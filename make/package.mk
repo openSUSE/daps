@@ -109,7 +109,6 @@ endif
 # * Color PDF
 #
 .PHONY: locdrop
-locdrop: $(PROFILEDIR)/.validate $(DISTPROFILE) link-entity-dist
 locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude \
 			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
@@ -118,19 +117,21 @@ locdrop: TOTRANSFILES = $(subst $(BASE_DIR)/xml, $(PROFILE_PARENT_DIR)/dist, \
 		$(shell cd $(BASE_DIR) && \
 		dm.py dg -P --include="doc:trans=yes" -H -A -q "%{name} "))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
-locdrop: ENTITIES     = $(shell susedoc-getentityname.py $(INCLUDED))
+locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
 locdrop: TOTRANSTAR   = $(LOCDROPDIR)/locdrop-totrans-$(BOOK).tar.bz2
 locdrop: NOTRANSTAR   = $(LOCDROPDIR)/locdrop-$(BOOK).tar
+locdrop: $(PROFILEDIR)/.validate $(DISTPROFILE) link-entity-dist dist-graphics
 ifndef NOPDF
 locdrop: color-pdf
 endif
-locdrop: dist-graphics color-pdf
+locdrop:
+	@echo "LOOOOOCDROPPING"
 # remove old stuff
 	rm -rf $(LOCDROPDIR) && mkdir -p $(LOCDROPDIR)
-	@echo "checking for unexpected characters: ... "
-	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(INCLUDED) && \
-	    echo "Found non-printable characters" || echo "OK"
+#	@echo "checking for unexpected characters: ... "
+#	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(INCLUDED) && \
+#	    echo "Found non-printable characters" || echo "OK"
 # totrans tarball
 	BZIP2=--best && tar chfj $(TOTRANSTAR) --absolute-names \
 	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
@@ -158,12 +159,13 @@ endif
 # PDF generation can be switched off via wrapper script
 #
 ifndef NOPDF
-	# copy color PDF
+# copy color PDF
 	cp $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf \
 	  $(LOCDROPDIR)/$(BOOK)_$(LL).pdf
 	@ccecho "info" "Created $(LOCDROPDIR)/$(BOOK)_$(LL).pdf"
 endif
 	@ccecho "result" "Find the locdrop results at:\n$(LOCDROPDIR)"
+
 #--------------
 # online-docs
 #
@@ -254,7 +256,7 @@ $(YELP_DIR):
 	mkdir -p $@
 
 $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
-	# clean up first
+# clean up first
 	rm -rf $(YELP_DIR) && mkdir -p $(YELP_DIR)
 	xsltproc $(DESKSTRINGS) $(ROOTSTRING) --nonet \
 		--output $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document \

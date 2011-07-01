@@ -1,11 +1,12 @@
 ----------------------------------------------------------------------------
-              susedoc README for upgrades from version 4.x 
+             DocBook Authoring and Publishing Suite (daps)
+                README for upgrading from susedoc 4.x 
 ----------------------------------------------------------------------------
 
 Adjusting existing projects:
 ----------------------------
 
-In order to use susedoc 5.x the following adjustments are needed:
+In order to use daps the following adjustments are needed:
 
 ENV files:
 ..........   
@@ -18,14 +19,14 @@ ENV files:
        'export MAIN="MAIN-mybook.xml"' becomes 'MAIN="MAIN-mybook.xml"'
    * if you want to be able to still source ENV-files for compatibility
      reasons, add the following line to your ENV-file:
-     export SUSEDOC_ENV_NAM=E$(basename $BASH_SOURCE)
+     export DAPS_ENV_NAME=E$(basename $BASH_SOURCE)
      NOTE: this is optional
 
    * The following commands should change your ENV files accordingly
      (provided each command in the ENV-file is on a separate line)
    
      sed -r -i.bkp "/^\s*(\.|source) \s*\.env-profile\s*$/d;s/^\s*export //" ENV-mybook
-     echo "export SUSEDOC_ENV_NAM=E$(basename \$BASH_SOURCE)" >> ENV-mybook
+     echo "export DAPS_ENV_NAME=$(basename \$BASH_SOURCE)" >> ENV-mybook
 
 Obsolete files/directories:
 ---------------------------
@@ -59,9 +60,13 @@ mandatory)
 Changed Paths:
 --------------
 
+* General:
+  old: /usr/share/susedoc
+  new: /usr/share/daps
+
 * SUSE dictionary:
   old: /usr/share/susedoc/aspell/suse_aspell.rws
-  new: /usr/share/susedoc/lib/suse_aspell.rws
+  new: /usr/share/daps/lib/suse_aspell.rws
 
 * emacs DocBook macros:
   old: /usr/share/susedoc/etc/emacs_docbook_macros.el
@@ -69,41 +74,41 @@ Changed Paths:
 
 * documentation
   old: /usr/share/susedoc/doc/
-  new: /usr/share/doc/packages/susedoc/
+  new: /usr/share/doc/packages/daps/
 
-susedoc Command
+daps Command
 ----------------
 Sourcing an ENV-file and calling make <TARGET> has been replaced by calling
-"susedoc". PLease see "susedoc help" for extensive help.
+"daps". Please see "daps help" for extensive help.
 
 For the impatient, here is a quickstart (<WD> = working directory containing
 the ENV-file(s), an images/src/ and an xml/ directory)
 
    # <WD> only contains on ENV file:
    cd <WD>
-   susedoc color-pdf
+   daps color-pdf
 
    # <WD> contains several ENV-files:
    cd <WD>
-   susedoc --envfile=ENV-mybook color-pdf
+   daps --envfile=ENV-mybook color-pdf
 
-   # calling susedoc from anywhere in the filesystem
-   susedoc --envfile=ENV-mybook --basedir=<WD>
+   # calling daps from anywhere in the filesystem
+   daps --envfile=ENV-mybook --basedir=<WD>
 
    # mybook has been build before
    cd <WD>/build/mybook
-   susedoc color-pdf
+   daps color-pdf
 
    # compatibility mode allows to source an ENV-file (also see the below for
    # ENV-file changes)
    cd <WD>
    . ENV-mybook
-   susedoc color-pdf
+   daps color-pdf
 
 Resulting and temporary files:
 ------------------------------
-By default susedoc will create a single directory named 'build' inside your <WD>
-direcory. _Everything_ susedoc creates will go into this directory:
+By default daps will create a single directory named 'build' inside your <WD>
+direcory. _Everything_ daps creates will go into this directory:
 
 <WD>/build/mybook/
    All book and package builds (HTML, PDF, ePub, *.tar.bz2, etc.) can be
@@ -119,39 +124,39 @@ direcory. _Everything_ susedoc creates will go into this directory:
    All generated images will go here
 
 
-If you prefer a complete separation of <WD> and susedoc output, specify the
-option --builddir=<BUILDDIR> with susedoc. This will put all susedoc output to
+If you prefer a complete separation of <WD> and daps' output, specify the
+option --builddir=<BUILDDIR> with daps. This will put all daps output to
 '<BUILDDIR>' rather than '<WD>/build/'.
 
-susedoc Verbosity:
+daps Verbosity:
 ------------------
 
-By default susedoc is far less verbose than the make calls of version 4.x .
+By default daps is far less verbose than the make calls of susedoc 4.x .
 Most of the time you will only see the path to the resulting file. A complete
-log file of the latest 'susedoc <SUBCOMMAND>' run is available in
+log file of the latest 'daps <SUBCOMMAND>' run is available in
 <WD>/build/mybook/log/make_<SUBCOMMAND>.log.
 
 In case of an error the complete log will be shown on STDOUT.
 
-Using the '-v' switch for susedoc will produce the same level of output as
-version 4.x.
+Using the '-v' switch for daps will produce the same level of output as
+susedoc 4.x.
 
 Using the '-d' switch will produce even mor detailed debugging output.
 
-By default susedoc generates colored output. Use the --color=0 switch to turn
+By default daps generates colored output. Use the --color=0 switch to turn
 off this behavior.
 
 Configuration:
 --------------
-susedoc can be configured as follows:
+daps can be configured as follows:
 
-* system wide config file: /etc/susedoc/config
+* system wide config file: /etc/daps/config
   - includes all configuration parameters available 
   - sets sane defaults for each parameter
   - includes extensive documentation for each parameter
 
-* user config file: ~/.susedoc/config
-  - create this file if wanted; it is recommended to use a copy the system
+* user config file: ~/.daps/config
+  - create this file if wanted; it is recommended to use a copy of the system
     config file
 
 * book specific config: <WD>/ENV-<bookname>
@@ -168,13 +173,4 @@ susedoc can be configured as follows:
     DRAFT (recommendation: set this value on the command line)
     REMARKS (recommendation: set this value on the command line)       
     
-    (refer to /etc/susedoc/config for documentation)
-
-
-Bugs:
------
-
-* DocManager is currently not working and has been exluded from this package
-  for the moment
-
-* Documentation in /usr/share/doc/packages/susedoc/ is outdated
+    (refer to /etc/daps/config for documentation)

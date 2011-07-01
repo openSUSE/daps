@@ -35,7 +35,7 @@
 </xsl:param>
 
 <!-- Given by the Makefiles -->
-<xsl:param name="dtdroot">/usr/share/susedoc/</xsl:param>
+<xsl:param name="dtdroot">/usr/share/daps/</xsl:param>
 
 <!-- Our Layout -->
 <xsl:param name="paper.type">novell</xsl:param>

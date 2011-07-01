@@ -1,4 +1,5 @@
-# Makefile --- for susedoc: Generate catalogs and install susedoc
+# Makefile for DocBook Authoring and Publishing Suite (daps)
+# Generate catalogs and install daps
 #
 # Copyright (C) 2011 SUSE Linux Products GmbH
 #
@@ -27,9 +28,9 @@ DIRECTORIES := catalogs
 #-------
 # Directories for installation
 PREFIX           ?= /usr/share
-SUSEDOC_CONFDIR  := $(DESTDIR)/etc/susedoc
-SUSEDOC_SHAREDIR := $(DESTDIR)$(PREFIX)/susedoc
-SUSEDOC_DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/susedoc
+DAPS_CONFDIR  := $(DESTDIR)/etc/daps
+DAPS_SHAREDIR := $(DESTDIR)$(PREFIX)/daps
+DAPS_DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/daps
 
 #-------
 # Man pages
@@ -63,29 +64,29 @@ install: create-install-dirs
 	    $(DESTDIR)/$(PREFIX)/sgml/
 	install -m644 catalogs/$(ROOT_CATALOG) $(DESTDIR)/etc/xml
 	install -m644 catalogs/$(XSLT_CATALOG) $(DESTDIR)/etc/xml
-	install -m644 COPYING INSTALL README* TODO $(SUSEDOC_DOCDIR)
+	install -m644 BUGS COPYING INSTALL README* TODO $(DAPS_DOCDIR)
 ifdef MANUALS
 	for BOOK in $(MANUALS); do \
-	  tar -C $(SUSEDOC_DOCDIR)/html -xjf doc/build/$$BOOK/*-html.tar.bz2; \
+	  tar -C $(DAPS_DOCDIR)/html -xjf doc/build/$$BOOK/*-html.tar.bz2; \
 	done
 endif
-	cp -a images/ $(SUSEDOC_SHAREDIR)
-	cp -a make/ $(SUSEDOC_SHAREDIR)
-	cp -a xslt/ $(SUSEDOC_SHAREDIR)
-	cp -a etc/* $(SUSEDOC_CONFDIR)
-	tar cp --exclude=docbook_macros.el lib/* | (cd $(SUSEDOC_SHAREDIR); tar xpv)
-	find {$(SUSEDOC_CONFDIR),$(SUSEDOC_DOCDIR),$(SUSEDOC_SHAREDIR)} -type d -exec chmod 755 {} \;
-	find {$(SUSEDOC_CONFDIR),$(SUSEDOC_DOCDIR),$(SUSEDOC_SHAREDIR)} -type f -exec chmod 644 {} \;
-	(cd $(SUSEDOC_SHAREDIR)/lib; chmod 755 *.sh *.py susedoc-{fop,xep})
+	cp -a images/ $(DAPS_SHAREDIR)
+	cp -a make/ $(DAPS_SHAREDIR)
+	cp -a xslt/ $(DAPS_SHAREDIR)
+	cp -a etc/* $(DAPS_CONFDIR)
+	tar cp --exclude=docbook_macros.el lib/* | (cd $(DAPS_SHAREDIR); tar xpv)
+	find {$(DAPS_CONFDIR),$(DAPS_DOCDIR),$(DAPS_SHAREDIR)} -type d -exec chmod 755 {} \;
+	find {$(DAPS_CONFDIR),$(DAPS_DOCDIR),$(DAPS_SHAREDIR)} -type f -exec chmod 644 {} \;
+	(cd $(DAPS_SHAREDIR)/lib; chmod 755 *.sh *.py daps-{fop,xep})
 
 create-install-dirs:
 ifdef MANUALS
-	mkdir -p $(SUSEDOC_DOCDIR)/html
+	mkdir -p $(DAPS_DOCDIR)/html
 else
-	mkdir -p $(SUSEDOC_DOCDIR)
+	mkdir -p $(DAPS_DOCDIR)
 endif
-	mkdir -p $(SUSEDOC_CONFDIR)
-	mkdir -p $(SUSEDOC_SHAREDIR)
+	mkdir -p $(DAPS_CONFDIR)
+	mkdir -p $(DAPS_SHAREDIR)
 	mkdir -p $(DESTDIR)/usr/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/{dtd,rng}/$(DTDVERSION)
 	mkdir -p $(DESTDIR)$(PREFIX)/emacs/site-lisp
@@ -151,7 +152,7 @@ schema/novdocx.dtd.tmp: $(DIRECTORIES)
 #
 
 catalogs/$(XSLT_CATALOG): $(DIRECTORIES)
-catalogs/$(XSLT_CATALOG): XSLT_PROFDIR := $(PREFIX)/susedoc/xslt/profiling
+catalogs/$(XSLT_CATALOG): XSLT_PROFDIR := $(PREFIX)/daps/xslt/profiling
 catalogs/$(XSLT_CATALOG): URN_PROF     := urn:x-suse:xslt:profiling
 catalogs/$(XSLT_CATALOG):
 	xmlcatalog --noout --create $@
@@ -209,6 +210,6 @@ $(DIRECTORIES):
 .PHONY: manuals
 manuals:
 	for BOOK in $(MANUALS); do \
-	  bin/susedoc -d --dtdroot=$(shell pwd) --basedir=$(shell pwd)/doc \
+	  bin/daps -d --dtdroot=$(shell pwd) --basedir=$(shell pwd)/doc \
 	    --envfile=ENV-$$BOOK --color=0 dist-html; \
 	done

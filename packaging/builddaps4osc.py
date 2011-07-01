@@ -18,7 +18,7 @@ __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __license__="GPL"
 __doc__= """Usage: %(proc)s [OPTIONS...]
 
-OBS = OpenSUSE Build Server, %(version)s
+OBS = Open Build Server, %(version)s
 
 This script creates a RPM package from the BerliOS SVN and builds it in OBS.
 """
@@ -37,7 +37,7 @@ parentproject="Documentation:Tools"
 ## The default levels are (in this order):
 ## NOTSET, DEBUG, INFO, WARNING, ERROR and CRITICAL
 LOG_FILENAME="/tmp/%s.%s.log" % (basename,username)
-log = logging.getLogger( 'susedoc4osc' )
+log = logging.getLogger( 'daps4osc' )
 log.setLevel(logging.DEBUG)
 
 # Create file handler which logs even info messages
@@ -145,13 +145,13 @@ class OBSException(Exception):
   pass
 
 class OBS(object):
-  """Data for openSUSE Build Server"""
+  """Data for Open Build Server"""
   # Development project:
   __project=project  #"home:%s:branches:unittest"
   # Where stable packages should live:
   parentprj=parentproject  #"Documentation:Tools"
   # The package name itself:
-  package="susedoc"
+  package="daps"
   user="thomas-schraitle"
   arch=os.uname()[-1] # $(uname -m)
   os=""
@@ -462,8 +462,8 @@ class OBS(object):
 class BerliOS(object):
   """Data for BerliOS SVN server"""
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/"
-  path="branches/tools/docmaker"
-  tags="tags/tools/docmaker"
+  path="branches/tools/daps"
+  tags="tags/tools/daps"
   # package=None
 
   def __init__(self, package, version, options):
@@ -479,7 +479,7 @@ class BerliOS(object):
 
   def export(self):
     """Exporting SVN repository """
-    # svn export --quiet $BERLIOS_URL/$BERLIOS_susedoc ${OBS_PACKAGE}
+    # svn export --quiet $BERLIOS_URL/$BERLIOS_daps ${OBS_PACKAGE}
     cmd="svn export %s %s" % ( os.path.join(self.url, self.path), "%s-svn" % self.package )
     self.debug(cmd)
     p = subprocess.Popen( cmd, #.split(" ", 1),
@@ -496,7 +496,7 @@ class BerliOS(object):
     log.debug("Making archive..." )
     tarname = "%s-%s.tar.bz2" % (self.package, self.version)
     cmd="tar cjhf %(tar)s " \
-       "--exclude-from=%(pkg)s-svn/packaging/exclude-files_for_susedoc_package.txt " \
+       "--exclude-from=%(pkg)s-svn/packaging/exclude-files_for_daps_package.txt " \
        "--transform=s/%(pkg)s-svn/%(pkg)s/ " \
        "%(pkg)s-svn" % \
        {
@@ -598,7 +598,7 @@ The script does the following things:
       )
   # OBS Group
   group = optparse.OptionGroup(parser, \
-      "openSUSE Build Server Options")
+      "Open Build Server Options")
   group.add_option("-P", "--obs-parent-project",
       dest="obsparentprj",
       help="Specifies the devel project or where all submitrequests end (default is %default)",

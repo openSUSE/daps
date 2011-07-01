@@ -3,9 +3,7 @@
 # Copyright (C) 2011 fs@suse.de, openSUSE.org
 # Authors: fs@suse.de
 #
-# TODO: PATH to ENVFILE instead of --basedir
-#
-#
+# daps = DocBook Authoring and Publishing Suite
 
 # ----------------------------------------------------------------------------
 # VARIABLES
@@ -87,12 +85,12 @@ unset "${UNSETLIST[@]}"
 #
 # We need to declare a few basic funtions first because they are needed
 # immideately. All other functions can be found at
-# $DTDROOT/lib/susedoc-functions
+# $DTDROOT/lib/daps-functions
 # ---------
 # Help
 #
 
-function susedoc_help () {
+function daps_help () {
     echo "
   Usage:
         $ME [--global-options] <subcommand> [--command-options] [arguments]
@@ -280,7 +278,7 @@ function get_envfile () {
 # run the subcommands
 #
 function run_subcmd () {
-    source "$DTDROOT/lib/susedoc_functions"
+    source "$DTDROOT/lib/daps_functions"
     case "$SUBCMD" in
         all|color-pdf|force|pdf|pdf-color)
 	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
@@ -340,22 +338,22 @@ MAKECMD="/usr/bin/make -j${CORE_NO} -s"
 ME=$(basename $0)
 
 # The default DTDROOT 
-DEFAULT_DTDROOT="/usr/share/susedoc"
+DEFAULT_DTDROOT="/usr/share/daps"
 
 # default config file
-DEFAULT_CONFIG="/etc/susedoc/config"
+DEFAULT_CONFIG="/etc/daps/config"
 
 # default libdir
 DEFAULT_LIB_DIR="${DEFAULT_DTDROOT}/lib"
 
 # user config file
-USER_CONFIG="$HOME/.susedoc/config"
+USER_CONFIG="$HOME/.daps/config"
 
 
 # ----------------------------------------------------------------------------
 # Parsing the command line arguments with GNU getopt
 #
-# In order to separate general susedoc parameters from subcommand parameters,
+# In order to separate general daps parameters from subcommand parameters,
 # we are setting POSIXLY_CORRECT before parsing the first time.
 # This causes getopt to interprete all remaining parameters as non-option
 # parameters as soon as the first non-option parameter (the subcommand) is
@@ -364,11 +362,11 @@ USER_CONFIG="$HOME/.susedoc/config"
 export POSIXLY_CORRECT=1
 
 # So, the first getopt go will parse all parameters listed directly after the 
-# susedoc command, leaving an array ($@) with the subcommand and it's
+# daps command, leaving an array ($@) with the subcommand and it's
 # parameters, which can be parsed in a second getopt go.
 
 #-------------------------------
-# Parsing the susedoc parameters
+# Parsing the daps parameters
 #
 # If (and only if) $BASE_DIR, $BUILD_DIR, $ENVFILE, and $DTDROOT are set here,
 # we do not want to overwrite them by any other file we source
@@ -434,7 +432,7 @@ while true ; do
 	    shift 2
             ;;
         -h|--help)
-            susedoc_help
+            daps_help
 	    exit 0
             ;;
 	-v|--verbose)
@@ -462,7 +460,7 @@ unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 if [[ -z $1 ]] || [[ help = $1 && -z $2 ]]; then
     # Call: "$ME" or "$ME help"
     #
-    susedoc_help
+    daps_help
     exit 0
 elif [[ help = $2 ]]; then
     # Call: "$ME foo help ..."
@@ -506,16 +504,16 @@ esac
 #
 # 2. ENV-file
 # 3. $USER_CONFIG (user config file)
-# 4. /etc/susedoc/config or $DTDROOT/etc/config
+# 4. /etc/daps/config or $DTDROOT/etc/config
 #
 #
 # In order to make developing easier, there is a hidden feature to set
-# DTDROOT, allowing to have multiple susedoc versions installed into
+# DTDROOT, allowing to have multiple daps versions installed into
 # different directories. You can switch between them by setting DTDROOT
 # accordingly (without a trailing slash)
 #
 # IMPORTANT:
-# DTDROOT MUST be set by either $ME --susedocroot $SCMD on the commandline
+# DTDROOT MUST be set by either $ME --dtdroot $SCMD on the commandline
 # or in $USER_CONFIG
 #
 # If DTDROOT was not already set on the commandline (in this case
@@ -579,8 +577,8 @@ fi
 # *_and_ no ENVFILE has been
 # specified on the command line, use the one that has been sourced 
 #
-if [[ -z $ENVFILE ]] && [[ -f ${PWD}/$SUSEDOC_ENV_NAME ]]; then
-    ENVFILE="$SUSEDOC_ENV_NAME"
+if [[ -z $ENVFILE ]] && [[ -f ${PWD}/$DAPS_ENV_NAME ]]; then
+    ENVFILE="$DAPS_ENV_NAME"
     BASE_DIR="$PWD"
     if [[ 1 = $VERBOSE ]]; then
         ccecho "info" "Using the previously sourced ENVFILE $ENVFILE\nand BASE_DIR $BASE_DIR"
@@ -745,7 +743,7 @@ export ENVFILE
 export LIB_DIR
 
 # FOP
-export FOP="${LIB_DIR}/susedoc-$FOPTYPE"
+export FOP="${LIB_DIR}/daps-$FOPTYPE"
 
 # PATH
 if [[ -n $BIN_DIR ]]; then

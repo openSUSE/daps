@@ -85,7 +85,7 @@ print
 LOG_FILENAME = '/tmp/dm-test.out'
 INITSCRIPT=extendpath4initscript("init-testsvn.sh")
 DOCRELEASE="OS_110"
-SUSEDOCPATH="/usr/share/susedoc/"
+DAPSPATH="/usr/share/daps/"
 FORMATSTRING='%(asctime)s %(levelname)s (%(funcName)s):  %(message)s'
 
 
@@ -372,7 +372,7 @@ class DMGetTestCase(BaseDM):
   def setUp(self):
     super(self.__class__, self).setUp()
     #
-    os.environ["DTDROOT"]="/usr/share/susedoc/"
+    os.environ["DTDROOT"]="/usr/share/daps/"
     logger.debug("<%s>%s: Ok" % (self.__class__.__name__, whoami()) ) 
 
   @logs
@@ -490,7 +490,7 @@ class DMSetTestCase(BaseDM):
   def setUp(self):
     super(self.__class__, self).setUp()
     #
-    os.environ["DTDROOT"]="/usr/share/susedoc/"
+    os.environ["DTDROOT"]="/usr/share/daps/"
  
   @logs
   def test_ds_0init(self):
@@ -830,7 +830,7 @@ class DMFormatTestCase(BaseDM):
   def setUp(self):
     super(self.__class__, self).setUp()
     #
-    os.environ["DTDROOT"]="/usr/share/susedoc/"
+    os.environ["DTDROOT"]="/usr/share/daps/"
 
   @logs
   def test_fm_init(self):
@@ -845,7 +845,7 @@ class DMFormatTestCase(BaseDM):
     res = commands.getstatusoutput(". ENV-opensuse-startup" )
     self.assertEqual(res[0], 0, msg="Error from '. ENV-opensuse-startup': %s" % res[1])
 
-    # Set up the directory for suse-xmlformat:
+    # Set up the directory for daps-xmlformat:
     curdir = os.getcwd()
     lastdir = os.path.split(curdir)[-1]
     if lastdir == "bin":
@@ -853,13 +853,13 @@ class DMFormatTestCase(BaseDM):
     elif lastdir == "dm":
       sxdir = ".."
     else:
-      # Fallback to the system directory of susedoc
-      sxdir = os.path.join(SUSEDOCPATH, "bin")
+      # Fallback to the system directory of daps
+      sxdir = os.path.join(DAPSPATH, "bin")
     
-    cmd="%s -i %s" % (os.path.join(sxdir, "suse-xmlformat"),main)
+    cmd="%s -i %s" % (os.path.join(sxdir, "daps-xmlformat"),main)
     res = commands.getstatusoutput(cmd)
     logger.debug("Executing %s, result %s" % (cmd, res) )
-    self.assertEqual(res[0], 0, msg="suse-xmlformat returned an error: %s" % res[1])
+    self.assertEqual(res[0], 0, msg="daps-xmlformat returned an error: %s" % res[1])
     
     cmd="svn st %s" % main 
     res = commands.getstatusoutput(cmd)
@@ -868,7 +868,7 @@ class DMFormatTestCase(BaseDM):
     
     # Only commit changes, if file is modified
     if res[1] != '':
-      msg = "DocManager unittest: Reformatted with suse-xmlformat"
+      msg = "DocManager unittest: Reformatted with daps-xmlformat"
       cmd="svn ci -m '%s' %s" % (msg, main)
       res = commands.getstatusoutput(cmd)
       logger.debug("Executing %s, result %s" % (cmd, res) )
@@ -950,18 +950,18 @@ def suite():
   return suite
 
 
-def checksusedoc():
-  """Checks susedoc specific parameters (RPM, version and suse-xmlformat)"""
-  res = commands.getstatusoutput("rpm -q susedoc" )
-  assert res[0] == 0, "ERROR: rpm -q susedoc returned an error: %s" % res[1]
+def checkdaps():
+  """Checks daps specific parameters (RPM, version and daps-xmlformat)"""
+  res = commands.getstatusoutput("rpm -q daps" )
+  assert res[0] == 0, "ERROR: rpm -q daps returned an error: %s" % res[1]
   # Get only the version:
   version = int(res[1].strip().split("-")[1].split("_")[1])
-  assert version >= 20080529, """ERROR: susedoc has the wrong version number.
+  assert version >= 20080529, """ERROR: daps has the wrong version number.
 Expected 20080529, got %s""" % version
   
-  xmlformatpath = os.path.join(SUSEDOCPATH, "bin", "suse-xmlformat")
+  xmlformatpath = os.path.join(DAPSPATH, "bin", "daps-xmlformat")
   assert os.path.exists( xmlformatpath ), \
-    "ERROR: Can not find path to suse-xmlformat"
+    "ERROR: Can not find path to daps-xmlformat"
 
 
 def removeSVNTrees(*paths):
@@ -1041,8 +1041,8 @@ def main():
 
 
 if __name__=="__main__":
-  # Checks, if susedoc is installed
-  checksusedoc()
+  # Checks, if daps is installed
+  checkdaps()
   options, args = main()
   print options, args
   

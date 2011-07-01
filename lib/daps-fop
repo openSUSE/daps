@@ -1,12 +1,12 @@
 #!/bin/sh
-__VERSION__="$Id: suse-fop 43536 2009-08-11 22:10:56Z jw $"
+__VERSION__="$Id: daps-fop 43536 2009-08-11 22:10:56Z jw $"
 
 #
 # Configuring variables
 #
 
 FOP_HOME=${FOP_HOME:-"/usr/share/fop"}
-FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/susedoc/fop/fop-suse.xml"}
+FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
 FOP_STACK=${FOP_STACK:-"-Xss512K"}
 FOP_CATALOG_VERBOSITY=${FOP_CATALOG_VERBOSITY:-"3"}
@@ -86,7 +86,7 @@ else
   done
 fi
 
-TMPFILE=$(mktemp /tmp/suse-fop.XXXXXX)
+TMPFILE=$(mktemp /tmp/daps-fop.XXXXXX)
 xx=$(build-classpath xmlgraphics-batik-all xml-commons-resolver jaxp_transform_impl excalibur/avalon-framework-api excalibur/avalon-framework-impl 2>$TMPFILE)
 CP=$CP${pathSepChar}$xx${pathSepChar}$DTDROOT/etc
 if ! $fop_exec_debug; then

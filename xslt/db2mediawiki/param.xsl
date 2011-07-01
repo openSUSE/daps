@@ -38,6 +38,6 @@ task before
     <!-- Use a category for all links, images, etc. -->
     <xsl:param name="wiki.category"/>
     <!-- Used for Templates -->
-    <xsl:param name="wiki.template.prefix">susedoc</xsl:param>
+    <xsl:param name="wiki.template.prefix">daps</xsl:param>
 
 </xsl:stylesheet>

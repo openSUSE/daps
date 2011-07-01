@@ -3,10 +3,10 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY command "susedoc">
+  <!ENTITY command "daps">
 ]>
 
-<refentry lang="en" id="susedoc">
+<refentry lang="en" id="daps">
  <refentryinfo>
   <productname>&command;</productname>
   <authorgroup>
@@ -14,7 +14,7 @@
     <contrib>Developer</contrib>
     <firstname>Frank</firstname>
     <surname>Sundermeyer</surname>
-    <email>fsundermeyer@opensuse.org</email>
+    <email>fs@suse.de</email>
    </author>
    <author>
     <contrib>Developer</contrib>
@@ -49,7 +49,7 @@
   <manvolnum>1</manvolnum>
   <refmiscinfo class="date">@DATE@</refmiscinfo>
   <refmiscinfo class="version">@VERSION@</refmiscinfo>
-  <refmiscinfo class="manual">susedoc</refmiscinfo>
+  <refmiscinfo class="manual">daps</refmiscinfo>
  </refmeta>
  <refnamediv>
   <refname>&command;</refname>
@@ -58,7 +58,7 @@
    DocBook XML.
   </refpurpose>
  </refnamediv>
- <refsynopsisdiv id="susedoc.synopsis">
+ <refsynopsisdiv id="daps.synopsis">
   <title>Synopsis</title>
   <cmdsynopsis>
    <command>&command;</command>
@@ -75,7 +75,7 @@
   </cmdsynopsis>
  </refsynopsisdiv>
 
- <refsect1 id="susedoc.description">
+ <refsect1 id="daps.description">
   <title>Description</title>
   <para>
     &command; contains a set of stylesheets, scripts and makefiles that enable
@@ -94,11 +94,11 @@
    </para>
   </refsect1>
  
- <refsect1 id="susedoc.files">
+ <refsect1 id="daps.files">
   <title>Files</title>
   <variablelist>
    <varlistentry>
-    <term><filename>/etc/susedoc/config</filename></term>
+    <term><filename>/etc/daps/config</filename></term>
     <listitem>
      <para>
       The system wide configuration file. See the file's inline documentation
@@ -107,11 +107,11 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><filename>~/.susedoc/config</filename></term>
+    <term><filename>~/.daps/config</filename></term>
     <listitem>
      <para>
       The per user configuration file. See the inline documentation of
-      <filename>/etc/susedoc/config</filename> for detailed information.
+      <filename>/etc/daps/config</filename> for detailed information.
      </para>
     </listitem>
    </varlistentry>

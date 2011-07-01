@@ -2,7 +2,7 @@
 # LfL, openSUSE
 # LfL: LAYOUTROOT defaults to ../../common
 # openSUSE: LAYOUTROOT defaults to ../../novdoc
-# fallback is /usr/share/susedoc and original stylesheets
+# fallback is /usr/share/daps and original stylesheets
 #
 # Fallback is
 # known fop processors:
@@ -12,7 +12,7 @@
 # STYLEFO, STYLEH
 # --> introducing LAYOUTROOT instead
 #
-# We may build with the rpm that installs everything in /usr/share/susedoc
+# We may build with the rpm that installs everything in /usr/share/daps
 # or we may want to build from the subversion directory. The location of
 # the stylesheets is $(DTDDIR)/xslt/*
 
@@ -34,23 +34,23 @@ LSTYLEPUBCSS  := /epub/susebooks.css
 STYLENWD      := /usr/share/xml/docbook/stylesheet/nwalsh/current
 STYLELFLD     := $(shell test -d ../../common/xslt && (cd ../../common/xslt; pwd))
 STYLENOVDOCD  := $(DTDROOT)/xslt
-STYLESUSEDOCD := /usr/share/susedoc/xslt
+STYLEDAPSD := /usr/share/daps/xslt
 #
 # pretend to be intelligent: stylesheets will be used if available.
 # defaults are just selected by the sequence of directory variables
 ifndef LAYOUTROOT
 ifeq ($(LAYOUT), LfL)
-LAYOUTROOT=$(wildcard $(STYLELFLD) $(STYLESUSEDOCD) $(STYLENOVDOCD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLELFLD) $(STYLEDAPSD) $(STYLENOVDOCD) $(STYLENWD))
 LSTYLECSS = /html/lessons4lizards.css
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), openSUSE)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLESUSEDOCD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), provo)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLESUSEDOCD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 HTMLSTRINGS += --stringparam generate.toc \
 	"book toc,title,figure,table,example  article toc,title  appendix \
@@ -59,7 +59,7 @@ HTMLSTRINGS += --stringparam generate.toc \
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), flyer)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLESUSEDOCD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /flyer/docbook.xsl
 else
@@ -68,7 +68,7 @@ LAYOUTROOT=$(wildcard $(STYLELFLD) $(STYLENOVDOCD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /pocket/docbook.xsl
 else
-LAYOUTROOT=$(wildcard $(STYLESUSEDOCD) $(STYLELFLD) $(STYLENOVDOCD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDAPSD) $(STYLELFLD) $(STYLENOVDOCD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /fo/docbook.xsl
 endif
@@ -117,15 +117,15 @@ FOCOLSTRINGS  += --stringparam fop1.extensions 1 \
 FOSTRINGS  += --stringparam fop1.extensions 1 \
               --stringparam xep.extensions 0
 ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
-FOP_CONFIG_FILE ?=/etc/susedoc/fop/fop-suse.xml
+FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
 else
-FOP_CONFIG_FILE ?=$(DTDROOT)/etc/fop/fop-suse.xml 
+FOP_CONFIG_FILE ?=$(DTDROOT)/etc/fop/fop-daps.xml 
 endif
 else
 ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
-FOP_CONFIG_FILE ?=/etc/susedoc/xep/xep-suse.xml
+FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
 else
-FOP_CONFIG_FILE ?=$(DTDROOT)/etc/xep/xep-suse.xml 
+FOP_CONFIG_FILE ?=$(DTDROOT)/etc/xep/xep-daps.xml 
 endif
 endif
 
@@ -150,14 +150,14 @@ layout-help:
 	@echo
 	@echo "The mechanics searches for those different filenames in several directories."
 	@echo "These are (in the following sequence): "
-	@echo "- /usr/share/susedoc/xslt (like in the susedoc package) "
+	@echo "- /usr/share/daps/xslt (like in the daps package) "
 	@echo "- ../../common/xslt (as seen from the project directory) "
 	@echo "- $$ DTDROOT/xslt"
 	@echo "- /usr/share/xml/docbook/stylesheet/nwalsh/current "
 	@echo
 	@echo "For the layout flyer, there is a different sequence:"
 	@echo "- $$ DTDROOT/xslt "
-	@echo "- /usr/share/susedoc/xslt (like in the susedoc package) "
+	@echo "- /usr/share/daps/xslt (like in the daps package) "
 	@echo "- ../../common/xslt (as seen from the project directory) "
 	@echo "- /usr/share/xml/docbook/stylesheet/nwalsh/current "
 	@echo
@@ -169,7 +169,7 @@ layout-help:
 	@echo "FOP is expected to be one of the following: "
 	@echo "- an absolute path to a FOP processor"
 	@echo "- just the program name without path"
-	@echo "- some wrapper script (with, or without path) that prependes suse- to the "
+	@echo "- some wrapper script (with, or without path) that prependes daps- to the "
 	@echo "  processor name. This mechanics is aware of RenderX XEP, or fop from the "
 	@echo "  apache project."
 

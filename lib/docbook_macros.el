@@ -21,10 +21,10 @@
 ;; (load "<PATH>/emacs_docbook_macros.el" t t)
 ;; where <PATH> is to be replaced appropriately
 ;;
-;; This file is also distributed in openSUSE with the susedoc package. After
-;; having installed susedoc, find it at
-;; /usr/share/susedoc/etc/emacs_docbook_macros.el
-;; The latest susedoc version is available from the repositories at
+;; This file is also distributed in openSUSE with the daps package. After
+;; having installed daps, find it at
+;; /usr/share/emacs/site-lisp/docbook_macros.el
+;; The latest daps version is available from the repositories at
 ;; http://download.opensuse.org/repositories/Documentation:/Tools/
 ;;
 ;; --------------------------------------------------------------------------

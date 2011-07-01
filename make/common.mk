@@ -12,19 +12,14 @@
 # <fs at suse dot de> or <toms at suse dot de>
 # 
 # Make file to build "books" from DocBook XML sources
-# Provides the core functionality for the susedoc package
-
-# TODO
-#
-# Define which targets are "allowed" to use remarks, comments and draft
-# Issue a warning, if set while target does not support that option
+# Provides the core functionality for the daps package
 
 #SHELL := /bin/bash
 
 #------------------------------------------------------------------------
 # Paths
 
-# the following values should have been set by the susedoc wrapper script
+# the following values should have been set by the daps wrapper script
 # let's provide sane defaults to prevent harm in case someone calls make
 # directly
 #
@@ -33,7 +28,7 @@ ifndef BASE_DIR
 BASE_DIR           := $(shell pwd)
 endif
 ifndef DTDROOT
-DTDROOT := "/usr/share/susedoc"
+DTDROOT := "/usr/share/daps"
 endif
 ifndef BOOK
 BOOK    := mybook
@@ -42,7 +37,7 @@ ifndef LIB_DIR
 LIB_DIR := $(DTDROOT)/lib
 endif
 ifndef FOP
-FOP     := $(LIB_DIR)/susedoc-fop
+FOP     := $(LIB_DIR)/daps-fop
 endif
 
 
@@ -656,7 +651,7 @@ dist-book:
 #
 # In order to properly calculate the USED* variables from the original XML
 # sources, we need to have an up-to-date profiled version of these sources.
-# This requires a "make profile" run before make dist-graphics! The susedoc
+# This requires a "make profile" run before make dist-graphics! The daps
 # wrapper script automatically takes care of it
 #
 .PHONY: dist-graphics
@@ -1108,7 +1103,7 @@ $(PROFILEDIR)/$(TMP_BOOK).idx: $(PROFILES) $(PROFILEDIR)/.validate
 
 # not used
 #.idx.ind:
-#	$(DTDROOT)/bin/susedoc-sortindexterms.py -l $(LL) $< --output $@
+#	$(DTDROOT)/bin/daps-sortindexterms.py -l $(LL) $< --output $@
 endif
 
 #------------------------------------------------------------------------

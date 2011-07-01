@@ -96,7 +96,7 @@
   <abstract>
    <para>
     This document describes what you need to set up an XML build environment
-    for creating HTML and PDF from XML source code by using the SUSE build
+    for creating HTML and PDF from XML source code by using the daps build
     mechanic.
    </para>
   </abstract>
@@ -108,8 +108,9 @@
 
  <sect1 id="sec.start">
   <title>Quick Start</title>
-  <para>Configuring your system enables you to build books from SUSE. Proceed as
-  follows:</para>
+  <para>
+   Configuring your system enables you to build books from DocBook XML sources.
+   Proceed as follows:</para>
 
   <procedure>
    <step>
@@ -159,7 +160,7 @@
             linkend="biblio"/>.) </para>
    </listitem>
    <listitem>
-    <para>The <package>susedoc</package> package. It requires several
+    <para>The <package>daps</package> package. It requires several
       other packages, for example the DocBook stylesheets. </para>
 
     <!--<table id="tab.packagelist">
@@ -254,7 +255,7 @@
 <!-- ******************************************************************* -->
  <sect1 id="sec.install.xep">
   <title>Installing XEP</title>
-  <para>The <package>susedoc</package> package installs everything what
+  <para>The <package>daps</package> package installs everything what
     you need for building PDFs and HTML. In case you want to build your
     books with XEP (a commercial formatter from <ulink
       url="http://www.renderx.com">RenderX</ulink>) you should have 
@@ -1051,7 +1052,7 @@ urn:x-suse:xslt:profiling:docbook43-profile.xsl</screen>
     </step>
     <step>
      <para>Open the XEP configuration file, usually
-      <filename>xep-suse.xml</filename>.</para>
+      <filename>xep-daps.xml</filename>.</para>
     </step>
     <step>
      <para>Search for the following line:</para>
@@ -1387,7 +1388,7 @@ and <sgmltag class="starttag">guimenu</sgmltag> like in <xref
        <para>
         Starts a reconfiguration of the currently used
 	<command>xep-suse</command> script. This is necessary after an update,
-	when a change in the <filename>xep-suse.xml</filename> file has
+	when a change in the <filename>xep-daps.xml</filename> file has
 	changed. If unsure, just run the command. See also the target
 	<option>update</option>.
        </para>
@@ -1634,11 +1635,3 @@ and <sgmltag class="starttag">guimenu</sgmltag> like in <xref
  </bibliography>
 
 </article>
-
-<!-- Keep this comment at the end of the file
-Local variables: 
-mode: xml
-coding: utf-8
-sgml-indent-step: 1
-End:
--->

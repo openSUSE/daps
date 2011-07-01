@@ -32,7 +32,7 @@ from svnquery import SVNQuery
 """
 
 PROCDIR=os.path.join(os.path.split(sys.argv[0])[0], "dm")
-SUSEDOCPATH="/usr/share/susedoc/"
+DAPSPATH="/usr/share/daps/"
 
 __all__=["userinput",
          "OptParseWarning",
@@ -712,11 +712,11 @@ Your friendly "DocManager Reminder". :-) Did you:
 
 
    def xmlformat(self, fileobj):
-    """Run suse-xmlformat"""
+    """Run daps-xmlformat"""
     # print "*** Inside xmlformat(%s)" % fileobj
 
     res = commands.getstatusoutput("%s -i %s" % (
-         "suse-xmlformat",
+         "daps-xmlformat",
          fileobj.getorigfilename()) )
     if res[0] != 0:
       print >> sys.stderr, "ERROR: XML formatting has failed.\n"\
