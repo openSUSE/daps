@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export FOP_HOME="@fop_home@"
+export FOP_OPTS="-Xmx128m -c $DTDROOT/etc/fop-suse.xml"
+
+exec $FOP_HOME/fop.sh "$@"

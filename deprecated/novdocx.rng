@@ -1,0 +1,2800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ...................................................................... -->
+<!-- novdoc DTD V1.0 ...................................................... -->
+<!-- File novdoc.dtd ...................................................... -->
+<!--
+  novdocx.dtd is a subset of DocBook and all instances should be valid
+  DocBook files, however, the docbookx.dtd is not directly referenced.
+  
+  Please use the following formal public identifier:
+  
+  "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"
+  
+  The following is copyright information required for the docbook dtd:
+  
+  Copyright 1992-2002 HaL Computer Systems, Inc.,
+  O'Reilly & Associates, Inc., ArborText, Inc., Fujitsu Software
+  Corporation, Norman Walsh, Sun Microsystems, Inc., and the
+  Organization for the Advancement of Structured Information
+  Standards (OASIS).
+  
+  $Id: novdocx.dtd 42467 2009-06-22 16:16:33Z toms $
+  
+  Permission to use, copy, modify and distribute the DocBook XML DTD
+  and its accompanying documentation for any purpose and without fee
+  is hereby granted in perpetuity, provided that the above copyright
+  notice and this paragraph appear in all copies.  The copyright
+  holders make no representation about the suitability of the DTD for
+  any purpose.  It is provided "as is" without expressed or implied
+  warranty.
+-->
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="admonitions">
+    <choice>
+      <ref name="important"/>
+      <ref name="note"/>
+      <ref name="tip"/>
+      <ref name="warning"/>
+    </choice>
+  </define>
+  <define name="lists">
+    <choice>
+      <ref name="itemizedlist"/>
+      <ref name="orderedlist"/>
+      <ref name="simplelist"/>
+      <ref name="variablelist"/>
+      <ref name="calloutlist"/>
+    </choice>
+  </define>
+  <define name="tables">
+    <choice>
+      <ref name="table"/>
+      <ref name="informaltable"/>
+    </choice>
+  </define>
+  <define name="figures">
+    <choice>
+      <ref name="figure"/>
+      <ref name="informalfigure"/>
+    </choice>
+  </define>
+  <!-- CHANGE_SEP_28 added bridgehead to common group and removed the other specific instances -->
+  <define name="common">
+    <choice>
+      <ref name="bridgehead"/>
+      <ref name="example"/>
+      <ref name="screen"/>
+      <ref name="remark"/>
+      <ref name="para"/>
+      <ref name="formalpara"/>
+      <ref name="indexterm"/>
+    </choice>
+  </define>
+  <define name="all">
+    <choice>
+      <ref name="admonitions"/>
+      <ref name="lists"/>
+      <ref name="figures"/>
+      <ref name="tables"/>
+      <ref name="common"/>
+    </choice>
+  </define>
+  <define name="xrefinlines">
+    <choice>
+      <ref name="xref"/>
+      <ref name="link"/>
+      <ref name="ulink"/>
+    </choice>
+  </define>
+  <define name="coreinlines">
+    <choice>
+      <ref name="command"/>
+      <ref name="envar"/>
+      <ref name="productname"/>
+      <ref name="literal"/>
+      <ref name="emphasis"/>
+      <ref name="option"/>
+      <ref name="replaceable"/>
+      <ref name="remark"/>
+      <ref name="filename"/>
+      <ref name="citetitle"/>
+      <ref name="quote"/>
+      <ref name="phrase"/>
+      <ref name="systemitem"/>
+      <ref name="guimenu"/>
+      <ref name="subscript"/>
+      <ref name="superscript"/>
+      <ref name="trademark"/>
+      <ref name="varname"/>
+    </choice>
+  </define>
+  <define name="basicinlines">
+    <choice>
+      <ref name="coreinlines"/>
+      <ref name="indexterm"/>
+    </choice>
+  </define>
+  <define name="guiinlines">
+    <choice>
+      <ref name="keycombo"/>
+      <ref name="keycap"/>
+      <ref name="menuchoice"/>
+    </choice>
+  </define>
+  <define name="allinlines">
+    <choice>
+      <ref name="xrefinlines"/>
+      <ref name="basicinlines"/>
+      <ref name="guiinlines"/>
+      <ref name="inlinemediaobject"/>
+    </choice>
+  </define>
+  <!-- Profiling information (attributes) -->
+  <define name="profiling.attributes">
+    <optional>
+      <attribute name="os"/>
+    </optional>
+    <optional>
+      <attribute name="arch"/>
+    </optional>
+    <optional>
+      <attribute name="condition"/>
+    </optional>
+  </define>
+  <define name="xmlbase">
+    <optional>
+      <attribute name="xml:base"/>
+    </optional>
+  </define>
+  <define name="set">
+    <element name="set">
+      <ref name="attlist.set"/>
+      <optional>
+        <ref name="title"/>
+        <optional>
+          <ref name="subtitle"/>
+        </optional>
+        <optional>
+          <ref name="titleabbrev"/>
+        </optional>
+      </optional>
+      <optional>
+        <ref name="toc"/>
+      </optional>
+      <oneOrMore>
+        <ref name="book"/>
+      </oneOrMore>
+      <optional>
+        <ref name="setindex"/>
+      </optional>
+    </element>
+  </define>
+  <define name="book">
+    <element name="book">
+      <ref name="attlist.book"/>
+      <ref name="bookinfo"/>
+      <optional>
+        <ref name="preface"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="part"/>
+          <ref name="chapter"/>
+          <ref name="article"/>
+        </choice>
+      </oneOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="appendix"/>
+          <ref name="glossary"/>
+        </choice>
+      </zeroOrMore>
+      <optional>
+        <ref name="index"/>
+      </optional>
+    </element>
+  </define>
+  <!-- change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed -->
+  <define name="bookinfo">
+    <element name="bookinfo">
+      <ref name="attlist.bookinfo"/>
+      <ref name="title"/>
+      <ref name="productname"/>
+      <optional>
+        <ref name="productnumber"/>
+      </optional>
+      <optional>
+        <ref name="date"/>
+      </optional>
+      <optional>
+        <ref name="titleabbrev"/>
+      </optional>
+      <oneOrMore>
+        <ref name="legalnotice"/>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="authorgroup"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="abstract"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="article">
+    <element name="article">
+      <ref name="attlist.article"/>
+      <ref name="title"/>
+      <optional>
+        <ref name="subtitle"/>
+      </optional>
+      <optional>
+        <ref name="articleinfo"/>
+      </optional>
+      <choice>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="calloutlist"/>
+              <ref name="itemizedlist"/>
+              <ref name="orderedlist"/>
+              <ref name="variablelist"/>
+              <ref name="important"/>
+              <ref name="note"/>
+              <ref name="tip"/>
+              <ref name="warning"/>
+              <ref name="screen"/>
+              <ref name="formalpara"/>
+              <ref name="para"/>
+              <ref name="mediaobject"/>
+              <ref name="informaltable"/>
+              <ref name="example"/>
+              <ref name="figure"/>
+              <ref name="table"/>
+              <ref name="procedure"/>
+              <ref name="bridgehead"/>
+              <ref name="remark"/>
+              <ref name="abstract"/>
+              <ref name="indexterm"/>
+            </choice>
+          </oneOrMore>
+          <choice>
+            <zeroOrMore>
+              <ref name="sect1"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="refentry"/>
+            </zeroOrMore>
+          </choice>
+        </group>
+        <choice>
+          <oneOrMore>
+            <ref name="sect1"/>
+          </oneOrMore>
+          <oneOrMore>
+            <ref name="refentry"/>
+          </oneOrMore>
+        </choice>
+      </choice>
+      <zeroOrMore>
+        <choice>
+          <ref name="index"/>
+          <ref name="glossary"/>
+          <ref name="appendix"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="articleinfo">
+    <element name="articleinfo">
+      <ref name="attlist.articleinfo"/>
+      <oneOrMore>
+        <choice>
+          <ref name="author"/>
+          <ref name="authorgroup"/>
+          <ref name="date"/>
+          <ref name="productname"/>
+          <ref name="productnumber"/>
+          <ref name="legalnotice"/>
+          <ref name="indexterm"/>
+          <ref name="abstract"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="preface">
+    <element name="preface">
+      <ref name="attlist.preface"/>
+      <ref name="title"/>
+      <choice>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="all"/>
+              <ref name="procedure"/>
+            </choice>
+          </oneOrMore>
+          <zeroOrMore>
+            <ref name="sect1"/>
+          </zeroOrMore>
+        </group>
+        <oneOrMore>
+          <ref name="sect1"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="part">
+    <element name="part">
+      <ref name="attlist.part"/>
+      <ref name="title"/>
+      <optional>
+        <ref name="partintro"/>
+      </optional>
+      <choice>
+        <group>
+          <oneOrMore>
+            <ref name="chapter"/>
+          </oneOrMore>
+          <zeroOrMore>
+            <ref name="appendix"/>
+          </zeroOrMore>
+        </group>
+        <oneOrMore>
+          <ref name="appendix"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <!-- CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1 -->
+  <define name="appendix">
+    <element name="appendix">
+      <ref name="attlist.appendix"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+      <choice>
+        <zeroOrMore>
+          <ref name="sect1"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="refentry"/>
+        </zeroOrMore>
+        <optional>
+          <ref name="msgset"/>
+        </optional>
+      </choice>
+    </element>
+  </define>
+  <define name="chapter">
+    <element name="chapter">
+      <ref name="attlist.chapter"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="abstract"/>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+      <choice>
+        <zeroOrMore>
+          <ref name="sect1"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="refentry"/>
+        </zeroOrMore>
+        <optional>
+          <ref name="msgset"/>
+        </optional>
+      </choice>
+    </element>
+  </define>
+  <define name="abstract">
+    <element name="abstract">
+      <ref name="attlist.abstract"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <oneOrMore>
+        <ref name="para"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="index">
+    <element name="index">
+      <ref name="attlist.index"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="setindex">
+    <element name="setindex">
+      <ref name="attlist.setindex"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="toc">
+    <element name="toc">
+      <ref name="attlist.toc"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist.toc" combine="interleave">
+    <empty/>
+  </define>
+  <!-- sections -->
+  <define name="sect1">
+    <element name="sect1">
+      <ref name="attlist.sect1"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+      <choice>
+        <zeroOrMore>
+          <ref name="sect2"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="refentry"/>
+        </zeroOrMore>
+        <optional>
+          <ref name="msgset"/>
+        </optional>
+      </choice>
+    </element>
+  </define>
+  <define name="sect2">
+    <element name="sect2">
+      <ref name="attlist.sect2"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="sect3"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sect3">
+    <element name="sect3">
+      <ref name="attlist.sect3"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="sect4"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sect4">
+    <element name="sect4">
+      <ref name="attlist.sect4"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="partintro">
+    <element name="partintro">
+      <ref name="attlist.partintro"/>
+      <oneOrMore>
+        <ref name="all"/>
+      </oneOrMore>
+      <zeroOrMore>
+        <ref name="sect1"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- inlines -->
+  <define name="application">
+    <element name="application">
+      <ref name="attlist.application"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="command">
+    <element name="command">
+      <ref name="attlist.command"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="option"/>
+          <ref name="replaceable"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="envar">
+    <element name="envar">
+      <ref name="attlist.envar"/>
+      <text/>
+    </element>
+  </define>
+  <define name="literal">
+    <element name="literal">
+      <ref name="attlist.literal"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="replaceable"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="emphasis">
+    <element name="emphasis">
+      <ref name="attlist.emphasis"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xrefinlines"/>
+          <ref name="basicinlines"/>
+          <ref name="guiinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="citetitle">
+    <element name="citetitle">
+      <ref name="attlist.citetitle"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+          <ref name="xrefinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="option">
+    <element name="option">
+      <ref name="attlist.option"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="replaceable"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="replaceable">
+    <element name="replaceable">
+      <ref name="attlist.replaceable"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="filename">
+    <element name="filename">
+      <ref name="attlist.filename"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="replaceable"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- CHANGE quote can contain other inlines -->
+  <define name="quote">
+    <element name="quote">
+      <ref name="attlist.quote"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="phrase">
+    <element name="phrase">
+      <ref name="attlist.phrase"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="productname">
+    <element name="productname">
+      <ref name="attlist.productname"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+          <ref name="superscript"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="productnumber">
+    <element name="productnumber">
+      <ref name="attlist.productnumber"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+          <ref name="superscript"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="systemitem">
+    <element name="systemitem">
+      <ref name="attlist.systemitem"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="varname">
+    <element name="varname">
+      <ref name="attlist.varname"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist.varname" combine="interleave">
+    <empty/>
+  </define>
+  <!-- Curtis, do we need that according to legal issues? -->
+  <define name="trademark">
+    <element name="trademark">
+      <ref name="attlist.trademark"/>
+      <text/>
+    </element>
+  </define>
+  <define name="co">
+    <element name="co">
+      <ref name="attlist.co"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="xref">
+    <element name="xref">
+      <ref name="attlist.xref"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="link">
+    <element name="link">
+      <ref name="attlist.link"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="basicinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ulink">
+    <element name="ulink">
+      <ref name="attlist.ulink"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="basicinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="keycombo">
+    <element name="keycombo">
+      <ref name="attlist.keycombo"/>
+      <oneOrMore>
+        <ref name="keycap"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="keycap">
+    <element name="keycap">
+      <ref name="attlist.keycap"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="menuchoice">
+    <element name="menuchoice">
+      <ref name="attlist.menuchoice"/>
+      <optional>
+        <ref name="shortcut"/>
+      </optional>
+      <oneOrMore>
+        <ref name="guimenu"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- toms -->
+  <define name="shortcut">
+    <element name="shortcut">
+      <ref name="attlist.shortcut"/>
+      <choice>
+        <ref name="keycombo"/>
+        <oneOrMore>
+          <ref name="keycap"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="guimenu">
+    <element name="guimenu">
+      <ref name="attlist.guimenu"/>
+      <text/>
+    </element>
+  </define>
+  <define name="subscript">
+    <element name="subscript">
+      <ref name="attlist.subscript"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="superscript">
+    <element name="superscript">
+      <ref name="attlist.superscript"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- common -->
+  <define name="bridgehead">
+    <element name="bridgehead">
+      <ref name="attlist.bridgehead"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="coreinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="title">
+    <element name="title">
+      <ref name="attlist.title"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="coreinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="subtitle">
+    <element name="subtitle">
+      <ref name="attlist.subtitle"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="coreinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist.subtitle" combine="interleave">
+    <empty/>
+  </define>
+  <define name="titleabbrev">
+    <element name="titleabbrev">
+      <ref name="attlist.titleabbrev"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="coreinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="example">
+    <element name="example">
+      <ref name="attlist.example"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <choice>
+          <ref name="lists"/>
+          <ref name="formalpara"/>
+          <ref name="para"/>
+          <ref name="screen"/>
+          <ref name="indexterm"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="para">
+    <element name="para">
+      <ref name="attlist.para"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="formalpara">
+    <element name="formalpara">
+      <ref name="attlist.formalpara"/>
+      <ref name="title"/>
+      <ref name="para"/>
+    </element>
+  </define>
+  <!-- change add replaceable, command, emphasis, option  and xrefinlines to screen -->
+  <define name="screen">
+    <element name="screen">
+      <ref name="attlist.screen"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="co"/>
+          <ref name="emphasis"/>
+          <ref name="replaceable"/>
+          <ref name="command"/>
+          <ref name="option"/>
+          <ref name="phrase"/>
+          <ref name="xrefinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="remark">
+    <element name="remark">
+      <ref name="attlist.remark"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- admonitions -->
+  <define name="admonition.module">
+    <optional>
+      <ref name="title"/>
+    </optional>
+    <oneOrMore>
+      <choice>
+        <ref name="para"/>
+        <ref name="remark"/>
+        <ref name="screen"/>
+        <ref name="simplelist"/>
+        <ref name="itemizedlist"/>
+        <ref name="variablelist"/>
+        <ref name="orderedlist"/>
+      </choice>
+    </oneOrMore>
+  </define>
+  <define name="tip">
+    <element name="tip">
+      <ref name="attlist.tip"/>
+      <ref name="admonition.module"/>
+    </element>
+  </define>
+  <define name="important">
+    <element name="important">
+      <ref name="attlist.important"/>
+      <ref name="admonition.module"/>
+    </element>
+  </define>
+  <define name="note">
+    <element name="note">
+      <ref name="attlist.note"/>
+      <ref name="admonition.module"/>
+    </element>
+  </define>
+  <define name="warning">
+    <element name="warning">
+      <ref name="attlist.warning"/>
+      <ref name="admonition.module"/>
+    </element>
+  </define>
+  <!-- lists -->
+  <define name="itemizedlist">
+    <element name="itemizedlist">
+      <ref name="attlist.itemizedlist"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="remark"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="listitem"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="orderedlist">
+    <element name="orderedlist">
+      <ref name="attlist.orderedlist"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="remark"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="listitem"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="simplelist">
+    <element name="simplelist">
+      <ref name="attlist.simplelist"/>
+      <oneOrMore>
+        <ref name="member"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="variablelist">
+    <element name="variablelist">
+      <ref name="attlist.variablelist"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="remark"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="varlistentry"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!--
+    calloutlist is used with co tag to callout sections within screen
+    we should review the use of calloutlist, callout and co
+  -->
+  <define name="calloutlist">
+    <element name="calloutlist">
+      <ref name="attlist.calloutlist"/>
+      <oneOrMore>
+        <ref name="callout"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="callout">
+    <element name="callout">
+      <ref name="attlist.callout"/>
+      <oneOrMore>
+        <choice>
+          <ref name="para"/>
+          <ref name="remark"/>
+          <ref name="lists"/>
+          <ref name="admonitions"/>
+          <ref name="screen"/>
+          <ref name="indexterm"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="listitem">
+    <element name="listitem">
+      <ref name="attlist.listitem"/>
+      <oneOrMore>
+        <ref name="all"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="member">
+    <element name="member">
+      <ref name="attlist.member"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="varlistentry">
+    <element name="varlistentry">
+      <ref name="attlist.varlistentry"/>
+      <oneOrMore>
+        <ref name="term"/>
+      </oneOrMore>
+      <ref name="listitem"/>
+    </element>
+  </define>
+  <define name="term">
+    <element name="term">
+      <ref name="attlist.term"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="allinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- procedure -->
+  <define name="procedure">
+    <element name="procedure">
+      <ref name="attlist.procedure"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="all"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="step"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="step">
+    <element name="step">
+      <ref name="attlist.step"/>
+      <choice>
+        <ref name="para"/>
+        <ref name="formalpara"/>
+      </choice>
+      <zeroOrMore>
+        <ref name="all"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="substeps"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="substeps">
+    <element name="substeps">
+      <ref name="attlist.substeps"/>
+      <oneOrMore>
+        <ref name="step"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- tables -->
+  <define name="informaltable">
+    <element name="informaltable">
+      <ref name="attlist.informaltable"/>
+      <ref name="tgroup"/>
+    </element>
+  </define>
+  <define name="table">
+    <element name="table">
+      <ref name="attlist.table"/>
+      <ref name="title"/>
+      <ref name="tgroup"/>
+    </element>
+  </define>
+  <define name="tgroup">
+    <element name="tgroup">
+      <ref name="attlist.tgroup"/>
+      <zeroOrMore>
+        <ref name="colspec"/>
+      </zeroOrMore>
+      <optional>
+        <ref name="thead"/>
+      </optional>
+      <ref name="tbody"/>
+    </element>
+  </define>
+  <define name="colspec">
+    <element name="colspec">
+      <ref name="attlist.colspec"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="thead">
+    <element name="thead">
+      <ref name="attlist.thead"/>
+      <zeroOrMore>
+        <ref name="colspec"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="row"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="tbody">
+    <element name="tbody">
+      <ref name="attlist.tbody"/>
+      <oneOrMore>
+        <ref name="row"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="row">
+    <element name="row">
+      <ref name="attlist.row"/>
+      <oneOrMore>
+        <ref name="entry"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!--
+    novdoc entry included tblhead and tsubhead for which no docbook
+    counterpart exists. May need to find alternatives?
+  -->
+  <define name="entry">
+    <element name="entry">
+      <ref name="attlist.entry"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="admonitions"/>
+          <ref name="mediaobject"/>
+          <ref name="para"/>
+          <ref name="screen"/>
+          <ref name="formalpara"/>
+          <ref name="itemizedlist"/>
+          <ref name="orderedlist"/>
+          <ref name="simplelist"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- figures -->
+  <define name="figure">
+    <element name="figure">
+      <ref name="attlist.figure"/>
+      <ref name="title"/>
+      <oneOrMore>
+        <ref name="mediaobject"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="informalfigure">
+    <element name="informalfigure">
+      <ref name="attlist.informalfigure"/>
+      <oneOrMore>
+        <ref name="mediaobject"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <!--
+    provo doc has required a text description for all graphics where suse
+    has not. textobject is optional but we might discuss this further
+  -->
+  <define name="inlinemediaobject">
+    <element name="inlinemediaobject">
+      <ref name="attlist.inlinemediaobject"/>
+      <optional>
+        <ref name="textobject"/>
+      </optional>
+      <oneOrMore>
+        <ref name="imageobject"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="mediaobject">
+    <element name="mediaobject">
+      <ref name="attlist.mediaobject"/>
+      <zeroOrMore>
+        <ref name="textobject"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="imageobject"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="imageobject">
+    <element name="imageobject">
+      <ref name="attlist.imageobject"/>
+      <ref name="imagedata"/>
+    </element>
+  </define>
+  <define name="imagedata">
+    <element name="imagedata">
+      <ref name="attlist.imagedata"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="textobject">
+    <element name="textobject">
+      <ref name="attlist.textobject"/>
+      <ref name="phrase"/>
+    </element>
+  </define>
+  <!-- glossary -->
+  <define name="glossary">
+    <element name="glossary">
+      <ref name="attlist.glossary"/>
+      <ref name="title"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="para"/>
+          <ref name="formalpara"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="glossentry"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="glossdiv"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="glossdiv">
+    <element name="glossdiv">
+      <ref name="attlist.glossdiv"/>
+      <ref name="title"/>
+      <zeroOrMore>
+        <ref name="remark"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="glossentry"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="glossentry">
+    <element name="glossentry">
+      <ref name="attlist.glossentry"/>
+      <ref name="glossterm"/>
+      <oneOrMore>
+        <ref name="glossdef"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="glossterm">
+    <element name="glossterm">
+      <ref name="attlist.glossterm"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="basicinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="glossdef">
+    <element name="glossdef">
+      <ref name="attlist.glossdef"/>
+      <oneOrMore>
+        <choice>
+          <ref name="para"/>
+          <ref name="remark"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <!-- indexterm -->
+  <define name="indexterm">
+    <element name="indexterm">
+      <ref name="attlist.indexterm"/>
+      <optional>
+        <ref name="primary"/>
+      </optional>
+      <optional>
+        <choice>
+          <group>
+            <ref name="secondary"/>
+            <optional>
+              <choice>
+                <group>
+                  <ref name="tertiary"/>
+                  <optional>
+                    <choice>
+                      <ref name="see"/>
+                      <oneOrMore>
+                        <ref name="seealso"/>
+                      </oneOrMore>
+                    </choice>
+                  </optional>
+                </group>
+                <ref name="see"/>
+                <oneOrMore>
+                  <ref name="seealso"/>
+                </oneOrMore>
+              </choice>
+            </optional>
+          </group>
+          <ref name="see"/>
+          <oneOrMore>
+            <ref name="seealso"/>
+          </oneOrMore>
+        </choice>
+      </optional>
+    </element>
+  </define>
+  <!-- content for these???? -->
+  <define name="primary">
+    <element name="primary">
+      <ref name="attlist.primary"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="secondary">
+    <element name="secondary">
+      <ref name="attlist.secondary"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="tertiary">
+    <element name="tertiary">
+      <ref name="attlist.tertiary"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="see">
+    <element name="see">
+      <ref name="attlist.see"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="seealso">
+    <element name="seealso">
+      <ref name="attlist.seealso"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- authorgroup -->
+  <define name="authorgroup">
+    <element name="authorgroup">
+      <ref name="attlist.authorgroup"/>
+      <oneOrMore>
+        <ref name="author"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="author">
+    <element name="author">
+      <ref name="attlist.author"/>
+      <ref name="firstname"/>
+      <ref name="surname"/>
+    </element>
+  </define>
+  <define name="firstname">
+    <element name="firstname">
+      <ref name="attlist.firstname"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="surname">
+    <element name="surname">
+      <ref name="attlist.surname"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- msgset -->
+  <define name="msgset">
+    <element name="msgset">
+      <ref name="attlist.msgset"/>
+      <oneOrMore>
+        <ref name="simplemsgentry"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="attlist.msgset" combine="interleave">
+    <empty/>
+  </define>
+  <define name="simplemsgentry">
+    <element name="simplemsgentry">
+      <ref name="attlist.simplemsgentry"/>
+      <ref name="msgtext"/>
+      <oneOrMore>
+        <ref name="msgexplan"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="msgtext">
+    <element name="msgtext">
+      <ref name="attlist.msgtext"/>
+      <oneOrMore>
+        <choice>
+          <ref name="para"/>
+          <ref name="remark"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="attlist.msgtext" combine="interleave">
+    <empty/>
+  </define>
+  <define name="msgexplan">
+    <element name="msgexplan">
+      <ref name="attlist.msgexplan"/>
+      <ref name="title"/>
+      <ref name="para"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist.msgexplan" combine="interleave">
+    <empty/>
+  </define>
+  <!-- misc -->
+  <define name="legalnotice">
+    <element name="legalnotice">
+      <ref name="attlist.legalnotice"/>
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <oneOrMore>
+        <choice>
+          <ref name="simplelist"/>
+          <ref name="para"/>
+          <ref name="formalpara"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="date">
+    <element name="date">
+      <ref name="attlist.date"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="phrase"/>
+          <ref name="superscript"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- refentry -->
+  <define name="refentry">
+    <element name="refentry">
+      <ref name="attlist.refentry"/>
+      <optional>
+        <ref name="refmeta"/>
+      </optional>
+      <zeroOrMore>
+        <ref name="remark"/>
+      </zeroOrMore>
+      <ref name="refnamediv"/>
+      <oneOrMore>
+        <ref name="refsect1"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="refmeta">
+    <element name="refmeta">
+      <ref name="attlist.refmeta"/>
+      <ref name="refentrytitle"/>
+      <optional>
+        <ref name="manvolnum"/>
+      </optional>
+    </element>
+  </define>
+  <define name="attlist.refmeta" combine="interleave">
+    <empty/>
+  </define>
+  <define name="refentrytitle">
+    <element name="refentrytitle">
+      <ref name="attlist.refentrytitle"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="command"/>
+          <ref name="envar"/>
+          <ref name="literal"/>
+          <ref name="replaceable"/>
+          <ref name="filename"/>
+          <ref name="guiinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="manvolnum">
+    <element name="manvolnum">
+      <ref name="attlist.manvolnum"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist.manvolnum" combine="interleave">
+    <empty/>
+  </define>
+  <define name="refnamediv">
+    <element name="refnamediv">
+      <ref name="attlist.refnamediv"/>
+      <oneOrMore>
+        <ref name="refname"/>
+      </oneOrMore>
+      <ref name="refpurpose"/>
+      <zeroOrMore>
+        <ref name="refclass"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <choice>
+          <ref name="link"/>
+          <ref name="ulink"/>
+          <ref name="remark"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refname">
+    <element name="refname">
+      <ref name="attlist.refname"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="command"/>
+          <ref name="envar"/>
+          <ref name="literal"/>
+          <ref name="replaceable"/>
+          <ref name="filename"/>
+          <ref name="guiinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refpurpose">
+    <element name="refpurpose">
+      <ref name="attlist.refpurpose"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="xrefinlines"/>
+          <ref name="basicinlines"/>
+          <ref name="guiinlines"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refclass">
+    <element name="refclass">
+      <ref name="attlist.refclass"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="application"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refsect1">
+    <element name="refsect1">
+      <ref name="attlist.refsect1"/>
+      <ref name="title"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="refsect2"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refsect2">
+    <element name="refsect2">
+      <ref name="attlist.refsect2"/>
+      <ref name="title"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="refsect3"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="refsect3">
+    <element name="refsect3">
+      <ref name="attlist.refsect3"/>
+      <ref name="title"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="all"/>
+          <ref name="procedure"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <!-- change added condition and userlevel -->
+  <define name="attlist.abstract" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.appendix" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.application" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.article" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="lang"/>
+    </optional>
+    <optional>
+      <attribute name="class">
+        <choice>
+          <value>faq</value>
+          <value>journalarticle</value>
+          <value>productsheet</value>
+          <value>specification</value>
+          <value>techreport</value>
+          <value>whitepaper</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="xmlbase"/>
+    <ref name="profiling.attributes"/>
+  </define>
+  <define name="attlist.articleinfo" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="xmlbase"/>
+    <ref name="profiling.attributes"/>
+  </define>
+  <define name="attlist.author" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.authorgroup" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.book" combine="interleave">
+    <optional>
+      <attribute name="revision"/>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="conformance"/>
+    </optional>
+    <optional>
+      <attribute name="lang"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.bookinfo" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.bridgehead" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+    <optional>
+      <attribute name="renderas">
+        <choice>
+          <value>sect1</value>
+          <value>sect2</value>
+          <value>sect3</value>
+          <value>sect4</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="attlist.calloutlist" combine="interleave">
+    <ref name="profiling.attributes"/>
+  </define>
+  <!-- change added role to Chapter -->
+  <define name="attlist.chapter" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="conformance"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="revision"/>
+    </optional>
+    <optional>
+      <attribute name="lang"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.citetitle" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+    <optional>
+      <attribute name="pubwork">
+        <choice>
+          <value>article</value>
+          <value>bbs</value>
+          <value>book</value>
+          <value>cdrom</value>
+          <value>chapter</value>
+          <value>dvd</value>
+          <value>emailmessage</value>
+          <value>gopher</value>
+          <value>journal</value>
+          <value>manuscript</value>
+          <value>newsposting</value>
+          <value>part</value>
+          <value>refentry</value>
+          <value>section</value>
+          <value>series</value>
+          <value>set</value>
+          <value>webpage</value>
+          <value>wiki</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="attlist.co" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="xmlbase"/>
+    <ref name="profiling.attributes"/>
+  </define>
+  <define name="attlist.colspec" combine="interleave">
+    <optional>
+      <attribute name="colnum"/>
+    </optional>
+    <optional>
+      <attribute name="colname"/>
+    </optional>
+    <optional>
+      <attribute name="colwidth"/>
+    </optional>
+    <optional>
+      <attribute name="align">
+        <choice>
+          <value>center</value>
+          <value>justify</value>
+          <value>left</value>
+          <value>right</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="xmlbase"/>
+    <ref name="profiling.attributes"/>
+  </define>
+  <define name="attlist.command" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.date" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.emphasis" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.entry" combine="interleave">
+    <optional>
+      <attribute name="align">
+        <choice>
+          <value>center</value>
+          <value>justify</value>
+          <value>left</value>
+          <value>right</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="colname"/>
+    </optional>
+    <optional>
+      <attribute name="namest"/>
+    </optional>
+    <optional>
+      <attribute name="nameend"/>
+    </optional>
+    <optional>
+      <attribute name="morerows"/>
+    </optional>
+    <optional>
+      <attribute name="valign">
+        <choice>
+          <value>bottom</value>
+          <value>middle</value>
+          <value>top</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.envar" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.example" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- pgwide used to set image at left edge or current indent -->
+  <define name="attlist.figure" combine="interleave">
+    <optional>
+      <attribute name="pgwide"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.filename" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.firstname" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.formalpara" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.glossary" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.glossdef" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.glossterm" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.glossdiv" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.glossentry" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.guimenu" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.index" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.informalfigure" combine="interleave">
+    <optional>
+      <attribute name="pgwide"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.imageobject" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.imagedata" combine="interleave">
+    <optional>
+      <attribute name="fileref"/>
+    </optional>
+    <optional>
+      <attribute name="width"/>
+    </optional>
+    <optional>
+      <attribute name="format"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.important" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.informaltable" combine="interleave">
+    <optional>
+      <attribute name="frame">
+        <choice>
+          <value>topbot</value>
+          <value>none</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="rowsep"/>
+    </optional>
+    <optional>
+      <attribute name="pgwide"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.inlinemediaobject" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- change added role and spacing -->
+  <define name="attlist.itemizedlist" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="mark" a:defaultValue="bullet">
+        <choice>
+          <value>bullet</value>
+          <value>dash</value>
+          <value>box</value>
+          <value>check</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="spacing" a:defaultValue="normal">
+        <choice>
+          <value>compact</value>
+          <value>normal</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.keycap" combine="interleave">
+    <optional>
+      <attribute name="function">
+        <choice>
+          <value>alt</value>
+          <value>backspace</value>
+          <value>command</value>
+          <value>control</value>
+          <value>delete</value>
+          <value>down</value>
+          <value>end</value>
+          <value>enter</value>
+          <value>escape</value>
+          <value>home</value>
+          <value>insert</value>
+          <value>left</value>
+          <value>meta</value>
+          <value>option</value>
+          <value>other</value>
+          <value>pagedown</value>
+          <value>pageup</value>
+          <value>right</value>
+          <value>shift</value>
+          <value>space</value>
+          <value>tab</value>
+          <value>up</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.keycombo" combine="interleave">
+    <optional>
+      <attribute name="action">
+        <choice>
+          <value>press</value>
+          <value>seq</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.legalnotice" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.listitem" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.literal" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.mediaobject" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.member" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.menuchoice" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.note" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.option" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- change added spacing -->
+  <define name="attlist.orderedlist" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="spacing" a:defaultValue="normal">
+        <choice>
+          <value>compact</value>
+          <value>normal</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.para" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.part" combine="interleave">
+    <optional>
+      <attribute name="revision"/>
+    </optional>
+    <optional>
+      <attribute name="conformance"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.partintro" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.phrase" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.preface" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.primary" combine="interleave">
+    <optional>
+      <attribute name="sortas"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.procedure" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.productname" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.productnumber" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.quote" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refclass" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.remark" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refname" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refnamediv" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refpurpose" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refentry" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refentrytitle" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refsect1" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refsect2" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.refsect3" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.simplemsgentry" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.replaceable" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.row" combine="interleave">
+    <optional>
+      <attribute name="rowsep"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="valign">
+        <choice>
+          <value>bottom</value>
+          <value>middle</value>
+          <value>top</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.screen" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <optional>
+      <attribute name="linenumbering">
+        <choice>
+          <value>numbered</value>
+          <value>unnumbered</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.sect1" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.sect2" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.sect3" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.sect4" combine="interleave">
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.secondary" combine="interleave">
+    <optional>
+      <attribute name="sortas"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.see" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.seealso" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.set" combine="interleave">
+    <optional>
+      <attribute name="lang"/>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.setindex" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.shortcut" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.simplelist" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.step" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="performance" a:defaultValue="required">
+        <choice>
+          <value>optional</value>
+          <value>required</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.subscript" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- id on substeps was probably a mistake -->
+  <define name="attlist.substeps" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="performance" a:defaultValue="required">
+        <choice>
+          <value>optional</value>
+          <value>required</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.superscript" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.surname" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.systemitem" combine="interleave">
+    <optional>
+      <attribute name="class">
+        <choice>
+          <value>constant</value>
+          <value>daemon</value>
+          <value>domainname</value>
+          <value>etheraddress</value>
+          <value>event</value>
+          <value>eventhandler</value>
+          <value>filesystem</value>
+          <value>fqdomainname</value>
+          <value>groupname</value>
+          <value>ipaddress</value>
+          <value>library</value>
+          <value>macro</value>
+          <value>netmask</value>
+          <value>newsgroup</value>
+          <value>osname</value>
+          <value>process</value>
+          <value>resource</value>
+          <value>server</value>
+          <value>service</value>
+          <value>systemname</value>
+          <value>username</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.table" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="frame">
+        <choice>
+          <value>topbot</value>
+          <value>none</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="rowsep"/>
+    </optional>
+    <optional>
+      <attribute name="pgwide"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.tbody" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.term" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.tertiary" combine="interleave">
+    <optional>
+      <attribute name="sortas"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- change added role -->
+  <define name="attlist.textobject" combine="interleave">
+    <attribute name="role">
+      <choice>
+        <value>description</value>
+        <value>longdescription</value>
+        <value>screencappath</value>
+      </choice>
+    </attribute>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.tgroup" combine="interleave">
+    <attribute name="cols"/>
+    <optional>
+      <attribute name="tgroupstyle"/>
+    </optional>
+    <optional>
+      <attribute name="align">
+        <choice>
+          <value>center</value>
+          <value>char</value>
+          <value>justify</value>
+          <value>left</value>
+          <value>right</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="valign">
+        <choice>
+          <value>bottom</value>
+          <value>middle</value>
+          <value>top</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.thead" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.tip" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.title" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.titleabbrev" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.trademark" combine="interleave">
+    <optional>
+      <attribute name="class">
+        <choice>
+          <value>service</value>
+          <value>trade</value>
+          <value>registered</value>
+          <value>copyright</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!-- change added role attribute -->
+  <define name="attlist.ulink" combine="interleave">
+    <attribute name="url"/>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="type"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.variablelist" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.varlistentry" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.warning" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <!--
+    This parameter entity "deactivates" all IDREF(S).
+    
+    So somebody can validate a separate file even if some
+    xref/link elements points outside this file.
+    
+  -->
+  <!--
+    The NOVDOC.DEACTIVATE.IDREF p.e. is mutually exclusive
+    to the following declaration.
+    This p.e. should be never touched.
+  -->
+  <define name="attlist.callout" combine="interleave">
+    <attribute name="arearefs">
+      <data type="IDREF"/>
+    </attribute>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.link" combine="interleave">
+    <attribute name="linkend">
+      <data type="IDREF"/>
+    </attribute>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <define name="attlist.indexterm" combine="interleave">
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+    <optional>
+      <attribute name="startref">
+        <data type="IDREF"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="role"/>
+    </optional>
+    <optional>
+      <attribute name="class">
+        <choice>
+          <value>endofrange</value>
+          <value>singular</value>
+          <value>startofrange</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="attlist.xref" combine="interleave">
+    <attribute name="linkend">
+      <data type="IDREF"/>
+    </attribute>
+    <optional>
+      <attribute name="xrefstyle"/>
+    </optional>
+    <ref name="profiling.attributes"/>
+    <ref name="xmlbase"/>
+  </define>
+  <start>
+    <choice>
+      <ref name="set"/>
+    </choice>
+  </start>
+</grammar>
+<!-- End of %__HIDE__ -->
+<!--
+  Entities which are used by SUSE
+  
+  If someone doesn't need that, it can be switched off with the proper
+  parameter entity declaration, e.g.:
+  <!ENTITY % ISOlat1.module "IGNORE">
+-->
+<!-- end of ISOlat1.module -->
+<!-- end of ISOlat2.module -->
+<!-- end of ISOnum.module -->
+<!-- end of ISOpub.module -->
+<!--
+  <!ENTITY % NOVELLmisc.module "INCLUDE">
+  <![ %NOVELLmisc.module; [
+   <!ENTITY % NOVELLmisc PUBLIC "-//Novell//ENTITIES Misc//EN" "novell.ent">
+  <!- -end of NOVELLmisc.module- ->]]>
+  
+  <![ %NOVELLmisc.module; [
+  %NOVELLmisc;
+  ]]>
+-->

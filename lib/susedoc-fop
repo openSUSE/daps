@@ -1,0 +1,123 @@
+#!/bin/sh
+__VERSION__="$Id: suse-fop 43536 2009-08-11 22:10:56Z jw $"
+
+#
+# Configuring variables
+#
+
+FOP_HOME=${FOP_HOME:-"/usr/share/fop"}
+FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/susedoc/fop/fop-suse.xml"}
+FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
+FOP_STACK=${FOP_STACK:-"-Xss512K"}
+FOP_CATALOG_VERBOSITY=${FOP_CATALOG_VERBOSITY:-"3"}
+JAVA_HOME="/etc/alternatives/jre"
+
+rpm_mode=true
+fop_exec_args=
+no_config=false
+fop_exec_debug=false
+show_help=false
+
+echo -e "\033[34m* Using $__VERSION__\033[m\017"
+echo -e "\033[34m* FOP using configuration file »$FOP_CONFIG_FILE«\033[m\017"
+
+
+for arg in "$@" ; do
+  if [ "$arg" = "--noconfig" ] ; then
+    no_config=true
+  elif [ "$arg" = "--execdebug" ] ; then
+    fop_exec_debug=true
+  elif [ my"$arg" = my"--h"  -o my"$arg" = my"--help"  ] ; then
+    show_help=true
+    fop_exec_args="$fop_exec_args -h"
+  else
+    if [  my"$arg" = my"-h"  -o  my"$arg" = my"-help" ] ; then
+      show_help=true
+    fi
+    fop_exec_args="$fop_exec_args \"$arg\""
+  fi
+done
+
+# Source/default fop configuration
+if $no_config ; then
+  rpm_mode=false
+else
+  # load system-wide fop configuration
+  if [ -f "/etc/fop.conf" ] ; then
+    . /etc/fop.conf
+  fi
+
+  # load user fop configuration
+  if [ -f "$HOME/.fop/fop.conf" ] ; then
+    . $HOME/.fop/fop.conf
+  fi
+  if [ -f "$HOME/.foprc" ] ; then
+    . "$HOME/.foprc"
+  fi
+
+  # provide default configuration values
+  if [ -z "$rpm_mode" ] ; then
+    rpm_mode=false
+  fi
+  if [ -z "$usejikes" ] ; then
+    usejikes=$use_jikes_default
+  fi
+fi
+
+#exec $FOP_HOME/fop "$@"
+
+if [ "$OS" = "Windows_NT" ] ; then
+    pathSepChar=";"
+else
+    pathSepChar=":"
+fi
+
+# Build the classpath for FOP
+if [ -f /usr/share/java/xmlgraphics-fop.jar ]; then
+  CP=/usr/share/java/xmlgraphics-fop.jar${pathSepChar}$CP
+else
+  # pre 11.4
+  for j in ${FOP_HOME}/lib/*.jar; do
+    if [ $j = ${FOP_HOME}/lib/\*.jar ]; then
+      echo "fop classes are missing"; exit 1
+    else
+      CP=$j${pathSepChar}$CP
+    fi
+  done
+fi
+
+TMPFILE=$(mktemp /tmp/suse-fop.XXXXXX)
+xx=$(build-classpath xmlgraphics-batik-all xml-commons-resolver jaxp_transform_impl excalibur/avalon-framework-api excalibur/avalon-framework-impl 2>$TMPFILE)
+CP=$CP${pathSepChar}$xx${pathSepChar}$DTDROOT/etc
+if ! $fop_exec_debug; then
+  rm -f $TMPFILE
+fi
+
+#echo "Classpath:" $CP
+
+if [ "$FOP_CONFIG_FILE" != "" ]; then
+  FOP_OPTS="-c $FOP_CONFIG_FILE" $FOP_OPTS
+fi
+
+# echo "CLASSPATH (local): $CP"
+
+if  [ -s /etc/alternatives/xml-commons-resolver ]; then
+echo -e "\033[34m* FOP has catalog support\033[m\017"
+fop_exec_command="exec $JAVA_HOME/bin/java \
+    $LOGCHOICE $LOGLEVEL \
+    $FOP_MEMORY $FOP_STACK \
+    -classpath \"$CP\" \
+    -Dxml.catalog.verbosity=$FOP_CATALOG_VERBOSITY \
+    -Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver \
+    org.apache.fop.cli.Main \
+    $FOP_OPTS $@"
+#     $FOP_OPTS \
+else
+echo -e "\033[31m* FOP WARNING: No Catalog Support!\033[m\017"
+fop_exec_command="exec $JAVA_HOME/bin/java $LOGCHOICE $LOGLEVEL -classpath \"$CP\" org.apache.fop.cli.Main $FOP_OPTS $@"
+fi
+
+echo "----------------------"
+echo $fop_exec_command
+echo
+eval $fop_exec_command

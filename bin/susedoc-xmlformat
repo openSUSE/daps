@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Used as a wrapper script, so it's not necessary to memorize
+# where the config file stays
+
+CONFIG_FILE="/usr/share/susedoc/etc/docbook-xmlformat.conf"
+
+# Directory of current shell script
+#bin="${BASH_SOURCE%/*}"
+#CONFIG_FILE="$bin/$CONFIG_FILE"
+
+echo "Using config file '$CONFIG_FILE'"
+
+if [ ! -e $CONFIG_FILE ]; then
+  printf "Could not find config file '$CONFIG_FILE'\n"
+  exit 100
+fi
+
+#cmd="xmlformat.pl --config-file '$CONFIG_FILE' $@"
+#echo $cmd
+#eval $cmd
+
+res=$(which xmlformat.pl 2>/dev/null)
+if [ "$res" = '' ]; then
+  printf "The xmlformat.pl script is missing. Please install the package xmlformat!\n"
+  exit 200
+fi
+
+xmlformat=$res
+## check, if xmlformat supports tag-formatting
+if $xmlformat -t < /dev/null >/dev/null 2>&1; then
+  xmlformat="$xmlformat -t"
+else
+  echo "$xmlformat: tag-formatting not supported."
+  echo "Please install version 1.04.01 or later."
+fi
+
+$xmlformat --config-file "$CONFIG_FILE" $@
+exit $?

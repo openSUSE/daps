@@ -1,0 +1,239 @@
+# @notice@
+# norootforbuild
+Name: @package@
+%define my_lang @LL@
+%define my_prov_obs suselinux-adminguide_%{my_lang} suselinux-userguide_%{my_lang} suselinux-manual_%{my_lang}
+%define my_book @BOOK@
+Version:        @version@
+Release:        1
+Obsoletes:      %{my_prov_obs}
+Provides:       %{my_prov_obs}
+Provides:       locale(desktop-data-openSUSE:@LL@)
+#OBS
+Source09:       LICENSE.txt
+#SOURCES
+Source901: pre_checkin.sh
+Source902: update_spec.pl
+Source903: attributes
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildArch:      noarch
+BuildRequires:  update-desktop-files
+Group:          Documentation/SuSE
+License:        GFDL
+Summary:        SUSE LINUX Adminguide (english)
+%define _defaultdocdir %{_datadir}/doc/manual
+%define _docdir %{_datadir}/doc/manual
+%define PDFDOC %{_defaultdocdir}/%{name}-pdf
+
+%description
+-
+
+#PDFSUB
+
+# Since 11.3 no longer wanted
+# %package pdf
+# Group:        Documentation/SuSE
+# License:      GFDL
+# Summary:      SUSE LINUX Adminguide (english)
+# Provides:     locale(desktop-data-openSUSE:@LL@)
+# #PDFOBS
+# 
+# %description pdf
+# -
+
+%prep
+#%setup -c -q
+#PREP
+cp %{S:9} .
+find -name '*.png' -o -name '*.svg' | xargs chmod 644 || :
+#PDFPREP
+
+%build
+# make sure index.html exists
+for f in $(find html -type f -name 'book.*'); do
+  pushd ${f%/*}
+  [ -f index.html -o -L index.html ] || ln -sf ${f##*/} index.html
+  popd
+done
+
+%install
+mkdir -p $RPM_BUILD_ROOT%{_defaultdocdir}
+#@slash_flavor@ is set for sles or sled as /sles or /sled
+%define my_desktopdir /usr/share/susehelp/meta@slash_flavor@
+echo %{my_desktopdir} | sed 's:\(@slash_flavor@\|xyzy\)::' >filelist
+# mkdir -p  desktop/{startup,reference,application,apparmor-admin-guide}
+###
+install -d $RPM_BUILD_ROOT%{my_desktopdir}/%{name}
+# product is name without language code
+%define gnome_dir %{_datadir}/gnome/help/@product@
+install -d $RPM_BUILD_ROOT%{gnome_dir}
+#
+if [ -d html/%my_book ]; then
+mv html/%my_book html/manual
+pushd desktop
+# problem writing desktop files on 10.3
+### CHECKIT: still necessary on 11.0?
+if [ -d index.desktop ]; then
+  for f in $(find index.desktop -mindepth 1 -maxdepth 1); do
+    mv $f .
+  done
+  rmdir index.desktop
+fi
+### CHECKIT: can we fix this for 11.0?  Just avoid the subdir...
+if [ ! -f .directory ]; then
+  # stand-alone book, hidden in sub-directory
+  dir=$(find . -maxdepth 1 -type d -name 'book_*')
+  if [ -n "$dir" ]; then
+    for f in $(find $dir -mindepth 1 -maxdepth 1); do
+      mv $f .
+    done
+    rmdir $dir
+  fi
+fi
+for f in $(find . -type f -name '*desktop'); do
+    # /usr/share/doc/manual/suselinux-manual_en/manual
+    sed -i "/^X-DOC-Identifier.*/d
+s|@PATH@|%{_defaultdocdir}/%{name}/manual|
+s/\[\]//" $f
+    if ! grep -q -e '^Name *=' $f; then
+    # requiered if no "Name=" is present
+      sed -i "s|^Name\[.*\]\(=.*\)|Name\1\\
+&|" $f
+    fi
+done
+for d in $(find . -maxdepth 1 -type d -name 'book*'); do
+  id=${d//\./}
+  id=${id//\//}%{my_lang}
+  pushd $d
+  for f in $(find . -name '.directory'); do
+    sed -i "s|@PATH@|%{_defaultdocdir}/%{name}/manual|
+s/\[\]//
+s|@id@|$id|" $f
+    case $d in
+      *_startup)
+        [ $f = "./.directory" ] \
+          && sed -i "s|^\(X-DOC-Weight\).*|\1=-10000|" $f ;;
+    esac
+  done
+  popd
+done
+
+# Probably useful for stand-alone books
+for f in $(find . -name '*.directory'); do
+  id=%{name}
+  id=${id//_/}
+  sed -i "s|@PATH@|%{_defaultdocdir}/%{name}/manual|
+s/\[\]//
+s|@id@|$id|" $f
+  # Fix the index.html reference
+  if [ $f = ./.directory ]; then
+    sed -i 's:\(^DocPath.*/\).*:\1index.html:
+s/^\(Name\|Comment\)\(.*\)/\1\2 (%{my_lang})/' $f
+
+    # write yelp / rarian file
+    sed "
+# remove useless comments and search settings
+/^Comment/d
+/^X-DOC-Search/d
+s/^\[Desktop Entry\]/[Document]/
+/^Name *=/i\
+DocPath=file://%{_defaultdocdir}/%{name}/manual/index.html\n\
+DocType=text/html\n\
+DocLang=%{my_lang}\n\
+Icon=document2\n\
+Categories=System;Core;Translation;Documentation
+s/^X-DOC-Identifier=/DocIdentifier=com.novell./
+s/^X-DOC-Weight/DocWeight/
+" $f > ../%{name}.document
+    my_title=$(echo "%{summary}" | sed 's/[Pp][Dd][Ff]//;s/(.*)//')
+    #if grep -s -q '^Name *= *$' ../%{name}.document; then
+    sed -i "
+s/^\(Name.*\)=\(.*\)/\1=$my_title \2/" ../%{name}.document
+    # fi
+    # if Name contains just "Documentation", add product info
+    # FIXME: check this properly
+    if ! grep -s -q '^Name *= *@flavor@' ../%{name}.document; then
+      sed -i "
+s/^\(Name.*\)=\(.*\)/\1=@flavor@ \2/" ../%{name}.document
+    fi
+  fi
+  # make sure to sort startup guide first
+  case %name in
+    sles-startup*)
+      [ $f = "./.directory" ] \
+        && sed -i "s|^\(X-DOC-Weight\).*|\1=-2000|" $f ;;
+  esac
+done
+cp -a . $RPM_BUILD_ROOT%{my_desktopdir}/%{name}
+cp %{S:100} $RPM_BUILD_ROOT%{my_desktopdir}/.directory || :
+popd
+if [ -d yelp ]; then
+  pushd yelp
+  for f in *.document; do
+    dir=${f%.document}
+    pdf_file=${dir/-pdf/.pdf}
+    sed -i "s|^\(DocPath=\).*|\1/usr/share/doc/manual/$dir/$pdf_file|
+s|^Categories=.*|Categories=System;Core;Translation;Documentation|
+s|^\(Name.*\)|\1 (PDF)|" $f
+  done
+fi
+popd
+if [ %{my_lang} = "en" ]; then
+  mkdir -p $RPM_BUILD_ROOT%{_datadir}/help
+  cp yelp/*.document $RPM_BUILD_ROOT%{_datadir}/help
+  cp %{name}.document $RPM_BUILD_ROOT%{_datadir}/help/%{name}.document
+else
+  ### FIXME: add PDF yelp files
+  mkdir -p $RPM_BUILD_ROOT%{_datadir}/help/LOCALE/%{my_lang}
+  cp %{name}.document \
+    $RPM_BUILD_ROOT%{_datadir}/help/LOCALE/%{my_lang}/%{name}.document
+fi
+# old stuff
+# Link it into the Gnome help system (must be found by calling
+# susehelp help://suselinux-manual/
+pushd $RPM_BUILD_ROOT%{gnome_dir}
+if [ %{my_lang} = "en" ]; then
+  target=$RPM_BUILD_ROOT%{_defaultdocdir}/%{name}/manual
+  install -d $target
+  ln -sf %{_defaultdocdir}/%{name}/manual C
+else
+  target=$RPM_BUILD_ROOT%{_defaultdocdir}/%{name}/manual
+  install -d $target
+  ln -sf %{_defaultdocdir}/%{name}/manual %{my_lang}
+fi
+popd
+else
+# PDF only books
+install -d html/manual
+echo PDF only > html/manual/%{name}
+fi
+if [ -f $RPM_BUILD_ROOT%{my_desktopdir}/%{name}/.directory ]; then
+  %suse_update_desktop_file $RPM_BUILD_ROOT%{my_desktopdir}/%{name}/.directory
+fi
+#PDFINST
+
+%clean
+rm -fr ${RPM_BUILD_ROOT}
+
+# %files pdf
+# %defattr(-, root, root)
+# %dir %{_defaultdocdir}
+# # we ship opensuse-manual_$LL-pdf just because of the provides/obsoletes
+# %doc LICENSE.txt
+# # %doc *.pdf
+#PDFXXX
+
+#PDFFILES
+
+%files
+%defattr(-, root, root)
+%dir %{_defaultdocdir}
+%doc html/manual
+%{my_desktopdir}
+%dir %{_datadir}/susehelp
+%dir %{_datadir}/susehelp/meta
+%{gnome_dir}
+%dir /usr/share/gnome
+%dir /usr/share/gnome/help
+%dir %{_datadir}/help
+%{_datadir}/help/%{name}.document

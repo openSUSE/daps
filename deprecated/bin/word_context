@@ -1,0 +1,186 @@
+#! /usr/bin/perl -w
+#
+# grab three lines of context, and reformat it as one line.
+#
+# 2009-08-12, jw, v0.3  - protected xml markup in html output better
+#
+# Usage: 
+#  
+# ./one_line_context.pl Jakub ../../../books/en/xml
+# ./one_line_context.pl wordlist.txt ../../../books/en/xml
+# call it either with a wordlist or with a word.
+#
+# TODO: 
+#  - run grep in --color=always mode, parse the wdiff colors
+#  - add -a option to print all matches,  not just the first one.
+
+use Data::Dumper;
+# 41:red 42:green 43:yellow 44:blue 45:magenta 46:cyan 47:gray
+my $c_ye = "\033[43m"; 
+my $c_no = "\033[m\033[K";
+
+my $opt;
+while (my $a = shift @ARGV)
+  {
+    if    ($a eq '-H') { $opt->{as_html}++; }
+    elsif ($a eq '-a') { $opt->{find_all}++; }
+    elsif ($a eq '-n') { $opt->{no_colors}++; }
+    elsif ($a eq '-N') { $opt->{no_highlight}++; }
+    elsif ($a eq '-v') { $opt->{verbose}++; }
+    elsif ($a eq '--') { last; }
+    elsif ($a =~ m{^-})
+      {
+        print STDERR qq{ERROR: unknown option '$a'
+
+Usage: 
+$0 [options] word 
+$0 [options] ./wordlistfile.txt
+$0 [options] word *.xml
+$0 [options] ./wordlistfile.txt *.xml
+
+Valid options are:
+ -a	show all matches. Default: show only one match per word.
+ -H	generate html output, also suitable as a .ods spreadsheet for oocalc.
+        Default: (colored) text output suitable for less -r
+ -n     No colors. Default mark words on yellow background.
+ -N     No highlight or marking. Default: *** around the word, 
+        and if HTML output, then use bold face for the word.
+ -v     be more verbose. Babble while working.
+
+The parameter <word> must not contain any slashes or dots.
+If it does so, it is asumed to be file with a list of words.
+
+If no additional parameters are given, all files in the current 
+directory are searched for matches.
+};
+	exit 0;
+      }
+    else
+      {
+        unshift @ARGV, $a;	## pushback.
+	last;
+      }
+  }
+
+# my $list = shift || "../aspell_unknown_words_2009_07_15.txt";
+my $list = shift;
+die "no word or list given.\n" unless $list;
+
+push @ARGV, '.' unless @ARGV;
+my $files = [];
+for my $f (@ARGV)
+  {
+    unless (-f $f)
+      {
+        # must be a directory
+        opendir DIR, $f or die "opendir($f) failed: $!\n";
+	push @$files, sort map { "$f/$_" } grep { -f "$f/$_" && !/^\./ } readdir DIR;
+	closedir DIR;
+      }
+    else
+      {
+        push @$files, $f;
+      }
+  }
+
+
+print "<table>\n" if $opt->{as_html};
+unless (open LI, "<", $list)
+  {
+    find_context($list, $files, $opt);
+  }
+else
+  {
+    my $n = 1;
+    while (defined(my $word = <LI>))
+      {
+	chomp $word;
+	find_context($word, $files, $opt);
+	printf STDERR " %d %s\r", $n++, $word unless -t STDOUT; 
+	last if $word eq 'adminc';
+      }
+  }
+print "</table>\n" if $opt->{as_html};
+
+#################################################
+exit 0;
+
+sub emit_one
+{
+  my ($word, $filename, $text, $opt) = @_;
+
+  if ($opt->{as_html})
+    {
+      $text =~ s{<}{&lt;}g;
+      $text =~ s{>}{&gt;}g;
+      if ($opt->{no_highlight})
+        {
+          $text =~ s{\Q$word\E}{<font size=1>$word</font>}g;
+	}
+      else
+        {
+          $text =~ s{\Q$word\E}{***<b>$word</b>***}g unless $opt->{no_highlight};
+	}
+      print "<tr><td></td><td>$word</td><td>$filename</td><td><font size=-4>$text</td></tr>\n";
+    }
+  else
+    {
+      $text =~ s{\Q$word\E}{***$word***}g unless $opt->{no_highlight};
+      $text =~ s{\Q$word\E}{$c_ye$word$c_no}g unless $opt->{no_colors};
+      print "-- $word in $filename --\n$text\n";
+    }
+}
+
+sub find_context
+{
+  my ($word, $files, $opt) = @_;
+  $files = join "' '", @$files;
+  my $all_opt = $opt->{find_all} ? '' : '-m1 ';
+  my $cmd = "env 'GREP_COLORS=ms=01;31:mc=01;31:sl=:cx=:fn=35:ln=32:bn=32:se=36:rv' grep -n -T --color=always -H -C1 -w $all_opt$word '$files'";
+  $cmd .= "| head -3" unless $opt->{find_all};
+  print STDERR "[$cmd]\n" if $opt->{verbose};
+  open IN, "-|", $cmd;
+
+  my $filename;
+  my $text;
+  while (defined(my $line = <IN>))
+    {
+      chomp $line;
+      # remove all clear EOL escapes 
+      $line =~ s{\033\[K}{}g;
+      my @line = split /\033\[[\d;]*m/, $line;
+# $VAR1 = '';
+# $VAR2 = '../../../books/en/xml//fs_structure.xml';
+# $VAR3 = '';
+# $VAR4 = '-';
+# $VAR5 = '';
+# $VAR6 = ' 425';
+# $VAR7 = '      ';
+# $VAR8 = '-';
+# $VAR9 = '     run the commands in the root file system. The Windows equivalent for';
+      if (scalar @line >= 8)
+        {
+	  $line[1] =~ s{^.*/}{};
+	  $line[5] += 0;
+	  $filename = "$line[1]:$line[5]" unless $filename;	# first line
+	  splice @line, 0, 8;	# remove these 8
+	  $text .= join ' ', @line;
+	  $text .= "\n";
+	}
+      elsif ($line eq '--' || $line[1] eq '--')
+        {
+  	  emit_one($word, $filename, $text, $opt) if $filename;
+	  $filename = '';
+	  last unless $opt->{find_all};
+	  $text = '';
+	}
+      else
+        {
+	  die Dumper \@line, $opt, "oops: unknown grep output: '$line'\n";
+	}
+    }
+  close IN;
+
+  # just in case there was no '--' line
+  emit_one($word, $filename, $text, $opt) if $filename;
+}

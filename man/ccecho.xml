@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC 
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+  <!ENTITY command "ccecho">
+  <!ENTITY date    "2011 June 14">
+]>
+
+
+<refentry lang="en" id="ccecho">
+ <refentryinfo>
+  <productname>&command;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&command;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="version">1.0</refmiscinfo>
+  <refmiscinfo class="manual">Conditional Color Echo</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&command;</refname>
+  <refpurpose>
+   ccecho (conditional color echo) let's you use colored output for STDOUT
+   while using regular output for log files, pipes and scripts
+  </refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="ccecho.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&command;</command>
+   <arg choice="plain">LEVEL</arg>
+   <arg choice="plain">MESSAGE</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="ccecho.description">
+  <title>Description</title>
+  <para>
+   Prints a colored message string to STDOUT using bash color codes. The color
+   depends on one of the LEVEL keyword. When the SHELL environment variable
+   COLOR is set to either "0" or "no" no color output is generated.
+  </para>   
+  <para>
+   The main purpose of this script is to provide an easy method to generate
+   colored output when the output should go to STDOUT, and regular output
+   (using echo -e) for log files, pipes and scripts (by exporting COLOR=0).
+  </para>
+ </refsect1>
+ 
+ <refsect1 id="ccecho.parameters">
+  <title>Parameters</title>
+  <para>ccecho takes two parameters, both are mandatory:</para>
+  <refsect2 id="ccecho.parameters.level">
+   <title>LEVEL</title>
+   <para>
+    Determines which color is used. Must be used as the first parameter. Is
+    ignored, when the ebvironment variable COLOR is set to "0" or "no".
+   </para>
+   <screen>error   ->  bold red
+info    ->  purple
+normal  ->  no color
+result  ->  green
+warn    ->  red</screen>
+  </refsect2>
+  <refsect2 id="ccecho.parameters.message">
+   <title>MESSAGE</title>
+   <para>
+    The message to be printed. Needs to be quoted using double quotes. You may
+    use sequences supported by echo (1) such as \n to insert a newline and \t
+    to insert a tab.
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="ccecho.env">
+  <title>Environment</title>
+  <variablelist>
+   <varlistentry>
+    <term><envar>COLOR</envar></term>
+    <listitem>
+     <para>
+      When set to "0" or "no", &command; will act as plain echo -e doing no
+      colored output.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1 id="ccecho.see_also">
+  <title>See also</title>
+  <para><command>echo</command>(1)</para>
+ </refsect1>
+
+</refentry>
+

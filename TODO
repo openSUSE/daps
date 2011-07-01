@@ -1,0 +1,85 @@
+----------------------------------------------------------------------------
+                              TODO
+----------------------------------------------------------------------------
+
+General:
+
+* Documentation!
+
+* Allow custom stylesheets
+
+* Reduce debug messages of make and stylesheets (susedoc -d now allows
+  to have extensive debug output by using (re)make's built-in debugging
+  switch)
+
+* rename package, script
+
+-------------
+susedoc
+
+* some targets such as clean do not need an ENVfile to be specified
+  do not check for an ENVfile with these targets 
+
+* full or realtive path to ENV-file instead of --basedir
+
+* add project-init function
+
+* replace turn on only switches -cdr with turn on/off switches
+
+* auto-generating $MAIN
+
+* auto detect $MAIN?
+
+-------------
+DocManager
+
+* adjust to new susedoc version
+
+* shortcut aliases from susedoc-aliases should be directly integrated into dm
+
+* improve speed by
+  - reducing the svn calls to a minimum
+  - using python svn bindings
+
+* Make DocManager a subpackage of susedoc?
+
+-------------
+Scripts
+
+* man page and new name for grepimage.sh 
+
+* update, man page and new name for trunkcopy.sh
+
+-------------
+Makefiles:
+
+* check if obb.mk, variables.mk, help.mk are needed
+
+* Create flow charts of Makefile mechanic [2011-04-06, fs]
+
+* Restrict graphics generation to graphics needed for the current build
+  (rather than generating all images)
+
+* Restrict profiling to current set (rather than profiling xml/*.xml)
+
+-------------
+Stylesheets:
+
+* Improve automatic indexranges so it doesn't create problems during profiling
+
+* Revamp stylesheets and remove any obsolete code pieces
+
+* FUTURE: Consider XSLT 2.0 and derive it from there
+
+* Quick Starts:
+  - Add metadata information into Quick Starts as well
+    (mainly doc:status and doc:maintainer) [taroth 2010-12-22]
+
+* Fix bugs from Bugzilla
+
+-------------
+Documentation:
+
+* needs to be updated
+
+* exclude sources from package, generate up-to-date HTML and PDF via Makefile instead

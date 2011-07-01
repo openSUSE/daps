@@ -1,0 +1,31 @@
+				jw, Thu Jun  3 14:16:09 CEST 2010
+
+
+sudo zypper -p http://download.opensuse.org/repositories/home:/babelworx:/python/openSUSE_11.2 --no-refresh -v in python-perlmodule
+
+print """
+       The "Inline::Python" module allows you to put Python source code
+       directly "inline" in a Perl script or module. It sets up an in-process
+       Python interpreter, runs your code, and then examines Python's symbol
+       table for things to bind to Perl. The process of interrogating the
+       Python interpreter for globals only occurs the first time you run your
+       Python code.  The namespace is cached, and subsequent calls use the
+       cached version.
+
+       "perl" is a Python module bundled with Inline::Python that gives you
+       access to Perl from inside your Python code. In the future, it will be
+       possible to compile Inline::Python to work the other way around -- to
+       use Python as the main programming language, and jump into Perl when
+       you want to.
+
+       The "perl" package exposes Perl packages and subs. It uses the same
+       code as Inline::Python to automatically translate parameters and return
+       values as needed. Packages and subs are represented as "PerlPkg" and
+       "PerlSub", respectively.
+
+Using the PerlPkg Type
+       The "perl" package is actually not a package at all. As soon as you
+       import it, it replaces itself with an instance of the PerlPkg class,
+       wrapping the Perl package "main". Perl's 'main' package is analogous to
+       '__main__' in Python.
+"""

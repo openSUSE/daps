@@ -1,0 +1,42 @@
+#####################################################################
+#  Steps for Building Colored PDF
+#  $Id$
+#####################################################################
+
+
+Steps to build colored PDF
+---------------------------------------------------------------------
+Creating PDF (example: ENV-susestudio-enterprise-admin, path: berlios://opensuse-doc/documents/studio/en)
+
+..........................
+make/common.mk:
+SVGPRINT    := $(addprefix images/print/, $(sort $(notdir $(SRCSVG) $(SRCSVGFIG) \
+               $(SRCSVGDIA) )))
+
+pdf-color color-pdf: $(TMP_BOOK)-$(FOPTYPE)-online.pdf
+
+provide-images: $(SVGPRINT) $(PRINTIMG)
+
+# Create pdf from fo
+ifeq ($(FOPTYPE), fop)
+%-online.pdf: tmp/%-online.fo provide-color-images warn-images $(FOP_CONFIG_FILE)
+        FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+else
+%-online.pdf: tmp/%-online.fo provide-color-images warn-images $(XEP_CONFIG_FILE)
+        XEP_CONFIG_FILE=$(XEP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+endif
+
+ifeq ($(FOPTYPE), fop)
+%.pdf: tmp/%.fo provide-images warn-images $(FOP_CONFIG_FILE)
+        FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+else
+%.pdf: tmp/%.fo provide-images warn-images $(XEP_CONFIG_FILE)
+        XEP_CONFIG_FILE=$(XEP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+endif
+
+
+..........................
+
+ . Sourcing the environment
+   . ENV-susestudio-enterprise-admin
+

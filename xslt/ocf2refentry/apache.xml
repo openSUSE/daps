@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE resource-agent SYSTEM "ra-api-1.dtd">
+<resource-agent name="apache">
+<version>1.0</version>
+
+<longdesc lang="en">
+This is the resource agent for the
+Apache web server.
+Thie resource agent operates both version 1.x and version 2.x Apache
+servers.
+See also http://httpd.apache.org/
+</longdesc>
+<shortdesc lang="en">Apache web server</shortdesc>
+
+<parameters>
+<parameter name="configfile" required="1" unique="1">
+<longdesc lang="en">
+The full pathname of the Apache configuration file.
+This file is parsed to provide defaults for various other
+resource agent parameters.
+</longdesc>
+<shortdesc lang="en">configuration file path</shortdesc>
+<content type="string" default="/etc/apache2/httpd.conf" />
+</parameter>
+
+<parameter name="httpd">
+<longdesc lang="en">
+The full pathname of the httpd binary (optional).
+</longdesc>
+<shortdesc lang="en">httpd binary path</shortdesc>
+<content type="string" default="/usr/sbin/httpd" />
+</parameter>
+
+<parameter name="port" >
+<longdesc lang="en">
+A port number that we can probe for status information
+using the statusurl.
+This will default to the port number found in the
+configuration file, or 80, if none can be found
+in the configuration file.
+
+</longdesc>
+<shortdesc lang="en">httpd port</shortdesc>
+<content type="integer" />
+</parameter>
+
+<parameter name="statusurl">
+<longdesc lang="en">
+The URL of the apache status module.
+If left unspecified, it will be inferred
+from the apache configuration file.
+</longdesc>
+<shortdesc lang="en">url name</shortdesc>
+<content type="string" />
+</parameter>
+
+<parameter name="options">
+<longdesc lang="en">
+Extra options to apply when starting apache. See man httpd(8).
+</longdesc>
+<shortdesc lang="en">command line options</shortdesc>
+<content type="string" />
+</parameter>
+
+</parameters>
+
+<actions>
+<action name="start"   timeout="90" />
+<action name="stop"    timeout="100" />
+<action name="status"  timeout="30" />
+<action name="monitor" depth="0"  timeout="20" interval="10" start-delay="1m" />
+<action name="meta-data"  timeout="5" />
+<action name="validate-all"  timeout="5" />
+</actions>
+</resource-agent>

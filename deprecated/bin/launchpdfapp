@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+
+DEFAULT_EDITOR=emacs
+DEFAULT_BROWSER=konqueror
+
+
+# Acrobat Reader inserts an additonal option
+if [ $1 = "-remote" ]; then
+# openURL(file:///local/suselx/books/en/xml/iprint_lx.xml,new-window)
+  FILENAME=$(echo $2 |  sed "s#openURL(file:/##g;s/,new-window)//g" )
+else
+  FILENAME=$1
+fi
+
+ext="${FILENAME##*.}"
+
+# kdialog --title "$0" --msgbox "Filename: $FILENAME\n$*"
+
+if [ "$ext" = "xml" ]; then
+   $DEFAULT_EDITOR $FILENAME
+else
+   $DEFAULT_BROWSER $FILENAME
+fi

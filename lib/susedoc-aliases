@@ -1,0 +1,200 @@
+###########################################
+# Aliases and functions for doc mechanics #
+###########################################
+
+#------------------------
+# make -j, default is "1"
+#------------------------
+
+NUMPROCS=$(egrep -qs -c ^cpu[0-9]+ /proc/stt || echo "1")
+alias make="make -j$NUMPROCS"
+
+#-------------------------
+# aspell
+#-------------------------
+
+# ignore text within these tags
+aspellsgmlskip="--add-sgml-skip=author \
+                --add-sgml-skip=command \
+                --add-sgml-skip=email \                 
+                --add-sgml-skip=envar \
+                --add-sgml-skip=filename \                
+		--add-sgml-skip=firstname \
+                --add-sgml-skip=guimenu \
+                --add-sgml-skip=keycap \
+                --add-sgml-skip=literal \                
+                --add-sgml-skip=option \                
+                --add-sgml-skip=quote \
+		--add-sgml-skip=remark \
+                --add-sgml-skip=screen \
+		--add-sgml-skip=surname \
+                --add-sgml-skip=systemitem \
+                --add-sgml-skip=ulink \
+                --add-sgml-skip=varname \
+                --add-sgml-skip=xref"
+
+alias spell='/usr/bin/aspell --mode=sgml $aspellsgmlskip --encoding=utf-8 --lang=en_US --extra-dicts="$DTDROOT/aspell/suse_aspell.rws" -c'
+
+aspelllist ()
+{
+	/usr/bin/aspell --mode=sgml $aspellsgmlskip --encoding=utf-8 --lang=en_US \
+	--extra-dicts="$DTDROOT/aspell/suse_aspell.rws" list < $1 | sort | uniq 
+}
+
+#---------------------------------------------
+# Misc
+#---------------------------------------------
+
+# TOC with filenames, headlines and IDs
+alias TOC='xsltproc --xinclude --nonet ${DTDROOT}/xslt/misc/get-headlines-ids.xsl'
+
+# trunkcopy.sh
+alias makebranch='trunkcopy.sh'
+alias maketag='trunkcopy.sh'
+alias grepimage='/usr/bin/grepimage.sh'
+
+#----------------------------------------------
+# docmanager
+#----------------------------------------------
+
+# docmanager Functions
+
+
+# generic sort function for all aliases - prints the table head
+# and does the sorting with the rest of the output takes a sort parameter as optional
+function sort_after_head () {
+  for ((x=5 ; x-- ; )); do
+    read line;
+    echo $line;
+  done;
+  sort $*;
+} 
+
+# files sorted by priority, takes a list of filenames as optional parameter
+function dmprio () {
+  if [ $1 ]; then
+    dm.py dg -q "%{name} %{priority} %{status} %{deadline} %{maintainer}\n" $* |  sort_after_head -k2
+  else
+    dm.py dg -P -q "%{name} %{priority} %{status} %{deadline} %{maintainer}\n" |  sort_after_head -k2
+  fi
+}
+
+# lets have an overview over the current priority files...
+# this takes the priority as first argument.
+function dmpriooverview () {
+  dm.py dg -P -q "%{name} %{status} %{priority} %{prelim} %{maintainer} %{deadline} \n" --include="doc:status=editing" --include="doc:priority=$1" -s
+}
+
+function dmygraphics () {
+  for i in $(dm.py dg -P -A -H --include="doc:maintainer=${LOGNAME}" -q "%{name} "); do
+    xsltproc --nonet ${DTDROOT}/xslt/misc/get-graphics.xsl $i;
+  done 2> /dev/null | sed -r ':a;N;s/ ?\n/ /;ta'
+}
+
+function dmprojects () {
+  dm.py dg --include="doc:maintainer=${LOGNAME}" \
+    $(for i in $* ;do
+      source $i >& /dev/null; make projectfiles;
+    done | \
+    sed 's: :\
+    :g' | sort | uniq | sed ':a; N; s/\n/ /; ta'; )
+}
+
+function dmprojectstrans () {
+  dm.py dg -P --include="doc:trans=yes" -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} %{revprop}\n" \
+    $(for i in $* ;do
+      source $i >& /dev/null; make projectfiles;
+    done | \
+    sed 's: :\
+    :g' | sort | uniq | sed ':a; N; s/\n/ /; ta'; )
+}
+
+
+# docmanager Aliases
+#-------------------
+
+#list files that are ready for rwalter
+alias dmedited='dm.py dg -P --include="doc:status=edited"'
+
+#list files that are ready for rwalter sorted by priority
+alias dmeditedp='dm.py dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n'
+
+#list files that are ready for rwalter sorted by deadline
+alias dmeditedd='dm.py dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2'
+
+#list files that are in editing state right now
+alias dmediting='dm.py dg -P --include="doc:status=editing"'
+
+#list files that are in editing state right now, sorted after deadline
+alias dmeditingx='dm.py dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 '
+
+#list files that are flagged with "prelim" 
+alias dmprelim='dm.py dg -P -q "%{name} %{maintainer} %{status} %{prelim} %{deadline} \n" --include "doc:prelim=yes"'
+
+#list files set to proofing
+alias dmproofing='dm.py dg -P --include="doc:status=proofing"'
+
+#list files set to proofed
+alias dmproofed='dm.py dg -P -q "%{name} %{priority} %{status} %{revprop} %{maintainer}\n" --include="doc:status=proofed"'
+
+#list files set to comments
+alias dmcomments='dm.py dg -P --include="doc:status=comments"'
+
+#list all files owned by $LOGNAME
+alias dmwork='dm.py dg -P --include="doc:maintainer=${LOGNAME}"'
+
+#list all files owned by $LOGNAME sorted by priority
+alias dmworkp=$'dm.py dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4'
+
+#list all files owned by $LOGNAME sorted by deadline
+alias dmworkx=$'dm.py dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{trans}\n" | sort_after_head -k5'
+
+#list all files owned by $LOGNAME that still need to be worked on
+alias dmtodo='dm.py dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2' 
+
+#set files to comments
+alias dscomments='dm.py ds -C'
+
+#set files to proofed
+alias dsproofed='dm.py ds -R'
+
+#set files to proofing
+alias dsproofing='dm.py ds -P'
+
+#set files to editing
+alias dsediting='dm.py ds -E'
+
+#set files to locdrop
+alias dslocdrop='dm.py ds -L'
+
+#set files to edited
+alias dsedited='dm.py ds -D'
+
+#set prelim to no
+alias dsrmprelim='dm.py ds -y'
+
+#project statistics
+#equals dm dg-P, including prios and deadlines
+alias dmstat='dm.py dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n"'
+
+#project statistics
+#equals dm dg-P, including prios and deadlines, sorted after deadline
+alias dmstatx='dm.py dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" | sort_after_head -k5 '
+
+#to be defined by toms
+alias dmrevprop='dm.py dg -P -q "%{name} _%{modified}_ %{maintainer} %{release} %{trans} %{status} %{prelim} %{revprop}\n" --include "doc:trans=yes"'
+
+# list the files which have to be translated
+alias dmtrans='dm.py dg -P -q  "%{name} %{trans} %{maintainer}\n" --include "doc:trans=yes"'
+
+alias dmtransready='dm.py dg -P -q  "%{name} %{trans} %{maintainer} %{status} %{prelim} %{revprop} \n" --include "doc:trans=yes"  --include "doc:status=proofed"  --exclude "doc:prelim=yes"'
+
+#list files which have to be translated and are set to locdrop
+alias dmplocdrop='dm.py dg -P -q "%{name} %{trans} %{status} %{revprop} %{maintainer}\n" --include="doc:status=locdrop"'
+
+#Outputs a list of the current user to have a nice printout
+alias dmprintout='dm.py dg -P --include "doc:maintainer=$USER" -q "%{name} %{status} %{deadline} %{trans} %{prelim}\n\n"'
+
+
+
+

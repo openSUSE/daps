@@ -1,0 +1,192 @@
+#! /usr/bin/perl -w
+#
+# svn_wdiff.pl -- a wrapper for svn diff for wdiff.
+# this is needed, as wdiff cannot accept -L options.
+#
+# this also parses -rHEAD-1 syntax:
+# - lookup the absolute revision number via svn log.
+# 
+# 2009-07-29, V0.3, jw, 	added -v for debugging'
+# 2009-07-29, V0.4, jw, 	changed -N to do bold/underline, 
+#                               added -P for NO_ANSI at all.
+# 2009-08-11, V0.4b, jw         added clear-to-EOL, added checking and
+#                               using wdiff -X,  added -E option.
+#
+# TODO: print line numbers above context snippets. 
+# This needs a wdiff extension.
+# TODO: investigate into pdiff, which comes with a2ps
+
+use strict;
+use Data::Dumper;
+
+my $version = '0.4b';
+
+my $gn = "\033[1;42m";		# bold black on green background
+my $rt = "\033[1;41m";		# bold black on red background
+my $no = "\033[m\033[K";	# normal and clear to EOL.
+
+if ($ENV{NO_COLOR})
+  {
+    $gn = "\033[1m";		# bold
+    $rt = "\033[4m";		# underline
+  }
+$gn = $rt = $no = '' if $ENV{NO_ANSI};
+
+push @ARGV, '--help' unless @ARGV;
+my $verbose = $ENV{SVN_WDIFF_VERBOSE} || 0;
+
+my @wdiff = (
+  "/usr/bin/wdiff",
+  "--start-delete=\n[-${rt}", 
+  "--end-delete=${no}-]",
+  "--start-insert=\n{+${gn}",
+  "--end-insert=${no}+}"
+);
+
+my @svn_diff = ('svn', 'diff', '--diff-cmd', $0);
+my $svn_log = "svn log";
+my $svn_status = "svn status";
+
+my $opt_L_seen = 0;	# when called from svn diff
+
+unless (-x $wdiff[0])
+  {
+    my $cmd = $wdiff[0]; $cmd =~ s{.*/}{};
+
+    die "$wdiff[0] not found. Try sudo zypper in $cmd\n";
+  }
+
+if (length(`$wdiff[0] --help| grep -- --xml`))
+  {
+    # good version.
+    splice @wdiff, 1, 0, '-X';
+  }
+else
+  {
+    print STDERR qq{Warning, old $wdiff[0] without XML support. Please try
+sudo zypper -p http://download.opensuse.org/repositories/devel:/tools:/wdiff:/openSUSE_11.1 --no-refresh in wdiff
+};
+    sleep 2;
+  }
+
+my @ARGS;
+my $rev;
+
+## this optione parser parses both,
+## direct call and call from svn diff --diff-cmd
+while (my $a = shift)
+  {
+    if ($a eq '-L')
+      {
+        shift;
+	$opt_L_seen++;
+      }
+    elsif ($a eq '-u')
+      {
+        push @ARGS, '-c', '3' unless $ENV{ENTIRE_FILE};
+      }
+    elsif ($a eq '-v')
+      {
+        $ENV{SVN_WDIFF_VERBOSE} = 1;
+        $verbose++;
+      }
+    elsif ($a eq '-N')
+      {
+        $ENV{NO_COLOR} = 1;
+      }
+    elsif ($a eq '-E')
+      {
+        $ENV{ENTIRE_FILE} = 1;
+      }
+    elsif ($a eq '-P')
+      {
+        $ENV{NO_ANSI} = 1;
+      }
+    elsif ($a =~ m{^-r(\S*)})
+      {
+        $rev = $1; $rev = shift unless length $rev;
+	push @ARGS, '-r', $rev;
+      }
+    elsif ($a eq '--help')
+      {
+        print qq{
+$0 Version $version Usage:
+
+svn_wdiff FILENAME
+	show local modifications, if any, otherwise show changes from the
+	latest revision.  removed text is shown in red inside [- ... -]
+	markers, and inserted text is shown in green inside {+ ... +} markers.
+
+svn_wdiff -r revision FILENAME
+	show changes since the specified revision. In addition to the syntax FILENAME
+	supported by svn ('HEAD', 'PREV', 'BASE', '{2009-07-15}', NNNN) we
+	support negative numbers.  Negative numbers count file specific
+	revisons backwards from the current version.  E.g. 'svn_wdiff -r -1 FILENAME' 
+	is identical to 'svn_wdiff FILENAME' on an unmodified checkout.
+
+svn_wdiff -N ...
+env NO_COLOR=1 svn_wdiff ...
+	use no red/green colors, but underline/bold face to highlight the diffs.
+
+svn_wdiff -P ...
+env NO_ANSI=1 svn_wdiff ...
+	use no colors or terminal control codes at all. Just show the the markers.
+
+svn_wdiff -E ...
+env ENTIRE_FILE=1 svn_wdiff ...
+	print the entire file. Default: 3 lines of context around each change.
+	
+};
+	exit;
+      }
+    else
+      {
+        push @ARGS, $a;
+      }
+  }
+	
+
+$rev = '' if $opt_L_seen;	# second pass, wdiff options now. rev belongs to first pass, svn options.
+
+if (!$rev && !$opt_L_seen)
+  {
+    unless (qx{$svn_status $ARGS[-1]})
+      {
+        $rev = '-1';
+	splice @ARGS, -1, 1, '-r', $rev, $ARGS[-1];
+      }
+    print "local changes:\n" if !$rev;
+  }
+
+
+if ($rev and $rev =~ m{^(HEAD)?[-^](\d+)$})
+  {
+    my $back = $2+1;
+    my @log = qx{$svn_log -l $back $ARGS[-1]};
+    my @users;
+    my $line;
+    for my $i (1..$#log)
+      {
+        if ($log[$i-1] =~ m{^----------------------------*$} and 
+	    $log[$i]   =~ m{^r(\d+)\s+\|\s+(\w+)\s+\|\s+\d\d\d\d-})
+	  {
+	    $rev = $1;
+	    push @users, "$1:$2" if $line;
+	    print "$log[$i]" unless $line;	# show first log line
+	    $line = $log[$i];
+	  }
+      }
+    if ($line)
+      {
+        pop @users;			# last one is shown in $line;
+	print "\t(@users)\n" if @users;
+	print "$line";			# and last log line
+	$ARGS[-2] = $rev;
+      }
+  }
+
+@wdiff = @svn_diff unless $opt_L_seen;
+push @wdiff, @ARGS;	# after parsing.
+print "$wdiff[0] .... @ARGS\n" if $verbose;
+
+exec { $wdiff[0] } @wdiff;

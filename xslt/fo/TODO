@@ -1,0 +1,86 @@
+-------------------------------------------------------------------
+TODO
+
+$Id: TODO 5622 2006-02-06 13:10:57Z toms $
+-------------------------------------------------------------------
+
+
+NEEDS FURTHER INVESTIGATION
+- Nested lists are sometimes not indented
+- Index entries: second entries should be visually distinct from first
+  level entries
+- Index contains empty "Symbols" entry. How can we discard that?
+- Index problems: Sort order is not correct according to Patrick vom VistaTec.
+  Affected languages are Spanish and French
+- article/title is sometimes centered sometimes not
+
+
+
+NEEDS CORRECTIONS:
+- Footer doesn't appear in index
+- Preface sections shouldn't have a number
+- Verso footer doesn't contain title. At the moment phrase inside title
+  seems not to work.
+
+
+NICE TO HAVE:
+- keycaps: Probably a SVG picture to have a nice little keycap
+- Spacing problem after substep and before step: A little bit too
+  much space
+- Unsorted glossary is sorted automatically
+- Should we keep admonition boxes together?
+
+
+FUTURE:
+- Keep in mind the current target os and arch attributes and compare
+  them to some e.g. para elements. Only insert a "visual marker", if
+  there are additional profiling attribute in an element.
+- indexterms in lists creates one linebreak too much
+  Fixed 2005-10-13
+  Note: It is _not_ in the FO or HTML stylesheets. So this works only,
+        if you do your profiling step. We should consider to add it
+        to the FO and HTML stylesheet customization
+
+
+DONE:
+- Fixed numbering of appendices in parts
+  -> Fixed 2005-02-06
+- Corrected distance between starts and label separation in procedure
+  lists (with count(step)>9 )
+  -> Fixed 2006-02-01
+- Page counter is different between print and online manual (maybe the same
+  error that encountered Jana with AppArmor?)
+  -> Possible Bug in the original DocBook Stylesheets
+     Asked on the docbook-apps mailinglist 2005-09-22
+  -> Bug #1306070 fixed on 2005-09-27 23:38 by bobstayton
+- If no part is specified, page numbers on the next chapter start not with 1
+  -> Probably related to the previous bug
+- article titlepage contains footer (Fixed 2005-09-27)
+- set without @role doesn't work for xrefs (Fixed 2005-09-20)
+- caption title for procedure, table, example and figure needs to be
+  "localization aware". It means that the width of the label should
+  be taken into account so that no linebreaks occurs.
+  (Fixed 2005-09-23 with fo:float object)
+
+- Text is left ragged now
+- glossary/title, preface/title: Not centered
+- toc: Needs improvement of keeping things together
+- toc: Long titles doesn't wrap into next line and spread page number
+- Chapter number on the right margin is printed now
+- Footer doesn't appear in appendix, index (probably also in glossary, ...)
+- variablelist: indendation, terms in bold etc.
+- admonition boxes should contain localized admonition text (tip, warning, ...)
+  _and_ title (if there)
+- section titles: Insert label and title as a list or table to
+  have better indendation of title
+- table: lines and spaces between top and bottom row
+- remark in lists creates an empty line
+  (AI: wrote to docbook-apps mailinglist on 21. July 2005)
+  Answer: It is very difficult to know, where to insert a space after or before
+  and where not.
+- Admonitions titles: Artifical titles like Tip, Warning, etc.
+  occured twice, if no title element is given
+- Support of PI for screen to adjust font size (especially for
+  long lines)
+- screen: omit carriage returns after <screen> and before </screen>
+

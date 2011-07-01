@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# Copyright (C) 2011 fs@suse.de, openSUSE.org
+# Authors: fs@suse.de
+#
+#
+function print_help () {
+    echo "
+Conditional Color echo
+
+Usage: ccecho LEVEL \"MESSAGE\"
+
+Prints a colored message string to STDOUT using bash color codes. The
+color depends on one of the LEVEL keyword. When the SHELL environment
+variable COLOR is set to either \"0\" or \"no\" no color output is
+generated.
+
+The main purpose of this script is to provide an easy method to generate
+colored output when the output should go to STDOUT, and regular output
+(with no color codes messing up the output) for log files, pipes and
+scripts (by exporting COLOR=0)
+
+
+LEVEL keywords
+  normal -> no color
+  error  -> bold red
+  info   -> purple
+  result -> green
+  warn   -> red
+
+MESSAGE
+  The message to be printed. Needs to be quoted using double quotes.
+  You may use sequences supported by echo (1) such as \n to insert a
+  newline and \t to insert a tab.
+"
+}
+
+#----------------------------------------------------------------------
+# printing help / catching errors
+#
+ME=$(basename $0)
+
+ARGS=$(getopt -o h -l help -n $ME -- "$@")
+eval set -- "$ARGS"
+while true ; do
+    case "$1" in
+        -h|--help)
+            print_help
+            exit
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+done
+
+if [[ -z $1 || -z $2 ]]; then
+    echo "ERROR: $(basename $0) must be called with two parameters:
+LEVEL and MESSAGE
+See '$ME -h' or 'man 1 $ME' for more information"
+    exit 1
+fi
+
+#----------------------------------------------------------------------
+# MAIN
+#
+LEVEL="$1"
+MESSAGE="$2"
+
+START_COLOR=""
+END_COLOR=""
+
+# set colors according to level if colored output is wanted
+#
+if [[  0 != $COLOR && no != $COLOR ]]; then
+    END_COLOR="\e[0m"
+    if [[ error = $LEVEL ]]; then
+        START_COLOR="\e[1;31m"
+    elif [[ info = $LEVEL ]]; then
+        START_COLOR="\e[35m"
+    elif [[ result = $LEVEL ]]; then
+        START_COLOR="\e[32m"
+    elif [[ warn = $LEVEL ]]; then
+        START_COLOR="\e[31m"
+    fi
+fi
+
+# in case you do a tail or a head on the output, the last/first color code
+# might get cut, leading to unwanted results
+# To be on the safe side, we make sure every line that is printed starts
+# and ends with a color code
+# (\ from \n needs to be escaped)
+#
+MESSAGE=${MESSAGE//\\n/${END_COLOR}\\n${START_COLOR}}
+
+echo -e "${START_COLOR}${MESSAGE}${END_COLOR}"

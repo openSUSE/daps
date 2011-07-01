@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE catalog PUBLIC
+  "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+  "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+
+<!--
+  IMPORTANT:
+  This file is _only_ used when you use a local copy of susedoc
+  rather than the package susedoc
+  For susedoc development purposes only!
+-->
+
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <!-- Novdoc DTD: file:///local/innerforge/novdoc/dtd/   -->
+  <group xml:base="../schema/">
+    <public publicId="-//Novell//DTD NovDoc XML V1.0//EN"
+	uri="novdocx.dtd"/>
+    <system systemId="novdocx.dtd"
+        uri="novdocx.dtd"/>
+  </group>
+  <group xml:base="../xslt/">
+    <system systemId="urn:x-suse:xslt:profiling:docbook41-profile.xsl"
+            uri="profiling/docbook41-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook42-profile.xsl"
+            uri="profiling/docbook42-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook43-profile.xsl"
+            uri="profiling/docbook43-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook44-profile.xsl"
+            uri="profiling/docbook44-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook45-profile.xsl"
+            uri="profiling/docbook45-profile.xsl"/>
+
+    <system systemId="urn:x-suse:xslt:profiling:novdoc-profile.xsl"
+            uri="profiling/novdoc-profile.xsl"/>
+    <rewriteSystem systemIdStartString="urn:x-suse:common:"
+                   rewritePrefix="common/l10n/"/>
+  </group>
+
+  <rewriteSystem
+    systemIdStartString="http://docbook.sourceforge.net/release/xsl/current/"
+    rewritePrefix="file:///usr/share/xml/docbook/stylesheet/nwalsh/current/"/>
+  <rewriteURI
+    uriStartString="http://docbook.sourceforge.net/release/xsl/current/"
+    rewritePrefix="file:///usr/share/xml/docbook/stylesheet/nwalsh/current/"/>
+
+  <group>
+    <rewriteSystem
+      systemIdStartString="http://www.docbook.org/xml/5.0CR4/rng/" 
+      rewritePrefix="file:///usr/share/xml/docbook/schema/rng/5.0CR4/"/>
+    <rewriteSystem
+      systemIdStartString="http://www.docbook.org/xml/5.0/rng/" 
+      rewritePrefix="file:///usr/share/xml/docbook/schema/rng/5.0CR4/"/>
+  </group>
+  
+
+  <!-- Only to make sure, the standard catalog is found -->
+  <nextCatalog catalog="file:///etc/xml/catalog" />
+</catalog>

@@ -1,0 +1,102 @@
+#####################################################################
+#  Steps for Building HTML
+#  $Id$
+#####################################################################
+
+
+Steps to build HTML
+---------------------------------------------------------------------
+Creating HTML (example: ENV-susestudio-enterprise-admin, path: berlios://opensuse-doc/documents/studio/en)
+
+..........................
+make/common.mk:
+html: profiled/$(PROFILEDIR)/.validate $(HTMLDIR)/index.html
+
+profiled/$(PROFILEDIR)/.validate validate: $(PROFILES)
+   xmllint --noent --postvalid --noout --xinclude profiled/$(PROFILEDIR)/$(MAIN)
+   touch profiled/$(PROFILEDIR)/.validate
+
+ifdef USESVN
+$(HTMLDIR)/index.html: meta $(HTMLDIR)
+endif
+$(HTMLDIR)/index.html: $(STYLEH) $(PROFILES) provide-color-images  warn-images $(HTMLGRAPHICS) $(HTMLDIR)
+   xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(MANIFEST) \
+                 --stringparam projectfile PROJECTFILE.$(BOOK) \
+                 --xinclude $(STYLEH) profiled/$(PROFILEDIR)/$(MAIN)
+   if test "$(ROOTID)"; then \
+      ln -sf $(ROOTID).html $(HTMLDIR)/index.html;\
+   fi
+
+..........................
+
+ . Sourcing the environment
+   . ENV-susestudio-enterprise-admin
+
+ . Creating directories, if necessary -> .env-profile
+
+ . make html  -> make/common.mk:735L
+
+ . Converting SVG into PNG  -> make/common.mk:964L
+   LANG=C dia -t cairo-svg  --export=images/gen/svg/lvm.svg  images/src/dia/lvm.dia
+
+ . optipng: Optimize PNGs (with "make optipng") -> make/common.mk:878L
+   
+ . Linking source PNGs:
+   ln -sf  ../src/png/studio-ec2-credentials.png  images/online/studio-ec2-credentials.png
+
+ . Creating output directory:
+   mkdir -p html/susestudio-enterprise-admin
+
+ . Profiling:
+   xsltproc --nonet --output profiled/x86-amd64-em64t_sles-sled-enterprise/common_copyright_opensuse.xml \
+       --stringparam profile.arch "x86;amd64;em64t" --stringparam profile.os "sles;sled;enterprise" \
+       --stringparam show.comments 0 --stringparam show.remarks 0 \
+       --stringparam filename "common_copyright_opensuse.xml" \
+        urn:x-suse:xslt:profiling:novdoc-profile.xsl xml/common_copyright_opensuse.xml 
+
+ . Linking CSS:
+   ln -sf /usr/share/susedoc/xslt/html/susebooks.css html/susestudio-enterprise-admin/
+
+ . Linking Navigation Images:
+   ln -sf /usr/share/susedoc/images/navig html/susestudio-enterprise-admin/
+
+ . Linking Admonition Images:
+   ln -sf /usr/share/susedoc/images/admon html/susestudio-enterprise-admin/
+
+ . Linking Callout Images:
+   ln -sf /usr/share/susedoc/images/callouts/ html/susestudio-enterprise-admin/
+
+ . Linking online images into HTML output directory:
+   ln -sf ../../images/online/ html/susestudio-enterprise-admin/images
+
+ . Validing profiled XML sources:
+   xmllint --noent --postvalid --noout --xinclude profiled/x86-amd64-em64t_sles-sled-enterprise/MAIN.enterprise.xml
+   touch profiled/x86-amd64-em64t_sles-sled-enterprise/.validate
+
+ . Create SVG from Dia:
+   images/src/dia/lvm.dia --> images/gen/svg/lvm.svg
+
+ . Fix "problems" in SVG files:
+   xsltproc /usr/share/susedoc/xslt/misc/fixsvg.xsl images/gen/svg/lvm.svg > images/online/lvm.svg
+
+ . Test PNG filename and create PNG from SVG:
+   if test -L images/online/lvm.png; then \
+    rm -f images/online/lvm.png; \
+   fi
+   inkscape -z -w 800 -e images/online/lvm.png -f images/gen/svg/lvm.svg
+
+ . Create HTML from profiled XML:
+   xsltproc --stringparam base.dir html/susestudio-enterprise-admin/ \
+            --stringparam show.comments 0 \
+            --stringparam show.remarks 0 \
+            --stringparam draft.mode "0" \
+            --stringparam rootid "book.suseonsite.admin" \
+	    --stringparam projectfile PROJECTFILE.susestudio-enterprise-admin \
+            --xinclude 
+      /usr/share/susedoc/xslt/html/chunk.xsl 
+      profiled/x86-amd64-em64t_sles-sled-enterprise/MAIN.enterprise.xml
+
+ . Create index.html link, if necessary:
+   if test "book.suseonsite.admin"; then \
+	ln -sf book.suseonsite.admin.html html/susestudio-enterprise-admin/index.html;\
+   fi

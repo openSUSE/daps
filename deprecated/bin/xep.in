@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# XEP command-line
+
+JAVA_HOME="/etc/alternatives/jre"
+XEP_HOME="@xep_home@"
+XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$DTDROOT/etc/xep-suse.xml"}
+
+XEP_MEMORY=${XEP_MEMORY:-"-Xmx700m"}
+XEP_STACK=${XEP_STACK:-"-Xss512K"}
+
+CP="$JAVA_HOME/lib/tools.jar:\
+$XEP_HOME/lib/xep.jar:\
+$XEP_HOME/lib/saxon.jar:\
+$XEP_HOME/lib/xt.jar:/usr/share/java/xml-commons-resolver.jar:$DTDROOT/etc"
+
+echo "* XEP using configuration file »$XEP_CONFIG_FILE«"
+
+if  rpm -q xml-commons-resolver 1>/dev/null ; then
+echo "* XEP has catalog support"
+$JAVA_HOME/bin/java \
+    $XEP_MEMORY $XEP_STACK \
+    -classpath "$CP" \
+    -Dcom.renderx.sax.entityresolver=org.apache.xml.resolver.tools.CatalogResolver \
+    -Dcom.renderx.jaxp.uriresolver=org.apache.xml.resolver.tools.CatalogResolver \
+    -Dcom.renderx.xep.CONFIG="$XEP_CONFIG_FILE" \
+    com.renderx.xep.XSLDriver "$@"
+else
+echo "* XEP WARNING: No Catalog Support!"
+$JAVA_HOME/bin/java \
+    -classpath "$CP" \
+    $XEP_MEMORY $XEP_STACK \
+    -Dcom.renderx.xep.CONFIG="$XEP_CONFIG_FILE" \
+    com.renderx.xep.XSLDriver "$@"
+fi

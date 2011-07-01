@@ -1,0 +1,452 @@
+#
+# Functions for ../bin/susedoc
+#
+# Copyright (C) 2011 Frank Sundermeyer <fs@suse.de>, openSUSE.org
+# Authors: Frank Sundermeyer <fs@suse.de>
+#
+#
+# TODO:
+#function bookinit () {
+#}
+
+# TODO:
+# make COMMENTS, DRAFT, and REMARKS options that can be set (--draft=1), so the
+# config file values can also be overwritten, when the feature is turned on
+# in the config file
+# In order to do so, it would be good to have a generic function that can check
+# and set the correct values rather than duplicating 
+
+
+# ----------------------------------------------------------------------------
+# Core functions
+#
+# The most important stuff comes first
+#
+
+# ---------
+# Calling make and writing a log file 
+#
+function call_make () {
+    local TARGET LOGFILE MCMD
+
+    # first argument passed to the function is the subcommand
+    # in some cases, additional arguments are passed to this
+    # function - store them in array PARAMS
+    #
+    TARGET=$1
+    shift
+    
+    MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
+    
+    LOGFILE="${LOG_DIR}/make_${TARGET}.log"
+    date > $LOGFILE
+
+    if [[ 1 = $VERBOSE ]]; then
+        echo "
+---------------
+   BASE_DIR: $BASE_DIR
+  BUILD_DIR: $BUILD_DIR
+    ENVFILE: $ENVFILE
+    DTDROOT: $DTDROOT
+       BOOK: $BOOK
+        FOP: $FOPTYPE
+    MAKECMD: $MAKECMD
+    STYLEFO: $STYLEFO
+XML_CATALOG: $XML_CATALOG_FILES
+---------------
+" | tee -a $LOGFILE
+        eval "$MCMD 2>&1 | tee -a $LOGFILE"
+    else
+        eval "$MCMD >> $LOGFILE 2>&1"
+        if [[ 0 = $? ]]; then
+	   # make command successful
+	    tail -n 1 $LOGFILE
+        else
+	    cat $LOGFILE
+        fi
+    fi
+}
+
+function call_make_nolog () {
+
+    # TODO: debug and verbose
+
+    
+    # do not write a logfile, to be used whenever writing a logfile
+    # is not necessary (e.g. for targets clean*)
+    local TARGET MCMD
+    TARGET=$1
+    MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
+    if [[ 1 = $PRETTY_FILELIST ]]; then
+        eval "$MCMD" | sed 's/ /\n/g' | sort
+    else
+        eval "$MCMD"
+    fi
+}
+
+function wrong_parameter () {
+    local TARGET PARAM
+    TARGET=$1
+    echo "Type '$ME $TARGET help' to get a list of valid parameters"
+    exit 1;
+}
+
+
+# ----------------------------------------------------------------------------
+# Functions processing existing make targets 
+#
+
+function build_pdfs () {
+    # targets force, pdf*, color-pdf
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o cdhr -l comments,draft,fop:,help,name:,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+	    -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+	    -d|--draft)
+		export DRAFT="yes"
+		shift
+		;;
+	    --fop)
+                if [[ $2 = xep || $2 = fop ]]; then
+                    export FOPTYPE="$2"
+                    export FOP="${LIB_DIR}/susedoc-$2"
+                else
+		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
+                fi
+		shift 2
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book."
+                help_comments
+                help_draft
+                echo "        --fop=FORMATTER           Specify the PDF formatter to be used.
+                                  Currently 'xep' or 'fop' are supported.
+                                  Default: 'xep'"
+                help_help
+                help_name
+                help_remarks
+                help_rootid
+                echo
+		exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+#            *) exit_on_error "Internal error!" ;;
+            *) wrong_parameter "$TARGET $1" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function build_html_jsp () {
+    # targets html*, jsp
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+	    -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+	    -d|--draft)
+		export DRAFT="yes"
+		shift
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book."
+                help_comments
+                help_draft
+                help_help
+                echo "        --meta, -m                If set, prints additional status information
+                                  (filename, maintainer and status) for each
+                                  file. Implies draft mode. Default: off"
+                help_name
+                help_remarks
+                help_rootid
+                echo
+                exit 0
+		;;
+            -m|--meta)
+                export USEMETA=1
+                # Implies draft and remarks mode
+                export DRAFT="yes"
+                export REMARKS=1
+                shift
+                ;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function build_epub () {
+    # taget: epub
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o hr -l help,name:,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Build an $TARGET book."
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function build_locdrop () {
+    # target: locdrop
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Provide everything that is needed to translate a set"
+                help_help
+                help_name
+                echo "        --nopdf, -n               Deactivates creating the color-pdf. Useful
+                                  when \"locdropping\" a complete set where
+                                  you want to deliver separate PDFs for each
+                                  book rather than one huge PDF for the whole
+                                  set. Default: off"
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -n|--nopdf)
+                export NOPDF="1"
+                shift
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+}
+
+function profile_first () {
+    # targets: dist-graphics*, dist-html, dist-jsp, missinggraphics,
+    # projectgraphics, remaininggraphics, showvariable
+    #
+    # some targets (such as projectgraphics and various dist and packaging
+    # targets) require an up-tp-date .profiled/*
+    # Therefore we call make profile first and then call make a second time
+    # with the real target
+    #
+    local TARGET=$1
+    shift
+    call_make "profile" "$@"
+    call_make "$TARGET" "$@"
+   
+}
+
+function build_generic () {
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Build a $TARGET book."
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function filelists () {
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o hp -l help,pretty -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Print a list of $TARGET."
+                help_help
+                help_pretty
+                echo
+                exit 0
+		;;
+            -p|--pretty)
+                if [[ 1 = $VERBOSE ]]; then
+                    ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
+                else
+                    PRETTY_FILELIST=1
+                fi
+                shift
+                ;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+#    if [[ $TARGET =~ graphics ]]; then
+#        call_make_nolog "profile" "$@"
+#    fi
+    call_make_nolog "$TARGET" "$@"
+}
+
+# ----------------------------------------------------------------------------
+# Help functions
+#
+# There are a lot of options, several functions have in common. I do
+# not want to write the same text again and again, so I am providing
+# extra functions for all help texts that appear more than once.
+
+function help_scmd_head () {
+    echo "
+$ME [--global-options] $TARGET [options]
+
+$1
+
+  Command options:"
+}
+
+function help_comments () {
+echo "        --comments, -c            Include XML comments in profiled sources.
+                                  Default: off"  
+}
+function help_draft () {
+echo "        --draft, -d               Add a 'DRAFT' watermark to all pages of the
+                                  book. Default: off" 
+}
+function help_help () {
+echo "        --help, -h                Print this help text"
+}
+function help_name () {
+echo "        --name=BOOKNAME           File- and directory names for generated
+                                  content are derived from BOOKNAME. Default:
+                                  generated by stripping 'ENV-' from the
+                                  ENV filename."
+}
+function help_pretty () {
+echo "        --pretty, -p              Pretty print file lists (one filename per line)"
+}
+function help_remarks () {
+echo "        --remarks, -r             Include remarks (<remark>...</remark>) in
+                                  book. Default: off"  
+}
+function help_rootid () {
+echo "        --rootid=ID               Specify a ROOTID to build only parts of a
+                                  book (parts or chapters). Default: Usually
+                                  set in the ENV-file; if not set the complete
+                                  set defined in $MAIN will be built"
+}

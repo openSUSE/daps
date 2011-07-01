@@ -1,0 +1,32 @@
+<!--<!DOCTYPE configuration SYSTEM "config.dtd">-->
+<!-- 
+     this file contains templates which allow an user easy 
+     configuration of Fop. Actually normally you don't need this configuration 
+     file, but if you need to change configuration, you should
+     always use this file and *not* config.xml. 
+     Usage: java org.apache.fop.apps.Fop -c userconfig.xml -fo fo-file -pdf pdf-file
+-->
+
+<fop version="1.0">
+
+ <renderers>
+  <renderer mime="application/pdf">
+   <fonts>
+     <!-- register all the fonts found in a directory -->
+     
+     <directory recursive="true">/usr/share/fonts/truetype/</directory>
+     <!--<directory recursive="true">/usr/share/fonts/truetype/</directory>-->
+     
+     <!-- register all the fonts found in a directory
+       and all of its sub directories (use with care) -->
+     <!--<directory recursive="true"></directory>-->
+
+     <!-- automatically detect operating system installed fonts -->
+     <auto-detect/>  
+   
+   </fonts>
+  </renderer>
+
+ </renderers>
+
+</fop>

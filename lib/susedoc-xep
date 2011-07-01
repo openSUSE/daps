@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Customized xep executable for susedoc
+# Use environment variablbe VERBOSE to get more debugging output
+#
+__VERSION__="$Id: suse-xep 45418 2009-11-09 09:44:56Z ke $"
+
+#
+# Configuring variables
+#
+if test -s $USER/.susedoc/xep-config.xml; then
+    ccecho "info" "Using XEP config file from $USER/.susedoc/xep-config.xml"
+    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$USER/.susedoc/xep-config.xml"}
+fi
+xep "$@"

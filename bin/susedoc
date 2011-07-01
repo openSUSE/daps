@@ -1,0 +1,794 @@
+#!/bin/bash
+#
+# Copyright (C) 2011 fs@suse.de, openSUSE.org
+# Authors: fs@suse.de
+#
+# TODO: PATH to ENVFILE instead of --basedir
+#
+#
+
+# ----------------------------------------------------------------------------
+# VARIABLES
+#
+# First, list all variables we need to pass to make. They all need to be
+# EXPORTED, but we do not want to write the export statement in the config
+# files, so we need to have this list
+#
+# IMPORTANT
+# Whenever a new variable is introduced, it needs to be added here!!
+#
+declare -a VARLIST
+# VENDOR is for unsetting only, since it is a default tcsh variable
+VARLIST=(
+    BASE_DIR
+    BUILD_DIR
+    CB_OPTIONS
+    CHECKBOT
+    COLOR
+    COMMENTS
+    COMMENT_STR
+    CONF_PREFIX
+    CONVERT_OPTS
+    DIA_OPTIONS
+    DISTVER
+    DRAFT
+    DRAFT_STR
+    FOPOPTIONS
+    FOPTYPE
+    HTMLROOT
+    INK_OPTIONS
+    LAYOUT
+    MAIN
+    PDFNAME
+    PRODUCTNAME
+    PRODUCTNAMEREG
+    PROFARCH
+    PROFCONDITION
+    PROFOS
+    PROFVENDOR
+    REMARKS
+    REMARK_STR
+    ROOTID
+    STYLEFO
+    STYLEH
+    STYLENOV
+    TITLE
+    USEMETA
+)
+
+# VARLIST contains all variables that can be set via config or command line.
+# To be on the safe side, we also want to unset a few variables before we start
+# because they are used/defined in make or may cause other harm if accidentally
+# set
+declare -a UNSETLIST
+UNSETLIST=(
+    BASE_DIR_CMDL
+    BUILD_DIR_CMDL
+    BIN_DIR
+    BOOK
+    COLORS_CMDL
+    CONFIG
+    DTDROOT
+    DTDROOT_CMDL
+    ENVFILE
+    ENVFILE_CMDL
+    FOP_CONFIG_FILE
+    LIB_DIR
+    VENDOR
+    VERBOSE   
+)
+
+# unset all for a fresh start
+unset "${VARLIST[@]}"
+unset "${UNSETLIST[@]}"
+
+# ----------------------------------------------------------------------------
+# FUNCTIONS
+#
+# We need to declare a few basic funtions first because they are needed
+# immideately. All other functions can be found at
+# $DTDROOT/lib/susedoc-functions
+# ---------
+# Help
+#
+
+function susedoc_help () {
+    echo "
+  Usage:
+        $ME [--global-options] <subcommand> [--command-options] [arguments]
+
+  Global Options:
+        --help, -h                Help.
+        --verbose, -v             Verbose output.
+        --debug, -d               Print debugging messages. Far more verbose
+                                  than the --verbose option.
+        --basedir=BASE_DIR        Project directory. Must contain the XML
+                                  sources in BASE_DIR/xml. If not specified, the
+                                  current directory will be used.
+                                  Default: Parent directory of $ENVFILE
+        --builddir=BUILD_DIR      Directory where every output $ME generates
+                                  will end up.
+                                  Default: $BASE_DIR/build/$BOOK
+        --color=(0|1)             By default errors, results, warnings and
+                                  certain info messages are printed in color
+                                  using bash color codes. Set to '0' to turn
+                                  off colors. Useful for cron jobs and sripts.
+                                  Default: 1
+        --envfile=ENVFILE         Specify which ENV file to use. Mandatory
+                                  unless there is only a single ENV file
+                                  in BASE_DIR. In that case the ENV file will
+                                  automatically be used.
+                                  Only specify the filename, not an absolute
+                                  path.
+
+  Subcommands:
+        help                      Print this help
+
+     Generate Books:
+	color-pdf, pdf-color      Color pdf book.
+        dist                      b/w pdf with cropmarks for each chapter
+        epub                      ePUB book.
+        force                     b/w pdf with cropmarks. Force updating the
+                                  profiled sources and the .fo file.
+        html                      HTML book.
+        html-single, htmlsingle   Single file HTML book.
+        jsp                       JSP book.
+        man                       man pages.
+        pdf                       b/w pdf with cropmarks.
+        txt, text                 ASCII book.
+        wiki                      Single file MediaWiki book.
+
+
+     Create Distributable Archives:
+        dist-all                  Shortcut for running the subcommands
+                                  validate chklink dist-xml dist-html dist
+                                  color-pdf
+        dist-book                 Profiled XML sources of the book.
+        dist-graphics             Graphics (PNG, SVG) of the whole set.
+        dist-graphics-png         PNG graphics of the whole set. SVG graphics
+                                  are converted to PNG.
+        dist-html                 HTML and graphics.
+        dist-htmlsingle           Single-file HTML and graphics.
+        dist-jsp                  JSP and graphics.
+	dist-xml                  Profiled XML sources of the whole set.
+                                  Identical to dist-book when using a book
+                                  rather than a set.
+        locdrop                   Provide everything that is need to translate
+                                  a set
+
+     File lists:
+        projectfiles              print XML source files used by the book
+        projectgraphics           print source graphics used by the book
+        missinggraphics           print missing images
+        remainingfiles            print XML source files _not_ used by the book
+        remaininggraphics         print source graphics _not_ used by the
+                                  book
+        xmlgraphics               print (generated) color graphics really used
+                                  to generate the books
+        xmlgraphics-bw            print (generated) b/w graphics really used
+                                  to generate the books
+
+     Cleaning up:
+        clean                     Remove all profiled sources and temporary
+                                  files.
+        clean-images              Remove all generated images.
+        clean-book                Remove all profiled sources, all temporary
+                                  files, all generated images, and
+                                  books/archives generated from the ENV file
+                                  used.
+        clean-all, real-clean     Remove everything generated by $ME.
+
+     Packaging:
+        package-html               Provide HTML tarball (set), desktop and
+                                   document files (for KDE and GNOME)
+        package-jsp                Provide JSP tarball
+        package-pdf                Provide color pdf, desktop and document
+                                   files (for KDE and GNOME)
+        package-src                Provide profiled XML sources and graphics
+
+     Deploying (novell.com):
+        online-docs                Provide a profiled XML bigfile and a
+                                   graphics tarball (PNG only).
+        online-localized           Provide a profiled XML bigfile and a
+                                   graphics tarball (PNG only). All xrefs to
+                                   other books from the set are replaced by
+                                   ulinks pointing to <?provo dirname>/id plus
+                                   text like \"See book FOO, chapter BAR\"
+                                   Useful for delivering translated manuals,
+                                   when only part of the set has been translated
+
+     Other Commands:
+        chklink                   Linkchecker for links from <ulink> tags
+        db2novdoc                 Convert DocBook XML sources to NovDoc
+        optipng                   Optimize (size) source PNGs
+        profile, prof             Profile XML sources
+        validate                  Validate profiled sources. Automatically
+                                  profiles the XML sources if needed.
+
+     File and Directory Names:
+        <target>-name             print resulting filename for <target>.
+                                  <target> may be one of color-pdf, epub, 
+                                  html-single, pdf, txt
+        <target>-dir-name         print resulting directory nae for <target>.
+                                  <target> may be either html or jsp
+        profiledir                print path to profiling directory
+
+     Debugging:
+        check                     Print a list of the most important make
+                                  variables and their value
+        profiledir                Print the profiling directory currently used
+        showvariable              Print value of a given make variable:
+                                  $ME showvariable VARIABLE=<MAKE_VARIABLE>
+
+Type '$ME <subcommand> -h' for help on a specific subcommand.
+"
+}
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    echo "error" "ERROR: ${1}"
+    exit 1;
+}
+
+# ---------
+# Recover command-line values
+#
+function recover_cmdl_values () {
+    test -n "$BASE_DIR_CMDL"  && BASE_DIR="$BASE_DIR_CMDL"
+    test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
+    test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
+    test -n "$DTDROOT_CMDL"   && DTDROOT="$DTDROOT_CMDL"
+    test -n "$ENVFILE_CMDL"   && ENVFILE="$ENVFILE_CMDL"
+}
+
+# ---------
+# Try to automatically set $BASE_DIR
+#
+function get_basedir () {
+    if [[ -d $PWD/xml ]]; then
+        # current directory is the BASE_DIR
+        BASE_DIR="$PWD"
+        return 0
+    elif [[ -h $ENVFILE ]]; then
+        # ENVFILE is a link
+        # assume the real directory of $ENVFILE is BASE_DIR
+        BASE_DIR=$(dirname $(readlink $ENVFILE))
+        return 0
+    else
+        return 42; # ;-)
+    fi
+}
+
+# ---------
+# Try to automatically set $ENVFILE
+#
+function get_envfile () {
+    local ENV_COUNT=$(find -L $PWD -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+    if [[ 1 = $ENV_COUNT ]]; then
+        # a single ENVFILE was found
+        ENVFILE=$(find -L $PWD -maxdepth 1 -name "${CONF_PREFIX}*" -type f)
+	ENVFILE=$(basename $ENVFILE)
+        return 0;
+    else
+        return 42;
+    fi
+}
+
+# ---------
+# run the subcommands
+#
+function run_subcmd () {
+    source "$DTDROOT/lib/susedoc_functions"
+    case "$SUBCMD" in
+        all|color-pdf|force|pdf|pdf-color)
+	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
+	    ;;
+        html|htmlsingle|html-single|jsp)
+            build_html_jsp $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        epub)
+            build_epub $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        dist-all|showvariable)
+            # Always run "make profile" to generate an up-to-date profiled
+            # version
+            # Not doing so creates all kinds of hen-egg problems with filelists
+            # depending on $PROFILES, especially with the used images
+            profile_first $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        locdrop)
+            build_locdrop "${SCMD_ARGS[@]}"
+            ;;
+        bigfile|bigfile-reduced|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|mdocument-files-pdf|an|online-docs|online-localized|package|package-html|package-pdf|package-jsp|package-src|txt|text|wiki)
+            build_generic $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
+            filelists $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        check|chklink|clean|clean-all|clean-book|clean-images|color-pdf-name|db2novdoc|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jana|jsp-dir-name|nothing|optipng|offspring|pdf-color-name|pdf-name|penguin|prof|profile|profiledir|provide-color-images|provide-epub-images|provide-images|real-clean|txt-name|validate|wiki-name)
+            # The generic stuff - put all targets here that do not need a
+            # special treatment.
+            # Writes no logfile
+            #
+            call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        *)
+            ccecho "error" "Error: Unknown command \"$SUBCMD\""
+            ccecho "normal" "Type '$ME help' to get a list of global parameters and commands"
+            exit 1;
+    esac
+}
+
+
+# ----------------------------------------------------------------------------
+# We need to set some basic defaults outside of $DEFAULT_CONFIG
+
+# by default we want to have colored output
+#
+export COLOR=1
+
+# make command - calculate -j setting
+#
+CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo | sed 's/cpu cores\s*:\s*//')
+# set to "1" if empty
+test -z "$CORE_NO" && CORE_NO=1
+MAKECMD="/usr/bin/make -j${CORE_NO} -s"
+
+# this script's name
+ME=$(basename $0)
+
+# The default DTDROOT 
+DEFAULT_DTDROOT="/usr/share/susedoc"
+
+# default config file
+DEFAULT_CONFIG="/etc/susedoc/config"
+
+# default libdir
+DEFAULT_LIB_DIR="${DEFAULT_DTDROOT}/lib"
+
+# user config file
+USER_CONFIG="$HOME/.susedoc/config"
+
+
+# ----------------------------------------------------------------------------
+# Parsing the command line arguments with GNU getopt
+#
+# In order to separate general susedoc parameters from subcommand parameters,
+# we are setting POSIXLY_CORRECT before parsing the first time.
+# This causes getopt to interprete all remaining parameters as non-option
+# parameters as soon as the first non-option parameter (the subcommand) is
+# found. This value must be _exported_
+
+export POSIXLY_CORRECT=1
+
+# So, the first getopt go will parse all parameters listed directly after the 
+# susedoc command, leaving an array ($@) with the subcommand and it's
+# parameters, which can be parsed in a second getopt go.
+
+#-------------------------------
+# Parsing the susedoc parameters
+#
+# If (and only if) $BASE_DIR, $BUILD_DIR, $ENVFILE, and $DTDROOT are set here,
+# we do not want to overwrite them by any other file we source
+# (command line always wins).
+# Declaring the variables as readonly is unfortunately not an option, since 
+# every attempt to (un)set a read-only variable throws an error - something
+# we do not want when sourcing a config-file.
+# Therefore we need to save each variable twice in order to recover the
+# original value.
+
+ARGS=$(getopt -o dhv -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbose -n $ME -- "$@")
+eval set -- "$ARGS"
+
+while true ; do
+    case "$1" in
+        --basedir)
+            test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
+            test -d "${2}/xml" || exit_on_error "Cannot find xml/ subdirectory in BASE_DIR $2"
+            BASE_DIR_CMDL="$2"
+            BASE_DIR="$BASE_DIR_CMDL"
+            shift 2
+            ;;
+         --builddir)
+            test -d "$2" || exit_on_error "BUILD_DIR $2 is not a valid directory"
+            test -w "$2" || exit_on_error "BUILD_DIR $2 is not writeable"
+            BUILD_DIR_CMDL="$2"
+            BUILD_DIR="$BUILD_DIR_CMDL"
+            shift 2
+            ;;
+        --color|--colour)
+            if [[ 1 != $2 && 0 != $2 ]]; then
+                exit_on_error "Wrong value ($2) for COLOR. Must be \"0\" or \"1\""
+            fi
+            COLOR_CMDL=$2
+            export COLOR="$COLOR_CMDL"
+            shift 2
+            ;;      
+        -d|--debug)
+            # set make command to "remake" if available
+            #
+            rpm -q remake &>/dev/null
+            if [[ 0 = $? ]]; then
+                MAKECMD="/usr/bin/remake -j1 --debug=b"
+            else
+                MAKECMD="/usr/bin/make -j1 --debug=b"
+            fi
+            #
+            # debug also implies the -v option
+            #
+            DEBUG=1
+            VERBOSE=1
+	    shift
+	    ;;
+        --dtdroot)
+	    test -d $2 || exit_on_error "$2 is not a valid DTDROOT"
+	    DTDROOT_CMDL="$2"
+	    DTDROOT="$DTDROOT_CMDL"
+	    shift 2
+            ;;
+	--envfile)
+	    ENVFILE_CMDL="$2"
+            ENVFILE="$ENVFILE_CMDL"
+	    shift 2
+            ;;
+        -h|--help)
+            susedoc_help
+	    exit 0
+            ;;
+	-v|--verbose)
+            if [[ 1 != $DEBUG ]]; then
+	        VERBOSE=1
+	        MAKECMD="/usr/bin/make -j${CORE_NO}"
+            fi
+	    shift
+	    ;;
+        --) shift ; break ;;
+        *) exit on error "Internal error!" ;;
+    esac
+done
+
+unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
+
+#-----------------------------------
+# Store the subcommand and it's args
+
+# extract the subcommand from $@ if $ME has been called with no arguments
+# or with "help" as the only argument, run global help. If it was called with
+# SUBOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
+# is displayed.
+
+if [[ -z $1 ]] || [[ help = $1 && -z $2 ]]; then
+    # Call: "$ME" or "$ME help"
+    #
+    susedoc_help
+    exit 0
+elif [[ help = $2 ]]; then
+    # Call: "$ME foo help ..."
+    # Rewrite to "$ME foo -h"
+    #
+    SUBCMD=$1
+    declare -a SCMD_ARGS=( "-h" )
+elif [[ help = $1 && -n $2 ]]; then
+    # Call: "$ME help foo"
+    # Rewrite to "$ME foo -h"
+    #
+    SUBCMD=$2
+    declare -a SCMD_ARGS=( "-h" )
+else
+    # No help
+    SUBCMD=$1
+    shift
+    declare -a SCMD_ARGS=( "$@" )
+fi
+    
+# Now check, whether subcommand help has been requested by -h or --help
+# anywhere in the argument string or if SCMD_ARGS contains bad strings
+#
+case "${SCMD_ARGS[@]}" in
+    "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
+        declare -a SCMD_ARGS=( "-h" )
+        ;;
+    *ENVFILE*|*DTDROOT*|*BASE_DIR*)
+        exit_on_error "Please specify BASE_DIR, ENVFILE, or DTDROOT via command line options" 
+esac
+
+# ----------------------------------------------------------------------------
+# Setting up the environment for the complete mechanics
+#
+# The environment is set up using the following hierachy
+# (1 == always wins)
+#
+# 1. Command line 
+#    - either as a real option
+#    - or as variable declaration (FOO=bar)
+#
+# 2. ENV-file
+# 3. $USER_CONFIG (user config file)
+# 4. /etc/susedoc/config or $DTDROOT/etc/config
+#
+#
+# In order to make developing easier, there is a hidden feature to set
+# DTDROOT, allowing to have multiple susedoc versions installed into
+# different directories. You can switch between them by setting DTDROOT
+# accordingly (without a trailing slash)
+#
+# IMPORTANT:
+# DTDROOT MUST be set by either $ME --susedocroot $SCMD on the commandline
+# or in $USER_CONFIG
+#
+# If DTDROOT was not already set on the commandline (in this case
+# DTDROOT_CMDL would be set), source the USER config to find out
+# if DTDROOT was set there.
+#
+# commandline values for $BASE_DIR, $BUILD_DIR, $ENVFILE, and $DTDROOT take
+# precedence we need to recover them _every_ time we source a file
+#
+if [[ -f $USER_CONFIG && -z $DTDROOT_CMDL ]]; then
+    source "$USER_CONFIG"
+    recover_cmdl_values
+fi
+
+# IF we have a custom DTDROOT, $DTDROOT is set by now - if not, use the default
+if [[ -n $DTDROOT ]]; then
+    # custom DTDROOT was set
+    if [[ ! -d "$DTDROOT" ]]; then
+        exit_on_error "dtdroot $DTDROOT is no valid directory"
+    else
+        # valid directory
+        BIN_DIR="${DTDROOT}/bin"
+        export PATH=$BIN_DIR:$PATH
+        LIB_DIR="${DTDROOT}/lib"
+        CONFIG="${DTDROOT}/etc/config"
+        XML_CATALOG_FILES="$DTDROOT/etc/catalog.xml"
+    fi
+else
+    # default DTDROOT
+    #
+    # no need to set BIN_DIR here, since it is /usr/bin
+    DTDROOT="$DEFAULT_DTDROOT"
+    LIB_DIR="$DEFAULT_LIB_DIR"
+    CONFIG="$DEFAULT_CONFIG"
+fi
+
+# Now that everything is in place, source the system config and the user
+# config (again)
+source $CONFIG
+if [[ -f $USER_CONFIG ]]; then
+    source "$USER_CONFIG"
+fi
+recover_cmdl_values
+
+# Before finally setting up the environment, run help if requested
+#
+if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
+        run_subcmd
+fi
+
+# Last, source the ENVfile
+#
+# If we know a valid ENVfile by now, just source it. If not, try
+# some magic to automatically find an ENVfile
+#
+
+#
+# if
+# * an ENVFILE has been sourced before
+# * that ENVFILE is present in the current directory
+# *_and_ no ENVFILE has been
+# specified on the command line, use the one that has been sourced 
+#
+if [[ -z $ENVFILE ]] && [[ -f ${PWD}/$SUSEDOC_ENV_NAME ]]; then
+    ENVFILE="$SUSEDOC_ENV_NAME"
+    BASE_DIR="$PWD"
+    if [[ 1 = $VERBOSE ]]; then
+        ccecho "info" "Using the previously sourced ENVFILE $ENVFILE\nand BASE_DIR $BASE_DIR"
+    fi
+fi
+
+# else
+#
+if [[ -f ${BASE_DIR}/$ENVFILE ]]; then
+    # ENVFILE and BASE_DIR known and valid
+    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
+else
+    if [[ -n $BASE_DIR ]]; then
+        # BASE_DIR not empty
+        if [[ ! -d ${BASE_DIR} ]]; then
+            exit_on_error "basedir $BASE_DIR is not a valid directory"
+        elif [[ ! -d ${BASE_DIR}/xml ]]; then
+            exit_on_error "Could not find an xml/ subdirectory under BASE_DIR $BASE_DIR"
+        else
+            # valid BASE_DIR
+            if [[ -n $ENVFILE ]]; then
+                # ENVFILE not empty but ${BASE_DIR}/$ENVFILE does not exist
+                exit_on_error "ENVFILE $ENVFILE does not exist"
+            else
+                # ENVFILE is empty, too, trying to find a valid ENV file
+                get_envfile
+                if [[ 0 = $? ]]; then
+                    # succeeded setting ENVFILE
+                    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
+                    if [[ 1 = $VERBOSE ]]; then
+                        ccecho "info" "Using ENVFILE $ENVFILE in current directory (${PWD})"
+                    fi
+                else
+                    # failed setting ENVFILE
+                    exit_on_error "Please specify an ENVFILE on the command line" 
+                fi
+            fi
+        fi
+    else
+        # BASE_DIR is empty, try to find a valid BASE_DIR
+        if [[ -f $PWD/$ENVFILE ]]; then
+            get_basedir
+            if [[ 0 = $? ]]; then
+                # succeeded setting BASE_DIR
+                ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
+                if [[ 1 = $VERBOSE ]]; then
+                    ccecho "info" "Using BASE_DIR ${BASE_DIR}"
+                fi
+            else
+                exit_on_error "Please specify a BASE_DIR on the command line"
+            fi
+        elif [[ -z $ENVFILE ]]; then
+            # ENVFILE is empty, too, trying to find a valid ENV file
+            get_envfile
+            if [[ 0 = $? ]]; then
+                # succeeded setting ENVFILE
+                # trying to find a valid BASE_DIR, too
+                get_basedir
+                if [[ 0 = $? ]]; then
+                    # succeeded setting BASE_DIR
+                    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
+                    if [[ 1 = $VERBOSE ]]; then
+                        ccecho "info" "Using BASE_DIR ${BASE_DIR} and ENVFILE ${ENVFILE}"
+                    fi
+                else
+                    exit_on_error "Looks like you intended to use ENVFILE ${ENVFILE} from the current directory. However, no valid\nBASE_DIR could be found. Please specify a BASE_DIR on the command line\nand check whether ${ENVFILE} is the correct ENVFILE."
+                fi
+            else
+                # failed to find a valid ENVFILE
+                exit_on_error "Please specify an ENVFILE on the command line"
+            fi
+        else
+            # ENVFILE is not a valid file
+            exit_on_error "Could not find a valid BASE_DIR and ENVFILE $ENVFILE is not valid. Please specify a BASE_DIR and check the ENVFILE settings."
+        fi
+    fi
+fi
+
+#
+# FINALLY! Source the ENV-file, recover the command line values and we
+# are done setting the environment
+source $ENV_TO_SOURCE
+recover_cmdl_values
+
+
+#----------
+# Check some values
+#
+
+# COLOR must be set to 1|0
+if [[ yes = $COLOR || 1 = $COLOR ]]; then
+    COLOR=1
+elif [[ no = $COLOR || 0 = $COLOR || -z $COLOR ]]; then
+    COLOR=0
+else
+    exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
+fi
+
+# COMMENTS must be set to 1|0
+if [[ yes = $COMMENTS || 1 = $COMMENTS ]]; then
+    COMMENTS=1
+elif [[ no = $COMMENTS || 0 = $COMMENTS || -z $COMMENTS ]]; then
+    COMMENTS=0
+    unset COMMENT_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for COMMENTS. Must be \"yes\" or \"no\""
+fi
+
+# DRAFT must be set to yes|no
+if [[ yes = $DRAFT || 1 = $DRAFT ]]; then
+    DRAFT="yes"
+elif [[ no = $DRAFT || 0 = $DRAFT || -z $DRAFT ]]; then
+    DRAFT="no"
+    unset DRAFT_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\""
+fi
+
+# MAIN
+if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
+    exit_on_error "MAIN ${BASE_DIR}/xml/$MAIN does not exist"
+fi
+
+# REMARKS must be set to 1|0
+if [[ yes = $REMARKS || 1 = $REMARKS ]]; then
+    REMARKS="1"
+elif [[ no = $REMARKS || 0 = $REMARKS || -z $REMARKS ]]; then
+    REMARKS="0"
+    unset REMARK_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
+fi
+
+# USEMETA must be set to 1|0
+if [[ yes = $USEMETA || 1 = $USEMETA ]]; then
+    USEMETA=1
+elif [[ no = $USEMETA || 0 = $USEMETA || -z $USEMETA ]]; then
+    USEMETA=0
+else
+    exit_on_error "Wrong value for USEMETA. Must be \"yes\" or \"no\""
+fi
+
+#----------
+# Export environment-depending variables
+#
+
+# book name
+if [[ -n $PDFNAME ]]; then
+    export BOOK="$PDFNAME"
+else
+    export BOOK="${ENVFILE#*${CONF_PREFIX}}"
+fi
+
+# DTDROOT
+export DTDROOT
+export DEFAULT_DTDROOT
+
+# ENVFILE
+export ENVFILE
+
+# LIB_DIR
+export LIB_DIR
+
+# FOP
+export FOP="${LIB_DIR}/susedoc-$FOPTYPE"
+
+# PATH
+if [[ -n $BIN_DIR ]]; then
+    export PATH=$BIN_DIR:$PATH
+fi
+
+# XML_CATALOG_FILES
+if [[ -n $XML_CATALOG_FILES ]]; then
+    export XML_CATALOG_FILES
+fi
+
+#----------
+# Now export all variables set by the config file
+export "${VARLIST[@]}"
+
+#-------------------------------------------------------------------
+# Create the log directory and a link to the ENV-file in RESULT_DIR
+#
+
+if [[ -n $BUILD_DIR ]]; then
+    RESULT_DIR="${BUILD_DIR}/${BOOK}/"
+    LOG_DIR="${RESULT_DIR}/log"
+else
+    RESULT_DIR="${BASE_DIR}/build/${BOOK}"
+    LOG_DIR="${RESULT_DIR}/log"
+fi
+
+mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
+
+if [[ ! -f ${RESULT_DIR}/$ENVFILE ]]; then
+    ln -sf ${BASE_DIR}/$ENVFILE ${RESULT_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $RESULT_DIR"
+fi
+
+# There should only be one ENVFILE in $RESULT_DIR
+#
+ENV_COUNT=$(find -L $RESULT_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+if [[ $ENV_COUNT -gt 1 ]]; then
+    ccecho "warn" "$RESULT_DIR contains more than one ENVFILE"
+fi
+
+#-------------------------------------------------------------------
+# Finally, run the Subcommands
+#
+
+run_subcmd;
+

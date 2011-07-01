@@ -1,0 +1,116 @@
+namespace rng = "http://relaxng.org/ns/structure/1.0"
+namespace db = "http://docbook.org/ns/docbook"
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
+#
+# Novdoc RNC Schema
+#
+
+# http://www.docbook.org/xml/5.0/rng/docbookxi.rnc
+include "docbookxi.rnc" inherit=db {
+  db.annotation = notAllowed
+  db.acknowledgements = notAllowed  
+  db.bibliography = notAllowed
+  db.bibliolist = notAllowed
+  db.colophon = notAllowed
+  db.computeroutput = notAllowed
+  db.constraintdef = notAllowed
+  db.equation = notAllowed
+  db.glosslist = notAllowed
+  db.informalequation = notAllowed
+  db.literallayout = notAllowed
+  db.productionset = notAllowed
+  db.prompt = notAllowed
+  db.qandaset = notAllowed
+  db.segmentedlist = notAllowed
+  db.simplesect = notAllowed
+  db.section = notAllowed
+  db.simplelist = notAllowed
+  db.task = notAllowed
+  db.userinput = notAllowed
+#  db.toc = notAllowed
+
+
+#
+# Components
+#
+  db.divisions = db.part
+
+  db.components = 
+    db.preface 
+    | db.chapter
+    | db.appendix
+    | db.article
+
+
+#
+# Blocks
+#
+  db.synopsis.blocks = notAllowed
+  db.info.elements = db.abstract | db.author
+  db.verbatim.blocks = (db.programlisting | db.screen )
+  db.technical.blocks = db.procedure
+  db.graphic.blocks = db.mediaobject
+  db.publishing.blocks = notAllowed
+  
+
+#
+# Inlines
+#
+  db.ubiq.inlines =
+    (db.inlinemediaobject
+    | db.remark
+    | db.superscript
+    | db.subscript
+    | db.indexterm
+    )
+    
+  db.link.inlines = db.xref | db.link    
+  db.product.inlines = db.productname | db.productnumber
+  db.programming.inlines = notAllowed
+  db.oo.inlines = notAllowed
+  db.error.inlines = notAllowed
+  db.technical.inlines = 
+    (db.replaceable
+    | db.systemitem
+    | db.option
+    )
+  db.markup.inlines = ( db.literal | db.email )
+  db.bibliography.inlines = db.citetitle
+  db.publishing.inlines = 
+    (db.phrase
+    | db.quote
+    | db.subscript
+    | db.superscript
+    | db.emphasis
+    )
+  db.gui.inlines = db.guimenu
+  db.keyboard.inlines =
+    (db.keycombo
+    | db.keycap
+    | db.shortcut
+    )
+  
+  #
+  db.para.blocks =  db.para | db.formalpara
+    
+  # db.para.info = notAllowed
+  db.para = element db:para {
+    db.para.attlist, db.all.inlines 
+    }
+
+#
+# Attributes
+#
+# db.href.attributes = notAllowed
+
+
+start = (db.set 
+  | db.book 
+  | db.components
+  | (db.sect1 | db.sect2 | db.sect3 )
+  | db.refentry
+  )
+
+}
+

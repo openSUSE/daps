@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"
+[
+  <!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]>
+  
+<refentry id="man.apache">
+ <refmeta>
+  <!-- ocf:name of xml file -->
+  <refentrytitle>ocf:apache</refentrytitle>
+  <manvolnum>7</manvolnum>
+ </refmeta>
+ <refnamediv>
+  <!-- ocf:name of xml file -->
+  <refname>ocf:apache</refname>
+  <!-- shortdesc -->
+  <refpurpose>Apache web server</refpurpose>
+ </refnamediv>
+
+ <refsect1>
+  <title>Synopsis</title>
+
+  <!-- supported variables are OCF_RESKEY_"name attribute of parameter" -->
+  <!-- = content type of parameter -->
+  <!-- parameters are required if unique="1" -->
+  <!-- synopsis from actions tag -->
+  <para>
+   <command>OCF_RESKEY_configfile</command>=string
+   [<command>OCF_RESKEY_httpd</command>=string]
+   [<command>OCF_RESKEY_port</command>=integer]
+   [<command>OCF_RESKEY_statusurl</command>=string]
+   [<command>OCF_RESKEY_options</command>=string]
+   <literal/>
+   <command>apache</command> [start|stop|status|monitor|meta-data|validate-all]
+  </para>
+ </refsect1>
+
+ <refsect1>
+  <title>Description</title>
+  <para> <!-- from longdesc -->
+  This is the resource agent for the Apache web server.
+  The resource agent operates both version 1.x and version 2.x Apache
+  servers. See also http://httpd.apache.org/
+ </para>
+ </refsect1>
+
+ <refsect1>
+  <title>Supported Parameters</title>
+  <variablelist>
+   <varlistentry>
+    <!-- variable from parameter = shortdesc of this parameter -->
+    <term><command>OCF_RESKEY_configfile</command>=configuration file path</term>
+    <listitem>
+     <!-- longdesc of parameter -->
+     <para>
+      The full pathname of the Apache configuration file.
+      This file is parsed to provide defaults for various other
+      resource agent parameters.
+     </para>
+     <para>
+      A possible value for this parameter is
+      <emphasis>/etc/apache2/httpd.conf</emphasis>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>OCF_RESKEY_httpd</command>=httpd binary path</term>
+    <listitem>
+     <para>
+      The full pathname of the httpd binary (optional).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>OCF_RESKEY_port</command>=httpd port</term>
+    <listitem>
+     <para>
+      A port number that we can probe for status information
+      using the statusurl.
+      This will default to the port number found in the
+      configuration file, or 80, if none can be found
+      in the configuration file.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>OCF_RESKEY_statusurl</command>=url name</term>
+    <listitem>
+     <para>
+      The URL of the apache status module.
+      If left unspecified, it will be inferred
+      from the apache configuration file.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><command>OCF_RESKEY_options</command>=command line options</term>
+    <listitem>
+     <para>
+      Extra options to apply when starting apache. See man httpd(8).
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+  </refentry>
+
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-indent-step:1
+coding:utf-8
+End:
+-->

@@ -1,0 +1,962 @@
+# ......................................................................
+
+# novdoc DTD V1.0 ......................................................
+
+# File novdoc.dtd ......................................................
+
+# novdocx.dtd is a subset of DocBook and all instances should be valid
+# DocBook files, however, the docbookx.dtd is not directly referenced.
+# 
+# Please use the following formal public identifier:
+# 
+# "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"
+# 
+# The following is copyright information required for the docbook dtd:
+# 
+# Copyright 1992-2002 HaL Computer Systems, Inc.,
+# O'Reilly & Associates, Inc., ArborText, Inc., Fujitsu Software
+# Corporation, Norman Walsh, Sun Microsystems, Inc., and the
+# Organization for the Advancement of Structured Information
+# Standards (OASIS).
+# 
+# $Id: novdocx.dtd 42467 2009-06-22 16:16:33Z toms $
+# 
+# Permission to use, copy, modify and distribute the DocBook XML DTD
+# and its accompanying documentation for any purpose and without fee
+# is hereby granted in perpetuity, provided that the above copyright
+# notice and this paragraph appear in all copies.  The copyright
+# holders make no representation about the suitability of the DTD for
+# any purpose.  It is provided "as is" without expressed or implied
+# warranty.
+
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+admonitions = important | note | tip | warning
+lists =
+  itemizedlist | orderedlist | simplelist | variablelist | calloutlist
+tables = table | informaltable
+figures = figure | informalfigure
+# CHANGE_SEP_28 added bridgehead to common group and removed the other specific instances
+common =
+  bridgehead | example | screen | remark | para | formalpara | indexterm
+all = admonitions | lists | figures | tables | common
+xrefinlines = xref | link | ulink
+coreinlines =
+  command
+  | envar
+  | productname
+  | literal
+  | emphasis
+  | option
+  | replaceable
+  | remark
+  | filename
+  | citetitle
+  | quote
+  | phrase
+  | systemitem
+  | guimenu
+  | subscript
+  | superscript
+  | trademark
+  | varname
+basicinlines = coreinlines | indexterm
+guiinlines = keycombo | keycap | menuchoice
+allinlines = xrefinlines | basicinlines | guiinlines | inlinemediaobject
+# Profiling information (attributes)
+profiling.attributes =
+  attribute os { text }?,
+  attribute arch { text }?,
+  attribute condition { text }?
+xmlbase = attribute xml:base { text }?
+set =
+  element set {
+    attlist.set,
+    (title, subtitle?, titleabbrev?)?,
+    toc?,
+    book+,
+    setindex?
+  }
+book =
+  element book {
+    attlist.book,
+    bookinfo,
+    preface?,
+    (part | chapter | article)+,
+    (appendix | glossary)*,
+    index?
+  }
+# change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed
+bookinfo =
+  element bookinfo {
+    attlist.bookinfo,
+    title,
+    productname,
+    productnumber?,
+    date?,
+    titleabbrev?,
+    legalnotice+,
+    authorgroup*,
+    abstract*
+  }
+article =
+  element article {
+    attlist.article,
+    title,
+    subtitle?,
+    articleinfo?,
+    (((calloutlist
+       | itemizedlist
+       | orderedlist
+       | variablelist
+       | important
+       | note
+       | tip
+       | warning
+       | screen
+       | formalpara
+       | para
+       | mediaobject
+       | informaltable
+       | example
+       | figure
+       | table
+       | procedure
+       | bridgehead
+       | remark
+       | abstract
+       | indexterm)+,
+      (sect1* | refentry*))
+     | (sect1+ | refentry+)),
+    (index | glossary | appendix)*
+  }
+articleinfo =
+  element articleinfo {
+    attlist.articleinfo,
+    (author
+     | authorgroup
+     | date
+     | productname
+     | productnumber
+     | legalnotice
+     | indexterm
+     | abstract)+
+  }
+preface =
+  element preface {
+    attlist.preface,
+    title,
+    (((all | procedure)+, sect1*)
+     | sect1+)
+  }
+part =
+  element part {
+    attlist.part,
+    title,
+    partintro?,
+    ((chapter+, appendix*) | appendix+)
+  }
+# CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1
+appendix =
+  element appendix {
+    attlist.appendix,
+    title,
+    (all | procedure)+,
+    (sect1* | refentry* | msgset?)
+  }
+chapter =
+  element chapter {
+    attlist.chapter,
+    title,
+    (abstract | all | procedure)+,
+    (sect1* | refentry* | msgset?)
+  }
+abstract = element abstract { attlist.abstract, title?, para+ }
+index = element index { attlist.index, empty }
+setindex = element setindex { attlist.setindex, empty }
+toc = element toc { attlist.toc, empty }
+attlist.toc &= empty
+# sections
+sect1 =
+  element sect1 {
+    attlist.sect1,
+    title,
+    (all | procedure)+,
+    (sect2* | refentry* | msgset?)
+  }
+sect2 =
+  element sect2 { attlist.sect2, title, (all | procedure)+, sect3* }
+sect3 =
+  element sect3 { attlist.sect3, title, (all | procedure)+, sect4* }
+sect4 = element sect4 { attlist.sect4, title, (all | procedure)+ }
+partintro = element partintro { attlist.partintro, all+, sect1* }
+# inlines
+application =
+  element application { attlist.application, (text | phrase | remark)* }
+command =
+  element command {
+    attlist.command, (text | option | replaceable | remark)*
+  }
+envar = element envar { attlist.envar, text }
+literal =
+  element literal { attlist.literal, (text | replaceable | remark)* }
+emphasis =
+  element emphasis {
+    attlist.emphasis, (text | xrefinlines | basicinlines | guiinlines)*
+  }
+citetitle =
+  element citetitle {
+    attlist.citetitle, (text | phrase | remark | xrefinlines)*
+  }
+option =
+  element option { attlist.option, (text | replaceable | remark)* }
+replaceable =
+  element replaceable { attlist.replaceable, (text | remark)* }
+filename =
+  element filename { attlist.filename, (text | replaceable | remark)* }
+# CHANGE quote can contain other inlines
+quote = element quote { attlist.quote, (text | allinlines)* }
+phrase = element phrase { attlist.phrase, (text | allinlines)* }
+productname =
+  element productname {
+    attlist.productname, (text | phrase | remark | superscript)*
+  }
+productnumber =
+  element productnumber {
+    attlist.productnumber, (text | phrase | remark | superscript)*
+  }
+systemitem = element systemitem { attlist.systemitem, (text | remark)* }
+varname = element varname { attlist.varname, text }
+attlist.varname &= empty
+# Curtis, do we need that according to legal issues?
+trademark = element trademark { attlist.trademark, text }
+co = element co { attlist.co, empty }
+xref = element xref { attlist.xref, empty }
+link = element link { attlist.link, (text | basicinlines)* }
+ulink = element ulink { attlist.ulink, (text | basicinlines)* }
+keycombo = element keycombo { attlist.keycombo, keycap+ }
+keycap = element keycap { attlist.keycap, (text | remark)* }
+menuchoice =
+  element menuchoice { attlist.menuchoice, shortcut?, guimenu+ }
+# toms
+shortcut = element shortcut { attlist.shortcut, (keycombo | keycap+) }
+guimenu = element guimenu { attlist.guimenu, text }
+subscript = element subscript { attlist.subscript, (text | remark)* }
+superscript =
+  element superscript { attlist.superscript, (text | remark)* }
+# common
+bridgehead =
+  element bridgehead { attlist.bridgehead, (text | coreinlines)* }
+title = element title { attlist.title, (text | coreinlines)* }
+subtitle = element subtitle { attlist.subtitle, (text | coreinlines)* }
+attlist.subtitle &= empty
+titleabbrev =
+  element titleabbrev { attlist.titleabbrev, (text | coreinlines)* }
+example =
+  element example {
+    attlist.example,
+    title,
+    (lists | formalpara | para | screen | indexterm)+
+  }
+para = element para { attlist.para, (text | allinlines)* }
+formalpara = element formalpara { attlist.formalpara, title, para }
+# change add replaceable, command, emphasis, option  and xrefinlines to screen
+screen =
+  element screen {
+    attlist.screen,
+    (text
+     | co
+     | emphasis
+     | replaceable
+     | command
+     | option
+     | phrase
+     | xrefinlines)*
+  }
+remark = element remark { attlist.remark, (text | allinlines)* }
+# admonitions
+admonition.module =
+  title?,
+  (para
+   | remark
+   | screen
+   | simplelist
+   | itemizedlist
+   | variablelist
+   | orderedlist)+
+tip = element tip { attlist.tip, admonition.module }
+important = element important { attlist.important, admonition.module }
+note = element note { attlist.note, admonition.module }
+warning = element warning { attlist.warning, admonition.module }
+# lists
+itemizedlist =
+  element itemizedlist {
+    attlist.itemizedlist, title?, remark*, listitem+
+  }
+orderedlist =
+  element orderedlist {
+    attlist.orderedlist, title?, remark*, listitem+
+  }
+simplelist = element simplelist { attlist.simplelist, member+ }
+variablelist =
+  element variablelist {
+    attlist.variablelist, title?, remark*, varlistentry+
+  }
+# calloutlist is used with co tag to callout sections within screen
+# we should review the use of calloutlist, callout and co
+calloutlist = element calloutlist { attlist.calloutlist, callout+ }
+callout =
+  element callout {
+    attlist.callout,
+    (para | remark | lists | admonitions | screen | indexterm)+
+  }
+listitem = element listitem { attlist.listitem, all+ }
+member = element member { attlist.member, (text | allinlines)* }
+varlistentry =
+  element varlistentry { attlist.varlistentry, term+, listitem }
+term = element term { attlist.term, (text | allinlines)* }
+# procedure
+procedure = element procedure { attlist.procedure, title?, all*, step+ }
+step =
+  element step { attlist.step, (para | formalpara), all*, substeps* }
+substeps = element substeps { attlist.substeps, step+ }
+# tables
+informaltable = element informaltable { attlist.informaltable, tgroup }
+table = element table { attlist.table, title, tgroup }
+tgroup = element tgroup { attlist.tgroup, colspec*, thead?, tbody }
+colspec = element colspec { attlist.colspec, empty }
+thead = element thead { attlist.thead, colspec*, row+ }
+tbody = element tbody { attlist.tbody, row+ }
+row = element row { attlist.row, entry+ }
+# novdoc entry included tblhead and tsubhead for which no docbook
+# counterpart exists. May need to find alternatives?
+entry =
+  element entry {
+    attlist.entry,
+    (admonitions
+     | mediaobject
+     | para
+     | screen
+     | formalpara
+     | itemizedlist
+     | orderedlist
+     | simplelist
+     | remark)*
+  }
+# figures
+figure = element figure { attlist.figure, title, mediaobject+ }
+informalfigure =
+  element informalfigure { attlist.informalfigure, mediaobject+ }
+# provo doc has required a text description for all graphics where suse
+# has not. textobject is optional but we might discuss this further
+inlinemediaobject =
+  element inlinemediaobject {
+    attlist.inlinemediaobject, textobject?, imageobject+
+  }
+mediaobject =
+  element mediaobject { attlist.mediaobject, textobject*, imageobject+ }
+imageobject = element imageobject { attlist.imageobject, imagedata }
+imagedata = element imagedata { attlist.imagedata, empty }
+textobject = element textobject { attlist.textobject, phrase }
+# glossary
+glossary =
+  element glossary {
+    attlist.glossary,
+    title,
+    (para | formalpara | remark)*,
+    (glossentry+ | glossdiv+)
+  }
+glossdiv =
+  element glossdiv { attlist.glossdiv, title, remark*, glossentry+ }
+glossentry =
+  element glossentry { attlist.glossentry, glossterm, glossdef+ }
+glossterm =
+  element glossterm { attlist.glossterm, (text | basicinlines)* }
+glossdef = element glossdef { attlist.glossdef, (para | remark)+ }
+# indexterm
+indexterm =
+  element indexterm {
+    attlist.indexterm,
+    primary?,
+    ((secondary,
+      ((tertiary, (see | seealso+)?)
+       | see
+       | seealso+)?)
+     | see
+     | seealso+)?
+  }
+# content for these????
+primary = element primary { attlist.primary, (text | phrase)* }
+secondary = element secondary { attlist.secondary, (text | phrase)* }
+tertiary = element tertiary { attlist.tertiary, (text | phrase)* }
+see = element see { attlist.see, (text | phrase)* }
+seealso = element seealso { attlist.seealso, (text | phrase)* }
+# authorgroup
+authorgroup = element authorgroup { attlist.authorgroup, author+ }
+author = element author { attlist.author, firstname, surname }
+firstname =
+  element firstname { attlist.firstname, (text | phrase | remark)* }
+surname = element surname { attlist.surname, (text | phrase | remark)* }
+# msgset
+msgset = element msgset { attlist.msgset, simplemsgentry+ }
+attlist.msgset &= empty
+simplemsgentry =
+  element simplemsgentry { attlist.simplemsgentry, msgtext, msgexplan+ }
+msgtext = element msgtext { attlist.msgtext, (para | remark)+ }
+attlist.msgtext &= empty
+msgexplan =
+  element msgexplan {
+    attlist.msgexplan, title, para, (all | procedure)*
+  }
+attlist.msgexplan &= empty
+# misc
+legalnotice =
+  element legalnotice {
+    attlist.legalnotice, title?, (simplelist | para | formalpara)+
+  }
+date = element date { attlist.date, (text | phrase | superscript)* }
+# refentry
+refentry =
+  element refentry {
+    attlist.refentry, refmeta?, remark*, refnamediv, refsect1+
+  }
+refmeta = element refmeta { attlist.refmeta, refentrytitle, manvolnum? }
+attlist.refmeta &= empty
+refentrytitle =
+  element refentrytitle {
+    attlist.refentrytitle,
+    (text
+     | command
+     | envar
+     | literal
+     | replaceable
+     | filename
+     | guiinlines)*
+  }
+manvolnum = element manvolnum { attlist.manvolnum, text }
+attlist.manvolnum &= empty
+refnamediv =
+  element refnamediv {
+    attlist.refnamediv,
+    refname+,
+    refpurpose,
+    refclass*,
+    (link | ulink | remark)*
+  }
+refname =
+  element refname {
+    attlist.refname,
+    (text
+     | command
+     | envar
+     | literal
+     | replaceable
+     | filename
+     | guiinlines)*
+  }
+refpurpose =
+  element refpurpose {
+    attlist.refpurpose,
+    (text | xrefinlines | basicinlines | guiinlines)*
+  }
+refclass = element refclass { attlist.refclass, (text | application)* }
+refsect1 =
+  element refsect1 {
+    attlist.refsect1, title, (all | procedure)*, refsect2*
+  }
+refsect2 =
+  element refsect2 {
+    attlist.refsect2, title, (all | procedure)*, refsect3*
+  }
+refsect3 =
+  element refsect3 { attlist.refsect3, title, (all | procedure)* }
+# change added condition and userlevel
+attlist.abstract &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.appendix &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.application &= profiling.attributes, xmlbase
+attlist.article &=
+  attribute id { xsd:ID }?,
+  attribute role { text }?,
+  attribute lang { text }?,
+  attribute class {
+    "faq"
+    | "journalarticle"
+    | "productsheet"
+    | "specification"
+    | "techreport"
+    | "whitepaper"
+  }?,
+  xmlbase,
+  profiling.attributes
+attlist.articleinfo &=
+  attribute role { text }?,
+  xmlbase,
+  profiling.attributes
+attlist.author &= profiling.attributes, xmlbase
+attlist.authorgroup &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.book &=
+  attribute revision { text }?,
+  attribute role { text }?,
+  attribute conformance { text }?,
+  attribute lang { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.bookinfo &=
+  attribute id { xsd:ID }?,
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.bridgehead &=
+  profiling.attributes,
+  xmlbase,
+  attribute renderas { "sect1" | "sect2" | "sect3" | "sect4" }?,
+  attribute id { xsd:ID }?
+attlist.calloutlist &= profiling.attributes
+# change added role to Chapter
+attlist.chapter &=
+  attribute role { text }?,
+  attribute conformance { text }?,
+  attribute id { xsd:ID }?,
+  attribute revision { text }?,
+  attribute lang { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.citetitle &=
+  profiling.attributes,
+  xmlbase,
+  attribute pubwork {
+    "article"
+    | "bbs"
+    | "book"
+    | "cdrom"
+    | "chapter"
+    | "dvd"
+    | "emailmessage"
+    | "gopher"
+    | "journal"
+    | "manuscript"
+    | "newsposting"
+    | "part"
+    | "refentry"
+    | "section"
+    | "series"
+    | "set"
+    | "webpage"
+    | "wiki"
+  }?
+attlist.co &=
+  attribute id { xsd:ID }?,
+  xmlbase,
+  profiling.attributes
+attlist.colspec &=
+  attribute colnum { text }?,
+  attribute colname { text }?,
+  attribute colwidth { text }?,
+  attribute align { "center" | "justify" | "left" | "right" }?,
+  xmlbase,
+  profiling.attributes
+attlist.command &= profiling.attributes, xmlbase
+attlist.date &= profiling.attributes, xmlbase
+attlist.emphasis &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.entry &=
+  attribute align { "center" | "justify" | "left" | "right" }?,
+  attribute colname { text }?,
+  attribute namest { text }?,
+  attribute nameend { text }?,
+  attribute morerows { text }?,
+  attribute valign { "bottom" | "middle" | "top" }?,
+  profiling.attributes,
+  xmlbase
+attlist.envar &= profiling.attributes, xmlbase
+attlist.example &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+# pgwide used to set image at left edge or current indent
+attlist.figure &=
+  attribute pgwide { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.filename &= profiling.attributes, xmlbase
+attlist.firstname &= profiling.attributes, xmlbase
+attlist.formalpara &=
+  attribute id { xsd:ID }?,
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.glossary &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.glossdef &= profiling.attributes, xmlbase
+attlist.glossterm &= profiling.attributes, xmlbase
+attlist.glossdiv &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.glossentry &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.guimenu &= profiling.attributes, xmlbase
+attlist.index &= profiling.attributes, xmlbase
+attlist.informalfigure &=
+  attribute pgwide { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.imageobject &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.imagedata &=
+  attribute fileref { text }?,
+  attribute width { text }?,
+  attribute format { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.important &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.informaltable &=
+  attribute frame { "topbot" | "none" }?,
+  attribute rowsep { text }?,
+  attribute pgwide { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.inlinemediaobject &= profiling.attributes, xmlbase
+# change added role and spacing
+attlist.itemizedlist &=
+  attribute id { xsd:ID }?,
+  [ a:defaultValue = "bullet" ]
+  attribute mark { "bullet" | "dash" | "box" | "check" }?,
+  attribute role { text }?,
+  [ a:defaultValue = "normal" ]
+  attribute spacing { "compact" | "normal" }?,
+  profiling.attributes,
+  xmlbase
+attlist.keycap &=
+  attribute function {
+    "alt"
+    | "backspace"
+    | "command"
+    | "control"
+    | "delete"
+    | "down"
+    | "end"
+    | "enter"
+    | "escape"
+    | "home"
+    | "insert"
+    | "left"
+    | "meta"
+    | "option"
+    | "other"
+    | "pagedown"
+    | "pageup"
+    | "right"
+    | "shift"
+    | "space"
+    | "tab"
+    | "up"
+  }?,
+  profiling.attributes,
+  xmlbase
+attlist.keycombo &=
+  attribute action { "press" | "seq" }?,
+  profiling.attributes,
+  xmlbase
+attlist.legalnotice &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.listitem &= profiling.attributes, xmlbase
+attlist.literal &= profiling.attributes, xmlbase
+attlist.mediaobject &= profiling.attributes, xmlbase
+attlist.member &= profiling.attributes, xmlbase
+attlist.menuchoice &= profiling.attributes, xmlbase
+attlist.note &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.option &= profiling.attributes, xmlbase
+# change added spacing
+attlist.orderedlist &=
+  attribute id { xsd:ID }?,
+  [ a:defaultValue = "normal" ]
+  attribute spacing { "compact" | "normal" }?,
+  profiling.attributes,
+  xmlbase
+attlist.para &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.part &=
+  attribute revision { text }?,
+  attribute conformance { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.partintro &= profiling.attributes, xmlbase
+attlist.phrase &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.preface &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.primary &=
+  attribute sortas { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.procedure &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.productname &= profiling.attributes, xmlbase
+attlist.productnumber &= profiling.attributes, xmlbase
+attlist.quote &= profiling.attributes, xmlbase
+attlist.refclass &= profiling.attributes, xmlbase
+attlist.remark &=
+  attribute role { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.refname &= profiling.attributes, xmlbase
+attlist.refnamediv &= profiling.attributes, xmlbase
+attlist.refpurpose &= profiling.attributes, xmlbase
+attlist.refentry &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.refentrytitle &=
+  attribute role { text }?,
+  xmlbase
+attlist.refsect1 &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.refsect2 &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.refsect3 &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.simplemsgentry &=
+  attribute id { xsd:ID }?,
+  xmlbase
+attlist.replaceable &= profiling.attributes, xmlbase
+attlist.row &=
+  attribute rowsep { text }?,
+  attribute id { xsd:ID }?,
+  attribute valign { "bottom" | "middle" | "top" }?,
+  profiling.attributes,
+  xmlbase
+attlist.screen &=
+  profiling.attributes,
+  attribute linenumbering { "numbered" | "unnumbered" }?,
+  xmlbase
+attlist.sect1 &=
+  attribute role { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.sect2 &=
+  attribute role { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.sect3 &=
+  attribute role { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.sect4 &=
+  attribute role { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.secondary &=
+  attribute sortas { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.see &= profiling.attributes, xmlbase
+attlist.seealso &= profiling.attributes, xmlbase
+attlist.set &=
+  attribute lang { text }?,
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.setindex &= profiling.attributes, xmlbase
+attlist.shortcut &= profiling.attributes, xmlbase
+attlist.simplelist &= profiling.attributes, xmlbase
+attlist.step &=
+  attribute id { xsd:ID }?,
+  [ a:defaultValue = "required" ]
+  attribute performance { "optional" | "required" }?,
+  profiling.attributes,
+  xmlbase
+attlist.subscript &= profiling.attributes, xmlbase
+# id on substeps was probably a mistake
+attlist.substeps &=
+  attribute id { xsd:ID }?,
+  [ a:defaultValue = "required" ]
+  attribute performance { "optional" | "required" }?,
+  profiling.attributes,
+  xmlbase
+attlist.superscript &= profiling.attributes, xmlbase
+attlist.surname &= profiling.attributes, xmlbase
+attlist.systemitem &=
+  attribute class {
+    "constant"
+    | "daemon"
+    | "domainname"
+    | "etheraddress"
+    | "event"
+    | "eventhandler"
+    | "filesystem"
+    | "fqdomainname"
+    | "groupname"
+    | "ipaddress"
+    | "library"
+    | "macro"
+    | "netmask"
+    | "newsgroup"
+    | "osname"
+    | "process"
+    | "resource"
+    | "server"
+    | "service"
+    | "systemname"
+    | "username"
+  }?,
+  profiling.attributes,
+  xmlbase
+attlist.table &=
+  attribute id { xsd:ID }?,
+  attribute frame { "topbot" | "none" }?,
+  attribute rowsep { text }?,
+  attribute pgwide { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.tbody &= profiling.attributes, xmlbase
+attlist.term &= profiling.attributes, xmlbase
+attlist.tertiary &=
+  attribute sortas { text }?,
+  profiling.attributes,
+  xmlbase
+# change added role
+attlist.textobject &=
+  attribute role {
+    "description" | "longdescription" | "screencappath"
+  },
+  profiling.attributes,
+  xmlbase
+attlist.tgroup &=
+  attribute cols { text },
+  attribute tgroupstyle { text }?,
+  attribute align { "center" | "char" | "justify" | "left" | "right" }?,
+  attribute valign { "bottom" | "middle" | "top" }?,
+  profiling.attributes,
+  xmlbase
+attlist.thead &= profiling.attributes, xmlbase
+attlist.tip &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.title &= profiling.attributes, xmlbase
+attlist.titleabbrev &= profiling.attributes, xmlbase
+attlist.trademark &=
+  attribute class { "service" | "trade" | "registered" | "copyright" }?,
+  profiling.attributes,
+  xmlbase
+# change added role attribute
+attlist.ulink &=
+  attribute url { text },
+  attribute role { text }?,
+  attribute type { text }?,
+  profiling.attributes,
+  xmlbase
+attlist.variablelist &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.varlistentry &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+attlist.warning &=
+  attribute id { xsd:ID }?,
+  profiling.attributes,
+  xmlbase
+# This parameter entity "deactivates" all IDREF(S).
+# 
+# So somebody can validate a separate file even if some
+# xref/link elements points outside this file.
+#
+
+# The NOVDOC.DEACTIVATE.IDREF p.e. is mutually exclusive
+# to the following declaration.
+# This p.e. should be never touched.
+attlist.callout &=
+  attribute arearefs { xsd:IDREF },
+  profiling.attributes,
+  xmlbase
+attlist.link &=
+  attribute linkend { xsd:IDREF },
+  profiling.attributes,
+  xmlbase
+attlist.indexterm &=
+  profiling.attributes,
+  xmlbase,
+  attribute startref { xsd:IDREF }?,
+  attribute role { text }?,
+  attribute class { "endofrange" | "singular" | "startofrange" }?,
+  attribute id { xsd:ID }?
+attlist.xref &=
+  attribute linkend { xsd:IDREF },
+  attribute xrefstyle { text }?,
+  profiling.attributes,
+  xmlbase
+start = set
+# End of %__HIDE__
+
+# Entities which are used by SUSE
+# 
+# If someone doesn't need that, it can be switched off with the proper
+# parameter entity declaration, e.g.:
+# <!ENTITY % ISOlat1.module "IGNORE">
+
+# end of ISOlat1.module
+
+# end of ISOlat2.module
+
+# end of ISOnum.module
+
+# end of ISOpub.module
+
+# <!ENTITY % NOVELLmisc.module "INCLUDE">
+# <![ %NOVELLmisc.module; [
+#  <!ENTITY % NOVELLmisc PUBLIC "-//Novell//ENTITIES Misc//EN" "novell.ent">
+# <!- -end of NOVELLmisc.module- ->]]>
+# 
+# <![ %NOVELLmisc.module; [
+# %NOVELLmisc;
+# ]]>

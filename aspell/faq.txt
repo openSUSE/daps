@@ -1,0 +1,131 @@
+Where can I get it?
+-------------------
+
+Just run "make update" and you will receive the files in trunk/novdoc/aspell/
+
+How can I use use it?
+---------------------
+
+  * Command line
+
+      aspell --mode=sgml --encoding=utf-8 --lang=en_US \
+      --extra-dicts="<PATH TO NOVDOC DIRECTORY>/aspell/suse_aspell.rws \
+      <FILENAME TO CHECK>
+
+      (remove the "\" and put it all in one line
+       replace the <...> parts with appropriate values )
+
+  * Emacs
+
+      Add the following lines to your custom emacs config file:
+
+(add-hook 'sgml-mode-hook   
+      '(lambda ()   
+      (setq ispell-program-name "aspell")
+      (ispell-change-dictionary "american")
+      (setq ispell-extra-args '("--extra-dicts=<PATH TO NOVDOC \
+DIRECTORY>/aspell/suse_aspell.rws"))))
+
+  * vi
+
+      vi users don't need help ;-))
+
+  * kate/kwrite
+
+      Enter the following command as user root:
+
+      cp <PATH TO NOVDOC DIRECTORY>/aspell/suse_aspell.rws \
+      <PATH TO NOVDOC DIRECTORY>/aspell/en_US-w_accents_suse.multi \
+      /usr/lib/aspell-0.60
+
+      Do the following as regular user:
+
+      Alt + F2 kcontrol
+      -> KDE Components -> Spell Checker
+
+      Client: Aspell
+      Dictionary: English (United States of America - w_accents_suse)
+
+      Every time suse_aspell.rws gets updated, you need to copy it 
+      to /usr/lib/aspell-0.60. You may instead create a link pointing to 
+      suse_aspell.rws within the trunk, but I am not sure whether this is a 
+      good idea...
+
+  * oXygen
+
+      oXygen comes with it's own spell checker and cannot use the aspell
+      directory. However, a tool to build custom dictionaries from wordlists
+      is available from http://www.xmlmind.com/spellchecker/dictbuilder.shtml
+      The SUSE wordlist is available as text file at
+      trunk/novdoc/aspell/suse_wordlist.txt
+
+      0. Download the ZIP archive from http://www.xmlmind.com/spellchecker/dictbuilder.shtml
+         and unpack it in this (aspell) directory.
+      1. Run "make update"
+
+      2. Create the dictionary
+
+         Run the following command:
+
+         <PATH TO DICTBUILDER-DIRECTORY>/dictbuilder -cs utf8 \
+         <PATH TO NOVDOC DIRECTORY>/aspell/suse_wordlist.txt \
+         -o <PATH TO NOVDOC DIRECTORY>/aspell/oxygen/en-US-SUSE/spec.cdi
+
+      3. Add the SUSE dictionary to the oXygen dictionaries
+
+         Run the following two commands:
+
+         cd <PATH TO NOVDOC DIRECTORY>/aspell/oxygen
+
+         zip -9 -r <PATH TO OXYGEN DIRECTORY>/dicts/en.dar \
+         en-US-SUSE/ -x en-US-SUSE/.svn/\*
+
+         Restart oXygen and go to Options -> Preferences -> Spell Check
+
+         there now is a new dictionary available: English (US + SUSE)
+
+
+What's currently missing?
+-------------------------
+
+The current dictionary does not include the following words that are 
+present in our documents:
+
+* All uppercase words (e.g. acronyms, variable names, etc.)
+* two or three letter words
+
+These words are located in trunk/novdoc/aspell/acronyms.txt - feel free 
+to work on this file, it will get merged into the dictionary in the 
+future. 
+
+
+How can I add words?
+--------------------
+
+trunk/novdoc/aspell/suse_wordlist.txt is the source from where the 
+dictionary is built. It is versioned in SVN and everybody can change 
+the file. If you do so, please note the following:
+
+* Only add words aspell does not already know
+
+* If you add a noun, please also add it's plural (providing it exists)
+  and genitive:
+
+  apache
+  apaches
+  apache's
+
+* Send a note to Rebecca - she has to proofread the new file before 
+  building a new directory.
+
+How can I generate a new dictionary?
+-------------------------------------
+
+Simply _don't do it_ if you are not Rebecca ;-).
+
+Rebecca, once you have proofed a new wordlist you can generate a new 
+directory with the following commands:
+
+cd <PATH TO NOVDOC DIRECTORY>/aspell/
+./make_dictionary.sh
+

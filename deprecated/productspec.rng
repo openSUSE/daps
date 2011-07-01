@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="urn:x-suse:xmlns:docproperties" xmlns:d="urn:x-suse:xmlns:docproperties" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="yesorno">
+    <choice>
+      <value>yes</value>
+      <value>no</value>
+    </choice>
+  </define>
+  <define name="release.attrib">
+    <attribute name="release">
+      <a:documentation>The release (OS_110, SL_100, ...) for this product</a:documentation>
+    </attribute>
+  </define>
+  <define name="status.attrib">
+    <attribute name="status">
+      <a:documentation>The status of this filename</a:documentation>
+    </attribute>
+  </define>
+  <define name="maintainer.attrib">
+    <attribute name="maintainer">
+      <a:documentation>Who maintains the file?</a:documentation>
+    </attribute>
+  </define>
+  <define name="prelim.attrib">
+    <attribute name="prelim">
+      <a:documentation>Is the file more or less ready? Preliminary?</a:documentation>
+      <ref name="yesorno"/>
+    </attribute>
+  </define>
+  <define name="trans.attrib">
+    <attribute name="trans">
+      <a:documentation>Should the file be translated?</a:documentation>
+      <ref name="yesorno"/>
+    </attribute>
+  </define>
+  <define name="version.attrib">
+    <attribute name="version">
+      <a:documentation>The version</a:documentation>
+      <value>1.0</value>
+    </attribute>
+  </define>
+  <start>
+    <ref name="Docproperties"/>
+  </start>
+  <define name="Docproperties">
+    <element name="docproperties">
+      <a:documentation>Holds product specifications and filenames</a:documentation>
+      <ref name="version.attrib"/>
+      <optional>
+        <ref name="Productspec"/>
+      </optional>
+      <optional>
+        <ref name="Filename"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Productspec">
+    <element name="productspec">
+      <a:documentation>Metadata container for a specific product</a:documentation>
+      <interleave>
+        <ref name="Bookname"/>
+        <ref name="Productname"/>
+        <ref name="Productversion"/>
+        <ref name="Htmlroot"/>
+        <ref name="Rootid"/>
+        <ref name="Main"/>
+        <ref name="Profos"/>
+        <ref name="Profarch"/>
+        <ref name="Layout"/>
+        <ref name="Packagename"/>
+        <ref name="Pdfname"/>
+        <ref name="Remark"/>
+        <ref name="Comments"/>
+      </interleave>
+    </element>
+  </define>
+  <define name="Bookname">
+    <element name="bookname">
+      <a:documentation>The name of the book</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Productname">
+    <element name="productname">
+      <a:documentation>The name of a product</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Productversion">
+    <element name="productversion">
+      <a:documentation>The version of a product</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Htmlroot">
+    <element name="htmlroot">
+      <a:documentation>The root directory for HTML output</a:documentation>
+      <data type="anyURI"/>
+    </element>
+  </define>
+  <define name="Rootid">
+    <element name="rootid">
+      <a:documentation>An ID, pointing to the element that has to be processed</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Main">
+    <element name="main">
+      <a:documentation>The filename of the main file</a:documentation>
+      <data type="anyURI"/>
+    </element>
+  </define>
+  <define name="Profos">
+    <element name="profos">
+      <a:documentation>Profiling attribute os</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Profarch">
+    <element name="profarch">
+      <text/>
+    </element>
+  </define>
+  <define name="Layout">
+    <element name="layout">
+      <a:documentation>Which layout should be used?</a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Packagename">
+    <element name="packagename">
+      <a:documentation>Name of </a:documentation>
+      <text/>
+    </element>
+  </define>
+  <define name="Pdfname">
+    <element name="pdfname">
+      <a:documentation>Name of the resulting PDF</a:documentation>
+      <data type="anyURI"/>
+    </element>
+  </define>
+  <define name="Remark">
+    <element name="remark">
+      <a:documentation>Should remarks be activated?</a:documentation>
+      <ref name="yesorno"/>
+    </element>
+  </define>
+  <define name="Comments">
+    <element name="comments">
+      <a:documentation>Should comments be activated?</a:documentation>
+      <ref name="yesorno"/>
+    </element>
+  </define>
+  <define name="Filename">
+    <element name="filename">
+      <a:documentation>A filename which belongs to this producct</a:documentation>
+      <optional>
+        <ref name="release.attrib"/>
+      </optional>
+      <optional>
+        <ref name="status.attrib"/>
+      </optional>
+      <optional>
+        <ref name="maintainer.attrib"/>
+      </optional>
+      <optional>
+        <ref name="prelim.attrib"/>
+      </optional>
+      <optional>
+        <ref name="trans.attrib"/>
+      </optional>
+      <text/>
+    </element>
+  </define>
+</grammar>
