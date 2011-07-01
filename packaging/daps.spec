@@ -22,7 +22,7 @@ Version:        0.9beta1
 %define xslt_catalog   for-catalog-%{dtdname}xslt-%{version}.xml
 
 Release:        1
-Summary:        A complete environment to build HTML, PDF and other formats from DocBook XML
+Summary:        DocBook Authoring and Publishing Suite
 License:        GPL
 Group:          Productivity/Publishing/XML
 URL:            http://svn.berlios.de/viewvc/opensuse-doc/trunk/tools/daps/
@@ -136,6 +136,8 @@ Provides:       susedoc
 
 
 %description
+DocBook Authoring and Publishing Suite (daps)
+
 daps contains a set of stylesheets, scripts and makefiles that enable
 you to create HTML, PDF, EPUB and other formats from DocBook XML with a
 single command. It also contains tools to generate profiled source
