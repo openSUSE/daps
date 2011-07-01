@@ -27,7 +27,7 @@ License:        GPL
 Group:          Productivity/Publishing/XML
 URL:            http://svn.berlios.de/viewvc/opensuse-doc/trunk/tools/daps/
 Source0:        %{name}-%{version}.tar.bz2
-Source1:        %{name}-rpmlintrc
+Source1:        %{name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
@@ -189,7 +189,7 @@ if [ -x %{regcat} ]; then
 fi
 #
 # remove existing entries first (if existing) - needed for
-# zypper in, since it does not call %postun
+# zypper in, since it does not call postun
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}-%{version}
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
