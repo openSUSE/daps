@@ -77,7 +77,7 @@ endif
 	tar cp --exclude=docbook_macros.el lib/* | (cd $(DAPS_SHAREDIR); tar xpv)
 	find {$(DAPS_CONFDIR),$(DAPS_DOCDIR),$(DAPS_SHAREDIR)} -type d -exec chmod 755 {} \;
 	find {$(DAPS_CONFDIR),$(DAPS_DOCDIR),$(DAPS_SHAREDIR)} -type f -exec chmod 644 {} \;
-	(cd $(DAPS_SHAREDIR)/lib; chmod 755 *.sh *.py daps-{fop,xep})
+	(cd $(DAPS_SHAREDIR)/lib; chmod 755 *.sh *.py daps-{fop,xep,xmlformat})
 
 create-install-dirs:
 ifdef MANUALS
