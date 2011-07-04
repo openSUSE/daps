@@ -336,7 +336,6 @@
   -1"</para>"\n
   -1"</listitem>"\n
   -1"</varlistentry>"\n
-  \n >
 )
 
 ;; Create a new menu and keyboard shortcuts
