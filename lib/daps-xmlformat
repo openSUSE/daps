@@ -3,7 +3,7 @@
 # Used as a wrapper script, so it's not necessary to memorize
 # where the config file stays
 
-CONFIG_FILE="/usr/share/daps/etc/docbook-xmlformat.conf"
+CONFIG_FILE="/etc/daps/docbook-xmlformat.conf"
 
 # Directory of current shell script
 #bin="${BASH_SOURCE%/*}"
@@ -12,7 +12,7 @@ CONFIG_FILE="/usr/share/daps/etc/docbook-xmlformat.conf"
 echo "Using config file '$CONFIG_FILE'"
 
 if [ ! -e $CONFIG_FILE ]; then
-  printf "Could not find config file '$CONFIG_FILE'\n"
+  echo -e "Could not find config file '$CONFIG_FILE'\n"
   exit 100
 fi
 
@@ -22,7 +22,7 @@ fi
 
 res=$(which xmlformat.pl 2>/dev/null)
 if [ "$res" = '' ]; then
-  printf "The xmlformat.pl script is missing. Please install the package xmlformat!\n"
+  echo -e "The xmlformat.pl script is missing. Please install the package xmlformat!\n"
   exit 200
 fi
 
