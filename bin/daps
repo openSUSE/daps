@@ -96,17 +96,17 @@ Usage:
   $ME [--global-options] <subcommand> [--command-options] [arguments]
 
 Global Options:
-  --help, -h                Help.
-  --verbose, -v             Verbose output.
+  --help, -h                Help
+  --verbose, -v             Verbose output
   --debug, -d               Print debugging messages. Far more verbose than the
-                             --verbose option.
+                             --verbose option
   -b BASE_DIR,
   --basedir=BASE_DIR        Project directory. Must contain the XML sources in
                             BASE_DIR/xml. If not specified, the current
-                            directory will be used.
+                            directory will be used
                             Default: Parent directory of $ENVFILE
   --builddir=BUILD_DIR      Directory where every output $ME generates will end
-                            up.
+                            up
                             Default: $BASE_DIR/build/$BOOK
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
@@ -118,37 +118,37 @@ Global Options:
                             there is only a single ENV file in BASE_DIR. In
                             that case the ENV file will automatically be used.
                             Only specify the filename, not an absolute
-                            path.
+                            path
 
 Subcommands:
    help                      Print this help
 
   Generate Books:
-    color-pdf, pdf-color      Color pdf book.
+    color-pdf, pdf-color      Color pdf book
     dist                      b/w pdf with cropmarks for each chapter
-    epub                      ePUB book.
+    epub                      ePUB book
     force                     b/w pdf with cropmarks. Force updating the
-                              profiled sources and the .fo file.
-    html                      HTML book.
-    html-single, htmlsingle   Single file HTML book.
-    jsp                       JSP book.
-    man                       man pages.
-    pdf                       b/w pdf with cropmarks.
-    txt, text                 ASCII book.
-    wiki                      Single file MediaWiki book.
+                              profiled sources and the .fo file
+    html                      HTML book
+    html-single, htmlsingle   Single file HTML book
+    jsp                       JSP book
+    man                       man pages
+    pdf                       b/w pdf with cropmarks
+    txt, text                 ASCII book
+    wiki                      Single file MediaWiki book
 
 
   Create Distributable Archives:
     dist-all                  Shortcut for running the subcommands 'validate'
                               'chklink' 'dist-xml' 'dist-html' 'dist' and
                               'color-pdf'
-    dist-book                 Profiled XML sources of the book.
-    dist-graphics             Graphics (PNG, SVG) of the whole set.
+    dist-book                 Profiled XML sources of the book
+    dist-graphics             Graphics (PNG, SVG) of the whole set
     dist-graphics-png         PNG graphics of the whole set. SVG graphics are
-                              converted to PNG.
-    dist-html                 HTML and graphics.
-    dist-htmlsingle           Single-file HTML and graphics.
-    dist-jsp                  JSP and graphics.
+                              converted to PNG
+    dist-html                 HTML and graphics
+    dist-htmlsingle           Single-file HTML and graphics
+    dist-jsp                  JSP and graphics
     dist-xml                  Profiled XML sources of the whole set. Identical
                               to dist-book when using a book rather than a set.
     locdrop                   Provide everything that is need to translate a set
@@ -182,7 +182,7 @@ Subcommands:
 
   Deploying (novell.com):
     online-docs               Provide a profiled XML bigfile and a graphics
-                              tarball (PNG only).
+                              tarball (PNG only)
     online-localized          Provide a profiled XML bigfile and a graphics
                               tarball (PNG only). All xrefs to other books from
                               the set are replaced by ulinks pointing to
@@ -197,7 +197,7 @@ Subcommands:
     optipng                   Optimize (size) source PNGs
     profile, prof             Profile XML sources
     validate                  Validate profiled sources. Automatically profiles
-                              the XML sources if needed.
+                              the XML sources if needed
 
   File and Directory Names:
     <target>-name             print resulting filename for <target>. <target>
