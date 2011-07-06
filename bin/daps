@@ -92,131 +92,127 @@ unset "${UNSETLIST[@]}"
 
 function daps_help () {
     echo "
-  Usage:
-        $ME [--global-options] <subcommand> [--command-options] [arguments]
+Usage:
+  $ME [--global-options] <subcommand> [--command-options] [arguments]
 
-  Global Options:
-        --help, -h                Help.
-        --verbose, -v             Verbose output.
-        --debug, -d               Print debugging messages. Far more verbose
-                                  than the --verbose option.
-        --basedir=BASE_DIR        Project directory. Must contain the XML
-                                  sources in BASE_DIR/xml. If not specified, the
-                                  current directory will be used.
-                                  Default: Parent directory of $ENVFILE
-        --builddir=BUILD_DIR      Directory where every output $ME generates
-                                  will end up.
-                                  Default: $BASE_DIR/build/$BOOK
-        --color=(0|1)             By default errors, results, warnings and
-                                  certain info messages are printed in color
-                                  using bash color codes. Set to '0' to turn
-                                  off colors. Useful for cron jobs and sripts.
-                                  Default: 1
-        --envfile=ENVFILE         Specify which ENV file to use. Mandatory
-                                  unless there is only a single ENV file
-                                  in BASE_DIR. In that case the ENV file will
-                                  automatically be used.
-                                  Only specify the filename, not an absolute
-                                  path.
+Global Options:
+  --help, -h                Help.
+  --verbose, -v             Verbose output.
+  --debug, -d               Print debugging messages. Far more verbose than the
+                             --verbose option.
+  -b BASE_DIR,
+  --basedir=BASE_DIR        Project directory. Must contain the XML sources in
+                            BASE_DIR/xml. If not specified, the current
+                            directory will be used.
+                            Default: Parent directory of $ENVFILE
+  --builddir=BUILD_DIR      Directory where every output $ME generates will end
+                            up.
+                            Default: $BASE_DIR/build/$BOOK
+  --color=(0|1)             By default errors, results, warnings and certain
+                            info messages are printed in color using bash color
+                            codes. Set to '0' to turn off colors. Useful for
+                            cron jobs and sripts.
+                            Default: 1
+  -e ENVFILE,
+  --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
+                            there is only a single ENV file in BASE_DIR. In
+                            that case the ENV file will automatically be used.
+                            Only specify the filename, not an absolute
+                            path.
 
-  Subcommands:
-        help                      Print this help
+Subcommands:
+   help                      Print this help
 
-     Generate Books:
-	color-pdf, pdf-color      Color pdf book.
-        dist                      b/w pdf with cropmarks for each chapter
-        epub                      ePUB book.
-        force                     b/w pdf with cropmarks. Force updating the
-                                  profiled sources and the .fo file.
-        html                      HTML book.
-        html-single, htmlsingle   Single file HTML book.
-        jsp                       JSP book.
-        man                       man pages.
-        pdf                       b/w pdf with cropmarks.
-        txt, text                 ASCII book.
-        wiki                      Single file MediaWiki book.
+  Generate Books:
+    color-pdf, pdf-color      Color pdf book.
+    dist                      b/w pdf with cropmarks for each chapter
+    epub                      ePUB book.
+    force                     b/w pdf with cropmarks. Force updating the
+                              profiled sources and the .fo file.
+    html                      HTML book.
+    html-single, htmlsingle   Single file HTML book.
+    jsp                       JSP book.
+    man                       man pages.
+    pdf                       b/w pdf with cropmarks.
+    txt, text                 ASCII book.
+    wiki                      Single file MediaWiki book.
 
 
-     Create Distributable Archives:
-        dist-all                  Shortcut for running the subcommands
-                                  validate chklink dist-xml dist-html dist
-                                  color-pdf
-        dist-book                 Profiled XML sources of the book.
-        dist-graphics             Graphics (PNG, SVG) of the whole set.
-        dist-graphics-png         PNG graphics of the whole set. SVG graphics
-                                  are converted to PNG.
-        dist-html                 HTML and graphics.
-        dist-htmlsingle           Single-file HTML and graphics.
-        dist-jsp                  JSP and graphics.
-	dist-xml                  Profiled XML sources of the whole set.
-                                  Identical to dist-book when using a book
-                                  rather than a set.
-        locdrop                   Provide everything that is need to translate
-                                  a set
+  Create Distributable Archives:
+    dist-all                  Shortcut for running the subcommands 'validate'
+                              'chklink' 'dist-xml' 'dist-html' 'dist' and
+                              'color-pdf'
+    dist-book                 Profiled XML sources of the book.
+    dist-graphics             Graphics (PNG, SVG) of the whole set.
+    dist-graphics-png         PNG graphics of the whole set. SVG graphics are
+                              converted to PNG.
+    dist-html                 HTML and graphics.
+    dist-htmlsingle           Single-file HTML and graphics.
+    dist-jsp                  JSP and graphics.
+    dist-xml                  Profiled XML sources of the whole set. Identical
+                              to dist-book when using a book rather than a set.
+    locdrop                   Provide everything that is need to translate a set
 
-     File lists:
-        projectfiles              print XML source files used by the book
-        projectgraphics           print source graphics used by the book
-        missinggraphics           print missing images
-        remainingfiles            print XML source files _not_ used by the book
-        remaininggraphics         print source graphics _not_ used by the
-                                  book
-        xmlgraphics               print (generated) color graphics really used
-                                  to generate the books
-        xmlgraphics-bw            print (generated) b/w graphics really used
-                                  to generate the books
+  File lists:
+    projectfiles              print XML source files used by the book
+    projectgraphics           print source graphics used by the book
+    missinggraphics           print missing images
+    remainingfiles            print XML source files _not_ used by the book
+    remaininggraphics         print source graphics _not_ used by the book
+    xmlgraphics               print (generated) color graphics really used to
+                              generate the books
+    xmlgraphics-bw            print (generated) b/w graphics really used to
+                              generate the books
 
-     Cleaning up:
-        clean                     Remove all profiled sources and temporary
-                                  files.
-        clean-images              Remove all generated images.
-        clean-book                Remove all profiled sources, all temporary
-                                  files, all generated images, and
-                                  books/archives generated from the ENV file
-                                  used.
-        clean-all, real-clean     Remove everything generated by $ME.
+  Cleaning up:
+    clean                     Remove all profiled sources and temporary files
+    clean-images              Remove all generated images
+    clean-book                Remove all profiled sources, all temporary files,
+                              all generated images, and books/archives
+                              generated from the ENV file used
+    clean-all, real-clean     Remove everything generated by $ME
 
-     Packaging:
-        package-html               Provide HTML tarball (set), desktop and
-                                   document files (for KDE and GNOME)
-        package-jsp                Provide JSP tarball
-        package-pdf                Provide color pdf, desktop and document
-                                   files (for KDE and GNOME)
-        package-src                Provide profiled XML sources and graphics
+  Packaging:
+    package-html              Provide HTML tarball (set), desktop and document
+                              files (for KDE and GNOME)
+    package-jsp               Provide JSP tarball
+    package-pdf               Provide color pdf, desktop and document files
+                              (for KDE and GNOME)
+    package-src               Provide profiled XML sources and graphics
 
-     Deploying (novell.com):
-        online-docs                Provide a profiled XML bigfile and a
-                                   graphics tarball (PNG only).
-        online-localized           Provide a profiled XML bigfile and a
-                                   graphics tarball (PNG only). All xrefs to
-                                   other books from the set are replaced by
-                                   ulinks pointing to <?provo dirname>/id plus
-                                   text like \"See book FOO, chapter BAR\"
-                                   Useful for delivering translated manuals,
-                                   when only part of the set has been translated
+  Deploying (novell.com):
+    online-docs               Provide a profiled XML bigfile and a graphics
+                              tarball (PNG only).
+    online-localized          Provide a profiled XML bigfile and a graphics
+                              tarball (PNG only). All xrefs to other books from
+                              the set are replaced by ulinks pointing to
+                              <?provo dirname>/id plus text like \"See book FOO,
+                              chapter BAR\" Useful for delivering translated
+                              manuals, when only part of the set has been
+                              translated
 
-     Other Commands:
-        chklink                   Linkchecker for links from <ulink> tags
-        db2novdoc                 Convert DocBook XML sources to NovDoc
-        optipng                   Optimize (size) source PNGs
-        profile, prof             Profile XML sources
-        validate                  Validate profiled sources. Automatically
-                                  profiles the XML sources if needed.
+  Other Commands:
+    chklink                   Linkchecker for links from <ulink> tags
+    db2novdoc                 Convert DocBook XML sources to NovDoc
+    optipng                   Optimize (size) source PNGs
+    profile, prof             Profile XML sources
+    validate                  Validate profiled sources. Automatically profiles
+                              the XML sources if needed.
 
-     File and Directory Names:
-        <target>-name             print resulting filename for <target>.
-                                  <target> may be one of color-pdf, epub, 
-                                  html-single, pdf, txt
-        <target>-dir-name         print resulting directory nae for <target>.
-                                  <target> may be either html or jsp
-        profiledir                print path to profiling directory
+  File and Directory Names:
+    <target>-name             print resulting filename for <target>. <target>
+                              may be one of color-pdf, epub, html-single,
+                              pdf, txt
+    <target>-dir-name         print resulting directory nae for <target>.
+                              <target> may be either html or jsp
+    profiledir                print path to profiling directory
 
-     Debugging:
-        check                     Print a list of the most important make
-                                  variables and their value
-        profiledir                Print the profiling directory currently used
-        showvariable              Print value of a given make variable:
-                                  $ME showvariable VARIABLE=<MAKE_VARIABLE>
+  Debugging:
+    check                     Print a list of the most important make variables
+                              and their value
+    profiledir                Print the profiling directory currently used
+    showvariable              Print value of a given make variable:
+                              $ME showvariable VARIABLE=<MAKE_VARIABLE>
 
 Type '$ME <subcommand> -h' for help on a specific subcommand.
 "
@@ -377,7 +373,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o dhv -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbose -n $ME -- "$@")
+ARGS=$(getopt -o db:e:hv -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbose -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
