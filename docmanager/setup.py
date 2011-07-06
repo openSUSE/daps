@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-#from distutils.core import setup
-from setuptools import setup, find_packages
+from distutils.core import setup
+#from setuptools import setup, find_packages
 
 
 # Utility function to read the README file.
@@ -12,6 +12,29 @@ from setuptools import setup, find_packages
 # string in below ...
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+trove_classifiers=[
+    "Intended Audience :: Developers",
+    "Intended Audience :: Other Audience",
+    "Development Status :: 4 - Beta",
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2.6",
+    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Version Control",
+    # "Topic :: Text Processing",    
+    "Topic :: Utilities",
+    "Topic :: Text Processing :: Markup :: XML",
+]
+
+requirements=[
+    'setuptools',
+    'lxml',
+    'optparse',
+]
 
 
 setup(
@@ -22,30 +45,13 @@ setup(
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/trunk/tools/daps/docmanager",
   license="LGPL",
   keywords="SVN properties status",
-   # packages=['dm'],
-  packages=find_packages(),
+  packages=['dm'], # find_packages(),
   description="Manages Doc Files through SVN Properties",
   long_description=read("README"),
    
-   # py_modules=["dm"],  
-  script_name='docmanager2.py',    #[, "dm.py"]
-  classifiers=[
-    "Intended Audience :: Developers",
-    "Intended Audience :: Other Audience",
-    "Development Status :: 4 - Beta",
-    "Topic :: Utilities",
-    "Programming Language :: Python",
-    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Documentation",
-    "Topic :: Software Development :: Quality Assurance",
-    "Topic :: Software Development :: Version Control",
-    # "Topic :: Text Processing",    
-    "Topic :: Text Processing :: Markup :: XML",
-  ],
-   install_requires=[
-    'setuptools',
-    'lxml',
-    'optparse',
-  ],
+  scripts=["bin/docmanager2.py", "bin/dm.py"],
+  
+  classifiers=trove_classifiers,
+  
+  install_requires=requirements,
 )
