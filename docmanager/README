@@ -1,2 +1,12 @@
 Docmanager
 
+Docmanager is a tool for managing your XML files (preferrebly with daps). 
+It uses and creates SVN properties to get an overview of all your files.
+
+The most important property is "doc:status"; it tracks the status of a
+file. A initial state of a file is "editing". After it has been edited
+it is changed to the "edited" state. A proofreader can search for all
+edited files and sets these file list to state "proofing". After the
+proofing has been finished, it is set to "proofed". Whenever something
+is wrong with the file, a proofreader can track that with the "comments"
+state.
