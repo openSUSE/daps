@@ -212,7 +212,6 @@
   > _ \n
   -1"</para>"\n
   -1"</listitem>"\n
-  \n
 )
 
 ;; MENUCHOICE
