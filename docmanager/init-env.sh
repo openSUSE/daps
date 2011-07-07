@@ -24,6 +24,6 @@ popd
 # Check --clear option for virtualenv:
 virtualenv --no-site-packages $ENV
 source $ENV/bin/activate
-$ENV/bin/easy_install york
-$ENV/bin/python setup.py install --root $ENV --record installed-files.txt
+# $ENV/bin/easy_install york
+$ENV/bin/python setup.py install --single-version-externally-managed --record installed-files.txt
 
