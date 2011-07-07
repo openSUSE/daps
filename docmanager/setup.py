@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from distutils.core import setup
-#from setuptools import setup, find_packages
+#from distutils.core import setup
+from setuptools import setup, find_packages
 
 
 # Utility function to read the README file.
@@ -31,7 +31,7 @@ trove_classifiers=[
 ]
 
 requirements=[
-    'setuptools',
+#    'setuptools',
     'lxml',
     'optparse',
 ]
@@ -53,5 +53,5 @@ setup(
   
   classifiers=trove_classifiers,
   
-  install_requires=requirements,
+  # install_requires=requirements,
 )
