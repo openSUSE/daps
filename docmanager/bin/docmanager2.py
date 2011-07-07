@@ -7,7 +7,6 @@
    Docmanager's light and writer's fate (BRANCH Edition)
 """
 
-
 __version__="$Revision: 43505 $"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __depends__=["optparse", "lxml"]
@@ -24,20 +23,13 @@ import optparse
 import optcomplete
 
 
-# HACK: Should be removed in production code:
-h=os.path.abspath(__file__)
-if not h.startswith("/usr"):
-   sys.path.insert(0, ".")
-del h
-
-
 from dm.docget import CmdDocget
 from dm.docset import CmdDocset
 from dm.tag    import CmdTag
 from dm.branch import CmdBranch
 from dm.propinit import CmdPropInit
 
-import dm.dmexceptions as dm
+import dm.dmexceptions as dmexcept
 
 
 if not hasattr(sys, "version_info") or sys.version_info < (2, 6):
@@ -169,6 +161,7 @@ def main():
         #dest="workingdir",
         #help="Set your working directory, if the current dir is different.")
 
+    # Use new options from daps
     group = optparse.OptionGroup(parser, "DAPS Options", "Useful options for working with daps:")
     group.add_option("", "--envfile",
         dest="envfile",
@@ -235,7 +228,7 @@ if __name__ == "__main__":
    #except NameError, e:
       #print >> sys.stderr, e
       #checkcwd()
-   except (dm.DocManagerException), e:
+   except (dmexcept.DocManagerException), e:
       print >> sys.stderr, "ERROR: %s" % e
       sys.exit(20)
    
