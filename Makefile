@@ -12,14 +12,16 @@
 # for make all and make install !!!!
 # this is just a fallback!!
 #
+
 VERSION    ?= 5.0
 
+PACKAGE    := daps
 DTDNAME    := novdoc
 DTDVERSION := 1.0
 DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 
-ROOT_CATALOG  := for-catalog-$(DTDNAME)-$(VERSION).xml
-XSLT_CATALOG  := for-catalog-$(DTDNAME)xslt-$(VERSION).xml
+ROOT_CATALOG  := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
+DAPS_CATALOG  := for-catalog-$(PACKAGE)-$(VERSION).xml
 NOVDOC_SCHEMA := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
 
 
@@ -45,7 +47,7 @@ MANUALS=$(subst doc/ENV-,,$(wildcard doc/ENV-*))
 
 
 all: $(MAN_PAGES) schema/novdocx.rnc schema/novdocx.rng
-all: catalogs/$(XSLT_CATALOG) catalogs/$(ROOT_CATALOG)
+all: catalogs/$(DAPS_CATALOG) catalogs/$(ROOT_CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION) manuals
 	@echo "Ready to install..."
 
@@ -63,7 +65,7 @@ install: create-install-dirs
 	  ln -s /var/lib/sgml/CATALOG.$(DTDNAME)-$(DTDVERSION) \
 	    $(DESTDIR)/$(PREFIX)/sgml/
 	install -m644 catalogs/$(ROOT_CATALOG) $(DESTDIR)/etc/xml
-	install -m644 catalogs/$(XSLT_CATALOG) $(DESTDIR)/etc/xml
+	install -m644 catalogs/$(DAPS_CATALOG) $(DESTDIR)/etc/xml
 	install -m644 BUGS COPYING INSTALL README* TODO $(DAPS_DOCDIR)
 ifdef MANUALS
 	for BOOK in $(MANUALS); do \
@@ -144,38 +146,38 @@ schema/novdocx.dtd.tmp: $(DIRECTORIES)
 
 
 #-----------------------------
-# Generate XSLT catalog
+# Generate DAPS catalog
 #
 # since xmlcatalog cannot create groups (<group>) we need to use sed
 # to fix this; while we are at it, we also remove the DOCTYPE line since 
 # it may cause problems with some XML parsers (hen/egg probem)
 #
 
-catalogs/$(XSLT_CATALOG): $(DIRECTORIES)
-catalogs/$(XSLT_CATALOG): XSLT_PROFDIR := $(PREFIX)/daps/xslt/profiling
-catalogs/$(XSLT_CATALOG): URN_PROF     := urn:x-suse:xslt:profiling
-catalogs/$(XSLT_CATALOG):
+catalogs/$(DAPS_CATALOG): $(DIRECTORIES)
+catalogs/$(DAPS_CATALOG): DAPS_PROFDIR := $(PREFIX)/daps/xslt/profiling
+catalogs/$(DAPS_CATALOG): URN_PROF     := urn:x-suse:xslt:profiling
+catalogs/$(DAPS_CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):docbook41-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/docbook41-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/docbook41-profile.xsl" $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):docbook42-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/docbook42-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/docbook42-profile.xsl" $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):docbook43-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/docbook43-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/docbook43-profile.xsl" $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):docbook44-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/docbook44-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/docbook44-profile.xsl" $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):docbook45-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/docbook45-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/docbook45-profile.xsl" $@
 	xmlcatalog --noout --add \
 	  "system" "$(URN_PROF):novdoc-profile.xsl" \
-	  "file://$(XSLT_PROFDIR)/novdoc-profile.xsl" $@
+	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
-	sed -i '/<catalog/a\ <group id="$(DTDNAME)xslt-$(VERSION)">' $@
+	sed -i '/<catalog/a\ <group id="$(PACKAGE)-$(VERSION)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
 
 
@@ -195,7 +197,7 @@ catalogs/$(ROOT_CATALOG):
 	xmlcatalog --noout --add "delegateSystem" "novdocx.dtd" \
 	  "file://$(NOVDOC_SCHEMA)/catalog.xml" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
-	sed -i '/<catalog/a\ <group id="$(DTDNAME)-$(VERSION)">' $@
+	sed -i '/<catalog/a\ <group id="$(DTDNAME)-$(DTDVERSION)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
 
 # create needed directories

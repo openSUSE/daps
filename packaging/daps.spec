@@ -18,8 +18,8 @@
 
 Name:           daps
 Version:        0.9beta1
-%define root_catalog   for-catalog-%{dtdname}-%{version}.xml
-%define xslt_catalog   for-catalog-%{dtdname}xslt-%{version}.xml
+%define root_catalog   for-catalog-%{dtdname}-%{dtdversion}.xml
+%define daps_catalog   for-catalog-%{name}-%{version}.xml
 
 Release:        1
 Summary:        DocBook Authoring and Publishing Suite
@@ -182,24 +182,37 @@ Authors:
 
 #----------------------
 %post
+# SGM CATALOG
+#
 if [ -x %{regcat} ]; then
   for CATALOG in CATALOG.%{dtdname}-%{dtdversion}; do
     %{regcat} -a %{_datadir}/sgml/$CATALOG >/dev/null 2>&1 || true
   done
 fi
+# XML Catalog
 #
 # remove existing entries first (if existing) - needed for
 # zypper in, since it does not call postun
+#
+# The first two ones are only there for campatibility reasons and
+# can be removed in the future
+#
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}-%{version}
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}xslt-%{version}
 #
+# These two entries need to stay
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{dtdname}-%{dtdversion}
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name}-%{version}
+#
 # now add new entries
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{root_catalog}
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --add /etc/xml/%{xslt_catalog}
+  --add /etc/xml/%{daps_catalog}
 
 %run_suseconfig_fonts
 exit 0
@@ -210,11 +223,21 @@ if [ ! -f %{_sysconfdir}/xml/%{root_catalog} -a -x /usr/bin/edit-xml-catalog ] ;
   for c in CATALOG.%{dtdname}-%{dtdversion}; do
     %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
   done
-#now XML catalog
+# XML Catalog
+#
+# The first two ones are only there for campatibility reasons and
+# can be removed in the future
+#
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}-%{version}
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}xslt-%{version}
+#
+# These two entries need to stay
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{dtdname}-%{dtdversion}
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name}-%{version}
 fi
 
 %run_suseconfig_fonts
