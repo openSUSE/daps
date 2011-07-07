@@ -385,7 +385,7 @@ while true ; do
             BASE_DIR="$BASE_DIR_CMDL"
             shift 2
             ;;
-         --builddir)
+         -b|--builddir)
             test -d "$2" || exit_on_error "BUILD_DIR $2 is not a valid directory"
             test -w "$2" || exit_on_error "BUILD_DIR $2 is not writeable"
             BUILD_DIR_CMDL="$2"
@@ -422,7 +422,7 @@ while true ; do
 	    DTDROOT="$DTDROOT_CMDL"
 	    shift 2
             ;;
-	--envfile)
+	-e|--envfile)
 	    ENVFILE_CMDL="$2"
             ENVFILE="$ENVFILE_CMDL"
 	    shift 2
