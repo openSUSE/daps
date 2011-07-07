@@ -10,7 +10,7 @@
 
 __version__="$Revision: 43505 $"
 __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
-__depends__=["Python-2.4", "optparse"]
+__depends__=["optparse", "lxml"]
 # BEWARE: Don't rename NAME to __name__!
 NAME= "docmanager2"
 
@@ -20,44 +20,28 @@ import os.path
 import types
 import re
 
-# FIXME: Set variable PYTHONPATH
-def addPythonPath(pypath):
-   """Add the path in the list (pypath) in the path
-   variable to allow searching for other modules"""
-   assert isinstance(pypath, list), "addPythonPath: Expecting a list"
-
-   try:
-     dtdroot=os.environ["DTDROOT"]
-     for p in pypath:
-        sys.path.insert(0, os.path.join(dtdroot, p))
-
-   except KeyError:
-     print >> sys.stderr, "ERROR: Did you forget to source an ENV file? "\
-                          "I can not find variable DTDROOT."
-     sys.exit(100)
-
-## Set an additional search path for Python modules
-## Please note: These paths are relative to env variable $DTDROOT
-addPythonPath([# "python",  # General modules
-               "bin/dm",  # Docmanager modules
-              ])
-
-
 import optparse
-
 import optcomplete
 
-from docget import CmdDocget
-from docset import CmdDocset
-from tag    import CmdTag
-from branch import CmdBranch
-from propinit import CmdPropInit
 
-import dmexceptions as dm
+# HACK: Should be removed in production code:
+h=os.path.abspath(__file__)
+if not h.startswith("/usr"):
+   sys.path.insert(0, ".")
+del h
 
 
-if not hasattr(sys, "version_info") or sys.version_info < (2, 4):
-    print "%s requires Python 2.4 or newer" % NAME
+from dm.docget import CmdDocget
+from dm.docset import CmdDocset
+from dm.tag    import CmdTag
+from dm.branch import CmdBranch
+from dm.propinit import CmdPropInit
+
+import dm.dmexceptions as dm
+
+
+if not hasattr(sys, "version_info") or sys.version_info < (2, 6):
+    print "%s requires Python 2.6 or newer" % NAME
     sys.exit(1)
 
 #global prog
@@ -151,7 +135,8 @@ def main():
     #global gparser # only need for 'help' command (optional)
     #import optparse
     parser = optparse.OptionParser(__doc__.strip(), \
-                                   version="Revision %s" % __version__[11:-2])
+                                   version="Revision %s" % __version__[11:-2])    
+    
     parser.set_default("verbose", True)
     parser.add_option("-v", "--verbose",
         dest="verbose",
@@ -183,6 +168,28 @@ def main():
     #parser.add_option("", "--working-dir",
         #dest="workingdir",
         #help="Set your working directory, if the current dir is different.")
+
+    group = optparse.OptionGroup(parser, "DAPS Options", "Useful options for working with daps:")
+    group.add_option("", "--envfile",
+        dest="envfile",
+        help="""Specify which ENV file to use.
+Mandatory unless there is only a single ENV file
+in BASE_DIR. In that case the ENV file will automatically be used.
+Only specify the filename, not an absolute path."""
+        )
+    
+    group.add_option("", "--basedir",
+        dest="basedir",
+        help="""Project directory. Must contain the XML
+sources in BASE_DIR/xml. If not specified, the current directory will be used."""
+        )
+
+    group.add_option("", "--dtdroot",
+        dest="dtdroot",
+        help=optparse.SUPPRESS_HELP
+        )
+    
+    parser.add_option_group(group)
 
     #
     # FIXME: Need option for redirecting error messages into a file?
