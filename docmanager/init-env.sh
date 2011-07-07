@@ -3,26 +3,14 @@
 ENV=env
 DIR=$PWD
 
-manualinstall() {
-pushd $ENV
-# Create link in bin
-pushd bin
- ln -s ../../bin/docmanager2.py
-popd
+CLEAR=
 
-sitepackages=$(bin/python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-
-# Create link for dm modules
-pushd $sitepackages/../
-ln -s ../../../dm
-popd
-
-source bin/activate
-popd
-}
+if [ "$1" = "--clear" ]; then
+ CLEAR="--clear"
+fi
 
 # Check --clear option for virtualenv:
-virtualenv --no-site-packages $ENV
+virtualenv --no-site-packages $CLEAR $ENV
 source $ENV/bin/activate
 # $ENV/bin/easy_install york
 $ENV/bin/python setup.py install --single-version-externally-managed --record installed-files.txt
