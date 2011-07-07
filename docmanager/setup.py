@@ -33,7 +33,8 @@ trove_classifiers=[
 requirements=[
 #    'setuptools',
     'lxml',
-    'optparse',
+    'optcomplete',
+#    'optparse',
 ]
 
 
