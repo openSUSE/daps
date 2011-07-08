@@ -33,7 +33,15 @@ trove_classifiers=[
     "Topic :: Text Processing :: Markup :: XML",
 ]
 
-requirements=[
+
+# List your project dependencies here.
+# For more details, see:
+# http://packages.python.org/distribute/setuptools.html#declaring-dependencies
+# Note: Dependency versions are specified in parentheses as per PEP314 and
+# PEP345.  They will be adjusted automatically to comply with distribute/
+# setuptools install_requires convention.
+
+REQUIRES=[
 #    'setuptools',
 #    'optparse',
     'lxml',
@@ -56,6 +64,9 @@ setup(
   # The scripts:
   scripts=["bin/docmanager2.py", ], # "bin/dm.py" 
  
+  # 
+  platforms = 'any',
+ 
   # Classifiers a la Sourceforge
   classifiers=trove_classifiers,
  
@@ -64,13 +75,16 @@ setup(
   
   # Our extensions to setuptools:
   #entry_points={
-    #'setuptools.commands': [
-      #'manpage = setuptools_dmutils.setuptools_command:ManpageCommand', 
+    #'distutils.commands': [
+      #'build_man = setuptools_dmutils.setuptools_command:BuildManpageCommand', 
+    #],
+    #"distutils.setup_keywords": [
+       #"bmanpage = setuptools_dmutils.setuptools_command:manpage",
       #],
-   #}
+  #},
   
   # Any requirements:
-  # install_requires=requirements,
+  # install_requires=REQUIRES,
   
   # All files are unzipped during installing:
   zip_safe = False,
