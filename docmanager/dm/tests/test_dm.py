@@ -46,12 +46,7 @@ def whereis(exe, dirs=[]):
 
 
 __dname = os.path.dirname(sys.argv[0])
-INITSCRIPT=whereis("init-testsvn.sh", \
-            [__dname,
-             os.path.abspath( os.path.join(__dname, "..") ),
-             ".",
-             "..", 
-             "../.."]) # "./bin/init-testsvn.sh"  #extendpath4initscript()
+INITSCRIPT="init-testsvn.sh"
 DAPSPATH="/usr/share/daps"
 LOG_FILENAME = '/tmp/dm-test.out'
 DOCRELEASE="OS_110"
@@ -96,15 +91,15 @@ def extendpath4initscript(script):
 
 
 # Extend the Python search path:
-SYSPATH = [ "../", "../../python", 
-          "./", "../python",
-          "./bin",
-          os.path.join(DAPSPATH, "python")
-          ]
-for i in SYSPATH:
-  AddSysPath(i)
-print "==> Search path:", sys.path
-print
+#SYSPATH = [ "../", "../../python", 
+#          "./", "../python",
+#          "./bin",
+#          os.path.join(DAPSPATH, "python")
+#          ]
+#for i in SYSPATH:
+#  AddSysPath(i)
+#print "==> Search path:", sys.path
+#print
 
 
 import commands
@@ -112,13 +107,13 @@ import unittest
 import logging # as log
 
 # Import all docmanager relevant modules:
-from base   import SVNRepository, SVNFile
-from docget import CmdDocget
-from docset import CmdDocset
-from tag    import CmdTag
-from branch import CmdBranch
+from dm.base   import SVNRepository, SVNFile
+from dm.docget import CmdDocget
+from dm.docset import CmdDocset
+from dm.tag    import CmdTag
+from dm.branch import CmdBranch
 #from locdrop import CmdLocdrop
-import dmexceptions as dm
+import dm.dmexceptions as dmexcept
 
 
 logger = logging.getLogger('DMLog')
@@ -1386,7 +1381,7 @@ def main():
 
 if __name__=="__main__":
   # Checks, if daps is installed
-  checkdaps()
+  # checkdaps()
   options, args = main()
   print options, args
   
