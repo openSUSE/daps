@@ -478,7 +478,7 @@ projectfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 projectfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 projectfiles:
 	@echo $(sort $(INCLUDED)) $(addprefix $(BASE_DIR)/xml/, \
-		$(ENTITIES)) $(BASE_DIR)/$(ENVFILE)
+		$(ENTITIES) $(MAIN)) $(BASE_DIR)/$(ENVFILE)
 
 # Files _not_ used in $BOOK
 #
@@ -486,6 +486,9 @@ projectfiles:
 remainingfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			--stringparam xml.or.img xml \
 			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+remainingfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+remainingfiles: INCLUDED += $(addprefix $(BASE_DIR)/xml/, $(ENTITIES) $(MAIN)) \
+				$(BASE_DIR)/$(ENVFILE)
 remainingfiles:
 	@echo $(sort $(filter-out $(INCLUDED), $(SRCFILES)))
 
