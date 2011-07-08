@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-#from distutils.core import setup
 from setuptools import setup, find_packages
+from setuptools.command.build_py import build_py as _build_py
+
+#from distutils.core import setup
+#from distutils.command.build_py import build_py as _build_py
 
 
 # Utility function to read the README file.
@@ -32,12 +35,12 @@ trove_classifiers=[
 
 requirements=[
 #    'setuptools',
+#    'optparse',
     'lxml',
     'optcomplete',
-#    'optparse',
 ]
 
-
+# Run the beast:
 setup(
   name="docmanager",
   version="2.0",
@@ -49,10 +52,26 @@ setup(
   packages=['dm'], # find_packages(),
   description="Manages Doc Files through SVN Properties",
   long_description=read("README"),
-   
-  scripts=["bin/docmanager2.py", "bin/dm.py"],
   
+  # The scripts:
+  scripts=["bin/docmanager2.py", ], # "bin/dm.py" 
+ 
+  # Classifiers a la Sourceforge
   classifiers=trove_classifiers,
+ 
+  # Our testsuite
+  test_suite = 'dm.tests',
   
+  # Our extensions to setuptools:
+  #entry_points={
+    #'setuptools.commands': [
+      #'manpage = setuptools_dmutils.setuptools_command:ManpageCommand', 
+      #],
+   #}
+  
+  # Any requirements:
   # install_requires=requirements,
+  
+  # All files are unzipped during installing:
+  zip_safe = False,
 )
