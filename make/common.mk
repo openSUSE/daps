@@ -474,20 +474,22 @@ endif
 .PHONY: projectfiles
 projectfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ) \
+			$(BASE_DIR)/xml/$(MAIN)
 projectfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 projectfiles:
 	@echo $(sort $(INCLUDED)) $(addprefix $(BASE_DIR)/xml/, \
-		$(ENTITIES) $(MAIN)) $(BASE_DIR)/$(ENVFILE)
+		$(ENTITIES)) $(BASE_DIR)/$(ENVFILE)
 
 # Files _not_ used in $BOOK
 #
 .PHONY: remainingfiles
 remainingfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ) \
+			$(BASE_DIR)/xml/$(MAIN)
 remainingfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
-remainingfiles: INCLUDED += $(addprefix $(BASE_DIR)/xml/, $(ENTITIES) $(MAIN)) \
+remainingfiles: INCLUDED += $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
 				$(BASE_DIR)/$(ENVFILE)
 remainingfiles:
 	@echo $(sort $(filter-out $(INCLUDED), $(SRCFILES)))
