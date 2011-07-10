@@ -16,7 +16,7 @@ class CleanCommand(Command):
         assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd
         os.system('rm -rf ./build ./dist')
 
-class mytest(_test):
+class TestCommand(_test):
    """Command to run unit tests after in-place build"""
    description = "Run unittests"
 
@@ -40,3 +40,4 @@ class mytest(_test):
    def run(self):
       _test.run(self)
       print "Running mytest..."
+
