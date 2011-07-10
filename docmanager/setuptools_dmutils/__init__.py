@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+import os
+
 from setuptools import Command
 from setuptools.command.test import test  as _test
+
+__all__=["CleanCommand", "TestCommand"]
 
 
 class CleanCommand(Command):
