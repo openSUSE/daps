@@ -3,10 +3,8 @@
 
 import os
 from setuptools import setup, find_packages
-from setuptools.command.build_py import build_py as _build_py
 
-#from distutils.core import setup
-#from distutils.command.build_py import build_py as _build_py
+from setuptools_dmutils import CleanCommand, TestCommand
 
 
 # Utility function to read the README file.
@@ -48,6 +46,11 @@ REQUIRES=[
     'lxml',
     'optcomplete',
 ]
+TEST_REQUIRES=[
+  "unittest2",
+  #"mocker",
+  # "mox",
+]
 
 # Run the beast:
 setup(
@@ -62,6 +65,11 @@ setup(
   description="Manages Doc Files through SVN Properties",
   long_description=read("README"),
   
+  # Commands which modifies/extends our setup.py
+  cmdclass={'clean': CleanCommand,
+            'test':  TestCommand,
+           },
+  
   # The scripts:
   scripts=["bin/docmanager2.py", ], # "bin/dm.py" 
  
@@ -71,18 +79,9 @@ setup(
   # Classifiers a la Sourceforge
   classifiers=trove_classifiers,
  
-  # Our testsuite
+  # Our testsuite, including its requirements
   test_suite = 'dm.tests',
-  
-  # Our extensions to setuptools:
-  #entry_points={
-    #'distutils.commands': [
-      #'build_man = setuptools_dmutils.setuptools_command:BuildManpageCommand', 
-    #],
-    #"distutils.setup_keywords": [
-       #"bmanpage = setuptools_dmutils.setuptools_command:manpage",
-      #],
-  #},
+  tests_require=TEST_REQUIRES,
   
   # Any requirements:
   # install_requires=REQUIRES,
