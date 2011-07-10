@@ -68,8 +68,7 @@ class ManpageCommand(Command):
          self.xml = "doc/docmanager.xml"
       if not self.xslt:
          self.xslt="/usr/share/xml/docbook/stylesheet/nwalsh/current/manpages/docbook.xsl"
-      
-      print "verbose:", self.verbose
+
       if not self.verbose:
          print dir(self)
          self.dump_options()
