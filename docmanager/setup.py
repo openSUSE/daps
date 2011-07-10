@@ -4,7 +4,7 @@
 import os
 from setuptools import setup, find_packages
 
-from setuptools_dmutils import CleanCommand, TestCommand
+from setuptools_dmutils import CleanCommand, TestCommand, ManpageCommand 
 
 
 # Utility function to read the README file.
@@ -68,11 +68,14 @@ setup(
   # Commands which modifies/extends our setup.py
   cmdclass={'clean': CleanCommand,
             'test':  TestCommand,
+            'manpage': ManpageCommand,
            },
   
   # The scripts:
   scripts=["bin/docmanager2.py", ], # "bin/dm.py" 
  
+  #manpages=["doc/docmanager.xml"],
+  #xslt="db2man.xsl",
   # 
   platforms = 'any',
  
