@@ -9,6 +9,7 @@ try:
 except ImportError:
   import unittest
 
+__all__=["discover", "setUpModule", "tearDownModule"]
 
 def discover(globaldict, prefix="Test_", module=__file__):
   """Discovers all classes in a module, which name starts with 'prefix' and are
@@ -18,10 +19,20 @@ def discover(globaldict, prefix="Test_", module=__file__):
   
   testcls = [ k for i, k in globaldict.items() \
               if i.startswith(prefix) and issubclass(k, unittest.TestCase) ]
-  print(">>>  %s: Found %s testcases" % ( os.path.basename(module), len(testcls) ))
+  print("-- %s: Found %s testcases" % ( os.path.basename(module), len(testcls) ))
   
   for u in testcls:
     case = unittest.TestLoader().loadTestsFromTestCase(u)
     suite.addTests(case)
   
   return suite
+  
+  
+def setUpModule():
+  """Create SVN repository and working directory"""
+  print "   Setup Module called"
+
+def tearDownModule():
+  print "  TearDownModule called"
+
+# EOF
