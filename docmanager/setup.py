@@ -72,7 +72,7 @@ setup(
 
   # Commands which modifies/extends our setup.py
   cmdclass={'clean': CleanCommand,
-            # 'test':  TestCommand,
+            #'test':  TestCommand,
             'manpage': ManpageCommand,
            },
   
@@ -88,7 +88,7 @@ setup(
   classifiers=trove_classifiers,
  
   # Our testsuite, including its requirements
-  test_suite = 'tests',
+  test_suite = 'tests.suite',
   tests_require=TEST_REQUIRES,
   
   # Any requirements:
