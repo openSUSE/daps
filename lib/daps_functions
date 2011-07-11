@@ -1,5 +1,5 @@
 #
-# Functions for ../bin/susedoc
+# Functions for ../bin/daps
 #
 # Copyright (C) 2011 Frank Sundermeyer <fs@suse.de>, openSUSE.org
 # Authors: Frank Sundermeyer <fs@suse.de>
@@ -120,7 +120,7 @@ function build_pdfs () {
 	    --fop)
                 if [[ $2 = xep || $2 = fop ]]; then
                     export FOPTYPE="$2"
-                    export FOP="${LIB_DIR}/susedoc-$2"
+                    export FOP="${LIB_DIR}/daps-$2"
                 else
 		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
                 fi
