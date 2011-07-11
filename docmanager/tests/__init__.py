@@ -7,9 +7,7 @@ try:
 except ImportError:
   import unittest
 
-
 print("****** Test Suite for DocManager ******")
-print(sys.argv)
 
 def suite():
   """Returns a test suite for DocManager"""
