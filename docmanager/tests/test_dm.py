@@ -29,7 +29,7 @@ try:
 except ImportError:
   import unittest
   
-from core import discover
+from core import discover, setUpModule
 
 
 log = logging.getLogger("dm")
