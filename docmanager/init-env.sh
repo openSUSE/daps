@@ -103,12 +103,21 @@ else
 fi
 
 
-# Check --clear option for virtualenv:
+# Create our virtualenv:
 virtualenv --no-site-packages $CLEAR $ENV
 source $ENV/bin/activate
+# Install docmanager in the virtualenv
 $ENV/bin/python setup.py install --single-version-externally-managed \
-    --record installed-files.txt
+  --record installed-files.txt
+
+# We want a _link_, not a copy as this is a evil trap:
 pushd $ENV/bin
 ln -sf ../bin/docmanager2.py
 popd
 
+# Patch our environment:
+pushd $ENV/lib/python2.7/site-packages
+ln -sf ../../../../dm
+popd
+
+# EOF
