@@ -41,14 +41,17 @@ trove_classifiers=[
 # setuptools install_requires convention.
 
 REQUIRES=[
-#    'setuptools',
+    'setuptools >= 0.6',
 #    'optparse',
     'lxml',
     'optcomplete',
 ]
 TEST_REQUIRES=[
-  "unittest2",
-  #"mocker",
+  'unittest2',
+  'optcomplete',
+  'setuptools',
+  'lxml',
+  'mocker',
   # "mox",
 ]
 
@@ -61,13 +64,15 @@ setup(
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/trunk/tools/daps/docmanager",
   license="LGPL",
   keywords="SVN properties status",
-  packages=['dm'], # find_packages(),
   description="Manages Doc Files through SVN Properties",
   long_description=read("README"),
-  
+
+  # Our packages we want to add;
+  packages=['dm'],
+
   # Commands which modifies/extends our setup.py
   cmdclass={'clean': CleanCommand,
-            'test':  TestCommand,
+            # 'test':  TestCommand,
             'manpage': ManpageCommand,
            },
   
@@ -83,7 +88,7 @@ setup(
   classifiers=trove_classifiers,
  
   # Our testsuite, including its requirements
-  test_suite = 'dm.tests',
+  test_suite = 'tests',
   tests_require=TEST_REQUIRES,
   
   # Any requirements:
