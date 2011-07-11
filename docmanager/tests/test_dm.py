@@ -22,38 +22,36 @@ __version__="$Revision: 43291 $"
 __author__="Thomas Schraitle <toms AT opensuse DOT org>"
 
 import sys
+import os, os.path
 import logging
 try:
   import unittest2 as unittest
 except ImportError:
   import unittest
+  
+from core import discover
 
 
 log = logging.getLogger("dm")
-
+log.setLevel(logging.DEBUG)
 
 class BaseDM(unittest.TestCase):
   def setUp(self):
     log.info("Setting up class %s" % self.__class__.__name__)
     
-  def test01CheckListings(self):
-    print sys.argv
 
-
-class test_dm(BaseDM):
+class Test_dm(BaseDM):
   """ Only a small test case"""
   def test00(self):
     self.assertTrue( 0 != 1 )
 
+class Test_Foo(unittest.TestCase):
+  def testBasic(self):
+    self.assertTrue( 5 < 10 )
 
-def suite():
-  suite = unittest.TestSuite()
-  
-  for u in (BaseDM, test_dm):
-    suite.addTest(unittest.makeSuite(u))
-  
-  return suite
-
+# -----------
+def suite(args=None):
+  return discover(globals(), module=__file__)
 
 if __name__=="__main__":
   unittest.main(defaultTest='suite')
