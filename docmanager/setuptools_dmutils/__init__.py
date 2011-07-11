@@ -11,11 +11,9 @@ from setuptools.command.build_py import build_py
 __all__=["CleanCommand", "TestCommand", "ManpageCommand"]
 
 
-
-
 class CleanCommand(Command):
-   """clean build and dist directory"""
-   description = "custom clean command that forcefully removes dist/build directories"
+   """custom clean command that forcefully removes dist/build directories"""
+   description = __doc__
    user_options = []
    def initialize_options(self):
       self.cwd = None
@@ -25,29 +23,6 @@ class CleanCommand(Command):
       assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd
       os.system('rm -rf ./build ./dist')
 
-class TestCommand(_test):
-   """run unit tests after in-place build"""
-   description = __doc__
-
-   user_options = _test.user_options + [
-      # Merge with our own:
-      ('svnrepo=',     None, "SVN root repository"),
-      ('workingrepo=', None, "Working directory"),
-   ]
-      
-   def initialize_options(self):
-      _test.initialize_options(self)      
-      self.svnrepo = None
-      self.workingrepo = None
-      
-   def finalize_options(self):
-      _test.finalize_options(self)
-      self.test_args.extend(["--svnrepo", self.svnrepo])
-      print "finalize_options", self, self.__dict__, sys.path
-      
-   #def run(self):
-   #   _test.run(self)
-   #   print "Running mytest..."
 
 class ManpageCommand(Command):
    """creates manpage from DocBook source"""
@@ -62,18 +37,24 @@ class ManpageCommand(Command):
    def initialize_options(self):
       self.xml=None
       self.xslt=None
+      self.verbose=None
       
    def finalize_options(self):
+      self.verbose=self.distribution.verbose
+      
       if not self.xml:
          self.xml = "doc/docmanager.xml"
       if not self.xslt:
          self.xslt="/usr/share/xml/docbook/stylesheet/nwalsh/current/manpages/docbook.xsl"
-
+      
       if not self.verbose:
          print dir(self)
          self.dump_options()
       self.ensure_filename('xml')
-   
+      self.ensure_filename('xslt')
+      print dir(self.distribution)
+
+
    def run(self):
       cmd="xsltproc --stringparam man.output.base.dir '%s/' " \
           "--stringparam man.output.subdirs.enabled 0 " \

@@ -4,7 +4,7 @@
 import os
 from setuptools import setup, find_packages
 
-from setuptools_dmutils import CleanCommand, TestCommand, ManpageCommand 
+from setuptools_dmutils import CleanCommand, ManpageCommand 
 
 
 # Utility function to read the README file.
@@ -72,7 +72,6 @@ setup(
 
   # Commands which modifies/extends our setup.py
   cmdclass={'clean': CleanCommand,
-            #'test':  TestCommand,
             'manpage': ManpageCommand,
            },
   
