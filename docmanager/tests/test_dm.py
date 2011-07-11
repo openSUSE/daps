@@ -51,6 +51,7 @@ class Test_Foo(unittest.TestCase):
 
 # -----------
 def suite(args=None):
+  # TODO: How do we delegate the args argument?
   return discover(globals(), module=__file__)
 
 if __name__=="__main__":
