@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import os, os.path
+import os
+from os import path
 
 try:
   import unittest2 as unittest
@@ -17,6 +18,7 @@ __all__=["discover","log", "SVNREPO", "WORKINGREPO",
 
 SVNREPO="/var/tmp/docmanagersvn"
 WORKINGREPO="/var/tmp/docmanager"
+TESTROOT=path.join(path.dirname(__file__),"ROOT")
 
 LOG_FILENAME="/var/tmp/docmanager-test.log"
 logging.basicConfig(filename=LOG_FILENAME,
