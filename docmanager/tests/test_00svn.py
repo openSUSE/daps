@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__version__="$Revision: $"
+__version__="$Revision$"
 __author__="Thomas Schraitle <toms AT opensuse DOT org>"
 
 import sys
