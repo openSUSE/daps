@@ -7,12 +7,11 @@ try:
   import unittest2 as unittest
 except ImportError:
   import unittest
-import logging
+
+from core import log
 
 print("----- Test Suite for DocManager -----")
 
-
-log = logging.getLogger("dm")
 
 def get_name_from_path(path):
   # Taken from unittest2.loader
@@ -24,7 +23,7 @@ def get_name_from_path(path):
   return name
 
 
-def suite():
+def suite( pattern="tests/test_*.py"):
   """Returns a test suite for DocManager"""
   # from tests import test_dm
   import glob
@@ -35,7 +34,7 @@ def suite():
        }
   
   # Use pattern:
-  testpy=glob.glob("tests/test_*.py")
+  testpy=glob.glob(pattern)
 
   # Iterate through all our found test cases and load them into our suite:
   for path in testpy:
