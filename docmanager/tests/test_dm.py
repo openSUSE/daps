@@ -23,24 +23,21 @@ __author__="Thomas Schraitle <toms AT opensuse DOT org>"
 
 import sys
 import os, os.path
-import logging
+
 try:
   import unittest2 as unittest
 except ImportError:
   import unittest
   
-from core import discover, setUpModule
+from core import discover, log
 
-
-log = logging.getLogger("dm")
-log.setLevel(logging.DEBUG)
 
 class BaseDM(unittest.TestCase):
   def setUp(self):
     log.info("Setting up class %s" % self.__class__.__name__)
     
 
-class Test_dm(BaseDM):
+class Test_dm(unittest.TestCase):
   """ Only a small test case"""
   def test00(self):
     self.assertTrue( 0 != 1 )
