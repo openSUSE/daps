@@ -12,7 +12,11 @@ except ImportError:
 import logging, logging.handlers
 
 
-__all__=["discover", "setUpModule", "tearDownModule", "log"]
+__all__=["discover","log", "SVNREPO", "WORKINGREPO",
+        ]
+
+SVNREPO="/var/tmp/docmanagersvn"
+WORKINGREPO="/var/tmp/docmanager"
 
 LOG_FILENAME="/var/tmp/docmanager-test.log"
 logging.basicConfig(filename=LOG_FILENAME,
@@ -41,13 +45,6 @@ def discover(globaldict, prefix="Test_", module=__file__):
     suite.addTests(case)
   
   return suite
-  
-  
-def setUpModule():
-  """Create SVN repository and working directory"""
-  print "   Setup Module called"
 
-def tearDownModule():
-  print "  TearDownModule called"
 
 # EOF
