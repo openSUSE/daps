@@ -34,5 +34,9 @@ class SVNFiles(unittest.TestCase):
       d=path.dirname(x)
       f="%s.log" % path.splitext(x)[0]
       open(f, "w").writelines(output)
-      
+
+
+if __name__ == "__main__":
+  unittest.main()
+
 # EOF
