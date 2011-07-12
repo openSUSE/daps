@@ -8,8 +8,13 @@ SVNREPO=/var/tmp/docmanagersvn
 WORKINGREPO=/var/tmp/docmanager
 # Contains all the structures/files which are exported to $WORKINGREPO
 TESTROOT=ROOT
+# Make it less verbose
+QUIET=
 
-usage() {
+# ---------
+# Usage of help
+#
+function usage() {
    cat << EOF
 $0 --svnrepo | --workingrepo --testroot
 Initalize the test environment
@@ -25,9 +30,18 @@ function exit_on_error () {
     exit 1;
 }
 
+# ---------
+# Print message, but observe QUIET
+#
+function message() {
+  if [[ yes != $QUIET ]]; then
+    printf "$1"
+  fi
+}
+
 # Taken from the example getopt-parse.bash
 #export LC_ALL=C
-ARGS=$(getopt -o h -l help,svnrepo:,workingrepo:,testroot: -n $0 -- "$@")
+ARGS=$(getopt -o hq -l help,quiet,svnrepo:,workingrepo:,testroot: -n $0 -- "$@")
 eval set -- "$ARGS"
 
 while true; do
@@ -38,28 +52,20 @@ while true; do
       exit 0
       ;;
     --svnrepo)
-      if [[ -d $2 ]]; then
-        SVNREPO=$2
-      else
-        exit_on_error "No valid SVN repository path"
-      fi
+      SVNREPO=$2
       shift 2
       ;;
     --workingrepo)
-      if [[ -d $2 ]]; then
-        WORKINGREPO=$2
-      else
-        exit_on_error "No valid SVN working directory"
-      fi
+      WORKINGREPO=$2
       shift 2
       ;;
     --testroot)
-      if [[ -d $2 ]]; then
-        TESTROOT=$2
-      else
-        exit_on_error "No valid SVN working directory"
-      fi
+      TESTROOT=$2
       shift 2
+      ;;
+    -q|--quiet)
+      QUIET=yes
+      shift
       ;;
     --) shift ; break ;;
     *)
@@ -69,13 +75,11 @@ while true; do
    esac
 done
 
-echo SVNREPO=$SVNREPO, WORKINGREPO=$WORKINGREPO, TESTROOT=$TESTROOT
+# message SVNREPO=$SVNREPO, WORKINGREPO=$WORKINGREPO, TESTROOT=$TESTROOT, QUIET=$QUIET\n
 
-
-exit 10
 
 if [ ! -d ${SVNREPO} ]; then
- printf "Creating SVN repository ${SVNREPO}"
+  message "Creating SVN repository ${SVNREPO}\n"
 
 # Change directory:
 # pushd ${TEMPDIR}
@@ -87,18 +91,19 @@ svnadmin create ${SVNREPO}
 svn export ${TESTROOT} ${WORKINGREPO}.tmp
 
 # Import our test structure into 
-svn import ${WORKINGREPO} file://${SVNREPO} -m"Initial import"
+svn import ${WORKINGREPO}.tmp file://${SVNREPO} -m"Initial import"
 
 # Remove obsolete temporary structure and checkout freshly:
 rm -rf ${WORKINGREPO}.tmp
 else
-  printf "SVN repository already there. Using '$SVNREPO'"
+  message "SVN repository already there. Using '$SVNREPO'\n"
 fi
+
 
 if [ ! -d ${WORKINGREPO} ]; then
   svn co file://${SVNREPO} ${WORKINGREPO}
 else
-  printf "SVN working directory already there. Using '$WORKINGREPO'"
+  message "SVN working directory already there. Using '$WORKINGREPO'\n"
 fi
 
 #popd
