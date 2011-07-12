@@ -13,7 +13,7 @@ except ImportError:
 import logging, logging.handlers
 
 
-__all__=["discover","log", "SVNREPO", "WORKINGREPO",
+__all__=["discover","log", "SVNREPO", "WORKINGREPO", "TESTROOT",
         ]
 
 SVNREPO="/var/tmp/docmanagersvn"
