@@ -77,7 +77,7 @@ done
 
 # message SVNREPO=$SVNREPO, WORKINGREPO=$WORKINGREPO, TESTROOT=$TESTROOT, QUIET=$QUIET\n
 
-
+### Create initial SVN repository:
 if [ ! -d ${SVNREPO} ]; then
   message "Creating SVN repository ${SVNREPO}\n"
 
@@ -96,11 +96,38 @@ else
   message "SVN repository already there. Using '$SVNREPO'\n"
 fi
 
-
+### Checkout a working copy:
 if [ ! -d ${WORKINGREPO} ]; then
   svn co file://${SVNREPO} ${WORKINGREPO}
 else
   message "SVN working directory already there. Using '$WORKINGREPO'\n"
 fi
+
+### Patch SVN directory to allow revision prop changes:
+if [ ! -e ${SVNREPO}/hooks/pre-revprop-change ]; then
+  cat << EOF
+#!/bin/sh
+# Every revision property is allowed:
+exit 0
+EOF
+  message "SVN repository patched.\n"
+fi
+
+### Set some preliminary properties
+pushd ${WORKINGREPO}
+
+# Our predefinied properties:
+declare -A PROPS=( [doc:maintainer]="toms" [doc:deadline]="2011-08-23" [doc:release]="DMTest"
+[doc:status]="editing" [doc:trans]="no" )
+
+for i in xml/*.xml; do
+ for p in "${!PROPS[@]}"; do
+   svn ps $p ${PROPS[$p]} $i
+ done
+done
+
+# Commit our change:
+svn ci -m"Set standard doc properties"
+popd
 
 # EOF
