@@ -439,8 +439,9 @@ while true ; do
 	    shift
 	    ;;
         --) shift ; break ;;
-        *) exit on error "Internal error!" ;;
+        *) exit_on_error "Internal error!" ;;
     esac
+    
 done
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
