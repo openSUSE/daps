@@ -113,21 +113,24 @@ fi
 
 ### Patch SVN directory to allow revision prop changes:
 if [ ! -e ${SVNREPO}/hooks/pre-revprop-change ]; then
-  cat << EOF
+  cat > ${SVNREPO}/hooks/pre-revprop-change << EOF
 #!/bin/sh
 # Every revision property is allowed:
 exit 0
 EOF
   message "SVN repository patched.\n"
+else
+  message "SVN contains pre-revprop-change hook script already.\n"
 fi
 
 ### Set some preliminary properties
 pushd ${WORKINGREPO}
 
 # Iterate through all XML files and set it to our standard doc properties:
+q=${QUIET:+--quiet}
 for i in xml/*.xml; do
  for p in "${!PROPS[@]}"; do
-   svn ps $p ${PROPS[$p]} $i
+   svn ps $q $p ${PROPS[$p]} $i
  done
 done
 
