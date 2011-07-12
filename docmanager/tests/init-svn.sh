@@ -81,9 +81,6 @@ done
 if [ ! -d ${SVNREPO} ]; then
   message "Creating SVN repository ${SVNREPO}\n"
 
-# Change directory:
-# pushd ${TEMPDIR}
-
 # Create a test SVN repository
 svnadmin create ${SVNREPO}
 
@@ -105,8 +102,5 @@ if [ ! -d ${WORKINGREPO} ]; then
 else
   message "SVN working directory already there. Using '$WORKINGREPO'\n"
 fi
-
-#popd
-
 
 # EOF
