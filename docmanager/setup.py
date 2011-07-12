@@ -4,7 +4,7 @@
 import os
 from setuptools import setup, find_packages
 
-from setuptools_dmutils import CleanCommand, ManpageCommand 
+from setuptools_dmutils import CleanCommand, ManpageCommand
 
 
 # Utility function to read the README file.
@@ -48,6 +48,7 @@ REQUIRES=[
 ]
 TEST_REQUIRES=[
   'unittest2',
+  'nose',
   'optcomplete',
   'setuptools',
   'lxml',
@@ -87,8 +88,9 @@ setup(
   classifiers=trove_classifiers,
  
   # Our testsuite, including its requirements
-  test_suite = 'tests.suite',
-  tests_require=TEST_REQUIRES,
+  #test_suite = 'tests.suite',
+  #test_suite="nose.collector",
+  #tests_require=TEST_REQUIRES,
   
   # Any requirements:
   # install_requires=REQUIRES,
