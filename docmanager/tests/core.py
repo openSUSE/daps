@@ -9,7 +9,22 @@ try:
 except ImportError:
   import unittest
 
-__all__=["discover", "setUpModule", "tearDownModule"]
+import logging, logging.handlers
+
+
+__all__=["discover", "setUpModule", "tearDownModule", "log"]
+
+LOG_FILENAME="/var/tmp/docmanager-test.log"
+logging.basicConfig(filename=LOG_FILENAME,
+                    level=logging.DEBUG
+                   )
+
+log = logging.getLogger("dm")
+log.setLevel(logging.DEBUG)
+handler=logging.handlers.RotatingFileHandler(LOG_FILENAME, backupCount=3)
+log.addHandler(handler)
+
+
 
 def discover(globaldict, prefix="Test_", module=__file__):
   """Discovers all classes in a module, which name starts with 'prefix' and are
