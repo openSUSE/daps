@@ -17,6 +17,14 @@ EOF
 }
 
 
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    echo "error" "ERROR: ${1}"
+    exit 1;
+}
+
 # Taken from the example getopt-parse.bash
 #export LC_ALL=C
 ARGS=$(getopt -o h -l help,svnrepo:,workingrepo:,testroot: -n $0 -- "$@")
@@ -30,15 +38,27 @@ while true; do
       exit 0
       ;;
     --svnrepo)
-      SVNREPO=$2
+      if [[ -d $2 ]]; then
+        SVNREPO=$2
+      else
+        exit_on_error "No valid SVN repository path"
+      fi
       shift 2
       ;;
     --workingrepo)
-      WORKINGREPO=$2
+      if [[ -d $2 ]]; then
+        WORKINGREPO=$2
+      else
+        exit_on_error "No valid SVN working directory"
+      fi
       shift 2
       ;;
     --testroot)
-      TESTROOT=$2
+      if [[ -d $2 ]]; then
+        TESTROOT=$2
+      else
+        exit_on_error "No valid SVN working directory"
+      fi
       shift 2
       ;;
     --) shift ; break ;;
