@@ -1,4 +1,12 @@
 #!/bin/sh
+#
+# This script initializes a test SVN repository, checks out a
+# working copy, and add some SVN properties
+#
+
+# Our predefinied properties:
+declare -A PROPS=( [doc:maintainer]="toms" [doc:deadline]="2011-08-23" [doc:release]="DMTest"
+[doc:status]="editing" [doc:trans]="no" )
 
 # Root directory where SVN repository and working directory are located:
 TEMPDIR=/var/tmp
@@ -116,10 +124,7 @@ fi
 ### Set some preliminary properties
 pushd ${WORKINGREPO}
 
-# Our predefinied properties:
-declare -A PROPS=( [doc:maintainer]="toms" [doc:deadline]="2011-08-23" [doc:release]="DMTest"
-[doc:status]="editing" [doc:trans]="no" )
-
+# Iterate through all XML files and set it to our standard doc properties:
 for i in xml/*.xml; do
  for p in "${!PROPS[@]}"; do
    svn ps $p ${PROPS[$p]} $i
