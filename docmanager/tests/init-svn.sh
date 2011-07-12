@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script initializes a test SVN repository, checks out a
 # working copy, and add some SVN properties
