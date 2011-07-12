@@ -4,6 +4,10 @@
 # working copy, and add some SVN properties
 #
 
+__version__="$Revision$"
+__author__="Thomas Schraitle <toms AT opensuse DOT org>"
+
+
 # Our predefinied properties:
 declare -A PROPS=( [doc:maintainer]="toms" [doc:deadline]="2011-08-23" [doc:release]="DMTest"
 [doc:status]="editing" [doc:trans]="no" )
