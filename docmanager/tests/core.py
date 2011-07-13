@@ -3,6 +3,14 @@
 
 __version__="$Revision$"
 __author__="Thomas Schraitle <toms AT opensuse DOT org>"
+# Which modules are exported, after from core import * is executed:
+__all__=[
+         # Our variables:
+         "SVNREPO", "WORKINGREPO", "TESTROOT", 
+         # Own functions
+         "discover","log",
+         # Modules we want to export:
+         "subprocess", "unittest", ]
 
 
 import sys
@@ -15,10 +23,8 @@ except ImportError:
   import unittest
 
 import logging, logging.handlers
+import subprocess
 
-
-__all__=["discover","log", "SVNREPO", "WORKINGREPO", "TESTROOT",
-        ]
 
 SVNREPO="/var/tmp/docmanagersvn"
 WORKINGREPO="/var/tmp/docmanager"
