@@ -8,16 +8,11 @@ import sys
 import os
 from os import path
 
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
-
-import subprocess
 from core import *
 
 
 class SVNFiles(unittest.TestCase):
+  """ Testcase for SVNFile class """
   def test_compareRootAndWorkingXMLFiles(self):
     """Create two lists and compare them: original from ROOT dir and from SVN working dir"""
     xmldir = path.join(WORKINGREPO, 'xml')
