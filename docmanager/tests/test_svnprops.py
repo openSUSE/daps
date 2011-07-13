@@ -34,8 +34,8 @@ class SVNProperties(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
     """Setups the class, used for all testcases"""
-    cls.filename = "xml/test_01.xml"
-    cls.fullfilename = path.join(WORKINGREPO, cls.filename)
+    cls.filename = "test_01.xml"
+    cls.fullfilename = path.join(WORKINGREPO, "xml", cls.filename)
     cls.svn = SVNFile(cls.fullfilename)
     cls.output=subprocess.check_output("svn pl -v --xml %s" % cls.fullfilename, shell=True)
     cls.doc = etree.parse(StringIO(cls.output))
