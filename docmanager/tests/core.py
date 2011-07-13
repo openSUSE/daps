@@ -8,7 +8,7 @@ __all__=[
          # Our variables:
          "SVNREPO", "WORKINGREPO", "TESTROOT", 
          # Own functions
-         "discover","log",
+         "discover","log", "whoami", "whereis",
          # Modules we want to export:
          "etree", "subprocess", "StringIO", "unittest", ]
 
@@ -75,4 +75,11 @@ def whereis(exe, dirs=[]):
     if path.exists( pe ):
       return pe
   return None
+  
+def whoami():
+  """Determins current function name
+   Source: http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66062
+  """
+  return sys._getframe(1).f_code.co_name
+
 # EOF
