@@ -54,8 +54,6 @@ package-pdf: color-pdf document-files-pdf
 	else \
 	  ccecho "info" "No PDF document files for GNOME yelp available"; \
 	fi
-# copy ENVfile
-	cp $(BASE_DIR)/$(ENVFILE) $(PACKDIR)
 	@ccecho "result" "Find the package-pdf results at:\n$(PACKDIR)"
 
 #--------------
