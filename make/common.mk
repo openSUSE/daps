@@ -14,7 +14,7 @@
 # Make file to build "books" from DocBook XML sources
 # Provides the core functionality for the daps package
 
-#SHELL := /bin/bash
+SHELL := /bin/bash -x
 
 #------------------------------------------------------------------------
 # Paths
@@ -664,20 +664,20 @@ dist-graphics: provide-color-images
 dist-graphics: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar
 dist-graphics:
 ifdef USED
-  ifdef USED_PNG
+  ifdef PNGONLINE
 	tar chf $(TARBALL) --exclude=.svn --ignore-failed-read \
           --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
-          $(sort $(USED_PNG));
+          $(sort $(PNGONLINE));
     # also add SVGs if available
     ifdef SVGONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/gen%images/src% \
+	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src% \
 	  $(sort $(SVGONLINE))
     endif
   else
         # if there are no PNGs, there must be SVGs
 	tar chf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/gen%images/src% \
+	  --absolute-names --xform=s%$(IMG_GENDIR)/onlinen%images/src% \
 	  $(sort $(SVGONLINE));
   endif
 	bzip2 -9f $(TARBALL)
@@ -694,7 +694,7 @@ endif
 dist-graphics-png: provide-color-images
 dist-graphics-png: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-png-graphics.tar.bz2
 dist-graphics-png:
-ifdef PNGPRINT
+ifdef PNGONLINE
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --ignore-failed-read \
 	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
@@ -716,7 +716,8 @@ endif
 dist-html: MANIFEST  = --stringparam manifest $(HTML_DIR)/HTML.manifest \
 		       --param generate.manifest 1
 dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2
-dist-html: HTML-USED = $(addprefix $(HTML_DIR)/images/,$(USED))
+#dist-html: HTML-USED = $(addprefix $(HTML_DIR)/images/,$(USED))
+dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
 	BZIP2=--best \

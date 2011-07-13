@@ -130,9 +130,7 @@ function build_pdfs () {
                 help_scmd_head "Build a $TARGET book"
                 help_comments
                 help_draft
-                echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
-                              'xep' or 'fop' are supported.
-                              Default: 'xep'"
+                help_fop
                 help_help
                 help_name
                 help_remarks
@@ -189,10 +187,7 @@ function build_html_jsp () {
                 help_comments
                 help_draft
                 help_help
-                echo "    --meta, -m                If set, prints additional status information
-                              (filename, maintainer and status) for each file.
-                              Implies draft mode.
-                              Default: off"
+                help_meta
                 help_name
                 help_remarks
                 help_rootid
@@ -286,11 +281,7 @@ function build_locdrop () {
                 help_scmd_head "Provide everything that is needed to translate a set"
                 help_help
                 help_name
-                echo "    --nopdf, -n               Deactivates creating the color-pdf. Useful when
-                              \"locdropping\" a complete set where you
-                              want to deliver separate PDFs for each book
-                              rather than one huge PDF for the whole set.
-                              Default: off"
+                help_nopdf
                 help_rootid
                 echo
                 exit 0
@@ -405,6 +396,70 @@ function filelists () {
     call_make_nolog "$TARGET" "$@"
 }
 
+function packaging () {
+    local TARGET=$1
+    shift
+    # command line args
+    if [[ package-pdf = $TARGET ]]; then
+        SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    elif [[ package-src = $TARGET ]]; then
+        SARGS=$(getopt -o h -l extra-files:,help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    else
+        SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    fi
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            --extra-files)
+                for FILE in $2; do
+                    test -f $FILE || exit_on_error "Cannot find extra file $FILE"
+                done
+                export EXTRA_FILES=$2
+                shift 2
+                ;;
+            --fop)
+                if [[ $2 = xep || $2 = fop ]]; then
+                    export FOPTYPE="$2"
+                    export FOP="${LIB_DIR}/susedoc-$2"
+                else
+		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
+                fi
+		shift 2
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book"
+                if [[ package-pdf = $TARGET ]]; then
+                    help_fop
+                elif [[ package-src = $TARGET ]]; then
+                    help_extrafiles
+                fi
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
 # ----------------------------------------------------------------------------
 # Help functions
 #
@@ -422,31 +477,54 @@ $1
 }
 
 function help_comments () {
-echo "        --comments, -c            Include XML comments in profiled sources
+    echo "        --comments, -c            Include XML comments in profiled sources
                                   Default: off"  
 }
 function help_draft () {
-echo "    --draft, -d               Add a 'DRAFT' watermark to all pages of the book
+    echo "    --draft, -d               Add a 'DRAFT' watermark to all pages of the book
                               Default: off" 
 }
+function help_extrafiles () {
+    echo "    --extra-files=FILES       Specify a space separated list of additional files to
+                              be added to the source tarball. Paths must be
+                              relative to BASE_DIR"
+}
+function help_fop () {
+    echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
+                              'xep' or 'fop' are supported.
+                              Default: 'xep'"
+}
 function help_help () {
-echo "    --help, -h                Print this help text"
+    echo "    --help, -h                Print this help text"
 }
 function help_name () {
-echo "    --name=BOOKNAME           File- and directory names for generated content
+    echo "    --name=BOOKNAME           File- and directory names for generated content
                               are derived from BOOKNAME.
                               Default: generated by stripping 'ENV-' from the
                               ENV filename"
 }
+function no_pdf () {
+    echo "    --nopdf, -n               Deactivates creating the color-pdf. Useful when
+                              \"locdropping\" a complete set where you
+                              want to deliver separate PDFs for each book
+                              rather than one huge PDF for the whole set.
+                              Default: off"
+}
+function help_meta () {
+    echo "    --meta, -m                If set, prints additional status information
+                              (filename, maintainer and status) for each file.
+                              Implies draft mode.
+                              Default: off"
+}
 function help_pretty () {
-echo "    --pretty, -p              Pretty print file lists (one filename per line)"
+    echo "    --pretty, -p              Pretty print file lists (one filename per line)"
 }
 function help_remarks () {
-echo "    --remarks, -r             Include remarks (<remark>...</remark>) in book
+    echo "    --remarks, -r             Include remarks (<remark>...</remark>) in book
                               Default: off"  
 }
 function help_rootid () {
-echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
+    echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
                               (parts or chapters). Default: Usually set
                               in the ENV-file; if not set the complete set
                               defined in $MAIN will be built"

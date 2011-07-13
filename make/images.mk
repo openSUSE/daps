@@ -28,12 +28,12 @@ SRCDIA      := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
 #		$(DTDROOT)/xslt/misc/get-image-files.xsl \
 #		$(BASE_DIR)/xml/$(MAIN)))
 
-USED        := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
+USED        := $(sort $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		  --stringparam xml.or.img img \
-		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ))
 
-# PNG and SVG can be directly taken from the USED list - the filter function
-# generates lists of all PNG/SVG common to USED and SCRSVG/SCRPNG
+# PNG can be directly taken from the USED list - the filter function
+# generates lists of all PNG common to USED and SCRPNG
 #
 USED_PNG := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPNG))
 

@@ -295,8 +295,11 @@ function run_subcmd () {
         locdrop)
             build_locdrop "${SCMD_ARGS[@]}"
             ;;
-        bigfile|bigfile-reduced|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|mdocument-files-pdf|an|online-docs|online-localized|package|package-html|package-pdf|package-jsp|package-src|txt|text|wiki)
+        bigfile|bigfile-reduced|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|mdocument-files-pdf|an|online-docs|online-localized|txt|text|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        package|package-html|package-pdf|package-jsp|package-src)
+            packaging $SUBCMD "${SCMD_ARGS[@]}"
             ;;
         missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
             filelists $SUBCMD "${SCMD_ARGS[@]}"

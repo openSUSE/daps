@@ -19,7 +19,7 @@ package-html: dist-html desktop-files document-files-html
 	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
 	    $(PACKDIR)/$(BOOK)_$(LL)-desktop.tar.bz2; \
 	else \
-	 ccecho "info" "No desktop files for KDE helpcenter available"; \;
+	 ccecho "info" "No desktop files for KDE helpcenter available"; \
 	fi
 # copy document files for GNOME
 	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2; then \
@@ -37,6 +37,7 @@ package-html: dist-html desktop-files document-files-html
 #  * Color PDF
 #  * desktop files (for KDE)
 #  * yelp files PDF (for GNOME)
+#  * ENVfile
 #
 .PHONY: package-pdf
 package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
@@ -53,6 +54,8 @@ package-pdf: color-pdf document-files-pdf
 	else \
 	  ccecho "info" "No PDF document files for GNOME yelp available"; \
 	fi
+# copy ENVfile
+	cp $(BASE_DIR)/$(ENVFILE) $(PACKDIR)
 	@ccecho "result" "Find the package-pdf results at:\n$(PACKDIR)"
 
 #--------------
@@ -98,6 +101,12 @@ else
 endif
 # copy source files tarball (dist-book)
 	cp $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 $(PACKDIR)/$(BOOK)_$(LL).tar.bz2
+ifdef EXTRA_FILES
+	bunzip2 $(PACKDIR)/$(BOOK)_$(LL).tar.bz2
+	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
+	  --xform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(EXTRA_FILES))
+	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
+endif
 	@ccecho "result" "Find the package results at:\n$(PACKDIR)"
 
 #--------------
