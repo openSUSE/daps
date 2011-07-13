@@ -282,13 +282,13 @@ endif
 #
 SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  --stringparam xml.src.path "$(BASE_DIR)/xml/" \
+		  --stringparam mainfile $(MAIN) \
 		  $(DTDROOT)/xslt/misc/get-all-used-files.xsl \
 		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
 
 SRCFILES     := $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
-		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ) \
-		  $(BASE_DIR)/xml/$(MAIN)
+		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
@@ -474,8 +474,7 @@ endif
 .PHONY: projectfiles
 projectfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ) \
-			$(BASE_DIR)/xml/$(MAIN)
+			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
 projectfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 projectfiles:
 	@echo $(sort $(INCLUDED)) $(addprefix $(BASE_DIR)/xml/, \
@@ -486,8 +485,7 @@ projectfiles:
 .PHONY: remainingfiles
 remainingfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ) \
-			$(BASE_DIR)/xml/$(MAIN)
+			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
 remainingfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 remainingfiles: INCLUDED += $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
 				$(BASE_DIR)/$(ENVFILE)
