@@ -14,7 +14,7 @@
 # Make file to build "books" from DocBook XML sources
 # Provides the core functionality for the daps package
 
-SHELL := /bin/bash -x
+#SHELL := /bin/bash -x
 
 #------------------------------------------------------------------------
 # Paths
@@ -716,7 +716,6 @@ endif
 dist-html: MANIFEST  = --stringparam manifest $(HTML_DIR)/HTML.manifest \
 		       --param generate.manifest 1
 dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2
-#dist-html: HTML-USED = $(addprefix $(HTML_DIR)/images/,$(USED))
 dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
