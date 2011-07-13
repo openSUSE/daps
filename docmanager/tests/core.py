@@ -20,7 +20,8 @@ from os import path
 try:
   import unittest2 as unittest
 except ImportError:
-  import unittest
+  raise ImportError("unittest2 module not found. Install the package python-unittest2.")
+  # import unittest
 
 import logging, logging.handlers
 import subprocess
