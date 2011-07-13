@@ -64,6 +64,9 @@
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
   
+  <!-- Name of the main file: -->
+  <xsl:param name="mainfile"/>
+  
   <!-- Profiling parameters -->
   <xsl:param name="profile.arch" select="''"/>
   <xsl:param name="profile.audience" select="''"/>
@@ -91,8 +94,17 @@
       get-included-files.xsl which was created in-memory
     </xsl:comment>
     <files>
-      <xsl:apply-templates/>
+        <xsl:apply-templates mode="root"/>
     </files>
+  </xsl:template>
+  
+  <!-- This stylesheet gets only called once -->
+  <xsl:template match="/*" mode="root">
+    <xsl:message><xsl:value-of select="name()"/> found</xsl:message>
+    <file href="{concat($xml.src.path, mainfile)}">
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates/>
+    </file>
   </xsl:template>
   
   <xsl:template match="*">
@@ -128,6 +140,7 @@
       <image fileref="{concat($img.src.path, @fileref)}"/>
     </xsl:if>
   </xsl:template>
+
 
   <xsl:template match="xi:include">
     <xsl:variable name="prof">
