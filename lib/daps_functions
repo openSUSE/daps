@@ -70,7 +70,6 @@ XML_CATALOG: $XML_CATALOG_FILES
 function call_make_nolog () {
 
     # TODO: debug and verbose
-
     
     # do not write a logfile, to be used whenever writing a logfile
     # is not necessary (e.g. for targets clean*)
@@ -78,9 +77,9 @@ function call_make_nolog () {
     TARGET=$1
     MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
     if [[ 1 = $PRETTY_FILELIST ]]; then
-        eval "$MCMD" | sed 's/ /\n/g' | sort
+        eval "$MCMD 2>/dev/null" | sed 's/ /\n/g' | sort
     else
-        eval "$MCMD"
+        eval "$MCMD 2>/dev/null"
     fi
 }
 
