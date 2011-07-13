@@ -62,4 +62,17 @@ def discover(globaldict, prefix="Test_", module=__file__):
   return suite
 
 
+def whereis(exe, dirs=[]):
+  """Searches all the paths of PATH environment variable and returns 
+     the complete path of the executable"""
+  assert isinstance( dirs, list), "Expected a list, got %s" % type(dirs)
+  paths = os.environ['PATH'].split(os.pathsep)
+  if dirs!=[]:
+    paths = dirs + paths
+  
+  for p in paths:
+    pe = path.abspath(path.join(p, exe))
+    if path.exists( pe ):
+      return pe
+  return None
 # EOF
