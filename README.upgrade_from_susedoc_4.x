@@ -19,7 +19,7 @@ ENV files:
        'export MAIN="MAIN-mybook.xml"' becomes 'MAIN="MAIN-mybook.xml"'
    * if you want to be able to still source ENV-files for compatibility
      reasons, add the following line to your ENV-file:
-     export DAPS_ENV_NAME=E$(basename $BASH_SOURCE)
+     export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
      NOTE: this is optional
 
    * The following commands should change your ENV files accordingly

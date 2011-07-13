@@ -31,7 +31,7 @@ function call_make () {
 
     # first argument passed to the function is the subcommand
     # in some cases, additional arguments are passed to this
-    # function - store them in array PARAMS
+    # function - they remain i $@
     #
     TARGET=$1
     shift
@@ -39,7 +39,7 @@ function call_make () {
     MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
     
     LOGFILE="${LOG_DIR}/make_${TARGET}.log"
-    date > $LOGFILE
+    date &> $LOGFILE
 
     if [[ 1 = $VERBOSE ]]; then
         echo "
@@ -320,7 +320,6 @@ function profile_first () {
     shift
     call_make "profile" "$@"
     call_make "$TARGET" "$@"
-   
 }
 
 function build_generic () {

@@ -36,6 +36,7 @@ VARLIST=(
     HTMLROOT
     INK_OPTIONS
     LAYOUT
+    LOG_DIR
     MAIN
     PDFNAME
     PRODUCTNAME
@@ -755,33 +756,35 @@ if [[ -n $XML_CATALOG_FILES ]]; then
     export XML_CATALOG_FILES
 fi
 
+# R_DIR / LOG_DIR
+#
+if [[ -n $BUILD_DIR ]]; then
+    R_DIR="${BUILD_DIR}/${BOOK}/"
+    LOG_DIR="${R_DIR}/log"
+else
+    R_DIR="${BASE_DIR}/build/${BOOK}"
+    LOG_DIR="${R_DIR}/log"
+fi
+
 #----------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
 
 #-------------------------------------------------------------------
-# Create the log directory and a link to the ENV-file in RESULT_DIR
+# Create the log directory and a link to the ENV-file in R_DIR
 #
-
-if [[ -n $BUILD_DIR ]]; then
-    RESULT_DIR="${BUILD_DIR}/${BOOK}/"
-    LOG_DIR="${RESULT_DIR}/log"
-else
-    RESULT_DIR="${BASE_DIR}/build/${BOOK}"
-    LOG_DIR="${RESULT_DIR}/log"
-fi
 
 mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
 
-if [[ ! -f ${RESULT_DIR}/$ENVFILE ]]; then
-    ln -sf ${BASE_DIR}/$ENVFILE ${RESULT_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $RESULT_DIR"
+if [[ ! -f ${R_DIR}/$ENVFILE ]]; then
+    ln -sf ${BASE_DIR}/$ENVFILE ${R_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $R_DIR"
 fi
 
-# There should only be one ENVFILE in $RESULT_DIR
+# There should only be one ENVFILE in $R_DIR
 #
-ENV_COUNT=$(find -L $RESULT_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+ENV_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
 if [[ $ENV_COUNT -gt 1 ]]; then
-    ccecho "warn" "$RESULT_DIR contains more than one ENVFILE"
+    ccecho "warn" "$R_DIR contains more than one ENVFILE"
 fi
 
 #-------------------------------------------------------------------
