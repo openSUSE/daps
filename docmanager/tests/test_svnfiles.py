@@ -45,7 +45,11 @@ class SVNFiles(unittest.TestCase):
     """Checks if SVNFile.getstatus() return != None"""
     status = self.svn.getstatus()
     self.failUnless( status != None, "Unexpected status: '%s'" % status)
-    
+  
+  def test_SVNFile_getfilename(self):
+    """Checks SVNFile.getfilename()"""
+    self.assertEqual(self.svn.getfilename(), self.filename)
+  
   def foo(self):
     for x in xml:
       output=subprocess.check_output("svn pl -v --xml %s" % x, shell=True)
