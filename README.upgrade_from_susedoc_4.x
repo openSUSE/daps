@@ -93,7 +93,7 @@ Sourcing an ENV-file and calling make <TARGET> has been replaced by calling
 For the impatient, here is a quickstart (<WD> = working directory containing
 the ENV-file(s), an images/src/ and an xml/ directory)
 
-   # <WD> only contains on ENV file:
+   # <WD> only contains one ENV file:
    cd <WD>
    daps color-pdf
 
