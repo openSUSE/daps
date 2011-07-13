@@ -32,6 +32,7 @@ class SVNProperties(unittest.TestCase):
     
   def setUp(self):
     self.c = self.__class__
+    self.svn = self.c.svn
 
   def test_InstanceOfSVNFile(self):
     """Checks instance of class xml variable"""
@@ -39,11 +40,11 @@ class SVNProperties(unittest.TestCase):
 
   def test_ComparesLengthOfProperties(self):
     """Compares length of properties from SVNFile and length from svn pl -v --xml"""
-    props = self.c.svn.getprops()
+    props = self.svn.getprops()
     root = self.c.doc.getroot()
-    # Iterate through the props dictionary but include only those with "doc:"
+    # Iterate through the props dictionary but include only those starting with "doc:"
     propdict = dict([ (k, i) for k, i in props.items() if k.startswith("doc:") ])
-    # Get the children from /properties/target
+    # Get the children from XPath /properties/target
     propertylist = root.getchildren()[0].getchildren()
     # Although both are different types (dict vs. list), nevertheless they should
     # contain the same amount of items
