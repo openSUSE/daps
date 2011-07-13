@@ -10,13 +10,7 @@ from os import path
 
 from core import *
 
-from dm.base   import SVNRepository, SVNFile
-from dm.docget import CmdDocget
-from dm.docset import CmdDocset
-from dm.tag    import CmdTag
-from dm.branch import CmdBranch
-#from locdrop import CmdLocdrop
-import dm.dmexceptions as dmexcept
+from dm.base import SVNFile
 
 
 class SVNProperties(unittest.TestCase):
