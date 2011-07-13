@@ -12,7 +12,7 @@ import svncmd
 import commands
 import shutil
 
-import dmexceptions as dm
+import dm.dmexceptions as dmexcept
 import itertools
 
 from lxml import etree as et
@@ -105,7 +105,7 @@ def extractURL(infolist):
 
 
 # Just a try:
-def runsvn(filename, svncmd, svnopt, exceptmsg, exception=dm.DocManagerException):
+def runsvn(filename, svncmd, svnopt, exceptmsg, exception=dmexcept.DocManagerException):
     """Run a svn command with appropriate options and filename(s).
        Arguments:
        - filename:  The filename(s) as string or list
@@ -197,6 +197,10 @@ class SVNFile(object):
 
    def getfilenamewithdir(self):
       return os.path.join(self.dir, self.filename)
+      
+   @property
+   def filenamewithdir(self):
+      return os.path.join(self.dir, self.filename)
 
    def __repr__(self):
       return "<SVNFile from '%s'>" % self._abspath
@@ -220,7 +224,7 @@ class SVNFile(object):
                   " Is it really available in SVN?" % apath
             return os.path.join(xx[0], "branches", release, xx[1])
           except AssertionError, e:
-            raise dm.SVNException(e)
+            raise dmexcept.SVNException(e)
 
       elif len(apath.split("/branches/")) == 2:
          return None
@@ -354,7 +358,7 @@ class SVNFile(object):
                ( "docmanager2: %s" % msg, self.getfilenamewithdir()) )
       if res[0] != 0:
         print failed()
-        raise dm.DocManagerCommitException(
+        raise dmexcept.DocManagerCommitException(
             "\nCommitting for file '%s' failed.\n"\
             "       Reason: %s" % (self.getfilenamewithdir(), res[1]) )
       print done()
@@ -388,9 +392,9 @@ class SVNRepository(object):
       #if not self.svnentrylist:
       #    self.initsvnentrylist()
       if not os.path.exists("xml/"):
-          raise dm.DocManagerEnvironment(dm.DIR_XML_NOT_FOUND)
+          raise dmexcept.DocManagerEnvironment(dmexcept.DIR_XML_NOT_FOUND)
       if not os.path.exists("xml/.svn"):
-          raise dm.DocManagerEnvironment(dm.DIR_SVN_NOT_FOUND)
+          raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
       
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
@@ -406,7 +410,7 @@ class SVNRepository(object):
       for f in filenames:
             # print "Filename %s" % f
             if not os.path.exists(f):
-                print >> sys.stderr, dm.FILE_NOT_FOUND_ERROR % f
+                print >> sys.stderr, dmexcept.FILE_NOT_FOUND_ERROR % f
                 continue
             elif f[-1]=='~':
                 # We don't want backup files
@@ -416,7 +420,7 @@ class SVNRepository(object):
                 # We don't want files, that are not under version control
                 # print >> sys.stderr, f
                 #continue
-                raise dm.SVNException(dm.NOT_IN_SVN_ERROR % f)
+                raise dmexcept.SVNException(dmexcept.NOT_IN_SVN_ERROR % f)
             #elif not(self.checkstatus(f)) and self.allowmodified==False:
             #   raise  RuntimeError("ERROR: File »%s« is modified. " \
             #            "Please commit your changes first." % f )
@@ -425,7 +429,7 @@ class SVNRepository(object):
                 # print "Filename %s" % f
 
       if not len(self._filenames):
-         print >> sys.stderr, dm.EMPTY_FILELIST
+         print >> sys.stderr, dmexcept.EMPTY_FILELIST
          sys.exit(40)
 
       
@@ -451,9 +455,9 @@ class SVNRepository(object):
          res=noerr_getstatusoutput("LANG=C make validate")
          # print >> sys.stderr, res
          if res[0] != 0:
-            raise dm.DocManagerEnvironment(dm.VALIDATION_ERROR % res[1])
+            raise dmexcept.DocManagerEnvironment(dmexcept.VALIDATION_ERROR % res[1])
          else:
-            raise dm.DocManagerEnvironment(dm.NO_FILELIST_ERROR % res[1])
+            raise dmexcept.DocManagerEnvironment(dmexcept.NO_FILELIST_ERROR % res[1])
 
       if self.args.get("header"):
           print done()
@@ -464,7 +468,7 @@ class SVNRepository(object):
       
       for f in filelist:
          if not self.issvnfile(f):
-           raise dm.SVNException(dm.NOT_IN_SVN_ERROR % f)
+           raise dmexcept.SVNException(dmexcept.NOT_IN_SVN_ERROR % f)
       
       if self.args.get("header"):
           print done()
@@ -603,7 +607,7 @@ class SVNRepository(object):
 
       except KeyError, e:
         print >> sys.stderr, \
-        dm.DocManagerEnvironment(dm.NO_PROPERTY_ERROR % (e, fileobj.getfilename() ) )
+        dmexcept.DocManagerEnvironment(dmexcept.NO_PROPERTY_ERROR % (e, fileobj.getfilename() ) )
 
    def setProperties(self, **properties):
      """Set properties from a dictionary"""
@@ -630,7 +634,7 @@ class SVNRepository(object):
      self._props = properties
      func = xx
      logmsg = ""
-     assert isinstance(properties, dict), dm.EXPECTED_DICTIONARY_ERROR
+     assert isinstance(properties, dict), dmexcept.EXPECTED_DICTIONARY_ERROR
      # Creates the string "KEY=VALUE[, KEY=VALUE]*"
      xx=", ".join(["%s=%s" % \
            _i for _i in itertools.izip(properties.keys(),
@@ -656,9 +660,9 @@ Your friendly "DocManager Reminder". :-) Did you:
        # print " ## setProperties: '%s'" % status
 
        if status[0]=='M':
-         raise dm.DocManagerPropertyException(dm.MODIFIED_FILE % f.getorigfilename())
+         raise dmexcept.DocManagerPropertyException(dmexcept.MODIFIED_FILE % f.getorigfilename())
        if status[1]=='M':
-         raise dm.DocManagerPropertyException(dm.MODIFIED_PROPS % f.getorigfilename())
+         raise dmexcept.DocManagerPropertyException(dmexcept.MODIFIED_PROPS % f.getorigfilename())
 
        # FIXME: Add missing option for skipping the XML format process
        #        Format the xml file, if not deactivated
@@ -666,7 +670,7 @@ Your friendly "DocManager Reminder". :-) Did you:
          logmsg = "Formatted with xmlformat."
          try:
            self.xmlformat(f)
-         except dm.DocManagerFileError, e:
+         except dmexcept.DocManagerFileError, e:
            print red(e)
            sys.exit(30)
        
@@ -690,19 +694,19 @@ Your friendly "DocManager Reminder". :-) Did you:
             
             print "    %s.\n" % green("Successful")
     
-        except (dm.DocManagerPropertyException,
-                dm.DocManagerCommitException), e:
+        except (dmexcept.DocManagerPropertyException,
+                dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
     
-        except (dm.DocManagerPropertyException,
-                dm.DocManagerCommitException), e:
+        except (dmexcept.DocManagerPropertyException,
+                dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
 
        # Neither in branch nor in trunk
        else:
-         raise dm.DocManagerEnvironment(dm.WRONG_DIRECTORY_ERROR)
+         raise dmexcept.DocManagerEnvironment(dmexcept.WRONG_DIRECTORY_ERROR)
 
        # Commit any changes
        # f.commit(logmsg)
@@ -722,7 +726,7 @@ Your friendly "DocManager Reminder". :-) Did you:
       print >> sys.stderr, "ERROR: XML formatting has failed.\n"\
                            "       Reason: %s" % (res[1], )
     elif res[0] == 100:
-      raise dm.DocManagerFileError("ERROR: %s" % res[1])
+      raise dmexcept.DocManagerFileError("ERROR: %s" % res[1])
     else:
       return False
       
@@ -736,7 +740,7 @@ Your friendly "DocManager Reminder". :-) Did you:
         print "  nothing:() properties:", properties
         pass
       
-      assert isinstance(properties, dict), dm.EXPECTED_DIRECTORY_ERROR
+      assert isinstance(properties, dict), dmexcept.EXPECTED_DIRECTORY_ERROR
       # print self, self.args, self.args["dryrun"] #properties
       # Creates a string with format:
       # PROPERTY=VALUE[, PROPERTY=VALUE]*
@@ -780,8 +784,8 @@ Your friendly "DocManager Reminder". :-) Did you:
     
             print "    %s.\n" % green("Successful")
     
-        except (dm.DocManagerPropertyException,
-                dm.DocManagerCommitException), e:
+        except (dmexcept.DocManagerPropertyException,
+                dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
       
@@ -801,14 +805,14 @@ Your friendly "DocManager Reminder". :-) Did you:
     
             print "    %s.\n" % green("Successful")
     
-        except (dm.DocManagerPropertyException,
-                dm.DocManagerCommitException), e:
+        except (dmexcept.DocManagerPropertyException,
+                dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
 
       # Neither in branch nor in trunk
       else:
-        raise dm.DocManagerEnvironment(dm.WRONG_DIRECTORY_ERROR)
+        raise dmexcept.DocManagerEnvironment(dmexcept.WRONG_DIRECTORY_ERROR)
 
 
    def getgraphics(self, fileobj):
@@ -894,7 +898,7 @@ Your friendly "DocManager Reminder". :-) Did you:
           # gfxfiles.append(svn)
           branchpath = svn.branchpath()
           trunkpath = svn.trunkpath()
-        except dm.SVNException, e:
+        except dmexcept.SVNException, e:
           # In case of a problem occurs, skip it
           print >> sys.stderr, e
           continue
@@ -914,7 +918,7 @@ Your friendly "DocManager Reminder". :-) Did you:
         print "Setting maintainer for '%s'" % trunkpath
         
         if res[0] != 0:
-          raise dm.DocManagerCommitException("ERROR: Problem with setting doc:maintainer property\n%s" % res[1])
+          raise dmexcept.DocManagerCommitException("ERROR: Problem with setting doc:maintainer property\n%s" % res[1])
         
         if os.path.exists(branchpath):
           print "Copying over existing file..."
@@ -940,7 +944,7 @@ Your friendly "DocManager Reminder". :-) Did you:
         
         if res[0] != 0:
           print failed()
-          raise dm.DocManagerCommitException("ERROR: Something went wrong with the graphics:\n%s" % res[1] )
+          raise dmexcept.DocManagerCommitException("ERROR: Something went wrong with the graphics:\n%s" % res[1] )
         
 
 
@@ -965,7 +969,7 @@ Your friendly "DocManager Reminder". :-) Did you:
 
       if res[0] != 0:
           print failed()
-          raise dm.DocManagerCommitException("\nCopying into branch failed.\n"\
+          raise dmexcept.DocManagerCommitException("\nCopying into branch failed.\n"\
                                           "Reason: %s" % res[1])
       print "%s\n%s %s" % (done(), res[1], "-"*10)
 
@@ -981,7 +985,7 @@ Your friendly "DocManager Reminder". :-) Did you:
       res=commands.getstatusoutput(cmd)
 
       if res[0] != 0:
-         raise dm.DocManagerEnvironment("Could not get remote URL from '%s'\n"\
+         raise dmexcept.DocManagerEnvironment("Could not get remote URL from '%s'\n"\
                                         "Reason: %s" %
                                         (branchpath, res[1])
                                        )
@@ -1005,7 +1009,7 @@ Your friendly "DocManager Reminder". :-) Did you:
 
       if res[0] != 0:
           print failed()
-          raise dm.DocManagerCommitException("\nMerging into branch failed.\n"\
+          raise dmexcept.DocManagerCommitException("\nMerging into branch failed.\n"\
                                           "Reason: %s" % res[1])
       print "%s\n%s\n%s" % (done(), res[1], "-"*10 )
 
@@ -1031,7 +1035,7 @@ Your friendly "DocManager Reminder". :-) Did you:
       
      c=r"(%s)_\d{3}" % "|".join(allowed_tags)
      if re.match(c, tagname)==None:
-          raise dm.DocManagerException("Tag name is not valid. "\
+          raise dmexcept.DocManagerException("Tag name is not valid. "\
                                        "Expected one of %s, but got '%s'." %
                     ( ", ".join(allowed_tags), tagname) )
 
@@ -1082,7 +1086,7 @@ Your friendly "DocManager Reminder". :-) Did you:
       #print "          trunkpath:", trunkpath
       #print "         branchpath:", branchpath
       if branchpath == None:
-         raise dm.DocManagerEnvironment("Path to branch not found for file '%s'"% trunkpath)
+         raise dmexcept.DocManagerEnvironment("Path to branch not found for file '%s'"% trunkpath)
       # Make sure we have the latest version in branch
       self.updateinbranch(fileobj)
 
