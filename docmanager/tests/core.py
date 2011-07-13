@@ -10,7 +10,7 @@ __all__=[
          # Own functions
          "discover","log",
          # Modules we want to export:
-         "subprocess", "unittest", ]
+         "etree", "subprocess", "StringIO", "unittest", ]
 
 
 import sys
@@ -24,6 +24,9 @@ except ImportError:
 
 import logging, logging.handlers
 import subprocess
+
+from lxml import etree
+from StringIO import StringIO
 
 
 SVNREPO="/var/tmp/docmanagersvn"

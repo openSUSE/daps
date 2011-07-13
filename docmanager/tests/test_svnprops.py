@@ -8,12 +8,6 @@ import sys
 import os
 from os import path
 
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
-
-import subprocess
 from core import *
 
 from dm.base   import SVNRepository, SVNFile
@@ -24,13 +18,9 @@ from dm.branch import CmdBranch
 #from locdrop import CmdLocdrop
 import dm.dmexceptions as dmexcept
 
-from lxml import etree
-from StringIO import StringIO
-
 
 class SVNProperties(unittest.TestCase):
-  """
-  """
+  """Checks Properties """
   @classmethod
   def setUpClass(cls):
     """Setups the class, used for all testcases"""
