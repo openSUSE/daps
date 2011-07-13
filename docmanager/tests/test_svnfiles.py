@@ -25,6 +25,7 @@ class SVNFiles(unittest.TestCase):
     self.c = self.__class__
     self.svn = self.c.svn
     self.filename = self.c.filename
+    self.fullfilename = self.c.fullfilename
   
   def test_compareRootAndWorkingXMLFiles(self):
     """Create two lists and compare them: original from ROOT dir and from SVN working dir"""
@@ -49,6 +50,15 @@ class SVNFiles(unittest.TestCase):
   def test_SVNFile_getfilename(self):
     """Checks SVNFile.getfilename()"""
     self.assertEqual(self.svn.getfilename(), self.filename)
+  
+  def test_SVNFILE_getdocrelease(self):
+    """Checks SVNFile.getdocrelease()"""
+    info = self.svn.getdocrelease()
+    #print info
+    output=subprocess.check_output("svn pg doc:release %s" % self.fullfilename, shell=True)
+    output = output.strip()
+    
+    self.assertEqual(info, output)
   
   def foo(self):
     for x in xml:
