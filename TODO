@@ -8,14 +8,14 @@ General:
 
 * Allow custom stylesheets
 
-* Reduce debug messages of make and stylesheets (susedoc -d now allows
+* Reduce debug messages of make and stylesheets (daps -d now allows
   to have extensive debug output by using (re)make's built-in debugging
   switch)
 
 * rename package, script
 
 -------------
-susedoc
+daps
 
 * generate man pages via ENVfile and daps instead of calling a stylesheet
   directly
@@ -36,15 +36,15 @@ susedoc
 -------------
 DocManager
 
-* adjust to new susedoc version
+* adjust to new daps version
 
-* shortcut aliases from susedoc-aliases should be directly integrated into dm
+* shortcut aliases from daps-aliases should be directly integrated into dm
 
 * improve speed by
   - reducing the svn calls to a minimum
   - using python svn bindings
 
-* Make DocManager a subpackage of susedoc?
+* Make DocManager a subpackage of daps?
 
 -------------
 Scripts
@@ -67,6 +67,8 @@ Makefiles:
 
 -------------
 Stylesheets:
+
+* Print all existing IDs (after the headline/text) in draft mode 
 
 * Improve fop support
 

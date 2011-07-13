@@ -2,7 +2,7 @@
 # Customizing:
 #
 # Override any setting from this file in
-# $HOME/.susedoc/config
+# $HOME/.daps/config
 # or on the commandline
 #------------------------------------------------------------
 #
@@ -29,18 +29,18 @@
 #
 # Set the  path to your book's working directory here (omit the trailing / ).
 # You usually don't want to set this value in the system wide config but
-# rather in ~/.susedoc/config. Can also be set on the command line with
+# rather in ~/.daps/config. Can also be set on the command line with
 # --basedir=BASE_DIR
 #
 BASE_DIR=""
 
 ## Key:         BUILD_DIR
 ## ----------------------             
-## Description: Build directory where all susedoc generated files will go
+## Description: Build directory where all daps generated files will go
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
 #
-# Allows to completely separate $BASE_DIR from the output susedoc generates
+# Allows to completely separate $BASE_DIR from the output daps generates
 # If not set it is automatically resolved to BASE_DIR/build/BOOK
 BUILD_DIR=""
 
@@ -62,7 +62,7 @@ CB_OPTIONS="-v --dontwarn 902 --sleep 0 --timeout 60"
 ## Default:     "no"
 #
 # By default XML comments ( <!-- --> ) will be stripped when profiling
-# sources, so whenever you create source archives with susedoc
+# sources, so whenever you create source archives with daps
 # (e.g. via dist-xml or locdrop), the XML files will contain no comments.
 # Change this by setting COMMENTS="yes". Has no effect on book creation
 # (html, pdf, etc). Can also be set to "yes" with the -c switch on teh command
@@ -129,7 +129,7 @@ DIA_OPTIONS="-t cairo-svg"
 ## Type:        String
 ## Default:     ""
 #
-# susedoc allows to set product name and product version dynamically. This
+# daps allows to set product name and product version dynamically. This
 # enables you to use the same XML sources for different products. To use this
 # feature, use the entities &productname; &productnamereg; (produktname with
 # copyright/trademark symbol)  and &productversion; in your XML sources. These
@@ -215,8 +215,8 @@ INK_OPTIONS="-z -w 800"
 ## Type:        String (flyer, pocket)
 ## Default:     ""
 #
-# Lets you specify a layout for book creation. If not set, uses the susedoc
-# default layout. susedoc offers two additional layouts for PDFs: flyer (two
+# Lets you specify a layout for book creation. If not set, uses the daps
+# default layout. daps offers two additional layouts for PDFs: flyer (two
 # column layout) and pocket (for DVD box sized manuals)
 # This is currently work in progress. The goal is to enable custom stylesheets
 # and to easily be able to fallback to the original DocBook stylesheets
@@ -258,7 +258,7 @@ PDFNAME=""
 ## Type:        String
 ## Default:     ""
 #
-# susedoc allows to set product name and product version dynamically. This
+# daps allows to set product name and product version dynamically. This
 # enables you to use the same XML sources for different products. To use this
 # feature, use the entities &productname; &productnamereg; (produktname with
 # copyright/trademark symbol)  and &productversion; in your XML sources. These
@@ -278,7 +278,7 @@ PRODUCTNAME=""
 ## Type:        String
 ## Default:     ""
 #
-# susedoc allows to set product name and product version dynamically. This
+# daps allows to set product name and product version dynamically. This
 # enables you to use the same XML sources for different products. To use this
 # feature, use the entities &productname; &productnamereg; (produktname with
 # copyright/trademark symbol)  and &productversion; in your XML sources. These
@@ -362,7 +362,7 @@ REMARK_STR="_remarks"
 #
 # When not set, the complete book defined in MAIN is build. If MAIN defines a
 # set of several books, you need to specify the id of a book (<book id="">) in
-# order to build the single book. susedoc also supports building single
+# order to build the single book. daps also supports building single
 # articles, parts, and chapters.
 # This value is usually set in a book specific ENVfile and can also be set
 # using the command line switch --rootid=""
