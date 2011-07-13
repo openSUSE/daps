@@ -100,7 +100,6 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <xsl:message><xsl:value-of select="name()"/> found</xsl:message>
     <file href="{concat($xml.src.path, $mainfile)}">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
