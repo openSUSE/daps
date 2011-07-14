@@ -580,13 +580,6 @@ case "$SUBCMD" in
       ;;
 esac
 
-#-----------------
-# Make a final check for BASE_DIR:
-# (could not have run that test earlier because if the init target)
-
-test -d "${BASE_DIR}/xml" || exit_on_error "Cannot find xml/ subdirectory in BASE_DIR $2"
-
-
 # Last, source the ENVfile
 #
 # If we know a valid ENVfile by now, just source it. If not, try
@@ -599,9 +592,9 @@ test -d "${BASE_DIR}/xml" || exit_on_error "Cannot find xml/ subdirectory in BAS
 # *_and_ no ENVFILE has been
 # specified on the command line, use the one that has been sourced 
 #
-if [[ -z $ENVFILE ]] && [[ -f ${PWD}/$DAPS_ENV_NAME ]]; then
+
+if [[ -z $ENVFILE ]] && [[ -f ${BASE_DIR}/$DAPS_ENV_NAME ]]; then
     ENVFILE="$DAPS_ENV_NAME"
-    BASE_DIR="$PWD"
     if [[ 1 = $VERBOSE ]]; then
         ccecho "info" "Using the previously sourced ENVFILE $ENVFILE\nand BASE_DIR $BASE_DIR"
     fi

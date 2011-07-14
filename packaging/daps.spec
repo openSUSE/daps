@@ -157,7 +157,6 @@ Authors:
     Frank Sundermeyer <fsundermeyer AT suse DOT de>
     Thomas Schraitle  <toms AT suse DOT de>
     Berthold Gunreben
-    Karl Eichwalder
     Curtis Graham
     Berthold Gunreben
     Jana Jaeger
