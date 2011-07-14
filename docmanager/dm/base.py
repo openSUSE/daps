@@ -447,9 +447,8 @@ class SVNRepository(object):
       return "<%s '%s'>" % (self.__class__.__name__, self._fileobjects)
 
    def makeprojectfiles(self):
-      if self.args.get("header"):
-         print "Collecting filenames...",
-      
+      """Call daps and create a list of projectfiles"""
+      # FIXME: What about --basedir?
       env=self._gopts.envfile
       if not env:
         env=glob.glob("ENV-*")
@@ -457,7 +456,10 @@ class SVNRepository(object):
           env=env[0]
         else:
           raise dmexcept.DocManagerTooManyENVFiles("You have NOT selected an env file with option --envfile and there are more than one available")
-      
+
+      if self.args.get("header"):
+         print "Collecting filenames...",
+
       res=noerr_getstatusoutput("LANG=C daps -e %s --color=0 projectfiles" % env )# FIXME
       if res[0] != 0:
          print failed()
