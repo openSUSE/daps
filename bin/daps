@@ -195,6 +195,9 @@ Subcommands:
   Other Commands:
     chklink                   Linkchecker for links from <ulink> tags
     db2novdoc                 Convert DocBook XML sources to NovDoc
+    init                      Create a working directory to get started with
+                              daps/DocBook. Generates a MAIN xml file and a
+                              fitting ENVfile
     optipng                   Optimize (size) source PNGs
     profile, prof             Profile XML sources
     validate                  Validate profiled sources. Automatically profiles
@@ -275,7 +278,6 @@ function get_envfile () {
 # run the subcommands
 #
 function run_subcmd () {
-    source "$DTDROOT/lib/daps_functions"
     case "$SUBCMD" in
         all|color-pdf|force|pdf|pdf-color)
 	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
@@ -294,7 +296,7 @@ function run_subcmd () {
             profile_first $SUBCMD "${SCMD_ARGS[@]}"
             ;;
         locdrop)
-            build_locdrop "${SCMD_ARGS[@]}"
+            build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
             ;;
         bigfile|bigfile-reduced|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|mdocument-files-pdf|an|online-docs|online-localized|txt|text|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
@@ -384,7 +386,6 @@ while true ; do
     case "$1" in
         --basedir)
             test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
-            test -d "${2}/xml" || exit_on_error "Cannot find xml/ subdirectory in BASE_DIR $2"
             BASE_DIR_CMDL="$2"
             BASE_DIR="$BASE_DIR_CMDL"
             shift 2
@@ -455,7 +456,7 @@ unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
 # extract the subcommand from $@ if $ME has been called with no arguments
 # or with "help" as the only argument, run global help. If it was called with
-# SUBOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
+# SUBCOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
 # is displayed.
 
 if [[ -z $1 ]] || [[ help = $1 && -z $2 ]]; then
@@ -492,6 +493,7 @@ case "${SCMD_ARGS[@]}" in
     *ENVFILE*|*DTDROOT*|*BASE_DIR*)
         exit_on_error "Please specify BASE_DIR, ENVFILE, or DTDROOT via command line options" 
 esac
+
 
 # ----------------------------------------------------------------------------
 # Setting up the environment for the complete mechanics
@@ -551,26 +553,45 @@ else
     CONFIG="$DEFAULT_CONFIG"
 fi
 
-# Now that everything is in place, source the system config and the user
-# config (again)
-source $CONFIG
+# Now that everything is in place, source the functions, the system config
+# and the user config (again)
+
+source "$LIB_DIR/daps_functions"
+source "$CONFIG"
 if [[ -f $USER_CONFIG ]]; then
     source "$USER_CONFIG"
 fi
 recover_cmdl_values
 
-# Before finally setting up the environment, run help if requested
+#----------------------------------
+# Run early commands that do not need to have an environment fully set up
+#
+# run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
         run_subcmd
 fi
+
+# Initialize a working directory
+#
+case "$SUBCMD" in
+    init)
+      init_wd "${SCMD_ARGS[@]}"
+      ;;
+esac
+
+#-----------------
+# Make a final check for BASE_DIR:
+# (could not have run that test earlier because if the init target)
+
+test -d "${BASE_DIR}/xml" || exit_on_error "Cannot find xml/ subdirectory in BASE_DIR $2"
+
 
 # Last, source the ENVfile
 #
 # If we know a valid ENVfile by now, just source it. If not, try
 # some magic to automatically find an ENVfile
 #
-
 #
 # if
 # * an ENVFILE has been sourced before
@@ -769,23 +790,6 @@ fi
 #----------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
-
-#-------------------------------------------------------------------
-# Create the log directory and a link to the ENV-file in R_DIR
-#
-
-mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
-
-if [[ ! -f ${R_DIR}/$ENVFILE ]]; then
-    ln -sf ${BASE_DIR}/$ENVFILE ${R_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $R_DIR"
-fi
-
-# There should only be one ENVFILE in $R_DIR
-#
-ENV_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
-if [[ $ENV_COUNT -gt 1 ]]; then
-    ccecho "warn" "$R_DIR contains more than one ENVFILE"
-fi
 
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
