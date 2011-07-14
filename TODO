@@ -91,21 +91,6 @@ Documentation:
 
 * needs to be updated
 
--------------
-Additional Subcommands
 
-* daps init:
-  Create the structure and all necessary files for an ambitious author with just this
-  subcommand. :)
-  Implementation idea/details:
-  1. Create the structure with all the files in SVN. That way it can be versioned and
-     every change can be tracked
-  2. Create an archive from the structure with "svn export"
-  3. During packaging, save the archive from the export somewhere in daps system dir
-  4. Whenever a user calls "daps init", the archive is extracted to the current dir
-    (or to a different dir)
-  5. Modify the extracted files afterwards, if neccessary. For example, in our
-     XML files could be the title coded as "@TITLE@". The post-processing step could
-     replace that with the users' command line option.
 
 
