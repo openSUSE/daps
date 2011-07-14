@@ -21,6 +21,7 @@
    Docmanager's light and writer's fate (BRANCH Edition)
 """ 
 
+import sys
 import os
 import os.path
 import types
