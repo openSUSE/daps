@@ -150,6 +150,7 @@ class CmdDocget(optcomplete.CmdComplete):
         svn = SVNRepository(args,
                           querystring=self.opts.query,
                           opts=self.opts,
+                          gopts=self.gopts,
                           dryrun=self.gopts.dryrun,
                           aligning=self.opts.aligning,
                           statistics=self.opts.statistic,
