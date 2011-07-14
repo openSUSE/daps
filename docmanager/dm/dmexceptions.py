@@ -32,9 +32,15 @@ class DocManagerEnvironment(DocManagerException):
    """Exception raised, if something is not correct with the environment."""
    pass
 
+class DocManagerTooManyENVFiles(DocManagerException):
+  """Exception raised, if a directory contains more than one ENV files and 
+     nothing is selected"""
+  pass
+
 class SVNException(Exception):
    """Exception for all Subversion errors"""
    pass
+
 
 
 # Messages
