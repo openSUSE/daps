@@ -40,44 +40,44 @@ trove_classifiers=[
 # PEP345.  They will be adjusted automatically to comply with distribute/
 # setuptools install_requires convention.
 
+## Requirements that need docmanager when installed:
 REQUIRES=[
-    'setuptools >= 0.6',
-#    'optparse',
+    #'setuptools >= 0.6',
     'lxml',
     'optcomplete',
 ]
+
+## Our test requirements:
 TEST_REQUIRES=[
   'unittest2',
   'nose',
   'optcomplete',
   'setuptools',
   'lxml',
-  'mocker',
-  # "mox",
 ]
 
 # Run the beast:
 setup(
   name="docmanager",
-  version="2.0",
+  version="0.9beta1",
   author="Thomas Schraitle",
   author_email="toms@opensuse.org",
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/trunk/tools/daps/docmanager",
   license="LGPL",
   keywords="SVN properties status",
-  description="Manages Doc Files through SVN Properties",
+  description="Manages XML Doc Files through SVN Properties",
   long_description=read("README"),
 
   # Our packages we want to add;
   packages=['dm'],
 
   # Commands which modifies/extends our setup.py
-  cmdclass={'clean': CleanCommand,
+  cmdclass={'clean':   CleanCommand,
             'manpage': ManpageCommand,
            },
   
   # The scripts:
-  scripts=["bin/docmanager2.py", ], # "bin/dm.py" 
+  scripts=["bin/docmanager", ], # "bin/dm.py" 
  
   #manpages=["doc/docmanager.xml"],
   #xslt="db2man.xsl",
