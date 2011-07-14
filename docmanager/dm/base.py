@@ -11,6 +11,7 @@ import re
 import svncmd
 import commands
 import shutil
+import glob
 
 import dm.dmexceptions as dmexcept
 import itertools
@@ -377,6 +378,7 @@ class SVNRepository(object):
       self.formatter=None
       self.args = args
       self._props = None
+      self._gopts = {}
       self.svnentrylist=[]  #
       self.docstatus = (
                 "editing",  # Someone starts to edit a file
@@ -398,6 +400,9 @@ class SVNRepository(object):
       
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
+      
+      #
+      self._gopts = self.args.get("gopts")
       
       # print " SVNRepository: filenames=%s" % len(filenames)
       # If file list is empty, use "make projectfiles"
@@ -444,20 +449,22 @@ class SVNRepository(object):
    def makeprojectfiles(self):
       if self.args.get("header"):
          print "Collecting filenames...",
-      res=noerr_getstatusoutput("LANG=C make projectfiles")
+      
+      env=self._gopts.envfile
+      if not env:
+        env=glob.glob("ENV-*")
+        if len(env)==1:
+          env=env[0]
+        else:
+          raise dmexcept.DocManagerTooManyENVFiles("You have NOT selected an env file with option --envfile and there are more than one available")
+      
+      res=noerr_getstatusoutput("LANG=C daps -e %s --color=0 projectfiles" % env )# FIXME
       if res[0] != 0:
          print failed()
          print >> sys.stderr, \
               red("\nReason: %s\n" \
-                  "Solution: I will run a 'make validate'. However, better check the result."
+                  "Solution: Check the result."
                   % ( res[1]) )
-         print >> sys.stderr, " make validate"
-         res=noerr_getstatusoutput("LANG=C make validate")
-         # print >> sys.stderr, res
-         if res[0] != 0:
-            raise dmexcept.DocManagerEnvironment(dmexcept.VALIDATION_ERROR % res[1])
-         else:
-            raise dmexcept.DocManagerEnvironment(dmexcept.NO_FILELIST_ERROR % res[1])
 
       if self.args.get("header"):
           print done()
