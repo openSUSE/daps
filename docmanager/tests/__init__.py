@@ -13,7 +13,7 @@ import subprocess
 
 
 def setUpPackage():
-  # Create SVN repository
+  # Check if SVN repositories are already there:
   if not path.exists(SVNREPO) or not path.exists(WORKINGREPO):
     log.error("SVN repository '%s' does not exists!" % SVNREPO)
     d=path.relpath(path.abspath(path.dirname(__file__)))
@@ -22,3 +22,7 @@ def setUpPackage():
       "--workingrepo %s "\
       "--testroot %s" % (SVNREPO, WORKINGREPO, TESTROOT)))
     log.error("Result of system: %s" % res)
+  
+  # Check if daps is installed:
+  if not whereis("daps"):
+    raise IOError("I couldn't find daps. Have you installed the daps package?")
