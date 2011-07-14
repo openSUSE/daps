@@ -20,13 +20,9 @@ class SVNSetProperties(unittest.TestCase):
     """Setups the class, used for all testcases"""
     cls.filename = "test_01.xml"
     cls.fullfilename = path.join(WORKINGREPO, "xml", cls.filename)
-    cls.svn = SVNFile(cls.fullfilename)
-    cls.output=subprocess.check_output("svn pl -v --xml %s" % cls.fullfilename, shell=True)
-    cls.doc = etree.parse(StringIO(cls.output))
     
   def setUp(self):
     self.c = self.__class__
-    self.svn = self.c.svn
     self.filename = self.c.filename
 
   def test_setMaintainer(self):
@@ -47,7 +43,39 @@ class SVNSetProperties(unittest.TestCase):
     self.assertEqual( out.strip(), user, "Unexpected maintainer")
     os.chdir(pwd)
     
+  def test_setEditing(self):
+    """Change doc:status to 'editing'"""
     
+    pwd = os.getcwd()
+    os.chdir( WORKINGREPO )# 
+    sys.argv=["testy.py", "--force",
+                "ds", "-o", "/tmp/.dm-test.log",
+                "--set-editing",
+                "xml/%s" % self.filename ]
+    res = main()
+    cmd="svn pg doc:status xml/%s" % self.filename
+    proc=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = proc.communicate()
+    
+    self.assertEqual( out.strip(), "editing", "Unexpected doc:status")
+    os.chdir(pwd)
+    
+  def test_setEdited(self):
+    """Change doc:status to 'edited'"""
+    
+    pwd = os.getcwd()
+    os.chdir( WORKINGREPO )# 
+    sys.argv=["testy.py", "--force",
+                "ds", "-o", "/tmp/.dm-test.log",
+                "--set-edited",
+                "xml/%s" % self.filename ]
+    res = main()
+    cmd="svn pg doc:status xml/%s" % self.filename
+    proc=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = proc.communicate()
+    
+    self.assertEqual( out.strip(), "edited", "Unexpected doc:status")
+    os.chdir(pwd)
 
 if __name__ == "__main__":
   unittest.main()
