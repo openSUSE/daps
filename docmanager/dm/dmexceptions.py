@@ -92,6 +92,9 @@ ERROR_BRANCH_DIRECTORY_NOT_EXISTS="ERROR: Directory »%s« not exists.\n" \
                "  1. cd ../../..\n"\
                "  2. svn up -N branches\n"\
                "  3. svn co branches/<PROJECTNAME>\n"
+TOO_MANY_ENV_FILES="No ENV file found/used.\n"\
+              "Solution: Use either --envfile or set the environment variable DAPS_ENV_NAME."           
+               
                
 if __name__ == "__main__":
    pass
