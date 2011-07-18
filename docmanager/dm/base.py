@@ -440,7 +440,7 @@ class SVNRepository(object):
                 # We don't want files, that are not under version control
                 # print >> sys.stderr, f
                 #continue
-                raise dmexcept.SVNException(dmexcept.NOT_IN_SVN_ERROR % f)
+                raise dmexcept.SVNException(red(dmexcept.NOT_IN_SVN_ERROR % f))
             #elif not(self.checkstatus(f)) and self.allowmodified==False:
             #   raise  RuntimeError("ERROR: File »%s« is modified. " \
             #            "Please commit your changes first." % f )
