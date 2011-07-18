@@ -29,7 +29,7 @@ QUIET=
 function usage() {
    cat << EOF
 $0 --svnrepo | --workingrepo --testroot
-Initalize the test environment
+Initalize the SVN repository
 EOF
 }
 
