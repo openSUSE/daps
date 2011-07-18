@@ -68,7 +68,7 @@ class DapsTestcase(unittest.TestCase):
     out=out.strip().split()
     
     # Checks if all files exists
-    out=[f for f in out.split() if os.path.exists(f) ]
+    out=[f for f in out if os.path.exists(f) ]
     self.assertTrue(out, msg="daps projectfiles failed")
     
     
