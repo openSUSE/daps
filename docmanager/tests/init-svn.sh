@@ -10,7 +10,7 @@ __author__="Thomas Schraitle <toms AT opensuse DOT org>"
 
 # Our predefinied properties:
 declare -A PROPS=( [doc:maintainer]="toms" [doc:deadline]="2011-08-23" [doc:release]="DMTest"
-[doc:status]="editing" [doc:trans]="no" )
+[doc:status]="editing" [doc:trans]="no" [incgraphics]="")
 
 # Root directory where SVN repository and working directory are located:
 TEMPDIR=/var/tmp
