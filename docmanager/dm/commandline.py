@@ -18,7 +18,7 @@
 # FIXME: Better motto
 """%prog [GLOBAL_OPTS] command [CMD_OPT] [filename(s)]
 
-   Docmanager's light and writer's fate (BRANCH Edition)
+   Docmanager's light and writer's fate
 """ 
 
 import sys
