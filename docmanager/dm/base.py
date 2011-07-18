@@ -97,17 +97,20 @@ def getsttycolumnwidth():
    m = re.search(r"columns (\d+);", out)
    return m.group(1)
 
+def normal(text):
+  return text
+
 def green(text):
-    return "\033[32m%s\033[m\017" % text
+  return "\033[32m%s\033[m\017" % text
 
 def red(text):
-    return "\033[31m%s\033[m\017" % text
+  return "\033[31m%s\033[m\017" % text
 
 def done():
-    return green("done.")
+  return green("done.")
 
 def failed():
-    return red("failed!")
+  return red("failed!")
 
 
 def extractURL(infolist):
@@ -404,20 +407,23 @@ class SVNRepository(object):
                 "locdrop",  # File is sent to translators
                )
 
+      #
+      self._gopts = self.args.get("gopts")
+      # Either value from self._gopts.basedir or "" is save in basedir
+      basedir=self._gopts.basedir or ""
+      
       # FIXME: Check if we are in the correct directory
       # Old:
       #if not self.svnentrylist:
       #    self.initsvnentrylist()
-      if not os.path.exists("xml/"):
+      if not os.path.exists(os.path.join(basedir, "xml/")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_XML_NOT_FOUND)
-      if not os.path.exists("xml/.svn"):
+      if not os.path.exists(os.path.join(basedir, "xml/.svn")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
       
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
       
-      #
-      self._gopts = self.args.get("gopts")
       
       # print " SVNRepository: filenames=%s" % len(filenames)
       # If file list is empty, use "make projectfiles"
@@ -440,7 +446,7 @@ class SVNRepository(object):
                 # We don't want files, that are not under version control
                 # print >> sys.stderr, f
                 #continue
-                raise dmexcept.SVNException(red(dmexcept.NOT_IN_SVN_ERROR % f))
+                raise dmexcept.SVNException(failed(dmexcept.NOT_IN_SVN_ERROR % f))
             #elif not(self.checkstatus(f)) and self.allowmodified==False:
             #   raise  RuntimeError("ERROR: File »%s« is modified. " \
             #            "Please commit your changes first." % f )
@@ -463,23 +469,32 @@ class SVNRepository(object):
 
    def makeprojectfiles(self):
       """Call daps and create a list of projectfiles"""
-      # FIXME: What about --basedir?
+      
+      # First we want to check for commandline option
       env=self._gopts.envfile
+      
       if not env:
-        env=glob.glob("ENV-*")
-        if len(env)==1:
-          env=env[0]
+        # Use ENV name from envirionment variable, otherwise
+        # use glob ENV-*
+        if os.environ.get("DAPS_ENV_NAME"):
+            env=os.environ.get("DAPS_ENV_NAME")
         else:
-          raise dmexcept.DocManagerTooManyENVFiles("You have NOT selected an env file with option --envfile and there are more than one available")
+          env=glob.glob("ENV-*")
+          if len(env)==1:
+            env=env[0]
+          else:
+            raise dmexcept.DocManagerTooManyENVFiles(TOO_MANY_ENV_FILES)
+        
 
       if self.args.get("header"):
          print "Collecting filenames...",
 
+      # FIXME: What about --basedir?
       res=noerr_getstatusoutput("LANG=C daps -e %s --color=0 projectfiles" % env )# FIXME
       if res[0] != 0:
          print failed()
          print >> sys.stderr, \
-              red("\nReason: %s\n" \
+              failed("\nReason: %s\n" \
                   "Solution: Check the result."
                   % ( res[1]) )
 
@@ -695,7 +710,7 @@ Your friendly "DocManager Reminder". :-) Did you:
          try:
            self.xmlformat(f)
          except dmexcept.DocManagerFileError, e:
-           print red(e)
+           print failed(e)
            sys.exit(30)
        
        #
@@ -720,12 +735,12 @@ Your friendly "DocManager Reminder". :-) Did you:
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print red(e)
+            print failed(e)
             sys.exit(30)
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print red(e)
+            print failed(e)
             sys.exit(30)
 
        # Neither in branch nor in trunk
@@ -778,20 +793,9 @@ Your friendly "DocManager Reminder". :-) Did you:
         func = nothing
 
       if self.isintrunk():
-        branchroot = os.path.abspath(os.path.join(os.getcwd(),
-                                     "../../../branches/"))
-        assert os.path.exists(branchroot), \
-               "ERROR: Directory »%s« not exists.\n" \
-               "Maybe you did not check out the branches directory?\n"\
-               "Solution:\n"\
-               "  1. cd ../../..\n"\
-               "  2. svn up -N branches\n"\
-               "  3. svn co branches/<PROJECTNAME>\n" % branchroot
-
-        #print self.args, self._props
-        #sys.exit(10)
-
-        # print "*** len", type(fileobjects), fileobjects
+        #branchroot = os.path.abspath(os.path.join(os.getcwd(),
+        #                             "../../../branches/"))
+        #assert os.path.exists(branchroot), ERROR_BRANCH_DIRECTORY_NOT_EXISTS % branchroot
 
         try:
             for f in fileobjects:
@@ -810,7 +814,7 @@ Your friendly "DocManager Reminder". :-) Did you:
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print red(e)
+            print failed(e)
             sys.exit(30)
       
       # Not in trunk, but in branches
