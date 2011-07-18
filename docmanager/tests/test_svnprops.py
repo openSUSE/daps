@@ -40,9 +40,11 @@ class SVNProperties(unittest.TestCase):
     propdict = dict([ (k, i) for k, i in props.items() if k.startswith("doc:") ])
     # Get the children from XPath /properties/target
     propertylist = root.getchildren()[0].getchildren()
+        
     # Although both are different types (dict vs. list), nevertheless they should
     # contain the same amount of items
-    self.assertEqual( len(propertylist), len(propdict) )
+    self.assertEqual( len(propertylist), len(propdict), msg="%s != %s" % ( [i.attrib['name'] for i in propertylist], 
+    propdict.keys()) )
     
 
 
