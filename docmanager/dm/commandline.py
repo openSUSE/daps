@@ -195,7 +195,7 @@ sources in BASE_DIR/xml. If not specified, the current directory will be used.""
     subcmds = [
         CmdDocget(),
         CmdDocset(),
-        CmdTag(),
+        # CmdTag(),
         # CmdBranch(),
         CmdPropInit(),
     #    CmdLocdrop(), 
