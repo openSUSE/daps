@@ -60,13 +60,6 @@ class SVNFiles(unittest.TestCase):
     
     self.assertEqual(info, output)
   
-  def foo(self):
-    for x in xml:
-      output=subprocess.check_output("svn pl -v --xml %s" % x, shell=True)
-      d=path.dirname(x)
-      f="%s.log" % path.splitext(x)[0]
-      open(f, "w").writelines(output)
-
 
 if __name__ == "__main__":
   unittest.main()
