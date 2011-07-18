@@ -130,9 +130,9 @@ fi
 ### Set some preliminary properties
 pushd ${WORKINGREPO}
 
-# Iterate through all XML files and set it to our standard doc properties:
+# Iterate through all XML and ENV- files and set it to our standard doc properties:
 q=${QUIET:+--quiet}
-for i in xml/*.xml; do
+for i in xml/*.xml ENV-*; do
  for p in "${!PROPS[@]}"; do
    svn ps $q $p ${PROPS[$p]} $i
  done
