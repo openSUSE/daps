@@ -57,6 +57,22 @@ class DapsTestcase(unittest.TestCase):
     
     self.assertEqual(proc.returncode, 0, "Got return code != 0")
   
+  def test_projectfilesWithDAPS_ENV_NAME(self):
+    """Checks, if daps is also satisfied with DAPS_ENV_NAME environment variable"""
+    os.environ['DAPS_ENV_NAME']="ENV-daps"
+    cmd="daps --basedir %s projectfiles" % (WORKINGREPO)
+    proc=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    out, err = proc.communicate()
+    self.assertEqual(proc.returncode, 0, "Got return code != 0")
+    
+    out=out.strip().split()
+    
+    # Checks if all files exists
+    out=[f for f in out.split() if os.path.exists(f) ]
+    self.assertTrue(out, msg="daps projectfiles failed")
+    
+    
+  
 if __name__ == "__main__":
   unittest.main()
 
