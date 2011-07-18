@@ -62,9 +62,9 @@ class SVNException(Exception):
 NOT_IN_SVN_ERROR="ERROR: File '%s' is not available in SVN"
 FILE_NOT_FOUND_ERROR="ERROR: File not found: '%s'"
 EMPTY_FILELIST="Empty filelist. Nothing to do."
-DIR_SVN_NOT_FOUND="ERROR: Could not find xml/.svn/"\
+DIR_SVN_NOT_FOUND="ERROR: Could not find xml/.svn/ "\
                   "Are you sure you are in the correct directory?"
-DIR_XML_NOT_FOUND="ERROR: I could not find the 'xml' directory in the current path."\
+DIR_XML_NOT_FOUND="ERROR: I could not find the 'xml' directory in the current path. "\
                   "Are you sure you are in the correct directory?"
 VALIDATION_ERROR="ERROR: Got the following validation error:\n %s\n"
 NO_FILELIST_ERROR="\nThis should *not* happen!  Could not get filelist from make projectfiles although I validated the files.\nReason:"
