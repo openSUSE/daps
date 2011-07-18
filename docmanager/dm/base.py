@@ -489,12 +489,16 @@ class SVNRepository(object):
       if self.args.get("header"):
          print "Collecting filenames...",
 
-      # FIXME: What about --basedir?
-      res=noerr_getstatusoutput("LANG=C daps -e %s --color=0 projectfiles" % env )# FIXME
+      # Use --basedir, when available
+      if self._gopts.basedir:
+        basedir = "--basedir %s" % self._gopts.basedir
+      cmd="LANG=C daps -e %s %s --color=0 projectfiles" % (env , basedir)
+      
+      res=noerr_getstatusoutput(cmd)
       if res[0] != 0:
          print failed()
          print >> sys.stderr, \
-              failed("\nReason: %s\n" \
+              red("\nReason: %s\n" \
                   "Solution: Check the result."
                   % ( res[1]) )
 
@@ -710,7 +714,7 @@ Your friendly "DocManager Reminder". :-) Did you:
          try:
            self.xmlformat(f)
          except dmexcept.DocManagerFileError, e:
-           print failed(e)
+           print red(e)
            sys.exit(30)
        
        #
@@ -735,12 +739,12 @@ Your friendly "DocManager Reminder". :-) Did you:
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print failed(e)
+            print red(e)
             sys.exit(30)
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print failed(e)
+            print red(e)
             sys.exit(30)
 
        # Neither in branch nor in trunk
@@ -814,7 +818,7 @@ Your friendly "DocManager Reminder". :-) Did you:
     
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
-            print failed(e)
+            print red(e)
             sys.exit(30)
       
       # Not in trunk, but in branches
