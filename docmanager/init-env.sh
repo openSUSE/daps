@@ -89,7 +89,6 @@ done
 
 printf "ROOTDIR=$ROOTDIR\nTEMPDIR=$ROOTDIR$TEMPDIR\nSVNREPO=$ROOTDIR$TEMPDIR$SVNREPO\nWORKINGREPO=$ROOTDIR$TEMPDIR$WORKINGREPO\n\n"
 
-# exit 100
 
 # Save our environment:
 cat > .env-config << EOF
