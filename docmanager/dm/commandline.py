@@ -39,7 +39,7 @@ from propinit import CmdPropInit
 import dm.dmexceptions as dmexcept
 
 __all__    = ["main", "climain", ]
-__version__ = "1.0"
+__version__ = "0.9beta1"
 
 # ------------------------------------
 class CmdHelp(optcomplete.CmdComplete):
