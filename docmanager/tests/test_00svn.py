@@ -32,14 +32,25 @@ class TestSVNRepository(unittest.TestCase):
   def test_00svnrepo_containsxmldir(self):
     """Checks, if SVN working directory contains a subdirectory 'xml'"""
     self.assertTrue(path.exists(path.join(WORKINGREPO, 'xml')))
-    
+  
+  def test_00svnrepo_imageisdir(self):
+    """Checks, if SVN working directory contains a subdirectory 'images', 'images/src'"""
+    self.assertTrue(path.isdir(path.join(WORKINGREPO, 'images')))
+    self.assertTrue(path.isdir(path.join(WORKINGREPO, 'images/src')))
+  
   def test_00svnrepo_xmlisdir(self):
-    """Checks, if SVN working directory contains a subdirectory 'xml' and is a directory"""
+    """Checks, if SVN working directory contains a subdirectory 'xml'"""
     self.assertTrue(path.isdir(path.join(WORKINGREPO, 'xml')))
   
+  def test_00svnrepo_xmldirisnotempty(self):
+    """Checks, if xml subdir is NOT empty"""
+    res = [ f for f in os.listdir(path.join(WORKINGREPO, 'xml')) if f != '.svn']
+    self.assertTrue(res)
+
   def test_dotsvn(self):
     """Checks, if the .svn directory is available"""
     self.assertTrue(path.exists(path.join(WORKINGREPO, '.svn')))
+
 
 if __name__ == "__main__":
   unittest.main()
