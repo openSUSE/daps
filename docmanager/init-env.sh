@@ -5,8 +5,10 @@ DIR=$PWD
 CLEAR=
 STEP=0
 
+# Base directory for building in a RPM environment:
+ROOTDIR=
 # Root directory where SVN repository and working directory are located:
-TEMPDIR=/var/tmp
+TEMPDIR=/var/tmp/
 # The name of our SVN repository:
 SVNREPO=docmanagersvn
 # The name of our SVN working directory:
@@ -14,47 +16,67 @@ WORKINGREPO=docmanager
 # Contains all the structures/files which are exported to $WORKINGREPO
 TESTROOT=${PWD}/dm/tests/ROOT
 
-usage() {
-   printf "$0 --temppath | --svnrepo | --workingrepo | --absworkingrepo\n\n"
-   printf "Just print some paths, nothing can be changed.\n"   
+# ---------
+# Usage of help
+#
+function usage() {
+   cat << EOF
+$0 --tempdir | --svnrepo | --workingrepo | --rootdir | --clear
+Initalize the testing environment
+
+--tempdir      Temporary directory, default "$TEMPDIR"
+--svnrepo      The name of our SVN repository, default "$SVNREPO"
+--workingrepo  The name of our SVN working directory, default "$WORKINGREPO"
+--rootdir      Prefix of tempdir, default is empty
+EOF
+}
+
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    echo "error" "ERROR: ${1}"
+    exit 1;
+}
+
+# ---------
+# Print message, but observe QUIET
+#
+function message() {
+  if [[ yes != $QUIET ]]; then
+    printf "$1"
+  fi
 }
 
 
 # Taken from the example getopt-parse.bash
 #export LC_ALL=C
-TEMP=$(getopt -o h -l "help,temppath,svnrepo,workingrepo,absworkingrepo,abssvnrepo,clear" -n "$0" -- "$@")
+TEMP=$(getopt -o h -l "help,rootdir:,tempdir:,svnrepo:,workingrepo:,clear" -n "$0" -- "$@")
 eval set -- "$TEMP"
 
-while true
-do
+while true; do
    # printf "Option: $1 \n"
    case $1 in
     -h|--help)
       usage 
       exit 0
       ;;
-    --clear)
-      CLEAR=--clear
+    --rootdir)
+      ROOTDIR=$2
+      shift 2
       ;;
-    --temppath)
-      printf "${TEMPDIR}\n"
-      exit 0
+    --tempdir)
+      TEMPDIR=$2
+      shift 2
       ;;
     --svnrepo)
-      printf "${SVNREPO}\n"
-      exit 0
+      SVNREPO=$2
+      shift 2
       ;;
     --workingrepo)
-      printf "${WORKINGREPO}\n"
-      exit 0
-      ;;
-    --absworkingrepo)
-      printf "${TEMPDIR}/${WORKINGREPO}\n"
-      exit 0
-      ;;
-    --abssvnrepo)
-      printf "${TEMPDIR}/${SVNREPO}\n"
-      exit 0
+      WORKINGREPO=$2
+      shift 2
       ;;
     --) shift ; break ;;
     *)
@@ -62,44 +84,48 @@ do
       exit 10
       ;;
    esac
-   shift
 done
 
-printf "TEMPDIR=$TEMPDIR\nSVNREPO=$SVNREPO\nWORKINGREPO=$WORKINGREPO\n\n"
+
+printf "ROOTDIR=$ROOTDIR\nTEMPDIR=$ROOTDIR$TEMPDIR\nSVNREPO=$ROOTDIR$TEMPDIR$SVNREPO\nWORKINGREPO=$ROOTDIR$TEMPDIR$WORKINGREPO\n\n"
+
+# exit 100
 
 # Save our environment:
 cat > .env-config << EOF
-TEMPDIR="$TEMPDIR"
-SVNREPO="$SVNREPO"
-WORKINGREPO="$WORKINGREPO"
+ROOTDIR="$ROOTDIR"
+TEMPDIR="$ROOTDIR$TEMPDIR"
+SVNREPO="$ROOTDIR$SVNREPO"
+WORKINGREPO="$ROOTDIR$WORKINGREPO"
 EOF
 
 #
 # Start
 #
 
-if [ ! -d ${TEMPDIR}/${SVNREPO} -a ! -d ${TEMPDIR}/${WORKINGREPO} ]; then
+if [ ! -d ${ROOTDIR}${TEMPDIR}/${SVNREPO} -a ! -d ${ROOTDIR}${TEMPDIR}/${WORKINGREPO} ]; then
 # Change directory:
-pushd ${TEMPDIR}
+mkdir -p ${ROOTDIR}${TEMPDIR}
+pushd ${ROOTDIR}${TEMPDIR}
 
 # Create a test SVN repository
-svnadmin create ${TEMPDIR}/${SVNREPO}
+svnadmin create ${ROOTDIR}${TEMPDIR}/${SVNREPO}
 
 # Export our test structure into our working directory:
-svn export ${TESTROOT} ${TEMPDIR}/${WORKINGREPO}.tmp
+svn export ${TESTROOT} ${ROOTDIR}${TEMPDIR}/${WORKINGREPO}.tmp
 
 # Import our test structure into 
-svn import ${TEMPDIR}/${WORKINGREPO} file://${TEMPDIR}/${SVNREPO} -m"Initial import"
+svn import ${ROOTDIR}${TEMPDIR}/${WORKINGREPO} file://${TEMPDIR}/${SVNREPO} -m"Initial import"
 
 # Remove obsolete temporary structure and checkout freshly:
-rm -rf ${TEMPDIR}/${WORKINGREPO}.tmp
+rm -rf ${ROOTDIR}${TEMPDIR}/${WORKINGREPO}.tmp
 svn co file://${TEMPDIR}/${SVNREPO} ${WORKINGREPO}
 
 popd
 
 else
  printf "SVN and Working directory already there.
-  => Using SVNREPO=\"${TEMPDIR}/$SVNREPO\" WORKINGREPO=\"${TEMPDIR}/$WORKINGREPO\"\n\n"
+  => Using SVNREPO=\"${ROOTDIR}${TEMPDIR}/$SVNREPO\" WORKINGREPO=\"${ROOTDIR}${TEMPDIR}/$WORKINGREPO\"\n\n"
 fi
 
 
