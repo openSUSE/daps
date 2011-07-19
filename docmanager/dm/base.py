@@ -471,8 +471,12 @@ class SVNRepository(object):
 
    def checkenvfile(self, env):
      """Checks for new style env file"""
-     # FIXME
-     pass
+     envfile = os.path.join(self.basedir, env)
+     data=open(envfile, 'r').read()
+     # Apply simple heuristic:
+     # If any "export " string is found, we assume it's old style
+     if "export " in data:
+       raise dmexcept.DocManagerEnvironment(dmexcept.OLDSTYLE_ENV_FILE)
 
    def makeprojectfiles(self):
       """Call daps and create a list of projectfiles"""
@@ -490,7 +494,7 @@ class SVNRepository(object):
           if len(env)==1:
             env=env[0]
           else:
-            raise dmexcept.DocManagerTooManyENVFiles(TOO_MANY_ENV_FILES)
+            raise dmexcept.DocManagerEnvironment(dmexcept.TOO_MANY_ENV_FILES)
           
         self.checkenvfile(env)
         
