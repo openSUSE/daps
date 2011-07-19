@@ -6,6 +6,7 @@ from setuptools import setup, find_packages
 
 from setuptools_dmutils import CleanCommand, ManpageCommand
 
+version="0.9beta3"
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 
@@ -59,7 +60,7 @@ TEST_REQUIRES=[
 # Run the beast:
 setup(
   name="docmanager",
-  version="0.9beta2",
+  version=version,
   author="Thomas Schraitle",
   author_email="toms@opensuse.org",
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/trunk/tools/daps/docmanager",
