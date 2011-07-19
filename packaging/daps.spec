@@ -17,7 +17,7 @@
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
 
 Name:           daps
-Version:        0.9beta1
+Version:        0.9beta2
 %define root_catalog   for-catalog-%{dtdname}-%{dtdversion}.xml
 %define daps_catalog   for-catalog-%{name}-%{version}.xml
 
