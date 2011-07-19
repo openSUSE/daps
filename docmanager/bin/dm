@@ -26,7 +26,11 @@ function sort_after_head () {
 
 
 function dm_help () {
-  echo "Program: $0 $DIR"
+  cat << EOF
+$PROG [-e|--envfile|-b|--basedir] alias
+
+EOF
+  # Output all xxxx) and remove any whitespaces and ')'
   egrep "*\)$" $DIR/$PROG | sed 's/ //g;s/)//g'
 }
 
