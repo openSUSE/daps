@@ -482,7 +482,7 @@ class SVNRepository(object):
      data=open(envfile, 'r').read()
      # Apply simple heuristic:
      # If any "export " string is found, we assume it's old style
-     if "export " in data:
+     if ".env-profile" in data:
        raise dmexcept.DocManagerEnvironment(dmexcept.OLDSTYLE_ENV_FILE)
 
    def makeprojectfiles(self):
@@ -503,7 +503,7 @@ class SVNRepository(object):
           else:
             raise dmexcept.DocManagerEnvironment(dmexcept.TOO_MANY_ENV_FILES)
           
-        self.checkenvfile(env)
+      self.checkenvfile(env)
         
 
       if self.args.get("header"):
