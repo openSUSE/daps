@@ -59,7 +59,7 @@ TEST_REQUIRES=[
 # Run the beast:
 setup(
   name="docmanager",
-  version="0.9beta1",
+  version="0.9beta2",
   author="Thomas Schraitle",
   author_email="toms@opensuse.org",
   url="https://svn.berlios.de/svnroot/repos/opensuse-doc/trunk/tools/daps/docmanager",
