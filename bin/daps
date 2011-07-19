@@ -593,7 +593,7 @@ esac
 # specified on the command line, use the one that has been sourced 
 #
 
-if [[ -z $ENVFILE ]] && [[ -f ${BASE_DIR}/$DAPS_ENV_NAME ]]; then
+if [[ -z $ENVFILE ]] || [[ -f ${BASE_DIR}/$DAPS_ENV_NAME ]]; then
     ENVFILE="$DAPS_ENV_NAME"
     if [[ 1 = $VERBOSE ]]; then
         ccecho "info" "Using the previously sourced ENVFILE $ENVFILE\nand BASE_DIR $BASE_DIR"
