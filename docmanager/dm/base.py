@@ -196,15 +196,15 @@ class SVNFile(object):
             raise StopIteration
 
    # Class SVNFile:
-   def __init__(self, filename):
+   def __init__(self, filename, basedir=None):
       self._docrelease=None
       self.origfilename = filename
+      self.basedir = basedir or ""
       self.dir, self.filename=os.path.split(filename)
       self._abspath=self.abspath()
       self._trunkpath=self.trunkpath()
       self._branchpath=self.branchpath()
-
-
+     
    def getbranchpath(self):
       return self._branchpath
 
@@ -220,6 +220,11 @@ class SVNFile(object):
    @property
    def filenamewithdir(self):
       return os.path.join(self.dir, self.filename)
+   
+   @property
+   def relfilename(self):
+     """Returns the relative filename in regards to basedir"""
+     return os.path.split(self.filename)[-1]
 
    def __repr__(self):
       return "<SVNFile from '%s'>" % self._abspath
@@ -396,7 +401,7 @@ class SVNRepository(object):
       self.formatter=None
       self.args = args
       self._props = None
-      self._gopts = {}
+      self.maxfilename = 0 # Length of the longest filename
       self.svnentrylist=[]  #
       self.docstatus = (
                 "editing",  # Someone starts to edit a file
@@ -460,10 +465,12 @@ class SVNRepository(object):
          print >> sys.stderr, dmexcept.EMPTY_FILELIST
          sys.exit(40)
 
-      
+      # Calculate the longest length of our filename
+      self.maxfilename = max([ len(os.path.split(f)[-1]) for f in self._filenames])
+
       # Create a new generator, only with existing filenames
       # Any exceptions are propagated to the caller
-      self._fileobjects = ( SVNFile(f) for f in self._filenames )
+      self._fileobjects = ( SVNFile(f, self.basedir) for f in self._filenames )
 
 
    def __repr__(self):
@@ -502,7 +509,7 @@ class SVNRepository(object):
       if self.args.get("header"):
          print "Collecting filenames...",
 
-      # Use --basedir, when available
+      # Use --basedir when available, otherwise assign empty string
       if self.basedir:
         basedir = "--basedir %s" % self.basedir
       else:
@@ -610,12 +617,14 @@ class SVNRepository(object):
       #self.args['***MAINTAINER***'] = 0# Addional
       self.args["***TRANS***"] = 0
       self.args["***filecount***"] = 0
+      self.args["maxfilename"] = self.maxfilename
       for k in self.docstatus:
         self.args['***%s***' % k] = 0
 
       for f in self._fileobjects:
         self.args["fileobj"] = f
         self.args["***filecount***"] += 1
+        # f = self.splitfrombasedir(f)
         svnq = SVNQuery(f, self.args.get("includequery"), self.args.get("excludequery"))
         
         if svnq.process():
@@ -789,7 +798,6 @@ Your friendly "DocManager Reminder". :-) Did you:
       return False
       
     return True
-
 
 
    def _setProps(self, fileobjects, ask=False, func=None, **properties):
