@@ -145,8 +145,8 @@ class CmdDocget(optcomplete.CmdComplete):
         keys.sort()
         print "%s %s %s" % \
             ( "Keyword".ljust(15),
-            "Type".ljust(12),
-            "Description"
+              "Type".ljust(12),
+              "Description"
             )
         print "-"*50
         for k in keys:
@@ -164,8 +164,9 @@ class CmdDocget(optcomplete.CmdComplete):
       try:
         svn = SVNRepository(args,
                           querystring=self.opts.query,
-                          opts=self.opts,
-                          gopts=self.gopts,
+                          opts=self.opts
+                          envfile=self.gopts.envfile,
+                          basedir=self.gopts.basedir,
                           dryrun=self.gopts.dryrun,
                           aligning=self.opts.aligning,
                           statistics=self.opts.statistic,
