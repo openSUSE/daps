@@ -30,8 +30,10 @@ function dm_help () {
 $PROG [-e|--envfile|-b|--basedir] alias
 
 EOF
-  # Output all xxxx) and remove any whitespaces and ')'
-  egrep "*\)$" $DIR/$PROG | sed 's/ //g;s/)//g'
+  # Output all xxxx) + the following line and remove any whitespaces and ')'
+  # If an option should NOT be displayed, use a hash mark at the end of the
+  # parenthesis
+  egrep -A1 "*\)$" $DIR/$PROG | sed 's/#//g;s/)//g;s/--//g'
 }
 
 # ----------------------------------------------------------------------------
@@ -52,17 +54,20 @@ eval set -- "$ARGS"
 while true ; do
   case "$1" in
     -b|--basedir)
+      # Project directory. Must contain the XML sources in BASE_DIR/xml
       test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
       BASE_DIR="$2"
       shift 2
       ;;
 
     -e|--envfile)
+      # Specify which ENV file to use
       ENVFILE="$2"
       shift 2
       ;;
 
     -h|--help)
+      # Outputs this help text
       dm_help
       exit 0
       ;;
@@ -100,43 +105,56 @@ fi
 
 case "$SUBCMD" in
   help)
+    # Output this help text
     dm_help
     exit 1
     ;;
   edited)
+    # Displays all edited files (doc:status=edited)
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
     ;;
   editedp)
+    # %{name} %{priority} %{prelim} %{maintainer}, sorted after priority
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n
     ;;
   editedd)
+    # %{name} %{deadline} %{prelim} %{maintainer}, sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2
     ;;
   editingx)
+    # %{name} %{maintainer} %{status} %{deadline}, sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 
     ;;
   prelim)
+    # %{name} %{maintainer} %{status} %{prelim} %{deadline}, include only doc:prelim=yes
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{prelim} %{deadline} \n" --include "doc:prelim=yes"
     ;;
   proofed)
+    # %{name} %{priority} %{status} %{revprop} %{maintainer}, include only proofed
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{status} %{revprop} %{maintainer}\n" --include="doc:status=proofed"
     ;;
   comments)
+    # Displays only files with doc:status=comments
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q --include="doc:status=comments"
     ;;
   work)
+    # Displays all files with doc:maintainer=${LOCGNAME}
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"
     ;;
   workp)
+    # Displays all files with doc:maintainer=${LOCGNAME} and sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
     ;;
   workx)
+    # Displays all files with doc:maintainer=${LOCGNAME} and sorted after priority
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
     ;;
   stat)
+    # %{name} %{maintainer} %{trans} %{status} %{priority} %{deadline}
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n"
     ;;
   statx)
+    # %{name} %{maintainer} %{trans} %{status} %{deadline} and sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" | sort_after_head -k5
     ;;
 esac
