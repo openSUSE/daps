@@ -47,10 +47,6 @@ class DocManagerEnvironment(DocManagerException):
    """Exception raised, if something is not correct with the environment."""
    pass
 
-class DocManagerTooManyENVFiles(DocManagerException):
-  """Exception raised, if a directory contains more than one ENV files and 
-     nothing is selected"""
-  pass
 
 class SVNException(Exception):
    """Exception for all Subversion errors"""
@@ -94,7 +90,8 @@ ERROR_BRANCH_DIRECTORY_NOT_EXISTS="ERROR: Directory »%s« not exists.\n" \
                "  3. svn co branches/<PROJECTNAME>\n"
 TOO_MANY_ENV_FILES="No ENV file found/used.\n"\
               "Solution: Use either --envfile or set the environment variable DAPS_ENV_NAME."           
-               
+OLDSTYLE_ENV_FILE="The ENV file is 'old style'.\n" \
+              "Solution: Migrate to new style. See /usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x"
                
 if __name__ == "__main__":
    pass
