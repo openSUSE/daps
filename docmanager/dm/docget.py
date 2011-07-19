@@ -164,7 +164,7 @@ class CmdDocget(optcomplete.CmdComplete):
       try:
         svn = SVNRepository(args,
                           querystring=self.opts.query,
-                          opts=self.opts
+                          opts=self.opts,
                           envfile=self.gopts.envfile,
                           basedir=self.gopts.basedir,
                           dryrun=self.gopts.dryrun,
