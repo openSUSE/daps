@@ -1,0 +1,140 @@
+#!/bin/sh
+
+
+ENVFILE=${DAPS_ENV_NAME}
+BASE_DIR=""
+DIR="$(dirname $(readlink -f $0))"
+PROG="$(basename $0)"
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+  echo "error" "ERROR: ${1}"
+  exit 1;
+}
+
+# generic sort function for all aliases - prints the table head
+# and does the sorting with the rest of the output takes a sort parameter as optional
+function sort_after_head () {
+  for ((x=5 ; x-- ; )); do
+    read line;
+    echo $line;
+  done;
+  sort $*;
+}
+
+
+function dm_help () {
+  echo "Program: $0 $DIR"
+  egrep "*\)$" $DIR/$PROG | sed 's/ //g;s/)//g'
+}
+
+# ----------------------------------------------------------------------------
+# Parsing the command line arguments with GNU getopt
+#
+# In order to separate general daps parameters from subcommand parameters,
+# we are setting POSIXLY_CORRECT before parsing the first time.
+# This causes getopt to interprete all remaining parameters as non-option
+# parameters as soon as the first non-option parameter (the subcommand) is
+# found. This value must be _exported_
+
+export POSIXLY_CORRECT=1
+
+
+ARGS=$(getopt -o h,b:e -l help,basedir:,envfile: -n "$ME" -- "$@") #
+eval set -- "$ARGS"
+
+while true ; do
+  case "$1" in
+    -b|--basedir)
+      test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
+      BASE_DIR="$2"
+      shift 2
+      ;;
+
+    -e|--envfile)
+      ENVFILE="$2"
+      shift 2
+      ;;
+
+    -h|--help)
+      dm_help
+      exit 0
+      ;;
+
+    --) shift; break ;;
+
+    *) echo "Unknown subcommand"
+     exit 1;
+     ;;
+  esac  
+  
+done
+
+unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
+
+# Extend variables with options:
+if [[ ! -z $ENVFILE ]]; then
+ ENVFILE="--envfile $ENVFILE"
+fi
+if [[ ! -z $BASE_DIR ]]; then
+ BASE_DIR="--basedir $BASE_DIR"
+fi
+
+
+if [[ -z $1 ]]; then
+    # Call: "$ME" or "$ME help"
+    #
+    dm_help
+    exit 0
+else
+    SUBCMD=$1
+    shift
+    declare -a SCMD_ARGS=( "$@" ) #
+fi
+
+case "$SUBCMD" in
+  help)
+    dm_help
+    exit 1
+    ;;
+  edited)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
+    ;;
+  editedp)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n
+    ;;
+  editedd)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2
+    ;;
+  editingx)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 
+    ;;
+  prelim)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{prelim} %{deadline} \n" --include "doc:prelim=yes"
+    ;;
+  proofed)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{status} %{revprop} %{maintainer}\n" --include="doc:status=proofed"
+    ;;
+  comments)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q --include="doc:status=comments"
+    ;;
+  work)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"
+    ;;
+  workp)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
+    ;;
+  workx)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+    ;;
+  stat)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n"
+    ;;
+  statx)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" | sort_after_head -k5
+    ;;
+esac
+
+# EOF
