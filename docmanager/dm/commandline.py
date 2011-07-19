@@ -164,7 +164,7 @@ def main():
 
     # Use new options from daps
     group = optparse.OptionGroup(parser, "DAPS Options", "Useful options for working with daps:")
-    group.add_option("", "--envfile",
+    group.add_option("-e", "--envfile",
         dest="envfile",
         help="""Specify which ENV file to use.
 Mandatory unless there is only a single ENV file
@@ -172,7 +172,7 @@ in BASE_DIR. In that case the ENV file will automatically be used.
 Only specify the filename, not an absolute path."""
         )
     
-    group.add_option("", "--basedir",
+    group.add_option("-b", "--basedir",
         dest="basedir",
         help="""Project directory. Must contain the XML
 sources in BASE_DIR/xml. If not specified, the current directory will be used."""
