@@ -91,12 +91,12 @@ class Formatter(object):
                          "help":  "Are the content or properties of this file modified?",
                          "func":  None,
                        },
-          "name":      { "width": 30,
+          "name":      { "width": args.get("maxfilename", 28)+2,
                          "align": "l",
                          "map":   "name",
                          "type":  "string",
                          "help":  "The filename",
-                         "func":  None,
+                         "func":  self.cb_filename,
                        },
           "prelim":    { "width": 6,
                          "align": "l",
@@ -162,8 +162,8 @@ class Formatter(object):
                          "help":  "The URL of this file",
                          "func":  None,
                        },
-        }
-        
+        }         
+       
        self.querystring = self.standardquery
        self.d = {}
        # Read from args (object, default value)
@@ -179,7 +179,7 @@ class Formatter(object):
        # We need a SVNFile object
        if self.fileobj is None:
           raise IOError("Formatter: Expected a SVNFile object")
-       
+              
        # print self.fileobj, self.fileobj.getprops()
        # Replace \n and \t
        self.querystring= re.sub(r"\\t", "\t", self.querystring)
@@ -193,6 +193,11 @@ class Formatter(object):
 
     def getspaces(self):
       return self.keywords
+
+    def cb_filename(self, value):
+      # print ">> cb_filename", value
+      return self.fileobj.relfilename
+      
 
     def cb_revprop(self, value):
       props = self.fileobj.getprops()
