@@ -408,17 +408,19 @@ class SVNRepository(object):
                )
 
       #
-      self._gopts = self.args.get("gopts")
-      # Either value from self._gopts.basedir or "" is save in basedir
-      basedir=self._gopts.basedir or ""
+      # self._gopts = self.args.get("gopts")
+      self.basedir = self.args.get("basedir", "")
+      self.envfile = self.args.get("envfile")
+      # Avoids None in self.basedir:
+      self.basedir=self.basedir or ""
       
       # FIXME: Check if we are in the correct directory
       # Old:
       #if not self.svnentrylist:
       #    self.initsvnentrylist()
-      if not os.path.exists(os.path.join(basedir, "xml/")):
+      if not os.path.exists(os.path.join(self.basedir, "xml/")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_XML_NOT_FOUND)
-      if not os.path.exists(os.path.join(basedir, "xml/.svn")):
+      if not os.path.exists(os.path.join(self.basedir, "xml/.svn")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
       
       # Just in case, there is no force attribute set...
@@ -446,7 +448,7 @@ class SVNRepository(object):
                 # We don't want files, that are not under version control
                 # print >> sys.stderr, f
                 #continue
-                raise dmexcept.SVNException(failed(dmexcept.NOT_IN_SVN_ERROR % f))
+                raise dmexcept.SVNException(red(dmexcept.NOT_IN_SVN_ERROR % f))
             #elif not(self.checkstatus(f)) and self.allowmodified==False:
             #   raise  RuntimeError("ERROR: File »%s« is modified. " \
             #            "Please commit your changes first." % f )
@@ -467,11 +469,16 @@ class SVNRepository(object):
    def __repr__(self):
       return "<%s '%s'>" % (self.__class__.__name__, self._fileobjects)
 
+   def checkenvfile(self, env):
+     """Checks for new style env file"""
+     # FIXME
+     pass
+
    def makeprojectfiles(self):
       """Call daps and create a list of projectfiles"""
       
       # First we want to check for commandline option
-      env=self._gopts.envfile
+      env=self.envfile
       
       if not env:
         # Use ENV name from envirionment variable, otherwise
@@ -484,14 +491,18 @@ class SVNRepository(object):
             env=env[0]
           else:
             raise dmexcept.DocManagerTooManyENVFiles(TOO_MANY_ENV_FILES)
+          
+        self.checkenvfile(env)
         
 
       if self.args.get("header"):
          print "Collecting filenames...",
 
       # Use --basedir, when available
-      if self._gopts.basedir:
-        basedir = "--basedir %s" % self._gopts.basedir
+      if self.basedir:
+        basedir = "--basedir %s" % self.basedir
+      else:
+        basedir = ""
       cmd="LANG=C daps -e %s %s --color=0 projectfiles" % (env , basedir)
       
       res=noerr_getstatusoutput(cmd)
