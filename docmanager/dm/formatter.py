@@ -37,7 +37,7 @@ import commands
 
 class Formatter(object):
     """Class to format filenames for output"""
-    standardquery=r"%{name} '%{modified}' %{maintainer} %{release} %{trans} %{status} %{prelim}\n"
+    standardquery=r"%{name} '%{modified}' %{maintainer} %{trans} %{status} %{priority} %{deadline}\n"
     # propvalue=r"(?P<prop>[\w\d:_]+)\s*[=]\s*(?P<value>[!]?\w+)"
 
     # Mapping from alignings to string functions
