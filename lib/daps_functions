@@ -108,11 +108,57 @@ function call_make_nolog () {
 }
 
 function wrong_parameter () {
-    local TARGET PARAM
-    TARGET=$1
+    local TARGET=$1
     echo "Type '$ME $TARGET help' to get a list of valid parameters"
     exit 1;
 }
+
+function format_options () {
+# COMMENTS must be set to 1|0
+if [[ yes = $COMMENTS || 1 = $COMMENTS ]]; then
+    COMMENTS=1
+elif [[ no = $COMMENTS || 0 = $COMMENTS || -z $COMMENTS ]]; then
+    COMMENTS=0
+    unset COMMENT_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for COMMENTS. Must be \"yes\" or \"no\""
+fi
+
+# DRAFT must be set to yes|no
+if [[ yes = $DRAFT || 1 = $DRAFT ]]; then
+    DRAFT="yes"
+elif [[ no = $DRAFT || 0 = $DRAFT || -z $DRAFT ]]; then
+    DRAFT="no"
+    unset DRAFT_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\""
+fi
+
+# REMARKS must be set to 1|0
+if [[ yes = $REMARKS || 1 = $REMARKS ]]; then
+    REMARKS="1"
+elif [[ no = $REMARKS || 0 = $REMARKS || -z $REMARKS ]]; then
+    REMARKS="0"
+    unset REMARK_STR # only needed when comment is set
+else
+    exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
+fi
+
+echo "****************\nREMARKS: $REMARKS\nSTRING: $REMARK_STR"
+
+# USEMETA must be set to 1|0
+if [[ yes = $USEMETA || 1 = $USEMETA ]]; then
+    USEMETA=1
+elif [[ no = $USEMETA || 0 = $USEMETA || -z $USEMETA ]]; then
+    USEMETA=0
+else
+    exit_on_error "Wrong value for USEMETA. Must be \"yes\" or \"no\""
+fi
+
+export COMMENTS DRAFT REMARKS USEMETA 
+
+}
+
 
 function init_wd () {
     # Initialize a working directory to get started with daps
@@ -256,6 +302,9 @@ function build_pdfs () {
 	esac
     done
 
+    # export comments, remarks, draft, usemeta
+    format_options
+    
     call_make "$TARGET" "$@"
     
 }
@@ -318,6 +367,9 @@ function build_html_jsp () {
 	esac
     done
 
+    # export comments, remarks, draft, usemeta
+    format_options
+    
     call_make "$TARGET" "$@"
     
 }

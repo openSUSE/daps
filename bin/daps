@@ -692,48 +692,9 @@ else
     exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
 fi
 
-# COMMENTS must be set to 1|0
-if [[ yes = $COMMENTS || 1 = $COMMENTS ]]; then
-    COMMENTS=1
-elif [[ no = $COMMENTS || 0 = $COMMENTS || -z $COMMENTS ]]; then
-    COMMENTS=0
-    unset COMMENT_STR # only needed when comment is set
-else
-    exit_on_error "Wrong value for COMMENTS. Must be \"yes\" or \"no\""
-fi
-
-# DRAFT must be set to yes|no
-if [[ yes = $DRAFT || 1 = $DRAFT ]]; then
-    DRAFT="yes"
-elif [[ no = $DRAFT || 0 = $DRAFT || -z $DRAFT ]]; then
-    DRAFT="no"
-    unset DRAFT_STR # only needed when comment is set
-else
-    exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\""
-fi
-
 # MAIN
 if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
     exit_on_error "MAIN ${BASE_DIR}/xml/$MAIN does not exist"
-fi
-
-# REMARKS must be set to 1|0
-if [[ yes = $REMARKS || 1 = $REMARKS ]]; then
-    REMARKS="1"
-elif [[ no = $REMARKS || 0 = $REMARKS || -z $REMARKS ]]; then
-    REMARKS="0"
-    unset REMARK_STR # only needed when comment is set
-else
-    exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
-fi
-
-# USEMETA must be set to 1|0
-if [[ yes = $USEMETA || 1 = $USEMETA ]]; then
-    USEMETA=1
-elif [[ no = $USEMETA || 0 = $USEMETA || -z $USEMETA ]]; then
-    USEMETA=0
-else
-    exit_on_error "Wrong value for USEMETA. Must be \"yes\" or \"no\""
 fi
 
 #----------
