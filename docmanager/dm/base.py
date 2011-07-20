@@ -713,7 +713,7 @@ class SVNRepository(object):
      # Output reminder, when doc:status="edited":
      if properties.get('doc:status') == 'edited':
            print """
-Your friendly "DocManager Reminder". :-) Did you:
+Your friendly "DocManager Reminder". :-) Have you:
   1. Checked the file(s) for validation?
   2. Checked all the image files, if any?
   3. Checked all the remarks, if any?
