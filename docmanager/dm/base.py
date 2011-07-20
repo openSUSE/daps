@@ -300,6 +300,7 @@ class SVNFile(object):
       # print( prop[1] )
       XP=et.fromstring( prop[1].strip() )
       props = XP.xpath( "//property")
+            
       x = ""
       for i in props:
         # x[i.attrib.get("name")] = i.text
@@ -307,14 +308,23 @@ class SVNFile(object):
       return x
 
    def __getprops(self):
-      prop=self.getpropertylist()
-      info=self.getinfo()
-      info=" : ".join(info.split(": ")).strip()
       status="svn:status : %s." % self.getstatus()[:3]# The dot after %s is essential!
-      # print("*** info:", info )
-      # print("*** prop:", prop )
-      #print("\n*** STATUS »%s«, INFO: »%s«" % (status, info) )
-      # _properties[1].strip()+"\n"+info+"\n"+status
+      
+      # Checks if a file is versioned or not. An unversioned file contains a '?'
+      # in the status variable. In that case, we create "dummy" entries
+      if "?" in status:
+        info="Path : %s" % os.path.join(self.dir, self.filename)
+        prop="doc:release : N/A\ndoc:priority : N/A\ndoc:status : N/A\n" \
+             "doc:deadline : N/A\ndoc:maintainer : fs\ndoc:trans : N/A\n" \
+             "doc:prelim : N/A\n"
+      else:
+        prop=self.getpropertylist()
+        info=self.getinfo()
+        info=" : ".join(info.split(": ")).strip()
+        #print("*** info:", info )
+        #print("*** prop:", prop )
+        #print("\n*** STATUS »%s«, INFO: »%s«" % (status, info) )
+        # _properties[1].strip()+"\n"+info+"\n"+status
       return self.Props( "\n".join([prop, info, status]) )
 
    def getprops(self):
