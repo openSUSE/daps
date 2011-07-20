@@ -111,6 +111,8 @@ man/%.1.gz: man/%.1
 	gzip $<
 
 man/%.1: man/%.xml
+	DATE=$(date +"%Y-%m-%d")
+	sed -i "s=@VERSION@=${VERSION}=g;s=@DATE@=${DATE}=g" $<
 	xsltproc --stringparam man.output.base.dir "man/" \
 	  --stringparam man.output.in.separate.dir 1 \
 	  --stringparam man.output.subdirs.enabled 0 \
