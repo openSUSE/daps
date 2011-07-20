@@ -226,7 +226,7 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 # Verbose error handling
 #
 function exit_on_error () {
-    echo "error" "ERROR: ${1}"
+    ccecho "error" "ERROR: ${1}"
     exit 1;
 }
 
@@ -580,102 +580,72 @@ case "$SUBCMD" in
       ;;
 esac
 
-# Last, source the ENVfile
-#
-# If we know a valid ENVfile by now, just source it. If not, try
-# some magic to automatically find an ENVfile
-#
-#
-# if
-# * an ENVFILE has been sourced before
-# * that ENVFILE is present in the current directory
-# *_and_ no ENVFILE has been
-# specified on the command line, use the one that has been sourced 
-#
+#-------------------------------------
+# Set up BASE_DIR and ENVFILE
 
-if [[ -z $ENVFILE ]] || [[ -f ${BASE_DIR}/$DAPS_ENV_NAME ]]; then
-    ENVFILE="$DAPS_ENV_NAME"
-    if [[ 1 = $VERBOSE ]]; then
-        ccecho "info" "Using the previously sourced ENVFILE $ENVFILE\nand BASE_DIR $BASE_DIR"
+# There are three possibilities to set an ENV file:
+# 1. Command line:
+#    $ENVFILE is set - takes precedence over 2. and 3.
+# 2. ENV files has been sourced:
+#    $DAPS_ENV_NAME is set - takes precedence over 3.
+# 3. Default ENV has been set in ~/.daps/config
+#    $DAPS_ENV_DEFAULT is set
+#
+# if ENVFILE is already set, we skip the while loop
+# if 2. and 3. fail, we try to set ENVFILE automatically
+#
+while [[ -z $ENVFILE ]] ; do 
+    # first check for $DAPS_ENV_NAME
+    if [[ -n $DAPS_ENV_NAME ]]; then
+        ENVFILE="$DAPS_ENV_NAME"
+        break
     fi
+    # second check for $DAPS_ENV_DEFAULT
+    if [[ -n $DAPS_ENV_DEFAULT ]]; then
+        ENVFILE="$DAPS_ENV_DEFAULT"
+        break
+    fi     
+    # last, try to get the ENVfile automatically
+    get_envfile    
+    if [[ 0 != $? ]]; then
+        # seting ENVfile failed
+        exit_on_error "Please specify an ENVfile at the command line"
+    fi
+    break
+done
+
+# If we arrive here, ENVFILE is set (or we have exited)
+# So we try to get a BASE_DIR is it does not exist
+#
+if [[ -z $BASE_DIR ]]; then
+    get_basedir
+    if [[ 0 != $? ]]; then
+        if [[ -n $ENVFILE ]]; then
+            exit_on_error "Cannot find a valid BASEDIR for ENVFILE \"$ENVFILE\""
+        else
+            exit_on_error "Please specify a BASE_DIR at the command line"
+        fi
+    fi
+elif [[ ! -d ${BASE_DIR}/xml ]]; then
+    exit_on_error "Could not find an xml/ subdirectory in BASE_DIR $BASE_DIR"
 fi
 
-# else
+# If we arrive here, BASE_DIR is set and valid (or we have exited)
+# Now check, whether ${BASE_DIR}/$ENVFILE is valid, too
 #
-if [[ -f ${BASE_DIR}/$ENVFILE ]]; then
-    # ENVFILE and BASE_DIR known and valid
-    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
+if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
+    exit_on_error "\nENVFILE: \"$ENVFILE\" in BASEDIR: $BASE_DIR\ncould not be found. Check the respective commandline options or the config files"
 else
-    if [[ -n $BASE_DIR ]]; then
-        # BASE_DIR not empty
-        if [[ ! -d ${BASE_DIR} ]]; then
-            exit_on_error "basedir $BASE_DIR is not a valid directory"
-        elif [[ ! -d ${BASE_DIR}/xml ]]; then
-            exit_on_error "Could not find an xml/ subdirectory under BASE_DIR $BASE_DIR"
-        else
-            # valid BASE_DIR
-            if [[ -n $ENVFILE ]]; then
-                # ENVFILE not empty but ${BASE_DIR}/$ENVFILE does not exist
-                exit_on_error "ENVFILE $ENVFILE does not exist"
-            else
-                # ENVFILE is empty, too, trying to find a valid ENV file
-                get_envfile
-                if [[ 0 = $? ]]; then
-                    # succeeded setting ENVFILE
-                    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
-                    if [[ 1 = $VERBOSE ]]; then
-                        ccecho "info" "Using ENVFILE $ENVFILE in current directory (${PWD})"
-                    fi
-                else
-                    # failed setting ENVFILE
-                    exit_on_error "Please specify an ENVFILE on the command line" 
-                fi
-            fi
-        fi
-    else
-        # BASE_DIR is empty, try to find a valid BASE_DIR
-        if [[ -f $PWD/$ENVFILE ]]; then
-            get_basedir
-            if [[ 0 = $? ]]; then
-                # succeeded setting BASE_DIR
-                ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
-                if [[ 1 = $VERBOSE ]]; then
-                    ccecho "info" "Using BASE_DIR ${BASE_DIR}"
-                fi
-            else
-                exit_on_error "Please specify a BASE_DIR on the command line"
-            fi
-        elif [[ -z $ENVFILE ]]; then
-            # ENVFILE is empty, too, trying to find a valid ENV file
-            get_envfile
-            if [[ 0 = $? ]]; then
-                # succeeded setting ENVFILE
-                # trying to find a valid BASE_DIR, too
-                get_basedir
-                if [[ 0 = $? ]]; then
-                    # succeeded setting BASE_DIR
-                    ENV_TO_SOURCE="${BASE_DIR}/$ENVFILE"
-                    if [[ 1 = $VERBOSE ]]; then
-                        ccecho "info" "Using BASE_DIR ${BASE_DIR} and ENVFILE ${ENVFILE}"
-                    fi
-                else
-                    exit_on_error "Looks like you intended to use ENVFILE ${ENVFILE} from the current directory. However, no valid\nBASE_DIR could be found. Please specify a BASE_DIR on the command line\nand check whether ${ENVFILE} is the correct ENVFILE."
-                fi
-            else
-                # failed to find a valid ENVFILE
-                exit_on_error "Please specify an ENVFILE on the command line"
-            fi
-        else
-            # ENVFILE is not a valid file
-            exit_on_error "Could not find a valid BASE_DIR and ENVFILE $ENVFILE is not valid. Please specify a BASE_DIR and check the ENVFILE settings."
-        fi
-    fi
-fi
+    # exit on old ENV files
+    egrep "^\s*[^#]*(\.|source)\s+\.env-profile" ${BASE_DIR}/$ENVFILE >/dev/null && exit_on_error "Looks like you are going to use an old susedoc ENVfile."
+    ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
+fi    
 
 #
 # FINALLY! Source the ENV-file, recover the command line values and we
 # are done setting the environment
-source $ENV_TO_SOURCE
+
+source ${BASE_DIR}/$ENVFILE
 recover_cmdl_values
 
 
