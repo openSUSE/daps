@@ -32,25 +32,25 @@ LSTYLEPUBCSS  := /epub/susebooks.css
 # I don't want to write that nwalsh filepath too often!
 # all the possible locations of layout stylesheets:
 STYLENWD      := /usr/share/xml/docbook/stylesheet/nwalsh/current
-STYLELFLD     := $(shell test -d ../../common/xslt && (cd ../../common/xslt; pwd))
-STYLENOVDOCD  := $(DTDROOT)/xslt
+#STYLELFLD     := $(shell test -d ../../common/xslt && (cd ../../common/xslt; pwd))
+STYLEDEVEL  := $(DTDROOT)/xslt
 STYLEDAPSD := /usr/share/daps/xslt
 #
 # pretend to be intelligent: stylesheets will be used if available.
 # defaults are just selected by the sequence of directory variables
 ifndef LAYOUTROOT
 ifeq ($(LAYOUT), LfL)
-LAYOUTROOT=$(wildcard $(STYLELFLD) $(STYLEDAPSD) $(STYLENOVDOCD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/lessons4lizards.css
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), openSUSE)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), provo)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 HTMLSTRINGS += --stringparam generate.toc \
 	"book toc,title,figure,table,example  article toc,title  appendix \
@@ -59,16 +59,16 @@ HTMLSTRINGS += --stringparam generate.toc \
 LSTYLEFO  = /fo/docbook.xsl
 else
 ifeq ($(LAYOUT), flyer)
-LAYOUTROOT=$(wildcard $(STYLENOVDOCD) $(STYLEDAPSD) $(STYLELFLD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /flyer/docbook.xsl
 else
 ifeq ($(LAYOUT), pocket)
-LAYOUTROOT=$(wildcard $(STYLELFLD) $(STYLENOVDOCD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /pocket/docbook.xsl
 else
-LAYOUTROOT=$(wildcard $(STYLEDAPSD) $(STYLELFLD) $(STYLENOVDOCD) $(STYLENWD))
+LAYOUTROOT=$(wildcard $(STYLEDEVEL) $(STYLEDAPSD) $(STYLENWD))
 LSTYLECSS = /html/susebooks.css
 LSTYLEFO  = /fo/docbook.xsl
 endif
