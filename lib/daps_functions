@@ -103,7 +103,7 @@ function call_make () {
 
     # export comments, remarks, draft, usemeta
     format_options
-    
+
     MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
     
     LOGFILE="${LOG_DIR}/make_${TARGET}.log"
@@ -609,7 +609,7 @@ function packaging () {
 }
         
 function show_env {
-         echo "ENVFILE=${BASE_DIR}/$ENVFILE"
+         echo "BASE_DIR=$BASE_DIR;ENVFILE=$ENVFILE"
 }
 
 
