@@ -68,7 +68,26 @@ setup(
   license="LGPL",
   keywords="SVN properties status",
   description="Manages XML Doc Files through SVN Properties",
-  long_description=read("README"),
+  long_description="""Docmanager is a command line tool for managing documentation
+projects in SVN that are based on Novdoc or DocBook 4.x.
+Preferably, use Docmanager in conjunction with daps (DocBook Authoring
+and Publishing Suite).
+
+Docmanager allows you to view or set doc-related properties to
+files in SVN, such as the properties "doc:status", "doc:maintainer",
+"doc:trans", "doc:deadline", or "doc:priority". They are especially
+helpful for managing larger documentation projects with multiple
+authors (maintainers), deadlines and priorities.
+
+The "doc:status" property reflects the workflow status of each file.
+The status can change several times throughout the documentation
+process. Whereas the initial state of each file is usually "editing", a
+proofreader can search for all files of a project that are already set
+to "edited", can set them to "proofing" and to "proofed" afterwards (or
+to the status "comments" if the author needs to check some of the
+proofreader's remarks in the file). With the "doc:trans" property you
+can keep track of the files that need to be translated.
+  """,
 
   # Our packages we want to add;
   packages=['dm'],
