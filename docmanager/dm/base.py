@@ -442,6 +442,7 @@ class SVNRepository(object):
       # Allow only those files that fit certain criterias
       for f in filenames:
             # print "Filename %s" % f
+            f = os.path.join(self.basedir, f)
             if not os.path.exists(f):
                 print >> sys.stderr, dmexcept.FILE_NOT_FOUND_ERROR % f
                 continue
@@ -449,12 +450,12 @@ class SVNRepository(object):
                 # We don't want backup files
                 # (they are not under version control)
                 continue
-            elif not self.issvnfile(f):
+            #elif not self.issvnfile(f):
                 # We don't want files, that are not under version control
                 # print >> sys.stderr, f
                 #continue
                 # raise dmexcept.SVNException(red(dmexcept.NOT_IN_SVN_ERROR % f))
-                print red(dmexcept.NOT_IN_SVN_ERROR % f)
+                #print red(dmexcept.NOT_IN_SVN_ERROR % f)
             #elif not(self.checkstatus(f)) and self.allowmodified==False:
             #   raise  RuntimeError("ERROR: File »%s« is modified. " \
             #            "Please commit your changes first." % f )
