@@ -371,8 +371,8 @@
 </xsl:template>
 
 
-<xsl:template match="comment[&comment.block.parents;]|remark[&comment.block.parents;]">
-  <xsl:if test="$show.comments != 0">
+<xsl:template match="remark[&comment.block.parents;]">
+  <xsl:if test="$show.remarks != 0">
     <fo:block xsl:use-attribute-sets="remark.properties">
       <xsl:call-template name="inline.charseq"/>
     </fo:block>
@@ -380,8 +380,8 @@
 </xsl:template>
 
 
-<xsl:template match="comment|remark">
-  <xsl:if test="$show.comments != 0">
+<xsl:template match="remark">
+  <xsl:if test="$show.remarks != 0">
     <fo:inline xsl:use-attribute-sets="remark.inline.properties">
       <xsl:call-template name="inline.charseq"/>
     </fo:inline>

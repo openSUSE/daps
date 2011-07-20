@@ -39,7 +39,7 @@
  <!-- <xsl:include href="xref.xsl"/> -->
  <!-- <xsl:include href="table.xsl"/> -->
  <xsl:include href="sections.xsl"/> 
- <xsl:include href="inlines.xsl"/>
+ <xsl:include href="inline.xsl"/>
  <xsl:include href="synop.xsl"/>
  
  <xsl:include href="footer.xsl"/>
