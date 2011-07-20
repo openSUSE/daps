@@ -226,7 +226,7 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 # Verbose error handling
 #
 function exit_on_error () {
-    ccecho "error" "ERROR: ${1}"
+    ccecho "error" "ERROR: ${1}" >2
     exit 1;
 }
 
@@ -313,6 +313,9 @@ function run_subcmd () {
             # Writes no logfile
             #
             call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
+            ;;
+        showenv)
+            show_env
             ;;
         *)
             ccecho "error" "Error: Unknown command \"$SUBCMD\""
@@ -638,7 +641,9 @@ if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
 else
     # exit on old ENV files
     egrep "^\s*[^#]*(\.|source)\s+\.env-profile" ${BASE_DIR}/$ENVFILE >/dev/null && exit_on_error "Looks like you are going to use an old susedoc ENVfile."
-    ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
+    if [[ 1 = $VERBOSE ]]; then
+        ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
+    fi
 fi    
 
 #

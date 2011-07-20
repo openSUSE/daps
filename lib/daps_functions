@@ -607,8 +607,11 @@ function packaging () {
     call_make "$TARGET" "$@"
     
 }
+        
+function show_env {
+         echo "ENVFILE=${BASE_DIR}/$ENVFILE"
+}
 
- 
 
 
 # ----------------------------------------------------------------------------
