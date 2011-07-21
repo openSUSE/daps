@@ -1,10 +1,16 @@
 #!/bin/sh
+#
+# "Aliases" for DocManager
+#
+# Author:
+#   Thomas Schraitle <toms AT opensuse DOT org>
+# July 2011
 
 
-ENVFILE=${DAPS_ENV_NAME}
-BASE_DIR=""
-DIR="$(dirname $(readlink -f $0))"
-PROG="$(basename $0)"
+# Determine the absolute path of $0, this script
+DIR="$(dirname $(readlink -f $0) )" #
+PROG="$(basename $0)" #
+DEBUG=0
 
 # ---------
 # Verbose error handling
@@ -25,15 +31,26 @@ function sort_after_head () {
 }
 
 
+function debug () {
+ if [[ $DEBUG = 1 ]]; then
+   echo "DEBUG: ${1}"
+ fi
+}
+
 function dm_help () {
   cat << EOF
 $PROG [-e|--envfile|-b|--basedir] alias
 
+Suffix:
+  d  deadline
+  p  priority
+  
+Options and Subcommands:
 EOF
   # Output all xxxx) + the following line and remove any whitespaces and ')'
   # If an option should NOT be displayed, use a hash mark at the end of the
   # parenthesis
-  egrep -A1 "*\)$" $DIR/$PROG | sed 's/#//g;s/)//g;s/--//g'
+  egrep -A1 "*\)$" $DIR/$PROG | sed 's/#//g;s/)//g;s/^--//g'
 }
 
 # ----------------------------------------------------------------------------
@@ -48,7 +65,7 @@ EOF
 export POSIXLY_CORRECT=1
 
 
-ARGS=$(getopt -o h,b:e: -l help,basedir:,envfile: -n "$ME" -- "$@") #
+ARGS=$(getopt -o h,d,b:e: -l help,debug,basedir:,envfile: -n "$ME" -- "$@") #
 eval set -- "$ARGS"
 
 while true ; do
@@ -71,7 +88,12 @@ while true ; do
       dm_help
       exit 0
       ;;
-
+    
+    -d|--debug)
+      # Enable debug messages
+      DEBUG=1
+      shift
+      ;;
     --) shift; break ;;
 
     *) echo "Unknown subcommand"
@@ -83,6 +105,35 @@ done
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
+debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
+
+# Checks, if ENVFILE is set from commandline or by daps
+if [[ -z $ENVFILE ]]; then
+ # Call daps and see what he has to say about ENVFILE and BASE_DIR:
+ ENV=$(daps showenv
+ )
+ if [[ ! $? ]]; then
+   # daps returned != 0 (or an empty string in ENV) so neither --envfile
+   # nor daps knows about it. Display an error:
+   exit_on_error "No ENV file set"
+ else
+   # ENV contains BASE_DIR=/foo/bla/bar;ENVFILE=ENV-foo
+   # The following construct extracts the BASE_DIR (b) and
+   # the ENVFILE (e) with the help of an Bash array
+   array=(${ENV//;/ }) #
+   b="${array[0]}"
+   e="${array[1]}"
+   # Above array could also be evalulated with eval. I try to avoid this
+   # and be on the safe side
+   ENVFILE=${e##*=}
+   if [[ -z $BASE_DIR ]]; then
+     BASE_DIR=${b##*=}
+   fi
+ fi
+fi
+
+debug "After daps showenv: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
+
 # Extend variables with options:
 if [[ ! -z $ENVFILE ]]; then
  ENVFILE="--envfile $ENVFILE"
@@ -91,10 +142,9 @@ if [[ ! -z $BASE_DIR ]]; then
  BASE_DIR="--basedir $BASE_DIR"
 fi
 
+debug "Final state: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
 
 if [[ -z $1 ]]; then
-    # Call: "$ME" or "$ME help"
-    #
     dm_help
     exit 0
 else
@@ -105,7 +155,7 @@ fi
 
 case "$SUBCMD" in
   help)
-    # Output this help text
+    # Output help text
     dm_help
     exit 1
     ;;
