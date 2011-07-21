@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Copyright (C) 2011 fs@suse.de, openSUSE.org
+# Authors: fs@suse.de
+#
+function print_help () {
+    echo "
+Spell checks DocBook XML files with aspell using the standard American English
+dictionary plus an additional dictionary with SUSE terminology.
+
+$me supports two modes:
+  * by default (if called with no arguments) runs the interactive spell
+    checker
+  * if called with -l or --list dumps a sorted list of misspelled words to
+    standard output
+"
+}
+
+#----------------------------------------------------------------------
+# Variables
+#
+
+# cleanup
+unset LIST
+
+# extra dictionary
+SUSEDICT="/usr/share/daps/lib/suse_aspell.rws"
+
+# ignore text within these tags
+declare -a SKIPTAGS=(
+    --add-sgml-skip=author 
+    --add-sgml-skip=command
+    --add-sgml-skip=email                 
+    --add-sgml-skip=envar
+    --add-sgml-skip=filename                
+    --add-sgml-skip=firstname
+    --add-sgml-skip=guimenu
+    --add-sgml-skip=keycap
+    --add-sgml-skip=literal                
+    --add-sgml-skip=option                
+    --add-sgml-skip=quote
+    --add-sgml-skip=remark
+    --add-sgml-skip=screen
+    --add-sgml-skip=surname
+    --add-sgml-skip=systemitem
+    --add-sgml-skip=ulink
+    --add-sgml-skip=varname
+    --add-sgml-skip=xref
+)
+
+#----------------------------------------------------------------------
+# printing help / catching errors
+#
+ME=$(basename $0)
+
+ARGS=$(getopt -o hl -l help,list -n $ME -- "$@")
+eval set -- "$ARGS"
+while true ; do
+    case "$1" in
+        -h|--help)
+            print_help
+            exit
+            ;;
+        -l|--list)
+            LIST=1
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+done
+
+if [[ -z $1 || ! -f $1 ]]; then
+    ccecho "error" "Error: Please specify a valid filename" >&2
+    exit 1
+fi
+
+if [[ ! $LIST ]]; then
+    /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
+        --lang=en_US --extra-dicts="$SUSEDICT" -c $1
+else
+    /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
+        --lang=en_US --extra-dicts="$SUSEDICT" list < $1 | sort -u
+fi
