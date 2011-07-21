@@ -48,7 +48,7 @@ EOF
 export POSIXLY_CORRECT=1
 
 
-ARGS=$(getopt -o h,b:e -l help,basedir:,envfile: -n "$ME" -- "$@") #
+ARGS=$(getopt -o h,b:e: -l help,basedir:,envfile: -n "$ME" -- "$@") #
 eval set -- "$ARGS"
 
 while true ; do
