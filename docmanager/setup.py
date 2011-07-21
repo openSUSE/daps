@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 from setuptools_dmutils import CleanCommand, ManpageCommand
 
-version="0.9beta4"
+version="0.9beta4a"
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 
