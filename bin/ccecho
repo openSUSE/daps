@@ -59,7 +59,7 @@ done
 if [[ -z $1 || -z $2 ]]; then
     echo "ERROR: $(basename $0) must be called with two parameters:
 LEVEL and MESSAGE
-See '$ME -h' or 'man 1 $ME' for more information"
+See '$ME -h' or 'man 1 $ME' for more information" >&2
     exit 1
 fi
 
