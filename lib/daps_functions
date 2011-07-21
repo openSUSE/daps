@@ -5,9 +5,6 @@
 # Authors: Frank Sundermeyer <fs@suse.de>
 #
 #
-# TODO:
-#function bookinit () {
-#}
 
 # TODO:
 # make COMMENTS, DRAFT, and REMARKS options that can be set (--draft=1), so the
@@ -240,6 +237,110 @@ function init_wd () {
     exit 1;
 }
 
+function getimages () {
+   
+    # Gets a list of images from the file specified with -f or --file
+    # and outputs them as:
+    #  * default:       long list (one file per line)
+    #  * --compact:  compact list (single line)
+    #  * --viewer=VIEWER: shows images in VIEWER and prints long list to STDOUT
+    #
+    # the additional option (-m|--modified) will also print the image file's
+    # mtime in long lists (this option is ignored with -c|--compact)
+
+    local CMD_IMG_VIEWER COMPACT FILE MOD SHOW
+    declare -a IMGLIST
+    
+    IMAGEDIR="$BASE_DIR/images/src/"
+
+    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            --compact)
+                COMPACT=1
+                shift
+                ;;
+            -f|--file)
+                FILE=$(basename $2)
+                shift 2
+                ;;
+            -h|--help)
+                help_scmd_head "List or display images from a profiled DocBook XML file"
+                help_compact
+                help_file
+                help_modified
+                help_show
+                help_viewer
+                echo
+		exit 0
+		;;
+            -m|--modified)
+                MOD=1
+                shift
+                ;;
+            -s|--show)
+                SHOW=1
+                shift
+                ;;
+	    --viewer)
+                CMD_IMG_VIEWER=$2
+                IMG_VIEWER=$CMD_IMG_VIEWER
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) wrong_parameter "$TARGET $1" ;;
+	esac
+    done
+
+    # IMG_VIEWER may also be set via config file:
+    if [[ $SHOW ]]; then
+        IMG_VIEWER=$(which $IMG_VIEWER 2>/dev/null)
+        if [[ 0 < $? ]]; then
+            if [[ $CMD_IMG_VIEWER ]]; then
+                exit_on_error "Cannot find VIEWER $CMD_IMG_VIEWER"
+            else
+              exit_on_error "Cannot find VIEWER $IMG_VIEWER. Please check your config file"
+            fi
+        fi
+    fi
+
+    # get the profiling directory
+    # this will automatically do the profiling, too, if needed
+    #
+    PROFDIR=$(profile_first showvariable VARIABLE=PROFILEDIR)
+
+    if [[ ! -f ${PROFDIR}/$FILE ]]; then
+        exit_on_error "File $FILE does not exist in profiling directory $PROFDIR\n.You either mistyped the filename or specified an ENVFILE for a book that does\nnot include $FILE"
+    fi
+
+    # the xml command produces a list of filenames from the imagedata tags
+    # the sed part generates the path to the image
+    # awk removes the duplicates wihout the need to sort it
+    # and tr removes the newline statements
+    declare -a IMGLIST=( $(xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
+
+    if [[ $COMPACT ]]; then
+        echo -e "${IMGLIST[@]}\n"
+    else
+        for IMAGE in ${IMGLIST[@]}; do
+            if [[ $MOD ]]; then
+	        MODIFIED=$(stat -c %y ${IMAGE} | cut -d '.' -f1)
+	        echo "${IMAGE} (${MODIFIED})"
+            else
+	        echo "${IMAGE}"
+            fi
+        done  | column -t
+        if [[ $SHOW ]]; then
+            eval "$IMG_VIEWER ${IMGLIST[@]} &"
+        fi
+    fi 
+    
+}
+
 
 # ----------------------------------------------------------------------------
 # Functions processing existing make targets 
@@ -456,6 +557,44 @@ function build_locdrop () {
     call_make "$TARGET" "$@"
 }
 
+function profiledir () {
+    # target profiledir is depending in remarks and comments
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o chr -l comments,help,remarks -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+	    -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+            -h|--help)
+                help_scmd_head "Print the profiling directory"
+                help_comments
+                help_remarks
+                echo
+		exit 0
+		;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+            --) shift ; break ;;
+#            *) exit_on_error "Internal error!" ;;
+            *) wrong_parameter "$TARGET $1" ;;
+	esac
+    done
+    
+    call_make_nolog "$TARGET" "$@"
+    
+}
+
 function profile_first () {
     # targets: dist-graphics*, dist-html, dist-jsp, missinggraphics,
     # projectgraphics, remaininggraphics, showvariable
@@ -467,8 +606,8 @@ function profile_first () {
     #
     local TARGET=$1
     shift
-    call_make "profile" "$@"
-    call_make "$TARGET" "$@"
+    call_make_nolog "profile" "$@"
+    call_make_nolog "$TARGET" "$@"
 }
 
 function build_generic () {
@@ -632,10 +771,15 @@ $1
 
 function help_comments () {
     echo "    --comments, -c            Include XML comments in profiled sources
-                                  Default: off"  
+                              Default: off"  
+}
+function help_compact () {
+    echo "    --compact                 Print the filelist on a single line.
+                              Ignored when -s|--show is set.
+                              Default: off"  
 }
 function help_dirname () {
-    echo "    --dirname=DIR                 Directory names to be created in BASE_DIR
+    echo "    --dirname=DIR             Directory names to be created in BASE_DIR
                               Default: generated by stripping 'ENV-' from the
                               ENV filename"
 }
@@ -648,6 +792,9 @@ function help_extrafiles () {
                               be added to the source tarball. Paths must be
                               relative to BASE_DIR"
 }
+function help_file () {
+    echo "    --file, -f                Specify a filename from where to get the images"
+}
 function help_fop () {
     echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
                               'xep' or 'fop' are supported.
@@ -655,6 +802,11 @@ function help_fop () {
 }
 function help_help () {
     echo "    --help, -h                Print this help text"
+}
+function help_modified () {
+    echo "    --modified, -m            Print the image's modification time.
+                              Ignored when -c is set.
+                              Default: off"
 }
 function help_name () {
     echo "    --name=BOOKNAME           File- and directory names for generated content
@@ -692,4 +844,14 @@ function help_rootid () {
                               (parts or chapters). Default: Usually set
                               in the ENV-file; if not set the complete set
                               defined in $MAIN will be built"
+}
+function help_show () {
+    echo "    --show, -s                Show images with an image viewer that either
+                              has been specified with --viewer or by setting
+                              IMG_VIEWER in the config file
+                              Default: off"
+}
+function help_viewer () {
+    echo "    --viewer                  Image viewer to be used.
+                              Default: IMG_VIEWER setting from config file"
 }

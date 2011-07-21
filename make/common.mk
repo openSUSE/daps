@@ -1158,12 +1158,10 @@ dist-htmlsingle-name dist-html-single-name:
 #
 ifdef USESVN
 .PHONY: meta
-meta: $(PROFILEDIR)/METAFILE
-
-$(PROFILEDIR)/METAFILE: $(SRCFILES)
-	@ccecho "info"  "Generating $@..."
-	svn pl -v --xml $< > $(TMP_DIR)/.docprops.xml
-	xsltproc -o $@ $(METAXSLT) $(TMP_DIR)/.docprops.xml
+meta: $(SRCFILES)
+	@ccecho "info"  "Generating $(PROFILEDIR)/METAFILE ..."
+	svn pl -v --xml $(SRCFILES) > $(TMP_DIR)/.docprops.xml
+	xsltproc -o $(PROFILEDIR)/METAFILE $(METAXSLT) $(TMP_DIR)/.docprops.xml
 endif
 
 

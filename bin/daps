@@ -195,6 +195,8 @@ Subcommands:
   Other Commands:
     chklink                   Linkchecker for links from <ulink> tags
     db2novdoc                 Convert DocBook XML sources to NovDoc
+    getimages                 List or display images from a profiled DocBook
+                              XML file
     init                      Create a working directory to get started with
                               daps/DocBook. Generates a MAIN xml file and a
                               fitting ENVfile
@@ -226,7 +228,7 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 # Verbose error handling
 #
 function exit_on_error () {
-    ccecho "error" "ERROR: ${1}" >2
+    ccecho "error" "ERROR: ${1}" >&2
     exit 1;
 }
 
@@ -295,6 +297,9 @@ function run_subcmd () {
             # depending on $PROFILES, especially with the used images
             profile_first $SUBCMD "${SCMD_ARGS[@]}"
             ;;
+        getimages)
+            getimages
+            ;;
         locdrop)
             build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
             ;;
@@ -304,10 +309,13 @@ function run_subcmd () {
         package|package-html|package-pdf|package-jsp|package-src)
             packaging $SUBCMD "${SCMD_ARGS[@]}"
             ;;
+        profiledir)
+            profiledir $SUBCMD
+            ;;
         missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
             filelists $SUBCMD "${SCMD_ARGS[@]}"
             ;;
-        check|chklink|clean|clean-all|clean-book|clean-images|color-pdf-name|db2novdoc|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jana|jsp-dir-name|nothing|optipng|offspring|pdf-color-name|pdf-name|penguin|prof|profile|profiledir|provide-color-images|provide-epub-images|provide-images|real-clean|txt-name|validate|wiki-name)
+        check|chklink|clean|clean-all|clean-book|clean-images|color-pdf-name|db2novdoc|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jana|jsp-dir-name|nothing|optipng|offspring|pdf-color-name|pdf-name|penguin|prof|profile|provide-color-images|provide-epub-images|provide-images|real-clean|txt-name|validate|wiki-name)
             # The generic stuff - put all targets here that do not need a
             # special treatment.
             # Writes no logfile
