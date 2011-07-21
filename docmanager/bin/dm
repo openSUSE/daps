@@ -50,7 +50,7 @@ EOF
   # Output all xxxx) + the following line and remove any whitespaces and ')'
   # If an option should NOT be displayed, use a hash mark at the end of the
   # parenthesis
-  egrep -A1 "*\)$" $DIR/$PROG | sed 's/#//g;s/)//g;s/^--//g'
+  egrep -A1 -- " -?.*[a-z]\)$" $DIR/$PROG | sed 's/# //g;s/)//g;s/^--//g'
 }
 
 # ----------------------------------------------------------------------------
@@ -110,8 +110,7 @@ debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
 # Checks, if ENVFILE is set from commandline or by daps
 if [[ -z $ENVFILE ]]; then
  # Call daps and see what he has to say about ENVFILE and BASE_DIR:
- ENV=$(daps showenv
- )
+ ENV=$(daps showenv )
  if [[ ! $? ]]; then
    # daps returned != 0 (or an empty string in ENV) so neither --envfile
    # nor daps knows about it. Display an error:
