@@ -303,7 +303,7 @@ function run_subcmd () {
         locdrop)
             build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
             ;;
-        bigfile|bigfile-reduced|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|mdocument-files-pdf|an|online-docs|online-localized|txt|text|wiki)
+        bigfile|bigfile-reduced|chklink|db2novdoc|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|jana|document-files-pdf|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|validate|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
             ;;
         package|package-html|package-pdf|package-jsp|package-src)
@@ -315,9 +315,7 @@ function run_subcmd () {
         missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
             filelists $SUBCMD "${SCMD_ARGS[@]}"
             ;;
-        check|chklink|clean|clean-all|clean-book|clean-images|color-pdf-name|db2novdoc|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jana|jsp-dir-name|nothing|optipng|offspring|pdf-color-name|pdf-name|penguin|prof|profile|provide-color-images|provide-epub-images|provide-images|real-clean|txt-name|validate|wiki-name)
-            # The generic stuff - put all targets here that do not need a
-            # special treatment.
+        check|clean|clean-all|clean-book|clean-images|color-pdf-name|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jsp-dir-name|nothing|offspring|pdf-color-name|pdf-name|penguin|real-clean|txt-name|wiki-name)
             # Writes no logfile
             #
             call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
