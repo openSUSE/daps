@@ -164,9 +164,7 @@ function wrong_parameter () {
 function init_wd () {
     # Initialize a working directory to get started with daps
     #
-
-    test -z "$BASE_DIR" && exit_on_error "You must specify BASE_DIR when calling $ME init"
-    
+   
     SARGS=$(getopt -o h -l help,name:,rootelement: -n $0 -- "${SCMD_ARGS[@]}")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
@@ -198,6 +196,8 @@ function init_wd () {
 	esac
     done
 
+    test -z "$BASE_DIR" && exit_on_error "You must specify BASE_DIR when calling $ME init"
+     
     # default when not set is book
     test -z $ROOTELEMENT && ROOTELEMENT=book
     

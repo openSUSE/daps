@@ -576,12 +576,6 @@ recover_cmdl_values
 
 #----------------------------------
 # Run early commands that do not need to have an environment fully set up
-#
-# run help if requested
-#
-if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
-        run_subcmd
-fi
 
 # Initialize a working directory
 #
@@ -590,6 +584,14 @@ case "$SUBCMD" in
       init_wd "${SCMD_ARGS[@]}"
       ;;
 esac
+
+#
+# run help if requested
+#
+if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
+        run_subcmd
+fi
+
 
 #-------------------------------------
 # Set up BASE_DIR and ENVFILE
