@@ -434,7 +434,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"
 	@if [ -z $(QUIET) ]; then \
-	  ccecho "info" "...validating done"; \
+	  ccecho "info" "All files are valid"; \
 	fi
 
 
