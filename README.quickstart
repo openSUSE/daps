@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------
+         DocBook Authoring and Publishing Suite (daps) Quickstart 
+----------------------------------------------------------------------------
+
+To start a new documentation project "my_book" in ~/authoring proceed as
+follows:
+
+1. Setting up ~/authoring/my_book:
+
+   daps --envfile=ENV-my_book --basedir=$HOME/authoring init
+
+   This will create a complete working environment for "my_book" in
+   ~/authoring/my_book. The working environment consists of the
+   complete directory structure:
+
+   ~/authoring/my_book
+                 |--images/
+                 |    |--src/
+                 |    |   |--dia/
+                 |    |   |--fig/
+                 |    |   |--png/
+                 |    |   |--svg/
+                 |--xml/
+
+   plus a config file for the book (aka ENVfile) named ENV-my_book and
+   an example XML document xml/MAIN.my_book.xml
+
+2. Building the example book:
+
+   Single HTML-file:
+   daps --envfile=ENV-my_book html
+
+   PDF:
+   daps --envfile=ENV-my_book color-pdf
