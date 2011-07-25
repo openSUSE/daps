@@ -283,12 +283,15 @@ function run_subcmd () {
     case "$SUBCMD" in
         all|color-pdf|force|pdf|pdf-color)
 	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
+            exit
 	    ;;
         html|htmlsingle|html-single|jsp)
             build_html_jsp $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         epub)
             build_epub $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         dist-all|showvariable)
             # Always run "make profile" to generate an up-to-date profiled
@@ -296,32 +299,41 @@ function run_subcmd () {
             # Not doing so creates all kinds of hen-egg problems with filelists
             # depending on $PROFILES, especially with the used images
             profile_first $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         getimages)
             getimages
+            exit
             ;;
         locdrop)
             build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         bigfile|bigfile-reduced|chklink|db2novdoc|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|jana|document-files-pdf|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|validate|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         package|package-html|package-pdf|package-jsp|package-src)
             packaging $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         profiledir)
             profiledir $SUBCMD
+            exit
             ;;
         missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
             filelists $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         check|clean|clean-all|clean-book|clean-images|color-pdf-name|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jsp-dir-name|nothing|offspring|pdf-color-name|pdf-name|penguin|real-clean|txt-name|wiki-name)
             # Writes no logfile
             #
             call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
+            exit
             ;;
         showenv)
             show_env
+            exit
             ;;
         *)
             ccecho "error" "Error: Unknown command \"$SUBCMD\""
@@ -393,13 +405,13 @@ eval set -- "$ARGS"
 
 while true ; do
     case "$1" in
-        --basedir)
+        -b|--basedir)
             test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
             BASE_DIR_CMDL="$2"
             BASE_DIR="$BASE_DIR_CMDL"
             shift 2
             ;;
-         -b|--builddir)
+         --builddir)
             test -d "$2" || exit_on_error "BUILD_DIR $2 is not a valid directory"
             test -w "$2" || exit_on_error "BUILD_DIR $2 is not writeable"
             BUILD_DIR_CMDL="$2"
@@ -580,6 +592,7 @@ recover_cmdl_values
 case "$SUBCMD" in
     init)
       init_wd "${SCMD_ARGS[@]}"
+      exit
       ;;
 esac
 

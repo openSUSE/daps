@@ -180,7 +180,12 @@ function init_wd () {
     while true ; do
 	case "$1" in
             -h|--help)
-                help_scmd_head "Create a working environment for a book/article"
+                echo "
+daps --envfile=<ENVFILE> --basedir=<BASEDIR> init [options]
+
+Create a working environment for a book/article. Specifying an ENVFILE and
+a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
+"
                 help_dirname
                 help_rootelement
                 echo
@@ -841,8 +846,8 @@ function help_remarks () {
                               Default: off"  
 }
 function help_rootelement () {
-    echo "    --rootelement=ELEMENT     Specify a ROOTELEMENT for your main DocBook XML file
-                              must be one either article or book.
+    echo "    --rootelement=ELEMENT     Specify a ROOTELEMENT for your main DocBook XML
+                              file; must be one either article or book.
                               Default: book"
 }
 function help_rootid () {
