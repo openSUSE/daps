@@ -5,6 +5,8 @@
 #
 function print_help () {
     echo "
+$ME [-l] FILELIST
+
 Spell checks DocBook XML files with aspell using the standard American English
 dictionary plus an additional dictionary with SUSE terminology.
 
@@ -77,10 +79,13 @@ if [[ -z $1 || ! -f $1 ]]; then
     exit 1
 fi
 
-if [[ ! $LIST ]]; then
-    /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-        --lang=en_US --extra-dicts="$SUSEDICT" -c $1
-else
-    /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-        --lang=en_US --extra-dicts="$SUSEDICT" list < $1 | sort -u
-fi
+for FILE in "$@"; do
+    if [[ ! $LIST ]]; then
+        echo "Checking $FILE..."
+        /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
+            --lang=en_US --extra-dicts="$SUSEDICT" -c $FILE
+    else
+        /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
+            --lang=en_US --extra-dicts="$SUSEDICT" list < $FILE | sort -u
+    fi
+done
