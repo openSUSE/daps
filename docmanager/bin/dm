@@ -41,7 +41,7 @@ function dm_help () {
   cat << EOF
 $PROG [-e|--envfile|-b|--basedir] alias
 
-Suffix:
+Suffix on Subcommand means:
   d  deadline
   p  priority
   
@@ -111,7 +111,7 @@ debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
 if [[ -z $ENVFILE ]]; then
  # Call daps and see what he has to say about ENVFILE and BASE_DIR:
  ENV=$(daps showenv )
- if [[ ! $? ]]; then
+ if [[ 0 < $? ]]; then
    # daps returned != 0 (or an empty string in ENV) so neither --envfile
    # nor daps knows about it. Display an error:
    exit_on_error "No ENV file set"
@@ -158,53 +158,91 @@ case "$SUBCMD" in
     dm_help
     exit 1
     ;;
-  edited)
-    # Displays all edited files (doc:status=edited)
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
-    ;;
-  editedp)
-    # %{name} %{priority} %{prelim} %{maintainer}, sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n
-    ;;
-  editedd)
-    # %{name} %{deadline} %{prelim} %{maintainer}, sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2
-    ;;
-  editingx)
-    # %{name} %{maintainer} %{status} %{deadline}, sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 
-    ;;
-  prelim)
-    # %{name} %{maintainer} %{status} %{prelim} %{deadline}, include only doc:prelim=yes
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{prelim} %{deadline} \n" --include "doc:prelim=yes"
-    ;;
-  proofed)
-    # %{name} %{priority} %{status} %{revprop} %{maintainer}, include only proofed
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{status} %{revprop} %{maintainer}\n" --include="doc:status=proofed"
-    ;;
-  comments)
+  dgcomments)
     # Displays only files with doc:status=comments
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q --include="doc:status=comments"
     ;;
-  work)
-    # Displays all files with doc:maintainer=${LOGNAME}
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"
+  dgedited)
+    # Displays all edited files (doc:status=edited)
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
     ;;
-  workp)
-    # Displays all files with doc:maintainer=${LOGNAME} and sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
+  dgeditedp)
+    # %{name} %{priority} %{prelim} %{maintainer}, sorted after priority
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n
     ;;
-  workx)
-    # Displays all files with doc:maintainer=${LOGNAME} and sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+  dgeditedd)
+    # %{name} %{deadline} %{prelim} %{maintainer}, sorted after deadline
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2
     ;;
-  stat)
+  dgeditingx)
+    # %{name} %{maintainer} %{status} %{deadline}, sorted after deadline
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 
+    ;;
+  dglocdrop)
+    # list files which have to be translated and are set to locdrop
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{trans} %{status} %{revprop} %{maintainer}\n" --include="doc:status=locdrop"
+    ;;
+  dgprelim)
+    # %{name} %{maintainer} %{status} %{prelim} %{deadline}, include only doc:prelim=yes
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{prelim} %{deadline} \n" --include "doc:prelim=yes"
+    ;;
+  dgproofed)
+    # %{name} %{priority} %{status} %{revprop} %{maintainer}, include only proofed
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{status} %{revprop} %{maintainer}\n" --include="doc:status=proofed"
+    ;;
+  dgstat)
     # %{name} %{maintainer} %{trans} %{status} %{priority} %{deadline}
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n"
     ;;
-  statx)
+  dgstatx)
     # %{name} %{maintainer} %{trans} %{status} %{deadline} and sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" | sort_after_head -k5
+    ;;
+  dgtodo)
+    # list all files owned by $LOGNAME that still need to be worked on
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+    ;;
+  dgtrans)
+    # list the files which have to be translated
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q  "%{name} %{trans} %{maintainer}\n" --include "doc:trans=yes"
+    ;;
+  dgwork)
+    # Displays all files with doc:maintainer=${LOGNAME}
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"
+    ;;
+  dgworkp)
+    # Displays all files with doc:maintainer=${LOGNAME} and sorted after deadline
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
+    ;;
+  dgworkx)
+    # Displays all files with doc:maintainer=${LOGNAME} and sorted after priority
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+    ;;
+
+## Set Commands
+  dscomments)
+    # set files to comments
+    docmanager ${ENVFILE} ${BASE_DIR} ds -C
+    ;;
+  dsproofed)
+    # set files to proofed
+    docmanager ${ENVFILE} ${BASE_DIR} ds -R
+    ;;
+  dsproofing)
+    # set files to proofing
+    docmanager ${ENVFILE} ${BASE_DIR} ds -P
+    ;;
+  dsediting)
+    # set files to editing
+    docmanager ${ENVFILE} ${BASE_DIR} ds -E
+    ;;
+  dsedited)
+    # set files to edited
+    docmanager ${ENVFILE} ${BASE_DIR} ds -D
+    ;;
+  dsprelim)
+    # Unset prelim state; prelim = no
+    docmanager ${ENVFILE} ${BASE_DIR} ds -y
     ;;
 esac
 
