@@ -125,7 +125,7 @@
   "Insert a docbook <callout> template."
   nil
   \n >
-  >"<callout areafs=\"" (skeleton-read "areafs: ") "\">"\n
+  >"<callout arearefs=\"" (skeleton-read "arearefs: ") "\">"\n
   >"<para>"\n
   > _ \n
   -1"</para>"\n
