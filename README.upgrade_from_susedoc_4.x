@@ -33,7 +33,7 @@ echo "export DAPS_ENV_NAME=\$(basename \$BASH_SOURCE)" >> ENV-mybook
 for ENV in ENV-*; do
   cp $ENV ${ENV}_new
   sed -r -i "/^\s*(\.|source) \s*\.env-profile\s*$/d;s/^\s*export //" ${ENV}_new
-  echp "export DAPS_ENV_NAME=\$(basename \$BASH_SOURCE)" >> ${ENV}_new
+  echo "export DAPS_ENV_NAME=\$(basename \$BASH_SOURCE)" >> ${ENV}_new
 done
      
 
