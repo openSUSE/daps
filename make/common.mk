@@ -1310,8 +1310,8 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki: $(STYLEWIKI) $(PROFILES)
 #---------------
 # Check external links (<ulink>)
 #
-.PHONY: chklink jana
-chklink jana: $(PROFILES)
+.PHONY: checklink chklink jana
+checklink chklink jana: $(PROFILES)
 	xsltproc --xinclude --noout $(ROOTSTRING) -o $(TESTPAGE) $(STYLELINKS) \
 		 $(PROFILEDIR)/$(MAIN)
 	checkbot --url file://localhost/$(TESTPAGE) \

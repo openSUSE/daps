@@ -568,6 +568,40 @@ function build_locdrop () {
     call_make "$TARGET" "$@"
 }
 
+function checklink () {
+    # HTTP link checker
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o h -l help,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Checks http links"
+                help_help
+                help_rootid
+                echo
+		exit 0
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+#            *) exit_on_error "Internal error!" ;;
+            *) wrong_parameter "$TARGET $1" ;;
+	esac
+    done
+    
+    call_make "$TARGET" "$@"
+    
+}
+
 function profiledir () {
     # target profiledir is depending in remarks and comments
     #

@@ -285,8 +285,8 @@ function run_subcmd () {
 	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
             exit
 	    ;;
-        html|htmlsingle|html-single|jsp)
-            build_html_jsp $SUBCMD "${SCMD_ARGS[@]}"
+        checklink|chklink|jana)
+            checklink $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
         epub)
@@ -305,11 +305,15 @@ function run_subcmd () {
             getimages
             exit
             ;;
+        html|htmlsingle|html-single|jsp)
+            build_html_jsp $SUBCMD "${SCMD_ARGS[@]}"
+            exit
+            ;;
         locdrop)
             build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        bigfile|bigfile-reduced|chklink|db2novdoc|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|jana|document-files-pdf|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|validate|wiki)
+        bigfile|bigfile-reduced|db2novdoc|desktop-files|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-html|document-files-pdf|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|validate|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
