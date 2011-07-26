@@ -17,7 +17,7 @@
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
 
 Name:           daps
-Version:        0.9beta3
+Version:        0.9beta4
 %define root_catalog   for-catalog-%{dtdname}-%{dtdversion}.xml
 %define daps_catalog   for-catalog-%{name}-%{version}.xml
 
@@ -41,7 +41,6 @@ BuildRequires:  ImageMagick
 BuildRequires:  inkscape
 BuildRequires:  libxslt
 BuildRequires:  optipng
-BuildRequires:  python-xml
 BuildRequires:  sgml-skel
 BuildRequires:  svg-dtd
 BuildRequires:  trang
@@ -58,7 +57,6 @@ BuildRequires:  java
 BuildRequires:  liberation-fonts
 BuildRequires:  LinuxLibertine
 BuildRequires:  mplus-fonts
-BuildRequires:  python-optcomplete
 BuildRequires:  opensp
 BuildRequires:  subversion
 BuildRequires:  xalan-j2
@@ -93,10 +91,8 @@ Requires:       liberation-fonts
 Requires:       LinuxLibertine
 Requires:       make
 Requires:       mplus-fonts
-Requires:       python-optcomplete
 Requires:       opensp
 Requires:       optipng
-Requires:       python-xml
 Requires:       sgml-skel
 Requires:       subversion
 Requires:       svg-dtd
@@ -118,6 +114,8 @@ Requires:       perl-checkbot
 %endif
 
 Recommends:     agfa-fonts
+Recommends:     aspell aspell-en aspell-en-huge
+Recommends:     daps-docmanager
 Recommends:     emacs psgml
 # Split of ttf-founder-simplified and ttf-founder-traditional
 Recommends:     FZFangSong FZHeiTi FZSongTi
@@ -132,22 +130,23 @@ Recommends:     unfonts
 # Internal XEP package:
 Recommends:     xep
 
-Provides:       susedoc
+Obsoletes:      susedoc <= 4.3.27
+Provides:       susedoc <= 4.3.27
 
 
 %description
-DocBook Authoring and Publishing Suite (daps)
+DocBook Authoring and Publishing Suite (DAPS)
 
-daps contains a set of stylesheets, scripts and makefiles that enable
+DAPS contains a set of stylesheets, scripts and makefiles that enable
 you to create HTML, PDF, EPUB and other formats from DocBook XML with a
 single command. It also contains tools to generate profiled source
 tarballs for distributing your XML sources for translation or review.
 
-daps also includes tools that assist you when writing DocBook XML:
+DAPS also includes tools that assist you when writing DocBook XML:
 linkchecker, validator, spellchecker, editor macros and stylesheets for
 converting DocBook XML.
 
-daps is the successor of susedoc. See
+DAPS is the successor of susedoc. See
 /usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x
 for upgrade instructions.
 
