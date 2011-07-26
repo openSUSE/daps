@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC 
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+  <!ENTITY command "daps-susespell">
+  <!ENTITY date    "2011 July 26">
+]>
+
+
+<refentry lang="en" id="daps-susespell">
+ <refentryinfo>
+  <productname>&command;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fs@suse.de</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&command;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="version">1.0</refmiscinfo>
+  <refmiscinfo class="manual">Aspell wrapper for DAPS</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&command;</refname>
+  <refpurpose>
+   Spell checks DocBook XML files with aspell.
+  </refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="daps-susespell.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&command;</command>
+   <arg choice="opt">
+    <replaceable>options</replaceable>
+   </arg>
+   <arg choice="plain">FILELIST</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="daps-susespell.description">
+  <title>Description</title>
+  <para>
+   An aspell wrapper for DAPS to check DocBook XML files. Calls aspell in
+   <literal>sgml-mode</literal>, so XML elements are not checked. &command;
+   also does not check the content of certain elements such as
+   <sgmltag>&lt;command&gt;</sgmltag> or <sgmltag>&lt;screen&gt;</sgmltag>.
+  </para>
+  <para>
+   &command; supports two modes:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     by default (if called with no arguments) runs the interactive spell
+    checker
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     if called with --list, dumps a sorted list of misspelled words to
+     standard output
+    </para>
+   </listitem>
+  </itemizedlist>
+  <para>
+   See <command>daps-susespell help</command> for a description of all options.
+  </para>
+ </refsect1>
+
+ <refsect1 id="ccecho.see_also">
+  <title>See also</title>
+  <para><command>aspell</command>(1)</para>
+ </refsect1>
+
+</refentry>
+

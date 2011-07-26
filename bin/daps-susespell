@@ -5,16 +5,36 @@
 #
 function print_help () {
     echo "
-$ME [-l] FILELIST
+$ME [options] FILELIST
 
-Spell checks DocBook XML files with aspell using the standard American English
-dictionary plus an additional dictionary with SUSE terminology.
+Spell checks DocBook XML files with aspell. By default uses the standard
+American English dictionary plus an additional dictionary with SUSE terminology.
 
-$me supports two modes:
-  * by default (if called with no arguments) runs the interactive spell
-    checker
-  * if called with -l or --list dumps a sorted list of misspelled words to
+$ME supports two modes:
+  * by default runs the interactive spell checker
+  * if called with --list, dumps a sorted list of misspelled words to
     standard output
+
+Options:
+  --dict=DICTIONARY               Specify an additional (custom) dictionary
+                                  (absolute path). By default the English
+                                  SUSE Terminology dictionary
+                                  (/usr/share/daps/lib/suse_aspell.rws) is used.
+                                  Specify --dict="" if you do not want to use
+                                  any additional dictionary.
+  --help, -h                      Display this help
+  --lang=LANGUAGE, -l LANGUAGE    Language to use. It uses the same format as
+                                  the LANG environmental variable: It consists
+                                  of  the two letter ISO 639 language code
+                                  (e.g. 'en' for English) and an optional two
+                                  letter ISO 3166 country code after an
+                                  underscore (e.g. en_GB for Britsh English).
+                                  Make sure the respective dictionary for
+                                  aspell is installed.
+                                  Default: en_US
+  --list                          dumps a sorted list of misspelled words to
+                                  standard output instead of starting the
+                                  interactive spellchecker
 "
 }
 
@@ -25,8 +45,9 @@ $me supports two modes:
 # cleanup
 unset LIST
 
-# extra dictionary
-SUSEDICT="/usr/share/daps/lib/suse_aspell.rws"
+# default values
+LANGUAGE=en_US
+EXTRA_DICT="--extra-dicts=\"/usr/share/daps/lib/suse_aspell.rws\""
 
 # ignore text within these tags
 declare -a SKIPTAGS=(
@@ -40,7 +61,6 @@ declare -a SKIPTAGS=(
     --add-sgml-skip=keycap
     --add-sgml-skip=literal                
     --add-sgml-skip=option                
-    --add-sgml-skip=quote
     --add-sgml-skip=remark
     --add-sgml-skip=screen
     --add-sgml-skip=surname
@@ -55,15 +75,30 @@ declare -a SKIPTAGS=(
 #
 ME=$(basename $0)
 
-ARGS=$(getopt -o hl -l help,list -n $ME -- "$@")
+ARGS=$(getopt -o hl: -l dict:,help,lang:,list -n $ME -- "$@")
 eval set -- "$ARGS"
 while true ; do
     case "$1" in
+        --dict)
+            if [[ -z $2 ]]; then
+                unset EXTRA_DICT
+            elif [[ ! -f $2 ]]; then
+                EXTRA_DICT="--extra-dicts=\$2\""
+            else
+                ccecho "error" "Extra dictionary $2 doe not exist" >&2
+                exit 1
+            fi
+            shift 2
+            ;;
         -h|--help)
             print_help
             exit
             ;;
-        -l|--list)
+        -l|--lang)
+            LANGUAGE=$2
+            shift 2
+            ;;
+        --list)
             LIST=1
             shift
             ;;
@@ -74,18 +109,19 @@ while true ; do
     esac
 done
 
-if [[ -z $1 || ! -f $1 ]]; then
+if [[ -z $1 ]]; then
     ccecho "error" "Error: Please specify a valid filename" >&2
     exit 1
 fi
 
 for FILE in "$@"; do
+    test -f $FILE || ccecho "warn" "File $FILE does not exist"
     if [[ ! $LIST ]]; then
         echo "Checking $FILE..."
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=en_US --extra-dicts="$SUSEDICT" -c $FILE
+            --lang=$LANGUAGE $EXTRA_DICTS -c $FILE
     else
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=en_US --extra-dicts="$SUSEDICT" list < $FILE | sort -u
+            --lang=$LANGUAGE $EXTRA_DICTS list < $FILE | sort -u
     fi
 done
