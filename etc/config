@@ -117,32 +117,12 @@ CONVERT_OPTS="-type grayscale -colors 256"
 ## -----------------------------
 ## Description: Specify a default ENVfile that is used whenever
 ##              no ENVfile is specified on the command line or via
-##              DAPS_ENV_NAME
+##              DAPS_ENV_NAME in teh ENVFILE
 ## Type:        String
 ## Default:     ""
 #
-# Also see DAPS_ENV_NAME
 #
 DAPS_ENV_DEFAULT=""
-
-#
-## Key:         DAPS_ENV_NAME
-## --------------------------
-## Description: ENVfile name that is automatically used if DAPS_ENV_NAME
-##              is set. Takes precednece over DAPS_ENV_DEFAULT
-## Type:        String
-## Default:     ""
-#
-# This value _may_ be set in a book-specific ENVfile by adding the following
-# line to the ENVfile:
-# export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
-# This enables you to source the ENVfile, so you do not have to specify
-# --envile=<ENVFILE> with daps
-#
-# DO NOT set this value here or in ~/.daps/config
-# Also see DAPS_ENV_DEFAULT
-#
-DAPS_ENV_NAME=""
 
 ## Key:         DIA_OPTIONS
 ## -------------------------
