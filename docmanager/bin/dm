@@ -167,12 +167,12 @@ case "$SUBCMD" in
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q --include="doc:status=comments" --include="doc:maintainer=${LOGNAME}" "$@"
     ;;
   edited)
-    # Displays all edited files (doc:status=edited)
+    # Displays all edited files with doc:status=edited
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
     ;;
   myedit)
-    # Displays your edited files (doc:status=edited)
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"  --include="doc:maintainer=${LOGNAME}" "$@"
+    # Displays your edited files with doc:status=edited
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" "$@"
     ;;
   editedp)
     # %{name} %{priority} %{prelim} %{maintainer}, sorted after priority
