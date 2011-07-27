@@ -166,6 +166,9 @@ case "$SUBCMD" in
     # Displays your files with doc:status=comments
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q --include="doc:status=comments" --include="doc:maintainer=${LOGNAME}" "$@"
     ;;
+# -------------------------------------------
+# Edited
+#
   edited)
     # Displays all edited files with doc:status=edited
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
@@ -190,13 +193,32 @@ case "$SUBCMD" in
     # Your files, %{name} %{deadline} %{prelim} %{maintainer}, sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{deadline} %{prelim} %{maintainer}\n" --include="doc:status=edited"  --include="doc:maintainer=${LOGNAME}" | sort_after_head -k2
     ;;
-  editingx)
+# -------------------------------------------
+# Editing
+#
+  editing)
+    # list all files owned by $LOGNAME that still need to be worked on
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+    ;;
+  myediting|todo)
+    # list all files owned by $LOGNAME that still need to be worked on
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+    ;;
+  editingd)
     # %{name} %{maintainer} %{status} %{deadline}, sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" | sort_after_head -k4 
     ;;
-  myeditingx)
+  myeditingd)
     # Your files %{name} %{maintainer} %{status} %{deadline}, sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{status} %{deadline}\n" --include="doc:status=editing" --include="doc:maintainer=${LOGNAME}" | sort_after_head -k4 
+    ;;
+  editingp)
+    # Lists editing files, sorted after priority
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=editing" | sort_after_head -k2 -n
+    ;;
+  myeditingp)
+    # Lists your editing files, sorted after priority
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:maintainer=${LOGNAME}"  | sort_after_head -k2 -n
     ;;
   locdrop)
     # list files which have to be translated and are set to locdrop
@@ -222,25 +244,21 @@ case "$SUBCMD" in
     # %{name} %{maintainer} %{trans} %{status} %{priority} %{deadline}
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n"
     ;;
-  statx)
+  mystat|work)
+    # %{name} %{maintainer} %{trans} %{status} %{priority} %{deadline}
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} \n" --include="doc:maintainer=${LOGNAME}"
+    ;;
+  statd)
     # %{name} %{maintainer} %{trans} %{status} %{deadline} and sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" | sort_after_head -k5
     ;;
-  todo)
-    # list all files owned by $LOGNAME that still need to be worked on
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
+  mystatd|workd)
+    # %{name} %{maintainer} %{trans} %{status} %{deadline} and sorted after deadline
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{maintainer} %{trans} %{status} %{deadline}\n" --include="doc:maintainer=${LOGNAME}" | sort_after_head -k5
     ;;
   trans)
     # list the files which have to be translated
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q  "%{name} %{trans} %{maintainer}\n" --include "doc:trans=yes"
-    ;;
-  work)
-    # Displays all files with doc:maintainer=${LOGNAME}
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}"
-    ;;
-  workd)
-    # Displays all files with doc:maintainer=${LOGNAME} and sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
     ;;
 
 ## Set Commands
