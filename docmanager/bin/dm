@@ -170,11 +170,11 @@ case "$SUBCMD" in
     # Displays all edited files with doc:status=edited
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:status=edited"
     ;;
-  myedit)
+  myedited)
     # Displays your edited files with doc:status=edited
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" "$@"
     ;;
-  editedp)
+  editedp|workp)
     # %{name} %{priority} %{prelim} %{maintainer}, sorted after priority
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "%{name} %{priority} %{prelim} %{maintainer}\n" --include="doc:status=edited" | sort_after_head -k2 -n
     ;;
@@ -241,10 +241,6 @@ case "$SUBCMD" in
   workd)
     # Displays all files with doc:maintainer=${LOGNAME} and sorted after deadline
     docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" -q "%{name} \'%{modified}\' %{priority} %{deadline} %{status} %{prelim}\n" | sort_after_head -k4
-    ;;
-  workp)
-    # Displays all files with doc:maintainer=${LOGNAME} and sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P --include="doc:maintainer=${LOGNAME}" --include="doc:status=editing" -q "%{name} %{priority} %{modified} %{maintainer} %{release} %{trans} %{status} %{prelim}\n" | sort_after_head -k2
     ;;
 
 ## Set Commands
