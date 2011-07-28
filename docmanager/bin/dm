@@ -329,29 +329,29 @@ case "$SUBCMD" in
 # -------------------------------------------
 # Set Commands
 #
-    dscomments)
+  dscomments)
     # set files to comments
-    docmanager ${ENVFILE} ${BASE_DIR} ds -C
+    docmanager ${ENVFILE} ${BASE_DIR} ds -C "$@"
     ;;
   dsproofed)
     # set files to proofed
-    docmanager ${ENVFILE} ${BASE_DIR} ds -R
+    docmanager ${ENVFILE} ${BASE_DIR} ds -R "$@"
     ;;
   dsproofing)
     # set files to proofing
-    docmanager ${ENVFILE} ${BASE_DIR} ds -P
+    docmanager ${ENVFILE} ${BASE_DIR} ds -P "$@"
     ;;
   dsediting)
     # set files to editing
-    docmanager ${ENVFILE} ${BASE_DIR} ds -E
+    docmanager ${ENVFILE} ${BASE_DIR} ds -E "$@"
     ;;
   dsedited)
     # set files to edited
-    docmanager ${ENVFILE} ${BASE_DIR} ds -D
+    docmanager ${ENVFILE} ${BASE_DIR} ds -D "$@"
     ;;
   dsprelim)
     # Unset prelim state; prelim = no
-    docmanager ${ENVFILE} ${BASE_DIR} ds -y
+    docmanager ${ENVFILE} ${BASE_DIR} ds -y "$@"
     ;;
 esac
 
