@@ -20,15 +20,28 @@ __author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
 __depends__=["Python-2.4", "optcomplete"]
 
 import optcomplete
+import commands
 from optparse import OptionGroup, OptionValueError
 from base     import SVNFile, SVNRepository, green, red
-import dmexceptions as dm
+import dmexceptions as dmexpect
 import svncmd
 import formatter
 
 import os.path
 import sys
 import re
+
+
+def getenvfile():
+  """Returns BASEDIR and ENVFILE"""
+  cmd = "daps showenv"
+  res=commands.getstatusoutput( cmd )
+  if res[0] != 0:
+    raise dmexpect.DocManagerEnvironment(res[1])
+  
+  # BASEDIR, ENVFILE
+  return tuple( i.split("=")[1] for i in res[1].split(";") )
+
 
 class CmdDocget(optcomplete.CmdComplete):
    """docget [option] [filename(s)]
@@ -160,13 +173,25 @@ class CmdDocget(optcomplete.CmdComplete):
                                       red("I need an option. Probably -P?\n") )
          sys.exit(10)
          # self.parser.error("I need an option.")
+     
+      # Handle ENVFILE and BASEDIR by getenvfile (which uses daps showenv internally)
+      # 
+      envfile = self.gopts.envfile
+      basedir = self.gopts.basedir
+      if not envfile:
+        res = getenvfile()
+        envfile = res[1]
+        if not basedir:
+          basedir=res[0]
+
+      
 
       try:
         svn = SVNRepository(args,
                           querystring=self.opts.query,
                           opts=self.opts,
-                          envfile=self.gopts.envfile,
-                          basedir=self.gopts.basedir,
+                          envfile=envfile,
+                          basedir=basedir,
                           dryrun=self.gopts.dryrun,
                           aligning=self.opts.aligning,
                           statistics=self.opts.statistic,
@@ -178,7 +203,7 @@ class CmdDocget(optcomplete.CmdComplete):
                           excludequery=self.opts.exclude
                          )
         svn.query()
-      except dm.SVNException, e:
+      except dmexpect.SVNException, e:
         print >> sys.stderr, e
         exit(1000)
 
