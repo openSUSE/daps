@@ -47,7 +47,7 @@ unset LIST
 
 # default values
 LANGUAGE=en_US
-EXTRA_DICT="--extra-dicts=\"/usr/share/daps/lib/suse_aspell.rws\""
+EXTRA_DICT="/usr/share/daps/lib/suse_aspell.rws"
 
 # ignore text within these tags
 declare -a SKIPTAGS=(
@@ -82,8 +82,8 @@ while true ; do
         --dict)
             if [[ -z $2 ]]; then
                 unset EXTRA_DICT
-            elif [[ ! -f $2 ]]; then
-                EXTRA_DICT="--extra-dicts=\$2\""
+            elif [[ -f $2 ]]; then
+                EXTRA_DICT="$2"
             else
                 ccecho "error" "Extra dictionary $2 doe not exist" >&2
                 exit 1
@@ -119,9 +119,9 @@ for FILE in "$@"; do
     if [[ ! $LIST ]]; then
         echo "Checking $FILE..."
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=$LANGUAGE $EXTRA_DICTS -c $FILE
+            --lang=$LANGUAGE --extra-dicts="$EXTRA_DICT" -c $FILE
     else
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=$LANGUAGE $EXTRA_DICTS list < $FILE | sort -u
+            --lang=$LANGUAGE --extra-dicts="$EXTRA_DICT" list < $FILE | sort -u
     fi
 done
