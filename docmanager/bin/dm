@@ -155,15 +155,15 @@ fi
 #
 # Define some Variable for often used docmanager arguments
 #
-MAINTAINER="--include=doc:maintainer=${LOGNAME}"
+MAINTAINER="doc:maintainer=${LOGNAME}"
 
-COMMENTS="--include=doc:status=comments"
-EDITED="--include=doc:status=edited"
-EDITING="--include=doc:status=editing"
-LOCDROP="--include=doc:status=locdrop"
-PRELIM="--include=doc:prelim=yes"
-PROOFED="--include=doc:status=proofed"
-TRANS="--include=doc:trans=yes"
+COMMENTS="doc:status=comments"
+EDITED="doc:status=edited"
+EDITING="doc:status=editing"
+LOCDROP="doc:status=locdrop"
+PRELIM="doc:prelim=yes"
+PROOFED="doc:status=proofed"
+TRANS="doc:trans=yes"
 
 
 # ATTENTION: If you modify these you may also have to modify the sort calls!!
@@ -185,7 +185,7 @@ case "$SUBCMD" in
 #
   comments)
     # All files with doc:status=comments
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $COMMENTS "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $COMMENTS "$@"
     ;;
   mycomments)
     # Your files with doc:status=comments
@@ -242,7 +242,7 @@ case "$SUBCMD" in
     ;;
   myeditingd)
     # Your files with doc:status=editing sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$MY_QSTRING"$EDITING \
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$MY_QSTRING" $EDITING \
         $MAINTAINER "$@" | sort_after_head -k3 
     ;;
   editingp)
