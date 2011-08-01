@@ -157,13 +157,13 @@ fi
 #
 MAINTAINER="doc:maintainer=${LOGNAME}"
 
-COMMENTS="--include doc:status=comments"
-EDITED="--include doc:status=edited"
-EDITING="--include doc:status=editing"
-LOCDROP="--include doc:status=locdrop"
-PRELIM="--include doc:prelim=yes"
-PROOFED="--include doc:status=proofed"
-TRANS="--include doc:trans=yes"
+COMMENTS="doc:status=comments"
+EDITED="doc:status=edited"
+EDITING="doc:status=editing"
+LOCDROP="doc:status=locdrop"
+PRELIM="doc:prelim=yes"
+PROOFED="doc:status=proofed"
+TRANS="doc:trans=yes"
 
 
 # ATTENTION: If you modify these you may also have to modify the sort calls!!
@@ -185,11 +185,12 @@ case "$SUBCMD" in
 #
   comments)
     # All files with doc:status=comments
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $COMMENTS "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
+        --include $COMMENTS "$@"
     ;;
   mycomments)
     # Your files with doc:status=comments
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $COMMENTS \
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $COMMENTS \
         $MAINTAINER "$@"
     ;;
 # -------------------------------------------
@@ -197,63 +198,65 @@ case "$SUBCMD" in
 #
   edited)
     # All edited files with doc:status=edited
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $EDITED "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITED "$@"
     ;;
   myedited)
     # Your edited files with doc:status=edited
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$MY_QSTRING" $MAINTAINER "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
+        --include $MAINTAINER "$@"
     ;;
   editedd)
     # All files sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$QSTRING" \
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
         "$@" | sort_after_head -k3
     ;;
   myeditedd)
     # Your files sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$MY_QSTRING" $EDITED \
-        $MAINTAINER "$@" | sort_after_head -k3
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
+        --include $EDITED $MAINTAINER "$@" | sort_after_head -k3
     ;;
   editedp)
     # All files sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$QSTRING" $EDITED "$@" \
-        | sort_after_head -k2 -n
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITED \
+        "$@" | sort_after_head -k2 -n
     ;;
   myeditedp|workp)
     # Your files sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $EDITED \
-        $MAINTAINER "$@" | sort_after_head -k2 -n
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
+        --include $MAINTAINER "$@" | sort_after_head -k2 -n
     ;;
 # -------------------------------------------
 # EDITING
 #
   editing)
     # All files with doc:status=editing
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $EDITING "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
+        --include $EDITING "$@"
     ;;
   myediting|todo)
     # Your files with doc:status=editing
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $EDITING \
-        $MAINTAINER "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $EDITING --include $MAINTAINER "$@"
     ;;
   editingd)
     # All files with doc:status=editing sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $EDITING \
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITING \
         "$@" | sort_after_head -k3 
     ;;
   myeditingd)
     # Your files with doc:status=editing sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$MY_QSTRING" $EDITING \
-        $MAINTAINER "$@" | sort_after_head -k3 
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $EDITING --include $MAINTAINER "$@" | sort_after_head -k3 
     ;;
   editingp)
     # All files with doc:status=editing sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $EDITING \
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITING \
         "$@" | sort_after_head -k2 -n
     ;;
   myeditingp)
     # Your files with doc:status=editing sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $EDITING \
-        $MAINTAINER "$@" | sort_after_head -k2 -n
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $EDITING --include $MAINTAINER "$@" | sort_after_head -k2 -n
     ;;
 # -------------------------------------------
 # LOCDROP
@@ -261,32 +264,32 @@ case "$SUBCMD" in
   locdrop)
     # All files which have to be translated and are set to locdrop
     docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$REVPROP_QSTRING" \
-        $LOCDROP "$@"
+        --include $LOCDROP "$@"
     ;;
 # -------------------------------------------
 # PRELIM
 # 
   prelim)
     # All files with doc:prelim=yes
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $PRELIM "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $PRELIM "$@"
     ;;
   myprelim)
     # Your files with doc:prelim=yes
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        $PRELIM $MAINTAINER "$@"
+        --include $PRELIM --include $MAINTAINER "$@"
     ;;
 # -------------------------------------------
 # PROOFED
 #
     proofed)
     # All files with doc:status=proofed
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $PROOFED \
-        $REVPROP_QSTRING "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$REVPROP_QSTRING" \
+        --include $PROOFED "$@"
     ;;
   myproofed)
     # Your files with doc:status=proofed
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "REVPROP_QSTRING" $PROOFED \
-        $MAINTAINER "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "REVPROP_QSTRING" \
+        --include $PROOFED --include $MAINTAINER "$@"
     ;;
 # -------------------------------------------
 # STAT
@@ -297,7 +300,8 @@ case "$SUBCMD" in
     ;;
   mystat|work)
     # Your files with including status column
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $MAINTAINER "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $MAINTAINER "$@"
     ;;
   statd)
     # All files with status column sorted after deadline
@@ -306,8 +310,8 @@ case "$SUBCMD" in
     ;;
   mystatd|workd)
     # Your files with status column sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $MAINTAINER \
-        "$@" | sort_after_head -k3
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $MAINTAINER "$@" | sort_after_head -k3
     ;;
   statd)
     # All files with status column sorted after priority
@@ -316,15 +320,15 @@ case "$SUBCMD" in
     ;;
   mystatd|workd)
     # Your files with status column sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" $MAINTAINER \
-        "$@" | sort_after_head -k2
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
+        --include $MAINTAINER "$@" | sort_after_head -k2
     ;;
 # -------------------------------------------
 # TRANS
 #    
   trans)
     # All files which have to be translated
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $TRANS "$@"
+    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $TRANS "$@"
     ;;
 # -------------------------------------------
 # Set Commands
