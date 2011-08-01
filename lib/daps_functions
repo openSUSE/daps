@@ -149,7 +149,7 @@ function call_make_nolog () {
     TARGET=$1
 
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -160,6 +160,8 @@ function call_make_nolog () {
                 help_nohelp
                 exit
                 ;;
+            --) shift ; break ;;
+            *) wrong_parameter "$TARGET $1" ;;
         esac
     done
     
@@ -187,7 +189,7 @@ function init_wd () {
     # Initialize a working directory to get started with daps
     #
    
-    SARGS=$(getopt -o h -l help,name:,rootelement: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,name:,rootelement: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -279,7 +281,7 @@ function getimages () {
     
     IMAGEDIR="$BASE_DIR/images/src/"
 
-    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -378,7 +380,7 @@ function build_pdfs () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o cdhr -l comments,draft,fop:,help,name:,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o cdhr -l comments,draft,fop:,help,name:,remarks,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -443,7 +445,7 @@ function build_html_jsp () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -504,7 +506,7 @@ function build_epub () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o hr -l help,name:,remarks,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o hr -l help,name:,remarks,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -546,7 +548,7 @@ function build_locdrop () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -589,7 +591,7 @@ function checklink () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o h -l help,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -623,7 +625,7 @@ function coments_remarks () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o chr -l comments,help,remarks -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o chr -l comments,help,remarks -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -654,7 +656,7 @@ function coments_remarks () {
             *) wrong_parameter "$TARGET $1" ;;
 	esac
     done
-    
+
     call_make_nolog "$TARGET" "$@"
     
 }
@@ -672,7 +674,7 @@ function profile_first () {
     shift
 
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -694,7 +696,7 @@ function build_generic () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -731,7 +733,7 @@ function filelists () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o hp -l help,pretty -n $0 -- "${SCMD_ARGS[@]}")
+    SARGS=$(getopt -o hp -l help,pretty -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -768,11 +770,11 @@ function packaging () {
     shift
     # command line args
     if [[ package-pdf = $TARGET ]]; then
-        SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+        SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "$@")
     elif [[ package-src = $TARGET ]]; then
-        SARGS=$(getopt -o h -l extra-files:,help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+        SARGS=$(getopt -o h -l extra-files:,help,name:,rootid: -n $0 -- "$@")
     else
-        SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "${SCMD_ARGS[@]}")
+        SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     fi
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"

@@ -302,7 +302,7 @@ function run_subcmd () {
             exit
             ;;
         getimages)
-            getimages
+            getimages "${SCMD_ARGS[@]}"
             exit
             ;;
         html|htmlsingle|html-single|jsp)
@@ -321,7 +321,7 @@ function run_subcmd () {
             packaging $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        profiledir|validate)
+        profiledir)
             coments_remarks $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
@@ -337,6 +337,11 @@ function run_subcmd () {
             ;;
         showenv)
             show_env
+            exit
+            ;;
+        validate)
+            export REMARKS=1
+            build_generic $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
         *)
