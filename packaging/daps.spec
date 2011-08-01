@@ -130,7 +130,7 @@ Recommends:     unfonts
 # Internal XEP package:
 Recommends:     xep
 
-Obsoletes:      susedoc <= 4.3.27
+#Obsoletes:      susedoc <= 4.3.27
 Provides:       susedoc <= 4.3.27
 
 
