@@ -157,13 +157,13 @@ fi
 #
 MAINTAINER="doc:maintainer=${LOGNAME}"
 
-COMMENTS="doc:status=comments"
-EDITED="doc:status=edited"
-EDITING="doc:status=editing"
-LOCDROP="doc:status=locdrop"
-PRELIM="doc:prelim=yes"
-PROOFED="doc:status=proofed"
-TRANS="doc:trans=yes"
+COMMENTS="--include doc:status=comments"
+EDITED="--include doc:status=edited"
+EDITING="--include doc:status=editing"
+LOCDROP="--include doc:status=locdrop"
+PRELIM="--include doc:prelim=yes"
+PROOFED="--include doc:status=proofed"
+TRANS="--include doc:trans=yes"
 
 
 # ATTENTION: If you modify these you may also have to modify the sort calls!!
@@ -278,7 +278,7 @@ case "$SUBCMD" in
 # -------------------------------------------
 # PROOFED
 #
-  proofed)
+    proofed)
     # All files with doc:status=proofed
     docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" $PROOFED \
         $REVPROP_QSTRING "$@"
