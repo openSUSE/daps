@@ -17,7 +17,7 @@ DEBUG=0
 # Verbose error handling
 #
 function exit_on_error () {
-  echo "error" "ERROR: ${1}"
+  echo "error" "ERROR: ${1}" >&2
   exit 1;
 }
 
@@ -309,7 +309,7 @@ case "$SUBCMD" in
     help)
         # Output help text
         dm_help
-        exit 1
+        exit 0
         ;;
 
 # -------------------------------------------
