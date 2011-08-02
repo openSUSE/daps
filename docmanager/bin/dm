@@ -359,7 +359,7 @@ case "$SUBCMD" in
         # Your files with doc:status=proofed
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "REVPROP_QSTRING" --include $PROOFED --include $MAINTAINER "$@"
+            -q "$REVPROP_QSTRING" --include $PROOFED --include $MAINTAINER "$@"
         ;;
 # -------------------------------------------
 # STAT
