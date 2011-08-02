@@ -17,7 +17,7 @@ DEBUG=0
 # Verbose error handling
 #
 function exit_on_error () {
-  echo "error" "ERROR: ${1}" >&2
+  ccecho "error" "ERROR: ${1}" >&2
   exit 1;
 }
 
@@ -145,8 +145,7 @@ while true ; do
       ;;
     --) shift; break ;;
 
-    *) echo "Unknown subcommand" >&2
-     exit 1;
+    *) exit_on_error "Unknown option"
      ;;
   esac  
   
@@ -481,6 +480,9 @@ case "$SUBCMD" in
         # Unset prelim state; prelim = no
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
         ;;
+    --) shift; break ;;
+    *) exit_on_error "Unknown subcommand"
+     ;;
 esac
 
 # EOF
