@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 #
 # "Aliases" for DocManager
 #
-# Author:
+# Authors:
 #   Thomas Schraitle <toms AT opensuse DOT org>
+#   Frank Sundermeyer <fs AT opensuse DOT org>
 # July 2011
 
 
@@ -41,16 +42,64 @@ function dm_help () {
   cat << EOF
 $PROG [-e|--envfile|-b|--basedir] alias
 
-Suffix on Subcommand means:
-  d  deadline
-  p  priority
+Queries for or sets SVN file properties.
+
+Getting properties
+   Apart from the 'stat' queries, queries are based on a certain property
+   or a property value. You basically call '$PROG <VALUE_or_PROPERTY>'
+   (e.g. '$PROG editing' to get all files which have set doc:status to
+   editing).
+   Each command has got several variants:
+     * <VALUE_or_PROPERTY>:   query the whole project
+     * my<VALUE_or_PROPERTY>: query files with doc:maintainer set to $LOGNAME
+     * <VALUE_or_PROPERTY>d:  sort results after doc:deadline
+     * <VALUE_or_PROPERTY>p:  sort results after doc: priority
+
+Setting properties
+   All 'setting' subcommands are prefixed with 'ds' followed by a property
+   value or a property name (for boolean properties).
   
-Options and Subcommands:
+Subcommands
 EOF
   # Output all xxxx) + the following line and remove any whitespaces and ')'
   # If an option should NOT be displayed, use a hash mark at the end of the
   # parenthesis
-  egrep -A1 -- " -?.*[a-z]\)$" $DIR/$PROG | sed 's/# //g;s/)//g;s/^--//g'
+  #egrep -A1 -- " -?.*[a-z]\)$" $DIR/$PROG | sed 's/# //g;s/)//g;s/^--//g'
+  sed '/^#§/!d;s/^#§//g' $DIR/$PROG
+  echo
+}
+
+function set_env_base () {
+
+    debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
+    
+    # Checks, if ENVFILE is set from commandline or by daps
+    if [[ -z $ENVFILE ]]; then
+        # Call daps and see what he has to say about ENVFILE and BASE_DIR:
+        ENV=$(daps showenv )
+        if [[ 0 < $? ]]; then
+            # daps returned != 0 (or an empty string in ENV)
+            # so neither --envfile
+            # nor daps knows about it. Display an error:
+            exit_on_error "No ENV file set"
+        else
+            # ENV contains BASE_DIR=/foo/bla/bar;ENVFILE=ENV-foo
+            # The following construct extracts the BASE_DIR (b) and
+            # the ENVFILE (e) with the help of an Bash array
+            array=(${ENV//;/ }) #
+            b="${array[0]}"
+            e="${array[1]}"
+            # Above array could also be evalulated with eval. I try to
+            # avoid this
+            # and be on the safe side
+            ENVFILE=${e##*=}
+            if [[ -z $BASE_DIR ]]; then
+                BASE_DIR=${b##*=}
+            fi
+        fi
+    fi
+
+    debug "After daps showenv: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
 }
 
 # ----------------------------------------------------------------------------
@@ -96,7 +145,7 @@ while true ; do
       ;;
     --) shift; break ;;
 
-    *) echo "Unknown subcommand"
+    *) echo "Unknown subcommand" >&2
      exit 1;
      ;;
   esac  
@@ -104,44 +153,6 @@ while true ; do
 done
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
-
-debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
-
-# Checks, if ENVFILE is set from commandline or by daps
-if [[ -z $ENVFILE ]]; then
- # Call daps and see what he has to say about ENVFILE and BASE_DIR:
- ENV=$(daps showenv )
- if [[ 0 < $? ]]; then
-   # daps returned != 0 (or an empty string in ENV) so neither --envfile
-   # nor daps knows about it. Display an error:
-   exit_on_error "No ENV file set"
- else
-   # ENV contains BASE_DIR=/foo/bla/bar;ENVFILE=ENV-foo
-   # The following construct extracts the BASE_DIR (b) and
-   # the ENVFILE (e) with the help of an Bash array
-   array=(${ENV//;/ }) #
-   b="${array[0]}"
-   e="${array[1]}"
-   # Above array could also be evalulated with eval. I try to avoid this
-   # and be on the safe side
-   ENVFILE=${e##*=}
-   if [[ -z $BASE_DIR ]]; then
-     BASE_DIR=${b##*=}
-   fi
- fi
-fi
-
-debug "After daps showenv: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
-
-# Extend variables with options:
-if [[ ! -z $ENVFILE ]]; then
- ENVFILE="--envfile $ENVFILE"
-fi
-if [[ ! -z $BASE_DIR ]]; then
- BASE_DIR="--basedir $BASE_DIR"
-fi
-
-debug "Final state: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
 
 if [[ -z $1 ]]; then
     dm_help
@@ -174,189 +185,302 @@ REVPROP_QSTRING="%{name} %{trans} %{status} %{revprop} %{maintainer}\n"
 
 MY_QSTRING="%{name} %{priority} %{deadline} %{trans} %{prelim} '%{modified}'\n"
 
+# ATTENTION
+# All subcommands that need to call docmanager with an ENVFILE and a
+# BASE_DIR need to call set_env_base first!!
+#
+#
 case "$SUBCMD" in
-  help)
-    # Output help text
-    dm_help
-    exit 1
-    ;;
 # -------------------------------------------
 # COMMENTS
-#
-  comments)
-    # All files with doc:status=comments
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
-        --include $COMMENTS "$@"
-    ;;
-  mycomments)
-    # Your files with doc:status=comments
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $COMMENTS \
-        $MAINTAINER "$@"
-    ;;
+#§
+#§  comments 
+#§    Variants: mycomments 
+#§    List files with status 'comments' (doc:status=comments) 
+#    
+    comments)
+        # All files with doc:status=comments
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $COMMENTS "$@"
+        ;;
+    mycomments)
+        # Your files with doc:status=comments
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $COMMENTS $MAINTAINER "$@"
+        ;;
 # -------------------------------------------
 # EDITED
+#§
+#§  edited 
+#§    Variants: editedd, editedp, myedited, myeditedd, myeditedp 
+#§    List files with status 'edited' (doc:status=edited) 
 #
-  edited)
-    # All edited files with doc:status=edited
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITED "$@"
+    edited)
+        # All edited files with doc:status=edited
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $EDITED "$@"
+        ;;
+    myedited)
+        # Your edited files with doc:status=edited
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER "$@"
     ;;
-  myedited)
-    # Your edited files with doc:status=edited
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
-        --include $MAINTAINER "$@"
-    ;;
-  editedd)
-    # All files sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
-        "$@" | sort_after_head -k3
-    ;;
-  myeditedd)
-    # Your files sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
-        --include $EDITED $MAINTAINER "$@" | sort_after_head -k3
-    ;;
-  editedp)
-    # All files sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITED \
-        "$@" | sort_after_head -k2 -n
-    ;;
-  myeditedp|workp)
-    # Your files sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" --include $EDITED \
-        --include $MAINTAINER "$@" | sort_after_head -k2 -n
+    editedd)
+        # All files sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" "$@" | sort_after_head -k3
+        ;;
+    myeditedd)
+        # Your files sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER \
+            "$@" | sort_after_head -k3
+        ;;
+    editedp)
+        # All files sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $EDITED "$@" | sort_after_head -k2 -n
+        ;;
+    myeditedp|workp)
+        # Your files sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER \
+            "$@" | sort_after_head -k2 -n
     ;;
 # -------------------------------------------
 # EDITING
+#§
+#§  editing 
+#§    Variants: editingd, editingp, myediting, myediting, myeditingp 
+#§    List files with status 'editing' (doc:status=editing) 
 #
-  editing)
-    # All files with doc:status=editing
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
-        --include $EDITING "$@"
-    ;;
-  myediting|todo)
-    # Your files with doc:status=editing
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $EDITING --include $MAINTAINER "$@"
-    ;;
-  editingd)
-    # All files with doc:status=editing sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITING \
-        "$@" | sort_after_head -k3 
-    ;;
-  myeditingd)
-    # Your files with doc:status=editing sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $EDITING --include $MAINTAINER "$@" | sort_after_head -k3 
-    ;;
-  editingp)
-    # All files with doc:status=editing sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $EDITING \
-        "$@" | sort_after_head -k2 -n
-    ;;
-  myeditingp)
-    # Your files with doc:status=editing sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $EDITING --include $MAINTAINER "$@" | sort_after_head -k2 -n
-    ;;
+    editing)
+        # All files with doc:status=editing
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $EDITING "$@"
+        ;;
+    myediting|todo)
+        # Your files with doc:status=editing
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER "$@"
+        ;;
+    editingd)
+        # All files with doc:status=editing sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k3 
+        ;;
+    myeditingd)
+        # Your files with doc:status=editing sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER \
+            "$@" | sort_after_head -k3 
+        ;;
+    editingp)
+        # All files with doc:status=editing sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k2 -n
+        ;;
+    myeditingp)
+        # Your files with doc:status=editing sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER \
+            "$@" | sort_after_head -k2 -n
+        ;;
+# -------------------------------------------
+# HELP
+#§
+#§  help 
+#§    Print this help text 
+#
+    help)
+        # Output help text
+        dm_help
+        exit 1
+        ;;
+
 # -------------------------------------------
 # LOCDROP
+#§
+#§  locdrop 
+#§    List files with status 'locdrop' (doc:status=locdrop) 
 #    
-  locdrop)
-    # All files which have to be translated and are set to locdrop
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$REVPROP_QSTRING" \
-        --include $LOCDROP "$@"
-    ;;
+    locdrop)
+        # All files which have to be translated and are set to locdrop
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$REVPROP_QSTRING" --include $LOCDROP "$@"
+        ;;
 # -------------------------------------------
 # PRELIM
+#§
+#§  prelim 
+#§    Variants: myprelim 
+#§    List files with status 'preliminary' (doc:prelim=yes) 
 # 
-  prelim)
-    # All files with doc:prelim=yes
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $PRELIM "$@"
-    ;;
-  myprelim)
-    # Your files with doc:prelim=yes
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $PRELIM --include $MAINTAINER "$@"
-    ;;
+    prelim)
+        # All files with doc:prelim=yes
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $PRELIM "$@"
+        ;;
+    myprelim)
+        # Your files with doc:prelim=yes
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $PRELIM --include $MAINTAINER "$@"
+        ;;
 # -------------------------------------------
 # PROOFED
+#§
+#§  proofed 
+#§    Variants: myproofed 
+#§    List files with status 'proofed' (doc:status=proofed) 
 #
     proofed)
-    # All files with doc:status=proofed
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$REVPROP_QSTRING" \
-        --include $PROOFED "$@"
-    ;;
-  myproofed)
-    # Your files with doc:status=proofed
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "REVPROP_QSTRING" \
-        --include $PROOFED --include $MAINTAINER "$@"
-    ;;
+        # All files with doc:status=proofed
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$REVPROP_QSTRING" --include $PROOFED "$@"
+        ;;
+    myproofed)
+        # Your files with doc:status=proofed
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "REVPROP_QSTRING" --include $PROOFED --include $MAINTAINER "$@"
+        ;;
 # -------------------------------------------
 # STAT
+#§
+#§  stat 
+#§    Variants: stad, statp, mystat, mystatd, mystatp 
+#§    List of files with all properties
 #
-  stat)
-    # All files including status column
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" "$@"
-    ;;
-  mystat|work)
-    # Your files with including status column
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $MAINTAINER "$@"
-    ;;
-  statd)
-    # All files with status column sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P  -q "$QSTRING" \
-        "$@" | sort_after_head -k3
-    ;;
-  mystatd|workd)
-    # Your files with status column sorted after deadline
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $MAINTAINER "$@" | sort_after_head -k3
-    ;;
-  statd)
-    # All files with status column sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" \
-        "$@" | sort_after_head -k2
-    ;;
-  mystatd|workd)
-    # Your files with status column sorted after priority
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$MY_QSTRING" \
-        --include $MAINTAINER "$@" | sort_after_head -k2
-    ;;
+    stat)
+        # All files including status column
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" "$@"
+        ;;
+    mystat|work)
+        # Your files with including status column
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $MAINTAINER "$@"
+        ;;
+    statd)
+        # all files with status column sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" "$@" | sort_after_head -k3
+        ;;
+    mystatd|workd)
+        # Your files with status column sorted after deadline
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k3
+        ;;
+    statp)
+        # All files with status column sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" "$@" | sort_after_head -k2
+        ;;
+    mystatp|workp)
+        # Your files with status column sorted after priority
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k2
+        ;;
 # -------------------------------------------
 # TRANS
+#§
+#§  stat 
+#§    List of files that are scheduled for translation (doc:trans=yes) 
 #    
-  trans)
-    # All files which have to be translated
-    docmanager ${ENVFILE} ${BASE_DIR} dg -P -q "$QSTRING" --include $TRANS "$@"
-    ;;
+    trans)
+        # All files which have to be translated
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$QSTRING" --include $TRANS "$@"
+        ;;
+# -------------------------------------------
+# FILE
+#
+# Not a real docmanager call, but the svn pl -v output has an odd formatting
+# and cannot handle multiple files
+# This command fixes that
+#§
+#§  file 
+#§    Variants: files    
+#§    Lists all doc:* properties of the given file(s) 
+#§    Usage: $PROG file FILELIST 
+#
+    file|files)
+        # show all doc:* properties of the given file(s). 
+        # Usage: dm $1 FILELIST
+        echo
+        for FILE in "$@"; do
+            if [[ ! -f $FILE ]]; then
+                ccecho "warn" "Warning: File $FILE does not exist\n"
+                continue
+            fi
+            echo -e "$FILE\n-------------------------"
+            for PROP in $(svn pl -v $FILE | grep "doc:" | sort ); do
+                PROPVAL=$(svn pg $PROP $FILE)
+                echo -e "$PROP:\t$PROPVAL"
+            done
+            echo
+        done
+        exit 0
+        ;;
 # -------------------------------------------
 # Set Commands
 #
-  dscomments)
-    # set files to comments
-    docmanager ${ENVFILE} ${BASE_DIR} ds -C "$@"
-    ;;
-  dsproofed)
-    # set files to proofed
-    docmanager ${ENVFILE} ${BASE_DIR} ds -R "$@"
-    ;;
-  dsproofing)
-    # set files to proofing
-    docmanager ${ENVFILE} ${BASE_DIR} ds -P "$@"
-    ;;
-  dsediting)
-    # set files to editing
-    docmanager ${ENVFILE} ${BASE_DIR} ds -E "$@"
-    ;;
-  dsedited)
-    # set files to edited
-    docmanager ${ENVFILE} ${BASE_DIR} ds -D "$@"
-    ;;
-  dsprelim)
-    # Unset prelim state; prelim = no
-    docmanager ${ENVFILE} ${BASE_DIR} ds -y "$@"
-    ;;
+#§
+#§  ds<VALUE> 
+#§    Variants: dscomments, dsedited, dsediting, dsproofed, dsproofing, 
+#§              dsprelim 
+#§    Set property or value on file(s) 
+#§    Usage: $PROG ds<VALUE> FILELIST 
+
+    dscomments)
+        # set files to comments
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -C "$@"
+        ;;
+    dsproofed)
+        # set files to proofed
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -R "$@"
+        ;;
+    dsproofing)
+        # set files to proofing
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -P "$@"
+        ;;
+    dsediting)
+        # set files to editing
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -E "$@"
+        ;;
+    dsedited)
+        # set files to edited
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -D "$@"
+        ;;
+    dsprelim)
+        # Unset prelim state; prelim = no
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
+        ;;
 esac
 
 # EOF
