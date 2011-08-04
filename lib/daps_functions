@@ -349,7 +349,7 @@ function getimages () {
     # the sed part generates the path to the image
     # awk removes the duplicates wihout the need to sort it
     # and tr removes the newline statements
-    declare -a IMGLIST=( $(/usr/bin/xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
+    declare -a IMGLIST=( $(/usr/bin/xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE 2>/dev/null | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
 
     if [[ $COMPACT ]]; then
         echo -e "${IMGLIST[@]}\n"
@@ -630,7 +630,7 @@ function checklink () {
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options" 
     fi
 
-    ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE) || exit_on_error "Cannot get a rootid from file $FILE"
+    ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
     
     call_make "$TARGET" "$@"
     
