@@ -65,7 +65,7 @@ UNSETLIST=(
     BUILD_DIR_CMDL
     BIN_DIR
     BOOK
-    COLORS_CMDL
+    COLOR_CMDL
     CONFIG
     DTDROOT
     DTDROOT_CMDL
@@ -354,10 +354,6 @@ function run_subcmd () {
 
 # ----------------------------------------------------------------------------
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
-
-# by default we want to have colored output
-#
-export COLOR=1
 
 # make command - calculate -j setting
 #
@@ -689,12 +685,28 @@ recover_cmdl_values
 #
 
 # COLOR must be set to 1|0
-if [[ yes = $COLOR || 1 = $COLOR ]]; then
-    COLOR=1
-elif [[ no = $COLOR || 0 = $COLOR || -z $COLOR ]]; then
-    COLOR=0
+#
+# if we are not in a terminal but rather in a pipe, script, etc.
+# disable color output otherwise use the value specified on the
+# command line or in the config
+#
+# checking for a Terminal is done by "test -t 1"
+
+if [[  -t 1 ]]; then
+    case $COLOR in
+        "1" | "yes")
+            COLOR=1
+            ;;
+        "0" | "no" | "")
+            COLOR=0
+            ;;
+        *)
+            exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
+            ;;
+        esac
 else
-    exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
+    # No terminal
+    COLOR=0
 fi
 
 # MAIN
