@@ -349,7 +349,7 @@ function getimages () {
     # the sed part generates the path to the image
     # awk removes the duplicates wihout the need to sort it
     # and tr removes the newline statements
-    declare -a IMGLIST=( $(xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
+    declare -a IMGLIST=( $(/usr/bin/xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
 
     if [[ $COMPACT ]]; then
         echo -e "${IMGLIST[@]}\n"
@@ -588,21 +588,31 @@ function build_locdrop () {
 function checklink () {
     # HTTP link checker
     #
-    local TARGET=$1
+    local FILE TARGET
+    TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o h -l help,rootid: -n $0 -- "$@")
+    SARGS=$(getopt -o f:h -l file:,help,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
     eval set -- "$SARGS"
     while true ; do
 	case "$1" in
+            -f|--file)
+                if [[ -f $2 ]]; then
+                    FILE="$2"
+                else
+                    exit_on_error "File $FILE does not exist"
+                fi
+                shift 2
+                ;;
             -h|--help)
-                help_scmd_head "Checks http links"
+                help_scmd_head "Checks ftp and http(s) links"
+                help_file
                 help_help
                 help_rootid
-                echo
+                echo -e "    NOTES: Options --file (-f) and --rootid exclude one another.\n           Checklink follows xi:includes\n"
 		exit 0
 		;;
 	    --rootid)
@@ -614,6 +624,13 @@ function checklink () {
             *) wrong_parameter "$TARGET $1" ;;
 	esac
     done
+
+    # You can either specify rootid _or_ file
+    if [[ -n $FILE && -n $ROOTID ]]; then
+        exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options" 
+    fi
+
+    ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE) || exit_on_error "Cannot get a rootid from file $FILE"
     
     call_make "$TARGET" "$@"
     
@@ -875,7 +892,7 @@ function help_extrafiles () {
                               relative to BASE_DIR"
 }
 function help_file () {
-    echo "    --file, -f                Specify a filename from where to get the images"
+    echo "    --file=FILE, -f FILE      Specify the filename of an XML file"
 }
 function help_fop () {
     echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
