@@ -278,10 +278,14 @@ function getimages () {
 
     local CMD_IMG_VIEWER COMPACT FILE MOD SHOW
     declare -a IMGLIST
-    
+
+    TARGET="$1"
+    shift
+
+  
     IMAGEDIR="$BASE_DIR/images/src/"
 
-    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $0 -- "$@")
+    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $ME -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -324,6 +328,10 @@ function getimages () {
 	esac
     done
 
+    if [[ -z $FILE ]]; then
+        exit_on_error "Please specify a filename with -f or --file"
+    fi
+
     # IMG_VIEWER may also be set via config file:
     if [[ $SHOW ]]; then
         IMG_VIEWER=$(which $IMG_VIEWER 2>/dev/null)
@@ -336,15 +344,17 @@ function getimages () {
         fi
     fi
 
-    # get the profiling directory
-    # this will automatically do the profiling, too, if needed
-    #
-    PROFDIR=$(profile_first showvariable VARIABLE=PROFILEDIR) || exit 1
+    # profile and then get the profiling directory
 
+    /usr/bin/make -j${CORE_NO} -f $DTDROOT/make/common.mk profile >/dev/null || exit_on_error "Profiling failed" 
+    PROFDIR=$(/usr/bin/make -j${CORE_NO} -f $DTDROOT/make/common.mk "showvariable" "VARIABLE=PROFILEDIR") || exit_on_error "Could not get the profiling directory"
+
+    # does a profiled version of $FILE exist? 
     if [[ ! -f ${PROFDIR}/$FILE ]]; then
         exit_on_error "File $FILE does not exist in profiling directory $PROFDIR\n.You either mistyped the filename or specified an ENVFILE for a book that does\nnot include $FILE"
     fi
 
+    
     # the xml command produces a list of filenames from the imagedata tags
     # the sed part generates the path to the image
     # awk removes the duplicates wihout the need to sort it
@@ -702,6 +712,7 @@ function profile_first () {
                 help_nohelp
                 exit
                 ;;
+            --) shift; break ;;
         esac
     done
     
