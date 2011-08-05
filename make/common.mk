@@ -820,7 +820,7 @@ $(PROFILE_PARENT_DIR)/dist:
 $(TMP_DIR)/dist/xml:
 	mkdir -p $@
 
-$(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK)
+$(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK) $(wildcard $(BASE_DIR)/xml/*.ent)
 $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 
 #---------------
