@@ -598,7 +598,7 @@ function build_locdrop () {
 function checklink () {
     # HTTP link checker
     #
-    local FILE TARGET
+    local FILE TARGET ROOTID_CMDL
     TARGET=$1
     shift
     # command line args
@@ -626,7 +626,8 @@ function checklink () {
 		exit 0
 		;;
 	    --rootid)
-		export ROOTID="$2"
+                ROOTID_CMDL="$2"
+		export ROOTID="$ROOTID_CMDL"
 		shift 2
 		;;
             --) shift ; break ;;
@@ -635,13 +636,18 @@ function checklink () {
 	esac
     done
 
-    # You can either specify rootid _or_ file
-    if [[ -n $FILE && -n $ROOTID ]]; then
-        exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options" 
+    if [[ -z $FILE && -z $ROOTID_CMDL ]]; then
+        exit_on_error "Please specify either a rootid or a filename"
     fi
 
-    ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
-    
+    if [[ -n $FILE ]]; then
+        if [[ -n $ROOTID_CMDL ]]; then
+            # You can either specify rootid _or_ file
+            exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
+        else
+            export ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
+        fi
+    fi
     call_make "$TARGET" "$@"
     
 }
