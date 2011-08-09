@@ -130,9 +130,16 @@
   <xsl:choose>
     <xsl:when test="parent::*">
       <rx:bookmark internal-destination="{$id}">
-        <xsl:if test="self::set|self::part|self::book">
-          <xsl:attribute name="collapse-subtree">false</xsl:attribute>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="self::set|self::part|self::book">
+            <xsl:attribute name="collapse-subtree"
+              >false</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="self::chapter|self::appendix|self::glossary">
+            <xsl:attribute name="collapse-subtree"
+              >true</xsl:attribute>
+          </xsl:when>
+        </xsl:choose>
         <rx:bookmark-label>
           <xsl:value-of select="$bookmark-label"/>
         </rx:bookmark-label>
