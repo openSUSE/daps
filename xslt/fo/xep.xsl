@@ -182,11 +182,11 @@
   <xsl:variable name="template">
     <xsl:apply-templates select="." mode="object.xep.title.template"/>
   </xsl:variable>
-   
+  
   <xsl:call-template name="substitute-markup">
     <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
     <xsl:with-param name="template" select="$template"/>
-  </xsl:call-template>
+  </xsl:call-template> 
 </xsl:template>
 
 
