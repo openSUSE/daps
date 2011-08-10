@@ -36,7 +36,7 @@
             font-size="11pt"
             font-family="{$sans.font.family}"
             y="12.5"
-            x="102mm">www.novell.com</svg:text>
+            x="102mm">www.suse.com</svg:text>
       <svg:text
             id="productnumber.text"
             x="5"
@@ -114,7 +114,7 @@
        </xsl:when>
        <xsl:otherwise>
         <xsl:attribute name="fill">
-          <xsl:text>#f90823</xsl:text>
+          <xsl:text>#0D5148</xsl:text>
         </xsl:attribute>
        </xsl:otherwise>
      </xsl:choose>

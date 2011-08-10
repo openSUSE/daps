@@ -86,7 +86,7 @@
                     padding-top=".5em">
                     <fo:inline padding-left="1em"
                       border-left="0.2pt dotted black">
-                      <xsl:comment>NOVELL&#x00AE; QUICK START CARD </xsl:comment>
+                      <xsl:comment>SUSE&#x00AE; QUICK START CARD </xsl:comment>
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key"
                           select="'FlyerQuickstart'"/>
@@ -116,7 +116,7 @@
                     font-family="{$sans.font.family}">
                     <fo:inline padding-left="1em" padding-top="0.25em"
                       border-left="0.2pt dotted black">
-                      <xsl:comment>NOVELL&#x00AE; QUICK START CARD </xsl:comment>
+                      <xsl:comment>SUSE&#x00AE; QUICK START CARD </xsl:comment>
                       <xsl:call-template name="gentext">
                         <xsl:with-param name="key"
                           select="'FlyerQuickstart'"/>
@@ -168,13 +168,13 @@
                     <fo:block/>
                   </fo:table-cell>
                   <fo:table-cell background-color="#E4E5E6"
-                    color="#FF1A00">
+                    color="#70B926">
                     <fo:block-container height="41mm" right="10pt">
                       <fo:block font-size="14pt"
                         margin-top="32.5mm" 
                         text-align="right" 
                         margin-right=".5em"
-                        >Novell<fo:inline font-size="7.5pt">®</fo:inline>
+                        >SUSE<fo:inline font-size="7.5pt">®</fo:inline>
                         </fo:block>
                     </fo:block-container>
                   </fo:table-cell>

@@ -30,7 +30,8 @@
    <xsl:when test="$pi = 'suse'">#70B926</xsl:when>
    <xsl:when test="$pi = 'dark-suse'">#0D5148</xsl:when>
    <xsl:when test="$pi = 'novell'">#f90823</xsl:when>
-   <xsl:otherwise>#f90823</xsl:otherwise>
+   <!-- Default is now SUSE -->
+   <xsl:otherwise>#70B926</xsl:otherwise>
   </xsl:choose> 
 </xsl:param>
 
@@ -68,7 +69,7 @@
   <xsl:choose>
    <xsl:when test="$pi = '1'">v1</xsl:when>
    <xsl:when test="$pi = '2'">v2</xsl:when>
-   <xsl:otherwise>1</xsl:otherwise>
+   <xsl:otherwise>v2</xsl:otherwise>
   </xsl:choose> 
 </xsl:param>
 
