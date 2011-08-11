@@ -631,7 +631,6 @@ function checklink () {
 		shift 2
 		;;
             --) shift ; break ;;
-#            *) exit_on_error "Internal error!" ;;
             *) wrong_parameter "$TARGET $1" ;;
 	esac
     done
@@ -645,7 +644,7 @@ function checklink () {
             # You can either specify rootid _or_ file
             exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
         else
-            export ROOTID=$(/usr/bin/xml sel -t -v '/*/@id' $FILE 2>/dev/null) || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID=$(xsltproc $DTDROOT/xslt/misc/get-rootelement-id.xsl $FILE) || exit_on_error "Cannot get a rootid from file $FILE"
         fi
     fi
     call_make "$TARGET" "$@"
