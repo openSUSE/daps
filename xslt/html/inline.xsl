@@ -86,6 +86,15 @@
        <xsl:call-template name="paragraph">
           <xsl:with-param name="class" select="'profarch'"/>
           <xsl:with-param name="content">
+            <xsl:variable name="arch">
+               <!-- Change here the appearance of your attributes
+                    TODO: Move it into common
+               -->
+               <xsl:choose>
+                 <xsl:when test="@arch = 'zseries'">System&#xa0;z</xsl:when>
+                 <xsl:otherwise><xsl:value-of select="@arch"/></xsl:otherwise>
+               </xsl:choose>
+             </xsl:variable>
              <xsl:if test="position() = 1 and parent::listitem">
              <xsl:call-template name="anchor">
                 <xsl:with-param name="node" select="parent::listitem"/>
@@ -93,9 +102,10 @@
              </xsl:if>
 
              <xsl:call-template name="anchor"/>
+             
              <span class="profarch"><xsl:value-of
                        select="concat('&rtrif;',
-                       translate(@arch, $profile.separator, ' '), ': ')"
+                       translate($arch, $profile.separator, ' '), ': ')"
              /></span>
              <xsl:apply-templates/>
              <span class="profarch">&ltrif;</span>
@@ -109,8 +119,8 @@
 </xsl:template>
 
 
-<xsl:template match="remark">
-    <xsl:if test="$show.remarks != 0">
+<xsl:template match="comment|remark">
+    <xsl:if test="$show.comments != 0">
       <xsl:variable name="num">
         <xsl:number format=".1" level="any" from="chapter" />
       </xsl:variable>

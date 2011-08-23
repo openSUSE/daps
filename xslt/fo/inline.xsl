@@ -371,8 +371,8 @@
 </xsl:template>
 
 
-<xsl:template match="remark[&comment.block.parents;]">
-  <xsl:if test="$show.remarks != 0">
+<xsl:template match="comment[&comment.block.parents;]|remark[&comment.block.parents;]">
+  <xsl:if test="$show.comments != 0">
     <fo:block xsl:use-attribute-sets="remark.properties">
       <xsl:call-template name="inline.charseq"/>
     </fo:block>
@@ -380,8 +380,8 @@
 </xsl:template>
 
 
-<xsl:template match="remark">
-  <xsl:if test="$show.remarks != 0">
+<xsl:template match="comment|remark">
+  <xsl:if test="$show.comments != 0">
     <fo:inline xsl:use-attribute-sets="remark.inline.properties">
       <xsl:call-template name="inline.charseq"/>
     </fo:inline>
@@ -390,13 +390,23 @@
 
 
 <xsl:template match="para[@arch][&para.parent;]">
-
+   <xsl:variable name="arch">
+      <!-- Change here the appearance of your attributes
+           TODO: Move it into common
+      -->
+      <xsl:choose>
+         <xsl:when test="@arch = 'zseries'">System&#xa0;z</xsl:when>
+         <xsl:otherwise><xsl:value-of select="@arch"/></xsl:otherwise>
+      </xsl:choose>
+   </xsl:variable>
+  
    <xsl:choose>
      <xsl:when test="$para.use.arch">
        <fo:block xsl:use-attribute-sets="normal.para.spacing">
-         <fo:inline font-weight="bold"
-            ><xsl:value-of select="concat('&rtrif;',
-                                   translate(@arch, $profile.separator, ' '), ': ')"
+         <fo:inline font-weight="bold">
+           
+           <xsl:value-of select="concat('&rtrif;',
+                                   translate($arch, $profile.separator, ' '), ': ')"
             /></fo:inline>
          <xsl:call-template name="anchor"/>
          <xsl:apply-templates/>
