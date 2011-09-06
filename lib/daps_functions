@@ -361,21 +361,23 @@ function getimages () {
     # and tr removes the newline statements
     declare -a IMGLIST=( $(/usr/bin/xml sel -t -m "//imagedata" -v "concat(@fileref, '&#x0a;')" ${PROFDIR}/$FILE 2>/dev/null | sed -e "s:\(.*\.\(.*\)\):${IMAGEDIR}\2/\1:g" | awk '!x[$0]++' | tr '\n' ' ') )   
 
-    if [[ $COMPACT ]]; then
-        echo -e "${IMGLIST[@]}\n"
-    else
-        for IMAGE in ${IMGLIST[@]}; do
-            if [[ $MOD ]]; then
-	        MODIFIED=$(stat -c %y ${IMAGE} | cut -d '.' -f1)
-	        echo "${IMAGE} (${MODIFIED})"
-            else
-	        echo "${IMAGE}"
+    if [[ 0 < ${#IMGLIST[@]} ]]; then
+        if [[ $COMPACT ]]; then
+            echo -e "${IMGLIST[@]}\n"
+        else
+            for IMAGE in ${IMGLIST[@]}; do
+                if [[ $MOD ]]; then
+	            MODIFIED=$(stat -c %y ${IMAGE} | cut -d '.' -f1)
+	            echo "${IMAGE} (${MODIFIED})"
+                else
+	            echo "${IMAGE}"
+                fi
+            done  | column -t
+            if [[ $SHOW && ${#IM[@]} ]]; then
+                eval "$IMG_VIEWER ${IMGLIST[@]} &"
             fi
-        done  | column -t
-        if [[ $SHOW ]]; then
-            eval "$IMG_VIEWER ${IMGLIST[@]} &"
         fi
-    fi 
+    fi
     
 }
 
