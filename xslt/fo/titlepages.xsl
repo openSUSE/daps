@@ -8,21 +8,53 @@
 
 
 <xsl:template name="debug.filename">
-  <xsl:if test="$draft.mode = 'yes' and @xml:base!=''">
-   <fo:block font-family="{$sans.font.family}"
+  <xsl:param name="node" select="."/>
+  <xsl:variable name="xmlbase"
+    select="ancestor-or-self::*[self::chapter or
+                                self::appendix or
+                                self::part or
+                                self::reference or
+                                self::preface or
+                                self::glossary or
+                                self::sect1 or
+                                self::sect2 or
+                                self::sect3 or
+                                self::sect4]/@xml:base"/>
+  
+  <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
+   <fo:block font-family="{$sans.font.family}" 
+     clear="both"
      background-color="lightgrey" color="white">
-    Filename:  <fo:inline font-family="{$monospace.font.family}"><fo:basic-link
-     show-destination="new"
-     source-document="url('{concat($xml.source.dir, @xml:base)}')"
-     external-destination="url('{concat($xml.source.dir, @xml:base)}')">
-      &quot;<xsl:value-of select="@xml:base"/>&quot;</fo:basic-link></fo:inline></fo:block>
+    Filename:  <fo:inline font-family="{$monospace.font.family}">
+      &quot;<xsl:value-of select="$xmlbase"/>&quot;</fo:inline>
+   </fo:block>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="id.block">
+  <xsl:param name="node" select="."/>
+   <xsl:if test="$draft.mode = 'yes'">
+     <fo:block font-family="{$sans.font.family}"
+       clear="both"
+     background-color="lightgrey" color="white">
+       <xsl:text>ID: </xsl:text>
+       <xsl:choose>
+         <xsl:when test="@id">
+           <xsl:text>#</xsl:text>
+           <xsl:call-template name="object.id"/>
+         </xsl:when>
+         <xsl:otherwise>- No ID found -</xsl:otherwise>
+       </xsl:choose>
+     </fo:block>
+   </xsl:if>
 </xsl:template>
 
 <!-- ==================================================================== -->
 <xsl:template name="chapter.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
+
 
 <xsl:template match="title" mode="chapter.titlepage.recto.auto.mode">
   <fo:block xsl:use-attribute-sets="chapter.titlepage.recto.style"
@@ -38,6 +70,7 @@
 <!-- ==================================================================== -->
 <xsl:template name="appendix.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 
@@ -54,6 +87,7 @@
 <!-- ==================================================================== -->
 <xsl:template name="preface.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <xsl:template match="title" mode="preface.titlepage.recto.auto.mode">
@@ -69,33 +103,40 @@
 <!-- ==================================================================== -->
 <xsl:template name="glossary.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <xsl:template name="part.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 
 <xsl:template name="set.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 
 <!-- ==================================================================== -->
 <xsl:template name="sect1.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <xsl:template name="sect2.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <xsl:template name="sect3.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <xsl:template name="sect4.titlepage.separator">
   <xsl:call-template name="debug.filename"/>
+  <xsl:call-template name="id.block"/>
 </xsl:template>
 
 <!-- ==================================================================== -->
