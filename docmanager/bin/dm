@@ -178,7 +178,7 @@ TRANS="doc:trans=yes"
 
 # ATTENTION: If you modify these you may also have to modify the sort calls!!
 #
-QSTRING="%{name} '%{modified}' %{maintainer} %{trans} %{status} %{priority} %{deadline}\n"
+QSTRING="%{name} %{maintainer} %{trans} %{status} %{priority} %{deadline} '%{modified}'\n"
 
 REVPROP_QSTRING="%{name} %{trans} %{status} %{revprop} %{maintainer}\n"
 
@@ -232,7 +232,7 @@ case "$SUBCMD" in
         # All files sorted after deadline
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" "$@" | sort_after_head -k3
+            -q "$QSTRING" "$@" | sort_after_head -k6
         ;;
     myeditedd)
         # Your files sorted after deadline
@@ -245,7 +245,7 @@ case "$SUBCMD" in
         # All files sorted after priority
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" --include $EDITED "$@" | sort_after_head -k2 -n
+            -q "$QSTRING" --include $EDITED "$@" | sort_after_head -k5 -n
         ;;
     myeditedp|workp)
         # Your files sorted after priority
@@ -277,7 +277,7 @@ case "$SUBCMD" in
         # All files with doc:status=editing sorted after deadline
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k3 
+            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k6 
         ;;
     myeditingd)
         # Your files with doc:status=editing sorted after deadline
@@ -290,7 +290,7 @@ case "$SUBCMD" in
         # All files with doc:status=editing sorted after priority
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k2 -n
+            -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k5 -n
         ;;
     myeditingp)
         # Your files with doc:status=editing sorted after priority
@@ -384,25 +384,25 @@ case "$SUBCMD" in
         # all files with status column sorted after deadline
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" "$@" | sort_after_head -k3
+            -q "$QSTRING" "$@" | sort_after_head -k6
         ;;
     mystatd|workd)
         # Your files with status column sorted after deadline
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k3
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k7
         ;;
     statp)
         # All files with status column sorted after priority
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" "$@" | sort_after_head -k2
+            -q "$QSTRING" "$@" | sort_after_head -k5
         ;;
     mystatp|workp)
         # Your files with status column sorted after priority
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k2
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k6
         ;;
 # -------------------------------------------
 # TRANS
@@ -415,6 +415,19 @@ case "$SUBCMD" in
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
             -q "$QSTRING" --include $TRANS "$@"
+        ;;
+# -------------------------------------------
+# REVPROP
+#§
+#§  revprop 
+#§    List revision properties of files that are scheduled for
+#§      translation (doc:trans=yes) 
+#    
+    revprop)
+        # Revision properties for all files which have to be translated
+        set_env_base
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+            -q "$REVPROP_QSTRING" --include $TRANS "$@"
         ;;
 # -------------------------------------------
 # FILE
