@@ -70,6 +70,7 @@
 	<xsl:with-param name="id" select="$id"/>
 	<xsl:with-param name="title" select="title"/>
       </xsl:call-template>
+      <xsl:call-template name="debug.filename"/>
       <xsl:call-template name="addid"/>
     </xsl:element>
   </xsl:template>

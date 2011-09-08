@@ -2,6 +2,26 @@
 <xsl:stylesheet version="1.0" 
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+<xsl:template name="debug.filename">
+  <xsl:param name="node" select="."/>
+  <xsl:variable name="xmlbase"
+    select="ancestor-or-self::*[self::chapter or
+                                self::appendix or
+                                self::part or
+                                self::reference or
+                                self::preface or
+                                self::glossary or
+                                self::sect1 or
+                                self::sect2 or
+                                self::sect3 or
+                                self::sect4]/@xml:base"/>
+  
+  <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
+   <div class="filenameblock">
+    Filename:  <span>&quot;<xsl:value-of select="$xmlbase"/>&quot;</span>
+   </div>
+  </xsl:if>
+</xsl:template>
 
 <xsl:template name="addstatus">
   <xsl:param name="node" select=".."/>
@@ -141,6 +161,7 @@
       <xsl:with-param name="id" select="$id"/>
       <xsl:with-param name="title" select="$title"/>
     </xsl:call-template>
+    <xsl:call-template name="debug.filename"/>
     <xsl:call-template name="addid"/>
   </xsl:element>
   
