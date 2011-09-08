@@ -27,7 +27,6 @@
    </xsl:if>
 </xsl:template>
 
-
 <xsl:template name="permalink">
   <xsl:param name="id"/>
   <xsl:param name="title"/>
@@ -47,6 +46,26 @@
       </a>
   </span>
   </xsl:if>
+</xsl:template>
+
+
+<xsl:template name="addid">
+  <xsl:param name="node" select=".."/>
+  
+  <xsl:if test="$draft.mode = 'yes'">
+     <div class="idblock">
+       <xsl:text>ID: </xsl:text>
+       <xsl:choose>
+         <xsl:when test="$node/@id">
+           <xsl:text>#</xsl:text>
+           <xsl:call-template name="object.id">
+             <xsl:with-param name="object" select="$node"/>
+           </xsl:call-template>
+         </xsl:when>
+         <xsl:otherwise>- No ID found -</xsl:otherwise>
+       </xsl:choose>
+     </div>
+   </xsl:if>
 </xsl:template>
 
 
@@ -122,7 +141,9 @@
       <xsl:with-param name="id" select="$id"/>
       <xsl:with-param name="title" select="$title"/>
     </xsl:call-template>
+    <xsl:call-template name="addid"/>
   </xsl:element>
+  
 </xsl:template>
   
 </xsl:stylesheet>
