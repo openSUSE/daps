@@ -39,6 +39,12 @@ endif
 ifndef FOP
 FOP     := $(LIB_DIR)/daps-fop
 endif
+ifndef PROFARCH
+PROFARCH := noarch
+endif
+ifndef PROFOS
+PROFOS := default
+endif
 
 
 # if BUILD_DIR was not set, use $(BASE_DIR)/build
@@ -292,6 +298,7 @@ SRCFILES     := $(shell echo "$(SETFILES)" | xsltproc \
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
+TMP_DISTPROFILE := $(subst $(BASE_DIR)/,$(TMP_DIR)/dist/,$(SRCFILES))
 
 
 #------------------------------------------------------------------------
@@ -601,8 +608,7 @@ dist: $(PROFILEDIR)/.validate
 # needed
 #
 .PHONY: dist-xml
-dist-xml: $(DISTPROFILE)
-dist-xml: link-entity-dist
+dist-xml: link-entity-dist $(DISTPROFILE)
 dist-xml: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude \
 			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
@@ -628,8 +634,7 @@ dist-xml:
 # on dist-xml target
 #
 .PHONY: dist-book
-dist-book: $(DISTPROFILE)
-dist-book: link-entity-dist
+dist-book: link-entity-dist $(DISTPROFILE)
 dist-book: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet $(ROOTSTRING) \
 			--xinclude $(STYLESEARCH) \
@@ -786,8 +791,8 @@ dist-all: validate chklink dist-xml dist-html dist color-pdf
 .PRECIOUS: $(IMG_GENDIR)/gen/svg/%.svg
 
 
-.INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%.xml
-.INTERMEDIATE: $(TMP_DIR)/dist/%.xml
+.INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%
+.INTERMEDIATE: $(TMP_DIR)/dist/%
 
 #------------------------------------------------------------------------
 #
@@ -832,13 +837,14 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 # If STYLENOV is undefined, there is no profiling information in $MAIN. This
 # means, we will continue without profiling.
 #
-$(PROFILEDIR)/%.xml: $(BASE_DIR)/xml/%.xml
+$(PROFILES): SOURCEFILE = $(subst $(PROFILEDIR)/,$(BASE_DIR)/xml/,$@)
+$(PROFILES):
 ifdef STYLENOV
 	$(QUIET)xsltproc --nonet --output $@ $(PROFSTRINGS) \
-	  --stringparam filename "$(notdir $<)" $(HROOTSTRING) \
-	  $(STYLENOV) $< $(QUIET2)
+	  --stringparam filename "$(notdir $(SOURCEFILE))" $(HROOTSTRING) \
+	  $(STYLENOV) $(SOURCEFILE)
 else
-	$(QUIET)ln -sf $< $@
+	$(QUIET)ln -sf $(SOURCEFILE) $@
 endif
 
 #---------------
@@ -871,29 +877,32 @@ endif
 # dist is _always_ redone
 #
 
-$(PROFILE_PARENT_DIR)/dist/%.xml: $(PROFILE_PARENT_DIR)/dist
+$(DISTPROFILE): $(PROFILE_PARENT_DIR)/dist $(TMP_DISTPROFILE)
 ifdef STYLENOV
-$(PROFILE_PARENT_DIR)/dist/%.xml: $(TMP_DIR)/dist/xml/%.xml
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -d preserve $<
+$(DISTPROFILE): SOURCEFILE = $(subst $(PROFILE_PARENT_DIR)/dist/,$(TMP_DIR)/dist/xml/,$@)
+$(DISTPROFILE):
+	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -d preserve $(SOURCEFILE)
 	$(QUIET)xsltproc --nonet --output $@ \
 		$(subst show.remarks 1,show.remarks 0, \
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
-	        --stringparam filename "$(notdir $<)" \
-	        $(STYLENOV) $< $(QUIET2)
+	        --stringparam filename "$(notdir $(SOURCEFILE))" \
+	        $(STYLENOV) $(SOURCEFILE)
 	$(QUIET)$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
-$(PROFILE_PARENT_DIR)/dist/%.xml: $(BASE_DIR)/xml/%.xml link-entity-noprofile
-	$(QUIET)ln -sf $< $@
+$(DISTPROFILE): SOURCEFILE = $(subst $(PROFILEDIR),$(BASE_DIR)/xml/,$@)
+$(DISTPROFILE):
+	$(QUIET)ln -sf $(SOURCEFILE) $@
 endif
 
 #
 # the TMP stuff
 #
-#$(TMP_DIR)/dist/xml/%.xml: $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
-$(TMP_DIR)/dist/xml/%.xml: $(TMP_DIR)/dist/xml
-$(TMP_DIR)/dist/xml/%.xml: $(BASE_DIR)/xml/%.xml link-entity-dist
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
+$(TMP_DISTPROFILE): $(TMP_DIR)/dist/xml link-entity-dist
+$(TMP_DISTPROFILE): SOURCEFILE = $(subst $(TMP_DIR)/dist/,$(BASE_DIR)/,$@)
+$(TMP_DISTPROFILE):
+	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) \
+	  -d preserve $(SOURCEFILE)
 
 
 #------------------------------------------------------------------------
