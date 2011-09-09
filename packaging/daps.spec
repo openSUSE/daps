@@ -10,15 +10,15 @@
 #
 # norootforbuild
 
+Name:           daps
+Version:        0.9beta6
+
 %define dtdversion     1.0
 %define dtdname        novdoc
 %define docbuilddir    %{_datadir}/daps
 %define regcat         %{_bindir}/sgml-register-catalog
 %define fontdir        %{_datadir}/fonts/truetype
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
-
-Name:           daps
-Version:        0.9beta5
 %define root_catalog   for-catalog-%{dtdname}-%{dtdversion}.xml
 %define daps_catalog   for-catalog-%{name}-%{version}.xml
 
