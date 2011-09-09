@@ -321,8 +321,8 @@ function run_subcmd () {
             packaging $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        profiledir)
-            coments_remarks $SUBCMD "${SCMD_ARGS[@]}"
+        profiledir|validate)
+            comments_remarks $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
         missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
@@ -337,11 +337,6 @@ function run_subcmd () {
             ;;
         showenv)
             show_env
-            exit
-            ;;
-        validate)
-            export REMARKS=1
-            build_generic $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
         *)
