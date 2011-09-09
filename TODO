@@ -19,9 +19,6 @@ General:
 -------------
 daps
 
-* allow sourcefiles named *.docbook (or any other suffix) rather than only
-  *.xml
-
 * generate man pages via ENVfile and daps instead of calling a stylesheet
   directly
 
@@ -29,8 +26,6 @@ daps
   do not check for an ENVfile with these targets 
 
 * full or realtive path to ENV-file instead of --basedir
-
-* add project-init function
 
 * replace turn on only switches -cdr with turn on/off switches
 
@@ -40,25 +35,29 @@ daps
 
 * TAB completion for options and subcommands
 
-* support for eps and pdf graphics
+* support for PDF graphics
+  creating graycsale PDFs:
+   gs -sOutputFile=gray.pdf -sDEVICE=pdfwrite \
+  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
+  -dCompatibilityLevel=1.4 color.pdf
 
+* support for eps graphics
+  - if we also have PDF support, consider converting EPS to PDF with
+    epstopdf
+  - if not:
+    EPS: color eps to grayscale:
+    http://en.wikibooks.org/wiki/LaTeX/Importing_Graphics#Converting_a_color_EPS_to_grayscale
+    EPS to PNG: convert MY.eps -depth 8 -strip MY.png
+  
 -------------
 DocManager
-
-* adjust to new daps version
-
-* shortcut aliases from daps-aliases should be directly integrated into dm
 
 * improve speed by
   - reducing the svn calls to a minimum
   - using python svn bindings
 
-* Make DocManager a subpackage of daps?
-
 -------------
 Scripts
-
-* man page and new name for grepimage.sh 
 
 * update, man page and new name for trunkcopy.sh
 
@@ -69,15 +68,8 @@ Makefiles:
 
 * Create flow charts of Makefile mechanic [2011-04-06, fs]
 
-* Restrict graphics generation to graphics needed for the current build
-  (rather than generating all images)
-
-* Restrict profiling to current set (rather than profiling xml/*.xml)
-
 -------------
 Stylesheets:
-
-* Print all existing IDs (after the headline/text) in draft mode 
 
 * Improve fop support
 
