@@ -9,6 +9,7 @@
 #
 #
 # norootforbuild
+
 %define dtdversion     1.0
 %define dtdname        novdoc
 %define docbuilddir    %{_datadir}/daps
@@ -64,14 +65,20 @@ BuildRequires:  xml-commons-resolver
 BuildRequires:  xmlformat
 BuildRequires:  xmlstarlet
 BuildRequires:  zip
-%if %{suse_version} < 1140
+
+%if %{suse_version} >= 1140
+BuildRequires:  perl-checkbot
+BuildRequires:  xmlgraphics-fop >= 0.94
+%else
 BuildRequires:  checkbot
 BuildRequires:  fop >= 0.94
 BuildRequires:  xerces-j2
+%if %{suse_version} == 1130
 BuildRequires:  xml-commons-jaxp-1.3-apis
-%else
-BuildRequires:  perl-checkbot
-BuildRequires:  xmlgraphics-fop >= 0.94
+%endif
+%if %{suse_version} < 1130
+BuildRequires:  xml-commons-apis-bootstrap
+%endif
 %endif
 
 PreReq:         libxml2
@@ -103,14 +110,19 @@ Requires:       xml-commons-resolver
 Requires:       xmlformat
 Requires:       xmlstarlet
 Requires:       zip
-%if %{suse_version} < 1140
-Requires:       checkbot
-Requires:       fop >= 0.94
-Requires:       xerces-j2
-Requires:       xml-commons-jaxp-1.3-apis
-%else
-Requires:       xmlgraphics-fop >= 0.94
+%if %{suse_version} >= 1140
 Requires:       perl-checkbot
+Requires:       xmlgraphics-fop >= 0.94
+%else
+Requires:        checkbot
+Requires:        fop >= 0.94
+Requires:        xerces-j2
+%if %{suse_version} == 1130
+Requires:        xml-commons-jaxp-1.3-apis
+%endif
+%if %{suse_version} < 1130
+Requires:        xml-commons-apis-bootstrap
+%endif
 %endif
 
 Recommends:     agfa-fonts
@@ -131,7 +143,7 @@ Recommends:     unfonts
 Recommends:     xep
 
 #Obsoletes:      susedoc <= 4.3.27
-Provides:       susedoc <= 4.3.27
+Provides:       susedoc < 4.4
 
 
 %description
