@@ -122,7 +122,7 @@ locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(MAIN))
 locdrop: TOTRANSFILES = $(subst $(BASE_DIR)/xml, $(PROFILE_PARENT_DIR)/dist, \
 		$(shell cd $(BASE_DIR) && \
-		dm.py dg -P --include="doc:trans=yes" -H -A -q "%{name} "))
+		docmanager dg -P --include="doc:trans=yes" -H -A -q "%{name} "))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
 locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
@@ -133,16 +133,18 @@ ifndef NOPDF
 locdrop: color-pdf
 endif
 locdrop:
-	@echo "LOOOOOCDROPPING"
 # remove old stuff
 	rm -rf $(LOCDROPDIR) && mkdir -p $(LOCDROPDIR)
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(INCLUDED) && \
 #	    echo "Found non-printable characters" || echo "OK"
 # totrans tarball
+ifdef TOTRANSFILES
+	@ccecho "warn" "No files for translation available"
 	BZIP2=--best && tar chfj $(TOTRANSTAR) --absolute-names \
 	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
 	@ccecho "info" "Created $(TOTRANSTAR)"
+endif
 # notrans tarball
 #
 # Weird result without the sort function
