@@ -292,9 +292,12 @@ SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  $(DTDROOT)/xslt/misc/get-all-used-files.xsl \
 		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
 
-SRCFILES     := $(shell echo "$(SETFILES)" | xsltproc \
+#
+# Use sort to remove duplicates from the list!!
+#
+SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
-		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ))
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
