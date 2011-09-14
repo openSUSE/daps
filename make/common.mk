@@ -143,11 +143,7 @@ TESTPAGE   ?= $(TMP_DIR)/$(TMP_BOOK)-links.html
 # be created
 #
 
-DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR) \
-	       $(IMG_SRCDIR)/fig $(IMG_SRCDIR)/png $(IMG_SRCDIR)/svg \
-               $(IMG_SRCDIR)/dia $(IMG_GENDIR)/online $(IMG_GENDIR)/print \
-               $(IMG_GENDIR)/gen/png $(IMG_GENDIR)/gen/svg
-
+DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR)
 
 #------------------------------------------------------------------------
 # Misc variables
@@ -292,9 +288,6 @@ SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  $(DTDROOT)/xslt/misc/get-all-used-files.xsl \
 		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
 
-#
-# Use sort to remove duplicates from the list!!
-#
 SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
 		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ))
@@ -784,16 +777,8 @@ dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
 dist-all: validate chklink dist-xml dist-html dist color-pdf
 
 #------------------------------------------------------------------------
-# Keep / remove stuff
+# We do not want to keep these:
 #
-
-# see images.mk
-.PRECIOUS: $(SRCSVGDIA)
-.PRECIOUS: $(SRCSVGFIG)
-.PRECIOUS: $(IMG_GENDIR)/gen/png/%.png
-.PRECIOUS: $(IMG_GENDIR)/gen/svg/%.svg
-
-
 .INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%
 .INTERMEDIATE: $(TMP_DIR)/dist/%
 
