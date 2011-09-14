@@ -54,11 +54,13 @@ BuildRequires:  xorg-x11-devel
 # the requirements for installation
 BuildRequires:  dejavu
 BuildRequires:  freefont
+BuildRequires:  ghostscript-library
 BuildRequires:  java
 BuildRequires:  liberation-fonts
 BuildRequires:  LinuxLibertine
 BuildRequires:  mplus-fonts
 BuildRequires:  opensp
+BuildRequires:  poppler-tools
 BuildRequires:  subversion
 BuildRequires:  xalan-j2
 BuildRequires:  xml-commons-resolver
@@ -90,6 +92,7 @@ Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.75
 Requires:       exiftool
 Requires:       freefont
+Requires:       ghostscript-library
 Requires:       ImageMagick
 Requires:       inkscape
 Requires:       java
@@ -100,6 +103,7 @@ Requires:       make
 Requires:       mplus-fonts
 Requires:       opensp
 Requires:       optipng
+Requires:       poppler-tools
 Requires:       sgml-skel
 Requires:       subversion
 Requires:       svg-dtd
