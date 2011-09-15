@@ -142,7 +142,6 @@ TESTPAGE   ?= $(TMP_DIR)/$(TMP_BOOK)-links.html
 # The following directories might not be present and therefore might have to
 # be created
 #
-
 DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR)
 
 #------------------------------------------------------------------------
@@ -294,7 +293,6 @@ SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
-TMP_DISTPROFILE := $(subst $(BASE_DIR)/,$(TMP_DIR)/dist/,$(SRCFILES))
 
 
 #------------------------------------------------------------------------
@@ -604,7 +602,8 @@ dist: $(PROFILEDIR)/.validate
 # needed
 #
 .PHONY: dist-xml
-dist-xml: link-entity-dist $(DISTPROFILE)
+dist-xml: $(DISTPROFILE)
+dist-xml: link-entity-dist
 dist-xml: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude \
 			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
@@ -630,7 +629,8 @@ dist-xml:
 # on dist-xml target
 #
 .PHONY: dist-book
-dist-book: link-entity-dist $(DISTPROFILE)
+dist-book: $(DISTPROFILE)
+dist-book: link-entity-dist
 dist-book: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet $(ROOTSTRING) \
 			--xinclude $(STYLESEARCH) \
@@ -777,10 +777,11 @@ dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
 dist-all: validate chklink dist-xml dist-html dist color-pdf
 
 #------------------------------------------------------------------------
-# We do not want to keep these:
+# Remove stuff
 #
-.INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%
-.INTERMEDIATE: $(TMP_DIR)/dist/%
+
+.INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%.xml
+.INTERMEDIATE: $(TMP_DIR)/dist/%.xml
 
 #------------------------------------------------------------------------
 #
@@ -825,14 +826,13 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 # If STYLENOV is undefined, there is no profiling information in $MAIN. This
 # means, we will continue without profiling.
 #
-$(PROFILES): SOURCEFILE = $(subst $(PROFILEDIR)/,$(BASE_DIR)/xml/,$@)
-$(PROFILES):
+$(PROFILEDIR)/%: $(BASE_DIR)/xml/%
 ifdef STYLENOV
 	$(QUIET)xsltproc --nonet --output $@ $(PROFSTRINGS) \
-	  --stringparam filename "$(notdir $(SOURCEFILE))" $(HROOTSTRING) \
-	  $(STYLENOV) $(SOURCEFILE)
+	  --stringparam filename "$(notdir $<)" $(HROOTSTRING) \
+	  $(STYLENOV) $< $(QUIET2)
 else
-	$(QUIET)ln -sf $(SOURCEFILE) $@
+	$(QUIET)ln -sf $< $@
 endif
 
 #---------------
@@ -865,32 +865,28 @@ endif
 # dist is _always_ redone
 #
 
-$(DISTPROFILE): $(PROFILE_PARENT_DIR)/dist $(TMP_DISTPROFILE)
+$(PROFILE_PARENT_DIR)/dist/%: $(PROFILE_PARENT_DIR)/dist
 ifdef STYLENOV
-$(DISTPROFILE): SOURCEFILE = $(subst $(PROFILE_PARENT_DIR)/dist/,$(TMP_DIR)/dist/xml/,$@)
-$(DISTPROFILE):
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -d preserve $(SOURCEFILE)
+$(PROFILE_PARENT_DIR)/dist/%: $(TMP_DIR)/dist/xml/%
+	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -d preserve $<
 	$(QUIET)xsltproc --nonet --output $@ \
 		$(subst show.remarks 1,show.remarks 0, \
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
-	        --stringparam filename "$(notdir $(SOURCEFILE))" \
-	        $(STYLENOV) $(SOURCEFILE)
+	        --stringparam filename "$(notdir $<)" \
+	        $(STYLENOV) $< $(QUIET2)
 	$(QUIET)$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
-$(DISTPROFILE): SOURCEFILE = $(subst $(PROFILEDIR),$(BASE_DIR)/xml/,$@)
-$(DISTPROFILE):
-	$(QUIET)ln -sf $(SOURCEFILE) $@
+$(PROFILE_PARENT_DIR)/dist/%: $(BASE_DIR)/xml/% link-entity-noprofile
+	$(QUIET)ln -sf $< $@
 endif
 
 #
 # the TMP stuff
 #
-$(TMP_DISTPROFILE): $(TMP_DIR)/dist/xml link-entity-dist
-$(TMP_DISTPROFILE): SOURCEFILE = $(subst $(TMP_DIR)/dist/,$(BASE_DIR)/,$@)
-$(TMP_DISTPROFILE):
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) \
-	  -d preserve $(SOURCEFILE)
+$(TMP_DIR)/dist/xml/%: $(TMP_DIR)/dist/xml
+$(TMP_DIR)/dist/xml/%: $(BASE_DIR)/xml/% link-entity-dist
+	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
 
 
 #------------------------------------------------------------------------
