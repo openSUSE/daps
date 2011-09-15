@@ -400,13 +400,13 @@ $(IMG_GENDIR)/online/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
 $(IMG_GENDIR)/print/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 $< < /dev/null
+	  -dCompatibilityLevel=1.4 $<
 
 # from generated color PDFs
 $(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 $< < /dev/null
+	  -dCompatibilityLevel=1.4 $<
 
 #---------------
 # Create color PDFs from other formats
@@ -417,8 +417,9 @@ $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/dia/%.dia
 	LANG=C dia $(DIA_OPTIONS) --export=$@ $<
 
 # EPS -> PDF
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
-	ps2pdf14 $@ $<
+$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps
+	gs -sOutputFile=$@ -sDEVICE=pdfwrite -dEPSCrop \
+	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $<
 
 # FIG -> SVG
 #
