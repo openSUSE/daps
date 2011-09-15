@@ -188,7 +188,7 @@ optipng:
 	exiftool -Comment=optipng -overwrite_original -P \
 	$(shell for i in $(USED_PNG); do  \
 		exiftool -Comment $$i  | grep optipng > /dev/null || \
-		optipng -o8 $$i > /dev/null; \
+		optipng -o2 $$i > /dev/null; \
 		echo "$$i "; \
 		done )
 
@@ -257,38 +257,44 @@ $(IMG_GENDIR)/print/%.png: $(IMG_GENDIR)/gen/png/%.png
 #---------------
 # Create color PNGs from other formats
 
+# remove_link and the optipng call are used more than once, so 
+# let's define them here
+
+define remove_link
+if test -L $@; then \
+rm -f $@; \
+fi
+endef
+
+define run_optipng
+optipng -o2 $@ >& /dev/null
+endef
+
 # SVG -> PNG
 # create color PNGs from SVGs
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg
-	if test -L $@; then \
-	    rm -f $@; \
-	fi
+	$(remove_link)
 	inkscape $(INK_OPTIONS) -e $@ -f $<
-	optipng -o8 $@ >& /dev/null
+	$(run_optipng)
 
 # EPS -> PNG
 # create color PNGs from EPS
-$(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/eps/%.eps
-	if test -L $@; then \
-	  rm -f $@; \
-	fi
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/eps/%.eps
+	$(remove_link)
 	convert $< $@
-	optipng -o8 $@ >& /dev/null
+	$(run_optipng)
 
 # PDF -> PNG
-# TODO
-# convert foo.pdf foo.png
+# create color PNGs from EPS
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf
+	$(remove_link)
+	convert $< $@
+	$(run_optipng)
 
-# Obsolete?? Should be sufficient to just link those (see above)...
-# SVG -> PNG
-# create color PNGs from SVGs
-#$(IMG_GENDIR)/online/%.png: $(IMG_GENDIR)/gen/svg/%.svg
-#	if test -L $@; then \
-#	    rm -f $@; \
-#	fi
-#	inkscape $(INK_OPTIONS) -e $@ -f $<
-#	optipng -o8 $@ >& /dev/null
-
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf
+	$(remove_link)
+	convert $< $@
+	$(run_optipng)
 
 #------------------------------------------------------------------------
 # SVGs
@@ -332,51 +338,6 @@ $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig
 $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/svg/%.svg
 	ln -sf $< $@
 
-#------------------------------------------------------------------------
-# EPSs
-#
-
-#---------------
-# Link images that are used in the manuals
-#
-$(IMG_GENDIR)/online/%.eps: $(IMG_SRCDIR)/eps/%.eps
-	ln -sf $< $@
-
-#---------------
-# Grayscale EPS for b/w PDFs
-#
-# receipe derived from
-# http://knol.google.com/k/carlo-caligaris/how-to-convert-a-vector-eps-color/1yx5vp4cwri6n/2#
-#
-# eps is converted into a grayscale PDF and the converted back into eps.
-# During this conversion a bounding box is introduced in order to avoid problems
-# with eps files that have no such box. Contrary to using
-# pscol (http://www.pa.op.dlr.de/~PatrickJoeckel/pscol/index.html)
-# this method (EPS -> PDF -> EPS) supports all EPS formats
-
-# EPS -> grayscale PDF (temporary)
-#
-#
-# This temporary grayscale PDF can also be used to use PDF directly
-# It just needs a new rule
-# $(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/eps/%.pdf
-#     ln -s $< $@
-#
-$(IMG_GENDIR)/gen/eps/%.pdf:  $(IMG_SRCDIR)/eps/%.eps
-	gs -sOutputFile=$@ -sDEVICE=pdfwrite -sColorConversionStrategy=Gray \
-	  -dProcessColorModel=/DeviceGray -dCompatibilityLevel=1.4 -dEPSCrop\
-	  -dNOPAUSE -dBATCH $<
-# pdfcrop $@
-# From http://knol.google.com/k/carlo-caligaris/how-to-convert-a-vector-eps-color/1yx5vp4cwri6n/2#
-# in my experience, the pdf margins will be larger than the picture
-# itself; to remove the white spaces and crop the image to its actual size,
-# I used pdfcrop ([4]):
-
-# (temporary) ggrayscale PDF -> grayscale EPS
-#
-#
-$(IMG_GENDIR)/print/%.eps: $(IMG_GENDIR)/gen/eps/%.pdf
-	pdftops -eps $< $@
 
 
 #------------------------------------------------------------------------
@@ -400,21 +361,27 @@ $(IMG_GENDIR)/online/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
 $(IMG_GENDIR)/print/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 $<
+	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< 
+#	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
+#	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
+#	  -dCompatibilityLevel=1.4 $<
 
 # from generated color PDFs
 $(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 $<
+	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< 
+#	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
+#	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
+#	  -dCompatibilityLevel=1.4 $<
 
 #---------------
 # Create color PDFs from other formats
 
 # DIA -> PDF
 #
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/dia/%.dia
-	LANG=C dia $(DIA_OPTIONS) --export=$@ $<
+#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/dia/%.dia
+#	LANG=C dia  --export=$@ $<
 
 # EPS -> PDF
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps
@@ -423,11 +390,12 @@ $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps
 
 # FIG -> SVG
 #
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/fig/%.fig
-	fig2dev -L pdf $< $@
+#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/fig/%.fig
+#	fig2dev -L pdf $< $@
 
 # SVG -> PDF
 # Color SVGs from are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/svg/%.svg
-	inkscape --export-pdf=$@ -f $<
+#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/svg/%.svg
+$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg
+	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $<
