@@ -7,108 +7,106 @@
 >
 
 <xsl:template name="xep-document-information">
+  <xsl:variable name="root.element" select="key('id', $rootid)"/>
+  
   <rx:meta-info>
     <xsl:variable name="authors" select="(//author|//editor|//authorgroup)[1]"/>
-    <xsl:element name="rx:meta-field">
-      <xsl:choose>
-      <xsl:when test="$authors">
-        <xsl:attribute name="name">author</xsl:attribute>
-        <xsl:attribute name="value">
-          <xsl:choose>
-            <xsl:when test="$authors[self::authorgroup]">
-              <xsl:call-template name="person.name.list">
-                <xsl:with-param name="person.list" select="$authors/*[self::author|self::corpauthor|self::othercredit|self::editor]"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="person.name">
-                <xsl:with-param name="node" select="$authors"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="name">author</xsl:attribute>
-        <xsl:attribute name="value">SUSE</xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
-    </xsl:element>
     
-    <xsl:element name="rx:meta-field">
-      <xsl:attribute name="name">title</xsl:attribute>
-      <xsl:attribute name="value">
+      <xsl:variable name="author">
         <xsl:choose>
-          <xsl:when test="/set/title">
-            <xsl:value-of select="normalize-space(/set/title)"/>
+          <xsl:when test="$authors[self::authorgroup]">
+            <xsl:call-template name="person.name.list">
+              <xsl:with-param name="person.list" 
+                        select="$authors/*[self::author|self::corpauthor|
+                               self::othercredit|self::editor]"/>
+            </xsl:call-template>
           </xsl:when>
-          <xsl:when test="/book/bookinfo/title">
-            <xsl:value-of select="normalize-space(/book/bookinfo/title)"/>
-          </xsl:when>
-          <xsl:when test="/book/bookinfo/productname and
-                          /book/bookinfo/titleabbrev">
-            <xsl:value-of select="concat(normalize-space(/book/bookinfo/productname),
-                                  ' ',
-                                  normalize-space(/book/bookinfo/productnumber))"/>
-          </xsl:when>
-          <xsl:when test="/article/title">
-            <xsl:value-of select="normalize-space(/article/title)"/>
+          <xsl:when test="$authors[self::corpauthor]">
+            <xsl:value-of select="$authors"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="/*[1]" mode="label.markup"/>
-            <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+            <xsl:call-template name="person.name">
+              <xsl:with-param name="node" select="$authors"/>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:variable>
+      <rx:meta-field name="author">
+          <xsl:attribute name="value">
+            <xsl:choose>
+              <xsl:when test="$authors[self::authorgroup]">
+                <xsl:call-template name="person.name.list">
+                  <xsl:with-param name="person.list"
+                    select="$authors/*[self::author|self::corpauthor|self::othercredit|self::editor]"
+                  />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:variable name="aut">
+                  <xsl:call-template name="person.name">
+                    <xsl:with-param name="node" select="$authors"/>
+                  </xsl:call-template>
+                </xsl:variable>
+
+                <xsl:choose>
+                  <xsl:when test="$aut != ''">
+                    <xsl:value-of select="$aut"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$metadata.producer"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+      </rx:meta-field>
+
+    <xsl:variable name="title">
+      <xsl:apply-templates select="/*[1]" mode="label.markup"/>
+      <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+    </xsl:variable>
+
+    <rx:meta-field name="creator">
+      <xsl:attribute name="value">
+        <xsl:value-of select="$metadata.producer"/>
       </xsl:attribute>
-    </xsl:element>
+    </rx:meta-field>
+
+    <rx:meta-field name="title">
+      <xsl:attribute name="value">
+        <xsl:value-of select="normalize-space($title)"/>
+      </xsl:attribute>
+    </rx:meta-field>
 
     <xsl:if test="//keyword">
-      <xsl:element name="rx:meta-field">
-        <xsl:attribute name="name">keywords</xsl:attribute>
+      <rx:meta-field name="keywords">
         <xsl:attribute name="value">
           <xsl:for-each select="//keyword">
-            <xsl:value-of select="."/>
+            <xsl:value-of select="normalize-space(.)"/>
             <xsl:if test="position() != last()">
               <xsl:text>, </xsl:text>
             </xsl:if>
           </xsl:for-each>
         </xsl:attribute>
-      </xsl:element>
+      </rx:meta-field>
     </xsl:if>
 
     <xsl:if test="//subjectterm">
-      <xsl:element name="rx:meta-field">
-        <xsl:attribute name="name">subject</xsl:attribute>
+      <rx:meta-field name="subject">
         <xsl:attribute name="value">
           <xsl:for-each select="//subjectterm">
-            <xsl:value-of select="."/>
+            <xsl:value-of select="normalize-space(.)"/>
             <xsl:if test="position() != last()">
               <xsl:text>, </xsl:text>
             </xsl:if>
           </xsl:for-each>
         </xsl:attribute>
-      </xsl:element>
+      </rx:meta-field>
     </xsl:if>
-    
-    <xsl:element name="rx:meta-field">
-      <xsl:attribute name="name">creator</xsl:attribute>
-      <xsl:attribute name="value">
-        <xsl:text>DocBook </xsl:text>
-        <!-- <xsl:value-of select="$DistroTitle"/> -->
-        <xsl:text> V</xsl:text>
-        <xsl:value-of select="$VERSION"/>
-      </xsl:attribute>
-    </xsl:element>
-    
   </rx:meta-info>
 </xsl:template>
 
 
-<!--
-<xsl:template match="*" mode="xep.outline">
-  <xsl:apply-templates select="*" mode="xep.outline"/>
-</xsl:template>
--->
 
 <xsl:template match="set|book|part|reference|preface|chapter|appendix|article
                      |glossary|bibliography|index|setindex
