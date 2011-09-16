@@ -11,7 +11,7 @@
 # norootforbuild
 
 Name:           daps
-Version:        0.9beta6
+Version:        0.9beta7
 
 %define dtdversion     1.0
 %define dtdname        novdoc
