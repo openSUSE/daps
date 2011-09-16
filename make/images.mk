@@ -121,12 +121,12 @@ GEN_SVG := $(subst .dia,.svg,$(notdir $(USED_DIA))) \
 
 # color images (used for manual creation)
 #
-PDFONLINE := $(addprefix $(IMG_GENDIR)/online/, \
-		$(notdir $(USED_PDF)) $(GEN_PDF))
-PNGONLINE := $(addprefix $(IMG_GENDIR)/online/, \
-		$(notdir $(USED_PNG)) $(GEN_PNG))
-SVGONLINE := $(addprefix $(IMG_GENDIR)/online/, \
-		$(notdir $(USED_SVG)) $(GEN_SVG))
+PDFONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
+		$(notdir $(USED_PDF)) $(GEN_PDF)))
+PNGONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
+		$(notdir $(USED_PNG)) $(GEN_PNG)))
+SVGONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
+		$(notdir $(USED_SVG)) $(GEN_SVG)))
 
 # grayscale images (used for manual creation)
 #
@@ -248,11 +248,17 @@ $(IMG_GENDIR)/online/%.png: $(IMG_GENDIR)/gen/png/%.png
 #
 # from existing color PNGs
 $(IMG_GENDIR)/print/%.png: $(IMG_SRCDIR)/png/%.png
-	convert $< $(CONVERT_OPTS) $@
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
+	convert $< $(CONVERT_OPTS) $@ $(DEVNULL)
 
 # from generated color PNGs
 $(IMG_GENDIR)/print/%.png: $(IMG_GENDIR)/gen/png/%.png
-	convert $< $(CONVERT_OPTS) $@
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
+	convert $< $(CONVERT_OPTS) $@ $(DEVNULL)
 
 #---------------
 # Create color PNGs from other formats
@@ -273,27 +279,39 @@ endef
 # SVG -> PNG
 # create color PNGs from SVGs
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PNG"
+endif
 	$(remove_link)
-	inkscape $(INK_OPTIONS) -e $@ -f $<
+	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL)
 	$(run_optipng)
 
 # EPS -> PNG
 # create color PNGs from EPS
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/eps/%.eps
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PNG"
+endif
 	$(remove_link)
-	convert $< $@
+	convert $< $@ $(DEVNULL)
 	$(run_optipng)
 
 # PDF -> PNG
 # create color PNGs from EPS
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PNG"
+endif
 	$(remove_link)
-	convert $< $@
+	convert $< $@ $(DEVNULL)
 	$(run_optipng)
 
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PNG"
+endif
 	$(remove_link)
-	convert $< $@
+	convert $< $@ $(DEVNULL)
 	$(run_optipng)
 
 #------------------------------------------------------------------------
@@ -309,12 +327,18 @@ $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf
 # some tags that cause trouble with xep or fop
 
 $(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
+ifeq ($(VERBOSITY),1)
+	@echo "   Fixing $(notdir $<)"
+endif
 	xsltproc $(STYLESVG) $< > $@
 
 #---------------
 # Create grayscale SVGs used in the manuals
 #
 $(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
 	xsltproc $(STYLESVG) $< | \
 	xsltproc $(STYLESVG2GRAY) - > $@
 
@@ -324,12 +348,18 @@ $(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
 # DIA -> SVG
 #
 $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/dia/%.dia
-	LANG=C dia $(DIA_OPTIONS) --export=$@ $<
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to SVG"
+endif
+	LANG=C dia $(DIA_OPTIONS) --export=$@ $< $(DEVNULL)
 
 # FIG -> SVG
 #
 $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig
-	fig2dev -L svg $< $@
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to SVG"
+endif
+	fig2dev -L svg $< $@ $(DEVNULL)
 
 # SVG -> SVG
 #
@@ -359,43 +389,38 @@ $(IMG_GENDIR)/online/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
 #
 # from existing color PDFs
 $(IMG_GENDIR)/print/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< 
-#	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
-#	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-#	  -dCompatibilityLevel=1.4 $<
+	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< $(DEVNULL)
 
 # from generated color PDFs
 $(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
 	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< 
-#	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
-#	  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-#	  -dCompatibilityLevel=1.4 $<
+	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< $(DEVNULL)
 
 #---------------
 # Create color PDFs from other formats
 
-# DIA -> PDF
-#
-#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/dia/%.dia
-#	LANG=C dia  --export=$@ $<
-
 # EPS -> PDF
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PDF"
+endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite -dEPSCrop \
-	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $<
-
-# FIG -> SVG
-#
-#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/fig/%.fig
-#	fig2dev -L pdf $< $@
+	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $< $(DEVNULL)
 
 # SVG -> PDF
 # Color SVGs from are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
-#$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/svg/%.svg
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg
-	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $<
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting $(notdir $<) to PDF"
+endif
+	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL)

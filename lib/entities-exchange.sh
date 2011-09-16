@@ -88,10 +88,11 @@ test -r ${TOOLS}/lib/entities.${LA}.sed  || {
 
 
 if [ "$REVERT" != "true" ] ; then
-  echo "Converting files..."
   for f in $PACKAGE; do
-    echo $f...
-    test -f $f  || echo "warning: $f does not exist";
+    if [[ 2 = $VERBOSITY ]]; then
+        echo -n " Converting $f ... "
+    fi
+    test -f $f  || ccecho "warn" "$f does not exist";
     if [ "z$OUTPUT" = "z" ] ; then
       cp $f ${f}.${LA}
       sed -f ${TOOLS}/lib/entities.$LA.sed ${f}.${LA} > $f 
@@ -102,12 +103,16 @@ if [ "$REVERT" != "true" ] ; then
       rm ${f}.${LA} 
     fi
   done
-  echo 'Done.'
+  if [[ 2 = $VERBOSITY ]]; then
+      echo "done."
+  fi
 fi
 
 if [ "$REVERT" = "true" ] ; then
   for f in $PACKAGE; do
-    echo $f...
+    if [[ 2 = $VERBOSITY ]]; then
+      echo $f...
+    fi
     test -f $f || echo "warning: $f does not exist";
     mv ${f}.${LA} ${f}
   done

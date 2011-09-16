@@ -16,6 +16,19 @@
 
 #SHELL := /bin/bash -x
 
+# Verbosity
+#
+#
+ifndef VERBOSITY
+VERBOSITY := 0
+endif
+ifeq ($(VERBOSITY), 2)
+DEVNULL :=
+else
+DEVNULL := >/dev/null
+endif
+
+
 #------------------------------------------------------------------------
 # Paths
 
@@ -25,41 +38,38 @@
 #
 
 ifndef BASE_DIR
-BASE_DIR           := $(shell pwd)
+BASE_DIR := $(shell pwd)
 endif
 ifndef DTDROOT
-DTDROOT := "/usr/share/daps"
+DTDROOT  := "/usr/share/daps"
 endif
 ifndef BOOK
-BOOK    := mybook
+BOOK     := mybook
 endif
 ifndef LIB_DIR
-LIB_DIR := $(DTDROOT)/lib
+LIB_DIR  := $(DTDROOT)/lib
 endif
 ifndef FOP
-FOP     := $(LIB_DIR)/daps-fop
+FOP      := $(LIB_DIR)/daps-fop
 endif
 ifndef PROFARCH
-PROFARCH := noarch
+PROFARCH  := noarch
 endif
 ifndef PROFOS
-PROFOS := default
+PROFOS  := default
 endif
 
 
 # if BUILD_DIR was not set, use $(BASE_DIR)/build
 #
-ifdef BUILD_DIR
+ifndef BUILD_DIR
+BUILD_DIR := $(BASE_DIR)/build
+endif
+
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
 IMG_GENDIR         := $(BUILD_DIR)/.images
 TMP_DIR            := $(BUILD_DIR)/.tmp
-else
-RESULT_DIR         := $(BASE_DIR)/build/$(BOOK)
-PROFILE_PARENT_DIR := $(BASE_DIR)/build/.profiled
-IMG_GENDIR         := $(BASE_DIR)/build/.images
-TMP_DIR            := $(BASE_DIR)/build/.tmp
-endif
 
 IMG_SRCDIR         := $(BASE_DIR)/images/src
 
@@ -147,7 +157,7 @@ DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR)
 #------------------------------------------------------------------------
 # Misc variables
 #
-QUIET  ?=
+#QUIET  ?=
 USESVN := $(shell svn pg doc:maintainer $(BASE_DIR)/xml/$(MAIN) 2>/dev/null)
 
 #------------------------------------------------------------------------
@@ -403,7 +413,7 @@ man: $(PROFILEDIR)/.validate $(TMP_XML)
 #
 .PHONY: force
 force: | $(DIRECTORIES)
-force: $(PROFILEDIR)/.validate 
+force: $(PROFILEDIR)/.validate
 	touch $(BASE_DIR)/xml/$(MAIN)
 	rm -f $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo # pdf only!
 	$(MAKE) pdf
@@ -425,18 +435,16 @@ prof profile: $(PROFILES)
 #
 .PHONY: validate
 $(PROFILEDIR)/.validate validate: $(PROFILES)
-	@if [ -z $(QUIET) ]; then \
-	  ccecho "info" "Validating..."; \
-	fi
-	$(QUIET)xmllint --noent --postvalid --noout \
-		--xinclude $(PROFILEDIR)/$(MAIN) $(QUIET2)
-	$(QUIET)touch $(PROFILEDIR)/.validate $(QUIET2)
+ifeq ($(VERBOSITY),1)
+	@echo "   Validating..."
+endif
+	xmllint --noent --postvalid --noout \
+		--xinclude $(PROFILEDIR)/$(MAIN)
+	touch $(PROFILEDIR)/.validate
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"
-	@if [ -z $(QUIET) ]; then \
-	  ccecho "info" "All files are valid"; \
-	fi
+	@ccecho "info" "All files are valid"; \
 
 
 #--------------
@@ -446,22 +454,22 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 clean: | $(DIRECTORIES)
 	rm -rf $(PROFILE_PARENT_DIR)/*
 	rm -rf $(TMP_DIR)/*
+	@ccecho "info" "Successfully removed all profiled and temporary files."
 
 .PHONY: clean-images
 clean-images: | $(DIRECTORIES)
 	find $(IMG_GENDIR) -type f | xargs rm -f
+	@ccecho "info" "Successfully removed all generated images."
 
-.PHONY: clean-book
-clean-book: clean
-clean-book: clean-images
-	rm -rf $(RESULT_DIR)
+.PHONY: clean-results
+clean-results:
+	rm -rf $(RESULT_DIR)/*
+	@ccecho "info" "Successfully removed all generated books"
 
 .PHONY: clean-all real-clean
-ifdef BUILD_DIR
+clean-all real-clean:
 	rm -rf $(BUILD_DIR)/.[^.]* $(BUILD_DIR)/*
-else
-	rm -rf $(BASE_DIR)/build
-endif
+	@ccecho "info" "Successfully removed all generated content"
 
 #--------------
 # file lists
@@ -604,20 +612,18 @@ dist: $(PROFILEDIR)/.validate
 .PHONY: dist-xml
 dist-xml: $(DISTPROFILE)
 dist-xml: link-entity-dist
-dist-xml: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
+dist-xml: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude \
 			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
-			$(MAIN))
+			$(MAIN)))
 dist-xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-xml:
-#
-# Weird result without the sort function
-# Need to check why!
-#
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+endif
 	tar chf $(TARBALL) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% \
-	  $(sort $(INCLUDED))
+	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
 	tar rhf $(TARBALL)  --absolute-names --xform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
@@ -631,16 +637,18 @@ dist-xml:
 .PHONY: dist-book
 dist-book: $(DISTPROFILE)
 dist-book: link-entity-dist
-dist-book: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
+dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet $(ROOTSTRING) \
 			--xinclude $(STYLESEARCH) \
-	        	$(PROFILE_PARENT_DIR)/dist/$(MAIN)) $(MAIN))
+	        	$(PROFILE_PARENT_DIR)/dist/$(MAIN)) $(MAIN)))
 dist-book: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-book:
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+endif
 	tar chf $(TARBALL) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% \
-	  $(sort $(INCLUDED))
+	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
 	tar rhf $(TARBALL) --absolute-names --xform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
@@ -663,21 +671,24 @@ dist-graphics: provide-color-images
 dist-graphics: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar
 dist-graphics:
 ifdef USED
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+  endif
   ifdef PNGONLINE
-	tar chf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
           --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
-          $(sort $(PNGONLINE));
-    # also add SVGs if available
-    ifdef SVGONLINE
+          $(PNGONLINE);
+  endif
+  # also add SVGs if available
+  ifdef SVGONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
 	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src% \
-	  $(sort $(SVGONLINE))
-    endif
-  else
-        # if there are no PNGs, there must be SVGs
-	tar chf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/onlinen%images/src% \
-	  $(sort $(SVGONLINE));
+	  $(SVGONLINE)
+  endif
+  ifdef PDFONLINE
+	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src% \
+	  $(PDFONLINE)
   endif
 	bzip2 -9f $(TARBALL)
 	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
@@ -694,6 +705,9 @@ dist-graphics-png: provide-color-images
 dist-graphics-png: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-png-graphics.tar.bz2
 dist-graphics-png:
 ifdef PNGONLINE
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+  endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --ignore-failed-read \
 	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
@@ -718,6 +732,9 @@ dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2
 dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
 	  -T $(HTML_DIR)/HTML.manifest \
@@ -739,6 +756,9 @@ dist-htmlsingle dist-html-single: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-ht
 dist-htmlsingle dist-html-single: HTML-USED = $(addprefix $(HTML_DIR)/images/,$(USED))
 dist-htmlsingle dist-html-single: $(PROFILES) $(PROFILEDIR)/.validate
 dist-htmlsingle dist-html-single: $(HTML_DIR)/$(BOOK).html
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
 	  --absolute-names --xform=s%$(RESULT_DIR)/html/%% \
@@ -759,6 +779,9 @@ dist-jsp: MANIFEST = --stringparam manifest $(JSP_DIR)/JSP.manifest \
 dist-jsp: TARBALL  = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-jsp.tar.bz2
 dist-jsp: JSP-USED = $(addprefix $(JSP_DIR)/images/,$(USED))
 dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
 	  -T $(JSP_DIR)/JSP.manifest \
@@ -797,11 +820,15 @@ $(DIRECTORIES):
 # epub, man, bigfile etc.
 #
 $(TMP_XML): $(PROFILES)
-	xsltproc --xinclude --output $@ --stringparam resolve.suse-pi 1 \
-        --stringparam show.comments $(COMMENTS) \
-        --stringparam show.remarks $(REMARKS) \
-	--stringparam projectfile PROJECTFILE.$(BOOK) $(STYLENOV) \
-	$(PROFILEDIR)/$(MAIN)
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating bigfile"
+endif
+	xsltproc --xinclude --output $@ \
+	  --stringparam resolve.suse-pi 1 \
+          --stringparam show.comments $(COMMENTS) \
+          --stringparam show.remarks $(REMARKS) \
+	  --stringparam projectfile PROJECTFILE.$(BOOK) $(STYLENOV) \
+	  $(PROFILEDIR)/$(MAIN)
 
 #------------------------------------------------------------------------
 #
@@ -828,11 +855,16 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 #
 $(PROFILEDIR)/%: $(BASE_DIR)/xml/%
 ifdef STYLENOV
-	$(QUIET)xsltproc --nonet --output $@ $(PROFSTRINGS) \
+ifeq ($(VERBOSITY),1)
+#tput el1
+#echo -en "\r   Profiling $(notdir $<)"
+	@echo "   Profiling $(notdir $<)"
+endif
+	xsltproc --nonet --output $@ $(PROFSTRINGS) \
 	  --stringparam filename "$(notdir $<)" $(HROOTSTRING) \
-	  $(STYLENOV) $< $(QUIET2)
+	  $(STYLENOV) $<
 else
-	$(QUIET)ln -sf $< $@
+	ln -sf $< $@
 endif
 
 #---------------
@@ -868,17 +900,20 @@ endif
 $(PROFILE_PARENT_DIR)/dist/%: $(PROFILE_PARENT_DIR)/dist
 ifdef STYLENOV
 $(PROFILE_PARENT_DIR)/dist/%: $(TMP_DIR)/dist/xml/%
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -d preserve $<
-	$(QUIET)xsltproc --nonet --output $@ \
+ifeq ($(VERBOSITY),1)
+	@echo "   Profiling $(notdir $<)"
+endif
+	$(LIB_DIR)/entities-exchange.sh -s -d preserve $<
+	xsltproc --nonet --output $@ \
 		$(subst show.remarks 1,show.remarks 0, \
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
 	        --stringparam filename "$(notdir $<)" \
-	        $(STYLENOV) $< $(QUIET2)
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -d recover $@
+	        $(STYLENOV) $<
+	$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
 $(PROFILE_PARENT_DIR)/dist/%: $(BASE_DIR)/xml/% link-entity-noprofile
-	$(QUIET)ln -sf $< $@
+	ln -sf $< $@
 endif
 
 #
@@ -886,7 +921,7 @@ endif
 #
 $(TMP_DIR)/dist/xml/%: $(TMP_DIR)/dist/xml
 $(TMP_DIR)/dist/xml/%: $(BASE_DIR)/xml/% link-entity-dist
-	$(QUIET)$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
+	$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
 
 
 #------------------------------------------------------------------------
@@ -907,6 +942,9 @@ $(TMP_DIR)/dist/xml/%: $(BASE_DIR)/xml/% link-entity-dist
 .PHONY: link-entity-noprofile
 link-entity: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
 link-entity: | $(DIRECTORIES)
+ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
 	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/noprofile; \
@@ -917,6 +955,9 @@ link-entity: | $(DIRECTORIES)
 link-entity-dist: $(PROFILE_PARENT_DIR)/dist $(TMP_DIR)/dist/xml
 link-entity-dist: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
 link-entity-dist:
+ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
 	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/dist/$$i; \
@@ -939,11 +980,17 @@ link-entity-dist:
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): | $(DIRECTORIES)
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(BASE_DIR)/$(ENVFILE)
+ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN)); do \
 	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILEDIR)/; \
 	  done \
 	fi
+ifeq ($(VERBOSITY),1)
+	@echo "   Writing projectfile"
+endif
 	@echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@
 	@echo "<!DOCTYPE docproperties [  " >> $@
 	@echo "<!ENTITY % ISOlat1 PUBLIC  " >> $@
@@ -1039,12 +1086,17 @@ pdf-color-name color-pdf-name:
 ifeq ("$(INDEX)", "Yes")
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
+ifeq ($(VERBOSITY),1)
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: FONTDEBUG := --stringparam debug.fonts 0
+endif
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(PROFILES) $(PROFILEDIR)/.validate
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(STYLEFO)
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating fo-file..."
+endif
 	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING) $(INDEXSTRING) \
-		--stringparam projectfile PROJECTFILE.$(BOOK) \
-		-o $@ $(STYLEFO) \
-	$(PROFILEDIR)/$(MAIN)
+	  --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@ccecho "info" "Created fo file $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo"
 
 # Color PDF
@@ -1053,20 +1105,30 @@ $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(STYLEFO)
 ifeq ("$(INDEX)", "Yes")
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
+ifeq ($(VERBOSITY),1)
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: FONTDEBUG := --stringparam debug.fonts 0
+endif
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(PROFILES) $(PROFILEDIR)/.validate
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(STYLEFO)
-	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) $(INDEXSTRING) \
-		--stringparam projectfile PROJECTFILE.$(BOOK) \
-		-o $@ $(STYLEFO) \
-	$(PROFILEDIR)/$(MAIN)
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating fo-file..."
+endif
+	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) \
+	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
 
 # Create PDF from fo
 #
 $(RESULT_DIR)/%.pdf: $(TMP_DIR)/%.fo $(FOP_CONFIG_FILE) provide-images warn-images
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating PDF from fo-file..."
+endif
 ifeq ("$(FOPTYPE)","fop")
-	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
+	  $(FOPOPTIONS) $< $@ $(DEVNULL)
 else
-	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
+	  $(FOPOPTIONS) $< $@ $(DEVNULL)
 endif
 ifdef MISSING
 	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
@@ -1078,10 +1140,15 @@ endif
 # Create COLOR-PDF from fo
 #
 $(RESULT_DIR)/%-online.pdf: $(TMP_DIR)/%-online.fo $(FOP_CONFIG_FILE) provide-color-images warn-images
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating PDF from fo-file..."
+endif
 ifeq ($(FOPTYPE), fop)
-	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
+	  $(FOPOPTIONS) $< $@ $(DEVNULL)
 else
-	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) $(FOPOPTIONS) $< $@
+	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
+	  $(FOPOPTIONS) $< $@ $(DEVNULL)
 endif
 ifdef MISSING
 	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
@@ -1094,6 +1161,9 @@ endif
 #
 ifeq ("$(INDEX)", "Yes")
 $(PROFILEDIR)/$(TMP_BOOK).idx: $(PROFILES) $(PROFILEDIR)/.validate
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating Index..."
+endif
 	xsltproc $(ROOTSTRING) --xinclude --output $@ $(STYLEINDEX) \
 	$(PROFILEDIR)/$(MAIN)
 
@@ -1124,7 +1194,7 @@ $(HTML_DIR)/admon: $(DTDROOT)/images/admon $(HTML_DIR)
 $(HTML_DIR)/callouts: $(DTDROOT)/images/callouts/ $(HTML_DIR) 
 	ln -sf $(DTDROOT)/images/callouts/ $(HTML_DIR)
 
-$(HTML_DIR)/images: $(IMG_GENDIR)/online/ $(HTML_DIR) 
+$(HTML_DIR)/images: | $(IMG_DIRECTORIES) $(HTML_DIR)
 	ln -sf $(IMG_GENDIR)/online/ $(HTML_DIR)/images
 
 # Print result directory names 
@@ -1165,9 +1235,12 @@ $(HTML_DIR)/index.html: meta
 endif
 $(HTML_DIR)/index.html: provide-color-images  warn-images
 $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(MANIFEST) \
-		 --stringparam projectfile PROJECTFILE.$(BOOK) \
-	         --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN)
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating HTML pages"
+endif
+	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
 	  ln -sf $(HTML_DIR)/$(ROOTID).html $@; \
 	fi
@@ -1182,10 +1255,13 @@ $(HTML_DIR)/$(BOOK).html: meta
 endif
 $(HTML_DIR)/$(BOOK).html: provide-color-images  warn-images
 $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(MANIFEST) \
-		 --stringparam projectfile PROJECTFILE.$(BOOK) \
-		 --output $(HTML_DIR)/$(BOOK).html \
-	         --xinclude $(HTMLBIGFILE) $(PROFILEDIR)/$(MAIN) 
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating single HTML page"
+endif
+	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  --output $(HTML_DIR)/$(BOOK).html \
+	  --xinclude $(HTMLBIGFILE) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 
 #------------------------------------------------------------------------
 #
@@ -1209,7 +1285,7 @@ $(JSP_DIR)/admon: $(DTDROOT)/images/admon/ $(JSP_DIR)
 $(JSP_DIR)/callouts: $(DTDROOT)/images/callouts/ $(JSP_DIR)
 	ln -sf $(DTDROOT)/images/callouts/ $(JSP_DIR)
 
-$(JSP_DIR)/images: $(IMG_GENDIR)/online/ $(JSP_DIR)
+$(JSP_DIR)/images: | $(IMG_DIRECTORIES) $(JSP_DIR)
 	ln -sf $(IMG_GENDIR)/online/ $(JSP_DIR)/images
 
 # Print result directory names
@@ -1225,9 +1301,13 @@ $(JSP_DIR)/index.jsp: meta
 endif
 $(JSP_DIR)/index.jsp: $(STYLEJ) $(PROFILES) $(JSP_DIR)
 $(JSP_DIR)/index.jsp: provide-color-images warn-images $(JSPGRAPHICS) 
-	xsltproc $(JSPSTRINGS) $(ROOTSTRING) $(METASTRING) $(XHTMLSTRING) \
-		$(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-		--xinclude $(STYLEJ) $(PROFILEDIR)/$(MAIN)
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating JSP pages"
+endif
+	xsltproc $(JSPSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	  $(XHTMLSTRING) $(MANIFEST)\
+	  --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  --xinclude $(STYLEJ) $(PROFILEDIR)/$(MAIN)
 ifdef ROOTID
 	ln -sf $(JSP_DIR)/$(ROOTID).jsp $(JSP_DIR)/index.jsp
 endif
@@ -1247,7 +1327,10 @@ txt-name:
 
 # create text from single html file
 #
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt: $(HTML_DIR)/$(BOOK).html
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt: $(HTML_DIR)/$(BOOK).html 
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating ASCII file"
+endif
 	w3m -dump $< > $@
 
 
@@ -1267,12 +1350,18 @@ epub-name:
 
 # Generate "epub xml" from $(TMP_XML)
 #
-$(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml: $(TMP_XML)
+$(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml: $(TMP_XML) 
+ifeq ($(VERBOSITY),1)
+	@echo "   Generating XML bigfile"
+endif
 	xsltproc --output $@ $(ROOTSTRING) $(STYLEPUB) $<
 
 # Generate epub from "epub xml" file 
 #
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml $(STYLEPUB) validate provide-epub-images
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml $(STYLEPUB) validate provide-epub-images 
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating epub"
+endif
 	$(DB2EPUB) \
 		-s $(STYLEPUBXSLT) \
 		--verbose --css $(STYLEPUBCSS) \
@@ -1290,7 +1379,10 @@ wiki-name:
 	@ccecho "result" "wiki/$(BOOK)/$(ROOTID).wiki"
 
 # Generate wiki from profiled xml
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki: $(STYLEWIKI) $(PROFILES)
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki: $(STYLEWIKI) $(PROFILES) 
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating mediawiki files"
+endif
 	xsltproc --output $@ $(ROOTSTRING) --xinclude $(STYLEWIKI) \
 	         $(PROFILEDIR)/$(MAIN)
 
@@ -1303,12 +1395,22 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki: $(STYLEWIKI) $(PROFILES)
 #---------------
 # Check external links (<ulink>)
 #
+ifeq ($(VERBOSITY),2)
+CB_VERBOSITY := --verbose
+endif
+
 .PHONY: checklink chklink jana
-checklink chklink jana: $(PROFILES)
-	xsltproc --xinclude --noout $(ROOTSTRING) -o $(TESTPAGE) $(STYLELINKS) \
-		 $(PROFILEDIR)/$(MAIN)
-	checkbot --url file://localhost/$(TESTPAGE) \
-		    $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html
+checklink chklink jana: $(PROFILES) 
+ifeq ($(VERBOSITY),1)
+	@echo "   Creating test page"
+endif
+	xsltproc --xinclude --noout $(ROOTSTRING) -o $(TESTPAGE) \
+	  $(STYLELINKS) $(PROFILEDIR)/$(MAIN) 
+ifeq ($(VERBOSITY),1)
+	@echo "   Running linkchecker"
+endif
+	checkbot --url file://localhost/$(TESTPAGE) $(CB_VERBOSITY) \
+	  $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html $(DEVNULL)
 	@ccecho "result" "Find the link check report at:\nfile://$(TMP_DIR)/$(BOOK)-checkbot-localhost.html"
 
 
@@ -1317,15 +1419,27 @@ checklink chklink jana: $(PROFILES)
 #
 
 .PHONY: db2novdoc 
-db2novdoc: $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml
+db2novdoc: $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml 
+ifeq ($(VERBOSITY),1)
+	@echo "   Converting to Novdoc"
+endif
 	xsltproc --output $< $(ROOTSTRING) $(STYLEDB2ND) $(TMP_XML)
+ifeq ($(VERBOSITY),1)
+	@echo "   Running xmllint"
+endif
 	xmllint --noent --valid \
 		--noout $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml
+ifeq ($(VERBOSITY),1)
+	@echo "   Moving results"
+endif
 	mv -iv $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml \
 		$(BASE_DIR)/xml/
 
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
+ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+endif
 	mkdir -p $(dir $@)
 	ln -sf $< $@
 	if test -n "$(ENTITIES)"; then \

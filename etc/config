@@ -48,12 +48,12 @@ BUILD_DIR=""
 ## ------------------------             
 ## Description: Command line options for /usr/bin/checkbot
 ## Type:        String
-## Default:     "-v --dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
+## Default:     "--dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
 #
 # 
 # Also see 'man 1 checkbot'. Do not change unless you really know what you do.
 #
-CB_OPTIONS="-v --dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
+CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
 
 ## Key:         COMMENTS
 ## ---------------------
@@ -426,3 +426,15 @@ TITLE=""
 # Also see REMARKS
 #
 USEMETA="no"
+
+## Key:         VERBOSITY
+## --------------------
+## Description: Verbosity level
+## Type:        number
+## Default:     0
+#
+# VERBOSITY=0: print only final results message (default)
+# VERBOSITY=1: results of each target that is called
+# VERBOSITY=2: detailed output of each target
+#
+VERBOSITY=0

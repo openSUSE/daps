@@ -106,8 +106,9 @@ function call_make () {
     LOGFILE="${LOG_DIR}/make_${TARGET}.log"
     date &> $LOGFILE
 
-    if [[ 1 = $VERBOSE ]]; then
-        echo "
+    if [[ 0 != $VERBOSITY ]]; then
+        if [[ 2 = $VERBOSITY ]]; then
+            echo "
 ---------------
    BASE_DIR: $BASE_DIR
   BUILD_DIR: $BUILD_DIR
@@ -120,6 +121,7 @@ function call_make () {
 XML_CATALOG: $XML_CATALOG_FILES
 ---------------
 " | tee -a $LOGFILE
+        fi
         eval "$MCMD 2>&1 | tee -a $LOGFILE"
     else
         eval "$MCMD >> $LOGFILE 2>&1"
@@ -259,7 +261,7 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
     cp ${LIB_DIR}/templates/example{1,2}.png ${BASE_DIR}/images/src/png/
   
     setup_builddir
-    if [[ 1 = $VERBOSE ]]; then
+    if [[ 0 != $VERBOSITY ]]; then
         ccecho "result" "Successfully created a working environment at"
     fi
     ccecho "result" "${BASE_DIR}"
@@ -783,7 +785,7 @@ function filelists () {
                 exit 0
 		;;
             -p|--pretty)
-                if [[ 1 = $VERBOSE ]]; then
+                if [[ 0 != $VERBOSITY ]]; then
                     ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
                 else
                     PRETTY_FILELIST=1

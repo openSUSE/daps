@@ -1,26 +1,14 @@
 ----------------------------------------------------------------------------
                               TODO
 ----------------------------------------------------------------------------
-
-General:
-
-* Documentation!
-
-* Allow custom stylesheets
-
-* Reduce debug messages of make and stylesheets (daps -d now allows
-  to have extensive debug output by using (re)make's built-in debugging
-  switch)
-
-* rename package, script
-
-* Add more testcases
-
--------------
 daps
 
+* documentation
+
+* switching between stylesheet sets / allow custom stylesheets
+
 * generate man pages via ENVfile and daps instead of calling a stylesheet
-  directly
+  directly (daps makefile)
 
 * some targets such as clean do not need an ENVfile to be specified
   do not check for an ENVfile with these targets 
@@ -29,26 +17,12 @@ daps
 
 * replace turn on only switches -cdr with turn on/off switches
 
-* auto-generating $MAIN
+* auto-generating $MAIN?
 
 * auto detect $MAIN?
 
 * TAB completion for options and subcommands
 
-* support for PDF graphics
-  creating graycsale PDFs:
-   gs -sOutputFile=gray.pdf -sDEVICE=pdfwrite \
-  -sColorConversionStrategy=Gray -dProcessColorModel=/DeviceGray \
-  -dCompatibilityLevel=1.4 color.pdf
-
-* support for eps graphics
-  - if we also have PDF support, consider converting EPS to PDF with
-    epstopdf
-  - if not:
-    EPS: color eps to grayscale:
-    http://en.wikibooks.org/wiki/LaTeX/Importing_Graphics#Converting_a_color_EPS_to_grayscale
-    EPS to PNG: convert MY.eps -depth 8 -strip MY.png
-  
 -------------
 DocManager
 
