@@ -6,6 +6,8 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
 >
 
+<!-- Metadata -->
+<xsl:param name="metadata.producer">SUSE Linux Products GmbH</xsl:param>
 
 <!-- Our Layout -->
 <xsl:param name="paper.layout"></xsl:param><!-- Empty for "normal" -->
