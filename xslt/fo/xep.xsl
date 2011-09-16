@@ -62,8 +62,16 @@
       </rx:meta-field>
 
     <xsl:variable name="title">
-      <xsl:apply-templates select="/*[1]" mode="label.markup"/>
-      <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+        <xsl:choose>
+          <xsl:when test="key('id', $rootid)">
+            <xsl:apply-templates select="key('id', $rootid)" mode="label.markup"/>
+            <xsl:apply-templates select="key('id', $rootid)" mode="title.markup"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="/*[1]" mode="label.markup"/>
+            <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+          </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
 
     <rx:meta-field name="creator">
