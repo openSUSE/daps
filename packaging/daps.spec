@@ -264,7 +264,7 @@ exit 0
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
 
-%doc %{_mandir}/man1/*.1.%{ext_man}
+%doc %{_mandir}/man1/*.1%{ext_man}
 %doc %{_defaultdocdir}/%{name}/*
 
 %{_bindir}/*
