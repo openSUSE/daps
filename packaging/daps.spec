@@ -8,7 +8,6 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 #
-# norootforbuild
 
 Name:           daps
 Version:        0.9beta7
@@ -167,15 +166,6 @@ DAPS is the successor of susedoc. See
 for upgrade instructions.
 
 
-Authors:
---------
-    Frank Sundermeyer <fsundermeyer AT suse DOT de>
-    Thomas Schraitle  <toms AT suse DOT de>
-    Berthold Gunreben
-    Curtis Graham
-    Berthold Gunreben
-    Jana Jaeger
-
 #--------------------------------------------------------------------------
 %prep
 %setup -q -n %{name}
@@ -184,12 +174,12 @@ Authors:
 #--------------------------------------------------------------------------
 %build
 # specifying VERSION is manadatory!! 
-%__make VERSION=%{version}
+%__make VERSION=%{version} %{?_smp_mflags}
 
 #--------------------------------------------------------------------------
 %install
 # specifying VERSION is manadatory!! 
-%make_install VERSION=%{version}
+%make_install VERSION=%{version} %{?_smp_mflags}
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}
@@ -256,12 +246,6 @@ fi
 
 %run_suseconfig_fonts
 exit 0
-
-
-#----------------------
-%clean
-%__make clean
-%{__rm} -rf $RPM_BUILD_ROOT
 
 
 #----------------------
