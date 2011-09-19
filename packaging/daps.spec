@@ -90,6 +90,7 @@ Requires:       dia
 Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.75
 Requires:       exiftool
+Requires:       fam
 Requires:       freefont
 Requires:       ghostscript-library
 Requires:       ImageMagick
