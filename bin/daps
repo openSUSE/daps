@@ -74,6 +74,7 @@ UNSETLIST=(
     ENVFILE_CMDL
     FOP_CONFIG_FILE
     LIB_DIR
+    SILENT
     VENDOR
     VERBOSITY_CMDL
 )
@@ -98,11 +99,6 @@ Usage:
   $ME [--global-options] <subcommand> [--command-options] [arguments]
 
 Global Options:
-  --help, -h                Help
-  --verbose=1, -v             Verbose output Level 1
-  --verbose=2, -vv          Verbose output Level 2
-  --debug                   Print debugging messages. Far more verbose than the
-                             --verbose option
   -b BASE_DIR,
   --basedir=BASE_DIR        Project directory. Must contain the XML sources in
                             BASE_DIR/xml. If not specified, the current
@@ -116,13 +112,23 @@ Global Options:
                             codes. Set to '0' to turn off colors. Useful for
                             cron jobs and sripts.
                             Default: 1
+  --debug                   Print debugging messages. Far more verbose than the
+                             --verbose option
   -e ENVFILE,
   --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
                             there is only a single ENV file in BASE_DIR. In
                             that case the ENV file will automatically be used.
                             Only specify the filename, not an absolute
                             path
+  --help, -h                Help
+  --silent                  Force silent mode (only prints result); overwrites
+                            verbose settings in ~/.daps/config
+                            Use when wanting to use daps results in scripts
+  --verbose=0, -v0          Verbosity Level 0 (print 1 line of results)
+  --verbose=1, -v1, -v      Verbosity Level 1 (print intermediate results)
+  --verbose=2, -v2, -vv     Verbosity Level 2 (print all commands, very verbose)
 
+  
 Subcommands:
    help                      Print this help
 
@@ -471,11 +477,13 @@ while true ; do
             if [[ 1 = $DEBUG ]]; then
                 VERBOSITY_CMDL=2
             else
-                if [[ "" != $2 && 1 != $2 ]]; then
+                if [[ 0 = $2 ]]; then
+                    VERBOSITY_CMDL=0
+                 elif [[ 1 = $2 || v = $2 ]]; then
+                    VERBOSITY_CMDL=1
+                else
                     VERBOSITY_CMDL=2
                     MAKECMD="/usr/bin/make -j${CORE_NO}"
-                else
-                    VERBOSITY_CMDL=1
                 fi
             fi
             VERBOSITY="$VERBOSITY_CMDL"
