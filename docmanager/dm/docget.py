@@ -34,7 +34,7 @@ import re
 
 def getenvfile():
   """Returns BASEDIR and ENVFILE"""
-  cmd = "daps showenv"
+  cmd = "daps --verbosity=0 showenv"
   res=commands.getstatusoutput( cmd )
   if res[0] != 0:
     raise dmexpect.DocManagerEnvironment(res[1])
