@@ -113,7 +113,7 @@ Global Options:
                             cron jobs and sripts.
                             Default: 1
   --debug                   Print debugging messages. Far more verbose than the
-                             --verbose option
+                             --verbosity options
   -e ENVFILE,
   --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
                             there is only a single ENV file in BASE_DIR. In
@@ -121,12 +121,10 @@ Global Options:
                             Only specify the filename, not an absolute
                             path
   --help, -h                Help
-  --silent                  Force silent mode (only prints result); overwrites
-                            verbose settings in ~/.daps/config
                             Use when wanting to use daps results in scripts
-  --verbose=0, -v0          Verbosity Level 0 (print 1 line of results)
-  --verbose=1, -v1, -v      Verbosity Level 1 (print intermediate results)
-  --verbose=2, -v2, -vv     Verbosity Level 2 (print all commands, very verbose)
+  --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
+  --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
+  --verbosity=2, -v2, -vv   Verbosity Level 2 (print all commands, very verbose)
 
   
 Subcommands:
@@ -410,7 +408,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbose:: -n $ME -- "$@")
+ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbosity:: -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
@@ -468,7 +466,7 @@ while true ; do
             daps_help
 	    exit 0
             ;;
-	-v|--verbose)
+	-v|--verbosity)
             # $VERBOSITY will be parsed in the makefiles
             # VERBOSITY=0: print only final results message (default)
             # VERBOSITY=1: results of each target that is called
