@@ -435,8 +435,12 @@ prof profile: $(PROFILES)
 #
 .PHONY: validate
 $(PROFILEDIR)/.validate validate: $(PROFILES)
+$(PROFILEDIR)/.validate validate:
 ifeq ($(VERBOSITY),1)
 	@echo "   Validating..."
+endif
+ifdef MISSING
+	@ccecho "warn" "The following graphics are missing: $(MISSING)"
 endif
 	xmllint --noent --postvalid --noout \
 		--xinclude $(PROFILEDIR)/$(MAIN)
@@ -444,7 +448,7 @@ endif
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"
-	@ccecho "info" "All files are valid"; \
+	@ccecho "info" "All files are valid.";
 
 
 #--------------

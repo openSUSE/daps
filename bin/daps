@@ -477,7 +477,7 @@ while true ; do
             else
                 if [[ 0 = $2 ]]; then
                     VERBOSITY_CMDL=0
-                 elif [[ 1 = $2 || v = $2 ]]; then
+                 elif [[ 1 = $2 || "" = $2 ]]; then
                     VERBOSITY_CMDL=1
                 else
                     VERBOSITY_CMDL=2
