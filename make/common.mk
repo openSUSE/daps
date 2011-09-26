@@ -627,8 +627,8 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
 endif
 	tar chf $(TARBALL) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
-	tar rhf $(TARBALL)  --absolute-names --xform=s%$(BASE_DIR)/%% \
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
+	tar rhf $(TARBALL)  --absolute-names --transform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
 	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
@@ -652,8 +652,8 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
 endif
 	tar chf $(TARBALL) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
-	tar rhf $(TARBALL) --absolute-names --xform=s%$(BASE_DIR)/%% \
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
+	tar rhf $(TARBALL) --absolute-names --transform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
 	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
@@ -680,18 +680,18 @@ ifdef USED
   endif
   ifdef PNGONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-          --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
+          --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
           $(PNGONLINE);
   endif
   # also add SVGs if available
   ifdef SVGONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
 	  $(SVGONLINE)
   endif
   ifdef PDFONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
 	  $(PDFONLINE)
   endif
 	bzip2 -9f $(TARBALL)
@@ -714,7 +714,7 @@ ifdef PNGONLINE
   endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-	  --absolute-names --xform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
 	  $(sort $(PNGONLINE))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 else
@@ -742,7 +742,7 @@ endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
 	  -T $(HTML_DIR)/HTML.manifest \
-	  --absolute-names --xform=s%$(RESULT_DIR)/html/%% \
+	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
 	  $(HTML_DIR)/$(notdir $(LSTYLECSS))
@@ -765,7 +765,7 @@ ifeq ($(VERBOSITY),1)
 endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
-	  --absolute-names --xform=s%$(RESULT_DIR)/html/%% \
+	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML_DIR)/$(BOOK).html $(HTML-USED) $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
 	  $(HTML_DIR)/$(notdir $(LSTYLECSS))
@@ -789,7 +789,7 @@ endif
 	BZIP2=--best \
 	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
 	  -T $(JSP_DIR)/JSP.manifest \
-	  --absolute-names --xform=s%$(RESULT_DIR)/jsp/%% \
+	  --absolute-names --transform=s%$(RESULT_DIR)/jsp/%% \
 	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/navig/* \
 	  $(JSP_DIR)/admon/* $(JSP_DIR)/callouts/* \
 	  $(JSP_DIR)/$(notdir $(LSTYLECSS))

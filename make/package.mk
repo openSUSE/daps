@@ -102,7 +102,7 @@ endif
 ifdef EXTRA_FILES
 	bunzip2 $(PACKDIR)/$(BOOK)_$(LL).tar.bz2
 	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
-	  --xform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(EXTRA_FILES))
+	  --transform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(EXTRA_FILES))
 	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
 endif
 	@ccecho "result" "Find the package results at:\n$(PACKDIR)"
@@ -142,7 +142,7 @@ locdrop:
 ifdef TOTRANSFILES
 	@ccecho "warn" "No files for translation available"
 	BZIP2=--best && tar chfj $(TOTRANSTAR) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
 	@ccecho "info" "Created $(TOTRANSTAR)"
 endif
 # notrans tarball
@@ -151,8 +151,8 @@ endif
 # Need to check why!
 #
 	tar chf $(NOTRANSTAR) --absolute-names \
-	  --xform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(sort $(NOTRANSFILES))
-	tar rhf $(NOTRANSTAR)  --absolute-names --xform=s%$(BASE_DIR)/%% \
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(sort $(NOTRANSFILES))
+	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(NOTRANSTAR)
 	@ccecho "info" "Created $(NOTRANSTAR).bz2"
@@ -252,14 +252,14 @@ document-files-html: OUTFORMAT = html
 document-files-html: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
-	 --absolute-names --xform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
 
 .PHONY: document-files-pdf
 document-files-pdf: OUTFORMAT = pdf
 document-files-pdf: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
-	 --absolute-names --xform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
 
 $(YELP_DIR):
 	mkdir -p $@
@@ -283,7 +283,7 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
-	  --absolute-names --xform=s%$(DESKTOP_FILES_DIR)%desktop/% \
+	  --absolute-names --transform=s%$(DESKTOP_FILES_DIR)%desktop/% \
           $(DESKTOP_FILES_DIR)
 
 $(DESKTOP_FILES_DIR):
