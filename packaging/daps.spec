@@ -67,20 +67,26 @@ BuildRequires:  xmlformat
 BuildRequires:  xmlstarlet
 BuildRequires:  zip
 
-%if %{suse_version} >= 1140
+%if 0%{?suse_version} >= 1140
 BuildRequires:  perl-checkbot
 BuildRequires:  xmlgraphics-fop >= 0.94
 %else
+%if %{undefined sles_version}
 BuildRequires:  checkbot
+%endif
 BuildRequires:  fop >= 0.94
 BuildRequires:  xerces-j2
-%if %{suse_version} == 1130
+%if 0%{?suse_version} == 1130
 BuildRequires:  xml-commons-jaxp-1.3-apis
 %endif
-%if %{suse_version} < 1130
+%if 0%{?suse_version} < 1130
 BuildRequires:  xml-commons-apis-bootstrap
 %endif
 %endif
+%if 0%{?suse_version} < 1120
+BuildRequires:  python-xml
+%endif
+
 
 PreReq:         libxml2
 PreReq:         sgml-skel
@@ -114,19 +120,26 @@ Requires:       xml-commons-resolver
 Requires:       xmlformat
 Requires:       xmlstarlet
 Requires:       zip
-%if %{suse_version} >= 1140
+%if 0%{?suse_version} >= 1140
 Requires:       perl-checkbot
 Requires:       xmlgraphics-fop >= 0.94
 %else
-Requires:        checkbot
+%if 0%{?sles_version}
+Recommends:     checkbot
+%else
+Requires:       checkbot
+%endif
 Requires:        fop >= 0.94
 Requires:        xerces-j2
-%if %{suse_version} == 1130
+%if 0%{?suse_version} == 1130
 Requires:        xml-commons-jaxp-1.3-apis
 %endif
-%if %{suse_version} < 1130
+%if 0%{?suse_version} < 1130
 Requires:        xml-commons-apis-bootstrap
 %endif
+%endif
+%if 0%{?suse_version} < 1120
+BuildRequires:  python-xml
 %endif
 
 Recommends:     agfa-fonts
@@ -175,12 +188,15 @@ for upgrade instructions.
 #--------------------------------------------------------------------------
 %build
 # specifying VERSION is manadatory!! 
-%__make VERSION=%{version} %{?_smp_mflags}
+%__make  %{?_smp_mflags} VERSION=%{version}
 
 #--------------------------------------------------------------------------
 %install
 # specifying VERSION is manadatory!! 
-%make_install VERSION=%{version} %{?_smp_mflags}
+make install DESTDIR=$RPM_BUILD_ROOT VERSION=%{version}
+
+# make_install macro does not have a DESTDIR in 11.1/SLE 11 !!
+#%#make_install VERSION=%{version}
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}
