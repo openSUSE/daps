@@ -214,6 +214,6 @@ $(DIRECTORIES):
 .PHONY: manuals
 manuals:
 	for BOOK in $(MANUALS); do \
-	  bin/daps -d --dtdroot=$(shell pwd) --basedir=$(shell pwd)/doc \
+	  bin/daps --debug --dtdroot=$(shell pwd) --basedir=$(shell pwd)/doc \
 	    --envfile=ENV-$$BOOK --color=0 dist-html; \
 	done
