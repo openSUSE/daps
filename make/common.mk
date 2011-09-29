@@ -332,8 +332,8 @@ include $(DTDROOT)/make/package.mk
 #
 .PHONY: all pdf
 all pdf: | $(DIRECTORIES)
-all pdf: $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE).pdf
-	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE).pdf"
+all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf
+	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
 
 #--------------
@@ -341,8 +341,8 @@ all pdf: $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE).pdf
 #
 .PHONY: color-pdf pdf-color
 pdf-color color-pdf: | $(DIRECTORIES)
-pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf
-	@ccecho "result" "COLOR-PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf"
+pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf
+	@ccecho "result" "COLOR-PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
 #--------------
 # HTML
@@ -1078,55 +1078,59 @@ endif
 #
 .PHONY: pdf-name
 pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE).pdf"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf"
 
 .PHONY: pdf-color-name color-pdf-name
 pdf-color-name color-pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf"
 
 
 # Generate fo from xml
 #
 # b/w PDF
 #
-.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo
+.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
 ifeq ("$(INDEX)", "Yes")
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
 ifeq ($(VERBOSITY),1)
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: FONTDEBUG := --stringparam debug.fonts 0
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: FONTDEBUG := --stringparam debug.fonts 0
 endif
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(PROFILES) $(PROFILEDIR)/.validate
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo: $(STYLEFO)
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(PROFILES) $(PROFILEDIR)/.validate
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
 	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING) $(INDEXSTRING) \
 	  --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
-	@ccecho "info" "Created fo file $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo"
+	@ccecho "info" "Created fo file $@"
 
 # Color PDF
 #
-.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo
+.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
 ifeq ("$(INDEX)", "Yes")
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(PROFILEDIR)/$(TMP_BOOK).ind
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
 ifeq ($(VERBOSITY),1)
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: FONTDEBUG := --stringparam debug.fonts 0
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: FONTDEBUG := --stringparam debug.fonts 0
 endif
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(PROFILES) $(PROFILEDIR)/.validate
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.fo: $(STYLEFO)
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(PROFILES) $(PROFILEDIR)/.validate
+$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
 	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) \
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
+	@ccecho "info" "Created fo file $@"
 
-# Create PDF from fo
+
+# Create b/w PDF from fo
 #
-$(RESULT_DIR)/%.pdf: $(TMP_DIR)/%.fo $(FOP_CONFIG_FILE) provide-images warn-images
+$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: $(FOP_CONFIG_FILE)
+$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images
+$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
 endif
@@ -1146,7 +1150,9 @@ endif
 
 # Create COLOR-PDF from fo
 #
-$(RESULT_DIR)/%-online.pdf: $(TMP_DIR)/%-online.fo $(FOP_CONFIG_FILE) provide-color-images warn-images
+$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: $(FOP_CONFIG_FILE)
+$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images
+$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
 endif

@@ -45,8 +45,7 @@ package-pdf: color-pdf document-files-pdf-dist
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy color PDF
-	cp  $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf \
-	  $(PACKDIR)/$(BOOK)_$(LL).pdf 
+	cp  $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(PACKDIR)
 # copy PDF document files for GNOME
 	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2; then \
 	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2 \
@@ -120,9 +119,9 @@ locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude \
 			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
 			$(MAIN))
-locdrop: TOTRANSFILES = $(subst $(BASE_DIR)/xml, $(PROFILE_PARENT_DIR)/dist, \
-		$(shell cd $(BASE_DIR) && \
-		docmanager dg -P --include="doc:trans=yes" -H -A -q "%{name} "))
+locdrop: TOTRANSFILES = $(sort $(subst $(BASE_DIR)/xml, \
+			  $(PROFILE_PARENT_DIR)/dist, \
+			  $(shell cd $(BASE_DIR) && docmanager dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
 locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
@@ -146,12 +145,8 @@ ifdef TOTRANSFILES
 	@ccecho "info" "Created $(TOTRANSTAR)"
 endif
 # notrans tarball
-#
-# Weird result without the sort function
-# Need to check why!
-#
 	tar chf $(NOTRANSTAR) --absolute-names \
-	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(sort $(NOTRANSFILES))
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(NOTRANSFILES)
 	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(NOTRANSTAR)
@@ -169,9 +164,8 @@ endif
 #
 ifndef NOPDF
 # copy color PDF
-	cp $(RESULT_DIR)/$(TMP_BOOK)-$(FOPTYPE)-online.pdf \
-	  $(LOCDROPDIR)/$(BOOK)_$(LL).pdf
-	@ccecho "info" "Created $(LOCDROPDIR)/$(BOOK)_$(LL).pdf"
+	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(LOCDROPDIR)
+	@ccecho "info" "Created $(LOCDROPDIR)/$(TMP_BOOK)_$(LL).pdf"
 endif
 	@ccecho "result" "Find the locdrop results at:\n$(LOCDROPDIR)"
 
