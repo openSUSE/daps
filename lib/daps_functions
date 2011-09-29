@@ -151,7 +151,7 @@ function call_make_nolog () {
     TARGET=$1
 
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
+    SARGS=$(getopt -o h -l help -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -870,7 +870,72 @@ function packaging () {
     call_make "$TARGET" "$@"
     
 }
-        
+
+function show_names () {
+    #
+    # function for all targets showing a filename or a directory
+    # (pdf-name, htmlsingle-name, etc.)
+
+    local TARGET MCMD
+    TARGET=$1
+
+    # command line args
+    SARGS=$(getopt -o cdhr -l comments,draft,help,name:,remarks,rootid: -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+	    -d|--draft)
+		export DRAFT="yes"
+		shift
+		;;
+            -h|--help)
+                help_scmd_head "Show a resulting filename/directory"
+                help_comments
+                help_draft
+                help_help
+                help_name
+                help_remarks
+                help_rootid
+                exit
+                ;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) wrong_parameter "$TARGET $1" ;;
+        esac
+    done
+    
+    setup_builddir
+
+    # export comments, remarks, draft, usemeta
+    format_options
+    
+    MCMD="$MAKECMD -f $DTDROOT/make/common.mk $TARGET $@"
+    if [[ 1 = $PRETTY_FILELIST ]]; then
+        eval "$MCMD" | sed 's/ /\n/g' | sort
+    else
+        eval "$MCMD"
+    fi
+}
+
 function show_env {
          echo "BASE_DIR=$BASE_DIR;ENVFILE=$ENVFILE"
 }

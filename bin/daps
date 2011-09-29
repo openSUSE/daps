@@ -338,12 +338,18 @@ function run_subcmd () {
             filelists $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        check|clean|clean-all|clean-images|clean-results|color-pdf-name|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jsp-dir-name|nothing|offspring|pdf-color-name|pdf-name|penguin|real-clean|txt-name|wiki-name)
+        check|clean|clean-all|clean-images|clean-results|nothing|offspring|penguin|real-clean)
             # Writes no logfile
             #
             call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
+        color-pdf-name|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jsp-dir-name|pdf-color-name|pdf-name|txt-name|wiki-name)
+            # Writes no logfile
+            #
+            show_names $SUBCMD "${SCMD_ARGS[@]}"
+            exit
+            ;;        
         showenv)
             show_env
             exit
