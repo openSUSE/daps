@@ -8,7 +8,7 @@
 #
 .PHONY: package-html
 package-html: PACKDIR = $(RESULT_DIR)/package/html
-package-html: dist-html desktop-files document-files-html
+package-html: dist-html desktop-files-dist document-files-html-dist
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy HTML tarball
@@ -41,7 +41,7 @@ package-html: dist-html desktop-files document-files-html
 #
 .PHONY: package-pdf
 package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
-package-pdf: color-pdf document-files-pdf
+package-pdf: color-pdf document-files-pdf-dist
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy color PDF
@@ -243,23 +243,36 @@ endif
 
 
 #--------------
-# desktop-files
+# yelp-files
 # Create tarball with document files for GNOME
 #
 #
-.PHONY: document-files-html
-document-files-html: OUTFORMAT = html
-document-files-html: $(YELP_DIR)/%.document
+.PHONY: document-files-html-dist
+document-files-html-dist: OUTFORMAT = html
+document-files-html-dist: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
 	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
 
-.PHONY: document-files-pdf
-document-files-pdf: OUTFORMAT = pdf
-document-files-pdf: $(YELP_DIR)/%.document
+.PHONY: document-files-pdf-dist
+document-files-pdf-dist: OUTFORMAT = pdf
+document-files-pdf-dist: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
 	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+
+.PHONY: document-files-html
+document-files-html: OUTFORMAT = html
+document-files-html: $(YELP_DIR)/%.document
+	ccecho "result" "Created document file $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document"
+
+.PHONY: document-files-pdf
+document-files-pdf: OUTFORMAT = pdf
+document-files-pdf: $(YELP_DIR)/%.document
+	ccecho "result" "Created document file $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document"
+
+document-files-dir-name: $(YELP_DIR)
+	ccecho "result" "$(YELP_DIR)"
 
 $(YELP_DIR):
 	mkdir -p $@
@@ -279,12 +292,18 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 # Create tarball with desktop files for KDE
 #
 #
-.PHONY: desktop-files
-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
+.PHONY: desktop-files-dist
+desktop-files-dist: $(DESKTOP_FILES_DIR)/%.desktop
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
 	  --absolute-names --transform=s%$(DESKTOP_FILES_DIR)%desktop/% \
           $(DESKTOP_FILES_DIR)
+
+desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
+	ccecho "result" "Created desktop files in $(DESKTOP_FILES_DIR)"
+
+desktop-files-dir-name:
+	ccecho "result" "$(DESKTOP_FILES_DIR)"
 
 $(DESKTOP_FILES_DIR):
 	mkdir -p $@
