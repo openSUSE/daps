@@ -459,7 +459,7 @@ function build_html_jsp () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid: -n $0 -- "$@")
+    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid:,static -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -483,6 +483,7 @@ function build_html_jsp () {
                 help_name
                 help_remarks
                 help_rootid
+                help_static
                 echo
                 exit 0
 		;;
@@ -506,6 +507,10 @@ function build_html_jsp () {
 		export ROOTID="$2"
 		shift 2
 		;;
+ 	    --static)
+		export STATIC_HTML=1
+		shift
+		;;           
             --) shift ; break ;;
             *) exit_on_error "Internal error!" ;;
 	esac
@@ -968,6 +973,12 @@ function help_rootid () {
                               (parts or chapters). Default: Usually set
                               in the ENV-file; if not set the complete set
                               defined in $MAIN will be built"
+}
+function help_static () {
+    echo "    --static                  Normally images and css files in HTML builds  
+                              are linked from elsewhere in the file system.
+                              Use this option to copy these files in order
+                              to create a distributable HTML build"
 }
 function help_show () {
     echo "    --show, -s                Show images with an image viewer that either

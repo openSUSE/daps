@@ -30,7 +30,7 @@ endif
 
 
 #------------------------------------------------------------------------
-# Paths
+# Paths / Defaults
 
 # the following values should have been set by the daps wrapper script
 # let's provide sane defaults to prevent harm in case someone calls make
@@ -57,6 +57,9 @@ PROFARCH  := noarch
 endif
 ifndef PROFOS
 PROFOS  := default
+endif
+ifndef STATIC_HTML
+STATIC_HTML := 0
 endif
 
 
@@ -559,7 +562,7 @@ bigfile: $(TMP_XML)
 .PHONY: bigfile-reduced
 bigfile-reduced: $(TMP_XML)
 	xsltproc --output $(TMP_DIR)/$(BOOK)-reduced.xml $(ROOTSTRING) \
-                 $(STYLEBURN) $< 
+	  $(STYLEBURN) $< 
 	xmllint --noent --valid --noout $(TMP_DIR)/$(BOOK)-reduced.xml
 	@ccecho "result" "Find the reduced bigfile at:\n$(TMP_DIR)/$(BOOK)-reduced.xml"
 
@@ -644,7 +647,7 @@ dist-book: link-entity-dist
 dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet $(ROOTSTRING) \
 			--xinclude $(STYLESEARCH) \
-	        	$(PROFILE_PARENT_DIR)/dist/$(MAIN)) $(MAIN)))
+			$(PROFILE_PARENT_DIR)/dist/$(MAIN)) $(MAIN)))
 dist-book: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-book:
@@ -680,8 +683,8 @@ ifdef USED
   endif
   ifdef PNGONLINE
 	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
-          --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
-          $(PNGONLINE);
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  $(PNGONLINE);
   endif
   # also add SVGs if available
   ifdef SVGONLINE
@@ -829,8 +832,8 @@ ifeq ($(VERBOSITY),1)
 endif
 	xsltproc --xinclude --output $@ \
 	  --stringparam resolve.suse-pi 1 \
-          --stringparam show.comments $(COMMENTS) \
-          --stringparam show.remarks $(REMARKS) \
+	  --stringparam show.comments $(COMMENTS) \
+	  --stringparam show.remarks $(REMARKS) \
 	  --stringparam projectfile PROJECTFILE.$(BOOK) $(STYLENOV) \
 	  $(PROFILEDIR)/$(MAIN)
 
@@ -912,8 +915,8 @@ endif
 		$(subst show.remarks 1,show.remarks 0, \
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
-	        --stringparam filename "$(notdir $<)" \
-	        $(STYLENOV) $<
+		  --stringparam filename "$(notdir $<)" \
+		  $(STYLENOV) $<
 	$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
 $(PROFILE_PARENT_DIR)/dist/%: $(BASE_DIR)/xml/% link-entity-noprofile
@@ -1187,19 +1190,43 @@ $(HTML_DIR):
 	mkdir -p $@
 
 $(HTML_DIR)/$(notdir $(LSTYLECSS)): $(STYLECSS) $(HTML_DIR)
+ifeq ($(STATIC_HTML), 1)
+	cp -rL $(STYLECSS) $(HTML_DIR)/
+else
 	ln -sf $(STYLECSS) $(HTML_DIR)/
+endif
 
 $(HTML_DIR)/navig: $(DTDROOT)/images/navig $(HTML_DIR)
+ifeq ($(STATIC_HTML), 1)
+	cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR)
+else
+	[ -d $(HTML_DIR)/navig ] && rm -rf $(HTML_DIR)/navig
 	ln -sf $(DTDROOT)/images/navig/ $(HTML_DIR)
+endif
 
-$(HTML_DIR)/admon: $(DTDROOT)/images/admon $(HTML_DIR) 
+$(HTML_DIR)/admon: $(DTDROOT)/images/admon $(HTML_DIR)
+ifeq ($(STATIC_HTML), 1)
+	cp -rL $(DTDROOT)/images/admon/ $(HTML_DIR)
+else
+	[ -d $(HTML_DIR)/admon ] && rm -rf $(HTML_DIR)/admon
 	ln -sf $(DTDROOT)/images/admon/ $(HTML_DIR)
+endif
 
-$(HTML_DIR)/callouts: $(DTDROOT)/images/callouts/ $(HTML_DIR) 
+$(HTML_DIR)/callouts: $(DTDROOT)/images/callouts/ $(HTML_DIR)
+ifeq ($(STATIC_HTML), 1)
+	cp -rL $(DTDROOT)/images/callouts/ $(HTML_DIR)
+else
+	[ -d $(HTML_DIR)/callouts ] && rm -rf $(HTML_DIR)/callouts
 	ln -sf $(DTDROOT)/images/callouts/ $(HTML_DIR)
+endif
 
 $(HTML_DIR)/images: | $(IMG_DIRECTORIES) $(HTML_DIR)
+ifeq ($(STATIC_HTML), 1)
+	cp -rL $(IMG_GENDIR)/online/ $(HTML_DIR)/images/
+else
+	[ -d $(HTML_DIR)/images/online ] && rm -rf $(HTML_DIR)/images/online
 	ln -sf $(IMG_GENDIR)/online/ $(HTML_DIR)/images
+endif
 
 # Print result directory names 
 #
@@ -1246,11 +1273,8 @@ endif
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
-	  ln -sf $(HTML_DIR)/$(ROOTID).html $@; \
+	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
-#ifdef ROOTID
-#	ln -sf $(HTML_DIR)/$(ROOTID).html $(HTML_DIR)/index.html;
-#endif
 
 # Generate HTML SINGLE from profiled xml
 #
@@ -1388,7 +1412,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating mediawiki files"
 endif
 	xsltproc --output $@ $(ROOTSTRING) --xinclude $(STYLEWIKI) \
-	         $(PROFILEDIR)/$(MAIN)
+	  $(PROFILEDIR)/$(MAIN)
 
 
 #------------------------------------------------------------------------
