@@ -814,7 +814,7 @@ function packaging () {
     if [[ package-pdf = $TARGET ]]; then
         SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "$@")
     elif [[ package-src = $TARGET ]]; then
-        SARGS=$(getopt -o h -l extra-files:,help,name:,rootid: -n $0 -- "$@")
+        SARGS=$(getopt -o h -l def-file:,help,name:,rootid: -n $0 -- "$@")
     else
         SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
     fi
@@ -824,11 +824,9 @@ function packaging () {
     eval set -- "$SARGS"
     while true ; do
 	case "$1" in
-            --extra-files)
-                for FILE in $2; do
-                    test -f $FILE || exit_on_error "Cannot find extra file $FILE"
-                done
-                export EXTRA_FILES=$2
+            --def-file)
+                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
+                export DEF_FILE=$2
                 shift 2
                 ;;
             --fop)
@@ -845,7 +843,7 @@ function packaging () {
                 if [[ package-pdf = $TARGET ]]; then
                     help_fop
                 elif [[ package-src = $TARGET ]]; then
-                    help_extrafiles
+                    help_def-file
                 fi
                 help_help
                 help_name
@@ -976,10 +974,9 @@ function help_draft () {
     echo "    --draft, -d               Add a 'DRAFT' watermark to all pages of the book
                               Default: off" 
 }
-function help_extrafiles () {
-    echo "    --extra-files=FILES       Specify a space separated list of additional files to
-                              be added to the source tarball. Paths must be
-                              relative to BASE_DIR"
+function help_def-file () {
+    echo "    --def-file=FILE           Specify a DEF-* file containing build
+                              information"
 }
 function help_file () {
     echo "    --file=FILE, -f FILE      Specify the filename of an XML file"

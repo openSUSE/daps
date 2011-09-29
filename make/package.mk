@@ -82,6 +82,13 @@ package-jsp: dist-jsp
 #
 .PHONY: package-src
 package-src: PACKDIR = $(RESULT_DIR)/package/src
+ifdef DEF_FILE
+# Get additional ENV-files from the DEF file
+# the awk scripts extracts the manual names from the second column of
+# the DEF file (ignoring comments and blank lines) and adds ENV- to it
+#
+package-src: E-FILES = $(shell awk '{OFS=""} !/^[ \t]*#/&&NR{print "ENV-",$$2}' $(DEF_FILE))
+endif
 package-src: dist-graphics dist-xml
 package-src:
 # remove old stuff
@@ -89,22 +96,30 @@ package-src:
 ifdef ROOTID
 ccecho "warn" "Warning: You specified a ROOTID. Sources may NOT be generated\nfor the whole set if !"
 endif
+# "copy" source files tarball (dist-xml) to an uncompressed tarball
+	bzcat $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 > $(PACKDIR)/$(BOOK)_$(LL).tar
 ifdef USED
-# copy graphics
-	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar.bz2 \
-		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar.bz2
+# "copy" graphics to an uncompressed tarball
+	bzcat $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar.bz2 > \
+		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
+# concat the two archives
+	tar -A --file=$(PACKDIR)/$(BOOK)_$(LL).tar \
+		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
+# remove graphics archive
+	rm -f $(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
 else
 	@ccecho "info" "Selected book/set contains no graphics"
 endif
-# copy source files tarball (dist-book)
-	cp $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 $(PACKDIR)/$(BOOK)_$(LL).tar.bz2
-ifdef EXTRA_FILES
-	bunzip2 $(PACKDIR)/$(BOOK)_$(LL).tar.bz2
+ifdef DEF_FILE
+# add ENV-Files from DEF file
 	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
-	  --transform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(EXTRA_FILES))
-	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
+	  --transform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(E-FILES))
 endif
-	@ccecho "result" "Find the package results at:\n$(PACKDIR)"
+	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
+	@ccecho "result" "Find the sources at:\n$(PACKDIR))/$(BOOK)_$(LL).tar.bz2"
+
+package-src-name:
+	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
 
 #--------------
 # locdrop

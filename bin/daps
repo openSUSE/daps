@@ -27,6 +27,7 @@ VARLIST=(
     COMMENT_STR
     CONF_PREFIX
     CONVERT_OPTS
+    DEF_FILE
     DIA_OPTIONS
     DISTVER
     DRAFT
@@ -338,7 +339,7 @@ function run_subcmd () {
             filelists $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        check|clean|clean-all|clean-images|clean-results|nothing|offspring|penguin|real-clean)
+        check|clean|clean-all|clean-images|clean-results|nothing|offspring|package-src-name|penguin|real-clean)
             # Writes no logfile
             #
             call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
