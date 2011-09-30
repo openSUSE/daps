@@ -29,7 +29,7 @@ __all__=["Formatter"]
 
 
 #import os
-#import os.path
+import os.path
 #import sys
 #import types
 import re
@@ -48,6 +48,13 @@ class Formatter(object):
     def __init__(self, **args):
        # Keyword dictionary that contains everything a Formatter class needs.
        self.keywords = {
+          "absname":   { "width": args.get("maxfilename", 28)+2,
+                         "align": "l",
+                         "map":   "name",
+                         "type":  "string",
+                         "help":  "The absolute filename",
+                         "func":  self.cb_absfilename,
+                       },
           "checksum":  { "width": 34,                      # Width of this entry
                          "align": "l",                     # Alignment, l=left, r=right, c=center
                          "map":   "Checksum",              # Maps to another output, svn info or others
@@ -95,9 +102,10 @@ class Formatter(object):
                          "align": "l",
                          "map":   "name",
                          "type":  "string",
-                         "help":  "The filename",
-                         "func":  self.cb_filename,
+                         "help":  "Filename relative to BASE_DIR",
+                         "func":  self.cb_relfilename,
                        },
+          
           "prelim":    { "width": 6,
                          "align": "l",
                          "map":   "doc:prelim",
@@ -194,10 +202,12 @@ class Formatter(object):
     def getspaces(self):
       return self.keywords
 
-    def cb_filename(self, value):
-      # print ">> cb_filename", value
+    def cb_relfilename(self, value):
+      """Prints relative filename"""
       return self.fileobj.relfilename
-      
+
+    def cb_absfilename(self, value):
+      return os.path.abspath(self.fileobj.getfilename())
 
     def cb_revprop(self, value):
       props = self.fileobj.getprops()
