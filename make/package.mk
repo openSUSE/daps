@@ -30,7 +30,6 @@ package-html: dist-html desktop-files-dist document-files-html-dist
 	fi
 	@ccecho "result" "Find the package-html results at:\n$(PACKDIR)"
 
-
 #--------------
 # package-pdf
 #
