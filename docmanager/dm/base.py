@@ -150,7 +150,22 @@ def runsvn(filename, svncmd, svnopt, exceptmsg, exception=dmexcept.DocManagerExc
             raise exception("%s\nReason: %s" % (exceptmsg, res[1]) )
     return res[1]
 
-    
+def getenvfile(env=None):
+  """Returns BASEDIR and ENVFILE from daps showenv"""
+  cmd = "daps %s --verbosity=0 showenv"
+  
+  if env:
+    cmd = cmd % "-e %s" % env
+  else:
+    cmd = cmd % ""
+ 
+  res=commands.getstatusoutput( cmd )
+  if res[0] != 0:
+    raise dmexcept.DocManagerEnvironment(res[1])
+
+  # BASEDIR, ENVFILE
+  return tuple( i.split("=")[1] for i in res[1].split(";") )
+
     
 ############################################
 class SVNFile(object):
@@ -199,11 +214,15 @@ class SVNFile(object):
    def __init__(self, filename, basedir=None):
       self._docrelease=None
       self.origfilename = filename
-      self.basedir = basedir or ""
+      self.basedir = basedir
       self.dir, self.filename=os.path.split(filename)
       self._abspath=self.abspath()
       self._trunkpath=self.trunkpath()
       self._branchpath=self.branchpath()
+      if self.basedir and self.basedir[-1] != '/':
+        self.basedir += "/"
+      
+      # print "*****", self.basedir, self.filename
      
    def getbranchpath(self):
       return self._branchpath
@@ -224,7 +243,7 @@ class SVNFile(object):
    @property
    def relfilename(self):
      """Returns the relative filename in regards to basedir"""
-     return os.path.split(self.filename)[-1]
+     return self.origfilename.split(self.basedir)[1]
 
    def __repr__(self):
       return "<SVNFile from '%s'>" % self._abspath
@@ -424,10 +443,13 @@ class SVNRepository(object):
 
       #
       # self._gopts = self.args.get("gopts")
-      self.basedir = self.args.get("basedir", "")
+      # self.basedir = self.args.get("basedir", "")
       self.envfile = self.args.get("envfile")
       # Avoids None in self.basedir:
-      self.basedir=self.basedir or ""
+      # self.basedir=self.basedir or ""
+            
+      # Set basedir and envfile after using daps
+      self.basedir, self.envfile = getenvfile(self.envfile)
       
       # FIXME: Check if we are in the correct directory
       # Old:
@@ -440,13 +462,13 @@ class SVNRepository(object):
       
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
-      
+
       
       # print " SVNRepository: filenames=%s" % len(filenames)
       # If file list is empty, use "make projectfiles"
       if not len(filenames):
         filenames=self.makeprojectfiles()
-        
+      
       # print "<%s>: " % (self.__class__.__name__,), self.args
 
       # Allow only those files that fit certain criterias
