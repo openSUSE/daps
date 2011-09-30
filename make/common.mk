@@ -1195,42 +1195,82 @@ HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(LSTYLECSS)) $(HTML_DIR)/navig $(HTML_DIR)/
 $(HTML_DIR):
 	mkdir -p $@
 
+#
+# in the following we do not use a simple copy command like
+# cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR) because DTDROOT
+# may contain .svn directories which we do not want to copy
+# therefore we use tar with the --exclude-vcs option to copy
+# the files
+
 $(HTML_DIR)/$(notdir $(LSTYLECSS)): $(STYLECSS) $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
-	cp -rL $(STYLECSS) $(HTML_DIR)/
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs $(STYLECSS) | (cd $(HTML_DIR); tar xpv) >/dev/null
+#	cp -rL $(STYLECSS) $(HTML_DIR)/
 else
+	if [ -f $@ ]; then \
+	  rm -f $@; \
+	fi
 	ln -sf $(STYLECSS) $(HTML_DIR)/
 endif
 
 $(HTML_DIR)/navig: $(DTDROOT)/images/navig $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
-	cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs $(DTDROOT)/images/navig/ | \
+	  (cd $(HTML_DIR); tar xpv) >/dev/null
+#	cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR)
 else
-	[ -d $(HTML_DIR)/navig ] && rm -rf $(HTML_DIR)/navig
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
 	ln -sf $(DTDROOT)/images/navig/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/admon: $(DTDROOT)/images/admon $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
-	cp -rL $(DTDROOT)/images/admon/ $(HTML_DIR)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs $(DTDROOT)/images/admon/ | \
+	  (cd $(HTML_DIR); tar xpv) >/dev/null
+#	cp -rL $(DTDROOT)/images/admon/ $(HTML_DIR)
 else
-	[ -d $(HTML_DIR)/admon ] && rm -rf $(HTML_DIR)/admon
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
 	ln -sf $(DTDROOT)/images/admon/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/callouts: $(DTDROOT)/images/callouts/ $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
-	cp -rL $(DTDROOT)/images/callouts/ $(HTML_DIR)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs $(DTDROOT)/images/callouts/ | \
+	  (cd $(HTML_DIR); tar xpv) >/dev/null
+#	cp -rL $(DTDROOT)/images/callouts/ $(HTML_DIR)
 else
-	[ -d $(HTML_DIR)/callouts ] && rm -rf $(HTML_DIR)/callouts
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
 	ln -sf $(DTDROOT)/images/callouts/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/images: | $(IMG_DIRECTORIES) $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
 	cp -rL $(IMG_GENDIR)/online/ $(HTML_DIR)/images/
 else
-	[ -d $(HTML_DIR)/images/online ] && rm -rf $(HTML_DIR)/images/online
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
 	ln -sf $(IMG_GENDIR)/online/ $(HTML_DIR)/images
 endif
 
