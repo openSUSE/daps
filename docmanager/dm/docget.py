@@ -22,7 +22,7 @@ __depends__=["Python-2.4", "optcomplete"]
 import optcomplete
 import commands
 from optparse import OptionGroup, OptionValueError
-from base     import SVNFile, SVNRepository, green, red
+from base     import SVNFile, SVNRepository, green, red, getenvfile
 import dmexceptions as dmexpect
 import svncmd
 import formatter
@@ -30,17 +30,6 @@ import formatter
 import os.path
 import sys
 import re
-
-
-def getenvfile():
-  """Returns BASEDIR and ENVFILE"""
-  cmd = "daps --verbosity=0 showenv"
-  res=commands.getstatusoutput( cmd )
-  if res[0] != 0:
-    raise dmexpect.DocManagerEnvironment(res[1])
-  
-  # BASEDIR, ENVFILE
-  return tuple( i.split("=")[1] for i in res[1].split(";") )
 
 
 class CmdDocget(optcomplete.CmdComplete):
