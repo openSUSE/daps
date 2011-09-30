@@ -39,6 +39,7 @@ VARLIST=(
     LAYOUT
     LOG_DIR
     MAIN
+    NOPDF
     PDFNAME
     PRODUCTNAME
     PRODUCTNAMEREG
@@ -323,7 +324,7 @@ function run_subcmd () {
             build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;
-        bigfile|bigfile-reduced|db2novdoc|desktop-files*|dist|dist-book|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-*|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|wiki)
+        bigfile|bigfile-reduced|db2novdoc|desktop-files*|dist|dist-book|dist-desktop-files|dist-document-files*|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-*|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|wiki)
             build_generic $SUBCMD "${SCMD_ARGS[@]}"
             exit
             ;;

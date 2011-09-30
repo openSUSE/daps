@@ -1237,7 +1237,7 @@ endif
 # Print result directory names 
 #
 .PHONY: html-dir-name
-html-dir:
+html-dir-name:
 	@ccecho "result" "$(HTML_DIR)"
 
 .PHONY: htmlsingle-name html-single-name

@@ -136,7 +136,7 @@ locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(MAIN))
 locdrop: TOTRANSFILES = $(sort $(subst $(BASE_DIR)/xml, \
 			  $(PROFILE_PARENT_DIR)/dist, \
-			  $(shell cd $(BASE_DIR) && docmanager dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
+			  $(shell docmanager -b $(BASE_DIR) -e $(ENVFILE) dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
 locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
@@ -164,6 +164,10 @@ endif
 	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(NOTRANSFILES)
 	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
 	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
+ifdef DEF_FILE
+	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
+	  $(addprefix $(BASE_DIR)/,$(DEF_FILE))
+endif
 	bzip2 -9f $(NOTRANSTAR)
 	@ccecho "info" "Created $(NOTRANSTAR).bz2"
 ifdef USED
@@ -177,7 +181,7 @@ endif
 #
 # PDF generation can be switched off via wrapper script
 #
-ifndef NOPDF
+ifneq ($(NOPDF), 1)
 # copy color PDF
 	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(LOCDROPDIR)
 	@ccecho "info" "Created $(LOCDROPDIR)/$(TMP_BOOK)_$(LL).pdf"
@@ -256,16 +260,16 @@ endif
 # Create tarball with document files for GNOME
 #
 #
-.PHONY: document-files-html-dist
-document-files-html-dist: OUTFORMAT = html
-document-files-html-dist: $(YELP_DIR)/%.document
+.PHONY: dist-document-files-html
+dist-document-files-html: OUTFORMAT = html
+dist-document-files-html: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
 	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
 
-.PHONY: document-files-pdf-dist
-document-files-pdf-dist: OUTFORMAT = pdf
-document-files-pdf-dist: $(YELP_DIR)/%.document
+.PHONY: dist-document-files-pdf
+dist-document-files-pdf: OUTFORMAT = pdf
+dist-document-files-pdf: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
 	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
@@ -280,6 +284,7 @@ document-files-pdf: OUTFORMAT = pdf
 document-files-pdf: $(YELP_DIR)/%.document
 	ccecho "result" "Created document file $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document"
 
+.PHONY: document-files-dir-name
 document-files-dir-name: $(YELP_DIR)
 	ccecho "result" "$(YELP_DIR)"
 
@@ -301,16 +306,18 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 # Create tarball with desktop files for KDE
 #
 #
-.PHONY: desktop-files-dist
-desktop-files-dist: $(DESKTOP_FILES_DIR)/%.desktop
+.PHONY: dist-desktop-files
+dist-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
 	BZIP2=--best && \
 	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
 	  --absolute-names --transform=s%$(DESKTOP_FILES_DIR)%desktop/% \
           $(DESKTOP_FILES_DIR)
 
+.PHONY: desktop-files
 desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
 	ccecho "result" "Created desktop files in $(DESKTOP_FILES_DIR)"
 
+.PHONY: desktop-files-dir-name
 desktop-files-dir-name:
 	ccecho "result" "$(DESKTOP_FILES_DIR)"
 

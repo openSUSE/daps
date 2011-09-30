@@ -124,10 +124,10 @@ Requires:       zip
 Requires:       perl-checkbot
 Requires:       xmlgraphics-fop >= 0.94
 %else
-%if 0%{?sles_version}
-Recommends:     checkbot
+%if %{undefined sles_version}
+Requires:  checkbot
 %else
-Requires:       checkbot
+Recommends:     checkbot
 %endif
 Requires:        fop >= 0.94
 Requires:        xerces-j2

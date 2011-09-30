@@ -567,15 +567,21 @@ function build_locdrop () {
     local TARGET=$1
     shift
     # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
+    SARGS=$(getopt -o hn -l def-file:,help,name:,nopdf,rootid: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
     eval set -- "$SARGS"
     while true ; do
 	case "$1" in
+            --def-file)
+                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
+                export DEF_FILE=$2
+                shift 2
+                ;;
             -h|--help)
                 help_scmd_head "Provide everything that is needed to translate a set"
+                help_def-file
                 help_help
                 help_name
                 help_nopdf
@@ -600,6 +606,8 @@ function build_locdrop () {
             *) exit_on_error "Internal error!" ;;
 	esac
     done
+
+    test -z $DEF_FILE && ccecho "warn" "Warning: No DEF file was specified"
 
     call_make "$TARGET" "$@"
 }
