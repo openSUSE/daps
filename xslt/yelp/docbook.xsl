@@ -54,7 +54,7 @@
   <xsl:param name="outformat"/>
   
   <!-- outputdir: Sets the output directory for each desktop file -->
-  <xsl:param name="outputdir" select="'yelp/'" />
+  <xsl:param name="outputdir" select="''" />
   
   <!-- Remove any space -->
   <xsl:strip-space elements="*"/>
@@ -139,7 +139,11 @@
     <xsl:value-of select="$docweight"/>
     <xsl:text>&#10;</xsl:text>
   </xsl:variable>
-  
+
+  <!-- <xsl:message>yelp:set:
+   filename = <xsl:value-of select="$setfilename"/>
+  </xsl:message> -->
+ 
   <xsl:call-template name="write.text.chunk">
       <xsl:with-param name="filename"
         select="concat($outputdir, $setfilename)" />
@@ -156,7 +160,12 @@
       <xsl:value-of select="current()/@id"/>
       <xsl:value-of select="$file.ext"/>
     </xsl:variable>
-    
+
+
+  <!-- <xsl:message>yelp:<xsl:value-of select="name(current())"/>
+   filename = <xsl:value-of select="$filename"/>
+  </xsl:message> -->
+
     <xsl:call-template name="write.text.chunk">
       <xsl:with-param name="filename"
         select="concat($outputdir, $filename)" />
