@@ -39,7 +39,7 @@
 <xsl:param name="dtdroot">/usr/share/daps/</xsl:param>
 
 <!-- Our Layout -->
-<xsl:param name="paper.type">novell</xsl:param>
+<xsl:param name="paper.type">A4</xsl:param>
 <xsl:param name="page.width">
   <xsl:choose>
     <xsl:when test="$paper.type = 'novell'">21.75cm</xsl:when>
@@ -56,28 +56,12 @@
 </xsl:param>
 <xsl:param name="double.sided">0</xsl:param>
 
-<xsl:param name="novell.layout">
-    <xsl:variable name="node" select="(key('id', $rootid) | /)[last()]"/>
-  <xsl:variable name="pi">
-   <xsl:call-template name="pi-attribute">
-    <xsl:with-param name="pis"
-      select="$node/processing-instruction('suse-quickstart')"/>
-    <xsl:with-param name="attribute">version</xsl:with-param>
-  </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:choose>
-   <xsl:when test="$pi = '1'">v1</xsl:when>
-   <xsl:when test="$pi = '2'">v2</xsl:when>
-   <xsl:otherwise>v2</xsl:otherwise>
-  </xsl:choose> 
-</xsl:param>
 
 <xsl:param name="header.rule" select="0"/>
 <xsl:param name="footer.rule" select="0"/>
 
-<xsl:param name="page.margin.outer">1cm</xsl:param>
-<xsl:param name="page.margin.inner">1cm</xsl:param>
+<xsl:param name="page.margin.outer">1.5cm</xsl:param>
+<xsl:param name="page.margin.inner">1.5cm</xsl:param>
 
 <xsl:param name="page.margin.top">10mm</xsl:param>
 <xsl:param name="page.margin.bottom">5mm</xsl:param>
@@ -113,8 +97,8 @@
 
 <!-- Add other variable definitions here -->
 <xsl:param name="shade.verbatim">0</xsl:param>
-<xsl:param name="callout.unicode">1</xsl:param>
-<xsl:param name="callout.graphics">0</xsl:param>
+<xsl:param name="callout.unicode">1</xsl:param> 
+<xsl:param name="callout.graphics">0</xsl:param> 
 <!-- <xsl:param name="callout.unicode.start.character" select="10122"/> -->
 
 <xsl:param name="chapter.autolabel" select="0"/>
