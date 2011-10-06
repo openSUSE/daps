@@ -1207,8 +1207,7 @@ ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs $(STYLECSS) | (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(STYLECSS) $(HTML_DIR)/
+	cp $(STYLECSS) $(HTML_DIR)/
 else
 	if [ -f $@ ]; then \
 	  rm -f $@; \
