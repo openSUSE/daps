@@ -115,7 +115,7 @@ ifdef DEF_FILE
 	  --transform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(E-FILES))
 endif
 	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
-	@ccecho "result" "Find the sources at:\n$(PACKDIR))/$(BOOK)_$(LL).tar.bz2"
+	@ccecho "result" "Find the sources at:\n$(PACKDIR)/$(BOOK)_$(LL).tar.bz2"
 
 package-src-name:
 	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
