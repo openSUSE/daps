@@ -1220,7 +1220,7 @@ ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs $(DTDROOT)/images/navig/ | \
+	tar cp --exclude-vcs -C $(DTDROOT)/images navig/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
 #	cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR)
 else
@@ -1235,7 +1235,7 @@ ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs $(DTDROOT)/images/admon/ | \
+	tar cp --exclude-vcs -C $(DTDROOT)/images admon/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
 #	cp -rL $(DTDROOT)/images/admon/ $(HTML_DIR)
 else
@@ -1250,7 +1250,7 @@ ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs $(DTDROOT)/images/callouts/ | \
+	tar cp --exclude-vcs -C $(DTDROOT)/images callouts/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
 #	cp -rL $(DTDROOT)/images/callouts/ $(HTML_DIR)
 else
@@ -1260,12 +1260,13 @@ else
 	ln -sf $(DTDROOT)/images/callouts/ $(HTML_DIR)
 endif
 
-$(HTML_DIR)/images: | $(IMG_DIRECTORIES) $(HTML_DIR)
+$(HTML_DIR)/images: $(HTML_DIR) provide-color-images
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	cp -rL $(IMG_GENDIR)/online/ $(HTML_DIR)/images/
+	mkdir -p $@
+	cp -rL $(PNGONLINE) $(HTML_DIR)/images/
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
