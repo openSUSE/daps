@@ -8,7 +8,9 @@
 
 <xsl:attribute-set name="article.titlepage.recto.style">
   <xsl:attribute name="text-align">left</xsl:attribute>
-  <xsl:attribute name="color">white</xsl:attribute>
+  <xsl:attribute name="color">
+    <xsl:value-of select="$flyer.color"/>
+  </xsl:attribute>
   <xsl:attribute name="font-family">
     <xsl:value-of select="$sans.font.family"/>
   </xsl:attribute>
