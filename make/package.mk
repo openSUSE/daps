@@ -86,7 +86,7 @@ ifdef DEF_FILE
 # the awk scripts extracts the manual names from the second column of
 # the DEF file (ignoring comments and blank lines) and adds ENV- to it
 #
-package-src: E-FILES = $(shell awk '{OFS=""} !/^[ \t]*#/&&NR{print "ENV-",$$2}' $(DEF_FILE))
+package-src: E-FILES = $(shell awk '/^[ \t]*#/ {next};NF {printf "ENV-%s\n", $$2}' $(DEF_FILE))
 endif
 package-src: dist-graphics dist-xml
 package-src:
@@ -261,27 +261,31 @@ endif
 #
 .PHONY: dist-document-files-html
 dist-document-files-html: OUTFORMAT = html
+dist-document-files-html: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html-yelp.tar.bz2
 dist-document-files-html: $(YELP_DIR)/%.document
 	BZIP2=--best && \
-	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
-	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	tar cjf $(TARBALL) --absolute-names \
+	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	ccecho "result" "Find the HTML document files tarball at:\n$(TARBALL)" 
 
 .PHONY: dist-document-files-pdf
 dist-document-files-pdf: OUTFORMAT = pdf
+dist-document-files-pdf: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2
 dist-document-files-pdf: $(YELP_DIR)/%.document
 	BZIP2=--best && \
-	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
-	 --absolute-names --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	tar cjf $(TARBALL) --absolute-names \
+	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
+	ccecho "result" "Find the PDF document files tarball at:\n$(TARBALL)" 
 
 .PHONY: document-files-html
 document-files-html: OUTFORMAT = html
 document-files-html: $(YELP_DIR)/%.document
-	ccecho "result" "Created document file $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document"
+	ccecho "result" "Created document files in\n$(YELP_DIR)/"
 
 .PHONY: document-files-pdf
 document-files-pdf: OUTFORMAT = pdf
 document-files-pdf: $(YELP_DIR)/%.document
-	ccecho "result" "Created document file $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document"
+	ccecho "result" "Created document files in\n$(YELP_DIR)/"
 
 .PHONY: document-files-dir-name
 document-files-dir-name: $(YELP_DIR)
@@ -306,15 +310,16 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 #
 #
 .PHONY: dist-desktop-files
+dist-desktop-files: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2
 dist-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
 	BZIP2=--best && \
-	tar cjf $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
-	  --absolute-names --transform=s%$(DESKTOP_FILES_DIR)%desktop/% \
-          $(DESKTOP_FILES_DIR)
+	tar cjf $(TARBALL) --absolute-names \
+	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
+	ccecho "result" "Find the desktop files files tarball at:\n$(TARBALL)"
 
 .PHONY: desktop-files
 desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
-	ccecho "result" "Created desktop files in $(DESKTOP_FILES_DIR)"
+	ccecho "result" "Created desktop files in\n$(DESKTOP_FILES_DIR)"
 
 .PHONY: desktop-files-dir-name
 desktop-files-dir-name:
