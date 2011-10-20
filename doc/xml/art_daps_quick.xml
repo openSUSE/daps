@@ -1,13 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-                         "http://www.docbook.org/xml/4.4/docbookx.dtd">
+                         "http://www.docbook.org/xml/4.4/docbookx.dtd"
+[
+      <!ENTITY daps "daps">
+]>
 <article>
-    <title>Article Title</title>
+    <title>daps Quick Start</title>
     <articleinfo>
         <author><firstname>Christopher-Julian</firstname><surname>Zwickl</surname></author>
     </articleinfo>
+    <abstract>
+        <para> Daps is a programm that transform your .xml document into a .txt or .html(-single)
+            document for example. Of course it is also possible to transform to .pdf , .wiki , .epub
+            and .man files. With Daps you can create distributable archives, too. In the following
+            you will learn to use the basics of daps. If you want to see more options and functions,
+            enter the command: "daps --help". </para>
+    </abstract>    
     <sect1>
-        <title>Section1 Title</title>
-        <para>Text</para>
+        <title>Contents</title>
+        <itemizedlist>
+            <listitem>
+                <para>Requirements</para>
+            </listitem>
+            <listitem>
+                <para>Install Daps</para>
+            </listitem>
+            <listitem>
+                <para>Transform</para>
+            </listitem>
+            <listitem>
+                <para>Create distributable archives</para>
+            </listitem>
+            <listitem>
+                <para>Building formats</para>
+            </listitem>
+            <listitem>
+                <para>Other/misc</para>
+            </listitem>
+        </itemizedlist>
     </sect1>
+    <sect2>
+        <title>1.Requirements</title>
+        <para>Before you start, you need:</para>
+        <itemizedlist>
+            <listitem>
+                <para>A Linux system</para>
+            </listitem>
+            <listitem>
+                <para>Some knowledge about Linux</para>
+            </listitem>
+            <listitem>
+                <para>Some knowledger about XML</para>
+            </listitem>
+            <listitem>
+                <para>Some knowledge about the console</para>
+            </listitem>
+        </itemizedlist>
+    </sect2>
+    <sect3>
+        <title>2.Install Daps</title>
+        <itemizedlist>
+            <listitem>
+                <para>1. Open Yast</para>
+            </listitem>
+            <listitem>
+                <para>2. Click on Software Management</para>
+            </listitem>
+            <listitem>
+                <para>3. Go to Search</para>
+            </listitem>
+            <listitem>
+                <para>4. Search for "daps"</para>
+            </listitem>
+            <listitem>
+                <para>5. Install "daps" and "daps-docmanager</para>
+            </listitem>
+        </itemizedlist>
+    </sect3>
+    <sect4>
+        <title>3.Transform</title>
+        <para> If you want to transform .xml to .pdf for example then use this way to do
+            this:</para>
+        <itemizedlist>
+            <listitem>
+                <para>1. Open your console with Alt+F2. Type into this line: console.</para>
+            </listitem>
+            <listitem>
+                <para>2. Enter in your console: "daps -e YOUR_XML_FILE pdf".</para>
+            </listitem>
+            <listitem>
+                <para>3. Finished. Your .xml file is now a .pdf file.</para>
+            </listitem>
+        </itemizedlist>
+        <para> if you want a other format, change the word text into txt, epub, wiki or man. More
+        options can you see with the command: "daps --help"</para>
+    </sect4>
+    <sect5>    
+    <title>Create Distributable Archives</title>
+        <para> To create a distributable Archives follow this steps:</para>
+        <itemizedlist>
+            <listitem>1. </listitem>
+            <listitem></listitem>
+            <listitem></listitem>
+            <listitem></listitem>
+        </itemizedlist>
+        
+    </sect5>
 </article>
