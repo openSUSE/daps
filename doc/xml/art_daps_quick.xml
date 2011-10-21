@@ -7,43 +7,64 @@
 <article lang="en">
     <title>&daps; Quick Start</title>
     <articleinfo>
-        <author><firstname>Christopher-Julian</firstname><surname>Zwickl</surname></author>
+        <author>
+            <firstname>Christopher-Julian</firstname>
+            <surname>Zwickl</surname>
+        </author>
     </articleinfo>
     <abstract>
-        <para> &daps; is a programm that transform your .xml document into a .txt or .html(-single)
-            document for example. Of course it is also possible to transform to .pdf , .wiki , .epub
-            and .man files. With Daps you can create distributable archives, too. In the following
-            you will learn to use the basics of daps. If you want to see more options and functions,
-            enter the command: "daps --help". </para>
-    </abstract>    
-    
-    
+        <para> &daps; is a programm that transform your .xml document into a .txt or
+            .html(-single) document for example. Of course it is also possible to transform to .pdf
+            , .wiki , .epub and .man files. With Daps you can create distributable archives, too. In
+            the following you will learn to use the basics of daps. If you want to see more options
+            and functions, enter the command: "daps --help". </para>
+    </abstract>
+
+
     <sect1 os="sles">
         <title>Terminology</title>
         <para>The following terms are used in this article:</para>
         <variablelist>
             <varlistentry>
                 <term>Formatting</term>
-                <listitem><para></para></listitem>
+                <listitem>
+                    <para>If you convert your .pdf into a .txt, you have format your data. The
+                        convert process is formatting</para>
+                </listitem>
             </varlistentry>
             <varlistentry>
                 <term>DocBook</term>
-                <listitem><para></para></listitem>
-            </varlistentry> 
-           <varlistentry>
+                <listitem>
+                    <para>DocBook is a semantic markup language for documentation.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Transformation</term>
+                <listitem>
+                    <para>Data transformation converts data from source data format into a
+                        destination data for example.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>Validation</term>
-                <listitem><para></para></listitem>
+                <listitem>
+                    <para>Validation is a control process for documents written in XML. (By using
+                        DTD.)</para>
+                </listitem>
             </varlistentry>
             <varlistentry>
                 <term>XML</term>
-                <listitem><para></para></listitem>
+                <listitem>
+                    <para>XML (extensible markup language) is a lanuguage with rules to encode
+                        documents into machine-readable form.</para>
+                </listitem>
             </varlistentry>
-            </variablelist>
-        
+        </variablelist>
+
     </sect1>
-    
-    
-    
+
+
+
     <sect1>
         <title>Requirements</title>
         <para>Before you start, you need:</para>
@@ -92,14 +113,30 @@
                 <para> Open your console with Alt+F2. Type into this line: console.</para>
             </listitem>
             <listitem>
-                <para> Enter in your console: "daps -e YOUR_XML_FILE pdf".</para>
+                <para>Create a ENV Data. With the command: </para>
+                <screen>touch ENV-YOUR-DATA</screen>
+            </listitem>
+            <listitem>
+                <para>Write in this data the following text: </para>
+                <screen>
+MAIN=YOUR-XML-DATA.xml
+DISTVER=1.0
+
+export DAPS_ENV_NAME=$(basename $BASH_SOURCE)</screen>
+            </listitem>
+            <listitem>
+                <para>Save this data.</para>
+            </listitem>
+            <listitem>
+                <para> Enter in your console:</para>
+                <screen>daps -e ENV_DATA pdf</screen>
             </listitem>
             <listitem>
                 <para> Finished. Your .xml file is now a .pdf file.</para>
             </listitem>
         </itemizedlist>
         <para> if you want a other format, change the word text into txt, epub, wiki or man. More
-        options can you see with the command: "daps --help"</para>
+            options can you see with the command: "daps --help"</para>
     </sect1>
     <!--<sect1>    
     <title>Create Distributable Archives</title>
