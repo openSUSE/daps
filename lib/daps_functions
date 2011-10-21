@@ -276,7 +276,7 @@ function getimages () {
     #  * --viewer=VIEWER: shows images in VIEWER and prints long list to STDOUT
     #
     # the additional option (-m|--modified) will also print the image file's
-    # mtime in long lists (this option is ignored with -c|--compact)
+    # mtime in long lists (this option is ignored with --compact)
 
     local CMD_IMG_VIEWER COMPACT FILE MOD SHOW
     declare -a IMGLIST
@@ -992,14 +992,14 @@ function help_file () {
 function help_fop () {
     echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
                               'xep' or 'fop' are supported.
-                              Default: 'xep'"
+                              Default: 'fop'"
 }
 function help_help () {
     echo "    --help, -h                Print this help text"
 }
 function help_modified () {
     echo "    --modified, -m            Print the image's modification time.
-                              Ignored when -c is set.
+                              Ignored when --compact is set.
                               Default: off"
 }
 function help_name () {
@@ -1042,7 +1042,7 @@ function help_rootid () {
     echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
                               (parts or chapters). Default: Usually set
                               in the ENV-file; if not set the complete set
-                              defined in $MAIN will be built"
+                              defined in \$MAIN will be built"
 }
 function help_static () {
     echo "    --static                  Normally images and css files in HTML builds  
