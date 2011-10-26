@@ -161,7 +161,7 @@
             </step>
             <step>
                 <para>Enter the command:</para>
-                <screen>daps --basedir=YOUR_PATH/dapstest --envfile=ENV-test-daps init</screen>
+                <screen>$ daps --basedir=YOUR_PATH/dapstest --envfile=ENV-test-daps init</screen>
                 <para>You have been created a daps directory</para>
             </step>
         </procedure>
@@ -171,7 +171,7 @@
         <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. </para>
         <sect2>
-            <title>Transforming XML to PDF</title>
+            <title>Transforming XML into PDF</title>
             <para> To transform XML into PDF, use the following steps:</para>
             <procedure>
                 <step>
@@ -182,7 +182,7 @@
                 </step>
                 <step>
                     <para>Create a ENV Data. With the command: </para>
-                    <screen>touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
+                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
                     <para>You need a daps directory. Look at creating new project.</para>
                 </step>
                 <step>
@@ -198,7 +198,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)</screen>
                 </step>
                 <step>
                     <para> Enter in your console:</para>
-                    <screen>daps -e ENV_DATA pdf</screen>
+                    <screen>$ daps -e ENV_DATA pdf</screen>
                 </step>
                 <step>
                     <para> Finish. Your .xml file is now a .pdf file.</para>
@@ -219,7 +219,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)</screen>
                 </step>
                 <step>
                     <para>Create a ENV Data. With the command:</para>
-                    <screen>touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
+                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
                     <para>You need a daps directory. Look at creating new project.</para>
                 </step>
                 <step>
@@ -236,7 +236,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
                 </step>
                 <step>
                     <para>Enter in your console:</para>
-                    <screen>daps -e ENV_DATA epub</screen>
+                    <screen>$ daps -e ENV_DATA epub</screen>
                 </step>
                 <step>
                     <para>Finish. Your .xml file is now a .epub file.</para>
@@ -254,7 +254,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
                 </step>
                 <step>
                     <para>Create a ENV Data. With the command:</para>
-                    <screen>touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
+                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
                     <para>You need a daps directory. Look at creating new project.</para>
                     <screen>
 MAIN=ENTER-THE-OF-YOUR-XML-DATA.xml
@@ -269,7 +269,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
                 <step>
                     <para>Enter in your console:</para>
                     <screen>
-                        daps -e ENV_DATA html
+                       $ daps -e ENV_DATA html
                     </screen>
                 </step>
                 <step>
@@ -292,7 +292,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
     <sect1>
         <title>Using &daps;</title>
         <para>The syntax of the &daps; command is the following:</para>
-        <screen>daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
+        <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
         <para>For Example:</para>
         <screen>daps -vv -e ENV_DATA html</screen>
         <para>Explanation:</para>
