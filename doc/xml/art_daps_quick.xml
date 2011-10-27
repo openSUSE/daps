@@ -7,7 +7,7 @@
 ]>
 
 <article lang="en" id="art.daps.quickstart">
-<?suse-quickstart columns="no" version="2"?>
+    <?suse-quickstart columns="no" version="2"?>
     <title>&dapsacr; Quick Start</title>
     <articleinfo>
         <author>
@@ -16,11 +16,10 @@
         </author>
     </articleinfo>
     <abstract>
-        <para>&dapsacr; (DocBook Authoring and Publishing Suite) is a programm that transforms your XML document into a text or HTML document
-            for example. Of course it is also possible to transform to PDF , Wiki , Epub and
-            Manpages. With &dapsacr; you can create distributable archives, too. The following article
-            shows you the basics of daps. If you want to see more options and functions, enter the
-            command: "daps --help". </para>
+        <para>&dapsacr; (DocBook Authoring and Publishing Suite) is a programm that transforms
+            your XML document into a text, HTML, PDF, EPUB or manpages. It is the successor of the former susedoc package.The following article shows
+            you the basics of daps. If you want to see more options and functions, enter the
+            command: <screen>daps --help</screen></para>
     </abstract>
     <sect1 os="sles">
         <title>Terminology</title>
@@ -36,8 +35,8 @@
             <varlistentry>
                 <term>DTD</term>
                 <listitem>
-                    <para>DTD (Document type definition) defines exactly the elements, entities and
-                        attributes in a XML or HTML document.</para>
+                    <para>DTD (Document type definition) defines exactly the elements, entities 
+                        attributes and structure in a XML or HTML document.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -48,9 +47,9 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term>FO-Formatter</term>
+                <term>FO Formatter</term>
                 <listitem>
-                    <para>The Formatting objects formatter renders XSL-FO documents into PDF.</para>
+                    <para>Renders XSL-FO documents usually into PDF. The output formats depends on the formatter.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -78,48 +77,48 @@
             <varlistentry>
                 <term>XSL-FO</term>
                 <listitem>
-                    <para>XSL-FO or "Extensible Stylesheet Language-Formatting Objects" is a markup
+                    <para>XSL-FO or <emphasis>Extensible Stylesheet Language-Formatting Objects</emphasis> is a markup
                         language to generate PDFs with XML documents.</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>XSLT</term>
                 <listitem>
-                    <para>XSLT or "Extensible Stylesheet Language Transformations" is a language
-                        based on XML and it´s used for transformation of XML documents</para>
+                    <para>XSLT or <emphasis>Extensible Stylesheet Language for Transformations</emphasis> is a language
+                        based on XML and it is used for transformation of XML documents</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>XML</term>
                 <listitem>
-                    <para>XML (extensible markup language) is a lanuguage with rules to encode
+                    <para>XML (extensible markup language) is a language with rules to encode
                         documents into machine-readable form.</para>
                 </listitem>
             </varlistentry>
-            <varlistentry>
+            <!--<varlistentry>
                 <term>XOP</term>
                 <listitem>
                     <para>XOP (XML-binary Optimized Packaging) is an advice of the W3C to represent
                         the binary data of XML documents. </para>
                 </listitem>
-            </varlistentry>
+            </varlistentry>-->
         </variablelist>
     </sect1>
     <sect1>
         <title>Requirements</title>
-        <para>Before you start, you need:</para>
+        <para>This quick start is for advanced users.Before you start, you need:</para>
         <itemizedlist>
             <listitem>
-                <para>A Linux system</para>
+                <para>A SUSE Linux system</para>
             </listitem>
             <listitem>
-                <para>Some knowledge about Linux</para>
+                <para>Some knowledge about SUSE Linux</para>
             </listitem>
             <listitem>
                 <para>Some knowledge about XML</para>
             </listitem>
             <listitem>
-                <para>Some knowledge about commandline tools</para>
+                <para>Some knowledge about how to use commandline tools</para>
             </listitem>
         </itemizedlist>
     </sect1>
@@ -128,7 +127,7 @@
         <para>Install &daps; as shown in the following procedure:</para>
         <procedure>
             <step>
-                <para> Open Yast</para>
+                <para> Open YaST</para>
             </step>
             <step>
                 <para> Click on <guilabel>Software Management</guilabel></para>
@@ -137,10 +136,10 @@
                 <para> Go to the <guilabel>Search</guilabel> tab.</para>
             </step>
             <step>
-                <para> Search for "daps"</para>
+                <para> Search for <literal>&daps;</literal></para>
             </step>
             <step>
-                <para> Install "daps" and "daps-docmanager</para>
+                <para> Install <systemitem>daps</systemitem> and <systemitem>daps-docmanager</systemitem></para>
             </step>
         </procedure>
     </sect1>
@@ -151,98 +150,61 @@
         <screen>daps init --help</screen>
         <procedure>
             <step>
-                <para>Open you search tool with Alt+F2. Search for console.</para>
+                <para>Press <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo> and enter <command>konsole</command>.</para>
+            </step>
+            
+                
+            
+            <step>
+                <para>Create a directory with the name <filename>dapstest</filename>.</para>
+                <screen>$ mkdir YOUR_PATH/dapstest</screen>
+                     
+                
             </step>
             <step>
-                <para>Open the console</para>
-            </step>
-            <step>
-                <para>Create a directory with the name "dapstest" for example.</para>
-                <screen>
-                    $ mkdir YOUR_PATH/dapstest 
-                </screen>
-            </step>
-            <step>
-                <para>Enter the command:</para>
+                <para>Enter the command to create the dapstest directory:</para>
                 <screen>$ daps --basedir=YOUR_PATH/dapstest --envfile=ENV-test-daps init</screen>
-                <para>You have been created a daps directory</para>
+                
             </step>
         </procedure>
     </sect1>
     <sect1>
-        <title>Building Formatts</title>
+        <title>Building Formats</title>
         <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. </para>
         <sect2>
             <title>Transforming XML into PDF</title>
-            <para> To transform XML into PDF, use the following steps:</para>
+            <para> To transform XML into PDF, you need an existing project(as shown in section 4), use the following steps:</para>
             <procedure>
                 <step>
-                    <para> Open your Search tool with Alt+F2. Type into this line: console.</para>
+                    <para> Press<keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo>and enter: <command>konsole</command>.</para>
                 </step>
                 <step>
-                    <para>Open the console</para>
+                    <para>Open the konsole</para>
                 </step>
                 <step>
-                    <para>Create a ENV Data. With the command: </para>
-                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
-                    <para>You need a daps directory. Look at creating new project.</para>
-                </step>
-                <step>
-                    <para>Write in this data the following text: </para>
-                    <screen>
-MAIN=ENTER-THE-NAME-OF-YOUR-XML-DATA.xml
-DISTVER=1.0
-
-export DAPS_ENV_NAME=$(basename $BASH_SOURCE)</screen>
-                </step>
-                <step>
-                    <para>Save this data.</para>
-                </step>
-                <step>
-                    <para> Enter in your console:</para>
+                    <para> Enter the following command:</para>
                     <screen>$ daps -e ENV_DATA pdf</screen>
                 </step>
-                <step>
-                    <para> Finish. Your .xml file is now a .pdf file.</para>
-                </step>
             </procedure>
-            <para> if you want a other format, change the word pdf into txt, epub, wiki or man. More
-                options can you see with the command: "daps --help"</para>
+            <para>Finish. Your XML file is now transformed PDF file.</para>
         </sect2>
         <sect2>
             <title>Transforming XML into Epub</title>
-            <para>To transform XML into Epub, use the following steps.</para>
+            <para>To transform XML into Epub, you need an existing project(as shown in the section 4), use the following steps.</para>
             <procedure>
                 <step>
-                    <para>Open your Search tool with Alt+F2. Type into this line: console</para>
+                    <para>Press <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo>and enter: konsole</para>
                 </step>
                 <step>
-                    <para>Open the console.</para>
+                    <para>Open the konsole.</para>
                 </step>
                 <step>
-                    <para>Create a ENV Data. With the command:</para>
-                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
-                    <para>You need a daps directory. Look at creating new project.</para>
-                </step>
-                <step>
-                    <para>Write in this data the following text:</para>
-                    <screen>
-MAIN=ENTER-THE-NAME-OF-YOUR-XML-DATA.xml
-DISTVER=1.0
-
-export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
-                    </screen>
-                </step>
-                <step>
-                    <para>Save this data.</para>
-                </step>
-                <step>
-                    <para>Enter in your console:</para>
+                    <para>Enter in your konsole:</para>
                     <screen>$ daps -e ENV_DATA epub</screen>
                 </step>
                 <step>
-                    <para>Finish. Your .xml file is now a .epub file.</para>
+                    <para>Finish. Your XML file is now transformed Epub file. Open the result Epub file with an EBook reader like calibre.</para>
                 </step>
             </procedure>
         </sect2>
@@ -250,33 +212,17 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
             <title>Transforming XML into HTML</title>
             <procedure>
                 <step>
-                    <para>Open your Search tool with Alt+F2. Type into this line: console</para>
+                    <para>Press <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo> and enter: konsole</para>
                 </step>
                 <step>
-                    <para>Open the console.</para>
+                    <para>Open the konsole.</para>
                 </step>
                 <step>
-                    <para>Create a ENV Data. With the command:</para>
-                    <screen>$ touch YOUR_PATH/dapsdirectory/ENV-YOUR-DATA</screen>
-                    <para>You need a daps directory. Look at creating new project.</para>
-                    <screen>
-MAIN=ENTER-THE-OF-YOUR-XML-DATA.xml
-DISTVER=1.0
-
-export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
-                    </screen>
+                    <para>Enter in your konsole:</para>
+                    <screen>$ daps -e ENV_DATA html</screen>
                 </step>
                 <step>
-                    <para>Save this data.</para>
-                </step>
-                <step>
-                    <para>Enter in your console:</para>
-                    <screen>
-                       $ daps -e ENV_DATA html
-                    </screen>
-                </step>
-                <step>
-                    <para>Finish. Your .xml file is now a .html file.</para>
+                    <para>Finish. Your XML file is now a HTML file.</para>
                 </step>
             </procedure>
         </sect2>
@@ -296,27 +242,30 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
         <title>Using &daps;</title>
         <para>The syntax of the &daps; command is the following:</para>
         <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-        <para>For Example:</para>
+        <para>For example:</para>
         <screen>daps -vv -e ENV_DATA html</screen>
         <para>Explanation:</para>
         <itemizedlist>
             <listitem>
-                <para>Global Option = -vv </para>
+                <para>Global Option = -vv    (verbose print more debug messages)</para>
             </listitem>
             <listitem>
-                <para>Global Option = -e</para>
+                <para>Global Option = -e     (defines the ENV file)</para>
             </listitem>
             <listitem>
-                <para>Subcommand = html</para>
+                <para>Subcommand = html      (what to create)</para>
             </listitem>
         </itemizedlist>
-        <para>Directory with one ENV-Data</para>
+        <para>DAPS can be executed with or without options, depending on the project.</para>
+        <para>If the directory contains only one ENV file:</para>
         <screen>daps "subcommand"</screen>
-        <para>Directory with more than one ENV-Data</para>
+        <para>If the directory contains more than one ENV-Data</para>
         <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
-        <para>Export ENV-Data</para>
+        <para>Setup ENV-Data</para>
         <screen>$ source ENV-YOUR-DATA</screen>
         <screen>$ daps "subcommand"</screen>
+        <para>Over configurationdata ~/.daps/conf:</para>
+        <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
     </sect1>
   
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
