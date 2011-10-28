@@ -49,7 +49,7 @@
             <varlistentry>
                 <term>FO Formatter</term>
                 <listitem>
-                    <para>Renders XSL-FO documents usually into PDF. The output formats depends on the formatter.</para>
+                    <para>Renders XSL-FO documents usually into PDF. The output formats depends on the formatter.For example FOP and XEP</para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -92,9 +92,7 @@
                 <term>XML</term>
                 <listitem>
                     <para>XML (extensible markup language) is a language with rules to encode
-                        documents into machine-readable form.<remark>Sascha Manns: Vielleicht noch
-                            XEP mit aufnehmen? Statt os=sles vielleicht
-                        os=sles;osuse</remark></para>
+                        documents into machine-readable form.</para>
                 </listitem>
             </varlistentry>
             <!--<varlistentry>
@@ -132,9 +130,7 @@
                 <para> Open YaST</para>
             </step>
             <step>
-                <para> Click on <guilabel>Software Management</guilabel><remark>Sascha Manns: Vorher
-                        noch erklären in welchem Repository es zu finden ist
-                        (Documentation:Tools)</remark></para>
+                <para> Click on <guilabel>Software Management</guilabel>or get it from this URL:<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_11.4/src/">download.opensuse.org</ulink></para>
             </step>
             <step>
                 <para> Go to the <guilabel>Search</guilabel> tab.</para>
@@ -155,14 +151,9 @@
         <procedure>
             <step>
                 <para>Press <keycombo>
-                        <keycap function="alt"/>
+                        <keycap function="alt">Alt</keycap>
                         <keycap>F2</keycap>
-                    </keycombo> and enter <command>konsole</command>.<remark>Sascha Manns: Bei
-                        Verwendung von &lt;keycombo>&lt;keycap
-                        function="alt"/>&lt;keycap>F2&lt;/keycap>&lt;/keycombo> wird die alt Taste
-                        im PDF nicht angezeigt. Das liegt meines Wissens am docbook-xsl-stylesheets
-                        Paket. Die Handbücher lassen sich nur mit dem alten Paket
-                    bauen.</remark></para>
+                    </keycombo> and enter <command>konsole</command>.</para>
             </step>
             
                 
@@ -190,7 +181,7 @@
             <procedure>
                 <step>
                     <para> Press<keycombo>
-                            <keycap function="alt"/>
+                            <keycap function="alt">Alt</keycap>
                             <keycap>F2</keycap>
                         </keycombo>and enter: <command>konsole</command>.<remark>Sascha Manns: Hier
                             wird alt auch nicht angezeigt</remark></para>
@@ -200,11 +191,10 @@
                 </step>
                 <step>
                     <para> Enter the following command:</para>
-                    <screen>$ daps -e ENV_DATA pdf</screen>
+                    <screen>$ daps -e ENV_PUT_IN_YOUR_DATA_NAME pdf</screen>
                 </step>
             </procedure>
-            <para><remark>Sascha Manns: Formulierungsvorschlag: Statt ENV_DATA setzten Sie den Namen
-                    Ihres ENV-Files ein.</remark>Finish. Your XML file is now transformed PDF
+            <para>Finish. Your XML file is now transformed PDF
                 file.</para>
         </sect2>
         <sect2>
@@ -230,7 +220,7 @@
             <title>Transforming XML into HTML</title>
             <procedure>
                 <step>
-                    <para>Press <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo> and enter: konsole</para>
+                    <para>Press <keycombo><keycap function="alt">Alt</keycap><keycap>F2</keycap></keycombo> and enter: konsole</para>
                 </step>
                 <step>
                     <para>Open the konsole.</para>
