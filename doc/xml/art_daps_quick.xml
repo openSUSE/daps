@@ -48,24 +48,17 @@
         </itemizedlist>
     </sect1>
     <sect1>
-        <title>Get &daps;</title>
-        <para>Get &daps; from <ulink
-                url="http://download.opensuse.oeg/repositories/Documentation:/Tools/"
-                >download.opensuse.de</ulink> or from <ulink
-                  url="https://sourceforge.net/p/daps/">sourceforge</ulink></para>
+        <title>Getting &daps;</title>
+        <para>Getting &daps; from <ulink
+                url="http://download.opensuse.org/repositories/Documentation:/Tools/"
+                >download.opensuse.de</ulink> or from <ulink url="https://sourceforge.net/p/daps/">sourceforge</ulink></para>
     </sect1>
     <sect1>
         <title>Creating a Project from scratch</title>
-        <para>Use the steps in the bottom to create a new project. You will see all functions to
+        <para>Use the steps in the bottom to create a project from the scratch. You will see all functions to
             create a new project with the command:</para>
         <screen>daps init --help</screen>
         <procedure>
-            <step>
-                <para>Press <keycombo>
-                        <keycap function="alt">Alt</keycap>
-                        <keycap>F2</keycap>
-                    </keycombo> and enter <command>konsole</command>.</para>
-            </step>
             <step>
                 <para>Create a directory with the name <filename>dapstest</filename>.</para>
                 <screen>$ mkdir YOUR_PATH/dapstest</screen>
@@ -77,7 +70,7 @@
         </procedure>
     </sect1>
     <sect1>
-        <title>Convert Formats</title>
+        <title>Converting Formats</title>
         
         <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. </para>
@@ -91,7 +84,8 @@
                     <screen>$ daps -e <replaceable>ENV_mybook</replaceable>color-pdf</screen>
                 </step>
             </procedure>
-            <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your daps repository.</para>
+            <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your daps repository. To generat a printable PDF switch "color-pdf"
+            into "pdf".</para>
         </sect2>
         
         <sect2>
@@ -115,10 +109,10 @@
             <procedure>
                <step>
                     <para>Enter in your konsole:</para>
-                    <screen>$ daps -e ENV_DATA html</screen>
+                    <screen>$ daps -e --static ENV_DATA html</screen>
                 </step>
                 <step>
-                    <para>Finish. Your XML file is now a HTML file.</para>
+                    <para>Finish. Your XML file is now a HTML file. The result is in the daps repository. Open the result with an Browser.</para>
                 </step>
             </procedure>
         </sect2>
@@ -135,23 +129,18 @@
         
         </sect1>-->
     <sect1>
-        <title>Using &daps;</title>
+        <title>Advanced usage of &daps;</title>
         <para>The syntax of the &daps; command is the following:</para>
         <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
         <para>For example:</para>
-        <screen>daps -vv -e ENV_DATA html</screen>
-        <para>Explanation:</para>
-        <itemizedlist>
-            <listitem>
-                <para>Global Option = -vv (verbose print more debug messages)</para>
-            </listitem>
-            <listitem>
-                <para>Global Option = -e (defines the ENV file)</para>
-            </listitem>
-            <listitem>
-                <para>Subcommand = html (what to create)</para>
-            </listitem>
-        </itemizedlist>
+        <screen>daps -vv<co id="co.daps.vv"/> -e ENV_DATA<co id="co.daps.env"/> html<co id="co.daps.html"/></screen>
+        <calloutlist>
+            <callout arearefs="co.daps.vv"><para>Global Option = -vv (verbose print more debug messages)</para></callout>
+            <callout arearefs="co.daps.env"><para>Global Option = -e (defines the ENV file)</para></callout>
+            <callout arearefs="co.daps.html"><para>Subcommand = html (what to create)</para></callout>
+        </calloutlist>
+        
+        
         <para>DAPS can be executed with or without options, depending on the project.</para>
         <para>If the directory contains only one ENV file:</para>
         <screen>daps "subcommand"</screen>
