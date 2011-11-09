@@ -29,6 +29,17 @@ daps
   information in the ENV files. DEF file content should go into the set
   ENV-file. Create spec file with package-src target.
 
+* When writing profiled sources a _new_ Doctype Header is written rather than
+  using the Doctype header of the original file. Therefore file-specific
+  entities, for example, are deleted during profiling.
+  This needs fixing:
+    - extracting the original doctype header (the hard part)
+      --> function getFirstEntity from
+          $DTDROOT/lib/getentityname.py may be helpful but contains errors!! 
+      --> perhaps libxml has got a solution: http://lxml.de/parsing.html
+    - passing the header to the profiling stylesheet as stringparam
+      (the easy part)
+  
 -------------
 DocManager
 
