@@ -16,7 +16,8 @@
     </articleinfo>
     <abstract>
         <para>&dapsacr; (DocBook Authoring and Publishing Suite) is a programm that transforms your
-            XML document into a text, HTML, PDF, EPUB or manpages. It is the successor of the former
+            XML document into a text, HTML, PDF, EPUB or manpages. And you can manage your documents
+            like XML, HTML,(...).You can migrate SUSEdoc Projects. It is the successor of the former
             susedoc package.The following article shows you the basics of daps. If you want to see
             more options and functions, enter the command: <screen>daps --help</screen></para>
     </abstract>
@@ -51,12 +52,13 @@
         <title>Getting &daps;</title>
         <para>Getting &daps; from <ulink
                 url="http://download.opensuse.org/repositories/Documentation:/Tools/"
-                >download.opensuse.de</ulink> or from <ulink url="https://sourceforge.net/p/daps/">sourceforge</ulink></para>
+                >download.opensuse.de</ulink> or from <ulink url="https://sourceforge.net/p/daps/"
+                >sourceforge</ulink></para>
     </sect1>
     <sect1>
         <title>Creating a Project from scratch</title>
-        <para>Use the steps in the bottom to create a project from the scratch. You will see all functions to
-            create a new project with the command:</para>
+        <para>Use the steps in the bottom to create a project from the scratch. You will see all
+            functions to create a new project with the command:</para>
         <screen>daps init --help</screen>
         <procedure>
             <step>
@@ -70,8 +72,47 @@
         </procedure>
     </sect1>
     <sect1>
+        <title>Existing Projects</title>
+        <para>You can also use existing projects. SUSEdoc projects are easy to transform into a DAPS
+            project. In the bottom you will see something about using your own and existing project.
+            By the way SUSEdoc is the predecessor of Daps.</para>
+        <para>
+            <warning>Daps support only DocBook 4.x. Support for DocBook 5.x is planned.</warning>
+        </para>
+        <sect2>
+            <title> The Directory Structure to use an existing Project:</title>
+            <screen>xml/*.ent</screen>
+            <screen>xml/*.xml</screen>
+            <screen>images/(Type)/data</screen>
+        </sect2>
+        <sect2>
+            <title>The basenames of Images must be different</title>
+            <screen>For Example: images/svg/foo.svg</screen>
+            <screen>images/png/foo.png</screen>
+            <para>The Example shows two images with the same name: foo. That is bad.</para>
+        </sect2>
+        <sect2>
+            <title>Adjustment for XML</title>
+            <para>Linking of Images:</para>
+            <screen>+xi:includes NAME_OF_IMAGE</screen>
+            <para>Please take only the name of the image.</para>
+            <para>Look at the following to learn to adjust your Header data for XML:</para>
+            <screen>
+                &lt;!DOCTYPE chapter PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd" [
+                &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
+                &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+                %entities; 
+                ] >
+            </screen>
+        </sect2>
+        <sect2>
+            <title>Migrate SUSEdoc Projects</title>
+            <para> See here to migrate your SUSEdoc Project:
+                /usr/share/doc/packages/daps/README</para>
+        </sect2>
+    </sect1>
+    <sect1>
         <title>Converting Formats</title>
-        
         <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. </para>
         <sect2>
@@ -79,15 +120,14 @@
             <para> To transform XML into PDF, you need an existing project(as shown in section 4),
                 use the following steps:</para>
             <procedure>
-               <step>
+                <step>
                     <para> Enter the following command:</para>
                     <screen>$ daps -e <replaceable>ENV_mybook</replaceable>color-pdf</screen>
                 </step>
             </procedure>
-            <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your daps repository. To generat a printable PDF switch "color-pdf"
-            into "pdf".</para>
+            <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
+                daps repository. To generat a printable PDF switch "color-pdf" into "pdf".</para>
         </sect2>
-        
         <sect2>
             <title>Creating Epub</title>
             <para>To transform XML into Epub, you need an existing project(as shown in the section
@@ -98,21 +138,21 @@
                     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
                 </step>
                 <step>
-                    <para>Finish. Your XML file is now transformed Epub file. The result is in the daps repository. Open the result 
-                         with an EBook reader like calibre.</para>
+                    <para>Finish. Your XML file is now transformed Epub file. The result is in the
+                        daps repository. Open the result with an EBook reader like calibre.</para>
                 </step>
             </procedure>
         </sect2>
-        
         <sect2>
             <title>Creating HTML</title>
             <procedure>
-               <step>
+                <step>
                     <para>Enter in your konsole:</para>
                     <screen>$ daps -e --static ENV_DATA html</screen>
                 </step>
                 <step>
-                    <para>Finish. Your XML file is now a HTML file. The result is in the daps repository. Open the result with an Browser.</para>
+                    <para>Finish. Your XML file is now a HTML file. The result is in the daps
+                        repository. Open the result with an Browser.</para>
                 </step>
             </procedure>
         </sect2>
@@ -135,12 +175,16 @@
         <para>For example:</para>
         <screen>daps -vv<co id="co.daps.vv"/> -e ENV_DATA<co id="co.daps.env"/> html<co id="co.daps.html"/></screen>
         <calloutlist>
-            <callout arearefs="co.daps.vv"><para>Global Option = -vv (verbose print more debug messages)</para></callout>
-            <callout arearefs="co.daps.env"><para>Global Option = -e (defines the ENV file)</para></callout>
-            <callout arearefs="co.daps.html"><para>Subcommand = html (what to create)</para></callout>
+            <callout arearefs="co.daps.vv">
+                <para>Global Option = -vv (verbose print more debug messages)</para>
+            </callout>
+            <callout arearefs="co.daps.env">
+                <para>Global Option = -e (defines the ENV file)</para>
+            </callout>
+            <callout arearefs="co.daps.html">
+                <para>Subcommand = html (what to create)</para>
+            </callout>
         </calloutlist>
-        
-        
         <para>DAPS can be executed with or without options, depending on the project.</para>
         <para>If the directory contains only one ENV file:</para>
         <screen>daps "subcommand"</screen>
