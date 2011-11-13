@@ -1,0 +1,56 @@
+-----------------------------------------------------------
+                        README
+-----------------------------------------------------------
+
+1. What is XSpec?
+
+According to their homepage http://http://code.google.com/p/xspec :
+»XSpec is a Behaviour Driven Development (BDD) framework for XML
+processing, currently focused on XSLT.«
+
+The primary idea is to write a XML fragment, let XSpec apply the 
+stylesheet(s) you want to test, and compare the result. The XSpec 
+framework does most of the work for you. The only thing _you_ need
+to do is to write your XML fragment (the input) and the expected 
+result (the output). This is done in a so called "XSpec testfile" 
+which is just XML.
+
+The benefit is to find regressions easier and quicker in our
+customization layer or in the DocBook XSL stylesheets itself.
+Another benefit is you do not need to write detailed unit tests
+for some templates just to test if this template behaves correct
+(it seems, you can, if you like). You just write the "overall"
+expected structure and compare that. Whitespace doesn't matter,
+just the structure.
+
+
+2. What do I need?
+
+Install the package xspec from my OBS repo. It is
+based on Saxon9 (XSLT 2.0 processor) but works also for XSLT 1.0
+stylesheets:
+
+For openSUSE 11.4:
+# zypper ar http://download.opensuse.org/repositories/home:/thomas-schraitle/openSUSE_11.4/home:thomas-schraitle.repo
+# zypper in xspec
+
+
+3. How do I run it?
+
+Pretty simple. Just run the command "xspec" with your "*.xspec"
+file. It will generate a result file in HTML which is saved in 
+the "xspec/" subdirectory of your current directory. Watch out
+for "*-result.html". 
+View the "*-result.html" in your preferred browser
+
+
+4. What needs to be done?
+There are several things that needs work:
+
+* Make HTML and FO tests complete
+* Let xspec command observe catalog file(s)
+* Make customization layer also run with Saxon. There are some
+  smaller issues as Saxon is more strict (see html.patch file for HTML)
+* Split tests in different test files
+
+
