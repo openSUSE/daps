@@ -1084,12 +1084,16 @@ pdf-name:
 pdf-color-name color-pdf-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf"
 
-
 # Generate fo from xml
+#
+# If the fo file is kept (PRECIOUS), it needs to be manually deleted
+# when having updated the fo stylesheets
+# Therefore we better delete it after each run (INTERMEDIATE)
 #
 # b/w PDF
 #
-.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+#.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+.INTERMEDIATE: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
 ifeq ("$(INDEX)", "Yes")
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
@@ -1108,7 +1112,8 @@ endif
 
 # Color PDF
 #
-.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
+#.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
+.INTERMEDIATE: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
 ifeq ("$(INDEX)", "Yes")
 $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
