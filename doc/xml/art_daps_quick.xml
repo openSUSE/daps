@@ -16,41 +16,20 @@
     </articleinfo>
     <abstract>
         <para>&dapsacr; (DocBook Authoring and Publishing Suite) is a programm that transforms your
-            XML document into a text, HTML, PDF, EPUB or manpages. And you can manage your documents
+            XML document into a text, HTML, PDF, EPUB or manpage. And you can manage your documents
             like XML, HTML,(...).You can migrate SUSEdoc Projects. It is the successor of the former
             susedoc package.The following article shows you the basics of daps. If you want to see
             more options and functions, enter the command: <screen>daps --help</screen></para>
     </abstract>
     <sect1>
         <title>Target Audience</title>
-        <para>This quick start is for advanced users.Before you start, you need:</para>
-        <itemizedlist>
-            <listitem>
-                <para>A SUSE Linux system</para>
-            </listitem>
-            <listitem>
-                <para>A Directory Structure</para>
-            </listitem>
-            <listitem>
-                <para>ENV-files (as shown in section 4)</para>
-            </listitem>
-            <listitem>
-                <para>Some experience with SUSE Linux </para>
-            </listitem>
-            <listitem>
-                <para>Some knowledge about XML</para>
-            </listitem>
-            <listitem>
-                <para>Experienced user with commandline knowledge</para>
-            </listitem>
-            <listitem>
-                <para>Some expierence with DocBook</para>
-            </listitem>
-        </itemizedlist>
+        <para>This quick start is for advanced users with some knowledge about DocBook XML. It's also useful to have some experience with
+              the commandline. Daps is only available for SUSELinux.</para>
+    
     </sect1>
     <sect1>
         <title>Getting &daps;</title>
-        <para>Getting &daps; from <ulink
+        <para>Getting &daps; from openSUSE Buildservice:<ulink
                 url="http://download.opensuse.org/repositories/Documentation:/Tools/"
                 >download.opensuse.de</ulink> or from <ulink url="https://sourceforge.net/p/daps/"
                 >sourceforge</ulink></para>
@@ -71,7 +50,7 @@
             </step>
         </procedure>
     </sect1>
-    <sect1>
+    <sect1> 
         <title>Existing Projects</title>
         <para>You can also use existing projects. SUSEdoc projects are easy to transform into a DAPS
             project. In the bottom you will see something about using your own and existing project.
@@ -79,30 +58,45 @@
         <para>
             <warning><para>Daps support only DocBook 4.x. Support for DocBook 5.x is planned.</para></warning>
         </para>
+        <sect2><title></title>
+            <variablelist>
+                 <varlistentry>
+                    <term>The Directory Structure to use an existing Project:</term>
+                    <listitem>
+                        <screen>
+xml/*.ent
+xml/*.xml
+images/(Type)/data
+                        </screen>
+                    </listitem>
+                 </varlistentry>         
+            </variablelist>
+        </sect2>    
         <sect2>
-            <title> The Directory Structure to use an existing Project:</title>
-            <screen>xml/*.ent</screen>
-            <screen>xml/*.xml</screen>
-            <screen>images/(Type)/data</screen>
-        </sect2>
-        <sect2>
-            <title>The basenames of Images must be different</title>
-            <screen>For Example: images/svg/foo.svg</screen>
-            <screen>images/png/foo.png</screen>
-            <para>The Example shows two images with the same name: foo. That is bad.</para>
+            <title>The basenames of Images must be unique different</title>
+            <para>The Images basenames need to be unique throughout different directories. Therefore  using names images/png/AAA.png and 
+                images/svg/AAA.svg is not an option it should be different. For Example: images/svg/BBB.svg and images/png/AAA.png </para>      
         </sect2>
         <sect2>
             <title>Adjustment for XML</title>
             <para>Linking of Images:</para>
-            <screen>+xi:includes NAME_OF_IMAGE</screen>
+            <formalpara>
+                <title>wrong:</title>
+                <para><literal>&lt;imagedata fileref = images/png/foo.png</literal></para>
+            </formalpara>
+            <formalpara>
+                <title>correct:</title>
+                <para><literal>foo.png</literal></para>
+            </formalpara>
+            
+            
             <para>Please take only the name of the image.</para>
             <para>Look at the following to learn to adjust your Header data for XML:</para>
-            <screen>
-                &lt;!DOCTYPE chapter PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd" [
-                &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
+            <screen> 
+                [&lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
                 &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
-                %entities; 
-                ] >
+                %entities; ] >
+                
             </screen>
         </sect2>
         <sect2>
@@ -112,9 +106,9 @@
         </sect2>
     </sect1>
     <sect1>
-        <title>Converting Formats</title>
+        <title>Generating output formatts</title>
         <para>In the following points you will see the procedure of transforming formats into a
-            other format. For example: XML into PDF. </para>
+            other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
         <sect2>
             <title>Creating PDF</title>
             <para> To transform XML into PDF, you need an existing project(as shown in section 4),
@@ -122,7 +116,7 @@
             <procedure>
                 <step>
                     <para> Enter the following command:</para>
-                    <screen>$ daps -e <replaceable>ENV_mybook</replaceable>color-pdf</screen>
+                    <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
                 </step>
             </procedure>
             <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
@@ -170,7 +164,7 @@
         </sect1>-->
     <sect1>
         <title>Advanced usage of &daps;</title>
-        <para>The syntax of the &daps; command is the following:</para>
+        <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
         <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
         <para>For example:</para>
         <screen>daps -vv<co id="co.daps.vv"/> -e ENV_DATA<co id="co.daps.env"/> html<co id="co.daps.html"/></screen>
@@ -198,7 +192,8 @@
         <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
         <remark>Sonst klasse gemacht :-)</remark>
     </sect1>
-    <sect1 os="sles">
+   
+        <!--
         <title>Terminology</title>
         <para>The following terms are used in this article:</para>
         <variablelist>
@@ -275,14 +270,14 @@
                         documents into machine-readable form.</para>
                 </listitem>
             </varlistentry>
-            <!--<varlistentry>
+            <varlistentry>
                 <term>XOP</term>
                 <listitem>
                     <para>XOP (XML-binary Optimized Packaging) is an advice of the W3C to represent
                         the binary data of XML documents. </para>
                 </listitem>
-            </varlistentry>-->
-        </variablelist>
-    </sect1>
+            </varlistentry>
+        </variablelist>-->
+    
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
 </article>
