@@ -89,7 +89,7 @@
 </xsl:template>
 
 
-<xsl:template name="section.heading" priority="100">
+<xsl:template name="section.heading">
   <xsl:param name="section" select="."/>
   <xsl:param name="level" select="1"/>
   <xsl:param name="allow-anchors" select="1"/>
