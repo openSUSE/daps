@@ -61,7 +61,9 @@ endif
 ifndef STATIC_HTML
 STATIC_HTML := 0
 endif
-
+ifndef XSLTPARAM
+XSLTPARAM :=
+endif
 
 # if BUILD_DIR was not set, use $(BASE_DIR)/build
 #
@@ -1086,6 +1088,9 @@ pdf-color-name color-pdf-name:
 
 # Generate fo from xml
 #
+# XSLTPARAM is a variable that can be set via wrapper script in order to
+# temporarily overwrite styleseet settings such as margins
+#
 # If the fo file is kept (PRECIOUS), it needs to be manually deleted
 # when having updated the fo stylesheets
 # Therefore we better delete it after each run (INTERMEDIATE)
@@ -1107,7 +1112,8 @@ ifeq ($(VERBOSITY),1)
 endif
 	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING) $(INDEXSTRING) \
 	  --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  $(FONTDEBUG)  $(XSLTPARAM) \
+	  -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@ccecho "info" "Created fo file $@"
 
 # Color PDF
@@ -1127,7 +1133,7 @@ ifeq ($(VERBOSITY),1)
 endif
 	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) \
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(FONTDEBUG) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
+	  $(FONTDEBUG) $(XSLTPARAM) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
 	@ccecho "info" "Created fo file $@"
 
 
@@ -1312,6 +1318,9 @@ endif
 
 # Generate HTML from profiled xml
 #
+# XSLTPARAM is a variable that can be set via wrapper script in order to
+# temporarily overwrite styleseet settings such as margins
+#
 ifdef USESVN
 $(HTML_DIR)/index.html: meta
 endif
@@ -1320,7 +1329,7 @@ $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating HTML pages"
 endif
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
@@ -1337,7 +1346,7 @@ $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating single HTML page"
 endif
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --output $(HTML_DIR)/$(BOOK).html \
 	  --xinclude $(HTMLBIGFILE) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
