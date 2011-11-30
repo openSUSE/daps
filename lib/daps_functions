@@ -211,7 +211,7 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
 		exit 0
 		;;
             --dirname)
-                DIR_NAME="$2"
+                DIRNAME="$2"
                 shift 2
                 ;;
 	    --rootelement)
@@ -238,8 +238,8 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
         BOOK="${ENVFILE#*${CONF_PREFIX}}"
     fi
     
-    if [[ -z $DIR_NAME ]]; then
-        DIR_NAME=$BOOK
+    if [[ -z $DIRNAME ]]; then
+        DIRNAME=$BOOK
     fi
     
     BASE_DIR="${BASE_DIR}/$BOOK"
@@ -275,7 +275,7 @@ function getimages () {
     #  * --compact:  compact list (single line)
     #  * --viewer=VIEWER: shows images in VIEWER and prints long list to STDOUT
     #
-    # the additional option (-m|--modified) will also print the image file's
+    # the additional option (--modified) will also print the image file's
     # mtime in long lists (this option is ignored with --compact)
 
     local CMD_IMG_VIEWER COMPACT FILE MOD SHOW
@@ -287,7 +287,7 @@ function getimages () {
   
     IMAGEDIR="$BASE_DIR/images/src/"
 
-    SARGS=$(getopt -o f:hms -l compact,file:,help,modified,show,viewer: -n $ME -- "$@")
+    SARGS=$(getopt -o f:hs -l compact,file:,help,modified,show,viewer: -n $ME -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
     fi
@@ -312,7 +312,7 @@ function getimages () {
                 echo
 		exit 0
 		;;
-            -m|--modified)
+            --modified)
                 MOD=1
                 shift
                 ;;
@@ -388,229 +388,11 @@ function getimages () {
 # Functions processing existing make targets 
 #
 
-function build_pdfs () {
-    # targets force, pdf*, color-pdf
-    #
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o cdhr -l comments,draft,fop:,help,name:,remarks,rootid: -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-	    -c|--comments)
-		export COMMENTS=1
-		shift
-		;;
-	    -d|--draft)
-		export DRAFT="yes"
-		shift
-		;;
-	    --fop)
-                if [[ xep = $2 || fop = $2 ]]; then
-                    export FOPTYPE="$2"
-                    export FOP="${LIB_DIR}/daps-$2"
-                else
-		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
-                fi
-		shift 2
-		;;
-            -h|--help)
-                help_scmd_head "Build a $TARGET book"
-                help_comments
-                help_draft
-                help_fop
-                help_help
-                help_name
-                help_remarks
-                help_rootid
-                echo
-		exit 0
-		;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-            -r|--remarks)
-		export REMARKS=1
-		shift
-		;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
-            --) shift ; break ;;
-#            *) exit_on_error "Internal error!" ;;
-            *) wrong_parameter "$TARGET $1" ;;
-	esac
-    done
-    
-    call_make "$TARGET" "$@"
-    
-}
 
-function build_html_jsp () {
-    # targets html*, jsp
-    #
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid:,static -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-	    -c|--comments)
-		export COMMENTS=1
-		shift
-		;;
-	    -d|--draft)
-		export DRAFT="yes"
-		shift
-		;;
-            -h|--help)
-                help_scmd_head "Build a $TARGET book"
-                help_comments
-                help_draft
-                help_help
-                help_meta
-                help_name
-                help_remarks
-                help_rootid
-                help_static
-                echo
-                exit 0
-		;;
-            -m|--meta)
-                export USEMETA=1
-                # Implies draft and remarks mode
-                export DRAFT="yes"
-                export REMARKS=1
-                shift
-                ;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-            -r|--remarks)
-		export REMARKS=1
-		shift
-		;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
- 	    --static)
-		export STATIC_HTML=1
-		shift
-		;;           
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
 
-    call_make "$TARGET" "$@"
-    
-}
 
-function build_epub () {
-    # taget: epub
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o hr -l help,name:,remarks,rootid: -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-            -h|--help)
-                help_scmd_head "Build an $TARGET book"
-                help_help
-                help_name
-                help_rootid
-                echo
-                exit 0
-		;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
-            -r|--remarks)
-		export REMARKS=1
-		shift
-		;;
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
 
-    call_make "$TARGET" "$@"
-    
-}
 
-function build_locdrop () {
-    # target: locdrop
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o hn -l def-file:,help,name:,nopdf,rootid: -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-            --def-file)
-                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
-                export DEF_FILE=$2
-                shift 2
-                ;;
-            -h|--help)
-                help_scmd_head "Provide everything that is needed to translate a set"
-                help_def-file
-                help_help
-                help_name
-                help_nopdf
-                help_rootid
-                echo
-                exit 0
-		;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-            -n|--nopdf)
-                export NOPDF="1"
-                shift
-                ;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
-
-    test -z $DEF_FILE && ccecho "warn" "Warning: No DEF file was specified"
-
-    call_make "$TARGET" "$@"
-}
 
 function checklink () {
     # HTTP link checker
@@ -742,140 +524,10 @@ function profile_first () {
     call_make_nolog "$TARGET" "$@"
 }
 
-function build_generic () {
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-            -h|--help)
-                help_scmd_head "Build a $TARGET book"
-                help_help
-                help_name
-                help_rootid
-                echo
-                exit 0
-		;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
 
-    call_make "$TARGET" "$@"
-    
-}
 
-function filelists () {
-    local TARGET=$1
-    shift
-    # command line args
-    SARGS=$(getopt -o hp -l help,pretty -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-            -h|--help)
-                help_scmd_head "Print a list of $TARGET"
-                help_help
-                help_pretty
-                echo
-                exit 0
-		;;
-            -p|--pretty)
-                if [[ 0 != $VERBOSITY ]]; then
-                    ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
-                else
-                    PRETTY_FILELIST=1
-                fi
-                shift
-                ;;
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
-#    if [[ $TARGET =~ graphics ]]; then
-#        call_make_nolog "profile" "$@"
-#    fi
-    call_make_nolog "$TARGET" "$@"
-}
 
-function packaging () {
-    local TARGET=$1
-    shift
-    # command line args
-    if [[ package-pdf = $TARGET ]]; then
-        SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "$@")
-    elif [[ package-src = $TARGET ]]; then
-        SARGS=$(getopt -o h -l def-file:,help,name:,rootid: -n $0 -- "$@")
-    else
-        SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
-    fi
-    if [[ 1 = $? ]]; then
-        wrong_parameter "$TARGET"
-    fi
-    eval set -- "$SARGS"
-    while true ; do
-	case "$1" in
-            --def-file)
-                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
-                export DEF_FILE=$2
-                shift 2
-                ;;
-            --fop)
-                if [[ $2 = xep || $2 = fop ]]; then
-                    export FOPTYPE="$2"
-                    export FOP="${LIB_DIR}/daps-$2"
-                else
-		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
-                fi
-		shift 2
-		;;
-            -h|--help)
-                help_scmd_head "Build a $TARGET book"
-                if [[ package-pdf = $TARGET ]]; then
-                    help_fop
-                elif [[ package-src = $TARGET ]]; then
-                    help_def-file
-                fi
-                help_help
-                help_name
-                help_rootid
-                echo
-                exit 0
-		;;
-            --name)
-                export PDFNAME="$2"
-                export BOOK="$PDFNAME"
-                shift 2
-                ;;
-	    --rootid)
-		export ROOTID="$2"
-		shift 2
-		;;
-            --) shift ; break ;;
-            *) exit_on_error "Internal error!" ;;
-	esac
-    done
 
-    call_make "$TARGET" "$@"
-    
-}
 
 function show_names () {
     #
@@ -942,6 +594,7 @@ function show_names () {
     fi
 }
 
+# needed by docmanager
 function show_env {
          echo "BASE_DIR=$BASE_DIR;ENVFILE=$ENVFILE"
 }
@@ -957,9 +610,9 @@ function show_env {
 
 function help_scmd_head () {
     echo "
-$ME [--global-options] $TARGET [options]
+$ME [--global-options] $1 [options]
 
-$1
+$2
 
   Command options:"
 }
@@ -1059,4 +712,939 @@ function help_show () {
 function help_viewer () {
     echo "    --viewer                  Image viewer to be used.
                               Default: IMG_VIEWER setting from config file"
+}
+function help_xsltparam () {
+    echo "    --xsltparam               Add one or mor xsltproc parmeters in the form of
+                              \"--stringparam paramname value\". The given string
+                              will be passed unmodified to the the xsltproc call that
+                              $1.
+                              Useful to temporarily overwrite style sheet
+                              parameters such as margins.
+                              Default: unset"
+}
+
+
+
+
+###########################################################################
+#
+# INITIALIZE ENVIRONMENT 
+#
+# Create needed directories and links
+# Finally export some variables 
+#
+###########################################################################
+function init_env {
+    # Create the log directory and a link to the ENV-file in R_DIR
+    # (R_DIR and LOG_DIR are set in bin/daps) 
+
+    mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
+
+    if [[ ! -f ${R_DIR}/$ENVFILE ]]; then
+        ln -sf ${BASE_DIR}/$ENVFILE ${R_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $R_DIR"
+    fi
+
+    # There should only be one ENVFILE in $R_DIR
+    #
+    ENV_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+    if [[ $ENV_COUNT -gt 1 ]]; then
+        ccecho "warn" "$R_DIR contains more than one ENVFILE"
+    fi
+
+    #
+    # The DocBook stylesheets require a 0|1 for REMARKS and COMMENTS, but
+    # yes|no for DRAFT 
+    # In order not to add to that confusion we will accept 0|1|yes|no for
+    # all of them and export the correct value here. Since USEMETA falls
+    # into a similar category, we also handle it the same way.
+    # We also need to reset the _STR variables that get added to the resulting
+    # filename here, when REMARKS, COMMENTS or DRAFT has been disabled
+    #
+    
+    # COMMENTS must be set to 1|0
+    case "$COMMENTS" in
+        1|yes)
+            export COMMENTS=1 ;;
+        0|no|"")
+            export COMMENTS=0
+            unset COMMENT_STR ;;
+        *)
+            exit_on_error "Wrong value for COMMENTS. Must be \"yes\" or \"no\""
+            ;;
+    esac
+    
+    # DRAFT must be set to yes|no
+    case "$DRAFT" in
+        1|yes)
+            export DRAFT="yes" ;;
+         0|no|"")
+            export DRAFT="no"
+            unset DRAFT_STR ;;
+        *)
+            exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\"" ;;
+    esac
+    
+    # REMARKS must be set to 1|0
+    case "$REMARKS" in
+        1|yes)
+            export REMARKS=1 ;;
+        0|no|"")
+            export REMARKS=0
+            unset REMARK_STR ;;
+        *)
+            exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
+            ;;
+        esac
+    
+    # USEMETA must be set to 1|0
+    case "$USEMETA" in
+        1|yes)
+            export USEMETA=1 ;;
+          0|no|"")
+            export USEMETA=0 ;;
+        *)
+            exit_on_error "Wrong value for USEMETA. Must be \"yes\" or \"no\""
+            ;;
+    esac
+
+}   
+
+###########################################################################
+#
+# ARGUMENT PARSER FOR ALL SUBCOMANDS 
+#
+# Generic parser for the subcommand's command line switches. If a function
+# introduces a new switch, it needs to be added here
+#
+###########################################################################
+function parse_args () {
+    #
+    # help is always handled within the function directly
+    # everything else is parsed here
+
+    # this functions only parses the getopts arguments and sets
+    # variables accordingly.
+
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SHORT_OPTS=$1
+    LONG_OPTS=$2
+    SUB_CMD=$3
+    shift 3
+
+    C_ARGS=$(getopt -o $SHORT_OPTS -l $LONG_OPTS -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$SUB_CMD"
+    fi
+
+    eval set -- "$C_ARGS"
+    
+    while true ; do
+        case "$1" in
+            -c|--comments)
+		P_COMMENTS=1
+		shift
+		;;
+            --compact)
+                P_COMPACT=1
+                shift
+                ;;
+            -d|--draft)
+		P_DRAFT=1
+		shift
+		;;
+            --def-file)
+                P_DEF_FILE="$2"
+                shift 2
+                ;;
+            --dirname)
+                P_DIRNAME="$2"
+                shift 2
+                ;;
+            -f|--file)
+                P_FILE="$2"
+                shift 2
+                ;;
+            --fop)
+                P_FOP=2
+		shift 2
+		;;
+            -h|--help)
+                P_HELP=1
+                shift
+                ;;
+            -m|--meta)
+                P_META=1
+                shift
+                ;;
+            --modified)
+                P_MODIFIED=1
+                shift
+                ;;
+            -n|--nopdf)
+                P_NOPDF=1
+                shift
+                ;;
+            --name)
+                P_PDFNAME="$2"
+                shift 2
+                ;;
+            -p|--pretty)
+                P_PRETTY=1
+                shift
+                ;;
+            -r|--remarks)
+		P_REMARKS=1
+		shift
+		;;
+            --rootelement)
+                ROOTELEMENT="$2"
+		shift 2
+		;;
+            --rootid)
+		P_ROOTID="$2"
+		shift 2
+		;;
+            -s|--show)
+                P_SHOW=1
+                shift
+                ;;
+            --static)
+		P_STATIC=1
+		shift
+		;; 
+	    --viewer)
+                P_VIEWER=$2
+		shift 2
+		;;
+            --xsltparam)
+                P_XSLTPARAM=$2
+		shift 2
+		;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                wrong_parameter "SUB_CMD"
+                ;;
+        esac
+    done
+
+    P_REMAIN_ARGS="$@"
+
+}
+
+
+##########################################################
+#
+# FUNCTION TEMPLATE
+#
+##########################################################
+#    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+
+    # The subcommand value is passed when calling this function
+#    SUB_CMD=$1
+#    shift
+
+    # SHORT_OPTS: Value for the getopt -o option 
+    # LONG_OPTS:  VALUE for the getopt -l option
+#    SHORT_OPTS="cdhr"
+#    LONG_OPTS="comments,draft,fop:,help,name:,remarks,rootid:"
+
+    # Call the argument parser
+#    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+
+    # Reset this functions $@ to what is remaining after having parsed the
+    # subcommand switches
+#    eval set -- "$P_REMAIN_ARGS"
+
+#    #------ Computing the values returned from the parser -----
+
+#    <REPLACE ME>
+
+#    call_make "$UB_CMD" "$@"
+
+
+###########################################################################
+#
+# BUILD PDFS 
+#
+# Subcommands: pdf,color-pdf
+#
+###########################################################################
+function build_pdfs () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="cdhr"
+    LONG_OPTS="comments,draft,fop:,help,name:,remarks,rootid:,xsltparam:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_comments
+        help_draft
+        help_fop
+        help_help
+        help_name
+        help_remarks
+        help_rootid
+        help_xsltparam "creates the .fo file from the profiled sources"
+        echo
+        exit 0
+    fi
+    
+    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
+    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+    
+    if [[ -n $P_FOP ]]; then
+        if [[ xep = $P_FOP || fop = $P_FOP ]]; then
+            export FOPTYPE="$P_FOP"
+            export FOP="${LIB_DIR}/daps-$P_FOP"
+        else
+	    exit_on_error "Wrong parameter for --fop: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+    
+    call_make "$SUB_CMD" "$@"
+}
+
+
+###########################################################################
+#
+# BUILD HTML and JSP 
+#
+# Subcommands: html, htmlsingle, jsp 
+#
+###########################################################################
+function build_html_jsp () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="cdhmr"
+    LONG_OPTS="comments,draft,help,name:,meta,remarks,rootid:,static,xsltparam:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_comments
+        help_draft
+        help_help
+        help_meta
+        help_name
+        help_remarks
+        help_rootid
+        help_static
+        help_xsltparam "creates HTML from the profiled sources"
+        echo
+        exit 0
+    fi
+    
+    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
+    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    # usemeta implies draft mode with remarks
+    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes" REMARKS=1
+    [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# BUILD ePUB 
+#
+# Subcommands: epub only
+#
+###########################################################################
+function build_epub () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="hr"
+    LONG_OPTS="help,name:,remarks,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_help
+        help_name
+        help_rootid
+        echo
+        exit 0
+    fi
+    
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# Generic BUILD function
+#
+# Subcommands: every commands that does not fit elsewhere
+#
+###########################################################################
+function build_generic () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="help,name:,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "Build a $SUB_CMD book"
+        help_help
+        help_name
+        help_rootid
+        echo
+        exit 0
+    fi
+
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# PACKAGING locdrop
+#
+# Subcommand: locdrop only
+#
+###########################################################################
+function build_locdrop () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="hn"
+    LONG_OPTS="def-file:,help,name:,nopdf,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "Provide everything that is needed to translate a set"
+        help_def-file
+        help_help
+        help_name
+        help_nopdf
+        help_rootid
+        echo
+        exit 0
+    fi
+    
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_NOPDF ]]     && export export NOPDF=1
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+
+    if [[ -f $P_DEF_FILE ]]; then
+        export DEF_FILE="$P_DEF_FILE"
+    elif [[ -z $P_DEF_FILE ]]; then
+        ccecho "warn" "Warning: No DEF file was specified"
+    else
+        exit_on_error "Cannot find DEF file P_DEF_FILE"
+    fi
+    
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+#  Generic PACKAGING
+#
+#  Subcommands: all packaging targets except locdrop
+#
+###########################################################################
+function packaging () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="hn"
+    LONG_OPTS="def-file:,help,name:,nopdf,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "Provide a $SUB_CMD package"
+        if [[ package-pdf = $TARGET ]]; then
+            help_fop
+        elif [[ package-src = $TARGET ]]; then
+            help_def-file
+        fi
+        help_help
+        help_name
+        help_rootid
+        echo
+        exit 0       
+    fi
+    
+    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+
+    if [[ -f $P_DEF_FILE ]]; then
+        export DEF_FILE="$P_DEF_FILE"
+    else
+        exit_on_error "Cannot find DEF file P_DEF_FILE"
+    fi
+
+    if [[ -n $P_FOP ]]; then
+        if [[ xep = $P_FOP || fop = $P_FOP ]]; then
+            export FOPTYPE="$P_FOP"
+            export FOP="${LIB_DIR}/daps-$P_FOP"
+        else
+	    exit_on_error "Wrong parameter for --fop: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+    
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+#  FILELISTS
+#
+#  Subcommands: missinggraphics, project(files|graphics),
+#               remaining(files|graphics)
+#
+###########################################################################   
+function filelists () {
+    local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="hp"
+    LONG_OPTS="help,pretty"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        case "$SUB_CMD" in
+            missinggraphics)
+                HELPTXT="Print the list of missing graphic files" ;;
+            projectfiles)
+                HELPTXT="Print the list of the project's XML files" ;;
+            projectgraphics)
+                HELPTXT="Print the list of the project's graphic files" ;;
+            remainingfiles)
+                HELPTXT="Print the list of XML files not belonging to the current project" ;;
+            remaininggraphics)
+                HELPTXT="Print the list of graphics not belonging to the current project";;
+        esac
+        help_scmd_head "$HELPTXT"
+        help_help
+        help_pretty
+        echo
+        exit 0
+    fi
+    if [[ 1 = $P_PRETTY ]]; then
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
+        else
+            PRETTY_FILELIST=1
+        fi
+    fi
+    
+    call_make_nolog "$SUB_CMD" "$@"
+}
+
+
+#
+# DEPRECATED
+#
+#
+function _filelists_ () {
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o hp -l help,pretty -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Print a list of $TARGET"
+                help_help
+                help_pretty
+                echo
+                exit 0
+		;;
+            -p|--pretty)
+                if [[ 0 != $VERBOSITY ]]; then
+                    ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
+                else
+                    PRETTY_FILELIST=1
+                fi
+                shift
+                ;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+#    if [[ $TARGET =~ graphics ]]; then
+#        call_make_nolog "profile" "$@"
+#    fi
+    call_make_nolog "$TARGET" "$@"
+}
+
+function _packaging_ () {
+    local TARGET=$1
+    shift
+    # command line args
+    if [[ package-pdf = $TARGET ]]; then
+        SARGS=$(getopt -o h -l fop:,help,name:,rootid: -n $0 -- "$@")
+    elif [[ package-src = $TARGET ]]; then
+        SARGS=$(getopt -o h -l def-file:,help,name:,rootid: -n $0 -- "$@")
+    else
+        SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
+    fi
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            --def-file)
+                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
+                export DEF_FILE=$2
+                shift 2
+                ;;
+            --fop)
+                if [[ $2 = xep || $2 = fop ]]; then
+                    export FOPTYPE="$2"
+                    export FOP="${LIB_DIR}/daps-$2"
+                else
+		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
+                fi
+		shift 2
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book"
+                if [[ package-pdf = $TARGET ]]; then
+                    help_fop
+                elif [[ package-src = $TARGET ]]; then
+                    help_def-file
+                fi
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+
+function _build_locdrop_ () {
+    # target: locdrop
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o hn -l def-file:,help,name:,nopdf,rootid: -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            --def-file)
+                test -f $2|| exit_on_error "Cannot find DEF file $FILE"
+                export DEF_FILE=$2
+                shift 2
+                ;;
+            -h|--help)
+                help_scmd_head "Provide everything that is needed to translate a set"
+                help_def-file
+                help_help
+                help_name
+                help_nopdf
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -n|--nopdf)
+                export NOPDF="1"
+                shift
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    test -z $DEF_FILE && ccecho "warn" "Warning: No DEF file was specified"
+
+    call_make "$TARGET" "$@"
+}
+
+function _build_generic_ () {
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o h -l help,name:,rootid: -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Build a $TARGET book"
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function _build_epub_ () {
+    # taget: epub
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o hr -l help,name:,remarks,rootid: -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+            -h|--help)
+                help_scmd_head "Build an $TARGET book"
+                help_help
+                help_name
+                help_rootid
+                echo
+                exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+
+function _build_html_jsp_ () {
+    # targets html*, jsp
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o cdhmr -l comments,draft,help,name:,meta,remarks,rootid:,static -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+	    -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+	    -d|--draft)
+		export DRAFT="yes"
+		shift
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book"
+                help_comments
+                help_draft
+                help_help
+                help_meta
+                help_name
+                help_remarks
+                help_rootid
+                help_static
+                echo
+                exit 0
+		;;
+            -m|--meta)
+                export USEMETA=1
+                # Implies draft and remarks mode
+                export DRAFT="yes"
+                export REMARKS=1
+                shift
+                ;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+ 	    --static)
+		export STATIC_HTML=1
+		shift
+		;;           
+            --) shift ; break ;;
+            *) exit_on_error "Internal error!" ;;
+	esac
+    done
+
+    call_make "$TARGET" "$@"
+    
+}
+
+function _build_pdfs_ () {
+    # targets force, pdf*, color-pdf
+    #
+    local TARGET=$1
+    shift
+    # command line args
+    SARGS=$(getopt -o cdhr -l comments,draft,fop:,help,name:,remarks,rootid: -n $0 -- "$@")
+    if [[ 1 = $? ]]; then
+        wrong_parameter "$TARGET"
+    fi
+    eval set -- "$SARGS"
+    while true ; do
+	case "$1" in
+	    -c|--comments)
+		export COMMENTS=1
+		shift
+		;;
+	    -d|--draft)
+		export DRAFT="yes"
+		shift
+		;;
+	    --fop)
+                if [[ xep = $2 || fop = $2 ]]; then
+                    export FOPTYPE="$2"
+                    export FOP="${LIB_DIR}/daps-$2"
+                else
+		    exit_on_error "Wrong parameter for $1: must be \"xep\" or \"fop\"!"
+                fi
+		shift 2
+		;;
+            -h|--help)
+                help_scmd_head "Build a $TARGET book"
+                help_comments
+                help_draft
+                help_fop
+                help_help
+                help_name
+                help_remarks
+                help_rootid
+                echo
+		exit 0
+		;;
+            --name)
+                export PDFNAME="$2"
+                export BOOK="$PDFNAME"
+                shift 2
+                ;;
+            -r|--remarks)
+		export REMARKS=1
+		shift
+		;;
+	    --rootid)
+		export ROOTID="$2"
+		shift 2
+		;;
+            --) shift ; break ;;
+#            *) exit_on_error "Internal error!" ;;
+            *) wrong_parameter "$TARGET $1" ;;
+	esac
+    done
+    
+    call_make "$TARGET" "$@"
+    
 }
