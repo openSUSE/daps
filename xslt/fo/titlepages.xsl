@@ -21,10 +21,9 @@
                                 self::sect3 or
                                 self::sect4]/@xml:base"/>
   
-  <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
+  <xsl:if test="$draft.mode = 'yes' and $xmlbase != '' and $use.meta != 0">
    <fo:block font-family="{$sans.font.family}" 
-     clear="both"
-     background-color="lightgrey" color="white">
+     clear="both" background-color="lightgrey" color="white">
     Filename:  <fo:inline font-family="{$monospace.font.family}">
       &quot;<xsl:value-of select="$xmlbase"/>&quot;</fo:inline>
    </fo:block>
@@ -33,10 +32,9 @@
 
 <xsl:template name="id.block">
   <xsl:param name="node" select="."/>
-   <xsl:if test="$draft.mode = 'yes'">
+   <xsl:if test="$draft.mode = 'yes' and $use.meta != 0">
      <fo:block font-family="{$sans.font.family}"
-       clear="both"
-     background-color="lightgrey" color="white">
+       clear="both" background-color="lightgrey" color="white">
        <xsl:text>ID: </xsl:text>
        <xsl:choose>
          <xsl:when test="@id">
@@ -166,7 +164,7 @@
    </fo:table-body>
   </fo:table>
 
-<!--  <xsl:if test="$draft.mode = 'yes'">
+<!--  <xsl:if test="$draft.mode = 'yes' and $use.meta != 0">
     <xsl:message> FILENAMES activated <xsl:value-of select="concat(name(), ' ', ../@xml:base)"/></xsl:message>
     <fo:block>Filename: &quot;<xsl:value-of select="../@xml:base"/>&quot;
     </fo:block>

@@ -146,6 +146,8 @@ set       nop
 <xsl:param name="table.frame.border.style">none</xsl:param>
 <xsl:param name="table.cell.border.style">none</xsl:param>
 
+<!-- Should information from SVN properties be used? yes|no -->
+<xsl:param name="use.meta" select="0"/>
 
 <!--<xsl:param name="autotoc.label.separator" select="'
 '"></xsl:param>-->
