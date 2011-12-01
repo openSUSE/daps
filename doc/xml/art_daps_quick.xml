@@ -69,20 +69,22 @@ xml/*.xml
 images/(Type)/data
                         </screen>
                     </listitem>
-                 </varlistentry>         
+                 </varlistentry>
             </variablelist>
         </sect2>    
         <sect2>
             <title>The basenames of Images must be unique different</title>
-            <para>The Images basenames need to be unique throughout different directories. Therefore  using names images/png/AAA.png and 
-                images/svg/AAA.svg is not an option it should be different. For Example: images/svg/BBB.svg and images/png/AAA.png </para>      
+      <para>The images basenames need to be unique throughout different
+        directories. Therefore using names <filename>images/png/AAA.png</filename> and
+        <filename>images/svg/AAA.svg</filename> is not an option it should be different. For
+        Example: <filename>images/svg/BBB.svg</filename> and <filename>images/png/AAA.png</filename> </para>      
         </sect2>
         <sect2>
             <title>Adjustment for XML</title>
             <para>Linking of Images:</para>
             <formalpara>
                 <title>wrong:</title>
-                <para><literal>&lt;imagedata fileref = images/png/foo.png</literal></para>
+                <para><literal>&lt;imagedata fileref="images/png/foo.png"/></literal></para>
             </formalpara>
             <formalpara>
                 <title>correct:</title>
@@ -92,12 +94,12 @@ images/(Type)/data
             
             <para>Please take only the name of the image.</para>
             <para>Look at the following to learn to adjust your Header data for XML:</para>
-            <screen> 
-                [&lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
-                &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
-                %entities; ] >
-                
-            </screen>
+            <screen>&lt;!DOCTYPE ...
+[
+  &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
+  &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]></screen>
         </sect2>
         <sect2>
             <title>Migrate SUSEdoc Projects</title>
@@ -167,7 +169,9 @@ images/(Type)/data
         <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
         <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
         <para>For example:</para>
-        <screen>daps -vv<co id="co.daps.vv"/> -e ENV_DATA<co id="co.daps.env"/> html<co id="co.daps.html"/></screen>
+        <screen>daps -vv<co id="co.daps.vv"/> \
+  -e ENV_DATA<co id="co.daps.env"/> \
+  html<co id="co.daps.html"/></screen>
         <calloutlist>
             <callout arearefs="co.daps.vv">
                 <para>Global Option = -vv (verbose print more debug messages)</para>
