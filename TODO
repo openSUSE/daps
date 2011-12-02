@@ -10,7 +10,9 @@ packaging:
 
 daps
 -----
-* Rewrite lib/daps_function and use one generic function to call make
+
+* BUGFIX: remarks mode only works when comments are turned on, too
+          (at least in PDFs)
 
 * documentation
 
@@ -48,10 +50,6 @@ daps
       --> perhaps libxml has got a solution: http://lxml.de/parsing.html
     - passing the header to the profiling stylesheet as stringparam
       (the easy part)
-
-* Add an --param option which can be used to pass parameter values to stylesheets
-  This is useful as it avoid to write a customization layer
-
 
 -------------
 DocManager
