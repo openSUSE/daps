@@ -438,3 +438,20 @@ USEMETA="no"
 # VERBOSITY=2: detailed output of each target
 #
 VERBOSITY=0
+
+## Key: XSLTPARAM        
+## --------------------
+## Description: String passed to xsltproc for HTML and PDF builds
+## Type:        number
+## Default:     ""
+#
+# With XSLTPARAM you can overwrite stylesheet settings without having
+# to touch the stylesheet files directly. You may overwrite parameters
+# by specifying "--stringparam <PARAM_NAME> <NEW_VALUE>"
+# Example:
+# Set the pagesize for PDFs to 200x100 mm
+# XSLTPARAM="--stringparam page.height 200mm --stringparam page.width 100mm"
+#
+# Can also be placed in an ENV-file if being a per-book setting
+#
+XSLTPARAM=""
