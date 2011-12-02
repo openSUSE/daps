@@ -16,6 +16,13 @@
 
 #SHELL := /bin/bash -x
 
+# If wanting to replace a " " with subst, a variable containing
+# a space is needed, since it is not possible to replace a literal
+# space (same goes for comma)
+#
+SPACE :=
+SPACE +=
+
 # Verbosity
 #
 #
@@ -240,17 +247,18 @@ ifdef ROOTID
 ROOTSTRING   := --stringparam rootid "$(ROOTID)"
 endif
 
+# meta information (author, last changed, etc)
+ifeq ($(USEMETA), 1)
+METASTRING   := --stringparam use.meta 1
+endif
+
 # HTML stuff
 ifdef HTMLROOT
 HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
 endif
-ifeq ($(USEMETA), 1)
-METASTRING   := --stringparam use.meta 1
-endif
 ifdef USEXHTML
 XHTMLSTRING  := --stringparam generate.jsp.marker 0
 endif
-
 
 # Language string
 LL         ?= $(shell xsltproc --nonet $(STYLELANG) $(BASE_DIR)/xml/$(MAIN))
@@ -490,39 +498,59 @@ clean-all real-clean:
 #
 
 .PHONY: projectfiles
-projectfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
-			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
-projectfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+projectfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
+			   --stringparam xml.or.img xml \
+			   $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+projectfiles: FILES    := $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
+			   $(BASE_DIR)/$(ENVFILE) $(INCLUDED)
 projectfiles:
-	@echo $(sort $(INCLUDED)) $(addprefix $(BASE_DIR)/xml/, \
-		$(ENTITIES)) $(BASE_DIR)/$(ENVFILE)
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
+else
+	@echo $(sort $(FILES))
+endif
 
 # Files _not_ used in $BOOK
 #
 .PHONY: remainingfiles
-remainingfiles: INCLUDED = $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
-			--stringparam xml.or.img xml \
-			$(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
-remainingfiles: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
-remainingfiles: INCLUDED += $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
-				$(BASE_DIR)/$(ENVFILE)
+remainingfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc \
+			     $(ROOTSTRING) --stringparam xml.or.img xml \
+			     $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+remainingfiles: FILES    := $(filter-out \
+			     $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
+			     $(BASE_DIR)/$(ENVFILE) $(INCLUDED), $(SRCFILES))
 remainingfiles:
-	@echo $(sort $(filter-out $(INCLUDED), $(SRCFILES)))
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo  -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
+else
+	@echo $(sort $(FILES))
+endif
 
 # Source graphics used for $BOOK/ROOTID
 #
 .PHONY: projectgraphics
-projectgraphics: 
-	@echo $(sort $(USED_SVG) $(USED_PNG) $(USED_DIA) $(USED_FIG))
+projectgraphics: FILES := $(USED_SVG) $(USED_PNG) $(USED_DIA) $(USED_FIG)
+projectgraphics:
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
+else
+	@echo $(sort $(FILES))
+endif
 
 # Source graphics _not_ used for $BOOK/ROOTID
 #
 .PHONY: remaininggraphics
-remaininggraphics: INCLUDED = $(USED_SVG) $(USED_PNG) $(USED_DIA) $(USED_FIG)
+remaininggraphics: INCLUDED := $(filter-out $(USED_SVG) $(USED_PNG) \
+				$(USED_DIA) $(USED_FIG), \
+				$(SRCPNG) $(SRCSVG) $(SRCFIG) $(SRCDIA))
 remaininggraphics:
-	@echo $(sort $(filter-out $(INCLUDED), $(SRCPNG) $(SRCSVG) \
-		$(SRCFIG) $(SRCDIA)))
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
+else
+	@echo $(sort $(FILES))
+endif
 
 # Graphics as linked in xml sources
 # (if a file exists as foo.svg but the xml sources contain a link to foo.png
@@ -547,7 +575,12 @@ xmlgraphics-bw: provide-images
 .PHONY: missinggraphics
 missinggraphics:
 ifdef MISSING
-	@ccecho "warn" "The following graphics are missing:\n$(MISSING)"
+	@ccecho "warn" "The following graphics are missing:"
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+else
+	@echo "$(MISSING)"
+endif
 else
 	@ccecho "info" "Graphics complete"
 endif
@@ -1110,8 +1143,8 @@ $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
-	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING) $(INDEXSTRING) \
-	  --stringparam projectfile PROJECTFILE.$(BOOK) \
+	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING)  $(METASTRING) \
+	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG)  $(XSLTPARAM) \
 	  -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@ccecho "info" "Created fo file $@"
@@ -1131,7 +1164,7 @@ $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
-	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) \
+	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) $(METASTRING)\
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG) $(XSLTPARAM) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
 	@ccecho "info" "Created fo file $@"
