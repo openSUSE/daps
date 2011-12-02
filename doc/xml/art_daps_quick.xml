@@ -15,24 +15,29 @@
         </author>
     </articleinfo>
     <abstract>
-        <para>&dapsacr; (DocBook Authoring and Publishing Suite) is a programm that transforms your
-            XML document into a text, HTML, PDF, EPUB or manpage. And you can manage your documents
-            like XML, HTML,(...).You can migrate SUSEdoc Projects. It is the successor of the former
-            susedoc package.The following article shows you the basics of daps. If you want to see
-            more options and functions, enter the command: <screen>daps --help</screen></para>
+    <para>&dapsacr; (<emphasis>DocBook Authoring and Publishing
+        Suite</emphasis>) is a programm that transforms your XML
+      document into a text, HTML, PDF, EPUB, or manpage. And you can
+      manage your documents like XML, HTML,(...). You can migrate SUSEdoc
+      Projects. It is the successor of the former susedoc package.The
+      following article shows you the basics of daps. If you want to see
+      more options and functions, enter the command:
+      <screen>daps --help</screen></para>
     </abstract>
     <sect1>
         <title>Target Audience</title>
-        <para>This quick start is for advanced users with some knowledge about DocBook XML. It's also useful to have some experience with
-              the commandline. Daps is only available for SUSELinux.</para>
+        <para>This quick start is for advanced users with some knowledge about DocBook XML. 
+          It is also useful to have some experience with
+              the commandline. &dapsacr; is only available for openSUSE.</para>
     
     </sect1>
     <sect1>
-        <title>Getting &daps;</title>
-        <para>Getting &daps; from openSUSE Buildservice:<ulink
-                url="http://download.opensuse.org/repositories/Documentation:/Tools/"
-                >download.opensuse.de</ulink> or from <ulink url="https://sourceforge.net/p/daps/"
-                >sourceforge</ulink></para>
+        <title>Getting &dapsacr;</title>
+        <para>Download and install the <systemitem
+          class="resource">daps</systemitem> package from the openSUSE
+          Buildservice (<ulink
+            url="http://download.opensuse.org/repositories/Documentation:/Tools/"
+         />) or from Sourceforge at <ulink url="https://daps.sf.net"/>.</para>
     </sect1>
     <sect1>
         <title>Creating a Project from scratch</title>
@@ -52,8 +57,9 @@
     </sect1>
     <sect1> 
         <title>Existing Projects</title>
-        <para>You can also use existing projects. SUSEdoc projects are easy to transform into a DAPS
-            project. In the bottom you will see something about using your own and existing project.
+        <para>You can also use existing projects. SUSEdoc projects are
+          easy to transform into a &dapsacr; project. In the bottom you 
+          will see something about using your own and existing project.
             By the way SUSEdoc is the predecessor of Daps.</para>
         <para>
             <warning><para>Daps support only DocBook 4.x. Support for DocBook 5.x is planned.</para></warning>
@@ -125,7 +131,7 @@ images/(Type)/data
                 daps repository. To generat a printable PDF switch "color-pdf" into "pdf".</para>
         </sect2>
         <sect2>
-            <title>Creating Epub</title>
+            <title>Creating EPUB</title>
             <para>To transform XML into Epub, you need an existing project(as shown in the section
                 4), use the following steps.</para>
             <procedure>
@@ -191,7 +197,7 @@ images/(Type)/data
         <para>Setup ENV-Data</para>
         <screen>$ source ENV-YOUR-DATA</screen>
         <screen>$ daps "subcommand"</screen>
-        <para>Over configurationdata ~/.daps/conf:</para>
+        <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
         <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
         <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
         <remark>Sonst klasse gemacht :-)</remark>
