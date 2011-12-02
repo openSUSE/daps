@@ -57,6 +57,7 @@ VARLIST=(
     TITLE
     USEMETA
     VERBOSITY
+    XSLTPARAM
 )
 
 # VARLIST contains all variables that can be set via config or command line.
@@ -109,10 +110,10 @@ SUBCOMMANDS=(
     [clean-images]=call_make_nolog
     [clean-results]=call_make_nolog
     [clean]=call_make_nolog
-    [color-pdf-name]=show-names
+    [color-pdf-name]=show_names
     [color-pdf]=build_pdfs
     [db2novdoc]=build_generic
-    [desktop-files-dir-name]=show-names
+    [desktop-files-dir-name]=show_names
     [desktop-files]=build_generic
     [dist-all]=profile_first
     [dist-book]=build_generic
@@ -121,28 +122,28 @@ SUBCOMMANDS=(
     [dist-document-files-pdf]=build_generic
     [dist-graphics-png]=build_generic
     [dist-graphics]=build_generic
-    [dist-html-name]=show-names
+    [dist-html-name]=show_names
     [dist-html-single]=build_generic
     [dist-html]=build_generic
     [dist-htmlsingle]=build_generic
     [dist-jsp]=build_generic
     [dist-xml]=build_generic
     [dist]=build_generic
-    [document-files-dir-name]=show-names
+    [document-files-dir-name]=show_names
     [document-files-html]=build_generic
     [document-files-pdf]=build_generic
-    [epub-name]=show-names
+    [epub-name]=show_names
     [epub]=build_epub
     [force]=build_pdfs
     [getimages]=getimages
-    [html-dir-name]=show-names
-    [html-single-name]=show-names
+    [html-dir-name]=show_names
+    [html-single-name]=show_names
     [html-single]=build_html_jsp
     [html]=build_html_jsp
-    [htmlsingle-name]=show-names
+    [htmlsingle-name]=show_names
     [htmlsingle]=build_html_jsp
     [jana]=checklink
-    [jsp-dir-name]=show-names
+    [jsp-dir-name]=show_names
     [jsp]=build_html_jsp
     [locdrop]=build_locdrop
     [missinggraphics]=filelists
@@ -154,12 +155,12 @@ SUBCOMMANDS=(
     [package-html]=packaging
     [package-jsp]=packaging
     [package-pdf]=packaging
-    [package-src-name]=show-names
+    [package-src-name]=show_names
     [package-src]=packaging
     [package]=packaging
-    [pdf-color-name]=show-names
+    [pdf-color-name]=show_names
     [pdf-color]=build_pdfs
-    [pdf-name]=show-names
+    [pdf-name]=show_names
     [pdf]=build_pdfs
     [penguin]=call_make_nolog
     [prof]=build_generic
@@ -176,7 +177,7 @@ SUBCOMMANDS=(
     [showenv]=show_env
     [showvariable]=profile_first
     [text]=build_generic
-    [txt-name]=show-names
+    [txt-name]=show_names
     [txt]=build_generic
     [validate]=comments_remarks
     [wiki-name]=show_names
@@ -469,13 +470,6 @@ function get_envfile () {
 # ----------------------------------------------------------------------------
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
 
-# make command - calculate -j setting
-#
-CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo | sed 's/cpu cores\s*:\s*//')
-# set to "1" if empty
-test -z "$CORE_NO" && CORE_NO=1
-MAKECMD="/usr/bin/make -j${CORE_NO} -s"
-
 # this script's name
 ME=$(basename $0)
 
@@ -546,17 +540,7 @@ while true ; do
             shift 2
             ;;      
         --debug)
-            # set make command to "remake" if available
-            #
-            rpm -q remake &>/dev/null
-            if [[ 0 = $? ]]; then
-                MAKECMD="/usr/bin/remake -j1 --debug=b"
-            else
-                MAKECMD="/usr/bin/make -j1 --debug=b"
-            fi
-            #
             # debug also implies VERBOSITY=2
-            #
             DEBUG=1
             VERBOSITY_CMDL=2
             VERBOSITY=$VERBOSITY_CMDL
@@ -600,7 +584,6 @@ while true ; do
                     VERBOSITY_CMDL=1
                 else
                     VERBOSITY_CMDL=2
-                    MAKECMD="/usr/bin/make -j${CORE_NO}"
                 fi
             fi
             VERBOSITY="$VERBOSITY_CMDL"
@@ -914,6 +897,11 @@ export "${VARLIST[@]}"
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
 #
+
+# By default we want to write a logfile, can be overwritten by
+# subcommand function
+#
+WRITE_LOG=1
 
 eval "${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}"
 
