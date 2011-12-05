@@ -979,6 +979,15 @@ function getimages () {
 #
 ###########################################################################  
 
+# call make directly
+# for functions with no command line options
+# do not write a log
+function no_opts {
+    WRITE_LOG=0
+    call_make "$SUB_CMD" "$@"
+}
+
+
 # error message when specifying an invalid subcommand
 function wrong_parameter () {
     local SUB_CMD=$1

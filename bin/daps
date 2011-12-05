@@ -110,10 +110,10 @@ SUBCOMMANDS=(
     [check]=call_make_nolog
     [checklink]=checklink
     [chklink]=checklink
-    [clean-all]=call_make_nolog
-    [clean-images]=call_make_nolog
-    [clean-results]=call_make_nolog
-    [clean]=call_make_nolog
+    [clean-all]=no_opts
+    [clean-images]=no_opts
+    [clean-results]=no_opts
+    [clean]=no_opts
     [color-pdf-name]=show_names
     [color-pdf]=build_pdfs
     [db2novdoc]=build_generic
@@ -151,8 +151,8 @@ SUBCOMMANDS=(
     [jsp]=build_html_jsp
     [locdrop]=build_locdrop
     [missinggraphics]=filelists
-    [nothing]=call_make_nolog
-    [offspring]=call_make_nolog
+    [nothing]=no_opts
+    [offspring]=no_opts
     [online-docs]=build_generic
     [online-localized]=build_generic
     [optipng]=build_generic
@@ -166,7 +166,7 @@ SUBCOMMANDS=(
     [pdf-color]=build_pdfs
     [pdf-name]=show_names
     [pdf]=build_pdfs
-    [penguin]=call_make_nolog
+    [penguin]=no_opts
     [prof]=build_generic
     [profile]=build_generic
     [profiledir]=comments_remarks
@@ -175,7 +175,7 @@ SUBCOMMANDS=(
     [provide-color-images]=build_generic
     [provide-epub-images]=build_generic
     [provide-images]=build_generic
-    [real-clean]=call_make_nolog
+    [real-clean]=no_opts
     [remainingfiles]=filelists
     [remaininggraphics]=filelists
     [showenv]=show_env
@@ -394,84 +394,6 @@ function get_envfile () {
         return 42;
     fi
 }
-
-# ---------
-# run the subcommands
-#
-#function run_subcmd () {
-#    DRY_RUN=$1
-#    case "$SUBCMD" in
-#        all|color-pdf|force|pdf|pdf-color)
-#	    build_pdfs $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#	    ;;
-#        checklink|chklink|jana)
-#            checklink $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        epub)
-#            build_epub $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        dist-all|showvariable)
-#            # Always run "make profile" to generate an up-to-date profiled
-#            # version
-#            # Not doing so creates all kinds of hen-egg problems with filelists
-#            # depending on $PROFILES, especially with the used images
-#            profile_first $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        getimages)
-#            getimages $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        html|htmlsingle|html-single|jsp)
-#            build_html_jsp $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        locdrop)
-#            build_locdrop $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        bigfile|bigfile-reduced|db2novdoc|desktop-files*|dist|dist-book|dist-desktop-files|dist-document-files*|dist-graphics|dist-graphics-png|dist-html|dist-htmlsingle|dist-html-single|dist-jsp|dist-xml|document-files-*|online-docs|online-localized|optipng|prof|profile|provide-color-images|provide-epub-images|provide-images|txt|text|wiki)
-#            build_generic $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        package|package-html|package-pdf|package-jsp|package-src)
-#            packaging $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        profiledir|validate)
-#            comments_remarks $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        missinggraphics|projectfiles|projectgraphics|remainingfiles|remaininggraphics|xmlgraphics|xmlgraphics-bw)
-#            filelists $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        check|clean|clean-all|clean-images|clean-results|nothing|offspring|package-src-name|penguin|real-clean)
-#            # Writes no logfile
-#            #
-#            call_make_nolog $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;
-#        color-pdf-name|dist-html-name|epub-name|html-dir-name|htmlsingle-name|html-single-name|jsp-dir-name|pdf-color-name|pdf-name|txt-name|wiki-name)
-#            # Writes no logfile
-#            #
-#            show_names $SUBCMD "${SCMD_ARGS[@]}"
-#            exit
-#            ;;        
-#        showenv)
-#            show_env
-#            exit
-#            ;;
-#        *)
-#            ccecho "error" "Error: Unknown command \"$SUBCMD\""
-#            ccecho "normal" "Type '$ME help' to get a list of global parameters and commands"
-#            exit 1;
-#    esac
-#}
-
 
 # ----------------------------------------------------------------------------
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
