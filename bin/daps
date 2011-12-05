@@ -441,7 +441,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbosity:: -n $ME -- "$@")
+ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbosity::,version -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
@@ -518,8 +518,8 @@ while true ; do
 	    shift 2
 	    ;;
         --version)
-            echo "$VERSION"
-            shift
+            echo "$ME $VERSION"
+            exit 0
             ;;
         --) shift ; break ;;
         *) exit_on_error "Internal error!" ;;
