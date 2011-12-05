@@ -5,6 +5,10 @@
 #
 # daps = DocBook Authoring and Publishing Suite
 
+
+VERSION=0.91
+
+
 # ----------------------------------------------------------------------------
 # VARIABLES
 #
@@ -230,6 +234,8 @@ Global Options:
   --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
   --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
   --verbosity=2, -v2, -vv   Verbosity Level 2 (print all commands, very verbose)
+
+  --version                 Print version number
 
   
 Subcommands:
@@ -589,6 +595,10 @@ while true ; do
             VERBOSITY="$VERBOSITY_CMDL"
 	    shift 2
 	    ;;
+        --version)
+            echo "$VERSION"
+            shift
+            ;;
         --) shift ; break ;;
         *) exit_on_error "Internal error!" ;;
     esac
