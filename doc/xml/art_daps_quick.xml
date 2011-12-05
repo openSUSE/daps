@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
    <!ENTITY daps     "daps">
    <!ENTITY dapsacr  "DAPS">
 ]>
-<book id="art.daps.quickstart" lang="en">
+<article lang="en" id="art.daps.quickstart">
     <?suse-quickstart columns="no" version="2"?>
     <title>&dapsacr; Quick Start</title>
-    <bookinfo>
+    <articleinfo>
         <author>
             <firstname>Christopher-Julian</firstname>
             <surname>Zwickl</surname>
         </author>
-    </bookinfo>
-<chapter>
-  <title>foo</title>
- <abstract>
+    </articleinfo>
+    <abstract>
     <para>&dapsacr; (<emphasis>DocBook Authoring and Publishing
         Suite</emphasis>) is a programm that transforms your XML
       document into a text, HTML, PDF, EPUB, or manpage. And you can
@@ -180,19 +178,18 @@ images/(Type)/data
         <screen>daps -vv<co id="co.daps.vv"/> \
   -e ENV_DATA<co id="co.daps.env"/> \
   html<co id="co.daps.html"/></screen>
-  <calloutlist>
-   <callout arearefs="co.daps.vv">
-    <para>Global Option = -vv (verbose print more debug messages)</para>
-   </callout>
-   <callout arearefs="co.daps.env">
-    <para>Global Option = -e (defines the ENV file)</para>
-   </callout>
-   <callout arearefs="co.daps.html">
-    <para>Subcommand = html (what to create)</para>
-   </callout>
-  </calloutlist>
-
-  <para>DAPS can be executed with or without options, depending on the project.</para>
+        <calloutlist>
+            <callout arearefs="co.daps.vv">
+                <para>Global Option = -vv (verbose print more debug messages)</para>
+            </callout>
+            <callout arearefs="co.daps.env">
+                <para>Global Option = -e (defines the ENV file)</para>
+            </callout>
+            <callout arearefs="co.daps.html">
+                <para>Subcommand = html (what to create)</para>
+            </callout>
+        </calloutlist>
+        <para>DAPS can be executed with or without options, depending on the project.</para>
         <para>If the directory contains only one ENV file:</para>
         <screen>daps "subcommand"</screen>
         <para>If the directory contains more than one ENV-Data</para>
@@ -293,5 +290,4 @@ images/(Type)/data
         </variablelist>-->
     
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
- </chapter>
-</book>
+</article>
