@@ -5,9 +5,18 @@
      file, but if you need to change configuration, you should
      always use this file and *not* config.xml. 
      Usage: java org.apache.fop.apps.Fop -c userconfig.xml -fo fo-file -pdf pdf-file
+     
+     See also:
+     http://xmlgraphics.apache.org/fop/1.0/configuration.html
 -->
 
 <fop version="1.0">
+
+ <!-- Specifies the base URL based on which relative URLs to 
+      hyphenation pattern files will be resolved. 
+      If not specified, support for user-supplied hyphenation 
+      patterns remains disabled.  -->
+ <hyphenation-base>/usr/share/xmlgraphics-fop/hyph/</hyphenation-base>
 
  <renderers>
   <renderer mime="application/pdf">
