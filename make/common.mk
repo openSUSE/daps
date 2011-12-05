@@ -193,7 +193,7 @@ STYLEDB2ND     := $(DTDROOT)/xslt/misc/db2novdoc.xsl
 
 # ruby script to generate ePUBs
 # not a stylesheet, but part of package docbook-xsl-stylesheets
-DB2EPUB := /usr/share/xml/docbook/stylesheet/nwalsh/current/epub/bin/dbtoepub
+DB2EPUB := ruby /usr/share/xml/docbook/stylesheet/nwalsh/current/epub/bin/dbtoepub
 
 #------------------------------------------------------------------------
 # xslt stringparams
@@ -1530,7 +1530,7 @@ endif
 ifeq ($(VERBOSITY),1)
 	@echo "   Running linkchecker"
 endif
-	checkbot --url file://localhost/$(TESTPAGE) $(CB_VERBOSITY) \
+	checkbot --url file://localhost$(TESTPAGE) $(CB_VERBOSITY) \
 	  $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html $(DEVNULL)
 	@ccecho "result" "Find the link check report at:\nfile://$(TMP_DIR)/$(BOOK)-checkbot-localhost.html"
 
