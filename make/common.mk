@@ -1111,6 +1111,11 @@ endif
 
 # Print result file names
 #
+
+COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
+BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+
+
 .PHONY: pdf-name
 pdf-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf"
@@ -1130,60 +1135,56 @@ pdf-color-name color-pdf-name:
 #
 # b/w PDF
 #
-#.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
-.INTERMEDIATE: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+.PHONY: bw-fo
 ifeq ("$(INDEX)", "Yes")
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
+bw-fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
 ifeq ($(VERBOSITY),1)
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: FONTDEBUG := --stringparam debug.fonts 0
+bw-fo: FONTDEBUG := --stringparam debug.fonts 0
 endif
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(PROFILES) $(PROFILEDIR)/.validate
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo: $(STYLEFO)
+bw-fo: $(PROFILES) $(PROFILEDIR)/.validate $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
 	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING)  $(METASTRING) \
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG)  $(XSLTPARAM) \
-	  -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
-	@ccecho "info" "Created fo file $@"
+	  -o $(BW_FO) $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	@ccecho "info" "Created fo file $(BW_FO)"
 
 # Color PDF
 #
-#.PRECIOUS: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
-.INTERMEDIATE: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
+.PHONY: color-fo
 ifeq ("$(INDEX)", "Yes")
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(PROFILEDIR)/$(TMP_BOOK).ind
+color-fo: $(PROFILEDIR)/$(TMP_BOOK).ind
 endif
 ifeq ($(VERBOSITY),1)
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: FONTDEBUG := --stringparam debug.fonts 0
+color-fo: FONTDEBUG := --stringparam debug.fonts 0
 endif
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(PROFILES) $(PROFILEDIR)/.validate
-$(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo: $(STYLEFO)
+color-fo: $(PROFILES) $(PROFILEDIR)/.validate $(STYLEFO)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating fo-file..."
 endif
 	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) $(METASTRING)\
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(FONTDEBUG) $(XSLTPARAM) -o $@ $(STYLEFO) $(PROFILEDIR)/$(MAIN)
+	  $(FONTDEBUG) $(XSLTPARAM) -o $(COLOR_FO) $(STYLEFO) \
+	  $(PROFILEDIR)/$(MAIN)
 	@ccecho "info" "Created fo file $@"
 
 
 # Create b/w PDF from fo
 #
 $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: $(FOP_CONFIG_FILE)
-$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images
-$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images bw-fo
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
 endif
 ifeq ("$(FOPTYPE)","fop")
 	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $< $@ $(DEVNULL)
+	  $(FOPOPTIONS) $(BW_FOL) $@ $(DEVNULL)
 else
 	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $< $@ $(DEVNULL)
+	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
 endif
 ifdef MISSING
 	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
@@ -1195,17 +1196,16 @@ endif
 # Create COLOR-PDF from fo
 #
 $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: $(FOP_CONFIG_FILE)
-$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images
-$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
+$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images color-fo
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
 endif
 ifeq ($(FOPTYPE), fop)
 	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $< $@ $(DEVNULL)
+	  $(FOPOPTIONS) $(COLOR_FO) $@ $(DEVNULL)
 else
 	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $< $@ $(DEVNULL)
+	  $(FOPOPTIONS) $(COLOR_FO) $@ $(DEVNULL)
 endif
 ifdef MISSING
 	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
