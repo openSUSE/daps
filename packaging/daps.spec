@@ -150,6 +150,8 @@ Recommends:     emacs psgml
 Recommends:     FZFangSong FZHeiTi FZSongTi
 Recommends:     fifth-leg-font
 Recommends:     remake
+# needed to create ePUBs
+Recommends:     ruby
 # Japanese Fonts:
 Recommends:     sazanami-fonts
 # Chinese
