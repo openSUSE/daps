@@ -831,12 +831,14 @@ function checklink () {
         help_file
         help_help
         help_rootid
-        echo -e "    NOTES: Options --file (-f) and --rootid exclude one another.\n           $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the ENV-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
     if [[ -z $P_ROOTID && -z $P_FILE ]]; then
-        exit_on_error "Please specify either a rootid or a filename"
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from ENV-file"
+        fi
     elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
@@ -899,7 +901,7 @@ function getimages () {
         help_rootid
         help_show
         help_viewer
-        echo -e "    NOTES: Options --file (-f) and --rootid exclude one another.\n           $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the ENV-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
@@ -910,7 +912,9 @@ function getimages () {
 
     # set ROOTID - either directly or via $FILE
     if [[ -z $P_ROOTID && -z $P_FILE ]]; then
-        exit_on_error "Please specify either a rootid or a filename"
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from ENV-file"
+        fi
     elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
