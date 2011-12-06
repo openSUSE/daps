@@ -387,7 +387,6 @@ function build_pdfs () {
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
     
     if [[ -n $P_FOP ]]; then
-        echo "------> $P_FOP"
         if [[ xep = $P_FOP || fop = $P_FOP ]]; then
             export FOPTYPE="$P_FOP"
             export FOP="${LIB_DIR}/daps-$P_FOP"
