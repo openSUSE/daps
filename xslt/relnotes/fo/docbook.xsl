@@ -23,10 +23,10 @@
   <xsl:param name="section.label.includes.component.label" select="1"/>
 
   <!-- Fonts -->
-  <xsl:param name="sans.font.family">DejaVuiSans</xsl:param>
-  <xsl:param name="title.font.family">DejaVuSans</xsl:param>
-  <xsl:param name="body.font.family">DejaVuSerif</xsl:param>
-  <xsl:param name="monospace.font.family">DejaVuSansMono</xsl:param>
+  <xsl:param name="sans.font.family">DroidSans</xsl:param>
+  <xsl:param name="title.font.family">DroidSans</xsl:param>
+  <xsl:param name="body.font.family">DroidSerif</xsl:param>
+  <xsl:param name="monospace.font.family">DroidSansMono</xsl:param>
 
   <!-- Show links? -->
   <xsl:param name="ulink.show" select="0"/>
@@ -59,4 +59,8 @@
       <xsl:with-param name="ulink.url" select="$ulink.url"/>
     </xsl:call-template>
   </xsl:template>
+  
+  <!-- Suppress sections with role='notoc' -->
+  <xsl:template match="section[@role='notoc']" mode="toc"/>
+  
 </xsl:stylesheet>
