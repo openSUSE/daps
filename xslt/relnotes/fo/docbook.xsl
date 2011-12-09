@@ -41,10 +41,12 @@
   
   <xsl:attribute-set name="section.title.properties">
     <xsl:attribute name="hyphenate">false</xsl:attribute>
-    <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-    <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
-    <xsl:attribute name="space-before.optimum">1.2em</xsl:attribute>
-    <xsl:attribute name="space-before.maximum">1.244em</xsl:attribute>
+    <xsl:attribute name="space-before.minimum">1.2em</xsl:attribute>
+    <xsl:attribute name="space-before.optimum">1.4em</xsl:attribute>
+    <xsl:attribute name="space-before.maximum">1.72em</xsl:attribute>
+    <xsl:attribute name="space-after.minimum">0em</xsl:attribute>
+    <xsl:attribute name="space-after.optimum">0em</xsl:attribute>
+    <xsl:attribute name="space-after.maximum">0em</xsl:attribute>
   </xsl:attribute-set>
   
 
