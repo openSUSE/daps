@@ -18,11 +18,18 @@
   <!-- Enable FOP 1.0 -->
   <xsl:param name="fop1.extension" select="1"/> 
 
+  <!-- Enable Section numbering -->
+  <xsl:param name="section.autolabel" select="1"/>
+  <xsl:param name="section.label.includes.component.label" select="1"/>
+
   <!-- Fonts -->
   <xsl:param name="sans.font.family">DejaVuiSans</xsl:param>
   <xsl:param name="title.font.family">DejaVuSans</xsl:param>
   <xsl:param name="body.font.family">DejaVuSerif</xsl:param>
   <xsl:param name="monospace.font.family">DejaVuSansMono</xsl:param>
+
+  <!-- Show links? -->
+  <xsl:param name="ulink.show" select="0"/>
 
   <!-- 
            Attribute Sets
