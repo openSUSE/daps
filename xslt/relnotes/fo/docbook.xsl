@@ -34,9 +34,15 @@
   <!-- 
            Attribute Sets
   -->
+  <!-- Make tables content always left aligned, regardless of body text  -->
   <xsl:attribute-set name="table.properties">
     <xsl:attribute name="text-align">left</xsl:attribute>
   </xsl:attribute-set>
+  
+  <xsl:attribute-set name="section.title.properties">
+    <xsl:attribute name="hyphenate">false</xsl:attribute>
+  </xsl:attribute-set>
+  
 
   <!-- 
            Templates
