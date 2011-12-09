@@ -1181,7 +1181,7 @@ ifeq ($(VERBOSITY),1)
 endif
 ifeq ("$(FOPTYPE)","fop")
 	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $(BW_FOL) $@ $(DEVNULL)
+	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
 else
 	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
 	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
