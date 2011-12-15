@@ -10,7 +10,7 @@
 #
 
 Name:           daps
-Version:        0.9.1
+Version:        0.9.2
 
 %define dtdversion     1.0
 %define dtdname        novdoc
