@@ -64,7 +64,6 @@ BuildRequires:  LinuxLibertine
 BuildRequires:  mplus-fonts
 BuildRequires:  opensp
 BuildRequires:  poppler-tools
-BuildRequires:  subversion
 BuildRequires:  xalan-j2
 BuildRequires:  xml-commons-resolver
 BuildRequires:  xmlformat
@@ -115,7 +114,6 @@ Requires:       opensp
 Requires:       optipng
 Requires:       poppler-tools
 Requires:       sgml-skel
-Requires:       subversion
 Requires:       svg-dtd
 Requires:       transfig
 Requires:       unzip
