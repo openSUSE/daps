@@ -23,7 +23,7 @@ Version:        0.9.1
 
 Release:        1
 Summary:        DocBook Authoring and Publishing Suite
-License:        GPL
+License:        GPL-2.0+
 Group:          Productivity/Publishing/XML
 URL:            http://svn.berlios.de/viewvc/opensuse-doc/trunk/tools/daps/
 Source0:        %{name}-%{version}.tar.bz2
