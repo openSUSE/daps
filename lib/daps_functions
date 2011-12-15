@@ -379,9 +379,9 @@ function build_pdfs () {
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1 DRAFT="yes"
     # usemeta implies draft mode with remarks
-    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes" REMARKS=1
+    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes"
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -435,9 +435,9 @@ function build_html_jsp () {
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1 DRAFT="yes"
     # usemeta implies draft mode with remarks
-    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes" REMARKS=1
+    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes"
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -1174,6 +1174,7 @@ function help_pretty () {
 }
 function help_remarks () {
     echo "    --remarks, -r             Include remarks (<remark>...</remark>) in book
+                              Implies draft mode.
                               Default: off"  
 }
 function help_rootelement () {
@@ -1206,14 +1207,14 @@ function help_viewer () {
 function help_xsltparam () {
     echo "    --xsltparam               Add one or more xsltproc parmeters in the form of
                               \"--stringparam paramname value\". The given string
-                              will be passed unmodified to the the xsltproc call that
-                              $1.
+                              will be passed unmodified to the xsltproc call 
+                              that $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
-                              Note: You MUST properly quote whitespace and quotes.
-                                    Use either
-                                    --xsltproc=\"\\\"--stringparam paramname value\\\"\"
-                                    or
-                                    --xsltproc=\"--stringparam\\ paramname\\ value\"
+                              Note: You MUST properly quote the string.
+                               Use either
+                                --xsltproc=\"\\\"--stringparam paramname value\\\"\"
+                                or
+                                --xsltproc=\"--stringparam\\ paramname\\ value\"
                               Default: unset"
 }
