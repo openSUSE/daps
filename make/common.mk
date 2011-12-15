@@ -453,7 +453,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Validating..."
 endif
 ifdef MISSING
-	@ccecho "warn" "The following graphics are missing: $(MISSING)"
+	@ccecho "warn" "The following graphics are missing: $(MISSING)" >&2
 endif
 	xmllint --noent --postvalid --noout \
 		--xinclude $(PROFILEDIR)/$(MAIN)
@@ -1169,7 +1169,7 @@ endif
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG) $(XSLTPARAM) -o $(COLOR_FO) $(STYLEFO) \
 	  $(PROFILEDIR)/$(MAIN)
-	@ccecho "info" "Created fo file $@"
+	@ccecho "info" "Created fo file $(COLOR_FO)"
 
 
 # Create b/w PDF from fo
@@ -1187,11 +1187,11 @@ else
 	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
 endif
 ifdef MISSING
-	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
+	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >2&
 endif
 	@pdffonts $@ | grep -v -e "^name" -e "^---" | cut -c 51-71 | \
 		grep -v -e "yes yes yes" >& /dev/null && \
-		(@ccecho "warn" "Not all fonts are embedded";) || :
+		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
 
 # Create COLOR-PDF from fo
 #
@@ -1208,11 +1208,11 @@ else
 	  $(FOPOPTIONS) $(COLOR_FO) $@ $(DEVNULL)
 endif
 ifdef MISSING
-	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)"
+	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >&2
 endif
 	@pdffonts $@ | grep -v -e "^name" -e "^---" | cut -c 51-71 | \
 		grep -v -e "yes yes yes" >& /dev/null && \
-		(@ccecho "warn" "Not all fonts are embedded";) || :
+		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
 
 # Index creation
 #
@@ -1608,7 +1608,7 @@ showvariable:
 ifndef VARIABLE
 	@echo "usage: VARIABLE=some_variable make showvariable"
 else
-	@echo "$($(VARIABLE))"
+	@ccecho "result" "$($(VARIABLE))"
 endif
 
 #---------------

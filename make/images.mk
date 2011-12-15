@@ -197,7 +197,7 @@ optipng:
 #
 warn-images:
 ifdef DOUBLEIMG
-	@ccecho "warn" "Image names not unique, multiple sources available for the following images:\n$(DOUBLEIMG)"
+	@ccecho "warn" "Image names not unique, multiple sources available for the following images:\n$(DOUBLEIMG)" >&2
 endif
 #
 # This warning is solely for publishing stuff on novell.com/documentation,
@@ -206,7 +206,7 @@ endif
 #
 ifdef HTMLROOT
 ifdef WRONG_CAP
-	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)"
+	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >&2
 endif
 endif
 
@@ -236,7 +236,7 @@ endif
 # existing color PNGs
 $(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
 	@exiftool -Comment $< | grep optipng > /dev/null || \
-	  ccecho "warn" " $< not optimized."
+	  ccecho "warn" " $< not optimized." >&2
 	ln -sf $< $@
 
 # created PNGs

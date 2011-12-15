@@ -68,7 +68,7 @@ package-jsp: dist-jsp
 # copy JSP tarball
 	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-jsp.tar.bz2 \
 	  $(PACKDIR)/$(BOOK)_$(LL)-jsp.tar.bz2
-	@ccecho "Find the package-jsp results at:\n$(PACKDIR)"
+	@ccecho "result" "Find the package-jsp results at:\n$(PACKDIR)"
 
 #------------------
 # package-src 
@@ -93,7 +93,7 @@ package-src:
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 ifdef ROOTID
-ccecho "warn" "Warning: You specified a ROOTID. Sources may NOT be generated\nfor the whole set if !"
+	@ccecho "warn" "Warning: You specified a ROOTID. Sources may NOT be generated\nfor the whole set if !" >&2
 endif
 # "copy" source files tarball (dist-xml) to an uncompressed tarball
 	bzcat $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 > $(PACKDIR)/$(BOOK)_$(LL).tar
@@ -153,7 +153,7 @@ locdrop:
 #	    echo "Found non-printable characters" || echo "OK"
 # totrans tarball
 ifdef TOTRANSFILES
-	@ccecho "warn" "No files for translation available"
+	@ccecho "warn" "No files for translation available" >&2
 	BZIP2=--best && tar chfj $(TOTRANSTAR) --absolute-names \
 	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
 	@ccecho "info" "Created $(TOTRANSTAR)"
@@ -266,7 +266,7 @@ dist-document-files-html: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(TARBALL) --absolute-names \
 	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
-	ccecho "result" "Find the HTML document files tarball at:\n$(TARBALL)" 
+	@ccecho "result" "Find the HTML document files tarball at:\n$(TARBALL)" 
 
 .PHONY: dist-document-files-pdf
 dist-document-files-pdf: OUTFORMAT = pdf
@@ -275,21 +275,21 @@ dist-document-files-pdf: $(YELP_DIR)/%.document
 	BZIP2=--best && \
 	tar cjf $(TARBALL) --absolute-names \
 	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
-	ccecho "result" "Find the PDF document files tarball at:\n$(TARBALL)" 
+	@ccecho "result" "Find the PDF document files tarball at:\n$(TARBALL)" 
 
 .PHONY: document-files-html
 document-files-html: OUTFORMAT = html
 document-files-html: $(YELP_DIR)/%.document
-	ccecho "result" "Created document files in\n$(YELP_DIR)/"
+	@ccecho "result" "Created document files in\n$(YELP_DIR)/"
 
 .PHONY: document-files-pdf
 document-files-pdf: OUTFORMAT = pdf
 document-files-pdf: $(YELP_DIR)/%.document
-	ccecho "result" "Created document files in\n$(YELP_DIR)/"
+	@ccecho "result" "Created document files in\n$(YELP_DIR)/"
 
 .PHONY: document-files-dir-name
 document-files-dir-name: $(YELP_DIR)
-	ccecho "result" "$(YELP_DIR)"
+	@ccecho "result" "$(YELP_DIR)"
 
 $(YELP_DIR):
 	mkdir -p $@
@@ -315,15 +315,15 @@ dist-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
 	BZIP2=--best && \
 	tar cjf $(TARBALL) --absolute-names \
 	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
-	ccecho "result" "Find the desktop files files tarball at:\n$(TARBALL)"
+	@ccecho "result" "Find the desktop files files tarball at:\n$(TARBALL)"
 
 .PHONY: desktop-files
 desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
-	ccecho "result" "Created desktop files in\n$(DESKTOP_FILES_DIR)"
+	@ccecho "result" "Created desktop files in\n$(DESKTOP_FILES_DIR)"
 
 .PHONY: desktop-files-dir-name
 desktop-files-dir-name:
-	ccecho "result" "$(DESKTOP_FILES_DIR)"
+	@ccecho "result" "$(DESKTOP_FILES_DIR)"
 
 $(DESKTOP_FILES_DIR):
 	mkdir -p $@

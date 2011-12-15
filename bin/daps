@@ -568,8 +568,8 @@ fi
 # Now that we have the subcommand, check whether it is valid
 
 if [[ -z ${SUBCOMMANDS[$SUBCMD]} ]]; then
-    ccecho "error" "Error: Unknown subcommand \"$SUBCMD\""
-    ccecho "normal" "Type '$ME help' to get a list of global parameters and subcommands"
+    ccecho "error" "Error: Unknown subcommand \"$SUBCMD\"" >&2
+    ccecho "normal" "Type '$ME help' to get a list of global parameters and subcommands" >&2
     exit 1;
 fi
 
