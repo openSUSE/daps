@@ -2,47 +2,26 @@
                               TODO
 ----------------------------------------------------------------------------
 
+See all tickets, go to also http://sf.net/p/daps/tickets/
+To browse specific tickets, use http://sf.net/p/daps/tickets/NUMBER/
+
 daps
 -----
 
-* make commandline usage of --xsltparam easier.
+* Ticket#1:  Create documentation for DAPS
+* Ticket#2:  Allow Custom Stylesheets
+* Ticket#3:  Make commandline Usage of --xsltparam easier
+* Ticket#4:  Generate Manpages directly
+* Ticket#5:  Do not check for an ENV file if not needed
+* Ticket#6:  Create full or relative path
+* Ticket#7:  Replace "turn on" only switches
+* Ticket#8:  Autgenerate $MAIN
+* Ticket#9:  Auto detect $MAIN
+* Ticket#10: Generate TAB completion 
+* Ticket#11: Check EPUBs with epubcheck
+* Ticket#12: Generate SPEC files with daps
+* Ticket#13: Retain Entities during Profiling
 
-* documentation
-
-* switching between stylesheet sets / allow custom stylesheets
-
-* generate man pages via ENVfile and daps instead of calling a stylesheet
-  directly (daps makefile)
-
-* some targets such as clean do not need an ENVfile to be specified
-  do not check for an ENVfile with these targets 
-
-* full or realtive path to ENV-file instead of --basedir
-
-* replace turn on only switches -cdr with turn on/off switches
-
-* auto-generating $MAIN?
-
-* auto detect $MAIN?
-
-* TAB completion for options and subcommands
-
-* check epubs with epubcheck
-
-* generate spec files with daps via spec file template and book specific
-  information in the ENV files. DEF file content should go into the set
-  ENV-file. Create spec file with package-src target.
-
-* When writing profiled sources a _new_ Doctype Header is written rather than
-  using the Doctype header of the original file. Therefore file-specific
-  entities, for example, are deleted during profiling.
-  This needs fixing:
-    - extracting the original doctype header (the hard part)
-      --> function getFirstEntity from
-          $DTDROOT/lib/getentityname.py may be helpful but contains errors!! 
-      --> perhaps libxml has got a solution: http://lxml.de/parsing.html
-    - passing the header to the profiling stylesheet as stringparam
-      (the easy part)
 
 -------------
 DocManager
