@@ -147,6 +147,7 @@ SUBCOMMANDS=(
     [html]=build_html_jsp
     [htmlsingle-name]=show_names
     [htmlsingle]=build_html_jsp
+    [init]=init_wd
     [jana]=checklink
     [jsp-dir-name]=show_names
     [jsp]=build_html_jsp
@@ -219,19 +220,20 @@ Global Options:
                             Default: $BASE_DIR/build/$BOOK
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
-                            codes. Set to '0' to turn off colors. Useful for
-                            cron jobs and sripts.
-                            Default: 1
+                            codes. Set to '0' to turn off colors.
+                            Default: 1 (when the output does not go to a
+                                        terminal, colored output will be
+                                        disabled automatically)
   --debug                   Print debugging messages. Far more verbose than the
                              --verbosity options
   -e ENVFILE,
   --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
                             there is only a single ENV file in BASE_DIR. In
                             that case the ENV file will automatically be used.
-                            Only specify the filename, not an absolute
-                            path
+                            Specify only the filename, not an absolute path.
   --help, -h                Help
-                            Use when wanting to use daps results in scripts
+  --main                    Path to the main file defining your document.
+                            Specify only the filename, not an absolute path
   --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
   --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
   --verbosity=2, -v2, -vv   Verbosity Level 2 (print all commands, very verbose)
@@ -360,6 +362,7 @@ function recover_cmdl_values () {
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
     test -n "$DTDROOT_CMDL"   && DTDROOT="$DTDROOT_CMDL"
     test -n "$ENVFILE_CMDL"   && ENVFILE="$ENVFILE_CMDL"
+    test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
     test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
 }
 
@@ -376,6 +379,9 @@ function get_basedir () {
         # assume the real directory of $ENVFILE is BASE_DIR
         BASE_DIR=$(dirname $(readlink $ENVFILE))
         return 0
+    elif [[ -f $MAIN ]]; then
+        BASE_DIR=$(dirname $MAIN)
+        BASE_DIR=${BASE_DIR%/xml*} #remove xml directory
     else
         return 42; # ;-)
     fi
@@ -442,7 +448,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,verbosity::,version -n $ME -- "$@")
+ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,main:,verbosity::,version -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
@@ -497,6 +503,11 @@ while true ; do
             else
                 CALL_SCMDHELP=1
             fi
+            ;;
+        --main)
+	    MAIN_CMDL="$2"
+	    MAIN="$MAIN_CMDL"
+	    shift 2
             ;;
 	-v|--verbosity)
             # $VERBOSITY will be parsed in the makefiles
@@ -580,7 +591,7 @@ case "${SCMD_ARGS[@]}" in
     "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
         declare -a SCMD_ARGS=( "-h" )
         ;;
-    *ENVFILE*|*DTDROOT*|*BASE_DIR*)
+    *ENVFILE*|*DTDROOT*|*BASE_DIR*|*MAIN*)
         exit_on_error "Please specify BASE_DIR, ENVFILE, or DTDROOT via command line options" 
 esac
 
@@ -656,15 +667,6 @@ recover_cmdl_values
 #----------------------------------
 # Run early commands that do not need to have an environment fully set up
 
-# Initialize a working directory
-#
-case "$SUBCMD" in
-    init)
-      init_wd "${SCMD_ARGS[@]}"
-      exit
-      ;;
-esac
-
 #
 # run help if requested
 #
@@ -672,6 +674,14 @@ if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
     eval "${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}"
 fi
 
+# Initialize a working directory
+#
+case "$SUBCMD" in
+    init)
+      "${SUBCOMMANDS[$SUBCMD]}" "${SCMD_ARGS[@]}"
+      exit
+      ;;
+esac
 
 #-------------------------------------
 # Set up BASE_DIR and ENVFILE
@@ -684,37 +694,36 @@ fi
 # 3. Default ENV has been set in ~/.daps/config
 #    $DAPS_ENV_DEFAULT is set
 #
-# if ENVFILE is already set, we skip the while loop
+# if ENVFILE or MAIN are already set, we skip the while loop
 # if 2. and 3. fail, we try to set ENVFILE automatically
 #
-while [[ -z $ENVFILE ]] ; do 
+if [[ -z $ENVFILE && -z $MAIN ]]; then 
     # first check for $DAPS_ENV_NAME
     if [[ -n $DAPS_ENV_NAME ]]; then
         ENVFILE="$DAPS_ENV_NAME"
-        break
     fi
     # second check for $DAPS_ENV_DEFAULT
     if [[ -n $DAPS_ENV_DEFAULT ]]; then
         ENVFILE="$DAPS_ENV_DEFAULT"
-        break
     fi     
     # last, try to get the ENVfile automatically
     get_envfile    
     if [[ 0 != $? ]]; then
         # seting ENVfile failed
-        exit_on_error "Please specify an ENVfile at the command line"
+        exit_on_error "Please specify an ENV or a MAIN file at the command line"
     fi
-    break
-done
+fi
 
-# If we arrive here, ENVFILE is set (or we have exited)
-# So we try to get a BASE_DIR is it does not exist
+# If we arrive here, either ENVFILE, MAIN or both are set (or we have exited)
+# So we try to get a BASE_DIR if it does not exist
 #
 if [[ -z $BASE_DIR ]]; then
     get_basedir
     if [[ 0 != $? ]]; then
         if [[ -n $ENVFILE ]]; then
             exit_on_error "Cannot find a valid BASEDIR for ENVFILE \"$ENVFILE\""
+        elif [[ -n $MAIN ]]; then
+            exit_on_error "Cannot find a valid BASEDIR for MAIN file \"$MAIN\""
         else
             exit_on_error "Please specify a BASE_DIR at the command line"
         fi
@@ -724,26 +733,36 @@ elif [[ ! -d ${BASE_DIR}/xml ]]; then
 fi
 
 # If we arrive here, BASE_DIR is set and valid (or we have exited)
-# Now check, whether ${BASE_DIR}/$ENVFILE is valid, too
+# Now check, whether ${BASE_DIR}/$ENVFILE and ${BASE_DIR}/$MAIN are valid, too
 #
-if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
-    exit_on_error "\nENVFILE: \"$ENVFILE\" in BASEDIR: $BASE_DIR\ncould not be found. Check the respective commandline options or the config files"
-else
-    # exit on old ENV files
-    egrep "^\s*[^#]*(\.|source)\s+\.env-profile" ${BASE_DIR}/$ENVFILE >/dev/null && exit_on_error "Looks like you are going to use an old susedoc ENVfile."
-
-    if [[ 0 != $VERBOSITY ]]; then
-        ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
+if [[ -n $ENVFILE ]]; then
+    if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
+        exit_on_error "\nENVFILE: \"$ENVFILE\" in BASEDIR: $BASE_DIR\ncould not be found. Check the respective commandline options or the config files"
+    else
+        # exit on old ENV files
+        egrep "^\s*[^#]*(\.|source)\s+\.env-profile" ${BASE_DIR}/$ENVFILE >/dev/null && exit_on_error "Looks like you are going to use an old susedoc ENVfile."
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
+        fi
     fi
-fi    
+elif [[ -n $MAIN ]]; then
+    if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
+        exit_on_error "\nMAIN file: \"$MAIN\" in BASEDIR: $BASE_DIR/xml\ncould not be found. Check the respective commandline options or the config files"
+    else
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Using MAIN file $MAIN in BASEDIR $BASE_DIR"
+        fi
+    fi
+fi
 
 #
 # FINALLY! Source the ENV-file, recover the command line values and we
 # are done setting the environment
 
-source ${BASE_DIR}/$ENVFILE
-recover_cmdl_values
-
+if [[ -n $ENVFILE ]]; then
+    source ${BASE_DIR}/$ENVFILE
+    recover_cmdl_values
+fi
 
 #----------
 # Check some values
