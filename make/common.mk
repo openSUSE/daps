@@ -1309,8 +1309,10 @@ ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
+ifdef PNGONLINE
 	mkdir -p $@
 	cp -rL $(PNGONLINE) $(HTML_DIR)/images/
+endif
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
