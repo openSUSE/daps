@@ -11,7 +11,7 @@
   <xsl:variable name="this" select="."/>
   <xsl:variable name="home" select="/*[1]"/>
   <xsl:variable name="up" select="parent::*"/>
-
+  
   <head>
     <xsl:call-template name="system.head.content"/>
     <xsl:call-template name="head.content"/>
@@ -154,15 +154,25 @@
   <xsl:param name="title">
     <xsl:apply-templates select="$node" mode="object.title.markup.textonly"/>
   </xsl:param>
-
+  <xsl:variable name="productname">
+   <xsl:apply-templates select="ancestor-or-self::book/bookinfo/productname"/>
+  </xsl:variable>
+  <xsl:variable name="productnumber">
+   <xsl:apply-templates select="ancestor-or-self::book/bookinfo/productnumber"/>
+  </xsl:variable>
+  
   <title>
     <xsl:choose>
-      <xsl:when test="/book/bookinfo/productname and not(/book/title)">
-         <xsl:value-of select="normalize-space(/book/bookinfo/productname)"/>
-         <xsl:if test="/book/bookinfo/productnumber">
-            <xsl:text> </xsl:text>
-            <xsl:value-of select="normalize-space(/book/bookinfo/productnumber)"/>
+      <xsl:when test="ancestor-or-self::book/bookinfo/productname and not(ancestor-or-self::book/title)">
+         <xsl:if test="string($productname) != ''">
+            <xsl:value-of select="string($productname)"/>
          </xsl:if>
+         <xsl:if test="string($productnumber) != ''">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="string($productnumber)"/>
+            <xsl:text>: </xsl:text>
+         </xsl:if>
+         <xsl:copy-of select="$title"/>
       </xsl:when>
       <xsl:otherwise>
          <xsl:copy-of select="$title"/>

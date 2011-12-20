@@ -74,7 +74,25 @@
 </xsl:template>
 
 <!-- productname is now the title of the book -->
-<xsl:template match="bookinfo/productname" mode="titlepage.mode">
+
+<!--
+Display product name & version number for the book.titlepage.recto.auto.mode
+(this mode is used by default, see suse-titlepage.xsl)
+-->
+ 
+<xsl:template match="bookinfo/productname" mode="book.titlepage.recto.auto.mode">
+   <div>
+      <h1 class="productname">
+         <xsl:apply-templates/>
+         <xsl:text> </xsl:text>
+         <xsl:apply-templates select="../productnumber"/> 
+      </h1>
+   </div>
+</xsl:template>
+ 
+<!-- fallback -->
+
+ <xsl:template match="bookinfo/productname" mode="titlepage.mode">
    <div>
       <h1 class="productname">
          <xsl:apply-templates/>
