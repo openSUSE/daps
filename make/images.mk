@@ -179,6 +179,11 @@ provide-color-images: $(SVGONLINE) $(PNGONLINE) $(PDFONLINE)
 provide-epub-images: provide-color-images $(EPUB_TMP_DIR)
 	ln -sf $(IMG_GENDIR)/online $(EPUB_TMP_DIR)/images
 
+.PHONY: missing-images
+missing-images:
+ifdef MISSING
+	@ccecho "warn" "The following graphics are missing: $(MISSING)" >&2
+endif
 
 #---------------
 # Optimize (size-wise) PNGs

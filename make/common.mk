@@ -342,6 +342,7 @@ include $(DTDROOT)/make/package.mk
 #
 .PHONY: all pdf
 all pdf: | $(DIRECTORIES)
+all pdf: missing-images $(PROFILEDIR)/.validate
 all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
@@ -351,6 +352,7 @@ all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf
 #
 .PHONY: color-pdf pdf-color
 pdf-color color-pdf: | $(DIRECTORIES)
+pdf-color color-pdf: missing-images $(PROFILEDIR)/.validate
 pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf
 	@ccecho "result" "COLOR-PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
@@ -359,7 +361,7 @@ pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf
 #
 .PHONY: html
 html: | $(DIRECTORIES)
-html: $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
+html: $(PROFILEDIR)/.validate missing-images $(HTML_DIR)/index.html
 	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(HTML_DIR)/index.html"
 
 #--------------
@@ -367,6 +369,7 @@ html: $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 #
 .PHONY: html-single htmlsingle
 html-single htmlsingle: | $(DIRECTORIES)
+html-single htmlsingle: missing-images
 html-single htmlsingle: $(PROFILEDIR)/.validate $(HTML_DIR)/$(BOOK).html
 	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\nfile://$(HTML_DIR)/$(BOOK).html\033[m\017"
 
@@ -376,7 +379,7 @@ html-single htmlsingle: $(PROFILEDIR)/.validate $(HTML_DIR)/$(BOOK).html
 .PHONY: jsp
 jsp: | $(DIRECTORIES)
 jsp: $(JSP_DIR)
-jsp: $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
+jsp: $(PROFILEDIR)/.validate missing-images $(JSP_DIR)/index.jsp
 	@ccecho "result" "Find the JSP book at:\nfile://$(JSP_DIR)/index.jsp"
 
 #--------------
@@ -392,6 +395,7 @@ txt text: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt
 #
 .PHONY: epub
 epub: | $(DIRECTORIES)
+epub: missing-images
 epub: $(PROFILEDIR)/.validate $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
 	@ccecho "result" "Find the EPUB book at:\n$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub"
 
@@ -447,13 +451,9 @@ prof profile: $(PROFILES)
 # validating
 #
 .PHONY: validate
-$(PROFILEDIR)/.validate validate: $(PROFILES)
-$(PROFILEDIR)/.validate validate:
+$(PROFILEDIR)/.validate validate: $(PROFILES) missing-images
 ifeq ($(VERBOSITY),1)
 	@echo "   Validating..."
-endif
-ifdef MISSING
-	@ccecho "warn" "The following graphics are missing: $(MISSING)" >&2
 endif
 	xmllint --noent --postvalid --noout \
 		--xinclude $(PROFILEDIR)/$(MAIN)
