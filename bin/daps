@@ -697,18 +697,17 @@ esac
 # if ENVFILE or MAIN are already set, we skip the while loop
 # if 2. and 3. fail, we try to set ENVFILE automatically
 #
+
 if [[ -z $ENVFILE && -z $MAIN ]]; then 
     # first check for $DAPS_ENV_NAME
     if [[ -n $DAPS_ENV_NAME ]]; then
         ENVFILE="$DAPS_ENV_NAME"
-    fi
     # second check for $DAPS_ENV_DEFAULT
-    if [[ -n $DAPS_ENV_DEFAULT ]]; then
+    elif [[ -n $DAPS_ENV_DEFAULT ]]; then
         ENVFILE="$DAPS_ENV_DEFAULT"
-    fi     
     # last, try to get the ENVfile automatically
     get_envfile    
-    if [[ 0 != $? ]]; then
+    elif [[ 0 != $? ]]; then
         # seting ENVfile failed
         exit_on_error "Please specify an ENV or a MAIN file at the command line"
     fi
