@@ -7,144 +7,162 @@ V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % entities SYSTEM "entity-decl.ent"> %entities; ]>
 <preface id="pre.daps">
  <title>About This Guide</title>
- <para>&dapsacr; (&dapslong;) is an open-source
-authoring and publishing environment for DocBook-XML. It is command-line
-oriented and can be used on Linux operating systems. <remark>taroth 2011-12-28:
-any Linux OS? </remark>. It consists of integrated tools that support technical
-writers in the editing, translation and publishing process of their XML
-documents. </para>
- <para>Currently, &dapsacr; supports only DocBook 4.x. Support
-for DocBook 5.x is planned.</para>
-<sect1><title>Target Audience</title>
-<para> This guide is intended for
-users you want to make efficient use of DocBook-XML for editing and publishing
-their documentation, be it documentation sets, individual books, or articles.
-Key knowledge of XML and DocBook is expected, as well as key knowlegde of using
-the Bash Shell (or command line interfaces in general). </para></sect1>
-<sect1 id="sec.daps.intro.doc">
-<title>Available Documentation</title>
-<para>This guide contains links to additional
-documentation resources. The following manuals are vailable for
-&dapsacr;:</para>
-<variablelist>
-<varlistentry>
- <term>
-  <xref linkend="book.daps.user"/>
- </term>
- <listitem>
+ <para>
+  &dapsacr; (&dapslong;) is an open-source authoring and publishing
+  environment for DocBook-XML. It is command-line oriented and can be used
+  on Linux operating systems.
+  <remark>taroth 2011-12-28:
+any Linux OS? </remark>
+  . It consists of integrated tools that support technical writers in the
+  editing, translation and publishing process of their XML documents.
+ </para>
+ <para>
+  Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
+  planned.
+ </para>
+ <sect1>
+  <title>Target Audience</title>
+
   <para>
-   <remark>taroth 2011-12-28:
+   This guide is intended for users you want to make efficient use of
+   DocBook-XML for editing and publishing their documentation, be it
+   documentation sets, individual books, or articles. Key knowledge of XML
+   and DocBook is expected, as well as key knowlegde of using the Bash Shell
+   (or command line interfaces in general).
+  </para>
+ </sect1>
+ <sect1 id="sec.daps.intro.doc">
+  <title>Available Documentation</title>
+
+  <para>
+   This guide contains links to additional documentation resources. The
+   following manuals are vailable for &dapsacr;:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><xref linkend="book.daps.user"/>
+    </term>
+    <listitem>
+     <para>
+      <remark>taroth 2011-12-28:
 FIXME</remark>
-  </para>
- </listitem>
-</varlistentry>
-<varlistentry>
- <term>
-  <xref linkend="art.daps.quickstart"/>
- </term>
- <listitem>
-  <para>
-   <remark>taroth
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><xref linkend="art.daps.quickstart"/>
+    </term>
+    <listitem>
+     <para>
+      <remark>taroth
 2011-12-28: FIXME</remark>
-  </para>
- </listitem>
-</varlistentry> <!--taroth
+     </para>
+    </listitem>
+   </varlistentry>
+<!--taroth
 2011-12-28: to add: svn doc, docmanager doc, xmleditor doc, etc.-->
-</variablelist>
-</sect1>
-<sect1 id="sec.daps.intro.feedback">
-<title>Feedback</title>
-<para>We want to hear your comments and suggestions about this guide and the 
-other documentation included with the &dapslong;.</para><remark>taroth 2011-12-28: where 
+  </variablelist>
+ </sect1>
+ <sect1 id="sec.daps.intro.feedback">
+  <title>Feedback</title>
+
+  <para>
+   We want to hear your comments and suggestions about this guide and the
+   other documentation included with the &dapslong;.
+  </para>
+
+  <remark>taroth 2011-12-28: where 
 to submit bug reports? add e-mail addressfor feedback (doc-team@suse.com?),
 any feedback framework?, contributions and patches welcome!</remark>
-</sect1>
-<sect1 id="sec.daps.intro.typo">
- <title>Documentation Conventions</title>
- <para>
-  The following typographical conventions are used in this manual:
- </para>
- <itemizedlist>
-  <listitem>
-   <para>
-    <filename>/etc/passwd</filename>: directory names and filenames
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <replaceable>placeholder</replaceable>: replace
-    <replaceable>placeholder</replaceable> with the actual value
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <envar>PATH</envar>: the environment variable PATH
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <command>ls</command>, <option>--help</option>: commands, options, and
-    parameters
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <systemitem class="username">user</systemitem>: users or groups
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <keycap function="alt"/>, <keycombo>
-    <keycap function="alt"/> <keycap>F1</keycap> </keycombo>: a
-    key to press or a key combination; keys are shown in uppercase as on a
-    keyboard
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <guimenu>File</guimenu>, <menuchoice> <guimenu>File</guimenu>
-    <guimenu>Save As</guimenu> </menuchoice>: menu items, buttons
-   </para>
-  </listitem>
-  <listitem>
-   <para>
-    <emphasis>Dancing Penguins</emphasis> (Chapter
-    <emphasis>Penguins</emphasis>, &uarr;Another Manual): This is a
-    reference to a chapter in another manual.
-   </para>
-  </listitem>
- </itemizedlist>
-</sect1>
-<sect1 id="sec.daps.intro.making">
- <title>About the Making of This Document</title>
+ </sect1>
+ <sect1 id="sec.daps.intro.typo">
+  <title>Documentation Conventions</title>
 
- <para>
-  This documentation is written in DocBook (see <ulink url="http://www.docbook.org"/>) and
-  edited and generated with the open-source tools provided by the &dapslong;. 
-  The XML source files were validated by <command>xmllint</command>, processed by
-  <command>xsltproc</command>, and converted into XSL-FO using the DocBook
-  stylesheets. <remark>taroth 2011-12-28: a customized version of Norman Walsh's stylesheets? 
+  <para>
+   The following typographical conventions are used in this manual:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <filename>/etc/passwd</filename>: directory names and filenames
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <replaceable>placeholder</replaceable>: replace
+     <replaceable>placeholder</replaceable> with the actual value
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <envar>PATH</envar>: the environment variable PATH
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <command>ls</command>, <option>--help</option>: commands, options, and
+     parameters
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <systemitem class="username">user</systemitem>: users or groups
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <keycap function="alt"/>, <keycombo> <keycap function="alt"/>
+     <keycap>F1</keycap> </keycombo>: a key to press or a key combination;
+     keys are shown in uppercase as on a keyboard
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <guimenu>File</guimenu>, <menuchoice> <guimenu>File</guimenu>
+     <guimenu>Save As</guimenu> </menuchoice>: menu items, buttons
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <emphasis>Dancing Penguins</emphasis> (Chapter
+     <emphasis>Penguins</emphasis>, &uarr;Another Manual): This is a
+     reference to a chapter in another manual.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="sec.daps.intro.making">
+  <title>About the Making of This Document</title>
+
+  <para>
+   This documentation is written in DocBook (see
+   <ulink url="http://www.docbook.org"/>) and edited and generated with the
+   open-source tools provided by the &dapslong;. The XML source files were
+   validated by <command>xmllint</command>, processed by
+   <command>xsltproc</command>, and converted into XSL-FO using the DocBook
+   stylesheets.
+   <remark>taroth 2011-12-28: a customized version of Norman Walsh's stylesheets? 
   The final PDF is formatted through XEP from RenderX? hopefully, through FOP 
   soon...</remark>
- </para>
-</sect1>
+  </para>
+ </sect1>
+ <sect1 id="sec.daps.intro.ack">
+  <title>Acknowledgments</title>
 
-<sect1 id="sec.daps.intro.ack">
- <title>Acknowledgments</title>
+  <para>
+   With a lot of voluntary commitment, the developers of Linux cooperate on
+   a global scale to promote the development of Linux. We thank them for
+   their efforts! Special thanks goes to Linus Torvalds and Norman Walsh.
+  </para>
 
- <para>
-  With a lot of voluntary commitment, the developers of Linux cooperate on a
-  global scale to promote the development of Linux. We thank them for their
-  efforts! Special thanks goes to Linus Torvalds and Norman Walsh.
- </para>
+  <para>
+   Have a lot of fun!
+  </para>
 
- <para>
-  Have a lot of fun!
- </para>
-
- <para>
-  Your &suse; Documentation Team
- </para>
-</sect1>
-
+  <para>
+   Your &suse; Documentation Team
+  </para>
+ </sect1>
 </preface>
