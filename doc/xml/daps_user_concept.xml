@@ -3,17 +3,193 @@
  href="urn:x-suse:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml"
  title="Profiling step"?>
- 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]>
-
-<chapter id="cha.daps.user.concept">
+<chapter id="cha.daps.user.oview">
  <title>Conceptual Overview</title>
-<para>
-   <remark>topics: daps components,
+ <para>
+  <remark>topics: daps components,
   directory structure, ENV files, profiling, validation, external components
   like XML editor and FO formatter, stylesheets ...</remark>
+ </para>
+ <para>&dapsacr; (&dapslong;) is developed as open source software for Linux 
+  operating systems. It consists of integrated tools, stylesheets, scripts, and 
+  makefiles that support technical writers in the editing, translation and 
+  publishing process of DocBook XML files. &dapsacr; supports single source publishing 
+  into a number of different output formats, like PDF, HTML, single HTML, or EPUB.</para>
+ <para>It can be used in combination with the following components:</para>
+ <itemizedlist>
+  <listitem>
+   <para>an XML editor of your choice</para>
+  </listitem>
+  <listitem>
+   <para>an FO formatter (like FOP or XEP)</para>
+  </listitem>
+  <listitem>
+   <para>a version management system, like CVS or Subversion</para>
+  </listitem>
+ </itemizedlist>
+ <sect1 id="sec.daps.user.oview.concepts">
+  <title>Basic Concepts</title>
+  <para>
+   <remark>taroth 2011-12-29: FIXME, add intro</remark>
   </para>
+  <sect2>
+   <title>Defining Documentation Projects</title>
+   <para>To define which XML files belong to your documentation project, and
+   which variants can be generated from the project with the help of conditional
+   text (or profiling, as it is called in DocBook), you need a special file
+   called &env; file. It is a text file and sets a number of variables for your
+   documentation project:</para>
+   <example id="ex.daps.env.user">
+    <title>An <filename>&env;-*</filename> file</title>
+    <screen># &env; file for &dapsacr; User Guide
+MAIN=MAIN.DAPS.xml         <co id="co.daps.main"/>
+ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
+PROFARCH="x86;ppc"         <co id="co.daps.profarch"/>
+PROFOS="lin;win"           <co id="co.daps.profos"/>
+<!--PROFCONDITION="print"      <co id="co.daps.condition"/>-->
+LAYOUT=                    <co id="co.daps.layout"/>
+DISTVER=1.0                <co id="co.daps.distver"/>
+HTMLROOT="daps"            <co id="co.daps.htmlroot"/>
+PRODUCTNAME="&dapslong;"   <co id="co.daps.productname"/>
+
+export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
+    </screen>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.daps.main">
+     <para>Mandatory variable. Sets the main file that contains 
+     <quote>references</quote> to other books, chapters, appendices, etc. If
+     your documentation project consists of multiple books and articles 
+     (a <literal>set</literal>), the MAIN variable usually references the 
+     file that contains the &lt;set&gt; element.
+      </para>
+    </callout>
+    <callout arearefs="co.daps.rootid">
+     <para>Optional variable. Defines the root ID of the element to be used for
+     creating an output format. Usually, you define the root ID of a
+     &lt;book&gt; or article element here.  
+     </para>
+    </callout>
+    <callout arearefs="co.daps.profarch">
+     <para>Optional variable. If you want to profile your text for different 
+      platforms or (processor) achitectures (for example, x86 or ppc), this 
+      variable selects the architecture profiling information. 
+      </para>
+    </callout>
+    <callout arearefs="co.daps.profos">
+     <para>
+      If you want to profile your text for different operating systems (for example,
+      for Linux and Windows), this variable selects the operating system profiling
+      information. 
+     </para>
+    </callout>
+    <!--taroth 2011-12-29: no longer used in our books, explain anyway??-->
+    <!--<callout arearefs="co.daps.condition">
+     <para>
+      Selects those parts of the book that are to be printed or made
+      available online. Currently used parameters are print and
+      online.
+     </para>
+    </callout>-->
+    <callout arearefs="co.daps.layout">
+     <para>Determines the layout of the book. <!--The allowed values for this 
+      variable depend on...-->
+      <remark>taroth 2011-12-29: 
+      I guess this references certain sets of stylesheets - where are they
+      defined in the system (path?) and which names must be used for addressing
+      them here?</remark> Per default, &dapsacr; ships the following layouts:</para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <option>flyer</option>
+       </term>
+       <listitem>
+        <para>Creates a flyer layout that can be used for Quick Starts.</para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <option>pocket</option>
+       </term>
+       <listitem>
+        <para>Creates a pocket layout which a smaller page format.</para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>Empty, no value</term>
+       <listitem>
+        <para>Selects the default layout.<remark>taroth 2011-12-29: 
+            =layout of SUSE manuals? where is the default defined?</remark>
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </callout>
+    <callout arearefs="co.daps.distver">
+     <para>
+      <remark>taroth 2011-12-29: not sure if to mention this...? can this
+     be any other name as well (just VERSION, for example?)</remark>
+       Sets the version of the current project. 
+     </para>
+    </callout>
+    <callout arearefs="co.daps.htmlroot">
+     <para>
+      <remark>taroth 2011-12-29: FIXME, not sure if to mention this</remark>
+     </para>
+    </callout>
+    <callout arearefs="co.daps.productname">
+     <para>
+      <remark>taroth 2011-12-29: FIXME, not sure if to mention this</remark>
+     </para>
+    </callout>
+    <callout arearefs="co.daps.source">
+     <para>Optional line. You only need to add this line if you want to be able to 
+      source &env; files with &dapsacr;. Sourcing an &env; file was necessary
+      to work with the documentation environment provided by &susedoc;&mdash;
+      &dapsacr;' predecessor.</para>
+    </callout>
+   </calloutlist>
+   <para>For a documentation set (a collection of books), you can define
+   multiple &env; files. By referring different root IDs, you define which book
+   is to be built with the specific &env; file. Of course, you can also specify
+   different layouts for certain books (or use different values for one of the
+   other variables defined in the &env; file): 
+   </para>
+   <example id="ex.daps.env.quick">
+    <title>An <filename>&env;-*</filename> file</title>
+    <screen># &env; file for &dapsacr; Quick Start
+MAIN="MAIN.DAPS.xml"
+ROOTID="art.daps.quickstart"
+PROFOS="osuse"
+PROFARCH="x86;amd64;em64t"
+DISTVER="1.0"
+LAYOUT="flyer"
+
+export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
+</screen>
+   </example>
+   <para>Because &env; files define which XML files belong to a documentation 
+    project, they are necessary for validating your XML files and for generating
+    any kind of output. Without &env; files, you cannot produce any output from
+    your DocBook sources with &dapsacr;.</para>
+   <para>If your documentation set contains cross-references between the 
+   individual books, it is useful to define an additional &env; file 
+   (<emphasis>without</emphasis> the root ID variable) that can be used to 
+   generate an HTML output that contains all hyperlinks between the individual 
+   books.<remark>taroth 2011-12-29: FIXME; add another example ENV file for 
+   that purpose</remark></para>
+   <para>&dapsacr; also contains a script for creating a new documentation
+    project from scratch. <remark>taroth 2011-12-29: FIXME, add xref</remark>.
+    When using that script, an example &env; file is automatically created.</para>
+   </sect2>
+   <sect2>
+    <title>Directory Structure</title>
+    <para>For &dapsacr; to work out of the box, XML files and images should be 
+    organized in the following directory structure:</para>
+   </sect2>
+  </sect1>
  </chapter>
