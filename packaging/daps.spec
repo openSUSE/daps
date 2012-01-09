@@ -34,6 +34,7 @@ BuildArch:      noarch
 BuildRequires:  dia
 BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
+BuildRequires:  python-xml
 %if 0%{?suse_version} > 1140
 BuildRequires:  perl-Image-ExifTool
 %else
