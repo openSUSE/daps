@@ -23,7 +23,7 @@ Version:        0.9.2
 
 Release:        1
 Summary:        DocBook Authoring and Publishing Suite
-License:        GPL-2.0+
+License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps
 Source0:        %{name}-%{version}.tar.bz2
