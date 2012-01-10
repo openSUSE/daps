@@ -28,6 +28,7 @@ Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
+Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
