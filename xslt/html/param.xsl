@@ -99,5 +99,8 @@ set      toc,title
 
 <!--  Output a warning, if chapter/@lang is different from book/@lang ? -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
+
+<!-- Show remarks? 0=no, 1=yes -->
+<xsl:param name="show.remarks" select="1"/>
   
 </xsl:stylesheet>
