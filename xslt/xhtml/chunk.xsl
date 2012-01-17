@@ -19,6 +19,6 @@
 <xsl:include href="&www;/manifest.xsl"/>
 <xsl:include href="&www;/chunk-code.xsl"/>
 
-<xsl:include href="navig.header.footer.xsl"/><!-- include it again to avoid import precedence problems -->
+<xsl:include href="../html/navig.header.footer.xsl"/><!-- include it again to avoid import precedence problems -->
   
 </xsl:stylesheet>
