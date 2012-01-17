@@ -24,5 +24,29 @@
 <xsl:include href="../common/l10n.xsl"/>
 <xsl:include href="../html/admon.xsl"/>
 
+<!-- Overwrite with our own implementation -->
+<xsl:include href="../html/redefinitions.xsl"/>
+
+<!-- Overwrite HTML header, because of productname, productnumber -->
+<xsl:include href="../html/html.head.xsl"/>
+
+<!-- Returns metadata from our XML files -->
+<xsl:include href="../html/metadata.xsl"/>
+
+
+<!-- Overwrite standard header and footer with our own definitions -->
+<xsl:include  href="../html/navig.header.footer.xsl"/>
+
+<!-- Overwrites some template rules for graphics -->
+<xsl:include href="../html/graphics.xsl"/>
+<!--<xsl:include href="../html/titlepage.xsl"/>-->
+
+<xsl:include href="../html/suse-titlepage.xsl"/>
+
+<xsl:include href="../html/pi.xsl"/>
+<xsl:include href="../html/autotoc.xsl"/>
+
+<!-- Overwrite parameter from param.xsl: -->
+<xsl:param name="generate.legalnotice.link" select="0"/>
 
 </xsl:stylesheet>
