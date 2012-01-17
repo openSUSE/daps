@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:xspec.rnc" type="application/relax-ng-compact-syntax"?>
+<x:description stylesheet="../xslt/xhtml/docbook.xsl"
+  xmlns:x="http://www.jenitennison.com/xslt/xspec"
+  xmlns:h="http://www.w3.org/1999/xhtml"
+  xmlns:db="http://docbook.org/ns/docbook">
+  
+  <x:scenario label="SUSE's DocBook XSLT 1.0 HTML Customization Tests">
+    
+    <x:scenario label="article.001.xml">
+      <x:context href="src/article.001.xml"/>
+      <x:expect label="Meta information: title"
+              test="/h:html/h:head/h:title"
+              select="/h:html/h:head/h:title"
+              href="results/article.001.html"/>
+      <x:expect label="Meta information: link"
+              test="/h:html/h:head/h:link"
+              select="/h:html/h:head/h:link"
+              href="results/article.001.html"/>
+      <x:expect label="Meta information: meta[@name='description']"
+              test="/h:html/h:head/meta[@name='description']"
+              select="/h:html/h:head/meta[@name='description']"
+              href="results/article.001.html"/>
+      
+      <x:expect label="Meta information: meta[@http-equiv]"
+              test="/h:html/h:head/meta[@http-equiv]"
+              select="/h:html/h:head/meta[@http-equiv]"
+              href="results/article.001.html"/>
+      
+      <!--  -->
+      <x:expect label="div[@class='article']/@title"
+              test="/h:html/h:body/h:div[@class='article']/@title"
+              select="/h:html/h:body/h:div[@class='article']/@title"
+              href="results/article.001.html"/>
+      <x:expect label="div[@class='article']/@xml:lang"
+              test="/h:html/h:body/h:div[@class='article']/@xml:lang"
+              select="/h:html/h:body/h:div[@class='article']/@xml:lang"
+              href="results/article.001.html"/>
+      <!--  -->
+      <x:pending label="div[@class='article']/div[@class='titlepage']//*[@class='title'] title in titlepage"
+              test="//h:div[@class='article']/h:div[@class='titlepage']//*[@class='title']"
+              select="//h:div[@class='article']/h:div[@class='titlepage']//*[@class='title']"
+              href="results/article.001.html"/>
+      <x:expect label="div[@class='article']/div[@class='titlepage']//*[@class='title']/h:alt/@href"
+              test="//h:div[@class='article']/h:div[@class='titlepage']//*[@class='title']/h:alt/@href"
+              select="//h:div[@class='article']/h:div[@class='titlepage']//*[@class='title']/h:alt/@href"
+              href="results/article.001.html"/>
+      <x:expect label="div[@class='article']/div[@class='titlepage']//div[@class='abstract']"
+              test="//h:div[@class='article']/h:div[@class='titlepage']//h:div[@class='abstract']"
+              select="//h:div[@class='article']/h:div[@class='titlepage']//h:div[@class='abstract']"
+              href="results/article.001.html"/>
+      <x:expect label="//div[@class='sect1']/@title"
+              test="//h:div[@class='sect1']/@title"
+              select="//h:div[@class='sect1']/@title"
+              href="results/article.001.html"/>
+      <x:expect label="div[@class='sect1']/div[@class='titlepage']//*[class='title']/text()"
+              test="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']/text()"
+              select="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']/text()"
+              href="results/article.001.html"/>
+      <!-- /xh:html/xh:body[1]/xh:div[1]/xh:div[3]/xh:div[1]/xh:div[1]/xh:div[1]/h2[1]/span[1]/a[1]/@title -->
+      <x:expect
+        label="div[@class='sect1']/div[@class='titlepage']//*[class='title']/h:span[@class='permalink']"
+              test="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']/h:span[@class='permalink']"
+              select="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']/h:span[@class='permalink']"
+              href="results/article.001.html"/>
+      <!--<x:expect label="div[@class='sect1']/div[@class='titlepage']//*[class='title']"
+              test="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']"
+              select="//h:div[@class='sect1']/h:div[@class='titlepage']//*[class='title']"
+              href="results/article.001.html"/>-->
+    </x:scenario>
+    
+    <x:scenario label="book.001.xml">
+      <x:context href="src/book.001.xml"/>
+      <x:expect label="body/div/@title"
+              test="//h:body/h:div/@title"
+              select="//h:body/h:div/@title"
+              href="results/book.001.html"/>
+      <x:expect label="productname and productnumber"
+              test="//h:*[@class='productname']"
+              select="//h:*[@class='productname']"
+              href="results/book.001.html"/>
+      <x:expect label="preface @title"
+              test="//h:*[@class='preface']/@title"
+              select="//h:*[@class='preface']/@title"
+              href="results/book.001.html"/>
+      <x:expect label="chapter @title"
+              test="//h:*[@class='chapter']/@title"
+              select="//h:*[@class='chapter']/@title"
+              href="results/book.001.html"/>
+      <x:expect label="permalinks"
+              test="//*[@class='permalink']"
+              select="//*[@class='permalink']"
+              href="results/book.001.html"/>
+    </x:scenario>
+    
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,45 @@
+-----------------------------------------------
+XSpec -- Behavior Driven Development (BDD) framework for XSLT
+-----------------------------------------------
+
+This directory contains xspec files for testing our DocBook customization 
+layer for HTML and XSL-FO.
+
+1. Contents
+-----------------
+* htmlbase.xspec
+  Contains testcases for single (X)HTML output
+
+* src/, results/
+  These directories contains the source DocBook XML files and the
+  results from HTML or FO transformation. They are read in by htmlbase.xspec
+
+* build/
+  Contains the result of the test run. For example, the result HTML file
+  from htmlbase.xspec is htmlbase-result.html
+
+* xspec.sh
+  Shell script to run the XSpec framework.
+
+
+2. Prerequisites
+-----------------
+In order to run the test, install the xspec package from my OBS repository
+(home:thomas-schraitle). Some important things you need to know:
+
+ * XSpec relies on XSLT2. As such, it uses Saxon9
+ * HTML is tested against XHTML
+
+
+3. Running Tests
+-----------------
+Use the following procedure:
+
+ a. Change the directory where the xspec.sh script is stored
+ b. Install the xspec package, if you haven't done so.
+ c. Check the environment variable XEP_HOME in xspec.sh
+ d. Run the script with a xspec file:
+    $ xspec.sh htmlbase.xspec
+ e. Check the result in build/htmlbase-result.html
+
+
