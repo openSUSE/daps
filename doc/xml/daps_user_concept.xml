@@ -34,7 +34,7 @@
  <sect1 id="sec.daps.user.oview.concepts">
   <title>Basic Concepts</title>
   <para>
-   <remark>taroth 2011-12-29: FIXME, add intro</remark>
+   <remark></remark>
   </para>
   <sect2>
    <title>Defining Documentation Projects</title>
@@ -50,10 +50,8 @@ MAIN=MAIN.DAPS.xml         <co id="co.daps.main"/>
 ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
 PROFARCH="x86;ppc"         <co id="co.daps.profarch"/>
 PROFOS="lin;win"           <co id="co.daps.profos"/>
-<!--PROFCONDITION="print"      <co id="co.daps.condition"/>-->
 LAYOUT=                    <co id="co.daps.layout"/>
 DISTVER=1.0                <co id="co.daps.distver"/>
-HTMLROOT="daps"            <co id="co.daps.htmlroot"/>
 PRODUCTNAME="&dapslong;"   <co id="co.daps.productname"/>
 
 export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
@@ -81,9 +79,9 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
       </para>
     </callout>
     <callout arearefs="co.daps.profos">
-     <para>
-      If you want to profile your text for different operating systems (for example,
-      for Linux and Windows), this variable selects the operating system profiling
+     <para>Optional variable.If you want to profile your text for different 
+      operating systems (for example, for Linux and Windows), this variable 
+      selects the operating system profiling
       information. 
      </para>
     </callout>
@@ -96,12 +94,8 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
      </para>
     </callout>-->
     <callout arearefs="co.daps.layout">
-     <para>Determines the layout of the book. <!--The allowed values for this 
-      variable depend on...-->
-      <remark>taroth 2011-12-29: 
-      I guess this references certain sets of stylesheets - where are they
-      defined in the system (path?) and which names must be used for addressing
-      them here?</remark> Per default, &dapsacr; ships the following layouts:</para>
+     <para>Determines the layout of the book. 
+     Per default, &dapsacr; ships the following layouts:</para>
      <variablelist>
       <varlistentry>
        <term>
@@ -136,16 +130,11 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
        Sets the version of the current project. 
      </para>
     </callout>
-    <callout arearefs="co.daps.htmlroot">
+   <!--    <callout arearefs="co.daps.productname">
      <para>
       <remark>taroth 2011-12-29: FIXME, not sure if to mention this</remark>
      </para>
-    </callout>
-    <callout arearefs="co.daps.productname">
-     <para>
-      <remark>taroth 2011-12-29: FIXME, not sure if to mention this</remark>
-     </para>
-    </callout>
+    </callout>-->
     <callout arearefs="co.daps.source">
      <para>Optional line. You only need to add this line if you want to be able to 
       source &env; files with &dapsacr;. Sourcing an &env; file was necessary
@@ -175,7 +164,8 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
    <para>Because &env; files define which XML files belong to a documentation 
     project, they are necessary for validating your XML files and for generating
     any kind of output. Without &env; files, you cannot produce any output from
-    your DocBook sources with &dapsacr;.</para>
+    your DocBook sources with &dapsacr;.<remark>taroth 2012-01-17: not 100% sure
+    if this is still the case</remark></para>
    <para>If your documentation set contains cross-references between the 
    individual books, it is useful to define an additional &env; file 
    (<emphasis>without</emphasis> the root ID variable) that can be used to 
@@ -183,7 +173,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
    books.<remark>taroth 2011-12-29: FIXME; add another example ENV file for 
    that purpose</remark></para>
    <para>&dapsacr; also contains a script for creating a new documentation
-    project from scratch. <remark>taroth 2011-12-29: FIXME, add xref</remark>.
+    project from scratch. <remark>taroth 2011-12-29: add xref later</remark>.
     When using that script, an example &env; file is automatically created.</para>
    </sect2>
    <sect2>
