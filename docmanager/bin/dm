@@ -232,7 +232,7 @@ case "$SUBCMD" in
         # All files sorted after deadline
         set_env_base
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
-            -q "$QSTRING" "$@" | sort_after_head -k6
+            -q "$QSTRING" "$@"  --include $EDITED | sort_after_head -k6
         ;;
     myeditedd)
         # Your files sorted after deadline
@@ -473,14 +473,6 @@ case "$SUBCMD" in
         # set files to comments
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -C "$@"
         ;;
-    dsproofed)
-        # set files to proofed
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -R "$@"
-        ;;
-    dsproofing)
-        # set files to proofing
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -P "$@"
-        ;;
     dsediting)
         # set files to editing
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -E "$@"
@@ -489,9 +481,21 @@ case "$SUBCMD" in
         # set files to edited
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -D "$@"
         ;;
+    dslocdrop)
+        # set files to locdrop
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -L "$@"
+        ;;
     dsprelim)
         # Unset prelim state; prelim = no
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
+        ;;
+    dsproofed)
+        # set files to proofed
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -R "$@"
+        ;;
+    dsproofing)
+        # set files to proofing
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -P "$@"
         ;;
     --) shift; break ;;
     *) exit_on_error "Unknown subcommand"
