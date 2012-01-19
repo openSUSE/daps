@@ -1,14 +1,22 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<!-- $Id: -->
+<!-- 
+    Purpose:
+      Extract language from @lang or @xml:lang attributes
+    
+    Input:
+      DocBook 4 or DocBook 5 documents with book, article, or
+      chapter as root element.
+           
+    Output:
+      string of the found language
+      If root element is not equal book or book doesn't 
+      contain a lang attribute, it will print an error.
+-->
+
+-->
 <xsl:stylesheet version="1.0"
    xmlns:db="http://docbook.org/ns/docbook"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<!--
-    Prints the language of element book.
-    If root element is not equal book or book doesn't contain a
-    lang attribute, it will print an error.
--->
 
 <xsl:output method="text"/>
 
