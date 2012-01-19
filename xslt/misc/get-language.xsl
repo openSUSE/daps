@@ -13,7 +13,6 @@
       contain a lang attribute, it will print an error.
 -->
 
--->
 <xsl:stylesheet version="1.0"
    xmlns:db="http://docbook.org/ns/docbook"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
