@@ -33,22 +33,6 @@
 </xsl:template>
 
 
-<xsl:template name="insert.home.link">
-  <xsl:param name="home"/>
-  <xsl:comment>htdig_noindex</xsl:comment>
-  <a accesskey="h">
-    <xsl:attribute name="href">
-      <xsl:call-template name="href.target">
-        <xsl:with-param name="object" select="$home"/>
-      </xsl:call-template>
-    </xsl:attribute>
-    <xsl:call-template name="navig.content">
-      <xsl:with-param name="direction" select="'home'"/>
-    </xsl:call-template>
-  </a>
-  <xsl:comment>/htdig_noindex</xsl:comment>
-</xsl:template>
-
 <xsl:template name="bg.navigation">
   <xsl:param name="node" select="."/>
   
