@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Contains template to create title for section elements
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns="http://www.w3.org/1999/xhtml">
   
   <xsl:template name="component.title">
     <xsl:param name="node" select="."/>
@@ -64,17 +68,16 @@
         <xsl:with-param name="title" select="title"/>
       </xsl:call-template>
       <xsl:call-template name="addos">
-	<xsl:with-param name="id" select="$id"/>
-	<xsl:with-param name="title" select="title"/>
+        <xsl:with-param name="id" select="$id"/>
+        <xsl:with-param name="title" select="title"/>
       </xsl:call-template>
       <xsl:call-template name="addstatus">
-	<xsl:with-param name="id" select="$id"/>
-	<xsl:with-param name="title" select="title"/>
+        <xsl:with-param name="id" select="$id"/>
+        <xsl:with-param name="title" select="title"/>
       </xsl:call-template>
       <xsl:call-template name="debug.filename"/>
       <xsl:call-template name="addid"/>
     </xsl:element>
   </xsl:template>
-  
   
 </xsl:stylesheet>

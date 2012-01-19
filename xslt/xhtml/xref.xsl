@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<?xml version="1.0"?>
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:svg="http://www.w3.org/2000/svg">
 
 
 
@@ -26,14 +28,15 @@
   </xsl:call-template>
 
   <xsl:choose>
-    <xsl:when test="(generate-id($target.book) = generate-id($this.book)) or                      not(/set) or /article">
+    <xsl:when test="(generate-id($target.book) = generate-id($this.book)) or
+                    not(/set) or /article">
       <!-- An xref that stays inside the current book; use the defaults -->
        <xsl:apply-imports/>
        <!--<xsl:call-template name="xref.old"/>-->
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
-        <xsl:when test="/set/@id=$rootid or                         /article/@id=$rootid">
+        <xsl:when test="/set/@id=$rootid or /article/@id=$rootid">
            <xsl:apply-imports/><!-- If we use the whole set, do the usual stuff -->
            <!-- <xsl:call-template name="xref.old"/> -->
         </xsl:when>
@@ -41,8 +44,11 @@
           <!-- A reference into another book -->
           <xsl:variable name="target.chapandapp" select="$target/ancestor-or-self::chapter[@lang!='']                                 | $target/ancestor-or-self::appendix[@lang!='']"/>
           
-          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and                          $target.chapandapp/@lang != $this.book/@lang">
-            <xsl:message>WARNING: The xref '<xsl:value-of select="@linkend"/>' points to a chapter (id='<xsl:value-of select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
+          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and  
+                        $target.chapandapp/@lang != $this.book/@lang">
+            <xsl:message>WARNING: The xref '<xsl:value-of 
+              select="@linkend"/>' points to a chapter (id='<xsl:value-of 
+                select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
           </xsl:if>
           
           <xsl:call-template name="create.linkto.other.book">
@@ -67,7 +73,7 @@
       <xsl:with-param name="referrer" select="."/>
       <xsl:with-param name="xrefstyle">
         <xsl:choose>
-          <xsl:when test="$refelem = 'chapter' or             $refelem = 'appendix'">number</xsl:when>
+          <xsl:when test="$refelem = 'chapter' or $refelem = 'appendix'">number</xsl:when>
           <xsl:otherwise>nonumber</xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>
@@ -75,8 +81,12 @@
   </xsl:if>
   
   <xsl:text> (</xsl:text>
-  <xsl:if test="$target/self::sect1 or     $target/self::sect2 or     $target/self::sect3 or     $target/self::sect4">
-    <xsl:variable name="hierarchy.node" select="(       $target/ancestor-or-self::chapter |       $target/ancestor-or-self::appendix |       $target/ancestor-or-self::preface)[1]"/>
+  <xsl:if test="$target/self::sect1 or
+                $target/self::sect2 or
+                $target/self::sect3 or
+                $target/self::sect4">
+    <xsl:variable name="hierarchy.node" 
+      select="($target/ancestor-or-self::chapter | $target/ancestor-or-self::appendix | $target/ancestor-or-self::preface)[1]"/>
     <xsl:if test="$hierarchy.node">
       <xsl:apply-templates select="$hierarchy.node" mode="xref-to">
       <xsl:with-param name="referrer" select="."/>
@@ -105,7 +115,7 @@
       <xsl:with-param name="referrer" select="."/>
       <xsl:with-param name="xrefstyle">
         <xsl:choose>
-          <xsl:when test="$refelem = 'chapter' or             $refelem = 'appendix'">number</xsl:when>
+          <xsl:when test="$refelem = 'chapter' or $refelem = 'appendix'">number</xsl:when>
           <xsl:otherwise>nonumber</xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>

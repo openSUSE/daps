@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dp="urn:x-suse:xmlns:docproperties" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!--
+   Purpose:  Contains customizations for footer
+-->
+
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:dp="urn:x-suse:xmlns:docproperties"
+  xmlns="http://www.w3.org/1999/xhtml">
 
 <xsl:template match="releaseinfo">
   <xsl:apply-templates/>
@@ -213,7 +219,8 @@
     <xsl:param name="nav.context"/>
     <xsl:param name="orientation"/>
     
-    <xsl:if test="$suppress.navigation = '0' and                   $suppress.header.navigation = '0' and                   not(self::set)">
+    <xsl:if test="$suppress.navigation = '0' and
+                  $suppress.header.navigation = '0' and not(self::set)">
       <!-- FIXME: Watch for $rootid -->
       
       <div class="nav{$orientation}">

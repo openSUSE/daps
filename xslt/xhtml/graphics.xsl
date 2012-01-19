@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="ASCII"?>
 <!--This file was created automatically by html2xhtml-->
 <!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:stext="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory" xmlns:simg="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.ImageIntrinsics" xmlns:ximg="xaln://com.nwalsh.xalan.ImageIntrinsics" xmlns:xtext="com.nwalsh.xalan.Text" xmlns:lxslt="http://xml.apache.org/xslt" xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="xlink stext xtext lxslt simg ximg" extension-element-prefixes="stext xtext" version="1.0">
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:stext="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory"
+  xmlns:simg="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.ImageIntrinsics"
+  xmlns:ximg="xaln://com.nwalsh.xalan.ImageIntrinsics"
+  xmlns:xtext="com.nwalsh.xalan.Text"
+  xmlns:lxslt="http://xml.apache.org/xslt"
+  xmlns="http://www.w3.org/1999/xhtml"
+  exclude-result-prefixes="xlink stext xtext lxslt simg ximg"
+  extension-element-prefixes="stext xtext">
 
 <!-- ********************************************************************
      $Id: graphics.xsl 52 2005-05-13 09:23:04Z toms $
@@ -209,10 +219,10 @@
       <xsl:when test="$use.extensions != 0 and $graphicsize.extension != 0">
         <xsl:choose>
           <xsl:when test="function-available('simg:getWidth')">
-            <xsl:value-of select="simg:getWidth(simg:new($filename),                                                 $nominal.image.width)"/>
+            <xsl:value-of select="simg:getWidth(simg:new($filename), $nominal.image.width)"/>
           </xsl:when>
           <xsl:when test="function-available('ximg:getWidth')">
-            <xsl:value-of select="ximg:getWidth(ximg:new($filename),                                                 $nominal.image.width)"/>
+            <xsl:value-of select="ximg:getWidth(ximg:new($filename), $nominal.image.width)"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$nominal.image.width"/>
@@ -231,10 +241,10 @@
       <xsl:when test="$use.extensions != 0 and $graphicsize.extension != 0">
         <xsl:choose>
           <xsl:when test="function-available('simg:getDepth')">
-            <xsl:value-of select="simg:getDepth(simg:new($filename),                                                 $nominal.image.depth)"/>
+            <xsl:value-of select="simg:getDepth(simg:new($filename), $nominal.image.depth)"/>
           </xsl:when>
           <xsl:when test="function-available('ximg:getDepth')">
-            <xsl:value-of select="ximg:getDepth(ximg:new($filename),                                                 $nominal.image.width)"/>
+            <xsl:value-of select="ximg:getDepth(ximg:new($filename), $nominal.image.width)"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="$nominal.image.depth"/>
@@ -405,7 +415,7 @@
   <xsl:variable name="viewport">
     <xsl:choose>
       <xsl:when test="$ignore.image.scaling != 0">0</xsl:when>
-      <xsl:when test="local-name(.) = 'inlinegraphic'                       or ancestor::inlinemediaobject                       or ancestor::inlineequation">0</xsl:when>
+      <xsl:when test="local-name(.) = 'inlinegraphic' or ancestor::inlinemediaobject or ancestor::inlineequation">0</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$make.graphic.viewport"/>
       </xsl:otherwise>
@@ -535,7 +545,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="use.viewport" select="$viewport != 0                         and ($html.width != ''                              or ($html.depth != '' and $depth-units != '%')                              or $bgcolor != ''                              or @valign)"/>
+  <xsl:variable name="use.viewport" select="$viewport != 0 and ($html.width != '' or ($html.depth != '' and $depth-units != '%')                              or $bgcolor != ''                              or @valign)"/>
 
   <xsl:choose>
     <xsl:when test="$use.viewport">
@@ -753,7 +763,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   <xsl:choose>
     <xsl:when test="@format='linespecific'">
       <xsl:choose>
-        <xsl:when test="$use.extensions != '0'                         and $textinsert.extension != '0'">
+        <xsl:when test="$use.extensions != '0' and $textinsert.extension != '0'">
           <xsl:choose>
             <xsl:when test="element-available('stext:insertfile')">
               <stext:insertfile href="{$filename}"/>
@@ -783,7 +793,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
 <xsl:template match="mediaobject|mediaobjectco">
 
-  <xsl:variable name="olist" select="imageobject|imageobjectco                      |videoobject|audioobject                      |textobject"/>
+  <xsl:variable name="olist" select="imageobject|imageobjectco|videoobject|audioobject|textobject"/>
 
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
@@ -822,7 +832,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   </span>
 </xsl:template>
 
-<xsl:template match="programlisting/inlinemediaobject                      |screen/inlinemediaobject" priority="2">
+<xsl:template match="programlisting/inlinemediaobject|screen/inlinemediaobject" priority="2">
   <!-- the additional span causes problems in some cases -->
   <xsl:call-template name="select.mediaobject"/>
 </xsl:template>
@@ -858,7 +868,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   <xsl:choose>
     <xsl:when test="@format='linespecific'">
       <xsl:choose>
-        <xsl:when test="$use.extensions != '0'                         and $textinsert.extension != '0'">
+        <xsl:when test="$use.extensions != '0' and $textinsert.extension != '0'">
           <xsl:choose>
             <xsl:when test="element-available('stext:insertfile')">
               <stext:insertfile href="{$filename}"/>
@@ -885,7 +895,9 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
         </xsl:call-template>
       </xsl:variable>
 
-      <xsl:variable name="phrases" select="ancestor::mediaobject/textobject[phrase]                             |ancestor::inlinemediaobject/textobject[phrase]                             |ancestor::mediaobjectco/textobject[phrase]"/>
+      <xsl:variable name="phrases" select="ancestor::mediaobject/textobject[phrase]
+                                           |ancestor::inlinemediaobject/textobject[phrase]
+                                           |ancestor::mediaobjectco/textobject[phrase]"/>
 
       <xsl:call-template name="process.image">
         <xsl:with-param name="alt">
@@ -898,7 +910,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
         </xsl:with-param>
       </xsl:call-template>
 
-      <xsl:if test="$html.longdesc != 0 and $html.longdesc.link != 0                     and ancestor::imageobject/parent::*/textobject[not(phrase)]">
+      <xsl:if test="$html.longdesc != 0 and $html.longdesc.link != 0 and ancestor::imageobject/parent::*/textobject[not(phrase)]">
         <xsl:call-template name="longdesc.link">
           <xsl:with-param name="longdesc.uri" select="$longdesc.uri"/>
         </xsl:call-template>
@@ -1057,7 +1069,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   </xsl:variable>
 
   <xsl:choose>
-    <xsl:when test="$use.extensions != '0'                     and $textinsert.extension != '0'">
+    <xsl:when test="$use.extensions != '0' and $textinsert.extension != '0'">
       <xsl:choose>
         <xsl:when test="element-available('stext:insertfile')">
           <stext:insertfile href="{$filename}"/>

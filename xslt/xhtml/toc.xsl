@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<!-- $Id: docbook.xsl 10321 2006-06-27 07:11:58Z toms $ -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Contains templates for toc handling
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml">
 
 <xsl:template match="toc">
   <xsl:comment>htdig_noindex</xsl:comment>

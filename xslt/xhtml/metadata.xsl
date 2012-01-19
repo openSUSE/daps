@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dp="urn:x-suse:xmlns:docproperties" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Inserts Meta information
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:dp="urn:x-suse:xmlns:docproperties" 
+  xmlns="http://www.w3.org/1999/xhtml">
 
  <!-- Use a key, to find the node dp:filename in 'METAFILE' -->
  <xsl:param name="metafilename" select="'METAFILE'"/>

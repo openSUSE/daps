@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Contains customizations to section titles
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns="http://www.w3.org/1999/xhtml">
 
 <xsl:template name="debug.filename">
   <xsl:param name="node" select="."/>
-  <xsl:variable name="xmlbase" select="ancestor-or-self::*[self::chapter or                                 self::appendix or                                 self::part or                                 self::reference or                                 self::preface or                                 self::glossary or                                 self::sect1 or                                 self::sect2 or                                 self::sect3 or                                 self::sect4]/@xml:base"/>
+  <xsl:variable name="xmlbase" 
+    select="ancestor-or-self::*[self::chapter or 
+                                self::appendix or
+                                self::part or
+                                self::reference or 
+                                self::preface or
+                                self::glossary or
+                                self::sect1 or 
+                                self::sect2 or
+                                self::sect3 or
+                                self::sect4]/@xml:base"/>
   
   <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
    <div class="filenameblock">

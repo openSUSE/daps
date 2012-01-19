@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:date="http://exslt.org/dates-and-times" xmlns="http://www.w3.org/1999/xhtml" version="1.0" extension-element-prefixes="date" exclude-result-prefixes="date">
+<!-- 
+   Purpose:  Contains titlepage specific structure
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:date="http://exslt.org/dates-and-times"
+  xmlns="http://www.w3.org/1999/xhtml"
+  extension-element-prefixes="date"
+  exclude-result-prefixes="date">
   
 <xsl:template name="titlepage.timestamp">
   <xsl:variable name="format">
@@ -218,6 +225,5 @@
       <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
    </div>
 </xsl:template>
-
 
 </xsl:stylesheet>

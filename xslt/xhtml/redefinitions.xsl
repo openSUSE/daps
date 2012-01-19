@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<!-- $Id: redefinitions.xsl 43118 2009-07-14 14:12:30Z toms $ -->
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" version="1.0" exclude-result-prefixes="l">
+<!-- 
+   Purpose:  Contains customizations mostly in titlepage.mode
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
+  exclude-result-prefixes="l">
 
 
 <!-- Other templates -->
@@ -51,7 +56,7 @@
       <xsl:call-template name="person.name"/>
       <xsl:apply-templates mode="titlepage.mode" select="./contrib"/>
       <xsl:apply-templates mode="titlepage.mode" select="./affiliation"/>
-        <xsl:if test="count(following-sibling::author)&gt;0 or                       count(following-sibling::othercredit)&gt;0">
+        <xsl:if test="count(following-sibling::author)&gt;0 or count(following-sibling::othercredit)&gt;0">
          <xsl:text>, </xsl:text>
       </xsl:if>
    </span>

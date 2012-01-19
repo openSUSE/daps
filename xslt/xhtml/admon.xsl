@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Contains customizations for admonition elements like note,
+             tip, caution etc.
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml">
 
 
 <xsl:template name="graphical.admonition">
@@ -80,7 +85,11 @@
   </div>
 </xsl:template>
 
-<xsl:template match="note/title|                      important/title|                      warning/title|                      caution/title|                      tip/title" mode="object.title.markup">
+<xsl:template match="note/title| 
+                     important/title|
+                     warning/title|
+                     caution/title|
+                     tip/title" mode="object.title.markup">
   <xsl:apply-templates/>
 </xsl:template>
 

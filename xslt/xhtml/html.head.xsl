@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<!-- $Id: html.head.xsl 52 2005-05-13 09:23:04Z toms $ -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+<!-- 
+   Purpose:  Contains HTML specific adaptions
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns="http://www.w3.org/1999/xhtml">
 
 
 <xsl:template name="html.head">
@@ -81,7 +84,10 @@
     </xsl:if>
 
     <xsl:if test="$html.extra.head.links != 0">
-      <xsl:for-each select="//part                             |//reference                             |//preface                             |//chapter                             |//article                             |//refentry                             |//appendix[not(parent::article)]|appendix                             |//glossary[not(parent::article)]|glossary                             |//index[not(parent::article)]|index">
+      <xsl:for-each select="//part|//reference |//preface|//chapter|//article|//refentry
+        |//appendix[not(parent::article)]|appendix
+        |//glossary[not(parent::article)]|glossary
+        |//index[not(parent::article)]|index">
         <link rel="{local-name(.)}">
           <xsl:attribute name="href">
             <xsl:call-template name="href.target">
@@ -99,7 +105,7 @@
         <link>
           <xsl:attribute name="rel">
             <xsl:choose>
-              <xsl:when test="local-name($this) = 'section'                               or local-name($this) = 'refsection'">
+              <xsl:when test="local-name($this) = 'section' or local-name($this) = 'refsection'">
                 <xsl:value-of select="'subsection'"/>
               </xsl:when>
               <xsl:otherwise>
@@ -187,7 +193,22 @@
   <meta name="generator" content="DocBook XSL Stylesheets V{$VERSION}"/>
 
   <xsl:if test="$generate.meta.abstract != 0">
-    <xsl:variable name="info" select="(articleinfo                                       |bookinfo                                       |prefaceinfo                                       |chapterinfo                                       |appendixinfo                                       |sectioninfo                                       |sect1info                                       |sect2info                                       |sect3info                                       |sect4info                                       |sect5info                                       |referenceinfo                                       |refentryinfo                                       |partinfo                                       |info                                       |docinfo)[1]"/>
+    <xsl:variable name="info" select="(articleinfo|
+                                       bookinfo|
+                                       prefaceinfo|
+                                       chapterinfo|
+                                       appendixinfo|
+                                       sectioninfo|
+                                       sect1info|
+                                       sect2info|
+                                       sect3info|
+                                       sect4info|
+                                       sect5info|
+                                       referenceinfo|
+                                       refentryinfo|
+                                       partinfo|
+                                       info|
+                                       docinfo)[1]"/>
     <xsl:if test="$info and $info/abstract">
       <meta name="description">
         <xsl:attribute name="content">
@@ -202,7 +223,9 @@
     </xsl:if>
   </xsl:if>
 
-  <xsl:if test="($draft.mode = 'yes' or                 ($draft.mode = 'maybe' and                 ancestor-or-self::*[@status][1]/@status = 'draft'))                 and $draft.watermark.image != ''">
+  <xsl:if test="($draft.mode = 'yes' or 
+                 ($draft.mode = 'maybe' and ancestor-or-self::*[@status][1]/@status = 'draft')) and
+                 $draft.watermark.image != ''">
     <style type="text/css"><xsl:text>
 body { background-image: url('</xsl:text>
 <xsl:value-of select="$draft.watermark.image"/><xsl:text>');
