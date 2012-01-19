@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <!-- $Id: -->
 <xsl:stylesheet version="1.0"
+   xmlns:db="http://docbook.org/ns/docbook"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!--
@@ -16,6 +17,9 @@
      <xsl:when test="book or article or set or chapter">
        <xsl:apply-templates select="book|article|set"/>
      </xsl:when>
+     <xsl:when test="db:book or db:article or db:set or db:chapter">
+       <xsl:apply-templates select="db:book|db:article|db:set"/>
+     </xsl:when>
      <xsl:otherwise>
        <xsl:message terminate="yes">
          <xsl:text>ERROR: Root Element is not a set, book, article or chapter!&#10;</xsl:text>
@@ -26,17 +30,24 @@
    </xsl:choose>
 </xsl:template>
 
-<xsl:template match="book|article|set|chapter">
+<xsl:template match="db:book|db:article|db:set">
+  <xsl:call-template name="getlanguage"/>
+</xsl:template>
+
+<xsl:template match="book|article|set|chapter" name="getlanguage">
    <xsl:choose>
     <xsl:when test="@lang">
      <xsl:value-of select="@lang"/>
      <xsl:text>&#10;</xsl:text>
     </xsl:when>
+     <xsl:when test="@xml:lang">
+       <xsl:value-of select="@xml:lang"/>
+     <xsl:text>&#10;</xsl:text>
+     </xsl:when>
     <xsl:otherwise>
      <xsl:message terminate="yes">ERROR: Element '<xsl:value-of select="name()"/>' doesn't contain attribute lang!</xsl:message>
     </xsl:otherwise>
    </xsl:choose>
 </xsl:template>
-
 
 </xsl:stylesheet>
