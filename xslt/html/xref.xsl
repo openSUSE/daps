@@ -39,8 +39,8 @@
       <xsl:choose>
         <xsl:when test="/set/@id=$rootid or
                         /article/@id=$rootid">
-           <!--<xsl:apply-imports/>--><!-- If we use the whole set, do the usual stuff -->
-           <xsl:call-template name="xref.old"/>
+           <xsl:apply-imports/><!-- If we use the whole set, do the usual stuff -->
+           <!-- <xsl:call-template name="xref.old"/> -->
         </xsl:when>
         <xsl:otherwise>
           <!-- A reference into another book -->
