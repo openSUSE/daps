@@ -1381,7 +1381,7 @@ endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --output $(HTML_DIR)/$(BOOK).html \
-	  --xinclude $(HTMLBIGFILE) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 
 #------------------------------------------------------------------------
 #
