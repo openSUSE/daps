@@ -24,7 +24,7 @@ ROOT_CATALOG  := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
 DAPS_CATALOG  := for-catalog-$(PACKAGE)-$(VERSION).xml
 NOVDOC_SCHEMA := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
 XHTML2HTML    := daps-xslt/common/xhtml2html.xsl
-HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard daps-xslt/xhtml/*.xsl))
+HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard suse-xslt/xhtml/*.xsl))
 
 DIRECTORIES := catalogs
 
@@ -125,7 +125,7 @@ man/%.1: man/%.xml
 	  $(DBSTYLES)/manpages/docbook.xsl $<
 
 # Create HTML stylesheets from XHTML:
-xslt/html/%.xsl: xslt/xhtml/%.xsl
+suse-xslt/html/%.xsl: suse-xslt/xhtml/%.xsl
 	xsltproc --output $@  ${XHTML2HTML} $<
 
 #-----------------------------
