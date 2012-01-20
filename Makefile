@@ -23,8 +23,8 @@ DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 ROOT_CATALOG  := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
 DAPS_CATALOG  := for-catalog-$(PACKAGE)-$(VERSION).xml
 NOVDOC_SCHEMA := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
-XHTML2HTML    := xslt/html/xhtml2html.xsl
-HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard xslt/xhtml/*.xsl))
+XHTML2HTML    := daps-xslt/common/xhtml2html.xsl
+HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard daps-xslt/xhtml/*.xsl))
 
 DIRECTORIES := catalogs
 
