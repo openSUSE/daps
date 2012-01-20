@@ -23,7 +23,8 @@ DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 ROOT_CATALOG  := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
 DAPS_CATALOG  := for-catalog-$(PACKAGE)-$(VERSION).xml
 NOVDOC_SCHEMA := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
-
+XHTML2HTML    := xslt/html/xhtml2html.xsl
+HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard xslt/xhtml/*.xsl))
 
 DIRECTORIES := catalogs
 
@@ -50,6 +51,8 @@ all: $(MAN_PAGES) schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(DAPS_CATALOG) catalogs/$(ROOT_CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION) manuals
 	@echo "Ready to install..."
+all: xhtml2html
+	@echo "Transforming XHTML -> HTML..."
 
 install: create-install-dirs
 	install -m755 bin/* $(DESTDIR)/usr/bin
@@ -83,7 +86,7 @@ endif
 
 create-install-dirs:
 ifdef MANUALS
-	mkdir -p $(DAPS_DOCDIR)/html
+	mkdir -p $(DAPS_DOCDIR)/{xhtml,html}
 else
 	mkdir -p $(DAPS_DOCDIR)
 endif
@@ -103,6 +106,9 @@ endif
 clean:
 	rm -rf catalogs/ schema/novdocx.rnc schema/novdocx.rng $(MAN_PAGES) 
 
+.PHONY: xhtml2html
+xhtml2html: ${HTMLSTYLESHEETS}
+
 
 #-----------------------------
 # Generate man pages
@@ -117,6 +123,10 @@ man/%.1: man/%.xml
 	  --stringparam man.output.in.separate.dir 1 \
 	  --stringparam man.output.subdirs.enabled 0 \
 	  $(DBSTYLES)/manpages/docbook.xsl $<
+
+# Create HTML stylesheets from XHTML:
+xslt/html/%.xsl: xslt/xhtml/%.xsl
+	xsltproc --output $@  ${XHTML2HTML} $<
 
 #-----------------------------
 # Generate SGML catalog for novdoc
