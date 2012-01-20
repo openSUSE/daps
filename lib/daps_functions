@@ -74,6 +74,10 @@ function parse_args () {
                 P_HELP=1
                 shift
                 ;;
+            --html4)
+                P_HTML4=1
+                shift
+                ;;
             -m|--meta)
                 P_META=1
                 shift
@@ -412,7 +416,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,draft,help,name:,meta,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="comments,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -439,6 +443,7 @@ function build_html_jsp () {
     # usemeta implies draft mode with remarks
     [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes"
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
+    [[ 1 = $P_HTML4 ]]    && export HTML4="yes"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"

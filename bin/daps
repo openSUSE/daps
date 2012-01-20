@@ -32,13 +32,16 @@ VARLIST=(
     CONF_PREFIX
     CONVERT_OPTS
     DEBUG
+    DEFAULT_DTDROOT
     DEF_FILE
+    DEVEL
     DIA_OPTIONS
     DISTVER
     DRAFT
     DRAFT_STR
     FOPOPTIONS
     FOPTYPE
+    HTML4
     HTMLROOT
     INK_OPTIONS
     LAYOUT
@@ -372,12 +375,12 @@ function recover_cmdl_values () {
 function get_basedir () {
     if [[ -d $PWD/xml ]]; then
         # current directory is the BASE_DIR
-        BASE_DIR="$PWD"
+        BASE_DIR=$(readlink -m "$PWD")
         return 0
     elif [[ -h $ENVFILE ]]; then
         # ENVFILE is a link
         # assume the real directory of $ENVFILE is BASE_DIR
-        BASE_DIR=$(dirname $(readlink $ENVFILE))
+        BASE_DIR=$(dirname $(readlink "$ENVFILE"))
         return 0
     elif [[ -f $MAIN ]]; then
         BASE_DIR=$(dirname $MAIN)
@@ -482,12 +485,13 @@ while true ; do
 	    shift
 	    ;;
         --dtdroot)
-	    test -d $2 || exit_on_error "$2 is not a valid DTDROOT"
-	    DTDROOT_CMDL="$2"
-	    DTDROOT="$DTDROOT_CMDL"
-	    shift 2
+            test -d $2 || exit_on_error "$2 is not a valid DTDROOT"
+            DTDROOT_CMDL="$2"
+            DTDROOT="$DTDROOT_CMDL"
+            DEVEL=1
+            shift 2
             ;;
-	-e|--envfile)
+        -e|--envfile)
 	    ENVFILE_CMDL="$2"
             ENVFILE="$ENVFILE_CMDL"
 	    shift 2

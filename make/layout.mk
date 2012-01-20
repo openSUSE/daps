@@ -21,12 +21,28 @@ LAYOUT        ?= openSUSE
 
 # we need the path to some stylesheets below LAYOUTROOT:
 # In this first section, this is only names that are similar for all layouts.
-LSTYLEH       := /html/chunk.xsl
+
 LSTYLEJ       := /jsp/chunk.xsl
 LSTYLEWIKI    := /db2mediawiki/docbook.xsl
 LSTYLEMAN     := /manpages/docbook.xsl
 LSTYLEPUBXSLT := /epub/docbook.xsl
 LSTYLEPUBCSS  := /epub/susebooks.css
+
+# HTML is special, because single-html uses docbook.xsl while chunked html
+# uses chunk.xsl. Whatsmore, we optionally allow html4.
+ifeq ("$(firstword $(MAKECMDGOALS))", "html")
+  H_STYLE := chunk.xsl
+else
+  H_STYLE := docbook.xsl
+endif
+
+ifeq ("$(HTML4)", "yes")
+  H_DIR := /html/
+else
+  H_DIR := /xhtml/
+endif
+
+LSTYLEH := $(addsuffix $(H_STYLE), $(H_DIR))
 
 
 # I don't want to write that nwalsh filepath too often!

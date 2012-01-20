@@ -302,7 +302,7 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 		--stringparam projectfile PROJECTFILE.$(BOOK) \
 		--stringparam outformat $(OUTFORMAT) \
 		--stringparam docid com.novell.$(BOOK)$(subst _,,$(LL))$(OUTFORMAT) \
-	        --xinclude $(STYLE_DOCUMENT) $(PROFILEDIR)/$(MAIN)
+		--xinclude $(STYLE_DOCUMENT) $(PROFILEDIR)/$(MAIN)
 
 #--------------
 # desktop-files
@@ -333,7 +333,7 @@ $(DESKTOP_FILES_DIR)/%.desktop: $(PROFILES) $(DESKTOP_FILES_DIR)
 	rm -rf $(DESKTOP_FILES_DIR) && mkdir -p $(DESKTOP_FILES_DIR)
 	xsltproc $(DESKSTRINGS) $(ROOTSTRING) --nonet \
 		--stringparam projectfile PROJECTFILE.$(BOOK) \
-	         --xinclude $(STYLEDESK) $(PROFILEDIR)/$(MAIN)
+		--xinclude $(STYLEDESK) $(PROFILEDIR)/$(MAIN)
 
 
 
