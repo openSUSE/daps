@@ -82,7 +82,7 @@ ifdef MANUALS
 endif
 	cp -a images/ $(DAPS_SHAREDIR)
 	cp -a make/ $(DAPS_SHAREDIR)
-	cp -a daps-xslt/ $(DAPS_SHAREDIR)
+	cp -a daps-xslt/ suse-xslt/ $(DAPS_SHAREDIR)
 	cp -a etc/* $(DAPS_CONFDIR)
 	tar cp --exclude=docbook_macros.el lib/* | (cd $(DAPS_SHAREDIR); tar xpv)
 	find {$(DAPS_CONFDIR),$(DAPS_DOCDIR),$(DAPS_SHAREDIR)} -type d -exec chmod 755 {} \;

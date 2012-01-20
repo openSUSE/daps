@@ -14,7 +14,7 @@
 #
 # We may build with the rpm that installs everything in /usr/share/daps
 # or we may want to build from the subversion directory. The location of
-# the stylesheets is $(DTDDIR)/xslt/*
+# the stylesheets is $(DTDDIR)/suse-xslt/*
 
 # do set the default layout:
 LAYOUT        ?= openSUSE
@@ -49,8 +49,8 @@ LSTYLEH := $(addsuffix $(H_STYLE), $(H_DIR))
 # all the possible locations of layout stylesheets:
 STYLENWD      := /usr/share/xml/docbook/stylesheet/nwalsh/current
 #STYLELFLD     := $(shell test -d ../../common/xslt && (cd ../../common/xslt; pwd))
-STYLEDEVEL  := $(DTDROOT)/xslt
-STYLEDAPSD := /usr/share/daps/xslt
+STYLEDEVEL  := $(DTDROOT)/suse-xslt
+STYLEDAPSD := /usr/share/daps/suse-xslt
 #
 # pretend to be intelligent: stylesheets will be used if available.
 # defaults are just selected by the sequence of directory variables
