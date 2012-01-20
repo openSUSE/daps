@@ -2,8 +2,8 @@
 # open Book Builder (oBB) project.
 
 
-STYLEBOOKSTRUCTURE := $(DTDDIR)/xslt/misc/get-bookstructure.xsl
-STYLEBOOKTITLE     := $(DTDDIR)/xslt/misc/get-booktitle.xsl
+STYLEBOOKSTRUCTURE := $(DTDROOT)/xslt/misc/get-bookstructure.xsl
+STYLEBOOKTITLE     := $(DTDROOT)/xslt/misc/get-booktitle.xsl
 
 rootids structure: QUIET=@
 rootids structure: QUIET2=>& /dev/null
