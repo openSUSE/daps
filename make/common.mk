@@ -48,7 +48,7 @@ ifndef BASE_DIR
 BASE_DIR := $(shell pwd)
 endif
 ifndef DTDROOT
-DTDROOT  := "/usr/share/daps"
+DTDROOT  := $(DEFAULT_DTDROOT)
 endif
 ifndef BOOK
 BOOK     := mybook
@@ -135,8 +135,6 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 # HTML / HTML-SINGLE
 #
-# HTMLGRAPHICS uses LSTYLECSS from layout.mk. This variable is used to define
-# dependencies for dist-html
 HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 
 # JSP
@@ -175,7 +173,6 @@ USESVN := $(shell svn pg doc:maintainer $(BASE_DIR)/xml/$(MAIN) 2>/dev/null)
 #------------------------------------------------------------------------
 # xslt stylsheets
 
-HTMLBIGFILE    := $(DTDROOT)/xslt/html/docbook.xsl
 METAXSLT       := $(DTDROOT)/daps-xslt/common/svn2docproperties.xsl
 STYLEEXTLINK   := $(DTDROOT)/daps-xslt/profiling/process-xrefs.xsl
 STYLEREMARK    := $(DTDROOT)/daps-xslt/common/get-remarks.xsl
@@ -1233,8 +1230,8 @@ endif
 #
 # "Helper" targets for HTML and HTML-SINGLE
 #
-
-HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(LSTYLECSS)) $(HTML_DIR)/navig $(HTML_DIR)/admon $(HTML_DIR)/callouts $(HTML_DIR)/images
+# HTMLGRAPHICS uses STYLECSS from layout.mk.
+HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(STYLECSS)) $(HTML_DIR)/navig $(HTML_DIR)/admon $(HTML_DIR)/callouts $(HTML_DIR)/images
 
 $(HTML_DIR):
 	mkdir -p $@
@@ -1365,7 +1362,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating HTML pages"
 endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
+	$(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
@@ -1610,7 +1607,7 @@ showvariable:
 ifndef VARIABLE
 	@echo "usage: VARIABLE=some_variable make showvariable"
 else
-	@ccecho "result" "$($(VARIABLE))"
+	@ccecho "result" "$(VARIABLE): $($(VARIABLE))"
 endif
 
 #---------------
