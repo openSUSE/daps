@@ -96,7 +96,7 @@ IMG_SRCDIR         := $(BASE_DIR)/images/src
 # will be used!
 #
 ifndef STYLENOV
-GETXMLSTY    := $(DTDROOT)/xslt/misc/get-xml-stylesheet.xsl
+GETXMLSTY    := $(DTDROOT)/daps-xslt/common/get-xml-stylesheet.xsl
 STYLENOV     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
 endif
 
@@ -176,20 +176,20 @@ USESVN := $(shell svn pg doc:maintainer $(BASE_DIR)/xml/$(MAIN) 2>/dev/null)
 # xslt stylsheets
 
 HTMLBIGFILE    := $(DTDROOT)/xslt/html/docbook.xsl
-METAXSLT       := $(DTDROOT)/xslt/misc/svn2docproperties.xsl
-STYLEEXTLINK   := $(DTDROOT)/xslt/profiling/process-xrefs.xsl
-STYLEREMARK    := $(DTDROOT)/xslt/misc/get-remarks.xsl
-STYLEROOTIDS   := $(DTDROOT)/xslt/misc/get-rootids.xsl
-STYLESEARCH    := $(DTDROOT)/xslt/misc/search4includedfiles.xsl
-STYLELANG      := $(DTDROOT)/xslt/misc/get-language.xsl
-STYLEDESK      := $(DTDROOT)/xslt/desktop/docbook.xsl
-STYLE_DOCUMENT := $(DTDROOT)/xslt/yelp/docbook.xsl
-STYLELINKS     := $(DTDROOT)/xslt/misc/get-links.xsl
-STYLEBURN      := $(DTDROOT)/xslt/misc/reduce-from-set.xsl
-STYLEINDEX     := $(DTDROOT)/xslt/index/xml2idx.xsl
-STYLESEAIND    := $(DTDROOT)/xslt/misc/search4index.xsl
-STYLEPUB       := $(DTDROOT)/xslt/epub/db2db.xsl
-STYLEDB2ND     := $(DTDROOT)/xslt/misc/db2novdoc.xsl
+METAXSLT       := $(DTDROOT)/daps-xslt/common/svn2docproperties.xsl
+STYLEEXTLINK   := $(DTDROOT)/daps-xslt/profiling/process-xrefs.xsl
+STYLEREMARK    := $(DTDROOT)/daps-xslt/common/get-remarks.xsl
+STYLEROOTIDS   := $(DTDROOT)/daps-xslt/common/get-rootids.xsl
+STYLESEARCH    := $(DTDROOT)/daps-xslt/common/search4includedfiles.xsl
+STYLELANG      := $(DTDROOT)/daps-xslt/common/get-language.xsl
+STYLEDESK      := $(DTDROOT)/daps-xslt/desktop/docbook.xsl
+STYLE_DOCUMENT := $(DTDROOT)/daps-xslt/yelp/docbook.xsl
+STYLELINKS     := $(DTDROOT)/daps-xslt/common/get-links.xsl
+STYLEBURN      := $(DTDROOT)/daps-xslt/common/reduce-from-set.xsl
+STYLEINDEX     := $(DTDROOT)/daps-xslt/index/xml2idx.xsl
+STYLESEAIND    := $(DTDROOT)/daps-xslt/common/search4index.xsl
+STYLEPUB       := $(DTDROOT)/daps-xslt/epub/db2db.xsl
+STYLEDB2ND     := $(DTDROOT)/daps-xslt/common/db2novdoc.xsl
 
 # ruby script to generate ePUBs
 # not a stylesheet, but part of package docbook-xsl-stylesheets
@@ -288,7 +288,7 @@ endif
 # xsltproc call does not put out $MAIN, this needs to be added
 # separately
 #
-# xslt/misc/get-all-used-files.xsl creates an XML "file" with a list
+# daps-xslt/common/get-all-used-files.xsl creates an XML "file" with a list
 # of all xml and image files and their corresponding ids for the whole
 # set taking profiling into account. Generating this list is very time
 # consuming and is the _one_ factor that determines the initialization
@@ -307,12 +307,12 @@ endif
 SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  --stringparam xml.src.path "$(BASE_DIR)/xml/" \
 		  --stringparam mainfile $(MAIN) \
-		  $(DTDROOT)/xslt/misc/get-all-used-files.xsl \
+		  $(DTDROOT)/daps-xslt/common/get-all-used-files.xsl \
 		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
 
 SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
-		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ))
+		  $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
@@ -500,7 +500,7 @@ clean-all real-clean:
 .PHONY: projectfiles
 projectfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 			   --stringparam xml.or.img xml \
-			   $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+			   $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
 projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 projectfiles: FILES    := $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
 			   $(BASE_DIR)/$(ENVFILE) $(INCLUDED)
@@ -516,7 +516,7 @@ endif
 .PHONY: remainingfiles
 remainingfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc \
 			     $(ROOTSTRING) --stringparam xml.or.img xml \
-			     $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - )
+			     $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
 remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 remainingfiles: FILES    := $(filter-out \
 			     $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \

@@ -846,7 +846,7 @@ function checklink () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DTDROOT/xslt/misc/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(xsltproc $DTDROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -922,7 +922,7 @@ function getimages () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DTDROOT/xslt/misc/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(xsltproc $DTDROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
         else
            exit_on_error "File $P_FILE does not exist"
         fi

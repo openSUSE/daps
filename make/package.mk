@@ -77,7 +77,7 @@ package-jsp: dist-jsp
 #
 # TODO:
 # when ROOTID is specified, check whether it is the set's ROOTID
-# e.g. with xslt/misc/get-headlines-ids.xsl
+# e.g. with daps-xslt/common/get-headlines-ids.xsl
 #
 .PHONY: package-src
 package-src: PACKDIR = $(RESULT_DIR)/package/src

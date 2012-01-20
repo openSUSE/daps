@@ -60,9 +60,9 @@ $(IMG_DIRECTORIES):
 #------------------------------------------------------------------------
 # xslt stylsheets
 #
-STYLEGFX       := $(DTDROOT)/xslt/misc/get-graphics.xsl
-STYLESVG       := $(DTDROOT)/xslt/misc/fixsvg.xsl
-STYLESVG2GRAY  := $(DTDROOT)/xslt/misc/svg.color2grayscale.xsl
+STYLEGFX       := $(DTDROOT)/daps-xslt/common/get-graphics.xsl
+STYLESVG       := $(DTDROOT)/daps-xslt/common/fixsvg.xsl
+STYLESVG2GRAY  := $(DTDROOT)/daps-xslt/common/svg.color2grayscale.xsl
 
 #------------------------------------------------------------------------
 # Image lists
@@ -80,7 +80,7 @@ SRCSVG      := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
 #
 USED        := $(sort $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		  --stringparam xml.or.img img \
-		  $(DTDROOT)/xslt/misc/extract-files-and-images.xsl - ))
+		  $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
 
 # PNG and PDF can be directly taken from the USED list - the filter function
 # generates lists of all PNG common to USED and SCRPNG
