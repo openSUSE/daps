@@ -61,9 +61,14 @@
    which variants can be generated from the project with the help of conditional
    text (or profiling, as it is called in DocBook), you need a special file
    called &env; file. It is a text file and sets a number of variables (or keys) 
-   for your documentation project:</para>
+   for your documentation project. For a documentation set (a collection of books), you can define
+   multiple &env; files. By referring different root IDs, you define which book
+   is to be built with the specific &env; file. Of course, you can also specify
+   different layouts for certain books (or use different values for one of the
+   other variables defined in the &env; file): 
+  </para>
    <example id="ex.daps.env.user">
-    <title>An <filename>&env;-*</filename> file</title>
+    <title>An <filename>&env;-*</filename> File</title>
     <screen># &env; file for &dapsacr; User Guide
 MAIN=MAIN.DAPS.xml         <co id="co.daps.main"/>
 ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
@@ -72,7 +77,6 @@ PROFOS="lin;win"           <co id="co.daps.profos"/>
 LAYOUT=                    <co id="co.daps.layout"/>
 PRODUCTNAME="&dapslong;"   <co id="co.daps.productname.version"/>
 DISTVER=1.0                <xref linkend="co.daps.productname.version"/>
-
 
 export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
     </screen>
@@ -105,14 +109,6 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
       information. 
      </para>
     </callout>
-    <!--taroth 2011-12-29: no longer used in our books, explain anyway??-->
-    <!--<callout arearefs="co.daps.condition">
-     <para>
-      Selects those parts of the book that are to be printed or made
-      available online. Currently used parameters are print and
-      online.
-     </para>
-    </callout>-->
     <callout arearefs="co.daps.layout">
      <para>Optional variable. Determines the layout of the book. 
      Per default, &dapsacr; ships the following layouts:
@@ -181,12 +177,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
       (&dapsacr;' predecessor).</para>
     </callout>
    </calloutlist>
-   <para>For a documentation set (a collection of books), you can define
-   multiple &env; files. By referring different root IDs, you define which book
-   is to be built with the specific &env; file. Of course, you can also specify
-   different layouts for certain books (or use different values for one of the
-   other variables defined in the &env; file): 
-   </para>
+   <para></para>
    <example id="ex.daps.env.quick">
     <title>An <filename>&env;-*</filename> file</title>
     <screen># &env; file for &dapsacr; Quick Start
@@ -197,30 +188,32 @@ PROFARCH="x86;amd64;em64t"
 DISTVER="1.0"
 LAYOUT="flyer"
 
-export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
-</screen>
+export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
    </example>
-   <para>Because &env; files define which XML files belong to a documentation 
-    project, they are necessary for validating your XML files and for generating
-    any kind of output. Without &env; files, you cannot produce any output from
-    your DocBook sources with &dapsacr;.<remark>taroth 2012-01-17: not 100% sure
-    if this is still the case</remark>
+   <para>Because
+&env; files define which XML files belong to a documentation project, they are
+necessary for validating your XML files and for generating any kind of output.
+Without &env; files, you cannot produce any output from your DocBook sources
+with &dapsacr;.<remark>taroth 2012-01-17: not 100% sure if this is still the
+case</remark>
    </para>
-   <para>If your documentation set contains cross-references between the 
-   individual books, it is useful to define an additional &env; file 
-   (<emphasis>without</emphasis> the root ID variable) that can be used to 
-   generate an HTML output that contains all hyperlinks between the individual 
-   books.<remark>taroth 2011-12-29: FIXME; add another example ENV file for 
-   that purpose</remark>
+   <para>If your documentation set contains cross-references
+between the individual books, it is useful to define an additional &env; file
+(<emphasis>without</emphasis> the root ID variable) that can be used to generate
+an HTML output that contains all hyperlinks between the individual
+books.<remark>taroth 2011-12-29: FIXME; add another example ENV file for that
+purpose</remark>
    </para>
-   <para>&dapsacr; also contains a script for creating a new documentation
-    project from scratch. <remark>taroth 2011-12-29: add xref later</remark>.
-    When using that script, an example &env; file is automatically created.</para>
+   <para>&dapsacr; also contains a script for creating a
+new documentation project from scratch. <remark>taroth 2011-12-29: add xref
+later</remark>. When using that script, an example &env; file is automatically
+created.</para>
   </sect2>
   <sect2>
    <title>Directory Structure</title>
-   <para>For &dapsacr; to work out of the box, XML files and images should be 
-    organized in the following directory structure:</para>
+   <para>For
+&dapsacr; to work out of the box, XML files and images should be organized in
+the following directory structure:</para>
   </sect2>
  </sect1>
 </chapter>
