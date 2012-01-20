@@ -17,8 +17,9 @@
  <para>&dapsacr; (&dapslong;) is developed as open source software for Linux 
   operating systems. It consists of integrated tools, stylesheets, scripts, and 
   makefiles that support technical writers in the editing, translation and 
-  publishing process of DocBook XML files. &dapsacr; supports single source publishing 
-  into a number of different output formats, like PDF, HTML, single HTML, or EPUB.</para>
+  publishing process of DocBook XML files. &dapsacr; supports single source 
+  publishing into a number of different output formats, like PDF, HTML, single 
+  HTML, or EPUB.</para>
  <para>It can be used in combination with the following components:</para>
  <itemizedlist>
   <listitem>
@@ -34,7 +35,7 @@
  <sect1 id="sec.daps.user.oview.concepts">
   <title>Basic Concepts</title>
   <para>To define the build environment to use, &dapsacr; uses a set of
-  parameters (keys) that can be set in various places:</para>
+  variables that can be set in various places:</para>
   <itemizedlist>
    <listitem>
     <para>/etc/daps/conf (system-wide configuration file)</para>
@@ -48,7 +49,8 @@
    </listitem>
    <listitem>
     <para>on the fly at the command line. You can specify them either as 
-   as options to a <command>daps</command> or  </para>
+   as options to a <command>daps</command> or as variable declaration 
+   (<literal>FOO=bar</literal>).</para>
    </listitem>
   </itemizedlist>
   <para>The configuration file <filename>/etc/daps/conf</filename> lists all keys 
@@ -58,8 +60,8 @@
    <para>To define which XML files belong to your documentation project, and
    which variants can be generated from the project with the help of conditional
    text (or profiling, as it is called in DocBook), you need a special file
-   called &env; file. It is a text file and sets a number of variables for your
-   documentation project:</para>
+   called &env; file. It is a text file and sets a number of variables (or keys) 
+   for your documentation project:</para>
    <example id="ex.daps.env.user">
     <title>An <filename>&env;-*</filename> file</title>
     <screen># &env; file for &dapsacr; User Guide
@@ -68,8 +70,9 @@ ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
 PROFARCH="x86;ppc"         <co id="co.daps.profarch"/>
 PROFOS="lin;win"           <co id="co.daps.profos"/>
 LAYOUT=                    <co id="co.daps.layout"/>
-DISTVER=1.0                <co id="co.daps.distver"/>
-PRODUCTNAME="&dapslong;"   <co id="co.daps.productname"/>
+PRODUCTNAME="&dapslong;"   <co id="co.daps.productname.version"/>
+DISTVER=1.0                <xref linkend="co.daps.productname.version"/>
+
 
 export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
     </screen>
@@ -143,33 +146,28 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
      </varlistentry>
     </variablelist>-->
     </callout>
-    <callout arearefs="co.daps.distver">
-     <para>
-      <remark>taroth 2012-01-19: variable name will probably change - 
-     https://sourceforge.net/p/daps/tickets/25/</remark>
-     Sets the version number of the current project. 
-     </para>
-    </callout>
-    <callout arearefs="co.daps.productname">
-     <para>Optional variable. &dapsacr; allows you to set product name and 
-     product version dynamically. This enables you to use the same XML sources 
-     for different products. To use this feature, use the following entities in 
-     your XML sources:</para>
+
+    <callout arearefs="co.daps.productname.version">
+     <para>Optional variable. <remark>taroth 2012-01-19: variable name DISTVER 
+     will probably change - https://sourceforge.net/p/daps/tickets/25/</remark>
+     &dapsacr; allows you to set product name and product version dynamically. 
+     This enables you to use the same XML sources for different products. 
+     To use this feature, use the following entities in your XML sources:</para>
      <itemizedlist>
       <listitem>
        <para>&amp;productname;</para>
       </listitem>
       <listitem>
-       <para>&amp;productnamereg; (if the productname should include a copyright or 
-     trademark symbol)</para>
+       <para>&amp;productnamereg; (productname including a copyright or trademark 
+       symbol)</para>
       </listitem>
       <listitem>
        <para>&amp;productversion;</para>
       </listitem>
      </itemizedlist>
      <para>These entities will be dynamically resolved to the values of DISTVER, 
-     PRODUCTNAME, and PRODUCTNAMEREG that you can set in a project-specific (or
-     boo-specific) &env; file. 
+     PRODUCTNAME, and PRODUCTNAMEREG. You can define the value of those variables
+     in a project-specific (or book-specific) &env; file. 
 <!--# Examle:
 #   PRODUCTNAME="MyVeryFirstSoftware"
 #   PRODUCTNAME="MyVeryFirstSoftware©"
@@ -179,8 +177,8 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
     <callout arearefs="co.daps.source">
      <para>Optional line. You only need to add this line if you want to be able to 
       source &env; files with &dapsacr;. Sourcing an &env; file was necessary
-      to work with the documentation environment provided by &susedoc;&mdash;
-      &dapsacr;' predecessor.</para>
+      to work with the documentation environment provided by &susedoc; 
+      (&dapsacr;' predecessor).</para>
     </callout>
    </calloutlist>
    <para>For a documentation set (a collection of books), you can define
