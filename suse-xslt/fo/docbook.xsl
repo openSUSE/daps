@@ -73,6 +73,13 @@
      </xsl:choose>
    </xsl:variable>
 
+   <xsl:if test="$styleroot = ''">
+     <xsl:message>
+       <xsl:text>WARNING: Please set path to your stylesheets </xsl:text>
+       <xsl:text>with styleroot parameter</xsl:text>
+     </xsl:message>
+   </xsl:if>
+
    <xsl:if test="$use.xep.cropmarks != 0 and $xep.extensions != 0">
     <xsl:processing-instruction
       name="xep-pdf-crop-offset">1cm</xsl:processing-instruction>

@@ -34,11 +34,19 @@
 <xsl:param name="title.margin.left" select="'0pt'"/>
 
 <xsl:param name="alignment">left</xsl:param>
-<xsl:param name="dtdroot"></xsl:param>
+<!--<xsl:param name="dtdroot"></xsl:param>-->
+<!-- Path to stylesheets -->
+<xsl:param name="styleroot"></xsl:param>
 
 <!--http://docbook.sourceforge.net/release/images/draft.png-->
 <xsl:param name="draft.watermark.image" 
-  select="concat('file://', $dtdroot, '/xslt/fo/draft.png')"/>
+  select="concat('file://', $styleroot, '/fo/draft.png')"/>
+
+
+<!--  -->
+<xsl:param name="booktitlepage.bw.logo">images/svg/suse-logo-bw.svg</xsl:param>
+<xsl:param name="booktitlepage.color.logo">images/svg/suse-logo.svg</xsl:param>
+
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
 <xsl:param name="legal.body.size" select="$body.font.master div 1.75"/>
