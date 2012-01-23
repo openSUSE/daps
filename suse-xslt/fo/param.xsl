@@ -44,8 +44,8 @@
 
 
 <!--  -->
-<xsl:param name="booktitlepage.bw.logo">images/svg/suse-logo-bw.svg</xsl:param>
-<xsl:param name="booktitlepage.color.logo">images/svg/suse-logo.svg</xsl:param>
+<xsl:param name="booktitlepage.bw.logo">/images/svg/suse-logo-bw.svg</xsl:param>
+<xsl:param name="booktitlepage.color.logo">/images/svg/suse-logo.svg</xsl:param>
 
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
