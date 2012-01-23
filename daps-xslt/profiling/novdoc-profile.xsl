@@ -162,6 +162,15 @@
    </xsl:element>
 </xsl:template>
 
+
+<!-- ****************************************************** -->
+<!-- 
+  These template fill in the phrase element with 
+  role='productnumber' or role='productname'.
+  The content ist taken from the nearest anchestor in 
+  book/bookinfo/(productname|productnumber) or 
+  article/articleinfo/(productname|productnumber).  
+-->
 <xsl:template match="phrase[@role='productnumber']" mode="profile">
   <xsl:variable name="prodnumber">
     <xsl:choose>
