@@ -157,18 +157,18 @@
      <xsl:choose>
        <xsl:when test="$format.print = '1'">
         <xsl:attribute name="src">
-          <xsl:value-of select="concat('url(&apos;', 
+          <xsl:value-of select='concat("url(&apos;", 
                                         $styleroot, 
                                         $booktitlepage.bw.logo,
-                                        '&apos;)')"/>
+                                        "&apos;)")'/>
         </xsl:attribute>
        </xsl:when>
        <xsl:otherwise>
         <xsl:attribute name="src">
-          <xsl:value-of select="concat('url(&apos;', 
+          <xsl:value-of select='concat("url(&apos;", 
                                        $styleroot,
                                        $booktitlepage.color.logo, 
-                                       '&apos;)')"/>
+                                       "&apos;)")'/>
         </xsl:attribute>
        </xsl:otherwise>
      </xsl:choose>
