@@ -7,8 +7,9 @@
 <xsl:stylesheet
 	version="1.0"
 	xmlns:p="urn:x-suse:xmlns:docproperties"
+	xmlns:exsl="http://exslt.org/common"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-   exclude-result-prefixes="p">
+	exclude-result-prefixes="p exsl">
 
 
 <xsl:import href="&db;/profiling/profile.xsl"/>
@@ -154,12 +155,60 @@
    </xsl:copy>
 </xsl:template>
 
-
 <xsl:template match="*" mode="indexterm">
    <xsl:element name="{name()}">
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates mode="indexterm"/>
    </xsl:element>
+</xsl:template>
+
+<xsl:template match="phrase[@role='productnumber']" mode="profile">
+  <xsl:variable name="prodnumber">
+    <xsl:choose>
+      <xsl:when test="ancestor::book/bookinfo/productnumber">
+        <xsl:apply-templates select="ancestor::book/bookinfo/productnumber" mode="profile"/>
+      </xsl:when>
+      <xsl:when test="ancestor::article/articleinfo/productnumber">
+        <xsl:apply-templates select="ancestor::article/articleinfo/productnumber" mode="profile"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Could not find neither book/bookinfo/productname
+          nor article/articleinfo/productname.</xsl:message>
+        <productnumber/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="rtf" select="exsl:node-set($prodnumber)/*[1]"/>
+  <!--<xsl:message>productnumber: "<xsl:value-of select="name($rtf)"/>"</xsl:message>-->
+  <xsl:copy>
+    <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
+    <xsl:apply-templates select="$rtf/node()" mode="profile"/>
+  </xsl:copy>
+</xsl:template>
+
+<xsl:template match="phrase[@role='productname']" mode="profile">
+  <xsl:variable name="prodname">
+    <xsl:choose>
+      <xsl:when test="ancestor::book/bookinfo/productname">
+        <xsl:apply-templates select="ancestor::book/bookinfo/productname" mode="profile"/>
+      </xsl:when>
+      <xsl:when test="ancestor::article/articleinfo/productname">
+        <xsl:apply-templates select="ancestor::article/articleinfo/productname" mode="profile"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Could not find neither /book/bookinfo/productname
+          nor /article/articleinfo/productname.</xsl:message>
+      </xsl:otherwise>
+      <productname/>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="rtf" select="exsl:node-set($prodname)/*[1]"/> 
+  <!--<xsl:message>productname: "<xsl:value-of select="name($rtf)"/>"</xsl:message>-->
+  <xsl:copy>
+    <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
+    <xsl:apply-templates select="$rtf/node()" mode="profile"/>
+  </xsl:copy>
+  
 </xsl:template>
 
 </xsl:stylesheet>
