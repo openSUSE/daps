@@ -39,6 +39,7 @@ VARLIST=(
     DISTVER
     DRAFT
     DRAFT_STR
+    FALLBACK_STYLEROOT
     FOPOPTIONS
     FOPTYPE
     HTML4
@@ -59,10 +60,7 @@ VARLIST=(
     REMARK_STR
     ROOTID
     STATIC_HTML
-    STYLEFO
-    STYLEH
-    STYLENOV
-    TITLE
+    STYLEROOT
     USEMETA
     VERBOSITY
     XSLTPARAM
@@ -84,9 +82,19 @@ UNSETLIST=(
     DTDROOT_CMDL
     ENVFILE
     ENVFILE_CMDL
+    FALLBACK_STYLEROOT_CMDL
     FOP_CONFIG_FILE
+    LAYOUT_TYPE
     LIB_DIR
     SILENT
+    STYLEPUBXSLT
+    STYLEFO
+    STYLEH
+    STYLEJ
+    STYLEMAN
+    STYLEWIKI
+    STYLEROOT_CMDL
+    TITLE
     VENDOR
     VERBOSITY_CMDL
 )
@@ -233,10 +241,24 @@ Global Options:
   --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
                             there is only a single ENV file in BASE_DIR. In
                             that case the ENV file will automatically be used.
+  --fb_styleroot            Fallback styleroot directory. Can only be used in
+                            conjunction with --styleroot. By default the
+                            DocBook stylesheets are used as a fallback if
+                            custom styles for an output format are  not present.
+                            With this option you can specify an alternative
+                            fallback. Useful if you have forks of your custom
+                            stylesheets. The DocBook stylesheets will be used
+                            as a last resort.
                             Specify only the filename, not an absolute path.
   --help, -h                Help
   --main                    Path to the main file defining your document.
                             Specify only the filename, not an absolute path
+  --styleroot               By default daps uses the DocBook Stylesheets to
+                            create output. If you have your own set of
+                            stylesheets, specify the absolute path to the
+                            stylesheet directory here. The DocBook stylesheets
+                            will be used as a fallback in case styles are not
+                            defined for all output formats.
   --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
   --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
   --verbosity=2, -v2, -vv   Verbosity Level 2 (print all commands, very verbose)
@@ -365,7 +387,9 @@ function recover_cmdl_values () {
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
     test -n "$DTDROOT_CMDL"   && DTDROOT="$DTDROOT_CMDL"
     test -n "$ENVFILE_CMDL"   && ENVFILE="$ENVFILE_CMDL"
+    test -n "$FALLBACK_STYLEROOT_CMDL" && FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
     test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
+    test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
     test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
 }
 
@@ -451,7 +475,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,help,main:,verbosity::,version -n $ME -- "$@")
+ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,fb_styleroot:,help,main:,styleroot:,verbosity::,version -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
@@ -482,8 +506,8 @@ while true ; do
             DEBUG=1
             VERBOSITY_CMDL=2
             VERBOSITY=$VERBOSITY_CMDL
-	    shift
-	    ;;
+            shift
+            ;;
         --dtdroot)
             test -d $2 || exit_on_error "$2 is not a valid DTDROOT"
             DTDROOT_CMDL="$2"
@@ -495,6 +519,12 @@ while true ; do
 	    ENVFILE_CMDL="$2"
             ENVFILE="$ENVFILE_CMDL"
 	    shift 2
+            ;;
+        --fb_styleroot)
+            test -d "$2" || exit_on_error "Fallback styleroot $2 is not a valid directory"
+            FALLBACK_STYLEROOT_CMDL="$2"
+            FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
+            shift 2
             ;;
         -h|--help)
             # if it's just "-h/--help", then print the global daps help
@@ -512,6 +542,12 @@ while true ; do
 	    MAIN_CMDL="$2"
 	    MAIN="$MAIN_CMDL"
 	    shift 2
+            ;;
+        --styleroot)
+            test -d "$2" || exit_on_error "Styleroot $2 is not a valid directory"
+            STYLEROOT_CMDL="$2"
+            STYLEROOT="$STYLEROOT_CMDL"
+            shift 2
             ;;
 	-v|--verbosity)
             # $VERBOSITY will be parsed in the makefiles
@@ -542,6 +578,13 @@ while true ; do
     esac
     
 done
+
+# Check FALLBACK_STYLEROOT and STYLEROOT
+#
+if [[ -n $FALLBACK_STYLEROOT && -z $STYLEROOT ]]; then
+    ccecho "warn" "--styleroot is not specified, ignoring --fb_styleroot"
+fi 
+
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 

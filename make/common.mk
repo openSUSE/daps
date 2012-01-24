@@ -222,7 +222,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
                 --param ulink.show 1 \
-	        --stringparam dtdroot $(DTDROOT)
+	        --stringparam styleroot  "$(STYLEROOT)"
 EPUBSTRINGS  := --stringparam img.src.path "$(IMG_GENDIR)/online/"
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -231,7 +231,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
                 --param ulink.show 1 \
-	        --stringparam dtdroot $(DTDROOT)
+	        --stringparam styleroot "$(STYLEROOT)"
 ifdef DRAFT
 FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
                 --stringparam xml.source.dir "$(BASE_DIR)/xml/"
@@ -780,7 +780,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
-	  $(HTML_DIR)/$(notdir $(LSTYLECSS))
+	  $(HTML_DIR)/$(notdir $(STYLECSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 
@@ -803,7 +803,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML_DIR)/$(BOOK).html $(HTML-USED) $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
-	  $(HTML_DIR)/$(notdir $(LSTYLECSS))
+	  $(HTML_DIR)/$(notdir $(STYLECSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 #---------------
@@ -827,7 +827,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/jsp/%% \
 	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/navig/* \
 	  $(JSP_DIR)/admon/* $(JSP_DIR)/callouts/* \
-	  $(JSP_DIR)/$(notdir $(LSTYLECSS))
+	  $(JSP_DIR)/$(notdir $(STYLECSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 #---------------
@@ -1112,7 +1112,6 @@ endif
 COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
 BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
 
-
 .PHONY: pdf-name
 pdf-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf"
@@ -1126,10 +1125,9 @@ pdf-color-name color-pdf-name:
 # XSLTPARAM is a variable that can be set via wrapper script in order to
 # temporarily overwrite styleseet settings such as margins
 #
-# If the fo file is kept (PRECIOUS), it needs to be manually deleted
-# when having updated the fo stylesheets
-# Therefore we better delete it after each run (INTERMEDIATE)
-#
+# Using PHONY (rather than INTERMEDIATE) targets to make sure the .fo file
+# is always remade _and_ kept for debugging purposes
+# 
 # b/w PDF
 #
 .PHONY: bw-fo
@@ -1243,7 +1241,7 @@ $(HTML_DIR):
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 
-$(HTML_DIR)/$(notdir $(LSTYLECSS)): $(STYLECSS) $(HTML_DIR)
+$(HTML_DIR)/$(notdir $(STYLECSS)): $(STYLECSS) $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
@@ -1347,6 +1345,12 @@ meta: $(SRCFILES)
 	xsltproc -o $(PROFILEDIR)/METAFILE $(METAXSLT) $(TMP_DIR)/.docprops.xml
 endif
 
+# Add a stringparam for a CSS file if defined
+#
+ifdef STYLECSS
+  CSSSTRING := --stringparam html.stylesheet $(notdir $(STYLECSS))
+endif
+
 
 # Generate HTML from profiled xml
 #
@@ -1362,8 +1366,9 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating HTML pages"
 endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	$(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  --stringparam use.id.as.filename 1 \
+	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
@@ -1380,7 +1385,7 @@ ifeq ($(VERBOSITY),1)
 endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  --output $(HTML_DIR)/$(BOOK).html \
+	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
 	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 
 #------------------------------------------------------------------------
@@ -1388,12 +1393,12 @@ endif
 # "Helper" targets for JSP
 #
 
-JSPGRAPHICS = $(JSP_DIR)/$(notdir $(LSTYLECSS)) $(JSP_DIR)/navig $(JSP_DIR)/admon $(JSP_DIR)/callouts $(JSP_DIR)/images
+JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLECSS)) $(JSP_DIR)/navig $(JSP_DIR)/admon $(JSP_DIR)/callouts $(JSP_DIR)/images
 
 $(JSP_DIR):
 	mkdir -p $@
 
-$(JSP_DIR)/$(notdir $(LSTYLECSS)): $(STYLECSS) $(JSP_DIR)
+$(JSP_DIR)/$(notdir $(STYLECSS)): $(STYLECSS) $(JSP_DIR)
 	ln -sf $(STYLECSS) $(JSP_DIR)/
 
 $(JSP_DIR)/navig: $(DTDROOT)/images/navig $(JSP_DIR)

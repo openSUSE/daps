@@ -134,26 +134,27 @@ DAPS_ENV_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
-
-## Key:         DISTVER
-## --------------------
-## Description: Productversion
-## Type:        String
-## Default:     ""
+# NOT USED ANYMORE
 #
-# daps allows to set product name and product version dynamically. This
-# enables you to use the same XML sources for different products. To use this
-# feature, use the entities &productname; &productnamereg; (produktname with
-# copyright/trademark symbol)  and &productversion; in your XML sources. These
-# entities will be resolved to the values of DISTVER, PRODUCTNAME, and
-# PRODUCTNAMEREG
-# Examles:
-#   PRODUCTNAME="MyVeryFirstSoftware"
-#   PRODUCTNAME="MyVeryFirstSoftware©"
-#   DISTVER="4.2"
-# This value is usually set in a book specific ENVfile
-#
-DISTVER=""
+#  ## Key:         DISTVER
+#  ## --------------------
+#  ## Description: Productversion
+#  ## Type:        String
+#  ## Default:     ""
+#  #
+#  # daps allows to set product name and product version dynamically. This
+#  # enables you to use the same XML sources for different products. To use this
+#  # feature, use the entities &productname; &productnamereg; (produktname with
+#  # copyright/trademark symbol)  and &productversion; in your XML sources. These
+#  # entities will be resolved to the values of DISTVER, PRODUCTNAME, and
+#  # PRODUCTNAMEREG
+#  # Examles:
+#  #   PRODUCTNAME="MyVeryFirstSoftware"
+#  #   PRODUCTNAME="MyVeryFirstSoftware©"
+#  #   DISTVER="4.2"
+#  # This value is usually set in a book specific ENVfile
+#  #
+#  DISTVER=""
 
 ## Key:         DRAFT
 ## ------------------
@@ -177,6 +178,34 @@ DRAFT="no"
 #
 #
 DRAFT_STR="_draft"
+
+## Key:         EPUB_CSS
+## ------------------------
+## Description: Absolute path to CSS file for EPUB builds
+## Type:        Path to file
+## Default:     ""
+#
+EPUB_CSS=""
+
+## Key:         FALLBACK_STYLEROOT
+## ----------------------
+## Description: Fallback styleroot directory.
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+# When having specified custom stylesheets with STYLEROOT, the fallback
+# for styles not specified in the custom STYLEROOT are the DocBook stylesheets
+# Specify an alternative fallback with this option. Useful if you have a 
+# fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
+# for directory that only has fo styles, html versions of that document would 
+# be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
+# directory containing your original custom stylesheets (which also have
+# html stylesheets) will create html versions with your custom styles. The
+# DocBook stylesheets remain as a last fallback resort.
+#
+# This option is ignored when not specifying STYLEROOT at the same time.
+#
+FALLBACK_STYLEROOT=""
 
 ## Key:         FOPOPTIONS
 ## -----------------------
@@ -207,6 +236,14 @@ FOPTYPE="fop"
 ## Default:     no
 #
 HTML4="no"
+
+## Key:         HTML_CSS
+## ------------------------
+## Description: Absolute path to CSS file for HTML builds
+## Type:        Path to file
+## Default:     ""
+#
+HTML_CSS=""
 
 ## Key:         HTMLROOT
 ## ------------------------
@@ -281,25 +318,29 @@ MAIN=""
 #
 PDFNAME=""
 
-## Key:         PRODUCTNAME
-## ------------------------
-## Description: Productname
-## Type:        String
-## Default:     ""
+
 #
-# daps allows to set product name and product version dynamically. This
-# enables you to use the same XML sources for different products. To use this
-# feature, use the entities &productname; &productnamereg; (produktname with
-# copyright/trademark symbol)  and &productversion; in your XML sources. These
-# entities will be resolved to the values of DISTVER, PRODUCTNAME, and
-# PRODUCTNAMEREG
-# Examles:
-#   PRODUCTNAME="MyVeryFirstSoftware"
-#   PRODUCTNAME="MyVeryFirstSoftware©"
-#   DISTVER="4.2"
-# This value is usually set in a book specific ENVfile
+# NO USED ANYMORE
 #
-PRODUCTNAME=""
+#  ## Key:         PRODUCTNAME
+#  ## ------------------------
+#  ## Description: Productname
+#  ## Type:        String
+#  ## Default:     ""
+#  #
+#  # daps allows to set product name and product version dynamically. This
+#  # enables you to use the same XML sources for different products. To use this
+#  # feature, use the entities &productname; &productnamereg; (produktname with
+#  # copyright/trademark symbol)  and &productversion; in your XML sources. These
+#  # entities will be resolved to the values of DISTVER, PRODUCTNAME, and
+#  # PRODUCTNAMEREG
+#  # Examles:
+#  #   PRODUCTNAME="MyVeryFirstSoftware"
+#  #   PRODUCTNAME="MyVeryFirstSoftware©"
+#  #   DISTVER="4.2"
+#  # This value is usually set in a book specific ENVfile
+#  #
+#  PRODUCTNAME=""
 
 ## Key:         PRODUCTNAMEREG
 ## ---------------------------
@@ -398,24 +439,19 @@ REMARK_STR="_remarks"
 #
 ROOTID=""
 
-## Key:         STYLE*
-## --------------------
-## Description: STYLE*
-## Type:        String
+## Key:      STYLEROOT     
+## -------------------
+## Description: Custom Stylesheet directory.
+## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
 #
-# ???????????????? Work in progress
+# By default daps uses the DocBook Stylesheets to create output. If you have
+# your own set of stylesheets, specify the absolute path to the stylesheet
+# directory here. The DocBook stylesheets will be used as a fallback in case
+# styles are not defined for all output formats.
 #
+STYLEROOT=""
 
-## Key:         TITLE
-## ------------------
-## Description: TITLE???
-## Type:        String
-## Default:     ""
-#
-# ???????????????? used in Projectfile only
-#
-TITLE=""
 
 ## Key:         USEMETA
 ## --------------------
