@@ -32,6 +32,7 @@ Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
+BuildRequires:  bash >= 4.0
 BuildRequires:  dia
 BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
@@ -96,6 +97,7 @@ BuildRequires:  python-xml
 PreReq:         libxml2
 PreReq:         sgml-skel
 
+Requires:       bash >= 4.0
 Requires:       dejavu
 Requires:       dia
 Requires:       docbook_4
@@ -143,7 +145,7 @@ Requires:        xml-commons-apis-bootstrap
 %endif
 %endif
 %if 0%{?suse_version} < 1120
-BuildRequires:  python-xml
+Requires:        python-xml
 %endif
 
 Recommends:     agfa-fonts
