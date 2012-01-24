@@ -35,6 +35,15 @@ else
 DEVNULL := >/dev/null
 endif
 
+# Check whether the sources are DocBook 4 or 5
+# get-docbook-version.xsl returns 4,5, or 0
+
+DOCBOOK_VERSION := $(shell xsltproc $(DTDROOT)/daps-xslt/common/get-docbook-version.xsl $(BASE_DIR)/xml/$(MAIN))
+
+ifeq ($(DOCBOOK_VERSION), 0)
+  $(error $(MAIN) is not a valid DocBook file)
+endif
+
 
 #------------------------------------------------------------------------
 # Paths / Defaults

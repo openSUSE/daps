@@ -38,17 +38,16 @@
 
 #----------------------------
 # Stylesheet root directories
+#
+# 
 
-DB_VERSION := $(shell xsltproc $(DTDROOT)/daps-xslt/common/get-docbook-version.xsl $(BASE_DIR)/xml/$(MAIN))
-ifeq ($(DB_VERSION), 4)
+ifeq ($(DOCBOOK_VERSION), 4)
   STYLE_DOCBOOK := /usr/share/xml/docbook/stylesheet/nwalsh/current
 endif
-ifeq ($(DB_VERSION), 5)
+ifeq ($(DOCBOOK_VERSION), 5)
   STYLE_DOCBOOK := /usr/share/xml/docbook/stylesheet/nwalsh5/current
 endif
-ifeq ($(DB_VERSION), 0)
-  $(error $(MAIN) is not a valid DocBook file)
-endif
+
 
 STYLE_CUSTOM          := $(STYLEROOT)
 
