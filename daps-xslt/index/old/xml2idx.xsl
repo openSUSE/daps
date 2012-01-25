@@ -7,7 +7,7 @@
     without text nodes.
 -->
 
-<xsl:import href="../misc/copy.xsl"/>
+<xsl:import href="../common/copy.xsl"/>
 
 <!-- Omit any any text node -->
 <xsl:template match="text()" />

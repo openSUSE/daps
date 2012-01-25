@@ -3,7 +3,7 @@
   xmlns:exsl="http://exslt.org/common" xmlns:suse="urn:x-suse:namespace:1.0"
   extension-element-prefixes="exsl suse" version="1.0">
 
-  <xsl:import href="../misc/rootid.xsl"/>
+  <xsl:import href="../common/rootid.xsl"/>
   <xsl:output method="text" encoding="UTF-8" />
 
   <xsl:include href="../profiling/suse-pi.xsl"/>

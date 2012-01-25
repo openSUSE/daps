@@ -16,7 +16,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:import href="../misc/rootid.xsl"/>
+<xsl:import href="../common/rootid.xsl"/>
 
 <xsl:output method="xml" encoding="UTF-8"/>
 
