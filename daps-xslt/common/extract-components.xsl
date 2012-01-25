@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id: extract-components.xsl 442 2005-06-22 09:23:51Z toms $ -->
 <xsl:stylesheet version="1.0"
+    xmlns:db="http://docbook.org/ns/docbook"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    extension-element-prefixes="exsl db"
 >
 
 <!--
@@ -53,12 +54,16 @@
 </xsl:template>
 
 
-<xsl:template match="book|part">
+<xsl:template match="book|db:book|part|db:part">
    <xsl:apply-templates />
 </xsl:template>
 
 
-<xsl:template match="chapter|preface|glossary|bibliography|appendix">
+<xsl:template match="chapter|db:chapter|
+                     preface|db:preface|
+                     glossary|db:glossary|
+                     bibliography|db:bibliography|
+                     appendix|db:appendix">
    <xsl:variable name="filename">
       <xsl:choose>
         <xsl:when test="$use.xml.base='1' and @xml:base">
@@ -66,15 +71,15 @@
         </xsl:when>
         <xsl:otherwise>
             <xsl:choose>
-            <xsl:when test="self::chapter">cha</xsl:when>
-            <xsl:when test="self::preface">pre</xsl:when>
-            <xsl:when test="self::glossary">glo</xsl:when>
-            <xsl:when test="self::bibliography">bib</xsl:when>
-            <xsl:when test="self::appendix">app</xsl:when>
+            <xsl:when test="self::chapter or self::db:chapter">cha</xsl:when>
+            <xsl:when test="self::preface or self::db:preface">pre</xsl:when>
+            <xsl:when test="self::glossary or self::db:glossary">glo</xsl:when>
+            <xsl:when test="self::bibliography or self::db:bibliography">bib</xsl:when>
+            <xsl:when test="self::appendix or self::db:appendix">app</xsl:when>
             </xsl:choose>
             <xsl:text>.</xsl:text>
             <xsl:choose>
-            <xsl:when test="@id"><xsl:value-of select="@id"/></xsl:when>
+            <xsl:when test="@id or @xml:id"><xsl:value-of select="(@id|@xml:id)[1]"/></xsl:when>
             <xsl:otherwise>
                <xsl:message>WARNING: Element <xsl:value-of select="name(.)" /> doesn't contain an id attribute. Using generated id.</xsl:message>
                <xsl:value-of select="generate-id(.)"/>

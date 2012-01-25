@@ -35,10 +35,11 @@
 -->
 <xsl:stylesheet version="1.0"
   xmlns:exsl="http://exslt.org/common"
+  xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xi="http://www.w3.org/2001/XInclude"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   extension-element-prefixes="exsl"
-  exclude-result-prefixes="exsl xi">
+  exclude-result-prefixes="exsl xi db">
 
   <xsl:import href="../profiling/check.profiling.xsl"/>
   <xsl:output method="xml" indent="yes"/>
@@ -115,7 +116,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="mediaobject">
+  <xsl:template match="mediaobject|db:mediaobject">
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
@@ -123,7 +124,7 @@
       <xsl:apply-templates/>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="imageobject">
+  <xsl:template match="imageobject|db:imageobject">
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
@@ -131,7 +132,7 @@
       <xsl:apply-templates/>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="imagedata">
+  <xsl:template match="imagedata|db:imagedata">
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
