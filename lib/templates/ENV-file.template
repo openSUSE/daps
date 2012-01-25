@@ -7,13 +7,33 @@
 # customize other settings from /etc/daps/config, do so in
 # ~/.daps/config
 
+# mandatory parameter
 MAIN="§§MAIN§§"
+
+#--------------------
+# optional parameters
+
+# rootid
+# needed to build individual books if MAIN contains a set with several
+# books/articels
+# if not specified the whole set from MAIN will be build
 ROOTID=""
+
+#------------------
+# Custom Stylesheets
+# (if not defined the DookBook stylesheets will be used)
+#
+STYLEROOT=""
+FB_STYLEROOT=""
+HTML_CSS=""
+EPUB_CSS=""
+
+# profiling stuff
+#
+# os=""
 PROFOS=""
+# arch=""
 PROFARCH=""
-DISTVER=""
-PRODUCTNAME=""
-PRODUCTNAMEREG=""
 
 # if you want to be able to source this file, so you do not have
 # to specify the -e/--envfile option with daps, uncomment the
