@@ -6,7 +6,7 @@
 # daps = DocBook Authoring and Publishing Suite
 
 
-VERSION=0.9.1
+VERSION=0.9.3
 
 
 # ----------------------------------------------------------------------------
@@ -37,6 +37,7 @@ VARLIST=(
     DEVEL
     DIA_OPTIONS
     DISTVER
+    DOCBOOK5_RNC_SCHEME
     DRAFT
     DRAFT_STR
     FALLBACK_STYLEROOT
@@ -197,6 +198,7 @@ SUBCOMMANDS=(
     [txt-name]=show_names
     [txt]=build_generic
     [validate]=comments_remarks
+    [warn-images]=filelists
     [wiki-name]=show_names
     [wiki]=build_generic
     [xmlgraphics-bw]=filelists
@@ -305,6 +307,7 @@ Subcommands:
     missinggraphics           Print missing images
     remainingfiles            Print XML source files _not_ used by the book
     remaininggraphics         Print source graphics _not_ used by the book
+    warn-images                Print a list of non-unique image files
     xmlgraphics               Print (generated) color graphics really used to
                               generate the books
     xmlgraphics-bw            Print (generated) b/w graphics really used to

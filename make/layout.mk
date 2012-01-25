@@ -2,11 +2,11 @@
 #
 # Docbook:
 #
-# docbook4: /usr/share/xml/docbook/stylesheet/nwalsh/current
-# docbook5: /usr/share/xml/docbook/stylesheet/nwalsh5/current
+# docbook4: e.g. /usr/share/xml/docbook/stylesheet/nwalsh/current
+# docbook5: e.g. /usr/share/xml/docbook/stylesheet/nwalsh5/current
 #
-# This make file automatically detects if $MAIN is docbook5
-# or docbook4 and uses the stylesheets accordingly.
+# common.mk automatically detects if $MAIN is docbook5
+# or docbook4 and this file uses the stylesheets accordingly.
 
 # The following variables need to be set for a custom layout
 #
@@ -24,17 +24,6 @@
 #
 # The subdirectory layout in each STYLEROOT directory needs to be the same as
 # in the original DocBook stylesheet directories
-#
-# Specifying  
-
-
-
-
-## SUSE
-##
-## SUSE:        /usr/share/daps/xslt
-## SUSE-pocket: /usr/share/daps/xslt/pocket (fo only)
-## SUSE-flyer:  /usr/share/daps/xslt/flyer  (fo only)
 
 #----------------------------
 # Stylesheet root directories
@@ -42,10 +31,15 @@
 # 
 
 ifeq ($(DOCBOOK_VERSION), 4)
-  STYLE_DOCBOOK := /usr/share/xml/docbook/stylesheet/nwalsh/current
+  STYLE_DOCBOOK := $(DOCBOOK4_STYLES)
+  EPUB_RUBY_SCRIPT := "$(DOCBOOK4_STYLES)/epub/bin/dbtoepub"
 endif
 ifeq ($(DOCBOOK_VERSION), 5)
-  STYLE_DOCBOOK := /usr/share/xml/docbook/stylesheet/nwalsh5/current
+  # the DocBook 5 XSLT 1.0 stylesheets are not available for
+  # all targets (epub, for example, is missing), therefore we
+  # need the DocBook4 stylesheets as a fallback
+  STYLE_DOCBOOK := $(DOCBOOK5_STYLES) $(DOCBOOK4_STYLES)
+  EPUB_RUBY_SCRIPT := "$(DOCBOOK4_STYLES)/epub/bin/dbtoepub"
 endif
 
 
@@ -83,11 +77,11 @@ STYLE_ROOTDIRS := $(wildcard $(STYLE_DEVEL) $(STYLE_CUSTOM) \
 # the same
 
 
-EPUB_STYLEDIR := /epub/docbook.xsl
-FO_STYLEDIR   := /fo/docbook.xsl
-JSP_STYLEDIR  := /jsp/chunk.xsl
-MAN_STYLEDIR  := /manpages/docbook.xsl
-WIKI_STYLEDIR := /db2mediawiki/docbook.xsl
+EPUB_XSLT_STYLE := /epub/docbook.xsl
+FO_STYLE        := /fo/docbook.xsl
+JSP_STYLE       := /jsp/chunk.xsl
+MAN_STYLE       := /manpages/docbook.xsl
+WIKI_STYLE      := /db2mediawiki/docbook.xsl
 
 # HTML is special, because single-html uses docbook.xsl while chunked html
 # uses chunk.xsl. Whatsmore, we optionally allow html4.
@@ -117,8 +111,8 @@ HTML_STYLEDIR := $(addsuffix $(H_STYLE), $(H_DIR))
 # STYLEMAN:      man
 # STYLEWIKI:     wiki
 #
-# STYLEPUBCSS:      css file for epub
-# STYLECSS:         cssfile for html
+# STYLE_EPUBCSS: css file for epub
+# STYLE_HTMLCSS: cssfile for html
 #
 # By using ifndef we allow to overwrite the style/css on the command line by
 # directly passing e.g. STYLEFO=<PATH> to make
@@ -128,41 +122,41 @@ HTML_STYLEDIR := $(addsuffix $(H_STYLE), $(H_DIR))
 # "intelligent". wildcard filters the list of files to only include the ones
 # that really exist, while firstword picks the first element of that
 # list.
-# So existing files are chosen in the oder defined in $STYLE_ROOTDIRS
+# So existing files are chosen in the order defined in $STYLE_ROOTDIRS
 # So the DocBook stylesheets always raima the last resort
 
-ifndef STYLEPUBXSLT
-  STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_STYLEDIR), \
+ifndef STYLEEPUBXSLT
+  STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 ifndef STYLEFO
-  STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLEDIR), \
+  STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 ifndef STYLEH
-  STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLEDIR), \
+  STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 ifndef STYLEJ
-  STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLEDIR), \
+  STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 ifndef STYLEMAN
-  STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLEDIR), \
+  STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 ifndef STYLEWIKI
-  STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLEDIR), \
+  STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 endif
 
 #
 # CSS
-ifndef STYLECSS
-  STYLECSS := $(HTML_CSS)
+ifndef STYLE_HTMLCSS
+  STYLE_HTMLCSS := $(HTML_CSS)
 endif
-ifndef STYLEPUBCSS
-  STYLEPUBCSS := $(EPUB_CSS)
+ifndef STYLE_EPUBCSS
+  STYLE_EPUBCSS := $(EPUB_CSS)
 endif
 
 

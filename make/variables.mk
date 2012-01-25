@@ -22,8 +22,8 @@ endif
 ifdef PROFCONDITION
 variables	+= "PROFCONDITION='$(PROFCONDITION)'"
 endif
-ifdef STYLENOV
-variables	+= "STYLENOV='$(STYLENOV)'"
+ifdef PROFILE_URN 
+variables	+= "PROFILE_URN='$(PROFILE_URN)'"
 endif
 ifdef STYLEFO
 variables	+= "STYLEFO='$(STYLEFO)'"

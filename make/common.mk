@@ -35,15 +35,6 @@ else
 DEVNULL := >/dev/null
 endif
 
-# Check whether the sources are DocBook 4 or 5
-# get-docbook-version.xsl returns 4,5, or 0
-
-DOCBOOK_VERSION := $(shell xsltproc $(DTDROOT)/daps-xslt/common/get-docbook-version.xsl $(BASE_DIR)/xml/$(MAIN))
-
-ifeq ($(DOCBOOK_VERSION), 0)
-  $(error $(MAIN) is not a valid DocBook file)
-endif
-
 
 #------------------------------------------------------------------------
 # Paths / Defaults
@@ -94,6 +85,24 @@ TMP_DIR            := $(BUILD_DIR)/.tmp
 
 IMG_SRCDIR         := $(BASE_DIR)/images/src
 
+#------------------------------------------------------------------------
+# DocBook version/Paths
+#
+# Check whether the sources are DocBook 4 or 5
+# get-docbook-version.xsl returns 4,5, or 0
+
+DOCBOOK_VERSION := $(shell xsltproc $(DTDROOT)/daps-xslt/common/get-docbook-version.xsl $(BASE_DIR)/xml/$(MAIN))
+
+ifeq ($(DOCBOOK_VERSION), 0)
+  $(error $(MAIN) is not a valid DocBook file)
+endif
+
+# Get the DocBook stylesheet locations via catalogs
+#
+DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current | sed -e s%^file://%%)
+
+DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current | sed -e s%^file://%%)
+
 #----------
 #
 # get the profiling stylesheet from $(MAIN)
@@ -104,14 +113,16 @@ IMG_SRCDIR         := $(BASE_DIR)/images/src
 # If $(MAIN) does not contain a link to a profiling stylesheet, no profiling
 # will be used!
 #
-ifndef STYLENOV
+# ==> if PROFILE_URN is not set, no profiling will be done
+
+ifndef PROFILE_URN
 GETXMLSTY    := $(DTDROOT)/daps-xslt/common/get-xml-stylesheet.xsl
-STYLENOV     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
+PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
 endif
 
 # PROFILEDIR is one of the most critical variables. Depending on
 # this variable, the profiling is done completely different.
-ifdef STYLENOV
+ifdef PROFILE_URN
 ifndef PROFCONDITION
 PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)
 else
@@ -194,12 +205,8 @@ STYLELINKS     := $(DTDROOT)/daps-xslt/common/get-links.xsl
 STYLEBURN      := $(DTDROOT)/daps-xslt/common/reduce-from-set.xsl
 STYLEINDEX     := $(DTDROOT)/daps-xslt/index/xml2idx.xsl
 STYLESEAIND    := $(DTDROOT)/daps-xslt/common/search4index.xsl
-STYLEPUB       := $(DTDROOT)/daps-xslt/epub/db2db.xsl
+STYLEEPUBDB    := $(DTDROOT)/daps-xslt/epub/db2db.xsl
 STYLEDB2ND     := $(DTDROOT)/daps-xslt/common/db2novdoc.xsl
-
-# ruby script to generate ePUBs
-# not a stylesheet, but part of package docbook-xsl-stylesheets
-DB2EPUB := ruby /usr/share/xml/docbook/stylesheet/nwalsh/current/epub/bin/dbtoepub
 
 #------------------------------------------------------------------------
 # xslt stringparams
@@ -232,7 +239,6 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
                 --param ulink.show 1 \
 	        --stringparam styleroot  "$(STYLEROOT)"
-EPUBSTRINGS  := --stringparam img.src.path "$(IMG_GENDIR)/online/"
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
@@ -456,13 +462,22 @@ prof profile: $(PROFILES)
 #--------------
 # validating
 #
+# Use xmllint for DocBook 4 and jing for DocBook 5
+# (xmllint -> DTD, jing Relax NG)
+
 .PHONY: validate
 $(PROFILEDIR)/.validate validate: $(PROFILES) missing-images
-ifeq ($(VERBOSITY),1)
+ifeq ($(VERBOSITY), 1)
 	@echo "   Validating..."
 endif
+ifeq ($(DOCBOOK_VERSION), 4)
 	xmllint --noent --postvalid --noout \
 		--xinclude $(PROFILEDIR)/$(MAIN)
+else
+
+	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing -c $(DOCBOOK5_RNC_SCHEME) \
+	  $(PROFILEDIR)/$(MAIN)
+endif
 	touch $(PROFILEDIR)/.validate
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
@@ -789,7 +804,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
-	  $(HTML_DIR)/$(notdir $(STYLECSS))
+	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 
@@ -812,7 +827,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML_DIR)/$(BOOK).html $(HTML-USED) $(HTML_DIR)/navig/* \
 	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
-	  $(HTML_DIR)/$(notdir $(STYLECSS))
+	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 #---------------
@@ -836,7 +851,7 @@ endif
 	  --absolute-names --transform=s%$(RESULT_DIR)/jsp/%% \
 	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/navig/* \
 	  $(JSP_DIR)/admon/* $(JSP_DIR)/callouts/* \
-	  $(JSP_DIR)/$(notdir $(STYLECSS))
+	  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 #---------------
@@ -867,16 +882,24 @@ $(DIRECTORIES):
 # Generate a temporary single XML file needed for various targets such as
 # epub, man, bigfile etc.
 #
+# If PROFILE_URN is not set, profiling is not needed. In that case we generate
+# a bigfile using xmllint
+#
 $(TMP_XML): $(PROFILES)
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating bigfile"
 endif
+ifdef PROFILE_URN
 	xsltproc --xinclude --output $@ \
 	  --stringparam resolve.suse-pi 1 \
 	  --stringparam show.comments $(COMMENTS) \
 	  --stringparam show.remarks $(REMARKS) \
-	  --stringparam projectfile PROJECTFILE.$(BOOK) $(STYLENOV) \
+	  --stringparam projectfile PROJECTFILE.$(BOOK) $(PROFILE_URN) \
 	  $(PROFILEDIR)/$(MAIN)
+else
+	xmllint --xinclude --output $@ $(PROFILEDIR)/$(MAIN)
+endif
+
 
 #------------------------------------------------------------------------
 #
@@ -898,11 +921,11 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 #
 # The entity declarations are needed for the target dist-xml because we want
 # to recover all the entities after the profiling step when exporting our xml.
-# If STYLENOV is undefined, there is no profiling information in $MAIN. This
+# If PROFILE_URN is undefined, there is no profiling information in $MAIN. This
 # means, we will continue without profiling.
 #
 $(PROFILEDIR)/%: $(BASE_DIR)/xml/%
-ifdef STYLENOV
+ifdef PROFILE_URN
 ifeq ($(VERBOSITY),1)
 #tput el1
 #echo -en "\r   Profiling $(notdir $<)"
@@ -910,7 +933,7 @@ ifeq ($(VERBOSITY),1)
 endif
 	xsltproc --nonet --output $@ $(PROFSTRINGS) \
 	  --stringparam filename "$(notdir $<)" $(HROOTSTRING) \
-	  $(STYLENOV) $<
+	  $(PROFILE_URN) $<
 else
 	ln -sf $< $@
 endif
@@ -946,7 +969,7 @@ endif
 #
 
 $(PROFILE_PARENT_DIR)/dist/%: $(PROFILE_PARENT_DIR)/dist
-ifdef STYLENOV
+ifdef PROFILE_URN
 $(PROFILE_PARENT_DIR)/dist/%: $(TMP_DIR)/dist/xml/%
 ifeq ($(VERBOSITY),1)
 	@echo "   Profiling $(notdir $<)"
@@ -957,7 +980,7 @@ endif
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
 		  --stringparam filename "$(notdir $<)" \
-		  $(STYLENOV) $<
+		  $(PROFILE_URN) $<
 	$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
 $(PROFILE_PARENT_DIR)/dist/%: $(BASE_DIR)/xml/% link-entity-noprofile
@@ -1237,8 +1260,8 @@ endif
 #
 # "Helper" targets for HTML and HTML-SINGLE
 #
-# HTMLGRAPHICS uses STYLECSS from layout.mk.
-HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(STYLECSS)) $(HTML_DIR)/navig $(HTML_DIR)/admon $(HTML_DIR)/callouts $(HTML_DIR)/images
+# HTMLGRAPHICS uses STYLE_HTMLCSS from layout.mk.
+HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)) $(HTML_DIR)/navig $(HTML_DIR)/admon $(HTML_DIR)/callouts $(HTML_DIR)/images
 
 $(HTML_DIR):
 	mkdir -p $@
@@ -1250,17 +1273,17 @@ $(HTML_DIR):
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 
-$(HTML_DIR)/$(notdir $(STYLECSS)): $(STYLECSS) $(HTML_DIR)
+$(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	cp $(STYLECSS) $(HTML_DIR)/
+	cp $(STYLE_HTMLCSS) $(HTML_DIR)/
 else
 	if [ -f $@ ]; then \
 	  rm -f $@; \
 	fi
-	ln -sf $(STYLECSS) $(HTML_DIR)/
+	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
 endif
 
 $(HTML_DIR)/navig: $(DTDROOT)/images/navig $(HTML_DIR)
@@ -1356,8 +1379,8 @@ endif
 
 # Add a stringparam for a CSS file if defined
 #
-ifdef STYLECSS
-  CSSSTRING := --stringparam html.stylesheet $(notdir $(STYLECSS))
+ifdef STYLE_HTMLCSS
+  CSSSTRING := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
 endif
 
 
@@ -1402,13 +1425,13 @@ endif
 # "Helper" targets for JSP
 #
 
-JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLECSS)) $(JSP_DIR)/navig $(JSP_DIR)/admon $(JSP_DIR)/callouts $(JSP_DIR)/images
+JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)) $(JSP_DIR)/navig $(JSP_DIR)/admon $(JSP_DIR)/callouts $(JSP_DIR)/images
 
 $(JSP_DIR):
 	mkdir -p $@
 
-$(JSP_DIR)/$(notdir $(STYLECSS)): $(STYLECSS) $(JSP_DIR)
-	ln -sf $(STYLECSS) $(JSP_DIR)/
+$(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
+	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
 
 $(JSP_DIR)/navig: $(DTDROOT)/images/navig $(JSP_DIR)
 	ln -sf $(DTDROOT)/images/navig/ $(JSP_DIR)
@@ -1473,6 +1496,10 @@ endif
 # "Helper" targets for EPUB
 #
 
+# ruby script to generate ePUBs
+# not a stylesheet, but part of package docbook-xsl-stylesheets
+DB2EPUB := ruby $(EPUB_RUBY_SCRIPT)
+
 $(EPUB_TMP_DIR):
 	mkdir -p $@
 
@@ -1488,18 +1515,16 @@ $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml: $(TMP_XML)
 ifeq ($(VERBOSITY),1)
 	@echo "   Generating XML bigfile"
 endif
-	xsltproc --output $@ $(ROOTSTRING) $(STYLEPUB) $<
+	xsltproc --output $@ $(ROOTSTRING) $(STYLEEPUBDB) $<
 
 # Generate epub from "epub xml" file 
 #
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml $(STYLEPUB) validate provide-epub-images 
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml $(STYLEEPUBDB) validate provide-epub-images
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating epub"
 endif
-	$(DB2EPUB) \
-		-s $(STYLEPUBXSLT) \
-		--verbose --css $(STYLEPUBCSS) \
-		-o $@ $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
+	$(DB2EPUB) -s $(STYLEEPUBXSLT) --verbose --css $(STYLE_EPUBCSS) \
+	  -o $@ $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 #------------------------------------------------------------------------
 #
@@ -1632,7 +1657,7 @@ check: ROOTIDS = $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLEROOTIDS) $(PRO
 check:
 	@echo "XML_CATALOG_FILES = $(XML_CATALOG_FILES)"
 	@echo "DTDROOT           = $(DTDROOT)"
-	@echo "STYLENOV          = $(STYLENOV)"
+	@echo "PROFILE_URN          = $(PROFILE_URN)"
 	@echo
 	@echo "LL                = $(LL)"
 	@echo "PROFARCH          = $(PROFARCH)"
@@ -1656,7 +1681,7 @@ check:
 	@echo "STYLEWIKI         = $(STYLEWIKI)"
 	@echo "LAYOUTROOT        = $(LAYOUTROOT)"
 	@echo "FOPTYPE           = $(FOPTYPE)"
-	@echo "STYLENOV          = $(STYLENOV)"
+	@echo "PROFILE_URN          = $(PROFILE_URN)"
 	@echo "T                 = $(T)"
 #	@echo "NOPROFILES        = $(NOPROFILES)"
 #	@echo "SRCFILES          = $(SRCFILES)"

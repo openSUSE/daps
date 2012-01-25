@@ -1,7 +1,25 @@
+###########################
+# DAPS configuration file #
+###########################
+#
+# Copyright (C) 2011 fs@suse.de, openSUSE.org
+# Authors: fs@suse.de
+#
+
+
+#------------------------------------------------------------
+# Distribution specific paths
+# You may need to create a patch for the following lines when packaging
+# daps for your distribution
+#
+# The following paths are the ones used in openSUSE
+
+DOCBOOK5_RNC_SCHEME="/usr/share/xml/docbook/schema/rng/5.0/docbook.rnc"
+
 #------------------------------------------------------------
 # Customizing:
 #
-# Override any setting from this file in
+# Override any setting below in
 # $HOME/.daps/config
 # or on the commandline
 #------------------------------------------------------------
@@ -16,7 +34,6 @@
 # 2. ENV-file
 # 3. $USER_RC (user config file)
 # 4. $DTDROOT/etc/system-profile
-#    XMLFORMAT_CONF
 
 
 ## Key:         BASE_DIR
@@ -275,20 +292,33 @@ IMG_VIEWER=""
 #
 INK_OPTIONS="-z -w 800"
 
-## Key:         LAYOUT
-## -------------------
-## Description: Specify a layout to be used for book generation
-## Type:        String (flyer, pocket)
-## Default:     ""
+## Key:         JING_FLAGS
+## ------------------------
+## Description: Flags for jing
+## Type:        String, whitespace-separated
+## Default:     "-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
 #
-# Lets you specify a layout for book creation. If not set, uses the daps
-# default layout. daps offers two additional layouts for PDFs: flyer (two
-# column layout) and pocket (for DVD box sized manuals)
-# This is currently work in progress. The goal is to enable custom stylesheets
-# and to easily be able to fallback to the original DocBook stylesheets
-# This value is usually set in a book specific ENVfile.
-# 
-LAYOUT=""
+# The default flag enables jing to follow xi:includes
+# Do not change unless you really know what you do.
+#
+JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+
+# NO LONGER USED
+#
+# ## Key:         LAYOUT
+# ## -------------------
+# ## Description: Specify a layout to be used for book generation
+# ## Type:        String (flyer, pocket)
+# ## Default:     ""
+# #
+# # Lets you specify a layout for book creation. If not set, uses the daps
+# # default layout. daps offers two additional layouts for PDFs: flyer (two
+# # column layout) and pocket (for DVD box sized manuals)
+# # This is currently work in progress. The goal is to enable custom stylesheets
+# # and to easily be able to fallback to the original DocBook stylesheets
+# # This value is usually set in a book specific ENVfile.
+# # 
+# LAYOUT=""
 
 ## Key:         MAIN
 ## -----------------
@@ -320,7 +350,7 @@ PDFNAME=""
 
 
 #
-# NO USED ANYMORE
+# NOT USED ANYMORE
 #
 #  ## Key:         PRODUCTNAME
 #  ## ------------------------
@@ -381,6 +411,18 @@ PROFARCH=""
 # This value is usually set in a book specific ENVfile.
 #
 PROFCONDITION=""
+
+## Key:         PROFILE_URN
+## ---------------------------
+## Description: URN for profiling stylesheet
+## Type:        urn (String)
+## Default:     ""
+#
+# In order to use profiling, the urn to a profiling stylesheet _either_ has
+# to be specified in the header of the main file ($MAIN) via <?xml-stylesheet/>
+# or via this variable. Valid urns can be found in the DAPS installation
+# directory in etc/catalog.xml
+PROFILE_URN=""
 
 ## Key:         PROFOS
 ## -------------------
