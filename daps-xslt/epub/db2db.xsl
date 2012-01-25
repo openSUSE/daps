@@ -14,7 +14,8 @@
 
 <xsl:stylesheet version="1.0"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:db="http://docbook.org/ns/docbook"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
 <xsl:import href="../common/rootid.xsl"/>
 
@@ -32,7 +33,9 @@
 </xsl:template>
 
 
-<xsl:template match="imagedata[ancestor::imageobject[@role='html']]/@fileref">
+<xsl:template
+  match="imagedata[ancestor::imageobject[@role='html']]/@fileref"
+  name="imagedata-fileref">
   <xsl:attribute name="fileref">
     <xsl:value-of select="concat($img.src.path, .)"/>  
   </xsl:attribute>
@@ -105,5 +108,15 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- Support for DocBook 5 -->
+<xsl:template match="db:xref">
+  <xsl:call-template name="xref"/>
+</xsl:template>
+  
+<xsl:template match="db:imageobject[@role != 'html']"/>
+
+<xsl:template match="db:imagedata[ancestor::db:imageobject[@role='html']]/@fileref">
+  <xsl:call-template name="imagedata-fileref"/>
+</xsl:template>
 
 </xsl:stylesheet>
