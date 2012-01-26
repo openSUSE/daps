@@ -27,13 +27,14 @@ Makefile
 
 # Set variables
 CATALOG_FILE="/etc/xml/catalog"
+DB_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 
 # Checks for programs.
 AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
 
-AC_MSG_NOTICE([**** Checking XML tools ****])
+AC_MSG_NOTICE([**** Checking XML tools... ****])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
 AC_PATH_PROG([XMLLINT], [xmllint])
@@ -61,7 +62,10 @@ if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
-for XML_DTD in "-//OASIS//DTD DocBook XML V4.2//EN" \
+AC_MSG_NOTICE([**** Checking Public Identifier for DocBook DTD... ****])
+
+for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
+               "-//OASIS//DTD DocBook XML V4.2//EN" \
                "-//OASIS//DTD DocBook XML V4.3//EN" \
                "-//OASIS//DTD DocBook XML V4.4//EN" \
                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
@@ -69,9 +73,42 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.2//EN" \
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([found])
   else
-    AC_MSG_ERROR([not found])
+    AC_MSG_WARN([not found])
   fi
 done
 
+AC_MSG_NOTICE([**** Checking System Identifier for DocBook DTD... ****])
+
+for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" ; do
+  AC_MSG_CHECKING([for $XML_DTD])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+    AC_MSG_RESULT([found])
+  else
+    AC_MSG_WARN([not found])
+  fi
+done
+
+AC_MSG_NOTICE([**** Checking Canonical URL for DocBook XSL Stylesheets... ****])
+
+
+for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
+            "${DB_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB_XSLT_URL}html/docbook.xsl" \
+            "${DB_XSLT_URL}html/chunk.xsl" \
+            "${DB_XSLT_URL}fo/docbook.xsl" \
+            "${DB_XSLT_URL}manpages/docbook.xsl" \
+            "${DB_XSLT_URL}epub/docbook.xsl" \
+            "${DB_XSLT_URL}profiling/profile.xsl"; do
+  AC_MSG_CHECKING([for $XSLT])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XSLT" >&2]); then
+    AC_MSG_RESULT([found])
+  else
+    AC_MSG_WARN([not found])
+  fi
+done
 
 AC_OUTPUT
