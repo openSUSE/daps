@@ -61,18 +61,17 @@ if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
-#for XML_DTD in "-//OASIS//DTD DocBook XML V4.1//EN" \
-               #"-//OASIS//DTD DocBook XML V4.2//EN" \
-               #"-//OASIS//DTD DocBook XML V4.3//EN" \
-               #"-//OASIS//DTD DocBook XML V4.4//EN" \
-               #"-//OASIS//DTD DocBook XML V4.5//EN" ; do
-  #AC_MSG_CHECKING([for $XML_DTD])
-  #if AC_RUN_LOG([$XMLCATALOG --noout "/etc/xml/catalog" "$XML_DTD" >&2]); then
-    #AC_MSG_RESULT([found])
-  #else
-    #AC_MSG_ERROR([not found])
-  #fi
-#done
+for XML_DTD in "-//OASIS//DTD DocBook XML V4.2//EN" \
+               "-//OASIS//DTD DocBook XML V4.3//EN" \
+               "-//OASIS//DTD DocBook XML V4.4//EN" \
+               "-//OASIS//DTD DocBook XML V4.5//EN" ; do
+  AC_MSG_CHECKING([for $XML_DTD])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+    AC_MSG_RESULT([found])
+  else
+    AC_MSG_ERROR([not found])
+  fi
+done
 
 
 AC_OUTPUT
