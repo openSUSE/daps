@@ -174,6 +174,8 @@ DESKTOP_FILES_DIR := $(TMP_DIR)/$(BOOK)/desktop
 # Yelp files
 YELP_DIR := $(TMP_DIR)/yelp
 
+# Man pages
+MAN_DIR := $(RESULT_DIR)/man
 
 # Testpage for checking links in our books
 TESTPAGE   ?= $(TMP_DIR)/$(TMP_BOOK)-links.html
@@ -432,10 +434,17 @@ wiki: $(PROFILEDIR)/.validate $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki
 # see http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.base.dir.html and
 # http://docbook.sourceforge.net/release/xsl/current/doc/manpages/output.html
 #
+$(MAN_DIR): | $(DIRECTORIES)
+	mkdir -p $@
+
 .PHONY: man
 man: | $(DIRECTORIES)
-man: $(PROFILEDIR)/.validate $(TMP_XML)
-	xsltproc $(ROOTSTRING) $(STYLEMAN) $(TMP_XML)
+man: $(MAN_DIR) $(PROFILEDIR)/.validate $(TMP_XML)
+	xsltproc $(ROOTSTRING) --stringparam man.output.base.dir "$(MAN_DIR)/" \
+	  --stringparam man.output.in.separate.dir 1 \
+	  --stringparam man.output.subdirs.enabled 0 \
+	  $(STYLEMAN) $(TMP_XML)
+	@ccecho "result" "Find the man page in: $(MAN_DIR)"	
 
 #--------------
 # FORCE
