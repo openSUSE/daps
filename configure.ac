@@ -85,7 +85,7 @@ fi
 AC_SUBST(HAVE_TRANSFIG)
 
 
-AC_MSG_NOTICE([**** Checking XML tools... ****])
+AC_MSG_NOTICE([===== Checking XML tools... ])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
 AC_PATH_PROG([XMLLINT], [xmllint])
@@ -123,7 +123,7 @@ if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
-AC_MSG_NOTICE([**** Checking Public Identifier for DocBook DTD... ****])
+AC_MSG_NOTICE([===== Checking Public Identifier for DocBook DTD...])
 
 DOCBOOKDTDS=""
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
@@ -144,7 +144,7 @@ done
 AC_SUBST(DOCBOOKDTDS)
 
 
-AC_MSG_NOTICE([**** Checking System Identifier for DocBook DTD... ****])
+AC_MSG_NOTICE([===== Checking System Identifier for DocBook DTD...])
 
 for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
                "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
@@ -159,7 +159,8 @@ for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
   fi
 done
 
-AC_MSG_NOTICE([**** Checking Canonical URL for DocBook XSL Stylesheets... ****])
+AC_MSG_NOTICE([===== Checking Canonical URL for DocBook XSL Stylesheets...])
+
 
 
 for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
@@ -177,5 +178,8 @@ for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
     AC_MSG_WARN([not found])
   fi
 done
+
+
+
 
 AC_OUTPUT
