@@ -1243,15 +1243,12 @@ function help_viewer () {
 }
 function help_xsltparam () {
     echo "    --xsltparam               Add one or more xsltproc parmeters in the form of
-                              \"--stringparam paramname value\". The given string
+                              \"'--stringparam paramname value'\". The given string
                               will be passed unmodified to the xsltproc call 
                               that $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
-                              Note: You MUST properly quote the string.
-                               Use either
-                                --xsltproc=\"\\\"--stringparam paramname value\\\"\"
-                                or
-                                --xsltproc=\"--stringparam\\ paramname\\ value\"
+                              Note: You MUST double quote the string with double and
+                              single quotes: --xsltproc=\"'STRING'\"
                               Default: unset"
 }
