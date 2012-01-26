@@ -24,6 +24,7 @@ AC_CONFIG_FILES([
 Makefile
 ])
 
+# Command-line arguments
 
 # Set variables
 CATALOG_FILE="/etc/xml/catalog"
@@ -33,6 +34,56 @@ DB_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
+AC_PROG_INSTALL
+
+
+AC_PATH_PROG(PERL, [perl] )
+if test -z "$PERL"; then
+  HAVE_PERL='no'
+else
+  HAVE_PERL='yes'
+fi
+AC_SUBST(HAVE_PERL)
+
+
+AC_PATH_PROG(PYTHON, [python] )
+if test -z "$PYTHON"; then
+  HAVE_PYTHON='no'
+else
+  HAVE_PYTHON='yes'
+fi
+AC_SUBST(HAVE_PYTHON)
+
+
+AC_PATH_PROG([INKSCAPE], [inkscape] )
+if test -z "$INKSCAPE"; then
+  HAVE_INKSCAPE='no'
+else
+  HAVE_INKSCAPE='yes'
+fi
+AC_SUBST(HAVE_INKSCAPE)
+
+
+AC_PATH_PROG([OPTIPNG], [optipng] )
+if test -z "$OPTIPNG"; then
+  HAVE_OPTIPNG='no'
+else
+  HAVE_OPTIPNG='yes'
+fi
+AC_SUBST(HAVE_OPTIPNG)
+
+
+AC_PATH_PROG([TRANSFIG], [transfig] )
+if test -z "$TRANSFIG"; then
+  HAVE_TRANSFIG='no'
+else
+  HAVE_TRANSFIG='yes'
+fi
+AC_SUBST(HAVE_TRANSFIG)
+
+
+
+
 
 AC_MSG_NOTICE([**** Checking XML tools... ****])
 
@@ -55,6 +106,16 @@ fi
 AC_PATH_PROG([FOP], [fop])
 if test -z "$FOP"; then
    AC_MSG_ERROR([fop not found]) 
+fi
+
+AC_PATH_PROG([TRANG], trang )
+if test -z "$TRANG"; then
+  AC_MSG_ERROR([trang not found]) 
+fi
+
+AC_PATH_PROG([JING], jing )
+if test -z "$JING"; then
+  AC_MSG_ERROR([jing not found]) 
 fi
 
 AC_CHECK_FILES([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
