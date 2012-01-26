@@ -25,12 +25,15 @@ Makefile
 ])
 
 # Command-line arguments
+## AC_ARG_WITH(stuff, [  --with-stuff            enable stuff])
 
-# Set variables
+
+# Some constants
 CATALOG_FILE="/etc/xml/catalog"
 DB_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 
 # Checks for programs.
+AC_PROG_MKDIR_P
 AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
@@ -82,9 +85,6 @@ fi
 AC_SUBST(HAVE_TRANSFIG)
 
 
-
-
-
 AC_MSG_NOTICE([**** Checking XML tools... ****])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
@@ -118,13 +118,14 @@ if test -z "$JING"; then
   AC_MSG_ERROR([jing not found]) 
 fi
 
-AC_CHECK_FILES([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
+AC_CHECK_FILE([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
 if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
 AC_MSG_NOTICE([**** Checking Public Identifier for DocBook DTD... ****])
 
+DOCBOOKDTDS=""
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.2//EN" \
                "-//OASIS//DTD DocBook XML V4.3//EN" \
@@ -133,10 +134,15 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
   AC_MSG_CHECKING([for $XML_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([found])
+    ## Extract version from public identifier
+    x=${XML_DTD##*XML V}    
+    DOCBOOKDTDS="$DOCBOOKDTDS${x%%//*} "
   else
     AC_MSG_WARN([not found])
   fi
 done
+AC_SUBST(DOCBOOKDTDS)
+
 
 AC_MSG_NOTICE([**** Checking System Identifier for DocBook DTD... ****])
 
