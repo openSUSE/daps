@@ -23,7 +23,7 @@
                       book or bridgehead or 
                       chapter or colophon or
                       dedication or glossary or index or
-                      lot or preface or reference or refsect1 or
+                      lot or preface or reference or refentry or refsect1 or
                       refsect2 or refsect3 or refsection or
                       sect1 or sect2 or sect3 or sect4 or sect5 or
                       section or set or simplesect or toc">4</xsl:when>
