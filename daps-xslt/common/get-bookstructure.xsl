@@ -11,6 +11,7 @@ I#part.kde.desktop#Introduction
 -->
 
 <xsl:stylesheet version="1.0"
+  xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="rootid.xsl"/>
@@ -21,11 +22,13 @@ I#part.kde.desktop#Introduction
   <xsl:template match="text()"/>
 
 
-  <xsl:template match="appendix">
+  <xsl:template match="appendix|db:appendix">
     <xsl:variable name="num">
       <xsl:number format="A"/>
     </xsl:variable>
-    <xsl:variable name="title" select="(title|appendixinfo/title)[1]"/>
+    <xsl:variable name="title"
+      select="(title|appendixinfo/title|
+               db:title|db:info/db:title)[1]"/>
 
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="$num"/>
@@ -34,11 +37,13 @@ I#part.kde.desktop#Introduction
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="chapter">
+  <xsl:template match="chapter|db:chapter">
     <xsl:variable name="num">
       <xsl:number from="book" level="any"/>
     </xsl:variable>
-    <xsl:variable name="title" select="(title|chapterinfo/title)[1]"/>
+    <xsl:variable name="title" 
+      select="(title|chapterinfo/title|
+               db:title|db:info/db:title)[1]"/>
 
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="$num"/>
@@ -47,11 +52,13 @@ I#part.kde.desktop#Introduction
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="glossary">
+  <xsl:template match="glossary|db:glossary">
     <xsl:variable name="num">
       <xsl:number from="book" format="1"/>
     </xsl:variable>
-    <xsl:variable name="title" select="(title|glossaryinfo/title)[1]"/>
+    <xsl:variable name="title" 
+      select="(title|glossaryinfo/title|
+               db:title|db:info/db:title)[1]"/>
 
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="concat('G', $num)"/>
@@ -60,11 +67,13 @@ I#part.kde.desktop#Introduction
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="part">
+  <xsl:template match="part|db:part">
     <xsl:variable name="num">
       <xsl:number from="book" format="I"/>
     </xsl:variable>
-    <xsl:variable name="title" select="(title|partinfo/title)[1]"/>
+    <xsl:variable name="title" 
+      select="(title|partinfo/title|
+               db:title|db:info/db:title)[1]"/>
     
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="$num"/>
@@ -73,8 +82,10 @@ I#part.kde.desktop#Introduction
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="preface">
-    <xsl:variable name="title" select="(title|prefaceinfo/title)[1]"/>
+  <xsl:template match="preface|db:preface">
+    <xsl:variable name="title" 
+      select="(title|prefaceinfo/title|
+               db:title|db:info/db:title)[1]"/>
     
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="'P'"/>
@@ -83,11 +94,12 @@ I#part.kde.desktop#Introduction
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="refentry">
+  <xsl:template match="refentry|db:refentry">
     <xsl:variable name="num">
       <xsl:number from="book" format="1"/>
     </xsl:variable>
-    <xsl:variable name="title" select="(refmeta/refentrytitle)[1]"/>
+    <xsl:variable name="title" 
+      select="(refmeta/refentrytitle|db:refmeta/db:refentrytitle)[1]"/>
     
     <xsl:call-template name="build-string">
       <xsl:with-param name="num" select="concat('R', $num)"/>
@@ -101,10 +113,10 @@ I#part.kde.desktop#Introduction
     <xsl:param name="title"/>
     
     <xsl:choose>
-      <xsl:when test="@id != ''">
+      <xsl:when test="@id != '' or @xml:id != ''">
         <xsl:value-of
           select="concat($num, $sep,
-                         @id, $sep,
+                         (@id|@xml:id)[1], $sep,
                          normalize-space($title),
                          '&#10;')"/>
       </xsl:when>

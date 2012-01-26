@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: extract-components.xsl 442 2005-06-22 09:23:51Z toms $ -->
-<xsl:stylesheet version="1.0"
-    xmlns:db="http://docbook.org/ns/docbook"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl db"
->
-
 <!--
     Purpose:
       This stylesheet extracts appendix, bibliography, chapter, glossary,
       preface and save it into separate files
 -->
+<xsl:stylesheet version="1.0"
+    xmlns:db="http://docbook.org/ns/docbook"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:exsl="http://exslt.org/common"
+    extension-element-prefixes="exsl db">
 
 <!-- PUBLIC identifier -->
 <xsl:param name="doctype.public"
@@ -46,9 +43,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*">
-</xsl:template>
-
+<xsl:template match="*"/>
 
 <xsl:template match="text()">
 </xsl:template>

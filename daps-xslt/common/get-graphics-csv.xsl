@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet version="1.0"
+  xmlns:db="http://docbook.org/ns/docbook"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:import href="get-graphics.xsl"/>
 
@@ -20,7 +22,7 @@
 </xsl:template>
 
 
-<xsl:template match="imageobject/text()"/>
+<xsl:template match="imageobject/text()|db:imageobject/text()"/>
 
 <xsl:template name="process.imagedata">
     <xsl:value-of select="concat(@fileref, $filename.separator)"/>
@@ -59,7 +61,7 @@
     <!--<xsl:value-of select="'&#xa;'"/>-->
 </xsl:template>
 
-<xsl:template match="imagedata">
+<xsl:template match="imagedata|db:imagedata">
     <xsl:choose>
         <xsl:when test="contains(@width, 'em') or contains(@width, 'px')">
             <xsl:message>ERROR: Image file '<xsl:value-of select="@fileref"/>' contains in width the unit 'em' or 'px' which is not useful.</xsl:message>
