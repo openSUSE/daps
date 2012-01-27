@@ -123,7 +123,7 @@ SUBCOMMANDS=(
     [all]=build_pdfs
     [bigfile-reduced]=build_generic
     [bigfile]=build_generic
-    [check]=call_make_nolog
+    [check]=no_opts
     [checklink]=checklink
     [chklink]=checklink
     [clean-all]=no_opts
@@ -436,6 +436,17 @@ function get_envfile () {
     fi
 }
 
+# ---------
+# Remove trailing slashes from directory paths
+function sanitize_paths () {
+    BASE_DIR=${BASE_DIR%/}
+    BUILD_DIR=${BUILD_DIR%/}
+    DTDROOT=${DTDROOT%/}
+    FALLBACK_STYLEROOT=${FALLBACK_STYLEROOT%/}
+    STYLEROOT=${STYLEROOT%/}
+}
+
+
 # ----------------------------------------------------------------------------
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
 
@@ -693,6 +704,8 @@ if [[ -n $DTDROOT ]]; then
         exit_on_error "dtdroot $DTDROOT is no valid directory"
     else
         # valid directory
+        #  strip trailing slash
+        DTDROOT=${DTDROOT%/}
         BIN_DIR="${DTDROOT}/bin"
         export PATH=$BIN_DIR:$PATH
         LIB_DIR="${DTDROOT}/lib"
@@ -717,6 +730,7 @@ if [[ -f $USER_CONFIG ]]; then
     source "$USER_CONFIG"
 fi
 recover_cmdl_values
+sanitize_paths
 
 #----------------------------------
 # Run early commands that do not need to have an environment fully set up
@@ -788,6 +802,8 @@ fi
 # If we arrive here, BASE_DIR is set and valid (or we have exited)
 # Now check, whether ${BASE_DIR}/$ENVFILE and ${BASE_DIR}/$MAIN are valid, too
 #
+#  strip trailing slash
+BASE_DIR=${BASE_DIR%/}
 if [[ -n $ENVFILE ]]; then
     if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
         exit_on_error "\nENVFILE: \"$ENVFILE\" in BASEDIR: $BASE_DIR\ncould not be found. Check the respective commandline options or the config files"
@@ -815,6 +831,7 @@ fi
 if [[ -n $ENVFILE ]]; then
     source ${BASE_DIR}/$ENVFILE
     recover_cmdl_values
+    sanitize_paths
 fi
 
 #----------

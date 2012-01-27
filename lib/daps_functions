@@ -1026,6 +1026,22 @@ function getimages () {
 # for functions with no command line options
 # do not write a log
 function no_opts {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="help"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_nohelp "$SUB_CMD"
+        exit 0
+    fi
+    
     WRITE_LOG=0
     call_make "$SUB_CMD" "$@"
 }
@@ -1075,6 +1091,8 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
 		;;
             --dirname)
                 DIRNAME="$2"
+                # strip trailing slash
+                DIRNAME=${DIRNAME%/}
                 shift 2
                 ;;
 	    --rootelement)
@@ -1212,7 +1230,7 @@ function help_name () {
 }
 function help_nohelp () {
     echo "
-No further help for subcommand \"$TARGET\" available.
+No further help for subcommand \"$1\" available.
 "
 }
 function help_nopdf () {
