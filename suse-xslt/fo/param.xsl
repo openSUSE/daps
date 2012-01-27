@@ -40,12 +40,12 @@
 
 <!--http://docbook.sourceforge.net/release/images/draft.png-->
 <xsl:param name="draft.watermark.image" 
-  select="concat('file://', $styleroot, '/fo/draft.png')"/>
+  select="concat('file://', $styleroot, 'fo/draft.png')"/>
 
 
 <!--  -->
-<xsl:param name="booktitlepage.bw.logo">/images/svg/suse-logo-bw.svg</xsl:param>
-<xsl:param name="booktitlepage.color.logo">/images/svg/suse-logo.svg</xsl:param>
+<xsl:param name="booktitlepage.bw.logo">images/svg/suse-logo-bw.svg</xsl:param>
+<xsl:param name="booktitlepage.color.logo">images/svg/suse-logo.svg</xsl:param>
 
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
