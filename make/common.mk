@@ -239,16 +239,18 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-                --param ulink.show 1 \
-	        --stringparam styleroot  "$(STYLEROOT)"
+	        --stringparam styleroot "$(STYLEROOT)" \
+	        --stringparam dtdroot "$(DTDROOT)" \
+		--param ulink.show 1
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-                --param ulink.show 1 \
-	        --stringparam styleroot "$(STYLEROOT)"
+	        --stringparam styleroot "$(STYLEROOT)" \
+	        --stringparam dtdroot "$(DTDROOT)" \
+		--param ulink.show 1
 ifdef DRAFT
 FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
                 --stringparam xml.source.dir "$(BASE_DIR)/xml/"
