@@ -239,7 +239,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-	        --stringparam styleroot "$(STYLEROOT)" \
+	        --stringparam styleroot "$(STYLEROOT)/" \
 	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
@@ -248,7 +248,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-	        --stringparam styleroot "$(STYLEROOT)" \
+	        --stringparam styleroot "$(STYLEROOT)/" \
 	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
 ifdef DRAFT
@@ -1678,7 +1678,7 @@ check: ROOTIDS = $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLEROOTIDS) $(PRO
 check:
 	@echo "XML_CATALOG_FILES = $(XML_CATALOG_FILES)"
 	@echo "DTDROOT           = $(DTDROOT)"
-	@echo "PROFILE_URN          = $(PROFILE_URN)"
+	@echo "PROFILE_URN       = $(PROFILE_URN)"
 	@echo
 	@echo "LL                = $(LL)"
 	@echo "PROFARCH          = $(PROFARCH)"
@@ -1723,7 +1723,7 @@ check:
 #
 .PHONY: nothing
 nothing:
-	echo "Done doing nothing"
+	@ccecho "result" "Done doing nothing"
 
 
 
