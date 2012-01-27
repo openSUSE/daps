@@ -240,7 +240,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
 	        --stringparam styleroot "$(STYLEROOT)" \
-	        --stringparam dtdroot "$(DTDROOT)" \
+	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -249,7 +249,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
 	        --stringparam styleroot "$(STYLEROOT)" \
-	        --stringparam dtdroot "$(DTDROOT)" \
+	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
 ifdef DRAFT
 FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
