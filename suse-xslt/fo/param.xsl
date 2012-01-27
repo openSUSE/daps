@@ -34,7 +34,7 @@
 <xsl:param name="title.margin.left" select="'0pt'"/>
 
 <xsl:param name="alignment">left</xsl:param>
-<!--<xsl:param name="dtdroot"></xsl:param>-->
+<xsl:param name="dtdroot"></xsl:param>
 <!-- Path to stylesheets -->
 <xsl:param name="styleroot"></xsl:param>
 
@@ -55,10 +55,13 @@
 
 <!-- Add other variable definitions here -->
 <xsl:param name="shade.verbatim">0</xsl:param>
-<xsl:param name="callout.unicode">1</xsl:param>
-<xsl:param name="callout.graphics">0</xsl:param>
+<xsl:param name="callout.unicode">0</xsl:param>
+<xsl:param name="callout.graphics">1</xsl:param>
+<xsl:param name="callout.graphics.extension">.pdf</xsl:param>
+<xsl:param name="callout.graphics.path" select="concat($dtdroot, 'images/callouts/')"/>
+  
 <!--<xsl:param name="callout.unicode.start.character">10102</xsl:param>-->
-<xsl:param name="callout.unicode.font">TomsCallouts</xsl:param>
+<!--<xsl:param name="callout.unicode.font">TomsCallouts</xsl:param>-->
 <xsl:param name="callout.unicode.number.limit">20</xsl:param>
 <!-- <xsl:param name="callout.unicode.start.character" select="10122"/> -->
 
