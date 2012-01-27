@@ -413,6 +413,9 @@ txt text: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt
 epub: | $(DIRECTORIES)
 epub: missing-images
 epub: $(PROFILEDIR)/.validate $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
+ifeq ("$(EPUBCHECK)", "yes")
+  epub: epub-check
+endif
 	@ccecho "result" "Find the EPUB book at:\n$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub"
 
 #--------------
@@ -1519,6 +1522,13 @@ $(EPUB_TMP_DIR):
 .PHONY: epub-name
 epub-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub"
+
+# Check the epub file
+.PHONY: epub-check
+epub-check: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
+	@ccecho "result" "#################### BEGIN epubcheck report ####################"
+	epubcheck $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub || true
+	@ccecho "result" "#################### END epubcheck report ####################"
 
 # Generate "epub xml" from $(TMP_XML)
 #

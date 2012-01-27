@@ -66,6 +66,10 @@ function parse_args () {
                 P_DIRNAME="$2"
                 shift 2
                 ;;
+            --check)
+                P_CHECK=1
+                shift
+                ;;
             -f|--file)
                 P_FILE="$2"
                 shift 2
@@ -478,7 +482,7 @@ function build_epub () {
     shift
 
     SHORT_OPTS="hr"
-    LONG_OPTS="css:,help,name:,remarks,rootid:"
+    LONG_OPTS="check,css:,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -486,6 +490,7 @@ function build_epub () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_check
         help_css
         help_help
         help_name
@@ -498,6 +503,12 @@ function build_epub () {
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
 
+    # Checking ePUBs requires a minimum verbosity level of 1
+    if [[ 1 = $P_CHECK ]]; then
+        [[ 0 = $VERBOSITY ]] && export VERBOSITY=1
+        export EPUBCHECK="yes"
+    fi
+        
     if [[ -n "$P_CSS" ]]; then
         if [[ -f "$P_CSS" ]]; then
             export EPUB_CSS="$P_CSS"
@@ -1143,6 +1154,12 @@ function help_compact () {
     echo "    --compact                 Print the filelist on a single line.
                               Ignored when -s|--show is set.
                               Default: off"  
+}
+function help_check () {
+    echo "    --check                   Validate the resulting documents.
+                              Useful when developing stylesheets. Implies a verbosity
+                              level of at least 1.
+                              Default: unset"
 }
 function help_css () {
     echo "    --css                     Specify an absolute path to a css file.
