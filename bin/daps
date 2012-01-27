@@ -17,7 +17,8 @@ VERSION=0.9.3
 # files, so we need to have this list
 #
 # IMPORTANT
-# Whenever a new variable is introduced, it needs to be added here!!
+# All variables that need to be exported for furtzher use in the makefiles
+# need to be added here!!
 #
 declare -a VARLIST
 # VENDOR is for unsetting only, since it is a default tcsh variable
@@ -49,6 +50,7 @@ VARLIST=(
     HTML_CSS
     HTMLROOT
     INK_OPTIONS
+    JING_FLAGS
     LAYOUT
     LOG_DIR
     MAIN
@@ -58,6 +60,7 @@ VARLIST=(
     PRODUCTNAMEREG
     PROFARCH
     PROFCONDITION
+    PROFILE_URN
     PROFOS
     PROFVENDOR
     REMARKS
@@ -74,6 +77,10 @@ VARLIST=(
 # To be on the safe side, we also want to unset a few variables before we start
 # because they are used/defined in make or may cause other harm if accidentally
 # set
+#
+# IMPORTANT:
+# See ticket 30!
+
 declare -a UNSETLIST
 UNSETLIST=(
     BASE_DIR_CMDL
@@ -88,7 +95,6 @@ UNSETLIST=(
     ENVFILE_CMDL
     FALLBACK_STYLEROOT_CMDL
     FOP_CONFIG_FILE
-    LAYOUT_TYPE
     LIB_DIR
     SILENT
     STYLEPUBXSLT
