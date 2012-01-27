@@ -12,7 +12,7 @@
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-<xsl:include href="../profiling/suse-pi.xsl"/>
+<xsl:include href="../../daps-xslt/profiling/suse-pi.xsl"/>
 <xsl:include href="attributesets.xsl"/>
 <xsl:include href="fonts.xsl"/>
 <xsl:include href="../common/copy-nodes.xsl"/>
@@ -24,7 +24,7 @@
 <!-- <xsl:include href="autoidx-kosek.xsl"/> -->
 <!-- <xsl:include href="autoidx.xsl"/> -->
 <xsl:include href="lists.xsl"/>
-<xsl:include href="callout.xsl"/>
+<!--<xsl:include href="callout.xsl"/>-->
 <xsl:include href="verbatim.xsl"/>
 <xsl:include href="xref.xsl"/>
 <xsl:include href="table.xsl"/>
@@ -79,6 +79,11 @@
        <xsl:text>with styleroot parameter</xsl:text>
      </xsl:message>
    </xsl:if>
+  
+  <!--<xsl:message>
+    styleroot = <xsl:value-of select="$styleroot"/>
+    dtdroot   = <xsl:value-of select="$dtdroot"/>
+  </xsl:message>-->
 
    <xsl:if test="$use.xep.cropmarks != 0 and $xep.extensions != 0">
     <xsl:processing-instruction
