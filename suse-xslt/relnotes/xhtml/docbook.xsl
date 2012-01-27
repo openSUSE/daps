@@ -26,7 +26,7 @@
                         ancestor::sect4 |
                         ancestor::sect5)[position() = last()]"/>
 
-  <span>
+  <div>
     <xsl:variable name="id">
       <xsl:call-template name="object.id">
         <xsl:with-param name="object" select="$section"/>
@@ -79,7 +79,7 @@
       <xsl:with-param name="marker" select="$marker"/>
       <xsl:with-param name="marker.title" select="$marker.title"/>
     </xsl:call-template>
-  </span>
+  </div>
   </xsl:template>
 
 
