@@ -11,7 +11,7 @@
 <xsl:output method="xml"/>
   
 
-<xsl:include href="../profiling/suse-pi.xsl"/>
+<xsl:include href="../../daps-xslt/profiling/suse-pi.xsl"/>
 
 <xsl:include href="lists.xsl"/>
 <xsl:include href="xref.xsl" />
