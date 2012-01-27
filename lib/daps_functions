@@ -283,15 +283,20 @@ function call_make () {
     if [[ 2 = $VERBOSITY ]]; then
         SHOWVARS=$(cat <<EOF
 ---------------
-   BASE_DIR: $BASE_DIR
-  BUILD_DIR: $BUILD_DIR
-    ENVFILE: $ENVFILE
-    DTDROOT: $DTDROOT
-       BOOK: $BOOK
-        FOP: $FOPTYPE
-    MAKECMD: $MAKECMD
-    STYLEFO: $STYLEFO
-XML_CATALOG: $XML_CATALOG_FILES
+          BASE_DIR: $BASE_DIR
+         BUILD_DIR: $BUILD_DIR
+           DTDROOT: $DTDROOT
+           ENVFILE: $ENVFILE
+               BOOK: $BOOK
+
+         STYLEROOT: $STYLEROOT
+FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
+          EPUB_CSS: $EPUB_CSS
+          HTML_CSS: $HTML_CSS
+
+               FOP: $FOPTYPE
+           MAKECMD: $MAKECMD
+       XML_CATALOG: $XML_CATALOG_FILES
 ---------------
 EOF
         )
