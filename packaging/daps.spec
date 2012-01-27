@@ -46,6 +46,7 @@ BuildRequires:  fam
 BuildRequires:  fdupes
 BuildRequires:  ImageMagick
 BuildRequires:  inkscape
+BuildRequires:  jing
 BuildRequires:  libxslt
 BuildRequires:  optipng
 BuildRequires:  sgml-skel
@@ -109,6 +110,7 @@ Requires:       ghostscript-library
 Requires:       ImageMagick
 Requires:       inkscape
 Requires:       java
+Requires:       jing
 Requires:       libxslt
 Requires:       liberation-fonts
 Requires:       LinuxLibertine
@@ -151,7 +153,9 @@ Requires:        python-xml
 Recommends:     agfa-fonts
 Recommends:     aspell aspell-en aspell-en-huge
 Recommends:     daps-docmanager
+Recommends:     docbook_5
 Recommends:     emacs psgml
+Recommends:     epubcheck
 # Split of ttf-founder-simplified and ttf-founder-traditional
 Recommends:     FZFangSong FZHeiTi FZSongTi
 Recommends:     fifth-leg-font
