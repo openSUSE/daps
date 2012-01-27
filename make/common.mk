@@ -525,8 +525,6 @@ clean-all real-clean:
 
 #--------------
 # file lists
-#
-# use validate as a dependency, otherwise you may get a wrong list
 
 # Files used in $BOOK
 #
@@ -1540,7 +1538,9 @@ endif
 
 # Generate epub from "epub xml" file 
 #
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml $(STYLEEPUBDB) validate provide-epub-images
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(STYLEEPUBDB) $(PROFILEDIR)/.validate
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: provide-epub-images
 ifeq ($(VERBOSITY),1)
 	@echo "   Creating epub"
 endif
