@@ -98,7 +98,7 @@ else
   H_DIR := /xhtml/
 endif
 
-HTML_STYLEDIR := $(addsuffix $(H_STYLE), $(H_DIR))
+HTML_STYLE := $(addsuffix $(H_STYLE), $(H_DIR))
 
 #----------------------------
 # No let's put it all together
