@@ -1141,7 +1141,7 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
     # graphics
     cp ${LIB_DIR}/templates/example{1,2}.png ${BASE_DIR}/images/src/png/
   
-    setup_builddir
+    init_env
     if [[ 0 != $VERBOSITY ]]; then
         ccecho "result" "Successfully created a working environment at"
     fi
