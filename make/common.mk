@@ -15,6 +15,7 @@
 # Provides the core functionality for the daps package
 
 #SHELL := /bin/bash -x
+SHELL := /bin/bash
 
 # If wanting to replace a " " with subst, a variable containing
 # a space is needed, since it is not possible to replace a literal
@@ -257,7 +258,7 @@ ifdef STYLEROOT
   FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
 endif
 
-# DRAFT string parameters
+# DRAFT stringparams
 #
 ifdef DRAFT
   FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
@@ -334,9 +335,21 @@ SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  $(DTDROOT)/daps-xslt/common/get-all-used-files.xsl \
 		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
 
+# XML source files for the whole set
+#
 SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
 		  $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
+
+# XML source files for the currently used document (defined by teh rootid)
+#
+ifdef ROOTSTRING
+  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
+		--stringparam xml.or.img xml \
+		$(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+else
+  DOCFILES  := $(SRCFILES)
+endif
 
 PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
@@ -539,12 +552,10 @@ clean-all real-clean:
 #
 
 .PHONY: projectfiles
-projectfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
-			   --stringparam xml.or.img xml \
-			   $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
-projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+projectfiles: $(DOCFILES)
+projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 projectfiles: FILES    := $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
-			   $(BASE_DIR)/$(ENVFILE) $(INCLUDED)
+			   $(BASE_DIR)/$(ENVFILE) $(DOCFILES)
 projectfiles:
 ifeq ($(PRETTY_FILELIST), 1)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
@@ -555,13 +566,11 @@ endif
 # Files _not_ used in $BOOK
 #
 .PHONY: remainingfiles
-remainingfiles: INCLUDED := $(shell echo "$(SETFILES)" | xsltproc \
-			     $(ROOTSTRING) --stringparam xml.or.img xml \
-			     $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
-remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+remainingfiles: $(DOCFILES)
+remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 remainingfiles: FILES    := $(filter-out \
 			     $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
-			     $(BASE_DIR)/$(ENVFILE) $(INCLUDED), $(SRCFILES))
+			     $(BASE_DIR)/$(ENVFILE) $(DOCFILES), $(SRCFILES))
 remainingfiles:
 ifeq ($(PRETTY_FILELIST), 1)
 	@echo  -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
@@ -932,6 +941,10 @@ $(PROFILE_PARENT_DIR)/dist:
 $(TMP_DIR)/dist/xml:
 	mkdir -p $@
 
+$(PROFILESUBDIRS):
+	mkdir -p $@
+
+
 $(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK) $(wildcard $(BASE_DIR)/xml/*.ent)
 $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 
@@ -944,6 +957,8 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 # If PROFILE_URN is undefined, there is no profiling information in $MAIN. This
 # means, we will continue without profiling.
 #
+
+$(PROFILEDIR)/%: | $(PROFILESUBDIRS)
 $(PROFILEDIR)/%: $(BASE_DIR)/xml/%
 ifdef PROFILE_URN
 ifeq ($(VERBOSITY),1)
@@ -1031,7 +1046,7 @@ $(TMP_DIR)/dist/xml/%: $(BASE_DIR)/xml/% link-entity-dist
 # and therefor need a separate link-entity-dist target
 
 .PHONY: link-entity-noprofile
-link-entity: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
+link-entity: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 link-entity: | $(DIRECTORIES)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
@@ -1044,7 +1059,7 @@ endif
 
 .PHONY: link-entity-dist
 link-entity-dist: $(PROFILE_PARENT_DIR)/dist $(TMP_DIR)/dist/xml
-link-entity-dist: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
+link-entity-dist: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 link-entity-dist:
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
@@ -1068,14 +1083,14 @@ endif
 # target to do this job (which would make things a bit more clear), because
 # otherwise the profiling would be redone every time
 #
-$(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): | $(DIRECTORIES)
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(BASE_DIR)/$(ENVFILE)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
 endif
 	if test -n "$(ENTITIES)"; then \
-	  for i in $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN)); do \
+	  for i in $(ENTITIES); do \
 	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILEDIR)/; \
 	  done \
 	fi
@@ -1623,7 +1638,7 @@ endif
 	mv -iv $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml \
 		$(BASE_DIR)/xml/
 
-$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(BASE_DIR)/xml/$(MAIN))
+$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
