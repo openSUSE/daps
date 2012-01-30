@@ -20,27 +20,33 @@ VERSION=0.9.3
 # All variables that need to be exported for furtzher use in the makefiles
 # need to be added here!!
 #
+
+# VENDOR is a default tcsh variable
+#
+unset VENDOR
+
 declare -a VARLIST
-# VENDOR is for unsetting only, since it is a default tcsh variable
 VARLIST=(
     BASE_DIR
     BUILD_DIR
     CB_OPTIONS
-    CHECKBOT
     COLOR
     COMMENTS
     COMMENT_STR
     CONF_PREFIX
     CONVERT_OPTS
+    DAPS_ENV_DEFAULT
     DEBUG
+    DTDROOT
     DEFAULT_DTDROOT
     DEF_FILE
     DEVEL
     DIA_OPTIONS
-    DISTVER
     DOCBOOK5_RNC_SCHEME
     DRAFT
     DRAFT_STR
+    DTDROOT
+    ENVFILE
     EPUBCHECK
     EPUB_CSS
     FALLBACK_STYLEROOT
@@ -49,15 +55,13 @@ VARLIST=(
     HTML4
     HTML_CSS
     HTMLROOT
+    IMG_VIEWER
     INK_OPTIONS
     JING_FLAGS
-    LAYOUT
-    LOG_DIR
+    LIB_DIR
     MAIN
     NOPDF
     PDFNAME
-    PRODUCTNAME
-    PRODUCTNAMEREG
     PROFARCH
     PROFCONDITION
     PROFILE_URN
@@ -65,54 +69,67 @@ VARLIST=(
     PROFVENDOR
     REMARKS
     REMARK_STR
-    ROOTID
     STATIC_HTML
+    ROOTID
     STYLEROOT
     USEMETA
     VERBOSITY
     XSLTPARAM
 )
+# unset all for a fresh start
+unset "${VARLIST[@]}"
 
 # VARLIST contains all variables that can be set via config or command line.
+#
+# The following UNSETLIST contains variables local to this script
+# unfortunately  
+
 # To be on the safe side, we also want to unset a few variables before we start
 # because they are used/defined in make or may cause other harm if accidentally
 # set
 #
-# IMPORTANT:
-# See ticket 30!
-
 declare -a UNSETLIST
 UNSETLIST=(
     BASE_DIR_CMDL
-    BUILD_DIR_CMDL
     BIN_DIR
-    BOOK
+    BUILD_DIR_CMDL
     COLOR_CMDL
     CONFIG
-    DTDROOT
     DTDROOT_CMDL
-    ENVFILE
     ENVFILE_CMDL
     FALLBACK_STYLEROOT_CMDL
-    FOP_CONFIG_FILE
-    LIB_DIR
-    SILENT
-    STYLEPUBXSLT
-    STYLEFO
-    STYLEH
-    STYLEJ
-    STYLEMAN
-    STYLEWIKI
+    LOG_DIR
+    R_DIR
     STYLEROOT_CMDL
-    TITLE
-    VENDOR
-    VERBOSITY_CMDL
+    VERBOSITY_CMDL 
 )
-
-# unset all for a fresh start
-unset "${VARLIST[@]}"
 unset "${UNSETLIST[@]}"
 
+# ----------------------------------------------------------------------------
+# We need to set some basic defaults outside of $DEFAULT_CONFIG
+
+# this script's name
+ME=$(basename $0)
+
+BOOK=""
+
+# default config file
+DEFAULT_CONFIG="/etc/daps/config"
+
+# The default DTDROOT 
+DEFAULT_DTDROOT="/usr/share/daps"
+
+# default libdir
+DEFAULT_LIB_DIR="${DEFAULT_DTDROOT}/lib"
+
+DTDROOT=""
+ENVFILE=""
+
+# user config file
+USER_CONFIG="$HOME/.daps/config"
+
+#---------------------------------------------------
+# SUBCOMMANDS
 #
 # Associative array with
 #  Key   = subcommand
@@ -451,25 +468,6 @@ function sanitize_paths () {
     FALLBACK_STYLEROOT=${FALLBACK_STYLEROOT%/}
     STYLEROOT=${STYLEROOT%/}
 }
-
-
-# ----------------------------------------------------------------------------
-# We need to set some basic defaults outside of $DEFAULT_CONFIG
-
-# this script's name
-ME=$(basename $0)
-
-# The default DTDROOT 
-DEFAULT_DTDROOT="/usr/share/daps"
-
-# default config file
-DEFAULT_CONFIG="/etc/daps/config"
-
-# default libdir
-DEFAULT_LIB_DIR="${DEFAULT_DTDROOT}/lib"
-
-# user config file
-USER_CONFIG="$HOME/.daps/config"
 
 
 # ----------------------------------------------------------------------------
@@ -875,7 +873,7 @@ if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
 fi
 
 #----------
-# Export environment-depending variables
+# Conditional exports
 #
 
 # book name
@@ -884,16 +882,6 @@ if [[ -n $PDFNAME ]]; then
 else
     export BOOK="${ENVFILE#*${CONF_PREFIX}}"
 fi
-
-# DTDROOT
-export DTDROOT
-export DEFAULT_DTDROOT
-
-# ENVFILE
-export ENVFILE
-
-# LIB_DIR
-export LIB_DIR
 
 # FOP
 export FOP="${LIB_DIR}/daps-$FOPTYPE"

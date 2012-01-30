@@ -28,12 +28,12 @@ SPACE +=
 #
 #
 ifndef VERBOSITY
-VERBOSITY := 0
+  VERBOSITY := 0
 endif
 ifeq ($(VERBOSITY), 2)
-DEVNULL :=
+  DEVNULL :=
 else
-DEVNULL := >/dev/null
+  DEVNULL := >/dev/null
 endif
 
 
@@ -46,37 +46,37 @@ endif
 #
 
 ifndef BASE_DIR
-BASE_DIR := $(shell pwd)
+  BASE_DIR := $(shell pwd)
 endif
 ifndef DTDROOT
-DTDROOT  := $(DEFAULT_DTDROOT)
+  DTDROOT  := $(DEFAULT_DTDROOT)
 endif
 ifndef BOOK
-BOOK     := mybook
+  BOOK     := mybook
 endif
 ifndef LIB_DIR
-LIB_DIR  := $(DTDROOT)/lib
+  LIB_DIR  := $(DTDROOT)/lib
 endif
 ifndef FOP
-FOP      := $(LIB_DIR)/daps-fop
+  FOP      := $(LIB_DIR)/daps-fop
 endif
 ifndef PROFARCH
-PROFARCH  := noarch
+  PROFARCH  := noarch
 endif
 ifndef PROFOS
-PROFOS  := default
+  PROFOS  := default
 endif
 ifndef STATIC_HTML
-STATIC_HTML := 0
+  STATIC_HTML := 0
 endif
 ifndef XSLTPARAM
-XSLTPARAM :=
+  XSLTPARAM :=
 endif
 
 # if BUILD_DIR was not set, use $(BASE_DIR)/build
 #
 ifndef BUILD_DIR
-BUILD_DIR := $(BASE_DIR)/build
+  BUILD_DIR := $(BASE_DIR)/build
 endif
 
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
@@ -98,12 +98,6 @@ ifeq ($(DOCBOOK_VERSION), 0)
   $(error $(MAIN) is not a valid DocBook file)
 endif
 
-# Get the DocBook stylesheet locations via catalogs
-#
-DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current | sed -e s%^file://%%)
-
-DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current | sed -e s%^file://%%)
-
 #----------
 #
 # get the profiling stylesheet from $(MAIN)
@@ -117,20 +111,20 @@ DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforg
 # ==> if PROFILE_URN is not set, no profiling will be done
 
 ifndef PROFILE_URN
-GETXMLSTY    := $(DTDROOT)/daps-xslt/common/get-xml-stylesheet.xsl
-PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
+  GETXMLSTY    := $(DTDROOT)/daps-xslt/common/get-xml-stylesheet.xsl
+  PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
 endif
 
 # PROFILEDIR is one of the most critical variables. Depending on
 # this variable, the profiling is done completely different.
 ifdef PROFILE_URN
-ifndef PROFCONDITION
-PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)
+  ifndef PROFCONDITION
+    PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)
+  else
+    PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)_$(PROFCONDITION)
+  endif
 else
-PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)_$(PROFCONDITION)
-endif
-else
-PROFILEDIR  := $(PROFILE_PARENT_DIR)/noprofile
+  PROFILEDIR  := $(PROFILE_PARENT_DIR)/noprofile
 endif
 
 #------------
@@ -143,10 +137,9 @@ TMP_BOOK    := $(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 #
 # The rootid should be used when manually set:
 ifdef ROOTID
-#ifneq ($(ROOTID),THE_WHOLE_DOCUMENT)
-ifndef PDFNAME
-TMP_BOOK := $(ROOTID)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
-endif
+  ifndef PDFNAME
+    TMP_BOOK := $(ROOTID)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+  endif
 endif
 # draft mode is only relevant for HTML and PDF
 TMP_BOOK_NODRAFT := $(subst _draft,,$(TMP_BOOK))
@@ -215,10 +208,15 @@ STYLEDB2ND     := $(DTDROOT)/daps-xslt/common/db2novdoc.xsl
 # xslt stringparams
 
 ifdef PROFVENDOR
-VENDOR      := --stringparam profile.vendor "$(PROFVENDOR)"
+  VENDOR      := --stringparam profile.vendor "$(PROFVENDOR)"
+else
+  VENDOR      :=
 endif
+
 ifdef PROFCONDITION
-CONDITION   := --stringparam profile.condition "$(PROFCONDITION)" 
+  CONDITION   := --stringparam profile.condition "$(PROFCONDITION)"
+else
+  CONDITION   :=
 endif
 
 PROFSTRINGS  := --stringparam profile.arch "$(PROFARCH)" \
@@ -260,7 +258,7 @@ endif
 
 # DRAFT stringparams
 #
-ifdef DRAFT
+ifeq ("$(DRAFT)", "yes")
   FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
                   --stringparam xml.source.dir "$(BASE_DIR)/xml/"
   FOCOLSTRINGS += --stringparam draft.mode "$(DRAFT)"
@@ -268,21 +266,51 @@ ifdef DRAFT
   JSPSTRINGS   += --stringparam draft.mode "$(DRAFT)"
 endif
 
+# FO formatter specifi stuff
+# currently supported are xep and fop
+#
+ifeq ($(FOPTYPE), fop)
+  FOCOLSTRINGS  += --stringparam fop1.extensions 1 \
+                   --stringparam xep.extensions 0
+  FOSTRINGS  += --stringparam fop1.extensions 1 \
+                --stringparam xep.extensions 0
+  ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
+    FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
+  else
+    FOP_CONFIG_FILE ?=$(DTDROOT)/etc/fop/fop-daps.xml 
+  endif
+else
+  ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
+    FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
+  else
+    FOP_CONFIG_FILE ?=$(DTDROOT)/etc/xep/xep-daps.xml 
+  endif
+endif
+
+
 ifdef ROOTID
   ROOTSTRING   := --stringparam rootid "$(ROOTID)"
+else
+  ROOTSTRING   :=
 endif
 
 # meta information (author, last changed, etc)
 ifeq ($(USEMETA), 1)
   METASTRING   := --stringparam use.meta 1
+else
+  METASTRING   :=
 endif
 
 # HTML stuff
 ifdef HTMLROOT
   HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
+else
+  HROOTSTRING  :=
 endif
 ifdef USEXHTML
   XHTMLSTRING  := --stringparam generate.jsp.marker 0
+else
+  XHTMLSTRING  :=
 endif
 
 # Language string
@@ -296,9 +324,13 @@ DESKSTRINGS  := --stringparam uselang "${LL}" \
 # index
 # the index file must be in the same directory than the profiled $(MAIN).
 ifdef USEINDEX
+  # returns "Yes" if index is used
   INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLESEAIND) \
                  $(BASE_DIR)/xml/$(MAIN))
   INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
+else
+  INDEX       :=
+  INDEXSTRING :=
 endif
 
 
@@ -368,7 +400,6 @@ include $(DTDROOT)/make/layout.mk
 include $(DTDROOT)/make/package.mk
 #include $(DTDROOT)/make/variables.mk
 #include $(DTDROOT)/make/obb.mk
-#include $(DTDROOT)/make/help.mk
 
 #------------------------------------------------------------------------
 #
@@ -466,9 +497,10 @@ $(MAN_DIR): | $(DIRECTORIES)
 .PHONY: man
 man: | $(DIRECTORIES)
 man: $(MAN_DIR) $(PROFILEDIR)/.validate $(TMP_XML)
-	xsltproc $(ROOTSTRING) --stringparam man.output.base.dir "$(MAN_DIR)/" \
+	xsltproc $(ROOTSTRING) --xinclude \
+	  --stringparam man.output.base.dir "$(MAN_DIR)/" \
 	  --stringparam man.output.in.separate.dir 1 \
-	  --stringparam man.output.subdirs.enabled 0 \
+	  --stringparam man.output.subdirs.enabled 1 \
 	  $(STYLEMAN) $(TMP_XML)
 	@ccecho "result" "Find the man page in: $(MAN_DIR)"	
 
@@ -626,11 +658,11 @@ xmlgraphics-bw: provide-images
 missinggraphics:
 ifdef MISSING
 	@ccecho "warn" "The following graphics are missing:"
-ifeq ($(PRETTY_FILELIST), 1)
+  ifeq ($(PRETTY_FILELIST), 1)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-else
+  else
 	@echo "$(MISSING)"
-endif
+  endif
 else
 	@ccecho "info" "Graphics complete"
 endif
@@ -961,11 +993,11 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 $(PROFILEDIR)/%: | $(PROFILESUBDIRS)
 $(PROFILEDIR)/%: $(BASE_DIR)/xml/%
 ifdef PROFILE_URN
-ifeq ($(VERBOSITY),1)
+  ifeq ($(VERBOSITY),1)
 #tput el1
 #echo -en "\r   Profiling $(notdir $<)"
 	@echo "   Profiling $(notdir $<)"
-endif
+  endif
 	xsltproc --nonet --output $@ $(PROFSTRINGS) \
 	  --stringparam filename "$(notdir $<)" $(HROOTSTRING) \
 	  $(PROFILE_URN) $<
@@ -1599,7 +1631,7 @@ endif
 # Check external links (<ulink>)
 #
 ifeq ($(VERBOSITY),2)
-CB_VERBOSITY := --verbose
+  CB_VERBOSITY := --verbose
 endif
 
 .PHONY: checklink chklink jana

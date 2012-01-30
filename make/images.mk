@@ -210,9 +210,9 @@ endif
 # for novell.com/documentation publishing
 #
 ifdef HTMLROOT
-ifdef WRONG_CAP
+  ifdef WRONG_CAP
 	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >&2
-endif
+  endif
 endif
 
 #------------------------------------------------------------------------

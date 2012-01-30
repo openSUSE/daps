@@ -25,6 +25,12 @@
 # The subdirectory layout in each STYLEROOT directory needs to be the same as
 # in the original DocBook stylesheet directories
 
+# Get the DocBook stylesheet locations via catalogs
+#
+DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current | sed -e s%^file://%%)
+
+DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current | sed -e s%^file://%%)
+
 #----------------------------
 # Stylesheet root directories
 #
@@ -60,7 +66,7 @@ endif
 
 ifneq ($(DTDROOT), $(DEFAULT_DTDROOT))
 #  STYLE_DEVEL           := $(DTDROOT)/suse-xslt
-  STYLE_DEVEL           :=
+  STYLE_DEVEL :=
 endif
 
 # Create a list with all stylesheet root directories. When setting the
@@ -125,59 +131,29 @@ HTML_STYLE := $(addsuffix $(H_STYLE), $(H_DIR))
 # So existing files are chosen in the order defined in $STYLE_ROOTDIRS
 # So the DocBook stylesheets always raima the last resort
 
-ifndef STYLEEPUBXSLT
-  STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
+STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-ifndef STYLEFO
-  STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
+STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-ifndef STYLEH
-  STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
+STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-ifndef STYLEJ
-  STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
+STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-ifndef STYLEMAN
-  STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
+STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-ifndef STYLEWIKI
-  STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
+STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
 		   $(STYLE_ROOTDIRS))))
-endif
-
 #
 # CSS
-ifndef STYLE_HTMLCSS
+ifdef HTML_CSS
   STYLE_HTMLCSS := $(HTML_CSS)
+else
+  STYLE_HTMLCSS :=
 endif
-ifndef STYLE_EPUBCSS
+ifdef EPUB_CSS
   STYLE_EPUBCSS := $(EPUB_CSS)
+else
+  STYLE_EPUBCSS :=
 endif
 
 
-# inform  the stylesheets about the used fop processor
-#
-# FIXME - this should go into a wrapper script
-#
-ifeq ($(FOPTYPE), fop)
-FOCOLSTRINGS  += --stringparam fop1.extensions 1 \
-                 --stringparam xep.extensions 0
-FOSTRINGS  += --stringparam fop1.extensions 1 \
-              --stringparam xep.extensions 0
-ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
-FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
-else
-FOP_CONFIG_FILE ?=$(DTDROOT)/etc/fop/fop-daps.xml 
-endif
-else
-ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
-FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
-else
-FOP_CONFIG_FILE ?=$(DTDROOT)/etc/xep/xep-daps.xml 
-endif
-endif
