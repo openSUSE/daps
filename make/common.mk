@@ -239,7 +239,6 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-	        --stringparam styleroot "$(STYLEROOT)/" \
 	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
@@ -248,32 +247,41 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-	        --stringparam styleroot "$(STYLEROOT)/" \
 	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
+
+# root directory for custom stylesheets
+#
+ifdef STYLEROOT
+  FOSTRINGS    += --stringparam styleroot "$(STYLEROOT)/"
+  FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
+endif
+
+# DRAFT string parameters
+#
 ifdef DRAFT
-FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
-                --stringparam xml.source.dir "$(BASE_DIR)/xml/"
-FOCOLSTRINGS += --stringparam draft.mode "$(DRAFT)"
-HTMLSTRINGS  += --stringparam draft.mode "$(DRAFT)"
-JSPSTRINGS   += --stringparam draft.mode "$(DRAFT)"
+  FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
+                  --stringparam xml.source.dir "$(BASE_DIR)/xml/"
+  FOCOLSTRINGS += --stringparam draft.mode "$(DRAFT)"
+  HTMLSTRINGS  += --stringparam draft.mode "$(DRAFT)"
+  JSPSTRINGS   += --stringparam draft.mode "$(DRAFT)"
 endif
 
 ifdef ROOTID
-ROOTSTRING   := --stringparam rootid "$(ROOTID)"
+  ROOTSTRING   := --stringparam rootid "$(ROOTID)"
 endif
 
 # meta information (author, last changed, etc)
 ifeq ($(USEMETA), 1)
-METASTRING   := --stringparam use.meta 1
+  METASTRING   := --stringparam use.meta 1
 endif
 
 # HTML stuff
 ifdef HTMLROOT
-HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
+  HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
 endif
 ifdef USEXHTML
-XHTMLSTRING  := --stringparam generate.jsp.marker 0
+  XHTMLSTRING  := --stringparam generate.jsp.marker 0
 endif
 
 # Language string
@@ -287,9 +295,9 @@ DESKSTRINGS  := --stringparam uselang "${LL}" \
 # index
 # the index file must be in the same directory than the profiled $(MAIN).
 ifdef USEINDEX
-INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLESEAIND) \
-               $(BASE_DIR)/xml/$(MAIN))
-INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
+  INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLESEAIND) \
+                 $(BASE_DIR)/xml/$(MAIN))
+  INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
 endif
 
 
