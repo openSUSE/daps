@@ -1,7 +1,23 @@
 <?xml version="1.0"?>
 <!--
-  this stylesheets prints a table of contents with 
-  filename, element, title and ID 
+   Purpose:
+     Overview of document structure with title and ID
+     
+   Parameters:
+     * separator (default: " ")
+     * endseparator (default: "&#10;")
+      
+   Input:
+     DocBook document
+     
+   Output:
+     Text output in the form
+      ELEMENT: TITLE ID
+      
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
