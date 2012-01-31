@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  
-  Input: A DocBook 4 or DocBook 5 document
-  Output:
-   * 4 = DocBook version 4
-   * 5 = DocBook version 5
-   * 0 = No DocBook document at all, something different
-  
-  CAVEAT:
-  It is assumed, the root element contains either the DocBook 5
-  namespace or is one of the structural elements (book, chapter, ...)
+<!--
+   Purpose:
+     Copy nodes
+     
+   Parameters:
+     None
+       
+   Input:
+     A DocBook 4 or DocBook 5 document
+     
+   Output:
+     Text output
+     * 4 = DocBook version 4
+     * 5 = DocBook version 5
+     * 0 = No DocBook document at all, something different
+     
+   CAVEAT:
+     It is assumed, the root element contains either the DocBook 5
+     namespace or is one of the structural elements (book, chapter, ...)
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
