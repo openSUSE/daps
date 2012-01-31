@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Removes DocBook 5 namespace from a DocBook 5 document
+
+   Parameters:
+     None
+
+   Input:
+     DocBook 5 document
+
+   Output:
+     DocBook 5 document without the DocBook 5 namespace
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:exsl="http://exslt.org/common"
@@ -10,13 +27,14 @@
     href="http://docbook.sourceforge.net/release/xsl/current/common/stripns.xsl"/>
   
   <xsl:param name="exsl.node.set.available">
-  <xsl:choose>
-    <xsl:when xmlns:exsl="http://exslt.org/common" exsl:foo="" 
-      test="function-available('exsl:node-set') or  
-      contains(system-property('xsl:vendor'),  'Apache Software Foundation')">1</xsl:when>
-    <xsl:otherwise>0</xsl:otherwise>
-  </xsl:choose>
-</xsl:param>
+    <xsl:choose>
+      <xsl:when xmlns:exsl="http://exslt.org/common" exsl:foo=""
+        test="function-available('exsl:node-set') or  
+      contains(system-property('xsl:vendor'),  'Apache Software Foundation')"
+        >1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:template match="/">
     <xsl:choose>
