@@ -76,7 +76,7 @@ SRCPDF      := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
 SRCPNG      := $(wildcard $(IMG_SRCDIR)/png/*.png)
 SRCSVG      := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
 
-# get all images used in the currrent set
+# get all images used in the current Document
 #
 USED        := $(sort $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		  --stringparam xml.or.img img \

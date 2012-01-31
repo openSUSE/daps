@@ -89,22 +89,16 @@ JSP_STYLE       := /jsp/chunk.xsl
 MAN_STYLE       := /manpages/docbook.xsl
 WIKI_STYLE      := /db2mediawiki/docbook.xsl
 
-# HTML is special, because single-html uses docbook.xsl while chunked html
-# uses chunk.xsl. Whatsmore, we optionally allow html4.
-
-ifeq ("$(firstword $(MAKECMDGOALS))", "html")
-  H_STYLE := chunk.xsl
-else
-  H_STYLE := docbook.xsl
-endif
+# HTML is special, because we optionally allow html4.
 
 ifeq ("$(HTML4)", "yes")
-  H_DIR := /html/
+  H_DIR := /html
 else
-  H_DIR := /xhtml/
+  H_DIR := /xhtml
 endif
 
-HTML_STYLE := $(addsuffix $(H_STYLE), $(H_DIR))
+HTML_STYLE        := $(H_DIR)/chunk.xsl
+HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 
 #----------------------------
 # No let's put it all together
@@ -136,6 +130,8 @@ STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
 STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
+		   $(STYLE_ROOTDIRS))))
+STYLEHSINGLE  := $(firstword $(wildcard $(addsuffix $(HTML_SINGLE_STYLE), \
 		   $(STYLE_ROOTDIRS))))
 STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
 		   $(STYLE_ROOTDIRS))))

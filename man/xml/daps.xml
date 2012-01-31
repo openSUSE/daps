@@ -3,12 +3,13 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY command "daps">
+  <!ENTITY daps_command "daps">
+  <!ENTITY daps_version "0.9.3">
 ]>
 
 <refentry lang="en" id="daps">
- <refentryinfo>
-  <productname>&command;</productname>
+  <refentryinfo>
+  <productname>&daps_command;</productname>
   <authorgroup>
    <author>
     <contrib>Developer</contrib>
@@ -45,23 +46,25 @@
   </authorgroup>
  </refentryinfo>
  <refmeta>
-  <refentrytitle>&command;</refentrytitle>
+  <refentrytitle>&daps_command;</refentrytitle>
   <manvolnum>1</manvolnum>
-  <refmiscinfo class="date">@DATE@</refmiscinfo>
-  <refmiscinfo class="version">@VERSION@</refmiscinfo>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&daps_version;</refmiscinfo>
   <refmiscinfo class="manual">daps</refmiscinfo>
  </refmeta>
  <refnamediv>
-  <refname>&command;</refname>
+  <refname>&daps_command;</refname>
   <refpurpose>
    A complete environment to build HTML, PDF, EPUB and other formats from
    DocBook XML.
   </refpurpose>
  </refnamediv>
+ 
+
  <refsynopsisdiv id="daps.synopsis">
   <title>Synopsis</title>
   <cmdsynopsis>
-   <command>&command;</command>
+   <command>&daps_command;</command>
    <arg choice="opt">
     <replaceable>GLOBAL OPTIONS</replaceable>
    </arg>
@@ -90,7 +93,7 @@
    </para>
    <para>
     Most of DAPS' functionality can be accessed with the command
-   <command>&command;</command>. Run <command>&command; <option>help</option></command> to access the built-in tool documentation.
+   <command>&daps_command;</command>. Run <command>&daps_command; <option>help</option></command> to access the built-in tool documentation.
    </para>
   </refsect1>
  

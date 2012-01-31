@@ -3,32 +3,30 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY command "daps-susespell">
-  <!ENTITY date    "2011 July 26">
+  <!ENTITY daps-susespell-command "daps-susespell">
 ]>
 
 
 <refentry lang="en" id="daps-susespell">
  <refentryinfo>
-  <productname>&command;</productname>
   <authorgroup>
    <author>
     <contrib>Developer</contrib>
     <firstname>Frank</firstname>
     <surname>Sundermeyer</surname>
-    <email>fs@suse.de</email>
+    <email>fsundermeyer@opensuse.org</email>
    </author>
   </authorgroup>
  </refentryinfo>
  <refmeta>
-  <refentrytitle>&command;</refentrytitle>
+  <refentrytitle>&daps-susespell-command;</refentrytitle>
   <manvolnum>1</manvolnum>
-  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="date">2011 July 26</refmiscinfo>
   <refmiscinfo class="version">1.0</refmiscinfo>
   <refmiscinfo class="manual">Aspell wrapper for DAPS</refmiscinfo>
  </refmeta>
  <refnamediv>
-  <refname>&command;</refname>
+  <refname>&daps-susespell-command;</refname>
   <refpurpose>
    Spell checks DocBook XML files with aspell.
   </refpurpose>
@@ -37,7 +35,7 @@
  <refsynopsisdiv id="daps-susespell.synopsis">
   <title>Synopsis</title>
   <cmdsynopsis>
-   <command>&command;</command>
+   <command>&daps-susespell-command;</command>
    <arg choice="opt">
     <replaceable>options</replaceable>
    </arg>
@@ -49,12 +47,12 @@
   <title>Description</title>
   <para>
    An aspell wrapper for DAPS to check DocBook XML files. Calls aspell in
-   <literal>sgml-mode</literal>, so XML elements are not checked. &command;
+   <literal>sgml-mode</literal>, so XML elements are not checked. &daps-susespell-command;
    also does not check the content of certain elements such as
    <sgmltag>&lt;command&gt;</sgmltag> or <sgmltag>&lt;screen&gt;</sgmltag>.
   </para>
   <para>
-   &command; supports two modes:
+   &daps-susespell-command; supports two modes:
   </para>
   <itemizedlist>
    <listitem>
@@ -75,7 +73,7 @@
   </para>
  </refsect1>
 
- <refsect1 id="ccecho.see_also">
+ <refsect1 id="daps-susespell.see_also">
   <title>See also</title>
   <para><command>aspell</command>(1)</para>
  </refsect1>

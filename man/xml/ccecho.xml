@@ -3,42 +3,39 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY command "ccecho">
-  <!ENTITY date    "2011 June 14">
+  <!ENTITY ccecho-command "ccecho">
 ]>
 
 
 <refentry lang="en" id="ccecho">
- <refentryinfo>
-  <productname>&command;</productname>
+  <refentryinfo>
   <authorgroup>
    <author>
     <contrib>Developer</contrib>
     <firstname>Frank</firstname>
     <surname>Sundermeyer</surname>
-    <email>fs@suse.de</email>
+    <email>fsundermeyer@opensuse.org</email>
    </author>
   </authorgroup>
  </refentryinfo>
  <refmeta>
-  <refentrytitle>&command;</refentrytitle>
+  <refentrytitle>&ccecho-command;</refentrytitle>
   <manvolnum>1</manvolnum>
-  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="date">2011 June 14</refmiscinfo>
   <refmiscinfo class="version">1.0</refmiscinfo>
   <refmiscinfo class="manual">Conditional Color Echo</refmiscinfo>
  </refmeta>
  <refnamediv>
-  <refname>&command;</refname>
+  <refname>&ccecho-command;</refname>
   <refpurpose>
    ccecho (conditional color echo) let's you use colored output for STDOUT
    while using regular output for log files, pipes and scripts
   </refpurpose>
  </refnamediv>
-
  <refsynopsisdiv id="ccecho.synopsis">
   <title>Synopsis</title>
   <cmdsynopsis>
-   <command>&command;</command>
+   <command>&ccecho-command;</command>
    <arg choice="plain">LEVEL</arg>
    <arg choice="plain">MESSAGE</arg>
   </cmdsynopsis>
@@ -90,7 +87,7 @@ warn    ->  red</screen>
     <term><envar>COLOR</envar></term>
     <listitem>
      <para>
-      When set to "0" or "no", &command; will act as plain echo -e doing no
+      When set to "0" or "no", &ccecho-command; will act as plain echo -e doing no
       colored output.
      </para>
     </listitem>

@@ -248,6 +248,10 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
 	        --stringparam dtdroot "$(DTDROOT)/" \
 		--param ulink.show 1
+MANSTRINGS   :=  --stringparam man.output.base.dir "$(MAN_DIR)/" \
+		 --stringparam man.output.in.separate.dir 1 \
+		 --stringparam man.output.subdirs.enabled 1 \
+		 --stringparam refentry.meta.get.quietly 1
 
 # root directory for custom stylesheets
 #
@@ -481,28 +485,29 @@ wiki: $(PROFILEDIR)/.validate $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki
 #--------------
 # MAN
 #
-# TODO:
-# The stylesheet writes into the current directory (filename: COMMAND.1)
-# we need to specify the --output parameter in order to write it to
-# $(RESULT_DIR)/man/COMMAND.1
-# This may also have an impact on packaging, check with
-# toms and ke
-#
-# see http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.base.dir.html and
-# http://docbook.sourceforge.net/release/xsl/current/doc/manpages/output.html
-#
 $(MAN_DIR): | $(DIRECTORIES)
 	mkdir -p $@
+
+# The problem with man page generation is that multiple man
+# pages may be generated with a single xsltproc call and that
+# the stylesheet defines name and output directories (following
+# the naming conventions for man pages)
+# Therefore we need that ugly for loop
 
 .PHONY: man
 man: | $(DIRECTORIES)
 man: $(MAN_DIR) $(PROFILEDIR)/.validate $(TMP_XML)
-	xsltproc $(ROOTSTRING) --xinclude \
-	  --stringparam man.output.base.dir "$(MAN_DIR)/" \
-	  --stringparam man.output.in.separate.dir 1 \
-	  --stringparam man.output.subdirs.enabled 1 \
-	  $(STYLEMAN) $(TMP_XML)
-	@ccecho "result" "Find the man page in: $(MAN_DIR)"	
+man: MAN_RESULTS = $(shell xsltproc --xinclude $(MANSTRINGS) $(DTDROOT)/daps-xslt/common/get-manpage-filename.xsl $(BASE_DIR)/xml/$(MAIN))
+man:
+	xsltproc $(ROOTSTRING) --xinclude $(MANSTRINGS) $(STYLEMAN) $(TMP_XML)
+ifneq ("$(GZIP_MAN)", "no")
+	for file in $(MAN_RESULTS); do \
+	  gzip -f $$file; \
+	done
+	@ccecho "result" "Find the man page(s) at:\n$(addsuffix .gz,$(MAN_RESULTS))"	
+else
+	@ccecho "result" "Find the man page(s) at:\n$(MAN_RESULTS)"
+endif
 
 #--------------
 # FORCE
@@ -1485,7 +1490,7 @@ endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
-	  --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  --xinclude $(STYLEHSINGLE) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
 
 #------------------------------------------------------------------------
 #
