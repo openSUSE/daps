@@ -5,7 +5,9 @@
      
    Parameters:
      * separator (default: " ")
+       Separates the different parts of the output
      * endseparator (default: "&#10;")
+       Separator at the end of a line
       
    Input:
      DocBook document
