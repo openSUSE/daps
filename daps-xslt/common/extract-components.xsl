@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Purpose:
-      This stylesheet extracts appendix, bibliography, chapter, glossary,
-      preface and save it into separate files
+   Purpose:
+     Extracts appendix, bibliography, chapter, glossary,
+     preface and save it into separate files
+     
+   Parameters:
+     * doctype.public (default: "-//Novell//DTD NovDoc XML V1.0//EN")
+       Public identifier for DOCTYPE declaration
+     * doctype.system (default: "novdocx.dtd")
+       System identifier for DOCTYPE declaration
+     * doctype.encoding (default: "UTF-8")
+       Encoding of the generated file
+     * base.dir (default: "novell/")
+       Base directory: where all the generated files are stored
+     * use.xml.base (default: 1)
+       Should xml:base attributes considered? 1=on, 0=off
+     * debug (default: 1)
+       Print messages? 1=on, 0=off
+       
+   Input:
+     DocBook document
+     
+   Output:
+     DocBook components saved in different files
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 <xsl:stylesheet version="1.0"
     xmlns:db="http://docbook.org/ns/docbook"
@@ -14,19 +38,10 @@
 <xsl:param name="doctype.public"
 >-//Novell//DTD NovDoc XML V1.0//EN</xsl:param>
 
-<!-- SYSTEM identifier -->
 <xsl:param name="doctype.system">novdocx.dtd</xsl:param>
-
-<!-- Encoding of the generated file -->
 <xsl:param name="doctype.encoding">UTF-8</xsl:param>
-
-<!-- Base directory: where all the generated files are stored -->
 <xsl:param name="base.dir">novell/</xsl:param>
-
-<!-- Should xml:base attributes considered? 1=on, 0=off -->
 <xsl:param name="use.xml.base">1</xsl:param>
-
-<!-- Print messages? 1=on, 0=off -->
 <xsl:param name="debug">1</xsl:param>
 
 
