@@ -30,6 +30,7 @@
   <xsl:import href="&db;/manpages/docbook.xsl"/>
 
   <xsl:output method="text"/>
+  
   <xsl:param name="filename.sep"><xsl:text> </xsl:text></xsl:param>
   
   <xsl:template match="/">
@@ -64,7 +65,8 @@
         <xsl:with-param name="section" select="$refentry.metadata/section"/>
         <xsl:with-param name="lang" select="$lang"/>
     </xsl:call-template>
-    <xsl:value-of select="filename.sep"/>
+    
+    <xsl:value-of select="$filename.sep"/>
   </xsl:template>
   
 </xsl:stylesheet>
