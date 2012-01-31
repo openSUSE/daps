@@ -13,7 +13,10 @@
      Normal DocBook source code
 
    Output:
-     Text output with each manpage filename on a separate line
+     Text output with each manpage filename separated by $filename.sep
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet 
