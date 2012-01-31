@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- $Id: get-graphics.xsl 42943 2009-07-10 09:15:05Z toms $
+   Purpose:
+     Lists all graphics files that are included inside an imageobject. 
+     It doesn't distinguish between different formats
+     
+   Parameters:
+     * preferred.mediaobject.role (not implemented yet)
+       
+   
+   Input:
+     DocBook document
+     
+   Output:
+     Text strings
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 
-<!--
-  This stylesheets lists all graphics files that are included
-  inside an imageobject. It doesn't distinguish between
-  different formats
--->
 
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
