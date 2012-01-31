@@ -1,18 +1,24 @@
-<?xml version='1.0' encoding="ISO-8859-1"?>
-<!-- 
-    Purpose:
-      Extract language from @lang or @xml:lang attributes
-    
-    Input:
-      DocBook 4 or DocBook 5 documents with book, article, or
-      chapter as root element.
-           
-    Output:
-      string of the found language
-      If root element is not equal book or book doesn't 
+<?xml version='1.0' encoding="UTF-8"?>
+<!--
+   Purpose:
+     Extract language from @lang or @xml:lang attributes
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook 4 or DocBook 5 documents with book, article, or
+     chapter as root element.
+     
+   Output:
+     String of the found language
+      If the root element is not equal to book or book doesn't 
       contain a lang attribute, it will print an error.
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
-
 <xsl:stylesheet version="1.0"
    xmlns:db="http://docbook.org/ns/docbook"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
