@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
- The output of this stylesheet conforms to the following syntax: 
-  NUMBER SEP ID SEP TITLE
-
- For example:
-I#part.kde.desktop#Introduction
-1#cha.kde.start#Getting Started with the KDE Desktop
-2#cha.kde.use#Working with Your Desktop
-
+<!--
+   Purpose:
+     Prints informative lines about a document structure
+     
+   Parameters:
+     * sep (default: '#')
+       Separator between number and id
+     
+   Input:
+     Normal DocBook 4 or 5 document
+     
+   Output:
+     The output of this stylesheet conforms to the following syntax: 
+        NUMBER SEP ID SEP TITLE
+        
+     NUMBER: The number of the component, arabic or roman
+     SEP:    Separator from parameter $sep
+     ID:     ID value of the component
+     TITLE:  Title of the component
+     
+     For example:
+        I#part.kde.desktop#Introduction
+        1#cha.kde.start#Getting Started with the KDE Desktop
+        2#cha.kde.use#Working with Your Desktop
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 
 <xsl:stylesheet version="1.0"
@@ -20,7 +39,6 @@ I#part.kde.desktop#Introduction
   <xsl:param name="sep">#</xsl:param>
 
   <xsl:template match="text()"/>
-
 
   <xsl:template match="appendix|db:appendix">
     <xsl:variable name="num">
