@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Transforms DocBook document into Novdoc
+     
+   Parameters:
+     * createvalid
+       Should the output be valid? 1=yes, 0=no
+     * menuchoice.menu.separator (default: " > ")
+       String to separate menu components in titles (only for 
+       guimenuitem and guisubmenu)
+     * menuchoice.separator (default: "+")
+       String to separate menu components in titles
+     * rootid
+       Process only parts of the document
+       
+   Input:
+     DocBook document
+     
+   Output:
+     Novdoc document (subset of DocBook)
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exslt="http://exslt.org/common"
