@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Prints all used referenced images or XML files
+     
+   Parameters:
+     * xml.or.img (default: 'xml')
+       xml or image? img=images files, xml=XML files
+     * separator (default: ' ')
+       Separator between each filename
+       
+   Input:
+     Output from get-all-used-files.xsl
+     
+   Output:
+     List of filenames separated by $separator
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
  
@@ -7,11 +28,7 @@
   <xsl:output method="text" indent="no"/>
   
 
-  <!-- xml or image? img=images files, xml=XML files-->
   <xsl:param name="xml.or.img" select="'xml'"/>
-
-
-  <!-- Separator between each filename: -->
   <xsl:param name="separator">
     <xsl:text> </xsl:text>
   </xsl:param>
