@@ -1,6 +1,28 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  version="1.0">
+<!--
+   Purpose:
+     Extracts all <ulink>s from a document and creates a HTML page for
+     checkbot(s)
+     
+   Parameters:
+     * nolocalhost (default: 1)
+       Suppressing localhost URLs (1=yes, 0=no)
+     * rootid
+       Applies stylesheet only to part of the document
+       
+   Input:
+     DocBook document
+     
+   Output:
+     HTML file which contains all <ulink>s from a book, easy to feed
+     to checkbot
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output method="html"/>
 
