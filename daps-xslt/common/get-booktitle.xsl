@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Resolves any processing instruction in titles (book or article)
+     
+   Parameters:
+     * debug-suse-pi (default: 0)
+       Disable any debug output from PI processing
+       
+   Input:
+     DocBook document containing processing-instruction('suse')
+     
+   Output:
+     DocBook document with resolved PI
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
@@ -8,7 +27,6 @@
   
   <xsl:output method="text" encoding="UTF-8"/>
 
-  <xsl:param name="resolve.suse-pi" select="1"/>
   <xsl:param name="debug-suse-pi" select="0"/>
 
   <xsl:template match="text()"/>
@@ -176,7 +194,5 @@
   <xsl:template match="bookinfo/productnumber">
     <xsl:value-of select="."/>
   </xsl:template>
-  
-
   
 </xsl:stylesheet>
