@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
+   Purpose:
+     Checks some conformance/consistency rules which can not be 
+     done through DTD validation (aka "business rules")
+     
+   Parameters:
+     None
+       
+   Input:
+     Normal DocBook document
+     
+   Output:
+     Debug messages
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
+
 <xsl:stylesheet version="1.0"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
