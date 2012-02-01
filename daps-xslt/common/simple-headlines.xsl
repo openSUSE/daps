@@ -1,4 +1,30 @@
 <?xml version="1.0"?>
+<!--
+   Purpose:
+     Print titles of DocBook divisions
+     
+   Parameters:
+     * separator (default: " ")
+       Split each filename with the content of this parameter
+     
+     * endseparator (default: "\n")
+       Terminate the list with the content of this parameter
+   
+     * rootid (imported)
+       Applies stylesheet only to part of the document
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Text with the following structure:
+       [ ]TITLE (@id)
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
 
