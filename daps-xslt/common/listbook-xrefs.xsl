@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Lists all xrefs that point to another book in the set
+     
+   Parameters:
+     * rootid
+       Applies stylesheet only to part of the document
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Text, in the following format:
+       xref: linkend=X title=Y
+     Whereas X and Y are placeholders for the respective content
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- 
-  Lists all xref that points to another book in the set
--->
 
 <xsl:import href="rootid.xsl"/>
 <xsl:output method="text"/>
