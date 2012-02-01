@@ -1,5 +1,22 @@
 <?xml version="1.0"?>
-<!-- $Id: $ -->
+<!--
+   Purpose:
+     Prints text nodes 
+     
+   Parameters:
+     None
+        
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Prints text nodes of the document, discarding any XML tags
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
