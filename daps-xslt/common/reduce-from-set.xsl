@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- -->
-<!DOCTYPE xsl:stylesheet
-[
-  <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current/">
-]>
+<!--
+   Purpose:
+     Extract a division and all its descendants by providing a ID
+     
+   Parameters:
+     * rootid
+       Applies stylesheet only to part of the document
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Reduced XML which contains only a fraction of the original document
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-
-<!--  <xsl:include href="&db;fo/param.xsl"/>
-  <xsl:include href="&db;lib/lib.xsl"/>
-  <xsl:include href="&db;common/common.xsl"/>
-  <xsl:include href="&db;common/gentext.xsl"/>
-  <xsl:include href="&db;fo/xref.xsl"/>-->
   
   <xsl:import href="rootid.xsl"/>
   
@@ -36,7 +43,6 @@
     <xsl:message terminate="yes">ERROR: No rootid given. Nothing to do.</xsl:message>
   </xsl:template>
 
-
   <xsl:template match="node()" mode="process.root">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
@@ -44,7 +50,6 @@
     </xsl:copy>
   </xsl:template>
 
-  
   <xsl:template match="xref" name="xref" mode="process.root" priority="2">
     <xsl:variable name="targets" select="key('id',@linkend)"/>
     <xsl:variable name="target" select="$targets[1]"/>
@@ -98,6 +103,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
 
 </xsl:stylesheet>
