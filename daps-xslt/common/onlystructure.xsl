@@ -1,16 +1,37 @@
 <?xml version="1.0"?>
-<!-- $Id: onlystructure.xsl 2118 2005-09-21 13:34:29Z toms $ -->
+<!--
+   Purpose:
+     Creates a hierarchy without text nodes. All elements, comments(*), 
+     processing-instructions(*) and attributs are preserved.
+     
+     (*) Can be enabled or disabled
+     
+   Parameters:
+     * use.comments (default: 0)
+       Should comments be preserved? (1=yes, 0=no)
+       
+     * use.pis (default: 0)
+       Should processing instructions be preserved? (1=yes, 0=no)
+       
+     * use.indexterms (default: 1)
+       Should indexterms be copied? (1=yes, 0=no)
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     DocBook XML structure without any text nodes
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0"
    xmlns:xi="http://www.w3.org/2001/XInclude"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<!--
-  This XSLT stylesheet creates a hierarchy structure of a XML file.
-  The result contains no text nodes and therefore no inline elements.
-  All elements, comments(*), processing-instructions(*) and attributs
-  are preserved.
 
-  (*) You can omit this, by setting a parameter
--->
+<xsl:import href="copy.xsl"/>
 
 <xsl:output method="xml"
    indent="yes"/>
@@ -20,9 +41,9 @@
 -->
 
 <!-- Some parameters -->
-<xsl:param name="use.comments">0</xsl:param>
-<xsl:param name="use.pis">0</xsl:param>
-<xsl:param name="use.indexterms">1</xsl:param>
+<xsl:param name="use.comments" select="0"/>
+<xsl:param name="use.pis" select="0"/>
+<xsl:param name="use.indexterms" select="1"/>
 
 
 <!-- ====================================================== -->
@@ -30,64 +51,29 @@
 <xsl:template match="text()"/>
 
 <xsl:template match="processing-instruction()">
-   <xsl:if test="$use.pis='1'">
+   <xsl:if test="$use.pis != 0">
       <xsl:copy-of select="."/>
    </xsl:if>
 </xsl:template>
 
 <xsl:template match="comment()">
-   <xsl:if test="$use.comments='1'">
+   <xsl:if test="$use.comments != 0">
       <xsl:text>&#10;</xsl:text>
       <xsl:copy-of select="."/>
       <xsl:text>&#10;</xsl:text>
    </xsl:if>
 </xsl:template>
 
-
-<!-- ====================================================== -->
-
-<xsl:template match="*">
-   <xsl:element name="{name(.)}">
-      <xsl:copy-of select="@*"/>
-      <xsl:apply-templates/>
-   </xsl:element>
-</xsl:template>
-
-
 <xsl:template match="remark"/>
 
-<xsl:template match="para|term|edition|title|subtitle|firstname|surname|othername">
-   <xsl:element name="{name(.)}">
-      <xsl:copy-of select="@*"/>
-      <xsl:text> </xsl:text>
-   </xsl:element>
-</xsl:template>
-
-
-<xsl:template match="indexterm">
-   <xsl:if test="$use.indexterms='1'">
-      <xsl:element name="{name(.)}">
-         <xsl:copy-of select="@*"/>
-         <xsl:apply-templates/>
-      </xsl:element>
+<xsl:template match="indexterm|primary|secondary|tertiary|see|seealso">
+   <xsl:if test="$use.indexterms != 0">
+      <xsl:apply-templates/>
    </xsl:if>
 </xsl:template>
 
-<xsl:template match="primary|secondary|tertiary|see|seealso">
-   <xsl:if test="$use.indexterms='1'">
-      <xsl:element name="{name(.)}">
-         <xsl:copy-of select="@*"/>
-         <xsl:text> </xsl:text>
-      </xsl:element>
-   </xsl:if>
-</xsl:template>
-
-<!-- ====================================================== -->
 <xsl:template match="xi:include|xi:fallback">
    <xsl:copy-of select="."/>
 </xsl:template>
-
-<!-- ====================================================== -->
-
 
 </xsl:stylesheet>
