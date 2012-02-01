@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Copies SVG document, but rewrite @style attribute to make it
+     easier for other XSLT stylesheets to match for any style-related
+     attributes
+     
+     For example, style="font-family:DejaVu-Sans;font-size:12pt" 
+     is rewritten as single attributes 
+     font-family="DejaVu-Sans" and font-size="12pt"
+     
+   Parameters:
+     None
+       
+   Input:
+     SVG document
+     
+   Output:
+     SVG document without any @style attribute but with single
+     attributes
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 <!DOCTYPE xsl:stylesheet 
 [
   <!ENTITY svgns "http://www.w3.org/2000/svg">
