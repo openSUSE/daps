@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Clean up sources from Provo
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Cleaned up sources
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    version="1.0">
 
