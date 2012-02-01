@@ -1,15 +1,24 @@
 <?xml version="1.0"?>
+<!--
+   Purpose:
+     Create toc level structure containing titles only
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     DocBook XML toc structure, see http://www.docbook.org/tdg/en/html/toc.html
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<!-- ********************************************************************
-     $Id: maketoc.xsl 273 2005-06-08 10:42:38Z toms $
-     ********************************************************************
-
-     This is a stylesheet that creates a toc structure. It contains
-     the id value of the hierarchy element and the title.
--->
-<!-- ==================================================================== -->
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
@@ -18,12 +27,9 @@
 
 
 <xsl:template match="/">
-  <xsl:text>&#xA;</xsl:text>
   <toc>
-    <xsl:text>&#xA;</xsl:text>
     <xsl:apply-templates select="/" mode="toc"/>
   </toc>
-  <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
 
@@ -31,7 +37,7 @@
 
 
 <!-- ==================================================================== -->
-<xsl:template match="book|article" mode="toc">
+<xsl:template match="set|book|article" mode="toc">
    <xsl:apply-templates mode="toc"/>
 </xsl:template>
 
