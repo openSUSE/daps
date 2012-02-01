@@ -67,6 +67,7 @@ install: create-install-dirs
 	install -m644 fonts/*.ttf $(DESTDIR)$(PREFIX)/fonts/truetype
 	install -m644 man/*.1.gz $(DESTDIR)$(PREFIX)/man/man1
 	install -m644 lib/docbook_macros.el $(DESTDIR)$(PREFIX)/emacs/site-lisp
+	install -m644 lib/suse_aspell.rws $(DESTDIR)$(PREFIX)/aspell-0.60
 	install -m644 schema/novdocx.{rnc,rng} \
 	  $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/rng/$(DTDVERSION)
 	install -m644 schema/{*.dtd,*.ent,catalog.xml,CATALOG} \
@@ -106,6 +107,8 @@ endif
 	mkdir -p $(DESTDIR)/usr/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/{dtd,rng}/$(DTDVERSION)
 	mkdir -p $(DESTDIR)$(PREFIX)/emacs/site-lisp
+# version number in path ;-(( needs to be checked
+	mkdir -p $(DESTDIR)$(PREFIX)/aspell-0.60
 	mkdir -p $(DESTDIR)$(PREFIX)/fonts/truetype
 	mkdir -p $(DESTDIR)/var/lib/sgml
 	mkdir -p $(DESTDIR)$(PREFIX)/sgml
