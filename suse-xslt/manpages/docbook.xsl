@@ -10,66 +10,55 @@
 
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"/>
 
-<xsl:key   name="id" match="*" use="@id|@xml:id"/>
-
-
-<xsl:param name="show.comments">0</xsl:param>
-<xsl:param name="rootid"/>
-<!--<xsl:param name="man.output.base.dir">./man/</xsl:param>-->
-<xsl:param name="man.output.in.separate.dir" select="1"/>
-
-<xsl:template match="remark">
-  <xsl:if test="$show.comments != 0">
-    <xsl:apply-imports/>
-  </xsl:if>
-</xsl:template>
-
-
-
-<!-- omit copyright section -->  
+  <xsl:key   name="id" match="*" use="@id|@xml:id"/>
+  
+  
+  <xsl:param name="show.comments">0</xsl:param>
+  <xsl:param name="rootid"/>
+  
+  <!-- omit copyright section -->  
   <xsl:template name="copyright.section"/>
+  
+  <!--  don't print the product name and version -->
+  <!-- FIXME toms: we might need to put SOMETHING in there -->
+  <xsl:param name="refentry.source.name.profile.enabled">1</xsl:param>  
+  <xsl:param name="refentry.version.profile.enabled">1</xsl:param>
+  
 
-<!--  don't print the product name and version -->
-<!-- FIXME toms: we might need to put SOMETHING in there -->
-<xsl:param name="refentry.source.name.profile.enabled">1</xsl:param>
-<xsl:param name="refentry.source.name.profile">0</xsl:param>
-<xsl:param name="refentry.version.profile.enabled">1</xsl:param>
-<xsl:param name="refentry.version.profile">0</xsl:param>
-
-<!-- put first step of a procedure on its own line -->
-<xsl:template match="itemizedlist[ancestor::listitem or ancestor::step  or ancestor::glossdef]|
-	             orderedlist[ancestor::listitem or ancestor::step or ancestor::glossdef]|
-                     procedure[ancestor::listitem or ancestor::step or ancestor::glossdef]|procedure">
-  <xsl:text>.RS</xsl:text> 
-  <xsl:if test="not($list-indent = '')">
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="$list-indent"/>
-  </xsl:if>
-  <xsl:text>&#10;</xsl:text>
-  <xsl:if test="title">
-    <xsl:text>.PP&#10;</xsl:text>
-    <xsl:apply-templates mode="bold" select="title"/>
-    <xsl:text>&#10;</xsl:text>
-  </xsl:if>
-  <xsl:text>.TP</xsl:text> 
-  <xsl:if test="not($list-indent = '')">
-    <xsl:text> </xsl:text>
-    <xsl:value-of select="$list-indent"/>
-  </xsl:if>
-  <xsl:text>&#10;</xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>.RE&#10;</xsl:text>
-  <xsl:if test="following-sibling::node() or
-                parent::para[following-sibling::node()] or
-                parent::simpara[following-sibling::node()] or
-                parent::remark[following-sibling::node()]">
-    <xsl:text>.IP ""</xsl:text> 
+  <!-- put first step of a procedure on its own line -->
+  <xsl:template match="itemizedlist[ancestor::listitem or ancestor::step  or ancestor::glossdef]|
+    orderedlist[ancestor::listitem or ancestor::step or ancestor::glossdef]|
+    procedure[ancestor::listitem or ancestor::step or ancestor::glossdef]|procedure">
+    <xsl:text>.RS</xsl:text> 
     <xsl:if test="not($list-indent = '')">
       <xsl:text> </xsl:text>
       <xsl:value-of select="$list-indent"/>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
-  </xsl:if>
-</xsl:template>
-
+    <xsl:if test="title">
+      <xsl:text>.PP&#10;</xsl:text>
+      <xsl:apply-templates mode="bold" select="title"/>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+    <xsl:text>.TP</xsl:text> 
+    <xsl:if test="not($list-indent = '')">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="$list-indent"/>
+    </xsl:if>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>.RE&#10;</xsl:text>
+    <xsl:if test="following-sibling::node() or
+      parent::para[following-sibling::node()] or
+      parent::simpara[following-sibling::node()] or
+      parent::remark[following-sibling::node()]">
+      <xsl:text>.IP ""</xsl:text> 
+      <xsl:if test="not($list-indent = '')">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$list-indent"/>
+      </xsl:if>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+  </xsl:template>
+ 
 </xsl:stylesheet>
