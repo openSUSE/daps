@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
- Transforms output of svn pl -v -xml
- 
- Structure:
-  <properties>
-    <target path="xml/foo.xml">
-      <property name="doc:priority">2</property>
-      <property name="doc:status">editing</property>
-      <property name="doc:deadline">2011-01-15</property>
-      <property name="doc:trans">no</property>
-      <property name="incgraphics">False</property>
-    </target>
-  </properties>
+<!--
+   Purpose:
+     Transforms output of svn pl -v --xml into more consumable XML
+     
+   Parameters:
+     None
+       
+   Input:
+     XML file from "svn  pl -v --xml" 
+      <properties>
+        <target path="xml/foo.xml">
+          <property name="doc:priority">2</property>
+          <property name="doc:status">editing</property>
+          <property name="doc:deadline">2011-01-15</property>
+          <property name="doc:trans">no</property>
+          <property name="incgraphics">False</property>
+        d</target>
+      </properties>
+     
+   Output:
+     XML file
+     <filename priority="2"
+               status="editing"
+               deadline="2011-01-15"
+               trans="no"
+               incgraphics="False"
+               >foo.xml</filename> 
    
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
    
- Output:
-  <filename priority="2"
-  status="editing"
-  deadline="2011-01-15"
-  trans="no"
-  incgraphics="False"
-  >foo.xml</filename> 
 -->
 
 <xsl:stylesheet  version="1.0"
@@ -28,7 +37,6 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output omit-xml-declaration="yes" indent="yes"/>
   <xsl:strip-space elements="*"/>
-  <xsl:param name="inputFile">-</xsl:param>
  
   <xsl:template name="basename">
     <xsl:param name="path"/>
