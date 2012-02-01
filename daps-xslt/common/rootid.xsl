@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-
+<!--
+   Purpose:
+     Provides basic templates for applying a stylesheet only to fraction
+     of the document
+     
+   Parameters:
+     * rootid
+       Applies stylesheet only to part of the document
+       
+     * rootid.debug (default: 0)
+       Controls some log messages (0=no, 1=yes)
+       
+   Keys:
+     * id (applys to: @id|@xml:id)
+       Creates an index for all elements with IDs
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Reduced XML which contains only a fraction of the original document
+     
+   Note:
+     This stylesheet cannot be used as a "standalone" transformatin. It
+     is normally imported and the exported templates are overwritten.
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
   <xsl:param name="rootid"/>
-  <!-- Controls some log messages: 0=off, 1=on -->
+  <!--  -->
   <xsl:param name="rootid.debug" select="0"/>
 
   <xsl:template match="/" name="process.rootid.node">
