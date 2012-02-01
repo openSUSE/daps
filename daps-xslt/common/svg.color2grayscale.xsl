@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Create a grayscaled version of a colored SVG
+     
+   Parameters:
+     * colornames.filename (default: "colornames.xml")
+       Contains names and RGB values of colors
+       
+   Input:
+     SVG document
+     
+   Output:
+     SVG document with grayscaled color
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:math="http://xsltsl.org/math"
@@ -12,8 +31,8 @@
 
  <xsl:output method="xml" cdata-section-elements="svg:style"/>
 
- <xsl:param name="colornames.filename">../common/colornames.xml</xsl:param>
- <xsl:param name="color.nodes" select="document($colornames.filename)/*/*"/>
+ <xsl:param name="colornames.filename">colornames.xml</xsl:param>
+ <xsl:variable name="color.nodes" select="document($colornames.filename)/*/*"/>
 
  <xsl:template name="color2gray">
   <xsl:param name="color" select="."/>
@@ -197,7 +216,6 @@
      </xsl:attribute>
    </xsl:otherwise>
   </xsl:choose>
-
  </xsl:template>
 
 </xsl:stylesheet>
