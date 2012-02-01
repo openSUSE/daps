@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: get-xml-stylesheet.xsl 110 2005-05-18 11:01:48Z toms $ -->
+<!--
+   Purpose:
+     Print content of a 'xml-stylesheet' processing instruction
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Text content of the 'xml-stylesheet' processing instruction
+     (detects this PI only in the root node!)
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -8,8 +26,7 @@
 
 <xsl:output method="text"/>
 
-<xsl:template match="*">
-</xsl:template>
+<xsl:template match="*"/>
 
 
 <xsl:template match="/processing-instruction('xml-stylesheet')[1]">
@@ -20,6 +37,5 @@
       <xsl:with-param name="attribute">href</xsl:with-param>
    </xsl:call-template>
 </xsl:template>
-
 
 </xsl:stylesheet>
