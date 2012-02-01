@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Provides templates for sets (union, intersection, ...)
+   
+   Templates:
+    * vset:union(nodes1, nodes2)
+      Computes the union of two sets
+    
+    * vset:intersection(nodes1, nodes2)
+     Compute the intersection of two sets using "by value" equality
+    
+    * vset:difference(nodes1, nodes2)
+      Compute the differnce between two sets (node1 - nodes2) using 
+      "by value" equality.
+    
+    * vset:equal-text-values(nodes1, nodes2)
+     Tests if two proper sets (containing no duplicates) have equal
+     elements. Equality means same text value.
+     
+    * vset:equal-text-values-ignore-dups(nodes1, nodes2)
+      Tests if two sets (possibly containing duplicates) have equal 
+      elements. Equality means same text value.
+      
+    * vset:equal(nodes1, nodes2)
+      Generalized equal test against proper sets
+      
+    * vset:equality-ignore-dups(nodes1, nodes2)
+      Generalized equal test when there may be duplicates  
+   
+   Author:    Sal Mangano
+   Source code taken from "XSLT Cookbook" (O'Reilly)
+   See http://examples.oreilly.com/xsltckbk/
+   
+-->
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:vset="http:/www.ora.com/XSLTCookbook/namespaces/vset" 
@@ -6,11 +40,6 @@
  
 <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 
-<!--
-  Original author: Sal Mangano
-  Source code taken from "XSLT Cookbook" (O'Reilly)
-  See http://examples.oreilly.com/xsltckbk/
--->
 
 <xsl:template match="node() | @*" mode="vset:element-equality">
   <xsl:param name="other"/>
