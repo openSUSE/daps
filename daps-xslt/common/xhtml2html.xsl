@@ -1,4 +1,21 @@
 <?xml version="1.0"?>
+<!--
+   Purpose:
+     Creates HTML stylesheets from XHTML
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook XSLT stylesheet for HTML
+     
+   Output:
+     DocBook XSLT stylesheet for XHTML
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xslo="http://www.w3.org/1999/XSL/TransformAlias"
                 xmlns:exsl="http://exslt.org/common"
