@@ -561,14 +561,14 @@ endif
 # cleaning up
 #
 .PHONY: clean
-clean: | $(DIRECTORIES)
+clean:
 	rm -rf $(PROFILE_PARENT_DIR)/*
 	rm -rf $(TMP_DIR)/*
 	@ccecho "info" "Successfully removed all profiled and temporary files."
 
 .PHONY: clean-images
-clean-images: | $(DIRECTORIES)
-	find $(IMG_GENDIR) -type f | xargs rm -f
+clean-images:
+	find $(IMG_GENDIR) -type f 2>/dev/null | xargs rm -f
 	@ccecho "info" "Successfully removed all generated images."
 
 .PHONY: clean-results
