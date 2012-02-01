@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id: get-remarks.xsl 15487 2006-11-17 09:25:07Z toms $ -->
+<!--
+   Purpose:
+     Extracts all remarks
+     
+   Parameters:
+     * print.title (default: 1)
+       Should the title of the component be printed?  (1=yes, 0=no)
+       
+     * print.xpath (default: 1)
+       Should the XPath to the remark be printed? (1=yes, 0=no)
+       
+     * remark.role
+       Should the @role attribute in <remark> be checked? (1=yes, 0=no)
+       If yes, only remarks with @roles are considered.
+       
+   Input:
+     Novedoc/DocBook document
+     
+   Output:
+     Text with all remark contents and possible title, XPaths or both
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <!DOCTYPE xsl:stylesheet >
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -10,12 +36,10 @@
 
 <xsl:include href="../common/xpath.location.xsl"/>
   
-  
-<xsl:param name="filename"/>
 
 <xsl:param name="print.title">1</xsl:param>
 <xsl:param name="print.xpath">1</xsl:param>
-<xsl:param name="remark.role"></xsl:param>
+<xsl:param name="remark.role"/>
 
 <xsl:template match="text()"/>
 
