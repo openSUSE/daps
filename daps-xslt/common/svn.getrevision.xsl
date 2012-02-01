@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: get-xrefs.xsl 449 2005-06-22 13:30:06Z jjaeger $ -->
-<!DOCTYPE xsl:stylesheet >
-
-<!-- extracts linkends from xref elements all over the place -->
+<!--
+   Purpose:
+     Extracts first revision from svn log --xml output
+     
+   Parameters:
+     None
+       
+   Input:
+     XML file from "svn log --xml" 
+     
+   Output:
+     Text, first revision
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
