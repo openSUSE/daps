@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: get-xref2booklist.xsl 552 2005-06-29 08:02:13Z toms $ -->
-<!DOCTYPE xsl:stylesheet>
-
 <!--
-    Lists all ids in a set and prints it in the following formats:
-
-     id -> print|online
-
-    The parameter xref.linkend can be set to filter all ids. It
-    prints the searched id only.
+   Purpose:
+     Prints ID information, wheather it's online or print
+     
+   Parameters:
+     * xref.linkend
+       Filter all ids. It prints the searched id only.
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     Text in the following format:
+      id -> print|online
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
 -->
 
 <xsl:stylesheet version="1.0"
@@ -49,7 +57,6 @@
        </xsl:choose>
      </xsl:otherwise>
    </xsl:choose>
-
   </xsl:message>
 </xsl:template>
 
