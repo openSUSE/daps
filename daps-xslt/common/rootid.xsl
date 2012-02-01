@@ -41,11 +41,7 @@
     <xsl:choose>
       <xsl:when test="$rootid !=''">
         <xsl:if test="count(key('id',$rootid)) = 0">
-          <xsl:message terminate="yes">
-            <xsl:text>ID '</xsl:text>
-            <xsl:value-of select="$rootid"/>
-            <xsl:text>' not found in document.</xsl:text>
-          </xsl:message>
+          <xsl:call-template name="rootid.noelementfound.message"/>
         </xsl:if>
         <xsl:call-template name="rootid.debug.message"/>
         <xsl:call-template name="rootid.process"/>
@@ -54,6 +50,14 @@
         <xsl:call-template name="normal.process"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="rootid.noelementfound.message">
+    <xsl:message terminate="yes">
+      <xsl:text>ID '</xsl:text>
+      <xsl:value-of select="$rootid"/>
+      <xsl:text>' not found in document.</xsl:text>
+    </xsl:message>
   </xsl:template>
 
   <xsl:template name="rootid.debug.message">
