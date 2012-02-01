@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:math="http://xsltsl.org/math"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<!--
+   Purpose:
+     Provides some math templates from the EXSLT initiative
+     
+   Functions:
+     * decimal = math:cvt-hex-decimal( hexvalue )
+       Converts a hexadecimal value to a decimal value
+       
+     * decimal = math:cvt-hex-decimal-digit( hexvalue )
+       Converts a single hexadecimal value (0..F) to a decimal value
+     
+     * hexadecimal = math:cvt-decimal-hex( decvalue )
+       Convert a decimal value to a hexadecimal value
+     
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 
+<xsl:stylesheet version="1.0" 
+  xmlns:math="http://xsltsl.org/math"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:template name="math:cvt-hex-decimal">
         <xsl:param name="value"/>
@@ -9,7 +29,7 @@
         <!--<xsl:message>math:cvt-hex-decimal = <xsl:value-of select="$value"/></xsl:message>-->
 
         <xsl:choose>
-            <xsl:when test="$value = &quot;&quot;"/>
+            <xsl:when test="$value = ''"/>
 
             <xsl:when test="string-length($value) = 1">
                 <xsl:call-template name="math:cvt-hex-decimal-digit">
@@ -39,12 +59,12 @@
             <xsl:when test="$digit &lt;= 9">
                 <xsl:value-of select="$digit"/>
             </xsl:when>
-            <xsl:when test="$digit = &quot;a&quot; or $digit = &quot;A&quot;">10</xsl:when>
-            <xsl:when test="$digit = &quot;b&quot; or $digit = &quot;B&quot;">11</xsl:when>
-            <xsl:when test="$digit = &quot;c&quot; or $digit = &quot;C&quot;">12</xsl:when>
-            <xsl:when test="$digit = &quot;d&quot; or $digit = &quot;D&quot;">13</xsl:when>
-            <xsl:when test="$digit = &quot;e&quot; or $digit = &quot;E&quot;">14</xsl:when>
-            <xsl:when test="$digit = &quot;f&quot; or $digit = &quot;F&quot;">15</xsl:when>
+            <xsl:when test="$digit = 'a' or $digit = 'A'">10</xsl:when>
+            <xsl:when test="$digit = 'b' or $digit = 'B'">11</xsl:when>
+            <xsl:when test="$digit = 'c' or $digit = 'C'">12</xsl:when>
+            <xsl:when test="$digit = 'd' or $digit = 'D'">13</xsl:when>
+            <xsl:when test="$digit = 'e' or $digit = 'E'">14</xsl:when>
+            <xsl:when test="$digit = 'f' or $digit = 'F'">15</xsl:when>
         </xsl:choose>
     </xsl:template>
 
