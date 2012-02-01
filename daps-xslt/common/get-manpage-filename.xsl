@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Prints filename including path to generated manpage(s)
+     Print filenames including path to generated manpage(s)
 
    Parameters:
      See http://docbook.sourceforge.net/release/xsl/current/doc/manpages/output.html
