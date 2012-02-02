@@ -1,4 +1,24 @@
 <?xml version="1.0"?>
+<!--
+   Purpose:
+     
+     
+   Parameters:
+     
+       
+   Input:
+     
+     
+   Output:
+     
+   See also:
+      get-headlines-ids.xsl
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    version="1.0">
 
