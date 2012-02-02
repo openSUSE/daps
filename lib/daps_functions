@@ -1108,10 +1108,7 @@ function show_env {
 function init_wd () {
     # Initialize a working directory to get started with daps
     #
-
-    [[ -z "$ENVFILE" ]] && exit_on_error "You must specify an ENV-file when calling $ME init"
-    [[ -z "$BASE_DIR" ]] && exit_on_error "You must specify BASE_DIR when calling $ME init"
-    
+  
     SARGS=$(getopt -o h -l help,dirname:,rootelement: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
@@ -1149,7 +1146,10 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
             *) wrong_parameter "$TARGET $1" ;;
 	esac
     done
-     
+
+    [[ -z "$ENVFILE" ]] && exit_on_error "You must specify an ENV-file when calling $ME init"
+    [[ -z "$BASE_DIR" ]] && exit_on_error "You must specify BASE_DIR when calling $ME init"
+    
     # default ROOTELEMENT is book
     test -z $ROOTELEMENT && ROOTELEMENT=book
     
