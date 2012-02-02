@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id: fixsvg.xsl 6334 2006-02-20 09:20:44Z toms $ -->
+<!--
+   Purpose:
+     Wrapper template to fix SVG documents
+     
+   Parameters:
+     None
+       
+   Input:
+     SVG document
+     
+   Output:
+     Cleaned up SVG document.
+     Currently, input is the same as output. All nodes are copied
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
+
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:svg="http://www.w3.org/2000/svg"
