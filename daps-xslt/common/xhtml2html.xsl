@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
    Purpose:
-     Creates HTML stylesheets from XHTML
+     Creates HTML stylesheets from XHTML, stripping the XHTML namespace
      
    Parameters:
      None
