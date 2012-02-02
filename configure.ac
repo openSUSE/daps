@@ -27,10 +27,12 @@ Makefile
 # Command-line arguments
 ## AC_ARG_WITH(stuff, [  --with-stuff            enable stuff])
 
+AC_PREFIX_DEFAULT(/usr)
 
 # Some constants
 CATALOG_FILE="/etc/xml/catalog"
 DB_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+FONT_DIR="/usr/share/fonts"
 
 # Checks for programs.
 AC_PROG_MKDIR_P
@@ -84,8 +86,17 @@ else
 fi
 AC_SUBST(HAVE_TRANSFIG)
 
+AC_PATH_PROG([XMLLINT], [xmllint])
+if test -z "$XMLLINT"; then
+   AC_MSG_ERROR([xmllint not found])
+fi
 
-AC_MSG_NOTICE([===== Checking XML tools... ])
+AC_PATH_PROG([EXIFTOOL], [exiftool])
+if test -z "$"; then
+   AC_MSG_ERROR([exiftool not found]) 
+fi
+
+AC_MSG_NOTICE([===== Checking for XML tools... ])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
 AC_PATH_PROG([XMLLINT], [xmllint])
@@ -98,7 +109,7 @@ if test -z "$XSLTPROC"; then
    AC_MSG_ERROR([xsltproc not found]) 
 fi
 
-AC_PATH_PROG(XMLCATALOG, xmlcatalog, no)
+AC_PATH_PROG([XMLCATALOG], [xmlcatalog])
 if test -z "$XMLCATALOG"; then
    AC_MSG_ERROR([xmlcatalog not found]) 
 fi
@@ -108,12 +119,12 @@ if test -z "$FOP"; then
    AC_MSG_ERROR([fop not found]) 
 fi
 
-AC_PATH_PROG([TRANG], trang )
+AC_PATH_PROG([TRANG], [trang] )
 if test -z "$TRANG"; then
   AC_MSG_ERROR([trang not found]) 
 fi
 
-AC_PATH_PROG([JING], jing )
+AC_PATH_PROG([JING], [jing] )
 if test -z "$JING"; then
   AC_MSG_ERROR([jing not found]) 
 fi
@@ -123,7 +134,21 @@ if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
-AC_MSG_NOTICE([===== Checking Public Identifier for DocBook DTD...])
+AC_PATH_PROG([XMLSTARLET], [xml])
+if test -z "$XMLSTARLET"; then
+   AC_MSG_WARN([xmlstarlet (xml) not found]) 
+fi
+
+AC_PATH_PROG([XMLFORMAT], [xmlformat])
+if test -z "$XMLFORMAT"; then
+   AC_PATH_PROG([XMLFORMAT], [xmlformat.pl])
+   if test -z "$XMLFORMAT"; then
+     AC_MSG_WARN([xmlformat not found]) 
+   fi
+fi
+
+
+AC_MSG_NOTICE([===== Checking for Public Identifiers...])
 
 DOCBOOKDTDS=""
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
@@ -144,7 +169,7 @@ done
 AC_SUBST(DOCBOOKDTDS)
 
 
-AC_MSG_NOTICE([===== Checking System Identifier for DocBook DTD...])
+AC_MSG_NOTICE([===== Checking for System Identifier...])
 
 for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
                "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
@@ -159,9 +184,7 @@ for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
   fi
 done
 
-AC_MSG_NOTICE([===== Checking Canonical URL for DocBook XSL Stylesheets...])
-
-
+AC_MSG_NOTICE([===== Checking for Canonical URL (DocBook XSL Stylesheets)...])
 
 for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
             "${DB_XSLT_URL}xhtml/chunk.xsl" \
@@ -178,7 +201,6 @@ for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
     AC_MSG_WARN([not found])
   fi
 done
-
 
 
 
