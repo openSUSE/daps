@@ -1,41 +1,41 @@
-# environment file for book/article §§MAIN§§
-#
-# see /etc/daps/config for documentation of the settings below
-#
-# These settings are settings for the document defined by §§MAIN§§
-# only. Please do not add additional settings here - if you need to
-# customize other settings from /etc/daps/config, do so in
-# ~/.daps/config
+## Environment file for book/article §§MAIN§§
+##
+## See /etc/daps/config for documentation of the settings below
+##
+## These settings are settings for the document defined by §§MAIN§§
+## only. Please do not add additional settings here - if you need to
+## customize other settings from /etc/daps/config, do so in
+## ~/.daps/config
 
-# mandatory parameter
+## Mandatory Parameter
 MAIN="§§MAIN§§"
 
-#--------------------
-# optional parameters
+##--------------------
+## Optional Parameters
 
-# rootid
-# needed to build individual books if MAIN contains a set with several
-# books/articels
-# if not specified the whole set from MAIN will be build
+## rootid
+## needed to build individual books if MAIN contains a set with several
+## books/articels
+## if not specified the whole set from MAIN will be build
 ROOTID=""
 
-#------------------
-# Custom Stylesheets
-# (if not defined the DookBook stylesheets will be used)
-#
-STYLEROOT=""
-FB_STYLEROOT=""
-HTML_CSS=""
-EPUB_CSS=""
+##------------------
+## Custom Stylesheets
+## (if not defined the DookBook stylesheets will be used)
+##
+#STYLEROOT=""
+#FB_STYLEROOT=""
+#HTML_CSS=""
+#EPUB_CSS=""
 
-# profiling stuff
-#
-# os=""
-PROFOS=""
-# arch=""
-PROFARCH=""
+## Profiling stuff
+## For elements with os="..." and arch="..."
+##
+#PROFOS=""
+#PROFARCH=""
 
-# if you want to be able to source this file, so you do not have
-# to specify the -e/--envfile option with daps, uncomment the
-# following line
+## If you want to be able to source this file, so you do not have
+## to specify the -e/--envfile option with daps, uncomment the
+## following line
+##
 #export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
