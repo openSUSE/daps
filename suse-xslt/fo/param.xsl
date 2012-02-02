@@ -62,7 +62,7 @@
   
 <!--<xsl:param name="callout.unicode.start.character">10102</xsl:param>-->
 <!--<xsl:param name="callout.unicode.font">TomsCallouts</xsl:param>-->
-<xsl:param name="callout.unicode.number.limit">20</xsl:param>
+<xsl:param name="callout.unicode.number.limit">30</xsl:param>
 <!-- <xsl:param name="callout.unicode.start.character" select="10122"/> -->
 
 <!-- Activate numbering of sections -->
