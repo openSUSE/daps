@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     
+     
+   Parameters:
+     * separator (default: "@")
+       Separator between each filename
+     * filename.sep (default: " ")
+       String to separate each filename
+       
+   Input:
+     DocBook document
+     
+   Output:
+     
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 <xsl:stylesheet version="1.0"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -11,7 +31,7 @@
 
 
 <xsl:param name="separator">@</xsl:param>
-<xsl:param name="filename.separator"><xsl:text> </xsl:text></xsl:param>
+<xsl:param name="filename.sep"><xsl:text> </xsl:text></xsl:param>
 
 
 <xsl:template name="ends-with">
@@ -25,11 +45,11 @@
 <xsl:template match="imageobject/text()|db:imageobject/text()"/>
 
 <xsl:template name="process.imagedata">
-    <xsl:value-of select="concat(@fileref, $filename.separator)"/>
+    <xsl:value-of select="concat(@fileref, $filename.sep)"/>
     
     <xsl:choose>
         <xsl:when test="contains(@fileref, '.png')">
-            <xsl:value-of select="substring-before(@fileref, '.png')"/>            
+            <xsl:value-of select="substring-before(@fileref, '.png')"/>
         </xsl:when>
         <xsl:when test="contains(@fileref, '.jpg') or contains(@fileref, '.JPEG')">
             <xsl:value-of select="substring-before(@fileref, '.jpg')"/>
@@ -58,7 +78,6 @@
     </xsl:choose>
     
     <xsl:text>&#xa;</xsl:text>
-    <!--<xsl:value-of select="'&#xa;'"/>-->
 </xsl:template>
 
 <xsl:template match="imagedata|db:imagedata">
