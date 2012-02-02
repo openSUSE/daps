@@ -211,14 +211,15 @@ that script, an example &env; file is automatically created.</para>
   <sect2 id="sec.daps.user.overview.dir">
    <title>Directory Structure and Key Files</title>
    <para></para>
-   <sect3><title>Required Structure of Sources</title>
-   <para>For &dapsacr; to work out of the box, your XML files and images should 
+   <sect3>
+    <title>Required Structure of Sources</title>
+    <para>For &dapsacr; to work out of the box, your XML files and images should 
    be organized in the following structure within your documentation directory 
    (DOC_DIR). <xref linkend="ex.daps.user.dir"/> also shows the key files of a 
    documentation project. The directories are printed in bold.</para>
-   <example id="ex.daps.user.dir">
-    <title>Directory Structure and Key Files</title>
-    <screen>
+    <example id="ex.daps.user.dir">
+     <title>Directory Structure and Key Files</title>
+     <screen>
      <replaceable>DOC_DIR</replaceable>          <co id="co.daps.user.dir.base"/>    
 &env;*                                           <co id="co.daps.user.dir.env"/>    
 |--<emphasis role="bold">images</emphasis>       <co id="co.daps.user.dir.img"/>
@@ -230,56 +231,67 @@ that script, an example &env; file is automatically created.</para>
 |--<emphasis role="bold">xml</emphasis>          <co id="co.daps.user.dir.xml"/>
    |--MAIN*.xml                                  <co id="co.daps.user.dir.main"/>
     </screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.daps.user.dir.base">
-     <para>"Working directory" for the respective documentation project. 
+    </example>
+    <calloutlist>
+     <callout arearefs="co.daps.user.dir.base">
+      <para>"Working directory" for the respective documentation project. 
      Can be set on the command line with <option>--basedir</option> or in the
      &dapsacr; config files (usually in the user-specific one, &dapsconfu;).
      </para>
-    </callout>
-    <callout arearefs="co.daps.user.dir.env">
-     <para>&env; file defining the documentation project. For more information,
+     </callout>
+     <callout arearefs="co.daps.user.dir.env">
+      <para>&env; file defining the documentation project. For more information,
      refer to <xref linkend="sec.daps.user.oview.env"/>.
     </para>
-    </callout>
+     </callout>
     <!--<callout arearefs="co.daps.user.dir.img">
      <para>Top-level directory for the images used in the documentation project.
       </para>
     </callout>-->
-    <callout arearefs="co.daps.user.dir.img.src">
-     <para>Top-level directory for any original images that you want to
+     <callout arearefs="co.daps.user.dir.img.src">
+      <para>Top-level directory for any original images that you want to
      use in the documentation project. Contains subdirectories for images in 
      various formats. Any images to be referenced in the XML sources must be put
      in the respective subdirectories. <remark>taroth 2012-02-01: add xref to 
      section about using images (how to reference them -> path!)</remark>
-     </para>
-    </callout>
-    <callout arearefs="co.daps.user.dir.xml">
-     <para>Directory holding the XML files for the documentation project. If you
+      </para>
+     </callout>
+     <callout arearefs="co.daps.user.dir.xml">
+      <para>Directory holding the XML files for the documentation project. If you
      declare entities in an external file (for example, in 
      <filename>entity-decl.ent</filename>), put the entity declaration file 
      here, too.<remark>taroth 2012-02-01: toms, this is not a must, or is it?</remark>
-     </para>
-    </callout>
-    <callout arearefs="co.daps.user.dir.main">
-     <para>The main file of the documentation project. It contains 
+      </para>
+     </callout>
+     <callout arearefs="co.daps.user.dir.main">
+      <para>The main file of the documentation project. It contains 
      <quote>references</quote> to other books, chapters, appendices, etc.
      </para>
-    </callout>
-   </calloutlist>
+     </callout>
+    </calloutlist>
    </sect3>
-   <sect3><title>Additional Structure Created by &dapsacr;</title>
-   <para>When generating an output format from your documentation project, 
-&dapsacr; automatically creates another directory that holds the generated
-contents. If not set otherwise in &dapsconf; (parameter 
-<literal>BUILD_DIR</literal>), the directory is named <filename>build</filename> and is 
-automatically created in parallel to the <filename>xml</filename> and 
-<filename>images</filename> directory. 
+   <sect3>
+    <title>Additional Structure Created by &dapsacr;</title>
+    <para>When generating the first output format from your documentation project, 
+&dapsacr; adds another directory that holds the generated contents. If not set 
+otherwise in &dapsconf; (parameter <literal>BUILD_DIR</literal>), the directory 
+is named <filename>build</filename> and is created in parallel to the
+<filename>xml</filename> and <filename>images</filename> directory. 
    </para>
-   <remark>taroth 2012-02-01: add dir structure after building a doc project 
-   (build dir, what happens to the images? where are the profiles sources to be
-   found? etc.)</remark>
+   <para>The contents of the <filename>build</filename> directory is structured 
+   as follows: </para>
+    <example id="ex.daps.user.build">
+     <title>Build Directory</title>
+     <screen>
+&env;*                                            
+|--<emphasis role="bold">images</emphasis>       
+|--<emphasis role="bold">xml</emphasis>         
+|--<emphasis role="bold">build</emphasis>                                
+    </screen>
+    </example>
+    <remark>taroth 2012-02-02: todo: add build subdirs, 
+    check: what happens to the images? where are the profiles sources to be found?
+    </remark>
    </sect3>
   </sect2>
  </sect1>
