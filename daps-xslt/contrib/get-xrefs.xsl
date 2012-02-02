@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: get-xrefs.xsl 25990 2007-11-13 14:05:19Z toms $ -->
-<!DOCTYPE xsl:stylesheet >
-
-<!-- extracts linkends from xref elements all over the place -->
+<!--
+   Purpose:
+     Extracts linkends from xref elements
+     
+   Parameters:
+     None
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+   
+-->
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/profiling/profile.xsl"/>
 
-
+<xsl:param name="rootid"/>
 <xsl:output method="text"/>
+
+<xsl:template match="text()"/>
 
 <xsl:template match="/">
   <xsl:choose>
