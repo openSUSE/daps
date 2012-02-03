@@ -11,7 +11,7 @@
 
 <!-- Our Layout -->
 <xsl:param name="paper.layout"></xsl:param><!-- Empty for "normal" -->
-<xsl:param name="paper.type">NOVELL Layout:</xsl:param>
+<xsl:param name="paper.type">NOVELL/SUSE Layout:</xsl:param>
 <xsl:param name="page.height">612pt</xsl:param>
 <xsl:param name="page.width">504pt</xsl:param>
 <xsl:param name="double.sided">1</xsl:param>
@@ -169,7 +169,13 @@ set       nop
 <xsl:param name="menuchoice.separator"> > </xsl:param>
 <xsl:param name="menuchoice.menu.separator"> > </xsl:param>
 <xsl:param name="preferred.mediaobject.role">fo</xsl:param>
-<xsl:param name="ulink.hyphenate">&#x200B;</xsl:param>
+<xsl:param name="ulink.hyphenate">
+<xsl:choose>
+  <xsl:when test="$xep.extensions != 0 or $axf.extensions != 0">&#x200B;</xsl:when>
+  <xsl:when test="$fop1.extensions != 0"></xsl:when><!-- See also bnc#706452​ -->
+  <xsl:otherwise/>
+</xsl:choose>
+</xsl:param>
 <xsl:param name="ulink.show" select="0"/>
 
 <xsl:param name="img.src.path">../images/print/</xsl:param>
