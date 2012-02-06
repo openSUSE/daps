@@ -62,24 +62,25 @@
    which variants can be generated from the project with the help of conditional
    text (or profiling, as it is called in DocBook), you need a special file
    called &env; file. It is a text file and sets a number of variables (or keys) 
-   for your documentation project. For a documentation set (a collection of books), 
-   you can define multiple &env; files. By referring different root IDs, you 
-   define which book is to be built with the specific &env; file. Of course, you
-   can also specify different layouts for certain books (or use different values
-   for one of the other variables defined in the &env; file): 
+   for your documentation project.</para>
+   <para>For a documentation set (a collection of books), multiple &env; files 
+   can be defined. This allows you to set different variables (or different values)
+   for individual books of the set: For example, by referring a different 
+   ROOTID in an &env; file, you define which book of the set is to be built. 
+   Another example would be to specify different layouts. 
   </para>
   <example id="ex.daps.env.user">
    <title>An <filename>&env;-*</filename> File For a Book</title>
    <screen># &env; file for &dapsacr; User Guide
-MAIN=MAIN.DAPS.xml         <co id="co.daps.main"/>
-ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
-PROFARCH="x86;ppc"         <co id="co.daps.profarch"/>
-PROFOS="lin;win"           <co id="co.daps.profos"/>
-LAYOUT=                    <co id="co.daps.layout"/>
-PRODUCTNAME="&dapslong;"   <co id="co.daps.productname.version"/>
-DISTVER=1.0                <xref linkend="co.daps.productname.version"/>
+<co id="co.daps.main"/> MAIN=MAIN.DAPS.xml         
+<co id="co.daps.rootid"/> ROOTID=book_daps_user.xml 
+<co id="co.daps.profarch"/> PROFARCH="x86;ppc"         
+<co id="co.daps.profos"/> PROFOS="lin;win"           
+<co id="co.daps.layout"/> LAYOUT=                   
+<co id="co.daps.productname.version"/> PRODUCTNAME="&dapslong;"   
+   DISTVER=1.0
 
-export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
+<co id="co.daps.source"/> export DAPS_ENV_NAME=$(basename $BASH_SOURCE) 
     </screen>
   </example>
   <calloutlist>
@@ -221,8 +222,8 @@ that script, an example &env; file is automatically created.</para>
    <example id="ex.daps.user.dir.doc">
     <title>Directory Structure and Key Files</title>
     <screen>
-     <replaceable>DOC_DIR</replaceable>          <co id="co.docdir.base"/>    
-&env;*                                           <co id="co.docdir.env"/>    
+<co id="co.docdir.base"/>  <replaceable>DOC_DIR</replaceable>              
+<co id="co.docdir.env"/>  &env;*                                               
 |--<emphasis role="bold">images</emphasis>       <co id="co.docdir.img"/>
    |-- <emphasis role="bold">src</emphasis>      <co id="co.docdir.img.src"/>
        |--<emphasis role="bold">dia</emphasis>   
