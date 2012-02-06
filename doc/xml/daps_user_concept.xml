@@ -220,26 +220,26 @@ that script, an example &env; file is automatically created.</para>
     <example id="ex.daps.user.dir">
      <title>Directory Structure and Key Files</title>
      <screen>
-     <replaceable>DOC_DIR</replaceable>          <co id="co.daps.user.dir.base"/>    
-&env;*                                           <co id="co.daps.user.dir.env"/>    
-|--<emphasis role="bold">images</emphasis>       <co id="co.daps.user.dir.img"/>
-   |-- <emphasis role="bold">src</emphasis>      <co id="co.daps.user.dir.img.src"/>
+     <replaceable>DOC_DIR</replaceable>          <co id="co.docdir.base"/>    
+&env;*                                           <co id="co.docdir.env"/>    
+|--<emphasis role="bold">images</emphasis>       <co id="co.docdir.img"/>
+   |-- <emphasis role="bold">src</emphasis>      <co id="co.docdir.img.src"/>
        |--<emphasis role="bold">dia</emphasis>   
        |--<emphasis role="bold">fig</emphasis>   
        |--<emphasis role="bold">png</emphasis>   
        |--<emphasis role="bold">svg</emphasis>
-|--<emphasis role="bold">xml</emphasis>          <co id="co.daps.user.dir.xml"/>
-   |--MAIN*.xml                                  <co id="co.daps.user.dir.main"/>
+|--<emphasis role="bold">xml</emphasis>          <co id="co.docdir.xml"/>
+   |--MAIN*.xml                                  <co id="co.docdir.main"/>
     </screen>
     </example>
     <calloutlist>
-     <callout arearefs="co.daps.user.dir.base">
+     <callout arearefs="co.docdir.base">
       <para>"Working directory" for the respective documentation project. 
      Can be set on the command line with <option>--basedir</option> or in the
      &dapsacr; config files (usually in the user-specific one, &dapsconfu;).
      </para>
      </callout>
-     <callout arearefs="co.daps.user.dir.env">
+     <callout arearefs="co.docdir.env">
       <para>&env; file defining the documentation project. For more information,
      refer to <xref linkend="sec.daps.user.oview.env"/>.
     </para>
@@ -248,7 +248,7 @@ that script, an example &env; file is automatically created.</para>
      <para>Top-level directory for the images used in the documentation project.
       </para>
     </callout>-->
-     <callout arearefs="co.daps.user.dir.img.src">
+     <callout arearefs="co.docdir.img.src">
       <para>Top-level directory for any original images that you want to
      use in the documentation project. Contains subdirectories for images in 
      various formats. Any images to be referenced in the XML sources must be put
@@ -256,14 +256,14 @@ that script, an example &env; file is automatically created.</para>
      section about using images (how to reference them -> path!)</remark>
       </para>
      </callout>
-     <callout arearefs="co.daps.user.dir.xml">
+     <callout arearefs="co.docdir.xml">
       <para>Directory holding the XML files for the documentation project. If you
      declare entities in an external file (for example, in 
      <filename>entity-decl.ent</filename>), put the entity declaration file 
      here, too.<remark>taroth 2012-02-01: toms, this is not a must, or is it?</remark>
       </para>
      </callout>
-     <callout arearefs="co.daps.user.dir.main">
+     <callout arearefs="co.docdir.main">
       <para>The main file of the documentation project. It contains 
      <quote>references</quote> to other books, chapters, appendices, etc.
      </para>
@@ -276,22 +276,48 @@ that script, an example &env; file is automatically created.</para>
 &dapsacr; adds another directory that holds the generated contents. If not set 
 otherwise in &dapsconf; (parameter <literal>BUILD_DIR</literal>), the directory 
 is named <filename>build</filename> and is created in parallel to the
-<filename>xml</filename> and <filename>images</filename> directory. 
-   </para>
-   <para>The contents of the <filename>build</filename> directory is structured 
+<filename>xml</filename> and <filename>images</filename> directory.
+    </para>
+    <para>The contents of the <filename>build</filename> directory is structured 
    as follows: </para>
     <example id="ex.daps.user.build">
      <title>Build Directory</title>
      <screen>
-&env;*                                            
-|--<emphasis role="bold">images</emphasis>       
-|--<emphasis role="bold">xml</emphasis>         
-|--<emphasis role="bold">build</emphasis>                                
-    </screen>
+|--<emphasis role="bold">build</emphasis>             <co id="co.builddir"/>                   
+   |--<emphasis role="bold"><replaceable>name_of_&env;</replaceable>
+      </emphasis>    <co id="co.builddir.env"/>     
+   |--<emphasis role="bold">.images</emphasis>        <co id="co.builddir.img"/> 
+   |--<emphasis role="bold">.profiled</emphasis>      <co id="co.builddir.profiled"/>
+   |--<emphasis role="bold">.tmp</emphasis>           <co id="co.builddir.tmp"/>
+     </screen>
     </example>
-    <remark>taroth 2012-02-02: todo: add build subdirs, 
-    check: what happens to the images? where are the profiles sources to be found?
-    </remark>
+    <calloutlist>
+     <callout arearefs="co.builddir">
+      <para>Directory that holds all contents build by &dapsacr;.
+     </para>
+     </callout>
+     <callout arearefs="co.builddir.env">
+      <para>For each of your documentation projects, &dapsacr; creates a 
+      subdirectory in the <filename>build</filename>, named after the respective
+      &env; from which you build the project. In the subdirectory you find all 
+      formats that have been generated from the &env; (PDF, HTML, or ePUB) plus
+      a <filename>log</filename> subdirectory holding log files for each output 
+      format that has been generated by &dapsacr;.</para>
+     </callout>
+     <callout arearefs="co.builddir.img">
+      <para>Directory holding the images
+     created by &dapsacr;.</para>
+     </callout>
+     <callout arearefs="co.builddir.profiled">
+      <para>Directory holding the profiled XML sources created by &dapsacr; 
+(if you use profiling in your documentation project).</para>
+     </callout>
+     <callout arearefs="co.builddir.tmp">
+      <para>Directory holding temporary files created by &dapsacr;, for example, 
+      the FO files. </para>
+     </callout>
+    </calloutlist>
+
    </sect3>
   </sect2>
  </sect1>
