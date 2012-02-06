@@ -14,12 +14,12 @@
   directory structure, ENV files, profiling, validation, external components
   like XML editor and FO formatter, stylesheets ...</remark>
  </para>
- <para>&dapsacr; (&dapslong;) is developed as open source software for Linux 
+ <para>The &dapslong; (&dapsacr;) is developed as open source software for Linux 
   operating systems. It consists of integrated tools, stylesheets, scripts, and 
   makefiles that support technical writers in the editing, translation and 
   publishing process of DocBook XML files. &dapsacr; supports single source 
   publishing into a number of different output formats, like PDF, HTML, single 
-  HTML, or EPUB.</para>
+  HTML, or ePUB.</para>
  <para>It can be used in combination with the following components:</para>
  <itemizedlist>
   <listitem>
@@ -33,7 +33,7 @@
   </listitem>
  </itemizedlist>
  <sect1 id="sec.daps.user.oview.concepts">
-  <title>Basic Concepts</title>
+  <title>&dapsacr; Variables</title>
   <para>To define the build environment to use, &dapsacr; uses a set of
   variables that can be set in various places:</para>
   <itemizedlist>
@@ -55,9 +55,10 @@
   </itemizedlist>
   <para>The configuration file &dapsconf; lists all keys 
  that can be used, including a short description for each key.</para>
-  <sect2 id="sec.daps.user.oview.env">
-   <title>Defining Documentation Projects</title>
-   <para>To define which XML files belong to your documentation project, and
+ </sect1>
+ <sect1 id="sec.daps.user.oview.docdef">
+  <title>Defining Documentation Projects</title>
+  <para>To define which XML files belong to your documentation project, and
    which variants can be generated from the project with the help of conditional
    text (or profiling, as it is called in DocBook), you need a special file
    called &env; file. It is a text file and sets a number of variables (or keys) 
@@ -67,9 +68,9 @@
    can also specify different layouts for certain books (or use different values
    for one of the other variables defined in the &env; file): 
   </para>
-   <example id="ex.daps.env.user">
-    <title>An <filename>&env;-*</filename> File For a Book</title>
-    <screen># &env; file for &dapsacr; User Guide
+  <example id="ex.daps.env.user">
+   <title>An <filename>&env;-*</filename> File For a Book</title>
+   <screen># &env; file for &dapsacr; User Guide
 MAIN=MAIN.DAPS.xml         <co id="co.daps.main"/>
 ROOTID=book_daps_user.xml  <co id="co.daps.rootid"/>
 PROFARCH="x86;ppc"         <co id="co.daps.profarch"/>
@@ -80,41 +81,41 @@ DISTVER=1.0                <xref linkend="co.daps.productname.version"/>
 
 export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
     </screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.daps.main">
-     <para>Mandatory variable. Sets the main file that contains 
+  </example>
+  <calloutlist>
+   <callout arearefs="co.daps.main">
+    <para>Mandatory variable. Sets the main file that contains 
      <quote>references</quote> to other books, chapters, appendices, etc. If
      your documentation project consists of multiple books and articles 
      (a <literal>set</literal>), the MAIN variable usually references the 
      file that contains the &lt;set&gt; element.
       </para>
-    </callout>
-    <callout arearefs="co.daps.rootid">
-     <para>Optional variable. Defines the root ID of the element to be used for
+   </callout>
+   <callout arearefs="co.daps.rootid">
+    <para>Optional variable. Defines the root ID of the element to be used for
      creating an output format. Usually, you define the root ID of a
      &lt;book&gt; or article element here.  
      </para>
-    </callout>
-    <callout arearefs="co.daps.profarch">
-     <para>Optional variable. If you want to profile your text for different 
+   </callout>
+   <callout arearefs="co.daps.profarch">
+    <para>Optional variable. If you want to profile your text for different 
       platforms or (processor) architectures (for example, x86 or ppc), this 
       variable selects the architecture profiling information. 
       </para>
-    </callout>
-    <callout arearefs="co.daps.profos">
-     <para>Optional variable.If you want to profile your text for different 
+   </callout>
+   <callout arearefs="co.daps.profos">
+    <para>Optional variable.If you want to profile your text for different 
       operating systems (for example, for Linux and Windows), this variable 
       selects the operating system profiling
       information. 
      </para>
-    </callout>
-    <callout arearefs="co.daps.layout">
-     <para>Optional variable. Determines the layout of the book. aKregator
+   </callout>
+   <callout arearefs="co.daps.layout">
+    <para>Optional variable. Determines the layout of the book. aKregator
      Per default, &dapsacr; ships the following layouts:
      <remark>taroth 2012-01-19: bound to change soon, therefore commenting 
      for now</remark>
-     </para>
+    </para>
     <!--<variablelist>
      <varlistentry>
       <term>
@@ -141,27 +142,27 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
       </listitem>
      </varlistentry>
     </variablelist>-->
-    </callout>
+   </callout>
 
-    <callout arearefs="co.daps.productname.version">
-     <para>Optional variable. <remark>taroth 2012-01-19: variable name DISTVER 
+   <callout arearefs="co.daps.productname.version">
+    <para>Optional variable. <remark>taroth 2012-01-19: variable name DISTVER 
      will probably change - https://sourceforge.net/p/daps/tickets/25/</remark>
      &dapsacr; allows you to set product name and product version dynamically. 
      This enables you to use the same XML sources for different products. 
      To use this feature, use the following entities in your XML sources:</para>
-     <itemizedlist>
-      <listitem>
-       <para>&amp;productname;</para>
-      </listitem>
-      <listitem>
-       <para>&amp;productnamereg; (productname including a copyright or trademark 
+    <itemizedlist>
+     <listitem>
+      <para>&amp;productname;</para>
+     </listitem>
+     <listitem>
+      <para>&amp;productnamereg; (productname including a copyright or trademark 
        symbol)</para>
-      </listitem>
-      <listitem>
-       <para>&amp;productversion;</para>
-      </listitem>
-     </itemizedlist>
-     <para>These entities will be dynamically resolved to the values of DISTVER, 
+     </listitem>
+     <listitem>
+      <para>&amp;productversion;</para>
+     </listitem>
+    </itemizedlist>
+    <para>These entities will be dynamically resolved to the values of DISTVER, 
      PRODUCTNAME, and PRODUCTNAMEREG. You can define the value of those variables
      in a project-specific (or book-specific) &env; file. 
      <remark>taroth 2012-01-30</remark> 
@@ -170,30 +171,30 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) <co id="co.daps.source"/>
 #   PRODUCTNAME="MyVeryFirstSoftware©"
 #   DISTVER="4.2"
 -->
-     </para>
-    </callout>
-    <callout arearefs="co.daps.source">
-     <para>Optional line. You only need to add this line if you want to be able to       
+    </para>
+   </callout>
+   <callout arearefs="co.daps.source">
+    <para>Optional line. You only need to add this line if you want to be able to       
       source &env; files with &dapsacr;. Sourcing an &env; file was necessary
       to work with the documentation environment provided by &susedoc; 
       (&dapsacr;' predecessor). </para>
-    </callout>
-   </calloutlist>
-   <para>Because
+   </callout>
+  </calloutlist>
+  <para>Because
 &env; files define which XML files belong to a documentation project, they are
 necessary for validating your XML files and for generating any kind of output.
 Without &env; files, you cannot produce any output from your DocBook sources
 with &dapsacr;.<remark>taroth 2012-01-17: not 100% sure if this is still the
 case</remark>
-   </para>
-   <para>If your documentation set contains cross-references
+  </para>
+  <para>If your documentation set contains cross-references
 between the individual books, it is useful to define an additional &env; file
 (<emphasis>without</emphasis> the root ID variable) that can be used to generate
 an HTML output that contains all hyperlinks between the individual
 books. Find an example &env; file in <xref linkend="ex.daps.env.set"/>.</para>
-   <example id="ex.daps.env.set">
-    <title>An <filename>&env;-*</filename> File for a Set</title>
-    <screen># &env; file for the complete &dapsacr; Documentation
+  <example id="ex.daps.env.set">
+   <title>An <filename>&env;-*</filename> File for a Set</title>
+   <screen># &env; file for the complete &dapsacr; Documentation
 MAIN=MAIN.DAPS.xml         
 PROFARCH="x86;ppc"         
 PROFOS="lin;win"           
@@ -202,24 +203,24 @@ PRODUCTNAME="&dapslong;"
 DISTVER=1.0                
 
 export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
-   </example>
-   <para>&dapsacr; also contains a script for creating a new documentation project
+  </example>
+  <para>&dapsacr; also contains a script for creating a new documentation project
 from scratch. <remark>taroth 2011-12-29: add xref later</remark>. When using
 that script, an example &env; file is automatically created.</para>
-  </sect2>
+ </sect1>
 
-  <sect2 id="sec.daps.user.overview.dir">
-   <title>Directory Structure and Key Files</title>
-   <para></para>
-   <sect3>
-    <title>Required Structure of Sources</title>
-    <para>For &dapsacr; to work out of the box, your XML files and images should 
+ <sect1 id="sec.daps.user.oview.dirstruct">
+  <title>Directory Structure</title>
+  <para></para>
+  <sect2 id="sec.daps.user.oview.dir.doc">
+   <title>Documentation Source Files</title>
+   <para>For &dapsacr; to work out of the box, your XML files and images should 
    be organized in the following structure within your documentation directory 
-   (DOC_DIR). <xref linkend="ex.daps.user.dir"/> also shows the key files of a 
+   (DOC_DIR). <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a 
    documentation project. The directories are printed in bold.</para>
-    <example id="ex.daps.user.dir">
-     <title>Directory Structure and Key Files</title>
-     <screen>
+   <example id="ex.daps.user.dir.doc">
+    <title>Directory Structure and Key Files</title>
+    <screen>
      <replaceable>DOC_DIR</replaceable>          <co id="co.docdir.base"/>    
 &env;*                                           <co id="co.docdir.env"/>    
 |--<emphasis role="bold">images</emphasis>       <co id="co.docdir.img"/>
@@ -231,58 +232,58 @@ that script, an example &env; file is automatically created.</para>
 |--<emphasis role="bold">xml</emphasis>          <co id="co.docdir.xml"/>
    |--MAIN*.xml                                  <co id="co.docdir.main"/>
     </screen>
-    </example>
-    <calloutlist>
-     <callout arearefs="co.docdir.base">
-      <para>"Working directory" for the respective documentation project. 
+   </example>
+   <calloutlist>
+    <callout arearefs="co.docdir.base">
+     <para>"Working directory" for the respective documentation project. 
      Can be set on the command line with <option>--basedir</option> or in the
      &dapsacr; config files (usually in the user-specific one, &dapsconfu;).
      </para>
-     </callout>
-     <callout arearefs="co.docdir.env">
-      <para>&env; file defining the documentation project. For more information,
-     refer to <xref linkend="sec.daps.user.oview.env"/>.
+    </callout>
+    <callout arearefs="co.docdir.env">
+     <para>&env; file defining the documentation project. For more information,
+     refer to <xref linkend="sec.daps.user.oview.docdef"/>.
     </para>
-     </callout>
+    </callout>
     <!--<callout arearefs="co.daps.user.dir.img">
      <para>Top-level directory for the images used in the documentation project.
       </para>
     </callout>-->
-     <callout arearefs="co.docdir.img.src">
-      <para>Top-level directory for any original images that you want to
+    <callout arearefs="co.docdir.img.src">
+     <para>Top-level directory for any original images that you want to
      use in the documentation project. Contains subdirectories for images in 
      various formats. Any images to be referenced in the XML sources must be put
      in the respective subdirectories. <remark>taroth 2012-02-01: add xref to 
      section about using images (how to reference them -> path!)</remark>
-      </para>
-     </callout>
-     <callout arearefs="co.docdir.xml">
-      <para>Directory holding the XML files for the documentation project. If you
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.xml">
+     <para>Directory holding the XML files for the documentation project. If you
      declare entities in an external file (for example, in 
      <filename>entity-decl.ent</filename>), put the entity declaration file 
      here, too.<remark>taroth 2012-02-01: toms, this is not a must, or is it?</remark>
-      </para>
-     </callout>
-     <callout arearefs="co.docdir.main">
-      <para>The main file of the documentation project. It contains 
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.main">
+     <para>The main file of the documentation project. It contains 
      <quote>references</quote> to other books, chapters, appendices, etc.
      </para>
-     </callout>
-    </calloutlist>
-   </sect3>
-   <sect3>
-    <title>Additional Structure Created by &dapsacr;</title>
-    <para>When generating the first output format from your documentation project, 
+    </callout>
+   </calloutlist>
+  </sect2>
+  <sect2 id="sec.daps.user.oview.dir.build">
+   <title>Structure Created by &dapsacr;</title>
+   <para>When generating the first output format from your documentation project, 
 &dapsacr; adds another directory that holds the generated contents. If not set 
 otherwise in &dapsconf; (parameter <literal>BUILD_DIR</literal>), the directory 
 is named <filename>build</filename> and is created in parallel to the
 <filename>xml</filename> and <filename>images</filename> directory.
     </para>
-    <para>The contents of the <filename>build</filename> directory is structured 
+   <para>The contents of the <filename>build</filename> directory is structured 
    as follows: </para>
-    <example id="ex.daps.user.build">
-     <title>Build Directory</title>
-     <screen>
+   <example id="ex.daps.user.build">
+    <title>Build Directory</title>
+    <screen>
 |--<emphasis role="bold">build</emphasis>             <co id="co.builddir"/>                   
    |--<emphasis role="bold"><replaceable>name_of_&env;</replaceable>
       </emphasis>    <co id="co.builddir.env"/>     
@@ -290,35 +291,33 @@ is named <filename>build</filename> and is created in parallel to the
    |--<emphasis role="bold">.profiled</emphasis>      <co id="co.builddir.profiled"/>
    |--<emphasis role="bold">.tmp</emphasis>           <co id="co.builddir.tmp"/>
      </screen>
-    </example>
-    <calloutlist>
-     <callout arearefs="co.builddir">
-      <para>Directory that holds all contents build by &dapsacr;.
+   </example>
+   <calloutlist>
+    <callout arearefs="co.builddir">
+     <para>Directory that holds all contents build by &dapsacr;.
      </para>
-     </callout>
-     <callout arearefs="co.builddir.env">
-      <para>For each of your documentation projects, &dapsacr; creates a 
+    </callout>
+    <callout arearefs="co.builddir.env">
+     <para>For each of your documentation projects, &dapsacr; creates a 
       subdirectory in the <filename>build</filename>, named after the respective
       &env; from which you build the project. In the subdirectory you find all 
       formats that have been generated from the &env; (PDF, HTML, or ePUB) plus
       a <filename>log</filename> subdirectory holding log files for each output 
       format that has been generated by &dapsacr;.</para>
-     </callout>
-     <callout arearefs="co.builddir.img">
-      <para>Directory holding the images
+    </callout>
+    <callout arearefs="co.builddir.img">
+     <para>Directory holding the images
      created by &dapsacr;.</para>
-     </callout>
-     <callout arearefs="co.builddir.profiled">
-      <para>Directory holding the profiled XML sources created by &dapsacr; 
+    </callout>
+    <callout arearefs="co.builddir.profiled">
+     <para>Directory holding the profiled XML sources created by &dapsacr; 
 (if you use profiling in your documentation project).</para>
-     </callout>
-     <callout arearefs="co.builddir.tmp">
-      <para>Directory holding temporary files created by &dapsacr;, for example, 
+    </callout>
+    <callout arearefs="co.builddir.tmp">
+     <para>Directory holding temporary files created by &dapsacr;, for example, 
       the FO files. </para>
-     </callout>
-    </calloutlist>
-
-   </sect3>
+    </callout>
+   </calloutlist>
   </sect2>
  </sect1>
 </chapter>
