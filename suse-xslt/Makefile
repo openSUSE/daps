@@ -30,6 +30,8 @@ PREFIX    ?= /usr/share
 STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
+EXCLUDES := packaging/exclude_non-stylesheets.txt
+
 all: schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(NOVDOC_CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
@@ -47,7 +49,7 @@ install: create-install-dirs
 	    $(DESTDIR)$(PREFIX)/sgml/
 	install -m644 catalogs/$(NOVDOC_CATALOG) $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
-	tar cp --exclude=Makefile --exclude=schema/ --exclude=catalogs/ --exclude=COPYING* --exclude=TODO * | (cd  $(STYLEDIR); tar xpv)
+	tar cp --exclude-from=$(EXCLUDES) * | (cd  $(STYLEDIR); tar xpv)
 	find $(STYLEDIR) -type d -exec chmod 755 {} \;
 	find $(DOCDIR) -type f -exec chmod 644 {} \;
 
