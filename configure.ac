@@ -1,12 +1,18 @@
-#                                               -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script or use autogen.sh
-#
-# Authors:
-#   Thomas Schraitle  <toms@opensuse.org>
-#   Frank Sundermeyer <fs@suse.de>
+dnl                                               -*- Autoconf -*-
+dnl Process this file with autoconf to produce a configure script or use autogen.sh
+dnl
+dnl Authors:
+dnl   Thomas Schraitle  <toms@opensuse.org>
+dnl   Frank Sundermeyer <fs@suse.de>
+
+m4_define(daps_version_major, 0)
+m4_define(daps_version_minor, 9)
+m4_define(daps_version_micro, 9dev)
 
 AC_PREREQ([2.68])
 AC_INIT([daps], [0.9.2], [fs@suse.de, toms@suse.de], [daps], [http://daps.sf.net])
+AC_CONFIG_MACRO_DIR([m4])
+
 
 AC_MSG_NOTICE([
 
@@ -17,7 +23,6 @@ AC_MSG_NOTICE([
 AC_CONFIG_SRCDIR([Makefile.am])
 # Turn on all warnings, report warnings as errors:
 AM_INIT_AUTOMAKE([1.10 no-define -Wall -Werror])
-#AC_CONFIG_MACRO_DIR([m4])
 
 
 AC_CONFIG_FILES([
@@ -96,6 +101,10 @@ if test -z "$"; then
    AC_MSG_ERROR([exiftool not found]) 
 fi
 
+
+# (files, [action-if-found], [action-if-not-found])
+# AC_CHECK_FILES
+
 AC_MSG_NOTICE([===== Checking for XML tools... ])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
@@ -147,6 +156,17 @@ if test -z "$XMLFORMAT"; then
    fi
 fi
 
+AC_MSG_NOTICE([===== Checking for Python modules...])
+
+# Variables HAVE_PYMOD_* are filled with "yes" or "no"
+AC_PYTHON_MODULE([lxml], [fatal])
+AC_SUBST(HAVE_PYMOD_LXML)
+AC_PYTHON_MODULE([optparse], [fatal])
+AC_SUBST(HAVE_PYMOD_OPTPARSE)
+
+
+dnl AS_IF([test "x${HAVE_PYMOD_LXML}" = "xno"],
+dnl 	AC_MSG_ERROR([Cannot find lxml module]))
 
 AC_MSG_NOTICE([===== Checking for Public Identifiers...])
 
