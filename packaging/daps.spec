@@ -1,31 +1,33 @@
 #
 # spec file for package daps
 #
-# Copyright (c) 2011 SUSE LINUX Products GmbH, Nuernberg, Germany.
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
+# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
+
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
-#
-
 Name:           daps
-Version:        0.9.2
+Version:        0.9.3
+Release:        0
 
-%define dtdversion     1.0
-%define dtdname        novdoc
 %define docbuilddir    %{_datadir}/daps
 %define regcat         %{_bindir}/sgml-register-catalog
 %define fontdir        %{_datadir}/fonts/truetype
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
-%define root_catalog   for-catalog-%{dtdname}-%{dtdversion}.xml
-%define daps_catalog   for-catalog-%{name}-%{version}.xml
+%define daps_catalog   for-catalog-%{name}.xml
 
-Release:        1
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
-URL:            http://sourceforge.net/p/daps
+Url:            http://sourceforge.net/p/daps
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source
@@ -34,8 +36,8 @@ BuildArch:      noarch
 
 BuildRequires:  bash >= 4.0
 BuildRequires:  dia
-BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
+BuildRequires:  docbook_4
 BuildRequires:  python-xml
 %if 0%{?suse_version} > 1140
 BuildRequires:  perl-Image-ExifTool
@@ -94,7 +96,6 @@ BuildRequires:  xml-commons-apis-bootstrap
 BuildRequires:  python-xml
 %endif
 
-
 PreReq:         libxml2
 PreReq:         sgml-skel
 
@@ -133,21 +134,21 @@ Requires:       perl-checkbot
 Requires:       xmlgraphics-fop >= 0.94
 %else
 %if %{undefined sles_version}
-Requires:  checkbot
+Requires:       checkbot
 %else
 Recommends:     checkbot
 %endif
-Requires:        fop >= 0.94
-Requires:        xerces-j2
+Requires:       fop >= 0.94
+Requires:       xerces-j2
 %if 0%{?suse_version} == 1130
-Requires:        xml-commons-jaxp-1.3-apis
+Requires:       xml-commons-jaxp-1.3-apis
 %endif
 %if 0%{?suse_version} < 1130
-Requires:        xml-commons-apis-bootstrap
+Requires:       xml-commons-apis-bootstrap
 %endif
 %endif
 %if 0%{?suse_version} < 1120
-Requires:        python-xml
+Requires:       python-xml
 %endif
 
 Recommends:     agfa-fonts
@@ -174,7 +175,6 @@ Recommends:     xep
 #Obsoletes:      susedoc <= 4.3.27
 Provides:       susedoc < 4.4
 
-
 %description
 DocBook Authoring and Publishing Suite (DAPS)
 
@@ -199,51 +199,31 @@ for upgrade instructions.
 
 #--------------------------------------------------------------------------
 %build
-# specifying VERSION is manadatory!! 
-%__make  %{?_smp_mflags} VERSION=%{version}
+%__make  %{?_smp_mflags}
 
 #--------------------------------------------------------------------------
 %install
 # specifying VERSION is manadatory!! 
-make install DESTDIR=$RPM_BUILD_ROOT VERSION=%{version}
+make install DESTDIR=$RPM_BUILD_ROOT
 
 # make_install macro does not have a DESTDIR in 11.1/SLE 11 !!
-#%#make_install VERSION=%{version}
+#%%make_install
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}
 
 #----------------------
 %post
-# SGM CATALOG
 #
-if [ -x %{regcat} ]; then
-  for CATALOG in CATALOG.%{dtdname}-%{dtdversion}; do
-    %{regcat} -a %{_datadir}/sgml/$CATALOG >/dev/null 2>&1 || true
-  done
-fi
-# XML Catalog
+# XML Catalog entries for daps profiling
 #
 # remove existing entries first (if existing) - needed for
 # zypper in, since it does not call postun
 #
-# The first two ones are only there for campatibility reasons and
-# can be removed in the future
-#
+# delete ...
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{version}
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}xslt-%{version}
-#
-# These two entries need to stay
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{dtdversion}
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}-%{version}
-#
-# now add new entries
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --add /etc/xml/%{root_catalog}
+  --del %{name}
+# ... and add it again
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{daps_catalog}
 
@@ -252,30 +232,15 @@ exit 0
 
 #----------------------
 %postun
-if [ ! -f %{_sysconfdir}/xml/%{root_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
-  for c in CATALOG.%{dtdname}-%{dtdversion}; do
-    %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
-  done
-# XML Catalog
 #
-# The first two ones are only there for campatibility reasons and
-# can be removed in the future
-#
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{version}
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}xslt-%{version}
-#
-# These two entries need to stay
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{dtdversion}
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}-%{version}
+# delete catalog entry for daps profiling
+if [ -x /usr/bin/edit-xml-catalog ] ; then
+  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name}
 fi
 
 %run_suseconfig_fonts
 exit 0
-
 
 #----------------------
 %files
@@ -283,13 +248,9 @@ exit 0
 
 %dir %{fontdir}
 %dir %{_sysconfdir}/%{name}
-%dir %{_datadir}/xml/%{dtdname}
-%dir %{_datadir}/xml/%{dtdname}/schema
-%dir %{_datadir}/xml/%{dtdname}/schema/*
-%dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
 %dir %{_defaultdocdir}/%{name}
+%dir %{_datadir}/aspell-0.60/
 
-%config /var/lib/sgml/CATALOG.*
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
 
@@ -297,12 +258,11 @@ exit 0
 %doc %{_defaultdocdir}/%{name}/*
 
 %{_bindir}/*
-%{_datadir}/sgml/CATALOG.*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
+%{_datadir}/aspell-0.60/suse_aspell.rws
 %{fontdir}/*
 %{docbuilddir}
-%{_datadir}/xml/%{dtdname}/schema/dtd/%{dtdversion}/*
-%{_datadir}/xml/%{dtdname}/schema/rng/%{dtdversion}/*
 
 #----------------------
+
 %changelog
