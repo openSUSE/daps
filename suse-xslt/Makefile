@@ -52,6 +52,7 @@ install: create-install-dirs
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR)
+	mkdir -p $(DOCDIR)
 	mkdir -p $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/{dtd,rng}/$(DTDVERSION)
 	mkdir -p $(DESTDIR)/var/lib/sgml
 	mkdir -p $(DESTDIR)$(PREFIX)/sgml
