@@ -118,7 +118,7 @@ exit 0
 %dir %{_defaultdocdir}/%{name}
 
 # stylesheets
-%{_datadir}/xml/docbook/stylesheet/suse
+%{_datadir}/xml/docbook/stylesheet/suse/*
 
 # NovDoc Schemas
 %{_datadir}/xml/%{dtdname}/schema/dtd/%{dtdversion}/*
