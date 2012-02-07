@@ -56,13 +56,8 @@ fi
 AC_SUBST(HAVE_PERL)
 
 
-AC_PATH_PROG(PYTHON, [python] )
-if test -z "$PYTHON"; then
-  HAVE_PYTHON='no'
-else
-  HAVE_PYTHON='yes'
-fi
-AC_SUBST(HAVE_PYTHON)
+dnl We require Python >= 2.6
+AM_PATH_PYTHON([2.6])
 
 
 AC_PATH_PROG([INKSCAPE], [inkscape] )
@@ -157,16 +152,12 @@ if test -z "$XMLFORMAT"; then
 fi
 
 AC_MSG_NOTICE([===== Checking for Python modules...])
-
 # Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([lxml], [fatal])
 AC_SUBST(HAVE_PYMOD_LXML)
 AC_PYTHON_MODULE([optparse], [fatal])
 AC_SUBST(HAVE_PYMOD_OPTPARSE)
 
-
-dnl AS_IF([test "x${HAVE_PYMOD_LXML}" = "xno"],
-dnl 	AC_MSG_ERROR([Cannot find lxml module]))
 
 AC_MSG_NOTICE([===== Checking for Public Identifiers...])
 
