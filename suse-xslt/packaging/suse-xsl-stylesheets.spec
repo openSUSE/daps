@@ -24,14 +24,15 @@ License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps/suse-xslt
 Source0:        %{name}-%{version}.tar.bz2
-Source1:        %{name}.rpmlintrc
-Source2:        susexsl-fetch-source
+Source1:        susexsl-fetch-source
+#Source2:        %{name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  libxslt
 BuildRequires:  make
+BuildRequires:  trang 
 
 Requires:       docbook
 Requires:       docbook-xsl-stylesheets >= 1.75
