@@ -25,7 +25,7 @@ Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps/suse-xslt
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        susexsl-fetch-source
-#Source2:        %{name}.rpmlintrc
+Source2:       {name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
@@ -91,7 +91,7 @@ exit 0
 # Remove catalog entries
 #
 # SGML
-if [ ! -f %{_sysconfdir}/xml/%{root_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
+if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
   for c in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
     %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
   done
