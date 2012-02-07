@@ -107,13 +107,15 @@ exit 0
 %files
 %defattr(-,root,root)
 
-# Create directories
+# Directories
 %dir %{_datadir}/xml/docbook/stylesheet/suse
 
 %dir %{_datadir}/xml/%{dtdname}
 %dir %{_datadir}/xml/%{dtdname}/schema
 %dir %{_datadir}/xml/%{dtdname}/schema/*
 %dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
+
+%dir %{_defaultdocdir}/%{name}
 
 # stylesheets
 %{_datadir}/xml/docbook/stylesheet/suse
