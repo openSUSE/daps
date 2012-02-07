@@ -1,0 +1,253 @@
+#!/bin/bash
+#
+# Copyright (C) 2012 fs@suse.de, openSUSE.org
+# Authors: fs@suse.de
+#
+# Convert ENV files to DOCCONF
+#
+# find ENVs with
+# find . -path "*/.svn" -prune -o -name "ENV-*" -print
+#
+
+# ---------
+# Variables
+DAPSROOT_DEFAULT="/usr/share/daps"
+GET_TITLE_SS="daps-xslt/common/get-booktitle.xsl"
+ME=$(basename $0) # this script's name
+
+unset CONT TITLE DAPSROOT STYLEROOT
+
+# unset to make sure all values are retrieved by sourcing $ENV
+unset MAIN ROOTID PROFOS PROFARCH HTMLROOT STYLEROOT HTML_CSS EPUB_CSS \
+    DISTVER PRODUCTNAME PRODUCTNAMEREG DAPS_ENV_NAME PKGNAME PDFNAME
+
+
+#DAPSROOT="/local/svns/daps/trunk/daps"
+#SUSE_STYLEROOT="/local/svns/daps/trunk/daps/suse-xslt"
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    ccecho "error" "ERROR: ${1}" >&2
+    exit 1;
+}
+
+function usage () {
+        echo "
+Usage:
+  $ME --envfile [ENV-file] [--options]
+
+Converts a given ENV file into the new Doc config format (DC-). The DC file
+is written to the current directory or to the output directory specified.
+
+Options:
+  -d DAPSROOT,
+  --dapsroot DAPSROOT    DAPS installation directory. Optional.
+                         Default: $DAPSROOT_DEFAULT
+
+  -e ENV-file,           ENV-file to be converted. Mandatory.
+  --envfile ENV-file
+
+  -h, --help             This help.
+
+  -o DIR,
+  --outputdir DIR        Output directory. Optional.
+                         Default: Current directory.
+
+  -p PRODUCT,            Product name. If specified, will be mentioned in the
+  --product              config file's header. Optional.
+                         Default: unset.
+
+  -s DIR,                Root directory for custom styleshhets. Also used
+  --styleroot DIR        to set HTML_CSS and EPUB_CSS. If not specified, no
+                         custom stylesheets and css will be set. Optional.
+                         Defaul: unset.
+
+  -t TITLE               Title of the manual. If not specified, the
+  --title TITLE          manual's title will be determined automatically. Set to
+                         \"0\" to disable title altogether. A title will be
+                         mentioned in the config file's header. Optional 
+                         Default: automatic title determination.
+"
+exit 0
+}
+
+
+# ---------
+# Parse command line arguments
+#
+ARGS=$(getopt -o d:e:ho:p:s:t: -l envfile:,help,outputdir:,product:,styleroot:,title: -n $ME -- "$@")
+eval set -- "$ARGS"
+
+while true ; do
+    case "$1" in
+        -d|--dapsroot)
+            [[ -d "$2" ]] || exit_on_error "DAPS root directory \"$2\" is not a valid directory"
+            DAPSROOT="$2"
+            shift 2
+            ;;
+        -e|--envfile)
+            [[ -z "$2" ]] && usage
+            [[ -e "$2" ]] || exit_on_error "ENV-file \"$2\" is not a valid file"
+            ENV="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            shift
+            ;;
+        -o|--outputdir)
+            [[ -d "$2" ]] || exit_on_error "The output directory \"$2\" does not exist"
+#            [[ -w "$2" ]] && exit_on_error "The output directory \"$2\" is not writeable"
+            OUTDIR="$2"
+            shift 2
+            ;;
+        -p|--product)
+            PRODUCT="$2"
+            shift 2
+            ;;
+        -s|--styleroot)
+            [[ -d "$2" ]] || exit_on_error "Stylesheet root directoory \"$2\" is not a valid directory"
+            STYLEROOT="$2"
+            shift 2
+            ;;
+        -t|--title)
+            TITLE="$2"
+            shift 2
+            ;;
+        --) shift ; break ;;
+        *) exit_on_error "Internal error!" ;;
+    esac
+done
+
+# Set output file
+if [[ -n $OUTDIR ]]; then
+    DC="${OUTDIR}/DC-${ENV#ENV-*}" # result filname
+else
+    DC="DC-${ENV#ENV-*}" # result filname
+fi
+#
+
+# ---------
+# Checks
+#
+[[ -z $ENV ]] && exit_on_error "You must specify an ENV-file."
+[[ -z $PRODUCT ]] && ccecho "warn" "Warning: No product name specified"
+
+if [[ -z "$DAPSROOT" && -z "$TITLE" ]]; then
+    if [[ -f ${DAPSROOT_DEFAULT}/$GET_TITLE_SS ]]; then
+        DAPSROOT="$DAPSROOT_DEFAULT"
+    else
+        exit_on_error "In order to automatically determine the manual title you need to specify\nthe DAPS root directory with --dapsroot.\nAlternatively, specify the manual title with --title"
+    fi
+fi
+
+# ask user whether to overwrite an existing DC file
+if [[ -e $DC ]]; then
+    while [[ y != $CONT && n != $CONT ]] ; do
+        read -p "$DC already exists. Overwrite? [y/n] " -t 20 CONT
+        [[ $? -gt 128 ]] && CONT="n" # timeout reached
+    done
+    if [[ y != $CONT ]]; then
+        echo -e "\nExiting, not overwriting $DC"
+        exit 1;
+    fi
+fi
+
+# ---------
+# Source EV file
+
+source "$ENV"
+[[ -z $MAIN ]] && echo "Fatal error: Mandatory parameter MAIN does not exist"
+
+# ---------
+# Automatically get book title
+#
+
+if [[ -z $TITLE ]]; then
+    [[ -n $ROOTID ]] && ROOTSTRING="--stringparam rootid \"$ROOTID\""
+    #
+    # BOOKTITLE=$(xsltproc ...) does not work (no clue why)
+    # therefore using eval
+    #
+    CMD="xsltproc --xinclude $ROOTSTRING ${DAPSROOT}/daps-xslt/common/get-booktitle.xsl ${PWD}/xml/$MAIN 2>/dev/null"
+    BOOKTITLE=$(eval $CMD)
+elif [[ 0 != $TITLE ]]; then
+        BOOKTITLE="$TITLE"
+else
+    BOOKTITLE=
+fi
+
+#
+# The following does not work since xsltproc does not return 0 ;-((((
+#
+#    if [[ 0 != $? ]]; then
+#        echo "Warning: Could not get book title"
+#    else
+#        BOOKTITLE="$TITLE"
+#    fi
+    
+# write header and basic section
+echo -n "## ---------------------------- 
+## Doc Config File" > $DC
+
+if [[ -n $PRODUCT ]]; then
+    echo " for $PRODUCT" >> $DC
+else
+    echo >> $DC
+fi
+
+# write book title
+[[ -n $BOOKTITLE ]] && echo "## $BOOKTITLE" >> $DC
+
+echo "## ----------------------------
+##
+## Basics" >> $DC
+if [[ -n $MAIN ]]; then
+    echo "MAIN=\"$MAIN\"" >> $DC
+fi
+[[ -n $ROOTID ]] && echo "ROOTID=\"$ROOTID\"" >> $DC
+[[ -n $PDFNAME ]] && echo "PDFNAME=\"$PDFNAME\"" >> $DC
+
+# write profiling section
+if [[ -n $PROFOS || -n $PROFARCH ]]; then
+    echo -e "\n## Profiling" >> $DC
+    [[ -n $PROFOS ]] && echo "PROFOS=\"$PROFOS\"" >> $DC
+    [[ -n $PROFARCH ]] && echo "PROFARCH=\"$PROFARCH\"" >> $DC
+fi
+
+# write Provo section
+if [[ -n $HTMLROOT ]]; then
+    echo -e "\n## Provo
+HTMLROOT=\"$HTMLROOT\"" >> $DC
+fi
+
+if [[ -n $STYLEROOT ]]; then
+    # write stylesheet section
+    echo -e "\n## stylesheet location" >> $DC
+    if [[ -n $LAYOUT ]]; then
+        echo "STYLEROOT=\"${STYLEROOT}/$LAYOUT\"
+FALLBACK_STYLEROOT=\"$STYLEROOT\"" >> $DC
+    else
+        echo "STYLEROOT=\"$STYLEROOT\"" >> $DC
+    fi
+    echo "HTML_CSS=\"${STYLEROOT}/html/susebooks.css\"
+EPUB_CSS=\"${STYLEROOT}/susebooks.css\"" >> $DC
+fi
+    
+# write obsolete section
+if [[ -n $DISTVER || -n $PRODCTNAME || -n $PRODUCTNAMEREG || -n $PKGNAME ]]; then
+    echo -e "\n## obsolete" >> $DC
+    [[ -n $DISTVER ]] && echo "DISTVER=\"$DISTVER\"" >> $DC
+    [[ -n $PRODUCTNAME ]] && echo "PRODUCTNAME=\"$PRODUCTNAME\"" >> $DC
+    [[ -n $PRODUCTNAMEREG ]] && echo "PRODUCTNAMEREG=\"$PRODUCTNAMEREG\"" >> $DC
+    [[ -n $PKGNAME ]] && echo "PKGNAME=\"$PKGNAME\"" >> $DC
+fi
+
+# write sourcing section
+echo -e "\n## enable sourcing
+export DOCCONF=\$BASH_SOURCE" >> $DC
+
+echo "Successfully wrote $DC"
+
