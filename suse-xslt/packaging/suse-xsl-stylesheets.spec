@@ -25,7 +25,7 @@ Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps/suse-xslt
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        susexsl-fetch-source
-Source2:       {name}.rpmlintrc
+Source2:        %{name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
