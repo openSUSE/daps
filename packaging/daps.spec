@@ -165,6 +165,7 @@ Recommends:     remake
 Recommends:     ruby
 # Japanese Fonts:
 Recommends:     sazanami-fonts
+Recommends:     suse-xsl-stylesheets
 # Chinese
 Recommends:     ttf-arphic
 # Korean Fonts:
