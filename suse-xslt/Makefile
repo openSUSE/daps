@@ -47,7 +47,7 @@ install: create-install-dirs
 	    $(DESTDIR)$(PREFIX)/sgml/
 	install -m644 catalogs/$(NOVDOC_CATALOG) $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
-	tar cp --exclude=Makefile --exclude=schema/ --exclude=schema/* * | (cd  $(STYLEDIR); tar xpv)
+	tar cp --exclude=Makefile --exclude=schema/ --exclude=schema/* --exclude=COPYING* --exclude=TODO * | (cd  $(STYLEDIR); tar xpv)
 	find $(STYLEDIR) -type d -exec chmod 755 {} \;
 	find $(DOCDIR) -type f -exec chmod 644 {} \;
 

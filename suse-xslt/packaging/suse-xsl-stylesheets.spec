@@ -30,6 +30,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
+BuildRequires:  fdupes
 BuildRequires:  libxslt
 BuildRequires:  make
 BuildRequires:  trang 
@@ -60,6 +61,9 @@ the DocBook 4 DTD.
 #--------------------------------------------------------------------------
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
+
+# create symlinks:
+%fdupes -s $RPM_BUILD_ROOT/%{_datadir}
 
 #----------------------
 %post
