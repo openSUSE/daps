@@ -6,14 +6,6 @@
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 
-# IMPORTANT:
-# Correct VERSION needs to be provided on the command line,
-# for make all and make install !!!!
-# this is just a fallback!!
-#
-
-VERSION    ?= 5.0
-
 PACKAGE    := suse-xsl-stylesheets
 DTDNAME    := novdoc
 DTDVERSION := 1.0
@@ -35,8 +27,8 @@ HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard suse-xslt/xhtml/*.xsl))
 #-------
 # Directories for installation
 PREFIX    ?= /usr/share
-STYLE_DIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
-DOC_DIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
+STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
+DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
 all: schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(NOVDOC_CATALOG)
@@ -53,10 +45,10 @@ install: create-install-dirs
 	  $(DESTDIR)/var/lib/sgml && \
 	  ln -s /var/lib/sgml/CATALOG.$(DTDNAME)-$(DTDVERSION) \
 	    $(DESTDIR)$(PREFIX)/sgml/
-	install -m644 COPYING* $(DOC_DIR)
-	tar cp --exclude-from=Makefile suse-xslt/* | (cd  $(STYLE_DIR); tar xpv)
+	install -m644 COPYING* $(DOCDIR)
+	tar cp --exclude-from=Makefile suse-xslt/* | (cd  $(STYLEDIR); tar xpv)
 	find $(STYLEDIR) -type d -exec chmod 755 {} \;
-	find $(DOC_DIR) -type f -exec chmod 644 {} \;
+	find $(DOCDIR) -type f -exec chmod 644 {} \;
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR)
