@@ -127,6 +127,7 @@ exit 0
 # Catalogs
 %config /var/lib/sgml/CATALOG.*
 %{_datadir}/sgml/CATALOG.*
+%config %{_sysconfdir}/xml/*.xml
 
 # Documentation
 %doc %{_defaultdocdir}/%{name}/*
