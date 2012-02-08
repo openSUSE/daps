@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Transforms output of svn pl -v --xml into more consumable XML
+     Transforms output of svn pl -v ++xml into more consumable XML
      
    Parameters:
      None
        
    Input:
-     XML file from "svn  pl -v --xml" 
+     XML file from "svn  pl -v ++xml" 
       <properties>
         <target path="xml/foo.xml">
           <property name="doc:priority">2</property>
