@@ -14,14 +14,12 @@
   like XML editor and FO formatter, stylesheets ...</remark>
  <abstract>
   <para>
-    <remark>toms 2012-02-08: Add hint about GPL license? Open source is
-      IMHO too general.</remark>
    The &dapslong; (&dapsacr;) is developed as open source software for Linux
-   operating systems. It consists of integrated tools, stylesheets, scripts,
-   and makefiles that support technical writers in the editing, translation
-   and publishing process of DocBook XML files. &dapsacr; supports single
-   source publishing into a number of different output formats, like PDF,
-   HTML, single HTML, or ePUB. &dapsacr; is suited for both small
+   operating systems, licensed under GPL. &dapsacr; consists of integrated tools, 
+   stylesheets, scripts, and makefiles that support technical writers in the 
+   editing, translation and publishing process of DocBook XML files. &dapsacr; 
+   supports single source publishing into a number of different output formats, 
+   like PDF, HTML, single HTML, or ePUB. &dapsacr; is suited for both small
    documentation projects (created by a single author), as well as
    comprehensive documentation projects that are created by multiple authors
    in a collaborative effort.
@@ -47,11 +45,8 @@
     </para>
    </listitem>
    <listitem>
-     <remark>toms 2012-02-08: I would better say, *any* version
-       *control* system (see Wikipedia). Maybe also add Git and
-       Mercurial as examples :)</remark>
-    <para>
-     a version management system, like CVS or Subversion
+     <para>
+     any version management system, like CVS, Subversion, Mercurial or Git
     </para>
    </listitem>
   </itemizedlist>
@@ -61,7 +56,7 @@
       too misleading. Could you separate "DAPS" and "Docmanager" by
       rewriting it?
     </remark>
-   In addition to &dapsacr; &dm; provides a workflow and management
+   In addition to &dapsacr;, &dm; provides a workflow and management
    component. Use it to add and retrieve meta-information for all files
    belonging to a documentation project. &dm; is especially useful for
    larger, collaborative projects where it helps you to keep track of owners
@@ -79,7 +74,7 @@
   <title>&dapsacr; Variables</title>
 
   <para>
-   To define the build environment to use, &dapsacr; uses a set of variables
+   To define the build environment to use, &dapsacr; uses a set of parameters
    that can be set in various places:
   </para>
 
@@ -122,13 +117,13 @@
    To define which XML files belong to your documentation project, and which
    variants can be generated from the project with the help of conditional
    text (or profiling, as it is called in DocBook), you need a special file
-   called &env; file. It is a text file and sets a number of variables (or
+   called &env; file. It is a text file and sets a number of parameters (or
    keys) for your documentation project.
   </para>
 
   <para>
    For a documentation set (a collection of books), multiple &env; files can
-   be defined. This allows you to set different variables (or different
+   be defined. This allows you to set different parameters (or different
    values) for individual books of the set: For example, by referring a
    different <literal>ROOTID</literal> in an &env; file, you define which
    book of the set is to be built. Another example would be to specify
@@ -153,16 +148,16 @@
   <calloutlist>
    <callout arearefs="co.daps.main">
     <para>
-     Mandatory variable. Sets the main file that contains
+     Mandatory parameter. Sets the main file that contains
      <quote>references</quote> to other books, chapters, appendices, etc. If
      your documentation project consists of multiple books and articles in a
-     <sgmltag>set</sgmltag>, the <literal>MAIN</literal> variable usually references
+     <sgmltag>set</sgmltag>, the <literal>MAIN</literal> usually references
      the file that contains the <sgmltag>set</sgmltag>.
     </para>
    </callout>
    <callout arearefs="co.daps.rootid">
     <para>
-     Optional variable. Defines the root ID of the element to be used for
+     Optional parameter. Defines the root ID of the element to be used for
      creating an output format. Usually, you define the root ID of a
      <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>
      element here.
@@ -170,21 +165,21 @@
    </callout>
    <callout arearefs="co.daps.profarch">
     <para>
-     Optional variable. If you want to profile your text for different
-     platforms or (processor) architectures, this variable selects the
+     Optional parameter. If you want to profile your text for different
+     platforms or (processor) architectures, this parameter selects the
      architecture profiling information.
     </para>
    </callout>
    <callout arearefs="co.daps.profos">
     <para>
-     Optional variable.If you want to profile your text for different
+     Optional parameter.If you want to profile your text for different
      operating systems (for example, for Linux and Windows), this variable
      selects the operating system profiling information.
     </para>
    </callout>
    <callout arearefs="co.daps.layout">
     <para>
-     Optional variable. Determines the layout of the book. Per default,
+     Optional parameter. Determines the layout of the book. Per default,
      &dapsacr; ships the following layouts:
      <remark>taroth 2012-01-19: bound to change soon, therefore commenting 
      for now</remark>
@@ -217,11 +212,9 @@
     </variablelist>-->
    </callout>
    <callout arearefs="co.daps.productname.version">
-     <remark>toms 2012-02-08: This part will change so I would better remove
-       it.</remark>
     <para>
-     Optional variables.
-     <remark>taroth 2012-01-19: variable name DISTVER 
+     Optional parameters.
+     <remark>taroth 2012-01-19: name DISTVER 
      will probably change - https://sourceforge.net/p/daps/tickets/25/</remark>
      &dapsacr; allows you to set product name and product version
      dynamically. This enables you to use the same XML sources for different
@@ -248,9 +241,9 @@
     </itemizedlist>
     <para>
      These entities will be dynamically resolved to the values of the
-     variables <literal>DISTVER</literal>, <literal>PRODUCTNAME</literal>,
+     parameters <literal>DISTVER</literal>, <literal>PRODUCTNAME</literal>,
      and <literal>PRODUCTNAMEREG</literal>. You can define the value of
-     those variables in a project-specific (or book-specific) &env; file.
+     those parameters in a project-specific (or book-specific) &env; file.
      <remark>taroth 2012-01-30</remark>
 <!--# Example:
 #   PRODUCTNAME="MyVeryFirstSoftware"
@@ -288,7 +281,7 @@ case</remark>
   <para>
    If your documentation set contains cross-references between the
    individual books, it is useful to define an additional &env; file
-   (<emphasis>without</emphasis> the <literal>ROOTID</literal> variable)
+   (<emphasis>without</emphasis> the <literal>ROOTID</literal> parameter)
    that can be used to generate an HTML output containing all hyperlinks
    between the individual books. Find an example &env; file in
    <xref linkend="ex.daps.env.set"/>.
