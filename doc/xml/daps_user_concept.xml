@@ -14,6 +14,8 @@
   like XML editor and FO formatter, stylesheets ...</remark>
  <abstract>
   <para>
+    <remark>toms 2012-02-08: Add hint about GPL license? Open source is
+      IMHO too general.</remark>
    The &dapslong; (&dapsacr;) is developed as open source software for Linux
    operating systems. It consists of integrated tools, stylesheets, scripts,
    and makefiles that support technical writers in the editing, translation
@@ -45,6 +47,9 @@
     </para>
    </listitem>
    <listitem>
+     <remark>toms 2012-02-08: I would better say, *any* version
+       *control* system (see Wikipedia). Maybe also add Git and
+       Mercurial as examples :)</remark>
     <para>
      a version management system, like CVS or Subversion
     </para>
@@ -52,6 +57,10 @@
   </itemizedlist>
 
   <para>
+    <remark>toms 2012-02-08: The beginning of the sentence looks a bit
+      too misleading. Could you separate "DAPS" and "Docmanager" by
+      rewriting it?
+    </remark>
    In addition to &dapsacr; &dm; provides a workflow and management
    component. Use it to add and retrieve meta-information for all files
    belonging to a documentation project. &dm; is especially useful for
@@ -147,15 +156,16 @@
      Mandatory variable. Sets the main file that contains
      <quote>references</quote> to other books, chapters, appendices, etc. If
      your documentation project consists of multiple books and articles in a
-     &lt;set&gt;, the <literal>MAIN</literal> variable usually references
-     the file that contains the &lt;set&gt; element.
+     <sgmltag>set</sgmltag>, the <literal>MAIN</literal> variable usually references
+     the file that contains the <sgmltag>set</sgmltag>.
     </para>
    </callout>
    <callout arearefs="co.daps.rootid">
     <para>
      Optional variable. Defines the root ID of the element to be used for
      creating an output format. Usually, you define the root ID of a
-     &lt;book&gt; or &lt;article&gt; element here.
+     <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>
+     element here.
     </para>
    </callout>
    <callout arearefs="co.daps.profarch">
@@ -207,6 +217,8 @@
     </variablelist>-->
    </callout>
    <callout arearefs="co.daps.productname.version">
+     <remark>toms 2012-02-08: This part will change so I would better remove
+       it.</remark>
     <para>
      Optional variables.
      <remark>taroth 2012-01-19: variable name DISTVER 
@@ -258,12 +270,19 @@
   </calloutlist>
 
   <para>
+    <remark>toms 2012-02-08: This is not entirely correct. The ENV files
+    do not define *all* XML files, but only the *MAIN* or XML file as an
+    entry point. The following sentence is a bit misleading IMHO as it
+    is an *indirect* relations: ENV -> MAIN -> all other files.
+    </remark>
    Because &env; files define which XML files belong to a documentation
    project, they are necessary for validating your XML files and for
    generating any kind of output. Without &env; files, you cannot produce
    any output from your DocBook sources with &dapsacr;.
    <remark>taroth 2012-01-17: not 100% sure if this is still the
 case</remark>
+    <remark>toms 2012-02-08: I think, your last sentence beginning with
+      "Without..." is correct.</remark>
   </para>
 
   <para>
@@ -310,20 +329,26 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
     documentation project. The directories are printed in bold.
    </para>
+    <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
+      *after* the term. This avoids unaligned characters (as the callout
+    is usually a bit wider)</remark>
    <example id="ex.daps.user.dir.doc">
     <title>Directory Structure</title>
-    <screen><co id="co.docdir.base"/><replaceable>YOUR_DOC_DIR</replaceable><co id="co.docdir.env"/> |--&env;*                                               
-<co id="co.docdir.img"/> |--<emphasis role="bold">images</emphasis><co id="co.docdir.img.src"/>    |-- <emphasis role="bold">src</emphasis>      
-         |--<emphasis role="bold">dia</emphasis>   
-         |--<emphasis role="bold">fig</emphasis>   
-         |--<emphasis role="bold">png</emphasis>   
-         |--<emphasis role="bold">svg</emphasis><co id="co.docdir.xml"/> |--<emphasis role="bold">xml</emphasis><co id="co.docdir.main"/>    |--MAIN*.xml                                  
-    </screen>
+    <screen><co id="co.docdir.base"/><replaceable>YOUR_DOC_DIR</replaceable>
+<co id="co.docdir.env"/> |--&env;*
+<co id="co.docdir.img"/> |--<emphasis role="bold">images</emphasis>
+<co id="co.docdir.img.src"/>    |-- <emphasis role="bold">src</emphasis>
+         |--<emphasis role="bold">dia</emphasis>
+         |--<emphasis role="bold">fig</emphasis>
+         |--<emphasis role="bold">png</emphasis>
+         |--<emphasis role="bold">svg</emphasis>
+<co id="co.docdir.xml"/> |--<emphasis role="bold">xml</emphasis>
+<co id="co.docdir.main"/>    |--MAIN*.xml</screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
      <para>
-      "Working directory" for the respective documentation project. Can be
+       <quote>Working directory</quote> for the respective documentation project. Can be
       set on the command line with <option>--basedir</option> or in the
       &dapsacr; config files (usually in the user-specific one,
       &dapsconfu;).
@@ -356,6 +381,8 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
       <filename>entity-decl.ent</filename>), put the entity declaration file
       here, too.
       <remark>taroth 2012-02-01: toms, this is not a must, or is it?</remark>
+      <remark>toms 2012-02-08: It is a must, if you define entities.
+         Otherwise not, of course. :)</remark>
      </para>
     </callout>
     <callout arearefs="co.docdir.main">
@@ -380,6 +407,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     The contents of the <filename>build</filename> directory is structured
     as follows:
    </para>
+    <remark>toms 2012-02-08: This looks garbled :)</remark>
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
     <screen><co id="co.builddir"/> |--<emphasis role="bold">build</emphasis><co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;1</replaceable></emphasis><xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;2</replaceable></emphasis><co id="co.builddir.img"/>    |--<emphasis role="bold">.images</emphasis><co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis><co id="co.builddir.tmp"/>    |--<emphasis role="bold">.tmp</emphasis></screen>
