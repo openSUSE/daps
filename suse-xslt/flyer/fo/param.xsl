@@ -142,7 +142,7 @@
 <xsl:param name="ulink.hyphenate">&#x200B;</xsl:param>
 <xsl:param name="ulink.show" select="1"/>
 
-<xsl:param name="img.src.path">../images/print/</xsl:param>
+<xsl:param name="img.src.path">../../images/print/</xsl:param>
 
 <!-- disable these as the traditional db admon style wastes precious space -->
 <!--
@@ -157,7 +157,7 @@
 >file:///usr/share/xml/docbook/stylesheet/nwalsh/current/images/</xsl:param>
 -->
 
-<xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
+<xsl:param name="local.l10n.xml" select="document('../../common/l10n/l10n.xml')"/>
 
 
 <!-- Where are the XML sources located? -->
