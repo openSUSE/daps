@@ -99,7 +99,7 @@
     <para>
      on the fly at the command line. You can specify them either as as
      options to a <command>daps</command> or as variable declaration
-     (<literal>FOO=bar</literal>).
+     (<varname>FOO=bar</varname>).
     </para>
    </listitem>
   </itemizedlist>
@@ -116,8 +116,8 @@
    <remark>taroth 2012-02-07: todo: check with fs and toms</remark>
    To define which XML files belong to your documentation project, and which
    variants can be generated from the project with the help of conditional
-   text (or profiling, as it is called in DocBook), you need a special file
-   called &env; file. It is a text file and sets a number of parameters (or
+   text (or profiling, as it is called in DocBook), you usually need a special 
+   file called &env; file. It is a text file and sets a number of parameters (or
    keys) for your documentation project.
   </para>
 
@@ -125,7 +125,7 @@
    For a documentation set (a collection of books), multiple &env; files can
    be defined. This allows you to set different parameters (or different
    values) for individual books of the set: For example, by referring a
-   different <literal>ROOTID</literal> in an &env; file, you define which
+   different <parameter>ROOTID</parameter> in an &env; file, you define which
    book of the set is to be built. Another example would be to specify
    different layouts.
   </para>
@@ -151,7 +151,7 @@
      Mandatory parameter. Sets the main file that contains
      <quote>references</quote> to other books, chapters, appendices, etc. If
      your documentation project consists of multiple books and articles in a
-     <sgmltag>set</sgmltag>, the <literal>MAIN</literal> usually references
+     <sgmltag>set</sgmltag>, the <parameter>MAIN</parameter> usually references
      the file that contains the <sgmltag>set</sgmltag>.
     </para>
    </callout>
@@ -241,8 +241,8 @@
     </itemizedlist>
     <para>
      These entities will be dynamically resolved to the values of the
-     parameters <literal>DISTVER</literal>, <literal>PRODUCTNAME</literal>,
-     and <literal>PRODUCTNAMEREG</literal>. You can define the value of
+     parameters <parameter>DISTVER</parameter>, <parameter>PRODUCTNAME</parameter>,
+     and <parameter>PRODUCTNAMEREG</parameter>. You can define the value of
      those parameters in a project-specific (or book-specific) &env; file.
      <remark>taroth 2012-01-30</remark>
 <!--# Example:
@@ -281,7 +281,7 @@ case</remark>
   <para>
    If your documentation set contains cross-references between the
    individual books, it is useful to define an additional &env; file
-   (<emphasis>without</emphasis> the <literal>ROOTID</literal> parameter)
+   (<emphasis>without</emphasis> the <parameter>ROOTID</parameter> parameter)
    that can be used to generate an HTML output containing all hyperlinks
    between the individual books. Find an example &env; file in
    <xref linkend="ex.daps.env.set"/>.
@@ -393,7 +393,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     When generating the first output format from your documentation project,
     &dapsacr; adds another directory that holds the generated contents. It
     is named <filename>build</filename> (if not set otherwise in &dapsconf;,
-    parameter <literal>BUILD_DIR</literal>), and is created in parallel to
+    parameter <parameter>BUILD_DIR</parameter>), and is created in parallel to
     the <filename>xml</filename> and <filename>images</filename> directory.
    </para>
    <para>
