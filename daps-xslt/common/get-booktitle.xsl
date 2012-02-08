@@ -28,6 +28,7 @@
   <xsl:output method="text" encoding="UTF-8"/>
 
   <xsl:param name="debug-suse-pi" select="0"/>
+  <xsl:param name="resolve.suse-pi" select="1"/>
 
   <xsl:template match="text()"/>
 
