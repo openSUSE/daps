@@ -45,29 +45,25 @@
     </para>
    </listitem>
    <listitem>
-     <para>
+    <para>
      any version management system, like CVS, Subversion, Mercurial or Git
+    </para>
+   </listitem>
+   <listitem>
+    <para>&dm; (if you want to add a workflow and management component). You can
+    use &dm; to add and retrieve meta-information for all files belonging to a 
+    documentation project. &dm; is especially useful for larger, collaborative 
+    projects where it helps you to keep track of owners (authors) and editing 
+    status of all files. <remark>taroth 2012-02-07: todo - add xref to separate
+  dm; guide</remark>
     </para>
    </listitem>
   </itemizedlist>
 
   <para>
-    <remark>toms 2012-02-08: The beginning of the sentence looks a bit
-      too misleading. Could you separate "DAPS" and "Docmanager" by
-      rewriting it?
-    </remark>
-   In addition to &dapsacr;, &dm; provides a workflow and management
-   component. Use it to add and retrieve meta-information for all files
-   belonging to a documentation project. &dm; is especially useful for
-   larger, collaborative projects where it helps you to keep track of owners
-   (authors) and editing status of all files.
-   <remark>taroth 2012-02-07: todo - add xref to separate
-  dm; guide</remark>
-  </para>
-
-  <para>
    Together with the software components mentioned above, &dapsacr; can be
-   used as a fully-fledged authoring and content management system.
+   used as a fully-fledged authoring and content management system for documentation
+   projects based on DocBook.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.oview.concepts">
@@ -109,19 +105,119 @@
    including a short description for each key.
   </para>
  </sect1>
- <sect1 id="sec.daps.user.oview.docdef">
+ <sect1 id="sec.daps.user.oview.docproject">
   <title>Defining Documentation Projects</title>
 
-  <para>
-   <remark>taroth 2012-02-07: todo: check with fs and toms</remark>
-   To define which XML files belong to your documentation project, and which
-   variants can be generated from the project with the help of conditional
-   text (or profiling, as it is called in DocBook), you usually need a special 
-   file called &env; file. It is a text file and sets a number of parameters (or
-   keys) for your documentation project.
-  </para>
+  <para>The following files are the key files for defining a documentation
+   project so that it can be processed by &dapsacr;:</para>
 
-  <para>
+  <variablelist>
+   <varlistentry>
+    <term>
+     <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/>
+    </term>
+    <listitem>
+     <para>An XML file containing the <quote>starting point</quote> (root ID) 
+    of your documentation project (<sgmltag>book</sgmltag>, 
+    <sgmltag>article</sgmltag>, or <sgmltag>set</sgmltag>). 
+    For larger documentation projects, it is good practice to name the file 
+    <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>, 
+    but you can use any other filename as well.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>&env; File</term>
+    <listitem>
+     <para>A text file defining a number of parameters for your 
+   documentation project (like which <parameter>ROOTID</parameter>, which layout, 
+   or which profiling information to use).</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <sect2 id="sec.daps.user.oview.docproject.main">
+   <title>Main File</title>
+   <para>Find an example main file for a book below. In the example file, the 
+   chapters of the book are included via Xincludes. <remark>taroth 2012-02-08: 
+   this might be too scary already for newbies - todo: better use example MAIN
+   that is used for daps init</remark> </para>
+   <example id="ex.daps.main">
+    <title>Main File of a Book</title>
+    <screen>	
+&lt;!-- ##################################################################### --&gt;
+&lt;!-- SLE HA High Availability Guide --&gt;
+&lt;!-- ##################################################################### --&gt;
+   	&lt;book lang="en" id="book.sleha"&gt;
+    	&lt;bookinfo&gt;
+      	&lt;title&gt;&amp;haguide;&lt;/title&gt;
+      	&lt;productname&gt;&amp;productname;&lt;/productname&gt;
+ 	      &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt;
+       	&lt;xi:include href="common_copyright_gfdl.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+   	  &lt;/bookinfo&gt;
+    &lt;xi:include href="ha_intro.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+&lt;!-- ===================================================================== --&gt;
+&lt;!-- Part: Installation and Setup --&gt;
+&lt;!-- ===================================================================== --&gt;
+	 &lt;part id="part.install"&gt;
+ 	&lt;title&gt;Installation and Setup&lt;/title&gt;
+	&lt;xi:include href="ha_concepts.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+	&lt;xi:include href="ha_installation.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/part&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;!-- Part: Configuration and Administration --&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;part id="part.config"&gt;
+ 	&lt;title&gt;Configuration and Administration&lt;/title&gt;
+ 	&lt;xi:include href="ha_config_basics.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_config_gui.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_config_cli.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+	&lt;xi:include href="ha_config_hawk.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_agents.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_fencing.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_lvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_netbonding.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/part&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;!-- Part: Storage and Data Replication --&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;part id="part.storage"&gt;
+ 	&lt;title&gt;Storage and Data Replication&lt;/title&gt;
+ 	&lt;xi:include href="ha_ocfs2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_drbd.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_clvm.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_storage_protection.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_samba.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/part&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;!-- Part: Troubleshooting and Reference --&gt;
+	&lt;!-- ===================================================================== --&gt;
+ 	&lt;part id="part.reference"&gt;
+ 	&lt;title&gt;Troubleshooting and Reference&lt;/title&gt;
+ 	&lt;xi:include href="ha_troubleshooting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_agentlist_details.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/part&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;!-- Part: Appendix --&gt;
+ 	&lt;!-- ===================================================================== --&gt;
+ 	&lt;part id="part.appendix"&gt;
+ 	&lt;title&gt;Appendix&lt;/title&gt;
+	&lt;xi:include href="ha_example.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_migration.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;xi:include href="ha_news.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/part&gt;
+	&lt;xi:include href="ha_glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ 	&lt;/book&gt;
+</screen>
+
+   </example>
+   <para>If your documentation project consists of multiple 
+   books and articles in a  <sgmltag>set</sgmltag>, the main file is the one 
+   that contains the <sgmltag>set</sgmltag> element.</para>
+  </sect2>
+
+  <sect2 id="sec.daps.user.oview.docproject.env">
+  <title>&env; File</title>
+  
+  <para>  
    For a documentation set (a collection of books), multiple &env; files can
    be defined. This allows you to set different parameters (or different
    values) for individual books of the set: For example, by referring a
@@ -149,10 +245,7 @@
    <callout arearefs="co.daps.main">
     <para>
      Mandatory parameter. Sets the main file that contains
-     <quote>references</quote> to other books, chapters, appendices, etc. If
-     your documentation project consists of multiple books and articles in a
-     <sgmltag>set</sgmltag>, the <parameter>MAIN</parameter> usually references
-     the file that contains the <sgmltag>set</sgmltag>.
+     <quote>references</quote> to other books, chapters, appendices, etc. 
     </para>
    </callout>
    <callout arearefs="co.daps.rootid">
@@ -165,9 +258,12 @@
    </callout>
    <callout arearefs="co.daps.profarch">
     <para>
-     Optional parameter. If you want to profile your text for different
-     platforms or (processor) architectures, this parameter selects the
-     architecture profiling information.
+     Optional parameters. If you have similar products to document and 
+     want to generate multiple documentation variants from your XML files, you 
+     can do so with the help of conditional text (or profiling, as it is called in DocBook). 
+     To profile your output for different (processor) architectures (like x86) or operating 
+     systems (like Windows or Linux), use those parameters to select the information 
+     that should be included.
     </para>
    </callout>
    <callout arearefs="co.daps.profos">
@@ -262,19 +358,20 @@
    </callout>
   </calloutlist>
 
+  <para>Of the parameters in the &env;, the only one required is 
+  <parameter>MAIN</parameter>. If you do not want to set any other parameters, 
+  you can also set the <parameter>MAIN</parameter> parameter on the command line
+  and do without &env;.</para>
+
   <para>
-    <remark>toms 2012-02-08: This is not entirely correct. The ENV files
-    do not define *all* XML files, but only the *MAIN* or XML file as an
-    entry point. The following sentence is a bit misleading IMHO as it
-    is an *indirect* relations: ENV -> MAIN -> all other files.
-    </remark>
-   Because &env; files define which XML files belong to a documentation
-   project, they are necessary for validating your XML files and for
+   Because &env; files define the <quote>starting point</quote> of your 
+   documentation (by referencing the <parameter>MAIN</parameter> parameter), 
+   they are necessary for validating your XML files and for
    generating any kind of output. Without &env; files, you cannot produce
    any output from your DocBook sources with &dapsacr;.
    <remark>taroth 2012-01-17: not 100% sure if this is still the
 case</remark>
-    <remark>toms 2012-02-08: I think, your last sentence beginning with
+   <remark>toms 2012-02-08: I think, your last sentence beginning with
       "Without..." is correct.</remark>
   </para>
 
@@ -304,8 +401,9 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
    &dapsacr; also contains a script for creating a new documentation project
    from scratch.
    <remark>taroth 2011-12-29: add xref later</remark>
-   . When using that script, an example &env; file is automatically created.
+   When using that script, an example &env; file is automatically created.
   </para>
+  </sect2>
  </sect1>
  <sect1 id="sec.daps.user.oview.dirstruct">
   <title>Directory Structure</title>
@@ -322,12 +420,14 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
     documentation project. The directories are printed in bold.
    </para>
-    <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
+   <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
       *after* the term. This avoids unaligned characters (as the callout
     is usually a bit wider)</remark>
    <example id="ex.daps.user.dir.doc">
     <title>Directory Structure</title>
-    <screen><co id="co.docdir.base"/><replaceable>YOUR_DOC_DIR</replaceable>
+    <screen>
+     <co id="co.docdir.base"/>
+     <replaceable>YOUR_DOC_DIR</replaceable>
 <co id="co.docdir.env"/> |--&env;*
 <co id="co.docdir.img"/> |--<emphasis role="bold">images</emphasis>
 <co id="co.docdir.img.src"/>    |-- <emphasis role="bold">src</emphasis>
@@ -341,7 +441,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
    <calloutlist>
     <callout arearefs="co.docdir.base">
      <para>
-       <quote>Working directory</quote> for the respective documentation project. Can be
+      <quote>Working directory</quote> for the respective documentation project. Can be
       set on the command line with <option>--basedir</option> or in the
       &dapsacr; config files (usually in the user-specific one,
       &dapsconfu;).
@@ -350,7 +450,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <callout arearefs="co.docdir.env">
      <para>
       &env; file defining the documentation project. For more information,
-      refer to <xref linkend="sec.daps.user.oview.docdef"/>.
+      refer to <xref linkend="sec.daps.user.oview.docproject"/>.
      </para>
     </callout>
 <!--<callout arearefs="co.daps.user.dir.img">
@@ -400,10 +500,19 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     The contents of the <filename>build</filename> directory is structured
     as follows:
    </para>
-    <remark>toms 2012-02-08: This looks garbled :)</remark>
+   <remark>toms 2012-02-08: This looks garbled :)</remark>
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
-    <screen><co id="co.builddir"/> |--<emphasis role="bold">build</emphasis><co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;1</replaceable></emphasis><xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;2</replaceable></emphasis><co id="co.builddir.img"/>    |--<emphasis role="bold">.images</emphasis><co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis><co id="co.builddir.tmp"/>    |--<emphasis role="bold">.tmp</emphasis></screen>
+    <screen>
+     <co id="co.builddir"/> |--<emphasis role="bold">build</emphasis>
+     <co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;1</replaceable>
+     </emphasis>
+     <xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;2</replaceable>
+     </emphasis>
+     <co id="co.builddir.img"/>    |--<emphasis role="bold">.images</emphasis>
+     <co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis>
+     <co id="co.builddir.tmp"/>    |--<emphasis role="bold">.tmp</emphasis>
+    </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.builddir">
