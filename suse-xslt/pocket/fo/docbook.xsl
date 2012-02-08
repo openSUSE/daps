@@ -3,7 +3,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
-<xsl:import href="../fo/docbook.xsl"/>
+<xsl:import href="../../fo/docbook.xsl"/>
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 

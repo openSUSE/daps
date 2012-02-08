@@ -8,11 +8,11 @@
 <!-- Import the current version of the stylesheets  -->
 <!--<xsl:import href="cropmarks.xsl"/>-->
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
-<xsl:import href="../profiling/suse-pi.xsl"/>
-<xsl:import href="../fo/fonts.xsl"/>
-<!-- <xsl:include href="../common/copy-nodes.xsl"/> -->
-<xsl:import href="../fo/hyphenate-url.xsl"/> 
-<!--<xsl:import href="../fo/admon.xsl"/>-->
+<xsl:import href="../../profiling/suse-pi.xsl"/>
+<xsl:import href="../../fo/fonts.xsl"/>
+<!-- <xsl:include href="../../common/copy-nodes.xsl"/> -->
+<xsl:import href="../../fo/hyphenate-url.xsl"/> 
+<!--<xsl:import href="../../fo/admon.xsl"/>-->
 <!-- <xsl:include href="toc.xsl"/> -->
 <!-- <xsl:include href="admon.xsl"/> -->
 <!-- <xsl:include href="component.xsl"/> -->
@@ -20,10 +20,10 @@
 <!-- <xsl:include href="booktitlepage.xsl"/> -->
 <!-- <xsl:include href="articletitlepage.xsl"/> -->
 <!-- <xsl:include href="titlepages.xsl"/> -->
-<xsl:import href="../fo/admon.xsl"/>
-<xsl:import href="../fo/pi.xsl"/>
-<xsl:import href="../fo/verbatim.xsl"/>
-<xsl:import href="../fo/xref.xsl"/>
+<xsl:import href="../../fo/admon.xsl"/>
+<xsl:import href="../../fo/pi.xsl"/>
+<xsl:import href="../../fo/verbatim.xsl"/>
+<xsl:import href="../../fo/xref.xsl"/>
 <!-- <xsl:include href="xep.xsl"/> -->
 
  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
