@@ -12,7 +12,7 @@
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-<xsl:include href="../../daps-xslt/profiling/suse-pi.xsl"/>
+<xsl:include href="../profiling/suse-pi.xsl"/>
 <xsl:include href="attributesets.xsl"/>
 <xsl:include href="fonts.xsl"/>
 <xsl:include href="../common/copy-nodes.xsl"/>
