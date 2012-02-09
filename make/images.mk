@@ -2,7 +2,7 @@
 # Makefile for image processing
 #
 # Overview
-# DAPS uses images in $BASE_DIR/images/src/<FORMAT>/
+# DAPS uses images in $DOC_DIR/images/src/<FORMAT>/
 # Supported image formats are .dia, .eps, .fig, .png, .pdf, and .svg
 # - When creating HTML manuals all formats are converted to PNG
 # - When creating PDF manuals all formats are converted to
@@ -25,7 +25,7 @@
 #  SVG   |   PNG     | SVG,PDF
 #........|...........|..........
 #
-# $BASE_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
+# $DOC_DIR/images/src/<FORMAT>/ is _never_ used for manual creation, the
 # images are rather created or linked into $IMG_GENDIR/online/ (color images)
 # or into $IMG_GENDIR/print/ (grayscale). If image creation/conversion requires
 # generating intermediate files, these files are created in
@@ -60,9 +60,9 @@ $(IMG_DIRECTORIES):
 #------------------------------------------------------------------------
 # xslt stylsheets
 #
-STYLEGFX       := $(DTDROOT)/daps-xslt/common/get-graphics.xsl
-STYLESVG       := $(DTDROOT)/daps-xslt/common/fixsvg.xsl
-STYLESVG2GRAY  := $(DTDROOT)/daps-xslt/common/svg.color2grayscale.xsl
+STYLEGFX       := $(DAPSROOT)/daps-xslt/common/get-graphics.xsl
+STYLESVG       := $(DAPSROOT)/daps-xslt/common/fixsvg.xsl
+STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 
 #------------------------------------------------------------------------
 # Image lists
@@ -80,7 +80,7 @@ SRCSVG      := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
 #
 USED        := $(sort $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		  --stringparam xml.or.img img \
-		  $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
+		  $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
 
 # PNG and PDF can be directly taken from the USED list - the filter function
 # generates lists of all PNG common to USED and SCRPNG

@@ -52,6 +52,7 @@ BuildRequires:  jing
 BuildRequires:  libxslt
 BuildRequires:  optipng
 BuildRequires:  sgml-skel
+BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  trang
 BuildRequires:  transfig
@@ -165,7 +166,7 @@ Recommends:     remake
 Recommends:     ruby
 # Japanese Fonts:
 Recommends:     sazanami-fonts
-Recommends:     suse-xsl-stylesheets
+Recommends:     suse-xsl-stxlesheets
 # Chinese
 Recommends:     ttf-arphic
 # Korean Fonts:
@@ -208,7 +209,7 @@ for upgrade instructions.
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # make_install macro does not have a DESTDIR in 11.1/SLE 11 !!
-#%%make_install
+#%#make_install
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}

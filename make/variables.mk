@@ -1,6 +1,6 @@
-# DTDROOT must be present.
-variables	= "DTDROOT='$(DTDROOT)'"
-# XML_CATALOG_FILES may be from $DTDROOT or unset (system)
+# DAPSROOT must be present.
+variables	= "DAPSROOT='$(DAPSROOT)'"
+# XML_CATALOG_FILES may be from $DAPSROOT or unset (system)
 ifdef XML_CATALOG_FILES
 variables	+= "XML_CATALOG_FILES='$(XML_CATALOG_FILES)'"
 endif

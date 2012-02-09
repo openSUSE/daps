@@ -36,7 +36,7 @@ package-html: dist-html desktop-files-dist document-files-html-dist
 #  * Color PDF
 #  * desktop files (for KDE)
 #  * yelp files PDF (for GNOME)
-#  * ENVfile
+#  * DC-file
 #
 .PHONY: package-pdf
 package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
@@ -82,11 +82,11 @@ package-jsp: dist-jsp
 .PHONY: package-src
 package-src: PACKDIR = $(RESULT_DIR)/package/src
 ifdef DEF_FILE
-# Get additional ENV-files from the DEF file
+# Get additional DC-files from the DEF file
 # the awk scripts extracts the manual names from the second column of
-# the DEF file (ignoring comments and blank lines) and adds ENV- to it
+# the DEF file (ignoring comments and blank lines) and adds DC- to it
 #
-package-src: E-FILES = $(shell awk '/^[ \t]*#/ {next};NF {printf "ENV-%s\n", $$2}' $(DEF_FILE))
+package-src: E-FILES = $(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s\n", $$2}' $(DEF_FILE))
 endif
 package-src: dist-graphics dist-xml
 package-src:
@@ -110,9 +110,9 @@ else
 	@ccecho "info" "Selected book/set contains no graphics"
 endif
 ifdef DEF_FILE
-# add ENV-Files from DEF file
+# add DC-Files from DEF file
 	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
-	  --transform=s%$(BASE_DIR)/%% $(addprefix $(BASE_DIR)/, $(E-FILES))
+	  --transform=s%$(DOC_DIR)/%% $(addprefix $(DOC_DIR)/, $(E-FILES))
 endif
 	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
 	@ccecho "result" "Find the sources at:\n$(PACKDIR)/$(BOOK)_$(LL).tar.bz2"
@@ -130,12 +130,12 @@ package-src-name:
 #
 .PHONY: locdrop
 locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
-			$(shell xsltproc --nonet --xinclude \
-			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
-			$(MAIN))
-locdrop: TOTRANSFILES = $(sort $(subst $(BASE_DIR)/xml, \
+			$(shell xsltproc --nonet --xinclude $(STYLESEARCH) \
+			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
+			$(notdir $(MAIN)))
+locdrop: TOTRANSFILES = $(sort $(subst $(DOC_DIR)/xml, \
 			  $(PROFILE_PARENT_DIR)/dist, \
-			  $(shell docmanager -b $(BASE_DIR) -e $(ENVFILE) dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
+			  $(shell docmanager -d $(DOCCONF) dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
 locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
@@ -161,11 +161,11 @@ endif
 # notrans tarball
 	tar chf $(NOTRANSTAR) --absolute-names \
 	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(NOTRANSFILES)
-	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
-	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
+	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
 ifdef DEF_FILE
-	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(BASE_DIR)/%% \
-	  $(addprefix $(BASE_DIR)/,$(DEF_FILE))
+	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(addprefix $(DOC_DIR)/,$(DEF_FILE))
 endif
 	bzip2 -9f $(NOTRANSTAR)
 	@ccecho "info" "Created $(NOTRANSTAR).bz2"
@@ -241,7 +241,7 @@ online-localized: dist-graphics-png $(TMP_XML)
 # remove old stuff
 	rm -rf $(ODDIR) && mkdir -p $(ODDIR)
 # create bigfile
-	xsltproc --nonet --output $(ODDIR)/$(MAIN) $(ROOTSTRING) \
+	xsltproc --nonet --output $(ODDIR)/$(notdir $(MAIN)) $(ROOTSTRING) \
 		--param use.id.as.filename 1 $(STYLEEXTLINK) $(TMP_XML)
 ifdef USED
 # copy graphics
@@ -302,7 +302,7 @@ $(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
 		--stringparam projectfile PROJECTFILE.$(BOOK) \
 		--stringparam outformat $(OUTFORMAT) \
 		--stringparam docid com.novell.$(BOOK)$(subst _,,$(LL))$(OUTFORMAT) \
-		--xinclude $(STYLE_DOCUMENT) $(PROFILEDIR)/$(MAIN)
+		--xinclude $(STYLE_DOCUMENT) $(PROFILED_MAIN)
 
 #--------------
 # desktop-files
@@ -333,7 +333,7 @@ $(DESKTOP_FILES_DIR)/%.desktop: $(PROFILES) $(DESKTOP_FILES_DIR)
 	rm -rf $(DESKTOP_FILES_DIR) && mkdir -p $(DESKTOP_FILES_DIR)
 	xsltproc $(DESKSTRINGS) $(ROOTSTRING) --nonet \
 		--stringparam projectfile PROJECTFILE.$(BOOK) \
-		--xinclude $(STYLEDESK) $(PROFILEDIR)/$(MAIN)
+		--xinclude $(STYLEDESK) $(PROFILED_MAIN)
 
 
 

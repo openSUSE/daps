@@ -1,7 +1,9 @@
 #!/bin/bash
 #
-# Copyright (C) 2011 fs@suse.de, openSUSE.org
-# Authors: fs@suse.de
+# Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # daps = DocBook Authoring and Publishing Suite
 
@@ -17,17 +19,23 @@ VERSION=0.9.3
 # files, so we need to have this list
 #
 # IMPORTANT
-# All variables that need to be exported for furtzher use in the makefiles
+# All variables that need to be exported for further use in the makefiles
 # need to be added here!!
 #
 
 # VENDOR is a default tcsh variable
 #
+# PENDING:
+# DISTVER, PRODUCTNAME, and PRODUCTNAMEREG are only need for resolving the
+# suse-PIs. Once we get rid of that, remove these variables fom the list
+#
 unset VENDOR
 
 declare -a VARLIST
 VARLIST=(
-    BASE_DIR
+    DISTVER
+    PRODUCTNAME
+    PRODUCTNAMEREG
     BUILD_DIR
     CB_OPTIONS
     COLOR
@@ -35,18 +43,19 @@ VARLIST=(
     COMMENT_STR
     CONF_PREFIX
     CONVERT_OPTS
-    DAPS_ENV_DEFAULT
     DEBUG
-    DTDROOT
-    DEFAULT_DTDROOT
+    DOC_DIR
+    DAPSROOT
+    DEFAULT_DAPSROOT
     DEF_FILE
     DEVEL
     DIA_OPTIONS
     DOCBOOK5_RNC_SCHEME
+    DOCCONF
+    DOCCONF_DEFAULT
     DRAFT
     DRAFT_STR
-    DTDROOT
-    ENVFILE
+    DAPSROOT
     EPUBCHECK
     EPUB_CSS
     FALLBACK_STYLEROOT
@@ -91,15 +100,17 @@ unset "${VARLIST[@]}"
 #
 declare -a UNSETLIST
 UNSETLIST=(
-    BASE_DIR_CMDL
+    DOC_DIR_CMDL
     BIN_DIR
     BUILD_DIR_CMDL
     COLOR_CMDL
     CONFIG
-    DTDROOT_CMDL
-    ENVFILE_CMDL
+    DC_PATH_EXISTS
+    DOCCONF_CMDL
+    DAPSROOT_CMDL
     FALLBACK_STYLEROOT_CMDL
     LOG_DIR
+    MAIN_CMDL
     R_DIR
     STYLEROOT_CMDL
     VERBOSITY_CMDL 
@@ -112,19 +123,14 @@ unset "${UNSETLIST[@]}"
 # this script's name
 ME=$(basename $0)
 
-BOOK=""
-
 # default config file
 DEFAULT_CONFIG="/etc/daps/config"
 
-# The default DTDROOT 
-DEFAULT_DTDROOT="/usr/share/daps"
+# The default DAPSROOT 
+DEFAULT_DAPSROOT="/usr/share/daps"
 
 # default libdir
-DEFAULT_LIB_DIR="${DEFAULT_DTDROOT}/lib"
-
-DTDROOT=""
-ENVFILE=""
+DEFAULT_LIB_DIR="${DEFAULT_DAPSROOT}/lib"
 
 # user config file
 USER_CONFIG="$HOME/.daps/config"
@@ -240,7 +246,7 @@ SUBCOMMANDS=(
 #
 # We need to declare a few basic funtions first because they are needed
 # immideately. All other functions can be found at
-# $DTDROOT/lib/daps-functions
+# $DAPSROOT/lib/daps-functions
 # ---------
 # Help
 #
@@ -248,17 +254,15 @@ SUBCOMMANDS=(
 function daps_help () {
     echo "
 Usage:
-  $ME [--global-options] <subcommand> [--command-options] [arguments]
+  1. $ME -d DC-file [--options] <subcommand> [--subcommand-options]
+  2. $ME -m MAIN file [--options] <subcommand> [--subcommand-options]
+  3. $ME [--options] <subcommand> [--subcommand-options]
+
 
 Global Options:
-  -b BASE_DIR,
-  --basedir=BASE_DIR        Project directory. Must contain the XML sources in
-                            BASE_DIR/xml. If not specified, the current
-                            directory will be used
-                            Default: Parent directory of $ENVFILE
   --builddir=BUILD_DIR      Directory where every output $ME generates will end
                             up
-                            Default: ${BASE_DIR:-.}/build/$BOOK
+                            Default: <doc dir>/build/$BOOK
   --color=(0|1)             By default errors, results, warnings and certain
                             info messages are printed in color using bash color
                             codes. Set to '0' to turn off colors.
@@ -267,10 +271,13 @@ Global Options:
                                         disabled automatically)
   --debug                   Print debugging messages. Far more verbose than the
                              --verbosity options
-  -e ENVFILE,
-  --envfile=ENVFILE         Specify which ENV file to use. Mandatory unless
-                            there is only a single ENV file in BASE_DIR. In
-                            that case the ENV file will automatically be used.
+  --docconfig=DC-file,
+  -d DC-file                Path to doc config file to use. Mandatory
+                            unless there is only a single DC-file in the current
+                            directory or unless you have configured a default
+                            value (DOCCONF_DEFAULT) in $USER_CONFIG.
+                            Note: Options --docconfig nad --main exclude
+                                  each other.
   --fb_styleroot            Fallback styleroot directory. Can only be used in
                             conjunction with --styleroot. By default the
                             DocBook stylesheets are used as a fallback if
@@ -281,8 +288,9 @@ Global Options:
                             as a last resort.
                             Specify only the filename, not an absolute path.
   --help, -h                Help
-  --main                    Path to the main file defining your document.
-                            Specify only the filename, not an absolute path
+  --main, -m                Path to the main file defining your document.
+                            Note: Options --main and --docconfig exclude
+                                  each other.
   --styleroot               By default daps uses the DocBook Stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
@@ -347,7 +355,6 @@ Subcommands:
     clean-results             Remove all generated books, archives, and log
                               files. Generated images and profiled sources will
                               _not_ be deleted.
-                              generated from the ENV file used
     clean-all, real-clean     Remove everything generated by $ME
 
   Packaging:
@@ -376,7 +383,7 @@ Subcommands:
                               XML file
     init                      Create a working directory to get started with
                               daps/DocBook. Generates a MAIN xml file and a
-                              fitting ENVfile
+                              fitting doc config file
     optipng                   Optimize (size) source PNGs
     profile, prof             Profile XML sources
     validate                  Validate profiled sources. Automatically profiles
@@ -408,16 +415,128 @@ function exit_on_error () {
     ccecho "error" "ERROR: ${1}" >&2
     exit 1;
 }
+# ---------
+# Get absolute path
+#
+function absolute_path () {
+    # returns the absolute path to $1
+    #
+    # Note: links are _not_ being followed
+    #       (use readlink for that purpose)
+    #
+    local ABSPATH BASE FILE DIR
+
+    FILE=$1
+    FILE=${FILE%/} # remove trailing slash
+
+    BASE=$(basename $FILE)
+    DIR=$(dirname $FILE)
+
+    if [[ -n $DIR && "." != DIR ]]; then
+        cd $DIR
+        ABSPATH="$(pwd)/$BASE"
+        cd - &>/dev/null
+    else
+        ABSPATH="$(pwd)/$BASE"
+    fi
+
+    echo $ABSPATH
+}
+
+# ---------
+# Try to automatically get the DOCCONF
+#
+function autoset_docconf () {
+    # if there is only one DOCCONF file in the current directory, use it
+    # and also set DOC_DIR
+    #
+    local DC_FILENAME DC_PARENT DC_REAL_PATH DC_REAL_DIR
+    declare -a DC_COUNT
+    DC_COUNT=( $(find -L . -maxdepth 1 -name "${CONF_PREFIX}*" -type f) )
+    if [[ 1 = ${#DC_COUNT[@]} ]]; then
+        # There is only one DOCCONF file
+        #
+        # two possibilites:
+        # 1. We are already in DOC_DIR
+        # 2. We are in the documents build result directory
+        # (DOC_DIR/build/<name>), where daps creates a link to the
+        # real ENV file
+        if [[ -h ${DC_COUNT[0]} ]]; then
+            # DOCCONF is a link
+            DC_REAL_PATH=$(readlink -nm "${DC_COUNT[0]}")
+            DC_REAL_DIR=$(dirname "$DC_REAL_PATH")
+            DC_FILENAME=$(basename "$DC_REAL_PATH")
+            DC_PARENT=${DC_FILENAME#*${CONF_PREFIX}}
+            if [[ -e ${DC_REAL_DIR}/build/${DC_PARENT}/$DC_FILENAME ]]; then
+                # we are in the result dir - set DOCCONF to the
+                # real path (with links "resolved")
+                DOCCONF_CMDL="$DC_REAL_PATH"
+            else
+                # we are in DOC_DIR
+                # preserve links
+                DOCCONF_CMDL=$(absolute_path "${DC_COUNT[0]}")
+            fi
+        else
+            # no link, we are in DOC_DIR
+            DOCCONF_CMDL=$(absolute_path "${DC_COUNT[0]}")
+        fi
+        # set DOC_DIR
+        DOC_DIR=$(dirname "$DOCCONF_CMDL")
+        ccecho "result" "Using automatically detected DOCCONF $DOCCONF_CMDL"
+    else
+        # more than one or no DOCCONF
+        exit_on_error "Could not find a valid MAIN file.\nPlease specify either a DOCCONF or a MAIN file at the command line"
+    fi
+}
+
+# ---------
+# Set MAIN to an absolute path
+#
+
+function set_mainfile () {
+    local MAINFILE
+    MAINFILE="$1"
+    if [[ -e "$MAINFILE" ]]; then
+        # MAINFILE is a file or link
+        MAIN_CMDL=$(absolute_path "$MAINFILE")
+        if [[ -z "$DOC_DIR" ]]; then
+            DOC_DIR=$(dirname "$MAIN_CMDL")
+            DOC_DIR=${DOC_DIR%/xml*} #remove xml directory
+        fi
+    else
+        if [[ -e "xml/$MAINFILE" ]]; then
+            # MAIN is not a valid file, but ./xml/$MAIN exists
+            MAIN_CMDL=$(absolute_path "xml/$MAINFILE")
+            if [[ -z "$DOC_DIR" ]]; then
+                DOC_DIR="$PWD"
+            fi
+            ccecho "result" "Using MAIN file xml/$MAIN_CMDL"
+        else
+            if [[ -n $DOC_DIR ]]; then
+                if [[ -e "${DOC_DIR}/xml/$MAINFILE" ]]; then
+                    MAIN_CMDL="${DOC_DIR}/xml/$MAINFILE"
+                elif [[ -e "${DOC_DIR}/$MAINFILE" ]]; then
+                    MAIN_CMDL="${DOC_DIR}/$MAINFILE"
+                else
+                    exit_on_error "Fatal error: ${DOC_DIR}/xml/$MAINFILE does not exist."
+                fi
+            else
+               exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
+            fi
+        fi
+    fi
+}
+
 
 # ---------
 # Recover command-line values
 #
 function recover_cmdl_values () {
-    test -n "$BASE_DIR_CMDL"  && BASE_DIR="$BASE_DIR_CMDL"
+#    test -n "$DOC_DIR_CMDL"  && DOC_DIR="$DOC_DIR_CMDL"
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
-    test -n "$DTDROOT_CMDL"   && DTDROOT="$DTDROOT_CMDL"
-    test -n "$ENVFILE_CMDL"   && ENVFILE="$ENVFILE_CMDL"
+    test -n "$DOCCONF_CMDL"   && DOCCONF="$DOCCONF_CMDL"
+    test -n "$DAPSROOT_CMDL"   && DAPSROOT="$DAPSROOT_CMDL"
     test -n "$FALLBACK_STYLEROOT_CMDL" && FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
     test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
     test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
@@ -425,47 +544,11 @@ function recover_cmdl_values () {
 }
 
 # ---------
-# Try to automatically set $BASE_DIR
-#
-function get_basedir () {
-    if [[ -d $PWD/xml ]]; then
-        # current directory is the BASE_DIR
-        BASE_DIR=$(readlink -m "$PWD")
-        return 0
-    elif [[ -h $ENVFILE ]]; then
-        # ENVFILE is a link
-        # assume the real directory of $ENVFILE is BASE_DIR
-        BASE_DIR=$(dirname $(readlink "$ENVFILE"))
-        return 0
-    elif [[ -f $MAIN ]]; then
-        BASE_DIR=$(dirname $MAIN)
-        BASE_DIR=${BASE_DIR%/xml*} #remove xml directory
-    else
-        return 42; # ;-)
-    fi
-}
-
-# ---------
-# Try to automatically set $ENVFILE
-#
-function get_envfile () {
-    local ENV_COUNT=$(find -L $PWD -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
-    if [[ 1 = $ENV_COUNT ]]; then
-        # a single ENVFILE was found
-        ENVFILE=$(find -L $PWD -maxdepth 1 -name "${CONF_PREFIX}*" -type f)
-	ENVFILE=$(basename $ENVFILE)
-        return 0;
-    else
-        return 42;
-    fi
-}
-
-# ---------
 # Remove trailing slashes from directory paths
 function sanitize_paths () {
-    BASE_DIR=${BASE_DIR%/}
+    DOC_DIR=${DOC_DIR%/}
     BUILD_DIR=${BUILD_DIR%/}
-    DTDROOT=${DTDROOT%/}
+    DAPSROOT=${DAPSROOT%/}
     FALLBACK_STYLEROOT=${FALLBACK_STYLEROOT%/}
     STYLEROOT=${STYLEROOT%/}
 }
@@ -489,30 +572,26 @@ export POSIXLY_CORRECT=1
 #-------------------------------
 # Parsing the daps parameters
 #
-# If (and only if) $BASE_DIR, $BUILD_DIR, $ENVFILE, and $DTDROOT are set here,
-# we do not want to overwrite them by any other file we source
-# (command line always wins).
+# If variables such as $BUILD_DIR, $DOCCONF, and $DAPSROOT are set via command
+# line switch, we do not want to overwrite them by any other file we source
+# at a later stage (command line always wins).
 # Declaring the variables as readonly is unfortunately not an option, since 
 # every attempt to (un)set a read-only variable throws an error - something
 # we do not want when sourcing a config-file.
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o b:e:hv:: -l basedir:,builddir:,color:,colour:,debug,dtdroot:,envfile:,fb_styleroot:,help,main:,styleroot:,verbosity::,version -n $ME -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,help,main:,styleroot:,verbosity::,version -n $ME -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
     case "$1" in
-        -b|--basedir)
-            test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
-            BASE_DIR_CMDL="$2"
-            BASE_DIR="$BASE_DIR_CMDL"
-            shift 2
-            ;;
          --builddir)
             test -d "$2" || exit_on_error "BUILD_DIR $2 is not a valid directory"
             test -w "$2" || exit_on_error "BUILD_DIR $2 is not writeable"
             BUILD_DIR_CMDL="$2"
+            # strip trailing slash
+            BUILD_DIR_CMDL=${BUILD_DIR_CMDL%/}
             BUILD_DIR="$BUILD_DIR_CMDL"
             shift 2
             ;;
@@ -524,6 +603,20 @@ while true ; do
             export COLOR="$COLOR_CMDL"
             shift 2
             ;;      
+        -d|--docconfig|-e|--envfile)
+            DOCCONF_CMDL="$2"
+            DOCCONF="$DOCCONF_CMDL"
+            shift 2
+            ;;
+        --dapsroot)
+            test -d $2 || exit_on_error "$2 is not a valid DAPSROOT"
+            DAPSROOT_CMDL="$2"
+            # strip trailing slash
+            DAPSROOT_CMDL=${DAPSROOT_CMDL%/}
+            DAPSROOT="$DAPSROOT_CMDL"
+            DEVEL=1
+            shift 2
+            ;;
         --debug)
             # debug also implies VERBOSITY=2
             DEBUG=1
@@ -531,21 +624,11 @@ while true ; do
             VERBOSITY=$VERBOSITY_CMDL
             shift
             ;;
-        --dtdroot)
-            test -d $2 || exit_on_error "$2 is not a valid DTDROOT"
-            DTDROOT_CMDL="$2"
-            DTDROOT="$DTDROOT_CMDL"
-            DEVEL=1
-            shift 2
-            ;;
-        -e|--envfile)
-	    ENVFILE_CMDL="$2"
-            ENVFILE="$ENVFILE_CMDL"
-	    shift 2
-            ;;
         --fb_styleroot)
             test -d "$2" || exit_on_error "Fallback styleroot $2 is not a valid directory"
             FALLBACK_STYLEROOT_CMDL="$2"
+            # strip trailing slash
+            FALLBACK_STYLEROOT_CMDL=${FALLBACK_STYLEROOT_CMDL%/}
             FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
             shift 2
             ;;
@@ -569,6 +652,8 @@ while true ; do
         --styleroot)
             test -d "$2" || exit_on_error "Styleroot $2 is not a valid directory"
             STYLEROOT_CMDL="$2"
+            # strip trailing slash
+            STYLEROOT_CMDL=${STYLEROOT_CMDL%/}
             STYLEROOT="$STYLEROOT_CMDL"
             shift 2
             ;;
@@ -601,6 +686,12 @@ while true ; do
     esac
     
 done
+
+# You can only specify DOCCONF or MAIN, not both
+#
+if [[ -n $DOCCONF_CMDL && -n $MAIN_CMDL ]]; then
+    exit_on_error "The options -d/--docconfig and --main exclude each other."
+fi
 
 # Check FALLBACK_STYLEROOT and STYLEROOT
 #
@@ -661,8 +752,8 @@ case "${SCMD_ARGS[@]}" in
     "-h"|"-h "*|*" -h "*|*" -h"|"--help"|"--help "*|*" --help "*|*" --help")
         declare -a SCMD_ARGS=( "-h" )
         ;;
-    *ENVFILE*|*DTDROOT*|*BASE_DIR*|*MAIN*)
-        exit_on_error "Please specify BASE_DIR, ENVFILE, or DTDROOT via command line options" 
+    *DOCCONF*|*DAPSROOT*|*DOC_DIR*|*MAIN*)
+        exit_on_error "Please specify DOC_DIR, DOCCONF, MAIN, or DAPSROOT via command line options" 
 esac
 
 
@@ -674,61 +765,53 @@ esac
 #
 # 1. Command line 
 #    - either as a real option
-#    - or as variable declaration (FOO=bar)
-#
-# 2. ENV-file
+#    - or as variable declaration (FOO=bar) --> debugging and developing
+# 2. DC-file
 # 3. $USER_CONFIG (user config file)
-# 4. /etc/daps/config or $DTDROOT/etc/config
-#
+# 4. /etc/daps/config or $DAPSROOT/etc/config
 #
 # In order to make developing easier, there is a hidden feature to set
-# DTDROOT, allowing to have multiple daps versions installed into
-# different directories. You can switch between them by setting DTDROOT
-# accordingly (without a trailing slash)
+# DAPSROOT, allowing to have multiple daps versions installed into
+# different directories. You can switch between them by setting DAPSROOT
+# accordingly. Either by command line switch --dtdroot or in  your user
+# config file (DAPSROOT="<path>") 
 #
-# IMPORTANT:
-# DTDROOT MUST be set by either $ME --dtdroot $SCMD on the commandline
-# or in $USER_CONFIG
+# Since commandline values take precedence we need to recover them every
+# time we source a file
 #
-# If DTDROOT was not already set on the commandline (in this case
-# DTDROOT_CMDL would be set), source the USER config to find out
-# if DTDROOT was set there.
+
+# source the user config for the first time to get DAPSROOT
 #
-# commandline values for $BASE_DIR, $BUILD_DIR, $ENVFILE, and $DTDROOT take
-# precedence we need to recover them _every_ time we source a file
-#
-if [[ -f $USER_CONFIG && -z $DTDROOT_CMDL ]]; then
+if [[ -f $USER_CONFIG && -z $DAPSROOT_CMDL ]]; then
     source "$USER_CONFIG"
     recover_cmdl_values
 fi
 
-# IF we have a custom DTDROOT, $DTDROOT is set by now - if not, use the default
-if [[ -n $DTDROOT ]]; then
-    # custom DTDROOT was set
-    if [[ ! -d "$DTDROOT" ]]; then
-        exit_on_error "dtdroot $DTDROOT is no valid directory"
+# IF we have a custom DAPSROOT, $DAPSROOT is set by now - if not, use the default
+if [[ -n $DAPSROOT ]]; then
+    # custom DAPSROOT was set
+    if [[ ! -d "$DAPSROOT" ]]; then
+        exit_on_error "dtdroot $DAPSROOT is no valid directory"
     else
         # valid directory
         #  strip trailing slash
-        DTDROOT=${DTDROOT%/}
-        BIN_DIR="${DTDROOT}/bin"
+        DAPSROOT=${DAPSROOT%/}
+        BIN_DIR="${DAPSROOT}/bin"
         export PATH=$BIN_DIR:$PATH
-        LIB_DIR="${DTDROOT}/lib"
-        CONFIG="${DTDROOT}/etc/config"
-        XML_CATALOG_FILES="$DTDROOT/etc/catalog.xml"
+        LIB_DIR="${DAPSROOT}/lib"
+        CONFIG="${DAPSROOT}/etc/config"
+        XML_CATALOG_FILES="$DAPSROOT/etc/catalog.xml"
     fi
 else
-    # default DTDROOT
-    #
+    # default DAPSROOT
     # no need to set BIN_DIR here, since it is /usr/bin
-    DTDROOT="$DEFAULT_DTDROOT"
+    DAPSROOT="$DEFAULT_DAPSROOT"
     LIB_DIR="$DEFAULT_LIB_DIR"
     CONFIG="$DEFAULT_CONFIG"
 fi
 
 # Now that everything is in place, source the functions, the system config
 # and the user config (again)
-
 source "$LIB_DIR/daps_functions"
 source "$CONFIG"
 if [[ -f $USER_CONFIG ]]; then
@@ -757,87 +840,86 @@ case "$SUBCMD" in
 esac
 
 #-------------------------------------
-# Set up BASE_DIR and ENVFILE
-
-# There are three possibilities to set an ENV file:
-# 1. Command line:
-#    $ENVFILE is set - takes precedence over 2. and 3.
-# 2. ENV files has been sourced:
-#    $DAPS_ENV_NAME is set - takes precedence over 3.
-# 3. Default ENV has been set in ~/.daps/config
-#    $DAPS_ENV_DEFAULT is set
+# Source DOCCONF and set up MAIN, DOC_DIR
 #
-# if ENVFILE or MAIN are already set, we skip the while loop
-# if 2. and 3. fail, we try to set ENVFILE automatically
+# The black magic part of daps ... ;-)
 #
-
-if [[ -z $ENVFILE && -z $MAIN ]]; then 
-    # first check for $DAPS_ENV_NAME
-    if [[ -n $DAPS_ENV_NAME ]]; then
-        ENVFILE="$DAPS_ENV_NAME"
-    # second check for $DAPS_ENV_DEFAULT
-    elif [[ -n $DAPS_ENV_DEFAULT ]]; then
-        ENVFILE="$DAPS_ENV_DEFAULT"
-    # last, try to get the ENVfile automatically
-    get_envfile    
-    elif [[ 0 != $? ]]; then
-        # seting ENVfile failed
-        exit_on_error "Please specify an ENV or a MAIN file at the command line"
-    fi
-fi
-
-# If we arrive here, either ENVFILE, MAIN or both are set (or we have exited)
-# So we try to get a BASE_DIR if it does not exist
+# Three possibilities:
+# 1. MAIN was set on the command line or via user config
+# 2. DOCCONF was set on the command line
+# 3. MAIN and DOCCONF were _not_ set
 #
-if [[ -z $BASE_DIR ]]; then
-    get_basedir
-    if [[ 0 != $? ]]; then
-        if [[ -n $ENVFILE ]]; then
-            exit_on_error "Cannot find a valid BASEDIR for ENVFILE \"$ENVFILE\""
-        elif [[ -n $MAIN ]]; then
-            exit_on_error "Cannot find a valid BASEDIR for MAIN file \"$MAIN\""
+# Use MAIN_CMDL and DOCCONF_CMDL in the following in order to avoid that
+# these get overwritten by chance with values from the DOCCONF files
+# (DOCCONF should never be set in an ENV file and MAIN_CMDL should always
+# overwrite a MAIN setting from DOCCONF)
+# The real values will be set when calling recover_cmdl_values
+
+
+if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
+# DOCCONF and MAIN were not set on the command line, check other possibilities
+    if [[ -n $DOCCONF_NAME ]]; then
+    # check if DOCCONF was sourced
+    # takes precedence over a default set in config
+        if [[ -e "$DOCCONF_NAME" ]]; then
+            DOCCONF_CMDL=$(absolute_path "$DOCCONF_NAME")
+            DOC_DIR=$(dirname "$DOCCONF_CMDL")
+            ccecho "info" "Using previously sourced DOCCONF $DOCCONF_CMDL"
         else
-            exit_on_error "Please specify a BASE_DIR at the command line"
+            exit_on_error "Cannot find previously sourced DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you sourced the config, or you need to provide an absolute path when\nsourcing the doc config."
         fi
-    fi
-elif [[ ! -d ${BASE_DIR}/xml ]]; then
-    exit_on_error "Could not find an xml/ subdirectory in BASE_DIR $BASE_DIR"
-fi
-
-# If we arrive here, BASE_DIR is set and valid (or we have exited)
-# Now check, whether ${BASE_DIR}/$ENVFILE and ${BASE_DIR}/$MAIN are valid, too
-#
-#  strip trailing slash
-BASE_DIR=${BASE_DIR%/}
-if [[ -n $ENVFILE ]]; then
-    if [[ ! -f ${BASE_DIR}/$ENVFILE ]]; then
-        exit_on_error "\nENVFILE: \"$ENVFILE\" in BASEDIR: $BASE_DIR\ncould not be found. Check the respective commandline options or the config files"
+    elif [[ -n $DOCCONF_DEFAULT ]]; then
+    # check if a default value was specified in the user/system config file
+        if [[ -e $DOCCONF_DEFAULT ]]; then
+            DOCCONF_CMDL=$(absolute_path "$DOCCONF_DEFAULT")
+            DOC_DIR=$(dirname "$DOCCONF_CMDL")
+            ccecho "info" "Using DOCCONF $DOCCONF_DEFAULT from config files"
+        else
+            exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck you config file at $USER_CONFIG."
+        fi
     else
-        # exit on old ENV files
-        egrep "^\s*[^#]*(\.|source)\s+\.env-profile" ${BASE_DIR}/$ENVFILE >/dev/null && exit_on_error "Looks like you are going to use an old susedoc ENVfile."
-        if [[ 0 != $VERBOSITY ]]; then
-            ccecho "info" "Using ENVFILE $ENVFILE in BASEDIR $BASE_DIR"
-        fi
+    # try to automatically set DOCCONF
+        autoset_docconf
     fi
-elif [[ -n $MAIN ]]; then
-    if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
-        exit_on_error "\nMAIN file: \"$MAIN\" in BASEDIR: $BASE_DIR/xml\ncould not be found. Check the respective commandline options or the config files"
+elif [[ -n $MAIN_CMDL ]]; then
+    # MAIN was set on the command line or in the user config
+    set_mainfile "$MAIN_CMDL"
+elif [[ -n $DOCCONF_CMDL ]]; then
+    # check if DOCCONF is a regular file
+    if [[ -e $DOCCONF_CMDL ]]; then
+        DOCCONF_CMDL=$(absolute_path "$DOCCONF_CMDL")
+        DOC_DIR=$(dirname "$DOCCONF_CMDL")
     else
-        if [[ 0 != $VERBOSITY ]]; then
-            ccecho "info" "Using MAIN file $MAIN in BASEDIR $BASE_DIR"
-        fi
+        exit_on_error "The file \"$DOCCONF\" you specified with --docconf is not a valid file"
     fi
 fi
+
+# Sanity checks
+#
+[[ -z "$DOC_DIR" ]] &&  exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened"
+[[ -d "${DOC_DIR}/xml" ]] ||  exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
+[[ -z "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: \$DOCCONF is not set. This should not have happened"
+[[ -e "$DOCCONF_CMDL" ]] || exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
 
 #
-# FINALLY! Source the ENV-file, recover the command line values and we
-# are done setting the environment
+# FINALLY! Source the DOCCONF file, recover the command line values
 
-if [[ -n $ENVFILE ]]; then
-    source ${BASE_DIR}/$ENVFILE
-    recover_cmdl_values
-    sanitize_paths
+[[ -n $DOCCONF_CMDL ]] && source $DOCCONF_CMDL
+recover_cmdl_values
+sanitize_paths
+
+# If MAIN was not specified on the command line, set MAIN to an absolute
+# path
+if [[ -z "$MAIN_CMDL" ]]; then
+    set_mainfile "$MAIN"
+    MAIN="$MAIN_CMDL"
 fi
+
+# A final test
+[[ -e "$MAIN" ]] || exit_on_error "Fatal: Could not find $MAIN"
+
+# Set a default BUILD_DIR
+[[ -z $BUILD_DIR ]] && BUILD_DIR=${DOC_DIR}/build
 
 #----------
 # Check some values
@@ -868,20 +950,15 @@ else
     COLOR=0
 fi
 
-# MAIN
-if [[ ! -f ${BASE_DIR}/xml/$MAIN ]]; then
-    exit_on_error "MAIN ${BASE_DIR}/xml/$MAIN does not exist"
-fi
-
 #----------
-# Conditional exports
+# Values that need to be exported and are not set in the config
 #
 
 # book name
 if [[ -n $PDFNAME ]]; then
     export BOOK="$PDFNAME"
 else
-    export BOOK="${ENVFILE#*${CONF_PREFIX}}"
+    export BOOK="${DOCCONF#*${CONF_PREFIX}}"
 fi
 
 # FOP
@@ -899,13 +976,8 @@ fi
 
 # R_DIR / LOG_DIR
 #
-if [[ -n $BUILD_DIR ]]; then
-    R_DIR="${BUILD_DIR}/${BOOK}/"
-    LOG_DIR="${R_DIR}/log"
-else
-    R_DIR="${BASE_DIR}/build/${BOOK}"
-    LOG_DIR="${R_DIR}/log"
-fi
+R_DIR="${BUILD_DIR}/${BOOK}/"
+LOG_DIR="${R_DIR}/log"
 
 #----------
 # Now export all variables set by the config file

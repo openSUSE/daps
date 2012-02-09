@@ -58,14 +58,14 @@ ifdef STYLEROOT
   STYLE_CUSTOM_FALLBACK := $(FALLBACK_STYLEROOT)
 endif
 #
-# if DTDROOT was changed on the commandline or in the config, we assume
+# if DAPSROOT was changed on the commandline or in the config, we assume
 # we are in "devel" mode and want to use stylesheets from the daps checkout
 # This variables purpose is to make the life of the daps developers easier - it
 # can not be used when deeloping custom stylesheets - in that case, specify
-# SRYLEROOT on teh command line, ENV-file or user config
+# SRYLEROOT on the command line, DC-file or user config
 
-ifneq ($(DTDROOT), $(DEFAULT_DTDROOT))
-#  STYLE_DEVEL           := $(DTDROOT)/suse-xslt
+ifneq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
+#  STYLE_DEVEL           := $(DAPSROOT)/suse-xslt
   STYLE_DEVEL :=
 endif
 

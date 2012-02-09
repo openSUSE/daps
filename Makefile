@@ -28,16 +28,19 @@ DAPS_CONFDIR  := $(DESTDIR)/etc/daps
 DAPS_SHAREDIR := $(DESTDIR)$(PREFIX)/daps
 DAPS_DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/daps
 
+# from the suse-xsl-stylesheets package
+STYLEROOT     := $(PREFIX)/xml/docbook/stylesheet/suse
+
 #-------
 # Man pages
 #
-ENV-manpages := ENV-daps-manpages
-MAN_PAGE_DIR=$(subst ENV-,,$(ENV-manpages))
+DC-manpages := DC-daps-manpages
+MAN_PAGE_DIR=$(subst DC-,,$(DC-manpages))
 
 #-------
 # Manuals
 #
-MANUALS=$(subst doc/ENV-,,$(wildcard doc/ENV-*))
+MANUALS=$(subst doc/DC-,,$(wildcard doc/DC-*))
 
 all: catalogs/$(DAPS_CATALOG) manuals manpages
 	@echo "Ready to install..."
@@ -48,9 +51,9 @@ install: create-install-dirs
 	install -m644 lib/docbook_macros.el $(DESTDIR)$(PREFIX)/emacs/site-lisp
 	install -m644 lib/suse_aspell.rws $(DESTDIR)$(PREFIX)/aspell-0.60
 	install -m644 catalogs/$(DAPS_CATALOG) $(DESTDIR)/etc/xml
-	install -m644 BUGS COPYING* README* TODO $(DAPS_DOCDIR)
+	install -m644 BUGS COPYING* INSTALL README* TODO $(DAPS_DOCDIR)
 ifdef MAN_PAGE_DIR
-	cp -a man/build/$(MAN_PAGE_DIR)/man/* $(DESTDIR)$(PREFIX)/man
+	cp -a man/build/$(MAN_PAGE_DIR)/man $(DESTDIR)$(PREFIX)
 endif
 ifdef MANUALS
 	for BOOK in $(MANUALS); do \
@@ -71,9 +74,6 @@ ifdef MANUALS
 	mkdir -p $(DAPS_DOCDIR)/html
 else
 	mkdir -p $(DAPS_DOCDIR)
-endif
-ifdef MAN_PAGE_DIR
-	mkdir -p $(DESTDIR)$(PREFIX)/man
 endif
 	mkdir -p $(DAPS_CONFDIR)
 	mkdir -p $(DAPS_SHAREDIR)
@@ -143,6 +143,12 @@ catalogs/$(DAPS_CATALOG):
 	  "system" "$(URN_SUSE):docbook45-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/docbook45-profile.xsl" $@
 	xmlcatalog --noout --add \
+	  "system" "$(URN_SUSE):docbook50-profile.xsl" \
+	  "file://$(DAPS_PROFDIR)/docbook50-profile.xsl" $@
+	xmlcatalog --noout --add \
+	  "system" "$(URN_SUSE):docbook51-profile.xsl" \
+	  "file://$(DAPS_PROFDIR)/docbook51-profile.xsl" $@
+	xmlcatalog --noout --add \
 	  "system" "$(URN_SUSE):novdoc-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
@@ -162,13 +168,13 @@ $(DIRECTORIES):
 .PHONY: manuals
 manuals:
 	for BOOK in $(MANUALS); do \
-	  bin/daps --debug --dtdroot=$(DAPSROOT) --basedir=$(DAPSROOT)/doc \
-	    --envfile=ENV-$$BOOK --color=0 --styleroot=$(DAPSROOT)/suse-xslt \
-	    html-single --static \
-	    --css=$(DAPSROOT)/suse-xslt/html/susebooks.css; \
+	  bin/daps --debug --dapsroot=$(DAPSROOT) \
+	    --docconfig=$(DAPSROOT)/doc/DC-$$BOOK --color=0 \
+	    --styleroot=$(STYLEROOT) html-single --static \
+	    --css=$(STYLEROOT)/html/susebooks.css; \
 	done
 
 .PHONY: manpages
 manpages:
-	bin/daps --debug --dtdroot=$(DAPSROOT) --basedir=$(DAPSROOT)/man \
-	  --envfile=$(ENV-manpages) --color=0 man
+	bin/daps --debug --dapsroot=$(DAPSROOT) --color=0 \
+	  --docconfig=$(DAPSROOT)/man/$(DC-manpages) man

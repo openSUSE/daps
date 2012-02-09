@@ -161,9 +161,11 @@ function parse_args () {
 #
 ###########################################################################
 function init_env {
-    # Create the log directory and a link to the ENV-file in R_DIR
+    # Create the log directory and a link to the DC-file in R_DIR
     # (R_DIR and LOG_DIR are set in bin/daps) 
-
+    
+    local DC_COUNT
+    
     # create directories
     
     mkdir -p $R_DIR
@@ -172,15 +174,15 @@ function init_env {
     fi
 
     
-    if [[ ! -f ${R_DIR}/$ENVFILE ]]; then
-        ln -sf ${BASE_DIR}/$ENVFILE ${R_DIR}/$ENVFILE || ccecho "warn" "Warning: Cannot create link to $ENVFILE in $R_DIR"
+    if [[ ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
+        ln -sf $DOCCONF ${R_DIR}/$(basename "$DOCCONF") || ccecho "warn" "Warning: Cannot create link to $DOCCONF in $R_DIR"
     fi
 
-    # There should only be one ENVFILE in $R_DIR
+    # There should only be one DC-file in $R_DIR
     #
-    ENV_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
-    if [[ $ENV_COUNT -gt 1 ]]; then
-        ccecho "warn" "$R_DIR contains more than one ENVFILE"
+    DC_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+    if [[ $DC_COUNT -gt 1 ]]; then
+        ccecho "warn" "$R_DIR contains more than one DC-file"
     fi
 
     #
@@ -280,17 +282,17 @@ function call_make () {
         test -z "$CORE_NO" && CORE_NO=1
         MAKECMD="/usr/bin/make -j${CORE_NO} -s"
     fi
-    MCMD="$MAKECMD -f $DTDROOT/make/common.mk $SUB_CMD $@"
+    MCMD="$MAKECMD -f $DAPSROOT/make/common.mk $SUB_CMD $@"
 
     
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 = $VERBOSITY ]]; then
         SHOWVARS=$(cat <<EOF
 ---------------
-          BASE_DIR: $BASE_DIR
+           DOC_DIR: $DOC_DIR
          BUILD_DIR: $BUILD_DIR
-           DTDROOT: $DTDROOT
-           ENVFILE: $ENVFILE
+          DAPSROOT: $DAPSROOT
+           DOCCONF: $DOCCONF
               BOOK: $BOOK
 
          STYLEROOT: $STYLEROOT
@@ -913,13 +915,13 @@ function checklink () {
         help_file
         help_help
         help_rootid
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the ENV-file is used\n           * $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
     if [[ -z $P_ROOTID && -z $P_FILE ]]; then
         if [[ 0 != $VERBOSITY ]]; then
-            ccecho "info" "Neither file nor rootid specified, using rootid from ENV-file"
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
     elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
@@ -929,7 +931,7 @@ function checklink () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DTDROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(xsltproc $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -961,7 +963,7 @@ function getimages () {
     shift
     
     declare -a IMGLIST
-    IMAGEDIR="$BASE_DIR/images/src/"
+    IMAGEDIR="$DOC_DIR/images/src/"
 
     # any kind of verbosity is unwanted in this case
     WRITE_LOG=0
@@ -983,7 +985,7 @@ function getimages () {
         help_rootid
         help_show
         help_viewer
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the ENV-file is used\n           * $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
@@ -995,7 +997,7 @@ function getimages () {
     # set ROOTID - either directly or via $FILE
     if [[ -z $P_ROOTID && -z $P_FILE ]]; then
         if [[ 0 != $VERBOSITY ]]; then
-            ccecho "info" "Neither file nor rootid specified, using rootid from ENV-file"
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
     elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
@@ -1005,7 +1007,7 @@ function getimages () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DTDROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(xsltproc $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1095,7 +1097,8 @@ function wrong_parameter () {
 
 # needed by docmanager
 function show_env {
-         echo "BASE_DIR=$BASE_DIR;ENVFILE=$ENVFILE"
+    echo "DOC_DIR=$DOC_DIR;DOCCONF=$DOCCONF"
+    exit 0
 }
 
 #
@@ -1108,7 +1111,7 @@ function show_env {
 function init_wd () {
     # Initialize a working directory to get started with daps
     #
-  
+
     SARGS=$(getopt -o h -l help,dirname:,rootelement: -n $0 -- "$@")
     if [[ 1 = $? ]]; then
         wrong_parameter "$TARGET"
@@ -1118,10 +1121,9 @@ function init_wd () {
 	case "$1" in
             -h|--help)
                 echo "
-daps --envfile=<ENVFILE> --basedir=<BASEDIR> init [options]
+daps --docconfig=<PATH TO DC-FILE> init [options]
 
-Create a working environment for a book/article. Specifying an ENVFILE and
-a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
+Create a working environment for a book/article. Specifying an DC-FILE is mandatory.
 "
                 help_dirname
                 help_rootelement
@@ -1130,8 +1132,8 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
 		;;
             --dirname)
                 DIRNAME="$2"
-                # strip trailing slash
-                DIRNAME=${DIRNAME%/}
+                # make path absolute
+                DIRNAME=$(readlink -nm $DIRNAME)
                 shift 2
                 ;;
 	    --rootelement)
@@ -1147,8 +1149,8 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
 	esac
     done
 
-    [[ -z "$ENVFILE" ]] && exit_on_error "You must specify an ENV-file when calling $ME init"
-    [[ -z "$BASE_DIR" ]] && exit_on_error "You must specify BASE_DIR when calling $ME init"
+    [[ -z "$DOCCONF" ]] && exit_on_error "You must specify an DC-file when calling $ME init"
+#    [[ -z "$DOC_DIR" ]] && exit_on_error "You must specify DOC_DIR when calling $ME init"
     
     # default ROOTELEMENT is book
     test -z $ROOTELEMENT && ROOTELEMENT=book
@@ -1156,32 +1158,33 @@ a BASEDIR is mandatory. <BASEDIR> must exist, init will create a subdirectory.
     if [[ -n $DIRNAME ]]; then
         BOOK="$DIRNAME"
     else
-        BOOK="${ENVFILE#*${CONF_PREFIX}}"
+        BOOK=$(basename "$DOCCONF")
+        BOOK="${BOOK#*${CONF_PREFIX}}"
     fi
     
-    BASE_DIR="${BASE_DIR}/$BOOK"
-    R_DIR="${BASE_DIR}/build/${BOOK}"
+    DOC_DIR="${DOC_DIR}/$BOOK"
+    R_DIR="${DOC_DIR}/build/${BOOK}"
     LOG_DIR="${R_DIR}/log"
     
-    # Create BASE_DIR and needed subdirectories
-    mkdir -p $BASE_DIR || exit_on_error "Cannot create $BASE_DIR" 
-    mkdir -p ${BASE_DIR}/images/src/{dia,fig,png,svg} ${BASE_DIR}/xml || exit_on_error "Cannot create subdirectories in $BASE_DIR" 
+    # Create DOC_DIR and needed subdirectories
+    mkdir -p $DOC_DIR || exit_on_error "Cannot create $DOC_DIR" 
+    mkdir -p ${DOC_DIR}/images/src/{dia,fig,png,svg} ${DOC_DIR}/xml || exit_on_error "Cannot create subdirectories in $DOC_DIR" 
 
     # copy the templates
     #
-    # ENV file
-    cp ${LIB_DIR}/templates/ENV-file.template ${BASE_DIR}/$ENVFILE && \
-        sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${BASE_DIR}/$ENVFILE
+    # DC-file
+    cp ${LIB_DIR}/templates/DC-file.template $DOCCONF && \
+        sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g $DOCCONF
     # MAIN
-    cp ${LIB_DIR}/templates/MAIN.$ROOTELEMENT.template ${BASE_DIR}/xml/MAIN-${BOOK}.xml
+    cp ${LIB_DIR}/templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml
     # graphics
-    cp ${LIB_DIR}/templates/example{1,2}.png ${BASE_DIR}/images/src/png/
+    cp ${LIB_DIR}/templates/example{1,2}.png ${DOC_DIR}/images/src/png/
   
     init_env
     if [[ 0 != $VERBOSITY ]]; then
         ccecho "result" "Successfully created a working environment at"
     fi
-    ccecho "result" "${BASE_DIR}"
+    ccecho "result" "${DOC_DIR}"
 }
 
 ###########################################################################
@@ -1225,9 +1228,9 @@ function help_css () {
                               Default: unset"
 }
 function help_dirname () {
-    echo "    --dirname=DIR             Directory names to be created in BASE_DIR
-                              Default: generated by stripping 'ENV-' from the
-                              ENV filename"
+    echo "    --dirname=DIR             Directory names to be created in DOC_DIR
+                              Default: generated by stripping '$CONF_PREFIX' from the
+                              doc config filename"
 }
 function help_draft () {
     echo "    --draft, -d               Add a 'DRAFT' watermark to all pages of the book
@@ -1261,8 +1264,8 @@ function help_modified () {
 function help_name () {
     echo "    --name=BOOKNAME           File- and directory names for generated content
                               are derived from BOOKNAME.
-                              Default: generated by stripping 'ENV-' from the
-                              ENV filename"
+                              Default: generated by stripping 'DC-' from the
+                              doc config filename"
 }
 function help_nogzip () {
     echo "    --nogzip                  If specified, man pages will not be compressed
@@ -1303,7 +1306,7 @@ function help_rootelement () {
 function help_rootid () {
     echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
                               (parts or chapters). Default: Usually set
-                              in the ENV-file; if not set the complete set
+                              in the DC-file; if not set the complete set
                               defined in \$MAIN will be built"
 }
 function help_static () {

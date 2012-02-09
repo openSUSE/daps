@@ -45,17 +45,17 @@ endif
 # directly
 #
 
-ifndef BASE_DIR
-  BASE_DIR := $(shell pwd)
+ifndef DOC_DIR
+  DOC_DIR := $(shell pwd)
 endif
-ifndef DTDROOT
-  DTDROOT  := $(DEFAULT_DTDROOT)
+ifndef DAPSROOT
+  DAPSROOT  := $(DEFAULT_DAPSROOT)
 endif
 ifndef BOOK
   BOOK     := mybook
 endif
 ifndef LIB_DIR
-  LIB_DIR  := $(DTDROOT)/lib
+  LIB_DIR  := $(DAPSROOT)/lib
 endif
 ifndef FOP
   FOP      := $(LIB_DIR)/daps-fop
@@ -73,10 +73,10 @@ ifndef XSLTPARAM
   XSLTPARAM :=
 endif
 
-# if BUILD_DIR was not set, use $(BASE_DIR)/build
+# if BUILD_DIR was not set, use $(DOC_DIR)/build
 #
 ifndef BUILD_DIR
-  BUILD_DIR := $(BASE_DIR)/build
+  BUILD_DIR := $(DOC_DIR)/build
 endif
 
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
@@ -84,7 +84,7 @@ PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
 IMG_GENDIR         := $(BUILD_DIR)/.images
 TMP_DIR            := $(BUILD_DIR)/.tmp
 
-IMG_SRCDIR         := $(BASE_DIR)/images/src
+IMG_SRCDIR         := $(DOC_DIR)/images/src
 
 #------------------------------------------------------------------------
 # DocBook version/Paths
@@ -92,7 +92,7 @@ IMG_SRCDIR         := $(BASE_DIR)/images/src
 # Check whether the sources are DocBook 4 or 5
 # get-docbook-version.xsl returns 4,5, or 0
 
-DOCBOOK_VERSION := $(shell xsltproc $(DTDROOT)/daps-xslt/common/get-docbook-version.xsl $(BASE_DIR)/xml/$(MAIN))
+DOCBOOK_VERSION := $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-docbook-version.xsl $(MAIN))
 
 ifeq ($(DOCBOOK_VERSION), 0)
   $(error $(MAIN) is not a valid DocBook file)
@@ -111,8 +111,8 @@ endif
 # ==> if PROFILE_URN is not set, no profiling will be done
 
 ifndef PROFILE_URN
-  GETXMLSTY    := $(DTDROOT)/daps-xslt/common/get-xml-stylesheet.xsl
-  PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(BASE_DIR)/xml/$(MAIN))
+  GETXMLSTY    := $(DAPSROOT)/daps-xslt/common/get-xml-stylesheet.xsl
+  PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(MAIN))
 endif
 
 # PROFILEDIR is one of the most critical variables. Depending on
@@ -126,6 +126,9 @@ ifdef PROFILE_URN
 else
   PROFILEDIR  := $(PROFILE_PARENT_DIR)/noprofile
 endif
+# profiled MAIN
+PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
+
 
 #------------
 # result paths
@@ -184,25 +187,25 @@ DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR)
 # Misc variables
 #
 #QUIET  ?=
-USESVN := $(shell svn pg doc:maintainer $(BASE_DIR)/xml/$(MAIN) 2>/dev/null)
+USESVN := $(shell svn pg doc:maintainer $(MAIN) 2>/dev/null)
 
 #------------------------------------------------------------------------
 # xslt stylsheets
 
-METAXSLT       := $(DTDROOT)/daps-xslt/common/svn2docproperties.xsl
-STYLEEXTLINK   := $(DTDROOT)/daps-xslt/profiling/process-xrefs.xsl
-STYLEREMARK    := $(DTDROOT)/daps-xslt/common/get-remarks.xsl
-STYLEROOTIDS   := $(DTDROOT)/daps-xslt/common/get-rootids.xsl
-STYLESEARCH    := $(DTDROOT)/daps-xslt/common/search4includedfiles.xsl
-STYLELANG      := $(DTDROOT)/daps-xslt/common/get-language.xsl
-STYLEDESK      := $(DTDROOT)/daps-xslt/desktop/docbook.xsl
-STYLE_DOCUMENT := $(DTDROOT)/daps-xslt/yelp/docbook.xsl
-STYLELINKS     := $(DTDROOT)/daps-xslt/common/get-links.xsl
-STYLEBURN      := $(DTDROOT)/daps-xslt/common/reduce-from-set.xsl
-STYLEINDEX     := $(DTDROOT)/daps-xslt/index/xml2idx.xsl
-STYLESEAIND    := $(DTDROOT)/daps-xslt/common/search4index.xsl
-STYLEEPUBDB    := $(DTDROOT)/daps-xslt/epub/db2db.xsl
-STYLEDB2ND     := $(DTDROOT)/daps-xslt/common/db2novdoc.xsl
+METAXSLT       := $(DAPSROOT)/daps-xslt/common/svn2docproperties.xsl
+STYLEEXTLINK   := $(DAPSROOT)/daps-xslt/profiling/process-xrefs.xsl
+STYLEREMARK    := $(DAPSROOT)/daps-xslt/common/get-remarks.xsl
+STYLEROOTIDS   := $(DAPSROOT)/daps-xslt/common/get-rootids.xsl
+STYLESEARCH    := $(DAPSROOT)/daps-xslt/common/search4includedfiles.xsl
+STYLELANG      := $(DAPSROOT)/daps-xslt/common/get-language.xsl
+STYLEDESK      := $(DAPSROOT)/daps-xslt/desktop/docbook.xsl
+STYLE_DOCUMENT := $(DAPSROOT)/daps-xslt/yelp/docbook.xsl
+STYLELINKS     := $(DAPSROOT)/daps-xslt/common/get-links.xsl
+STYLEBURN      := $(DAPSROOT)/daps-xslt/common/reduce-from-set.xsl
+STYLEINDEX     := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
+STYLESEAIND    := $(DAPSROOT)/daps-xslt/common/search4index.xsl
+STYLEEPUBDB    := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
+STYLEDB2ND     := $(DAPSROOT)/daps-xslt/common/db2novdoc.xsl
 
 #------------------------------------------------------------------------
 # xslt stringparams
@@ -238,7 +241,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-	        --stringparam dtdroot "$(DTDROOT)/" \
+	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
 # CAUTION: path in FOCOLSTRINGS must end with a trailing /
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -246,7 +249,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-	        --stringparam dtdroot "$(DTDROOT)/" \
+	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
 MANSTRINGS   :=  --stringparam man.output.base.dir "$(MAN_DIR)/" \
 		 --stringparam man.output.in.separate.dir 1 \
@@ -264,7 +267,7 @@ endif
 #
 ifeq ("$(DRAFT)", "yes")
   FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
-                  --stringparam xml.source.dir "$(BASE_DIR)/xml/"
+                  --stringparam xml.source.dir "$(DOC_DIR)/xml/"
   FOCOLSTRINGS += --stringparam draft.mode "$(DRAFT)"
   HTMLSTRINGS  += --stringparam draft.mode "$(DRAFT)"
   JSPSTRINGS   += --stringparam draft.mode "$(DRAFT)"
@@ -278,16 +281,16 @@ ifeq ($(FOPTYPE), fop)
                    --stringparam xep.extensions 0
   FOSTRINGS  += --stringparam fop1.extensions 1 \
                 --stringparam xep.extensions 0
-  ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
+  ifeq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
     FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
   else
-    FOP_CONFIG_FILE ?=$(DTDROOT)/etc/fop/fop-daps.xml 
+    FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/fop/fop-daps.xml 
   endif
 else
-  ifeq ($(DTDROOT), $(DEFAULT_DTDROOT))
+  ifeq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
     FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
   else
-    FOP_CONFIG_FILE ?=$(DTDROOT)/etc/xep/xep-daps.xml 
+    FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/xep/xep-daps.xml 
   endif
 endif
 
@@ -318,7 +321,7 @@ else
 endif
 
 # Language string
-LL         ?= $(shell xsltproc --nonet $(STYLELANG) $(BASE_DIR)/xml/$(MAIN))
+LL         ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
 
 # for creating desktop files
 DESKSTRINGS  := --stringparam uselang "${LL}" \
@@ -330,7 +333,7 @@ DESKSTRINGS  := --stringparam uselang "${LL}" \
 ifdef USEINDEX
   # returns "Yes" if index is used
   INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLESEAIND) \
-                 $(BASE_DIR)/xml/$(MAIN))
+                 $(MAIN))
   INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
 else
   INDEX       :=
@@ -342,7 +345,7 @@ endif
 
 # find all xml files in subdirectory xml
 # and generate profile targets
-#SRCFILES    := $(wildcard $(BASE_DIR)/xml/*.xml)
+#SRCFILES    := $(wildcard $(DOC_DIR)/xml/*.xml)
 
 # find all xml files for the current set and generate profile targets
 #
@@ -366,29 +369,29 @@ endif
 # xsltproc)
 #
 SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
-		  --stringparam xml.src.path "$(BASE_DIR)/xml/" \
-		  --stringparam mainfile $(MAIN) \
-		  $(DTDROOT)/daps-xslt/common/get-all-used-files.xsl \
-		  $(BASE_DIR)/xml/$(MAIN) | tr \" \')
+		  --stringparam xml.src.path "$(DOC_DIR)/xml/" \
+		  --stringparam mainfile $(notdir $(MAIN)) \
+		  $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
+		  $(MAIN) | tr \" \')
 
 # XML source files for the whole set
 #
 SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
-		  $(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
+		  $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
 
 # XML source files for the currently used document (defined by teh rootid)
 #
 ifdef ROOTSTRING
   DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		--stringparam xml.or.img xml \
-		$(DTDROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
 else
   DOCFILES  := $(SRCFILES)
 endif
 
-PROFILES    := $(subst $(BASE_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
-DISTPROFILE := $(subst $(BASE_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
+PROFILES    := $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
+DISTPROFILE := $(subst $(DOC_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
 
 
 #------------------------------------------------------------------------
@@ -399,11 +402,11 @@ WRONG_CAP   := $(filter-out $(USED_LC), $(USED))
 #------------------------------------------------------------------------
 # Include the other make files
 #
-include $(DTDROOT)/make/images.mk
-include $(DTDROOT)/make/layout.mk
-include $(DTDROOT)/make/package.mk
-#include $(DTDROOT)/make/variables.mk
-#include $(DTDROOT)/make/obb.mk
+include $(DAPSROOT)/make/images.mk
+include $(DAPSROOT)/make/layout.mk
+include $(DAPSROOT)/make/package.mk
+#include $(DAPSROOT)/make/variables.mk
+#include $(DAPSROOT)/make/obb.mk
 
 #------------------------------------------------------------------------
 #
@@ -497,7 +500,7 @@ $(MAN_DIR): | $(DIRECTORIES)
 .PHONY: man
 man: | $(DIRECTORIES)
 man: $(MAN_DIR) $(PROFILEDIR)/.validate $(TMP_XML)
-man: MAN_RESULTS = $(shell xsltproc --xinclude $(MANSTRINGS) $(DTDROOT)/daps-xslt/common/get-manpage-filename.xsl $(BASE_DIR)/xml/$(MAIN))
+man: MAN_RESULTS = $(shell xsltproc --xinclude $(MANSTRINGS) $(DAPSROOT)/daps-xslt/common/get-manpage-filename.xsl $(MAIN))
 man:
 	xsltproc $(ROOTSTRING) --xinclude $(MANSTRINGS) $(STYLEMAN) $(TMP_XML)
 ifneq ("$(GZIP_MAN)", "no")
@@ -515,7 +518,7 @@ endif
 .PHONY: force
 force: | $(DIRECTORIES)
 force: $(PROFILEDIR)/.validate
-	touch $(BASE_DIR)/xml/$(MAIN)
+	touch $(MAIN)
 	rm -f $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo # pdf only!
 	$(MAKE) pdf
 
@@ -544,11 +547,11 @@ ifeq ($(VERBOSITY), 1)
 endif
 ifeq ($(DOCBOOK_VERSION), 4)
 	xmllint --noent --postvalid --noout \
-		--xinclude $(PROFILEDIR)/$(MAIN)
+		--xinclude $(PROFILED_MAIN)
 else
 
 	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing -c $(DOCBOOK5_RNC_SCHEME) \
-	  $(PROFILEDIR)/$(MAIN)
+	  $(PROFILED_MAIN)
 endif
 	touch $(PROFILEDIR)/.validate
 #	@echo "checking for unexpected characters: ... "
@@ -591,8 +594,8 @@ clean-all real-clean:
 .PHONY: projectfiles
 projectfiles: $(DOCFILES)
 projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
-projectfiles: FILES    := $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
-			   $(BASE_DIR)/$(ENVFILE) $(DOCFILES)
+projectfiles: FILES    := $(addprefix $(DOC_DIR)/xml/, $(ENTITIES)) \
+			   $(DOCCONF) $(DOCFILES)
 projectfiles:
 ifeq ($(PRETTY_FILELIST), 1)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
@@ -606,8 +609,8 @@ endif
 remainingfiles: $(DOCFILES)
 remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 remainingfiles: FILES    := $(filter-out \
-			     $(addprefix $(BASE_DIR)/xml/, $(ENTITIES)) \
-			     $(BASE_DIR)/$(ENVFILE) $(DOCFILES), $(SRCFILES))
+			     $(addprefix $(DOC_DIR)/xml/, $(ENTITIES)) \
+			     $(DOCCONF) $(DOCFILES), $(SRCFILES))
 remainingfiles:
 ifeq ($(PRETTY_FILELIST), 1)
 	@echo  -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
@@ -702,7 +705,7 @@ bigfile-reduced: $(TMP_XML)
 #
 .PHONY: dist
 dist: ROOTIDS = $(shell xsltproc --xinclude $(STYLEROOTIDS) \
-		$(PROFILEDIR)/$(MAIN))
+		$(PROFILED_MAIN))
 dist: | $(DIRECTORIES)
 dist: $(PROFILEDIR)/.validate
 	for i in $(ROOTIDS); do \
@@ -713,7 +716,7 @@ dist: $(PROFILEDIR)/.validate
 # dist-xml:
 
 # create tarball with xml files for the _whole set_ plus entity declaration
-# files and the ENV-file that is sourced. Such an archive is needed to
+# files and the DC-file that is sourced. Such an archive is needed to
 # distribute a book. Only packaging the book itself is not sufficient, because
 # it may link into other books of the set and therefore need sources from
 # the whole set in order to properly build.
@@ -742,9 +745,9 @@ dist: $(PROFILEDIR)/.validate
 dist-xml: $(DISTPROFILE)
 dist-xml: link-entity-dist
 dist-xml: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
-			$(shell xsltproc --nonet --xinclude \
-			$(STYLESEARCH) $(PROFILE_PARENT_DIR)/dist/$(MAIN)) \
-			$(MAIN)))
+			$(shell xsltproc --nonet --xinclude $(STYLESEARCH) \
+			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
+			$(notdir $(MAIN))))
 dist-xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-xml:
@@ -753,13 +756,13 @@ ifeq ($(VERBOSITY),1)
 endif
 	tar chf $(TARBALL) --absolute-names \
 	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
-	tar rhf $(TARBALL)  --absolute-names --transform=s%$(BASE_DIR)/%% \
-	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
+	tar rhf $(TARBALL)  --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
 	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
 
 #--------------
-# dist-book: Create an archive with profiled xml, ENV-file, and entity
+# dist-book: Create an archive with profiled xml, DC-file, and entity
 # declarations. Entities in xml sources are preserved, see explanation
 # on dist-xml target
 #
@@ -769,7 +772,8 @@ dist-book: link-entity-dist
 dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet $(ROOTSTRING) \
 			--xinclude $(STYLESEARCH) \
-			$(PROFILE_PARENT_DIR)/dist/$(MAIN)) $(MAIN)))
+			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
+			$(notdir $(MAIN))))
 dist-book: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
 dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-book:
@@ -778,8 +782,8 @@ ifeq ($(VERBOSITY),1)
 endif
 	tar chf $(TARBALL) --absolute-names \
 	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
-	tar rhf $(TARBALL) --absolute-names --transform=s%$(BASE_DIR)/%% \
-	  $(BASE_DIR)/$(ENVFILE) $(addprefix $(BASE_DIR)/xml/,$(ENTITIES))
+	tar rhf $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
 	bzip2 -9f $(TARBALL)
 	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
 
@@ -961,9 +965,9 @@ ifdef PROFILE_URN
 	  --stringparam show.comments $(COMMENTS) \
 	  --stringparam show.remarks $(REMARKS) \
 	  --stringparam projectfile PROJECTFILE.$(BOOK) $(PROFILE_URN) \
-	  $(PROFILEDIR)/$(MAIN)
+	  $(PROFILED_MAIN)
 else
-	xmllint --xinclude --output $@ $(PROFILEDIR)/$(MAIN)
+	xmllint --xinclude --output $@ $(PROFILED_MAIN)
 endif
 
 
@@ -982,7 +986,7 @@ $(PROFILESUBDIRS):
 	mkdir -p $@
 
 
-$(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK) $(wildcard $(BASE_DIR)/xml/*.ent)
+$(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK) $(wildcard $(DOC_DIR)/xml/*.ent)
 $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 
 #---------------
@@ -996,7 +1000,7 @@ $(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
 #
 
 $(PROFILEDIR)/%: | $(PROFILESUBDIRS)
-$(PROFILEDIR)/%: $(BASE_DIR)/xml/%
+$(PROFILEDIR)/%: $(DOC_DIR)/xml/%
 ifdef PROFILE_URN
   ifeq ($(VERBOSITY),1)
 #tput el1
@@ -1022,8 +1026,8 @@ endif
 # because they would be resolved else. The intermediate files without
 # entities resides in tmp/dist/xml . The sed scripts that are used to
 # protect the entities and convert them back are 
-# $(DTDROOT)/etc/entities.preserve.sed and
-# $(DTDROOT)/etc/entities.recover.sed. Intermediate profiled sources in
+# $(DAPSROOT)/etc/entities.preserve.sed and
+# $(DAPSROOT)/etc/entities.recover.sed. Intermediate profiled sources in
 # $TMP_DIR/dist/%.xml are used for this.
 #
 # We want $(PROFILE_PARENT_DIR)/dist/*.xml to be recreated everytime to
@@ -1055,7 +1059,7 @@ endif
 		  $(PROFILE_URN) $<
 	$(LIB_DIR)/entities-exchange.sh -d recover $@
 else
-$(PROFILE_PARENT_DIR)/dist/%: $(BASE_DIR)/xml/% link-entity-noprofile
+$(PROFILE_PARENT_DIR)/dist/%: $(DOC_DIR)/xml/% link-entity-noprofile
 	ln -sf $< $@
 endif
 
@@ -1063,7 +1067,7 @@ endif
 # the TMP stuff
 #
 $(TMP_DIR)/dist/xml/%: $(TMP_DIR)/dist/xml
-$(TMP_DIR)/dist/xml/%: $(BASE_DIR)/xml/% link-entity-dist
+$(TMP_DIR)/dist/xml/%: $(DOC_DIR)/xml/% link-entity-dist
 	$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
 
 
@@ -1090,7 +1094,7 @@ ifeq ($(VERBOSITY),1)
 endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
-	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/noprofile; \
+	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/noprofile; \
 	  done \
 	fi
 
@@ -1103,8 +1107,8 @@ ifeq ($(VERBOSITY),1)
 endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
-	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/dist/$$i; \
-	    ln -sf $(BASE_DIR)/xml/$$i $(TMP_DIR)/dist/xml/$$i; \
+	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/dist/$$i; \
+	    ln -sf $(DOC_DIR)/xml/$$i $(TMP_DIR)/dist/xml/$$i; \
 	  done \
 	fi
 
@@ -1122,13 +1126,13 @@ endif
 #
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): | $(DIRECTORIES)
-$(PROFILEDIR)/PROJECTFILE.$(BOOK): $(BASE_DIR)/$(ENVFILE)
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
 endif
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
-	    ln -sf $(BASE_DIR)/xml/$$i $(PROFILEDIR)/; \
+	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILEDIR)/; \
 	  done \
 	fi
 ifeq ($(VERBOSITY),1)
@@ -1248,7 +1252,7 @@ endif
 	xsltproc --xinclude $(FOSTRINGS) $(ROOTSTRING)  $(METASTRING) \
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG)  $(XSLTPARAM) \
-	  -o $(BW_FO) $(STYLEFO) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  -o $(BW_FO) $(STYLEFO) $(PROFILED_MAIN) $(DEVNULL)
 	@ccecho "info" "Created fo file $(BW_FO)"
 
 # Color PDF
@@ -1267,7 +1271,7 @@ endif
 	xsltproc --xinclude $(FOCOLSTRINGS) $(ROOTSTRING) $(METASTRING)\
 	  $(INDEXSTRING) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(FONTDEBUG) $(XSLTPARAM) -o $(COLOR_FO) $(STYLEFO) \
-	  $(PROFILEDIR)/$(MAIN)
+	  $(PROFILED_MAIN)
 	@ccecho "info" "Created fo file $(COLOR_FO)"
 
 
@@ -1321,11 +1325,11 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating Index..."
 endif
 	xsltproc $(ROOTSTRING) --xinclude --output $@ $(STYLEINDEX) \
-	$(PROFILEDIR)/$(MAIN)
+	$(PROFILED_MAIN)
 
 # not used
 #.idx.ind:
-#	$(DTDROOT)/bin/daps-sortindexterms.py -l $(LL) $< --output $@
+#	$(DAPSROOT)/bin/daps-sortindexterms.py -l $(LL) $< --output $@
 endif
 
 #------------------------------------------------------------------------
@@ -1340,7 +1344,7 @@ $(HTML_DIR):
 
 #
 # in the following we do not use a simple copy command like
-# cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR) because DTDROOT
+# cp -rL $(DAPSROOT)/images/navig/ $(HTML_DIR) because DAPSROOT
 # may contain .svn directories which we do not want to copy
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
@@ -1358,49 +1362,49 @@ else
 	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
 endif
 
-$(HTML_DIR)/navig: $(DTDROOT)/images/navig $(HTML_DIR)
+$(HTML_DIR)/navig: $(DAPSROOT)/images/navig $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DTDROOT)/images navig/ | \
+	tar cp --exclude-vcs -C $(DAPSROOT)/images navig/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DTDROOT)/images/navig/ $(HTML_DIR)
+#	cp -rL $(DAPSROOT)/images/navig/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DTDROOT)/images/navig/ $(HTML_DIR)
+	ln -sf $(DAPSROOT)/images/navig/ $(HTML_DIR)
 endif
 
-$(HTML_DIR)/admon: $(DTDROOT)/images/admon $(HTML_DIR)
+$(HTML_DIR)/admon: $(DAPSROOT)/images/admon $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DTDROOT)/images admon/ | \
+	tar cp --exclude-vcs -C $(DAPSROOT)/images admon/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DTDROOT)/images/admon/ $(HTML_DIR)
+#	cp -rL $(DAPSROOT)/images/admon/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DTDROOT)/images/admon/ $(HTML_DIR)
+	ln -sf $(DAPSROOT)/images/admon/ $(HTML_DIR)
 endif
 
-$(HTML_DIR)/callouts: $(DTDROOT)/images/callouts/ $(HTML_DIR)
+$(HTML_DIR)/callouts: $(DAPSROOT)/images/callouts/ $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DTDROOT)/images callouts/ | \
+	tar cp --exclude-vcs -C $(DAPSROOT)/images callouts/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DTDROOT)/images/callouts/ $(HTML_DIR)
+#	cp -rL $(DAPSROOT)/images/callouts/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DTDROOT)/images/callouts/ $(HTML_DIR)
+	ln -sf $(DAPSROOT)/images/callouts/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/images: $(HTML_DIR) provide-color-images
@@ -1472,7 +1476,8 @@ endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --stringparam use.id.as.filename 1 \
-	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILED_MAIN) \
+	  $(DEVNULL)
 	@if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
@@ -1490,7 +1495,7 @@ endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
-	  --xinclude $(STYLEHSINGLE) $(PROFILEDIR)/$(MAIN) $(DEVNULL)
+	  --xinclude $(STYLEHSINGLE) $(PROFILED_MAIN) $(DEVNULL)
 
 #------------------------------------------------------------------------
 #
@@ -1505,14 +1510,14 @@ $(JSP_DIR):
 $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
 	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
 
-$(JSP_DIR)/navig: $(DTDROOT)/images/navig $(JSP_DIR)
-	ln -sf $(DTDROOT)/images/navig/ $(JSP_DIR)
+$(JSP_DIR)/navig: $(DAPSROOT)/images/navig $(JSP_DIR)
+	ln -sf $(DAPSROOT)/images/navig/ $(JSP_DIR)
 
-$(JSP_DIR)/admon: $(DTDROOT)/images/admon/ $(JSP_DIR)
-	ln -sf $(DTDROOT)/images/admon/ $(JSP_DIR)
+$(JSP_DIR)/admon: $(DAPSROOT)/images/admon/ $(JSP_DIR)
+	ln -sf $(DAPSROOT)/images/admon/ $(JSP_DIR)
 
-$(JSP_DIR)/callouts: $(DTDROOT)/images/callouts/ $(JSP_DIR)
-	ln -sf $(DTDROOT)/images/callouts/ $(JSP_DIR)
+$(JSP_DIR)/callouts: $(DAPSROOT)/images/callouts/ $(JSP_DIR)
+	ln -sf $(DAPSROOT)/images/callouts/ $(JSP_DIR)
 
 $(JSP_DIR)/images: | $(IMG_DIRECTORIES) $(JSP_DIR)
 	ln -sf $(IMG_GENDIR)/online/ $(JSP_DIR)/images
@@ -1536,7 +1541,7 @@ endif
 	xsltproc $(JSPSTRINGS) $(ROOTSTRING) $(METASTRING) \
 	  $(XHTMLSTRING) $(MANIFEST)\
 	  --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  --xinclude $(STYLEJ) $(PROFILEDIR)/$(MAIN)
+	  --xinclude $(STYLEJ) $(PROFILED_MAIN)
 ifdef ROOTID
 	ln -sf $(JSP_DIR)/$(ROOTID).jsp $(JSP_DIR)/index.jsp
 endif
@@ -1624,7 +1629,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating mediawiki files"
 endif
 	xsltproc --output $@ $(ROOTSTRING) --xinclude $(STYLEWIKI) \
-	  $(PROFILEDIR)/$(MAIN)
+	  $(PROFILED_MAIN)
 
 
 #------------------------------------------------------------------------
@@ -1645,7 +1650,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating test page"
 endif
 	xsltproc --xinclude --noout $(ROOTSTRING) -o $(TESTPAGE) \
-	  $(STYLELINKS) $(PROFILEDIR)/$(MAIN) 
+	  $(STYLELINKS) $(PROFILED_MAIN)
 ifeq ($(VERBOSITY),1)
 	@echo "   Running linkchecker"
 endif
@@ -1673,7 +1678,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Moving results"
 endif
 	mv -iv $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml \
-		$(BASE_DIR)/xml/
+		$(DOC_DIR)/xml/
 
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
@@ -1684,7 +1689,7 @@ endif
 	ln -sf $< $@
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
-	    ln -sf $(BASE_DIR)/xml/$$i $(dir $@); \
+	    ln -sf $(DOC_DIR)/xml/$$i $(dir $@); \
 	  done \
 	fi
 
@@ -1734,16 +1739,16 @@ endif
 # Print a set of selected variables
 #
 .PHONY: check
-check: ROOTIDS = $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLEROOTIDS) $(PROFILEDIR)/$(MAIN))
+check: ROOTIDS = $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLEROOTIDS) $(PROFILED_MAIN))
 check:
 	@echo "XML_CATALOG_FILES = $(XML_CATALOG_FILES)"
-	@echo "DTDROOT           = $(DTDROOT)"
+	@echo "DAPSROOT          = $(DAPSROOT)"
 	@echo "PROFILE_URN       = $(PROFILE_URN)"
 	@echo
 	@echo "LL                = $(LL)"
 	@echo "PROFARCH          = $(PROFARCH)"
 	@echo "PROFOS            = $(PROFOS)"
-	@echo "MAIN              = $(BASE_DIR)/$(MAIN)"
+	@echo "MAIN              = $(MAIN)"
 	@echo "BOOK              = $(BOOK)"
 	@echo "COMMENTS          = $(COMMENTS)"
 	@echo "REMARKS           = $(REMARKS)"

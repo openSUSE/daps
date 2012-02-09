@@ -88,7 +88,7 @@ fi
 
 TMPFILE=$(mktemp /tmp/daps-fop.XXXXXX)
 xx=$(build-classpath xmlgraphics-batik-all xml-commons-resolver jaxp_transform_impl excalibur/avalon-framework-api excalibur/avalon-framework-impl 2>$TMPFILE)
-CP=$CP${pathSepChar}$xx${pathSepChar}$DTDROOT/etc
+CP=$CP${pathSepChar}$xx${pathSepChar}$DAPSROOT/etc
 if ! $fop_exec_debug; then
   rm -f $TMPFILE
 fi

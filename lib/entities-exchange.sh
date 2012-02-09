@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ -d $DTDROOT ] ; then
-  TMP=$DTDROOT
+if [ -d $DAPSROOT ] ; then
+  TMP=$DAPSROOT
 else
   TMP=$(pwd)
 fi
