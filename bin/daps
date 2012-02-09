@@ -192,7 +192,6 @@ SUBCOMMANDS=(
     [html]=build_html_jsp
     [htmlsingle-name]=show_names
     [htmlsingle]=build_html_jsp
-    [init]=init_wd
     [jana]=checklink
     [jsp-dir-name]=show_names
     [jsp]=build_html_jsp
@@ -381,9 +380,6 @@ Subcommands:
     db2novdoc                 Convert DocBook XML sources to NovDoc
     getimages                 List or display images from a profiled DocBook
                               XML file
-    init                      Create a working directory to get started with
-                              daps/DocBook. Generates a MAIN xml file and a
-                              fitting doc config file
     optipng                   Optimize (size) source PNGs
     profile, prof             Profile XML sources
     validate                  Validate profiled sources. Automatically profiles
@@ -830,14 +826,14 @@ if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
     eval "${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}"
 fi
 
-# Initialize a working directory
+# Sample call for early commands
 #
-case "$SUBCMD" in
-    init)
-      "${SUBCOMMANDS[$SUBCMD]}" "${SCMD_ARGS[@]}"
-      exit
-      ;;
-esac
+#case "$SUBCMD" in
+#    foo)
+#      "${SUBCOMMANDS[$SUBCMD]}" "${SCMD_ARGS[@]}"
+#      exit
+#      ;;
+#esac
 
 #-------------------------------------
 # Source DOCCONF and set up MAIN, DOC_DIR

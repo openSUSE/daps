@@ -1,0 +1,132 @@
+#!/bin/bash
+#
+# Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Initialize a working directory to get started with daps
+#
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    ccecho "error" "ERROR: ${1}" >&2
+    exit 1;
+}
+
+function usage () {
+    echo "
+$ME -d <PATH TO DIRECTORY> [-r (article|book)] 
+
+Create a working environment for DAPS with an example DocBook 4 document.
+Specifying a directory with -d (the example document's config file).
+(Sub)Directories will be created if not existing..
+
+Options:
+
+-r, --rootelement  DocBook root element of the example document. Currently
+                   supported are \"book\" (default) and \"article\".
+"
+    exit 0
+}
+#################################################
+# MAIN
+#
+
+# show help when called with no arguments
+[[ -z $1 ]] && usage
+
+ME=$(basename $0)
+CONT=
+DC_FILE="DC-daps-example"
+DAPSROOT="/usr/share/daps" # the default
+
+# user config file
+USER_CONFIG="$HOME/.daps/config"
+
+# source config file to possibly get a DAPSROOT
+source "/etc/daps/config"
+if [[ -f $USER_CONFIG ]]; then
+    source $USER_CONFIG
+fi
+
+ARGS=$(getopt -o d:hr: -l dapsroot:,docconfig:,help,rootelement: -n $ME -- "$@")
+
+eval set -- "$ARGS"
+
+while true ; do
+    case "$1" in
+        --dapsroot)
+            # undocumented devel feature
+            if [[ -d $2 ]]; then
+                DAPSROOT="$2"
+            else
+                exit_on_error "dapsroot \"$2\" is not a valid directory."
+            fi
+            shift 2
+            ;;
+        -d|--docdir)
+            DOC_DIR=$2
+            shift 2
+            ;;
+        -h|--help)
+            usage
+	    ;;
+	--rootelement)
+            if [[ article = $2 || book = $2 ]]; then
+                ROOTELEMENT="$2"
+            else
+                exit_on_error "Rootelement must be either \"article\" or \"book\""
+            fi
+	    shift 2
+	    ;;
+        --) shift ; break ;;
+        *) exit_on_error "Wrong parameter: $1" ;;
+    esac
+done
+
+[[ -z "$DOC_DIR" ]] && exit_on_error "You must specify a directory with -d. See \"$ME -h for details"
+# default ROOTELEMENT is book
+[[ -z $ROOTELEMENT ]] && ROOTELEMENT=book
+
+# ----------
+# Process DOCCONFIG and create directories
+#
+
+if [[ ! -d $DOC_DIR ]]; then
+    while [[ y != $CONT && n != $CONT ]] ; do
+        read -p "$DOC_DIR does not exist. Create it? [y/n] " CONT
+    done
+    if [[ y = $CONT ]]; then
+        mkdir -p $DOC_DIR || exit_on_error "Cannot create $DOC_DIR" 
+    else
+        exit_on_error "Aborted by user"
+    fi
+fi
+
+# Create needed subdirs in DOC_DIR
+mkdir -p ${DOC_DIR}/images/src/{dia,fig,png,svg,eps,pdf} ${DOC_DIR}/xml || exit_on_error "Cannot create needed subdirectories in $DOC_DIR" 
+
+# ----------
+# copy the templates
+#
+BOOK="${DC_FILE#${CONF_PREFIX}*}"
+
+# DC-file
+cp ${DAPSROOT}/lib/templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
+        sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${DOC_DIR}/$DC_FILE
+# MAIN XML file
+cp ${DAPSROOT}/lib/templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+
+# graphics
+cp ${DAPSROOT}/lib/templates/example{1,2}.png ${DOC_DIR}/images/src/png/
+  
+ccecho "result" "Successfully created a working environment at ${DOC_DIR}"
+echo "To build a PDF or HTML version of the example document enter
+daps -d ${DOC_DIR}/$DC_FILE color-pdf
+or
+daps -d ${DOC_DIR}/$DC_FILE html"
+
+exit 0;
