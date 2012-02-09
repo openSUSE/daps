@@ -465,7 +465,7 @@ case "$SUBCMD" in
 #§
 #§  ds<VALUE> 
 #§    Variants: dscomments, dsedited, dsediting, dsproofed, dsproofing, 
-#§              dsprelim 
+#§              dsprelim, dsnoprelim 
 #§    Set property or value on file(s) 
 #§    Usage: $PROG ds<VALUE> FILELIST 
 
@@ -486,9 +486,13 @@ case "$SUBCMD" in
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -L "$@"
         ;;
     dsprelim)
-        # Unset prelim state; prelim = no
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
+        # set preliminary state prelim=yes
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -Y "$@"
         ;;
+    dsnoprelim)
+        # unset preliminary state prelim=no
+        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
+        ;;    
     dsproofed)
         # set files to proofed
         docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -R "$@"
