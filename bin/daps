@@ -46,7 +46,7 @@ VARLIST=(
     DEBUG
     DOC_DIR
     DAPSROOT
-    DEFAULT_DAPSROOT
+    DAPSROOT_DEFAULT
     DEF_FILE
     DEVEL
     DIA_OPTIONS
@@ -127,10 +127,10 @@ ME=$(basename $0)
 DEFAULT_CONFIG="/etc/daps/config"
 
 # The default DAPSROOT 
-DEFAULT_DAPSROOT="/usr/share/daps"
+DAPSROOT_DEFAULT="/usr/share/daps"
 
 # default libdir
-DEFAULT_LIB_DIR="${DEFAULT_DAPSROOT}/lib"
+DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
 
 # user config file
 USER_CONFIG="$HOME/.daps/config"
@@ -466,7 +466,7 @@ function autoset_docconf () {
             DC_REAL_PATH=$(readlink -nm "${DC_COUNT[0]}")
             DC_REAL_DIR=$(dirname "$DC_REAL_PATH")
             DC_FILENAME=$(basename "$DC_REAL_PATH")
-            DC_PARENT=${DC_FILENAME#*${CONF_PREFIX}}
+            DC_PARENT=${DC_FILENAME#${CONF_PREFIX}*}
             if [[ -e ${DC_REAL_DIR}/build/${DC_PARENT}/$DC_FILENAME ]]; then
                 # we are in the result dir - set DOCCONF to the
                 # real path (with links "resolved")
@@ -805,7 +805,7 @@ if [[ -n $DAPSROOT ]]; then
 else
     # default DAPSROOT
     # no need to set BIN_DIR here, since it is /usr/bin
-    DAPSROOT="$DEFAULT_DAPSROOT"
+    DAPSROOT="$DAPSROOT_DEFAULT"
     LIB_DIR="$DEFAULT_LIB_DIR"
     CONFIG="$DEFAULT_CONFIG"
 fi
@@ -958,7 +958,8 @@ fi
 if [[ -n $PDFNAME ]]; then
     export BOOK="$PDFNAME"
 else
-    export BOOK="${DOCCONF#*${CONF_PREFIX}}"
+    DC_FILE=$(basename $DOCCONF)
+    export BOOK="${DC_FILE#${CONF_PREFIX}*}"
 fi
 
 # FOP

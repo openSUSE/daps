@@ -64,7 +64,7 @@ endif
 # can not be used when deeloping custom stylesheets - in that case, specify
 # SRYLEROOT on the command line, DC-file or user config
 
-ifneq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
+ifneq ($(DAPSROOT), $(DAPSROOT_DEFAULT))
 #  STYLE_DEVEL           := $(DAPSROOT)/suse-xslt
   STYLE_DEVEL :=
 endif

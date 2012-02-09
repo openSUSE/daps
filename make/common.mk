@@ -49,7 +49,7 @@ ifndef DOC_DIR
   DOC_DIR := $(shell pwd)
 endif
 ifndef DAPSROOT
-  DAPSROOT  := $(DEFAULT_DAPSROOT)
+  DAPSROOT  := $(DAPSROOT_DEFAULT)
 endif
 ifndef BOOK
   BOOK     := mybook
@@ -1130,6 +1130,7 @@ $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
 endif
+	echo "-----> $(LIB_DIR)/getentityname.py $(DOCFILES) "
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
 	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILEDIR)/; \
