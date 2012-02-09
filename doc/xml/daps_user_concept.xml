@@ -137,75 +137,53 @@
   <sect2 id="sec.daps.user.oview.docproject.main">
    <title>Main File</title>
    <para>Find an example main file for a book below. In the example file, the 
-   chapters of the book are included via Xincludes. <remark>taroth 2012-02-08: 
-   this might be too scary already for newbies - todo: better use example MAIN
-   that is used for daps init</remark> </para>
+   chapters of the book are included via Xincludes.  </para>
    <example id="ex.daps.main">
     <title>Main File of a Book</title>
-    <screen>	
-&lt;!-- ##################################################################### --&gt;
-&lt;!-- SLE HA High Availability Guide --&gt;
-&lt;!-- ##################################################################### --&gt;
-   	&lt;book lang="en" id="book.sleha"&gt;
-    	&lt;bookinfo&gt;
-      	&lt;title&gt;&amp;haguide;&lt;/title&gt;
-      	&lt;productname&gt;&amp;productname;&lt;/productname&gt;
- 	      &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt;
-       	&lt;xi:include href="common_copyright_gfdl.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-   	  &lt;/bookinfo&gt;
-    &lt;xi:include href="ha_intro.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-&lt;!-- ===================================================================== --&gt;
-&lt;!-- Part: Installation and Setup --&gt;
-&lt;!-- ===================================================================== --&gt;
-	 &lt;part id="part.install"&gt;
- 	&lt;title&gt;Installation and Setup&lt;/title&gt;
-	&lt;xi:include href="ha_concepts.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-	&lt;xi:include href="ha_installation.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/part&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;!-- Part: Configuration and Administration --&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;part id="part.config"&gt;
- 	&lt;title&gt;Configuration and Administration&lt;/title&gt;
- 	&lt;xi:include href="ha_config_basics.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_config_gui.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_config_cli.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-	&lt;xi:include href="ha_config_hawk.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_agents.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_fencing.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_lvs.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_netbonding.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/part&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;!-- Part: Storage and Data Replication --&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;part id="part.storage"&gt;
- 	&lt;title&gt;Storage and Data Replication&lt;/title&gt;
- 	&lt;xi:include href="ha_ocfs2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_drbd.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_clvm.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_storage_protection.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_samba.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/part&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;!-- Part: Troubleshooting and Reference --&gt;
-	&lt;!-- ===================================================================== --&gt;
- 	&lt;part id="part.reference"&gt;
- 	&lt;title&gt;Troubleshooting and Reference&lt;/title&gt;
- 	&lt;xi:include href="ha_troubleshooting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_agentlist_details.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/part&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;!-- Part: Appendix --&gt;
- 	&lt;!-- ===================================================================== --&gt;
- 	&lt;part id="part.appendix"&gt;
- 	&lt;title&gt;Appendix&lt;/title&gt;
-	&lt;xi:include href="ha_example.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_migration.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;xi:include href="ha_news.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/part&gt;
-	&lt;xi:include href="ha_glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- 	&lt;/book&gt;
+    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet href="urn:x-suse:xslt:profiling:docbook45-profile.xsl" 
+                 type="text/xml" title="Profiling step"?&gt;
+&lt;!DOCTYPE book PUBLIC
+ "-//OASIS//DTD DocBook XML V4.5//EN"
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+  &lt;!ENTITY tdg "DocBook: The Definitive Guide"&gt;
+]&gt;
+&lt;book id="book.template" lang="en"&gt;
+ &lt;bookinfo&gt;
+  &lt;title&gt;Book template&lt;/title&gt;
+  &lt;subtitle&gt;generated by daps&lt;/subtitle&gt;
+  &lt;productname&gt;Book template&lt;/productname&gt;
+  &lt;releaseinfo&gt;Version 0.1&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;Revision: 0&lt;/releaseinfo&gt;
+  &lt;date&gt;
+   &lt;?dbtimestamp format="B d, Y"?&gt;
+  &lt;/date&gt;
+  &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/bookinfo&gt;
+ &lt;chapter id="cha.template.examples"&gt;
+  &lt;title&gt;Examples: the most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    You may use this file as a template. for a complete reference on DocBook
+    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt; at &lt;ulink
+     url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+  &lt;para&gt;
+   I am a paragraph in a chapter.
+  &lt;/para&gt;
+  &lt;sect1 id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This is a section 1.
+   &lt;/para&gt;
+  &lt;/sect1&gt;
+  &lt;/chapter&gt;
+  &lt;/book&gt;
 </screen>
 
    </example>
@@ -213,7 +191,6 @@
    books and articles in a  <sgmltag>set</sgmltag>, the main file is the one 
    that contains the <sgmltag>set</sgmltag> element.</para>
   </sect2>
-
   <sect2 id="sec.daps.user.oview.docproject.env">
   <title>&env; File</title>
   
