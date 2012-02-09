@@ -1,8 +1,10 @@
-## Environment file for book/article §§MAIN§§
+##
+## Doc config file for the DAPS example document 
+## defined by §§MAIN§§
 ##
 ## See /etc/daps/config for documentation of the settings below
 ##
-## These settings are settings for the document defined by §§MAIN§§
+## These values are settings for the document defined by §§MAIN§§
 ## only. Please do not add additional settings here - if you need to
 ## customize other settings from /etc/daps/config, do so in
 ## ~/.daps/config
@@ -13,10 +15,14 @@ MAIN="§§MAIN§§"
 ##--------------------
 ## Optional Parameters
 
-## rootid
-## needed to build individual books if MAIN contains a set with several
-## books/articels
-## if not specified the whole set from MAIN will be build
+## ROOTID
+## If MAIN contains a set with several books and/or articles, use
+## a separate DC-file for each book/article and set ROOTID to
+## the id of the respective <book>/<article> element of the document
+## This will enable you to build individual books/article rather than
+## the whole set
+## See http://www.docbook.org/tdg/en/html/set.html for more information
+## on sets
 ROOTID=""
 
 ##------------------
@@ -28,14 +34,20 @@ ROOTID=""
 #HTML_CSS=""
 #EPUB_CSS=""
 
+##-----------------
 ## Profiling stuff
-## For elements with os="..." and arch="..."
+## For elements with arch="...", condition="...", os="..." and vendor="..."
+## See http://www.sagehill.net/docbookxsl/Profiling.html for more
+## information on profiling
 ##
-#PROFOS=""
 #PROFARCH=""
+#PROFCONDITION=""
+#PROFOS=""
+#PROFVENDOR=""
+
 
 ## If you want to be able to source this file, so you do not have
-## to specify the -d/--docconf option with daps, uncomment the
+## to specify the -d/--docconfig option with daps, uncomment the
 ## following line
 ##
-#export DAPS_ENV_NAME=$(basename $BASH_SOURCE)
+#export DOCCONF_NAME=$BASH_SOURCE
