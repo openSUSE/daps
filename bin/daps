@@ -478,7 +478,9 @@ function autoset_docconf () {
         fi
         # set DOC_DIR
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
-        ccecho "result" "Using automatically detected DOCCONF $DOCCONF_CMDL"
+        if [[ 1 -le $VERBOSITY ]]; then
+            ccecho "result" "Using automatically detected DOCCONF $DOCCONF_CMDL"
+        fi
     else
         # more than one or no DOCCONF
         exit_on_error "Could not find a valid MAIN file.\nPlease specify either a DOCCONF or a MAIN file at the command line"
@@ -506,7 +508,9 @@ function set_mainfile () {
             if [[ -z "$DOC_DIR" ]]; then
                 DOC_DIR="$PWD"
             fi
-            ccecho "result" "Using MAIN file xml/$MAIN_CMDL"
+            if [[ 1 -le $VERBOSITY ]]; then
+                ccecho "result" "Using MAIN file $MAIN_CMDL"
+            fi
         else
             if [[ -n $DOC_DIR ]]; then
                 if [[ -e "${DOC_DIR}/xml/$MAINFILE" ]]; then
@@ -749,7 +753,9 @@ case "${SCMD_ARGS[@]}" in
         declare -a SCMD_ARGS=( "-h" )
         ;;
     *DOCCONF*|*DAPSROOT*|*DOC_DIR*|*MAIN*)
-        exit_on_error "Please specify DOC_DIR, DOCCONF, MAIN, or DAPSROOT via command line options" 
+        if [[ showvariable != $SUBCMD ]]; then
+            exit_on_error "Please specify DOC_DIR, DOCCONF, MAIN, or DAPSROOT via command line options"
+        fi
 esac
 
 
@@ -860,7 +866,9 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
         if [[ -e "$DOCCONF_NAME" ]]; then
             DOCCONF_CMDL=$(absolute_path "$DOCCONF_NAME")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
-            ccecho "info" "Using previously sourced DOCCONF $DOCCONF_CMDL"
+            if [[ 1 -le $VERBOSITY ]]; then
+                ccecho "info" "Using previously sourced DOCCONF $DOCCONF_CMDL"
+            fi
         else
             exit_on_error "Cannot find previously sourced DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you sourced the config, or you need to provide an absolute path when\nsourcing the doc config."
         fi
@@ -869,7 +877,9 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
         if [[ -e $DOCCONF_DEFAULT ]]; then
             DOCCONF_CMDL=$(absolute_path "$DOCCONF_DEFAULT")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
-            ccecho "info" "Using DOCCONF $DOCCONF_DEFAULT from config files"
+            if [[ 1 -le $VERBOSITY ]]; then
+                ccecho "info" "Using DOCCONF $DOCCONF_DEFAULT from config files"
+            fi
         else
             exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck you config file at $USER_CONFIG."
         fi
