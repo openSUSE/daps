@@ -9,9 +9,6 @@
 ]>
 <chapter id="cha.daps.user.oview">
  <title>Conceptual Overview</title>
- <remark>topics: daps components,
-  directory structure, ENV files, profiling, validation, external components
-  like XML editor and FO formatter, stylesheets ...</remark>
  <abstract>
   <para>
    The &dapslong; (&dapsacr;) is developed as open source software for Linux
@@ -87,7 +84,7 @@
    </listitem>
    <listitem>
     <para>
-     &env; file of the documentation project (usually for project- or
+     &dc; file of the documentation project (usually for project- or
      book-specific settings)
     </para>
    </listitem>
@@ -211,35 +208,30 @@
 
 &lt;set lang="en"&gt;
  &lt;title&gt;openSUSE Documentation&lt;/title&gt;
-&lt;!-- Start-Up --&gt;
  &lt;xi:include href="book_opensuse_startup.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-&lt;!-- Reference --&gt;
  &lt;xi:include href="book_opensuse_reference.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-&lt;!-- Security Guide --&gt;
  &lt;xi:include href="book_security.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-&lt;!-- Tuning Guide --&gt;
  &lt;xi:include href="book_tuning.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-&lt;!-- KVM Guide --&gt;
  &lt;xi:include href="book_kvm.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
 &lt;/set&gt;
     </screen>
    </example>
   </sect2>
   <sect2 id="sec.daps.user.oview.docproject.env">
-   <title>&env; File</title>
+   <title>&dc; File</title>
 
    <para>  
    For a documentation <sgmltag>set</sgmltag> (a collection of books or articles), 
-   multiple &env; files can be defined. This allows you to set both different 
+   multiple &dc; files can be defined. This allows you to set both different 
    parameters or different values for individual books in the set: For example, 
-   by refering a different <parameter>ROOTID</parameter> in an &env; file, you 
+   by refering a different <parameter>ROOTID</parameter> in an &dc; file, you 
    define which book of the set is to be built. Another example would be to specify
-   different layouts in &env; files that belong to the same documentation set.
+   different layouts in &dc; files that belong to the same documentation set.
   </para>
 
    <example id="ex.daps.env.user">
-    <title>An <filename>&env;-*</filename> File For a Book</title>
-    <screen># &env; file for &dapsacr; User Guide
+    <title>An <filename>&dc;-*</filename> File For a Book</title>
+    <screen># &dc; file for &dapsacr; User Guide
 <co id="co.daps.main"/> MAIN=MAIN.DAPS.xml         
 <co id="co.daps.rootid"/> ROOTID=book_daps_user.xml 
 <co id="co.daps.profarch"/> PROFARCH="x86;ppc"         
@@ -350,7 +342,7 @@
      These entities will be dynamically resolved to the values of the
      parameters <parameter>DISTVER</parameter>, <parameter>PRODUCTNAME</parameter>,
      and <parameter>PRODUCTNAMEREG</parameter>. You can define the value of
-     those parameters in a project-specific (or book-specific) &env; file.
+     those parameters in a project-specific (or book-specific) &dc; file.
      <remark>taroth 2012-01-30</remark>
 <!--# Example:
 #   PRODUCTNAME="MyVeryFirstSoftware"
@@ -362,23 +354,23 @@
     <callout arearefs="co.daps.source">
      <para>
      Optional line. You only need to add this line if you want to be able to
-     source &env; files with &dapsacr;. Sourcing an &env; file was necessary
+     source &dc; files with &dapsacr;. Sourcing an &dc; file was necessary
      to work with the documentation environment provided by &susedoc;
      (&dapsacr;' predecessor).
     </para>
     </callout>
    </calloutlist>
 
-   <para>Of the parameters in the &env;, the only one required is 
+   <para>Of the parameters in the &dc;, the only one required is 
   <parameter>MAIN</parameter>. If you do not want to set any other parameters, 
   you can also set the <parameter>MAIN</parameter> parameter on the command line
-  and do without &env;.</para>
+  and do without &dc;.</para>
 
    <para>
-   Because &env; files define the <quote>starting point</quote> of your 
+   Because &dc; files define the <quote>starting point</quote> of your 
    documentation (by referencing the <parameter>MAIN</parameter> parameter), 
    they are necessary for validating your XML files and for
-   generating any kind of output. Without &env; files, you cannot produce
+   generating any kind of output. Without &dc; files, you cannot produce
    any output from your DocBook sources with &dapsacr;.
    <remark>taroth 2012-01-17: not 100% sure if this is still the
 case</remark>
@@ -388,16 +380,16 @@ case</remark>
 
    <para>
    If your documentation set contains cross-references between the
-   individual books, it is useful to define an additional &env; file
+   individual books, it is useful to define an additional &dc; file
    (<emphasis>without</emphasis> the <parameter>ROOTID</parameter> parameter)
    that can be used to generate an HTML output containing all hyperlinks
-   between the individual books. Find an example &env; file in
+   between the individual books. Find an example &dc; file in
    <xref linkend="ex.daps.env.set"/>.
   </para>
 
    <example id="ex.daps.env.set">
-    <title>An <filename>&env;-*</filename> File for a Set</title>
-    <screen># &env; file for the complete &dapsacr; Documentation
+    <title>An <filename>&dc;-*</filename> File for a Set</title>
+    <screen># &dc; file for the complete &dapsacr; Documentation
 MAIN=MAIN.DAPS.xml         
 PROFARCH="x86;ppc"         
 PROFOS="lin;win"           
@@ -412,7 +404,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
    &dapsacr; also contains a script for creating a new documentation project
    from scratch.
    <remark>taroth 2011-12-29: add xref later</remark>
-   When using that script, an example &env; file is automatically created.
+   When using that script, an example &dc; file is automatically created.
   </para>
   </sect2>
  </sect1>
@@ -439,7 +431,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <screen>
      <co id="co.docdir.base"/>
      <replaceable>YOUR_DOC_DIR</replaceable>
-<co id="co.docdir.env"/> |--&env;*
+<co id="co.docdir.env"/> |--&dc;*
 <co id="co.docdir.img"/> |--<emphasis role="bold">images</emphasis>
 <co id="co.docdir.img.src"/>    |-- <emphasis role="bold">src</emphasis>
          |--<emphasis role="bold">dia</emphasis>
@@ -460,7 +452,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     </callout>
     <callout arearefs="co.docdir.env">
      <para>
-      &env; file defining the documentation project. For more information,
+      &dc; file defining the documentation project. For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.
      </para>
     </callout>
@@ -516,9 +508,9 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <title>Build Directory</title>
     <screen>
      <co id="co.builddir"/> |--<emphasis role="bold">build</emphasis>
-     <co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;1</replaceable>
+     <co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable>
      </emphasis>
-     <xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&env;2</replaceable>
+     <xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;2</replaceable>
      </emphasis>
      <co id="co.builddir.img"/>    |--<emphasis role="bold">.images</emphasis>
      <co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis>
@@ -534,8 +526,8 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <callout arearefs="co.builddir.env">
      <para>
       For each of your documentation projects, &dapsacr; creates a
-      subdirectory, named after the respective &env; from which you build
-      the project. All formats that have been generated from the &env; (PDF,
+      subdirectory, named after the respective &dc; from which you build
+      the project. All formats that have been generated from the &dc; (PDF,
       HTML, TXT, ePUB etc.) can be found there. A <filename>log</filename>
       subdirectory stores log files for each output format that has been
       generated by &dapsacr;.
