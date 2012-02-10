@@ -124,7 +124,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <xref linkend="sec.daps.user.oview.docproject.env" xrefstyle="select:title"/>
+     <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>
     </term>
     <listitem>
      <para>A text file defining a number of parameters for your 
@@ -217,7 +217,7 @@
     </screen>
    </example>
   </sect2>
-  <sect2 id="sec.daps.user.oview.docproject.env">
+  <sect2 id="sec.daps.user.oview.docproject.dc">
    <title>&dc; File</title>
 
    <para>  
@@ -229,7 +229,7 @@
    different layouts in &dc; files that belong to the same documentation set.
   </para>
 
-   <example id="ex.daps.env.user">
+   <example id="ex.daps.dc.user">
     <title>An <filename>&dc;-*</filename> File For a Book</title>
     <screen># &dc; file for &dapsacr; User Guide
 <co id="co.daps.main"/> MAIN=MAIN.DAPS.xml         
@@ -384,10 +384,10 @@ case</remark>
    (<emphasis>without</emphasis> the <parameter>ROOTID</parameter> parameter)
    that can be used to generate an HTML output containing all hyperlinks
    between the individual books. Find an example &dc; file in
-   <xref linkend="ex.daps.env.set"/>.
+   <xref linkend="ex.daps.dc.set"/>.
   </para>
 
-   <example id="ex.daps.env.set">
+   <example id="ex.daps.dc.set">
     <title>An <filename>&dc;-*</filename> File for a Set</title>
     <screen># &dc; file for the complete &dapsacr; Documentation
 MAIN=MAIN.DAPS.xml         
@@ -431,7 +431,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <screen>
      <co id="co.docdir.base"/>
      <replaceable>YOUR_DOC_DIR</replaceable>
-<co id="co.docdir.env"/> |--&dc;*
+<co id="co.docdir.dc"/> |--&dc;*
 <co id="co.docdir.img"/> |--<emphasis role="bold">images</emphasis>
 <co id="co.docdir.img.src"/>    |-- <emphasis role="bold">src</emphasis>
          |--<emphasis role="bold">dia</emphasis>
@@ -450,7 +450,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
       &dapsconfu;).
      </para>
     </callout>
-    <callout arearefs="co.docdir.env">
+    <callout arearefs="co.docdir.dc">
      <para>
       &dc; file defining the documentation project. For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.
@@ -508,9 +508,9 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
     <title>Build Directory</title>
     <screen>
      <co id="co.builddir"/> |--<emphasis role="bold">build</emphasis>
-     <co id="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable>
+     <co id="co.builddir.dc"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable>
      </emphasis>
-     <xref linkend="co.builddir.env"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;2</replaceable>
+     <xref linkend="co.builddir.dc"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;2</replaceable>
      </emphasis>
      <co id="co.builddir.img"/>    |--<emphasis role="bold">.images</emphasis>
      <co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis>
@@ -523,7 +523,7 @@ export DAPS_ENV_NAME=$(basename $BASH_SOURCE) </screen>
       Directory that holds all contents build by &dapsacr;.
      </para>
     </callout>
-    <callout arearefs="co.builddir.env">
+    <callout arearefs="co.builddir.dc">
      <para>
       For each of your documentation projects, &dapsacr; creates a
       subdirectory, named after the respective &dc; from which you build
