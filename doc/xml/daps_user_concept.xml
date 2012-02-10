@@ -218,19 +218,19 @@
    </example>
   </sect2>
   <sect2 id="sec.daps.user.oview.docproject.dc">
-   <title>&dc; File</title>
+   <title>&dc; (Doc Config) File</title>
 
    <para>  
    For a documentation <sgmltag>set</sgmltag> (a collection of books or articles), 
    multiple &dc; files can be defined. This allows you to set both different 
    parameters or different values for individual books in the set: For example, 
-   by refering a different <parameter>ROOTID</parameter> in an &dc; file, you 
+   by refering a different <parameter>ROOTID</parameter> in a &dc; file, you 
    define which book of the set is to be built. Another example would be to specify
    different layouts in &dc; files that belong to the same documentation set.
   </para>
 
    <example id="ex.daps.dc.user">
-    <title>An <filename>&dc;-*</filename> File For a Book</title>
+    <title>A <filename>&dc;-*</filename> File For a Book</title>
     <screen># &dc; file for &dapsacr; User Guide
 <co id="co.daps.main"/> MAIN=MAIN.DAPS.xml         
 <co id="co.daps.rootid"/> ROOTID=book_daps_user.xml 
@@ -354,9 +354,9 @@
     <callout arearefs="co.daps.source">
      <para>
      Optional line. You only need to add this line if you want to be able to
-     source &dc; files with &dapsacr;. Sourcing an &dc; file was necessary
-     to work with the documentation environment provided by &susedoc;
-     (&dapsacr;' predecessor).
+     source &dc; files with &dapsacr;. Sourcing a &dc; file (formerly called 
+     <literal>ENV</literal> file) was necessary to work with the documentation 
+     environment provided by &susedoc;  (&dapsacr;' predecessor).
     </para>
     </callout>
    </calloutlist>
@@ -372,11 +372,7 @@
    they are necessary for validating your XML files and for
    generating any kind of output. Without &dc; files, you cannot produce
    any output from your DocBook sources with &dapsacr;.
-   <remark>taroth 2012-01-17: not 100% sure if this is still the
-case</remark>
-    <remark>toms 2012-02-08: I think, your last sentence beginning with
-      "Without..." is correct.</remark>
-   </para>
+    </para>
 
    <para>
    If your documentation set contains cross-references between the
@@ -388,7 +384,7 @@ case</remark>
   </para>
 
    <example id="ex.daps.dc.set">
-    <title>An <filename>&dc;-*</filename> File for a Set</title>
+    <title>A <filename>&dc;-*</filename> File for a Set</title>
     <screen># &dc; file for the complete &dapsacr; Documentation
 MAIN=MAIN.DAPS.xml         
 PROFARCH="x86;ppc"         
