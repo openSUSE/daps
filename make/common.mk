@@ -60,12 +60,6 @@ endif
 ifndef FOP
   FOP      := $(LIB_DIR)/daps-fop
 endif
-ifndef PROFARCH
-  PROFARCH  := noarch
-endif
-ifndef PROFOS
-  PROFOS  := default
-endif
 ifndef STATIC_HTML
   STATIC_HTML := 0
 endif
@@ -115,17 +109,41 @@ ifndef PROFILE_URN
   PROFILE_URN     := $(shell xsltproc $(GETXMLSTY) $(MAIN))
 endif
 
-# PROFILEDIR is one of the most critical variables. Depending on
-# this variable, the profiling is done completely different.
+# PROFILEDIR is the directory where the profiled sources end up
+# The directory name depends on the profiling values for the four
+# supported profiling attributes arch, condition, os, and vendor.
+#
+# If everything would end up in one directory, the profiling would have to
+# be redone every time.
+
 ifdef PROFILE_URN
-  ifndef PROFCONDITION
-    PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)
-  else
-    PROFILEDIR  := $(PROFILE_PARENT_DIR)/$(subst ;,-,$(PROFARCH))_$(subst ;,-,$(PROFOS))$(REMARK_STR)$(COMMENT_STR)_$(PROFCONDITION)
+  PROFILEDIR := $(PROFILE_PARENT_DIR)/
+  ifdef PROFARCH
+    PROFILEDIR += $(subst ;,-,$(PROFARCH))_
   endif
-else
+  ifdef PROFCONDITION
+    PROFILEDIR += $(subst ;,-,$(PROFCONDITION))_
+  endif
+  ifdef PROFOS
+    PROFILEDIR += $(subst ;,-,$(PROFOS))_
+  endif
+  ifdef PROFVENDOR
+    PROFILEDIR += $(subst ;,-,$(PROFVENDOR))
+  endif
+  PROFILEDIR += $(REMARK_STR)$(COMMENT_STR)
+endif
+
+# Use noprofile if PROFILEDIR is still undefined
+#
+ifndef PROFILEDIR
   PROFILEDIR  := $(PROFILE_PARENT_DIR)/noprofile
 endif
+
+# Remove spaces in PROFILEDIR that were introduced by using
+# +=
+PROFILEDIR := $(subst $(SPACE),,$(PROFILEDIR))
+
+
 # profiled MAIN
 PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 
@@ -209,52 +227,46 @@ STYLEDB2ND     := $(DAPSROOT)/daps-xslt/common/db2novdoc.xsl
 
 #------------------------------------------------------------------------
 # xslt stringparams
+#
+# CAUTION: When value is a directory path, it MUST ALWAYS end with
+#          a trailing slash
 
-ifdef PROFVENDOR
-  VENDOR      := --stringparam profile.vendor "$(PROFVENDOR)"
-else
-  VENDOR      :=
+
+#----------
+# Common stringparams
+#
+
+# rootid
+ifdef ROOTID
+  ROOTSTRING   := --stringparam rootid "$(ROOTID)"
 endif
 
-ifdef PROFCONDITION
-  CONDITION   := --stringparam profile.condition "$(PROFCONDITION)"
-else
-  CONDITION   :=
+# meta information (author, last changed, etc)
+ifeq ($(USEMETA), 1)
+  METASTRING   := --stringparam use.meta 1
 endif
 
-PROFSTRINGS  := --stringparam profile.arch "$(PROFARCH)" \
-	        --stringparam profile.os "$(PROFOS)" \
-	        --stringparam show.comments $(COMMENTS) \
-	        --stringparam show.remarks $(REMARKS) $(VENDOR) $(CONDITION)
+#----------
+# FO stringparams
+#  fostrings:    b/w pdf
+#  focolstrings: color pdf
 
-#ifdef PROFVENDOR
-#PROFSTRINGS += --stringparam profile.vendor "$(PROFVENDOR)
-#endif
-
-HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
-                --stringparam show.comments $(COMMENTS) \
-	        --stringparam show.remarks $(REMARKS)
-JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
-                --stringparam show.comments $(COMMENTS) \
-                --stringparam show.remarks $(REMARKS) 
 FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
+                --stringparam draft.mode "$(DRAFT)" \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
 	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
-# CAUTION: path in FOCOLSTRINGS must end with a trailing /
+
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
+                --stringparam draft.mode "$(DRAFT)" \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
 	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
-MANSTRINGS   :=  --stringparam man.output.base.dir "$(MAN_DIR)/" \
-		 --stringparam man.output.in.separate.dir 1 \
-		 --stringparam man.output.subdirs.enabled 1 \
-		 --stringparam refentry.meta.get.quietly 1
 
 # root directory for custom stylesheets
 #
@@ -263,24 +275,20 @@ ifdef STYLEROOT
   FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
 endif
 
-# DRAFT stringparams
-#
-ifeq ("$(DRAFT)", "yes")
-  FOSTRINGS    += --stringparam draft.mode "$(DRAFT)" \
-                  --stringparam xml.source.dir "$(DOC_DIR)/xml/"
-  FOCOLSTRINGS += --stringparam draft.mode "$(DRAFT)"
-  HTMLSTRINGS  += --stringparam draft.mode "$(DRAFT)"
-  JSPSTRINGS   += --stringparam draft.mode "$(DRAFT)"
-endif
+# index
+# returns "Yes" if index is used
+INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) \
+		$(STYLESEAIND) $(MAIN) 2>/dev/null)
+INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
 
-# FO formatter specifi stuff
+# FO formatter specific stuff
 # currently supported are xep and fop
 #
 ifeq ($(FOPTYPE), fop)
   FOCOLSTRINGS  += --stringparam fop1.extensions 1 \
                    --stringparam xep.extensions 0
-  FOSTRINGS  += --stringparam fop1.extensions 1 \
-                --stringparam xep.extensions 0
+  FOSTRINGS     += --stringparam fop1.extensions 1 \
+                   --stringparam xep.extensions 0
   ifeq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
     FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
   else
@@ -294,51 +302,72 @@ else
   endif
 endif
 
+#----------
+# HTML stringparams
+#  
+#
 
-ifdef ROOTID
-  ROOTSTRING   := --stringparam rootid "$(ROOTID)"
-else
-  ROOTSTRING   :=
-endif
+HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
+                --stringparam show.comments $(COMMENTS) \
+		--stringparam draft.mode "$(DRAFT)" \
+	        --stringparam show.remarks $(REMARKS)
 
-# meta information (author, last changed, etc)
-ifeq ($(USEMETA), 1)
-  METASTRING   := --stringparam use.meta 1
-else
-  METASTRING   :=
-endif
-
-# HTML stuff
 ifdef HTMLROOT
   HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
-else
-  HROOTSTRING  :=
 endif
 ifdef USEXHTML
   XHTMLSTRING  := --stringparam generate.jsp.marker 0
-else
-  XHTMLSTRING  :=
 endif
 
-# Language string
-LL         ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
 
-# for creating desktop files
-DESKSTRINGS  := --stringparam uselang "${LL}" \
+#----------
+# JSP stringparams
+#  
+#
+JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
+                --stringparam show.comments $(COMMENTS) \
+		--stringparam draft.mode "$(DRAFT)" \
+                --stringparam show.remarks $(REMARKS) 
+
+
+#----------
+# man page stringparams
+#  
+#
+
+MANSTRINGS   :=  --stringparam man.output.base.dir "$(MAN_DIR)/" \
+		 --stringparam man.output.in.separate.dir 1 \
+		 --stringparam man.output.subdirs.enabled 1 \
+		 --stringparam refentry.meta.get.quietly 1
+
+#----------
+# Profiling stringparams
+#
+ifdef PROFILE_URN
+  PROFSTRINGS :=
+  ifdef PROFARCH
+    PROFSTRINGS += --stringparam profile.arch "$(PROFARCH)"
+  endif
+  ifdef PROFCONDITION
+    PROFSTRINGS += --stringparam profile.condition "$(PROFCONDITION)"
+  endif
+  ifdef PROFOS
+    PROFSTRINGS += --stringparam profile.os "$(PROFOS)"
+  endif
+  ifdef PROFVENDOR
+    PROFSTRINGS += --stringparam profile.vendor "$(PROFVENDOR)"
+  endif
+endif
+
+
+#----------
+# Desktop file stringparams
+#
+# Language
+LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
+DESKSTRINGS  := --stringparam uselang "$(LL)" \
 	        --stringparam docpath "@PATH@/" \
                 --stringparam base.dir $(DESKTOP_FILES_DIR)/
-
-# index
-# the index file must be in the same directory than the profiled $(MAIN).
-ifdef USEINDEX
-  # returns "Yes" if index is used
-  INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) $(STYLESEAIND) \
-                 $(MAIN))
-  INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
-else
-  INDEX       :=
-  INDEXSTRING :=
-endif
 
 
 #------------------------------------------------------------------------
@@ -372,7 +401,7 @@ SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  --stringparam xml.src.path "$(DOC_DIR)/xml/" \
 		  --stringparam mainfile $(notdir $(MAIN)) \
 		  $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
-		  $(MAIN) | tr \" \')
+		  $(MAIN)  | tr \" \')
 
 # XML source files for the whole set
 #
