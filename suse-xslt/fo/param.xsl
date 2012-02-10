@@ -196,9 +196,6 @@ set       nop
 <!-- format.print = 1: print, 0: online -->
 <xsl:param name="format.print">1</xsl:param>
 
-<!-- Where are the XML sources located? -->
-<xsl:param name="xml.source.dir">xml/</xsl:param>
-
 <xsl:param name="insert.xref.page.number">yes</xsl:param>
 
 <!-- Should I markup paras with @arch? -->

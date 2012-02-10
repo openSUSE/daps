@@ -159,10 +159,6 @@
 
 <xsl:param name="local.l10n.xml" select="document('../../common/l10n/l10n.xml')"/>
 
-
-<!-- Where are the XML sources located? -->
-<xsl:param name="xml.source.dir">xml/</xsl:param>
-
 <xsl:param name="insert.xref.page.number">yes</xsl:param>
 
 <!-- Should I markup paras with @arch? -->
