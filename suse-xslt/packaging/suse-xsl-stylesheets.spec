@@ -12,11 +12,12 @@
 Name:           suse-xsl-stylesheets
 Version:        1.9
 
-%define dtdversion     1.0
-%define dtdname        novdoc
-%define regcat         %{_bindir}/sgml-register-catalog
-%define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
-%define novdoc_catalog for-catalog-%{dtdname}-%{dtdversion}.xml
+%define dtdversion      1.0
+%define dtdname         novdoc
+%define regcat          %{_bindir}/sgml-register-catalog
+%define dbstyles        %{_datadir}/xml/docbook/stylesheet/nwalsh/current
+%define novdoc_catalog  for-catalog-%{dtdname}-%{dtdversion}.xml
+%define susexsl_catalog for-catalog-%{name}.xml
 
 Release:        1
 Summary:        SUSE-branded Docbook stylesheets for XSLT 1.0
@@ -76,7 +77,7 @@ if [ -x %{regcat} ]; then
     %{regcat} -a %{_datadir}/sgml/$CATALOG >/dev/null 2>&1 || true
   done
 fi
-# XML Catalog
+# XML Catalogs
 #
 # remove existing entries first - needed for
 # zypper in, since it does not call postun
@@ -86,6 +87,12 @@ edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
 # ... and add it again
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{novdoc_catalog}
+# delete ...
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name}
+# ... and add it again
+edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --add /etc/xml/%{susexsl_catalog}
 
 exit 0
 
@@ -94,14 +101,18 @@ exit 0
 #
 # Remove catalog entries
 #
-# SGML
 if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
-  for c in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
-    %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
-  done
-# XML
-  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{dtdversion}
+   # SGML
+    for c in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
+        %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
+    done
+    # XML
+    # novdoc entry
+    edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+        --del %{dtdname}-%{dtdversion}
+    # susexsl entry
+    edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+        --del %{name}
 fi
 
 exit 0
