@@ -10,9 +10,12 @@ PACKAGE    := suse-xsl-stylesheets
 DTDNAME    := novdoc
 DTDVERSION := 1.0
 DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
+SUSESTYLES := /usr/share/xml/docbook/stylesheet/suse
 
-NOVDOC_CATALOG := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
-NOVDOC_SCHEMA  := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
+SUSEXSL_CATALOG        := $(PACKAGE).xml
+SUSEXSL_FOR-CATALOG    := for-catalog-$(PACKAGE).xml
+NOVDOC_FOR-CATALOG     := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
+NOVDOC_SCHEMA          := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
 
 DIRECTORIES := catalogs
 
@@ -33,8 +36,8 @@ DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 EXCLUDES := packaging/exclude_non-stylesheets.txt
 
 all: schema/novdocx.rnc schema/novdocx.rng
-all: catalogs/$(NOVDOC_CATALOG)
-all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
+all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
+all: catalogs/$(SUSEXSL_CATALOG) catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
 all: xhtml2html
 	@echo "Ready to install..."
 
@@ -47,7 +50,7 @@ install: create-install-dirs
 	  $(DESTDIR)/var/lib/sgml && \
 	  ln -s /var/lib/sgml/CATALOG.$(DTDNAME)-$(DTDVERSION) \
 	    $(DESTDIR)$(PREFIX)/sgml/
-	install -m644 catalogs/$(NOVDOC_CATALOG) $(DESTDIR)/etc/xml
+	install -m644 catalogs/*.xml $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
 	tar cp --exclude-from=$(EXCLUDES) * | (cd  $(STYLEDIR); tar xpv)
 	find $(STYLEDIR) -type d -exec chmod 755 {} \;
@@ -113,8 +116,8 @@ schema/novdocx.dtd.tmp: $(DIRECTORIES)
 # to fix this; while we are at it, we also remove the DOCTYPE line since 
 # it may cause problems with some XML parsers (hen/egg probem)
 #
-catalogs/$(NOVDOC_CATALOG): $(DIRECTORIES)
-catalogs/$(NOVDOC_CATALOG):
+catalogs/$(NOVDOC_FOR-CATALOG): | $(DIRECTORIES)
+catalogs/$(NOVDOC_FOR-CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "delegatePublic" "-//Novell//DTD NovDoc XML" \
 	  "file://$(NOVDOC_SCHEMA)/catalog.xml" $@
@@ -123,6 +126,24 @@ catalogs/$(NOVDOC_CATALOG):
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(DTDNAME)-$(DTDVERSION)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
+
+catalogs/$(SUSEXSL_FOR-CATALOG): | $(DIRECTORIES)
+catalogs/$(SUSEXSL_FOR-CATALOG):
+	xmlcatalog --noout --create $@
+	xmlcatalog --noout --add "delegateSystem" \
+	  "http://daps.sourceforge.net/release/suse-xsl/" \
+	  "file:///etc/xml/$(SUSEXSL_CATALOG)" $@
+	sed -i '/^<!DOCTYPE .*>$$/d' $@
+	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
+	sed -i '/<\/catalog/i\ </group>' $@
+
+catalogs/$(SUSEXSL_CATALOG): | $(DIRECTORIES)
+catalogs/$(SUSEXSL_CATALOG):
+	xmlcatalog --noout --create $@
+	xmlcatalog --noout --add "rewriteSystem" \
+	  "http://daps.sourceforge.net/release/suse-xsl/current" \
+	  "file//$(SUSESTYLES)" $@
+	sed -i '/^<!DOCTYPE .*>$$/d' $@
 
 # create needed directories
 #
