@@ -19,7 +19,8 @@ unset CONT TITLE DAPSROOT STYLEROOT
 
 # unset to make sure all values are retrieved by sourcing $ENV
 unset MAIN ROOTID PROFOS PROFARCH HTMLROOT STYLEROOT HTML_CSS EPUB_CSS \
-    DISTVER PRODUCTNAME PRODUCTNAMEREG DAPS_ENV_NAME PKGNAME PDFNAME
+    DISTVER PRODUCTNAME PRODUCTNAMEREG DAPS_ENV_NAME PKGNAME PDFNAME \
+    XSLTPARAM DRAFT REMARKS COMMENTS
 
 
 #DAPSROOT="/local/svns/daps/trunk/daps"
@@ -122,10 +123,14 @@ while true ; do
 done
 
 # Set output file
+ENV_FILENAME=$(basename $ENV)
+ENV_DIRNAME=$(dirname $ENV)
+DC_FILENAME="DC-${ENV_FILENAME#ENV-*}"
+
 if [[ -n $OUTDIR ]]; then
-    DC="${OUTDIR}/DC-${ENV#ENV-*}" # result filname
+    DC="${OUTDIR}/DC_FILENAME" # result filname
 else
-    DC="DC-${ENV#ENV-*}" # result filname
+    DC="${ENV_DIRNAME}/$DC_FILENAME" # result filname
 fi
 #
 
@@ -209,6 +214,15 @@ if [[ -n $MAIN ]]; then
 fi
 [[ -n $ROOTID ]] && echo "ROOTID=\"$ROOTID\"" >> $DC
 [[ -n $PDFNAME ]] && echo "PDFNAME=\"$PDFNAME\"" >> $DC
+
+# write Layout section
+if [[ -n $COMMENTS || -n $DRAFT || -n $REMARKS || -n $XSLTPARAM ]]; then
+    echo -e "\n## Layout" >> $DC
+    [[ -n $COMMENTS ]] && echo "COMMENTS=\"$COMMENTS\"" >> $DC
+    [[ -n $DRAFT ]] && echo "DRAFT=\"$DRAFT\"" >> $DC
+    [[ -n $REMARKS ]] && echo "REMARKS=\"$REMARKS\"" >> $DC
+    [[ -n $XSLTPARAM ]] && echo "XSLTPARAM=\"$XSLTPARAM\"" >> $DC
+fi
 
 # write profiling section
 if [[ -n $PROFOS || -n $PROFARCH ]]; then
