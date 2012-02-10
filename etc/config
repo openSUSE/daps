@@ -217,6 +217,7 @@ EPUB_CSS=""
 # DocBook stylesheets remain as a last fallback resort.
 #
 # This option is ignored when not specifying STYLEROOT at the same time.
+# Also see STYLEROOT
 #
 FALLBACK_STYLEROOT=""
 
@@ -490,6 +491,24 @@ REMARK_STR="_remarks"
 #
 ROOTID=""
 
+## Key:      STYLEDEVEL
+## -------------------
+## Description: Custom Stylesheet directory for development purposes.
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+#
+# By default daps uses the DocBook Stylesheets to create output. If you are
+# developing your own set of stylesheets, you may want to set STYLEDEVEL in
+# ~/.daps/config. If set STYLEDEVEL _always_ takes precedence over STYLEROOT!
+# You may also want to set FALLBACK_STYLEROOT alomngside with STYLEDEVEL
+#
+# See also STYLEROOT, FALLBACK_STYLEROOT
+#
+# Do NOT use unless you really know what you are doing.
+#
+STYLEDEVEL=""
+
 ## Key:      STYLEROOT     
 ## -------------------
 ## Description: Custom Stylesheet directory.
@@ -500,6 +519,8 @@ ROOTID=""
 # your own set of stylesheets, specify the absolute path to the stylesheet
 # directory here. The DocBook stylesheets will be used as a fallback in case
 # styles are not defined for all output formats.
+#
+# See also FALLBACK_STYLEROOT
 #
 STYLEROOT=""
 

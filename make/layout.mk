@@ -48,7 +48,6 @@ ifeq ($(DOCBOOK_VERSION), 5)
   EPUB_RUBY_SCRIPT := "$(DOCBOOK4_STYLES)/epub/bin/dbtoepub"
 endif
 
-
 STYLE_CUSTOM          := $(STYLEROOT)
 
 # It only makes sense to set a custom fallback when a custom styleroot 
@@ -57,21 +56,14 @@ STYLE_CUSTOM          := $(STYLEROOT)
 ifdef STYLEROOT
   STYLE_CUSTOM_FALLBACK := $(FALLBACK_STYLEROOT)
 endif
-#
-# if DAPSROOT was changed on the commandline or in the config, we assume
-# we are in "devel" mode and want to use stylesheets from the daps checkout
-# This variables purpose is to make the life of the daps developers easier - it
-# can not be used when deeloping custom stylesheets - in that case, specify
-# SRYLEROOT on the command line, DC-file or user config
-
-ifneq ($(DAPSROOT), $(DAPSROOT_DEFAULT))
-#  STYLE_DEVEL           := $(DAPSROOT)/suse-xslt
-  STYLE_DEVEL :=
-endif
 
 # Create a list with all stylesheet root directories. When setting the
 # stylesheets to be used for the targets, the _first_ element from this
 # list is used (firstword). As a consequence the ORDER is IMPORTANT!
+#
+# STYLEDEVEL, which can be set in $USER_CONFIG, is useful when devolping
+# stylesheets. It always takes precedence over STYLEROOT.
+#
 
 STYLE_ROOTDIRS := $(wildcard $(STYLE_DEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(STYLE_DOCBOOK) )
@@ -143,13 +135,9 @@ STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
 # CSS
 ifdef HTML_CSS
   STYLE_HTMLCSS := $(HTML_CSS)
-else
-  STYLE_HTMLCSS :=
 endif
 ifdef EPUB_CSS
   STYLE_EPUBCSS := $(EPUB_CSS)
-else
-  STYLE_EPUBCSS :=
 endif
 
 
