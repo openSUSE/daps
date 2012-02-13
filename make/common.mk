@@ -289,13 +289,13 @@ ifeq ($(FOPTYPE), fop)
                    --stringparam xep.extensions 0
   FOSTRINGS     += --stringparam fop1.extensions 1 \
                    --stringparam xep.extensions 0
-  ifeq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
+  ifeq ("$(DAPSROOT)", "$(DAPSROOT_DEFAULT)")
     FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
   else
     FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/fop/fop-daps.xml 
   endif
 else
-  ifeq ($(DAPSROOT), $(DEFAULT_DAPSROOT))
+  ifeq ("$(DAPSROOT)", "$(DAPSROOT_DEFAULT)")
     FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
   else
     FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/xep/xep-daps.xml 
