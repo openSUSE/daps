@@ -38,14 +38,11 @@
 <!-- Path to stylesheets -->
 <xsl:param name="styleroot"></xsl:param>
 
-<!--http://docbook.sourceforge.net/release/images/draft.png-->
-<xsl:param name="draft.watermark.image" 
-  select="concat('file://', $styleroot, 'fo/draft.png')"/>
-
+<xsl:param name="draft.watermark.image">../images/misc/draft.png</xsl:param> 
 
 <!--  -->
-<xsl:param name="booktitlepage.bw.logo">images/svg/suse-logo-bw.svg</xsl:param>
-<xsl:param name="booktitlepage.color.logo">images/svg/suse-logo.svg</xsl:param>
+<xsl:param name="booktitlepage.bw.logo">../images/logos/suse-logo-bw.svg</xsl:param>
+<xsl:param name="booktitlepage.color.logo">../images/logos/suse-logo.svg</xsl:param>
 
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
@@ -58,7 +55,7 @@
 <xsl:param name="callout.unicode">0</xsl:param>
 <xsl:param name="callout.graphics">1</xsl:param>
 <xsl:param name="callout.graphics.extension">.pdf</xsl:param>
-<xsl:param name="callout.graphics.path" select="concat($dtdroot, 'images/callouts/')"/>
+<xsl:param name="callout.graphics.path">../images/callouts/</xsl:param>
   
 <!--<xsl:param name="callout.unicode.start.character">10102</xsl:param>-->
 <!--<xsl:param name="callout.unicode.font">TomsCallouts</xsl:param>-->
@@ -187,8 +184,7 @@ set       nop
    </xsl:choose>
 </xsl:param>
 <xsl:param name="admon.graphics.extension">.svg</xsl:param>
-<xsl:param name="admon.graphics.path"
->file:///usr/share/xml/docbook/stylesheet/nwalsh/current/images/</xsl:param>
+<xsl:param name="admon.graphics.path">../images/admon/</xsl:param>
 
 
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>

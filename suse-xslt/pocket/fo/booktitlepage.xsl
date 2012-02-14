@@ -76,17 +76,14 @@
          <xsl:when test="$format.print = '1'">
            <xsl:call-template name="fo-external-image">
              <xsl:with-param name="filename">
-               <xsl:value-of select="$dtdroot"/>
-               <xsl:text>/xslt/images/svg/suse-logo-bw.svg</xsl:text>
+               <xsl:value-of select="$booktitlepage.bw.logo"/>
              </xsl:with-param>
            </xsl:call-template>
          </xsl:when>
          <xsl:otherwise>
            <xsl:call-template name="fo-external-image">
              <xsl:with-param name="filename">
-               <xsl:value-of select="$dtdroot"/>
-               <xsl:text>/xslt/images/svg/suse-logo.svg</xsl:text>
-             </xsl:with-param>
+               <xsl:value-of select="$booktitlepage.color.logo"/>
            </xsl:call-template>
          </xsl:otherwise>
        </xsl:choose>

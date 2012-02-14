@@ -200,14 +200,10 @@
                 <fo:footnote-body text-align="right" margin-left="0pt"
                   margin-right="0pt">
                   <fo:block padding="0pt">
-                    <!--<fo:external-graphic width="3.5cm"
-                      content-width="scale-to-fit"
-                      content-height="scale-to-fit"
-                      src="url(&quot;{$dtdroot}/xslt/images/svg/novell-logo.svg&quot;)"/>-->
                     <fo:external-graphic width="3.5cm"
                       content-width="scale-to-fit"
                       content-height="scale-to-fit"
-                      src="url(&quot;{$dtdroot}/xslt/images/svg/suse-logo.svg&quot;)"
+                      src="url(&quot;../images/svg/suse-logo.svg&quot;)"
                     />
                   </fo:block>
                   <fo:block
@@ -274,12 +270,12 @@
                       height="0.59"
                       content-width="scale-to-fit"
                       content-height="scale-to-fit"
-                      src="url(&quot;{$dtdroot}/xslt/images/svg/novell-logo.svg&quot;)"/>
+                      src="url(&quot;../images/svg/novell-logo.svg&quot;)"/>
                    <fo:leader leader-length="2em" leader-pattern="space"/>-->
                     <fo:external-graphic width="2.5cm"
                       content-width="scale-to-fit"
                       content-height="scale-to-fit"
-                      src="url(&quot;{$dtdroot}/xslt/images/svg/suse-logo.svg&quot;)"
+                      src="url(&quot;../images/svg/suse-logo.svg&quot;)"
                     />
                   </fo:block>
                   <fo:block
