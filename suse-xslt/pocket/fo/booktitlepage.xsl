@@ -84,6 +84,7 @@
            <xsl:call-template name="fo-external-image">
              <xsl:with-param name="filename">
                <xsl:value-of select="$booktitlepage.color.logo"/>
+             </xsl:with-param>
            </xsl:call-template>
          </xsl:otherwise>
        </xsl:choose>
