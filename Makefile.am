@@ -1,10 +1,15 @@
 #
 #
 #
-AUTOMAKE_OPTIONS = dist-bzip2 foreign
-# SUBDIRS = bin man etc
+AUTOMAKE_OPTIONS = 1.10 foreign no-define no-dist no-installinfo -Wall -Werror
+SUBDIRS=
 
-# bin/Makefile man/Makefile etc/Makefile
-# AC_OUTPUT(Makefile)
+DAPS_CATALOG := for-catalog-$(PACKAGE).xml
+DAPSROOT     := $(shell pwd)
+DIRECTORIES  := catalogs
 
-dist_noinst_SCRIPTS = autogen.sh
+DESTDIR      ?=
+
+STYLEROOT    := $(datadir)/xml/docbook/stylesheet/suse
+
+#include Makefile.daps
