@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Log in to Sourceforge to create a shell account
+# 
+# Copyright 2012, Thomas Schraitle
+#
+# $1=User
+
+USER=${1:-tom_schr}
+PROJECT=daps
+
+echo "Logging as $USER for $PROJECT..."
+ssh -t ${USER},${PROJECT}@shell.sourceforge.net create
+
