@@ -29,127 +29,157 @@
   planned for version 2.0.
  </para>
  </sect1>
- <sect1 id="sec.daps.user.oview.addon">
-  <title>Additional Software</title>
-  <para>
-   &dapsacr; can be used in combination with the following software
-   components:
+ <sect1 id="sec.daps.user.oview.req">
+  <title>Requirements</title>
+   <variablelist>
+   <varlistentry>
+    <term>RAM, Hard Disk Space, CPU</term>
+    <listitem>
+     <para>&dapsacr; is a lean solution that does not require a lot of system 
+    resources. The disk space consumed rather depends on the amount of your 
+    documentation sources and the number of output formats you want to generate.
+    If you have multiple or very large documentation projects, a
+    machine with multiple-cores is recommended, but is not required.
+    </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Software</term>
+    <listitem>
+     <para>In addition to &dapsacr;, you need the following software:</para>
+     <itemizedlist>
+      <listitem>
+       <para>
+      An XML (or text) editor of your choice.
+    </para>
+      </listitem>
+      <listitem>
+       <para>For generating PDF output: an FO formatter, like FOP or XEP.</para>
+      </listitem>
+     </itemizedlist>
+     <para>To add version management and workflow mechanisms to your documentations 
+     projects, you can install <xref linkend="sec.daps.user.oview.addon" 
+     xrefstyle="select:title"/>.</para>
+    </listitem>
+    </varlistentry> 
+   <varlistentry>
+    <term>Directory Structure</term>
+    <listitem>
+     <para>For &dapsacr; to work out of the box, it requires a certain
+      organization of your XML files and images within your documentation
+      directory. For details, refer to <xref linkend="sec.daps.user.oview.dir.doc"/>. 
+      You can easily generate the necessary structure with the &dapsacr; 
+      initialization script, <command>daps-init</command>.</para>
+    </listitem>
+   </varlistentry>
+   </variablelist>
+  </sect1>
+  <sect1 id="sec.daps.user.oview.addon">
+   <title>Additional Software</title>
+   <para>To add further components like version management or a workflow mechanism
+   for your documentation projects, use &daps; in combination with the following 
+   software:
   </para>
+   <itemizedlist>
+    <listitem>
+     <para> Any version management system, like CVS, Subversion, Mercurial or Git.
+      </para>
+    </listitem>
+    <listitem>
+     <para>&dm;, a command-line tool for adding and retrieving meta-information 
+     for all files belonging to a documentation project. &dm; is especially useful 
+     for larger, collaborative projects where it helps you to keep track of 
+     owners (authors) and editing status of all files. However, &dm; requires to 
+     host your documentation files on a Subversion server. 
+     <remark>taroth 2012-02-07: todo - add xref to separate &dm; guide</remark>
+     </para>
+    </listitem>
+   </itemizedlist>
 
-  <itemizedlist>
-   <listitem>
-    <para>
-     an XML (or text) editor of your choice (required)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     an FO formatter, like FOP or XEP (required for generating PDF output)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     any version management system, like CVS, Subversion, Mercurial or Git
-     (optional)
-    </para>
-   </listitem>
-   <listitem>
-    <para>&dm; (optional). &dm; integrates with &dapsacr; and adds a workflow and
-    management component to your documentation environment. Use &dm; to add and 
-    retrieve meta-information for all files belonging to a documentation project. 
-    &dm; is especially useful for larger, collaborative projects where it helps 
-    you to keep track of owners (authors) and editing status of all files. 
-    However, &dm; requires to host your documentation files on a
-    Subversion server. <remark>taroth 2012-02-07: todo - add xref to separate
-  dm; guide</remark>
-    </para>
-   </listitem>
-  </itemizedlist>
-
-  <para>
+   <para>
    Together with the software components mentioned above, &dapsacr; can be
    used as a fully-fledged authoring and content management system for documentation
    projects based on DocBook.
   </para>
- </sect1>
- <sect1 id="sec.daps.user.oview.concepts">
-  <title>&dapsacr; Configuration</title>
+  </sect1>
+  <sect1 id="sec.daps.user.oview.concepts">
+   <title>&dapsacr; Configuration</title>
 
-  <para>
+   <para>
    &dapsacr; can be customized to a large degree by setting options in various
    places:
   </para>
 
-  <itemizedlist>
-   <listitem>
-    <para>
+   <itemizedlist>
+    <listitem>
+     <para>
      &dapsconf; (system-wide configuration file)
     </para>
-   </listitem>
-   <listitem>
-    <para>
+    </listitem>
+    <listitem>
+     <para>
      &dapsconfu; (user-specific configuration file)
     </para>
-   </listitem>
-   <listitem>
-    <para>
+    </listitem>
+    <listitem>
+     <para>
      &dc; (doc config) file of the documentation project (for settings specific 
      to a document or documentation set)
     </para>
-   </listitem>
-   <listitem>
-    <para>
+    </listitem>
+    <listitem>
+     <para>
      on the fly at the command line by specifing options to a
      <command>daps</command> command.
     </para>
-   </listitem>
-  </itemizedlist>
+    </listitem>
+   </itemizedlist>
 
-  <para>
+   <para>
    The configuration file &dapsconf; lists all settings that can be
    configured, including a short description for each option. Settings are
    always defined as <option>KEY="VALUE"</option> pairs.
   </para>
- </sect1>
- <sect1 id="sec.daps.user.oview.docproject">
-  <title>Defining Documentation Projects</title>
+  </sect1>
+  <sect1 id="sec.daps.user.oview.docproject">
+   <title>Defining Documentation Projects</title>
 
-  <para>The following files are the key files for defining a documentation
+   <para>The following files are the key files for defining a documentation
    project so that it can be processed by &dapsacr;:</para>
 
-  <variablelist>
-   <varlistentry>
-    <term>
-     <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/>
-    </term>
-    <listitem>
-     <para>An XML file containing the <quote>starting point</quote> (the 
+   <variablelist>
+    <varlistentry>
+     <term>
+      <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/>
+     </term>
+     <listitem>
+      <para>An XML file containing the <quote>starting point</quote> (the 
      highest-level object) of your documentation project (for example, 
      <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>). 
     For larger documentation projects, it is good practice to name the file 
     <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>, 
     but you can use any other filename as well.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
-     <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>
-    </term>
-    <listitem>
-     <para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>
+     </term>
+     <listitem>
+      <para>
       A configuration file defining a number of parameters for your
       documentation project (like the Main file, layout variants, or which
       profiling information to use).
      </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-  <sect2 id="sec.daps.user.oview.docproject.main">
-   <title>Main File</title>
-   <para>Find a simple example in <xref linkend="ex.daps.main.book"/>.</para>
-   <example id="ex.daps.main.book">
-    <title>Main File of a Book (DocBook 4.x)</title>
-    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <sect2 id="sec.daps.user.oview.docproject.main">
+    <title>Main File</title>
+    <para>Find a simple example in <xref linkend="ex.daps.main.book"/>.</para>
+    <example id="ex.daps.main.book">
+     <title>Main File of a Book (DocBook 4.x)</title>
+     <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;book id="book.template" lang="en"&gt;
@@ -190,8 +220,8 @@
  &lt;/chapter&gt;
 &lt;/book&gt;
 </screen>
-   </example>
-   <para>If your documentation project consists of multiple books or articles 
+    </example>
+    <para>If your documentation project consists of multiple books or articles 
    in a  <sgmltag>set</sgmltag>, the main file is the one that contains the 
    <sgmltag>set</sgmltag> element. In the following example, the components of 
    the set (individual books) are not part of the Main file, but have been put
@@ -201,9 +231,9 @@
    modularization for books by splitting them into individual chapters files (or
    split chapters into a number of section files).
    </para>
-   <example id="ex.daps.main.set">
-    <title>Main File of a Set (DocBook 4.x)</title>
-    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <example id="ex.daps.main.set">
+     <title>Main File of a Set (DocBook 4.x)</title>
+     <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;set lang="en"&gt;
@@ -215,19 +245,19 @@
  &lt;xi:include href="book_kvm.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
 &lt;/set&gt;
     </screen>
-   </example>
-  </sect2>
+    </example>
+   </sect2>
 
-  <sect2 id="sec.daps.user.oview.docproject.dc">
-   <title>&dc; (Doc Config) File</title>
-   <para>Of the multiple parameters that can be set in the &dc; file, the only one 
+   <sect2 id="sec.daps.user.oview.docproject.dc">
+    <title>&dc; (Doc Config) File</title>
+    <para>Of the multiple parameters that can be set in the &dc; file, the only one 
   required is <parameter>MAIN</parameter>, pointing to the XML file that you
   want to process. Suppose you want to publish a whitepaper from DocBook XML 
   with the default DocBook stylesheets, the following example shows a very basic
   &dc; file that you could use:</para>
-   <example id="ex.daps.dc.basic">
-    <title>A Very Basic &dc; File</title>
-    <screen>## ---------------------------- 
+    <example id="ex.daps.dc.basic">
+     <title>A Very Basic &dc; File</title>
+     <screen>## ---------------------------- 
 ## Doc Config File for DAPS
 ## DocBook Authoring and Publishing Suite
 ## ----------------------------
@@ -235,20 +265,20 @@
 ## Basics
 MAIN="my_whitepaper.xml" 
  </screen>
-   </example>
-   <para>
+    </example>
+    <para>
   The example above is a bit artificial though&mdash;if you do not want to 
    specify any further parameters, you can also set the <parameter>MAIN</parameter>
    parameter on the command line and do completely without &dc;.
    <remark>taroth 2012-02-10: add xref to usage chapter</remark>
-   </para>
-   <para>
-    <xref linkend="ex.daps.dc.bookcustom"/> shows a more realistic &dc; file 
+    </para>
+    <para>
+     <xref linkend="ex.daps.dc.bookcustom"/> shows a more realistic &dc; file 
    that can be used to build a book with customized DocBook stylesheets.</para>
 
-   <example id="ex.daps.dc.bookcustom">
-    <title>&dc; File For a Book</title>
-    <screen>## ---------------------------- 
+    <example id="ex.daps.dc.bookcustom">
+     <title>&dc; File For a Book</title>
+     <screen>## ---------------------------- 
 ## Doc Config File for DAPS
 ## DocBook Authoring and Publishing Suite
 ## ----------------------------
@@ -259,12 +289,12 @@ MAIN="book_daps_user.xml"
 ## stylesheet location
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse" 
  </screen>
-   </example>
-   <para>In addition to the parameter <parameter>MAIN</parameter> that points to the 
+    </example>
+    <para>In addition to the parameter <parameter>MAIN</parameter> that points to the 
 respective book XML file, this &dc; file specifies a path to customized 
 stylesheets that &dapsacr; should use to build the book. Custom 
 stylesheets can be defined for all output formats that can be generated by &dapsacr;.</para>
-   <para> For a documentation <sgmltag>set</sgmltag> (a collection of books or
+    <para> For a documentation <sgmltag>set</sgmltag> (a collection of books or
     articles), multiple &dc; files can be defined. This allows you to set both
     different parameters or different values for individual books in the set:
     For example, by refering a different <parameter>ROOTID</parameter> in a
@@ -272,10 +302,10 @@ stylesheets can be defined for all output formats that can be generated by &daps
     example would be to specify different output modes (such as draft or
     annotated) for individual books in the same documentation set.
   </para>
-   <para>The following example shows the &dc; file of the &dapsuser;. </para>
-   <example id="ex.daps.dc.user">
-    <title>&dc; File For a Book</title>
-    <screen>## ---------------------------- 
+    <para>The following example shows the &dc; file of the &dapsuser;. </para>
+    <example id="ex.daps.dc.user">
+     <title>&dc; File For a Book</title>
+     <screen>## ---------------------------- 
 ## Doc Config File for DAPS
 ## DocBook Authoring and Publishing Suite
 ## ----------------------------
@@ -296,25 +326,25 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref linke
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
   </screen>
-   </example>
+    </example>
 
-   <calloutlist>
-    <callout arearefs="co.daps.dc.main">
-     <para>
+    <calloutlist>
+     <callout arearefs="co.daps.dc.main">
+      <para>
      Mandatory parameter. Sets the main file that contains
      <quote>references</quote> to other books, chapters, appendices, etc. 
     </para>
-    </callout>
-    <callout arearefs="co.daps.dc.rootid">
-     <para>
+     </callout>
+     <callout arearefs="co.daps.dc.rootid">
+      <para>
      Optional parameter. Defines the root ID of the element to be used for
      creating an output format. Usually, you define the root ID of a
      <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>
      element here.
     </para>
-    </callout>
-    <callout arearefs="co.daps.dc.profile">
-     <para>
+     </callout>
+     <callout arearefs="co.daps.dc.profile">
+      <para>
       Optional parameters. If you have similar products to document and want
       to generate documentation variants from your XML files, you can do so
       with the help of conditional text (or profiling, as it is called in
@@ -329,10 +359,10 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
        2012-02-13 - fs: Add link to profiling section
       </remark>
 
-     </para>
-    </callout>
-    <callout arearefs="co.daps.dc.styleroot">
-     <para>
+      </para>
+     </callout>
+     <callout arearefs="co.daps.dc.styleroot">
+      <para>
      Optional parameter. If the parameter is not specified, &dapsacr; will 
      use the default DocBook stylesheets for production. With 
      <parameter>STYLEROOT</parameter> specify the absolute path to the directory
@@ -342,25 +372,25 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
       formats. If custom stylesheets are not found, &dapsacr; will automatically
       fall back to the DocBook stylesheets.
      </para>
-    </callout>
-    <callout arearefs="co.daps.dc.css">
-     <para>
+     </callout>
+     <callout arearefs="co.daps.dc.css">
+      <para>
      Optional parameters. If they are not specified, &dapsacr; will 
      use the default DocBook stylesheets for production of HTML or ePUB. 
      With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
      specify the abolute path to the respective CSS file. 
      </para>
-    </callout>
-    <callout arearefs="co.daps.dc.source">
-     <para>
+     </callout>
+     <callout arearefs="co.daps.dc.source">
+      <para>
      Optional line. You only need to add this line if you want to be able to 
      source &dc; files on the Bash with &dapsacr;. Sourcing a &dc; file (formerly 
      called <literal>ENV</literal> file) was necessary to work with the 
      documentation environment provided by &susedoc; (&dapsacr;' predecessor).
     </para>
-    </callout>
-   </calloutlist>
-   <para>
+     </callout>
+    </calloutlist>
+    <para>
    If your documentation set contains cross-references between the
    individual books, it is useful to define an additional &dc; file
    (<emphasis>without</emphasis> the <parameter>ROOTID</parameter> parameter).
@@ -369,9 +399,9 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
    <xref linkend="ex.daps.dc.set"/>.
   </para>
 
-   <example id="ex.daps.dc.set">
-    <title>&dc; File for a Set</title>
-    <screen>## ---------------------------- 
+    <example id="ex.daps.dc.set">
+     <title>&dc; File for a Set</title>
+     <screen>## ---------------------------- 
 ## Doc Config File for DAPS
 ## DocBook Authoring and Publishing Suite
 ## ----------------------------
@@ -390,30 +420,30 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE</screen>
-   </example>
-  </sect2>
- </sect1>
- <sect1 id="sec.daps.user.oview.dirstruct">
-  <title>Directory Structure</title>
+    </example>
+   </sect2>
+  </sect1>
+  <sect1 id="sec.daps.user.oview.dirstruct">
+   <title>Directory Structure</title>
 
-  <para>
+   <para>
    For &dapsacr; to work out of the box, your XML files and images should be
    organized within your documentation directory (DOC_DIR) as shown in
    <xref linkend="ex.daps.user.dir.doc"/>.
   </para>
 
-  <sect2 id="sec.daps.user.oview.dir.doc">
-   <title>Documentation Source Files</title>
-   <para>
-    <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
+   <sect2 id="sec.daps.user.oview.dir.doc">
+    <title>Documentation Source Files</title>
+    <para>
+     <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
     documentation project. The directories are printed in bold.
    </para>
-   <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
+    <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
       *after* the term. This avoids unaligned characters (as the callout
     is usually a bit wider)</remark>
-   <example id="ex.daps.user.dir.doc">
-    <title>Directory Structure</title>
-    <screen>
+    <example id="ex.daps.user.dir.doc">
+     <title>Directory Structure</title>
+     <screen>
      <co id="co.docdir.base"/>
      <replaceable>YOUR_DOC_DIR</replaceable>
 <co id="co.docdir.dc"/> |--&dc;*
@@ -425,70 +455,70 @@ export DOCCONF=$BASH_SOURCE</screen>
          |--<emphasis role="bold">svg</emphasis>
 <co id="co.docdir.xml"/> |--<emphasis role="bold">xml</emphasis>
 <co id="co.docdir.main"/>    |--MAIN*.xml</screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.docdir.base">
-     <para>
-      <quote>Working directory</quote> for the respective documentation project.
+    </example>
+    <calloutlist>
+     <callout arearefs="co.docdir.base">
+      <para>
+       <quote>Working directory</quote> for the respective documentation project.
      </para>
-    </callout>
-    <callout arearefs="co.docdir.dc">
-     <para>
+     </callout>
+     <callout arearefs="co.docdir.dc">
+      <para>
       &dc; file defining the documentation project. For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.
      </para>
-    </callout>
+     </callout>
 <!--<callout arearefs="co.daps.user.dir.img">
      <para>Top-level directory for the images used in the documentation project.
       </para>
     </callout>-->
-    <callout arearefs="co.docdir.img.src">
-     <para>
+     <callout arearefs="co.docdir.img.src">
+      <para>
       Top-level directory for any original images that you want to use in
       the documentation project. Contains subdirectories for images in
       various formats. Any images to be referenced in the XML sources must
       be put in the respective subdirectories.
       <remark>taroth 2012-02-01: add xref to 
      section about using images (how to reference them -> path!)</remark>
-     </para>
-    </callout>
-    <callout arearefs="co.docdir.xml">
-     <para>
+      </para>
+     </callout>
+     <callout arearefs="co.docdir.xml">
+      <para>
       Directory holding the XML files for the documentation project. If you
       declare entities in an external file (for example, in
       <filename>entity-decl.ent</filename>), put the entity declaration file
       here, too.
       <remark>taroth 2012-02-01: toms, this is not a must, or is it?</remark>
-      <remark>toms 2012-02-08: It is a must, if you define entities.
+       <remark>toms 2012-02-08: It is a must, if you define entities.
          Otherwise not, of course. :)</remark>
-     </para>
-    </callout>
-    <callout arearefs="co.docdir.main">
-     <para>
+      </para>
+     </callout>
+     <callout arearefs="co.docdir.main">
+      <para>
       The main file of the documentation project. It contains
       <quote>references</quote> to other books, chapters, appendices, etc.
      </para>
-    </callout>
-   </calloutlist>
-  </sect2>
+     </callout>
+    </calloutlist>
+   </sect2>
 
-  <sect2 id="sec.daps.user.oview.dir.build">
-   <title>Structure Created by &dapsacr;</title>
-   <para>
+   <sect2 id="sec.daps.user.oview.dir.build">
+    <title>Structure Created by &dapsacr;</title>
+    <para>
     When generating the first output format from your documentation project,
     &dapsacr; adds another directory that holds the generated contents. It
     is named <filename>build</filename> (if not set otherwise in &dapsconf;,
     parameter <parameter>BUILD_DIR</parameter>), and is created in parallel to
     the <filename>xml</filename> and <filename>images</filename> directory.
    </para>
-   <para>
+    <para>
     The contents of the <filename>build</filename> directory is structured
     as follows:
    </para>
-   <remark>toms 2012-02-08: This looks garbled :)</remark>
-   <example id="ex.daps.user.build">
-    <title>Build Directory</title>
-    <screen>
+    <remark>toms 2012-02-08: This looks garbled :)</remark>
+    <example id="ex.daps.user.build">
+     <title>Build Directory</title>
+     <screen>
      <co id="co.builddir"/> |--<emphasis role="bold">build</emphasis>
      <co id="co.builddir.dc"/>    |--<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable>
      </emphasis>
@@ -498,15 +528,15 @@ export DOCCONF=$BASH_SOURCE</screen>
      <co id="co.builddir.profiled"/>    |--<emphasis role="bold">.profiled</emphasis>
      <co id="co.builddir.tmp"/>    |--<emphasis role="bold">.tmp</emphasis>
     </screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.builddir">
-     <para>
+    </example>
+    <calloutlist>
+     <callout arearefs="co.builddir">
+      <para>
       Directory that holds all contents build by &dapsacr;.
      </para>
-    </callout>
-    <callout arearefs="co.builddir.dc">
-     <para>
+     </callout>
+     <callout arearefs="co.builddir.dc">
+      <para>
       For each of your documentation projects, &dapsacr; creates a
       subdirectory, named after the respective &dc; from which you build
       the project. All formats that have been generated from the &dc; (PDF,
@@ -514,35 +544,35 @@ export DOCCONF=$BASH_SOURCE</screen>
       subdirectory stores log files for each output format that has been
       generated by &dapsacr;.
      </para>
-    </callout>
-    <callout arearefs="co.builddir.img">
-     <para>
+     </callout>
+     <callout arearefs="co.builddir.img">
+      <para>
       Directory holding the images created by &dapsacr;.
      </para>
-    </callout>
-    <callout arearefs="co.builddir.profiled">
-     <para>
+     </callout>
+     <callout arearefs="co.builddir.profiled">
+      <para>
       Directory holding the profiled XML sources created by &dapsacr;.
      </para>
-    </callout>
-    <callout arearefs="co.builddir.tmp">
-     <para>
+     </callout>
+     <callout arearefs="co.builddir.tmp">
+      <para>
       Directory holding temporary files created by &dapsacr;(for example,
       the FO files).
      </para>
-    </callout>
-   </calloutlist>
-   <tip>
-    <title>Creating a New Documentation project from Scratch</title>
-    <para>
+     </callout>
+    </calloutlist>
+    <tip>
+     <title>Creating a New Documentation project from Scratch</title>
+     <para>
      &dapsacr; also contains the script <command>daps-init</command>for
      creating a new documentation project from scratch. <remark>taroth
       2011-12-29: add xref later</remark> When using that script, the direcory
      structure is automatically set up and an example &dc; file is
      automatically created.
   </para>
-   </tip>
-  </sect2>
- </sect1>
+    </tip>
+   </sect2>
+  </sect1>
 
-</chapter>
+ </chapter>
