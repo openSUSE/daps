@@ -1,5 +1,6 @@
-dnl                                               -*- Autoconf -*-
-dnl Process this file with autoconf to produce a configure script or use autogen.sh
+dnl                               -*- Autoconf -*-
+dnl Process this file with autoconf to produce a configure script
+dnl or use autogen.sh (recommended)
 dnl
 dnl Authors:
 dnl   Thomas Schraitle  <toms@opensuse.org>
@@ -10,7 +11,7 @@ m4_define(daps_version_minor, 9)
 m4_define(daps_version_micro, 9dev)
 
 AC_PREREQ([2.68])
-AC_INIT([daps], [0.9.2], [fs@suse.de, toms@suse.de], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [0.9.9], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
 
@@ -21,13 +22,12 @@ AC_MSG_NOTICE([
 ])
 
 AC_CONFIG_SRCDIR([Makefile.am])
-# Turn on all warnings, report warnings as errors:
-AM_INIT_AUTOMAKE([1.10 no-define -Wall -Werror])
+#AM_INIT_AUTOMAKE([1.10 foreign no-define no-dist no-installinfo -Wall -Werror])
 
 
-AC_CONFIG_FILES([
-Makefile
-])
+#AC_CONFIG_FILES([
+#Makefile
+#])
 
 # Command-line arguments
 ## AC_ARG_WITH(stuff, [  --with-stuff            enable stuff])
@@ -36,7 +36,7 @@ AC_PREFIX_DEFAULT(/usr)
 
 # Some constants
 CATALOG_FILE="/etc/xml/catalog"
-DB_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 FONT_DIR="/usr/share/fonts"
 
 # Checks for programs.
@@ -46,60 +46,31 @@ AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_INSTALL
 
-
-AC_PATH_PROG(PERL, [perl] )
-if test -z "$PERL"; then
-  HAVE_PERL='no'
-else
-  HAVE_PERL='yes'
-fi
-AC_SUBST(HAVE_PERL)
-
-
-dnl We require Python >= 2.6
-AM_PATH_PYTHON([2.6])
-
-
-AC_PATH_PROG([INKSCAPE], [inkscape] )
-if test -z "$INKSCAPE"; then
-  HAVE_INKSCAPE='no'
-else
-  HAVE_INKSCAPE='yes'
-fi
-AC_SUBST(HAVE_INKSCAPE)
-
-
-AC_PATH_PROG([OPTIPNG], [optipng] )
-if test -z "$OPTIPNG"; then
-  HAVE_OPTIPNG='no'
-else
-  HAVE_OPTIPNG='yes'
-fi
-AC_SUBST(HAVE_OPTIPNG)
-
-
-AC_PATH_PROG([TRANSFIG], [transfig] )
-if test -z "$TRANSFIG"; then
-  HAVE_TRANSFIG='no'
-else
-  HAVE_TRANSFIG='yes'
-fi
-AC_SUBST(HAVE_TRANSFIG)
-
-AC_PATH_PROG([XMLLINT], [xmllint])
-if test -z "$XMLLINT"; then
-   AC_MSG_ERROR([xmllint not found])
+# make
+AC_PATH_PROG([MAKE], [make])
+if test -z "$MAKE"; then
+   AC_MSG_ERROR([make not found]) 
 fi
 
-AC_PATH_PROG([EXIFTOOL], [exiftool])
-if test -z "$"; then
-   AC_MSG_ERROR([exiftool not found]) 
+# tar
+AC_PATH_PROG([TAR], [tar] )
+if test -z "$TAR"; then
+   AC_MSG_ERROR([tar not found]) 
 fi
 
+# perl
+#AC_PATH_PROG([PERL], [perl] )
+#if test -z "$PERL"; then
+#  HAVE_PERL='no'
+#else
+#  HAVE_PERL='yes'
+#fi
+#AC_SUBST(HAVE_PERL)
 
 # (files, [action-if-found], [action-if-not-found])
 # AC_CHECK_FILES
 
+#--------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for XML tools... ])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
@@ -110,7 +81,7 @@ fi
 
 AC_PATH_PROG([XSLTPROC], [xsltproc])
 if test -z "$XSLTPROC"; then
-   AC_MSG_ERROR([xsltproc not found]) 
+   AC_MSG_ERROR([xsltproc (libxslt) not found]) 
 fi
 
 AC_PATH_PROG([XMLCATALOG], [xmlcatalog])
@@ -123,14 +94,10 @@ if test -z "$FOP"; then
    AC_MSG_ERROR([fop not found]) 
 fi
 
-AC_PATH_PROG([TRANG], [trang] )
-if test -z "$TRANG"; then
-  AC_MSG_ERROR([trang not found]) 
-fi
-
+# recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing] )
 if test -z "$JING"; then
-  AC_MSG_ERROR([jing not found]) 
+  AC_MSG_WARN([jing not found => no DocBook 5 support]) 
 fi
 
 AC_CHECK_FILE([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
@@ -138,30 +105,79 @@ if test -z "$CATALOG"; then
   AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
 fi
 
-AC_PATH_PROG([XMLSTARLET], [xml])
-if test -z "$XMLSTARLET"; then
-   AC_MSG_WARN([xmlstarlet (xml) not found]) 
+#--------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for Image conversion tools...])
+
+# convert (ImageMagick)
+AC_PATH_PROG([CONVERT], [convert] )
+if test -z "$CONVERT"; then
+   AC_MSG_ERROR([convert (ImageMagick) not found]) 
 fi
 
-AC_PATH_PROG([XMLFORMAT], [xmlformat])
-if test -z "$XMLFORMAT"; then
-   AC_PATH_PROG([XMLFORMAT], [xmlformat.pl])
-   if test -z "$XMLFORMAT"; then
-     AC_MSG_WARN([xmlformat not found]) 
-   fi
+# dia
+AC_PATH_PROG([DIA], [dia] )
+if test -z "$DIA"; then
+   AC_MSG_WARN([dia not found => no support for .dia images])
 fi
 
+# inkscape
+AC_PATH_PROG([INKSCAPE], [inkscape] )
+if test -z "$INKSCAPE"; then
+   AC_MSG_WARN([inkscape not found => no support for .svg images])
+fi
+
+# optipng
+AC_PATH_PROG([OPTIPNG], [optipng] )
+if test -z "$OPTIPNG"; then
+  AC_MSG_WARN([optipng not found => no support for size reduction of .png images])
+fi
+# exiftool
+AC_PATH_PROG([EXIFTOOL], [exiftool])
+if test -z "$EXIFTOOL"; then
+   AC_MSG_WARN([exiftool not found => no support for size reduction of .png images])
+fi
+
+# transfig
+AC_PATH_PROG([XFIG], [xfig] )
+if test -z "$XFIG"; then
+  AC_MSG_WARN([xfig (transfig) not found => no support of .fig images])
+fi
+
+# svg DTD
+for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
+               "-//W3C//DTD SVG 1.1 Basic//EN" ; do
+  AC_MSG_CHECKING([for $SVG_DTD])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$SVG_DTD" >&2]); then
+    AC_MSG_RESULT([found])
+    HAVE_SVGDTD="yes"
+  else
+    AC_MSG_WARN([not found])
+  fi
+done
+if test -z "$HAVE_SVGDTD"; then
+   AC_MSG_WARN([SVG DTD not found => no support for .svg images])
+fi               
+
+#--------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
+# python
+dnl We require Python >= 2.6
+AM_PATH_PYTHON([2.6])
+
 # Variables HAVE_PYMOD_* are filled with "yes" or "no"
-AC_PYTHON_MODULE([lxml], [fatal])
-AC_SUBST(HAVE_PYMOD_LXML)
-AC_PYTHON_MODULE([optparse], [fatal])
-AC_SUBST(HAVE_PYMOD_OPTPARSE)
+AC_PYTHON_MODULE([xml], [fatal])
+AC_SUBST(HAVE_PYMOD_XML)
 
+# only needed fo daps-docmanager
+#AC_PYTHON_MODULE([lxml], [fatal])
+#AC_SUBST(HAVE_PYMOD_LXML)
+#AC_PYTHON_MODULE([optparse], [fatal])
+#AC_SUBST(HAVE_PYMOD_OPTPARSE)
 
-AC_MSG_NOTICE([===== Checking for Public Identifiers...])
+#--------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for DocBook 4...])
 
-DOCBOOKDTDS=""
+#DOCBOOKDTDS=""
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.2//EN" \
                "-//OASIS//DTD DocBook XML V4.3//EN" \
@@ -169,50 +185,57 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
   AC_MSG_CHECKING([for $XML_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
-    AC_MSG_RESULT([found])
-    ## Extract version from public identifier
-    x=${XML_DTD##*XML V}    
-    DOCBOOKDTDS="$DOCBOOKDTDS${x%%//*} "
+    AC_MSG_RESULT([yes])
+#    ## Extract version from public identifier
+#    x=${XML_DTD##*XML V}    
+#    DOCBOOKDTDS="$DOCBOOKDTDS${x%%//*} "
+     HAVE_DOCBOOK="yes"
   else
-    AC_MSG_WARN([not found])
+    AC_MSG_RESULT([no])
   fi
 done
-AC_SUBST(DOCBOOKDTDS)
+#AC_SUBST(DOCBOOKDTDS)
+if test -z "$HAVE_DOCBOOK"; then
+  AC_MSG_ERROR([DocBook 4 not found])
+fi
 
+dnl AC_MSG_NOTICE([===== Checking for System Identifier...])
+dnl 
+dnl for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
+dnl               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
+dnl               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+dnl               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
+dnl               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" ; do
+dnl  AC_MSG_CHECKING([for $XML_DTD])
+dnl  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+dnl    AC_MSG_RESULT([yes])
+dnl  else
+dnl    AC_MSG_RESULT([no])
+dnl  fi
+dnldone
 
-AC_MSG_NOTICE([===== Checking for System Identifier...])
+#--------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for DocBook 4 XSL Stylesheets...])
 
-for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
-               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
-               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
-               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
-               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" ; do
-  AC_MSG_CHECKING([for $XML_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
-    AC_MSG_RESULT([found])
-  else
-    AC_MSG_WARN([not found])
-  fi
-done
-
-AC_MSG_NOTICE([===== Checking for Canonical URL (DocBook XSL Stylesheets)...])
-
-for XSLT in "${DB_XSLT_URL}xhtml/docbook.xsl" \
-            "${DB_XSLT_URL}xhtml/chunk.xsl" \
-            "${DB_XSLT_URL}html/docbook.xsl" \
-            "${DB_XSLT_URL}html/chunk.xsl" \
-            "${DB_XSLT_URL}fo/docbook.xsl" \
-            "${DB_XSLT_URL}manpages/docbook.xsl" \
-            "${DB_XSLT_URL}epub/docbook.xsl" \
-            "${DB_XSLT_URL}profiling/profile.xsl"; do
+for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
+            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB4_XSLT_URL}html/docbook.xsl" \
+            "${DB4_XSLT_URL}html/chunk.xsl" \
+            "${DB4_XSLT_URL}fo/docbook.xsl" \
+            "${DB4_XSLT_URL}manpages/docbook.xsl" \
+            "${DB4_XSLT_URL}epub/docbook.xsl" \
+            "${DB4_XSLT_URL}profiling/profile.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XSLT" >&2]); then
-    AC_MSG_RESULT([found])
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_STYLESHEETS="yes"
   else
-    AC_MSG_WARN([not found])
+    AC_MSG_RESULT([no])
   fi
 done
+if test -z "$HAVE_DOCBOOK_STYLESHEETS"; then
+  AC_MSG_ERROR([DocBook 4 stylesheets not found])
+fi
 
 
-
-AC_OUTPUT
+AC_OUTPUT([Makefile])

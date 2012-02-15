@@ -42,7 +42,7 @@ AC_DEFUN([AX_PYTHON_MODULE],[
 		#
 		if test -n "$2"
 		then
-			AC_MSG_ERROR(failed to find required module $1)
+			AC_MSG_ERROR(failed to find required python module $1)
 			exit 1
 		fi
 	fi
