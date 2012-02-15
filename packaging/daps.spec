@@ -51,7 +51,6 @@ BuildRequires:  bash >= 4.0
 BuildRequires:  dia
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  docbook_4
-BuildRequires:  python-xml
 %if 0%{?suse_version} > 1140
 BuildRequires:  perl-Image-ExifTool
 %else
@@ -61,16 +60,13 @@ BuildRequires:  fam
 BuildRequires:  fdupes
 BuildRequires:  ImageMagick
 BuildRequires:  inkscape
-BuildRequires:  jing
 BuildRequires:  libxslt
 BuildRequires:  optipng
+BuildRequires:  python-xml
 BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
-BuildRequires:  trang
 BuildRequires:  transfig
-BuildRequires:  unzip
-BuildRequires:  xorg-x11-devel
 
 # the following requirements are not really needed for building, but we add
 # them nevertheless in order to see if the build target is able to fullfill
@@ -78,34 +74,22 @@ BuildRequires:  xorg-x11-devel
 BuildRequires:  dejavu
 BuildRequires:  freefont
 BuildRequires:  ghostscript-library
-BuildRequires:  java
 BuildRequires:  liberation-fonts
 BuildRequires:  LinuxLibertine
 BuildRequires:  mplus-fonts
-BuildRequires:  opensp
 BuildRequires:  poppler-tools
-BuildRequires:  xalan-j2
-BuildRequires:  xml-commons-resolver
 BuildRequires:  xmlformat
-BuildRequires:  xmlstarlet
-BuildRequires:  zip
 
 %if 0%{?suse_version} >= 1140
 BuildRequires:  perl-checkbot
 BuildRequires:  xmlgraphics-fop >= 0.94
 %else
+BuildRequires:  fop >= 0.94
 %if %{undefined sles_version}
 BuildRequires:  checkbot
 %endif
-BuildRequires:  fop >= 0.94
-BuildRequires:  xerces-j2
-%if 0%{?suse_version} == 1130
-BuildRequires:  xml-commons-jaxp-1.3-apis
 %endif
-%if 0%{?suse_version} < 1130
-BuildRequires:  xml-commons-apis-bootstrap
-%endif
-%endif
+
 %if 0%{?suse_version} < 1120
 BuildRequires:  python-xml
 %endif
@@ -124,41 +108,25 @@ Requires:       freefont
 Requires:       ghostscript-library
 Requires:       ImageMagick
 Requires:       inkscape
-Requires:       java
-Requires:       jing
 Requires:       libxslt
 Requires:       liberation-fonts
 Requires:       LinuxLibertine
 Requires:       make
 Requires:       mplus-fonts
-Requires:       opensp
 Requires:       optipng
 Requires:       poppler-tools
 Requires:       sgml-skel
 Requires:       svg-dtd
 Requires:       transfig
-Requires:       unzip
-Requires:       xalan-j2
-Requires:       xml-commons-resolver
-Requires:       xmlformat
-Requires:       xmlstarlet
-Requires:       zip
 %if 0%{?suse_version} >= 1140
 Requires:       perl-checkbot
 Requires:       xmlgraphics-fop >= 0.94
 %else
+Requires:       fop >= 0.94
 %if %{undefined sles_version}
 Requires:       checkbot
 %else
 Recommends:     checkbot
-%endif
-Requires:       fop >= 0.94
-Requires:       xerces-j2
-%if 0%{?suse_version} == 1130
-Requires:       xml-commons-jaxp-1.3-apis
-%endif
-%if 0%{?suse_version} < 1130
-Requires:       xml-commons-apis-bootstrap
 %endif
 %endif
 %if 0%{?suse_version} < 1120
@@ -174,6 +142,7 @@ Recommends:     epubcheck
 # Split of ttf-founder-simplified and ttf-founder-traditional
 Recommends:     FZFangSong FZHeiTi FZSongTi
 Recommends:     fifth-leg-font
+Recommends:     jing
 Recommends:     remake
 # needed to create ePUBs
 Recommends:     ruby
