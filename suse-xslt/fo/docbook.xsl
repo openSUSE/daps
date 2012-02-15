@@ -76,13 +76,13 @@
    <xsl:if test="$styleroot = ''">
      <xsl:message>
        <xsl:text>WARNING: Please set path to your stylesheets </xsl:text>
-       <xsl:text>with styleroot parameter</xsl:text>
+       <xsl:text>with the --styleroot parameter or via STYLEROOT in the config
+    file</xsl:text>
      </xsl:message>
    </xsl:if>
   
   <!--<xsl:message>
     styleroot = <xsl:value-of select="$styleroot"/>
-    dtdroot   = <xsl:value-of select="$dtdroot"/>
   </xsl:message>-->
 
    <xsl:if test="$use.xep.cropmarks != 0 and $xep.extensions != 0">

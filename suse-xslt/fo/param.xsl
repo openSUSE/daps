@@ -34,15 +34,15 @@
 <xsl:param name="title.margin.left" select="'0pt'"/>
 
 <xsl:param name="alignment">left</xsl:param>
-<xsl:param name="dtdroot"></xsl:param>
+
 <!-- Path to stylesheets -->
 <xsl:param name="styleroot"></xsl:param>
 
-<xsl:param name="draft.watermark.image">../images/misc/draft.png</xsl:param> 
+<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/misc/draft.png')"/>
 
 <!--  -->
-<xsl:param name="booktitlepage.bw.logo">../images/logos/suse-logo-bw.svg</xsl:param>
-<xsl:param name="booktitlepage.color.logo">../images/logos/suse-logo.svg</xsl:param>
+<xsl:param name="booktitlepage.bw.logo" select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
+<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, '/images/logos/suse-logo.svg')"/>
 
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
@@ -55,7 +55,7 @@
 <xsl:param name="callout.unicode">0</xsl:param>
 <xsl:param name="callout.graphics">1</xsl:param>
 <xsl:param name="callout.graphics.extension">.pdf</xsl:param>
-<xsl:param name="callout.graphics.path">../images/callouts/</xsl:param>
+<xsl:param name="callout.graphics.path" select="concat($styleroot, 'images/callouts/')"/>
   
 <!--<xsl:param name="callout.unicode.start.character">10102</xsl:param>-->
 <!--<xsl:param name="callout.unicode.font">TomsCallouts</xsl:param>-->
@@ -175,7 +175,7 @@ set       nop
 </xsl:param>
 <xsl:param name="ulink.show" select="0"/>
 
-<xsl:param name="img.src.path">../images/print/</xsl:param>
+<xsl:param name="img.src.path">../.images/print/</xsl:param>
 
 <xsl:param name="admon.graphics">
    <xsl:choose>
@@ -184,7 +184,7 @@ set       nop
    </xsl:choose>
 </xsl:param>
 <xsl:param name="admon.graphics.extension">.svg</xsl:param>
-<xsl:param name="admon.graphics.path">../images/admon/</xsl:param>
+<xsl:param name="admon.graphics.path" select="concat($styleroot, 'images/admon/')"/>
 
 
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>

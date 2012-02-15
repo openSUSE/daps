@@ -126,26 +126,6 @@
               The positioning could be probably designed better, but I don't know how
               Depends highly on the SVG graphics!
    -->
-<!--  <fo:block-container top="{$page.height} -94.5pt -5pt"
-   left="55pt"
-   absolute-position="fixed">
-    <fo:block><fo:external-graphic
-          content-width="94.5pt" content-height="4cm" width="94.5pt">
-     <xsl:choose>
-       <xsl:when test="$format.print = '1'">
-        <xsl:attribute name="src">
-          <xsl:text>url('../../../novdoc/xslt/images/svg/n-logo-bw.svg')</xsl:text>
-        </xsl:attribute>
-       </xsl:when>
-       <xsl:otherwise>
-        <xsl:attribute name="src">
-          <xsl:text>url('../../../novdoc/xslt/images/svg/n-logo.svg')</xsl:text>
-        </xsl:attribute>
-       </xsl:otherwise>
-     </xsl:choose>
-   </fo:external-graphic>
-  </fo:block>
-  </fo:block-container>-->
   <!-- top={$page.height} -40.5pt -2.5mm-->
   <fo:block-container top="{$page.height} -94.5pt -5pt"
    left="202pt"
@@ -157,16 +137,18 @@
      <xsl:choose>
        <xsl:when test="$format.print = '1'">
         <xsl:attribute name="src">
-          <xsl:value-of select='concat("url(&apos;", 
-                                        $booktitlepage.bw.logo,
-                                        "&apos;)")'/>
+          <xsl:call-template name="fo-external-image">
+            <xsl:with-param name="filename"
+              select="$booktitlepage.bw.logo"/>
+          </xsl:call-template>
         </xsl:attribute>
        </xsl:when>
        <xsl:otherwise>
         <xsl:attribute name="src">
-          <xsl:value-of select='concat("url(&apos;", 
-                                       $booktitlepage.color.logo, 
-                                       "&apos;)")'/>
+          <xsl:call-template name="fo-external-image">
+            <xsl:with-param name="filename"
+              select="$booktitlepage.color.logo"/>
+          </xsl:call-template>
         </xsl:attribute>
        </xsl:otherwise>
      </xsl:choose>

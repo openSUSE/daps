@@ -256,7 +256,6 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
 
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -265,15 +264,15 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-	        --stringparam dtdroot "$(DAPSROOT)/" \
 		--param ulink.show 1
 
 # root directory for custom stylesheets
-#
-ifdef STYLEROOT
-  FOSTRINGS    += --stringparam styleroot "$(STYLEROOT)/"
-  FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
-endif
+# see layout.mk
+
+#ifdef STYLEROOT
+#  FOSTRINGS    += --stringparam styleroot "$(STYLEROOT)/"
+#  FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
+#endif
 
 # index
 # returns "Yes" if index is used
@@ -1392,29 +1391,27 @@ else
 	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
 endif
 
-$(HTML_DIR)/navig: $(DAPSROOT)/images/navig $(HTML_DIR)
+$(HTML_DIR)/navig: $(STYLEROOT)/images/navig $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DAPSROOT)/images navig/ | \
+	tar cp --exclude-vcs -C $(STYLEROOT)/images navig/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DAPSROOT)/images/navig/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DAPSROOT)/images/navig/ $(HTML_DIR)
+	ln -sf $(STYLEROOT)/images/navig/ $(HTML_DIR)
 endif
 
-$(HTML_DIR)/admon: $(DAPSROOT)/images/admon $(HTML_DIR)
+$(HTML_DIR)/admon: $(STYLEROOT)/images/admon $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DAPSROOT)/images admon/ | \
+	tar cp --exclude-vcs -C $(STYLEROOT)/images admon/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DAPSROOT)/images/admon/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
@@ -1422,19 +1419,18 @@ else
 	ln -sf $(DAPSROOT)/images/admon/ $(HTML_DIR)
 endif
 
-$(HTML_DIR)/callouts: $(DAPSROOT)/images/callouts/ $(HTML_DIR)
+$(HTML_DIR)/callouts: $(STYLEROOT)/images/callouts/ $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(DAPSROOT)/images callouts/ | \
+	tar cp --exclude-vcs -C $(STYLEROOT)/images callouts/ | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-#	cp -rL $(DAPSROOT)/images/callouts/ $(HTML_DIR)
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DAPSROOT)/images/callouts/ $(HTML_DIR)
+	ln -sf $(STYLEROOT)/images/callouts/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/images: $(HTML_DIR) provide-color-images
@@ -1540,14 +1536,14 @@ $(JSP_DIR):
 $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
 	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
 
-$(JSP_DIR)/navig: $(DAPSROOT)/images/navig $(JSP_DIR)
-	ln -sf $(DAPSROOT)/images/navig/ $(JSP_DIR)
+$(JSP_DIR)/navig: $(STYLEROOT)/images/navig $(JSP_DIR)
+	ln -sf $(STYLEROOT)/images/navig/ $(JSP_DIR)
 
-$(JSP_DIR)/admon: $(DAPSROOT)/images/admon/ $(JSP_DIR)
-	ln -sf $(DAPSROOT)/images/admon/ $(JSP_DIR)
+$(JSP_DIR)/admon: $(STYLEROOT)/images/admon/ $(JSP_DIR)
+	ln -sf $(STYLEROOT)/images/admon/ $(JSP_DIR)
 
-$(JSP_DIR)/callouts: $(DAPSROOT)/images/callouts/ $(JSP_DIR)
-	ln -sf $(DAPSROOT)/images/callouts/ $(JSP_DIR)
+$(JSP_DIR)/callouts: $(STYLEROOT)/images/callouts/ $(JSP_DIR)
+	ln -sf $(STYLEROOT)/images/callouts/ $(JSP_DIR)
 
 $(JSP_DIR)/images: | $(IMG_DIRECTORIES) $(JSP_DIR)
 	ln -sf $(IMG_GENDIR)/online/ $(JSP_DIR)/images

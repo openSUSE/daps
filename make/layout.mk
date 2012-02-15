@@ -65,8 +65,13 @@ endif
 # stylesheets. It always takes precedence over STYLEROOT.
 #
 
-STYLE_ROOTDIRS := $(wildcard $(STYLE_DEVEL) $(STYLE_CUSTOM) \
+STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(STYLE_DOCBOOK) )
+
+ifdef STYLEROOT
+  FOSTRINGS    += --stringparam styleroot "$(firstword $(STYLE_ROOTDIRS))/"
+  FOCOLSTRINGS += --stringparam styleroot "$(firstword $(STYLE_ROOTDIRS))/"
+endif
 
 
 #----------------------------

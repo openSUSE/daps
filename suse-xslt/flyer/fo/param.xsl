@@ -91,7 +91,7 @@
 
 <xsl:param name="alignment">left</xsl:param>
 
-<xsl:param name="draft.watermark.image">../images/misc/draft.png</xsl:param>
+<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/misc/draft.png')"/>
 
 <xsl:param name="refentry.pagebreak" select="0"/>
 
@@ -142,7 +142,7 @@
 <xsl:param name="ulink.hyphenate">&#x200B;</xsl:param>
 <xsl:param name="ulink.show" select="1"/>
 
-<xsl:param name="img.src.path">../../images/print/</xsl:param>
+<xsl:param name="img.src.path">../.images/print/</xsl:param>
 
 <xsl:param name="local.l10n.xml" select="document('../../common/l10n/l10n.xml')"/>
 

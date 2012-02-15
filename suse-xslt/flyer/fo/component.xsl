@@ -202,9 +202,14 @@
                   <fo:block padding="0pt">
                     <fo:external-graphic width="3.5cm"
                       content-width="scale-to-fit"
-                      content-height="scale-to-fit"
-                      src="url(&quot;../images/svg/suse-logo.svg&quot;)"
-                    />
+                      content-height="scale-to-fit">
+                      <xsl:attribute name="src">
+                        <xsl:call-template name="fo-external-image">
+                          <xsl:with-param name="filename"
+                            select="$booktitlepage.color.logo"/>
+                        </xsl:call-template>
+                      </xsl:attribute>
+                    </fo:external-graphic>
                   </fo:block>
                   <fo:block
                     xsl:use-attribute-sets="copyright.flyer.properties">
@@ -265,18 +270,16 @@
                 margin-right="0pt">
                   <fo:block padding="0pt">
                     <!-- Original size: width=190pt, height=45pt -->
-                    <!-- For some reason -->
-                    <!--<fo:external-graphic width="2.5cm"
-                      height="0.59"
-                      content-width="scale-to-fit"
-                      content-height="scale-to-fit"
-                      src="url(&quot;../images/svg/novell-logo.svg&quot;)"/>
-                   <fo:leader leader-length="2em" leader-pattern="space"/>-->
                     <fo:external-graphic width="2.5cm"
                       content-width="scale-to-fit"
-                      content-height="scale-to-fit"
-                      src="url(&quot;../images/svg/suse-logo.svg&quot;)"
-                    />
+                      content-height="scale-to-fit">
+                      <xsl:attribute name="src">
+                        <xsl:call-template name="fo-external-image">
+                          <xsl:with-param name="filename"
+                            select="$booktitlepage.color.logo"/>
+                        </xsl:call-template>
+                      </xsl:attribute>
+                    </fo:external-graphic>
                   </fo:block>
                   <fo:block
                     xsl:use-attribute-sets="copyright.flyer.properties">

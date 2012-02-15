@@ -35,6 +35,6 @@
   <xsl:param name="section.autolabel" select="1"/>
   
   <!-- Path to HTML/FO image files -->
-  <xsl:param name="img.src.path">../images/</xsl:param>
+  <xsl:param name="img.src.path">images/</xsl:param>
   
 </xsl:stylesheet>
