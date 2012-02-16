@@ -22,7 +22,7 @@ AC_MSG_NOTICE([
 ])
 
 AC_CONFIG_SRCDIR([Makefile.am])
-#AM_INIT_AUTOMAKE([1.10 foreign no-define no-dist no-installinfo -Wall -Werror])
+AM_INIT_AUTOMAKE([1.10])
 
 
 #AC_CONFIG_FILES([
