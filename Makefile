@@ -60,7 +60,6 @@ ifdef MANUALS
 	  cp -a doc/build/$$BOOK/html/* $(DAPS_DOCDIR)/html; \
 	done
 endif
-	cp -a images/ $(DAPS_SHAREDIR)
 	cp -a make/ $(DAPS_SHAREDIR)
 	cp -a daps-xslt/ $(DAPS_SHAREDIR)
 	cp -a etc/* $(DAPS_CONFDIR)
