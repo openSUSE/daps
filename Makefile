@@ -176,4 +176,4 @@ manuals:
 .PHONY: manpages
 manpages:
 	bin/daps --debug --dapsroot=$(DAPSROOT) --color=0 \
-	  --docconfig=$(DAPSROOT)/man/$(DC-manpages) man
+	  --docconfig=$(DAPSROOT)/man/$(DC-manpages) man --subdirs
