@@ -121,7 +121,11 @@ function parse_args () {
             --static)
 		P_STATIC=1
 		shift
-		;; 
+		;;
+            --subdirs)
+                P_SUBDIRS=1
+                shift
+                ;;
 	    --viewer)
                 P_VIEWER="$2"
 		shift 2
@@ -536,7 +540,7 @@ function build_man () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nogzip,rootid:"
+    LONG_OPTS="help,nogzip,rootid:,subdirs"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -547,12 +551,14 @@ function build_man () {
         help_help
         help_nogzip
         help_rootid
+        help_subdirs
         echo
         exit 0
     fi
 
     [[ -n $P_NOGZIP ]]    && export GZIP_MAN="no"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n $P_SUBDIRS ]]   && export MAN_SUBDIRS="yes"
     
     call_make "$SUB_CMD" "$@"
 }
@@ -1215,6 +1221,12 @@ function help_show () {
     echo "    --show, -s                Show images with an image viewer that either
                               has been specified with --viewer or by setting
                               IMG_VIEWER in the config file
+                              Default: off"
+}
+function help_subdirs () {
+    echo "    --subdirs                 Man pages are created in a man/ directory.
+                              To also enable the subdirectories man1/, man2/, 
+                              etc., specify this parameter.
                               Default: off"
 }
 function help_viewer () {

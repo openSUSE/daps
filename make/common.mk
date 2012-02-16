@@ -334,10 +334,16 @@ JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
 #  
 #
 
-MANSTRINGS   :=  --stringparam man.output.base.dir "$(MAN_DIR)/" \
-		 --stringparam man.output.in.separate.dir 1 \
-		 --stringparam man.output.subdirs.enabled 1 \
-		 --stringparam refentry.meta.get.quietly 1
+MANSTRINGS   := --stringparam man.output.base.dir "$(MAN_DIR)/" \
+		--stringparam refentry.meta.get.quietly 1 \
+		--stringparam man.output.in.separate.dir 1
+ifeq ("$(MAN_SUBDIRS)", "yes")
+  MANSTRINGS  += --stringparam man.output.subdirs.enabled 1
+else
+  MANSTRINGS  += --stringparam man.output.subdirs.enabled 0
+endif
+
+
 
 #----------
 # Profiling stringparams
