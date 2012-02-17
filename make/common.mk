@@ -1422,7 +1422,7 @@ else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(DAPSROOT)/images/admon/ $(HTML_DIR)
+	ln -sf $(STYLEROOT)/images/admon/ $(HTML_DIR)
 endif
 
 $(HTML_DIR)/callouts: $(STYLEROOT)/images/callouts/ $(HTML_DIR)
