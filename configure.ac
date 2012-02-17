@@ -5,6 +5,10 @@ dnl
 dnl Authors:
 dnl   Thomas Schraitle  <toms@opensuse.org>
 dnl   Frank Sundermeyer <fs@suse.de>
+dnl
+dnl TODO
+dnl
+dnl determine aspell directory
 
 m4_define(daps_version_major, 0)
 m4_define(daps_version_minor, 9)
@@ -148,10 +152,10 @@ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
   AC_MSG_CHECKING([for $SVG_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$SVG_DTD" >&2]); then
-    AC_MSG_RESULT([found])
+    AC_MSG_RESULT([yes])
     HAVE_SVGDTD="yes"
   else
-    AC_MSG_WARN([not found])
+    AC_MSG_WARN([no])
   fi
 done
 if test -z "$HAVE_SVGDTD"; then
@@ -212,7 +216,7 @@ dnl    AC_MSG_RESULT([yes])
 dnl  else
 dnl    AC_MSG_RESULT([no])
 dnl  fi
-dnldone
+dnl done
 
 #--------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook 4 XSL Stylesheets...])
