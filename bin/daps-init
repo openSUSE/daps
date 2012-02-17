@@ -115,13 +115,13 @@ mkdir -p ${DOC_DIR}/images/src/{dia,fig,png,svg,eps,pdf} ${DOC_DIR}/xml || exit_
 BOOK="${DC_FILE#${CONF_PREFIX}*}"
 
 # DC-file
-cp ${DAPSROOT}/lib/templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
+cp ${DAPSROOT}/init_templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
         sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${DOC_DIR}/$DC_FILE
 # MAIN XML file
-cp ${DAPSROOT}/lib/templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+cp ${DAPSROOT}/init_templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml
 
 # graphics
-cp ${DAPSROOT}/lib/templates/example{1,2}.png ${DOC_DIR}/images/src/png/
+cp ${DAPSROOT}/init_templates/example{1,2}.png ${DOC_DIR}/images/src/png/
   
 ccecho "result" "Successfully created a working environment at ${DOC_DIR}"
 echo "To build a PDF or HTML version of the example document enter
