@@ -130,8 +130,13 @@
    <varlistentry>
     <term>Dynamic Product Names and Numbers</term>
     <listitem>
-     <para>&dapsacr; allows to set product name and product number 
-   dynamically. This enables you to use the same XML sources for different products. 
+     <para>&dapsacr; allows to set product name and product number dynamically. 
+     This enables you to use the same XML sources for different products. If you 
+     use the entities &amp;productname; and &amp;productnumber; in your XML
+     sources, &dapsacr; will automatically use the values defined in the 
+     <sgmltag>productname</sgmltag> and <sgmltag>productversion</sgmltag>
+     elements within  <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>
+     throughout the book or article. 
   </para>
     </listitem>
    </varlistentry>
