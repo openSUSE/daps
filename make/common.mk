@@ -1164,7 +1164,7 @@ $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
 endif
-	echo "-----> $(LIB_DIR)/getentityname.py $(DOCFILES) "
+#	echo "-----> $(LIB_DIR)/getentityname.py $(DOCFILES) "
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
 	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILEDIR)/; \
