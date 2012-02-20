@@ -133,56 +133,82 @@
      <para>&dapsacr; allows to set product name and product number dynamically. 
      This enables you to use the same XML sources for different products. If you 
      use the entities &amp;productname; and &amp;productnumber; in your XML
-     sources, &dapsacr; will automatically use the values defined in the 
-     <sgmltag>productname</sgmltag> and <sgmltag>productversion</sgmltag>
-     elements within  <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>
-     throughout the book or article. 
+     sources, &dapsacr; will automatically use the values 
+     defined in the  <sgmltag>productname</sgmltag> and <sgmltag>productversion</sgmltag>
+     elements within the <sgmltag>bookinfo</sgmltag> or
+     <sgmltag>articleinfo</sgmltag>.    
   </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Custom Layouts</term>
     <listitem>
-     <para></para>
+     <para>By default, &dapsacr; uses the DocBook stylesheets to generate the 
+     output formats. But &dapsacr; also supports custom layouts for your 
+     documentation projects (or for individual books or articles within your set).
+     You do not need to define custom stylesheets for <emphasis>all</emphasis> 
+     output formats&mdash;in case a custom layout cannot be found, &dapsacr; 
+     will automatically fall back to the DocBook stylesheets. </para>
+     <para>Apart from that, &dapsacr; allows you to change individual layout
+     parameters without even touching the stylesheets by passing string 
+     parameters to xsltproc for HTML or PDF builds.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spellcheck</term>
+    <term>Spell Check</term>
     <listitem>
-     <para></para>
+     <para>&dapsacr; supports spell checking your XML sources with aspell from 
+     the command line. <remark>taroth 2012-02-20: DEVs, is the following correct?</remark>
+     Depending on the XML editor you use, you can also integrate a custom aspell
+     dictionary into your editor.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Link Checker</term>
     <listitem>
-     <para></para>
+     <para>To make sure that all links in your XML sources are still available 
+     (and do not give a <literal>404</literal> error or similar), &dapsacr; also
+     includes a link checker (based on <literal>checkbot</literal>). Use it 
+     to create a report of all links that caused some kind of warning or error.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Editor Macros</term>
     <listitem>
-     <para></para>
+     <para>For Emacs, &dapsacr; includes a set of macros for easy insertion of 
+     complex DocBook elements like <sgmltag>variablelist</sgmltag>, 
+     <sgmltag>figure</sgmltag>, <sgmltag>table</sgmltag> or <sgmltag>indexterm</sgmltag>. 
+     Instead of inserting the child elements succesively, you will get a 
+     <quote>skeleton</quote> that includes all required child elements and 
+     is ready to be filled with contents.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Validating</term>
     <listitem>
-     <para></para>
+     <para>Whereas all <remark>taroth 2012-02-20: all?? or most??</remark>XML 
+     editors can check if your XML file is well-formed, validating XML files
+     is more difficult, as it might require checking other XML files, too 
+     (for example, if you have <sgmltag>xref</sgmltag> elements that 
+     point to a linkend located in another XML file, or if you use XIncludes 
+     in your documentation project). With &dapsacr;, check validity of all files
+     belonging to a documentation project with a single command.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Review and Translation Processes</term>
     <listitem>
+     <para><!--taroth 2012-02-20: draft mode, comments, remarks, meta information--></para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Image Handling</term>
+    <listitem>
      <para></para>
     </listitem>
    </varlistentry>
   </variablelist>
- <!-- <para>
-   &dapsacr; supports single source publishing into a number of different
-   output formats, like PDF, HTML, single HTML, or ePUB. &dapsacr; is suited
-   for both small documentation projects (created by a single author), as well
-   as comprehensive documentation projects that are created by multiple
-   authors in a collaborative effort.</para>-->
+
  </sect1>
  <sect1 id="sec.daps.user.oview.concepts">
   <title>&dapsacr; Configuration</title>
