@@ -180,19 +180,27 @@
       <xsl:when test="ancestor::article/articleinfo/productnumber">
         <xsl:apply-templates select="ancestor::article/articleinfo/productnumber" mode="profile"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:message>Could not find neither book/bookinfo/productname
-          nor article/articleinfo/productname.</xsl:message>
-        <productnumber/>
-      </xsl:otherwise>
+      <xsl:otherwise/>
     </xsl:choose>
   </xsl:variable>
+  
   <xsl:variable name="rtf" select="exsl:node-set($prodnumber)/*[1]"/>
-  <!--<xsl:message>productnumber: "<xsl:value-of select="name($rtf)"/>"</xsl:message>-->
-  <xsl:copy>
-    <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
-    <xsl:apply-templates select="$rtf/node()" mode="profile"/>
-  </xsl:copy>
+  
+  <xsl:choose>
+      <xsl:when test="count($rtf/node()) > 0">
+        <xsl:copy>
+          <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
+          <xsl:apply-templates select="$rtf/node()" mode="profile"/>
+        </xsl:copy>
+      </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+        <xsl:text>Could not find neither book/bookinfo/productnumber </xsl:text>
+        <xsl:text>nor article/articleinfo/productnumber.</xsl:text>
+      </xsl:message>
+      <xsl:copy-of select="."/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="phrase[@role='productname']" mode="profile">
@@ -204,20 +212,59 @@
       <xsl:when test="ancestor::article/articleinfo/productname">
         <xsl:apply-templates select="ancestor::article/articleinfo/productname" mode="profile"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:message>Could not find neither /book/bookinfo/productname
-          nor /article/articleinfo/productname.</xsl:message>
-      </xsl:otherwise>
-      <productname/>
+      <xsl:otherwise/>
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="rtf" select="exsl:node-set($prodname)/*[1]"/> 
   <!--<xsl:message>productname: "<xsl:value-of select="name($rtf)"/>"</xsl:message>-->
-  <xsl:copy>
-    <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
-    <xsl:apply-templates select="$rtf/node()" mode="profile"/>
-  </xsl:copy>
   
+  <xsl:choose>
+      <xsl:when test="count($rtf/node()) > 0">
+        <xsl:copy>
+          <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
+          <xsl:apply-templates select="$rtf/node()" mode="profile"/>
+        </xsl:copy>
+      </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+        <xsl:text>Could not find neither book/bookinfo/productname </xsl:text>
+        <xsl:text>nor article/articleinfo/productname.</xsl:text>
+      </xsl:message>
+      <xsl:copy-of select="."/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
+
+  <xsl:template match="phrase[@role='productname-reg']" mode="profile">
+    <xsl:variable name="prodnumber">
+      <xsl:choose>
+        <xsl:when test="ancestor::book/bookinfo/productname[@role='reg']">
+          <xsl:apply-templates  select="ancestor::book/bookinfo/productname[@role='reg']" mode="profile"/>
+        </xsl:when>
+        <xsl:when test="ancestor::article/articleinfo/productname[@role='reg']">
+          <xsl:apply-templates select="ancestor::article/articleinfo/productname[@role='reg']" mode="profile"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:variable name="rtf" select="exsl:node-set($prodnumber)/*[1]"/>
+    
+    <xsl:choose>
+      <xsl:when test="count($rtf/node()) > 0">
+        <xsl:copy>
+          <xsl:copy-of select="@*|$rtf/@*[local-name(.) != 'class']"/>
+          <xsl:apply-templates select="$rtf/node()" mode="profile"/>
+        </xsl:copy>
+      </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+        <xsl:text>Could not find neither book/bookinfo/productname[@role='reg'] </xsl:text>
+        <xsl:text>nor article/articleinfo/productname[@role='reg'].</xsl:text>
+      </xsl:message>
+      <xsl:copy-of select="."/>
+    </xsl:otherwise>
+  </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
