@@ -155,7 +155,7 @@ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
     AC_MSG_RESULT([yes])
     HAVE_SVGDTD="yes"
   else
-    AC_MSG_WARN([no])
+    AC_MSG_RESULT([no])
   fi
 done
 if test -z "$HAVE_SVGDTD"; then
