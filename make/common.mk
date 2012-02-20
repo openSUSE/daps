@@ -152,18 +152,21 @@ PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 # result paths
 
 # TMP_BOOK is the filename for result files
+# if PDFNAME is set (via --name) do not generate a name, but use PDFNAME
 #
-# the default:
-TMP_BOOK    := $(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
-#
-# The rootid should be used when manually set:
-ifdef ROOTID
-  ifndef PDFNAME
-    TMP_BOOK := $(ROOTID)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+ifdef PDFNAME
+  TMP_BOOK := $(PDFNAME)
+  TMP_BOOK_NODRAFT := $(PDFNAME)
+else
+  ifndef ROOTID
+    # the default:
+    TMP_BOOK    := $(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+  else
+   TMP_BOOK := $(ROOTID)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
   endif
+  # draft mode is only relevant for HTML and PDF
+  TMP_BOOK_NODRAFT := $(subst _draft,,$(TMP_BOOK))
 endif
-# draft mode is only relevant for HTML and PDF
-TMP_BOOK_NODRAFT := $(subst _draft,,$(TMP_BOOK))
 
 # Path to temporary XML file (needed for bigfile, epub and man)
 TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
