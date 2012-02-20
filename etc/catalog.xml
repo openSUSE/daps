@@ -43,23 +43,7 @@
                    rewritePrefix="common/l10n/"/>
   </group>
 
-  <rewriteSystem
-    systemIdStartString="http://docbook.sourceforge.net/release/xsl/current/"
-    rewritePrefix="file:///usr/share/xml/docbook/stylesheet/nwalsh/current/"/>
-  <rewriteURI
-    uriStartString="http://docbook.sourceforge.net/release/xsl/current/"
-    rewritePrefix="file:///usr/share/xml/docbook/stylesheet/nwalsh/current/"/>
+ <!-- Only to make sure, the standard catalog is found -->
 
-  <group>
-    <rewriteSystem
-      systemIdStartString="http://www.docbook.org/xml/5.0CR4/rng/" 
-      rewritePrefix="file:///usr/share/xml/docbook/schema/rng/5.0CR4/"/>
-    <rewriteSystem
-      systemIdStartString="http://www.docbook.org/xml/5.0/rng/" 
-      rewritePrefix="file:///usr/share/xml/docbook/schema/rng/5.0CR4/"/>
-  </group>
-  
-
-  <!-- Only to make sure, the standard catalog is found -->
-  <nextCatalog catalog="file:///etc/xml/catalog" />
+ <nextCatalog catalog="file:///etc/xml/catalog" />
 </catalog>
