@@ -689,13 +689,21 @@ endif
 #
 .PHONY: xmlgraphics
 xmlgraphics: provide-images provide-color-images
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(SVGONLINE) $(PNGONLINE)))"
+else
 	@echo $(sort $(SVGONLINE) $(PNGONLINE))
+endif
 
 # xmlgraphics-bw -> b/w images only
 #
 .PHONY: xmlgraphics-bw
 xmlgraphics-bw: provide-images
+ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(SVGPRINT) $(PNGPRINT)))"
+else
 	@echo $(sort $(SVGPRINT) $(PNGPRINT))
+endif
 
 # Graphics missing in $BOOK
 #
