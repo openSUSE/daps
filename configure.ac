@@ -27,22 +27,15 @@ AC_MSG_NOTICE([
 
 AC_CONFIG_SRCDIR([Makefile.am])
 AM_INIT_AUTOMAKE([1.10])
-
-
-#AC_CONFIG_FILES([
-#Makefile
-#])
-
-# Command-line arguments
-## AC_ARG_WITH(stuff, [  --with-stuff            enable stuff])
-
 AC_PREFIX_DEFAULT(/usr)
 
 # Some constants
 CATALOG_FILE="/etc/xml/catalog"
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
 FONT_DIR="/usr/share/fonts"
 
+#-------------------------
 # Debug mode switch
 # $DEBUG is used with bin/daps
 # $Q is the quiet switch for the Makefile
@@ -54,6 +47,7 @@ eval "eval DEBUG=$debug Q=$quiet"
 AC_SUBST(DEBUG)
 AC_SUBST(Q)
 
+#-------------------------
 # Checks for programs.
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
@@ -90,17 +84,6 @@ AC_PATH_PROG([W3M], [w3m] )
 if test -z "$W3M"; then
     HAVE_W3M=0
 fi
-# perl
-#AC_PATH_PROG([PERL], [perl] )
-#if test -z "$PERL"; then
-#  HAVE_PERL='no'
-#else
-#  HAVE_PERL='yes'
-#fi
-#AC_SUBST(HAVE_PERL)
-
-# (files, [action-if-found], [action-if-not-found])
-# AC_CHECK_FILES
 
 #--------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for XML tools... ])
@@ -134,7 +117,7 @@ fi
 # recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing] )
 if test -z "$JING"; then
-  AC_MSG_WARN([jing not found => no DocBook 5 support]) 
+  HAVE_JING=0
 fi
 
 AC_CHECK_FILE([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
@@ -154,34 +137,30 @@ fi
 # dia
 AC_PATH_PROG([DIA], [dia] )
 if test -z "$DIA"; then
-#  AC_MSG_WARN([dia not found => no support for .dia images])
   HAVE_DIA=0
 fi
 
 # inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape] )
 if test -z "$INKSCAPE"; then
-#  AC_MSG_WARN([inkscape not found => no support for .svg images])
   HAVE_INKSCAPE=0
 fi
 
 # optipng
 AC_PATH_PROG([OPTIPNG], [optipng] )
 if test -z "$OPTIPNG"; then
-# AC_MSG_WARN([optipng not found => no support for size reduction of .png images])
   HAVE_OPTIPNG=0
 fi
+
 # exiftool
 AC_PATH_PROG([EXIFTOOL], [exiftool])
 if test -z "$EXIFTOOL"; then
-#   AC_MSG_WARN([exiftool not found => no support for size reduction of .png images])
   HAVE_EXIFTOOL=0  
 fi
 
 # xfig
 AC_PATH_PROG([XFIG], [xfig] )
 if test -z "$XFIG"; then
-#  AC_MSG_WARN([xfig (transfig) not found => no support of .fig images])
   HAVE_XFIG=0
 fi
 
@@ -197,7 +176,6 @@ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
   fi
 done
 if test -z "$HAVE_SVGDTD"; then
-#   AC_MSG_WARN([SVG DTD not found => no support for .svg images])
   HAVE_SVGDTD=0
 fi               
 
@@ -218,9 +196,8 @@ AC_SUBST(HAVE_PYMOD_XML)
 #AC_SUBST(HAVE_PYMOD_OPTPARSE)
 
 #--------------------------------------------------------------------------
-AC_MSG_NOTICE([===== Checking for DocBook 4...])
+AC_MSG_NOTICE([===== Checking for DocBook...])
 
-#DOCBOOKDTDS=""
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.2//EN" \
                "-//OASIS//DTD DocBook XML V4.3//EN" \
@@ -229,37 +206,34 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
   AC_MSG_CHECKING([for $XML_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
-#    ## Extract version from public identifier
-#    x=${XML_DTD##*XML V}    
-#    DOCBOOKDTDS="$DOCBOOKDTDS${x%%//*} "
-     HAVE_DOCBOOK="yes"
+    HAVE_DOCBOOK="yes"
   else
     AC_MSG_RESULT([no])
   fi
 done
-#AC_SUBST(DOCBOOKDTDS)
 if test -z "$HAVE_DOCBOOK"; then
   AC_MSG_ERROR([DocBook 4 not found])
 fi
 
-dnl AC_MSG_NOTICE([===== Checking for System Identifier...])
-dnl 
-dnl for XML_DTD in "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" \
-dnl               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
-dnl               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
-dnl               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" \
-dnl               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" ; do
-dnl  AC_MSG_CHECKING([for $XML_DTD])
-dnl  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
-dnl    AC_MSG_RESULT([yes])
-dnl  else
-dnl    AC_MSG_RESULT([no])
-dnl  fi
-dnl done
+# Docbook 5
+for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
+               "http://docbook.org/xml/5.0/rng/docbookxi.rnc" ; do
+  AC_MSG_CHECKING([for $XML_SCHEMA])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_5=1
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_5"; then
+  HAVE_DOCBOOK_5=0
+fi
 
 #--------------------------------------------------------------------------
-AC_MSG_NOTICE([===== Checking for DocBook 4 XSL Stylesheets...])
+AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
+# DocBook4
 for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
             "${DB4_XSLT_URL}xhtml/chunk.xsl" \
             "${DB4_XSLT_URL}html/docbook.xsl" \
@@ -280,24 +254,44 @@ if test -z "$HAVE_DOCBOOK_STYLESHEETS"; then
   AC_MSG_ERROR([DocBook 4 stylesheets not found])
 fi
 
+# DocBook 5
+for XSLT in "${DB5_XSLT_URL}xhtml/docbook.xsl" \
+            "${DB5_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB5_XSLT_URL}html/docbook.xsl" \
+            "${DB5_XSLT_URL}html/chunk.xsl" \
+            "${DB5_XSLT_URL}fo/docbook.xsl" \
+            "${DB5_XSLT_URL}manpages/docbook.xsl" \
+            "${DB5_XSLT_URL}epub/docbook.xsl" \
+            "${DB5_XSLT_URL}profiling/profile.xsl"; do
+  AC_MSG_CHECKING([for $XSLT])
+  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XSLT" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_5_STYLESHEETS="yes"
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
+  HAVE_DOCBOOK_5_STYLESHEETS=0
+fi
 
 AC_OUTPUT([Makefile])
-
-#
-# TODO: list features, that work out of the box like HTML, JSP, etc
-#
-
-
 
 AC_MSG_RESULT([
 ###############################################################################
 DAPS is configured as follows.  Please verify that this configuration matches
 your expectations.
 
-Optional features:
+Supported features
+------------------
+* HTML/single HTML output            * MediaWiki output (experimental)
+* JSP output                         * support for .png images
+* man pages output
 
-Feature                           | Enabled | Action to enable
-------------------------------------------------------------------------------])
+Optional features
+-----------------
+Feature                          | Enabled | Action to enable
+..............................................................................])
 # Create ASCII (w3m)
 if test 0 = "$HAVE_W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
@@ -314,9 +308,11 @@ fi
 
 # Create PDFs (fop, xep)
 if test 0 = "$HAVE_TAR" -o 0 = "$HAVE_BZIP"; then
-  AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)])
+  AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
+])
 else
-  AC_MSG_RESULT([Create PDF output                |   yes   |])
+  AC_MSG_RESULT([Create PDF output                |   yes   |
+])
 fi
 
 # DIA support
@@ -340,9 +336,39 @@ else
   AC_MSG_RESULT([Support for .fig images          |   yes   |])
 fi
 
+# Optimize PNGs (optipng)
+if test 0 = "$HAVE_OPTIPNG" -o 0 = "$HAVE_EXIFTOOL"; then
+  AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
+])
+else
+  AC_MSG_RESULT([Size optimization for .png       |   yes   |
+])
+fi
+
 # Create archives (tar, bzip2)
 if test 0 = "$HAVE_TAR" -o 0 = "$HAVE_BZIP"; then
   AC_MSG_RESULT([Create distributable archives    |    no   | install tar and/or bzip2])
 else
   AC_MSG_RESULT([Create distributable archives    |   yes   |])
+fi
+
+AC_MSG_RESULT([
+Experimental features
+---------------------
+Feature                          | Enabled | Action to enable
+..............................................................................])
+# DocBook 5
+
+test 0 = "$HAVE_DOCBOOK_5" && DB5=0
+test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
+test 0 = "$HAVE_JING" && DB5=0
+
+if test 0 = "$DB5"; then
+  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5 support                |   yes   |
+])
 fi
