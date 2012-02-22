@@ -57,7 +57,7 @@ htmldocdir   = @docdir@/html
 #------------------------
 # Automake primaries
 
-all-local: $(USERGUIDE) $(QUICKSTART) etc/xml/$(DAPS_CATALOG)
+all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) etc/xml/$(DAPS_CATALOG)
 
 # BIN
 dist_bin_SCRIPTS    = $(srcdir)/$(wildcard bin/*)
@@ -116,9 +116,9 @@ etc/xml/$(DAPS_CATALOG): URN_SUSE     := urn:x-suse:xslt:profiling
 etc/xml/$(DAPS_CATALOG): URN_DAPS     := urn:x-daps:xslt:profiling
 etc/xml/$(DAPS_CATALOG): DB_VERSIONS  := 41 42 43 44 45 50 51
 etc/xml/$(DAPS_CATALOG):
-	@test -z "$(srcdir)/etc/xml" || $(MKDIR_P) $(srcdir)/etc/xml
-	@$(XMLCATALOG) --noout --create $@
-	@for VERS in $(DB_VERSIONS); do \
+	$(Q)test -z "$(srcdir)/etc/xml" || $(MKDIR_P) $(srcdir)/etc/xml
+	$(Q)$(XMLCATALOG) --noout --create $@
+	$(Q)for VERS in $(DB_VERSIONS); do \
 	  $(XMLCATALOG) --noout --add \
 	  "system" "$(URN_DAPS):docbook$${VERS}-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/docbook$${VERS}-profile.xsl" $@; \
@@ -126,28 +126,33 @@ etc/xml/$(DAPS_CATALOG):
 	  "system" "$(URN_SUSE):docbook$${VERS}-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/docbook$${VERS}-profile.xsl" $@; \
 	done
-	@$(XMLCATALOG) --noout --add \
+	$(Q)$(XMLCATALOG) --noout --add \
 	  "system" "$(URN_DAPS):novdoc-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
-	@$(XMLCATALOG) --noout --add \
+	$(Q)$(XMLCATALOG) --noout --add \
 	  "system" "$(URN_SUSE):novdoc-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
-	@$(SED) -i '/^<!DOCTYPE .*>$$/d' $@
-	@$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
-	@$(SED) -i '/<\/catalog/i\ </group>' $@
-	@$(srcdir)/bin/ccecho "result" "Created $@"
+	$(Q)$(SED) -i '/^<!DOCTYPE .*>$$/d' $@
+	$(Q)$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
+	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
+	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(USERGUIDE):
-	@$(srcdir)/bin/daps -v --dapsroot=$(DAPSROOT) --docconfig=$(DC_USERGUIDE) \
+	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	    --docconfig=$(DC_USERGUIDE) \
 	    --styleroot=$(STYLEROOT) html-single --static \
 	    --css=$(STYLEROOT)/html/susebooks.css --name=$(USERGUIDE_NAME)
+	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
-	@$(srcdir)/bin/daps -v --dapsroot=$(DAPSROOT) --docconfig=$(DC_QUICKSTART) \
+	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	    --docconfig=$(DC_QUICKSTART) \
 	    --styleroot=$(STYLEROOT) html-single --static \
 	    --css=$(STYLEROOT)/html/susebooks.css --name=$(QUICKSTART_NAME)
+	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
 $(man_MANS):
-	@$(srcdir)/bin/daps -v --dapsroot=$(DAPSROOT) --color=0 \
+	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
+	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
