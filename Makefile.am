@@ -50,7 +50,7 @@ xmlconfdir     = @sysconfdir@/xml
 
 aspelldir      = @datadir@/aspell
 dapslibdir     = $(pkgdatadir)/lib
-dapslibexecdir = $(pkgdatadir)/daps
+dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
