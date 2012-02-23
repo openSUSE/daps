@@ -73,6 +73,18 @@ if test -z "$BZIP"; then
     HAVE_BZIP=0
 fi
 
+# epubcheck
+AC_PATH_PROG([EPUBCHECK], [epubcheck] )
+if test -z "$EPUBCHECK"; then
+    HAVE_EPUBCHECK=0
+fi
+
+# checkbot
+AC_PATH_PROG([CHECKBOT], [checkbot] )
+if test -z "$CHECKBOT"; then
+    HAVE_CHECKBOT=0
+fi
+
 #ruby
 AC_PATH_PROG([RUBY], [ruby] )
 if test -z "$RUBY"; then
@@ -140,6 +152,18 @@ if test -z "$DIA"; then
   HAVE_DIA=0
 fi
 
+# exiftool
+AC_PATH_PROG([EXIFTOOL], [exiftool])
+if test -z "$EXIFTOOL"; then
+  HAVE_EXIFTOOL=0  
+fi
+
+# ghostscript
+AC_PATH_PROG([GHOSTSCRIPT], [gs] )
+if test -z "$GHOSTSCRIPT"; then
+  HAVE_GHOSTSCRIPT=0
+fi
+
 # inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape] )
 if test -z "$INKSCAPE"; then
@@ -152,10 +176,10 @@ if test -z "$OPTIPNG"; then
   HAVE_OPTIPNG=0
 fi
 
-# exiftool
-AC_PATH_PROG([EXIFTOOL], [exiftool])
-if test -z "$EXIFTOOL"; then
-  HAVE_EXIFTOOL=0  
+# pdffonts
+AC_PATH_PROG([PDFFONTS], [pdffonts] )
+if test -z "$PDFFONTS"; then
+  HAVE_PDFFONTS=0
 fi
 
 # xfig
@@ -345,6 +369,13 @@ else
 ])
 fi
 
+# Linkchecker (checkbot)
+if test 0 = "$HAVE_CHECKBOT"; then
+  AC_MSG_RESULT([Check links in XML sources       |    no   | install checkbot])
+else
+  AC_MSG_RESULT([Check links in XML sources       |   yes   |])
+fi
+
 # Create archives (tar, bzip2)
 if test 0 = "$HAVE_TAR" -o 0 = "$HAVE_BZIP"; then
   AC_MSG_RESULT([Create distributable archives    |    no   | install tar and/or bzip2])
@@ -352,13 +383,34 @@ else
   AC_MSG_RESULT([Create distributable archives    |   yes   |])
 fi
 
+# Validate ePUBs (epubcheck)
+if test 0 = "$HAVE_EPUBCHECK"; then
+  AC_MSG_RESULT([Validate generated ePUB files    |    no   | install epubcheck])
+else
+  AC_MSG_RESULT([Validate generated ePUB files    |   yes   |])
+fi
+
+# PDF font summary (pdffonts)
+if test 0 = "$HAVE_PDFFONTS"; then
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools])
+else
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |])
+fi
+
+
 AC_MSG_RESULT([
 Experimental features
 ---------------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
-# DocBook 5
+# PDF/EPS images support(ghostscript (gs))
+if test 0 = "$HAVE_XFIG"; then
+  AC_MSG_RESULT([Support for .pdf and .eps images |    no   | install ghostscript])
+else
+  AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
+fi
 
+# DocBook 5
 test 0 = "$HAVE_DOCBOOK_5" && DB5=0
 test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
 test 0 = "$HAVE_JING" && DB5=0
