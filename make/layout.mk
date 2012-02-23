@@ -26,10 +26,12 @@
 # in the original DocBook stylesheet directories
 
 # Get the DocBook stylesheet locations via catalogs
+# Note:
+# URL _must_ end with a "/", otherwise it will not be resolved on Ubuntu
 #
-DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current | sed -e s%^file://%%)
+DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current/ | sed -e s%^file://%%)
+DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current/ | sed -e s%^file://%%)
 
-DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current | sed -e s%^file://%%)
 
 #----------------------------
 # Stylesheet root directories

@@ -57,8 +57,11 @@ endif
 ifndef LIB_DIR
   LIB_DIR  := $(DAPSROOT)/lib
 endif
+ifndef LIBEXEC_DIR
+  LIBEXEC_DIR  := $(DAPSROOT)/libexec
+endif
 ifndef FOP
-  FOP      := $(LIB_DIR)/daps-fop
+  FOP      := $(LIBEXEC_DIR)/daps-fop
 endif
 ifndef STATIC_HTML
   STATIC_HTML := 0
@@ -630,7 +633,7 @@ clean-all real-clean:
 
 .PHONY: projectfiles
 projectfiles: $(DOCFILES)
-projectfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+projectfiles: ENTITIES := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 projectfiles: FILES    := $(addprefix $(DOC_DIR)/xml/, $(ENTITIES)) \
 			   $(DOCCONF) $(DOCFILES)
 projectfiles:
@@ -644,7 +647,7 @@ endif
 #
 .PHONY: remainingfiles
 remainingfiles: $(DOCFILES)
-remainingfiles: ENTITIES := $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+remainingfiles: ENTITIES := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 remainingfiles: FILES    := $(filter-out \
 			     $(addprefix $(DOC_DIR)/xml/, $(ENTITIES)) \
 			     $(DOCCONF) $(DOCFILES), $(SRCFILES))
@@ -793,7 +796,7 @@ dist-xml: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(shell xsltproc --nonet --xinclude $(STYLESEARCH) \
 			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
 			$(notdir $(MAIN))))
-dist-xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+dist-xml: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
 dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-xml:
 ifeq ($(VERBOSITY),1)
@@ -819,7 +822,7 @@ dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			--xinclude $(STYLESEARCH) \
 			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
 			$(notdir $(MAIN))))
-dist-book: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+dist-book: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
 dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
 dist-book:
 ifeq ($(VERBOSITY),1)
@@ -1095,14 +1098,14 @@ $(PROFILE_PARENT_DIR)/dist/%: $(TMP_DIR)/dist/xml/%
 ifeq ($(VERBOSITY),1)
 	@echo "   Profiling $(notdir $<)"
 endif
-	$(LIB_DIR)/entities-exchange.sh -s -d preserve $<
+	$(LIBEXEC_DIR)/entities-exchange.sh -s -d preserve $<
 	xsltproc --nonet --output $@ \
 		$(subst show.remarks 1,show.remarks 0, \
 		  $(subst show.comments 1,show.comments 0, \
 		  $(PROFSTRINGS))) \
 		  --stringparam filename "$(notdir $<)" \
 		  $(PROFILE_URN) $<
-	$(LIB_DIR)/entities-exchange.sh -d recover $@
+	$(LIBEXEC_DIR)/entities-exchange.sh -d recover $@
 else
 $(PROFILE_PARENT_DIR)/dist/%: $(DOC_DIR)/xml/% link-entity-noprofile
 	ln -sf $< $@
@@ -1113,7 +1116,7 @@ endif
 #
 $(TMP_DIR)/dist/xml/%: $(TMP_DIR)/dist/xml
 $(TMP_DIR)/dist/xml/%: $(DOC_DIR)/xml/% link-entity-dist
-	$(LIB_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
+	$(LIBEXEC_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
 
 
 #------------------------------------------------------------------------
@@ -1132,7 +1135,7 @@ $(TMP_DIR)/dist/xml/%: $(DOC_DIR)/xml/% link-entity-dist
 # and therefor need a separate link-entity-dist target
 
 .PHONY: link-entity-noprofile
-link-entity: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+link-entity: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 link-entity: | $(DIRECTORIES)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
@@ -1145,7 +1148,7 @@ endif
 
 .PHONY: link-entity-dist
 link-entity-dist: $(PROFILE_PARENT_DIR)/dist $(TMP_DIR)/dist/xml
-link-entity-dist: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+link-entity-dist: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 link-entity-dist:
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
@@ -1169,13 +1172,13 @@ endif
 # target to do this job (which would make things a bit more clear), because
 # otherwise the profiling would be redone every time
 #
-$(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): | $(DIRECTORIES)
 $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"
 endif
-#	echo "-----> $(LIB_DIR)/getentityname.py $(DOCFILES) "
+#	echo "-----> $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) "
 	if test -n "$(ENTITIES)"; then \
 	  for i in $(ENTITIES); do \
 	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILEDIR)/; \
@@ -1723,7 +1726,7 @@ endif
 	mv -iv $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml \
 		$(DOC_DIR)/xml/
 
-$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIB_DIR)/getentityname.py $(DOCFILES))
+$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
 $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
 ifeq ($(VERBOSITY),1)
 	@echo "   Linking entities"

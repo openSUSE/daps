@@ -22,9 +22,12 @@ DAPS_CATALOG := for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 # stylesheets with which to build the documentation
 STYLEROOT    := $(DAPSROOT)/suse-xslt
+
 # Man pages
-DC_MANPAGES := DC-daps-manpages
-MAN_PAGE_DIR=$(subst DC-,,$(DC_MANPAGES))
+DC_MANPAGES    := DC-daps-manpages
+MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
+MAN_PAGES      := daps.1 ccecho.1
+MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
 DC_USERGUIDE    = $(srcdir)/doc/DC-daps-user
@@ -39,20 +42,23 @@ MANUALS         = $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
 #------------------------
 # Installation hooks
 #
-dapsconfdir  = @sysconfdir@/daps
-fopconfdir   = @sysconfdir@/fop
-xepconfdir   = @sysconfdir@/xep
-hyphendir    = $(xepconfdir)/hyphen
-xmlconfdir   = @sysconfdir@/xml
+dapsconfdir    = @sysconfdir@/daps
+fopconfdir     = @sysconfdir@/fop
+xepconfdir     = @sysconfdir@/xep
+hyphendir      = $(xepconfdir)/hyphen
+xmlconfdir     = @sysconfdir@/xml
 
-aspelldir    = @datadir@/aspell
-dapslibdir   = $(pkgdatadir)/lib
-dapsmakedir  = $(pkgdatadir)/make
-emacssitedir = @datadir@/emacs/site-lisp
-templatedir  = $(pkgdatadir)/init_templates
-ttfontsdir   = @datadir@/fonts/truetype
+aspelldir      = @datadir@/aspell
+dapslibdir     = $(pkgdatadir)/lib
+dapslibexecdir = $(pkgdatadir)/daps
+dapsmakedir    = $(pkgdatadir)/make
+emacssitedir   = @datadir@/emacs/site-lisp
+templatedir    = $(pkgdatadir)/init_templates
+ttfontsdir     = @datadir@/fonts/truetype
 
-htmldocdir   = @docdir@/html
+htmldocdir     = @docdir@/html
+
+
 
 #------------------------
 # Automake primaries
@@ -60,7 +66,8 @@ htmldocdir   = @docdir@/html
 all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) etc/xml/$(DAPS_CATALOG)
 
 # BIN
-dist_bin_SCRIPTS    = $(srcdir)/$(wildcard bin/*)
+dist_bin_SCRIPTS         = $(srcdir)/$(wildcard bin/*)
+dist_dapslibexec_SCRIPTS = $(srcdir)/$(wildcard libexec/*)
 
 # CONFIG files
 dist_dapsconf_DATA  = $(srcdir)/etc/config
@@ -83,9 +90,7 @@ dist_ttfonts_DATA   = $(wildcard $(srcdir)/fonts/*.ttf)
 dist_doc_DATA      = $(addprefix, $(srcdir)/, BUGS COPYING COPYING-2.0 \
 			COPYING-3.0 INSTALL README README.quickstart \
 			README.upgrade_from_susedoc_4.x)
-
-# MAN pages
-man_MANS = $(wildcard $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/*.1)
+man_MANS = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Manual INSTALLATION--------------------------------
 
@@ -155,4 +160,4 @@ $(QUICKSTART):
 $(man_MANS):
 	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
-	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
+	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"

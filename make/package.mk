@@ -137,7 +137,7 @@ locdrop: TOTRANSFILES = $(sort $(subst $(DOC_DIR)/xml, \
 			  $(PROFILE_PARENT_DIR)/dist, \
 			  $(shell docmanager -d $(DOCCONF) dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
 locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
-locdrop: ENTITIES     = $(shell $(LIB_DIR)/getentityname.py $(INCLUDED))
+locdrop: ENTITIES     = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
 locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
 locdrop: TOTRANSTAR   = $(LOCDROPDIR)/locdrop-totrans-$(BOOK).tar.bz2
 locdrop: NOTRANSTAR   = $(LOCDROPDIR)/locdrop-$(BOOK).tar

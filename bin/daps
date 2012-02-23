@@ -67,6 +67,7 @@ VARLIST=(
     INK_OPTIONS
     JING_FLAGS
     LIB_DIR
+    LIBEXEC_DIR
     MAIN
     NOPDF
     PDFNAME
@@ -135,6 +136,7 @@ DAPSROOT_DEFAULT="/usr/share/daps"
 
 # default libdir
 DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
+DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 
 # user config file
 USER_CONFIG="$HOME/.daps/config"
@@ -805,6 +807,7 @@ if [[ -n $DAPSROOT ]]; then
         BIN_DIR="${DAPSROOT}/bin"
         export PATH=$BIN_DIR:$PATH
         LIB_DIR="${DAPSROOT}/lib"
+        LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
         XML_CATALOG_FILES="$DAPSROOT/etc/catalog.xml"
     fi
@@ -813,6 +816,7 @@ else
     # no need to set BIN_DIR here, since it is /usr/bin
     DAPSROOT="$DAPSROOT_DEFAULT"
     LIB_DIR="$DEFAULT_LIB_DIR"
+    LIBEXEC_DIR="$DEFAULT_LIBEXEC_DIR"
     CONFIG="$DEFAULT_CONFIG"
 fi
 
@@ -975,7 +979,7 @@ else
 fi
 
 # FOP
-export FOP="${LIB_DIR}/daps-$FOPTYPE"
+export FOP="${LIBEXEC_DIR}/daps-$FOPTYPE"
 
 # PATH
 if [[ -n $BIN_DIR ]]; then
