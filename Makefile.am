@@ -18,8 +18,9 @@ AUTOMAKE_OPTIONS = 1.10 foreign no-define no-dist no-installinfo \
 SUBDIRS=
 
 #------------------------
-DAPS_CATALOG := for-catalog-$(PACKAGE).xml
+DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
+
 # stylesheets with which to build the documentation
 STYLEROOT    := $(DAPSROOT)/suse-xslt
 
@@ -43,10 +44,9 @@ MANUALS         = $(dir $(USERGUIDE)) $(dir $(QUICKSTART))
 # Installation hooks
 #
 dapsconfdir    = @sysconfdir@/daps
-fopconfdir     = @sysconfdir@/fop
-xepconfdir     = @sysconfdir@/xep
+fopconfdir     = $(dapsconfdir)/fop
+xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
-xmlconfdir     = @sysconfdir@/xml
 
 aspelldir      = @datadir@/aspell
 dapslibdir     = $(pkgdatadir)/lib
@@ -63,8 +63,6 @@ htmldocdir     = @docdir@/html
 #------------------------
 # Automake primaries
 
-all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) etc/xml/$(DAPS_CATALOG)
-
 # BIN
 dist_bin_SCRIPTS         = $(srcdir)/$(wildcard bin/*)
 dist_dapslibexec_SCRIPTS = $(srcdir)/$(wildcard libexec/*)
@@ -75,7 +73,6 @@ dist_fopconf_DATA   = $(srcdir)/etc/fop/fop-daps.xml
 dist_xepconf_DATA   = $(srcdir)/etc/xep/xep-daps.xml
 dist_hyphen_DATA    = $(wildcard $(srcdir)/etc/xep/hyphen/*.tex) \
 			$(wildcard $(srcdir)/etc/xep/hyphen/*.il2)
-dist_xmlconf_DATA   = $(srcdir)/etc/xml/$(DAPS_CATALOG)
 
 # DATA
 dist_aspell_DATA    = $(srcdir)/misc/suse_aspell.rws
@@ -92,7 +89,10 @@ dist_doc_DATA      = $(addprefix, $(srcdir)/, BUGS COPYING COPYING-2.0 \
 			README.upgrade_from_susedoc_4.x)
 man_MANS = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
-#---------------------------Manual INSTALLATION--------------------------------
+#---------------------------Local TARGETS--------------------------------------
+all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG)
+
+#---------------------------Local INSTALLATION--------------------------------
 
 INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir)
 
@@ -100,6 +100,8 @@ $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
 
 install-data-local: $(INSTALLDIRS)
+install-data-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
+install-data-local:
 	for BOOK in $(MANUALS); do \
 	  cp -a $$BOOK/* $(DESTDIR)$(docdir)/html; \
 	done
@@ -108,20 +110,39 @@ install-data-local: $(INSTALLDIRS)
 		-type d -exec chmod -R u=rwx,go=rx,a-s {} \;; \
 	find {$(DESTDIR)$(docdir)/html,$(DESTDIR)$(pkgdatadir)/daps-xslt} \
 		-type f -exec chmod -R u=rw,go=r,a-s {} \;;
+# create entry in xml root catalog
+	{ \
+	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
+	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
+	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
+	      END{print "</catalog>"}'; \
+	} >$(TMP_CATALOG)
+	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
+	$(XMLLINT) --nocatalogs --noout $(TMP_CATALOG) && \
+	  mv $(TMP_CATALOG) $(ROOT_CATALOG)
+
+#---------------------------Local UNINSTALL-----------------------------------
+uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
+uninstall-local:
+	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
+	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id="$(PACKAGE)">/{s=1;next} {print}" > $(TMP_CATALOG)
+	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
+	$(XMLLINT) --nocatalogs --noout $(TMP_CATALOG) && \
+	  mv $(TMP_CATALOG) $(ROOT_CATALOG)
 
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
-	rm -rf $(srcdir)/etc/xml $(srcdir)/man/build/ $(srcdir)/doc/build/
+	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(dir $(DAPS_CATALOG)) 
 
 #-----------------------------DAPS--------------------------------------------
 
-# create DAPS catalog entries
-etc/xml/$(DAPS_CATALOG): DAPS_PROFDIR := $(pkgdatadir)/daps-xslt/profiling
-etc/xml/$(DAPS_CATALOG): URN_SUSE     := urn:x-suse:xslt:profiling
-etc/xml/$(DAPS_CATALOG): URN_DAPS     := urn:x-daps:xslt:profiling
-etc/xml/$(DAPS_CATALOG): DB_VERSIONS  := 41 42 43 44 45 50 51
-etc/xml/$(DAPS_CATALOG):
-	$(Q)test -z "$(srcdir)/etc/xml" || $(MKDIR_P) $(srcdir)/etc/xml
+# create temporary DAPS catalog entries file
+$(DAPS_CATALOG): DAPS_PROFDIR := $(pkgdatadir)/daps-xslt/profiling
+$(DAPS_CATALOG): URN_SUSE     := urn:x-suse:xslt:profiling
+$(DAPS_CATALOG): URN_DAPS     := urn:x-daps:xslt:profiling
+$(DAPS_CATALOG): DB_VERSIONS  := 41 42 43 44 45 50 51
+$(DAPS_CATALOG):
+	$(Q)test -z "$(dir $@)" || $(MKDIR_P) $(dir $@)
 	$(Q)$(XMLCATALOG) --noout --create $@
 	$(Q)for VERS in $(DB_VERSIONS); do \
 	  $(XMLCATALOG) --noout --add \

@@ -2,6 +2,10 @@ dnl                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script
 dnl or use autogen.sh (recommended)
 dnl
+dnl Copyright (C) 2011,2012:
+dnl   Thomas Schraitle  <toms@opensuse.org>
+dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
+dnl
 dnl Authors:
 dnl   Thomas Schraitle  <toms@opensuse.org>
 dnl   Frank Sundermeyer <fs@suse.de>
@@ -30,7 +34,8 @@ AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
 # Some constants
-CATALOG_FILE="/etc/xml/catalog"
+ROOT_CATALOG="/etc/xml/catalog"
+AC_SUBST(ROOT_CATALOG)
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
 FONT_DIR="/usr/share/fonts"
@@ -132,9 +137,9 @@ if test -z "$JING"; then
   HAVE_JING=0
 fi
 
-AC_CHECK_FILE([${CATALOG_FILE}], [CATALOG=yes], [CATALOG=no])
+AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=yes], [CATALOG=no])
 if test -z "$CATALOG"; then
-  AC_MSG_ERROR([Catalog ${CATALOG_FILE} not found])
+  AC_MSG_ERROR([Catalog $ROOT_CATALOG not found])
 fi
 
 #--------------------------------------------------------------------------
@@ -192,7 +197,7 @@ fi
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
   AC_MSG_CHECKING([for $SVG_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$SVG_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$SVG_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_SVGDTD="yes"
   else
@@ -228,7 +233,7 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.4//EN" \
                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
   AC_MSG_CHECKING([for $XML_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK="yes"
   else
@@ -243,7 +248,7 @@ fi
 for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
                "http://docbook.org/xml/5.0/rng/docbookxi.rnc" ; do
   AC_MSG_CHECKING([for $XML_SCHEMA])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5=1
   else
@@ -267,7 +272,7 @@ for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
             "${DB4_XSLT_URL}epub/docbook.xsl" \
             "${DB4_XSLT_URL}profiling/profile.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_STYLESHEETS="yes"
   else
@@ -288,7 +293,7 @@ for XSLT in "${DB5_XSLT_URL}xhtml/docbook.xsl" \
             "${DB5_XSLT_URL}epub/docbook.xsl" \
             "${DB5_XSLT_URL}profiling/profile.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "${CATALOG_FILE}" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5_STYLESHEETS="yes"
   else
