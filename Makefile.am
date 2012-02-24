@@ -167,14 +167,14 @@ $(USERGUIDE):
 	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --docconfig=$(DC_USERGUIDE) \
 	    --styleroot=$(STYLEROOT) html-single --static \
-	    --css=$(STYLEROOT)/html/susebooks.css --name=$(USERGUIDE_NAME)
+	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
 	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --docconfig=$(DC_QUICKSTART) \
 	    --styleroot=$(STYLEROOT) html-single --static \
-	    --css=$(STYLEROOT)/html/susebooks.css --name=$(QUICKSTART_NAME)
+	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
