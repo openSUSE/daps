@@ -241,12 +241,14 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
   fi
 done
 if test -z "$HAVE_DOCBOOK"; then
-  AC_MSG_ERROR([DocBook 4 not found])
+  AC_MSG_ERROR([No DocBook 4 DTD not found])
 fi
 
 # Docbook 5
 for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
-               "http://docbook.org/xml/5.0/rng/docbookxi.rnc" ; do
+                  "http://docbook.org/xml/5.0/rng/docbookxi.rnc" \
+                  "http://docbook.org/xml/5.0/rng/docbook.rng" \
+                  "http://docbook.org/xml/5.0/rng/docbook.rnc" ; do
   AC_MSG_CHECKING([for $XML_SCHEMA])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
