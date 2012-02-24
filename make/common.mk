@@ -1397,9 +1397,11 @@ endif
 #
 # "Helper" targets for HTML and HTML-SINGLE
 #
+
+HTML_CSSFILE := $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
+
 # HTMLGRAPHICS uses STYLE_HTMLCSS from layout.mk.
-HTMLGRAPHICS := $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)) \
-		$(HTML_DIR)/style_images $(HTML_DIR)/images
+HTMLGRAPHICS := $(HTML_CSSFILE) $(HTML_DIR)/style_images $(HTML_DIR)/images
 
 $(HTML_DIR):
 	mkdir -p $@
@@ -1411,6 +1413,7 @@ $(HTML_DIR):
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 
+ifdef $(HTML_CSSFILE)
 $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
@@ -1422,6 +1425,7 @@ else
 	  rm -f $@; \
 	fi
 	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
+endif
 endif
 
 #
@@ -1536,15 +1540,17 @@ endif
 #
 # "Helper" targets for JSP
 #
+JSP_CSSFILE := $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
 
-JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)) $(JSP_DIR)/style_images \
-		$(JSP_DIR)/images
+JSPGRAPHICS = $(JSP_CSSFILE)) $(JSP_DIR)/style_images $(JSP_DIR)/images
 
 $(JSP_DIR):
 	mkdir -p $@
 
+ifdef $(JSP_CSSFILE)
 $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
 	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
+endif
 
 $(JSP_DIR)/navig: $(USED_STYLEDIR)/images/navig $(JSP_DIR)
 	ln -sf $(USED_STYLEDIR)/images $(JSP_DIR)/style_images
