@@ -29,8 +29,10 @@
 # Note:
 # URL _must_ end with a "/", otherwise it will not be resolved on Ubuntu
 #
-DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current/ | sed -e s%^file://%%)
-DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current/ | sed -e s%^file://%%)
+# sed call removes the file:// prefix and the trailing "/"
+#
+DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current/ | sed -e 's%^file://%%;s%/$$%%')
+DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current/ | sed -e 's%^file://%%;s%/$$%%')
 
 
 #----------------------------
@@ -69,10 +71,11 @@ endif
 
 STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(STYLE_DOCBOOK) )
+USED_STYLEDIR  := $(firstword $(STYLE_ROOTDIRS))
 
 ifdef STYLEROOT
-  FOSTRINGS    += --stringparam styleroot "$(firstword $(STYLE_ROOTDIRS))/"
-  FOCOLSTRINGS += --stringparam styleroot "$(firstword $(STYLE_ROOTDIRS))/"
+  FOSTRINGS    += --stringparam styleroot "$(USED_STYLEDIR)/"
+  FOCOLSTRINGS += --stringparam styleroot "$(USED_STYLEDIR)/"
 endif
 
 
@@ -124,20 +127,28 @@ HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 # So existing files are chosen in the order defined in $STYLE_ROOTDIRS
 # So the DocBook stylesheets always raima the last resort
 
-STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEHSINGLE  := $(firstword $(wildcard $(addsuffix $(HTML_SINGLE_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
-		   $(STYLE_ROOTDIRS))))
-STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
-		   $(STYLE_ROOTDIRS))))
+#STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEEPUBXSLT := $(addsuffix $(EPUB_XSLT_STYLE), $(USED_STYLEDIR))
+#STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEFO       := $(addsuffix $(FO_STYLE), $(USED_STYLEDIR))
+#STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEH        := $(addsuffix $(HTML_STYLE), $(USED_STYLEDIR))
+#STYLEHSINGLE  := $(firstword $(wildcard $(addsuffix $(HTML_SINGLE_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEHSINGLE  := $(addsuffix $(HTML_SINGLE_STYLE), $(USED_STYLEDIR))
+#STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEJ        := $(addsuffix $(JSP_STYLE), $(USED_STYLEDIR))
+#STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEMAN      := $(addsuffix $(MAN_STYLE), $(USED_STYLEDIR))
+#STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
+#		   $(STYLE_ROOTDIRS))))
+STYLEWIKI     := $(addsuffix $(WIKI_STYLE), $(USED_STYLEDIR))
+
 #
 # CSS
 ifdef HTML_CSS

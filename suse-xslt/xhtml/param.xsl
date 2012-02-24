@@ -30,7 +30,7 @@
 <!-- Prefix path for every filename, has to end with "/" -->
 <xsl:param name="graphics.path">images/</xsl:param>
 
-<xsl:param name="draft.watermark.image">navig/draft.png</xsl:param>
+<xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
 
 <!--
 

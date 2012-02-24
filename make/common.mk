@@ -275,11 +275,6 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
 # root directory for custom stylesheets
 # see layout.mk
 
-#ifdef STYLEROOT
-#  FOSTRINGS    += --stringparam styleroot "$(STYLEROOT)/"
-#  FOCOLSTRINGS += --stringparam styleroot "$(STYLEROOT)/"
-#endif
-
 # index
 # returns "Yes" if index is used
 INDEX       := $(shell xsltproc --xinclude $(ROOTSTRING) \
@@ -315,7 +310,14 @@ endif
 HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
                 --stringparam show.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
-	        --stringparam show.remarks $(REMARKS)
+	        --stringparam show.remarks $(REMARKS) \
+                --stringparam admon.graphics.path "style_images/" \
+                --stringparam admon.graphics 1 \
+                --stringparam navig.graphics.path "style_images/" \
+                 --stringparam navig.graphics 1 \
+                --stringparam callout.graphics.path "style_images/callouts/" \
+                --stringparam img.src.path "images/"
+
 
 ifdef HTMLROOT
   HROOTSTRING  := --stringparam provo.root "$(HTMLROOT)"
@@ -332,7 +334,13 @@ endif
 JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
                 --stringparam show.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
-                --stringparam show.remarks $(REMARKS) 
+                --stringparam show.remarks $(REMARKS) \
+                --stringparam admon.graphics.path "style_images/" \
+                --stringparam admon.graphics 1 \
+                --stringparam navig.graphics.path "style_images/" \
+                 --stringparam navig.graphics 1 \
+                --stringparam callout.graphics.path "style_images/callouts/" \
+                --stringparam img.src.path "images/"
 
 
 #----------
@@ -856,18 +864,18 @@ ifdef USED
 	@echo "   Creating tarball..."
   endif
   ifdef PNGONLINE
-	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
 	  $(PNGONLINE);
   endif
   # also add SVGs if available
   ifdef SVGONLINE
-	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
 	  $(SVGONLINE)
   endif
   ifdef PDFONLINE
-	tar rhf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
 	  $(PDFONLINE)
   endif
@@ -890,7 +898,7 @@ ifdef PNGONLINE
 	@echo "   Creating tarball..."
   endif
 	BZIP2=--best \
-	tar cjhf $(TARBALL) --exclude=.svn --ignore-failed-read \
+	tar cjhf $(TARBALL) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
 	  $(sort $(PNGONLINE))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
@@ -917,12 +925,18 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
 endif
 	BZIP2=--best \
-	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
+	tar cjhf $(TARBALL) --exclude-vcs --no-recursion \
 	  -T $(HTML_DIR)/HTML.manifest \
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
-	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
-	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
+	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/style_images/* \
 	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
+#	BZIP2=--best \
+#	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
+#	  -T $(HTML_DIR)/HTML.manifest \
+#	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
+#	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
+#	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
+#	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 
@@ -941,10 +955,9 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
 endif
 	BZIP2=--best \
-	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
+	tar cjhf $(TARBALL) --exclude-vcs --no-recursion \
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
-	  $(HTML_DIR)/$(BOOK).html $(HTML-USED) $(HTML_DIR)/navig/* \
-	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
+	  $(HTML_DIR)/$(BOOK).html $(HTML-USED) $(HTML_DIR)/style_images/* \
 	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
@@ -964,11 +977,10 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
 endif
 	BZIP2=--best \
-	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
+	tar cjhf $(TARBALL) --exclude-vcs --no-recursion \
 	  -T $(JSP_DIR)/JSP.manifest \
 	  --absolute-names --transform=s%$(RESULT_DIR)/jsp/%% \
-	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/navig/* \
-	  $(JSP_DIR)/admon/* $(JSP_DIR)/callouts/* \
+	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/style_image/* \
 	  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
@@ -1386,7 +1398,8 @@ endif
 # "Helper" targets for HTML and HTML-SINGLE
 #
 # HTMLGRAPHICS uses STYLE_HTMLCSS from layout.mk.
-HTMLGRAPHICS = $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)) $(HTML_DIR)/navig $(HTML_DIR)/admon $(HTML_DIR)/callouts $(HTML_DIR)/images
+HTMLGRAPHICS := $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)) \
+		$(HTML_DIR)/style_images $(HTML_DIR)/images
 
 $(HTML_DIR):
 	mkdir -p $@
@@ -1411,46 +1424,22 @@ else
 	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
 endif
 
-$(HTML_DIR)/navig: $(STYLEROOT)/images/navig $(HTML_DIR)
+#
+# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# callout images in callouts/
+#
+$(HTML_DIR)/style_images: $(USED_STYLEDIR)/images $(HTML_DIR)
 ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then \
 	  rm -f $@; \
 	fi
-	tar cp --exclude-vcs -C $(STYLEROOT)/images navig/ | \
-	  (cd $(HTML_DIR); tar xpv) >/dev/null
+	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	  -C $(USED_STYLEDIR) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
 else
 	@if [ -d $@ ]; then \
 	  rm -rf $@; \
 	fi
-	ln -sf $(STYLEROOT)/images/navig/ $(HTML_DIR)
-endif
-
-$(HTML_DIR)/admon: $(STYLEROOT)/images/admon $(HTML_DIR)
-ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	tar cp --exclude-vcs -C $(STYLEROOT)/images admon/ | \
-	  (cd $(HTML_DIR); tar xpv) >/dev/null
-else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(STYLEROOT)/images/admon/ $(HTML_DIR)
-endif
-
-$(HTML_DIR)/callouts: $(STYLEROOT)/images/callouts/ $(HTML_DIR)
-ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	tar cp --exclude-vcs -C $(STYLEROOT)/images callouts/ | \
-	  (cd $(HTML_DIR); tar xpv) >/dev/null
-else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(STYLEROOT)/images/callouts/ $(HTML_DIR)
+	ln -sf $(USED_STYLEDIR)/images/ $(HTML_DIR)/style_images
 endif
 
 $(HTML_DIR)/images: $(HTML_DIR) provide-color-images
@@ -1548,7 +1537,8 @@ endif
 # "Helper" targets for JSP
 #
 
-JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)) $(JSP_DIR)/navig $(JSP_DIR)/admon $(JSP_DIR)/callouts $(JSP_DIR)/images
+JSPGRAPHICS = $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)) $(JSP_DIR)/style_images \
+		$(JSP_DIR)/images
 
 $(JSP_DIR):
 	mkdir -p $@
@@ -1556,14 +1546,8 @@ $(JSP_DIR):
 $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
 	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
 
-$(JSP_DIR)/navig: $(STYLEROOT)/images/navig $(JSP_DIR)
-	ln -sf $(STYLEROOT)/images/navig/ $(JSP_DIR)
-
-$(JSP_DIR)/admon: $(STYLEROOT)/images/admon/ $(JSP_DIR)
-	ln -sf $(STYLEROOT)/images/admon/ $(JSP_DIR)
-
-$(JSP_DIR)/callouts: $(STYLEROOT)/images/callouts/ $(JSP_DIR)
-	ln -sf $(STYLEROOT)/images/callouts/ $(JSP_DIR)
+$(JSP_DIR)/navig: $(USED_STYLEDIR)/images/navig $(JSP_DIR)
+	ln -sf $(USED_STYLEDIR)/images $(JSP_DIR)/style_images
 
 $(JSP_DIR)/images: | $(IMG_DIRECTORIES) $(JSP_DIR)
 	ln -sf $(IMG_GENDIR)/online/ $(JSP_DIR)/images

@@ -338,7 +338,7 @@ else
 fi
 
 # Create PDFs (fop, xep)
-if test 0 = "$HAVE_TAR" -o 0 = "$HAVE_BZIP"; then
+if test 0 = "$HAVE_FOP" -o 0 = "$HAVE_XEP"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
