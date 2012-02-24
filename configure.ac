@@ -90,6 +90,12 @@ if test -z "$CHECKBOT"; then
     HAVE_CHECKBOT=0
 fi
 
+# remake
+AC_PATH_PROG([REMAKE], [remake] )
+if test -z "$REMAKE"; then
+    HAVE_REAMKE=0
+fi
+
 #ruby
 AC_PATH_PROG([RUBY], [ruby] )
 if test -z "$RUBY"; then
@@ -399,9 +405,18 @@ fi
 
 # PDF font summary (pdffonts)
 if test 0 = "$HAVE_PDFFONTS"; then
-  AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools])
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
+])
 else
-  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |])
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |
+])
+fi
+
+# Enhanced Debugging (remake)
+if test 0 = "$HAVE_REMAKE"; then
+  AC_MSG_RESULT([Enhanced debugging               |    no   | install remake])
+else
+  AC_MSG_RESULT([Enhanced debugging               |   yes   |])
 fi
 
 
