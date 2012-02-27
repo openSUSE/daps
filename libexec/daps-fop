@@ -8,7 +8,6 @@ __VERSION__="$Id: daps-fop 43536 2009-08-11 22:10:56Z jw $"
 #FOP_STACK=${FOP_STACK:-"-Xss512K"}
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 
-VERBOSE=1 \
 ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACK" \
 ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver" \
 fop -c ${FOP_CONFIG_FILE} "$@"
