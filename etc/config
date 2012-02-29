@@ -2,25 +2,9 @@
 # DAPS configuration file #
 ###########################
 #
-# Copyright (C) 2011 fs@suse.de, openSUSE.org
-# Authors: fs@suse.de
+# Copyright (C) 2011,2012 fsundermeyer@opensuse.org
+# Authors: fsundermeyer@opensuse.org
 #
-
-#------------------------------------------------------------
-# Distribution specific paths
-# You may need to create a patch for the following lines when packaging
-# daps for your distribution
-#
-# The following paths are the ones used in openSUSE
-
-XML_MAIN_CATALOG="/etc/xml/catalog"
-
-# Note:
-# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
-DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
-DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
-
-DOCBOOK5_RNC_SCHEME="/usr/share/xml/docbook/schema/rng/5.0/docbook.rnc"
 
 #------------------------------------------------------------
 # Customizing:
@@ -143,6 +127,42 @@ DOCCONF_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
+## Key: DOCBOOK4_STYLE_URI        
+## ------------------
+## Description: URI to DocBook 4 stlysheets
+## Type:        URI
+## Default:     "http://docbook.sourceforge.net/release/xsl/current/"
+#
+# URI to the DocBook 4 stylesheets that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# Note:
+# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
+#
+DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
+
+## Key: DOCBOOK5_STYLE_URI        
+## ------------------
+## Description: URI to DocBook 5 stlysheets
+## Type:        URI
+## Default:     "http://docbook.sourceforge.net/release/xsl-ns/current/"
+#
+# URI to the DocBook 5 stylesheets that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# Note:
+# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
+#
+DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
+
+## Key: DOCBOOK5_RNG_URI        
+## ------------------
+## Description: URI to DocBook 5 Relax NG schema
+## Type:        URI
+## Default:     "http://docbook.org/xml/5.0/rng/docbook.rng"
+#
+# URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
+# There should be no need to change this entry
+#
+DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbook.rng"
 
 ## Key:         DRAFT
 ## ------------------
@@ -536,6 +556,17 @@ XEP_OPTIONS="-q"
 #
 XEP_WRAPPER="xep"
 
+## Key:         XML_MAIN_CATALOG
+## -----------------------
+## Description: Main XML catalog file
+## Type:        PATH to file
+## Default:     "/etc/xml/catalog"
+#
+# Path to the main XML catalog used to resolve URIs. /etc/xml/catalog is
+# the standard location used by most (all?) Linux distributions. Only
+# change if the main catalog is located elsewhere on you distribution.
+#
+XML_MAIN_CATALOG="/etc/xml/catalog"
 
 ## Key: XSLTPARAM        
 ## --------------------

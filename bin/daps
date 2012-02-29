@@ -958,6 +958,10 @@ if [[ 5 = $DOCBOOK_VERSION ]]; then
     DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
         $DOCBOOK5_STYLE_URI 2>/dev/null) || \
         exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
+    # also get the RNG scheme location
+    DOCBOOK5_RNG=$(xmlcatalog $XML_MAIN_CATALOG \
+        $DOCBOOK5_RNG_URI 2>/dev/null) || \
+        exit_on_error "Could not determine the DocBook 5 schema location by\nresolving $DOCBOOK5_RNG_URI\n via xmlcatalog"
 elif [[ 4 = $DOCBOOK_VERSION ]]; then
     DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
         $DOCBOOK4_STYLE_URI 2>/dev/null) || \
@@ -966,10 +970,16 @@ else
     exit_on_error "Fatal: Could not determine the DocBook version from $MAIN" 
 fi
 
-# remove the file:// string
-DOCBOOK_STYLES=${DOCBOOK_STYLES#file://}
+# remove the file:// string from the styles
+# use ##*file:// rather than #file:// because sometimes xmlcatalog also outputs
+# warnings to stdout which we would like to ignore. Fortunately the file:// url
+# is always the last string
+#
+DOCBOOK_STYLES=${DOCBOOK_STYLES##*file://}
+DOCBOOK5_RNG=${DOCBOOK5_RNG##*file://}
+
 # ...and export
-export DOCBOOK_STYLES DOCBOOK_VERSION
+export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 
 #----------------------------------
 # Result directory / LOG directory

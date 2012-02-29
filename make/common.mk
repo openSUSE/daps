@@ -563,11 +563,9 @@ $(PROFILEDIR)/.validate validate: $(PROFILES) missing-images
 	@echo "   Validating..."
   endif
   ifeq ($(DOCBOOK_VERSION), 4)
-	xmllint --noent --postvalid --noout \
-		--xinclude $(PROFILED_MAIN)
+	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
   else
-
-	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing -c $(DOCBOOK5_RNC_SCHEME) \
+	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing $(DOCBOOK5_RNG_URI) \
 	  $(PROFILED_MAIN)
   endif
 	touch $(PROFILEDIR)/.validate
