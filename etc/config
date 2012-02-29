@@ -221,27 +221,51 @@ EPUB_CSS=""
 #
 FALLBACK_STYLEROOT=""
 
-## Key:         FOPOPTIONS
+## Key:         FOP_CONFIG
 ## -----------------------
-## Description: Command line options for the PDF formatter (xep/fop)
+## Description: Config file for the FOP pdf formatter
+## Type:        Path
+## Default:     "/etc/daps/fop/fop-daps.xml"
+#
+# Specify a config file for FOP
+# Also see FORMATTER, FOP-*
+#
+FOP_CONFIG="/etc/daps/fop/fop-daps.xml"
+
+## Key:         FOP_OPTIONS
+## -----------------------
+## Description: Command line options for the FOP pdf formatter
 ## Type:        String
 ## Default:     "-q" (turn on quiet mode)
 #
-# Specify command line options for the PDF formatter (xep/fop).
-# Also see FOPTYPE
+# Specify command line options for the FOP formatter.
+# Also see FORMATTER, FOP-*
 #
-FOPOPTIONS="-q"
+FOP_OPTIONS="-q"
 
-## Key:         FOPTYPE
+## Key:         FOP_WRAPPER
+## -----------------------
+## Description: Wrapper script for the FOP pdf formatter
+## Type:        PATH to script
+## Default:     "fop"
+#
+# Optional wrapper script for calling FOP. The default "fop" will run
+# the first fop executable found in your path (usually this will be
+# /usr/bin/fop)
+# Also see FORMATTER, FOP-*
+#
+FOP_WRAPPER="fop"
+
+## Key:         FORMATTER
 ## --------------------
 ## Description: Specify the PDF formatter to use
 ## Type:        String (fop,xep)
 ## Default:     "fop"
 #
 # Specify which PDF formatter to use. Currently only fop or xep are supported
-# Also see FOPOPTIONS
+# Also see FOP_*, XEP_*
 #
-FOPTYPE="fop"
+FORMATTER="fop"
 
 ## Key:         GZIP_MAN
 ## ------------------
@@ -554,6 +578,42 @@ USEMETA="no"
 # VERBOSITY=2: detailed output of each target
 #
 VERBOSITY=0
+
+## Key:         XEP_CONFIG
+## -----------------------
+## Description: Config file for the XEP pdf formatter
+## Type:        Path
+## Default:     "/etc/daps/xep/xep-daps.xml"
+#
+# Specify a config file for XEP
+# Also see FORMATTER, XEP-*
+#
+XEP_CONFIG="/etc/daps/xep/xep-daps.xml"
+
+## Key:         XEP_OPTIONS
+## -----------------------
+## Description: Command line options for the XEP pdf formatter
+## Type:        String
+## Default:     "-q" (turn on quiet mode)
+#
+# Specify command line options for the XEP formatter.
+# Also see FORMATTER, XEP-*
+#
+XEP_OPTIONS="-q"
+
+## Key:         XEP_WRAPPER
+## -----------------------
+## Description: Wrapper script for the XEP pdf formatter
+## Type:        PATH to script
+## Default:     "xep"
+#
+# Optional wrapper script for calling XEP. The default "xep" will run
+# the first xep binary found in your path (usually this will be
+# /usr/bin/xep)
+# Also see FORMATTER, XEP-*
+#
+XEP_WRAPPER="xep"
+
 
 ## Key: XSLTPARAM        
 ## --------------------

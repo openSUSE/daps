@@ -57,8 +57,10 @@ VARLIST=(
     EPUBCHECK
     EPUB_CSS
     FALLBACK_STYLEROOT
-    FOPOPTIONS
-    FOPTYPE
+    FOP_CONFIG
+    FOP_OPTIONS
+    FOP_WRAPPER
+    FORMATTER
     GZIP_MAN
     HTML4
     HTML_CSS
@@ -84,6 +86,9 @@ VARLIST=(
     STYLEROOT
     USEMETA
     VERBOSITY
+    XEP_CONFIG
+    XEP_OPTIONS
+    XEP_WRAPPER
     XSLTPARAM
 )
 # unset all for a fresh start, but preserve $DOCCONF - it might have been set
@@ -977,9 +982,6 @@ else
     DC_FILE=$(basename $DOCCONF)
     export BOOK="${DC_FILE#${CONF_PREFIX}*}"
 fi
-
-# FOP
-export FOP="${LIBEXEC_DIR}/daps-$FOPTYPE"
 
 # PATH
 if [[ -n $BIN_DIR ]]; then

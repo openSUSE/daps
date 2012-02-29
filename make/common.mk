@@ -60,8 +60,8 @@ endif
 ifndef LIBEXEC_DIR
   LIBEXEC_DIR  := $(DAPSROOT)/libexec
 endif
-ifndef FOP
-  FOP      := $(LIBEXEC_DIR)/daps-fop
+ifndef FORMATTER
+  FORMATTER    := fop
 endif
 ifndef STATIC_HTML
   STATIC_HTML := 0
@@ -284,22 +284,18 @@ INDEXSTRING := --stringparam indexfile $(TMP_BOOK).ind
 # FO formatter specific stuff
 # currently supported are xep and fop
 #
-ifeq ($(FOPTYPE), fop)
+ifeq ($(FORMATTER), fop)
   FOCOLSTRINGS  += --stringparam fop1.extensions 1 \
                    --stringparam xep.extensions 0
   FOSTRINGS     += --stringparam fop1.extensions 1 \
                    --stringparam xep.extensions 0
-  ifeq ("$(DAPSROOT)", "$(DAPSROOT_DEFAULT)")
-    FOP_CONFIG_FILE ?=/etc/daps/fop/fop-daps.xml
-  else
-    FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/fop/fop-daps.xml 
-  endif
-else
-  ifeq ("$(DAPSROOT)", "$(DAPSROOT_DEFAULT)")
-    FOP_CONFIG_FILE ?=/etc/daps/xep/xep-daps.xml
-  else
-    FOP_CONFIG_FILE ?=$(DAPSROOT)/etc/xep/xep-daps.xml 
-  endif
+endif
+
+ifeq ($(FORMATTER), xep)
+  FOCOLSTRINGS  += --stringparam fop1.extensions 0 \
+                   --stringparam xep.extensions 1
+  FOSTRINGS     += --stringparam fop1.extensions 0 \
+                   --stringparam xep.extensions 1
 endif
 
 #----------
@@ -567,7 +563,7 @@ man:
 force: | $(DIRECTORIES)
 force: $(PROFILEDIR)/.validate
 	touch $(MAIN)
-	rm -f $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE).fo # pdf only!
+	rm -f $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER).fo # pdf only!
 	$(MAKE) pdf
 
 #------------------------------------------------------------------------
@@ -1273,11 +1269,25 @@ $(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
 # "Helper" targets for PDF and COLOR-PDF
 #
 
+# Formatter command
+#
+ifeq ("$(FORMATTER)","fop")
+  ifdef FOP_CONFIG
+    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS) -c $(FOP_CONFIG)
+  else
+    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS)
+  endif
+endif
+ifeq ("$(FORMATTER)","xep")
+  FORMATTER_CMD := XEP_CONFIG_FILE=$(XEP_CONFIG) $(XEP_WRAPPER) $(XEP_OPTIONS)
+endif
+
+
 # Print result file names
 #
 
-COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)_$(LL).fo
-BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FOPTYPE)-print_$(LL).fo
+COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)_$(LL).fo
+BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)-print_$(LL).fo
 
 .PHONY: pdf-name
 pdf-name:
@@ -1336,45 +1346,31 @@ endif
 
 # Create b/w PDF from fo
 #
-$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: $(FOP_CONFIG_FILE)
 $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images bw-fo
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
   endif
-  ifeq ("$(FOPTYPE)","fop")
-	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
-  else
-	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $(BW_FO) $@ $(DEVNULL)
-  endif
-  ifdef MISSING
-	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >2& 
-  endif
+	$(FORMATTER_CMD) $(BW_FO) $@ $(DEVNULL)
 	@pdffonts $@ | grep -v -e "^name" -e "^---" | cut -c 51-71 | \
 		grep -v -e "yes yes yes" >& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
+  ifdef MISSING
+	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >2& 
+  endif
 
 # Create COLOR-PDF from fo
 #
-$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: $(FOP_CONFIG_FILE)
 $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images color-fo
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
   endif
-  ifeq ($(FOPTYPE), fop)
-	FOP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $(COLOR_FO) $@ $(DEVNULL)
-  else
-	XEP_CONFIG_FILE=$(FOP_CONFIG_FILE) $(FOP) \
-	  $(FOPOPTIONS) $(COLOR_FO) $@ $(DEVNULL)
-  endif
-  ifdef MISSING
-	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >&2
-  endif
+	$(FORMATTER_CMD) $(COLOR_FO) $@ $(DEVNULL)
 	@pdffonts $@ | grep -v -e "^name" -e "^---" | cut -c 51-71 | \
 		grep -v -e "yes yes yes" >& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
+  ifdef MISSING
+	@ccecho "warn" "Looks like the following graphics are missing: $(MISSING)" >&2
+  endif
 
 # Index creation
 #
@@ -1787,7 +1783,7 @@ check:
 	@echo "COMMENTS          = $(COMMENTS)"
 	@echo "REMARKS           = $(REMARKS)"
 	@echo "DISTVER           = $(DISTVER)"
-	@echo "FOP               = $(FOP)"
+	@echo "FORMATTER         = $(FORMATTER)"
 	@echo "ROOTID            = $(ROOTID)"
 	@echo "ROOTIDS           = $(ROOTIDS)"
 	@echo "DOUBLEIMG         = $(DOUBLEIMG)"
@@ -1800,7 +1796,6 @@ check:
 	@echo "STYLEJ            = $(STYLEJ)"
 	@echo "STYLEWIKI         = $(STYLEWIKI)"
 	@echo "LAYOUTROOT        = $(LAYOUTROOT)"
-	@echo "FOPTYPE           = $(FOPTYPE)"
 	@echo "PROFILE_URN          = $(PROFILE_URN)"
 	@echo "T                 = $(T)"
 #	@echo "NOPROFILES        = $(NOPROFILES)"

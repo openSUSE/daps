@@ -66,8 +66,8 @@ function parse_args () {
                 P_FILE="$2"
                 shift 2
                 ;;
-            --fop)
-                P_FOP="$2"
+            --formatter)
+                P_FORMATTER="$2"
 		shift 2
 		;;
             -h|--help)
@@ -300,7 +300,7 @@ function call_make () {
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
 
-               FOP: $FOPTYPE
+     PDF FORMATTER: $FORMATTER
            MAKECMD: $MAKECMD
  XML_CATALOG_FILES: $XML_CATALOG_FILES
 ---------------
@@ -349,7 +349,7 @@ function call_make () {
     # SHORT_OPTS: Value for the getopt -o option 
     # LONG_OPTS:  VALUE for the getopt -l option
 #    SHORT_OPTS="cdhr"
-#    LONG_OPTS="comments,draft,fop:,help,name:,remarks,rootid:"
+#    LONG_OPTS="comments,draft,formatter:,help,name:,remarks,rootid:"
 
     # Call the argument parser
 #    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -378,7 +378,7 @@ function build_pdfs () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,draft,fop:,help,meta,name:,remarks,rootid:,xsltparam:"
+    LONG_OPTS="comments,draft,formatter:,help,meta,name:,remarks,rootid:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -388,7 +388,7 @@ function build_pdfs () {
         help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
         help_comments
         help_draft
-        help_fop
+        help_formatter
         help_help
         help_meta
         help_name
@@ -408,12 +408,11 @@ function build_pdfs () {
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
     
-    if [[ -n $P_FOP ]]; then
-        if [[ xep = $P_FOP || fop = $P_FOP ]]; then
-            export FOPTYPE="$P_FOP"
-            export FOP="${LIBEXEC_DIR}/daps-$P_FOP"
+    if [[ -n $P_FORMATTER ]]; then
+        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+            export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --fop: must be \"xep\" or \"fop\"!"
+	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
     
@@ -659,7 +658,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="hn"
-    LONG_OPTS="def-file:,help,name:,nopdf,rootid:"
+    LONG_OPTS="def-file:,formatter:,help,name:,nopdf,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -668,7 +667,7 @@ function packaging () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "Provide a $SUB_CMD package"
         if [[ package-pdf = $TARGET ]]; then
-            help_fop
+            help_formatter
         elif [[ package-src = $TARGET ]]; then
             help_def-file
         fi
@@ -688,12 +687,11 @@ function packaging () {
         exit_on_error "Cannot find DEF file P_DEF_FILE"
     fi
 
-    if [[ -n $P_FOP ]]; then
-        if [[ xep = $P_FOP || fop = $P_FOP ]]; then
-            export FOPTYPE="$P_FOP"
-            export FOP="${LIB_DIR}/daps-$P_FOP"
+    if [[ -n $P_FORMATTER ]]; then
+        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+            export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --fop: must be \"xep\" or \"fop\"!"
+	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
     
@@ -1157,8 +1155,8 @@ function help_def-file () {
 function help_file () {
     echo "    --file=FILE, -f FILE      Specify the filename of an XML file"
 }
-function help_fop () {
-    echo "    --fop=FORMATTER           Specify the PDF formatter to be used. Currently
+function help_formatter () {
+    echo "    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
                               'xep' or 'fop' are supported.
                               Default: 'fop'"
 }

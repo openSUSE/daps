@@ -4,8 +4,17 @@ variables	= "DAPSROOT='$(DAPSROOT)'"
 ifdef XML_CATALOG_FILES
 variables	+= "XML_CATALOG_FILES='$(XML_CATALOG_FILES)'"
 endif
-ifdef FOPOPTIONS
-variables	+= "FOPOPTIONS='$(FOPOPTIONS)'"
+ifdef FORMATTER
+variables	+= "FORMATTER='$(FORMATTER)'"
+endif
+ifdef FOP_CONFIG
+variables	+= "FOP_CONFIG='$(FOP_CONFIG)'"
+endif
+ifdef FOP_OPTIONS
+variables	+= "FOP_OPTIONS='$(FOP_OPTIONS)'"
+endif
+ifdef FOP_WRAPPER
+variables	+= "FOP_WRAPPER='$(FOP_WRAPPER)'"
 endif
 ifdef COMMENTS
 variables	+= "COMMENTS='$(COMMENTS)'"
@@ -82,6 +91,16 @@ endif
 ifdef DB2EPUB
 variables	+= "DB2EPUB='$(DB2EPUB)'"
 endif
+ifdef XEP_CONFIG
+variables	+= "XEP_CONFIG='$(XEP_CONFIG)'"
+endif
+ifdef XEP_OPTIONS
+variables	+= "XEP_OPTIONS='$(XEP_OPTIONS)'"
+endif
+ifdef XEP_WRAPPER
+variables	+= "XEP_WRAPPER='$(XEP_WRAPPER)'"
+endif
+
 # print out the variables that are used from the environment
 .PHONY: environment
 environment:
