@@ -45,21 +45,11 @@ endif
 # directly
 #
 
-ifndef DOC_DIR
-  DOC_DIR := $(shell pwd)
-endif
-ifndef DAPSROOT
-  DAPSROOT  := $(DAPSROOT_DEFAULT)
-endif
+
 ifndef BOOK
   BOOK     := mybook
 endif
-ifndef LIB_DIR
-  LIB_DIR  := $(DAPSROOT)/lib
-endif
-ifndef LIBEXEC_DIR
-  LIBEXEC_DIR  := $(DAPSROOT)/libexec
-endif
+
 ifndef FORMATTER
   FORMATTER    := fop
 endif
@@ -70,11 +60,6 @@ ifndef XSLTPARAM
   XSLTPARAM :=
 endif
 
-# if BUILD_DIR was not set, use $(DOC_DIR)/build
-#
-ifndef BUILD_DIR
-  BUILD_DIR := $(DOC_DIR)/build
-endif
 
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
@@ -82,18 +67,6 @@ IMG_GENDIR         := $(BUILD_DIR)/.images
 TMP_DIR            := $(BUILD_DIR)/.tmp
 
 IMG_SRCDIR         := $(DOC_DIR)/images/src
-
-#------------------------------------------------------------------------
-# DocBook version/Paths
-#
-# Check whether the sources are DocBook 4 or 5
-# get-docbook-version.xsl returns 4,5, or 0
-
-DOCBOOK_VERSION := $(shell xsltproc $(DAPSROOT)/daps-xslt/common/get-docbook-version.xsl $(MAIN))
-
-ifeq ($(DOCBOOK_VERSION), 0)
-  $(error $(MAIN) is not a valid DocBook file)
-endif
 
 #----------
 #
@@ -926,13 +899,6 @@ dist-html: provide-color-images
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/style_images/* \
 	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
-#	BZIP2=--best \
-#	tar cjhf $(TARBALL) --exclude=.svn --no-recursion \
-#	  -T $(HTML_DIR)/HTML.manifest \
-#	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
-#	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/navig/* \
-#	  $(HTML_DIR)/admon/* $(HTML_DIR)/callouts/* \
-#	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
 
@@ -1603,8 +1569,9 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt: $(HTML_DIR)/$(BOOK).html
 #
 
 # ruby script to generate ePUBs
-# not a stylesheet, but part of package docbook-xsl-stylesheets
-DB2EPUB := ruby $(EPUB_RUBY_SCRIPT)
+# not a stylesheet, but part of the Docbook4 stylesheet package
+# (it is _NOT_ available with the DocBook 5 stylesheets!!)
+DB2EPUB := ruby $(DOCBOOK_STYLES)/epub/bin/dbtoepub
 
 $(EPUB_TMP_DIR):
 	mkdir -p $@

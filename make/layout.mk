@@ -5,8 +5,8 @@
 # docbook4: e.g. /usr/share/xml/docbook/stylesheet/nwalsh/current
 # docbook5: e.g. /usr/share/xml/docbook/stylesheet/nwalsh5/current
 #
-# common.mk automatically detects if $MAIN is docbook5
-# or docbook4 and this file uses the stylesheets accordingly.
+# bin/daps automatically detects if $MAIN is docbook5
+# or docbook4 and sets DOCBOOK_STYLES accordingly
 
 # The following variables need to be set for a custom layout
 #
@@ -25,32 +25,6 @@
 # The subdirectory layout in each STYLEROOT directory needs to be the same as
 # in the original DocBook stylesheet directories
 
-# Get the DocBook stylesheet locations via catalogs
-# Note:
-# URL _must_ end with a "/", otherwise it will not be resolved on Ubuntu
-#
-# sed call removes the file:// prefix and the trailing "/"
-#
-DOCBOOK4_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl/current/ | sed -e 's%^file://%%;s%/$$%%')
-DOCBOOK5_STYLES := $(shell xmlcatalog /etc/xml/catalog http://docbook.sourceforge.net/release/xsl-ns/current/ | sed -e 's%^file://%%;s%/$$%%')
-
-
-#----------------------------
-# Stylesheet root directories
-#
-# 
-
-ifeq ($(DOCBOOK_VERSION), 4)
-  STYLE_DOCBOOK := $(DOCBOOK4_STYLES)
-  EPUB_RUBY_SCRIPT := "$(DOCBOOK4_STYLES)/epub/bin/dbtoepub"
-endif
-ifeq ($(DOCBOOK_VERSION), 5)
-  # the DocBook 5 XSLT 1.0 stylesheets are not available for
-  # all targets (epub, for example, is missing), therefore we
-  # need the DocBook4 stylesheets as a fallback
-  STYLE_DOCBOOK := $(DOCBOOK5_STYLES) $(DOCBOOK4_STYLES)
-  EPUB_RUBY_SCRIPT := "$(DOCBOOK4_STYLES)/epub/bin/dbtoepub"
-endif
 
 STYLE_CUSTOM          := $(STYLEROOT)
 
@@ -70,7 +44,7 @@ endif
 #
 
 STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
-		  $(STYLE_CUSTOM_FALLBACK) $(STYLE_DOCBOOK) )
+		  $(STYLE_CUSTOM_FALLBACK) $(DOCBOOK_STYLES) )
 USED_STYLEDIR  := $(firstword $(STYLE_ROOTDIRS))
 
 ifdef STYLEROOT
@@ -127,26 +101,12 @@ HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 # So existing files are chosen in the order defined in $STYLE_ROOTDIRS
 # So the DocBook stylesheets always raima the last resort
 
-#STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix $(EPUB_XSLT_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEEPUBXSLT := $(addsuffix $(EPUB_XSLT_STYLE), $(USED_STYLEDIR))
-#STYLEFO       := $(firstword $(wildcard $(addsuffix $(FO_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEFO       := $(addsuffix $(FO_STYLE), $(USED_STYLEDIR))
-#STYLEH        := $(firstword $(wildcard $(addsuffix $(HTML_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEH        := $(addsuffix $(HTML_STYLE), $(USED_STYLEDIR))
-#STYLEHSINGLE  := $(firstword $(wildcard $(addsuffix $(HTML_SINGLE_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEHSINGLE  := $(addsuffix $(HTML_SINGLE_STYLE), $(USED_STYLEDIR))
-#STYLEJ        := $(firstword $(wildcard $(addsuffix $(JSP_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEJ        := $(addsuffix $(JSP_STYLE), $(USED_STYLEDIR))
-#STYLEMAN      := $(firstword $(wildcard $(addsuffix $(MAN_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEMAN      := $(addsuffix $(MAN_STYLE), $(USED_STYLEDIR))
-#STYLEWIKI     := $(firstword $(wildcard $(addsuffix $(WIKI_STYLE), \
-#		   $(STYLE_ROOTDIRS))))
 STYLEWIKI     := $(addsuffix $(WIKI_STYLE), $(USED_STYLEDIR))
 
 #

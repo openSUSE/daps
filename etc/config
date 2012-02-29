@@ -6,13 +6,19 @@
 # Authors: fs@suse.de
 #
 
-
 #------------------------------------------------------------
 # Distribution specific paths
 # You may need to create a patch for the following lines when packaging
 # daps for your distribution
 #
 # The following paths are the ones used in openSUSE
+
+XML_MAIN_CATALOG="/etc/xml/catalog"
+
+# Note:
+# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
+DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
+DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
 
 DOCBOOK5_RNC_SCHEME="/usr/share/xml/docbook/schema/rng/5.0/docbook.rnc"
 
@@ -137,27 +143,6 @@ DOCCONF_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
-# NOT USED ANYMORE
-#
-#  ## Key:         DISTVER
-#  ## --------------------
-#  ## Description: Productversion
-#  ## Type:        String
-#  ## Default:     ""
-#  #
-#  # daps allows to set product name and product version dynamically. This
-#  # enables you to use the same XML sources for different products. To use this
-#  # feature, use the entities &productname; &productnamereg; (produktname with
-#  # copyright/trademark symbol)  and &productversion; in your XML sources. These
-#  # entities will be resolved to the values of DISTVER, PRODUCTNAME, and
-#  # PRODUCTNAMEREG
-#  # Examles:
-#  #   PRODUCTNAME="MyVeryFirstSoftware"
-#  #   PRODUCTNAME="MyVeryFirstSoftware©"
-#  #   DISTVER="4.2"
-#  # This value is usually set in a book specific DC-file
-#  #
-#  DISTVER=""
 
 ## Key:         DRAFT
 ## ------------------
@@ -335,23 +320,6 @@ INK_OPTIONS="-z -w 800"
 #
 JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
 
-# NO LONGER USED
-#
-# ## Key:         LAYOUT
-# ## -------------------
-# ## Description: Specify a layout to be used for book generation
-# ## Type:        String (flyer, pocket)
-# ## Default:     ""
-# #
-# # Lets you specify a layout for book creation. If not set, uses the daps
-# # default layout. daps offers two additional layouts for PDFs: flyer (two
-# # column layout) and pocket (for DVD box sized manuals)
-# # This is currently work in progress. The goal is to enable custom stylesheets
-# # and to easily be able to fallback to the original DocBook stylesheets
-# # This value is usually set in a book specific DC-file.
-# # 
-# LAYOUT=""
-
 ## Key:         MAIN
 ## -----------------
 ## Description: Filename of the set/book defining XML file
@@ -379,52 +347,6 @@ MAIN=""
 #            be overwritten by a new build
 #
 PDFNAME=""
-
-
-#
-# NOT USED ANYMORE
-#
-#  ## Key:         PRODUCTNAME
-#  ## ------------------------
-#  ## Description: Productname
-#  ## Type:        String
-#  ## Default:     ""
-#  #
-#  # daps allows to set product name and product version dynamically. This
-#  # enables you to use the same XML sources for different products. To use this
-#  # feature, use the entities &productname; &productnamereg; (produktname with
-#  # copyright/trademark symbol)  and &productversion; in your XML sources. These
-#  # entities will be resolved to the values of DISTVER, PRODUCTNAME, and
-#  # PRODUCTNAMEREG
-#  # Examles:
-#  #   PRODUCTNAME="MyVeryFirstSoftware"
-#  #   PRODUCTNAME="MyVeryFirstSoftware©"
-#  #   DISTVER="4.2"
-#  # This value is usually set in a book specific DC-file
-#  #
-#  PRODUCTNAME=""
-
-# NOT USED ANYMORE
-#
-# ## Key:         PRODUCTNAMEREG
-# ## ---------------------------
-# ## Description: Productname with copyright/trademark
-# ## Type:        String
-# ## Default:     ""
-# #
-# # daps allows to set product name and product version dynamically. This
-# # enables you to use the same XML sources for different products. To use this
-# # feature, use the entities &productname; &productnamereg; (produktname with
-# # copyright/trademark symbol)  and &productversion; in your XML sources. These
-# # entities will be resolved to the values of DISTVER, PRODUCTNAME, and
-# # PRODUCTNAMEREG
-# # Examles:
-# #   PRODUCTNAME="MyVeryFirstSoftware"
-# #   PRODUCTNAME="MyVeryFirstSoftware©"
-# #   DISTVER="4.2"
-# # This value is usually set in a book specific DC-file
-# #
-# PRODUCTNAMEREG=""
 
 ## Key:         PROFARCH
 ## ---------------------

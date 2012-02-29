@@ -161,7 +161,7 @@ USER_CONFIG="$HOME/.daps/config"
 
 declare -A SUBCOMMANDS
 SUBCOMMANDS=(
-    [all]=build_pdfs
+    [all]=build_pdf
     [bigfile-reduced]=build_generic
     [bigfile]=build_generic
     [check]=no_opts
@@ -915,10 +915,7 @@ elif [[ -n $DOCCONF_CMDL ]]; then
     fi
 fi
 
-# Sanity checks
-#
-[[ -z "$DOC_DIR" ]] &&  exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened"
-[[ -d "${DOC_DIR}/xml" ]] ||  exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
+
 [[ -z "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: \$DOCCONF is not set. This should not have happened"
 [[ -e "$DOCCONF_CMDL" ]] || exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
 
@@ -935,41 +932,59 @@ if [[ -z "$MAIN_CMDL" ]]; then
     set_mainfile "$MAIN"
     MAIN="$MAIN_CMDL"
 fi
-
 # A final test
 [[ -e "$MAIN" ]] || exit_on_error "Fatal: Could not find $MAIN"
 
-# Set a default BUILD_DIR
-[[ -z $BUILD_DIR ]] && BUILD_DIR=${DOC_DIR}/build
-
-#----------
-# Check some values
+# ----------------------------------------------------------------------------
+# Set paths
 #
+# set all basic paths that have not been set by now
 
-# COLOR must be set to 1|0
-#
-# if we are not in a terminal but rather in a pipe, script, etc.
-# disable color output otherwise use the value specified on the
-# command line or in the config
-#
-# checking for a Terminal is done by "test -t 1"
+#----------------------------------
+# default BUILD_DIR if not specified on the command line
+[[ -z $BUILD_DIR_CMDL ]] && BUILD_DIR=${DOC_DIR}/build
 
-if [[  -t 1 ]]; then
-    case $COLOR in
-        "1" | "yes")
-            COLOR=1
-            ;;
-        "0" | "no" | "")
-            COLOR=0
-            ;;
-        *)
-            exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
-            ;;
-        esac
+#----------------------------------
+# DocBook Stylesheet locations
+#
+# get DocBook version first ...
+DOCBOOK_VERSION=$(xsltproc \
+    ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl $MAIN 2>/dev/null) || \
+    { DOCBOOK_VERSION=4; ccecho "warn" \
+      "Could not get DocBook version, assuming DocBook 4"; } 
+
+# ... no resolve the style URI via catalogs
+if [[ 5 = $DOCBOOK_VERSION ]]; then
+    DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
+        $DOCBOOK5_STYLE_URI 2>/dev/null) || \
+        exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
+elif [[ 4 = $DOCBOOK_VERSION ]]; then
+    DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
+        $DOCBOOK4_STYLE_URI 2>/dev/null) || \
+        exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
 else
-    # No terminal
-    COLOR=0
+    exit_on_error "Fatal: Could not determine the DocBook version from $MAIN" 
 fi
+
+# remove the file:// string
+DOCBOOK_STYLES=${DOCBOOK_STYLES#file://}
+# ...and export
+export DOCBOOK_STYLES DOCBOOK_VERSION
+
+#----------------------------------
+# Result directory / LOG directory
+#
+R_DIR="${BUILD_DIR}/${BOOK}/"
+LOG_DIR="${R_DIR}/log"
+
+
+#----------------------------------
+# Sanity checks
+#
+[[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
+[[ -d "${DOC_DIR}/xml" ]] || exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
+[[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
+[[ -d "$DAPSROOT" ]] || exit_on_error "Fatal: Could not find DAPSROOT \"${DAPSROOT}\"."
 
 #----------
 # Values that need to be exported and are not set in the config
@@ -983,20 +998,10 @@ else
     export BOOK="${DC_FILE#${CONF_PREFIX}*}"
 fi
 
-# PATH
-if [[ -n $BIN_DIR ]]; then
-    export PATH=$BIN_DIR:$PATH
-fi
-
 # XML_CATALOG_FILES
 if [[ -n $XML_CATALOG_FILES ]]; then
     export XML_CATALOG_FILES
 fi
-
-# R_DIR / LOG_DIR
-#
-R_DIR="${BUILD_DIR}/${BOOK}/"
-LOG_DIR="${R_DIR}/log"
 
 #----------
 # Now export all variables set by the config file
@@ -1013,5 +1018,4 @@ WRITE_LOG=1
 
 eval "${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}"
 
-#run_subcmd;
 

@@ -237,6 +237,24 @@ function init_env {
             ;;
     esac
 
+    # COLOR must be set to 1|0
+    # if we are not in a terminal but rather in a pipe, script, etc.
+    # disable color output otherwise use the value specified on the
+    # command line or in the config
+    if [[  -t 1 ]]; then
+        case $COLOR in
+            "1" | "yes")
+                export COLOR=1 ;;
+            "0" | "no" | "")
+                COLOR=0 ;;
+            *)
+                exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
+                ;;
+        esac
+    else
+        # No terminal
+        COLOR=0
+    fi
 }   
 
 ###########################################################################
@@ -294,8 +312,13 @@ function call_make () {
         if [[ -n $STYLEDEVEL ]]; then
             echo "         STYLEROOT: $STYLEDEVEL"
         else
-            echo "         STYLEROOT: $STYLEROOT"
+            if [[ -n $STYLEROOT ]]; then
+                echo "         STYLEROOT: $STYLEROOT"
+            else
+                echo "         STYLEROOT: $DOCBOOK_STYLES"   
+            fi
         fi
+        
         echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
