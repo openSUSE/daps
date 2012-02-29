@@ -22,6 +22,11 @@ AC_PREREQ([2.68])
 AC_INIT([DAPS], [0.9.9], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_CONFIG_FILES([
+        Makefile
+        etc/config
+        bin/daps
+        ])
 
 AC_MSG_NOTICE([
 
@@ -61,90 +66,60 @@ AC_PROG_GREP
 AC_PROG_INSTALL
 
 # make
-AC_PATH_PROG([MAKE], [make])
-if test -z "$MAKE"; then
+AC_PATH_PROG([MAKE], [make], [0])
+if test 0 = "$MAKE"; then
    AC_MSG_ERROR([make not found]) 
 fi
 
 # tar
-AC_PATH_PROG([TAR], [tar] )
-if test -z "$TAR"; then
-    HAVE_TAR=0
-fi
+AC_PATH_PROG([TAR], [tar], [0])
 
 # bzip2
-AC_PATH_PROG([BZIP], [bzip2] )
-if test -z "$BZIP"; then
-    HAVE_BZIP=0
-fi
+AC_PATH_PROG([BZIP], [bzip2], [0])
 
 # epubcheck
-AC_PATH_PROG([EPUBCHECK], [epubcheck] )
-if test -z "$EPUBCHECK"; then
-    HAVE_EPUBCHECK=0
-fi
+AC_PATH_PROG([EPUBCHECK], [epubcheck], [0])
 
 # checkbot
-AC_PATH_PROG([CHECKBOT], [checkbot] )
-if test -z "$CHECKBOT"; then
-    HAVE_CHECKBOT=0
-fi
+AC_PATH_PROG([CHECKBOT], [checkbot], [0])
 
 # remake
-AC_PATH_PROG([REMAKE], [remake] )
-if test -z "$REMAKE"; then
-    HAVE_REAMKE=0
-fi
+AC_PATH_PROG([REMAKE], [remake], [0])
 
 #ruby
-AC_PATH_PROG([RUBY], [ruby] )
-if test -z "$RUBY"; then
-    HAVE_RUBY=0
-fi
+AC_PATH_PROG([RUBY], [ruby], [0])
 
 # w3m
-AC_PATH_PROG([W3M], [w3m] )
-if test -z "$W3M"; then
-    HAVE_W3M=0
-fi
+AC_PATH_PROG([W3M], [w3m], [0])
 
 #--------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for XML tools... ])
 
 # Syntax: AC_PATH_PROG([VARIABLE], [binary])
-AC_PATH_PROG([XMLLINT], [xmllint])
-if test -z "$XMLLINT"; then
+AC_PATH_PROG([XMLLINT], [xmllint], [0])
+if test 0 = "$XMLLINT"; then
    AC_MSG_ERROR([xmllint not found])
 fi
 
-AC_PATH_PROG([XSLTPROC], [xsltproc])
-if test -z "$XSLTPROC"; then
+AC_PATH_PROG([XSLTPROC], [xsltproc], [0])
+if test 0 = "$XSLTPROC"; then
    AC_MSG_ERROR([xsltproc (libxslt) not found]) 
 fi
 
-AC_PATH_PROG([XMLCATALOG], [xmlcatalog])
-if test -z "$XMLCATALOG"; then
+AC_PATH_PROG([XMLCATALOG], [xmlcatalog], [0])
+if test 0 = "$XMLCATALOG"; then
    AC_MSG_ERROR([xmlcatalog not found]) 
 fi
 
-AC_PATH_PROG([FOP], [fop])
-if test -z "$FOP"; then
-   HAVE_FOP=0
-fi
+AC_PATH_PROG([FOP], [fop], [0])
 
-AC_PATH_PROG([XEP], [xep])
-if test -z "$XEP"; then
-   HAVE_XEP=0
-fi
+AC_PATH_PROG([XEP], [xep], [0])
 
 # recommendation, only needed for Docbook5
-AC_PATH_PROG([JING], [jing] )
-if test -z "$JING"; then
-  HAVE_JING=0
-fi
+AC_PATH_PROG([JING], [jing], [0])
 
-AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=yes], [CATALOG=no])
-if test -z "$CATALOG"; then
+AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=$ROOT_CATALOG], [CATALOG=0])
+if test 0 = "$CATALOG"; then
   AC_MSG_ERROR([Catalog $ROOT_CATALOG not found])
 fi
 
@@ -152,52 +127,31 @@ fi
 AC_MSG_NOTICE([===== Checking for Image conversion tools...])
                      
 # convert (ImageMagick)
-AC_PATH_PROG([CONVERT], [convert] )
-if test -z "$CONVERT"; then
+AC_PATH_PROG([CONVERT], [convert], [0])
+if test 0 = "$CONVERT"; then
    AC_MSG_ERROR([convert (ImageMagick) not found]) 
 fi
 
 # dia
-AC_PATH_PROG([DIA], [dia] )
-if test -z "$DIA"; then
-  HAVE_DIA=0
-fi
+AC_PATH_PROG([DIA], [dia], [0])
 
 # exiftool
-AC_PATH_PROG([EXIFTOOL], [exiftool])
-if test -z "$EXIFTOOL"; then
-  HAVE_EXIFTOOL=0  
-fi
+AC_PATH_PROG([EXIFTOOL], [exiftool], [0])
 
 # ghostscript
-AC_PATH_PROG([GHOSTSCRIPT], [gs] )
-if test -z "$GHOSTSCRIPT"; then
-  HAVE_GHOSTSCRIPT=0
-fi
+AC_PATH_PROG([GHOSTSCRIPT], [gs], [0])
 
 # inkscape
-AC_PATH_PROG([INKSCAPE], [inkscape] )
-if test -z "$INKSCAPE"; then
-  HAVE_INKSCAPE=0
-fi
+AC_PATH_PROG([INKSCAPE], [inkscape], [0])
 
 # optipng
-AC_PATH_PROG([OPTIPNG], [optipng] )
-if test -z "$OPTIPNG"; then
-  HAVE_OPTIPNG=0
-fi
+AC_PATH_PROG([OPTIPNG], [optipng], [0])
 
 # pdffonts
-AC_PATH_PROG([PDFFONTS], [pdffonts] )
-if test -z "$PDFFONTS"; then
-  HAVE_PDFFONTS=0
-fi
+AC_PATH_PROG([PDFFONTS], [pdffonts], [0])
 
 # xfig
-AC_PATH_PROG([XFIG], [xfig] )
-if test -z "$XFIG"; then
-  HAVE_XFIG=0
-fi
+AC_PATH_PROG([XFIG], [xfig], [0])
 
 # svg DTD
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
@@ -205,7 +159,7 @@ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
   AC_MSG_CHECKING([for $SVG_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$SVG_DTD" >&2]); then
     AC_MSG_RESULT([yes])
-    HAVE_SVGDTD="yes"
+    HAVE_SVGDTD=1
   else
     AC_MSG_RESULT([no])
   fi
@@ -241,7 +195,7 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
   AC_MSG_CHECKING([for $XML_DTD])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
-    HAVE_DOCBOOK="yes"
+    HAVE_DOCBOOK=1
   else
     AC_MSG_RESULT([no])
   fi
@@ -282,7 +236,7 @@ for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
-    HAVE_DOCBOOK_STYLESHEETS="yes"
+    HAVE_DOCBOOK_STYLESHEETS=1
   else
     AC_MSG_RESULT([no])
   fi
@@ -303,7 +257,7 @@ for XSLT in "${DB5_XSLT_URL}xhtml/docbook.xsl" \
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
-    HAVE_DOCBOOK_5_STYLESHEETS="yes"
+    HAVE_DOCBOOK_5_STYLESHEETS=1
   else
     AC_MSG_RESULT([no])
   fi
@@ -312,6 +266,16 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
   HAVE_DOCBOOK_5_STYLESHEETS=0
 fi
 
+#--------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for Distribution Vendor...])
+AC_CHECK_FILE([/etc/SuSE-release], [VENDOR=SUSE])
+AC_CHECK_FILE([/etc/redhat-release], [VENDOR=REDHAT])
+AC_CHECK_FILE([/etc/debian-version], [VENDOR=DEBIAN])
+AC_CHECK_FILE([/etc/slackware-version], [VENDOR=SLACKWARE])
+if test -z "$VENDOR"; then VENDOR=OTHER; fi
+AC_SUBST(VENDOR)
+
+#--------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
 
 AC_MSG_RESULT([
@@ -330,21 +294,21 @@ Optional features
 Feature                          | Enabled | Action to enable
 ..............................................................................])
 # Create ASCII (w3m)
-if test 0 = "$HAVE_W3M"; then
+if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
 else
   AC_MSG_RESULT([Create ASCII txt output          |   yes   |])
 fi
 
 # Create ePUBs (ruby)
-if test 0 = "$HAVE_RUBY"; then
+if test 0 = "$RUBY"; then
   AC_MSG_RESULT([Create ePUB output               |    no   | install ruby])
 else
   AC_MSG_RESULT([Create ePUB output               |   yes   |])
 fi
 
 # Create PDFs (fop, xep)
-if test 0 = "$HAVE_FOP" -o 0 = "$HAVE_XEP"; then
+if test 0 = "$FOP" -o 0 = "$XEP"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
@@ -353,28 +317,28 @@ else
 fi
 
 # DIA support
-if test 0 = "$HAVE_DIA"; then
+if test 0 = "$DIA"; then
   AC_MSG_RESULT([Support for .dia images          |    no   | install dia])
 else
   AC_MSG_RESULT([Support for .dia images          |   yes   |])
 fi
 
 # SVG support
-if test 0 = "$HAVE_INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
+if test 0 = "$INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
   AC_MSG_RESULT([Support for .svg images          |    no   | install inkscape and/or the SVG DTD])
 else
   AC_MSG_RESULT([Support for .svg images          |   yes   |])
 fi
 
 # XFIG support
-if test 0 = "$HAVE_XFIG"; then
+if test 0 = "$XFIG"; then
   AC_MSG_RESULT([Support for .fig images          |    no   | install xfig (transfig)])
 else
   AC_MSG_RESULT([Support for .fig images          |   yes   |])
 fi
 
 # Optimize PNGs (optipng)
-if test 0 = "$HAVE_OPTIPNG" -o 0 = "$HAVE_EXIFTOOL"; then
+if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
   AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
 ])
 else
@@ -383,28 +347,28 @@ else
 fi
 
 # Linkchecker (checkbot)
-if test 0 = "$HAVE_CHECKBOT"; then
+if test 0 = "$CHECKBOT"; then
   AC_MSG_RESULT([Check links in XML sources       |    no   | install checkbot])
 else
   AC_MSG_RESULT([Check links in XML sources       |   yes   |])
 fi
 
 # Create archives (tar, bzip2)
-if test 0 = "$HAVE_TAR" -o 0 = "$HAVE_BZIP"; then
+if test 0 = "$TAR" -o 0 = "$BZIP"; then
   AC_MSG_RESULT([Create distributable archives    |    no   | install tar and/or bzip2])
 else
   AC_MSG_RESULT([Create distributable archives    |   yes   |])
 fi
 
 # Validate ePUBs (epubcheck)
-if test 0 = "$HAVE_EPUBCHECK"; then
+if test 0 = "$EPUBCHECK"; then
   AC_MSG_RESULT([Validate generated ePUB files    |    no   | install epubcheck])
 else
   AC_MSG_RESULT([Validate generated ePUB files    |   yes   |])
 fi
 
 # PDF font summary (pdffonts)
-if test 0 = "$HAVE_PDFFONTS"; then
+if test 0 = "$PDFFONTS"; then
   AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
 ])
 else
@@ -413,7 +377,7 @@ else
 fi
 
 # Enhanced Debugging (remake)
-if test 0 = "$HAVE_REMAKE"; then
+if test 0 = "$REMAKE"; then
   AC_MSG_RESULT([Enhanced debugging               |    no   | install remake])
 else
   AC_MSG_RESULT([Enhanced debugging               |   yes   |])
@@ -426,7 +390,7 @@ Experimental features
 Feature                          | Enabled | Action to enable
 ..............................................................................])
 # PDF/EPS images support(ghostscript (gs))
-if test 0 = "$HAVE_XFIG"; then
+if test 0 = "$GS"; then
   AC_MSG_RESULT([Support for .pdf and .eps images |    no   | install ghostscript])
 else
   AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
