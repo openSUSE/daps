@@ -142,7 +142,7 @@ ME=$(basename $0)
 DEFAULT_CONFIG="@sysconfdir@/daps/config"
 
 # The default DAPSROOT 
-DAPSROOT_DEFAULT="@datadir@/daps"
+DAPSROOT_DEFAULT="@pkgdatadir@/daps"
 
 # default libdir
 DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
@@ -940,6 +940,23 @@ fi
 # A final test
 [[ -e "$MAIN" ]] || exit_on_error "Fatal: Could not find $MAIN"
 
+#----------
+# Values that need to be exported and are not set in the config
+#
+
+# book name
+if [[ -n $PDFNAME ]]; then
+    export BOOK="$PDFNAME"
+else
+    DC_FILE=$(basename $DOCCONF)
+    export BOOK="${DC_FILE#${CONF_PREFIX}*}"
+fi
+
+# XML_CATALOG_FILES
+if [[ -n $XML_CATALOG_FILES ]]; then
+    export XML_CATALOG_FILES
+fi
+
 # ----------------------------------------------------------------------------
 # Set paths
 #
@@ -1001,24 +1018,7 @@ LOG_DIR="${R_DIR}/log"
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
 [[ -d "$DAPSROOT" ]] || exit_on_error "Fatal: Could not find DAPSROOT \"${DAPSROOT}\"."
 
-#----------
-# Values that need to be exported and are not set in the config
-#
-
-# book name
-if [[ -n $PDFNAME ]]; then
-    export BOOK="$PDFNAME"
-else
-    DC_FILE=$(basename $DOCCONF)
-    export BOOK="${DC_FILE#${CONF_PREFIX}*}"
-fi
-
-# XML_CATALOG_FILES
-if [[ -n $XML_CATALOG_FILES ]]; then
-    export XML_CATALOG_FILES
-fi
-
-#----------
+#-------------------------------------------------------------------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
 
