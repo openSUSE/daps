@@ -8,7 +8,7 @@ dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
 dnl
 dnl Authors:
 dnl   Thomas Schraitle  <toms@opensuse.org>
-dnl   Frank Sundermeyer <fs@suse.de>
+dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
 dnl
 dnl TODO
 dnl
@@ -22,11 +22,6 @@ AC_PREREQ([2.68])
 AC_INIT([DAPS], [0.9.9], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_FILES([
-        etc/config
-        bin/daps
-        ])
-
 AC_MSG_NOTICE([
 
  Configuring DAPS, the DocBook Authoring and Publishing Suite...
@@ -37,18 +32,18 @@ AC_CONFIG_SRCDIR([Makefile.am])
 AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
-# Some constants
+dnl Some constants
 ROOT_CATALOG="/etc/xml/catalog"
 AC_SUBST(ROOT_CATALOG)
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
 FONT_DIR="/usr/share/fonts"
 
-#-------------------------
-# Debug mode switch
-# $DEBUG is used with bin/daps
-# $Q is the quiet switch for the Makefile
-#
+dnl -------------------------
+dnl Debug mode switch
+dnl $DEBUG is used with bin/daps
+dnl $Q is the quiet switch for the Makefile
+
 AC_ARG_ENABLE([debug],
     [AC_HELP_STRING([--enable-debug], [Enable debug mode])],
       [debug="--debug"], [quiet="@"])
@@ -56,45 +51,44 @@ eval "eval DEBUG=$debug Q=$quiet"
 AC_SUBST(DEBUG)
 AC_SUBST(Q)
 
-#-------------------------
-# Checks for programs.
+dnl -------------------------
+dnl Checks for programs.
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_INSTALL
 
-# make
+dnl make
 AC_PATH_PROG([MAKE], [make], [0])
 if test 0 = "$MAKE"; then
    AC_MSG_ERROR([make not found]) 
 fi
 
-# tar
+dnl tar
 AC_PATH_PROG([TAR], [tar], [0])
 
-# bzip2
+dnl bzip2
 AC_PATH_PROG([BZIP], [bzip2], [0])
 
-# epubcheck
+dnl epubcheck
 AC_PATH_PROG([EPUBCHECK], [epubcheck], [0])
 
-# checkbot
+dnl checkbot
 AC_PATH_PROG([CHECKBOT], [checkbot], [0])
 
-# remake
+dnl remake
 AC_PATH_PROG([REMAKE], [remake], [0])
 
-#ruby
+dnl ruby
 AC_PATH_PROG([RUBY], [ruby], [0])
 
-# w3m
+dnl w3m
 AC_PATH_PROG([W3M], [w3m], [0])
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for XML tools... ])
 
-# Syntax: AC_PATH_PROG([VARIABLE], [binary])
 AC_PATH_PROG([XMLLINT], [xmllint], [0])
 if test 0 = "$XMLLINT"; then
    AC_MSG_ERROR([xmllint not found])
@@ -114,7 +108,7 @@ AC_PATH_PROG([FOP], [fop], [0])
 
 AC_PATH_PROG([XEP], [xep], [0])
 
-# recommendation, only needed for Docbook5
+dnl recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing], [0])
 
 AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=$ROOT_CATALOG], [CATALOG=0])
@@ -122,37 +116,37 @@ if test 0 = "$CATALOG"; then
   AC_MSG_ERROR([Catalog $ROOT_CATALOG not found])
 fi
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Image conversion tools...])
                      
-# convert (ImageMagick)
+dnl convert (ImageMagick)
 AC_PATH_PROG([CONVERT], [convert], [0])
 if test 0 = "$CONVERT"; then
    AC_MSG_ERROR([convert (ImageMagick) not found]) 
 fi
 
-# dia
+dnl dia
 AC_PATH_PROG([DIA], [dia], [0])
 
-# exiftool
+dnl exiftool
 AC_PATH_PROG([EXIFTOOL], [exiftool], [0])
 
-# ghostscript
+dnl ghostscript
 AC_PATH_PROG([GHOSTSCRIPT], [gs], [0])
 
-# inkscape
+dnl inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape], [0])
 
-# optipng
+dnl optipng
 AC_PATH_PROG([OPTIPNG], [optipng], [0])
 
-# pdffonts
+dnl pdffonts
 AC_PATH_PROG([PDFFONTS], [pdffonts], [0])
 
-# xfig
+dnl xfig
 AC_PATH_PROG([XFIG], [xfig], [0])
 
-# svg DTD
+dnl svg DTD
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
   AC_MSG_CHECKING([for $SVG_DTD])
@@ -167,9 +161,9 @@ if test -z "$HAVE_SVGDTD"; then
   HAVE_SVGDTD=0
 fi               
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
-# python
+ dnl python
 dnl We require Python >= 2.6
 AM_PATH_PYTHON([2.6])
 
@@ -177,13 +171,7 @@ AM_PATH_PYTHON([2.6])
 AC_PYTHON_MODULE([xml], [fatal])
 AC_SUBST(HAVE_PYMOD_XML)
 
-# only needed for daps-docmanager
-#AC_PYTHON_MODULE([lxml], [fatal])
-#AC_SUBST(HAVE_PYMOD_LXML)
-#AC_PYTHON_MODULE([optparse], [fatal])
-#AC_SUBST(HAVE_PYMOD_OPTPARSE)
-
-#--------------------------------------------------------------------------
+dnl --------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook...])
 
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
@@ -203,7 +191,7 @@ if test -z "$HAVE_DOCBOOK"; then
   AC_MSG_ERROR([No DocBook 4 DTD not found])
 fi
 
-# Docbook 5
+dnl Docbook 5
 for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
                   "http://docbook.org/xml/5.0/rng/docbookxi.rnc" \
                   "http://docbook.org/xml/5.0/rng/docbook.rng" \
@@ -220,10 +208,10 @@ if test -z "$HAVE_DOCBOOK_5"; then
   HAVE_DOCBOOK_5=0
 fi
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
-# DocBook4
+dnl DocBook4
 for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
             "${DB4_XSLT_URL}xhtml/chunk.xsl" \
             "${DB4_XSLT_URL}html/docbook.xsl" \
@@ -244,7 +232,7 @@ if test -z "$HAVE_DOCBOOK_STYLESHEETS"; then
   AC_MSG_ERROR([DocBook 4 stylesheets not found])
 fi
 
-# DocBook 5
+dnl DocBook 5
 for XSLT in "${DB5_XSLT_URL}xhtml/docbook.xsl" \
             "${DB5_XSLT_URL}xhtml/chunk.xsl" \
             "${DB5_XSLT_URL}html/docbook.xsl" \
@@ -265,7 +253,7 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
   HAVE_DOCBOOK_5_STYLESHEETS=0
 fi
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Distribution Vendor...])
 AC_CHECK_FILE([/etc/SuSE-release], [VENDOR=SUSE])
 AC_CHECK_FILE([/etc/redhat-release], [VENDOR=REDHAT])
@@ -274,11 +262,11 @@ AC_CHECK_FILE([/etc/slackware-version], [VENDOR=SLACKWARE])
 if test -z "$VENDOR"; then VENDOR=OTHER; fi
 AC_SUBST(VENDOR)
 
-#--------------------------------------------------------------------------
+dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
 
 AC_MSG_RESULT([
-###############################################################################
+dnl ###########################################################################
 DAPS is configured as follows.  Please verify that this configuration matches
 your expectations.
 
@@ -292,21 +280,21 @@ Optional features
 -----------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
-# Create ASCII (w3m)
+dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
 else
   AC_MSG_RESULT([Create ASCII txt output          |   yes   |])
 fi
 
-# Create ePUBs (ruby)
+dnl Create ePUBs (ruby)
 if test 0 = "$RUBY"; then
   AC_MSG_RESULT([Create ePUB output               |    no   | install ruby])
 else
   AC_MSG_RESULT([Create ePUB output               |   yes   |])
 fi
 
-# Create PDFs (fop, xep)
+dnl Create PDFs (fop, xep)
 if test 0 = "$FOP" -o 0 = "$XEP"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
@@ -315,28 +303,28 @@ else
 ])
 fi
 
-# DIA support
+dnl DIA support
 if test 0 = "$DIA"; then
   AC_MSG_RESULT([Support for .dia images          |    no   | install dia])
 else
   AC_MSG_RESULT([Support for .dia images          |   yes   |])
 fi
 
-# SVG support
+dnl SVG support
 if test 0 = "$INKSCAPE" -o 0 = "$HAVE_SVGDTD"; then
   AC_MSG_RESULT([Support for .svg images          |    no   | install inkscape and/or the SVG DTD])
 else
   AC_MSG_RESULT([Support for .svg images          |   yes   |])
 fi
 
-# XFIG support
+dnl XFIG support
 if test 0 = "$XFIG"; then
   AC_MSG_RESULT([Support for .fig images          |    no   | install xfig (transfig)])
 else
   AC_MSG_RESULT([Support for .fig images          |   yes   |])
 fi
 
-# Optimize PNGs (optipng)
+dnl Optimize PNGs (optipng)
 if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
   AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
 ])
@@ -345,28 +333,28 @@ else
 ])
 fi
 
-# Linkchecker (checkbot)
+dnl Linkchecker (checkbot)
 if test 0 = "$CHECKBOT"; then
   AC_MSG_RESULT([Check links in XML sources       |    no   | install checkbot])
 else
   AC_MSG_RESULT([Check links in XML sources       |   yes   |])
 fi
 
-# Create archives (tar, bzip2)
+dnl Create archives (tar, bzip2)
 if test 0 = "$TAR" -o 0 = "$BZIP"; then
   AC_MSG_RESULT([Create distributable archives    |    no   | install tar and/or bzip2])
 else
   AC_MSG_RESULT([Create distributable archives    |   yes   |])
 fi
 
-# Validate ePUBs (epubcheck)
+dnl Validate ePUBs (epubcheck)
 if test 0 = "$EPUBCHECK"; then
   AC_MSG_RESULT([Validate generated ePUB files    |    no   | install epubcheck])
 else
   AC_MSG_RESULT([Validate generated ePUB files    |   yes   |])
 fi
 
-# PDF font summary (pdffonts)
+dnl PDF font summary (pdffonts)
 if test 0 = "$PDFFONTS"; then
   AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
 ])
@@ -375,7 +363,7 @@ else
 ])
 fi
 
-# Enhanced Debugging (remake)
+dnl Enhanced Debugging (remake)
 if test 0 = "$REMAKE"; then
   AC_MSG_RESULT([Enhanced debugging               |    no   | install remake])
 else
@@ -388,14 +376,14 @@ Experimental features
 ---------------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
-# PDF/EPS images support(ghostscript (gs))
+dnl PDF/EPS images support(ghostscript (gs))
 if test 0 = "$GS"; then
   AC_MSG_RESULT([Support for .pdf and .eps images |    no   | install ghostscript])
 else
   AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
 fi
 
-# DocBook 5
+dnl DocBook 5
 test 0 = "$HAVE_DOCBOOK_5" && DB5=0
 test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
 test 0 = "$HAVE_JING" && DB5=0
@@ -410,8 +398,8 @@ else
 ])
 fi
 
-# Evil magic
-#
+dnl Evil magic
+
 eval "eval SYSCONFDIR=$sysconfdir/daps"
 eval "eval DATADIR=$datadir/daps"
 eval "eval BINDIR=$bindir"

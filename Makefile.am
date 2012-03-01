@@ -8,16 +8,23 @@
 #
 # TODO: aspell location
 # Stylesheets for building xhtml need to be packaged in src tar
-# Replace PHONY manuals:
 
-# Manuals
 
 #------------------------
-AUTOMAKE_OPTIONS = 1.10 foreign no-define no-dist no-installinfo \
+AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
-SUBDIRS=
+SUBDIRS = 
+
+# additional files to add to the tarball
+EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
 
 #------------------------
+REPL_PATH = sed \
+             -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
+             -e 's|@bindir[@]|$(bindir)|g' \
+             -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+             -e 's|@prefix[@]|$(prefix)|g'
+
 DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 
@@ -58,39 +65,56 @@ ttfontsdir     = @datadir@/fonts/truetype
 
 htmldocdir     = @docdir@/html
 
-
+xsltdir          = $(pkgdatadir)/daps-xslt
+xsltcommondir    = $(xsltdir)/common
+xsltcontribdir   = $(xsltdir)/contrib
+xsltdesktopdir   = $(xsltdir)/desktop
+xsltepubdir      = $(xsltdir)/epub
+xsltindexdir     = $(xsltdir)/index
+xsltmandir       = $(xsltdir)/man
+xsltprofilingdir = $(xsltdir)/profiling
+xsltyelpdir      = $(xsltdir)/yelp
 
 #------------------------
 # Automake primaries
 
 # BIN
-dist_bin_SCRIPTS         = $(srcdir)/$(wildcard bin/*)
-dist_dapslibexec_SCRIPTS = $(srcdir)/$(wildcard libexec/*)
+dist_bin_SCRIPTS         = $(wildcard bin/*)
+dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
 
 # CONFIG files
-dist_dapsconf_DATA  = $(srcdir)/etc/config
-dist_fopconf_DATA   = $(srcdir)/etc/fop/fop-daps.xml
-dist_xepconf_DATA   = $(srcdir)/etc/xep/xep-daps.xml
-dist_hyphen_DATA    = $(wildcard $(srcdir)/etc/xep/hyphen/*.tex) \
-			$(wildcard $(srcdir)/etc/xep/hyphen/*.il2)
+dist_dapsconf_DATA  = etc/config
+dist_fopconf_DATA   = etc/fop/fop-daps.xml
+dist_xepconf_DATA   = etc/xep/xep-daps.xml
+dist_hyphen_DATA    = $(wildcard etc/xep/hyphen/*.tex) \
+			$(wildcard etc/xep/hyphen/*.il2)
 
 # DATA
-dist_aspell_DATA    = $(srcdir)/misc/suse_aspell.rws
-dist_dapslib_DATA   = $(wildcard $(srcdir)/lib/*)
-dist_emacssite_DATA = $(srcdir)/misc/docbook_macros.el
-dist_dapsmake_DATA  = $(wildcard $(srcdir)/make/*.mk)
-dist_template_DATA  = $(wildcard $(srcdir)/init_templates/*)
-dist_ttfonts_DATA   = $(wildcard $(srcdir)/fonts/*.ttf)
-
+dist_aspell_DATA        = misc/suse_aspell.rws
+dist_dapslib_DATA       = $(wildcard lib/*)
+dist_emacssite_DATA     = misc/docbook_macros.el
+dist_dapsmake_DATA      = $(wildcard make/*.mk)
+dist_template_DATA      = $(wildcard init_templates/*)
+dist_ttfonts_DATA       = $(wildcard fonts/*.ttf)
+dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
+			   $(wildcard daps-xslt/common/*.xml) \
+			   $(wildcard daps-xslt/common/*.svg)
+dist_xsltcontrib_DATA   = $(wildcard daps-xslt/contrib/*.xsl)
+dist_xsltdesktop_DATA   = $(wildcard daps-xslt/desktop/*.xsl)
+dist_xsltepub_DATA      = $(wildcard daps-xslt/epub/*.xsl)
+dist_xsltindex_DATA     = $(wildcard daps-xslt/index/*.xsl)
+dist_xsltman_DATA       = $(wildcard daps-xslt/man/*.xsl)
+dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
+dist_xsltyelp_DATA      = $(wildcard daps-xslt//*.xsl)
 
 # DOCUMENTATION
-dist_doc_DATA      = $(addprefix, $(srcdir)/, BUGS COPYING COPYING-2.0 \
-			COPYING-3.0 INSTALL README README.quickstart \
-			README.upgrade_from_susedoc_4.x)
-man_MANS = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
+dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL README \
+			README.quickstart README.upgrade_from_susedoc_4.x
+dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local TARGETS--------------------------------------
-all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG)
+all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
+	   bin/daps etc/config
 
 #---------------------------Local INSTALLATION--------------------------------
 
@@ -103,13 +127,9 @@ install-data-local: $(INSTALLDIRS)
 install-data-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
-	  cp -a $$BOOK/* $(DESTDIR)$(docdir)/html; \
+	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
+		(cd $(DESTDIR)$(docdir)/html; tar xp); \
 	done
-	cp -a $(srcdir)/daps-xslt/ $(DESTDIR)$(pkgdatadir)
-	find {$(DESTDIR)$(docdir)/html,$(DESTDIR)$(pkgdatadir)/daps-xslt} \
-		-type d -exec chmod -R u=rwx,go=rx,a-s {} \;; \
-	find {$(DESTDIR)$(docdir)/html,$(DESTDIR)$(pkgdatadir)/daps-xslt} \
-		-type f -exec chmod -R u=rw,go=r,a-s {} \;;
 # create entry in xml root catalog
 	{ \
 	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
@@ -118,21 +138,20 @@ install-data-local:
 	      END{print "</catalog>"}'; \
 	} >$(TMP_CATALOG)
 	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	$(XMLLINT) --nocatalogs --noout $(TMP_CATALOG) && \
-	  mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	mv $(TMP_CATALOG) $(ROOT_CATALOG)
 
 #---------------------------Local UNINSTALL-----------------------------------
 uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
 uninstall-local:
 	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
-	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id="$(PACKAGE)">/{s=1;next} {print}" > $(TMP_CATALOG)
+	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
 	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	$(XMLLINT) --nocatalogs --noout $(TMP_CATALOG) && \
-	  mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	mv $(TMP_CATALOG) $(ROOT_CATALOG)
 
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
-	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(dir $(DAPS_CATALOG)) 
+	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
+	$(dir $(DAPS_CATALOG)) bin/daps etc/config 
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -163,22 +182,30 @@ $(DAPS_CATALOG):
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-$(USERGUIDE):
-	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+# see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
+bin/daps:
+	$(REPL_PATH) $@.in > $@
+	chmod +x $@
+
+etc/config:
+	$(REPL_PATH) $@.in > $@
+
+$(USERGUIDE): bin/daps etc/config
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --docconfig=$(DC_USERGUIDE) \
 	    --styleroot=$(STYLEROOT) html-single --static \
 	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-$(QUICKSTART):
-	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+$(QUICKSTART): bin/daps etc/config
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --docconfig=$(DC_QUICKSTART) \
 	    --styleroot=$(STYLEROOT) html-single --static \
 	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
-$(man_MANS):
-	$(Q)$(srcdir)/bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
+$(man_MANS): bin/daps etc/config
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
