@@ -233,7 +233,6 @@ exit 0
 %dir %{fontdir}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
-%dir %{_datadir}/aspell-0.60/
 
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
@@ -243,7 +242,6 @@ exit 0
 
 %{_bindir}/*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
-%{_datadir}/aspell-0.60/suse_aspell.rws
 %{fontdir}/*
 %{docbuilddir}
 

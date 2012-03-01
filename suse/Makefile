@@ -33,8 +33,6 @@ PREFIX    ?= /usr/share
 STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
-EXCLUDES := packaging/exclude_non-stylesheets.txt
-
 all: schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
 all: catalogs/$(SUSEXSL_CATALOG) catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)

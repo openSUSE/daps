@@ -50,6 +50,7 @@ BuildRequires:  libxslt
 BuildRequires:  make
 BuildRequires:  trang 
 
+Requires:       aspell aspell-en aspell-en-huge
 Requires:       docbook
 Requires:       docbook-xsl-stylesheets >= 1.75
 Requires:       libxslt

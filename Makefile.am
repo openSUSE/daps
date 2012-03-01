@@ -6,7 +6,7 @@
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
-# TODO: aspell location
+# TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
 
 
@@ -55,7 +55,6 @@ fopconfdir     = $(dapsconfdir)/fop
 xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
 
-aspelldir      = @datadir@/aspell
 dapslibdir     = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
@@ -90,7 +89,6 @@ dist_hyphen_DATA    = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
 
 # DATA
-dist_aspell_DATA        = misc/suse_aspell.rws
 dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)

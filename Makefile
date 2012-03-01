@@ -49,7 +49,6 @@ install: create-install-dirs
 	install -m755 bin/* $(DESTDIR)/usr/bin
 	install -m644 fonts/*.ttf $(DESTDIR)$(PREFIX)/fonts/truetype
 	install -m644 lib/docbook_macros.el $(DESTDIR)$(PREFIX)/emacs/site-lisp
-	install -m644 lib/suse_aspell.rws $(DESTDIR)$(PREFIX)/aspell-0.60
 	install -m644 catalogs/$(DAPS_CATALOG) $(DESTDIR)/etc/xml
 	install -m644 BUGS COPYING* INSTALL README* TODO $(DAPS_DOCDIR)
 ifdef MAN_PAGE_DIR
@@ -79,7 +78,6 @@ endif
 	mkdir -p $(DESTDIR)/usr/bin
 	mkdir -p $(DESTDIR)$(PREFIX)/emacs/site-lisp
 # version number in path ;-(( needs to be checked
-	mkdir -p $(DESTDIR)$(PREFIX)/aspell-0.60
 	mkdir -p $(DESTDIR)$(PREFIX)/fonts/truetype
 	mkdir -p $(DESTDIR)/etc/xml
 
