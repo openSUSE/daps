@@ -23,7 +23,6 @@ AC_INIT([DAPS], [0.9.9], [https://sourceforge.net/p/daps/tickets/], [daps], [htt
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_FILES([
-        Makefile
         etc/config
         bin/daps
         ])
@@ -410,3 +409,18 @@ else
   AC_MSG_RESULT([DocBook 5 support                |   yes   |
 ])
 fi
+
+# Evil magic
+#
+eval "eval SYSCONFDIR=$sysconfdir/daps"
+eval "eval DATADIR=$datadir/daps"
+eval "eval BINDIR=$bindir"
+eval "eval DOCDIR=$docdir"
+
+AC_MSG_RESULT([DAPS will be installed into the following paths:
+------------------------------------------------
+Executables             : $BINDIR
+System wide config files: $SYSCONFDIR
+Documentation           : $DOCDIR
+Everything else         : $DATADIR
+])
