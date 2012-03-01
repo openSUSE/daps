@@ -1,0 +1,989 @@
+<!-- ...................................................................... -->
+<!-- novdoc DTD V1.0 ...................................................... -->
+<!-- File novdoc.dtd ...................................................... -->
+<!--
+     novdocx.dtd is a subset of DocBook and all instances should be valid
+     DocBook files, however, the docbookx.dtd is not directly referenced.
+
+     Please use the following formal public identifier:
+
+     "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"
+
+     The following is copyright information required for the docbook dtd:
+
+     Copyright 1992-2002 HaL Computer Systems, Inc.,
+     O'Reilly & Associates, Inc., ArborText, Inc., Fujitsu Software
+     Corporation, Norman Walsh, Sun Microsystems, Inc., and the
+     Organization for the Advancement of Structured Information
+     Standards (OASIS).
+
+     $Id: novdocx.dtd 42467 2009-06-22 16:16:33Z toms $
+
+     Permission to use, copy, modify and distribute the DocBook XML DTD
+     and its accompanying documentation for any purpose and without fee
+     is hereby granted in perpetuity, provided that the above copyright
+     notice and this paragraph appear in all copies.  The copyright
+     holders make no representation about the suitability of the DTD for
+     any purpose.  It is provided "as is" without expressed or implied
+     warranty.
+-->
+
+
+<!ENTITY % admonitions "important | note | tip | warning">
+<!ENTITY % lists   "itemizedlist | orderedlist | simplelist | variablelist | calloutlist">
+<!ENTITY % tables  "table | informaltable">
+<!ENTITY % figures "figure | informalfigure">
+<!-- CHANGE_SEP_28 added bridgehead to common group and removed the other specific instances -->
+<!ENTITY % common	 "bridgehead | example | screen | remark | para | formalpara | indexterm">
+<!ENTITY % all     "%admonitions; | %lists; | %figures; | %tables; | %common;">
+
+<!ENTITY % xrefinlines	"xref | link | ulink">
+
+
+<!ENTITY % coreinlines   "command | envar | productname | literal | emphasis |
+    option | replaceable | remark | filename | citetitle | quote |
+    phrase | systemitem | guimenu | subscript | superscript | trademark | varname">
+
+<!ENTITY % basicinlines "%coreinlines; | indexterm">
+
+<!ENTITY % guiinlines	"keycombo | keycap | menuchoice">
+<!ENTITY % allinlines	"%xrefinlines; | %basicinlines; | %guiinlines; | inlinemediaobject">
+
+
+<!-- Profiling information (attributes) -->
+<!ENTITY % profiling.attributes
+   "os        CDATA     #IMPLIED
+    arch      CDATA     #IMPLIED
+    condition CDATA     #IMPLIED">
+<!ENTITY % xmlbase
+   "xml:base  CDATA     #IMPLIED">
+
+<!ELEMENT set       ((title,subtitle?,titleabbrev?)?,
+ toc?,
+ (book)+,
+ setindex?)>
+
+<!ELEMENT book      (bookinfo , preface? ,
+                    (part | chapter | article)+,
+                    (appendix | glossary)*, index?) >
+<!-- change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed -->
+<!ELEMENT bookinfo  (title, productname , productnumber? , date? , titleabbrev? , legalnotice+, authorgroup*, abstract*) >
+
+<!ELEMENT article (title, subtitle?,
+                   articleinfo?,
+                  (((calloutlist|itemizedlist|orderedlist|
+                     variablelist|important|note|
+                     tip|warning|screen|formalpara|para|
+                     mediaobject|informaltable|example|
+                     figure|table|procedure|
+                     bridgehead|remark|abstract|
+                     indexterm)+,
+                   (sect1*|(refentry)*))|(sect1+|(refentry)+)),
+                  (index|glossary|appendix)*)>
+               
+<!ELEMENT articleinfo ((author|authorgroup|date|productname|
+                        productnumber|legalnotice|indexterm|abstract)+)>
+
+<!ELEMENT preface   (title , (((%all; | procedure)+ , sect1*) | sect1+)) >
+<!ELEMENT part      (title , partintro? , ((chapter+ , appendix*) | appendix+) ) >
+
+<!-- CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1 -->
+<!ELEMENT appendix  (title , (%all; | procedure)+ , (sect1* | refentry* | msgset?) ) >
+<!ELEMENT chapter   (title , (abstract | %all; | procedure)+ , (sect1* | refentry* | msgset?) ) >
+<!ELEMENT abstract  (title?, para+) >
+<!ELEMENT index     EMPTY>
+<!ELEMENT setindex  EMPTY>
+<!ELEMENT toc       EMPTY>
+
+<!-- sections -->
+<!ELEMENT sect1      (title , (%all; | procedure)+, (sect2* | refentry* | msgset?)) >
+<!ELEMENT sect2      (title , (%all; | procedure)+, (sect3*)) >
+<!ELEMENT sect3      (title , (%all; | procedure)+, (sect4*)) >
+<!ELEMENT sect4      (title , (%all; | procedure)+) >
+
+<!ELEMENT partintro  ((%all;)+ , sect1*) >
+
+
+<!-- inlines -->
+<!ELEMENT application     (#PCDATA | phrase | remark)* >
+<!ELEMENT command         (#PCDATA | option | replaceable | remark)* >
+<!ELEMENT envar           (#PCDATA) >
+<!ELEMENT literal         (#PCDATA | replaceable | remark)* >
+<!ELEMENT emphasis        (#PCDATA | %xrefinlines; | %basicinlines; | %guiinlines;)* >
+
+<!ELEMENT citetitle       (#PCDATA | phrase | remark | %xrefinlines;)* >
+
+<!ELEMENT option          (#PCDATA | replaceable | remark)* >
+<!ELEMENT replaceable     (#PCDATA | remark)* >
+<!ELEMENT filename        (#PCDATA | replaceable | remark)* >
+
+<!-- CHANGE quote can contain other inlines -->
+<!ELEMENT quote           (#PCDATA | %allinlines;)* >
+<!ELEMENT phrase          (#PCDATA | %allinlines;)* >
+<!ELEMENT productname     (#PCDATA | phrase | remark | superscript)* >
+<!ELEMENT productnumber   (#PCDATA | phrase | remark | superscript)* >
+<!ELEMENT systemitem      (#PCDATA | remark)* >
+<!ELEMENT varname         (#PCDATA) >
+
+<!-- Curtis, do we need that according to legal issues? -->
+<!ELEMENT trademark       (#PCDATA)>
+
+<!ELEMENT co              EMPTY  >
+<!ELEMENT xref            EMPTY  >
+<!ELEMENT link            (#PCDATA | %basicinlines;)* >
+<!ELEMENT ulink           (#PCDATA | %basicinlines;)* >
+
+<!ELEMENT keycombo        (keycap)+ >
+<!ELEMENT keycap          (#PCDATA | remark)* >
+<!ELEMENT menuchoice      (shortcut?, guimenu+) ><!-- toms -->
+<!ELEMENT shortcut        (keycombo | keycap+) >
+<!ELEMENT guimenu         (#PCDATA) >
+
+<!ELEMENT subscript       (#PCDATA | remark)* >
+<!ELEMENT superscript     (#PCDATA | remark)* >
+
+<!-- common -->
+<!ELEMENT bridgehead  (#PCDATA | %coreinlines;)*>
+<!ELEMENT title       (#PCDATA | %coreinlines;)* >
+<!ELEMENT subtitle    (#PCDATA | %coreinlines;)* >
+<!ELEMENT titleabbrev (#PCDATA | %coreinlines;)* >
+<!ELEMENT example     (title , (%lists; | formalpara | para | screen | indexterm)+ ) >
+<!ELEMENT para        (#PCDATA | %allinlines;)* >
+
+<!ELEMENT formalpara  (title , para) >
+
+<!-- change add replaceable, command, emphasis, option  and xrefinlines to screen -->
+<!ELEMENT screen      (#PCDATA | co | emphasis | replaceable | command |
+                       option | phrase |%xrefinlines;)* >
+<!ELEMENT remark      (#PCDATA | %allinlines;)* >
+
+<!-- admonitions -->
+<!ENTITY % admonition.module
+  "(title? , (para | remark | screen |
+    simplelist | itemizedlist | variablelist | orderedlist )+)" >
+<!ELEMENT tip         (%admonition.module;)>
+<!ELEMENT important   (%admonition.module;)>
+<!ELEMENT note        (%admonition.module;)>
+<!ELEMENT warning     (%admonition.module;)>
+
+<!-- lists -->
+<!ELEMENT itemizedlist  (title?, remark*, listitem+) >
+<!ELEMENT orderedlist   (title?, remark*, listitem+) >
+<!ELEMENT simplelist    (member+) >
+<!ELEMENT variablelist  (title?, remark*, varlistentry+) >
+<!--
+     calloutlist is used with co tag to callout sections within screen
+     we should review the use of calloutlist, callout and co
+-->
+<!ELEMENT calloutlist   (callout+) >
+<!ELEMENT callout       (para | remark | %lists; | %admonitions; |
+                         screen | indexterm)+ >
+
+<!ELEMENT listitem      ((%all;)+) >
+<!ELEMENT member        (#PCDATA | %allinlines;)* >
+<!ELEMENT varlistentry  (term+ , listitem) >
+<!ELEMENT term          (#PCDATA | %allinlines;)* >
+
+
+<!-- procedure -->
+<!ELEMENT procedure   (title? , (%all;)* , step+) >
+<!ELEMENT step        ((para | formalpara) , (%all;)*, substeps*) >
+<!ELEMENT substeps    (step+) >
+
+
+<!-- tables -->
+<!ELEMENT informaltable   (tgroup) >
+<!ELEMENT table           (title , tgroup) >
+<!ELEMENT tgroup          (colspec* , thead? , tbody) >
+<!ELEMENT colspec         EMPTY >
+<!ELEMENT thead           (colspec* , row+) >
+<!ELEMENT tbody           (row+) >
+<!ELEMENT row             (entry+) >
+<!--
+       novdoc entry included tblhead and tsubhead for which no docbook
+       counterpart exists. May need to find alternatives?
+-->
+<!ELEMENT entry           ((%admonitions; | mediaobject | para | screen |
+    formalpara | itemizedlist | orderedlist | simplelist | remark)*) >
+
+<!-- figures -->
+<!ELEMENT figure             (title, mediaobject+) >
+<!ELEMENT informalfigure     (mediaobject+) >
+
+
+<!--
+       provo doc has required a text description for all graphics where suse
+       has not. textobject is optional but we might discuss this further
+-->
+<!ELEMENT inlinemediaobject  (textobject?, imageobject+) >
+<!ELEMENT mediaobject        (textobject*, imageobject+) >
+<!ELEMENT imageobject        (imagedata) >
+<!ELEMENT imagedata          EMPTY >
+<!ELEMENT textobject         (phrase) >
+
+<!-- glossary -->
+<!ELEMENT glossary    (title , (para | formalpara | remark)* ,
+    (glossentry+ | glossdiv+)) >
+
+<!ELEMENT glossdiv    (title, remark*, glossentry+) >
+<!ELEMENT glossentry  (glossterm , glossdef+) >
+<!ELEMENT glossterm   (#PCDATA | %basicinlines;)*>
+<!ELEMENT glossdef    (para|remark)+ >
+
+<!-- indexterm -->
+<!ELEMENT indexterm  (primary?, ((secondary, ((tertiary, (see | seealso+)?) |
+    see | seealso+)?) | see | seealso+)?) >
+
+<!-- content for these???? -->
+<!ELEMENT primary         (#PCDATA | phrase)* >
+<!ELEMENT secondary       (#PCDATA | phrase)* >
+<!ELEMENT tertiary        (#PCDATA | phrase)* >
+<!ELEMENT see             (#PCDATA | phrase)* >
+<!ELEMENT seealso         (#PCDATA | phrase)* >
+
+
+<!-- authorgroup -->
+<!ELEMENT authorgroup     (author+) >
+<!ELEMENT author          (firstname, surname) >
+<!ELEMENT firstname       (#PCDATA | phrase | remark)* >
+<!ELEMENT surname         (#PCDATA | phrase | remark)* >
+
+<!-- msgset -->
+<!ELEMENT msgset     (simplemsgentry+) >
+<!ELEMENT simplemsgentry (msgtext,msgexplan+) >
+<!ELEMENT msgtext    (para|remark)+ >
+<!ELEMENT msgexplan  (title, para, (%all; | procedure)*) >
+
+<!-- misc -->
+<!ELEMENT legalnotice     (title?, (simplelist | para | formalpara )+) >
+<!ELEMENT date              (#PCDATA | phrase | superscript)* >
+
+<!-- refentry -->
+<!ELEMENT refentry        (refmeta?, remark*, refnamediv, refsect1+) >
+<!ELEMENT refmeta         (refentrytitle,manvolnum?) >
+<!ELEMENT refentrytitle   (#PCDATA | command | envar | literal | replaceable |
+                           filename | %guiinlines;)* >
+<!ELEMENT manvolnum       (#PCDATA) >
+
+<!ELEMENT refnamediv      (refname+,refpurpose,refclass*,(link | ulink | remark)*) >
+
+<!ELEMENT refname         (#PCDATA | command | envar | literal | replaceable |
+                           filename | %guiinlines;)* >
+
+<!ELEMENT refpurpose      (#PCDATA | %xrefinlines; | %basicinlines; | %guiinlines;)* >
+<!ELEMENT refclass        (#PCDATA | application)* >
+
+<!ELEMENT refsect1        (title , (%all; | procedure)* , (refsect2*)) >
+<!ELEMENT refsect2        (title , (%all; | procedure)* , (refsect3*)) >
+<!ELEMENT refsect3        (title , (%all; | procedure)*) >
+
+<!-- change added condition and userlevel -->
+<!ATTLIST abstract
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST appendix
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase; >
+
+<!ATTLIST application
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST article
+               id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               lang           CDATA     #IMPLIED
+               class          (faq|journalarticle|productsheet|specification|
+                               techreport|whitepaper)        #IMPLIED
+               %xmlbase; 
+               %profiling.attributes; >
+
+<!ATTLIST articleinfo
+               role           CDATA     #IMPLIED
+               %xmlbase; 
+               %profiling.attributes; >
+
+<!ATTLIST author
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST authorgroup
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST book
+               revision       CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
+               conformance    CDATA     #IMPLIED
+               lang           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes; 
+               %xmlbase; >
+
+<!ATTLIST bookinfo
+               id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST bridgehead
+               %profiling.attributes;
+               %xmlbase;
+               renderas				(sect1 | sect2 | sect3 | sect4) #IMPLIED
+               id             ID        #IMPLIED>
+
+<!ATTLIST calloutlist
+               %profiling.attributes; >
+
+
+<!-- change added role to Chapter -->
+<!ATTLIST chapter
+               role           CDATA     #IMPLIED
+               conformance    CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               revision       CDATA     #IMPLIED
+               lang           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST citetitle
+               %profiling.attributes;
+               %xmlbase;
+	        pubwork (article|bbs|book|cdrom|chapter|dvd|emailmessage|gopher|
+                         journal|manuscript|newsposting|part|refentry|section|
+                         series|set|webpage|wiki) #IMPLIED >
+
+<!ATTLIST co
+                id            ID        #IMPLIED
+                %xmlbase;
+                %profiling.attributes; >
+
+<!ATTLIST colspec
+               colnum         CDATA     #IMPLIED
+               colname        CDATA     #IMPLIED
+               colwidth       CDATA     #IMPLIED
+               align          (center|justify|left|right)     #IMPLIED
+               %xmlbase;
+               %profiling.attributes; >
+
+<!ATTLIST command
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST date
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST emphasis
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST entry
+               align          (center|justify|left|right)  #IMPLIED
+               colname        CDATA     #IMPLIED
+               namest         CDATA     #IMPLIED
+               nameend        CDATA     #IMPLIED
+               morerows       CDATA     #IMPLIED
+               valign         (bottom |middle|top)         #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST envar
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST example
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- pgwide used to set image at left edge or current indent -->
+<!ATTLIST figure
+               pgwide         CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST filename
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST firstname
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST formalpara
+               id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST glossary
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST glossdef
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST glossterm
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST glossdiv
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST glossentry
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST guimenu
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST index
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST informalfigure
+               pgwide         CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST imageobject
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST imagedata
+               fileref        CDATA     #IMPLIED
+               width          CDATA     #IMPLIED
+               format         CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST important
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST informaltable
+               frame    (topbot|none)   #IMPLIED
+               rowsep   CDATA           #IMPLIED
+               pgwide   CDATA           #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST inlinemediaobject
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- change added role and spacing -->
+<!ATTLIST itemizedlist
+               id             ID        #IMPLIED
+               mark           (bullet|dash|box|check) "bullet"
+               role           CDATA     #IMPLIED
+               spacing        (compact|normal) "normal"
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST keycap
+               function (alt|
+                        backspace|
+                        command|
+                        control|
+                        delete|
+                        down|
+                        end|
+                        enter|
+                        escape|
+                        home|
+                        insert|
+                        left|
+                        meta|
+                        option|
+                        other|
+                        pagedown|
+                        pageup|
+                        right|
+                        shift|
+                        space|
+                        tab|
+                        up) #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST keycombo
+               action     (press | seq) #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST legalnotice
+                id            ID        #IMPLIED
+                %profiling.attributes;
+                %xmlbase;>
+
+<!ATTLIST listitem
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST literal
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST mediaobject
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST member
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST menuchoice
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST note
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST option
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- change added spacing -->
+<!ATTLIST orderedlist
+               id            ID        #IMPLIED
+               spacing        (compact|normal) "normal"
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST para
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST part
+               revision       CDATA     #IMPLIED
+               conformance    CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST partintro
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST phrase
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST preface
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase; >
+
+<!ATTLIST primary
+               sortas         CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST procedure
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST productname
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST productnumber
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST quote
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refclass
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST remark
+               role           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refname
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refnamediv
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refpurpose
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refentry
+               id             ID        #IMPLIED
+               %profiling.attributes; 
+               %xmlbase; >
+
+<!ATTLIST refentrytitle
+               role           CDATA     #IMPLIED
+               %xmlbase;>
+
+<!ATTLIST refsect1
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refsect2
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST refsect3
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST simplemsgentry
+               id             ID        #IMPLIED
+               %xmlbase;>
+
+<!ATTLIST replaceable
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST row
+               rowsep         CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               valign         (bottom |middle|top)   #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST screen
+               %profiling.attributes;
+               linenumbering   (numbered | unnumbered)    #IMPLIED
+               %xmlbase;>
+
+<!ATTLIST sect1
+               role           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST sect2
+               role           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST sect3
+               role           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST sect4
+               role           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;  >
+
+<!ATTLIST secondary
+               sortas         CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST see
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST seealso
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST set
+               lang           CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST setindex
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST shortcut
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST simplelist
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST step
+               id             ID        #IMPLIED
+               performance    (optional|required) "required"
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST subscript
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- id on substeps was probably a mistake -->
+<!ATTLIST substeps
+               id             ID        #IMPLIED
+               performance    (optional|required) "required"
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST superscript
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST surname
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST systemitem
+               class (constant | daemon | domainname | etheraddress |
+                     event | eventhandler | filesystem | fqdomainname |
+                     groupname | ipaddress | library | macro |
+                     netmask | newsgroup | osname | process | resource |
+                     server | service | systemname | username) #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST table
+               id         ID              #IMPLIED
+               frame      (topbot|none)   #IMPLIED
+               rowsep     CDATA           #IMPLIED
+               pgwide     CDATA           #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST tbody
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST term
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST tertiary
+               sortas         CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- change added role -->
+<!ATTLIST textobject
+               role           (description | longdescription | screencappath)    #REQUIRED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST tgroup
+               cols           CDATA     #REQUIRED
+               tgroupstyle    CDATA     #IMPLIED
+               align (center | char | justify | left | right) #IMPLIED
+               valign         (bottom |middle|top)            #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST thead
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST tip
+               id         ID              #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST title
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST titleabbrev
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST trademark
+               class (service | trade | registered | copyright) #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!-- change added role attribute -->
+<!ATTLIST ulink
+               url            CDATA     #REQUIRED
+               role           CDATA     #IMPLIED
+               type           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST variablelist
+               id             ID       #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST varlistentry
+               id             ID        #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST warning
+               id         ID              #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+
+
+<!--
+   This parameter entity "deactivates" all IDREF(S).
+
+   So somebody can validate a separate file even if some
+   xref/link elements points outside this file.
+
+-->
+<!ENTITY % NOVDOC.DEACTIVATE.IDREF "IGNORE">
+
+<![%NOVDOC.DEACTIVATE.IDREF;[
+  <!ENTITY % __HIDE__ "IGNORE">
+<!--
+   docbook has linkends as IDREFS but we'll just use IDREF
+-->
+
+<!ATTLIST callout
+               arearefs       CDATA     #REQUIRED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST link
+               linkend        CDATA     #REQUIRED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST indexterm
+               %profiling.attributes;
+               %xmlbase;
+               startref       CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
+               class          (endofrange|singular|startofrange)    #IMPLIED
+               id             ID        #IMPLIED  >
+
+<!ATTLIST xref
+               linkend        CDATA     #REQUIRED
+               xrefstyle      CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+<!-- End of NOVDOC.DEACTIVATE.IDREF -->]]>
+
+<!--
+   The NOVDOC.DEACTIVATE.IDREF p.e. is mutually exclusive
+   to the following declaration.
+   This p.e. should be never touched.
+-->
+<!ENTITY % __HIDE__ "INCLUDE">
+<![%__HIDE__;[
+
+<!ATTLIST callout
+               arearefs       IDREF     #REQUIRED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST link
+               linkend        IDREF     #REQUIRED
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST indexterm
+               %profiling.attributes;
+               %xmlbase;
+               startref       IDREF     #IMPLIED
+               role           CDATA     #IMPLIED
+               class          (endofrange | singular | startofrange)     #IMPLIED
+               id             ID        #IMPLIED  >
+<!ATTLIST xref
+               linkend        IDREF     #REQUIRED
+               xrefstyle      CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;>
+<!-- End of %__HIDE__ -->]]>
+
+
+
+<!-- Entities which are used by SUSE
+
+     If someone doesn't need that, it can be switched off with the proper
+     parameter entity declaration, e.g.:
+     <!ENTITY % ISOlat1.module "IGNORE">
+-->
+<!ENTITY % ISOlat1.module "INCLUDE">
+<![ %ISOlat1.module; [
+ <!ENTITY % ISOlat1 PUBLIC
+  "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML"
+  "http://www.oasis-open.org/docbook/xml/4.3/ent/iso-lat1.ent">
+<!--end of ISOlat1.module-->]]>
+
+<!ENTITY % ISOlat2.module "INCLUDE">
+<![ %ISOlat2.module; [
+ <!ENTITY % ISOlat2 PUBLIC
+  "ISO 8879:1986//ENTITIES Added Latin 2//EN//XML"
+  "http://www.oasis-open.org/docbook/xml/4.3/ent/iso-lat2.ent">
+<!--end of ISOlat2.module-->]]>
+
+<!ENTITY % ISOnum.module "INCLUDE">
+<![ %ISOnum.module; [
+ <!ENTITY % ISOnum PUBLIC
+  "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML"
+  "http://www.oasis-open.org/docbook/xml/4.3/ent/iso-num.ent">
+<!--end of ISOnum.module-->]]>
+
+<!ENTITY % ISOpub.module "INCLUDE">
+<![ %ISOpub.module; [
+ <!ENTITY % ISOpub PUBLIC
+  "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+  "http://www.oasis-open.org/docbook/xml/4.3/ent/iso-pub.ent">
+<!--end of ISOpub.module-->]]>
+
+<![ %ISOlat1.module; [
+%ISOlat1;
+]]>
+
+<![ %ISOlat2.module; [
+%ISOlat2;
+]]>
+
+<![ %ISOnum.module; [
+%ISOnum;
+]]>
+
+<![ %ISOpub.module; [
+%ISOpub;
+]]>
+
+<!-- 
+<!ENTITY % NOVELLmisc.module "INCLUDE">
+<![ %NOVELLmisc.module; [
+ <!ENTITY % NOVELLmisc PUBLIC "-//Novell//ENTITIES Misc//EN" "novell.ent">
+<!- -end of NOVELLmisc.module- ->]]>
+
+<![ %NOVELLmisc.module; [
+%NOVELLmisc;
+]]>
+-->
+
