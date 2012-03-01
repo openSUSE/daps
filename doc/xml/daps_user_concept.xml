@@ -198,18 +198,48 @@
    <varlistentry>
     <term>Review and Translation Processes</term>
     <listitem>
-     <para><!--taroth 2012-02-20: draft mode, comments, remarks, meta information--></para>
+     <para>&dapsacr; offers a numbers of features that you can use to simplify 
+     review and translation processes. For example, you can insert 
+     <sgmltag>remark</sgmltag> elements in the source code and generate an output 
+     format that either includes or suppresses these remarks. You can also choose
+     to generate preview versions of your documentation with a <literal>DRAFT</literal>
+     watermark appearing on the HTML or PDF output. If you use &dm; in addition to
+     &dapsacr;, you can <quote>flag</quote> your XML files with meta-information
+     (for example, you can set their workflow status to <literal>editing</literal>
+     or <literal>proofed</literal>). &dapsacr; offers an option to also display
+     this meta-information in the generated output. For handing over your files 
+     to review or translation, &dapsacr; can create tarballs of the XML
+     sources and graphics. If it easier for you to hand off and process one big 
+     XML file instead of multiple XML files, you can also transform all files 
+     included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into an
+     XML bigfile. If you have a huge documentation project of which only individual
+     books or files are to be translated, you can mark them for translation
+     with &dm; and then use the command <command>daps locdrop</command> to 
+     automatically sort and pack those files into s separate tarball. 
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Image Handling</term>
     <listitem>
-     <para></para>
+     <para>&dapsacr; provides sophisticated image handling support. For example, 
+     it can transform images referenced in your XML files into different
+     formats, list all source graphics referenced in your XML files, list any 
+     missing graphics or list the <emphasis>generated</emphasis> graphics used 
+     for the various output formats. You can also forward those lists to your 
+     preferred image viewer to conveniently browse through the images.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Packaging and Deployment</term>
+    <listitem>
+     <para>FIXME</para>
     </listitem>
    </varlistentry>
   </variablelist>
-
- </sect1>
+<!--taroth 2012-03-01: todo: add links to respective chapters, add some more words
+about packaging and deployment
+--> </sect1>
  <sect1 id="sec.daps.user.oview.concepts">
   <title>&dapsacr; Configuration</title>
 
