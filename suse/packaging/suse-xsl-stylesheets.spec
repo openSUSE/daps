@@ -144,6 +144,8 @@ exit 0
 %dir %{_datadir}/xml/%{dtdname}/schema/*
 %dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
 
+%dir %{_datadir}/aspell-0.60/
+
 %dir %{_defaultdocdir}/%{name}
 
 # stylesheets
@@ -160,6 +162,9 @@ exit 0
 
 # Documentation
 %doc %{_defaultdocdir}/%{name}/*
+
+# aspell
+%{_datadir}/aspell-0.60/suse_aspell.rws
 
 #----------------------
 %changelog
