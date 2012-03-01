@@ -38,28 +38,7 @@ endif
 
 
 #------------------------------------------------------------------------
-# Paths / Defaults
-
-# the following values should have been set by the daps wrapper script
-# let's provide sane defaults to prevent harm in case someone calls make
-# directly
-#
-
-
-ifndef BOOK
-  BOOK     := mybook
-endif
-
-ifndef FORMATTER
-  FORMATTER    := fop
-endif
-ifndef STATIC_HTML
-  STATIC_HTML := 0
-endif
-ifndef XSLTPARAM
-  XSLTPARAM :=
-endif
-
+# Paths
 
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
