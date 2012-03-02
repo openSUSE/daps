@@ -1017,8 +1017,8 @@ LOG_DIR="${R_DIR}/log"
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
-FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@/${DAPSROOT}/etc}
-XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@/${DAPSROOT}/etc}
+FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 #FOP_WRAPPER
 #XEP_WRAPPER
 
