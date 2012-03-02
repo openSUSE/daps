@@ -132,7 +132,7 @@ dnl exiftool
 AC_PATH_PROG([EXIFTOOL], [exiftool], [0])
 
 dnl ghostscript
-AC_PATH_PROG([GHOSTSCRIPT], [gs], [0])
+AC_PATH_PROG([GS], [gs], [0])
 
 dnl inkscape
 AC_PATH_PROG([INKSCAPE], [inkscape], [0])
