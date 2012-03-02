@@ -1,0 +1,165 @@
+#!/bin/bash
+#set -x
+
+TEMPDIR=$(mktemp -d /tmp/PDFdiff_XXXX)
+METHOD="html"
+OUTPUT="1"
+echo "---"
+echo "$TEMPDIR"
+echo "---"
+function usage(){
+echo "----------------------------------------------------------------------------------------"
+echo " "
+echo "pdfdiff look for differences between two PDFs."
+echo " "
+echo "pdfdiff -option  PDF_FILE_1 PDF_FILE_2"
+echo " option = --html|-H, --text|-T "
+echo " "
+echo " --html = Convert the PDF into HTML and look for differences between two HTML-Documents."
+echo " --txt = Convert the PDF into text and look for differences between two txt-Documents."
+echo " "
+echo "----------------------------------------------------------------------------------------"
+exit 0
+}
+
+function f_pdforhtml(){
+
+echo "#----#"
+echo "f_pdforhtml wurde erreicht"
+echo "#----#"
+
+local METHOD=$1 PDF1=$2 PDF2=$3 TEMPDIR=$4 OUTPUT=$5 OUTPUTPATH=$6
+
+if [[ "text" = $METHOD ]]; then   #Wenn METHOD = text; dann werden die PDFs konvertiert in text.
+      f_pdftotext "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
+
+elif [[ "html" = $METHOD ]]; then   #Wenn METHOD = html; dann werden die PDFs konvertiert in HTML.
+      f_pdftohtml "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
+
+fi
+
+if [ $? = 2 ]; then
+     echo "The operation was not successful" 
+     exit 6
+fi
+}
+
+function f_pdftotext(){
+
+local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5    
+
+	local PDF_FILENAME1=$(basename $PDF1)
+
+	   pdftotext -layout  $PDF1  $TEMPDIR/${PDF_FILENAME1%.*}.txt
+
+        local PDF_FILENAME2=$(basename $PDF2)
+   
+           pdftotext -layout  $PDF2  $TEMPDIR/${PDF_FILENAME2%.*}.txt
+
+   f_diff "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" 
+}
+
+function f_pdftohtml(){
+
+        local  PDF1=$1 PDF2=$2 METHOD=$3  TEMPDIR=$4 OUTPUT=$5 
+ 
+        local PDF_FILENAME=$(basename $1)
+        
+        echo "{$1} {$PDF_FILENAME}"
+        
+        # -----------
+        #mkdir -v $TEMPDIR/${PDF_FILENAME%.html}
+        pdftohtml -s "$1"  "$TEMPDIR/${PDF_FILENAME}"
+               
+        local PDF_FILENAME2=$(basename $2)
+        
+        echo "{$2} {$PDF_FILENAME2}"
+
+        # -----------
+        #mkdir -v $TEMPDIR/${PDF_FILENAME2%.html}
+        pdftohtml -s "$2"  "$TEMPDIR/${PDF_FILENAME2}"
+
+        f_diff "$TEMPDIR/${PDF_FILENAME}-html.html" "$TEMPDIR/${PDF_FILENAME2}-html.html" "$OUTPUT" 
+
+ 
+}
+
+function f_diff(){
+
+local FILE1=$1 FILE2=$2 OUTPUT=$3 
+if [[ $OUTPUT = "" ]]; then
+
+   echo "The Output will be saved in the file $OUTPUT"
+ 
+   diff -u "${FILE1}" "${FILE2}"
+
+ else   
+
+   diff -u "${FILE1}" "${FILE2}" > $OUTPUT
+             
+   
+ fi
+}
+
+
+echo "Davor $@"
+
+
+if ! options=$(getopt -o hHTo: -l help,html,text,output: -- "$@")
+ then
+    exit 1
+fi
+
+
+eval set -- "$options"
+while [ $# -gt 0  ]
+ do                #getopts switch case to choose an option
+  case "$1" in
+    -h|--help) usage;;
+    -H|--html) METHOD="html" ;; 
+    -T|--text) METHOD="text" ;;
+    -o|--output) OUTPUT="$2"; shift;;
+    (--) shift; break;;
+    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
+    (*)  break;;
+  esac
+ shift
+done
+
+echo "Danach $@, $#"
+echo "METHOD=$METHOD, OUTPUT=$OUTPUT"
+
+OLD_PDF="$1"
+NEW_PDF="$2"
+OUTPUTPATH="$3"
+
+
+# Hier wir überprüft ob die 2x Pfade angegeben wurden
+if [ $# -ne 2 ]; then
+  echo "pdfdiff need two .pdf files"; exit 1;
+        fi
+
+## Wenn genau 2 angaben (also 2x Pfad) vorhanden sind werden diese Dateien gedifft.
+if [ $# = 2 ]; then
+  echo "---"
+  echo "pdfdiff checked your files for differences"
+  echo "---"       
+fi
+
+#if [ ! -e "$OLD_PDF" ]; then
+ # echo "$1 not found, sorry! " 
+  #exit 2
+#fi
+
+#if [ ! -e "$NEW_PDF" ]; then
+ # echo "$2 not found, sorry! " 
+  # exit 2
+#fi
+
+f_pdforhtml "$METHOD" "$OLD_PDF" "$NEW_PDF" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
+
+rm -rf $TEMPDIR
+
+exit 0
+
+
