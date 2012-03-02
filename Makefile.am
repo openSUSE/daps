@@ -175,6 +175,9 @@ $(DAPS_CATALOG):
 	$(Q)$(XMLCATALOG) --noout --add \
 	  "system" "$(URN_SUSE):novdoc-profile.xsl" \
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
+	$(Q)$(XMLCATALOG) --noout --add "rewriteSystem" \
+	  "http://daps.sourceforge.net/release/daps-xsl/current" \
+	  "file//$(pkgdatadir)/daps-xslt" $@
 	$(Q)$(SED) -i '/^<!DOCTYPE .*>$$/d' $@
 	$(Q)$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
