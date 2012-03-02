@@ -33,7 +33,8 @@ AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
 dnl Some constants
-ROOT_CATALOG="/etc/xml/catalog"
+#ROOT_CATALOG="/etc/xml/catalog"
+ROOT_CATALOG="/home/fs/tmp/suse-catalog"
 AC_SUBST(ROOT_CATALOG)
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
@@ -254,13 +255,13 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
 fi
 
 dnl -------------------------------------------------------------------------
-AC_MSG_NOTICE([===== Checking for Distribution Vendor...])
-AC_CHECK_FILE([/etc/SuSE-release], [VENDOR=SUSE])
-AC_CHECK_FILE([/etc/redhat-release], [VENDOR=REDHAT])
-AC_CHECK_FILE([/etc/debian-version], [VENDOR=DEBIAN])
-AC_CHECK_FILE([/etc/slackware-version], [VENDOR=SLACKWARE])
-if test -z "$VENDOR"; then VENDOR=OTHER; fi
-AC_SUBST(VENDOR)
+dnl Add more distributions if needed
+
+AM_CONDITIONAL([DIST_REDHAT], [test -f /etc/redhat-release])
+AM_CONDITIONAL([DIST_SUSE], [test -f /etc/SuSE-release])
+AM_CONDITIONAL([DIST_OTHER], [test ! -f /etc/redhat-release && test ! -f /etc/SuSE-release])
+# /etc/debian-version Debian, Ubuntu
+# /etc/slackware-version Slackware
 
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])

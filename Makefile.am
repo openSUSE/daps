@@ -28,8 +28,22 @@ REPL_PATH = sed \
 DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 
+# fop config
+# I love automake conditionals, they are sooo powerful ;-(
+#
+FOP_CONFIG   := etc/fop/fop-daps.xml
+if DIST_SUSE
+  FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+endif
+if DIST_REDHAT
+  FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
+endif
+if DIST_OTHER
+  FOP_CONFIG_SRC :=  etc/fop/fop-daps.generic
+endif
+
 # stylesheets with which to build the documentation
-STYLEROOT    := $(DAPSROOT)/suse-xslt
+STYLEROOT    := $(DAPSROOT)/suse/xslt
 
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
@@ -112,7 +126,7 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local TARGETS--------------------------------------
 all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
-	   bin/daps etc/config
+	   bin/daps etc/config $(FOP_CONFIG)
 
 #---------------------------Local INSTALLATION--------------------------------
 
@@ -149,7 +163,7 @@ uninstall-local:
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
-	$(dir $(DAPS_CATALOG)) bin/daps etc/config 
+	$(dir $(DAPS_CATALOG)) $(FOP_CONFIG) bin/daps etc/config 
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -191,6 +205,11 @@ bin/daps:
 etc/config:
 	$(REPL_PATH) $@.in > $@
 
+# Create the FOP config file. RedHat and SUSE require a special version
+# (see FOP_CONFIG_SRC definitions above)
+$(FOP_CONFIG): $(FOP_CONFIG_SRC)
+	ln -sf $< $@
+
 $(USERGUIDE): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --docconfig=$(DC_USERGUIDE) \
@@ -206,7 +225,7 @@ $(QUICKSTART): bin/daps etc/config
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
-$(man_MANS): bin/daps etc/config
+$(dist_man1_MANS): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
