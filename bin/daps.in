@@ -1009,6 +1009,18 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 R_DIR="${BUILD_DIR}/${BOOK}/"
 LOG_DIR="${R_DIR}/log"
 
+#----------------------------------
+# FOP_CONFIG / XEP_CONFIG
+# when using an SVN checkout, @sysconfdir@ has not been replaced
+#
+# ${string/#substring/replacement}
+# If $substring matches front end of $string, substitute
+# $replacement for $substring.
+
+FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@/$DAPSROOT}
+XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@/$DAPSROOT}
+#FOP_WRAPPER
+#XEP_WRAPPER
 
 #----------------------------------
 # Sanity checks
