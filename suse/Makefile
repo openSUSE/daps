@@ -12,7 +12,6 @@ DTDVERSION := 1.0
 DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 SUSESTYLES := /usr/share/xml/docbook/stylesheet/suse
 
-SUSEXSL_CATALOG        := $(PACKAGE).xml
 SUSEXSL_FOR-CATALOG    := for-catalog-$(PACKAGE).xml
 NOVDOC_FOR-CATALOG     := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
 NOVDOC_SCHEMA          := /usr/share/xml/novdoc/schema/dtd/$(DTDVERSION)
@@ -126,22 +125,16 @@ catalogs/$(NOVDOC_FOR-CATALOG):
 	sed -i '/<\/catalog/i\ </group>' $@
 
 catalogs/$(SUSEXSL_FOR-CATALOG): | $(DIRECTORIES)
+catalogs/$(SUSEXSL_FOR-CATALOG): URNS := \
+			urn:x-suse:xslt:profiling urn:x-daps:xslt:profiling
 catalogs/$(SUSEXSL_FOR-CATALOG):
-	xmlcatalog --noout --create $@
-	xmlcatalog --noout --add "delegateSystem" \
-	  "http://daps.sourceforge.net/release/suse-xsl/" \
-	  "file:///etc/xml/$(SUSEXSL_CATALOG)" $@
-	sed -i '/^<!DOCTYPE .*>$$/d' $@
-	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
-	sed -i '/<\/catalog/i\ </group>' $@
-
-catalogs/$(SUSEXSL_CATALOG): | $(DIRECTORIES)
-catalogs/$(SUSEXSL_CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse-xsl/current" \
 	  "file//$(SUSESTYLES)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
+	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
+	sed -i '/<\/catalog/i\ </group>' $@
 
 # create needed directories
 #
