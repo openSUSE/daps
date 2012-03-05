@@ -33,8 +33,7 @@ AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
 dnl Some constants
-#ROOT_CATALOG="/etc/xml/catalog"
-ROOT_CATALOG="/home/fs/tmp/suse-catalog"
+ROOT_CATALOG="/etc/xml/catalog"
 AC_SUBST(ROOT_CATALOG)
 DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
