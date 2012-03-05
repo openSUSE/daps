@@ -16,17 +16,19 @@ MAIN_CLASS=com.nexwave.nquindexer.IndexerMain
 # "${webhelp.indexer.language}"
 #INDEXERLANGUAGE=""
 # "${html.extension}"
-#HTMLEXTENSION=""
+HTMLEXTENSION="${HTMLEXTENSION:-.html}"
 # "${enable.stemming}"
-#DOSTEM=""
+DOSTEM="${DOSTEM:-true}"
 # "${toc.file}"
-#TOCFILE=""
+TOCFILE="${TOCFILE:-}"
 
 BASE_FLAGS="-Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl"
 
-if [[ ! -n ${DB} ]]; then
+if [[ -z ${DB} ]]; then
 echo "Environment variable DB not set. DB points to the path for the DocBook XSL stylesheets"
 exit 1
+elif [[ -n $VERBOSE ]]; then
+ echo "Using DocBook XSL stylesheet path: $DB"
 fi
 
 if [[ -n ${HTMLDIR} ]]; then
@@ -45,9 +47,7 @@ if [[ -n ${TOCFILE} ]]; then
 BASE_FLAGS="$BASE_FLAGS -DtocFile=${TOCFILE} "
 fi
 
-
-CLASSPATH="$CLASSPATH:$(build-classpath-directory $DB/extensions 2>/dev/null)"
-
+CLASSPATH="$CLASSPATH:$(build-classpath-directory $DB/extensions ${VERBOSE:+2>/dev/null})"
 
 # Set parameters
 set_jvm
