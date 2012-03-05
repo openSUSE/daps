@@ -15,7 +15,7 @@ echo "---"
 function usage(){
 echo "----------------------------------------------------------------------------------------"
 echo " "
-echo "pdfdiff look for differences between two PDFs."
+echo "pdfdiff look for differences between two PDFs."    #This function need no arguments.
 echo " "
 echo "pdfdiff -option  PDF_FILE_1 PDF_FILE_2"
 echo " option = --html|-H, --text|-T "
@@ -35,14 +35,18 @@ echo "#----#"
 echo "f_pdforhtml wurde erreicht"
 echo "#----#"
 
+#This function received the following variables: METHOD, PDF1, PDF2, TEMPDIR, OUTPUT, OUTPUTPATH.
 local METHOD=$1 PDF1=$2 PDF2=$3 TEMPDIR=$4 OUTPUT=$5 OUTPUTPATH=$6
 
 if [[ "text" = $METHOD ]]; then   #Wenn METHOD = text; dann werden die PDFs konvertiert in text.
+     
       f_pdftotext "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
+      #The function send the following variables to f_pdftotext: PDF1&2, METHOD, TEMPDIR, OUTPUT, OUTPUTPATH.     
 
 elif [[ "html" = $METHOD ]]; then   #Wenn METHOD = html; dann werden die PDFs konvertiert in HTML.
+      
       f_pdftohtml "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
-
+      #The function send the following variables to f_pdftotext: PDF1&2, METHOD, TEMPDIR, OUTPUT, OUTPUTPATH.
 fi
 
 if [ $? = 2 ]; then
@@ -55,23 +59,28 @@ fi
 #This function convert the PDFs int txt.
 function f_pdftotext(){
 
+#This fucntion received the following variables from f_pdforhtml.
 local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5    
 
 	local PDF_FILENAME1=$(basename $PDF1)
 
 	   pdftotext -layout  $PDF1  $TEMPDIR/${PDF_FILENAME1%.*}.txt
+           #Convert the PDF into txt
 
         local PDF_FILENAME2=$(basename $PDF2)
    
            pdftotext -layout  $PDF2  $TEMPDIR/${PDF_FILENAME2%.*}.txt
+           #Convert the PDF into txt
 
-   f_diff "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" 
+   f_diff "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT"
+   #Send the following variables to f_diff: PDF1&2 METHOD TEMPDIR OUTPUT
 }
 
 
 #This is the function converts the PDFs into HTML.
 function f_pdftohtml(){
 
+	#This function received the following variables from f_pdforhtml
         local  PDF1=$1 PDF2=$2 METHOD=$3  TEMPDIR=$4 OUTPUT=$5 
  
         local PDF_FILENAME=$(basename $1)
@@ -91,13 +100,14 @@ function f_pdftohtml(){
         pdftohtml -s "$2"  "$TEMPDIR/${PDF_FILENAME2}"
 
         f_diff "$TEMPDIR/${PDF_FILENAME}-html.html" "$TEMPDIR/${PDF_FILENAME2}-html.html" "$OUTPUT" 
-
+	#f_pdftohtml send this variables to f_diff
  
 }
 
 #This is the function that makes a diff between the two converted pdfs
 function f_diff(){
 
+#f_diff reveived the following variables from f_pdftotext or f_pdftohtml
 local FILE1=$1 FILE2=$2 OUTPUT=$3 
 if [[ $OUTPUT = "" ]]; then
 
@@ -149,7 +159,7 @@ OUTPUTPATH="$3"
 #-----
 
 
-# Hier wird überprüft ob die 2x Pfade angegeben wurden
+# This block controll the paths. It's not possible to use pdfdiff with only one pdf. You need to PDFs.
 if [ $# -ne 2 ]; then
   echo "pdfdiff need two .pdf files"; exit 1;
         fi
