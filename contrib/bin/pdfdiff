@@ -33,10 +33,19 @@ exit 0
 function f_pdforhtml(){
 # Purpose: Decides the kind of converting (pdf or html)
 # Input:   
-#   $1:
-#   $2: 
+#	$1: METHOD -> METHOD
+#	$2: OLD_PDF -> PDF1
+#	$3: NEW_PDF -> PDF2
+#	$4: TEMPDIR -> TEMPDIR
+#	$5: OUTPUT -> OUTPUT
+#	$6: OUTPUTPATH -> OUTPUTPATH
 # Output:
-#
+#	$1: PDF1
+#	$2: PDF2
+#	$3: METHOD
+#	$4: TEMPDIR
+#	$5: OUTPUT
+#	$6: OUTPUTPATH
 
 echo "#----#"
 echo "f_pdforhtml wurde erreicht"
@@ -63,8 +72,24 @@ fi
 }
 
 
-#This function convert the PDFs int txt.
+
 function f_pdftotext(){
+#Purpose: Converting the PDFs into txt.
+#Input:
+#	$1: PDF1
+#	$2: PDF2
+#	$3: METHOD
+#	$4: TEMPDIR
+#	$5: OUTPUT
+#	$6: OUTPUTPATH
+#Output:
+#       $1: PDF1
+#       $2: PDF2
+#       $3: METHOD
+#       $4: TEMPDIR
+#       $5: OUTPUT
+
+
 
 #This fucntion received the following variables from f_pdforhtml.
 local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5    
@@ -86,6 +111,20 @@ local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5
 
 #This is the function converts the PDFs into HTML.
 function f_pdftohtml(){
+
+#Purpose: Converting the PDFs into HTML.
+#Input:
+#       $1: PDF1
+#       $2: PDF2
+#       $3: METHOD
+#       $4: TEMPDIR
+#       $5: OUTPUT
+#       $6: OUTPUTPATH
+#Output:
+#       $1: $TEMPDIR/${PDF_FILENAME}
+#       $2: $TEMPDIR/${PDF_FILENAME2}
+#       $3: OUTPUT
+
 
 	#This function received the following variables from f_pdforhtml
         local  PDF1=$1 PDF2=$2 METHOD=$3  TEMPDIR=$4 OUTPUT=$5 
@@ -111,8 +150,15 @@ function f_pdftohtml(){
  
 }
 
-#This is the function that makes a diff between the two converted pdfs
+
 function f_diff(){
+
+#Purpose: Make the diff between the two converted pdfs..
+#Input:
+#       $1: FILE1
+#       $2: FILE2
+#       $3: OUTPUT
+#Output: The result from diff on the screen.
 
 #f_diff reveived the following variables from f_pdftotext or f_pdftohtml
 local FILE1=$1 FILE2=$2 OUTPUT=$3 
