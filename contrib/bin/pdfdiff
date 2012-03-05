@@ -10,9 +10,11 @@ echo "$TEMPDIR"
 echo "---"
 
 
-
-# This function show you the helppage
 function usage(){
+# Purpose: Shows the usage 
+# Input:   nothing
+# Output:  prints the usage string
+
 echo "----------------------------------------------------------------------------------------"
 echo " "
 echo "pdfdiff look for differences between two PDFs."    #This function need no arguments.
@@ -28,8 +30,13 @@ exit 0
 }
 
 
-#This function decide the kind of converting.
 function f_pdforhtml(){
+# Purpose: Decides the kind of converting (pdf or html)
+# Input:   
+#   $1:
+#   $2: 
+# Output:
+#
 
 echo "#----#"
 echo "f_pdforhtml wurde erreicht"
