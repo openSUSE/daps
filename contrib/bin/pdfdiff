@@ -1,12 +1,17 @@
 #!/bin/bash
 #set -x
 
+#Variables
 TEMPDIR=$(mktemp -d /tmp/PDFdiff_XXXX)
 METHOD="html"
 OUTPUT="1"
 echo "---"
 echo "$TEMPDIR"
 echo "---"
+
+
+
+# This function show you the helppage
 function usage(){
 echo "----------------------------------------------------------------------------------------"
 echo " "
@@ -22,6 +27,8 @@ echo "--------------------------------------------------------------------------
 exit 0
 }
 
+
+#This function decide the kind of converting.
 function f_pdforhtml(){
 
 echo "#----#"
@@ -44,6 +51,8 @@ if [ $? = 2 ]; then
 fi
 }
 
+
+#This function convert the PDFs int txt.
 function f_pdftotext(){
 
 local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5    
@@ -59,6 +68,8 @@ local PDF1=$1 PDF2=$2 METHOD=$3 TEMPDIR=$4 OUTPUT=$5
    f_diff "$PDF1" "$PDF2" "$METHOD" "$TEMPDIR" "$OUTPUT" 
 }
 
+
+#This is the function converts the PDFs into HTML.
 function f_pdftohtml(){
 
         local  PDF1=$1 PDF2=$2 METHOD=$3  TEMPDIR=$4 OUTPUT=$5 
@@ -84,6 +95,7 @@ function f_pdftohtml(){
  
 }
 
+#This is the function that makes a diff between the two converted pdfs
 function f_diff(){
 
 local FILE1=$1 FILE2=$2 OUTPUT=$3 
@@ -102,9 +114,8 @@ if [[ $OUTPUT = "" ]]; then
 }
 
 
-echo "Davor $@"
 
-
+#Initializing of the options for the getopts switch case
 if ! options=$(getopt -o hHTo: -l help,html,text,output: -- "$@")
  then
     exit 1
@@ -113,14 +124,14 @@ fi
 
 eval set -- "$options"
 while [ $# -gt 0  ]
- do                #getopts switch case to choose an option
-  case "$1" in
-    -h|--help) usage;;
-    -H|--html) METHOD="html" ;; 
-    -T|--text) METHOD="text" ;;
-    -o|--output) OUTPUT="$2"; shift;;
-    (--) shift; break;;
-    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
+ do                #getopts switch case to choose an option       
+  case "$1" in                                                    
+    -h|--help) usage;;                                            #-h||--help open the help page.
+    -H|--html) METHOD="html" ;;                                   #-H||--html choose the html converting process.
+    -T|--text) METHOD="text" ;;                                   #-T||--text choose the txt converting process.
+    -o|--output) OUTPUT="$2"; shift;;                             #-o||--output write the results in a file.
+    (--) shift; break;;                                           
+    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;; 
     (*)  break;;
   esac
  shift
@@ -129,36 +140,35 @@ done
 echo "Danach $@, $#"
 echo "METHOD=$METHOD, OUTPUT=$OUTPUT"
 
+
+#-----
 OLD_PDF="$1"
 NEW_PDF="$2"
 OUTPUTPATH="$3"
+#This are variables for the primary process
+#-----
 
 
-# Hier wir überprüft ob die 2x Pfade angegeben wurden
+# Hier wird überprüft ob die 2x Pfade angegeben wurden
 if [ $# -ne 2 ]; then
   echo "pdfdiff need two .pdf files"; exit 1;
         fi
 
-## Wenn genau 2 angaben (also 2x Pfad) vorhanden sind werden diese Dateien gedifft.
 if [ $# = 2 ]; then
   echo "---"
   echo "pdfdiff checked your files for differences"
   echo "---"       
 fi
 
-#if [ ! -e "$OLD_PDF" ]; then
- # echo "$1 not found, sorry! " 
-  #exit 2
-#fi
 
-#if [ ! -e "$NEW_PDF" ]; then
- # echo "$2 not found, sorry! " 
-  # exit 2
-#fi
 
 f_pdforhtml "$METHOD" "$OLD_PDF" "$NEW_PDF" "$TEMPDIR" "$OUTPUT" "$OUTPUTPATH"
+#This is the activation of the f_pdforhtml function to start the primary process
+
+
 
 rm -rf $TEMPDIR
+#This delete the temporaly directory
 
 exit 0
 
