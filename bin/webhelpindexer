@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# webhelpindexer: creates index file(s) needed for the webhelp output
+# taken from the build.xml file of  the DocBook XSL distribution
+#
+# (C) 2012 Thomas Schraitle <toms@opensuse.org>
+
+. /usr/share/java-utils/java-functions
+
+MAIN_CLASS=com.nexwave.nquindexer.IndexerMain
+
+# The DocBook XSLT stylesheet path:
+DB="/usr/share/xml/docbook/stylesheet/nwalsh/"
+# "${output-dir}/content"
+HTMLDIR=""
+# "${webhelp.indexer.language}"
+INDEXERLANGUAGE=""
+# "${html.extension}"
+HTMLEXTENSION=""
+# "${enable.stemming}"
+DOSTEM=""
+# "${toc.file}"
+TOCFILE=""
+
+BASE_FLAGS="-Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl"
+
+if [[ -z ${HTMLDIR} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${HTML_DIR} "
+fi
+if [[ -z ${INDEXERLANGUAGE} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${INDEXERLANGUAGE} "
+fi
+if [[ -z ${HTMLEXTENSION} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${HTMLEXTENSION} "
+fi
+if [[ -z ${DOSTEM} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${DOSTEM} "
+fi
+if [[ -z ${TOCFILE} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${TOCFILE} "
+fi
+
+
+CLASSPATH="$CLASSPATH:$(build-classpath-directory $DB 2>/dev/null)"
+
+
+# Set parameters
+set_jvm
+set_classpath $BASE_JARS
+set_flags $BASE_FLAGS
+set_options $BASE_OPTIONS
+
+# Let's start
+run $args $PARAMS
