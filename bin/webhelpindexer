@@ -10,43 +10,48 @@
 MAIN_CLASS=com.nexwave.nquindexer.IndexerMain
 
 # The DocBook XSLT stylesheet path:
-DB="/usr/share/xml/docbook/stylesheet/nwalsh/"
+# DB="/usr/share/xml/docbook/stylesheet/nwalsh/current"
 # "${output-dir}/content"
-HTMLDIR=""
+#HTMLDIR=""
 # "${webhelp.indexer.language}"
-INDEXERLANGUAGE=""
+#INDEXERLANGUAGE=""
 # "${html.extension}"
-HTMLEXTENSION=""
+#HTMLEXTENSION=""
 # "${enable.stemming}"
-DOSTEM=""
+#DOSTEM=""
 # "${toc.file}"
-TOCFILE=""
+#TOCFILE=""
 
 BASE_FLAGS="-Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl"
 
-if [[ -z ${HTMLDIR} ]]; then
+if [[ ! -n ${DB} ]]; then
+echo "Environment variable DB not set. DB points to the path for the DocBook XSL stylesheets"
+exit 1
+fi
+
+if [[ -n ${HTMLDIR} ]]; then
 BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${HTML_DIR} "
 fi
-if [[ -z ${INDEXERLANGUAGE} ]]; then
-BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${INDEXERLANGUAGE} "
+if [[ -n ${INDEXERLANGUAGE} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DindexerLanguage=${INDEXERLANGUAGE} "
 fi
-if [[ -z ${HTMLEXTENSION} ]]; then
-BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${HTMLEXTENSION} "
+if [[ -n ${HTMLEXTENSION} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DhtmlExtension=${HTMLEXTENSION} "
 fi
-if [[ -z ${DOSTEM} ]]; then
-BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${DOSTEM} "
+if [[ -n ${DOSTEM} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DdoStem=${DOSTEM} "
 fi
-if [[ -z ${TOCFILE} ]]; then
-BASE_FLAGS="$BASE_FLAGS -DhtmlDir=${TOCFILE} "
+if [[ -n ${TOCFILE} ]]; then
+BASE_FLAGS="$BASE_FLAGS -DtocFile=${TOCFILE} "
 fi
 
 
-CLASSPATH="$CLASSPATH:$(build-classpath-directory $DB 2>/dev/null)"
+CLASSPATH="$CLASSPATH:$(build-classpath-directory $DB/extensions 2>/dev/null)"
 
 
 # Set parameters
 set_jvm
-set_classpath $BASE_JARS
+# set_classpath $BASE_JARS
 set_flags $BASE_FLAGS
 set_options $BASE_OPTIONS
 
