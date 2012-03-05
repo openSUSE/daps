@@ -22,24 +22,69 @@
  </abstract>
  <sect1 id="sec.daps.user.install.where">
   <title>Where to Get &dapsacr;?</title>
-  <para>The &dapsacr; homepage is <ulink url="daps.sourceforge.net"></ulink>.
+  <para>The &dapsacr; homepage is <ulink url="http://daps.sourceforge.net"></ulink>.
   From there, you can download a tarball with the installation sources.
-  <remark>taroth 2012-02-08: fs, toms: is that the correct link?</remark>
   For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
   available at 
-  <ulink
-  url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_VERSIONNUMBER"></ulink>. 
+  <ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_VERSIONNUMBER"></ulink>. 
   For example, for &osuse; 12.1, the URL would be as follows:
-<ulink
-url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>.  
+<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>.  
   <remark>taroth 2012-02-08: check if the following is already
   the case - If you want to use &dapsacr; on &sle;, find the
   <systemitem class="resource">daps</systemitem> on the media of the &sle; SDK 
-  (Software Development Kit).</remark> </para>
+  (Software Development Kit).</remark>
+  </para>
  </sect1>
  <sect1 id="sec.daps.user.install.osuse">
   <title>Installing &dapsacr; on &osuse;</title>
-  <para>FIXME</para>
+  <para>For basic details on how to add software repositories and how to install 
+  software on &osuse;, refer to the &osuse; <citetitle>Reference
+  Guide</citetitle>. The guide is available as part of the &osuse; documentation
+  from <ulink url="http://www.suse.com/documentation"></ulink>. 
+  </para>
+  <para>Choose one of the following installation methods:</para>
+  <variablelist>
+   <varlistentry>
+    <term>One-Click Installation from the Internet</term>
+    <listitem>
+     <para>Follow the instructions in the &osuse; 
+     <citetitle>Reference Guide</citetitle>, chapter 
+    <citetitle>Installing Packages from the Internet</citetitle>. Search for 
+    the package <systemitem class="resource">daps</systemitem> that matches your 
+    &osuse; version. From the list of results, install the one that is provided 
+    by the repository <literal>Documentation:Tools</literal>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Installation with &yast; (GUI)</term>
+    <listitem>
+     <para>Follow the instructions in the &osuse; 
+     <citetitle>Reference Guide</citetitle>, chapter 
+    <citetitle>Installing Or Removing Software</citetitle>. Add the 
+    <literal>Documentation:Tools</literal> repository that matches your &osuse;
+    version&mdash;see <xref linkend="sec.daps.user.install.where"/>. From there, 
+    install the <systemitem class="resource">daps</systemitem> package.
+    </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Installation with <command>zypper</command> (command line)</term>
+    <listitem>
+     <para>
+     Follow the instructions in the &osuse; 
+     <citetitle>Reference Guide</citetitle>, chapter 
+    <citetitle>Managing Software with Command Line Tools</citetitle>. Add the 
+    <literal>Documentation:Tools</literal> repository that matches your &osuse;
+    version&mdash;see <xref linkend="sec.daps.user.install.where"/>. From there, 
+    install the <systemitem class="resource">daps</systemitem> package.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <para>All of the installation methods mentioned above will take care of resolving
+any dependencies to other packages that are required by &dapsacr;. If all
+requirements can be fulfilled, &dapsacr; will be successfully installed in your 
+system and is ready to use. </para>
  </sect1>
  <sect1 id="sec.daps.user.install.sle">
   <title>Installing &dapsacr; on &sle;</title>
