@@ -47,12 +47,6 @@ STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(DOCBOOK_STYLES) )
 USED_STYLEDIR  := $(firstword $(STYLE_ROOTDIRS))
 
-ifdef STYLEROOT
-  FOSTRINGS    += --stringparam styleroot "$(USED_STYLEDIR)/"
-  FOCOLSTRINGS += --stringparam styleroot "$(USED_STYLEDIR)/"
-endif
-
-
 #----------------------------
 # Stylesheet directory layout
 # We assume that the directory layout for all stylesheet root directories is

@@ -165,6 +165,12 @@ DIRECTORIES := $(PROFILEDIR) $(TMP_DIR) $(RESULT_DIR)
 #QUIET  ?=
 USESVN := $(shell svn pg doc:maintainer $(MAIN) 2>/dev/null)
 
+
+#-----------------------------------------------------------------------
+# include layout
+
+include $(DAPSROOT)/make/layout.mk
+
 #------------------------------------------------------------------------
 # xslt stylsheets
 
@@ -213,7 +219,10 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
+                --stringparam callout.graphics.path \
+                  "$(USED_STYLEDIR)/images/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
+                --stringparam styleroot "$(USED_STYLEDIR)/" \
 		--param ulink.show 1
 
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -221,7 +230,10 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
+                --stringparam callout.graphics.path \
+                  "$(USED_STYLEDIR)/images/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
+                --stringparam styleroot "$(USED_STYLEDIR)/" \
 		--param ulink.show 1
 
 # root directory for custom stylesheets
@@ -399,7 +411,6 @@ WRONG_CAP   := $(filter-out $(USED_LC), $(USED))
 # Include the other make files
 #
 include $(DAPSROOT)/make/images.mk
-include $(DAPSROOT)/make/layout.mk
 include $(DAPSROOT)/make/package.mk
 #include $(DAPSROOT)/make/variables.mk
 #include $(DAPSROOT)/make/obb.mk
