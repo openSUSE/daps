@@ -33,23 +33,22 @@ exit 0
 function f_pdforhtml(){
 # Purpose: Decides the kind of converting (pdf or html)
 # Input:   
-#	$1: METHOD -> METHOD
-#	$2: OLD_PDF -> PDF1
-#	$3: NEW_PDF -> PDF2
-#	$4: TEMPDIR -> TEMPDIR
-#	$5: OUTPUT -> OUTPUT
-#	$6: OUTPUTPATH -> OUTPUTPATH
+#	$1: Includes the information about the Method
+#	$2: Is the path of a PDF file
+#	$3: Is a different path of a PDF file
+#	$4: Is the path of the temp directory
+#	$5: Is the Information which kind of output is needed
+#	$6: The output will be saved in this directory.
 # Output:
-#	$1: PDF1
-#	$2: PDF2
-#	$3: METHOD
-#	$4: TEMPDIR
-#	$5: OUTPUT
-#	$6: OUTPUTPATH
+#	$1: The file
+#	$2: The second file
+#	$3: Contains the informations about the method
+#	$4: Contains the temp directory
+#	$5: Contains the Information about the output 
+#	$6: Contains the path for the output
 
-echo "#----#"
-echo "f_pdforhtml wurde erreicht"
-echo "#----#"
+
+
 
 #This function received the following variables: METHOD, PDF1, PDF2, TEMPDIR, OUTPUT, OUTPUTPATH.
 local METHOD=$1 PDF1=$2 PDF2=$3 TEMPDIR=$4 OUTPUT=$5 OUTPUTPATH=$6
@@ -76,18 +75,18 @@ fi
 function f_pdftotext(){
 #Purpose: Converting the PDFs into txt.
 #Input:
-#	$1: PDF1
-#	$2: PDF2
-#	$3: METHOD
-#	$4: TEMPDIR
-#	$5: OUTPUT
-#	$6: OUTPUTPATH
+#	$1: Includes the method options
+#	$2: Stores the Path of the first file
+#	$3: Stores the Path of the second file
+#	$4: Contains the temp directory
+#	$5: Includes the output options
+#	$6: Stores the path for the output
 #Output:
-#       $1: PDF1
-#       $2: PDF2
-#       $3: METHOD
-#       $4: TEMPDIR
-#       $5: OUTPUT
+#       $1: The converted file
+#       $2: The converted second file
+#       $3: Includes the method options
+#       $4: Contains the temp directory
+#       $5: Includes hte output options
 
 
 
@@ -114,16 +113,18 @@ function f_pdftohtml(){
 
 #Purpose: Converting the PDFs into HTML.
 #Input:
-#       $1: PDF1
-#       $2: PDF2
-#       $3: METHOD
-#       $4: TEMPDIR
-#       $5: OUTPUT
-#       $6: OUTPUTPATH
+#       $1: Includes the method options
+#       $2: Stores the Path of the first file
+#       $3: Stores the Path of the second file
+#       $4: Contains the temp directory
+#       $5: Includes the output options
+#       $6: Stores the path for the output
 #Output:
-#       $1: $TEMPDIR/${PDF_FILENAME}
-#       $2: $TEMPDIR/${PDF_FILENAME2}
-#       $3: OUTPUT
+#       $1: The converted file
+#       $2: The converted second file
+#       $3: Includes the method options
+#       $4: Contains the temp directory
+#       $5: Includes hte output options
 
 
 	#This function received the following variables from f_pdforhtml
@@ -155,10 +156,10 @@ function f_diff(){
 
 #Purpose: Make the diff between the two converted pdfs..
 #Input:
-#       $1: FILE1
-#       $2: FILE2
-#       $3: OUTPUT
-#Output: The result from diff on the screen.
+#       $1: Stores the Path of a temp directory with the converted pdf file
+#       $2: Stores the Path of a temp directory with the converted pdf file
+#       $3: Saves the output informations
+#Output: Show the result on the screen
 
 #f_diff reveived the following variables from f_pdftotext or f_pdftohtml
 local FILE1=$1 FILE2=$2 OUTPUT=$3 
