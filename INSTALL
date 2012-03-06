@@ -2,9 +2,38 @@
       Installing the DocBook Authoring and Publishing Suite (daps)
 ----------------------------------------------------------------------------
 
+openSUSE/SUSE:
+-------------
 Please use the daps RPMs available from
 http://download.opensuse.org/repositories/Documentation:/Tools/
 
-The corresponding Open Build Service project is located at
-https://build.opensuse.org/project/show?project=Documentation%3ATools
+Other Distributions:
+--------------------
 
+Requirements:
+
+Before you start installaing DAPS, make sure the following packages/tools are
+installed:
+- automake
+- convert (from the ImageMagick package)
+- DocBook 4
+- DocBook 4 Stylesheets (usually come as a separate package) 
+- make
+- xmlcatalog (usually part of a libxml2, libxml-utils, or libxml-tools package)
+- xmllint (usually part of a libxml2, libxml-utils, or libxml-tools package)
+- xsltproc (may be included in libxslt if not available as a separate package)
+
+Installation:
+
+* unpack the source tarball
+* cd into the newly created directory
+* run ./configure
+
+  => Make sure you carefully check the script's summary
+
+     run ./configure --help for more information on how
+     to change installation paths
+
+* run make
+* run sudo make install
+  
