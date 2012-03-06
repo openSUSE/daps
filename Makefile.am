@@ -136,7 +136,7 @@ $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
 
 install-data-local: $(INSTALLDIRS)
-install-data-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
+install-data-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
@@ -144,21 +144,21 @@ install-data-local:
 	done
 # create entry in xml root catalog
 	{ \
-	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
+	  sed '/<\/catalog>/d' $(DESTDIR)$(ROOT_CATALOG); \
 	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
 	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
 	      END{print "</catalog>"}'; \
 	} >$(TMP_CATALOG)
-	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	chmod --reference=$(DESTDIR)$(ROOT_CATALOG) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(DESTDIR)$(ROOT_CATALOG)
 
 #---------------------------Local UNINSTALL-----------------------------------
 uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
 uninstall-local:
-	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
+	$(XMLLINT) --nocatalogs --format $(DESTDIR)$(ROOT_CATALOG) | \
 	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	chmod --reference=$(DESTDIR)$(ROOT_CATALOG) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(DESTDIR)$(ROOT_CATALOG)
 
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
