@@ -183,15 +183,12 @@ for upgrade instructions.
 
 #--------------------------------------------------------------------------
 %build
+%configure
 %__make  %{?_smp_mflags}
 
 #--------------------------------------------------------------------------
 %install
-# specifying VERSION is manadatory!! 
 make install DESTDIR=$RPM_BUILD_ROOT
-
-# make_install macro does not have a DESTDIR in 11.1/SLE 11 !!
-#%#make_install
 
 # create symlinks:
 %fdupes -s $RPM_BUILD_ROOT/%{_datadir}
