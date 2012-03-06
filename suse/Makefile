@@ -34,7 +34,7 @@ DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
 all: schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
-all: catalogs/$(SUSEXSL_CATALOG) catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
+all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
 all: xhtml2html
 	@echo "Ready to install..."
 
@@ -125,8 +125,6 @@ catalogs/$(NOVDOC_FOR-CATALOG):
 	sed -i '/<\/catalog/i\ </group>' $@
 
 catalogs/$(SUSEXSL_FOR-CATALOG): | $(DIRECTORIES)
-catalogs/$(SUSEXSL_FOR-CATALOG): URNS := \
-			urn:x-suse:xslt:profiling urn:x-daps:xslt:profiling
 catalogs/$(SUSEXSL_FOR-CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "rewriteSystem" \
