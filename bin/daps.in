@@ -424,7 +424,7 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 # Verbose error handling
 #
 function exit_on_error () {
-    ccecho "error" "ERROR: ${1}" >&2
+    echo "ERROR: ${1}" >&2
     exit 1;
 }
 # ---------
@@ -495,7 +495,7 @@ function autoset_docconf () {
         # set DOC_DIR
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
         if [[ 1 -le $VERBOSITY ]]; then
-            ccecho "result" "Using automatically detected DOCCONF $DOCCONF_CMDL"
+            echo "Using automatically detected DOCCONF $DOCCONF_CMDL"
         fi
     else
         # more than one or no DOCCONF
@@ -525,7 +525,7 @@ function set_mainfile () {
                 DOC_DIR="$PWD"
             fi
             if [[ 1 -le $VERBOSITY ]]; then
-                ccecho "result" "Using MAIN file $MAIN_CMDL"
+                echo "Using MAIN file $MAIN_CMDL"
             fi
         else
             if [[ -n $DOC_DIR ]]; then
@@ -712,7 +712,7 @@ fi
 # Check FALLBACK_STYLEROOT and STYLEROOT
 #
 if [[ -n $FALLBACK_STYLEROOT && -z $STYLEROOT ]]; then
-    ccecho "warn" "--styleroot is not specified, ignoring --fb_styleroot"
+    echo "--styleroot is not specified, ignoring --fb_styleroot"
 fi 
 
 
@@ -756,8 +756,8 @@ fi
 # Now that we have the subcommand, check whether it is valid
 
 if [[ -z ${SUBCOMMANDS[$SUBCMD]} ]]; then
-    ccecho "error" "Error: Unknown subcommand \"$SUBCMD\"" >&2
-    ccecho "normal" "Type '$ME help' to get a list of global parameters and subcommands" >&2
+    echo "Error: Unknown subcommand \"$SUBCMD\"" >&2
+    echo "Type '$ME help' to get a list of global parameters and subcommands" >&2
     exit 1;
 fi
 
@@ -887,7 +887,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
             DOCCONF_CMDL=$(absolute_path "$DOCCONF_NAME")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 1 -le $VERBOSITY ]]; then
-                ccecho "info" "Using previously sourced DOCCONF $DOCCONF_CMDL"
+                echo "Using previously sourced DOCCONF $DOCCONF_CMDL"
             fi
         else
             exit_on_error "Cannot find previously sourced DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you sourced the config, or you need to provide an absolute path when\nsourcing the doc config."
@@ -898,7 +898,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
             DOCCONF_CMDL=$(absolute_path "$DOCCONF_DEFAULT")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 1 -le $VERBOSITY ]]; then
-                ccecho "info" "Using DOCCONF $DOCCONF_DEFAULT from config files"
+                echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
             fi
         else
             exit_on_error "DOCCONF_DEFAULT \"$DOCCONF_DEFAULT\" not found in current directory.\nCheck your config file at $USER_CONFIG."
@@ -972,7 +972,7 @@ fi
 # get DocBook version first ...
 DOCBOOK_VERSION=$(xsltproc \
     ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl $MAIN 2>/dev/null) || \
-    { DOCBOOK_VERSION=4; ccecho "warn" \
+    { DOCBOOK_VERSION=4; \
       "Could not get DocBook version, assuming DocBook 4"; } 
 
 # ... no resolve the style URI via catalogs
