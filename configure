@@ -612,6 +612,8 @@ SED
 LN_S
 Q
 DEBUG
+CATALOG_EDIT_FALSE
+CATALOG_EDIT_TRUE
 ROOT_CATALOG
 am__untar
 am__tar
@@ -678,6 +680,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_debug
+enable_edit_rootcatalog
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1299,6 +1302,10 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          Enable debug mode
+  --disable-edit-rootcatalog
+                          Disable editing the XML root catalog. Use this
+                          switch when running make install from a package
+                          generating script (such as a spec file).
 
 Report bugs to <https://sourceforge.net/p/daps/tickets/>.
 DAPS home page: <http://daps.sf.net>.
@@ -2267,6 +2274,25 @@ else
 fi
 
 eval "eval DEBUG=$debug Q=$quiet"
+
+
+
+# Check whether --enable-edit-rootcatalog was given.
+if test "${enable_edit_rootcatalog+set}" = set; then :
+  enableval=$enable_edit_rootcatalog; if test "yes" = $enableval; then cat_edit=1; else cat_edit=0; fi
+else
+  cat_edit=1
+fi
+
+ if test 1 = $cat_edit; then
+  CATALOG_EDIT_TRUE=
+  CATALOG_EDIT_FALSE='#'
+else
+  CATALOG_EDIT_TRUE='#'
+  CATALOG_EDIT_FALSE=
+fi
+
+
 
 
 
@@ -3950,6 +3976,10 @@ LTLIBOBJS=$ac_ltlibobjs
 
 
 
+if test -z "${CATALOG_EDIT_TRUE}" && test -z "${CATALOG_EDIT_FALSE}"; then
+  as_fn_error $? "conditional \"CATALOG_EDIT\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${DIST_REDHAT_TRUE}" && test -z "${DIST_REDHAT_FALSE}"; then
   as_fn_error $? "conditional \"DIST_REDHAT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5

@@ -142,24 +142,27 @@ install-data-local:
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
 		(cd $(DESTDIR)$(docdir)/html; tar xp); \
 	done
+if CATALOG_EDIT
 # create entry in xml root catalog
 	{ \
-	  sed '/<\/catalog>/d' $(DESTDIR)$(ROOT_CATALOG); \
+	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
 	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
 	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
 	      END{print "</catalog>"}'; \
 	} >$(TMP_CATALOG)
-	chmod --reference=$(DESTDIR)$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(DESTDIR)$(ROOT_CATALOG)
+	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+endif
 
 #---------------------------Local UNINSTALL-----------------------------------
+if CATALOG_EDIT
 uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
 uninstall-local:
-	$(XMLLINT) --nocatalogs --format $(DESTDIR)$(ROOT_CATALOG) | \
+	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
 	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-	chmod --reference=$(DESTDIR)$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(DESTDIR)$(ROOT_CATALOG)
-
+	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+endif
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \

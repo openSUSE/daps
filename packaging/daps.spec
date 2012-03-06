@@ -183,7 +183,7 @@ for upgrade instructions.
 
 #--------------------------------------------------------------------------
 %build
-%configure --docdir=%{_defaultdocdir}/%{name}
+%configure --docdir=%{_defaultdocdir}/%{name} --disable-edit-rootcatalog
 %__make  %{?_smp_mflags}
 
 #--------------------------------------------------------------------------

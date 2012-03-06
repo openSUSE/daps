@@ -48,6 +48,20 @@ AC_ARG_ENABLE([debug],
     [AC_HELP_STRING([--enable-debug], [Enable debug mode])],
       [debug="--debug"], [quiet="@"])
 eval "eval DEBUG=$debug Q=$quiet"
+
+
+dnl -------------------------
+dnl Switch for disabling xml root catalog editing
+dnl Needs to be disabled when creating real packages, because
+dnl this needs to be done with the package's post-install
+dnl commands
+
+AC_ARG_ENABLE([edit-rootcatalog],
+    [AC_HELP_STRING([--disable-edit-rootcatalog], [Disable editing the XML root catalog. Use this switch when running make install from a package generating script (such as a spec file).])],
+      [if test "yes" = $enableval; then cat_edit=1; else cat_edit=0; fi],
+      [cat_edit=1])
+AM_CONDITIONAL([CATALOG_EDIT], [test 1 = $cat_edit])
+
 AC_SUBST(DEBUG)
 AC_SUBST(Q)
 
