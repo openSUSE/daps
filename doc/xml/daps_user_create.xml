@@ -3,15 +3,65 @@
  href="urn:x-suse:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml"
  title="Profiling step"?>
- 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]>
-
 <chapter id="cha.daps.user.create">
  <title>Creating a Project From Scratch</title>
-<para>
-   <remark>topic: daps init</remark>
-  </para>
- </chapter>
+ <abstract>
+  <para>The easiest way to set up a new documentation project from scratch is to
+ use <command>daps-init</command>. This initialization script automatically 
+ creates the key files and directory structure you need to get started with the 
+ &dapsacr;.</para>
+ </abstract>
+ <para>It generates:</para>
+ <itemizedlist>
+  <listitem>
+   <para>the <xref linkend="sec.daps.user.oview.dirstruct" xrefstyle="select:title"/> 
+   required by &dapsacr;,</para>
+  </listitem>
+  <listitem>
+   <para>an example <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>, and </para>
+  </listitem>
+  <listitem>
+   <para>an example <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/> that you can use as a starting point for 
+   your documentation. </para>
+  </listitem>
+ </itemizedlist>
+ <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
+ as example document, but with the <option>-r</option>, you can also set another
+ root element, such as <sgmltag>article</sgmltag>, for example.</para>
+ <procedure>
+  <step>
+   <para>To create the default directory structure with a <sgmltag>book</sgmltag> 
+   documentation example, enter the following on a command line:</para>
+   <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable>
+  </screen>
+   <para>Alternatively, enter the following to create the default directory structure 
+   with an <sgmltag>article</sgmltag> documentation example: </para>
+   <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
+  </step>
+  <step>
+   <para>If the specified directory does not exists, &dapsacr; asks if to
+   create it. Proceed by pressing <keycap>y</keycap>.</para>
+  </step>
+  <step>
+   <para>Check your working directory for the new files and have a look at them:
+   The text file <filename>DC-daps-example</filename> is annotated and gives you 
+   a rough idea which options can be defined in a <filename>DC-*</filename> file. 
+   Change to the <filename>xml</filename> subdirectory and open 
+   <filename>MAIN-DC-daps-example.xml</filename> in your favorite editor to 
+   explore its contents.</para>
+  </step>
+  <step>
+   <para>To see what the output of the XML example file looks like, follow the 
+   instructions printed by the initialization script. For example:</para>
+   <screen>daps -d <replaceable>PATH_TO_DIRECTORY</replaceable>/DC-daps-example color-pdf</screen>
+   <para>This command specifies the <filename>DC*</filename> file to use for the
+   document and the output format to create. It will create a PDF of the book or
+   article, using FOP (default, if no other formatter is specified) and the 
+   default DocBook stylesheets (as no custom layout options are defined).</para>
+  </step>
+ </procedure>
+</chapter>
