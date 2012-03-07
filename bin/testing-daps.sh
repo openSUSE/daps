@@ -12,7 +12,7 @@
 # Global Variables
 
 # Remove temporary directory? 0=no, 1=yes
-DELTEMP=0
+DELTEMP=1
 # Logging actions to $LOGFILE? 0=no, 1=yes
 LOGGING=1
 
@@ -27,12 +27,14 @@ LOGFILE="/tmp/daps-testing.log"
 usage() {
 cat << EOF
 ${0##*/} [-h|--help] [-i|--dapsinit DAPS_INIT] [-l|--logfile LOGFILE] [-D|--daps DAPS]
+         [-k|--keeptemp]
 DAPS Testing Framework
 
  -h, --help         Shows this help
  -i, --dapsinit     Absolute path to the daps-init program
  -l, --logfile      Save result in LOGFILE (default $LOGFILE)
  -D, --daps         Points to the daps script
+ -k, --keeptemp     Do not delete the TEMPDIR directory, default ${DELTEMP}
 EOF
 exit 0
 }
@@ -85,33 +87,35 @@ logging() {
 
 # ---------
 # Parsing Command Line Options
-if ! options=$(getopt -o h,i:,l:,D: -l help,dapsinit:,logfile:,daps -- "$@"); then
+if ! options=$(getopt -o h,i:,l:,D:,k  -l help,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
     exit 1
 fi
 
+
 eval set -- "$options"
+
 while [ $# -gt 0  ]; do
   case "$1" in                                                    
     -h|--help) usage;;
     -i|--dapsinit)
-        if [[ ! -f $2 ]]; then
-           exit_on_error "$1 does not exist"
-        fi
-        DAPS_INIT=$2
+        D=$(readlink -f $2)
+        [[ -f $D ]] || exit_on_error "$D does not exist"
+        DAPS_INIT=$D
         shift
         ;;
     -l|--logfile)
-       # Make *absolute* filename to avoid problems when 
+       # Make an *absolute* filename to avoid problems when 
        # switching to other directories
        LOGFILE=$(readlink -f $2)
        shift
        ;;
     -D|--daps)
-       if [[ ! -f $2 ]]; then
-           exit_on_error "$2 does not exist"
-       fi
+       [[ -f $2 ]] || exit_on_error "$2 does not exist"
        DAPS=$(readlink -f $2)
        shift
+       ;;
+    -k|--keeptemp)
+       DELTEMP=0
        ;;
     (--) shift; break;;                                           
     (-*) exit_on_error "${0##*/}: error - unrecognized option $1" ;; 
@@ -129,19 +133,19 @@ TEMPDIR=$(mktemp -d /tmp/daps-testing_XXXXXX)
 # Creating DAPS Testing Environment
 #
 oneTimeSetUp() {
-  echo "--- Setting up DAPS Testing Framework..."
+  logging "--- Setting up DAPS Testing Framework..."
   assertTrue "Could not find temporary directory $TEMPDIR" "[ -d $TEMPDIR ]"
   logging "Starting ${0##*/}"
 }
 
 oneTimeTearDown() {
-  echo "--- Tearing down DAPS Testing Framework ..."
-  if [[ -d $TEMPDIR ]]; then
-    [[ 0 -ne $DELTEMP ]] && rm -rf $TEMPDIR
-  fi
+  # Delete temporary directory, when DELTEMP is enabled
+  [[ -d $TEMPDIR && 0 -ne $DELTEMP ]] && rm -rf $TEMPDIR
+
   if [[ $LOGGING -ne 0 ]]; then
     echo "Find the logging output in $LOGFILE"
   fi
+  logging "--- Tearing down DAPS Testing Framework ..."
 }
 
 
@@ -149,6 +153,25 @@ oneTimeTearDown() {
 # DAPS Testing Functions
 #
 # Test functions are executed in the given order
+
+
+test_Programs() {
+  logging "<<< test_Programs:Start"
+  assertTrue "No /usr/bin/fop" "[[ -f /usr/bin/fop ]] && [[ -x /usr/bin/fop ]]"
+  logging $? "/usr/bin/fop"
+  
+  PROGRAMS="fop dia inkscape convert xmllint xsltproc make bzip2 tar ruby python w3m"
+  for p in $PROGRAMS; do
+    p=$(which $p 2>/dev/null)
+    # echo "  $p"
+    assertTrue "Program $p not found" $?
+    logging $? "Program $p"
+    assertTrue "No executable $p" "[[ -x $p ]]"
+    logging $? "Executable $p"
+  done
+
+  logging ">>> test_Programs:End"
+}
 
 testDAPS_Init() {
 # Purpose:
@@ -244,6 +267,8 @@ testDAPS_htmlsingle() {
 
   logging ">>> testDAPS_htmlsingle:End"
 }
+
+
 
 # ALWAYS source it last:
 source /usr/share/shunit2/src/shunit2
