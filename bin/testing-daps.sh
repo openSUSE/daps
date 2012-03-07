@@ -18,12 +18,13 @@ LOGGING=1
 
 usage() {
 cat << EOF
-${0##*/} [-h|--help] [-i|--dapsinit DAPS_INIT] [-l|--logfile LOGFILE]
+${0##*/} [-h|--help] [-i|--dapsinit DAPS_INIT] [-l|--logfile LOGFILE] [-D|--daps DAPS]
 DAPS Testing Framework
 
--h, --help         Shows this help
--i, --dapsinit     Absolute path to the daps-init program
--l, --logfile      Save result in LOGFILE (default $LOGFILE)
+ -h, --help         Shows this help
+ -i, --dapsinit     Absolute path to the daps-init program
+ -l, --logfile      Save result in LOGFILE (default $LOGFILE)
+ -D, --daps         Points to the daps script
 EOF
 exit 0
 }
@@ -76,7 +77,7 @@ logging() {
 
 # ---------
 # Parsing Command Line Options
-if ! options=$(getopt -o h,i:,l: -l help,dapsinit:,logfile: -- "$@"); then
+if ! options=$(getopt -o h,i:,l:,D: -l help,dapsinit:,logfile:,daps -- "$@"); then
     exit 1
 fi
 
@@ -85,7 +86,7 @@ while [ $# -gt 0  ]; do
   case "$1" in                                                    
     -h|--help) usage;;
     -i|--dapsinit)
-        if [[ ! -f $1 ]]; then
+        if [[ ! -f $2 ]]; then
            exit_on_error "$1 does not exist"
         fi
         DAPS_INIT=$2
@@ -95,6 +96,13 @@ while [ $# -gt 0  ]; do
        # Make *absolute* filename to avoid problems when 
        # switching to other directories
        LOGFILE=$(readlink -f $2)
+       shift
+       ;;
+    -D|--daps)
+       if [[ ! -f $2 ]]; then
+           exit_on_error "$2 does not exist"
+       fi
+       DAPS=$(readlink -f $2)
        shift
        ;;
     (--) shift; break;;                                           
@@ -142,53 +150,53 @@ testDAPS_Init() {
 
   $DAPS_INIT  -d . -r book
   assertTrue "daps-init returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "daps-init was successful"
+  logging $? "daps-init"
 
   # Enable export, to make it "sourceable":
   sed -i 's/^#export DOCCONF_NAME/export DOCCONF_NAME/g' DC-daps-example
 
   assertTrue "Could not find file DC-daps-example" "[[ -f DC-daps-example ]]"
-  logging $? "Found DC-daps-example file"
+  logging $? "File DC-daps-example"
 
   assertTrue "Could not find xml directory" "[[ -d xml ]]"
-  logging $? "Found xml directory"
+  logging $? "Directory xml"
 
   assertTrue "Could not find images directory" "[[ -d images ]]"
-  logging $? "Found images directory"
+  logging $? "Directory images"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src ]]"
-  logging $? "Found images/src directory"
+  logging $? "Directory images/src"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/dia ]]"
-  logging $? "Found images/src/dia directory"
+  logging $? "Directory images/src/dia"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/eps ]]"
-  logging $? "Found images/src/eps directory"
+  logging $? "Directory images/src/eps"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/fig ]]"
-  logging $? "Found images/src/fig directory"
+  logging $? "Directory images/src/fig"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/pdf ]]"
-  logging $? "Found images/src/pdf directory"
+  logging $? "Directory images/src/pdf"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/png ]]"
-  logging $? "Found images/src/png directory"
+  logging $? "Directory images/src/png"
 
   assertTrue "Could not find images/src directory" "[[ -d images/src/svg ]]"
-  logging $? "Found images/src/svg directory"
+  logging $? "Directory images/src/svg"
 
   logging ">>> testDAPS_Init:End"
 }
 
 testDAPS_Validate() {
   logging "<<< testDAPS_Validate:Start"
-  source DC-daps-example
+  # source DC-daps-example
   $DAPS validate
   assertTrue "daps validate returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "Validation successful"
+  logging $? "Validation"
 
   assertTrue "Could not find build directory" "[[ -d build ]]"
-  logging $? "Found build directory"
+  logging $? "Directory build "
 
   logging ">>> testDAPS_Validate:End"
 }
@@ -196,7 +204,7 @@ testDAPS_Validate() {
 
 testDAPS_html_chunk() {
   logging "<<< testDAPS_html_chunk:Start"
-  source DC-daps-example
+  # source DC-daps-example
   $DAPS html
   assertTrue "daps html returned != 0 (was $?)" "[[ $? -eq 0 ]]"
   logging $? "HTML creation successful"
@@ -212,7 +220,7 @@ testDAPS_html_chunk() {
 
 testDAPS_htmlsingle() {
   logging "<<< testDAPS_htmlsingle:Start"
-  source DC-daps-example
+  # source DC-daps-example
   $DAPS htmlsingle
   assertTrue "daps htmlsingle returned != 0 (was $?)" "[[ $? -eq 0 ]]"
   logging $? "Creation of HTML single"
