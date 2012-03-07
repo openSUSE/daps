@@ -50,7 +50,11 @@ BuildRequires:  libxslt
 BuildRequires:  make
 BuildRequires:  trang 
 
-Requires:       aspell aspell-en aspell-en-huge
+Requires:       aspell aspell-en
+# Only works only for openSUSE 11.4 and below
+%if 0%{?suse_version} < 1210
+Requires:       aspell-en-huge
+%endif
 Requires:       docbook
 Requires:       docbook-xsl-stylesheets >= 1.75
 Requires:       libxslt
