@@ -32,7 +32,7 @@ exit 0
 # Verbose error handling
 #
 exit_on_error () {
-    echo "ERROR: ${1}" >&2
+    echo "ERROR: ${1}" 1>&2
     exit 1;
 }
 
@@ -92,11 +92,13 @@ while [ $# -gt 0  ]; do
         shift
         ;;
     -l|--logfile)
+       # Make *absolute* filename to avoid problems when 
+       # switching to other directories
        LOGFILE=$(readlink -f $2)
        shift
        ;;
     (--) shift; break;;                                           
-    (-*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;; 
+    (-*) exit_on_error "${0##*/}: error - unrecognized option $1" ;; 
     (*)  break;;
   esac
  shift
@@ -200,17 +202,23 @@ testDAPS_html_chunk() {
   logging $? "HTML creation successful"
 
   assertTrue "Could not find build/daps-example/html/daps-example/ directory" "[[ -d build/daps-example/html/daps-example/ ]]"
-  logging $? "Found build/daps-example/html/daps-example/ directory"
+  logging $? "Directory build/daps-example/html/daps-example/"
 
   assertTrue "Could not find build/daps-example/html/daps-example/index.html directory" "[[ -f build/daps-example/html/daps-example/index.html ]]"
-  logging $? "Found build/daps-example/html/daps-example/index.html file"
+  logging $? "File build/daps-example/html/daps-example/index.html"
 
   logging ">>> testDAPS_html_chunk:End"
 }
 
-#testDAPS_html_bigfile() {
-#
-#}
+testDAPS_htmlsingle() {
+  logging "<<< testDAPS_htmlsingle:Start"
+  source DC-daps-example
+  $DAPS htmlsingle
+  assertTrue "daps htmlsingle returned != 0 (was $?)" "[[ $? -eq 0 ]]"
+  logging $? "Creation of HTML single"
+
+  logging ">>> testDAPS_htmlsingle:End"
+}
 
 # ALWAYS source it last:
 source /usr/share/shunit2/src/shunit2
