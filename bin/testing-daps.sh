@@ -161,6 +161,8 @@ oneTimeTearDown() {
 
 
 test_Programs() {
+# Purpose:
+#  Tests for several programs that daps needs
   logging "<<< test_Programs:Start"
   assertTrue "No /usr/bin/fop" "[[ -f /usr/bin/fop ]] && [[ -x /usr/bin/fop ]]"
   logging $? "/usr/bin/fop"
@@ -168,7 +170,6 @@ test_Programs() {
   PROGRAMS="fop dia inkscape convert xmllint xsltproc make bzip2 tar ruby python w3m"
   for p in $PROGRAMS; do
     p=$(which $p 2>/dev/null)
-    # echo "  $p"
     assertTrue "Program $p not found" $?
     logging $? "Program $p"
     assertTrue "No executable $p" "[[ -x $p ]]"
@@ -197,32 +198,12 @@ testDAPS_Init() {
   assertTrue "Could not find file DC-daps-example" "[[ -f DC-daps-example ]]"
   logging $? "File DC-daps-example"
 
-  assertTrue "Could not find xml directory" "[[ -d xml ]]"
-  logging $? "Directory xml"
-
-  assertTrue "Could not find images directory" "[[ -d images ]]"
-  logging $? "Directory images"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src ]]"
-  logging $? "Directory images/src"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/dia ]]"
-  logging $? "Directory images/src/dia"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/eps ]]"
-  logging $? "Directory images/src/eps"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/fig ]]"
-  logging $? "Directory images/src/fig"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/pdf ]]"
-  logging $? "Directory images/src/pdf"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/png ]]"
-  logging $? "Directory images/src/png"
-
-  assertTrue "Could not find images/src directory" "[[ -d images/src/svg ]]"
-  logging $? "Directory images/src/svg"
+  DIRECTORIES="xml images images/src images/src/dia images/src/eps images/src/fig 
+               images/src/pdf images/src/png images/src/svg"
+  for d in $DIRECTORIES; do
+    assertTrue "Could not find $d directory" "[[ -d $d ]]"
+    logging $? "Directory $d"
+  done
 
   logging ">>> testDAPS_Init:End"
 }
