@@ -13,6 +13,7 @@
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
+ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = 
 
 # additional files to add to the tarball
