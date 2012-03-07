@@ -35,7 +35,7 @@ Release:        0
 %define regcat         %{_bindir}/sgml-register-catalog
 %define fontdir        %{_datadir}/fonts/truetype
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
-%define daps_catalog   catalogs/for-catalog-%{name}.xml
+%define daps_catalog   for-catalog-%{name}.xml
 
 Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
