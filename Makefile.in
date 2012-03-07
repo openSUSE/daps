@@ -45,7 +45,8 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 subdir = .
-DIST_COMMON = README $(am__configure_deps) $(dist_bin_SCRIPTS) \
+DIST_COMMON = README $(am__configure_deps) \
+	$(am__dist_catalog_DATA_DIST) $(dist_bin_SCRIPTS) \
 	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapslibexec_SCRIPTS) $(dist_dapsmake_DATA) \
 	$(dist_doc_DATA) $(dist_emacssite_DATA) $(dist_fopconf_DATA) \
@@ -90,16 +91,16 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" \
-	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(dapsconfdir)" \
-	"$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" \
-	"$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" \
-	"$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" \
-	"$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" \
-	"$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" \
-	"$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" \
-	"$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" \
-	"$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" \
-	"$(DESTDIR)$(xsltyelpdir)"
+	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" \
+	"$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" \
+	"$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" \
+	"$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" \
+	"$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" \
+	"$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" \
+	"$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" \
+	"$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" \
+	"$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmandir)" \
+	"$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)"
 SCRIPTS = $(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS)
 SOURCES =
 DIST_SOURCES =
@@ -113,7 +114,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(dist_man1_MANS)
-DATA = $(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
+am__dist_catalog_DATA_DIST = catalogs/for-catalog-$(PACKAGE).xml
+DATA = $(dist_catalog_DATA) $(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
 	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
 	$(dist_ttfonts_DATA) $(dist_xepconf_DATA) \
@@ -329,6 +331,7 @@ dapsconfdir = @sysconfdir@/daps
 fopconfdir = $(dapsconfdir)/fop
 xepconfdir = $(dapsconfdir)/xep
 hyphendir = $(xepconfdir)/hyphen
+catalogdir = @sysconfdir@/xml
 dapslibdir = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir = $(pkgdatadir)/make
@@ -352,6 +355,9 @@ xsltyelpdir = $(xsltdir)/yelp
 # BIN
 dist_bin_SCRIPTS = $(wildcard bin/*)
 dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
+
+# CATALOG files
+@CATALOG_EDIT_FALSE@dist_catalog_DATA = $(DAPS_CATALOG)
 
 # CONFIG files
 dist_dapsconf_DATA = etc/config
@@ -526,6 +532,26 @@ uninstall-man1:
 	test -z "$$files" || { \
 	  echo " ( cd '$(DESTDIR)$(man1dir)' && rm -f" $$files ")"; \
 	  cd "$(DESTDIR)$(man1dir)" && rm -f $$files; }
+install-dist_catalogDATA: $(dist_catalog_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(catalogdir)" || $(MKDIR_P) "$(DESTDIR)$(catalogdir)"
+	@list='$(dist_catalog_DATA)'; test -n "$(catalogdir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(catalogdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(catalogdir)" || exit $$?; \
+	done
+
+uninstall-dist_catalogDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_catalog_DATA)'; test -n "$(catalogdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(catalogdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(catalogdir)" && rm -f $$files
 install-dist_dapsconfDATA: $(dist_dapsconf_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(dapsconfdir)" || $(MKDIR_P) "$(DESTDIR)$(dapsconfdir)"
@@ -1214,7 +1240,7 @@ check: check-recursive
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1264,16 +1290,17 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-data-local install-dist_dapsconfDATA \
-	install-dist_dapslibDATA install-dist_dapsmakeDATA \
-	install-dist_docDATA install-dist_emacssiteDATA \
-	install-dist_fopconfDATA install-dist_hyphenDATA \
-	install-dist_templateDATA install-dist_ttfontsDATA \
-	install-dist_xepconfDATA install-dist_xsltcommonDATA \
-	install-dist_xsltcontribDATA install-dist_xsltdesktopDATA \
-	install-dist_xsltepubDATA install-dist_xsltindexDATA \
-	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltyelpDATA install-man
+install-data-am: install-data-local install-dist_catalogDATA \
+	install-dist_dapsconfDATA install-dist_dapslibDATA \
+	install-dist_dapsmakeDATA install-dist_docDATA \
+	install-dist_emacssiteDATA install-dist_fopconfDATA \
+	install-dist_hyphenDATA install-dist_templateDATA \
+	install-dist_ttfontsDATA install-dist_xepconfDATA \
+	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
+	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
+	install-dist_xsltindexDATA install-dist_xsltmanDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltyelpDATA \
+	install-man
 
 install-dvi: install-dvi-recursive
 
@@ -1320,17 +1347,17 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-dist_binSCRIPTS uninstall-dist_dapsconfDATA \
-	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
-	uninstall-dist_dapsmakeDATA uninstall-dist_docDATA \
-	uninstall-dist_emacssiteDATA uninstall-dist_fopconfDATA \
-	uninstall-dist_hyphenDATA uninstall-dist_templateDATA \
-	uninstall-dist_ttfontsDATA uninstall-dist_xepconfDATA \
-	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
-	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
-	uninstall-dist_xsltindexDATA uninstall-dist_xsltmanDATA \
-	uninstall-dist_xsltprofilingDATA uninstall-dist_xsltyelpDATA \
-	uninstall-local uninstall-man
+uninstall-am: uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
+	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
+	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
+	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
+	uninstall-dist_fopconfDATA uninstall-dist_hyphenDATA \
+	uninstall-dist_templateDATA uninstall-dist_ttfontsDATA \
+	uninstall-dist_xepconfDATA uninstall-dist_xsltcommonDATA \
+	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdesktopDATA \
+	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
+	uninstall-dist_xsltmanDATA uninstall-dist_xsltprofilingDATA \
+	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man
 
 uninstall-man: uninstall-man1
 
@@ -1345,34 +1372,35 @@ uninstall-man: uninstall-man1
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-data-local install-dist_binSCRIPTS \
-	install-dist_dapsconfDATA install-dist_dapslibDATA \
-	install-dist_dapslibexecSCRIPTS install-dist_dapsmakeDATA \
-	install-dist_docDATA install-dist_emacssiteDATA \
-	install-dist_fopconfDATA install-dist_hyphenDATA \
-	install-dist_templateDATA install-dist_ttfontsDATA \
-	install-dist_xepconfDATA install-dist_xsltcommonDATA \
-	install-dist_xsltcontribDATA install-dist_xsltdesktopDATA \
-	install-dist_xsltepubDATA install-dist_xsltindexDATA \
-	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltyelpDATA install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-man1 \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-recursive uninstall uninstall-am \
-	uninstall-dist_binSCRIPTS uninstall-dist_dapsconfDATA \
-	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
-	uninstall-dist_dapsmakeDATA uninstall-dist_docDATA \
-	uninstall-dist_emacssiteDATA uninstall-dist_fopconfDATA \
-	uninstall-dist_hyphenDATA uninstall-dist_templateDATA \
-	uninstall-dist_ttfontsDATA uninstall-dist_xepconfDATA \
-	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
-	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
-	uninstall-dist_xsltindexDATA uninstall-dist_xsltmanDATA \
-	uninstall-dist_xsltprofilingDATA uninstall-dist_xsltyelpDATA \
-	uninstall-local uninstall-man uninstall-man1
+	install-dist_catalogDATA install-dist_dapsconfDATA \
+	install-dist_dapslibDATA install-dist_dapslibexecSCRIPTS \
+	install-dist_dapsmakeDATA install-dist_docDATA \
+	install-dist_emacssiteDATA install-dist_fopconfDATA \
+	install-dist_hyphenDATA install-dist_templateDATA \
+	install-dist_ttfontsDATA install-dist_xepconfDATA \
+	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
+	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
+	install-dist_xsltindexDATA install-dist_xsltmanDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltyelpDATA \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-man1 install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
+	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
+	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
+	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
+	uninstall-dist_fopconfDATA uninstall-dist_hyphenDATA \
+	uninstall-dist_templateDATA uninstall-dist_ttfontsDATA \
+	uninstall-dist_xepconfDATA uninstall-dist_xsltcommonDATA \
+	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdesktopDATA \
+	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
+	uninstall-dist_xsltmanDATA uninstall-dist_xsltprofilingDATA \
+	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
+	uninstall-man1
 
 
 #---------------------------Local TARGETS--------------------------------------
@@ -1454,7 +1482,7 @@ etc/config:
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
 $(FOP_CONFIG): $(FOP_CONFIG_SRC)
-	ln -sf $< $@
+	ln -sf $(notdir $<) $@
 
 $(USERGUIDE): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
