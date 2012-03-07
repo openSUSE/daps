@@ -16,26 +16,19 @@
   &osuse; distribution (and the &sle; products based on &osuse;). Eventually, 
   RPM packages for further distributions may become available.
   In the meantime, you can download a tarball with the &dapsacr; sources 
-  and install them on any distribution with <literal>autoconf</literal> and 
-  <literal>make</literal>.</para>
+  <remark>taroth 2012-03-07: add from where: http://daps.sourceforge.net???</remark>
+  and install them on any distribution with <literal>configure</literal>, 
+  <literal>make</literal>, and <literal>make install</literal>.</para>
  </abstract>
- <sect1 id="sec.daps.user.install.where">
-  <title>Where to Get &dapsacr;?</title>
-  <para>The &dapsacr; homepage is <ulink url="http://daps.sourceforge.net"></ulink>.
-  From there, you can download a tarball with the installation sources.
-  For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
+ 
+ <sect1 id="sec.daps.user.inst.osuse">
+  <title>Installing &dapsacr; on &osuse;</title>
+  <para>For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
   available at 
   <ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_VERSIONNUMBER"></ulink>. 
   For example, for &osuse; 12.1, the URL would be as follows:
-<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>.  
-  <remark>taroth 2012-02-08: check if the following is already
-  the case - If you want to use &dapsacr; on &sle;, find the
-  <systemitem class="resource">daps</systemitem> on the media of the &sle; SDK 
-  (Software Development Kit).</remark>
-  </para>
- </sect1>
- <sect1 id="sec.daps.user.inst.osuse">
-  <title>Installing &dapsacr; on &osuse;</title>
+<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>.</para>  
+ 
   <para>For basic details on how to add software repositories and how to install 
   software on &osuse;, refer to the &osuse; <citetitle>Reference
   Guide</citetitle>. The guide is available as part of the &osuse; documentation
@@ -62,7 +55,7 @@
      <citetitle>Reference Guide</citetitle>, chapter 
     <citetitle>Installing Or Removing Software</citetitle>. Add the 
     <literal>Documentation:Tools</literal> repository that matches your &osuse;
-    version&mdash;see <xref linkend="sec.daps.user.install.where"/>. From there, 
+    version&mdash;see the introduction to this section. From this repository, 
     install the <systemitem class="resource">daps</systemitem> package.
     </para>
     </listitem>
@@ -75,26 +68,32 @@
      <citetitle>Reference Guide</citetitle>, chapter 
     <citetitle>Managing Software with Command Line Tools</citetitle>. Add the 
     <literal>Documentation:Tools</literal> repository that matches your &osuse;
-    version&mdash;see <xref linkend="sec.daps.user.install.where"/>. From there, 
+    version&mdash;see the introduction to this section. From this repository, 
     install the <systemitem class="resource">daps</systemitem> package.</para>
     </listitem>
    </varlistentry>
   </variablelist>
-  <para>All of the installation methods mentioned above take care of resolving
-any dependencies to other packages that are required by &dapsacr;. </para>
+  <para>All of the installation methods mentioned above automatically resolve 
+  any dependencies to other packages that are required by &dapsacr;. </para>
  </sect1>
  <!--taroth 2012-03-06: daps not available yet on SLE SDK, for missing packages and
  dependencies, see https://bugzilla.novell.com/show_bug.cgi?id=750641 and 
  https://bugzilla.novell.com/show_bug.cgi?id=750644-->
  <!--<sect1 id="sec.daps.user.install.sle">
   <title>Installing &dapsacr; on &sle;</title>
-  <para><remark>taroth 2012-03-06: FIXME</remark></para>
+  <para> <remark>taroth 2012-02-08: check if the following is already
+  the case - If you want to use &dapsacr; on &sle;, find the
+  <systemitem class="resource">daps</systemitem> on the media of the &sle; SDK 
+  (Software Development Kit).</remark></para>
  </sect1>-->
  <sect1 id="sec.daps.user.inst.other">
   <title>Installing &dapsacr; on Other Linux Distributions</title>
   <para>For installation on other Linux distributions, the &dapsacr; sources
-  are available as tarball.</para>
-  <para>Before installing &dapsacr;, make sure the following 
+  are available as tarball.<remark>taroth 2012-03-07: from???</remark> They can
+  be installed with <literal>configure</literal>, 
+  <literal>make</literal>, and <literal>make install</literal> as described in 
+  <xref linkend="pro.daps.user.inst.tarball"/>.</para>
+  <para>Before starting the installation, make sure the following 
   packages or tools are installed on your system:</para>
   <itemizedlist id="itl.daps.user.inst.other.req">
    <title>Software Requirements</title>
@@ -132,7 +131,7 @@ any dependencies to other packages that are required by &dapsacr;. </para>
    </listitem>
   </itemizedlist>
 
-  <procedure>
+  <procedure id="pro.daps.user.inst.tarball">
    <title>Installing the &dapsacr; Sources</title>
    <step>
     <para>Download the &dapsacr; source tarball from 
