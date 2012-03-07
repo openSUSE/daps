@@ -61,6 +61,7 @@ BuildRequires:  fdupes
 BuildRequires:  ImageMagick
 BuildRequires:  inkscape
 BuildRequires:  libxslt
+BuildRequires:  openSUSE-release
 BuildRequires:  optipng
 BuildRequires:  python-xml
 BuildRequires:  sgml-skel
