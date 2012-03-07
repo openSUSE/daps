@@ -10,11 +10,19 @@
 
 # ----------------------------------------------------------------------------
 # Global Variables
+
+# Remove temporary directory? 0=no, 1=yes
 DELTEMP=0
-DAPS="/local/doc/daps/bin/daps"
-DAPS_INIT="/local/doc/daps/bin/daps-init"
-LOGFILE="/tmp/daps-testing.log"
+# Logging actions to $LOGFILE? 0=no, 1=yes
 LOGGING=1
+
+# Default path to daps script:
+DAPS="/usr/bin/daps"
+# Default path to daps-init script:
+DAPS_INIT="/usr/bin/daps-init"
+# Default path to logfile:
+LOGFILE="/tmp/daps-testing.log"
+
 
 usage() {
 cat << EOF
