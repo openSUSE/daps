@@ -46,7 +46,7 @@ exit_on_error () {
 }
 
 # ---------
-# Logs a message ($1) in $LOGFILE only when $LOGGING is != 0
+# Logs a message in $LOGFILE when $LOGGING is != 0
 #
 logging() {
 # Examples:
@@ -79,7 +79,7 @@ logging() {
 }
 
 # ---------
-# Short test 
+# Short test, if shunit2 is available
 [[ -f /usr/share/shunit2/src/shunit2 ]] || exit_on_error "No shunit2 package found! :-(("
 
 
@@ -121,7 +121,7 @@ while [ $# -gt 0  ]; do
 done
 
 # ---------
-# Creating temporary directory
+# Create temporary directory were we store 
 TEMPDIR=$(mktemp -d /tmp/daps-testing_XXXXXX)
 
 
@@ -146,11 +146,14 @@ oneTimeTearDown() {
 
 
 # ----------------------------------------------------------------------------
-# DAPS Testing Function
+# DAPS Testing Functions
 #
 # Test functions are executed in the given order
 
 testDAPS_Init() {
+# Purpose:
+#  Tests daps-init and checks, if DC file and all directories are available
+
   logging "<<< testDAPS_Init:Start"
   cd $TEMPDIR
   CONTENTS=$(ls)
@@ -197,6 +200,8 @@ testDAPS_Init() {
 }
 
 testDAPS_Validate() {
+# Purpose:
+#  Runs daps validate, checks return value and if build directory is available
   logging "<<< testDAPS_Validate:Start"
   # source DC-daps-example
   $DAPS validate
@@ -211,6 +216,8 @@ testDAPS_Validate() {
 
 
 testDAPS_html_chunk() {
+# Purpose:
+#  Runs daps html, checks return value and checks several files
   logging "<<< testDAPS_html_chunk:Start"
   # source DC-daps-example
   $DAPS html
@@ -227,6 +234,8 @@ testDAPS_html_chunk() {
 }
 
 testDAPS_htmlsingle() {
+# Purpose:
+#  Runs daps htmlsingle, checks return value and checks several files
   logging "<<< testDAPS_htmlsingle:Start"
   # source DC-daps-example
   $DAPS htmlsingle
