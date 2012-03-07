@@ -70,6 +70,8 @@ fopconfdir     = $(dapsconfdir)/fop
 xepconfdir     = $(dapsconfdir)/xep
 hyphendir      = $(xepconfdir)/hyphen
 
+catalogdir     = @sysconfdir@/xml
+
 dapslibdir     = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
@@ -95,6 +97,11 @@ xsltyelpdir      = $(xsltdir)/yelp
 # BIN
 dist_bin_SCRIPTS         = $(wildcard bin/*)
 dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
+
+if !CATALOG_EDIT
+# CATALOG files
+dist_catalog_DATA   = $(DAPS_CATALOG)
+endif
 
 # CONFIG files
 dist_dapsconf_DATA  = etc/config
