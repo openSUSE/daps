@@ -56,6 +56,9 @@ BuildRequires:  perl-Image-ExifTool
 %else
 BuildRequires:  exiftool
 %endif
+%if 0%{?suse_version} >= 1220
+BuildRequires:  libxml2-tools
+%endif
 BuildRequires:  fam
 BuildRequires:  fdupes
 BuildRequires:  ImageMagick
@@ -135,7 +138,11 @@ Requires:       python-xml
 %endif
 
 Recommends:     agfa-fonts
-Recommends:     aspell aspell-en aspell-en-huge
+Recommends:     aspell aspell-en
+# Only works only for openSUSE 11.4 and below
+%if 0%{?suse_version} < 1210
+Recommends:     aspell-en-huge
+%endif
 Recommends:     daps-docmanager
 Recommends:     docbook_5
 Recommends:     emacs psgml
