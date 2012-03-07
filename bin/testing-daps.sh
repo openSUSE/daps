@@ -26,15 +26,20 @@ LOGFILE="/tmp/daps-testing.log"
 
 usage() {
 cat << EOF
-${0##*/} [-h|--help] [-i|--dapsinit DAPS_INIT] [-l|--logfile LOGFILE] [-D|--daps DAPS]
-         [-k|--keeptemp]
+${0##*/} [OPTIONS...]
 DAPS Testing Framework
 
- -h, --help         Shows this help
- -i, --dapsinit     Absolute path to the daps-init program
- -l, --logfile      Save result in LOGFILE (default $LOGFILE)
- -D, --daps         Points to the daps script
- -k, --keeptemp     Do not delete the TEMPDIR directory, default ${DELTEMP}
+Available Options:
+ -h, --help
+     Shows this help
+ -i, --dapsinit DAPSINIT
+     Absolute filename, points to the daps-init program
+ -D, --daps DAPS
+     Absolute filename, points to the daps script
+ -l, --logfile LOGFILE
+     Save result in LOGFILE (default $LOGFILE)
+ -k, --keeptemp
+     Do not delete the TEMPDIR directory, default ${DELTEMP}
 EOF
 exit 0
 }
@@ -71,7 +76,7 @@ logging() {
      exit_on_error "Wrong number of arguments in logging()"
    fi
 
-    DATE=$(date +"[%d-%m-%YT%M:%S]")
+    DATE=$(date +"[%d-%m-%YT%H:%M:%S]")
     if [[ $RESULT -eq 0 ]]; then
       echo "$DATE: $MSG" >> $LOGFILE
     else
