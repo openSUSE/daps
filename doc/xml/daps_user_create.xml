@@ -12,7 +12,7 @@
  <abstract>
   <para>The easiest way to set up a new documentation project from scratch is to
  use <command>daps-init</command>. This initialization script automatically 
- creates the key files and directory structure you need to get started with the 
+ creates the key files and directory structure you need to get started with 
  &dapsacr;.</para>
  </abstract>
  <para>It generates:</para>
@@ -30,16 +30,16 @@
   </listitem>
  </itemizedlist>
  <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
- as example document, but with the <option>-r</option>, you can also set another
+ as example document. With the <option>-r</option> option, you can also set another
  root element, such as <sgmltag>article</sgmltag>, for example.</para>
  <procedure>
   <step>
-   <para>To create the default directory structure with a <sgmltag>book</sgmltag> 
-   documentation example, enter the following on a command line:</para>
+   <para>To create the default directory structure containing an example 
+   <sgmltag>book</sgmltag>, enter the following on a command line:</para>
    <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable>
   </screen>
    <para>Alternatively, enter the following to create the default directory structure 
-   with an <sgmltag>article</sgmltag> documentation example: </para>
+   with an <sgmltag>article</sgmltag> example: </para>
    <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
   </step>
   <step>
@@ -47,26 +47,27 @@
    create it. Proceed by pressing <keycap>y</keycap>.</para>
   </step>
   <step>
-   <para>Check your working directory for the new files and have a look at them:
-   The text file <filename>DC-daps-example</filename> is annotated and gives you 
-   a rough idea which options can be defined in a <filename>DC-*</filename> file. 
-   Change to the <filename>xml</filename> subdirectory and open 
-   <filename>MAIN-DC-daps-example.xml</filename> in your favorite editor to 
-   explore its contents.</para>
+   <para>Check your working directory for the new files: The text file 
+   <filename>DC-daps-example</filename> is annotated and gives you 
+   a rough idea which options can be defined in a <filename>DC</filename> file. 
+   For having a look at the XML source code of the <sgmltag>book</sgmltag> or 
+   <sgmltag>article</sgmltag>, change to the <filename>xml</filename> subdirectory 
+   and open the file <filename>MAIN-DC-daps-example.xml</filename> in a text or 
+   XML editor.</para>
   </step>
   <step>
    <para>To see what the output of the XML example file looks like, follow the 
-   instructions printed by the initialization script. For example:</para>
+   instructions printed by the initialization script. For example, enter:</para>
 <screen>daps -d <replaceable>PATH_TO_DIRECTORY</replaceable>/DC-daps-example color-pdf</screen>
    <para>This command specifies the <filename>DC*</filename> file to use for the
-   document and the output format to create. It will create a PDF of the book or
-   article, using FOP (default, if no other formatter is specified) and the 
+   document and the output format to create. For creation of the PDF, &dapsacr; 
+   uses FOP by default (if no other formatter is specified) and applies the 
    default DocBook stylesheets (as no custom layout options are defined). Find 
    the generated PDF in your documentation directory in 
    <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
   </step>
  </procedure>
- <para>This was only a brief demonstration of the most basic &dapsacr; features. 
+ <para>This was only a brief introduction of the most basic &dapsacr; features. 
  In the following chapters, learn how &dapsacr; can support you in editing, 
  managing images and creating more output formats than just PDF or HTML.</para>
 </chapter>
