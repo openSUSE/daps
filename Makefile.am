@@ -34,13 +34,13 @@ DAPSROOT     := $(abs_top_srcdir)
 #
 FOP_CONFIG   := etc/fop/fop-daps.xml
 if DIST_SUSE
-  FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+  FOP_CONFIG_SRC := fop-daps.suse
 endif
 if DIST_REDHAT
-  FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
+  FOP_CONFIG_SRC := fop-daps.redhat
 endif
 if DIST_OTHER
-  FOP_CONFIG_SRC :=  etc/fop/fop-daps.generic
+  FOP_CONFIG_SRC := fop-daps.generic
 endif
 
 # stylesheets with which to build the documentation
