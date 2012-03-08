@@ -128,7 +128,7 @@
     <listitem>
      <para>By default, &dapsacr; uses the DocBook stylesheets to generate the 
      output formats. But &dapsacr; also supports custom layouts for your 
-     documentation projects (or for individual books or articles within your set).
+     documentation projects (or for individual books within your set).
      You do not need to define custom stylesheets for <emphasis>all</emphasis> 
      output formats&mdash;in case a custom layout cannot be found, &dapsacr; 
      will automatically fall back to the DocBook stylesheets. </para>
@@ -376,8 +376,8 @@
 &lt;/book&gt;
 </screen>
    </example>
-   <para>If your documentation project consists of multiple books or articles 
-   in a  <sgmltag>set</sgmltag>, the main file is the one that contains the 
+   <para>If your documentation project consists of multiple books in a  
+   <sgmltag>set</sgmltag>, the main file is the one that contains the 
    <sgmltag>set</sgmltag> element. In the following example, the components of 
    the set (individual books) are not part of the Main file, but have been put
    into separate document files (<sgmltag>book*.xml</sgmltag>), that are then
@@ -427,8 +427,8 @@ MAIN="my_whitepaper.xml"
    parameter on the command line and do completely without &dc;.
    <remark>taroth 2012-02-10: add xref to usage chapter</remark>
    </para>
-   <para> For a documentation <sgmltag>set</sgmltag> (a collection of books or
-    articles), multiple &dc; files can be defined. This allows you to set both
+   <para> For a documentation <sgmltag>set</sgmltag> (a collection of books), 
+   multiple &dc; files can be defined. This allows you to set both
     different parameters or different values for individual books in the set:
     For example, by refering a different <parameter>ROOTID</parameter> in a
     &dc; file, you define which book of the set is to be built. Another
