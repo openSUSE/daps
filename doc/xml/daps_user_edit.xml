@@ -72,16 +72,78 @@
    &lt;/varlistentry&gt;
    </screen>
   </example>
-   <para>For Emacs, &dapsacr; already includes macros for adding elements such as 
- <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, <sgmltag>indexterm</sgmltag> etc. The macros are defined in 
- <filename>docbook_macros.el</filename> that is shipped with &dapsacr;. 
- They require that you execute Emacs in <literal>psgml</literal>-mode. To load 
- the DocBook macros, open your Emacs customization file
- (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename> and insert
- the following line:</para>
-   <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
-   <para>For an overview, which macros are available and how to use them, refer to 
+  <para>For Emacs, &dapsacr; already includes macros for adding elements such as 
+ <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, <sgmltag>indexterm</sgmltag> etc. 
+ The macros are defined in <filename>docbook_macros.el</filename> and are
+ added to your system during the installation of &dapsacr;. They require that 
+ you execute Emacs in <literal>psgml</literal>-mode. To load the DocBook macros, 
+ open your Emacs customization file (<filename>~/.emacs</filename> or 
+ <filename>~/.gnu-emacs</filename> and insert the following line:</para>
+  <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+  <para>For an overview, which macros are available and how to use them, refer to 
  <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros">.</ulink>
-   </para>
-  </sect1>
- </chapter>
+  </para>
+ </sect1>
+ <sect1 id="sec.daps.user.edit.imgs">
+  <title>Using Images</title>
+  <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
+  for example), the source images you provide and reference in your XML sources 
+  can automatically be transformed into different output formats 
+  (from SVG to PNG for example). This section describes the basic things
+  you need to know for using images (supported formats, where to store the 
+  images in your documentation directory, and how to reference them). For
+  the more advanced image handling features (like listing graphics 
+  referenced in your XML files or the one used for output formats, list any 
+  missing graphics or checking for unique graphics names), refer to 
+  <xref linkend="cha.daps.user.adv"/>.</para>
+  <sect2 id="sec.daps.user.edit.imgs.types">
+   <title>Supported Image Types</title>
+   <para>&dapsacr; supports the following types of images:</para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <filename>*.dia</filename>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <filename>*.eps</filename> (experimental)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+      <filename>*.fig</filename>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <filename>*.pdf</filename> (experimental)
+    </para>
+    </listitem>
+    <listitem>
+     <para>
+      <filename>*.png</filename>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <filename>*.svg</filename>
+     </para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+  <sect2 id="sec.daps.user.edit.imgs.path">
+   <title>Location of the Images</title>
+   <para>&dapsacr; requires a certain directory structure for your XML sources and
+  images that you want to reference there. For details, refer to 
+  <xref linkend="ex.daps.user.dir.doc" xrefstyle="select:title"/>.Depending on 
+  the file type of your source image, add them to the respective subdirectories 
+  in <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
+  </para>
+  </sect2>
+  <sect2 id="sec.daps.user.edit.imgs.refer">
+   <title>Referencing Graphis</title>
+   <para></para>
+  </sect2>
+ </sect1>
+</chapter>
