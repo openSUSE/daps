@@ -73,18 +73,14 @@
    </screen>
   </example>
    <para>For Emacs, &dapsacr; already includes macros for adding elements such as 
- <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>,
- <sgmltag>indexterm</sgmltag> etc. The macros are defined in 
- <filename>emacs_docbook_macros.el</filename>.<remark>taroth 2012-03-08: 
- verify file name and add path</remark> They require that you execute Emacs in 
- <literal>psgml</literal>-mode. To load them, open your Emacs customization file
+ <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, <sgmltag>indexterm</sgmltag> etc. The macros are defined in 
+ <filename>docbook_macros.el</filename> that is shipped with &dapsacr;. 
+ They require that you execute Emacs in <literal>psgml</literal>-mode. To load 
+ the DocBook macros, open your Emacs customization file
  (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename> and insert
  the following line:</para>
-   <screen>(load "<replaceable>PATH</replaceable>/emacs_docbook_macros.el" t t)</screen>
-   <para>
-    <remark>taroth 2012-03-08: todo - if there is a default path in the daps 
- installation, add it above</remark> For an overview, which macros are available
- and how to use them, refer to 
+   <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+   <para>For an overview, which macros are available and how to use them, refer to 
  <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros">.</ulink>
    </para>
   </sect1>
