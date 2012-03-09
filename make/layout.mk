@@ -57,6 +57,7 @@ EPUB_XSLT_STYLE := /epub/docbook.xsl
 FO_STYLE        := /fo/docbook.xsl
 JSP_STYLE       := /jsp/chunk.xsl
 MAN_STYLE       := /manpages/docbook.xsl
+WEBHELP_STYLE   := /webhelp/xsl/webhelp.xsl
 WIKI_STYLE      := /db2mediawiki/docbook.xsl
 
 # HTML is special, because we optionally allow html4.
@@ -79,6 +80,7 @@ HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 # STYLEH:        html
 # STYLEJ:        jsp
 # STYLEMAN:      man
+# STYLEWEBHELP   webhelp
 # STYLEWIKI:     wiki
 #
 # STYLE_EPUBCSS: css file for epub
@@ -101,6 +103,7 @@ STYLEH        := $(addsuffix $(HTML_STYLE), $(USED_STYLEDIR))
 STYLEHSINGLE  := $(addsuffix $(HTML_SINGLE_STYLE), $(USED_STYLEDIR))
 STYLEJ        := $(addsuffix $(JSP_STYLE), $(USED_STYLEDIR))
 STYLEMAN      := $(addsuffix $(MAN_STYLE), $(USED_STYLEDIR))
+STYLEWEBHELP  := $(addsuffix $(WEBHELP_STYLE), $(USED_STYLEDIR))
 STYLEWIKI     := $(addsuffix $(WIKI_STYLE), $(USED_STYLEDIR))
 
 #

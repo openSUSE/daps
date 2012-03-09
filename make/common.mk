@@ -130,8 +130,12 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 #
 HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 
+# WEBHELP
+WEBHELP_DIR := $(RESULT_DIR)/webhelp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+
 # JSP
 JSP_DIR := $(RESULT_DIR)/jsp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+
 
 # EPUB
 # building epub with nwalsh's ruby scripts requires to create an intermediate
@@ -286,6 +290,31 @@ ifdef USEXHTML
   XHTMLSTRING  := --stringparam generate.jsp.marker 0
 endif
 
+#----------
+# Webhelp stringparams
+#  
+#
+
+WEBHELPSTRINGS := --stringparam base.dir $(WEBHELP_DIR)/ \
+                  --stringparam show.comments $(COMMENTS) \
+	          --stringparam draft.mode "$(DRAFT)" \
+	          --stringparam show.remarks $(REMARKS) \
+                  --stringparam admon.graphics.path "style_images/" \
+                  --stringparam admon.graphics 1 \
+                  --stringparam navig.graphics.path "style_images/" \
+                  --stringparam navig.graphics 1 \
+                  --stringparam callout.graphics.path "style_images/callouts/" \
+                  --stringparam img.src.path "images/" \
+                  --stringparam webhelp.common.dir "common/" \
+                  --stringparam webhelp.start.filename "index.html"
+
+ifeq ("$(WH_SEARCH)", "no")
+  WEBHELPSTRINGS += --stringparam webhelp.include.search.tab "false"
+endif
+
+# Remove these once we have desent custom stylesheets
+WEBHELPSTRINGS += --stringparam chunk.fast 1 \
+                  --stringparam chunk.section.depth 0
 
 #----------
 # JSP stringparams
@@ -344,6 +373,9 @@ endif
 #
 # Language
 LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
+
+WEBHELPSTRINGS +=  --stringparam webhelp.indexer.language $(LL)
+
 DESKSTRINGS  := --stringparam uselang "$(LL)" \
 	        --stringparam docpath "@PATH@/" \
                 --stringparam base.dir $(DESKTOP_FILES_DIR)/
@@ -454,6 +486,16 @@ html-single htmlsingle: | $(DIRECTORIES)
 html-single htmlsingle: missing-images
 html-single htmlsingle: $(PROFILEDIR)/.validate $(HTML_DIR)/$(BOOK).html
 	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\nfile://$(HTML_DIR)/$(BOOK).html\033[m\017"
+
+#--------------
+# WEBHELP
+#
+.PHONY: webhelp
+webhelp: | $(DIRECTORIES)
+webhelp: missing-images
+webhelp: $(PROFILEDIR)/.validate missing-images $(WEBHELP_DIR)/$(BOOK).html
+	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(WEBHELP_DIR)/$(BOOK).html"
+
 
 #--------------
 # JSP
@@ -1479,6 +1521,155 @@ $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
 	  --xinclude $(STYLEHSINGLE) $(PROFILED_MAIN) $(DEVNULL)
+
+#------------------------------------------------------------------------
+#
+# "Helper" targets for WEBHELP
+#
+
+WEBHELPGRAPHICS := $(WEBHELP_DIR)/style_images $(WEBHELP_DIR)/images \
+		   $(WEBHELP_DIR)/common
+
+ifneq ("$(WH_SEARCH)", "no")
+  WEBHELPGRAPHICS += $(WEBHELP_DIR)/search
+endif
+
+$(WEBHELP_DIR):
+	mkdir -p $@
+
+#
+# in the following we do not use a simple copy command like
+# cp -rL $(DAPSROOT)/images/navig/ $(WEBHELP_DIR) because DAPSROOT
+# may contain .svn directories which we do not want to copy
+# therefore we use tar with the --exclude-vcs option to copy
+# the files
+
+ifdef STYLE_HTMLCSS
+  # Add CSS file to WEBHELPGRAPHICS
+  # Add a stringparam for a CSS file if defined
+  WEBHELPGRAPHICS += $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS))
+  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
+
+  $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(WEBHELP_DIR)
+    ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	cp $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
+    else
+	if [ -f $@ ]; then \
+	  rm -f $@; \
+	fi
+	ln -sf $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
+  endif
+endif
+
+#
+# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# callout images in callouts/
+#
+$(WEBHELP_DIR)/style_images: $(USED_STYLEDIR)/images $(WEBHELP_DIR)
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	  -C $(USED_STYLEDIR) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+  else
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
+	ln -sf $(USED_STYLEDIR)/images/ $@
+  endif
+
+# common stuff /(Javascript, CSS,...)
+#
+$(WEBHELP_DIR)/common: $(WEBHELP_DIR)
+$(WEBHELP_DIR)/common: $(USED_STYLEDIR)/webhelp/template/common
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+	tar cp --exclude-vcs -C $(USED_STYLEDIR)/webhelp/template common | \
+	  (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+  else
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
+	ln -sf $< $@
+  endif
+
+# search stuff
+#
+$(WEBHELP_DIR)/search: $(WEBHELP_DIR)
+$(WEBHELP_DIR)/search: $(USED_STYLEDIR)/webhelp/template/content/search 
+	test -d $@/stemmers || mkdir -p $@/stemmers
+  ifeq ($(STATIC_HTML), 1)
+	cp -u $</default.props $@
+	cp -u $</punctuation.props $@
+	for LPROPS in "$</$LL*.props"; do \
+	  cp -u $$LPROPS $@; \
+	done
+  else
+	(cd $@; \
+	  ln -sf $</default.props; \
+	  ln -sf $</punctuation.props; \
+	  for LPROPS in "$</$LL*.props"; do \
+	    ln -sf $$LPROPS; \
+	  done;)
+  endif
+
+$(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then \
+	  rm -f $@; \
+	fi
+    ifdef PNGONLINE
+	mkdir -p $@
+	cp -rL $(PNGONLINE) $(WEBHELP_DIR)/images/
+    endif
+  else
+	@if [ -d $@ ]; then \
+	  rm -rf $@; \
+	fi
+	ln -sf $(IMG_GENDIR)/online/ $(WEBHELP_DIR)/images
+  endif
+
+# Print result directory names 
+#
+.PHONY: webhelp-dir-name
+webhelp-dir-name:
+	@ccecho "result" "$(WEBHELP_DIR)"
+	@ccecho "result" "$(WEBHELP_DIR)/$(BOOK).html"
+
+.PHONY: dist-webhelp-name
+dist-webhelp-name:
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-webhelp.tar.bz2"
+
+# Generate WEBHELP from profiled xml
+#
+# XSLTPARAM is a variable that can be set via wrapper script in order to
+# temporarily overwrite styleseet settings such as margins
+#
+$(WEBHELP_DIR)/$(BOOK).html: provide-color-images  warn-images
+$(WEBHELP_DIR)/$(BOOK).html: $(STYLEWEBHELP) $(PROFILES) $(WEBHELP_DIR)
+$(WEBHELP_DIR)/$(BOOK).html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating webhelp pages"
+  endif
+	xsltproc $(WEBHELPSTRINGS) $(ROOTSTRING) $(XSLTPARAM) \
+	  $(MANIFEST) --stringparam use.id.as.filename 1 \
+	  $(CSSSTRING) --xinclude $(STYLEWEBHELP) $(PROFILED_MAIN) \
+	  $(DEVNULL)
+	@if [ ! -f  $@ ]; then \
+	  (cd $(WEBHELP_DIR) && ln -sf $(ROOTID).html $@); \
+	fi
+	java -DhtmlDir=$(WEBHELP_DIR)/ -DindexerLanguage=$LL \
+	  -DfillTheRest=true \
+	  -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
+	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
+	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.0.0.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/lucene-core-3.0.0.jar \
+	  com.nexwave.nquindexer.IndexerMain
 
 #------------------------------------------------------------------------
 #

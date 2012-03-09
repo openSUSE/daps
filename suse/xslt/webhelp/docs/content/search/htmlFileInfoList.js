@@ -1,0 +1,16 @@
+fil = new Array();
+fil["0"]= "ch02s02.html@@@2.2. Using and customizing the output@@@null";
+fil["1"]= "ch03s01.html@@@3.1. Design@@@An overview of webhelp page structure...";
+fil["2"]= "ch05.html@@@Chapter 5. Test section@@@null";
+fil["3"]= "ch01.html@@@Chapter 1. Introduction@@@Overview of the package...";
+fil["4"]= "ch03s02.html@@@3.2. Search@@@Adding new Stemmers is very simple...";
+fil["5"]= "ch02.html@@@Chapter 2. Using the package@@@The following sections describe how to install and use the package on Windows...";
+fil["6"]= "ch02s05.html@@@2.5. Adding images@@@null";
+fil["7"]= "ch02s04.html@@@2.4. Adding support for other (non-CJKV) languages@@@null";
+fil["8"]= "ch02s03.html@@@2.3. Search indexing@@@To build the indexer, you must have installed the JDK version 1.5 or higher and set the ANT_HOME environment variable...";
+fil["9"]= "ch05s02.html@@@5.2. Some problematic search words (inflected)@@@null";
+fil["10"]= "ch02s01.html@@@2.1. Generating webhelp output@@@Installation instructions...";
+fil["11"]= "ch03.html@@@Chapter 3. Developer Docs@@@This chapter provides an overview of how webhelp is implemented...";
+fil["12"]= "ch05s01.html@@@5.1. Some problematic search words@@@null";
+fil["13"]= "index.html@@@README: Web-based Help from DocBook XML@@@null";
+fil["14"]= "ch04.html@@@@@@Frequently Asked Questions...";
