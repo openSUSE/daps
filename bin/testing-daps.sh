@@ -159,7 +159,6 @@ oneTimeTearDown() {
 #
 # Test functions are executed in the given order
 
-
 test_Programs() {
 # Purpose:
 #  Tests for several programs that daps needs
@@ -167,7 +166,7 @@ test_Programs() {
   assertTrue "No /usr/bin/fop" "[[ -f /usr/bin/fop ]] && [[ -x /usr/bin/fop ]]"
   logging $? "/usr/bin/fop"
   
-  PROGRAMS="fop dia inkscape convert xmllint xsltproc make bzip2 tar ruby python w3m"
+  PROGRAMS="fop dia inkscape convert xmllint xmlcatalog xsltproc make bzip2 tar ruby python w3m"
   for p in $PROGRAMS; do
     p=$(which $p 2>/dev/null)
     assertTrue "Program $p not found" $?
@@ -179,6 +178,25 @@ test_Programs() {
   logging ">>> test_Programs:End"
 }
 
+testCatalogs() {
+# Purpose:
+#  Tests catalog
+
+logging "<<< test_Catalogs:Start"
+
+CATALOGS='urn:x-suse:xslt:profiling:docbook45-profile.xsl 
+          http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
+          http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'
+
+for i in $CATALOGS; do
+ xmlcatalog /etc/xml/catalog $i > catalog-output
+ assertTrue "Catalog entry $i not found" "[[  $? -eq 0 ]]"
+ logging $? "Catalog file $i"
+done
+
+logging "<<< test_Catalogs:End"
+}
+
 testDAPS_Init() {
 # Purpose:
 #  Tests daps-init and checks, if DC file and all directories are available
@@ -188,7 +206,7 @@ testDAPS_Init() {
   CONTENTS=$(ls)
   assertNull "The temp dir contains something which was not expected" "$CONTENTS"
 
-  $DAPS_INIT  -d . -r book
+  $DAPS_INIT  -d . -r book 2>/dev/null
   assertTrue "daps-init returned != 0 (was $?)" "[[ $? -eq 0 ]]"
   logging $? "daps-init"
 
@@ -253,7 +271,6 @@ testDAPS_htmlsingle() {
 
   logging ">>> testDAPS_htmlsingle:End"
 }
-
 
 
 # ALWAYS source it last:
