@@ -95,7 +95,7 @@ xsltyelpdir      = $(xsltdir)/yelp
 # Automake primaries
 
 # BIN
-dist_bin_SCRIPTS         = $(wildcard bin/*)
+dist_bin_SCRIPTS         = $(wildcard bin/*[^.in])
 dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
 
 if !CATALOG_EDIT
@@ -104,10 +104,11 @@ dist_catalog_DATA   = $(DAPS_CATALOG)
 endif
 
 # CONFIG files
-dist_dapsconf_DATA  = etc/config
-dist_fopconf_DATA   = etc/fop/fop-daps.xml
-dist_xepconf_DATA   = etc/xep/xep-daps.xml
-dist_hyphen_DATA    = $(wildcard etc/xep/hyphen/*.tex) \
+dist_dapsconf_DATA    = etc/config
+nodist_dapsconf_DATA  = etc/config.in
+dist_fopconf_DATA     = etc/fop/fop-daps.xml
+dist_xepconf_DATA     = etc/xep/xep-daps.xml
+dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
 
 # DATA
