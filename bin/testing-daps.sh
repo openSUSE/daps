@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This is a testing framework for DAPS (DocBook Authoring and Publishing Suite)
-# It tests several issues regarding document creation 
+# It tests several issues regarding existing files, document creation etc.
 #
 # Needs the shunit2 package
 #
