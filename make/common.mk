@@ -301,9 +301,12 @@ WEBHELPSTRINGS := --stringparam base.dir $(WEBHELP_DIR)/ \
 	          --stringparam show.remarks $(REMARKS) \
                   --stringparam admon.graphics.path "style_images/" \
                   --stringparam admon.graphics 1 \
+                  --stringparam admon.graphics.extension ".png" \
                   --stringparam navig.graphics.path "style_images/" \
-                  --stringparam navig.graphics 1 \
+                  --stringparam navig.graphics 0 \
+                  --stringparam navig.graphics.extension ".png" \
                   --stringparam callout.graphics.path "style_images/callouts/" \
+                  --stringparam callout.graphics.extension ".png" \
                   --stringparam img.src.path "images/" \
                   --stringparam webhelp.common.dir "common/" \
                   --stringparam webhelp.start.filename "index.html"
@@ -1607,16 +1610,21 @@ $(WEBHELP_DIR)/search: $(USED_STYLEDIR)/webhelp/template/content/search
   ifeq ($(STATIC_HTML), 1)
 	cp -u $</default.props $@
 	cp -u $</punctuation.props $@
-	for LPROPS in "$</$LL*.props"; do \
+	cp -u $</nwSearchFnt.js $@
+	cp -u "$</stemmers/$(LL)_stemmer.js" $@/stemmers
+	for LPROPS in "$</$(LL)*.props $</*.js"; do \
 	  cp -u $$LPROPS $@; \
 	done
   else
 	(cd $@; \
 	  ln -sf $</default.props; \
 	  ln -sf $</punctuation.props; \
-	  for LPROPS in "$</$LL*.props"; do \
+	  ln -sf $</nwSearchFnt.js; \
+	  for LPROPS in "$</$(LL)*.props"; do \
 	    ln -sf $$LPROPS; \
 	  done;)
+	(cd $@/stemmers; \
+	  ln -sf $</stemmers/$(LL)_stemmer.js)
   endif
 
 $(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
@@ -1670,6 +1678,7 @@ $(WEBHELP_DIR)/$(BOOK).html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
 	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.0.0.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/lucene-core-3.0.0.jar \
 	  com.nexwave.nquindexer.IndexerMain
+	rm -f $(WEBHELP_DIR)/search/*.props
 
 #------------------------------------------------------------------------
 #
