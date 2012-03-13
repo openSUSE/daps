@@ -79,7 +79,7 @@
     <xsl:param name="admon.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/admon/</xsl:param>
     <xsl:param name="admon.graphics" select="0"/>
     <!--xsl:param name="generate.toc">book toc</xsl:param-->
-
+<!-- fs
 <xsl:param name="generate.toc">
 appendix  toc,title
 article/appendix  nop
@@ -99,7 +99,26 @@ sect5     toc
 section   toc
 set       toc,title
 </xsl:param>
-
+-->
+<xsl:param name="generate.toc">
+appendix  toc,title
+article/appendix  nop
+article   toc,title
+book      title,figure,table,example,equation
+chapter   nop
+part      nop
+preface   toc,title
+qandadiv  toc
+qandaset  toc
+reference toc,title
+sect1     toc
+sect2     toc
+sect3     toc
+sect4     toc
+sect5     toc
+section   toc
+set       toc,title
+</xsl:param> 
     <!-- Localizations of webhelp specific words. Your contributions for other languages are appreciated.
 	Currently, only around 10 translations needed. -->
     <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
@@ -404,12 +423,14 @@ border: none; background: none; font-weight: none; color: none; }
         <xsl:comment> <!-- KEEP this code. --> </xsl:comment>
     </xsl:template>
 
+
     <xsl:template name="user.footer.navigation">
     	<xsl:call-template name="webhelptoc">
 		  <xsl:with-param name="currentid" select="generate-id(.)"/>
 	     </xsl:call-template>
     </xsl:template>
 
+ 
   <xsl:template match="/">
 	<xsl:message>language: <xsl:value-of select="$webhelp.indexer.language"/> </xsl:message>
 	<!-- * Get a title for current doc so that we let the user -->
@@ -692,141 +713,144 @@ border: none; background: none; font-weight: none; color: none; }
 
     <xsl:template name="user.webhelp.navheader.content"/>
 
-    <xsl:template name="webhelptoc">
-        <xsl:param name="currentid"/>
-        <xsl:choose>
-          <!-- fs
-            <xsl:when test="$rootid != ''">
-          -->
-              <xsl:when test="$rootid = 'sajhjAHHSJ'">
-                <xsl:variable name="title">
-                    <xsl:if test="$webhelp.autolabel=1">
-                        <xsl:variable name="label.markup">
-                            <xsl:apply-templates select="key('id',$rootid)" mode="label.markup"/>
-                        </xsl:variable>
-                        <xsl:if test="normalize-space($label.markup)">
-                            <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
-                        </xsl:if>
-                    </xsl:if>
-                    <xsl:apply-templates select="key('id',$rootid)" mode="titleabbrev.markup"/>
-                </xsl:variable>
-                <xsl:variable name="href">
-                    <xsl:choose>
-                        <xsl:when test="$manifest.in.base.dir != 0">
-                            <xsl:call-template name="href.target">
-                                <xsl:with-param name="object" select="key('id',$rootid)"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="href.target.with.base.dir">
-                                <xsl:with-param name="object" select="key('id',$rootid)"/>
-                            </xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
+  <xsl:template name="webhelptoc">
+    <xsl:param name="currentid"/>
+    <xsl:variable name="object" select="(key('id',$rootid) | /* )[1]"/>
+    <xsl:variable name="title">
+      <xsl:if test="$webhelp.autolabel=1">
+        <xsl:variable name="label.markup">
+          <xsl:apply-templates select="$object" mode="label.markup"/>
+        </xsl:variable>
+        <xsl:if test="normalize-space($label.markup)">
+          <xsl:value-of
+            select="concat($label.markup,$autotoc.label.separator)"/>
+        </xsl:if>
+      </xsl:if>
+      <xsl:apply-templates select="$object" mode="titleabbrev.markup"/>
+    </xsl:variable>
+    <xsl:variable name="href">
+      <xsl:choose>
+        <xsl:when test="$rootid != ''">
+          <xsl:choose>
+            <xsl:when test="$manifest.in.base.dir != 0">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="$object"/>
+              </xsl:call-template>
             </xsl:when>
-
             <xsl:otherwise>
-                <xsl:variable name="title">
-                    <xsl:if test="$webhelp.autolabel=1">
-                        <xsl:variable name="label.markup">
-                            <xsl:apply-templates select="/*" mode="label.markup"/>
-                        </xsl:variable>
-                        <xsl:if test="normalize-space($label.markup)">
-                            <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
-                        </xsl:if>
-                    </xsl:if>
-                    <xsl:apply-templates select="/*" mode="titleabbrev.markup"/>
-                </xsl:variable>
-                <xsl:variable name="href">
-                    <xsl:choose>
-                        <xsl:when test="$manifest.in.base.dir != 0">
-                            <xsl:call-template name="href.target">
-                                <xsl:with-param name="object" select="/"/>
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="href.target.with.base.dir">
-                                <xsl:with-param name="object" select="/"/>
-                            </xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-
-                <div id="sidebar"> <!--#sidebar id is used for showing and hiding the side bar -->
-                    <div id="leftnavigation" style="padding-top:3px;">
-                        <div id="tabs">
-                            <ul>
-                                <li>
-                                    <a href="#treeDiv" style="outline:0;" tabindex="1">
-                                        <span class="contentsTab">
-                                            <xsl:call-template name="gentext">
-                                                <xsl:with-param name="key" select="'TableofContents'"/>
-                                            </xsl:call-template>
-                                        </span>
-                                    </a>
-                                </li>
-                                <xsl:if test="$webhelp.include.search.tab != 'false'">
-                                    <li>
-                                        <a href="#searchDiv" style="outline:0;" tabindex="1" onclick="doSearch()">
-                                            <span class="searchTab">
-                                                <xsl:call-template name="gentext">
-                                                    <xsl:with-param name="key" select="'Search'"/>
-                                                </xsl:call-template>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </xsl:if>
-				<xsl:call-template name="user.webhelp.tabs.title"/>
-                            </ul>
-                            <div id="treeDiv">
-                                <img src="{$webhelp.common.dir}images/loading.gif" alt="loading table of contents..."
-                                     id="tocLoading" style="display:block;"/>
-                                <div id="ulTreeDiv" style="display:none">
-                                    <ul id="tree" class="filetree">
-                                        <xsl:apply-templates select="/*/*" mode="webhelptoc">
-                                            <xsl:with-param name="currentid" select="$currentid"/>
-                                        </xsl:apply-templates>
-                                    </ul>
-                                </div>
-
-                            </div>
-                            <xsl:if test="$webhelp.include.search.tab != 'false'">
-                                <div id="searchDiv">
-                                    <div id="search">
-                                        <form onsubmit="Verifie(searchForm);return false"
-                                              name="searchForm"
-                                              class="searchForm">
-                                            <fieldset class="searchFieldSet">
-                                                <legend>
-                                                    <xsl:call-template name="gentext">
-                                                        <xsl:with-param name="key" select="'Search'"/>
-                                                    </xsl:call-template>
-                                                </legend>
-                                                <center>
-                                                    <input id="textToSearch" name="textToSearch" type="text"
-                                                           class="searchText" tabindex="1"/>
-                                                    <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
-                                                    <input onclick="Verifie(searchForm)" type="button"
-                                                           class="searchButton"
-                                                           value="Go" id="doSearch" tabindex="1"/>
-                                                </center>
-                                            </fieldset>
-                                        </form>
-                                    </div>
-                                    <div id="searchResults">
-                                           <center> </center>
-                                    </div>
-                                    <p class="searchHighlight"><a href="#" onclick="toggleHighlight()">Search Highlighter (On/Off)</a></p>
-                                </div>
-                            </xsl:if>
-			    <xsl:call-template name="user.webhelp.tabs.content"/>
-                        </div>
-                    </div>
-                </div>
+              <xsl:call-template name="href.target.with.base.dir">
+                <xsl:with-param name="object" select="$object"/>
+              </xsl:call-template>
             </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="$manifest.in.base.dir != 0">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="/"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              
+              <xsl:call-template name="href.target.with.base.dir">
+                <xsl:with-param name="object" select="/"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+      
+    </xsl:variable>
+
+    <div id="sidebar">
+      <!--#sidebar id is used for showing and hiding the side bar -->
+      <div id="leftnavigation" style="padding-top:3px;">
+        <div id="tabs">
+          <ul>
+            <li>
+              <a href="#treeDiv" style="outline:0;" tabindex="1">
+                <span class="contentsTab">
+                  <xsl:call-template name="gentext">
+                    <xsl:with-param name="key"
+                      select="'TableofContents'"/>
+                  </xsl:call-template>
+                </span>
+              </a>
+            </li>
+            <xsl:if test="$webhelp.include.search.tab != 'false'">
+              <li>
+                <a href="#searchDiv" style="outline:0;" tabindex="1"
+                  onclick="doSearch()">
+                  <span class="searchTab">
+                    <xsl:call-template name="gentext">
+                      <xsl:with-param name="key" select="'Search'"/>
+                    </xsl:call-template>
+                  </span>
+                </a>
+              </li>
+            </xsl:if>
+            <xsl:call-template name="user.webhelp.tabs.title"/>
+          </ul>
+          <div id="treeDiv">
+            <img src="{$webhelp.common.dir}images/loading.gif"
+              alt="loading table of contents..." id="tocLoading"
+              style="display:block;"/>
+            <div id="ulTreeDiv" style="display:none">
+              <ul id="tree" class="filetree">
+        <!-- fs
+                <xsl:apply-templates select="/*/*" mode="webhelptoc">
+        
+        -->
+                <xsl:choose>
+                 <xsl:when test="$rootid != ''">
+                  <xsl:apply-templates select="key('id',$rootid)" mode="webhelptoc">
+                  <xsl:with-param name="currentid" select="$currentid"/>
+                 </xsl:apply-templates>
+               </xsl:when>
+         <xsl:otherwise><xsl:apply-templates select="/" mode="webhelptoc">
+                  <xsl:with-param name="currentid" select="$currentid"/>
+                 </xsl:apply-templates>
+         </xsl:otherwise>
+              </xsl:choose>
+       </ul>
+            </div>
+
+          </div>
+          <xsl:if test="$webhelp.include.search.tab != 'false'">
+            <div id="searchDiv">
+              <div id="search">
+                <form onsubmit="Verifie(searchForm);return false"
+                  name="searchForm" class="searchForm">
+                  <fieldset class="searchFieldSet">
+                    <legend>
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key" select="'Search'"/>
+                      </xsl:call-template>
+                    </legend>
+                    <center>
+                      <input id="textToSearch" name="textToSearch"
+                        type="text" class="searchText" tabindex="1"/>
+                      <xsl:text disable-output-escaping="yes"> <![CDATA[&nbsp;]]> </xsl:text>
+                      <input onclick="Verifie(searchForm)" type="button"
+                        class="searchButton" value="Go" id="doSearch"
+                        tabindex="1"/>
+                    </center>
+                  </fieldset>
+                </form>
+              </div>
+              <div id="searchResults">
+                <center> </center>
+              </div>
+              <p class="searchHighlight"><a href="#"
+                  onclick="toggleHighlight()">Search Highlighter (On/Off)</a></p>
+            </div>
+          </xsl:if>
+          <xsl:call-template name="user.webhelp.tabs.content"/>
+        </div>
+      </div>
+    </div>
+  </xsl:template>
 
     <!-- Hooks for adding customs tabs -->
     <xsl:template name="user.webhelp.tabs.title"/>
