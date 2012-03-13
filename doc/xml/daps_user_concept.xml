@@ -129,9 +129,9 @@
      <para>By default, &dapsacr; uses the DocBook stylesheets to generate the 
      output formats. But &dapsacr; also supports custom layouts for your 
      documentation projects (or for individual books within your set).
-     You do not need to define custom stylesheets for <emphasis>all</emphasis> 
+     <!--You do not need to define custom stylesheets for <emphasis>all</emphasis> 
      output formats&mdash;in case a custom layout cannot be found, &dapsacr; 
-     will automatically fall back to the DocBook stylesheets. </para>
+     will automatically fall back to the DocBook stylesheets.--> </para>
      <para>Apart from that, &dapsacr; allows you to change individual layout
      parameters by passing string parameters to xsltproc for HTML or PDF builds
      &mdash;without even touching the stylesheets. For details about custom 
@@ -155,11 +155,10 @@
     <listitem>
      <para>Whereas all <remark>taroth 2012-02-20: all?? or most??</remark>XML 
      editors can check if your XML file is well-formed, validating XML files
-     is more difficult, as it might require checking other XML files, too 
-     (for example, if you have <sgmltag>xref</sgmltag> elements that 
-     point to a linkend located in another XML file, or if you use XIncludes 
-     in your documentation project). With &dapsacr;, check validity of all files
-     belonging to a documentation project with a single command. For details, 
+     might require checking other XML files, too (for example, if you have 
+     <sgmltag>xref</sgmltag> elements that point to a linkend located in another
+     XML file). With &dapsacr;, you can check validity of all files that belong
+     to a documentation project with a single command. For details, 
      refer to <xref linkend="cha.daps.user.edit"/>.</para>
     </listitem>
    </varlistentry>
@@ -233,16 +232,16 @@
      to generate preview versions of your documentation with a <literal>DRAFT</literal>
      watermark appearing on the HTML or PDF output. If you use &dm; in addition to
      &dapsacr;, you can <quote>flag</quote> your XML files with meta-information
-     (for example, you can set their workflow status to <literal>editing</literal>
+     like workflow status (for example, <literal>editing</literal>
      or <literal>proofed</literal>). &dapsacr; offers an option to also display
      this meta-information in the generated output. For handing over your files 
      to review or translation, &dapsacr; can create tarballs of the XML
      sources and graphics. Alternatively, transform all files 
      included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into an
-     XML bigfile. If you have a huge documentation project of which only individual
+     XML bigfile. <!--If you have a huge documentation project of which only individual
      books or files are to be translated, you can mark them for translation
      with &dm;. The command <command>daps locdrop</command> will automatically 
-     sort and pack those files into s separate tarball.<remark>taroth 2012-03-02:
+     sort and pack those files into s separate tarball.--><remark>taroth 2012-03-02:
      todo - add link to one or more chapters, if appropriate</remark>
      </para>
     </listitem>

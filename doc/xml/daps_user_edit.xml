@@ -29,7 +29,7 @@
   <para>If you already worked with DocBook, you know about the typical top-level 
   elements (or root elements) for documents: <sgmltag>book</sgmltag> or 
   <sgmltag>article</sgmltag>. For larger documentation projects, another typical
-  root element is <sgmltag>set</sgmltag>. A set is a collection of books.</para>
+  root element is <sgmltag>set</sgmltag> (a collection of books).</para>
   <para>To define the individual components of a book, other structural elements 
   are used, for example, <sgmltag>part</sgmltag>, <sgmltag>chapter</sgmltag>, or 
   <sgmltag>appendix</sgmltag>. Within a chapter, you will probably also find
@@ -53,7 +53,7 @@
  </para>
   <para>Most editors allow you to define or record macros which you can use 
  for automatically inserting empty <quote>skeletons</quote> for a complex XML
- construct, for example <xref linkend="ex.daps.user.vle" xrefstyle="select:title"/>.</para>
+ construct as illustrated by <xref linkend="ex.daps.user.vle"/>.</para>
   <example id="ex.daps.user.vle">
    <title>A <sgmltag>varlistentry</sgmltag>
    </title>
@@ -70,17 +70,29 @@
  <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, <sgmltag>indexterm</sgmltag> etc. 
  The macros are defined in <filename>docbook_macros.el</filename> and are
  added to your system during the installation of &dapsacr;. They require that 
- you execute Emacs in <literal>psgml</literal>-mode. To load the DocBook macros, 
+ you execute Emacs in <literal>psgml</literal>-mode. </para>
+  <procedure>
+   <title>Configuring Emacs to Use the DB Macros</title>
+   <step>
+    <para>To load the DocBook macros, 
  open your Emacs customization file (<filename>~/.emacs</filename> or 
- <filename>~/.gnu-emacs</filename> and insert the following line:</para>
-  <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
-  <para>For an overview, which macros are available and how to use them, refer to 
- <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros">.</ulink>
-  </para>
- </sect1>
- <sect1 id="sec.daps.user.edit.imgs">
-  <title>Using Images</title>
-  <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
+ <filename>~/.gnu-emacs</filename>).</para>
+   </step>
+   <step>
+    <para>Insert the following line:</para>
+    <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+   </step>
+   <step><para>Save the Emacs customization file.
+   <remark>taroth 2012-03-13: restart of Emacs needed?</remark></para></step>
+   </procedure>
+   <para>For an overview, which macros are available and how to use them, refer to 
+ <ulink
+ url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
+   </para>
+  </sect1>
+  <sect1 id="sec.daps.user.edit.imgs">
+   <title>Using Images</title>
+   <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
   for example), the source images you provide and reference in your XML sources 
   can automatically be transformed into different output formats 
   (from SVG to PNG for example). This section describes the basic things
@@ -90,61 +102,61 @@
   in your XML files or the one used for output formats, list any 
   missing images or checking for unique image names), refer to 
   <xref linkend="cha.daps.user.adv"/>.</para>
-  <sect2 id="sec.daps.user.edit.imgs.types">
-   <title>Supported Image Types</title>
-   <para>&dapsacr; supports the following types of images:</para>
-   <itemizedlist>
-    <listitem>
-     <para>
-      <filename>*.dia</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>*.eps</filename> (experimental)
+   <sect2 id="sec.daps.user.edit.imgs.types">
+    <title>Supported Image Types</title>
+    <para>&dapsacr; supports the following types of images:</para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <filename>DIA</filename>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <filename>EPS</filename> (experimental)
     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>*.fig</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>*.pdf</filename> (experimental)
+     </listitem>
+     <listitem>
+      <para>
+       <filename>FIG</filename>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <filename>PDF</filename> (experimental)
     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>*.png</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>*.svg</filename>
-     </para>
-    </listitem>
-   </itemizedlist>
-  </sect2>
-  <sect2 id="sec.daps.user.edit.imgs.path">
-   <title>Location of the Images</title>
-   <para>&dapsacr; requires a certain directory structure for your XML sources and
-  images that you want to reference there. For details, refer to 
-  <xref linkend="ex.daps.user.dir.doc" xrefstyle="select:title"/>.Depending on 
-  the file type of your source image, add them to the respective subdirectories 
+     </listitem>
+     <listitem>
+      <para>
+       <filename>PNG</filename>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <filename>SVG</filename>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </sect2>
+   <sect2 id="sec.daps.user.edit.imgs.path">
+    <title>Location of the Images</title>
+    <para>&dapsacr; requires a certain directory structure for your XML sources 
+    and for your images that you want to reference there. For details, refer to 
+  <xref linkend="ex.daps.user.dir.doc" xrefstyle="select:title"/>. Depending on 
+  the file type of your source images, add them to the respective subdirectories 
   in <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
   </para>
-  </sect2>
-  <sect2 id="sec.daps.user.edit.imgs.refer">
-   <title>Referencing Images</title>
-   <para>Provided your images are located in the required default directory, 
+   </sect2>
+   <sect2 id="sec.daps.user.edit.imgs.refer">
+    <title>Referencing Images</title>
+    <para>Provided your images are located in the required default directory, 
    &dapsacr; automatically finds the path to your images.Therefore referencing 
    images in your XML sources is very straightforward: you do not need
    to include any path in the <sgmltag>fileref</sgmltag> attribute&mdash;the 
-   file name is enough, see <xref linkend="ex.xml.img.ref"/>.</para>
-   <example id="ex.xml.img.ref">
-    <title>Image Reference in an XML File</title>
-    <screen>&lt;figure&gt;
+   file name is enough. See <xref linkend="ex.xml.img.ref"/>.</para>
+    <example id="ex.xml.img.ref">
+     <title>Image Reference in an XML File</title>
+     <screen>&lt;figure&gt;
     &lt;title&gt;Main Window&lt;/title&gt;
     &lt;mediaobject&gt;
      &lt;imageobject role="fo"&gt;
@@ -155,16 +167,18 @@
      &lt;/imageobject&gt;
     &lt;/mediaobject&gt;
    &lt;/figure&gt;</screen>
-   </example>
-  </sect2>
- </sect1>
- <sect1 id="sec.daps.user.edit.validate">
-  <title>Validating Your XML Sources</title>
-  <para><!--taroth 2012-03-09: well-formed, valid, maybe also move validating to 
+    </example>
+   </sect2>
+  </sect1>
+  <sect1 id="sec.daps.user.edit.validate">
+   <title>Validating Your XML Sources</title>
+   <para><!--taroth 2012-03-09: well-formed, valid, maybe also move validating to 
   output chapter?--></para>
- </sect1>
- <sect1>
-  <title>Spell Checking</title>
-  <para><remark>taroth 2012-03-09: FIXME</remark></para>
- </sect1>
-</chapter>
+  </sect1>
+  <sect1>
+   <title>Spell Checking</title>
+   <para>
+    <remark>taroth 2012-03-09: FIXME</remark>
+   </para>
+  </sect1>
+ </chapter>
