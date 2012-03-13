@@ -184,7 +184,10 @@ testCatalogs() {
 
 logging "<<< test_Catalogs:Start"
 
-CATALOGS='urn:x-suse:xslt:profiling:docbook45-profile.xsl 
+CATALOGS='urn:x-suse:xslt:profiling:novdoc-profile.xsl
+          urn:x-suse:xslt:profiling:docbook45-profile.xsl
+          urn:x-daps:xslt:profiling:novdoc-profile.xsl
+          urn:x-daps:xslt:profiling:docbook45-profile.xsl
           http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
           http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'
 
