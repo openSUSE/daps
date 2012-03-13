@@ -136,6 +136,20 @@ WEBHELP_DIR := $(RESULT_DIR)/webhelp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_S
 # JSP
 JSP_DIR := $(RESULT_DIR)/jsp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 
+# HTML/WEBHELP/JSP Graphics Copy Flags
+# HTML/WEBHELP/JSP graphics are either linked (default) or copied
+# (if STATIC_HTML is set)
+#
+# If a build already exists, we must ensure, a regular file can be overwritten
+# with a link and a link can be overwritten with a normal file (both does not
+# work by default). Calling cp with --remove-destination solves the problem
+#
+ifneq ($(STATIC_HTML), 1)
+  # linking instead of copying
+  HTML_GRAPH_COMMAND := cp -rL --remove-destination
+else
+  HTML_GRAPH_COMMAND += ln -sf
+endif
 
 # EPUB
 # building epub with nwalsh's ruby scripts requires to create an intermediate
@@ -1391,73 +1405,10 @@ endif
 # "Helper" targets for HTML and HTML-SINGLE
 #
 
-# HTMLGRAPHICS uses STYLE_HTMLCSS from layout.mk.
-HTMLGRAPHICS := $(HTML_DIR)/style_images $(HTML_DIR)/images
-
 $(HTML_DIR):
 	mkdir -p $@
 
-#
-# in the following we do not use a simple copy command like
-# cp -rL $(DAPSROOT)/images/navig/ $(HTML_DIR) because DAPSROOT
-# may contain .svn directories which we do not want to copy
-# therefore we use tar with the --exclude-vcs option to copy
-# the files
-
-ifdef STYLE_HTMLCSS
-  # Add CSS file to HTMLGRAPHICS
-  # Add a stringparam for a CSS file if defined
-  HTMLGRAPHICS += $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
-  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
-
-  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(HTML_DIR)
-    ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	cp $(STYLE_HTMLCSS) $(HTML_DIR)/
-    else
-	if [ -f $@ ]; then \
-	  rm -f $@; \
-	fi
-	ln -sf $(STYLE_HTMLCSS) $(HTML_DIR)/
-  endif
-endif
-
-#
-# $(USED_STYLEDIR)/images contains admon and navig images as well as
-# callout images in callouts/
-#
-$(HTML_DIR)/style_images: $(USED_STYLEDIR)/images $(HTML_DIR)
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	tar cp --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(USED_STYLEDIR) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
-  else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(USED_STYLEDIR)/images/ $(HTML_DIR)/style_images
-  endif
-
-$(HTML_DIR)/images: $(HTML_DIR) provide-color-images
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-    ifdef PNGONLINE
-	mkdir -p $@
-	cp -rL $(PNGONLINE) $(HTML_DIR)/images/
-    endif
-  else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(IMG_GENDIR)/online/ $(HTML_DIR)/images
-  endif
-
+#---------------
 # Print result directory names 
 #
 .PHONY: html-dir-name
@@ -1476,8 +1427,51 @@ dist-html-name:
 dist-htmlsingle-name dist-html-single-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-htmlsingle.tar.bz2"
 
+#---------------
+# Htmlgraphics
+#
 
+HTMLGRAPHICS := $(HTML_DIR)/style_images $(HTML_DIR)/images
 
+ifdef STYLE_HTMLCSS
+  # Add CSS file to HTMLGRAPHICS
+  # Add a stringparam for a CSS file if defined
+  HTMLGRAPHICS += $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
+  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
+
+  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(HTML_DIR)
+	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(HTML_DIR)/
+endif
+
+# images
+$(HTML_DIR)/images: $(HTML_DIR) provide-color-images
+  ifeq ($(STATIC_HTML), 1)
+    ifdef PNGONLINE
+	test -d $@ || mkdir -p $@
+	$(HTML_GRAPH_COMMAND) $(PNGONLINE) $@
+    endif
+  else
+	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
+  endif
+
+# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# callout images in callouts/
+# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# therefore we use tar with the --exclude-vcs option to copy
+# the files
+#
+# style images
+$(HTML_DIR)/style_images: $(USED_STYLEDIR)/images $(HTML_DIR)
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then rm -f $@; fi
+	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	  -C $(USED_STYLEDIR) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
+  else
+	if [ -d $@ ]; then rm -rf $@; fi
+	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $(HTML_DIR)/style_images
+  endif
+
+#---------------
 # target to generate METAFILE for html stylesheets
 #
 ifdef USESVN
@@ -1488,6 +1482,7 @@ ifdef USESVN
 	xsltproc -o $(PROFILEDIR)/METAFILE $(METAXSLT) $(TMP_DIR)/.docprops.xml
 endif
 
+#---------------
 # Generate HTML from profiled xml
 #
 # XSLTPARAM is a variable that can be set via wrapper script in order to
@@ -1510,6 +1505,7 @@ $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
 
+#---------------
 # Generate HTML SINGLE from profiled xml
 #
 ifdef USESVN
@@ -1530,119 +1526,10 @@ $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 # "Helper" targets for WEBHELP
 #
 
-WEBHELPGRAPHICS := $(WEBHELP_DIR)/style_images $(WEBHELP_DIR)/images \
-		   $(WEBHELP_DIR)/common
-
-ifneq ("$(WH_SEARCH)", "no")
-  WEBHELPGRAPHICS += $(WEBHELP_DIR)/search
-endif
-
 $(WEBHELP_DIR):
 	mkdir -p $@
 
-#
-# in the following we do not use a simple copy command like
-# cp -rL $(DAPSROOT)/images/navig/ $(WEBHELP_DIR) because DAPSROOT
-# may contain .svn directories which we do not want to copy
-# therefore we use tar with the --exclude-vcs option to copy
-# the files
-
-ifdef STYLE_HTMLCSS
-  # Add CSS file to WEBHELPGRAPHICS
-  # Add a stringparam for a CSS file if defined
-  WEBHELPGRAPHICS += $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS))
-  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
-
-  $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(WEBHELP_DIR)
-    ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	cp $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
-    else
-	if [ -f $@ ]; then \
-	  rm -f $@; \
-	fi
-	ln -sf $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
-  endif
-endif
-
-#
-# $(USED_STYLEDIR)/images contains admon and navig images as well as
-# callout images in callouts/
-#
-$(WEBHELP_DIR)/style_images: $(USED_STYLEDIR)/images $(WEBHELP_DIR)
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	tar cp --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(USED_STYLEDIR) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(USED_STYLEDIR)/images/ $@
-  endif
-
-# common stuff /(Javascript, CSS,...)
-#
-$(WEBHELP_DIR)/common: $(WEBHELP_DIR)
-$(WEBHELP_DIR)/common: $(USED_STYLEDIR)/webhelp/template/common
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-	tar cp --exclude-vcs -C $(USED_STYLEDIR)/webhelp/template common | \
-	  (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $< $@
-  endif
-
-# search stuff
-#
-$(WEBHELP_DIR)/search: $(WEBHELP_DIR)
-$(WEBHELP_DIR)/search: $(USED_STYLEDIR)/webhelp/template/content/search 
-	test -d $@/stemmers || mkdir -p $@/stemmers
-  ifeq ($(STATIC_HTML), 1)
-	cp -u $</default.props $@
-	cp -u $</punctuation.props $@
-	cp -u $</nwSearchFnt.js $@
-	cp -u "$</stemmers/$(LL)_stemmer.js" $@/stemmers
-	for LPROPS in "$</$(LL)*.props $</*.js"; do \
-	  cp -u $$LPROPS $@; \
-	done
-  else
-	(cd $@; \
-	  ln -sf $</default.props; \
-	  ln -sf $</punctuation.props; \
-	  ln -sf $</nwSearchFnt.js; \
-	  for LPROPS in "$</$(LL)*.props"; do \
-	    ln -sf $$LPROPS; \
-	  done;)
-	(cd $@/stemmers; \
-	  ln -sf $</stemmers/$(LL)_stemmer.js)
-  endif
-
-$(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then \
-	  rm -f $@; \
-	fi
-    ifdef PNGONLINE
-	mkdir -p $@
-	cp -rL $(PNGONLINE) $(WEBHELP_DIR)/images/
-    endif
-  else
-	@if [ -d $@ ]; then \
-	  rm -rf $@; \
-	fi
-	ln -sf $(IMG_GENDIR)/online/ $(WEBHELP_DIR)/images
-  endif
-
+#---------------
 # Print result directory names 
 #
 .PHONY: webhelp-dir-name
@@ -1654,6 +1541,80 @@ webhelp-dir-name:
 dist-webhelp-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-webhelp.tar.bz2"
 
+
+#---------------
+# Webhelpgraphics
+#
+WEBHELPGRAPHICS := $(WEBHELP_DIR)/style_images $(WEBHELP_DIR)/images \
+		   $(WEBHELP_DIR)/common
+
+ifneq ("$(WH_SEARCH)", "no")
+  WEBHELPGRAPHICS += $(WEBHELP_DIR)/search
+endif
+
+ifdef STYLE_HTMLCSS
+  # Add CSS file to WEBHELPGRAPHICS
+  # Add a stringparam for a CSS file if defined
+  WEBHELPGRAPHICS += $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS))
+  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
+
+  $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(WEBHELP_DIR)
+	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
+endif
+
+# search stuff
+$(WEBHELP_DIR)/search: $(WEBHELP_DIR)
+$(WEBHELP_DIR)/search: $(USED_STYLEDIR)/webhelp/template/content/search 
+	test -d $@/stemmers || mkdir -p $@/stemmers
+	$(HTML_GRAPH_COMMAND) $</default.props $@
+	$(HTML_GRAPH_COMMAND) $</punctuation.props $@
+	$(HTML_GRAPH_COMMAND) $</nwSearchFnt.js $@
+	$(HTML_GRAPH_COMMAND) "$</stemmers/$(LL)_stemmer.js" \
+	  $@/stemmers
+	for LPROPS in "$</$(LL)*.props $</*.js"; do \
+	  $(HTML_GRAPH_COMMAND) $$LPROPS $@; \
+	done
+
+# images
+$(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
+  ifeq ($(STATIC_HTML), 1)
+    ifdef PNGONLINE
+	test -d $@ || mkdir -p $@
+	$(HTML_GRAPH_COMMAND) $(PNGONLINE) $@
+    endif
+  else
+	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
+  endif
+
+# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# callout images in callouts/
+# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# therefore we use tar with the --exclude-vcs option to copy
+# the files
+#
+# style images
+$(WEBHELP_DIR)/style_images: $(USED_STYLEDIR)/images $(WEBHELP_DIR)
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then rm -f $@; fi
+	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	  -C $(USED_STYLEDIR) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+  else
+	if [ -d $@ ]; then rm -rf; fi
+	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $@
+  endif
+# common stuff /(Javascript, CSS,...)
+$(WEBHELP_DIR)/common: $(WEBHELP_DIR)
+$(WEBHELP_DIR)/common: $(USED_STYLEDIR)/webhelp/template/common
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then rm -f $@; fi
+	tar cp --exclude-vcs -C $(USED_STYLEDIR)/webhelp/template common | \
+	  (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+  else
+	if [ -d $@ ]; then rm -rf $@; fi
+	$(HTML_GRAPH_COMMAND) $< $@
+  endif
+
+#---------------
 # Generate WEBHELP from profiled xml
 #
 # XSLTPARAM is a variable that can be set via wrapper script in order to
@@ -1685,32 +1646,58 @@ $(WEBHELP_DIR)/$(BOOK).html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 # "Helper" targets for JSP
 #
 
-JSPGRAPHICS = $(JSP_DIR)/style_images $(JSP_DIR)/images
-
 $(JSP_DIR):
 	mkdir -p $@
 
-ifdef STYLE_HTMLCSS
-  JSPGRAPHICS += $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
-  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
-
-  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
-	ln -sf $(STYLE_HTMLCSS) $(JSP_DIR)/
-endif
-
-
-$(JSP_DIR)/navig: $(USED_STYLEDIR)/images/navig $(JSP_DIR)
-	ln -sf $(USED_STYLEDIR)/images $(JSP_DIR)/style_images
-
-$(JSP_DIR)/images: | $(IMG_DIRECTORIES) $(JSP_DIR)
-	ln -sf $(IMG_GENDIR)/online/ $(JSP_DIR)/images
-
+#---------------
 # Print result directory names
 #
 .PHONY: jsp-dir-name
 jsp-dir:
 	@ccecho "result" "$(JSP_DIR)"
 
+#---------------
+# Jspgraphics
+#
+JSPGRAPHICS = $(JSP_DIR)/style_images $(JSP_DIR)/images
+
+ifdef STYLE_HTMLCSS
+  JSPGRAPHICS += $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
+  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
+
+  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
+	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(JSP_DIR)/
+endif
+
+# images
+$(JSP_DIR)/images: $(JSP_DIR) provide-color-images
+  ifeq ($(STATIC_HTML), 1)
+    ifdef PNGONLINE
+	test -d $@ || mkdir -p $@
+	$(HTML_GRAPH_COMMAND) $(PNGONLINE) $@
+    endif
+  else
+	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
+  endif
+
+# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# callout images in callouts/
+# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# therefore we use tar with the --exclude-vcs option to copy
+# the files
+#
+# style images
+$(JSP_DIR)/style_images: $(USED_STYLEDIR)/images $(JSP_DIR)
+  ifeq ($(STATIC_HTML), 1)
+	if [ -L $@ ]; then rm -f $@; fi
+	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	  -C $(USED_STYLEDIR) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
+  else
+	if [ -d $@ ]; then rm -rf $@; fi
+	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $(JSP_DIR)/style_images
+  endif
+
+#---------------
 # Generate JSP from profiled xml
 #
 ifdef USESVN
