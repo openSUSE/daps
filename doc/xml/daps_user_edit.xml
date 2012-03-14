@@ -82,23 +82,36 @@
     <para>Insert the following line:</para>
     <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
    </step>
-   <step><para>Save the Emacs customization file.
-   <remark>taroth 2012-03-13: restart of Emacs needed?</remark></para></step>
-   </procedure>
-   <para>For an overview, which macros are available and how to use them, refer to 
- <ulink
- url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
+   <step>
+    <para>Save the Emacs customization file.
+   <remark>taroth 2012-03-13: restart of Emacs needed?</remark>
+    </para>
+   </step>
+  </procedure>
+  <para>For an overview, which macros are available and how to use them, refer to 
+ <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
    </para>
-  </sect1>
-   <sect1 id="sec.daps.user.edit.validate">
-   <title>Validating Your XML Sources</title>
-   <para><!--taroth 2012-03-09: well-formed, valid, maybe also move validating to 
-  output chapter?--></para>
-  </sect1>
-  <sect1>
-   <title>Spell Checking</title>
-   <para>
-    <remark>taroth 2012-03-09: FIXME</remark>
-   </para>
-  </sect1>
- </chapter>
+ </sect1>
+ <sect1 id="sec.daps.user.edit.validate">
+  <title>Validating Your XML Sources</title>
+  <para>Validating XML files within in a book or set often exceeds validation of
+  the current XML file, as links (<sgmltag>xref</sgmltag> elements) or XIncludes 
+  need to be resolved, too. If you use conditional text (<literal>profiling</literal>) 
+  in your XML sources (for creating variants), your XML editor cannot check 
+  validity of your XML files. However, &dapsacr; can handle all those cases due 
+  to the built-in xmllint validator. To check validity of all files that belong 
+  to your documentation project, &dapsacr; only needs to know which doc config 
+  file to use. Usually, you specify the DC file with the <option>-d</option>
+  option:</para>
+ <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+<remark>taroth 2012-03-14: turn into procedure and mention special cases 
+(only one DC file in dir, DC specified as default, validate with remarks or 
+comments turned on</remark>
+ </sect1>
+ <sect1>
+  <title>Spell Checking</title>
+  <para>
+   <remark>taroth 2012-03-09: FIXME</remark>
+  </para>
+ </sect1>
+</chapter>
