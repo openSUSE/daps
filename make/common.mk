@@ -142,13 +142,13 @@ JSP_DIR := $(RESULT_DIR)/jsp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 #
 # If a build already exists, we must ensure, a regular file can be overwritten
 # with a link and a link can be overwritten with a normal file (both does not
-# work by default). Calling cp with --remove-destination solves the problem
-#
-ifneq ($(STATIC_HTML), 1)
+# work by default). Calling cp with --remove-destination solves the problem with
+# cp, -f with ln
+ifeq ($(STATIC_HTML), 1)
   # linking instead of copying
   HTML_GRAPH_COMMAND := cp -rL --remove-destination
 else
-  HTML_GRAPH_COMMAND += ln -sf
+  HTML_GRAPH_COMMAND := ln -sf
 endif
 
 # EPUB
@@ -289,6 +289,7 @@ HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
                 --stringparam show.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
 	        --stringparam show.remarks $(REMARKS) \
+                --stringparam use.id.as.filename 1 \
                 --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
                 --stringparam navig.graphics.path "style_images/" \
@@ -308,11 +309,12 @@ endif
 # Webhelp stringparams
 #  
 #
-
+# 
 WEBHELPSTRINGS := --stringparam base.dir $(WEBHELP_DIR)/ \
                   --stringparam show.comments $(COMMENTS) \
 	          --stringparam draft.mode "$(DRAFT)" \
 	          --stringparam show.remarks $(REMARKS) \
+                  --stringparam use.id.as.filename 1 \
                   --stringparam admon.graphics.path "style_images/" \
                   --stringparam admon.graphics 1 \
                   --stringparam admon.graphics.extension ".png" \
@@ -322,16 +324,19 @@ WEBHELPSTRINGS := --stringparam base.dir $(WEBHELP_DIR)/ \
                   --stringparam callout.graphics.path "style_images/callouts/" \
                   --stringparam callout.graphics.extension ".png" \
                   --stringparam img.src.path "images/" \
+                  --stringparam webhelp.gen.index 0 \
                   --stringparam webhelp.common.dir "common/" \
-                  --stringparam webhelp.start.filename "index.html"
+                  --stringparam webhelp.start.filename "index.html" \
+                  --stringparam webhelp.base.dir $(WEBHELP_DIR)/
 
 ifeq ("$(WH_SEARCH)", "no")
   WEBHELPSTRINGS += --stringparam webhelp.include.search.tab "false"
 endif
 
-# Remove these once we have desent custom stylesheets
+# Remove these once we have decent custom stylesheets
 WEBHELPSTRINGS += --stringparam chunk.fast 1 \
-                  --stringparam chunk.section.depth 0
+                  --stringparam chunk.section.depth 0 \
+                  --stringparam suppress.footer.navigation 1
 
 #----------
 # JSP stringparams
@@ -341,6 +346,7 @@ JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
                 --stringparam show.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
                 --stringparam show.remarks $(REMARKS) \
+                --stringparam use.id.as.filename 1 \
                 --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
                 --stringparam navig.graphics.path "style_images/" \
@@ -510,8 +516,8 @@ html-single htmlsingle: $(PROFILEDIR)/.validate $(HTML_DIR)/$(BOOK).html
 .PHONY: webhelp
 webhelp: | $(DIRECTORIES)
 webhelp: missing-images
-webhelp: $(PROFILEDIR)/.validate missing-images $(WEBHELP_DIR)/$(BOOK).html
-	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(WEBHELP_DIR)/$(BOOK).html"
+webhelp: $(PROFILEDIR)/.validate missing-images $(WEBHELP_DIR)/index.html
+	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(WEBHELP_DIR)/index.html"
 
 
 #--------------
@@ -1429,8 +1435,9 @@ dist-htmlsingle-name dist-html-single-name:
 
 #---------------
 # Htmlgraphics
-#
+# Declaring HTMLGRAPHICS as PHONY to make sure they are redone everytime
 
+.PHONY: $(HTMLGRAPHICS)
 HTMLGRAPHICS := $(HTML_DIR)/style_images $(HTML_DIR)/images
 
 ifdef STYLE_HTMLCSS
@@ -1498,10 +1505,9 @@ $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
   endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  --stringparam use.id.as.filename 1 \
 	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILED_MAIN) \
 	  $(DEVNULL)
-	@if [ ! -f  $@ ]; then \
+	if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
 
@@ -1545,6 +1551,9 @@ dist-webhelp-name:
 #---------------
 # Webhelpgraphics
 #
+# Declaring WEBHELPGRAPHICS as PHONY to make sure they are redone everytime
+
+.PHONY: $(WEBHELPGRAPHICS)
 WEBHELPGRAPHICS := $(WEBHELP_DIR)/style_images $(WEBHELP_DIR)/images \
 		   $(WEBHELP_DIR)/common
 
@@ -1599,7 +1608,7 @@ $(WEBHELP_DIR)/style_images: $(USED_STYLEDIR)/images $(WEBHELP_DIR)
 	tar cp --exclude-vcs --transform=s%images/%style_images/% \
 	  -C $(USED_STYLEDIR) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   else
-	if [ -d $@ ]; then rm -rf; fi
+	if [ -d $@ ]; then rm -rf $@; fi
 	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $@
   endif
 # common stuff /(Javascript, CSS,...)
@@ -1620,17 +1629,16 @@ $(WEBHELP_DIR)/common: $(USED_STYLEDIR)/webhelp/template/common
 # XSLTPARAM is a variable that can be set via wrapper script in order to
 # temporarily overwrite styleseet settings such as margins
 #
-$(WEBHELP_DIR)/$(BOOK).html: provide-color-images  warn-images
-$(WEBHELP_DIR)/$(BOOK).html: $(STYLEWEBHELP) $(PROFILES) $(WEBHELP_DIR)
-$(WEBHELP_DIR)/$(BOOK).html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
+$(WEBHELP_DIR)/index.html: provide-color-images  warn-images
+$(WEBHELP_DIR)/index.html: $(STYLEWEBHELP) $(PROFILES) $(WEBHELP_DIR)
+$(WEBHELP_DIR)/index.html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating webhelp pages"
   endif
 	xsltproc $(WEBHELPSTRINGS) $(ROOTSTRING) $(XSLTPARAM) \
-	  $(MANIFEST) --stringparam use.id.as.filename 1 \
 	  $(CSSSTRING) --xinclude $(STYLEWEBHELP) $(PROFILED_MAIN) \
 	  $(DEVNULL)
-	@if [ ! -f  $@ ]; then \
+	if [ ! -f  $@ ]; then \
 	  (cd $(WEBHELP_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
 	java -DhtmlDir=$(WEBHELP_DIR)/ -DindexerLanguage=$LL \
@@ -1658,7 +1666,9 @@ jsp-dir:
 
 #---------------
 # Jspgraphics
-#
+# Declaring JSPGRAPHICS as PHONY to make sure they are redone everytime
+
+.PHONY: $(JSPGRAPHICS)
 JSPGRAPHICS = $(JSP_DIR)/style_images $(JSP_DIR)/images
 
 ifdef STYLE_HTMLCSS
