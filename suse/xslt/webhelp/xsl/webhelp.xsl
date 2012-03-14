@@ -40,15 +40,22 @@
 	This is needed for stemming support and to filter the subtle differences in the languages 
 	'en' (english) is the default. Refer the NOTE: on stemmers given below for more info. -->
     <xsl:param name="webhelp.indexer.language">en</xsl:param>
+ <!-- fs
     <xsl:param name="webhelp.default.topic">index.html</xsl:param>
+ -->
+    <xsl:param name="webhelp.default.topic"/>
     <xsl:param name="webhelp.autolabel">0</xsl:param>
-    <!-- webhelp-specific params! -->
+    <!-- Generate index.html ? Default (1) == yes -->
+    <xsl:param name="webhelp.gen.index">1</xsl:param>
+ <!-- webhelp-specific params! -->
 
     <!-- Set some reasonable defaults for webhelp output -->
     <xsl:param name="chunker.output.indent">yes</xsl:param>
     <xsl:param name="navig.showtitles">0</xsl:param>
     <xsl:param name="manifest.in.base.dir" select="0"/>
+ <!-- fs
     <xsl:param name="base.dir" select="concat($webhelp.base.dir,'/content/')"/>
+-->
     <xsl:param name="suppress.navigation">0</xsl:param>
     <!-- Generate the end-of-the-book index -->
     <xsl:param name="generate.index" select="1"/>
@@ -521,9 +528,9 @@ border: none; background: none; font-weight: none; color: none; }
 		</xsl:choose>
 	  </xsl:otherwise>
 	</xsl:choose>
-	
-	<xsl:call-template name="index.html"/>
-
+	<xsl:if test="$webhelp.gen.index != 0">
+	    <xsl:call-template name="index.html"/>
+        </xsl:if>
 	<xsl:call-template name="l10n.js"/>
     </xsl:template>
 
@@ -938,7 +945,7 @@ border: none; background: none; font-weight: none; color: none; }
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:apply-templates
-                                            select="*/*[self::preface|self::chapter|self::appendix|self::part][1]"
+                                            select="*/*[self::article|self::book|self::preface|self::chapter|self::appendix|self::part|self::reference|self::glossary|self::bibliography][1]"
                                             mode="chunk-filename"/>
                                 </xsl:otherwise>
                             </xsl:choose>
@@ -954,7 +961,7 @@ border: none; background: none; font-weight: none; color: none; }
                 <!--       </xsl:if> -->
                 <xsl:choose>
                     <xsl:when test="$webhelp.start.filename">
-                        <xsl:value-of select="concat($webhelp.base.dir,'/',$webhelp.start.filename)"/>
+                        <xsl:value-of select="concat($webhelp.base.dir,$webhelp.start.filename)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="'index.html'"/>
@@ -972,7 +979,7 @@ border: none; background: none; font-weight: none; color: none; }
 		      <title><xsl:value-of select="//title[1]"/>&#160;</title>
                     </head>
                     <body>
-		      If not automatically redirected, click <a href="content/{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
+		      If not automatically redirected, click <a href="{$webhelp.base.dir}{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
                     </body>
                 </html>
             </xsl:with-param>
