@@ -81,9 +81,9 @@
     <xsl:param name="generate.section.toc.level" select="5"/>
     <xsl:param name="component.label.includes.part.label" select="1"/>
     <xsl:param name="suppress.footer.navigation">0</xsl:param>
-    <xsl:param name="callout.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/callouts/</xsl:param>
+    <xsl:param name="callout.graphics.path" select="concat($webhelp.common.dir, 'images/callouts/')"/>
     <xsl:param name="callouts.extension">1</xsl:param>
-    <xsl:param name="admon.graphics.path"><xsl:value-of select="$webhelp.common.dir"/>images/admon/</xsl:param>
+    <xsl:param name="admon.graphics.path" select="concat($webhelp.common.dir, 'images/admon/')"/>
     <xsl:param name="admon.graphics" select="0"/>
     <!--xsl:param name="generate.toc">book toc</xsl:param-->
 <!-- fs
@@ -215,8 +215,7 @@ set       toc,title
 
   <xsl:template name="system.head.content">
   <xsl:param name="node" select="."/>
-<xsl:text>
-</xsl:text>
+  <xsl:text>&#10;</xsl:text>
 <!-- 
 This avoids two problems in IE 8. We should someday figure out why this is happening and tweak the JavaScript so this <meta/> tag is not necessary:
 1. When you perform a search and click the Toggle Highlight button, IE 8 adds a line break before the highlighted word.
@@ -224,8 +223,7 @@ This avoids two problems in IE 8. We should someday figure out why this is happe
 These problems go away when you add this IE=7 mode meta tag.
  -->
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-<xsl:text>
-</xsl:text>
+    <xsl:text>&#10;</xsl:text>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <xsl:text>
 </xsl:text>
