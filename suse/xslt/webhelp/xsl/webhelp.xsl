@@ -531,7 +531,7 @@ border: none; background: none; font-weight: none; color: none; }
 	</xsl:choose>
 	<xsl:if test="$webhelp.gen.index != 0">
 	    <xsl:call-template name="index.html"/>
-        </xsl:if>
+    </xsl:if>
 	<xsl:call-template name="l10n.js"/>
     </xsl:template>
 
@@ -955,6 +955,14 @@ border: none; background: none; font-weight: none; color: none; }
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="relative.default.topic">
+            <xsl:variable name="dir">
+                <xsl:call-template name="getdir">
+                    <xsl:with-param name="filename" select="$default.topic"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:value-of select="substring-after($default.topic, $dir)"/>
+        </xsl:variable>
         <xsl:call-template name="write.chunk">
             <xsl:with-param name="filename">
                 <!--       <xsl:if test="$manifest.in.base.dir != 0"> -->
@@ -976,11 +984,14 @@ border: none; background: none; font-weight: none; color: none; }
                 <html>
                     <head>
                         <link rel="shortcut icon" href="{$webhelp.favicon.filename}"/>
-		      <meta http-equiv="Refresh" content="1; URL=content/{$default.topic}"/>
+		      <meta http-equiv="Refresh" content="1; URL={$relative.default.topic}"/>
 		      <title><xsl:call-template name="get.doc.title"/></title>
                     </head>
                     <body>
-		      If not automatically redirected, click <a href="{$webhelp.base.dir}{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
+                        <p>If not automatically redirected, click <a
+		          href="{$relative.default.topic}"><xsl:value-of
+		              select="$relative.default.topic"/></a>
+                        </p>
                     </body>
                 </html>
             </xsl:with-param>
