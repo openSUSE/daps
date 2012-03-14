@@ -47,7 +47,11 @@ function parse_args () {
                 shift
                 ;;
             --css)
-                P_CSS="$2"
+                if [[ -n $2 ]]; then
+                    P_CSS="$2"
+                else
+                    P_CSS=0
+                fi
                 shift 2
                 ;;
             -d|--draft)
@@ -460,7 +464,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,css:,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="comments,css::,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -494,9 +498,12 @@ function build_html_jsp () {
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
 
-    if [[ -n "$P_CSS" ]]; then
-        if [[ -f "$P_CSS" ]]; then
+    if [[ -n $P_CSS ]]; then
+        if [[ -f $P_CSS ]]; then
             export HTML_CSS="$P_CSS"
+        elif [[ 0 = $P_CSS ]]; then
+            # this allows to disable CSS from a DC file
+            unset HTML_CSS
         else
             exit_on_error "Cannot find CSS file $P_CSS"
         fi
@@ -518,7 +525,7 @@ function webhelp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,css:,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="comments,css::draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -552,11 +559,14 @@ function webhelp () {
     if [[ -n "$P_CSS" ]]; then
         if [[ -f "$P_CSS" ]]; then
             export HTML_CSS="$P_CSS"
+        elif [[ 0 = $P_CSS ]]; then
+            # this allows to disable CSS from a DC file
+            unset HTML_CSS
         else
             exit_on_error "Cannot find CSS file $P_CSS"
         fi
     fi
-
+    
     call_make "$SUB_CMD" "$@"
 }
 
@@ -573,7 +583,7 @@ function build_epub () {
     shift
 
     SHORT_OPTS="hr"
-    LONG_OPTS="check,css:,help,name:,remarks,rootid:"
+    LONG_OPTS="check,css::help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -603,11 +613,14 @@ function build_epub () {
     if [[ -n "$P_CSS" ]]; then
         if [[ -f "$P_CSS" ]]; then
             export EPUB_CSS="$P_CSS"
+        elif [[ 0 = $P_CSS ]]; then
+            # this allows to disable CSS from a DC file
+            unset HTML_CSS
         else
             exit_on_error "Cannot find CSS file $P_CSS"
         fi
     fi
-
+        
     call_make "$SUB_CMD" "$@"
 }
 
@@ -1223,7 +1236,9 @@ function help_check () {
                               Default: unset"
 }
 function help_css () {
-    echo "    --css                     Specify an absolute path to a css file.
+    echo "    --css=filenem, --css      Specify an absolute path to a css file, or,
+                              when no argument is given, unset a declaration made
+                              in a config file (e.g. a DC-file).
                               Default: unset"
 }
 function help_draft () {
