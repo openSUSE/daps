@@ -223,12 +223,17 @@ exit 0
 %postun
 #
 # delete catalog entry for daps profiling
+# only run if package is really uninstalled ($1 = 0) and not
+# in case of an update
+#
+if [ 0 = $1 ]; then 
 if [ -x /usr/bin/edit-xml-catalog ] ; then
   edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{name}
 fi
 
 %run_suseconfig_fonts
+fi
 exit 0
 
 #----------------------
