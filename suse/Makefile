@@ -32,6 +32,16 @@ PREFIX    ?= /usr/share
 STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
+#
+# Isn't there an easier way??
+#
+ARCH := $(shell getconf LONG_BIT)
+ifeq ($(ARCH),64)
+   LIBDIR := /usr/lib64
+else
+   LIBDIR := /usr/lib
+endif
+
 all: schema/novdocx.rnc schema/novdocx.rng
 all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
@@ -48,7 +58,7 @@ install: create-install-dirs
 	  ln -s /var/lib/sgml/CATALOG.$(DTDNAME)-$(DTDVERSION) \
 	    $(DESTDIR)$(PREFIX)/sgml/
 	install -m644 catalogs/*.xml $(DESTDIR)/etc/xml
-	install -m644 aspell/suse_aspell.rws $(DESTDIR)$(PREFIX)/aspell-0.60
+	install -m644 aspell/suse_aspell.rws $(DESTDIR)$(LIBDIR)/aspell-0.60
 	install -m644 COPYING* $(DOCDIR)
 	tar c --mode=u+w,go+r-w,a-s -C xslt . | (cd  $(STYLEDIR); tar xpv)
 
