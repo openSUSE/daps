@@ -40,6 +40,9 @@
 	This is needed for stemming support and to filter the subtle differences in the languages 
 	'en' (english) is the default. Refer the NOTE: on stemmers given below for more info. -->
     <xsl:param name="webhelp.indexer.language">en</xsl:param>
+    <!-- toms: new 
+    -->
+    <xsl:param name="webhelp.favicon.filename">favicon.ico</xsl:param>
  <!-- fs
     <xsl:param name="webhelp.default.topic">index.html</xsl:param>
  -->
@@ -260,7 +263,7 @@ These problems go away when you add this IE=7 mode meta tag.
 
 <!-- kasunbg: Order is important between the in-html-file css and the linked css files. Some css declarations in jquery-ui-1.8.2.custom.css are over-ridden. 
      If that's a concern, just remove the additional css contents inside these default jquery css files. I thought of keeping them intact for easier maintenance! -->
-	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon"/>
+	<link rel="shortcut icon" href="../{$webhelp.favicon.filename}" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}css/positioning.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/theme-redmond/jquery-ui-1.8.2.custom.css"/>
         <link rel="stylesheet" type="text/css" href="{$webhelp.common.dir}jquery/treeview/jquery.treeview.css"/>
@@ -962,7 +965,7 @@ border: none; background: none; font-weight: none; color: none; }
                         <xsl:value-of select="concat($webhelp.base.dir,$webhelp.start.filename)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="'index.html'"/>
+                        <xsl:value-of select="$webhelp.start.filename"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>
@@ -972,9 +975,9 @@ border: none; background: none; font-weight: none; color: none; }
             <xsl:with-param name="content">
                 <html>
                     <head>
-		      <link rel="shortcut icon" href="favicon.ico"/>
+                        <link rel="shortcut icon" href="{$webhelp.favicon.filename}"/>
 		      <meta http-equiv="Refresh" content="1; URL=content/{$default.topic}"/>
-		      <title><xsl:value-of select="//title[1]"/>&#160;</title>
+		      <title><xsl:call-template name="get.doc.title"/></title>
                     </head>
                     <body>
 		      If not automatically redirected, click <a href="{$webhelp.base.dir}{$default.topic}">content/<xsl:value-of select="$default.topic"/></a>
@@ -986,9 +989,7 @@ border: none; background: none; font-weight: none; color: none; }
 
     <xsl:template name="l10n.js">
         <xsl:call-template name="write.chunk">
-            <xsl:with-param name="filename">
-	      <xsl:value-of select="concat($base.dir,'search/l10n.js')"/>
-            </xsl:with-param>
+            <xsl:with-param name="filename" select="concat($base.dir,'search/l10n.js')"/>
             <xsl:with-param name="method" select="'text'"/>
             <xsl:with-param name="encoding" select="'utf-8'"/>
             <xsl:with-param name="indent" select="'no'"/>
