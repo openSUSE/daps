@@ -525,7 +525,7 @@ function webhelp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,css::draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="comments,css::,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -583,7 +583,7 @@ function build_epub () {
     shift
 
     SHORT_OPTS="hr"
-    LONG_OPTS="check,css::help,name:,remarks,rootid:"
+    LONG_OPTS="check,css::,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1236,7 +1236,7 @@ function help_check () {
                               Default: unset"
 }
 function help_css () {
-    echo "    --css=filenem, --css      Specify an absolute path to a css file, or,
+    echo "    --css=filename --css      Specify an absolute path to a css file, or,
                               when no argument is given, unset a declaration made
                               in a config file (e.g. a DC-file).
                               Default: unset"
