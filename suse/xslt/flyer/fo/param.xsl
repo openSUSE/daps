@@ -91,7 +91,7 @@
 
 <xsl:param name="alignment">left</xsl:param>
 
-<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/misc/draft.png')"/>
+<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/draft.png')"/>
 
 <xsl:param name="refentry.pagebreak" select="0"/>
 

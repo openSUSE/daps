@@ -38,11 +38,11 @@
 <!-- Path to stylesheets -->
 <xsl:param name="styleroot"></xsl:param>
 
-<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/misc/draft.png')"/>
+<xsl:param name="draft.watermark.image" select="concat($styleroot, 'images/draft.png')"/>
 
 <!--  -->
 <xsl:param name="booktitlepage.bw.logo" select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
-<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, '/images/logos/suse-logo.svg')"/>
+<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
 
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
