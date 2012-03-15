@@ -47,7 +47,13 @@ unset LIST
 
 # default values
 LANGUAGE=en_US
-EXTRA_DICT="/usr/share/daps/lib/suse_aspell.rws"
+ARCH=$(getconf LONG_BIT)
+if [[ 64 = $ARCH ]]; then
+    LIBDIR=/usr/lib64
+else
+    LIBDIR=/usr/lib
+fi
+EXTRA_DICT="$LIBDIR/aspell-0.60/suse_aspell.rws"
 
 # ignore text within these tags
 declare -a SKIPTAGS=(
