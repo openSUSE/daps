@@ -69,7 +69,7 @@ create-install-dirs:
 	mkdir -p $(DESTDIR)/var/lib/sgml
 	mkdir -p $(DESTDIR)$(PREFIX)/sgml
 	mkdir -p $(DESTDIR)/etc/xml
-	mkdir -p $(DESTDIR)$(PREFIX)/aspell-0.60
+	mkdir -p $(DESTDIR)$(LIBDIR)/aspell-0.60
 
 
 .PHONY: clean

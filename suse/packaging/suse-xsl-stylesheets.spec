@@ -169,7 +169,7 @@ exit 0
 %doc %{_defaultdocdir}/%{name}/*
 
 # aspell
-%{_datadir}/aspell-0.60/suse_aspell.rws
+%{_libdir}/aspell-0.60/suse_aspell.rws
 
 #----------------------
 %changelog
