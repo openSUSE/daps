@@ -151,8 +151,9 @@ set       nop
 
 <!-- Default width of tables -->
 <xsl:param name="default.table.width">100%</xsl:param>
-<xsl:param name="table.frame.border.style">none</xsl:param>
-<xsl:param name="table.cell.border.style">none</xsl:param>
+<xsl:param name="default.table.frame">topbot</xsl:param>
+<xsl:param name="table.frame.border.style">solid</xsl:param>
+<xsl:param name="table.cell.border.style">dotted</xsl:param>
 
 <!-- Should information from SVN properties be used? yes|no -->
 <xsl:param name="use.meta" select="0"/>
