@@ -287,8 +287,8 @@ your expectations.
 Supported features
 ------------------
 * HTML/single HTML output            * MediaWiki output (experimental)
-* JSP output                         * support for .png images
-* man pages output
+* JSP output                         * webhelp output (experimental)
+* man pages output                   * support for .png images
 
 Optional features
 -----------------
