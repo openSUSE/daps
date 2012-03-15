@@ -48,19 +48,14 @@ exit 0
 
 
 # ---------
-# Short test, if shunit2 is available
-[[ -f $SHUNIT2SRC ]] || exit_on_error "No shunit2 package found! :-(("
-
-
-# ---------
 # Parsing Command Line Options
 if ! options=$(getopt -o h,i:,l:,D:,k  -l help,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
     exit 1
 fi
 
-
 eval set -- "$options"
 
+# TODO: Add --dapsroot to overwrite some it?
 while [ $# -gt 0  ]; do
   case "$1" in                                                    
     -h|--help) usage;;
@@ -91,7 +86,6 @@ while [ $# -gt 0  ]; do
  shift
 done
 
-echo 
 
 for i in $TESTSUITE; do
   echo -e "******************
