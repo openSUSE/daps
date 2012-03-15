@@ -5,7 +5,8 @@
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 #
 
-source ../common.sh
+[[ -f common.sh ]] && source common.sh 
+
 
 
 test_XYZ() {
