@@ -7,8 +7,12 @@
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 #
 
+
 # Source common functions
 source common.sh
+
+MAIN=${0%%/*}
+PROG=${0##*/}
 
 
 # ----------------------------------------------------------------------------
@@ -28,7 +32,7 @@ TESTSUITE=$(ls -d test_*)
 
 usage() {
 cat << EOF
-${0##*/} [OPTIONS...]
+${PROG} [OPTIONS...]
 DAPS Testing Framework
 
 Available Options:
@@ -87,11 +91,20 @@ while [ $# -gt 0  ]; do
 done
 
 
+# Create temporary directory were we store 
+TEMPDIR=$(mktemp -d /tmp/daps-testing_XXXXXX)
+
+
 for i in $TESTSUITE; do
   echo -e "******************
-     Calling test: $i 
+     Calling test: $i
 ******************"
-  $i/testing.sh
+  mkdir -vp $TEMPDIR/$i
+  $i/testing.sh --tempdir $TEMPDIR/$i
 done
+
+# Delete temporary directory, when DELTEMP is enabled
+[[ -d $TEMPDIR && 0 -ne $DELTEMP ]] && rm -rf $TEMPDIR
+
 
 # EOF
