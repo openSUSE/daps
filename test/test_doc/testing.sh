@@ -5,6 +5,9 @@
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 #
 
+MAIN=${0%%/*}
+PROG=${0##*/}
+
 if [[ -f common.sh ]]; then
   source common.sh
 elif [[ -f ../common.sh ]]; then
@@ -14,27 +17,21 @@ fi
 
 usage() {
 cat << EOF
-${0##*/} [OPTIONS...]
+${PROG} [OPTIONS...]
 DAPS Testing Framework
 
 Available Options:
  -h, --help
      Shows this help
- -i, --dapsinit DAPSINIT
-     Absolute filename, points to the daps-init program
- -D, --daps DAPS
-     Absolute filename, points to the daps script
- -l, --logfile LOGFILE
-     Save result in LOGFILE (default $LOGFILE)
+ -t, --tempdir TEMPDIR
+     Absolute path to temporary directory 
  -k, --keeptemp
      Do not delete the TEMPDIR directory, default ${DELTEMP}
 EOF
 exit 0
 }
 
-# ---------
-# Parsing Command Line Options
-if ! options=$(getopt -o h,i:,l:,D:,k  -l help,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
+if ! options=$(getopt -o h,t:,k  -l help,tempdir:,keeptemp -- "$@"); then
     exit 1
 fi
 
@@ -43,16 +40,8 @@ eval set -- "$options"
 while [ $# -gt 0  ]; do
   case "$1" in                                                    
     -h|--help) usage;;
-    -i|--dapsinit)
-        D=$(readlink -f $2)
-        [[ -f $D ]] || exit_on_error "$D does not exist"
-        DAPS_INIT=$D
-        shift
-        ;;
-    -l|--logfile)
-       # Make an *absolute* filename to avoid problems when 
-       # switching to other directories
-       LOGFILE=$(readlink -f $2)
+    -t|--tempdir)
+       TEMPDIR=$2
        shift
        ;;
     -D|--daps)
@@ -69,6 +58,29 @@ while [ $# -gt 0  ]; do
   esac
  shift
 done
+
+
+
+# ----------------------------------------------------------------------------
+# Test functions
+#
+oneTimeSetUp() {
+  logging "--- Setting up DAPS Testing Framework ($MAIN)..."
+  [[ -e $TEMPDIR && -d $TEMPDIR ]] || mkdir -vp $TEMPDIR
+  assertTrue "Could not find temporary directory $TEMPDIR" "[ -d $TEMPDIR ]"
+  logging "Starting ${PROG}"
+}
+
+oneTimeTearDown() {
+  # TODO: Distinguish between running alone and from runtests.sh
+  # Delete temporary directory, when DELTEMP is enabled
+  # [[ -d $TEMPDIR && 0 -ne $DELTEMP ]] && rm -rf $TEMPDIR
+
+  if [[ $LOGGING -ne 0 ]]; then
+    echo "Find the logging output in $LOGFILE"
+  fi
+  logging "--- Tearing down DAPS Testing Framework ($MAIN)..."
+}
 
 
 test_XYZ() {
