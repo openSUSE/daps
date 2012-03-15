@@ -61,3 +61,10 @@ logging() {
     fi
   fi
 }
+
+
+
+# Short test, if shunit2 is available
+[[ -f $SHUNIT2SRC ]] || exit_on_error "No shunit2 package found! :-(("
+
+# EOF
