@@ -9,6 +9,10 @@
 LOGFILE="/tmp/daps-testing.log"
 # Main file to include shunit2
 SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
+# Remove temporary directory? 0=no, 1=yes
+DELTEMP=1
+# Logging actions to $LOGFILE? 0=no, 1=yes
+LOGGING=1
 
 
 # ----------------------------------------------------------------------------
