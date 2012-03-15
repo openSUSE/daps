@@ -978,7 +978,7 @@ DOCBOOK_VERSION=$(xsltproc \
     { DOCBOOK_VERSION=4; \
       "Could not get DocBook version, assuming DocBook 4"; } 
 
-# ... no resolve the style URI via catalogs
+# ... now resolve the style URI via catalogs
 if [[ 5 = $DOCBOOK_VERSION ]]; then
     DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
         $DOCBOOK5_STYLE_URI 2>/dev/null) || \
