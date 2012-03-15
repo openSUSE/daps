@@ -1914,7 +1914,8 @@ showvariable:
   ifndef VARIABLE
 	@echo "usage: VARIABLE=some_variable make showvariable"
   else
-	@ccecho "result" "$(VARIABLE): $($(VARIABLE))"
+#	@ccecho "result" "$(VARIABLE): $($(VARIABLE))"
+	@ccecho "result" "$($(VARIABLE))"
   endif
 
 #---------------
