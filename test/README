@@ -1,0 +1,25 @@
+-----------------------------------------------------------
+README
+-----------------------------------------------------------
+
+This text describes some information about the testing
+environment for DAPS.
+
+
+1. Structure
+The structure of this directory contains the following files
+and directories:
+
++ test/
+  +-- README             This file
+  +-- runtest.sh         Bash script to run the complete
+  |                      test suite
+  +-- test_*/            One testcase is located in one
+  |   |                  directory
+  |   +-- testing.sh     Run the test case, called from runtest.sh
+  |   +-- DC-<FOO>       DC file for DAPS
+  |   +-- xml/           Contains all XML files, necessary to 
+                         create the test
+
+
+
