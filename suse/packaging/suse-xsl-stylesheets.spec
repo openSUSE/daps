@@ -42,7 +42,7 @@ Source0:        %{name}-%{version}.tar.bz2
 Source1:        susexsl-fetch-source
 Source2:        %{name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildArch:      noarch
+#BuildArch:      noarch
 
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  fdupes
@@ -149,7 +149,7 @@ exit 0
 %dir %{_datadir}/xml/%{dtdname}/schema/*
 %dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
 
-%dir %{_datadir}/aspell-0.60/
+%dir %{_libdir}/aspell-0.60/
 
 %dir %{_defaultdocdir}/%{name}
 
