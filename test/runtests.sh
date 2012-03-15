@@ -7,24 +7,24 @@
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 #
 
+# Source common functions
+source common.sh
+
+
 # ----------------------------------------------------------------------------
 # Global Variables
-
+#
 # Remove temporary directory? 0=no, 1=yes
 DELTEMP=1
 # Logging actions to $LOGFILE? 0=no, 1=yes
 LOGGING=1
-
 # Default path to daps script:
 DAPS="/usr/bin/daps"
 # Default path to daps-init script:
 DAPS_INIT="/usr/bin/daps-init"
-# Default path to logfile:
-LOGFILE="/tmp/daps-testing.log"
 # We only consider directories with "test_*" which are our test suite
 TESTSUITE=$(ls -d test_*)
-#
-SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
+
 
 usage() {
 cat << EOF

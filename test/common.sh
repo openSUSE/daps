@@ -2,6 +2,17 @@
 # Common functions to be sourced in testing.sh
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 
+# ----------------------------------------------------------------------------
+# Global Variables
+#
+# Default path to logfile:
+LOGFILE="/tmp/daps-testing.log"
+# Main file to include shunit2
+SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
+
+
+# ----------------------------------------------------------------------------
+# Functions
 
 # ---------
 # Verbose error handling
