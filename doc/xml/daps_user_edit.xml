@@ -99,14 +99,39 @@
   need to be resolved, too. If you use conditional text (<literal>profiling</literal>) 
   in your XML sources (for creating variants), your XML editor cannot check 
   validity of your XML files. However, &dapsacr; can handle all those cases due 
-  to the built-in xmllint validator. To check validity of all files that belong 
-  to your documentation project, &dapsacr; only needs to know which doc config 
-  file to use. Usually, you specify the DC file with the <option>-d</option>
-  option:</para>
- <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
-<remark>taroth 2012-03-14: turn into procedure and mention special cases 
+  to the built-in xmllint validator. </para>
+  <procedure>
+   <title>Validating XML Files</title>
+   <para>To validate all files that belong to your documentation project, 
+   &dapsacr; only needs to know which &dclong; file to use. By default, 
+   <sgmltag>remark</sgmltag> elements and XML comments are ignored during
+   validation. However, if you intend to create a (draft) output including remarks
+   or comments, you need to include them for validation by specifying 
+   the respective &dapsacr; option. 
+   </para>
+   <step>
+    <para>To validate all XML files in your book, article or set, enter:</para>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+    <para>If the XML files are not valid, &dapsacr; will return the parser
+    errors. They include information about the type of error, the respective 
+    file name and the line number where the error occured. In addition, &dapsacr;
+    shows the path to the profiled XML sources and the toal number of erros.</para>
+    <remark>taroth 2012-03-15: maybe add example output</remark>
+    <para>If validation was successfull, &dapsacr; returns: 
+<literal>All files are valid.</literal>
+    </para>
+   </step>
+   <step>
+    <para>To validate your files including remarks, enter:</para>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
+   </step>
+   <step>
+    <para>To validate your files including XML comments, enter:</para>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
+   </step> <!--<remark>taroth 2012-03-14: turn into procedure and mention special cases 
 (only one DC file in dir, DC specified as default, validate with remarks or 
-comments turned on</remark>
+comments turned on</remark>-->
+  </procedure>
  </sect1>
  <sect1>
   <title>Spell Checking</title>
