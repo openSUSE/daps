@@ -43,6 +43,10 @@ Available Options:
      Suppress output (default)
  -v, --verbose
      Be more noisy
+ -t, --base-temp TEMPDIR
+     Use TEMPDIR (no default set); useful if you do not want to create a
+     temporary directory again and want to use it from the last run.
+     Combine it with -k.
  -i, --dapsinit DAPSINIT
      Absolute filename, points to the daps-init program
  -D, --daps DAPS
@@ -58,7 +62,7 @@ exit 0
 
 # ---------
 # Parsing Command Line Options
-if ! options=$(getopt -o h,v,q,i:,l:,D:,k  -l help,verbose,quiet,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
+if ! options=$(getopt -o h,v,q,t:,i:,l:,D:,k  -l help,verbose,quiet,base-temp:,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
     exit 1
 fi
 
@@ -91,6 +95,12 @@ while [ $# -gt 0  ]; do
        DAPS=$(readlink -f $2)
        shift
        ;;
+    -t|--base-temp)
+       T=$2
+       [[ -d $T ]] || mkdir -p $T
+       TEMPDIR=$T
+       shift
+       ;;
     -k|--keeptemp)
        DELTEMP=0
        ;;
@@ -101,13 +111,17 @@ while [ $# -gt 0  ]; do
  shift
 done
 
-
-# Create temporary directory were we store 
+# If TEMPDIR is set, use it and don't create a temp directory
+if [[ ! "$TEMPDIR" ]]; then
 TEMPDIR=$(mktemp -d /tmp/daps-testing_XXXXXX)
+fi
 
+# Copy our common functions (again)
+cp common.sh $TEMPDIR
 
+# Iterate through our "testsuite" and rsync it
 for i in $TESTSUITE; do
-  echo -e "******************
+  message $VERBOSE -e "******************
      Calling test: $i
 ******************"
   # mkdir -vp $TEMPDIR/$i
