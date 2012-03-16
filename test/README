@@ -34,3 +34,21 @@ test, use this procedure:
  $ ./testing.sh
 
 
+3. Writing your Own Tests
+To write your own test, proceed as follows:
+
+ a. Create a test_XXX-Y directory, whereas XXX are a number and
+    Y is a short descriptive term
+ b. Create a DC file. Usually, you can copy it from an existing
+    project and adapt it.
+ c. Create a "testing.sh" script. Usually, you can copy it from
+    an existing project and adapt it. 
+    IMPORTANT: Make sure, you use only 0-9, a-z, A-Z, and "_" 
+    in your test function! If your test function contains other
+    characters, it won't be found and executed!
+ d. Create a xml/ subdirectory and assemble the corresponding XML
+    file which you want to test.
+
+Your test directory will be automatically found and executed if 
+the above conditions are fulfilled.
+
