@@ -5,6 +5,10 @@
 # ----------------------------------------------------------------------------
 # Global Variables
 #
+# Default path to daps script:
+DAPS="/usr/bin/daps"
+# Default path to daps-init script:
+DAPS_INIT="/usr/bin/daps-init"
 # Default path to logfile:
 LOGFILE="/tmp/daps-testing.log"
 # Main file to include shunit2
