@@ -69,48 +69,6 @@ done
 #
 # Test functions are executed in the given order
 
-test_Programs() {
-# Purpose:
-#  Tests for several programs that daps needs
-  logging "<<< $MAIN::test_Programs:Start"
-  assertTrue "No /usr/bin/fop" "[[ -f /usr/bin/fop ]] && [[ -x /usr/bin/fop ]]"
-  logging $? "/usr/bin/fop"
-  
-  PROGRAMS="fop dia inkscape convert xmllint xmlcatalog xsltproc make bzip2 tar ruby python w3m"
-  for p in $PROGRAMS; do
-    p=$(which $p 2>/dev/null)
-    assertTrue "Program $p not found" $?
-    logging $? "Program $p"
-    assertTrue "No executable $p" "[[ -x $p ]]"
-    logging $? "Executable $p"
-  done
-
-  logging ">>> $MAIN::test_Programs:End"
-}
-
-test_Catalogs() {
-# Purpose:
-#  Tests catalog
-
-logging "<<< $MAIN::test_Catalogs:Start"
-
-CATALOGS='urn:x-suse:xslt:profiling:novdoc-profile.xsl
-          urn:x-suse:xslt:profiling:docbook45-profile.xsl
-          urn:x-daps:xslt:profiling:novdoc-profile.xsl
-          urn:x-daps:xslt:profiling:docbook45-profile.xsl
-          http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
-          http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl'
-
-for i in $CATALOGS; do
- xmlcatalog /etc/xml/catalog $i > $TEMPDIR/catalog-output
- assertTrue "Catalog entry $i not found" "[[  $? -eq 0 ]]"
- logging $? "Catalog file $i"
-done
-
-logging "<<< $MAIN::test_Catalogs:End"
-}
-
-
 test_Userguide_validate() {
 # Purpose:
 #  Validate DAPS user guide
