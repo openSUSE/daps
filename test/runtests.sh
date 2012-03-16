@@ -8,6 +8,10 @@
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
 #
 
+## TODO:
+## - Better error handling: 
+##
+
 
 # Source common functions
 source common.sh
@@ -117,7 +121,7 @@ if [[ ! "$TEMPDIR" ]]; then
 TEMPDIR=$(mktemp -d /tmp/daps-testing_XXXXXX)
 fi
 
-# Copy our common functions (again)
+# Copy our common functions
 cp common.sh $TEMPDIR
 
 # Iterate through our "testsuite" and rsync it
@@ -132,7 +136,9 @@ for i in $TESTSUITE; do
   rsync $opt --exclude=.svn --exclude=\*.~ $i $TEMPDIR
   pushd $TEMPDIR/$i
   ./testing.sh --tempdir $TEMPDIR/$i
-  echo ">>> Result: $?"
+  RESULT=$?
+  logging $VERBOSE "Result from $i/testing.sh: $RESULT"
+  [[ 0 -ne $RESULT ]] && exit_on_error "Test suite failed"
   popd
 done
 
