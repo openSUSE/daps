@@ -129,7 +129,10 @@ for i in $TESTSUITE; do
   opt="-azL"
   [[ 0 -ne $VERBOSE ]] && opt="$opt -v"
   rsync $opt --exclude=.svn --exclude=\*.~ $i $TEMPDIR
-  $i/testing.sh --tempdir $TEMPDIR/$i
+  pushd $TEMPDIR/$i
+  ./testing.sh --tempdir $TEMPDIR/$i
+  echo ">>> Result: $?"
+  popd
 done
 
 # Delete temporary directory, when DELTEMP is enabled
