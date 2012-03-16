@@ -28,7 +28,8 @@ DAPS="/usr/bin/daps"
 DAPS_INIT="/usr/bin/daps-init"
 # We only consider directories with "test_*" which are our test suite
 TESTSUITE=$(ls -d test_*)
-
+# Verbose flag, 0=no, 1=yes
+VERBOSE=0
 
 usage() {
 cat << EOF
@@ -38,6 +39,10 @@ DAPS Testing Framework
 Available Options:
  -h, --help
      Shows this help
+ -q, --quite
+     Suppress output (default)
+ -v, --verbose
+     Be more noisy
  -i, --dapsinit DAPSINIT
      Absolute filename, points to the daps-init program
  -D, --daps DAPS
@@ -53,7 +58,7 @@ exit 0
 
 # ---------
 # Parsing Command Line Options
-if ! options=$(getopt -o h,i:,l:,D:,k  -l help,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
+if ! options=$(getopt -o h,v,q,i:,l:,D:,k  -l help,verbose,quiet,dapsinit:,logfile:,daps:,keeptemp -- "$@"); then
     exit 1
 fi
 
@@ -63,6 +68,12 @@ eval set -- "$options"
 while [ $# -gt 0  ]; do
   case "$1" in                                                    
     -h|--help) usage;;
+    -v|--verbose)
+        VERBOSE=1
+        ;;
+    -q|--quiet)
+        VERBOSE=0
+        ;;
     -i|--dapsinit)
         D=$(readlink -f $2)
         [[ -f $D ]] || exit_on_error "$D does not exist"
@@ -99,7 +110,11 @@ for i in $TESTSUITE; do
   echo -e "******************
      Calling test: $i
 ******************"
-  mkdir -vp $TEMPDIR/$i
+  # mkdir -vp $TEMPDIR/$i
+  # We use rsync here to dereference any symbolic links:
+  opt="-azL"
+  [[ 0 -ne $VERBOSE ]] && opt="$opt -v"
+  rsync $opt --exclude=.svn --exclude=\*.~ $i $TEMPDIR
   $i/testing.sh --tempdir $TEMPDIR/$i
 done
 
