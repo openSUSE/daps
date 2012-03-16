@@ -70,6 +70,28 @@ logging() {
   fi
 }
 
+# ---------
+# Prints out message, if flag is != 0
+#
+message() {
+# Synopsis:
+#   $1 flag (integer) 
+#   $2 message
+# Examples:
+#   message 0 "Found x"
+#   message $VERBOSE -e "Hello World"
+# Returns:
+#   Returns string or nothing, depending on the flag
+#
+local LIMIT=$1
+shift
+local MESSAGE=$@
+
+if [[ $LIMIT -ne 0 ]]; then
+  echo $MESSAGE
+fi
+}
+
 
 
 # Short test, if shunit2 is available
