@@ -1,1 +1,0 @@
-../bin/testing-daps.sh
