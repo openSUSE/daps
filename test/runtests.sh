@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# This is the 
+# This is the wrapper script to call each test function individually
 #
+# See file:///usr/share/doc/packages/shunit2/shunit2.html
 # Needs the shunit2 package
 #
 # (C) 2012 Thomas Schraitle <toms@opensuse.org>
