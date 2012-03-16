@@ -14,6 +14,8 @@ elif [[ -f ../common.sh ]]; then
   source ../common.sh
 fi
 
+# If TEMPDIR variable is not set, use current directory
+TEMPDIR=${TEMPDIR:-"."}
 
 usage() {
 cat << EOF
@@ -83,8 +85,9 @@ oneTimeTearDown() {
 #
 
 test_X() {
-  assertTrue "Not equal" "[[ 1 -eq 1 ]]"
+  assertTrue "Not equal" "[[ 1 -eq 2 ]]"
 }
+
 
 # ALWAYS source it last:
 source $SHUNIT2SRC
