@@ -14,6 +14,10 @@ elif [[ -f ../common.sh ]]; then
   source ../common.sh
 fi
 
+# If TEMPDIR variable is not set, use current directory
+TEMPDIR=${TEMPDIR:-"."}
+
+DCFILE="DC-daps-user"
 
 usage() {
 cat << EOF
@@ -84,7 +88,7 @@ test_Programs() {
   logging ">>> $MAIN::test_Programs:End"
 }
 
-testCatalogs() {
+test_Catalogs() {
 # Purpose:
 #  Tests catalog
 
@@ -106,82 +110,29 @@ done
 logging "<<< $MAIN::test_Catalogs:End"
 }
 
-testDAPS_Init() {
+
+test_Userguide_validate() {
 # Purpose:
-#  Tests daps-init and checks, if DC file and all directories are available
-
-  logging "<<< $MAIN::testDAPS_Init:Start"
-  logging " TEMPDIR=$TEMPDIR"
-  cd $TEMPDIR
-  CONTENTS=$(ls)
-  assertNull "The temp dir contains something which was not expected" "$CONTENTS"
-
-  $DAPS_INIT  -d . -r book 2>/dev/null
-  assertTrue "daps-init returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "daps-init"
-
-  # Enable export, to make it "sourceable":
-  sed -i 's/^#export DOCCONF_NAME/export DOCCONF_NAME/g' DC-daps-example
-
-  assertTrue "Could not find file DC-daps-example" "[[ -f DC-daps-example ]]"
-  logging $? "File DC-daps-example"
-
-  DIRECTORIES="xml images images/src images/src/dia images/src/eps images/src/fig 
-               images/src/pdf images/src/png images/src/svg"
-  for d in $DIRECTORIES; do
-    assertTrue "Could not find $d directory" "[[ -d $d ]]"
-    logging $? "Directory $d"
-  done
-
-  logging ">>> $MAIN::testDAPS_Init:End"
-}
-
-testDAPS_Validate() {
-# Purpose:
-#  Runs daps validate, checks return value and if build directory is available
-  logging "<<< $MAIN::testDAPS_Validate:Start"
-  # source DC-daps-example
-  $DAPS validate
+#  Validate DAPS user guide
+  logging "<<< $MAIN::test_userguide-validate:Start"
+  $DAPS -d $DCFILE validate
   assertTrue "daps validate returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "Validation"
-
-  assertTrue "Could not find build directory" "[[ -d build ]]"
-  logging $? "Directory build "
-
-  logging ">>> $MAIN::testDAPS_Validate:End"
+  logging $? "Validated DAPS User Guide"
+  logging "<<< $MAIN::test_userguide-validate:End"
 }
 
-
-testDAPS_html_chunk() {
+test_Userguide_htmlsingle() {
 # Purpose:
-#  Runs daps html, checks return value and checks several files
-  logging "<<< $MAIN::testDAPS_html_chunk:Start"
-  # source DC-daps-example
-  $DAPS html
-  assertTrue "daps html returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "HTML creation successful"
-
-  assertTrue "Could not find build/daps-example/html/daps-example/ directory" "[[ -d build/daps-example/html/daps-example/ ]]"
-  logging $? "Directory build/daps-example/html/daps-example/"
-
-  assertTrue "Could not find build/daps-example/html/daps-example/index.html directory" "[[ -f build/daps-example/html/daps-example/index.html ]]"
-  logging $? "File build/daps-example/html/daps-example/index.html"
-
-  logging ">>> $MAIN::testDAPS_html_chunk:End"
-}
-
-testDAPS_htmlsingle() {
-# Purpose:
-#  Runs daps htmlsingle, checks return value and checks several files
-  logging "<<< $MAIN::testDAPS_htmlsingle:Start"
-  # source DC-daps-example
+#   Create single HTML
+  logging "<<< $MAIN::test_userguide-htmlsingle:Start"
+  # pushd $TEMPDIR
   $DAPS htmlsingle
+  # popd
   assertTrue "daps htmlsingle returned != 0 (was $?)" "[[ $? -eq 0 ]]"
-  logging $? "Creation of HTML single"
-
-  logging ">>> $MAIN::testDAPS_htmlsingle:End"
+  logging $? "Create single HTML DAPS User Guide"
+  
+  logging "<<< $MAIN::test_userguide-htmlsingle:End"
 }
-
 
 # ALWAYS source it last:
 source $SHUNIT2SRC
