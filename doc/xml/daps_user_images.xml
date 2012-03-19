@@ -13,9 +13,7 @@
   <remark>taroth 2012-03-14: todo: also add advanced feature like listings
   with daps etc.</remark>
  </para>
- 
- 
-  <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
+ <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
   for example), the source images you provide and reference in your XML sources 
   can automatically be transformed into different output formats 
   (from SVG to PNG for example). This section describes the basic things
@@ -25,61 +23,71 @@
   in your XML files or the one used for output formats, list any 
   missing images or checking for unique image names), refer to 
   <xref linkend="cha.daps.user.adv"/>.</para>
-  <sect1 id="sec.daps.user.edit.imgs.types">
-   <title>Supported Image Types</title>
-   <para>&dapsacr; supports the following types of images:</para>
-   <itemizedlist>
-    <listitem>
-     <para>
-      <filename>DIA</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>EPS</filename> (experimental)
+ <sect1 id="sec.daps.user.edit.imgs.types">
+  <title>Supported Image Types</title>
+  <para>&dapsacr; supports the following types of images:</para>
+  <itemizedlist>
+   <listitem>
+    <para>
+     <filename>DIA</filename>
     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>FIG</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>PDF</filename> (experimental)
+   </listitem>
+   <listitem>
+    <para>
+     <filename>EPS</filename> (experimental)
     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>PNG</filename>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <filename>SVG</filename>
-     </para>
-    </listitem>
-   </itemizedlist>
-  </sect1>
-  <sect1 id="sec.daps.user.edit.imgs.path">
-   <title>Location of the Images</title>
-   <para>&dapsacr; requires a certain directory structure for your XML sources 
+   </listitem>
+   <listitem>
+    <para>
+     <filename>FIG</filename>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <filename>PDF</filename> (experimental)
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <filename>PNG</filename>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <filename>SVG</filename>
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="sec.daps.user.edit.imgs.path">
+  <title>Location of the Images</title>
+  <para>&dapsacr; requires a certain directory structure for your XML sources 
     and for your images that you want to reference there. For details, refer to 
   <xref linkend="ex.daps.user.dir.doc" xrefstyle="select:title"/>. Depending on 
   the file type of your source images, add them to the respective subdirectories 
   in <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
   </para>
-  </sect1>
-  <sect1 id="sec.daps.user.edit.imgs.refer">
-   <title>Referencing Images</title>
-   <para>Provided your images are located in the required default directory, 
+  <important>
+   <title>Unique Image Names</title>
+   <para>The base names of your images need to be unique throughout the image 
+   subdirectories. For example, using <filename>images/svg/AAA.svn</filename> and 
+   <filename>images/svg/AAA.png</filename> will not work.
+   <remark>taroth 2012-03-19: check with fs what happens in this case</remark> 
+   The name in front of the file extension needs to be different, for example:
+   <filename>images/svg/AAA.svn</filename> and 
+   <filename>images/svg/BBB.png</filename>. </para>
+  </important>
+ </sect1>
+ <sect1 id="sec.daps.user.edit.imgs.refer">
+  <title>Referencing Images</title>
+  <para>Provided your images are located in the required default directory, 
    &dapsacr; automatically finds the path to your images.Therefore referencing 
    images in your XML sources is very straightforward: you do not need
    to include any path in the <sgmltag>fileref</sgmltag> attribute&mdash;the 
    file name is enough. See <xref linkend="ex.xml.img.ref"/>.</para>
-   <example id="ex.xml.img.ref">
-    <title>Image Reference in an XML File</title>
-    <screen>&lt;figure&gt;
+  <example id="ex.xml.img.ref">
+   <title>Image Reference in an XML File</title>
+   <screen>&lt;figure&gt;
     &lt;title&gt;Main Window&lt;/title&gt;
     &lt;mediaobject&gt;
      &lt;imageobject role="fo"&gt;
@@ -90,6 +98,7 @@
      &lt;/imageobject&gt;
     &lt;/mediaobject&gt;
    &lt;/figure&gt;</screen>
-   </example>
-  </sect1>
- </chapter>
+  </example>
+
+ </sect1>
+</chapter>

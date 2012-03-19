@@ -103,11 +103,15 @@
   <procedure>
    <title>Validating XML Files</title>
    <para>To validate all files that belong to your documentation project, 
-   &dapsacr; only needs to know which &dclong; file to use. By default, 
-   <sgmltag>remark</sgmltag> elements and XML comments are ignored during
-   validation. However, if you intend to create a (draft) output including remarks
-   or comments, you need to include them for validation by specifying 
-   the respective &dapsacr; option. 
+   &dapsacr; only needs to know which &dclong; file to use. If you have specified
+   a value for <parameter>DOCCONF_DEFAULT</parameter> in &dapsconfu; or if your
+   documentation directory contains only one &dc; file, &dapsacr; automatically
+   uses the corresponding &dc; file. Otherwise, specify the path to the &dc; file
+   with the <option>-d</option> option as described below.</para>
+   <para>By default, <sgmltag>remark</sgmltag> elements and XML comments are 
+   ignored during validation. However, if you intend to create a (draft) output 
+   including remarks or comments, you need to include them for validation by 
+   specifying the respective &dapsacr; option. 
    </para>
    <step>
     <para>To validate all XML files in your book, article or set, enter:</para>
