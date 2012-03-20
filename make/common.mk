@@ -1394,7 +1394,7 @@ $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images color-fo
 # Index creation
 #
 ifeq ("$(INDEX)", "Yes")
-  $(PROFILEDIR)/$(TMP_BOOK).idx: $(PROFILES) $(PROFILEDIR)/.validate
+  $(PROFILEDIR)/$(TMP_BOOK).ind: $(PROFILES) $(PROFILEDIR)/.validate
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating Index..."
   endif
