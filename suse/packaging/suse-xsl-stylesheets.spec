@@ -138,7 +138,7 @@ if [ 0 = $1 ]; then
     edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
         --del %{name}
   fi
-}
+fi
 
 exit 0
 
