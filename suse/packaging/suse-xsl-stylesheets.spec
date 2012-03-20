@@ -120,8 +120,13 @@ exit 0
 #
 # Remove catalog entries
 #
-if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
-   # SGML
+# delete catalog entries
+# only run if package is really uninstalled ($1 = 0) and not
+# in case of an update
+#
+if [ 0 = $1 ]; then 
+  if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
+    # SGML
     for c in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
         %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
     done
@@ -132,7 +137,8 @@ if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ]
     # susexsl entry
     edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
         --del %{name}
-fi
+  fi
+}
 
 exit 0
 
