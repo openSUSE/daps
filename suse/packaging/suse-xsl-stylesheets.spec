@@ -92,9 +92,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # SGML CATALOG
 #
 if [ -x %{regcat} ]; then
-  for CATALOG in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
-    %{regcat} -a %{_datadir}/sgml/$CATALOG >/dev/null 2>&1 || true
-  done
+  echo "######################## adding catalog in post"
+  %{regcat} -a %{_datadir}/sgml/CATALOG.%{dtdname}-%{dtdversion} >/dev/null 2>&1 || true
 fi
 # XML Catalogs
 #
@@ -126,12 +125,11 @@ exit 0
 #
 if [ 0 = $1 ]; then 
   if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
-    # SGML
-    for c in catalog/CATALOG.%{dtdname}-%{dtdversion}; do
-        %{regcat} -r %{_datadir}/sgml/$c >/dev/null 2>&1
-    done
+    # SGML: novdoc dtd entry
+        echo "######################## deleting catalog in postun"
+    %{regcat} -r %{_datadir}/sgml/CATALOG.%{dtdname}-%{dtdversion} >/dev/null 2>&1 || true
     # XML
-    # novdoc entry
+    # novdoc dtd entry
     edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
         --del %{dtdname}-%{dtdversion}
     # susexsl entry
