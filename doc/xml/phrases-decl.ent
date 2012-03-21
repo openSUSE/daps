@@ -20,5 +20,87 @@
  single source publishing into a number of different output formats, and is 
  suited both for small documentation projects as well as for comprehensive 
  projects, created by multiple authors in a collaborative effort.">
+  
+<!ENTITY daps-db-versions 
+"Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
+ planned for version 2.0."> 
  
- 
+<!ENTITY daps-sys-req
+'<variablelist>
+   <varlistentry>
+    <term>RAM, Hard Disk Space, CPU</term>
+    <listitem>
+     <para>&dapsacr; is a lean solution that does not require a lot of system 
+    resources. The disk space consumed rather depends on the amount of your 
+    documentation sources and the number of output formats you want to generate.
+    If you have multiple or very large documentation projects, a
+    machine with multiple-cores is recommended, but is not required.
+    </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Software</term>
+    <listitem>
+     <para>In addition to &dapsacr;, you need the following software:</para>
+     <itemizedlist>
+      <listitem>
+       <para>
+      An XML (or text) editor of your choice.
+    </para>
+      </listitem>
+      <listitem>
+       <para>For generating PDF output: an FO formatter, like FOP or XEP.</para>
+      </listitem>
+     </itemizedlist>
+     <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
+     dependencies on other software packages are automatically resolved during 
+     installation. For installing &dapsacr; on other Linux 
+     distributions with <literal>configure</literal>, <literal>make</literal>,
+     and <literal>make install</literal>, make sure the following packages or 
+     tools are installed on your system:</para>
+     <itemizedlist>
+      <listitem>
+       <para>automake</para>
+      </listitem>
+      <listitem>
+       <para>convert (included in the 
+    <systemitem class="resource">ImageMagick</systemitem> package)</para>
+      </listitem>
+      <listitem>
+       <para>DocBook 4</para>
+      </listitem>
+      <listitem>
+       <para>DocBook 4 Stylesheets (usually a separate package)</para>
+      </listitem>
+      <listitem>
+       <para>make</para>
+      </listitem>
+      <listitem>
+       <para>xmlcatalog (usually part of the package 
+   <systemitem class="resource">libxml2</systemitem>, 
+   <systemitem class="resource">libxml-utils</systemitem>, or 
+   <systemitem class="resource">libxml-tools</systemitem>)</para>
+      </listitem>
+      <listitem>
+       <para>xmllint (usually part of the package 
+   <systemitem class="resource">libxml2</systemitem>, 
+   <systemitem class="resource">libxml-utils</systemitem>, or 
+   <systemitem class="resource">libxml-tools</systemitem>)</para>
+      </listitem>
+      <listitem>
+       <para>xsltproc (if not available as a separate package, it may be included in
+    <systemitem class="resource">libxslt</systemitem>)</para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Directory Structure</term>
+    <listitem>
+     <para>For &dapsacr; to work out of the box, it requires a certain
+      organization of your XML files and images within your documentation
+      directory. You can generate the necessary structure with the &dapsacr; 
+      initialization script, <command>daps-init</command>.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>'>
