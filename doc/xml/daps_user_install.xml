@@ -20,7 +20,7 @@
   and install them on any distribution with <literal>configure</literal>, 
   <literal>make</literal>, and <literal>make install</literal>.</para>
  </abstract>
- 
+
  <sect1 id="sec.daps.user.inst.osuse">
   <title>Installing &dapsacr; on &osuse;</title>
   <para>For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
@@ -29,8 +29,9 @@
   For the complete path to the repository, you need to add the version number 
   of your &osuse; installation. For example, the complete repository URL for &osuse;
   <productnumber>12.1</productnumber> would be:
-<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink></para>  
- 
+<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>
+  </para>
+
   <para>For basic details on how to add software repositories and how to install 
   software on &osuse;, refer to the &osuse; <citetitle>Reference
   Guide</citetitle>. The guide is part of the &osuse; documentation
@@ -93,48 +94,12 @@
   <para>For installation on other Linux distributions, the &dapsacr; sources
   are available as tarball.<remark>taroth 2012-03-07: from???</remark> They can
   be installed with <literal>configure</literal>, 
-  <literal>make</literal>, and <literal>make install</literal> as described in 
-  <xref linkend="pro.daps.user.inst.tarball"/>.</para>
-  <para>Before starting the installation, make sure the following 
-  packages or tools are installed on your system:</para>
-  <itemizedlist id="itl.daps.user.inst.other.req">
-   <title>Software Requirements</title>
-   <listitem>
-    <para>automake</para>
-   </listitem>
-   <listitem>
-    <para>convert (included in the 
-    <systemitem class="resource">ImageMagick</systemitem> package)</para>
-   </listitem>
-   <listitem>
-    <para>DocBook 4</para>
-   </listitem>
-   <listitem>
-    <para>DocBook 4 Stylesheets (usually a separate package)</para>
-   </listitem>
-   <listitem>
-    <para>make</para>
-   </listitem>
-   <listitem>
-    <para>xmlcatalog (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
-   </listitem>
-   <listitem>
-    <para>xmllint (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
-   </listitem>
-   <listitem>
-    <para>xsltproc (if not available as a separate package, it may be included in
-    <systemitem class="resource">libxslt</systemitem>)</para>
-   </listitem>
-  </itemizedlist>
+  <literal>make</literal>, and <literal>make install</literal>.</para>
 
   <procedure id="pro.daps.user.inst.tarball">
    <title>Installing the &dapsacr; Sources</title>
+   <para>Before starting the installation, check the &dapsacr; system requirements
+  and make sure to have all required packages and tools installed.</para>
    <step>
     <para>Download the &dapsacr; source tarball from 
    <ulink url="http://daps.sourceforge.net"></ulink>.
@@ -189,10 +154,10 @@
     <screen>make install</screen>
    </step>
   </procedure>
-   <para>
-    <remark>taroth 2012-03-07: todo check what happens at the end of 
+  <para>
+   <remark>taroth 2012-03-07: todo check what happens at the end of 
    make install - do any messages appear?</remark>
-   </para>
-  
+  </para>
+
  </sect1>
 </chapter>
