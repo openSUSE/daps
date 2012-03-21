@@ -27,9 +27,21 @@
   <title>Target Audience</title>
   <para>&audience;</para>
  </sect1>
-  <sect1 id="sec.daps.quick.inst">
-<title>Installing &dapsacr;</title>
- <para>The &dapslong; can be installed and used on any Linux distribution. 
+ <sect1 id="sec.daps.quick.dbversions">
+  <title>Supported DocBook Versions</title>
+  <para>&daps-db-versions;</para>
+ </sect1>
+ <sect1 id="sec.daps.quick.req">
+  <title>Requirements and Additional Software</title>
+  <para></para>
+  <sect2 id="sec.daps.quick.req.system">
+   <title>System Requirements</title>
+   &daps-sys-req;
+  </sect2>
+ </sect1>
+ <sect1 id="sec.daps.quick.inst">
+  <title>Installing &dapsacr;</title>
+  <para>The &dapslong; can be installed and used on any Linux distribution. 
   Currently, &dapsacr; is available as RPM package for the &osuse; distribution.
   <remark>taroth 2012-03-20: (and the &sle; products based on &osuse;)???</remark>
   Eventually, RPM packages for further distributions may become available. 
@@ -39,165 +51,166 @@
   <literal>make</literal>, and <literal>make install</literal>. 
  </para>
 
- 
- <sect2 id="sec.daps.quick.inst.osuse">
-  <title>Installing &dapsacr; on &osuse;</title>
-  <para>For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
+
+  <sect2 id="sec.daps.quick.inst.osuse">
+   <title>Installing &dapsacr; on &osuse;</title>
+   <para>For &osuse;, the <systemitem class="resource">daps</systemitem> package is 
   available from the <literal>Documentation:Tools</literal> repository at 
   <ulink url="http://download.opensuse.org/repositories"></ulink>. 
   For the complete path to the repository, you need to add the version number 
   of your &osuse; installation. For example, the complete repository URL for &osuse;
   <productnumber>12.1</productnumber> would be:
-<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink></para>  
- 
-  <para>For basic details on how to add software repositories and how to install 
+<ulink url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>
+   </para>
+
+   <para>For basic details on how to add software repositories and how to install 
   software on &osuse;, refer to the &osuse; <citetitle>Reference
   Guide</citetitle>. The guide is part of the &osuse; documentation and
   available from <ulink url="http://www.suse.com/documentation"></ulink>. 
   </para>
-  <para>Choose one of the following installation methods:</para>
-  <variablelist>
-   <varlistentry>
-    <term>1-Click Installation from the Internet</term>
-    <listitem>
-     <para>Follow the instructions in the &osuse; 
+   <para>Choose one of the following installation methods:</para>
+   <variablelist>
+    <varlistentry>
+     <term>1-Click Installation from the Internet</term>
+     <listitem>
+      <para>Follow the instructions in the &osuse; 
      <citetitle>Reference Guide</citetitle>, chapter 
     <citetitle>Installing Packages from the Internet</citetitle>. Search for 
     the <systemitem class="resource">daps</systemitem> package that matches your 
     &osuse; version. From the listed results, install the package that is provided 
     by the repository <literal>Documentation:Tools</literal>.
      </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Installation with &yast; (GUI)</term>
-    <listitem>
-     <para>Follow the instructions in the &osuse; 
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Installation with &yast; (GUI)</term>
+     <listitem>
+      <para>Follow the instructions in the &osuse; 
      <citetitle>Reference Guide</citetitle>, chapter 
     <citetitle>Installing Or Removing Software</citetitle>. Add the 
     <literal>Documentation:Tools</literal> repository that matches your &osuse;
     version&mdash;see the introduction to this section. From this repository, 
     install the <systemitem class="resource">daps</systemitem> package.
     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Installation with <command>zypper</command> (command line)</term>
-    <listitem>
-     <para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>Installation with <command>zypper</command> (command line)</term>
+     <listitem>
+      <para>
      Follow the instructions in the &osuse; 
      <citetitle>Reference Guide</citetitle>, chapter 
     <citetitle>Managing Software with Command Line Tools</citetitle>. Add the 
     <literal>Documentation:Tools</literal> repository that matches your &osuse;
     version&mdash;see the introduction to this section. From this repository, 
     install the <systemitem class="resource">daps</systemitem> package.</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-  <para>All of the installation methods above automatically resolve 
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>All of the installation methods above automatically resolve 
   any dependencies to other packages that are required by &dapsacr;. </para>
- </sect2>
- <sect2 id="sec.daps.quick.inst.other">
-  <title>Installing &dapsacr; on Other Linux Distributions</title>
-  <para>For installation on other Linux distributions, the &dapsacr; sources
+  </sect2>
+  <sect2 id="sec.daps.quick.inst.other">
+   <title>Installing &dapsacr; on Other Linux Distributions</title>
+   <para>For installation on other Linux distributions, the &dapsacr; sources
   are available as tarball.<remark>taroth 2012-03-07: from???</remark> They can
   be installed with <literal>configure</literal>, 
   <literal>make</literal>, and <literal>make install</literal> as described in 
   <xref linkend="pro.daps.quick.inst.tarball"/>.</para>
-  <para>Before starting the installation, make sure the following 
+   <para>Before starting the installation, make sure the following 
   packages or tools are installed on your system:</para>
-  <itemizedlist id="itl.daps.quick.inst.other.req">
-   <title>Software Requirements</title>
-   <listitem>
-    <para>automake</para>
-   </listitem>
-   <listitem>
-    <para>convert (included in the 
+   <itemizedlist id="itl.daps.quick.inst.other.req">
+    <title>Software Requirements</title>
+    <listitem>
+     <para>automake</para>
+    </listitem>
+    <listitem>
+     <para>convert (included in the 
     <systemitem class="resource">ImageMagick</systemitem> package)</para>
-   </listitem>
-   <listitem>
-    <para>DocBook 4</para>
-   </listitem>
-   <listitem>
-    <para>DocBook 4 Stylesheets (usually a separate package)</para>
-   </listitem>
-   <listitem>
-    <para>make</para>
-   </listitem>
-   <listitem>
-    <para>xmlcatalog (usually part of the package 
+    </listitem>
+    <listitem>
+     <para>DocBook 4</para>
+    </listitem>
+    <listitem>
+     <para>DocBook 4 Stylesheets (usually a separate package)</para>
+    </listitem>
+    <listitem>
+     <para>make</para>
+    </listitem>
+    <listitem>
+     <para>xmlcatalog (usually part of the package 
    <systemitem class="resource">libxml2</systemitem>, 
    <systemitem class="resource">libxml-utils</systemitem>, or 
    <systemitem class="resource">libxml-tools</systemitem>)</para>
-   </listitem>
-   <listitem>
-    <para>xmllint (usually part of the package 
+    </listitem>
+    <listitem>
+     <para>xmllint (usually part of the package 
    <systemitem class="resource">libxml2</systemitem>, 
    <systemitem class="resource">libxml-utils</systemitem>, or 
    <systemitem class="resource">libxml-tools</systemitem>)</para>
-   </listitem>
-   <listitem>
-    <para>xsltproc (if not available as a separate package, it may be included in
+    </listitem>
+    <listitem>
+     <para>xsltproc (if not available as a separate package, it may be included in
     <systemitem class="resource">libxslt</systemitem>)</para>
-   </listitem>
-  </itemizedlist>
+    </listitem>
+   </itemizedlist>
 
-  <procedure id="pro.daps.quick.inst.tarball">
-   <title>Installing the &dapsacr; Sources</title>
-   <step>
-    <para>Download the &dapsacr; source tarball from 
+   <procedure id="pro.daps.quick.inst.tarball">
+    <title>Installing the &dapsacr; Sources</title>
+    <step>
+     <para>Download the &dapsacr; source tarball from 
    <ulink url="http://daps.sourceforge.net"></ulink>.
    <remark>taroth 2012-03-07: todo - URL may still change, check with fs</remark>
-    </para>
-   </step>
-   <step>
-    <para>Create a new directory in your file system and unpack the tarball there:</para>
+     </para>
+    </step>
+    <step>
+     <para>Create a new directory in your file system and unpack the tarball there:</para>
     <!--<screen>tar xvf TARBALLNAME .</screen>-->
-   </step>
-   <step id="daps.quick.inst.configure">
-    <para>Change to the newly created directory and start the configure script:</para>
-    <screen>./configure</screen>
-    <para>The script checks your system for any software relevant to &dapsacr; or
+    </step>
+    <step id="daps.quick.inst.configure">
+     <para>Change to the newly created directory and start the configure script:</para>
+     <screen>./configure</screen>
+     <para>The script checks your system for any software relevant to &dapsacr; or
     the &dapsacr; installation process. It also creates a makefile that will
     be used during installation. Based on the analysis, the script shows a 
     summary that includes the following information:</para>
-    <itemizedlist>
-     <listitem>
-      <para>the &dapsacr; installation paths,</para>
-     </listitem>
-     <listitem>
-      <para>an overview of &dapsacr; features that will be available on your 
+     <itemizedlist>
+      <listitem>
+       <para>the &dapsacr; installation paths,</para>
+      </listitem>
+      <listitem>
+       <para>an overview of &dapsacr; features that will be available on your 
       system if you install &dapsacr; now, and </para>
-     </listitem>
-     <listitem>
-      <para>which software is still missing to enable the remaining &daps; 
+      </listitem>
+      <listitem>
+       <para>which software is still missing to enable the remaining &daps; 
       features as well.</para>
-     </listitem>
-    </itemizedlist>
-   </step>
-   <step>
-    <para>Check the summary carefully.</para>
-   </step>
-   <step>
-    <para>Install missing packages, if necessary. After installing new packages, 
+      </listitem>
+     </itemizedlist>
+    </step>
+    <step>
+     <para>Check the summary carefully.</para>
+    </step>
+    <step>
+     <para>Install missing packages, if necessary. After installing new packages, 
     repeat <xref linkend="daps.quick.inst.configure"/> and check the summary again.</para>
-   </step>
-   <step>
-    <para>If you want to adjust the &dapsacr; installation paths, check which 
+    </step>
+    <step>
+     <para>If you want to adjust the &dapsacr; installation paths, check which 
     options are available:</para>
-    <screen>./configure --help</screen>
-    <para>To create a makefile with custom installation paths, run the configure 
+     <screen>./configure --help</screen>
+     <para>To create a makefile with custom installation paths, run the configure 
     script with the desired option.</para>
-   </step>
-   <step>
-    <para>If everything is prepared according to your wishes, enter:</para>
-    <screen>make</screen>
-   </step>
-   <step>
-    <para>To start the installation process, enter:</para>
-    <screen>make install</screen>
-   </step>
-  </procedure>
+    </step>
+    <step>
+     <para>If everything is prepared according to your wishes, enter:</para>
+     <screen>make</screen>
+    </step>
+    <step>
+     <para>To start the installation process, enter:</para>
+     <screen>make install</screen>
+    </step>
+   </procedure>
    <para>
     <remark>taroth 2012-03-07: todo check what happens at the end of 
    make install - do any messages appear?</remark>
