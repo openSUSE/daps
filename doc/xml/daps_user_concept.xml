@@ -20,32 +20,8 @@
  </sect1>
  <sect1 id="sec.daps.user.oview.addon">
   <title>Additional Software</title>
-  <para>To add further components like version management or a workflow mechanism
-   for your documentation projects, use &daps; in combination with the following 
-   software:
-  </para>
-  <itemizedlist>
-   <listitem>
-    <para> Any version management system, like CVS, Subversion, Mercurial or Git.
-      </para>
-   </listitem>
-   <listitem>
-    <para>&dm;, a command-line tool for adding and retrieving meta-information 
-     for all files belonging to a documentation project. &dm; is especially useful 
-     for larger, collaborative projects where it helps you to keep track of 
-     owners (authors) and editing status of all files. However, &dm; requires to 
-     host your documentation files on a Subversion server. 
-     <remark>taroth 2012-02-07: todo - add xref to separate &dm; guide</remark>
-    </para>
-   </listitem>
-  </itemizedlist>
-
-  <para>
-   Together with the software components mentioned above, &dapsacr; can be
-   used as a fully-fledged authoring and content management system for documentation
-   projects based on DocBook.
-  </para>
- </sect1>
+  &daps-addon;
+  </sect1>
  <sect1 id="sec.daps.user.oview.features">
   <title>Key Features</title>
   <para>&dapsacr; supports technical writers in the editing, translation and 
@@ -164,12 +140,11 @@
      <para>&dapsacr; offers a numbers of features to simplify review and 
      translation processes. For example, you can insert 
      <sgmltag>remark</sgmltag> elements in the source code and generate an output 
-     format that either includes or suppresses these remarks. You can also choose
-     to generate preview versions of your documentation with a <literal>DRAFT</literal>
+     format that either includes or suppresses these remarks. You can also 
+     generate preview versions of your documentation with a <literal>DRAFT</literal>
      watermark appearing on the HTML or PDF output. If you use &dm; in addition to
      &dapsacr;, you can <quote>flag</quote> your XML files with meta-information
-     like workflow status (for example, <literal>editing</literal>
-     or <literal>proofed</literal>). &dapsacr; offers an option to also display
+     (like workflow status). &dapsacr; offers an option to also display
      this meta-information in the generated output. For handing over your files 
      to review or translation, &dapsacr; can create tarballs of the XML
      sources and graphics. Alternatively, transform all files 
