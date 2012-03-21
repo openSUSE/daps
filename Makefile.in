@@ -295,7 +295,8 @@ REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
-             -e 's|@prefix[@]|$(prefix)|g'
+             -e 's|@prefix[@]|$(prefix)|g' \
+             -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
 DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT := $(abs_top_srcdir)
@@ -1461,7 +1462,7 @@ install-data-local:
 @CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(ROOT_CATALOG)
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
-	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
+	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(srcdir)/.firstbuild \
 	$(dir $(DAPS_CATALOG)) $(FOP_CONFIG) bin/daps etc/config 
 
 #-----------------------------DAPS--------------------------------------------
@@ -1496,17 +1497,32 @@ $(DAPS_CATALOG):
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
+# the SVN sources contain links bin/daps, etc/config and $(FOP_CONFIG)
+# These need to be replaced by real files/differenmt links created by
+# the respective targets below.
+# To make sure they are rebuild at least once when make is called for
+# the first time, we make them depend on a file we create first
+# This file will be newer than the existing links and thus the targets
+# will be rebuild.
+# This helps to avoid PHONY targets which would be called with every single
+# make call (even make clean) - something we definetely would like to avoid)
+
+.firstbuild:
+	touch $@
+
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps:
+bin/daps: .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
-etc/config:
+etc/config: .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
-$(FOP_CONFIG): $(FOP_CONFIG_SRC)
+$(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
 	ln -sf $(notdir $<) $@
 
 $(USERGUIDE): bin/daps etc/config
