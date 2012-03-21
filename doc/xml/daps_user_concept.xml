@@ -12,62 +12,11 @@
  <abstract><para>&daps-description-long;</para></abstract>
  <sect1 id="sec.daps.user.oview.dbversion">
   <title>Supported DocBook Versions</title>
-  <para>
-  Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
-  planned for version 2.0.
- </para>
+  <para>&daps-db-versions;</para>
  </sect1>
  <sect1 id="sec.daps.user.oview.req">
   <title>System Requirements</title>
-  <variablelist>
-   <varlistentry>
-    <term>RAM, Hard Disk Space, CPU</term>
-    <listitem>
-     <para>&dapsacr; is a lean solution that does not require a lot of system 
-    resources. The disk space consumed rather depends on the amount of your 
-    documentation sources and the number of output formats you want to generate.
-    If you have multiple or very large documentation projects, a
-    machine with multiple-cores is recommended, but is not required.
-    </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Software</term>
-    <listitem>
-     <para>In addition to &dapsacr;, you need the following software:</para>
-     <itemizedlist>
-      <listitem>
-       <para>
-      An XML (or text) editor of your choice.
-    </para>
-      </listitem>
-      <listitem>
-       <para>For generating PDF output: an FO formatter, like FOP or XEP.</para>
-      </listitem>
-     </itemizedlist>
-     <para>To add version management and workflow mechanisms to your documentations 
-     projects, you can install <xref linkend="sec.daps.user.oview.addon" xrefstyle="select:title"/>.</para>
-     <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
-     dependencies on other software packages are automatically resolved during 
-     installation. For installing &dapsacr; on other Linux 
-     distributions with <literal>configure</literal>, <literal>make</literal>,
-     and <literal>make install</literal>, see also 
-     <xref linkend="itl.daps.user.inst.other.req"/>.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Directory Structure</term>
-    <listitem>
-     <para>For &dapsacr; to work out of the box, it requires a certain
-      organization of your XML files and images within your documentation
-      directory. For details, refer to <xref linkend="ex.daps.user.dir.doc"/>. 
-      You can generate the necessary structure with the &dapsacr; 
-      initialization script, <command>daps-init</command>. For more information 
-      on the initialization script, refer to <xref linkend="cha.daps.user.create"/>.
- </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+  &daps-sys-req;  
  </sect1>
  <sect1 id="sec.daps.user.oview.addon">
   <title>Additional Software</title>
