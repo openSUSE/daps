@@ -185,43 +185,130 @@
    </para>
   </sect2>
  </sect1>
- <sect1 id="sec.daps.quick.init">
-  <title>A Project from Scratch</title>
+ <sect1 id="sec.daps.quick.basics">
+  <title>Defining Documentation Projects</title>
   <para>The easiest way to set up a new documentation project from scratch is to
- use <command>daps-init</command>. View the available options with the command
- <command>daps-init --help</command>.The &dapsacr; initialization script automatically 
- creates the key files and directory structure you need to get started with 
- &dapsacr;:</para>
- <!--taroth 2012-03-22: maybe change to varlist and explain directly below--> 
- <!--<para>It generates:</para>
- <itemizedlist>
-  <listitem>
-   <para>the <xref linkend="sec.daps.user.oview.dirstruct" xrefstyle="select:title"/> 
-   required by &dapsacr;,</para>
-  </listitem>
-  <listitem>
-   <para>an example <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>, and </para>
-  </listitem>
-  <listitem>
-   <para>an example <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/> that you can use as a starting point for 
-   your documentation. </para>
-  </listitem>
- </itemizedlist>-->
-  <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
- as example document. With the <option>-r</option> option, you can also set another
- root element, such as <sgmltag>article</sgmltag>, for example.</para>
-  <procedure>
+ use the &dapsacr; initialization script. For instructions how to do so, refer
+ to <xref linkend="pro.daps.init"/>. It automatically creates the key files and directory 
+ structure you need to get started with &dapsacr;.</para>
+  <sect2 id="sec.daps.quick.basics.files">
+   <title>Key Files of a &dapsacr; Documentation Project</title>
+   <para>The following files are the key files for defining a documentation
+   project so that it can be processed by &dapsacr;:</para>
+   <variablelist>
+    <varlistentry>
+     <term>Main File</term>
+     <listitem>
+      <para>An XML file containing the <quote>starting point</quote> (the 
+     highest-level object) of your documentation project (for example, 
+     <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>). 
+    For larger documentation projects, it is good practice to name the file 
+    <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>, 
+    but you can use any other filename as well.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>&dclong; (&dc;) File</term>
+     <listitem>
+      <para>
+      A configuration file defining a number of parameters for your
+      documentation project (like the Main file, layout variants, or which
+      profiling information to use). Of the multiple parameters that can be set 
+      in the &dc; file, the only one required is <parameter>MAIN</parameter>, 
+      pointing to the XML file that you want to process.
+     </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  <sect2 id="sec.daps.quick.basics.dirstruct">
+   <title>Directory Structure</title>
+
+   <para>
+   For &dapsacr; to work out of the box, your XML files and images should be
+   organized within your documentation directory (DOC_DIR) as shown in
+   <xref linkend="ex.daps.dir.doc"/>. The example also also shows the key files 
+   of a documentation project as mentioned above. Any directories are printed in 
+   bold.</para>
+   <example id="ex.daps.dir.doc">
+    <title>Directory Structure</title>
+    <screen>
+     <replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
+  |--&dc;* <co id="co.docdir.dc"/>
+  |--<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
+     |--<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
+        |--<emphasis role="bold">dia</emphasis>
+        |--<emphasis role="bold">eps</emphasis>
+        |--<emphasis role="bold">fig</emphasis>
+        |--<emphasis role="bold">pdf</emphasis>
+        |--<emphasis role="bold">png</emphasis>
+        |--<emphasis role="bold">svg</emphasis>
+  |--<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
+     |--MAIN*.xml <co id="co.docdir.main"/>
+    </screen>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.docdir.base">
+     <para>
+      <quote>Working directory</quote> for the respective documentation project.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.dc">
+     <para>
+      &dc; file defining the documentation project. <!--For more information,
+      refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
+    </callout>
+    <callout arearefs="co.docdir.img.src">
+     <para>
+      Top-level directory for any original images that you want to use in
+      the documentation project. Contains subdirectories for images in
+      various formats. Any images to be referenced in the XML sources must
+      be put in the respective subdirectories.
+      <remark>taroth 2012-02-01: add xref to 
+     section about using images (how to reference them -> path!)</remark>
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.xml">
+     <para>
+      Directory holding the XML files for the documentation project. If you
+      declare entities in an external file (for example, in
+      <filename>entity-decl.ent</filename>), put the entity declaration file
+      here, too.</para>
+    </callout>
+    <callout arearefs="co.docdir.main">
+     <para>
+      The main file of the documentation project. It contains
+      <quote>references</quote> to other books, chapters, appendices, etc.
+     </para>
+    </callout>
+   </calloutlist>
+  </sect2>
+ </sect1>
+ <sect1 id="sec.daps.quick.init">
+  <title>A Documentation Project From Scratch</title>
+  <para>Use <command>daps-init</command> to set up a new documentation 
+  project from scratch. The initialization script automatically creates the key 
+  files and directory structure you need to get started with &dapsacr;.
+  View the available options with the command  <command>daps-init --help</command>. 
+  By default, the script creates a <sgmltag>book</sgmltag>
+ as example document.
+  </para>
+  <procedure id="pro.daps.init">
+   <title>Using <command>daps-init</command>
+   </title>
    <step>
     <para>Create a directory that you want to use as your documentation directory:</para>
-    <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>
+    </screen>
    </step>
    <step>
-    <para>Create the default directory structure for &dapsdir; (containing an example 
+    <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
     <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>
     </screen>
-    <para>Alternatively, create the default directory structure 
-   with an <sgmltag>article</sgmltag> example: </para>
+    <para>With the <option>-r</option> option, you can also set another root 
+    element, such as <sgmltag>article</sgmltag>, for example.To create the default 
+    directory structure with an <sgmltag>article</sgmltag> example: </para>
     <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</screen>
    </step>
    <step>
@@ -241,127 +328,61 @@
     <para>To see what the output of the XML example file looks like, follow the 
    instructions on screen. For example, the following command specifies the 
    <filename>DC*</filename> file to use and the output format to create:</para>
-    <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR/replaceable>/DC-daps-example color-pdf</screen>
-    <para>For creation of the PDF, &dapsacr; uses FOP by default 
+    <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/DC-daps-example color-pdf</screen>
+     <para>For creation of the PDF, &dapsacr; uses FOP by default 
     (if no other formatter is specified) and applies the default DocBook 
     stylesheets (if no custom layout options are defined). Find 
    the generated PDF in your documentation directory in 
    <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
-   </step>
-  </procedure>
- </sect1>
- <sect1>
-  <title>Existing Projects</title>
-  <para>You can also use existing projects. SUSEdoc projects are
-          easy to transform into a &dapsacr; project. In the bottom you 
-          will see something about using your own and existing project.
-            By the way SUSEdoc is the predecessor of Daps.</para>
-  <para>
-   <warning>
-    <para>Daps support only DocBook 4.x. Support for DocBook 5.x is planned.</para>
-   </warning>
-  </para>
-  <sect2>
-   <title></title>
-   <variablelist>
-    <varlistentry>
-     <term>The Directory Structure to use an existing Project:</term>
-     <listitem>
-      <screen>
-xml/*.ent
-xml/*.xml
-images/(Type)/data
-                        </screen>
-     </listitem>
-    </varlistentry>
-   </variablelist>
-  </sect2>
-  <sect2>
-   <title>The basenames of Images must be unique different</title>
-   <para>The images basenames need to be unique throughout different
-        directories. Therefore using names <filename>images/png/AAA.png</filename> and
-        <filename>images/svg/AAA.svg</filename> is not an option it should be different. For
-        Example: <filename>images/svg/BBB.svg</filename> and <filename>images/png/AAA.png</filename>
-   </para>
-  </sect2>
-  <sect2>
-   <title>Adjustment for XML</title>
-   <para>Linking of Images:</para>
-   <formalpara>
-    <title>wrong:</title>
-    <para>
-     <literal>&lt;imagedata fileref="images/png/foo.png"/></literal>
-    </para>
-   </formalpara>
-   <formalpara>
-    <title>correct:</title>
-    <para>
-     <literal>foo.png</literal>
-    </para>
-   </formalpara>
-
-
-   <para>Please take only the name of the image.</para>
-   <para>Look at the following to learn to adjust your Header data for XML:</para>
-   <screen>&lt;!DOCTYPE ...
-[
-  &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
-  &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
-  %entities;
-]></screen>
-  </sect2>
-  <sect2>
-   <title>Migrate SUSEdoc Projects</title>
-   <para> See here to migrate your SUSEdoc Project:
-                /usr/share/doc/packages/daps/README</para>
-  </sect2>
- </sect1>
- <sect1>
-  <title>Generating output formatts</title>
-  <para>In the following points you will see the procedure of transforming formats into a
+    </step>
+   </procedure>
+  </sect1>
+  <sect1>
+   <title>Generating output formatts</title>
+   <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
-  <sect2>
-   <title>Creating PDF</title>
-   <para> To transform XML into PDF, you need an existing project(as shown in section 4),
+   <sect2>
+    <title>Creating PDF</title>
+    <para> To transform XML into PDF, you need an existing project(as shown in section 4),
                 use the following steps:</para>
-   <procedure>
-    <step>
-     <para> Enter the following command:</para>
-     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
-    </step>
-   </procedure>
-   <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
+    <procedure>
+     <step>
+      <para> Enter the following command:</para>
+      <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
+     </step>
+    </procedure>
+    <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
                 daps repository. To generat a printable PDF switch "color-pdf" into "pdf".</para>
-  </sect2>
-  <sect2>
-   <title>Creating &epub;</title>
-   <para>To transform XML into &epub;, you need an existing project(as shown in the section
+   </sect2>
+   <sect2>
+    <title>Creating &epub;</title>
+    <para>To transform XML into &epub;, you need an existing project(as shown in the section
                 4), use the following steps.</para>
-   <procedure>
-    <step>
-     <para>Enter in your konsole:</para>
-     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
-    </step>
-    <step>
-     <para>Finish. Your XML file is now transformed &epub; file. The result is in the
+    <procedure>
+     <step>
+      <para>Enter in your konsole:</para>
+      <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
+     </step>
+     <step>
+      <para>Finish. Your XML file is now transformed &epub; file. The result is in the
                         daps repository. Open the result with an EBook reader like calibre.</para>
-    </step>
-   </procedure>
-  </sect2>
-  <sect2>
-   <title>Creating HTML</title>
-   <procedure>
-    <step>
-     <para>Enter in your konsole:</para>
-     <screen>$ daps -e --static ENV_DATA html</screen>
-    </step>
-    <step>
-     <para>Finish. Your XML file is now a HTML file. The result is in the daps
+     </step>
+    </procedure>
+   </sect2>
+   <sect2>
+    <title>Creating HTML</title>
+    <procedure>
+     <step>
+      <para>Enter in your konsole:</para>
+      <screen>$ daps -e --static ENV_DATA html</screen>
+     </step>
+     <step>
+      <para>Finish. Your XML file is now a HTML file. The result is in the daps
                         repository. Open the result with an Browser.</para>
-    </step>
-   </procedure>
-  </sect2>
- </sect1>
+     </step>
+    </procedure>
+   </sect2>
+  </sect1>
     <!--<sect1>    
     <title>Create Distributable Archives</title>
         <para> To create a distributable archives read the following:</para>
@@ -373,39 +394,107 @@ images/(Type)/data
         </itemizedlist>
         
         </sect1>-->
- <sect1>
-  <title>Advanced usage of &daps;</title>
-  <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
-  <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-  <para>For example:</para>
-  <screen>daps -vv<co id="co.daps.vv"/> \
+  <sect1>
+   <title>Advanced usage of &daps;</title>
+   <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
+   <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
+   <para>For example:</para>
+   <screen>daps -vv<co id="co.daps.vv"/> \
   -e ENV_DATA<co id="co.daps.env"/> \
   html<co id="co.daps.html"/>
   </screen>
-  <calloutlist>
-   <callout arearefs="co.daps.vv">
-    <para>Global Option = -vv (verbose print more debug messages)</para>
-   </callout>
-   <callout arearefs="co.daps.env">
-    <para>Global Option = -e (defines the ENV file)</para>
-   </callout>
-   <callout arearefs="co.daps.html">
-    <para>Subcommand = html (what to create)</para>
-   </callout>
-  </calloutlist>
-  <para>DAPS can be executed with or without options, depending on the project.</para>
-  <para>If the directory contains only one ENV file:</para>
-  <screen>daps "subcommand"</screen>
-  <para>If the directory contains more than one ENV-Data</para>
-  <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
-  <para>Setup ENV-Data</para>
-  <screen>$ source ENV-YOUR-DATA</screen>
-  <screen>$ daps "subcommand"</screen>
-  <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
-  <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
-  <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
-  <remark>Sonst klasse gemacht :-)</remark>
- </sect1>
+   <calloutlist>
+    <callout arearefs="co.daps.vv">
+     <para>Global Option = -vv (verbose print more debug messages)</para>
+    </callout>
+    <callout arearefs="co.daps.env">
+     <para>Global Option = -e (defines the ENV file)</para>
+    </callout>
+    <callout arearefs="co.daps.html">
+     <para>Subcommand = html (what to create)</para>
+    </callout>
+   </calloutlist>
+   <para>DAPS can be executed with or without options, depending on the project.</para>
+   <para>If the directory contains only one ENV file:</para>
+   <screen>daps "subcommand"</screen>
+   <para>If the directory contains more than one ENV-Data</para>
+   <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
+   <para>Setup ENV-Data</para>
+   <screen>$ source ENV-YOUR-DATA</screen>
+   <screen>$ daps "subcommand"</screen>
+   <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
+   <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
+   <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
+   <remark>Sonst klasse gemacht :-)</remark>
+  </sect1>
+  
+   <!-- <sect1>
+   <title>Migration of Existing Projects</title>
+   <para>You can also use existing projects. SUSEdoc projects are
+          easy to transform into a &dapsacr; project. In the bottom you 
+          will see something about using your own and existing project.
+            By the way SUSEdoc is the predecessor of Daps.</para>
+   <para>
+    <warning>
+     <para>Daps support only DocBook 4.x. Support for DocBook 5.x is planned.</para>
+    </warning>
+   </para>
+   <sect2>
+    <title></title>
+    <variablelist>
+     <varlistentry>
+      <term>The Directory Structure to use an existing Project:</term>
+      <listitem>
+       <screen>
+xml/*.ent
+xml/*.xml
+images/(Type)/data
+                        </screen>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect2>
+   <sect2>
+    <title>The basenames of Images must be unique different</title>
+    <para>The images basenames need to be unique throughout different
+        directories. Therefore using names <filename>images/png/AAA.png</filename> and
+        <filename>images/svg/AAA.svg</filename> is not an option it should be different. For
+        Example: <filename>images/svg/BBB.svg</filename> and <filename>images/png/AAA.png</filename>
+    </para>
+   </sect2>
+   <sect2>
+    <title>Adjustment for XML</title>
+    <para>Linking of Images:</para>
+    <formalpara>
+     <title>wrong:</title>
+     <para>
+      <literal>&lt;imagedata fileref="images/png/foo.png"/></literal>
+     </para>
+    </formalpara>
+    <formalpara>
+     <title>correct:</title>
+     <para>
+      <literal>foo.png</literal>
+     </para>
+    </formalpara>
+
+
+    <para>Please take only the name of the image.</para>
+    <para>Look at the following to learn to adjust your Header data for XML:</para>
+    <screen>&lt;!DOCTYPE ...
+[
+  &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
+  &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]></screen>
+   </sect2>
+   <sect2>
+    <title>Migrate SUSEdoc Projects</title>
+    <para> See here to migrate your SUSEdoc Project:
+                /usr/share/doc/packages/daps/README</para>
+   </sect2>
+  </sect1>
+ -->
    
         <!--
         <title>Terminology</title>
@@ -493,5 +582,5 @@ images/(Type)/data
             </varlistentry>
         </variablelist>-->
 
- <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
-</article>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
+ </article>
