@@ -168,7 +168,7 @@
      available options:</para>
      <screen>$ ./configure --help</screen>
      <para>To create a makefile with custom installation paths, run the configure 
-    script as descriwith the desired option.</para>
+    script with the desired option.</para>
     </step>
     <step>
      <para>If everything is prepared according to your wishes, enter:</para>
@@ -187,12 +187,11 @@
  </sect1>
  <sect1 id="sec.daps.quick.init">
   <title>A Project from Scratch</title>
- <para>The easiest way to set up a new documentation project from scratch is to
- use <command>daps-init</command>. View the available options with the command</para>
- <screen>$ daps-init --help</screen>
- <para>The &dapsacr; initialization script automatically 
+  <para>The easiest way to set up a new documentation project from scratch is to
+ use <command>daps-init</command>. View the available options with the command
+ <command>daps-init --help</command>.The &dapsacr; initialization script automatically 
  creates the key files and directory structure you need to get started with 
- &dapsacr;.</para>
+ &dapsacr;:</para>
  <!--taroth 2012-03-22: maybe change to varlist and explain directly below--> 
  <!--<para>It generates:</para>
  <itemizedlist>
@@ -208,44 +207,49 @@
    your documentation. </para>
   </listitem>
  </itemizedlist>-->
- <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
+  <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
  as example document. With the <option>-r</option> option, you can also set another
  root element, such as <sgmltag>article</sgmltag>, for example.</para>
- <procedure>
-  <step>
-   <para>To create the default directory structure (containing an example 
+  <procedure>
+   <step>
+    <para>Create a directory that you want to use as your documentation directory:</para>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
+   </step>
+   <step>
+    <para>Create the default directory structure for &dapsdir; (containing an example 
    <sgmltag>book</sgmltag>):</para>
-   <screen>$ daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable></screen>
-   <para>Alternatively, create the default directory structure 
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>
+    </screen>
+    <para>Alternatively, create the default directory structure 
    with an <sgmltag>article</sgmltag> example: </para>
-   <screen>$ daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
-  </step>
-  <step>
-   <para>If the specified directory does not exists, &dapsacr; asks if to
-   create it. Proceed by pressing <keycap>y</keycap>.</para>
-  </step>
-  <step>
-   <para>Check your working directory for the new files: The text file 
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</screen>
+   </step>
+   <step>
+    <para>In case the specified directory does not exists, &dapsacr; asks if to
+   create it. Proceed by pressing <keycap>y</keycap> or <keycap>n</keycap>.</para>
+   </step>
+   <step>
+    <para>Check your documentation directory for the new files: The text file 
    <filename>DC-daps-example</filename> is annotated and gives you 
    a rough idea which options can be defined in a <filename>DC</filename> file. 
    For having a look at the XML source code of the <sgmltag>book</sgmltag> or 
    <sgmltag>article</sgmltag>, change to the <filename>xml</filename> subdirectory 
    and open the file <filename>MAIN-DC-daps-example.xml</filename> in a text or 
    XML editor.</para>
-  </step>
-  <step>
-   <para>To see what the output of the XML example file looks like, follow the 
-   instructions printed by the initialization script. For example:</para>
-<screen>$ daps -d <replaceable>PATH_TO_DIRECTORY</replaceable>/DC-daps-example color-pdf</screen>
-   <para>This command specifies the <filename>DC*</filename> file to use for the
-   document and the output format to create. For creation of the PDF, &dapsacr; 
-   uses FOP by default (if no other formatter is specified) and applies the 
-   default DocBook stylesheets (if no custom layout options are defined). Find 
+   </step>
+   <step>
+    <para>To see what the output of the XML example file looks like, follow the 
+   instructions on screen. For example, the following command specifies the 
+   <filename>DC*</filename> file to use and the output format to create:</para>
+    <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR/replaceable>/DC-daps-example color-pdf</screen>
+    <para>For creation of the PDF, &dapsacr; uses FOP by default 
+    (if no other formatter is specified) and applies the default DocBook 
+    stylesheets (if no custom layout options are defined). Find 
    the generated PDF in your documentation directory in 
    <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
-  </step>
- </procedure>
-  </sect1>
+   </step>
+  </procedure>
+ </sect1>
  <sect1>
   <title>Existing Projects</title>
   <para>You can also use existing projects. SUSEdoc projects are
