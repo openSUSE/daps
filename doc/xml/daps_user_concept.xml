@@ -314,7 +314,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.oview.docproject.dc">
-   <title>&dc; (Doc Config) File</title>
+   <title>&dc; (&dclong; File</title>
    <para>Of the multiple parameters that can be set in the &dc; file, the only one 
   required is <parameter>MAIN</parameter>, pointing to the XML file that you
   want to process. Suppose you want to publish a whitepaper from DocBook XML 
@@ -472,32 +472,29 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
   <para>
    For &dapsacr; to work out of the box, your XML files and images should be
    organized within your documentation directory (DOC_DIR) as shown in
-   <xref linkend="ex.daps.user.dir.doc"/>.
+  FIXME <!-- <xref linkend="ex.daps.user.dir.doc"/>-->.
   </para>
 
-  <sect2 id="sec.daps.user.oview.dir.doc">
-   <title>Documentation Source Files</title>
+  <!--<sect2 id="sec.daps.user.oview.dir.doc">
+   <title>Source Files</title>
    <para>
     <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
     documentation project. The directories are printed in bold.
    </para>
-   <remark>toms 2012-02-08: IMHO, it looks better to have the callouts
-      *after* the term. This avoids unaligned characters (as the callout
-    is usually a bit wider)</remark>
    <example id="ex.daps.user.dir.doc">
     <title>Directory Structure</title>
     <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
-  |--&dc;* <co id="co.docdir.dc"/>
-  |--<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
-     |--<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
-        |--<emphasis role="bold">dia</emphasis>
-        |--<emphasis role="bold">eps</emphasis>
-        |--<emphasis role="bold">fig</emphasis>
-        |--<emphasis role="bold">pdf</emphasis>
-        |--<emphasis role="bold">png</emphasis>
-        |--<emphasis role="bold">svg</emphasis>
-  |--<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
-     |--MAIN*.xml <co id="co.docdir.main"/>
+  |-/-&dc;* <co id="co.docdir.dc"/>
+  |-/-<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
+     |-/-<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
+        |-/-<emphasis role="bold">dia</emphasis>
+        |-/-<emphasis role="bold">eps</emphasis>
+        |-/-<emphasis role="bold">fig</emphasis>
+        |-/-<emphasis role="bold">pdf</emphasis>
+        |-/-<emphasis role="bold">png</emphasis>
+        |-/-<emphasis role="bold">svg</emphasis>
+  |-/-<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
+     |-/-MAIN*.xml <co id="co.docdir.main"/>
     </screen>
    </example>
    <calloutlist>
@@ -512,10 +509,6 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.
      </para>
     </callout>
-<!--<callout arearefs="co.daps.user.dir.img">
-     <para>Top-level directory for the images used in the documentation project.
-      </para>
-    </callout>-->
     <callout arearefs="co.docdir.img.src">
      <para>
       Top-level directory for any original images that you want to use in
@@ -541,7 +534,7 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
     </callout>
    </calloutlist>
   </sect2>
-
+-->
   <sect2 id="sec.daps.user.oview.dir.build">
    <title>Structure Created by &dapsacr;</title>
    <para>
