@@ -116,7 +116,7 @@
       is called in DocBook). For example, you can profile certain parts of your 
       XML texts for different (processor) architectures, operating systems, 
       vendors or target groups. Use the <literal>PROF*</literal> keys defined 
-      in &dapsconf; to define which information should be included
+      in &dapsconf-sys; to define which information should be included
       in the output. For details, refer to <xref linkend="cha.daps.user.adv"/>.</para>
     </listitem>
    </varlistentry>
@@ -183,12 +183,12 @@
   <itemizedlist>
    <listitem>
     <para>
-     &dapsconf; (system-wide configuration file)
+     &dapsconf-sys; (system-wide configuration file)
     </para>
    </listitem>
    <listitem>
     <para>
-     &dapsconfu; (user-specific configuration file)
+     &dapsconf-user; (user-specific configuration file)
     </para>
    </listitem>
    <listitem>
@@ -206,7 +206,7 @@
   </itemizedlist>
 
   <para>
-   The configuration file &dapsconf; lists all settings that can be
+   The configuration file &dapsconf-sys; lists all settings that can be
    configured, including a short description for each option. Settings are
    always defined as <option>KEY="VALUE"</option> pairs.
   </para>
@@ -547,7 +547,7 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
    <para>
     When generating the first output format from your documentation project,
     &dapsacr; adds another directory that holds the generated contents. It
-    is named <filename>build</filename> (if not set otherwise in &dapsconf;,
+    is named <filename>build</filename> (if not set otherwise in &dapsconf-sys;,
     parameter <parameter>BUILD_DIR</parameter>), and is created in your 
     documentation directory, parallel to the <filename>xml</filename> and 
     <filename>images</filename> subdirectory.
