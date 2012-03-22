@@ -232,8 +232,7 @@
    bold.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen>
-     <replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
   |--&dc;* <co id="co.docdir.dc"/>
   |--<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
      |--<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
@@ -317,7 +316,7 @@
    </step>
    <step>
     <para>To see what the output of the XML example file looks like, follow the 
-   instructions on screen. For example, the following command specifies the 
+   instructions on the screen. For example, the following command specifies the 
    <filename>DC*</filename> file to use and the output format to create:</para>
     <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/DC-daps-example color-pdf</screen>
     <para>For creation of the PDF, &dapsacr; uses FOP by default 
@@ -361,12 +360,17 @@
   format to contain meta-data about the XML files (for example, file name or 
   workflow status), to include <sgmltag>remark</sgmltag> elements or to be 
   marked as a <literal>draft</literal> version, you can tell &dapsacr; to do so 
-  by specifying options on the command line.--> 
+  by specifying options on the command line.-->
   <para>By default, the DocBook stylesheets are used for generating output formats.
   But &dapsacr; also allows you to customize your output formats in a very flexible way.
   <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
   </para>
-
+  <para>Independent of the individual output format you want to create, 
+  you need to specify the &dclong; file to use with <option>-d</option>:</para>
+<screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
+<para>If your current directory is not the documentation directory where the &dc; 
+file is located, also specify the path to the &dc; file:</para>
+<screen>$ daps -d <replaceable>PATH_TO_DOC_DIR/DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
  <!--taroth 2012-03-22: updated until here-->
   <para>In the following points you will see the procedure of transforming formats into a
             other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
