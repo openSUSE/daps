@@ -316,73 +316,102 @@
    create it. Proceed by pressing <keycap>y</keycap> or <keycap>n</keycap>.</para>
    </step>
    <step>
+    <para>To see what the output of the XML example file looks like, follow the 
+   instructions on screen. For example, the following command specifies the 
+   <filename>DC*</filename> file to use and the output format to create:</para>
+    <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/DC-daps-example color-pdf</screen>
+    <para>For creation of the PDF, &dapsacr; uses FOP by default 
+    (if no other formatter is specified) and applies the default DocBook 
+    stylesheets (if no custom layout options are defined). Find 
+   the generated PDF in your documentation directory in 
+   <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
+   </step>
+   <step>
     <para>Check your documentation directory for the new files: The text file 
    <filename>DC-daps-example</filename> is annotated and gives you 
-   a rough idea which options can be defined in a <filename>DC</filename> file. 
+   a rough idea which options can be defined in a &dc; file. 
    For having a look at the XML source code of the <sgmltag>book</sgmltag> or 
    <sgmltag>article</sgmltag>, change to the <filename>xml</filename> subdirectory 
    and open the file <filename>MAIN-DC-daps-example.xml</filename> in a text or 
    XML editor.</para>
    </step>
-   <step>
-    <para>To see what the output of the XML example file looks like, follow the 
-   instructions on screen. For example, the following command specifies the 
-   <filename>DC*</filename> file to use and the output format to create:</para>
-    <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/DC-daps-example color-pdf</screen>
-     <para>For creation of the PDF, &dapsacr; uses FOP by default 
-    (if no other formatter is specified) and applies the default DocBook 
-    stylesheets (if no custom layout options are defined). Find 
-   the generated PDF in your documentation directory in 
-   <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
+  </procedure>
+  <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
+ </sect1>
+ <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
+ <sect1 id="sec.daps.quick.output">
+  <title>Generating Output Formats</title>
+  <para>&dapsacr; supports a number of different output formats,
+  including also <quote>exotic</quote> formats like man pages or ASCII text.
+  For an overview of the available output formats, run 
+  <command>daps --help</command>. The output formats are listed below
+  <menuchoice><guimenu>Subcommands</guimenu>
+    <guimenu>Generate Books</guimenu>
+   </menuchoice>.</para>
+  <para>Generating any output requires that your XML files are well-formed and 
+  can be validated. As soon as any output command is executed, &dapsacr; 
+  automatically runs a validation check first&mdash;if it fails, &dapsacr; 
+  returns the parser errors.</para>
+  <!--They include information about the type of error, the respective 
+    file name and the line number where the error occured. In addition, &dapsacr;
+    shows the path to the profiled XML sources and the total number of errors.-->  
+  <!--You can build several output formats in parallel, 
+  build your complete documentation project (set, book, or article) 
+  or only a part of it (for example, a specific chapter). If you want the output
+  format to contain meta-data about the XML files (for example, file name or 
+  workflow status), to include <sgmltag>remark</sgmltag> elements or to be 
+  marked as a <literal>draft</literal> version, you can tell &dapsacr; to do so 
+  by specifying options on the command line.--> 
+  <para>By default, the DocBook stylesheets are used for generating output formats.
+  But &dapsacr; also allows you to customize your output formats in a very flexible way.
+  <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
+  </para>
+
+ <!--taroth 2012-03-22: updated until here-->
+  <para>In the following points you will see the procedure of transforming formats into a
+            other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
+  <sect2>
+   <title>Creating PDF</title>
+   <para> To transform XML into PDF, you need an existing project(as shown in section 4),
+                use the following steps:</para>
+   <procedure>
+    <step>
+     <para> Enter the following command:</para>
+     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
     </step>
    </procedure>
-  </sect1>
-  <sect1>
-   <title>Generating output formatts</title>
-   <para>In the following points you will see the procedure of transforming formats into a
-            other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
-   <sect2>
-    <title>Creating PDF</title>
-    <para> To transform XML into PDF, you need an existing project(as shown in section 4),
-                use the following steps:</para>
-    <procedure>
-     <step>
-      <para> Enter the following command:</para>
-      <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
-     </step>
-    </procedure>
-    <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
+   <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
                 daps repository. To generat a printable PDF switch "color-pdf" into "pdf".</para>
-   </sect2>
-   <sect2>
-    <title>Creating &epub;</title>
-    <para>To transform XML into &epub;, you need an existing project(as shown in the section
+  </sect2>
+  <sect2>
+   <title>Creating &epub;</title>
+   <para>To transform XML into &epub;, you need an existing project(as shown in the section
                 4), use the following steps.</para>
-    <procedure>
-     <step>
-      <para>Enter in your konsole:</para>
-      <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
-     </step>
-     <step>
-      <para>Finish. Your XML file is now transformed &epub; file. The result is in the
+   <procedure>
+    <step>
+     <para>Enter in your konsole:</para>
+     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
+    </step>
+    <step>
+     <para>Finish. Your XML file is now transformed &epub; file. The result is in the
                         daps repository. Open the result with an EBook reader like calibre.</para>
-     </step>
-    </procedure>
-   </sect2>
-   <sect2>
-    <title>Creating HTML</title>
-    <procedure>
-     <step>
-      <para>Enter in your konsole:</para>
-      <screen>$ daps -e --static ENV_DATA html</screen>
-     </step>
-     <step>
-      <para>Finish. Your XML file is now a HTML file. The result is in the daps
+    </step>
+   </procedure>
+  </sect2>
+  <sect2>
+   <title>Creating HTML</title>
+   <procedure>
+    <step>
+     <para>Enter in your konsole:</para>
+     <screen>$ daps -e --static ENV_DATA html</screen>
+    </step>
+    <step>
+     <para>Finish. Your XML file is now a HTML file. The result is in the daps
                         repository. Open the result with an Browser.</para>
-     </step>
-    </procedure>
-   </sect2>
-  </sect1>
+    </step>
+   </procedure>
+  </sect2>
+ </sect1>
     <!--<sect1>    
     <title>Create Distributable Archives</title>
         <para> To create a distributable archives read the following:</para>
@@ -394,39 +423,39 @@
         </itemizedlist>
         
         </sect1>-->
-  <sect1>
-   <title>Advanced usage of &daps;</title>
-   <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
-   <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-   <para>For example:</para>
-   <screen>daps -vv<co id="co.daps.vv"/> \
+ <sect1>
+  <title>Advanced usage of &daps;</title>
+  <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
+  <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
+  <para>For example:</para>
+  <screen>daps -vv<co id="co.daps.vv"/> \
   -e ENV_DATA<co id="co.daps.env"/> \
   html<co id="co.daps.html"/>
   </screen>
-   <calloutlist>
-    <callout arearefs="co.daps.vv">
-     <para>Global Option = -vv (verbose print more debug messages)</para>
-    </callout>
-    <callout arearefs="co.daps.env">
-     <para>Global Option = -e (defines the ENV file)</para>
-    </callout>
-    <callout arearefs="co.daps.html">
-     <para>Subcommand = html (what to create)</para>
-    </callout>
-   </calloutlist>
-   <para>DAPS can be executed with or without options, depending on the project.</para>
-   <para>If the directory contains only one ENV file:</para>
-   <screen>daps "subcommand"</screen>
-   <para>If the directory contains more than one ENV-Data</para>
-   <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
-   <para>Setup ENV-Data</para>
-   <screen>$ source ENV-YOUR-DATA</screen>
-   <screen>$ daps "subcommand"</screen>
-   <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
-   <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
-   <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
-   <remark>Sonst klasse gemacht :-)</remark>
-  </sect1>
+  <calloutlist>
+   <callout arearefs="co.daps.vv">
+    <para>Global Option = -vv (verbose print more debug messages)</para>
+   </callout>
+   <callout arearefs="co.daps.env">
+    <para>Global Option = -e (defines the ENV file)</para>
+   </callout>
+   <callout arearefs="co.daps.html">
+    <para>Subcommand = html (what to create)</para>
+   </callout>
+  </calloutlist>
+  <para>DAPS can be executed with or without options, depending on the project.</para>
+  <para>If the directory contains only one ENV file:</para>
+  <screen>daps "subcommand"</screen>
+  <para>If the directory contains more than one ENV-Data</para>
+  <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
+  <para>Setup ENV-Data</para>
+  <screen>$ source ENV-YOUR-DATA</screen>
+  <screen>$ daps "subcommand"</screen>
+  <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
+  <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
+  <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
+  <remark>Sonst klasse gemacht :-)</remark>
+ </sect1>
   
    <!-- <sect1>
    <title>Migration of Existing Projects</title>
@@ -582,5 +611,5 @@ images/(Type)/data
             </varlistentry>
         </variablelist>-->
 
-  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
- </article>
+ <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
+</article>
