@@ -52,8 +52,7 @@
   <remark>taroth 2012-03-20: (and the &sle; products based on &osuse;)???</remark>
   Eventually, RPM packages for further distributions may become available. 
   In the meantime, you can download a tarball with the &dapsacr; sources 
-  <remark>taroth 2012-03-07: add from where: http://daps.sourceforge.net???</remark>
-  and install them on any distribution as described in 
+  and install them on any distribution as described in
   <xref linkend="pro.daps.quick.inst.tarball"/>. 
  </para>
   <sect2 id="sec.daps.quick.inst.osuse">
@@ -112,55 +111,20 @@
      </listitem>
     </varlistentry>
    </variablelist>
-  
+
   </sect2>
   <sect2 id="sec.daps.quick.inst.other">
    <title>Installing &dapsacr; on Other Linux Distributions</title>
    <para>For installation on other Linux distributions, the &dapsacr; sources
   are available as tarball.<remark>taroth 2012-03-07: from???</remark> They can
   be installed with <literal>configure</literal>, 
-  <literal>make</literal>, and <literal>make install</literal> as described in 
-  <xref linkend="pro.daps.quick.inst.tarball"/>.</para>
-   <para>Before starting the installation, make sure the following 
-  packages or tools are installed on your system:</para>
-   <itemizedlist id="itl.daps.quick.inst.other.req">
-    <title>Software Requirements</title>
-    <listitem>
-     <para>automake</para>
-    </listitem>
-    <listitem>
-     <para>convert (included in the 
-    <systemitem class="resource">ImageMagick</systemitem> package)</para>
-    </listitem>
-    <listitem>
-     <para>DocBook 4</para>
-    </listitem>
-    <listitem>
-     <para>DocBook 4 Stylesheets (usually a separate package)</para>
-    </listitem>
-    <listitem>
-     <para>make</para>
-    </listitem>
-    <listitem>
-     <para>xmlcatalog (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
-    </listitem>
-    <listitem>
-     <para>xmllint (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
-    </listitem>
-    <listitem>
-     <para>xsltproc (if not available as a separate package, it may be included in
-    <systemitem class="resource">libxslt</systemitem>)</para>
-    </listitem>
-   </itemizedlist>
+  <literal>make</literal>, and <literal>make install</literal>.</para>
 
    <procedure id="pro.daps.quick.inst.tarball">
     <title>Installing the &dapsacr; Sources</title>
+    <para>Before starting the installation, check the &dapsacr; 
+   <xref linkend="sec.daps.quick.req.system" xrefstyle="select:title"/>
+   and make sure to have all required packages and tools installed.</para>
     <step>
      <para>Download the &dapsacr; source tarball from 
    <ulink url="http://daps.sourceforge.net"></ulink>.
@@ -168,12 +132,12 @@
      </para>
     </step>
     <step>
-     <para>Create a new directory in your file system and unpack the tarball there:</para>
+     <para>Create a new directory in your file system and unpack the tarball there.</para>
     <!--<screen>tar xvf TARBALLNAME .</screen>-->
     </step>
     <step id="daps.quick.inst.configure">
      <para>Change to the newly created directory and start the configure script:</para>
-     <screen>./configure</screen>
+     <screen>$ ./configure</screen>
      <para>The script checks your system for any software relevant to &dapsacr; or
     the &dapsacr; installation process. It also creates a makefile that will
     be used during installation. Based on the analysis, the script shows a 
@@ -187,7 +151,7 @@
       system if you install &dapsacr; now, and </para>
       </listitem>
       <listitem>
-       <para>which software is still missing to enable the remaining &daps; 
+       <para>which software is still missing to enable the remaining &dapsacr; 
       features as well.</para>
       </listitem>
      </itemizedlist>
@@ -200,19 +164,19 @@
     repeat <xref linkend="daps.quick.inst.configure"/> and check the summary again.</para>
     </step>
     <step>
-     <para>If you want to adjust the &dapsacr; installation paths, check which 
-    options are available:</para>
-     <screen>./configure --help</screen>
+     <para>If you want to adjust the &dapsacr; installation paths, view the 
+     available options:</para>
+     <screen>$ ./configure --help</screen>
      <para>To create a makefile with custom installation paths, run the configure 
-    script with the desired option.</para>
+    script as descriwith the desired option.</para>
     </step>
     <step>
      <para>If everything is prepared according to your wishes, enter:</para>
      <screen>make</screen>
     </step>
     <step>
-     <para>To start the installation process, enter:</para>
-     <screen>make install</screen>
+     <para>To start the installation process:</para>
+     <screen>$ make install</screen>
     </step>
    </procedure>
    <para>
@@ -221,22 +185,67 @@
    </para>
   </sect2>
  </sect1>
- <sect1>
-  <title>Creating a Project from scratch</title>
-  <para>Use the steps in the bottom to create a project from the scratch. You will see all
-            functions to create a new project with the command:</para>
-  <screen>daps init --help</screen>
-  <procedure>
-   <step>
-    <para>Create a directory with the name <filename>dapstest</filename>.</para>
-    <screen>$ mkdir YOUR_PATH/dapstest</screen>
-   </step>
-   <step>
-    <para>Enter the command to create the dapstest directory:</para>
-    <screen>$ daps --basedir=YOUR_PATH/dapstest --envfile=ENV-test-daps init</screen>
-   </step>
-  </procedure>
- </sect1>
+ <sect1 id="sec.daps.quick.init">
+  <title>A Project from Scratch</title>
+ <para>The easiest way to set up a new documentation project from scratch is to
+ use <command>daps-init</command>. View the available options with the command</para>
+ <screen>$ daps-init --help</screen>
+ <para>The &dapsacr; initialization script automatically 
+ creates the key files and directory structure you need to get started with 
+ &dapsacr;.</para>
+ <!--taroth 2012-03-22: maybe change to varlist and explain directly below--> 
+ <!--<para>It generates:</para>
+ <itemizedlist>
+  <listitem>
+   <para>the <xref linkend="sec.daps.user.oview.dirstruct" xrefstyle="select:title"/> 
+   required by &dapsacr;,</para>
+  </listitem>
+  <listitem>
+   <para>an example <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>, and </para>
+  </listitem>
+  <listitem>
+   <para>an example <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/> that you can use as a starting point for 
+   your documentation. </para>
+  </listitem>
+ </itemizedlist>-->
+ <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
+ as example document. With the <option>-r</option> option, you can also set another
+ root element, such as <sgmltag>article</sgmltag>, for example.</para>
+ <procedure>
+  <step>
+   <para>To create the default directory structure (containing an example 
+   <sgmltag>book</sgmltag>):</para>
+   <screen>$ daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable></screen>
+   <para>Alternatively, create the default directory structure 
+   with an <sgmltag>article</sgmltag> example: </para>
+   <screen>$ daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
+  </step>
+  <step>
+   <para>If the specified directory does not exists, &dapsacr; asks if to
+   create it. Proceed by pressing <keycap>y</keycap>.</para>
+  </step>
+  <step>
+   <para>Check your working directory for the new files: The text file 
+   <filename>DC-daps-example</filename> is annotated and gives you 
+   a rough idea which options can be defined in a <filename>DC</filename> file. 
+   For having a look at the XML source code of the <sgmltag>book</sgmltag> or 
+   <sgmltag>article</sgmltag>, change to the <filename>xml</filename> subdirectory 
+   and open the file <filename>MAIN-DC-daps-example.xml</filename> in a text or 
+   XML editor.</para>
+  </step>
+  <step>
+   <para>To see what the output of the XML example file looks like, follow the 
+   instructions printed by the initialization script. For example:</para>
+<screen>$ daps -d <replaceable>PATH_TO_DIRECTORY</replaceable>/DC-daps-example color-pdf</screen>
+   <para>This command specifies the <filename>DC*</filename> file to use for the
+   document and the output format to create. For creation of the PDF, &dapsacr; 
+   uses FOP by default (if no other formatter is specified) and applies the 
+   default DocBook stylesheets (if no custom layout options are defined). Find 
+   the generated PDF in your documentation directory in 
+   <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
+  </step>
+ </procedure>
+  </sect1>
  <sect1>
   <title>Existing Projects</title>
   <para>You can also use existing projects. SUSEdoc projects are
