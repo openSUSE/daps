@@ -343,14 +343,14 @@
  </sect1>
  <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
  <sect1 id="sec.daps.quick.output">
-  <title>Generating Output Formats</title>
+  <title>Output Formats</title>
   <para>&dapsacr; supports a number of different output formats,
   including <quote>exotic</quote> formats like man pages or ASCII text.
-  For an overview of the available output formats, run 
-  <command>daps --help</command>. The output formats are listed below
+  <!--For an overview of the available output formats, run 
+  <command>daps -/-help</command>. The output formats are listed below
   <menuchoice><guimenu>Subcommands</guimenu>
     <guimenu>Generate Books</guimenu>
-   </menuchoice>.</para>
+   </menuchoice>.--></para>
   <para>By default, the DocBook stylesheets are used for generating output formats.
   But &dapsacr; also allows you to customize your output formats in a very flexible way.
   <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
@@ -366,8 +366,10 @@
   total number of errors.</para>
    <example>
     <title>Parser Output For Validation Errors</title>
-    <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
-Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
+    <screen>daps_user_concept.xml:60: element xref: validity error : 
+    IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml 
+does not validate
 make: *** [validate] Error 3
 </screen>
    </example>
@@ -375,21 +377,151 @@ make: *** [validate] Error 3
   <sect2 id="sec.daps.quick.output.syntax">
    <title>Basic &dapsacr; Syntax</title>
     <para>Independent of the individual output format you want to create, 
-  you need to specify the &dclong; file to use with <option>-d</option>:</para>
-  <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>
-  </screen>
+  you need to specify the &dclong; file to use:</para>
+  <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
   <para>For example:</para>
   <screen>$ daps -d DC-daps-quick color-pdf</screen>
   <para>If your current directory is not the documentation directory where the &dc; 
 file is located, also specify the (absolute or relative) path to the &dc; file.
 For example:</para>
   <screen>$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</screen>
+  <para>At the end of the transformation process, &dapsacr; shows a message 
+  where to find the generated output.</para>
   </sect2>
-
- <!--taroth 2012-03-22: updated until here-->
-<!--  <para>In the following points you will see the procedure of transforming formats into a
-            other format. For example: XML into PDF. You can find the results in the Build-Directory. </para>
--->  
+  <sect2>
+   <title>Generating Different Output Formats</title>
+   <para>The following table gives an overview of the &dapsacr; subcommands for generating output
+   formats. If more than one subcommand is mentioned for a format, either variant is recognized by
+   &dapsacr;.</para>
+  <table>
+    <title>&dapsacr; Output Commands and Formats</title>
+    <tgroup cols="4">
+     <colspec colnum="1" colname="1" colwidth="25*"/>
+     <colspec colnum="2" colname="2" colwidth="30*"/>
+     <colspec colnum="3" colname="3" colwidth="30*"/>
+     <thead>
+      <row>
+       <entry>
+        <para>Subcommand</para>
+       </entry>
+       <entry>
+        <para>Output</para>
+       </entry>
+       <entry>
+        <para>Note</para>
+       </entry>
+      </row>
+     </thead>
+  
+     
+     <tbody>
+      <row>
+       <entry>
+        <para>color-pdf</para>
+        <para>pdf-color</para>
+       </entry>
+       <entry>
+        <para>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
+        </para>
+       </entry>
+       <entry>
+        <para>Requires an FO formatter. A ROOTID (pointing to a 
+        <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>, <sgmltag>part</sgmltag> 
+        or <sgmltag>chapter</sgmltag>) must be specified. It is not possible 
+        to generate one PDF containing all the contents of a <sgmltag>set</sgmltag>,
+        you can only build individual components.</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>dist</para>
+       </entry>
+       <entry>
+        <para>Creates a black and white PDF with cropmarks for each chapter.  Open the 
+        result in a PDF viewer.</para>
+       </entry>
+       <entry>
+        <para>See color-pdf</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>epub</para>
+       </entry>
+       <entry>
+        <para>&epub; book. Open the result in an portable e-book reader (or with
+        a software like Calibre).</para>
+       </entry>
+       <entry>
+        <para><remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+        conversion of articles to epub?</remark></para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>html</para>
+       </entry>
+       <entry>
+        <para>Creates a subdirectory containing individual HTML files for 
+        all chapters of a book (including also preface, glossary or appendix files).
+        They are named according to the ID of the respective root element.  
+        Open the generated <filename>index.html</filename> file in a Web browser 
+        to view the generated HTML from the starting point (ROOTID of the top-level
+        element).</para>
+       </entry>
+       <entry>
+        <para>Images and CSS files are only referenced in the HTML. To copy 
+        these files to the same location like the HTML files, use the
+        <option>--static</option> option. This is useful for creating 
+        distributable HTML builds.</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>html-single</para>
+        <para>htmlsingle</para>
+       </entry>
+       <entry>
+        <para>Creates a single HTML file, named after the &dc; file used 
+        to create the output. Open the generated <filename>*.html</filename> file
+        in a Web browser.</para>
+       </entry>
+       <entry>
+        <para>Single HTML files are more convenient for full text searches. 
+        Images and CSS files are only referenced in the HTML. To copy 
+        these files to the same location like the HTML files, use the
+        <option>--static</option> option. This is useful for creating 
+        distributable HTML builds.
+        </para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>Row 2, Cell 1</para>
+       </entry>
+       <entry>
+        <para>Row 2, Cell 2</para>
+       </entry>
+       <entry>
+        <para>Row 2, Cell 3</para>
+       </entry>
+      </row>
+         
+   <!-- 
+     jsp                    
+     man                    
+     pdf                    
+     txt, text              
+     webhelp                
+     wiki                   -->
+     </tbody>
+    </tgroup>
+   </table>
+   <remark>taroth 2012-03-23: todo - check with fs/toms: which formats can only be generated
+   from books (or the other way round: which formats also allow transformation of 
+   articles)?</remark>
+  </sect2>
+  
 <sect2>   <title>Creating PDF</title>
    <para> To transform XML into PDF, you need an existing project(as shown in section 4),
                 use the following steps:</para>
