@@ -271,6 +271,11 @@ endif
 # remove_link and the optipng call are used more than once, so 
 # let's define them here
 
+# A note on inkscape:
+# Inkscape always returns 0, even when it fails to create an image
+# in order to exit properly, if an inkscape command has failed, we
+# need to work around this by testing if the result file exists
+# inkscape && (test -f $< || false )
 define remove_link
 if test -L $@; then \
 rm -f $@; \
@@ -288,7 +293,8 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL)
+	inkscape $(INK_OPTIONS) -e $@ -f $< $(DEVNULL) && \
+	  ( test -f $< || false )
 	$(run_optipng)
 
 # EPS -> PNG
@@ -428,4 +434,5 @@ $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),1)
 	@echo "   Converting $(notdir $<) to PDF"
 endif
-	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL)
+	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL) && \
+	  ( test -f $< || false )
