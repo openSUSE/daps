@@ -31,31 +31,30 @@ See also:
 import sys
 import os
 import re
-from pyparsing import Literal, Group, Optional, Suppress, Keyword, \
-  alphanums, alphas, Word, ZeroOrMore, CharsNotIn, Regex, \
+from pyparsing import Literal, Word, alphanums, alphas, \
+  Group, Optional, ZeroOrMore, CharsNotIn, \
+  Suppress, Keyword, Regex, \
   QuotedString, removeQuotes, htmlComment, \
   ParseException
 
-
+# Define some keywords:
 xmlstart=Suppress("<?xml")
 xmlend=Suppress("?>")
 xmlversion=Keyword("version")
 xmlencoding=Keyword("encoding")
 xmlstandalone=Keyword("standalone")
-
 doctype=Suppress("<!DOCTYPE")
 
-# Define some constants which are suppressed
-equal=Suppress("=")
-quote=Suppress('"')
-apos=Suppress("'")
+# Define some constants which are suppressed;
+# use the convenient map function and tuple unpacking:
+equal, quote, apos = map(Suppress, "=\"'")
 yesno=Keyword("yes") | Keyword("no")
 
 
 def EncName():
    """Creates Name
    
-    [A-Za-z] ([A-Za-z0-9._] | '-')*
+    EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
    
     >>> x=EncName()
     >>> x.parseString("Foo")
@@ -84,7 +83,6 @@ def makequoteing(obj):
     Traceback (most recent call last):
         ...
     ParseException: Expected """ (at char 0), (line:1, col:1)
-    
     '''
     return (Group( quote + obj + quote) | \
             Group( apos  + obj + apos))
@@ -92,6 +90,7 @@ def makequoteing(obj):
 
 def EncodingDecl():
    """Parse the encoding string
+
    EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" ) 
    
     >>> tests=(
@@ -118,6 +117,7 @@ def EncodingDecl():
 
 def SDDecl():
    """Parses standalone string
+
    SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'") | 
                                  ('"' ('yes' | 'no') '"')) 
 
@@ -143,6 +143,7 @@ def SDDecl():
    
 def VersionInfo():
    """Parses version string; we allow only 1.0 at the moment
+
     VersionInfo ::=  S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
     
     >>> # Watch out for correct quoting in doctest:
@@ -355,7 +356,6 @@ def DoctypeDecl():
     ['foo', 'urn:foo:dtd', 'foo.dtd', '[\\n  <!-- baz -->\\n ]']
     ['foo', '-//TMS/DTD DocBook XML V4.2//EN', 'http://www.example.org/tms/docbook.dtd', '[\\n <!-- Hallo -->\\n]']
    """
-   # Suppress('[') + \ # Suppress(']')
    d = Suppress('<!DOCTYPE') + \
        Word(alphas, alphanums)('root') + \
        Optional(ExternalID()) + \
@@ -446,6 +446,7 @@ def Prolog():
    
     
 if __name__ == "__main__":
+    # TODO: Implement CLI interface for parsing XML files
     import doctest
     doctest.testmod()
 
