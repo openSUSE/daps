@@ -16,10 +16,11 @@ Caveats:
  is currently negligible.
 
 Requirements:
- pyparsing
+ pyparsing, http://pyparsing.wikispaces.com
 
 TODO:
- Implement command line parsing to load a XML file
+ * Implement command line parsing to load a XML file
+ * Combine the "loose" ends ;)
 
 See also:
  http://www.w3.org/TR/2008/REC-xml-20081126/#sec-prolog-dtd
@@ -32,8 +33,7 @@ import os
 import re
 from pyparsing import Literal, Group, Optional, Suppress, Keyword, \
   alphanums, alphas, Word, ZeroOrMore, CharsNotIn, Regex, \
-  QuotedString, removeQuotes, \
-  htmlComment, \
+  QuotedString, removeQuotes, htmlComment, \
   ParseException
 
 
@@ -67,8 +67,25 @@ def EncName():
 
 
 def makequoteing(obj):
-    """Makes the right quoting, either 'bla' or "bla"  
-    """
+    '''Makes the right quoting, either 'bla' or "bla"
+    
+    >>> q=makequoteing("x")
+    >>> q.parseString("'x'")
+    ([(['x'], {})], {})
+    >>> q.parseString("'1'")
+    Traceback (most recent call last):
+        ...
+    ParseException: Expected "x" (at char 1), (line:1, col:2)
+    >>> q.parseString("x'")
+    Traceback (most recent call last):
+        ...
+    ParseException: Expected """ (at char 0), (line:1, col:1)
+    >>> q.parseString('x"')
+    Traceback (most recent call last):
+        ...
+    ParseException: Expected """ (at char 0), (line:1, col:1)
+    
+    '''
     return (Group( quote + obj + quote) | \
             Group( apos  + obj + apos))
 
