@@ -923,10 +923,17 @@ elif [[ -n $DOCCONF_CMDL ]]; then
     fi
 fi
 
+#
+# Checking MAIN_CMDL, DOCCONF_CMDL, DOC_DIR and DAPSROOT
+#
+
 [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN is set. This should not have happened"
 [[ -n "$DOCCONF_CMDL" && ! -e "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
 [[ -n "$MAIN_CMDL" && ! -e "$MAIN_CMDL" ]] && exit_on_error "Fatal: Could not find MAIN \"$MAIN_CMDL\""
-
+[[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
+[[ -d "${DOC_DIR}/xml" ]] || exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
+[[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
+[[ -d "$DAPSROOT" ]] || exit_on_error "Fatal: Could not find DAPSROOT \"${DAPSROOT}\"."
 #
 # FINALLY! Source the DOCCONF file, recover the command line values
 
@@ -940,7 +947,10 @@ if [[ -z "$MAIN_CMDL" ]]; then
     set_mainfile "$MAIN"
     MAIN="$MAIN_CMDL"
 fi
-# A final test
+
+# 
+# Checking MAIN
+#
 [[ -e "$MAIN" ]] || exit_on_error "Fatal: Could not find $MAIN"
 
 #----------
@@ -1034,10 +1044,7 @@ XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 #----------------------------------
 # Sanity checks
 #
-[[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
-[[ -d "${DOC_DIR}/xml" ]] || exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
-[[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
-[[ -d "$DAPSROOT" ]] || exit_on_error "Fatal: Could not find DAPSROOT \"${DAPSROOT}\"."
+
 
 #-------------------------------------------------------------------
 # Now export all variables set by the config file

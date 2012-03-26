@@ -34,14 +34,10 @@
   </xsl:if>
   <xsl:choose>
    <xsl:when test="count(key('id',$rootid)) = 0">
-    <xsl:message terminate="yes">
-     <xsl:text>no</xsl:text>
-    </xsl:message>
+    <xsl:text>no</xsl:text>
    </xsl:when>
    <xsl:otherwise>
-    <xsl:message terminate="yes">
-     <xsl:text>yes</xsl:text>
-    </xsl:message> 
+    <xsl:text>yes</xsl:text>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
