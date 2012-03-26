@@ -874,7 +874,7 @@ fi
 #
 # Use MAIN_CMDL and DOCCONF_CMDL in the following in order to avoid that
 # these get overwritten by chance with values from the DOCCONF files
-# (DOCCONF should never be set in an ENV file and MAIN_CMDL should always
+# (DOCCONF should never be set in a DC file and MAIN_CMDL should always
 # overwrite a MAIN setting from DOCCONF)
 # The real values will be set when calling recover_cmdl_values
 
@@ -923,9 +923,9 @@ elif [[ -n $DOCCONF_CMDL ]]; then
     fi
 fi
 
-
-[[ -z "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: \$DOCCONF is not set. This should not have happened"
-[[ -e "$DOCCONF_CMDL" ]] || exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
+[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN is set. This should not have happened"
+[[ -n "$DOCCONF_CMDL" && ! -e "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
+[[ -n "$MAIN_CMDL" && ! -e "$MAIN_CMDL" ]] && exit_on_error "Fatal: Could not find MAIN \"$MAIN_CMDL\""
 
 #
 # FINALLY! Source the DOCCONF file, recover the command line values
@@ -951,8 +951,13 @@ fi
 if [[ -n $PDFNAME ]]; then
     export BOOK="$PDFNAME"
 else
-    DC_FILE=$(basename $DOCCONF)
-    export BOOK="${DC_FILE#${CONF_PREFIX}*}"
+    if [[ -n $DOCCONF ]]; then
+        DC_FILE=$(basename $DOCCONF)
+        export BOOK="${DC_FILE#${CONF_PREFIX}*}"
+    elif [[ -n "$MAIN_CMDL" ]]; then
+        # --main was specified, BOOK is set to basenme of MAIN
+        export BOOK=$(basename $MAIN .xml)
+    fi
 fi
 
 # XML_CATALOG_FILES
