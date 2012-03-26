@@ -189,7 +189,8 @@
    system administrator. For FOP, you usually only need to install the 
    respective FOP package. However, not all FOP packages contain hyphenation 
    pattern files. <remark>taroth 2012-03-26: todo - mention download from 
-   offo.sourceforeg.net in troubleshooting section and add xref</remark> </para>
+   offo.sourceforeg.net in troubleshooting section and add xref</remark>
+   </para>
   </sect2>
  </sect1>
  <sect1 id="sec.daps.quick.basics">
@@ -242,8 +243,7 @@
    outlined below.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen>
-     <replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
   |--&dc;* <co id="co.docdir.dc"/>
   |--<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
      |--<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
@@ -378,8 +378,8 @@
     <title>Parser Output For Validation Errors</title>
     <screen>daps_user_concept.xml:60: element xref: validity error : 
     IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
-Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml 
-does not validate
+Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
+MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3
 </screen>
    </example>
@@ -399,126 +399,122 @@ For example:</para>
    <para>At the end of the transformation process, &dapsacr; shows a message 
   where to find the generated output.</para>
   </sect2>
-  <sect2>
-   <title>Generating Different Output Formats</title>
-   <para>The following table gives an overview of the &dapsacr; subcommands for generating output
-   formats. If more than one subcommand is mentioned for a format, either variant is recognized by
-   &dapsacr;.</para>
-   <table>
-    <title>&dapsacr; Output Commands and Formats</title>
-    <tgroup cols="4">
-     <colspec colnum="1" colname="1" colwidth="25*"/>
-     <colspec colnum="2" colname="2" colwidth="30*"/>
-     <colspec colnum="3" colname="3" colwidth="30*"/>
-     <thead>
-      <row>
-       <entry>
-        <para>Subcommand</para>
-       </entry>
-       <entry>
-        <para>Output</para>
-       </entry>
-       <entry>
-        <para>Note</para>
-       </entry>
-      </row>
-     </thead>
-     
-
-     <tbody>
-      <row>
-       <entry>
-        <para>color-pdf</para>
-        <para>pdf-color</para>
-       </entry>
-       <entry>
-        <para>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
+  
+<sect2 id="sec.daps.quick.output.formats">
+  <title>Generating Different Output Formats</title>
+  <para>The following table gives an overview of the &dapsacr; subcommands for 
+   generating output formats.</para>
+  <table>
+   <title>&dapsacr; Output Commands and Formats</title>
+   <tgroup cols="3">
+    <colspec colnum="1" colname="1" colwidth="20*"/>
+    <colspec colnum="2" colname="2" colwidth="40*"/>
+    <colspec colnum="3" colname="3" colwidth="40*"/>
+    <thead>
+     <row>
+      <entry>
+       <para>Subcommand</para>
+      </entry>
+      <entry>
+       <para>Output</para>
+      </entry>
+      <entry>
+       <para>Note</para>
+      </entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>
+       <para>color-pdf</para>
+      </entry>
+      <entry>
+       <para>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
         </para>
-       </entry>
-       <entry>
-        <para>Requires an FO formatter. A ROOTID (pointing to a 
-        <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>, <sgmltag>part</sgmltag> 
-        or <sgmltag>chapter</sgmltag>) must be specified. It is not possible 
-        to generate one PDF containing all the contents of a <sgmltag>set</sgmltag>,
-        you can only build individual components.</para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>dist</para>
-       </entry>
-       <entry>
-        <para>Creates a black and white PDF with cropmarks for each chapter.  Open the 
+      </entry>
+      <entry>
+       <para>Requires an FO formatter. <!--It is also possible to create one PDF 
+        containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
+        for large documentation projects you might run into problems with the
+        java memory stack.--></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>dist</para>
+      </entry>
+      <entry>
+       <para>Creates a black and white PDF with cropmarks for each chapter.  Open the 
         result in a PDF viewer.</para>
-       </entry>
-       <entry>
-        <para>See color-pdf</para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>epub</para>
-       </entry>
-       <entry>
-        <para>&epub; book. Open the result in an portable e-book reader (or with
-        a software like Calibre).</para>
-       </entry>
-       <entry>
-        <para>
-         <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+      </entry>
+      <entry>
+       <para>See color-pdf</para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>epub</para>
+      </entry>
+      <entry>
+       <para>Creates an &epub; book. Open the result in an portable e-book reader 
+        (or with  a software like Calibre).</para>
+      </entry>
+      <entry>
+       <para>
+        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
         conversion of articles to epub?</remark>
-        </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>html</para>
-       </entry>
-       <entry>
-        <para>Creates a subdirectory containing individual HTML files for 
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>html</para>
+      </entry>
+      <entry>
+       <para>Creates a subdirectory containing individual HTML files for 
         all chapters of a book (including also preface, glossary or appendix files).
         They are named according to the ID of the respective root element.  
         Open the generated <filename>index.html</filename> file in a Web browser 
         to view the generated HTML from the starting point (ROOTID of the top-level
         element).</para>
-       </entry>
-       <entry>
-        <para>Images and CSS files are only referenced in the HTML. To copy 
+      </entry>
+      <entry>
+       <para>Images and CSS files are only referenced in the HTML. To copy 
         these files to the same location like the HTML files, use the
         <option>--static</option> option. This is useful for creating 
         distributable HTML builds.</para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>html-single</para>
-        <para>htmlsingle</para>
-       </entry>
-       <entry>
-        <para>Creates a single HTML file, named after the &dc; file used 
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>html-single</para>
+       <para>htmlsingle</para>
+      </entry>
+      <entry>
+       <para>Creates a single HTML file, named after the &dc; file used 
         to create the output. Open the generated <filename>*.html</filename> file
         in a Web browser.</para>
-       </entry>
-       <entry>
-        <para>Single HTML files are more convenient for full text searches. 
+      </entry>
+      <entry>
+       <para>Single HTML files are more convenient for full text searches. 
         Images and CSS files are only referenced in the HTML. To copy 
         these files to the same location like the HTML files, use the
         <option>--static</option> option. This is useful for creating 
         distributable HTML builds.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>Row 2, Cell 1</para>
-       </entry>
-       <entry>
-        <para>Row 2, Cell 2</para>
-       </entry>
-       <entry>
-        <para>Row 2, Cell 3</para>
-       </entry>
-      </row>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>Row 2, Cell 1</para>
+      </entry>
+      <entry>
+       <para>Row 2, Cell 2</para>
+      </entry>
+      <entry>
+       <para>Row 2, Cell 3</para>
+      </entry>
+     </row>
          
    <!-- 
      jsp                    
@@ -527,100 +523,76 @@ For example:</para>
      txt, text              
      webhelp                
      wiki                   -->
-     </tbody>
-    </tgroup>
-   </table>
-   <remark>taroth 2012-03-23: todo - check with fs/toms: which formats can only be generated
+    </tbody>
+   </tgroup>
+  </table>
+  <remark>taroth 2012-03-23: todo - check with fs/toms: which formats can only be generated
    from books (or the other way round: which formats also allow transformation of 
    articles)?</remark>
-  </sect2>
-
-  <sect2>
-   <title>Creating PDF</title>
-   <para> To transform XML into PDF, you need an existing project(as shown in section 4),
-                use the following steps:</para>
-   <procedure>
-    <step>
-     <para> Enter the following command:</para>
-     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> color-pdf</screen>
-    </step>
-   </procedure>
-   <para>Finish. Your XML file is now transformed PDF file. You can find the PDF in your
-                daps repository. To generat a printable PDF switch "color-pdf" into "pdf".</para>
-  </sect2>
-  <sect2>
-   <title>Creating &epub;</title>
-   <para>To transform XML into &epub;, you need an existing project(as shown in the section
-                4), use the following steps.</para>
-   <procedure>
-    <step>
-     <para>Enter in your konsole:</para>
-     <screen>$ daps -e <replaceable>ENV_mybook</replaceable> epub</screen>
-    </step>
-    <step>
-     <para>Finish. Your XML file is now transformed &epub; file. The result is in the
-                        daps repository. Open the result with an EBook reader like calibre.</para>
-    </step>
-   </procedure>
-  </sect2>
-  <sect2>
-   <title>Creating HTML</title>
-   <procedure>
-    <step>
-     <para>Enter in your konsole:</para>
-     <screen>$ daps -e --static ENV_DATA html</screen>
-    </step>
-    <step>
-     <para>Finish. Your XML file is now a HTML file. The result is in the daps
-                        repository. Open the result with an Browser.</para>
-    </step>
-   </procedure>
+ </sect2>
+ <sect2 id="sec.daps.quick.output.adv">
+   <title>Advanced Output Options</title>
+   <para>Instead of always building your complete documentation project 
+   (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or <sgmltag>article</sgmltag>),
+   &dapsacr; also allows you to build an individual <sgmltag>chapter</sgmltag> 
+   or <sgmltag>part</sgmltag>. If you want the output format to 
+   include <sgmltag>remark</sgmltag> elements or to be marked as a 
+   <literal>draft</literal> version, you can tell &dapsacr; to do so.</para>
+   <sect3 id="sec.daps.quick.output.adv.partial">
+    <title>Partial Builds</title>
+    <para>The <quote>starting point</quote> of your documentation project is
+    specified by the <parameter>ROOTID</parameter> parameter. It usually
+    points to the ID of a <sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, 
+    or <sgmltag>article</sgmltag> and is referenced in the &dc; file. 
+    Alternatively, specify a ROOTID on the command line by using the 
+    <option>--rootid</option> option. This also allows you to build only a part 
+    of your documentation project (like an individual chapter or part). To do so, 
+    specify the ID of the respective <sgmltag>chapter</sgmltag> or 
+    <sgmltag>part</sgmltag> to build.</para>
+    <para>If you have set up your working environment with 
+    <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
+    the following command will build only the chapter about the most commonly 
+    used DocBook constructs, without any book title page:</para>
+    <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
+   </sect3>
+   <sect3><title>Output with Remarks or Draft Watermark</title>
+   <para>FIXME</para></sect3>
   </sect2>
  </sect1>
-    <!--<sect1>    
-    <title>Create Distributable Archives</title>
-        <para> To create a distributable archives read the following:</para>
-        <itemizedlist>
-            <listitem><para></para></listitem>
-            <listitem><para></para></listitem>
-            <listitem><para></para></listitem>
-            <listitem><para></para></listitem>
-        </itemizedlist>
-        
-        </sect1>-->
- <sect1>
-  <title>Advanced usage of &daps;</title>
-  <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
-  <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-  <para>For example:</para>
-  <screen>daps -vv<co id="co.daps.vv"/> \
+   
+<!--<sect1>
+ <title>Advanced usage of &daps;</title>
+ <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
+ <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
+ <para>For example:</para>
+ <screen>daps -vv<co id="co.daps.vv"/> \
   -e ENV_DATA<co id="co.daps.env"/> \
   html<co id="co.daps.html"/>
   </screen>
-  <calloutlist>
-   <callout arearefs="co.daps.vv">
-    <para>Global Option = -vv (verbose print more debug messages)</para>
-   </callout>
-   <callout arearefs="co.daps.env">
-    <para>Global Option = -e (defines the ENV file)</para>
-   </callout>
-   <callout arearefs="co.daps.html">
-    <para>Subcommand = html (what to create)</para>
-   </callout>
-  </calloutlist>
-  <para>DAPS can be executed with or without options, depending on the project.</para>
-  <para>If the directory contains only one ENV file:</para>
-  <screen>daps "subcommand"</screen>
-  <para>If the directory contains more than one ENV-Data</para>
-  <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
-  <para>Setup ENV-Data</para>
-  <screen>$ source ENV-YOUR-DATA</screen>
-  <screen>$ daps "subcommand"</screen>
-  <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
-  <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
-  <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
-  <remark>Sonst klasse gemacht :-)</remark>
- </sect1>
+ <calloutlist>
+  <callout arearefs="co.daps.vv">
+   <para>Global Option = -vv (verbose print more debug messages)</para>
+  </callout>
+  <callout arearefs="co.daps.env">
+   <para>Global Option = -e (defines the ENV file)</para>
+  </callout>
+  <callout arearefs="co.daps.html">
+   <para>Subcommand = html (what to create)</para>
+  </callout>
+ </calloutlist>
+ <para>DAPS can be executed with or without options, depending on the project.</para>
+ <para>If the directory contains only one ENV file:</para>
+ <screen>daps "subcommand"</screen>
+ <para>If the directory contains more than one ENV-Data</para>
+ <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
+ <para>Setup ENV-Data</para>
+ <screen>$ source ENV-YOUR-DATA</screen>
+ <screen>$ daps "subcommand"</screen>
+ <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
+ <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
+ <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
+ <remark>Sonst klasse gemacht :-)</remark>
+</sect1>-->
   
    <!-- <sect1>
    <title>Migration of Existing Projects</title>
@@ -776,5 +748,5 @@ images/(Type)/data
             </varlistentry>
         </variablelist>-->
 
- <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
 </article>
