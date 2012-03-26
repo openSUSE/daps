@@ -182,6 +182,15 @@
    make install - do any messages appear?</remark>
    </para>
   </sect2>
+  <sect2 id="sec.daps.quick.inst.formatter">
+   <title>Installing and Configuring the FO Formatter</title>
+   <para>For installation and configuration of an FO formatter (for generating 
+   PDF output), refer to the installation instructions of the product or your 
+   system administrator. For FOP, you usually only need to install the 
+   respective FOP package. However, not all FOP packages contain hyphenation 
+   pattern files. <remark>taroth 2012-03-26: todo - mention download from 
+   offo.sourceforeg.net in troubleshooting section and add xref</remark> </para>
+  </sect2>
  </sect1>
  <sect1 id="sec.daps.quick.basics">
   <title>Defining Documentation Projects</title>
@@ -350,7 +359,8 @@
   <command>daps -/-help</command>. The output formats are listed below
   <menuchoice><guimenu>Subcommands</guimenu>
     <guimenu>Generate Books</guimenu>
-   </menuchoice>.--></para>
+   </menuchoice>.-->
+  </para>
   <para>By default, the DocBook stylesheets are used for generating output formats.
   But &dapsacr; also allows you to customize your output formats in a very flexible way.
   <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
@@ -376,16 +386,17 @@ make: *** [validate] Error 3
   </sect2>
   <sect2 id="sec.daps.quick.output.syntax">
    <title>Basic &dapsacr; Syntax</title>
-    <para>Independent of the individual output format you want to create, 
+   <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-  <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
-  <para>For example:</para>
-  <screen>$ daps -d DC-daps-quick color-pdf</screen>
-  <para>If your current directory is not the documentation directory where the &dc; 
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>
+   </screen>
+   <para>For example:</para>
+   <screen>$ daps -d DC-daps-quick color-pdf</screen>
+   <para>If your current directory is not the documentation directory where the &dc; 
 file is located, also specify the (absolute or relative) path to the &dc; file.
 For example:</para>
-  <screen>$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</screen>
-  <para>At the end of the transformation process, &dapsacr; shows a message 
+   <screen>$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</screen>
+   <para>At the end of the transformation process, &dapsacr; shows a message 
   where to find the generated output.</para>
   </sect2>
   <sect2>
@@ -393,7 +404,7 @@ For example:</para>
    <para>The following table gives an overview of the &dapsacr; subcommands for generating output
    formats. If more than one subcommand is mentioned for a format, either variant is recognized by
    &dapsacr;.</para>
-  <table>
+   <table>
     <title>&dapsacr; Output Commands and Formats</title>
     <tgroup cols="4">
      <colspec colnum="1" colname="1" colwidth="25*"/>
@@ -412,8 +423,8 @@ For example:</para>
        </entry>
       </row>
      </thead>
-  
      
+
      <tbody>
       <row>
        <entry>
@@ -453,8 +464,10 @@ For example:</para>
         a software like Calibre).</para>
        </entry>
        <entry>
-        <para><remark>taroth 2012-03-23: check with fs/toms: only books? what about 
-        conversion of articles to epub?</remark></para>
+        <para>
+         <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+        conversion of articles to epub?</remark>
+        </para>
        </entry>
       </row>
       <row>
@@ -521,8 +534,9 @@ For example:</para>
    from books (or the other way round: which formats also allow transformation of 
    articles)?</remark>
   </sect2>
-  
-<sect2>   <title>Creating PDF</title>
+
+  <sect2>
+   <title>Creating PDF</title>
    <para> To transform XML into PDF, you need an existing project(as shown in section 4),
                 use the following steps:</para>
    <procedure>
