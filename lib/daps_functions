@@ -193,7 +193,7 @@ function init_env {
     #
     if [[ -n ROOTID ]]; then
         EXISTS_ROOTID=$(xsltproc --stringparam rootid $ROOTID --xinclude \
-            ${DAPSROOT}/daps-xslt/common/check_rootid.xsl $MAIN)
+            ${DAPSROOT}/daps-xslt/common/check_rootid.xsl $MAIN 2>/dev/null)
     fi
     if [[ "yes" != $EXISTS_ROOTID ]]; then
         exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
