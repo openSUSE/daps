@@ -45,34 +45,13 @@ endif
 
 STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(DOCBOOK_STYLES) )
-USED_STYLEDIR  := $(firstword $(STYLE_ROOTDIRS))
-
-#----------------------------
-# Stylesheet directory layout
-# We assume that the directory layout for all stylesheet root directories is
-# the same
-
-
-EPUB_XSLT_STYLE := /epub/docbook.xsl
-FO_STYLE        := /fo/docbook.xsl
-JSP_STYLE       := /jsp/chunk.xsl
-MAN_STYLE       := /manpages/docbook.xsl
-WEBHELP_STYLE   := /webhelp/xsl/webhelp.xsl
-WIKI_STYLE      := /db2mediawiki/docbook.xsl
-
-# HTML is special, because we optionally allow html4.
-
-ifeq ("$(HTML4)", "yes")
-  H_DIR := /html
-else
-  H_DIR := /xhtml
-endif
-
-HTML_STYLE        := $(H_DIR)/chunk.xsl
-HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 
 #----------------------------
 # No let's put it all together
+#
+# We assume that the directory layout for all stylesheet root directories is
+# the same as with the original DocBook stylesheets
+#
 # The following variables are actually used to build the targets:
 #
 # STYLEEPUBXSLT: epub
@@ -83,28 +62,55 @@ HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 # STYLEWEBHELP   webhelp
 # STYLEWIKI:     wiki
 #
+# STYLEIMG:      images
+#
 # STYLE_EPUBCSS: css file for epub
 # STYLE_HTMLCSS: cssfile for html
 #
-# By using ifndef we allow to overwrite the style/css on the command line by
-# directly passing e.g. STYLEFO=<PATH> to make
-
 #
 # The combination of firstword and wildcard makes the following specifications
 # "intelligent". wildcard filters the list of files to only include the ones
 # that really exist, while firstword picks the first element of that
 # list.
 # So existing files are chosen in the order defined in $STYLE_ROOTDIRS
-# So the DocBook stylesheets always raima the last resort
+# So the DocBook stylesheets always remain the last resort
 
-STYLEEPUBXSLT := $(addsuffix $(EPUB_XSLT_STYLE), $(USED_STYLEDIR))
-STYLEFO       := $(addsuffix $(FO_STYLE), $(USED_STYLEDIR))
-STYLEH        := $(addsuffix $(HTML_STYLE), $(USED_STYLEDIR))
-STYLEHSINGLE  := $(addsuffix $(HTML_SINGLE_STYLE), $(USED_STYLEDIR))
-STYLEJ        := $(addsuffix $(JSP_STYLE), $(USED_STYLEDIR))
-STYLEMAN      := $(addsuffix $(MAN_STYLE), $(USED_STYLEDIR))
-STYLEWEBHELP  := $(addsuffix $(WEBHELP_STYLE), $(USED_STYLEDIR))
-STYLEWIKI     := $(addsuffix $(WIKI_STYLE), $(USED_STYLEDIR))
+# HTML is special, because we optionally allow html4.
+
+ifeq ("$(HTML4)", "yes")
+  H_DIR := /html
+else
+  H_DIR := /xhtml
+endif
+HTML_STYLE        := $(H_DIR)/chunk.xsl
+HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
+
+
+STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix \
+			/epub/docbook.xsl, $(STYLE_ROOTDIRS))))
+STYLEFO       := $(firstword $(wildcard $(addsuffix \
+			/fo/docbook.xsl, $(STYLE_ROOTDIRS))))
+STYLEH        := $(firstword $(wildcard $(addsuffix \
+			$(H_DIR)/chunk.xsl, $(STYLE_ROOTDIRS))))
+STYLEHSINGLE  := $(firstword $(wildcard $(addsuffix \
+			$(H_DIR)/docbook.xsl, $(STYLE_ROOTDIRS))))
+STYLEJ        := $(firstword $(wildcard $(addsuffix \
+			/jsp/chunk.xsl, $(STYLE_ROOTDIRS))))
+STYLEMAN      := $(firstword $(wildcard $(addsuffix \
+			/manpages/docbook.xsl, $(STYLE_ROOTDIRS))))
+STYLEWEBHELP  := $(firstword $(wildcard $(addsuffix \
+			/webhelp/xsl/webhelp.xsl, $(STYLE_ROOTDIRS))))
+STYLEWIKI     := $(firstword $(wildcard $(addsuffix \
+			/db2mediawiki/docbook.xsl, $(STYLE_ROOTDIRS))))
+
+# webhelp is special, too, because it also contains subdirectorieys we need
+STYLEWEBHELP_BASE  := $(firstword $(wildcard $(addsuffix \
+			/webhelp, $(STYLE_ROOTDIRS))))
+STYLWEBHELP        := $(addsuffix /xsl/webhelp.xsl, $(STYLEWEBHELP_BASE))
+
+
+# images provided with the stylesheets
+STYLEIMG := $(firstword $(wildcard $(addsuffix /images, $(STYLE_ROOTDIRS))))
 
 #
 # CSS
@@ -114,5 +120,3 @@ endif
 ifdef EPUB_CSS
   STYLE_EPUBCSS := $(EPUB_CSS)
 endif
-
-

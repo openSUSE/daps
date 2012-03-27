@@ -238,9 +238,9 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
                 --stringparam callout.graphics.path \
-                  "$(USED_STYLEDIR)/images/callouts/" \
+                  "$(STYLEIMG)/images/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-                --stringparam styleroot "$(USED_STYLEDIR)/" \
+                --stringparam styleroot "$(STYLEIMG)/" \
 		--param ulink.show 1
 
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -249,9 +249,9 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
                 --stringparam callout.graphics.path \
-                  "$(USED_STYLEDIR)/images/callouts/" \
+                  "$(STYLEIMG)/images/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-                --stringparam styleroot "$(USED_STYLEDIR)/" \
+                --stringparam styleroot "$(STYLEIMG)/" \
 		--param ulink.show 1
 
 # root directory for custom stylesheets
@@ -1461,21 +1461,21 @@ $(HTML_DIR)/images: $(HTML_DIR) provide-color-images
 	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
   endif
 
-# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# STYLEIMG contains admon and navig images as well as
 # callout images in callouts/
-# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# STYLEIMG may contain .svn directories which we do not want to copy
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 #
 # style images
-$(HTML_DIR)/style_images: $(USED_STYLEDIR)/images $(HTML_DIR)
+$(HTML_DIR)/style_images: $(STYLEIMG) $(HTML_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
 	tar cp --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(USED_STYLEDIR) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
+	  -C $(dir $(STYLEIMG)) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $(HTML_DIR)/style_images
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $@
   endif
 
 #---------------
@@ -1573,7 +1573,7 @@ endif
 
 # search stuff
 $(WEBHELP_DIR)/search: $(WEBHELP_DIR)
-$(WEBHELP_DIR)/search: $(USED_STYLEDIR)/webhelp/template/content/search 
+$(WEBHELP_DIR)/search: $(STYLEWEBHELP_BASE)/template/content/search 
 	test -d $@/stemmers || mkdir -p $@/stemmers
 	$(HTML_GRAPH_COMMAND) $</default.props $@
 	$(HTML_GRAPH_COMMAND) $</punctuation.props $@
@@ -1595,29 +1595,28 @@ $(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
 	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
   endif
 
-# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# $(STYLEIMG) contains admon and navig images as well as
 # callout images in callouts/
-# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# STYLEIMG may contain .svn directories which we do not want to copy
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 #
 # style images
-$(WEBHELP_DIR)/style_images: $(USED_STYLEDIR)/images $(WEBHELP_DIR)
+$(WEBHELP_DIR)/style_images: $(STYLEIMG) $(WEBHELP_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
 	tar cp --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(USED_STYLEDIR) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+	  -C $(dir $(STYLEIMG)) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $@
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG)/ $@
   endif
 # common stuff /(Javascript, CSS,...)
 $(WEBHELP_DIR)/common: $(WEBHELP_DIR)
-$(WEBHELP_DIR)/common: $(USED_STYLEDIR)/webhelp/template/common
+$(WEBHELP_DIR)/common: $(STYLEWEBHELP_BASE)/template/common
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
-	tar cp --exclude-vcs -C $(USED_STYLEDIR)/webhelp/template common | \
-	  (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+	tar cp --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
 	$(HTML_GRAPH_COMMAND) $< $@
@@ -1690,21 +1689,21 @@ $(JSP_DIR)/images: $(JSP_DIR) provide-color-images
 	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
   endif
 
-# $(USED_STYLEDIR)/images contains admon and navig images as well as
+# $(STYLEIMG) contains admon and navig images as well as
 # callout images in callouts/
-# USED_STYLEDIR may contain .svn directories which we do not want to copy
+# STYLEIMG may contain .svn directories which we do not want to copy
 # therefore we use tar with the --exclude-vcs option to copy
 # the files
 #
 # style images
-$(JSP_DIR)/style_images: $(USED_STYLEDIR)/images $(JSP_DIR)
+$(JSP_DIR)/style_images: $(STYLEIMG) $(JSP_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
 	tar cp --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(USED_STYLEDIR) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
+	  -C $(dir $(STYLEIMG)) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(USED_STYLEDIR)/images/ $(JSP_DIR)/style_images
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG)/images/ $@
   endif
 
 #---------------
