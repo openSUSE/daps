@@ -274,7 +274,6 @@ function daps_help () {
 Usage:
   1. $ME -d DC-file [--options] <subcommand> [--subcommand-options]
   2. $ME -m MAIN file [--options] <subcommand> [--subcommand-options]
-  3. $ME [--options] <subcommand> [--subcommand-options]
 
 
 Global Options:
@@ -409,9 +408,8 @@ Subcommands:
     <target>-name             Print resulting filename for <target>. <target>
                               may be one of color-pdf, epub, html-single,
                               pdf, txt
-    <target>-dir-name         Print resulting directory nae for <target>.
+    <target>-dir-name         Print resulting directory name for <target>.
                               <target> may be either html or jsp
-    profiledir                Print path to profiling directory
 
   Debugging:
     check                     Print a list of the most important make variables
@@ -552,11 +550,10 @@ function set_mainfile () {
 # Recover command-line values
 #
 function recover_cmdl_values () {
-#    test -n "$DOC_DIR_CMDL"  && DOC_DIR="$DOC_DIR_CMDL"
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
     test -n "$DOCCONF_CMDL"   && DOCCONF="$DOCCONF_CMDL"
-    test -n "$DAPSROOT_CMDL"   && DAPSROOT="$DAPSROOT_CMDL"
+    test -n "$DAPSROOT_CMDL"  && DAPSROOT="$DAPSROOT_CMDL"
     test -n "$FALLBACK_STYLEROOT_CMDL" && FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
     test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
     test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
@@ -570,9 +567,37 @@ function sanitize_paths () {
     BUILD_DIR=${BUILD_DIR%/}
     DAPSROOT=${DAPSROOT%/}
     FALLBACK_STYLEROOT=${FALLBACK_STYLEROOT%/}
+    STYLEDEVEL=${STYLEDEVEL%/}
     STYLEROOT=${STYLEROOT%/}
 }
 
+# ---------
+# Check values of Variable containing paths
+
+function check_paths () {
+    local DIR FILE VAL
+    # Directories:
+    #    DAPSROOT
+    #    FALLBACK_STYLEROOT
+    #    STYLEDEVEL
+    #    STYLEROOT
+    for DIR in DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
+        VAL=""
+        eval "VAL=\$$DIR"
+        [[ -n $VAL && ! -d $VAL ]] && exit_on_error "Fatal: $DIR \"$VAL\" is not a valid directory"
+    done
+    # Files:
+    #    EPUB_CSS
+    #    FOP_WRAPPER
+    #    HTML_CSS
+    #    MAIN
+    #    XEP_WRAPPER
+    for FILE in EPUB_CSS FOP_WRAPPER HTML_CSS MAIN XEP_WRAPPER; do
+        VAL=""
+        eval "VAL=\$$FILE"
+        [[ -n $VAL && ! -e $VAL ]] && exit_on_error "Fatal: $FILE \"$VAL\" does not exist"
+    done
+}
 
 # ----------------------------------------------------------------------------
 # Parsing the command line arguments with GNU getopt
@@ -607,8 +632,8 @@ eval set -- "$ARGS"
 while true ; do
     case "$1" in
          --builddir)
-            test -d "$2" || exit_on_error "BUILD_DIR $2 is not a valid directory"
-            test -w "$2" || exit_on_error "BUILD_DIR $2 is not writeable"
+            [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
+            [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
             BUILD_DIR_CMDL="$2"
             # strip trailing slash
             BUILD_DIR_CMDL=${BUILD_DIR_CMDL%/}
@@ -629,7 +654,7 @@ while true ; do
             shift 2
             ;;
         --dapsroot)
-            test -d $2 || exit_on_error "$2 is not a valid DAPSROOT"
+            [[ -d $2 ]] || exit_on_error "DAPSROOT \"$2\" is not a valid directory"
             DAPSROOT_CMDL="$2"
             # strip trailing slash
             DAPSROOT_CMDL=${DAPSROOT_CMDL%/}
@@ -645,7 +670,6 @@ while true ; do
             shift
             ;;
         --fb_styleroot)
-            test -d "$2" || exit_on_error "Fallback styleroot $2 is not a valid directory"
             FALLBACK_STYLEROOT_CMDL="$2"
             # strip trailing slash
             FALLBACK_STYLEROOT_CMDL=${FALLBACK_STYLEROOT_CMDL%/}
@@ -670,7 +694,6 @@ while true ; do
 	    shift 2
             ;;
         --styleroot)
-            test -d "$2" || exit_on_error "Styleroot $2 is not a valid directory"
             STYLEROOT_CMDL="$2"
             # strip trailing slash
             STYLEROOT_CMDL=${STYLEROOT_CMDL%/}
@@ -813,7 +836,7 @@ fi
 if [[ -n $DAPSROOT ]]; then
     # custom DAPSROOT was set
     if [[ ! -d "$DAPSROOT" ]]; then
-        exit_on_error "dtdroot $DAPSROOT is no valid directory"
+        exit_on_error exit_on_error "DAPSROOT \"$2\" is not a valid directory"
     else
         # valid directory
         #  strip trailing slash
@@ -929,13 +952,9 @@ fi
 #
 
 [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN is set. This should not have happened"
-[[ -n "$DOCCONF_CMDL" && ! -e "$DOCCONF_CMDL" ]] && exit_on_error "Fatal: Could not find DOCCONF \"$DOCCONF_CMDL\""
-[[ -n "$MAIN_CMDL" && ! -e "$MAIN_CMDL" ]] && exit_on_error "Fatal: Could not find MAIN \"$MAIN_CMDL\""
 [[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
-[[ -d "${DOC_DIR}/xml" ]] || exit_on_error "Fatal: Could not find DOC_DIR \"${DOC_DIR}/xml\"."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
-[[ -d "$DAPSROOT" ]] || exit_on_error "Fatal: Could not find DAPSROOT \"${DAPSROOT}\"."
-#
+
 # FINALLY! Source the DOCCONF file, recover the command line values
 
 [[ -n $DOCCONF_CMDL ]] && source $DOCCONF_CMDL
@@ -949,10 +968,9 @@ if [[ -z "$MAIN_CMDL" ]]; then
     MAIN="$MAIN_CMDL"
 fi
 
-# 
-# Checking MAIN
+# Check paths that have been set so far
 #
-[[ -e "$MAIN" ]] || exit_on_error "Fatal: Could not find $MAIN"
+check_paths
 
 #----------
 # Values that need to be exported and are not set in the config
@@ -1041,11 +1059,6 @@ FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 #FOP_WRAPPER
 #XEP_WRAPPER
-
-#----------------------------------
-# Sanity checks
-#
-
 
 #-------------------------------------------------------------------
 # Now export all variables set by the config file
