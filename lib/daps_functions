@@ -191,12 +191,12 @@ function init_env {
 
     # test if ROOTID exist
     #
-    if [[ -n ROOTID ]]; then
+    if [[ -n $ROOTID ]]; then
         EXISTS_ROOTID=$(xsltproc --stringparam rootid $ROOTID --xinclude \
             ${DAPSROOT}/daps-xslt/common/check_rootid.xsl $MAIN 2>/dev/null)
-    fi
-    if [[ "yes" != $EXISTS_ROOTID ]]; then
-        exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
+        if [[ "yes" != $EXISTS_ROOTID ]]; then
+            exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
+        fi
     fi
     
     #
@@ -751,7 +751,7 @@ function build_locdrop () {
     elif [[ -z $P_DEF_FILE ]]; then
         ccecho "warn" "Warning: No DEF file was specified"
     else
-        exit_on_error "Cannot find DEF file P_DEF_FILE"
+        exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
     
     call_make "$SUB_CMD" "$@"
@@ -778,9 +778,9 @@ function packaging () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "Provide a $SUB_CMD package"
-        if [[ package-pdf = $TARGET ]]; then
+        if [[ "package-pdf" = $SUB_CMD ]]; then
             help_formatter
-        elif [[ package-src = $TARGET ]]; then
+        elif [[ "package-src" = $SUB_CMD ]]; then
             help_def-file
         fi
         help_help
@@ -795,8 +795,10 @@ function packaging () {
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
+    elif [[ -z $P_DEF_FILE ]]; then
+        ccecho "warn" "Warning: No DEF file was specified"
     else
-        exit_on_error "Cannot find DEF file P_DEF_FILE"
+        exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
 
     if [[ -n $P_FORMATTER ]]; then
