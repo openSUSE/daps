@@ -375,7 +375,8 @@ endif
 # Profiling stringparams
 #
 ifdef PROFILE_URN
-  PROFSTRINGS :=
+  PROFSTRINGS := --stringparam show.comments $(COMMENTS) \
+	         --stringparam show.remarks $(REMARKS)
   ifdef PROFARCH
     PROFSTRINGS += --stringparam profile.arch "$(PROFARCH)"
   endif
@@ -1505,8 +1506,7 @@ $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
   endif
 	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILED_MAIN) \
-	  $(DEVNULL)
+	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILED_MAIN) $(DEVNULL)
 	if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi

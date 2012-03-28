@@ -8,8 +8,11 @@
 <xsl:key name="id" match="*" use="@id|@xml:id" />
 
 <!-- Maybe obsolete in the future: -->
-<xsl:param name="show.comments">0</xsl:param>
-<xsl:param name="show.remarks">0</xsl:param>
+<!-- show comments and/or remarks
+     0 = no, 1 = yes
+-->
+<xsl:param name="show.comments" select="0"/>
+<xsl:param name="show.remarks" select="0"/>
 
 <!-- Should the SUSE processing instruction be resolved?
    0 = no, 1 = yes
@@ -21,7 +24,7 @@
 <xsl:param name="filename"/>
 
 
-<!-- rootid: Process only this element and their childs         -->
+<!-- rootid: Process only this element and their children  -->
 <xsl:param name="rootid"/>
 
 </xsl:stylesheet>
