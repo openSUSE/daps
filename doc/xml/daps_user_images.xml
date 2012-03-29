@@ -81,23 +81,32 @@
  <sect1 id="sec.daps.user.edit.imgs.refer">
   <title>Referencing Images</title>
   <para>Provided your images are located in the required default directory, 
-   &dapsacr; automatically finds the path to your images.Therefore referencing 
+   &dapsacr; automatically finds the path to your images. Therefore referencing 
    images in your XML sources is very straightforward: you do not need
-   to include any path in the <sgmltag>fileref</sgmltag> attribute&mdash;the 
-   file name is enough. See <xref linkend="ex.xml.img.ref"/>.</para>
+   to include any path in the <sgmltag class="attribute">fileref</sgmltag> 
+   attribute&mdash;the file name is enough. </para>
+  <para>Furthermore DocBook allows you to insert more than one image to
+   distinguish between different target formats. For example, you can
+   add two images pointing to the same file, but with different widths.
+   Use the <sgmltag class="attribute">role</sgmltag> attribute and add
+   the name of the target format (<sgmltag
+      class="attvalue">fo</sgmltag>, <sgmltag
+      class="attvalue">html</sgmltag>, etc.)
+   See <xref linkend="ex.xml.img.ref"/>.
+  </para>
   <example id="ex.xml.img.ref">
    <title>Image Reference in an XML File</title>
    <screen>&lt;figure&gt;
-    &lt;title&gt;Main Window&lt;/title&gt;
-    &lt;mediaobject&gt;
-     &lt;imageobject role="fo"&gt;
-      &lt;imagedata fileref="screenshot.png" width="75%" format="PNG"/&gt;
-     &lt;/imageobject&gt;
-     &lt;imageobject role="html"&gt;
-      &lt;imagedata fileref="screenshot.png" width="75%" format="PNG"/&gt;
-     &lt;/imageobject&gt;
-    &lt;/mediaobject&gt;
-   &lt;/figure&gt;</screen>
+  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;mediaobject&gt;
+    &lt;imageobject role="fo"&gt;
+      &lt;imagedata fileref="screenshot.png" width="70%"/&gt;
+    &lt;/imageobject&gt;
+    &lt;imageobject role="html"&gt;
+      &lt;imagedata fileref="screenshot.png" width="75%"/&gt;
+    &lt;/imageobject&gt;
+  &lt;/mediaobject&gt;
+&lt;/figure&gt;</screen>
   </example>
 
  </sect1>
