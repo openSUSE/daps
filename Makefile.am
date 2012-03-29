@@ -127,7 +127,7 @@ dist_xsltepub_DATA      = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA     = $(wildcard daps-xslt/index/*.xsl)
 dist_xsltman_DATA       = $(wildcard daps-xslt/man/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
-dist_xsltyelp_DATA      = $(wildcard daps-xslt//*.xsl)
+dist_xsltyelp_DATA      = $(wildcard daps-xslt//yelp/*.xsl)
 
 # DOCUMENTATION
 dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL README \
