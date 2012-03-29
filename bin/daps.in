@@ -598,11 +598,13 @@ function check_paths () {
         [[ -n $VAL && ! -e $VAL ]] && exit_on_error "Fatal: $FILE \"$VAL\" does not exist"
     done
     # issue warnings only for the wrapper scripts
-    for FILE in FOP_WRAPPER XEP_WRAPPER; do
-        VAL=""
-        eval "VAL=\$$FILE"
-        [[ -n $VAL && ! -e $VAL ]] && echo "Hint: $FILE \"$VAL\" does not exist"
-    done
+    if [[ 1 -le $VERBOSITY ]]; then
+        for FILE in FOP_WRAPPER XEP_WRAPPER; do
+            VAL=""
+            eval "VAL=\$$FILE"
+            [[ -n $VAL && ! -e $VAL ]] && echo "Hint: $FILE \"$VAL\" does not exist"
+        done
+    fi
 }
 
 # ----------------------------------------------------------------------------
