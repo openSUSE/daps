@@ -19,7 +19,7 @@ m4_define(daps_version_minor, 9)
 m4_define(daps_version_micro, 9dev)
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [1.0RC1], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [1.0RC2], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_MSG_NOTICE([
