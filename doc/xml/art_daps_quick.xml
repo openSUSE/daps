@@ -254,8 +254,7 @@
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
   |--<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
-     |--MAIN*.xml <co id="co.docdir.main"/>
-    </screen>
+     |--MAIN*.xml <co id="co.docdir.main"/>    </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
@@ -308,14 +307,12 @@
    </title>
    <step>
     <para>Create a directory that you want to use as your documentation directory:</para>
-    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>
-    </screen>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>    </screen>
    </step>
    <step>
     <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
-    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>
-    </screen>
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>    </screen>
     <para>With the <option>-r</option> option, you can also set another root 
     element, such as <sgmltag>article</sgmltag>, for example.To create the default 
     directory structure with an <sgmltag>article</sgmltag> example: </para>
@@ -380,16 +377,14 @@
     IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
-make: *** [validate] Error 3
-</screen>
+make: *** [validate] Error 3</screen>
    </example>
   </sect2>
   <sect2 id="sec.daps.quick.output.syntax">
    <title>Basic &dapsacr; Syntax</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>
-   </screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>   </screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-quick color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
