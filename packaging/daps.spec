@@ -94,10 +94,6 @@ BuildRequires:  checkbot
 %endif
 %endif
 
-%if 0%{?suse_version} < 1120
-BuildRequires:  python-xml
-%endif
-
 PreReq:         libxml2
 PreReq:         sgml-skel
 
@@ -133,9 +129,7 @@ Requires:       checkbot
 Recommends:     checkbot
 %endif
 %endif
-%if 0%{?suse_version} < 1120
 Requires:       python-xml
-%endif
 
 Recommends:     agfa-fonts
 Recommends:     aspell aspell-en
