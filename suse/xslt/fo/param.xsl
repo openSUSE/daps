@@ -185,7 +185,7 @@ set       nop
    </xsl:choose>
 </xsl:param>
 <xsl:param name="admon.graphics.extension">.svg</xsl:param>
-<xsl:param name="admon.graphics.path" select="concat($styleroot, 'images/admon/')"/>
+<xsl:param name="admon.graphics.path" select="concat($styleroot, 'images/')"/>
 
 
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
