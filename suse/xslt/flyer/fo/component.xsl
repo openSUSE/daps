@@ -108,7 +108,9 @@
               <fo:table-cell background-color="darkgray" text-depth="4mm">
               <fo:block font-size="4pt">&#xa0;</fo:block>
             </fo:table-cell>
-            <fo:table-cell/>
+            <fo:table-cell>
+               <fo:block/>
+            </fo:table-cell>
             <fo:table-cell background-color="{$flyer.color}"
               text-depth="4mm">
               <fo:block font-size="4pt">&#xa0;</fo:block>
@@ -124,7 +126,9 @@
                   </xsl:call-template>
                 </fo:block>
               </fo:table-cell>
-              <fo:table-cell/>
+              <fo:table-cell>
+                 <fo:block/>
+              </fo:table-cell>
               <fo:table-cell>
                 <fo:block margin-top=".5em" font-size="8pt">www.suse.com</fo:block>
               </fo:table-cell>
@@ -193,7 +197,6 @@
             <xsl:with-param name="master-reference" select="$master-reference"/>
           </xsl:call-template>
           <xsl:apply-templates select="*[@role='legal']"/>
-          <xsl:if test="false()">
             <fo:block span="all">
               <fo:footnote>
                 <fo:inline/>
@@ -223,7 +226,6 @@
                 </fo:footnote-body>
               </fo:footnote>
             </fo:block>
-            </xsl:if>
         </fo:flow>
       </fo:page-sequence>
     </xsl:when>
