@@ -240,7 +240,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
                 --stringparam callout.graphics.path \
                   "$(STYLEIMG)/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
-                --stringparam styleroot "$(dir $(STYLEIMG))/" \
+                --stringparam styleroot "$(dir $(STYLEIMG))" \
 		--param ulink.show 1
 
 FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
@@ -251,7 +251,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam callout.graphics.path \
                   "$(STYLEIMG)/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
-                --stringparam styleroot "$(dir $(STYLEIMG))/" \
+                --stringparam styleroot "$(dir $(STYLEIMG))" \
 		--param ulink.show 1
 
 # root directory for custom stylesheets
