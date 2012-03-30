@@ -2,29 +2,20 @@
 <!-- $Id:  $ -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
->
+    xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <!-- Import the current version of the stylesheets  -->
-<!--<xsl:import href="cropmarks.xsl"/>-->
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
+
 <xsl:import href="../../profiling/suse-pi.xsl"/>
 <xsl:import href="../../fo/fonts.xsl"/>
-<!-- <xsl:include href="../../common/copy-nodes.xsl"/> -->
+
 <xsl:import href="../../fo/hyphenate-url.xsl"/> 
-<!--<xsl:import href="../../fo/admon.xsl"/>-->
-<!-- <xsl:include href="toc.xsl"/> -->
-<!-- <xsl:include href="admon.xsl"/> -->
-<!-- <xsl:include href="component.xsl"/> -->
-<!-- <xsl:include href="redefinitions.xsl"/> -->
-<!-- <xsl:include href="booktitlepage.xsl"/> -->
-<!-- <xsl:include href="articletitlepage.xsl"/> -->
-<!-- <xsl:include href="titlepages.xsl"/> -->
+
 <xsl:import href="../../fo/admon.xsl"/>
 <xsl:import href="../../fo/pi.xsl"/>
-<xsl:import href="../../fo/verbatim.xsl"/>
+<!--<xsl:import href="../../fo/verbatim.xsl"/>-->
 <xsl:import href="../../fo/xref.xsl"/>
-<!-- <xsl:include href="xep.xsl"/> -->
 
  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
@@ -33,11 +24,6 @@
  <xsl:include href="attributesets.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="lists.xsl"/>
- 
- <!-- <xsl:include href="callout.xsl"/> -->
- <!-- <xsl:include href="verbatim.xsl"/> -->
- <!-- <xsl:include href="xref.xsl"/> -->
- <!-- <xsl:include href="table.xsl"/> -->
  <xsl:include href="sections.xsl"/> 
  <xsl:include href="inline.xsl"/>
  <xsl:include href="synop.xsl"/>
@@ -46,14 +32,12 @@
  <xsl:include href="header.xsl"/>
  
 
-
 <!-- Use cropmarks? -->
 <xsl:param name="use.xep.cropmarks" select="1"/>
 
 <!-- Use extensions -->
 <xsl:param name="xep.extensions">1</xsl:param>
 <xsl:param name="fop.extensions">0</xsl:param>
-
 
 <xsl:template match="/">
   <xsl:if test="$use.xep.cropmarks != 0 and $xep.extensions != 0">
@@ -70,7 +54,6 @@
   </xsl:if>
   <xsl:apply-imports/>
 </xsl:template>
-
 
 <xsl:template name="root.messages">
   
