@@ -99,9 +99,23 @@
 
 <!-- Add other variable definitions here -->
 <xsl:param name="shade.verbatim">0</xsl:param>
-<xsl:param name="callout.unicode">1</xsl:param> 
-<xsl:param name="callout.graphics">0</xsl:param> 
 <!-- <xsl:param name="callout.unicode.start.character" select="10122"/> -->
+<xsl:param name="callout.unicode">0</xsl:param>
+<xsl:param name="callout.graphics">1</xsl:param>
+<xsl:param name="callout.xep.graphics.extension">.pdf</xsl:param>
+<xsl:param name="callout.fop.graphics.extension">.svg</xsl:param>
+<xsl:param name="callout.graphics.extension">
+   <xsl:choose>
+      <xsl:when test="$fop1.extensions != 0">
+         <xsl:value-of select="$callout.fop.graphics.extension"/>
+      </xsl:when>
+      <xsl:otherwise>
+         <xsl:value-of select="$callout.xep.graphics.extension"/>
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:param>
+<xsl:param name="callout.graphics.path" select="concat($styleroot, 'images/callouts/')"/>
+
 
 <xsl:param name="chapter.autolabel" select="0"/>
 <!-- Activate numbering of sections -->
