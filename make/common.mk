@@ -238,7 +238,7 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
 	        --stringparam show.remarks $(REMARKS) \
                 --stringparam format.print 1 \
                 --stringparam callout.graphics.path \
-                  "$(STYLEIMG)/images/callouts/" \
+                  "$(STYLEIMG)/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/print/" \
                 --stringparam styleroot "$(STYLEIMG)/" \
 		--param ulink.show 1
@@ -249,7 +249,7 @@ FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
                 --stringparam callout.graphics.path \
-                  "$(STYLEIMG)/images/callouts/" \
+                  "$(STYLEIMG)/callouts/" \
 	        --stringparam img.src.path "$(IMG_GENDIR)/online/" \
                 --stringparam styleroot "$(STYLEIMG)/" \
 		--param ulink.show 1
