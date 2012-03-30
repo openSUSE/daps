@@ -54,7 +54,18 @@
 <xsl:param name="shade.verbatim">0</xsl:param>
 <xsl:param name="callout.unicode">0</xsl:param>
 <xsl:param name="callout.graphics">1</xsl:param>
-<xsl:param name="callout.graphics.extension">.pdf</xsl:param>
+<xsl:param name="callout.xep.graphics.extension">.pdf</xsl:param>
+<xsl:param name="callout.fop.graphics.extension">.svg</xsl:param>
+<xsl:param name="callout.graphics.extension">
+   <xsl:choose>
+      <xsl:when test="$fop1.extensions != 0">
+         <xsl:value-of select="$callout.fop.graphics.extension"/>
+      </xsl:when>
+      <xsl:otherwise>
+         <xsl:value-of select="$callout.xep.graphics.extension"/>
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:param>
 <xsl:param name="callout.graphics.path" select="concat($styleroot, 'images/callouts/')"/>
   
 <!--<xsl:param name="callout.unicode.start.character">10102</xsl:param>-->
