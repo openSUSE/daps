@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DAPS Quick Start</title><link rel="stylesheet" type="text/css" href="daps.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="DAPS Quick Start" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="art.daps.quickstart"></a>DAPS Quick Start<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#art.daps.quickstart">¶</a></span></h2></div><div class="buildtime"><p>Publication Date 30 Mar 2012</p></div><div><span class="author"><span class="firstname">Christopher-Julian</span> <span class="surname">Zwickl</span>, </span></div><div><span class="author"><span class="firstname">Tanja</span> <span class="surname">Roth</span></span></div></div><hr /></div><div class="toc"><p><strong>Contents</strong></p><dl><dt><span class="sect1"><a href="#sec.daps.quick.audience">1. Target Audience</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.dbversions">2. Supported DocBook Versions</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.req">3. Requirements and Additional Software</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.inst">4. Installation</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.basics">5. Defining Documentation Projects</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.init">6. A Documentation Project From Scratch</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.output">7. Output Formats</a></span></dt><dt><span class="sect1"><a href="#id347450">8. GNU Free Documentation License</a></span></dt></dl></div><div class="abstract" title="Abstract"><div class="titlepage"></div><p>The DocBook Authoring and Publishing Suite (DAPS) is developed as open source software for Linux
+ operating systems, licensed under the GPL. A number of  integrated tools, 
+ stylesheets, scripts, and makefiles help technical writers in the editing,
+ translation and publishing process. DAPS supports single source publishing
+ into a number of different output formats, and is suited both for small 
+ documentation projects as well as for comprehensive projects, created by 
+ multiple authors in a collaborative effort.</p></div><div class="sect1" title="1. Target Audience"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.audience"></a>1. Target Audience<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.audience">¶</a></span></h2></div></div></div><p>This document is intended for users who want to make efficient use of
+ DocBook-XML for editing and publishing their documentation—be it
+ documentation sets, individual books, or articles. Key knowledge of XML
+ and DocBook is required, as well as key knowledge of using the Bash Shell
+ (or command line interfaces in general).</p></div><div class="sect1" title="2. Supported DocBook Versions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.dbversions"></a>2. Supported DocBook Versions<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.dbversions">¶</a></span></h2></div></div></div><p>Currently, DAPS supports only DocBook 4.x. Support for DocBook 5.x is
+ planned for version 2.0.</p></div><div class="sect1" title="3. Requirements and Additional Software"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.req"></a>3. Requirements and Additional Software<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req">¶</a></span></h2></div></div></div><p></p><div class="sect2" title="3.1. System Requirements"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.system"></a>3.1. System Requirements<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req.system">¶</a></span></h3></div></div></div><div class="variablelist"><dl><dt><span class="term">RAM, Hard Disk Space, CPU</span></dt><dd><p>DAPS is a lean solution that does not require a lot of system 
+    resources. The disk space consumed mostly depends on the amount of your 
+    documentation sources and the number of output formats you want to generate.
+    If you have multiple or very large documentation projects, a
+    machine with multiple-cores is recommended, but is not required.
+    </p></dd><dt><span class="term">Software</span></dt><dd><p>In addition to DAPS, you need the following software:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+      An XML (or text) editor of your choice.
+    </p></li><li class="listitem"><p>For generating PDF output: an FO formatter, like FOP 
+       (open source, Apache) or XEP (commercial, RenderX). Antenna House Formatter 
+       (commercial) is currently not supported.</p></li></ul></div><p>When installing DAPS as an RPM package (on any SUSE-based system), 
+     dependencies on other software packages are automatically resolved during 
+     installation. For installing DAPS on other Linux 
+     distributions with <code class="literal">configure</code>, <code class="literal">make</code>,
+     and <code class="literal">make install</code>, make sure the following packages or 
+     tools are installed on your system:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>automake</p></li><li class="listitem"><p>convert (included in the 
+    <code class="systemitem">ImageMagick</code> package)</p></li><li class="listitem"><p>DocBook 4</p></li><li class="listitem"><p>DocBook 4 Stylesheets (usually a separate package)</p></li><li class="listitem"><p>make</p></li><li class="listitem"><p>xmlcatalog (usually part of the package 
+   <code class="systemitem">libxml2</code>, 
+   <code class="systemitem">libxml-utils</code>, or 
+   <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xmllint (usually part of the package 
+   <code class="systemitem">libxml2</code>, 
+   <code class="systemitem">libxml-utils</code>, or 
+   <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xsltproc (if not available as a separate package, it may be included in
+    <code class="systemitem">libxslt</code>)</p></li></ul></div></dd><dt><span class="term">Directory Structure</span></dt><dd><p>For DAPS to work out of the box, it requires a certain
+      organization of your XML files and images within your documentation
+      directory. You can generate the necessary structure with the DAPS 
+      initialization script, <span class="command"><strong>daps-init</strong></span>.</p></dd></dl></div></div><div class="sect2" title="3.2. Additional Software"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.addon"></a>3.2. Additional Software<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req.addon">¶</a></span></h3></div></div></div><p>To add further components like version management or a workflow mechanism
+   for your projects, use DAPS in combination with the following 
+   software:
+  </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Any version management system, like CVS, Subversion, Mercurial or Git.
+      </p></li><li class="listitem"><p>Docmanager, a command-line tool for adding and retrieving meta-information 
+     for all files belonging to a documentation project. Docmanager is especially useful 
+     for larger, collaborative projects where it helps you to keep track of 
+     owners (authors) and editing status of all files. However, Docmanager requires to 
+     host your documentation files on a Subversion server. 
+     </p></li></ul></div><p>
+   Together with the software components mentioned above, DAPS can be
+   used as a fully-fledged authoring and content management system for documentation
+   projects based on DocBook.
+  </p></div></div><div class="sect1" title="4. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.inst"></a>4. Installation<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst">¶</a></span></h2></div></div></div><p>The DocBook Authoring and Publishing Suite can be installed and used on any Linux distribution. 
+  Currently, DAPS is available as RPM package for the openSUSE distribution.
+  
+  Eventually, RPM packages for further distributions may become available. 
+  In the meantime, you can download a tarball with the DAPS sources 
+  and install them on any distribution as described in
+  <a class="xref" href="#pro.daps.quick.inst.tarball" title="Procedure 1. Installing the DAPS Sources">Procedure 1, “Installing the DAPS Sources”</a>. 
+ </p><div class="sect2" title="4.1. Installing DAPS on openSUSE"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.osuse"></a>4.1. Installing DAPS on openSUSE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.osuse">¶</a></span></h3></div></div></div><p>For openSUSE, the <code class="systemitem">daps</code> package is 
+  available from the <code class="literal">Documentation:Tools</code> repository at 
+  <a class="ulink" href="http://download.opensuse.org/repositories" target="_top">http://download.opensuse.org/repositories</a>. 
+  For the complete path to the repository, add the version number of your openSUSE 
+  installation. For example, the complete repository URL for openSUSE
+  <span class="productnumber">12.1</span> is:
+<a class="ulink" href="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/" target="_top">http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/</a>
+   </p><p>For basic details on how to add software repositories and how to install 
+  software on openSUSE, refer to the openSUSE <em class="citetitle">Reference
+  Guide</em>. The guide is available from 
+  <a class="ulink" href="http://www.suse.com/documentation" target="_top">http://www.suse.com/documentation</a>. 
+  </p><p>Choose one of the following installation methods. Any dependencies to 
+   other packages that are required by DAPS are automatically resolved.</p><div class="variablelist"><dl><dt><span class="term">1-Click Installation from the Internet</span></dt><dd><p>Follow the instructions in the openSUSE 
+     <em class="citetitle">Reference Guide</em>, chapter 
+    <em class="citetitle">Installing Packages from the Internet</em>. Search for 
+    the <code class="systemitem">daps</code> package that matches your 
+    openSUSE version. From the listed results, install the package that is provided 
+    by the repository <code class="literal">Documentation:Tools</code>.
+     </p></dd><dt><span class="term">Installation with YaST (GUI)</span></dt><dd><p>Follow the instructions in the openSUSE 
+     <em class="citetitle">Reference Guide</em>, chapter 
+    <em class="citetitle">Installing Or Removing Software</em>. Add the 
+    <code class="literal">Documentation:Tools</code> repository that matches your openSUSE
+    version—see the introduction to this section. From this repository, 
+    install the <code class="systemitem">daps</code> package.
+    </p></dd><dt><span class="term">Installation with <span class="command"><strong>zypper</strong></span> (command line)</span></dt><dd><p>
+     Follow the instructions in the openSUSE 
+     <em class="citetitle">Reference Guide</em>, chapter 
+    <em class="citetitle">Managing Software with Command Line Tools</em>. Add the 
+    <code class="literal">Documentation:Tools</code> repository that matches your openSUSE
+    version—see the introduction to this section. From this repository, 
+    install the <code class="systemitem">daps</code> package.</p></dd></dl></div></div><div class="sect2" title="4.2. Installing DAPS on Other Linux Distributions"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.other"></a>4.2. Installing DAPS on Other Linux Distributions<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.other">¶</a></span></h3></div></div></div><p>For installation on other Linux distributions, the DAPS sources
+  are available as tarball. They can
+  be installed with <code class="literal">configure</code>, 
+  <code class="literal">make</code>, and <code class="literal">make install</code>.</p><div class="procedure" title="Procedure 1. Installing the DAPS Sources"><a id="pro.daps.quick.inst.tarball"></a><p class="title"><strong>Procedure 1. Installing the DAPS Sources</strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#pro.daps.quick.inst.tarball">¶</a></span></p><p>Before starting the installation, check the DAPS 
+   <a class="xref" href="#sec.daps.quick.req.system" title="3.1. System Requirements">System Requirements</a>
+   and make sure to have all required packages and tools installed.</p><ol class="procedure" type="1"><li><p>Download the DAPS source tarball from 
+   <a class="ulink" href="http://daps.sourceforge.net" target="_top">http://daps.sourceforge.net</a>.
+   
+     </p></li><li><p>Create a new directory in your file system and unpack the tarball there.</p></li><li id="daps.quick.inst.configure"><p>Change to the newly created directory and start the configure script:</p><pre class="screen">$ ./configure</pre><p>The script checks your system for any software relevant to DAPS or
+    the DAPS installation process. It also creates a makefile that will
+    be used during installation. Based on the analysis, the script shows a 
+    summary that includes the following information:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>the DAPS installation paths,</p></li><li class="listitem"><p>an overview of DAPS features that will be available on your 
+      system if you install DAPS now, and </p></li><li class="listitem"><p>which software is still missing to enable the remaining DAPS 
+      features as well.</p></li></ul></div></li><li><p>Check the summary carefully.</p></li><li><p>Install missing packages, if necessary. After installing new packages, 
+    repeat <a class="xref" href="#daps.quick.inst.configure" title="Step 3">Step 3</a> and check the summary again.</p></li><li><p>If you want to adjust the DAPS installation paths, view the 
+     available options:</p><pre class="screen">$ ./configure --help</pre><p>To create a makefile with custom installation paths, run the configure 
+    script with the desired option.</p></li><li><p>If everything is prepared according to your wishes, enter:</p><pre class="screen">$ make</pre></li><li><p>To start the installation process:</p><pre class="screen">$ make install</pre></li></ol></div><p>
+    
+   </p></div><div class="sect2" title="4.3. Installing and Configuring the FO Formatter"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.formatter"></a>4.3. Installing and Configuring the FO Formatter<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.formatter">¶</a></span></h3></div></div></div><p>For installation and configuration of an FO formatter (for generating 
+   PDF output), refer to the installation instructions of the product or your 
+   system administrator. For FOP, you usually only need to install the 
+   respective FOP package. However, not all FOP packages contain hyphenation 
+   pattern files. 
+   </p></div></div><div class="sect1" title="5. Defining Documentation Projects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.basics"></a>5. Defining Documentation Projects<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics">¶</a></span></h2></div></div></div><p>The easiest way to set up a new documentation project from scratch is to
+ use the DAPS initialization script. For instructions how to do so, refer
+ to <a class="xref" href="#pro.daps.init" title="Procedure 2. Using daps-init">Procedure 2, “Using <span class="command"><strong>daps-init</strong></span>
+   ”</a>. The script automatically creates the 
+ <a class="xref" href="#sec.daps.quick.basics.files" title="5.1. Key Files">Key Files</a> and 
+ <a class="xref" href="#sec.daps.quick.basics.dirstruct" title="5.2. Directory Structure">Directory Structure</a> 
+ you need to get started with DAPS.</p><div class="sect2" title="5.1. Key Files"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.files"></a>5.1. Key Files<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics.files">¶</a></span></h3></div></div></div><p>The following key files define a documentation project so that 
+   it can be processed by DAPS:</p><div class="variablelist"><dl><dt><span class="term">Main File</span></dt><dd><p>An XML file containing the <span class="quote">“<span class="quote">starting point</span>”</span> (the 
+     highest-level object) of your documentation project (for example, 
+     <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). 
+    For larger documentation projects, it is good practice to name the file 
+    <code class="filename">MAIN-<em class="replaceable"><code>PROJECTNAME</code></em>.xml</code>, 
+    but you can use any other filename as well.</p></dd><dt><span class="term">Doc Config (DC) File</span></dt><dd><p>
+      A configuration file defining a number of parameters for your
+      documentation project (for example, the main file, layout variants, or 
+      which profiling information to use). Of the multiple parameters that can 
+      be set  in the DC file, the only one required is <em class="parameter"><code>MAIN</code></em>, 
+      pointing to the XML file that you want to process.
+     </p></dd></dl></div></div><div class="sect2" title="5.2. Directory Structure"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.dirstruct"></a>5.2. Directory Structure<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics.dirstruct">¶</a></span></h3></div></div></div><p>
+   For DAPS to work out of the box, your XML files and images 
+   must be organized in a specific structure within your documentation directory.
+   <a class="xref" href="#ex.daps.dir.doc" title="Example 1. Directory Structure">Example 1, “Directory Structure”</a> shows the required structure including the
+   key files for a DAPS documentation project. The directories are printed 
+   in bold. You can also create multiple documentation directories for 
+   individual documentation projects, but they all need the substructure 
+   outlined below.</p><div class="example"><a id="ex.daps.dir.doc"></a><p class="title"><strong>Example 1. Directory Structure</strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#ex.daps.dir.doc">¶</a></span></p><div class="example-contents"><pre class="screen"><em class="replaceable"><code>YOUR_DOC_DIR</code></em> <a id="co.docdir.base"></a><img src="style_images/callouts/1.png" alt="1" border="0" />
+  |--DC* <a id="co.docdir.dc"></a><img src="style_images/callouts/2.png" alt="2" border="0" />
+  |--<span class="bold"><strong>images</strong></span> <a id="co.docdir.img"></a><img src="style_images/callouts/3.png" alt="3" border="0" /> 
+     |--<span class="bold"><strong>src</strong></span> <a id="co.docdir.img.src"></a><img src="style_images/callouts/4.png" alt="4" border="0" />
+        |--<span class="bold"><strong>dia</strong></span>
+        |--<span class="bold"><strong>eps</strong></span>
+        |--<span class="bold"><strong>fig</strong></span>
+        |--<span class="bold"><strong>pdf</strong></span>
+        |--<span class="bold"><strong>png</strong></span>
+        |--<span class="bold"><strong>svg</strong></span>
+  |--<span class="bold"><strong>xml</strong></span> <a id="co.docdir.xml"></a><img src="style_images/callouts/5.png" alt="5" border="0" /> 
+     |--MAIN*.xml <a id="co.docdir.main"></a><img src="style_images/callouts/6.png" alt="6" border="0" />    </pre></div></div><br class="example-break" /><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.base"><img src="style_images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation project.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.dc"><img src="style_images/callouts/2.png" alt="2" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      DC file defining the documentation project. </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.img.src"><img src="style_images/callouts/4.png" alt="4" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      Top-level directory for any original images that you want to use in
+      the documentation project. Contains subdirectories for images in
+      various formats. Any images to be referenced in the XML sources must
+      be put in the respective subdirectories.
+      
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.xml"><img src="style_images/callouts/5.png" alt="5" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      Directory holding the XML files for the documentation project. If you
+      declare entities in an external file (for example, in
+      <code class="filename">entity-decl.ent</code>), put the entity declaration file
+      here, too.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.main"><img src="style_images/callouts/6.png" alt="6" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      The main file of the documentation project. It contains
+      <span class="quote">“<span class="quote">references</span>”</span> to other books, chapters, appendices, etc.
+     </p></td></tr></table></div></div></div><div class="sect1" title="6. A Documentation Project From Scratch"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.init"></a>6. A Documentation Project From Scratch<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.init">¶</a></span></h2></div></div></div><p>Use <span class="command"><strong>daps-init</strong></span> to set up a new documentation 
+  project from scratch. The initialization script automatically creates the key 
+  files and directory structure you need to get started with DAPS.
+  View the available options with the command  <span class="command"><strong>daps-init --help</strong></span>. 
+  By default, the script creates a <code class="sgmltag-element">book</code>
+ as example document.
+  </p><div class="procedure" title="Procedure 2. Using daps-init"><a id="pro.daps.init"></a><p class="title"><strong>Procedure 2. Using <span class="command"><strong>daps-init</strong></span>
+   </strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#pro.daps.init">¶</a></span></p><ol class="procedure" type="1"><li><p>Create a directory that you want to use as your documentation directory:</p><pre class="screen">$ mkdir <em class="replaceable"><code>DOC_DIR</code></em>    </pre></li><li><p>Create the default directory structure for DAPS (containing an example 
+   <code class="sgmltag-element">book</code>):</p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em>    </pre><p>With the <code class="option">-r</code> option, you can also set another root 
+    element, such as <code class="sgmltag-element">article</code>, for example.To create the default 
+    directory structure with an <code class="sgmltag-element">article</code> example: </p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em> -r article</pre></li><li><p>In case the specified directory does not exists, DAPS asks if to
+   create it. Proceed by pressing <span class="keycap">y</span> or <span class="keycap">n</span>.</p></li><li><p>To see what the output of the XML example file looks like, follow the 
+   instructions on the screen. For example, the following command specifies the 
+   <code class="filename">DC*</code> file to use and the output format to create:</p><pre class="screen">$ daps -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em>/DC-daps-example color-pdf</pre><p>For creation of the PDF, DAPS uses FOP by default 
+    (if no other formatter is specified) and applies the default DocBook 
+    stylesheets (if no custom layout options are defined). At the end of the 
+    transformation process, DAPS shows a message where to find the generated 
+    PDF. By default, all contents generated by DAPS is located in the
+    <code class="filename">build</code> subdirectory. It is automatically created 
+    within your documentation directory.</p></li><li><p>Check your documentation directory for the new files: The text file 
+   <code class="filename">DC-daps-example</code> is annotated and gives you 
+   a rough idea which options can be defined in a DC file. 
+   For having a look at the XML source code of the <code class="sgmltag-element">book</code> or 
+   <code class="sgmltag-element">article</code>, change to the <code class="filename">xml</code> subdirectory 
+   and open the file <code class="filename">MAIN-DC-daps-example.xml</code> in a text or 
+   XML editor.</p></li></ol></div></div><div class="sect1" title="7. Output Formats"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.output"></a>7. Output Formats<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output">¶</a></span></h2></div></div></div><p>DAPS supports a number of different output formats,
+  including <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or ASCII text.
+  
+  </p><p>By default, the DocBook stylesheets are used for generating output formats.
+  But DAPS also allows you to customize your output formats in a very flexible way.
+  
+  </p><div class="sect2" title="7.1. Validation"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.validate"></a>7.1. Validation<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.validate">¶</a></span></h3></div></div></div><p>Generating any output requires that your XML files are well-formed and 
+  can be validated. As soon as any output command is executed, DAPS 
+  automatically runs a validation check first—if it fails, DAPS 
+  returns the parser errors. They include information about the type of error, 
+  the respective file name and the line number where the error occured. 
+  In addition, DAPS shows the path to the profiled XML sources and the 
+  total number of errors.</p><div class="example"><a id="id322819"></a><p class="title"><strong>Example 2. Parser Output For Validation Errors</strong></p><div class="example-contents"><pre class="screen">daps_user_concept.xml:60: element xref: validity error : 
+    IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
+MAIN.DAPS.xml does not validate
+make: *** [validate] Error 3</pre></div></div><br class="example-break" /></div><div class="sect2" title="7.2. Basic DAPS Syntax"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.syntax"></a>7.2. Basic DAPS Syntax<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.syntax">¶</a></span></h3></div></div></div><p>Independent of the individual output format you want to create, 
+  you need to specify the Doc Config file to use:</p><pre class="screen">$ daps -d <em class="replaceable"><code>DC_FILE</code></em> <em class="replaceable"><code>OUTPUT_FORMAT</code></em>   </pre><p>For example:</p><pre class="screen">$ daps -d DC-daps-quick color-pdf</pre><p>If your current directory is not the documentation directory where the DC 
+file is located, also specify the (absolute or relative) path to the DC file.
+For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</pre><p>At the end of the transformation process, DAPS shows a message 
+  where to find the generated output.</p></div><div class="sect2" title="7.3. Generating Different Output Formats"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.formats"></a>7.3. Generating Different Output Formats<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.formats">¶</a></span></h3></div></div></div><p>The following table gives an overview of the DAPS subcommands for 
+   generating output formats.</p><div class="table"><a id="id327808"></a><p class="title"><strong>Table 1. DAPS Output Commands and Formats</strong></p><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /><col class="3" /></colgroup><thead><tr><th>
+       <p>Subcommand</p>
+      </th><th>
+       <p>Output</p>
+      </th><th>
+       <p>Note</p>
+      </th></tr></thead><tbody><tr><td>
+       <p>color-pdf</p>
+      </td><td>
+       <p>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
+        </p>
+      </td><td>
+       <p>Requires an FO formatter. </p>
+      </td></tr><tr><td>
+       <p>dist</p>
+      </td><td>
+       <p>Creates a black and white PDF with cropmarks for each chapter.  Open the 
+        result in a PDF viewer.</p>
+      </td><td>
+       <p>See color-pdf</p>
+      </td></tr><tr><td>
+       <p>epub</p>
+      </td><td>
+       <p>Creates an ePUB book. Open the result in an portable e-book reader 
+        (or with  a software like Calibre).</p>
+      </td><td>
+       <p>
+        
+       </p>
+      </td></tr><tr><td>
+       <p>html</p>
+      </td><td>
+       <p>Creates a subdirectory containing individual HTML files for 
+        all chapters of a book (including also preface, glossary or appendix files).
+        They are named according to the ID of the respective root element.  
+        Open the generated <code class="filename">index.html</code> file in a Web browser 
+        to view the generated HTML from the starting point (ROOTID of the top-level
+        element).</p>
+      </td><td>
+       <p>Images and CSS files are only referenced in the HTML. To copy 
+        these files to the same location like the HTML files, use the
+        <code class="option">--static</code> option. This is useful for creating 
+        distributable HTML builds.</p>
+      </td></tr><tr><td>
+       <p>html-single</p>
+       <p>htmlsingle</p>
+      </td><td>
+       <p>Creates a single HTML file, named after the DC file used 
+        to create the output. Open the generated <code class="filename">*.html</code> file
+        in a Web browser.</p>
+      </td><td>
+       <p>Single HTML files are more convenient for full text searches. 
+        Images and CSS files are only referenced in the HTML. To copy 
+        these files to the same location like the HTML files, use the
+        <code class="option">--static</code> option. This is useful for creating 
+        distributable HTML builds.
+        </p>
+      </td></tr><tr><td>
+       <p>Row 2, Cell 1</p>
+      </td><td>
+       <p>Row 2, Cell 2</p>
+      </td><td>
+       <p>Row 2, Cell 3</p>
+      </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="sect2" title="7.4. Advanced Output Options"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.adv"></a>7.4. Advanced Output Options<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.adv">¶</a></span></h3></div></div></div><p>Instead of always building your complete documentation project 
+   (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or <code class="sgmltag-element">article</code>),
+   DAPS also allows you to build an individual <code class="sgmltag-element">chapter</code> 
+   or <code class="sgmltag-element">part</code>. If you want the output format to 
+   include <code class="sgmltag-element">remark</code> elements or to be marked as a 
+   <code class="literal">draft</code> version, you can tell DAPS to do so.</p><div class="sect3" title="7.4.1. Partial Builds"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.quick.output.adv.partial"></a>7.4.1. Partial Builds<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.adv.partial">¶</a></span></h4></div></div></div><p>The <span class="quote">“<span class="quote">starting point</span>”</span> of your documentation project is
+    specified by the <em class="parameter"><code>ROOTID</code></em> parameter. It usually
+    points to the ID of a <code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, 
+    or <code class="sgmltag-element">article</code> and is referenced in the DC file. 
+    Alternatively, specify a ROOTID on the command line by using the 
+    <code class="option">--rootid</code> option. This also allows you to build only a part 
+    of your documentation project (like an individual chapter or part). To do so, 
+    specify the ID of the respective <code class="sgmltag-element">chapter</code> or 
+    <code class="sgmltag-element">part</code> to build.</p><p>If you have set up your working environment with 
+    <span class="command"><strong>daps-init</strong></span> and an example <code class="sgmltag-element">book</code>,
+    the following command will build only the chapter about the most commonly 
+    used DocBook constructs, without any book title page:</p><pre class="screen">$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</pre></div><div class="sect3" title="7.4.2. Output with Remarks or Draft Watermark"><div class="titlepage"><div><div><h4 class="title"><a id="id287775"></a>7.4.2. Output with Remarks or Draft Watermark<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287775">¶</a></span></h4></div></div></div><p></p></div></div></div><div class="sect1" title="8. GNU Free Documentation License"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id347450"></a>8. GNU Free Documentation License<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id347450">¶</a></span></h2></div></div></div><p>
+  Version 1.2, November 2002
+ </p><p>
+  Copyright (C) 2000,2001,2002 Free Software Foundation, Inc. 59 Temple
+  Place, Suite 330, Boston, MA 02111-1307 USA
+ </p><p>
+  Everyone is permitted to copy and distribute verbatim copies of this
+  license document, but changing it is not allowed.
+ </p><div class="sect2" title="8.1. PREAMBLE"><div class="titlepage"><div><div><h3 class="title"><a id="id351637"></a>8.1. PREAMBLE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id351637">¶</a></span></h3></div></div></div><p>
+   The purpose of this License is to make a manual, textbook, or other
+   functional and useful document “free” in the sense of
+   freedom: to assure everyone the effective freedom to copy and
+   redistribute it, with or without modifying it, either commercially or
+   noncommercially. Secondarily, this License preserves for the author and
+   publisher a way to get credit for their work, while not being considered
+   responsible for modifications made by others.
+  </p><p>
+   This License is a kind of <span class="quote">“<span class="quote">copyleft</span>”</span>, which means that
+   derivative works of the document must themselves be free in the same
+   sense. It complements the GNU General Public License, which is a copyleft
+   license designed for free software.
+  </p><p>
+   We have designed this License in order to use it for manuals for free
+   software, because free software needs free documentation: a free program
+   should come with manuals providing the same freedoms that the software
+   does. But this License is not limited to software manuals; it can be used
+   for any textual work, regardless of subject matter or whether it is
+   published as a printed book. We recommend this License principally for
+   works whose purpose is instruction or reference.
+  </p></div><div class="sect2" title="8.2. APPLICABILITY AND DEFINITIONS"><div class="titlepage"><div><div><h3 class="title"><a id="id363968"></a>8.2. APPLICABILITY AND DEFINITIONS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id363968">¶</a></span></h3></div></div></div><p>
+   This License applies to any manual or other work, in any medium, that
+   contains a notice placed by the copyright holder saying it can be
+   distributed under the terms of this License. Such a notice grants a
+   world-wide, royalty-free license, unlimited in duration, to use that work
+   under the conditions stated herein. The <span class="quote">“<span class="quote">Document</span>”</span>, below,
+   refers to any such manual or work. Any member of the public is a
+   licensee, and is addressed as <span class="quote">“<span class="quote">you</span>”</span>. You accept the license
+   if you copy, modify or distribute the work in a way requiring permission
+   under copyright law.
+  </p><p>
+   A <span class="quote">“<span class="quote">Modified Version</span>”</span> of the Document means any work
+   containing the Document or a portion of it, either copied verbatim, or
+   with modifications and/or translated into another language.
+  </p><p>
+   A <span class="quote">“<span class="quote">Secondary Section</span>”</span> is a named appendix or a front-matter
+   section of the Document that deals exclusively with the relationship of
+   the publishers or authors of the Document to the Document’s overall
+   subject (or to related matters) and contains nothing that could fall
+   directly within that overall subject. (Thus, if the Document is in part a
+   textbook of mathematics, a Secondary Section may not explain any
+   mathematics.) The relationship could be a matter of historical connection
+   with the subject or with related matters, or of legal, commercial,
+   philosophical, ethical or political position regarding them.
+  </p><p>
+   The <span class="quote">“<span class="quote">Invariant Sections</span>”</span> are certain Secondary Sections
+   whose titles are designated, as being those of Invariant Sections, in the
+   notice that says that the Document is released under this License. If a
+   section does not fit the above definition of Secondary then it is not
+   allowed to be designated as Invariant. The Document may contain zero
+   Invariant Sections. If the Document does not identify any Invariant
+   Sections then there are none.
+  </p><p>
+   The <span class="quote">“<span class="quote">Cover Texts</span>”</span> are certain short passages of text that
+   are listed, as Front-Cover Texts or Back-Cover Texts, in the notice that
+   says that the Document is released under this License. A Front-Cover Text
+   may be at most 5 words, and a Back-Cover Text may be at most 25 words.
+  </p><p>
+   A <span class="quote">“<span class="quote">Transparent</span>”</span> copy of the Document means a
+   machine-readable copy, represented in a format whose specification is
+   available to the general public, that is suitable for revising the
+   document straightforwardly with generic text editors or (for images
+   composed of pixels) generic paint programs or (for drawings) some widely
+   available drawing editor, and that is suitable for input to text
+   formatters or for automatic translation to a variety of formats suitable
+   for input to text formatters. A copy made in an otherwise Transparent
+   file format whose markup, or absence of markup, has been arranged to
+   thwart or discourage subsequent modification by readers is not
+   Transparent. An image format is not Transparent if used for any
+   substantial amount of text. A copy that is not <span class="quote">“<span class="quote">Transparent</span>”</span>
+   is called <span class="quote">“<span class="quote">Opaque</span>”</span>.
+  </p><p>
+   Examples of suitable formats for Transparent copies include plain ASCII
+   without markup, Texinfo input format, LaTeX input format, SGML or XML
+   using a publicly available DTD, and standard-conforming simple HTML,
+   PostScript or PDF designed for human modification. Examples of
+   transparent image formats include PNG, XCF and JPG. Opaque formats
+   include proprietary formats that can be read and edited only by
+   proprietary word processors, SGML or XML for which the DTD and/or
+   processing tools are not generally available, and the machine-generated
+   HTML, PostScript or PDF produced by some word processors for output
+   purposes only.
+  </p><p>
+   The <span class="quote">“<span class="quote">Title Page</span>”</span> means, for a printed book, the title page
+   itself, plus such following pages as are needed to hold, legibly, the
+   material this License requires to appear in the title page. For works in
+   formats which do not have any title page as such, <span class="quote">“<span class="quote">Title
+   Page</span>”</span> means the text near the most prominent appearance of the
+   work’s title, preceding the beginning of the body of the text.
+  </p><p>
+   A section <span class="quote">“<span class="quote">Entitled XYZ</span>”</span> means a named subunit of the
+   Document whose title either is precisely XYZ or contains XYZ in
+   parentheses following text that translates XYZ in another language. (Here
+   XYZ stands for a specific section name mentioned below, such as
+   <span class="quote">“<span class="quote">Acknowledgements</span>”</span>, <span class="quote">“<span class="quote">Dedications</span>”</span>,
+   <span class="quote">“<span class="quote">Endorsements</span>”</span>, or <span class="quote">“<span class="quote">History</span>”</span>.) To
+   <span class="quote">“<span class="quote">Preserve the Title</span>”</span> of such a section when you modify the
+   Document means that it remains a section <span class="quote">“<span class="quote">Entitled XYZ</span>”</span>
+   according to this definition.
+  </p><p>
+   The Document may include Warranty Disclaimers next to the notice which
+   states that this License applies to the Document. These Warranty
+   Disclaimers are considered to be included by reference in this License,
+   but only as regards disclaiming warranties: any other implication that
+   these Warranty Disclaimers may have is void and has no effect on the
+   meaning of this License.
+  </p></div><div class="sect2" title="8.3. VERBATIM COPYING"><div class="titlepage"><div><div><h3 class="title"><a id="id287900"></a>8.3. VERBATIM COPYING<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287900">¶</a></span></h3></div></div></div><p>
+   You may copy and distribute the Document in any medium, either
+   commercially or noncommercially, provided that this License, the
+   copyright notices, and the license notice saying this License applies to
+   the Document are reproduced in all copies, and that you add no other
+   conditions whatsoever to those of this License. You may not use technical
+   measures to obstruct or control the reading or further copying of the
+   copies you make or distribute. However, you may accept compensation in
+   exchange for copies. If you distribute a large enough number of copies
+   you must also follow the conditions in section 3.
+  </p><p>
+   You may also lend copies, under the same conditions stated above, and you
+   may publicly display copies.
+  </p></div><div class="sect2" title="8.4. COPYING IN QUANTITY"><div class="titlepage"><div><div><h3 class="title"><a id="id287920"></a>8.4. COPYING IN QUANTITY<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287920">¶</a></span></h3></div></div></div><p>
+   If you publish printed copies (or copies in media that commonly have
+   printed covers) of the Document, numbering more than 100, and the
+   Document’s license notice requires Cover Texts, you must enclose
+   the copies in covers that carry, clearly and legibly, all these Cover
+   Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on the
+   back cover. Both covers must also clearly and legibly identify you as the
+   publisher of these copies. The front cover must present the full title
+   with all words of the title equally prominent and visible. You may add
+   other material on the covers in addition. Copying with changes limited to
+   the covers, as long as they preserve the title of the Document and
+   satisfy these conditions, can be treated as verbatim copying in other
+   respects.
+  </p><p>
+   If the required texts for either cover are too voluminous to fit legibly,
+   you should put the first ones listed (as many as fit reasonably) on the
+   actual cover, and continue the rest onto adjacent pages.
+  </p><p>
+   If you publish or distribute Opaque copies of the Document numbering more
+   than 100, you must either include a machine-readable Transparent copy
+   along with each Opaque copy, or state in or with each Opaque copy a
+   computer-network location from which the general network-using public has
+   access to download using public-standard network protocols a complete
+   Transparent copy of the Document, free of added material. If you use the
+   latter option, you must take reasonably prudent steps, when you begin
+   distribution of Opaque copies in quantity, to ensure that this
+   Transparent copy will remain thus accessible at the stated location until
+   at least one year after the last time you distribute an Opaque copy
+   (directly or through your agents or retailers) of that edition to the
+   public.
+  </p><p>
+   It is requested, but not required, that you contact the authors of the
+   Document well before redistributing any large number of copies, to give
+   them a chance to provide you with an updated version of the Document.
+  </p></div><div class="sect2" title="8.5. MODIFICATIONS"><div class="titlepage"><div><div><h3 class="title"><a id="id287278"></a>8.5. MODIFICATIONS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287278">¶</a></span></h3></div></div></div><p>
+   You may copy and distribute a Modified Version of the Document under the
+   conditions of sections 2 and 3 above, provided that you release the
+   Modified Version under precisely this License, with the Modified Version
+   filling the role of the Document, thus licensing distribution and
+   modification of the Modified Version to whoever possesses a copy of it.
+   In addition, you must do these things in the Modified Version:
+  </p><p title="A."><strong>A. </strong>
+    Use in the Title Page (and on the covers, if any) a title distinct from
+    that of the Document, and from those of previous versions (which should,
+    if there were any, be listed in the History section of the Document).
+    You may use the same title as a previous version if the original
+    publisher of that version gives permission.
+   </p><p title="B."><strong>B. </strong>
+    List on the Title Page, as authors, one or more persons or entities
+    responsible for authorship of the modifications in the Modified Version,
+    together with at least five of the principal authors of the Document
+    (all of its principal authors, if it has fewer than five), unless they
+    release you from this requirement.
+   </p><p title="C."><strong>C. </strong>
+    State on the Title page the name of the publisher of the Modified
+    Version, as the publisher.
+   </p><p title="D."><strong>D. </strong>
+    Preserve all the copyright notices of the Document.
+   </p><p title="E."><strong>E. </strong>
+    Add an appropriate copyright notice for your modifications adjacent to
+    the other copyright notices.
+   </p><p title="F."><strong>F. </strong>
+    Include, immediately after the copyright notices, a license notice
+    giving the public permission to use the Modified Version under the terms
+    of this License, in the form shown in the Addendum below.
+   </p><p title="G."><strong>G. </strong>
+    Preserve in that license notice the full lists of Invariant Sections and
+    required Cover Texts given in the Document’s license notice.
+   </p><p title="H."><strong>H. </strong>
+    Include an unaltered copy of this License.
+   </p><p title="I."><strong>I. </strong>
+    Preserve the section Entitled <span class="quote">“<span class="quote">History</span>”</span>, Preserve its
+    Title, and add to it an item stating at least the title, year, new
+    authors, and publisher of the Modified Version as given on the Title
+    Page. If there is no section Entitled <span class="quote">“<span class="quote">History</span>”</span> in the
+    Document, create one stating the title, year, authors, and publisher of
+    the Document as given on its Title Page, then add an item describing the
+    Modified Version as stated in the previous sentence.
+   </p><p title="J."><strong>J. </strong>
+    Preserve the network location, if any, given in the Document for public
+    access to a Transparent copy of the Document, and likewise the network
+    locations given in the Document for previous versions it was based on.
+    These may be placed in the <span class="quote">“<span class="quote">History</span>”</span> section. You may omit
+    a network location for a work that was published at least four years
+    before the Document itself, or if the original publisher of the version
+    it refers to gives permission.
+   </p><p title="K."><strong>K. </strong>
+    For any section Entitled <span class="quote">“<span class="quote">Acknowledgements</span>”</span> or
+    <span class="quote">“<span class="quote">Dedications</span>”</span>, Preserve the Title of the section, and
+    preserve in the section all the substance and tone of each of the
+    contributor acknowledgements and/or dedications given therein.
+   </p><p title="L."><strong>L. </strong>
+    Preserve all the Invariant Sections of the Document, unaltered in their
+    text and in their titles. Section numbers or the equivalent are not
+    considered part of the section titles.
+   </p><p title="M."><strong>M. </strong>
+    Delete any section Entitled <span class="quote">“<span class="quote">Endorsements</span>”</span>. Such a section
+    may not be included in the Modified Version.
+   </p><p title="N."><strong>N. </strong>
+    Do not retitle any existing section to be Entitled
+    <span class="quote">“<span class="quote">Endorsements</span>”</span> or to conflict in title with any Invariant
+    Section.
+   </p><p title="O."><strong>O. </strong>
+    Preserve any Warranty Disclaimers.
+   </p><p>
+   If the Modified Version includes new front-matter sections or appendices
+   that qualify as Secondary Sections and contain no material copied from
+   the Document, you may at your option designate some or all of these
+   sections as invariant. To do this, add their titles to the list of
+   Invariant Sections in the Modified Version’s license notice. These
+   titles must be distinct from any other section titles.
+  </p><p>
+   You may add a section Entitled <span class="quote">“<span class="quote">Endorsements</span>”</span>, provided it
+   contains nothing but endorsements of your Modified Version by various
+   parties--for example, statements of peer review or that the text has been
+   approved by an organization as the authoritative definition of a
+   standard.
+  </p><p>
+   You may add a passage of up to five words as a Front-Cover Text, and a
+   passage of up to 25 words as a Back-Cover Text, to the end of the list of
+   Cover Texts in the Modified Version. Only one passage of Front-Cover Text
+   and one of Back-Cover Text may be added by (or through arrangements made
+   by) any one entity. If the Document already includes a cover text for the
+   same cover, previously added by you or by arrangement made by the same
+   entity you are acting on behalf of, you may not add another; but you may
+   replace the old one, on explicit permission from the previous publisher
+   that added the old one.
+  </p><p>
+   The author(s) and publisher(s) of the Document do not by this License
+   give permission to use their names for publicity for or to assert or
+   imply endorsement of any Modified Version.
+  </p></div><div class="sect2" title="8.6. COMBINING DOCUMENTS"><div class="titlepage"><div><div><h3 class="title"><a id="id354540"></a>8.6. COMBINING DOCUMENTS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354540">¶</a></span></h3></div></div></div><p>
+   You may combine the Document with other documents released under this
+   License, under the terms defined in section 4 above for modified
+   versions, provided that you include in the combination all of the
+   Invariant Sections of all of the original documents, unmodified, and list
+   them all as Invariant Sections of your combined work in its license
+   notice, and that you preserve all their Warranty Disclaimers.
+  </p><p>
+   The combined work need only contain one copy of this License, and
+   multiple identical Invariant Sections may be replaced with a single copy.
+   If there are multiple Invariant Sections with the same name but different
+   contents, make the title of each such section unique by adding at the end
+   of it, in parentheses, the name of the original author or publisher of
+   that section if known, or else a unique number. Make the same adjustment
+   to the section titles in the list of Invariant Sections in the license
+   notice of the combined work.
+  </p><p>
+   In the combination, you must combine any sections Entitled
+   <span class="quote">“<span class="quote">History</span>”</span> in the various original documents, forming one
+   section Entitled <span class="quote">“<span class="quote">History</span>”</span>; likewise combine any sections
+   Entitled <span class="quote">“<span class="quote">Acknowledgements</span>”</span>, and any sections Entitled
+   <span class="quote">“<span class="quote">Dedications</span>”</span>. You must delete all sections Entitled
+   <span class="quote">“<span class="quote">Endorsements</span>”</span>.
+  </p></div><div class="sect2" title="8.7. COLLECTIONS OF DOCUMENTS"><div class="titlepage"><div><div><h3 class="title"><a id="id354584"></a>8.7. COLLECTIONS OF DOCUMENTS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354584">¶</a></span></h3></div></div></div><p>
+   You may make a collection consisting of the Document and other documents
+   released under this License, and replace the individual copies of this
+   License in the various documents with a single copy that is included in
+   the collection, provided that you follow the rules of this License for
+   verbatim copying of each of the documents in all other respects.
+  </p><p>
+   You may extract a single document from such a collection, and distribute
+   it individually under this License, provided you insert a copy of this
+   License into the extracted document, and follow this License in all other
+   respects regarding verbatim copying of that document.
+  </p></div><div class="sect2" title="8.8. AGGREGATION WITH INDEPENDENT WORKS"><div class="titlepage"><div><div><h3 class="title"><a id="id354604"></a>8.8. AGGREGATION WITH INDEPENDENT WORKS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354604">¶</a></span></h3></div></div></div><p>
+   A compilation of the Document or its derivatives with other separate and
+   independent documents or works, in or on a volume of a storage or
+   distribution medium, is called an “aggregate” if the
+   copyright resulting from the compilation is not used to limit the legal
+   rights of the compilation’s users beyond what the individual works
+   permit. When the Document is included in an aggregate, this License does
+   not apply to the other works in the aggregate which are not themselves
+   derivative works of the Document.
+  </p><p>
+   If the Cover Text requirement of section 3 is applicable to these copies
+   of the Document, then if the Document is less than one half of the entire
+   aggregate, the Document’s Cover Texts may be placed on covers that
+   bracket the Document within the aggregate, or the electronic equivalent
+   of covers if the Document is in electronic form. Otherwise they must
+   appear on printed covers that bracket the whole aggregate.
+  </p></div><div class="sect2" title="8.9. TRANSLATION"><div class="titlepage"><div><div><h3 class="title"><a id="id354627"></a>8.9. TRANSLATION<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354627">¶</a></span></h3></div></div></div><p>
+   Translation is considered a kind of modification, so you may distribute
+   translations of the Document under the terms of section 4. Replacing
+   Invariant Sections with translations requires special permission from
+   their copyright holders, but you may include translations of some or all
+   Invariant Sections in addition to the original versions of these
+   Invariant Sections. You may include a translation of this License, and
+   all the license notices in the Document, and any Warranty Disclaimers,
+   provided that you also include the original English version of this
+   License and the original versions of those notices and disclaimers. In
+   case of a disagreement between the translation and the original version
+   of this License or a notice or disclaimer, the original version will
+   prevail.
+  </p><p>
+   If a section in the Document is Entitled <span class="quote">“<span class="quote">Acknowledgements</span>”</span>,
+   <span class="quote">“<span class="quote">Dedications</span>”</span>, or <span class="quote">“<span class="quote">History</span>”</span>, the requirement
+   (section 4) to Preserve its Title (section 1) will typically require
+   changing the actual title.
+  </p></div><div class="sect2" title="8.10. TERMINATION"><div class="titlepage"><div><div><h3 class="title"><a id="id354661"></a>8.10. TERMINATION<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354661">¶</a></span></h3></div></div></div><p>
+   You may not copy, modify, sublicense, or distribute the Document except
+   as expressly provided for under this License. Any other attempt to copy,
+   modify, sublicense or distribute the Document is void, and will
+   automatically terminate your rights under this License. However, parties
+   who have received copies, or rights, from you under this License will not
+   have their licenses terminated so long as such parties remain in full
+   compliance.
+  </p></div><div class="sect2" title="8.11. FUTURE REVISIONS OF THIS LICENSE"><div class="titlepage"><div><div><h3 class="title"><a id="id354676"></a>8.11. FUTURE REVISIONS OF THIS LICENSE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354676">¶</a></span></h3></div></div></div><p>
+   The Free Software Foundation may publish new, revised versions of the GNU
+   Free Documentation License from time to time. Such new versions will be
+   similar in spirit to the present version, but may differ in detail to
+   address new problems or concerns. See
+   http://www.gnu.org/copyleft/.
+  </p><p>
+   Each version of the License is given a distinguishing version number. If
+   the Document specifies that a particular numbered version of this License
+   <span class="quote">“<span class="quote">or any later version</span>”</span> applies to it, you have the option of
+   following the terms and conditions either of that specified version or of
+   any later version that has been published (not as a draft) by the Free
+   Software Foundation. If the Document does not specify a version number of
+   this License, you may choose any version ever published (not as a draft)
+   by the Free Software Foundation.
+  </p></div><div class="sect2" title="8.12. ADDENDUM: How to use this License for your documents"><div class="titlepage"><div><div><h3 class="title"><a id="id354701"></a>8.12. ADDENDUM: How to use this License for your documents<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354701">¶</a></span></h3></div></div></div><p>
+   To use this License in a document you have written, include a copy of the
+   License in the document and put the following copyright and license
+   notices just after the title page:
+  </p><pre class="screen">
+   Copyright (c) YEAR YOUR NAME.
+   Permission is granted to copy, distribute and/or modify this document
+   under the terms of the GNU Free Documentation License, Version 1.2
+   or any later version published by the Free Software Foundation;
+   with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+   A copy of the license is included in the section entitled “GNU
+   Free Documentation License”.
+  </pre><p>
+   If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts,
+   replace the “with...Texts.” line with this:
+  </p><pre class="screen">
+   with the Invariant Sections being LIST THEIR TITLES, with the
+   Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST.
+  </pre><p>
+   If you have Invariant Sections without Cover Texts, or some other
+   combination of the three, merge those two alternatives to suit the
+   situation.
+  </p><p>
+   If your document contains nontrivial examples of program code, we
+   recommend releasing these examples in parallel under your choice of free
+   software license, such as the GNU General Public License, to permit their
+   use in free software.
+  </p></div></div></div></body></html>
