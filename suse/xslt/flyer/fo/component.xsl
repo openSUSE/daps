@@ -130,7 +130,7 @@
                  <fo:block/>
               </fo:table-cell>
               <fo:table-cell>
-                <fo:block margin-top=".5em" font-size="8pt">www.suse.com</fo:block>
+                <fo:block margin-top=".5em" font-size="8pt"> <xsl:value-of select="$flyer.url"/></fo:block>
               </fo:table-cell>
             </fo:table-row>
           </fo:table-body>
