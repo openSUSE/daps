@@ -3,9 +3,7 @@
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
->
-
+    xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 
 <!-- The color of our flyer; usually in Novell red -->
@@ -36,7 +34,11 @@
 </xsl:param>
 
 <!-- Given by the Makefiles -->
-<xsl:param name="dtdroot">/usr/share/daps/</xsl:param>
+<xsl:param name="styleroot"/>
+
+<!-- Pointer to our logo -->
+<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
+   
 
 <!-- Our Layout -->
 <xsl:param name="paper.type">A4</xsl:param>
