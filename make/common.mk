@@ -1472,7 +1472,7 @@ $(HTML_DIR)/images: $(HTML_DIR) provide-color-images
 $(HTML_DIR)/style_images: $(STYLEIMG) $(HTML_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
-	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	tar cph --exclude-vcs --transform=s%images/%style_images/% \
 	  -C $(dir $(STYLEIMG)) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
@@ -1605,7 +1605,7 @@ $(WEBHELP_DIR)/images: $(WEBHELP_DIR) provide-color-images
 $(WEBHELP_DIR)/style_images: $(STYLEIMG) $(WEBHELP_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
-	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	tar cph --exclude-vcs --transform=s%images/%style_images/% \
 	  -C $(dir $(STYLEIMG)) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
@@ -1616,7 +1616,7 @@ $(WEBHELP_DIR)/common: $(WEBHELP_DIR)
 $(WEBHELP_DIR)/common: $(STYLEWEBHELP_BASE)/template/common
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
-	tar cp --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+	tar cph --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
 	$(HTML_GRAPH_COMMAND) $< $@
@@ -1644,7 +1644,7 @@ $(WEBHELP_DIR)/index.html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 	  -DfillTheRest=true \
 	  -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
 	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
-	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.0.0.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.2.1.jar:$(DOCBOOK_STYLES)/extensions/lucene-core-3.0.0.jar \
+	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.*.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.*.jar:$(DOCBOOK_STYLES)/extensions/lucene-core-3.*.jar \
 	  com.nexwave.nquindexer.IndexerMain
 	rm -f $(WEBHELP_DIR)/search/*.props
 
@@ -1699,7 +1699,7 @@ $(JSP_DIR)/images: $(JSP_DIR) provide-color-images
 $(JSP_DIR)/style_images: $(STYLEIMG) $(JSP_DIR)
   ifeq ($(STATIC_HTML), 1)
 	if [ -L $@ ]; then rm -f $@; fi
-	tar cp --exclude-vcs --transform=s%images/%style_images/% \
+	tar cph --exclude-vcs --transform=s%images/%style_images/% \
 	  -C $(dir $(STYLEIMG)) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
