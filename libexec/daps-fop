@@ -1,11 +1,11 @@
-#!/bin/sh
-# Customized xep executable for daps
+#!/bin/bash
+# Customized fop executable for daps
 # Use environment variable VERBOSE to get more debugging output
 
 __VERSION__="$Id: daps-fop 43536 2009-08-11 22:10:56Z jw $"
 
 #FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
-#FOP_STACK=${FOP_STACK:-"-Xss512K"}
+FOP_STACK=${FOP_STACK:-"-Xss512K"}
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 
 ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACK" \
