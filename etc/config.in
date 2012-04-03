@@ -230,7 +230,7 @@ FALLBACK_STYLEROOT=""
 ## -----------------------
 ## Description: Config file for the FOP pdf formatter
 ## Type:        Path
-## Default:     "/etc/daps/fop/fop-daps.xml"
+## Default:     "@sysconfdir@/daps/fop/fop-daps.xml"
 #
 # Specify a config file for FOP
 # Also see FORMATTER, FOP-*
@@ -252,14 +252,14 @@ FOP_OPTIONS="-q"
 ## -----------------------
 ## Description: Wrapper script for the FOP pdf formatter
 ## Type:        PATH to script
-## Default:     "/usr/bin/fop"
+## Default:     "@pkgdatadir@/libexec/daps-fop""
 #
 # Optional wrapper script for calling FOP. The default "fop" will run
 # the first fop executable found in your path (usually this will be
 # /usr/bin/fop)
 # Also see FORMATTER, FOP-*
 #
-FOP_WRAPPER="/usr/bin/fop"
+FOP_WRAPPER="@pkgdatadir@/libexec/daps-fop"
 
 ## Key:         FORMATTER
 ## --------------------
@@ -534,7 +534,7 @@ WH_SEARCH="yes"
 ## -----------------------
 ## Description: Config file for the XEP pdf formatter
 ## Type:        Path
-## Default:     "/etc/daps/xep/xep-daps.xml"
+## Default:     "@sysconfdir@/daps/xep/xep-daps.xml"
 #
 # Specify a config file for XEP
 # Also see FORMATTER, XEP-*
@@ -556,14 +556,14 @@ XEP_OPTIONS="-q"
 ## -----------------------
 ## Description: Wrapper script for the XEP pdf formatter
 ## Type:        PATH to script
-## Default:     "/usr/bin/xep"
+## Default:     "@pkgdatadir@/libexec/daps-xep"
 #
 # Optional wrapper script for calling XEP. The default "xep" will run
 # the first xep binary found in your path (usually this will be
 # /usr/bin/xep)
 # Also see FORMATTER, XEP-*
 #
-XEP_WRAPPER="/usr/bin/xep"
+XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
 
 ## Key:         XML_MAIN_CATALOG
 ## -----------------------
