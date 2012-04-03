@@ -853,6 +853,8 @@ if [[ -n $DAPSROOT ]]; then
         export PATH=$BIN_DIR:$PATH
         LIB_DIR="${DAPSROOT}/lib"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
+        FOP_WARPPER="${LIBEXEC_DIR}/daps-fop"
+        XEP_WARPPER="${LIBEXEC_DIR}/daps-xep"
         CONFIG="${DAPSROOT}/etc/config"
         XML_CATALOG_FILES="$DAPSROOT/etc/catalog.xml"
     fi
