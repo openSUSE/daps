@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+                 type="text/xml" title="Profiling step"?>
+<!DOCTYPE book PUBLIC
+ "-//OASIS//DTD DocBook XML V4.5//EN"
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  <!ENTITY tdg "DocBook: The Definitive Guide">
+
+]>
+<book id="booktest" lang="en">
+ <bookinfo>
+  <title>Book Test</title>
+  <subtitle>Test Document for DAPS</subtitle>
+  <productname>Testing Books</productname>
+  <releaseinfo>Version 1.0</releaseinfo>
+  <releaseinfo>Revision 0</releaseinfo>
+  <date>
+   <?dbtimestamp format="B d, Y"?>
+  </date>
+  <legalnotice>
+   <para>
+    <ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html">GNU Free Documentation License</ulink>
+   </para>
+  </legalnotice>
+ </bookinfo>
+ <chapter id="cha.booktest">
+  <title>Chapter</title>
+  <!-- Comment -->
+  <remark>Remark</remark>
+  <abstract>
+   <para>
+    You may use this file as a template. For a complete reference DocBook
+    reference see <citetitle>&tdg;</citetitle>. It is available at <ulink
+     url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
+   </para>
+  </abstract>
+  <para>
+   I am a paragraph in a chapter.
+  </para>
+  <sect1 id="sec.template.examples.lists">
+   <title>Lists</title>
+   <para>
+    This section 1 showcases 3 types of lists.
+   </para>
+   <sect2 id="sec.template.examples.lists.itemized">
+    <title>Itemized Lists</title>
+    <para>I am a paragraph in a section 2.</para>
+    <itemizedlist>
+     <title>Example Itemized List</title>
+     <listitem>
+      <para>
+       Listitem 1
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Listitem 2
+      </para>
+     </listitem>
+    </itemizedlist>
+   </sect2>
+   <sect2 id="sec.template.examples.lists.ordered">
+    <title>Ordered Lists</title>
+    <orderedlist>
+     <title>Example Ordered List</title>
+     <listitem>
+      <para>
+       First item
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Second item
+      </para>
+     </listitem>
+    </orderedlist>
+   </sect2>
+   <sect2 id="sec.template.examples.lists.variable">
+    <title>Variablelists</title>  
+    <variablelist>
+     <title>Example Variablelist</title>
+     <varlistentry>
+      <term>Term 1</term>
+      <listitem>
+       <para>
+        Definition 1
+       </para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>Term 2</term>
+      <listitem>
+       <para>
+        Definition 2
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect2>
+  </sect1>
+  <sect1 id="sec.template.examples.table">
+   <title>Tables</title>
+   <para>This section 1 features a table with 4 columns and 3 rows:
+   </para>
+   <table>
+    <title>Example Table</title>
+    <tgroup cols="4">
+     <colspec colnum="1" colname="1" colwidth="25*"/>
+     <colspec colnum="2" colname="2" colwidth="25*"/>
+     <colspec colnum="3" colname="3" colwidth="25*"/>
+     <colspec colnum="4" colname="4" colwidth="25*"/>
+     <thead>
+      <row>
+       <entry><para>Col 1</para></entry>
+       <entry><para>Col 2</para></entry>
+       <entry><para>Col 3</para></entry>
+       <entry><para>Col 4</para></entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry><para>Row 1, Cell 1</para></entry>
+       <entry><para>Row 1, Cell 2</para></entry>
+       <entry><para>Row 1, Cell 3</para></entry>
+       <entry><para>Row 1, Cell 4</para></entry>
+      </row>
+      <row>
+       <entry><para>Row 2, Cell 1</para></entry>
+       <entry><para>Row 2, Cell 2</para></entry>
+       <entry><para>Row 2, Cell 3</para></entry>
+       <entry><para>Row 2, Cell 4</para></entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+  </sect1>
+  <sect1 id="sec.template.examples.images">
+   <title>Images</title>
+   <para>
+    This section 1 shows two types of images:  with and without a
+    headline. 
+   </para>
+   <figure>
+    <title>Basketball Player</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="example2.png" width="75%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="example2.png" width="75%" format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    And now an image without headline:
+   </para>
+   <informalfigure>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="example1.png" width="75%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="example1.png" width="75%" format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </informalfigure>
+  </sect1>
+ </chapter>
+</book>
