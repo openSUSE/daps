@@ -1555,7 +1555,6 @@ $(WEBHELP_DIR):
 .PHONY: webhelp-dir-name
 webhelp-dir-name:
 	@ccecho "result" "$(WEBHELP_DIR)"
-	@ccecho "result" "$(WEBHELP_DIR)/$(BOOK).html"
 
 .PHONY: dist-webhelp-name
 dist-webhelp-name:
@@ -2014,6 +2013,3 @@ check:
 .PHONY: nothing
 nothing:
 	@ccecho "result" "Done doing nothing"
-
-
-
