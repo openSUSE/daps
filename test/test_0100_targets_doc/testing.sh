@@ -5,9 +5,7 @@ declare -a DOC_TARGETS=( color-pdf pdf html htmlsingle webhelp jsp txt epub wiki
 SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 DAPSROOT="../.."
 DAPS="${DAPSROOT}/bin/daps"
-DC="${DAPSROOT}/doc/DC-daps-user"
-
-
+DC="../docs_to_test/DC-booktest"
 
 # clean results
 rclean() {
@@ -50,7 +48,7 @@ test_HTML_dir() {
     #
     for PARAM in comments draft remarks; do
         DIR=$(get_htmldir "--$PARAM")
-        expr match "$DIR" ".*\(_$PARAM\)"
+        expr match "$DIR" ".*\(_$PARAM\)" >/dev/null 2>&1
         assertTrue "The result directory naming ($DIR) does not adhere to the --$PARAM parameter" "[[ $? -eq 0 ]]"
     done
 }
@@ -58,6 +56,7 @@ test_HTML_dir() {
 # HTML
 test_HTML() {
     local FILE
+    rclean
     FILE=$($DAPS -d $DC --builddir $SHUNIT_TMPDIR --dapsroot $DAPSROOT html)
     assertTrue "Regular HTML build failed" "[[ $? -eq 0 ]]"
     assertTrue "Regular HTML result file $FILE does not exist" \
@@ -87,19 +86,35 @@ test_HTML_options() {
     local DIR FILE LINKS
     DIR=$(get_htmldir)
     #-----------
-    # check if build itself is ok
+    # check static mode
     #
+    rclean
     FILE=$($DAPS -d $DC --builddir $SHUNIT_TMPDIR --dapsroot $DAPSROOT \
         html --static)
     assertTrue "Static HTML build failed" "[[ $? -eq 0 ]]"
-    #-----------
     # check if result dir contains links
-    #
     LINKS=$(find $DIR -type l 2>/dev/null) # should only contain index.html
     FILE=${FILE#file://}
     LINKS=${LINKS#$FILE} # remove index.html
     assertNull "A static HTML result dir must not contain links ($LINKS)" \
         "$LINKS"
+    #-----------
+    # check draft mode
+    #
+    rclean
+    FILE=$($DAPS -d $DC --builddir $SHUNIT_TMPDIR --dapsroot $DAPSROOT \
+        html --draft)
+    egrep "background-image: url\('style_images/draft(_html)?\.png'\)" ${FILE#file://} >/dev/null 2>&1
+    assertTrue "Draft build does not contain watermark image" "[[ $? -eq 0 ]]"
+    #-----------
+    # check if remarks are displayed
+    #
+    rclean
+    DIR=$(get_htmldir --remarks --comments)
+    $DAPS -d $DC --builddir $SHUNIT_TMPDIR --dapsroot $DAPSROOT \
+        html --remarks --comments
+    grep "Remark [12]" ${DIR}/*.html >/dev/null 2>&1
+    assertTrue "Remarks build does not contain remarks" "[[ $? -eq 0 ]]"
 }
 
 test_HTML_name() {

@@ -6,7 +6,9 @@
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 
   <!ENTITY % entities SYSTEM "entity-decl.ent">
-  <!ENTITY tdg "DocBook: The Definitive Guide">
+  %entities;
+  <!ENTITY ent3 "Entity3">
+  <!ENTITY ent4 "Entity4">
 
 ]>
 <book id="booktest" lang="en">
@@ -25,117 +27,189 @@
    </para>
   </legalnotice>
  </bookinfo>
- <chapter id="cha.booktest">
-  <title>Chapter</title>
-  <!-- Comment -->
-  <remark>Remark</remark>
-  <abstract>
-   <para>
-    You may use this file as a template. For a complete reference DocBook
-    reference see <citetitle>&tdg;</citetitle>. It is available at <ulink
-     url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
-   </para>
-  </abstract>
-  <para>
-   I am a paragraph in a chapter.
-  </para>
-  <sect1 id="sec.template.examples.lists">
-   <title>Lists</title>
-   <para>
-    This section 1 showcases 3 types of lists.
-   </para>
-   <sect2 id="sec.template.examples.lists.itemized">
-    <title>Itemized Lists</title>
-    <para>I am a paragraph in a section 2.</para>
-    <itemizedlist>
-     <title>Example Itemized List</title>
-     <listitem>
-      <para>
-       Listitem 1
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Listitem 2
-      </para>
-     </listitem>
-    </itemizedlist>
-   </sect2>
-   <sect2 id="sec.template.examples.lists.ordered">
-    <title>Ordered Lists</title>
-    <orderedlist>
-     <title>Example Ordered List</title>
-     <listitem>
-      <para>
-       First item
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Second item
-      </para>
-     </listitem>
-    </orderedlist>
-   </sect2>
-   <sect2 id="sec.template.examples.lists.variable">
-    <title>Variablelists</title>  
-    <variablelist>
-     <title>Example Variablelist</title>
-     <varlistentry>
-      <term>Term 1</term>
+ <part id="part.booktest1">
+  <title>Part 1</title>
+  <chapter id="cha.booktest1">
+   <title>Chapter</title>
+<!-- Comment 1 -->
+   <remark>Remark 1</remark>
+   <abstract>
+    <para>
+     Abstract: Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed
+     diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+     erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
+     ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+     ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+     elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+     aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+     dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+     est Lorem ipsum dolor sit amet.
+    </para>
+   </abstract>
+   <sect1 id="sec.booktest1.1">
+    <title>Section 1.1</title>
+    <para>
+     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+     eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+     voluptua.
+    </para>
+    <sect2 id="sec.booktest1.1.1">
+     <title>Section 2.1</title>
+<!-- Comment 2 -->
+     <remark>Remark 2</remark>
+     <itemizedlist>
+      <title>Itemized List</title>
       <listitem>
        <para>
-        Definition 1
+        Listitem 1
        </para>
       </listitem>
-     </varlistentry>
-     <varlistentry>
-      <term>Term 2</term>
       <listitem>
        <para>
-        Definition 2
+        Listitem 2
        </para>
       </listitem>
-     </varlistentry>
-    </variablelist>
-   </sect2>
-  </sect1>
-  <sect1 id="sec.template.examples.table">
-   <title>Tables</title>
-   <para>This section 1 features a table with 4 columns and 3 rows:
-   </para>
-   <table>
-    <title>Example Table</title>
-    <tgroup cols="4">
-     <colspec colnum="1" colname="1" colwidth="25*"/>
-     <colspec colnum="2" colname="2" colwidth="25*"/>
-     <colspec colnum="3" colname="3" colwidth="25*"/>
-     <colspec colnum="4" colname="4" colwidth="25*"/>
-     <thead>
-      <row>
-       <entry><para>Col 1</para></entry>
-       <entry><para>Col 2</para></entry>
-       <entry><para>Col 3</para></entry>
-       <entry><para>Col 4</para></entry>
-      </row>
-     </thead>
-     <tbody>
-      <row>
-       <entry><para>Row 1, Cell 1</para></entry>
-       <entry><para>Row 1, Cell 2</para></entry>
-       <entry><para>Row 1, Cell 3</para></entry>
-       <entry><para>Row 1, Cell 4</para></entry>
-      </row>
-      <row>
-       <entry><para>Row 2, Cell 1</para></entry>
-       <entry><para>Row 2, Cell 2</para></entry>
-       <entry><para>Row 2, Cell 3</para></entry>
-       <entry><para>Row 2, Cell 4</para></entry>
-      </row>
-     </tbody>
-    </tgroup>
-   </table>
-  </sect1>
+     </itemizedlist>
+    </sect2>
+    <sect2 id="sec.booktest1.1.2">
+     <title>Section 2.2</title>
+     <orderedlist>
+      <title>Ordered List</title>
+      <listitem>
+       <para>
+        First item
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Second item
+       </para>
+      </listitem>
+     </orderedlist>
+    </sect2>
+    <sect2 id="sec.booktest1.1.3">
+     <title>Section 2.3</title>  
+     <variablelist>
+      <title>Variablelist</title>
+      <varlistentry>
+       <term>Term 1</term>
+       <listitem>
+        <para>
+         Definition 1
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>Term 2</term>
+       <listitem>
+        <para>
+         Definition 2
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </sect2>
+   </sect1>
+  </chapter>
+ </part>
+ <part id="part.booktest2">
+  <title>Part 2</title>
+  <chapter id="cha.booktest2">
+   <title>Chapter</title>
+   <sect1 id="sec.booktest2.1">
+    <title>Section 1</title>
+    <table>
+     <title>Plain Table</title>
+     <tgroup cols="4">
+      <colspec colnum="1" colname="1" colwidth="25*"/>
+      <colspec colnum="2" colname="2" colwidth="25*"/>
+      <colspec colnum="3" colname="3" colwidth="25*"/>
+      <colspec colnum="4" colname="4" colwidth="25*"/>
+      <thead>
+       <row>
+        <entry><para>Col 1</para></entry>
+        <entry><para>Col 2</para></entry>
+        <entry><para>Col 3</para></entry>
+        <entry><para>Col 4</para></entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry><para>Row 1, Cell 1</para></entry>
+        <entry><para>Row 1, Cell 2</para></entry>
+        <entry><para>Row 1, Cell 3</para></entry>
+        <entry><para>Row 1, Cell 4</para></entry>
+       </row>
+       <row>
+        <entry><para>Row 2, Cell 1</para></entry>
+        <entry><para>Row 2, Cell 2</para></entry>
+        <entry><para>Row 2, Cell 3</para></entry>
+        <entry><para>Row 2, Cell 4</para></entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
+    <table>
+     <title>Sep Table</title>
+     <tgroup cols="4" colsep="1" rowsep="1">
+      <colspec colnum="1" colname="1" colwidth="25*"/>
+      <colspec colnum="2" colname="2" colwidth="25*"/>
+      <colspec colnum="3" colname="3" colwidth="25*"/>
+      <colspec colnum="4" colname="4" colwidth="25*"/>
+      <thead>
+       <row>
+        <entry><para>Col 1</para></entry>
+        <entry><para>Col 2</para></entry>
+        <entry><para>Col 3</para></entry>
+        <entry><para>Col 4</para></entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry><para>Row 1, Cell 1</para></entry>
+        <entry><para>Row 1, Cell 2</para></entry>
+        <entry><para>Row 1, Cell 3</para></entry>
+        <entry><para>Row 1, Cell 4</para></entry>
+       </row>
+       <row>
+        <entry><para>Row 2, Cell 1</para></entry>
+        <entry><para>Row 2, Cell 2</para></entry>
+        <entry><para>Row 2, Cell 3</para></entry>
+        <entry><para>Row 2, Cell 4</para></entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
+   </sect1>
+  </chapter>
+ </part>
+ <part id="part.booktest3">
+  <title>Part 3</title>
+  <chapter id="cha.booktest3">
+   <title>Chapter</title>
+   <sect1 id="sec.booktest3.1">
+    <title>Section 1.1</title>
+    <para os="arch1">arch1</para>
+    <para os="arch2">arch2</para>
+    <para os="condition1">condition1</para>
+    <para os="condition2">condition2</para>
+    <para os="os1">os1</para>
+    <para os="os2">os2</para>
+    <para os="vendor11">vendor1</para>
+    <para os="vendor2">vendor2</para>
+   </sect1>
+   
+   <sect1 id="sec.booktest3.2">
+    <title>Section 1.2</title>
+    <para>&ent1;</para>
+    <para>&ent2;</para>
+    <para>&ent3;</para>
+    <para>&ent4;</para>
+   </sect1>
+   
+  </chapter>
+ </part>
+<!--
   <sect1 id="sec.template.examples.images">
    <title>Images</title>
    <para>
@@ -167,5 +241,5 @@
     </mediaobject>
    </informalfigure>
   </sect1>
- </chapter>
+-->
 </book>
