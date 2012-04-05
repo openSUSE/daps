@@ -1479,6 +1479,20 @@ $(HTML_DIR)/style_images: $(STYLEIMG) $(HTML_DIR)
 	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $@
   endif
 
+# With the SUSE Stylesheets we use an alternative draft image for HTML
+# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+# both HML and FO
+# The following is a HACK to allow draft_html.png Upstream should have
+# draft.svg and draft.png, that would make things easier...
+
+HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
+		   $(firstword $(wildcard \
+		   $(STYLEIMG)/draft_html.png \
+		   $(STYLEIMG)/draft.png)))
+ifdef HTML_DRAFT_IMG
+  HTMLSTRINGS += --stringparam draft.watermark.image $(HTML_DRAFT_IMG) 
+endif
+
 #---------------
 # target to generate METAFILE for html stylesheets
 #
@@ -1611,6 +1625,22 @@ $(WEBHELP_DIR)/style_images: $(STYLEIMG) $(WEBHELP_DIR)
 	if [ -d $@ ]; then rm -rf $@; fi
 	$(HTML_GRAPH_COMMAND) $(STYLEIMG)/ $@
   endif
+
+# With the SUSE Stylesheets we use an alternative draft image for HTML
+# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+# both HML and FO
+# The following is a HACK to allow draft_html.png Upstream should have
+# draft.svg and draft.png, that would make things easier...
+
+WEBHELP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
+		   $(firstword $(wildcard \
+		   $(STYLEIMG)/draft_html.png \
+		   $(STYLEIMG)/draft.png)))
+ifdef WEBHELP_DRAFT_IMG
+  WEBHELPSTRINGS += --stringparam draft.watermark.image $(WEBHELP_DRAFT_IMG) 
+endif
+
+
 # common stuff /(Javascript, CSS,...)
 $(WEBHELP_DIR)/common: $(WEBHELP_DIR)
 $(WEBHELP_DIR)/common: $(STYLEWEBHELP_BASE)/template/common
@@ -1705,6 +1735,20 @@ $(JSP_DIR)/style_images: $(STYLEIMG) $(JSP_DIR)
 	if [ -d $@ ]; then rm -rf $@; fi
 	$(HTML_GRAPH_COMMAND) $(STYLEIMG)/images/ $@
   endif
+
+# With the SUSE Stylesheets we use an alternative draft image for HTML
+# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+# both HML and FO
+# The following is a HACK to allow draft_html.png Upstream should have
+# draft.svg and draft.png, that would make things easier...
+
+JSP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
+		   $(firstword $(wildcard \
+		   $(STYLEIMG)/draft_html.png \
+		   $(STYLEIMG)/draft.png)))
+ifdef JSP_DRAFT_IMG
+  JSPSTRINGS += --stringparam draft.watermark.image $(JSP_DRAFT_IMG) 
+endif
 
 #---------------
 # Generate JSP from profiled xml
