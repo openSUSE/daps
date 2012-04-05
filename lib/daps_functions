@@ -214,8 +214,7 @@ function init_env {
         1|yes)
             export COMMENTS=1 ;;
         0|no|"")
-            export COMMENTS=0
-            unset COMMENT_STR ;;
+            export COMMENTS=0 ;;
         *)
             exit_on_error "Wrong value for COMMENTS. Must be \"yes\" or \"no\""
             ;;
@@ -226,28 +225,28 @@ function init_env {
         1|yes)
             export DRAFT="yes" ;;
          0|no|"")
-            export DRAFT="no"
-            unset DRAFT_STR ;;
+            export DRAFT="no" ;;
         *)
             exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\"" ;;
     esac
     
     # REMARKS must be set to 1|0
+    # if enabled (set to 1) implies DRAFT mode
     case "$REMARKS" in
         1|yes)
-            export REMARKS=1 ;;
+            export REMARKS=1 DRAFT="yes" ;;
         0|no|"")
-            export REMARKS=0
-            unset REMARK_STR ;;
+            export REMARKS=0 ;;
         *)
             exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
             ;;
         esac
     
     # USEMETA must be set to 1|0
+    # if enabled (set to 1) implies DRAFT mode
     case "$USEMETA" in
         1|yes)
-            export USEMETA=1 ;;
+            export USEMETA=1 DRAFT="yes" ;;
           0|no|"")
             export USEMETA=0 ;;
         *)
@@ -273,6 +272,13 @@ function init_env {
         # No terminal
         COLOR=0
     fi
+
+    # Unset the strings last, because values for COMMENTS, DRAFT or REMARKS
+    # may have been altered in-between
+    [[ 0 -eq $COMMENTS ]] && unset COMMENT_STR
+    [[ "no" = $DRAFT ]] && unset DRAFT_STR
+    [[ 0 -eq $REMARKS ]] && unset REMARK_STR
+    
 }   
 
 ###########################################################################
@@ -442,9 +448,9 @@ function build_pdfs () {
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1 DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode with remarks
-    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes"
+    [[ 1 = $P_META ]]     && USEMETA=1
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -499,9 +505,9 @@ function build_html_jsp () {
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1 DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]     && USEMETA=1 DRAFT="yes"
+    [[ 1 = $P_META ]]     && USEMETA=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
     [[ 1 = $P_HTML4 ]]    && export HTML4="yes"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
@@ -566,7 +572,7 @@ function webhelp () {
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1 DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
