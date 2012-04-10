@@ -241,17 +241,22 @@
    outlined below.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
+    <screen>
+     <replaceable>YOUR_DOC_DIR</replaceable>
+     <co id="co.docdir.base"/>
   |--&dc;* <co id="co.docdir.dc"/>
-  |--<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
-     |--<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
+  |--<emphasis role="bold">images</emphasis>
+     <co id="co.docdir.img"/> 
+     |--<emphasis role="bold">src</emphasis>
+     <co id="co.docdir.img.src"/>
         |--<emphasis role="bold">dia</emphasis>
         |--<emphasis role="bold">eps</emphasis>
         |--<emphasis role="bold">fig</emphasis>
         |--<emphasis role="bold">pdf</emphasis>
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
-  |--<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
+  |--<emphasis role="bold">xml</emphasis>
+     <co id="co.docdir.xml"/> 
      |--MAIN*.xml <co id="co.docdir.main"/></screen>
    </example>
    <calloutlist>
@@ -346,46 +351,51 @@
   <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
  </sect1>
  <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
- <sect1><title>Basic &dapsacr; Syntax</title>
- <para>&dapsacr; is a command-line tool. Before introducing you to the key 
+ <sect1 id="sec.daps.quick.syntax">
+  <title>Basic &dapsacr; Syntax</title>
+  <para>&dapsacr; is a command-line tool. Before introducing you to the key 
  <command>daps</command> commands to create output formats from your 
  XML documents, let's get familiar with the basic <command>daps</command> 
  syntax:</para>
- <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
- <para><xref linkend="ex.daps.syntax"/> shows an example <command>daps</command> 
+  <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
+  <para>
+   <xref linkend="ex.daps.syntax"/> shows an example <command>daps</command> 
  command that generates a HTML output. Global options are used to specify the 
  level of verbosity, and the &dclong; file to be used for creating the 
  output.</para>
- 
- <example id="ex.daps.syntax"><title>&dapsacr; Syntax </title>
- <screen>daps -vv<co id="co.daps.syntax.vv"/> \
+
+  <example id="ex.daps.syntax">
+   <title>&dapsacr; Syntax </title>
+   <screen>daps -vv<co id="co.daps.syntax.vv"/> \
   -d DC-daps-example<co id="co.daps.syntax.dc"/> \
   html --static<co id="co.daps.syntax.output"/></screen>
- <calloutlist>
-  <callout arearefs="co.daps.syntax.vv">
-   <para>Global Option <option>-vv</option>: Sets the highest verbosity level 
+   <calloutlist>
+    <callout arearefs="co.daps.syntax.vv">
+     <para>Global Option <option>-vv</option>: Sets the highest verbosity level 
    (number of messages shown during the transformation process from XML to HTML). 
    In this case, debug messages are shown.</para>
-  </callout>
-  <callout arearefs="co.daps.syntax.dc">
-   <para>Global Option <option>-d</option>: Defines the &dclong; file.</para>
-  </callout>
-  <callout arearefs="co.daps.syntax.output">
-   <para>Subcommand <command>html</command>: Defines the output format to create. 
+    </callout>
+    <callout arearefs="co.daps.syntax.dc">
+     <para>Global Option <option>-d</option>: Defines the &dclong; file.</para>
+    </callout>
+    <callout arearefs="co.daps.syntax.output">
+     <para>Subcommand <command>html</command>: Defines the output format to create. 
    The command option <option>--static</option> tells &dapsacr; to copy CSS and
    image files to the same location like the HTML files. For more information, 
    see <xref linkend="table.daps.output.overview"/>.</para>
-  </callout>
- </calloutlist></example>
- <para>Generally, &dapsacr; can be executed with or without options. To view 
+    </callout>
+   </calloutlist>
+  </example>
+  <para>Generally, &dapsacr; can be executed with or without options. To view 
  the global options and the available subcommands, use the command: </para>
-<screen>$ daps -h</screen>
-<para>For a short help text on a specific <emphasis>subcommand</emphasis>, use:</para>
-<screen>$ daps <replaceable>subcommand</replaceable> -h</screen>
-<para>For example, if you want more information about generating HTML output, run:</para> 
-<screen>$ daps html -h</screen>
-<para>The following section introduces the key <command>daps</command> commands
-you need to create output formats from your XML files.</para></sect1>
+  <screen>$ daps -h</screen>
+  <para>For a short help text on a specific <emphasis>subcommand</emphasis>, use:</para>
+  <screen>$ daps <replaceable>subcommand</replaceable> -h</screen>
+  <para>For example, if you want more information about generating HTML output, run:</para>
+  <screen>$ daps html -h</screen>
+  <para>The following section introduces the key <command>daps</command> commands
+you need to create output formats from your XML files.</para>
+ </sect1>
  <sect1 id="sec.daps.quick.output">
   <title>Output Formats</title>
   <para>&dapsacr; supports a number of different output formats,
@@ -419,10 +429,11 @@ make: *** [validate] Error 3</screen>
    </example>
   </sect2>
   <sect2 id="sec.daps.quick.output.syntax">
-   <title>Basic &dapsacr; Syntax</title>
+   <title>Basic Syntax for Generating Output</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable>
+    <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-example color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
@@ -432,96 +443,98 @@ For example:</para>
    <para>At the end of the transformation process, &dapsacr; shows a message 
   where to find the generated output.</para>
   </sect2>
-  
-<sect2 id="sec.daps.quick.output.formats">
-  <title>Generating Different Output Formats</title>
-  <para>The following table gives an overview of the &dapsacr; subcommands for 
+
+  <sect2 id="sec.daps.quick.output.formats">
+   <title>Generating Different Output Formats</title>
+   <para>The following table gives an overview of the &dapsacr; subcommands for 
    generating output formats.</para>
-  <table id="table.daps.output.overview">
-   <title>&dapsacr; Output Commands and Formats</title>
-   <tgroup cols="3">
-    <colspec colnum="1" colname="1" colwidth="20*"/>
-    <colspec colnum="2" colname="2" colwidth="40*"/>
-    <colspec colnum="3" colname="3" colwidth="40*"/>
-    <thead>
-     <row>
-      <entry>
-       <para>Subcommand</para>
-      </entry>
-      <entry>
-       <para>Output</para>
-      </entry>
-      <entry>
-       <para>Note</para>
-      </entry>
-     </row>
-    </thead>
-    <tbody>
-     <row>
-      <entry>
-       <para>color-pdf</para>
-      </entry>
-      <entry>
-       <para>Creates a color PDF (without any cropmarks). Open the result in a 
+   <table id="table.daps.output.overview">
+    <title>&dapsacr; Output Commands and Formats</title>
+    <tgroup cols="3">
+     <colspec colnum="1" colname="1" colwidth="20*"/>
+     <colspec colnum="2" colname="2" colwidth="40*"/>
+     <colspec colnum="3" colname="3" colwidth="40*"/>
+     <thead>
+      <row>
+       <entry>
+        <para>Subcommand</para>
+       </entry>
+       <entry>
+        <para>Output</para>
+       </entry>
+       <entry>
+        <para>Note</para>
+       </entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry>
+        <para>color-pdf</para>
+       </entry>
+       <entry>
+        <para>Creates a color PDF (without any cropmarks). Open the result in a 
        PDF viewer.
         </para>
-      </entry>
-      <entry>
-       <para>Requires an FO formatter. <!--It is also possible to create one PDF 
+       </entry>
+       <entry>
+        <para>Requires an FO formatter. <!--It is also possible to create one PDF 
         containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
         for large documentation projects you might run into problems with the
         java memory stack.--></para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>pdf</para>
-      </entry>
-      <entry>
-       <para>Creates a black-and-white PDF with crop marks, suitable for
-       hand-off to a printing shop.  Open the result in a PDF viewer.</para>
-      </entry>
-      <entry><para>Requires an FO formatter. All color images are automatically 
-      converted to black-and-white <remark>taroth 2012-04-10: check with fs: 
-      greyscale???</remark>images.</para></entry>
-     </row>
+       </entry>
+      </row>
       <row>
-      <entry>
-       <para>html</para>
-      </entry>
-      <entry>
-       <para>Creates a subdirectory containing individual HTML files for 
+       <entry>
+        <para>pdf</para>
+       </entry>
+       <entry>
+        <para>Creates a black-and-white PDF with crop marks, suitable for
+       hand-off to a printing shop.  Open the result in a PDF viewer.</para>
+       </entry>
+       <entry>
+        <para>Requires an FO formatter. All color images are automatically 
+      converted to black-and-white <remark>taroth 2012-04-10: check with fs: 
+      greyscale???</remark>images.</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>html</para>
+       </entry>
+       <entry>
+        <para>Creates a subdirectory containing individual HTML files for 
         all chapters of a book (including also preface, glossary or appendix files).
         <!--They are named according to the ID of the respective root element.-->  
         Open the generated <filename>index.html</filename> file in a Web browser 
         to view the generated HTML from the starting point (ROOTID of the top-level
         element).</para>
-      </entry>
-      <entry>
-       <para>Images and CSS files are only referenced in the HTML. To copy 
+       </entry>
+       <entry>
+        <para>Images and CSS files are only referenced in the HTML. To copy 
         these files to the same location like the HTML files, use the
         <option>--static</option> option. This is useful for creating 
         distributable HTML builds.</para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>html-single</para>
-      </entry>
-      <entry>
-       <para>Creates a single HTML file, named after the &dc; file used 
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>html-single</para>
+       </entry>
+       <entry>
+        <para>Creates a single HTML file, named after the &dc; file used 
        to create the output. Open the generated <filename>*.html</filename> file
         in a Web browser.</para>
-      </entry>
-      <entry>
-       <para>Single HTML files are more convenient for full text searches. 
+       </entry>
+       <entry>
+        <para>Single HTML files are more convenient for full text searches. 
         Images and CSS files are only referenced in the HTML. To copy 
         these files to the same location like the HTML files, use the
         <option>--static</option> option. This is useful for creating 
         distributable HTML builds.
         </para>
-      </entry>
-     </row>
+       </entry>
+      </row>
 
      <!--<row>
       <entry>
@@ -535,98 +548,107 @@ For example:</para>
        <para>See color-pdf</para>
       </entry>
      </row>-->
-     <row>
-      <entry>
-       <para>epub</para>
-      </entry>
-      <entry>
-       <para>Creates an &epub; book. Open the result in an portable e-book reader 
+      <row>
+       <entry>
+        <para>epub</para>
+       </entry>
+       <entry>
+        <para>Creates an &epub; book. Open the result in an portable e-book reader 
         (or with  a software like Calibre).</para>
-      </entry>
-      <entry>
-       <para>
-        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+       </entry>
+       <entry>
+        <para>
+         <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
         conversion of articles to epub?</remark>
-       </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>webhelp</para>
-      </entry>
-      <entry>
-       <para>Creates a DocBook &webh; output. Open the result in a Web browser.</para>
-      </entry>
-      <entry><para>Requires a very recent version of the DocBook stylesheets. 
+        </para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>webhelp</para>
+       </entry>
+       <entry>
+        <para>Creates a DocBook &webh; output. Open the result in a Web browser.</para>
+       </entry>
+       <entry>
+        <para>Requires a very recent version of the DocBook stylesheets. 
       DocBook WebHelp consists of HTML pages with an additional pane, featuring 
       a table of contents and a search function. The table of contents can be 
       expanded and collapsed and is automatically synchronized with the contents 
       pane. The search function weights the search results so that the most 
-      relevant results are listed first.</para></entry>
-     </row>
-     <row>
-      <entry>
-       <para>txt</para>
-      </entry>
-      <entry>
-       <para>Creates an ASCII text output. Open the result in a text editor.</para>
-      </entry>
-      <entry>
-       <para>All images are removed from the output, but their location
+      relevant results are listed first.</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>txt</para>
+       </entry>
+       <entry>
+        <para>Creates an ASCII text output. Open the result in a text editor.</para>
+       </entry>
+       <entry>
+        <para>All images are removed from the output, but their location
       is indicated in the text by printing the respective image base name in 
       square brackets. A table of contents is automatically generated and is 
-      available at the beginning of the text document.</para></entry>
-     </row>
-     <row>
-      <entry>
-       <para>man</para>
-      </entry>
-      <entry>
-       <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
+      available at the beginning of the text document.</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>man</para>
+       </entry>
+       <entry>
+        <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
        with fs and toms (required XML structure, one file or multiple files, etc.)
-       </remark></para>
-      </entry>
-      <entry><para>&wip;</para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>jsp <remark>taroth 2012-04-10: check with fs if to mention JSP 
-       here at all</remark></para>
-      </entry>
-      <entry>
-       <para>Creates Java Server Pages (JSP files). The generated 
+       </remark>
+        </para>
+       </entry>
+       <entry>
+        <para>&wip;</para>
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <para>jsp <remark>taroth 2012-04-10: check with fs if to mention JSP 
+       here at all</remark>
+        </para>
+       </entry>
+       <entry>
+        <para>Creates Java Server Pages (JSP files). The generated 
        <filename>jsp</filename> subdirectory contains individual 
        JSP files for all chapters of a book (including also preface, glossary or 
        appendix files). <!--They are named according to the ID of the respective 
-       root element.--> </para>
-      </entry>
-      <entry>
-       <para>A JSP file is an HTML page containing a reference to Java 
+       root element.-->
+        </para>
+       </entry>
+       <entry>
+        <para>A JSP file is an HTML page containing a reference to Java 
       servlets or java server side applets.</para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <remark>taroth 2012-04-10: check with fs and toms if to mention
+       </entry>
+      </row>
+      <row>
+       <entry>
+        <remark>taroth 2012-04-10: check with fs and toms if to mention
       this at all</remark>
-       <para>wiki</para>
-      </entry>
-      <entry>
-       <para>Creates a MediaWiki output in a single file. Open the result in a 
+        <para>wiki</para>
+       </entry>
+       <entry>
+        <para>Creates a MediaWiki output in a single file. Open the result in a 
        text or MediaWiki editor, and use it as raw input for a MediaWiki article.</para>
-      </entry>
-      <entry><para>The output is very basic: Section titles are converted
+       </entry>
+       <entry>
+        <para>The output is very basic: Section titles are converted
       in headlines according to their hierarchy, itemized lists, ordered lists
       and <sgmltag>screen</sgmltag> elements are converted to the respective
-      MediWiki elements. </para></entry>
-     </row>
-    </tbody>
-   </tgroup>
-  </table>
-  
- </sect2>
- <sect2 id="sec.daps.quick.output.adv">
+      MediWiki elements. </para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
+
+  </sect2>
+  <sect2 id="sec.daps.quick.output.adv">
    <title>Advanced Output Options</title>
    <para>Instead of always building your complete documentation project 
    (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or <sgmltag>article</sgmltag>),
@@ -651,11 +673,17 @@ For example:</para>
     used DocBook constructs&mdash;without the book's title page:</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
-   <sect3><title>Output with Remarks or Draft Watermark</title>
-   <para>To If you want the output format to contain meta-data about the XML files (for example, file name or 
-  workflow status), to include <sgmltag>remark</sgmltag> elements or to be 
-  marked as a <literal>draft</literal> version, you can tell &dapsacr; to do so 
-  by specifying options on the command line.</para></sect3>
+   <sect3 id="sec.daps.quick.output.adv.review">
+    <title>Output with Remarks or Draft Watermark</title>
+    
+    <para>For publishing a pre-release version of a document that you 
+    might want to send to a proofreader for review, you can tell &dapsacr; to
+    mark the document as <literal>draft</literal> version. If you used  
+    <sgmltag>remark</sgmltag> elements in your XML files to add questions for
+    the proofreader (or for any other editorial remarks), &dapsacr; also provides
+    an option to include the remarks in the output formats.</para>
+    <!--taroth 2012-04-10: TBC-->
+   </sect3>
   </sect2>
  </sect1>
    
@@ -815,5 +843,5 @@ images/(Type)/data
             </varlistentry>
         </variablelist>-->
 
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
+ <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
 </article>
