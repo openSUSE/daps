@@ -8,7 +8,7 @@
 %entities;
 ]>
 <article lang="en" id="art.daps.quickstart">
- <?suse-quickstart columns="no" version="2" color="daps" url="daps.sourceforge.net"?>
+ <?suse-quickstart columns="no" version="2"?>
  <title>&dapsacr; Quick Start</title>
  <articleinfo>
   <author>
@@ -254,7 +254,7 @@
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
   |--<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
-     |--MAIN*.xml <co id="co.docdir.main"/>    </screen>
+     |--MAIN*.xml <co id="co.docdir.main"/></screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
@@ -307,12 +307,12 @@
    </title>
    <step>
     <para>Create a directory that you want to use as your documentation directory:</para>
-    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>    </screen>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
    </step>
    <step>
     <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
-    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>    </screen>
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></screen>
     <para>With the <option>-r</option> option, you can also set another root 
     element, such as <sgmltag>article</sgmltag>, for example.To create the default 
     directory structure with an <sgmltag>article</sgmltag> example: </para>
@@ -384,7 +384,7 @@ make: *** [validate] Error 3</screen>
    <title>Basic &dapsacr; Syntax</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>   </screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-quick color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
@@ -424,7 +424,8 @@ For example:</para>
        <para>color-pdf</para>
       </entry>
       <entry>
-       <para>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
+       <para>Creates a color PDF (without any cropmarks). Open the result in a 
+       PDF viewer.
         </para>
       </entry>
       <entry>
@@ -434,18 +435,18 @@ For example:</para>
         java memory stack.--></para>
       </entry>
      </row>
-     <row>
+     <!--<row>
       <entry>
        <para>dist</para>
       </entry>
       <entry>
-       <para>Creates a black and white PDF with cropmarks for each chapter.  Open the 
-        result in a PDF viewer.</para>
+       <para>Creates a black-and-white PDF with crop marks for each chapter. 
+       Open the result in a PDF viewer.</para>
       </entry>
       <entry>
        <para>See color-pdf</para>
       </entry>
-     </row>
+     </row>-->
      <row>
       <entry>
        <para>epub</para>
@@ -483,11 +484,10 @@ For example:</para>
      <row>
       <entry>
        <para>html-single</para>
-       <para>htmlsingle</para>
       </entry>
       <entry>
        <para>Creates a single HTML file, named after the &dc; file used 
-        to create the output. Open the generated <filename>*.html</filename> file
+       to create the output. Open the generated <filename>*.html</filename> file
         in a Web browser.</para>
       </entry>
       <entry>
@@ -501,29 +501,101 @@ For example:</para>
      </row>
      <row>
       <entry>
-       <para>Row 2, Cell 1</para>
+       <para>jsp</para>
       </entry>
       <entry>
-       <para>Row 2, Cell 2</para>
+       <para>Creates Java Server Pages (JSP files). The generated 
+       <filename>jsp</filename> subdirectory contains individual 
+       JSP files for all chapters of a book (including also preface, glossary or 
+       appendix files). They are named according to the ID of the respective 
+       root element. <remark>taroth 2012-04-10: check with fs if to mention JSP 
+       here at all</remark></para>
       </entry>
       <entry>
-       <para>Row 2, Cell 3</para>
+       <para>A JSP file is an HTML page containing a reference to Java 
+      servlets or java server side applets.</para>
       </entry>
      </row>
-         
-   <!-- 
-     jsp                    
-     man                    
-     pdf                    
-     txt, text              
-     webhelp                
-     wiki                   -->
+     <row>
+      <entry>
+       <para>man</para>
+      </entry>
+      <entry>
+       <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
+       with fs and toms (required XML structure, one file or multiple files, etc.)
+       </remark></para>
+      </entry>
+      <entry><para></para>
+      </entry>
+     </row>  
+     <row>
+      <entry>
+       <para>pdf</para>
+      </entry>
+      <entry>
+       <para>Creates a black-and-white PDF with crop marks, suitable for
+       hand-off to a printing shop. All color images are automatically converted 
+       to black-and-white <remark>taroth 2012-04-10: check with fs: greyscale???
+       </remark>images. Open the result in a PDF viewer.</para>
+      </entry>
+      <entry><para>>Requires an FO formatter.</para></entry>
+     </row>  
+     <row>
+      <entry>
+       <para>txt</para>
+      </entry>
+      <entry>
+       <para>Creates an ASCII text output. Open the result in a text editor.</para>
+      </entry>
+      <entry><para>All images are removed from the output, but their location
+      is indicated in the text by printing the respective file name in square 
+      brackets. A table of contents is automatically generated and is available
+      at the beginning of the text document.</para></entry>
+     </row>
+     <row>
+      <entry>
+       <para>txt</para>
+      </entry>
+      <entry>
+       <para>Creates an ASCII text output. Open the result in a text editor.</para>
+      </entry>
+      <entry><para>All images are removed from the output, but their location
+      is indicated in the text by the respective file name in square 
+      brackets. A table of contents is automatically generated and is available
+      at the beginning of the text document.</para></entry>
+     </row>
+      <row>
+      <entry>
+       <para>webhelp</para>
+      </entry>
+      <entry>
+       <para>Creates a DocBook &webh; output. Open the result in a Web browser.</para>
+      </entry>
+      <entry><para>Requires a very recent version of the DocBook stylesheets. 
+      DocBook WebHelp consists of HTML pages with an additional pane, featuring 
+      a table of contents and a search function. The table of contents can be 
+      expanded and collapsed and is automatically synchronized with the contents 
+      pane. The search function weights the search results so that the most 
+      relevant results are listed first.</para></entry>
+     </row>
+     <row>
+      <entry><remark>taroth 2012-04-10: check with fs and toms if to mention
+      this at all</remark>
+       <para>wiki</para>
+      </entry>
+      <entry>
+       <para>Creates a MediaWiki output in a single file.</para>
+      </entry>
+      <entry><para>The output is very basic: Section titles are converted
+      in headlines according to their hierarchy, itemized lists, ordered lists
+      and <sgmltag>screen</sgmltag> elements are converted to the respective
+      MediWiki elements. Open the result in a text or MediaWiki editor and 
+      use it as raw input for a MediaWiki article.</para></entry>
+     </row>
     </tbody>
    </tgroup>
   </table>
-  <remark>taroth 2012-03-23: todo - check with fs/toms: which formats can only be generated
-   from books (or the other way round: which formats also allow transformation of 
-   articles)?</remark>
+  
  </sect2>
  <sect2 id="sec.daps.quick.output.adv">
    <title>Advanced Output Options</title>
@@ -551,8 +623,7 @@ For example:</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3><title>Output with Remarks or Draft Watermark</title>
-   <para>&wip;</para>
-   </sect3>
+   <para>&wip;</para></sect3>
   </sect2>
  </sect1>
    
