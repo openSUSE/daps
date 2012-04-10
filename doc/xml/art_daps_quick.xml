@@ -386,11 +386,11 @@ make: *** [validate] Error 3</screen>
   you need to specify the &dclong; file to use:</para>
    <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>For example:</para>
-   <screen>$ daps -d DC-daps-quick color-pdf</screen>
+   <screen>$ daps -d DC-daps-example color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
 file is located, also specify the (absolute or relative) path to the &dc; file.
 For example:</para>
-   <screen>$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</screen>
+   <screen>$ daps -d /svn/daps/example/DC-daps-example color-pdf</screen>
    <para>At the end of the transformation process, &dapsacr; shows a message 
   where to find the generated output.</para>
   </sect2>
@@ -435,34 +435,19 @@ For example:</para>
         java memory stack.--></para>
       </entry>
      </row>
-     <!--<row>
-      <entry>
-       <para>dist</para>
-      </entry>
-      <entry>
-       <para>Creates a black-and-white PDF with crop marks for each chapter. 
-       Open the result in a PDF viewer.</para>
-      </entry>
-      <entry>
-       <para>See color-pdf</para>
-      </entry>
-     </row>-->
      <row>
       <entry>
-       <para>epub</para>
+       <para>pdf</para>
       </entry>
       <entry>
-       <para>Creates an &epub; book. Open the result in an portable e-book reader 
-        (or with  a software like Calibre).</para>
+       <para>Creates a black-and-white PDF with crop marks, suitable for
+       hand-off to a printing shop.  Open the result in a PDF viewer.</para>
       </entry>
-      <entry>
-       <para>
-        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
-        conversion of articles to epub?</remark>
-       </para>
-      </entry>
+      <entry><para>Requires an FO formatter. All color images are automatically 
+      converted to black-and-white <remark>taroth 2012-04-10: check with fs: 
+      greyscale???</remark>images.</para></entry>
      </row>
-     <row>
+      <row>
       <entry>
        <para>html</para>
       </entry>
@@ -499,60 +484,35 @@ For example:</para>
         </para>
       </entry>
      </row>
+
+     <!--<row>
+      <entry>
+       <para>dist</para>
+      </entry>
+      <entry>
+       <para>Creates a black-and-white PDF with crop marks for each chapter. 
+       Open the result in a PDF viewer.</para>
+      </entry>
+      <entry>
+       <para>See color-pdf</para>
+      </entry>
+     </row>-->
      <row>
       <entry>
-       <para>jsp</para>
+       <para>epub</para>
       </entry>
       <entry>
-       <para>Creates Java Server Pages (JSP files). The generated 
-       <filename>jsp</filename> subdirectory contains individual 
-       JSP files for all chapters of a book (including also preface, glossary or 
-       appendix files). <!--They are named according to the ID of the respective 
-       root element.--> <remark>taroth 2012-04-10: check with fs if to mention JSP 
-       here at all</remark></para>
+       <para>Creates an &epub; book. Open the result in an portable e-book reader 
+        (or with  a software like Calibre).</para>
       </entry>
       <entry>
-       <para>A JSP file is an HTML page containing a reference to Java 
-      servlets or java server side applets.</para>
+       <para>
+        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+        conversion of articles to epub?</remark>
+       </para>
       </entry>
      </row>
      <row>
-      <entry>
-       <para>man</para>
-      </entry>
-      <entry>
-       <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
-       with fs and toms (required XML structure, one file or multiple files, etc.)
-       </remark></para>
-      </entry>
-      <entry><para></para>
-      </entry>
-     </row>  
-     <row>
-      <entry>
-       <para>pdf</para>
-      </entry>
-      <entry>
-       <para>Creates a black-and-white PDF with crop marks, suitable for
-       hand-off to a printing shop.  Open the result in a PDF viewer.</para>
-      </entry>
-      <entry><para>Requires an FO formatter. All color images are automatically 
-      converted to black-and-white <remark>taroth 2012-04-10: check with fs: 
-      greyscale???</remark>images.</para></entry>
-     </row>  
-     <row>
-      <entry>
-       <para>txt</para>
-      </entry>
-      <entry>
-       <para>Creates an ASCII text output. Open the result in a text editor.</para>
-      </entry>
-      <entry><para>All images are removed from the output, but their location
-      is indicated in the text by printing the respective file name in square 
-      brackets. A table of contents is automatically generated and is available
-      at the beginning of the text document.</para></entry>
-     </row>
-      <row>
       <entry>
        <para>webhelp</para>
       </entry>
@@ -567,7 +527,50 @@ For example:</para>
       relevant results are listed first.</para></entry>
      </row>
      <row>
-      <entry><remark>taroth 2012-04-10: check with fs and toms if to mention
+      <entry>
+       <para>txt</para>
+      </entry>
+      <entry>
+       <para>Creates an ASCII text output. Open the result in a text editor.</para>
+      </entry>
+      <entry>
+       <para>All images are removed from the output, but their location
+      is indicated in the text by printing the respective file name in square 
+      brackets. A table of contents is automatically generated and is available
+      at the beginning of the text document.</para></entry>
+     </row>
+     <row>
+      <entry>
+       <para>man</para>
+      </entry>
+      <entry>
+       <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
+       with fs and toms (required XML structure, one file or multiple files, etc.)
+       </remark></para>
+      </entry>
+      <entry><para>&wip;</para>
+      </entry>
+     </row>
+     <row><remark>taroth 2012-04-10: check with fs if to mention JSP 
+       here at all</remark>
+      <entry>
+       <para>jsp</para>
+      </entry>
+      <entry>
+       <para>Creates Java Server Pages (JSP files). The generated 
+       <filename>jsp</filename> subdirectory contains individual 
+       JSP files for all chapters of a book (including also preface, glossary or 
+       appendix files). <!--They are named according to the ID of the respective 
+       root element.--> </para>
+      </entry>
+      <entry>
+       <para>A JSP file is an HTML page containing a reference to Java 
+      servlets or java server side applets.</para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <remark>taroth 2012-04-10: check with fs and toms if to mention
       this at all</remark>
        <para>wiki</para>
       </entry>
@@ -606,8 +609,8 @@ For example:</para>
     <sgmltag>part</sgmltag> to build.</para>
     <para>If you have set up your working environment with 
     <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
-    the following command will build only the chapter about the most commonly 
-    used DocBook constructs, without any book title page:</para>
+    the following command will only build the chapter about the most commonly 
+    used DocBook constructs&mdash;without any book title page:</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3><title>Output with Remarks or Draft Watermark</title>
