@@ -185,7 +185,7 @@
   <sect2 id="sec.daps.quick.inst.formatter">
    <title>Installing and Configuring the FO Formatter</title>
    <para>For installation and configuration of an FO formatter (for generating 
-   PDF output), refer to the installation instructions of the product or your 
+   PDF output), refer to the installation instructions of the product or to your 
    system administrator. For FOP, you usually only need to install the 
    respective FOP package. However, not all FOP packages contain hyphenation 
    pattern files. <remark>taroth 2012-03-26: todo - mention download from 
@@ -469,7 +469,7 @@ For example:</para>
       <entry>
        <para>Creates a subdirectory containing individual HTML files for 
         all chapters of a book (including also preface, glossary or appendix files).
-        They are named according to the ID of the respective root element.  
+        <!--They are named according to the ID of the respective root element.-->  
         Open the generated <filename>index.html</filename> file in a Web browser 
         to view the generated HTML from the starting point (ROOTID of the top-level
         element).</para>
@@ -507,8 +507,8 @@ For example:</para>
        <para>Creates Java Server Pages (JSP files). The generated 
        <filename>jsp</filename> subdirectory contains individual 
        JSP files for all chapters of a book (including also preface, glossary or 
-       appendix files). They are named according to the ID of the respective 
-       root element. <remark>taroth 2012-04-10: check with fs if to mention JSP 
+       appendix files). <!--They are named according to the ID of the respective 
+       root element.--> <remark>taroth 2012-04-10: check with fs if to mention JSP 
        here at all</remark></para>
       </entry>
       <entry>
@@ -534,11 +534,11 @@ For example:</para>
       </entry>
       <entry>
        <para>Creates a black-and-white PDF with crop marks, suitable for
-       hand-off to a printing shop. All color images are automatically converted 
-       to black-and-white <remark>taroth 2012-04-10: check with fs: greyscale???
-       </remark>images. Open the result in a PDF viewer.</para>
+       hand-off to a printing shop.  Open the result in a PDF viewer.</para>
       </entry>
-      <entry><para>>Requires an FO formatter.</para></entry>
+      <entry><para>Requires an FO formatter. All color images are automatically 
+      converted to black-and-white <remark>taroth 2012-04-10: check with fs: 
+      greyscale???</remark>images.</para></entry>
      </row>  
      <row>
       <entry>
@@ -549,18 +549,6 @@ For example:</para>
       </entry>
       <entry><para>All images are removed from the output, but their location
       is indicated in the text by printing the respective file name in square 
-      brackets. A table of contents is automatically generated and is available
-      at the beginning of the text document.</para></entry>
-     </row>
-     <row>
-      <entry>
-       <para>txt</para>
-      </entry>
-      <entry>
-       <para>Creates an ASCII text output. Open the result in a text editor.</para>
-      </entry>
-      <entry><para>All images are removed from the output, but their location
-      is indicated in the text by the respective file name in square 
       brackets. A table of contents is automatically generated and is available
       at the beginning of the text document.</para></entry>
      </row>
@@ -584,13 +572,13 @@ For example:</para>
        <para>wiki</para>
       </entry>
       <entry>
-       <para>Creates a MediaWiki output in a single file.</para>
+       <para>Creates a MediaWiki output in a single file. Open the result in a 
+       text or MediaWiki editor, and use it as raw input for a MediaWiki article.</para>
       </entry>
       <entry><para>The output is very basic: Section titles are converted
       in headlines according to their hierarchy, itemized lists, ordered lists
       and <sgmltag>screen</sgmltag> elements are converted to the respective
-      MediWiki elements. Open the result in a text or MediaWiki editor and 
-      use it as raw input for a MediaWiki article.</para></entry>
+      MediWiki elements. </para></entry>
      </row>
     </tbody>
    </tgroup>
