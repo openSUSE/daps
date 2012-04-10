@@ -346,6 +346,46 @@
   <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
  </sect1>
  <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
+ <sect1><title>Basic &dapsacr; Syntax</title>
+ <para>&dapsacr; is a command-line tool. Before introducing you to the key 
+ <command>daps</command> commands to create output formats from your 
+ XML documents, let's get familiar with the basic <command>daps</command> 
+ syntax:</para>
+ <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
+ <para><xref linkend="ex.daps.syntax"/> shows an example <command>daps</command> 
+ command that generates a HTML output. Global options are used to specify the 
+ level of verbosity, and the &dclong; file to be used for creating the 
+ output.</para>
+ 
+ <example id="ex.daps.syntax"><title>&dapsacr; Syntax </title>
+ <screen>daps -vv<co id="co.daps.syntax.vv"/> \
+  -d DC-daps-example<co id="co.daps.syntax.dc"/> \
+  html --static<co id="co.daps.syntax.output"/></screen>
+ <calloutlist>
+  <callout arearefs="co.daps.syntax.vv">
+   <para>Global Option <option>-vv</option>: Sets the highest verbosity level 
+   (number of messages shown during the transformation process from XML to HTML). 
+   In this case, debug messages are shown.</para>
+  </callout>
+  <callout arearefs="co.daps.syntax.dc">
+   <para>Global Option <option>-d</option>: Defines the &dclong; file.</para>
+  </callout>
+  <callout arearefs="co.daps.syntax.output">
+   <para>Subcommand <command>html</command>: Defines the output format to create. 
+   The command option <option>--static</option> tells &dapsacr; to copy CSS and
+   image files to the same location like the HTML files. For more information, 
+   see <xref linkend="table.daps.output.overview"/>.</para>
+  </callout>
+ </calloutlist></example>
+ <para>Generally, &dapsacr; can be executed with or without options. To view 
+ the global options and the available subcommands, use the command: </para>
+<screen>$ daps -h</screen>
+<para>For a short help text on a specific <emphasis>subcommand</emphasis>, use:</para>
+<screen>$ daps <replaceable>subcommand</replaceable> -h</screen>
+<para>For example, if you want more information about generating HTML output, run:</para> 
+<screen>$ daps html -h</screen>
+<para>The following section introduces the key <command>daps</command> commands
+you need to create output formats from your XML files.</para></sect1>
  <sect1 id="sec.daps.quick.output">
   <title>Output Formats</title>
   <para>&dapsacr; supports a number of different output formats,
@@ -397,7 +437,7 @@ For example:</para>
   <title>Generating Different Output Formats</title>
   <para>The following table gives an overview of the &dapsacr; subcommands for 
    generating output formats.</para>
-  <table>
+  <table id="table.daps.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
    <tgroup cols="3">
     <colspec colnum="1" colname="1" colwidth="20*"/>
@@ -533,9 +573,9 @@ For example:</para>
       </entry>
       <entry>
        <para>All images are removed from the output, but their location
-      is indicated in the text by printing the respective file name in square 
-      brackets. A table of contents is automatically generated and is available
-      at the beginning of the text document.</para></entry>
+      is indicated in the text by printing the respective image base name in 
+      square brackets. A table of contents is automatically generated and is 
+      available at the beginning of the text document.</para></entry>
      </row>
      <row>
       <entry>
@@ -549,10 +589,10 @@ For example:</para>
       <entry><para>&wip;</para>
       </entry>
      </row>
-     <row><remark>taroth 2012-04-10: check with fs if to mention JSP 
-       here at all</remark>
+     <row>
       <entry>
-       <para>jsp</para>
+       <para>jsp <remark>taroth 2012-04-10: check with fs if to mention JSP 
+       here at all</remark></para>
       </entry>
       <entry>
        <para>Creates Java Server Pages (JSP files). The generated 
@@ -608,47 +648,18 @@ For example:</para>
     <para>If you have set up your working environment with 
     <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
     the following command will only build the chapter about the most commonly 
-    used DocBook constructs&mdash;without any book title page:</para>
+    used DocBook constructs&mdash;without the book's title page:</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3><title>Output with Remarks or Draft Watermark</title>
-   <para>By default, &dapsacr; excludes </para></sect3>
+   <para>To If you want the output format to contain meta-data about the XML files (for example, file name or 
+  workflow status), to include <sgmltag>remark</sgmltag> elements or to be 
+  marked as a <literal>draft</literal> version, you can tell &dapsacr; to do so 
+  by specifying options on the command line.</para></sect3>
   </sect2>
  </sect1>
    
-<!--<sect1>
- <title>Advanced usage of &daps;</title>
- <para>In the following you will learn the advanced usage of &daps; and you will see the explanation of the syntax.</para>
- <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
- <para>For example:</para>
- <screen>daps -vv<co id="co.daps.vv"/> \
-  -e ENV_DATA<co id="co.daps.env"/> \
-  html<co id="co.daps.html"/>
-  </screen>
- <calloutlist>
-  <callout arearefs="co.daps.vv">
-   <para>Global Option = -vv (verbose print more debug messages)</para>
-  </callout>
-  <callout arearefs="co.daps.env">
-   <para>Global Option = -e (defines the ENV file)</para>
-  </callout>
-  <callout arearefs="co.daps.html">
-   <para>Subcommand = html (what to create)</para>
-  </callout>
- </calloutlist>
- <para>DAPS can be executed with or without options, depending on the project.</para>
- <para>If the directory contains only one ENV file:</para>
- <screen>daps "subcommand"</screen>
- <para>If the directory contains more than one ENV-Data</para>
- <screen>$ daps -e ENV-YOUR-DATA "subcommand"</screen>
- <para>Setup ENV-Data</para>
- <screen>$ source ENV-YOUR-DATA</screen>
- <screen>$ daps "subcommand"</screen>
- <para>Over configuration data <filename>~/.daps/conf</filename>:</para>
- <screen>DAPS_ENV_DEFAULT=ENV_YOUR_DATA</screen>
- <remark>Sascha Manns: Vielleicht FOPTYPE einbauen.</remark>
- <remark>Sonst klasse gemacht :-)</remark>
-</sect1>-->
+
   
    <!-- <sect1>
    <title>Migration of Existing Projects</title>
