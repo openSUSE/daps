@@ -241,23 +241,18 @@
    outlined below.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen>
-     <replaceable>YOUR_DOC_DIR</replaceable>
-     <co id="co.docdir.base"/>
-  |--&dc;* <co id="co.docdir.dc"/>
-  |--<emphasis role="bold">images</emphasis>
-     <co id="co.docdir.img"/> 
-     |--<emphasis role="bold">src</emphasis>
-     <co id="co.docdir.img.src"/>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable><co id="co.docdir.base"/>
+  |--&dc;*<co id="co.docdir.dc"/>
+  |--<emphasis role="bold">images</emphasis><co id="co.docdir.img"/> 
+     |--<emphasis role="bold">src</emphasis><co id="co.docdir.img.src"/>
         |--<emphasis role="bold">dia</emphasis>
         |--<emphasis role="bold">eps</emphasis>
         |--<emphasis role="bold">fig</emphasis>
         |--<emphasis role="bold">pdf</emphasis>
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
-  |--<emphasis role="bold">xml</emphasis>
-     <co id="co.docdir.xml"/> 
-     |--MAIN*.xml <co id="co.docdir.main"/></screen>
+  |--<emphasis role="bold">xml</emphasis><co id="co.docdir.xml"/> 
+     |--MAIN*.xml<co id="co.docdir.main"/></screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
@@ -366,9 +361,7 @@
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax </title>
-   <screen>daps -vv<co id="co.daps.syntax.vv"/> \
-  -d DC-daps-example<co id="co.daps.syntax.dc"/> \
-  html --static<co id="co.daps.syntax.output"/></screen>
+   <screen>daps -vv<co id="co.daps.syntax.vv"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/></screen>
    <calloutlist>
     <callout arearefs="co.daps.syntax.vv">
      <para>Global Option <option>-vv</option>: Sets the highest verbosity level 
@@ -380,10 +373,12 @@
     </callout>
     <callout arearefs="co.daps.syntax.output">
      <para>Subcommand <command>html</command>: Defines the output format to create. 
-   The command option <option>--static</option> tells &dapsacr; to copy CSS and
-   image files to the same location like the HTML files. For more information, 
-   see <xref linkend="table.daps.output.overview"/>.</para>
+   </para>
     </callout>
+    <callout arearefs="co.daps.syntax.static"><para>Command option 
+    <option>--static</option>: Tells &dapsacr; to copy CSS and image files to 
+    the same location like the HTML files. For more information, 
+   see <xref linkend="table.daps.output.overview"/>.</para></callout>
    </calloutlist>
   </example>
   <para>Generally, &dapsacr; can be executed with or without options. To view 
