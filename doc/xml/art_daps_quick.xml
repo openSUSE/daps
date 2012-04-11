@@ -12,12 +12,12 @@
  <title>&dapsacr; Quick Start</title>
  <articleinfo>
   <author>
-   <firstname>Christopher-Julian</firstname>
-   <surname>Zwickl</surname>
-  </author>
-  <author>
    <firstname>Tanja</firstname>
    <surname>Roth</surname>
+  </author>
+  <author>
+   <firstname>Christopher-Julian</firstname>
+   <surname>Zwickl</surname>
   </author>
  </articleinfo>
  <abstract>
@@ -674,25 +674,42 @@ For example:</para>
     or <sgmltag>article</sgmltag> and is referenced in the &dc; file. 
     Alternatively, specify a ROOTID on the command line by using the 
     <option>--rootid</option> option. This also allows you to build only a part 
-    of your documentation project (like an individual chapter or part). To do so, 
-    specify the ID of the respective <sgmltag>chapter</sgmltag> or 
-    <sgmltag>part</sgmltag> to build.</para>
-    <para>If you have set up your working environment with 
+    of your documentation project (like an individual chapter or part) by 
+    using the ID of the <sgmltag>chapter</sgmltag> or <sgmltag></sgmltag> element.</para>
+    <para>For example, if you have set up your working environment with 
     <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
-    the following command will only build the chapter about the most commonly 
-    used DocBook constructs&mdash;without the book's title page:</para>
+    use the following command to build the chapter about the most commonly 
+    used DocBook construct (without the book's title page):</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3 id="sec.daps.quick.output.adv.review">
     <title>Output with Remarks or Draft Watermark</title>
-    
     <para>For publishing a pre-release version of a document that you 
-    might want to send to a proofreader for review, you can tell &dapsacr; to
-    mark the document as <literal>draft</literal> version. If you used  
-    <sgmltag>remark</sgmltag> elements in your XML files to add questions for
-    the proofreader (or for any other editorial remarks), &dapsacr; also provides
-    an option to include the remarks in the output formats.</para>
-    <!--taroth 2012-04-10: TBC-->
+    might want to send to a proofreader for review, use the <option>-d</option> 
+    option to mark the document as <literal>DRAFT</literal> version.</para>
+    <para>For example, if you have set up your working environment with 
+    <command>daps-init</command>, use the following command to build a color PDF
+    that has a <literal>DRAFT</literal> watermark printed on each page:</para>
+    <screen>$ daps -d DC-daps-example color-pdf -d</screen>
+   
+    <para>If you used  <sgmltag>remark</sgmltag> elements in your XML files (for 
+    editorial remarks or questions to the proofreader), include the remarks 
+    in the output with the <option>-r</option> option:</para>
+    <screen>$ daps -d DC-daps-example color-pdf -r</screen>
+    <para>By default, the content of remark elements is shown in red color in 
+    the output format.</para>
+    <para>Of course, you can also combine both option to create output including
+    remarks and a draft watermark:</para>
+    <screen>$ daps -d DC-daps-example color-pdf -rd</screen>
+    <note>
+     <title>Output with Remarks or Draft Watermark</title>
+     <para>The command options <option>-d</option> option and <option>-r </option>
+     are supported for HTML and PDF, but not for all &dapsacr; output formats.</para>
+    </note> 
+    <para>By default, &dapsacr; adds a string to the base name of the output 
+    file to flag output formats generated with special options. Example file names
+    are <filename>daps-example_draft_en.pdf</filename> or 
+    <filename>daps-example_remarks_draft_en.pdf</filename>.</para>
    </sect3>
   </sect2>
  </sect1>
