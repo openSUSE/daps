@@ -61,7 +61,7 @@
   
   <xsl:if test="$generate.permalink != '0'">
   <span class="permalink">
-      <a alt="Permalink" title="Copy Permalink">
+      <a title="Copy Permalink">
         <!--<xsl:call-template name="generate.html.title"/>--> 
         <xsl:attribute name="href">
           <xsl:text>#</xsl:text>
