@@ -357,7 +357,7 @@
  <command>daps</command> commands to create output formats from your 
  XML documents, let's get familiar with the basic <command>daps</command> 
  syntax:</para>
-  <screen>$ daps [-/-global-options] "subcommand" [-/-command-options] [arguments]</screen>
+  <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
   <para>
    <xref linkend="ex.daps.syntax"/> shows an example <command>daps</command> 
  command that generates a HTML output. Global options are used to specify the 
@@ -598,13 +598,23 @@ For example:</para>
         <para>man</para>
        </entry>
        <entry>
-        <para>&wip;<remark>taroth 2012-04-10: check the requirements for man pages
-       with fs and toms (required XML structure, one file or multiple files, etc.)
-       </remark>
+        <para>Creates one or multiple man pages.
         </para>
        </entry>
        <entry>
-        <para>&wip;</para>
+        <para>To create man pages, your XML files must contain at least one 
+        <sgmltag>refentry</sgmltag> or <sgmltag>reference</sgmltag> element. 
+        When processing a DocBook document with <sgmltag>refentry</sgmltag> 
+        elements, &dapsacr; generates one man page file per 
+        <sgmltag>refentry</sgmltag> element. All other parts of the document will
+        be ignored.
+        </para>
+        <!--taroth 2012-04-11: additional information to be covered in User Guide:
+        The filename for each man page is generated from refentry content elements. 
+        The filename prefix is the refname, and the suffix is the manvolnum from 
+        within the refmeta element. If you are processing many refentrys from the
+        same document, make sure they will all produce unique filenames, or else
+        any duplicates will overwrite each other.-->
        </entry>
       </row>
       <row>
