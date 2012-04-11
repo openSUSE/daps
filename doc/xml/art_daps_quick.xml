@@ -345,15 +345,25 @@
   </procedure>
   <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
  </sect1>
- <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
+ <sect1 id="sec.daps.quick.edit">
+  <title>Editing and Image Handling</title>
+   <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
+   for example), the source images you provide and reference in your XML sources 
+   are automatically transformed into the appropriate output formats. This section 
+   describes the basic things you need to know for using images (supported formats, 
+   where to store the images in your documentation directory, and how to 
+   reference them).</para>
+   <para><!--taroth 2012-04-11: to be continued: img formats, location,
+   references--></para>
+ </sect1>
+ 
  <sect1 id="sec.daps.quick.syntax">
   <title>Basic &dapsacr; Syntax</title>
   <para>Before introducing the key <command>daps</command> commands to create 
-  output formats from yourXML documents, let's get familiar with the basic syntax
+  output formats from your XML documents, let's get familiar with the basic syntax
   of the <command>daps</command> command:</para>
   <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-  <para>
-   <xref linkend="ex.daps.syntax"/> shows an example command that generates 
+  <para><xref linkend="ex.daps.syntax"/> shows an example command that generates 
    HTML output. Global options are used to specify the level of verbosity, and 
    the &dclong; file for creating the output.</para>
 
