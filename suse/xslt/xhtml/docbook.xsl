@@ -14,6 +14,7 @@
 <xsl:include href="../profiling/suse-pi.xsl"/>
 
 <xsl:include href="lists.xsl"/>
+<xsl:include href="callout.xsl"/>
 <xsl:include href="xref.xsl" />
 <xsl:include href="formal.xsl"/>
 <xsl:include href="sections.xsl"/>
@@ -22,6 +23,7 @@
 <xsl:include href="component.xsl"/>
 <xsl:include href="synop.xsl"/>
 <xsl:include href="../common/l10n.xsl"/>
+<xsl:include href="html.xsl"/>
 <xsl:include href="admon.xsl"/>
 
 <!-- Overwrite with our own implementation -->
