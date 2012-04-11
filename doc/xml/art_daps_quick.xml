@@ -348,16 +348,14 @@
  <!--taroth 2012-03-22: add short section about editing and basic image handling???-->
  <sect1 id="sec.daps.quick.syntax">
   <title>Basic &dapsacr; Syntax</title>
-  <para>&dapsacr; is a command-line tool. Before introducing you to the key 
- <command>daps</command> commands to create output formats from your 
- XML documents, let's get familiar with the basic <command>daps</command> 
- syntax:</para>
+  <para>Before introducing the key <command>daps</command> commands to create 
+  output formats from yourXML documents, let's get familiar with the basic syntax
+  of the <command>daps</command> command:</para>
   <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
   <para>
-   <xref linkend="ex.daps.syntax"/> shows an example <command>daps</command> 
- command that generates a HTML output. Global options are used to specify the 
- level of verbosity, and the &dclong; file to be used for creating the 
- output.</para>
+   <xref linkend="ex.daps.syntax"/> shows an example command that generates 
+   HTML output. Global options are used to specify the level of verbosity, and 
+   the &dclong; file for creating the output.</para>
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax </title>
@@ -389,7 +387,10 @@
   <para>For example, if you want more information about generating HTML output, run:</para>
   <screen>$ daps html -h</screen>
   <para>The following section introduces the key <command>daps</command> commands
-you need to create output formats from your XML files.</para>
+ needed to create output formats from XML files. All examples are based
+ on the example files that are provided by the &dapsacr; initialization script. 
+ For more information, refer to <xref linkend="sec.daps.quick.init"/>.
+  </para>
  </sect1>
  <sect1 id="sec.daps.quick.output">
   <title>Output Formats</title>
@@ -416,8 +417,8 @@ you need to create output formats from your XML files.</para>
   total number of errors.</para>
    <example>
     <title>Parser Output For Validation Errors</title>
-    <screen>daps_user_concept.xml:60: element xref: validity error : 
-    IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+    <screen>daps_user_concept.xml:60: element xref: validity error: 
+IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
@@ -427,8 +428,7 @@ make: *** [validate] Error 3</screen>
    <title>Basic Syntax for Generating Output</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable>
-    <replaceable>OUTPUT_FORMAT</replaceable></screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-example color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
@@ -633,9 +633,8 @@ For example:</para>
       </row>
       <row>
        <entry>
-        <remark>taroth 2012-04-10: check with fs and toms if to mention
-      this at all</remark>
-        <para>wiki</para>
+        <para>wiki <remark>taroth 2012-04-10: check with fs and toms if to mention
+      this at all</remark></para>
        </entry>
        <entry>
         <para>Creates a MediaWiki output in a single file. Open the result in a 
@@ -669,12 +668,12 @@ For example:</para>
     or <sgmltag>article</sgmltag> and is referenced in the &dc; file. 
     Alternatively, specify a ROOTID on the command line by using the 
     <option>--rootid</option> option. This also allows you to build only a part 
-    of your documentation project (like an individual chapter or part) by 
-    using the ID of the <sgmltag>chapter</sgmltag> or <sgmltag></sgmltag> element.</para>
+    of your documentation project by using the ID of the <sgmltag>chapter</sgmltag> 
+    or <sgmltag>part</sgmltag> element.</para>
     <para>For example, if you have set up your working environment with 
     <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
-    use the following command to build the chapter about the most commonly 
-    used DocBook construct (without the book's title page):</para>
+    use the following command to build the first chapter of the book 
+    (without the book's title page, table of contents etc.):</para>
     <screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3 id="sec.daps.quick.output.adv.review">
@@ -682,8 +681,7 @@ For example:</para>
     <para>For publishing a pre-release version of a document that you 
     might want to send to a proofreader for review, use the <option>-d</option> 
     option to mark the document as <literal>DRAFT</literal> version.</para>
-    <para>For example, if you have set up your working environment with 
-    <command>daps-init</command>, use the following command to build a color PDF
+    <para>For example, use the following command to build a color PDF
     that has a <literal>DRAFT</literal> watermark printed on each page:</para>
     <screen>$ daps -d DC-daps-example color-pdf -d</screen>
    
