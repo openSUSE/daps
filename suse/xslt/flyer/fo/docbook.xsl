@@ -30,7 +30,7 @@
  <xsl:include href="sections.xsl"/> 
  <xsl:include href="inline.xsl"/>
  <xsl:include href="synop.xsl"/>
- 
+ <xsl:include href="verbatim.xsl"/>
  <xsl:include href="footer.xsl"/>
  <xsl:include href="header.xsl"/>
  
