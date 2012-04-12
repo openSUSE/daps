@@ -22,7 +22,14 @@
       <xsl:with-param name="attribute" select="'font-size'"/>
     </xsl:call-template>
   </xsl:variable>
-
+  <xsl:variable name="keep-together">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis"
+                      select="(processing-instruction('dbsuse-fo') |
+                              ../processing-instruction('dbsuse-fo')[parent::example])[last()]"/>
+      <xsl:with-param name="attribute" select="'keep-together'"/>
+    </xsl:call-template>
+  </xsl:variable>
   <xsl:variable name="content">
     <xsl:choose>
       <xsl:when test="$suppress-numbers = '0'
@@ -41,7 +48,10 @@
     </xsl:choose>
   </xsl:variable>
 
-  
+  <!--<xsl:message>programlisting|screen|synopsis
+     pi="<xsl:value-of select="$pi"/>"
+     keep-together="<xsl:value-of select="$keep-together"/>"
+  </xsl:message>-->
   <xsl:choose>
     <xsl:when test="$shade.verbatim != 0">
       <fo:block id="{$id}"
@@ -53,6 +63,9 @@
           <xsl:attribute name="font-size">
             <xsl:value-of select="$pi"/>
           </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$keep-together = 'yes'">
+           <xsl:attribute name="keep-together">always</xsl:attribute>
         </xsl:if>
 
         <xsl:choose>
@@ -75,6 +88,9 @@
           <xsl:attribute name="font-size">
             <xsl:value-of select="$pi"/>
           </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$keep-together = 'yes'">
+           <xsl:attribute name="keep-together">always</xsl:attribute>
         </xsl:if>
         <xsl:choose>
           <xsl:when test="$hyphenate.verbatim != 0 and function-available('exsl:node-set')">
