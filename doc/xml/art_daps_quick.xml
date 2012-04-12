@@ -241,18 +241,24 @@
    outlined below.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen><?dbfo keep-together="always"?><replaceable>YOUR_DOC_DIR</replaceable><co id="co.docdir.base"/>
+    <screen>
+     <replaceable>YOUR_DOC_DIR</replaceable>
+     <co id="co.docdir.base"/>
   |--&dc;*<co id="co.docdir.dc"/>
-  |--<emphasis role="bold">images</emphasis><co id="co.docdir.img"/> 
-     |--<emphasis role="bold">src</emphasis><co id="co.docdir.img.src"/>
+  |--<emphasis role="bold">images</emphasis>
+     <co id="co.docdir.img"/> 
+     |--<emphasis role="bold">src</emphasis>
+     <co id="co.docdir.img.src"/>
         |--<emphasis role="bold">dia</emphasis>
         |--<emphasis role="bold">eps</emphasis>
         |--<emphasis role="bold">fig</emphasis>
         |--<emphasis role="bold">pdf</emphasis>
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
-  |--<emphasis role="bold">xml</emphasis><co id="co.docdir.xml"/> 
-     |--MAIN*.xml<co id="co.docdir.main"/></screen>
+  |--<emphasis role="bold">xml</emphasis>
+     <co id="co.docdir.xml"/> 
+     |--MAIN*.xml<co id="co.docdir.main"/>
+    </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
@@ -305,12 +311,14 @@
    </title>
    <step>
     <para>Create a directory that you want to use as your documentation directory:</para>
-    <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>
+    </screen>
    </step>
    <step>
     <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
-    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></screen>
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>
+    </screen>
     <para>With the <option>-r</option> option, you can also set another root 
     element, such as <sgmltag>article</sgmltag>, for example.To create the default 
     directory structure with an <sgmltag>article</sgmltag> example: </para>
@@ -346,7 +354,7 @@
   <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
  </sect1>
  <sect1 id="sec.daps.quick.edit">
- <title>Editing DocBook XML Files</title>
+  <title>Editing DocBook XML Files</title>
   <para>As &dapsacr; does not include any editor software, you are 
   completely free in the choice of your XML editor. Basically, you can use
   any text editor, but it is helpful if the editor supports editing XML 
@@ -370,61 +378,58 @@
   <command>daps-init</command>, you can explore the example documents that are
   installed within the directory structure. They show the most commonly used 
   DocBook XML constructs. For a complete DocBook reference
-  see <citetitle>&tdg;</citetitle>. It is available at <ulink
-  url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
+  see <citetitle>&tdg;</citetitle>. It is available at <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
   </para>
  </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
-   <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
+  <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
    for example), the source images you provide and reference in your XML sources 
    are automatically transformed into the appropriate output formats. This section 
    describes the basic things you need to know for using images (supported formats, 
    where to store the images in your documentation directory, and how to 
    reference them).</para>
-   <sect2 id="sec.daps.quick.imgs.types">
-  <title>Supported Image Types</title> 
+  <sect2 id="sec.daps.quick.imgs.types">
+   <title>Supported Image Types</title> 
   &daps-img-formats;
   </sect2>
   <sect2 id="sec.daps.quick.imgs.path">
-  <title>Location of the Images</title>
-  <para>&dapsacr; requires a certain directory structure for your XML sources 
+   <title>Location of the Images</title>
+   <para>&dapsacr; requires a certain directory structure for your XML sources 
    and for your images that you want to reference there. For details, refer to 
   <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Depending on 
   the file type of your source images, add them to the respective subdirectories 
   in <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
   </para>
-  <important>
-   <title>Unique Image Names</title>
-   <para>The base names of your images need to be unique throughout the image 
+   <important>
+    <title>Unique Image Names</title>
+    <para>The base names of your images need to be unique throughout the image 
    subdirectories. For example, using <filename>images/svg/AAA.svg</filename> and 
    <filename>images/svg/AAA.png</filename> will not work.
    <remark>taroth 2012-03-19: check with fs what happens in this case</remark> 
    The name in front of the file extension needs to be different, for example:
    <filename>images/svg/AAA.svn</filename> and 
    <filename>images/svg/BBB.png</filename>. </para>
-  </important>
+   </important>
   </sect2>
- 
- <sect2 id="sec.daps.quick.imgs.refer">
-  <title>Referencing Images</title>
-  <para>Provided your images are located in the required default directory, 
+
+  <sect2 id="sec.daps.quick.imgs.refer">
+   <title>Referencing Images</title>
+   <para>Provided your images are located in the required default directory, 
    &dapsacr; automatically finds the path to your images. Therefore referencing 
    images in your XML sources is very straightforward: you do not need
    to include any path in the <sgmltag class="attribute">fileref</sgmltag> 
    attribute&mdash;the file name is enough. </para>
-  <para>Furthermore DocBook allows you to insert more than one image to
+   <para>Furthermore DocBook allows you to insert more than one image to
    distinguish between different target formats. For example, you can
    add two images pointing to the same file, but with different widths.
    Use the <sgmltag class="attribute">role</sgmltag> attribute and add
-   the name of the target format (<sgmltag
-      class="attvalue">fo</sgmltag>, <sgmltag
-      class="attvalue">html</sgmltag>, etc.)
+   the name of the target format (<sgmltag class="attvalue">fo</sgmltag>, <sgmltag class="attvalue">html</sgmltag>, etc.)
    See <xref linkend="ex.xml.img.ref"/>.
   </para>
-  <example id="ex.xml.img.ref">
-   <title>Image Reference in an XML File</title>
-   <screen>&lt;figure&gt;
+   <example id="ex.xml.img.ref">
+    <title>Image Reference in an XML File</title>
+    <screen>&lt;figure&gt;
   &lt;title&gt;Main Window&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject role="fo"&gt;
@@ -435,23 +440,25 @@
     &lt;/imageobject&gt;
   &lt;/mediaobject&gt;
 &lt;/figure&gt;</screen>
-  </example>
+   </example>
   </sect2>
  </sect1>
- 
+
  <sect1 id="sec.daps.quick.syntax">
   <title>Basic &dapsacr; Syntax</title>
   <para>Before introducing the key <command>daps</command> commands to create 
   output formats from your XML documents, let's get familiar with the basic syntax
   of the <command>daps</command> command:</para>
   <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
-  <para><xref linkend="ex.daps.syntax"/> shows an example command that generates 
+  <para>
+   <xref linkend="ex.daps.syntax"/> shows an example command that generates 
    HTML output. Global options are used to specify the level of verbosity, and 
    the &dclong; file for creating the output.</para>
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax </title>
-   <screen>daps -vv<co id="co.daps.syntax.vv"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/></screen>
+   <screen>daps -vv<co id="co.daps.syntax.vv"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
+   </screen>
    <calloutlist>
     <callout arearefs="co.daps.syntax.vv">
      <para>Global Option <option>-vv</option>: Sets the highest verbosity level 
@@ -465,10 +472,12 @@
      <para>Subcommand <command>html</command>: Defines the output format to create. 
    </para>
     </callout>
-    <callout arearefs="co.daps.syntax.static"><para>Command option 
+    <callout arearefs="co.daps.syntax.static">
+     <para>Command option 
     <option>--static</option>: Tells &dapsacr; to copy CSS and image files to 
     the same location like the HTML files. For more information, 
-   see <xref linkend="table.daps.output.overview"/>.</para></callout>
+   see <xref linkend="table.daps.output.overview"/>.</para>
+    </callout>
    </calloutlist>
   </example>
   <para>Generally, &dapsacr; can be executed with or without options. To view 
@@ -520,7 +529,9 @@ make: *** [validate] Error 3</screen>
    <title>Basic Syntax for Generating Output</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable>
+    <replaceable>OUTPUT_FORMAT</replaceable>
+   </screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-example color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
@@ -726,7 +737,8 @@ For example:</para>
       <row>
        <entry>
         <para>wiki <remark>taroth 2012-04-10: check with fs and toms if to mention
-      this at all</remark></para>
+      this at all</remark>
+        </para>
        </entry>
        <entry>
         <para>Creates a MediaWiki output in a single file. Open the result in a 
@@ -776,7 +788,7 @@ For example:</para>
     <para>For example, use the following command to build a color PDF
     that has a <literal>DRAFT</literal> watermark printed on each page:</para>
     <screen>$ daps -d DC-daps-example color-pdf -d</screen>
-   
+
     <para>If you used  <sgmltag>remark</sgmltag> elements in your XML files (for 
     editorial remarks or questions to the proofreader), include the remarks 
     in the output with the <option>-r</option> option:</para>
@@ -790,7 +802,7 @@ For example:</para>
      <title>Output with Remarks or Draft Watermark</title>
      <para>The command options <option>-d</option> option and <option>-r </option>
      are supported for HTML and PDF, but not for all &dapsacr; output formats.</para>
-    </note> 
+    </note>
     <para>By default, &dapsacr; adds a string to the base name of the output 
     file to flag output formats generated with special options. Example file names
     are <filename>daps-example_draft_en.pdf</filename> or 
@@ -798,8 +810,63 @@ For example:</para>
    </sect3>
   </sect2>
  </sect1>
-   
-
+ <sect1 id="sec.daps.quick.migrate">
+  <title>Migration of Existing DocBook Projects</title>
+  <para>This section gives an overview which requirements you need to fulfill
+   if you want to migrate existing DocBook projects so that you can use &dapsacr;
+   for managing and publishing them.
+   </para>
+  <procedure id="pro.daps.quick.migrate">
+   <title>Migrating DocBook Projects</title>
+   <step>
+    <para>If your XML files are distributed across several subdirectories, flatten the hierarchy and put all XML files 
+      directly into the <filename>xml</filename> subdirectory that is required by 
+      &dapsacr;. See <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>.
+      Hosting multiple documentation projects in the same <filename>xml</filename>
+      directory is fine as long as the file names are unique. You can put
+      multiple Main files there.<remark>taroth 2012-04-12: check again: 
+      how about IDs? does &dapsacr; only care about the same IDs used multiply 
+      if the files belong to the same set? or would the same IDs in multiple 
+      files conflict anyway?</remark>
+    </para>
+   </step>
+   <step>
+    <para>If you have any XIncludes or entity declaration files, also
+    put them into the  <filename>xml</filename> subdirectory.</para>
+   </step>
+   <step>
+    <para>Depending on the file type of your source images, add them to the 
+    respective subdirectories in 
+    <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>. 
+    The <filename>image</filename> directory and its substructure is required
+    by &dapsacr;. For details, refer to  <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>.</para>
+   </step>
+   <step>
+    <para>Make sure that the base names of your image files are unique. For details,
+   refer to <xref linkend="sec.daps.quick.imgs.path"/>.</para>
+   </step>
+   <step>
+    <para>Adjust all references of image files, Xincludes, and entity declarations, 
+    in the existing XML files to match the structure required by &dapsacr;. 
+    The references must not include any absolute or relative path, the plain file name is 
+    enough. <remark>taroth 2012-04-12: maybe add examples for image names, 
+    Xincludes and entity-decl? see commented section below</remark>
+    </para>
+   </step>
+   <step>
+    <para>For each deliverable (book, article, set) that you want to 
+   generate from your XML files, create a &dclong; file. For more information, 
+   refer to <xref linkend="sec.daps.quick.basics.files"/>. Find a template for
+   &dc; files in your installed system in 
+   <filename>/usr/share/daps/init_templates/DC-file.template</filename>.
+  </para>
+   </step>
+  </procedure>
+ </sect1>
+ <!--<sect1 id="sec.daps.quick.trouble">
+  <title>Troubleshooting</title>
+  <para></para>
+ </sect1>-->
   
    <!-- <sect1>
    <title>Migration of Existing Projects</title>
