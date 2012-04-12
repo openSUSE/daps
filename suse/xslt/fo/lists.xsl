@@ -5,6 +5,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
+<xsl:include href="formal.object.heading.xsl"/>
 
 <xsl:template match="itemizedlist">
   <xsl:variable name="id">
@@ -291,59 +292,6 @@
 
 
 <!-- **************************************** -->
-
-<xsl:template match="procedure|table|figure|example" mode="object.title.markup">
-  <xsl:param name="allow-anchors" select="0"/>
-
-  <xsl:variable name="label.label">
-     <xsl:call-template name="substitute-markup">
-        <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
-        <xsl:with-param name="template">
-           <xsl:call-template name="gentext.template">
-              <xsl:with-param name="context" select="'styles'"/>
-              <xsl:with-param name="name"
-                 select="concat(name(.), '-label')"/>
-           </xsl:call-template>
-        </xsl:with-param>
-     </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="label.title">
-    <xsl:call-template name="substitute-markup">
-      <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
-      <xsl:with-param name="template">
-         <xsl:call-template name="gentext.template">
-            <xsl:with-param name="context" select="'styles'"/>
-            <xsl:with-param name="name"
-                 select="concat(name(.), '-title')"/>
-         </xsl:call-template>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:choose>
-   <xsl:when test="$xep.extensions != 0">
-    <fo:block intrusion-displace="block">
-     <fo:float float="start"><fo:block><fo:inline margin-right="1em"
-      xsl:use-attribute-sets="formal.inline.number.properties"
-      ><xsl:value-of select="$label.label"/></fo:inline></fo:block></fo:float>
-     <fo:inline xsl:use-attribute-sets="formal.inline.title.properties"
-      ><xsl:value-of select="normalize-space($label.title)"/></fo:inline>
-    </fo:block>
-   </xsl:when>
-   <xsl:otherwise>
-    <fo:block>
-     <fo:inline margin-right="1em"
-      xsl:use-attribute-sets="formal.inline.number.properties"
-      ><xsl:value-of select="$label.label"/></fo:inline>
-     <xsl:text> </xsl:text>
-     <fo:inline xsl:use-attribute-sets="formal.inline.title.properties"
-      ><xsl:value-of select="normalize-space($label.title)"/></fo:inline>
-    </fo:block>
-   </xsl:otherwise>
-  </xsl:choose>
- 
-</xsl:template>
-
 
 <xsl:template match="procedure|table|figure|example" mode="object.title.markup_safe">
   <xsl:param name="allow-anchors" select="0"/>
