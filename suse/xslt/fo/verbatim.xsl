@@ -10,26 +10,7 @@
 <xsl:template match="programlisting|screen|synopsis">
   <xsl:param name="suppress-numbers" select="'0'"/>
   <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
-   <xsl:variable name="rtf">
-     <xsl:apply-templates select="self::screen" mode="screen-copy-node-normal"/>
-   </xsl:variable>
 
-  <xsl:variable name="pi">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis"
-                      select="(processing-instruction('dbsuse-fo') |
-                              ../processing-instruction('dbsuse-fo')[parent::example])[last()]"/>
-      <xsl:with-param name="attribute" select="'font-size'"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="keep-together">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis"
-                      select="(processing-instruction('dbsuse-fo') |
-                              ../processing-instruction('dbsuse-fo')[parent::example])[last()]"/>
-      <xsl:with-param name="attribute" select="'keep-together'"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:variable name="content">
     <xsl:choose>
       <xsl:when test="$suppress-numbers = '0'
@@ -38,71 +19,121 @@
                       and $linenumbering.extension != '0'">
         <xsl:call-template name="number.rtf.lines">
           <xsl:with-param name="rtf">
-            <xsl:apply-templates select="exsl:node-set($rtf)" mode="screen"/>
+            <xsl:choose>
+              <xsl:when test="$highlight.source != 0">
+                <xsl:call-template name="apply-highlighting"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates/>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="exsl:node-set($rtf)" mode="screen"/>
+        <xsl:choose>
+          <xsl:when test="$highlight.source != 0">
+            <xsl:call-template name="apply-highlighting"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
-  <!--<xsl:message>programlisting|screen|synopsis
-     pi="<xsl:value-of select="$pi"/>"
-     keep-together="<xsl:value-of select="$keep-together"/>"
-  </xsl:message>-->
+  <xsl:variable name="font.size">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis"
+                      select="(processing-instruction('dbsuse-fo') |
+                              ../processing-instruction('dbsuse-fo')[parent::example])[last()]"/>
+      <xsl:with-param name="attribute" select="'font-size'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="keep.together">
+    <xsl:call-template name="pi.dbfo_keep-together"/>
+  </xsl:variable>
+  
+  <xsl:message>programlisting|screen|synopsis
+     pi="<xsl:value-of select="$font.size"/>"
+     keep-together="<xsl:value-of select="$keep.together"/>"
+  </xsl:message>
+  <xsl:variable name="block.content">
+    <xsl:choose>
+      <xsl:when test="$shade.verbatim != 0">
+        <fo:block id="{$id}"
+             xsl:use-attribute-sets="monospace.verbatim.properties shade.verbatim.style">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+              select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:if test="$font.size != ''">
+            <xsl:attribute name="font-size"><xsl:value-of
+              select="$font.size"/></xsl:attribute>
+          </xsl:if> 
+          <xsl:choose>
+            <xsl:when test="$hyphenate.verbatim != 0 and 
+                            $exsl.node.set.available != 0">
+              <xsl:apply-templates select="exsl:node-set($content)" 
+                                   mode="hyphenate.verbatim"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy-of select="$content"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="monospace.verbatim.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+              select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:if test="$font.size != ''">
+            <xsl:attribute name="font-size"><xsl:value-of
+              select="$font.size"/></xsl:attribute>
+          </xsl:if>  
+          <xsl:choose>
+            <xsl:when test="$hyphenate.verbatim != 0 and 
+                            $exsl.node.set.available != 0">
+              <xsl:apply-templates select="exsl:node-set($content)" 
+                                   mode="hyphenate.verbatim"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy-of select="$content"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
-    <xsl:when test="$shade.verbatim != 0">
-      <fo:block id="{$id}"
-                white-space-collapse='false'
-                white-space-treatment='preserve'
-                linefeed-treatment='preserve'
-                xsl:use-attribute-sets="monospace.verbatim.properties shade.verbatim.style">
-        <xsl:if test="$pi!=''">
-          <xsl:attribute name="font-size">
-            <xsl:value-of select="$pi"/>
+    <!-- Need a block-container for these features -->
+    <xsl:when test="@width != '' or
+                    (self::programlisting and
+                    starts-with($writing.mode, 'rl'))">
+      <fo:block-container start-indent="0pt" end-indent="0pt">
+        <xsl:if test="@width != ''">
+          <xsl:attribute name="width">
+            <xsl:value-of select="concat(@width, '*', $monospace.verbatim.font.width)"/>
           </xsl:attribute>
         </xsl:if>
-        <xsl:if test="$keep-together = 'yes'">
-           <xsl:attribute name="keep-together">always</xsl:attribute>
+        <!-- All known program code is left-to-right -->
+        <xsl:if test="self::programlisting and
+                      starts-with($writing.mode, 'rl')">
+          <xsl:attribute name="writing-mode">lr-tb</xsl:attribute>
         </xsl:if>
-
-        <xsl:choose>
-          <xsl:when test="$hyphenate.verbatim != 0 and function-available('exsl:node-set')">
-            <xsl:apply-templates select="exsl:node-set($content)" mode="hyphenate.verbatim"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:copy-of select="$content"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </fo:block>
+        <xsl:copy-of select="$block.content"/>
+      </fo:block-container>
     </xsl:when>
     <xsl:otherwise>
-      <fo:block id="{$id}"
-                white-space-collapse='false'
-                white-space-treatment='preserve'
-                linefeed-treatment="preserve"
-                xsl:use-attribute-sets="monospace.verbatim.properties">
-        <xsl:if test="$pi!=''">
-          <xsl:attribute name="font-size">
-            <xsl:value-of select="$pi"/>
-          </xsl:attribute>
-        </xsl:if>
-        <xsl:if test="$keep-together = 'yes'">
-           <xsl:attribute name="keep-together">always</xsl:attribute>
-        </xsl:if>
-        <xsl:choose>
-          <xsl:when test="$hyphenate.verbatim != 0 and function-available('exsl:node-set')">
-            <xsl:apply-templates select="exsl:node-set($content)" mode="hyphenate.verbatim"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:copy-of select="$content"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </fo:block>
+      <xsl:copy-of select="$block.content"/>
     </xsl:otherwise>
   </xsl:choose>
+
 </xsl:template>
 
 
