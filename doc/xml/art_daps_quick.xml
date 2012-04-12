@@ -345,6 +345,35 @@
   </procedure>
   <remark>taroth 2012-03-22: maybe add DC-daps-example with callouts??</remark>
  </sect1>
+ <sect1 id="sec.daps.quick.edit">
+ <title>Editing DocBook XML Files</title>
+  <para>As &dapsacr; does not include any editor software, you are 
+  completely free in the choice of your XML editor. Basically, you can use
+  any text editor, but it is helpful if the editor supports editing XML 
+  in accordance with the DTD you use. A number of open source editors can be 
+  extended with plug-ins for automatic tag insertion and completion, insertion
+  of <sgmltag>xref</sgmltag> elements and for checks if the XML document is 
+  well-formed. If you are already familiar with vi or Emacs, you can configure
+  them to support XML editing mode. If your prefer an editor with a graphical 
+  user interface, jEdit is a good choice.</para>
+  <para>If you already worked with DocBook, you know about the typical top-level 
+  elements (or root elements) for documents: <sgmltag>book</sgmltag> or 
+  <sgmltag>article</sgmltag>. For larger documentation projects, another typical
+  root element is <sgmltag>set</sgmltag> (a collection of books).</para>
+  <para>To define the individual components of a book, other structural elements 
+  are used, for example, <sgmltag>part</sgmltag>, <sgmltag>chapter</sgmltag>, or 
+  <sgmltag>appendix</sgmltag>. Within a chapter, you will probably also find
+  sections, thus <sgmltag>section</sgmltag> (or <sgmltag>sect1</sgmltag>, 
+  <sgmltag>sect2</sgmltag> etc.) are further structural elements, as are 
+  <sgmltag>para</sgmltag> (for paragraphs) or <sgmltag>orderedlist</sgmltag>.</para>
+  <para>If you have set up your documentation project from scratch with 
+  <command>daps-init</command>, you can explore the example documents that are
+  installed within the directory structure. They show the most commonly used 
+  DocBook XML constructs. For a complete DocBook reference
+  see <citetitle>&tdg;</citetitle>. It is available at <ulink
+  url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
+  </para>
+ </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
    <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
@@ -353,9 +382,7 @@
    describes the basic things you need to know for using images (supported formats, 
    where to store the images in your documentation directory, and how to 
    reference them).</para>
-   <para><!--taroth 2012-04-11: to be continued: img formats, location,
-   references--></para>
- <sect2 id="sec.daps.quick.imgs.types">
+   <sect2 id="sec.daps.quick.imgs.types">
   <title>Supported Image Types</title> 
   &daps-img-formats;
   </sect2>
