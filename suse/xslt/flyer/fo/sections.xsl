@@ -14,6 +14,7 @@
 
      ******************************************************************** -->
 
+
 <!-- ==================================================================== -->
 
 <xsl:param name="legal.body.size" select="$body.font.master div 1.75"/>
@@ -38,8 +39,6 @@
     </fo:block>
   </fo:block>
 </xsl:template>
-
-
 
 <xsl:template match="sect2[parent::sect1[@role='legal']]">
   <xsl:variable name="id">
