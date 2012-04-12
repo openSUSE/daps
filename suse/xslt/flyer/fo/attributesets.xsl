@@ -159,16 +159,19 @@
      <xsl:value-of select="$body.font.master"/>
      <xsl:text>pt</xsl:text>
    </xsl:attribute>
+   <xsl:attribute name="font-family">
+    <xsl:value-of select="$sans.font.family"/>
+  </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="formal.inline.number.properties" >
   <xsl:attribute name="font-weight">bold</xsl:attribute>
-  <xsl:attribute name="font-family">
-    <xsl:value-of select="$sans.font.family"/>
-  </xsl:attribute>
+   <xsl:attribute name="font-style">italic</xsl:attribute>
+  
 </xsl:attribute-set>
 <xsl:attribute-set name="formal.inline.title.properties" >
   <xsl:attribute name="font-weight">normal</xsl:attribute>
+   <xsl:attribute name="font-style">italic</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="footnote.sep.leader.properties">
@@ -189,5 +192,5 @@
   <xsl:attribute name="color">red</xsl:attribute>
   <xsl:attribute name="font-style">italic</xsl:attribute>
 </xsl:attribute-set>
-  
+
 </xsl:stylesheet>
