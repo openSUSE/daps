@@ -2,7 +2,9 @@
 <!-- $Id:  $ -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:exsl="http://exslt.org/common"
+    exclude-result-prefixes="exsl">
 
 <!-- Import the current version of the stylesheets  -->
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
@@ -16,7 +18,8 @@
 <xsl:import href="../../fo/pi.xsl"/>
 <!--<xsl:import href="../../fo/verbatim.xsl"/>-->
 <xsl:import href="../../fo/xref.xsl"/>
-
+<xsl:import href="../../fo/mode-object.title.markup.xsl"/>
+   
  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 
@@ -97,5 +100,6 @@
     <xsl:text>)</xsl:text>
   </xsl:message>  
 </xsl:template>
+
 
 </xsl:stylesheet>
