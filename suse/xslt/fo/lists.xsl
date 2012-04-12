@@ -5,7 +5,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
-<xsl:include href="formal.object.heading.xsl"/>
+<xsl:include href="mode-object.title.markup.xsl"/>
 
 <xsl:template match="itemizedlist">
   <xsl:variable name="id">
