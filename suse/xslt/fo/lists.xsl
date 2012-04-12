@@ -291,34 +291,6 @@
 
 
 <!-- **************************************** -->
-<xsl:template name="formal.object.heading">
-  <xsl:param name="object" select="."/>
-  <xsl:param name="placement" select="'before'"/>
-
-
-  <fo:block xsl:use-attribute-sets="formal.title.properties">
-    <xsl:choose>
-      <xsl:when test="$placement = 'before'">
-        <xsl:attribute
-               name="keep-with-next.within-column">always</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute
-               name="keep-with-previous.within-column">always</xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
-<!--    <xsl:message> formal.object.heading (<xsl:value-of select="name($object)"/>)
-    <xsl:apply-templates select="$object" mode="object.title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates>
-    </xsl:message>-->
-
-    <xsl:apply-templates select="$object" mode="object.title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates>
-  </fo:block>
-</xsl:template>
-
 
 <xsl:template match="procedure|table|figure|example" mode="object.title.markup">
   <xsl:param name="allow-anchors" select="0"/>
