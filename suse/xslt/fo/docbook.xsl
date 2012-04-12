@@ -2,8 +2,7 @@
 <!-- $Id: docbook.xsl 36008 2008-10-21 11:24:36Z toms $ -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
->
+    xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <!-- Import the current version of the stylesheets  -->
 <!--<xsl:import href="cropmarks.xsl"/>-->
