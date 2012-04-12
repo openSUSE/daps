@@ -7,19 +7,6 @@
 
 <xsl:include href="section.heading.xsl"/>
 
-<xsl:template name="addstatus">
-  <xsl:param name="node" select="."/>
-
-  <xsl:if test="($draft.mode = 'yes' or $draft.mode = 'maybe') and
-    $node/@status">
-    <fo:inline xsl:use-attribute-sets="status.inline.properties">
-      <xsl:text>[</xsl:text>
-      <xsl:value-of select="$node/@status"/>
-      <xsl:text>]</xsl:text>
-    </fo:inline>
-  </xsl:if>
-</xsl:template>
-
 
 <xsl:template match="sect1[@role='legal']">
   <xsl:variable name="id">

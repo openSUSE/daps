@@ -3,6 +3,21 @@
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
+
+   <xsl:template name="addstatus">
+      <xsl:param name="node" select="."/>
+      
+      <xsl:if test="($draft.mode = 'yes' or $draft.mode = 'maybe') and
+         $node/@status">
+         <fo:inline xsl:use-attribute-sets="status.inline.properties">
+            <xsl:text>[</xsl:text>
+            <xsl:value-of select="$node/@status"/>
+            <xsl:text>]</xsl:text>
+         </fo:inline>
+      </xsl:if>
+   </xsl:template>
+   
+   
    <xsl:template name="section.heading">
       <xsl:param name="level" select="1"/>
       <xsl:param name="marker" select="1"/>
