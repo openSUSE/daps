@@ -97,7 +97,6 @@
           </xsl:if>  
           <xsl:if test="parent::example or parent::step">
              <xsl:attribute name="margin-top">-1em</xsl:attribute>
-             <!--<xsl:attribute name="space-before."></xsl:attribute>-->
           </xsl:if>
            <xsl:choose>
             <xsl:when test="$hyphenate.verbatim != 0 and 
