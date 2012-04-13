@@ -73,10 +73,10 @@
          </xsl:when>
          <xsl:otherwise>
             <fo:block>
-               <fo:inline margin-right="1em"
+               <fo:inline
                   xsl:use-attribute-sets="formal.inline.number.properties"
                   ><xsl:value-of select="$label.label"/></fo:inline>
-               <xsl:text> </xsl:text>
+               <fo:leader leader-length=".5em" leader-pattern="space"/>
                <fo:inline xsl:use-attribute-sets="formal.inline.title.properties"
                   ><xsl:value-of select="normalize-space($label.title)"/></fo:inline>
             </fo:block>
