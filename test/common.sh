@@ -5,12 +5,14 @@
 # ----------------------------------------------------------------------------
 # Global Variables
 #
+# Default DAPS root path:
+DAPSROOT=${DAPSROOT:-".."}
 # Default path to daps script:
-DAPS="/usr/bin/daps"
+DAPS=${DAPS:-"/usr/bin/daps"}
 # Default path to daps-init script:
-DAPS_INIT="/usr/bin/daps-init"
+DAPS_INIT=${DAPS_INIT:-"/usr/bin/daps-init"}
 # Default path to logfile:
-LOGFILE="/tmp/daps-testing.log"
+LOGFILE=${LOGFILE:-"/tmp/daps-testing.log"}
 # Main file to include shunit2
 SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 # Remove temporary directory? 0=no, 1=yes
