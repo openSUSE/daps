@@ -8,7 +8,7 @@
 # Default DAPS root path:
 DAPSROOT=${DAPSROOT:-".."}
 # Default path to daps script:
-DAPS=${DAPS:-"/usr/bin/daps"}
+DAPS=${DAPS:-"$DAPSROOT/bin/daps"}
 # Default path to daps-init script:
 DAPS_INIT=${DAPS_INIT:-"/usr/bin/daps-init"}
 # Default path to logfile:
@@ -94,6 +94,38 @@ if [[ $LIMIT -ne 0 ]]; then
 fi
 }
 
+
+# ---------
+# Returns basename of file
+#
+cbasename() {
+# Synopsis:
+#   $1 filename
+# Examples:
+#   $ cbasename "foo/foo/bar/bla.sh"
+#   bla.sh
+# Returns:
+#   Returns string of basename without any directories
+#
+  local FILE=$1
+  echo "${FILE##*/}"
+}
+
+# ---------
+# Returns dirname of file
+#
+cdirname() {
+# Synopsis:
+#   $1 filename
+# Examples:
+#   $ cdirname "foo/foo/bar/bla.sh"
+#   foo/foo/bar/
+# Returns:
+#   Returns string of dirname
+#
+  local FILE=$1
+  echo "${FILE%/*}"
+}
 
 
 # Short test, if shunit2 is available
