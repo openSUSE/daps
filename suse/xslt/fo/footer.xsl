@@ -135,9 +135,9 @@
 
    <!--<xsl:message>footer.leftside: <xsl:value-of select="$title"/></xsl:message>
 -->
-   <fo:inline font-family="{$sans.font.family}"
+   <fo:inline font-family="{$sans.font.family}" border="0.8pt solid blue"
    font-weight="bold"><fo:page-number/></fo:inline>
-   <fo:inline margin-left="17pt"
+   <fo:inline margin-left="10pt"  border="0.8pt solid red"
      font-family="{$sans.font.family}"
    ><xsl:value-of select="normalize-space($title)"/></fo:inline>
 </xsl:template>
@@ -147,10 +147,10 @@
   <xsl:apply-templates select="title" mode="footer"/>
  </xsl:variable>
 
-  <fo:inline text-align="right"  margin-right="17pt"
+  <fo:inline text-align="right"  margin-right="10pt"  border="0.8pt solid red"
    font-family="{$sans.font.family}"><xsl:value-of
    select="$title"/></fo:inline>
-  <fo:inline text-align="right"
+  <fo:inline text-align="right" border="0.8pt solid blue"
    font-weight="bold"><fo:page-number/></fo:inline>
 </xsl:template>
 
