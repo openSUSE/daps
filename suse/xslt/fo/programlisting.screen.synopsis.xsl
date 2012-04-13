@@ -95,7 +95,9 @@
             <xsl:attribute name="font-size"><xsl:value-of
               select="$font.size"/></xsl:attribute>
           </xsl:if>  
-          <xsl:if test="parent::example or parent::step">
+          <!-- Apply it only for XEP -->
+          <xsl:if test="$xep.extensions != 0 and 
+                        (parent::example or parent::step)">
              <xsl:attribute name="margin-top">-1em</xsl:attribute>
           </xsl:if>
            <xsl:choose>
