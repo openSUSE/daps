@@ -84,7 +84,8 @@
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <fo:block id="{$id}" role="non-shade-{local-name()}" 
+        <fo:block id="{$id}" role="non-shade-{local-name()}"
+           clear="both" float="none" 
                   xsl:use-attribute-sets="monospace.verbatim.properties">
           <xsl:if test="$keep.together != ''">
             <xsl:attribute name="keep-together.within-column"><xsl:value-of
