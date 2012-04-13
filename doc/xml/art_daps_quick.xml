@@ -241,24 +241,18 @@
    outlined below.</para>
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
-    <screen>
-     <replaceable>YOUR_DOC_DIR</replaceable>
-     <co id="co.docdir.base"/>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable><co id="co.docdir.base"/>
   |--&dc;*<co id="co.docdir.dc"/>
-  |--<emphasis role="bold">images</emphasis>
-     <co id="co.docdir.img"/> 
-     |--<emphasis role="bold">src</emphasis>
-     <co id="co.docdir.img.src"/>
+  |--<emphasis role="bold">images</emphasis><co id="co.docdir.img"/> 
+     |--<emphasis role="bold">src</emphasis><co id="co.docdir.img.src"/>
         |--<emphasis role="bold">dia</emphasis>
         |--<emphasis role="bold">eps</emphasis>
         |--<emphasis role="bold">fig</emphasis>
         |--<emphasis role="bold">pdf</emphasis>
         |--<emphasis role="bold">png</emphasis>
         |--<emphasis role="bold">svg</emphasis>
-  |--<emphasis role="bold">xml</emphasis>
-     <co id="co.docdir.xml"/> 
-     |--MAIN*.xml<co id="co.docdir.main"/>
-    </screen>
+  |--<emphasis role="bold">xml</emphasis><co id="co.docdir.xml"/> 
+     |--MAIN*.xml<co id="co.docdir.main"/></screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir.base">
@@ -311,14 +305,12 @@
    </title>
    <step>
     <para>Create a directory that you want to use as your documentation directory:</para>
-    <screen>$ mkdir <replaceable>DOC_DIR</replaceable>
-    </screen>
+    <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
    </step>
    <step>
     <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
-    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>
-    </screen>
+    <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></screen>
     <para>With the <option>-r</option> option, you can also set another root 
     element, such as <sgmltag>article</sgmltag>, for example.To create the default 
     directory structure with an <sgmltag>article</sgmltag> example: </para>
@@ -529,9 +521,7 @@ make: *** [validate] Error 3</screen>
    <title>Basic Syntax for Generating Output</title>
    <para>Independent of the individual output format you want to create, 
   you need to specify the &dclong; file to use:</para>
-   <screen>$ daps -d <replaceable>DC_FILE</replaceable>
-    <replaceable>OUTPUT_FORMAT</replaceable>
-   </screen>
+   <screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>For example:</para>
    <screen>$ daps -d DC-daps-example color-pdf</screen>
    <para>If your current directory is not the documentation directory where the &dc; 
@@ -812,9 +802,8 @@ For example:</para>
  </sect1>
  <sect1 id="sec.daps.quick.migrate">
   <title>Migration of Existing DocBook Projects</title>
-  <para>This section gives an overview which requirements you need to fulfill
-   if you want to migrate existing DocBook projects so that you can use &dapsacr;
-   for managing and publishing them.
+  <para>This section provides instructions how to migrate existing DocBook 
+  projects so that you can use &dapsacr; for managing and publishing them.
    </para>
   <procedure id="pro.daps.quick.migrate">
    <title>Migrating DocBook Projects</title>
