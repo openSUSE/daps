@@ -123,9 +123,12 @@
    <xref linkend="sec.daps.quick.req.system" xrefstyle="select:title"/>
    and make sure to have all required packages and tools installed.</para>
     <step>
-     <para>Download the &dapsacr; source tarball from 
-   <ulink url="http://sourceforge.net/projects/daps/files/latest/download"></ulink>.
-   </para>
+     <remark>toms, 2012-04-15: Should we explicitly mention that all
+       following steps are based on a "stable" release? Add "stable"
+       after "the"?</remark>
+     <para>Download the &dapsacr; source tarball from <ulink
+              url="http://sourceforge.net/projects/daps/files/latest/download"
+            />. </para>
     </step>
     <step>
      <para>Create a new directory in your file system and unpack the tarball there.</para>
@@ -160,6 +163,12 @@
     repeat <xref linkend="daps.quick.inst.configure"/> and check the summary again.</para>
     </step>
     <step>
+     <remark>toms, 2012-04-15: Not sure, if someone wants to check/set
+            the installation paths *after* he's gone through the
+            previous steps. Should this step be moved? Maybe combine it
+            with step 3? Normally you do not set this explicitly as the
+            installation paths are discovered automatically. Not sure,
+            if we should mention this step at all.</remark>
      <para>If you want to adjust the &dapsacr; installation paths, view the 
      available options:</para>
      <screen>$ ./configure --help</screen>
@@ -193,12 +202,15 @@
  </sect1>
  <sect1 id="sec.daps.quick.basics">
   <title>Defining Documentation Projects</title>
-  <para>The easiest way to set up a new documentation project from scratch is to
- use the &dapsacr; initialization script. For instructions how to do so, refer
- to <xref linkend="pro.daps.init"/>. The script automatically creates the 
- <xref linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/> and 
- <xref linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/> 
- you need to get started with &dapsacr;.</para>
+  <para>The easiest way to set up a new documentation project from
+      scratch is to use the &dapsacr; initialization script
+        <command>daps-init</command>. For instructions how to do so,
+      refer to <xref linkend="pro.daps.init"/>. The script automatically
+      creates the <xref linkend="sec.daps.quick.basics.files"
+        xrefstyle="select:title"/> and <xref
+        linkend="sec.daps.quick.basics.dirstruct"
+        xrefstyle="select:title"/> you need to get started with
+      &dapsacr;.</para>
   <sect2 id="sec.daps.quick.basics.files">
    <title>Key Files</title>
    <para>The following key files define a documentation project so that 
@@ -231,14 +243,19 @@
   </sect2>
   <sect2 id="sec.daps.quick.basics.dirstruct">
    <title>Directory Structure</title>
-   <para>
-   For &dapsacr; to work out of the box, your XML files and images 
-   must be organized in a specific structure within your documentation directory.
-   <xref linkend="ex.daps.dir.doc"/> shows the required structure including the
-   key files for a &dapsacr; documentation project. The directories are printed 
-   in bold. You can also create multiple documentation directories for 
-   individual documentation projects, but they all need the substructure 
-   outlined below.</para>
+   <para> For &dapsacr; to work out of the box, your XML files and
+        images must be organized in a specific structure within your
+        documentation directory. <xref linkend="ex.daps.dir.doc"/> shows
+        the required structure including the key files for a &dapsacr;
+        documentation project. The directories are printed in bold.
+          <remark>toms, 2012-04-15: Idea: You can didstinguish between
+          files and directories if you append a "/" after the directory
+          name, so no bold is needed. The bold *could* (theoretically)
+          misinterpreted as something every important/special.</remark>
+        You can also create multiple documentation directories for
+        individual documentation projects, but they all need the
+        substructure outlined below.</para>
+    
    <example id="ex.daps.dir.doc">
     <title>Directory Structure</title>
     <screen><replaceable>YOUR_DOC_DIR</replaceable><co id="co.docdir.base"/>
@@ -304,6 +321,8 @@
    <title>Using <command>daps-init</command>
    </title>
    <step>
+    <remark>toms, 2012-04-15: As daps-init creates the DOC_DIR if it
+      does not exist, this steps seems to be unnecessary to me.</remark> 
     <para>Create a directory that you want to use as your documentation directory:</para>
     <screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
    </step>
@@ -311,9 +330,10 @@
     <para>Create the default directory structure for &dapsacr; (containing an example 
    <sgmltag>book</sgmltag>):</para>
     <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></screen>
-    <para>With the <option>-r</option> option, you can also set another root 
-    element, such as <sgmltag>article</sgmltag>, for example.To create the default 
-    directory structure with an <sgmltag>article</sgmltag> example: </para>
+    <para>With the <option>-r</option> option, you can also set another
+          root element, such as <sgmltag>article</sgmltag>, for example.
+          To create the default directory structure with an
+            <sgmltag>article</sgmltag> example: </para>
     <screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</screen>
    </step>
    <step>
@@ -370,7 +390,7 @@
   <command>daps-init</command>, you can explore the example documents that are
   installed within the directory structure. They show the most commonly used 
   DocBook XML constructs. For a complete DocBook reference
-  see <citetitle>&tdg;</citetitle>. It is available at <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
+  see <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle></ulink>.   
   </para>
  </sect1>
  <sect1 id="sec.daps.quick.imgs">
@@ -395,13 +415,15 @@
   </para>
    <important>
     <title>Unique Image Names</title>
-    <para>The base names of your images need to be unique throughout the image 
-   subdirectories. For example, using <filename>images/svg/AAA.svg</filename> and 
-   <filename>images/svg/AAA.png</filename> will not work.
-   <remark>taroth 2012-03-19: check with fs what happens in this case</remark> 
-   The name in front of the file extension needs to be different, for example:
-   <filename>images/svg/AAA.svn</filename> and 
-   <filename>images/svg/BBB.png</filename>. </para>
+    <para>The base names of your images need to be unique throughout the
+          image subdirectories. For example, using
+            <filename>images/src/svg/AAA.svg</filename> and
+            <filename>images/src/png/AAA.png</filename> will not work.
+            <remark>taroth 2012-03-19: check with fs what happens in
+            this case</remark> The name in front of the file extension
+          needs to be different, for example:
+            <filename>images/src/svg/AAA.svg</filename> and
+            <filename>images/src/svg/BBB.png</filename>. </para>
    </important>
   </sect2>
 
@@ -412,6 +434,10 @@
    images in your XML sources is very straightforward: you do not need
    to include any path in the <sgmltag class="attribute">fileref</sgmltag> 
    attribute&mdash;the file name is enough. </para>
+   <remark>toms, 2012-04-15: Maybe add here another sentence that the
+        correct image path is added automatically during the creation of
+        the output format.</remark>
+    
    <para>Furthermore DocBook allows you to insert more than one image to
    distinguish between different target formats. For example, you can
    add two images pointing to the same file, but with different widths.
@@ -508,6 +534,11 @@
   the respective file name and the line number where the error occured. 
   In addition, &dapsacr; shows the path to the profiled XML sources and the 
   total number of errors.</para>
+    <remark>toms, 2012-04-15: It seems "profiled XML" isn't definied
+        yet, is it? Either completely be silent about profiled XML
+        sources or add a small section about the why's and how's. :) I
+        would tend to remove this as it is a Quick Start and such detail
+        can be explained in the User's Guide.</remark>
    <example>
     <title>Parser Output For Validation Errors</title>
     <screen>daps_user_concept.xml:60: element xref: validity error: 
@@ -515,6 +546,9 @@ IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
+     <remark>toms, 2012-04-15: Maybe explain here a little bit what
+          happend in the above error message? Just one or two sentences
+          should be enough so the reader gets an idea. </remark>
    </example>
   </sect2>
   <sect2 id="sec.daps.quick.output.syntax">
@@ -577,8 +611,10 @@ For example:</para>
         <para>pdf</para>
        </entry>
        <entry>
-        <para>Creates a black-and-white PDF with crop marks, suitable for
+        <para>Creates a black-and-white PDF with crop marks<remark>toms,
+          2012-04-15: Cropmarks in XEP only!</remark>, suitable for
        hand-off to a printing shop.  Open the result in a PDF viewer.</para>
+         
        </entry>
        <entry>
         <para>Requires an FO formatter. All color images are automatically 
@@ -648,6 +684,8 @@ For example:</para>
         <para>
          <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
         conversion of articles to epub?</remark>
+         <remark>toms, 2012-04-15: This seems to be an issue with the
+           current DocBook stylesheets. Need to check this.</remark>
         </para>
        </entry>
       </row>
@@ -657,6 +695,9 @@ For example:</para>
        </entry>
        <entry>
         <para>Creates a DocBook &webh; output. Open the result in a Web browser.</para>
+         <remark>toms, 2012-04-15: Add a note how to open it into a
+           browser? Reference to index.html, similar for the "html"
+           target?</remark>
        </entry>
        <entry>
         <para>Requires a very recent version of the DocBook stylesheets. 
@@ -673,6 +714,7 @@ For example:</para>
        </entry>
        <entry>
         <para>Creates an ASCII text output. Open the result in a text editor.</para>
+        <remark>toms, 2012-04-15: Maybe add a note about the filename?</remark>
        </entry>
        <entry>
         <para>All images are removed from the output, but their location
@@ -690,13 +732,16 @@ For example:</para>
         </para>
        </entry>
        <entry>
-        <para>To create man pages, your XML files must contain at least one 
-        <sgmltag>refentry</sgmltag> or <sgmltag>reference</sgmltag> element. 
-        When processing a DocBook document with <sgmltag>refentry</sgmltag> 
-        elements, &dapsacr; generates one man page file per 
-        <sgmltag>refentry</sgmltag> element. All other parts of the document will
-        be ignored.
-        </para>
+        <para>To create man pages, your XML files must contain at least
+                  one <sgmltag>refentry</sgmltag> be it in a
+                    <sgmltag>chapter</sgmltag>,
+                    <sgmltag>appendix</sgmltag>, or collected in a
+                    <sgmltag>reference</sgmltag> element. When
+                  processing a DocBook document with multiple
+                    <sgmltag>refentry</sgmltag> elements (regardless
+                  where it appears), &dapsacr; generates one man page
+                  file per <sgmltag>refentry</sgmltag> element. All
+                  other parts of the document will be ignored. </para>
         <!--taroth 2012-04-11: additional information to be covered in User Guide:
         The filename for each man page is generated from refentry content elements. 
         The filename prefix is the refname, and the suffix is the manvolnum from 
@@ -720,8 +765,8 @@ For example:</para>
         </para>
        </entry>
        <entry>
-        <para>A JSP file is an HTML page containing a reference to Java 
-      servlets or java server side applets.</para>
+        <para>A JSP file is an HTML page containing a reference to Java
+                  servlets or Java Server Side Applets.</para>
        </entry>
       </row>
       <row>
@@ -756,10 +801,16 @@ For example:</para>
    <literal>draft</literal> version, you can tell &dapsacr; to do so.</para>
    <sect3 id="sec.daps.quick.output.adv.partial">
     <title>Partial Builds</title>
+    <remark>toms, 2012-04-15: The following sentences til "END" is not entirely
+      correct. The "starting point" is actually the DC/ENV file. If you do not set the ROOTID
+      at all, the complete MAIN file is used. No ID is needed here.
+      Although you can point your ID to your first level element (usually
+      set, book, or article) in MAIN, it would be pointless.</remark>
     <para>The <quote>starting point</quote> of your documentation project is
     specified by the <parameter>ROOTID</parameter> parameter. It usually
     points to the ID of a <sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, 
     or <sgmltag>article</sgmltag> and is referenced in the &dc; file. 
+    <remark>toms, 2012-04-15: END</remark> 
     Alternatively, specify a ROOTID on the command line by using the 
     <option>--rootid</option> option. This also allows you to build only a part 
     of your documentation project by using the ID of the <sgmltag>chapter</sgmltag> 
@@ -772,9 +823,10 @@ For example:</para>
    </sect3>
    <sect3 id="sec.daps.quick.output.adv.review">
     <title>Output with Remarks or Draft Watermark</title>
-    <para>For publishing a pre-release version of a document that you 
-    might want to send to a proofreader for review, use the <option>-d</option> 
-    option to mark the document as <literal>DRAFT</literal> version.</para>
+    <para>For publishing a pre-release version of a document that you
+          might want to send to a proofreader for review, use the local
+            <option>-d</option> option to mark the document as
+            <literal>DRAFT</literal> version.</para>
     <para>For example, use the following command to build a color PDF
     that has a <literal>DRAFT</literal> watermark printed on each page:</para>
     <screen>$ daps -d DC-daps-example color-pdf -d</screen>
@@ -783,6 +835,9 @@ For example:</para>
     editorial remarks or questions to the proofreader), include the remarks 
     in the output with the <option>-r</option> option:</para>
     <screen>$ daps -d DC-daps-example color-pdf -r</screen>
+    <remark>toms, 2012-04-15: The "default" red color for remarks is a
+      customization by me. It's not a default in the DocBook
+      stylesheets (they use italic as far as I know).</remark>
     <para>By default, the content of remark elements is shown in red color in 
     the output format.</para>
     <para>Of course, you can also combine both option to create output including
@@ -817,9 +872,15 @@ For example:</para>
       how about IDs? does &dapsacr; only care about the same IDs used multiply 
       if the files belong to the same set? or would the same IDs in multiple 
       files conflict anyway?</remark>
+     <remark>toms, 2012-04-15: IDs *have* to be unique, if the files
+       which contains them belong to the same set. Or in other words:
+       you can have the same ID in different files if you can guarantee
+       they are never be used in the same set.</remark>
     </para>
    </step>
    <step>
+    <remark>toms, 2012-04-15: XIncludes are used for the first time.
+      Definition? :)</remark> 
     <para>If you have any XIncludes or entity declaration files, also
     put them into the  <filename>xml</filename> subdirectory.</para>
    </step>
