@@ -854,8 +854,6 @@ if [[ -n $DAPSROOT ]]; then
         export PATH=$BIN_DIR:$PATH
         LIB_DIR="${DAPSROOT}/lib"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
-        FOP_WARPPER="${LIBEXEC_DIR}/daps-fop"
-        XEP_WARPPER="${LIBEXEC_DIR}/daps-xep"
         CONFIG="${DAPSROOT}/etc/config"
         XML_CATALOG_FILES="$DAPSROOT/etc/catalog.xml"
     fi
@@ -1009,6 +1007,15 @@ fi
 # Set paths
 #
 # set all basic paths that have not been set by now
+
+# In config.in these values are set to @pkgdatadir@/libexec/
+# In case we use an SVN checkout we want to replace @pkgdatadir@
+# with areal path
+#
+if [[ -n $DAPSROOT_CMDL ]]; then
+    FOP_WRAPPER="${LIBEXEC_DIR}/daps-fop"
+    XEP_WRAPPER="${LIBEXEC_DIR}/daps-xep"
+fi
 
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
