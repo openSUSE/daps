@@ -440,15 +440,21 @@ function absolute_path () {
     #       (use readlink for that purpose)
     #
     local ABSPATH BASE FILE DIR
-
+    
     FILE=$1
     FILE=${FILE%/} # remove trailing slash
+
+    if [[ "/" = ${FILE:0:1} ]]; then
+        # string is already an absolute path
+        echo $FILE
+        return
+    fi
 
     BASE=$(basename $FILE)
     DIR=$(dirname $FILE)
 
     if [[ -n $DIR && "." != DIR ]]; then
-        cd $DIR
+        cd $DIR || exit_on_error "Path \"$FILE\" does not exist"
         ABSPATH="$(pwd)/$BASE"
         cd - &>/dev/null
     else
@@ -643,9 +649,8 @@ while true ; do
          --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
             [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
-            BUILD_DIR_CMDL="$2"
-            # strip trailing slash
-            BUILD_DIR_CMDL=${BUILD_DIR_CMDL%/}
+            # make path absolute and strip trailing slash
+            BUILD_DIR_CMDL=$(absolute_path "$2")
             BUILD_DIR="$BUILD_DIR_CMDL"
             shift 2
             ;;
@@ -658,15 +663,15 @@ while true ; do
             shift 2
             ;;      
         -d|--docconfig|-e|--envfile)
-            DOCCONF_CMDL="$2"
+            # make path absolute and strip trailing slash
+            DOCCONF_CMDL=$(absolute_path "$2")
             DOCCONF="$DOCCONF_CMDL"
             shift 2
             ;;
         --dapsroot)
             [[ -d $2 ]] || exit_on_error "DAPSROOT \"$2\" is not a valid directory"
-            DAPSROOT_CMDL="$2"
-            # strip trailing slash
-            DAPSROOT_CMDL=${DAPSROOT_CMDL%/}
+            # make path absolute and strip trailing slash
+            DAPSROOT_CMDL=$(absolute_path "$2")
             DAPSROOT="$DAPSROOT_CMDL"
             DEVEL=1
             shift 2
@@ -679,9 +684,8 @@ while true ; do
             shift
             ;;
         --fb_styleroot)
-            FALLBACK_STYLEROOT_CMDL="$2"
-            # strip trailing slash
-            FALLBACK_STYLEROOT_CMDL=${FALLBACK_STYLEROOT_CMDL%/}
+            # make path absolute and strip trailing slash
+            FALLBACK_STYLEROOT_CMDL=$(absolute_path "$2")
             FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
             shift 2
             ;;
@@ -698,14 +702,14 @@ while true ; do
             fi
             ;;
         --main)
-	    MAIN_CMDL="$2"
+            # make path absolute and strip trailing slash
+	    MAIN_CMDL=$(absolute_path "$2")
 	    MAIN="$MAIN_CMDL"
 	    shift 2
             ;;
         --styleroot)
-            STYLEROOT_CMDL="$2"
-            # strip trailing slash
-            STYLEROOT_CMDL=${STYLEROOT_CMDL%/}
+            # make path absolute and strip trailing slash
+            STYLEROOT_CMDL=$(absolute_path "$2")
             STYLEROOT="$STYLEROOT_CMDL"
             shift 2
             ;;
@@ -1016,6 +1020,18 @@ if [[ -n $DAPSROOT_CMDL ]]; then
     FOP_WRAPPER="${LIBEXEC_DIR}/daps-fop"
     XEP_WRAPPER="${LIBEXEC_DIR}/daps-xep"
 fi
+
+# Make paths for Variables set in the user config file absolute
+# and remove trailing slashes
+#
+[[ -z $BUILD_DIR_CMDL && -n $BUILD_DIR ]] && \
+    BUILD_DIR=$(absolute_path "$BUILDDIR")
+[[ -z $DAPSROOT_CMDL && -n $DAPSROOT ]] && \
+    DAPSROOT=$(absolute_path "DAPSROOT")
+[[ -z $FALLBACK_STYLEROOT_CMDL && -n $FALLBACK_STYLEROOT ]] && \
+    FALLBACK_STYLEROOT=$(absolute_path "FALLBACK_STYLEROOT")
+[[ -z $STYLEROOT_CMDL && -n $STYLEROOT ]] && \
+    STYLEROOT=$(absolute_path "STYLEROOT")
 
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
