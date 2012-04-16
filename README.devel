@@ -1,0 +1,34 @@
+----------------------------------------------------------------------------
+  DocBook Authoring and Publishing Suite (daps) Developement README.devel
+----------------------------------------------------------------------------
+
+This file is mainly interesting for developers who wants to hack/work with
+the development version of daps.
+
+In order to run daps from this working copy, remember the following things:
+
+1. Do NOT run ./configure or ./autogen.sh if you intend to run daps 
+   from this working copy.
+
+2. If you have run the configure script already, run "svn st" to see any
+   modified files and roll them back with "svn revert".
+
+3. If you want to run daps from this working copy, *always* add the --dapsroot
+   option. To simplify this, define a ddaps function (or alias) which can
+   look like this (replace the content of the "D" variable with your absolute
+   path of your working copy):
+
+----------[ ~/.bashrc ]----------
+ddaps () 
+{ 
+    echo "****** DAPS Developer Version ******"
+    D="/local/doc/daps"
+    $D/bin/daps --dapsroot "$D" $@
+}
+---------------------------------
+
+   If you like, you can also add the --styleroot option.
+   Add these lines to your ~/.bashrc (or ~/.bashrc.local) Bash config file.
+   
+
+Happy Hacking! :)
