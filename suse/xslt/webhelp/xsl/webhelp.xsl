@@ -503,7 +503,7 @@ border: none; background: none; font-weight: none; color: none; }
 				</xsl:message>
 			  </xsl:when>
 			  <xsl:otherwise>
-				<xsl:if test="$collect.xref.targets = 'yes' or                             $collect.xref.targets = 'only'">
+				<xsl:if test="$collect.xref.targets = 'yes' or $collect.xref.targets = 'only'">
 				  <xsl:apply-templates select="key('id', $rootid)" mode="collect.targets"/>
 				</xsl:if>
 				<xsl:if test="$collect.xref.targets != 'only'">
@@ -516,7 +516,7 @@ border: none; background: none; font-weight: none; color: none; }
 			</xsl:choose>
 		  </xsl:when>
 		  <xsl:otherwise>
-			<xsl:if test="$collect.xref.targets = 'yes' or                         $collect.xref.targets = 'only'">
+			<xsl:if test="$collect.xref.targets = 'yes' or $collect.xref.targets = 'only'">
 			  <xsl:apply-templates select="/" mode="collect.targets"/>
 			</xsl:if>
 			<xsl:if test="$collect.xref.targets != 'only'">
