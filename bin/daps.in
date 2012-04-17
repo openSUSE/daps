@@ -1012,11 +1012,11 @@ fi
 [[ -z $BUILD_DIR_CMDL && -n $BUILD_DIR ]] && \
     BUILD_DIR=$(absolute_path "$BUILDDIR")
 [[ -z $DAPSROOT_CMDL && -n $DAPSROOT ]] && \
-    DAPSROOT=$(absolute_path "DAPSROOT")
+    DAPSROOT=$(absolute_path "$DAPSROOT")
 [[ -z $FALLBACK_STYLEROOT_CMDL && -n $FALLBACK_STYLEROOT ]] && \
-    FALLBACK_STYLEROOT=$(absolute_path "FALLBACK_STYLEROOT")
+    FALLBACK_STYLEROOT=$(absolute_path "$FALLBACK_STYLEROOT")
 [[ -z $STYLEROOT_CMDL && -n $STYLEROOT ]] && \
-    STYLEROOT=$(absolute_path "STYLEROOT")
+    STYLEROOT=$(absolute_path "$STYLEROOT")
 
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
