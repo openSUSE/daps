@@ -101,6 +101,6 @@ set      toc,title
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
 <!-- Show remarks? 0=no, 1=yes -->
-<xsl:param name="show.remarks" select="1"/>
+<xsl:param name="show.comments" select="1"/>
   
 </xsl:stylesheet>

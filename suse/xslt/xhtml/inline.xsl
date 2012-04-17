@@ -93,7 +93,7 @@
 
 
 <xsl:template match="remark">
-    <xsl:if test="$show.remarks != 0">
+    <xsl:if test="$show.comments != 0">
       <xsl:variable name="num">
         <xsl:number format=".1" level="any" from="chapter"/>
       </xsl:variable>
