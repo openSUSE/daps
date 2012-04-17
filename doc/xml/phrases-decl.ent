@@ -15,12 +15,12 @@
  
 <!ENTITY daps-description-long 
 "The &dapslong; (&dapsacr;) is developed as open source software for Linux
- operating systems, licensed under the GPL. A number of  integrated tools, 
- stylesheets, scripts, and makefiles help technical writers in the editing,
- translation and publishing process. &dapsacr; supports single source publishing
- into a number of different output formats, and is suited both for small 
- documentation projects as well as for comprehensive projects, created by 
- multiple authors in a collaborative effort.">
+ operating systems and is licensed under the GPL. A number of  integrated
+ tools, stylesheets, scripts, and makefiles help technical writers in the
+ editing, translation and publishing process. &dapsacr; supports single
+ source publishing into a number of different output formats, and is suited
+ both for small documentation projects as well as for comprehensive projects,
+ created by multiple authors in a collaborative effort.">
   
 <!ENTITY daps-db-versions 
 "Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
@@ -66,9 +66,6 @@
      tools are installed on your system:</para>
      <itemizedlist>
       <listitem>
-       <para>automake</para>
-      </listitem>
-      <listitem>
        <para>convert (included in the 
     <systemitem class="resource">ImageMagick</systemitem> package)</para>
       </listitem>
@@ -112,10 +109,69 @@
   </variablelist>'>
 
 <!ENTITY daps-addon
-"<para>To add further components like version management or a workflow mechanism
-   for your projects, use &dapsacr; in combination with the following 
-   software:
+' <para>
+   By default, &dapsacr; supports the following features:
   </para>
+  <itemizedlist>
+   <listitem>
+    <para>HTML/single HTML/JSP/man pages/PDF output</para>
+   </listitem>
+   <listitem>
+    <para>MediaWiki/WebHelp output (experimental)</para>
+   </listitem>
+   <listitem>
+    <para>support for PNG images</para>
+   </listitem>
+  </itemizedlist>
+  <para>To enable optional features, additional software packages need to be
+   installed. Please refer to the following table for details:</para>
+  <informaltable>
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>Feature</entry>
+      <entry>Requirement</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>ASCII text output</entry>
+      <entry>w3m</entry>
+     </row>
+     <row>
+      <entry>ePUB output</entry>
+      <entry>ruby</entry>
+     </row>
+     <row>
+      <entry>DIA images support</entry>
+      <entry>dia</entry>
+     </row>
+     <row>
+      <entry>SVG images support</entry>
+      <entry>inkscape</entry>
+     </row>
+     <row>
+      <entry>XFIG images support</entry>
+      <entry>xfig</entry>
+     </row>
+     <row>
+      <entry>PNG images optimization</entry>
+      <entry>optipng</entry>
+     </row>
+     <row>
+      <entry>Linkchecker (http, https, ftp)</entry>
+      <entry>checkbot</entry>
+     </row>
+     <row>
+      <entry>Enhanced Debugging</entry>
+      <entry>remake</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </informaltable>
+  <para>To add further components like version management or a workflow
+   mechanism for your projects, use &dapsacr; in combination with the following 
+   software:</para>
   <itemizedlist>
    <listitem>
     <para>Any version management system, like CVS, Subversion, Mercurial or Git.
@@ -135,7 +191,7 @@
    Together with the software components mentioned above, &dapsacr; can be
    used as a fully-fledged authoring and content management system for documentation
    projects based on DocBook.
-  </para>">  
+  </para>'>  
   
 <!ENTITY daps-img-formats
 " <para>&dapsacr; supports the following types of images:</para>
