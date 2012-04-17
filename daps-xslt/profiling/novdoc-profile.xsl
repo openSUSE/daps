@@ -100,7 +100,7 @@
 
 
 <xsl:template match="remark" mode="profile">
-  <xsl:if test="$show.remarks != 0">
+  <xsl:if test="$show.comments != 0">
     <xsl:apply-imports/>
   </xsl:if>
 </xsl:template>
