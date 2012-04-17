@@ -107,7 +107,7 @@
 
 
 <xsl:template match="comment()" mode="profile">
-  <xsl:if test="$show.comments != 0">
+  <xsl:if test="$keep.xml.comments != 0">
     <xsl:apply-imports/>
   </xsl:if>
 </xsl:template>

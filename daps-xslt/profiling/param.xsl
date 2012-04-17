@@ -11,7 +11,7 @@
 <!-- show comments and/or remarks
      0 = no, 1 = yes
 -->
-<xsl:param name="show.comments" select="0"/>
+<xsl:param name="keep.xml.comments" select="0"/>
 <xsl:param name="show.remarks" select="0"/>
 
 <!-- Should the SUSE processing instruction be resolved?

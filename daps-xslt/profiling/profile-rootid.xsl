@@ -7,7 +7,7 @@
    <xsl:variable name="_comment.msg">
      <xsl:text> HINT: Comments are</xsl:text>
      <xsl:choose>
-       <xsl:when test="$show.comments != 0">
+       <xsl:when test="$keep.xml.comments != 0">
          <xsl:text> ON&#10;</xsl:text>
        </xsl:when>
        <xsl:otherwise>
