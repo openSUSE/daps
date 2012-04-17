@@ -588,30 +588,28 @@ function check_paths () {
     #    FALLBACK_STYLEROOT
     #    STYLEDEVEL
     #    STYLEROOT
-    for DIR in DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
+    for DIR in BUILD_DIR DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
         VAL=""
         eval "VAL=\$$DIR"
         [[ -n $VAL && ! -d $VAL ]] && exit_on_error "Fatal: $DIR \"$VAL\" is not a valid directory"
     done
     # Files:
     #    EPUB_CSS
-    #    FOP_WRAPPER
     #    HTML_CSS
     #    MAIN
-    #    XEP_WRAPPER
     for FILE in EPUB_CSS HTML_CSS MAIN; do
         VAL=""
         eval "VAL=\$$FILE"
         [[ -n $VAL && ! -e $VAL ]] && exit_on_error "Fatal: $FILE \"$VAL\" does not exist"
     done
     # issue warnings only for the wrapper scripts
-    if [[ 1 -le $VERBOSITY ]]; then
-        for FILE in FOP_WRAPPER XEP_WRAPPER; do
-            VAL=""
-            eval "VAL=\$$FILE"
-            [[ -n $VAL && ! -e $VAL ]] && echo "Hint: $FILE \"$VAL\" does not exist"
-        done
-    fi
+#    if [[ 1 -le $VERBOSITY ]]; then
+#        for FILE in FOP_WRAPPER XEP_WRAPPER; do
+#            VAL=""
+#            eval "VAL=\$$FILE"
+#            [[ -n $VAL && ! -e $VAL ]] && echo "Hint: $FILE \"$VAL\" does not exist"
+#        done
+#    fi
 }
 
 # ----------------------------------------------------------------------------
@@ -981,10 +979,6 @@ if [[ -z "$MAIN_CMDL" ]]; then
     MAIN="$MAIN_CMDL"
 fi
 
-# Check paths that have been set so far
-#
-check_paths
-
 #----------
 # Values that need to be exported and are not set in the config
 #
@@ -1012,15 +1006,6 @@ fi
 #
 # set all basic paths that have not been set by now
 
-# In config.in these values are set to @pkgdatadir@/libexec/
-# In case we use an SVN checkout we want to replace @pkgdatadir@
-# with areal path
-#
-if [[ -n $DAPSROOT_CMDL ]]; then
-    FOP_WRAPPER="${LIBEXEC_DIR}/daps-fop"
-    XEP_WRAPPER="${LIBEXEC_DIR}/daps-xep"
-fi
-
 # Make paths for Variables set in the user config file absolute
 # and remove trailing slashes
 #
@@ -1036,6 +1021,11 @@ fi
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
 [[ -z $BUILD_DIR_CMDL ]] && BUILD_DIR=${DOC_DIR}/build
+
+
+# Check paths that have been set so far
+#
+check_paths
 
 #----------------------------------
 # DocBook Stylesheet locations
@@ -1082,17 +1072,19 @@ R_DIR="${BUILD_DIR}/${BOOK}/"
 LOG_DIR="${R_DIR}/log"
 
 #----------------------------------
-# FOP_CONFIG / XEP_CONFIG
-# when using an SVN checkout, @sysconfdir@ has not been replaced
+# FOP/XEP CONFIG and WRAPPER
+# when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
+# replaced
 #
 # ${string/#substring/replacement}
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
 FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
 XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
-#FOP_WRAPPER
-#XEP_WRAPPER
+XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 #-------------------------------------------------------------------
 # Now export all variables set by the config file

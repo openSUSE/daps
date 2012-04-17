@@ -347,7 +347,13 @@ function call_make () {
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
 
-     PDF FORMATTER: $FORMATTER
+     PDF FORMATTER: $FORMATTER"
+        if [[ "fop" = $FORMATTER ]]; then
+            echo "           WRAPPER: $FOP_WRAPPER"
+        elif [[ "xep" = $FORMATTER ]]; then
+            echo "           WRAPPER: $XEP_WRAPPER"
+        fi
+        echo "
            MAKECMD: $MAKECMD
  XML_CATALOG_FILES: $XML_CATALOG_FILES
 ---------------
