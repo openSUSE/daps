@@ -205,8 +205,8 @@
    <title>Installing and Configuring the FO Formatter</title>
    <para>
     For installation and configuration of an FO formatter (for generating PDF
-    output), refer to the installation instructions of the product or to your
-   system administrator. For FOP, you usually only need to install the 
+    output), refer to its installation instructions (or to your
+   system administrator). For FOP, you usually only need to install the 
    respective FOP package. However, not all FOP packages contain hyphenation 
    pattern files. <remark>taroth 2012-03-26: todo - mention download from 
    offo.sourceforeg.net in troubleshooting section and add xref</remark>
@@ -221,7 +221,7 @@
    instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
    script automatically creates the <xref
     linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/> and <xref
-    linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/> you
+    linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/> that you
    need to get started with  &dapsacr;.
   </para>
   <sect2 id="sec.daps.quick.basics.files">
@@ -274,14 +274,14 @@
     <title>Directory Structure</title>
     <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.docdir.base"/>
   |--&dc;*<co id="co.docdir.dc"/>
-     |--images/<co id="co.docdir.img"/> 
+     |--images/
      |   |--src/<co id="co.docdir.img.src"/>
-     |   |--dia/
-     |   |--eps/
-     |   |--fig/
-     |   |--pdf/
-     |   |--png/
-     |   |--svg/
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
      |--xml/<co id="co.docdir.xml"/> 
      |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
    </example>
@@ -301,9 +301,8 @@
       Top-level directory for any original images that you want to use in
       the documentation project. Contains subdirectories for images in
       various formats. Any images to be referenced in the XML sources must
-      be put in the respective subdirectories.
-      <remark>taroth 2012-02-01: add xref to 
-     section about using images (how to reference them -> path!)</remark>
+      be put in the respective subdirectories. For information about referencing
+      images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.</remark>
      </para>
     </callout>
     <callout arearefs="co.docdir.xml">
@@ -404,7 +403,8 @@
    <sgmltag>xref</sgmltag> elements and for checks if the XML document is
    well-formed. If you are already familiar with vi or Emacs, you can
    configure them to support XML editing mode. If your prefer an editor with a
-   graphical user interface, jEdit is a good choice.
+   graphical user interface, <ulink url="www.jedit.org/">jEdit</ulink> is a good
+   choice.
   </para>
   <para>
    If you already worked with DocBook, you know about the typical top-level
@@ -432,7 +432,7 @@
  </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
-  <para>D epending on the output format you generate with &dapsacr; (PDF or
+  <para>Depending on the output format you generate with &dapsacr; (PDF or
    HTML for example), the source images you provide and reference in your XML
    sources are automatically transformed into the appropriate output formats,
    for example SVG to PNG for HTML builds, or color to grayscale for b/w PDFs.
