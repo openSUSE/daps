@@ -434,11 +434,9 @@
   <title>Image Handling</title>
   <para>Depending on the output format you generate with &dapsacr; (PDF or
    HTML for example), the source images you provide and reference in your XML
-   sources are automatically transformed into the appropriate output formats,
-   for example SVG to PNG for HTML builds, or color to grayscale for b/w PDFs.
-   This section describes the basic things you need to know about using images
-   (supported formats, where to store the images in your documentation
-   directory, and how to reference them).
+   sources are automatically transformed into the appropriate output formats. 
+   For example, SVG images are converted to PNG for HTML builds, or color images 
+   to grayscale for black-and-white PDFs. 
   </para>
   <sect2 id="sec.daps.quick.imgs.types">
    <title>Supported Image Types</title> 
@@ -448,9 +446,9 @@
    <title>Location of the Images</title>
    <para>
     &dapsacr; requires a certain directory structure for your XML sources and
-    for your images that you want to reference there. For details, refer to 
-  <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Depending on 
-    the file type of your source images, add them to the respective
+    for your images that you want to reference in the XML files. For details, 
+    refer to <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Depending 
+    on the file type of your source images, add them to the respective
     subdirectories in
     <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
   </para>
@@ -458,15 +456,15 @@
     <title>Unique Image Names</title>
     <para>
      The base names of your images need to be unique throughout the image
-     subdirectories. If, for example,
-            <filename>images/src/svg/AAA.svg</filename> and
-     <filename>images/src/png/AAA.png</filename> exist, there is no way to
-     predict which one will show up in your output documents (due to image
-     processing being done in parallel processes). The basename of the image
-          needs to be different, for example:
-            <filename>images/src/svg/AAA.svg</filename> and
-     <filename>images/src/svg/BBB.png</filename>. Use &dapsacr;' subcommand
-     <command>warn-images</command> to earch for image names not being unique:
+     subdirectories. &dapsacr; processes images in parallel processes. For example, 
+     if both <filename>images/src/svg/AAA.svg</filename> 
+     and <filename>images/src/png/AAA.png</filename> exist, it is unpredictable 
+     if the SVG or the PNG will appear in your output document. Therefore, 
+     use different base names: <filename>images/src/svg/AAA.svg</filename> and
+     <filename>images/src/svg/BBB.png</filename>.</para>
+     <para>To search for common image names, use the <command>warn-images</command> 
+     subcommand. It lists all images with non-unique base names for a 
+     particular documentation project. 
     </para>
     <screen>$ daps -d <replaceable>PATH_TO_DOC_DIR/DC-FILE</replaceable> warn-images</screen>
    </important>
@@ -483,12 +481,12 @@
     enough.
    </para>
    <para>
-    Furthermore DocBook allows you to insert more than one image to
-    distinguish between different target formats. For example, you can add two
-    images pointing to the same file, but with different widths. Use the
-    <sgmltag class="attribute">role</sgmltag> attribute and add the name of
-    the target format (<sgmltag class="attvalue">fo</sgmltag>, <sgmltag
-     class="attvalue">html</sgmltag>, etc.) See <xref
+    Furthermore DocBook allows you to reference more than one image to distinguish 
+    between different output formats. For example, you can add two
+    references pointing to the same file, but using different images widths for
+    PDF and HTML output. Use the <sgmltag class="attribute">role</sgmltag> attribute 
+    to specify the output format, for example <sgmltag class="attvalue">fo</sgmltag>
+    or <sgmltag class="attvalue">html</sgmltag>. See <xref
      linkend="ex.xml.img.ref"/>.
   </para>
    <example id="ex.xml.img.ref">
@@ -697,7 +695,7 @@ make: *** [validate] Error 3</screen>
        <entry>
         <para>
          Requires an FO formatter. All color images are automatically 
-         converted to greyscale images.
+         converted to grayscale images.
         </para>
        </entry>
       </row>
