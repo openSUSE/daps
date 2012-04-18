@@ -89,7 +89,7 @@
        Go to <ulink url="http://software.opensuse.org/"/> and search for the 
        <systemitem class="resource">daps</systemitem>. On the resulting page, 
        click <menuchoice><guimenu>daps</guimenu><guimenu>Show other versions</guimenu>
-       <guimenu>Show unstable packages</guimenu>. Select the version that is provided 
+       <guimenu>Show unstable packages</guimenu></menuchoice>. Select the version that is provided 
        by the repository <systemitem class="service">&suse-dapsrepo;</systemitem>. 
        To start installation of the package click the <guimenu>1 Click Install</guimenu> 
        link next to the selected package.
@@ -138,56 +138,48 @@
 
    <procedure id="pro.daps.quick.inst.tarball">
     <title>Installing the &dapsacr; Sources</title>
-    <para>
-     Before starting the installation, check the &dapsacr; 
-     <xref linkend="sec.daps.quick.req.system" xrefstyle="select:title"/> and
-     make sure to have all required packages and tools installed.
-    </para>
+    <para> Before starting the installation, check the &dapsacr; <xref
+      linkend="sec.daps.quick.req.system" xrefstyle="select:title"/> and make
+     sure to have all required packages and tools installed. </para>
     <step>
-     <para>
-      Download the &dapsacr; source tarball
-      (<literal>daps-<replaceable>x.y.tar.bz2)</replaceable></literal>)from
-      <ulink url="http://sourceforge.net/projects/daps/files/" />.
+     <para>Go to <ulink url="http://sourceforge.net/projects/daps/files/"/> and
+      download the &dapsacr; source tarball,
+        <filename>daps-<replaceable>versionnumber</replaceable>.tar.bz2</filename>.
      </para>
     </step>
     <step>
-     <para>
-      Create a new directory in your file system and unpack the tarball there.
-     </para>
-    <!--<screen>tar xvf TARBALLNAME .</screen>-->
+     <para> Unpack the tarball: </para>
+     <screen>tar xvf daps-<replaceable>versionnumber</replaceable>.tar.bz2</screen>
     </step>
     <step id="daps.quick.inst.configure">
-     <para>
-      Change to the newly created directory and start the configure script:
-     </para>
+     <para> Change to the newly created <filename>daps</filename> subdirectory
+      and start the configure script: </para>
      <screen>$ ./configure</screen>
-     <para>
-      If you want to adjust the &dapsacr; installation paths, view the
-      available options with <command>$ ./configure
-       <option>--help</option></command> and run the configure script with the
-      desired option.
-     </para>
-     <para>
-      The script checks your system for any software relevant to &dapsacr; or
-    the &dapsacr; installation process. It also creates a makefile that will
-    be used during installation. Based on the analysis, the script shows a 
-      summary that includes the following information:
-     </para>
+     <para> If you want to adjust the &dapsacr; installation paths:</para>
+     <substeps>
+      <step>
+       <para>View the available options with</para>
+       <screen>$ ./configure <option>--help</option></screen>
+      </step>
+      <step>
+       <para>Run the configure script with the desired option. </para>
+      </step>
+     </substeps>
+     <para> The script checks your system for any software relevant to
+      &dapsacr; or the &dapsacr; installation process. It also creates a
+      makefile that will be used during installation. Based on the analysis, the
+      script shows a summary that includes the following information: </para>
      <itemizedlist>
       <listitem>
        <para>the &dapsacr; installation paths,</para>
       </listitem>
       <listitem>
-       <para>
-        an overview of &dapsacr; features that will be available on your
-        system if you install &dapsacr; now, and
-       </para>
+       <para> an overview of &dapsacr; features that will be available on
+        your system if you install &dapsacr; now, and </para>
       </listitem>
       <listitem>
-       <para>
-        which software is still missing to enable the remaining &dapsacr;
-        features as well.
-       </para>
+       <para> which software is still missing to enable the remaining
+        &dapsacr; features as well. </para>
       </listitem>
      </itemizedlist>
     </step>
@@ -195,11 +187,9 @@
      <para>Check the summary carefully.</para>
     </step>
     <step>
-     <para>
-      Install missing packages, if necessary. After installing new packages, 
-      repeat <xref linkend="daps.quick.inst.configure"/> and check the summary
-      again.
-     </para>
+     <para> Install missing packages, if necessary. After installing new
+      packages, repeat <xref linkend="daps.quick.inst.configure"/> and check the
+      summary again. </para>
     </step>
     <step>
      <para>If everything is prepared according to your wishes, enter:</para>
