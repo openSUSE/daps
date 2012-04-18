@@ -47,11 +47,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#26558b', end
 h2 {
   font-size:2em;
   font-weight:400;
-  padding-left:0.75em;
-  padding: 0.5em 2em; 
-  -webkit-column-span:all; /* Chrome */
-  -moz-column-span:all;
-
+  text-align:center;
 }
 
 h3 {
@@ -80,6 +76,13 @@ h3 {
 }
 
 #main {
+  -o-column-count: 3;
+  -o-column-width:200px;
+  -o-column-gap: 25px;
+  -o-column-rule-width: thin;
+  -o-column-rule-color:gray;
+  -o-column-rule-style:solid;
+  
   -webkit-column-count: 3;
   -webkit-column-width:200px;
   -webkit-column-gap: 25px;
