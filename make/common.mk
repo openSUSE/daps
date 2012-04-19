@@ -235,6 +235,7 @@ endif
 
 FOSTRINGS    := --stringparam keep.xml.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
+		--stringparam draft.watermark.image "$(dir $(STYLEIMG))images/draft.png" \
 	        --stringparam show.comments $(REMARKS) \
                 --stringparam format.print 1 \
                 --stringparam callout.graphics.path \
@@ -245,6 +246,7 @@ FOSTRINGS    := --stringparam keep.xml.comments $(COMMENTS) \
 
 FOCOLSTRINGS := --stringparam keep.xml.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
+		--stringparam draft.watermark.image "$(dir $(STYLEIMG))images/draft.png" \
 	        --stringparam show.comments $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
