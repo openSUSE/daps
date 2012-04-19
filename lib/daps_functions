@@ -349,9 +349,12 @@ function call_make () {
 
      PDF FORMATTER: $FORMATTER"
         if [[ "fop" = $FORMATTER ]]; then
-            echo "           WRAPPER: $FOP_WRAPPER"
+            echo " FORMATTER WRAPPER: $FOP_WRAPPER
+  FORMATTER CONFIG: $FOP_CONFIG_FILE"
+
         elif [[ "xep" = $FORMATTER ]]; then
-            echo "           WRAPPER: $XEP_WRAPPER"
+            echo "  FORMATTER WRAPPER: $XEP_WRAPPER
+  FORMATTER CONFIG: $XEP_CONFIG_FILE"
         fi
         echo "
            MAKECMD: $MAKECMD
