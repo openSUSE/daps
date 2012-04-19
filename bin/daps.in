@@ -62,7 +62,7 @@ VARLIST=(
     EPUBCHECK
     EPUB_CSS
     FALLBACK_STYLEROOT
-    FOP_CONFIG
+    FOP_CONFIG_FILE
     FOP_OPTIONS
     FOP_WRAPPER
     FORMATTER
@@ -92,7 +92,7 @@ VARLIST=(
     USEMETA
     WH_SEARCH
     VERBOSITY
-    XEP_CONFIG
+    XEP_CONFIG_FILE
     XEP_OPTIONS
     XEP_WRAPPER
     XSLTPARAM
@@ -1081,10 +1081,10 @@ LOG_DIR="${R_DIR}/log"
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
-FOP_CONFIG=${FOP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
-XEP_CONFIG=${XEP_CONFIG/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 #-------------------------------------------------------------------

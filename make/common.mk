@@ -1301,7 +1301,7 @@ ifeq ("$(FORMATTER)","fop")
   endif
 endif
 ifeq ("$(FORMATTER)","xep")
-  FORMATTER_CMD := XEP_CONFIG_FILE=$(XEP_CONFIG) $(XEP_WRAPPER) $(XEP_OPTIONS)
+  FORMATTER_CMD := $(XEP_WRAPPER) $(XEP_OPTIONS)
 endif
 
 
