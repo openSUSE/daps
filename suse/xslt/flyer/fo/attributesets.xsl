@@ -193,4 +193,11 @@
   <xsl:attribute name="font-style">italic</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-left">12pt</xsl:attribute>
+  <xsl:attribute name="padding-right">12pt</xsl:attribute>
+  <xsl:attribute name="padding-top">6pt</xsl:attribute>
+  <xsl:attribute name="padding-bottom">6pt</xsl:attribute>
+</xsl:attribute-set>
+
 </xsl:stylesheet>
