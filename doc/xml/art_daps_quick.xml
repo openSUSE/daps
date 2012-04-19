@@ -513,7 +513,7 @@
    output formats from your XML documents, let's get familiar with the basic
    syntax of the <command>daps</command> command:
   </para>
-  <screen>$ daps [--global-options] "subcommand" [--command-options] [arguments]</screen>
+  <screen>$ daps [--global-options] subcommand [--command-options] [arguments]</screen>
   <para>
    <xref linkend="ex.daps.syntax"/> shows an example command that generates 
    HTML output. Global options are used to specify the level of verbosity, and 
@@ -529,13 +529,13 @@
      <para>
       Global Option <option>--debug</option>: Sets the highest verbosity level
       (number of messages shown during the transformation process from XML to
-      HTML). In this case, debug messages are shown.
+      HTML). 
      </para>
     </callout>
     <callout arearefs="co.daps.syntax.dc">
      <para>
-      Global Option <option>-d</option>: Defines the realtive or absolute path
-      to the &dclong; file. In this example <command>daps</command> is called
+      Global Option <option>-d</option>: Defines the relative or absolute path
+      to the &dclong; file. In this example, <command>daps</command> is called
       in the same directory that holds the &dclong; file.
      </para>
     </callout>
@@ -594,17 +594,12 @@
    <para>
     Generating any output requires that your XML files are well-formed and can
     be validated. As soon as any output command is executed, &dapsacr;
-  automatically runs a validation check first&mdash;if it fails, &dapsacr; 
-    returns the parser errors. They include information about the type of
+    automatically runs a validation check first. If it fails, &dapsacr; 
+    returns the parser errors, including information about the type of
     error, the respective file name and the line number where the error
     occured. <!-- In addition, &dapsacr; shows the path to the profiled XML
     sources and the total number of errors. -->
    </para>
-    <remark>toms, 2012-04-15: It seems "profiled XML" isn't definied
-        yet, is it? Either completely be silent about profiled XML
-        sources or add a small section about the why's and how's. :) I
-        would tend to remove this as it is a Quick Start and such detail
-        can be explained in the User's Guide.</remark>
    <example>
     <title>Parser Output For Validation Errors (link to unknown ID)</title>
     <screen>daps_user_concept.xml:60: element xref: validity error: 
@@ -645,9 +640,9 @@ make: *** [validate] Error 3</screen>
    <table id="table.daps.output.overview">
     <title>&dapsacr; Output Commands and Formats</title>
     <tgroup cols="3">
-     <colspec colnum="1" colname="1" colwidth="20*"/>
-     <colspec colnum="2" colname="2" colwidth="40*"/>
-     <colspec colnum="3" colname="3" colwidth="40*"/>
+     <colspec colnum="1" colname="1" colwidth="18*"/>
+     <colspec colnum="2" colname="2" colwidth="41*"/>
+     <colspec colnum="3" colname="3" colwidth="41*"/>
      <thead>
       <row>
        <entry>
@@ -668,7 +663,7 @@ make: *** [validate] Error 3</screen>
        </entry>
        <entry>
         <para>
-         Creates a color PDF (without any cropmarks). Open the result in
+         Creates a color PDF (without any crop marks). Open the result in
          a PDF viewer.
         </para>
        </entry>
@@ -687,14 +682,14 @@ make: *** [validate] Error 3</screen>
        </entry>
        <entry>
         <para>
-         Creates a black-and-white PDF with crop marks (currently only
-         supported by the XEP FO formatter), suitable for hand-off to a printing
-         shop.  Open the result in a PDF viewer.
+         Creates a black-and-white PDF with crop marks, suitable for hand-off to
+         a printing shop. Open the result in a PDF viewer.
         </para>
        </entry>
        <entry>
         <para>
-         Requires an FO formatter. All color images are automatically 
+         Requires an FO formatter. Creation of crop marks is currently only
+         supported by the XEP FO formatter. All color images are automatically 
          converted to grayscale images.
         </para>
        </entry>
@@ -716,10 +711,10 @@ make: *** [validate] Error 3</screen>
        </entry>
        <entry>
         <para>
-         Images and CSS files are only linked in the HTML result
-         directory. To copy these files to the same location like the HTML
-         files, use the <option>--static</option> option. This is useful for
-         creating distributable HTML builds.
+         Images and CSS files are only linked in the resulting directory 
+         that contains the HTML files. To copy these files to the same location 
+         like the HTML files, use the <option>--static</option> option. This is 
+         useful for creating distributable HTML builds.
         </para>
        </entry>
       </row>
@@ -737,10 +732,10 @@ make: *** [validate] Error 3</screen>
        <entry>
         <para>
          Single HTML files are more convenient for full text searches.
-         Images and CSS files are only linked in the HTML result directory. To
-         copy these files to the same location like the HTML files, use the
-        <option>--static</option> option. This is useful for creating 
-        distributable HTML builds.
+         Images and CSS files are only linked in the resulting directory that
+         contains the HTML files. To copy these files to the same location like 
+         the HTML files, use the <option>--static</option> option. This is useful 
+         for creating distributable HTML builds.
         </para>
        </entry>
       </row>
@@ -778,7 +773,7 @@ make: *** [validate] Error 3</screen>
        <entry>
         <para>
          Experimental feature. Requires a very recent version of the
-         DocBook stylesheets. DocBook WebHelp consists of HTML pages with an
+         DocBook stylesheets. DocBook &webh; consists of HTML pages with an
          additional pane, featuring a table of contents and a search function.
          The table of contents can be expanded and collapsed and is
          automatically synchronized with the contents pane. The search
@@ -799,7 +794,7 @@ make: *** [validate] Error 3</screen>
        <entry>
         <para>
          All images are removed from the output, but their location
-      is indicated in the text by printing the respective image base name in 
+      is indicated in the text by the respective image base name printed in 
       square brackets. A table of contents is automatically generated and is 
          available at the beginning of the text document.
         </para>
@@ -816,11 +811,11 @@ make: *** [validate] Error 3</screen>
        <entry>
         <para>
          To create man pages, your XML files must contain at least one
-         <sgmltag>refentry</sgmltag> be it in a <sgmltag>chapter</sgmltag>,
-                    <sgmltag>appendix</sgmltag>, or collected in a
+         <sgmltag>refentry</sgmltag>&mdash;be it in a <sgmltag>chapter</sgmltag>,
+         <sgmltag>appendix</sgmltag>, or collected in a
          <sgmltag>reference</sgmltag> element. When processing a DocBook
          document with multiple <sgmltag>refentry</sgmltag> elements
-         (regardless where it appears), &dapsacr; generates one man page file
+         (regardless where they appear), &dapsacr; generates one man page file
          per <sgmltag>refentry</sgmltag> element. All other parts of the
          document will be ignored.
         </para>
@@ -871,7 +866,7 @@ make: *** [validate] Error 3</screen>
          Experimental feature. The output is very basic: Section titles
          are converted in headlines according to their hierarchy, itemized
          lists, ordered lists and <sgmltag>screen</sgmltag> elements are
-         converted to the respective MediWiki elements.
+         converted to the respective MediaWiki elements.
         </para>
        </entry>
       </row>
@@ -915,12 +910,9 @@ make: *** [validate] Error 3</screen>
     <title>Output with Remarks or Draft Watermark</title>
     <para>
      For publishing a pre-release version of a document that you
-          might want to send to a proofreader for review, use the local
-     <option>--draftd</option> option to mark the document as
-     <literal>DRAFT</literal> version.
-    </para>
-    <para>
-     For example, use the following command to build a color PDF
+     might want to send to a proofreader for review, use the 
+     <option>--draft</option> command option to mark the document as
+     draft version. For example, use the following command to build a color PDF
      that has a <literal>DRAFT</literal> watermark printed on each page:
     </para>
     <screen>$ daps -d DC-daps-example color-pdf --draft</screen>
@@ -958,7 +950,7 @@ make: *** [validate] Error 3</screen>
   projects so that you can use &dapsacr; for managing and publishing them.
    </para>
   <procedure id="pro.daps.quick.migrate">
-   <title>Migrating DocBook Projects</title>
+   <title>Making DocBook Projects Compatible with &dapsacr;</title>
    <step>
     <para>
      If your XML files are distributed across several subdirectories, flatten
