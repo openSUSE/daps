@@ -233,9 +233,9 @@ endif
 #  fostrings:    b/w pdf
 #  focolstrings: color pdf
 
-FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
+FOSTRINGS    := --stringparam keep.xml.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
-	        --stringparam show.remarks $(REMARKS) \
+	        --stringparam show.comments $(REMARKS) \
                 --stringparam format.print 1 \
                 --stringparam callout.graphics.path \
                   "$(STYLEIMG)/callouts/" \
@@ -243,9 +243,9 @@ FOSTRINGS    := --stringparam show.comments $(COMMENTS) \
                 --stringparam styleroot "$(dir $(STYLEIMG))" \
 		--param ulink.show 1
 
-FOCOLSTRINGS := --stringparam show.comments $(COMMENTS) \
+FOCOLSTRINGS := --stringparam keep.xml.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
-	        --stringparam show.remarks $(REMARKS) \
+	        --stringparam show.comments $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
                 --stringparam format.print 0 \
                 --stringparam callout.graphics.path \
@@ -286,9 +286,9 @@ endif
 #
 
 HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
-                --stringparam show.comments $(COMMENTS) \
+                --stringparam keep.xml.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
-	        --stringparam show.remarks $(REMARKS) \
+	        --stringparam show.comments $(REMARKS) \
                 --stringparam use.id.as.filename 1 \
                 --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
@@ -311,9 +311,9 @@ endif
 #
 # 
 WEBHELPSTRINGS := --stringparam base.dir $(WEBHELP_DIR)/ \
-                  --stringparam show.comments $(COMMENTS) \
+                  --stringparam keep.xml.comments $(COMMENTS) \
 	          --stringparam draft.mode "$(DRAFT)" \
-	          --stringparam show.remarks $(REMARKS) \
+	          --stringparam show.comments $(REMARKS) \
                   --stringparam use.id.as.filename 1 \
                   --stringparam admon.graphics.path "style_images/" \
                   --stringparam admon.graphics 1 \
@@ -343,9 +343,9 @@ WEBHELPSTRINGS += --stringparam chunk.fast 1 \
 #  
 #
 JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
-                --stringparam show.comments $(COMMENTS) \
+                --stringparam keep.xml.comments $(COMMENTS) \
 		--stringparam draft.mode "$(DRAFT)" \
-                --stringparam show.remarks $(REMARKS) \
+                --stringparam show.comments $(REMARKS) \
                 --stringparam use.id.as.filename 1 \
                 --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
@@ -375,8 +375,8 @@ endif
 # Profiling stringparams
 #
 ifdef PROFILE_URN
-  PROFSTRINGS := --stringparam show.comments $(COMMENTS) \
-	         --stringparam show.remarks $(REMARKS)
+  PROFSTRINGS := --stringparam keep.xml.comments $(COMMENTS) \
+	         --stringparam show.comments $(REMARKS)
   ifdef PROFARCH
     PROFSTRINGS += --stringparam profile.arch "$(PROFARCH)"
   endif
@@ -1038,8 +1038,8 @@ $(TMP_XML): $(PROFILES)
   ifdef PROFILE_URN
 	xsltproc --xinclude --output $@ \
 	  --stringparam resolve.suse-pi 1 \
-	  --stringparam show.comments $(COMMENTS) \
-	  --stringparam show.remarks $(REMARKS) \
+	  --stringparam keep.xml.comments $(COMMENTS) \
+	  --stringparam show.comments $(REMARKS) \
 	  --stringparam projectfile PROJECTFILE.$(BOOK) $(PROFILE_URN) \
 	  $(PROFILED_MAIN)
   else
@@ -1126,8 +1126,8 @@ $(PROFILE_PARENT_DIR)/dist/%: $(PROFILE_PARENT_DIR)/dist
     endif
 	$(LIBEXEC_DIR)/entities-exchange.sh -s -d preserve $<
 	xsltproc --nonet --output $@ \
-		$(subst show.remarks 1,show.remarks 0, \
-		  $(subst show.comments 1,show.comments 0, \
+		$(subst show.comments 1,show.comments 0, \
+		  $(subst keep.xml.comments 1,keep.xml.comments 0, \
 		  $(PROFSTRINGS))) \
 		  --stringparam filename "$(notdir $<)" \
 		  $(PROFILE_URN) $<
