@@ -92,7 +92,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # SGML CATALOG
 #
 if [ -x %{regcat} ]; then
-  echo "######################## adding catalog in post"
   %{regcat} -a %{_datadir}/sgml/CATALOG.%{dtdname}-%{dtdversion} >/dev/null 2>&1 || true
 fi
 # XML Catalogs
