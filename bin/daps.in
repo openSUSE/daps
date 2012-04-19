@@ -588,7 +588,7 @@ function check_paths () {
     #    FALLBACK_STYLEROOT
     #    STYLEDEVEL
     #    STYLEROOT
-    for DIR in BUILD_DIR DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
+    for DIR in DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
         VAL=""
         eval "VAL=\$$DIR"
         [[ -n $VAL && ! -d $VAL ]] && exit_on_error "Fatal: $DIR \"$VAL\" is not a valid directory"
