@@ -1032,9 +1032,10 @@ check_paths
 #
 # get DocBook version first ...
 DOCBOOK_VERSION=$(xsltproc \
-    ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl $MAIN 2>/dev/null) || \
-    { DOCBOOK_VERSION=4; \
-      "Could not get DocBook version, assuming DocBook 4"; } 
+    ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl $MAIN) || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
+
+#    || { DOCBOOK_VERSION=4; \
+#      "Could not get DocBook version, assuming DocBook 4"; } 
 
 # ... now resolve the style URI via catalogs
 if [[ 5 = $DOCBOOK_VERSION ]]; then
