@@ -38,7 +38,7 @@ function parse_args () {
     
     while true ; do
         case "$1" in
-            -c|--comments)
+            --comments)
 		P_COMMENTS=1
 		shift
 		;;
@@ -48,18 +48,18 @@ function parse_args () {
                 ;;
             --css)
                 if [[ -n $2 ]]; then
-                    P_CSS="$2"
+                    P_CSS=$(absolute_path "$2")
                 else
                     P_CSS=0
                 fi
                 shift 2
                 ;;
-            -d|--draft)
+            --draft)
 		P_DRAFT=1
 		shift
 		;;
             --def-file)
-                P_DEF_FILE="$2"
+                P_DEF_FILE=$(absolute_path "$2")
                 shift 2
                 ;;
             --check)
@@ -82,7 +82,7 @@ function parse_args () {
                 P_HTML4=1
                 shift
                 ;;
-            -m|--meta)
+            --meta)
                 P_META=1
                 shift
                 ;;
@@ -90,11 +90,11 @@ function parse_args () {
                 P_MODIFIED=1
                 shift
                 ;;
-            -n|--nopdf)
+            --nopdf)
                 P_NOPDF=1
                 shift
                 ;;
-            -n|--nosearch)
+            --nosearch)
                 P_NOSEARCH=1
                 shift
                 ;;
@@ -110,7 +110,7 @@ function parse_args () {
                 P_PRETTY=1
                 shift
                 ;;
-            -r|--remarks)
+            --remarks)
 		P_REMARKS=1
 		shift
 		;;
@@ -122,7 +122,7 @@ function parse_args () {
 		P_ROOTID="$2"
 		shift 2
 		;;
-            -s|--show)
+            --show)
                 P_SHOW=1
                 shift
                 ;;
@@ -1255,7 +1255,7 @@ $2
 }
 
 function help_comments () {
-    echo "    --comments, -c            Include XML comments in profiled sources
+    echo "    --comments                Include XML comments in profiled sources
                               Default: off"  
 }
 function help_compact () {
@@ -1270,13 +1270,13 @@ function help_check () {
                               Default: unset"
 }
 function help_css () {
-    echo "    --css=filename --css      Specify an absolute path to a css file, or,
-                              when no argument is given, unset a declaration made
+    echo "    --css=filename, --css     Specify a path to a css file, or, when no
+                              argument is given, unset a declaration made
                               in a config file (e.g. a DC-file).
                               Default: unset"
 }
 function help_draft () {
-    echo "    --draft, -d               Add a 'DRAFT' watermark to all pages of the book
+    echo "    --draft                   Add a 'DRAFT' watermark to all pages of the book
                               Default: off" 
 }
 function help_def-file () {
@@ -1300,7 +1300,7 @@ function help_html4 () {
                               Default: unset"
 }
 function help_modified () {
-    echo "    --modified, -m            Print the image's modification time.
+    echo "    --modified                Print the image's modification time.
                               Ignored when --compact is set.
                               Default: off"
 }
@@ -1321,7 +1321,7 @@ No further help for subcommand \"$1\" available.
 "
 }
 function help_nopdf () {
-    echo "    --nopdf, -n               Deactivates creating the color-pdf. Useful when
+    echo "    --nopdf                   Deactivates creating the color-pdf. Useful when
                               \"locdropping\" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
@@ -1333,7 +1333,7 @@ function help_nosearch () {
                               Default: enabled"
 }
 function help_meta () {
-    echo "    --meta, -m                If set, prints additional status information
+    echo "    --meta                    If set, prints additional status information
                               (filename, maintainer and status) for each file.
                               Implies draft mode.
                               Default: off"
@@ -1342,7 +1342,7 @@ function help_pretty () {
     echo "    --pretty, -p              Pretty print file lists (one filename per line)"
 }
 function help_remarks () {
-    echo "    --remarks, -r             Include remarks (<remark>...</remark>) in book
+    echo "    --remarks                 Include remarks (<remark>...</remark>) in book
                               Implies draft mode.
                               Default: off"  
 }
@@ -1359,7 +1359,7 @@ function help_static () {
                               to create a distributable HTML build"
 }
 function help_show () {
-    echo "    --show, -s                Show images with an image viewer that either
+    echo "    --show                    Show images with an image viewer that either
                               has been specified with --viewer or by setting
                               IMG_VIEWER in the config file
                               Default: off"

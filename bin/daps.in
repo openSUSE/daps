@@ -1017,6 +1017,8 @@ fi
     FALLBACK_STYLEROOT=$(absolute_path "$FALLBACK_STYLEROOT")
 [[ -z $STYLEROOT_CMDL && -n $STYLEROOT ]] && \
     STYLEROOT=$(absolute_path "$STYLEROOT")
+[[ -n $HTML_CSS ]] && HTML_CSS=$(absolute_path "$HTML_CSS")
+[[ -n $EPUB_CSS ]] && EPUB_CSS=$(absolute_path "$EPUB_CSS")
 
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
