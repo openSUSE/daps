@@ -28,7 +28,7 @@
 # Please submit bugfixes or comments via https://sourceforge.net/p/daps/tickets
 #
 Name:           daps
-Version:        1.0
+Version:        1.01
 Release:        0
 
 %define docbuilddir    %{_datadir}/daps
@@ -47,7 +47,7 @@ Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
-BuildRequires:  bash >= 4.0
+BuildRequires:  bash >= 3.0
 BuildRequires:  dia
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  docbook_4
