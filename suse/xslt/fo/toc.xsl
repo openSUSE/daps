@@ -5,19 +5,6 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 
-<xsl:template name="insert.dot">
- <xsl:if test="ancestor-or-self::*[@lang][1]/@lang = 'hu'">
-  <xsl:text>.</xsl:text>
- </xsl:if>
-</xsl:template>
-
-<!-- Disable the following elements in mode toc: -->
-<xsl:template match="preface/sect1" mode="toc"/>
-<xsl:template match="preface/sect1/sect2" mode="toc"/>
-<xsl:template match="preface/sect1/sect2/sect3" mode="toc"/>
-
-<xsl:template match="refentry" mode="toc"/>
-
 <xsl:template name="keep-with-next.within-line-or-not">
   <xsl:choose>
     <xsl:when test="$xep.extensions != 0">
@@ -28,487 +15,148 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- Special rules for appendix and chapters: -->
-<xsl:template name="toc.line.appendix">
-  <xsl:call-template name="toc.line.chapter"/>
+
+  <xsl:template name="toc.line">
+    <xsl:param name="node" select="."/>
+    <xsl:apply-templates select="$node" mode="toc.line"/>
+  </xsl:template>
+
+
+
+<xsl:template match="preface|glossary|bibliography" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+    <fo:block text-align-last="justify" 
+      space-before="27pt -1em"
+      xsl:use-attribute-sets="toc.title.chapapp.properties">
+      <fo:basic-link internal-destination="{$id}">
+        <xsl:apply-templates select="." mode="title.markup"/>
+        <fo:leader leader-pattern="space"/>
+        <fo:page-number-citation ref-id="{$id}"/>
+      </fo:basic-link>
+    </fo:block>
 </xsl:template>
 
-<xsl:template name="toc.line.chapter">
-  <xsl:variable name="label">
-      <xsl:apply-templates select="." mode="label.markup"/>
-  </xsl:variable>
+<xsl:template match="preface/sect1|preface/section" mode="toc.line">
+  <!-- Nothing to do here -->
+</xsl:template>
 
+
+<xsl:template match="book|article|part" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+   
   <fo:list-block
-                 keep-with-next.within-line="always"
-                 keep-with-next.within-column="always"
-                 space-before="27pt -1em"
-                 space-after="16pt -1em"><!-- provisional-distance-between-starts="15pt" -->
-   <xsl:choose>
-      <xsl:when test="string-length($label)=0"/>
+      provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt">
+      <fo:list-item xsl:use-attribute-sets="toc.title.part.properties">
+        <fo:list-item-label end-indent="label-end()">
+          <fo:block>
+            <xsl:apply-templates select="." mode="label.markup"/>
+            <xsl:value-of select="$autotoc.label.separator"/>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block text-align-last="justify">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:apply-templates select="." mode="title.markup"/>
+              <fo:leader leader-pattern="space"/>
+              <fo:page-number-citation ref-id="{$id}" />
+            </fo:basic-link>
+          </fo:block>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
+  
+</xsl:template>
 
-      <xsl:when test="string-length($label)=1">
-         <xsl:attribute name="provisional-distance-between-starts">15pt</xsl:attribute>
-      </xsl:when>
+<xsl:template match="chapter|appendix" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+   
+  <fo:list-block
+      provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt"
+      space-before="27pt -1em"
+      space-after="16pt -1.5em">
+      <fo:list-item xsl:use-attribute-sets="toc.title.chapapp.properties">
+        <fo:list-item-label end-indent="label-end()">
+          <fo:block>
+            <xsl:apply-templates select="." mode="label.markup"/>
+            <xsl:value-of select="$autotoc.label.separator"/>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block text-align-last="justify">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:apply-templates select="." mode="title.markup"/>
+              <fo:leader leader-pattern="space"/>
+              <fo:page-number-citation ref-id="{$id}" />
+            </fo:basic-link>
+          </fo:block>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
+  
+</xsl:template>
 
-      <xsl:otherwise>
-         <xsl:attribute name="provisional-distance-between-starts">20pt</xsl:attribute>
-      </xsl:otherwise>
-   </xsl:choose>
-
-   <fo:list-item>
+<xsl:template match="chapter/sect1|chapter/section
+                     |appendix/sect1|appendix/section
+                     |article/sect1|article/section" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+  
+  <fo:list-block
+    provisional-distance-between-starts="27pt"
+    provisional-label-separation="3pt">
+   <fo:list-item xsl:use-attribute-sets="toc.title.section.properties">
     <fo:list-item-label end-indent="label-end()">
-      <xsl:call-template name="toc.line.chapter.number"/>
+      <fo:block>
+        <xsl:apply-templates select="." mode="label.markup"/>
+      </fo:block>      
     </fo:list-item-label>
     <fo:list-item-body start-indent="body-start()">
-      <xsl:call-template name="toc.line.chapter.title"/>
+      <fo:block>
+        <fo:block text-align-last="justify">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:apply-templates select="." mode="title.markup"/>
+              <fo:leader leader-pattern="dots" leader-pattern-width="1em"/>
+              <fo:page-number-citation ref-id="{$id}" />
+            </fo:basic-link>
+          </fo:block>
+      </fo:block>
     </fo:list-item-body>
    </fo:list-item>
   </fo:list-block>
 </xsl:template>
 
-<xsl:template name="toc.line.chapter.number">
-  <xsl:variable name="label">
-    <xsl:apply-templates select="." mode="label.markup"/>
-    <xsl:call-template name="insert.dot"/>
-  </xsl:variable>
-
- <fo:block>
-   <fo:inline>
-      <xsl:if test="$label != ''">
-         <xsl:copy-of select="$label"/>
-         <xsl:value-of select="$autotoc.label.separator"/>
-      </xsl:if>
-   </fo:inline>
- </fo:block>
-</xsl:template>
-
-<xsl:template name="toc.line.chapter.title">
+<xsl:template match="refentry" mode="toc.line">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-
-  <fo:block text-align-last="justify"
-            text-align="left"
-            end-indent="2pt"
-            last-line-end-indent="-2pt"
-     ><fo:basic-link internal-destination="{$id}">
-        <xsl:apply-templates
-          select="." mode="titleabbrev.markup"/>
-   </fo:basic-link><fo:inline
-    ><fo:leader leader-pattern="space"
-    />&#xa0;<fo:basic-link internal-destination="{$id}"
-    ><fo:page-number-citation ref-id="{$id}" letter-spacing="0"
-    /></fo:basic-link></fo:inline
-  ></fo:block>
+  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+  
+    <fo:block xsl:use-attribute-sets="toc.title.section.properties"
+       text-align-last="justify">
+      <fo:basic-link internal-destination="{$id}">
+        <xsl:apply-templates select="." mode="title.markup"/>
+        <fo:leader leader-pattern="dots" leader-pattern-width="1em"/>
+        <fo:page-number-citation ref-id="{$id}"/>
+      </fo:basic-link>
+    </fo:block>
 </xsl:template>
 
-
-<xsl:template name="toc.line.section">
-  <fo:list-block>
-   <xsl:choose>
-    <xsl:when test="self::sect1">
-      <xsl:attribute name="start-indent">15pt</xsl:attribute>
-      <xsl:attribute name="provisional-distance-between-starts">27pt</xsl:attribute>
-    </xsl:when>
-    <xsl:when test="self::sect2">
-      <xsl:attribute name="start-indent">42pt</xsl:attribute>
-      <xsl:attribute name="provisional-distance-between-starts">36pt</xsl:attribute>
-    </xsl:when>
-    <xsl:otherwise/>
-   </xsl:choose>
-   <fo:list-item>
-    <fo:list-item-label end-indent="label-end()">
-      <xsl:call-template name="toc.line.section.number"/>
-    </fo:list-item-label>
-    <fo:list-item-body start-indent="body-start()">
-      <xsl:call-template name="toc.line.section.title"/>
-    </fo:list-item-body>
-   </fo:list-item>
-  </fo:list-block>
+<xsl:template match="*" mode="toc.line">
+    <xsl:message>*** Unknown element "<xsl:value-of
+      select="local-name()"/>" for toc.line</xsl:message>
 </xsl:template>
-
-<xsl:template name="toc.line.section.number">
-  <xsl:variable name="label">
-     <xsl:apply-templates select="." mode="label.markup"/>
-     <xsl:call-template name="insert.dot"/>
-  </xsl:variable>
-
-  <fo:block letter-spacing="0"><fo:inline>
-      <xsl:if test="$label != ''">
-         <xsl:copy-of select="$label"/>
-         <xsl:value-of select="$autotoc.label.separator"/>
-      </xsl:if>
-      </fo:inline>
-  </fo:block>
-</xsl:template>
-
-<xsl:template name="toc.line.section.title">
-  <xsl:variable name="id">
-    <xsl:call-template name="object.id"/>
-  </xsl:variable>
-
-  <fo:block text-align-last="justify" hyphenate="false"
-    ><fo:basic-link internal-destination="{$id}">
-       <xsl:apply-templates
-         select="." 
-         mode="titleabbrev.markup"/>
-    </fo:basic-link>
-    
-    <xsl:call-template name="addstatus"/>
-    
-    <fo:inline><fo:leader
-         leader-pattern="dots"
-         leader-pattern-width="1em"
-      /></fo:inline><fo:basic-link internal-destination="{$id}"
-       ><fo:page-number-citation ref-id="{$id}" letter-spacing="0"
-      /></fo:basic-link></fo:block>
-</xsl:template>
-
-
-<xsl:template name="toc.line">
-  <xsl:variable name="id">
-    <xsl:call-template name="object.id"/>
-  </xsl:variable>
-  <xsl:variable name="label">
-     <xsl:apply-templates select="." mode="label.markup"/>
-  </xsl:variable>
-
-
-  <!--<xsl:message> toc.line = <xsl:value-of select="$label"/> <xsl:call-template name="gentext"
-         /> <xsl:call-template name="gentext.template">
-      <xsl:with-param name="name"><xsl:value-of select="name(.)"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:message>-->
-
-
-  <xsl:choose>
-    <xsl:when test="self::part">
-      <fo:block xsl:use-attribute-sets="toc.title.part.properties">
-          <xsl:choose>
-            <xsl:when test="/*[@lang='hu']">
-              <fo:basic-link internal-destination="{$id}">
-                <xsl:if test="$label != ''">
-                  <xsl:copy-of select="$label"/>
-                  <xsl:text>. </xsl:text>
-                </xsl:if>
-                <xsl:call-template name="gentext"/>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates
-                  select="." 
-                  mode="titleabbrev.markup"/>
-              </fo:basic-link>
-            </xsl:when>
-            <xsl:when test="/*[@lang='ko']">
-             <fo:basic-link internal-destination="{$id}">
-                <xsl:if test="$label != ''">
-                  <xsl:copy-of select="$label"/>
-                </xsl:if>
-                <xsl:call-template name="gentext"/>
-                <xsl:text> </xsl:text>
-                <xsl:apply-templates
-                  select="." 
-                  mode="titleabbrev.markup"/>
-              </fo:basic-link>
-            </xsl:when>
-            <xsl:otherwise>
-              <fo:basic-link internal-destination="{$id}">
-                <xsl:call-template name="gentext" />
-                <xsl:text> </xsl:text>
-                <xsl:if test="$label != ''">
-                  <xsl:copy-of select="$label"/>
-<!--             <xsl:value-of select="$autotoc.label.separator"/> -->
-                  <fo:leader leader-length="1em" leader-pattern="space"/>
-                </xsl:if>
-                <xsl:apply-templates
-                  select="." 
-                  mode="titleabbrev.markup"/>
-              </fo:basic-link>
-            </xsl:otherwise>
-          </xsl:choose>
-        
-         <fo:inline
-        ><fo:leader leader-alignment="reference-area"
-                 leader-pattern="space"
-        /><fo:basic-link internal-destination="{$id}"
-         ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-       </fo:inline>
-      </fo:block>
-    </xsl:when>
-    <xsl:when test="self::preface or
-                    self::refentry or
-                    self::bibliography or
-                    self::index or
-                    self::article or
-                    self::glossary">
-     <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
-        role="{local-name()}-toc"
-               space-before="27pt -1em">
-       <xsl:call-template name="keep-with-next.within-line-or-not"/>
-       <xsl:if test="self::preface">
-         <xsl:attribute name="margin-top">54pt -1em</xsl:attribute>
-       </xsl:if>
-       <fo:inline width="15pt">
-         <xsl:if test="$label != ''">
-           <xsl:copy-of select="$label"/>
-           <xsl:value-of select="$autotoc.label.separator"/>
-         </xsl:if>
-       </fo:inline><fo:basic-link internal-destination="{$id}">
-          <xsl:apply-templates
-            select="." mode="titleabbrev.markup"/>
-       </fo:basic-link>
-       <fo:inline><fo:leader leader-alignment="reference-area"
-                 keep-with-next.within-line="always"
-                 leader-pattern="space"
-         /><fo:basic-link internal-destination="{$id}"
-         ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-       </fo:inline>
-     </fo:block>
-    </xsl:when>
-    <xsl:when test="self::chapter">
-      <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
-         role="chapter-toc">
-       <xsl:call-template name="keep-with-next.within-line-or-not"/>
-       <xsl:call-template name="toc.line.chapter"/>
-      </fo:block>
-    </xsl:when>
-    <xsl:when test="self::appendix">
-      <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
-         role="appendix-toc">
-       <xsl:call-template name="keep-with-next.within-line-or-not"/>
-       <xsl:call-template name="toc.line.appendix"/>
-      </fo:block>
-    </xsl:when>
-    <xsl:when test="self::sect1 or
-                    self::sect2 or
-                    self::sect3 or
-                    self::sect4 or
-                    self::section">
-      <fo:block xsl:use-attribute-sets="toc.title.section.properties"
-        role="{local-name()}-toc">
-        <xsl:call-template name="keep-with-next.within-line-or-not"/>
-        <xsl:call-template name="toc.line.section"/>
-      </fo:block>
-    </xsl:when>
-    <xsl:when test="self::book">
-      <!-- FIXME -->
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:message> STRANGE TOC!!! <xsl:value-of select="name()"/></xsl:message>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-
-<xsl:template name="toc.line.block">
-  <xsl:variable name="id">
-    <xsl:call-template name="object.id"/>
-  </xsl:variable>
-
-  <xsl:variable name="label">
-    <xsl:apply-templates select="." mode="label.markup"/>
-  </xsl:variable>
-
-  <xsl:variable name="depth">
-    <xsl:value-of select="count(ancestor::*)"/>
-  </xsl:variable>
-
-  <xsl:message>
-  label = "<xsl:value-of select="$label"/>"
-  depth = "<xsl:value-of select="$depth"/>"
-  name  = "<xsl:value-of select="name(.)"/>"
-  </xsl:message>
-
-  <xsl:choose>
-    <xsl:when test="self::part">
-      <fo:block xsl:use-attribute-sets="toc.title.part.properties"
-         keep-with-next.within-line="always"
-         keep-with-next.within-column="always">
-       <fo:inline><xsl:call-template name="gentext"
-         /><xsl:text> </xsl:text
-          ><fo:basic-link internal-destination="{$id}">
-         <xsl:if test="$label != ''">
-           <xsl:copy-of select="$label"/>
-           <xsl:value-of select="$autotoc.label.separator"/>
-           <xsl:text> </xsl:text>
-         </xsl:if>
-         <xsl:apply-templates
-           select="." mode="titleabbrev.markup"/>
-        </fo:basic-link>
-       </fo:inline><fo:inline
-        ><fo:leader leader-alignment="reference-area"
-                 keep-with-next.within-line="always"
-                 leader-pattern="space"
-        /><fo:basic-link internal-destination="{$id}"
-         ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-       </fo:inline>
-      </fo:block>
-    </xsl:when>
-    <xsl:when test="self::chapter or
-                  self::appendix or
-                  self::index or
-                  self::preface or
-                  self::glossary">
-     <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties">
-       <fo:inline width="15pt">
-         <xsl:if test="$label != ''">
-           <xsl:copy-of select="$label"/>
-           <xsl:value-of select="$autotoc.label.separator"/>
-<!--            <xsl:text> </xsl:text> -->
-         </xsl:if>
-       </fo:inline><fo:basic-link internal-destination="{$id}">
-          <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-       </fo:basic-link>
-       <fo:inline><fo:leader leader-alignment="reference-area"
-                 keep-with-next.within-line="always"
-                 leader-pattern="space"
-         /><fo:basic-link internal-destination="{$id}"
-         ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-       </fo:inline>
-     </fo:block>
-    </xsl:when>
-    <xsl:otherwise>
-     <fo:block xsl:use-attribute-sets="toc.title.properties">
-       <xsl:attribute name="margin-left">
-         <xsl:choose>
-            <xsl:when test="self::sect1">
-               <xsl:text>15pt</xsl:text>
-         <xsl:message> name=<xsl:value-of select="name(.)"/>
-         </xsl:message>
-            </xsl:when>
-            <xsl:when test="self::sect2">
-               <xsl:text>42pt</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-             <xsl:value-of select="$toc.indent.width"/>
-             <xsl:text>pt</xsl:text>
-            </xsl:otherwise>
-         </xsl:choose>
-       </xsl:attribute>
-       <fo:inline>
-         <xsl:choose>
-            <xsl:when test="self::sect1">
-              <xsl:attribute name="width">27pt</xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="width">21pt + 15pt</xsl:attribute>
-            </xsl:otherwise>
-         </xsl:choose>
-         <xsl:if test="$label != ''">
-           <xsl:copy-of select="$label"/>
-           <xsl:value-of select="$autotoc.label.separator"/>
-           <!--<xsl:text> </xsl:text>-->
-         </xsl:if>
-       </fo:inline>
-       <fo:basic-link internal-destination="{$id}">
-           <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-       </fo:basic-link><fo:inline><fo:leader leader-alignment="reference-area"
-                 keep-with-next.within-line="always"
-                 leader-pattern-width="1em"
-                 leader-pattern="dots"/>
-        <fo:basic-link internal-destination="{$id}"
-         ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-       </fo:inline>
-     </fo:block>
-    </xsl:otherwise>
-  </xsl:choose>
-
-</xsl:template>
-
-
-<xsl:template name="toc.line.old">
-  <xsl:variable name="id">
-    <xsl:call-template name="object.id"/>
-  </xsl:variable>
-
-  <xsl:variable name="label">
-    <xsl:apply-templates select="." mode="label.markup"/>
-  </xsl:variable>
-
-  <fo:block text-align-last="justify"
-            end-indent="{$toc.indent.width}pt"
-            last-line-end-indent="-{$toc.indent.width}pt"
-            font-family="{$title.font.family}">
-    <xsl:if test="self::part">
-        <xsl:attribute name="space-before">27pt -1em</xsl:attribute>
-        <xsl:attribute name="space-after"> 27pt -1em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-    </xsl:if>
-    <xsl:if test="self::chapter or
-                  self::appendix or
-                  self::index or
-                  self::preface or
-                  self::glossary">
-        <xsl:attribute name="space-before">27pt -1em</xsl:attribute>
-        <xsl:attribute name="space-after">16pt -1em</xsl:attribute>
-        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-    </xsl:if>
-
-    <xsl:choose>
-      <xsl:when test="self::part">
-        <fo:inline xsl:use-attribute-sets="toc.title.part.properties">
-          <xsl:call-template name="gentext">
-          </xsl:call-template>
-        </fo:inline>
-      </xsl:when>
-    </xsl:choose>
-
-    <fo:inline>
-     <xsl:choose>
-      <xsl:when test="self::part">
-        <xsl:attribute name="font-weight">
-            <xsl:text>bold</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="font-size">
-            <xsl:value-of select="$body.font.master"/>
-            <xsl:text>pt</xsl:text>
-        </xsl:attribute>
-      </xsl:when>
-      <xsl:when test="self::chapter or
-                      self::preface or
-                      self::appendix or
-                      self::glossary or
-                      self::index">
-         <xsl:attribute name="font-size">
-           <xsl:value-of select="$body.font.master"/>
-           <xsl:text>pt</xsl:text>
-         </xsl:attribute>
-         <xsl:attribute name="font-weight">bold</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
-      </xsl:otherwise>
-     </xsl:choose>
-     <fo:basic-link internal-destination="{$id}">
-        <xsl:if test="$label != ''">
-          <xsl:copy-of select="$label"/>
-          <xsl:value-of select="$autotoc.label.separator"/>
-        </xsl:if>
-        <xsl:apply-templates select=".|processing-instruction()" mode="titleabbrev.markup"/>
-     </fo:basic-link>
-    </fo:inline>
-    <fo:inline keep-together.within-line="always">
-      <!--<xsl:text> </xsl:text>-->
-      <fo:leader leader-alignment="reference-area"
-                 keep-with-next.within-line="always">
-        <xsl:choose>
-          <xsl:when test="self::part or self::preface or self::chapter or self::appendix">
-            <xsl:attribute name="leader-pattern">space</xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="leader-pattern">dots</xsl:attribute>
-            <xsl:attribute name="leader-pattern-width">1em</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-      </fo:leader>
-      <fo:basic-link internal-destination="{$id}"
-       ><fo:page-number-citation ref-id="{$id}"/></fo:basic-link>
-    </fo:inline>
-  </fo:block>
-</xsl:template>
-
-<xsl:template name="set.toc.indent">
-  <xsl:param name="reldepth"/>
-  <xsl:text>0pt</xsl:text>
-</xsl:template>
-
+  
 </xsl:stylesheet>

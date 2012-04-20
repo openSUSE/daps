@@ -185,7 +185,7 @@
    <xsl:attribute name="font-family">
       <xsl:value-of select="$sans.font.family"/>
    </xsl:attribute>
-   <xsl:attribute name="text-align-last">justify</xsl:attribute>
+   <!--<xsl:attribute name="text-align-last">justify</xsl:attribute>-->
 </xsl:attribute-set>
 
 <xsl:attribute-set name="toc.title.part.properties"
@@ -195,13 +195,10 @@
    </xsl:attribute>
    <xsl:attribute name="font-weight">bold</xsl:attribute>
    <xsl:attribute name="font-size"><xsl:value-of select="$body.font.master"/>pt</xsl:attribute>
-   <xsl:attribute name="space-before">27pt -1em</xsl:attribute>
-   <xsl:attribute name="space-after">27pt -1em</xsl:attribute>
+   <!--<xsl:attribute name="space-before">27pt -1em</xsl:attribute>
+   <xsl:attribute name="space-after">27pt -1em</xsl:attribute>-->
    <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
    <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-<!--text-align-last="justify"
-end-indent="{$toc.indent.width}pt"
-last-line-end-indent="-{$toc.indent.width}pt"-->
 </xsl:attribute-set>
 <xsl:attribute-set name="toc.title.chapapp.properties"
    use-attribute-sets="toc.title.properties">
