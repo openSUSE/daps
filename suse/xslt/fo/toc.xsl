@@ -16,12 +16,10 @@
 </xsl:template>
 
 
-  <xsl:template name="toc.line">
+<xsl:template name="toc.line">
     <xsl:param name="node" select="."/>
     <xsl:apply-templates select="$node" mode="toc.line"/>
-  </xsl:template>
-
-
+</xsl:template>
 
 <xsl:template match="preface|glossary|bibliography" mode="toc.line">
   <xsl:variable name="id">
@@ -44,12 +42,57 @@
   <!-- Nothing to do here -->
 </xsl:template>
 
-
-<xsl:template match="book|article|part" mode="toc.line">
+<xsl:template match="part" mode="toc.line">
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
+   
+  <fo:list-block 
+      space-before="27pt -1em"
+      space-after="16pt -1em"
+      provisional-distance-between-starts="40pt"
+      provisional-label-separation="3pt">
+      <fo:list-item xsl:use-attribute-sets="toc.title.part.properties">
+        <fo:list-item-label end-indent="label-end()">
+          <fo:block>
+            <xsl:choose>
+              <xsl:when test="string($part.autolabel) != 0">
+                <xsl:call-template name="substitute-markup">
+                  <xsl:with-param name="template">
+                    <xsl:call-template name="gentext.template">
+                      <xsl:with-param name="context" select="'xref-number'"/>
+                      <xsl:with-param name="name">
+                        <xsl:call-template name="xpath.location"/>
+                      </xsl:with-param>
+                    </xsl:call-template>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="gentext">
+                   <xsl:with-param name="key" select="'above'"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block text-align-last="justify">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:apply-templates select="." mode="title.markup"/>
+              <fo:leader leader-pattern="space"/>
+              <fo:page-number-citation ref-id="{$id}" />
+            </fo:basic-link>
+          </fo:block>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
+</xsl:template>
+  
+<xsl:template match="book" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
    
   <fo:list-block 
       space-before="27pt -1em"
@@ -74,7 +117,36 @@
         </fo:list-item-body>
       </fo:list-item>
     </fo:list-block>
+</xsl:template>
   
+<xsl:template match="article" mode="toc.line">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+   
+  <fo:list-block 
+      space-before="27pt -1em"
+      space-after="16pt -1em"
+      provisional-distance-between-starts="18pt"
+      provisional-label-separation="3pt">
+      <fo:list-item xsl:use-attribute-sets="toc.title.part.properties">
+        <fo:list-item-label end-indent="label-end()">
+          <fo:block>
+            <xsl:apply-templates select="." mode="label.markup"/>
+            <xsl:value-of select="$autotoc.label.separator"/>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block text-align-last="justify">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:apply-templates select="." mode="title.markup"/>
+              <fo:leader leader-pattern="space"/>
+              <fo:page-number-citation ref-id="{$id}" />
+            </fo:basic-link>
+          </fo:block>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
 </xsl:template>
 
 <xsl:template match="chapter|appendix" mode="toc.line">
@@ -115,7 +187,6 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
   
   <fo:list-block
     provisional-distance-between-starts="27pt"
@@ -145,7 +216,6 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
   
     <fo:block xsl:use-attribute-sets="toc.title.section.properties"
        text-align-last="justify">
