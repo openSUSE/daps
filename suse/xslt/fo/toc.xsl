@@ -18,11 +18,20 @@
 
 <xsl:template match="refentry" mode="toc"/>
 
+<xsl:template name="keep-with-next.within-line-or-not">
+  <xsl:choose>
+    <xsl:when test="$xep.extensions != 0">
+      <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
+    </xsl:when>
+    <!-- Do nothing for FOP 1.x -->
+    <xsl:when test="$fop1.extensions != 0"/>
+  </xsl:choose>
+</xsl:template>
+
 <!-- Special rules for appendix and chapters: -->
 <xsl:template name="toc.line.appendix">
   <xsl:call-template name="toc.line.chapter"/>
 </xsl:template>
-
 
 <xsl:template name="toc.line.chapter">
   <xsl:variable name="label">
@@ -232,9 +241,10 @@
                     self::article or
                     self::glossary">
      <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
+        role="{local-name()}-toc"
                space-before="27pt -1em">
+       <xsl:call-template name="keep-with-next.within-line-or-not"/>
        <xsl:if test="self::preface">
-         <xsl:attribute name="start-indent">15pt</xsl:attribute>
          <xsl:attribute name="margin-top">54pt -1em</xsl:attribute>
        </xsl:if>
        <fo:inline width="15pt">
@@ -256,13 +266,15 @@
     </xsl:when>
     <xsl:when test="self::chapter">
       <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
-                keep-with-next.within-line="always">
+         role="chapter-toc">
+       <xsl:call-template name="keep-with-next.within-line-or-not"/>
        <xsl:call-template name="toc.line.chapter"/>
       </fo:block>
     </xsl:when>
     <xsl:when test="self::appendix">
       <fo:block xsl:use-attribute-sets="toc.title.chapapp.properties"
-                keep-with-next.within-line="always">
+         role="appendix-toc">
+       <xsl:call-template name="keep-with-next.within-line-or-not"/>
        <xsl:call-template name="toc.line.appendix"/>
       </fo:block>
     </xsl:when>
@@ -272,7 +284,8 @@
                     self::sect4 or
                     self::section">
       <fo:block xsl:use-attribute-sets="toc.title.section.properties"
-                keep-with-next.within-line="always">
+        role="{local-name()}-toc">
+        <xsl:call-template name="keep-with-next.within-line-or-not"/>
         <xsl:call-template name="toc.line.section"/>
       </fo:block>
     </xsl:when>
