@@ -26,48 +26,33 @@
 "Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
  planned for version 2.0."> 
  
-<!ENTITY daps-sys-req
-'<variablelist>
-   <varlistentry>
-    <term>RAM, Hard Disk Space, CPU</term>
+<!ENTITY daps-sys-req-sw
+' <para>In addition to &dapsacr;, you need the following software:</para>
+   <itemizedlist>
     <listitem>
-     <para>&dapsacr; is a lean solution that does not require a lot of system 
-    resources. The disk space consumed mostly depends on the amount of your 
-    documentation sources and the number of output formats you want to generate.
-    If you have multiple or very large documentation projects, a
-    machine with multiple-cores is recommended, but is not required.
-    </para>
+     <para> An XML (or text) editor of your choice. </para>
     </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Software</term>
     <listitem>
-     <para>In addition to &dapsacr;, you need the following software:</para>
-     <itemizedlist>
-      <listitem>
-       <para>
-      An XML (or text) editor of your choice.
-    </para>
-      </listitem>
-      <listitem>
-       <para>For generating PDF output: an FO formatter, like
-       <ulink url="http://projects.apache.org/projects/fop.html">FOP</ulink> 
-       or <ulink url="http://www.renderx.com">XEP</ulink>. 
-       <ulink url="http://www.antennahouse.com">Antenna House Formatter</ulink> 
-       is currently not supported. Whereas FOP is an open source product, both
-       XEP and Antenna House are commercial products.</para>
-      </listitem>
-     </itemizedlist>
-     <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
-     dependencies on other software packages are automatically resolved during 
-     installation. For installing &dapsacr; on other Linux 
-     distributions with <literal>configure</literal>, <literal>make</literal>,
-     and <literal>make install</literal>, make sure the following packages or 
-     tools are installed on your system:</para>
+     <para>For generating PDF output: an FO formatter, like 
+      <ulink url="http://projects.apache.org/projects/fop.html">FOP</ulink> or 
+      <ulink url="http://www.renderx.com">XEP</ulink>. 
+      <ulink url="http://www.antennahouse.com">Antenna House Formatter</ulink> 
+      is currently not supported. Whereas FOP is an open source product,
+      both XEP and Antenna House are commercial products.</para>
+    </listitem>
+   </itemizedlist>
+   <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
+   dependencies on other software packages are automatically resolved during 
+   installation.</para>
+   <para>For installing the &dapsacr; sources on other Linux distributions (with 
+   <literal>configure</literal>, <literal>make</literal>, and 
+   <literal>make install</literal>), make sure the following packages or 
+   tools are installed on your system. Otherwise the installation scripts will
+   fail.</para>
      <itemizedlist>
       <listitem>
        <para>convert (included in the 
-    <systemitem class="resource">ImageMagick</systemitem> package)</para>
+      <systemitem class="resource">ImageMagick</systemitem> package)</para>
       </listitem>
       <listitem>
        <para>DocBook 4</para>
@@ -79,97 +64,57 @@
        <para>make</para>
       </listitem>
       <listitem>
-       <para>xmlcatalog (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
+     <para>xmlcatalog (usually part of the package 
+      <systemitem class="resource">libxml2</systemitem>, 
+      <systemitem class="resource">libxml-utils</systemitem>, or 
+      <systemitem class="resource">libxml-tools</systemitem>)</para>
       </listitem>
       <listitem>
-       <para>xmllint (usually part of the package 
-   <systemitem class="resource">libxml2</systemitem>, 
-   <systemitem class="resource">libxml-utils</systemitem>, or 
-   <systemitem class="resource">libxml-tools</systemitem>)</para>
+     <para>xmllint (usually part of the package 
+     <systemitem class="resource">libxml2</systemitem>,
+       <systemitem class="resource">libxml-utils</systemitem>, or 
+       <systemitem class="resource"
+       >libxml-tools</systemitem>)</para>
       </listitem>
       <listitem>
-       <para>xsltproc (if not available as a separate package, it may be included in
-    <systemitem class="resource">libxslt</systemitem>)</para>
+       <para>xsltproc (if not available as a separate package, it may be 
+       included in  <systemitem class="resource">libxslt</systemitem>)</para>
       </listitem>
      </itemizedlist>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Directory Structure</term>
-    <listitem>
-     <para>For &dapsacr; to work out of the box, it requires a certain
-      organization of your XML files and images within your documentation
-      directory. You can generate the necessary structure with the &dapsacr; 
-      initialization script, <command>daps-init</command>.</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>'>
+     <para>During the installation procedure, the <filename>convert</filename> 
+     script informs you about any further missing software packages. Refer to 
+     <xref linkend="pro.daps.quick.inst.tarball"/> for more information.
+     </para>'>
+     
+<!ENTITY daps-sys-req-hw 
+'   <variablelist>
+     <varlistentry>
+      <term>RAM</term>
+      <listitem>
+       <para>The required amount of RAM mostly depends on the volume of your 
+       documentation projects. For creation of PDF output, 2 GB of RAM are 
+       recommended.</para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>CPU</term>
+      <listitem>
+       <para>If you have multiple or very large documentation projects, a machine
+       with multiple cores is recommended.</para>
+      </listitem>
+     </varlistentry>
+    <varlistentry>
+     <term>Hard Disk Space</term>
+     <listitem>
+      <para>The disk space consumed mostly depends on the amount of your 
+       documentation sources and  the number of output formats you want to generate.</para>
+     </listitem>
+    </varlistentry>
+    </variablelist>'>
+
 
 <!ENTITY daps-addon
-' <para>
-   By default, &dapsacr; offers the following features:
-  </para>
-  <itemizedlist>
-   <listitem>
-    <para>HTML/single HTML/JSP/man pages/PDF output</para>
-   </listitem>
-   <listitem>
-    <para>MediaWiki/WebHelp output (experimental)</para>
-   </listitem>
-   <listitem>
-    <para>processing of PNG images</para>
-   </listitem>
-  </itemizedlist>
-  <para>To enable optional features, additional software packages need to be
-   installed. Refer to the following table for details:</para>
-  <informaltable>
-   <tgroup cols="2">
-    <thead>
-     <row>
-      <entry>Feature</entry>
-      <entry>Requirement</entry>
-     </row>
-    </thead>
-    <tbody>
-     <row>
-      <entry>ASCII text output</entry>
-      <entry>w3m</entry>
-     </row>
-     <row>
-      <entry>ePUB output</entry>
-      <entry>ruby</entry>
-     </row>
-     <row>
-      <entry>DIA images support</entry>
-      <entry>dia</entry>
-     </row>
-     <row>
-      <entry>SVG images support</entry>
-      <entry>inkscape</entry>
-     </row>
-     <row>
-      <entry>XFIG images support</entry>
-      <entry>xfig</entry>
-     </row>
-     <row>
-      <entry>PNG images optimization</entry>
-      <entry>optipng</entry>
-     </row>
-     <row>
-      <entry>Linkchecker (http, https, ftp)</entry>
-      <entry>checkbot</entry>
-     </row>
-     <row>
-      <entry>Enhanced Debugging</entry>
-      <entry>remake</entry>
-     </row>
-    </tbody>
-   </tgroup>
-  </informaltable>
-  <para>To add further components like version management or a workflow
+' <para>To add further components like version management or a workflow
    mechanism for your projects, use &dapsacr; in combination with the following 
    software:</para>
   <itemizedlist>

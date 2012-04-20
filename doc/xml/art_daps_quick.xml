@@ -33,19 +33,29 @@
  </sect1>
  <sect1 id="sec.daps.quick.req">
   <title>Requirements and Additional Software</title>
-  <para></para>
-  <sect2 id="sec.daps.quick.req.system">
-   <title>System Requirements</title>
-   &daps-sys-req;
-   <para>
-    Instructions on how to make existing DocBook projects compatible with &dapsacr;
-    are available at <xref linkend="sec.daps.quick.migrate"/>.
-   </para>
+   <para>&dapsacr; is a lean solution that does not require a lot of system 
+    resources.</para>
+   <sect2 id="sec.daps.quick.req.hw">
+    <title>Hardware Requirements</title>
+   &daps-sys-req-hw;
+  </sect2>
+  <sect2 id="sec.daps.quick.req.sw">
+   <title>Software Requirements</title>
+   &daps-sys-req-sw;
+  </sect2>
+  <sect2 id="sec.daps.quick.req.further">
+   <title>Directory Structure</title>
+   <para>For &dapsacr; to work out of the box, it requires a certain organization 
+    of your XML files and images within your documentation directory. For details,
+    refer to <xref linkend="sec.daps.quick.basics.dirstruct"/>. You can generate
+    the necessary structure with the &dapsacr; initialization script, 
+    <command>daps-init</command>. For instructions on how to make existing 
+    DocBook projects compatible with &dapsacr;, refer to 
+    <xref linkend="sec.daps.quick.migrate"/>.</para>
   </sect2>
   <sect2 id="sec.daps.quick.req.addon">
    <title>Additional Software</title>
-   &daps-addon;
-  </sect2>
+   &daps-addon; </sect2>
  </sect1>
  <sect1 id="sec.daps.quick.inst">
   <title>Installation</title>
@@ -89,9 +99,10 @@
        Go to <ulink url="http://software.opensuse.org/"/> and search for the 
        <systemitem class="resource">daps</systemitem>. On the resulting page, 
        click <menuchoice><guimenu>daps</guimenu><guimenu>Show other versions</guimenu>
-       <guimenu>Show unstable packages</guimenu></menuchoice>. Select the version that is provided 
-       by the repository <systemitem class="service">&suse-dapsrepo;</systemitem>. 
-       To start installation of the package click the <guimenu>1 Click Install</guimenu> 
+       <guimenu>Show unstable packages</guimenu></menuchoice>. Select the version 
+       that is provided by the repository 
+       <systemitem class="service">&suse-dapsrepo;</systemitem>. To start 
+       installation of the package click the <guimenu>1-Click Install</guimenu> 
        link next to the selected package.
      </para>
      </listitem>
@@ -139,7 +150,7 @@
    <procedure id="pro.daps.quick.inst.tarball">
     <title>Installing the &dapsacr; Sources</title>
     <para> Before starting the installation, check the &dapsacr; <xref
-      linkend="sec.daps.quick.req.system" xrefstyle="select:title"/> and make
+      linkend="sec.daps.quick.req" xrefstyle="select:title"/> and make
      sure to have all required packages and tools installed. </para>
     <step>
      <para>Go to <ulink url="http://sourceforge.net/projects/daps/files/"/> and
