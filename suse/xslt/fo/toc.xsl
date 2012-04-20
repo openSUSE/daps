@@ -5,10 +5,10 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 
-<xsl:template name="keep-with-next.within-line-or-not">
+<xsl:template name="keep-with-next-or-not">
   <xsl:choose>
     <xsl:when test="$xep.extensions != 0">
-      <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
+      <xsl:attribute name="keep-with-next">always</xsl:attribute>
     </xsl:when>
     <!-- Do nothing for FOP 1.x -->
     <xsl:when test="$fop1.extensions != 0"/>
@@ -27,16 +27,17 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
-    <fo:block text-align-last="justify" 
+  
+  <fo:block text-align-last="justify" 
       space-before="27pt -1em"
+      space-after="16pt -1.5em"
       xsl:use-attribute-sets="toc.title.chapapp.properties">
       <fo:basic-link internal-destination="{$id}">
         <xsl:apply-templates select="." mode="title.markup"/>
         <fo:leader leader-pattern="space"/>
         <fo:page-number-citation ref-id="{$id}"/>
       </fo:basic-link>
-    </fo:block>
+  </fo:block>
 </xsl:template>
 
 <xsl:template match="preface/sect1|preface/section" mode="toc.line">
@@ -50,7 +51,9 @@
   </xsl:variable>
   <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
    
-  <fo:list-block
+  <fo:list-block 
+      space-before="27pt -1em"
+      space-after="16pt -1em"
       provisional-distance-between-starts="18pt"
       provisional-label-separation="3pt">
       <fo:list-item xsl:use-attribute-sets="toc.title.part.properties">
@@ -78,13 +81,13 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
-  <xsl:message>toc.line: <xsl:value-of select="local-name(.)"/></xsl:message>
    
   <fo:list-block
       provisional-distance-between-starts="18pt"
       provisional-label-separation="3pt"
       space-before="27pt -1em"
-      space-after="16pt -1.5em">
+      space-after="2pt">
+    <xsl:call-template name="keep-with-next-or-not"/>
       <fo:list-item xsl:use-attribute-sets="toc.title.chapapp.properties">
         <fo:list-item-label end-indent="label-end()">
           <fo:block>
