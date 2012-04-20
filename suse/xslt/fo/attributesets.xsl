@@ -227,8 +227,8 @@ last-line-end-indent="-{$toc.indent.width}pt"-->
 <!-- ==================================================================== -->
 <!-- Table properties                                                     -->
 <xsl:attribute-set name="table.cell.padding">
-  <xsl:attribute name="padding-left">5pt</xsl:attribute>
-  <xsl:attribute name="padding-right">5pt</xsl:attribute>
+  <xsl:attribute name="padding-left">10pt</xsl:attribute>
+  <xsl:attribute name="padding-right">10pt</xsl:attribute>
   <xsl:attribute name="padding-top">6pt</xsl:attribute>
   <xsl:attribute name="padding-bottom">6pt</xsl:attribute>
 </xsl:attribute-set>
