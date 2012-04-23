@@ -1498,7 +1498,7 @@ $(DAPS_CATALOG):
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # the SVN sources contain links bin/daps, etc/config and $(FOP_CONFIG)
-# These need to be replaced by real files/differenmt links created by
+# These need to be replaced by real files/different links created by
 # the respective targets below.
 # To make sure they are rebuild at least once when make is called for
 # the first time, we make them depend on a file we create first
@@ -1527,16 +1527,14 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
 
 $(USERGUIDE): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_USERGUIDE) \
-	    --styleroot=$(STYLEROOT) html-single --static \
-	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(USERGUIDE_NAME)
+	    --docconfig=$(DC_USERGUIDE) html-single --static \
+            --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_QUICKSTART) \
-	    --styleroot=$(STYLEROOT) html-single --static \
-	    --css=$(STYLEROOT)/xhtml/susebooks.css --name=$(QUICKSTART_NAME)
+	    --docconfig=$(DC_QUICKSTART) html-single --static \
+	    --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
