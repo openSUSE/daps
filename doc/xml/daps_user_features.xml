@@ -7,25 +7,19 @@
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]>
-<chapter id="cha.daps.user.oview">
- <title>Conceptual Overview</title>
- <abstract><para>&daps-description-long;</para></abstract>
- <sect1 id="sec.daps.user.oview.dbversion">
-  <title>Supported DocBook Versions</title>
-  <para>&daps-db-versions;</para>
- </sect1>
- <sect1 id="sec.daps.user.oview.features">
-  <title>Key Features</title>
+<chapter id="cha.daps.user.features">
+ <title>Key Features</title>
   <para>&dapsacr; supports technical writers in the editing, translation and 
    publishing process of DocBook XML files:</para>
   <variablelist>
    <varlistentry>
     <term>Output Formats</term>
     <listitem>
-     <para>&dapsacr; lets you publish your XML sources in the  
-      following output formats: HTML, HTML-single, PDF, &epub;, text, 
-       man pages, JSP books or MediaWiki. <remark>taroth 2012-03-15: add &webh;?
-       already?</remark>For details, refer to <xref linkend="cha.daps.user.output"/>.
+     <para>&dapsacr; lets you publish your XML sources in a number of different 
+     output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;, text, 
+       man pages, or MediaWiki. For details, refer to 
+       <xref linkend="cha.daps.user.output"/>.<remark>taroth 2012-04-24: decide 
+       where to point to: book chapter or QS?</remark>
        </para>
     </listitem>
    </varlistentry>
@@ -163,80 +157,8 @@
     </listitem>
    </varlistentry>
   </variablelist>
- </sect1>
- <sect1 id="sec.daps.user.oview.concepts">
-  <title>&dapsacr; Configuration</title>
-
-  <para>
-   &dapsacr; can be customized to a large degree by setting options in various
-   places:
-  </para>
-
-  <itemizedlist>
-   <listitem>
-    <para>
-     &dapsconf-sys; (system-wide configuration file)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     &dapsconf-user; (user-specific configuration file)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     &dc; (doc config) file of the documentation project (for settings specific 
-     to a document or documentation set)
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     on the fly at the command line by specifing options to a
-     <command>daps</command> command.
-    </para>
-   </listitem>
-  </itemizedlist>
-
-  <para>
-   The configuration file &dapsconf-sys; lists all settings that can be
-   configured, including a short description for each option. Settings are
-   always defined as <option>KEY="VALUE"</option> pairs.
-  </para>
- </sect1>
- <sect1 id="sec.daps.user.oview.docproject">
-  <title>Defining Documentation Projects</title>
-
-  <para>The following files are the key files for defining a documentation
-   project so that it can be processed by &dapsacr;:</para>
-
-  <variablelist>
-   <varlistentry>
-    <term>
-     <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/>
-    </term>
-    <listitem>
-     <para>An XML file containing the <quote>starting point</quote> (the 
-     highest-level object) of your documentation project (for example, 
-     <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>). 
-    For larger documentation projects, it is good practice to name the file 
-    <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>, 
-    but you can use any other filename as well.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
-     <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>
-    </term>
-    <listitem>
-     <para>
-      A configuration file defining a number of parameters for your
-      documentation project (like the Main file, layout variants, or which
-      profiling information to use).
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-  <sect2 id="sec.daps.user.oview.docproject.main">
+ 
+ <!-- <sect2 id="sec.daps.user.oview.docproject.main">
    <title>Main File</title>
    <para>Find a simple example in <xref linkend="ex.daps.main.book"/>.</para>
    <example id="ex.daps.main.book">
@@ -314,10 +236,10 @@
   &dc; file that you could use:</para>
    <example id="ex.daps.dc.basic">
     <title>A Very Basic &dc; File</title>
-    <screen>## ---------------------------- 
+    <screen>## -/- 
 ## Doc Config File for DAPS (very basic)
 ## DocBook Authoring and Publishing Suite
-## ----------------------------
+## -/-
 ##
 ## Basics
 MAIN="my_whitepaper.xml" 
@@ -340,10 +262,10 @@ MAIN="my_whitepaper.xml"
    <para>The following example shows the &dc; file of the &dapsuser;. </para>
    <example id="ex.daps.dc.user">
     <title>&dc; File For a Book in a Set</title>
-    <screen>## ---------------------------- 
+    <screen>## -/-
 ## Doc Config File for DAPS (used for a book in a set)
 ## DocBook Authoring and Publishing Suite
-## ----------------------------
+## -/-
 ##
 ## Basics
 MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.main"/>
@@ -353,15 +275,16 @@ ROOTID="book.daps.user" <co id="co.daps.dc.rootid"/>
 export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
   </screen>
    </example>
-<!--## Profiling
+## Profiling
 PROFOS="osuse" <co id="co.daps.dc.profile"/>
 PROFARCH="x86;amd64;em64t" <xref linkend="co.daps.dc.profile"/>
 
 ## stylesheet location
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse" <co id="co.daps.dc.styleroot"/>
 HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css" <co id="co.daps.dc.css"/>
-EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref linkend="co.daps.dc.css"/>
--->
+EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref
+linkend="co.daps.dc.css"/>
+
    <calloutlist>
     <callout arearefs="co.daps.dc.main">
      <para>
@@ -377,7 +300,7 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref linke
      element here.
     </para>
     </callout>
-     <!--<callout arearefs="co.daps.dc.profile">
+     <callout arearefs="co.daps.dc.profile">
       <para>
       Optional parameters. If you have similar products to document and want
       to generate documentation variants from your XML files, you can do so
@@ -414,7 +337,7 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref linke
      With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
      specify the abolute path to the respective CSS file. 
      </para>
-     </callout>-->
+     </callout>
     <callout arearefs="co.daps.dc.source">
      <para>
      Optional line. You only need to add this line if you want to be able to 
@@ -435,10 +358,10 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref linke
 
    <example id="ex.daps.dc.set">
     <title>&dc; File for a Set</title>
-    <screen>## ---------------------------- 
+    <screen>## -/- 
 ## Doc Config File for DAPS
 ## DocBook Authoring and Publishing Suite
-## ----------------------------
+## -/-
 ##
 ## Basics
 MAIN="MAIN.DAPS.xml" 
@@ -447,7 +370,7 @@ MAIN="MAIN.DAPS.xml"
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE</screen>
    </example>
-<!--## Profiling
+## Profiling
 PROFOS="osuse"
 PROFARCH="x86;amd64;em64t" 
 
@@ -455,7 +378,6 @@ PROFARCH="x86;amd64;em64t"
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse" 
 HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css" 
 EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" 
--->
   </sect2>
  </sect1>
  <sect1 id="sec.daps.user.oview.dirstruct">
@@ -464,70 +386,10 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
   <para>
    For &dapsacr; to work out of the box, your XML files and images should be
    organized within your documentation directory (DOC_DIR) as shown in
-  FIXME <!-- <xref linkend="ex.daps.user.dir.doc"/>-->.
+  FIXME  <xref linkend="ex.daps.user.dir.doc"/>
   </para>
 
-  <!--<sect2 id="sec.daps.user.oview.dir.doc">
-   <title>Source Files</title>
-   <para>
-    <xref linkend="ex.daps.user.dir.doc"/> also shows the key files of a
-    documentation project. The directories are printed in bold.
-   </para>
-   <example id="ex.daps.user.dir.doc">
-    <title>Directory Structure</title>
-    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir.base"/>
-  |-/-&dc;* <co id="co.docdir.dc"/>
-  |-/-<emphasis role="bold">images</emphasis> <co id="co.docdir.img"/> 
-     |-/-<emphasis role="bold">src</emphasis> <co id="co.docdir.img.src"/>
-        |-/-<emphasis role="bold">dia</emphasis>
-        |-/-<emphasis role="bold">eps</emphasis>
-        |-/-<emphasis role="bold">fig</emphasis>
-        |-/-<emphasis role="bold">pdf</emphasis>
-        |-/-<emphasis role="bold">png</emphasis>
-        |-/-<emphasis role="bold">svg</emphasis>
-  |-/-<emphasis role="bold">xml</emphasis> <co id="co.docdir.xml"/> 
-     |-/-MAIN*.xml <co id="co.docdir.main"/>
-    </screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.docdir.base">
-     <para>
-      <quote>Working directory</quote> for the respective documentation project.
-     </para>
-    </callout>
-    <callout arearefs="co.docdir.dc">
-     <para>
-      &dc; file defining the documentation project. For more information,
-      refer to <xref linkend="sec.daps.user.oview.docproject"/>.
-     </para>
-    </callout>
-    <callout arearefs="co.docdir.img.src">
-     <para>
-      Top-level directory for any original images that you want to use in
-      the documentation project. Contains subdirectories for images in
-      various formats. Any images to be referenced in the XML sources must
-      be put in the respective subdirectories.
-      <remark>taroth 2012-02-01: add xref to 
-     section about using images (how to reference them -> path!)</remark>
-     </para>
-    </callout>
-    <callout arearefs="co.docdir.xml">
-     <para>
-      Directory holding the XML files for the documentation project. If you
-      declare entities in an external file (for example, in
-      <filename>entity-decl.ent</filename>), put the entity declaration file
-      here, too.</para>
-    </callout>
-    <callout arearefs="co.docdir.main">
-     <para>
-      The main file of the documentation project. It contains
-      <quote>references</quote> to other books, chapters, appendices, etc.
-     </para>
-    </callout>
-   </calloutlist>
-  </sect2>
--->
-  <sect2 id="sec.daps.user.oview.dir.build">
+   <sect2 id="sec.daps.user.oview.dir.build">
    <title>Structure Created by &dapsacr;</title>
    <para>
     When generating the first output format from your documentation project,
@@ -543,12 +405,12 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
     <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
-  |--<emphasis role="bold">build</emphasis> <co id="co.builddir"/> 
-     |--<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable></emphasis> <co id="co.builddir.dc"/>    
-     |--<emphasis role="bold"><replaceable>NAME_OF_&dc;2</replaceable></emphasis> <xref linkend="co.builddir.dc"/>    
-     |--<emphasis role="bold">.images</emphasis> <co id="co.builddir.img"/>    
-     |--<emphasis role="bold">.profiled</emphasis> <co id="co.builddir.profiled"/>
-     |--<emphasis role="bold">.tmp</emphasis> <co id="co.builddir.tmp"/>
+  |-/-<emphasis role="bold">build</emphasis> <co id="co.builddir"/> 
+     |-/-<emphasis role="bold"><replaceable>NAME_OF_&dc;1</replaceable></emphasis> <co id="co.builddir.dc"/>    
+     |-/-<emphasis role="bold"><replaceable>NAME_OF_&dc;2</replaceable></emphasis> <xref linkend="co.builddir.dc"/>    
+     |-/-<emphasis role="bold">.images</emphasis> <co id="co.builddir.img"/>    
+     |-/-<emphasis role="bold">.profiled</emphasis> <co id="co.builddir.profiled"/>
+     |-/-<emphasis role="bold">.tmp</emphasis> <co id="co.builddir.tmp"/>
     </screen>
    </example>
    <calloutlist>
@@ -599,6 +461,5 @@ EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
      automatically created.
   </para>
    </tip>
-  </sect2>
- </sect1>
+  </sect2>-->
 </chapter>
