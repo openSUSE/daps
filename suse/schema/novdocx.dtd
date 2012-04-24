@@ -59,15 +59,20 @@
    "xml:base  CDATA     #IMPLIED">
 
 <!ELEMENT set       ((title,subtitle?,titleabbrev?)?,
- toc?,
+ setinfo?, toc?,
  (book)+,
  setindex?)>
+
+<!ELEMENT setinfo (productname+ , productnumber?, 
+                   date?, 
+                   legalnotice*,
+                   authorgroup*, abstract*) >
 
 <!ELEMENT book      (bookinfo , preface? ,
                     (part | chapter | article)+,
                     (appendix | glossary)*, index?) >
 <!-- change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed -->
-<!ELEMENT bookinfo  (title, productname , productnumber? , date? , titleabbrev? , legalnotice+, authorgroup*, abstract*) >
+<!ELEMENT bookinfo  (title, productname+ , productnumber? , date? , titleabbrev? , legalnotice+, authorgroup*, abstract*) >
 
 <!ELEMENT article (title, subtitle?,
                    articleinfo?,
@@ -724,6 +729,12 @@
                id             ID        #IMPLIED
                %profiling.attributes;
                %xmlbase;>
+
+<!ATTLIST setinfo 
+               id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               %profiling.attributes;
+               %xmlbase;   >
 
 <!ATTLIST setindex
                %profiling.attributes;
