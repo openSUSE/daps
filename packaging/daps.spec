@@ -249,6 +249,8 @@ exit 0
 %{fontdir}/*
 %{docbuilddir}
 
+%exclude %{_defaultdocdir}/%{name}/INSTALL
+
 #----------------------
 
 %changelog
