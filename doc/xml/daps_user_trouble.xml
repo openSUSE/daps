@@ -3,13 +3,24 @@
  href="urn:x-suse:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml"
  title="Profiling step"?>
- 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]>
-
 <chapter id="cha.daps.user.trouble">
-  <title>Troubleshooting</title>
-  <para></para>
- </chapter>
+ <title>Troubleshooting</title>
+ <para>&dapsacr; is less verbose than its predecessor <literal>susedoc</literal>.
+  If you should run into problems with &dapsacr;, check the &dapsacr; log
+  files in
+  <filename><replaceable>YOUR_DOC_DIR</replaceable>build/<replaceable>BOOKNAME</replaceable>log</filename>.
+  A complete log file of the latest <command>daps <replaceable>subcommand</replaceable>
+  </command>
+  run is available in <filename><replaceable>YOUR_DOC_DIR</replaceable>build/<replaceable>BOOKNAME</replaceable>log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename
+ 
+<para>In case of an error the complete log will be shown on the screen (STDOUT).</para>
+
+ <para>To get the same level of output as with susedoc 4.x, run <command>daps</command>
+with the <option>-v</option> option. For more details, use the <option>--debug</option>
+option.
+</para>
+</chapter>
