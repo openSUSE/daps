@@ -49,7 +49,7 @@ function parse_args () {
                 ;;
             --css)
                 if [[ -n $2 ]]; then
-                    P_CSS=$(absolute_path "$2")
+                    sanitize_path "$2" "P_CSS"
                 else
                     P_CSS=0
                 fi
@@ -60,7 +60,7 @@ function parse_args () {
 		shift
 		;;
             --def-file)
-                P_DEF_FILE=$(absolute_path "$2")
+                sanitize_path "$2" "P_DEF_FILE"
                 shift 2
                 ;;
             --check)
