@@ -133,6 +133,26 @@ UNSETLIST=(
 )
 unset "${UNSETLIST[@]}"
 
+# PATHLIST contains all variables holding a path. Relative paths need to be 
+# made absolute and we need this list in order to know which variables hold
+# path information
+
+declare -a PATHLIST
+PATHLIST=(
+    BUILD_DIR
+    DAPSROOT
+    DOCCONF_DEFAULT
+    EPUB_CSS
+    FALLBACK_STYLEROOT
+    FOP_CONFIG_FILE
+    FOP_WRAPPER
+    HTML_CSS
+    STYLEDEVEL
+    STYLEROOT
+    XEP_CONFIG_FILE
+    XEP_WRAPPER
+)
+
 # ----------------------------------------------------------------------------
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
 
@@ -431,37 +451,70 @@ function exit_on_error () {
     exit 1;
 }
 # ---------
-# Get absolute path
+# Get absolute path, remove trailing / and test if path is valid
 #
-function absolute_path () {
-    # returns the absolute path to $1
+function sanitize_path () {
+    # Takes values
+    # $1 = path
+    # $2 = variable name holding $1
+    # $3 = additional base dir for $1 (optional)
     #
-    # Note: links are _not_ being followed
-    #       (use readlink for that purpose)
+    # returns absolute path without trailing / for $1, links are being followed
+    # also tests if paths are valid 
     #
-    local ABSPATH BASE FILE DIR
+    local ABSPATH BASEDIR MYPATH VARNAME
     
-    FILE=$1
-    FILE=${FILE%/} # remove trailing slash
+    MYPATH=$1
+    VARNAME=$2
+    [[ -n $3 ]] && BASEDIR=$3
 
-    if [[ "/" = ${FILE:0:1} ]]; then
-        # string is already an absolute path
-        echo $FILE
+    # ignore values that need to be set by configure
+    # (makes it possible to directly use a SVN checkout)
+    if [[ $MYPATH =~ @[a-zA-Z]*@ ]]; then
+        echo "$MYPATH"
         return
     fi
+    
+    # 1. Remove trailing Slash
+    #
+    MYPATH=${MYPATH%/} # remove trailing slash
 
-    BASE=$(basename $FILE)
-    DIR=$(dirname $FILE)
+    # If path is not already absolute and BASEDIR was provided
+    # concatenate BASEDIR and MYPATH
+    [[ "/" != ${MYPATH:0:1} && -n $BASEDIR ]] && MYPATH="${BASEDIR}/${MYPATH}"
 
-    if [[ -n $DIR && "." != DIR ]]; then
-        cd $DIR || exit_on_error "Path \"$FILE\" does not exist"
-        ABSPATH="$(pwd)/$BASE"
-        cd - &>/dev/null
+    ABSPATH=$(readlink -en "$MYPATH")
+    if [[ 0 = $? ]]; then
+        echo -n "$ABSPATH"
+        return
     else
-        ABSPATH="$(pwd)/$BASE"
+        if [[ _WRAPPER =~ $VARNAME ]]; then
+            # issue warnings only for FOP_WRAPPER and XEP_WRAPPER
+            # if path does not exist
+            echo "HINT: $VARNAME=$MYPATH. Path does not exist."
+        else
+            # exit for all other variables if MYPATH is invalid
+            exit_on_error "$VARNAME=$MYPATH. Path does not exist."
+        fi
     fi
+}
 
-    echo $ABSPATH
+# ----------------------
+# Check all paths in $PATHLIST with sanitize_path
+#
+function check_pathlist () {
+    local ABS BASEDIR DIR VAL
+
+    BASEDIR=$1
+
+    for DIR in ${PATHLIST[@]}; do
+        eval "VAL=\$$DIR"
+        if [[ -n $VAL ]]; then
+            ABS=$(sanitize_path "$VAL" "$DIR" "$BASEDIR")
+            eval "$DIR=$ABS"
+        fi
+        eval "echo $DIR=\$$DIR"
+    done
 }
 
 # ---------
@@ -495,11 +548,11 @@ function autoset_docconf () {
             else
                 # we are in DOC_DIR
                 # preserve links
-                DOCCONF_CMDL=$(absolute_path "${DC_COUNT[0]}")
+                DOCCONF_CMDL="${PWD}/${DC_COUNT[0]}"
             fi
         else
             # no link, we are in DOC_DIR
-            DOCCONF_CMDL=$(absolute_path "${DC_COUNT[0]}")
+            DOCCONF_CMDL=$(sanitize_path "${DC_COUNT[0]}" "DOCCONF")
         fi
         # set DOC_DIR
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
@@ -521,7 +574,7 @@ function set_mainfile () {
     MAINFILE="$1"
     if [[ -e "$MAINFILE" ]]; then
         # MAINFILE is a file or link
-        MAIN_CMDL=$(absolute_path "$MAINFILE")
+        MAIN_CMDL=$(sanitize_path "$MAINFILE" "MAIN")
         if [[ -z "$DOC_DIR" ]]; then
             DOC_DIR=$(dirname "$MAIN_CMDL")
             DOC_DIR=${DOC_DIR%/xml*} #remove xml directory
@@ -529,7 +582,7 @@ function set_mainfile () {
     else
         if [[ -e "xml/$MAINFILE" ]]; then
             # MAIN is not a valid file, but ./xml/$MAIN exists
-            MAIN_CMDL=$(absolute_path "xml/$MAINFILE")
+            MAIN_CMDL=$(sanitize_path "xml/$MAINFILE" "MAIN")
             if [[ -z "$DOC_DIR" ]]; then
                 DOC_DIR="$PWD"
             fi
@@ -565,51 +618,6 @@ function recover_cmdl_values () {
     test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
     test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
     test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
-}
-
-# ---------
-# Remove trailing slashes from directory paths
-function sanitize_paths () {
-    DOC_DIR=${DOC_DIR%/}
-    BUILD_DIR=${BUILD_DIR%/}
-    DAPSROOT=${DAPSROOT%/}
-    FALLBACK_STYLEROOT=${FALLBACK_STYLEROOT%/}
-    STYLEDEVEL=${STYLEDEVEL%/}
-    STYLEROOT=${STYLEROOT%/}
-}
-
-# ---------
-# Check values of Variable containing paths
-
-function check_paths () {
-    local DIR FILE VAL
-    # Directories:
-    #    DAPSROOT
-    #    FALLBACK_STYLEROOT
-    #    STYLEDEVEL
-    #    STYLEROOT
-    for DIR in DAPSROOT FALLBACK_STYLEROOT STYLEDEVEL STYLEROOT; do
-        VAL=""
-        eval "VAL=\$$DIR"
-        [[ -n $VAL && ! -d $VAL ]] && exit_on_error "Fatal: $DIR \"$VAL\" is not a valid directory"
-    done
-    # Files:
-    #    EPUB_CSS
-    #    HTML_CSS
-    #    MAIN
-    for FILE in EPUB_CSS HTML_CSS MAIN; do
-        VAL=""
-        eval "VAL=\$$FILE"
-        [[ -n $VAL && ! -e $VAL ]] && exit_on_error "Fatal: $FILE \"$VAL\" does not exist"
-    done
-    # issue warnings only for the wrapper scripts
-#    if [[ 1 -le $VERBOSITY ]]; then
-#        for FILE in FOP_WRAPPER XEP_WRAPPER; do
-#            VAL=""
-#            eval "VAL=\$$FILE"
-#            [[ -n $VAL && ! -e $VAL ]] && echo "Hint: $FILE \"$VAL\" does not exist"
-#        done
-#    fi
 }
 
 # ----------------------------------------------------------------------------
@@ -648,7 +656,7 @@ while true ; do
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
             [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
             # make path absolute and strip trailing slash
-            BUILD_DIR_CMDL=$(absolute_path "$2")
+            BUILD_DIR_CMDL=$(sanitize_path "$2" "BUILD_DIR")
             BUILD_DIR="$BUILD_DIR_CMDL"
             shift 2
             ;;
@@ -662,14 +670,14 @@ while true ; do
             ;;      
         -d|--docconfig|-e|--envfile)
             # make path absolute and strip trailing slash
-            DOCCONF_CMDL=$(absolute_path "$2")
+            DOCCONF_CMDL=$(sanitize_path "$2" "DOCCONF")
             DOCCONF="$DOCCONF_CMDL"
             shift 2
             ;;
         --dapsroot)
             [[ -d $2 ]] || exit_on_error "DAPSROOT \"$2\" is not a valid directory"
             # make path absolute and strip trailing slash
-            DAPSROOT_CMDL=$(absolute_path "$2")
+            DAPSROOT_CMDL=$(sanitize_path "$2" "DAPSROOT")
             DAPSROOT="$DAPSROOT_CMDL"
             DEVEL=1
             shift 2
@@ -683,7 +691,7 @@ while true ; do
             ;;
         --fb_styleroot)
             # make path absolute and strip trailing slash
-            FALLBACK_STYLEROOT_CMDL=$(absolute_path "$2")
+            FALLBACK_STYLEROOT_CMDL=$(sanitize_path "$2" "FALLBACK_STYLEROOT")
             FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
             shift 2
             ;;
@@ -701,13 +709,13 @@ while true ; do
             ;;
         --main)
             # make path absolute and strip trailing slash
-	    MAIN_CMDL=$(absolute_path "$2")
+	    MAIN_CMDL=$(sanitize_path "$2" "MAIN")
 	    MAIN="$MAIN_CMDL"
 	    shift 2
             ;;
         --styleroot)
             # make path absolute and strip trailing slash
-            STYLEROOT_CMDL=$(absolute_path "$2")
+            STYLEROOT_CMDL=$(sanitize_path "$2" "STYLEROOT")
             STYLEROOT="$STYLEROOT_CMDL"
             shift 2
             ;;
@@ -840,6 +848,9 @@ esac
 #
 if [[ -f $USER_CONFIG && -z $DAPSROOT_CMDL ]]; then
     source "$USER_CONFIG"
+    # make DAPSROOT path absolute and remove trailing /
+    DAPSROOT=$(sanitize_path "$DAPSROOT" "DAPSROOT" \
+        $(readlink -en $(dirname $USER_CONFIG)))
     recover_cmdl_values
 fi
 
@@ -868,15 +879,42 @@ else
     CONFIG="$DEFAULT_CONFIG"
 fi
 
+# ---------------------------------------------
+# Source functions and system config
+#
 # Now that everything is in place, source the functions, the system config
 # and the user config (again)
 source "$LIB_DIR/daps_functions"
 source "$CONFIG"
+
+# FOP/XEP CONFIG and WRAPPER
+# when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
+# replaced
+#
+# ${string/#substring/replacement}
+# If $substring matches front end of $string, substitute
+# $replacement for $substring.
+
+FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+
+# ---------------------------------------------
+# Source user config
+#
 if [[ -f $USER_CONFIG ]]; then
     source "$USER_CONFIG"
+    # make paths from PATHLIST absolute and remove trailing /
+#    MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
+#    check_pathlist "$MY_BASEDIR"
+    # make DAPSROOT path absolute and remove trailing /
+    DAPSROOT=$(sanitize_path "$DAPSROOT" "DAPSROOT" \
+        $(readlink -en $(dirname $USER_CONFIG)))
 fi
 recover_cmdl_values
-sanitize_paths
 
 #----------------------------------
 # Run early commands that do not need to have an environment fully set up
@@ -922,7 +960,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
     # check if DOCCONF was sourced
     # takes precedence over a default set in config
         if [[ -e "$DOCCONF_NAME" ]]; then
-            DOCCONF_CMDL=$(absolute_path "$DOCCONF_NAME")
+            DOCCONF_CMDL=$(sanitize_path "$DOCCONF_NAME" "DOCCONF")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 1 -le $VERBOSITY ]]; then
                 echo "Using previously sourced DOCCONF $DOCCONF_CMDL"
@@ -933,7 +971,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
     elif [[ -n $DOCCONF_DEFAULT ]]; then
     # check if a default value was specified in the user/system config file
         if [[ -e $DOCCONF_DEFAULT ]]; then
-            DOCCONF_CMDL=$(absolute_path "$DOCCONF_DEFAULT")
+            DOCCONF_CMDL=$(sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_DEFAULT")
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
             if [[ 1 -le $VERBOSITY ]]; then
                 echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
@@ -951,7 +989,7 @@ elif [[ -n $MAIN_CMDL ]]; then
 elif [[ -n $DOCCONF_CMDL ]]; then
     # check if DOCCONF is a regular file
     if [[ -e $DOCCONF_CMDL ]]; then
-        DOCCONF_CMDL=$(absolute_path "$DOCCONF_CMDL")
+        DOCCONF_CMDL=$(sanitize_path "$DOCCONF_CMDL" "DOCCONF")
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
     else
         exit_on_error "The file \"$DOCCONF\" you specified with --docconf is not a valid file"
@@ -962,15 +1000,17 @@ fi
 # Checking MAIN_CMDL, DOCCONF_CMDL, DOC_DIR and DAPSROOT
 #
 
-[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN is set. This should not have happened"
+[[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]] && exit_on_error "Fatal: Neither \$DOCCONF nor $MAIN are set. This should not have happened"
 [[ -z "$DOC_DIR" ]] && exit_on_error "Fatal: \$DOC_DIR is not set. This should not have happened. Please report a bug."
 [[ -z "$DAPSROOT" ]] && exit_on_error "Fatal: \$DAPSROOT is not set. This should not have happened. Please report a bug."
 
 # FINALLY! Source the DOCCONF file, recover the command line values
 
 [[ -n $DOCCONF_CMDL ]] && source $DOCCONF_CMDL
+# make all paths absolute, remove trailing / and check
+MY_BASEDIR=$(readlink -en $(dirname $DOCCONF_CMDL))
+check_pathlist "$MY_BASEDIR"
 recover_cmdl_values
-sanitize_paths
 
 # If MAIN was not specified on the command line, set MAIN to an absolute
 # path
@@ -978,6 +1018,7 @@ if [[ -z "$MAIN_CMDL" ]]; then
     set_mainfile "$MAIN"
     MAIN="$MAIN_CMDL"
 fi
+
 
 #----------
 # Values that need to be exported and are not set in the config
@@ -1006,28 +1047,9 @@ fi
 #
 # set all basic paths that have not been set by now
 
-# Make paths for Variables set in the user config file absolute
-# and remove trailing slashes
-#
-[[ -z $BUILD_DIR_CMDL && -n $BUILD_DIR ]] && \
-    BUILD_DIR=$(absolute_path "$BUILDDIR")
-[[ -z $DAPSROOT_CMDL && -n $DAPSROOT ]] && \
-    DAPSROOT=$(absolute_path "$DAPSROOT")
-[[ -z $FALLBACK_STYLEROOT_CMDL && -n $FALLBACK_STYLEROOT ]] && \
-    FALLBACK_STYLEROOT=$(absolute_path "$FALLBACK_STYLEROOT")
-[[ -z $STYLEROOT_CMDL && -n $STYLEROOT ]] && \
-    STYLEROOT=$(absolute_path "$STYLEROOT")
-[[ -n $HTML_CSS ]] && HTML_CSS=$(absolute_path "$HTML_CSS")
-[[ -n $EPUB_CSS ]] && EPUB_CSS=$(absolute_path "$EPUB_CSS")
-
 #----------------------------------
 # default BUILD_DIR if not specified on the command line
 [[ -z $BUILD_DIR_CMDL ]] && BUILD_DIR=${DOC_DIR}/build
-
-
-# Check paths that have been set so far
-#
-check_paths
 
 #----------------------------------
 # DocBook Stylesheet locations
@@ -1074,20 +1096,6 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 R_DIR="${BUILD_DIR}/${BOOK}/"
 LOG_DIR="${R_DIR}/log"
 
-#----------------------------------
-# FOP/XEP CONFIG and WRAPPER
-# when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
-# replaced
-#
-# ${string/#substring/replacement}
-# If $substring matches front end of $string, substitute
-# $replacement for $substring.
-
-FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
-FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
-
-XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
-XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 #-------------------------------------------------------------------
 # Now export all variables set by the config file
