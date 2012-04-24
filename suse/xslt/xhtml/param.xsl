@@ -86,11 +86,6 @@ set      toc,title
 <!-- Display minitocs from Provo? display=1, suppress=0 -->
 <xsl:param name="provo.minitoc" select="'0'"/>
 
-<!-- Should the SUSE processing instruction be resolved?
-   0 = no, 1 = yes
--->
-<xsl:param name="resolve.suse-pi" select="1"/>
-
 <!-- Should I generate breadcrumbs navigation?  -->
 <xsl:param name="generate.breadcrumbs" select="1"/>
 <!-- Separator between separate links: -->

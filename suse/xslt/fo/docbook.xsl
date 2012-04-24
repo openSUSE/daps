@@ -11,12 +11,11 @@
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
-<xsl:include href="../profiling/suse-pi.xsl"/>
 <xsl:include href="attributesets.xsl"/>
 <xsl:include href="fonts.xsl"/>
 <xsl:include href="../common/copy-nodes.xsl"/>
 <xsl:include href="../common/common.xsl"/>
-<xsl:include href="../common/titles.xsl"/>
+<!--<xsl:include href="../common/titles.xsl"/>-->
 <xsl:include href="../common/l10n.xsl"/>
 
 
@@ -45,11 +44,6 @@
 <xsl:include href="booktitlepage.xsl"/>
 <xsl:include href="articletitlepage.xsl"/>
 <xsl:include href="titlepages.xsl"/>
-
-<xsl:include href="pi.xsl"/>
-<!--<xsl:include href="fop1.xsl"/>-->
-<!--<xsl:include href="xep.xsl"/>-->
-
 
 <!-- Use cropmarks? -->
 <xsl:param name="use.xep.cropmarks" select="1"/>

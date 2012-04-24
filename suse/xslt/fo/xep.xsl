@@ -127,7 +127,7 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
   <xsl:variable name="bookmark-label">
-    <xsl:apply-templates select=".|title/processing-instruction('suse')" 
+    <xsl:apply-templates select="."
                          mode="object.xep.title.markup"/>
   </xsl:variable>
 

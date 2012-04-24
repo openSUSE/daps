@@ -223,8 +223,6 @@ set       nop
 <!-- Debug Parameters -->
 <xsl:param name="debug.fonts" select="1"/>
 
-<!-- Should the SUSE processing instruction be resolved? -->
-<xsl:param name="resolve.suse-pi" select="1"/>
 
 <!--  -->
 <xsl:param name="orderedlist.label.width">1em</xsl:param>

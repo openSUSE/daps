@@ -281,58 +281,9 @@
 
 </xsl:template>
 
-<!-- ================================================= -->
-<xsl:template match="article" mode="xref-to">
-  <xsl:param name="referrer"/>
-  <xsl:param name="xrefstyle"/>
-  <xsl:param name="verbose" select="1"/>
-  
-  
-  <xsl:apply-templates select=".|title/processing-instruction('suse')" mode="object.xref.markup">
-    <xsl:with-param name="purpose" select="'xref'"/>
-    <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
-    <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="verbose" select="$verbose"/>
-  </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="book" mode="xref-to">
-  <xsl:param name="referrer"/>
-  <xsl:param name="xrefstyle"/>
-  <xsl:param name="verbose" select="1"/>
-
-  
-  <xsl:apply-templates select=".|(title/processing-instruction('suse')|bookinfo/title/processing-instruction('suse'))[1]" 
-    mode="object.xref.markup">
-    <xsl:with-param name="purpose" select="'xref'"/>
-    <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
-    <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="verbose" select="$verbose"/>
-  </xsl:apply-templates>
-</xsl:template>
-
 
 <!--  -->
-<xsl:template match="processing-instruction('suse')" mode="xref-to">
-    <xsl:param name="referrer"/>
-    <xsl:param name="xrefstyle"/>
-    <xsl:param name="verbose" select="1"/>
-    
-    <xsl:call-template name="suse-pi"/>
-</xsl:template>
-  
-  
-<xsl:template match="processing-instruction('suse')" mode="object.xref.markup">
-    <xsl:param name="referrer"/>
-    <xsl:param name="xrefstyle"/>
-    <xsl:param name="verbose" select="1"/>
-    
-    <xsl:call-template name="suse-pi"/>
-</xsl:template>
-  
-
-<!--  -->
-<xsl:template match="*" mode="page.citation">
+<!--<xsl:template match="*" mode="page.citation">
   <xsl:param name="id" select="'???'"/>
 
   <fo:inline>
@@ -345,6 +296,6 @@
       </xsl:with-param>
     </xsl:call-template>
   </fo:inline>
-</xsl:template>
+</xsl:template>-->
 
 </xsl:stylesheet>

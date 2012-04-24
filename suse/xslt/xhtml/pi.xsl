@@ -19,28 +19,6 @@
     <xsl:with-param name="attribute" select="'filename'"/>
   </xsl:call-template>
 </xsl:template>
-  
-<xsl:template match="processing-instruction('suse')" mode="titlepage.mode">
-  <xsl:call-template name="suse-pi"/>
-</xsl:template>
 
-<xsl:template match="processing-instruction('suse')" mode="title.markup">
-  <xsl:call-template name="suse-pi"/>
-</xsl:template>
-
-<xsl:template match="processing-instruction('suse')" mode="titleabbrev.markup">
-  <xsl:call-template name="suse-pi"/>  
-</xsl:template>
-
-
-<xsl:template match="title/processing-instruction('suse')" mode="object.title.markup">
-  <xsl:message>PI('suse')(object.title.markup): <xsl:value-of select="."/></xsl:message>
-  <xsl:call-template name="suse-pi"/>
-</xsl:template>
-
-
-<xsl:template match="processing-instruction('suse')">
-  <xsl:call-template name="suse-pi"/>  
-</xsl:template>
 
 </xsl:stylesheet>
