@@ -164,12 +164,13 @@ def main():
 
     # Use new options from daps
     group = optparse.OptionGroup(parser, "DAPS Options", "Useful options for working with daps:")
-    group.add_option("-d", "--dcfile",
+    group.add_option("-d", "--docconfig",
         dest="dcfile",
-        help="""Specify which DC file to use.
-Mandatory unless there is only a single DC file
-in DOC_DIR. In that case the DC file will automatically be used.
-Only specify the filename, not an absolute path."""
+        help="""Path to doc config file to use. Mandatory
+                unless there is only a single DC-file in the current
+                directory or unless you have configured a default
+                value (DOCCONF_DEFAULT) in $HOME/.daps/config.
+                Note: Options --docconfig and --main exclude"""
         )
     
     #group.add_option("-b", "--basedir",
