@@ -24,7 +24,7 @@
 
 
 Name:           suse-xsl-stylesheets
-Version:        1.9.4
+Version:        1.9.5
 
 %define dtdversion      1.0
 %define dtdname         novdoc
