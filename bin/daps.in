@@ -58,7 +58,6 @@ VARLIST=(
     DOCCONF_DEFAULT
     DRAFT
     DRAFT_STR
-    DAPSROOT
     EPUBCHECK
     EPUB_CSS
     FALLBACK_STYLEROOT
@@ -471,10 +470,13 @@ function sanitize_path () {
     VARNAME=$2
     [[ -n $3 ]] && BASEDIR=$3
 
+    # Do nothing if $1 is an empty value
+    [[ -z $MYPATH ]] && return
+    
     # ignore values that need to be set by configure
     # (makes it possible to directly use a SVN checkout)
     [[ $MYPATH =~ @[a-zA-Z]*@ ]] && return
-    
+
     # 1. Remove trailing Slash
     #
     MYPATH=${MYPATH%/} # remove trailing slash
@@ -849,7 +851,8 @@ esac
 if [[ -f $USER_CONFIG && -z $DAPSROOT_CMDL ]]; then
     source "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
-    sanitize_path "$DAPSROOT" "DAPSROOT" $(readlink -en $(dirname $USER_CONFIG))
+    [[ -n $DAPSROOT ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
+        $(readlink -en $(dirname $USER_CONFIG))
     recover_cmdl_values
 fi
 
@@ -872,6 +875,11 @@ if [[ -n $DAPSROOT ]]; then
 else
     # default DAPSROOT
     # no need to set BIN_DIR here, since it should be in the default path
+    #
+    # if DAPSROOT_DEFAULT contains @...@ we are operating from an SVN
+    # checkout and no  --dapsroot was set
+    #
+    [[ $DAPSROOT_DEFAULT =~ @[a-zA-Z]*@ ]] && exit_on_error "You need to specify a DAPSROOT when using an SVN checkout"
     DAPSROOT="$DAPSROOT_DEFAULT"
     LIB_DIR="$DEFAULT_LIB_DIR"
     LIBEXEC_DIR="$DEFAULT_LIBEXEC_DIR"
@@ -895,7 +903,8 @@ if [[ -f $USER_CONFIG ]]; then
 #    MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
 #    check_pathlist "$MY_BASEDIR"
     # make DAPSROOT path absolute and remove trailing /
-    sanitize_path "$DAPSROOT" "DAPSROOT" $(readlink -en $(dirname $USER_CONFIG))
+    [[ -n $DAPSROOT ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
+        $(readlink -en $(dirname $USER_CONFIG))
 fi
 recover_cmdl_values
 
