@@ -50,15 +50,10 @@ BuildRequires:  libxslt
 BuildRequires:  make
 BuildRequires:  trang 
 
-Requires:       aspell aspell-en
 Requires:       docbook
 Requires:       docbook-xsl-stylesheets >= 1.75
 Requires:       libxslt
 
-# Only works only for openSUSE 11.4 and below
-%if 0%{?suse_version} < 1210
-Recommends:       aspell-en-huge
-%endif
 Recommends:     daps
 Recommends:     docbook5
 Recommends:     docbook5-xsl-stylesheets
@@ -152,8 +147,6 @@ exit 0
 %dir %{_datadir}/xml/%{dtdname}/schema/*
 %dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
 
-%dir %{_libdir}/aspell-0.60/
-
 %dir %{_defaultdocdir}/%{name}
 
 # stylesheets
@@ -170,9 +163,6 @@ exit 0
 
 # Documentation
 %doc %{_defaultdocdir}/%{name}/*
-
-# aspell
-%{_libdir}/aspell-0.60/suse_aspell.rws
 
 #----------------------
 %changelog
