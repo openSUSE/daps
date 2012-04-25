@@ -303,8 +303,8 @@ You can force the maintainer by using -M|--set-maintainer.
       # print >> sys.stderr, "Opts: %s, GOpts: %s" % (self.opts, self.gopts)
       svn = SVNRepository(args,
                           dryrun=self.gopts.dryrun,
-                          envfile=self.gopts.envfile,
-                          basedir=self.gopts.basedir,
+                          envfile=self.gopts.dcfile,
+                          #basedir=self.gopts.basedir,
                           force=self.gopts.force,
                           output=self.opts.output,
                           ##FIXME: Implement it later:

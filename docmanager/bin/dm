@@ -40,7 +40,7 @@ function debug () {
 
 function dm_help () {
   cat << EOF
-$PROG [-e|--envfile|-b|--basedir] alias
+$PROG [-d|--docconf] alias
 
 Queries for or sets SVN file properties.
 
@@ -71,35 +71,24 @@ EOF
 
 function set_env_base () {
 
-    debug "After commandline parsing: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
+    debug "After commandline parsing: DOC_DIR=$DOC_DIR, DOCCONF=$DOCCONF"
     
-    # Checks, if ENVFILE is set from commandline or by daps
-    if [[ -z $ENVFILE ]]; then
-        # Call daps and see what he has to say about ENVFILE and BASE_DIR:
+    # Checks, if DOCCONF is set from commandline or by daps
+    if [[ -z $DOCCONF ]]; then
+        # Call daps and see what he has to say about DOCCONF and BASE_DIR:
         ENV=$(daps showenv )
         if [[ 0 < $? ]]; then
             # daps returned != 0 (or an empty string in ENV)
-            # so neither --envfile
+            # so neither --docconfig
             # nor daps knows about it. Display an error:
-            exit_on_error "No ENV file set"
+            exit_on_error "No DC-file set"
         else
-            # ENV contains BASE_DIR=/foo/bla/bar;ENVFILE=ENV-foo
-            # The following construct extracts the BASE_DIR (b) and
-            # the ENVFILE (e) with the help of an Bash array
-            array=(${ENV//;/ }) #
-            b="${array[0]}"
-            e="${array[1]}"
-            # Above array could also be evalulated with eval. I try to
-            # avoid this
-            # and be on the safe side
-            ENVFILE=${e##*=}
-            if [[ -z $BASE_DIR ]]; then
-                BASE_DIR=${b##*=}
-            fi
+            # ENV contains DOC_DIR=$DOC_DIR;DOCCONF=$DOCCONF
+            eval "$ENV" || exit_on_error "Setting the DC-file failed"
         fi
     fi
 
-    debug "After daps showenv: ENVFILE=$ENVFILE, BASE_DIR=$BASE_DIR"
+    debug "After daps showenv: DOCCONF=$DOCCONF, DOC_DIR=$DOC_DIR"
 }
 
 # ----------------------------------------------------------------------------
@@ -114,21 +103,14 @@ function set_env_base () {
 export POSIXLY_CORRECT=1
 
 
-ARGS=$(getopt -o h,d,b:e: -l help,debug,basedir:,envfile: -n "$ME" -- "$@") #
+ARGS=$(getopt -o h,d: -l help,debug,docconfig: -n "$ME" -- "$@") #
 eval set -- "$ARGS"
 
 while true ; do
   case "$1" in
-    -b|--basedir)
-      # Project directory. Must contain the XML sources in BASE_DIR/xml
-      test -d "$2" || exit_on_error "BASE_DIR $2 is not a valid directory"
-      BASE_DIR="$2"
-      shift 2
-      ;;
-
-    -e|--envfile)
+    -d|--docconfig)
       # Specify which ENV file to use
-      ENVFILE="$2"
+      DOCCONF="$2"
       shift 2
       ;;
 
@@ -138,7 +120,7 @@ while true ; do
       exit 0
       ;;
     
-    -d|--debug)
+    --debug)
       # Enable debug messages
       DEBUG=1
       shift
@@ -185,7 +167,7 @@ REVPROP_QSTRING="%{name} %{trans} %{status} %{revprop} %{maintainer}\n"
 MY_QSTRING="%{name} %{priority} %{deadline} %{trans} %{prelim} '%{modified}'\n"
 
 # ATTENTION
-# All subcommands that need to call docmanager with an ENVFILE and a
+# All subcommands that need to call docmanager with an DOCCONF and a
 # BASE_DIR need to call set_env_base first!!
 #
 #
@@ -200,13 +182,13 @@ case "$SUBCMD" in
     comments)
         # All files with doc:status=comments
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $COMMENTS "$@"
         ;;
     mycomments)
         # Your files with doc:status=comments
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $COMMENTS $MAINTAINER "$@"
         ;;
 # -------------------------------------------
@@ -219,38 +201,38 @@ case "$SUBCMD" in
     edited)
         # All edited files with doc:status=edited
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $EDITED "$@"
         ;;
     myedited)
         # Your edited files with doc:status=edited
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER "$@"
     ;;
     editedd)
         # All files sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" "$@"  --include $EDITED | sort_after_head -k6
         ;;
     myeditedd)
         # Your files sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER \
             "$@" | sort_after_head -k3
         ;;
     editedp)
         # All files sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $EDITED "$@" | sort_after_head -k5 -n
         ;;
     myeditedp|workp)
         # Your files sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITED --include $MAINTAINER \
             "$@" | sort_after_head -k2 -n
     ;;
@@ -264,38 +246,38 @@ case "$SUBCMD" in
     editing)
         # All files with doc:status=editing
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $EDITING "$@"
         ;;
     myediting|todo)
         # Your files with doc:status=editing
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER "$@"
         ;;
     editingd)
         # All files with doc:status=editing sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k6 
         ;;
     myeditingd)
         # Your files with doc:status=editing sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER \
             "$@" | sort_after_head -k3 
         ;;
     editingp)
         # All files with doc:status=editing sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $EDITING "$@" | sort_after_head -k5 -n
         ;;
     myeditingp)
         # Your files with doc:status=editing sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $EDITING --include $MAINTAINER \
             "$@" | sort_after_head -k2 -n
         ;;
@@ -320,7 +302,7 @@ case "$SUBCMD" in
     locdrop)
         # All files which have to be translated and are set to locdrop
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$REVPROP_QSTRING" --include $LOCDROP "$@"
         ;;
 # -------------------------------------------
@@ -333,13 +315,13 @@ case "$SUBCMD" in
     prelim)
         # All files with doc:prelim=yes
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $PRELIM "$@"
         ;;
     myprelim)
         # Your files with doc:prelim=yes
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $PRELIM --include $MAINTAINER "$@"
         ;;
 # -------------------------------------------
@@ -352,13 +334,13 @@ case "$SUBCMD" in
     proofed)
         # All files with doc:status=proofed
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$REVPROP_QSTRING" --include $PROOFED "$@"
         ;;
     myproofed)
         # Your files with doc:status=proofed
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$REVPROP_QSTRING" --include $PROOFED --include $MAINTAINER "$@"
         ;;
 # -------------------------------------------
@@ -371,37 +353,37 @@ case "$SUBCMD" in
     stat)
         # All files including status column
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" "$@"
         ;;
     mystat|work)
         # Your files with including status column
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $MAINTAINER "$@"
         ;;
     statd)
         # all files with status column sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" "$@" | sort_after_head -k6
         ;;
     mystatd|workd)
         # Your files with status column sorted after deadline
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k7
         ;;
     statp)
         # All files with status column sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" "$@" | sort_after_head -k5
         ;;
     mystatp|workp)
         # Your files with status column sorted after priority
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k6
         ;;
 # -------------------------------------------
@@ -413,7 +395,7 @@ case "$SUBCMD" in
     trans)
         # All files which have to be translated
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$QSTRING" --include $TRANS "$@"
         ;;
 # -------------------------------------------
@@ -426,7 +408,7 @@ case "$SUBCMD" in
     revprop)
         # Revision properties for all files which have to be translated
         set_env_base
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P \
             -q "$REVPROP_QSTRING" --include $TRANS "$@"
         ;;
 # -------------------------------------------
@@ -471,35 +453,35 @@ case "$SUBCMD" in
 
     dscomments)
         # set files to comments
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -C "$@"
+        docmanager --docconfig "$DOCCONF" ds -C "$@"
         ;;
     dsediting)
         # set files to editing
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -E "$@"
+        docmanager --docconfig "$DOCCONF" ds -E "$@"
         ;;
     dsedited)
         # set files to edited
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -D "$@"
+        docmanager --docconfig "$DOCCONF" ds -D "$@"
         ;;
     dslocdrop)
         # set files to locdrop
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -L "$@"
+        docmanager --docconfig "$DOCCONF" ds -L "$@"
         ;;
     dsprelim)
         # set preliminary state prelim=yes
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -Y "$@"
+        docmanager --docconfig "$DOCCONF" ds -Y "$@"
         ;;
     dsnoprelim)
         # unset preliminary state prelim=no
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -y "$@"
+        docmanager --docconfig "$DOCCONF" ds -y "$@"
         ;;    
     dsproofed)
         # set files to proofed
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -R "$@"
+        docmanager --docconfig "$DOCCONF" ds -R "$@"
         ;;
     dsproofing)
         # set files to proofing
-        docmanager --envfile "$ENVFILE" --basedir "$BASE_DIR" ds -P "$@"
+        docmanager --docconfig "$DOCCONF" ds -P "$@"
         ;;
     --) shift; break ;;
     *) exit_on_error "Unknown subcommand"
