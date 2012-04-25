@@ -13,69 +13,16 @@
   <remark>taroth 2012-03-14: todo: also add advanced feature like listings
   with daps etc.</remark>
  </para>
- <para>Depending on the output format you generate with &dapsacr; (PDF or HTML
-  for example), the source images you provide and reference in your XML sources 
-  can automatically be transformed into different output formats 
-  (from SVG to PNG for example). This section describes the basic things
-  you need to know for using images (supported formats, where to store the 
-  images in your documentation directory, and how to reference them). For
-  the more advanced image handling features (like listing images referenced 
-  in your XML files or the one used for output formats, list any 
-  missing images or checking for unique image names), refer to 
- <!-- <xref linkend="cha.daps.user.adv"/>-->.</para>
+  <para>Depending on the output format you generate with &dapsacr; (PDF or
+   HTML for example), the source images you provide and reference in your XML
+   sources are automatically transformed into the appropriate output formats. 
+   For example, SVG images are converted to PNG for HTML builds, or color images 
+   to grayscale for black-and-white PDFs. For basic information about image 
+   handling (such as supported formats, where to store the images in your 
+   documentation directory, and how to reference them in your XML files), refer 
+   to <xref linkend="sec.daps.quick.imgs"/>. </para>
  <sect1 id="sec.daps.user.edit.imgs.types">
   <title>Supported Image Types</title>
   &daps-img-formats;
  </sect1>
- <sect1 id="sec.daps.user.edit.imgs.path">
-  <title>Location of the Images</title>
-  <para>&dapsacr; requires a certain directory structure for your XML sources 
-    and for your images that you want to reference there. For details, refer to 
-  <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Depending on 
-  the file type of your source images, add them to the respective subdirectories 
-  in <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
-  </para>
-  <important>
-   <title>Unique Image Names</title>
-   <para>The base names of your images need to be unique throughout the image 
-   subdirectories. For example, using <filename>images/svg/AAA.svn</filename> and 
-   <filename>images/svg/AAA.png</filename> will not work.
-   <remark>taroth 2012-03-19: check with fs what happens in this case</remark> 
-   The name in front of the file extension needs to be different, for example:
-   <filename>images/svg/AAA.svn</filename> and 
-   <filename>images/svg/BBB.png</filename>. </para>
-  </important>
- </sect1>
- <sect1 id="sec.daps.user.edit.imgs.refer">
-  <title>Referencing Images</title>
-  <para>Provided your images are located in the required default directory, 
-   &dapsacr; automatically finds the path to your images. Therefore referencing 
-   images in your XML sources is very straightforward: you do not need
-   to include any path in the <sgmltag class="attribute">fileref</sgmltag> 
-   attribute&mdash;the file name is enough. </para>
-  <para>Furthermore DocBook allows you to insert more than one image to
-   distinguish between different target formats. For example, you can
-   add two images pointing to the same file, but with different widths.
-   Use the <sgmltag class="attribute">role</sgmltag> attribute and add
-   the name of the target format (<sgmltag
-      class="attvalue">fo</sgmltag>, <sgmltag
-      class="attvalue">html</sgmltag>, etc.)
-   <!--See <xref linkend="ex.xml.img.ref"/>.-->
-  </para>
-  <!--<example id="ex.xml.img.ref">
-   <title>Image Reference in an XML File</title>
-   <screen>&lt;figure&gt;
-  &lt;title&gt;Main Window&lt;/title&gt;
-  &lt;mediaobject&gt;
-    &lt;imageobject role="fo"&gt;
-      &lt;imagedata fileref="screenshot.png" width="70%"/&gt;
-    &lt;/imageobject&gt;
-    &lt;imageobject role="html"&gt;
-      &lt;imagedata fileref="screenshot.png" width="75%"/&gt;
-    &lt;/imageobject&gt;
-  &lt;/mediaobject&gt;
-&lt;/figure&gt;</screen>
-  </example>
--->
- </sect1>
-</chapter>
+ </chapter>
