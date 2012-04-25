@@ -163,15 +163,15 @@ class CmdDocget(optcomplete.CmdComplete):
          sys.exit(10)
          # self.parser.error("I need an option.")
      
-      # Handle ENVFILE and BASEDIR by getenvfile (which uses daps showenv internally)
+      # Handle DCFILE and BASEDIR by getenvfile (which uses daps showenv internally)
       # 
-      envfile = self.gopts.envfile
-      basedir = self.gopts.basedir
+      envfile = self.gopts.dcfile
+      # basedir = self.gopts.basedir
       if not envfile:
         res = getenvfile()
         envfile = res[1]
-        if not basedir:
-          basedir=res[0]
+        #if not basedir:
+        #  basedir=res[0]
 
       
 
@@ -180,7 +180,7 @@ class CmdDocget(optcomplete.CmdComplete):
                           querystring=self.opts.query,
                           opts=self.opts,
                           envfile=envfile,
-                          basedir=basedir,
+                          basedir=".",
                           dryrun=self.gopts.dryrun,
                           aligning=self.opts.aligning,
                           statistics=self.opts.statistic,
