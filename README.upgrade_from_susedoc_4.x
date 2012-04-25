@@ -11,6 +11,10 @@ received some changes. For updating your ENV files, use the
 conversion script /usr/bin/daps-envconvert. View the available
 options with --help.
      
+Furthermore, DAPS now uses the DocBook layout by default. 
+The SUSE-stylesheets have been moved to a separate package,
+suse-xsl-stylesheets. If you want to use the SUSE-layout, 
+install this package in addition to DAPS. 
 
 Basic Directory Structure
 --------------------------
