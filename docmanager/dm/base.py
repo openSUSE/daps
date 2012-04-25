@@ -543,12 +543,7 @@ class SVNRepository(object):
       if self.args.get("header"):
          print "Collecting filenames...",
 
-      # Use --basedir when available, otherwise assign empty string
-      if self.basedir:
-        basedir = "--basedir %s" % self.basedir
-      else:
-        basedir = ""
-      cmd="LANG=C daps -e %s %s --color=0 projectfiles" % (env , basedir)
+      cmd="LANG=C daps -e %s --color=0 projectfiles" % (env,)
       
       res=noerr_getstatusoutput(cmd)
       if res[0] != 0:
