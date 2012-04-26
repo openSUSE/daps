@@ -28,7 +28,7 @@
 # Please submit bugfixes or comments via https://sourceforge.net/p/daps/tickets
 #
 Name:           daps
-Version:        1.0.11
+Version:        1.0.12
 Release:        0
 
 %define docbuilddir    %{_datadir}/daps
