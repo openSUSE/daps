@@ -98,15 +98,20 @@ oneTimeTearDown() {
 #
 
 test_guimenu_in_title() {
-  logging "> pwd=$PWD"
-  FILE=$($DAPS --color=0 --dapsroot "$DAPSROOT" -d $DC htmlsingle)
-  logging "> file=$FILE"
+  logging "test_guimenu_in_title"
+  # --dapsroot "$DAPSROOT"
+  $DAPS --dapsroot "$DAPSROOT" --color=0  -d $DC htmlsingle
+  # HACK: For some reasons, daps outputs some strange characters *after*
+  # the filename when using FILE=$(daps ...). This leads to subsequent
+  # error messages in xmlstarlet
+  FILE=build/guimenu/html/guimenu/guimenu.html
   assertNotNull "Expected file" "$FILE"
+  assertTrue "Expected file exist" "[[ -e $FILE ]]"
   RES=$(xml sel -N h=http://www.w3.org/1999/xhtml -t \
     -v "//h:a[@href='#chap.guimenu']/h:span[@class='guimenu'][1]" \
     $FILE )
    logging "> result=$RES"
-   assertEquals "Expected 'File' in guimenu" "File" "$X"
+   assertEquals "Expected 'File' in guimenu" "File" "$RES"
 }
 
 # ALWAYS source it last:
