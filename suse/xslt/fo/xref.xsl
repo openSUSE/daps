@@ -25,19 +25,22 @@
   <xsl:variable name="this.book" select="(ancestor-or-self::article|ancestor-or-self::book)[1]"/>
   <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
 
-  <!--<xsl:if test="$this.book/@id != $target.book/@id">
- <xsl:message>-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  <!--<xsl:if test="$this.book/@id != $target.book/@id">-->
+ <!--<xsl:message>-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  linkend:        <xsl:value-of select="@linkend"/>
  count(targets): <xsl:value-of select="count($targets)"/>
  target:         <xsl:value-of select="name($target)"/>
- refelem:        <xsl:value-of select="$refelem"/>
+ <!-\-refelem:        <xsl:value-of select="$refelem"/>-\->
+ article         <xsl:value-of select="count($target/ancestor-or-self::article)"/>
+ article-title   <xsl:value-of
+   select="$target/ancestor-or-self::article/title"/>
  $this.book/@id: <xsl:value-of select="$this.book/@id"/>
  $target.book/@id: <xsl:value-of select="$target.book/@id"/>
  $target/xml:base  <xsl:value-of select="$target/ancestor-or-self::*[1]/@xml:base"/>
  $target.book/title          "<xsl:value-of select="$target.book/title"/>"
  $target.book/bookinfo/title "<xsl:value-of select="$target.book/bookinfo/title"/>"
-</xsl:message>
- </xsl:if>-->
+</xsl:message>-->
+ <!--</xsl:if>-->
 
   <xsl:call-template name="check.id.unique">
     <xsl:with-param name="linkend" select="@linkend"/>
@@ -84,9 +87,22 @@
 <xsl:template name="create.linkto.other.book">
   <xsl:param name="target"/>
   <xsl:variable name="refelem" select="local-name($target)"/>
-  <xsl:variable name="target.book" select="($target/ancestor-or-self::article|$target/ancestor-or-self::book)[1]"/>
-  <!--<xsl:param name=""/>-->
+  <xsl:variable name="target.article"
+    select="$target/ancestor-or-self::article"/>
+  <xsl:variable name="target.book" 
+    select="$target/ancestor-or-self::book"/>
+  
   <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
+  
+  <!--<xsl:message>create.linkto.other.book:
+    linkend: <xsl:value-of select="@linkend"/>
+    refelem: <xsl:value-of select="$refelem"/>
+    target:  <xsl:value-of select="concat(count($target), ':',
+      name($target))"/>
+    target/@id:  <xsl:value-of select="$target/@id"/>
+    target.article: <xsl:value-of select="count($target.article)"/>
+    target.book: <xsl:value-of select="count($target.book)"/>
+  </xsl:message>-->
   
   <xsl:if test="$lang != 'ko'"> 
     <xsl:apply-templates select="$target" mode="xref-to">
@@ -123,18 +139,13 @@
   <xsl:text>&#x2191;</xsl:text>
   
   <xsl:choose>
-    <xsl:when test="$refelem = 'article'">
-      <xsl:apply-templates select="$target/title" mode="xref-to"/>
-    </xsl:when>
-    <xsl:when test="$refelem = 'book'">
-      <xsl:apply-templates 
-        select="$target.book" 
-        mode="xref-to"/>
+    <xsl:when test="$target.article">
+      <xsl:apply-templates
+        select="$target.article/title|$target.article/articleinfo/title" mode="xref-to"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates 
-        select="$target.book" 
-        mode="xref-to"/>
+        select="$target.book" mode="xref-to"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>)</xsl:text>
