@@ -554,7 +554,7 @@ function autoset_docconf () {
             fi
         else
             # no link, we are in DOC_DIR
-            sanitize_path "DC_COUNT[0]}" "DOCCONF_CMDL"
+            sanitize_path "${DC_COUNT[0]}" "DOCCONF_CMDL"
         fi
         # set DOC_DIR
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
