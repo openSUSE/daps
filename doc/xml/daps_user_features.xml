@@ -176,12 +176,77 @@
    use the &dapsacr; initialization script <command>daps-init</command>. For
    instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
    script automatically creates the <xref linkend="sec.daps.user.basics.files" 
-   xrefstyle="select:title"/> and <!--<xref linkend="sec.daps.user.basics.dirstruct" 
-   xrefstyle="select:title"/>--> that you need to get started with  &dapsacr;.
+   xrefstyle="select:title"/> and <xref linkend="sec.daps.user.basics.dirstruct" 
+   xrefstyle="select:title"/> that you need to get started with  &dapsacr;.
   </para>
   <sect2 id="sec.daps.user.basics.files">
    <title>Key Files</title>
    &daps-key-files;
+  </sect2>
+  <sect2 id="sec.daps.user.basics.dirstruct">
+  <title>Directory Structure</title>
+  <!--taroth 2012-04-26: cave, same contents in DAPS Quick 
+  (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
+  <!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and 
+  include it multiple times (callout IDs!)-->
+   <para>
+    For &dapsacr; to work out of the box, your XML files and images must be
+    organized in a specific structure within your documentation directory.
+    <xref linkend="ex.daps.dir.doc"/> shows the required structure including
+    the key files for a &dapsacr; documentation project. You can also create
+    multiple documentation directories for individual documentation projects,
+    but they all need the substructure outlined below.
+   </para>
+    
+   <example id="ex.daps.dir.doc">
+    <title>Directory Structure</title>
+    <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.docdir.base"/>
+  |--&dc;*<co id="co.docdir.dc"/>
+     |--images/
+     |   |--src/<co id="co.docdir.img.src"/>
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
+     |--xml/<co id="co.docdir.xml"/> 
+     |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.docdir.base">
+     <para>
+      <quote>Working directory</quote> for the respective documentation project.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.dc">
+     <para>
+      &dc; file defining the documentation project. <!--For more information,
+      refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
+    </callout>
+    <callout arearefs="co.docdir.img.src">
+     <para>
+      Top-level directory for any original images that you want to use in
+      the documentation project. Contains subdirectories for images in
+      various formats. Any images to be referenced in the XML sources must
+      be put in the respective subdirectories. For information about referencing
+      images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.xml">
+     <para>
+      Directory holding the XML files for the documentation project. If you
+      declare entities in an external file (for example, in
+      <filename>entity-decl.ent</filename>), put the entity declaration file
+      here, too.</para>
+    </callout>
+    <callout arearefs="co.docdir.main">
+     <para>
+      The main file of the documentation project. It contains
+      <quote>references</quote> to other books, chapters, appendices, etc.
+     </para>
+    </callout>
+   </calloutlist>
   </sect2>
  </sect1>
 </chapter>

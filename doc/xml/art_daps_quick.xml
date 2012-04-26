@@ -240,43 +240,47 @@
    &daps-key-files;
   </sect2>
   <sect2 id="sec.daps.quick.basics.dirstruct">
-   <title>Directory Structure</title>
-   <para>
+  <title>Directory Structure</title>
+  <!--taroth 2012-04-26: cave, same contents in DAPS User Guide 
+  (daps_user_concept.xml, id=sec.daps.user.basics.dirstruct)-->
+  <!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and 
+  include it multiple times (callout IDs!)-->
+  <para>
     For &dapsacr; to work out of the box, your XML files and images must be
     organized in a specific structure within your documentation directory.
-    <xref linkend="ex.daps.dir.doc"/> shows the required structure including
+    <xref linkend="ex.daps.quick.dir.doc"/> shows the required structure including
     the key files for a &dapsacr; documentation project. You can also create
     multiple documentation directories for individual documentation projects,
     but they all need the substructure outlined below.
    </para>
     
-   <example id="ex.daps.dir.doc">
+   <example id="ex.daps.quick.dir.doc">
     <title>Directory Structure</title>
-    <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.docdir.base"/>
-  |--&dc;*<co id="co.docdir.dc"/>
+    <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.quick.docdir.base"/>
+  |--&dc;*<co id="co.quick.docdir.dc"/>
      |--images/
-     |   |--src/<co id="co.docdir.img.src"/>
+     |   |--src/<co id="co.quick.docdir.img.src"/>
      |   |  |--dia/
      |   |  |--eps/
      |   |  |--fig/
      |   |  |--pdf/
      |   |  |--png/
      |   |  |--svg/
-     |--xml/<co id="co.docdir.xml"/> 
-     |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
+     |--xml/<co id="co.quick.docdir.xml"/> 
+     |   |--MAIN*.xml<co id="co.quick.docdir.main"/></screen>
    </example>
    <calloutlist>
-    <callout arearefs="co.docdir.base">
+    <callout arearefs="co.quick.docdir.base">
      <para>
       <quote>Working directory</quote> for the respective documentation project.
      </para>
     </callout>
-    <callout arearefs="co.docdir.dc">
+    <callout arearefs="co.quick.docdir.dc">
      <para>
       &dc; file defining the documentation project. <!--For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
     </callout>
-    <callout arearefs="co.docdir.img.src">
+    <callout arearefs="co.quick.docdir.img.src">
      <para>
       Top-level directory for any original images that you want to use in
       the documentation project. Contains subdirectories for images in
@@ -285,14 +289,14 @@
       images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.
      </para>
     </callout>
-    <callout arearefs="co.docdir.xml">
+    <callout arearefs="co.quick.docdir.xml">
      <para>
       Directory holding the XML files for the documentation project. If you
       declare entities in an external file (for example, in
       <filename>entity-decl.ent</filename>), put the entity declaration file
       here, too.</para>
     </callout>
-    <callout arearefs="co.docdir.main">
+    <callout arearefs="co.quick.docdir.main">
      <para>
       The main file of the documentation project. It contains
       <quote>references</quote> to other books, chapters, appendices, etc.
@@ -427,7 +431,7 @@
    <para>
     &dapsacr; requires a certain directory structure for your XML sources and
     for your images that you want to reference in the XML files. For details, 
-    refer to <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>. Depending 
+    refer to <xref linkend="ex.daps.quick.dir.doc" xrefstyle="select:title"/>. Depending 
     on the file type of your source images, add them to the respective
     subdirectories in
     <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
@@ -936,7 +940,7 @@ make: *** [validate] Error 3</screen>
      If your XML files are distributed across several subdirectories, flatten
      the hierarchy and put all XML files directly into the
      <filename>xml</filename> subdirectory that is required by &dapsacr;. See
-     <xref linkend="ex.daps.dir.doc"
+     <xref linkend="ex.daps.quick.dir.doc"
       xrefstyle="select:title"/>. Hosting multiple documentation projects in
      the same <filename>xml</filename> directory is fine as long as the file
      names are unique. You can put multiple Main files there.
@@ -954,7 +958,7 @@ make: *** [validate] Error 3</screen>
     respective subdirectories in 
     <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>. 
     The <filename>image</filename> directory and its substructure is required
-     by &dapsacr;. For details, refer to  <xref linkend="ex.daps.dir.doc"
+     by &dapsacr;. For details, refer to  <xref linkend="ex.daps.quick.dir.doc"
       xrefstyle="select:title"/>.
     </para>
    </step>
