@@ -110,7 +110,7 @@ test_guimenu_in_title() {
   RES=$(xml sel -N h=http://www.w3.org/1999/xhtml -t \
     -v "//h:a[@href='#chap.guimenu']/h:span[@class='guimenu'][1]" \
     $FILE )
-   logging "> result=$RES"
+   logging "Result from xmlstarlet: [$RES]"
    assertEquals "Expected 'File' in guimenu" "File" "$RES"
 }
 
