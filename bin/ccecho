@@ -85,14 +85,13 @@ if [[  0 != $COLOR && no != $COLOR ]]; then
     elif [[ warn = $LEVEL ]]; then
         START_COLOR="\e[31m"
     fi
+    # in case you do a tail or a head on the output, the last/first color code
+    # might get cut, leading to unwanted results
+    # To be on the safe side, we make sure every line that is printed starts
+    # and ends with a color code
+    # (\ from \n needs to be escaped)
+    #
+    MESSAGE=${MESSAGE//\\n/${END_COLOR}\\n${START_COLOR}}
 fi
-
-# in case you do a tail or a head on the output, the last/first color code
-# might get cut, leading to unwanted results
-# To be on the safe side, we make sure every line that is printed starts
-# and ends with a color code
-# (\ from \n needs to be escaped)
-#
-MESSAGE=${MESSAGE//\\n/${END_COLOR}\\n${START_COLOR}}
 
 echo -e "${START_COLOR}${MESSAGE}${END_COLOR}"
