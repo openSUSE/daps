@@ -1000,7 +1000,7 @@ dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
 	tar cjhf $(TARBALL) --exclude-vcs --no-recursion \
 	  -T $(JSP_DIR)/JSP.manifest \
 	  --absolute-names --transform=s%$(RESULT_DIR)/jsp/%% \
-	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/style_image/* \
+	  $(JSP-USED) $(JSP_DIR)/index.jsp $(JSP_DIR)/style_images/* \
 	  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
 	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
 
@@ -1736,7 +1736,7 @@ $(JSP_DIR)/style_images: $(STYLEIMG) $(JSP_DIR)
 	  -C $(dir $(STYLEIMG)) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
   else
 	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(STYLEIMG)/images/ $@
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $@
   endif
 
 # With the SUSE Stylesheets we use an alternative draft image for HTML
