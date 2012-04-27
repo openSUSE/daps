@@ -237,6 +237,7 @@ FOSTRINGS    := --stringparam keep.xml.comments $(COMMENTS) \
                 --stringparam draft.mode "$(DRAFT)" \
 		--stringparam draft.watermark.image "$(dir $(STYLEIMG))images/draft.png" \
 	        --stringparam show.comments $(REMARKS) \
+                --stringparam generate.permalink 0  \
                 --stringparam format.print 1 \
                 --stringparam callout.graphics.path \
                   "$(STYLEIMG)/callouts/" \
@@ -249,6 +250,7 @@ FOCOLSTRINGS := --stringparam keep.xml.comments $(COMMENTS) \
 		--stringparam draft.watermark.image "$(dir $(STYLEIMG))images/draft.png" \
 	        --stringparam show.comments $(REMARKS) \
                 --stringparam use.xep.cropmarks 0 \
+                --stringparam generate.permalink 0  \
                 --stringparam format.print 0 \
                 --stringparam callout.graphics.path \
                   "$(STYLEIMG)/callouts/" \
@@ -295,7 +297,7 @@ HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
                 --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
                 --stringparam navig.graphics.path "style_images/" \
-                 --stringparam navig.graphics 1 \
+                --stringparam navig.graphics 1 \
                 --stringparam callout.graphics.path "style_images/callouts/" \
                 --stringparam img.src.path "images/"
 
