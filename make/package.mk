@@ -165,7 +165,7 @@ endif
 	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
 ifdef DEF_FILE
 	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(DOC_DIR)/%% \
-	  $(addprefix $(DOC_DIR)/,$(DEF_FILE))
+	  $(DEF_FILE)
 endif
 	bzip2 -9f $(NOTRANSTAR)
 	@ccecho "info" "Created $(NOTRANSTAR).bz2"
