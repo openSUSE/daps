@@ -175,8 +175,14 @@
   
 <!ENTITY daps-config 
   '<para>
-   &dapsacr; can be customized to a large degree by setting options in various
-   places:
+   &dapsacr; can be customized to a large degree. The configuration file 
+   &dapsconf-sys; lists all parameters that can be configured, including a 
+   short description for each parameter. Parameters are always defined as 
+   <option>KEY="VALUE"</option> pairs. Any parameter can be set in various 
+   locations, which are listed below in ascending order with regards to their 
+   hierarchy. If conflicting values are set for the same parameter, the value of 
+   the next hierarchy level takes precedence. Values defined on the command line 
+   always take precedence over any values defined in other locations.
   </para>
 
   <itemizedlist>
@@ -202,13 +208,8 @@
      <command>daps</command> command.
     </para>
    </listitem>
-  </itemizedlist>
-
-  <para>
-   The configuration file &dapsconf-sys; lists all settings that can be
-   configured, including a short description for each option. Settings are
-   always defined as <option>KEY="VALUE"</option> pairs.
-  </para> '>
+  </itemizedlist>'>
+ 
   
 <!ENTITY daps-key-files 
  ' <para>
