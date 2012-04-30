@@ -1677,7 +1677,7 @@ $(WEBHELP_DIR)/index.html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 	  -DfillTheRest=true \
 	  -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
 	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
-	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.*.jar:$(DOCBOOK_STYLES)/extensions/tagsoup-1.*.jar:$(DOCBOOK_STYLES)/extensions/lucene-core-3.*.jar \
+	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.*.jar)):$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/tagsoup-1.*.jar)):$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/lucene-core-3.*.jar)) \
 	  com.nexwave.nquindexer.IndexerMain
 	rm -f $(WEBHELP_DIR)/search/*.props
 
