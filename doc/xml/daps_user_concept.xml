@@ -299,34 +299,56 @@
  &lt;xi:include href="book_kvm.xml" 
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
 &lt;/set&gt;
-    </screen>
+     </screen>
     </example>
+    <para>For more information about splitting a document into separate files, 
+    refer to <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
+    <citetitle>Physical Divisions: Breaking a Document into Separate Files</citetitle>
+    </ulink>.</para>
    </sect3>
 
   <sect3 id="sec.daps.user.oview.docproject.dc">
    <title>&dc; (&dclong; File)</title>
-   <para>Of the multiple parameters that can be set in the &dc; file, the only one 
-  required is <parameter>MAIN</parameter>, pointing to the XML file that you
-  want to process. Suppose you want to publish a whitepaper from DocBook XML 
+   <para>Depending on the setup of your documentation project, you can have one 
+   or multiple &dclong; for your documentation project. Usually, you create
+   one &dc; file per book or article&mdash;to specify a number of parameters 
+   such as the Main file or which layout to use.</para>
+   <para>For a list of all parameters that are available for &dapsacr;, refer to
+   <filename>&dapsconf-sys;</filename>. Usually, you only include a small number
+   of them in the &dc; file&mdash;those that are specific for the respective
+   book, article or set. Of the mutliple parameters that can be set in the &dc; 
+   file, the only one required is <parameter>MAIN</parameter>, 
+   pointing to the XML file that you want to process.</para>
+   <tip>
+     <title>No &dc; File</title>
+     <para>For very small or basic projects where you do not want to specify
+       any parameters (apart from the Main file), you can also do without
+       &dc; file. In this case, you must specify the <parameter>MAIN</parameter>
+       parameter on the command line, for example:</para>
+       <screen>daps -m xml/MAIN-daps-example.xml html</screen>
+   </tip>
+   <para>The following examples of &dc; files demonstrate some key parameters 
+   that can be defined there, depending on your use case.</para>
+   <para>Suppose you want to publish a whitepaper from DocBook XML 
   with the default DocBook stylesheets, the following example shows a very basic
   &dc; file that you could use:</para>
-   <example id="ex.daps.dc.basic">
-    <title>A Very Basic &dc; File</title>
-    <screen>## -/- 
-## Doc Config File for DAPS (very basic)
-## DocBook Authoring and Publishing Suite
-## -/-
+  <example><title>Basic &dc; for an Article</title>
+  <screen>##
+## Doc config file for a whitepaper article
+## See /etc/daps/config for documentation of the settings below
 ##
-## Basics
-MAIN="my_whitepaper.xml" 
- </screen>
-   </example>
-   <para>
-  The example above is a bit artificial though&mdash;if you do not want to 
-   specify any further parameters, you can also set the <parameter>MAIN</parameter>
-   parameter on the command line and do completely without &dc;.
-   <remark>taroth 2012-02-10: add xref to usage chapter</remark>
-   </para>
+
+## Mandatory Parameter
+MAIN="my_whitepaper.xml"
+
+</screen>
+  </example>
+    <para>The example above is a bit artificial, though&mdash;if you do not
+     need to specify any further parameters, you would just use the
+      <option>-m</option> to define the Mainf file on the command line (and do
+     completely without &dc; file).</para> 
+     <!--taroth 2012-04-30: updated until here, revise/restructure remaining section 
+     (article with more options, book, set)-->
    <para> For a documentation <sgmltag>set</sgmltag> (a collection of books), 
    multiple &dc; files can be defined. This allows you to set both
     different parameters or different values for individual books in the set:
