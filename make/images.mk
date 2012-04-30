@@ -172,15 +172,15 @@ DOUBLEIMG := $(wildcard \
 
 # images referenced in the currently used XML sources that cannot be found in
 # $(IMG_SRCDIR)
-#
-MISSING     := $(sort $(filter-out \
-		$(notdir $(SRCSVG)) \
-                $(notdir $(SRCPNG)) \
-                $(notdir $(SRCFIG)) \
-                $(notdir $(SRCEPS)) \
-                $(notdir $(SRCPDF)) \
-                $(notdir $(SRCDIA)), \
-                $(USED)))
+
+MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCSVG))) \
+                $(notdir $(basename $(SRCPNG))) \
+                $(notdir $(basename $(SRCFIG))) \
+                $(notdir $(basename $(SRCEPS))) \
+                $(notdir $(basename $(SRCPDF))) \
+                $(notdir $(basename $(SRCDIA))), \
+                $(basename $(USED))))
+
 
 #------------------------------------------------------------------------
 # PHONY targets for image creation
