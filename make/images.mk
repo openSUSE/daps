@@ -107,6 +107,7 @@ USED_FIG := $(filter \
 USED_SVG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
+USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_PNG) $(USED_PDF) $(USED_SVG)
 
 # generated images
 #
@@ -173,14 +174,8 @@ DOUBLEIMG := $(wildcard \
 # images referenced in the currently used XML sources that cannot be found in
 # $(IMG_SRCDIR)
 
-MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCSVG))) \
-                $(notdir $(basename $(SRCPNG))) \
-                $(notdir $(basename $(SRCFIG))) \
-                $(notdir $(basename $(SRCEPS))) \
-                $(notdir $(basename $(SRCPDF))) \
-                $(notdir $(basename $(SRCDIA))), \
+MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
                 $(basename $(USED))))
-
 
 #------------------------------------------------------------------------
 # PHONY targets for image creation
@@ -367,7 +362,7 @@ $(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),1)
 	@echo "   Fixing $(notdir $<)"
 endif
-	xsltproc $(STYLESVG) $< > $@
+	xsltproc --novalid $(STYLESVG) $< > $@ $(DEVNULL)
 
 #---------------
 # Create grayscale SVGs used in the manuals
@@ -376,8 +371,8 @@ $(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),1)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
-	xsltproc $(STYLESVG) $< | \
-	xsltproc $(STYLESVG2GRAY) - > $@
+	xsltproc --novalid $(STYLESVG) $< | \
+	xsltproc --novalid $(STYLESVG2GRAY) - > $@ $(DEVNULL)
 
 #---------------
 # Create color SVGs from other formats
