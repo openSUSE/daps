@@ -63,7 +63,14 @@
       
       <xsl:choose>
          <xsl:when test="$xep.extensions != 0">
-            <fo:block intrusion-displace="block">
+            <fo:block intrusion-displace="block" margin-bottom="-.5em">
+              <xsl:if test="$xep.extensions != 0">
+                <!--<xsl:attribute name="border">1pt solid blue</xsl:attribute>-->
+                <xsl:attribute name="float">none</xsl:attribute>
+                <xsl:attribute name="clear">both</xsl:attribute>
+                <!-- For some reasons, XEP needs this invisible border -->
+                <!--<xsl:attribute name="border">0.5pt dotted orange</xsl:attribute>-->
+        </xsl:if>
                <fo:float float="start"><fo:block><fo:inline margin-right="1em"
                   xsl:use-attribute-sets="formal.inline.number.properties"
                   ><xsl:value-of select="$label.label"/></fo:inline></fo:block></fo:float>

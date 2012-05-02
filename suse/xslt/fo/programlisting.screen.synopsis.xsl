@@ -71,12 +71,6 @@
             <xsl:attribute name="font-size"><xsl:value-of
               select="$font.size"/></xsl:attribute>
           </xsl:if> 
-          <xsl:if test="$xep.extensions != 0">
-              <xsl:attribute name="float">none</xsl:attribute>
-              <xsl:attribute name="clear">both</xsl:attribute>
-              <!-- For some reasons, XEP needs this invisible border -->
-              <xsl:attribute name="border">0.05pt solid white</xsl:attribute>
-          </xsl:if> 
           <xsl:choose>
             <xsl:when test="$hyphenate.verbatim != 0 and 
                             $exsl.node.set.available != 0">
@@ -99,18 +93,7 @@
           <xsl:if test="$font.size != ''">
             <xsl:attribute name="font-size"><xsl:value-of
               select="$font.size"/></xsl:attribute>
-          </xsl:if>  
-          <!-- Apply it only for XEP -->
-          <xsl:if test="$xep.extensions != 0 and 
-                        (parent::example or parent::step)">
-             <xsl:attribute name="margin-top">-1em</xsl:attribute>
           </xsl:if>
-           <xsl:if test="$xep.extensions != 0">
-              <xsl:attribute name="float">none</xsl:attribute>
-              <xsl:attribute name="clear">both</xsl:attribute>
-              <!-- For some reasons, XEP needs this invisible border -->
-              <xsl:attribute name="border">0.05pt solid white</xsl:attribute>
-           </xsl:if>
            <xsl:choose>
             <xsl:when test="$hyphenate.verbatim != 0 and 
                             $exsl.node.set.available != 0">
@@ -149,7 +132,6 @@
       <xsl:copy-of select="$block.content"/>
     </xsl:otherwise>
   </xsl:choose>
-
 </xsl:template>
 
 
