@@ -696,20 +696,17 @@ remainingfiles:
 # Source graphics used for $BOOK/ROOTID
 #
 .PHONY: projectgraphics
-projectgraphics: FILES := $(USED_SVG) $(USED_PNG) $(USED_DIA) $(USED_FIG)
 projectgraphics:
   ifeq ($(PRETTY_FILELIST), 1)
-	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(USED_ALL)))"
   else
-	@echo $(sort $(FILES))
+	@echo $(sort $(USED_ALL))
   endif
 
 # Source graphics _not_ used for $BOOK/ROOTID
 #
 .PHONY: remaininggraphics
-remaininggraphics: INCLUDED := $(filter-out $(USED_SVG) $(USED_PNG) \
-				$(USED_DIA) $(USED_FIG), \
-				$(SRCPNG) $(SRCSVG) $(SRCFIG) $(SRCDIA))
+remaininggraphics: FILES := $(filter-out $(USED_ALL), $(SRCALL))
 remaininggraphics:
   ifeq ($(PRETTY_FILELIST), 1)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(FILES)))"
@@ -728,9 +725,9 @@ remaininggraphics:
 .PHONY: xmlgraphics
 xmlgraphics: provide-images provide-color-images
   ifeq ($(PRETTY_FILELIST), 1)
-	@echo -e "$(subst $(SPACE),\n,$(sort $(SVGONLINE) $(PNGONLINE)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)))"
   else
-	@echo $(sort $(SVGONLINE) $(PNGONLINE))
+	@echo $(sort $(PDFONLINE) $(PNGONLINE) $(SVGONLINE))
   endif
 
 # xmlgraphics-bw -> b/w images only
@@ -738,9 +735,9 @@ xmlgraphics: provide-images provide-color-images
 .PHONY: xmlgraphics-bw
 xmlgraphics-bw: provide-images
   ifeq ($(PRETTY_FILELIST), 1)
-	@echo -e "$(subst $(SPACE),\n,$(sort $(SVGPRINT) $(PNGPRINT)))"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)))"
   else
-	@echo $(sort $(SVGPRINT) $(PNGPRINT))
+	@echo $(sort $(PDFPRINT) $(PNGPRINT) $(SVGPRINT))
   endif
 
 # Graphics missing in $BOOK
