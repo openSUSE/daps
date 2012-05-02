@@ -8,7 +8,7 @@
 #
 .PHONY: package-html
 package-html: PACKDIR = $(RESULT_DIR)/package/html
-package-html: dist-html desktop-files-dist document-files-html-dist
+package-html: dist-html dist-desktop-files dist-document-files-html
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy HTML tarball
@@ -40,7 +40,7 @@ package-html: dist-html desktop-files-dist document-files-html-dist
 #
 .PHONY: package-pdf
 package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
-package-pdf: color-pdf document-files-pdf-dist
+package-pdf: color-pdf dist-document-files-pdf
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy color PDF
