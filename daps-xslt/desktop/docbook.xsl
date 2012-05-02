@@ -6,7 +6,6 @@
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:output method="text" encoding="UTF-8" />
 
-  <xsl:include href="../profiling/suse-pi.xsl"/>
   <xsl:include href="filename.xsl" />
   <xsl:include href="write.text.chunk.xsl" />
 
@@ -44,7 +43,7 @@
   <xsl:param name="generate.index" select="1" />
   <xsl:param name="chunk.section.depth" select="1" />
   <xsl:param name="chunk.first.sections" select="0" />
-
+  <xsl:param name="chunk.quietly" select="0"/>
 
   <!-- ********************************************************** -->
   <xsl:template match="/">
