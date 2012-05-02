@@ -224,8 +224,8 @@
 &lt;/book&gt;
 </screen>
     </example>
-    <para>Articles basically can look very similar, except that an article must
-     not contain chapter elements, but is structured by means of section
+    <para>The Main file of an article can look very similar, except that an 
+    article must not contain chapter elements, but is structured by means of section
      elements (either <sgmltag>section</sgmltag>, or <sgmltag>sect1</sgmltag>,
       <sgmltag>sect2</sgmltag> etc.): </para>
     <example id="ex.daps.main.art">
@@ -316,7 +316,7 @@
    <para>For a list of all parameters that are available for &dapsacr;, refer to
    <filename>&dapsconf-sys;</filename>. Usually, you only include a small number
    of them in the &dc; file&mdash;those that are specific for the respective
-   book, article or set. Of the mutliple parameters that can be set in the &dc; 
+   book, article or set. Of the multiple parameters that can be set in the &dc; 
    file, the only one required is <parameter>MAIN</parameter>, 
    pointing to the XML file that you want to process.</para>
    <tip>
@@ -332,113 +332,116 @@
    <para>Suppose you want to publish a whitepaper from DocBook XML 
   with the default DocBook stylesheets, the following example shows a very basic
   &dc; file that you could use:</para>
-  <example><title>Basic &dc; for an Article</title>
-  <screen>##
+  <example id="ex.daps.user.dc.art.simple">
+   <title>Basic &dc; for an Article</title>
+    <screen>##
 ## Doc config file for a whitepaper article
 ## See /etc/daps/config for documentation of the settings below
 ##
 
 ## Mandatory Parameter
 MAIN="my_whitepaper.xml"
-
 </screen>
   </example>
     <para>The example above is a bit artificial, though&mdash;if you do not
      need to specify any further parameters, you would just use the
-      <option>-m</option> to define the Mainf file on the command line (and do
+     <option>-m</option> to define the Main file on the command line (and do
      completely without &dc; file).</para> 
-     <!--taroth 2012-04-30: updated until here, revise/restructure remaining section 
-     (article with more options, book, set)-->
+        
    <para> For a documentation <sgmltag>set</sgmltag> (a collection of books), 
-   multiple &dc; files can be defined. This allows you to set both
+    multiple &dc; files can be defined. This allows you to set both
     different parameters or different values for individual books in the set:
     For example, by refering a different <parameter>ROOTID</parameter> in a
     &dc; file, you define which book of the set is to be built. Another
     example would be to specify different output modes (such as draft or
-    annotated) for individual books in the same documentation set.
+    annotated) for individual books in the same documentation set, as
+    illustrated by the following examples
   </para>
-   <para>The following example shows the &dc; file of the &dapsuser;. </para>
    <example id="ex.daps.dc.user">
     <title>&dc; File For a Book in a Set</title>
-    <screen>## --------------------------------
-## Doc Config File for DAPS (used for a book in a set)
-## DocBook Authoring and Publishing Suite
-## ------------------------------------
+    <screen>##
+## Doc config file for DAPS User Guide
+## See /etc/daps/config for documentation of the settings below
 ##
-## Basics
-MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.main"/>
-ROOTID="book.daps.user" <co id="co.daps.dc.rootid"/>
 
-## enable sourcing
-export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.source"/>
-  </screen>
-   </example>
-<!--## Profiling
-PROFOS="osuse" <co id="co.daps.dc.profile"/>
-PROFARCH="x86;amd64;em64t" <xref linkend="co.daps.dc.profile"/>
+## Mandatory Parameter
+MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.user.main"/>
 
-## stylesheet location
-STYLEROOT="/usr/share/xml/docbook/stylesheet/suse" <co id="co.daps.dc.styleroot"/>
-HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css" <co id="co.daps.dc.css"/>
-EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css" <xref
-linkend="co.daps.dc.css"/>
--->
+## Optional Parameters
+
+## ROOTID
+## If MAIN contains a set with several books and/or articles, use
+## a separate DC-file for each book/article and set ROOTID to
+## the id of the respective &lt;book&gt;/&lt;article&gt; element of the document
+## This will enable you to build individual books/articles rather than
+## the whole set
+## See http://www.docbook.org/tdg/en/html/set.html for more information
+## on sets
+ROOTID="book.daps.user" <co id="co.daps.dc.user.rootid"/>
+
+
+## Custom Stylesheets
+## (if not defined the DookBook stylesheets will be used)
+##
+STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt" <co id="co.daps.dc.user.styleroot"/>
+#FB_STYLEROOT="" <co id="co.daps.dc.user.fbstyleroot"/>
+HTML_CSS="./daps.css" <co id="co.daps.dc.user.css"/>
+#EPUB_CSS="" <co id="co.daps.dc.user.epub"/>
+
+## If you want to be able to source this file, so you do not have
+## to specify the -d/&#45;&#45;docconfig option with daps, uncomment the
+## following line
+##
+export DOCCONF_NAME=$BASH_SOURCE <co id="co.daps.dc.user.source"/>
+</screen>
+</example>
    <calloutlist>
-    <callout arearefs="co.daps.dc.main">
+    <callout arearefs="co.daps.dc.user.main">
      <para>
-     Mandatory parameter. Sets the main file that contains
-     <quote>references</quote> to other books, chapters, appendices, etc. 
+     Sets the Main file that contains <quote>references</quote> to other books, 
+     chapters, appendices, etc. 
     </para>
     </callout>
-    <callout arearefs="co.daps.dc.rootid">
+    <callout arearefs="co.daps.dc.user.rootid">
      <para>
-     Optional parameter. Defines the root ID of the element to be used for
-     creating an output format. Usually, you define the root ID of a
-     <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>
-     element here.
+     Defines the root ID of the element to be used for creating an output format. 
+     Usually, you define the root ID of a <sgmltag>book</sgmltag> or 
+     <sgmltag>article</sgmltag> element here. In this example, 
+     <literal>book.daps.user</literal> is the root ID of the &dapsuser;.
     </para>
     </callout>
-     <!--<callout arearefs="co.daps.dc.profile">
+     <callout arearefs="co.daps.dc.user.styleroot">
       <para>
-      Optional parameters. If you have similar products to document and want
-      to generate documentation variants from your XML files, you can do so
-      with the help of conditional text (or profiling, as it is called in
-      DocBook). To profile your output for different (processor) architectures
-      (like x86, ppc) or operating systems, use the
-      <parameter>PROFARCH</parameter>, <parameter>PROFCONDITION</parameter>,
-      <parameter>PROFOS</parameter>, or <parameter>PROFVENDOR</parameter>
-      parameter, respectively to define which information should be included
-      in the generated output.
-      
-      <remark condition="generic">
-       2012-02-13 - fs: Add link to profiling section
-      </remark>
-
-      </para>
-     </callout>
-     <callout arearefs="co.daps.dc.styleroot">
-      <para>
-     Optional parameter. If the parameter is not specified, &dapsacr; will 
+     If the parameter is not specified, &dapsacr; will 
      use the default DocBook stylesheets for production. With 
-     <parameter>STYLEROOT</parameter> specify the absolute path to the directory
-      containing the custom stylesheets. It must have the same
-      directory structure as the original DocBook stylesheet root
-      directory, but does not need to contain stylesheets for all output
-      formats. If custom stylesheets are not found, &dapsacr; will automatically
-      fall back to the DocBook stylesheets.
+     <parameter>STYLEROOT</parameter> specify the (absolute or relative) path 
+      to the directory containing the custom stylesheets. The directory must have
+      the same structure as the original DocBook stylesheet root directory, but 
+      needs not to contain stylesheets for all output formats. 
+      <!--If custom stylesheets are not found, &dapsacr; will automatically
+      fall back to the DocBook stylesheets.--> It is recommended to use absolute
+      paths for <parameter>STYLEROOT</parameter>.
      </para>
      </callout>
-     <callout arearefs="co.daps.dc.css">
+     <callout arearefs="co.daps.dc.user.css">
       <para>
-     Optional parameters. If they are not specified, &dapsacr; will 
+     If they are not specified, &dapsacr; will 
      use the default DocBook stylesheets for production of HTML or &epub;. 
      With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
-     specify the abolute path to the respective CSS file. 
+     specify the absolute path to the respective CSS file. 
      </para>
-     </callout>-->
-    <callout arearefs="co.daps.dc.source">
+     </callout>
+      <callout arearefs="co.daps.dc.user.epub">
+      <para>
+     If they are not specified, &dapsacr; will 
+     use the default DocBook stylesheets for production of HTML or &epub;. 
+     With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
+     specify the absolute path to the respective CSS file. 
+     </para>
+     </callout>
+    <callout arearefs="co.daps.dc.user.source">
      <para>
-     Optional line. You only need to add this line if you want to be able to 
+     You only need to add this line if you want to be able to 
      source &dc; files on the Bash with &dapsacr;. Sourcing a &dc; file (formerly 
      called <literal>ENV</literal> file) was necessary to work with the 
      documentation environment provided by &susedoc; (&dapsacr;' predecessor).
@@ -456,26 +459,8 @@ linkend="co.daps.dc.css"/>
 
    <example id="ex.daps.dc.set">
     <title>&dc; File for a Set</title>
-    <screen>## -/- 
-## Doc Config File for DAPS
-## DocBook Authoring and Publishing Suite
-## -/-
-##
-## Basics
-MAIN="MAIN.DAPS.xml" 
-
-
-## enable sourcing
-export DOCCONF=$BASH_SOURCE</screen>
+    <screen></screen>
    </example>
-<!--## Profiling
-PROFOS="osuse"
-PROFARCH="x86;amd64;em64t" 
-
-## stylesheet location
-STYLEROOT="/usr/share/xml/docbook/stylesheet/suse" 
-HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css" 
-EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"--> 
   </sect3>
 
   </sect2>
