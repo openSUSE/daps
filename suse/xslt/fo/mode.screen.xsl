@@ -9,12 +9,6 @@
       <xsl:apply-templates mode="screen"/>
    </xsl:template>
    
-   
-   <xsl:template match="processing-instruction('suse')" mode="screen">
-      <xsl:call-template name="suse-pi"/>
-   </xsl:template>
-   
-   
    <xsl:template name="normalize-left">
       <xsl:param name="node" />
       <xsl:variable name="char" select="substring($node,1,1)"/>
