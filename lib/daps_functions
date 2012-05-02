@@ -809,12 +809,16 @@ function packaging () {
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
 
-    if [[ -f $P_DEF_FILE ]]; then
-        export DEF_FILE="$P_DEF_FILE"
-    elif [[ -z $P_DEF_FILE ]]; then
-        ccecho "warn" "Warning: No DEF file was specified"
+    if [[ -n $P_DEF_FILE ]]; then
+        if [[ -f $P_DEF_FILE ]]; then
+            export DEF_FILE="$P_DEF_FILE"
+        else
+            exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
+        fi
     else
-        exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
+       if [[ $SUB_CMD = package-src ]]; then
+           ccecho "warn" "Warning: No DEF file was specified"
+       fi
     fi
 
     if [[ -n $P_FORMATTER ]]; then
@@ -1048,7 +1052,7 @@ function checklink () {
         help_file
         help_help
         help_rootid
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
@@ -1118,7 +1122,7 @@ function getimages () {
         help_rootid
         help_show
         help_viewer
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither rootid nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
