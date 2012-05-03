@@ -442,7 +442,7 @@ function build_pdfs () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_draft
         help_formatter
@@ -497,7 +497,7 @@ function build_html_jsp () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_css
         help_draft
@@ -546,13 +546,6 @@ function build_html_jsp () {
 #
 ###########################################################################
 function webhelp () {
-    if [[ ! -f $DOCBOOK_STYLES/extensions/webhelpindexer.jar && \
-        ! -f $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar && \
-        ! -f $DOCBOOK_STYLES/extensions/lucene-core-*.jar  && \
-        ! -f $DOCBOOK_STYLES/extensions/tagsoup-*.jar ]]; then
-        exit_on_error "webhelp only works when a recent snapshot of the
-#DocBook stylesheets is installed. Your version of the DocBook styles at $DOCBOOK_STYLES is not webhelp capable."
-    fi
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
     shift
@@ -565,7 +558,7 @@ function webhelp () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_css
         help_draft
@@ -578,6 +571,13 @@ function webhelp () {
         help_xsltparam "creates Webhelp HTML from the profiled sources"
         echo
         exit 0
+    fi
+    
+    if [[ ! -f $DOCBOOK_STYLES/extensions/webhelpindexer.jar && \
+        ! -f $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar && \
+        ! -f $DOCBOOK_STYLES/extensions/lucene-core-*.jar  && \
+        ! -f $DOCBOOK_STYLES/extensions/tagsoup-*.jar ]]; then
+        exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
     fi
     
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
@@ -623,7 +623,7 @@ function build_epub () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_check
         help_css
         help_help
@@ -677,7 +677,7 @@ function build_man () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build one or more man pages"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_nogzip
         help_rootid
@@ -714,7 +714,7 @@ function build_generic () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Build a $SUB_CMD book"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_name
         help_rootid
@@ -748,7 +748,7 @@ function build_locdrop () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Provide everything that is needed to translate a set"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_def-file
         help_help
         help_name
@@ -793,7 +793,7 @@ function packaging () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Provide a $SUB_CMD package"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         if [[ "package-pdf" = $SUB_CMD ]]; then
             help_formatter
         elif [[ "package-src" = $SUB_CMD ]]; then
@@ -855,13 +855,7 @@ function profile_first () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        case "$SUB_CMD" in
-            dist-all)
-                HELPTXT="This is an unmaintained target and may not work" ;;
-            showvariable)
-                HELPTXT="Show the value of the given make variable: Example: daps showvariable -r VARIABLE=REMARKS" ;;
-        esac
-        help_scmd_head "$SUB_CMD" "$HELPTXT"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_draft
         help_name
@@ -904,13 +898,7 @@ function comments_remarks () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        case "$SUB_CMD" in
-            profiledir)
-                HELPTXT="Print the profiling directory" ;;
-            validate)
-                HELPTXT="Validate profiled XML sources with xmllint" ;;
-        esac
-        help_scmd_head "$SUB_CMD" "$HELPTXT"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_remarks
         echo
@@ -947,23 +935,7 @@ function filelists () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        case "$SUB_CMD" in
-            missinggraphics)
-                HELPTXT="Print the list of missing graphic files" ;;
-            projectfiles)
-                HELPTXT="Print the list of the project's XML files" ;;
-            projectgraphics)
-                HELPTXT="Print the list of the project's graphic files" ;;
-            remainingfiles)
-                HELPTXT="Print the list of XML files not belonging to the current project" ;;
-            remaininggraphics)
-                HELPTXT="Print the list of graphics not belonging to the current project";;
-            xmlgraphics)
-                HELPTEXT="Print the list of generated color graphics actually used for building the book";;
-            xmlgraphics)
-                HELPTEXT="Print the list of generated bw graphics actually used for building the book";;
-        esac
-        help_scmd_head "$SUB_CMD" "$HELPTXT"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
         help_pretty
         echo
@@ -1004,7 +976,7 @@ function show_names () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-                help_scmd_head "$SUB_CMD" "Show a resulting filename/directory"
+                help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
                 help_comments
                 help_draft
                 help_help
@@ -1048,7 +1020,7 @@ function checklink () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "Checks ftp and http(s) links"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_file
         help_help
         help_rootid
@@ -1115,7 +1087,7 @@ function getimages () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "List or display images from a profiled DocBook XML file"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_compact
         help_file
         help_modified
@@ -1216,7 +1188,7 @@ function no_opts {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_nohelp "$SUB_CMD"
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}" "0"
         exit 0
     fi
     
@@ -1251,12 +1223,12 @@ function show_env {
 # first line of help
 #
 function help_scmd_head () {
-    echo "
+    echo -e "
 $ME [--global-options] $1 [options]
 
 $2
-
-  Command options:"
+"
+[[ 0 != $3 ]] && echo -e "  Command options:"
 }
 
 function help_comments () {
