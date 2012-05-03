@@ -1007,7 +1007,7 @@ dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
 # calls validate and chklink and creates dist-xml dist-html dist color-pdf
 #
 .PHONY: dist-all
-dist-all: validate chklink dist-xml dist-html dist color-pdf
+dist-all: validate chklink dist-xml dist-html color-pdf
 
 #------------------------------------------------------------------------
 # Remove stuff
@@ -1777,8 +1777,8 @@ $(JSP_DIR)/index.jsp: provide-color-images warn-images $(JSPGRAPHICS)
 
 # Print result file name
 #
-.PHONY: txt-name
-txt-name:
+.PHONY: txt-name text-name
+txt-name text-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt"
 
 
