@@ -506,10 +506,15 @@
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax </title>
-   <screen>daps --debug<co id="co.daps.syntax.vv"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
+   <screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
    </screen>
    <calloutlist>
-    <callout arearefs="co.daps.syntax.vv">
+   <callout arearefs="co.daps.syntax.main">
+     <para>
+      Main command: <command>daps</command>
+     </para>
+    </callout>
+    <callout arearefs="co.daps.syntax.debug">
      <para>
       Global Option <option>--debug</option>: Sets the highest verbosity level
       (number of messages shown during the transformation process from XML to
