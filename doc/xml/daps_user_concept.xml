@@ -334,8 +334,7 @@
   &dc; file that you could use:</para>
   <example id="ex.daps.user.dc.art.simple">
    <title>Basic &dc; for an Article</title>
-    <screen>##
-## Doc config file for a whitepaper article
+    <screen>## Doc config file for a whitepaper article
 ## See /etc/daps/config for documentation of the settings below
 ##
 
@@ -359,10 +358,8 @@ MAIN="my_whitepaper.xml"
   </para>
    <example id="ex.daps.dc.user">
     <title>&dc; File For a Book in a Set</title>
-    <screen>##
-## Doc config file for DAPS User Guide
+    <screen>## Doc config file for DAPS User Guide
 ## See /etc/daps/config for documentation of the settings below
-##
 
 ## Mandatory Parameter
 MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.user.main"/>
@@ -378,28 +375,27 @@ MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.user.main"/>
 ## on sets
 ROOTID="book.daps.user" <co id="co.daps.dc.user.rootid"/>
 
-
 ## Custom Stylesheets
 ## (if not defined the DookBook stylesheets will be used)
 ##
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt" <co id="co.daps.dc.user.styleroot"/>
 #FB_STYLEROOT="" <co id="co.daps.dc.user.fbstyleroot"/>
 HTML_CSS="./daps.css" <co id="co.daps.dc.user.css"/>
-#EPUB_CSS="" <co id="co.daps.dc.user.epub"/>
+#EPUB_CSS="" <xref linkend="co.daps.dc.user.css"/>
 
 ## If you want to be able to source this file, so you do not have
-## to specify the -d/&#45;&#45;docconfig option with daps, uncomment the
+## to specify the -d/--docconfig option with daps, uncomment the
 ## following line
 ##
 export DOCCONF_NAME=$BASH_SOURCE <co id="co.daps.dc.user.source"/>
 </screen>
 </example>
-<!--taroth 2012-05-02: todo: adjust callout texts tomorrow-->
    <calloutlist>
     <callout arearefs="co.daps.dc.user.main">
      <para>
-     Sets the Main file that contains <quote>references</quote> to other books, 
-     chapters, appendices, etc. 
+     Sets the Main XML file that contains the highest-level object (root element)
+     of your documentation project. In this case, <filename>MAIN.DAPS.xml</filename> 
+     has <sgmltag>set</sgmltag> as root element and contains two books.
     </para>
     </callout>
     <callout arearefs="co.daps.dc.user.rootid">
@@ -407,44 +403,47 @@ export DOCCONF_NAME=$BASH_SOURCE <co id="co.daps.dc.user.source"/>
      Defines the root ID of the element to be used for creating an output format. 
      Usually, you define the root ID of a <sgmltag>book</sgmltag> or 
      <sgmltag>article</sgmltag> element here. In this example, 
-     <literal>book.daps.user</literal> is the root ID of the &dapsuser;.
+     <literal>book.daps.user</literal> is the root ID of the &dapsuser;, one of
+     the books contained in <filename>MAIN.DAPS.xml</filename>.
     </para>
     </callout>
      <callout arearefs="co.daps.dc.user.styleroot">
       <para>
-     If the parameter is not specified, &dapsacr; will 
-     use the default DocBook stylesheets for production. With 
-     <parameter>STYLEROOT</parameter> specify the (absolute or relative) path 
-      to the directory containing the custom stylesheets. The directory must have
-      the same structure as the original DocBook stylesheet root directory, but 
-      needs not to contain stylesheets for all output formats. 
-      <!--If custom stylesheets are not found, &dapsacr; will automatically
-      fall back to the DocBook stylesheets.--> It is recommended to use absolute
-      paths for <parameter>STYLEROOT</parameter>.
-     </para>
+     By default, &dapsacr; uses the default DocBook stylesheets for production 
+     of the output formats. If you want to use a custom layout format, specify 
+     the (absolute or relative) path to the directory containing the custom 
+     stylesheets. Using absolute paths is recommended. In this example, 
+     <filename>STYLEROOT</filename>  specifies the path to the &suse;
+     stylesheets. <!--taroth 2012-05-03: include this info in the custom layout 
+     chapter: The custom directory must have the same structure as the 
+     original DocBook stylesheet root directory, but does not need to contain 
+     stylesheets for all output formats. If custom stylesheets are not found, 
+     &dapsacr; will automatically fall back to the DocBook stylesheets.--> 
+      </para>
+     </callout>
+     <callout arearefs="co.daps.dc.user.fbstyleroot">
+     <para>Allows you to define a fallback which is used in case the custom 
+     stylesheets defined with <parameter>STYLEROOT</parameter> cannot be accessed. 
+     In case neither the stylesheets specified with <parameter>STYLEROOT</parameter> 
+     nor with <parameter>FB_STYLEROOT</parameter> can be accessed, &dapsacr; uses
+     the default DocBook layout.</para>
      </callout>
      <callout arearefs="co.daps.dc.user.css">
       <para>
-     If they are not specified, &dapsacr; will 
-     use the default DocBook stylesheets for production of HTML or &epub;. 
-     With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
-     specify the absolute path to the respective CSS file. 
+     If not specified, &dapsacr; will use the default DocBook stylesheets for 
+     production of HTML and &epub;. For custom CSS styles, specify the 
+     (absolute or relative) path to the respective CSS file. In this example, 
+     a custom CSS file for HTML output is used, whereas &epub; uses the default
+     DocBook layout.
      </para>
      </callout>
-      <callout arearefs="co.daps.dc.user.epub">
-      <para>
-     If they are not specified, &dapsacr; will 
-     use the default DocBook stylesheets for production of HTML or &epub;. 
-     With <parameter>HTML_CSS</parameter> or <parameter>EPUB_CSS</parameter>, 
-     specify the absolute path to the respective CSS file. 
-     </para>
-     </callout>
-    <callout arearefs="co.daps.dc.user.source">
+     <callout arearefs="co.daps.dc.user.source">
      <para>
-     You only need to add this line if you want to be able to 
-     source &dc; files on the Bash with &dapsacr;. Sourcing a &dc; file (formerly 
-     called <literal>ENV</literal> file) was necessary to work with the 
-     documentation environment provided by &susedoc; (&dapsacr;' predecessor).
+     Enabled for compatibility reasons to &dapsacr;' predecessor  &susedoc;.
+     Only needed if you want to be able to source &dc; files on the Bash with 
+     &dapsacr;. Sourcing a &dc; file (formerly called <literal>ENV</literal> file) 
+     was necessary to work with the documentation environment provided by &susedoc;.
+     
     </para>
     </callout>
    </calloutlist>
