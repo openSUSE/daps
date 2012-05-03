@@ -47,7 +47,7 @@ Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
-BuildRequires:  bash >= 3.0
+BuildRequires:  bash >= 4.0
 BuildRequires:  dia
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  docbook_4
