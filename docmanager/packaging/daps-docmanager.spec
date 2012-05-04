@@ -15,7 +15,7 @@
 
 Summary:      Manages Doc Files through SVN Properties
 Name:         daps-docmanager
-Version:      0.9beta11
+Version:      1.0
 Release:      0 
 Source0:      %{_name}-%{version}.tar.bz2
 Source1:      %{name}-rpmlintrc
