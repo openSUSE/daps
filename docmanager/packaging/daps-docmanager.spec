@@ -9,7 +9,6 @@
 #
 #
 
-%define _name docmanager
 %{!?python_sitelib:  %global python_sitelib  %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
@@ -17,7 +16,7 @@ Summary:      Manages Doc Files through SVN Properties
 Name:         daps-docmanager
 Version:      1.0
 Release:      0 
-Source0:      %{_name}-%{version}.tar.bz2
+Source0:      %{name}-%{version}.tar.bz2
 Source1:      %{name}-rpmlintrc
 License:      LGPL
 Group:        Development/Libraries/Python
@@ -74,7 +73,7 @@ Author
 
 
 %prep
-%setup -n %{_name}-%{version}
+%setup -n %{name}-%{version}
 
 %build
 python setup.py build
