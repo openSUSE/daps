@@ -117,12 +117,11 @@
     <term>Dynamic Product Names and Numbers</term>
     <listitem>
      <para>&dapsacr; allows to set product name and product number dynamically. 
-     This enables you to use the same XML sources for different products. If you 
-     use the entities &amp;productname; and &amp;productnumber; in your XML
-     sources, &dapsacr; will automatically use the values 
-     defined in the  <sgmltag>productname</sgmltag> and <sgmltag>productversion</sgmltag>
-     elements within the <sgmltag>bookinfo</sgmltag> or
-     <sgmltag>articleinfo</sgmltag>. For details, refer to 
+     This enables you to use the same XML sources for different products. Use the
+     entities &amp;productname; and &amp;productnumber; in your XML
+     sources, and define the respective values in an entity (using profiling for 
+     multiple products). <remark>taroth 2012-05-04: link may need adjustment, not
+     100% clear where profiling will be covered</remark> For details, refer to 
      <xref linkend="cha.daps.user.edit"/>.   
   </para>
     </listitem>
@@ -130,7 +129,7 @@
    <varlistentry>
     <term>Review and Translation Processes</term>
     <listitem>
-     <para>&dapsacr; offers a numbers of features to simplify review and 
+     <para>&dapsacr; offers a number of features to simplify review and 
      translation processes. For example, you can insert 
      <sgmltag>remark</sgmltag> elements in the source code and generate an output 
      format that either includes or suppresses these remarks. You can also 
@@ -140,13 +139,13 @@
      (like workflow status). &dapsacr; offers an option to also display
      this meta-information in the generated output. For handing over your files 
      to review or translation, &dapsacr; can create tarballs of the XML
-     sources and graphics. Alternatively, transform all files 
+     sources and graphics. <!--Alternatively, transform all files 
      included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into an
-     XML bigfile. <!--If you have a huge documentation project of which only individual
+     XML bigfile. If you have a huge documentation project of which only individual
      books or files are to be translated, you can mark them for translation
      with &dm;. The command <command>daps locdrop</command> will automatically 
-     sort and pack those files into s separate tarball.--><remark>taroth 2012-03-02:
-     todo - add link to one or more chapters, if appropriate</remark>
+     sort and pack those files into s separate tarball.-->For details, refer to 
+     <xref linkend="cha.daps.user.review"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -158,8 +157,7 @@
      (via JSP), &dapsacr; offers a number of options to produce the corresponding
      output: For example, you can create source packages, HTML tarballs, color 
      PDFs and desktop and document files with the <command>daps package-*</command>
-     commands.<remark>taroth 2012-03-02: todo - add link to deployment chapter, 
-     if appropriate</remark>
+     commands. For details refer to <xref linkend="cha.daps.user.deploy"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -485,9 +483,8 @@ EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css"/>
 export DOCCONF_NAME=$BASH_SOURCE <xref linkend="co.daps.dc.user.source"/>
 </screen>
 
-<!--taroth 2012-05-03: updated until here, callouts in the example above and 
-calloutlist below need a sanity check tomorrow-->
-<!--<calloutlist>
+
+<calloutlist>
     <callout arearefs="co.daps.dc.user.main">
      <para>
      Sets the Main XML file that contains the highest-level object (root element)
@@ -538,8 +535,8 @@ calloutlist below need a sanity check tomorrow-->
      was necessary to work with the documentation environment provided by &susedoc;.
      </para>
     </callout>
-   </calloutlist>-->
-</example>
+   </calloutlist>
+  </example>
 
 
    
