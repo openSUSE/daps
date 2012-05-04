@@ -688,22 +688,9 @@ class SVNRepository(object):
    def collectstatistics(self, queryobj, fileobj):
       """Count all properties"""
       try:
-        if queryobj["doc:status"]=="editing":
-            self.args['***editing***'] += 1
-        elif queryobj["doc:status"]=="edited":
-            self.args['***edited***'] += 1
-        elif queryobj["doc:status"]=="proofing":
-            self.args['***proofing***'] += 1
-        elif queryobj["doc:status"]=="proofed":
-            self.args['***proofed***'] += 1
-        elif queryobj["doc:status"]=="comments":
-            self.args['***comments***'] += 1
-        elif queryobj["doc:status"]=="locdrop":
-            self.args['***locdrop***'] += 1
-        elif queryobj["doc:status"]=="merging":
-            self.args['***merging***'] += 1
-        elif queryobj["doc:status"]=="merged":
-            self.args['***merged***'] += 1
+        st=queryobj["doc:status"]
+        if st in self.docstatus:
+          self.args['***%s***' % st ] += 1
 
         if queryobj["doc:trans"]=="yes":
             self.args["***TRANS***"] += 1
