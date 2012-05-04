@@ -155,6 +155,8 @@ EDITING="doc:status=editing"
 LOCDROP="doc:status=locdrop"
 PRELIM="doc:prelim=yes"
 PROOFED="doc:status=proofed"
+MERGING="doc:status=merging"
+MERGED="doc:status=merged"
 TRANS="doc:trans=yes"
 
 
@@ -343,6 +345,48 @@ case "$SUBCMD" in
         docmanager --docconfig "$DOCCONF" dg -P \
             -q "$REVPROP_QSTRING" --include $PROOFED --include $MAINTAINER "$@"
         ;;
+# -------------------------------------------
+# Merging
+#§
+#§  merging 
+#§    Variants: mymerging
+#§    Lists all files with status "merging" (doc:status=merging)
+#
+    merging)
+        # All files with doc:status=merging
+        set_env_base
+        echo "QSTRING=$QSTRING"
+        docmanager --docconfig "$DOCCONF" dg -P \
+            -q "$QSTRING" --include "$MERGING" "$@"
+        ;;
+    mymerging)
+        # Your files with doc:status=merging
+        set_env_base
+        echo "MY_QSTRING=$MY_QSTRING"
+        docmanager --docconfig "$DOCCONF" dg -P \
+            -q "$MY_QSTRING" --include "$MERGING" --include $MAINTAINER "$@"
+        ;;
+
+# -------------------------------------------
+# Merged
+#§
+#§  merging 
+#§    Variants: mymerging
+#§    Lists all files with status "merged" (doc:status=merged)
+#
+    merged)
+        # All files with doc:status=merging
+        set_env_base
+        docmanager --docconfig "$DOCCONF" dg -P \
+            -q "$QSTRING" --include "$MERGED" "$@"
+        ;;
+    mymerged)
+        # Your files with doc:status=merged
+        set_env_base
+        docmanager --docconfig "$DOCCONF" dg -P \
+            -q "$MY_QSTRING" --include "$MERGED" --include $MAINTAINER "$@"
+        ;;
+
 # -------------------------------------------
 # STAT
 #§
