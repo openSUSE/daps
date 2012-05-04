@@ -105,8 +105,8 @@ dist_catalog_DATA   = $(DAPS_CATALOG)
 endif
 
 # CONFIG files
-dist_dapsconf_DATA    = etc/config
-nodist_dapsconf_DATA  = etc/config.in
+dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf
+nodist_dapsconf_DATA  = etc/config.in etc/catalog.xml
 dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
 dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
