@@ -73,7 +73,7 @@ Author
 
 
 %prep
-%setup -n %{name}-%{version}
+%setup -n %{name}
 
 %build
 python setup.py build
