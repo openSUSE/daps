@@ -16,7 +16,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __version__="$Revision: 43294 $"
-__author__="Thomas Schraitle <thomas DOT schraitle AT suse DOT de>"
+__author__="Thomas Schraitle <toms AT opensuse DOT org>"
 __depends__=["Python-2.4", "optcomplete"]
 
 import os
@@ -178,6 +178,16 @@ Parameters:
         const="proofing",
         # metavar="[$LOGNAME]",
         help="Sets property doc:status = proofing")
+     group.add_option("-m", "--set-merging",
+        dest="actionset",
+        action="store_const",
+        const="merging",
+        help="Sets property doc:status = merging")
+     group.add_option("-N", "--set-merged",
+        dest="actionset",
+        action="store_const",
+        const="merged",
+        help="Sets property doc:status = merged")
      group.add_option("-R", "--set-proofed",
         dest="actionset",
         action="store_const",

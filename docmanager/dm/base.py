@@ -439,6 +439,8 @@ class SVNRepository(object):
                 "proofed",  # Proofreader has finished proofing
                 "comments", # Proofreader has some comments for proofed file
                 "locdrop",  # File is sent to translators
+                "merging",  # Someone starts to merge a file
+                "merged",   # Someone has finished merging
                )
 
       #
@@ -698,6 +700,10 @@ class SVNRepository(object):
             self.args['***comments***'] += 1
         elif queryobj["doc:status"]=="locdrop":
             self.args['***locdrop***'] += 1
+        elif queryobj["doc:status"]=="merging":
+            self.args['***merging***'] += 1
+        elif queryobj["doc:status"]=="merged":
+            self.args['***merged***'] += 1
 
         if queryobj["doc:trans"]=="yes":
             self.args["***TRANS***"] += 1
