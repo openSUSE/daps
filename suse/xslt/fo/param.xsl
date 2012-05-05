@@ -10,7 +10,6 @@
 <xsl:param name="metadata.producer">SUSE Linux Products GmbH</xsl:param>
 
 <!-- Our Layout -->
-<xsl:param name="paper.layout"></xsl:param><!-- Empty for "normal" -->
 <xsl:param name="paper.type">NOVELL/SUSE Layout:</xsl:param>
 <xsl:param name="page.height">612pt</xsl:param>
 <xsl:param name="page.width">504pt</xsl:param>
