@@ -247,3 +247,44 @@
      </listitem>
     </varlistentry>
    </variablelist> '>
+   
+<!ENTITY daps-co-main
+ ' <para>
+   Specifies the Main XML file. It contains the highest-level object 
+   (root element) of your documentation project. The Main file must be located 
+   in <filename><replaceable>YOUR_DOC_DIR</replaceable>/xml/</filename>. 
+   Therefore, you only need to specify the Main&#39;s file name in the &dc; file
+   (no path).</para>'>
+   
+<!ENTITY daps-co-rootid
+ '<para>
+  Defines the root ID of the element to be used for creating an output format. 
+  Usually, you specify the root ID of a <sgmltag>book</sgmltag> or 
+  <sgmltag>article</sgmltag> element here.</para>'>
+  
+<!ENTITY daps-co-styleroot
+  '<para>
+   For a custom layout, use the <parameter>STYLEROOT</parameter> parameter to 
+   specify the (absolute or relative) path to the directory containing the 
+   custom stylesheets. Using absolute paths is recommended for &dc; files.
+   </para>'> 
+
+<!ENTITY daps-co-fbstyleroot   
+  '<para>Allows you to define a fallback which is used in case the custom 
+     stylesheets defined with <parameter>STYLEROOT</parameter> cannot be accessed. 
+     In case neither the stylesheets specified with <parameter>STYLEROOT</parameter> 
+     nor with <parameter>FALLBACK_STYLEROOT</parameter> can be accessed, &dapsacr; 
+     uses the default DocBook layout.</para>'>
+     
+<!ENTITY daps-co-css       
+  '<para>If not specified, &dapsacr; will use the default DocBook stylesheets for 
+     production of HTML and &epub;. For custom CSS styles, specify the 
+     (absolute or relative) path to the respective CSS file. Using absolute paths
+     is recommended for &dc; files.</para>'>  
+     
+<!ENTITY daps-co-source    
+  '<para>
+   Enabling this parameter allows you to source &dc; files on the Bash with 
+   &dapsacr;. Sourcing a &dc; file (formerly called <literal>ENV</literal> file) 
+   was necessary to work with the documentation environment provided by &susedoc;.
+  </para>'>
