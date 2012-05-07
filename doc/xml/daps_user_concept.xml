@@ -186,7 +186,7 @@
    projects, consisting of multiple deliverables like books or articles, organized
    in a <sgmltag>set</sgmltag>.  
    </para>
-   <sect3 id="sec.daps.user.basics.single">
+   <sect2 id="sec.daps.user.basics.single">
     <title>Setup for Single Deliverables (Article or Book)</title>
     <para>The most elementary case of a documentation project is probably a white 
     paper or article. Typically, its contents is covered in a single XML file
@@ -346,7 +346,8 @@ parameter.</para>
 DAPS-example-book-->
    <example id="ex.daps.dc.book">
     <title>&dc; File For a Book with Custom Layout</title>
-    <screen>## Doc config file for DAPS User Guide
+     <screen>## Doc config file for the DAPS example document 
+## defined by MAIN-daps-example.xml
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -411,9 +412,9 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.use
      </para>
     </callout>-->
    </calloutlist>
-</sect3>
+</sect2>
 <!--taroth 2012-05-04: updated until here, rest still WIP-->
-<sect3 id="sec.daps.user.basics.mutliple">
+<sect2 id="sec.daps.user.basics.mutliple">
 <title>Setup for Multiple Deliverables: Articles or Books in a Set</title>
 
    <para>If your documentation project consists of multiple books in a
@@ -581,7 +582,7 @@ export DOCCONF_NAME=$BASH_SOURCE <!--<xref linkend="co.daps.dc.user.source"/>-->
     <title>&dc; File for a Set</title>
     <screen></screen>
    </example>
-  </sect3>
+  </sect2>
 
  </sect2>
  <sect2 id="sec.daps.user.basics.dirstruct">
