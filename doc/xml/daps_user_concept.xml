@@ -402,6 +402,10 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.use
      <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
     <citetitle>Physical Divisions: Breaking a Document into Separate Files</citetitle>
     </ulink>.</para>
+    
+ <!--taroth 2012-05-07: openSUSE is fully out of context here, maybe use
+ MAIN.DAPS.xml, even if it contains book_daps_quick.xml (= probably another thing
+ to explain)-->   
    <example id="ex.daps.main.set">
     <title>Main File of a Set (DocBook 4.x)</title>
     <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -464,8 +468,6 @@ HTML_CSS="./daps.css" <co id="co.daps.dc.quick.css"/>
 EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:label nopage"/>
 
 </screen>
-
-
    <calloutlist>
    <callout arearefs="co.daps.dc.quick.main">
     &daps-co-main;
@@ -496,7 +498,9 @@ EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:lab
     </calloutlist>
    </example>
 
-
+<!--taroth 2012-05-07: updated until here, todo: add another DC file for DAPS User
+(with different STYLEROOT and draft mode); add DC file for complete
+set-->
 
    <para>
    If your documentation set contains cross-references between the
