@@ -10,63 +10,93 @@
 <chapter id="cha.daps.user.create">
  <title>Creating a Project From Scratch</title>
  <abstract>
-  <para>The easiest way to set up a new documentation project from scratch is to
- use <command>daps-init</command>. This initialization script automatically 
- creates the key files and directory structure you need to get started with 
- &dapsacr;.</para>
+  <para>
+   The easiest way to set up a new documentation project from scratch is to
+   use <command>daps-init</command>. This initialization script
+   automatically creates the key files and directory structure you need to
+   get started with &dapsacr;.
+  </para>
  </abstract>
- <para>It generates:</para>
+ <para>
+  It generates:
+ </para>
  <itemizedlist>
   <listitem>
-   <para>the <xref linkend="sec.daps.user.oview.dirstruct" xrefstyle="select:title"/> 
-   required by &dapsacr;,</para>
+   <para>
+    the
+    <xref linkend="sec.daps.user.oview.dirstruct" xrefstyle="select:title"/>
+    required by &dapsacr;,
+   </para>
   </listitem>
   <listitem>
-   <para>an example <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>, and </para>
+   <para>
+    an example
+    <xref linkend="sec.daps.user.oview.docproject.dc" xrefstyle="select:title"/>,
+    and
+   </para>
   </listitem>
   <listitem>
-   <para>an example <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/> that you can use as a starting point for 
-   your documentation. </para>
+   <para>
+    an example
+    <xref linkend="sec.daps.user.oview.docproject.main" xrefstyle="select:title"/>
+    that you can use as a starting point for your documentation.
+   </para>
   </listitem>
  </itemizedlist>
- <para>By default, the initialization script creates a <sgmltag>book</sgmltag>
- as example document. With the <option>-r</option> option, you can also set another
- root element, such as <sgmltag>article</sgmltag>, for example.</para>
+ <para>
+  By default, the initialization script creates a <sgmltag>book</sgmltag> as
+  example document. With the <option>-r</option> option, you can also set
+  another root element, such as <sgmltag>article</sgmltag>, for example.
+ </para>
  <procedure>
   <step>
-   <para>To create the default directory structure (containing an example 
-   <sgmltag>book</sgmltag>), enter the following on a command line:</para>
-   <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable></screen>
-   <para>Alternatively, enter the following to create the default directory structure 
-   with an <sgmltag>article</sgmltag> example: </para>
-   <screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
+   <para>
+    To create the default directory structure (containing an example
+    <sgmltag>book</sgmltag>), enter the following on a command line:
+   </para>
+<screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable></screen>
+   <para>
+    Alternatively, enter the following to create the default directory
+    structure with an <sgmltag>article</sgmltag> example:
+   </para>
+<screen>daps-init -d <replaceable>PATH_TO_DIRECTORY</replaceable> -r article</screen>
   </step>
   <step>
-   <para>If the specified directory does not exists, &dapsacr; asks if to
-   create it. Proceed by pressing <keycap>y</keycap>.</para>
+   <para>
+    If the specified directory does not exists, &dapsacr; asks if to create
+    it. Proceed by pressing <keycap>y</keycap>.
+   </para>
   </step>
   <step>
-   <para>Check your working directory for the new files: The text file 
-   <filename>DC-daps-example</filename> is annotated and gives you 
-   a rough idea which options can be defined in a <filename>DC</filename> file. 
-   For having a look at the XML source code of the <sgmltag>book</sgmltag> or 
-   <sgmltag>article</sgmltag>, change to the <filename>xml</filename> subdirectory 
-   and open the file <filename>MAIN-DC-daps-example.xml</filename> in a text or 
-   XML editor.</para>
+   <para>
+    Check your working directory for the new files: The text file
+    <filename>DC-daps-example</filename> is annotated and gives you a rough
+    idea which options can be defined in a <filename>DC</filename> file. For
+    having a look at the XML source code of the <sgmltag>book</sgmltag> or
+    <sgmltag>article</sgmltag>, change to the <filename>xml</filename>
+    subdirectory and open the file
+    <filename>MAIN-DC-daps-example.xml</filename> in a text or XML editor.
+   </para>
   </step>
   <step>
-   <para>To see what the output of the XML example file looks like, follow the 
-   instructions printed by the initialization script. For example, enter:</para>
+   <para>
+    To see what the output of the XML example file looks like, follow the
+    instructions printed by the initialization script. For example, enter:
+   </para>
 <screen>daps -d <replaceable>PATH_TO_DIRECTORY</replaceable>/DC-daps-example color-pdf</screen>
-   <para>This command specifies the <filename>DC*</filename> file to use for the
-   document and the output format to create. For creation of the PDF, &dapsacr; 
-   uses FOP by default (if no other formatter is specified) and applies the 
-   default DocBook stylesheets (if no custom layout options are defined). Find 
-   the generated PDF in your documentation directory in 
-   <filename>/build/daps-example/daps-example_en.pdf</filename>.</para>
+   <para>
+    This command specifies the <filename>DC*</filename> file to use for the
+    document and the output format to create. For creation of the PDF,
+    &dapsacr; uses FOP by default (if no other formatter is specified) and
+    applies the default DocBook stylesheets (if no custom layout options are
+    defined). Find the generated PDF in your documentation directory in
+    <filename>/build/daps-example/daps-example_en.pdf</filename>.
+   </para>
   </step>
  </procedure>
- <para>This was only a brief introduction to the most basic &dapsacr; features. 
- In the following chapters, learn how &dapsacr; can support you in editing, 
- managing images and creating more output formats than just PDF or HTML.</para>
+ <para>
+  This was only a brief introduction to the most basic &dapsacr; features.
+  In the following chapters, learn how &dapsacr; can support you in editing,
+  managing images and creating more output formats than just PDF or HTML.
+ </para>
 </chapter>
