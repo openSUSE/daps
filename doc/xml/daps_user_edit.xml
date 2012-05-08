@@ -11,130 +11,179 @@
  <title>Editing DocBook-XML</title>
  <remark>profiling, checklinks, spellcheck, dynamic product names and numbers</remark>
  <abstract>
-  <para>As &dapsacr; does not include any editor software, you are 
-  completely free in the choice of your XML editor. Basically, you can use
-  any text editor, but it is helpful if the editor supports editing XML 
-  in accordance with the DTD you use. A number of open source editors can be 
-  extended with plug-ins for automatic tag insertion and completion, insertion
-  of <sgmltag>xref</sgmltag> elements and for checks if the XML document is 
-  well-formed. If you are already familiar with vi or Emacs, you can configure
-  them to support XML editing mode. If your prefer an editor with a graphical 
-  user interface, jEdit is a good choice.</para>
+  <para>
+   As &dapsacr; does not include any editor software, you are completely
+   free in the choice of your XML editor. Basically, you can use any text
+   editor, but it is helpful if the editor supports editing XML in
+   accordance with the DTD you use. A number of open source editors can be
+   extended with plug-ins for automatic tag insertion and completion,
+   insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
+   document is well-formed. If you are already familiar with vi or Emacs,
+   you can configure them to support XML editing mode. If your prefer an
+   editor with a graphical user interface, jEdit is a good choice.
+  </para>
  </abstract>
- <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
+<!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
      be a great idea-->
- <!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
+<!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
      tips/instructions for individual editors?-->
  <sect1 id="sec.daps.user.edit.basics">
   <title>Basic Structural Elements</title>
-  <para>If you already worked with DocBook, you know about the typical top-level 
-  elements (or root elements) for documents: <sgmltag>book</sgmltag> or 
-  <sgmltag>article</sgmltag>. For larger documentation projects, another typical
-  root element is <sgmltag>set</sgmltag> (a collection of books).</para>
-  <para>To define the individual components of a book, other structural elements 
-  are used, for example, <sgmltag>part</sgmltag>, <sgmltag>chapter</sgmltag>, or 
-  <sgmltag>appendix</sgmltag>. Within a chapter, you will probably also find
-  sections, thus <sgmltag>section</sgmltag> (or <sgmltag>sect1</sgmltag>, 
-  <sgmltag>sect2</sgmltag> etc.) are further structural elements, as are 
-  <sgmltag>para</sgmltag> (for paragraphs) or <sgmltag>orderlist</sgmltag>.</para>
-  <para>If you have set up your documentation project from scratch with 
-  <command>daps-init</command>, you can explore the example documents that are
-  installed within the directory structure. They show the most commonly used 
-  DocBook XML constructs. 
+
+  <para>
+   If you already worked with DocBook, you know about the typical top-level
+   elements (or root elements) for documents: <sgmltag>book</sgmltag> or
+   <sgmltag>article</sgmltag>. For larger documentation projects, another
+   typical root element is <sgmltag>set</sgmltag> (a collection of books).
+  </para>
+
+  <para>
+   To define the individual components of a book, other structural elements
+   are used, for example, <sgmltag>part</sgmltag>,
+   <sgmltag>chapter</sgmltag>, or <sgmltag>appendix</sgmltag>. Within a
+   chapter, you will probably also find sections, thus
+   <sgmltag>section</sgmltag> (or <sgmltag>sect1</sgmltag>,
+   <sgmltag>sect2</sgmltag> etc.) are further structural elements, as are
+   <sgmltag>para</sgmltag> (for paragraphs) or <sgmltag>orderlist</sgmltag>.
+  </para>
+
+  <para>
+   If you have set up your documentation project from scratch with
+   <command>daps-init</command>, you can explore the example documents that
+   are installed within the directory structure. They show the most commonly
+   used DocBook XML constructs.
   </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.macros">
   <title>Macros for Automatic Insertion of Complex Elements</title>
-  <para>XML elements can be nested to a high extend. Some constructs 
- like <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> 
- or <sgmltag>image</sgmltag> have a lot of required child elements.
- If you have an editor with DTD support, it will tell you which elements are 
- allowed at the current cursor position, but nevertheless it is cumbersome if
- you need to insert the child elements of complex XML constructs consecutively.  
- </para>
-  <para>Most editors allow you to define or record macros which you can use 
- for automatically inserting empty <quote>skeletons</quote> for a complex XML
- construct as illustrated by <xref linkend="ex.daps.user.vle"/>.</para>
+
+  <para>
+   XML elements can be nested to a high extend. Some constructs like
+   <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
+   <sgmltag>image</sgmltag> have a lot of required child elements. If you
+   have an editor with DTD support, it will tell you which elements are
+   allowed at the current cursor position, but nevertheless it is cumbersome
+   if you need to insert the child elements of complex XML constructs
+   consecutively.
+  </para>
+
+  <para>
+   Most editors allow you to define or record macros which you can use for
+   automatically inserting empty <quote>skeletons</quote> for a complex XML
+   construct as illustrated by <xref linkend="ex.daps.user.vle"/>.
+  </para>
+
   <example id="ex.daps.user.vle">
    <title>A <sgmltag>varlistentry</sgmltag></title>
-   <screen>&lt;varlistentry&gt;
+<screen>&lt;varlistentry&gt;
   &lt;term&gt;&lt;/term&gt;
   &lt;listitem&gt;
     &lt;para&gt;&lt;/para&gt;
   &lt;/listitem&gt;
 &lt;/varlistentry&gt;</screen>
   </example>
-  <para>For Emacs, &dapsacr; already includes macros for adding elements such as 
- <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>, <sgmltag>indexterm</sgmltag> etc. 
- The macros are defined in <filename>docbook_macros.el</filename> and are
- added to your system during the installation of &dapsacr;. They require that 
- you execute Emacs in <literal>psgml</literal>-mode. </para>
+
+  <para>
+   For Emacs, &dapsacr; already includes macros for adding elements such as
+   <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>,
+   <sgmltag>indexterm</sgmltag> etc. The macros are defined in
+   <filename>docbook_macros.el</filename> and are added to your system
+   during the installation of &dapsacr;. They require that you execute Emacs
+   in <literal>psgml</literal>-mode.
+  </para>
+
   <procedure>
    <title>Configuring Emacs to Use the DB Macros</title>
    <step>
-    <para>To load the DocBook macros, 
- open your Emacs customization file (<filename>~/.emacs</filename> or 
- <filename>~/.gnu-emacs</filename>).</para>
+    <para>
+     To load the DocBook macros, open your Emacs customization file
+     (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename>).
+    </para>
    </step>
    <step>
-    <para>Insert the following line:</para>
-    <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+    <para>
+     Insert the following line:
+    </para>
+<screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
    </step>
    <step>
-    <para>Save the Emacs customization file.
-   <remark>taroth 2012-03-13: restart of Emacs needed?</remark>
+    <para>
+     Save the Emacs customization file.
+     <remark>taroth 2012-03-13: restart of Emacs needed?</remark>
     </para>
    </step>
   </procedure>
-  <para>For an overview, which macros are available and how to use them, refer to 
- <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
-   </para>
+
+  <para>
+   For an overview, which macros are available and how to use them, refer to
+   <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
+  </para>
  </sect1>
  <sect1 id="sec.daps.user.edit.validate">
   <title>Validating Your XML Sources</title>
-  <para>Validating XML files within in a book or set often exceeds validation of
-  the current XML file, as links (<sgmltag>xref</sgmltag> elements) or XIncludes 
-  need to be resolved, too. If you use conditional text (<literal>profiling</literal>) 
-  in your XML sources (for creating variants), your XML editor cannot check 
-  validity of your XML files. However, &dapsacr; can handle all those cases due 
-  to the built-in xmllint validator. </para>
+
+  <para>
+   Validating XML files within in a book or set often exceeds validation of
+   the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
+   XIncludes need to be resolved, too. If you use conditional text
+   (<literal>profiling</literal>) in your XML sources (for creating
+   variants), your XML editor cannot check validity of your XML files.
+   However, &dapsacr; can handle all those cases due to the built-in xmllint
+   validator.
+  </para>
+
   <procedure>
    <title>Validating XML Files</title>
-   <para>To validate all files that belong to your documentation project, 
-   &dapsacr; only needs to know which &dclong; file to use. If you have specified
-   a value for <parameter>DOCCONF_DEFAULT</parameter> in &dapsconf-user; or if your
-   documentation directory contains only one &dc; file, &dapsacr; automatically
-   uses the corresponding &dc; file. Otherwise, specify the path to the &dc; file
-   with the <option>-d</option> option as described below.</para>
-   <para>By default, <sgmltag>remark</sgmltag> elements and XML comments are 
-   ignored during validation. However, if you intend to create a (draft) output 
-   including remarks or comments, you need to include them for validation by 
-   specifying the respective &dapsacr; option. 
+   <para>
+    To validate all files that belong to your documentation project,
+    &dapsacr; only needs to know which &dclong; file to use. If you have
+    specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
+    &dapsconf-user; or if your documentation directory contains only one
+    &dc; file, &dapsacr; automatically uses the corresponding &dc; file.
+    Otherwise, specify the path to the &dc; file with the
+    <option>-d</option> option as described below.
+   </para>
+   <para>
+    By default, <sgmltag>remark</sgmltag> elements and XML comments are
+    ignored during validation. However, if you intend to create a (draft)
+    output including remarks or comments, you need to include them for
+    validation by specifying the respective &dapsacr; option.
    </para>
    <step>
-    <para>To validate all XML files in your book, article or set, enter:</para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
-    <para>If the XML files are not valid, &dapsacr; will return the parser
-    errors. They include information about the type of error, the respective 
-    file name and the line number where the error occured. In addition, &dapsacr;
-    shows the path to the profiled XML sources and the total number of errors.</para>
+    <para>
+     To validate all XML files in your book, article or set, enter:
+    </para>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+    <para>
+     If the XML files are not valid, &dapsacr; will return the parser
+     errors. They include information about the type of error, the
+     respective file name and the line number where the error occured. In
+     addition, &dapsacr; shows the path to the profiled XML sources and the
+     total number of errors.
+    </para>
     <remark>taroth 2012-03-15: maybe add example output</remark>
-    <para>If validation was successful, &dapsacr; returns: 
-<literal>All files are valid.</literal>
+    <para>
+     If validation was successful, &dapsacr; returns: <literal>All files are
+     valid.</literal>
     </para>
    </step>
    <step>
-    <para>To validate your files including remarks, enter:</para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
+    <para>
+     To validate your files including remarks, enter:
+    </para>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
    </step>
    <step>
-    <para>To validate your files including XML comments, enter:</para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
+    <para>
+     To validate your files including XML comments, enter:
+    </para>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
    </step>
   </procedure>
+
   <example>
    <title>Parser Output For Validation Errors</title>
-   <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+<screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3
 </screen>
@@ -142,9 +191,9 @@ make: *** [validate] Error 3
  </sect1>
  <sect1>
   <title>Spell Checking</title>
+
   <para>
    <remark>taroth 2012-03-09: FIXME</remark>
   </para>
  </sect1>
- 
 </chapter>
