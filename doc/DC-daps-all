@@ -1,11 +1,11 @@
 ## ---------------------------- 
 ## Doc Config File for DAPS
-## DAPS User Guide
+## DocBook Authoring and Publishing Suite
 ## ----------------------------
 ##
 ## Basics
 MAIN="MAIN.DAPS.xml"
-ROOTID="book.daps.user"
+#ROOTID="book.daps.user"
 
 ## Profiling
 PROFOS="osuse"
@@ -13,9 +13,8 @@ PROFARCH="x86;amd64;em64t"
 
 ## stylesheet location
 #STYLEROOT="/usr/share/xml/docbook/stylesheet/suse"
-STYLEROOT="../suse/xslt"
-HTML_CSS="./daps.css"
-EPUB_CSS="./daps.css"
+HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css"
+#EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
