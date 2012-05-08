@@ -167,43 +167,62 @@
   <title>&dapsacr; Configuration</title>
  &daps-config;
  </sect1>
+ 
  <sect1 id="sec.daps.user.basics">
   <title>Defining Documentation Projects</title>
-  <para>
-   The easiest way to set up a new documentation project from scratch is to
-   use the &dapsacr; initialization script <command>daps-init</command>. For
-   instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
-   script automatically creates the <xref linkend="sec.daps.user.basics.files" 
-   xrefstyle="select:title"/> and <xref linkend="sec.daps.user.basics.dirstruct" 
-   xrefstyle="select:title"/> that you need to get started with  &dapsacr;.
-  </para>
-  <sect2 id="sec.daps.user.basics.files">
-   <title>Key Files</title>
-   &daps-key-files;
-   <para>In the following section, find examples for both Main and &dc; files, 
-   sorted according to use cases: for documentation projects consisting of single 
-   deliverables like an article or a book, and for larger documentation
-   projects, consisting of multiple deliverables like books or articles, organized
-   in a <sgmltag>set</sgmltag>.  
-   </para>
-  </sect2>
+  <para> The easiest way to set up a new documentation project from scratch is
+   to use the &dapsacr; initialization script <command>daps-init</command>.
+   For instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
+   script automatically creates the <xref linkend="sec.daps.user.basics.files"
+    xrefstyle="select:title"/> and <xref
+    linkend="sec.daps.user.basics.dirstruct" xrefstyle="select:title"/> that you
+   need to get started with &dapsacr;. </para>
+  <para>To migrate existing DocBook projects so that you can manage and publish
+   them with &dapsacr;, follow the step-by-step instructions in <xref
+   linkend="pro.daps.quick.migrate"/>.</para>
   
-   <sect2 id="sec.daps.user.basics.single">
-    <title>Single Deliverables (Article or Book)</title>
-    <para>The most elementary case of a documentation project is probably a white 
-    paper or article. Typically, its contents is covered in a single XML file
-    with <sgmltag>article</sgmltag> as root element. In this case, the 
-    single XML file would be the Main file as it specifies the highest-level object
-    in your documentation project (<sgmltag>article</sgmltag>). Apart from document
-    title and body, the file can contain other information such as legal notice, 
-    release information, author data etc. An article may be structured into
-    sections (by use of <sgmltag>section</sgmltag> elements or 
-    <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.).</para>
+  <sect2 id="sec.daps.user.basics.files">
+   <title>Key Files</title> &daps-key-files; <para>In the following
+    sections, find examples for Main and &dc; files, together with
+    background information on some key parameters that can be used in &dc;
+    files. The examples are sorted according to use cases:</para>
+   <itemizedlist>
+    <listitem>
+     <para>Small documentation projects, consisting of <xref
+       linkend="sec.daps.user.basics.single" xrefstyle="select:title"/></para>
+    </listitem>
+    <listitem>
+     <para>Larger documentation projects, consisting of <xref
+       linkend="sec.daps.user.basics.mutliple" xrefstyle="select:title"/></para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
 
-    <para>Find a simple example in <xref linkend="ex.daps.main.art"/>. </para>
-    <example id="ex.daps.main.art">
-     <title>Main File of an Article (DocBook 4.x)</title>
-     <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  <sect2 id="sec.daps.user.basics.single">
+   <title>Single Deliverables (Article or Book)</title>
+   <para>The most elementary case of a documentation project is probably a white
+    paper or article. Typically, its contents is covered in a single XML file
+    with <sgmltag>article</sgmltag> as root element. In this case, the single
+    XML file would be the Main file as it specifies the highest-level object in
+    your documentation project (<sgmltag>article</sgmltag>). Apart from document
+    title and body, the file can contain other information such as legal notice,
+    release information, author data etc. An article may be structured into
+    sections (by use of <sgmltag>section</sgmltag> elements or
+     <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.).</para>
+
+   <tip>
+    <title>Creating an Example Document</title>
+    <para><xref linkend="pro.daps.init" xrefstyle="select:title"/> allows you to
+     automatically set up an example article or book, together with a &dc; file.
+     The examples below are based on the output of <command>daps-init</command>,
+     but vary deliberately in some details to show key parameters that you might
+     want to add or change.</para>
+   </tip>
+
+   <para>Find a simple example in <xref linkend="ex.daps.main.art"/>. </para>
+   <example id="ex.daps.main.art">
+    <title>Main File of an Article (DocBook 4.x)</title>
+    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;article lang="en" id="art.template"&gt;
@@ -244,40 +263,41 @@
  &lt;/sect1&gt;
 &lt;/article&gt;
      </screen>
-    </example>
+   </example>
 
-<para>Let us assume the XML file shown in <xref linkend="ex.daps.main.art"/> is 
-named <filename>MAIN-DAPS-example-article.xml</filename> and you want to publish
-it in default DocBook layout, without any special requirements. To generate output, 
-you usually create a &dc; file per article or book, specifying a number of parameters 
-such as the Main file or which layout to use. Of the multiple parameters that can 
-be set in the &dc; file, the only one required is <parameter>MAIN</parameter>, 
-pointing to the XML file that you want to process. Therefore, a very basic &dc; 
-file for the article in <xref linkend="ex.daps.main.art"/> could look as follows:</para>
+   <para>Let us assume the XML file shown in <xref linkend="ex.daps.main.art"/>
+    is named <filename>MAIN-DAPS-example-article.xml</filename> and you want to
+    publish it in default DocBook layout, without any special requirements. To
+    generate output, you usually create a &dc; file per article or book,
+    specifying a number of parameters such as the Main file or which layout to
+    use. Of the multiple parameters that can be set in the &dc; file, the
+    only one required is <parameter>MAIN</parameter>, pointing to the XML file
+    that you want to process. Therefore, a very basic &dc; file for the
+    article in <xref linkend="ex.daps.main.art"/> could look as follows:</para>
 
-    <example id="ex.daps.user.dc.art.simple">
-     <title>Basic &dc; File for an Article</title>
-     <screen>## Doc config file for the DAPS example article
+   <example id="ex.daps.user.dc.art.simple">
+    <title>Basic &dc; File for an Article</title>
+    <screen>## Doc config file for the DAPS example article
 ## See /etc/daps/config for documentation of the settings below
 ##
 
 ## Mandatory Parameter
 MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
      </screen>
-    </example>
-    <calloutlist>
-     <callout arearefs="co.daps.dc.art.main">
-      &daps-co-main;
-    </callout>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.daps.dc.art.main"> &daps-co-main; </callout>
    </calloutlist>
-   <para>The example above is a bit artificial, though: If you do not want to 
- specify any further parameters (apart from the Main file), you can also set
- the <parameter>MAIN</parameter> parameter as command line option during 
- generation of the output format. In that case, you can do completely without
- &dc; file. For details, refer to <xref linkend="cha.daps.user.output"/>.</para>
-<!-- <screen>daps -m xml/MAIN-daps-example.xml html</screen>-->
-<para>In case your documentation project does not consist of an article, but a 
-single book, the basic setup of Main file and &dc; file is similar:</para>
+   <para>The example above is a bit artificial, though: If you do not want to
+    specify any further parameters (apart from the Main file), you can also set
+    the <parameter>MAIN</parameter> parameter as command line option during
+    generation of the output format. In that case, you can do completely without
+    &dc; file. For details, refer to <xref linkend="cha.daps.user.output"/>.
+   </para>
+   <!-- <screen>daps -m xml/MAIN-daps-example.xml html</screen>-->
+   <para>In case your documentation project does not consist of an article, but
+    a single book, the basic setup of Main file and &dc; file is
+    similar:</para>
 
    <example id="ex.daps.main.book">
     <title>Main File of a Book (DocBook 4.x)</title>
@@ -318,27 +338,29 @@ single book, the basic setup of Main file and &dc; file is similar:</para>
 &lt;/book&gt;
 </screen>
    </example>
-<para>In the example above, the book contents is also covered in a single XML 
-file with <sgmltag>book</sgmltag> as root element. In contrast to an article,
-books can have more structure levels: they are usually divided into 
-<sgmltag>chapter</sgmltag> elements (that may contain sections and subsections) 
-as outlined in <xref linkend="ex.daps.main.book"/>. In addition to chapters, 
-books may also contain other structure elements such as <sgmltag>preface</sgmltag>, 
-<sgmltag>glossary</sgmltag>, or <sgmltag>appendix</sgmltag>. As additional 
-structure level, books may also contain parts. For a complete reference, 
-see <citetitle>&tdg;</citetitle>, available at 
-<ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.</para>
-<para>Let us assume the XML file shown in <xref linkend="ex.daps.main.book"/> is 
-named <filename>MAIN-DAPS-example-book.xml</filename> and you want to publish it in a custom 
-layout. To generate output, you would create a &dc; file pointing to the 
-Main file of the book, and additionally specifying a set of custom stylesheets.</para>
+   <para>In the example above, the book contents is also covered in a single XML
+    file with <sgmltag>book</sgmltag> as root element. In contrast to an
+    article, books can have more structure levels: they are usually divided into
+     <sgmltag>chapter</sgmltag> elements (that may contain sections and
+    subsections) as outlined in <xref linkend="ex.daps.main.book"/>. In addition
+    to chapters, books may also contain other structure elements such as
+     <sgmltag>preface</sgmltag>, <sgmltag>glossary</sgmltag>, or
+     <sgmltag>appendix</sgmltag>. As additional structure level, books may also
+    contain parts. For a complete reference, see
+     <citetitle>&tdg;</citetitle>, available at <ulink
+     url="http://www.docbook.org/tdg/en/html/docbook.html"/>.</para>
+   <para>Let us assume the XML file shown in <xref linkend="ex.daps.main.book"/>
+    is named <filename>MAIN-DAPS-example-book.xml</filename> and you want to
+    publish it in a custom layout. To generate output, you would create a
+    &dc; file pointing to the Main file of the book, and additionally
+    specifying a set of custom stylesheets.</para>
    <example id="ex.daps.dc.book">
     <title>&dc; File For a Book with Custom Layout</title>
-     <screen>## Doc config file for the DAPS example book 
+    <screen>## Doc config file for the DAPS example book 
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
-MAIN="MAIN-DAPS-example-book.xml" <co id="co.daps.dc.book.main" />
+MAIN="MAIN-DAPS-example-book.xml" <co id="co.daps.dc.book.main"/>
 
 ## Optional Parameters
 
@@ -349,11 +371,8 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
 </screen>
    </example>
    <calloutlist>
-    <callout arearefs="co.daps.dc.book.main">
-    &daps-co-main; 
-    </callout>
-    <callout arearefs="co.daps.dc.book.styleroot">
-     &daps-co-styleroot;
+    <callout arearefs="co.daps.dc.book.main"> &daps-co-main; </callout>
+    <callout arearefs="co.daps.dc.book.styleroot"> &daps-co-styleroot;
      <!--The custom stylesheet directory must have the same structure as the 
      original DocBook stylesheet root directory, but it but does not need to 
      contain stylesheets for all output formats. If &dapsacr; cannot find a 
@@ -361,24 +380,25 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
      default DocBook layout instead.-->
     </callout>
    </calloutlist>
-</sect2>
-<sect2 id="sec.daps.user.basics.mutliple">
-<title>Multiple Deliverables: Articles or Books in a Set</title>
+  </sect2>
+  <sect2 id="sec.daps.user.basics.mutliple">
+   <title>Multiple Deliverables: Articles or Books in a Set</title>
 
    <para>If your documentation project consists of multiple books in a
-      <sgmltag>set</sgmltag>, the Main file is the one that contains the
-      <sgmltag>set</sgmltag> element. In the following example, the components
-     of the set (individual books) are not part of the Main file, but have been
-     put into separate document files (<sgmltag>book*.xml</sgmltag>), that are
-     then assembled in the Main file using XIncludes. Note that this is not
-     specific for a set&mdash;it is mainly a means of modularizing your
-     documents. You can also use XIncludes for splitting up books, articles or
-     chapters into separate files. For more information, refer to 
-     <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
-    <citetitle>Physical Divisions: Breaking a Document into Separate Files</citetitle>
+     <sgmltag>set</sgmltag>, the Main file is the one that contains the
+     <sgmltag>set</sgmltag> element. In the following example, the components of
+    the set (individual books) are not part of the Main file, but have been put
+    into separate document files (<sgmltag>book*.xml</sgmltag>), that are then
+    assembled in the Main file using XIncludes. Note that this is not specific
+    for a set&mdash;it is mainly a means of modularizing your documents. You
+    can also use XIncludes for splitting up books, articles or chapters into
+    separate files. For more information, refer to <ulink
+     url="http://www.docbook.org/tdg51/en/html/ch02.html">
+     <citetitle>Physical Divisions: Breaking a Document into Separate
+      Files</citetitle>
     </ulink>.</para>
-    
-    <example id="ex.daps.main.set">
+
+   <example id="ex.daps.main.set">
     <title>Main File of a Set (DocBook 4.x)</title>
     <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
@@ -393,20 +413,18 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;             
 &lt;/set&gt;</screen>
    </example>
-   
-   <para>For a documentation <sgmltag>set</sgmltag> (a collection of books), 
-    multiple &dc; files can be defined. This allows you to set different parameters 
-    and values for individual books in the set. By specifying a different 
-    <parameter>ROOTID</parameter> in the &dc; file, you define which 
-    book of the set is to be built. You can also specify different layouts or 
-    output modes (such as draft or annotated versions) for individual
-    books in the same documentation set. 
-  </para>
 
-   <para>The following two &dc; files are those of the &dapsquick; and the 
-   &dapsuser;&mdash; both guides belong to the same documentation set, but
-   use different layouts.
-   </para>
+   <para>For a documentation <sgmltag>set</sgmltag> (a collection of books),
+    multiple &dc; files can be defined. This allows you to set different
+    parameters and values for individual books in the set. By specifying a
+    different <parameter>ROOTID</parameter> in the &dc; file, you define
+    which book of the set is to be built. You can also specify different layouts
+    or output modes (such as draft or annotated versions) for individual books
+    in the same documentation set. </para>
+
+   <para>The following two &dc; files are those of the &dapsquick; and
+    the &dapsuser;&mdash; both guides belong to the same documentation
+    set, but use different layouts. </para>
    <example id="ex.daps.dc.quick">
     <title>&dc; File For a Book in a Set</title>
     <screen>## Doc config file for &dapsquick;
@@ -435,36 +453,28 @@ HTML_CSS="./daps.css" <co id="co.daps.dc.quick.css"/>
 EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:label nopage"/>
 
 </screen>
-   <calloutlist>
-   <callout arearefs="co.daps.dc.quick.main">
-    &daps-co-main;
-    </callout>
-    <callout arearefs="co.daps.dc.quick.rootid">
-      &daps-co-rootid;   
-     <para>In this example, <literal>art.daps.quick</literal> is the root ID of 
-     the &dapsquick;, contained in <filename>MAIN.DAPS.xml</filename>.
-    </para>
+    <calloutlist>
+     <callout arearefs="co.daps.dc.quick.main"> &daps-co-main; </callout>
+     <callout arearefs="co.daps.dc.quick.rootid"> &daps-co-rootid; <para>In
+       this example, <literal>art.daps.quick</literal> is the root ID of the
+       &dapsquick;, contained in <filename>MAIN.DAPS.xml</filename>. </para>
      </callout>
-   <callout arearefs="co.daps.dc.quick.styleroot">
-   &daps-co-styleroot;   
-   <para>In this example, the parameter specifies the path to a directory
-   with &suse;-specific styleheets for the flyer layout that is used by the
-   &dapsquick;.
-   </para>  
-  </callout>
-    <callout arearefs="co.daps.dc.quick.fbstyleroot">
-     &daps-co-fbstyleroot;
-     <para>In this example, no fallback is specified and the parameter is 
-     disabled.</para>
+     <callout arearefs="co.daps.dc.quick.styleroot"> &daps-co-styleroot;
+       <para>In this example, the parameter specifies the path to a directory
+       with &suse;-specific styleheets for the flyer layout that is used by
+       the &dapsquick;. </para>
      </callout>
-     <callout arearefs="co.daps.dc.quick.css">
-     &daps-co-css;
-     <para>In this example, custom CSS files are specified for both HTML and 
-     &epub; output.</para>
+     <callout arearefs="co.daps.dc.quick.fbstyleroot"> &daps-co-fbstyleroot;
+       <para>In this example, no fallback is specified and the parameter is
+       disabled.</para>
+     </callout>
+     <callout arearefs="co.daps.dc.quick.css"> &daps-co-css; <para>In this
+       example, custom CSS files are specified for both HTML and &epub;
+       output.</para>
      </callout>
     </calloutlist>
    </example>
- 
+
    <example id="ex.daps.dc.user">
     <title>&dc; File For a Book in the Same Set</title>
     <screen>## Doc config file for &dapsuser;
@@ -505,53 +515,41 @@ FORMATTER="xep" <co id="co.daps.dc.user.formatter"/>
 #
 DRAFT="yes" <co id="co.daps.dc.user.draft"/>
 </screen>
-  <calloutlist>
-   <callout arearefs="co.daps.dc.user.main">
-    &daps-co-main;
-    </callout>
-    <callout arearefs="co.daps.dc.user.rootid">
-      &daps-co-rootid;   
-     <para>In this example, <literal>book.daps.user</literal> is the root ID of 
-     the &dapsuser;, contained in <filename>MAIN.DAPS.xml</filename>.
-    </para>
+    <calloutlist>
+     <callout arearefs="co.daps.dc.user.main"> &daps-co-main; </callout>
+     <callout arearefs="co.daps.dc.user.rootid"> &daps-co-rootid; <para>In
+       this example, <literal>book.daps.user</literal> is the root ID of the
+       &dapsuser;, contained in <filename>MAIN.DAPS.xml</filename>. </para>
      </callout>
-   <callout arearefs="co.daps.dc.user.styleroot">
-   &daps-co-styleroot;   
-   <para>In this example, the parameter specifies the path to a directory
-   with &suse;-specific styleheets that is used by the &dapsuser;.
-   </para>  
-  </callout>
-    <callout arearefs="co.daps.dc.user.fbstyleroot">
-     &daps-co-fbstyleroot;
-     <para>In this example, no fallback is specified and the parameter is 
-     disabled.</para>
+     <callout arearefs="co.daps.dc.user.styleroot"> &daps-co-styleroot;
+       <para>In this example, the parameter specifies the path to a directory
+       with &suse;-specific styleheets that is used by the &dapsuser;.
+      </para>
      </callout>
-     <callout arearefs="co.daps.dc.user.css">
-     &daps-co-css;
-     <para>In this example, custom CSS files are specified for both HTML and 
-     &epub; output.</para>
+     <callout arearefs="co.daps.dc.user.fbstyleroot"> &daps-co-fbstyleroot;
+       <para>In this example, no fallback is specified and the parameter is
+       disabled.</para>
      </callout>
-     <callout arearefs="co.daps.dc.user.formatter">
-     &daps-co-formatter;
-     <para>For supported formatters, refer to 
-     <xref linkend="sec.daps.quick.req.sw"/>. In this example, XEP is specified 
-     as PDF formatter.</para>
+     <callout arearefs="co.daps.dc.user.css"> &daps-co-css; <para>In this
+       example, custom CSS files are specified for both HTML and &epub;
+       output.</para>
      </callout>
-     <callout arearefs="co.daps.dc.user.draft">
-     &daps-co-draft;
+     <callout arearefs="co.daps.dc.user.formatter"> &daps-co-formatter;
+       <para>For supported formatters, refer to <xref
+        linkend="sec.daps.quick.req.sw"/>. In this example, XEP is specified as
+       PDF formatter.</para>
      </callout>
+     <callout arearefs="co.daps.dc.user.draft"> &daps-co-draft; </callout>
     </calloutlist>
    </example>
-   
-  <para>
-   If your documentation project contains cross-references between the
-   individual books in a set, it is useful to define an additional &dc; file
-   &mdash;<emphasis>without</emphasis> the <parameter>ROOTID</parameter> parameter.
-   Use this (generic) &dc; to generate HTML outputs containing all hyperlinks
-   between the individual books (or for creating file lists of all source files
-   and images used in the set). Find an example &dc; file in
-   <xref linkend="ex.daps.dc.set"/>.
-  </para>
+
+   <para> If your documentation project contains cross-references between the
+    individual books in a set, it is useful to define an additional &dc;
+    file &mdash;<emphasis>without</emphasis> the
+     <parameter>ROOTID</parameter> parameter. Use this (generic) &dc; to
+    generate HTML outputs containing all hyperlinks between the individual books
+    (or for creating file lists of all source files and images used in the set).
+    Find an example &dc; file in <xref linkend="ex.daps.dc.set"/>. </para>
 
    <example id="ex.daps.dc.set">
     <title>&dc; File for a Set</title>
@@ -583,43 +581,31 @@ EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.set.css" xrefstyle="select:label
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
 
-<calloutlist>
-   <callout arearefs="co.daps.dc.set.main">
-    &daps-co-main;
-    </callout>
-    <callout arearefs="co.daps.dc.set.rootid">
-      &daps-co-rootid;   
-     <para>In this example, no <parameter>ROOTID</parameter> is set. This allows
-     to build the complete documentation set, with the output containing all 
-     hyperlinks between the individual books.
-      </para>
+    <calloutlist>
+     <callout arearefs="co.daps.dc.set.main"> &daps-co-main; </callout>
+     <callout arearefs="co.daps.dc.set.rootid"> &daps-co-rootid; <para>In
+       this example, no <parameter>ROOTID</parameter> is set. This allows to
+       build the complete documentation set, with the output containing all
+       hyperlinks between the individual books. </para>
      </callout>
-   <callout arearefs="co.daps.dc.set.styleroot">
-   &daps-co-styleroot;   
-   <para>In this example, the parameter specifies the path to a directory
-   with &suse;-specific styleheets.
-   </para>  
-  </callout>
-    <callout arearefs="co.daps.dc.set.fbstyleroot">
-     &daps-co-fbstyleroot;
-     <para>In this example, no fallback is specified and the parameter is 
-     disabled.</para>
+     <callout arearefs="co.daps.dc.set.styleroot"> &daps-co-styleroot;
+       <para>In this example, the parameter specifies the path to a directory
+       with &suse;-specific styleheets. </para>
      </callout>
-     <callout arearefs="co.daps.dc.set.css">
-     &daps-co-css;
-     <para>In this example, custom CSS files are specified for both HTML and 
-     &epub; output.</para>
+     <callout arearefs="co.daps.dc.set.fbstyleroot"> &daps-co-fbstyleroot;
+       <para>In this example, no fallback is specified and the parameter is
+       disabled.</para>
      </callout>
-     <callout arearefs="co.daps.dc.set.source">
-     &daps-co-draft;
+     <callout arearefs="co.daps.dc.set.css"> &daps-co-css; <para>In this
+       example, custom CSS files are specified for both HTML and &epub;
+       output.</para>
      </callout>
-     <callout arearefs="co.daps.dc.set.source">
-     &daps-co-source;
-     </callout>
+     <callout arearefs="co.daps.dc.set.source"> &daps-co-draft; </callout>
+     <callout arearefs="co.daps.dc.set.source"> &daps-co-source; </callout>
     </calloutlist>
    </example>
   </sect2>
-</sect1>
+ </sect1>
   <sect1 id="sec.daps.user.basics.dirstruct">
   <title>Directory Structure</title>
   <!--taroth 2012-04-26: cave, same contents in DAPS Quick 
