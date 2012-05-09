@@ -2,519 +2,692 @@
 <?xml-stylesheet href="urn:x-suse:xslt:profiling:docbook45-profile.xsl" 
 type="text/xml"
 title="Profiling step"?>
-
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" 
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
  %entities;
 ]>
-                 
 <article id="art.svn" lang="en">
-  <title>Using Subversion</title>
-  <articleinfo>
-    <authorgroup>
-      <author>
-        <firstname>Berthold</firstname>
-        <surname>Gunreben</surname>
-        <email>berthold.gunreben AT suse DOT de</email>
-      </author>
-      <author>
-        <firstname>Thomas</firstname>
-        <surname>Schraitle</surname>
-        <email>thomas.schraitle AT suse DOT de</email>
-      </author>
-    </authorgroup>
-    <releaseinfo>$Id$</releaseinfo>
-  </articleinfo>
-  <sect1 id="sec.svn.quickstart">
-    <title>Quick Start</title>
+ <title>Using Subversion</title>
+ <articleinfo>
+  <authorgroup>
+   <author><firstname>Berthold</firstname><surname>Gunreben</surname><email>berthold.gunreben AT suse DOT de</email>
+   </author>
+   <author><firstname>Thomas</firstname><surname>Schraitle</surname><email>thomas.schraitle AT suse DOT de</email>
+   </author>
+  </authorgroup>
+  <releaseinfo>$Id$</releaseinfo>
+ </articleinfo>
+ <sect1 id="sec.svn.quickstart">
+  <title>Quick Start</title>
+
+  <para>
+   Subversion is, like CVS, a tool for managing source files. It keeps track
+   of your work and changes in a set of files and directories. It allows
+   developers and writers to collaborate. The common area is the
+   <emphasis>repository</emphasis>, where all files are stored. The
+   repository can reside on a local directory, but it is usually accessible
+   over a network.
+  </para>
+
+  <para>
+   Working with Subversion involves the following steps:
+  </para>
+
+  <procedure>
+   <step id="st.checkout">
     <para>
-      Subversion is, like CVS, a tool for managing source files. It keeps track
-      of your work and changes in a set of files and directories. It allows
-      developers and writers to collaborate. The common area is the
-      <emphasis>repository</emphasis>, where all files are stored. The
-      repository can reside on a local directory, but it is usually accessible
-      over a network.
-    </para>
-    <para>
-      Working with Subversion involves the following steps:
-    </para>
-    <procedure>
-      <step id="st.checkout">
-        <para>You <emphasis>check out</emphasis> your working directory from the
+     You <emphasis>check out</emphasis> your working directory from the
      repository. This needs to be done only once.
     </para>
-      </step>
-      <step id="st.changes">
-        <para>You <emphasis>modify</emphasis> your files, for example, insert new
+   </step>
+   <step id="st.changes">
+    <para>
+     You <emphasis>modify</emphasis> your files, for example, insert new
      sections or delete some paragraphs.
     </para>
-      </step>
-      <step id="st.status">
-	<para>You can check the <emphasis>status</emphasis> of your working
-	  directory.</para>
-      </step>
-      <step id="st.checkin">
-        <para>If you have write permission, you <emphasis>check in</emphasis> your
-     changes to the repository. With read access only, you must find
-     someone with write permission if you want to keep these changes. 
+   </step>
+   <step id="st.status">
+    <para>
+     You can check the <emphasis>status</emphasis> of your working
+     directory.
     </para>
-      </step>
-      <step id="st.update">
-        <para>At the same time, other users with write access to the repository
-     might check in their modifications. To get these changes,
+   </step>
+   <step id="st.checkin">
+    <para>
+     If you have write permission, you <emphasis>check in</emphasis> your
+     changes to the repository. With read access only, you must find someone
+     with write permission if you want to keep these changes.
+    </para>
+   </step>
+   <step id="st.update">
+    <para>
+     At the same time, other users with write access to the repository might
+     check in their modifications. To get these changes,
      <emphasis>update</emphasis> your working directory.
     </para>
-      </step>
-      <step id="st.conflicts">
-        <para>If you change a file and another person changed it too, you might get
-     <emphasis>conflicts</emphasis> with the next update. This rare case occurs
-     if two people edit the same lines of the same file. Subversion cannot decide
-     which version is better, so you must resolve the conflict manually.
+   </step>
+   <step id="st.conflicts">
+    <para>
+     If you change a file and another person changed it too, you might get
+     <emphasis>conflicts</emphasis> with the next update. This rare case
+     occurs if two people edit the same lines of the same file. Subversion
+     cannot decide which version is better, so you must resolve the conflict
+     manually.
     </para>
-      </step>
-    </procedure>
-    <para>For more information, see <xref
-	xrefstyle="select: nopage" linkend="bib.svn"/>. Although you can work
-      with Subversion on Windows, this guide is targeted to Linux.</para>
-  </sect1>
+   </step>
+  </procedure>
 
-  <sect1 id="sec.svn.cycle">
-    <title>Basic Work Cycle</title>
-    <para>For your daily work, use the <command>svn</command> command. It knows
-      <option>--help</option>. You can even get the options for a certain
-      Subversion command, for example <command>svn <option>update</option>
-	<option>--help</option></command>. This prints the available options
-      for the update procedure of Subversion.</para>
-    <para>A typical work cycle looks like this (taken from the Subversion Book):</para>
-    
-    <procedure>
-      <title>A typical Work Cycle during Development</title>
-	<step>
-	  <para>Update your working copy</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>update</option></command>, see <xref linkend="sec.svn.up"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-	<step>
-	  <para>Make changes</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>add</option></command>, see <xref linkend="sec.svn.addrm"/></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>delete</option></command>, see <xref linkend="sec.svn.addrm"/></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>copy</option></command>, see <xref linkend="sec.svn.cpmv"/></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>move</option></command>, see <xref linkend="sec.svn.cpmv"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-	<step>
-	  <para>Examine your changes</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>status</option></command>, see <xref linkend="sec.svn.status"/></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>diff</option></command>, see <xref linkend="sec.svn.diff"/></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>revert</option></command>, see <xref linkend="sec.svn.revert"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-	<step>
-	  <para>Merge others' changes</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>merge</option></command></para>
-	    </listitem>
-	    <listitem>
-	      <para><command>svn <option>resolved</option></command>, see <xref
-	      linkend="sec.svn.conflicts"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-	<step>
-	  <para>Commit your changes</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>commit</option></command>, see <xref linkend="sec.svn.ci"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-	<step>
-	  <para>Tag your work after finishing</para>
-	  <itemizedlist>
-	    <listitem>
-	      <para><command>svn <option>copy</option></command>, see
-		<xref linkend="sec.svn.tag"/></para>
-	    </listitem>
-	  </itemizedlist>
-	</step>
-      </procedure>
-  </sect1>
+  <para>
+   For more information, see
+   <xref
+	xrefstyle="select: nopage" linkend="bib.svn"/>. Although you can
+   work with Subversion on Windows, this guide is targeted to Linux.
+  </para>
+ </sect1>
+ <sect1 id="sec.svn.cycle">
+  <title>Basic Work Cycle</title>
 
-  <sect1 id="sec.svn.requirements">
-    <title>Requirements</title>
-    <para>Before you start, you should know about Subversion:</para>
-    <orderedlist>
-      <listitem>
-        <para>Subversion is platform neutral; it runs on Linux, MacOS, Windows
-	  and some others</para>
-      </listitem>
-      <listitem>
-        <para>You can run Subversion with the help of a GUI (graphical user interface) or
-	  by typing the respective commands in a shell</para>
-      </listitem>
-    </orderedlist>
-    <para>There are some packages that are essential or might be useful if you
-      work with Subversion:</para>
-    <table id="tab.svn.packages">
-      <title>Essential and useful packages</title>
-      <tgroup cols="2">
-        <thead>
-          <row>
-            <entry>Package</entry>
-            <entry>Description</entry>
-          </row>
-        </thead>
-        <tbody>
-          <row>
-            <entry><systemitem class="resource">subversion</systemitem></entry>
-            <entry>This is essential. You can not work without this package</entry>
-          </row>
-          <row>
-            <entry><systemitem class="resource">subversion-doc</systemitem></entry>
-            <entry>The documentation of Subversion. If you need in-depth
-	      information, this is the right place to look.</entry>
-          </row>
-          <row>
-            <entry><systemitem class="resource">kdesvn</systemitem></entry>
-            <entry>GUI for Subversion. This let you access the repository through a GUI.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
-    <para>The configure check needs additional  packages:</para>
+  <para>
+   For your daily work, use the <command>svn</command> command. It knows
+   <option>--help</option>. You can even get the options for a certain
+   Subversion command, for example <command>svn <option>update</option>
+   <option>--help</option></command>. This prints the available options for
+   the update procedure of Subversion.
+  </para>
+
+  <para>
+   A typical work cycle looks like this (taken from the Subversion Book):
+  </para>
+
+  <procedure>
+   <title>A typical Work Cycle during Development</title>
+   <step>
+    <para>
+     Update your working copy
+    </para>
     <itemizedlist>
-      <listitem>
-	<para><systemitem class="resource">make</systemitem></para>
-      </listitem>
-      <listitem>
-	<para><systemitem class="resource">automake</systemitem></para>
-      </listitem>
-      <listitem>
-	<para><systemitem class="resource">autoconf</systemitem></para>
-      </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>update</option></command>, see
+       <xref linkend="sec.svn.up"/>
+      </para>
+     </listitem>
     </itemizedlist>
-  </sect1>
+   </step>
+   <step>
+    <para>
+     Make changes
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <command>svn <option>add</option></command>, see
+       <xref linkend="sec.svn.addrm"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>delete</option></command>, see
+       <xref linkend="sec.svn.addrm"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>copy</option></command>, see
+       <xref linkend="sec.svn.cpmv"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>move</option></command>, see
+       <xref linkend="sec.svn.cpmv"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Examine your changes
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <command>svn <option>status</option></command>, see
+       <xref linkend="sec.svn.status"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>diff</option></command>, see
+       <xref linkend="sec.svn.diff"/>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>revert</option></command>, see
+       <xref linkend="sec.svn.revert"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Merge others' changes
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <command>svn <option>merge</option></command>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       <command>svn <option>resolved</option></command>, see
+       <xref
+	      linkend="sec.svn.conflicts"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Commit your changes
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <command>svn <option>commit</option></command>, see
+       <xref linkend="sec.svn.ci"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>
+     Tag your work after finishing
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <command>svn <option>copy</option></command>, see
+       <xref linkend="sec.svn.tag"/>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 id="sec.svn.requirements">
+  <title>Requirements</title>
 
+  <para>
+   Before you start, you should know about Subversion:
+  </para>
 
-  <sect1 id="sec.svn.workingenvironment">
-    <title>Setting up your Subversion Working Environment</title>
-    <para>Before you work with Subversion, you should check whether all relevant packages are
-   installed. Proceed as follows:</para>
-    <procedure id="pro.svn.settingup">
-      <title>Setting up your Subversion Working Environment</title>
-      <step>
-        <para>Find a place where you have lots of free space and write access. It
-     is important that you do not run out of space. Between 2 and 3 GB should
+  <orderedlist>
+   <listitem>
+    <para>
+     Subversion is platform neutral; it runs on Linux, MacOS, Windows and
+     some others
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     You can run Subversion with the help of a GUI (graphical user
+     interface) or by typing the respective commands in a shell
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <para>
+   There are some packages that are essential or might be useful if you work
+   with Subversion:
+  </para>
+
+  <table id="tab.svn.packages">
+   <title>Essential and useful packages</title>
+   <tgroup cols="2">
+    <thead>
+     <row>
+      <entry>Package</entry>
+      <entry>Description</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry><systemitem class="resource">subversion</systemitem>
+      </entry>
+      <entry>This is essential. You can not work without this package</entry>
+     </row>
+     <row>
+      <entry><systemitem class="resource">subversion-doc</systemitem>
+      </entry>
+      <entry>The documentation of Subversion. If you need in-depth
+	      information, this is the right place to look.</entry>
+     </row>
+     <row>
+      <entry><systemitem class="resource">kdesvn</systemitem>
+      </entry>
+      <entry>GUI for Subversion. This let you access the repository through a GUI.</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+
+  <para>
+   The configure check needs additional packages:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <systemitem class="resource">make</systemitem>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <systemitem class="resource">automake</systemitem>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <systemitem class="resource">autoconf</systemitem>
+    </para>
+   </listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="sec.svn.workingenvironment">
+  <title>Setting up your Subversion Working Environment</title>
+
+  <para>
+   Before you work with Subversion, you should check whether all relevant
+   packages are installed. Proceed as follows:
+  </para>
+
+  <procedure id="pro.svn.settingup">
+   <title>Setting up your Subversion Working Environment</title>
+   <step>
+    <para>
+     Find a place where you have lots of free space and write access. It is
+     important that you do not run out of space. Between 2 and 3 GB should
      be enough, but more is always better.
-     </para>
-      </step>
-      <step>
-        <para>Configure Subversion</para>
-        <substeps>
-          <step>
-            <para>Check, if you have a directory <filename
-	class="directory">.subversion</filename> in your home directory. If
-       not, create it:</para>
-            <screen>mkdir ~/.subversion</screen>
-          </step>
-        </substeps>
-      </step>
-      <step id="st.svn.export.svnroot">
-        <para>Insert the following line into your <filename>~/.bashrc</filename> or
-	  <filename>~/.bashrc.local</filename>:</para>
-        <screen>export SVNROOT=&quot;&SVNROOT;&quot;</screen>
-        <para>This simplifies the typing of your commands.</para>
-      </step>
-    </procedure>
-  </sect1>
-
-
-  <sect1 id="sec.svn.co">
-    <title>Checking out</title>
+    </para>
+   </step>
+   <step>
     <para>
-      The first step when working with Subversion is to check out your files
-      from a repository. This step must be done only once, but it is essential.
-   </para>
-    <procedure>
-      <title>Checking out</title>
-      <step>
-        <para>Open a shell</para>
-      </step>
-      <step>
-	<para>Check out an init script that does most of the tedious work (one line):</para>
-	<screen>svn cat $SVNROOT/trunk/bin/initdoc.py > initdoc.py</screen>
-	<para>You have to enter the password <literal>anonymous</literal> twice.</para>
-      </step>
-      <step>
-	<para>Set the excecution permission:</para>
-	<screen>chmod +x initdoc.py</screen>
-      </step>
-      <step>
-	<para>Run the command. Use as first parameter the directory where you
-	  want to store the hole stylesheets and book source codes:</para>
-	<screen>./initdoc.py WORKING_DIRECTORY</screen>
-	<para>This script creates a directory <filename
+     Configure Subversion
+    </para>
+    <substeps>
+     <step>
+      <para>
+       Check, if you have a directory
+       <filename
+	class="directory">.subversion</filename> in your home
+       directory. If not, create it:
+      </para>
+<screen>mkdir ~/.subversion</screen>
+     </step>
+    </substeps>
+   </step>
+   <step id="st.svn.export.svnroot">
+    <para>
+     Insert the following line into your <filename>~/.bashrc</filename> or
+     <filename>~/.bashrc.local</filename>:
+    </para>
+<screen>export SVNROOT=&quot;&SVNROOT;&quot;</screen>
+    <para>
+     This simplifies the typing of your commands.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 id="sec.svn.co">
+  <title>Checking out</title>
+
+  <para>
+   The first step when working with Subversion is to check out your files
+   from a repository. This step must be done only once, but it is essential.
+  </para>
+
+  <procedure>
+   <title>Checking out</title>
+   <step>
+    <para>
+     Open a shell
+    </para>
+   </step>
+   <step>
+    <para>
+     Check out an init script that does most of the tedious work (one line):
+    </para>
+<screen>svn cat $SVNROOT/trunk/bin/initdoc.py > initdoc.py</screen>
+    <para>
+     You have to enter the password <literal>anonymous</literal> twice.
+    </para>
+   </step>
+   <step>
+    <para>
+     Set the excecution permission:
+    </para>
+<screen>chmod +x initdoc.py</screen>
+   </step>
+   <step>
+    <para>
+     Run the command. Use as first parameter the directory where you want to
+     store the hole stylesheets and book source codes:
+    </para>
+<screen>./initdoc.py WORKING_DIRECTORY</screen>
+    <para>
+     This script creates a directory
+     <filename
 	    class="directory">SUSEDOC/</filename> inside
-	  <filename>WORKING_DIRECTORY</filename>.</para>
-	<note>
-	  <title>Change the language</title>
-	  <para>Your language is determined by the <envar>LANG</envar>
-	    environment variable.</para>
-	</note>
-      </step>
-      <step>
-        <para>Change to your directory:</para>
-        <screen>cd&nbsp;<replaceable>WORKING_DIRECTORY</replaceable></screen>
-      </step>
-    </procedure>
-  </sect1>
-
-  <sect1 id="sec.svn.up">
-    <title>Updating your Working Directory</title>
-    <para>
-     From time to time, you should update your working directory to get
-     changes others have made:
+     <filename>WORKING_DIRECTORY</filename>.
     </para>
-    <procedure>
-      <step>
-        <para>
-      Open a shell and go to the directory where the book file
-      resides, for example, <filename class="directory">books</filename>:
+    <note>
+     <title>Change the language</title>
+     <para>
+      Your language is determined by the <envar>LANG</envar> environment
+      variable.
      </para>
-        <screen>cd <replaceable>WORKING_DIRECTORY/doc/trunk/books/</replaceable></screen>
-      </step>
-      <step>
-        <para>
-      Run the update process:
-     </para>
-        <screen>svn update</screen>
-        <para>The <command>svn <option>update</option></command> might give an
-     output, see <xref linkend="sec.svn.status"/> for more information.</para>
-      </step>
-    </procedure>
+    </note>
+   </step>
+   <step>
     <para>
-      The next action depends on the status of the file. If you have modified a
-      file, you probably want to check in your changes. If your file is added
-      or removed, a commit would solve this problem. For files with a conflict,
-      resolve the conflict before handing it to Subversion.
+     Change to your directory:
     </para>
-  </sect1>
+<screen>cd&nbsp;<replaceable>WORKING_DIRECTORY</replaceable></screen>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 id="sec.svn.up">
+  <title>Updating your Working Directory</title>
 
+  <para>
+   From time to time, you should update your working directory to get
+   changes others have made:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open a shell and go to the directory where the book file resides, for
+     example, <filename class="directory">books</filename>:
+    </para>
+<screen>cd <replaceable>WORKING_DIRECTORY/doc/trunk/books/</replaceable></screen>
+   </step>
+   <step>
+    <para>
+     Run the update process:
+    </para>
+<screen>svn update</screen>
+    <para>
+     The <command>svn <option>update</option></command> might give an
+     output, see <xref linkend="sec.svn.status"/> for more information.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   The next action depends on the status of the file. If you have modified a
+   file, you probably want to check in your changes. If your file is added
+   or removed, a commit would solve this problem. For files with a conflict,
+   resolve the conflict before handing it to Subversion.
+  </para>
+ </sect1>
  <sect1 id="sec.svn.status">
-    <title>Examine your Changes</title>
-    <para>Before you checking in your changes, it is always a good idea to take
-      a look at exactly what you have changed. Subversion prints the status of
-      your working directory with <command>svn <option>status</option
-	  ></command>. The output of this commands contains six columns:</para>
-    <variablelist>
-      <varlistentry>
-	<term>First column (content, file and directory changes)</term>
-	<listitem>
-	  <para>This is the most important column</para>
-	  <informaltable>
-	    <tgroup cols="2">
-	      <tbody>
-		<row>
-		  <entry> </entry>
-		  <entry>(space) no modifications</entry>
-		</row>
-		<row>
-		  <entry><literal>A</literal></entry>
-		  <entry>Added</entry>
-		</row>
-		<row>
-		  <entry><literal>C</literal></entry>
-		  <entry>Conflicted</entry>
-		</row>
-		<row>
-		  <entry><literal>D</literal></entry>
-		  <entry>Deleted</entry>
-		</row>
-		<row>
-		  <entry><literal>G</literal></entry>
-		  <entry>Merged</entry>
-		</row>
-		<row>
-		  <entry><literal>I</literal></entry>
-		  <entry>Ignored</entry>
-		</row>
-		<row>
-		  <entry><literal>M</literal></entry>
-		  <entry>Modified</entry>
-		</row>
-		<row>
-		  <entry><literal>R</literal></entry>
-		  <entry>Replaced</entry>
-		</row>
-		<row>
-		  <entry><literal>X</literal></entry>
-		  <entry>item is unversioned, but is used by an external
+  <title>Examine your Changes</title>
+
+  <para>
+   Before you checking in your changes, it is always a good idea to take a
+   look at exactly what you have changed. Subversion prints the status of
+   your working directory with <command>svn
+   <option>status</option
+	  ></command>. The output of this commands
+   contains six columns:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>First column (content, file and directory changes)</term>
+    <listitem>
+     <para>
+      This is the most important column
+     </para>
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row>
+         <entry></entry>
+         <entry>(space) no modifications</entry>
+        </row>
+        <row>
+         <entry><literal>A</literal>
+         </entry>
+         <entry>Added</entry>
+        </row>
+        <row>
+         <entry><literal>C</literal>
+         </entry>
+         <entry>Conflicted</entry>
+        </row>
+        <row>
+         <entry><literal>D</literal>
+         </entry>
+         <entry>Deleted</entry>
+        </row>
+        <row>
+         <entry><literal>G</literal>
+         </entry>
+         <entry>Merged</entry>
+        </row>
+        <row>
+         <entry><literal>I</literal>
+         </entry>
+         <entry>Ignored</entry>
+        </row>
+        <row>
+         <entry><literal>M</literal>
+         </entry>
+         <entry>Modified</entry>
+        </row>
+        <row>
+         <entry><literal>R</literal>
+         </entry>
+         <entry>Replaced</entry>
+        </row>
+        <row>
+         <entry><literal>X</literal>
+         </entry>
+         <entry>item is unversioned, but is used by an external
 		    definition</entry>
-		</row>
-		<row>
-		  <entry><literal>?</literal></entry>
-		  <entry>item is not under version control</entry>
-		</row>
-		<row>
-		  <entry><literal>!</literal></entry>
-		  <entry>item is missing (removed by non-svn command) or
+        </row>
+        <row>
+         <entry><literal>?</literal>
+         </entry>
+         <entry>item is not under version control</entry>
+        </row>
+        <row>
+         <entry><literal>!</literal>
+         </entry>
+         <entry>item is missing (removed by non-svn command) or
 		    incomplete</entry>
-		</row>
-		<row>
-		  <entry><literal>~</literal></entry>
-		  <entry>versioned item obstructed by some item of a different
+        </row>
+        <row>
+         <entry><literal>~</literal>
+         </entry>
+         <entry>versioned item obstructed by some item of a different
 		    kind</entry>
-		</row>
-	      </tbody>
-	    </tgroup>
-	  </informaltable>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>Second column (Property changes)</term>
-	<listitem>
-	  <para>This is probably the second most important column.</para>
-	  <informaltable>
-	    <tgroup cols="2">
-	      <tbody>
-		<row>
-		  <entry> </entry>
-		  <entry>(space) no modifications</entry>
-		</row>
-		<row>
-		  <entry><literal>C</literal></entry>
-		  <entry>Conflicted</entry>
-		</row>
-		<row>
-		  <entry><literal>M</literal></entry>
-		  <entry>Modified</entry>
-		</row>
-	      </tbody>
-	    </tgroup>
-	  </informaltable>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>Third column (working directory locked?)</term>
-	<listitem>
-	  <informaltable>
-	    <tgroup cols="2">
-	      <tbody>
-		<row>
-		  <entry> </entry>
-		  <entry>(space) not locked</entry>
-		</row>
-		<row>
-		  <entry><literal>L</literal></entry>
-		  <entry>Locked</entry>
-		</row>
-	      </tbody>
-	    </tgroup>
-	  </informaltable>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>Fourth column (history)</term>
-	<listitem>
-	  <informaltable>
-	    <tgroup cols="2">
-	      <tbody>
-		<row>
-		  <entry> </entry>
-		  <entry>(space) no history scheduled with commit</entry>
-		</row>
-		<row>
-		  <entry><literal>+</literal></entry>
-		  <entry>history scheduled with commit</entry>
-		</row>
-	      </tbody>
-	    </tgroup>
-	  </informaltable>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>Fifth column (Switching)</term>
-	<listitem>
-	  <para>Only used for switching and is not relevant for us at the
-	    moment. See <command>svn status --help</command> for more
-	    information.</para>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term>Sixth column (Repository lock token)</term>
-	<listitem>
-	  <para>Not relevant for us at the moment. See <command>svn status
-	      --help</command>  for more information.</para>
-	</listitem>
-      </varlistentry>
-    </variablelist>
-  </sect1>
-  <sect1 id="sec.svn.diff">
-    <title>Diffing your Changes</title>
-    <para>If you do not know, which changes did you make, try <command>svn
-	<option>diff</option></command>. You can diff your files even if you
-      are not online&mdash;Subversion holds a copy of the last revision.</para>
-    <para>To get the differences between your current, modified file and the
-      last revision, run:</para>
-    <screen>svn diff foo</screen>
-    <para>To get the difference between your working copy and the trunk
-      revision, run:</para>
-    <screen>svn diff</screen>
-    <para>However, you can also diff between revisions that are already checked
-      in. Subversion knows the following <emphasis>revision
-	keywords</emphasis>:</para>
-    <variablelist>
-      <title>Revision Keywords (taken from the Subversion Book)</title>
-      <varlistentry>
-	<term><token>HEAD</token></term>
-	<listitem>
-	  <para>The latest revision in the repository.</para>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term><token>BASE</token></term>
-	<listitem>
-	  <para>The revision you last updated to</para>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term><token>COMMITTED</token></term>
-	<listitem>
-	  <para>The revision of the latest change to the file when you last
-	    updated. Or in other words: The last revision in which an item
-	    changed before (or at) <token>BASE</token>.</para>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
-	<term><token>PREV</token></term>
-	<listitem>
-	  <para>The revision just <emphasis>before</emphasis> the last revision
-	    in which an item changed. (Technically, <token>COMMITTED &minus; 1</token>.)</para>
-	</listitem>
-      </varlistentry>
-    </variablelist>
-    <para>Here are some examples (taken from the Subversion Book):</para>
-    <screen>svn diff --revision PREV:COMMITED foo
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Second column (Property changes)</term>
+    <listitem>
+     <para>
+      This is probably the second most important column.
+     </para>
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row>
+         <entry></entry>
+         <entry>(space) no modifications</entry>
+        </row>
+        <row>
+         <entry><literal>C</literal>
+         </entry>
+         <entry>Conflicted</entry>
+        </row>
+        <row>
+         <entry><literal>M</literal>
+         </entry>
+         <entry>Modified</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Third column (working directory locked?)</term>
+    <listitem>
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row>
+         <entry></entry>
+         <entry>(space) not locked</entry>
+        </row>
+        <row>
+         <entry><literal>L</literal>
+         </entry>
+         <entry>Locked</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Fourth column (history)</term>
+    <listitem>
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row>
+         <entry></entry>
+         <entry>(space) no history scheduled with commit</entry>
+        </row>
+        <row>
+         <entry><literal>+</literal>
+         </entry>
+         <entry>history scheduled with commit</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Fifth column (Switching)</term>
+    <listitem>
+     <para>
+      Only used for switching and is not relevant for us at the moment. See
+      <command>svn status --help</command> for more information.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Sixth column (Repository lock token)</term>
+    <listitem>
+     <para>
+      Not relevant for us at the moment. See <command>svn status
+      --help</command> for more information.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 id="sec.svn.diff">
+  <title>Diffing your Changes</title>
+
+  <para>
+   If you do not know, which changes did you make, try <command>svn
+   <option>diff</option></command>. You can diff your files even if you are
+   not online&mdash;Subversion holds a copy of the last revision.
+  </para>
+
+  <para>
+   To get the differences between your current, modified file and the last
+   revision, run:
+  </para>
+
+<screen>svn diff foo</screen>
+
+  <para>
+   To get the difference between your working copy and the trunk revision,
+   run:
+  </para>
+
+<screen>svn diff</screen>
+
+  <para>
+   However, you can also diff between revisions that are already checked in.
+   Subversion knows the following <emphasis>revision keywords</emphasis>:
+  </para>
+
+  <variablelist>
+   <title>Revision Keywords (taken from the Subversion Book)</title>
+   <varlistentry>
+    <term><token>HEAD</token>
+    </term>
+    <listitem>
+     <para>
+      The latest revision in the repository.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><token>BASE</token>
+    </term>
+    <listitem>
+     <para>
+      The revision you last updated to
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><token>COMMITTED</token>
+    </term>
+    <listitem>
+     <para>
+      The revision of the latest change to the file when you last updated.
+      Or in other words: The last revision in which an item changed before
+      (or at) <token>BASE</token>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><token>PREV</token>
+    </term>
+    <listitem>
+     <para>
+      The revision just <emphasis>before</emphasis> the last revision in
+      which an item changed. (Technically, <token>COMMITTED &minus;
+      1</token>.)
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Here are some examples (taken from the Subversion Book):
+  </para>
+
+<screen>svn diff --revision PREV:COMMITED foo
 <emphasis># shows the last change committed to foo</emphasis>
 
 svn log --revision HEAD
@@ -523,83 +696,133 @@ svn log --revision HEAD
 svn diff --revision BASE:HEAD
 <emphasis># shows all commit logs since you last updated</emphasis>
 </screen>
-  </sect1>
-  <sect1 id="sec.svn.tag">
-    <title>Tagging your current trunk</title>
-    <para>This section is probably useful to SUSE employees only. However it
-      can be informative for other as well.</para>
-    <para>Tags are <quote>snapshots of a project in time</quote>. To create a
-      tag for our books, enter:</para>
+ </sect1>
+ <sect1 id="sec.svn.tag">
+  <title>Tagging your current trunk</title>
 
-    <screen>svn copy $SVNROOT/trunk/books/en \
+  <para>
+   This section is probably useful to SUSE employees only. However it can be
+   informative for other as well.
+  </para>
+
+  <para>
+   Tags are <quote>snapshots of a project in time</quote>. To create a tag
+   for our books, enter:
+  </para>
+
+<screen>svn copy $SVNROOT/trunk/books/en \
          $SVNROOT/tags/books/en/<replaceable>TAG_NAME</replaceable></screen>
 
-    <para>Replace <replaceable>TAG_NAME</replaceable> with an appropriate name.</para>
-  </sect1>
-  <sect1 id="sec.svn.addrm">
-    <title>Adding and Removing Files</title>
+  <para>
+   Replace <replaceable>TAG_NAME</replaceable> with an appropriate name.
+  </para>
+ </sect1>
+ <sect1 id="sec.svn.addrm">
+  <title>Adding and Removing Files</title>
+
+  <para>
+   If you need to add new files or remove old files, use the commands
+   <command>svn <option>add</option></command> and <command>svn
+   <option>remove</option></command>.
+  </para>
+
+  <para>
+   To add a new file, enter:
+  </para>
+
+<screen>svn add <replaceable>NEW_FILE</replaceable></screen>
+
+  <para>
+   To delete an old file, enter:
+  </para>
+
+<screen>svn remove <replaceable>OLD_FILE</replaceable></screen>
+
+  <para>
+   If you are finished with adding or deleting files, commit your changes:
+  </para>
+
+<screen>svn commit</screen>
+ </sect1>
+ <sect1 id="sec.svn.cpmv">
+  <title>Copying and Renaming Files</title>
+
+  <para>
+   Unless CVS, Subversion can copy a file and retain its history. Subversion
+   copies a file from a source to a destination. There are four
+   possibilities where the source and destination are located:
+  </para>
+
+  <itemizedlist>
+   <listitem>
     <para>
-    If you need to add new files or remove old files, use
-    the commands <command>svn <option>add</option></command> and
-    <command>svn <option>remove</option></command>.
-   </para>
+     From a working copy to a working copy (WC -> WC)
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     From a working copy to an URL (WC -> URL)
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     From an URL to a working copy (URL -> WC)
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     From an URL to an URL (URL -> URL). Used to branch &amp; tag
+    </para>
+   </listitem>
+  </itemizedlist>
 
-    <para>To add a new file, enter:</para>
-    <screen>svn add <replaceable>NEW_FILE</replaceable></screen>
-    <para>To delete an old file, enter:</para>
-    <screen>svn remove <replaceable>OLD_FILE</replaceable></screen>
-    <para>If you are finished with adding or deleting files, commit your
-      changes:</para>
-    <screen>svn commit</screen>
-  </sect1>
-  <sect1 id="sec.svn.cpmv">
-    <title>Copying and Renaming Files</title>
-    <para>Unless CVS, Subversion can copy a file and retain its
-      history. Subversion copies a file from a source to a destination. There
-      are four possibilities where the source and destination are located:</para>
-    <itemizedlist>
-      <listitem>
-	<para>From a working copy to a working copy (WC -> WC)</para>
-      </listitem>
-      <listitem>
-	<para>From a working copy to an URL (WC -> URL)</para>
-      </listitem>
-      <listitem>
-	<para>From an URL to a working copy (URL -> WC)</para>
-      </listitem>
-      <listitem>
-	<para>From an URL to an URL (URL -> URL). Used to branch &amp; tag</para>
-      </listitem>
-    </itemizedlist>
+  <para>
+   In general, you can copy a file <filename>A</filename> to a file
+   <filename>B</filename> with the following command:
+  </para>
 
-    <para>In general, you can copy a file <filename>A</filename> to a file
-      <filename>B</filename> with the following command:</para>
-    <screen>svn copy A B</screen>
-    <para>After a <command>svn <option>status</option></command> you can see
-      the new file <filename>B</filename> is scheduled for addition. It looks
-      like if you have added and removed a file.</para>
+<screen>svn copy A B</screen>
 
-    <para>To rename or move a file from a source to a destination, use
-      <command>svn <option>move</option></command> or <command>svn
-	<option>rename</option></command> (the two commands are the same, they
-      are just synonyms.) For example:</para>
-    <screen>svn rename X Y</screen>
-    <para>This renames <filename>X</filename> to <filename>Y</filename>. After
-      a <command>svn <option>status</option></command> you can see the renamed file
-      is scheduled for addition.</para>
-    <para>After you copied or renamend the files, you must check in if you want
-    to save it in the repository:</para>
-    <screen>svn ci -m"Copied file" A B
+  <para>
+   After a <command>svn <option>status</option></command> you can see the
+   new file <filename>B</filename> is scheduled for addition. It looks like
+   if you have added and removed a file.
+  </para>
+
+  <para>
+   To rename or move a file from a source to a destination, use <command>svn
+   <option>move</option></command> or <command>svn
+   <option>rename</option></command> (the two commands are the same, they
+   are just synonyms.) For example:
+  </para>
+
+<screen>svn rename X Y</screen>
+
+  <para>
+   This renames <filename>X</filename> to <filename>Y</filename>. After a
+   <command>svn <option>status</option></command> you can see the renamed
+   file is scheduled for addition.
+  </para>
+
+  <para>
+   After you copied or renamend the files, you must check in if you want to
+   save it in the repository:
+  </para>
+
+<screen>svn ci -m"Copied file" A B
 svn ci -m"Renamend file" X Y</screen>
-  </sect1>
-  <sect1 id="sec.svn.revert">
-    <title>Reverting Changes</title>
-    <para>If you want to discard your local changes, you can use the
-      <command>svn <option>revert</option></command> command. It reverts any
-      local changes to a file, directory or any property changes. It can revert
-      scheduling operations like addition, renaming or deletion only. For example:</para>
-    
-    <screen>svn add foo
+ </sect1>
+ <sect1 id="sec.svn.revert">
+  <title>Reverting Changes</title>
+
+  <para>
+   If you want to discard your local changes, you can use the <command>svn
+   <option>revert</option></command> command. It reverts any local changes
+   to a file, directory or any property changes. It can revert scheduling
+   operations like addition, renaming or deletion only. For example:
+  </para>
+
+<screen>svn add foo
 svn revert foo
 
 svn rename foo bar
@@ -607,158 +830,197 @@ svn revert foo bar
 
 svn delete foo
 svn revert foo</screen>
-    <tip>
-      <title>No targets to <command>svn <option>revert</option></command> is a protection</title>
-      <para>The Subversion book <xref linkend="bib.svn"/> says: <quote>If you
-	  provide no target to  <command>svn <option>revert</option></command>,
-	it will do nothing&mdash;to protect you from accidentally losing
-	  changes in your working copy,  <command>svn
-	    <option>revert</option></command> requires you to provide at least
-	  one target.</quote></para>
-    </tip>
-  </sect1>
-  <sect1 id="sec.svn.conflicts">
-    <title>Resolving Conflicts</title>
-    <para>
-    Conflicts occur only when all of the following conditions are met:
+
+  <tip>
+   <title>No targets to <command>svn <option>revert</option></command> is a protection</title>
+   <para>
+    The Subversion book <xref linkend="bib.svn"/> says: <quote>If you
+    provide no target to <command>svn <option>revert</option></command>, it
+    will do nothing&mdash;to protect you from accidentally losing changes in
+    your working copy, <command>svn <option>revert</option></command>
+    requires you to provide at least one target.</quote>
    </para>
-    <itemizedlist>
-      <listitem>
-        <remark>Murx</remark>
-        <para>
-      Two users edit the same file.
-     </para>
-      </listitem>
-      <listitem>
-        <para>
-      These two users also edit the same line.
-     </para>
-      </listitem>
-      <listitem>
-        <para>
-      One of them commits the changes and the other updates.
-     </para>
-      </listitem>
-    </itemizedlist>
+  </tip>
+ </sect1>
+ <sect1 id="sec.svn.conflicts">
+  <title>Resolving Conflicts</title>
+
+  <para>
+   Conflicts occur only when all of the following conditions are met:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <remark>Murx</remark>
     <para>
-    If you update your working directory and Subversion detects a conflict, it
-    changes the contents of the file and inserts <quote>conflict marks</quote>:
-   </para>
-    <screen><![CDATA[<<<<<<< .mine
+     Two users edit the same file.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     These two users also edit the same line.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     One of them commits the changes and the other updates.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   If you update your working directory and Subversion detects a conflict,
+   it changes the contents of the file and inserts <quote>conflict
+   marks</quote>:
+  </para>
+
+<screen><![CDATA[<<<<<<< .mine
   This is a nice line.
 =======
   This is a short line.
 >>>>>>> .r4]]></screen>
+
+  <para>
+   You have the following possibilities:
+  </para>
+
+  <orderedlist>
+   <listitem>
     <para>
-    You have the following possibilities:
-   </para>
-    <orderedlist>
-      <listitem>
-        <para>
-      Remove your version and update the file. You get the latest version
-      from Subversion. This solution works if you do not want to keep your
-	  changes. Or
-     </para>
-      </listitem>
-      <listitem>
-        <para>
-      Resolve the conflict.
-     </para>
-      </listitem>
-    </orderedlist>
+     Remove your version and update the file. You get the latest version
+     from Subversion. This solution works if you do not want to keep your
+     changes. Or
+    </para>
+   </listitem>
+   <listitem>
     <para>
-    To resolve the conflict, proceed as follows:
-   </para>
-    <procedure>
-      <step>
-        <para>
-      Open the file containing the conflict.
-     </para>
-      </step>
-      <step>
-        <para>
-      Search for conflict marks. These marks have the general format:
-     </para>
-        <screen><![CDATA[<<<<<<<]]> <replaceable>FILENAME</replaceable>
+     Resolve the conflict.
+    </para>
+   </listitem>
+  </orderedlist>
+
+  <para>
+   To resolve the conflict, proceed as follows:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Open the file containing the conflict.
+    </para>
+   </step>
+   <step>
+    <para>
+     Search for conflict marks. These marks have the general format:
+    </para>
+<screen><![CDATA[<<<<<<<]]> <replaceable>FILENAME</replaceable>
  <lineannotation>Lines that you have changed</lineannotation>
 =======
  <lineannotation>Lines from the repository</lineannotation>
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; <replaceable>.last revision number from repository</replaceable></screen>
-      </step>
-      <step>
-        <para>
-      Decide which version is preferred (yours or the repository&apos;s), or merge
-      the two lines, delete the conflict marks, and save the result.
-     </para>
-      </step>
-      <step>
-        <para>Remove the conflict state with:</para>
-        <screen>svn resolved <replaceable>FILENAME</replaceable></screen>
-    <para>The command <command>svn resolved</command> fixes some bookkeeping
-     data. </para>
-      </step>
-   <step>
-    <para>Check in your changes</para>
-    <screen>svn ci <replaceable>FILENAME</replaceable></screen>
    </step>
-    </procedure>
-  </sect1>
-  <sect1 id="sec.svn.ci">
-    <title>Checking in your Modifications</title>
-    <para>After you have changed, added, or removed files in your local working
-    directory, you have to commit your files back to the Subversion repository:</para>
-    <procedure>
-      <step>
-        <para>Change your directory to the book sources.</para>
-      </step>
-      <step>
-        <para>Run:</para>
-        <screen>svn ci <replaceable>NAME_OF_YOUR_FILE(S)</replaceable></screen>
-        <para>Replace <replaceable>NAME_OF_YOUR_FILE(S)</replaceable> with the
-      name of your changed file(s). The editor vi opens.</para>
-	<tip>
-	  <title>Check the files before commit</title>
-	  <para>It is possible to check in with the command <command>svn
-	      ci</command>. However, practice showed, that you get modified files that
-	    you do not want to check in at this stage. For this reason it is
-	    probably a good idea to always insert the files in the command line.</para>
-	</tip>
-      </step>
-      <step>
-        <para>Press <keycap>i</keycap> to insert your login message.</para>
-      </step>
-      <step>
-        <para>Close the editor with <keycombo action="seq">
-            <keycap>:</keycap>
-            <keycap>w</keycap>
-            <keycap>q</keycap>
-          </keycombo>. Subversion commits your file(s) with your commit message.</para>
-      </step>
-      <step>
-        <para>If you want to cancel the commit, press <keycombo action="seq">
-            <keycap>:</keycap>
-            <keycap>q</keycap>
-            <keycap>!</keycap>
-          </keycombo> in the vi editor. Subversion lets you determine your actions. Abort
-      with <keycap>a</keycap>.
-      </para>
-      </step>
-    </procedure>
-    <tip>
-      <title>Checking in is always a good Idea</title>
-      <para>Do not hesitate to check in your changes. If you have checked
-	your changes back in our Subversion repository, you are protected from
-	hard disk crash or other loss of data. In other words: Subversion is
-	your backup system.</para>
-      <para>Please make sure that you always check in valid XML.</para>
-    </tip>
-  </sect1>
+   <step>
+    <para>
+     Decide which version is preferred (yours or the repository&apos;s), or
+     merge the two lines, delete the conflict marks, and save the result.
+    </para>
+   </step>
+   <step>
+    <para>
+     Remove the conflict state with:
+    </para>
+<screen>svn resolved <replaceable>FILENAME</replaceable></screen>
+    <para>
+     The command <command>svn resolved</command> fixes some bookkeeping
+     data.
+    </para>
+   </step>
+   <step>
+    <para>
+     Check in your changes
+    </para>
+<screen>svn ci <replaceable>FILENAME</replaceable></screen>
+   </step>
+  </procedure>
+ </sect1>
+ <sect1 id="sec.svn.ci">
+  <title>Checking in your Modifications</title>
 
-  <sect1 id="sec.svn.log">
-    <title>Viewing History</title>
-    <para>If you want to see the history of your files use the <command>svn
-	<option>log</option></command> command. For example:</para>
-    <screen>svn log xml/help.xml
+  <para>
+   After you have changed, added, or removed files in your local working
+   directory, you have to commit your files back to the Subversion
+   repository:
+  </para>
+
+  <procedure>
+   <step>
+    <para>
+     Change your directory to the book sources.
+    </para>
+   </step>
+   <step>
+    <para>
+     Run:
+    </para>
+<screen>svn ci <replaceable>NAME_OF_YOUR_FILE(S)</replaceable></screen>
+    <para>
+     Replace <replaceable>NAME_OF_YOUR_FILE(S)</replaceable> with the name
+     of your changed file(s). The editor vi opens.
+    </para>
+    <tip>
+     <title>Check the files before commit</title>
+     <para>
+      It is possible to check in with the command <command>svn ci</command>.
+      However, practice showed, that you get modified files that you do not
+      want to check in at this stage. For this reason it is probably a good
+      idea to always insert the files in the command line.
+     </para>
+    </tip>
+   </step>
+   <step>
+    <para>
+     Press <keycap>i</keycap> to insert your login message.
+    </para>
+   </step>
+   <step>
+    <para>
+     Close the editor with <keycombo action="seq"> <keycap>:</keycap>
+     <keycap>w</keycap> <keycap>q</keycap> </keycombo>. Subversion commits
+     your file(s) with your commit message.
+    </para>
+   </step>
+   <step>
+    <para>
+     If you want to cancel the commit, press <keycombo action="seq">
+     <keycap>:</keycap> <keycap>q</keycap> <keycap>!</keycap> </keycombo> in
+     the vi editor. Subversion lets you determine your actions. Abort with
+     <keycap>a</keycap>.
+    </para>
+   </step>
+  </procedure>
+
+  <tip>
+   <title>Checking in is always a good Idea</title>
+   <para>
+    Do not hesitate to check in your changes. If you have checked your
+    changes back in our Subversion repository, you are protected from hard
+    disk crash or other loss of data. In other words: Subversion is your
+    backup system.
+   </para>
+   <para>
+    Please make sure that you always check in valid XML.
+   </para>
+  </tip>
+ </sect1>
+ <sect1 id="sec.svn.log">
+  <title>Viewing History</title>
+
+  <para>
+   If you want to see the history of your files use the <command>svn
+   <option>log</option></command> command. For example:
+  </para>
+
+<screen>svn log xml/help.xml
 ------------------------------------------------------------------------
 r2913 | tom | 2005-12-19 13:34:17 +0100 (Mo, 19 Dez 2005) | 1 line
 
@@ -777,61 +1039,68 @@ r2876 | rwalter | 2005-12-18 18:49:53 +0100 (So, 18 Dez 2005) | 3 lines
 
 proofing and comments
 ...</screen>
-    <para>It is more convenient to pipe it to less to browse a long
-      history:</para>
-    <screen>svn log xml/help.xml | less</screen>
-    <para>Quit with <keycap>q</keycap>.</para>
-  </sect1>
 
-  <sect1 id="sec.svn.restore">
-    <title>Restore an old Revision</title>
-    <para>Sometimes you need to restore an old revision from the Subversion
-      repository. Do the following:</para>
-    <remark>Are there any other methods? What about svn merge?</remark>
-    <procedure>
-      <step>
-	<para>Check if your respective file is unchanged. If there are changes
-	  that you do not want to loose, check in first otherwise run
-	  <command>svn <option>revert</option> <replaceable>FILENAME</replaceable></command></para>
-      </step>
-      <step>
-	<para>Determine your revision with <command>svn
-	    <option>log</option></command>. See also <xref linkend="sec.svn.log"/>.</para>
-      </step>
-      <step>
-	<para>Restore your revision and save it; for example (replace
-	  <replaceable>REVISION</replaceable> from the last step):</para>
-	<screen>svn cat -r<replaceable>REVISION</replaceable> \
+  <para>
+   It is more convenient to pipe it to less to browse a long history:
+  </para>
+
+<screen>svn log xml/help.xml | less</screen>
+
+  <para>
+   Quit with <keycap>q</keycap>.
+  </para>
+ </sect1>
+ <sect1 id="sec.svn.restore">
+  <title>Restore an old Revision</title>
+
+  <para>
+   Sometimes you need to restore an old revision from the Subversion
+   repository. Do the following:
+  </para>
+
+  <remark>Are there any other methods? What about svn merge?</remark>
+
+  <procedure>
+   <step>
+    <para>
+     Check if your respective file is unchanged. If there are changes that
+     you do not want to loose, check in first otherwise run <command>svn
+     <option>revert</option> <replaceable>FILENAME</replaceable></command>
+    </para>
+   </step>
+   <step>
+    <para>
+     Determine your revision with <command>svn
+     <option>log</option></command>. See also <xref linkend="sec.svn.log"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Restore your revision and save it; for example (replace
+     <replaceable>REVISION</replaceable> from the last step):
+    </para>
+<screen>svn cat -r<replaceable>REVISION</replaceable> \
   $SVNROOT/trunk/books/en/xml/foo.xml > xml/foo.xml</screen>
-      </step>
-      <step>
-	<para>Check in your changes with a meaningful log message.</para>
-      </step>
-    </procedure>
-  </sect1>
-
-  
-  <bibliography id="biblio">
-    <title>Links</title>
-    <biblioentry id="bib.svn">
-      <abbrev>svn</abbrev>
-      <title>Version Control with Subversion</title>
-      <bibliosource>
-        <ulink url="http://svnbook.red-bean.com/"/>
-      </bibliosource>
-      <author>
-        <firstname>Ben</firstname>
-        <surname>Collins-Sussman</surname>
-      </author>
-      <author>
-        <firstname>Brian</firstname>
-        <othername>W.</othername>
-        <surname>Fitzpatrick</surname>
-      </author>
-      <author>
-        <firstname>Michael</firstname>
-        <surname>Pilato</surname>
-      </author>
-    </biblioentry>
-  </bibliography>
+   </step>
+   <step>
+    <para>
+     Check in your changes with a meaningful log message.
+    </para>
+   </step>
+  </procedure>
+ </sect1>
+ <bibliography id="biblio">
+  <title>Links</title>
+  <biblioentry id="bib.svn"><abbrev>svn</abbrev>
+   <title>Version Control with Subversion</title>
+   <bibliosource><ulink url="http://svnbook.red-bean.com/"/>
+   </bibliosource>
+   <author><firstname>Ben</firstname><surname>Collins-Sussman</surname>
+   </author>
+   <author><firstname>Brian</firstname><othername>W.</othername><surname>Fitzpatrick</surname>
+   </author>
+   <author><firstname>Michael</firstname><surname>Pilato</surname>
+   </author>
+  </biblioentry>
+ </bibliography>
 </article>
