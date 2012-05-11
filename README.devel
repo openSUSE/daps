@@ -31,4 +31,20 @@ ddaps ()
    Add these lines to your ~/.bashrc (or ~/.bashrc.local) Bash config file.
    
 
+----------
+Creating New DAPS Version
+
+In order to create a new daps version, do the following:
+
+1. Adapt version number in configure.ac
+2. Run autogen.sh
+3. Adapt version number in packaging/daps.spec
+4. Commit your changes
+5. Change to the OBS working copy from Documentation:Tools
+   and run daps-fetch-source to get the latest changes from SVN.
+6. Run osc vc and add your change log
+7. Rebuild the package, fix any errors, and commit to OBS.
+
+
+
 Happy Hacking! :)
