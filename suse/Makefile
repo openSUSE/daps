@@ -39,7 +39,7 @@ all: xhtml2html
 	@echo "Ready to install..."
 
 install: create-install-dirs
-	install -m644 schema/novdocx*.{rnc,rng} \
+	install -m644 schema/*.{rnc,rng} \
 	  $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/rng/$(DTDVERSION)
 	install -m644 schema/{*.dtd,*.ent,catalog.xml,CATALOG} \
 	  $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/dtd/$(DTDVERSION)
@@ -62,7 +62,8 @@ create-install-dirs:
 
 .PHONY: clean
 clean:
-	rm -rf catalogs/ schema/novdocx.rnc schema/novdocx.rng xslt/html/
+	rm -rf catalogs/ schema/novdocx-core.rnc schema/novdocx-core.rng \
+		schema/novdocx.rng xslt/html/
 
 # auto-generate the html stylesheets
 #
