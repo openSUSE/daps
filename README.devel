@@ -7,8 +7,7 @@ the development version of daps.
 
 In order to run daps from this working copy, remember the following things:
 
-1. Do NOT run ./configure or ./autogen.sh if you intend to run daps 
-   from this working copy.
+1. Do NOT run ./configure if you intend to run daps from this working copy.
 
 2. If you have run the configure script already, run "svn st" to see any
    modified files and roll them back with "svn revert".
@@ -31,6 +30,17 @@ ddaps ()
    Add these lines to your ~/.bashrc (or ~/.bashrc.local) Bash config file.
    
 
+----------
+Changing automake files
+
+- the only automake files that may be edited are
+  * configure.ac
+  * Makefile.am
+  Do NOT edit any other automake files, since they are generated.
+- Whenever configure.ac or Makefile.am have been changed, you MUST run
+  autogen.sh and submit the resulting changes together with your edits
+
+   
 ----------
 Creating New DAPS Version
 
