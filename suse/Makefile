@@ -39,7 +39,7 @@ all: xhtml2html
 	@echo "Ready to install..."
 
 install: create-install-dirs
-	install -m644 schema/novdocx.{rnc,rng} \
+	install -m644 schema/novdocx*.{rnc,rng} \
 	  $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/rng/$(DTDVERSION)
 	install -m644 schema/{*.dtd,*.ent,catalog.xml,CATALOG} \
 	  $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/dtd/$(DTDVERSION)
@@ -88,11 +88,14 @@ catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION):
 # Generate RELAX NG schemes for novdoc
 #
 
-schema/novdocx.rnc: schema/novdocx.dtd.tmp
-	trang -I dtd $< $@
+schema/novdocx-core.rnc: schema/novdocx.dtd.tmp
+	trang -I dtd -i no-generate-start $< $@
 
-schema/novdocx.rng: schema/novdocx.dtd.tmp
-	trang -I dtd $< $@
+schema/novdocx-core.rng: schema/novdocx.dtd.tmp
+	trang -I dtd -i no-generate-start $< $@
+
+schema/novdocx.rng: schema/novdocx.rnc
+	trang $< $@
 
 # To avoid unknown host errors with trang, we have to switch off the external
 # entities from DocBook by creating a temporary file novdocx.dtd.tmp.
