@@ -9,12 +9,12 @@
 ;; All the code inserted to your documents will be indented correctly and
 ;; the cursor is placed in a way that you can start typing immediately.
 ;;
-;; The macros require the psgml-mode (package psgml). When the macros are
-;; loaded, you will see a new menu "DocBook" listing all the macros and the
-;; corresponding keyboard shortcuts. Of course you can load the macros with
-;; M-x <function-name> as well. The function names all start with "docbook-"
-;; followed by an element string: docbook-remark, docbook-table,
-;; docbook-step, etc. 
+;; The macros require the nxml-mode or, alternatively the psgml-mode (package
+;; psgml). When the macros are loaded, you will see a new menu "DocBook"
+;; listing all the macros and the corresponding keyboard shortcuts. Of course
+;; you can load the macros with M-x <function-name> as well. The function names
+;; all start with "docbook-" followed by an element string: docbook-remark,
+;; docbook-table, docbook-step, etc. 
 ;;
 ;; Load in your emacs customization file (e.g. ~/.emacs) with the following
 ;; command
@@ -337,44 +337,65 @@
   -1"</varlistentry>"\n
 )
 
-;; Create a new menu and keyboard shortcuts
+;;----------------------------------------
+;; Keyboard shortcuts and menu
+
+;; keyboard shortcuts
+(defun docbook-key-bindings ()
+  (local-set-key (kbd "C-c C-c a") 'docbook-annotation)
+  (local-set-key (kbd "C-c C-c c") 'docbook-callout)
+  (local-set-key (kbd "C-c C-c d") 'docbook-docbook)
+  (local-set-key (kbd "C-c C-c f") 'docbook-figure)
+  (local-set-key (kbd "C-c C-c i") 'docbook-indexterm)
+  (local-set-key (kbd "C-c C-c k") 'docbook-keycombo)
+  (local-set-key (kbd "C-c C-c l") 'docbook-listitem)
+  (local-set-key (kbd "C-c C-c m") 'docbook-menuchoice)
+  (local-set-key (kbd "C-c C-c n") 'docbook-novdoc)
+  (local-set-key (kbd "C-c C-c r") 'docbook-remark)
+  (local-set-key (kbd "C-c C-c s") 'docbook-sect)
+  (local-set-key (kbd "C-c C-c p") 'docbook-step)
+  (local-set-key (kbd "C-c C-c t") 'docbook-table)
+  (local-set-key (kbd "C-c C-c v") 'docbook-varlistentry)
+)
+;; menu
+(defun docbook-menu (modemapname)
+  (require 'easymenu)
+  (easy-menu-define docbook-macros modemapname "DocBook Marcos"
+    '("DocBook"
+       ["Insert DocBook page template"  docbook-docbook t]
+       ["Insert NovDoc page template"  docbook-novdoc t]
+       "--"
+       ["Insert annotation" docbook-annotation t]
+       ["Insert callout" docbook-callout t]
+       ["Insert comment" docbook-comment t]
+       ["Insert figure" docbook-figure t]
+       ["Insert indexterm" docbook-indexterm t]
+       ["Insert keycombo" docbook-keycombo t]
+       ["Insert listitem" docbook-listitem t]
+       ["Insert menuchoice" docbook-menuchoice t]
+       ["Insert remark" docbook-remark t]
+       ["Insert sect" docbook-sect t]
+       ["Insert step" docbook-step t]
+       ["Insert table" docbook-table t]
+       ["Insert varlistentry" docbook-varlistentry t]
+    )
+  )
+  (easy-menu-add docbook-macros modemapname)
+)
+  
+
+;;Add key-bindings and menu for psgml mode
 (add-hook 'sgml-mode-hook
   '(lambda ()
-     ;; The keyboard shortcuts
-     (define-key sgml-mode-map (kbd "\C-c\C-ca") 'docbook-annotation)
-     (define-key sgml-mode-map (kbd "\C-c\C-cc") 'docbook-callout)
-     (define-key sgml-mode-map (kbd "\C-c\C-cd") 'docbook-docbook)
-     (define-key sgml-mode-map (kbd "\C-c\C-cf") 'docbook-figure)
-     (define-key sgml-mode-map (kbd "\C-c\C-ci") 'docbook-indexterm)
-     (define-key sgml-mode-map (kbd "\C-c\C-ck") 'docbook-keycombo)
-     (define-key sgml-mode-map (kbd "\C-c\C-cl") 'docbook-listitem)
-     (define-key sgml-mode-map (kbd "\C-c\C-cm") 'docbook-menuchoice)
-     (define-key sgml-mode-map (kbd "\C-c\C-cn") 'docbook-novdoc)
-     (define-key sgml-mode-map (kbd "\C-c\C-cr") 'docbook-remark)
-     (define-key sgml-mode-map (kbd "\C-c\C-cs") 'docbook-sect)
-     (define-key sgml-mode-map (kbd "\C-c\C-cp") 'docbook-step)
-     (define-key sgml-mode-map (kbd "\C-c\C-ct") 'docbook-table)
-     (define-key sgml-mode-map (kbd "\C-c\C-cv") 'docbook-varlistentry)
+     (docbook-key-bindings)
+     (docbook-menu psml-mode-map)
+  )
+)
 
-     ;; The Menu
-     (require 'easymenu)
-     (easy-menu-define docbook-macros sgml-mode-map "DocBook Marcos"
-                      '("DocBook"
-                        ["Insert DocBook page template"  docbook-docbook t]
-                        ["Insert NovDoc page template"  docbook-novdoc t]
-                        "--"
-                        ["Insert annotation" docbook-annotation t]
-                        ["Insert callout" docbook-callout t]
-                        ["Insert comment" docbook-comment t]
-                        ["Insert figure" docbook-figure t]
-                        ["Insert indexterm" docbook-indexterm t]
-                        ["Insert keycombo" docbook-keycombo t]
-                        ["Insert listitem" docbook-listitem t]
-                        ["Insert menuchoice" docbook-menuchoice t]
-                        ["Insert remark" docbook-remark t]
-                        ["Insert sect" docbook-sect t]
-                        ["Insert step" docbook-step t]
-                        ["Insert table" docbook-table t]
-                        ["Insert varlistentry" docbook-varlistentry t]))
-     (easy-menu-add docbook-macros sgml-mode-map)
-))
+;;Add key-bindings and menu for nxml mode
+(add-hook 'nxml-mode-hook
+  '(lambda ()
+     (docbook-key-bindings)
+     (docbook-menu nxml-mode-map)
+  )
+)
