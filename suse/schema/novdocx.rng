@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  
+    novdocx.dtd is a subset of DocBook and all instances should be valid
+    DocBook files, however, the docbookx.dtd is not directly referenced.
+  
+    Use this file with Emacs and nXML or any other XML editor which
+    supports RELAX NG.
+  
+   ** This file just definies the start pattern, but not the core
+      elements for Novdoc. The core elements are definied in the
+      novdoc-core.rnc file which is converted from the DTD during
+      installation. 
+      It can be manually created by running trang with the 
+       -i no-generate-start option:
+      $ trang -i no-generate-start novdocx.dtd novdocx-core.rnc
+   **
+  
+    Copyright 2012 Thomas Schraitle <toms@opensuse.org>
+  
+-->
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0">
+  <include href="novdocx-core.rng"/>
+  <define name="structure">
+    <choice>
+      <ref name="appendix">
+        <a:documentation>Contains all divison-like elements</a:documentation>
+      </ref>
+      <ref name="article"/>
+      <ref name="book"/>
+      <ref name="bridgehead"/>
+      <ref name="chapter"/>
+      <ref name="legalnotice"/>
+      <ref name="glossary"/>
+      <ref name="preface"/>
+      <ref name="refentry"/>
+      <ref name="refsect1"/>
+      <ref name="refsect2"/>
+      <ref name="refsect3"/>
+      <ref name="set"/>
+      <ref name="sect1"/>
+      <ref name="sect2"/>
+      <ref name="sect3"/>
+      <ref name="sect4"/>
+    </choice>
+  </define>
+  <define name="block">
+    <choice>
+      <!--
+        HINT: figure_s_ and table_s_ are a pattern, not an element
+        definition
+      -->
+      <ref name="abstract">
+        <a:documentation>Contains all block elements</a:documentation>
+      </ref>
+      <ref name="example"/>
+      <ref name="figures"/>
+      <ref name="tables"/>
+      <ref name="screen"/>
+      <ref name="procedure"/>
+      <ref name="admonitions"/>
+      <ref name="lists"/>
+    </choice>
+  </define>
+  <start>
+    <choice>
+      <ref name="structure"/>
+      <ref name="block"/>
+    </choice>
+  </start>
+</grammar>
