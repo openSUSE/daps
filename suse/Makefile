@@ -32,7 +32,7 @@ PREFIX    ?= /usr/share
 STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
-all: schema/novdocx.rnc schema/novdocx.rng
+all: schema/novdocx-core.rnc schema/novdocx-core.rng schema/novdocx.rng
 all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
 all: xhtml2html
