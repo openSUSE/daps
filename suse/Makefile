@@ -95,9 +95,6 @@ schema/novdocx-core.rnc: schema/novdocx.dtd.tmp
 schema/novdocx-core.rng: schema/novdocx.dtd.tmp
 	trang -I dtd -i no-generate-start $< $@
 
-schema/novdocx.rng: schema/novdocx.rnc
-	trang $< $@
-
 # To avoid unknown host errors with trang, we have to switch off the external
 # entities from DocBook by creating a temporary file novdocx.dtd.tmp.
 # As the entities are not used in RELAX NG anyway, this is uncritical.
