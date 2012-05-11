@@ -128,7 +128,7 @@ catalogs/$(SUSEXSL_FOR-CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse-xsl/current" \
-	  "file//$(SUSESTYLES)" $@
+	  "file://$(SUSESTYLES)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
