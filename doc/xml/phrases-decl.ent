@@ -310,3 +310,44 @@
 <!ENTITY daps-co-draft
  '<para>When set to <literal>yes</literal>, a DRAFT watermark appears in PDF or 
    HTML outputs of the document.</para>'>
+   
+<!ENTITY daps-editor   
+ ' <para>
+   As &dapsacr; does not include any editor software, you are completely
+   free in the choice of your XML editor. Basically, you can use any text
+   editor, but it is helpful if the editor supports editing XML in
+   accordance with the DTD you use. A number of open source editors can be
+   extended with plug-ins for automatic tag insertion and completion,
+   insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
+   document is well-formed. If you are already familiar with vi or Emacs,
+   you can configure them to support XML editing mode. If your prefer an
+   editor with a graphical user interface,
+   <ulink url="www.jedit.org/">jEdit</ulink> is a good choice.
+  </para>'>
+  
+  
+<!ENTITY db-structure-elements     
+ ' <para>
+   If you already worked with DocBook, you know about the typical top-level
+   elements (or root elements) for documents: <sgmltag>book</sgmltag> or
+   <sgmltag>article</sgmltag>. For larger documentation projects, another
+   typical root element is <sgmltag>set</sgmltag> (a collection of books).
+  </para>
+
+  <para>
+   To define the individual components of a book, you use structural elements
+   such as <sgmltag>part</sgmltag>, <sgmltag>chapter</sgmltag>, 
+   <sgmltag>preview</sgmltag> or <sgmltag>appendix</sgmltag>. Chapters are 
+   usually subdivided into sections (<sgmltag>section</sgmltag> elements or 
+   <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.). Smaller structural 
+   units are <sgmltag>para</sgmltag> (for paragraphs), or list elements
+   such as <sgmltag>orderlist</sgmltag>, <sgmltag>itemizedlist</sgmltag>, or
+   <sgmltag>variablelist</sgmltag>.
+  </para>
+
+  <para>
+   If you have set up your documentation project from scratch with
+   <command>daps-init</command>, you can explore the example documents that
+   are installed within the directory structure. They show the most commonly
+   used DocBook XML constructs.
+  </para>'>
