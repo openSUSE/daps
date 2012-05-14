@@ -86,7 +86,23 @@
    <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
   </para>
  </sect1>
- <sect1 id="sec.daps.user.edit.validate">
+ 
+ <sect1>
+  <title>Spell Checking</title>
+
+  <para>&dapsacr; comes with a spell checker that is optimized for DocBook
+  documents: Tags and attributes are excluded from the check so that you can
+  focus on the content of the document. The spell checker is based on aspell
+  and can be run from the command line. &dapsacr; also allows you to specify a 
+  custom dictionary.  
+  </para>
+  <para>The basic command to spell check one or multiple XML files: </para>
+   <!--daps-susespell [options] FILELIST-->
+  <screen>&daps-spell; xml/<replaceable>file1</replaceable>.xml xml/<replaceable>file2</replaceable>.xml</screen>
+  <!--taroth 2012-05-14: todo: mention options-->
+  </sect1>
+ 
+  <sect1 id="sec.daps.user.edit.validate">
   <title>Validating Your XML Sources</title>
 
   <para>
@@ -156,11 +172,5 @@ make: *** [validate] Error 3
 </screen>
   </example>
  </sect1>
- <sect1>
-  <title>Spell Checking</title>
 
-  <para>
-   <remark>taroth 2012-03-09: FIXME</remark>
-  </para>
- </sect1>
 </chapter>
