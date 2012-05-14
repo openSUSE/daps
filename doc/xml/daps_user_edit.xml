@@ -11,17 +11,7 @@
  <title>Editing DocBook-XML</title>
  <remark>profiling, checklinks, spellcheck, dynamic product names and numbers</remark>
  <abstract>
-  <para>
-   As &dapsacr; does not include any editor software, you are completely
-   free in the choice of your XML editor. Basically, you can use any text
-   editor, but it is helpful if the editor supports editing XML in
-   accordance with the DTD you use. A number of open source editors can be
-   extended with plug-ins for automatic tag insertion and completion,
-   insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
-   document is well-formed. If you are already familiar with vi or Emacs,
-   you can configure them to support XML editing mode. If your prefer an
-   editor with a graphical user interface, jEdit is a good choice.
-  </para>
+  &daps-editor;
  </abstract>
 <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
      be a great idea-->
@@ -29,30 +19,7 @@
      tips/instructions for individual editors?-->
  <sect1 id="sec.daps.user.edit.basics">
   <title>Basic Structural Elements</title>
-
-  <para>
-   If you already worked with DocBook, you know about the typical top-level
-   elements (or root elements) for documents: <sgmltag>book</sgmltag> or
-   <sgmltag>article</sgmltag>. For larger documentation projects, another
-   typical root element is <sgmltag>set</sgmltag> (a collection of books).
-  </para>
-
-  <para>
-   To define the individual components of a book, other structural elements
-   are used, for example, <sgmltag>part</sgmltag>,
-   <sgmltag>chapter</sgmltag>, or <sgmltag>appendix</sgmltag>. Within a
-   chapter, you will probably also find sections, thus
-   <sgmltag>section</sgmltag> (or <sgmltag>sect1</sgmltag>,
-   <sgmltag>sect2</sgmltag> etc.) are further structural elements, as are
-   <sgmltag>para</sgmltag> (for paragraphs) or <sgmltag>orderlist</sgmltag>.
-  </para>
-
-  <para>
-   If you have set up your documentation project from scratch with
-   <command>daps-init</command>, you can explore the example documents that
-   are installed within the directory structure. They show the most commonly
-   used DocBook XML constructs.
-  </para>
+&db-structure-elements;
  </sect1>
  <sect1 id="sec.daps.user.edit.macros">
   <title>Macros for Automatic Insertion of Complex Elements</title>
