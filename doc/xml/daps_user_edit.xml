@@ -41,8 +41,9 @@
   </para>
 
   <example id="ex.daps.user.vle">
-   <title>A <sgmltag>varlistentry</sgmltag></title>
-<screen>&lt;varlistentry&gt;
+   <title>A <sgmltag>varlistentry</sgmltag>
+   </title>
+   <screen>&lt;varlistentry&gt;
   &lt;term&gt;&lt;/term&gt;
   &lt;listitem&gt;
     &lt;para&gt;&lt;/para&gt;
@@ -71,7 +72,7 @@
     <para>
      Insert the following line:
     </para>
-<screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
+    <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
    </step>
    <step>
     <para>
@@ -86,23 +87,62 @@
    <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
   </para>
  </sect1>
- 
+
  <sect1>
   <title>Spell Checking</title>
 
   <para>&dapsacr; comes with a spell checker that is optimized for DocBook
   documents: Tags and attributes are excluded from the check so that you can
   focus on the content of the document. The spell checker is based on aspell
-  and can be run from the command line. &dapsacr; also allows you to specify a 
-  custom dictionary.  
+  and can be run from the command line. By default, it starts in interactive
+  mode, but you can also run it in <quote>batch</quote> mode where it dumps 
+  a sorted list of misspelled words to standard output. &dapsacr; also allows 
+  you to specify a custom dictionary and the language to use for spelling.
   </para>
-  <para>The basic command to spell check one or multiple XML files: </para>
+  <para>In the following, find some examples for using &daps-spell;:</para>
    <!--daps-susespell [options] FILELIST-->
-  <screen>&daps-spell; xml/<replaceable>file1</replaceable>.xml xml/<replaceable>file2</replaceable>.xml</screen>
-  <!--taroth 2012-05-14: todo: mention options-->
+  <variablelist>
+   <varlistentry>
+    <term>Spell Checking One or Multiple XML Files</term>
+    <listitem>
+     <screen>&daps-spell; xml/<replaceable>file1</replaceable>.xml xml/<replaceable>file2</replaceable>.xml</screen>
+     <para>Checks the specified files with the default dictionary (en_US). 
+     Suggests alternative spellings for each misspelled word and waits for user 
+     interaction.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Spell Checking XML Files in Languages Other than English</term>
+    <listitem>
+     <screen>&daps-spell; --lang=de_DE xml/<replaceable>filename</replaceable>.xml</screen>
+     <para>Checks the specified files with the de_DE dictionary (make sure the
+     specified aspell dictionary is installed). Suggests alternative spellings 
+     for each misspelled word and waits for user interaction. For information 
+     about the language code to use for the <option>--lang</option> option, 
+     run &daps-spell; --help.</para>
+    </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>Spell Checking XML Files in Batch Mode</term>
+    <listitem>
+     <screen>&daps-spell; --list xml/<replaceable>filename</replaceable>.xml > aspell_output.txt</screen>
+     <para>Checks the specified files with the default dictionary (en_US). Returns 
+     a list of misspelled words to standard output and writes them to the file
+     <filename>aspell_output.txt</filename>. You can use the  <option>--list</option> 
+     option to easily collect a list of words that are unknown to aspell and 
+     use this output as basis for a custom aspell wordlist or dictionary.</para>
+    </listitem>
+   </varlistentry><varlistentry>
+    <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
+    <listitem>
+     <screen></screen>
+     <para><!--taroth 2012-05-15: to be continued--></para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
   </sect1>
- 
-  <sect1 id="sec.daps.user.edit.validate">
+
+ <sect1 id="sec.daps.user.edit.validate">
   <title>Validating Your XML Sources</title>
 
   <para>
@@ -136,7 +176,7 @@
     <para>
      To validate all XML files in your book, article or set, enter:
     </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
     <para>
      If the XML files are not valid, &dapsacr; will return the parser
      errors. They include information about the type of error, the
@@ -154,19 +194,19 @@
     <para>
      To validate your files including remarks, enter:
     </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
    </step>
    <step>
     <para>
      To validate your files including XML comments, enter:
     </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
    </step>
   </procedure>
 
   <example>
    <title>Parser Output For Validation Errors</title>
-<screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+   <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3
 </screen>
