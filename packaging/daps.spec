@@ -82,7 +82,6 @@ BuildRequires:  liberation-fonts
 BuildRequires:  LinuxLibertine
 BuildRequires:  mplus-fonts
 BuildRequires:  poppler-tools
-BuildRequires:  xmlformat
 
 %if 0%{?suse_version} >= 1140
 BuildRequires:  perl-checkbot
@@ -157,6 +156,9 @@ Recommends:     ttf-arphic
 Recommends:     unfonts
 # Internal XEP package:
 Recommends:     xep
+
+Recommends:     xmlformat
+
 
 #Obsoletes:      susedoc <= 4.3.27
 Provides:       susedoc < 4.4
