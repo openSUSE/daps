@@ -43,6 +43,8 @@
 <xsl:param name="booktitlepage.bw.logo" select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
 <xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
 
+<xsl:param name="booktitlepage.url">www.suse.com</xsl:param>
+
 
 <!-- Font sizes for Legal Text with sect1[@role='legal'] -->
 <xsl:param name="legal.body.size" select="$body.font.master div 1.75"/>

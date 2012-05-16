@@ -36,7 +36,9 @@
             font-size="11pt"
             font-family="{$sans.font.family}"
             y="12.5"
-            x="102mm">www.suse.com</svg:text>
+            x="102mm">
+        <xsl:value-of select="$booktitlepage.url"/>
+      </svg:text>
       <svg:text
             id="productnumber.text"
             x="5"
