@@ -135,11 +135,17 @@
    </varlistentry><varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
-     <screen></screen>
-     <para><!--taroth 2012-05-15: to be continued--></para>
+     <screen>&daps-spell; --dict /<replaceable>absolute_path_to_custom_dict</replaceable> xml/<replaceable>filename</replaceable>.xml</screen>
+     <para>Checks the specified files with the default dictionary (en_US) plus 
+     the additional custom dictionary specified with <option>--dict</option>.
+     <remark>taroth 2012-05-16: currently, the SUSE-specific dictionary
+     (/usr/share/daps/lib/suse_aspell.rws) is used in addition per default. 
+     "Specify --dict= if you do not want to use any additional dictionary." -
+     check with fs (bound to change for the future)</remark></para>
     </listitem>
    </varlistentry>
   </variablelist>
+  <!--taroth 2012-05-16: todo - maybe add how to add (custom) dictionary to editor?-->
   </sect1>
 
  <sect1 id="sec.daps.user.edit.validate">
