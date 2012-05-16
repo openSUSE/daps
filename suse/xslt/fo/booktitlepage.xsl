@@ -208,8 +208,8 @@
       </xsl:call-template>
       <xsl:text>: </xsl:text>
     </fo:inline>
-    <xsl:for-each select="author|authorgroup">
-      <xsl:apply-templates select="self::author[current()]"/>
+    <xsl:for-each select="author|editor">
+      <xsl:apply-templates select="(self::author|self::editor)[current()]"/>
       <xsl:choose>
          <xsl:when test="position() = last()"/> <!-- do nothing -->
          <xsl:otherwise>
