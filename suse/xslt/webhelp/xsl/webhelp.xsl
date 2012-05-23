@@ -8,6 +8,11 @@
 
     <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl"/>
 
+<xsl:param name="webhelp.logo">
+  <xsl:value-of select="$webhelp.common.dir"/>
+  <xsl:text>images/logo.png</xsl:text>
+</xsl:param>
+
     <xsl:output
             method="html"
             encoding="utf-8"
@@ -621,7 +626,7 @@ border: none; background: none; font-weight: none; color: none; }
                     </xsl:choose>
                 </xsl:attribute>
             <img style='margin-right: 2px; height: 49px; padding-right: 25px; padding-top: 8px' align="right"
-                src='{$webhelp.common.dir}images/logo.png' alt="{$brandname} Documentation"/>
+                src='{$webhelp.logo}' alt="{$brandname} Documentation"/>
             </a>
             <!-- Display the page title and the main heading(parent) of it-->
             <h1>
@@ -716,7 +721,7 @@ border: none; background: none; font-weight: none; color: none; }
 
     <xsl:template name="webhelpheader.logo">
       <img style='margin-right: 2px; height: 59px; padding-right: 25px; padding-top: 8px' align="right"
-	   src='{$webhelp.common.dir}images/logo.png' alt="Company Logo"/>
+	   src='{$webhelp.logo}' alt="Company Logo"/>
     </xsl:template>
 
     <xsl:template name="user.webhelp.navheader.content"/>
