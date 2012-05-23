@@ -39,6 +39,9 @@ VARLIST=(
     DISTVER
     PRODUCTNAME
     PRODUCTNAMEREG
+    ASPELL_EXTRA_DICT
+    ASPELL_LANG
+    ASPELL_SKIP_TAGS
     BUILD_DIR
     CB_OPTIONS
     COLOR
@@ -264,6 +267,7 @@ SUBCOMMANDS=(
     [remaininggraphics]=filelists
     [showenv]=show_env
     [showvariable]=profile_first
+    [spellcheck]=spellcheck
     [text]=build_generic
     [text-name]=show_names
     [txt]=build_generic
@@ -274,6 +278,7 @@ SUBCOMMANDS=(
     [webhelp-dir-name]=show_names
     [wiki-name]=show_names
     [wiki]=build_generic
+    [xmlfiles]=filelists
     [xmlgraphics-bw]=filelists
     [xmlgraphics]=filelists
 )
@@ -353,7 +358,7 @@ HELP_SUBCOMMAND=(
     [prof]="Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory."
     [profile]="Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory."
     [profiledir]="Print the directory name that would result when profiling the XML sources."
-    [projectfiles]="Print a list of all XML source files used in the document referenced\nby the DC- or MAIN-file."
+    [projectfiles]="Print a list of all project files (XML sources, entity declarations, DC-file)\nused by the document referenced by the DC- or MAIN-file."
     [projectgraphics]="Print a list of all source image used in the document referenced\nby the DC- or MAIN-file."
     [provide-color-images]="Convert all image files used in the document referenced by the DC- or MAIN-file.\nAll files will be converted to PNG, \".dia\", \".eps\", and \".fig\" files\nwill also be converted into SVG and PDF. \".svg\" files  will also\nbe converted into PDF."
     [provide-epub-images]="Prepare converted images for inclusion into an eBook."
@@ -362,7 +367,8 @@ HELP_SUBCOMMAND=(
     [remainingfiles]="Print a list of all source XML files _not_ used in the document referenced\nby the DC- or MAIN-file."
     [remaininggraphics]="Print a list of all source images _not_ used in the document referenced\nby the DC- or MAIN-file."
     [showenv]="DEBUGGING: Target reserved for daps-docmanager"
-    [showvariable]="DEBUGGING: Show the value of a given variable.\nUsage: showvariable VARIABLE=<VARNAME>" 
+    [showvariable]="DEBUGGING: Show the value of a given variable.\nUsage: showvariable VARIABLE=<VARNAME>"
+    [spellcheck]="Spellchecks the file specified with --file or the document specified by rootid."
     [text]="Build an ASCII text document the from the XML sources."
     [text-name]="Print the file name that would result when building an ASCII text document."
     [txt]="Build am ASCII text document the from the XML sources."
@@ -374,6 +380,7 @@ HELP_SUBCOMMAND=(
     [webhelp-dir-name]="Print the directory name that would result when building a webhelp document."
     [wiki]="Build a MediaWiki document from the XML sources. Images need to be uploaded\nmanually to the Wiki."
     [wiki-name]="Print the file name that would result when building a MediaWiki document."
+    [xmlfiles]="Print a list of all XML files used in the document referenced\nby the DC- or MAIN-file."
     [xmlgraphics]="Print the list of generated images that will directly be used\nwhen building a document."
     [xmlgraphics-bw]="Print the list of generated grayscale images that will directly be used\nwhen building a document."
 
@@ -476,12 +483,14 @@ Subcommands:
                               set
 
   File lists:
-    projectfiles              Print XML source files used by the book
+    projectfiles              Print project files (XML sources, entity
+                              declarations, DC-file) used by the book
     projectgraphics           Print source graphics used by the book
     missinggraphics           Print missing images
     remainingfiles            Print XML source files _not_ used by the book
     remaininggraphics         Print source graphics _not_ used by the book
-    warn-images                Print a list of non-unique image files
+    warn-images               Print a list of non-unique image files
+    xmlfiles                  Print XML source files used by the book
     xmlgraphics               Print (generated) color graphics really used to
                               generate the books
     xmlgraphics-bw            Print (generated) grayscale graphics really used

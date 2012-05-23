@@ -666,6 +666,14 @@ clean-all real-clean:
 #
 #
 
+.PHONY: xmlfiles
+xmlfiles: $(DOCFILES)
+  ifeq ($(PRETTY_FILELIST), 1)
+	@echo -e "$(subst $(SPACE),\n,$(sort $(DOCFILES)))"
+  else
+	@echo $(sort $(DOCFILES))
+  endif
+
 .PHONY: projectfiles
 projectfiles: $(DOCFILES)
 projectfiles: ENTITIES := $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))

@@ -39,6 +39,10 @@ function parse_args () {
     
     while true ; do
         case "$1" in
+            --check)
+                P_CHECK=1
+                shift
+                ;;
             --comments)
 		P_COMMENTS=1
 		shift
@@ -63,9 +67,9 @@ function parse_args () {
                 sanitize_path "$2" "P_DEF_FILE"
                 shift 2
                 ;;
-            --check)
-                P_CHECK=1
-                shift
+            --extra-dict)
+                sanitize_path "$2" "P_ASPELL_EXTRA_DICT"
+                shift 2
                 ;;
             --file)
                 P_FILE="$2"
@@ -81,6 +85,14 @@ function parse_args () {
                 ;;
             --html4)
                 P_HTML4=1
+                shift
+                ;;
+            --lang)
+                P_LANG="$2"
+                shift 2
+                ;;
+            --list)
+                P_LIST=1
                 shift
                 ;;
             --meta)
@@ -1053,8 +1065,8 @@ function checklink () {
 #
 #  GETIMAGES
 #
-#  Gets a list of images from the file specified with -f or --file
-#  and outputs them as:
+#  Gets a list of images from the file specified with -f or --file or
+#  the document specified by rootid  and outputs them as:
 #   * default:       long list (one file per line)
 #   * --compact:  compact list (single line)
 #   * --viewer=VIEWER: shows images in VIEWER and prints long list to STDOUT
@@ -1067,11 +1079,11 @@ function getimages () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     local COMPACT DEBUG_SAV FILE IMAGEDIR MOD P_FILE
     local PROFDIR SHOW VERBOSITY_SAV
-
+    local -a IMGLIST
+    
     SUB_CMD=$1
     shift
     
-    declare -a IMGLIST
     IMAGEDIR="$DOC_DIR/images/src/"
 
     # any kind of verbosity is unwanted in this case
@@ -1143,6 +1155,9 @@ function getimages () {
     # get the image list
     # we can use projectgraphics, since it returns images for a given rootid
     IMGLIST=( $(call_make projectgraphics) )
+    if [[ 0 != $? ]]; then
+        exit_on_error "Failed to get list of images"
+    fi
 
     if [[ 0 < ${#IMGLIST[@]} ]]; then
         if [[ $COMPACT ]]; then
@@ -1161,7 +1176,95 @@ function getimages () {
             fi
         fi
     fi
+    exit
+}
+
+###########################################################################
+#
+#  SPELLCHECK
+#
+#  Spellchecks a file specified with -f or --file or
+#  the document specified by rootid.
+#
+###########################################################################  
+function spellcheck () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD 
+    local -a FILELIST SKIPLIST
     
+    SUB_CMD=$1
+    shift
+    
+    SHORT_OPTS="h"
+    LONG_OPTS="extra-dict:,file:,help,lang,list,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_extra-dict
+        help_file
+        help_help
+        help_lang
+        help_list
+        help_rootid
+        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
+	exit 0
+    fi
+
+    [[ -n $P_ASPELL_EXTRA_DICT ]]  && ASPELL_EXTRA_DICT="$P_ASPELL_EXTRA_DICT"
+    [[ -n $P_FILE ]] && FILELIST[0]="$P_FILE"
+    [[ -n $P_LANG ]] && ASPELL_LANG="$P_LANG"
+    [[ 1 = $P_LIST ]] && LISTMODE=1
+    
+    # set FILELIST if rootid was specified
+    if [[ -z $P_ROOTID && -z $P_FILE ]]; then
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
+        fi
+    elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
+        exit_on_error "Options --file and --rootid exclude one another.\nPlease specify only one of these options"
+    fi
+                
+    [[ -n $P_ROOTID ]] && export ROOTID="$P_ROOTID"
+
+    if [[ -z ${FILELIST[0]} ]]; then ## --file was not specified
+        FILELIST=( $(call_make xmlfiles) )
+        if [[ 0 != $? ]]; then
+            exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
+        fi
+    fi
+    #------------------
+    # create spellchecking command to eval
+    #
+    # first, create skiplist
+    #
+    COUNT=0
+    for SKIP in ${ASPELL_SKIP_TAGS[@]}; do
+        SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
+        let COUNT++
+    done
+    # now create the command
+    SPELLCMD="/usr/bin/aspell --mode=sgml ${SKIPLIST[@]} --encoding=utf-8 --lang=$ASPELL_LANG"
+    if [[ -n $ASPELL_EXTRA_DICT ]]; then
+        SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
+    fi
+
+    # do spellchecking on the list of files
+    for FILE in ${FILELIST[@]}; do
+        test -f $FILE || ccecho "warn" "File $FILE does not exist"
+        if [[ 1 = $LISTMODE ]]; then
+            LISTOUTPUT=$(eval "$SPELLCMD list < $FILE | sort -u")
+            [[ -n $LISTOUTPUT ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
+            LISTOUTPUT=""
+        else
+            echo "Checking $FILE..."
+            eval "$SPELLCMD -c $FILE"
+        fi
+    done
+    exit
 }
 
 ###########################################################################
@@ -1260,6 +1363,10 @@ function help_def-file () {
     echo "    --def-file=FILE           Specify a DEF-* file containing build
                               information"
 }
+function help_extra-dict () {
+    echo "    --extra-dict=filename     Specify a path to an additional custom disctionary.
+                              Default: unset"
+}
 function help_file () {
     echo "    --file=FILE               Specify the filename of an XML file"
 }
@@ -1275,6 +1382,17 @@ function help_html4 () {
     echo "    --html4                   HTML builds are generated as XHTML files.
                               Force HTML4 with this switch.
                               Default: unset"
+}
+function help_lang () {
+    echo "    --lang                    Specify a language to use for spellcheking.
+                              See \"man aspell \" for details.
+                              Default: en_US"
+}
+function help_list () {
+    echo "    --list                    Dumps a sorted list of misspelled words to
+                              standard output instead of starting the
+                              interactive spellchecker.
+                              Default: en_US"
 }
 function help_modified () {
     echo "    --modified                Print the image's modification time.

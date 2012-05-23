@@ -25,6 +25,59 @@
 # 3. $USER_RC (user config file)
 # 4. $DAPSROOT/etc/system-profile
 
+## Key:         ASPELL_EXTRA_DICT
+## ----------------------             
+## Description: Additional dictionary for spell checker
+## Type:        Absolute path to distionary
+## Default:     ""
+#
+# Specify an additional (custom) dictionary
+ASPELL_EXTRA_DICT=""
+
+## Key:         ASPELL_LANG
+## ----------------------             
+## Description: Language for spell checker
+## Type:        String
+## Default:     en_US
+#
+# NOTE:  Language to use for spellchecker. It uses the same format as the
+#        LANG environmental variable: It consists of  the two letter ISO 639
+#        language code (e.g. 'en' for English) and an optional two letter
+#        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
+#        English). Make sure the respective dictionary for aspell is installed.
+#
+ASPELL_LANG=en_US
+
+## Key:         ASPELL_SKIP_TAGS
+## ----------------------             
+## Description: list of DOcBook XML tags which content should _not_ be
+##              spell-checked
+## Type:        List
+## Default:     ( author command email envar filename firstname guimenu
+##                keycap literal option remark screen surname systemitem
+##                ulink varname xref )
+#
+# NOTE: Spece separated list of tags, needs to be enclosed in brackets
+#
+ASPELL_SKIP_TAGS=(
+    author 
+    command
+    email                 
+    envar
+    filename                
+    firstname
+    guimenu
+    keycap
+    literal                
+    option                
+    remark
+    screen
+    surname
+    systemitem
+    ulink
+    varname
+    xref
+)
 
 ## Key:         BUILD_DIR
 ## ----------------------             
