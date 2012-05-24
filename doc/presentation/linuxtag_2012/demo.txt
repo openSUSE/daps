@@ -1,0 +1,58 @@
+#-------------------------
+#  daps -init
+#-------------------------
+
+daps-init -d /tmp/dapstest -r book
+cd /tmp/dapstest
+ll
+
+# -> show structure
+tree .
+
+#
+# -> explain DC-file
+less DC-daps-example
+
+# -> build pdf with DocBook4 stylesheets
+daps -d=DC-daps-example color-pdf
+
+# -> build html with DocBook4 stylesheets
+daps -d DC-daps-example html
+
+  # OPTIONAL
+  #-> show xsltproc and fop call for color-pdf build:
+  (dapsltcd; cat xsltproc.txt)
+
+#--------------------------
+# Advanced usage
+#--------------------------
+# change into the presentation directory
+dapsltcd
+
+# -> build a Quickstart
+daps -d DC-daps-quick color-pdf
+
+# -> build a Quickstart in draft mode with remarks
+daps -d DC-daps-quick color-pdf --remarks
+
+# -> build a Quickstart with a different set of stylesheets
+daps -d DC-daps-quick --styleroot=../../../suse/xslt/flyer color-pdf
+
+# make that permanent
+vi DC-daps-quick
+
+# -> profiling
+daps -d DC-daps-quick-profile
+
+# html htmlsingle epub txt
+# build a webhelp user guide
+daps -d DC-daps-user webhelp
+
+   # Optional: -> build all other formats
+   for FORMAT in html htmlsingle epub txt webhelp; do daps -d DC-daps-quick $FORMAT; done
+
+#--------------------------
+# Authoring support
+#--------------------------
+
+

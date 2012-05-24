@@ -1,0 +1,19 @@
+#
+# Creating a PDF from the daps-init example
+#
+
+xsltproc \
+  --xinclude
+  --stringparam draft.mode "no" --stringparam format.print 0 \
+  --stringparam callout.graphics.path
+  "/usr/share/xml/docbook/stylesheet/nwalsh/1.75.2/images/callouts/" \
+  --stringparam img.src.path "/tmp/dapstest/build/.images/online/" \
+  --param ulink.show 1 --stringparam fop1.extensions 1 \
+  --stringparam indexfile daps-example.ind \
+  -o /tmp/dapstest/build/.tmp/daps-example-fop_en.fo \
+  /usr/share/xml/docbook/stylesheet/nwalsh/1.75.2/fo/docbook.xsl \
+  /tmp/dapstest/build/.profiled//MAIN-daps-example.xml
+
+/usr/share/daps/libexec/daps-fop \
+  -q /tmp/dapstest/build/.tmp/daps-example-fop_en.fo \
+  /tmp/dapstest/build/daps-example/daps-example_en.pdf
