@@ -88,7 +88,7 @@
   </para>
  </sect1>
 
- <sect1>
+ <sect1 id="sec.daps.user.edit.spell">
   <title>Spell Checking</title>
 
   <para>&dapsacr; comes with a spell checker that is optimized for DocBook
@@ -122,7 +122,7 @@
      run &daps-spell; --help.</para>
     </listitem>
    </varlistentry>
-    <varlistentry>
+   <varlistentry>
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
      <screen>&daps-spell; --list xml/<replaceable>filename</replaceable>.xml > aspell_output.txt</screen>
@@ -132,7 +132,8 @@
      option to easily collect a list of words that are unknown to aspell and 
      use this output as basis for a custom aspell word list or dictionary.</para>
     </listitem>
-   </varlistentry><varlistentry>
+   </varlistentry>
+   <varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
      <screen>&daps-spell; --dict /<replaceable>absolute_path_to_custom_dict</replaceable> xml/<replaceable>filename</replaceable>.xml</screen>
@@ -141,12 +142,124 @@
      <remark>taroth 2012-05-16: currently, the SUSE-specific dictionary
      (/usr/share/daps/lib/suse_aspell.rws) is used in addition per default. 
      "Specify --dict= if you do not want to use any additional dictionary." -
-     check with fs (bound to change for the future)</remark></para>
+     check with fs (bound to change for the future)</remark>
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
-  <!--taroth 2012-05-16: todo - maybe add how to add (custom) dictionary to editor?-->
-  </sect1>
+  <para>To spell check all files that belong to a documentation project, use the 
+  following comand:</para>
+  <screen>daps -d <replaceable>&dc;_FILE</replaceable> spellcheck</screen>
+  <para>One by one, the files are checked with aspell. To abort spell checking of 
+  the current file, press <keycap>X</keycap>. The spell check continues with the
+  next file in the project.</para>
+  <para>For your convenience, you can also integrate &daps-spell; (plus a custom 
+  aspell dictionary, if needed) into your XML editor, so that spelling is checked
+  <quote>on the fly</quote> during editing. Consult your editor's documentation 
+  on how to integrate a custom dictionary. If you use jEdit, proceed as outlined
+  in <xref linkend="pro.daps.spellcheck.jedit"/>.</para>
+  <procedure id="pro.daps.spellcheck.jedit">
+   <title>Integrating &daps-spell; into jEdit</title>
+   <para>
+    <remark>taroth 2012-05-24: check and adjust as the spellchecker will
+   evolve in the future</remark>
+   </para>
+   <step>
+    <para>Start jEdit and select <menuchoice><guimenu>Plugins</guimenu>
+      <guimenu>Plugin Manager</guimenu>
+     </menuchoice>.
+    </para>
+   </step>
+   <step>
+    <para>If the <guimenu>Spell Check</guimenu> plug-in is not already
+    installed, install and activate it.
+    </para>
+   </step>
+   <step>
+    <para>Close jEdit and restart it.</para>
+   </step>
+   <step>
+    <para>Select <menuchoice>
+      <guimenu>Plugins</guimenu>
+      <guimenu>Plugin Options</guimenu>
+     </menuchoice>.</para>
+   </step>
+   <step>
+    <para>In the left navigation pane, select <menuchoice>
+      <guimenu>Spell Check</guimenu>
+      <guimenu>General</guimenu>
+     </menuchoice>.</para>
+   </step>
+   <step>
+    <para>Set <guimenu>Spell-checking engine</guimenu> to
+      <guimenu>Aspell</guimenu> and select the <guimenu>Dictionary to
+      use</guimenu>. </para>
+   </step>
+   <step>
+    <para>If the desired dictionary does not appear in the drop-down list,
+     install the respective aspell dictionary for the language you need and
+     click <guimenu>Refresh list</guimenu>. </para>
+   </step>
+   <step>
+    <para>In the left navigation pane, switch to <menuchoice>
+      <guimenu>Spell Check</guimenu>
+      <guimenu>Syntax handling</guimenu>
+     </menuchoice>.</para>
+   </step>
+   <step>
+    <para>In the table, activate the <guimenu>markup</guimenu> entry and click
+      <guimenu>Edit</guimenu> next to it.</para>
+   </step>
+   <step>
+    <para>In the <guimenu>Token types picker</guimenu>, activate the following
+    entries:</para>
+    <itemizedlist>
+     <listitem>
+      <para>NULL</para>
+     </listitem>
+     <listitem>
+      <para>COMMENT1</para>
+     </listitem>
+     <listitem>
+      <para>LITERAL1</para>
+     </listitem>
+    </itemizedlist>
+   </step>
+   <step>
+    <para>In the left navigation pane, switch to <menuchoice>
+      <guimenu>Spell Check</guimenu>
+      <guimenu>Aspell Engine</guimenu>
+     </menuchoice>.</para>
+   </step>
+   <step>
+    <para>Set the path to the <guimenu>Aspell executable filename</guimenu>. As
+      <guimenu>Markup mode</guimenu>, select <guimenu>Enable markup
+      mode</guimenu>.</para>
+   </step>
+   <step>
+    <para>To use an additional custom aspell dictionary, specify the path to the
+     custom dictionary in the input field below <guimenu>Additional
+     parameters</guimenu>:</para>
+    <screen>--extra-dicts=<replaceable>PATH_TO_CUSTOM_DICT</replaceable>
+    </screen>
+    <para>For example:</para>
+    <screen>--extra-dicts=/home/tux/custom_aspell.rws</screen>
+   </step>
+   <step>
+    <para>Confirm your settings in the plugin options dialog with
+      <guimenu>OK</guimenu> or <guimenu>Apply</guimenu> to finish the
+      integration of &daps-spell;.</para>
+   </step>
+   <step>
+    <para>To execute a spell check during editing, select <menuchoice>
+      <guimenu>Plugins</guimenu>
+      <guimenu>Spell Check</guimenu>
+      <guimenu>Highlight misspelled words</guimenu>
+     </menuchoice> (or use the keyboard shortcut assigned to that menu
+     item).</para>
+   </step>
+  </procedure>
+ </sect1>
 
  <sect1 id="sec.daps.user.edit.validate">
   <title>Validating Your XML Sources</title>
