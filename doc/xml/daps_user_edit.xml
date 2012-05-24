@@ -93,7 +93,7 @@
 
   <para>&dapsacr; comes with a spell checker that is optimized for DocBook
   documents: Tags and attributes are excluded from the check so that you can
-  focus on the content of the document. The spell checker is based on aspell
+  focus on the content of the document. The spell checker is based on &aspell;
   and can be run from the command line. By default, it starts in interactive
   mode, but you can also run it in <quote>batch</quote> mode where it dumps 
   a sorted list of misspelled words to standard output. &dapsacr; also allows 
@@ -116,7 +116,7 @@
     <listitem>
      <screen>&daps-spell; --lang=de_DE xml/<replaceable>filename</replaceable>.xml</screen>
      <para>Checks the specified files with the de_DE dictionary (make sure the
-     specified aspell dictionary is installed). Suggests alternative spellings 
+     specified &aspell; dictionary is installed). Suggests alternative spellings 
      for each misspelled word and waits for user interaction. For information 
      about the language code to use for the <option>--lang</option> option, 
      run &daps-spell; --help.</para>
@@ -129,8 +129,8 @@
      <para>Checks the specified files with the default dictionary (en_US). Returns 
      a list of misspelled words to standard output and writes them to the file
      <filename>aspell_output.txt</filename>. You can use the  <option>--list</option> 
-     option to easily collect a list of words that are unknown to aspell and 
-     use this output as basis for a custom aspell word list or dictionary.</para>
+     option to easily collect a list of words that are unknown to &aspell; and 
+     use this output as basis for a custom &aspell; word list or dictionary.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -150,11 +150,11 @@
   <para>To spell check all files that belong to a documentation project, use the 
   following comand:</para>
   <screen>daps -d <replaceable>&dc;_FILE</replaceable> spellcheck</screen>
-  <para>One by one, the files are checked with aspell. To abort spell checking of 
+  <para>One by one, the files are checked with &aspell;. To abort spell checking of 
   the current file, press <keycap>X</keycap>. The spell check continues with the
   next file in the project.</para>
   <para>For your convenience, you can also integrate &daps-spell; (plus a custom 
-  aspell dictionary, if needed) into your XML editor, so that spelling is checked
+  &aspell; dictionary, if needed) into your XML editor, so that spelling is checked
   <quote>on the fly</quote> during editing. Consult your editor's documentation 
   on how to integrate a custom dictionary. If you use &jedit;, proceed as outlined
   in <xref linkend="pro.daps.spellcheck.jedit"/>.</para>
@@ -197,7 +197,7 @@
    </step>
    <step>
     <para>If the desired dictionary does not appear in the drop-down list,
-     install the respective aspell dictionary for the language you need and
+     install the respective &aspell; dictionary for the language you need and
      click <guimenu>Refresh list</guimenu>. </para>
    </step>
    <step>
@@ -237,7 +237,7 @@
       mode</guimenu>.</para>
    </step>
    <step>
-    <para>To use an additional custom aspell dictionary, specify the path to the
+    <para>To use an additional custom &aspell; dictionary, specify the path to the
      custom dictionary in the input field below <guimenu>Additional
      parameters</guimenu>:</para>
     <screen>--extra-dicts=<replaceable>PATH_TO_CUSTOM_DICT</replaceable>
