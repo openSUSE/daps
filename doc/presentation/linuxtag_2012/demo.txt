@@ -1,28 +1,3 @@
-#-------------------------
-#  daps -init
-#-------------------------
-
-daps-init -d /tmp/dapstest -r book
-cd /tmp/dapstest
-ll
-
-# -> show structure
-tree .
-
-#
-# -> explain DC-file
-less DC-daps-example
-
-# -> build pdf with DocBook4 stylesheets
-daps -d=DC-daps-example color-pdf
-
-# -> build html with DocBook4 stylesheets
-daps -d DC-daps-example html
-
-  # OPTIONAL
-  #-> show xsltproc and fop call for color-pdf build:
-  (dapsltcd; cat xsltproc.txt)
-
 #--------------------------
 # Advanced usage
 #--------------------------
@@ -32,14 +7,14 @@ dapsltcd
 # -> build a Quickstart
 daps -d DC-daps-quick color-pdf
 
-# -> build a Quickstart in draft mode with remarks
-daps -d DC-daps-quick color-pdf --remarks
-
 # -> build a Quickstart with a different set of stylesheets
 daps -d DC-daps-quick --styleroot=../../../suse/xslt/flyer color-pdf
 
 # make that permanent
 vi DC-daps-quick
+
+# -> build a Quickstart in draft mode with remarks
+daps -d DC-daps-quick color-pdf --remarks
 
 # -> profiling
 daps -d DC-daps-quick-profile
@@ -55,4 +30,18 @@ daps -d DC-daps-user webhelp
 # Authoring support
 #--------------------------
 
+#  daps -init
 
+daps-init -d /tmp/dapstest -r book
+cd /tmp/dapstest
+ll
+
+# -> show structure
+tree .
+
+# -> projectfiles
+daps -d DC-daps-user projectfiles --pretty
+
+# -> showimages
+bookcd
+daps -d DC-opensuse-startup getimages --rootid=cha.inst -viewer=xv --modified --show
