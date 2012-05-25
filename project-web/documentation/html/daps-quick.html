@@ -1,45 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DAPS Quick Start</title><link rel="stylesheet" type="text/css" href="daps.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.76.1" /></head><body><div xml:lang="en" class="article" title="DAPS Quick Start" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="art.daps.quickstart"></a>DAPS Quick Start<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#art.daps.quickstart">¶</a></span></h2></div><div class="buildtime"><p>Publication Date 30 Mar 2012</p></div><div><span class="author"><span class="firstname">Christopher-Julian</span> <span class="surname">Zwickl</span>, </span></div><div><span class="author"><span class="firstname">Tanja</span> <span class="surname">Roth</span></span></div></div><hr /></div><div class="toc"><p><strong>Contents</strong></p><dl><dt><span class="sect1"><a href="#sec.daps.quick.audience">1. Target Audience</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.dbversions">2. Supported DocBook Versions</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.req">3. Requirements and Additional Software</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.inst">4. Installation</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.basics">5. Defining Documentation Projects</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.init">6. A Documentation Project From Scratch</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.output">7. Output Formats</a></span></dt><dt><span class="sect1"><a href="#id347450">8. GNU Free Documentation License</a></span></dt></dl></div><div class="abstract" title="Abstract"><div class="titlepage"></div><p>The DocBook Authoring and Publishing Suite (DAPS) is developed as open source software for Linux
- operating systems, licensed under the GPL. A number of  integrated tools, 
- stylesheets, scripts, and makefiles help technical writers in the editing,
- translation and publishing process. DAPS supports single source publishing
- into a number of different output formats, and is suited both for small 
- documentation projects as well as for comprehensive projects, created by 
- multiple authors in a collaborative effort.</p></div><div class="sect1" title="1. Target Audience"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.audience"></a>1. Target Audience<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.audience">¶</a></span></h2></div></div></div><p>This document is intended for users who want to make efficient use of
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DAPS™ FIXME: DAPS Quick Start Guide</title><link rel="stylesheet" type="text/css" href="daps.css" /><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot_9284" /></head><body><div xml:lang="en" class="article" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="art.daps.quick"></a>DAPS Quick Start Guide<span class="permalink"><a title="Copy Permalink" href="#art.daps.quick">¶</a></span></h2></div><div class="buildtime"><p>Publication Date 24 May 2012</p></div><div><span class="author"><span class="firstname">Tanja</span> <span class="surname">Roth</span>, </span></div><div><span class="author"><span class="firstname">Christopher-Julian</span> <span class="surname">Zwickl</span></span></div></div><hr /></div><div class="toc"><p><strong>Contents</strong></p><dl><dt><span class="sect1"><a href="#sec.daps.quick.audience">1. Target Audience</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.dbversions">2. Supported DocBook Versions</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.req">3. Requirements and Additional Software</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.inst">4. Installation</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.basics">5. Defining Documentation Projects</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.init">6. A Documentation Project From Scratch</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.edit">7. Editing DocBook XML Files</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.imgs">8. Image Handling</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.syntax">9. Basic DAPS Syntax</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.output">10. Output Formats</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.migrate">11. Migration of Existing DocBook Projects</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.config">12. DAPS Configuration</a></span></dt><dt><span class="sect1"><a href="#sec.daps.quick.more">13. For More Information</a></span></dt><dt><span class="sect1"><a href="#id378076">14. GNU Free Documentation License</a></span></dt></dl></div><div class="abstract"><div class="titlepage"></div><p>
+   The DocBook Authoring and Publishing Suite (DAPS) is developed as open source software for Linux
+ operating systems and is licensed under the GPL. A number of  integrated
+ tools, stylesheets, scripts, and makefiles help technical writers in the
+ editing, translation and publishing process. DAPS supports single
+ source publishing into a number of different output formats, and is suited
+ both for small documentation projects as well as for comprehensive projects,
+ created by multiple authors in a collaborative effort.
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.audience"></a>1. Target Audience<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.audience">¶</a></span></h2></div></div></div><p>
+   This document is intended for users who want to make efficient use of
  DocBook-XML for editing and publishing their documentation—be it
  documentation sets, individual books, or articles. Key knowledge of XML
  and DocBook is required, as well as key knowledge of using the Bash Shell
- (or command line interfaces in general).</p></div><div class="sect1" title="2. Supported DocBook Versions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.dbversions"></a>2. Supported DocBook Versions<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.dbversions">¶</a></span></h2></div></div></div><p>Currently, DAPS supports only DocBook 4.x. Support for DocBook 5.x is
- planned for version 2.0.</p></div><div class="sect1" title="3. Requirements and Additional Software"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.req"></a>3. Requirements and Additional Software<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req">¶</a></span></h2></div></div></div><p></p><div class="sect2" title="3.1. System Requirements"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.system"></a>3.1. System Requirements<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req.system">¶</a></span></h3></div></div></div><div class="variablelist"><dl><dt><span class="term">RAM, Hard Disk Space, CPU</span></dt><dd><p>DAPS is a lean solution that does not require a lot of system 
-    resources. The disk space consumed mostly depends on the amount of your 
-    documentation sources and the number of output formats you want to generate.
-    If you have multiple or very large documentation projects, a
-    machine with multiple-cores is recommended, but is not required.
-    </p></dd><dt><span class="term">Software</span></dt><dd><p>In addition to DAPS, you need the following software:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
-      An XML (or text) editor of your choice.
-    </p></li><li class="listitem"><p>For generating PDF output: an FO formatter, like FOP 
-       (open source, Apache) or XEP (commercial, RenderX). Antenna House Formatter 
-       (commercial) is currently not supported.</p></li></ul></div><p>When installing DAPS as an RPM package (on any SUSE-based system), 
-     dependencies on other software packages are automatically resolved during 
-     installation. For installing DAPS on other Linux 
-     distributions with <code class="literal">configure</code>, <code class="literal">make</code>,
-     and <code class="literal">make install</code>, make sure the following packages or 
-     tools are installed on your system:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>automake</p></li><li class="listitem"><p>convert (included in the 
-    <code class="systemitem">ImageMagick</code> package)</p></li><li class="listitem"><p>DocBook 4</p></li><li class="listitem"><p>DocBook 4 Stylesheets (usually a separate package)</p></li><li class="listitem"><p>make</p></li><li class="listitem"><p>xmlcatalog (usually part of the package 
-   <code class="systemitem">libxml2</code>, 
-   <code class="systemitem">libxml-utils</code>, or 
-   <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xmllint (usually part of the package 
-   <code class="systemitem">libxml2</code>, 
-   <code class="systemitem">libxml-utils</code>, or 
-   <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xsltproc (if not available as a separate package, it may be included in
-    <code class="systemitem">libxslt</code>)</p></li></ul></div></dd><dt><span class="term">Directory Structure</span></dt><dd><p>For DAPS to work out of the box, it requires a certain
-      organization of your XML files and images within your documentation
-      directory. You can generate the necessary structure with the DAPS 
-      initialization script, <span class="command"><strong>daps-init</strong></span>.</p></dd></dl></div></div><div class="sect2" title="3.2. Additional Software"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.addon"></a>3.2. Additional Software<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.req.addon">¶</a></span></h3></div></div></div><p>To add further components like version management or a workflow mechanism
-   for your projects, use DAPS in combination with the following 
-   software:
-  </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Any version management system, like CVS, Subversion, Mercurial or Git.
+ (or command line interfaces in general).
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.dbversions"></a>2. Supported DocBook Versions<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.dbversions">¶</a></span></h2></div></div></div><p>
+   Currently, DAPS supports only DocBook 4.x. Support for DocBook 5.x is
+ planned for version 2.0.
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.req"></a>3. Requirements and Additional Software<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.req">¶</a></span></h2></div></div></div><p>
+   DAPS is a lean solution that does not require a lot of system
+   resources.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.hw"></a>3.1. Hardware Requirements<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.req.hw">¶</a></span></h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">RAM</span></dt><dd><p>The required amount of RAM mostly depends on the volume of your 
+       documentation projects. For creation of PDF output, 2 GB of RAM are 
+       recommended.</p></dd><dt><span class="term">CPU</span></dt><dd><p>If you have multiple or very large documentation projects, a machine
+       with multiple cores is recommended.</p></dd><dt><span class="term">Hard Disk Space</span></dt><dd><p>The disk space consumed mostly depends on the amount of your 
+       documentation sources and  the number of output formats you want to generate.</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.sw"></a>3.2. Software Requirements<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.req.sw">¶</a></span></h3></div></div></div><p>In addition to DAPS, you need the following software:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p> An XML (or text) editor of your choice. </p></li><li class="listitem"><p>For generating PDF output: an FO formatter, like 
+      <a class="ulink" href="http://projects.apache.org/projects/fop.html" target="_top">FOP</a> or 
+      <a class="ulink" href="http://www.renderx.com" target="_top">XEP</a>. 
+      <a class="ulink" href="http://www.antennahouse.com" target="_top">Antenna House Formatter</a> 
+      is currently not supported. Whereas FOP is an open source product,
+      both XEP and Antenna House are commercial products.</p></li></ul></div><p>When installing DAPS as an RPM package (on any SUSE-based system), 
+   dependencies on other software packages are automatically resolved during 
+   installation.</p><p>For installing the DAPS sources on other Linux distributions (with 
+   <code class="literal">configure</code>, <code class="literal">make</code>, and 
+   <code class="literal">make install</code>), make sure the following packages or 
+   tools are installed on your system. Otherwise the installation scripts will
+   fail.</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>convert (included in the 
+      <code class="systemitem">ImageMagick</code> package)</p></li><li class="listitem"><p>DocBook 4</p></li><li class="listitem"><p>DocBook 4 Stylesheets (usually a separate package)</p></li><li class="listitem"><p>make</p></li><li class="listitem"><p>xmlcatalog (usually part of the package 
+      <code class="systemitem">libxml2</code>, 
+      <code class="systemitem">libxml-utils</code>, or 
+      <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xmllint (usually part of the package 
+     <code class="systemitem">libxml2</code>,
+       <code class="systemitem">libxml-utils</code>, or 
+       <code class="systemitem">libxml-tools</code>)</p></li><li class="listitem"><p>xsltproc (if not available as a separate package, it may be 
+       included in  <code class="systemitem">libxslt</code>)</p></li></ul></div><p>During the installation procedure, the <code class="filename">convert</code> 
+     script informs you about any further missing software packages. Refer to 
+     <a class="xref" href="#pro.daps.quick.inst.tarball" title="Procedure 1. Installing the DAPS Sources">Procedure 1, “Installing the DAPS Sources”</a> for more information.
+     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.further"></a>3.3. Directory Structure<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.req.further">¶</a></span></h3></div></div></div><p>
+    For DAPS to work out of the box, it requires a certain organization
+    of your XML files and images within your documentation directory. For
+    details, refer to <a class="xref" href="#sec.daps.quick.basics.dirstruct" title="5.2. Directory Structure">Section 5.2, “Directory Structure”</a>. You
+    can generate the necessary structure with the DAPS initialization
+    script, <span class="command"><strong>daps-init</strong></span>. For instructions on how to make
+    existing DocBook projects compatible with DAPS, refer to
+    <a class="xref" href="#sec.daps.quick.migrate" title="11. Migration of Existing DocBook Projects">Section 11, “Migration of Existing DocBook Projects”</a>.
+   </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.addon"></a>3.4. Additional Software<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.req.addon">¶</a></span></h3></div></div></div><p>To add further components like version management or a workflow
+   mechanism for your projects, use DAPS in combination with the following 
+   software:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>Any version management system, like CVS, Subversion, Mercurial or Git.
       </p></li><li class="listitem"><p>Docmanager, a command-line tool for adding and retrieving meta-information 
      for all files belonging to a documentation project. Docmanager is especially useful 
      for larger, collaborative projects where it helps you to keep track of 
@@ -49,244 +66,720 @@
    Together with the software components mentioned above, DAPS can be
    used as a fully-fledged authoring and content management system for documentation
    projects based on DocBook.
-  </p></div></div><div class="sect1" title="4. Installation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.inst"></a>4. Installation<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst">¶</a></span></h2></div></div></div><p>The DocBook Authoring and Publishing Suite can be installed and used on any Linux distribution. 
-  Currently, DAPS is available as RPM package for the openSUSE distribution.
-  
-  Eventually, RPM packages for further distributions may become available. 
-  In the meantime, you can download a tarball with the DAPS sources 
-  and install them on any distribution as described in
-  <a class="xref" href="#pro.daps.quick.inst.tarball" title="Procedure 1. Installing the DAPS Sources">Procedure 1, “Installing the DAPS Sources”</a>. 
- </p><div class="sect2" title="4.1. Installing DAPS on openSUSE"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.osuse"></a>4.1. Installing DAPS on openSUSE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.osuse">¶</a></span></h3></div></div></div><p>For openSUSE, the <code class="systemitem">daps</code> package is 
-  available from the <code class="literal">Documentation:Tools</code> repository at 
-  <a class="ulink" href="http://download.opensuse.org/repositories" target="_top">http://download.opensuse.org/repositories</a>. 
-  For the complete path to the repository, add the version number of your openSUSE 
-  installation. For example, the complete repository URL for openSUSE
-  <span class="productnumber">12.1</span> is:
-<a class="ulink" href="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/" target="_top">http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/</a>
-   </p><p>For basic details on how to add software repositories and how to install 
-  software on openSUSE, refer to the openSUSE <em class="citetitle">Reference
-  Guide</em>. The guide is available from 
-  <a class="ulink" href="http://www.suse.com/documentation" target="_top">http://www.suse.com/documentation</a>. 
-  </p><p>Choose one of the following installation methods. Any dependencies to 
-   other packages that are required by DAPS are automatically resolved.</p><div class="variablelist"><dl><dt><span class="term">1-Click Installation from the Internet</span></dt><dd><p>Follow the instructions in the openSUSE 
-     <em class="citetitle">Reference Guide</em>, chapter 
-    <em class="citetitle">Installing Packages from the Internet</em>. Search for 
-    the <code class="systemitem">daps</code> package that matches your 
-    openSUSE version. From the listed results, install the package that is provided 
-    by the repository <code class="literal">Documentation:Tools</code>.
-     </p></dd><dt><span class="term">Installation with YaST (GUI)</span></dt><dd><p>Follow the instructions in the openSUSE 
-     <em class="citetitle">Reference Guide</em>, chapter 
-    <em class="citetitle">Installing Or Removing Software</em>. Add the 
-    <code class="literal">Documentation:Tools</code> repository that matches your openSUSE
-    version—see the introduction to this section. From this repository, 
-    install the <code class="systemitem">daps</code> package.
-    </p></dd><dt><span class="term">Installation with <span class="command"><strong>zypper</strong></span> (command line)</span></dt><dd><p>
-     Follow the instructions in the openSUSE 
-     <em class="citetitle">Reference Guide</em>, chapter 
-    <em class="citetitle">Managing Software with Command Line Tools</em>. Add the 
-    <code class="literal">Documentation:Tools</code> repository that matches your openSUSE
-    version—see the introduction to this section. From this repository, 
-    install the <code class="systemitem">daps</code> package.</p></dd></dl></div></div><div class="sect2" title="4.2. Installing DAPS on Other Linux Distributions"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.other"></a>4.2. Installing DAPS on Other Linux Distributions<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.other">¶</a></span></h3></div></div></div><p>For installation on other Linux distributions, the DAPS sources
-  are available as tarball. They can
-  be installed with <code class="literal">configure</code>, 
-  <code class="literal">make</code>, and <code class="literal">make install</code>.</p><div class="procedure" title="Procedure 1. Installing the DAPS Sources"><a id="pro.daps.quick.inst.tarball"></a><p class="title"><strong>Procedure 1. Installing the DAPS Sources</strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#pro.daps.quick.inst.tarball">¶</a></span></p><p>Before starting the installation, check the DAPS 
-   <a class="xref" href="#sec.daps.quick.req.system" title="3.1. System Requirements">System Requirements</a>
-   and make sure to have all required packages and tools installed.</p><ol class="procedure" type="1"><li><p>Download the DAPS source tarball from 
-   <a class="ulink" href="http://daps.sourceforge.net" target="_top">http://daps.sourceforge.net</a>.
+  </p></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.inst"></a>4. Installation<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.inst">¶</a></span></h2></div></div></div><p>
+   The DocBook Authoring and Publishing Suite can be installed and used on any Linux distribution.
+   Currently, DAPS is available as RPM package for the openSUSE
+   distribution.
    
-     </p></li><li><p>Create a new directory in your file system and unpack the tarball there.</p></li><li id="daps.quick.inst.configure"><p>Change to the newly created directory and start the configure script:</p><pre class="screen">$ ./configure</pre><p>The script checks your system for any software relevant to DAPS or
-    the DAPS installation process. It also creates a makefile that will
-    be used during installation. Based on the analysis, the script shows a 
-    summary that includes the following information:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>the DAPS installation paths,</p></li><li class="listitem"><p>an overview of DAPS features that will be available on your 
-      system if you install DAPS now, and </p></li><li class="listitem"><p>which software is still missing to enable the remaining DAPS 
-      features as well.</p></li></ul></div></li><li><p>Check the summary carefully.</p></li><li><p>Install missing packages, if necessary. After installing new packages, 
-    repeat <a class="xref" href="#daps.quick.inst.configure" title="Step 3">Step 3</a> and check the summary again.</p></li><li><p>If you want to adjust the DAPS installation paths, view the 
-     available options:</p><pre class="screen">$ ./configure --help</pre><p>To create a makefile with custom installation paths, run the configure 
-    script with the desired option.</p></li><li><p>If everything is prepared according to your wishes, enter:</p><pre class="screen">$ make</pre></li><li><p>To start the installation process:</p><pre class="screen">$ make install</pre></li></ol></div><p>
+   Eventually, RPM packages for further distributions may become available.
+   In the meantime, you can download a tarball with the DAPS sources
+   and install them on any distribution as described in
+   <a class="xref" href="#pro.daps.quick.inst.tarball" title="Procedure 1. Installing the DAPS Sources">Procedure 1, “Installing the DAPS Sources”</a>.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.osuse"></a>4.1. Installing DAPS on openSUSE<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.inst.osuse">¶</a></span></h3></div></div></div><p>
+    For openSUSE, the <code class="systemitem">daps</code> package
+    is available from the
+    <code class="systemitem">Documentation:Tools</code> repository at
+    <a class="ulink" href="http://download.opensuse.org/repositories" target="_top">http://download.opensuse.org/repositories</a>.
+    For the complete path to the repository, add the version number of your
+    openSUSE installation. For example, the complete repository URL for
+    openSUSE
+    <span class="productnumber">12.1</span>
+    is:
+    <a class="ulink" href="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/" target="_top">http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/</a>
+   </p><p>
+    For basic details on how to add software repositories and how to install
+    software on openSUSE, refer to the openSUSE <em class="citetitle">Reference
+    Guide</em>. The guide is available from
+    <a class="ulink" href="http://www.suse.com/documentation" target="_top">http://www.suse.com/documentation</a>.
+   </p><p>
+    Choose one of the following installation methods. Dependencies to other
+    packages that are required by DAPS are automatically resolved.
+   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">1-Click Installation from the Internet</span></dt><dd><p>
+       Go to <a class="ulink" href="http://software.opensuse.org/" target="_top">http://software.opensuse.org/</a> and search for the
+       <code class="systemitem">daps</code>. On the resulting
+       page, click <span class="guimenu">daps</span>+<span class="guimenu">Show other
+       versions</span>+<span class="guimenu">Show unstable
+       packages</span>. Select the version that is provided
+       by the repository
+       <code class="systemitem">Documentation:Tools</code>. To start
+       installation of the package click the <span class="guimenu">1-Click
+       Install</span> link next to the selected package.
+      </p></dd><dt><span class="term">Installation with YaST (GUI)</span></dt><dd><p>
+       Add the <code class="systemitem">Documentation:Tools</code>
+       repository that matches your openSUSE version—see the
+       introduction to this section. From this repository, install the
+       <code class="systemitem">daps</code> package. For
+       more information on installing packages with YaST refer to the
+       openSUSE <em class="citetitle">Reference Guide</em>, chapter
+       <em class="citetitle">Installing Or Removing Software</em>.
+      </p></dd><dt><span class="term">Installation with <span class="command"><strong>zypper</strong></span> (command line)</span></dt><dd><p>
+       Add the <code class="systemitem">Documentation:Tools</code>
+       repository that matches your openSUSE version—see the
+       introduction to this section. From this repository, install the
+       <code class="systemitem">daps</code> package. For
+       more information on installing packages with YaST refer to the
+       openSUSE <em class="citetitle">Reference Guide</em>, chapter
+       <em class="citetitle">Managing Software with Command Line Tools</em>.
+      </p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.other"></a>4.2. Installing DAPS on Other Linux Distributions<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.inst.other">¶</a></span></h3></div></div></div><p>
+    For installation on other Linux distributions, the DAPS sources are
+    available as tarball. They can be installed with
+    <code class="literal">configure</code>, <code class="literal">make</code>, and <code class="literal">make
+    install</code>.
+   </p><div class="procedure"><a id="pro.daps.quick.inst.tarball"></a><p class="title"><strong>Procedure 1. Installing the DAPS Sources</strong><span class="permalink"><a title="Copy Permalink" href="#pro.daps.quick.inst.tarball">¶</a></span></p><p>
+     Before starting the installation, check the DAPS
+     <a class="xref" href="#sec.daps.quick.req" title="3. Requirements and Additional Software">Requirements and Additional Software</a> and
+     make sure to have all required packages and tools installed.
+    </p><ol class="procedure" type="1"><li><p>
+      Go to <a class="ulink" href="http://sourceforge.net/projects/daps/files/" target="_top">http://sourceforge.net/projects/daps/files/</a> and
+      download the DAPS source tarball,
+      <code class="filename">daps-<em class="replaceable"><code>versionnumber</code></em>.tar.bz2</code>.
+     </p></li><li><p>
+      Unpack the tarball:
+     </p><pre class="screen">tar xvf daps-<em class="replaceable"><code>versionnumber</code></em>.tar.bz2</pre></li><li id="daps.quick.inst.configure"><p>
+      Change to the newly created <code class="filename">daps</code> subdirectory and
+      start the configure script:
+     </p><pre class="screen">$ ./configure</pre><p>
+      If you want to adjust the DAPS installation paths:
+     </p><ol type="a" class="substeps"><li><p>
+        View the available options with
+       </p><pre class="screen">$ ./configure <code class="option">--help</code></pre></li><li><p>
+        Run the configure script with the desired option.
+       </p></li></ol><p>
+      The script checks your system for any software relevant to DAPS
+      or the DAPS installation process. It also creates a makefile that
+      will be used during installation. Based on the analysis, the script
+      shows a summary that includes the following information:
+     </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+        the DAPS installation paths,
+       </p></li><li class="listitem"><p>
+        an overview of DAPS features that will be available on your
+        system if you install DAPS now, and
+       </p></li><li class="listitem"><p>
+        which software is still missing to enable the remaining DAPS
+        features as well.
+       </p></li></ul></div></li><li><p>
+      Check the summary carefully.
+     </p></li><li><p>
+      Install missing packages, if necessary. After installing new packages,
+      repeat <a class="xref" href="#daps.quick.inst.configure" title="Step 3">Step 3</a> and check the
+      summary again.
+     </p></li><li><p>
+      If everything is prepared according to your wishes, enter:
+     </p><pre class="screen">$ make</pre></li><li><p>
+      Start the installation process with:
+     </p><pre class="screen">$ sudo make install</pre></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.formatter"></a>4.3. Installing and Configuring the FO Formatter<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.inst.formatter">¶</a></span></h3></div></div></div><p>
+    For installation and configuration of an FO formatter (for generating
+    PDF output), refer to its installation instructions (or to your system
+    administrator). For FOP, you usually only need to install the respective
+    FOP package. However, not all FOP packages contain hyphenation pattern
+    files.
     
-   </p></div><div class="sect2" title="4.3. Installing and Configuring the FO Formatter"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.inst.formatter"></a>4.3. Installing and Configuring the FO Formatter<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.inst.formatter">¶</a></span></h3></div></div></div><p>For installation and configuration of an FO formatter (for generating 
-   PDF output), refer to the installation instructions of the product or your 
-   system administrator. For FOP, you usually only need to install the 
-   respective FOP package. However, not all FOP packages contain hyphenation 
-   pattern files. 
-   </p></div></div><div class="sect1" title="5. Defining Documentation Projects"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.basics"></a>5. Defining Documentation Projects<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics">¶</a></span></h2></div></div></div><p>The easiest way to set up a new documentation project from scratch is to
- use the DAPS initialization script. For instructions how to do so, refer
- to <a class="xref" href="#pro.daps.init" title="Procedure 2. Using daps-init">Procedure 2, “Using <span class="command"><strong>daps-init</strong></span>
-   ”</a>. The script automatically creates the 
- <a class="xref" href="#sec.daps.quick.basics.files" title="5.1. Key Files">Key Files</a> and 
- <a class="xref" href="#sec.daps.quick.basics.dirstruct" title="5.2. Directory Structure">Directory Structure</a> 
- you need to get started with DAPS.</p><div class="sect2" title="5.1. Key Files"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.files"></a>5.1. Key Files<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics.files">¶</a></span></h3></div></div></div><p>The following key files define a documentation project so that 
-   it can be processed by DAPS:</p><div class="variablelist"><dl><dt><span class="term">Main File</span></dt><dd><p>An XML file containing the <span class="quote">“<span class="quote">starting point</span>”</span> (the 
+   </p></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.basics"></a>5. Defining Documentation Projects<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.basics">¶</a></span></h2></div></div></div><p>
+   The easiest way to set up a new documentation project from scratch is to
+   use the DAPS initialization script <span class="command"><strong>daps-init</strong></span>. For
+   instructions how to do so, refer to <a class="xref" href="#pro.daps.init" title="Procedure 2. Using daps-init">Procedure 2, “Using <span class="command"><strong>daps-init</strong></span>”</a>. The
+   script automatically creates the
+   <a class="xref" href="#sec.daps.quick.basics.files" title="5.1. Key Files">Key Files</a>
+   and
+   <a class="xref" href="#sec.daps.quick.basics.dirstruct" title="5.2. Directory Structure">Directory Structure</a>
+   that you need to get started with DAPS.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.files"></a>5.1. Key Files<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.basics.files">¶</a></span></h3></div></div></div><p>
+    The following key files define a documentation project so that 
+    it can be processed by DAPS:
+   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Main File</span></dt><dd><p>
+       An XML file containing the <span class="quote">“<span class="quote">starting point</span>”</span> (the
      highest-level object) of your documentation project (for example, 
-     <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). 
-    For larger documentation projects, it is good practice to name the file 
+       <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). For larger
+       documentation projects, it is good practice to name the file
     <code class="filename">MAIN-<em class="replaceable"><code>PROJECTNAME</code></em>.xml</code>, 
-    but you can use any other filename as well.</p></dd><dt><span class="term">Doc Config (DC) File</span></dt><dd><p>
+       but you can use any other filename as well.
+      </p></dd><dt><span class="term">Doc Config (DC) File</span></dt><dd><p>
       A configuration file defining a number of parameters for your
-      documentation project (for example, the main file, layout variants, or 
-      which profiling information to use). Of the multiple parameters that can 
-      be set  in the DC file, the only one required is <em class="parameter"><code>MAIN</code></em>, 
-      pointing to the XML file that you want to process.
-     </p></dd></dl></div></div><div class="sect2" title="5.2. Directory Structure"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.dirstruct"></a>5.2. Directory Structure<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.basics.dirstruct">¶</a></span></h3></div></div></div><p>
-   For DAPS to work out of the box, your XML files and images 
-   must be organized in a specific structure within your documentation directory.
-   <a class="xref" href="#ex.daps.dir.doc" title="Example 1. Directory Structure">Example 1, “Directory Structure”</a> shows the required structure including the
-   key files for a DAPS documentation project. The directories are printed 
-   in bold. You can also create multiple documentation directories for 
-   individual documentation projects, but they all need the substructure 
-   outlined below.</p><div class="example"><a id="ex.daps.dir.doc"></a><p class="title"><strong>Example 1. Directory Structure</strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#ex.daps.dir.doc">¶</a></span></p><div class="example-contents"><pre class="screen"><em class="replaceable"><code>YOUR_DOC_DIR</code></em> <a id="co.docdir.base"></a><img src="style_images/callouts/1.png" alt="1" border="0" />
-  |--DC* <a id="co.docdir.dc"></a><img src="style_images/callouts/2.png" alt="2" border="0" />
-  |--<span class="bold"><strong>images</strong></span> <a id="co.docdir.img"></a><img src="style_images/callouts/3.png" alt="3" border="0" /> 
-     |--<span class="bold"><strong>src</strong></span> <a id="co.docdir.img.src"></a><img src="style_images/callouts/4.png" alt="4" border="0" />
-        |--<span class="bold"><strong>dia</strong></span>
-        |--<span class="bold"><strong>eps</strong></span>
-        |--<span class="bold"><strong>fig</strong></span>
-        |--<span class="bold"><strong>pdf</strong></span>
-        |--<span class="bold"><strong>png</strong></span>
-        |--<span class="bold"><strong>svg</strong></span>
-  |--<span class="bold"><strong>xml</strong></span> <a id="co.docdir.xml"></a><img src="style_images/callouts/5.png" alt="5" border="0" /> 
-     |--MAIN*.xml <a id="co.docdir.main"></a><img src="style_images/callouts/6.png" alt="6" border="0" />    </pre></div></div><br class="example-break" /><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.base"><img src="style_images/callouts/1.png" alt="1" border="0" /></a> </p></td><td valign="top" align="left"><p>
-      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation project.
-     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.dc"><img src="style_images/callouts/2.png" alt="2" border="0" /></a> </p></td><td valign="top" align="left"><p>
-      DC file defining the documentation project. </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.img.src"><img src="style_images/callouts/4.png" alt="4" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      documentation deliverable (for example, the main file, layout variants, or 
+      which profiling information to use). Of the multiple parameters that
+      can be set  in the DC file, the only one required is
+      <em class="parameter"><code>MAIN</code></em>, pointing to the XML file that you want to
+      process. Usually, you create one DC file per book or article. For a 
+      documentation <code class="sgmltag-element">set</code> (a collection of books), 
+      multiple DC files can be defined. This allows you to set different 
+      parameters and different values for individual books in the set.
+     </p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.dirstruct"></a>5.2. Directory Structure<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.basics.dirstruct">¶</a></span></h3></div></div></div><p>
+    For DAPS to work out of the box, your XML files and images must be
+    organized in a specific structure within your documentation directory.
+    <a class="xref" href="#ex.daps.quick.dir.doc" title="Example 1. Directory Structure">Example 1, “Directory Structure”</a> shows the required structure
+    including the key files for a DAPS documentation project. You can
+    also create multiple documentation directories for individual
+    documentation projects, but they all need the substructure outlined
+    below.
+   </p><div class="example"><a id="ex.daps.quick.dir.doc"></a><p class="title"><strong>Example 1. Directory Structure</strong><span class="permalink"><a title="Copy Permalink" href="#ex.daps.quick.dir.doc">¶</a></span></p><div class="example-contents"><pre class="screen"><em class="replaceable"><code>YOUR_DOC_DIR/</code></em><a id="co.quick.docdir.base"><span><img src="style_images/callouts/1.png" alt="1" border="0" /></span></a>
+  |--DC*<a id="co.quick.docdir.dc"><span><img src="style_images/callouts/2.png" alt="2" border="0" /></span></a>
+     |--images/
+     |   |--src/<a id="co.quick.docdir.img.src"><span><img src="style_images/callouts/3.png" alt="3" border="0" /></span></a>
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
+     |--xml/<a id="co.quick.docdir.xml"><span><img src="style_images/callouts/4.png" alt="4" border="0" /></span></a> 
+     |   |--MAIN*.xml<a id="co.quick.docdir.main"><span><img src="style_images/callouts/5.png" alt="5" border="0" /></span></a></pre></div></div><br class="example-break" /><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.base"><span><img src="style_images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation
+      project.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.dc"><span><img src="style_images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      DC file defining the documentation project.
+
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.img.src"><span><img src="style_images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
       Top-level directory for any original images that you want to use in
       the documentation project. Contains subdirectories for images in
       various formats. Any images to be referenced in the XML sources must
-      be put in the respective subdirectories.
-      
-     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.xml"><img src="style_images/callouts/5.png" alt="5" border="0" /></a> </p></td><td valign="top" align="left"><p>
+      be put in the respective subdirectories. For information about
+      referencing images, refer to
+      <a class="xref" href="#sec.daps.quick.imgs.refer" title="8.3. Referencing Images">Section 8.3, “Referencing Images”</a>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.xml"><span><img src="style_images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
       Directory holding the XML files for the documentation project. If you
       declare entities in an external file (for example, in
       <code class="filename">entity-decl.ent</code>), put the entity declaration file
-      here, too.</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.docdir.main"><img src="style_images/callouts/6.png" alt="6" border="0" /></a> </p></td><td valign="top" align="left"><p>
-      The main file of the documentation project. It contains
+      here, too.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.main"><span><img src="style_images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      The Main file of the documentation project. It contains
       <span class="quote">“<span class="quote">references</span>”</span> to other books, chapters, appendices, etc.
-     </p></td></tr></table></div></div></div><div class="sect1" title="6. A Documentation Project From Scratch"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.init"></a>6. A Documentation Project From Scratch<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.init">¶</a></span></h2></div></div></div><p>Use <span class="command"><strong>daps-init</strong></span> to set up a new documentation 
-  project from scratch. The initialization script automatically creates the key 
-  files and directory structure you need to get started with DAPS.
-  View the available options with the command  <span class="command"><strong>daps-init --help</strong></span>. 
-  By default, the script creates a <code class="sgmltag-element">book</code>
- as example document.
-  </p><div class="procedure" title="Procedure 2. Using daps-init"><a id="pro.daps.init"></a><p class="title"><strong>Procedure 2. Using <span class="command"><strong>daps-init</strong></span>
-   </strong><span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#pro.daps.init">¶</a></span></p><ol class="procedure" type="1"><li><p>Create a directory that you want to use as your documentation directory:</p><pre class="screen">$ mkdir <em class="replaceable"><code>DOC_DIR</code></em>    </pre></li><li><p>Create the default directory structure for DAPS (containing an example 
-   <code class="sgmltag-element">book</code>):</p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em>    </pre><p>With the <code class="option">-r</code> option, you can also set another root 
-    element, such as <code class="sgmltag-element">article</code>, for example.To create the default 
-    directory structure with an <code class="sgmltag-element">article</code> example: </p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em> -r article</pre></li><li><p>In case the specified directory does not exists, DAPS asks if to
-   create it. Proceed by pressing <span class="keycap">y</span> or <span class="keycap">n</span>.</p></li><li><p>To see what the output of the XML example file looks like, follow the 
-   instructions on the screen. For example, the following command specifies the 
-   <code class="filename">DC*</code> file to use and the output format to create:</p><pre class="screen">$ daps -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em>/DC-daps-example color-pdf</pre><p>For creation of the PDF, DAPS uses FOP by default 
-    (if no other formatter is specified) and applies the default DocBook 
-    stylesheets (if no custom layout options are defined). At the end of the 
-    transformation process, DAPS shows a message where to find the generated 
-    PDF. By default, all contents generated by DAPS is located in the
-    <code class="filename">build</code> subdirectory. It is automatically created 
-    within your documentation directory.</p></li><li><p>Check your documentation directory for the new files: The text file 
-   <code class="filename">DC-daps-example</code> is annotated and gives you 
-   a rough idea which options can be defined in a DC file. 
-   For having a look at the XML source code of the <code class="sgmltag-element">book</code> or 
-   <code class="sgmltag-element">article</code>, change to the <code class="filename">xml</code> subdirectory 
-   and open the file <code class="filename">MAIN-DC-daps-example.xml</code> in a text or 
-   XML editor.</p></li></ol></div></div><div class="sect1" title="7. Output Formats"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.output"></a>7. Output Formats<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output">¶</a></span></h2></div></div></div><p>DAPS supports a number of different output formats,
-  including <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or ASCII text.
-  
-  </p><p>By default, the DocBook stylesheets are used for generating output formats.
-  But DAPS also allows you to customize your output formats in a very flexible way.
-  
-  </p><div class="sect2" title="7.1. Validation"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.validate"></a>7.1. Validation<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.validate">¶</a></span></h3></div></div></div><p>Generating any output requires that your XML files are well-formed and 
-  can be validated. As soon as any output command is executed, DAPS 
-  automatically runs a validation check first—if it fails, DAPS 
-  returns the parser errors. They include information about the type of error, 
-  the respective file name and the line number where the error occured. 
-  In addition, DAPS shows the path to the profiled XML sources and the 
-  total number of errors.</p><div class="example"><a id="id322819"></a><p class="title"><strong>Example 2. Parser Output For Validation Errors</strong></p><div class="example-contents"><pre class="screen">daps_user_concept.xml:60: element xref: validity error : 
-    IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+     </p></td></tr></table></div></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.init"></a>6. A Documentation Project From Scratch<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.init">¶</a></span></h2></div></div></div><p>
+   Use <span class="command"><strong>daps-init</strong></span> to set up a new documentation project
+   from scratch. The initialization script automatically creates the key
+   files and directory structure you need to get started with DAPS.
+   View the available options with the command <span class="command"><strong>daps-init
+   --help</strong></span>. By default, the script creates a
+   <code class="sgmltag-element">book</code> as example document.
+  </p><div class="procedure"><a id="pro.daps.init"></a><p class="title"><strong>Procedure 2. Using <span class="command"><strong>daps-init</strong></span></strong><span class="permalink"><a title="Copy Permalink" href="#pro.daps.init">¶</a></span></p><ol class="procedure" type="1"><li><p>
+     Create a directory that you want to use as your documentation
+     directory:
+    </p><pre class="screen">$ mkdir <em class="replaceable"><code>DOC_DIR</code></em></pre></li><li><p>
+     Create the default directory structure for DAPS (containing an
+     example <code class="sgmltag-element">book</code>):
+    </p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em></pre><p>
+     With the <code class="option">-r</code> option, you can also set another root
+     element, such as <code class="sgmltag-element">article</code>, for example. To create the
+     default directory structure with an <code class="sgmltag-element">article</code> example:
+    </p><pre class="screen">$ daps-init -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em> -r article</pre></li><li><p>
+     In case the specified directory does not exists, DAPS asks if to
+     create it. Proceed by pressing <span class="keycap">y</span> or
+     <span class="keycap">n</span>.
+    </p></li><li><p>
+     To see what the output of the XML example file looks like, follow the
+     instructions on the screen. For example, the following command
+     specifies the <code class="filename">DC*</code> file
+     (<code class="filename">DC-daps-example</code>) to use and the output format
+     (color PDF) to create:
+    </p><pre class="screen">$ daps -d <em class="replaceable"><code>PATH_TO_DOC_DIR</code></em>/DC-daps-example color-pdf</pre><p>
+     For creation of the PDF, DAPS uses FOP by default (if no other
+     formatter is specified) and applies the default DocBook stylesheets (if
+     no custom layout options are defined). At the end of the transformation
+     process, DAPS shows a message where to find the generated PDF. By
+     default, all contents generated by DAPS is located in the
+     <code class="filename">build</code> subdirectory. It is automatically created
+     within your documentation directory.
+    </p></li><li><p>
+     Check your documentation directory for the new files: The text file
+     <code class="filename">DC-daps-example</code> is annotated and gives you a rough
+     idea which options can be defined in a DC file. For having a look at
+     the XML source code of the <code class="sgmltag-element">book</code> or
+     <code class="sgmltag-element">article</code>, change to the <code class="filename">xml</code>
+     subdirectory and open the file
+     <code class="filename">MAIN-DC-daps-example.xml</code> in a text or XML editor.
+    </p></li></ol></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.edit"></a>7. Editing DocBook XML Files<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.edit">¶</a></span></h2></div></div></div><p>
+   As DAPS does not include any editor software, you are completely
+   free in the choice of your XML editor. Basically, you can use any text
+   editor, but it is helpful if the editor supports editing XML in
+   accordance with the DTD you use. A number of open source editors can be
+   extended with plug-ins for automatic tag insertion and completion,
+   insertion of <code class="sgmltag-element">xref</code> elements and for checks if the XML
+   document is well-formed. If you are already familiar with vi or Emacs,
+   you can configure them to support XML editing mode. If your prefer an
+   editor with a graphical user interface,
+   <a class="ulink" href="www.jedit.org/" target="_top">jEdit</a> is a good choice.
+  </p><p>
+   If you already worked with DocBook, you know about the typical top-level
+   elements (or root elements) for documents: <code class="sgmltag-element">book</code> or
+   <code class="sgmltag-element">article</code>. For larger documentation projects, another
+   typical root element is <code class="sgmltag-element">set</code> (a collection of books).
+  </p><p>
+   To define the individual components of a book, you use structural elements
+   such as <code class="sgmltag-element">part</code>, <code class="sgmltag-element">chapter</code>, 
+   <code class="sgmltag-element">preview</code> or <code class="sgmltag-element">appendix</code>. Chapters are 
+   usually subdivided into sections (<code class="sgmltag-element">section</code> elements or 
+   <code class="sgmltag-element">sect1</code>, <code class="sgmltag-element">sect2</code> etc.). Smaller structural 
+   units are <code class="sgmltag-element">para</code> (for paragraphs), or list elements
+   such as <code class="sgmltag-element">orderlist</code>, <code class="sgmltag-element">itemizedlist</code>, or
+   <code class="sgmltag-element">variablelist</code>.
+  </p><p>
+   If you have set up your documentation project from scratch with
+   <span class="command"><strong>daps-init</strong></span>, you can explore the example documents that
+   are installed within the directory structure. They show the most commonly
+   used DocBook XML constructs.
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.imgs"></a>8. Image Handling<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.imgs">¶</a></span></h2></div></div></div><p>
+   Depending on the output format you generate with DAPS (PDF or HTML
+   for example), the source images you provide and reference in your XML
+   sources are automatically transformed into the appropriate output
+   formats. For example, SVG images are converted to PNG for HTML builds, or
+   color images to grayscale for black-and-white PDFs.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.imgs.types"></a>8.1. Supported Image Types<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.imgs.types">¶</a></span></h3></div></div></div><p>DAPS supports the following types of images:</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+     <code class="filename">DIA</code>
+    </p></li><li class="listitem"><p>
+     <code class="filename">EPS</code> (experimental)
+    </p></li><li class="listitem"><p>
+     <code class="filename">FIG</code>
+    </p></li><li class="listitem"><p>
+     <code class="filename">PDF</code> (experimental)
+    </p></li><li class="listitem"><p>
+     <code class="filename">PNG</code>
+    </p></li><li class="listitem"><p>
+     <code class="filename">SVG</code>
+    </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.imgs.path"></a>8.2. Location of the Images<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.imgs.path">¶</a></span></h3></div></div></div><p>
+    DAPS requires a certain directory structure for your XML sources
+    and for your images that you want to reference in the XML files. For
+    details, refer to
+    <a class="xref" href="#ex.daps.quick.dir.doc" title="Example 1. Directory Structure">Directory Structure</a>.
+    Depending on the file type of your source images, add them to the
+    respective subdirectories in
+    <code class="filename"><em class="replaceable"><code>YOUR_DOC_DIR</code></em>/images/src</code>.
+   </p><div class="important"><table border="0" cellpadding="3" cellspacing="0" width="100%" summary="Important: Unique Image Names"><tr class="head"><td width="32"><img alt="[Important]" src="style_images/important.png" /></td><th align="left">Unique Image Names</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+     The base names of your images need to be unique throughout the image
+     subdirectories. DAPS processes images in parallel processes. For
+     example, if both <code class="filename">images/src/svg/AAA.svg</code> and
+     <code class="filename">images/src/png/AAA.png</code> exist, it is unpredictable
+     if the SVG or the PNG will appear in your output document. Therefore,
+     use different base names: <code class="filename">images/src/svg/AAA.svg</code>
+     and <code class="filename">images/src/svg/BBB.png</code>.
+    </p><p>
+     To search for common image names, use the
+     <span class="command"><strong>warn-images</strong></span> subcommand. It lists all images with
+     non-unique base names for a particular documentation project.
+    </p><pre class="screen">$ daps -d <em class="replaceable"><code>PATH_TO_DOC_DIR/DC-FILE</code></em> warn-images</pre></td></tr></table></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.imgs.refer"></a>8.3. Referencing Images<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.imgs.refer">¶</a></span></h3></div></div></div><p>
+    Provided your images are located in the required default directory,
+    DAPS automatically finds the path to your images. Therefore
+    referencing images in your XML sources is very straightforward: you do
+    not need to include any path in the
+    <code class="sgmltag-attribute">fileref</code> attribute—the
+    file name is enough.
+   </p><p>
+    Furthermore DocBook allows you to reference more than one image to
+    distinguish between different output formats. For example, you can add
+    two references pointing to the same file, but using different images
+    widths for PDF and HTML output. Use the
+    <code class="sgmltag-attribute">role</code> attribute to specify the
+    output format, for example <code class="sgmltag-attvalue">fo</code> or
+    <code class="sgmltag-attvalue">html</code>. See
+    <a class="xref" href="#ex.xml.img.ref" title="Example 2. Image Reference in an XML File">Example 2, “Image Reference in an XML File”</a>.
+   </p><div class="example"><a id="ex.xml.img.ref"></a><p class="title"><strong>Example 2. Image Reference in an XML File</strong><span class="permalink"><a title="Copy Permalink" href="#ex.xml.img.ref">¶</a></span></p><div class="example-contents"><pre class="screen">&lt;figure&gt;
+  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;mediaobject&gt;
+    &lt;imageobject role="fo"&gt;
+      &lt;imagedata fileref="screenshot.png" width="70%"/&gt;
+    &lt;/imageobject&gt;
+    &lt;imageobject role="html"&gt;
+      &lt;imagedata fileref="screenshot.png" width="75%"/&gt;
+    &lt;/imageobject&gt;
+  &lt;/mediaobject&gt;
+&lt;/figure&gt;</pre></div></div><br class="example-break" /></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.syntax"></a>9. Basic DAPS Syntax<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.syntax">¶</a></span></h2></div></div></div><p>
+   Before introducing the key <span class="command"><strong>daps</strong></span> commands to create
+   output formats from your XML documents, let's get familiar with the basic
+   syntax of the <span class="command"><strong>daps</strong></span> command:
+  </p><pre class="screen">$ daps [--global-options] subcommand [--command-options] [arguments]</pre><p>
+   <a class="xref" href="#ex.daps.syntax" title="Example 3. DAPS Syntax">Example 3, “DAPS Syntax”</a> shows an example command that generates
+   HTML output. Global options are used to specify the level of verbosity,
+   and the Doc Config file for creating the output.
+  </p><div class="example"><a id="ex.daps.syntax"></a><p class="title"><strong>Example 3. DAPS Syntax</strong><span class="permalink"><a title="Copy Permalink" href="#ex.daps.syntax">¶</a></span></p><div class="example-contents"><pre class="screen">daps<a id="co.daps.syntax.main"><span><img src="style_images/callouts/1.png" alt="1" border="0" /></span></a> --debug<a id="co.daps.syntax.debug"><span><img src="style_images/callouts/2.png" alt="2" border="0" /></span></a> -d<a id="co.daps.syntax.dc"><span><img src="style_images/callouts/3.png" alt="3" border="0" /></span></a> DC-daps-example html<a id="co.daps.syntax.output"><span><img src="style_images/callouts/4.png" alt="4" border="0" /></span></a> --static<a id="co.daps.syntax.static"><span><img src="style_images/callouts/5.png" alt="5" border="0" /></span></a>
+   </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.main"><span><img src="style_images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Main command: <span class="command"><strong>daps</strong></span>
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.debug"><span><img src="style_images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">--debug</code>: Sets the highest verbosity
+      level (number of messages shown during the transformation process from
+      XML to HTML).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.dc"><span><img src="style_images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">-d</code>: Defines the relative or absolute
+      path to the Doc Config file. In this example, <span class="command"><strong>daps</strong></span> is
+      called in the same directory that holds the Doc Config file.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.output"><span><img src="style_images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Subcommand <span class="command"><strong>html</strong></span>: Defines the output format to
+      create.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.static"><span><img src="style_images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Command option <code class="option">--static</code>: Tells DAPS to copy CSS
+      and image files to the same location like the HTML files. For more
+      information, see <a class="xref" href="#table.daps.output.overview" title="Table 1. DAPS Output Commands and Formats">Table 1, “DAPS Output Commands and Formats”</a>.
+     </p></td></tr></table></div></div></div><br class="example-break" /><p>
+   Generally, DAPS can be executed with or without options. To view the
+   global options and the available subcommands, use the command:
+  </p><pre class="screen">$ daps help</pre><p>
+   For a short help text on a specific <span class="emphasis"><em>subcommand</em></span>, use:
+  </p><pre class="screen">$ daps help <em class="replaceable"><code>subcommand</code></em></pre><p>
+   For example, if you want more information about generating HTML output,
+   run:
+  </p><pre class="screen">$ daps help html</pre><p>
+   The following section introduces the key <span class="command"><strong>daps</strong></span> commands
+   needed to create output formats from XML files. All examples are based on
+   the example files that are provided by the DAPS initialization
+   script. For more information, refer to
+   <a class="xref" href="#sec.daps.quick.init" title="6. A Documentation Project From Scratch">Section 6, “A Documentation Project From Scratch”</a>.
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.output"></a>10. Output Formats<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output">¶</a></span></h2></div></div></div><p>
+   DAPS supports a number of different output formats, including
+   <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or ASCII text.
+
+  </p><p>
+   By default, the DocBook stylesheets are used for generating output
+   formats. But DAPS also allows you to customize your output formats
+   in a very flexible way.
+   
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.validate"></a>10.1. Validation<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.validate">¶</a></span></h3></div></div></div><p>
+    Generating any output requires that your XML files are well-formed and
+    can be validated. As soon as any output command is executed, DAPS
+    automatically runs a validation check first. If it fails, DAPS
+    returns the parser errors, including information about the type of
+    error, the respective file name and the line number where the error
+    occured.
+
+   </p><div class="example"><a id="id390394"></a><p class="title"><strong>Example 4. Parser Output For Validation Errors (link to unknown ID)</strong></p><div class="example-contents"><pre class="screen">daps_user_concept.xml:60: element xref: validity error: 
+IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
-make: *** [validate] Error 3</pre></div></div><br class="example-break" /></div><div class="sect2" title="7.2. Basic DAPS Syntax"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.syntax"></a>7.2. Basic DAPS Syntax<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.syntax">¶</a></span></h3></div></div></div><p>Independent of the individual output format you want to create, 
-  you need to specify the Doc Config file to use:</p><pre class="screen">$ daps -d <em class="replaceable"><code>DC_FILE</code></em> <em class="replaceable"><code>OUTPUT_FORMAT</code></em>   </pre><p>For example:</p><pre class="screen">$ daps -d DC-daps-quick color-pdf</pre><p>If your current directory is not the documentation directory where the DC 
-file is located, also specify the (absolute or relative) path to the DC file.
-For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-pdf</pre><p>At the end of the transformation process, DAPS shows a message 
-  where to find the generated output.</p></div><div class="sect2" title="7.3. Generating Different Output Formats"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.formats"></a>7.3. Generating Different Output Formats<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.formats">¶</a></span></h3></div></div></div><p>The following table gives an overview of the DAPS subcommands for 
-   generating output formats.</p><div class="table"><a id="id327808"></a><p class="title"><strong>Table 1. DAPS Output Commands and Formats</strong></p><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /><col class="3" /></colgroup><thead><tr><th>
-       <p>Subcommand</p>
-      </th><th>
-       <p>Output</p>
-      </th><th>
-       <p>Note</p>
-      </th></tr></thead><tbody><tr><td>
-       <p>color-pdf</p>
-      </td><td>
-       <p>Creates a color PDF (without any cropmarks). Open the result in a PDF viewer.
+make: *** [validate] Error 3</pre></div></div><br class="example-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.syntax"></a>10.2. Basic Syntax for Generating Output<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.syntax">¶</a></span></h3></div></div></div><p>
+    Independent of the individual output format you want to create, you need
+    to specify the Doc Config file to use:
+   </p><pre class="screen">$ daps -d <em class="replaceable"><code>DC_FILE</code></em> <em class="replaceable"><code>OUTPUT_FORMAT</code></em></pre><p>
+    For example:
+   </p><pre class="screen">$ daps -d DC-daps-example color-pdf</pre><p>
+    If your current directory is not the documentation directory where the
+    DC file is located, also specify the (absolute or relative) path to
+    the DC file. For example:
+   </p><pre class="screen">$ daps -d /svn/daps/example/DC-daps-example color-pdf</pre><p>
+    At the end of the transformation process, DAPS shows a message
+    where to find the generated output.
+   </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.formats"></a>10.3. Generating Different Output Formats<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.formats">¶</a></span></h3></div></div></div><p>
+    The following table gives an overview of the DAPS subcommands for
+    generating output formats.
+   </p><div class="table"><a id="table.daps.output.overview"></a><p class="title"><strong>Table 1. DAPS Output Commands and Formats</strong><span class="permalink"><a title="Copy Permalink" href="#table.daps.output.overview">¶</a></span></p><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /><col class="3" /></colgroup><thead><tr><th>
+        <p>
+         Subcommand
         </p>
-      </td><td>
-       <p>Requires an FO formatter. </p>
-      </td></tr><tr><td>
-       <p>dist</p>
-      </td><td>
-       <p>Creates a black and white PDF with cropmarks for each chapter.  Open the 
-        result in a PDF viewer.</p>
-      </td><td>
-       <p>See color-pdf</p>
-      </td></tr><tr><td>
-       <p>epub</p>
-      </td><td>
-       <p>Creates an ePUB book. Open the result in an portable e-book reader 
-        (or with  a software like Calibre).</p>
-      </td><td>
-       <p>
-        
-       </p>
-      </td></tr><tr><td>
-       <p>html</p>
-      </td><td>
-       <p>Creates a subdirectory containing individual HTML files for 
-        all chapters of a book (including also preface, glossary or appendix files).
-        They are named according to the ID of the respective root element.  
-        Open the generated <code class="filename">index.html</code> file in a Web browser 
-        to view the generated HTML from the starting point (ROOTID of the top-level
-        element).</p>
-      </td><td>
-       <p>Images and CSS files are only referenced in the HTML. To copy 
-        these files to the same location like the HTML files, use the
-        <code class="option">--static</code> option. This is useful for creating 
-        distributable HTML builds.</p>
-      </td></tr><tr><td>
-       <p>html-single</p>
-       <p>htmlsingle</p>
-      </td><td>
-       <p>Creates a single HTML file, named after the DC file used 
-        to create the output. Open the generated <code class="filename">*.html</code> file
-        in a Web browser.</p>
-      </td><td>
-       <p>Single HTML files are more convenient for full text searches. 
-        Images and CSS files are only referenced in the HTML. To copy 
-        these files to the same location like the HTML files, use the
-        <code class="option">--static</code> option. This is useful for creating 
-        distributable HTML builds.
+       </th><th>
+        <p>
+         Output
         </p>
-      </td></tr><tr><td>
-       <p>Row 2, Cell 1</p>
-      </td><td>
-       <p>Row 2, Cell 2</p>
-      </td><td>
-       <p>Row 2, Cell 3</p>
-      </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="sect2" title="7.4. Advanced Output Options"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.adv"></a>7.4. Advanced Output Options<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.adv">¶</a></span></h3></div></div></div><p>Instead of always building your complete documentation project 
-   (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or <code class="sgmltag-element">article</code>),
-   DAPS also allows you to build an individual <code class="sgmltag-element">chapter</code> 
-   or <code class="sgmltag-element">part</code>. If you want the output format to 
-   include <code class="sgmltag-element">remark</code> elements or to be marked as a 
-   <code class="literal">draft</code> version, you can tell DAPS to do so.</p><div class="sect3" title="7.4.1. Partial Builds"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.quick.output.adv.partial"></a>7.4.1. Partial Builds<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#sec.daps.quick.output.adv.partial">¶</a></span></h4></div></div></div><p>The <span class="quote">“<span class="quote">starting point</span>”</span> of your documentation project is
-    specified by the <em class="parameter"><code>ROOTID</code></em> parameter. It usually
-    points to the ID of a <code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, 
-    or <code class="sgmltag-element">article</code> and is referenced in the DC file. 
-    Alternatively, specify a ROOTID on the command line by using the 
-    <code class="option">--rootid</code> option. This also allows you to build only a part 
-    of your documentation project (like an individual chapter or part). To do so, 
-    specify the ID of the respective <code class="sgmltag-element">chapter</code> or 
-    <code class="sgmltag-element">part</code> to build.</p><p>If you have set up your working environment with 
-    <span class="command"><strong>daps-init</strong></span> and an example <code class="sgmltag-element">book</code>,
-    the following command will build only the chapter about the most commonly 
-    used DocBook constructs, without any book title page:</p><pre class="screen">$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</pre></div><div class="sect3" title="7.4.2. Output with Remarks or Draft Watermark"><div class="titlepage"><div><div><h4 class="title"><a id="id287775"></a>7.4.2. Output with Remarks or Draft Watermark<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287775">¶</a></span></h4></div></div></div><p></p></div></div></div><div class="sect1" title="8. GNU Free Documentation License"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id347450"></a>8. GNU Free Documentation License<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id347450">¶</a></span></h2></div></div></div><p>
+       </th><th>
+        <p>
+         Note
+        </p>
+       </th></tr></thead><tbody><tr><td>
+        <p>
+         color-pdf
+        </p>
+       </td><td>
+        <p>
+         Creates a color PDF (without any crop marks). Open the result in a
+         PDF viewer.
+        </p>
+       </td><td>
+        <p>
+         Requires an FO formatter.
+
+        </p>
+       </td></tr><tr><td>
+        <p>
+         pdf
+        </p>
+       </td><td>
+        <p>
+         Creates a black-and-white PDF with crop marks, suitable for
+         hand-off to a printing shop. Open the result in a PDF viewer.
+        </p>
+       </td><td>
+        <p>
+         Requires an FO formatter. Creation of crop marks is currently only
+         supported by the XEP FO formatter. All color images are
+         automatically converted to grayscale images.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         html
+        </p>
+       </td><td>
+        <p>
+         Creates a subdirectory containing individual HTML files for all
+         chapters of a book (including also preface, glossary or appendix
+         files).
+
+         Open the generated <code class="filename">index.html</code> file in a Web
+         browser to view the generated HTML from the starting point (ROOTID
+         of the top-level element).
+        </p>
+       </td><td>
+        <p>
+         Images and CSS files are only linked in the resulting directory
+         that contains the HTML files. To copy these files to the same
+         location like the HTML files, use the <code class="option">--static</code>
+         option. This is useful for creating distributable HTML builds.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         html-single
+        </p>
+       </td><td>
+        <p>
+         Creates a single HTML file, named after the DC file used to
+         create the output. Open the generated <code class="filename">*.html</code>
+         file in a Web browser.
+        </p>
+       </td><td>
+        <p>
+         Single HTML files are more convenient for full text searches.
+         Images and CSS files are only linked in the resulting directory
+         that contains the HTML files. To copy these files to the same
+         location like the HTML files, use the <code class="option">--static</code>
+         option. This is useful for creating distributable HTML builds.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         epub
+        </p>
+       </td><td>
+        <p>
+         Creates an ePUB document. Open the result in an portable e-book
+         reader (or with a software like Calibre).
+        </p>
+       </td><td>
+        <p>
+         
+         
+        </p>
+       </td></tr><tr><td>
+        <p>
+         webhelp
+        </p>
+       </td><td>
+        <p>
+         Creates a DocBook Web Help output. Open the generated
+         <code class="filename">index.html</code> file in a Web browser to view the
+         generated HTML from the starting point (ROOTID of the top-level
+         element).
+        </p>
+       </td><td>
+        <p>
+         Experimental feature. Requires a very recent version of the DocBook
+         stylesheets. DocBook Web Help consists of HTML pages with an
+         additional pane, featuring a table of contents and a search
+         function. The table of contents can be expanded and collapsed and
+         is automatically synchronized with the contents pane. The search
+         function weights the search results so that the most relevant
+         results are listed first.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         txt
+        </p>
+       </td><td>
+        <p>
+         Creates an ASCII text output. Open the result in a text editor.
+        </p>
+       </td><td>
+        <p>
+         All images are removed from the output, but their location is
+         indicated in the text by the respective image base name printed in
+         square brackets. A table of contents is automatically generated and
+         is available at the beginning of the text document.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         man
+        </p>
+       </td><td>
+        <p>
+         Creates one or multiple man pages.
+        </p>
+       </td><td>
+        <p>
+         To create man pages, your XML files must contain at least one
+         <code class="sgmltag-element">refentry</code>—be it in a
+         <code class="sgmltag-element">chapter</code>, <code class="sgmltag-element">appendix</code>, or
+         collected in a <code class="sgmltag-element">reference</code> element. When
+         processing a DocBook document with multiple
+         <code class="sgmltag-element">refentry</code> elements (regardless where they
+         appear), DAPS generates one man page file per
+         <code class="sgmltag-element">refentry</code> element. All other parts of the
+         document will be ignored.
+        </p>
+
+       </td></tr><tr><td>
+        <p>
+         jsp
+        </p>
+       </td><td>
+        <p>
+         Creates Java Server Pages (JSP files). The generated
+         <code class="filename">jsp</code> subdirectory contains individual JSP files
+         for all chapters of a book (including also preface, glossary or
+         appendix files).
+
+        </p>
+       </td><td>
+        <p>
+         A JSP file is an HTML page containing a reference to Java servlets
+         or Java Server Side Applets.
+        </p>
+       </td></tr><tr><td>
+        <p>
+         wiki
+        </p>
+       </td><td>
+        <p>
+         Creates a MediaWiki output in a single file. Open the result in a
+         text or MediaWiki editor, and use it as raw input for a MediaWiki
+         article.
+        </p>
+       </td><td>
+        <p>
+         Experimental feature. The output is very basic: Section titles are
+         converted in headlines according to their hierarchy, itemized
+         lists, ordered lists and <code class="sgmltag-element">screen</code> elements are
+         converted to the respective MediaWiki elements.
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.output.adv"></a>10.4. Advanced Output Options<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.adv">¶</a></span></h3></div></div></div><p>
+    Instead of always building your complete documentation project
+    (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or
+    <code class="sgmltag-element">article</code>), DAPS also allows you to build an
+    individual <code class="sgmltag-element">chapter</code> or <code class="sgmltag-element">part</code>. If you
+    want the output format to include <code class="sgmltag-element">remark</code> elements or
+    to be marked as a <code class="literal">draft</code> version, you can tell
+    DAPS to do so.
+   </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.quick.output.adv.partial"></a>10.4.1. Partial Builds<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.adv.partial">¶</a></span></h4></div></div></div><p>
+     The <span class="quote">“<span class="quote">starting point</span>”</span> of your documentation project is
+     usually the root element defined in the Main file that is referenced in
+     the respective Doc Config. Alternatively, specify a ROOTID on the command
+     line by using the <code class="option">--rootid</code> option. This also allows
+     you to build only a part of your documentation project by using the ID
+     of a <code class="sgmltag-element">book</code>, <code class="sgmltag-element">article</code>,
+     <code class="sgmltag-element">glossary</code>, <code class="sgmltag-element">appendix</code>,
+     <code class="sgmltag-element">part</code>, or <code class="sgmltag-element">chapter</code> element.
+    </p><p>
+     For example, if you have set up your working environment with
+     <span class="command"><strong>daps-init</strong></span> and an example <code class="sgmltag-element">book</code>,
+     use the following command to build the first chapter of the book
+     (without the book's title page, table of contents etc.):
+    </p><pre class="screen">$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.quick.output.adv.review"></a>10.4.2. Output with Remarks or Draft Watermark<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.output.adv.review">¶</a></span></h4></div></div></div><p>
+     For publishing a pre-release version of a document that you might want
+     to send to a proofreader for review, use the <code class="option">--draft</code>
+     command option to mark the document as draft version. For example, use
+     the following command to build a color PDF that has a
+     <code class="literal">DRAFT</code> watermark printed on each page:
+    </p><pre class="screen">$ daps -d DC-daps-example color-pdf --draft</pre><p>
+     If you used <code class="sgmltag-element">remark</code> elements in your XML files (for
+     editorial remarks or questions to the proofreader), include the remarks
+     in the output with the <code class="option">--remarks</code> option:
+    </p><pre class="screen">$ daps -d DC-daps-example color-pdf --remarks</pre><p>
+     By default, the content of remark elements is shown in italics in the
+     output format. Enabling remarks automatically turns draft mode on.
+    </p><div class="note"><table border="0" cellpadding="3" cellspacing="0" width="100%" summary="Note: Output with Remarks or Draft Watermark"><tr class="head"><td width="32"><img alt="[Note]" src="style_images/note.png" /></td><th align="left">Output with Remarks or Draft Watermark</th></tr><tr><td colspan="2" align="left" valign="top"><p>
+      The command options <code class="option">--draft</code> option and
+      <code class="option">--remarks</code> are supported for HTML and PDF, but not for
+      all DAPS output formats.
+     </p></td></tr></table></div><p>
+     By default, DAPS adds a string to the base name of the output file
+     to flag output formats generated with special options. Example file
+     names are <code class="filename">daps-example_draft_en.pdf</code> or
+     <code class="filename">daps-example_remarks_draft_en.pdf</code>.
+    </p></div></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.migrate"></a>11. Migration of Existing DocBook Projects<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.migrate">¶</a></span></h2></div></div></div><p>
+   This section provides instructions how to migrate existing DocBook
+   projects so that you can use DAPS for managing and publishing them.
+  </p><div class="procedure"><a id="pro.daps.quick.migrate"></a><p class="title"><strong>Procedure 3. Making DocBook Projects Compatible with DAPS</strong><span class="permalink"><a title="Copy Permalink" href="#pro.daps.quick.migrate">¶</a></span></p><ol class="procedure" type="1"><li><p>
+     If your XML files are distributed across several subdirectories,
+     flatten the hierarchy and put all XML files directly into the
+     <code class="filename">xml</code> subdirectory that is required by DAPS.
+     See
+     <a class="xref" href="#ex.daps.quick.dir.doc" title="Example 1. Directory Structure">Directory Structure</a>.
+     Hosting multiple documentation projects in the same
+     <code class="filename">xml</code> directory is fine as long as the file names
+     are unique. You can put multiple Main files there.
+    </p></li><li><p>
+     If you have any XIncludes or entity declaration files, also put them
+     into the <code class="filename">xml</code> subdirectory.
+    </p></li><li><p>
+     Depending on the file type of your source images, add them to the
+     respective subdirectories in
+     <code class="filename"><em class="replaceable"><code>YOUR_DOC_DIR</code></em>/images/src</code>.
+     The <code class="filename">image</code> directory and its substructure is
+     required by DAPS. For details, refer to
+     <a class="xref" href="#ex.daps.quick.dir.doc" title="Example 1. Directory Structure">Directory Structure</a>.
+    </p></li><li><p>
+     Make sure that the base names of your image files are unique. For
+     details, refer to <a class="xref" href="#sec.daps.quick.imgs.path" title="8.2. Location of the Images">Section 8.2, “Location of the Images”</a>.
+    </p></li><li><p>
+     Adjust all references of image files, Xincludes, and entity
+     declarations, in the existing XML files to match the structure required
+     by DAPS. The references must not include any absolute or relative
+     path, the plain file name is enough.
+     
+    </p></li><li><p>
+     For each deliverable (book, article, set) that you want to generate
+     from your XML files, create a Doc Config file. For more information,
+     refer to <a class="xref" href="#sec.daps.quick.basics.files" title="5.1. Key Files">Section 5.1, “Key Files”</a>. Find a template
+     for DC files in your installed system in
+     <code class="filename">/usr/share/daps/init_templates/DC-file.template</code>.
+    </p></li></ol></div><p>
+   If you already used DAPS' predecessor <code class="literal">susedoc</code>,
+   use the <code class="filename">/usr/bin/daps-envconvert</code> script for
+   migrating your ENV files to DC files. For a short overview of the main
+   changes, refer to
+   <code class="filename">/usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x</code>.
+   In contrast to susedoc, DAPS uses the DocBook layout by default. The
+   SUSE-stylesheets have been moved to a separate package,
+   <code class="systemitem">suse-xsl-stylesheets</code>. It is
+   available from the Documentation:Tools repository. If you want to continue
+   using the SUSE-layout for your documentation projects, install this
+   package in addition to DAPS. To make DAPS use the SUSE
+   layout, adjust the <em class="parameter"><code>STYLEROOT</code></em> parameter in the DC
+   files of your documentation projetcs.
+
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.config"></a>12. DAPS Configuration<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.config">¶</a></span></h2></div></div></div><p>
+   DAPS can be customized to a large degree: per system, per user, and per 
+   document. The configuration file <code class="filename">/etc/daps/config</code> lists all parameters that can
+   be configured, including a short description for each parameter. Parameters 
+   are always defined as <code class="option">KEY="VALUE"</code> pairs. Any parameter can be 
+   set in various locations, which are listed below in ascending order with 
+   regards to their hierarchy. If conflicting values are set for the same parameter, 
+   the value defined in the next higher hierarchy level takes precedence. Values 
+   defined on the command line always take precedence over values set in any other 
+   locations.
+  </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+     <code class="filename">/etc/daps/config</code> (system-wide configuration file)
+    </p></li><li class="listitem"><p>
+     <code class="filename">~/.daps/config</code> (user-specific configuration file)
+    </p></li><li class="listitem"><p>
+     DC (doc config) file of the documentation project (for settings specific 
+     to a document or documentation set)
+    </p></li><li class="listitem"><p>
+     on the fly at the command line by specifing options to a
+     <span class="command"><strong>daps</strong></span> command.
+    </p></li></ul></div></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.more"></a>13. For More Information<span class="permalink"><a title="Copy Permalink" href="#sec.daps.quick.more">¶</a></span></h2></div></div></div><p>
+   This guide gave you a short introduction toDAPS and guided you
+   through the key tasks. To discover more, refer to the other manuals
+   available on DAPS at
+   <a class="ulink" href="https://sourceforge.net/p/daps/home/Home/" target="_top">https://sourceforge.net/p/daps/home/Home/</a>.
+  </p><p>
+   For general discussions and technical support, join the forum at
+   <a class="ulink" href="https://sourceforge.net/p/daps/discussion/" target="_top">https://sourceforge.net/p/daps/discussion/</a>. You do not need a user 
+   account at  <a class="ulink" href="sourceforge.net" target="_top">sourceforge.net</a> for this.
+  </p><p>
+   For bugs or enhancement requests, please open a ticket at 
+   <a class="ulink" href="https://sourceforge.net/p/daps/tickets/add" target="_top">https://sourceforge.net/p/daps/tickets/add</a>. A user account
+   at <a class="ulink" href="sourceforge.net" target="_top">sourceforge.net</a> is recommended, but you
+   may also open tickets anonymously.
+  </p><p>
+   For a complete DocBook reference see
+   <a class="ulink" href="http://www.docbook.org/tdg/en/html/docbook.html" target="_top">
+   <em class="citetitle">DocBook: The Definitive Guide</em></a>.
+  </p><p>
+   If you encounter problems with DAPS, check
+   Chapter 10, <em>Troubleshooting</em> (↑User Guide) for a list of common problems and
+   their solution.
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id378076"></a>14. GNU Free Documentation License<span class="permalink"><a title="Copy Permalink" href="#id378076">¶</a></span></h2></div></div></div><p>
   Version 1.2, November 2002
  </p><p>
   Copyright (C) 2000,2001,2002 Free Software Foundation, Inc. 59 Temple
@@ -294,7 +787,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
  </p><p>
   Everyone is permitted to copy and distribute verbatim copies of this
   license document, but changing it is not allowed.
- </p><div class="sect2" title="8.1. PREAMBLE"><div class="titlepage"><div><div><h3 class="title"><a id="id351637"></a>8.1. PREAMBLE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id351637">¶</a></span></h3></div></div></div><p>
+ </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id458746"></a>14.1. PREAMBLE<span class="permalink"><a title="Copy Permalink" href="#id458746">¶</a></span></h3></div></div></div><p>
    The purpose of this License is to make a manual, textbook, or other
    functional and useful document “free” in the sense of
    freedom: to assure everyone the effective freedom to copy and
@@ -315,7 +808,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    for any textual work, regardless of subject matter or whether it is
    published as a printed book. We recommend this License principally for
    works whose purpose is instruction or reference.
-  </p></div><div class="sect2" title="8.2. APPLICABILITY AND DEFINITIONS"><div class="titlepage"><div><div><h3 class="title"><a id="id363968"></a>8.2. APPLICABILITY AND DEFINITIONS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id363968">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id375606"></a>14.2. APPLICABILITY AND DEFINITIONS<span class="permalink"><a title="Copy Permalink" href="#id375606">¶</a></span></h3></div></div></div><p>
    This License applies to any manual or other work, in any medium, that
    contains a notice placed by the copyright holder saying it can be
    distributed under the terms of this License. Such a notice grants a
@@ -401,7 +894,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    but only as regards disclaiming warranties: any other implication that
    these Warranty Disclaimers may have is void and has no effect on the
    meaning of this License.
-  </p></div><div class="sect2" title="8.3. VERBATIM COPYING"><div class="titlepage"><div><div><h3 class="title"><a id="id287900"></a>8.3. VERBATIM COPYING<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287900">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id394424"></a>14.3. VERBATIM COPYING<span class="permalink"><a title="Copy Permalink" href="#id394424">¶</a></span></h3></div></div></div><p>
    You may copy and distribute the Document in any medium, either
    commercially or noncommercially, provided that this License, the
    copyright notices, and the license notice saying this License applies to
@@ -414,7 +907,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
   </p><p>
    You may also lend copies, under the same conditions stated above, and you
    may publicly display copies.
-  </p></div><div class="sect2" title="8.4. COPYING IN QUANTITY"><div class="titlepage"><div><div><h3 class="title"><a id="id287920"></a>8.4. COPYING IN QUANTITY<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287920">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id390912"></a>14.4. COPYING IN QUANTITY<span class="permalink"><a title="Copy Permalink" href="#id390912">¶</a></span></h3></div></div></div><p>
    If you publish printed copies (or copies in media that commonly have
    printed covers) of the Document, numbering more than 100, and the
    Document’s license notice requires Cover Texts, you must enclose
@@ -448,43 +941,43 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    It is requested, but not required, that you contact the authors of the
    Document well before redistributing any large number of copies, to give
    them a chance to provide you with an updated version of the Document.
-  </p></div><div class="sect2" title="8.5. MODIFICATIONS"><div class="titlepage"><div><div><h3 class="title"><a id="id287278"></a>8.5. MODIFICATIONS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id287278">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id364918"></a>14.5. MODIFICATIONS<span class="permalink"><a title="Copy Permalink" href="#id364918">¶</a></span></h3></div></div></div><p>
    You may copy and distribute a Modified Version of the Document under the
    conditions of sections 2 and 3 above, provided that you release the
    Modified Version under precisely this License, with the Modified Version
    filling the role of the Document, thus licensing distribution and
    modification of the Modified Version to whoever possesses a copy of it.
    In addition, you must do these things in the Modified Version:
-  </p><p title="A."><strong>A. </strong>
+  </p><p><strong>A. </strong>
     Use in the Title Page (and on the covers, if any) a title distinct from
     that of the Document, and from those of previous versions (which should,
     if there were any, be listed in the History section of the Document).
     You may use the same title as a previous version if the original
     publisher of that version gives permission.
-   </p><p title="B."><strong>B. </strong>
+   </p><p><strong>B. </strong>
     List on the Title Page, as authors, one or more persons or entities
     responsible for authorship of the modifications in the Modified Version,
     together with at least five of the principal authors of the Document
     (all of its principal authors, if it has fewer than five), unless they
     release you from this requirement.
-   </p><p title="C."><strong>C. </strong>
+   </p><p><strong>C. </strong>
     State on the Title page the name of the publisher of the Modified
     Version, as the publisher.
-   </p><p title="D."><strong>D. </strong>
+   </p><p><strong>D. </strong>
     Preserve all the copyright notices of the Document.
-   </p><p title="E."><strong>E. </strong>
+   </p><p><strong>E. </strong>
     Add an appropriate copyright notice for your modifications adjacent to
     the other copyright notices.
-   </p><p title="F."><strong>F. </strong>
+   </p><p><strong>F. </strong>
     Include, immediately after the copyright notices, a license notice
     giving the public permission to use the Modified Version under the terms
     of this License, in the form shown in the Addendum below.
-   </p><p title="G."><strong>G. </strong>
+   </p><p><strong>G. </strong>
     Preserve in that license notice the full lists of Invariant Sections and
     required Cover Texts given in the Document’s license notice.
-   </p><p title="H."><strong>H. </strong>
+   </p><p><strong>H. </strong>
     Include an unaltered copy of this License.
-   </p><p title="I."><strong>I. </strong>
+   </p><p><strong>I. </strong>
     Preserve the section Entitled <span class="quote">“<span class="quote">History</span>”</span>, Preserve its
     Title, and add to it an item stating at least the title, year, new
     authors, and publisher of the Modified Version as given on the Title
@@ -492,7 +985,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
     Document, create one stating the title, year, authors, and publisher of
     the Document as given on its Title Page, then add an item describing the
     Modified Version as stated in the previous sentence.
-   </p><p title="J."><strong>J. </strong>
+   </p><p><strong>J. </strong>
     Preserve the network location, if any, given in the Document for public
     access to a Transparent copy of the Document, and likewise the network
     locations given in the Document for previous versions it was based on.
@@ -500,23 +993,23 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
     a network location for a work that was published at least four years
     before the Document itself, or if the original publisher of the version
     it refers to gives permission.
-   </p><p title="K."><strong>K. </strong>
+   </p><p><strong>K. </strong>
     For any section Entitled <span class="quote">“<span class="quote">Acknowledgements</span>”</span> or
     <span class="quote">“<span class="quote">Dedications</span>”</span>, Preserve the Title of the section, and
     preserve in the section all the substance and tone of each of the
     contributor acknowledgements and/or dedications given therein.
-   </p><p title="L."><strong>L. </strong>
+   </p><p><strong>L. </strong>
     Preserve all the Invariant Sections of the Document, unaltered in their
     text and in their titles. Section numbers or the equivalent are not
     considered part of the section titles.
-   </p><p title="M."><strong>M. </strong>
+   </p><p><strong>M. </strong>
     Delete any section Entitled <span class="quote">“<span class="quote">Endorsements</span>”</span>. Such a section
     may not be included in the Modified Version.
-   </p><p title="N."><strong>N. </strong>
+   </p><p><strong>N. </strong>
     Do not retitle any existing section to be Entitled
     <span class="quote">“<span class="quote">Endorsements</span>”</span> or to conflict in title with any Invariant
     Section.
-   </p><p title="O."><strong>O. </strong>
+   </p><p><strong>O. </strong>
     Preserve any Warranty Disclaimers.
    </p><p>
    If the Modified Version includes new front-matter sections or appendices
@@ -545,7 +1038,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    The author(s) and publisher(s) of the Document do not by this License
    give permission to use their names for publicity for or to assert or
    imply endorsement of any Modified Version.
-  </p></div><div class="sect2" title="8.6. COMBINING DOCUMENTS"><div class="titlepage"><div><div><h3 class="title"><a id="id354540"></a>8.6. COMBINING DOCUMENTS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354540">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id369612"></a>14.6. COMBINING DOCUMENTS<span class="permalink"><a title="Copy Permalink" href="#id369612">¶</a></span></h3></div></div></div><p>
    You may combine the Document with other documents released under this
    License, under the terms defined in section 4 above for modified
    versions, provided that you include in the combination all of the
@@ -568,7 +1061,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    Entitled <span class="quote">“<span class="quote">Acknowledgements</span>”</span>, and any sections Entitled
    <span class="quote">“<span class="quote">Dedications</span>”</span>. You must delete all sections Entitled
    <span class="quote">“<span class="quote">Endorsements</span>”</span>.
-  </p></div><div class="sect2" title="8.7. COLLECTIONS OF DOCUMENTS"><div class="titlepage"><div><div><h3 class="title"><a id="id354584"></a>8.7. COLLECTIONS OF DOCUMENTS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354584">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id462980"></a>14.7. COLLECTIONS OF DOCUMENTS<span class="permalink"><a title="Copy Permalink" href="#id462980">¶</a></span></h3></div></div></div><p>
    You may make a collection consisting of the Document and other documents
    released under this License, and replace the individual copies of this
    License in the various documents with a single copy that is included in
@@ -579,7 +1072,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    it individually under this License, provided you insert a copy of this
    License into the extracted document, and follow this License in all other
    respects regarding verbatim copying of that document.
-  </p></div><div class="sect2" title="8.8. AGGREGATION WITH INDEPENDENT WORKS"><div class="titlepage"><div><div><h3 class="title"><a id="id354604"></a>8.8. AGGREGATION WITH INDEPENDENT WORKS<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354604">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id384912"></a>14.8. AGGREGATION WITH INDEPENDENT WORKS<span class="permalink"><a title="Copy Permalink" href="#id384912">¶</a></span></h3></div></div></div><p>
    A compilation of the Document or its derivatives with other separate and
    independent documents or works, in or on a volume of a storage or
    distribution medium, is called an “aggregate” if the
@@ -595,7 +1088,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    bracket the Document within the aggregate, or the electronic equivalent
    of covers if the Document is in electronic form. Otherwise they must
    appear on printed covers that bracket the whole aggregate.
-  </p></div><div class="sect2" title="8.9. TRANSLATION"><div class="titlepage"><div><div><h3 class="title"><a id="id354627"></a>8.9. TRANSLATION<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354627">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id458233"></a>14.9. TRANSLATION<span class="permalink"><a title="Copy Permalink" href="#id458233">¶</a></span></h3></div></div></div><p>
    Translation is considered a kind of modification, so you may distribute
    translations of the Document under the terms of section 4. Replacing
    Invariant Sections with translations requires special permission from
@@ -613,7 +1106,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    <span class="quote">“<span class="quote">Dedications</span>”</span>, or <span class="quote">“<span class="quote">History</span>”</span>, the requirement
    (section 4) to Preserve its Title (section 1) will typically require
    changing the actual title.
-  </p></div><div class="sect2" title="8.10. TERMINATION"><div class="titlepage"><div><div><h3 class="title"><a id="id354661"></a>8.10. TERMINATION<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354661">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id459720"></a>14.10. TERMINATION<span class="permalink"><a title="Copy Permalink" href="#id459720">¶</a></span></h3></div></div></div><p>
    You may not copy, modify, sublicense, or distribute the Document except
    as expressly provided for under this License. Any other attempt to copy,
    modify, sublicense or distribute the Document is void, and will
@@ -621,7 +1114,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    who have received copies, or rights, from you under this License will not
    have their licenses terminated so long as such parties remain in full
    compliance.
-  </p></div><div class="sect2" title="8.11. FUTURE REVISIONS OF THIS LICENSE"><div class="titlepage"><div><div><h3 class="title"><a id="id354676"></a>8.11. FUTURE REVISIONS OF THIS LICENSE<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354676">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id346138"></a>14.11. FUTURE REVISIONS OF THIS LICENSE<span class="permalink"><a title="Copy Permalink" href="#id346138">¶</a></span></h3></div></div></div><p>
    The Free Software Foundation may publish new, revised versions of the GNU
    Free Documentation License from time to time. Such new versions will be
    similar in spirit to the present version, but may differ in detail to
@@ -636,7 +1129,7 @@ For example:</p><pre class="screen">$ daps -d /svn/daps/doc/DC-daps-quick color-
    Software Foundation. If the Document does not specify a version number of
    this License, you may choose any version ever published (not as a draft)
    by the Free Software Foundation.
-  </p></div><div class="sect2" title="8.12. ADDENDUM: How to use this License for your documents"><div class="titlepage"><div><div><h3 class="title"><a id="id354701"></a>8.12. ADDENDUM: How to use this License for your documents<span class="permalink"><a alt="Permalink" title="Copy Permalink" href="#id354701">¶</a></span></h3></div></div></div><p>
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="id431043"></a>14.12. ADDENDUM: How to use this License for your documents<span class="permalink"><a title="Copy Permalink" href="#id431043">¶</a></span></h3></div></div></div><p>
    To use this License in a document you have written, include a copy of the
    License in the document and put the following copyright and license
    notices just after the title page:
