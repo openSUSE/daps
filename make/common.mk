@@ -399,14 +399,17 @@ endif
 #----------
 # Desktop file stringparams
 #
-# Language
-LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
 
 WEBHELPSTRINGS +=  --stringparam webhelp.indexer.language $(LL)
 
-DESKSTRINGS  := --stringparam uselang "$(LL)" \
-	        --stringparam docpath "@PATH@/" \
+DESKSTRINGS  := --stringparam docpath "@PATH@/" \
                 --stringparam base.dir $(DESKTOP_FILES_DIR)/
+# Language
+LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
+ifdef LL
+  DESKSTRINGS += --stringparam uselang "$(LL)"
+  LANGSTRING  := _$(LL)
+endif
 
 
 #------------------------------------------------------------------------
@@ -485,7 +488,7 @@ include $(DAPSROOT)/make/package.mk
 .PHONY: all pdf
 all pdf: | $(DIRECTORIES)
 all pdf: missing-images $(PROFILEDIR)/.validate
-all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf
+all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print$(LANGSTRING).pdf
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
 
@@ -495,7 +498,7 @@ all pdf: $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf
 .PHONY: color-pdf pdf-color
 pdf-color color-pdf: | $(DIRECTORIES)
 pdf-color color-pdf: missing-images $(PROFILEDIR)/.validate
-pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf
+pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf
 	@ccecho "result" "COLOR-PDF book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$<"
 
 #--------------
@@ -837,7 +840,7 @@ dist-xml: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
 			$(notdir $(MAIN))))
 dist-xml: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
-dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
+dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)$(LANGSTRING).tar
 dist-xml:
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
@@ -863,7 +866,7 @@ dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
 			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
 			$(notdir $(MAIN))))
 dist-book: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
-dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)_$(LL).tar
+dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)$(LANGSTRING).tar
 dist-book:
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
@@ -889,7 +892,7 @@ dist-book:
 #
 .PHONY: dist-graphics
 dist-graphics: provide-color-images
-dist-graphics: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar
+dist-graphics: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-graphics.tar
 dist-graphics:
   ifdef USED
     ifeq ($(VERBOSITY),1)
@@ -923,7 +926,7 @@ dist-graphics:
 #
 .PHONY: dist-graphics-png
 dist-graphics-png: provide-color-images
-dist-graphics-png: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-png-graphics.tar.bz2
+dist-graphics-png: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-png-graphics.tar.bz2
 dist-graphics-png:
   ifdef PNGONLINE
     ifeq ($(VERBOSITY),1)
@@ -949,7 +952,7 @@ dist-graphics-png:
 .PHONY: dist-html
 dist-html: MANIFEST  = --stringparam manifest $(HTML_DIR)/HTML.manifest \
 		       --param generate.manifest 1
-dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2
+dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-html.tar.bz2
 dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
@@ -972,7 +975,7 @@ dist-html: provide-color-images
 # all needed images and css
 #
 .PHONY: dist-htmlsingle dist-html-single
-dist-htmlsingle dist-html-single: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-htmlsingle.tar.bz2
+dist-htmlsingle dist-html-single: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-htmlsingle.tar.bz2
 dist-htmlsingle dist-html-single: HTML-USED = $(addprefix $(HTML_DIR)/images/,$(USED))
 dist-htmlsingle dist-html-single: $(PROFILES) $(PROFILEDIR)/.validate
 dist-htmlsingle dist-html-single: $(HTML_DIR)/$(BOOK).html
@@ -995,7 +998,7 @@ dist-htmlsingle dist-html-single: $(HTML_DIR)/$(BOOK).html
 .PHONY: dist-jsp
 dist-jsp: MANIFEST = --stringparam manifest $(JSP_DIR)/JSP.manifest \
 		     --param generate.manifest 1
-dist-jsp: TARBALL  = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-jsp.tar.bz2
+dist-jsp: TARBALL  = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-jsp.tar.bz2
 dist-jsp: JSP-USED = $(addprefix $(JSP_DIR)/images/,$(USED))
 dist-jsp: $(PROFILES) $(PROFILEDIR)/.validate $(JSP_DIR)/index.jsp
   ifeq ($(VERBOSITY),1)
@@ -1315,16 +1318,16 @@ endif
 # Print result file names
 #
 
-COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)_$(LL).fo
-BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)-print_$(LL).fo
+COLOR_FO := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)$(LANGSTRING).fo
+BW_FO    := $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER)-print$(LANGSTRING).fo
 
 .PHONY: pdf-name
 pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)-print$(LANGSTRING).pdf"
 
 .PHONY: pdf-color-name color-pdf-name
 pdf-color-name color-pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf"
 
 # Generate fo from xml
 #
@@ -1375,7 +1378,7 @@ endif
 
 # Create b/w PDF from fo
 #
-$(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images bw-fo
+$(RESULT_DIR)/$(TMP_BOOK)-print$(LANGSTRING).pdf: provide-images warn-images bw-fo
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
   endif
@@ -1389,7 +1392,7 @@ $(RESULT_DIR)/$(TMP_BOOK)-print_$(LL).pdf: provide-images warn-images bw-fo
 
 # Create COLOR-PDF from fo
 #
-$(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf: provide-color-images warn-images color-fo
+$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf: provide-color-images warn-images color-fo
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating PDF from fo-file..."
   endif
@@ -1437,11 +1440,11 @@ htmlsingle-name html-single-name:
 
 .PHONY: dist-html-name
 dist-html-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-html.tar.bz2"
 
 .PHONY: dist-htmlsingle-name dist-html-single-name
 dist-htmlsingle-name dist-html-single-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-htmlsingle.tar.bz2"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-htmlsingle.tar.bz2"
 
 #---------------
 # Htmlgraphics
@@ -1567,7 +1570,7 @@ webhelp-dir-name:
 
 .PHONY: dist-webhelp-name
 dist-webhelp-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)_$(LL)-webhelp.tar.bz2"
+	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-webhelp.tar.bz2"
 
 
 #---------------
