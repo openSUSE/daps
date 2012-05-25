@@ -103,6 +103,17 @@
    <!--daps-susespell [options] FILELIST-->
   <variablelist>
    <varlistentry>
+    <term>Spell Checking all Files in a Documentation Project</term>
+    <listitem>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
+     <para>Spell checks all files in the documentation project with the default 
+  dictionary (<literal>en_US</literal>). One by one, the files are opened in 
+  interactive mode and checked with &aspell;. To abort spell checking of 
+  the current file, press <keycap>X</keycap>. The spell check continues with the
+  next file in the project.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term>Spell Checking One or Multiple XML Files</term>
     <listitem>
      <screen>&daps-spell; xml/<replaceable>file1</replaceable>.xml xml/<replaceable>file2</replaceable>.xml</screen>
@@ -115,32 +126,35 @@
     <term>Spell Checking XML Files in Languages Other than English</term>
     <listitem>
      <screen>&daps-spell; --lang=de_DE xml/<replaceable>filename</replaceable>.xml</screen>
-     <para>Checks the specified files with the de_DE dictionary (make sure the
-     specified &aspell; dictionary is installed). Suggests alternative spellings 
-     for each misspelled word and waits for user interaction. For information 
-     about the language code to use for the <option>--lang</option> option, 
-     run &daps-spell; --help.</para>
+     <para>Checks <replaceable>filename</replaceable>.xml with the 
+     <literal>de_DE</literal> dictionary (make sure the specified &aspell; 
+     dictionary is installed). Suggests alternative spellings for each misspelled
+     word and waits for user interaction. For information about the language 
+     code to use for the <option>--lang</option> option, run 
+     <command>&daps-spell;&nbsp;--help</command>.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
      <screen>&daps-spell; --list xml/<replaceable>filename</replaceable>.xml > aspell_output.txt</screen>
-     <para>Checks the specified files with the default dictionary (en_US). Returns 
-     a list of misspelled words to standard output and writes them to the file
-     <filename>aspell_output.txt</filename>. You can use the  <option>--list</option> 
-     option to easily collect a list of words that are unknown to &aspell; and 
-     use this output as basis for a custom &aspell; word list or dictionary.</para>
+     <para>Checks <replaceable>filename</replaceable>.xml with the default 
+     dictionary (<literal>en_US</literal>). Returns a list of misspelled words 
+     to standard output and writes them to the file <filename>aspell_output.txt</filename>. 
+     You can use the  <option>--list</option> option to easily collect a list of 
+     words that are unknown to &aspell; and use this output as basis for a custom 
+     &aspell; word list or dictionary.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
-     <screen>&daps-spell; --dict /<replaceable>absolute_path_to_custom_dict</replaceable> xml/<replaceable>filename</replaceable>.xml</screen>
-     <para>Checks the specified files with the default dictionary (en_US) plus 
-     the additional custom dictionary specified with <option>--dict</option>.
-     <remark>taroth 2012-05-16: currently, the SUSE-specific dictionary
-     (/usr/share/daps/lib/suse_aspell.rws) is used in addition per default. 
+     <screen>&daps-spell; --dict /<replaceable>PATH_TO_CUSTOM_DICT</replaceable> xml/<replaceable>filename</replaceable>.xml</screen>
+     <para>Checks the specified files with the default dictionary 
+     (<literal>en_US</literal>) plus the additional custom dictionary specified 
+     with <option>--dict</option>. The <option>--dict</option> option requires 
+     an absolute path. <remark>taroth 2012-05-16: currently, the SUSE-specific 
+     dictionary (/usr/share/daps/lib/suse_aspell.rws) is used in addition per default. 
      "Specify --dict= if you do not want to use any additional dictionary." -
      check with fs (bound to change for the future)</remark>
      </para>
@@ -176,7 +190,7 @@
     </para>
    </step>
    <step>
-    <para>Close &jedit; and restart it.</para>
+    <para>Close and restart &jedit;.</para>
    </step>
    <step>
     <para>Select <menuchoice>
@@ -193,11 +207,11 @@
    <step>
     <para>Set <guimenu>Spell-checking engine</guimenu> to
       <guimenu>Aspell</guimenu> and select the <guimenu>Dictionary to
-      use</guimenu>. </para>
+      use</guimenu>, for example <literal>en_US</literal>. </para>
    </step>
    <step>
     <para>If the desired dictionary does not appear in the drop-down list,
-     install the respective &aspell; dictionary for the language you need and
+     install the respective &aspell; dictionary for the language and
      click <guimenu>Refresh list</guimenu>. </para>
    </step>
    <step>
@@ -232,9 +246,8 @@
      </menuchoice>.</para>
    </step>
    <step>
-    <para>Set the path to the <guimenu>Aspell executable filename</guimenu>. As
-      <guimenu>Markup mode</guimenu>, select <guimenu>Enable markup
-      mode</guimenu>.</para>
+    <para>Set the path to the <guimenu>Aspell executable filename</guimenu>.  
+    Select <guimenu>Enable markup mode</guimenu>.</para>
    </step>
    <step>
     <para>To use an additional custom &aspell; dictionary, specify the path to the
@@ -247,8 +260,7 @@
    </step>
    <step>
     <para>Confirm your settings in the plugin options dialog with
-      <guimenu>OK</guimenu> or <guimenu>Apply</guimenu> to finish the
-      integration of &daps-spell;.</para>
+      <guimenu>OK</guimenu> or <guimenu>Apply</guimenu>.</para>
    </step>
    <step>
     <para>To execute a spell check during editing, select <menuchoice>
@@ -303,7 +315,6 @@
      addition, &dapsacr; shows the path to the profiled XML sources and the
      total number of errors.
     </para>
-    <remark>taroth 2012-03-15: maybe add example output</remark>
     <para>
      If validation was successful, &dapsacr; returns: <literal>All files are
      valid.</literal>
@@ -313,13 +324,13 @@
     <para>
      To validate your files including remarks, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -r</screen>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
    </step>
    <step>
     <para>
      To validate your files including XML comments, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -c</screen>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
    </step>
   </procedure>
 
