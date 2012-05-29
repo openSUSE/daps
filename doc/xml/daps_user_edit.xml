@@ -100,10 +100,9 @@
   you to specify a custom dictionary and the language to use for spelling.
   </para>
   <para>In the following, find some examples for using &daps-spell;:</para>
-   <!--daps-susespell [options] FILELIST-->
   <variablelist>
    <varlistentry>
-    <term>Spell Checking all Files in a Documentation Project</term>
+    <term>Spell Checking All Files in a Documentation Project</term>
     <listitem>
      <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
      <para>Spell checks all files in the documentation project with the default 
@@ -161,12 +160,6 @@
     </listitem>
    </varlistentry>
   </variablelist>
-  <para>To spell check all files that belong to a documentation project, use the 
-  following comand:</para>
-  <screen>daps -d <replaceable>&dc;_FILE</replaceable> spellcheck</screen>
-  <para>One by one, the files are checked with &aspell;. To abort spell checking of 
-  the current file, press <keycap>X</keycap>. The spell check continues with the
-  next file in the project.</para>
   <para>For your convenience, you can also integrate &daps-spell; (plus a custom 
   &aspell; dictionary, if needed) into your XML editor, so that spelling is checked
   <quote>on the fly</quote> during editing. Consult your editor's documentation 
@@ -271,6 +264,66 @@
      item).</para>
    </step>
   </procedure>
+ </sect1>
+ <sect1 id="sec.daps.user.edit.chklink">
+  <title>Checking Links to Web Pages</title>
+  <para>To make sure that all links in your XML sources are still available
+      (and do not give a <literal>404</literal> error or similar), &dapsacr;
+      also includes a link checker (based on <literal>checkbot</literal>).
+      It searches for the <sgmltag class="attribute">url</sgmltag> attribute in
+      <sgmltag>ulink</sgmltag> elements and checks links included there. 
+      Use it to create a report of all links that caused some kind of
+      warning or error:</para>
+  <variablelist>
+   <varlistentry>
+    <term>Checking Links in a Documentation Project</term>
+    <listitem>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> chklink</screen>
+     <para>Uses the ROOTID defined in the specified &dc; file as starting point. 
+     Checks the  <sgmltag>ulink</sgmltag> elements in all files belonging to the documentation
+     project. If the documentation project contains XIncludes, the link checker 
+     also checks the respective XIncludes. At the end of the check, &dapsacr;
+     returns an HTLM file with a list of all links which caused some kind of warning 
+     or error. Open the resulting <filename>*checkbot-localhost.html</filename>
+     file in a browser.</para>
+     <figure>
+      <title>Example Output of <command>daps chklink</command>
+      </title>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="daps_chklink_report.png" width="61%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="daps_chklink_report.png" width="61%"/>
+       </imageobject>
+      </mediaobject>
+     </figure>
+     <para>If your &dc; file references a documentation <sgmltag>set</sgmltag>, 
+     you probably do not want to check all files belonging to the set. You can 
+     restrict the check to parts of the set, such as a <sgmltag>book</sgmltag>, 
+     <sgmltag>article</sgmltag>, <sgmltag>glossary</sgmltag>, 
+     <sgmltag>appendix</sgmltag>, <sgmltag>part</sgmltag>, or 
+     <sgmltag>chapter</sgmltag> element. To do so, specify the ID of the
+     respective element with the <option>--rootid</option> option:</para>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> chklink --rootid=<replaceable>ID</replaceable>
+     </screen>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Checking Links in One or Multiple XML Files</term>
+    <listitem>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> chklink --file=xml/<replaceable>filename</replaceable>.xml</screen>
+     <para>
+      <remark>taroth 2012-05-29: check: individual files only? or also multiple files?</remark>
+     Checks the  <sgmltag>ulink</sgmltag> elements in 
+     <filename><replaceable>filename.xml</replaceable>
+      </filename>. At the end of 
+     the check, &dapsacr; returns an HTLM file with a list of all links which 
+     caused some kind of warning or error. Open the resulting
+     <filename>*checkbot-localhost.html</filename> file in a browser.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </sect1>
 
  <sect1 id="sec.daps.user.edit.validate">
