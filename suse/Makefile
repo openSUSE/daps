@@ -33,6 +33,7 @@ STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
 all: schema/novdocx-core.rnc schema/novdocx-core.rng schema/novdocx.rng
+all: schema/novdocxi.rng
 all: catalogs/$(NOVDOC_FOR-CATALOG) catalogs/$(SUSEXSL_FOR-CATALOG)
 all: catalogs/CATALOG.$(DTDNAME)-$(DTDVERSION)
 all: xhtml2html
@@ -63,7 +64,7 @@ create-install-dirs:
 .PHONY: clean
 clean:
 	rm -rf catalogs/ schema/novdocx-core.rnc schema/novdocx-core.rng \
-		schema/novdocx.rng xslt/html/
+		schema/novdocx.rng schema/novdocxi.rng xslt/html/
 
 # auto-generate the html stylesheets
 #
@@ -94,6 +95,13 @@ schema/novdocx-core.rnc: schema/novdocx.dtd.tmp
 
 schema/novdocx-core.rng: schema/novdocx.dtd.tmp
 	trang -I dtd -i no-generate-start $< $@
+
+schema/novdocx.rng: schema/nocdocx.rnc
+	trang -I rnc $< $@
+
+schema/novdocxi.rng: schema/nocdocxi.rnc
+	trang -I rnc $< $@
+
 
 # To avoid unknown host errors with trang, we have to switch off the external
 # entities from DocBook by creating a temporary file novdocx.dtd.tmp.
