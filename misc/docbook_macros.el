@@ -388,7 +388,7 @@
 (add-hook 'sgml-mode-hook
   '(lambda ()
      (docbook-key-bindings)
-     (docbook-menu psml-mode-map)
+     (docbook-menu psgml-mode-map)
   )
 )
 
