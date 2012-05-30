@@ -145,7 +145,7 @@ exit 0
 %dir %{_datadir}/xml/%{dtdname}
 %dir %{_datadir}/xml/%{dtdname}/schema
 %dir %{_datadir}/xml/%{dtdname}/schema/*
-%dir %{_datadir}/xml/%{dtdname}/schema/*/1.0
+%dir %{_datadir}/xml/%{dtdname}/schema/*/%{dtdversion}
 
 %dir %{_defaultdocdir}/%{name}
 
