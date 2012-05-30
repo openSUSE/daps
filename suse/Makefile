@@ -96,10 +96,10 @@ schema/novdocx-core.rnc: schema/novdocx.dtd.tmp
 schema/novdocx-core.rng: schema/novdocx.dtd.tmp
 	trang -I dtd -i no-generate-start $< $@
 
-schema/novdocx.rng: schema/novdocx.rnc
+schema/novdocx.rng: schema/novdocx.rnc schema/novdocx-core.%
 	trang -I rnc $< $@
 
-schema/novdocxi.rng: schema/novdocxi.rnc
+schema/novdocxi.rng: schema/novdocxi.rnc schema/novdocx-core.%
 	trang -I rnc $< $@
 
 
