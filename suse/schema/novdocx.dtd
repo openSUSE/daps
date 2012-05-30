@@ -28,6 +28,31 @@
      warranty.
 -->
 
+<!ELEMENT xi:include (xi:fallback)?>
+<!ATTLIST xi:include 
+   xmlns:xi   CDATA       #FIXED    "http://www.w3.org/2001/XInclude"
+   href       CDATA       #IMPLIED
+   parse      (xml|text)  "xml"
+   xpointer   CDATA       #IMPLIED
+   encoding   CDATA       #IMPLIED 
+   accept     CDATA       #IMPLIED
+   accept-language CDATA  #IMPLIED 
+   os        CDATA        #IMPLIED
+   arch      CDATA        #IMPLIED
+   >
+   
+<!ELEMENT xi:fallback ANY>
+
+<!ENTITY % NOVDOC.XINCLUDE "IGNORE">
+
+<![%NOVDOC.XINCLUDE;[
+  <!ENTITY % xi_include.def "| xi:include">
+  <!ENTITY % xi_include.opt "| xi:include?">
+  <!-- End of NOVDOC.DEACTIVATE.XINCLUDE -->
+]]>
+<!ENTITY % xi_include.def "">
+<!ENTITY % xi_include.opt "">
+
 
 <!ENTITY % admonitions "important | note | tip | warning">
 <!ENTITY % lists   "itemizedlist | orderedlist | simplelist | variablelist | calloutlist">
@@ -35,7 +60,8 @@
 <!ENTITY % figures "figure | informalfigure">
 <!-- CHANGE_SEP_28 added bridgehead to common group and removed the other specific instances -->
 <!ENTITY % common	 "bridgehead | example | screen | remark | para | formalpara | indexterm">
-<!ENTITY % all     "%admonitions; | %lists; | %figures; | %tables; | %common;">
+<!ENTITY % all     "%admonitions; | %lists; | %figures; | %tables; |
+%common; %xi_include.def;">
 
 <!ENTITY % xrefinlines	"xref | link | ulink">
 
@@ -58,9 +84,10 @@
 <!ENTITY % xmlbase
    "xml:base  CDATA     #IMPLIED">
 
+
 <!ELEMENT set       ((title,subtitle?,titleabbrev?)?,
  setinfo?, toc?,
- (book)+,
+ (book  %xi_include.def;)+,
  setindex?)>
 
 <!ELEMENT setinfo (productname* , productnumber*, 
@@ -68,11 +95,12 @@
                    legalnotice*,
                    authorgroup*, abstract*) >
 
-<!ELEMENT book      (bookinfo , preface? ,
-                    (part | chapter | article)+,
-                    (appendix | glossary)*, index?) >
+<!ELEMENT book      (bookinfo , (preface?  %xi_include.opt;),
+                    (part | chapter | article %xi_include.def;)+,
+                    (appendix | glossary %xi_include.def;)*, index?) >
 <!-- change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed -->
-<!ELEMENT bookinfo  (title, productname+ , productnumber? , date? , titleabbrev? , legalnotice+, authorgroup*, abstract*) >
+<!ELEMENT bookinfo  (title, productname+ , productnumber? , date? , titleabbrev? , 
+                     (legalnotice %xi_include.def;)+, authorgroup*, abstract*) >
 
 <!ELEMENT article (title, subtitle?,
                    articleinfo?,
@@ -82,19 +110,21 @@
                      mediaobject|informaltable|example|
                      figure|table|procedure|
                      bridgehead|remark|abstract|
-                     indexterm)+,
-                   (sect1*|(refentry)*))|(sect1+|(refentry)+)),
-                  (index|glossary|appendix)*)>
+                     indexterm %xi_include.def;)+,
+                   (sect1*|(refentry
+                   %xi_include.def;)*))|(sect1+|(refentry %xi_include.def;)+)),
+                  (index|glossary|appendix %xi_include.def;)*)>
                
 <!ELEMENT articleinfo ((author|authorgroup|date|productname|
-                        productnumber|legalnotice|indexterm|abstract)+)>
+                        productnumber|legalnotice|indexterm|abstract
+                        %xi_include.def;)+)>
 
 <!ELEMENT preface   (title , (((%all; | procedure)+ , sect1*) | sect1+)) >
-<!ELEMENT part      (title , partintro? , ((chapter+ , appendix*) | appendix+) ) >
+<!ELEMENT part      (title , partintro? , (((chapter %xi_include.def;)+ , appendix*) | appendix+) ) >
 
 <!-- CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1 -->
 <!ELEMENT appendix  (title , (%all; | procedure)+ , (sect1* | refentry* | msgset?) ) >
-<!ELEMENT chapter   (title , (abstract | %all; | procedure)+ , (sect1* | refentry* | msgset?) ) >
+<!ELEMENT chapter   (title , (abstract | %all; | procedure)+ , (sect1* |refentry* | msgset? %xi_include.opt;) ) >
 <!ELEMENT abstract  (title?, para+) >
 <!ELEMENT index     EMPTY>
 <!ELEMENT setindex  EMPTY>
@@ -615,6 +645,7 @@
                %xmlbase;>
 
 <!ATTLIST productnumber
+               role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
