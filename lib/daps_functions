@@ -95,6 +95,10 @@ function parse_args () {
                 P_LIST=1
                 shift
                 ;;
+            --manifest)
+                P_MANIFEST=1
+                shift
+                ;;
             --meta)
                 P_META=1
                 shift
@@ -719,7 +723,7 @@ function build_generic () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,name:,rootid:"
+    LONG_OPTS="help,manifest,name:,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -728,12 +732,15 @@ function build_generic () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_help
+        [[ dist-html=$SUB_CMD ]] && help_manifest
+
         help_name
         help_rootid
         echo
         exit 0
     fi
 
+    [[ 1 = $P_MANIFEST ]] && INCLUDE_MANIFEST=1
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     
@@ -870,6 +877,7 @@ function profile_first () {
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
         help_comments
         help_draft
+        [[ dist-html = $SUB_CMD ]] && help_meta
         help_name
         help_remarks
         help_rootid
@@ -1080,7 +1088,7 @@ function getimages () {
     local COMPACT DEBUG_SAV FILE IMAGEDIR MOD P_FILE
     local PROFDIR SHOW VERBOSITY_SAV
     local -a IMGLIST
-    
+
     SUB_CMD=$1
     shift
     
@@ -1251,7 +1259,7 @@ function spellcheck () {
     if [[ -n $ASPELL_EXTRA_DICT ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
-
+    
     # do spellchecking on the list of files
     for FILE in ${FILELIST[@]}; do
         test -f $FILE || ccecho "warn" "File $FILE does not exist"
@@ -1394,6 +1402,18 @@ function help_list () {
                               interactive spellchecker.
                               Default: en_US"
 }
+function help_manifest () {
+    echo "    --manifest                If set, adds a manifest file containing a list
+                              of all HTML files in the correct order to the
+                              tarball.
+                              Default: off"
+}
+function help_meta () {
+    echo "    --meta                    If set, prints additional status information
+                              (filename, maintainer and status) for each file.
+                              Implies draft mode.
+                              Default: off"
+}
 function help_modified () {
     echo "    --modified                Print the image's modification time.
                               Ignored when --compact is set.
@@ -1426,12 +1446,6 @@ function help_nosearch () {
     echo "    --nosearch                Deactivates creating the search tab in webhtml
                               builds.
                               Default: enabled"
-}
-function help_meta () {
-    echo "    --meta                    If set, prints additional status information
-                              (filename, maintainer and status) for each file.
-                              Implies draft mode.
-                              Default: off"
 }
 function help_pretty () {
     echo "    --pretty                  Pretty print file lists (one filename per line)"

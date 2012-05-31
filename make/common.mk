@@ -952,20 +952,26 @@ dist-graphics-png:
 .PHONY: dist-html
 dist-html: MANIFEST  = --stringparam manifest $(HTML_DIR)/HTML.manifest \
 		       --param generate.manifest 1
-dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-html.tar.bz2
-dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
+dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-html.tar
+dist-html: HTML-USED = $(subst $(IMG_GENDIR),$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
   endif
-	BZIP2=--best \
-	tar cjhf $(TARBALL) --exclude-vcs --no-recursion \
+	tar rhf $(TARBALL) --exclude-vcs --no-recursion \
 	  -T $(HTML_DIR)/HTML.manifest \
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
 	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/style_images/* \
 	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
-	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
+  ifeq ($(INCLUDE_MANIFEST),1)
+	sed s#$(RESULT_DIR)/html/##g < $(HTML_DIR)/HTML.manifest > $(HTML_DIR)/$(TMP_BOOK)$(LANGSTRING).manifest
+	tar rhf $(TARBALL) --absolute-names \
+	  --transform=s%$(RESULT_DIR)/html/%% \
+	  $(HTML_DIR)/$(TMP_BOOK)$(LANGSTRING).manifest
+  endif
+	bzip2 -9f $(TARBALL)
+	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
 
 
 #---------------
