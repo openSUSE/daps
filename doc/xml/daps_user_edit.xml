@@ -352,21 +352,26 @@
   </variablelist>
   <sect2 id="sec.daps.user.edit.variants.profiling">
    <title>Profiling Attributes</title>
-   <para>Similar to what you might know as <quote>conditional text</quote>, 
-  DocBook offers <literal>profiling</literal> attributes. Those can be set at the
-  level of XML elements. Any content that is valid for <emphasis>all</emphasis> 
-  products does <emphasis>not</emphasis> get any profiling attributes. The 
+   <para>DocBook offers a large number of profiling attributes for various 
+   purposes. &dapsacr; currently supports the following attributes:</para>
+   &daps-profiling-attributes;
+    <para>Any content that is valid for <emphasis>all</emphasis> 
+  products does <emphasis>not</emphasis> need any profiling attributes. The 
   respective content will always be included in the output formats generated from 
   the XML sources. Text snippets that only apply to a certain condition 
-  (<sgmltag class="attribute">condition</sgmltag>), 
-  architecture (<sgmltag class="attribute">arch</sgmltag>), operating system 
-  (<sgmltag class="attribute">os</sgmltag>), or vendor 
-  (<sgmltag class="attribute">vendor</sgmltag>) can be tagged with the respective
-  profiling attribute like shown in <xref linkend="ex.daps.profiling"/>. The
-  The DocBook4 DTD allows profiling attributes for a huge number of elements,
-  including <sgmltag>para</sgmltag>, <sgmltag>listitem</sgmltag>, 
-  <sgmltag>section</sgmltag>, or <sgmltag>book</sgmltag>, to name only a few.
-  </para>
+  can be tagged with the respective profiling attribute or attributes.
+  The tagged snippets will only be included in the output, if the required 
+  condition is fulfilled.</para>
+   <para>The DocBook4 DTD allows profiling attributes for a huge number of elements
+   &mdash;from high-level elements like <sgmltag>book</sgmltag> or 
+   <sgmltag>chapter</sgmltag> down to 
+   low-level elements like <sgmltag>para</sgmltag>. Using the 
+   <sgmltag>phrase</sgmltag> element, you can even profile inline elements, like 
+   one sentence within a paragraph. </para>
+   <para>Based on the conditions that you want to apply, select one or more 
+   profiling attributes. You are free in defining the attributes values, but they
+   must be used consistently in all files belonging to a documentation project.</para>
+
    <example id="ex.daps.profiling">
     <title>
      <remark>FIXME</remark>
@@ -374,17 +379,20 @@
     <screen> <remark>FIXME</remark>
      </screen>
    </example>
+
    <para>If using profiling attributes in your XML sources, you need to define
   which of them should be interpreted for generating output formats. This is
-  usually defined in the respective &dc; file for your documentation project by
-  setting one or multiple profiling paramaters and by defining which values should
-  be considered during generation of output format.
+  usually defined in the respective &dc; file for your documentation project: 
+  Set one or multiple profiling paramaters and define which values should
+  be interpreted during generation of output format.
   <remark>taroth 2012-05-30: todo - add example</remark>
    </para>
-   <para>
-    <remark>taroth 2012-05-30: todo - add third requirement for using profiling: 
-     include certain line in $MAIN</remark>
-   </para>
+   <para>Last but not least, in order for the profiling process to take effect,
+  the following line must be included in the Main file of your documentation
+  project:</para>
+   <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+   <para>Without that line, &dapsacr; ignores the profiling parameters in the &dc;
+  file.</para>
   </sect2>
   <sect2 id="sec.daps.user.edit.variants.productentities">
    <title>Entities for Dynamic Product Names and Numbers</title>
