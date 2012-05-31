@@ -359,9 +359,16 @@
       your can mark some elements as conditional by using profiling attributes.
       When processing the files to generate output, specify which conditions 
       apply to the output. The stylesheets will then include or exclude the 
-      marked text.</para>
-      <para>Profiling allows you to keep both common content and product-specific
-      variations in one XML file and select at production time which information 
+      marked text, according to the conditions.</para>
+      <para>Profiling allows you to keep both common and product-specific
+      content in one XML file and select at production time which information 
       to include in the output. For more details, refer to  
       <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"></ulink>. 
    </para>'>
+
+ <!ENTITY daps-product-entities   
+   '&dapsacr; allows to set product name and product number dynamically.
+    This enables you to use the same XML sources for different products.
+    Use the entities &amp;productname; and &amp;productnumber; in your XML
+    sources, and define the respective values in an entity (using
+    profiling for multiple products).'>
