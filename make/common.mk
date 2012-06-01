@@ -400,15 +400,14 @@ endif
 # Desktop file stringparams
 #
 
-WEBHELPSTRINGS +=  --stringparam webhelp.indexer.language $(LL)
-
 DESKSTRINGS  := --stringparam docpath "@PATH@/" \
                 --stringparam base.dir $(DESKTOP_FILES_DIR)/
 # Language
 LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
 ifdef LL
-  DESKSTRINGS += --stringparam uselang "$(LL)"
-  LANGSTRING  := _$(LL)
+  DESKSTRINGS    += --stringparam uselang "$(LL)"
+  WEBHELPSTRINGS +=  --stringparam webhelp.indexer.language $(LL)
+  LANGSTRING     := _$(LL)
 endif
 
 
@@ -1601,6 +1600,11 @@ ifdef STYLE_HTMLCSS
   $(WEBHELP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(WEBHELP_DIR)
 	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(WEBHELP_DIR)/
 endif
+
+#
+# $(LL) is not necessarily set. We probably need to exit if empty
+# This is a TODO
+
 
 # search stuff
 $(WEBHELP_DIR)/search: $(WEBHELP_DIR)
