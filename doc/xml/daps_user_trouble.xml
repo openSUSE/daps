@@ -9,22 +9,74 @@
 ]>
 <chapter id="cha.daps.user.trouble">
  <title>Troubleshooting</title>
- <para>
+ <abstract>
+  <para>This chapter lists common problems and possible solutions, sorted 
+ into categories.</para>
+ </abstract>
+ <sect1 id="sec.daps.user.trouble.inst">
+  <title>Installation and First Steps</title>
+  <para>
+   <remark>taroth 2012-06-01: FIXME</remark>
+  </para>
+ </sect1>
+ <sect1 id="sec.daps.user.trouble.output">
+  <title>Generating Output</title>
+  <variablelist>
+   <varlistentry>
+    <term>Profiling Does Not Work as Expected?</term>
+    <listitem>
+     <orderedlist>
+      <listitem>
+       <para>Check the values of your profiling attributes in the XML files: 
+       They must use consistent spelling throughout a documentation project. 
+       If you assigned multiple values to a profiling attribute, check 
+       if the values are separated with a semicolon, for example,
+       <literal>os="linux;unix"</literal>.</para>
+      </listitem>
+      <listitem>
+       <para>Check the &dc; file for your documentation project: Does it contain
+       one or multiple <parameter>PROF*</parameter> parameters? Otherwise &dapsacr;
+       does not know which profiling attributes to interpret. Do the 
+       <parameter>PROF*</parameter> parameters match the profiling attributes 
+       used in the XML files? Do the values of the <parameter>PROF*</parameter> 
+       parameters match the attribute values used in the XML files? </para>
+      </listitem>
+      <listitem><para>Check the Main file of your documentation projects: Does 
+      its header (also named prolog) contain the following line?</para>
+     <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+     <para>If not, any profiling parameters in the &dc; file will be ignored
+     during generation of the output.
+     </para>
+    </listitem>
+   </orderedlist>
+   <para>For more details, refer to 
+   <xref linkend="sec.daps.user.edit.variants.profiling"/>
+   and
+   <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+ <sect1 id="sec.daps.user.trouble.misc">
+  <title>Miscellaneous</title>
+  <para>
   &dapsacr; is less verbose than its predecessor <literal>susedoc</literal>.
-  If you should run into problems with &dapsacr;, check the &dapsacr; log
-  files in
-  <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
-  A complete log file of the latest <command>daps
-  <replaceable>subcommand</replaceable></command> that was executed is
-  available in
+  If you should run into problems with &dapsacr; that you cannot classify, 
+  check the &dapsacr; log
+  files in  <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
+  A complete log file of the latest <command>daps&nbsp;<replaceable>subcommand</replaceable>
+   </command> 
+  that was executed is  available in
   <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
- </para>
- <para>
+  </para>
+  <para>
   In case of an error the complete log will be shown on the screen (STDOUT).
  </para>
- <para>
+  <para>
   To get the same level of output as with susedoc 4.x, run
   <command>daps</command> with the <option>-v</option> option. For more
   details, use the <option>--debug</option> option.
  </para>
+ </sect1>
+
 </chapter>
