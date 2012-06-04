@@ -5,7 +5,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="exsl">
   
-  <xsl:param name="base.dir">./drupal/html/</xsl:param>
+  <xsl:param name="base.dir"/>
   
   <xsl:param name="chunker.output.doctype-public"/>
   <xsl:param name="chunker.output.doctype-system"/>
