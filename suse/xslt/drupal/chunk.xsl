@@ -40,9 +40,9 @@
   <xsl:param name="node" select="/"/>
   <xsl:call-template name="write.text.chunk">
     <xsl:with-param name="filename">
-      <!--<xsl:if test="$manifest.in.base.dir != 0">
+      <xsl:if test="$manifest.in.base.dir != 0">
         <xsl:value-of select="$chunk.base.dir"/>
-      </xsl:if>-->
+      </xsl:if>
       <xsl:value-of select="$manifest"/>
     </xsl:with-param>
     <xsl:with-param name="method" select="'text'"/>
