@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   
+  Need DocBook stylesheet version >= 1.77.0
+  
   Run it as follows:
 
   $ xsltproc -xinclude chunk.xsl YOUR_XML_FILE.xml
@@ -23,6 +25,7 @@
   <xsl:include href="&www;/chunk-code.xsl"/>-->
 
   <xsl:include href="param.xsl"/>
+  
   
   <xsl:template name="chunk-element-content">
   <xsl:param name="prev"/>
