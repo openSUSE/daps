@@ -68,11 +68,7 @@
     <xsl:value-of select="concat(local-name(.), $manifest.separator)"/>
     
     <xsl:call-template name="make-relative-filename">
-      <!--<xsl:with-param name="base.dir">
-        <xsl:if test="$manifest.in.base.dir = 0">
-          <xsl:value-of select="$chunk.base.dir"/>
-        </xsl:if>
-      </xsl:with-param>-->
+      <xsl:with-param name="base.dir" select="''"/>
       <xsl:with-param name="base.name">
         <xsl:apply-templates mode="chunk-filename" select="."/>
       </xsl:with-param>
