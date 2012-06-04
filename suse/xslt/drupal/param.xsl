@@ -17,6 +17,6 @@
   
   <xsl:param name="generate.manifest" select="1"/>
   <xsl:param name="manifest.in.base.dir" select="1"/>
-  
+  <xsl:param name="manifest.separator"> | </xsl:param>
   
 </xsl:stylesheet>
