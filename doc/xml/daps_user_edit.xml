@@ -325,7 +325,7 @@
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.edit.variants">
-  <title>Preparing Document Variants</title>
+  <title>Support for Document Variants</title>
   <para>Similar products often share a considerable amount of features and
   differ in details only. It is therefore convenient to apply the same approach 
   to the documentation of similar products or product families: Share most of the
@@ -352,24 +352,25 @@
   </variablelist>
   <sect2 id="sec.daps.user.edit.variants.profiling">
    <title>Profiling Attributes</title>
-   <para>DocBook offers profiling attributes for various purposes. &dapsacr; 
-   currently supports the following attributes:</para> 
+   <para>DocBook offers various profiling attributes for various purposes. 
+   &dapsacr; currently supports the following attributes:</para> 
    &daps-profiling-attributes; 
-   <para>Profiling attributes can be used on a large number of elements&mdash;
-   from high-level elements like <sgmltag>book</sgmltag> or <sgmltag>chapter</sgmltag> 
+   <para>Profiling attributes can be used on a large number of 
+   elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
+   or <sgmltag>chapter</sgmltag> 
    down to low-level elements like <sgmltag>para</sgmltag>. With the 
    <sgmltag>phrase</sgmltag> element, you can even profile inline elements, like
-   one sentence within a paragraph as shown in
+   one sentence within a paragraph, see
    <xref linkend="ex.daps.profiling.inline"/>.</para>
    <para>Based on the conditions that you want to apply, select one or more 
-   profiling attributes. You are free in defining the attributes values, but they
+   profiling attributes. You are free in defining the attribute values, but they
    must be used consistently in all files belonging to a documentation project.</para>
    <para>Any content that is valid for <emphasis>all</emphasis> products does
     <emphasis>not</emphasis> need any profiling attributes. The respective 
     content will always be included in the output formats generated from the XML 
     sources. Text snippets that only apply to a certain condition can be tagged 
     with the respective profiling attribute or attributes. The tagged snippets 
-    will only be included in the output, if the required condition is fulfilled.
+    will only be included in the output if the required condition is fulfilled.
     </para>
    <example id="ex.daps.profiling">
     <title>Example for Profiling Articles Within a Book</title>
@@ -410,13 +411,13 @@
      the following:</para>
    <itemizedlist>
     <listitem>
-     <para>sled: &sled;</para>
+     <para><literal>os="sled"</literal>: &sled;</para>
     </listitem>
     <listitem>
-     <para>sles: &sles;</para>
+     <para><literal>os="sles"</literal>: &sles;</para>
     </listitem>
     <listitem>
-     <para>osuse: &osuse;</para>
+     <para><literal>os="osuse"</literal>: &osuse;</para>
     </listitem>
    </itemizedlist>
    <calloutlist>
@@ -428,8 +429,8 @@
      <para>This XInclude is profiled for both &sled; and &osuse;: If the book
       <citetitle>GNOME Quick Start</citetitle> is generated for &sled; or &osuse;, 
       the articles <citetitle>KDE Quick Start</citetitle> and 
-      <citetitle>GNOME Quick Start</citetitle> should be included in the book. 
-      If the same book is generated for &sles;, this articles should not appear.
+      <citetitle>GNOME Quick Start</citetitle> will be included in the book. 
+      If the same book is generated for &sles;, this articles will be excluded.
       </para>
     </callout>
     <callout arearefs="co.daps.prof.sled">
@@ -459,23 +460,20 @@
      included. For &osuse;, this article will be excluded from the book.</para>
     </callout>
    </calloutlist>
-   <para>Whereas <xref linkend="ex.daps.profiling"/> shows how to profile
-   entire elements, the following example demonstrates how to profile inline
+   <para>The following example demonstrates how to profile inline
    elements, like one sentence or a cross-reference in a paragraph:</para>
    <example id="ex.daps.profiling.inline">
     <title>Example for Profiling Inline Elements</title>
     <screen>&lt;para&gt;If you choose this option, your credentials are stored in
 KWalletManager. &lt;phrase os="sled"&gt;<co id="co.daps.prof.inline"/>For more information on 
-KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.
- &lt;/phrase&gt; 
+KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt; 
 &lt;/para&gt;
       </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.daps.prof.inline">
      <para>If the XML file containing this text snippet is profiled for &sled;
-      (<literal>os="sled"</literal>), the sentence containing the 
-      cross-reference will be included in the output:
+      (<literal>os="sled"</literal>), both sentences will be included in the output:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager. For more information on KWalletManager, see Chapter 8, 
      Managing Passwords with KWallet Manager (KDE User Guide).</literal>
