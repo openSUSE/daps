@@ -351,8 +351,30 @@
    </varlistentry>
   </variablelist>
   <sect2 id="sec.daps.user.edit.variants.profiling">
-   <title>Profiling Attributes</title>
-   <para>DocBook offers various profiling attributes for various purposes. 
+   <title>Profiling (Conditional Text)</title>
+   <para>To use profiling for creating multiple documentation variants of the 
+   same pool of XML files, you need to execute the following basic steps:</para>
+   <procedure>
+    <step>
+     <para>
+      <xref linkend="sec.daps.user.edit.variants.profiling.attributes" xrefstyle="select:title"/>
+     </para>
+    </step>
+    <step>
+     <para>
+      <xref linkend="sec.daps.user.edit.variants.profiling.pi" xrefstyle="select:title"/>
+     </para>
+    </step>
+    <step>
+     <para>
+      <xref linkend="sec.daps.user.edit.variants.profiling.params" xrefstyle="select:title"/>
+     </para>
+    </step>
+   </procedure>
+
+   <sect3 id="sec.daps.user.edit.variants.profiling.attributes">
+    <title>Using Profiling Attributes in XML Files</title>
+    <para>DocBook offers various profiling attributes for various purposes. 
    &dapsacr; currently supports the following attributes:</para> 
    &daps-profiling-attributes; 
    <para>Profiling attributes can be used on a large number of 
@@ -362,19 +384,19 @@
    <sgmltag>phrase</sgmltag> element, you can even profile inline elements, like
    one sentence within a paragraph, see
    <xref linkend="ex.daps.profiling.inline"/>.</para>
-   <para>Based on the conditions that you want to apply, select one or more 
+    <para>Based on the conditions that you want to apply, select one or more 
    profiling attributes. You are free in defining the attribute values, but they
    must be used consistently in all files belonging to a documentation project.</para>
-   <para>Any content that is valid for <emphasis>all</emphasis> products does
+    <para>Any content that is valid for <emphasis>all</emphasis> products does
     <emphasis>not</emphasis> need any profiling attributes. The respective 
     content will always be included in the output formats generated from the XML 
     sources. Text snippets that only apply to a certain condition can be tagged 
     with the respective profiling attribute or attributes. The tagged snippets 
     will only be included in the output if the required condition is fulfilled.
     </para>
-   <example id="ex.daps.profiling">
-    <title>Example for Profiling Articles Within a Book</title>
-    <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+    <example id="ex.daps.profiling">
+     <title>Example for Profiling Articles Within a Book</title>
+     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...]    
 &lt;book lang="en" id="book.quickstarts"&gt;
  &lt;bookinfo&gt;
@@ -402,77 +424,80 @@
  &lt;xi:include os="sles" href="art_lxc_quick.xml" <xref linkend="co.daps.prof.sles" xrefstyle="select:label nopage"/>
              xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
 &lt;/book&gt;</screen>
-   </example>
-   <para>The example above shows a book named 
+    </example>
+    <para>The example above shows a book named 
    <citetitle>Quick Start Manuals</citetitle> that contains a number of articles, 
    for example <citetitle>KDE Quick Start</citetitle> and
      <citetitle>LXC Quick Start</citetitle>. The <literal>os</literal> attribute 
-     is used for profiling according to products. The attribute values refer to
-     the following:</para>
-   <itemizedlist>
-    <listitem>
-     <para><literal>os="sled"</literal>: &sled;</para>
-    </listitem>
-    <listitem>
-     <para><literal>os="sles"</literal>: &sles;</para>
-    </listitem>
-    <listitem>
-     <para><literal>os="osuse"</literal>: &osuse;</para>
-    </listitem>
-   </itemizedlist>
-   <calloutlist>
-    <callout arearefs="co.daps.prof.all">
-     <para>This XInclude does not contain any profiling attributes, meaning the 
+     is used for profiling contents according to products. The attribute values 
+     refer to the following products:</para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       <literal>os="sled"</literal>: &sled;</para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal>os="sles"</literal>: &sles;</para>
+     </listitem>
+     <listitem>
+      <para>
+       <literal>os="osuse"</literal>: &osuse;</para>
+     </listitem>
+    </itemizedlist>
+    <calloutlist>
+     <callout arearefs="co.daps.prof.all">
+      <para>This XInclude does not contain any profiling attributes, meaning the 
      contents of this file will always be included in the output.</para>
-    </callout>
-    <callout arearefs="co.daps.prof.sled.osuse">
-     <para>This XInclude is profiled for both &sled; and &osuse;: If the book
+     </callout>
+     <callout arearefs="co.daps.prof.sled.osuse">
+      <para>This XInclude is profiled for both &sled; and &osuse;: If the book
       <citetitle>GNOME Quick Start</citetitle> is generated for &sled; or &osuse;, 
       the articles <citetitle>KDE Quick Start</citetitle> and 
       <citetitle>GNOME Quick Start</citetitle> will be included in the book. 
       If the same book is generated for &sles;, this articles will be excluded.
       </para>
-    </callout>
-    <callout arearefs="co.daps.prof.sled">
-     <para>This XInclude is profiled for &sled;. This means if the book 
+     </callout>
+     <callout arearefs="co.daps.prof.sled">
+      <para>This XInclude is profiled for &sled;. This means if the book 
      <citetitle>Quick Start Manuals</citetitle> is generated for &sled;, the 
      articles <citetitle>SLED Installation Quick Start</citetitle> and 
      <citetitle>LibreOffice Quick Start</citetitle> will be included.
      For &osuse; and &sles;, this articles will be excluded from the book.</para>
-    </callout>
-    <callout arearefs="co.daps.prof.sles">
-     <para>This XInclude is profiled for &sles;. This means if the book 
+     </callout>
+     <callout arearefs="co.daps.prof.sles">
+      <para>This XInclude is profiled for &sles;. This means if the book 
      <citetitle>Quick Start Manuals</citetitle> is generated for &sles;, the 
      articles <citetitle>SLES Installation Quick Start</citetitle> and 
      <citetitle>LXC Quick Start</citetitle> will be included. For
       &osuse; and &sled;, this articles will be excluded from the book.</para>
-    </callout>
-    <callout arearefs="co.daps.prof.sled.sles.osuse">
-     <para>This XInclude is profiled for all three products: &sles;, &sled;, and
+     </callout>
+     <callout arearefs="co.daps.prof.sled.sles.osuse">
+      <para>This XInclude is profiled for all three products: &sles;, &sled;, and
      &osuse;, meaning the article <citetitle>AppArmor Quick Start</citetitle> will
      be included in the book <citetitle>Quick Start Manuals</citetitle> 
      for all of these products. </para>
-    </callout>
-    <callout arearefs="co.daps.prof.sled.sles">
-     <para>This XInclude is profiled for both &sled; and &sles;. This means if 
+     </callout>
+     <callout arearefs="co.daps.prof.sled.sles">
+      <para>This XInclude is profiled for both &sled; and &sles;. This means if 
      the book <citetitle>Quick Start Manuals</citetitle> is generated for &sles;
      or &sled;, the article <citetitle>Audit Quick Start</citetitle> will be 
      included. For &osuse;, this article will be excluded from the book.</para>
-    </callout>
-   </calloutlist>
-   <para>The following example demonstrates how to profile inline
+     </callout>
+    </calloutlist>
+    <para>The following example demonstrates how to profile inline
    elements, like one sentence or a cross-reference in a paragraph:</para>
-   <example id="ex.daps.profiling.inline">
-    <title>Example for Profiling Inline Elements</title>
-    <screen>&lt;para&gt;If you choose this option, your credentials are stored in
+    <example id="ex.daps.profiling.inline">
+     <title>Example for Profiling Inline Elements</title>
+     <screen>&lt;para&gt;If you choose this option, your credentials are stored in
 KWalletManager. &lt;phrase os="sled"&gt;<co id="co.daps.prof.inline"/>For more information on 
 KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt; 
 &lt;/para&gt;
       </screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.daps.prof.inline">
-     <para>If the XML file containing this text snippet is profiled for &sled;
+    </example>
+    <calloutlist>
+     <callout arearefs="co.daps.prof.inline">
+      <para>If the XML file containing this text snippet is profiled for &sled;
       (<literal>os="sled"</literal>), both sentences will be included in the output:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager. For more information on KWalletManager, see Chapter 8, 
@@ -481,23 +506,33 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;
      element is omitted and the output will be as follows:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager.</literal>
-     </para>
-    </callout>
-   </calloutlist>
-   <para>For more details about using profiling attributes, refer to 
+      </para>
+     </callout>
+    </calloutlist>
+    <para>For more details about using profiling attributes, refer to 
    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
-   <para>If using profiling attributes in your XML sources, you need to define 
+   </sect3>
+   <sect3 id="sec.daps.user.edit.variants.profiling.pi">
+    <title>Adding a Processing Instruction to the Main File</title>
+    <para>In order for the profiling process to take effect, the following
+    processing instruction must be included the header (prolog) of the Main file 
+    that is referenced in the &dc; file of the documentation project:</para>
+    <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+    <para>You can also add the processing instruction line to all files of your 
+   documentation project, it does not hurt. But &dapsacr; only checks the Main 
+   file referenced in the &dc; file for this processing instruction. If it is 
+   missing there, any profiling parameters in the &dc; file will be ignored 
+   during generation of the output.</para>
+   </sect3>
+   <sect3 id="sec.daps.user.edit.variants.profiling.params">
+    <title>Adding Profiling Parameters to the Main File</title>
+    <para>If using profiling attributes in your XML sources, you need to define 
    which of them should be interpreted by &dapsacr; during generation of output. 
    Set the respective <parameter>PROF*</parameter> parameters in the &dc; file 
    of your documentation project and define which values should be interpreted 
-   during generation of output format. <remark>taroth
-     2012-05-30: todo - add example</remark>
-   </para>
-   <para>In order for the profiling process to take effect, the following line 
-   must be included the Main file's header (prolog) of your documentation project:</para>
-   <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-   <para>Without that line, any profiling parameters in the &dc; file will be 
-   ignored during generation of the output.</para>
+   during generation of output format. <remark>taroth 2012-05-30: todo - add example</remark>
+    </para>
+   </sect3>
   </sect2>
   <sect2 id="sec.daps.user.edit.variants.productentities">
    <title>Entities for Dynamic Product Names and Numbers</title>
@@ -578,10 +613,11 @@ make: *** [validate] Error 3
  </sect1>
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
-   <para>
+  <para>
    For a complete DocBook reference see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
-   <citetitle>&tdg;</citetitle></ulink>.
+   <citetitle>&tdg;</citetitle>
+   </ulink>.
   </para>
   <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
