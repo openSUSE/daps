@@ -362,7 +362,7 @@ $(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),1)
 	@echo "   Fixing $(notdir $<)"
 endif
-	xsltproc --novalid $(STYLESVG) $< > $@ $(DEVNULL)
+	xsltproc --novalid $(STYLESVG) $< > $@
 
 #---------------
 # Create grayscale SVGs used in the manuals
@@ -372,7 +372,7 @@ ifeq ($(VERBOSITY),1)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	xsltproc --novalid $(STYLESVG) $< | \
-	xsltproc --novalid $(STYLESVG2GRAY) - > $@ $(DEVNULL)
+	xsltproc --novalid $(STYLESVG2GRAY) - > $@
 
 #---------------
 # Create color SVGs from other formats
