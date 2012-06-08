@@ -515,7 +515,7 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;
    <sect3 id="sec.daps.user.edit.variants.profiling.pi">
     <title>Adding a Processing Instruction to the Main File</title>
     <para>In order for the profiling process to take effect, the following
-    processing instruction must be included the header (prolog) of the Main file 
+    processing instruction (PI) must be included the header (prolog) of the Main file 
     that is referenced in the &dc; file of the documentation project:</para>
     <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
     <para>You can also add the processing instruction line to all files of your 
@@ -523,6 +523,27 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;
    file referenced in the &dc; file for this processing instruction. If it is 
    missing there, any profiling parameters in the &dc; file will be ignored 
    during generation of the output.</para>
+    <example id="ex.daps.main.profiling">
+     <title>Main File with Processing Instruction for Profiling </title>
+     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;?xml-stylesheet
+href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"
+title="Profiling step" ?&gt;
+&lt;!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
+%entities;
+]&gt;
+
+&lt;set lang="en"&gt;
+ &lt;title&gt;&dapsacr; Documentation&lt;/title&gt;
+ &lt;xi:include href="book_daps_user.xml" 
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ &lt;xi:include href="book_daps_quickstarts.xml" 
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml" 
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;             
+&lt;/set&gt;</screen>
+    </example>
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.params">
     <title>Adding Profiling Parameters to the &dc; File</title>
