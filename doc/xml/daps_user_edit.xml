@@ -371,13 +371,16 @@
      </para>
     </step>
    </procedure>
-
-   <sect3 id="sec.daps.user.edit.variants.profiling.attributes">
-    <title>Using Profiling Attributes in XML Files</title>
+   <sect3 id="sec.daps.user.edit.variants.profiling.supported">
+    <title>Supported DocBook Profiling Attributes</title>
     <para>DocBook offers various profiling attributes for various purposes. 
    &dapsacr; currently supports the following attributes:</para> 
    &daps-profiling-attributes; 
-   <para>Profiling attributes can be used on a large number of 
+   </sect3>
+
+   <sect3 id="sec.daps.user.edit.variants.profiling.attributes">
+    <title>Using Profiling Attributes in XML Files</title>
+    <para>Profiling attributes can be used on a large number of 
    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
    or <sgmltag>chapter</sgmltag> 
    down to low-level elements like <sgmltag>para</sgmltag>. With the 
@@ -548,10 +551,14 @@ title="Profiling step" ?&gt;
    <sect3 id="sec.daps.user.edit.variants.profiling.params">
     <title>Adding Profiling Parameters to the &dc; File</title>
     <para>If using profiling attributes in your XML sources, you need to define 
-   which of them should be interpreted by &dapsacr; during generation of output. 
+   which of them should be interpreted by &dapsacr; during generation of output.
+   For a list of DocBook profiling attributes supported by &dapsacr; and the
+   corresponding &dapsacr; parameters, refer to 
+   <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.
    Set the respective <parameter>PROF*</parameter> parameters in the &dc; file 
    of your documentation project and define which values should be interpreted 
-   during generation of output format. <remark>taroth 2012-05-30: todo - add example</remark>
+   during generation of output format. <remark>taroth 2012-05-30: 
+   todo - add example and turn into procedure</remark>
     </para>
    </sect3>
   </sect2>
@@ -565,7 +572,6 @@ title="Profiling step" ?&gt;
 
  <sect1 id="sec.daps.user.edit.validate">
   <title>Validating Your XML Sources</title>
-
   <para>
    Validating XML files within in a book or set often exceeds validation of
    the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
