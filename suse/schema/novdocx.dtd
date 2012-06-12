@@ -599,7 +599,12 @@
 <!-- change added spacing -->
 <!ATTLIST orderedlist
                id            ID        #IMPLIED
-               spacing        (compact|normal) "normal"
+               spacing       (compact|normal) "normal"
+               numeration    (arabic
+                             |loweralpha
+                             |lowerroman
+                             |upperalpha
+                             |upperroman) #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
