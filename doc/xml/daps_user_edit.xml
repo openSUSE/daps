@@ -530,7 +530,7 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;
      <title>Main File with Processing Instruction for Profiling </title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet
-href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"
+href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml" <co id="co.daps.profile.main"/>
 title="Profiling step" ?&gt;
 &lt;!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
@@ -547,6 +547,15 @@ title="Profiling step" ?&gt;
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;             
 &lt;/set&gt;</screen>
     </example>
+    <calloutlist>
+     <callout arearefs="co.daps.profile.main">
+      <para>Processing instruction line for 
+     profiling. For profiling to work, this line must be included in the prolog 
+     of the Main file that is referenced in the &dc; file of your documentation 
+     project. Otherwise any profiling attributes in the XML files and any profiling
+     parameters in the &dc; file are ignored.</para>
+     </callout>
+    </calloutlist>
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.params">
     <title>Adding Profiling Parameters to the &dc; File</title>
@@ -554,12 +563,57 @@ title="Profiling step" ?&gt;
    which of them should be interpreted by &dapsacr; during generation of output.
    For a list of DocBook profiling attributes supported by &dapsacr; and the
    corresponding &dapsacr; parameters, refer to 
-   <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.
-   Set the respective <parameter>PROF*</parameter> parameters in the &dc; file 
-   of your documentation project and define which values should be interpreted 
-   during generation of output format. <remark>taroth 2012-05-30: 
-   todo - add example and turn into procedure</remark>
-    </para>
+   <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.</para>
+    <procedure>
+     <para>The following procedure is based on <xref linkend="ex.daps.profiling"/>.
+      </para>
+     <step>
+      <para>For each variant that you want to generate from the XML files
+      in your pool, create a separate &dc; file. For example, to generate a 
+      document variant for each of the products (&osuse;, &sled;, and &sles;) 
+      from the example file in <xref linkend="ex.daps.profiling"/>, you would need 
+      three &dc; files: <filename>DC-opensuse-quick</filename>,
+      <filename>DC-sled-quick</filename>,  and 
+      <filename>DC-sles-quick</filename>.</para>
+     </step>
+     <step>
+      <para>Open the &dc; files in a text editor.</para>
+     </step>
+     <step>
+      <para>Add the respective <parameter>PROF*</parameter> parameters that match 
+      the profiling attributes used in the XML files. For the XML file in 
+      <xref linkend="ex.daps.profiling"/>, you only need to add the 
+      <parameter>PROFOS</parameter> parameter.</para>
+     </step>
+     <step>
+      <para>For each profiling parameter, set the respective attributes values 
+      for which you want to filter during the profiling process. The spelling 
+      of the values must be the same that is used in the XML files.
+      </para>
+      <para>For <xref linkend="ex.daps.profiling"/>, you would set only one
+      attribute value for <parameter>PROFOS</parameter> in each &dc; file: 
+      either <literal>osuse</literal>, 
+      <literal>sles</literal>, or <literal>sles</literal>.</para>
+     </step>
+     <step>
+      <para>Save the &dc; files. </para>
+     </step>
+    </procedure>
+    <para>Using the respective &dc; file, you can now generate different output 
+    variants from your XML files. Depending on the profiling attributes used in 
+    your XML files, a &dc; file may contain multiple profiling parameters.  
+    You can also assign multiple attribute values to a profiling parameter, for 
+    example</para>
+    <screen>PROFARCH=x86_64;ppc</screen>
+    <para>A &dc; file containing that line would create an output that contains
+    all elements profiled for one or both of the following processor architectures: 
+    <literal>x86_64</literal> and <literal>ppc</literal>.</para>
+    <example>
+     <title>Profiling Parameters in a &dc; File</title>
+     <screen>
+      <remark>taroth 2012-06-13: add example</remark>
+     </screen>
+    </example>
    </sect3>
   </sect2>
   <sect2 id="sec.daps.user.edit.variants.productentities">
