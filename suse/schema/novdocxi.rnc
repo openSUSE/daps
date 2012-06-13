@@ -21,6 +21,16 @@ datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 include "novdocx-core.rnc" {
   xi_include.def = \include
   xi_include.opt = \include?
+  # We need to redefine that to avoid the following Jing error:
+  # error: conflicting ID-types for attribute  "X"
+  # whereas "X" is one of the following attributes in brackets:
+  # See also http://tech.groups.yahoo.com/group/rng-users/message/1205
+  any = (element * 
+     {
+       attribute * - (id | linkend | startref | arearefs) { text }* ,
+       any
+     }
+     | text)*
 }
 
 structure =
