@@ -336,47 +336,49 @@
   pool of XML sources, you can use of the following features that are supported 
   by &dapsacr;:</para>
   <variablelist>
-   <varlistentry>
-    <term>Profiling (<quote>Conditional Text</quote>)
+   <varlistentry><!--Profiling (<quote>Conditional Text</quote>)-->
+    <term><xref linkend="sec.daps.user.edit.profiling" xrefstyle="select:title"/>
     </term>
     <listitem>
     &db-profiling;
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Entities for Dynamic Product Names and Numbers</term>
+    <!--Entities for Dynamic Product Names and Numbers-->
+    <term><xref linkend="sec.daps.user.edit.productentities" xrefstyle="select:title"/></term>
     <listitem>
      <para>&daps-product-entities;</para>
     </listitem>
    </varlistentry>
   </variablelist>
-  <sect2 id="sec.daps.user.edit.variants.profiling">
+  </sect1>
+  <sect1 id="sec.daps.user.edit.profiling">
    <title>Profiling (Conditional Text)</title>
    <para>To use profiling for creating multiple documentation variants of the 
    same pool of XML files, you need to execute the following basic steps:</para>
    <procedure>
     <step>
      <para>
-      <xref linkend="sec.daps.user.edit.variants.profiling.attributes" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.edit.profiling.attributes" xrefstyle="select:title"/>
      </para>
     </step>
     <step>
      <para>
-      <xref linkend="sec.daps.user.edit.variants.profiling.pi" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.edit.profiling.pi" xrefstyle="select:title"/>
      </para>
     </step>
     <step>
      <para>
-      <xref linkend="sec.daps.user.edit.variants.profiling.params" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.edit.profiling.params" xrefstyle="select:title"/>
      </para>
     </step>
    </procedure>
-   <sect3 id="sec.daps.user.edit.variants.profiling.supported">
+   <sect2 id="sec.daps.user.edit.profiling.supported">
     <title>Supported DocBook Profiling Attributes</title>
      &daps-profiling-attributes; 
-   </sect3>
+   </sect2>
 
-   <sect3 id="sec.daps.user.edit.variants.profiling.attributes">
+   <sect2 id="sec.daps.user.edit.profiling.attributes">
     <title>Using Profiling Attributes in XML Files</title>
     <para>Profiling attributes can be used on a large number of 
    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
@@ -520,8 +522,8 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
     </para>
     <para>For more details about using profiling attributes, refer to 
    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
-   </sect3>
-   <sect3 id="sec.daps.user.edit.variants.profiling.pi">
+   </sect2>
+   <sect2 id="sec.daps.user.edit.profiling.pi">
     <title>Adding a Processing Instruction to the Main File</title>
     <para>For the profiling process to take effect, &dapsacr; needs a certain
      processing instruction (PI):</para>
@@ -564,8 +566,8 @@ title="Profiling step" ?&gt;
      missing there, any profiling parameters in the &dc; file will be ignored 
      during generation of the output.</para>
     </note>
-   </sect3>
-   <sect3 id="sec.daps.user.edit.variants.profiling.params">
+   </sect2>
+   <sect2 id="sec.daps.user.edit.profiling.params">
     <title>Adding Profiling Parameters to the &dc; File</title>
     <para>If using profiling attributes in your XML sources, you need to define 
    which of them should be interpreted by &dapsacr; during generation of output.
@@ -574,7 +576,7 @@ title="Profiling step" ?&gt;
    profiling attributes used in your XML files, a &dc; file may contain multiple 
    profiling parameters. For a list of DocBook profiling attributes supported by
    &dapsacr; and the corresponding &dapsacr; parameters, refer to 
-   <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.</para>
+   <xref linkend="sec.daps.user.edit.profiling.supported"/>.</para>
     <para>For each profiling parameter, set the respective attribute values for 
      which you want to filter during the profiling process. The spelling 
      of the values must be the same that is used in the XML files. You can also assign 
@@ -664,51 +666,15 @@ PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
      of the <citetitle>Quick Start Manuals</citetitle> displayed in
      <xref linkend="ex.daps.profiling"/>. It will contain all Quick
      Starts that are profiled with <literal>os="sles"</literal>.</para>
-   
-    <!--<procedure>
-     <para>The following procedure is based on <xref linkend="ex.daps.profiling"/>.
-      </para>
-     <step>
-      <para>For each variant that you want to generate from the XML files
-      in your pool, create a separate &dc; file. For example, to generate a 
-      document variant for each of the products (&osuse;, &sled;, and &sles;) 
-      from the example file in <xref linkend="ex.daps.profiling"/>, you would need 
-      three &dc; files: <filename>DC-opensuse-quick</filename>,
-      <filename>DC-sled-quick</filename>,  and 
-      <filename>DC-sles-quick</filename>.</para>
-     </step>
-     <step>
-      <para>Open the &dc; files in a text editor.</para>
-     </step>
-     <step>
-      <para>Add the respective <parameter>PROF*</parameter> parameters that match 
-      the profiling attributes used in the XML files. For the XML file in 
-      <xref linkend="ex.daps.profiling"/>, you only need to add the 
-      <parameter>PROFOS</parameter> parameter.</para>
-     </step>
-     <step>
-      <para>For each profiling parameter, set the respective attributes values 
-      for which you want to filter during the profiling process. The spelling 
-      of the values must be the same that is used in the XML files.
-      </para>
-      <para>For <xref linkend="ex.daps.profiling"/>, you would set only one
-      attribute value for <parameter>PROFOS</parameter> in each &dc; file: 
-      either <literal>osuse</literal>, 
-      <literal>sles</literal>, or <literal>sles</literal>.</para>
-     </step>
-     <step>
-      <para>Save the &dc; files. </para>
-     </step>
-    </procedure>-->
-    </sect3>
-   </sect2>
-   <sect2 id="sec.daps.user.edit.variants.productentities">
+    </sect2>
+   </sect1>
+   <sect1 id="sec.daps.user.edit.productentities">
     <title>Entities for Dynamic Product Names and Numbers</title>
     <para>
      <remark>taroth 2012-05-30: FIXME</remark>
     </para>
-   </sect2>
-  </sect1>
+   </sect1>
+  
 
   <sect1 id="sec.daps.user.edit.validate">
    <title>Validating Your XML Sources</title>
