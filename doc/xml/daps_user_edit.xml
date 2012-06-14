@@ -505,7 +505,7 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
        &mdash;in this  case a sentence containing a cross-reference.</para>
      </callout>
      <callout arearefs="co.daps.prof.inline.end">
-      <para>End tag of the profiled phrase element.</para>
+      <para>End tag of the profiled <sgmltag>phrase</sgmltag> element.</para>
      </callout>
      </calloutlist>
      <para>If the XML file containing this text snippet is profiled for &sled;
@@ -523,20 +523,18 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.pi">
     <title>Adding a Processing Instruction to the Main File</title>
-    <para>In order for the profiling process to take effect, the following
-    processing instruction (PI) must be included the header (prolog) of the Main file 
-    that is referenced in the &dc; file of the documentation project:</para>
+    <para>For the profiling process to take effect, &dapsacr; needs a certain
+     processing instruction (PI):</para>
     <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-    <para>You can also add the processing instruction line to all files of your 
-   documentation project, it does not hurt. But &dapsacr; only checks the Main 
-   file referenced in the &dc; file for this processing instruction. If it is 
-   missing there, any profiling parameters in the &dc; file will be ignored 
-   during generation of the output.</para>
+    <para>For all documentation projects that need profiling, add 
+     this line to the header (prolog) of the Main file that is 
+     referenced by the <parameter>MAIN</parameter> parameter 
+     in the &dc; file.</para>
     <example id="ex.daps.main.profiling">
      <title>Main File with Processing Instruction for Profiling </title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet
-href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml" <co id="co.daps.profile.main"/>
+href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml" <co id="co.daps.profile.main"/> 
 title="Profiling step" ?&gt;
 &lt;!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
@@ -555,22 +553,37 @@ title="Profiling step" ?&gt;
     </example>
     <calloutlist>
      <callout arearefs="co.daps.profile.main">
-      <para>Processing instruction line for 
-     profiling. For profiling to work, this line must be included in the prolog 
-     of the Main file that is referenced in the &dc; file of your documentation 
-     project. Otherwise any profiling attributes in the XML files and any profiling
-     parameters in the &dc; file are ignored.</para>
+      <para>Processing instruction line for  profiling. </para>
      </callout>
     </calloutlist>
+    <note>
+     <title>Only Required in the Main File</title>
+     <para>You may also add the processing instruction line to all files of your
+     documentation project, it does not hurt. But &dapsacr; only checks the Main 
+     file referenced in the &dc; file for this processing instruction. If it is 
+     missing there, any profiling parameters in the &dc; file will be ignored 
+     during generation of the output.</para>
+    </note>
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.params">
     <title>Adding Profiling Parameters to the &dc; File</title>
     <para>If using profiling attributes in your XML sources, you need to define 
    which of them should be interpreted by &dapsacr; during generation of output.
+   For this purpose, add profiling parameters (<parameter>PROF*</parameter>) to the 
+   &dc; files of the documentation projects that need profiling.
    For a list of DocBook profiling attributes supported by &dapsacr; and the
    corresponding &dapsacr; parameters, refer to 
    <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.</para>
-    <procedure>
+  <para>For each profiling parameter, set the respective attribute values for 
+   which you want to filter during the profiling process. You can also assign 
+   multiple attribute values to a profiling parameter&mdash;for example, if you 
+   want to cover multiple processor architectures in the same document. 
+   A &dc; file containing the following line <literal>PROFARCH=x86_64;ppc</literal>
+   would create an output that contains all elements profiled for either 
+   <literal>x86_64</literal> or <literal>ppc</literal> architectures or both.</para>
+   
+   
+    <!--<procedure>
      <para>The following procedure is based on <xref linkend="ex.daps.profiling"/>.
       </para>
      <step>
@@ -604,16 +617,11 @@ title="Profiling step" ?&gt;
      <step>
       <para>Save the &dc; files. </para>
      </step>
-    </procedure>
+    </procedure>-->
     <para>Using the respective &dc; file, you can now generate different output 
     variants from your XML files. Depending on the profiling attributes used in 
     your XML files, a &dc; file may contain multiple profiling parameters.  
-    You can also assign multiple attribute values to a profiling parameter, for 
-    example</para>
-    <screen>PROFARCH=x86_64;ppc</screen>
-    <para>A &dc; file containing that line would create an output that contains
-    all elements profiled for one or both of the following processor architectures: 
-    <literal>x86_64</literal> and <literal>ppc</literal>.</para>
+    </para>
     <example>
      <title>Profiling Parameters in a &dc; File</title>
      <screen>
