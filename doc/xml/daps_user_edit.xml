@@ -396,7 +396,7 @@
     will only be included in the output if the required condition is fulfilled.
     </para>
     <example id="ex.daps.profiling">
-     <title>Example for Profiling Articles Within a Book</title>
+     <title>Profiling Articles Within a Book</title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...]    
 &lt;book lang="en" id="book.quickstarts"&gt;
@@ -489,16 +489,26 @@
     <para>The following example demonstrates how to profile inline
    elements, like one sentence or a cross-reference in a paragraph:</para>
     <example id="ex.daps.profiling.inline">
-     <title>Example for Profiling Inline Elements</title>
+     <title>Profiling Inline Elements</title>
      <screen>&lt;para&gt;If you choose this option, your credentials are stored in
-KWalletManager. &lt;phrase os="sled"&gt;<co id="co.daps.prof.inline"/>For more information on 
-KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt; 
+KWalletManager. <co id="co.daps.prof.inline.start"/>&lt;phrase os="sled"&gt;For more information on 
+KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co id="co.daps.prof.inline.end"/> 
 &lt;/para&gt;
       </screen>
     </example>
     <calloutlist>
-     <callout arearefs="co.daps.prof.inline">
-      <para>If the XML file containing this text snippet is profiled for &sled;
+     <callout arearefs="co.daps.prof.inline.start">
+      <para>Start tag of a <sgmltag>phrase</sgmltag> element with 
+       a profiling attribute:  <literal>os=sled"</literal>. The 
+       <sgmltag>phrase</sgmltag> element is used 
+       to profile contents within a <sgmltag>para</sgmltag> element
+       &mdash;in this  case a sentence containing a cross-reference.</para>
+     </callout>
+     <callout arearefs="co.daps.prof.inline.end">
+      <para>End tag of the profiled phrase element.</para>
+     </callout>
+     </calloutlist>
+     <para>If the XML file containing this text snippet is profiled for &sled;
       (<literal>os="sled"</literal>), both sentences will be included in the output:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager. For more information on KWalletManager, see Chapter 8, 
@@ -508,9 +518,7 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager.</literal>
       </para>
-     </callout>
-    </calloutlist>
-    <para>For more details about using profiling attributes, refer to 
+     <para>For more details about using profiling attributes, refer to 
    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.pi">
