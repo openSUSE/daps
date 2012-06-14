@@ -570,18 +570,61 @@ title="Profiling step" ?&gt;
     <para>If using profiling attributes in your XML sources, you need to define 
    which of them should be interpreted by &dapsacr; during generation of output.
    For this purpose, add profiling parameters (<parameter>PROF*</parameter>) to the 
-   &dc; files of the documentation projects that need profiling.
-   For a list of DocBook profiling attributes supported by &dapsacr; and the
-   corresponding &dapsacr; parameters, refer to 
+   &dc; files of the documentation projects that need profiling. Depending on the
+   profiling attributes used in your XML files, a &dc; file may contain multiple 
+   profiling parameters. For a list of DocBook profiling attributes supported by
+   &dapsacr; and the corresponding &dapsacr; parameters, refer to 
    <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.</para>
   <para>For each profiling parameter, set the respective attribute values for 
    which you want to filter during the profiling process. You can also assign 
    multiple attribute values to a profiling parameter&mdash;for example, if you 
    want to cover multiple processor architectures in the same document. 
-   A &dc; file containing the following line <literal>PROFARCH=x86_64;ppc</literal>
-   would create an output that contains all elements profiled for either 
-   <literal>x86_64</literal> or <literal>ppc</literal> architectures or both.</para>
-   
+   A &dc; file containing the following line <literal>PROFARCH=s390;systemz</literal>
+   would create an output that contains all contents profiled for either 
+   <literal>s390</literal> or <literal>systemz</literal> architectures or both.</para>
+   <para>For each document variant that you  want to generate from a pool of common 
+    XML files you need to create an individual &dc; file. <xref linkend="ex.daps.profiling.dc.osuse"/> and
+    <xref linkend="ex.daps.profiling.dc.sles"/> show two Main files that can be used to generate 
+   product-specific documentation from the XML file in 
+   <xref linkend="ex.daps.profiling"/>&mdash;in this case 
+   the <citetitle>&osuse; Quick Start Guide</citetitle> and the
+   <citetitle>&sles; Quick Start Guide</citetitle>.
+   </para>
+   <example id="ex.daps.profiling.dc.osuse">
+     <title>Profiling Parameters in Product-specific &dc; File (&osuse;)</title>
+     <screen>### 
+## Doc Config File for openSUSE Quick Start Guide
+
+## Mandatory Parameters
+MAIN="MAIN.opensuse.xml"
+
+## Optional Parameters
+ROOTID="book.quickstarts"
+
+## Profiling
+PROFOS="osuse"
+PROFARCH="x86;i586"
+
+[...]</screen>
+</example>
+
+<example id="ex.daps.profiling.dc.sles">
+     <title>Profiling Parameters in Product-specific &dc; File (&sles;)</title>
+     <screen>### 
+## Doc Config File for SLES Quick Start Guide
+
+## Mandatory Parameters
+MAIN="MAIN.SLES.xml"
+
+## Optional Parameters
+ROOTID="book.quickstarts"
+
+## Profiling
+PROFOS="sles"
+PROFARCH="s390;systemz"
+
+[...]</screen>
+</example> 
    
     <!--<procedure>
      <para>The following procedure is based on <xref linkend="ex.daps.profiling"/>.
@@ -618,16 +661,6 @@ title="Profiling step" ?&gt;
       <para>Save the &dc; files. </para>
      </step>
     </procedure>-->
-    <para>Using the respective &dc; file, you can now generate different output 
-    variants from your XML files. Depending on the profiling attributes used in 
-    your XML files, a &dc; file may contain multiple profiling parameters.  
-    </para>
-    <example>
-     <title>Profiling Parameters in a &dc; File</title>
-     <screen>
-      <remark>taroth 2012-06-13: add example</remark>
-     </screen>
-    </example>
    </sect3>
   </sect2>
   <sect2 id="sec.daps.user.edit.variants.productentities">
