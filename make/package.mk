@@ -44,7 +44,7 @@ package-pdf: color-pdf dist-document-files-pdf
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy color PDF
-	cp  $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(PACKDIR)
+	cp  $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(PACKDIR)/$(BOOK)_$(LL).pdf
 # copy PDF document files for GNOME
 	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2; then \
 	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2 \
