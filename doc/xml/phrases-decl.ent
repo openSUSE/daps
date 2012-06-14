@@ -372,27 +372,47 @@
     profiling for multiple products).'>
    
 <!ENTITY daps-profiling-attributes    
-  '<itemizedlist>
+  '<para>DocBook offers various profiling attributes for various purposes. 
+   &dapsacr; currently supports the following attributes:</para>
+  <itemizedlist>
     <listitem>
      <para>
       <sgmltag class="attribute">arch</sgmltag> 
-      (&dapsacr; parameter: <parameter>PROFARCH</parameter>)  
      </para>
     </listitem>
     <listitem>
-     <para><sgmltag class="attribute">condition</sgmltag>
-     (&dapsacr; parameter: <parameter>PROFCONDITION</parameter>)
+     <para>
+      <sgmltag class="attribute">condition</sgmltag>
      </para>
     </listitem>
     <listitem>
-     <para><sgmltag class="attribute">os</sgmltag>
-     (&dapsacr; parameter: <parameter>PROFOS</parameter>)
+     <para>
+      <sgmltag class="attribute">os</sgmltag>
      </para>
     </listitem>
     <listitem>
-     <para><sgmltag class="attribute">vendor</sgmltag>
-     (&dapsacr; parameter: <parameter>PROFVENDOR</parameter>)
+     <para>
+      <sgmltag class="attribute">vendor</sgmltag>
      </para>
     </listitem>
-   </itemizedlist>'> 
+   </itemizedlist>
+   <para>Each profiling attribute has a corresponding profiling parameter
+   in &dapsacr;: </para>
+   <itemizedlist>
+    <listitem>
+     <para><parameter>PROFARCH</parameter></para>
+    </listitem>
+    <listitem>
+     <para><parameter>PROFCONDITION</parameter></para>
+    </listitem>
+    <listitem>
+     <para><parameter>PROFOS</parameter></para>
+    </listitem>
+    <listitem>
+     <para><parameter>PROFVENDOR</parameter></para>
+    </listitem>
+   </itemizedlist>
+   <para>The profiling parameters are used in the &dc; file to define 
+   which profiling attributes in the XML files should be interpreted 
+   during generation of output.</para>'> 
 
