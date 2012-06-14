@@ -507,8 +507,8 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
      <callout arearefs="co.daps.prof.inline.end">
       <para>End tag of the profiled <sgmltag>phrase</sgmltag> element.</para>
      </callout>
-     </calloutlist>
-     <para>If the XML file containing this text snippet is profiled for &sled;
+    </calloutlist>
+    <para>If the XML file containing this text snippet is profiled for &sled;
       (<literal>os="sled"</literal>), both sentences will be included in the output:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager. For more information on KWalletManager, see Chapter 8, 
@@ -517,8 +517,8 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
      element is omitted and the output will be as follows:
      <literal>If you choose this options, your credentials are stored in 
      KWalletManager.</literal>
-      </para>
-     <para>For more details about using profiling attributes, refer to 
+    </para>
+    <para>For more details about using profiling attributes, refer to 
    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
    </sect3>
    <sect3 id="sec.daps.user.edit.variants.profiling.pi">
@@ -575,25 +575,25 @@ title="Profiling step" ?&gt;
    profiling parameters. For a list of DocBook profiling attributes supported by
    &dapsacr; and the corresponding &dapsacr; parameters, refer to 
    <xref linkend="sec.daps.user.edit.variants.profiling.supported"/>.</para>
-  <para>For each profiling parameter, set the respective attribute values for 
-   which you want to filter during the profiling process. You can also assign 
+    <para>For each profiling parameter, set the respective attribute values for 
+     which you want to filter during the profiling process. The spelling 
+     of the values must be the same that is used in the XML files. You can also assign 
    multiple attribute values to a profiling parameter&mdash;for example, if you 
    want to cover multiple processor architectures in the same document. 
    A &dc; file containing the following line <literal>PROFARCH=s390;systemz</literal>
    would create an output that contains all contents profiled for either 
    <literal>s390</literal> or <literal>systemz</literal> architectures or both.</para>
-   <para>For each document variant that you  want to generate from a pool of common 
-    XML files you need to create an individual &dc; file. <xref linkend="ex.daps.profiling.dc.osuse"/> and
-    <xref linkend="ex.daps.profiling.dc.sles"/> show two Main files that can be used to generate 
+    <para>Create an individual &dc; file for each document variant that you want 
+   to generate from a pool of common XML files. 
+     <xref linkend="ex.daps.profiling.dc.osuse" xrefstyle="select:label"/> and 
+     <xref linkend="ex.daps.profiling.dc.sles" xrefstyle="select:label"/> show 
+     two Main files that can be used to generate 
    product-specific documentation from the XML file in 
-   <xref linkend="ex.daps.profiling"/>&mdash;in this case 
-   the <citetitle>&osuse; Quick Start Guide</citetitle> and the
-   <citetitle>&sles; Quick Start Guide</citetitle>.
+   <xref linkend="ex.daps.profiling"/>.
    </para>
-   <example id="ex.daps.profiling.dc.osuse">
+    <example id="ex.daps.profiling.dc.osuse">
      <title>Profiling Parameters in Product-specific &dc; File (&osuse;)</title>
-     <screen>### 
-## Doc Config File for openSUSE Quick Start Guide
+     <screen>## Doc Config File for openSUSE Quick Start Guide
 
 ## Mandatory Parameters
 MAIN="MAIN.opensuse.xml"
@@ -602,16 +602,35 @@ MAIN="MAIN.opensuse.xml"
 ROOTID="book.quickstarts"
 
 ## Profiling
-PROFOS="osuse"
-PROFARCH="x86;i586"
+PROFOS="osuse" <co id="daps.param.profos.osuse"/>
+PROFARCH="x86;i586" <co id="daps.param.profarch.osuse"/>
 
 [...]</screen>
-</example>
-
-<example id="ex.daps.profiling.dc.sles">
+    </example>
+    <calloutlist>
+     <callout arearefs="daps.param.profos.osuse">
+      <para>Profiling parameter. Filters the XML files of the documentation 
+      project for elements with a <literal>os="osuse"</literal> profiling
+      attribute and includes their content in the generated output. 
+      </para>
+     </callout>
+     <callout arearefs="daps.param.profarch.osuse">
+      <para>Profiling parameter. Filters the XML files of the documentation 
+      project for elements with a <literal>arch="x86"</literal> or 
+      <literal>arch="i586"</literal> profiling attribute or <sgmltag>arch</sgmltag>
+      attributes that includes both attribute values. Includes their content in 
+      the generated output. 
+      </para>
+     </callout>
+    </calloutlist>
+    <para>You can use this &dc; file to generate an &osuse;-specific version
+     of the <citetitle>Quick Start Manuals</citetitle> displayed in
+     <xref linkend="ex.daps.profiling"/>. It will contain all Quick
+     Starts that are profiled with <literal>os="osuse"</literal>. 
+    </para>
+    <example id="ex.daps.profiling.dc.sles">
      <title>Profiling Parameters in Product-specific &dc; File (&sles;)</title>
-     <screen>### 
-## Doc Config File for SLES Quick Start Guide
+     <screen>## Doc Config File for SLES Quick Start Guide
 
 ## Mandatory Parameters
 MAIN="MAIN.SLES.xml"
@@ -620,11 +639,31 @@ MAIN="MAIN.SLES.xml"
 ROOTID="book.quickstarts"
 
 ## Profiling
-PROFOS="sles"
-PROFARCH="s390;systemz"
+PROFOS="sles" <co id="daps.param.profos.sles"/>
+PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
 
 [...]</screen>
-</example> 
+     <calloutlist>
+      <callout arearefs="daps.param.profos.sles">
+       <para>Profiling parameter. Filters the XML files of the documentation 
+      project for elements with a <literal>os="sles"</literal> profiling
+      attribute and includes their content in the generated output. 
+      </para>
+      </callout>
+      <callout arearefs="daps.param.profarch.sles">
+       <para>Profiling parameter. Filters the XML files of the documentation 
+      project for elements with a <literal>arch="s390"</literal> or 
+      <literal>arch="systemz"</literal> profiling attribute or <sgmltag>arch</sgmltag>
+      attributes that includes both attribute values. Includes their content in 
+      the generated output. 
+      </para>
+      </callout>
+     </calloutlist>
+    </example>
+    <para>You can use this &dc; file to generate a &sles;-specific version
+     of the <citetitle>Quick Start Manuals</citetitle> displayed in
+     <xref linkend="ex.daps.profiling"/>. It will contain all Quick
+     Starts that are profiled with <literal>os="sles"</literal>.</para>
    
     <!--<procedure>
      <para>The following procedure is based on <xref linkend="ex.daps.profiling"/>.
@@ -661,19 +700,19 @@ PROFARCH="s390;systemz"
       <para>Save the &dc; files. </para>
      </step>
     </procedure>-->
-   </sect3>
-  </sect2>
-  <sect2 id="sec.daps.user.edit.variants.productentities">
-   <title>Entities for Dynamic Product Names and Numbers</title>
-   <para>
-    <remark>taroth 2012-05-30: FIXME</remark>
-   </para>
-  </sect2>
- </sect1>
+    </sect3>
+   </sect2>
+   <sect2 id="sec.daps.user.edit.variants.productentities">
+    <title>Entities for Dynamic Product Names and Numbers</title>
+    <para>
+     <remark>taroth 2012-05-30: FIXME</remark>
+    </para>
+   </sect2>
+  </sect1>
 
- <sect1 id="sec.daps.user.edit.validate">
-  <title>Validating Your XML Sources</title>
-  <para>
+  <sect1 id="sec.daps.user.edit.validate">
+   <title>Validating Your XML Sources</title>
+   <para>
    Validating XML files within in a book or set often exceeds validation of
    the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
    XIncludes need to be resolved, too. If you use conditional text
@@ -683,9 +722,9 @@ PROFARCH="s390;systemz"
    validator.
   </para>
 
-  <procedure>
-   <title>Validating XML Files</title>
-   <para>
+   <procedure>
+    <title>Validating XML Files</title>
+    <para>
     To validate all files that belong to your documentation project,
     &dapsacr; only needs to know which &dclong; file to use. If you have
     specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
@@ -694,62 +733,62 @@ PROFARCH="s390;systemz"
     Otherwise, specify the path to the &dc; file with the
     <option>-d</option> option as described below.
    </para>
-   <para>
+    <para>
     By default, <sgmltag>remark</sgmltag> elements and XML comments are
     ignored during validation. However, if you intend to create a (draft)
     output including remarks or comments, you need to include them for
     validation by specifying the respective &dapsacr; option.
    </para>
-   <step>
-    <para>
+    <step>
+     <para>
      To validate all XML files in your book, article or set, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
-    <para>
+     <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+     <para>
      If the XML files are not valid, &dapsacr; will return the parser
      errors. They include information about the type of error, the
      respective file name and the line number where the error occurred. In
      addition, &dapsacr; shows the path to the profiled XML sources and the
      total number of errors.
     </para>
-    <para>
+     <para>
      If validation was successful, &dapsacr; returns: <literal>All files are
      valid.</literal>
-    </para>
-   </step>
-   <step>
-    <para>
+     </para>
+    </step>
+    <step>
+     <para>
      To validate your files including remarks, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
-   </step>
-   <step>
-    <para>
+     <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+    </step>
+    <step>
+     <para>
      To validate your files including XML comments, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
-   </step>
-  </procedure>
+     <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
+    </step>
+   </procedure>
 
-  <example>
-   <title>Parser Output For Validation Errors</title>
-   <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+   <example>
+    <title>Parser Output For Validation Errors</title>
+    <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3
 </screen>
-  </example>
- </sect1>
- <sect1 id="sec.daps.user.edit.more">
-  <title>For More Information</title>
-  <para>
+   </example>
+  </sect1>
+  <sect1 id="sec.daps.user.edit.more">
+   <title>For More Information</title>
+   <para>
    For a complete DocBook reference see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
    <citetitle>&tdg;</citetitle>
-   </ulink>.
+    </ulink>.
   </para>
-  <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
+   <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
    Developers and Writers</citetitle>, available at 
    <ulink url="http://doccookbook.sourceforge.net/"></ulink>.</para>
- </sect1>
-</chapter>
+  </sect1>
+ </chapter>
