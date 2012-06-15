@@ -416,11 +416,11 @@
     <para>
      To see what the output of the XML example file looks like, follow the
      instructions on the screen. For example, the following command
-     specifies the <filename>DC*</filename> file
-     (<filename>DC-daps-example</filename>) to use and the output format
+     specifies the <filename>&dc;*</filename> file
+     (<filename>&dc;-daps-example</filename>) to use and the output format
      (color PDF) to create:
     </para>
-<screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/DC-daps-example color-pdf</screen>
+<screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</screen>
     <para>
      For creation of the PDF, &dapsacr; uses FOP by default (if no other
      formatter is specified) and applies the default DocBook stylesheets (if
@@ -434,12 +434,12 @@
    <step>
     <para>
      Check your documentation directory for the new files: The text file
-     <filename>DC-daps-example</filename> is annotated and gives you a rough
+     <filename>&dc;-daps-example</filename> is annotated and gives you a rough
      idea which options can be defined in a &dc; file. For having a look at
      the XML source code of the <sgmltag>book</sgmltag> or
      <sgmltag>article</sgmltag>, change to the <filename>xml</filename>
      subdirectory and open the file
-     <filename>MAIN-DC-daps-example.xml</filename> in a text or XML editor.
+     <filename>MAIN-&dc;-daps-example.xml</filename> in a text or XML editor.
     </para>
    </step>
   </procedure>
@@ -495,7 +495,7 @@
      <command>warn-images</command> subcommand. It lists all images with
      non-unique base names for a particular documentation project.
     </para>
-<screen>$ daps -d <replaceable>PATH_TO_DOC_DIR/DC-FILE</replaceable> warn-images</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</screen>
    </important>
   </sect2>
 
@@ -556,7 +556,7 @@
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax</title>
-<screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> DC-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
+<screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> &dc;-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
    </screen>
    <calloutlist>
     <callout arearefs="co.daps.syntax.main">
@@ -671,17 +671,17 @@ make: *** [validate] Error 3</screen>
     Independent of the individual output format you want to create, you need
     to specify the &dclong; file to use:
    </para>
-<screen>$ daps -d <replaceable>DC_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
+<screen>$ daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
    <para>
     For example:
    </para>
-<screen>$ daps -d DC-daps-example color-pdf</screen>
+<screen>$ daps -d &dc;-daps-example color-pdf</screen>
    <para>
     If your current directory is not the documentation directory where the
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>
-<screen>$ daps -d /svn/daps/example/DC-daps-example color-pdf</screen>
+<screen>$ daps -d /svn/daps/example/&dc;-daps-example color-pdf</screen>
    <para>
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.
@@ -990,7 +990,7 @@ make: *** [validate] Error 3</screen>
      use the following command to build the first chapter of the book
      (without the book's title page, table of contents etc.):
     </para>
-<screen>$ daps -d DC-daps-example color-pdf --rootid=cha.template.examples</screen>
+<screen>$ daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
    </sect3>
    <sect3 id="sec.daps.quick.output.adv.review">
     <title>Output with Remarks or Draft Watermark</title>
@@ -1001,13 +1001,13 @@ make: *** [validate] Error 3</screen>
      the following command to build a color PDF that has a
      <literal>DRAFT</literal> watermark printed on each page:
     </para>
-<screen>$ daps -d DC-daps-example color-pdf --draft</screen>
+<screen>$ daps -d &dc;-daps-example color-pdf --draft</screen>
     <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
      editorial remarks or questions to the proofreader), include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
-<screen>$ daps -d DC-daps-example color-pdf --remarks</screen>
+<screen>$ daps -d &dc;-daps-example color-pdf --remarks</screen>
     <para>
      By default, the content of remark elements is shown in italics in the
      output format. Enabling remarks automatically turns draft mode on.
@@ -1092,7 +1092,7 @@ make: *** [validate] Error 3</screen>
      from your XML files, create a &dclong; file. For more information,
      refer to <xref linkend="sec.daps.quick.basics.files"/>. Find a template
      for &dc; files in your installed system in
-     <filename>/usr/share/daps/init_templates/DC-file.template</filename>.
+     <filename>/usr/share/daps/init_templates/&dc;-file.template</filename>.
     </para>
    </step>
   </procedure>
