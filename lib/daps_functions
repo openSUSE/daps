@@ -1221,10 +1221,19 @@ function spellcheck () {
 	exit 0
     fi
 
-    [[ -n $P_ASPELL_EXTRA_DICT ]]  && ASPELL_EXTRA_DICT="$P_ASPELL_EXTRA_DICT"
     [[ -n $P_FILE ]] && FILELIST[0]="$P_FILE"
     [[ -n $P_LANG ]] && ASPELL_LANG="$P_LANG"
     [[ 1 = $P_LIST ]] && LISTMODE=1
+
+    # extra dictionary
+    # check and absolutize path
+    if [[ -n $P_ASPELL_EXTRA_DICT ]]; then
+        if [[ -e $P_ASPELL_EXTRA_DICT ]]; then
+            sanitize_path "$P_ASPELL_EXTRA_DICT" "ASPELL_EXTRA_DICT"
+        else
+            exit_on_error "Path to extra dictionary \"$P_ASPELL_EXTRA_DICT\" is not valid"
+        fi
+    fi
     
     # set FILELIST if rootid was specified
     if [[ -z $P_ROOTID && -z $P_FILE ]]; then
