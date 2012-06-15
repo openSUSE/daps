@@ -195,7 +195,8 @@
   
 
 
-  <para>
+  <para><remark>taroth 2012-06-15: move the following editor-specific content to
+  the appendix as discussed with Frank today</remark>
    For your convenience, you can also integrate &daps-spell; (plus a custom
    &aspell; dictionary, if needed) into your XML editor, so that spelling is
    checked <quote>on the fly</quote> during editing. Consult your editor's
@@ -316,7 +317,16 @@
    information).  It searches for the <sgmltag class="attribute">url</sgmltag>
    attribute in <sgmltag>ulink</sgmltag> elements and checks links included
    there.  Use it to create a report of all links that caused some kind of
-   warning or error:</para>
+   warning or error.</para>
+   <note>
+   <title>
+    <command>checklink</command> follows XIncludes</title>
+   <para>
+    The checklink command always follows <sgmltag>xi:includes</sgmltag>, even
+    when using the <option>--file</option> option.
+   </para>
+  </note>
+
   <variablelist>
    <varlistentry>
     <term>Checking Links in a Documentation Project</term>
@@ -326,8 +336,8 @@
       Uses the ROOTID defined in the specified &dc; file as starting point.
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
       the documentation project. The resulting HTML report
-      <filename>*checkbot-localhost.html</filename> can be opened in a browser
-      (see <xref linkend="fig.daps.user.edit.chklink"/>).
+      <filename>*checkbot-localhost.html</filename> can be opened in a browser,
+      see <xref linkend="fig.daps.user.edit.chklink"/>.
      </para>
      <para>
       If your &dc; file references a documentation <sgmltag>set</sgmltag>, you
@@ -349,7 +359,7 @@
      <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>
      </screen>
      <para>
-      Checks the <sgmltag>ulink</sgmltag> elements inthe specified file. At
+      Checks the <sgmltag>ulink</sgmltag> elements in the specified file. At
       the end of the check, &dapsacr; returns an HTML file with a list of all
       links which caused some kind of warning or error. Open the resulting
       <filename>checkbot-localhost.html</filename> file in a browser.</para>
@@ -357,15 +367,7 @@
    </varlistentry>
   </variablelist>
 
-  <note>
-   <title>
-    <command>checklink</command> follows XIncludes</title>
-   <para>
-    The checklink command always follows <sgmltag>xi:includes</sgmltag>, even
-    when using the <option>--file option</option>.
-   </para>
-  </note>
-
+  
   <figure id="fig.daps.user.edit.chklink">
    <title>Example Output of <command>daps checklink</command>
    </title>
@@ -382,8 +384,8 @@
   <tip>
    <title>Opening the Link Check Report</title>
    <para>
-    To directly opening the link check report use the &dapsacr; command
-    output as an argument for a browser, e.g. the command-line web browser
+    To directly open the link check report, use the &dapsacr; command
+    output as an argument for a browser, e.g. the command-line Web browser
     w3m:
    </para>
    <screen>w3m -dump $(daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
