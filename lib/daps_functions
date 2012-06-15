@@ -1203,7 +1203,7 @@ function spellcheck () {
     shift
     
     SHORT_OPTS="h"
-    LONG_OPTS="extra-dict:,file:,help,lang,list,rootid:"
+    LONG_OPTS="extra-dict:,file:,help,lang:,list,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
