@@ -27,7 +27,11 @@
   <para>
    XML elements can be nested to a high extend. Some constructs like
    <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
-   <sgmltag>image</sgmltag> have a lot of required child elements. If you
+   <sgmltag>image</sgmltag> have a lot of required child elements.
+    <remark>toms 2012-06-15: the last sentence sounds a bit too much.
+      Actually, lots of elements are optional. Maybe rephrase that
+      better to "... needs a specific, nested structure."</remark>
+   If you
    have an editor with DTD support, it will tell you which elements are
    allowed at the current cursor position, but nevertheless it is cumbersome
    if you need to insert the child elements of complex XML constructs
@@ -77,6 +81,7 @@
     <para>
      Save the Emacs customization file.
      <remark>taroth 2012-03-13: restart of Emacs needed?</remark>
+      <remark>toms 2012-06-15: Yes, I think so.</remark>
     </para>
    </step>
   </procedure>
@@ -98,7 +103,8 @@
   a sorted list of misspelled words to standard output. &dapsacr; also allows 
   you to specify a custom dictionary and the language to use for spelling.
   </para>
-  <para>In the following, find some examples for using &daps-spell;:</para>
+  <para>In the following, find some examples for using &daps-spell;<remark
+    >toms 2012-06-15: Missing command element?</remark>:</para>
   <variablelist>
    <varlistentry>
     <term>Spell Checking All Files in a Documentation Project</term>
@@ -112,7 +118,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Spell Checking One or Multiple XML Files</term>
+    <term>Spell Checking One or Multiple XML Files<remark>toms
+      2012-06-15: One or More?</remark></term>
     <listitem>
      <screen>&daps-spell; xml/<replaceable>file1</replaceable>.xml xml/<replaceable>file2</replaceable>.xml</screen>
      <para>Checks the specified files with the default dictionary (en_US). 
@@ -164,6 +171,10 @@
   <quote>on the fly</quote> during editing. Consult your editor's documentation 
   on how to integrate a custom dictionary. If you use &jedit;, proceed as outlined
   in <xref linkend="pro.daps.spellcheck.jedit"/>.</para>
+   
+   <remark>toms 2012-06-15: Restructure the following procedure into
+     smaller pieces like steps and substeps? Or in sections? 15 steps
+     seems a bit overwhelming. :)</remark>
   <procedure id="pro.daps.spellcheck.jedit">
    <title>Integrating &daps-spell; into &jedit;</title>
    <para>
@@ -266,9 +277,13 @@
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
   <title>Checking Links to Web Pages</title>
-  <para>To make sure that all links in your XML sources are still available
+  <para>To make sure that all links<remark>toms 2012-06-15: maybe
+    explicitly say "external" or "remote" links? Depends on your
+    definition of "links" (vs. cross refs).</remark> in your XML sources are still available
       (and do not give a <literal>404</literal> error or similar), &dapsacr;
-      also includes a link checker (based on <literal>checkbot</literal>).
+      also includes a link checker (based on
+    <literal>checkbot</literal><remark>toms 2012-06-15: Add link to
+      home page?</remark>).
       It searches for the <sgmltag class="attribute">url</sgmltag> attribute in
       <sgmltag>ulink</sgmltag> elements and checks links included there. 
       Use it to create a report of all links that caused some kind of
@@ -285,7 +300,20 @@
      &dapsacr; returns an HTLM file with a list of all links which caused some 
      kind of warning or error. Open the resulting 
      <filename>*checkbot-localhost.html</filename> file in a browser.</para>
-     <figure>
+     <remark>toms 2012-06-15: I would rephrase the previous paragraph as
+     it contains some things that are not quite right (or unimportant):</remark>
+     <para>Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to the
+     documentation project. If the documentation project contains
+     XIncludes, all XIncludes will be resolved by &dapsacr;. At the end of the check, 
+     &dapsacr; returns an HTML file with a list of all links which caused some 
+     kind of warning or error. Open the resulting 
+     <filename>checkbot-localhost.html</filename> file in a browser (see
+       <xref linkend="fig.daps.user.edit.chklink"/>).</para> 
+      <remark>toms 2012-06-15: Move the following screenshot before the
+        list? It applies to both methods (checking all links or checking
+        links for a specific file). Placing the screenshot here can be
+        misinterpreted as it only applies to this part.</remark>
+     <figure id="fig.daps.user.edit.chklink">
       <title>Example Output of <command>daps chklink</command>
       </title>
       <mediaobject>
@@ -309,7 +337,8 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Checking Links in One or Multiple XML Files</term>
+    <term>Checking Links in One or Multiple XML Files<remark>toms
+      2012-06-15: One or More?</remark></term>
     <listitem>
      <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> chklink --file=xml/<replaceable>filename</replaceable>.xml</screen>
      <para>
@@ -317,9 +346,9 @@
      Checks the  <sgmltag>ulink</sgmltag> elements in 
      <filename><replaceable>filename.xml</replaceable>
       </filename>. At the end of 
-     the check, &dapsacr; returns an HTLM file with a list of all links which 
+     the check, &dapsacr; returns an HTML file with a list of all links which 
      caused some kind of warning or error. Open the resulting
-     <filename>*checkbot-localhost.html</filename> file in a browser.</para>
+     <filename>checkbot-localhost.html</filename> file in a browser.</para>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -375,6 +404,8 @@
    </procedure>
    <sect2 id="sec.daps.user.edit.profiling.supported">
     <title>Supported DocBook Profiling Attributes</title>
+     <remark>toms 2012-06-15: Maybe collect the information about
+       profiling attributes and env variable in a table?</remark>
      &daps-profiling-attributes; 
    </sect2>
 
@@ -397,6 +428,14 @@
     with the respective profiling attribute or attributes. The tagged snippets 
     will only be included in the output if the required condition is fulfilled.
     </para>
+     
+     <remark>toms 2012-06-15: The following example is a bit unfortunate
+     as the os attribute in xi:include is by definition not allowed.
+     Actually it is a "hack". ;)
+     Better show a chapter that contains some paras with and without os.
+     This is more compatible.
+     </remark>
+     
     <example id="ex.daps.profiling">
      <title>Profiling Articles Within a Book</title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -510,6 +549,11 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
       <para>End tag of the profiled <sgmltag>phrase</sgmltag> element.</para>
      </callout>
     </calloutlist>
+     
+     <remark>toms 2012-06-15: Maybe better add a list and show what's
+       going on with and without the os profiling attribute? Something
+       like itemizedlist/listitem/para with screen.</remark>
+     
     <para>If the XML file containing this text snippet is profiled for &sled;
       (<literal>os="sled"</literal>), both sentences will be included in the output:
      <literal>If you choose this options, your credentials are stored in 
@@ -529,9 +573,17 @@ KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co i
      processing instruction (PI):</para>
     <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
     <para>For all documentation projects that need profiling, add 
-     this line to the header (prolog) of the Main file that is 
+     this line to the header (prolog) of the Main<remark>toms
+       2012-06-15: Main: upper case or lower case?</remark> file that is 
      referenced by the <parameter>MAIN</parameter> parameter 
      in the &dc; file.</para>
+     
+     <remark>toms 2012-06-15: I would describe the components of the
+     PI (?xml-stylesheet, href, type). A single callout is a bit useless
+     IMHO. :) Futhermore, I would only include the header without any
+     root element, which restricts the focus on the very important
+     line(s).</remark>
+     
     <example id="ex.daps.main.profiling">
      <title>Main File with Processing Instruction for Profiling </title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -584,7 +636,9 @@ title="Profiling step" ?&gt;
    want to cover multiple processor architectures in the same document. 
    A &dc; file containing the following line <literal>PROFARCH=s390;systemz</literal>
    would create an output that contains all contents profiled for either 
-   <literal>s390</literal> or <literal>systemz</literal> architectures or both.</para>
+   <literal>s390</literal> or <literal>systemz</literal> architectures or both.
+    <remark>toms 2012-06-15: maybe add: "..., but not x86_64.</remark>
+    </para>
     <para>Create an individual &dc; file for each document variant that you want 
    to generate from a pool of common XML files. 
      <xref linkend="ex.daps.profiling.dc.osuse" xrefstyle="select:label"/> and 

@@ -317,7 +317,8 @@
    As &dapsacr; does not include any editor software, you are completely
    free in the choice of your XML editor. Basically, you can use any text
    editor, but it is helpful if the editor supports editing XML in
-   accordance with the DTD you use. A number of open source editors can be
+   accordance with the DTD<remark>toms 2012-06-15: better replace DTD
+     with schema as it is a general term</remark> you use. A number of open source editors can be
    extended with plug-ins for automatic tag insertion and completion,
    insertion of <sgmltag>xref</sgmltag> elements and for checks if the XML
    document is well-formed. If you are already familiar with vi or Emacs,
@@ -330,9 +331,11 @@
 <!ENTITY db-structure-elements     
  ' <para>
    If you already worked with DocBook, you know about the typical top-level
-   elements (or root elements) for documents: <sgmltag>book</sgmltag> or
+   elements (or root elements)<remark>toms 2012-06-15: root element !=
+   top level element; it is not an exact synonym. Better remove the
+   addition in brackets.</remark> for documents: <sgmltag>book</sgmltag> or
    <sgmltag>article</sgmltag>. For larger documentation projects, another
-   typical root element is <sgmltag>set</sgmltag> (a collection of books).
+   typical top level element is <sgmltag>set</sgmltag> (a collection of books).
   </para>
 
   <para>
