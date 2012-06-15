@@ -9,7 +9,6 @@
 ]>
 <chapter id="cha.daps.user.edit">
  <title>Editing DocBook-XML</title>
- <remark>profiling, checklinks, spellcheck, dynamic product names and numbers</remark>
  <abstract>
   &daps-editor;
  </abstract>
@@ -23,16 +22,14 @@
  </sect1>
  <sect1 id="sec.daps.user.edit.macros">
   <title>Editor Macros for Inserting Complex Elements</title>
-
+<remark>taroth 2012-06-15: todo - move to appendix as discussed with Frank today</remark>
   <para>
    XML elements can be nested to a high extend. Some constructs like
    <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
-   <sgmltag>image</sgmltag> have a lot of required child elements.
-    <remark>toms 2012-06-15: the last sentence sounds a bit too much.
-      Actually, lots of elements are optional. Maybe rephrase that
-      better to "... needs a specific, nested structure."</remark>
+   <sgmltag>image</sgmltag> can have a lot of child elements&mdash;some of them
+   required, some optional.
    If you
-   have an editor with DTD support, it will tell you which elements are
+   have an editor with schema support, it will tell you which elements are
    allowed at the current cursor position, but nevertheless it is cumbersome
    if you need to insert the child elements of complex XML constructs
    consecutively.
@@ -59,7 +56,7 @@
    <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>,
    <sgmltag>indexterm</sgmltag> etc. The macros are defined in
    <filename>docbook_macros.el</filename> and are added to your system during
-   the installation of &dapsacr;. They require that you either use one of
+   the installation of &dapsacr;. They require that you use one of
    Emacs' main XML editing modes, either <literal>nxml</literal> or
    <literal>psgml</literal>.
   </para>
@@ -121,8 +118,8 @@
       with the next file in the project.
      </para>
      <para>
-      Uses the ROOTID defined in the specified DC file as starting point. You
-      can restrict the check to parts of the set, such as a
+      Uses the ROOTID defined in the specified &dc; file as starting point. You
+      can restrict the spell check to parts of the set, such as a
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
       <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element. To do
@@ -144,13 +141,14 @@
    <varlistentry>
     <term>Spell Checking XML Files in Languages Other than English</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list=<replaceable>LANG</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
+[--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with the dictionary
       for <replaceable>LANG</replaceable> (make sure the specified &aspell;
       dictionary is installed). Suggests alternative spellings for each
-      misspelled word and waits for user interaction. The language code that
-      is used for the <option>--lang</option> option, is the same as used for
+      misspelled word and waits for user interaction. The language code used for
+      the <option>--lang</option> option is the same that is used for
       the <envar>LANG</envar> environment variable and matches the directory
       names in <filename>/usr/share/locale</filename>.
      </para>
@@ -159,7 +157,8 @@
    <varlistentry>
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list</screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
+[--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>Checks the specified documentation project or file. Returns a list
      of misspelled words to standard output. You can use the
      <option>--list</option> option to easily collect a list of words that are
@@ -170,7 +169,8 @@
    <varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
+[--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified the specified documentation project or file with
       the default dictionary plus the additional custom dictionary specified
