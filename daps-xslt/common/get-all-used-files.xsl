@@ -206,6 +206,11 @@
 
   <xsl:template match="included">
       <file href="{concat($xml.src.path, @xml:base)}">
+         <xsl:if test="*/@id">
+           <xsl:attribute name="id">
+              <xsl:value-of select="*/@id"/>
+           </xsl:attribute>
+         </xsl:if>
         <xsl:apply-templates/>
       </file>
   </xsl:template>
