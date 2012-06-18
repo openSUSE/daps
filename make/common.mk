@@ -443,12 +443,18 @@ SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  --stringparam mainfile $(notdir $(MAIN)) \
 		  $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
 		  $(MAIN)  | tr \" \')
+ifndef SETFILES
+  $(error Fatal error: Could not compute the list of setfiles)
+endif
 
 # XML source files for the whole set
 #
 SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
 		  --stringparam xml.or.img xml \
 		  $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
+ifndef SRCFILES
+  $(error Fatal error: Could not compute the list of XML source files)
+endif
 
 # XML source files for the currently used document (defined by teh rootid)
 #
@@ -456,6 +462,9 @@ ifdef ROOTSTRING
   DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
 		--stringparam xml.or.img xml \
 		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+  ifndef DOCFILES
+    $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
+  endif
 else
   DOCFILES  := $(SRCFILES)
 endif
