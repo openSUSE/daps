@@ -97,6 +97,9 @@
   <!-- Only recognize elements with the correct id attribute: -->
   <xsl:param name="rootid"/>
   
+  <!--  -->
+  <xsl:param name="rootid.debug" select="0"/>
+  
   <!-- Base path of XML files (ALWAYS end a trailing slash!): -->
   <xsl:param name="xml.src.path"/>
   
@@ -136,7 +139,9 @@
   
   <!-- Special handling of xi:include elements in profile mode -->
   <xsl:template match="xi:include[not(@parse) or @parse='xml']" mode="profile" priority="10">   
-    <xsl:message>Included <xsl:value-of select="@href"/></xsl:message>
+    <xsl:if test="$rootid.debug != 0">
+      <xsl:message>Included <xsl:value-of select="@href"/></xsl:message>
+    </xsl:if>
     <included xml:base="{@href}">
       <xsl:apply-templates select="document(@href)/*" mode="profile"/>
     </included>
@@ -158,21 +163,25 @@
       This is an intermediate XML file from
       get-included-files.xsl which was created in-memory
     </xsl:comment>
-    <xsl:message>rootid="<xsl:value-of select="$rootid"/>"</xsl:message>
+    <xsl:if test="$rootid.debug != 0">
+      <xsl:message>rootid="<xsl:value-of select="$rootid"/>"</xsl:message>
+    </xsl:if>
     <files>
     <xsl:choose>
       <xsl:when test="$rootid != ''">
         <xsl:choose>
           <xsl:when test="count($node//*[@id=$rootid]) = 0">
             <xsl:message terminate="yes">
-              <xsl:text>ID '</xsl:text>
+              <xsl:text>>>> ID '</xsl:text>
               <xsl:value-of select="$rootid"/>
               <xsl:text>' not found in document.</xsl:text>
             </xsl:message>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:message>Applying <xsl:value-of select="$rootid"/> to document</xsl:message>
-              <xsl:apply-templates select="$node//*[@id=$rootid]"/>
+            <xsl:if test="$rootid.debug != 0">
+              <xsl:message>Applying <xsl:value-of select="$rootid"/> to document</xsl:message>
+            </xsl:if>
+            <xsl:apply-templates select="$node//*[@id=$rootid]"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
