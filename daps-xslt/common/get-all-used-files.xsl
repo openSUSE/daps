@@ -103,6 +103,9 @@
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
   
+  <!--  -->
+  <xsl:param name="xmlbase"/>
+  
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
   
@@ -127,6 +130,10 @@
 
   <xsl:template match="text()"/>
   
+  <xsl:template name="add-xml-base">
+    <xsl:value-of select="$xmlbase"/>
+  </xsl:template>
+  
   <!-- Special handling of xi:include elements in profile mode -->
   <xsl:template match="xi:include[not(@parse) or @parse='xml']" mode="profile" priority="10">   
     <xsl:message>Included <xsl:value-of select="@href"/></xsl:message>
@@ -145,15 +152,18 @@
         <xsl:text>Need XSLT processor which support EXSLT node-set function.</xsl:text>
       </xsl:message>
     </xsl:if>
+    <xsl:variable name="node" select="exsl:node-set($rtf)"/>
     
     <xsl:comment>
       This is an intermediate XML file from
       get-included-files.xsl which was created in-memory
     </xsl:comment>
+    <xsl:message>rootid="<xsl:value-of select="$rootid"/>"</xsl:message>
+    <files>
     <xsl:choose>
       <xsl:when test="$rootid != ''">
         <xsl:choose>
-          <xsl:when test="count(exsl:node-set($rtf)//*[@id=$rootid]) = 0">
+          <xsl:when test="count($node//*[@id=$rootid]) = 0">
             <xsl:message terminate="yes">
               <xsl:text>ID '</xsl:text>
               <xsl:value-of select="$rootid"/>
@@ -162,18 +172,15 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:message>Applying <xsl:value-of select="$rootid"/> to document</xsl:message>
-            <files>
-              <xsl:apply-templates select="exsl:node-set($rtf)//*[@id=$rootid]"/>
-            </files>
+              <xsl:apply-templates select="$node//*[@id=$rootid]"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <files>
-          <xsl:apply-templates select="exsl:node-set($rtf)/node()"/>
-        </files>
-      </xsl:otherwise>
-    </xsl:choose>
+          <xsl:apply-templates select="$node/node()"/>
+      </xsl:otherwise>     
+    </xsl:choose> 
+    </files>
   </xsl:template>
   
   <!-- This stylesheet gets only called once -->
