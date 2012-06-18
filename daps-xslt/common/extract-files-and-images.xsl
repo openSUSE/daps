@@ -22,11 +22,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
- 
-  <xsl:import href="rootid.xsl"/>
-  
-  <xsl:output method="text" indent="no"/>
-  
+  <xsl:import href="rootid.xsl"/>  
+  <xsl:output method="text" indent="no"/>  
 
   <xsl:param name="xml.or.img" select="'xml'"/>
   <xsl:param name="separator">
@@ -34,6 +31,11 @@
   </xsl:param>
   
   <xsl:template match="text()"/>
+  
+  
+  <xsl:template match="/">
+    <xsl:call-template name="process.rootid.node"/>
+  </xsl:template>
   
   
   <xsl:template match="file">
