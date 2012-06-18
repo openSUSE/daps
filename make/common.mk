@@ -438,7 +438,7 @@ endif
 # we need to replace double quotes by single quotes (cannot be done with
 # xsltproc)
 #
-SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
+SETFILES     := $(shell xsltproc $(PROFSTRINGS) $(ROOTSTRING) \
 		  --stringparam xml.src.path "$(DOC_DIR)/xml/" \
 		  --stringparam mainfile $(notdir $(MAIN)) \
 		  $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
@@ -458,16 +458,16 @@ endif
 
 # XML source files for the currently used document (defined by teh rootid)
 #
-ifdef ROOTSTRING
-  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
-		--stringparam xml.or.img xml \
-		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
-  ifndef DOCFILES
-    $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
-  endif
-else
+#ifdef ROOTSTRING
+#  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
+#		--stringparam xml.or.img xml \
+#		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+# ifndef DOCFILES
+#    $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
+#  endif
+#else
   DOCFILES  := $(SRCFILES)
-endif
+#endif
 
 PROFILES    := $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(DOC_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
