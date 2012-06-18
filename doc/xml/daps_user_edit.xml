@@ -487,10 +487,10 @@
   <sect2 id="sec.daps.user.edit.profile.basics">
    <title>Profiling Basics</title>
    <para>DocBook offers profiling attributes for various purposes as illustrated
-    in <citetitle>Table 26.1. Profiling attributes</citetitle> at <ulink
-     url="http://www.sagehill.net/docbookxsl/Profiling.html"/>. Currently, not
-    all of them are supported by &dapsacr;, see <xref
-     linkend="sec.daps.user.edit.profile.daps"/>.</para>
+    in <citetitle>Table 26.1. Profiling attributes</citetitle> at 
+    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>. Currently, not
+    all of them are supported by &dapsacr;, see 
+    <xref linkend="sec.daps.user.edit.profile.daps"/>.</para>
    <para>Generally, profiling attributes can be used on a large number of 
    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
    or <sgmltag>chapter</sgmltag> down to low-level elements like 
@@ -510,7 +510,25 @@
     sources. Text snippets that only apply to a certain condition can be tagged 
     with the respective profiling attribute. The tagged snippets 
     will only be included in the output if the required condition is fulfilled.
-    </para>
+   </para>
+   <para>The following example shows how to profile product-specific information 
+    in a product description for a software. The software product is
+    available in two editions: a basic edition for home users
+    and a professional edition for enterprise customers. Both
+    editions share common features, but some features are only available in the 
+    Basic Edition or the Professional Edition, respectively.</para>
+   <example>
+    <title>Profiling Product-specific Information</title>
+    <screen>&lt;simplelist&gt;
+     &lt;member&gt;Common Feature 1&lt;/member&gt;
+     &lt;member&gt;Common Feature 2&lt;/member&gt;
+     &lt;member&gt;Common Feature 3&lt;/member&gt;
+     &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+     &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
+     &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+&lt;/simplelist&gt;</screen>
+   </example>
+   <remark>taroth 2012-06-18: add table with output</remark>
   </sect2>
   <sect2 id="sec.daps.user.edit.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
@@ -616,8 +634,7 @@
       <formalpara>
        <title>Supported Profiling Attributes:</title>
        <para>Your XML sources must contain profiling attributes that are
-        supported by &dapsacr;&mdash;see <xref
-         linkend="sec.daps.user.edit.profile.daps.supported"/>. </para>
+        supported by &dapsacr;&mdash;see <xref linkend="sec.daps.user.edit.profile.daps.supported"/>. </para>
       </formalpara>
      </listitem>
      <listitem>
@@ -655,6 +672,23 @@
       </formalpara>
      </listitem>
     </orderedlist>
+   </sect3>
+   <sect3 id="sec.daps.user.edit.profile.daps.ex">
+    <title>Profiling Example</title>
+    <para><remark>taroth 2012-06-18: FIXME: extend example</remark></para>
+    
+   <screen>&lt;simplelist&gt;
+     &lt;member&gt;Common Feature 1&lt;/member&gt;
+     &lt;member&gt;Common Feature 2 &lt;/member&gt;
+     &lt;member&gt;Common Feature 3 &lt;/member&gt;
+     &lt;member condition="basic"&gt;Basic Feature 1 &lt;/member&gt;
+     &lt;member condition="professional"&gt;Professional Feature 1 &lt;/member&gt;
+     &lt;member condition="professional"&gt;Professional Feature 2 &lt;/member&gt;
+&lt;/simplelist&gt;</screen>
+   </sect3>
+   <sect3 id="sec.daps.user.edit.profile.daps.productentities">
+   <title>Dynamic Productnames and Productnumbers</title>
+   <para><remark>taroth 2012-06-18: todo - combine profiling and entities</remark></para>
    </sect3>
   </sect2>
  </sect1>
@@ -958,7 +992,7 @@ PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
      Starts that are profiled with <literal>os="sles"</literal>.</para>
   </sect2>-->
  
- 
+
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
   <para>
