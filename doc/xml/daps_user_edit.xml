@@ -517,7 +517,7 @@
     and a professional edition for enterprise customers. Both
     editions share common features, but some features are only available in the 
     Basic Edition or the Professional Edition, respectively.</para>
-   <example>
+   <example id="ex.daps.profile.simple">
     <title>Profiling Product-specific Information</title>
     <screen>&lt;simplelist&gt;
      &lt;member&gt;Common Feature 1&lt;/member&gt;
@@ -528,7 +528,41 @@
      &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
-   <remark>taroth 2012-06-18: add table with output</remark>
+   <para>This profiling would result in the following output:</para>
+   <table id="tab.daps.profile.output" rowsep="1">
+    <title>Output of <xref linkend="ex.daps.profile.simple"/></title>
+     <tgroup cols="2">
+      <colspec colnum="1" colname="1" colwidth="50*"/>
+      <colspec colnum="2" colname="2" colwidth="50*"/>
+      <thead>
+      <row>
+       <entry colname="1">
+        <para> Basic Edition </para>
+       </entry>
+       <entry colname="2">
+        <para> Professional Edition </para>
+       </entry>
+      </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry colname="1">
+         <para>Common Feature 1</para>
+         <para>Common Feature 2</para>
+         <para>Common Feature 3</para>
+          <para>Basic Feature 1</para>
+        </entry>
+       <entry colname="2">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+       </entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
   </sect2>
   <sect2 id="sec.daps.user.edit.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
