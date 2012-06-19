@@ -487,30 +487,33 @@
   <sect2 id="sec.daps.user.edit.profile.basics">
    <title>Profiling Basics</title>
    <para>DocBook offers profiling attributes for various purposes as illustrated
-    in <citetitle>Table 26.1. Profiling attributes</citetitle> at 
-    <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>. Currently, not
-    all of them are supported by &dapsacr;, see 
+    in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
+    <citetitle>Table 26.1. Profiling attributes</citetitle></ulink>. Currently, not
+    all of them are supported by &dapsacr;. For details, refer to 
     <xref linkend="sec.daps.user.edit.profile.daps"/>.</para>
    <para>Generally, profiling attributes can be used on a large number of 
    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
    or <sgmltag>chapter</sgmltag> down to low-level elements like 
    <sgmltag>para</sgmltag>. With the <sgmltag>phrase</sgmltag> element, you can 
-   even profile inline elements, like one sentence within a paragraph<!--, see
+   even profile inline elements, like one sentence within a paragraph.<!--, see
    <xref linkend="ex.daps.profiling.inline"/>.-->
    </para>
    <para>Based on the conditions that you want to apply, select one or more 
-   profiling attributes, like <literal>vendor</literal> for vendor-specific 
-   information or <literal>os</literal> for information that is specific to an 
-   operating system, like Windows or Linux. You are free in defining the attribute 
-   values, but they must be used consistently in all files belonging to a 
-   documentation project.</para>
-   <para>Any content that is valid for <emphasis>all</emphasis> conditions does
-    <emphasis>not</emphasis> need any profiling attributes. The respective 
-    content will always be included in the output formats generated from the XML 
-    sources. Text snippets that only apply to a certain condition can be tagged 
-    with the respective profiling attribute. The tagged snippets will only be 
-    included in the output if the required condition is fulfilled.
-   </para>&dapsdev;
+   profiling attributes and add them to the text snippets that are conditional.
+   The tagged snippets will only be included in the output if the required 
+   condition is fulfilled. Any content that is valid for <emphasis>all</emphasis> 
+   conditions does <emphasis>not</emphasis> need any profiling attributes. The 
+   respective content will always be included in the output formats generated 
+   from the XML sources. You are free in defining the attribute 
+   values (<literal>condition="foo"</literal>), but they must be used consistently 
+   in all files belonging to a documentation project.</para>
+   <para><xref linkend="ex.daps.profile.simple"/> shows how to profile 
+   product-specific information in a software description. The software is 
+   available in two editions: a basic edition for home users and a professional 
+   edition for enterprise customers. Both editions share common features, but 
+   some features are only available in the basic or the professional 
+   edition, respectively.</para>
+   
    <example id="ex.daps.profile.simple">
     <title>Profiling Product-specific Information</title>
     <screen>&lt;simplelist&gt;
@@ -522,16 +525,11 @@
      &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
-   <para><xref linkend="ex.daps.profile.simple"/> shows how to profile 
-   product-specific information in a software description. The software is 
-   available in two editions: a basic edition for home users and a professional 
-   edition for enterprise customers. Both editions share common features, but 
-   some features are only available in the basic or the professional 
-   edition, respectively. The example source code would result in the following 
-   output when generated for the basic edition or the professional edition,
-   respectively:</para>
+   <para>When generated for the basic edition or for the professional edition, 
+   respectively, the example source code would result in the following 
+   output:</para>
    <table id="tab.daps.profile.output" rowsep="1">
-    <title>Output of <xref linkend="ex.daps.profile.simple" xrefstyle="select:label"/></title>
+    <title>Output of <xref linkend="ex.daps.profile.simple"/></title>
      <tgroup cols="2">
       <colspec colnum="1" colname="1" colwidth="50*"/>
       <colspec colnum="2" colname="2" colwidth="50*"/>
@@ -575,15 +573,15 @@
     <para>Currently, &dapsacr; supports the profiling attributes that are listed 
    in <xref linkend="tab.daps.profiling"/>. In &dapsacr;, each profiling attribute 
    has a corresponding profiling parameter to be used in the &dc; file. The 
-   profiling parameters define which profiling attributes and values in the XML 
-   files are interpreted during generation of output.</para>
+   profiling parameters define which profiling attributes and values to interpret
+   during generation of output.</para>
 
     <table id="tab.daps.profiling" rowsep="1">
      <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
      <tgroup cols="3">
       <colspec colnum="1" colname="1" colwidth="20*"/>
-      <colspec colnum="2" colname="2" colwidth="60*"/>
-      <colspec colnum="3" colname="3" colwidth="20*"/>
+      <colspec colnum="2" colname="2" colwidth="50*"/>
+      <colspec colnum="3" colname="3" colwidth="30*"/>
       <thead>
        <row>
         <entry colname="1">
@@ -650,7 +648,7 @@
          </para>
         </entry>
         <entry colname="2">
-         <para>Product vendor</para>
+         <para>Product vendor.</para>
         </entry>
         <entry colname="3">
          <parameter>PROFVENDOR</parameter>
@@ -662,8 +660,8 @@
    </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.req">
     <title>Requirements</title>
-    <para>To create multiple documentation variants of the same pool of XML
-     files with &dapsacr;, the following requirements need to be fulfilled: </para>
+    <para>To create multiple documentation variants of the same pool of DocBook 
+    files with &dapsacr;, the following requirements need to be fulfilled: </para>
     <orderedlist>
      <listitem>
       <formalpara>
@@ -676,12 +674,13 @@
       <formalpara>
        <title>Processing Instruction:</title>
        <para>The following processing instruction (PI) must be included in the
-        header (prolog) of the Main file that is referenced by the
-         <parameter>MAIN</parameter> parameter in the &dc; file:</para>
+        header of the Main file. </para>
       </formalpara>
       <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-      <para>If it is missing, any profiling parameters in the &dc; file will
-       be ignored during generation of the output. </para>
+      <para>The Main file of a documentation project is the one that is referenced 
+      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the 
+      processing is missing in the Main file, any profiling parameters in the 
+      &dc; file will be ignored during generation of the output. </para>
       <tip>
        <title>Include PI in All XML Files</title>
        <para>For any documentation projects that need profiling, we advise to
@@ -694,15 +693,12 @@
      <listitem>
       <formalpara>
        <title>Profiling Attributes in &dc; Files:</title>
-       <para>If using profiling attributes in your XML sources, you need to
-        define which of them should be interpreted by &dapsacr; during
-        generation of output. For this purpose, add profiling parameters
-         (<parameter>PROF*</parameter>) to the &dc; files of the
-        documentation projects that need profiling. Depending on the profiling
-        attributes used in your XML files, a &dc; file may contain multiple
-        profiling parameters. For each parameter, set the respective attribute
-        values for which you want to filter during the profiling process. The
-        spelling of the values must be the same that is used in the XML
+       <para>Depending on the profiling attributes used in your XML files, a &dc;
+       file may contain multiple profiling parameters. They define 
+        which of the profiling attributes should be interpreted by &dapsacr;
+        when generating output. For each profiling parameter, set the respective 
+        attribute values for which you want to filter during the profiling process. 
+        The spelling of the values must be the same that is used in the XML
         files.</para>
       </formalpara>
      </listitem>
