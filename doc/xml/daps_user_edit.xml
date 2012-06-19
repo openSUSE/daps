@@ -508,15 +508,9 @@
     <emphasis>not</emphasis> need any profiling attributes. The respective 
     content will always be included in the output formats generated from the XML 
     sources. Text snippets that only apply to a certain condition can be tagged 
-    with the respective profiling attribute. The tagged snippets 
-    will only be included in the output if the required condition is fulfilled.
-   </para>
-   <para>The following example shows how to profile product-specific information 
-    in a product description for a software. The software product is
-    available in two editions: a basic edition for home users
-    and a professional edition for enterprise customers. Both
-    editions share common features, but some features are only available in the 
-    Basic Edition or the Professional Edition, respectively.</para>
+    with the respective profiling attribute. The tagged snippets will only be 
+    included in the output if the required condition is fulfilled.
+   </para>&dapsdev;
    <example id="ex.daps.profile.simple">
     <title>Profiling Product-specific Information</title>
     <screen>&lt;simplelist&gt;
@@ -528,9 +522,16 @@
      &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
-   <para>This profiling would result in the following output:</para>
+   <para><xref linkend="ex.daps.profile.simple"/> shows how to profile 
+   product-specific information in a software description. The software is 
+   available in two editions: a basic edition for home users and a professional 
+   edition for enterprise customers. Both editions share common features, but 
+   some features are only available in the basic or the professional 
+   edition, respectively. The example source code would result in the following 
+   output when generated for the basic edition or the professional edition,
+   respectively:</para>
    <table id="tab.daps.profile.output" rowsep="1">
-    <title>Output of <xref linkend="ex.daps.profile.simple"/></title>
+    <title>Output of <xref linkend="ex.daps.profile.simple" xrefstyle="select:label"/></title>
      <tgroup cols="2">
       <colspec colnum="1" colname="1" colwidth="50*"/>
       <colspec colnum="2" colname="2" colwidth="50*"/>
