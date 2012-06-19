@@ -1,7 +1,11 @@
 """
+
+>>> import docbook
+>>> db = DocBook.EPUB2(f, options)
+
 """
 
-__all__=["EPUB2",]
+__all__=["EPUB2", "DBPATH"]
 __version__="0.1"
 __author__="Thomas Schraitle <toms@opensuse.org>"
 
@@ -14,7 +18,7 @@ from lxml import etree
 import zipfile
 
 # HACK: This path should be retrieved in a platform independant way 
-DB="/usr/share/xml/docbook/stylesheet/nwalsh/current/"
+DBPATH="/usr/share/xml/docbook/stylesheet/nwalsh/current/"
 
 class EPUB2(object):
   """Transforms a DocBook 4 file into a EPUB file, version 2
@@ -25,7 +29,7 @@ class EPUB2(object):
   MIMETYPE = "application/epub+zip"
   META_DIR = "META-INF"
   OEBPS_DIR = "OEBPS"
-  STYLESHEET=os.path.join(DB, "epub", "docbook.xsl") 
+  STYLESHEET=unicode(os.path.join(DBPATH, "epub", "docbook.xsl"))
   
   def __init__(self, xmlfile, options):
     """Initalizes the EPUB class
@@ -49,42 +53,50 @@ class EPUB2(object):
   
   def stringparam(self, string):
     """Wrap string values in single quotes before passing it to XSLT"""
-    return "'%s'" % etree.XSLT.strparam(string)
+    return "'%s'" % string
 
   def render(self, epubfile=None):
     """Render DocBook file to EPUB"""
-   self.epubfile = epubfile if epubfile else self.epubfile
-   self.render_to_epub()
-   self.bundle_epub()
-   self.cleanup()
+    if epubfile:
+      self.epubfile = epubfile
+    if self.verbose: print >> sys.stderr, self.epubfile
+    self.render_to_epub()
+    #self.bundle_epub()
+    #self.cleanup()
   
   def render_to_epub(self):
     """ """
     # Create directory structure:
-    os.mkdir(os.path.join(self.tmpdir), self.OEBPS_DIR))
-    os.mkdir(os.path.join(self.tmpdir), self.META_DIR))
+    os.mkdir(os.path.join(self.tmpdir, self.OEBPS_DIR))
+    os.mkdir(os.path.join(self.tmpdir, self.META_DIR))
     # 
     # Create stylesheet parameters:
     # Watch out for correct string quotation
     params= { 
-       "chunk.quietly":              int(bool(self.verbose)) if self.verbose else 0,
+       "chunk.quietly":              "%s" % int(bool(self.verbose)) if self.verbose else 0,
        #"callout.graphics.path":      CALLOUT_PATH,
        #"callout.graphics.number.limit": CALLOUT_EXT,
-       "callout.graphics.extension": 1,
+       "callout.graphics.extension": self.stringparam('1'),
        # Make sure, all the directories contain a trailing slash (IMPORTANT!):
-       "base.dir":                   self.strparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
-       "epub.metainf.dir":           self.strparam("%s/" % os.path.join(self.tmpdir, self.META_DIR)),
-       "epub.oebps.dir":             self.strparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
+       "base.dir":                   self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
+       "epub.metainf.dir":           self.stringparam("%s/" % os.path.join(self.tmpdir, self.META_DIR)),
+       "epub.oebps.dir":             self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
     }
     if self.cssfile:
       params["html.stylesheet"] = self.strparam(self.cssfile)
     if self.otffiles:
       params["epub.embedded.fonts"] =  self.strparam(" ".join(self.otffiles))
    
+    
     # Prepare for transformation
     self.xslttree = etree.parse(self.myxslt)
+    if self.verbose: print >> sys.stderr, \
+      "Preparing transformation with params: %s\n " \
+      "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree )
+
     transform = etree.XSLT(self.xslttree)    
-    result = transform(self.xmltree, **params)
+    result = self.xmltree, **params)
+    if self.verbose: print >> sys.stderr, "Result: %s" % result
     
   def bundle_epub(self):
     """ """
@@ -96,7 +108,6 @@ class EPUB2(object):
     # 
     
     # with zipfile.ZipFile(self.epubfile, mode="w", compression=zipfile.ZIP_DEFLATED ) as myzip:
-      
     
   
   def get_image_refs(self):
