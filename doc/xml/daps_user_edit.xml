@@ -485,10 +485,11 @@
    sources by means of <literal>profiling</literal>: </para>
    &db-profiling; 
   <sect2 id="sec.daps.user.edit.profile.basics">
-   <title>Profiling Basics</title>
+   <title>Introduction to DocBook Profiling</title>
    <para>DocBook offers profiling attributes for various purposes as illustrated
     in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
-    <citetitle>Table 26.1. Profiling attributes</citetitle></ulink>. Currently, not
+    <citetitle>Table 26.1. Profiling attributes</citetitle>
+    </ulink>. Currently, not
     all of them are supported by &dapsacr;. For details, refer to 
     <xref linkend="sec.daps.user.edit.profile.daps"/>.</para>
    <para>Generally, profiling attributes can be used on a large number of 
@@ -504,18 +505,18 @@
    condition is fulfilled. Any content that is valid for <emphasis>all</emphasis> 
    conditions does <emphasis>not</emphasis> need any profiling attributes. The 
    respective content will always be included in the output formats generated 
-   from the XML sources. You are free in defining the attribute 
-   values (<literal>condition="foo"</literal>), but they must be used consistently 
+   from the XML sources. You are free in defining the attribute values 
+   (<literal>condition="foo"</literal>), but they must be used consistently 
    in all files belonging to a documentation project.</para>
-   <para><xref linkend="ex.daps.profile.simple"/> shows how to profile 
+   <para><xref linkend="ex.daps.profile.one"/> shows how to profile 
    product-specific information in a software description. The software is 
    available in two editions: a basic edition for home users and a professional 
    edition for enterprise customers. Both editions share common features, but 
    some features are only available in the basic or the professional 
    edition, respectively.</para>
-   
-   <example id="ex.daps.profile.simple">
-    <title>Profiling Product-specific Information</title>
+
+   <example id="ex.daps.profile.one">
+    <title>Product-specific Profiling (One Attribute)</title>
     <screen>&lt;simplelist&gt;
      &lt;member&gt;Common Feature 1&lt;/member&gt;
      &lt;member&gt;Common Feature 2&lt;/member&gt;
@@ -528,13 +529,14 @@
    <para>When generated for the basic edition or for the professional edition, 
    respectively, the example source code would result in the following 
    output:</para>
-   <table id="tab.daps.profile.output" rowsep="1">
-    <title>Output of <xref linkend="ex.daps.profile.simple" xrefstyle="select:
-     label"/></title>
-     <tgroup cols="2">
-      <colspec colnum="1" colname="1" colwidth="50*"/>
-      <colspec colnum="2" colname="2" colwidth="50*"/>
-      <thead>
+   <table id="tab.daps.profile.output.one" rowsep="1">
+    <title>Output of <xref linkend="ex.daps.profile.one" xrefstyle="select:
+     label"/>
+    </title>
+    <tgroup cols="2">
+     <colspec colnum="1" colname="1" colwidth="50*"/>
+     <colspec colnum="2" colname="2" colwidth="50*"/>
+     <thead>
       <row>
        <entry colname="1">
         <para> Basic Edition </para>
@@ -543,15 +545,15 @@
         <para> Professional Edition </para>
        </entry>
       </row>
-      </thead>
-      <tbody>
-       <row>
-        <entry colname="1">
-         <para>Common Feature 1</para>
-         <para>Common Feature 2</para>
-         <para>Common Feature 3</para>
-          <para>Basic Feature 1</para>
-        </entry>
+     </thead>
+     <tbody>
+      <row>
+       <entry colname="1">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Basic Feature 1</para>
+       </entry>
        <entry colname="2">
         <para>Common Feature 1</para>
         <para>Common Feature 2</para>
@@ -559,32 +561,58 @@
         <para>Professional Feature 1</para>
         <para>Professional Feature 2</para>
        </entry>
-       </row>
-      </tbody>
-     </tgroup>
+      </row>
+     </tbody>
+    </tgroup>
    </table>
-  <!-- <important>
-    <title>Enable Profiling in &dapsacr;</title>
-    <para>To make profiling work like expected, you have meet a few
-     requirements as described in <xref
-      linkend="sec.daps.user.edit.profile.daps"/>. </para>
-   </important>-->
    <para>If the profiling attributes are <emphasis>not</emphasis> processed during
-   output, the source code in <xref linkend="ex.daps.profile.simple"/> would
-   result in the following output for both editions:</para>
-<screen>Common Feature 1
-Common Feature 2
-Common Feature 3
-Basic Feature 1
-Professional Feature 1
-Professional Feature 2</screen>
+   output, the source code in <xref linkend="ex.daps.profile.one"/> would
+   result in the following (identical) output for both editions:</para>
+   <table id="tab.daps.profile.output.one.without" rowsep="1">
+    <title>Output of <xref linkend="ex.daps.profile.one" xrefstyle="select:
+     label"/> (Without Profiling)</title>
+    <tgroup cols="2">
+     <colspec colnum="1" colname="1" colwidth="50*"/>
+     <colspec colnum="2" colname="2" colwidth="50*"/>
+     <thead>
+      <row>
+       <entry colname="1">
+        <para> Basic Edition </para>
+       </entry>
+       <entry colname="2">
+        <para> Professional Edition </para>
+       </entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry colname="1">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Basic Feature 1</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+       </entry>
+       <entry colname="2">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Basic Feature 1</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
    <para>Let's suppose the professional edition of the software is also available 
     as OEM (original equipment manufacturer) version by the vendor 
     <literal>OEM Company</literal>. It contains additional features that are 
     only available in the OEM version:</para>
-   <example>
-    <title>FIXME</title>
-<screen>&lt;simplelist&gt;
+   <example id="ex.daps.profile.two">
+    <title>Product-specific Profiling (Two Attributes)</title>
+    <screen>&lt;simplelist&gt;
  &lt;member&gt;Common Feature 1&lt;/member&gt;
  &lt;member&gt;Common Feature 2&lt;/member&gt;
  &lt;member&gt;Common Feature 3&lt;/member&gt;
@@ -594,12 +622,54 @@ Professional Feature 2</screen>
  &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
  &lt;/simplelist&gt;</screen>
    </example>
+   <para>When generated for the professional edition or for the professional 
+    edition in the OEM version, respectively, the example source code would 
+    result in the following output:</para>
+   <table id="tab.daps.profile.output.two" rowsep="1">
+    <title>Output of <xref linkend="ex.daps.profile.two" xrefstyle="select:
+     label"/>
+    </title>
+    <tgroup cols="2">
+     <colspec colnum="1" colname="1" colwidth="50*"/>
+     <colspec colnum="2" colname="2" colwidth="50*"/>
+     <thead>
+      <row>
+       <entry colname="1">
+        <para>Professional Edition </para>
+       </entry>
+       <entry colname="2">
+        <para> Professional Edition (OEM Version)</para>
+       </entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry colname="1">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+       </entry>
+       <entry colname="2">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+        <para>OEM Feature 1</para>
+       </entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
   </sect2>
   <sect2 id="sec.daps.user.edit.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
-   <para>
-    <remark>taroth 2012-06-18: todo - introductory para</remark>
-   </para>
+   <para>To create multiple documentation variants of the same pool of DocBook 
+    files with &dapsacr;, the following requirements need to be fulfilled:</para>
+    <orderedlist><listitem><para>XML Files: </para></listitem></orderedlist>
+    
    <sect3 id="sec.daps.user.edit.profile.daps.supported">
     <title>Supported Profiling Attributes</title>
     <para>Currently, &dapsacr; supports the profiling attributes that are listed 
@@ -738,9 +808,11 @@ Professional Feature 2</screen>
    </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.ex">
     <title>Profiling Example</title>
-    <para><remark>taroth 2012-06-18: FIXME: extend example</remark></para>
-    
-   <screen>&lt;simplelist&gt;
+    <para>
+     <remark>taroth 2012-06-18: FIXME: extend example</remark>
+    </para>
+
+    <screen>&lt;simplelist&gt;
      &lt;member&gt;Common Feature 1&lt;/member&gt;
      &lt;member&gt;Common Feature 2 &lt;/member&gt;
      &lt;member&gt;Common Feature 3 &lt;/member&gt;
@@ -750,8 +822,10 @@ Professional Feature 2</screen>
 &lt;/simplelist&gt;</screen>
    </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.productentities">
-   <title>Dynamic Productnames and Productnumbers</title>
-   <para><remark>taroth 2012-06-18: todo - combine profiling and entities</remark></para>
+    <title>Dynamic Productnames and Productnumbers</title>
+    <para>
+     <remark>taroth 2012-06-18: todo - combine profiling and entities</remark>
+    </para>
    </sect3>
   </sect2>
  </sect1>
@@ -1054,7 +1128,7 @@ PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
      <xref linkend="ex.daps.profiling"/>. It will contain all Quick
      Starts that are profiled with <literal>os="sles"</literal>.</para>
   </sect2>-->
- 
+
 
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
