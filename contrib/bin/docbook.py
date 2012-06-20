@@ -132,8 +132,19 @@ class EPUB2(object):
     log.debug("Preparing transformation with params: %s\n " \
               "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree) )
 
-    transform = etree.XSLT(self.xslttree)    
-    result = transform(self.xmltree, **params)
+    try:
+      transform = etree.XSLT(self.xslttree)
+      result = transform(self.xmltree, **params)
+    except etree.XSLTApplyError, e:
+      for msg in e.error_log.filter_from_warnings():
+         log.error("<Domain %s Level: %s Name: %s> %s " % (msg.domain_name, msg.level_name, msg.type_name, msg.message))
+         # a xslt tree does not need to come from a file
+         if not '<string>' in msg.filename:
+            log.error(msg.filename)
+            log.errno(msg.line)
+    for error in transform.error_log:
+       log.error(error.message)
+
     log.debug("Result of transformation: %s" % result)
     
   def bundle_epub(self):
