@@ -529,7 +529,8 @@
    respectively, the example source code would result in the following 
    output:</para>
    <table id="tab.daps.profile.output" rowsep="1">
-    <title>Output of <xref linkend="ex.daps.profile.simple"/></title>
+    <title>Output of <xref linkend="ex.daps.profile.simple" xrefstyle="select:
+     label"/></title>
      <tgroup cols="2">
       <colspec colnum="1" colname="1" colwidth="50*"/>
       <colspec colnum="2" colname="2" colwidth="50*"/>
@@ -561,7 +562,54 @@
        </row>
       </tbody>
      </tgroup>
-    </table>
+   </table>
+   <important>
+    <title>Enable Profiling in &dapsacr;</title>
+    <para>To make profiling work like expected, you have meet a few
+     requirements as described in <xref
+      linkend="sec.daps.user.edit.profile.daps"/>. </para>
+   </important>
+   <para>If profiling was not enabled, the source code in 
+    <xref linkend="ex.daps.profile.simple"/> would result in the following
+    output:</para>
+    <table id="tab.daps.profile.output.without" rowsep="1">
+    <title><remark>taroth 2012-06-20: FIXME</remark></title>
+     <tgroup cols="2">
+      <colspec colnum="1" colname="1" colwidth="50*"/>
+      <colspec colnum="2" colname="2" colwidth="50*"/>
+      <thead>
+      <row>
+       <entry colname="1">
+        <para> Basic Edition </para>
+       </entry>
+       <entry colname="2">
+        <para> Professional Edition </para>
+       </entry>
+      </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry colname="1">
+         <para>Common Feature 1</para>
+         <para>Common Feature 2</para>
+         <para>Common Feature 3</para>
+         <para>Basic Feature 1</para>
+         <para>Professional Feature 1</para>
+         <para>Professional Feature 2</para>
+        </entry>
+       <entry colname="2">
+        <para>Common Feature 1</para>
+        <para>Common Feature 2</para>
+        <para>Common Feature 3</para>
+        <para>Basic Feature 1</para>
+        <para>Professional Feature 1</para>
+        <para>Professional Feature 2</para>
+       </entry>
+       </row>
+      </tbody>
+     </tgroup>
+   </table>
+   
   </sect2>
   <sect2 id="sec.daps.user.edit.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
