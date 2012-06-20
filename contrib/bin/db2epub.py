@@ -17,6 +17,10 @@ import logging
 import docbook
 
 log = logging.getLogger('db2epub')
+fh=logging.FileHandler('/var/tmp/db2epub.log')
+fh.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+log.addHandler(fh) 
+log.setLevel(logging.INFO)
 log.addHandler(logging.StreamHandler(sys.stdout))
 
 
