@@ -571,45 +571,28 @@
    </important>
    <para>If profiling was not enabled, the source code in 
     <xref linkend="ex.daps.profile.simple"/> would result in the following
-    output:</para>
-    <table id="tab.daps.profile.output.without" rowsep="1">
-    <title><remark>taroth 2012-06-20: FIXME</remark></title>
-     <tgroup cols="2">
-      <colspec colnum="1" colname="1" colwidth="50*"/>
-      <colspec colnum="2" colname="2" colwidth="50*"/>
-      <thead>
-      <row>
-       <entry colname="1">
-        <para> Basic Edition </para>
-       </entry>
-       <entry colname="2">
-        <para> Professional Edition </para>
-       </entry>
-      </row>
-      </thead>
-      <tbody>
-       <row>
-        <entry colname="1">
-         <para>Common Feature 1</para>
-         <para>Common Feature 2</para>
-         <para>Common Feature 3</para>
-         <para>Basic Feature 1</para>
-         <para>Professional Feature 1</para>
-         <para>Professional Feature 2</para>
-        </entry>
-       <entry colname="2">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Basic Feature 1</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
-       </entry>
-       </row>
-      </tbody>
-     </tgroup>
-   </table>
-   
+    output for both editions:</para>
+<screen>Common Feature 1
+Common Feature 2
+Common Feature 3
+Basic Feature 1
+Professional Feature 1
+Professional Feature 2</screen>
+   <para>Now let's suppose the professional edition of the software is also available 
+    in a OEM version by the vendor <literal>OEM Company</literal> with
+   features that are only available in the OEM version:</para>
+   <example>
+    <title/>
+<screen>&lt;simplelist&gt;
+ &lt;member&gt;Common Feature 1&lt;/member&gt;
+ &lt;member&gt;Common Feature 2&lt;/member&gt;
+ &lt;member&gt;Common Feature 3&lt;/member&gt;
+ &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+ &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
+ &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+ &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+ &lt;/simplelist&gt;</screen>
+   </example>
   </sect2>
   <sect2 id="sec.daps.user.edit.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
