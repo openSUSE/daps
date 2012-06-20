@@ -10,9 +10,14 @@ import sys
 import os
 import optparse
 
+import logging
+
 #IMPORTDIR=os.path.dirname(__file__)
 #sys.path.insert(0, IMPORTDIR)
 import docbook
+
+log = logging.getLogger('db2epub')
+log.addHandler(logging.StreamHandler(sys.stdout))
 
 
 def main():
@@ -47,10 +52,24 @@ def main():
      OUTPUTFILE=None,
      )  
   (options, args)= parser.parse_args()
-  print options, args
+  print "Parsed commandline: options=%s, args=%s" % (options, args)
+  log.debug("Parsed commandline: options=%s, args=%s" % (options, args) )
+  
   if not len(args):
     parser.print_help()
     sys.exit(1)
+  
+  verbosedict={ 0: logging.NOTSET,
+                1: logging.DEBUG,
+                2: logging.INFO,
+                3: logging.WARN,
+                4: logging.ERROR,
+                5: logging.CRITICAL,
+               }  
+
+  
+  log.setLevel( verbosedict.get(options.VERBOSE, logging.DEBUG) ) 
+
   return (options, args, parser)
 
   
