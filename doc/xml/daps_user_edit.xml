@@ -563,26 +563,27 @@
       </tbody>
      </tgroup>
    </table>
-   <important>
+  <!-- <important>
     <title>Enable Profiling in &dapsacr;</title>
     <para>To make profiling work like expected, you have meet a few
      requirements as described in <xref
       linkend="sec.daps.user.edit.profile.daps"/>. </para>
-   </important>
-   <para>If profiling was not enabled, the source code in 
-    <xref linkend="ex.daps.profile.simple"/> would result in the following
-    output for both editions:</para>
+   </important>-->
+   <para>If the profiling attributes are <emphasis>not</emphasis> processed during
+   output, the source code in <xref linkend="ex.daps.profile.simple"/> would
+   result in the following output for both editions:</para>
 <screen>Common Feature 1
 Common Feature 2
 Common Feature 3
 Basic Feature 1
 Professional Feature 1
 Professional Feature 2</screen>
-   <para>Now let's suppose the professional edition of the software is also available 
-    in a OEM version by the vendor <literal>OEM Company</literal> with
-   features that are only available in the OEM version:</para>
+   <para>Let's suppose the professional edition of the software is also available 
+    as OEM (original equipment manufacturer) version by the vendor 
+    <literal>OEM Company</literal>. It contains additional features that are 
+    only available in the OEM version:</para>
    <example>
-    <title/>
+    <title>
 <screen>&lt;simplelist&gt;
  &lt;member&gt;Common Feature 1&lt;/member&gt;
  &lt;member&gt;Common Feature 2&lt;/member&gt;
