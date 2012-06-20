@@ -153,12 +153,16 @@ class EPUB2(object):
       myzip.write(os.path.join(self.tmpdir, "mimetype"), compression=zipfile.ZIP_DEFLATED)
       d=[ i for i in os.listdir(self.tmpdir) if os.path.isdir(os.path.join(self.tmpdir,i)) ]
       for i in d:
-        myzip.write(os.path.join(self.tmpdir, i), zipfile.ZIP_STORED)
+        #myzip.write(os.path.join(self.tmpdir, i), zipfile.ZIP_STORED)
+        log.info("Directory %s" % i)
         for root, dirs, files in os.walk(os.path.join(self.tmpdir, i)):
            # myzip.write()
+           log.info("  root %s" % root)
            for ff in dirs:
+              log.info("  dir %s" % ff)
               myzip.write(ff)
            for ff in files:
+              log.info("  file %s" % ff)
               myzip.write(ff, zipfile.ZIP_STORED)
            
     
@@ -184,8 +188,9 @@ class EPUB2(object):
     log.info("copy_admons")
     if not self.has_admons:
        return
-
-    admons=[ os.path.join(self.ADMON_FULL_PATH, a) for a in os.listdir(self.ADMON_FULL_PATH) if a.endswith(self.ADMON_EXT) ]
+    #
+    admons=[ "%s%s" % (os.path.join(self.ADMON_FULL_PATH, a), self.ADMON_EXT)  for a in ('important', 'warning', 'tip', 'caution', 'note')]
+    
     # callouts.sort()
     for img in admons:
       newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, os.path.basename(img))
@@ -194,6 +199,7 @@ class EPUB2(object):
 
      
   def copy_fonts(self):
+    # FIXME
     pass
   
   def copy_callouts(self):
