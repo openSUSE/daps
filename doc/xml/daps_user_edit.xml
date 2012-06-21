@@ -508,7 +508,8 @@
    from the XML sources. You are free in defining the attribute values 
    (<literal>condition="foo"</literal>), but they must be used consistently 
    in all files belonging to a documentation project.</para>
-   <para><xref linkend="ex.daps.profile.one"/> shows how to profile 
+   <para>
+    <xref linkend="ex.daps.profile.one"/> shows how to profile 
    product-specific information in a software description. The software is 
    available in two editions: a basic edition for home users and a professional 
    edition for enterprise customers. Both editions share common features, but 
@@ -518,12 +519,12 @@
    <example id="ex.daps.profile.one">
     <title>Product-specific Profiling (One Attribute)</title>
     <screen>&lt;simplelist&gt;
-     &lt;member&gt;Common Feature 1&lt;/member&gt;
-     &lt;member&gt;Common Feature 2&lt;/member&gt;
-     &lt;member&gt;Common Feature 3&lt;/member&gt;
-     &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
-     &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
-     &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+  &lt;member&gt;Common Feature 1&lt;/member&gt;
+  &lt;member&gt;Common Feature 2&lt;/member&gt;
+  &lt;member&gt;Common Feature 3&lt;/member&gt;
+  &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
    <para>When generated for the basic edition or for the professional edition, 
@@ -613,14 +614,14 @@
    <example id="ex.daps.profile.two">
     <title>Product-specific Profiling (Two Attributes)</title>
     <screen>&lt;simplelist&gt;
- &lt;member&gt;Common Feature 1&lt;/member&gt;
- &lt;member&gt;Common Feature 2&lt;/member&gt;
- &lt;member&gt;Common Feature 3&lt;/member&gt;
- &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
- &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
- &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
- &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
- &lt;/simplelist&gt;</screen>
+  &lt;member&gt;Common Feature 1&lt;/member&gt;
+  &lt;member&gt;Common Feature 2&lt;/member&gt;
+  &lt;member&gt;Common Feature 3&lt;/member&gt;
+  &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+  &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+&lt;/simplelist&gt;</screen>
    </example>
    <para>When generated for the professional edition or for the professional 
     edition in the OEM version, respectively, the example source code would 
@@ -668,10 +669,27 @@
    <title>Using Profiling with &dapsacr;</title>
    <para>To create multiple documentation variants of the same pool of DocBook 
     files with &dapsacr;, the following requirements need to be fulfilled:</para>
-    <orderedlist><listitem><para>XML Files: </para></listitem></orderedlist>
-    
-   <sect3 id="sec.daps.user.edit.profile.daps.supported">
-    <title>Supported Profiling Attributes</title>
+   <orderedlist>
+    <listitem><!--XML Files: Profiling Attributes-->
+     <para>
+      <xref linkend="sec.daps.user.edit.profile.daps.pa" xrefstyle="select:title"/>
+     </para>
+    </listitem>
+    <listitem><!--Main File: Processing Instruction-->
+     <para>
+      <xref linkend="sec.daps.user.edit.profile.daps.pi" xrefstyle="select: title"/>
+     </para>
+    </listitem>
+    <listitem><!--&dc; File: Profiling Parameters-->
+     <para>
+      <xref linkend="sec.daps.user.edit.profile.daps.pp" xrefstyle="select: title"/>
+     </para>
+    </listitem>
+   </orderedlist>
+
+
+   <sect3 id="sec.daps.user.edit.profile.daps.pa">
+    <title>XML Files: Profiling Attributes</title>
     <para>Currently, &dapsacr; supports the profiling attributes that are listed 
    in <xref linkend="tab.daps.profiling"/>. In &dapsacr;, each profiling attribute 
    has a corresponding profiling parameter to be used in the &dc; file. The 
@@ -760,52 +778,36 @@
      </tgroup>
     </table>
    </sect3>
-   <sect3 id="sec.daps.user.edit.profile.daps.req">
-    <title>Requirements</title>
-    <para>To create multiple documentation variants of the same pool of DocBook 
-    files with &dapsacr;, the following requirements need to be fulfilled: </para>
-    <orderedlist>
-     <listitem>
-      <formalpara>
-       <title>Supported Profiling Attributes:</title>
-       <para>Your XML sources must contain profiling attributes that are
-        supported by &dapsacr;&mdash;see <xref linkend="sec.daps.user.edit.profile.daps.supported"/>. </para>
-      </formalpara>
-     </listitem>
-     <listitem>
-      <formalpara>
-       <title>Processing Instruction:</title>
-       <para>The following processing instruction (PI) must be included in the
-        header of the Main file. </para>
-      </formalpara>
-      <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-      <para>The Main file of a documentation project is the one that is referenced 
-      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the 
-      processing is missing in the Main file, any profiling parameters in the 
-      &dc; file will be ignored during generation of the output. </para>
-      <tip>
-       <title>Include PI in All XML Files</title>
-       <para>For any documentation projects that need profiling, we advise to
+   <sect3 id="sec.daps.user.edit.profile.daps.pi">
+    <title>Main File: Processing Instruction</title>
+    <para>The Main file of a documentation project is the one that is referenced 
+      by the <parameter>MAIN</parameter> parameter in the &dc; file. 
+      To activate generation of profiled output in &dapsacr;, the following 
+      processing instruction (PI) must be included in the header of the Main file:
+      </para>
+    <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+    <para> If the processing instruction is missing in the Main file, any profiling
+    parameters in the &dc; file will be ignored during generation of the output. </para>
+    <tip>
+     <title>Include PI in All XML Files</title>
+     <para>For any documentation projects that need profiling, we advise to
         include the PI in all XML files. Otherwise you might forget to move the
         PI in case of restructuring the XML sources. Having the PI in all XML
         files does not hurt: Generation of profiled output is only triggered if
         your &dc; files contain profiling parameters. </para>
-      </tip>
-     </listitem>
-     <listitem>
-      <formalpara>
-       <title>Profiling Attributes in &dc; Files:</title>
-       <para>Depending on the profiling attributes used in your XML files, a &dc;
+    </tip>
+   </sect3>
+   <sect3 id="sec.daps.user.edit.profile.daps.pp">
+    <title>&dc; Files: Profiling Parameters</title>
+    <para>Depending on the profiling attributes used in your XML files, a &dc;
        file may contain multiple profiling parameters. They define 
         which of the profiling attributes should be interpreted by &dapsacr;
         when generating output. For each profiling parameter, set the respective 
         attribute values for which you want to filter during the profiling process. 
         The spelling of the values must be the same that is used in the XML
         files.</para>
-      </formalpara>
-     </listitem>
-    </orderedlist>
    </sect3>
+
    <sect3 id="sec.daps.user.edit.profile.daps.ex">
     <title>Profiling Example</title>
     <para>
@@ -813,16 +815,16 @@
     </para>
 
     <screen>&lt;simplelist&gt;
-     &lt;member&gt;Common Feature 1&lt;/member&gt;
-     &lt;member&gt;Common Feature 2 &lt;/member&gt;
-     &lt;member&gt;Common Feature 3 &lt;/member&gt;
-     &lt;member condition="basic"&gt;Basic Feature 1 &lt;/member&gt;
-     &lt;member condition="professional"&gt;Professional Feature 1 &lt;/member&gt;
-     &lt;member condition="professional"&gt;Professional Feature 2 &lt;/member&gt;
+  &lt;member&gt;Common Feature 1&lt;/member&gt;
+  &lt;member&gt;Common Feature 2 &lt;/member&gt;
+  &lt;member&gt;Common Feature 3 &lt;/member&gt;
+  &lt;member condition="basic"&gt;Basic Feature 1 &lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 1 &lt;/member&gt;
+  &lt;member condition="professional"&gt;Professional Feature 2 &lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.productentities">
-    <title>Dynamic Productnames and Productnumbers</title>
+    <title>Combining Entities and Profiling</title>
     <para>
      <remark>taroth 2012-06-18: todo - combine profiling and entities</remark>
     </para>
