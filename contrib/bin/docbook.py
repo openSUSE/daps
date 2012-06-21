@@ -142,41 +142,59 @@ class EPUB2(object):
          if not '<string>' in msg.filename:
             log.error(msg.filename)
             log.errno(msg.line)
-    for error in transform.error_log:
-       log.error(error.message)
+    if self.verbose > 3:
+      for error in transform.error_log:
+         log.error(error.message)
 
     log.debug("Result of transformation: %s" % result)
+    log.info("Temporary directory for EPUB: %s" % self.tmpdir)
     
   def bundle_epub(self):
     """ """
     log.info("bundle_epub")
     self.write_mimetype()
-    # self.copy_images()
+    self.copy_images()
     self.copy_cssfiles()
+    self.copy_callouts()
     self.copy_admons()
     self.copy_fonts()
-    self.copy_callouts()
-    # 
     
-    return
-    # ------------- FIXME
-    with zipfile.ZipFile(self.epubfile, mode="w", ) as myzip: # 
-      myzip.write(os.path.join(self.tmpdir, "mimetype"), compression=zipfile.ZIP_DEFLATED)
-      d=[ i for i in os.listdir(self.tmpdir) if os.path.isdir(os.path.join(self.tmpdir,i)) ]
-      for i in d:
-        #myzip.write(os.path.join(self.tmpdir, i), zipfile.ZIP_STORED)
-        log.info("Directory %s" % i)
-        for root, dirs, files in os.walk(os.path.join(self.tmpdir, i)):
-           # myzip.write()
-           log.info("  root %s" % root)
-           for ff in dirs:
-              log.info("  dir %s" % ff)
-              myzip.write(ff)
-           for ff in files:
-              log.info("  file %s" % ff)
-              myzip.write(ff, zipfile.ZIP_STORED)
-           
+    self.packepub(self):
+    log.info("Packing directory %s into EPUB file %s" % (self.tmpdir, self.epubfile) )
+
+  def packepub(self):
+   # ------------- FIXME
+    with zipfile.ZipFile(self.epubfile, mode="w" ) as myzip:
+      # Handle mimetype separately
+      log.info("Writing mimetype file")
+      myzip.write(os.path.join(self.tmpdir, "mimetype"), compress_type=zipfile.ZIP_STORED)
+      rootdirs=[ i for i in os.listdir(self.tmpdir) if os.path.isdir(os.path.join(self.tmpdir,i)) ]
+      
+      log.info("rootdirs=%s" % rootdirs)
+      for d in rootdirs:
+         log.info("Investigating %s dir..." % d)
+         myzip.write(os.path.join(self.tmpdir, d), compress_type=zipfile.ZIP_STORED)
+         
+         for root, dirs, files in os.walk(os.path.join(self.tmpdir, d)):
+            log.info("  root %s" % root)
+            log.info("  dirs %s" % dirs)
+            log.info("  files %s" % files)
+            # myzip.write( ,compress_type=zipfile.ZIP_DEFLATED)
+            for _d in dirs:
+               log.info("    adding dir %s" % _d)
+               myzip.write(os.path.join(root, _d))
+            for _f in files:
+               log.info("    adding file %s" % _f)
+               myzip.write(os.path.join(root, _f), compress_type=zipfile.ZIP_DEFLATED)
     
+    log.info("Wrote EPUB file %s" % self.epubfile)
+  
+  def copy_images(self):
+    """Copy all image files into OEBPS directory"""
+    images = self.get_image_refs()
+    imgextensions = (".svg", ".png", ".gif", ".jpg", ".jpeg", ".xml", ".eps", ".pdf")
+    
+  
   def copy_cssfiles(self):
     """Copy CSS file into OEBPS directory
        raises IOError if CSS file is not found
@@ -231,7 +249,9 @@ class EPUB2(object):
   def get_image_refs(self):
     """Returns a list of image filenames"""
     imagedata = self.xmltree.findall("//imagedata")
-    return [ i.attrib["fileref"] for i in imagedata if i.attrib.get("fileref") ]
+    imagedata= [ i.attrib["fileref"] for i in imagedata if i.attrib.get("fileref") ]
+    # Only return those, whose parent element contains a role with either html, xhtml or epub
+    return [ img for img in imagedata  if img.getparent().attrib.get("role") in ("epub", "html", "xhtml") ]
   
   @property
   def has_callouts(self):
