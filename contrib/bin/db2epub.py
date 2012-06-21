@@ -37,6 +37,9 @@ def main():
      action="append",
      # type="str",
      help="Embed OTF FILE in .epub")
+  parser.add_option("-i", "--image-dir",
+     dest="IMAGEDIR",
+     help="Points to the image path")
   parser.add_option("-o", "--output",
      dest="OUTPUTFILE",
      help="Output ePub file as OUTPUT FILE")
@@ -52,6 +55,7 @@ def main():
      DEBUG=False,
      CSSFILE=None,
      # OTFFILES=[],
+     # IMAGEDIR=None,
      CUSTOMIZATIONLAYER=os.path.join(docbook.DBPATH, "epub/docbook.xsl"),
      OUTPUTFILE=None,
      )  
@@ -102,7 +106,8 @@ if __name__=="__main__":
       epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(f)[0]+".epub"
       if options.VERBOSE > 0: print >> sys.stderr, "Rendering DocBook file %s to %s" % (f, epubfile)
       d.render(epubfile)
-      
+  
+  # except etree.XIncludeError, e
   except IOError, e:
     print >> sys.stderr, e
     sys.exit(10)
