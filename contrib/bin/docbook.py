@@ -41,6 +41,8 @@ def mkdir_p(path):
 class EPUB2(object):
   """Transforms a DocBook 4 file into a EPUB file, version 2
   """
+  IMG_SRC_PATH="images"
+  #
   CALLOUT_EXT = ".png"
   CALLOUT_PATH = os.path.join("images", "callouts")
   CALLOUT_FULL_PATH= os.path.join(DBPATH, CALLOUT_PATH)
@@ -75,6 +77,7 @@ class EPUB2(object):
     self.verbose = options.VERBOSE
     self.cssfile = options.CSSFILE
     self.otffiles = options.OTFFILES
+    self.imgsrcpath = os.path.abspath(options.IMAGEDIR) if options.IMAGEDIR else os.path.abspath(os.path.dirname(self.xmlfile))
     self.myxslt  = options.CUSTOMIZATIONLAYER if options.CUSTOMIZATIONLAYER else self.STYLESHEET
     self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
   
@@ -104,6 +107,7 @@ class EPUB2(object):
     if self.has_admons:
       mkdir_p(os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH))  
     
+    mkdir_p(os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, "admons"))
   
   def render_to_epub(self):
     """Transforms DocBook XML file into HTML chunk files"""
@@ -116,6 +120,8 @@ class EPUB2(object):
        #"callout.graphics.path":      CALLOUT_PATH,
        #"callout.graphics.number.limit": CALLOUT_EXT,
        "callout.graphics.extension": self.stringparam('1'),
+       'admon.graphics.path':        self.stringparam("%s/" % os.path.join(self.ADMON_PATH, "admons")),
+       'img.src.path':               self.stringparam("%s/" % self.IMG_SRC_PATH),
        # Make sure, all the directories contain a trailing slash (IMPORTANT!):
        "base.dir":                   self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
        "epub.metainf.dir":           self.stringparam("%s/" % os.path.join(self.tmpdir, self.META_DIR)),
@@ -158,8 +164,7 @@ class EPUB2(object):
     self.copy_callouts()
     self.copy_admons()
     self.copy_fonts()
-    
-    self.packepub(self):
+    self.packepub()
     log.info("Packing directory %s into EPUB file %s" % (self.tmpdir, self.epubfile) )
 
   def packepub(self):
@@ -191,9 +196,12 @@ class EPUB2(object):
   
   def copy_images(self):
     """Copy all image files into OEBPS directory"""
-    images = self.get_image_refs()
-    imgextensions = (".svg", ".png", ".gif", ".jpg", ".jpeg", ".xml", ".eps", ".pdf")
-    
+    log.info("copy_images")
+    for img in self.get_image_refs():
+       newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, img.attrib["fileref"])
+       fullimg = os.path.join(self.imgsrcpath, img.attrib["fileref"])
+       log.info("  copying image from %s to %s" % (fullimg, newimg))
+       shutil.copyfile(fullimg, newimg)
   
   def copy_cssfiles(self):
     """Copy CSS file into OEBPS directory
@@ -222,7 +230,7 @@ class EPUB2(object):
     
     # callouts.sort()
     for img in admons:
-      newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, os.path.basename(img))
+      newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, "admons", os.path.basename(img))
       log.info("  From %s to %s" % (img, newimg) )
       shutil.copyfile(img, newimg)
 
@@ -248,10 +256,26 @@ class EPUB2(object):
   
   def get_image_refs(self):
     """Returns a list of image filenames"""
+    log.info("get_image_refs")
+    # Allowed image file extensions:
+    imgext = (".svg", ".png", ".gif", ".jpg", ".jpeg", ".xml", ".eps", ".pdf")
+    # Allowed values in <imageobject role="...">
+    rolevalues = ("epub", "html", "xhtml")
     imagedata = self.xmltree.findall("//imagedata")
-    imagedata= [ i.attrib["fileref"] for i in imagedata if i.attrib.get("fileref") ]
-    # Only return those, whose parent element contains a role with either html, xhtml or epub
-    return [ img for img in imagedata  if img.getparent().attrib.get("role") in ("epub", "html", "xhtml") ]
+    
+    # Only return an imagedata element, when
+    #  (1) imagedata has a fileref attribute, and
+    #  (2) its parent element contains a role
+    #  (3) that role attribute contains a value with either html, xhtml or epub, and
+    #  (4) the filename of the fileref attribute is one of the extensions in the imgext tuple
+    imagedata=[ img for img in imagedata if \
+              img.attrib.get("fileref") and \
+              img.getparent().attrib.get("role") and \
+              img.getparent().attrib.get("role") in rolevalues and \
+              os.path.splitext(img.attrib.get("fileref", ""))[1] in imgext 
+              ]
+    log.info("  images:%s" % imagedata )
+    return imagedata
   
   @property
   def has_callouts(self):
