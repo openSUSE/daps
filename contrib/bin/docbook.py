@@ -127,8 +127,8 @@ class EPUB2(object):
        'img.src.path':               self.stringparam("%s/" % self.IMG_SRC_PATH),
        # Make sure, all the directories contain a trailing slash (IMPORTANT!):
        "base.dir":                   self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
-       "epub.metainf.dir":           self.stringparam("%s/" % os.path.join(self.tmpdir, self.META_DIR)),
-       "epub.oebps.dir":             self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
+       "epub.metainf.dir":           self.stringparam("%s/" % self.META_DIR),
+       "epub.oebps.dir":             self.stringparam("%s/" % self.OEBPS_DIR),
     }
     if self.cssfile:
       params["html.stylesheet"] = self.stringparam(self.cssfile)
@@ -141,7 +141,9 @@ class EPUB2(object):
     log.debug("Preparing transformation with params: %s\n " \
               "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree) )
 
+    pwd=os.getcwd()
     try:
+      os.chdir(self.tmpdir)
       transform = etree.XSLT(self.xslttree)
       result = transform(self.xmltree, **params)
     except etree.XSLTApplyError, e:
@@ -151,6 +153,9 @@ class EPUB2(object):
          if not '<string>' in msg.filename:
             log.error(msg.filename)
             log.errno(msg.line)
+    finally:
+      os.chdir(pwd)
+   
     if self.verbose > 3:
       for error in transform.error_log:
          log.error(error.message)
