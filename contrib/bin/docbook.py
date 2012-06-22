@@ -5,7 +5,7 @@
 
 """
 
-__all__=["EPUB2", "DBPATH", "DBURI"]
+__all__=["EPUB2", "DBPATH", "DBURI", "FileNotFoundError"]
 __version__="0.1"
 __author__="Thomas Schraitle <toms@opensuse.org>"
 
@@ -37,6 +37,9 @@ def mkdir_p(path):
     if err.errno != errno.EEXIST:
        raise
 
+       
+class FileNotFoundError(Exception):
+   pass
 
 class EPUB2(object):
   """Transforms a DocBook 4 file into a EPUB file, version 2
@@ -91,8 +94,8 @@ class EPUB2(object):
       self.epubfile = epubfile
     log.info("Use epubfile=%s" % self.epubfile )
     self.createstructure()
-    self.bundle_epub()
     self.render_to_epub()
+    self.bundle_epub()
     #self.cleanup()
   
   def createstructure(self):
@@ -168,29 +171,39 @@ class EPUB2(object):
     log.info("Packing directory %s into EPUB file %s" % (self.tmpdir, self.epubfile) )
 
   def packepub(self):
-   # ------------- FIXME
-    with zipfile.ZipFile(self.epubfile, mode="w" ) as myzip:
-      # Handle mimetype separately
-      log.info("Writing mimetype file")
-      myzip.write(os.path.join(self.tmpdir, "mimetype"), compress_type=zipfile.ZIP_STORED)
-      rootdirs=[ i for i in os.listdir(self.tmpdir) if os.path.isdir(os.path.join(self.tmpdir,i)) ]
-      
-      log.info("rootdirs=%s" % rootdirs)
-      for d in rootdirs:
-         log.info("Investigating %s dir..." % d)
-         myzip.write(os.path.join(self.tmpdir, d), compress_type=zipfile.ZIP_STORED)
-         
-         for root, dirs, files in os.walk(os.path.join(self.tmpdir, d)):
-            log.info("  root %s" % root)
-            log.info("  dirs %s" % dirs)
-            log.info("  files %s" % files)
-            # myzip.write( ,compress_type=zipfile.ZIP_DEFLATED)
-            for _d in dirs:
-               log.info("    adding dir %s" % _d)
-               myzip.write(os.path.join(root, _d))
-            for _f in files:
-               log.info("    adding file %s" % _f)
-               myzip.write(os.path.join(root, _f), compress_type=zipfile.ZIP_DEFLATED)
+    """Create a ZIP archive with all the needed files """
+    # Create two lists of all files and directories
+    log.info("packepub")
+    epubfiles = [os.path.join(root,f) for root, dirs, files in \
+                  os.walk(os.path.join(self.tmpdir, self.OEBPS_DIR)) for f in files ]
+    epubdirs = [os.path.join(root,d) for root, dirs, files in os.walk(self.tmpdir) for d in dirs ]
+    
+    
+    log.info(" Epubfile: %s" % epubfiles)
+    log.info(" Epubdirs: %s" % epubdirs)
+   
+    myzip=zipfile.ZipFile(self.epubfile, mode="w" )
+    # Handle mimetype separately
+    log.info("  Writing mimetype file")
+    myzip.write(os.path.join(self.tmpdir, "mimetype"), "mimetype", 
+                compress_type=zipfile.ZIP_STORED)
+    # Handle container.xml separately
+    container=os.path.join(self.tmpdir, self.META_DIR, "container.xml")
+    myzip.write(container,
+                os.path.relpath(container, self.tmpdir),
+                compress_type=zipfile.ZIP_DEFLATED)
+
+    # Handle directories first
+    for d in epubdirs:
+      log.info("  Storing %s directory" % d)
+      myzip.write(d, os.path.relpath(d, self.tmpdir), compress_type=zipfile.ZIP_STORED)
+    # Handle files
+    for f in epubfiles:
+      log.info("  Compressing %s file" % f)
+      myzip.write(f, os.path.relpath(f, self.tmpdir), compress_type=zipfile.ZIP_DEFLATED)
+
+    
+    myzip.close()
     
     log.info("Wrote EPUB file %s" % self.epubfile)
   
