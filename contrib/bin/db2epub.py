@@ -109,10 +109,13 @@ if __name__=="__main__":
   
   # except etree.XIncludeError, e
   except IOError, e:
-    print >> sys.stderr, e
+    log.critical(e)
     sys.exit(10)
+  except docbook.FileNotFoundError, e:
+     log.critical(e)
+     sys.exit(10)
   except KeyboardInterrupt:
-    print >> sys.stderr, "Canceled by user."
+    log.error("Canceled by user.")
     sys.exit(2)
     
 # EOF
