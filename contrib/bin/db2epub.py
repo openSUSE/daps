@@ -1,10 +1,10 @@
 #!/usr/bin/python
-"""
+__doc__="""
 EPUB is defined by the IDPF at www.idpf.org and is made up of 3 standards:
 * Open Publication Structure (OPS)
 * Open Packaging Format (OPF) 
 * Open Container Format (OCF)
-"""
+""".strip()
 
 __version__="0.1"
 __author__="Thomas Schraitle <toms@opensuse.org>"
