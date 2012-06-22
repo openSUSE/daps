@@ -60,7 +60,7 @@ def main():
      OUTPUTFILE=None,
      )  
   (options, args)= parser.parse_args()
-  print "Parsed commandline: options=%s, args=%s" % (options, args)
+  # print "Parsed commandline: options=%s, args=%s" % (options, args)
   log.debug("Parsed commandline: options=%s, args=%s" % (options, args) )
   
   if not len(args):
@@ -82,7 +82,7 @@ def main():
 
   
 def opt2dict(options):
-  """Converts the result from OptionParser into a dictionary"""
+  """FUTURE: Converts the result from OptionParser into a dictionary"""
   # Convert options into a string representation
   dictstring = str(options)[1:-1].split(":")
   key = re.compile("'(?P<name>\w+)'" )
@@ -101,11 +101,10 @@ if __name__=="__main__":
   
   try:
     for f in args:
-      if options.VERBOSE > 0: print >> sys.stderr, "File: %s" % f
       d = docbook.EPUB2(f, options) # **opt2dict(options)
       epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(f)[0]+".epub"
-      if options.VERBOSE > 0: print >> sys.stderr, "Rendering DocBook file %s to %s" % (f, epubfile)
-      d.render(epubfile)
+      d.render(epubfile)      
+      if options.VERBOSE > 1: log.warn("Rendered DocBook file %s to %s" % (f, os.path.abspath(epubfile)))
   
   # except etree.XIncludeError, e
   except IOError, e:

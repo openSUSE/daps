@@ -96,7 +96,7 @@ class EPUB2(object):
     self.createstructure()
     self.render_to_epub()
     self.bundle_epub()
-    #self.cleanup()
+    self.cleanup()
   
   def createstructure(self):
     """Create directory structure in temp directory"""
@@ -160,7 +160,7 @@ class EPUB2(object):
       for error in transform.error_log:
          log.error(error.message)
 
-    log.debug("Result of transformation: %s" % result)
+    # log.debug("Result of transformation: %s" % result)
     log.info("Temporary directory for EPUB: %s" % self.tmpdir)
     
   def bundle_epub(self):
@@ -173,7 +173,7 @@ class EPUB2(object):
     self.copy_admons()
     self.copy_fonts()
     self.packepub()
-    log.info("Packing directory %s into EPUB file %s" % (self.tmpdir, self.epubfile) )
+    log.info("Packing directory %s into EPUB file %s" % (self.tmpdir, os.path.abspath(self.epubfile)) )
 
   def packepub(self):
     """Create a ZIP archive with all the needed files """
@@ -182,10 +182,6 @@ class EPUB2(object):
     epubfiles = [os.path.join(root,f) for root, dirs, files in \
                   os.walk(os.path.join(self.tmpdir, self.OEBPS_DIR)) for f in files ]
     epubdirs = [os.path.join(root,d) for root, dirs, files in os.walk(self.tmpdir) for d in dirs ]
-    
-    
-    log.info(" Epubfile: %s" % epubfiles)
-    log.info(" Epubdirs: %s" % epubdirs)
    
     myzip=zipfile.ZipFile(self.epubfile, mode="w" )
     # Handle mimetype separately
@@ -207,10 +203,8 @@ class EPUB2(object):
       log.info("  Compressing %s file" % f)
       myzip.write(f, os.path.relpath(f, self.tmpdir), compress_type=zipfile.ZIP_DEFLATED)
 
-    
     myzip.close()
-    
-    log.info("Wrote EPUB file %s" % self.epubfile)
+    log.info("Wrote EPUB file %s" % os.path.abspath(self.epubfile))
   
   def copy_images(self):
     """Copy all image files into OEBPS directory"""
@@ -228,7 +222,7 @@ class EPUB2(object):
     log.info("copy_cssfiles")
     if not self.cssfile:
       return
-    log.info("  tmpdir=%s, oebps=%s, css=%s" % (self.tmpdir, self.OEBPS_DIR, self.cssfile))
+    #log.info("  tmpdir=%s, oebps=%s, css=%s" % (self.tmpdir, self.OEBPS_DIR, self.cssfile))
     # FUTURE: If cssfile will be a list, remove [...]
     for css in [self.cssfile]:
       if not os.path.exists(css):
