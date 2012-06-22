@@ -196,12 +196,14 @@ class EPUB2(object):
 
     # Handle directories first
     for d in epubdirs:
-      log.info("  Storing %s directory" % d)
-      myzip.write(d, os.path.relpath(d, self.tmpdir), compress_type=zipfile.ZIP_STORED)
+      archive = os.path.relpath(d, self.tmpdir)
+      log.info("  Storing %s directory as %s" % (d, archive))
+      myzip.write(d,archive, compress_type=zipfile.ZIP_STORED)
     # Handle files
     for f in epubfiles:
-      log.info("  Compressing %s file" % f)
-      myzip.write(f, os.path.relpath(f, self.tmpdir), compress_type=zipfile.ZIP_DEFLATED)
+      archive = os.path.relpath(f, self.tmpdir)
+      log.info("  Compressing %s file as %s" % (f, archive))
+      myzip.write(f, archive, compress_type=zipfile.ZIP_DEFLATED)
 
     myzip.close()
     log.info("Wrote EPUB file %s" % os.path.abspath(self.epubfile))
