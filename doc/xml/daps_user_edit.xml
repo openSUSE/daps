@@ -612,7 +612,7 @@
     <literal>OEM Company</literal>. It contains additional features that are 
     only available in the OEM version:</para>
    <example id="ex.daps.profile.two">
-    <title>Product-specific Profiling (Two Attributes)</title>
+    <title>Product-specific Profiling (Multiple Attributes)</title>
     <screen>&lt;simplelist&gt;
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
@@ -807,28 +807,51 @@
         The spelling of the values must be the same that is used in the XML
         files.</para>
    </sect3>
-
-   <sect3 id="sec.daps.user.edit.profile.daps.ex">
-    <title>Profiling Example</title>
-    <para>
-     <remark>taroth 2012-06-18: FIXME: extend example</remark>
-    </para>
-
-    <screen>&lt;simplelist&gt;
-  &lt;member&gt;Common Feature 1&lt;/member&gt;
-  &lt;member&gt;Common Feature 2 &lt;/member&gt;
-  &lt;member&gt;Common Feature 3 &lt;/member&gt;
-  &lt;member condition="basic"&gt;Basic Feature 1 &lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 1 &lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 2 &lt;/member&gt;
-&lt;/simplelist&gt;</screen>
-   </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.productentities">
     <title>Combining Entities and Profiling</title>
     <para>
      <remark>taroth 2012-06-18: todo - combine profiling and entities</remark>
     </para>
    </sect3>
+
+   <sect3 id="sec.daps.user.edit.profile.daps.ex">
+    <title>Profiling Example</title>
+    <para>In the following, find a  comprehensive example that shows the basic 
+    &dapsacr; profiling requirements in the affected files (XML files,
+    Main file, and &dc; file) in more detail. It is based on the examples in
+    <xref linkend="sec.daps.user.edit.profile.basics"/>.</para>
+
+    <example id="ex.daps.xml.pa">
+     <title>XML File With Profiling Attributes</title>
+    
+    <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml"
+ title="Profiling step"?&gt;
+&lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY productname  '<phrase condition="basic">Frog Home</phrase>
+     <phrase condition="professional">Frog Professional</phrase>'&gt;
+ &lt;!ENTITY productversion  '<phrase condition="basic">0.42</phrase>
+     <phrase condition="professional">1.0</phrase>'&gt; 
+]    
+ 
+&lt;chapter id="frog.features"&gt;
+ [...]
+ &lt;simplelist&gt;
+   &lt;member&gt;Common Feature 1&lt;/member&gt;
+   &lt;member&gt;Common Feature 2&lt;/member&gt;
+   &lt;member&gt;Common Feature 3&lt;/member&gt;
+   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
+   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+ &lt;/simplelist&gt; 
+ [...]
+&lt;/chapter&gt;</screen>
+</example>
+   </sect3>
+   
   </sect2>
  </sect1>
  
