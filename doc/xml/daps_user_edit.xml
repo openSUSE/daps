@@ -820,21 +820,11 @@
     &dapsacr; profiling requirements in the affected files (XML files,
     Main file, and &dc; file) in more detail. It is based on the examples in
     <xref linkend="sec.daps.user.edit.profile.basics"/>.</para>
-
+<remark>taroth 2012-06-22: FIXME - add callouts</remark>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
-    
-    <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
- type="text/xml"
- title="Profiling step"?&gt;
-&lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
-[&lt;!ENTITY productname  '<phrase condition="basic">Frog Home</phrase>
-     <phrase condition="professional">Frog Professional</phrase>'&gt;
- &lt;!ENTITY productversion  '<phrase condition="basic">0.42</phrase>
-     <phrase condition="professional">1.0</phrase>'&gt; 
-]    
+     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+[...] 
  
 &lt;chapter id="frog.features"&gt;
  [...]
@@ -849,11 +839,60 @@
  &lt;/simplelist&gt; 
  [...]
 &lt;/chapter&gt;</screen>
-</example>
-   </sect3>
+    </example>
+    <example id="ex.daps.main.pi">
+     <title>Main File With PI for Profiling </title>
+     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml"
+ title="Profiling step"?&gt;
+&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]&gt;  
+
+&lt;article lang="en" id="art.frog"&gt;
+ &lt;title&gt;Frog Product Description&lt;/title&gt;
+ &lt;abstract>
+ [...]
+ &lt;/abstract&gt;
+ &lt;xi:include href="frog_features.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ [...]
+&lt;/article&gt;</screen>
+    </example>
+    <example id="ex.daps.main.pa.home">
+     <title>&dc; File for Frog Home Edition</title>
+     <screen>## Doc Config File for Frog Home Edition
+
+## Mandatory Parameters
+MAIN="art_frog.xml"
+
+## Profiling
+PROFCONDITION="basic" <co id="daps.dc.pa.basic"/>
+[...]</screen>
+    </example>
+  
+   <example id="ex.daps.main.pa.prof">
+     <title>&dc; File for Frog Professional Edition</title>
+     <screen>## Doc Config File for Frog Professional Edition
+
+## Mandatory Parameters
+MAIN="art_frog.xml"
+
+## Profiling
+PROFCONDITION="professional" <co id="daps.dc.pa.prof"/>
+PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
+[...]</screen>
+    </example>
    
-  </sect2>
- </sect1>
+  <example id="ex.daps.main.decl">
+   <title>External Entity File with Profiling Attributes</title>
+   <screen><remark>taroth 2012-06-22: FIXME</remark></screen>
+  </example>
+ </sect3>
+</sect2>
+</sect1>
  
   
 
@@ -1155,17 +1194,17 @@ PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
   </sect2>-->
 
 
- <sect1 id="sec.daps.user.edit.more">
-  <title>For More Information</title>
-  <para>
+<sect1 id="sec.daps.user.edit.more">
+<title>For More Information</title>
+<para>
    For a complete DocBook reference see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
    <citetitle>&tdg;</citetitle>
-   </ulink>.
+ </ulink>.
   </para>
-  <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
+<para>Useful tips and tricks around using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
    Developers and Writers</citetitle>, available at 
    <ulink url="http://doccookbook.sourceforge.net/"></ulink>.</para>
- </sect1>
+</sect1>
 </chapter>
