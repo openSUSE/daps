@@ -71,7 +71,18 @@ class EPUB2(object):
     """
     self.xmlfile = os.path.abspath(xmlfile)
     self.tmpdir = tempfile.mkdtemp(prefix="db2epub-")
-    self.xmlparser = etree.XMLParser(remove_blank_text=True, no_network=True)
+    # We introduce our own variables to make it independant from options
+    # self.options = options
+    self.verbose = options.VERBOSE
+    self.cssfile = options.CSSFILE
+    self.otffiles = options.OTFFILES
+    self.keeptemp = options.KEEP_TEMP
+    self.dtd = options.DTD
+    self.imgsrcpath = os.path.abspath(options.IMAGEDIR) if options.IMAGEDIR else os.path.abspath(os.path.dirname(self.xmlfile))
+    self.myxslt  = options.CUSTOMIZATIONLAYER if options.CUSTOMIZATIONLAYER else self.STYLESHEET
+    self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
+    
+    self.xmlparser = etree.XMLParser(remove_blank_text=True, no_network=True, dtd_validation=bool(self.dtd))
     self.xmltree = etree.parse(self.xmlfile, self.xmlparser)
     self.xmltree.xinclude()
     
@@ -79,15 +90,6 @@ class EPUB2(object):
     self._has_callouts = int(self.xmltree.xpath("count(//co)"))
     self._has_admons = int(self.xmltree.xpath("count(//note | //caution | //tip | //warning | //important)"))
     
-    # We introduce our own variables to make it independant from options
-    # self.options = options
-    self.verbose = options.VERBOSE
-    self.cssfile = options.CSSFILE
-    self.otffiles = options.OTFFILES
-    self.keeptemp = options.KEEP_TEMP
-    self.imgsrcpath = os.path.abspath(options.IMAGEDIR) if options.IMAGEDIR else os.path.abspath(os.path.dirname(self.xmlfile))
-    self.myxslt  = options.CUSTOMIZATIONLAYER if options.CUSTOMIZATIONLAYER else self.STYLESHEET
-    self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
   
   def stringparam(self, string):
     """Wrap string values in single quotes before passing it to XSLT"""
@@ -139,12 +141,12 @@ class EPUB2(object):
       params["html.stylesheet"] = self.stringparam(self.cssfile)
       # log.info("Found css file: %s, %s" % (self.cssfile, params["html.stylesheet"]) )
     if self.otffiles:
-      params["epub.embedded.fonts"] =  self.stringparam(" ".join(self.otffiles))
+      params["epub.embedded.fonts"] =  self.stringparam(",".join([os.path.basename(font) for font in self.otffiles]))
    
     # Prepare for transformation
     self.xslttree = etree.parse(self.myxslt)
-    log.debug("Preparing transformation with params: %s\n " \
-              "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree) )
+    #log.debug("Preparing transformation with params: %s\n " \
+    #          "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree) )
 
     pwd=os.getcwd()
     try:
@@ -190,7 +192,7 @@ class EPUB2(object):
    
     myzip=zipfile.ZipFile(self.epubfile, mode="w" )
     # Handle mimetype separately
-    log.info("  Writing mimetype file")
+    log.debug("  Writing mimetype file")
     myzip.write(os.path.join(self.tmpdir, "mimetype"), "mimetype", 
                 compress_type=zipfile.ZIP_STORED)
     # Handle container.xml separately
@@ -202,7 +204,7 @@ class EPUB2(object):
     # Handle directories first
     for d in epubdirs:
       archive = os.path.relpath(d, self.tmpdir)
-      log.info("  Storing %s directory as %s" % (d, archive))
+      log.debug("  Storing %s directory as %s" % (d, archive))
       myzip.write(d,archive, compress_type=zipfile.ZIP_STORED)
     # Handle files
     for f in epubfiles:
@@ -211,15 +213,17 @@ class EPUB2(object):
       myzip.write(f, archive, compress_type=zipfile.ZIP_DEFLATED)
 
     myzip.close()
-    log.info("Wrote EPUB file %s" % os.path.abspath(self.epubfile))
+    log.debug("Wrote EPUB file %s" % os.path.abspath(self.epubfile))
   
   def copy_images(self):
     """Copy all image files into OEBPS directory"""
     log.debug("copy_images")
-    for img in self.get_image_refs():
+    images=self.get_image_refs()
+    log.debug("  found %i images" % len(images))
+    for img in images:
        newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, img.attrib["fileref"])
        fullimg = os.path.join(self.imgsrcpath, img.attrib["fileref"])
-       log.info("  copying image from %s to %s" % (fullimg, newimg))
+       log.debug("  copying image from %s to %s" % (fullimg, newimg))
        shutil.copyfile(fullimg, newimg)
   
   def copy_cssfiles(self):
@@ -235,7 +239,7 @@ class EPUB2(object):
       if not os.path.exists(css):
         raise IOError("CSS file %s not found" % css)
       newcss=os.path.join(self.tmpdir, self.OEBPS_DIR, os.path.basename(css))
-      log.info("  From %s to %s" % (css, newcss) )
+      log.debug("  From %s to %s" % (css, newcss) )
       shutil.copyfile(css, newcss)
   
   def copy_admons(self):
@@ -250,13 +254,20 @@ class EPUB2(object):
     # callouts.sort()
     for img in admons:
       newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, "admons", os.path.basename(img))
-      log.info("  From %s to %s" % (img, newimg) )
+      log.debug("  From %s to %s" % (img, newimg) )
       shutil.copyfile(img, newimg)
 
      
   def copy_fonts(self):
-    # FIXME
-    pass
+    """Copy font files into OEBPS/ directory """
+    log.info("copy_fonts")
+    if not self.otffiles:
+       return
+    
+    for font in self.otffiles:
+       newfont=os.path.join(self.tmpdir, self.OEBPS_DIR, os.path.basename(font))
+       log.info("   Copying from %s to %s" % (font, newfont) )
+       shutil.copyfile(font, newfont)
   
   def copy_callouts(self):
     """Copy callout files"""
@@ -269,7 +280,7 @@ class EPUB2(object):
     # callouts.sort()
     for img in callouts:
       newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.CALLOUT_PATH, os.path.basename(img))
-      log.info("  From %s to %s" % (img, newimg) )
+      log.debug("  From %s to %s" % (img, newimg) )
       shutil.copyfile(img, newimg)
     
   
@@ -307,14 +318,16 @@ class EPUB2(object):
  
   def write_mimetype(self):
     """Write the mimetype file and returns the absolute path of the file 'mimetype'"""
-    log.info("write_mimetype")
+    log.debug("write_mimetype")
     filename = os.path.join(self.tmpdir, "mimetype")
     file(filename, "w").write(self.MIMETYPE)
     return filename
   
   def cleanup(self):
     """Cleanup temporary directory"""
+    log.debug("cleanup")
     if self.keeptemp:
+      log.debug("  Temporary directory tree deleted")
       shutil.rmtree(self.tmpdir) # ignore_errors=
     
 # EOF
