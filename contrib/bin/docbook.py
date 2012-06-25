@@ -1,7 +1,10 @@
 """
+Library 
 
+Example:
 >>> import docbook
->>> db = DocBook.EPUB2(f, options)
+>>> db = docbook.EPUB2(f, options)
+>>> db.render()
 
 """
 
@@ -27,7 +30,8 @@ log = logging.getLogger('db2epub')
 DBPATH="/usr/share/xml/docbook/stylesheet/nwalsh/current/"
 # The official DocBook URI for the stylesheet
 DBURI="http://docbook.sourceforge.net/release/xsl/current/"
-
+# Namespace for DocBook5
+DB5NS="http://docbook.org/ns/docbook"
 
 def mkdir_p(path):
   """Make parent directories as needed"""
@@ -80,6 +84,7 @@ class EPUB2(object):
     self.verbose = options.VERBOSE
     self.cssfile = options.CSSFILE
     self.otffiles = options.OTFFILES
+    self.keeptemp = options.KEEP_TEMP
     self.imgsrcpath = os.path.abspath(options.IMAGEDIR) if options.IMAGEDIR else os.path.abspath(os.path.dirname(self.xmlfile))
     self.myxslt  = options.CUSTOMIZATIONLAYER if options.CUSTOMIZATIONLAYER else self.STYLESHEET
     self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
@@ -92,7 +97,7 @@ class EPUB2(object):
     """Render DocBook file to EPUB"""
     if epubfile:
       self.epubfile = epubfile
-    log.info("Use epubfile=%s" % self.epubfile )
+    log.debug("Use epubfile=%s" % self.epubfile )
     self.createstructure()
     self.render_to_epub()
     self.bundle_epub()
@@ -100,7 +105,7 @@ class EPUB2(object):
   
   def createstructure(self):
     """Create directory structure in temp directory"""
-    log.info("createstructure")
+    log.debug("createstructure")
     mkdir_p(os.path.join(self.tmpdir, self.OEBPS_DIR))
     mkdir_p(os.path.join(self.tmpdir, self.META_DIR))
     
@@ -114,7 +119,7 @@ class EPUB2(object):
   
   def render_to_epub(self):
     """Transforms DocBook XML file into HTML chunk files"""
-    log.info("render_to_epub")
+    log.debug("render_to_epub")
     # 
     # Create stylesheet parameters:
     # Watch out for correct string quotation
@@ -165,7 +170,7 @@ class EPUB2(object):
     
   def bundle_epub(self):
     """ """
-    log.info("bundle_epub")
+    log.debug("bundle_epub")
     self.write_mimetype()
     self.copy_images()
     self.copy_cssfiles()
@@ -178,7 +183,7 @@ class EPUB2(object):
   def packepub(self):
     """Create a ZIP archive with all the needed files """
     # Create two lists of all files and directories
-    log.info("packepub")
+    log.debug("packepub")
     epubfiles = [os.path.join(root,f) for root, dirs, files in \
                   os.walk(os.path.join(self.tmpdir, self.OEBPS_DIR)) for f in files ]
     epubdirs = [os.path.join(root,d) for root, dirs, files in os.walk(self.tmpdir) for d in dirs ]
@@ -210,7 +215,7 @@ class EPUB2(object):
   
   def copy_images(self):
     """Copy all image files into OEBPS directory"""
-    log.info("copy_images")
+    log.debug("copy_images")
     for img in self.get_image_refs():
        newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, img.attrib["fileref"])
        fullimg = os.path.join(self.imgsrcpath, img.attrib["fileref"])
@@ -221,7 +226,7 @@ class EPUB2(object):
     """Copy CSS file into OEBPS directory
        raises IOError if CSS file is not found
     """
-    log.info("copy_cssfiles")
+    log.debug("copy_cssfiles")
     if not self.cssfile:
       return
     #log.info("  tmpdir=%s, oebps=%s, css=%s" % (self.tmpdir, self.OEBPS_DIR, self.cssfile))
@@ -236,7 +241,7 @@ class EPUB2(object):
   def copy_admons(self):
     """Copy admonition files into OEBPS/admons directory
     """
-    log.info("copy_admons")
+    log.debug("copy_admons")
     if not self.has_admons:
        return
     #
@@ -255,7 +260,7 @@ class EPUB2(object):
   
   def copy_callouts(self):
     """Copy callout files"""
-    log.info("copy_callouts")
+    log.debug("copy_callouts")
     if not self.has_callouts:
       return
 
@@ -270,7 +275,7 @@ class EPUB2(object):
   
   def get_image_refs(self):
     """Returns a list of image filenames"""
-    log.info("get_image_refs")
+    log.debug("get_image_refs")
     # Allowed image file extensions:
     imgext = (".svg", ".png", ".gif", ".jpg", ".jpeg", ".xml", ".eps", ".pdf")
     # Allowed values in <imageobject role="...">
@@ -288,7 +293,6 @@ class EPUB2(object):
               img.getparent().attrib.get("role") in rolevalues and \
               os.path.splitext(img.attrib.get("fileref", ""))[1] in imgext 
               ]
-    log.info("  images:%s" % imagedata )
     return imagedata
   
   @property
@@ -310,6 +314,7 @@ class EPUB2(object):
   
   def cleanup(self):
     """Cleanup temporary directory"""
-    shutil.rmtree(self.tmpdir) # ignore_errors=
+    if self.keeptemp:
+      shutil.rmtree(self.tmpdir) # ignore_errors=
     
 # EOF
