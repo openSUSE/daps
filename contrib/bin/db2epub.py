@@ -21,6 +21,7 @@ import textwrap
 #IMPORTDIR=os.path.dirname(__file__)
 #sys.path.insert(0, IMPORTDIR)
 import docbook
+from lxml import etree
 
 log = logging.getLogger('db2epub')
 fh=logging.FileHandler('/var/tmp/db2epub.log')
@@ -175,7 +176,9 @@ if __name__=="__main__":
       d.render(epubfile)      
       if options.VERBOSE > 1: log.warn("Rendered DocBook file %s to %s" % (f, os.path.abspath(epubfile)))
   
-  # except etree.XIncludeError, e
+  except (etree.XIncludeError, etree.XMLSyntaxError), e:
+     log.critical("ERROR in file '%s': %s " % (f, e))
+     sys.exit(10)
   except IOError, e:
     log.critical(e)
     sys.exit(10)
