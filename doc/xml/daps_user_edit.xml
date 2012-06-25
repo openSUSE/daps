@@ -686,15 +686,16 @@
      </para>
     </listitem>
    </orderedlist>
-
+ <para>For a comprehensive example showing all requirements in detail,
+ refer to <xref linkend="sec.daps.user.edit.profile.daps.ex"/>.</para>
 
    <sect3 id="sec.daps.user.edit.profile.daps.pa">
     <title>XML Files: Profiling Attributes</title>
-    <para>Currently, &dapsacr; supports the profiling attributes that are listed 
-   in <xref linkend="tab.daps.profiling"/>. In &dapsacr;, each profiling attribute 
-   has a corresponding profiling parameter to be used in the &dc; file. The 
-   profiling parameters define which profiling attributes and values to interpret
-   during generation of output.</para>
+    <para>In your DocBook XM files, only use profiling attributes that are supported 
+    by &dapsacr;&mdash;refer to <xref linkend="tab.daps.profiling"/>. In &dapsacr;,
+    each profiling attribute has a corresponding profiling parameter to be used 
+    in the &dc; file. The profiling parameters define which profiling attributes 
+    and values to interpret during generation of output.</para>
 
     <table id="tab.daps.profiling" rowsep="1">
      <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
@@ -780,14 +781,15 @@
    </sect3>
    <sect3 id="sec.daps.user.edit.profile.daps.pi">
     <title>Main File: Processing Instruction</title>
-    <para>The Main file of a documentation project is the one that is referenced 
-      by the <parameter>MAIN</parameter> parameter in the &dc; file. 
+    <para> 
       To activate generation of profiled output in &dapsacr;, the following 
       processing instruction (PI) must be included in the header of the Main file:
       </para>
     <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-    <para> If the processing instruction is missing in the Main file, any profiling
-    parameters in the &dc; file will be ignored during generation of the output. </para>
+    <para>The Main file of a documentation project is the one that is referenced 
+      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the processing 
+      instruction is missing in the Main file, any profiling parameters in the &dc; 
+      file will be ignored during generation of the output. </para>
     <tip>
      <title>Include PI in All XML Files</title>
      <para>For any documentation projects that need profiling, we advise to
@@ -817,9 +819,9 @@
    <sect3 id="sec.daps.user.edit.profile.daps.ex">
     <title>Profiling Example</title>
     <para>In the following, find a  comprehensive example that shows the basic 
-    &dapsacr; profiling requirements in the affected files (XML files,
-    Main file, and &dc; file) in more detail. It is based on the examples in
-    <xref linkend="sec.daps.user.edit.profile.basics"/>.</para>
+    &dapsacr; profiling requirements in more detail. It is based on the examples in
+    <xref linkend="sec.daps.user.edit.profile.basics"/> and shows all files
+    that you need to consider (XML files, Main file, and &dc; file). </para>
 <remark>taroth 2012-06-22: FIXME - add callouts</remark>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
@@ -862,7 +864,7 @@
 &lt;/article&gt;</screen>
     </example>
     <example id="ex.daps.main.pa.home">
-     <title>&dc; File for Frog Home Edition</title>
+     <title>&dc; File with Profiling for Frog Home Edition</title>
      <screen>## Doc Config File for Frog Home Edition
 
 ## Mandatory Parameters
@@ -874,7 +876,7 @@ PROFCONDITION="basic" <co id="daps.dc.pa.basic"/>
     </example>
   
    <example id="ex.daps.main.pa.prof">
-     <title>&dc; File for Frog Professional Edition</title>
+     <title>&dc; File with Profiling for Frog Professional Edition</title>
      <screen>## Doc Config File for Frog Professional Edition
 
 ## Mandatory Parameters
