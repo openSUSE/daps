@@ -1,12 +1,14 @@
 #!/usr/bin/python
-__doc__="""
+"""
+Transforms a DocBook4 XML file into EPUB2 file
+
 EPUB is defined by the IDPF at www.idpf.org and is made up of 3 standards:
 * Open Publication Structure (OPS)
 * Open Packaging Format (OPF) 
 * Open Container Format (OCF)
-""".strip()
+"""
 
-__version__="0.1"
+__version__="0.9"
 __author__="Thomas Schraitle <toms@opensuse.org>"
 
 import sys
@@ -85,14 +87,16 @@ class IndentedHelpFormatterWithNL(optparse.IndentedHelpFormatter):
 
 def main():
   parser = optparse.OptionParser(version="%prog "+__version__, 
+               usage="%prog [options] XMLFILE [XMLFILE...]",
+               # version="",
                formatter=IndentedHelpFormatterWithNL(),
-               description=__doc__) # epilog="See also "
+               description=__doc__.strip()) # epilog="See also "
   parser.add_option("-c", "--css",
      dest="CSSFILE",
      help="Use CSSFILE for CSS on generated XHTML")
-  parser.add_option("-d", "--debug",
-     dest="DEBUG",
-     help="Show debugging output")
+  #parser.add_option("-d", "--debug",
+  #   dest="DEBUG",
+  #   help="Show debugging output")
   parser.add_option("-f", "--font",
      dest="OTFFILES",
      action="append",
@@ -112,16 +116,20 @@ def main():
      #action="store_true",
      action="count",
      help="Make output verbose")
+  parser.add_option("-k", "--keep-temp",
+     dest="KEEP_TEMP",
+     action="store_true",
+     help="Keep temporary directory for debugging reason (default: %default)")
   parser.set_defaults(VERBOSE=False,
-     DEBUG=False,
+     # DEBUG=False,
      CSSFILE=None,
+     KEEP_TEMP=False,
      # OTFFILES=[],
      # IMAGEDIR=None,
      CUSTOMIZATIONLAYER=os.path.join(docbook.DBPATH, "epub/docbook.xsl"),
      OUTPUTFILE=None,
      )  
   (options, args)= parser.parse_args()
-  # print "Parsed commandline: options=%s, args=%s" % (options, args)
   log.debug("Parsed commandline: options=%s, args=%s" % (options, args) )
   
   if not len(args):
@@ -129,15 +137,15 @@ def main():
     sys.exit(1)
   
   verbosedict={ 0: logging.NOTSET,
-                1: logging.DEBUG,
-                2: logging.INFO,
-                3: logging.WARN,
-                4: logging.ERROR,
-                5: logging.CRITICAL,
+                1: logging.DEBUG,    # logging.ERROR
+                2: logging.INFO,     # logging.WARN
+                3: logging.WARN,     # logging.INFO
+                4: logging.ERROR,    # logging.DEBUG
+                5: logging.CRITICAL, # 
                }  
 
   
-  log.setLevel( verbosedict.get(options.VERBOSE, logging.DEBUG) ) 
+  log.setLevel( verbosedict.get(options.VERBOSE, logging.WARN) ) 
 
   return (options, args, parser)
 
