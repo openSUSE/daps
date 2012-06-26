@@ -68,7 +68,7 @@ die "\e[31mNo valid config file specified:\n\t $config\e[0m\n" if ! -s $config;
 #
 
 my $cfg = Config::IniFiles->new( -file => "$config" ) or
-    die "\e[31mPlease check the config file syntax.\e[0m\n";
+    die "\e[31mPlease check the config file syntax.\n@Config::IniFiles::errors\e[0m\n";
 
 my @dcfiles       = (); # all DC files from one set
 my @formats       = (); # all formats from one set
