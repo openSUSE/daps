@@ -23,6 +23,7 @@ my $me = basename($0);
 my $builddir      = "";
 my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
+my @vformats      = qw(color-pdf epub html htmlsingle pdf txt); # valid formats
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -73,7 +74,6 @@ my $cfg = Config::IniFiles->new( -file => "$config" ) or
 my @dcfiles       = (); # all DC files from one set
 my @formats       = (); # all formats from one set
 my @sets          = (); # the sections from the config file
-my @vformats      = qw(color-pdf epub html htmlsingle pdf txt); # valid formats
 
 
 #
@@ -162,7 +162,7 @@ foreach my $set (@sets) {
     }
     # formats
     foreach my $format ( @formats ) {
-        if ( ! grep { $_ eq $format } @vformats ) {
+        if ( not grep { $_ eq $format } @vformats ) {
             warn "${bcol}Invalid format \"$format\" in config for section [$set].\n-> Skipping ${format}.${ecol}\n";
             next;
         } else {
@@ -281,7 +281,7 @@ sub rsync {
     #} );
     
     my ($rsync_target,$rsync_flags, $set) = @_;
-    my %rsync_opts = eval $cfg->val('general', 'rsync_flags');
+    my %rsync_opts = eval $rsync_flags;
     my $rsync = File::Rsync->new( \%rsync_opts );
     my $rsync_src = catdir("$builddir", "$set");
 
