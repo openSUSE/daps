@@ -13,10 +13,11 @@ use strict;
 use Getopt::Long;
 use Config::IniFiles;
 use File::Basename;
-use File::Copy;
+use File::Copy::Recursive qw(fmove dirmove);
 use File::Path;
 use File::Rsync;
 use File::Spec::Functions;
+use File::Temp qw(tempdir);
 
 
 my $me = basename($0);
@@ -194,16 +195,19 @@ foreach my $set (@sets) {
                         #
                         # Move non-html format results into subdirectory $format
                         #
+                        my $resultdir = dirname($dapsresult);
+                        my $formatdir = '';
+                        print "    Moving $dapsresult to $formatdir\n" if $verbose;
                         if ( $format !~ /^html.*/ ) {
-                            my $resultdir  = dirname($dapsresult);
-                            my $format_dir = catdir($resultdir, $format);
-                            print "    Moving $dapsresult to $format_dir\n" if $verbose;
-                            if ( ! -d $format_dir ) {
-                                mkdir($format_dir,0755) or warn "${bcol}Failed to create directory $format_dir.${ecol}\n";
-                            }
-                            move($dapsresult, $format_dir) or warn "${bcol}Failed to move $dapsresult to $format_dir.${ecol}\n";
+                            $formatdir = catdir($resultdir, $format);
+                            fmove($dapsresult, $formatdir) or warn "${bcol}Failed to move $dapsresult to $formatdir.${ecol}\n";
+                        } else {
+                            my $upresultdir = dirname($resultdir);
+                            my $tempdir = tempdir( CLEANUP => 1);
+                            dirmove($resultdir, $tempdir) or warn "${bcol}Failed to move $resultdir to $tempdir.${ecol}\n";
+                            rmdir $upresultdir or warn "${bcol}Failed to remove $resultdir.${ecol}\n";
+                            dirmove($tempdir, $upresultdir) or warn "${bcol}Failed to rename $tempdir to $upresultdir.${ecol}\n";
                         }
-                 
                     }
                 }
             }
@@ -258,7 +262,7 @@ sub set_daps_cmd_and_log {
         $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
         $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
         if ( $format =~ /^html.*/ ) {
-            $dapscmd .= " --static";
+            $dapscmd .= " --static --clean";
         }
     }
     $dapscmd .= " 2>&1" if $debug; 
