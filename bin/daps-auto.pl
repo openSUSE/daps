@@ -200,6 +200,10 @@ foreach my $set (@sets) {
                         print "    Moving $dapsresult to $formatdir\n" if $verbose;
                         if ( $format !~ /^html.*/ ) {
                             $formatdir = catdir($resultdir, $format);
+                            if ( not -d $formatdir ) {
+                                mkdir("$formatdir",0755) or warn "${bcol}Failed to create $formatdir.${ecol}\n";
+                            }
+                            mkdir("$formatdir",0755) if not -d $formatdir;
                             fmove($dapsresult, $formatdir) or warn "${bcol}Failed to move $dapsresult to $formatdir.${ecol}\n";
                         } else {
                             my $upresultdir = dirname($resultdir);
