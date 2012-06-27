@@ -128,7 +128,13 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 # HTML / HTML-SINGLE
 #
-HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+ifeq ($(MAKECMDGOALS), html)
+  HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+endif
+ifeq ($(MAKECMDGOALS), htmlsingle)
+  HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+endif
+
 
 # WEBHELP
 WEBHELP_DIR := $(RESULT_DIR)/webhelp/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
@@ -438,7 +444,7 @@ endif
 # we need to replace double quotes by single quotes (cannot be done with
 # xsltproc)
 #
-SETFILES     := $(shell xsltproc $(PROFSTRINGS) $(ROOTSTRING) \
+SETFILES     := $(shell xsltproc $(PROFSTRINGS) \
 		  --stringparam xml.src.path "$(DOC_DIR)/xml/" \
 		  --stringparam mainfile $(notdir $(MAIN)) \
 		  $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
@@ -458,16 +464,16 @@ endif
 
 # XML source files for the currently used document (defined by teh rootid)
 #
-#ifdef ROOTSTRING
-#  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
-#		--stringparam xml.or.img xml \
-#		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
-# ifndef DOCFILES
-#    $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
-#  endif
-#else
+ifdef ROOTSTRING
+  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc $(ROOTSTRING) \
+		--stringparam xml.or.img xml \
+		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+ ifndef DOCFILES
+    $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
+  endif
+else
   DOCFILES  := $(SRCFILES)
-#endif
+endif
 
 PROFILES    := $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 DISTPROFILE := $(subst $(DOC_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
@@ -514,26 +520,26 @@ pdf-color color-pdf: $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf
 #
 .PHONY: html
 html: | $(DIRECTORIES)
-html: $(PROFILEDIR)/.validate missing-images $(HTML_DIR)/index.html
-	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(HTML_DIR)/index.html"
+html: clean_html $(PROFILEDIR)/.validate missing-images $(HTML_DIR)/index.html 
+	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\n$(HTML_DIR)/index.html"
 
 #--------------
 # HTML-SINGLE
 #
 .PHONY: html-single htmlsingle
 html-single htmlsingle: | $(DIRECTORIES)
-html-single htmlsingle: missing-images
-html-single htmlsingle: $(PROFILEDIR)/.validate $(HTML_DIR)/$(BOOK).html
-	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\nfile://$(HTML_DIR)/$(BOOK).html\033[m\017"
+html-single htmlsingle: clean_html $(PROFILEDIR)/.validate \
+			missing-images $(HTML_DIR)/$(BOOK).html
+	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(HTML_DIR)/index.html\033[m\017"
 
 #--------------
 # WEBHELP
 #
 .PHONY: webhelp
 webhelp: | $(DIRECTORIES)
-webhelp: missing-images
-webhelp: $(PROFILEDIR)/.validate missing-images $(WEBHELP_DIR)/index.html
-	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\nfile://$(WEBHELP_DIR)/index.html"
+webhelp: clean_webhelp $(PROFILEDIR)/.validate missing-images \
+		missing-images $(WEBHELP_DIR)/index.html
+	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS), DRAFT=$(DRAFT) and USEMETA=$(USEMETA):\n$(WEBHELP_DIR)/index.html"
 
 
 #--------------
@@ -541,9 +547,8 @@ webhelp: $(PROFILEDIR)/.validate missing-images $(WEBHELP_DIR)/index.html
 #
 .PHONY: jsp
 jsp: | $(DIRECTORIES)
-jsp: $(JSP_DIR)
-jsp: $(PROFILEDIR)/.validate missing-images $(JSP_DIR)/index.jsp
-	@ccecho "result" "Find the JSP book at:\nfile://$(JSP_DIR)/index.jsp"
+jsp: clean_jsp $(PROFILEDIR)/.validate missing-images $(JSP_DIR)/index.jsp
+	@ccecho "result" "Find the JSP book at:\n$(JSP_DIR)/index.jsp"
 
 #--------------
 # TXT
@@ -1441,6 +1446,12 @@ endif
 $(HTML_DIR):
 	mkdir -p $@
 
+.PHONY: clean_html
+clean_html: $(HTML_DIR)
+  ifeq ($(CLEAN_DIR), 1)
+	rm -rf $(HTML_DIR)/*
+  endif
+
 #---------------
 # Print result directory names 
 #
@@ -1566,6 +1577,7 @@ $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
 	  --xinclude $(STYLEHSINGLE) $(PROFILED_MAIN) $(DEVNULL)
+	(cd $(HTML_DIR) && ln -sf $(BOOK).html index.html);
 
 #------------------------------------------------------------------------
 #
@@ -1574,6 +1586,12 @@ $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 
 $(WEBHELP_DIR):
 	mkdir -p $@
+
+.PHONY: clean_webhelp
+clean_webhelp: $(WEBHELP_DIR)
+  ifeq ($(CLEAN_DIR), 1)
+	rm -rf $(WEBHELP_DIR)/*
+  endif
 
 #---------------
 # Print result directory names 
@@ -1715,6 +1733,12 @@ $(WEBHELP_DIR)/index.html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 
 $(JSP_DIR):
 	mkdir -p $@
+
+.PHONY: clean_jsp
+clean_jsp: $(JPS_DIR)
+  ifeq ($(CLEAN_DIR), 1)
+	rm -rf $(JSP_DIR)/*
+  endif
 
 #---------------
 # Print result directory names

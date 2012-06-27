@@ -43,6 +43,10 @@ function parse_args () {
                 P_CHECK=1
                 shift
                 ;;
+            --clean)
+                P_CLEAN=1
+                shift
+                ;;
             --comments)
 		P_COMMENTS=1
 		shift
@@ -506,7 +510,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,css::,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,comments,css::,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -514,6 +518,7 @@ function build_html_jsp () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_clean
         help_comments
         help_css
         help_draft
@@ -524,11 +529,12 @@ function build_html_jsp () {
         help_remarks
         help_rootid
         help_static
-        help_xsltparam "creates HTML from the profiled sources"
+        help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
     fi
-    
+
+    [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
@@ -567,7 +573,7 @@ function webhelp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,css::,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,comments,css::,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -575,6 +581,7 @@ function webhelp () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_clean
         help_comments
         help_css
         help_draft
@@ -596,6 +603,7 @@ function webhelp () {
         exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
     fi
     
+    [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
@@ -1363,6 +1371,11 @@ function help_check () {
     echo "    --check                   Validate the resulting documents.
                               Useful when developing stylesheets. Implies a verbosity
                               level of at least 1.
+                              Default: unset"
+}
+function help_clean () {
+    echo "    --clean                   Clean up the result directory (delete all files and
+                              subdirectories) before building the document.
                               Default: unset"
 }
 function help_css () {
