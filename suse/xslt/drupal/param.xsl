@@ -17,5 +17,11 @@
   <xsl:param name="suppress.footer.navigation" select="1"/>
   <xsl:param name="suppress.header.navigation" select="1"/>
 
+  <!-- Don't use admon graphics -->
+  <xsl:param name="admon.graphics" select="0"/>
+  <!--
+  <xsl:param name="callout.unicode" select="1"/>
+  <xsl:param name="callout.graphics" select="0"/>
+  -->
   
 </xsl:stylesheet>
