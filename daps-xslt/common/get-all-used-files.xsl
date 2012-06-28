@@ -7,20 +7,10 @@
    its descendant
    
   The stylesheet contains two passes:
-  1. Profiling
-     Apply profiling to the XML document and save the result
-     in a temporary RTF (result tree fragment).
-     Any xi:include elements are resolved and wrapped inside
-     a <included xml:base="...">...</included> element. 
-     This element is needed to find the corresponding file name.
-  
-  2. Generate the File List
-     The RTF is converted into a node set. If the parameter
-     rootid is set, only the part of the tree is considered
-     which contains an element with id=$rootid. If no rootid
-     is set, the complete tree is traversed.
-  
-     The output looks can like this:
+  1. Search for every xi:include element, memorize the href
+     attribute and resolve it. Memorize the attributes from
+     the root element (mainly id). Create an internal
+     intermediate structure which looks like this:
      <files>
        <file href="foo.xml">
          <file href="bar.xml" id="bar"/>
@@ -31,29 +21,14 @@
      </files>
      
      Which reads: foo.xml includes bar.xml and bar.xml's root
-     element contains the id attribute "bar". File xyz.xml contains
-     additionally an image foo.png.
+     element contains the id attribute "bar".
      
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   
-   CAVEAT:
-   Every xincluded file is mapped to a <file> entry. That means,
-   if you have inserted some structures *directly*, these generate
-   NOT a <file> entry. For example:
-   
-   <book xmlns:xi="http://www.w3.org/2001/XInclude">
-      <part id="foo">
-        <title>The Foo Part</title>
-        <xi:include href="chapter_a.xml"/>
-        <xi:include href="chapter_b.xml"/>
-        <xi:include href="chapter_c.xml"/>
-      </part>
-   </book>
-
-   The stylesheet only generated three <file> entries for each chapter.
-   However, the part with id=foo does NOT get a <file> element (as it
-   is not included with a xi:include element).
-   
+  2. Parse the intermediate XML structure and apply the /files
+     template. If rootid is set, search for an file element which
+     contains the correct id attribute and process all of its
+     children.
+     Otherwise just apply the file template.
+     
    
    Used in combination with extract-files-and-images.xsl
       
@@ -66,23 +41,10 @@
   extension-element-prefixes="exsl"
   exclude-result-prefixes="exsl xi db">
 
- 
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/profiling/profile-mode.xsl"/>
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current//common/stripns.xsl"/>
-  
+  <xsl:import href="../profiling/check.profiling.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:key name="file-id" match="file" use="@id|@xml:id"/>
-  
-  <xsl:param name="exsl.node.set.available">
-    <xsl:choose>
-      <xsl:when xmlns:exsl="http://exslt.org/common" exsl:foo=""
-        test="function-available('exsl:node-set') or contains(system-property('xsl:vendor'), 'Apache Software Foundation')"
-        >1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:param>
-  
 
   <!-- Separator between each filename: -->
   <xsl:param name="separator">
@@ -97,17 +59,11 @@
   <!-- Only recognize elements with the correct id attribute: -->
   <xsl:param name="rootid"/>
   
-  <!--  -->
-  <xsl:param name="rootid.debug" select="0"/>
-  
   <!-- Base path of XML files (ALWAYS end a trailing slash!): -->
   <xsl:param name="xml.src.path"/>
   
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
-  
-  <!--  -->
-  <xsl:param name="xmlbase"/>
   
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
@@ -133,86 +89,90 @@
 
   <xsl:template match="text()"/>
   
-  <xsl:template name="add-xml-base">
-    <xsl:value-of select="$xmlbase"/>
-  </xsl:template>
-  
-  <!-- Special handling of xi:include elements in profile mode -->
-  <xsl:template match="xi:include[not(@parse) or @parse='xml']" mode="profile" priority="10">   
-    <xsl:if test="$rootid.debug != 0">
-      <xsl:message>Included <xsl:value-of select="@href"/></xsl:message>
-    </xsl:if>
-    <included xml:base="{@href}">
-      <xsl:apply-templates select="document(@href)/*" mode="profile"/>
-    </included>
-  </xsl:template>
-  
-  <!--  -->
   <xsl:template match="/">
-    <xsl:variable name="rtf">
-      <xsl:apply-templates select="." mode="profile"/>
-    </xsl:variable>
-    <xsl:if test="$exsl.node.set.available = 0">
-      <xsl:message terminate="yes">
-        <xsl:text>Need XSLT processor which support EXSLT node-set function.</xsl:text>
-      </xsl:message>
-    </xsl:if>
-    <xsl:variable name="node" select="exsl:node-set($rtf)"/>
-    
     <xsl:comment>
       This is an intermediate XML file from
       get-included-files.xsl which was created in-memory
     </xsl:comment>
-    <xsl:if test="$rootid.debug != 0">
-      <xsl:message>rootid="<xsl:value-of select="$rootid"/>"</xsl:message>
-    </xsl:if>
     <files>
-    <xsl:choose>
-      <xsl:when test="$rootid != ''">
-        <xsl:choose>
-          <xsl:when test="count($node//*[@id=$rootid]) = 0">
-            <xsl:message terminate="yes">
-              <xsl:text>>>> ID '</xsl:text>
-              <xsl:value-of select="$rootid"/>
-              <xsl:text>' not found in document.</xsl:text>
-            </xsl:message>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:if test="$rootid.debug != 0">
-              <xsl:message>Applying <xsl:value-of select="$rootid"/> to document</xsl:message>
-            </xsl:if>
-            <xsl:apply-templates select="$node//*[@id=$rootid]"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-          <xsl:apply-templates select="$node/node()"/>
-      </xsl:otherwise>     
-    </xsl:choose> 
+        <xsl:apply-templates mode="root"/>
     </files>
   </xsl:template>
   
   <!-- This stylesheet gets only called once -->
-  <xsl:template match="/*">
+  <xsl:template match="/*" mode="root">
     <file href="{concat($xml.src.path, $mainfile)}">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
     </file>
   </xsl:template>
+  
+  <xsl:template match="*">
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
+      <xsl:apply-templates/>
+    </xsl:if>
+  </xsl:template>
 
+  <xsl:template match="mediaobject|db:mediaobject">
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
+      <xsl:apply-templates/>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="imageobject|db:imageobject">
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
+      <xsl:apply-templates/>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="imagedata|db:imagedata">
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
       <image fileref="{concat($img.src.path, @fileref)}"/>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="included">
-      <file href="{concat($xml.src.path, @xml:base)}">
-         <xsl:if test="*/@id">
-           <xsl:attribute name="id">
-              <xsl:value-of select="*/@id"/>
-           </xsl:attribute>
-         </xsl:if>
-        <xsl:apply-templates/>
+
+  <xsl:template match="xi:include">
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
+      <xsl:variable name="rootnode" select="document(@href)/*"/>
+      <file href="{concat($xml.src.path, @href)}">
+        <xsl:copy-of select="$rootnode/@*"/>
+        <xsl:apply-templates select="$rootnode"/>
       </file>
+    </xsl:if>
   </xsl:template>
 
+  <xsl:template name="cross.compare">
+    <xsl:param name="a"/>
+    <xsl:param name="b"/>
+    <xsl:param name="sep" select="$profile.separator"/>
+    <xsl:variable name="head"
+      select="substring-before(concat($a, $sep), $sep)"/>
+    <xsl:variable name="tail" select="substring-after($a, $sep)"/>
+    <xsl:if
+      test="contains(concat($sep, $b, $sep), concat($sep, $head, $sep))"
+      >1</xsl:if>
+    <xsl:if test="$tail">
+      <xsl:call-template name="cross.compare">
+        <xsl:with-param name="a" select="$tail"/>
+        <xsl:with-param name="b" select="$b"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  
+  
 </xsl:stylesheet>
