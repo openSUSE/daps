@@ -8,7 +8,6 @@
   $ xsltproc -xinclude chunk.xsl YOUR_XML_FILE.xml
 
 -->
-
 <!DOCTYPE xsl:stylesheet
 [
   <!ENTITY www "http://docbook.sourceforge.net/release/xsl/current/xhtml">
@@ -26,62 +25,151 @@
 
   <xsl:include href="param.xsl"/>
   
-  
-  <xsl:template name="chunk-element-content">
-  <xsl:param name="prev"/>
-  <xsl:param name="next"/>
-  <xsl:param name="nav.context"/>
-  <xsl:param name="content">
-    <xsl:apply-imports/>
-  </xsl:param>
+  <xsl:template name="html.head">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    <xsl:variable name="this" select="."/>
+    <xsl:variable name="home" select="/*[1]"/>
+    <xsl:variable name="up" select="parent::*"/>
 
-  <!--<xsl:message>chunk-element-content: <xsl:value-of select="local-name()"/></xsl:message>-->
-  <xsl:copy-of select="$content"/>
-</xsl:template>
+    <xsl:message>html.head gefunden: <xsl:apply-templates select="$this" 
+      mode="title.markup"/></xsl:message>
+    <head>
+      <xsl:call-template name="system.head.content"/>
+      <xsl:call-template name="head.content"/>
 
-  <xsl:template name="generate.manifest" priority="10">
-  <xsl:param name="node" select="/"/>
-  <xsl:call-template name="write.text.chunk">
-    <xsl:with-param name="filename">
-      <xsl:if test="$manifest.in.base.dir != 0">
-        <xsl:value-of select="$chunk.base.dir"/>
+      <!-- For Drupal -->
+      <link rel="self">
+        <xsl:attribute name="href">
+          <xsl:call-template name="href.target">
+            <xsl:with-param name="object" select="$this"/>
+          </xsl:call-template>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:apply-templates select="$this" 
+            mode="title.markup"/>
+        </xsl:attribute>
+      </link>
+      <xsl:if test="$home">
+        <link rel="home">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="$home"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <!-- Change: Take into account productname and productnumber -->
+            <xsl:choose>
+              <xsl:when test="/book/bookinfo/productname and not(/book/title)">
+                <xsl:value-of select="normalize-space(/book/bookinfo/productname)"/>
+                <xsl:if test="/book/bookinfo/productnumber">
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="normalize-space(/book/bookinfo/productnumber)"/>
+                </xsl:if>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="$home" mode="object.title.markup.textonly"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </link>
       </xsl:if>
-      <xsl:value-of select="$manifest"/>
-    </xsl:with-param>
-    <xsl:with-param name="method" select="'text'"/>
-    <xsl:with-param name="content">
-      <xsl:apply-templates select="$node" mode="enumerate-files"/>
-    </xsl:with-param>
-    <xsl:with-param name="encoding" select="$chunker.output.encoding"/>
-  </xsl:call-template>
+      <xsl:if test="$up">
+        <link rel="up">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="$up"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:apply-templates select="$up" mode="object.title.markup.textonly"/>
+          </xsl:attribute>
+        </link>
+      </xsl:if>
+
+      <xsl:if test="$prev">
+        <link rel="previous">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="$prev"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:apply-templates select="$prev" mode="object.title.markup.textonly"/>
+          </xsl:attribute>
+        </link>
+      </xsl:if>
+
+      <xsl:if test="$next">
+        <link rel="next">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="$next"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:apply-templates select="$next" mode="object.title.markup.textonly"/>
+          </xsl:attribute>
+        </link>
+      </xsl:if>
+
+      <!--<xsl:if test="$html.extra.head.links != 0">
+        <xsl:for-each select="//part|//reference |//preface|//chapter|//article|//refentry
+          |//appendix[not(parent::article)]|appendix
+          |//glossary[not(parent::article)]|glossary
+          |//index[not(parent::article)]|index">
+          <link rel="{local-name(.)}">
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="context" select="$this"/>
+                <xsl:with-param name="object" select="."/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="title">
+              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+            </xsl:attribute>
+          </link>
+        </xsl:for-each>
+        <xsl:for-each select="section|sect1|refsection|refsect1">
+          <link>
+            <xsl:attribute name="rel">
+              <xsl:choose>
+                <xsl:when test="local-name($this) = 'section' or local-name($this) = 'refsection'">
+                  <xsl:value-of select="'subsection'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="'section'"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="context" select="$this"/>
+                <xsl:with-param name="object" select="."/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="title">
+              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+            </xsl:attribute>
+          </link>
+        </xsl:for-each>
+        <xsl:for-each select="sect2|sect3|sect4|sect5|refsect2|refsect3">
+          <link rel="subsection">
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="context" select="$this"/>
+                <xsl:with-param name="object" select="."/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="title">
+              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
+            </xsl:attribute>
+          </link>
+        </xsl:for-each>
+      </xsl:if>-->
+
+      <!--<xsl:call-template name="user.head.content"/>-->
+    </head>
 </xsl:template>
-  
-  <xsl:template match="set|book|part|preface|chapter|appendix
-                       |article|topic|reference|refentry
-                       |sect1|sect2|sect3|sect4|sect5|section
-                       |book/glossary|article/glossary|part/glossary
-                       |book/bibliography|article/bibliography|part/bibliography
-                       |colophon" mode="enumerate-files">
-  <xsl:variable name="ischunk"><xsl:call-template name="chunk"/></xsl:variable>
-  <xsl:if test="$ischunk='1'">
-    <xsl:variable name="title">
-      <xsl:apply-templates select="." mode="title.markup"/>
-    </xsl:variable>
-    
-    <xsl:value-of select="concat(local-name(.), $manifest.separator)"/>
-    
-    <xsl:call-template name="make-relative-filename">
-      <xsl:with-param name="base.dir" select="''"/>
-      <xsl:with-param name="base.name">
-        <xsl:apply-templates mode="chunk-filename" select="."/>
-      </xsl:with-param>
-    </xsl:call-template>
-    
-    <xsl:value-of select="concat($manifest.separator, $title, '&#10;')"/>
-  </xsl:if>
-  <xsl:apply-templates select="*" mode="enumerate-files"/>
-</xsl:template>
-  
-  
   
 </xsl:stylesheet>
