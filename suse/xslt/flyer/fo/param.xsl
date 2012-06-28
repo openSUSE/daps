@@ -5,26 +5,28 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
-
 <!-- The color of our flyer; usually SUSE green -->
 <xsl:param name="flyer.color">
-  <xsl:variable name="node" select="(key('id', $rootid) | /)[last()]"/>
   <xsl:variable name="pi">
-   <xsl:call-template name="pi-attribute">
-    <xsl:with-param name="pis" select="$node/processing-instruction('suse-quickstart')"/>
-    <xsl:with-param name="attribute">color</xsl:with-param>
-  </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="count(key('id', $rootid)) = 0">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis"
+            select="(/processing-instruction('suse-quickstart') | 
+                     /*/processing-instruction('suse-quickstart'))[1]"/>
+          <xsl:with-param name="attribute">color</xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis" select="key('id', $rootid)//processing-instruction('suse-quickstart')[1]"/>
+          <xsl:with-param name="attribute">color</xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>    
   </xsl:variable>
- <!--<xsl:message>flyer.color 
-  rootid: <xsl:value-of select="$rootid"/>
-  node:   <xsl:value-of select="count($node)"/>
-  node-name: <xsl:value-of select="name(key('id', $rootid))"/>
-  node-name: <xsl:value-of select="name($node)"/>
-  pi:     <xsl:value-of select="$pi"/>
-  <xsl:value-of
-   select="$node/processing-instruction('suse-quickstart')"/>
- </xsl:message>-->
- <xsl:choose>
+  <!--<xsl:message>flyer.color:<xsl:value-of select="$pi"/></xsl:message>-->
+  <xsl:choose>
    <xsl:when test="$pi = 'suse'">#70B926</xsl:when>
    <xsl:when test="$pi = 'dark-suse'">#0D5148</xsl:when>
    <xsl:when test="$pi = 'novell'">#f90823</xsl:when>
@@ -36,13 +38,26 @@
 
 <!-- The URl to be printed at the top of the doc; usually www.suse.com -->
 <xsl:param name="flyer.url">
-  <xsl:variable name="node" select="(key('id', $rootid) | /)[last()]"/>
   <xsl:variable name="pi">
-   <xsl:call-template name="pi-attribute">
-    <xsl:with-param name="pis" select="$node/processing-instruction('suse-quickstart')"/>
-    <xsl:with-param name="attribute">url</xsl:with-param>
-  </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="count(key('id', $rootid)) = 0">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis"
+            select="(/processing-instruction('suse-quickstart') | 
+                     /*/processing-instruction('suse-quickstart'))[1]"/>
+          <xsl:with-param name="attribute">url</xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis" select="key('id', $rootid)//processing-instruction('suse-quickstart')[1]"/>
+          <xsl:with-param name="attribute">url</xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
+  <!--<xsl:message>** flyer.url:<xsl:value-of select="$pi"/></xsl:message>-->
+  
  <xsl:choose>
    <xsl:when test="$pi = ''">www.suse.com</xsl:when>
    <xsl:otherwise><xsl:value-of select="$pi"/></xsl:otherwise>
@@ -75,7 +90,6 @@
 </xsl:param>
 <xsl:param name="double.sided">0</xsl:param>
 
-
 <xsl:param name="header.rule" select="0"/>
 <xsl:param name="footer.rule" select="0"/>
 
@@ -92,13 +106,25 @@
 <xsl:param name="body.start.indent">0pt</xsl:param>
 
 <xsl:param name="column.count.body">
- <xsl:variable name="node" select="(key('id', $rootid) | /)[last()]"/>
   <xsl:variable name="pi">
-   <xsl:call-template name="pi-attribute">
-    <xsl:with-param name="pis" select="$node/processing-instruction('suse-quickstart')"/>
-    <xsl:with-param name="attribute">columns</xsl:with-param>
-  </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="count(key('id', $rootid)) = 0">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis"
+            select="(/processing-instruction('suse-quickstart') | 
+                     /*/processing-instruction('suse-quickstart'))[1]"/>
+          <xsl:with-param name="attribute">columns</xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis" select="key('id', $rootid)//processing-instruction('suse-quickstart')[1]"/>
+          <xsl:with-param name="attribute">columns</xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
+  
   <xsl:choose>
    <xsl:when test="normalize-space($pi) ='yes' or $pi=''">2</xsl:when>
    <xsl:otherwise>1</xsl:otherwise>
