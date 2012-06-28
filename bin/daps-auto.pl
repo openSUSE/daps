@@ -14,7 +14,7 @@ use Getopt::Long;
 use Config::IniFiles;
 use File::Basename;
 use File::Copy::Recursive qw(fmove dirmove);
-use File::Path;
+use File::Path qw(make_path remove_tree);;
 use File::Rsync;
 use File::Spec::Functions;
 use File::Temp qw(tempdir);
@@ -142,6 +142,7 @@ if ( $clean ) {
 foreach my $set (@sets) {
     # daps does not like spaces
     my $to_rsync = 0;
+    my $syncdir  = catdir($builddir, "sync", $set);
     next if "$set" eq "general"; # skip general section
     print "$set:\n";
     if ( $set =~ /.*\s.*/ ) {
@@ -174,14 +175,20 @@ foreach my $set (@sets) {
                     warn "${bcol}Invalid DC-file \"$dcfile\" in config for section [$set].\n-> Skipping $dcfile${ecol}.\n";
                     next;
                 } else {
+                    # clean up previous build results
+                    my $dapsclean = "$dapsbin -d $dcpath";
+                    $dapsclean .= " --dapsroot=\"$dapsroot\"" if $dapsroot ne "";
+                    system("$dapsclean clean-results >/dev/null")  == 0
+                        or warn "${bcol}Failed to run \"daps clean-results\".${ecol}\n";
+                    my $book = $dcfile;
+                    $book =~ s/^DC-//;
                     my $dapserror  = '';
                     my $dapsresult = '';
                     my ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
                     print "\n    Command: $dapscmd\n    Logfile: $dapslog\n" if $verbose;
                     $dapsresult = `$dapscmd`;
-                    chomp($dapsresult);
                     $dapserror = $?; # error occurred if != 0
-                    
+                    chomp($dapsresult);                    
                     if ( $dapserror) {
                         warn "${bcol}Failed to execute\n$dapscmd\nSee $dapslog for details.${ecol}\n";
                         next;
@@ -196,21 +203,14 @@ foreach my $set (@sets) {
                         # Move non-html format results into subdirectory $format
                         #
                         my $resultdir = dirname($dapsresult);
-                        my $formatdir = '';
-                        print "    Moving $dapsresult to $formatdir\n" if $verbose;
+                        my $syncsubdir = catdir($syncdir, $book, $format);
+                        if ( not -d $syncsubdir ) {
+                            make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
+                        }                       
                         if ( $format !~ /^html.*/ ) {
-                            $formatdir = catdir($resultdir, $format);
-                            if ( not -d $formatdir ) {
-                                mkdir("$formatdir",0755) or warn "${bcol}Failed to create $formatdir.${ecol}\n";
-                            }
-                            mkdir("$formatdir",0755) if not -d $formatdir;
-                            fmove($dapsresult, $formatdir) or warn "${bcol}Failed to move $dapsresult to $formatdir.${ecol}\n";
+                            fmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
                         } else {
-                            my $upresultdir = dirname($resultdir);
-                            my $tempdir = tempdir( CLEANUP => 1);
-                            dirmove($resultdir, $tempdir) or warn "${bcol}Failed to move $resultdir to $tempdir.${ecol}\n";
-                            rmdir $upresultdir or warn "${bcol}Failed to remove $resultdir.${ecol}\n";
-                            dirmove($tempdir, $upresultdir) or warn "${bcol}Failed to rename $tempdir to $upresultdir.${ecol}\n";
+                            dirmove($resultdir, $syncsubdir)or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
                         }
                     }
                 }
@@ -231,6 +231,8 @@ foreach my $set (@sets) {
             $rsync_flags = $cfg->val('general', 'rsync_flags');
         }
         rsync("$rsync_target", "$rsync_flags", "$set");
+        # remove $syncdir
+        remove_tree($syncdir) or warn "${bcol}Failed to remove sync dir \"$syncdir\".\n${ecol}";
     }
     print "\n";
 }
@@ -266,7 +268,7 @@ sub set_daps_cmd_and_log {
         $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
         $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
         if ( $format =~ /^html.*/ ) {
-            $dapscmd .= " --static --clean";
+            $dapscmd .= " --static";
         }
     }
     $dapscmd .= " 2>&1" if $debug; 
@@ -311,7 +313,9 @@ sub rsync {
             dest => "$rsync_target",
         } );
         warn "${bcol}Failed to rsnyc $rsync_src to $rsync_target:\n@{$rsync_error}\nrsync command was: @{$rsync_cmd}${ecol}\n";
+        return 1;
     }
+    return 0;
 }
 
 
