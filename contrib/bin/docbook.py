@@ -107,7 +107,7 @@ class EPUB2(object):
   
   def createstructure(self):
     """Create directory structure in temp directory"""
-    log.debug("createstructure")
+    # log.info("createstructure")
     mkdir_p(os.path.join(self.tmpdir, self.OEBPS_DIR))
     mkdir_p(os.path.join(self.tmpdir, self.META_DIR))
     
@@ -121,7 +121,7 @@ class EPUB2(object):
   
   def render_to_epub(self):
     """Transforms DocBook XML file into HTML chunk files"""
-    log.debug("render_to_epub")
+    # log.info("render_to_epub")
     # 
     # Create stylesheet parameters:
     # Watch out for correct string quotation
@@ -172,7 +172,7 @@ class EPUB2(object):
     
   def bundle_epub(self):
     """ """
-    log.debug("bundle_epub")
+    #log.info("bundle_epub")
     self.write_mimetype()
     self.copy_images()
     self.copy_cssfiles()
@@ -185,7 +185,7 @@ class EPUB2(object):
   def packepub(self):
     """Create a ZIP archive with all the needed files """
     # Create two lists of all files and directories
-    log.debug("packepub")
+    #log.info("packepub")
     epubfiles = [os.path.join(root,f) for root, dirs, files in \
                   os.walk(os.path.join(self.tmpdir, self.OEBPS_DIR)) for f in files ]
     epubdirs = [os.path.join(root,d) for root, dirs, files in os.walk(self.tmpdir) for d in dirs ]
@@ -217,7 +217,7 @@ class EPUB2(object):
   
   def copy_images(self):
     """Copy all image files into OEBPS directory"""
-    log.debug("copy_images")
+    #log.info("copy_images")
     images=self.get_image_refs()
     log.debug("  found %i images" % len(images))
     for img in images:
@@ -230,7 +230,7 @@ class EPUB2(object):
     """Copy CSS file into OEBPS directory
        raises IOError if CSS file is not found
     """
-    log.debug("copy_cssfiles")
+    #log.info("copy_cssfiles")
     if not self.cssfile:
       return
     #log.info("  tmpdir=%s, oebps=%s, css=%s" % (self.tmpdir, self.OEBPS_DIR, self.cssfile))
@@ -245,7 +245,7 @@ class EPUB2(object):
   def copy_admons(self):
     """Copy admonition files into OEBPS/admons directory
     """
-    log.debug("copy_admons")
+    #log.info("copy_admons")
     if not self.has_admons:
        return
     #
@@ -260,7 +260,7 @@ class EPUB2(object):
      
   def copy_fonts(self):
     """Copy font files into OEBPS/ directory """
-    log.info("copy_fonts")
+    # log.info("copy_fonts")
     if not self.otffiles:
        return
     
@@ -271,7 +271,7 @@ class EPUB2(object):
   
   def copy_callouts(self):
     """Copy callout files"""
-    log.debug("copy_callouts")
+    #log.info("copy_callouts")
     if not self.has_callouts:
       return
 
@@ -286,7 +286,7 @@ class EPUB2(object):
   
   def get_image_refs(self):
     """Returns a list of image filenames"""
-    log.debug("get_image_refs")
+    #log.info("get_image_refs")
     # Allowed image file extensions:
     imgext = (".svg", ".png", ".gif", ".jpg", ".jpeg", ".xml", ".eps", ".pdf")
     # Allowed values in <imageobject role="...">
@@ -318,16 +318,16 @@ class EPUB2(object):
  
   def write_mimetype(self):
     """Write the mimetype file and returns the absolute path of the file 'mimetype'"""
-    log.debug("write_mimetype")
+    #log.info("write_mimetype")
     filename = os.path.join(self.tmpdir, "mimetype")
     file(filename, "w").write(self.MIMETYPE)
     return filename
   
   def cleanup(self):
     """Cleanup temporary directory"""
-    log.debug("cleanup")
-    if self.keeptemp:
-      log.debug("  Temporary directory tree deleted")
+    #log.info("cleanup")
+    if not self.keeptemp:
+      log.info("  Temporary directory tree deleted")
       shutil.rmtree(self.tmpdir) # ignore_errors=
     
 # EOF
