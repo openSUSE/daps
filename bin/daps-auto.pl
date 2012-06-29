@@ -50,6 +50,7 @@ GetOptions (
     'help|h'       => \$help,
     'nocolor'      => \$nocolor,
     'norsync'      => \$norsync,
+    'nosvncheck'   => \$nosvncheck,
     'nosvnup'      => \$nosvnup,
     'sections|s=s' => \@sections,
     'verbose|v'    => \$verbose,
