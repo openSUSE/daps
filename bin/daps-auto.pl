@@ -145,7 +145,7 @@ if ( ! $verbose ) {
 
 # clean up
 if ( $clean ) {
-    rmtree("$builddir");
+    remove_tree("$builddir");
     mkdir("$builddir",0755);
 }
 
