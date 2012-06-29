@@ -32,6 +32,8 @@ log.setLevel(logging.INFO)
 log.addHandler(logging.StreamHandler(sys.stdout))
 
 class IndentedHelpFormatterWithNL(optparse.IndentedHelpFormatter):
+  # Source
+  # http://groups.google.com/group/comp.lang.python/browse_frm/thread/6df6e6b541a15bc2/09f28e26af0699b1
   def format_description(self, description):
     if not description: return ""
     desc_width = self.width - self.current_indent
