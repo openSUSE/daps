@@ -221,7 +221,7 @@ class EPUB2(object):
     images=self.get_image_refs()
     log.debug("  found %i images" % len(images))
     for img in images:
-       newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, img.attrib["fileref"])
+       newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, os.path.basename(img.attrib["fileref"]))
        fullimg = os.path.join(self.imgsrcpath, img.attrib["fileref"])
        log.debug("  copying image from %s to %s" % (fullimg, newimg))
        shutil.copyfile(fullimg, newimg)
