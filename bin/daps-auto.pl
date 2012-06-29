@@ -383,7 +383,7 @@ sub rsync {
     my ($rsync_target,$rsync_flags, $set) = @_;
     my %rsync_opts = eval $rsync_flags;
     my $rsync = File::Rsync->new( \%rsync_opts );
-    my $rsync_src = catdir("$builddir", "$set");
+    my $rsync_src = catdir("$builddir", "sync", "$set");
 
     print "  Rsyncing $rsync_src to $rsync_target\n" if $verbose;
     
