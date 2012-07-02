@@ -138,7 +138,7 @@ class EPUB2(object):
        "epub.oebps.dir":             self.stringparam("%s/" % self.OEBPS_DIR),
     }
     if self.cssfile:
-      params["html.stylesheet"] = self.stringparam(self.cssfile)
+      params["html.stylesheet"] = self.stringparam(os.path.basename(self.cssfile))
       # log.info("Found css file: %s, %s" % (self.cssfile, params["html.stylesheet"]) )
     if self.otffiles:
       params["epub.embedded.fonts"] =  self.stringparam(",".join([os.path.basename(font) for font in self.otffiles]))
