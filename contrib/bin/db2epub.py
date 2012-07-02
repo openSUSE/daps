@@ -8,7 +8,7 @@ EPUB is defined by the IDPF at www.idpf.org and is made up of 3 standards:
 * Open Container Format (OCF)
 """
 
-__version__="0.9"
+__version__="1.0"
 __author__="Thomas Schraitle <toms@opensuse.org>"
 
 import sys
