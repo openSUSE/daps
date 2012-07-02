@@ -9,7 +9,7 @@ Example:
 """
 
 __all__=["EPUB2", "DBPATH", "DBURI", "FileNotFoundError"]
-__version__="0.1"
+__version__="1.0"
 __author__="Thomas Schraitle <toms@opensuse.org>"
 
 import sys
