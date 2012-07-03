@@ -90,7 +90,40 @@ class EPUB2(object):
     # Calculated values for properties
     self._has_callouts = int(self.xmltree.xpath("count(//co)"))
     self._has_admons = int(self.xmltree.xpath("count(//note | //caution | //tip | //warning | //important)"))
+  
+  
+  def getxsltparam(self, param):
+    """HACK: Returns the value of the parameter 'param' from the given
+       stylesheet.
+       
+       This may be an expensive call, if there is no catalog resolution
+       available. It just creates a stylesheet in memory and applies a
+       dummy document to it. The stylesheet just returns the value of
+       the parameter as text output.
+    """
     
+    xslt="""<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:import href="file://%s"/>
+  <xsl:output method="text"/>  
+  <xsl:template match="/">
+    <xsl:value-of select="$%s"/>
+  </xsl:template>  
+</xsl:stylesheet>
+     """ % ( os.path.abspath(self.myxslt), param)
+     
+    try:
+      # We recycle our xmlparser object and apply our stylesheet
+      # to the dummy doc "<x/>". The result is text, so we can
+      # use the str() function
+      transform = etree.XSLT( etree.XML(xslt, self.xmlparser) )
+      result=transform( etree.parse(StringIO("<x/>")))
+      return str(result)
+    except etree.XSLTApplyError, e:
+      # We return None, if parameter 'param' doesn't exist
+      return None
+
+  
   
   def stringparam(self, string):
     """Wrap string values in single quotes before passing it to XSLT"""
@@ -244,12 +277,15 @@ class EPUB2(object):
     """Copy admonition files into OEBPS/admons directory
     """
     log.debug("copy_admons")
-    if not self.has_admons:
+    # Set admonparam to True/False, regardless of None return value
+    admonparam = self.getxsltparam("admon.graphics")
+    admonparam = True if admonparam != None and int(admonparam) else False
+    
+    if not self.has_admons and admonparam:
        return
     #
     admons=[ "%s%s" % (os.path.join(self.ADMON_FULL_PATH, a), self.ADMON_EXT)  for a in ('important', 'warning', 'tip', 'caution', 'note')]
     
-    # callouts.sort()
     for img in admons:
       newimg=os.path.join(self.tmpdir, self.OEBPS_DIR, self.ADMON_PATH, "admons", os.path.basename(img))
       log.debug("  From %s to %s" % (img, newimg) )
