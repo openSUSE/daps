@@ -22,6 +22,8 @@ import zipfile
 import logging
 import errno
 
+from StringIO import StringIO
+
 # Prepare the logger
 log = logging.getLogger('db2epub')
 
