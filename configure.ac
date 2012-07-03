@@ -184,6 +184,10 @@ AM_PATH_PYTHON([2.6])
 # Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([xml], [fatal])
 AC_SUBST(HAVE_PYMOD_XML)
+#
+AC_PYTHON_MODULE([lxml], [fatal])
+AC_SUBST(HAVE_PYMOD_LXML)
+
 
 dnl --------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook...])
