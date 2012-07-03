@@ -67,6 +67,7 @@ BuildRequires:  libxslt
 BuildRequires:  openSUSE-release
 BuildRequires:  optipng
 BuildRequires:  python-xml
+BuildRequires:  python-lxml
 BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
@@ -129,6 +130,7 @@ Recommends:     checkbot
 %endif
 %endif
 Requires:       python-xml
+Requires:       python-lxml
 
 Recommends:     agfa-fonts
 Recommends:     aspell aspell-en
