@@ -174,16 +174,11 @@ def main():
     sys.exit(1)
   
   ## -----------------------------
-  
   verbosedict={ 0: logging.NOTSET,
-                1: logging.DEBUG,    # logging.ERROR
-                2: logging.INFO,     # logging.WARN
-                3: logging.WARN,     # logging.INFO
-                4: logging.ERROR,    # logging.DEBUG
-                5: logging.CRITICAL, # 
+                1: logging.INFO,
+                2: logging.DEBUG,
                }  
 
-  
   log.setLevel( verbosedict.get(options.VERBOSE, logging.WARN) ) 
 
   return (options, args, parser)
@@ -211,8 +206,8 @@ if __name__=="__main__":
     for f in args:
       d = docbook.EPUB2(f, options) # **opt2dict(options)
       epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(f)[0]+".epub"
-      d.render(epubfile)      
-      if options.VERBOSE > 1: log.warn("Rendered DocBook file %s to %s" % (f, os.path.abspath(epubfile)))
+      d.render(epubfile)
+      log.info("Wrote EPUB file to '%s'" % os.path.abspath(epubfile))
   
   except (etree.XIncludeError, etree.XMLSyntaxError), e:
      log.critical("ERROR in file '%s': %s " % (f, e))
