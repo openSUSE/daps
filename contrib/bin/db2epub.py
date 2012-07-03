@@ -89,8 +89,28 @@ class IndentedHelpFormatterWithNL(optparse.IndentedHelpFormatter):
       result.append("\n")
     return "".join(result) 
 
+
+class DictOption(optparse.Option):
+   """Option type, takes arguments in the form parameter=value """
+   ACTIONS = optparse.Option.ACTIONS + ("dict",)
+   STORE_ACTIONS = optparse.Option.STORE_ACTIONS + ("dict",)
+   TYPED_ACTIONS = optparse.Option.TYPED_ACTIONS + ("dict",)
+   ALWAYS_TYPED_ACTIONS = optparse.Option.ALWAYS_TYPED_ACTIONS + ("dict",)
+
+   def take_action(self, action, dest, opt, value, values, parser):
+      if action == "dict":
+         try:
+           p,v = value.split("=")
+         except ValueError:
+           parser.error("Expected = in value '%s' for option %s; "
+                        "syntax is PARAM=VALUE" % (value, opt))
+         values.ensure_value(dest, {}).update({p:v})
+      else:
+         optparse.Option.take_action(self, action, dest, opt, value, values, parser)
+
 def main():
   parser = optparse.OptionParser(version="%prog "+__version__, 
+               option_class=DictOption,
                usage="%prog [options] XMLFILE [XMLFILE...]",
                # version="",
                formatter=IndentedHelpFormatterWithNL(),
@@ -111,7 +131,7 @@ def main():
      help="Points to the image path")
   parser.add_option("-d", "--dtd",
      dest="DTD",
-     help="Validate with respective DTD")
+     help="Validate with given DocBook DTD")
   parser.add_option("-o", "--output",
      dest="OUTPUTFILE",
      help="Output ePub file as OUTPUT FILE")
@@ -127,12 +147,21 @@ def main():
      dest="KEEP_TEMP",
      action="store_true",
      help="Keep temporary directory for debugging reason (default: %default)")
+  parser.add_option("-p", "--param",
+     dest="XSLTPARAMS",
+     action="dict",
+     #callback=cb_xsltparam,
+     help="Use syntax PARAM=VALUE to pass a single parameter to "
+          "stylesheet. This option be used multiple times\n"
+          "NOTE: It doesn't check, if a parameter is added twice. Only "
+          "the last parameter is considered")
   parser.set_defaults(VERBOSE=False,
      # DEBUG=False,
      CSSFILE=None,
      KEEP_TEMP=False,
      DTD=None,
      # OTFFILES=[],
+     # XSLTPARAMS=[],
      # IMAGEDIR=None,
      CUSTOMIZATIONLAYER=os.path.join(docbook.DBPATH, "epub/docbook.xsl"),
      OUTPUTFILE=None,
@@ -143,6 +172,8 @@ def main():
   if not len(args):
     parser.print_help()
     sys.exit(1)
+  
+  ## -----------------------------
   
   verbosedict={ 0: logging.NOTSET,
                 1: logging.DEBUG,    # logging.ERROR
