@@ -13,14 +13,20 @@ __author__="Thomas Schraitle <toms@opensuse.org>"
 
 import sys
 import os
+import os.path
 import optparse
 
 import logging
 import textwrap
 
-#IMPORTDIR=os.path.dirname(__file__)
-#sys.path.insert(0, IMPORTDIR)
-import docbook
+# Only add additional path, when we are in our repository:
+__=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../lib/python"))
+if os.path.exists(__):
+  sys.path.insert(0, __)
+  del __
+
+
+from daps import docbook
 from lxml import etree
 
 log = logging.getLogger('db2epub')
