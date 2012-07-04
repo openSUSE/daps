@@ -162,17 +162,17 @@ class EPUB2(object):
     # 
     # Create stylesheet parameters:
     # Watch out for correct string quotation
-    params= { 
+    params= {
        "chunk.quietly":              self.stringparam("%s" % int(bool(self.verbose)) if self.verbose else 0),
        #"callout.graphics.path":      CALLOUT_PATH,
        #"callout.graphics.number.limit": CALLOUT_EXT,
-       "callout.graphics.extension": self.stringparam('1'),
-       'admon.graphics.path':        self.stringparam("%s/" % os.path.join(self.ADMON_PATH, "admons")),
-       'img.src.path':               self.stringparam("%s/" % self.IMG_SRC_PATH),
+       #"callout.graphics.extension": self.stringparam('.png'),
+       #'admon.graphics.path':        self.stringparam("%s/" % os.path.join(self.ADMON_PATH, "admons")),
+       #'img.src.path':               self.stringparam("%s/" % self.IMG_SRC_PATH),
        # Make sure, all the directories contain a trailing slash (IMPORTANT!):
        "base.dir":                   self.stringparam("%s/" % os.path.join(self.tmpdir, self.OEBPS_DIR)),
-       "epub.metainf.dir":           self.stringparam("%s/" % self.META_DIR),
-       "epub.oebps.dir":             self.stringparam("%s/" % self.OEBPS_DIR),
+       #"epub.metainf.dir":           self.stringparam("%s/" % self.META_DIR),
+       # "epub.oebps.dir":             self.stringparam("%s/" % self.OEBPS_DIR),
     }
     if self.cssfile:
       params["html.stylesheet"] = self.stringparam(os.path.basename(self.cssfile))
@@ -236,11 +236,11 @@ class EPUB2(object):
                 os.path.relpath(container, self.tmpdir),
                 compress_type=zipfile.ZIP_DEFLATED)
 
-    # Handle directories first
-    for d in epubdirs:
-      archive = os.path.relpath(d, self.tmpdir)
-      log.debug("  Storing %s directory as %s" % (d, archive))
-      myzip.write(d,archive, compress_type=zipfile.ZIP_STORED)
+    ## Handle directories first
+    #for d in epubdirs:
+    #  archive = os.path.relpath(d, self.tmpdir)
+    #  log.debug("  Storing %s directory as %s" % (d, archive))
+    #  myzip.write(d,archive, compress_type=zipfile.ZIP_STORED)
     # Handle files
     for f in epubfiles:
       archive = os.path.relpath(f, self.tmpdir)
