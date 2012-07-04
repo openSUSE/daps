@@ -184,21 +184,21 @@ class EPUB2(object):
     params.update(self.xslparams)
     # Prepare for transformation
     self.xslttree = etree.parse(self.myxslt)
-    log.debug("Preparing transformation with params: %s\n " \
-              "xml: %s: xslt: %s" % ( params, self.xmltree, self.xslttree) )
+    log.debug("  Preparing transformation with params: %s" %  params )
 
     pwd=os.getcwd()
     try:
       os.chdir(self.tmpdir)
       transform = etree.XSLT(self.xslttree)
       result = transform(self.xmltree, **params)
+      log.debug("  Results from XSLT transformation: %s" % result )
     except etree.XSLTApplyError, e:
       for msg in e.error_log.filter_from_warnings():
-         log.error("<Domain %s Level: %s Name: %s> %s " % (msg.domain_name, msg.level_name, msg.type_name, msg.message))
+         log.debug(msg.message)
          # a xslt tree does not need to come from a file
-         if not '<string>' in msg.filename:
-            log.error(msg.filename)
-            log.errno(msg.line)
+         #if not '<string>' in msg.filename:
+         #   log.error(msg.filename)
+         #   log.error(msg.line)
     finally:
       os.chdir(pwd)
    
