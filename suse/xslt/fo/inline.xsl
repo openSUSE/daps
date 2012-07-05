@@ -142,16 +142,14 @@
 
 
 <xsl:template match="keycap">
-   <xsl:param name="key.contents" select="."/>
-   <xsl:variable name="key.length" select="string-length($key.contents)"/>
-
+  <!-- See also Ticket#84 -->
    <fo:inline font-size="{$body.font.master * 0.96}pt">
      <xsl:choose>
        <xsl:when test="@function">
          <xsl:call-template name="inline.sansseq">
             <xsl:with-param name="content">
                <xsl:call-template name="gentext.template">
-                  <xsl:with-param name="context" select="'keycap'"/>
+                  <xsl:with-param name="context" select="'msgset'"/>
                   <xsl:with-param name="name">
                      <xsl:value-of select="@function"/>
                   </xsl:with-param>

@@ -4,8 +4,10 @@
 -->
 
 <xsl:stylesheet version="1.0"
+  xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns="http://www.w3.org/1999/xhtml"
+  exclude-result-prefixes="l">
 
 
 <xsl:template name="inline.sansseq">
@@ -30,16 +32,14 @@
 </xsl:template>
 
 
-<xsl:template xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0" match="keycap">
-   <xsl:param name="key.contents" select="."/>
-   <xsl:variable name="key.length" select="string-length($key.contents)"/>
-
+<xsl:template match="keycap">
+  <!-- See also Ticket#84 -->
    <xsl:choose>
-       <xsl:when test="@function and @function!=''">
+       <xsl:when test="@function">
          <xsl:call-template name="inline.sansseq">
             <xsl:with-param name="content">
                <xsl:call-template name="gentext.template">
-                  <xsl:with-param name="context" select="local-name()"/>
+                  <xsl:with-param name="context" select="'msgset'"/>
                   <xsl:with-param name="name" select="@function"/>
                </xsl:call-template>
             </xsl:with-param>
