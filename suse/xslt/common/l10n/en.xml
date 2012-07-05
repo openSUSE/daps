@@ -132,11 +132,16 @@
    <l:context name="title">
       <l:template name="part" text="Part&#160;%n&#160;%t"/>
    </l:context>
-
-   <l:context name="keycap">
+   
+  <!-- 
+    HACK for keycap context
+    We need to keep this for some time
+    See Ticket#84 and https://sf.net/tracker/index.php?func=detail&aid=3540451&group_id=21935&atid=373750
+   --> 
+   <l:context name="msgset">
       <l:template name="alt" text="Alt"/>
       <l:template name="backspace" text="&lt;&#x2014;"/><!-- mdash -->
-<!--       <l:template name="command" text="???"/> -->
+      <l:template name="command" text="&#x2318;"/>
       <l:template name="control" text="Ctrl"/>
       <l:template name="delete" text="Del"/>
       <l:template name="down" text="&#x02193;"/><!-- darr -->
