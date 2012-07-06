@@ -784,12 +784,12 @@ missinggraphics:
 # Useful for complex validation problems
 #
 .PHONY: bigfile
-bigfile: $(TMP_XML)
+bigfile $(TMP_XML):
 	xmllint --noent --valid --noout $(TMP_XML)
 	@ccecho "result" "Find the bigfile at:\n$(TMP_XML)"
 
 .PHONY: bigfile-reduced
-bigfile-reduced: $(TMP_XML)
+bigfile-reduced $(TMP_DIR)/$(BOOK)-reduced.xml:
 	xsltproc --output $(TMP_DIR)/$(BOOK)-reduced.xml $(ROOTSTRING) \
 	  $(STYLEBURN) $< 
 	xmllint --noent --valid --noout $(TMP_DIR)/$(BOOK)-reduced.xml
@@ -1971,6 +1971,16 @@ $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
 	    ln -sf $(DOC_DIR)/xml/$$i $(dir $@); \
 	  done \
 	fi
+
+#---------------
+# show productname and productnumber
+.PHONY: productinfo
+productinfo: $(TMP_XML) 
+productinfo: PNAME   := $(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productname" $(TMP_XML) 2>/dev/null)
+productinfo: PNUMBER := $(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productnumber" $(TMP_XML) 2>/dev/null)
+productinfo:
+	@echo -n "PRODUCTNAME=\"$(PNAME)\" "
+	@echo -n "PRODUCTNUMBER=\"$(PNUMBER)\""
 
 #---------------
 # Funstuff
