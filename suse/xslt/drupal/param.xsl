@@ -19,6 +19,9 @@
 
   <!-- Don't use admon graphics -->
   <xsl:param name="admon.graphics" select="0"/>
+  
+  <!-- Intentionally left blank as we don't want toc entries -->
+  <xsl:param name="generate.toc"/>
   <!--
   <xsl:param name="callout.unicode" select="1"/>
   <xsl:param name="callout.graphics" select="0"/>
