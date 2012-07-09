@@ -46,8 +46,9 @@
           </xsl:call-template>
         </xsl:attribute>
         <xsl:attribute name="title">
-          <xsl:apply-templates select="$this" 
-            mode="title.markup"/>
+          <!--<xsl:apply-templates select="$this" 
+            mode="title.markup"/>-->
+          <xsl:apply-templates select="$this" mode="object.title.markup"/>
         </xsl:attribute>
       </link>
       <xsl:if test="$home">
@@ -112,63 +113,6 @@
           </xsl:attribute>
         </link>
       </xsl:if>
-
-      <!--<xsl:if test="$html.extra.head.links != 0">
-        <xsl:for-each select="//part|//reference |//preface|//chapter|//article|//refentry
-          |//appendix[not(parent::article)]|appendix
-          |//glossary[not(parent::article)]|glossary
-          |//index[not(parent::article)]|index">
-          <link rel="{local-name(.)}">
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="context" select="$this"/>
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
-            </xsl:attribute>
-          </link>
-        </xsl:for-each>
-        <xsl:for-each select="section|sect1|refsection|refsect1">
-          <link>
-            <xsl:attribute name="rel">
-              <xsl:choose>
-                <xsl:when test="local-name($this) = 'section' or local-name($this) = 'refsection'">
-                  <xsl:value-of select="'subsection'"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="'section'"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="context" select="$this"/>
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
-            </xsl:attribute>
-          </link>
-        </xsl:for-each>
-        <xsl:for-each select="sect2|sect3|sect4|sect5|refsect2|refsect3">
-          <link rel="subsection">
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="context" select="$this"/>
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup.textonly"/>
-            </xsl:attribute>
-          </link>
-        </xsl:for-each>
-      </xsl:if>-->
-
-      <!--<xsl:call-template name="user.head.content"/>-->
     </head>
 </xsl:template>
  
