@@ -784,12 +784,13 @@ missinggraphics:
 # Useful for complex validation problems
 #
 .PHONY: bigfile
-bigfile $(TMP_XML):
+bigfile: $(TMP_XML)
+        # validate bigfile
 	xmllint --noent --valid --noout $(TMP_XML)
 	@ccecho "result" "Find the bigfile at:\n$(TMP_XML)"
 
 .PHONY: bigfile-reduced
-bigfile-reduced $(TMP_DIR)/$(BOOK)-reduced.xml:
+bigfile-reduced $(TMP_DIR)/$(BOOK)-reduced.xml: $(TMP_XML)
 	xsltproc --output $(TMP_DIR)/$(BOOK)-reduced.xml $(ROOTSTRING) \
 	  $(STYLEBURN) $< 
 	xmllint --noent --valid --noout $(TMP_DIR)/$(BOOK)-reduced.xml
