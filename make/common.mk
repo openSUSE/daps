@@ -44,7 +44,7 @@ RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
 PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
 IMG_GENDIR         := $(BUILD_DIR)/.images
 TMP_DIR            := $(BUILD_DIR)/.tmp
-
+PYTHONPATH         := $(DAPSROOT)/lib/python
 IMG_SRCDIR         := $(DOC_DIR)/images/src
 
 #----------
@@ -1854,7 +1854,12 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt: $(HTML_DIR)/$(BOOK).html
 # ruby script to generate ePUBs
 # not a stylesheet, but part of the Docbook4 stylesheet package
 # (it is _NOT_ available with the DocBook 5 stylesheets!!)
-DB2EPUB := ruby $(DOCBOOK_STYLES)/epub/bin/dbtoepub
+#DB2EPUB := ruby $(DOCBOOK_STYLES)/epub/bin/dbtoepub
+ifdef PYTHON_DIR
+  DB2EPUB := PYTHONPATH=$(PYTHON_DIR) python $(DAPSROOT)/bin/db2epub.py
+else
+  DB2EPUB := python /usr/bin/db2epub.py
+endif
 
 $(EPUB_TMP_DIR):
 	mkdir -p $@
@@ -1888,7 +1893,7 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: provide-epub-images
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating epub"
   endif
-	$(DB2EPUB) -s $(STYLEEPUBXSLT) --verbose --css $(STYLE_EPUBCSS) \
+	$(DB2EPUB) -s $(STYLEEPUBXSLT) -k --css $(STYLE_EPUBCSS) \
 	  -o $@ $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 #------------------------------------------------------------------------
