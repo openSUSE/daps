@@ -171,5 +171,9 @@
       <!--<xsl:call-template name="user.head.content"/>-->
     </head>
 </xsl:template>
-  
+ 
+ <!-- Drupal don't need any titlepage structures -->
+ <xsl:template name="article.titlepage"/>
+ <xsl:template name="book.titlepage"/>
+ 
 </xsl:stylesheet>
