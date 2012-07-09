@@ -172,8 +172,16 @@
     </head>
 </xsl:template>
  
- <!-- Drupal don't need any titlepage structures -->
- <xsl:template name="article.titlepage"/>
- <xsl:template name="book.titlepage"/>
- 
+  <!-- Drupal don't need any titlepage structuresIt -->
+  <xsl:template name="article.titlepage"/>
+  <xsl:template name="book.titlepage"/>
+  <xsl:template name="appendix.titlepage"/>
+  <xsl:template name="chapter.titlepage"/>
+  <xsl:template name="preface.titlepage"/>
+  <xsl:template name="sect1.titlepage"/>
+  <xsl:template name="sect2.titlepage"/>
+  <xsl:template name="sect3.titlepage"/>
+  <xsl:template name="sect4.titlepage"/>
+  <xsl:template name="section.titlepage"/>
+  
 </xsl:stylesheet>
