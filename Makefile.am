@@ -76,6 +76,7 @@ catalogdir     = @sysconfdir@/xml
 dapslibdir     = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
+dapspythondir  = $(pkgpythondir)
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
 ttfontsdir     = @datadir@/fonts/truetype
@@ -118,6 +119,7 @@ dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)
 dist_ttfonts_DATA       = $(wildcard fonts/*.ttf)
+dist_dapspython_DATA    = $(wildcard lib/python/daps/*)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
@@ -127,7 +129,7 @@ dist_xsltepub_DATA      = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA     = $(wildcard daps-xslt/index/*.xsl)
 dist_xsltman_DATA       = $(wildcard daps-xslt/man/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
-dist_xsltyelp_DATA      = $(wildcard daps-xslt//yelp/*.xsl)
+dist_xsltyelp_DATA      = $(wildcard daps-xslt/yelp/*.xsl)
 
 # DOCUMENTATION
 dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL README \
@@ -140,7 +142,7 @@ all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
 
 #---------------------------Local INSTALLATION--------------------------------
 
-INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir)
+INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) $(dapspythondir)
 
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
@@ -218,7 +220,7 @@ $(DAPS_CATALOG):
 # This file will be newer than the existing links and thus the targets
 # will be rebuild.
 # This helps to avoid PHONY targets which would be called with every single
-# make call (even make clean) - something we definetely would like to avoid)
+# make call (even make clean) - something we definetely would like to avoid
 
 .firstbuild:
 	touch $@

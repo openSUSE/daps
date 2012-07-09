@@ -94,9 +94,6 @@ AC_PATH_PROG([CHECKBOT], [checkbot], [0])
 dnl remake
 AC_PATH_PROG([REMAKE], [remake], [0])
 
-dnl ruby
-AC_PATH_PROG([RUBY], [ruby], [0])
-
 dnl w3m
 AC_PATH_PROG([W3M], [w3m], [0])
 
@@ -292,7 +289,8 @@ Supported features
 ------------------
 * HTML/single HTML output            * MediaWiki output (experimental)
 * JSP output                         * webhelp output (experimental)
-* man pages output                   * support for .png images
+* ePUB output                        * support for .png images
+* man pages output
 
 Optional features
 -----------------
@@ -303,13 +301,6 @@ if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
 else
   AC_MSG_RESULT([Create ASCII txt output          |   yes   |])
-fi
-
-dnl Create ePUBs (ruby)
-if test 0 = "$RUBY"; then
-  AC_MSG_RESULT([Create ePUB output               |    no   | install ruby])
-else
-  AC_MSG_RESULT([Create ePUB output               |   yes   |])
 fi
 
 dnl Create PDFs (fop, xep)
