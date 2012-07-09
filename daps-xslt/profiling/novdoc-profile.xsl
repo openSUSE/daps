@@ -28,6 +28,7 @@
             doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
             doctype-system="novdocx.dtd"/>
 
+<xsl:param name="pubdate"/>
 
 
 <!--
@@ -162,5 +163,20 @@
    </xsl:element>
 </xsl:template>
 
-
+<!-- Special template rule to rewrite pubdate (DocBook) or date (Novdoc)   -->
+<xsl:template match="pubdate|date" mode="profile">
+  <xsl:choose>
+    <xsl:when test="$pubdate != ''">
+      <xsl:element name="{local-name()}">
+        <xsl:value-of select="$pubdate"/>
+      </xsl:element>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy>
+        <xsl:copy-of select="node()"/>
+      </xsl:copy>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+  
 </xsl:stylesheet>
