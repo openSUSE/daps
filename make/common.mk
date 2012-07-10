@@ -130,8 +130,7 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 #
 ifeq ($(MAKECMDGOALS), html)
   HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
-endif
-ifeq ($(MAKECMDGOALS), htmlsingle)
+else
   HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 endif
 
@@ -528,9 +527,9 @@ html: clean_html $(PROFILEDIR)/.validate missing-images $(HTML_DIR)/index.html
 #
 .PHONY: html-single htmlsingle
 html-single htmlsingle: | $(DIRECTORIES)
-html-single htmlsingle: clean_html $(PROFILEDIR)/.validate \
+html-single htmlsingle: clean_htmlsingle $(PROFILEDIR)/.validate \
 			missing-images $(HTML_DIR)/$(BOOK).html
-	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(HTML_DIR)/index.html\033[m\017"
+	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(HTML_DIR)/index.html"
 
 #--------------
 # WEBHELP
