@@ -462,7 +462,7 @@ function build_pdfs () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_comments
         help_draft
         help_formatter
@@ -517,7 +517,7 @@ function build_html_jsp () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
         help_comments
         help_css
@@ -580,7 +580,7 @@ function webhelp () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
         help_comments
         help_css
@@ -647,7 +647,7 @@ function build_epub () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_check
         help_css
         help_help
@@ -701,7 +701,7 @@ function build_man () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
         help_rootid
@@ -738,7 +738,7 @@ function build_generic () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         [[ dist-html=$SUB_CMD ]] && help_manifest
 
@@ -775,7 +775,7 @@ function build_locdrop () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_help
         help_name
@@ -820,7 +820,7 @@ function packaging () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         if [[ "package-pdf" = $SUB_CMD ]]; then
             help_formatter
         elif [[ "package-src" = $SUB_CMD ]]; then
@@ -882,7 +882,7 @@ function profile_first () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_comments
         help_draft
         help_name
@@ -925,7 +925,7 @@ function comments_remarks () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_comments
         help_remarks
         echo
@@ -962,7 +962,7 @@ function filelists () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_pretty
         echo
@@ -1003,7 +1003,7 @@ function show_names () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-                help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+                help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
                 help_comments
                 help_draft
                 help_help
@@ -1047,7 +1047,7 @@ function checklink () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_file
         help_help
         help_rootid
@@ -1114,7 +1114,7 @@ function getimages () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_compact
         help_file
         help_modified
@@ -1218,7 +1218,7 @@ function spellcheck () {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_extra-dict
         help_file
         help_help
@@ -1315,7 +1315,7 @@ function no_opts {
     
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
-        help_scmd_head "$SUB_CMD" "${HELP_SUBCOMMAND[$SUB_CMD]}" "0"
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD" "0"
         exit 0
     fi
     
