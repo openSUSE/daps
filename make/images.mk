@@ -261,8 +261,6 @@ endif
 #
 # existing color PNGs
 $(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
-	@exiftool -Comment $< | grep optipng > /dev/null || \
-	  ccecho "warn" " $< not optimized." >&2
 	ln -sf $< $@
 
 # created PNGs
