@@ -45,96 +45,79 @@ Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildArch:      noarch
 
-BuildRequires:  bash >= 4.0
-BuildRequires:  dia
-BuildRequires:  docbook-xsl-stylesheets >= 1.75
-BuildRequires:  docbook_4
-%if 0%{?suse_version} > 1140
-BuildRequires:  perl-Image-ExifTool
-%else
-BuildRequires:  exiftool
+# on SLES 11 python is not noarch
+%if 0%{?sles_version} == 0
+BuildArch:      noarch
 %endif
+
+BuildRequires:  bash >= 3.1
+BuildRequires:  dejavu
+BuildRequires:  dia
+BuildRequires:  docbook_4
+BuildRequires:  docbook-xsl-stylesheets >= 1.75
+BuildRequires:  fam
+BuildRequires:  fdupes
+BuildRequires:  freefont
+BuildRequires:  ghostscript-library
+BuildRequires:  ImageMagick
+BuildRequires:  inkscape
+BuildRequires:  liberation-fonts
 %if 0%{?suse_version} >= 1220
 BuildRequires:  libxml2-tools
 %endif
-BuildRequires:  fam
-BuildRequires:  fdupes
-BuildRequires:  ImageMagick
-BuildRequires:  inkscape
 BuildRequires:  libxslt
+#BuildRequires:  mplus-fonts
+%if 0%{?sles_version} > 0
+BuildRequires:  sles-release
+%else
 BuildRequires:  openSUSE-release
-BuildRequires:  optipng
+%endif
+BuildRequires:  poppler-tools
 BuildRequires:  python-xml
 BuildRequires:  python-lxml
 BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
-
-# the following requirements are not really needed for building, but we add
-# them nevertheless in order to see if the build target is able to fullfill
-# the requirements for installation
-BuildRequires:  dejavu
-BuildRequires:  freefont
-BuildRequires:  ghostscript-library
-BuildRequires:  liberation-fonts
-BuildRequires:  LinuxLibertine
-BuildRequires:  mplus-fonts
-BuildRequires:  poppler-tools
-
 %if 0%{?suse_version} >= 1140
-BuildRequires:  perl-checkbot
 BuildRequires:  xmlgraphics-fop >= 0.94
 %else
 BuildRequires:  fop >= 0.94
-%if %{undefined sles_version}
-BuildRequires:  checkbot
 %endif
-%endif
+
+#
+# In order to keep the requirements list as short as possible, only packages
+# needed ti build EPUB, HTML and PDF are really required
+# All other packages required for editing or more exotic output formats
+# are recommended rather than required
 
 PreReq:         libxml2
 PreReq:         sgml-skel
 
-Requires:       bash >= 4.0
-Requires:       dejavu
+Requires:       bash >= 3.1
 Requires:       dia
 Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.75
-Requires:       exiftool
 Requires:       fam
-Requires:       freefont
 Requires:       ghostscript-library
 Requires:       ImageMagick
 Requires:       inkscape
 Requires:       libxslt
-Requires:       liberation-fonts
-Requires:       LinuxLibertine
 Requires:       make
-Requires:       mplus-fonts
-Requires:       optipng
 Requires:       poppler-tools
+Requires:       python-xml
+Requires:       python-lxml
 Requires:       sgml-skel
 Requires:       svg-dtd
 Requires:       transfig
 %if 0%{?suse_version} >= 1140
-Requires:       perl-checkbot
 Requires:       xmlgraphics-fop >= 0.94
 %else
 Requires:       fop >= 0.94
-%if %{undefined sles_version}
-Requires:       checkbot
-%else
-Recommends:     checkbot
 %endif
-%endif
-Requires:       python-xml
-Requires:       python-lxml
 
-Recommends:     agfa-fonts
 Recommends:     aspell aspell-en
-# Only works only for openSUSE 11.4 and below
 %if 0%{?suse_version} < 1210
 Recommends:     aspell-en-huge
 %endif
@@ -142,24 +125,39 @@ Recommends:     daps-docmanager
 Recommends:     docbook_5
 Recommends:     emacs psgml
 Recommends:     epubcheck
-# Split of ttf-founder-simplified and ttf-founder-traditional
-Recommends:     FZFangSong FZHeiTi FZSongTi
-Recommends:     fifth-leg-font
+Recommends:     exiftool
 Recommends:     jing
+Recommends:     optipng
+%if 0%{?suse_version} >= 1140
+Recommends:     perl-checkbot
+%else
+Recommends:     checkbot
+%endif
 Recommends:     remake
-# needed to create ePUBs
-Recommends:     ruby
-# Japanese Fonts:
-Recommends:     sazanami-fonts
 Recommends:     suse-xsl-stylesheets
-# Chinese
-Recommends:     ttf-arphic
-# Korean Fonts:
-Recommends:     unfonts
 # Internal XEP package:
 Recommends:     xep
-
 Recommends:     xmlformat
+Recommends:     xmlstarlet
+
+#------
+# Fonts
+#------
+Requires:       dejavu
+Requires:       freefont
+Requires:       liberation-fonts
+Requires:       mplus-fonts
+Recommends:     agfa-fonts
+Recommends:     fifth-leg-font
+Recommends:     LinuxLibertine
+# Chinese Fonts
+Recommends:     FZFangSong FZHeiTi FZSongTi
+Recommends:     ttf-arphic
+# Japanese Fonts:
+Recommends:     sazanami-fonts
+# Korean Fonts:
+Recommends:     unfonts
+
 
 
 #Obsoletes:      susedoc <= 4.3.27
@@ -241,6 +239,7 @@ exit 0
 %dir %{fontdir}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
+%dir %{python_sitelib}/%{name}
 
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
@@ -250,8 +249,10 @@ exit 0
 
 %{_bindir}/*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
-%{fontdir}/*
 %{docbuilddir}
+%{fontdir}/*
+%{python_sitelib}/%{name}/*
+
 
 %exclude %{_defaultdocdir}/%{name}/INSTALL
 
