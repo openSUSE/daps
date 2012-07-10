@@ -324,8 +324,8 @@ DC_USERGUIDE = $(srcdir)/doc/DC-daps-user
 DC_QUICKSTART = $(srcdir)/doc/DC-daps-quick
 USERGUIDE_NAME = daps-user
 QUICKSTART_NAME = daps-quick
-USERGUIDE = $(srcdir)/doc/build/$(USERGUIDE_NAME)/html/$(USERGUIDE_NAME)/$(USERGUIDE_NAME).html
-QUICKSTART = $(srcdir)/doc/build/$(QUICKSTART_NAME)/html/$(QUICKSTART_NAME)/$(QUICKSTART_NAME).html
+USERGUIDE = $(srcdir)/doc/build/$(USERGUIDE_NAME)/htmlsingle/$(USERGUIDE_NAME)/$(USERGUIDE_NAME).html
+QUICKSTART = $(srcdir)/doc/build/$(QUICKSTART_NAME)/htmlsingle/$(QUICKSTART_NAME)/$(QUICKSTART_NAME).html
 MANUALS = $(dir $(USERGUIDE)) $(dir $(QUICKSTART)) 
 
 #------------------------
@@ -379,7 +379,7 @@ dist_emacssite_DATA = misc/docbook_macros.el
 dist_dapsmake_DATA = $(wildcard make/*.mk)
 dist_template_DATA = $(wildcard init_templates/*)
 dist_ttfonts_DATA = $(wildcard fonts/*.ttf)
-dist_dapspython_DATA = $(wildcard lib/python/daps/*)
+dist_dapspython_DATA = $(wildcard python/daps/*)
 dist_xsltcommon_DATA = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
