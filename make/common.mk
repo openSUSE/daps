@@ -527,7 +527,7 @@ html: clean_html $(PROFILEDIR)/.validate missing-images $(HTML_DIR)/index.html
 #
 .PHONY: html-single htmlsingle
 html-single htmlsingle: | $(DIRECTORIES)
-html-single htmlsingle: clean_htmlsingle $(PROFILEDIR)/.validate \
+html-single htmlsingle: clean_html $(PROFILEDIR)/.validate \
 			missing-images $(HTML_DIR)/$(BOOK).html
 	@ccecho "result" "HTML-SINGLE book built with REMARKS=$(REMARKS), COMMENTS=$(COMMENTS) and DRAFT=$(DRAFT):\n$(HTML_DIR)/index.html"
 
