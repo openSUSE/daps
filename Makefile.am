@@ -142,7 +142,7 @@ all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
 
 #---------------------------Local INSTALLATION--------------------------------
 
-INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) $(dapspythondir)
+INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(dapspythondir)
 
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
