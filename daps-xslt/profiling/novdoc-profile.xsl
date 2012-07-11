@@ -14,6 +14,7 @@
 
 <xsl:import href="&db;/profiling/profile.xsl"/>
 <xsl:import href="&db;/common/pi.xsl"/>
+<xsl:import href="&db;/lib/lib.xsl"/>
 <xsl:import href="profile-rootid.xsl"/>
   
 <xsl:include href="xml-stylesheet.xsl"/>
@@ -111,6 +112,10 @@
   <xsl:if test="$keep.xml.comments != 0">
     <xsl:apply-imports/>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="processing-instruction('dbtimestamp')" mode="profile">
+  <xsl:call-template name="pi.dbtimestamp"/>
 </xsl:template>
 
 <xsl:template match="processing-instruction()|processing-instruction('xml-stylesheet')" mode="profile">
