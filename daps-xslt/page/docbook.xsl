@@ -5,7 +5,11 @@
      project Mallard (see http://projectmallard.org)
      
    Parameters:
-   
+     * packagename: Needed for Page format of the package name
+       (default: @PACKAGENAME@)
+     * productid: Used to differentiate of several products in
+       the new Yelp page (default: /*/*/productname, this XPath
+       matches both for article, book, or set root elements)
    
    Input:
      DocBook 4/Novdoc document
@@ -15,6 +19,9 @@
      http://projectmallard.org/1.0/mallard-1.0.rnc
      
    Note:
+     If an article or book does NOT contain an @id, it won't be
+     included into the output format. In such a case, the stlyesheet
+     prints a warning.
 
 -->
 <!DOCTYPE xsl:stylesheet [
