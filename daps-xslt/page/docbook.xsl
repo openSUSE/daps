@@ -37,6 +37,7 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="packagename">@PACKAGENAME@</xsl:param>
   
   <!--  -->
   <xsl:template name="string.lower">
@@ -91,7 +92,7 @@
         <xsl:apply-templates select="(*/title|title)[1]"/>
       </title>
       <p>
-       <link href="help:opensuse-manuals">The complete set of 
+       <link href="help:{$packagename}">The complete set of 
          <xsl:value-of select="normalize-space(*/productname)"/> documents</link> 
         consists of the following books and guide:
       </p>
@@ -110,7 +111,7 @@
         <xsl:apply-templates select="(bookinfo/title|title)[1]"/>
       </title>
       <p>
-       <link href="help:opensuse-manuals">The complete 
+       <link href="help:{$packagename}">The complete 
          <xsl:value-of select="normalize-space(*/productname)"/> documents</link> 
         consists of the following chapters:
       </p>
