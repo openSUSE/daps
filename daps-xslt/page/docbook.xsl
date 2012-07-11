@@ -24,9 +24,7 @@
 <xsl:stylesheet version="1.0"
   xmlns="http://projectmallard.org/1.0/"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  
-  <xsl:import href="../common/rootid.xsl"/>
-  
+    
   <xsl:output method="xml" indent="yes"/>
   <xsl:strip-space elements="*"/>
   
@@ -40,7 +38,7 @@
     </xsl:call-template>
   </xsl:param>
   
-  
+  <!--  -->
   <xsl:template name="string.lower">
     <xsl:param name="string" select="''"/>
     <xsl:value-of select="translate($string,&uppercase;,&lowercase;)"/>
@@ -69,6 +67,14 @@
     </info>
   </xsl:template>
   
+  <xsl:template name="warning">
+    <xsl:message>
+      <xsl:text>Warning: Missing @id in </xsl:text>
+      <xsl:value-of select="local-name()"/>
+      <xsl:text>, skipped </xsl:text>
+      <xsl:value-of select="(*/title|title)[1]"/>
+    </xsl:message>
+  </xsl:template>
   
   <xsl:template match="/">
     <xsl:processing-instruction name="xml-model"
@@ -89,10 +95,10 @@
          <xsl:value-of select="normalize-space(*/productname)"/> documents</link> 
         consists of the following books and guide:
       </p>
-      <xsl:apply-templates mode="summary"/>
+      <xsl:apply-templates select="book[not(article)]|book[article]/article"
+        mode="summary"/>
     </page>
   </xsl:template>
-  
   
   <xsl:template match="/book">
     <page type="guide" id="{$productid}">
@@ -104,9 +110,9 @@
         <xsl:apply-templates select="(bookinfo/title|title)[1]"/>
       </title>
       <p>
-       <link href="help:opensuse-manuals">The complete set of 
+       <link href="help:opensuse-manuals">The complete 
          <xsl:value-of select="normalize-space(*/productname)"/> documents</link> 
-        consists of the following books and guide:
+        consists of the following chapters:
       </p>
       <xsl:apply-templates mode="summary"/>
     </page>
@@ -124,21 +130,33 @@
     <xsl:apply-templates select="book/article"/>
   </xsl:template>
   
+  <xsl:template match="book/article[not(@id)]">
+    <xsl:call-template name="warning"/>
+  </xsl:template>
+  
   <xsl:template match="book/article">
     <xsl:param name="node" select="."/>
+    <!--<xsl:message>book/article: <xsl:value-of 
+      select="normalize-space((*/title|title)[1])"/> for <xsl:value-of
+        select="@id"/></xsl:message>-->
     <link xref="{$productid}#{@id}">
       <xsl:apply-templates select="(*/title|title)[1]"/>
     </link>
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
   
+  <!-- ***************** -->
   <xsl:template match="*" mode="summary"/>
   
-  <xsl:template match="book" mode="summary">
+  <xsl:template match="book[not(article)][@id]" mode="summary">
     <xsl:param name="node" select="."/>
+    <xsl:message>book: <xsl:value-of 
+      select="normalize-space((*/title|title)[1])"/> for <xsl:value-of
+        select="@id"/></xsl:message>
+
     <section id="{@id}">
       <title>
-        <link href="help:opensuse-manuals">
+        <link href="help:{$productid}-manuals">
           <xsl:apply-templates select="(*/title|title)[1]"/>
         </link>
       </title>
@@ -148,15 +166,24 @@
     </section>
   </xsl:template>
   
-  <xsl:template match="book[article]" mode="summary">
-    <xsl:apply-templates select="book/article"/>
+  <xsl:template match="book[not(article)][not(@id)]" mode="summary">
+    <xsl:call-template name="warning"/>
   </xsl:template>
   
-  <xsl:template match="book/article" mode="summary">
+  <xsl:template match="book[article[@id]]" mode="summary">
+    <xsl:message>Process article...</xsl:message>
+    <xsl:apply-templates select="article"/>
+  </xsl:template>
+  
+  <xsl:template match="book/article[not(@id)]" mode="summary">
+    <xsl:call-template name="warning"/>
+  </xsl:template>
+  
+  <xsl:template match="book/article[@id]" mode="summary">
     <xsl:param name="node" select="."/>
     <section id="{@id}">
       <title>
-        <link href="help:opensuse-manuals">
+        <link href="help:{$productid}-manuals">
           <xsl:apply-templates select="(*/title|title)[1]"/>
         </link>
       </title>
@@ -166,6 +193,7 @@
     </section>
   </xsl:template>
   
+  <!-- ***************** -->
   <xsl:template match="abstract/para">
     <p>
       <xsl:apply-templates/>
