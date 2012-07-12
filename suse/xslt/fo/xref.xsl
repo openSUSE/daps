@@ -315,9 +315,17 @@
   <xsl:param name="verbose" select="1"/>
 
   <!-- to avoid the comma that will be generated if there are several terms -->
-  <xsl:call-template name="gentext.startquote"/>
-  <xsl:apply-templates/>
-  <xsl:call-template name="gentext.endquote"/>
+  <xsl:choose>
+    <xsl:when test="quote">
+      <xsl:apply-templates/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="gentext.startquote"/>
+      <xsl:apply-templates/>
+      <xsl:call-template name="gentext.endquote"/>
+    </xsl:otherwise>
+  </xsl:choose>
+   
 </xsl:template>
 
 </xsl:stylesheet>
