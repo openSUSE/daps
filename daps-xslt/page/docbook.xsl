@@ -99,7 +99,7 @@
   
   <xsl:template match="/set">
     <xsl:param name="node" select="."/>
-    <page type="guide" id="{$productid}">
+    <page type="guide" id="{$packagename}">
       <xsl:call-template name="create-info"/>
       <title>
         <xsl:apply-templates select="(*/title|title)[1]"/>
@@ -115,7 +115,7 @@
   </xsl:template>
   
   <xsl:template match="/book">
-    <page type="guide" id="{$productid}">
+    <page type="guide" id="{$packagename}">
       <xsl:call-template name="create-info">
         <xsl:with-param name="subnodes"
           select="article|chapter|preface|appendix|glossary"/>
