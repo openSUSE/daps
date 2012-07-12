@@ -71,9 +71,16 @@
         <email>doc-team@suse.de</email>
       </credit>
       
-      <desc>
-        <xsl:value-of select="normalize-space(*/productname)"/> comes
-        with the following books and guides:
+      <desc>        
+        <xsl:choose>
+          <xsl:when test="*/productname">
+            <xsl:value-of select="normalize-space(*/productname)"/>
+            <xsl:text> comes with the following documents:</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>This product comes with the following documents: </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:apply-templates select="$subnodes"/>
       </desc>
     </info>
@@ -104,9 +111,17 @@
       <title>
         <xsl:apply-templates select="(*/title|title)[1]"/>
       </title>
-      <p>
-       <link href="help:{$packagename}">The complete set of 
-         <xsl:value-of select="normalize-space(*/productname)"/> documents</link> 
+      <p>The complete set of <link href="help:{$packagename}">
+        <xsl:choose>
+          <xsl:when test="*/productname">
+            <xsl:value-of select="normalize-space(*/productname)"/>
+            <xsl:text> documents</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="/*/title"/>
+          </xsl:otherwise>
+        </xsl:choose>
+         </link> 
         consists of the following books and guide:
       </p>
       <xsl:apply-templates select="book[not(article)]|book[article]/article"
@@ -137,6 +152,9 @@
     <link href="help:{$packagename}/{@id}">
       <xsl:apply-templates select="(*/title|title)[1]"/>
     </link>
+    <xsl:if test="following-sibling::book">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
   
