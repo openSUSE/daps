@@ -29,8 +29,6 @@
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
     
-    <xsl:message>html.head gefunden: <xsl:apply-templates select="$this" 
-      mode="title.markup"/></xsl:message>
     <head>
       <xsl:call-template name="system.head.content"/>
       <xsl:call-template name="head.content"/>
