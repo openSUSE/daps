@@ -69,14 +69,16 @@ STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 #
 
 # generate lists of all existing images
-SRCDIA  := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
-SRCEPS  := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
-SRCFIG  := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
-SRCPDF  := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
-SRCPNG  := $(wildcard $(IMG_SRCDIR)/png/*.png)
-SRCSVG  := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
-SRCALL  := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCPDF) $(SRCPNG) $(SRCSVG)
-IMGDIRS := $(sort $(dir $(SRCALL)))
+SRCDIA     := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
+SRCEPS     := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
+SRCFIG     := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
+SRCPDF     := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
+SRCPNG     := $(wildcard $(IMG_SRCDIR)/png/*.png)
+SRCSVG     := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
+SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCPDF) $(SRCPNG) $(SRCSVG)
+IMGDIRS    := $(sort $(dir $(SRCALL)))
+IMGFORMATS := dia eps fig pdf png svg
+
 
 # get all images used in the current Document
 #
@@ -166,10 +168,12 @@ DUPLICATES := $(filter \
 		$(shell echo $(basename $(notdir $(SRCALL))) | tr " " "\n" | sort |uniq -d), \
 		$(basename $(USED)))
 
-
-DOUBLEIMG := $(wildcard \
-	  $(foreach IMGDIR, $(IMGDIRS), \
-	  $(addprefix $(IMGDIR), $(addsuffix .*, $(DUPLICATES)))))
+DOUBLEIMG := $(sort \
+	       $(wildcard \
+		 $(foreach IMGDIR, $(IMGDIRS), \
+	  	   $(addprefix $(IMGDIR), \
+		     $(foreach SUFFIX, $(IMGFORMATS), \
+		       $(addsuffix .$(SUFFIX), $(DUPLICATES)))))))
 
 # images referenced in the currently used XML sources that cannot be found in
 # $(IMG_SRCDIR)
@@ -261,6 +265,8 @@ endif
 #
 # existing color PNGs
 $(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
+	@exiftool -Comment $< | grep optipng > /dev/null || \
+	  ccecho "warn" " $< not optimized." >&2
 	ln -sf $< $@
 
 # created PNGs
