@@ -6,7 +6,7 @@
 #
 # Author: Frank Sundermeyer <fsundermeyer@opensuse.org>
 # Created: 20 Jun 2012
-# Version: 1.0
+# Version: 1.1 (12 Jul 2012)
 
 use warnings;
 use strict;
@@ -23,6 +23,7 @@ my $me = basename($0);
 my $builddir      = "";
 my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
+my $to_rsync      = "";
 my @vformats      = qw(color-pdf epub html htmlsingle pdf txt); # valid formats
 
 $ENV{SHELL}="/bin/bash";
@@ -159,10 +160,13 @@ if ( $clean ) {
 foreach my $set (@sets) {
     # daps does not like spaces
     my $needs_update = 1; # rebuild docs by default
-    my $to_rsync = 0;
     my $syncdir  = catdir($builddir, "sync", $set);
+    
     next if "$set" eq "general"; # skip general section
     print "$set:\n";
+
+    $to_rsync = 0;
+    
     if ( $set =~ /.*\s.*/ ) {
         warn "${bcol}Set names must not include whitespace.\n${ecol}Skipping set [$set].\n";
         next
@@ -199,52 +203,20 @@ foreach my $set (@sets) {
             foreach my $dcfile ( @dcfiles ) {
                 print "  * $dcfile: \U$format...";
                 my $dcpath = catfile("$workdir", "$dcfile");
-                if ( ! -f $dcpath ) {
+                unless ( -f $dcpath ) {
                     warn "${bcol}Invalid DC-file \"$dcfile\" in config for section [$set].\n-> Skipping $dcfile${ecol}.\n";
                     next;
                 } else {
-                    # clean up previous build results
-                    my $dapsclean = "$dapsbin -d $dcpath";
-                    $dapsclean .= " --dapsroot=\"$dapsroot\"" if $dapsroot ne "";
-                    system("$dapsclean clean-results >/dev/null")  == 0
-                        or warn "${bcol}Failed to run \"daps clean-results\".${ecol}\n";
-                    my $book = $dcfile;
-                    $book =~ s/^DC-//;
-                    my $dapserror  = '';
-                    my $dapsresult = '';
                     my ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
-                    print "\n    Command: $dapscmd\n    Logfile: $dapslog\n" if $verbose;
-                    $dapsresult = `$dapscmd`;
-                    $dapserror = $?; # error occurred if != 0
-                    chomp($dapsresult);                    
-                    if ( $dapserror) {
-                        warn "${bcol}Failed to execute\n$dapscmd\nSee $dapslog for details.${ecol}\n";
-                        next;
-                    } else {
-                        $to_rsync = 1;
-                        if ( $verbose ) {
-                            print "    $dapsresult\n";
-                        } else {
-                            print "OK\n";
-                        }
-                        #
-                        # Move non-html format results into subdirectory $format
-                        #
-                        my $resultdir = dirname($dapsresult);
-                        my $syncsubdir = catdir($syncdir, $book, $format);
-                        if ( not -d $syncsubdir ) {
-                            make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
-                        }                       
-                        if ( $format !~ /^html.*/ ) {
-                            fmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
-                        } else {
-                            dirmove($resultdir, $syncsubdir)or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
-                        }
-                    }
+                    my $buildresult = build("$set", "$syncdir", "$format", "$dcpath", "$dapscmd", "$dapslog");
+                    # if build was not successful, $buildresult == 0
+                    next unless $buildresult;
                 }
             }
         }
     }
+    # Build sources if source-dc was set
+    sources("$set", "$syncdir", "$workdir") if $cfg->exists("$set", 'source-dc');
     if ( not $norsync and $to_rsync ) {
         my $rsync_target;
         my $rsync_flags;
@@ -258,9 +230,10 @@ foreach my $set (@sets) {
         } else {
             $rsync_flags = $cfg->val('general', 'rsync_flags');
         }
-        rsync("$rsync_target", "$rsync_flags", "$set");
-        # remove $syncdir
-        remove_tree($syncdir) or warn "${bcol}Failed to remove sync dir \"$syncdir\".\n${ecol}";
+        rsync("$set", "$rsync_target", "$rsync_flags");
+        print "  Rsync complete\n";
+    } else {
+        print "  Books are available at $syncdir\n";
     }
     print "\n";
 }
@@ -271,11 +244,16 @@ $rcfg->RewriteConfig;
 # Subroutines
 #
 
+
 sub check_svn_changes {
+    # Arguments (all mandatory):
+    #   set    : Section name from config
+    #   workdir: absolute path to workdir from config
+    #
     # return values:
-    # 2 -> error
-    # 1 -> revisions differ
-    # 0 -> revisions do not differ
+    #   2 -> error
+    #   1 -> revisions differ
+    #   0 -> revisions do not differ
     #
 
     my ($set, $workdir) = @_;
@@ -336,6 +314,14 @@ sub check_svn_changes {
 # according to the data from the logfile
 #
 sub set_daps_cmd_and_log {
+    # Arguments (all mandatory):
+    #   set    : Section name from config
+    #   dcpath : absolute path to DC-file
+    #   format : sync/ subdirectory name
+    #
+    # return values:
+    # $dapscmd, $dapslog
+    #
     my ($set, $dcpath, $format) = @_;
     my $bookname;
     my $dapscmd;
@@ -371,7 +357,124 @@ sub set_daps_cmd_and_log {
     return ($dapscmd, $dapslog);
 }
 
+sub build {
+    # Arguments (all mandatory):
+    #   set    : Section name from config
+    #   syncdir: absolute path to sync/ directory 
+    #   format : sync/ subdirectory name
+    #   dcpath : absolute path to DC-file
+    #   dapscmd: dapscommand tp be executed
+    #   dapslog: DAPS log file
+    #
+    # return values:
+    #   0 failure
+    #   1 success
+    #
+    my ($set, $syncdir, $format, $dcpath, $dapscmd, $dapslog) = @_;
+    my $dapserror  = '';
+    my $dapsresult = '';    
+    # ----
+    # clean up previous build results
+    my ($dapsclean, undef) = set_daps_cmd_and_log("$set", "$dcpath", "clean-results");
+    system("$dapsclean clean-results >/dev/null")  == 0
+        or warn "${bcol}Failed to run \"$dapsclean\".${ecol}\n";
+
+    # ----
+    # build the document
+    print "\n    Command: $dapscmd\n    Logfile: $dapslog\n" if $verbose;
+    $dapsresult = `$dapscmd`;
+    $dapserror = $?; # error occurred if != 0
+    chomp($dapsresult);                    
+    if ( $dapserror) {
+        warn "${bcol}Failed to execute\n$dapscmd\nSee $dapslog for details.${ecol}\n";
+        return 0;
+    } else {
+        my $syncsubdir = "";
+        $to_rsync = 1;
+        if ( $verbose ) {
+            print "    $dapsresult\n";
+        } else {
+            print "OK\n";
+        }
+        # --
+        # move results into sync subdir
+        if ( $format eq "src" ) {
+            $syncsubdir = catdir($syncdir, $format);
+        } else {
+            my $book = basename($dcpath);
+            $book =~ s/^DC-//;
+            $syncsubdir = catdir($syncdir, $book, $format);
+        }
+        # If a build was successful, we want to remove the contents of a subdir
+        # in sync/ - easiest way is to remove it and create it again
+        if ( -d $syncsubdir ) {
+            remove_tree("$syncsubdir") or warn "${bcol}Failed to remove sync dir \"$syncsubdir\".\n${ecol}";
+        }
+        make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
+        # HTML/HTMLsingle do not return single files, but files and directories
+        if ( $format =~ /^html.*/ ) {
+            my $resultdir = dirname($dapsresult);
+            dirmove($resultdir, $syncsubdir)or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
+        } else {
+            fmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
+        }
+    }
+    return 1;
+}
+
+sub sources {
+    # Arguments (all mandatory):
+    #   set    : Section name from config
+    #   syncdir: absolute path to sync/ directory
+    #   workdir: absolute path to workdir from config
+    #
+    my ($set, $syncdir, $workdir) = @_;
+    my $dcfile  = $cfg->val("$set", 'source-dc');
+    my $deffile = "";
+    my $dcpath  = "";
+    my $defpath = "";
+
+    print "  * Creating Source tarball ... ";    
+
+    $dcpath = catfile("$workdir", "$dcfile");
+    unless ( -f $dcpath ) {
+        warn "${bcol}Invalid source DC-file \"$dcfile\" in config for section [$set].\n-> Skipping source tarball generation.${ecol}.\n";
+        return;
+    }
+
+    my ($dapscmd, $dapslog) = set_daps_cmd_and_log($set, $dcpath, "package-src");
+    
+    
+    if ( $cfg->exists("$set", 'source-def') ) {
+        $deffile = $cfg->val("$set", 'source-def');
+        $defpath = catfile("$workdir", "$deffile");
+        $dapscmd .= " --def-file=\"$defpath\"";
+        unless ( -f $defpath ) {
+            warn "${bcol}Invalid source DEF-file \"$defpath\" in config for section [$set].\n-> Skipping source tarball generation.${ecol}.\n";
+            return 0;
+        }
+    }
+    # Build the source tarball
+    my $buildresult = build("$set", "$syncdir", "src", "$dcpath", "$dapscmd", "$dapslog");
+    if ( $buildresult ) {
+        return 1; # success
+    } else {
+        return 0; #failure
+    }
+}
+
+
 sub rsync {
+    # Arguments (all mandatory):
+    #   set         : Section name from config
+    #   rsync_target: rsync target from config
+    #   rsync_flags : rsync flags from config
+    #
+    # return values:
+    #   0 failure
+    #   1 success
+    #    
+    
     #my $rsync = File::Rsync->new( {
     #    archive      => 1,
     #    compress     => 1,
@@ -380,7 +483,7 @@ sub rsync {
     #    chmod        => [ "Dg+s" ,"ug+w", "o-w", "o+r", "F-X" ],
     #} );
     
-    my ($rsync_target,$rsync_flags, $set) = @_;
+    my ($set, $rsync_target,$rsync_flags) = @_;
     my %rsync_opts = eval $rsync_flags;
     my $rsync = File::Rsync->new( \%rsync_opts );
     my $rsync_src = catdir("$builddir", "sync", "$set");
@@ -403,9 +506,9 @@ sub rsync {
             dest => "$rsync_target",
         } );
         warn "${bcol}Failed to rsnyc $rsync_src to $rsync_target:\n@{$rsync_error}\nrsync command was: @{$rsync_cmd}${ecol}\n";
-        return 1;
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 
