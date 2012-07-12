@@ -10,7 +10,7 @@
      * productid: Used to differentiate of several products in
        the new Yelp page (default: /*/*/productname, this XPath
        matches both for article, book, or set root elements)
-     * generate-xml-model.pi: Creates the PI <?xml-model href="..."
+     * generate.xml-model.pi: Creates the PI <?xml-model href="..."
        type="application/relax-ng-compact-syntax"?>.
        This is useful for validation with RELAX NG and oXygen.
    
