@@ -10,6 +10,9 @@
      * productid: Used to differentiate of several products in
        the new Yelp page (default: /*/*/productname, this XPath
        matches both for article, book, or set root elements)
+     * generate-xml-model.pi: Creates the PI <?xml-model href="..."
+       type="application/relax-ng-compact-syntax"?>.
+       This is useful for validation with RELAX NG and oXygen.
    
    Input:
      DocBook 4/Novdoc document
@@ -45,6 +48,7 @@
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="packagename">@PACKAGENAME@</xsl:param>
+  <xsl:param name="generate.xml-model.pi" select="1"/>
   
   <!--  -->
   <xsl:template name="string.lower">
@@ -85,8 +89,10 @@
   </xsl:template>
   
   <xsl:template match="/">
-    <xsl:processing-instruction name="xml-model"
+    <xsl:if test="$generate.xml-model.pi != 0">
+      <xsl:processing-instruction name="xml-model"
       >href="mallard-1.0.rnc" type="application/relax-ng-compact-syntax"</xsl:processing-instruction>
+    </xsl:if>
     <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates/>
   </xsl:template>
