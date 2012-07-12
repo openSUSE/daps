@@ -309,4 +309,15 @@
   </fo:inline>
 </xsl:template>-->
 
+ <xsl:template match="varlistentry/term" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/> 
+  <xsl:param name="verbose" select="1"/>
+
+  <!-- to avoid the comma that will be generated if there are several terms -->
+  <xsl:call-template name="gentext.startquote"/>
+  <xsl:apply-templates/>
+  <xsl:call-template name="gentext.endquote"/>
+</xsl:template>
+
 </xsl:stylesheet>
