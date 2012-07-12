@@ -61,7 +61,7 @@
     <xsl:param name="subnodes" select="book"/>
     
     <info>
-      <link type="guide" xref="index" group="{$productid}"/>
+      <link type="guide" xref="index" group="{$packagename}"/>
       <credit type="author">
         <name>Documentation Team</name>
         <email>doc-team@suse.de</email>
@@ -128,7 +128,7 @@
   
   <xsl:template match="book">
     <xsl:param name="node" select="."/>
-    <link href="help:{$productid}/{@id}">
+    <link href="help:{$packagename}/{@id}">
       <xsl:apply-templates select="(*/title|title)[1]"/>
     </link>
     <xsl:text>&#10;</xsl:text>
@@ -147,7 +147,7 @@
     <!--<xsl:message>book/article: <xsl:value-of 
       select="normalize-space((*/title|title)[1])"/> for <xsl:value-of
         select="@id"/></xsl:message>-->
-    <link href="help:{$productid}/{@id}">
+    <link href="help:{$packagename}/{@id}">
       <xsl:apply-templates select="(*/title|title)[1]"/>
     </link>
     <xsl:text>&#10;</xsl:text>
@@ -161,7 +161,7 @@
 
     <section id="{@id}">
       <title>
-        <link href="help:{$productid}/{@id}">
+        <link href="help:{$packagename}/{@id}">
           <xsl:apply-templates select="(*/title|title)[1]"/>
         </link>
       </title>
@@ -188,7 +188,7 @@
     <xsl:param name="node" select="."/>
     <section id="{@id}">
       <title>
-        <link href="help:{$productid}/{@id}">
+        <link href="help:{$packagename}/{@id}">
           <xsl:apply-templates select="(*/title|title)[1]"/>
         </link>
       </title>
