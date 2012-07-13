@@ -30,7 +30,7 @@ from daps import docbook
 from lxml import etree
 
 log = logging.getLogger('db2epub')
-fh=logging.FileHandler('/var/tmp/db2epub.log')
+fh=logging.FileHandler('/var/tmp/db2epub-%s.log' % os.getlogin())
 fh.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
 fh.setLevel(logging.DEBUG)
 log.addHandler(fh) 
