@@ -1860,6 +1860,10 @@ else
   DB2EPUB := python /usr/bin/db2epub.py
 endif
 
+ifdef STYLE_EPUBCSS
+  EPUB_CSSSTRING := --css $(STYLE_EPUBCSS)
+endif
+
 $(EPUB_TMP_DIR):
 	mkdir -p $@
 
@@ -1892,7 +1896,7 @@ $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: provide-epub-images
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating epub"
   endif
-	$(DB2EPUB) -s $(STYLEEPUBXSLT) -k --css $(STYLE_EPUBCSS) \
+	$(DB2EPUB) -s $(STYLEEPUBXSLT) -k $(EPUB_CSSSTRING) \
 	  -o $@ $(EPUB_TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 #------------------------------------------------------------------------
