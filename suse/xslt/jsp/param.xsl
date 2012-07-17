@@ -37,4 +37,16 @@
   <!-- Path to HTML/FO image files -->
   <xsl:param name="img.src.path">images/</xsl:param>
   
+  <!-- Should I generate breadcrumbs navigation?  -->
+  <xsl:param name="generate.breadcrumbs" select="1"/>
+  <!-- Separator between separate links: -->
+  <xsl:param name="breadcrumbs.separator"> &gt; </xsl:param>
+  <!-- Should I generate breadcrumbs navigation?  -->
+  <xsl:param name="generate.bgnavi" select="1"/>
+  <!-- Navigation "Icons" for breadcrumbs: -->
+  <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
+  <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
+  <!-- Should information from SVN properties be used? yes|no -->
+  <xsl:param name="use.meta" select="0"/>
+  
 </xsl:stylesheet>
