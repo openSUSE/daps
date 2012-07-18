@@ -7,7 +7,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:dp="urn:x-suse:xmlns:docproperties"
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns="http://www.w3.org/1999/xhtml"
+  exclude-result-prefixes="dp">
 
 <xsl:template match="releaseinfo">
   <xsl:apply-templates/>
@@ -20,7 +21,8 @@
   <xsl:param name="node" select="/foo"/>
 
   <xsl:choose>
-    <xsl:when test="generate-id($node/ancestor-or-self::book) = generate-id(ancestor-or-self::book) and                     count($node)&gt;0">
+    <xsl:when test="generate-id($node/ancestor-or-self::book) = generate-id(ancestor-or-self::book) and  
+                    count($node)&gt;0">
         <xsl:value-of select="0"/>
     </xsl:when>
     <xsl:otherwise>
@@ -33,8 +35,6 @@
 
 <xsl:template name="get.roottitle">
   <xsl:param name="book" select="ancestor-or-self::book"/>
-  <xsl:text>FIXME</xsl:text>
-  <!--<xsl:call-template name="suse-pi"/>-->
 </xsl:template>
 
 
@@ -249,7 +249,11 @@
               If it isn't available, we point to the book filename
           -->
           <xsl:variable name="xmlbase.filename">
-             <xsl:variable name="_xmlbase" select="(ancestor-or-self::chapter|                         ancestor-or-self::preface|                         ancestor-or-self::appendix|                         ancestor-or-self::glossary)/@xml:base"/>
+             <xsl:variable name="_xmlbase" 
+               select="(ancestor-or-self::chapter|
+                        ancestor-or-self::preface|
+                        ancestor-or-self::appendix|
+                        ancestor-or-self::glossary)/@xml:base"/>
              <xsl:choose>
                <xsl:when test="$_xmlbase != ''">
                  <xsl:value-of select="$_xmlbase"/>
@@ -283,7 +287,28 @@
   <xsl:variable name="next.book" select="$next/ancestor-or-self::book"/>
   <xsl:variable name="prev.book" select="$prev/ancestor-or-self::book"/>
   <xsl:variable name="this.book" select="ancestor-or-self::book"/>
-    
+  <!-- 
+     We use two node sets and calculate the set difference
+     with the following, general XPath expression:
+     
+      setdiff = $node-set1[count(.|$node-set2) != count($node-set2)]
+     
+     $node-set1 contains the ancestors of all nodes, starting with the
+     current node (but the current node is NOT included in the set)
+     
+     $node-set2 contains the ancestors of all nodes starting from the 
+     node which points to the $rootid parameter
+     
+     For example:
+     node-set1: /, set, book, chapter
+     node-set2: /, set, 
+     setdiff:   book, chapter
+     
+  -->
+  <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
+  <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
+                                != count($ancestorrootnode)]"/>
+  
   <xsl:variable name="prevresult">
     <xsl:call-template name="check.header.link">
       <xsl:with-param name="node" select="$prev"/>
@@ -294,18 +319,7 @@
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="breadcrumbs">
         <p>
-          <xsl:for-each select="ancestor::*">
-            <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
-              <xsl:attribute name="href">
-                <xsl:call-template name="href.target">
-                  <xsl:with-param name="object" select="."/>
-                  <xsl:with-param name="context" select="."/>
-                </xsl:call-template>
-              </xsl:attribute>
-              <xsl:apply-templates select="." mode="title.markup"/>
-            </xsl:element>
-            <span class="breadcrumbs-sep"><xsl:copy-of select="$breadcrumbs.separator"/></span>
-          </xsl:for-each>
+          <xsl:apply-templates select="$setdiff"  mode="breadcrumbs"/>
           <xsl:if test="self::* != /*">
             <strong>
               <xsl:if test="$prevresult=0">
@@ -343,8 +357,8 @@
 </xsl:message>
 </xsl:if>
 -->
-              <xsl:choose>
-                <xsl:when test="count(following-sibling::*[1])">
+              
+              <xsl:if test="count(following-sibling::*[1])">
                   <xsl:text> </xsl:text>
                   <a accesskey="n">
                     <xsl:attribute name="title">
@@ -360,14 +374,7 @@
                     <xsl:with-param name="direction" select="'next'"/>
                   </xsl:call-template>-->
                   </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <!--<a accesskey="n" class="end">
-                    <span>&#x2d;&#x2d;&#x2d;</span>
-                  </a>-->
-                </xsl:otherwise>
-              </xsl:choose>
-              
+              </xsl:if>
             </strong>
           </xsl:if>
         </p>
@@ -375,7 +382,20 @@
     </xsl:if>
 </xsl:template>
   
-
+<xsl:template match="*" mode="breadcrumbs">
+    <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:attribute name="href">
+        <xsl:call-template name="href.target">
+          <xsl:with-param name="object" select="."/>
+          <xsl:with-param name="context" select="."/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:apply-templates select="." mode="title.markup"/>
+    </xsl:element>
+    <span class="breadcrumbs-sep">
+      <xsl:copy-of select="$breadcrumbs.separator"/>
+    </span>
+</xsl:template>
 
 <!-- ==================================================================== -->
   
