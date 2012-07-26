@@ -20,6 +20,8 @@
   <!-- Don't use admon graphics -->
   <xsl:param name="admon.graphics" select="0"/>
   
+  <xsl:param name="css.decoration" select="0"/>
+  
   <!-- Intentionally left blank as we don't want toc entries -->
   <xsl:param name="generate.toc"/>
   <!--
