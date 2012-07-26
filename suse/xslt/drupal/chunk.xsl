@@ -151,8 +151,8 @@
   
   <xsl:template match="keycap" priority="10">
   <!-- See also Ticket#84 -->
-    <xsl:message>keycap: <xsl:value-of select="concat(@function, '-',
-      normalize-space())"/></xsl:message>
+  <!--  <xsl:message>keycap: <xsl:value-of select="concat(@function, '-',
+      normalize-space())"/></xsl:message>-->
    <xsl:choose>
        <xsl:when test="@function">
          <xsl:call-template name="inline.sansseq">
