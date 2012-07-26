@@ -12,6 +12,7 @@
   <xsl:param name="chunker.output.doctype-public"/>
   <xsl:param name="chunker.output.doctype-system"/>
   <xsl:param name="chunker.output.omit-xml-declaration" select="'yes'"/>
+  <xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
   
   <!-- That is done in Drupal -->
   <xsl:param name="suppress.footer.navigation" select="1"/>
