@@ -13,7 +13,7 @@
 ]>
 <book id="booktest" lang="en">
  <bookinfo>
-  <title>Book Test</title>
+  <title>DocBook Book Test</title>
   <subtitle>Test Document for DAPS</subtitle>
   <productname>Testing Books</productname>
   <releaseinfo>Version 1.0</releaseinfo>
@@ -54,7 +54,7 @@
      voluptua.
     </para>
     <sect2 id="sec.booktest1.1.1">
-     <title>Section 2.1</title>
+     <title>Section 2.1 (itemizedlist)</title>
 <!-- Comment 2 -->
      <remark>Remark 2</remark>
      <itemizedlist>
@@ -72,7 +72,7 @@
      </itemizedlist>
     </sect2>
     <sect2 id="sec.booktest1.1.2">
-     <title>Section 2.2</title>
+     <title>Section 2.2 (orderedlist)</title>
      <orderedlist>
       <title>Ordered List</title>
       <listitem>
@@ -88,7 +88,7 @@
      </orderedlist>
     </sect2>
     <sect2 id="sec.booktest1.1.3">
-     <title>Section 2.3</title>  
+     <title>Section 2.3 (variablelist)</title>  
      <variablelist>
       <title>Variablelist</title>
       <varlistentry>
@@ -108,6 +108,69 @@
        </listitem>
       </varlistentry>
      </variablelist>
+    </sect2>
+    <sect2 id="sec.sec.booktest1.1.4">
+      <title>Section 2.4</title>
+      <itemizedlist>
+        <title>Nested Itemized List</title>
+        <listitem>
+          <para>First item</para>
+          <itemizedlist>
+            <listitem>
+              <para>First subitem</para>
+              <itemizedlist>
+                <listitem>
+                  <para>First subsubitem</para>
+                </listitem>
+                <listitem>
+                  <para>Second subsubitem</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+            <listitem>
+              <para>Second subitem</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>Second item</para>
+          <itemizedlist>
+            <listitem>
+              <para>First subitem</para>
+              <itemizedlist>
+                <listitem>
+                  <para>First item of level </para>
+                  <note>
+                    <title>A Short Note</title>
+                        <para>Lorem ipsum dolor sit amet, consetetur
+                          sadipscing elitr, sed diam nonumy eirmod
+                          tempor invidunt ut labore et dolore magna
+                          aliquyam erat, sed diam voluptua.</para>
+                  </note>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>Third item</para>
+          <note>
+            <title>Another Short Note</title>
+            <para>Here we have a itemizedlist inside note:</para>
+            <itemizedlist>
+              <listitem>
+                <para>First item</para>
+              </listitem>
+              <listitem>
+                <para>Second item</para>
+              </listitem>
+              <listitem>
+                <para>Third item</para>
+              </listitem>
+            </itemizedlist>
+          </note>
+        </listitem>
+      </itemizedlist>
     </sect2>
    </sect1>
   </chapter>
