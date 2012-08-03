@@ -3,7 +3,6 @@
    Purpose:  Contains customizations for footer
 -->
 
-
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:dp="urn:x-suse:xmlns:docproperties"
@@ -21,13 +20,9 @@
   <xsl:param name="node" select="/foo"/>
 
   <xsl:choose>
-    <xsl:when test="generate-id($node/ancestor-or-self::book) = generate-id(ancestor-or-self::book) and  
-                    count($node)&gt;0">
-        <xsl:value-of select="0"/>
-    </xsl:when>
-    <xsl:otherwise>
-        <xsl:value-of select="1"/>
-    </xsl:otherwise>
+    <xsl:when test="generate-id($node/ancestor-or-self::book) = generate-id(ancestor-or-self::book) 
+                    and count($node)&gt;0">0</xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
   </xsl:choose>
 
 </xsl:template>
@@ -38,180 +33,7 @@
 </xsl:template>
 
 
-<xsl:template name="bg.navigation">
-  <xsl:param name="node" select="."/>
-  
-  <xsl:if test="$generate.bgnavi != 0">
-    <!--<xsl:message>BG: <xsl:value-of select="name()"/></xsl:message>-->
-    <div class="bgnavi">
-      <p class="title">Quick Navigation:</p>
-      <xsl:choose>
-        <xsl:when test="/article">
-          <p class="bg-sect1">
-          <xsl:for-each select="ancestor-or-self::article/sect1">
-              <xsl:apply-templates select="." mode="bgnavi">
-                <xsl:with-param name="node" select="$node"/>
-              </xsl:apply-templates>
-          </xsl:for-each>
-          </p>
-        </xsl:when>
-        <xsl:when test="ancestor-or-self::article">
-          <p class="bg-sect1">
-          <xsl:for-each select="ancestor-or-self::article">
-              <xsl:apply-templates select="." mode="bgnavi">
-                <xsl:with-param name="node" select="$node"/>
-              </xsl:apply-templates>
-          </xsl:for-each>
-          </p>
-          <p class="bg-section">
-            <xsl:apply-templates select="ancestor-or-self::article/sect1" mode="bgnavi">
-              <xsl:with-param name="node" select="$node"/>
-            </xsl:apply-templates>
-          </p>
-        </xsl:when>
-        <xsl:otherwise>
-          <p class="bg-part">
-            <xsl:for-each select="ancestor-or-self::book/part">
-              <xsl:apply-templates select="." mode="bgnavi">
-                <xsl:with-param name="node" select="$node"/>
-              </xsl:apply-templates>
-            </xsl:for-each>
-            
-          </p>
-          <p class="bg-chapter">
-            <xsl:apply-templates select="ancestor-or-self::part/chapter" mode="bgnavi">
-              <xsl:with-param name="node" select="$node"/>
-            </xsl:apply-templates>
-          </p>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template match="text()" mode="bgnavi"/>
-
-<xsl:template match="part" mode="bgnavi">
-  <xsl:param name="node" select="."/>
-  
-  <span>
-    <xsl:choose>
-        <xsl:when test="generate-id(.) = generate-id($node/ancestor-or-self::part)">
-          <xsl:attribute name="class">bg-part-current</xsl:attribute>
-          <xsl:apply-templates select="self::part" mode="division.number"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="class">bg-part</xsl:attribute>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup"/>
-            </xsl:attribute>
-            <xsl:apply-templates select="self::part" mode="division.number"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-  </span>
-  <xsl:text> </xsl:text>
-</xsl:template>
-
-<xsl:template match="chapter" mode="bgnavi">
-  <xsl:param name="node" select="."/>
-  <xsl:variable name="num">
-    <xsl:apply-templates select="self::chapter" mode="label.markup"/>
-  </xsl:variable>
-  
-    <span>
-      <xsl:choose>
-        <xsl:when test="generate-id(.) = generate-id($node/ancestor-or-self::chapter)">
-          <xsl:attribute name="class">bg-chapter-current</xsl:attribute>
-          <xsl:value-of select="$num"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="class">bg-chapter</xsl:attribute>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup"/>
-            </xsl:attribute>
-            <xsl:value-of select="$num"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
-  <xsl:text> </xsl:text>
-</xsl:template>
-
-<xsl:template match="article" mode="bgnavi">
-   <xsl:param name="node" select="."/>
-   <xsl:variable name="num">
-    <xsl:apply-templates select="self::article" mode="label.markup"/>
-   </xsl:variable>
-  
-  <span>
-    <xsl:choose>
-      <xsl:when test="generate-id(.) = generate-id($node/ancestor-or-self::sect1)">
-        <xsl:attribute name="class">bg-article-current</xsl:attribute>
-        <xsl:value-of select="$num"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="class">bg-article</xsl:attribute>
-        <a>
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="."/>
-            </xsl:call-template>
-          </xsl:attribute>
-          <xsl:attribute name="title">
-            <xsl:apply-templates select="." mode="object.title.markup"/>
-          </xsl:attribute>
-          <xsl:value-of select="$num"/>
-        </a>
-        <xsl:text> </xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </span>
-</xsl:template>
-
-<xsl:template match="sect1" mode="bgnavi">
-  <xsl:param name="node" select="."/>
-  <xsl:variable name="num">
-    <xsl:apply-templates select="self::sect1" mode="label.markup"/>
-  </xsl:variable>
-
-    <span>
-      <xsl:choose>
-        <xsl:when test="generate-id(.) = generate-id($node/ancestor-or-self::sect1)">
-          <xsl:attribute name="class">bg-sect1-current</xsl:attribute>
-          <xsl:value-of select="$num"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="class">bg-sect1</xsl:attribute>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:call-template name="href.target">
-                <xsl:with-param name="object" select="."/>
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="title">
-              <xsl:apply-templates select="." mode="object.title.markup"/>
-            </xsl:attribute>
-            <xsl:value-of select="$num"/>
-          </a>
-          <xsl:text> </xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
-</xsl:template>
-
+<!-- ==================================================================== -->
 
 <xsl:template name="generate.link.line">
     <xsl:param name="prev" select="/foo"/>
@@ -219,8 +41,26 @@
     <xsl:param name="nav.context"/>
     <xsl:param name="orientation"/>
     
+   <xsl:variable name="homes" select="(/*[1] | key('id', $rootid) )"/>
+   <!-- last() gets either the key(...) node or the root nodes, if key()
+        does not return a result node
+   -->
+   <xsl:variable name="home" select="$homes[last()]"/>
+   <xsl:variable name="up" select="parent::*"/>
+   
+    <!--<xsl:message>generate.link.line:
+orientation: <xsl:value-of select="$orientation"/>
+      prev:  <xsl:value-of select="count($prev)"/>
+      next:  <xsl:value-of select="count($next)"/>
+      homes: <xsl:value-of select="count($homes)"/>
+      home:  <xsl:value-of select="local-name($home)"/>
+      first home: <xsl:value-of select="local-name($homes[1])"/>
+      last home:  <xsl:value-of select="local-name($homes[last()])"/>
+    </xsl:message>-->
+    
+    
     <xsl:if test="$suppress.navigation = '0' and
-                  $suppress.header.navigation = '0' and not(self::set)">
+                  $suppress.header.navigation = '0'">
       <!-- FIXME: Watch for $rootid -->
       
       <div class="nav{$orientation}">
@@ -237,9 +77,6 @@
                 <xsl:with-param name="debug" select="$orientation = 'header'"/>
               </xsl:call-template>
             </td>
-            <!--<td width="20%">
-              <xsl:call-template name="bg.navigation"/>
-            </td>-->
           </tr>
         </table>
         <xsl:if test="$use.meta != 0">
@@ -274,7 +111,6 @@
           <hr/>
         </xsl:if>
       </div>
-      
     </xsl:if>
     
 </xsl:template>
@@ -300,21 +136,22 @@
      node which points to the $rootid parameter
      
      For example:
-     node-set1: /, set, book, chapter
-     node-set2: /, set, 
-     setdiff:   book, chapter
+     node-set1: {/, set, book, chapter}
+     node-set2: {/, set, } 
+     setdiff:   {book, chapter}
      
   -->
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
   
-  <xsl:variable name="prevresult">
-    <xsl:call-template name="check.header.link">
-      <xsl:with-param name="node" select="$prev"/>
-    </xsl:call-template>
-  </xsl:variable>
-    
+    <xsl:variable name="prevresult">
+      <xsl:call-template name="check.header.link">
+        <xsl:with-param name="node" select="$prev"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="nextplus"
+      select="$next|following::*[1][ancestor::book = $this.book]"/>
     
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="breadcrumbs">
@@ -392,9 +229,14 @@
       </xsl:attribute>
       <xsl:apply-templates select="." mode="title.markup"/>
     </xsl:element>
-    <span class="breadcrumbs-sep">
-      <xsl:copy-of select="$breadcrumbs.separator"/>
-    </span>
+    <xsl:if
+      test="following-sibling::*[self::chapter|self::article|self::book
+                                 |self::part|self::preface|self::appendix|self::glossary
+                                 |self::bibliography]">
+      <span class="breadcrumbs-sep">
+        <xsl:copy-of select="$breadcrumbs.separator"/>
+      </span>
+    </xsl:if>
 </xsl:template>
 
 <!-- ==================================================================== -->
