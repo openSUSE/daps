@@ -16,15 +16,57 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template name="check.header.link">
-  <xsl:param name="node" select="/foo"/>
+<!--<xsl:template name="check.header.link">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="prev" select="/foo"/>
+  <xsl:param name="next" select="/foo"/>
 
+  <xsl:variable name="homes" select="(/*[1] | key('id', $rootid) )"/>
+   <!-\- last() gets either the key(...) node or the root nodes, if key()
+        does not return a result node
+   -\->
+  <xsl:variable name="home" select="$homes[last()]"/>
+  <xsl:variable name="up" select="parent::*"/>
+  
+  
   <xsl:choose>
     <xsl:when test="generate-id($node/ancestor-or-self::book) = generate-id(ancestor-or-self::book) 
                     and count($node)&gt;0">0</xsl:when>
     <xsl:otherwise>1</xsl:otherwise>
   </xsl:choose>
 
+</xsl:template>-->
+
+
+<xsl:template name="check.prev.link">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="prev"/>
+  <xsl:variable name="prev.book" 
+    select="$prev/ancestor-or-self::*[self::article | self::book][1]"/>
+  <xsl:variable name="this.book" select="ancestor-or-self::book"/>
+  
+  <xsl:choose>
+    <xsl:when test="$rootid != '' and
+                    count(key('id', $rootid))>0 and
+                    generate-id($prev.book) = generate-id($this.book)">0</xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="check.next.link">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="next"/>
+  <xsl:variable name="next.book" 
+    select="$next/ancestor-or-self::*[self::article | self::book][1]"/>
+  <xsl:variable name="this.book" select="ancestor-or-self::book"/>
+  
+  <xsl:choose>
+    <xsl:when test="$rootid != '' and
+                    count(key('id', $rootid))>0 and
+                    generate-id($next.book) = generate-id($this.book)">0</xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
+  </xsl:choose>
+  
 </xsl:template>
 
 
@@ -46,7 +88,7 @@
         does not return a result node
    -->
    <xsl:variable name="home" select="$homes[last()]"/>
-   <xsl:variable name="up" select="parent::*"/>
+
    
     <!--<xsl:message>generate.link.line:
 orientation: <xsl:value-of select="$orientation"/>
@@ -138,7 +180,7 @@ orientation: <xsl:value-of select="$orientation"/>
      For example:
      node-set1: {/, set, book, chapter}
      node-set2: {/, set, } 
-     setdiff:   {book, chapter}
+     setdiff:   {        book, chapter}
      
   -->
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
@@ -146,12 +188,15 @@ orientation: <xsl:value-of select="$orientation"/>
                                 != count($ancestorrootnode)]"/>
   
     <xsl:variable name="prevresult">
-      <xsl:call-template name="check.header.link">
-        <xsl:with-param name="node" select="$prev"/>
+      <xsl:call-template name="check.prev.link">
+        <xsl:with-param name="prev" select="$prev"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="nextplus"
-      select="$next|following::*[1][ancestor::book = $this.book]"/>
+    <xsl:variable name="nextresult">
+      <xsl:call-template name="check.next.link">
+        <xsl:with-param name="next" select="$next"/>
+      </xsl:call-template>
+    </xsl:variable>
     
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="breadcrumbs">
@@ -195,7 +240,7 @@ orientation: <xsl:value-of select="$orientation"/>
 </xsl:if>
 -->
               
-              <xsl:if test="count(following-sibling::*[1])">
+              <xsl:if test="$nextresult=0">
                   <xsl:text> </xsl:text>
                   <a accesskey="n">
                     <xsl:attribute name="title">
@@ -229,10 +274,10 @@ orientation: <xsl:value-of select="$orientation"/>
       </xsl:attribute>
       <xsl:apply-templates select="." mode="title.markup"/>
     </xsl:element>
-    <xsl:if
-      test="following-sibling::*[self::chapter|self::article|self::book
-                                 |self::part|self::preface|self::appendix|self::glossary
-                                 |self::bibliography]">
+    <xsl:if test="following-sibling::*[
+                    self::chapter|self::article|self::book
+                    |self::part|self::preface|self::appendix|self::glossary
+                    |self::sect1|self::bibliography]">
       <span class="breadcrumbs-sep">
         <xsl:copy-of select="$breadcrumbs.separator"/>
       </span>
