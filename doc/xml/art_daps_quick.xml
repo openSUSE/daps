@@ -407,7 +407,7 @@
    </step>
    <step>
     <para>
-     In case the specified directory does not exists, &dapsacr; asks if to
+     In case the specified directory does not exists, &dapsacr; asks whether to
      create it. Proceed by pressing <keycap>y</keycap> or
      <keycap>n</keycap>.
     </para>
@@ -1098,19 +1098,19 @@ make: *** [validate] Error 3</screen>
   </procedure>
 
   <para>
-   If you already used &dapsacr;' predecessor <literal>susedoc</literal>,
+   If you have already used &dapsacr;' predecessor <literal>susedoc</literal>,
    use the <filename>/usr/bin/daps-envconvert</filename> script for
    migrating your ENV files to &dc; files. For a short overview of the main
    changes, refer to
    <filename>/usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x</filename>.
    In contrast to susedoc, &dapsacr; uses the DocBook layout by default. The
-   &suse;-stylesheets have been moved to a separate package,
+   &suse; stylesheets have been moved to a separate package,
    <systemitem class="resource">suse-xsl-stylesheets</systemitem>. It is
    available from the &suse-dapsrepo; repository. If you want to continue
    using the &suse;-layout for your documentation projects, install this
    package in addition to &dapsacr;. To make &dapsacr; use the &suse;
    layout, adjust the <parameter>STYLEROOT</parameter> parameter in the &dc;
-   files of your documentation projetcs.
+   files of your documentation projects.
 <!--taroth 2012-04-30: enable this xref as soon
   as chapter contains some information: For more information, refer to 
   <xref linkend="cha.daps.user.layout"/>.-->
