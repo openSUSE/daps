@@ -1,5 +1,6 @@
 ## ---------------------------- 
 ## Doc Config File for testing
+## DocBook Book Test
 ## ----------------------------
 ##
 ## Basics
@@ -14,4 +15,13 @@ MAIN="xml/book.xml"
 #PROFOS="os2"
 #PROFVENDOR="vendor1"
 #PROFVENDOR="vendor2"
+
+## stylesheet location
+STYLEROOT="/usr/share/xml/docbook/stylesheet/suse"
+HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css"
+EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
+
+
+## enable sourcing
+export DOCCONF=$BASH_SOURCE
 
