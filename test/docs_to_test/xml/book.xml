@@ -27,12 +27,10 @@
    </para>
   </legalnotice>
  </bookinfo>
- <part id="part.booktest1">
-  <title>Part 1</title>
-  <chapter id="cha.booktest1">
-   <title>Block Elements</title>
-<!-- Comment 1 -->
-   <remark>Remark 1</remark>
+ <part id="blocks">
+  <title>Block Elements</title>
+  <chapter id="lists">
+   <title>Lists</title>
    <abstract>
     <para>
      Abstract: Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed
@@ -46,15 +44,9 @@
      est Lorem ipsum dolor sit amet.
     </para>
    </abstract>
-   <sect1 id="sec.booktest1.1">
-    <title>Lists</title>
-    <para>
-     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-     eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-     voluptua.
-    </para>
-    <sect2 id="sec.booktest1.1.1">
-     <title>Section 1.1.1 (itemizedlist)</title>
+   
+    <sect1 id="lists.itemizedlists">
+     <title>Itemizedlist</title>
 <!-- Comment 2 -->
      <remark>Remark 2</remark>
      <itemizedlist>
@@ -75,9 +67,9 @@
          <para>Listitem 3</para>
       </listitem>
      </itemizedlist>
-    </sect2>
-    <sect2 id="sec.booktest1.1.2">
-     <title>Section 1.1.2 (orderedlist)</title>
+    </sect1>
+    <sect1 id="lists.orderedlists">
+     <title>Orderedlist</title>
      <orderedlist>
       <title>Ordered List</title>
       <listitem>
@@ -94,41 +86,36 @@
          <para>Third item</para>
       </listitem>
      </orderedlist>
-    </sect2>
-    <sect2 id="sec.booktest1.1.3">
-     <title>Section 1.1.3 (variablelist)</title>  
-     <variablelist>
-      <title>Variablelist</title>
-      <varlistentry>
-       <term>Term 1</term>
-       <listitem>
-        <para>
-         Definition 1
-        </para>
-       </listitem>
-      </varlistentry>
-      <varlistentry>
-       <term>Term 2</term>
-       <listitem>
-        <para>
-         Definition 2: Lorem ipsum dolor sit amet, consetetur sadipscing 
-         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-         magna aliquyam erat, sed diam voluptua.
-        </para>
-       </listitem>
-      </varlistentry>
-      <varlistentry>
-       <term>Term 3</term>
-       <listitem>
-        <para>
-         Definition 3
-        </para>
-       </listitem>
-      </varlistentry>
-     </variablelist>
-    </sect2>
-    <sect2 id="sec.booktest1.1.4">
-      <title>Section 1.1.4: Nested Itemized Lists</title>
+    </sect1>
+    <sect1 id="lists.variablelists">
+     <title>Variablelist</title>
+     <variablelist id="variablelist">
+            <title>Variablelist</title>
+            <varlistentry>
+              <term>Term 1</term>
+              <listitem>
+                <para> Definition 1 </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Term 2</term>
+              <listitem>
+                <para> Definition 2: Lorem ipsum dolor sit amet,
+                  consetetur sadipscing elitr, sed diam nonumy eirmod
+                  tempor invidunt ut labore et dolore magna aliquyam
+                  erat, sed diam voluptua. </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Term 3</term>
+              <listitem>
+                <para> Definition 3 </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+    </sect1>
+    <sect1 id="lists.nesteditemizedlists">
+      <title>Nested Itemized Lists</title>
       <itemizedlist>
         <title>Nested Itemized List</title>
         <listitem>
@@ -224,9 +211,61 @@
               </listitem>
             </varlistentry>
           </variablelist>
-    </sect2>
-    <sect2 id="sec.booktest1.1.5">
-      <title>Section 1.1.5: Lists with Para Inside</title>
+    </sect1>
+    <sect1 id="lists.nestedorderedlists">
+      <title>Nested Ordered Lists</title>
+      <orderedlist>
+        <listitem>
+          <para>First item. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.</para>
+          <orderedlist>
+            <listitem>
+              <para>First subitem. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua. </para>
+            </listitem>
+            <listitem>
+              <para>Second subitem. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.</para>
+              <orderedlist>
+                <listitem>
+                  <para>First subsubitem. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.</para>
+                  <orderedlist>
+                    <listitem>
+                      <para>First item of level 4. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.</para>
+                    </listitem>
+                    <listitem>
+                      <para>Second item of level 4. <literal>Lorem ipsum</literal> dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua. </para>
+                    </listitem>
+                  </orderedlist>
+                </listitem>
+                <listitem>
+                  <para>Second subsubitem</para>
+                </listitem>
+              </orderedlist>
+            </listitem>
+            <listitem>
+              <para>Third subitem</para>
+            </listitem>
+          </orderedlist>
+        </listitem>
+        <listitem>
+          <para>Second item. Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.</para>
+        </listitem>
+      </orderedlist>
+    </sect1>
+    <sect1 id="lists.parainside">
+      <title>Lists with Para Inside</title>
       <itemizedlist>
         <title>Itemized List with Para Inside</title>
          <para>Lorem ipsum dolor sit amet, consetetur sadipscing
@@ -273,11 +312,13 @@
        </listitem>
       </varlistentry>
      </variablelist>
-    </sect2>
-   </sect1>
-   <sect1 id="sec.booktest1.2">
+    </sect1>
+   
+  </chapter>
+   <chapter id="tables">
      <title>Tables</title>
-     <sect2 id="sec.booktest.1.2.1">
+   
+     <sect1 id="tables.plain">
        <title>Plain Tables</title>
        
        <table id="tab.simple-table">
@@ -398,56 +439,24 @@
            </tbody>
          </tgroup>
        </table>
-     </sect2>
+     </sect1>
      
-   </sect1>
-  </chapter>
+     
+   </chapter>
  </part>
- <part id="part.booktest2">
-  <title>Part 2</title>
-  <chapter id="cha.booktest2">
-   <title>Chapter Two</title>
-   <sect1 id="sec.booktest2.1">
-    <title>Section 1</title>
-    
-    <table>
-     <title>Sep Table</title>
-     <tgroup cols="4" colsep="1" rowsep="1">
-      <colspec colnum="1" colname="1" colwidth="25*"/>
-      <colspec colnum="2" colname="2" colwidth="25*"/>
-      <colspec colnum="3" colname="3" colwidth="25*"/>
-      <colspec colnum="4" colname="4" colwidth="25*"/>
-      <thead>
-       <row>
-        <entry><para>Col 1</para></entry>
-        <entry><para>Col 2</para></entry>
-        <entry><para>Col 3</para></entry>
-        <entry><para>Col 4</para></entry>
-       </row>
-      </thead>
-      <tbody>
-       <row>
-        <entry><para>Row 1, Cell 1</para></entry>
-        <entry><para>Row 1, Cell 2</para></entry>
-        <entry><para>Row 1, Cell 3</para></entry>
-        <entry><para>Row 1, Cell 4</para></entry>
-       </row>
-       <row>
-        <entry><para>Row 2, Cell 1</para></entry>
-        <entry><para>Row 2, Cell 2</para></entry>
-        <entry><para>Row 2, Cell 3</para></entry>
-        <entry><para>Row 2, Cell 4</para></entry>
-       </row>
-      </tbody>
-     </tgroup>
-    </table>
-   </sect1>
-  </chapter>
+ <part id="inlines">
+   <title>Inline Elements</title>
+   <chapter id="links-and-xrefs">
+     <title>Links and Cross References</title>
+     <abstract>
+       <para>Lore ipsum...</para>
+     </abstract>
+   </chapter>
  </part>
- <part id="part.booktest3">
-  <title>Part 3</title>
+  <part id="profiling">
+  <title>Profiling</title>
   <chapter id="cha.booktest3">
-   <title>Chapter</title>
+   <title>Profiling</title>
    <sect1 id="sec.booktest3.1">
     <title>Section 1.1</title>
     <para os="arch1">para with os=arch1</para>
@@ -470,37 +479,5 @@
    
   </chapter>
  </part>
-<!--
-  <sect1 id="sec.template.examples.images">
-   <title>Images</title>
-   <para>
-    This section 1 shows two types of images:  with and without a
-    headline. 
-   </para>
-   <figure>
-    <title>Basketball Player</title>
-    <mediaobject>
-     <imageobject role="fo">
-      <imagedata fileref="example2.png" width="75%" format="PNG"/>
-     </imageobject>
-     <imageobject role="html">
-      <imagedata fileref="example2.png" width="75%" format="PNG"/>
-     </imageobject>
-    </mediaobject>
-   </figure>
-   <para>
-    And now an image without headline:
-   </para>
-   <informalfigure>
-    <mediaobject>
-     <imageobject role="fo">
-      <imagedata fileref="example1.png" width="75%" format="PNG"/>
-     </imageobject>
-     <imageobject role="html">
-      <imagedata fileref="example1.png" width="75%" format="PNG"/>
-     </imageobject>
-    </mediaobject>
-   </informalfigure>
-  </sect1>
--->
+
 </book>
