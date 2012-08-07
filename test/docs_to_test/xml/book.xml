@@ -449,7 +449,27 @@
             </tbody>
           </tgroup>
         </table>
-
+        
+        <para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+          sed diam nonumy eirmod tempor invidunt ut labore et dolore
+          magna aliquyam erat, sed diam voluptua. </para>        
+        <table>
+          <title>Table with Screen and Different Column Width (1*/2*)</title>
+          <tgroup cols="2">
+            <colspec colname="c1" colwidth="1*"/>
+            <colspec colname="c2" colwidth="2*"/>
+            <tbody>
+              <row>
+                <entry>Lorem ipsum</entry>
+                <entry>
+                  <screen>xsltproc --output foo-bar.fo $DB/fo/docbook.xsl<!--
+                --> foo.xml</screen>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        
       </sect1>
 
       <sect1 id="tables.hspan">
@@ -461,15 +481,28 @@
             <colspec colname="c2"/>
             <tbody>
               <row>
-                <entry namest="c1" nameend="c2" align="center">Spanned Entry</entry>
+                <entry namest="c1" nameend="c2"
+                  align="center">Horizontal Spanned Entry (centered)</entry>
               </row>
               <row>
                 <entry>Entry 1</entry>
                 <entry>Entry 2</entry>
               </row>
               <row>
+                <entry namest="c1" nameend="c2"
+                  align="left">Horizontal Spanned Entry (left aligned)</entry>
+              </row>
+              <row>
                 <entry>Entry 3</entry>
                 <entry>Entry 4</entry>
+              </row>
+              <row>
+                <entry namest="c1" nameend="c2"
+                  align="right">Horizontal Spanned Entry (right aligned)</entry>
+              </row>
+              <row>
+                <entry>Entry 5</entry>
+                <entry>Entry 6</entry>
               </row>
             </tbody>
           </tgroup>
@@ -482,11 +515,30 @@
         <table>
           <title>Vertical Span</title>
           <tgroup cols="2">
-            <colspec colname="c1"/>
-            <colspec colname="c2"/>
             <tbody>
-              <row rowsep="1">
-                <entry></entry>
+              <row>
+                <entry morerows="1" valign="middle">Middle Entry</entry>
+                <entry>Entry 2</entry>
+              </row>
+              <row>
+                <!-- -->
+                <entry>Entry 3</entry>
+              </row>
+              <row>
+                <entry morerows="1" valign="top">Top Entry</entry>
+                <entry>Entry 5</entry>
+              </row>
+              <row>
+                <!--  -->
+                <entry>Entry 6</entry>
+              </row>
+              <row>
+                <entry morerows="1" valign="bottom">Bottom Entry</entry>
+                <entry>Entry 8</entry>
+              </row>
+              <row>
+                <!--  -->
+                <entry>Entry 9</entry>
               </row>
             </tbody>
           </tgroup>
