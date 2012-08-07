@@ -3,8 +3,8 @@
                  type="text/xml" title="Profiling step"?>
 <!DOCTYPE book PUBLIC
  "-//OASIS//DTD DocBook XML V4.5//EN"
- "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" 
+[
   <!ENTITY % entities SYSTEM "entity-decl.ent">
   %entities;
   <!ENTITY ent3 "Entity3">
@@ -30,7 +30,7 @@
  <part id="part.booktest1">
   <title>Part 1</title>
   <chapter id="cha.booktest1">
-   <title>Chapter One</title>
+   <title>Block Elements</title>
 <!-- Comment 1 -->
    <remark>Remark 1</remark>
    <abstract>
@@ -47,7 +47,7 @@
     </para>
    </abstract>
    <sect1 id="sec.booktest1.1">
-    <title>Section 1.1: Lists</title>
+    <title>Lists</title>
     <para>
      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
      eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
@@ -66,8 +66,13 @@
       </listitem>
       <listitem>
        <para>
-        Listitem 2
+         Listitem 2: Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.
        </para>
+      </listitem>
+      <listitem>
+         <para>Listitem 3</para>
       </listitem>
      </itemizedlist>
     </sect2>
@@ -84,6 +89,9 @@
        <para>
         Second item
        </para>
+      </listitem>
+      <listitem>
+         <para>Third item</para>
       </listitem>
      </orderedlist>
     </sect2>
@@ -103,14 +111,24 @@
        <term>Term 2</term>
        <listitem>
         <para>
-         Definition 2
+         Definition 2: Lorem ipsum dolor sit amet, consetetur sadipscing 
+         elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+         magna aliquyam erat, sed diam voluptua.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>Term 3</term>
+       <listitem>
+        <para>
+         Definition 3
         </para>
        </listitem>
       </varlistentry>
      </variablelist>
     </sect2>
     <sect2 id="sec.booktest1.1.4">
-      <title>Section 1.1.4: Nested Itemized List</title>
+      <title>Section 1.1.4: Nested Itemized Lists</title>
       <itemizedlist>
         <title>Nested Itemized List</title>
         <listitem>
@@ -171,6 +189,41 @@
           </note>
         </listitem>
       </itemizedlist>
+      <para>Special test for SUSE Cloud:</para>
+          <variablelist>
+            <varlistentry>
+              <term>A Term</term>
+              <listitem>
+                <para> Lorem ipsum dolor sit amet, consetetur sadipscing
+                  elitr, sed diam nonumy eirmod tempor invidunt ut
+                  labore et dolore magna aliquyam erat, sed diam
+                  voluptua. </para>
+                <note>
+                  <title>Network Requirement Summary</title>
+                  <itemizedlist>
+                    <listitem>
+                      <para> Listitem 1 </para>
+                    </listitem>
+                    <listitem>
+                      <para> Listitem 2 </para>
+                    </listitem>
+                    <listitem>
+                      <para> Listitem 3 </para>
+                    </listitem>
+                    <listitem>
+                      <para> Listitem 4 </para>
+                    </listitem>
+                    <listitem>
+                      <para> Listitem 5 </para>
+                    </listitem>
+                    <listitem>
+                      <para> Listitem 6 </para>
+                    </listitem>
+                  </itemizedlist>
+                </note>
+              </listitem>
+            </varlistentry>
+          </variablelist>
     </sect2>
     <sect2 id="sec.booktest1.1.5">
       <title>Section 1.1.5: Lists with Para Inside</title>
@@ -222,6 +275,138 @@
      </variablelist>
     </sect2>
    </sect1>
+   <sect1 id="sec.booktest1.2">
+     <title>Tables</title>
+     <sect2 id="sec.booktest.1.2.1">
+       <title>Plain Tables</title>
+       
+       <table id="tab.simple-table">
+         <title>A Simple Table</title>
+         <tgroup cols="2">
+           <tbody>
+             <row>
+               <entry>Entry 1</entry>
+               <entry>Entry 2</entry>
+             </row>
+             <row>
+               <entry>Entry 3</entry>
+               <entry>Entry 4</entry>
+             </row>
+           </tbody>
+         </tgroup>
+       </table>
+       <para>
+         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+         voluptua.
+       </para>
+       
+       <table id="tab.simple-table-with-header">
+         <title>A Simple Table With Header</title>
+         <tgroup cols="2">
+           <thead>
+             <row>
+               <entry>Head 1</entry>
+               <entry>Head 2</entry>
+             </row>
+           </thead>
+           <tbody>
+             <row>
+               <entry>Entry 1</entry>
+               <entry>Entry 2</entry>
+             </row>
+             <row>
+               <entry>Entry 3</entry>
+               <entry>Entry 4</entry>
+             </row>
+           </tbody>
+         </tgroup>
+       </table>
+       <para>
+         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+         voluptua.
+       </para>
+       
+       <table id="tab.table-with-four-columns">
+         <title>Table with Header and 4 Columns</title>
+         <tgroup cols="4">
+           <colspec colnum="1" colname="1" colwidth="25*"/>
+           <colspec colnum="2" colname="2" colwidth="25*"/>
+           <colspec colnum="3" colname="3" colwidth="25*"/>
+           <colspec colnum="4" colname="4" colwidth="25*"/>
+           <thead>
+             <row>
+               <entry><para>Col 1</para></entry>
+               <entry><para>Col 2</para></entry>
+               <entry><para>Col 3</para></entry>
+               <entry><para>Col 4</para></entry>
+             </row>
+           </thead>
+           <tbody>
+             <row>
+               <entry><para>Row 1, Cell 1</para></entry>
+               <entry><para>Row 1, Cell 2</para></entry>
+               <entry><para>Row 1, Cell 3</para></entry>
+               <entry><para>Row 1, Cell 4</para></entry>
+             </row>
+             <row>
+               <entry><para>Row 2, Cell 1</para></entry>
+               <entry><para>Row 2, Cell 2</para></entry>
+               <entry><para>Row 2, Cell 3</para></entry>
+               <entry><para>Row 2, Cell 4</para></entry>
+             </row>
+           </tbody>
+         </tgroup>
+       </table>
+       <para>
+         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+         voluptua.
+       </para>
+       
+       <table id="tab-table-with-long-lines">
+         <title>Table with Long Lines</title>
+         <tgroup cols="2">
+           <tbody>
+             <row>
+               <entry>Lorem ipsum</entry>
+               <entry>At vero eos et accusam et justo duo dolores et
+     ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+     ipsum dolor sit amet.</entry>
+             </row>
+           </tbody>
+         </tgroup>
+       </table>
+       
+       <para>
+         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+         eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+         voluptua.
+       </para>
+       <table id="tab-table-with-screen">
+         <title>Table with Long Lines</title>
+         <tgroup cols="2">
+           <tbody>
+             <row>
+               <entry>Lorem ipsum</entry>
+               <entry>
+                 <screen>xsltproc --output foo-bar.fo $DB/fo/docbook.xsl<!--
+                --> foo.xml</screen>
+               </entry>
+             </row>
+           </tbody>
+         </tgroup>
+       </table>
+     </sect2>
+     
+     <sect2>
+       <title></title>
+       <table>
+         <title></title>
+       </table>
+     </sect2>
+   </sect1>
   </chapter>
  </part>
  <part id="part.booktest2">
@@ -230,37 +415,7 @@
    <title>Chapter Two</title>
    <sect1 id="sec.booktest2.1">
     <title>Section 1</title>
-    <table>
-     <title>Plain Table</title>
-     <tgroup cols="4">
-      <colspec colnum="1" colname="1" colwidth="25*"/>
-      <colspec colnum="2" colname="2" colwidth="25*"/>
-      <colspec colnum="3" colname="3" colwidth="25*"/>
-      <colspec colnum="4" colname="4" colwidth="25*"/>
-      <thead>
-       <row>
-        <entry><para>Col 1</para></entry>
-        <entry><para>Col 2</para></entry>
-        <entry><para>Col 3</para></entry>
-        <entry><para>Col 4</para></entry>
-       </row>
-      </thead>
-      <tbody>
-       <row>
-        <entry><para>Row 1, Cell 1</para></entry>
-        <entry><para>Row 1, Cell 2</para></entry>
-        <entry><para>Row 1, Cell 3</para></entry>
-        <entry><para>Row 1, Cell 4</para></entry>
-       </row>
-       <row>
-        <entry><para>Row 2, Cell 1</para></entry>
-        <entry><para>Row 2, Cell 2</para></entry>
-        <entry><para>Row 2, Cell 3</para></entry>
-        <entry><para>Row 2, Cell 4</para></entry>
-       </row>
-      </tbody>
-     </tgroup>
-    </table>
+    
     <table>
      <title>Sep Table</title>
      <tgroup cols="4" colsep="1" rowsep="1">
