@@ -52,7 +52,7 @@
             <xsl:otherwise>10pt</xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
-        <xsl:attribute name="start-indent">
+        <xsl:attribute name="margin-left">
           <xsl:choose>
             <xsl:when test="parent::procedure or
                             parent::listitem or
