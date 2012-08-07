@@ -1,0 +1,225 @@
+body {
+    background-color: #FFF;
+    font-family: Open Sans, sans-serif;
+    margin: 0;
+}
+
+.wrap {
+    margin: 0 auto;
+    min-width: 500px;
+    max-width: 1018px;
+    background-color: transparent;
+    padding: 0 10px;
+    position: relative; /* to be able to position the lucky charms(TM) absolutely*/
+}
+
+body > .wrap {
+    padding-top: 33px;
+}
+
+/* Header Area */
+
+#logo {
+    float: left;
+    padding: 22px 22px 22px 0;
+    position: relative;
+    top: -33px;
+}
+
+#crumbs {
+    position: absolute;
+    top: 33px;
+    left: 100px;
+    height: 36px !important;
+    overflow: hidden;
+}
+
+#crumbs a, #crumbs span {
+    height: 36px;
+    font-size: 15px;
+    line-height: 36px;
+    display: block;
+    float: left;
+    padding-left: 5px;
+}
+
+.book-icon {
+    background: url(style_images/icons.png) no-repeat scroll 0px 0px;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+}
+
+
+.book-icon:hover {
+    background: url(style_images/icons.png) no-repeat scroll 0px -36px;
+    margin: 0;
+}
+
+#crumbs span {
+    color: #B9B9B9;
+}
+
+#crumbs a {
+    color: #464547;
+    text-decoration: none;
+}
+
+#crumbs a:hover {
+    color: #00843E;
+    text-decoration: none;
+}
+
+#bg-positioner {
+    background: url(style_images/dottery.png) repeat-x scroll top;
+    min-height: 139px;
+    clear: both;
+    position: relative;
+    top: -33px;
+    min-width: 520px;
+}
+
+/* Sidebar */
+
+#lucky-charms {
+    position: absolute;
+    top: 33px;
+    right: 0px;
+    background-color: #FFF;
+    box-shadow: -5px 0 5px 0 #FFF;
+    padding-left: 17px;
+}
+
+#lucky-charms a {
+    text-decoration: none;
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+
+.toc-icon {
+    background: url(style_images/icons.png) no-repeat scroll -36px 0px;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+}
+
+
+.toc-icon:hover {
+    background: url(style_images/icons.png) no-repeat scroll -36px -36px;
+    margin: 0;
+}
+
+.find-icon {
+    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+}
+
+
+.find-icon:hover {
+    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
+    margin: 0;
+}
+
+.tools-icon {
+    background: url(style_images/icons.png) no-repeat scroll -108px 0px;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+}
+
+
+.tools-icon:hover {
+    background: url(style_images/icons.png) no-repeat scroll -108px -36px;
+    margin: 0;
+}
+
+/* Content Area */
+
+#content {
+/* tbc... */
+}
+
+.nav-buttons {
+    float: right;
+    margin-top: 17px;
+    width: 50px;
+    margin-left: 19px;
+}
+
+
+.nav-buttons a {
+    display: inline;
+    margin: 0;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 28px;
+    color: #B9B9B9;
+}
+.nav-buttons a:hover {
+    color: #00843E;
+}
+
+.nav-buttons a:first-child {
+    margin-right: 10px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: normal;
+    padding: 10px 0 0 0;
+    margin: 0;
+}
+
+.chapter {
+    color: #00843E;
+}
+
+.number {
+    color: #b9b9b9;
+}
+
+.permalink {
+    display: none;
+    font-size: 15px;
+    text-decoration: none;
+    color: #B9B9B9;
+}
+
+.permalink:hover {
+    color: #00843E;
+}
+
+h2:hover .permalink {
+    display: inline;
+}
+
+.page-toc {
+    padding: 17px;
+    margin: 0;
+}
+
+.line {
+    margin: 0 0 36px 0;
+    padding: 0;
+    border-bottom: 1px solid #00843E;
+    width: 100%;
+}
+
+.page-toc a {
+        text-decoration: none;
+}
+
+.page-toc a:hover .chapter {
+    text-decoration: underline !important;
+}
+
+#content p {
+    font-size: 15px;
+}
+
+#content .abstract {
+    font-weight: bold;
+}

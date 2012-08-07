@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>openSUSE 12.2: Chapter 5. Installing or Removing Software</title>
+  <link rel="stylesheet" type="text/css" href="susebooks.css"/>
+  <meta name="generator" content="DocBook XSL Stylesheets V1.77.1"/>
+  <link rel="self" href="cha.y2.sw.html" title="Installing or Removing Software"/>
+  <link rel="home" href="index.html" title="openSUSE Documentation"/>
+  <link rel="up" href="part.reference.software.html" title="Part II. Managing and Updating Software"/>
+  <link rel="previous" href="part.reference.software.html"
+   title="Part II. Managing and Updating Software"/>
+  <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
+ </head>
+<body>
+    <div class="wrap">
+        <div id="logo"><img src="style_images/logo.png" alt="SUSE" /></div>
+        <div id="crumbs">
+            <a href="index.html" title="Documentation" alt="Documentation"><div class="book-icon">&nbsp;</div></a>
+            <span> » </span>
+            <a href="book.opensuse.startup.html">Start-Up</a>
+            <span> » </span>
+            <a href="part.reference.software.html">Managing and Updating Software rfgfsd gseg dfgs dfg sdfgsdfgs df gsdfg  sdfgsd gs dfgsdf gsdfg</a>
+        </div>
+        <div id="lucky-charms">
+            <a href="#contents" title="Contents"><div class="toc-icon">&nbsp;</div></a>
+            <a href="#find" title="Find"><div class="find-icon">&nbsp;</div></a>
+            <a href="#tools" title="Page Tools"><div class="tools-icon">&nbsp;</div></a>
+        </div>
+    </div>
+    <div id="bg-positioner">
+        <div class="wrap">
+            <div id="content">
+                <div style="height: 0; width: 100%" />
+                <div class="nav-buttons">
+                    <a accesskey="p" title="Part II. Managing and Updating Software" href="part.reference.software.html">◀</a>
+                    <a accesskey="n" title="Chapter 6. YaST Online Update" href="cha.onlineupdate.you.html">▶</a>
+                </div>
+                <div class="line">
+                    <h2 class="title">
+                        <a id="cha.y2.sw"/>
+                        <span class="number">5. </span>
+                        <span class="chapter">Installing or Removing Software</span>
+                        <a class="permalink" title="Permalink" href="#cha.y2.sw"> #</a>
+                    </h2>
+                    <dl class="page-toc">
+                        <dt>
+                            <span class="sect1">
+                                <a href="cha.y2.sw.html#sec.onlineupdate.terms"><span class="number">5.1. </span><span class="chapter">Definition of Terms</span></a>
+                            </span>
+                        </dt>
+                        <dt>
+                            <span class="sect1">
+                                <a href="cha.y2.sw.html#sec.y2.sw.qt"><span class="number">5.2. </span><span class="chapter">Using the KDE Interface (Qt)</span></a>
+                            </span>
+                        </dt>
+                        <dt>
+                            <span class="sect1">
+                                <a href="cha.y2.sw.html#sec.y2.sw.gtk"><span class="number">5.3. </span><span class="chapter">Using the GNOME Interface (GTK+)</span></a>
+                            </span>
+                        </dt>
+                        <dt>
+                            <span class="sect1">
+                                <a href="cha.y2.sw.html#sec.y2.sw.instsource"><span class="number">5.4. </span><span class="chapter">Managing Software Repositories and Services</span></a>
+                            </span>
+                        </dt>
+                        <dt>
+                            <span class="sect1">
+                                <a href="cha.y2.sw.html#sec.updater"><span class="number">5.5. </span><span class="chapter">Keeping the System Up-to-date</span></a>
+                            </span>
+                        </dt>
+                    </dl>
+                </div>
+                <a id="id2625969" class="indexterm"/>
+                <a id="id2625977" class="indexterm"/>
+                <p class="abstract">Use YaST's software management tool to search for software components you want to add or 
+                remove. YaST resolves all dependencies for you. To install packages not shipped with the
+                installation media, add additional software repositories to your setup and let YaST manage
+                them. Keep your system up-to-date by managing software updates with the update applet.</p>
+                <p> Change the software collection of your system with YaST Software Manager. This YaST module is
+                available in three toolkit flavors: Qt (for KDE desktops), GTK+ (for GNOME desktops), and
+                ncurses (providing a pseudo-graphical user interface in text mode). This chapter describes Qt
+                and GTK+ flavors—for details on the ncurses YaST, see
+                <a class="xref" href="cha.yast.text.html" title="Chapter 12. YaST in Text Mode">Chapter 12, <em>YaST in Text Mode</em></a>.</p>
+   <div class="tip">
+    <table border="0" cellpadding="3" cellspacing="0" width="100%"
+     summary="Tip: Changing the Toolkit Flavor">
+     <tr class="head">
+      <td width="32">
+       <img alt="[Tip]" src="style_images/tip.png"/>
+      </td>
+      <th align="left">Changing the Toolkit Flavor</th>
+     </tr>
+     <tr>
+      <td colspan="2" align="left" valign="top">
+       <p> By default, YaST is started with the toolkit matching your desktop (GTK+ under GNOME, Qt
+        under KDE). To alter this default setting system-wide, change the variable <code
+         class="literal">WANTED_GUI</code> in <code class="filename">/etc/sysconfig/yast2</code> to
+        either <code class="literal">qt</code> or <code class="literal">gtk</code>. </p>
+       <p> If you do not want to change the system-wide settings, you can nevertheless start YaST in
+        the desired flavor from command line by using the <code class="option">--gtk</code> or <code
+         class="option">--qt</code>. For example: <span class="command">
+         <strong>yast2 --gtk</strong>
+        </span>. </p>
+      </td>
+     </tr>
+    </table>
+   </div>
+            </div>
+ </body>
+</html>
