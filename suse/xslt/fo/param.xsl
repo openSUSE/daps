@@ -220,12 +220,13 @@ set       nop
    >.,%?&amp;#\~+{_-</xsl:param>
 <xsl:param name="ulink.hyphenate.after.chars"
    >/:@=};</xsl:param>
+<xsl:param name="hyphenate.verbatim" select="1"/>
 
 <!-- Debug Parameters -->
 <xsl:param name="debug.fonts" select="1"/>
 
-
 <!--  -->
 <xsl:param name="orderedlist.label.width">1em</xsl:param>
+
 
 </xsl:stylesheet>
