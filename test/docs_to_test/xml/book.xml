@@ -532,7 +532,6 @@
                 <entry>Entry 2</entry>
               </row>
               <row>
-                <!-- -->
                 <entry>Entry 3</entry>
               </row>
               <row>
@@ -554,12 +553,39 @@
             </tbody>
           </tgroup>
         </table>
-        <para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+        <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
           sed diam nonumy eirmod tempor invidunt ut labore et dolore
           magna aliquyam erat, sed diam voluptua. </para>
        
       </sect1>
     </chapter>
+    
+    <chapter id="screens">
+      <title>Screens</title>
+      <abstract>
+        <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+          sed diam nonumy eirmod tempor invidunt ut labore et dolore
+          magna aliquyam erat, sed diam voluptua. </para>
+      </abstract>
+      
+      <sect1 id="screens.normal">
+        <title>Normal Screens</title>
+        <screen>ls /var/log/messages</screen>
+        <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+          sed diam nonumy eirmod tempor invidunt ut labore et dolore
+          magna aliquyam erat, sed diam voluptua. </para>
+      </sect1>
+      
+      <sect1 id="screens.break">
+        <title>Screens With Long Lines</title>
+        <screen>xsltproc --output foo.fo --stringparam base.dir helloworld/<!-- 
+--> /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
+        <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+          sed diam nonumy eirmod tempor invidunt ut labore et dolore
+          magna aliquyam erat, sed diam voluptua. </para>
+      </sect1>
+    </chapter>
+
   </part>
   <part id="inlines">
     <title>Inline Elements</title>
