@@ -7,7 +7,8 @@
   <!--  -->
   <xsl:param name="generate.jsp.marker" select="1"/>
   
-  <xsl:param name="html.stylesheet">susebooks.css</xsl:param>
+  <!-- Don't use our stylesheet for JSP.  -->
+  <xsl:param name="html.stylesheet"></xsl:param>
 
   <xsl:param name="chunk.fast" select="1"/>
   <xsl:param name="chunk.section.depth" select="1"/>
