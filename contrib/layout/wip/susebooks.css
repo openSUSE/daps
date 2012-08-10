@@ -4,17 +4,52 @@ body {
     margin: 0;
 }
 
-.wrap {
+#header, .chapter, #footer {
     margin: 0 auto;
     min-width: 500px;
     max-width: 1018px;
-    background-color: transparent;
     padding: 0 10px;
+}
+
+#header {
     position: relative; /* to be able to position the lucky charms(TM) absolutely*/
 }
 
-body > .wrap {
-    padding-top: 33px;
+#bg-positioner {
+    background: url(style_images/dots-gray.png) repeat-x scroll top;
+    min-height: 139px;
+    clear: both;
+    position: relative;
+    min-width: 520px;
+}
+
+.clearme {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+#whiten {
+    background-color: #FFF;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    z-index: 5;
+}
+
+.chapter {
+    z-index: 0;
+}
+
+/* Greener Selection Color */
+
+::selection {
+    background: #00A54F;
+    color: #FFF;
+}
+::-moz-selection {
+    background: #00A54F;
+    color: #FFF;
 }
 
 /* Header Area */
@@ -23,27 +58,50 @@ body > .wrap {
     float: left;
     padding: 22px 22px 22px 0;
     position: relative;
-    top: -33px;
 }
 
-#crumbs {
+#header .crumbs {
     position: absolute;
     top: 33px;
-    left: 100px;
-    height: 36px !important;
+    left: 130px;
+    height: 36px;
     overflow: hidden;
 }
 
-#crumbs a, #crumbs span {
-    height: 36px;
-    font-size: 15px;
-    line-height: 36px;
+.crumbs a, .crumbs span {
     display: block;
     float: left;
-    padding-left: 5px;
 }
 
-.book-icon {
+#fixed-header .crumbs {
+    padding: 0 10px;
+}
+
+#header .crumbs a, #header .crumbs span {
+    height: 36px !important;
+    display: block;
+    vertical-align: middle;
+    padding-left: 5px;
+    font-size: 15px;
+    line-height: 36px;
+}
+
+
+.crumbs span {
+    color: #B9B9B9;
+}
+
+.crumbs a {
+    color: #464547;
+    text-decoration: none;
+}
+
+.crumbs a:hover {
+    color: #00843E;
+    text-decoration: none;
+}
+
+#header .book-icon {
     background: url(style_images/icons.png) no-repeat scroll 0px 0px;
     margin: 0;
     width: 36px;
@@ -51,42 +109,28 @@ body > .wrap {
 }
 
 
-.book-icon:hover {
+#header .book-icon:hover {
     background: url(style_images/icons.png) no-repeat scroll 0px -36px;
     margin: 0;
 }
 
-#crumbs span {
-    color: #B9B9B9;
+#fixed-header .book-icon {
+    background: url(style_images/icons.png) no-repeat scroll 0px -72px;
+    margin: 1px 0;
+    width: 18px;
+    height: 15px;
 }
 
-#crumbs a {
-    color: #464547;
-    text-decoration: none;
+#fixed-header .book-icon:hover {
+    background: url(style_images/icons.png) no-repeat scroll -18px -72px;
 }
-
-#crumbs a:hover {
-    color: #00843E;
-    text-decoration: none;
-}
-
-#bg-positioner {
-    background: url(style_images/dottery.png) repeat-x scroll top;
-    min-height: 139px;
-    clear: both;
-    position: relative;
-    top: -33px;
-    min-width: 520px;
-}
-
-/* Sidebar */
 
 #lucky-charms {
     position: absolute;
     top: 33px;
     right: 0px;
     background-color: #FFF;
-    box-shadow: -5px 0 5px 0 #FFF;
+    box-shadow: -5px 0 5px #FFF;
     padding-left: 17px;
 }
 
@@ -136,11 +180,39 @@ body > .wrap {
     margin: 0;
 }
 
-/* Content Area */
+/* Smaller, fixed header */
 
-#content {
-/* tbc... */
+#fixed-header-wrap {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 5px 5px #FFF;
+    border-bottom: 1px solid #CCC;
+    background-color: #EFEFF0;
 }
+
+#fixed-header {
+    max-width: 1038px;
+    min-width: 480px;
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    margin: 0 auto;
+}
+
+.top-button {
+    display: block;
+    float: right;
+    margin: 0 10px;
+    background-color: #00843E;
+    padding: 0 5px;
+    color: #FFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Content Area */
 
 .nav-buttons {
     float: right;
@@ -166,14 +238,29 @@ body > .wrap {
     margin-right: 10px;
 }
 
-.title {
+.chapter .title {
     font-size: 28px;
     font-weight: normal;
     padding: 10px 0 0 0;
     margin: 0;
 }
 
-.chapter {
+.sect1 .title {
+    font-size: 24px;
+    font-weight: normal;
+    padding: 10px 0 0 0;
+    margin: 0;
+}
+
+.sect2 .title {
+    /* tbc ...*/
+    font-size: 24px;
+    font-weight: normal;
+    padding: 10px 0 0 0;
+    margin: 0;
+}
+
+.chapter .name {
     color: #00843E;
 }
 
@@ -183,7 +270,7 @@ body > .wrap {
 
 .permalink {
     display: none;
-    font-size: 15px;
+    font-size: 75%;
     text-decoration: none;
     color: #B9B9B9;
 }
@@ -192,7 +279,7 @@ body > .wrap {
     color: #00843E;
 }
 
-h2:hover .permalink {
+.title:hover .permalink, .subtitle:hover .permalink {
     display: inline;
 }
 
@@ -216,10 +303,187 @@ h2:hover .permalink {
     text-decoration: underline !important;
 }
 
-#content p {
+
+/* Thou shalt not ... */
+
+.admonition {
+    border-width: 1px;
+    border-radius: 5px;
+    border-style: solid;
+    padding: 10px;
+    margin-bottom: 17px;
+}
+
+.tip {
+    border-color: #00843E;
+    background: url(style_images/dots-green.png) repeat-x scroll top;
+}
+
+.note {
+    border-color: #2E3436;
+    background: url(style_images/dots-yellow.png) repeat-x scroll top;
+}
+
+.important {
+    border-color: #E35001;
+    background: url(style_images/dots-orange.png) repeat-x scroll top;
+}
+
+.warning, .caution {
+    border-color: #8C0000;
+    background: url(style_images/dots-red.png) repeat-x scroll top;
+}
+
+.admonition h6 {
+    font-size: 15px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    height: 36px;
+}
+
+.tip h6 {
+    color: #00843E;
+}
+
+.note h6 {
+    color: #2E3436;
+}
+
+.important h6 {
+    color: #E35001;
+}
+
+.warning h6, .caution h6 {
+    color: #8C0000;
+}
+
+.symbol {
+    width: 36px;
+    height: 36px;
+    margin: 0 10px 0 0;
+    padding: 0;
+    background-image: url(style_images/icons.png);
+    background-repeat: no-repeat;
+    float: left;
+}
+
+.tip .symbol {
+    background-position: -144px 0px;
+}
+
+.note .symbol {
+     background-position: -144px -36px;
+}
+
+.important .symbol {
+    background-position: -180px 0px;
+}
+
+.warning .symbol, .caution .symbol {
+    background-position: -180px -36px;
+}
+
+/* Text styles */
+
+em, i, .guimenu {
+    font-style: italic;
+}
+
+em .guimenu, i .guimenu {
+    font-style: normal; /* Don't use italics within italics... */
+}
+
+strong, b {
+    font-weight: bold;
+}
+
+.chapter p {
+    font-size: 15px;
+    color: #000;
+    text-align: left;
+    line-height: 150%;
+}
+
+.chapter .abstract {
+    font-weight: bold;
+    color: #464547;
+}
+
+.chapter p a {
+    color: #00843E;
+    text-decoration: none;
+}
+
+.chapter p a:hover {
+    color: #00843E;
+    text-decoration: underline;
+}
+
+code, .command {
+    font: normal 15px "Droid Sans Mono", monospace;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+code {
+    background-color: #EFEFF0;
+    color: #464547;
+}
+
+.command {
+    background-color: #EFEFF0;
+    color: #464547;
+    font-weight: bold;
+}
+
+.variablelist {
+    margin: 17px 0;
+    line-height: 125%;
     font-size: 15px;
 }
 
-#content .abstract {
+.variablelist p {
+   line-height: 130%;
+   margin: 0;
+   padding: 0;
+}
+
+.variablelist dt {
     font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.variablelist dd {
+    margin: 0 0 17px 0;
+    padding: 0 0 0 24px;
+}
+
+/*dl.variablelist {
+    margin: 0 0 17px 0;
+}*/
+
+/* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
+
+html, body {
+    height: 100%;
+}
+
+#inward, #footerwrap {
+    height: 100px;
+}
+
+#footerwrap {
+    width: 100%;
+    overflow: hidden;
+    background-color: #EFEFF0;
+    
+}
+
+#outerwrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px;
 }
