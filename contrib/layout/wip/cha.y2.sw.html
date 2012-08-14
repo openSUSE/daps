@@ -58,7 +58,7 @@
                 </div>
                 <div class="line">
                     <h2 class="title">
-                        <a id="cha.y2.sw"/>
+                        <a id="cha.y2.sw"></a>
                         <span class="number">5. </span>
                         <span class="name">Installing or Removing Software</span>
                         <a class="permalink" title="Permalink" href="#cha.y2.sw"> #</a>
@@ -137,79 +137,1303 @@
                                 <span class="term">Repository</span>
                             </dt>
                             <dd>
-                            <p> A local or remote directory containing packages, plus additional information about these
-                            packages (package meta-data).</p>
-      </dd>
-      <dt>
-       <span class="term">(Repository) Alias</span>
-      </dt>
-      <dd>
-       <p> A short name for a repository used by various zypper commands. The alias can be chosen by
-        the user when adding a repository and must be unique. </p>
-      </dd>
-      <dt>
-       <span class="term">Product</span>
-      </dt>
-      <dd>
-       <p> Represents a whole product, for example <span class="phrase">openSUSE®</span>. </p>
-      </dd>
-      <dt>
-       <span class="term">Pattern</span>
-      </dt>
-      <dd>
-       <p> A pattern is an installable group of packages dedicated to a certain purpose. For
-        example, the <code class="systemitem">Laptop</code> pattern contains all packages that are
-        needed in a mobile computing environment. Patterns define package dependencies (such as
-        required or recommended packages) and come with a preselection of packages marked for
-        installation. This ensures that the most important packages needed for a certain purpose are
-        available on your system after installation of the pattern. However, not necessarily all
-        packages in a pattern are preselected for installation and you can manually select or
-        deselect packages within a pattern according to your needs and wishes. </p>
-      </dd>
-      <dt>
-       <span class="term">Package</span>
-      </dt>
-      <dd>
-       <p> A package is a compressed file in <code class="literal">rpm</code> format that contains
-        the files for a particular program. </p>
-      </dd>
-      <dt>
-       <span class="term">Patch</span>
-      </dt>
-      <dd>
-       <p> A patch consists of one or more packages and may be applied by means of deltarpms. It may
-        also introduce dependencies to packages that are not installed yet. </p>
-      </dd>
-      <dt>
-       <span class="term">Resolvable</span>
-      </dt>
-      <dd>
-       <p> An generic term for product, pattern, package or patch. The most commonly used type of
-        resolvable is a package or a patch. </p>
-      </dd>
-      <dt>
-       <span class="term">deltarpm</span>
-      </dt>
-      <dd>
-       <p> A deltarpm consists only of the binary diff between two defined versions of a package,
-        and therefore has the smallest download size. Before being installed, the full RPM package
-        is rebuilt on the local machine. </p>
-      </dd>
-      <dt>
-       <span class="term">Package Dependencies</span>
-      </dt>
-      <dd>
-       <p> Certain packages are dependent on other packages, such as shared libraries. In other
-        terms, a package may <code class="literal">require</code> other packages—if the required
-        packages are not available, the package cannot be installed. In addition to dependencies
-        (package requirements) that must be fulfilled, some packages <code class="literal"
-         >recommend</code> other packages. These recommended packages are only installed if they are
-        actually available, otherwise they are just ignored and the package recommending them is
-        installed nevertheless. </p>
-      </dd>
-     </dl>
+                                <p> A local or remote directory containing packages, plus additional information about these
+                                packages (package meta-data).</p>
+                            </dd>
+                            <dt>
+                                <span class="term">(Repository) Alias</span>
+                            </dt>
+                            <dd>
+                                <p> A short name for a repository used by various zypper commands. The alias can be chosen by
+                                the user when adding a repository and must be unique. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">Product</span>
+                            </dt>
+                            <dd>
+                                <p> Represents a whole product, for example <span class="phrase">openSUSE®</span>. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">Pattern</span>
+                            </dt>
+                            <dd>
+                                <p> A pattern is an installable group of packages dedicated to a certain purpose. For
+                                example, the <code class="systemitem">Laptop</code> pattern contains all packages that are
+                                needed in a mobile computing environment. Patterns define package dependencies (such as
+                                required or recommended packages) and come with a preselection of packages marked for
+                                installation. This ensures that the most important packages needed for a certain purpose are
+                                available on your system after installation of the pattern. However, not necessarily all
+                                packages in a pattern are preselected for installation and you can manually select or
+                                deselect packages within a pattern according to your needs and wishes. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">Package</span>
+                            </dt>
+                            <dd>
+                                <p> A package is a compressed file in <code class="literal">rpm</code> format that contains
+                                the files for a particular program. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">Patch</span>
+                            </dt>
+                            <dd>
+                                <p>A patch consists of one or more packages and may be applied by means of deltarpms. It may
+                                also introduce dependencies to packages that are not installed yet.</p>
+                            </dd>
+                            <dt>
+                                <span class="term">Resolvable</span>
+                            </dt>
+                            <dd>
+                                <p> An generic term for product, pattern, package or patch. The most commonly used type of
+                                resolvable is a package or a patch. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">deltarpm</span>
+                            </dt>
+                            <dd>
+                                <p> A deltarpm consists only of the binary diff between two defined versions of a package,
+                                and therefore has the smallest download size. Before being installed, the full RPM package
+                                is rebuilt on the local machine. </p>
+                            </dd>
+                            <dt>
+                                <span class="term">Package Dependencies</span>
+                            </dt>
+                            <dd>
+                                <p> Certain packages are dependent on other packages, such as shared libraries. In other
+                                terms, a package may <code class="literal">require</code> other packages—if the required
+                                packages are not available, the package cannot be installed. In addition to dependencies
+                                (package requirements) that must be fulfilled, some packages 
+                                <code class="literal">recommend</code> other packages. These recommended packages are only
+                                installed if they are actually available, otherwise they are just ignored and the package
+                                recommending them is installed nevertheless. </p>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                   <div class="sect1">
+    <div class="titlepage">
+     <div>
+      <div>
+       <h2 class="title" style="clear: both"><a id="sec.y2.sw.qt"></a><span class="number">5.2.</span> <span class="name">Using the KDE Interface
+         (Qt)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.qt"> #</a></h2>
+      </div>
+     </div>
+    </div>
+    <p> The YaST Qt interface is started by default when using the desktops KDE, icewm, and others.
+     It is also used when invoking YaST from a remote terminal. Start the software manager from the
+     YaST Control Center by choosing <span class="guimenu">Software</span>+<span class="guimenu"
+      >Software Management</span>. </p>
+    <div class="informalfigure">
+     <img src="images/yast2_sw_manager.png"/>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.search"></a><span class="number">5.2.1.</span> <span class="name">Views for Searching Packages or
+          Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.search"> #</a></h3>
+       </div>
+      </div>
+     </div>
+     <p> The YaST software manager can install packages or patterns from all currently enabled
+      repositories. It offers different views and filters to make it easier to find the software you
+      are searching for. The <span class="guimenu">Search </span> view is the default view of the
+      window. To change view, click <span class="guimenu">View</span> and select one of the
+      following entries from the drop-down list. The selected view opens in a new tab. </p>
+     <div class="variablelist">
+      <dl class="variablelist">
+       <dt>
+        <span class="term">Patterns</span>
+       </dt>
+       <dd>
+        <p> Lists all patterns available for installation on your system. </p>
+       </dd>
+       <dt>
+        <span class="term">Package Groups</span>
+       </dt>
+       <dd>
+        <p> Lists all packages sorted by groups such as <span class="guimenu">Graphics</span>, <span
+          class="guimenu">Programming</span>, or <span class="guimenu">Security</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">RPM Groups</span>
+       </dt>
+       <dd>
+        <p> Lists all packages sorted by functionality with groups and subgroups. For example <span
+          class="guimenu">Networking</span> → <span class="guimenu">Email</span> → <span class="guimenu"
+          >Clients</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">Languages</span>
+       </dt>
+       <dd>
+        <p> Filter to list all packages needed to add a new system language. </p>
+       </dd>
+       <dt>
+        <span class="term">Repositories</span>
+       </dt>
+       <dd>
+        <p> Filter to list packages by repository. In order to select more than one repository, hold
+         the <span class="keycap">Ctrl</span> key while clicking on repository names. The <span
+          class="quote">“<span class="quote">pseudo repository</span>”</span>
+         <span class="guimenu">@System</span> lists all packages currently installed. </p>
+       </dd>
+       <dt>
+        <span class="term">Search</span>
+       </dt>
+       <dd>
+        <p> Lets you search for a package according to certain criteria. Enter a search term and
+         press <span class="keycap">Enter</span>. Refine your search by specifying where to <span
+          class="guimenu">Search In</span> and by changing the <span class="guimenu">Search
+          Mode</span>. For example, if you do not know the package name but only the name of the
+         application that you are searching for, try including the package <span class="guimenu"
+          >Description</span> in the search process. </p>
+       </dd>
+       <dt>
+        <span class="term">Installation Summary</span>
+       </dt>
+       <dd>
+        <p> If you have already selected packages for installation, update or removal, this view
+         shows the changes that will be applied to your system as soon as you click <span
+          class="guimenu">Accept</span>. To filter for packages with a certain status in this view,
+         activate or deactivate the respective check boxes. Hit <span class="keycap"
+          >Shift</span><span class="key-connector">&ndash;</span><span class="keycap">F1</span> for details on the status flags. </p>
+       </dd>
+      </dl>
+     </div>
+                <div class="admonition tip" summary="Tip: Finding Packages not Belonging to an Active Repository">
+                    <div class="symbol" alt="[Tip]" title="Tip">&nbsp;</div>
+                    <h6>Finding Packages not Belonging to an Active Repository</h6>
+         <p>To list all packages that do not belong to an active repository, choose <span
+           class="guimenu">View</span> → <span class="guimenu">Repositories</span> → <span
+           class="guimenu">@System</span> and then choose <span class="guimenu">Secondary
+           Filter</span> → <span class="guimenu">Unmaintained Packages</span>. This is useful, for
+          example, if you have deleted a repository and would like to make sure no packages from
+          that repository remain installed.</p>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.install"></a><span class="number">5.2.2.</span> <span class="name">Installing and Removing Packages or
+          Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.install"> #</a></h3>
+       </div>
+      </div>
+     </div>
+     <p> Certain packages are dependent on other packages, such as shared libraries. On the other
+      hand, some packages cannot coexist with others on the system. If possible, YaST automatically
+      resolves these dependencies or conflicts. If your choice results in a dependency conflict that
+      cannot be automatically solved, you need to solve it manually as described in <a class="xref"
+       href="cha.y2.sw.html#sec.y2.sw.deps" title="5.2.4. Checking Software Dependencies"
+       >Section 5.2.4, “Checking Software Dependencies”</a>. </p>
+                <div class="admonition note" summary="Note: Removal of Packages">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Removal of Packages</h6>
+                    <p>When removing any packages, by default YaST only removes the selected packages. If you
+                    want YaST to also remove any other packages that become unneeded after removal of the
+                    specified package, select <span class="guimenu">Options</span> → 
+                    <span class="guimenu">Cleanup when deleting packages</span>.</p>
+                </div>
+     <div class="procedure">
+      <ol class="procedure" type="1">
+       <li>
+        <p> Search for packages as described in <a class="xref"
+          href="cha.y2.sw.html#sec.y2.sw.search"
+          title="5.2.1. Views for Searching Packages or Patterns">Section 5.2.1, “Views for
+          Searching Packages or Patterns”</a>. </p>
+       </li>
+       <li>
+        <p> The packages found are listed in the right pane. To install a package or remove it,
+         right-click it and choose <span class="guimenu">Install</span> or <span class="guimenu"
+          >Delete</span>. If the relevant option is not available, check the package status
+         indicated by the symbol in front of the package name—hit <span class="keycap"
+          >Shift</span><span class="key-connector">&ndash;</span><span class="keycap">F1</span> for help. </p>
+               <div class="admonition tip" summary="Tip: Applying an Action to All Packages Listed">
+                    <div class="symbol" alt="[Tip]" title="Tip">&nbsp;</div>
+                    <h6>Applying an Action to All Packages Listed</h6>
+                    <p> To apply an action to all packages listed in the right pane, choose an action from
+                    <span class="guimenu">Package</span> → <span class="guimenu">All in This List</span>.
+                    </p>
+        </div>
+       </li>
+       <li>
+        <p> To install a pattern, right-click the pattern name and choose <span class="guimenu"
+          >Install</span>. </p>
+       </li>
+       <li>
+        <p> It is not possible to remove a pattern per se. Instead, select the packages of a pattern
+         you want to remove and mark them for removal. </p>
+       </li>
+       <li>
+        <p> In order to select more packages, repeat the steps mentioned above. </p>
+       </li>
+       <li>
+        <p> Before applying your changes, you can review or modify them by clicking <span
+          class="guimenu">View</span> → <span class="guimenu">Installation Summary</span>. By default,
+         all packages that will change status, are listed. </p>
+       </li>
+       <li>
+        <p> In order to revert the status for a package, right-click the package and select one of
+         the following entries: <span class="guimenu">Keep</span> if the package was scheduled to be
+         deleted or updated, or <span class="guimenu">Do Not Install</span> if it was scheduled for
+         installation. To abandon all changes and close the Software Manager, click <span
+          class="guimenu">Cancel</span> and <span class="guimenu">Abandon</span>
+        </p>
+       </li>
+       <li>
+        <p> When you are finished, click <span class="guimenu">Accept</span> to apply your changes.
+        </p>
+       </li>
+       <li>
+        <p> In case YaST found dependencies on other packages, a list of packages that have
+         additionally been chosen for installation, update or removal is presented. Click <span
+          class="guimenu">Continue</span> to accept them. </p>
+        <p> After all selected packages are installed, updated or removed, the YaST Software Manager
+         automatically terminates. </p>
+       </li>
+      </ol>
+     </div>
+               <div class="admonition note" summary="Note: Installing Source Packages">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Installing Source Packages</h6>
+         <p> Installing source packages with YaST Software Manager is not possible at the moment.
+          Use the command line tool <span class="command">zypper</span> for this purpose. For more information, see <a class="xref"
+           href="cha.sw_cl.html#sec.zypper.softman.sources"
+           title="9.1.2.1. Installing Source Packages">Section 9.1.2.1, “Installing Source
+           Packages”</a>.</p>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.update"></a><span class="number">5.2.3.</span> <span class="name">Updating Packages</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.update"> #</a></h3>
+       </div>
+      </div>
+     </div>
+     <p> Instead of updating individual packages, you can also update all installed packages or all
+      packages from a certain repository. When mass updating packages, the following aspects are
+      generally considered: </p>
+     <div class="itemizedlist">
+      <ul class="itemizedlist">
+       <li class="listitem">
+        <p> priorities of the repositories that provide the package, </p>
+       </li>
+       <li class="listitem">
+        <p> architecture of the package (for example, x86_64, i686, i586), </p>
+       </li>
+       <li class="listitem">
+        <p> version number of the package, </p>
+       </li>
+       <li class="listitem">
+        <p> package vendor. </p>
+       </li>
+      </ul>
+     </div>
+     <p> Which of the aspects has the highest importance for choosing the update candidates depends
+      on the respective update option you choose. </p>
+     <div class="procedure">
+      <ol class="procedure" type="1">
+       <li>
+        <p> To update all installed packages to the latest version, choose <span class="guimenu"
+          >Package</span> → <span class="guimenu">All Packages</span> → <span class="guimenu">Update if
+          Newer Version Available</span> from the main menu. </p>
+        <p> All repositories are checked for possible update candidates, using the following policy:
+         YaST first tries to restrict the search to packages with the same architecture and vendor
+         like the installed one. If the search is positive, the <span class="quote">“<span
+           class="quote">best</span>”</span> update candidate from those is selected according to
+         the process below. However, if no comparable package of the same vendor can be found, the
+         search is expanded to all packages with the same architecture. If still no comparable
+         package can be found, all packages are considered and the <span class="quote">“<span
+           class="quote">best</span>”</span> update candidate is selected according to the following
+         criteria: </p>
+        <div class="orderedlist">
+         <ol class="orderedlist" type="1">
+          <li>
+           <p> Repository priority: Prefer the package from the repository with the highest
+            priority. </p>
+          </li>
+          <li>
+           <p> If more than one package results from this selection, choose the one with the <span
+             class="quote">“<span class="quote">best</span>”</span> architecture (best choice:
+            matching the architecture of the installed one; otherwise: x86_64 &gt; i686 &gt;
+            i586). </p>
+          </li>
+         </ol>
+        </div>
+        <p> If the resulting package has a higher version number than the installed one, the
+         installed package will be updated and replaced with the selected update candidate. </p>
+        <p> This option tries to avoid changes in architecture and vendor for the installed
+         packages, but under certain circumstances, they are tolerated. </p>
+               <div class="admonition note" summary="Note: Update Unconditionally">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Update Unconditionally</h6>
+            <p>If you choose <span class="guimenu">Package</span> → <span class="guimenu">All
+              Packages</span> → <span class="guimenu">Update Unconditionally</span> instead, basically
+             the same criteria apply but candidate package found is installed unconditionally. Thus,
+             choosing this option might actually lead to downgrading some packages.</p>
+        </div>
+       </li>
+       <li>
+        <p> To make sure that the packages for a mass update derive from a certain repository: </p>
+        <ol type="a" class="substeps">
+         <li>
+          <p> Choose the repository from which to update as described in <a class="xref"
+            href="cha.y2.sw.html#sec.y2.sw.search"
+            title="5.2.1. Views for Searching Packages or Patterns">Section 5.2.1, “Views for
+            Searching Packages or Patterns”</a> . </p>
+         </li>
+         <li>
+          <p> On the right hand side of the window, click <span class="guimenu">Switch system
+            packages to the versions in this repository</span>. This explicitly allows YaST to
+           change the package vendor when replacing the packages. </p>
+          <p> As soon as you proceed with <span class="guimenu">Accept</span>, all installed
+           packages will be replaced by packages deriving from this repository, if available. This
+           may lead to changes in vendor and architecture and even to downgrading some packages.
+          </p>
+         </li>
+         <li>
+          <p> To refrain from this, click <span class="guimenu">Cancel switching system packages to
+            the versions in this repository</span>. Note that you can only cancel this until you
+           press the <span class="guimenu">Accept</span> button. </p>
+         </li>
+        </ol>
+       </li>
+       <li>
+        <p> Before applying your changes, you can review or modify them by clicking <span
+          class="guimenu">View</span> → <span class="guimenu">Installation Summary</span>. By default,
+         all packages that will change status, are listed. </p>
+       </li>
+       <li>
+        <p> If all options are set according to your wishes, confirm your changes with <span
+          class="guimenu">Accept</span> to start the mass update. </p>
+       </li>
+      </ol>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.deps"></a><span class="number">5.2.4.</span> <span class="name">Checking Software Dependencies</span>
+            <a class="permalink" title="Permalink" href="#sec.y2.sw.deps"> #</a>
+         </span></h3>
+       </div>
+      </div>
+     </div>
+     <p> Most packages are dependent on other packages. If a package, for example, uses a shared
+      library, it is dependent on the package providing this library. On the other hand some
+      packages cannot coexist with each other, causing a conflict (for example, you can only install
+      one mail transfer agent: sendmail or postfix). When installing or removing software, the
+      Software Manager makes sure no dependencies or conflicts remain unsolved to ensure system
+      integrity. </p>
+     <p> In case there exists only one solution to resolve a dependency or a conflict, it is
+      resolved automatically. Multiple solutions always cause a conflict which needs to be resolved
+      manually. If solving a conflict involves a vendor or architecture change, it also needs to be
+      solved manually. When clicking <span class="guimenu">Accept</span> to apply any changes in the
+      Software Manager, you get an overview of all actions triggered by the automatic resolver which
+      you need to confirm. </p>
+     <p> By default, dependencies are automatically checked. A check is performed every time you
+      change a package status (for example, by marking a package for installation or removal). This
+      is generally useful, but can become exhausting when manually resolving a dependency conflict.
+      To disable this function, uncheck <span class="guimenu">Dependencies</span> → <span
+       class="guimenu">Autocheck</span>. Manually perform a dependency check with <span
+       class="guimenu">Dependencies</span> → <span class="guimenu">Check Now</span>. A consistency
+      check is always performed when you confirm your selection with <span class="guimenu"
+       >Accept</span>. </p>
+     <p> To review a package's dependencies, right-click it and choose <span class="guimenu">Show
+       Solver Information</span>. A map showing the dependencies opens. Packages that are already
+      installed are displayed in a green frame. </p>
+
+               <div class="admonition note" summary="Note: Manually Solving Package Conflicts">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Manually Solving Package Conflicts</h6>
+         <p> Unless you are very experienced, follow the suggestions YaST makes when handling
+          package conflicts, otherwise you may not be able to resolve them. Keep in mind that every
+          change you make, potentially triggers other conflicts, so you can easily end up with a
+          steadily increasing number of conflicts. In case this happens, <span class="guimenu"
+           >Cancel</span> the Software Manager, <span class="guimenu">Abandon</span> all your
+          changes and start again. </p>
+     </div>
+     <div class="figure" style="width: 542px;">
+      <a id="fig.y2.sw.packconfl"></a>
+           <img src="images/yast2_package_conflict.png" alt="Conflict Management of the Software Manager"/>
+                  <div class="titlewrap"><p class="title"><span class="number">Figure 5.1.</span> <span class="name"> Conflict Management of the Software Manager<!--</span>-->
+                  <a class="permalink" title="Permalink" href="#fig.y2.sw.packconfl"> #</a></p></div>
+      
+     </div>
     </div>
    </div>
+   <div class="sect1">
+    <div class="titlepage">
+     <div>
+      <div>
+       <h2 class="title" style="clear: both"><a id="sec.y2.sw.gtk"></a><span class="number">5.3.</span> <span class="name">Using the GNOME Interface
+         (GTK+)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk"> #</a>
+       </h2>
+      </div>
+     </div>
+    </div>
+    <a id="id2627234" class="indexterm"></a>
+    <a id="id2627241" class="indexterm"></a>
+    <p> The YaST GTK+ interface is started by default when using the desktops GNOME and XFCE. Start
+     the software manager from the YaST Control Center by clicking <span class="guimenu"
+      >Software</span> → <span class="guimenu">Software Management</span>. </p>
+    <div class="informalfigure">
+     <img src="images/yast2_sw_manager_gtk.png"/>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.gtk.search"></a><span class="number">5.3.1.</span> <span class="name">Views for Searching Packages or
+          Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.deps"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> The easiest way to find a package is to use the search field in the upper right corner of
+      the software manager. Enter a search term and press <span class="keycap">Enter</span>. By
+      default it will search package names and summaries. Press the search item to change this
+      filter and search the file lists, for example. </p>
+     <p> The software manager also offers different views and filters for displaying package lists.
+      These are available from the pull-down menu in the upper left corner: </p>
+     <div class="variablelist">
+      <dl class="variablelist">
+       <dt>
+        <span class="term">Groups</span>
+       </dt>
+       <dd>
+        <p> The default view lists all packages sorted by groups such as <span class="guimenu">Admin
+          Tools</span>, <span class="guimenu">Graphics</span>, <span class="guimenu"
+          >Programming</span>, or <span class="guimenu">Security</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">RPM Groups</span>
+       </dt>
+       <dd>
+        <p> Lists all packages sorted by functionality with groups and subgroups. For example <span
+          class="guimenu">Networking</span> → <span class="guimenu">Email</span> → <span class="guimenu"
+          >Clients</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">Repositories</span>
+       </dt>
+       <dd>
+        <p> Filter to list packages by repository. In order to select more than one repository, hold
+         the <span class="keycap">Ctrl</span> key while clicking on repository names. The <span
+          class="quote">“<span class="quote">pseudo repository</span>”</span>
+         <span class="guimenu">@System</span> lists all packages currently installed. </p>
+        <p> To add, edit, or remove available repositories, click <span class="guimenu">Edit
+          Repositories</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">Patterns</span>
+       </dt>
+       <dd>
+        <p> Lists all patterns available for installation on your system. </p>
+       </dd>
+       <dt>
+        <span class="term">Languages</span>
+       </dt>
+       <dd>
+        <p> Filter to list all packages needed to add a new system language. </p>
+       </dd>
+      </dl>
+     </div>
+     <p> The box in the lower right corner of the dialog also allows to filter for packages that are
+       <span class="guimenu">Installed</span>, <span class="guimenu">Not Installed</span> or <span
+       class="guimenu">Upgradable</span>. If you select the <span class="guimenu">No Status</span>
+      entry, all available packages from the configured repositories are displayed, independent of
+      their status. </p>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.gtk.install"></a><span class="number">5.3.2.</span> <span class="name">Installing and Removing Packages or
+          Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.install"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <div class="procedure">
+      <p> Certain packages are dependent on other packages, such as shared libraries. On the other
+       hand, some packages cannot coexist with others on the system. If possible, YaST automatically
+       resolves these dependencies or conflicts. If your choice results in a dependency conflict
+       that cannot be automatically solved, you need to solve it manually as described in <a
+        class="xref" href="cha.y2.sw.html#sec.y2.sw.deps"
+        title="5.2.4. Checking Software Dependencies">Section 5.2.4, “Checking Software
+        Dependencies”</a>. </p>
+      <ol class="procedure" type="1">
+       <li>
+        <p> Search for packages as described in <a class="xref"
+          href="cha.y2.sw.html#sec.y2.sw.gtk.search"
+          title="5.3.1. Views for Searching Packages or Patterns">Section 5.3.1, “Views for
+          Searching Packages or Patterns”</a>. </p>
+       </li>
+       <li>
+        <p> The packages found are listed in the right pane. To further filter the search results
+         according to package status (<span class="guimenu">Any Status</span>, <span class="guimenu"
+          >Not Installed</span>, <span class="guimenu">Installed</span>, <span class="guimenu"
+          >Upgradable)</span>, select one of the entries in the box at the lower left corner of the
+         dialog. For details about a package, click the package in the list. Information like
+         available versions, authors and changelog of the package are displayed in the lower right
+         corner of the window. </p>
+        <p> To mark a package for installation, re-installation, removal, or upgrade, right-click
+         the package and choose the appropriate action from the menu. </p>
+               <div class="admonition note" summary="Tip: Applying an Action to All Packages Listed">
+                    <div class="symbol" alt="[Tip]" title="Note">&nbsp;</div>
+                    <h6>Applying an Action to All Packages Listed</h6>
+            <p>To apply an action to all packages listed in the right pane, right-click a package,
+             choose <span class="guimenu">Select All</span>, right-click again and choose an action.
+            </p>
+        </div>
+       </li>
+       <li>
+        <p> To install a pattern, right-click the pattern name and choose <span class="guimenu"
+          >Install</span>. </p>
+       </li>
+       <li>
+        <p> It is not possible to remove a pattern per se. Instead, select the packages of a pattern
+         you want to remove and mark them for removal. </p>
+       </li>
+       <li>
+        <p> In order to select more packages, repeat the steps mentioned above. </p>
+       </li>
+       <li>
+        <p> Before applying your changes, you can review or modify them by clicking <span
+          class="guimenu">View All Changes</span> at the bottom of the dialog. By default, all
+         packages that will change status are listed. </p>
+       </li>
+       <li>
+        <p> To revert changes for a package, click the <span class="guimenu">Undo</span> icon with
+         the yellow arrow. To finish the review, click <span class="guimenu">Close</span>. </p>
+       </li>
+       <li>
+        <p> When you are finished with the selection of packages to install or remove, <span
+          class="guimenu">Apply</span> your changes. </p>
+       </li>
+       <li>
+        <p> In case YaST found dependencies on other packages, a list of packages that have
+         additionally been chosen for installation, update or removal is presented. Click <span
+          class="guimenu">Apply</span> to accept them. </p>
+        <p> After all selected packages are installed, updated or removed, the YaST Software Manager
+         automatically terminates. </p>
+       </li>
+      </ol>
+     </div>
+               <div class="admonition note" summary="Note: Installing Source Packages">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Installing Source Packages</h6>
+         <p> Installing source packages with YaST Software Manager is not possible at the moment.
+          Use the command line tool <span class="command">zypper</span> for this purpose. For more information, see <a class="xref"
+           href="cha.sw_cl.html#sec.zypper.softman.sources"
+           title="9.1.2.1. Installing Source Packages">Section 9.1.2.1, “Installing Source
+           Packages”</a>. </p>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.gtk.update"></a><span class="number">5.3.3.</span> <span class="name">Updating Packages</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.update"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> Instead of updating individual packages, you can also update all installed packages or all
+      packages from a certain repository. When mass updating packages, the following aspects are
+      generally considered: </p>
+     <div class="itemizedlist">
+      <ul class="itemizedlist" style="list-style-type: bullet; ">
+       <li class="listitem" style="list-style-type: disc">
+        <p> priorities of the repositories that provide the package, </p>
+       </li>
+       <li class="listitem" style="list-style-type: disc">
+        <p> architecture of the package (for example, x86_64, i686, i586), </p>
+       </li>
+       <li class="listitem" style="list-style-type: disc">
+        <p> version number of the package, </p>
+       </li>
+       <li class="listitem" style="list-style-type: disc">
+        <p> package vendor. </p>
+       </li>
+      </ul>
+     </div>
+     <p> Which of the aspects has the highest importance for choosing the update candidates depends
+      on the respective update option you choose. </p>
+     <div class="procedure">
+      <ol class="procedure" type="1">
+       <li>
+        <p> To view the list of packages that can be updated (packages with higher versions are
+         available), select <span class="guimenu">Upgradable</span> in the bottom left box. </p>
+       </li>
+       <li>
+        <p> To update all packages listed there, click <span class="guimenu">Upgrade All</span>. </p>
+        <p> To install only upgradable packages for which an official patch has been issued, click
+          <span class="guimenu">Upgrade Patches</span>. Those packages are marked by a patch tag
+         next to their version number. Choosing this option is equivalent to doing an online update
+         with YaST as described in <a class="xref" href="cha.onlineupdate.you.html"
+          title="Chapter 6. YaST Online Update">Chapter 6, <em>YaST Online Update</em></a>. </p>
+        <p> If no patches have been issued since last applying patches, the button is disabled. </p>
+       </li>
+       <li>
+        <p> To make sure that the packages for a mass update derive from a certain repository: </p>
+        <ol type="a" class="substeps">
+         <li>
+          <p> Choose the repository from which to update as described in <a class="xref"
+            href="cha.y2.sw.html#sec.y2.sw.gtk.search"
+            title="5.3.1. Views for Searching Packages or Patterns">Section 5.3.1, “Views for
+            Searching Packages or Patterns”</a> . </p>
+         </li>
+         <li>
+          <p> On the right hand side of the window, click <span class="guimenu">Switch system
+            packages to the versions in this repository</span>. This explicitly allows YaST to
+           change the package vendor when replacing the packages. </p>
+          <p> All installed packages will be replaced by packages deriving from this repository, if
+           available. This may lead to changes in vendor and architecture and even to downgrading
+           some packages. </p>
+         </li>
+        </ol>
+       </li>
+       <li>
+        <p> Before applying the changes, you can review or modify them by clicking <span
+          class="guimenu">View All Changes</span> at the bottom of the dialog. By default, all
+         packages that will change status are listed. </p>
+       </li>
+       <li>
+        <p> To refrain from switching the system packages to the versions in this repository, click
+         the <span class="guimenu">Undo</span> button next to the respective option. </p>
+       </li>
+       <li>
+        <p> If all options are set according to your wishes, confirm your changes with <span
+          class="guimenu">Apply</span> to start the mass update. </p>
+       </li>
+      </ol>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.gtk.deps"></a><span class="number">5.3.4.</span> <span class="name">Checking Software Dependencies</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.deps"> #</a>
+         </span></h3>
+       </div>
+      </div>
+     </div>
+     <p> Most packages are dependent on other packages. If a package, for example, uses a shared
+      library, it will be dependent on the package providing this library. On the other hand, some
+      packages cannot coexist with each other, causing a conflict (for example, you can only install
+      one mail transfer agent: sendmail or postfix). When installing or removing software, the
+      Software Manager makes sure no dependencies or conflicts remain unresolved to ensure system
+      integrity. </p>
+     <p> In case there exists only one solution to resolve a dependency or a conflict, it is
+      resolved automatically. Multiple solutions always cause a conflict which needs to be resolved
+      manually. If solving a conflict involves a vendor or architecture change, it also needs to be
+      solved manually. When clicking <span class="guimenu">Apply</span> to apply any changes in the
+      Software Manager, you get an overview of all actions triggered by the automatic resolver which
+      you need to confirm. </p>
+     <p> By default, dependencies are automatically checked. A check is performed every time you
+      change a package status (for example, by marking a package for installation or removal). This
+      is generally useful, but can become exhausting when manually resolving a dependency conflict.
+      To disable this function, uncheck <span class="guimenu">Dependencies</span> → <span
+       class="guimenu">Autocheck</span>. Manually perform a dependency check with <span
+       class="guimenu">Dependencies</span> → <span class="guimenu">Check Now</span>. A consistency
+      check is always performed when you confirm your selection with <span class="guimenu"
+       >Apply</span>. </p>
+               <div class="admonition note" summary="Note: Manually Solving Package Conflicts">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Manually Solving Package Conflicts</h6>
+         <p> Unless you are very experienced, follow the suggestions YaST makes when handling
+          package conflicts, otherwise you may not be able to resolve them. Keep in mind that every
+          change you make, potentially triggers other conflicts, so you can easily end up with a
+          steadily increasing number of conflicts. In case this happens, click <span class="guimenu"
+           >Cancel</span> and <span class="guimenu">Quit</span> the software manger. Relaunch it to
+          start again. </p>
+     </div>
+
+     <div class="figure" style="width: 463px;">
+      <a id="fig.y2.sw.gtk.packconfl"></a>
+           <img src="images/yast2_gtk_package_conflict.png" alt="Conflict Management of the Software Manager"/>
+                  <div class="titlewrap"><p class="title"><span class="number">Figure 5.2.</span> <span class="name"> Conflict Management of the Software Manager<!--</span>-->
+                  <a class="permalink" title="Permalink" href="#fig.y2.sw.gtk.packconfl"> #</a></p></div>
+    </div>
+   </div>
+     <br class="figure-break"/>
+    </div>
+   </div>
+   <div class="sect1">
+    <div class="titlepage">
+     <div>
+      <div>
+       <h2 class="title" style="clear: both"><a id="sec.y2.sw.instsource"></a><span class="number">5.4.</span> <span class="name">Managing Software
+        Repositories and Services</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource"> #</a>
+       </h2>
+      </div>
+     </div>
+    </div>
+    <p> If you want to install third-party software, add additional software repositories to your
+     system. By default, the product repositories such as <span class="phrase">openSUSE</span>-DVD
+      <span class="phrase">12.2</span> and a matching update repository are automatically configured
+      <span class="phrase">during the installation</span>. Depending on the initially selected
+     product, a separate language add-on repository with translations, dictionaries, etc. might also
+     be configured. </p>
+    <p> To manage repositories, start YaST and select <span class="guimenu">Software</span> → <span
+      class="guimenu">Software Repositories</span>. The <span class="guimenu">Configured Software
+      Repositories</span> dialog opens. Here, you can also manage subscriptions to so-called <span
+      class="guimenu">Services</span> by changing the <span class="guimenu">View</span> at the right
+     corner of the dialog to <span class="guimenu">All Services</span>. A Service in this context is
+     a <span class="guimenu">Repository Index Service</span> (RIS) that can offer one or more
+     software repositories. Such a Service can be changed dynamically by its administrator or
+     vendor. </p>
+    <p> Each repository provides files describing content of the repository (package names,
+     versions, etc.). These repository description files are downloaded to a local cache that is
+     used by YaST. To ensure their integrity, software repositories can be signed with the GPG Key
+     of the repository maintainer. Whenever you add a new repository, YaST offers the ability to
+     import its key. </p>
+               <div class="admonition warning" summary="Warning: Trusting External Software Sources">
+                    <div class="symbol" alt="[Warning]" title="Warning">&nbsp;</div>
+                    <h6>Warning: Trusting External Software Sources</h6>
+        <p>Before adding external software repositories to your list of repositories, make sure
+         this repository can be trusted. <span class="phrase">openSUSE</span> is not responsible for
+         any potential problems arising from software installed from third-party software
+         repositories.</p>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.instsource.add"></a><span class="number">5.4.1.</span> <span class="name">Adding Software Repositories</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.add"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> You can either add repositories from a local harddisk, from a removable medium (like a CD,
+      DVD or a USB mass storage) or from a network. </p>
+     <p> To add repositories from the <span class="guimenu">Configured Software Repositories</span>
+      dialog in YaST proceed as follows: </p>
+     <div class="procedure">
+      <ol class="procedure" type="1">
+       <li>
+        <p> Click <span class="guimenu">Add</span>. </p>
+       </li>
+       <li>
+        <p> From the list of available <span class="guimenu">Media Types</span> specify the type
+         matching your repository: </p>
+        <p> For network sources, it is usually sufficient to use the default option, <span
+          class="guimenu">Specify URL</span>. </p>
+        <p> To add a repository from a removable medium or a local harddisk, choose the relevant
+         option and insert the medium or connect the USB device to the machine, respectively. </p>
+       </li>
+       <li>
+        <p> You can choose to <span class="guimenu">Download Repository Description Files</span>
+         now. If the option is unchecked, YaST will automatically download the files later, if
+         needed. Click <span class="guimenu">Next</span> to proceed. </p>
+       </li>
+       <li>
+        <p> When adding a repository from the network, enter the data you are prompted for. Continue
+         with <span class="guimenu">Next</span>. </p>
+       </li>
+       <li>
+        <p> Depending on the repository you have added, you might be asked if you want to import the
+         GPG key with which it is signed or asked to agree to a license. </p>
+        <p> After confirming these messages, YaST will download and parse the metadata and add the
+         repository to the list of <span class="guimenu">Configured Repositories.</span>. </p>
+       </li>
+       <li>
+        <p> If needed, adjust the repository <span class="guimenu">Properties</span> as described in
+          <a class="xref" href="cha.y2.sw.html#sec.y2.sw.instsource.manage"
+          title="5.4.2. Managing Repository Properties">Section 5.4.2, “Managing Repository
+          Properties”</a> or confirm your changes with <span class="guimenu">OK</span> to close the
+         configuration dialog. </p>
+       </li>
+      </ol>
+     </div>
+     <p> Now you can install software from this repository as described in <a class="xref"
+       href="cha.y2.sw.html#sec.y2.sw.qt" title="5.2. Using the KDE Interface (Qt)">Section 5.2,
+       “Using the KDE Interface (Qt)”</a><span class="phrase"> or in <a class="xref"
+        href="cha.y2.sw.html#sec.y2.sw.gtk" title="5.3. Using the GNOME Interface (GTK+)"
+        >Section 5.3, “Using the GNOME Interface (GTK+)”</a></span>. </p>
+     <p> YaST also offers a list of predefined popular repositories available under <span
+       class="guimenu">Community Repositories</span>. Among others, it includes driver repositories
+      for nVidia and ATI graphics cards, and popular projects from the openSUSE® Build Service, such
+      as the Mozilla repository (containing packages with the most recent versions of Firefox and
+      Thunderbird). </p>
+     <div class="procedure">
+      <a id="id2628272"></a>
+      <p class="title">
+       Procedure 5.1. Configuring Community Repositories
+      </p>
+      <ol class="procedure" type="1">
+       <li>
+        <p> Start YaST and select <span class="guimenu">Software</span> → <span class="guimenu"
+          >Software Repositories</span>. </p>
+       </li>
+       <li>
+        <p> Click <span class="guimenu">Add</span>. </p>
+       </li>
+       <li>
+        <p> Choose <span class="guimenu">Community Repositories</span> and proceed with <span
+          class="guimenu">Next</span>. </p>
+       </li>
+       <li>
+        <p> From the preconfigured list of repositories choose the ones you want to add by ticking
+         the respective check boxes. The Mozilla repository, for example, is listed as <span
+          class="guimenu">openSUSE BuildService - Mozilla</span>. </p>
+        <p> Confirm with <span class="guimenu">OK</span>. </p>
+       </li>
+       <li>
+        <p> Accept to <span class="guimenu">Import</span> the GPG key. You need to import a key for
+         each repository you have chosen. </p>
+       </li>
+       <li>
+        <p> The new software repositories are now listed in the <span class="guimenu">Configured
+          Software Repositories</span> overview. Click <span class="guimenu">OK</span> to leave the
+         software repositories configuration. </p>
+       </li>
+      </ol>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.instsource.manage"></a><span class="number">5.4.2.</span> <span class="name">Managing Repository
+          Properties</span>
+          <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.manage"> #</a>
+          </h3>
+       </div>
+      </div>
+     </div>
+     <p> The <span class="guimenu">Configured Software Repositories</span> overview of the <span
+       class="guimenu">Software Repositories</span> lets you change the following repository
+      properties: </p>
+     <div class="variablelist">
+      <dl class="variablelist">
+       <dt>
+        <span class="term">Status</span>
+       </dt>
+       <dd>
+        <p> The repository status can either be <span class="guimenu">Enabled</span> or <span
+          class="guimenu">Disabled</span>. You can only install packages from repositories that are
+         enabled. To turn a repository off temporarily click <span class="guimenu">Disable</span>.
+         You can also double-click on a repository name to toggle its status. If you want to remove
+         a repository completely, click <span class="guimenu">Delete</span>. </p>
+       </dd>
+       <dt>
+        <span class="term">Refresh</span>
+       </dt>
+       <dd>
+        <p> When refreshing a repository, its content description (package names, versions, etc.) is
+         downloaded to a local cache that is used by YaST. It is sufficient to do this once for
+         static repositories such as CDs or DVDs, whereas repositories whose content changes often
+         should be refreshed frequently. The easiest way to keep a repository's cache up-to-date is
+         to choose <span class="guimenu">Automatically Refresh</span>. To do a manual refresh click
+          <span class="guimenu">Refresh</span> and select one of the options. </p>
+       </dd>
+       <dt>
+        <span class="term">
+         <span class="guimenu">Keep Downloaded Packages</span>
+        </span>
+       </dt>
+       <dd>
+        <p> Packages from remote repositories are downloaded before being installed. By default,
+         they are deleted upon a successful installation. Activating <span class="guimenu">Keep
+          Downloaded Packages</span> prevents the deletion of downloaded packages. The download
+         location is configured in <code class="filename">/etc/zypp/zypp.conf</code>, by default it
+         is <code class="filename">/var/cache/zypp/packages</code>. </p>
+       </dd>
+       <dt>
+        <span class="term">
+         <span class="guimenu">Priority</span>
+        </span>
+       </dt>
+       <dd>
+        <p> The <span class="guimenu">Priority</span> of a repository is a value between <code
+          class="literal">1</code> and <code class="literal">200</code>, with <code class="literal"
+          >1</code> being the highest priority and <code class="literal">200</code> the lowest
+         priority. Any new repositories that are added with YaST get a priority of <code
+          class="literal">99</code> by default. If you do not care about a priority value for a
+         certain repository, you can also set the value to <code class="literal">0</code> to apply
+         the default priority to that repository (<code class="literal">99</code>). If a package is
+         available in more than one repository, then the repository with the highest priority takes
+         precedence. This is useful if you want to avoid downloading packages unnecessarily from the
+         Internet by giving a local repository (for example, a DVD) a higher priority. </p>
+               <div class="admonition important" summary="Important: Priority vs. Version">
+                    <div class="symbol" alt="[Important]" title="Important">&nbsp;</div>
+                    <h6>Priority vs. Version</h6>
+            <p>The repository with the highest priority takes precedence in any case. Therefore,
+             make sure that the update repository always has the highest priority (20 by default),
+             otherwise you might install an outdated version that will not be updated until the next
+             online update.</p>
+            <p>If you add repositories providing new versions for programs shipped with <span
+              class="phrase">openSUSE</span> (for example a repository with the latest KDE or GNOME
+             version), make sure they have a higher priority than the standard repositories,
+             otherwise packages from these repositories will not be installed by default.</p>
+        </div>
+       </dd>
+       <dt>
+        <span class="term">Name and URL</span>
+       </dt>
+       <dd>
+        <p> To change a repository name or its URL, select it from the list with a single-click and
+         then click <span class="guimenu">Edit</span>. </p>
+       </dd>
+      </dl>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.y2.sw.repo.gpg-keys"></a><span class="number">5.4.3.</span> <span class="name">Managing Repository Keys</span>
+        <a class="permalink" title="Permalink" href="#sec.y2.sw.repo.gpg-keys"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> To ensure their integrity, software repositories can be signed with the GPG Key of the
+      repository maintainer. Whenever you add a new repository, YaST offers to import its key.
+      Verify it as you would do with any other GPG key and make sure it does not change. If you
+      detect a key change, something might be wrong with the repository. Disable the repository as
+      an installation source until you know the cause of the key change. </p>
+     <p> To manage all imported keys, click <span class="guimenu">GPG Keys...</span> in the <span
+       class="guimenu">Configured Software Repositories</span> dialog. Select an entry with the
+      mouse to show the key properties at the bottom of the window. <span class="guimenu"
+      >Add</span>, <span class="guimenu">Edit</span> or <span class="guimenu">Delete</span> keys
+      with a click on the respective buttons. </p>
+    </div>
+   </div>
+   <div class="sect1">
+    <div class="titlepage">
+     <div>
+      <div>
+       <h2 class="title" style="clear: both"><a id="sec.updater"></a><span class="number">5.5.</span> <span class="name">Keeping the System
+         Up-to-date</span>
+         <a class="permalink" title="Permalink" href="#sec.updater"> #</a>
+       </h2>
+      </div>
+     </div>
+    </div>
+    <p>
+     <span class="phrase">openSUSE</span> offers a continuous stream of software security patches
+     for your product. The update applet informs you about the availability of patches and lets you
+     easily install them with just a few clicks. </p>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.updater.kde"></a><span class="number">5.5.1.</span> <span class="name">Using the KDE Software Updater</span>
+        <a class="permalink" title="Permalink" href="#sec.updater.kde"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> The Software Updater icon resides in the system tray of your panel depicting a gearwheel
+      with a green arrow. To start Software Updater manually, choose <span class="guimenu">System
+       Settings</span> → <span class="guimenu">Software Management</span> → <span class="guimenu"
+       >Software Updates</span> from the main menu. Alternatively, <span class="keycap"
+       >Alt</span><span class="key-connector">&ndash;</span><span class="keycap">F2</span> and enter <span class="command">kpk_update</span>.</p>
+               <div class="admonition note" summary="Note: Icon Visibility">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Icon Visibility</h6>
+         <p> The Software Updater icon is only visible in the system tray, if patches are available.
+          Hover over the icon to see the number of patches available. </p>
+     </div>
+     <div class="sect3">
+      <div class="titlepage">
+       <div>
+        <div>
+         <h4 class="title"><a id="sec.updater.kde.patches"></a><span class="number">5.5.1.1.</span> <span class="name">Installing Patches</span>
+         <a class="permalink" title="Permalink" href="#sec.updater.kde.patches"> #</a>
+         </h4>
+        </div>
+       </div>
+      </div>
+      <div class="procedure">
+       <ol class="procedure" type="1">
+        <li>
+         <p> Whenever software updates are available, the applet icon appears in the panel.
+          Left-click the Software Updater icon to launch the <span class="guimenu">Review and
+           Update</span> software window. </p>
+        </li>
+        <li>
+         <p> Select a patch for installation by ticking its checkbox. Get detailed information on a
+          patch by clicking on its title. To select all available patches for installation, tick the
+          checkbox in the table header. </p>
+        </li>
+        <li>
+         <p> Click <span class="guimenu">Apply</span> to start the patch installation. </p>
+        </li>
+        <li>
+         <p> In case you have started the patch installation for the first time, you will be asked
+          to enter the <code class="systemitem">root</code> password twice in order to proceed. If
+          you also check <span class="guimenu">Remember authorization</span> you will never be asked
+          again to provide the password. </p>
+        </li>
+        <li>
+         <p> The <span class="guimenu">Additional Changes</span> window showing an installation
+          summary opens. Click <span class="guimenu">Continue</span> to finish the installation.
+         </p>
+        </li>
+       </ol>
+      </div>
+      
+           <div class="figure" style="width: 577px;">
+      <a id="id2628836"></a>
+           <img src="images/kupdater_updates.png" alt="KDE Software Updater"/>
+                  <div class="titlewrap"><p class="title"><span class="number">Figure 5.3.</span> <span class="name">KDE Software Updater</span>
+                  <a class="permalink" title="Permalink" href="#id2628836"> #</a></p></div>
+      
+     </div>
+    </div>
+      <p> The YaST Online Update offers advanced features to customize the patch installation.
+       Please refer to <a class="xref" href="cha.onlineupdate.you.html"
+        title="Chapter 6. YaST Online Update">Chapter 6, <em>YaST Online Update</em></a> for more
+       information. </p>
+     </div>
+     <div class="sect3">
+      <div class="titlepage">
+       <div>
+        <div>
+         <h4 class="title"><a id="sec.updater.kde.config"></a><span class="number">5.5.1.2.</span> <span class="name">Configuring the KDE Software
+           Updater</span>
+           <a class="permalink" title="Permalink" href="#sec.updater.kde.config"> #</a>
+         </h4>
+        </div>
+       </div>
+      </div>
+      <p> By default Software Updater checks for updates every 24 hours, notifies you when patches
+       are available and does not automatically install patches. These settings can be changed with
+       the <span class="guimenu">Software Management settings</span>. To open the <span
+        class="guimenu">Software Management settings</span> choose <span class="guimenu">System
+        Settings</span> → <span class="guimenu">Software Management</span> → <span class="guimenu"
+        >Settings</span> from the main menu. Alternatively, press <span class="keycap"
+        >Alt</span><span class="key-connector">&ndash;</span><span class="keycap">F2</span> and enter <span class="command">kpk_settings</span>.
+        The settings for Software Updater are available in the <span class="guimenu">Update
+        Settings</span> section. </p>
+               <div class="admonition important" summary="Important: Patch Origin">
+                    <div class="symbol" alt="[Important]" title="Important">&nbsp;</div>
+                    <h6>Patch Origin</h6>
+          <p> The <span class="guimenu">Software Management settings</span> also allows you to
+           configure the repositories (<span class="guimenu">Origin of Packages</span>) to be used.
+           This setting not only applies to Software Updater but also to the KDE Software Management
+           module (<span class="guimenu">Get and Remove Software</span>). </p>
+          <p> Make sure the repository <span class="emphasis">
+            <em>Updates for <span class="phrase">openSUSE</span>
+             <span class="phrase">12.2</span></em>
+           </span> is always selected—otherwise you will not receive patches. </p>
+      </div>
+     </div>
+    </div>
+    <div class="sect2">
+     <div class="titlepage">
+      <div>
+       <div>
+        <h3 class="title"><a id="sec.updater.gnome"></a><span class="number">5.5.2.</span> <span class="name">Using the GNOME Update Applet</span>
+        <a class="permalink" title="Permalink" href="#sec.updater.gnome"> #</a>
+        </h3>
+       </div>
+      </div>
+     </div>
+     <p> The update applet resides in the notification area of the panel. Its icon changes depending
+      on the availability and relevance of patches and the status of the update. To invoke the
+      applet manually, choose <span class="guimenu">Computer</span> → <span class="guimenu">More
+       Applications</span> → <span class="guimenu">System</span> → <span class="guimenu">Software
+       Update</span>. </p>
+               <div class="admonition note" summary="Note: Icon visibility">
+                    <div class="symbol" alt="[Note]" title="Note">&nbsp;</div>
+                    <h6>Icon visibility</h6>
+         <p> The applet icon is only visible if the following conditions are met: </p>
+         <div class="itemizedlist">
+          <ul class="itemizedlist" style="list-style-type: bullet; ">
+           <li class="listitem" style="list-style-type: disc">
+            <p> patches are available </p>
+           </li>
+           <li class="listitem" style="list-style-type: disc">
+            <p> the GUI was not started as user <code class="systemitem">root</code>
+            </p>
+           </li>
+           <li class="listitem" style="list-style-type: disc">
+            <p> the GUI was not started in a VNC session </p>
+           </li>
+          </ul>
+         </div>
+         <p> To start the update viewer even if no applet icon is visible, press <span
+           class="keycap">Alt</span><span class="key-connector">&ndash;</span><span class="keycap">F2</span> and enter <span class="command">gpk-update-viewer</span>.</p>
+     </div>
+     <div class="variablelist">
+      <dl class="variablelist">
+       <dt>
+        <span class="term">Open box with a globe</span>
+       </dt>
+       <dd>
+        <p> The update applet is busy (for example checking for updates or installing software).
+        </p>
+       </dd>
+       <dt>
+        <span class="term">Red Star with Exclamation Mark</span>
+       </dt>
+       <dd>
+        <p> Security patches are available. </p>
+       </dd>
+       <dt>
+        <span class="term">Orange Star with an Up Arrow</span>
+       </dt>
+       <dd>
+        <p> Important patches are available. </p>
+       </dd>
+       <dt>
+        <span class="term">Yellow Star with a Down Arrow</span>
+       </dt>
+       <dd>
+        <p> Trivial patches are available. </p>
+       </dd>
+       <dt>
+        <span class="term">Yellow Triangle with Exclamation Mark</span>
+       </dt>
+       <dd>
+        <p> An error has occurred. </p>
+       </dd>
+      </dl>
+     </div>
+     <div class="sect3">
+      <div class="titlepage">
+       <div>
+        <div>
+         <h4 class="title"><a id="sec.updater.gnome.patches"></a><span class="number">5.5.2.1.</span> <span class="name">Installing Patches</span>
+         <a class="permalink" title="Permalink" href="#sec.updater.gnome.patches"> #</a>
+         </h4>
+        </div>
+       </div>
+      </div>
+      <div class="procedure">
+       <a id="id2629201"></a>
+       <p class="title">
+        Procedure 5.2. Installing Patches
+       </p>
+       <ol class="procedure" type="1">
+        <li>
+         <p> Whenever new patches are available, a notification message will appear and the Update
+          Applet icon will be visible in the notification area. Either click <span class="guimenu"
+           >Install updates</span> in the notification message or click the icon to open the <span
+           class="guimenu">Software Update</span> window. </p>
+        </li>
+        <li>
+         <p> All security and important patches are preselected. It is strongly recommended to
+          install these patches. Trivial patches can be manually selected by ticking the respective
+          check boxes. Get detailed information on a patch by clicking on its title. </p>
+        </li>
+        <li>
+         <p> Click <span class="guimenu">Install Updates</span> to start the patch installation.
+         </p>
+        </li>
+        <li>
+         <p> The <span class="guimenu">Additional Confirmation Required</span> window showing an
+          installation summary opens. Click <span class="guimenu">Continue</span> to proceed. </p>
+        </li>
+        <li>
+         <p> Enter the <code class="systemitem">root</code> password in the authentication screen
+          and proceed with <span class="guimenu">Authenticate</span>. </p>
+        </li>
+       </ol>
+      </div>
+           <div class="figure" style="width: 684px;">
+      <a id="id2629297"></a>
+           <img src="images/gupdater_updates.png" alt="GNOME Update Applet"/>
+                  <div class="titlewrap"><p class="title"><span class="number">Figure 5.4.</span> <span class="name">GNOME Update Applet</span>
+                  <a class="permalink" title="Permalink" href="#id2629297"> #</a></p></div>
+      </div>
+
+      <p> The YaST Online Update offers advanced features to customize the patch installation.
+       Please refer to <a class="xref" href="cha.onlineupdate.you.html"
+        title="Chapter 6. YaST Online Update">Chapter 6, <em>YaST Online Update</em></a> for more
+       information. </p>
+     </div>
+     <div class="sect3">
+      <div class="titlepage">
+       <div>
+        <div>
+         <h4 class="title"><a id="sec.updater.gnome.config"></a><span class="number">5.5.2.2.</span> <span class="name">Configuring the Software
+          Update Applet</span>
+          <a class="permalink" title="Permalink" href="#sec.updater.gnome.config"> #</a>
+          </h4>
+        </div>
+       </div>
+      </div>
+      <p> To configure the update applet, right-click the update icon in the panel and choose <span
+        class="guimenu">Preferences</span>. The configuration dialog lets you modify the following
+       settings: </p>
+      <div class="variablelist">
+       <dl class="variablelist">
+        <dt>
+         <span class="term">
+          <span class="guimenu">Check for Updates</span>
+         </span>
+        </dt>
+        <dd>
+         <p> Choose how often a check for updates is performed: <span class="guimenu">Hourly</span>,
+           <span class="guimenu">Daily</span>, <span class="guimenu">Weekly</span>, or <span
+           class="guimenu">Never</span>. </p>
+        </dd>
+        <dt>
+         <span class="term">
+          <span class="guimenu">Automatically Install</span>
+         </span>
+        </dt>
+        <dd>
+         <p> Configure whether patches are installed automatically or not (default). Automatic
+          installation can be chosen for either security patches only or for all patches. </p>
+        </dd>
+        <dt>
+         <span class="term">
+          <span class="guimenu">Check for Major Upgrades</span>
+         </span>
+        </dt>
+        <dd>
+         <p> Choose how often a check for major upgrades is performed: <span class="guimenu">Daily</span>,
+         <span class="guimenu">Weekly</span>, or <span class="guimenu">Never</span>. </p>
+        </dd>
+        <dt>
+         <span class="term">Check for updates when using mobile broadband</span>
+        </dt>
+        <dd>
+         <p> This configuration option is only available on mobile computers. Turned off by default.
+         </p>
+        </dd>
+       </dl>
+      </div>
+      <p> More options are configurable using <span class="command">gconf-editor</span>:
+      <span class="guimenu">apps</span> → <span class="guimenu">gnome-packagekit</span>.
+      </p>
+     </div>
+    </div>
+
+                   <div class="sect1">
+                    <div class="titlepage">
+                        <h3 class="title">
+                            <a id="sec.onlineupdate.zypper"></a>
+                            <span class="number">5.6. </span><span class="name">Using <span class="command">zypper</span> to do your bidding</span>
+                            <a class="permalink" title="Permalink" href="#sec.onlineupdate.terms"> #</a>
+                        </h3>
+                        
+                        <p>Here's what the average <code>man</code> page would tell you about <span class="command">zypper</span>:</p>
+                        <div class="screenwrap"><pre class="screen">zypper <code class="option">[global-options]</code><em class="replaceable"><code>command</code></em><code class="option">[command-options]</code><code class="option">[arguments]</code> ...</pre></div>
+                        <p>That is all fairly top-notch. Though, here's how you know you've notched it up over 9000:</p>
+                                                <div class="screenwrap"><pre class="screen">$ <span class="command">zypper in zypper</span>
+If 'zypper' is not a typo you can use command-not-found to lookup the package that contains it, like this:
+    cnf zypper</pre></div>
+                           <p>Oh dear!</p>                     
+                    </div>
+                   </div>
+                      </div>
         </div>
     </div>
     <div id="inward"></div>
@@ -217,15 +1441,15 @@
 </div>
     <div id="footerwrap">
         <div class="footer">
-        <p>© 2012 SUSE</p>
-            <ul>
-                <li><a href="/company/careers/" target="_top">Careers</a></li>
-                <li><a href="/company/legal/" target="_top">Legal</a></li>
-                <li><a href="http://www.suse.com/cs-cz/common/inc/feedback_overlay.html?iframe=true" class="feedback">Feedback</a></li>
-                <li><a href="/company/" target="_top">About</a></li>
-                <li><a href="/ContactsOffices/contacts_offices.jsp" target="_top">Contact Us</a></li>
-            </ul>
-        <p id="suse_phone">+420-283-007-311</p>
+            <p>© 2012 SUSE</p>
+                <ul>
+                    <li><a href="http://www.suse.com/company/careers/" target="_top">Careers</a></li>
+                    <li><a href="http://www.suse.com/company/legal/" target="_top">Legal</a></li>
+                    <li><a href="http://www.suse.com/common/inc/feedback_overlay.html?iframe=true" class="feedback">Feedback</a></li>
+                    <li><a href="http://www.suse.com/company/" target="_top">About</a></li>
+                    <li><a href="http://www.suse.com/ContactsOffices/contacts_offices.jsp" target="_top">Contact Us</a></li>
+                </ul>
+            <p id="suse_phone">+420-283-007-311</p>
         </div>
     </div>
  </body>

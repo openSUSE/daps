@@ -4,10 +4,10 @@ body {
     margin: 0;
 }
 
-#header, .chapter, #footer {
+#header, .chapter, .footer {
     margin: 0 auto;
-    min-width: 500px;
-    max-width: 1018px;
+    min-width: 400px;
+    max-width: 998px;
     padding: 0 10px;
 }
 
@@ -20,7 +20,7 @@ body {
     min-height: 139px;
     clear: both;
     position: relative;
-    min-width: 520px;
+    min-width: 440px;
 }
 
 .clearme {
@@ -35,6 +35,7 @@ body {
     margin: 0;
     position: relative;
     z-index: 5;
+    min-width: 440px;
 }
 
 .chapter {
@@ -44,11 +45,11 @@ body {
 /* Greener Selection Color */
 
 ::selection {
-    background: #00A54F;
+    background: #439539;
     color: #FFF;
 }
 ::-moz-selection {
-    background: #00A54F;
+    background: #439539;
     color: #FFF;
 }
 
@@ -88,16 +89,16 @@ body {
 
 
 .crumbs span {
-    color: #B9B9B9;
+    color: #666;
 }
 
 .crumbs a {
-    color: #464547;
+    color: #333;
     text-decoration: none;
 }
 
 .crumbs a:hover {
-    color: #00843E;
+    color: #439539;
     text-decoration: none;
 }
 
@@ -183,18 +184,19 @@ body {
 /* Smaller, fixed header */
 
 #fixed-header-wrap {
-    z-index: 1;
+    z-index: 3;
     position: fixed;
     top: 0;
     width: 100%;
     box-shadow: 0 5px 5px #FFF;
     border-bottom: 1px solid #CCC;
     background-color: #EFEFF0;
+    padding: 3px 0;
 }
 
 #fixed-header {
-    max-width: 1038px;
-    min-width: 480px;
+    max-width: 1018px;
+    min-width: 380px;
     display: block;
     width: 100%;
     font-size: 12px;
@@ -205,14 +207,14 @@ body {
     display: block;
     float: right;
     margin: 0 10px;
-    background-color: #00843E;
+    background-color: #439539;
     padding: 0 5px;
     color: #FFF;
     text-decoration: none;
     font-weight: bold;
 }
 
-/* Content Area */
+/* Content^WChapter Area */
 
 .nav-buttons {
     float: right;
@@ -228,10 +230,10 @@ body {
     text-decoration: none;
     font-size: 20px;
     line-height: 28px;
-    color: #B9B9B9;
+    color: #999;
 }
 .nav-buttons a:hover {
-    color: #00843E;
+    color: #439539;
 }
 
 .nav-buttons a:first-child {
@@ -254,33 +256,47 @@ body {
 
 .sect2 .title {
     /* tbc ...*/
-    font-size: 24px;
+    font-size: 20px;
     font-weight: normal;
     padding: 10px 0 0 0;
     margin: 0;
 }
 
+.sect3 .title {
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px 0 0 0;
+    margin: 0;
+}
 .chapter .name {
-    color: #00843E;
+    color: #439539;
 }
 
 .number {
-    color: #b9b9b9;
+    color: #666;
 }
 
 .permalink {
-    display: none;
+    /*display: none;*/
+    opacity: 0;
     font-size: 75%;
     text-decoration: none;
-    color: #B9B9B9;
+    color: #999;
+    font-weight: normal;
+    line-height: 100%;
+    transition: opacity 0.2s ease-in-out 0.1s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: opacity 0.2s ease-in-out 0.1s;
+    -webkit-transition: opacity 0.2s ease-in-out 0.1s
 }
 
 .permalink:hover {
-    color: #00843E;
+    color: #439539;
 }
 
 .title:hover .permalink, .subtitle:hover .permalink {
-    display: inline;
+    /*display: inline;*/
+    opacity: 1;
 }
 
 .page-toc {
@@ -291,7 +307,7 @@ body {
 .line {
     margin: 0 0 36px 0;
     padding: 0;
-    border-bottom: 1px solid #00843E;
+    border-bottom: 1px solid #439539;
     width: 100%;
 }
 
@@ -311,21 +327,22 @@ body {
     border-radius: 5px;
     border-style: solid;
     padding: 10px;
-    margin-bottom: 17px;
+    margin: 10px 0 17px 0;
+    background-color: #FFF;
 }
 
 .tip {
-    border-color: #00843E;
+    border-color: #439539;
     background: url(style_images/dots-green.png) repeat-x scroll top;
 }
 
 .note {
-    border-color: #2E3436;
+    border-color: #333;
     background: url(style_images/dots-yellow.png) repeat-x scroll top;
 }
 
 .important {
-    border-color: #E35001;
+    border-color: /*#E35001*/ #BB7B03;
     background: url(style_images/dots-orange.png) repeat-x scroll top;
 }
 
@@ -343,15 +360,15 @@ body {
 }
 
 .tip h6 {
-    color: #00843E;
+    color: #439539;
 }
 
 .note h6 {
-    color: #2E3436;
+    color: #333;
 }
 
 .important h6 {
-    color: #E35001;
+    color: /*#E35001*/ #BB7B03;
 }
 
 .warning h6, .caution h6 {
@@ -369,19 +386,23 @@ body {
 }
 
 .tip .symbol {
-    background-position: -144px 0px;
+    background-position: -216px 0px;
 }
 
 .note .symbol {
-     background-position: -144px -36px;
+     background-position: -216px -36px;
 }
 
 .important .symbol {
-    background-position: -180px 0px;
+    background-position: -252px 0px;
 }
 
 .warning .symbol, .caution .symbol {
-    background-position: -180px -36px;
+    background-position: -252px -36px;
+}
+
+.admonition p {
+    margin: 10px 0 0 0 !important;
 }
 
 /* Text styles */
@@ -407,34 +428,65 @@ strong, b {
 
 .chapter .abstract {
     font-weight: bold;
-    color: #464547;
+    color: /*#464547*/ #333;
 }
 
 .chapter p a {
-    color: #00843E;
+    color: #439539;
     text-decoration: none;
 }
 
 .chapter p a:hover {
-    color: #00843E;
+    color: #439539;
     text-decoration: underline;
 }
 
 code, .command {
-    font: normal 15px "Droid Sans Mono", monospace;
-    padding: 2px;
+    font: normal 100% "Droid Sans Mono", monospace;
+    padding: 1px 5px;
     border-radius: 3px;
 }
 
 code {
     background-color: #EFEFF0;
-    color: #464547;
+    color: #333;
 }
 
 .command {
     background-color: #EFEFF0;
-    color: #464547;
+    color: #333;
     font-weight: bold;
+}
+
+.screenwrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+    padding: 10px;
+    background-color: #202020;
+    border-radius: 5px;
+}
+
+.screen {
+    padding: 0;
+    margin: 0;
+    font: normal 13px "Droid Sans Mono", monospace;
+    color: #FFF;
+    line-height: 125%;
+    display: block;  
+    overflow: auto;
+}
+
+.screen code , .screen .command {
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    width: 100% !important;
+}
+
+.screen code {
+    color: #FFF;
+}
+
+.screen .command {
+    color: #76AD2D;
 }
 
 .variablelist {
@@ -453,12 +505,129 @@ code {
     font-weight: bold;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
 .variablelist dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 24px;
 }
+
+.figure {
+    padding: 0;
+    /*border-radius: 5px;*/
+    position: relative;
+    max-width: 100%;
+}
+
+.figure img {
+    margin: 0;
+    padding: 0;
+    background-color: #FFF;
+    max-width: 100%;
+    display: block; /* inline images weirdly have some whitspace below them, thus block'ing */
+}
+
+.figure .title {
+    padding: 10px;
+    font-size: 15px;
+    color: #FFF !important;
+    font-weight: normal;
+
+}
+
+.figure .titlewrap {
+    padding: 0;
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(32,32,32,0.9);
+    border-radius: 0 /*0 5px 5px*/;
+    width: 100%;
+    transition: all 0.2s ease-in-out 0.1s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: all 0.2s ease-in-out 0.1s;
+    -webkit-transition: all 0.2s ease-in-out 0.1s;
+}
+
+.figure a {
+    padding: 0;
+    margin: 0;
+    height: 0;
+    width: 0;
+}
+
+.figure .number, .figure .permalink:hover {
+    color: #76AD2D;
+    text-decoration: none;
+}
+
+.figure .name, .figure .permalink {
+    color: #FFF;
+}
+
+.figure:hover .titlewrap {
+    opacity: 1;
+}
+
+.informalfigure img {
+    max-width: 100%;
+    display: block; /* inline images weirdly have some whitspace below them, thus block'ing */
+}
+
+.keycap {
+    color: #333;
+    font-size: 13px;
+    padding: 0px 5px;
+    background-color: #EFEFF0;
+    border-radius: 3px;
+    border-width: 1px 2px 2px 1px;
+    border-color: #999;
+    border-style: solid;
+}
+
+/* We put an ndash character between keycaps that are part of an accelerator */
+.key-connector {
+    margin: 0 -1px; 
+    color: #666;"
+}
+
+.procedure .title {
+    font-size: 15px;
+    font-weight: normal;
+    margin: 5px 10px 0 10px;
+}
+
+div.procedure {
+    font-size: 15px;
+    border-left: 3px solid rgba(67,149,57,0.5) /*#439539*/;
+    /*border-radius: 5px 0 0 5px;*/
+    font-weight: normal;
+    padding: 0 0 10px 0;
+    background-color: #f7faf6;
+    display: block;
+}
+
+ol.procedure {
+    padding: 5px 5px 0 20px;
+    margin: 0 10px 0 10px;
+    display: block;
+    color: #439539;
+    font-weight: bold;
+}
+
+ul {
+    padding: 5px 5px 0 20px;
+    margin: 0 10px 0 10px;
+    display: block;
+    color: #439539;
+    list-style-type: bullet;
+}  
+
+.procedure li p {
+    font-weight: normal;
+}
+
 
 /*dl.variablelist {
     margin: 0 0 17px 0;
@@ -468,10 +637,16 @@ code {
 
 html, body {
     height: 100%;
+    min-width: 500px;
 }
 
 #inward, #footerwrap {
-    height: 100px;
+    height: 80px;
+}
+
+#inward {
+    z-index: -1;
+    position: relative;
 }
 
 #footerwrap {
@@ -485,5 +660,45 @@ html, body {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -100px;
+    margin: 0 auto -80px;
+}
+
+/* Footer contents */
+
+.footer {
+    font-family: Helvetica, FreeSans, sans-serif;
+    font-size: 12px;
+    z-index: 2; /* Else, #inward overlays the footer */
+    position: relative;
+}
+
+.footer li, .footer p {
+    display: block;
+    float: left;
+    margin: 35px 30px 35px 0;
+    padding: 0;
+}
+
+.footer ul {
+    margin: 0;
+    padding: 0;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #666;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #76AD2D;
+}
+
+.footer p {
+    color: #333;
+}
+
+#suse_phone {
+    margin: 35px 0 35px 30px;
+    float: right;
 }
