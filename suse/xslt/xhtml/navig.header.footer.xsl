@@ -320,7 +320,7 @@ orientation: <xsl:value-of select="$orientation"/>
 <!-- ==================================================================== -->
 
 
-<xsl:template name="user.header.content">
+<!--<xsl:template name="user.header.content">
   <xsl:choose>
     <xsl:when test="self::set">
       <div class="logo">
@@ -328,27 +328,26 @@ orientation: <xsl:value-of select="$orientation"/>
       </div>
     </xsl:when>
     <xsl:otherwise>
-      <!--<xsl:call-template name="breadcrumbs.navigation"/>-->
+      <!-\-<xsl:call-template name="breadcrumbs.navigation"/>-\->
     </xsl:otherwise>
   </xsl:choose>
-  
-</xsl:template>
+</xsl:template>-->
 
 
   
 <xsl:template name="user.footer.content">
   <!--<xsl:message> user.footer.content </xsl:message>-->
   
-   <xsl:if test="/book/bookinfo/productnumber">
+   <xsl:if test="ancestor-or-self::book/bookinfo/productnumber">
       <div class="userfootercontent">
        <xsl:comment>htdig_noindex</xsl:comment>
        <hr/>
        <center>
-         <xsl:value-of select="/book/bookinfo/productname"/>
+         <xsl:value-of select="ancestor-or-self::book/bookinfo/productname"/>
          <xsl:text> </xsl:text>
-         <xsl:value-of select="/book/bookinfo/titleabbrev"/>
+         <xsl:apply-templates select="ancestor-or-self::book" mode="titleabbrev.markup"/>
          <xsl:text> </xsl:text>
-         <xsl:value-of select="/book/bookinfo/productnumber"/>
+         <xsl:value-of select="ancestor-or-self::book/bookinfo/productnumber"/>
        </center>
        <xsl:comment>/htdig_noindex</xsl:comment>
       </div>
