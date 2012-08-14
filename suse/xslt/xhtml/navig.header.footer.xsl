@@ -37,39 +37,6 @@
 
 </xsl:template>-->
 
-
-<xsl:template name="check.prev.link">
-  <xsl:param name="node" select="."/>
-  <xsl:param name="prev"/>
-  <xsl:variable name="prev.book" 
-    select="$prev/ancestor-or-self::*[self::article | self::book][1]"/>
-  <xsl:variable name="this.book" select="ancestor-or-self::book"/>
-  
-  <xsl:choose>
-    <xsl:when test="$rootid != '' and
-                    count(key('id', $rootid))>0 and
-                    generate-id($prev.book) = generate-id($this.book)">0</xsl:when>
-    <xsl:otherwise>1</xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template name="check.next.link">
-  <xsl:param name="node" select="."/>
-  <xsl:param name="next"/>
-  <xsl:variable name="next.book" 
-    select="$next/ancestor-or-self::*[self::article | self::book][1]"/>
-  <xsl:variable name="this.book" select="ancestor-or-self::book"/>
-  
-  <xsl:choose>
-    <xsl:when test="$rootid != '' and
-                    count(key('id', $rootid))>0 and
-                    generate-id($next.book) = generate-id($this.book)">0</xsl:when>
-    <xsl:otherwise>1</xsl:otherwise>
-  </xsl:choose>
-  
-</xsl:template>
-
-
 <xsl:template name="get.roottitle">
   <xsl:param name="book" select="ancestor-or-self::book"/>
 </xsl:template>
@@ -162,9 +129,33 @@ orientation: <xsl:value-of select="$orientation"/>
   <xsl:param name="prev"/>
   <xsl:param name="next"/>
   <xsl:param name="debug"/>
-  <xsl:variable name="next.book" select="$next/ancestor-or-self::book"/>
-  <xsl:variable name="prev.book" select="$prev/ancestor-or-self::book"/>
-  <xsl:variable name="this.book" select="ancestor-or-self::book"/>
+  <!-- The next.book, prev.book, and this.book variables contains the
+       ancestor or self nodes for book or article, but only one node.
+  -->
+  <xsl:variable name="next.book" 
+    select="($next/ancestor-or-self::book |
+             $next/ancestor-or-self::article)[last()]"/>
+  <xsl:variable name="prev.book"
+    select="($prev/ancestor-or-self::book |
+             $prev/ancestor-or-self::article)[last()]"/>
+  <xsl:variable name="this.book" 
+    select="(ancestor-or-self::book|ancestor-or-self::article)[last()]"/>
+  
+  <!-- Compare the current "book" ID (be it really a book or an article)
+       with the "next" or "previous" book or article ID
+  -->
+  <xsl:variable name="isnext"  select="generate-id($this.book) = generate-id($next.book)"/>
+  <xsl:variable name="isprev"  select="generate-id($this.book) = generate-id($prev.book)"/>
+  
+  <xsl:variable name="home" select="/*[1]"/>
+  <xsl:variable name="up" select="parent::*"/>
+  <xsl:variable name="row2" select="(count($prev) > 0 and $isprev) or
+                                    (count($up) &gt; 0 and 
+                                     generate-id($up) != generate-id($home) and 
+                                     $navig.showtitles != 0) or
+                                    (count($next) > 0 and $isnext)"/>
+  
+  
   <!-- 
      We use two node sets and calculate the set difference
      with the following, general XPath expression:
@@ -186,25 +177,25 @@ orientation: <xsl:value-of select="$orientation"/>
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
-  
-    <xsl:variable name="prevresult">
-      <xsl:call-template name="check.prev.link">
-        <xsl:with-param name="prev" select="$prev"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="nextresult">
-      <xsl:call-template name="check.next.link">
-        <xsl:with-param name="next" select="$next"/>
-      </xsl:call-template>
-    </xsl:variable>
+    
+<!--<xsl:if test="$debug">
+              <xsl:message>breadcrumbs.navigation:
+    Element:  <xsl:value-of select="local-name(.)"/>
+    prev:     <xsl:value-of select="local-name($prev)"/>
+    next:     <xsl:value-of select="local-name($next)"/>
+    rootid:   <xsl:value-of select="$rootid"/>
+    isnext:   <xsl:value-of select="$isnext"/>
+    isprev:   <xsl:value-of select="$isprev"/>
+</xsl:message>
+</xsl:if>-->
     
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="breadcrumbs">
         <p>
           <xsl:apply-templates select="$setdiff"  mode="breadcrumbs"/>
-          <xsl:if test="self::* != /*">
+          <xsl:if test="$row2">
             <strong>
-              <xsl:if test="$prevresult=0">
+              <xsl:if test="count($prev) >0 and $isprev">
                 <a accesskey="p">
                   <xsl:attribute name="title">
                     <xsl:apply-templates select="$prev" mode="object.title.markup"/>
@@ -221,26 +212,8 @@ orientation: <xsl:value-of select="$orientation"/>
                 </a>
                 <xsl:text> </xsl:text>
               </xsl:if>
-<!--
-<xsl:if test="$debug">
-              <xsl:message>breadcrumbs.navigation:
-    Element:  <xsl:value-of select="local-name(.)"/>
-    prev:     <xsl:value-of select="local-name($prev)"/>
-    next:     <xsl:value-of select="local-name($next)"/>
-    rootid:   <xsl:value-of select="$rootid"/>
-    this.book:    <xsl:value-of select="generate-id($this.book)"/>
-    prev.book:    <xsl:value-of select="generate-id($prev.book)"/>
-    next.book:    <xsl:value-of select="concat(generate-id($next.book),
-      ' ', count($next[$this.book]), 
-      ' ', local-name($next),
-      ' ', local-name(following-sibling::*[1]))"/>
-    following-sibling: <xsl:value-of select="count(following-sibling::*[1])"/>
-    prevresult:   <xsl:value-of select="$prevresult"/>
-</xsl:message>
-</xsl:if>
--->
               
-              <xsl:if test="$nextresult=0">
+              <xsl:if test="count($next) >0 and $isnext">
                   <xsl:text> </xsl:text>
                   <a accesskey="n">
                     <xsl:attribute name="title">
