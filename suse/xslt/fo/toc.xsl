@@ -5,6 +5,14 @@
     xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 
+<xsl:param name="toc.part.label-separation">3pt</xsl:param>
+<xsl:param name="toc.part.distance-between-starts">40pt</xsl:param>
+<xsl:param name="toc.chapter.label-separation">3pt</xsl:param>
+<xsl:param name="toc.chapter.distance-between-starts">18pt</xsl:param>
+<xsl:param name="toc.section.label-separation">3pt</xsl:param>
+<xsl:param name="toc.section.distance-between-starts">27pt</xsl:param>
+  
+
 <xsl:template name="keep-with-next-or-not">
   <xsl:choose>
     <xsl:when test="$xep.extensions != 0">
@@ -50,11 +58,11 @@
   <fo:list-block 
       space-before="27pt -1em"
       space-after="16pt -1em"
-      provisional-distance-between-starts="40pt"
-      provisional-label-separation="3pt">
+      provisional-distance-between-starts="{$toc.part.distance-between-starts}"
+      provisional-label-separation="{$toc.section.label-separation}">
       <fo:list-item xsl:use-attribute-sets="toc.title.part.properties">
         <fo:list-item-label end-indent="label-end()">
-          <fo:block>
+          <fo:block text-align="left">
             <xsl:choose>
               <xsl:when test="string($part.autolabel) != 0">
                 <xsl:call-template name="substitute-markup">
@@ -155,8 +163,8 @@
   </xsl:variable>
    
   <fo:list-block
-      provisional-distance-between-starts="18pt"
-      provisional-label-separation="3pt"
+      provisional-distance-between-starts="{$toc.chapter.distance-between-starts}"
+      provisional-label-separation="{$toc.chapter.label-separation}"
       space-before="27pt -1em"
       space-after="2pt">
     <xsl:call-template name="keep-with-next-or-not"/>
@@ -189,11 +197,11 @@
   </xsl:variable>
   
   <fo:list-block
-    provisional-distance-between-starts="27pt"
-    provisional-label-separation="3pt">
+    provisional-distance-between-starts="{$toc.section.distance-between-starts}"
+    provisional-label-separation="{$toc.section.label-separation}">
    <fo:list-item xsl:use-attribute-sets="toc.title.section.properties">
     <fo:list-item-label end-indent="label-end()">
-      <fo:block>
+      <fo:block text-align="left">
         <xsl:apply-templates select="." mode="label.markup"/>
       </fo:block>      
     </fo:list-item-label>
