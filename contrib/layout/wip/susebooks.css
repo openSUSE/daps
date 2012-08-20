@@ -1,27 +1,18 @@
-body {
-    background-color: #FFF;
-    font-family: Open Sans, sans-serif;
-    margin: 0;
-}
+/* Reset everything */
+@import url("reset.css");
 
-#header, .chapter, .footer {
-    margin: 0 auto;
-    min-width: 400px;
-    max-width: 998px;
-    padding: 0 10px;
-}
+/*
+Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
+For additional support for Vietnamese, add "vietnamese," after "&subset=".
+Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
+Consider page load time.
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic&subset=latin,cyrillic-ext);
 
-#header {
-    position: relative; /* to be able to position the lucky charms(TM) absolutely*/
-}
 
-#bg-positioner {
-    background: url(style_images/dots-gray.png) repeat-x scroll top;
-    min-height: 139px;
-    clear: both;
-    position: relative;
-    min-width: 440px;
-}
+/* PAGE BOILERPLATE AND NAVIGATION */
+
+/* Common */
 
 .clearme {
     clear: both;
@@ -29,11 +20,45 @@ body {
     height: 0;
 }
 
-#whiten {
+::selection, ::-moz-selection { /* Green Selections */
+    background: #439539;
+    color: #FFF;
+}
+
+
+body {
+    background-color: #FFF;
+    font-family: Open Sans, Helvetica, FreeSans, sans-serif;
+    line-height: 140%;
+}
+
+html, body {
+    height: 100%;
+    min-width: 400px;
+}
+
+#_header, #_footer, #_toolbar, .chapter {
+    margin: 0 auto;
+    min-width: 400px;
+    max-width: 998px;
+    padding: 0 10px;
+}
+
+/* to be able to position various elements and be able to use z-index*/
+#_header, #_content, #_white-bg, #_inward, #_footer, .figure {
+    position: relative; 
+}
+
+#_content {
+    background: url(style_images/dots-gray.png) repeat-x scroll 0px 0px;
+    min-height: 139px;
+    clear: both;
+    min-width: 440px;
+}
+
+#_white-bg {
     background-color: #FFF;
     width: 100%;
-    margin: 0;
-    position: relative;
     z-index: 5;
     min-width: 440px;
 }
@@ -42,26 +67,14 @@ body {
     z-index: 0;
 }
 
-/* Greener Selection Color */
-
-::selection {
-    background: #439539;
-    color: #FFF;
-}
-::-moz-selection {
-    background: #439539;
-    color: #FFF;
-}
-
 /* Header Area */
 
-#logo {
+#_logo {
     float: left;
-    padding: 22px 22px 22px 0;
-    position: relative;
+    margin: 22px 22px 22px 5px;
 }
 
-#header .crumbs {
+#_header .crumbs {
     position: absolute;
     top: 33px;
     left: 130px;
@@ -74,17 +87,15 @@ body {
     float: left;
 }
 
-#fixed-header .crumbs {
+#_fixed-header .crumbs {
     padding: 0 10px;
 }
 
-#header .crumbs a, #header .crumbs span {
-    height: 36px !important;
-    display: block;
-    vertical-align: middle;
-    padding-left: 5px;
+#_header .crumbs a, #_header .crumbs span {
+    margin: 0 0 0 5px;
     font-size: 15px;
     line-height: 36px;
+    height: 36px;
 }
 
 
@@ -97,93 +108,101 @@ body {
     text-decoration: none;
 }
 
-.crumbs a:hover {
+.crumbs a:hover, .crumbs a:focus, .crumbs a:active {
     color: #439539;
     text-decoration: none;
 }
 
-#header .book-icon {
+.book-icon, .toc-icon, .find-icon, .tools-icon {
+    display: block;
+}
+
+#_header .book-icon {
     background: url(style_images/icons.png) no-repeat scroll 0px 0px;
-    margin: 0;
-    width: 36px;
-    height: 36px;
 }
 
-
-#header .book-icon:hover {
-    background: url(style_images/icons.png) no-repeat scroll 0px -36px;
-    margin: 0;
+#_header .book-icon:hover, #header .book-icon:focus, #header .book-icon:active {
+    background-position: 0px -36px;
 }
 
-#fixed-header .book-icon {
+#_fixed-header .book-icon {
     background: url(style_images/icons.png) no-repeat scroll 0px -72px;
     margin: 1px 0;
     width: 18px;
     height: 15px;
 }
 
-#fixed-header .book-icon:hover {
+#_fixed-header .book-icon:hover, #fixed-header .book-icon:focus, #fixed-header .book-icon:active {
     background: url(style_images/icons.png) no-repeat scroll -18px -72px;
 }
 
-#lucky-charms {
-    position: absolute;
-    top: 33px;
-    right: 0px;
-    background-color: #FFF;
-    box-shadow: -5px 0 5px #FFF;
-    padding-left: 17px;
+/* Toolbar */
+
+#_toolbar {
+    padding: 22px 0 0;/*
+    width: 100%;*/
 }
 
-#lucky-charms a {
+#_toolbar a {
     text-decoration: none;
     display: block;
     float: left;
     margin-right: 10px;
 }
 
-.toc-icon {
-    background: url(style_images/icons.png) no-repeat scroll -36px 0px;
-    margin: 0;
+#_toolbar > div {
+    float: left;
+    height: 80px;
+}
+
+#_toolbar .inactive {
+    width: 25%;
+}
+
+#_toolbar .inactive {
+    width: 20%;
+}
+
+#_toolbar .search-area {
+    border-left: 1px solid #FFF;
+    border-right: 1px solid #FFF;
+}
+
+.toc-icon, .find-icon, .tools-icon, #_header .book-icon {
     width: 36px;
     height: 36px;
 }
 
+.toc-icon {
+    background: url(style_images/icons.png) no-repeat scroll -36px 0px;
+}
 
-.toc-icon:hover {
-    background: url(style_images/icons.png) no-repeat scroll -36px -36px;
-    margin: 0;
+
+.toc-icon:hover, .toc-icon:focus, .toc-icon:active {
+    background-position: -36px -36px;
 }
 
 .find-icon {
     background: url(style_images/icons.png) no-repeat scroll -72px 0px;
-    margin: 0;
-    width: 36px;
-    height: 36px;
 }
 
 
-.find-icon:hover {
-    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
-    margin: 0;
+.find-icon:hover, .find-icon:focus, .find-icon:active {
+    background-position: -72px -36px;
 }
 
 .tools-icon {
     background: url(style_images/icons.png) no-repeat scroll -108px 0px;
-    margin: 0;
-    width: 36px;
-    height: 36px;
 }
 
 
-.tools-icon:hover {
-    background: url(style_images/icons.png) no-repeat scroll -108px -36px;
-    margin: 0;
+.tools-icon:hover, .tools-icon:focus, .tools-icon:active {
+    background-position: -108px -36px;
 }
 
 /* Smaller, fixed header */
 
-#fixed-header-wrap {
+#_fixed-header-wrap {
     z-index: 3;
     position: fixed;
     top: 0;
@@ -192,9 +211,10 @@ body {
     border-bottom: 1px solid #CCC;
     background-color: #EFEFF0;
     padding: 3px 0;
+    line-height: 100%;
 }
 
-#fixed-header {
+#_fixed-header {
     max-width: 1018px;
     min-width: 380px;
     display: block;
@@ -208,31 +228,92 @@ body {
     float: right;
     margin: 0 10px;
     background-color: #439539;
-    padding: 0 5px;
+    padding: 1px 5px;
     color: #FFF;
     text-decoration: none;
     font-weight: bold;
+    border-radius: 3px;
 }
 
-/* Content^WChapter Area */
+/* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
+#_inward, #_footer-wrap {
+    height: 80px;
+}
+
+#_inward {
+    z-index: -1;
+}
+
+#_footer-wrap {
+    width: 100%;
+    overflow: hidden;
+    background-color: #EFEFF0;
+    
+}
+
+#_outer-wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -80px;
+}
+
+/* Footer contents */
+
+#_footer {
+    font-family: Helvetica, FreeSans, sans-serif;
+    z-index: 2; /* Else, #_inward overlays the footer */
+}
+
+#_footer li, #_footer p {
+    display: block;
+    float: left;
+    line-height: 80px;
+    margin: 0 30px 0 0;
+    font-size: 12px;
+}
+
+#_footer a {
+    text-decoration: none;
+    color: #666;
+}
+
+#_footer a:hover, #_footer a:focus, #_footer a:active {
+    text-decoration: underline;
+    color: #76AD2D;
+}
+
+#_footer p {
+    color: #333;
+}
+
+#_suse_phone {
+    margin: 0 !important;
+    float: right !important;
+}
+
+
+/* .CHAPTER AREA */
+
+.chapter {
+    margin-bottom: 75px;
+}
 
 .nav-buttons {
     float: right;
-    margin-top: 17px;
     width: 50px;
-    margin-left: 19px;
+    margin: 33px 0 0 20px;
 }
 
 
 .nav-buttons a {
     display: inline;
-    margin: 0;
     text-decoration: none;
     font-size: 20px;
     line-height: 28px;
     color: #999;
 }
-.nav-buttons a:hover {
+.nav-buttons a:hover, .nav-buttons a:focus,.nav-buttons a:active {
     color: #439539;
 }
 
@@ -243,33 +324,33 @@ body {
 .chapter .title {
     font-size: 28px;
     font-weight: normal;
-    padding: 10px 0 0 0;
-    margin: 0;
+    padding: 40px 0 5px;
 }
 
 .sect1 .title {
     font-size: 24px;
     font-weight: normal;
-    padding: 10px 0 0 0;
-    margin: 0;
+    padding: 50px 0 5px;
 }
 
 .sect2 .title {
-    /* tbc ...*/
     font-size: 20px;
     font-weight: normal;
-    padding: 10px 0 0 0;
-    margin: 0;
+    padding: 40px 0 0;
 }
 
 .sect3 .title {
     font-size: 15px;
     font-weight: bold;
-    padding: 10px 0 0 0;
-    margin: 0;
+    padding: 30px 0 0;
 }
-.chapter .name {
+
+.name {
     color: #439539;
+}
+
+a:hover .name, a:focus .name, a:active .name {
+    text-decoration: underline;
 }
 
 .number {
@@ -277,7 +358,6 @@ body {
 }
 
 .permalink {
-    /*display: none;*/
     opacity: 0;
     font-size: 75%;
     text-decoration: none;
@@ -290,23 +370,22 @@ body {
     -webkit-transition: opacity 0.2s ease-in-out 0.1s
 }
 
-.permalink:hover {
+.permalink:hover, .permalink:focus, .permalink:active {
     color: #439539;
 }
 
-.title:hover .permalink, .subtitle:hover .permalink {
-    /*display: inline;*/
+/* Do I actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
+.title:hover .permalink, .title:focus .permalink, .title:active .permalink,
+.subtitle:hover .permalink, .subtitle:focus .permalink, .subtitle:active .permalink {
     opacity: 1;
 }
 
 .page-toc {
     padding: 17px;
-    margin: 0;
 }
 
 .line {
     margin: 0 0 36px 0;
-    padding: 0;
     border-bottom: 1px solid #439539;
     width: 100%;
 }
@@ -315,7 +394,7 @@ body {
         text-decoration: none;
 }
 
-.page-toc a:hover .chapter {
+.page-toc a:hover .chapter, .page-toc a:focus .chapter, .page-toc a:active .chapter {
     text-decoration: underline !important;
 }
 
@@ -327,7 +406,7 @@ body {
     border-radius: 5px;
     border-style: solid;
     padding: 10px;
-    margin: 10px 0 17px 0;
+    margin: 17px 0;
     background-color: #FFF;
 }
 
@@ -342,7 +421,7 @@ body {
 }
 
 .important {
-    border-color: /*#E35001*/ #BB7B03;
+    border-color: #BB7B03;
     background: url(style_images/dots-orange.png) repeat-x scroll top;
 }
 
@@ -368,7 +447,7 @@ body {
 }
 
 .important h6 {
-    color: /*#E35001*/ #BB7B03;
+    color: #BB7B03;
 }
 
 .warning h6, .caution h6 {
@@ -379,7 +458,6 @@ body {
     width: 36px;
     height: 36px;
     margin: 0 10px 0 0;
-    padding: 0;
     background-image: url(style_images/icons.png);
     background-repeat: no-repeat;
     float: left;
@@ -419,32 +497,34 @@ strong, b {
     font-weight: bold;
 }
 
-.chapter p {
+p {
     font-size: 15px;
     color: #000;
     text-align: left;
-    line-height: 150%;
+    margin: 10px 0 0;
 }
 
-.chapter .abstract {
+.abstract {
     font-weight: bold;
-    color: /*#464547*/ #333;
+    color: #333;
 }
 
-.chapter p a {
+p a {
     color: #439539;
     text-decoration: none;
 }
 
-.chapter p a:hover {
+p a:hover, p a:focus, p a:active {
     color: #439539;
     text-decoration: underline;
 }
 
 code, .command {
-    font: normal 100% "Droid Sans Mono", monospace;
+    font: normal 120% FreeMono, "Droid Sans Mono", monospace;
     padding: 1px 5px;
     border-radius: 3px;
+    /* There might be code or commands within links. The following doesn't help, however. */
+    text-decoration: none !important;
 }
 
 code {
@@ -458,16 +538,15 @@ code {
     font-weight: bold;
 }
 
-.screenwrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+.screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
     padding: 10px;
     background-color: #202020;
     border-radius: 5px;
+    margin: 10px 0 0;
 }
 
 .screen {
-    padding: 0;
-    margin: 0;
-    font: normal 13px "Droid Sans Mono", monospace;
+    font: normal 13px FreeMono, "Droid Sans Mono", monospace;
     color: #FFF;
     line-height: 125%;
     display: block;  
@@ -475,10 +554,10 @@ code {
 }
 
 .screen code , .screen .command {
-    padding: 0;
     border-radius: 0;
     background-color: transparent;
     width: 100% !important;
+    font-size: 100%;
 }
 
 .screen code {
@@ -491,38 +570,33 @@ code {
 
 .variablelist {
     margin: 17px 0;
-    line-height: 125%;
     font-size: 15px;
-}
-
-.variablelist p {
-   line-height: 130%;
-   margin: 0;
-   padding: 0;
 }
 
 .variablelist dt {
     font-weight: bold;
-    margin: 0;
-    padding: 0;
     color: #333;
 }
 
 .variablelist dd {
-    margin: 0 0 17px 0;
-    padding: 0 0 0 24px;
+    margin: 0 0 10px 0;
+    padding: 0 0 0 30px;
+}
+
+.variablelist dd p {
+    margin: 0;
 }
 
 .figure {
-    padding: 0;
-    /*border-radius: 5px;*/
-    position: relative;
     max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    color: #999;
+    margin: 17px 0 7px;
+    border: 1px solid rgb(32,32,32);
 }
 
 .figure img {
-    margin: 0;
-    padding: 0;
     background-color: #FFF;
     max-width: 100%;
     display: block; /* inline images weirdly have some whitspace below them, thus block'ing */
@@ -530,34 +604,25 @@ code {
 
 .figure .title {
     padding: 10px;
-    font-size: 15px;
+    margin: 0;
+    font-size: 13px;
+    text-transform: uppercase;
     color: #FFF !important;
     font-weight: normal;
-
 }
 
-.figure .titlewrap {
-    padding: 0;
-    opacity: 0;
-    position: absolute;
-    bottom: 0;
-    background-color: rgba(32,32,32,0.9);
-    border-radius: 0 /*0 5px 5px*/;
+.figure .title-wrap {
+    background-color: rgba(32,32,32,1);
     width: 100%;
-    transition: all 0.2s ease-in-out 0.1s;
-    /* Clean the below up in Q3 2013 or so... */
-    -moz-transition: all 0.2s ease-in-out 0.1s;
-    -webkit-transition: all 0.2s ease-in-out 0.1s;
+    overflow: hidden;
 }
 
 .figure a {
-    padding: 0;
-    margin: 0;
     height: 0;
     width: 0;
 }
 
-.figure .number, .figure .permalink:hover {
+.figure .number, .figure .permalink:hover,  .figure .permalink:focus,  .figure .permalink:active {
     color: #76AD2D;
     text-decoration: none;
 }
@@ -566,13 +631,12 @@ code {
     color: #FFF;
 }
 
-.figure:hover .titlewrap {
-    opacity: 1;
-}
-
 .informalfigure img {
     max-width: 100%;
-    display: block; /* inline images weirdly have some whitspace below them, thus block'ing */
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+    text-align: center;
+    color: #999;
+    margin: 17px 0 0;
 }
 
 .keycap {
@@ -589,35 +653,53 @@ code {
 /* We put an ndash character between keycaps that are part of an accelerator */
 .key-connector {
     margin: 0 -1px; 
-    color: #666;"
+    color: #666;
 }
 
 .procedure .title {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: normal;
-    margin: 5px 10px 0 10px;
+    margin: 0 10px;
+    padding: 0 0 5px;
+    text-transform: uppercase;
+}
+
+.procedure .title code, .procedure .title .command, .procedure .title .keycap {
+    text-transform: none;
 }
 
 div.procedure {
     font-size: 15px;
-    border-left: 3px solid rgba(67,149,57,0.5) /*#439539*/;
-    /*border-radius: 5px 0 0 5px;*/
+    border-left: 3px solid rgba(67,149,57,0.5);
     font-weight: normal;
-    padding: 0 0 10px 0;
+    margin: 17px 0 17px;
+    padding: 5px 5px 5px 2px; /* -3px of border on the left, so it sits right there with the other list etc. */
     background-color: #f7faf6;
     display: block;
 }
 
-ol.procedure {
-    padding: 5px 5px 0 20px;
+ol.procedure, ol.substeps {
+    padding: 0 0 0 20px;
     margin: 0 10px 0 10px;
     display: block;
     color: #439539;
     font-weight: bold;
 }
 
-ul {
-    padding: 5px 5px 0 20px;
+ol.procedure {
+    list-style-type: decimal;
+}
+
+ol.substeps {
+    list-style-type: lower-latin;
+}
+
+.procedure li:first-child p {
+    margin: 0;
+}
+
+.chapter ul {
+    padding: 5px 0 5px 25px;
     margin: 0 10px 0 10px;
     display: block;
     color: #439539;
@@ -628,77 +710,7 @@ ul {
     font-weight: normal;
 }
 
-
-/*dl.variablelist {
-    margin: 0 0 17px 0;
-}*/
-
-/* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
-
-html, body {
-    height: 100%;
-    min-width: 500px;
+.procedure > p {
+    margin: 0 10px 5px;
 }
 
-#inward, #footerwrap {
-    height: 80px;
-}
-
-#inward {
-    z-index: -1;
-    position: relative;
-}
-
-#footerwrap {
-    width: 100%;
-    overflow: hidden;
-    background-color: #EFEFF0;
-    
-}
-
-#outerwrap {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -80px;
-}
-
-/* Footer contents */
-
-.footer {
-    font-family: Helvetica, FreeSans, sans-serif;
-    font-size: 12px;
-    z-index: 2; /* Else, #inward overlays the footer */
-    position: relative;
-}
-
-.footer li, .footer p {
-    display: block;
-    float: left;
-    margin: 35px 30px 35px 0;
-    padding: 0;
-}
-
-.footer ul {
-    margin: 0;
-    padding: 0;
-}
-
-.footer a {
-    text-decoration: none;
-    color: #666;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-    color: #76AD2D;
-}
-
-.footer p {
-    color: #333;
-}
-
-#suse_phone {
-    margin: 35px 0 35px 30px;
-    float: right;
-}
