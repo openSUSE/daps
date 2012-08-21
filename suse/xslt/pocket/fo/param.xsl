@@ -42,13 +42,4 @@
   </xsl:choose>
 </xsl:param>
 
-<xsl:param name="toc.part.label-separation">10pt</xsl:param>
-<xsl:param name="toc.chapter.label-separation">10pt</xsl:param>
-<xsl:param name="toc.chapter.distance-between-starts">22pt</xsl:param>
-<xsl:param name="toc.section.label-separation">10pt</xsl:param>
-<xsl:param name="toc.section.distance-between-starts">27pt</xsl:param>
-
-
-<!--<xsl:param name="callout.unicode.start.character">9352</xsl:param>-->
-  
 </xsl:stylesheet>
