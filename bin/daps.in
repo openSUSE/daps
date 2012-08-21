@@ -1017,7 +1017,7 @@ if [[ -n $DAPSROOT ]]; then
         PYTHON_DIR="${DAPSROOT}/python"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
-        XML_CATALOG_FILES="$DAPSROOT/etc/catalog.xml"
+        XML_CATALOG_FILES="$XML_CATALOG_FILES $DAPSROOT/etc/catalog.xml"
     fi
 else
     # default DAPSROOT
