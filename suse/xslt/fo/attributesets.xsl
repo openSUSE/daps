@@ -100,9 +100,10 @@
   <xsl:attribute name="space-after.minimum">0pt</xsl:attribute>
   <xsl:attribute name="space-after.optimum">6pt</xsl:attribute>
   <xsl:attribute name="space-after.maximum">6pt</xsl:attribute>
+<!--  <xsl:attribute name="hyphenate">false</xsl:attribute>-->
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-  <xsl:attribute name="hyphenate">false</xsl:attribute>
-<!--   <xsl:attribute name="hyphenation-character">&#x25BA;</xsl:attribute> -->
+   <xsl:attribute name="hyphenation-character">&#x21a9;</xsl:attribute><!-- &#x25ca; -->
+
   <xsl:attribute name="font-size"
    ><xsl:value-of select="0.75*$body.font.master"/>pt</xsl:attribute>
 </xsl:attribute-set>
@@ -171,7 +172,6 @@
 </xsl:attribute-set>
 
 
-
 <!-- ==================================================================== -->
 <!--
  I don't use attribute sets for Chapter and TOC since some of parameters
@@ -181,43 +181,50 @@
   <xsl:attribute name="margin-top">162pt -54pt</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="toc.title.properties">
-   <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>
-   </xsl:attribute>
-   <!--<xsl:attribute name="text-align-last">justify</xsl:attribute>-->
-</xsl:attribute-set>
-
-<xsl:attribute-set name="toc.title.part.properties"
-   use-attribute-sets="toc.title.properties">
-   <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>
-   </xsl:attribute>
-   <xsl:attribute name="font-weight">bold</xsl:attribute>
-   <xsl:attribute name="font-size"><xsl:value-of select="$body.font.master"/>pt</xsl:attribute>
-   <!--<xsl:attribute name="space-before">27pt -1em</xsl:attribute>
-   <xsl:attribute name="space-after">27pt -1em</xsl:attribute>-->
-   <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
-   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-</xsl:attribute-set>
-<xsl:attribute-set name="toc.title.chapapp.properties"
-   use-attribute-sets="toc.title.properties">
-   <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>
-   </xsl:attribute>
-   <xsl:attribute name="font-weight">bold</xsl:attribute>
-   <xsl:attribute name="font-size">10.5pt</xsl:attribute>
-<!--    <xsl:attribute name="space-before">27pt -1em</xsl:attribute> -->
-<!--   <xsl:attribute name="space-after">16pt -1em</xsl:attribute>-->
-<!--    <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute> -->
-</xsl:attribute-set>
-
-<xsl:attribute-set name="toc.title.section.properties"
-   use-attribute-sets="toc.title.properties">
-   <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>
-   </xsl:attribute>
-   <xsl:attribute name="font-size">9pt</xsl:attribute>
+<xsl:attribute-set name="toc.line.properties">
+  <xsl:attribute name="text-align-last">justify</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
+  <xsl:attribute name="hyphenate">false</xsl:attribute>
+  <xsl:attribute name="end-indent">3* <xsl:value-of select="concat($toc.indent.width, 'pt')"/></xsl:attribute>
+  <xsl:attribute name="last-line-end-indent"><xsl:value-of select="concat('-', $toc.indent.width, 'pt')"/></xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:choose>
+      <xsl:when test="self::part"><xsl:value-of select="1.44 * $body.font.master"/>pt</xsl:when>
+      <xsl:when test="self::chapter or 
+                      self::preface or 
+                      self::glossary or 
+                      self::appendix"><xsl:value-of select="1.2 * $body.font.master"/>pt</xsl:when>
+      <xsl:when test="self::sect1"><xsl:value-of select="$body.font.master"/>pt</xsl:when>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="keep-with-next">
+    <xsl:choose>
+      <xsl:when test="self::part or
+                      self::chapter or
+                      self::preface or 
+                      self::glossary or
+                      self::appendix">always</xsl:when>
+      <xsl:otherwise>auto</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="space-before">
+    <xsl:choose>
+      <xsl:when test="self::part">18pt</xsl:when>
+      <xsl:when test="self::chapter or self::appendix or self::glossary">12pt</xsl:when>
+      <xsl:otherwise><xsl:value-of select=".5 * $body.font.master"/>pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-weight">
+    <xsl:choose>
+      <xsl:when test="self::part">bold</xsl:when>
+      <xsl:when test="self::chapter or 
+                      self::preface or 
+                      self::glossary or 
+                      self::appendix">bold</xsl:when>
+      <xsl:when test="self::sect1">normal</xsl:when>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
 

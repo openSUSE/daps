@@ -80,7 +80,7 @@
 <xsl:param name="refsection.autolabel" select="0"/><!-- Not available in DB XSL -->
 <xsl:param name="section.autolabel.max.depth" select="3"/>
 <xsl:param name="autotoc.label.separator" select="' '"/>
-<xsl:param name="toc.indent.width">15</xsl:param>
+<xsl:param name="toc.indent.width">5</xsl:param>
 <xsl:param name="appendix.autolabel" select="'A'"/>
 
 <!-- Control generation of ToCs and LoTs -->
