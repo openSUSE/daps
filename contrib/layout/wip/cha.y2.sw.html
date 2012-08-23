@@ -12,8 +12,125 @@
         <link rel="previous" href="part.reference.software.html"
             title="Part II. Managing and Updating Software"/>
         <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
+        <script type="text/javascript">
+            function show() {
+            //    document.getElementsByClassName('js-necessary').onclick = function() {alert('HUI!');};
+            }
+            
+            function activate(element) {
+                if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
+                    document.getElementById('_toc-area').className = 'inactive';
+                    document.getElementById('_language-picker').className = 'inactive';
+                    document.getElementById('_format-picker').className = 'inactive';
+                    if ((element == '_toc-area')) {
+                        document.getElementById('_find-area').className = 'inactive';
+                    }
+                    else {
+                        document.getElementById('_find-area').className = 'active';
+                    }
+                    document.getElementById('_toc-area-bottom').className = 'b-inactive';
+                    
+                    document.getElementById(element).className = 'active';                    
+                    if (element == '_toc-area') {
+                        document.getElementById(element + '-bottom').className = 'b-active';
+                    }
+                    document.getElementById(element + '-button').onclick = function() {deactivate();};
+                }
+                else {
+                    alert('Eek! This element can\'t be activated.');
+                }
+            }
+
+            
+            function deactivate() {
+                document.getElementById('_toc-area').className = 'inactive';
+                document.getElementById('_find-area').className = 'active';
+                document.getElementById('_toc-area-bottom').className = 'b-inactive';
+                document.getElementById('_language-picker').className = 'inactive';
+                document.getElementById('_format-picker').className = 'inactive';
+                document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area');};
+                document.getElementById('_find-area-button').onclick = function() {activate('_find-area');};
+                document.getElementById('_language-picker-button').onclick = function() {activate('_language-picker');};
+                document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker');};
+            }
+            
+            function share(service) {
+                u = encodeURIComponent(document.URL);
+                t = encodeURIComponent(document.title);
+                if (service == 'fb') {
+                    shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
+                    window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
+                }
+                else if (service == 'tw') {
+                    shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
+                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
+                }
+                
+                else if (service == 'mail') {
+                    shareURL = 'http://www.suse.com/info/sendemail.jsp?url=' + u;
+                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=400');
+                }
+                else {
+                    alert('Eek! This sharing service must be new.');
+                }
+                
+            }
+            
+            
+            // Smooth scrolling thanks to Andrew Johnson
+            
+           
+           function currentYPosition() {
+               // Firefox, Chrome, Opera, Safari
+               if (self.pageYOffset) return self.pageYOffset;
+               // Internet Explorer 6 - standards mode
+               if (document.documentElement && document.documentElement.scrollTop)
+               return document.documentElement.scrollTop;
+               // Internet Explorer 6, 7 and 8
+               if (document.body.scrollTop) return document.body.scrollTop;
+               return 0;
+           }
+           
+           function elmYPosition(eID) {
+               var elm = document.getElementById(eID);
+               var y = elm.offsetTop;
+               var node = elm;
+               while (node.offsetParent && node.offsetParent != document.body) {
+               node = node.offsetParent;
+               y += node.offsetTop;
+               y -= 30;
+               if (y < 0)
+                   y = 0;
+               } return y;
+           }
+           function scroll(eID) {
+               var startY = currentYPosition();
+               var stopY = elmYPosition(eID);
+               var distance = stopY > startY ? stopY - startY : startY - stopY;
+               if (distance < 100) {
+                   scrollTo(0, stopY); return;
+               }
+               var speed = Math.round(distance / 100);
+               if (speed >= 20) speed = 20;
+               var step = Math.round(distance / 25);
+               var leapY = stopY > startY ? startY + step : startY - step;
+               var timer = 0;
+               if (stopY > startY) {
+                   for ( var i=startY; i<stopY; i+=step ) {
+                       setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
+                       leapY += step; if (leapY > stopY) leapY = stopY; timer++;
+                   } return;
+               }
+               for ( var i=startY; i>stopY; i-=step ) {
+                   setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
+                   leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+               }
+           }
+           
+            
+        </script>
     </head>
-    <body>
+    <body onload="show();">
         <div id="_outer-wrap">
             <div id="_white-bg">
                 <div id="_header">
@@ -25,8 +142,97 @@
                         <span>&nbsp;&#187;&nbsp;</span>
                         <a href="part.reference.software.html">Managing and Updating Software</a>
                     </div>
-
+                    <div class="pickers">
+                        <div class="inactive" id="_language-picker">
+                            <a href="#" onclick="activate('_language-picker')" id="_language-picker-button"><span class="picker">English</span></a>
+                            <div class="bubble-corner active-contents">&nbsp;</div>
+                            <div class="bubble active-contents">
+                                <p>Select a Language</p>
+                                <a href="#">Deutsch</a>
+                                <a href="#" class="selected">English</a>
+                                <a href="#">Español</a>
+                                <a href="#">Français</a>
+                                <a href="#">中文(简体)</a>
+                                <a href="#">日本語</a>
+                                <a href="#">Русский</a>
+                            </div>
+                        </div>
+                        <div class="inactive" id="_format-picker">
+                            <a href="#" onclick="activate('_format-picker')" id="_format-picker-button"><span class="picker">Web Page</span></a>
+                            <div class="bubble-corner active-contents">&nbsp;</div>
+                            <div class="bubble active-contents">
+                                <p>Select a Format</p>
+                                <a href="#" class="selected">Web Page</a>
+                                <a href="#">Single Web Page</a>
+                                <a href="#">PDF</a>
+                                <a href="#">E-Book (EPUB)</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="clearme"></div>
+                </div>
+            </div>
+                       
+            <div id="_toolbar-wrap">
+               <div id="_toolbar">
+                   <div id="_toc-area" class="inactive">
+                           <a href="#" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area')">
+                               <span class="pad-tools-50-out">
+                                   <span class="pad-tools-50-in">
+                                       <span class="toc-icon">&nbsp;</span>
+                                       <span class="tool-label">Contents</span>
+                                   </span>
+                               </span>
+                           </a>
+                       <div class="active-contents bubble-corner">
+                           &nbsp;
+                       </div>
+                   </div>
+                   <div id="_find-area" class="active">
+                       <div class="inactive-contents">
+                           <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area')">
+                               <span class="pad-tools-50-out">
+                                   <span class="pad-tools-50-in">
+                                       <span class="find-icon">&nbsp;</span>
+                                       <span class="tool-label">Find</span>
+                                   </span>
+                               </span>
+                           </a>
+                       </div>
+                       <div class="active-contents">
+                           <form action="post">
+                               <div class="search-form">
+                                   <input type="text" class="search-input" value="Find" />
+                                   <input type="image" class="search-button" alt="Find" title="Find" src="style_images/blank.png" />
+                               </div>
+                           </form>
+                       </div>
+                   </div>
+                   <div id="_nav-area" class="inactive">
+                       <a href="#" class="tool" "title="More" onclick="activate('_nav-area')" style="float: right; display: block; width: auto;">
+                           <span class="tool-label">Chapter</span>
+                           <span class="prev-icon">&nbsp;</span>
+                           <div style="width: 5px; float:left;">&nbsp;</div>
+                           <span class="next-icon">&nbsp;</span>
+                       </a>
+                       <div class="active-contents bubble-corner">
+                           &nbsp;
+                       </div>
+                   </div>
+               </div>
+                <div id="_toolbar-bottom" style="position: relative; z-index: 20; min-height: 0;">
+                   <div class="b-inactive" id="_toc-area-bottom" style="background-color: rgba(51,51,51, 1); padding: 0 10px 10px; position: absolute; top: 10px; left: 0; width: 100%;">
+                           <h1>OpenSUSE 12.2 Start-up</h1>
+                           <p>I Imagination is key</p>
+                           <div class="clearme"></div>   
+                        </div>
+                <div class="b-inactive" id="_tools-area-bottom" style="background-color: rgba(51,51,51, 1); padding: 0 10px 10px; position: absolute; top: 10px; right: 0; max-width: 400px;">
+                        <p class="js-necessary" style="color: #FFF !important;"><strong>Share:</strong> <a href="#" onclick="share('fb')" style=" color: #FFF !important;">Facebook</a> &bull; <a href="#" onclick="share('tw')" style=" color: #FFF !important;">Twitter</a> &bull; <a href="#" onclick="share('mail');" style=" color: #FFF !important;">Email</a></p>
+                        <p class="js-necessary" style="color: #FFF !important;border-top: 1px solid #FFF; padding-top: 10px;"><a href="javascript:print()" style="color: #FFF !important;"><strong>Print this page</strong></a></p>
+                        <p style=" color: #FFF !important; border-top: 1px solid #FFF; padding-top: 10px;"><strong>Languages:</strong> <a href="#" style=" color: #FFF !important; display: inline-block;">Deutsch</a> &bull; <span style=" color: #FFF !important; display: inline-block; background-color: #76AD2D; padding: 3px; border-radius: 3px;">English</span> &bull; <a href="#" style=" color: #FFF !important;">Español</a> &bull; <a href="#" style=" color: #FFF !important;">Français</a> &bull; <a href="#" style=" color: #FFF !important;">中文(简体)</a> &bull; <a href="#" style=" color: #FFF !important; display: inline-block;">日本語</a> &bull; <a href="#" style=" color: #FFF !important;">Русский</a></p>
+                        <p style=" color: #FFF !important; border-top: 1px solid #FFF; padding-top: 10px;"><strong>Formats:</strong> <a href="#" style="color: #FFF !important;">EPUB</a> &bull; <a href="#" style=" color: #FFF !important;">Single HTML</a> &bull; <a href="#" style=" color: #FFF !important;">PDF</a></p>
+                        <div class="clearme"></div>   
+                    </div>
                 </div>
             </div>
             
@@ -41,26 +247,12 @@
                         <span>&nbsp;&#187;&nbsp;</span>
                         <a href="part.reference.software.html">Managing and Updating Software</a>
                     </div>
-                    <a href="#" class="top-button" title="Go to top of page">Top</a>
+                    <a href="#" class="top-button" title="Go to top of page" onclick="scroll('_white-bg');return false;">Top</a>
                     <div class="clearme"></div>
                 </div>
             </div>
             
-            <div id="_toolbar-wrap" style="margin: 0 0 15px;width: 100%; height: 80px; min-width: 400px; background-image: url(style_images/dots-grayongreen.png); background-color: /*fixme*/ #76AD2D;">
-               <div id="_toolbar">
-                   <div class="toc-area inactive">
-                        <a href="#contents" title="Contents"><span class="toc-icon">&nbsp;</span></a> Contents
-                   </div>
-                   <div class="search-area active">
-                       <a href="#find" title="Find"><span class="find-icon">&nbsp;</span></a> Search
-                   </div>
-                   <div class="tools-area inactive">
-                       <a href="#tools" title="Page Tools"><span class="tools-icon">&nbsp;</span></a> Tools
-                   </div>
-               </div>
-            </div>
-            
-            <div id="_content">
+            <div id="_content" onclick="deactivate();">
                 <div class="chapter">
                     <div style="height: 0; width: 100%"></div>
                     <div class="nav-buttons">
@@ -72,7 +264,7 @@
                             <a id="cha.y2.sw"></a>
                             <span class="number">5. </span>
                             <span class="name">Installing or Removing Software</span>
-                            <a class="permalink" title="Permalink" href="#cha.y2.sw">&nbsp;#</a>
+                            <a class="permalink" title="Permalink" href="#cha.y2.sw" onclick="scroll('cha.y2.sw');return false;">#</a>
                         </h2>
                         <dl class="page-toc">
                             <dt>
@@ -140,7 +332,7 @@
                             <h3 class="title">
                                 <a id="sec.onlineupdate.terms"></a>
                                 <span class="number">5.1. </span><span class="name">Definition of Terms</span>
-                                <a class="permalink" title="Permalink" href="#sec.onlineupdate.terms">&nbsp;#</a>
+                                <a class="permalink" title="Permalink" href="#sec.onlineupdate.terms" onclick="scroll('sec.onlineupdate.terms');return false;">#</a>
                             </h3>
                             <div class="variablelist">
                                 <dl class="variablelist">
@@ -227,7 +419,7 @@
                             <div>
                                 <div>
                                     <h2 class="title" style="clear: both"><a id="sec.y2.sw.qt"></a><span class="number">5.2.</span> <span class="name">Using the KDE Interface
-                                        (Qt)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.qt">&nbsp;#</a></h2>
+                                        (Qt)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.qt" onclick="scroll('sec.y2.sw.qt');return false;">#</a></h2>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +435,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.search"></a><span class="number">5.2.1.</span> <span class="name">Views for Searching Packages or
-                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.search">&nbsp;#</a></h3>
+                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.search" onclick="scroll('sec.y2.sw.search');return false;">#</a></h3>
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +521,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.install"></a><span class="number">5.2.2.</span> <span class="name">Installing and Removing Packages or
-                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.install">&nbsp;#</a></h3>
+                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.install" onclick="scroll('sec.y2.sw.install');return false;">#</a></h3>
                                     </div>
                                 </div>
                             </div>
@@ -421,7 +613,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.update"></a><span class="number">5.2.3.</span> <span class="name">Updating Packages</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.update">&nbsp;#</a></h3>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.update" onclick="scroll('sec.y2.sw.update');return false;">#</a></h3>
                                     </div>
                                 </div>
                             </div>
@@ -530,7 +722,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.deps"></a><span class="number">5.2.4.</span> <span class="name">Checking Software Dependencies</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.deps">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.deps" onclick="scroll('sec.y2.sw.deps');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -569,11 +761,11 @@
                                         >Cancel</span> the Software Manager, <span class="guimenu">Abandon</span> all your
                                     changes and start again. </p>
                             </div>
-                            <div class="figure" style="width: 542px;">
+                            <div class="figure" style="width: 544px;">
                                 <a id="fig.y2.sw.packconfl"></a>
                                 <img src="images/yast2_package_conflict.png" alt="Conflict Management of the Software Manager"/>
                                 <div class="title-wrap"><p class="title"><span class="number">Figure 5.1.</span> <span class="name"> Conflict Management of the Software Manager</span>
-                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.packconfl">&nbsp;#</a></p></div>
+                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.packconfl" onclick="scroll('fig.y2.sw.packconfl');return false;">#</a></p></div>
                                 
                             </div>
                         </div>
@@ -583,7 +775,7 @@
                             <div>
                                 <div>
                                     <h2 class="title" style="clear: both"><a id="sec.y2.sw.gtk"></a><span class="number">5.3.</span> <span class="name">Using the GNOME Interface
-                                        (GTK+)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk">&nbsp;#</a>
+                                        (GTK+)</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk" onclick="scroll('sec.y2.sw.gtk');return false;">#</a>
                                     </h2>
                                 </div>
                             </div>
@@ -601,7 +793,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.gtk.search"></a><span class="number">5.3.1.</span> <span class="name">Views for Searching Packages or
-                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.deps">&nbsp;#</a>
+                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.search" onclick="scroll('sec.y2.sw.gtk.search');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -666,7 +858,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.gtk.install"></a><span class="number">5.3.2.</span> <span class="name">Installing and Removing Packages or
-                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.install">&nbsp;#</a>
+                                            Patterns</span><a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.install" onclick="scroll('sec.y2.sw.gtk.install');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -752,7 +944,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.gtk.update"></a><span class="number">5.3.3.</span> <span class="name">Updating Packages</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.update">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.update" onclick="scroll('sec.y2.sw.gtk.update');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -833,7 +1025,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.gtk.deps"></a><span class="number">5.3.4.</span> <span class="name">Checking Software Dependencies</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.deps">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.gtk.deps" onclick="scroll('sec.y2.sw.gtk.deps');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -869,11 +1061,11 @@
                                     start again. </p>
                             </div>
                             
-                            <div class="figure" style="width: 463px;">
+                            <div class="figure" style="width: 465px;">
                                 <a id="fig.y2.sw.gtk.packconfl"></a>
                                 <img src="images/yast2_gtk_package_conflict.png" alt="Conflict Management of the Software Manager"/>
                                 <div class="title-wrap"><p class="title"><span class="number">Figure 5.2.</span> <span class="name"> Conflict Management of the Software Manager</span>
-                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.gtk.packconfl">&nbsp;#</a></p></div>
+                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.gtk.packconfl" onclick="scroll('sec.y2.gtk.packconfl');return false;">#</a></p></div>
                             </div>
                         </div>
                     </div>
@@ -883,7 +1075,7 @@
                                 <div>
                                     <h2 class="title" style="clear: both"><a id="sec.y2.sw.instsource"></a><span class="number">5.4.</span> <span class="name">Managing Software
                                         Repositories and Services</span>
-                                        <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource">&nbsp;#</a>
+                                        <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource" onclick="scroll('sec.y2.sw.instsource');return false;">#</a>
                                     </h2>
                                 </div>
                             </div>
@@ -920,7 +1112,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.instsource.add"></a><span class="number">5.4.1.</span> <span class="name">Adding Software Repositories</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.add">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.add" onclick="scroll('sec.y2.sw.instsource.add');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -1017,7 +1209,7 @@
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.instsource.manage"></a><span class="number">5.4.2.</span> <span class="name">Managing Repository
                                             Properties</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.manage">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.instsource.manage" onclick="scroll('sec.y2.sw.instsource.manage');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -1104,7 +1296,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.y2.sw.repo.gpg-keys"></a><span class="number">5.4.3.</span> <span class="name">Managing Repository Keys</span>
-                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.repo.gpg-keys">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.y2.sw.repo.gpg-keys" onclick="scroll('sec.y2.sw.repo.gpg-keys');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -1127,7 +1319,7 @@
                                 <div>
                                     <h2 class="title" style="clear: both"><a id="sec.updater"></a><span class="number">5.5.</span> <span class="name">Keeping the System
                                         Up-to-date</span>
-                                        <a class="permalink" title="Permalink" href="#sec.updater">&nbsp;#</a>
+                                        <a class="permalink" title="Permalink" href="#sec.updater" onclick="scroll('sec.updater');return false;">#</a>
                                     </h2>
                                 </div>
                             </div>
@@ -1141,7 +1333,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.updater.kde"></a><span class="number">5.5.1.</span> <span class="name">Using the KDE Software Updater</span>
-                                            <a class="permalink" title="Permalink" href="#sec.updater.kde">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.updater.kde" onclick="scroll('sec.updater.kde');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -1162,7 +1354,7 @@
                                     <div>
                                         <div>
                                             <h4 class="title"><a id="sec.updater.kde.patches"></a><span class="number">5.5.1.1.</span> <span class="name">Installing Patches</span>
-                                                <a class="permalink" title="Permalink" href="#sec.updater.kde.patches">&nbsp;#</a>
+                                                <a class="permalink" title="Permalink" href="#sec.updater.kde.patches" onclick="scroll('sec.updater.kde.patches');return false;">#</a>
                                             </h4>
                                         </div>
                                     </div>
@@ -1196,11 +1388,11 @@
                                     </ol>
                                 </div>
                                 
-                                <div class="figure" style="width: 577px;">
+                                <div class="figure" style="width: 579px;">
                                     <a id="id2628836"></a>
                                     <img src="images/kupdater_updates.png" alt="KDE Software Updater"/>
                                     <div class="title-wrap"><p class="title"><span class="number">Figure 5.3.</span> <span class="name">KDE Software Updater</span>
-                                        <a class="permalink" title="Permalink" href="#id2628836">&nbsp;#</a></p></div>
+                                        <a class="permalink" title="Permalink" href="#id2628836" onclick="scroll('id2628836');return false;">#</a></p></div>
                                     
                                 </div>
                             </div>
@@ -1215,7 +1407,7 @@
                                     <div>
                                         <h4 class="title"><a id="sec.updater.kde.config"></a><span class="number">5.5.1.2.</span> <span class="name">Configuring the KDE Software
                                             Updater</span>
-                                            <a class="permalink" title="Permalink" href="#sec.updater.kde.config">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.updater.kde.config" onclick="scroll('sec.updater.kde.config');return false;">#</a>
                                         </h4>
                                     </div>
                                 </div>
@@ -1247,7 +1439,7 @@
                                 <div>
                                     <div>
                                         <h3 class="title"><a id="sec.updater.gnome"></a><span class="number">5.5.2.</span> <span class="name">Using the GNOME Update Applet</span>
-                                            <a class="permalink" title="Permalink" href="#sec.updater.gnome">&nbsp;#</a>
+                                            <a class="permalink" title="Permalink" href="#sec.updater.gnome" onclick="scroll('sec.updater.gnome');return false;">#</a>
                                         </h3>
                                     </div>
                                 </div>
@@ -1318,7 +1510,7 @@
                                     <div>
                                         <div>
                                             <h4 class="title"><a id="sec.updater.gnome.patches"></a><span class="number">5.5.2.1.</span> <span class="name">Installing Patches</span>
-                                                <a class="permalink" title="Permalink" href="#sec.updater.gnome.patches">&nbsp;#</a>
+                                                <a class="permalink" title="Permalink" href="#sec.updater.gnome.patches" onclick="scroll('sec.updater.gnome.patches');return false;">#</a>
                                             </h4>
                                         </div>
                                     </div>
@@ -1354,11 +1546,11 @@
                                         </li>
                                     </ol>
                                 </div>
-                                <div class="figure" style="width: 684px;">
+                                <div class="figure" style="width: 686px;">
                                     <a id="id2629297"></a>
                                     <img src="images/gupdater_updates.png" alt="GNOME Update Applet"/>
                                     <div class="title-wrap"><p class="title"><span class="number">Figure 5.4.</span> <span class="name">GNOME Update Applet</span>
-                                        <a class="permalink" title="Permalink" href="#id2629297">&nbsp;#</a></p></div>
+                                        <a class="permalink" title="Permalink" href="#id2629297" onclick="scroll('id2629297');return false;">#</a></p></div>
                                 </div>
                                 
                                 <p> The YaST Online Update offers advanced features to customize the patch installation.
@@ -1372,7 +1564,7 @@
                                         <div>
                                             <h4 class="title"><a id="sec.updater.gnome.config"></a><span class="number">5.5.2.2.</span> <span class="name">Configuring the Software
                                                 Update Applet</span>
-                                                <a class="permalink" title="Permalink" href="#sec.updater.gnome.config">&nbsp;#</a>
+                                                <a class="permalink" title="Permalink" href="#sec.updater.gnome.config" onclick="scroll('sec.updater.gnome.config');return false;">#</a>
                                             </h4>
                                         </div>
                                     </div>
@@ -1430,7 +1622,7 @@
                             <h3 class="title">
                                 <a id="sec.onlineupdate.zypper"></a>
                                 <span class="number">5.6. </span><span class="name">Using <span class="command">zypper</span> to do your bidding</span>
-                                <a class="permalink" title="Permalink" href="#sec.onlineupdate.terms">&nbsp;#</a>
+                                <a class="permalink" title="Permalink" href="#sec.onlineupdate.terms" onclick="scroll('sec.onlineupdate.zypper');return false;">#</a>
                             </h3>
                             
                             <p>Here's what the average <code>man</code> page would tell you about <span class="command">zypper</span>:</p>

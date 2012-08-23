@@ -20,15 +20,23 @@ Consider page load time.
     height: 0;
 }
 
-::selection, ::-moz-selection { /* Green Selections */
+.js-necessary {/*
+    display: none;*/
+}
+
+::selection { /* Green Selections */
     background: #439539;
     color: #FFF;
 }
 
+::-moz-selection {
+    background: #439539;
+    color: #FFF;
+}
 
 body {
     background-color: #FFF;
-    font-family: Open Sans, Helvetica, FreeSans, sans-serif;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
     line-height: 140%;
 }
 
@@ -37,15 +45,18 @@ html, body {
     min-width: 400px;
 }
 
-#_header, #_footer, #_toolbar, .chapter {
+#_header, #_footer, #_toolbar, #_toolbar-bottom, .chapter {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
+}
+
+#_header, #_footer, .chapter {
     padding: 0 10px;
 }
 
 /* to be able to position various elements and be able to use z-index*/
-#_header, #_content, #_white-bg, #_inward, #_footer, .figure {
+#_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
     position: relative; 
 }
 
@@ -53,7 +64,7 @@ html, body {
     background: url(style_images/dots-gray.png) repeat-x scroll 0px 0px;
     min-height: 139px;
     clear: both;
-    min-width: 440px;
+    min-width: 400px;
 }
 
 #_white-bg {
@@ -93,7 +104,7 @@ html, body {
 
 #_header .crumbs a, #_header .crumbs span {
     margin: 0 0 0 5px;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 36px;
     height: 36px;
 }
@@ -117,6 +128,11 @@ html, body {
     display: block;
 }
 
+.toc-icon, .find-icon, .tools-icon, #_header .book-icon, .prev-icon, .next-icon {
+    width: 36px;
+    height: 36px;
+}
+
 #_header .book-icon {
     background: url(style_images/icons.png) no-repeat scroll 0px 0px;
 }
@@ -136,41 +152,198 @@ html, body {
     background: url(style_images/icons.png) no-repeat scroll -18px -72px;
 }
 
-/* Toolbar */
+/* Language and Format Pickers*/
 
-#_toolbar {
-    padding: 22px 0 0;/*
-    width: 100%;*/
+.pickers {
+    float: right;
+    padding: 5px 0;
+    background-color: #FFF;
 }
 
-#_toolbar a {
+.pickers .inactive, .pickers .active {
+    float: left;
+}
+
+.picker {
+    margin: 0 0 0 5px;
+    display: block;
+    padding: 0 10px;
+    border-radius: 3px;
+    float: left;
+    background: #202020;
+    height: 24px;
+    line-height: 24px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.picker:hover, .picker:focus, .picker:active, .active .picker {
+    background-color: #666;
+    text-decoration: underline;
+}
+
+.pickers .bubble-corner {
+    left: 50%;
+    top: 24px;
+    margin: 0 0 0 -15px;
+}
+
+.pickers .bubble {
+    background-color: #333;
+    padding: 0 10px 10px 10px;
+    position: absolute;
+    right: 0;
+    top: 43px;
+    max-width: 400px;
+    min-width: 200px;
+    z-index: 70;
+}
+
+.pickers .bubble p {
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    padding: 10px 0 5px;
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+.pickers .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+
+
+.pickers .bubble a:hover, .pickers .bubble a:focus, .pickers .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+.pickers .bubble .selected {
+    background-color: #5E9632;
+    background-image: url(style_images/picker-bg.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+.pickers .bubble .selected:hover, .pickers .bubble .selected:focus, .pickers .bubble .selected:active {
+    text-decoration: underline;
+    background-color: #76AD2D;
+}
+
+
+/* Toolbar */
+
+#_toolbar-wrap{
+    margin: 0 0 15px;
+    width: 100%;
+    min-width: 400px;
+    background-image: url(style_images/dots-grayongreen.png);
+    background-color: #76AD2D;
+    position: relative;
+}
+
+#_toolbar {
+    min-height: 56px;
+    min-width: 400px;
+}
+
+.tool {
     text-decoration: none;
     display: block;
     float: left;
-    margin-right: 10px;
+    padding: 10px 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.2s ease-in-out 0.1s;
+    /* Clean this up later when browser support is there*/
+    -moz-transition: all 0.2s ease-in-out 0.1s;
+    -webkit-transition: all 0.2s ease-in-out 0.1s;
+    -o-transition: all 0.2s ease-in-out 0.1s;
+}
+
+
+.active .active-contents, .inactive .inactive-contents {
+    display: block;
+}
+
+.inactive .active-contents, .active .inactive-contents {
+    display: none;
+}
+
+.b-inactive {
+    display: none;
+}
+
+.b-active {
+    display: block;
+}
+
+.active-contents {
+    z-index: 10;
+    position: relative;
+}
+
+
+#_toolbar .inactive {
+    width: 32%;
+    transition: width 0.2s ease-in-out;
+    -moz-transition: width 0.2s ease-in-out;
+    -webkit-transition: width 0.2s ease-in-out;
+    -o-transition: width 0.2s ease-in-out;
+}
+
+#_toolbar .active {
+    width: 36%;
+    transition: width 0.2s ease-in-out;
+    -moz-transition: width 0.2s ease-in-out;
+    -webkit-transition: width 0.2s ease-in-out;
+    -o-transition: width 0.2s ease-in-out;
 }
 
 #_toolbar > div {
     float: left;
-    height: 80px;
-}
-
-#_toolbar .inactive {
-    width: 25%;
-}
-
-#_toolbar .inactive {
-    width: 20%;
-}
-
-#_toolbar .search-area {
-    border-left: 1px solid #FFF;
-    border-right: 1px solid #FFF;
-}
-
-.toc-icon, .find-icon, .tools-icon, #_header .book-icon {
-    width: 36px;
     height: 36px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.pad-tools-50-out {
+    float: left;
+    left: 50%;
+    position: relative;
+}
+
+
+.pad-tools-50-in {
+    float: left;
+    left: -50%;
+    position: relative;
+}
+
+.tool-label {
+    float: left;
+    display: block;
+    vertical-align: middle;
+    line-height: 36px;
+    padding: 0 10px;
+    color: #FFF;
+    font-weight: normal;
+}
+
+.inactive .tool:hover, .inactive .tool:focus, .inactive .tool:active {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.active .tool {
+    background-color: rgba(255,255,255,0.3);
+}
+
+.toc-icon, .find-icon, .tools-icon, .prev-icon, .next-icon {
+    float: left;
 }
 
 .toc-icon {
@@ -178,7 +351,7 @@ html, body {
 }
 
 
-.toc-icon:hover, .toc-icon:focus, .toc-icon:active {
+.active .toc-icon, a:hover .toc-icon, a:focus .toc-icon, a:active .toc-icon {
     background-position: -36px -36px;
 }
 
@@ -187,7 +360,7 @@ html, body {
 }
 
 
-.find-icon:hover, .find-icon:focus, .find-icon:active {
+.active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
     background-position: -72px -36px;
 }
 
@@ -196,8 +369,83 @@ html, body {
 }
 
 
-.tools-icon:hover, .tools-icon:focus, .tools-icon:active {
+.active .tools-icon, a:hover .tools-icon, a:focus .tools-icon, a:active .tools-icon {
     background-position: -108px -36px;
+}
+
+.prev-icon {
+    background: url(style_images/icons.png) no-repeat scroll -144px 0px;
+}
+
+
+.active .prev-icon, a:hover .prev-icon, a:focus .prev-icon, a:active .prev-icon {
+    background-position: -144px -36px;
+}
+
+.next-icon {
+    background: url(style_images/icons.png) no-repeat scroll -180px 0px;
+}
+
+
+.active .next-icon, a:hover .next-icon, a:focus .next-icon, a:active .next-icon {
+    background-position: -180px -36px;
+}
+
+.bubble-corner {
+     background-image: url(style_images/corner.png);
+     width: 30px;
+     height: 15px;
+     position: relative;
+     z-index: 40;
+}
+
+#_toolbar .bubble-corner {
+    top: 52px;
+    left: 48%;
+}
+
+.search-area .active-contents {
+    margin: 0 0 0 80%; /* EEK */
+}
+
+.search-form {
+    padding: 10px;
+    margin: 0 0 0 -0%; /* EEK */
+    display: block;
+    max-width: 250px;
+    width: 100%;
+}
+
+.search-input {
+    max-width: 187px;
+    height: 34px;
+    padding: 0 20px 0 5px;
+    font: 16px 'Open Sans', Helvetica, Arial, sans-serif;
+    display: block;
+    background-color: #cde8a8;
+    border: 1px solid #CCE9A7;
+    float: left;
+}
+
+.search-input:focus {
+    background-color: #FFF;
+}
+
+.search-input:focus + .search-button {
+    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
+}
+
+.search-button {
+    width: 36px;
+    height: 36px;
+    display: block;
+    margin: 0 0 0 -18px;
+    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
+    float: left;
+}
+
+.search-button:hover, .search-button:focus, .search-button:active {
+    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
 }
 
 /* Smaller, fixed header */
@@ -322,27 +570,41 @@ html, body {
 }
 
 .chapter .title {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: normal;
     padding: 40px 0 5px;
+    line-height: 120%;
+    width: 100%;
 }
 
 .sect1 .title {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: normal;
     padding: 50px 0 5px;
 }
 
 .sect2 .title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: normal;
     padding: 40px 0 0;
 }
 
 .sect3 .title {
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: normal;
     padding: 30px 0 0;
+}
+
+.sect4 .title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 20px 0 0;
+}
+
+.sect5 .title {
+    font-size: 16px;
+    font-weight: normal;
+    padding: 20px 0 0;
 }
 
 .name {
@@ -374,7 +636,7 @@ a:hover .name, a:focus .name, a:active .name {
     color: #439539;
 }
 
-/* Do I actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
+/* Do we actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
 .title:hover .permalink, .title:focus .permalink, .title:active .permalink,
 .subtitle:hover .permalink, .subtitle:focus .permalink, .subtitle:active .permalink {
     opacity: 1;
@@ -431,7 +693,7 @@ a:hover .name, a:focus .name, a:active .name {
 }
 
 .admonition h6 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
     display: table-cell;
@@ -498,7 +760,7 @@ strong, b {
 }
 
 p {
-    font-size: 15px;
+    font-size: 16px;
     color: #000;
     text-align: left;
     margin: 10px 0 0;
@@ -520,11 +782,16 @@ p a:hover, p a:focus, p a:active {
 }
 
 code, .command {
-    font: normal 120% FreeMono, "Droid Sans Mono", monospace;
+    font: normal 100% 'Droid Sans Mono', monospace;
     padding: 1px 5px;
     border-radius: 3px;
     /* There might be code or commands within links. The following doesn't help, however. */
     text-decoration: none !important;
+}
+
+
+.name code, .name .command {
+    color: inherit;
 }
 
 code {
@@ -546,7 +813,7 @@ code {
 }
 
 .screen {
-    font: normal 13px FreeMono, "Droid Sans Mono", monospace;
+    font: normal 13px 'Droid Sans Mono', monospace;
     color: #FFF;
     line-height: 125%;
     display: block;  
@@ -570,7 +837,7 @@ code {
 
 .variablelist {
     margin: 17px 0;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .variablelist dt {
@@ -593,26 +860,28 @@ code {
     text-align: center;
     color: #999;
     margin: 17px 0 7px;
-    border: 1px solid rgb(32,32,32);
+    border: 1px solid #202020;
 }
 
 .figure img {
+    padding: 1px;
     background-color: #FFF;
     max-width: 100%;
-    display: block; /* inline images weirdly have some whitspace below them, thus block'ing */
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
 }
 
 .figure .title {
     padding: 10px;
     margin: 0;
-    font-size: 13px;
+    font-size: 14px;
     text-transform: uppercase;
     color: #FFF !important;
     font-weight: normal;
+    width: auto;
 }
 
 .figure .title-wrap {
-    background-color: rgba(32,32,32,1);
+    background-color: #202020;
     width: 100%;
     overflow: hidden;
 }
@@ -637,6 +906,8 @@ code {
     text-align: center;
     color: #999;
     margin: 17px 0 0;
+    padding: 1px;
+    border: 1px solid #202020;
 }
 
 .keycap {
@@ -648,6 +919,7 @@ code {
     border-width: 1px 2px 2px 1px;
     border-color: #999;
     border-style: solid;
+    font-weight: normal;
 }
 
 /* We put an ndash character between keycaps that are part of an accelerator */
@@ -657,7 +929,7 @@ code {
 }
 
 .procedure .title {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: normal;
     margin: 0 10px;
     padding: 0 0 5px;
@@ -669,7 +941,7 @@ code {
 }
 
 div.procedure {
-    font-size: 15px;
+    font-size: 16px;
     border-left: 3px solid rgba(67,149,57,0.5);
     font-weight: normal;
     margin: 17px 0 17px;
@@ -704,7 +976,7 @@ ol.substeps {
     display: block;
     color: #439539;
     list-style-type: bullet;
-}  
+}
 
 .procedure li p {
     font-weight: normal;
