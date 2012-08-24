@@ -67,7 +67,7 @@
 <xsl:template name="nongraphical.admonition">
   <div>
     <xsl:apply-templates select="." mode="class.attribute"/>
-    <xsl:if test="$admon.style">
+    <xsl:if test="$admon.style != ''">
       <xsl:attribute name="style">
         <xsl:value-of select="$admon.style"/>
       </xsl:attribute>
