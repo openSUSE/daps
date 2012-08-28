@@ -11,37 +11,29 @@
 ]>
 <glossary id="daps.glossary">
  <title>Glossary</title>
-<!--taroth 2012-04-20: the following terms are copied from the former Quick Start,
-check and integrate-->
 <!-- <title>Terminology</title>
         <para>The following terms are used in this article:</para>
         <variablelist>
             <varlistentry>
-                <term>DocBook</term>
-                <listitem>
-                    <para>DocBook is a semantic markup language for technical documentation
-                        published as a DTD.</para>
+                
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>DTD</term>
                 <listitem>
-                    <para>DTD (Document type definition) defines exactly the elements, entities
-                        attributes and structure in a XML or HTML document.</para>
+                    <para></para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>Formatting</term>
                 <listitem>
-                    <para>Is the process of converting a XSL-FO file into PDF with the help of a FO
-                        formatter.</para>
+                    <para></para>
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term>FO Formatter</term>
                 <listitem>
-                    <para>Renders XSL-FO documents usually into PDF. The output formats depends on
-                        the formatter.For example FOP and XEP</para>
+                    <para></para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -85,8 +77,7 @@ check and integrate-->
             <varlistentry>
                 <term>XML</term>
                 <listitem>
-                    <para>XML (extensible markup language) is a language with rules to encode
-                        documents into machine-readable form.</para>
+                    <para></para>
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -97,13 +88,17 @@ check and integrate-->
                 </listitem>
             </varlistentry>
         </variablelist>-->
+ <glossentry id="glos.antennahouse"><glossterm>Antenna House Formatter</glossterm>
+    <glosssee otherterm="glos.formatter"/>
+ </glossentry>
  <glossentry id="glos.condtext"><glossterm>Conditional Text</glossterm>
   <glosssee otherterm="glos.profiling"/>
  </glossentry>
  <glossentry id="glos.dtd"><glossterm>Document Type Definition</glossterm><acronym>DTD</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    The DTD (Document Type Definition) defines the exact elements, entities 
+    attributes and structure available in a XML or HTML document.
    </para>
   </glossdef>
  </glossentry>
@@ -117,14 +112,15 @@ check and integrate-->
  <glossentry id="glos.daps"><glossterm>DocBook Authoring and Publishing Suite</glossterm><acronym>DAPS</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    DAPS provides authors of technical documentation with an easy-to-use toolchain 
+    to convert their DocBook documents into various output formats.
    </para>
   </glossdef>
  </glossentry>
  <glossentry id="glos.docbook"><glossterm>DocBook</glossterm>
   <glossdef>
-   <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+   <para>DocBook is a semantic markup language for technical documentation 
+   published as a DTD.
    </para>
   </glossdef>
  </glossentry>
@@ -135,10 +131,39 @@ check and integrate-->
    </para>
   </glossdef>
  </glossentry>
- <glossentry id="glos.formatter"><glossterm>Formatter</glossterm>
+ <glossentry id="glos.formatter"><glossterm>FO Formatter</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    Renders the XSL-FO files created by the DocBook XSL stylesheets into various 
+    output formats. The output format used most often is likely PDF. Other 
+    formats that can usually be rendered into include:
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       Page description languages such as PDF, Postscript, and XPS.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Different raster and vector image formats such as PNG and SVG.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Text documents and web page documents such as TXT, RTF, and HTML.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Internal formats of the formatter.
+      </para>
+     </listitem>
+    </itemizedlist>
+   <para>
+    Well-known formatters include Apache FOP, XEP, and Antenna House Formatter. 
+    Whereas the former is an open-source product, the latter two are proprietary 
+    and paid solutions. Antenna House Formatter is incompatible with DAPS.
    </para>
   </glossdef>
  </glossentry>
@@ -149,6 +174,9 @@ check and integrate-->
    </para>
    <glossseealso otherterm="glos.formatter"/>
   </glossdef>
+ </glossentry>
+  <glossentry id="glos.FOP"><glossterm>FOP</glossterm>
+    <glosssee otherterm="glos.formatter"/>
  </glossentry>
  <glossentry id="glos.pdf"><glossterm>Portable Document Format</glossterm><acronym>PDF</acronym>
   <glossdef>
@@ -174,8 +202,15 @@ check and integrate-->
  <glossentry id="glos.svg"><glossterm>Scalable Vector Graphics</glossterm><acronym>SVG</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    SVG is an XML-based vector graphics format which is supported by most modern 
+    web browsers.
    </para>
+   <para>
+    Vector graphics formats are different from traditional raster graphics in 
+    that they describe the exact shape of an object instead of using the lossy 
+    process of subdividing an object into many individual raster points (such as 
+    pixels). 
+    </para>
   </glossdef>
  </glossentry>
  <glossentry id="glos.stylesheet"><glossterm>Stylesheet</glossterm>
@@ -185,17 +220,38 @@ check and integrate-->
    </para>
   </glossdef>
  </glossentry>
+  <glossentry id="glos.transformation"><glossterm>Transformation</glossterm>
+  <glossdef>
+   <para>
+    Data transformation converts data from a source data format into a
+    destination data format. An example is the process of converting a DocBook 
+    XML document into HTML by using an XSLT processor.
+    </para>
+  </glossdef>
+ </glossentry>
  <glossentry id="glos.validation"><glossterm>Validation</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    Validation refers to the process of checking whether an XML document is formally
+    correct, checking, for instance, if all XML tags are properly closed and nested. 
+    This is done using a DTD or XML Schema.
+   </para>
+   <para>
+    If a document is valid that does not mean, that its contents are 
+    factually correct or that it is structured as you intended. However, validity 
+    does mean that a document can be further processed, for instance by a web 
+    browser, or an XSL processor.
    </para>
   </glossdef>
+ </glossentry>
+ <glossentry id="glos.xep"><glossterm>XEP</glossterm>
+    <glosssee otherterm="glos.formatter"/>
  </glossentry>
  <glossentry id="glos.xinclude"><glossterm>XInclude</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    XIncludes can be used to split one large file into multiple smaller, more 
+    manageable files, for instance, individual files per chapter.
    </para>
   </glossdef>
  </glossentry>
@@ -216,7 +272,8 @@ check and integrate-->
  <glossentry id="glos.xml"><glossterm>Extensible Markup Language</glossterm><acronym>XML</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    XML is a markup language with rules to encode documents 
+    into a form that is both human-readable and machine-readable.
    </para>
   </glossdef>
  </glossentry>
