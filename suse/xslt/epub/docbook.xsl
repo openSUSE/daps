@@ -17,19 +17,16 @@
 
 
 <xsl:template match="keycap">
+   <!-- See also Ticket#84 -->
    <xsl:param name="key.contents"  select="."/>
    <xsl:variable name="key.length" select="string-length($key.contents)"/>
 
    <xsl:choose>
-       <xsl:when test="@function and @function!=''">
-         <!--<xsl:message>@function = <xsl:value-of select="@function"/>-><xsl:call-template name="gentext.template">
-                  <xsl:with-param name="context" select="local-name()"/>
-                  <xsl:with-param name="name" select="@function"/>
-               </xsl:call-template></xsl:message>-->
+       <xsl:when test="@function">
          <xsl:call-template name="inline.charseq">
             <xsl:with-param name="content">
                <xsl:call-template name="gentext.template">
-                  <xsl:with-param name="context" select="local-name()"/>
+                  <xsl:with-param name="context" select="'msgset'"/>
                   <xsl:with-param name="name" select="@function"/>
                </xsl:call-template>
             </xsl:with-param>
