@@ -102,7 +102,7 @@
   <xsl:attribute name="space-after.maximum">6pt</xsl:attribute>
 <!--  <xsl:attribute name="hyphenate">false</xsl:attribute>-->
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
-   <xsl:attribute name="hyphenation-character">&#x21a9;</xsl:attribute><!-- &#x25ca; -->
+   <xsl:attribute name="hyphenation-character">&#x23CE;</xsl:attribute><!-- &#x25ca; -->
 
   <xsl:attribute name="font-size"
    ><xsl:value-of select="0.75*$body.font.master"/>pt</xsl:attribute>
