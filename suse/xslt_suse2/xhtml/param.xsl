@@ -44,6 +44,8 @@
 
 
 <!-- 8. XSLT Processing ========================================= -->
+  <!-- Rule over footers? -->
+  <xsl:param name="footer.rule" select="0"/>
 
 <!-- 9. Meta/*Info and Titlepages =============================== -->
   <xsl:param name="generate.legalnotice.link" select="1"/>
@@ -97,6 +99,20 @@
   
 
 <!-- 28. SUSE specific parameters =============================== -->
+  <!--  -->
+  <xsl:param name="daps.header.logo">style_images/logo.png</xsl:param>
+  <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
+  
+  <!-- Should I generate breadcrumbs navigation?  -->
+  <xsl:param name="generate.breadcrumbs" select="1"/>
+  <!-- Separator between separate links: -->
+  <xsl:param name="daps.breadcrumbs.sep"> » </xsl:param>
+  
+  <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
+  <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
 
 
+  <!-- Should information from SVN properties be used? yes=1|no=0 -->
+  <xsl:param name="use.meta" select="0"/>
+  
 </xsl:stylesheet>
