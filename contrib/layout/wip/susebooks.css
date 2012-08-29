@@ -45,13 +45,20 @@ html, body {
     min-width: 400px;
 }
 
-#_header, #_footer, #_toolbar, #_toolbar-bottom, .chapter {
+#_header, #_footer, #_toolbar-bottom, .chapter {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
 }
 
-#_header, #_footer, .chapter {
+#_toolbar {
+    margin: 0 auto;
+    min-width: 420px;
+    max-width: 1018px;
+    padding: 0;
+}
+
+#_header, #_footer, #_content .chapter {
     padding: 0 10px;
 }
 
@@ -109,6 +116,9 @@ html, body {
     height: 36px;
 }
 
+_header a {
+    text-decoration: none !important;
+}
 
 .crumbs span {
     color: #666;
@@ -184,23 +194,18 @@ html, body {
 }
 
 .pickers .bubble-corner {
-    left: 50%;
     top: 24px;
-    margin: 0 0 0 -15px;
 }
 
 .pickers .bubble {
-    background-color: #333;
-    padding: 0 10px 10px 10px;
-    position: absolute;
     right: 0;
     top: 43px;
     max-width: 400px;
     min-width: 200px;
-    z-index: 70;
+    padding: 0 10px 10px;
 }
 
-.pickers .bubble p {
+.pickers .bubble h6 {
     color: #FFF;
     border-bottom: 1px solid #FFF;
     padding: 10px 0 5px;
@@ -244,6 +249,7 @@ html, body {
     background-image: url(style_images/dots-grayongreen.png);
     background-color: #76AD2D;
     position: relative;
+    z-index: 4;
 }
 
 #_toolbar {
@@ -255,9 +261,11 @@ html, body {
     text-decoration: none;
     display: block;
     float: left;
-    padding: 10px 0;
     width: 100%;
-    height: 100%;
+    overflow: hidden;
+}
+
+.tool, #_nav-area .tool-spacer {
     transition: all 0.2s ease-in-out 0.1s;
     /* Clean this up later when browser support is there*/
     -moz-transition: all 0.2s ease-in-out 0.1s;
@@ -274,34 +282,14 @@ html, body {
     display: none;
 }
 
-.b-inactive {
-    display: none;
-}
-
-.b-active {
-    display: block;
-}
-
 .active-contents {
     z-index: 10;
     position: relative;
 }
 
 
-#_toolbar .inactive {
-    width: 32%;
-    transition: width 0.2s ease-in-out;
-    -moz-transition: width 0.2s ease-in-out;
-    -webkit-transition: width 0.2s ease-in-out;
-    -o-transition: width 0.2s ease-in-out;
-}
-
-#_toolbar .active {
-    width: 36%;
-    transition: width 0.2s ease-in-out;
-    -moz-transition: width 0.2s ease-in-out;
-    -webkit-transition: width 0.2s ease-in-out;
-    -o-transition: width 0.2s ease-in-out;
+#_toc-area, #_nav-area, #_find-area {
+    width: 33.3%;
 }
 
 #_toolbar > div {
@@ -328,13 +316,27 @@ html, body {
     float: left;
     display: block;
     vertical-align: middle;
-    line-height: 36px;
-    padding: 0 10px;
+    line-height: 56px;
     color: #FFF;
     font-weight: normal;
 }
 
-.inactive .tool:hover, .inactive .tool:focus, .inactive .tool:active {
+#_toc-area .tool-label, #_find-area .tool-label {
+    padding: 0 0 0 10px;
+}
+
+#_nav-area .tool-label {
+    padding: 0 10px 0 0;
+}
+
+.tool-spacer {
+    padding: 10px;
+    display: block;
+    float: left;
+}
+.inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
+.inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
+#_nav-area .tool-spacer:hover, #_nav-area .tool-spacer:focus, #_nav-area .tool-spacer:active {
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -344,6 +346,7 @@ html, body {
 
 .toc-icon, .find-icon, .tools-icon, .prev-icon, .next-icon {
     float: left;
+    display: block;
 }
 
 .toc-icon {
@@ -362,15 +365,6 @@ html, body {
 
 .active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
     background-position: -72px -36px;
-}
-
-.tools-icon {
-    background: url(style_images/icons.png) no-repeat scroll -108px 0px;
-}
-
-
-.active .tools-icon, a:hover .tools-icon, a:focus .tools-icon, a:active .tools-icon {
-    background-position: -108px -36px;
 }
 
 .prev-icon {
@@ -392,50 +386,117 @@ html, body {
 }
 
 .bubble-corner {
-     background-image: url(style_images/corner.png);
-     width: 30px;
-     height: 15px;
-     position: relative;
-     z-index: 40;
+    background-image: url(style_images/corner.png);
+    width: 30px;
+    height: 15px;
+    position: relative;
+    z-index: 40;
+    left: 50%;
+    margin: 0 0 0 -15px;
+}
+
+.bubble {
+    background-color: #333;
+    position: absolute;
+    z-index: 70;
 }
 
 #_toolbar .bubble-corner {
     top: 52px;
-    left: 48%;
+}
+#_toolbar .bubble {
+    top: 66px;
+    left: 0;
+    width: 100%;
+    padding: 0;
 }
 
-.search-area .active-contents {
-    margin: 0 0 0 80%; /* EEK */
+#_toolbar .bubble-container {
+    padding: 0 10px 10px;
 }
 
-.search-form {
-    padding: 10px;
-    margin: 0 0 0 -0%; /* EEK */
+.bubble-toc {
+    overflow: auto;
+    max-height: 400px;
+}
+
+
+#_toolbar .bubble h6 { /* Currently the same as h6 .pickers.bubble */
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    padding: 10px 0 5px;
     display: block;
-    max-width: 250px;
+    margin: 0 0 5px 0;
+}
+
+#_toolbar .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+.bubble-toc ol {
+    list-style-type: none;
+}
+
+.bubble-toc > ol {
     width: 100%;
 }
 
-.search-input {
-    max-width: 187px;
+.bubble-toc > ol > li > ol {
+    padding: 0 10px;
+}
+
+.bubble-toc > ol > li > ol > li {
+    width: 33.33%;
+    float: left;
+}
+
+.bubble-toc > ol > li > ol > li > ol {
+    padding: 0 10px;
+}
+
+.bubble a:hover, .bubble a:focus, .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+
+#_find-area form {
+    margin: 0 0 0 50% !important;
+}
+
+.find-form {
+    padding: 10px;
+    margin: 0 0 0 -110px;
+    display: block;
+    width: 200px;
+}
+
+#_find-input {
+    width: 155px;
     height: 34px;
     padding: 0 20px 0 5px;
     font: 16px 'Open Sans', Helvetica, Arial, sans-serif;
     display: block;
-    background-color: #cde8a8;
+    background-color: #FFF;
     border: 1px solid #CCE9A7;
     float: left;
+    outline: none;
+    z-index: 0;
 }
 
-.search-input:focus {
+#_find-input:focus {
     background-color: #FFF;
+    border: 1px solid #FFF;
 }
 
-.search-input:focus + .search-button {
-    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
+#_find-input:focus + #_find-button {
+    background: url(style_images/icons.png) no-repeat scroll -108px 0px !important;
 }
 
-.search-button {
+#_find-button {
     width: 36px;
     height: 36px;
     display: block;
@@ -444,9 +505,23 @@ html, body {
     float: left;
 }
 
-.search-button:hover, .search-button:focus, .search-button:active {
-    background: url(style_images/icons.png) no-repeat scroll -72px -36px;
+#_find-input:focus + #_find-button:hover {
+    background: url(style_images/icons.png) no-repeat scroll -108px -36px !important;
 }
+
+#_find-input-label {
+    cursor: text;
+    line-height: 36px;
+    height: 36px;
+    position: relative;
+    left: 5px;
+    top: -36px;
+    z-index: 200;
+    color: #333;
+    font-style: italic;
+    display: none;
+}
+
 
 /* Smaller, fixed header */
 
@@ -483,6 +558,17 @@ html, body {
     border-radius: 3px;
 }
 
+/* Sharing and printing (bottom of the page) */
+#_share-print {
+    margin: 30px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 1px solid #999;
+}
+
+.offline .online-contents {
+    visibility: hidden;
+}
+
 /* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
 #_inward, #_footer-wrap {
     height: 80px;
@@ -505,6 +591,7 @@ html, body {
     height: 100%;
     margin: 0 auto -80px;
 }
+
 
 /* Footer contents */
 
@@ -543,33 +630,18 @@ html, body {
 
 /* .CHAPTER AREA */
 
-.chapter {
+#_content .chapter {
     margin-bottom: 75px;
 }
 
-.nav-buttons {
-    float: right;
-    width: 50px;
-    margin: 33px 0 0 20px;
+/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
+/* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
+.chapter a[id] {
+    position: relative;
+    top: -30px;
 }
 
-
-.nav-buttons a {
-    display: inline;
-    text-decoration: none;
-    font-size: 20px;
-    line-height: 28px;
-    color: #999;
-}
-.nav-buttons a:hover, .nav-buttons a:focus,.nav-buttons a:active {
-    color: #439539;
-}
-
-.nav-buttons a:first-child {
-    margin-right: 10px;
-}
-
-.chapter .title {
+#_content .chapter .title {
     font-size: 32px;
     font-weight: normal;
     padding: 40px 0 5px;
@@ -577,31 +649,31 @@ html, body {
     width: 100%;
 }
 
-.sect1 .title {
+#_content .sect1 .title {
     font-size: 28px;
     font-weight: normal;
     padding: 50px 0 5px;
 }
 
-.sect2 .title {
+#_content .sect2 .title {
     font-size: 24px;
     font-weight: normal;
     padding: 40px 0 0;
 }
 
-.sect3 .title {
+#_content .sect3 .title {
     font-size: 20px;
     font-weight: normal;
     padding: 30px 0 0;
 }
 
-.sect4 .title {
+#_content .sect4 .title {
     font-size: 16px;
     font-weight: bold;
     padding: 20px 0 0;
 }
 
-.sect5 .title {
+#_content .sect5 .title {
     font-size: 16px;
     font-weight: normal;
     padding: 20px 0 0;
@@ -634,6 +706,7 @@ a:hover .name, a:focus .name, a:active .name {
 
 .permalink:hover, .permalink:focus, .permalink:active {
     color: #439539;
+    text-decoration: none !important;
 }
 
 /* Do we actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
@@ -655,11 +728,6 @@ a:hover .name, a:focus .name, a:active .name {
 .page-toc a {
         text-decoration: none;
 }
-
-.page-toc a:hover .chapter, .page-toc a:focus .chapter, .page-toc a:active .chapter {
-    text-decoration: underline !important;
-}
-
 
 /* Thou shalt not ... */
 
@@ -771,14 +839,19 @@ p {
     color: #333;
 }
 
-p a {
+#_content p a {
     color: #439539;
     text-decoration: none;
 }
 
-p a:hover, p a:focus, p a:active {
+#_content p a:hover, #_content p a:focus, #_content p a:active,
+#_content p a:visited:hover, #_content p a:visited:focus, #_content p a:visited:active {
     color: #439539;
     text-decoration: underline;
+}
+
+#_content p a:visited {
+    color: #5C3566;
 }
 
 code, .command {

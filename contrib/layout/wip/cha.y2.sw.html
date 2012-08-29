@@ -12,125 +12,9 @@
         <link rel="previous" href="part.reference.software.html"
             title="Part II. Managing and Updating Software"/>
         <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
-        <script type="text/javascript">
-            function show() {
-            //    document.getElementsByClassName('js-necessary').onclick = function() {alert('HUI!');};
-            }
-            
-            function activate(element) {
-                if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
-                    document.getElementById('_toc-area').className = 'inactive';
-                    document.getElementById('_language-picker').className = 'inactive';
-                    document.getElementById('_format-picker').className = 'inactive';
-                    if ((element == '_toc-area')) {
-                        document.getElementById('_find-area').className = 'inactive';
-                    }
-                    else {
-                        document.getElementById('_find-area').className = 'active';
-                    }
-                    document.getElementById('_toc-area-bottom').className = 'b-inactive';
-                    
-                    document.getElementById(element).className = 'active';                    
-                    if (element == '_toc-area') {
-                        document.getElementById(element + '-bottom').className = 'b-active';
-                    }
-                    document.getElementById(element + '-button').onclick = function() {deactivate();};
-                }
-                else {
-                    alert('Eek! This element can\'t be activated.');
-                }
-            }
-
-            
-            function deactivate() {
-                document.getElementById('_toc-area').className = 'inactive';
-                document.getElementById('_find-area').className = 'active';
-                document.getElementById('_toc-area-bottom').className = 'b-inactive';
-                document.getElementById('_language-picker').className = 'inactive';
-                document.getElementById('_format-picker').className = 'inactive';
-                document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area');};
-                document.getElementById('_find-area-button').onclick = function() {activate('_find-area');};
-                document.getElementById('_language-picker-button').onclick = function() {activate('_language-picker');};
-                document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker');};
-            }
-            
-            function share(service) {
-                u = encodeURIComponent(document.URL);
-                t = encodeURIComponent(document.title);
-                if (service == 'fb') {
-                    shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
-                    window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
-                }
-                else if (service == 'tw') {
-                    shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
-                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
-                }
-                
-                else if (service == 'mail') {
-                    shareURL = 'http://www.suse.com/info/sendemail.jsp?url=' + u;
-                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=400');
-                }
-                else {
-                    alert('Eek! This sharing service must be new.');
-                }
-                
-            }
-            
-            
-            // Smooth scrolling thanks to Andrew Johnson
-            
-           
-           function currentYPosition() {
-               // Firefox, Chrome, Opera, Safari
-               if (self.pageYOffset) return self.pageYOffset;
-               // Internet Explorer 6 - standards mode
-               if (document.documentElement && document.documentElement.scrollTop)
-               return document.documentElement.scrollTop;
-               // Internet Explorer 6, 7 and 8
-               if (document.body.scrollTop) return document.body.scrollTop;
-               return 0;
-           }
-           
-           function elmYPosition(eID) {
-               var elm = document.getElementById(eID);
-               var y = elm.offsetTop;
-               var node = elm;
-               while (node.offsetParent && node.offsetParent != document.body) {
-               node = node.offsetParent;
-               y += node.offsetTop;
-               y -= 30;
-               if (y < 0)
-                   y = 0;
-               } return y;
-           }
-           function scroll(eID) {
-               var startY = currentYPosition();
-               var stopY = elmYPosition(eID);
-               var distance = stopY > startY ? stopY - startY : startY - stopY;
-               if (distance < 100) {
-                   scrollTo(0, stopY); return;
-               }
-               var speed = Math.round(distance / 100);
-               if (speed >= 20) speed = 20;
-               var step = Math.round(distance / 25);
-               var leapY = stopY > startY ? startY + step : startY - step;
-               var timer = 0;
-               if (stopY > startY) {
-                   for ( var i=startY; i<stopY; i+=step ) {
-                       setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
-                       leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                   } return;
-               }
-               for ( var i=startY; i>stopY; i-=step ) {
-                   setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
-                   leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-               }
-           }
-           
-            
-        </script>
+        <script type="text/javascript" src="susebooks.js"/>
     </head>
-    <body onload="show();">
+    <body onload="show(); labelInputFind();">
         <div id="_outer-wrap">
             <div id="_white-bg">
                 <div id="_header">
@@ -147,7 +31,7 @@
                             <a href="#" onclick="activate('_language-picker')" id="_language-picker-button"><span class="picker">English</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
-                                <p>Select a Language</p>
+                                <h6>Select a Language</h6>
                                 <a href="#">Deutsch</a>
                                 <a href="#" class="selected">English</a>
                                 <a href="#">Español</a>
@@ -161,7 +45,7 @@
                             <a href="#" onclick="activate('_format-picker')" id="_format-picker-button"><span class="picker">Web Page</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
-                                <p>Select a Format</p>
+                                <h6>Select a Format</h6>
                                 <a href="#" class="selected">Web Page</a>
                                 <a href="#">Single Web Page</a>
                                 <a href="#">PDF</a>
@@ -177,15 +61,662 @@
                <div id="_toolbar">
                    <div id="_toc-area" class="inactive">
                            <a href="#" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area')">
-                               <span class="pad-tools-50-out">
-                                   <span class="pad-tools-50-in">
-                                       <span class="toc-icon">&nbsp;</span>
-                                       <span class="tool-label">Contents</span>
-                                   </span>
-                               </span>
+                                <span class="tool-spacer">
+                                   <span class="toc-icon">&nbsp;</span>
+                                   <div class="clearme"></div>
+                                </span>
+                                   <span class="tool-label">Contents</span>
                            </a>
-                       <div class="active-contents bubble-corner">
-                           &nbsp;
+                       <div class="active-contents bubble-corner">&nbsp;</div>
+                       <div class="active-contents bubble">
+                           <div class="bubble-container">
+                           <h6>OpenSUSE 12.2 Start-up</h6>
+            <div class="bubble-toc">
+                <ol>
+                    <li>
+                        <a href="preface.startup.html">About This Guide</a>
+                        <ol>
+                            <li><a href="preface.startup.html#id2562990">1. Available Documentation</a></li>
+                            <li><a href="preface.startup.html#id2612068">2. Feedback</a></li>
+                            <li><a href="preface.startup.html#id2611085">3. Documentation Conventions</a></li>
+                            <li><a href="preface.startup.html#id2568057">4. About the Making of This Manual</a></li>
+                            <li><a href="preface.startup.html#id2565850">5. Source Code</a></li>
+                            <li><a href="preface.startup.html#id2557963">6. Acknowledgments</a></li>
+                        </ol>
+                    </li>
+                    <li><div class="clearme"></div>
+                        <a href="part.basics.html">I. Installation and Basics</a>
+                        <ol>
+                            <li><a href="art.osuse.installquick.html">1. Installation Quick Start</a>
+                                <ol>
+                                    <li><a href="art.osuse.installquick.html#sec.osuse.installquick">1.1. Welcome to <span class="phrase">openSUSE</span></a></li>
+                                </ol>
+                            </li>
+                            <li><a href="art.kdequick.html">2. KDE Quick Start</a>
+                                <ol>
+                                    <li><a href="art.kdequick.html#sec.kdequick.start">2.1. Getting Started</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.startprogr">2.2. Starting Programs</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.mediahandling">2.3. Handling Media</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.custom">2.4. Customizing Your Desktop</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.desktopeffects">2.5. Applying Desktop Effects</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.virtdesk">2.6. Using Virtual Desktops</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.dolphin">2.7. Managing Files and Folders</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.browser">2.8. Browsing the Internet</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.kwallet">2.9. Managing Passwords</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.mail">2.10. E-Mailing and Calendaring</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.kopete">2.11. Instant Messaging with Kopete</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.ooo">2.12. Starting LibreOffice</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.docview">2.13. Viewing PDF Files and Other Documents</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.find">2.14. Searching for Data</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.burn">2.15. Creating a CD or DVD</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.digikam">2.16. Managing Your Digital Image Collection</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.amarok">2.17. Managing Your Music Collection</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.logout">2.18. Logging Out</a></li>
+                                    <li><a href="art.kdequick.html#sec.kdequick.more">2.19. For More Information</a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <a href="art.gnomequick.html">3. GNOME Quick Start</a>
+                                <ol>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.start">3.1. Getting Started</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.startprog">3.2. Starting Programs</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.mediahandling">3.3. Handling Media</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.custom">3.4. Customizing Your Desktop</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.desktopeffects">3.5. Applying Desktop Effects</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.virtdesk">3.6. Using Virtual Desktops</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.nautilus">3.7. Managing Files and Folders</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.firefox">3.8. Browsing the Internet with Firefox</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.gnomekeyring">3.9. Managing Passwords</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.mail">3.10. E-Mailing and Calendaring</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.pidgin">3.11. Instant Messaging with Pidgin</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.ooo">3.12. Starting LibreOffice</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.pdf">3.13. Viewing PDF Files and Other Documents</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.search">3.14. Searching for Data</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.burn">3.15. Creating a CD or DVD</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.fspot">3.16. Managing Your Digital Image Collection</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.banshee">3.17. Managing Your Music and Videos</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.logout">3.18. Logging Out</a></li>
+                                    <li><a href="art.gnomequick.html#sec.gnomequick.more">3.19. For More Information</a></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <a href="art.oofficequick.html">4. LibreOffice Quick Start</a>
+                                <ol>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.compatible">4.1. Compatibility</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.modules">4.2. LibreOffice Modules</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.start">4.3. Starting LibreOffice</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.writer">4.4. LibreOffice Writer</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.calc">4.5. LibreOffice Calc</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.other">4.6. Other LibreOffice Modules</a></li>
+                                    <li><a href="art.oofficequick.html#sec.oofficequick.moreinfo">4.7. For More Information</a></li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+
+                        <!--<span class="part">
+                            <a href="part.reference.software.html">II. Managing and Updating
+                                Software</a>
+                        </span>
+                    </dt>
+                    <dd>
+                        <dl>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.y2.sw.html">5. Installing or Removing Software</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.sw.html#sec.onlineupdate.terms">5.1.
+                                                Definition of Terms</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.sw.html#sec.y2.sw.qt">5.2. Using the KDE
+                                                Interface (Qt)</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.sw.html#sec.y2.sw.gtk">5.3. Using the
+                                                GNOME Interface (GTK+)</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.sw.html#sec.y2.sw.instsource">5.4.
+                                                Managing Software Repositories and Services</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.sw.html#sec.updater">5.5. Keeping the
+                                                System Up-to-date</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.onlineupdate.you.html">6. YaST Online Update</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.onlineupdate.you.html#sec.onlineupdate.you.overview"
+                                                >6.1. The Online Update Dialog</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.onlineupdate.you.html#sec.onlineupdate.you.install"
+                                                >6.2. Installing Patches</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.onlineupdate.you.html#sec.onlineupdate.you.automatically"
+                                                >6.3. Automatic Online Update</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.y2.sw.inst_pkg_internet.html">7. Installing
+                                        Packages From the Internet</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.y2.sw.inst_pkg_internet.html#sec.y2.sw.1click"
+                                                >7.1. 1-Click Install</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.y2.sw.inst_pkg_internet.html#sec.y2.sw.webpin"
+                                                >7.2. YaST Package Search</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.add-ons.html">8. Installing Add-On Products</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.add-ons.html#sec.add-ons.addon">8.1.
+                                                Add-Ons</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.add-ons.html#sec.add-ons.drivers">8.2.
+                                                Binary Drivers</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.sw_cl.html">9. Managing Software with Command Line
+                                        Tools</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.sw_cl.html#sec.zypper">9.1. Using
+                                                Zypper</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.sw_cl.html#sec.rpm">9.2. RPM—the Package
+                                                Manager</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </dd>
+                    <dt>
+                        <span class="part">
+                            <a href="part.reference.administration.html">III. Administration</a>
+                        </span>
+                    </dt>
+                    <dd>
+                        <dl>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.y2.userman.html">10. Managing Users with YaST</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.main">10.1.
+                                                User and Group Administration Dialog</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.users">10.2.
+                                                Managing User Accounts</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.adv">10.3.
+                                                Additional Options for User Accounts</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.defaults"
+                                                >10.4. Changing Default Settings for Local Users</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.assign"
+                                                >10.5. Assigning Users to Groups</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#sec.y2.userman.groups"
+                                                >10.6. Managing Groups</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.userman.html#cha.y2.userman.authent"
+                                                >10.7. Changing the User Authentication Method</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.y2.lang.html">11. Changing Language and Country
+                                        Settings with YaST</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.lang.html#sec.y2.langmod">11.1. Changing
+                                                the System Language</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.lang.html#sec.y2.country">11.2. Changing
+                                                the Country and Time Settings</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.yast.text.html">12. YaST in Text Mode</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.yast.text.html#sec.yast.navi.ncurses_modul"
+                                                >12.1. Navigation in Modules</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.yast.text.html#sec.yast.ncurses_tasten"
+                                                >12.2. Restriction of Key Combinations</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.yast.text.html#sec.yast.ncurses_commands"
+                                                >12.3. YaST Command Line Options</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.y2.hw.html">13. Setting Up Hardware Components with
+                                        YaST</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.hw.html#sec.y2.hw.probe">13.1. Hardware
+                                                Information</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.hw.html#sec.y2.hw.sound">13.2. Setting
+                                                Up Sound Cards</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.y2.hw.html#sec.y2.hw.scan">13.3. Setting Up
+                                                a Scanner</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.p.html">14. Printer Operation</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.workflow">14.1. The Workflow
+                                                of the Printing System</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.method">14.2. Methods and
+                                                Protocols for Connecting Printers</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.software">14.3. Installing the
+                                                Software</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.y2.hw.print">14.4. Setting Up a
+                                                Printer</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.net">14.5. Network
+                                                Printers</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.appl.commandline">14.6.
+                                                Printing from the Command Line</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.p.special">14.7. Special
+                                                Features in <span class="phrase">openSUSE</span></a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.p.html#sec.drucken.prob">14.8.
+                                                Troubleshooting</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.fontconfig.html">15. Installing and Configuring
+                                        Fonts for the Graphical User Interface</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.fontconfig.html#sec.fontconfig.add">15.1.
+                                                Adding Fonts</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.update.html">16. Upgrading the System and System
+                                        Changes</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.update.html#sec.update.suselinux">16.1.
+                                                Upgrading the System</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.update.html#sec.update.version">16.2. For
+                                                More Information</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </dd>
+                    <dt>
+                        <span class="part">
+                            <a href="part.bash.html">IV. The Bash Shell</a>
+                        </span>
+                    </dt>
+                    <dd>
+                        <dl>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.new.bash.html">17. Shell Basics</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.start">17.1.
+                                                Starting a Shell</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.commands">17.2.
+                                                Entering Commands</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.fildir">17.3.
+                                                Working with Files and Directories</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.root">17.4.
+                                                Becoming Root</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.accperm">17.5.
+                                                File Access Permissions</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.feat">17.6.
+                                                Useful Features of the Shell</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.edit">17.7.
+                                                Editing Texts</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.search">17.8.
+                                                Searching for Files or Contents</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.view">17.9.
+                                                Viewing Text Files</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.redir">17.10.
+                                                Redirection and Pipes</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.new.bash.jobs">17.11.
+                                                Starting Programs and Handling Processes</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.new.bash.html#sec.shell.commands">17.12.
+                                                Important Linux Commands</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                            <dt>
+                                <span class="chapter">
+                                    <a href="cha.adm.shell.html">18. Bash and Bash Scripts</a>
+                                </span>
+                            </dt>
+                            <dd>
+                                <dl>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.whatistheshell"
+                                                >18.1. What is <span class="quote">“<span
+                                                  class="quote">The Shell</span>”</span>?</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.shellscripts">18.2.
+                                                Writing Shell Scripts</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.shell.redirect"
+                                                >18.3. Redirecting Command Events</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.alias">18.4. Using
+                                                Aliases</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.variables">18.5.
+                                                Using Variables in Bash</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.shell.grouping"
+                                                >18.6. Grouping And Combining Commands</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a
+                                                href="cha.adm.shell.html#sec.adm.shell.commonconstructs"
+                                                >18.7. Working with Common Flow Constructs</a>
+                                        </span>
+                                    </dt>
+                                    <dt>
+                                        <span class="sect1">
+                                            <a href="cha.adm.shell.html#sec.adm.shell.moreinfo"
+                                                >18.8. For More Information</a>
+                                        </span>
+                                    </dt>
+                                </dl>
+                            </dd>
+                        </dl>
+                    </dd>
+                    <dt>
+                        <span class="appendix">
+                            <a href="bk01apa.html">A. Help and Troubleshooting</a>
+                        </span>
+                    </dt>
+                    <dd>
+                        <dl>
+                            <dt>
+                                <span class="sect1">
+                                    <a href="bk01apa.html#cha.adminhelp">A.1. Help and
+                                        Documentation</a>
+                                </span>
+                            </dt>
+                            <dt>
+                                <span class="sect1">
+                                    <a href="bk01apa.html#cha.trouble">A.2. Common Problems and
+                                        Their Solutions</a>
+                                </span>
+                            </dt>
+                            <dt>
+                                <span class="sect1">
+                                    <a href="bk01apa.html#id2667501">A.3. Legal Notice</a>
+                                </span>
+                            </dt>
+                            <dt>
+                                <span class="sect1">
+                                    <a href="bk01apa.html#id2667571">A.4. GNU Free Documentation
+                                        License</a>
+                                </span>
+                            </dt>
+                        </dl>
+                    </dd>
+                </dl>-->
+            </div>
+                           <div class="clearme"></div>
+                            </div>
                        </div>
                    </div>
                    <div id="_find-area" class="active">
@@ -193,7 +724,9 @@
                            <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area')">
                                <span class="pad-tools-50-out">
                                    <span class="pad-tools-50-in">
-                                       <span class="find-icon">&nbsp;</span>
+                                       <span class="tool-spacer">
+                                           <span class="find-icon">&nbsp;</span>
+                                       </span>
                                        <span class="tool-label">Find</span>
                                    </span>
                                </span>
@@ -201,39 +734,25 @@
                        </div>
                        <div class="active-contents">
                            <form action="post">
-                               <div class="search-form">
-                                   <input type="text" class="search-input" value="Find" />
-                                   <input type="image" class="search-button" alt="Find" title="Find" src="style_images/blank.png" />
+                               <div class="find-form">
+                                   <input type="text" id="_find-input" value="" onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
+                                   <input type="image" id="_find-button" alt="Find" title="Find" src="style_images/blank.png" />
+                                   <label id="_find-input-label" onclick="document.getElementById('_find-input').focus(); return false;">Find</label>
+                                   <div class="clearme"></div>
                                </div>
                            </form>
                        </div>
                    </div>
                    <div id="_nav-area" class="inactive">
-                       <a href="#" class="tool" "title="More" onclick="activate('_nav-area')" style="float: right; display: block; width: auto;">
-                           <span class="tool-label">Chapter</span>
-                           <span class="prev-icon">&nbsp;</span>
-                           <div style="width: 5px; float:left;">&nbsp;</div>
-                           <span class="next-icon">&nbsp;</span>
-                       </a>
-                       <div class="active-contents bubble-corner">
-                           &nbsp;
+                       <div class="tool" style="float: left; display: block;">
+                           <span style="float: right;">
+                               <span class="tool-label">Chapter</span>
+                               <a accesskey="p" title="Part II. Managing and Updating Software" href="part.reference.software.html" class="tool-spacer"><span class="prev-icon">&nbsp;</span></a>
+                               <a accesskey="n" title="Chapter 6. YaST Online Update" href="cha.onlineupdate.you.html" class="tool-spacer"><span class="next-icon">&nbsp;</span></a>
+                           </span>
                        </div>
                    </div>
                </div>
-                <div id="_toolbar-bottom" style="position: relative; z-index: 20; min-height: 0;">
-                   <div class="b-inactive" id="_toc-area-bottom" style="background-color: rgba(51,51,51, 1); padding: 0 10px 10px; position: absolute; top: 10px; left: 0; width: 100%;">
-                           <h1>OpenSUSE 12.2 Start-up</h1>
-                           <p>I Imagination is key</p>
-                           <div class="clearme"></div>   
-                        </div>
-                <div class="b-inactive" id="_tools-area-bottom" style="background-color: rgba(51,51,51, 1); padding: 0 10px 10px; position: absolute; top: 10px; right: 0; max-width: 400px;">
-                        <p class="js-necessary" style="color: #FFF !important;"><strong>Share:</strong> <a href="#" onclick="share('fb')" style=" color: #FFF !important;">Facebook</a> &bull; <a href="#" onclick="share('tw')" style=" color: #FFF !important;">Twitter</a> &bull; <a href="#" onclick="share('mail');" style=" color: #FFF !important;">Email</a></p>
-                        <p class="js-necessary" style="color: #FFF !important;border-top: 1px solid #FFF; padding-top: 10px;"><a href="javascript:print()" style="color: #FFF !important;"><strong>Print this page</strong></a></p>
-                        <p style=" color: #FFF !important; border-top: 1px solid #FFF; padding-top: 10px;"><strong>Languages:</strong> <a href="#" style=" color: #FFF !important; display: inline-block;">Deutsch</a> &bull; <span style=" color: #FFF !important; display: inline-block; background-color: #76AD2D; padding: 3px; border-radius: 3px;">English</span> &bull; <a href="#" style=" color: #FFF !important;">Español</a> &bull; <a href="#" style=" color: #FFF !important;">Français</a> &bull; <a href="#" style=" color: #FFF !important;">中文(简体)</a> &bull; <a href="#" style=" color: #FFF !important; display: inline-block;">日本語</a> &bull; <a href="#" style=" color: #FFF !important;">Русский</a></p>
-                        <p style=" color: #FFF !important; border-top: 1px solid #FFF; padding-top: 10px;"><strong>Formats:</strong> <a href="#" style="color: #FFF !important;">EPUB</a> &bull; <a href="#" style=" color: #FFF !important;">Single HTML</a> &bull; <a href="#" style=" color: #FFF !important;">PDF</a></p>
-                        <div class="clearme"></div>   
-                    </div>
-                </div>
             </div>
             
             <div id="_fixed-header-wrap">
@@ -254,42 +773,37 @@
             
             <div id="_content" onclick="deactivate();">
                 <div class="chapter">
-                    <div style="height: 0; width: 100%"></div>
-                    <div class="nav-buttons">
-                        <a accesskey="p" title="Part II. Managing and Updating Software" href="part.reference.software.html">◀</a>
-                        <a accesskey="n" title="Chapter 6. YaST Online Update" href="cha.onlineupdate.you.html">▶</a>
-                    </div>
                     <div class="line">
                         <h2 class="title">
                             <a id="cha.y2.sw"></a>
                             <span class="number">5. </span>
                             <span class="name">Installing or Removing Software</span>
-                            <a class="permalink" title="Permalink" href="#cha.y2.sw" onclick="scroll('cha.y2.sw');return false;">#</a>
+                            <a class="permalink" title="Permalink" href="#cha.y2.sw" onclick="scroll('cha.y2.sw'); return false;">#</a>
                         </h2>
                         <dl class="page-toc">
                             <dt>
                                 <span class="sect1">
-                                    <a href="cha.y2.sw.html#sec.onlineupdate.terms"><span class="number">5.1. </span><span class="name">Definition of Terms</span></a>
+                                    <a href="cha.y2.sw.html#sec.onlineupdate.terms" onclick="scroll('sec.onlineupdate.terms'); return false;"><span class="number">5.1. </span><span class="name">Definition of Terms</span></a>
                                 </span>
                             </dt>
                             <dt>
                                 <span class="sect1">
-                                    <a href="cha.y2.sw.html#sec.y2.sw.qt"><span class="number">5.2. </span><span class="name">Using the KDE Interface (Qt)</span></a>
+                                    <a href="cha.y2.sw.html#sec.y2.sw.qt" onclick="scroll('sec.y2.sw.qt'); return false;"><span class="number">5.2. </span><span class="name">Using the KDE Interface (Qt)</span></a>
                                 </span>
                             </dt>
                             <dt>
                                 <span class="sect1">
-                                    <a href="cha.y2.sw.html#sec.y2.sw.gtk"><span class="number">5.3. </span><span class="name">Using the GNOME Interface (GTK+)</span></a>
+                                    <a href="cha.y2.sw.html#sec.y2.sw.gtk" onclick="scroll('sec.y2.sw.gtk'); return false;"><span class="number">5.3. </span><span class="name">Using the GNOME Interface (GTK+)</span></a>
                                 </span>
                             </dt>
                             <dt>
                                 <span class="sect1">
-                                    <a href="cha.y2.sw.html#sec.y2.sw.instsource"><span class="number">5.4. </span><span class="name">Managing Software Repositories and Services</span></a>
+                                    <a href="cha.y2.sw.html#sec.y2.sw.instsource" onclick="scroll('sec.y2.sw.instsource'); return false;"><span class="number">5.4. </span><span class="name">Managing Software Repositories and Services</span></a>
                                 </span>
                             </dt>
                             <dt>
                                 <span class="sect1">
-                                    <a href="cha.y2.sw.html#sec.updater"><span class="number">5.5. </span><span class="name">Keeping the System Up-to-date</span></a>
+                                    <a href="cha.y2.sw.html#sec.updater" onclick="scroll('sec.updater'); return false;"><span class="number">5.5. </span><span class="name">Keeping the System Up-to-date</span></a>
                                 </span>
                             </dt>
                         </dl>
@@ -1633,6 +2147,15 @@ If 'zypper' is not a typo you can use command-not-found to lookup the package th
 cnf zypper</pre></div>
                             <p>Oh dear!</p>                     
                         </div>
+                    </div>
+                    <div id="_share-print" class="offline" style="display: none;">
+                        <p style="float: left; width: 50%; display: block;" class="online-contents"><strong>Share this page:</strong> 
+                            <a href="javascript:share('fb')">Facebook</a> &bull; 
+                            <a href="javascript:share('gp')">Google+</a> &bull; 
+                            <a href="javascript:share('tw')">Twitter</a> &bull;
+                            <a href="javascript:share('mail');">Email</a></p>
+                        <p style="float: right; width: 50%; display: block; text-align: right;"><a href="javascript:print()">Print this page</a></p>
+                        <div class="clearme"></div>   
                     </div>
                 </div>
             </div>
