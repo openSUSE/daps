@@ -35,8 +35,9 @@
     exclude-result-prefixes="exsl l t">
 
 <xsl:import href="docbook.xsl"/> 
-<xsl:import href="&www;/chunk-common.xsl"/>
+<xsl:import href="chunk-common.xsl"/>
 <xsl:include href="&www;/manifest.xsl"/>
 <xsl:include href="&www;/chunk-code.xsl"/>
+
 
 </xsl:stylesheet>
