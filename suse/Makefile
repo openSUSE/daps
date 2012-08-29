@@ -77,6 +77,7 @@ xhtml2html: $(HTMLSTYLESHEETS)
 xslt/html/%.xsl: xslt/xhtml/%.xsl
 	xsltproc --output $@  ${XHTML2HTML} $<
 
+
 #-----------------------------
 # Generate SGML catalog for novdoc
 #
@@ -137,6 +138,9 @@ catalogs/$(SUSEXSL_FOR-CATALOG):
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse-xsl/current" \
 	  "file://$(SUSESTYLES)" $@
+	xmlcatalog --noout --add "rewriteSystem" \
+	  "http://daps.sourceforge.net/release/suse2-xsl/current" \
+          "file://$(SUSESTYLES)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
