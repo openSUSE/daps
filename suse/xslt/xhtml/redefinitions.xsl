@@ -12,7 +12,8 @@
 
 <!-- Other templates -->
 <xsl:template match="authorgroup" mode="titlepage.mode">
-  <table width="100%" class="{name(.)}">
+  <table width="100%">
+    <xsl:apply-templates select="." mode="class.attribute"/>
    <tbody>
     <tr valign="top">
      <td width="15%">
@@ -51,18 +52,32 @@
 </xsl:template>
 
 
-<xsl:template match="author|othercredit" mode="titlepage.mode">
-   <span class="{name(.)}">
+<xsl:template match="author|editor|othercredit" mode="titlepage.mode">
+   <span>
+      <xsl:apply-templates select="." mode="class.attribute"/>
       <xsl:call-template name="person.name"/>
-      <xsl:apply-templates mode="titlepage.mode" select="./contrib"/>
-      <xsl:apply-templates mode="titlepage.mode" select="./affiliation"/>
-        <xsl:if test="count(following-sibling::author)&gt;0 or count(following-sibling::othercredit)&gt;0">
+      <xsl:apply-templates mode="titlepage.mode" select="contrib"/>
+      <xsl:apply-templates mode="titlepage.mode" select="affiliation"/>
+        <xsl:if test="count(following-sibling::*[
+                       self::author or
+                       self::editor or 
+                       self::othercredit]) &gt;0">
          <xsl:text>, </xsl:text>
       </xsl:if>
    </span>
 </xsl:template>
 
-
+<xsl:template match="contrib|authorblurb|personblurb"
+  mode="titlepage.mode">
+  <span>
+    <xsl:apply-templates select="." mode="common.html.attributes"/>
+    <xsl:text> (</xsl:text>
+    <xsl:call-template name="id.attribute"/>
+    <xsl:apply-templates mode="titlepage.mode"/>
+    <xsl:text>)</xsl:text>
+  </span>
+</xsl:template>
+  
 <xsl:template match="authorgroup[@role='translators']/author" mode="titlepage.mode">
    <span class="{name(.)}">
       <xsl:call-template name="person.name"/>
