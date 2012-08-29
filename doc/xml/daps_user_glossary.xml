@@ -1,249 +1,195 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+<?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml"
  title="Profiling step"?>
-<!DOCTYPE glossary PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-                      "http://www.docbook.org/xml/4.5/docbookx.dtd"
-[
+<!DOCTYPE glossary PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"[
   <!ENTITY % entities SYSTEM "entity-decl.ent">
   %entities;
 ]>
 <glossary id="daps.glossary">
  <title>Glossary</title>
  <glossentry id="glos.antennahouse"><glossterm>Antenna House Formatter</glossterm>
-    <glosssee otherterm="glos.formatter"/>
- </glossentry>
+  <glosssee otherterm="glos.formatter"/></glossentry>
  <glossentry id="glos.condtext"><glossterm>Conditional Text</glossterm>
-  <glosssee otherterm="glos.profiling"/>
- </glossentry>
- <glossentry id="glos.dtd"><glossterm>Document Type Definition</glossterm><acronym>DTD</acronym>
+  <glosssee otherterm="glos.profiling"/></glossentry>
+ <glossentry id="glos.dtd"><glossterm>Document Type Definition</glossterm><acronym id="acr.dtd"
+   >DTD</acronym>
   <glossdef>
-   <para>
-    The DTD (Document Type Definition) defines the exact elements, entities 
-    attributes and structure available in a XML or HTML document.
-   </para>
-  </glossdef>
- </glossentry>
- <glossentry id="glos.doctype"><glossterm>DOCTYPE Declaration</glossterm>
+   <para> The DTD (Document Type Definition) defines the exact elements, entities attributes and
+    structure available in a XML or HTML document. </para>
+  </glossdef></glossentry>
+ <glossentry id="glos.doctype"><glossterm>DOCTYPE</glossterm>
   <glossdef>
-   <para>
-    <remark>toms 2012-03-16: FIXME</remark>
-   </para>
-  </glossdef>
- </glossentry>
- <glossentry id="glos.daps"><glossterm>DocBook Authoring and Publishing Suite</glossterm><acronym>DAPS</acronym>
+   <para> The DOCTYPE, or Document Type <emphasis>Declaration</emphasis>, not to be confused with a
+     <xref linkend="glos.dtd"/>, contains the information on the <xref endterm="acr.dtd"
+     linkend="glos.dtd"/> to use with an XML document. Therefore, it also defines which particular
+    XML format is for the document. </para>
+  </glossdef></glossentry>
+ <glossentry id="glos.daps"><glossterm>DocBook Authoring and Publishing
+   Suite</glossterm><acronym>DAPS</acronym>
   <glossdef>
-   <para>
-    DAPS provides authors of technical documentation with an easy-to-use toolchain 
-    to convert their DocBook documents into various output formats.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> DAPS provides authors of technical documentation with an easy-to-use toolchain to convert
+    their DocBook documents into various output formats. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.docbook"><glossterm>DocBook</glossterm>
   <glossdef>
-   <para>DocBook is a semantic markup language for technical documentation 
-   published as a DTD.
+   <para>DocBook is a semantic markup language for technical documentation published as a DTD.
    </para>
-  </glossdef>
- </glossentry>
+  </glossdef></glossentry>
  <glossentry id="glos.entity"><glossterm>Entity</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    An entity connects one or multiple characters with a unique identifier. One
+    example where this is used, is for escaping characters that are necessary for
+    XML markup, such as the character <literal>&amp;</literal> which must be
+    written as the entity <code>&amp;amp;</code> in XML.
    </para>
-  </glossdef>
- </glossentry>
+   <para>
+    You can also declare custom entities.
+   </para>
+  </glossdef></glossentry>
  <glossentry id="glos.formatter"><glossterm>FO Formatter</glossterm>
   <glossdef>
-   <para>
-    Renders the XSL-FO files created by the DocBook XSL stylesheets into various 
-    output formats. The output format used most often is likely PDF. Formats that 
-    can usually be rendered into include:
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       Page description formats such as PDF, Postscript, and XPS.
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Different raster and vector image formats such as PNG and SVG.
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Text documents and web page documents such as TXT, RTF, and HTML.
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Internal formats of the formatter.
-      </para>
-     </listitem>
-    </itemizedlist>
-   <para>
-    Well-known formatters include Apache FOP, XEP, and Antenna House Formatter. 
-    Whereas the former is an open-source product, the latter two are proprietary 
-    and paid solutions. Antenna House Formatter is incompatible with DAPS.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> Renders the XSL-FO files created by the DocBook XSL stylesheets into various output
+    formats. The output format used most often is likely PDF. Formats that can usually be rendered
+    into include: </para>
+   <itemizedlist>
+    <listitem>
+     <para> Page description formats such as PDF, Postscript, and XPS. </para>
+    </listitem>
+    <listitem>
+     <para> Different raster and vector image formats such as PNG and SVG. </para>
+    </listitem>
+    <listitem>
+     <para> Text documents and web page documents such as TXT, RTF, and HTML. </para>
+    </listitem>
+    <listitem>
+     <para> Internal formats of the formatter. </para>
+    </listitem>
+   </itemizedlist>
+   <para> Well-known formatters include Apache FOP, XEP, and Antenna House Formatter. Whereas the
+    former is an open-source product, the latter two are proprietary and paid solutions. Antenna
+    House Formatter is incompatible with DAPS. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.fo"><glossterm>Formatting Objects</glossterm><acronym>FO</acronym>
-  <glossdef>
-   <para>
-    <remark>toms 2012-03-16: FIXME</remark>
-   </para>
-   <glossseealso otherterm="glos.formatter"/>
-  </glossdef>
+  <glosssee otherterm="glos.xslfo"/>
  </glossentry>
-  <glossentry id="glos.FOP"><glossterm>Formatting Objects Processor</glossterm><acronym>FOP</acronym>
-    <glosssee otherterm="glos.formatter"/>
- </glossentry>
+ <glossentry id="glos.FOP"><glossterm>Formatting Objects Processor</glossterm><acronym>FOP</acronym>
+  <glosssee otherterm="glos.formatter"/></glossentry>
  <glossentry id="glos.pdf"><glossterm>Portable Document Format</glossterm><acronym>PDF</acronym>
   <glossdef>
-   <para>
-    PDF is a page description format created by Adobe Systems in 1993. Today, it 
-    is widely adopted as the standard format for digitally distributed 
-    page-oriented documents.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> PDF is a page description format created by Adobe Systems in 1993. Today, it is widely
+    adopted as the standard format for digitally distributed page-oriented documents. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.pi"><glossterm>Processing Instruction</glossterm><acronym>PI</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    PIs can be used to mark certain content as having to be treated differently
+    by writing an instruction enclosed in <code>&lt;?</code> and <code>?&gt;</code>.
+    This is commonly used within (X)HTML web pages to mark parts of the file as
+    being written in server-side scripting language PHP.
    </para>
-  </glossdef>
- </glossentry>
+   <para>In DocBook, Processing Instructions can also be used for somewhat more
+   mundane purposes, such as setting the background color of a preceding image.
+   </para>
+  </glossdef></glossentry>
  <glossentry id="glos.profiling"><glossterm>Profiling</glossterm>
   <glossdef>
-   <para>
-    <remark>toms 2012-03-16: FIXME</remark>
-   </para>
-  </glossdef>
- </glossentry>
+   <para> Through profiling, you can easily adapt your documentation to different variants of a
+    product. For instance, a manufacturer of white-label products might appreciate being able to
+    easily replace the brand name for the product they sell.</para>
+   <para>It is possible to further this concept and even replace entire sections of text depending,
+    for instance, on whether the documentation is generated for the entry-level or for the
+    professional version of a product.</para>
+  </glossdef></glossentry>
  <glossentry id="glos.svg"><glossterm>Scalable Vector Graphics</glossterm><acronym>SVG</acronym>
   <glossdef>
-   <para>
-    SVG is an XML-based vector graphics format which is supported by most modern 
-    web browsers.
-   </para>
-   <para>
-    Vector graphics formats are different from traditional raster graphics in 
-    that they describe the exact shape of an object instead of using the lossy 
-    process of subdividing an object into many individual raster points (such as 
-    pixels). 
-    </para>
-  </glossdef>
- </glossentry>
+   <para> SVG is an XML-based vector graphics format which is supported by most modern web browsers. </para>
+   <para> Vector graphics formats are different from traditional raster graphics in that they
+    describe the exact shape of an object instead of using the lossy process of subdividing an
+    object into many individual raster points (such as pixels). </para>
+  </glossdef></glossentry>
  <glossentry id="glos.stylesheet"><glossterm>Stylesheet</glossterm>
   <glossdef>
-   <para>
-    <remark>toms 2012-03-16: FIXME</remark>
-   </para>
-  </glossdef>
- </glossentry>
-  <glossentry id="glos.transformation"><glossterm>Transformation</glossterm>
+   <para>In the context of DocBook, the term <emphasis>stylesheet</emphasis>
+    usually refers to the <xref linkend="glos.xslt"/> stylesheets used to
+    transform DocBook documents into their repsective output formats.</para>
+  </glossdef></glossentry>
+ <glossentry id="glos.transformation"><glossterm>Transformation</glossterm>
   <glossdef>
-   <para>
-    Data transformation converts data from a source data format into a
-    destination data format. An example is the process of converting a DocBook 
-    XML document into HTML by using an XSLT processor.
-    </para>
-  </glossdef>
- </glossentry>
+   <para> Data transformation converts data from a source data format into a destination data
+    format. An example is the process of converting a DocBook XML document into HTML by using an
+    XSLT processor. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.validation"><glossterm>Validation</glossterm>
   <glossdef>
-   <para>
-    Validation refers to the process of checking whether an XML document is formally
-    correct, checking, for instance, if all XML tags are properly closed and nested. 
-    This is done using a DTD or XML Schema.
-   </para>
-   <para>
-    If a document is valid that does not mean, that its contents are 
-    factually correct or that it is structured as you intended. However, validity 
-    does mean that a document can be further processed, for instance by a web 
-    browser, or an XSL processor.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> Validation refers to the process of checking whether an XML document is formally correct,
+    checking, for instance, if all XML tags are properly closed and nested. This is done using a DTD
+    or XML Schema. </para>
+   <para> If a document is valid that does not mean, that its contents are factually correct or that
+    it is structured as you intended. However, validity does mean that a document can be further
+    processed, for instance by a web browser, or an XSL processor. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.xep"><glossterm>XEP</glossterm>
-    <glosssee otherterm="glos.formatter"/>
- </glossentry>
+  <glosssee otherterm="glos.formatter"/></glossentry>
  <glossentry id="glos.xinclude"><glossterm>XInclude</glossterm>
   <glossdef>
-   <para>
-    XIncludes are references to other DocBook files that can be used to split one 
-    large file into multiple smaller, more manageable files. For instance, instead 
-    of having an entire book in a single file, you can create one central file 
-    from which you can reference individual chapter files.
-   </para>
-   <para>
-    In the context of using version control system with your documentation, 
-    having smaller files can also help avoid version conflicts if you and co-workers 
-    are working on different chapters of the same book.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> XIncludes are references to other DocBook files that can be used to split one large file
+    into multiple smaller, more manageable files. For instance, instead of having an entire book in
+    a single file, you can create one central file from which you can reference individual chapter
+    files. </para>
+   <para> In the context of using version control system with your documentation, having smaller
+    files can also help avoid version conflicts if you and co-workers are working on different
+    chapters of the same book. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.xmlcatalog"><glossterm>XML Catalog</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    XML Catalogs can be used to make DTDs available locally, so they do not have
+    to be downloaded over the network every time they are accessed.
    </para>
-  </glossdef>
- </glossentry>
+  </glossdef></glossentry>
  <glossentry id="glos.xmlparser"><glossterm>XML Parser</glossterm>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    Also known as an <emphasis>XML Processor</emphasis>, an <emphasis>XML Parser</emphasis>
+    is used to provide the structural information contained in an XML file to
+    another application.
    </para>
-  </glossdef>
- </glossentry>
+  </glossdef></glossentry>
  <glossentry>
   <glossterm>XOP</glossterm>
   <glossdef>
-   <para>
-    XOP (XML-binary Optimized Packaging) is a W3C (World Wide Web Consortium) 
-    recommendation on how to represent binary data inside XML documents.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> XOP (XML-binary Optimized Packaging) is a W3C (World Wide Web Consortium) recommendation
+    on how to represent binary data inside XML documents. </para>
+  </glossdef></glossentry>
  <glossentry id="glos.xml"><glossterm>Extensible Markup Language</glossterm><acronym>XML</acronym>
   <glossdef>
-   <para>
-    XML is a markup language with rules to encode documents 
-    into a form that is both human-readable and machine-readable.
-   </para>
-  </glossdef>
- </glossentry>
- <glossentry id="glos.xsl"><glossterm>Extensible Stylesheet Language</glossterm><acronym>XSL</acronym>
+   <para> XML is a markup language with rules to encode documents into a form that is both
+    human-readable and machine-readable. </para>
+  </glossdef></glossentry>
+ <glossentry id="glos.xsl"><glossterm>Extensible Stylesheet
+   Language</glossterm><acronym>XSL</acronym>
   <glossdef>
    <para>
-    <remark>toms 2012-03-16: FIXME</remark>
+    XSL is a collective noun used to refer to <xref linkend="glos.xslt" endterm="acr.xslt" />,
+    <xref linkend="glos.xslfo"/>, and the XML Path Language
+    (XPath).
    </para>
    <glossseealso otherterm="glos.xslt"/>
-   <glossseealso otherterm="glos.fo"/>
-  </glossdef>
- </glossentry>
+   <glossseealso otherterm="glos.xslfo"/>
+  </glossdef></glossentry>
  <glossentry id="glos.xslfo"><glossterm>XSL-FO</glossterm>
   <glossdef>
-   <para>
-    XSL-FO or <emphasis>Extensible Stylesheet Language-Formatting 
-    Objects</emphasis> is a markup language used to mediate between other XML
-    representations and a page formatting language format such as PDF.
-   </para>
+   <para>FO, XSL-FO or <emphasis>Extensible Stylesheet Language-Formatting Objects</emphasis> is a
+    markup language used to mediate between other XML representations and a page formatting format
+    such as PDF. </para>
    <glossseealso otherterm="glos.xslt"/>
-   <glossseealso otherterm="glos.fo"/>
-  </glossdef>
- </glossentry>
- <glossentry id="glos.xslt"><glossterm>Extensible Stylesheet Language for Transformations</glossterm><acronym>XSLT</acronym>
+  </glossdef></glossentry>
+ <glossentry id="glos.xslt"><glossterm>Extensible Stylesheet Language for
+   Transformations</glossterm><acronym id="acr.xslt">XSLT</acronym>
   <glossdef>
-   <para>
-    XSLT or <emphasis>Extensible Stylesheet Language for Transformations</emphasis> 
-    is a language based on XML which is used to transform XML documents.
-   </para>
-  </glossdef>
- </glossentry>
+   <para> XSLT or <emphasis>Extensible Stylesheet Language for Transformations</emphasis> is a
+    language based on XML which is used to transform XML documents. </para>
+  </glossdef></glossentry>
 </glossary>
