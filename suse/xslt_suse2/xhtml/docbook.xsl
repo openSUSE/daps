@@ -28,6 +28,6 @@
 	exclude-result-prefixes="exsl">
   
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
- <!--<xsl:import href="param.xsl"/>-->
+ <xsl:include href="param.xsl"/>
  
 </xsl:stylesheet>
