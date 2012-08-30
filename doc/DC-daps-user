@@ -20,3 +20,6 @@ EPUB_CSS="./daps.css"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
+
+## show acronyms in the glossary, so as not to confuse the user
+XSLTPARAM="--stringparam glossentry.show.acronym primary"
