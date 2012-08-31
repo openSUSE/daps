@@ -218,6 +218,40 @@
     </div>
   </xsl:template>
   
+  <xsl:template name="toolbar-wrap">
+    <xsl:param name="prev"/>
+    <xsl:param name="next"/>
+    <xsl:param name="nav.context"/>
+    
+    <div id="_toolbar-wrap">
+      <div id="_toolbar">
+        <div id="_toc-area" class="inactive">
+          <a id="_toc-area-button" class="tool"><span class="toc-icon">&nbsp;</span></a> Contents
+        </div>
+        
+        <xsl:call-template name="create-find-area">
+          <xsl:with-param name="next" select="$next"/>
+          <xsl:with-param name="prev" select="$prev"/>
+        </xsl:call-template>
+        
+        <div id="_nav-area" class="inactive">
+          <!-- FIXME: style attr. needs to be moved to CSS file -->
+          <div class="tool" style="float:left;display:block;">
+            <span style="float:right;">
+              <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
+              <!-- Add navigation -->
+              <xsl:call-template name="header.navigation">
+                <xsl:with-param name="next" select="$next"/>
+                <xsl:with-param name="prev" select="$prev"/>
+                <xsl:with-param name="nav.context" select="$nav.context"/>
+              </xsl:call-template>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </xsl:template>
+  
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
@@ -343,6 +377,11 @@
     </div>
   </xsl:template>
 
+  <xsl:template name="body.onload.attribute">
+    <!-- TODO: Add parameter to control it -->
+    <xsl:attribute name="onload">show(); labelInputFind();</xsl:attribute>
+  </xsl:template>
+
   <!-- ===================================================== -->
   
   <xsl:template name="chunk-element-content">
@@ -367,7 +406,8 @@
         <xsl:with-param name="next" select="$next"/>
       </xsl:call-template>
 
-      <body onload="show(); labelInputFind();">
+      <body>
+        <xsl:call-template name="body.onload.attribute"/>
         <xsl:call-template name="body.attributes"/>
         <div id="_outer-wrap">
           <div id="_white-bg">
@@ -389,33 +429,10 @@
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
           
-          <div id="_toolbar-wrap">
-            <div id="_toolbar">
-                   <div id="_toc-area" class="inactive">
-                      <a id="_toc-area-button" class="tool"><span class="toc-icon">&nbsp;</span></a> Contents
-                   </div>
-              
-                   <xsl:call-template name="create-find-area">
-                     <xsl:with-param name="next" select="$next"/>
-                     <xsl:with-param name="prev" select="$prev"/>
-                   </xsl:call-template>
-              
-                   <div id="_nav-area" class="inactive">
-                     <!-- FIXME: style attr. needs to be moved to CSS file -->
-                     <div class="tool" style="float:left;display:block;">
-                       <span style="float:right;">
-                         <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
-                         <!-- Add navigation -->
-                         <xsl:call-template name="header.navigation">
-                           <xsl:with-param name="next" select="$next"/>
-                           <xsl:with-param name="prev" select="$prev"/>
-                           <xsl:with-param name="nav.context" select="$nav.context"/>
-                         </xsl:call-template>
-                       </span>
-                     </div>
-                   </div>
-               </div>
-          </div>
+          <xsl:call-template name="toolbar-wrap">
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="prev" select="$prev"/>
+          </xsl:call-template>
           
         <xsl:call-template name="user.header.navigation">
           <xsl:with-param name="prev" select="$prev"/>
