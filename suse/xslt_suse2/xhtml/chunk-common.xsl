@@ -308,6 +308,41 @@
      </xsl:if>
   </xsl:template>
 
+  <xsl:template name="create-find-area">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    
+    <div id="_find-area" class="active">
+      <div class="inactive-contents">
+        <a href="#" id="_find-area-button" class="tool" title="Find"
+          onclick="activate('_find-area')">
+          <span class="pad-tools-50-out">
+            <span class="pad-tools-50-in">
+              <span class="tool-spacer">
+                <span class="find-icon">&nbsp;</span>
+              </span>
+              <span class="tool-label">Find</span>
+            </span>
+          </span>
+        </a>
+      </div>
+      <div class="active-contents">
+        <form action="post">
+          <div class="find-form">
+            <input type="text" id="_find-input" value=""
+              onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
+            <input type="image" id="_find-button" alt="Find"
+              title="Find" src="style_images/blank.png"/>
+            <label id="_find-input-label"
+              onclick="document.getElementById('_find-input').focus(); return false;"
+              >Find</label>
+            <div class="clearme"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </xsl:template>
+
   <!-- ===================================================== -->
   
   <xsl:template name="chunk-element-content">
@@ -359,9 +394,12 @@
                    <div id="_toc-area" class="inactive">
                       <a id="_toc-area-button" class="tool"><span class="toc-icon">&nbsp;</span></a> Contents
                    </div>
-                   <div id="_find-area" class="active">
-                       <a href="#find" title="Find"><span class="find-icon">&nbsp;</span></a> Search
-                   </div>
+              
+                   <xsl:call-template name="create-find-area">
+                     <xsl:with-param name="next" select="$next"/>
+                     <xsl:with-param name="prev" select="$prev"/>
+                   </xsl:call-template>
+              
                    <div id="_nav-area" class="inactive">
                      <!-- FIXME: style attr. needs to be moved to CSS file -->
                      <div class="tool" style="float:left;display:block;">
