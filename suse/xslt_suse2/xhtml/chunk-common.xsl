@@ -174,7 +174,7 @@
           onclick="activate('_language-picker')" href="#">
           <span class="picker">English</span>
         </a>
-        <div class="bubble-corner active-content"> </div>
+        <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
           
         </div>
