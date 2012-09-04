@@ -1,5 +1,31 @@
 /* Reset everything */
-@import url("reset.css");
+/* From http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
+a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
+sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+menu, nav, output, section, summary, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+}
 
 /*
 Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
@@ -20,10 +46,6 @@ Consider page load time.
     height: 0;
 }
 
-.js-necessary {/*
-    display: none;*/
-}
-
 ::selection { /* Green Selections */
     background: #439539;
     color: #FFF;
@@ -42,13 +64,17 @@ body {
 
 html, body {
     height: 100%;
-    min-width: 400px;
+    min-width: 450px;
 }
 
 #_header, #_footer, #_toolbar-bottom, .chapter {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
+}
+
+#_header {
+    min-width: 400px;
 }
 
 #_toolbar {
@@ -81,7 +107,7 @@ html, body {
     min-width: 440px;
 }
 
-.chapter {
+#_content {
     z-index: 0;
 }
 
@@ -89,20 +115,32 @@ html, body {
 
 #_logo {
     float: left;
-    margin: 22px 22px 22px 5px;
+    margin: 22px 22px 22px 0;
+}
+
+#_header .crumbs-wrap {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    height: 36px;
+    text-overflow: ellipsis;
+    min-width: 400px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 #_header .crumbs {
-    position: absolute;
-    top: 33px;
-    left: 130px;
+    margin: 0 0 0 130px;
     height: 36px;
-    overflow: hidden;
 }
 
-.crumbs a, .crumbs span {
+#_header .crumbs a, #_header .crumbs span {
     display: block;
     float: left;
+    overflow: hidden;
 }
 
 #_fixed-header .crumbs {
@@ -116,7 +154,7 @@ html, body {
     height: 36px;
 }
 
-_header a {
+#_header a {
     text-decoration: none !important;
 }
 
@@ -149,6 +187,11 @@ _header a {
 
 #_header .book-icon:hover, #header .book-icon:focus, #header .book-icon:active {
     background-position: 0px -36px;
+}
+
+#_fixed-header .crumbs span, #_fixed-header .crumbs a {
+    display: block;
+    float: left;
 }
 
 #_fixed-header .book-icon {
@@ -253,16 +296,24 @@ _header a {
 }
 
 #_toolbar {
-    min-height: 56px;
+    height: 56px;
     min-width: 400px;
 }
 
 .tool {
     text-decoration: none;
     display: block;
-    float: left;
     width: 100%;
     overflow: hidden;
+}
+
+
+#_toc-area {
+    float: left;
+}
+
+#_nav-area, #_find-area {
+    float: right;
 }
 
 .tool, #_nav-area .tool-spacer {
@@ -293,7 +344,6 @@ _header a {
 }
 
 #_toolbar > div {
-    float: left;
     height: 36px;
     display: table-cell;
     vertical-align: middle;
@@ -402,7 +452,7 @@ _header a {
 }
 
 #_toolbar .bubble-corner {
-    top: 52px;
+    top: -3px;
 }
 #_toolbar .bubble {
     top: 66px;
@@ -421,7 +471,7 @@ _header a {
 }
 
 
-#_toolbar .bubble h6 { /* Currently the same as h6 .pickers.bubble */
+#_toolbar .bubble h6 { /* Currently the same as .pickers .bubble h6 */
     color: #FFF;
     border-bottom: 1px solid #FFF;
     padding: 10px 0 5px;
@@ -546,17 +596,52 @@ _header a {
     margin: 0 auto;
 }
 
-.top-button {
+#_fixed-header .buttons {
     display: block;
     float: right;
-    margin: 0 10px;
-    background-color: #439539;
-    padding: 1px 5px;
-    color: #FFF;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 3px;
+    margin: 0 10px 0 5px;
 }
+
+#_fixed-header .buttons a {
+    display: block;
+    float: left;
+}
+
+#_fixed-header .button {
+    float: left;
+}
+
+#_fixed-header .prev-button, #_fixed-header .next-button {
+    background-image: url(style_images/icons.png);
+    height: 15px;
+    width: 18px;
+}
+
+#_fixed-header .top-button {
+    color: #333;
+}
+
+#_fixed-header .top-button:hover, #_fixed-header .top-button:focus, #_fixed-header .top-button:active {
+    text-decoration: none;
+    color: #439539;
+}
+
+#_fixed-header .prev-button {
+    background-position: -36px -72px;
+}
+
+#_fixed-header .prev-button:hover, #_fixed-header .prev-button:focus, #_fixed-header .prev-button:active {
+    background-position: -54px -72px;
+}
+
+#_fixed-header .next-button {
+    background-position: -108px -72px;
+}
+
+#_fixed-header .next-button:hover, #_fixed-header .next-button:focus, #_fixed-header .next-button:active {
+    background-position: -126px -72px;
+}
+
 
 /* Sharing and printing (bottom of the page) */
 #_share-print {
@@ -636,7 +721,7 @@ _header a {
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
 /* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
-.chapter a[id] {
+#_content a[id] {
     position: relative;
     top: -30px;
 }
@@ -679,19 +764,19 @@ _header a {
     padding: 20px 0 0;
 }
 
-.name {
+#_content .name {
     color: #439539;
 }
 
-a:hover .name, a:focus .name, a:active .name {
+#_content a:hover .name, #_content a:focus .name, #_content a:active .name {
     text-decoration: underline;
 }
 
-.number {
+#_content .number {
     color: #666;
 }
 
-.permalink {
+#_content .permalink {
     opacity: 0;
     font-size: 75%;
     text-decoration: none;
@@ -704,34 +789,34 @@ a:hover .name, a:focus .name, a:active .name {
     -webkit-transition: opacity 0.2s ease-in-out 0.1s
 }
 
-.permalink:hover, .permalink:focus, .permalink:active {
+#_content .permalink:hover, #_content .permalink:focus, #_content .permalink:active {
     color: #439539;
     text-decoration: none !important;
 }
 
 /* Do we actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
-.title:hover .permalink, .title:focus .permalink, .title:active .permalink,
-.subtitle:hover .permalink, .subtitle:focus .permalink, .subtitle:active .permalink {
+#_content .title:hover .permalink, #_content .title:focus .permalink, #_content .title:active .permalink,
+#_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink {
     opacity: 1;
 }
 
-.page-toc {
+#_content .page-toc {
     padding: 17px;
 }
 
-.line {
+#_content .line {
     margin: 0 0 36px 0;
     border-bottom: 1px solid #439539;
     width: 100%;
 }
 
-.page-toc a {
+#_content .page-toc a {
         text-decoration: none;
 }
 
 /* Thou shalt not ... */
 
-.admonition {
+#_content .admonition {
     border-width: 1px;
     border-radius: 5px;
     border-style: solid;
@@ -740,27 +825,27 @@ a:hover .name, a:focus .name, a:active .name {
     background-color: #FFF;
 }
 
-.tip {
+#_content .tip {
     border-color: #439539;
     background: url(style_images/dots-green.png) repeat-x scroll top;
 }
 
-.note {
+#_content .note {
     border-color: #333;
     background: url(style_images/dots-yellow.png) repeat-x scroll top;
 }
 
-.important {
+#_content .important {
     border-color: #BB7B03;
     background: url(style_images/dots-orange.png) repeat-x scroll top;
 }
 
-.warning, .caution {
+#_content .warning, .caution {
     border-color: #8C0000;
     background: url(style_images/dots-red.png) repeat-x scroll top;
 }
 
-.admonition h6 {
+#_content .admonition h6 {
     font-size: 16px;
     font-weight: bold;
     vertical-align: middle;
@@ -768,73 +853,56 @@ a:hover .name, a:focus .name, a:active .name {
     height: 36px;
 }
 
-.tip h6 {
+#_content .tip h6 {
     color: #439539;
 }
 
-.note h6 {
+#_content .note h6 {
     color: #333;
 }
 
-.important h6 {
+#_content .important h6 {
     color: #BB7B03;
 }
 
-.warning h6, .caution h6 {
+#_content .warning h6, .caution h6 {
     color: #8C0000;
 }
 
-.symbol {
+#_content .symbol {
     width: 36px;
     height: 36px;
     margin: 0 10px 0 0;
-    background-image: url(style_images/icons.png);
     background-repeat: no-repeat;
     float: left;
 }
 
-.tip .symbol {
-    background-position: -216px 0px;
-}
-
-.note .symbol {
-     background-position: -216px -36px;
-}
-
-.important .symbol {
-    background-position: -252px 0px;
-}
-
-.warning .symbol, .caution .symbol {
-    background-position: -252px -36px;
-}
-
-.admonition p {
-    margin: 10px 0 0 0 !important;
+#_content .admonition p {
+    margin: 10px 0 0 !important;
 }
 
 /* Text styles */
 
-em, i, .guimenu {
+#_content em, i, .guimenu {
     font-style: italic;
 }
 
-em .guimenu, i .guimenu {
+#_content em .guimenu, i .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b {
+#_content strong, b {
     font-weight: bold;
 }
 
-p {
+#_content p {
     font-size: 16px;
     color: #000;
     text-align: left;
     margin: 10px 0 0;
 }
 
-.abstract {
+#_content .abstract {
     font-weight: bold;
     color: #333;
 }
@@ -854,7 +922,7 @@ p {
     color: #5C3566;
 }
 
-code, .command {
+#_content code, #_content .command {
     font: normal 100% 'Droid Sans Mono', monospace;
     padding: 1px 5px;
     border-radius: 3px;
@@ -863,29 +931,29 @@ code, .command {
 }
 
 
-.name code, .name .command {
+#_content .name code, #_content .name .command {
     color: inherit;
 }
 
-code {
+#_content code {
     background-color: #EFEFF0;
     color: #333;
 }
 
-.command {
+#_content .command {
     background-color: #EFEFF0;
     color: #333;
     font-weight: bold;
 }
 
-.screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+#_content .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
     padding: 10px;
     background-color: #202020;
     border-radius: 5px;
     margin: 10px 0 0;
 }
 
-.screen {
+#_content .screen {
     font: normal 13px 'Droid Sans Mono', monospace;
     color: #FFF;
     line-height: 125%;
@@ -893,41 +961,41 @@ code {
     overflow: auto;
 }
 
-.screen code , .screen .command {
+#_content .screen code, #_content .screen .command {
     border-radius: 0;
     background-color: transparent;
     width: 100% !important;
     font-size: 100%;
 }
 
-.screen code {
+#_content .screen code {
     color: #FFF;
 }
 
-.screen .command {
+#_content .screen .command {
     color: #76AD2D;
 }
 
-.variablelist {
+#_content .variablelist {
     margin: 17px 0;
     font-size: 16px;
 }
 
-.variablelist dt {
+#_content .variablelist dt {
     font-weight: bold;
     color: #333;
 }
 
-.variablelist dd {
+#_content .variablelist dd {
     margin: 0 0 10px 0;
     padding: 0 0 0 30px;
 }
 
-.variablelist dd p {
+#_content .variablelist dd p {
     margin: 0;
 }
 
-.figure {
+#_content .figure {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
@@ -936,14 +1004,14 @@ code {
     border: 1px solid #202020;
 }
 
-.figure img {
+#_content .figure img {
     padding: 1px;
     background-color: #FFF;
     max-width: 100%;
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
 }
 
-.figure .title {
+#_content .figure .title {
     padding: 10px;
     margin: 0;
     font-size: 14px;
@@ -953,27 +1021,27 @@ code {
     width: auto;
 }
 
-.figure .title-wrap {
+#_content .figure .title-wrap {
     background-color: #202020;
     width: 100%;
     overflow: hidden;
 }
 
-.figure a {
+#_content .figure a {
     height: 0;
     width: 0;
 }
 
-.figure .number, .figure .permalink:hover,  .figure .permalink:focus,  .figure .permalink:active {
+#_content .figure .number, #_content .figure .permalink:hover, #_content .figure .permalink:focus, #_content .figure .permalink:active {
     color: #76AD2D;
     text-decoration: none;
 }
 
-.figure .name, .figure .permalink {
+#_content .figure .name, #_content .figure .permalink {
     color: #FFF;
 }
 
-.informalfigure img {
+#_content .informalfigure img {
     max-width: 100%;
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
     text-align: center;
@@ -983,7 +1051,7 @@ code {
     border: 1px solid #202020;
 }
 
-.keycap {
+#_content .keycap {
     color: #333;
     font-size: 13px;
     padding: 0px 5px;
@@ -996,12 +1064,12 @@ code {
 }
 
 /* We put an ndash character between keycaps that are part of an accelerator */
-.key-connector {
+#_content .key-connector {
     margin: 0 -1px; 
     color: #666;
 }
 
-.procedure .title {
+#_content .procedure .title {
     font-size: 14px;
     font-weight: normal;
     margin: 0 10px;
@@ -1009,11 +1077,11 @@ code {
     text-transform: uppercase;
 }
 
-.procedure .title code, .procedure .title .command, .procedure .title .keycap {
+#_content .procedure .title code, #_content .procedure .title .command, #_content .procedure .title .keycap {
     text-transform: none;
 }
 
-div.procedure {
+#_content div.procedure {
     font-size: 16px;
     border-left: 3px solid rgba(67,149,57,0.5);
     font-weight: normal;
@@ -1023,7 +1091,7 @@ div.procedure {
     display: block;
 }
 
-ol.procedure, ol.substeps {
+#_content ol.procedure, #_content ol.substeps {
     padding: 0 0 0 20px;
     margin: 0 10px 0 10px;
     display: block;
@@ -1031,19 +1099,19 @@ ol.procedure, ol.substeps {
     font-weight: bold;
 }
 
-ol.procedure {
+#_content ol.procedure {
     list-style-type: decimal;
 }
 
-ol.substeps {
+#_content ol.substeps {
     list-style-type: lower-latin;
 }
 
-.procedure li:first-child p {
+#_content .procedure li:first-child p {
     margin: 0;
 }
 
-.chapter ul {
+#_content .chapter ul {
     padding: 5px 0 5px 25px;
     margin: 0 10px 0 10px;
     display: block;
@@ -1051,11 +1119,64 @@ ol.substeps {
     list-style-type: bullet;
 }
 
-.procedure li p {
+#_content .procedure li p {
     font-weight: normal;
 }
 
-.procedure > p {
+#_content .procedure > p {
     margin: 0 10px 5px;
 }
 
+@media print {
+    #_fixed-header-wrap, #_toolbar-wrap, .pickers, #_inward, #_footer-wrap {
+        display: none;
+    }
+    
+    #_share-print {
+        visibility: hidden;
+    }
+    
+    .figure, .informalfigure, .admonition, p {
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002*/
+        page-break-inside: avoid;
+    }
+    
+    .title {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+}
+
+@media screen and (max-width: 700px) {
+    .find-form {
+        margin: 0 0 0 -72.5px;
+        width: 125px;
+    }
+
+    #_find-input {
+       width: 80px;
+    }
+}
+
+
+@media screen and (max-width: 625px) {
+    #_toc-area, #_nav-area {
+        width: 49.98%;
+    }
+    
+    #_find-area {
+        display: none !important;
+    }
+    
+    .find-form {
+        padding: 10px;
+        margin: 0 0 0 -72.5px;
+        display: block;
+        width: 125px;
+    }
+
+    #_find-input {
+       width: 80px;
+    }
+}
