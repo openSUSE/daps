@@ -41,9 +41,6 @@
       </xsl:attribute>
       <xsl:apply-templates select="." mode="title.markup"/>
     </xsl:element>
-    <xsl:if test="following-sibling::*">
-      <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-    </xsl:if>
   </xsl:template>
   
   <xsl:template name="breadcrumbs.navigation">
@@ -116,52 +113,20 @@
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        <xsl:if test="$rootid = ''">
+        <!-- TODO: Do we need an icon always? -->
+        <!--<xsl:if test="$rootid = ''">-->
              <a href="{$root.filename}" title="Documentation">
                   <span class="book-icon">&nbsp;</span>
              </a>
           <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-        </xsl:if>
-          <xsl:apply-templates select="$setdiff" mode="breadcrumbs"/>
-          <xsl:if test="$row2">
-            <strong>
-              <xsl:if test="count($prev) >0 and $isprev">
-                <a accesskey="p">
-                  <xsl:attribute name="title">
-                    <xsl:apply-templates select="$prev"
-                      mode="object.title.markup"/>
-                  </xsl:attribute>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$prev"/>
-                    </xsl:call-template>
-                  </xsl:attribute>
-                  <span><xsl:copy-of select="$breadcrumbs.prev"/></span>
-                  <!--<xsl:call-template name="navig.content">
-                    <xsl:with-param name="direction" select="'prev'"/>
-                  </xsl:call-template>-->
-                </a>
-                <xsl:text> </xsl:text>
-              </xsl:if> <xsl:if test="count($next) >0 and $isnext">
-                <xsl:text> </xsl:text>
-                <a accesskey="n">
-                  <xsl:attribute name="title">
-                    <xsl:apply-templates select="$next"
-                      mode="object.title.markup"/>
-                  </xsl:attribute>
-                  <xsl:attribute name="href">
-                    <xsl:call-template name="href.target">
-                      <xsl:with-param name="object" select="$next"/>
-                    </xsl:call-template>
-                  </xsl:attribute>
-                  <span><xsl:copy-of select="$breadcrumbs.next"/></span>
-                  <!--<xsl:call-template name="navig.content">
-                    <xsl:with-param name="direction" select="'next'"/>
-                  </xsl:call-template>-->
-                </a>
-              </xsl:if>
-            </strong>
+        <!--</xsl:if>-->
+        
+        <xsl:for-each select="$setdiff">
+          <xsl:apply-templates select="." mode="breadcrumbs"/>
+          <xsl:if test="position() != last()">
+            <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
           </xsl:if>
+        </xsl:for-each>
       </div>
     </xsl:if>
   </xsl:template>
