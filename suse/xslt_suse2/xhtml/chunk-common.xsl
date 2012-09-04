@@ -230,7 +230,15 @@
     <div id="_toolbar-wrap">
       <div id="_toolbar">
         <div id="_toc-area" class="inactive">
-          <a id="_toc-area-button" class="tool"><span class="toc-icon">&nbsp;</span></a> Contents
+          <a id="_toc-area-button" class="tool"
+            href="#"
+            onclick="activate('_toc_rea')" title="Contents">
+            <span class="tool-spacer">
+              <span class="toc-icon"> </span>
+              <span class="clearme"></span>
+            </span>
+            <span class="tool-label">Contents</span>
+          </a>
         </div>
                 
         <div id="_nav-area" class="inactive">
