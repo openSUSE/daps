@@ -420,13 +420,11 @@
           <div id="_white-bg">
             <div id="_header">
               <xsl:call-template name="create.header.logo"/>
-              
+              <xsl:call-template name="pickers"/>
               <xsl:call-template name="breadcrumbs.navigation">
                 <xsl:with-param name="prev" select="$prev"/>
                 <xsl:with-param name="next" select="$next"/>
               </xsl:call-template>
-              
-              <xsl:call-template name="pickers"/>
               
             <div class="clearme"></div>
             </div>
