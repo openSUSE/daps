@@ -195,12 +195,14 @@
     </div>
   </xsl:template>
 
+  <!-- ===================================================== -->
   <xsl:template name="create.header.logo">
     <div id="_logo">
       <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
     </div>
   </xsl:template>
 
+  <!-- ===================================================== -->
   <xsl:template name="fixed-header-wrap">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -218,6 +220,43 @@
     </div>
   </xsl:template>
   
+  <xsl:template name="create-find-area">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    
+    <div id="_find-area" class="active">
+      <div class="inactive-contents">
+        <a href="#" id="_find-area-button" class="tool" title="Find"
+          onclick="activate('_find-area')">
+          <span class="pad-tools-50-out">
+            <span class="pad-tools-50-in">
+              <span class="tool-spacer">
+                <span class="find-icon">&nbsp;</span>
+              </span>
+              <span class="tool-label">Find</span>
+            </span>
+          </span>
+        </a>
+      </div>
+      <div class="active-contents">
+        <form action="post">
+          <div class="find-form">
+            <input type="text" id="_find-input" value=""
+              onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
+            <input type="image" id="_find-button" alt="Find"
+              title="Find" src="style_images/blank.png"/>
+            <label id="_find-input-label"
+              onclick="document.getElementById('_find-input').focus(); return false;"
+              >Find</label>
+            <div class="clearme"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </xsl:template>
+  
+  
+  <!-- ===================================================== -->
   <xsl:template name="toolbar-wrap">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -228,15 +267,10 @@
         <div id="_toc-area" class="inactive">
           <a id="_toc-area-button" class="tool"><span class="toc-icon">&nbsp;</span></a> Contents
         </div>
-        
-        <xsl:call-template name="create-find-area">
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="prev" select="$prev"/>
-        </xsl:call-template>
-        
+                
         <div id="_nav-area" class="inactive">
           <!-- FIXME: style attr. needs to be moved to CSS file -->
-          <div class="tool" style="float:left;display:block;">
+          <div class="tool">
             <span style="float:right;">
               <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
               <!-- Add navigation -->
@@ -248,6 +282,12 @@
             </span>
           </div>
         </div>
+        <xsl:call-template name="create-find-area">
+          <xsl:with-param name="next" select="$next"/>
+          <xsl:with-param name="prev" select="$prev"/>
+          <xsl:with-param name="nav.context" select="$nav.context"/>
+        </xsl:call-template>
+        
       </div>
     </div>
   </xsl:template>
@@ -312,7 +352,7 @@
     
      <xsl:if test="$row2">
        <xsl:if test="count($prev) >0 and $isprev">
-        <a accesskey="p">
+        <a accesskey="p" class="tool-spacer">
           <xsl:attribute name="title">
             <xsl:apply-templates select="$prev"
               mode="object.title.markup"/>
@@ -326,7 +366,7 @@
         </a>
        </xsl:if>
        <xsl:if test="count($next) >0 and $isnext">
-        <a accesskey="n">
+        <a accesskey="n" class="tool-spacer">
           <xsl:attribute name="title">
             <xsl:apply-templates select="$next"
               mode="object.title.markup"/>
@@ -342,45 +382,12 @@
      </xsl:if>
   </xsl:template>
 
-  <xsl:template name="create-find-area">
-    <xsl:param name="prev" select="/foo"/>
-    <xsl:param name="next" select="/foo"/>
-    
-    <div id="_find-area" class="active">
-      <div class="inactive-contents">
-        <a href="#" id="_find-area-button" class="tool" title="Find"
-          onclick="activate('_find-area')">
-          <span class="pad-tools-50-out">
-            <span class="pad-tools-50-in">
-              <span class="tool-spacer">
-                <span class="find-icon">&nbsp;</span>
-              </span>
-              <span class="tool-label">Find</span>
-            </span>
-          </span>
-        </a>
-      </div>
-      <div class="active-contents">
-        <form action="post">
-          <div class="find-form">
-            <input type="text" id="_find-input" value=""
-              onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
-            <input type="image" id="_find-button" alt="Find"
-              title="Find" src="style_images/blank.png"/>
-            <label id="_find-input-label"
-              onclick="document.getElementById('_find-input').focus(); return false;"
-              >Find</label>
-            <div class="clearme"></div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </xsl:template>
 
   <xsl:template name="body.onload.attribute">
     <!-- TODO: Add parameter to control it -->
     <xsl:attribute name="onload">show(); labelInputFind();</xsl:attribute>
   </xsl:template>
+  
 
   <!-- ===================================================== -->
   
@@ -407,8 +414,8 @@
       </xsl:call-template>
 
       <body>
-        <xsl:call-template name="body.onload.attribute"/>
         <xsl:call-template name="body.attributes"/>
+        <xsl:call-template name="body.onload.attribute"/>
         <div id="_outer-wrap">
           <div id="_white-bg">
             <div id="_header">
@@ -434,11 +441,11 @@
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
           
-        <xsl:call-template name="user.header.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
+          <xsl:call-template name="user.header.navigation">
+            <xsl:with-param name="prev" select="$prev"/>
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="nav.context" select="$nav.context"/>
+          </xsl:call-template>
 
         <!--<xsl:call-template name="header.navigation">
           <xsl:with-param name="prev" select="$prev"/>
@@ -446,10 +453,10 @@
           <xsl:with-param name="nav.context" select="$nav.context"/>
         </xsl:call-template>-->
 
-        <xsl:call-template name="user.header.content"/>
+          <xsl:call-template name="user.header.content"/>
 
-        <xsl:copy-of select="$content"/>
-          
+          <xsl:copy-of select="$content"/>
+          <div id="_inward"></div>
         </div>
         
         <div id="_footerwrap">
