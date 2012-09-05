@@ -33,13 +33,13 @@
 <!-- 3. EBNF ==================================================== -->
 
 <!-- 4. ToC/LoT/Index Generation ================================ -->
-<xsl:param name="toc.section.depth" select="1"/>
+  <xsl:param name="toc.section.depth" select="1"/>
 
 <!-- 5. Stylesheet Extensions =================================== -->
 
 <!-- 6. Automatic labeling ====================================== -->
-<xsl:param name="section.autolabel" select="1"/>
-<xsl:param name="section.label.includes.component.label" select="1"/>
+  <xsl:param name="section.autolabel" select="1"/>
+  <xsl:param name="section.label.includes.component.label" select="1"/>
 
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
