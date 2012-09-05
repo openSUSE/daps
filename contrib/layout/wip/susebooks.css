@@ -73,8 +73,8 @@ html, body {
     max-width: 998px;
 }
 
-#_header {
-    min-width: 400px;
+#_footer, #_toolbar-bottom, .chapter {
+    overflow: hidden;
 }
 
 #_toolbar {
@@ -124,19 +124,20 @@ html, body {
     left: 0;
     height: 36px;
     text-overflow: ellipsis;
-    min-width: 400px;
     margin: 0;
-    padding: 0;
+    padding: 0 0 2px 0;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 100%;
-    margin: 0 0 0 130px;
+    margin: 0 0 0 110px;
     height: 36px;
+    max-width: 70%;
+    max-width: calc(100% - 120px);
+    max-width: -moz-calc(100% - 120px);
+    max-width: -webkit-calc(100% - 120px);
 }
 
-#_header .crumbs a, #_header .crumbs span {
-    display: block;
-    float: left;
+#_header .crumbs a.crumb, #_header .crumbs > span {
+    display: inline;
     overflow: hidden;
 }
 
@@ -149,10 +150,6 @@ html, body {
     font-size: 16px;
     line-height: 36px;
     height: 36px;
-}
-
-#_header a {
-    text-decoration: none !important;
 }
 
 .crumbs span {
@@ -171,6 +168,13 @@ html, body {
 
 .book-icon, .toc-icon, .find-icon, .tools-icon {
     display: block;
+}
+
+#_header .book-link {
+    display: inline-block;
+    vertical-align: middle;
+    width: 36px;
+    height: 36px;
 }
 
 .toc-icon, .find-icon, .tools-icon, #_header .book-icon, .prev-icon, .next-icon {
@@ -307,10 +311,12 @@ html, body {
 
 #_toc-area {
     float: left;
+    height: 56px;
 }
 
 #_nav-area, #_find-area {
     float: right;
+    height: 56px;
 }
 
 .tool, #_nav-area .tool-spacer {
@@ -340,11 +346,6 @@ html, body {
     width: 33.3%;
 }
 
-#_toolbar > div {
-    height: 36px;
-    display: table-cell;
-    vertical-align: middle;
-}
 
 .pad-tools-50-out {
     float: left;
@@ -374,6 +375,10 @@ html, body {
 
 #_nav-area .tool-label {
     padding: 0 10px 0 0;
+}
+
+.nav-inner {
+    float: right;
 }
 
 .tool-spacer {
@@ -525,7 +530,7 @@ html, body {
     width: 155px;
     height: 34px;
     padding: 0 20px 0 5px;
-    font: 16px 'Open Sans', Helvetica, Arial, sans-serif;
+    font: 16px 'Open Sans', Helvetica, FreeSans, sans-serif;
     display: block;
     background-color: #FFF;
     border: 1px solid #CCE9A7;
@@ -567,6 +572,7 @@ html, body {
     color: #333;
     font-style: italic;
     display: none;
+    float: left;
 }
 
 
@@ -783,7 +789,8 @@ html, body {
     transition: opacity 0.2s ease-in-out 0.1s;
     /* Clean the below up in Q3 2013 or so... */
     -moz-transition: opacity 0.2s ease-in-out 0.1s;
-    -webkit-transition: opacity 0.2s ease-in-out 0.1s
+    -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+    -o-transition: opacity 0.2s ease-in-out 0.1s;
 }
 
 #_content .permalink:hover, #_content .permalink:focus, #_content .permalink:active {
@@ -1083,7 +1090,7 @@ html, body {
     border-left: 3px solid rgba(67,149,57,0.5);
     font-weight: normal;
     margin: 17px 0 17px;
-    padding: 5px 5px 5px 2px; /* -3px of border on the left, so it sits right there with the other list etc. */
+    padding: 5px 5px 5px 2px; /* -3px of border on the left, so it sits right there with any other lists etc. */
     background-color: #f7faf6;
     display: block;
 }
@@ -1134,7 +1141,8 @@ html, body {
     }
     
     .figure, .informalfigure, .admonition, p {
-        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002*/
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002.*/
+        /* Webkit does, though. */
         page-break-inside: avoid;
     }
     
@@ -1145,7 +1153,7 @@ html, body {
 
 }
 
-@media screen and (max-width: 700px) {
+@media only screen and (max-width: 700px) {
     .find-form {
         margin: 0 0 0 -72.5px;
         width: 125px;
@@ -1157,23 +1165,135 @@ html, body {
 }
 
 
-@media screen and (max-width: 625px) {
+@media only screen and (max-width: 640px) {
+    #_toolbar {
+        height: 98px;
+    }
+    
     #_toc-area, #_nav-area {
         width: 49.98%;
     }
     
     #_find-area {
-        display: none !important;
+        height: 42px;
+        background-color: #439539;
+        width: 100%;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+    
+    #_find-area form {
+        margin: 0 !important;
     }
     
     .find-form {
         padding: 10px;
-        margin: 0 0 0 -72.5px;
+        margin: 0;
         display: block;
-        width: 125px;
+        width: 100%;
     }
 
     #_find-input {
-       width: 80px;
+        /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+        width: 91%;
+        width: calc(100% - 44px);
+        width: -moz-calc(100% - 44px);
+        width: -webkit-calc(100% - 44px);
+        height: 20px;
+        margin: 0 auto;
+        padding: 0 20px 0 1px;
+        font-size: 13px;
+        border: 1px solid #CDE8A8;
+        border-radius: 3px;
     }
+    
+    #_find-input:focus {
+        border: 1px solid #FFF;
+    }
+    
+    #_find-button {
+        width: 18px;
+        height: 15px;
+        margin: 3px 0 3px -20px;
+        background-position: -72px -72px;
+        float: left;
+    }
+
+    #_find-input:focus + #_find-button {
+        background-position: -72px -72px !important;
+    }
+
+
+    #_find-input:focus + #_find-button:hover {
+        background-position: -90px -72px !important;
+    }
+    
+    #_find-input-label {
+        line-height: 20px;
+        height: 20px;
+        left: 3px;
+        top: -21px;
+        font-size: 13px;
+        clear: both;
+    }
+    /*
+    #_find-area form {
+    margin: 0 0 0 50% !important;
+}
+
+.find-form {
+    padding: 10px;
+    margin: 0 0 0 -110px;
+    display: block;
+    width: 200px;
+}
+
+#_find-input {
+    width: 155px;
+    height: 34px;
+    padding: 0 20px 0 5px;
+    font: 16px 'Open Sans', Helvetica, Arial, sans-serif;
+    display: block;
+    background-color: #FFF;
+    border: 1px solid #CCE9A7;
+    float: left;
+    outline: none;
+    z-index: 0;
+}
+
+#_find-input:focus {
+    background-color: #FFF;
+    border: 1px solid #FFF;
+}
+
+#_find-input:focus + #_find-button {
+    background: url(style_images/icons.png) no-repeat scroll -108px 0px !important;
+}
+
+#_find-button {
+    width: 36px;
+    height: 36px;
+    display: block;
+    margin: 0 0 0 -18px;
+    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
+    float: left;
+}
+
+#_find-input:focus + #_find-button:hover {
+    background: url(style_images/icons.png) no-repeat scroll -108px -36px !important;
+}
+
+#_find-input-label {
+    cursor: text;
+    line-height: 36px;
+    height: 36px;
+    position: relative;
+    left: 5px;
+    top: -36px;
+    z-index: 200;
+    color: #333;
+    font-style: italic;
+    display: none;
+}
+ */   
 }

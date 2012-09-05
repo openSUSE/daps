@@ -46,14 +46,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="crumbs-wrap">
-                        <div class="crumbs">
-                            <a href="index.html" title="Documentation"><span class="book-icon">&nbsp;</span></a>
+                    <div class="crumbs">
+                            <a href="index.html" title="Documentation" class="book-link"><span class="book-icon">&nbsp;</span></a>
                             <span>&nbsp;&#187;&nbsp;</span>
-                            <a href="book.opensuse.startup.html">Start-Up</a>
+                            <a href="book.opensuse.startup.html" class="crumb">Start-Up</a>
                             <span>&nbsp;&#187;&nbsp;</span>
-                            <a href="part.reference.software.html">Managing and Updating Software</a>
-                        </div>
+                            <a href="part.reference.software.html" class="crumb">Managing and Updating Software</a>
                     </div>
                     <div class="clearme"></div>
                 </div>
@@ -73,7 +71,7 @@
                        <div class="active-contents bubble">
                            <div class="bubble-container">
                            <h6>OpenSUSE 12.2 Start-up</h6>
-            <div class="bubble-toc">
+                       <div class="bubble-toc">
                 <ol>
                     <li>
                         <a href="preface.startup.html">About This Guide</a>
@@ -717,13 +715,14 @@
                     </dd>
                 </dl>-->
             </div>
-                           <div class="clearme"></div>
-                            </div>
+                             <div class="clearme"></div>
                        </div>
+                       </div>
+                       <div class="clearme"></div>
                    </div>
                    <div id="_nav-area" class="inactive">
-                       <div class="tool" style="float: left; display: block;">
-                           <span style="float: right;">
+                       <div class="tool">
+                           <span class="nav-inner">
                                <span class="tool-label">Navigation</span>
                                <a accesskey="p" title="Part II. Managing and Updating Software" href="part.reference.software.html" class="tool-spacer"><span class="prev-icon">&nbsp;</span></a>
                                <a accesskey="n" title="Chapter 6. YaST Online Update" href="cha.onlineupdate.you.html" class="tool-spacer"><span class="next-icon">&nbsp;</span></a>
@@ -769,7 +768,7 @@
                         <a href="part.reference.software.html">Managing and Updating Software</a>
                     </div>
                     <div class="buttons">
-                        <a class="top-button button" title="Go to Top of Page" href="#" style="margin-right: 10px;" title="Go to top of page" onclick="scroll('_white-bg');return false;">Top</a>
+                        <a class="top-button button" title="Go to Top of Page" href="#" style="margin-right: 10px;" onclick="scroll('_white-bg');">Top</a>
                         <div class="button">
                             <a class="prev-button" title="Part II. Managing and Updating Software" href="part.reference.software.html">&nbsp;</a>
                             <a class="next-button" title="Chapter 6. YaST Online Update" href="cha.onlineupdate.you.html">&nbsp;</a>
@@ -832,7 +831,7 @@
                         <a class="xref" href="cha.yast.text.html" title="Chapter 12. YaST in Text Mode">Chapter 12, <em>YaST in Text Mode</em></a>.</p>
                     
                     <div class="admonition tip">
-                        <img class="symbol" src="style_images/icon-tip.png" title="Tip"/>
+                        <img class="symbol" src="style_images/icon-tip.png" title="Tip" alt="Tip"/>
                         <h6>Tip: Changing the Toolkit Flavor</h6>
                         <p> By default, YaST is started with the toolkit matching your desktop (GTK+ under GNOME, Qt
                             under KDE). To alter this default setting system-wide, change the variable <code
@@ -843,7 +842,7 @@
                                 class="option">--qt</code>. For example: <span class="command">yast2 --gtk</span>.</p>
                     </div>
                     <div class="admonition note">
-                        <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                        <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                         <h6>Note: Confirmation and Review of Changes</h6>
                         <p> When installing, updating or removing packages, any changes in the Software Manager are
                             not applied immediately but only after confirming them with <span class="guimenu">Accept</span> or
@@ -1030,7 +1029,7 @@
                                 </dl>
                             </div>
                             <div class="admonition tip">
-                                <img class="symbol" src="style_images/icon-tip.png" title="Tip"/>
+                                <img class="symbol" src="style_images/icon-tip.png" title="Tip" alt="Tip"/>
                                 <h6>Tip: Finding Packages not Belonging to an Active Repository</h6>
                                 <p>To list all packages that do not belong to an active repository, choose <span
                                     class="guimenu">View</span> → <span class="guimenu">Repositories</span> → <span
@@ -1056,7 +1055,7 @@
                                     href="cha.y2.sw.html#sec.y2.sw.deps" title="5.2.4. Checking Software Dependencies"
                                     >Section 5.2.4, “Checking Software Dependencies”</a>. </p>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Removal of Packages</h6>
                                 <p>When removing any packages, by default YaST only removes the selected packages. If you
                                     want YaST to also remove any other packages that become unneeded after removal of the
@@ -1078,7 +1077,7 @@
                                             indicated by the symbol in front of the package name—hit <span class="keycap"
                                                 >Shift</span><span class="key-connector">&ndash;</span><span class="keycap">F1</span> for help. </p>
                                         <div class="admonition tip">
-                                            <img class="symbol" src="style_images/icon-tip.png" title="Tip"/>
+                                            <img class="symbol" src="style_images/icon-tip.png" title="Tip" alt="Tip"/>
                                             <h6>Tip: Applying an Action to All Packages Listed</h6>
                                             <p> To apply an action to all packages listed in the right pane, choose an action from
                                                 <span class="guimenu">Package</span> → <span class="guimenu">All in This List</span>.
@@ -1123,7 +1122,7 @@
                                 </ol>
                             </div>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Installing Source Packages</h6>
                                 <p> Installing source packages with YaST Software Manager is not possible at the moment.
                                     Use the command line tool <span class="command">zypper</span> for this purpose. For more information, see <a class="xref"
@@ -1196,7 +1195,7 @@
                                         <p> This option tries to avoid changes in architecture and vendor for the installed
                                             packages, but under certain circumstances, they are tolerated. </p>
                                         <div class="admonition note">
-                                            <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                            <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                             <h6>Note: Update Unconditionally</h6>
                                             <p>If you choose <span class="guimenu">Package</span> → <span class="guimenu">All
                                                 Packages</span> → <span class="guimenu">Update Unconditionally</span> instead, basically
@@ -1276,7 +1275,7 @@
                                 installed are displayed in a green frame. </p>
                             
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Manually Solving Package Conflicts</h6>
                                 <p> Unless you are very experienced, follow the suggestions YaST makes when handling
                                     package conflicts, otherwise you may not be able to resolve them. Keep in mind that every
@@ -1413,7 +1412,7 @@
                                         <p> To mark a package for installation, re-installation, removal, or upgrade, right-click
                                             the package and choose the appropriate action from the menu. </p>
                                         <div class="admonition note">
-                                            <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                            <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                             <h6>Note: Applying an Action to All Packages Listed</h6>
                                             <p>To apply an action to all packages listed in the right pane, right-click a package,
                                                 choose <span class="guimenu">Select All</span>, right-click again and choose an action.
@@ -1454,7 +1453,7 @@
                                 </ol>
                             </div>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Installing Source Packages</h6>
                                 <p> Installing source packages with YaST Software Manager is not possible at the moment.
                                     Use the command line tool <span class="command">zypper</span> for this purpose. For more information, see <a class="xref"
@@ -1575,7 +1574,7 @@
                                 check is always performed when you confirm your selection with <span class="guimenu"
                                     >Apply</span>. </p>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Manually Solving Package Conflicts</h6>
                                 <p> Unless you are very experienced, follow the suggestions YaST makes when handling
                                     package conflicts, otherwise you may not be able to resolve them. Keep in mind that every
@@ -1624,7 +1623,7 @@
                             of the repository maintainer. Whenever you add a new repository, YaST offers the ability to
                             import its key. </p>
                         <div class="admonition warning">
-                            <img class="symbol" src="style_images/icon-warning.png" title="Warning"/>
+                            <img class="symbol" src="style_images/icon-warning.png" title="Warning" alt="Warning"/>
                             <h6>Warning: Trusting External Software Sources</h6>
                             <p>Before adding external software repositories to your list of repositories, make sure
                                 this repository can be trusted. <span class="phrase">openSUSE</span> is not responsible for
@@ -1793,7 +1792,7 @@
                                             precedence. This is useful if you want to avoid downloading packages unnecessarily from the
                                             Internet by giving a local repository (for example, a DVD) a higher priority. </p>
                                         <div class="admonition important">
-                                            <img class="symbol" src="style_images/icon-important.png" title="Important"/>
+                                            <img class="symbol" src="style_images/icon-important.png" title="Important" alt="Important"/>
                                             <h6>Important: Priority vs. Version</h6>
                                             <p>The repository with the highest priority takes precedence in any case. Therefore,
                                                 make sure that the update repository always has the highest priority (20 by default),
@@ -1868,7 +1867,7 @@
                                         >Software Updates</span> from the main menu. Alternatively, <span class="keycap"
                                             >Alt</span><span class="key-connector">&ndash;</span><span class="keycap">F2</span> and enter <span class="command">kpk_update</span>.</p>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Icon Visibility</h6>
                                 <p> The Software Updater icon is only visible in the system tray, if patches are available.
                                     Hover over the icon to see the number of patches available. </p>
@@ -1946,7 +1945,7 @@
                                 The settings for Software Updater are available in the <span class="guimenu">Update
                                     Settings</span> section. </p>
                             <div class="admonition important">
-                                <img class="symbol" src="style_images/icon-important.png" title="Important"/>
+                                <img class="symbol" src="style_images/icon-important.png" title="Important" alt="Important"/>
                                 <h6>Important: Patch Origin</h6>
                                 <p> The <span class="guimenu">Software Management settings</span> also allows you to
                                     configure the repositories (<span class="guimenu">Origin of Packages</span>) to be used.
@@ -1974,7 +1973,7 @@
                                     Applications</span> → <span class="guimenu">System</span> → <span class="guimenu">Software
                                         Update</span>. </p>
                             <div class="admonition note">
-                                <img class="symbol" src="style_images/icon-note.png" title="Note"/>
+                                <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
                                 <h6>Note: Icon visibility</h6>
                                 <p> The applet icon is only visible if the following conditions are met: </p>
                                 <div class="itemizedlist">
