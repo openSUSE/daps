@@ -29,6 +29,7 @@
   
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
  <xsl:include href="param.xsl"/>
+ <xsl:include href="autotoc.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="sections.xsl"/>
  <xsl:include href="admon.xsl"/>
