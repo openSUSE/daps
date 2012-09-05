@@ -32,9 +32,10 @@
    <!-- ===================================================== -->
   <xsl:template match="chapter|appendix|article|book|part|glossary|sect1|bibliography"
                 mode="breadcrumbs">
+    <xsl:param name="class">crumb</xsl:param>
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="generate.class.attribute">
-        <xsl:with-param name="class">crumb</xsl:with-param>
+        <xsl:with-param name="class" select="$class"/>
       </xsl:call-template>
       <xsl:attribute name="href">
         <xsl:call-template name="href.target">
@@ -137,6 +138,7 @@
 
   <!-- ===================================================== -->
   <xsl:template name="pickers">
+    <xsl:if test="$generate.pickers != 0">
     <div class="pickers">
       <div id="_language-picker" class="inactive">
         <a id="_language-picker-button"
@@ -162,12 +164,31 @@
         </div>
       </div>
     </div>
+    </xsl:if>
   </xsl:template>
 
   <!-- ===================================================== -->
   <xsl:template name="create.header.logo">
     <div id="_logo">
       <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
+    </div>
+  </xsl:template>
+
+  <xsl:template name="create.header.buttons">
+    <xsl:param name="prev"/>
+    <xsl:param name="next"/>
+
+    
+    <div class="buttons">
+      <a class="top-button button">Top</a>
+      <div class="button">
+        <xsl:call-template name="header.navigation">
+          <xsl:with-param name="next" select="$next"/>
+          <xsl:with-param name="prev" select="$prev"/>
+          <!--<xsl:with-param name="nav.context" select="$nav.context"/>-->
+        </xsl:call-template>
+      </div>
+      <div class="clearme"></div>
     </div>
   </xsl:template>
 
@@ -183,7 +204,10 @@
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>
         </xsl:call-template>
-        <a href="#" class="top-button" title="Go to top of page">Top</a>
+        <xsl:call-template name="create.header.buttons">
+          <xsl:with-param name="prev" select="$prev"/>
+          <xsl:with-param name="next" select="$next"/>
+        </xsl:call-template>
         <div class="clearme"></div>
       </div>
     </div>
