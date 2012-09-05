@@ -31,4 +31,5 @@
  <xsl:include href="param.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="sections.xsl"/>
+ <xsl:include href="admon.xsl"/>
 </xsl:stylesheet>
