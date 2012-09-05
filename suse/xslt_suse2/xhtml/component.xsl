@@ -13,6 +13,7 @@
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="exsl">
 
+
   <xsl:template name="component.title">
   <xsl:param name="node" select="."/>
 
@@ -43,17 +44,7 @@
       <xsl:with-param name="node" select="$node"/>
       <xsl:with-param name="conditional" select="0"/>
     </xsl:call-template>
-    <span class="number"><xsl:apply-templates select="$node"
-      mode="label.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates></span>
-    <span class="name"><xsl:apply-templates select="$node"
-      mode="title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates></span>
-    <!--<xsl:apply-templates select="$node" mode="object.title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates>-->
+    <xsl:call-template name="create.header.title"/>
   </xsl:element>
 </xsl:template>
 
