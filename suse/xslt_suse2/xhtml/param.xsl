@@ -44,7 +44,7 @@
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
   <xsl:param name="html.stylesheet">susebooks.css</xsl:param>
-
+  <xsl:param name="make.clean.html" select="1"/> 
 
 <!-- 8. XSLT Processing ========================================= -->
   <!-- Rule over footers? -->
