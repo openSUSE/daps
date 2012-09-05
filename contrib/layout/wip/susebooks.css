@@ -622,6 +622,7 @@ html, body {
 
 #_fixed-header .top-button {
     color: #333;
+    margin-right: 10px;
 }
 
 #_fixed-header .top-button:hover, #_fixed-header .top-button:focus, #_fixed-header .top-button:active {
@@ -655,6 +656,20 @@ html, body {
 
 .offline .online-contents {
     visibility: hidden;
+}
+
+.share, .print {
+    width: 49.98%;
+    display: block;
+}
+
+.share {
+    float: left;
+}
+
+.print {
+    float: right;
+    text-align: right !important;
 }
 
 /* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
@@ -729,12 +744,26 @@ html, body {
     top: -30px;
 }
 
+.version-info {
+    color: #439539;
+    font-weight: normal;
+    background-color: rgba(255,255,255,0.45);
+    border: 1px solid #439539;
+    padding: 3px 5px;
+    line-height: 120%;
+    float: right;
+    margin: 5px 0 10px;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
 #_content .chapter .title {
     font-size: 32px;
     font-weight: normal;
-    padding: 40px 0 5px;
+    padding: 30px 0 5px;
     line-height: 120%;
     width: 100%;
+    clear: both;
 }
 
 #_content .sect1 .title {
@@ -798,7 +827,6 @@ html, body {
     text-decoration: none !important;
 }
 
-/* Do we actually care if it's in .title/.subtitle? Would just :hover or *:hover make sense? */
 #_content .title:hover .permalink, #_content .title:focus .permalink, #_content .title:active .permalink,
 #_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink {
     opacity: 1;
@@ -808,7 +836,7 @@ html, body {
     padding: 17px;
 }
 
-#_content .line {
+#_content .chapter > .titlepage {
     margin: 0 0 36px 0;
     border-bottom: 1px solid #439539;
     width: 100%;
@@ -911,13 +939,14 @@ html, body {
     color: #333;
 }
 
-#_content p a {
+#_content p a, .share a, .print a {
     color: #439539;
     text-decoration: none;
 }
 
 #_content p a:hover, #_content p a:focus, #_content p a:active,
-#_content p a:visited:hover, #_content p a:visited:focus, #_content p a:visited:active {
+#_content p a:visited:hover, #_content p a:visited:focus, #_content p a:visited:active,
+.share a:hover, .print a:focus:hover, .share a, .print a:focus, {
     color: #439539;
     text-decoration: underline;
 }
@@ -1006,12 +1035,17 @@ html, body {
     color: #999;
     margin: 17px 0 7px;
     border: 1px solid #202020;
+    overflow: hidden;
 }
 
 #_content .figure img {
     padding: 1px;
     background-color: #FFF;
+    /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
     max-width: 100%;
+    max-width: calc(100% - 2px);
+    max-width: -moz-calc(100% - 2px);
+    max-width: -webkit-calc(100% - 2px);
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
 }
 
@@ -1095,7 +1129,7 @@ html, body {
     display: block;
 }
 
-#_content ol.procedure, #_content ol.substeps {
+#_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
     padding: 0 0 0 20px;
     margin: 0 10px 0 10px;
     display: block;
@@ -1236,64 +1270,4 @@ html, body {
         font-size: 13px;
         clear: both;
     }
-    /*
-    #_find-area form {
-    margin: 0 0 0 50% !important;
-}
-
-.find-form {
-    padding: 10px;
-    margin: 0 0 0 -110px;
-    display: block;
-    width: 200px;
-}
-
-#_find-input {
-    width: 155px;
-    height: 34px;
-    padding: 0 20px 0 5px;
-    font: 16px 'Open Sans', Helvetica, Arial, sans-serif;
-    display: block;
-    background-color: #FFF;
-    border: 1px solid #CCE9A7;
-    float: left;
-    outline: none;
-    z-index: 0;
-}
-
-#_find-input:focus {
-    background-color: #FFF;
-    border: 1px solid #FFF;
-}
-
-#_find-input:focus + #_find-button {
-    background: url(style_images/icons.png) no-repeat scroll -108px 0px !important;
-}
-
-#_find-button {
-    width: 36px;
-    height: 36px;
-    display: block;
-    margin: 0 0 0 -18px;
-    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
-    float: left;
-}
-
-#_find-input:focus + #_find-button:hover {
-    background: url(style_images/icons.png) no-repeat scroll -108px -36px !important;
-}
-
-#_find-input-label {
-    cursor: text;
-    line-height: 36px;
-    height: 36px;
-    position: relative;
-    left: 5px;
-    top: -36px;
-    z-index: 200;
-    color: #333;
-    font-style: italic;
-    display: none;
-}
- */   
 }
