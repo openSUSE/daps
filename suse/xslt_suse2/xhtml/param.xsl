@@ -108,6 +108,10 @@
   
   <!-- Should I generate breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
+  
+  <!-- Should I generate the language and format areas in the header? -->
+  <xsl:param name="generate.pickers" select="0"/>
+  
   <!-- Separator between separate links: -->
   <xsl:param name="daps.breadcrumbs.sep"> » </xsl:param>
   
