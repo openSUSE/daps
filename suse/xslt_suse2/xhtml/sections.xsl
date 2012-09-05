@@ -26,6 +26,7 @@
       <xsl:apply-templates select="$node" mode="title.markup">
         <xsl:with-param name="allow-anchors" select="1"/>
       </xsl:apply-templates>
+      <xsl:text> </xsl:text>
     </span>
     <!-- Original:
       <xsl:apply-templates select="$node" mode="object.title.markup">
