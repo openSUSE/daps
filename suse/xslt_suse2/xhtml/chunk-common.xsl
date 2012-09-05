@@ -33,6 +33,9 @@
   <xsl:template match="chapter|appendix|article|book|part|glossary|sect1|bibliography"
                 mode="breadcrumbs">
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:call-template name="generate.class.attribute">
+        <xsl:with-param name="class">crumb</xsl:with-param>
+      </xsl:call-template>
       <xsl:attribute name="href">
         <xsl:call-template name="href.target">
           <xsl:with-param name="object" select="."/>
@@ -115,7 +118,8 @@
       <div class="crumbs">
         <!-- TODO: Do we need an icon always? -->
         <!--<xsl:if test="$rootid = ''">-->
-             <a href="{$root.filename}" title="Documentation">
+             <a href="{$root.filename}" class="book-link"
+               title="Documentation">
                   <span class="book-icon">&nbsp;</span>
              </a>
           <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
@@ -439,8 +443,10 @@
         </xsl:call-template>-->
 
           <xsl:call-template name="user.header.content"/>
-
-          <xsl:copy-of select="$content"/>
+          <div id="_content">
+            <xsl:copy-of select="$content"/>
+          </div>
+          
           <div id="_inward"></div>
         </div>
         
