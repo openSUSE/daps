@@ -239,6 +239,20 @@
             </span>
             <span class="tool-label">Contents</span>
           </a>
+          <div class="active-contents bubble-corner"> </div>
+          <div class="active-contents bubble">
+            <div class="bubble-container">
+              <h6>
+                <xsl:apply-templates mode="title.markup"
+                  select="(ancestor-or-self::book |
+                  ancestor-or-self::article)[1]"/>
+              </h6>
+              <div class="bubble-toc">
+                <!-- FIXME -->
+              </div>
+              <div class="clearme"></div>
+            </div>
+          </div>
         </div>
                 
         <div id="_nav-area" class="inactive">
