@@ -51,8 +51,7 @@
   
   <xsl:template name="admon.graphic">
   <xsl:param name="node" select="."/>
-  <xsl:value-of select="$admon.graphics.path"/>
-  <xsl:text>icon-</xsl:text>
+  <xsl:value-of select="concat($admon.graphics.path, $admon.graphics.prefix)"/>
   <xsl:choose>
     <xsl:when test="local-name($node)='note'">note</xsl:when>
     <xsl:when test="local-name($node)='warning'">warning</xsl:when>

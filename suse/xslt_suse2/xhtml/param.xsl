@@ -103,6 +103,8 @@
 
 <!-- 28. SUSE specific parameters =============================== -->
   <!--  -->
+  <xsl:param name="admon.graphics.prefix">icon-</xsl:param>
+  
   <xsl:param name="daps.header.logo">style_images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
   
