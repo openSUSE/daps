@@ -119,7 +119,8 @@
       <div class="crumbs">
         <!-- TODO: Do we need an icon always? -->
         <!--<xsl:if test="$rootid = ''">-->
-             <a href="{$root.filename}" class="book-link"
+             <a href="{concat($root.filename, $html.ext)}"
+               class="book-link"
                title="Documentation">
                   <span class="book-icon">&nbsp;</span>
              </a>
