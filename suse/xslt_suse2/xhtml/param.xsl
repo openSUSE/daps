@@ -70,6 +70,7 @@
 <!-- 17. Glossary =============================================== -->
 
 <!-- 18. Miscellaneous ========================================== -->
+  <xsl:param name="menuchoice.separator" select="$daps.breadcrumbs.sep"/>
   
 <!-- 19. Annotations ============================================ -->
 
@@ -115,7 +116,7 @@
   <xsl:param name="generate.pickers" select="0"/>
   
   <!-- Separator between separate links: -->
-  <xsl:param name="daps.breadcrumbs.sep"> » </xsl:param>
+  <xsl:param name="daps.breadcrumbs.sep">&#xa0;›&#xa0;</xsl:param>
   
   <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
   <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
