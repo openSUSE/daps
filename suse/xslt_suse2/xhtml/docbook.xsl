@@ -32,5 +32,6 @@
  <xsl:include href="autotoc.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="sections.xsl"/>
+ <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
 </xsl:stylesheet>
