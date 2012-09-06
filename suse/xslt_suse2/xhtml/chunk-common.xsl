@@ -178,7 +178,6 @@
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
 
-    
     <div class="buttons">
       <a class="top-button button">Top</a>
       <div class="button">
@@ -474,7 +473,7 @@
           <div id="_inward"></div>
         </div>
         
-        <div id="_footerwrap">
+        <div id="_footer-wrap">
         <xsl:call-template name="user.footer.content"/>
 
         <!--
