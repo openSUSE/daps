@@ -224,7 +224,7 @@ html, body {
     padding: 0 10px;
     border-radius: 3px;
     float: left;
-    background: #202020;
+    background: #333;
     height: 24px;
     line-height: 24px;
     font-size: 13px;
@@ -381,11 +381,18 @@ html, body {
     float: right;
 }
 
-.tool-spacer {
+#_toolbar .tool-spacer {
     padding: 10px;
     display: block;
     float: left;
 }
+
+#_fixed-header .tool-spacer {
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
 .inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
 .inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
 #_nav-area .tool-spacer:hover, #_nav-area .tool-spacer:focus, #_nav-area .tool-spacer:active {
@@ -618,6 +625,7 @@ html, body {
     background-image: url(style_images/icons.png);
     height: 15px;
     width: 18px;
+    display: block;
 }
 
 #_fixed-header .top-button {
@@ -1107,12 +1115,20 @@ html, body {
     color: #666;
 }
 
-#_content .procedure .title {
+#_content .procedure .title, #_content .table .title {
     font-size: 14px;
     font-weight: normal;
+    text-transform: uppercase;
+}
+
+#_content .procedure .title {
     margin: 0 10px;
     padding: 0 0 5px;
-    text-transform: uppercase;
+}
+
+#_content .table .title {
+    margin: 17px 0 10px;
+    padding: 0;
 }
 
 #_content .procedure .title code, #_content .procedure .title .command, #_content .procedure .title .keycap {
@@ -1147,6 +1163,24 @@ html, body {
 
 #_content .procedure li:first-child p {
     margin: 0;
+}
+
+#_content .table table {
+    border: 1px solid #999;
+    width: 100%;
+    vertical-align: middle;
+}
+
+#_content .table th {
+    font-weight: bold;
+}
+
+#_content .table td, #_content .table th {
+    border: 1px solid #999;
+}
+
+#_content .table td *, #_content .table th * {
+    vertical-align: middle !important;
 }
 
 #_content .chapter ul {
