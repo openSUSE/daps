@@ -220,7 +220,11 @@ set       nop
    >.,%?&amp;#\~+{_-</xsl:param>
 <xsl:param name="ulink.hyphenate.after.chars"
    >/:@=};</xsl:param>
-<xsl:param name="hyphenate.verbatim" select="1"/>
+  
+<!-- This seems to make problems in FOP, see bnc#778567;
+     as such, it's safer to set it to "0".
+-->
+<xsl:param name="hyphenate.verbatim" select="0"/>
 
 <!-- Debug Parameters -->
 <xsl:param name="debug.fonts" select="1"/>
