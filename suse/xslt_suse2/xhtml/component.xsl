@@ -16,8 +16,8 @@
 
   <xsl:template name="component.title">
    <xsl:param name="node" select="."/>
-   <xsl:param name="wrapper" select="concat('h', $level+1)"/> 
-
+   <xsl:param name="wrapper"/> 
+    
   <!-- This handles the case where a component (bibliography, for example)
        occurs inside a section; will we need parameters for this? -->
 
@@ -37,8 +37,18 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="wrapperplus">
+    <xsl:choose>
+      <xsl:when test="$wrapper = ''">
+        <xsl:value-of select="concat('h', $level+1)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$wrapper"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
-  <xsl:element name="{$wrapper}" namespace="http://www.w3.org/1999/xhtml">
+  <xsl:element name="{$wrapperplus}" namespace="http://www.w3.org/1999/xhtml">
     <xsl:attribute name="class">title</xsl:attribute>
     <xsl:call-template name="id.attribute"/>
     <xsl:call-template name="anchor">
