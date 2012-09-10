@@ -148,8 +148,6 @@ html, body {
 #_header .crumbs a, #_header .crumbs span {
     margin: 0 0 0 5px;
     font-size: 16px;
-    line-height: 36px;
-    height: 36px;
 }
 
 .crumbs span {
@@ -173,7 +171,6 @@ html, body {
 #_header .book-link {
     display: inline-block;
     vertical-align: middle;
-    width: 36px;
     height: 36px;
 }
 
@@ -954,7 +951,7 @@ html, body {
 
 #_content p a:hover, #_content p a:focus, #_content p a:active,
 #_content p a:visited:hover, #_content p a:visited:focus, #_content p a:visited:active,
-.share a:hover, .print a:focus:hover, .share a, .print a:focus, {
+.share a:hover, .print a:hover, .share a:focus, .print a:focus {
     color: #439539;
     text-decoration: underline;
 }
@@ -965,25 +962,30 @@ html, body {
 
 #_content code, #_content .command {
     font: normal 100% 'Droid Sans Mono', monospace;
-    padding: 1px 5px;
+    padding: 0px 4px;
+    border: 1px solid #EFEFF0;
     border-radius: 3px;
+    background-color: #EFEFF0;
+    color: #333;
     /* There might be code or commands within links. The following doesn't help, however. */
     text-decoration: none !important;
 }
 
 
-#_content .name code, #_content .name .command {
+#_content .name code, #_content .name .command, #_content a .command, #_content a code,
+#_content .admonition h6 .command, #_content .admonition h6 code {
     color: inherit;
 }
 
+#_content .admonition h6 .command, #_content .admonition h6 code {
+    border-color: #D1D1D3;
+}
+
 #_content code {
-    background-color: #EFEFF0;
-    color: #333;
+    font-weight: normal;
 }
 
 #_content .command {
-    background-color: #EFEFF0;
-    color: #333;
     font-weight: bold;
 }
 
@@ -1000,6 +1002,7 @@ html, body {
     line-height: 125%;
     display: block;  
     overflow: auto;
+    background-color: #202020;
 }
 
 #_content .screen code, #_content .screen .command {
@@ -1057,17 +1060,14 @@ html, body {
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
 }
 
-#_content .figure .title {
+#_content .figure-title {
     padding: 10px;
     margin: 0;
-    font-size: 14px;
-    text-transform: uppercase;
     color: #FFF !important;
-    font-weight: normal;
     width: auto;
 }
 
-#_content .figure .title-wrap {
+#_content .figure .figure-title-wrap {
     background-color: #202020;
     width: 100%;
     overflow: hidden;
@@ -1115,29 +1115,31 @@ html, body {
     color: #666;
 }
 
-#_content .procedure .title, #_content .table .title {
+#_content .procedure-title, #_content .table-title, #_content .example-title, #_content .figure-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
+    text-align: left;
+    line-height: 120%;
 }
 
-#_content .procedure .title {
+#_content .procedure-title {
     margin: 0 10px;
     padding: 0 0 5px;
 }
 
-#_content .table .title {
+#_content .table-title {
     margin: 17px 0 10px;
     padding: 0;
 }
 
-#_content .procedure .title code, #_content .procedure .title .command, #_content .procedure .title .keycap {
+#_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap {
     text-transform: none;
 }
 
 #_content div.procedure {
     font-size: 16px;
-    border-left: 3px solid rgba(67,149,57,0.5);
+    border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
     padding: 5px 5px 5px 2px; /* -3px of border on the left, so it sits right there with any other lists etc. */
@@ -1153,7 +1155,7 @@ html, body {
     font-weight: bold;
 }
 
-#_content ol.procedure {
+#_content ol.procedure, #_content ol.orderedlist {
     list-style-type: decimal;
 }
 
@@ -1161,26 +1163,50 @@ html, body {
     list-style-type: lower-latin;
 }
 
-#_content .procedure li:first-child p {
-    margin: 0;
+#_content div.procedure > ol.procedure {
+    margin-top: -10px;
+}
+
+#_content .table-contents {
+    /* Yup, let's make this scroll... While ugly, there seems to be no better
+    way to avoid the table running off the page border...(?) */
+    overflow: auto;
 }
 
 #_content .table table {
     border: 1px solid #999;
-    width: 100%;
-    vertical-align: middle;
+    max-width: 100%;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+
+#_content table .screen-wrap {
+    margin: 0;
+}
+
+#_content table p {
+    margin: 0;
 }
 
 #_content .table th {
     font-weight: bold;
+    background-color: #EFEFF0;
 }
 
 #_content .table td, #_content .table th {
     border: 1px solid #999;
+    margin: 0;
+    padding: 3px;
+    overflow: hidden;
 }
 
-#_content .table td *, #_content .table th * {
-    vertical-align: middle !important;
+#_content .table th {
+    vertical-align: middle;
+}
+
+#_content .table tr:hover {
+    background-color: #ebf3e9;
 }
 
 #_content .chapter ul {
@@ -1208,7 +1234,7 @@ html, body {
         visibility: hidden;
     }
     
-    .figure, .informalfigure, .admonition, p {
+    .figure, .informalfigure, .admonition, p, table {
         /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002.*/
         /* Webkit does, though. */
         page-break-inside: avoid;
