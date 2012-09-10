@@ -71,6 +71,14 @@
 
 <!-- 18. Miscellaneous ========================================== -->
   <xsl:param name="menuchoice.separator" select="$daps.breadcrumbs.sep"/>
+  <xsl:param name="formal.title.placement">
+figure after
+example before
+equation before
+table before
+procedure before
+task before
+  </xsl:param>
   
 <!-- 19. Annotations ============================================ -->
 
