@@ -27,38 +27,38 @@
   <title>Supported Image Types</title>
   &daps-img-formats;
  </sect1>
- <sect1 id="sec.daps.user.imgs.usage"> <!--Make this a sect2?-->
-  <title>Where to Use Which Image Type</title>
+ <sect1 id="sec.daps.user.imgs.usage">
+  <title>Where to Use Which Image Type<remark>Make this a sect2? sknorr, 31-08-2012</remark></title>
   <sect2 id="sec.daps.user.imgs.usage.dia">
-   <title><literal>DIA</literal></title>
+   <title><acronym>DIA</acronym></title>
    <para>
     The software Dia is a diagram editor which can be used to draw
     entity-relationship diagrams, UML diagrams, and flowcharts. It stores these
-    diagrams in a custom XML-based vector format called <literal>DIA</literal>.
+    diagrams in a custom XML-based vector format called <acronym>DIA</acronym>.
    </para>
    <para>
-    Being a vector format, the <literal>DIA</literal> format is
+    Being a vector format, the <acronym>DIA</acronym> format is
     resolution-independent, meaning that an image made in it can be displayed or
     printed as large or small as you wish without artifacts.
    </para>
    <para>
     Dia makes it very easy to connect elements, to add text and to use simple
-    fill and border colors. Although it can import <literal>SVG</literal> files as
+    fill and border colors. Although it can import <acronym>SVG</acronym> files as
     shapes, it is not useful for drawing shapes freely itself. It also make it
     relatively hard to create complex or effect-laden vector illustrations and
     information graphics.
    </para>
    <para>
-    <literal>DIA</literal> files are automatically compressed when saving, thus
+    <acronym>DIA</acronym> files are automatically compressed when saving, thus
     they are often quite small.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.eps">
-   <title><literal>EPS</literal></title>
+   <title><acronym>EPS</acronym></title>
    <important>
     <title>Using EPS files is not recommended</title>
     <para>
-     <literal>EPS</literal> support in DAPS is experimental and currently only
+     <acronym>EPS</acronym> support in DAPS is experimental and currently only
      supported in combination with the XEP formatter. Even then, it might lead
      to longer document creation times.
     </para>
@@ -66,53 +66,53 @@
    <para>
     The <emphasis>Encapsulated Postscript</emphasis> format is a general purpose
     vector image format. As a Postscript-based format, it is similar to
-    <literal>PDF</literal>. There is currently no Linux software that creates
-    <literal>EPS</literal> files natively, although a number of applications can
-    export into it. <literal>EPS</literal> might occasionally serve as an
-    exchange format with contributors that use Adobe* graphics software.
+    <acronym>PDF</acronym>. There is currently no mainstream Linux image editor
+    software that creates <acronym>EPS</acronym> files natively, although a number
+    of applications can export into it. <acronym>EPS</acronym> might occasionally
+    serve as an exchange format with contributors that use Adobe* graphics software.
    </para>
    <para>
-    Where feasible, it is recommended that you use <literal>SVG</literal> files
-    instead of <literal>EPS</literal> files.
+    Where feasible, it is recommended that you use <acronym>SVG</acronym> files
+    instead of <acronym>EPS</acronym> files.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.fig">
-   <title><literal>FIG</literal></title>
+   <title><acronym>FIG</acronym></title>
    <para>
-    <literal>FIG</literal> is a vector image format that can be created with the
+    <acronym>FIG</acronym> is a vector image format that can be created with the
     software Xfig. While you should create new illustrations as
-    <literal>SVG</literal> files and new diagrams as <literal>DIA</literal>, the
-    support for <literal>FIG</literal> can help when working with legacy images.
+    <acronym>SVG</acronym> files and new diagrams as <acronym>DIA</acronym>, the
+    support for <acronym>FIG</acronym> can help when working with legacy images.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.pdf">
-   <title><literal>PDF</literal></title>
+   <title><acronym>PDF</acronym></title>
    <important>
     <title>Using PDF files is not recommended</title>
     <para>
-     <literal>PDF</literal> support in DAPS is experimental and currently only
+     <acronym>PDF</acronym> support in DAPS is experimental and currently only
      supported in combination with the XEP formatter. Even then, it might lead
      to longer document creation times.
     </para>
    </important>
    <para>
     The <emphasis>Portable Document File</emphasis> format is a general purpose,
-    page-based fixed-layout document format. <literal>PDF</literal> is a
+    page-based fixed-layout document format. <acronym>PDF</acronym> is a
     Postscript-based format. There is a large number of Linux software that can
-    export <literal>PDF</literal> files natively. <literal>PDF</literal> files
+    export <acronym>PDF</acronym> files natively. <acronym>PDF</acronym> files
     can also be used as an exchange format with contributors that are unable to
-    export to <literal>SVG</literal>.
+    export to <acronym>SVG</acronym>.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.png">
-   <title><literal>PNG</literal></title>
+   <title><acronym>PNG</acronym></title>
    <para>
     The <emphasis>Portable Network Graphics</emphasis> format can be used whenever
     you wish to use a raster, that is, point-based image. A good example for when
-    to use <literal>PNG</literal> are screenshots and photographs.
+    to use <acronym>PNG</acronym> are screenshots and photographs.
    </para>
    <para>
-    <literal>PNG</literal> files can be created with a number of applications,
+    <acronym>PNG</acronym> files can be created with a number of applications,
     among them is the GIMP graphics editor.
    </para>
    <tip>
@@ -127,28 +127,64 @@
    </tip>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.svg">
-   <title><literal>SVG</literal></title>
+   <title><acronym>SVG</acronym></title>
    <para>
     The <emphasis>Scalable Vector Graphics</emphasis> format is a general purpose,
-    vector image format. <literal>SVG</literal> is an XML format which can be
+    vector image format. <acronym>SVG</acronym> is an XML format which can be
     displayed in most browsers and edited in many graphics programs.
    </para>
    <para>
-    Under Linux, Mac, and Windows, a good open-source <literal>SVG</literal>
-    editor is Inkscape. You can also create <literal>SVG</literal> files from
-    many Adobe* products, for instance, from Illustrator*. SVG is the preferred
-    vector image format for &daps;.
+    A good open-source <acronym>SVG</acronym> editor is Inkscape. Inkscape is
+    available for most operating systems. You can also create <acronym>SVG</acronym>
+    files from many Adobe* products, for instance, from Illustrator*. SVG is the
+    preferred vector image format for &dapsacr;.
    </para>
    <tip>
     <title>Check your images in Inkscape</title>
     <para>
-     Internally, whenever DAPS needs to convert SVG images to raster images, as
-     it does for HTML output files, it uses Inkscape. Therefore, it is a good idea
-     to check whether your images render appropriately in Inkscape before
-     including them.
+     Internally, whenever &dapsacr; needs to convert <acronym>SVG</acronym>
+     images to raster images, it uses Inkscape. This happens, for instance when
+     exporting to HTML. Therefore, you should check whether your
+     <literal>SVG</literal> images render appropriately in Inkscape before
+     including them, even if you do not use Inkscape otherwise.
     </para>
    </tip>
   </sect2>
  </sect1>
+ <sect1>
+  <title>Managing Images</title>
+   <sect2 id="sec.daps.user.imgs.dir">
+    <title>Organisation of the <code>images</code> Directory</title>
+    <para>
+     &dapsacr; requires you to use a specific directory structure for images. All
+     images that you reference from your DocBook files must be stored in
+     a sub-directory of the project directory, that is, the directory where the
+     <acronym>DC</acronym> file lies. named
+     <filename>images/src/file_extension</filename>. For instance, <acronym>PNG</acronym>
+     should be stored under <filename>images/src/png</filename>. If you used
+     <command>daps-init</command> to set up your project, the appropriate
+     directories should already exist.
+    </para>
+    <important>
+     <title>Use unique filenames</title>
+     <para>
+      Make sure you store just one file with a particular name within the
+      <filename>images/src</filename> folder of a project. Having, for instance,
+      a file named <filename>example.png</filename> and another called
+      <filename>example.svg</filename> in the same project will generally lead to
+      confusion among the authors about which file to use where, which is current
+      and so on.
+     </para>
+     <para>
+      When invoking &dapsacr; with the option <command>-v</command>, a warning
+      will be printed whenever a filename appears twice within a project.
+     </para>
+    </important>
+    <para>
+     ...
+    </para>
+   </sect2>
+ </sect1>
+ 
  
 </chapter>
