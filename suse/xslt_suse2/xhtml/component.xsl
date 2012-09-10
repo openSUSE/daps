@@ -15,7 +15,8 @@
 
 
   <xsl:template name="component.title">
-  <xsl:param name="node" select="."/>
+   <xsl:param name="node" select="."/>
+   <xsl:param name="wrapper" select="{concat('h', $level+1)}"/> 
 
   <!-- This handles the case where a component (bibliography, for example)
        occurs inside a section; will we need parameters for this? -->
@@ -37,7 +38,7 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:element name="h{$level+1}" namespace="http://www.w3.org/1999/xhtml">
+  <xsl:element name="{$wrapper}" namespace="http://www.w3.org/1999/xhtml">
     <xsl:attribute name="class">title</xsl:attribute>
     <xsl:call-template name="id.attribute"/>
     <xsl:call-template name="anchor">
