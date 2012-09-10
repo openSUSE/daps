@@ -16,7 +16,7 @@
 
   <xsl:template name="component.title">
    <xsl:param name="node" select="."/>
-   <xsl:param name="wrapper" select="{concat('h', $level+1)}"/> 
+   <xsl:param name="wrapper" select="concat('h', $level+1)"/> 
 
   <!-- This handles the case where a component (bibliography, for example)
        occurs inside a section; will we need parameters for this? -->
