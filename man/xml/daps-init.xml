@@ -7,7 +7,7 @@
 <!ENTITY daps_version "1.0.2">
 <!ENTITY daps_init "daps_init">
 ]>
-<refentry lang="en" id="daps">
+<refentry lang="en" id="daps_init">
     <refentryinfo>
         <productname>&daps_command;</productname>
         <authorgroup>
@@ -30,7 +30,7 @@
         <refname>&daps_init;</refname>
         <refpurpose> A command to set up a daps documentation directory</refpurpose>
     </refnamediv>
-    <refsynopsisdiv id="daps.synopsis">
+    <refsynopsisdiv id="daps_init.synopsis">
         <title>Synopsis</title>
         <cmdsynopsis>
       <command>&daps_init;</command>
@@ -41,7 +41,7 @@
     </refsynopsisdiv>
     <refsect1>
         <title>Description</title>
-        <para>daps-init is used in daps to create a new documentation project from scratch. It
+        <para>&daps_init; is used in daps to create a new documentation project from scratch. It
             automatically sets up the key files and directory structure needed and creates an example document which can be used to explore daps´ functionality</para>
     </refsect1>
     <refsect1>
@@ -50,9 +50,8 @@
         <para> Set the root element of your example dokument. Currently supported are "book"
             (default) and "article"</para>
         <cmdsynopsis>
-            <command/>
-            <arg choice="req">-r</arg>
-            <arg condition="">(article|book)</arg>
+            <command>&daps_init;</command>
+            <arg choice="req">-r (article|book)</arg>
         </cmdsynopsis>
     </refsect1>
 
@@ -60,40 +59,11 @@
         <title>See Also</title>
         <variablelist>
             <varlistentry>
-                <term>
-                    <ulink url="http://daps.sf.net"/>
-                </term>
+                <term><ulink url="http://daps.sf.net"/></term>
                 <listitem>
                     <para>DAPS project homepage</para>
                 </listitem>
             </varlistentry>
-            <!--<varlistentry>
-                <term><ulink  url="http://daps.sf.net/docs/daps-quickstart.html"
-                >DAPS Quick Start</ulink></term>
-                <listitem>
-                <para>Contains an overview of basic concepts and how to create
-                your documents.</para>
-                </listitem>
-                </varlistentry>-->
-            <!--<varlistentry>
-                <!-\- FIXME: Add correct link-\->
-                <term><ulink url="http://daps.sf.net/docs/daps-userguide.html">DAPS User Guide</ulink></term>
-                <listitem>
-                <para>Is intended for users who want to make efficient use of
-                DocBook XML for editing and publishing their documentation.
-                Key knowledge of XML and DocBook is expected, as well as key
-                knowledge of using the Bash Shell (or command line
-                interfaces in general).</para>
-                </listitem>
-                </varlistentry>-->
-            <!--<varlistentry>
-                <term><ulink url="http://daps.sf.net/docs/daps-adminguide.html"
-                >DAPS Administration Guide</ulink></term>
-                <listitem>
-                <para>Intended for developers who wants to add their own
-                stylesheets.</para>
-                </listitem>
-                </varlistentry>-->
         </variablelist>
     </refsect1>
 </refentry>
