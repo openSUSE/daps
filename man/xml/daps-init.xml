@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC 
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+<!ENTITY daps_command "daps">
+<!ENTITY daps_version "1.0.2">
+<!ENTITY daps_init "daps_init">
+]>
+<refentry lang="en" id="daps">
+    <refentryinfo>
+        <productname>&daps_command;</productname>
+        <authorgroup>
+            <author>
+                <contrib>Developer</contrib>
+                <firstname>Frank</firstname>
+                <surname>Sundermeyer</surname>
+                <email>fs@suse.de</email>
+            </author>
+            <author>
+                <contrib>Developer</contrib>
+                <firstname>Thomas</firstname>
+                <surname>Schraitle</surname>
+                <email>toms@opensuse.org</email>
+            </author>
+            <author>
+                <contrib>Developer</contrib>
+                <firstname>Karl</firstname>
+                <surname>Eichwalder</surname>
+            </author>
+            <author>
+                <contrib>Previous Developer of susedoc</contrib>
+                <firstname>Berthold</firstname>
+                <surname>Gunreben</surname>
+            </author>
+            <author>
+                <contrib>Previous Developer of susedoc</contrib>
+                <firstname>Jana</firstname>
+                <surname>Jaeger</surname>
+            </author>
+            <author>
+                <contrib>Developer</contrib>
+                <firstname>Curtis</firstname>
+                <surname>Graham</surname>
+            </author>
+        </authorgroup>
+    </refentryinfo>
+    <refmeta>
+        <refentrytitle>&daps_command;</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+        <refmiscinfo class="version">&daps_version;</refmiscinfo>
+        <refmiscinfo class="manual">daps</refmiscinfo>
+    </refmeta>
+    <refnamediv>
+        <refname>&daps_init;</refname>
+        <refpurpose> A command to set up a daps documentation directory</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv id="daps.synopsis">
+        <title>Synopsis</title>
+        <cmdsynopsis>
+            <command>&daps_init;</command>
+            <arg choice="req">-d</arg>
+            <arg choice="req">
+                <replaceable>PATH_TO_DOC_DIR</replaceable>
+            </arg>
+            <arg choice="opt">
+                <replaceable>ROOT ELEMENT</replaceable>
+            </arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    <refsect1>
+        <title>Description</title>
+        <para>daps-init is used in daps to create a new documentation project from scratch. It
+            automatically sets up the key files and directory structure needed and creates an example document which can be used to explore daps´ functionality</para>
+    </refsect1>
+    <refsect1>
+        <title>Options</title>
+        <para>View the available Options with <command>&daps_init;</command></para>
+        <para> Set the root element of your example dokument. Currently supported are "book"
+            (default) and "article"</para>
+        <cmdsynopsis>
+            <command/>
+            <arg choice="req">-r</arg>
+            <arg condition="">(article|book)</arg>
+        </cmdsynopsis>
+    </refsect1>
+
+    <refsect1 id="daps.moreinfo">
+        <title>See Also</title>
+        <variablelist>
+            <varlistentry>
+                <term>
+                    <ulink url="http://daps.sf.net"/>
+                </term>
+                <listitem>
+                    <para>DAPS project homepage</para>
+                </listitem>
+            </varlistentry>
+            <!--<varlistentry>
+                <term><ulink  url="http://daps.sf.net/docs/daps-quickstart.html"
+                >DAPS Quick Start</ulink></term>
+                <listitem>
+                <para>Contains an overview of basic concepts and how to create
+                your documents.</para>
+                </listitem>
+                </varlistentry>-->
+            <!--<varlistentry>
+                <!-\- FIXME: Add correct link-\->
+                <term><ulink url="http://daps.sf.net/docs/daps-userguide.html">DAPS User Guide</ulink></term>
+                <listitem>
+                <para>Is intended for users who want to make efficient use of
+                DocBook XML for editing and publishing their documentation.
+                Key knowledge of XML and DocBook is expected, as well as key
+                knowledge of using the Bash Shell (or command line
+                interfaces in general).</para>
+                </listitem>
+                </varlistentry>-->
+            <!--<varlistentry>
+                <term><ulink url="http://daps.sf.net/docs/daps-adminguide.html"
+                >DAPS Administration Guide</ulink></term>
+                <listitem>
+                <para>Intended for developers who wants to add their own
+                stylesheets.</para>
+                </listitem>
+                </varlistentry>-->
+        </variablelist>
+    </refsect1>
+</refentry>
