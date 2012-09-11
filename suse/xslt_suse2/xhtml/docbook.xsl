@@ -35,4 +35,5 @@
  <xsl:include href="sections.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
+ <xsl:include href="verbatim.xsl"/>
 </xsl:stylesheet>
