@@ -55,14 +55,60 @@
         </cmdsynopsis>
     </refsect1>
     <refsect1>
-        <title>Example</title>
-        <cmdsynopsis>
-            <command>&daps_init; -d /tmp -r article</command>
-        </cmdsynopsis>
-        <para>For example this command creates a documentation poject in the directory /tmp with an
-            article as example document</para>
-    </refsect1>
+        <title>Examples</title>
+        <variablelist>
+            <varlistentry>
+                <term>Option usage example</term>
+                <listitem>
+                    <cmdsynopsis>
+                        <command>&daps_init; -d /home/exampledir -r article</command>
+                    </cmdsynopsis>
+                    <para>This command creates a documentation poject in /home/exampledir with an
+                        article as example document</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Directory structure Example</term>
+                <listitem>
+                    <screen>
+            EXAMPLE_DOC_DIR/ (1)
+              |--DC* (2)
+                 |--images/
+                 |   |--src/ (3)
+                 |   |--dia/
+                 |   |--eps/
+                 |   |--fig/
+                 |   |--pdf/
+                 |   |--png/
+                 |   |--svg/
+                 |--xml/ (4)
+                    |--MAIN*.xml (5)
+        </screen>
+                    <orderedlist>
+                        <listitem>
+                            <para>"Working directory" for the respective documentation
+                                project</para>
+                        </listitem>
+                        <listitem>
+                            <para>DC-file defining the documentation project</para>
+                        </listitem>
+                        <listitem>
+                            <para>Top-level Directory for images used in the documentation. Contains
+                                sub-directories for images in different formats</para>
+                        </listitem>
+                        <listitem>
+                            <para>XML-file directory. Also holds entity declaration files</para>
+                        </listitem>
+                        <listitem>
+                            <para>Main file of the documentation project. It contains references to
+                                other books, chapters etc.</para>
+                        </listitem>
+                    </orderedlist>
+                </listitem>
+            </varlistentry>
 
+        </variablelist>
+    </refsect1>
     <refsect1 id="daps_init.moreinfo">
         <title>See Also</title>
         <variablelist>
