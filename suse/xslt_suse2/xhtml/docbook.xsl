@@ -4,7 +4,7 @@
      Transform DocBook document into single XHTML file
      
    Parameters:
-     Too many to list here, see here:
+     Too many to list here, see:
      http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
        
    Input:
@@ -30,10 +30,11 @@
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
  <xsl:include href="param.xsl"/>
  <xsl:include href="autotoc.xsl"/>
+ <xsl:include href="lists.xsl"/>
+ <xsl:include href="verbatim.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="formal.xsl"/>
  <xsl:include href="sections.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
- <xsl:include href="verbatim.xsl"/>
 </xsl:stylesheet>
