@@ -5,8 +5,7 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="exsl">
- 
-<xsl:param name="formal.object.break.after">0</xsl:param>
+
 
 <xsl:template name="formal.object.heading">
   <xsl:param name="object" select="."/>

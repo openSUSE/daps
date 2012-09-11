@@ -80,6 +80,9 @@ procedure before
 task before
   </xsl:param>
   
+  <!-- From the DocBook XHMTL stylesheet's "formal.xsl" -->
+  <xsl:param name="formal.object.break.after">0</xsl:param>
+  
 <!-- 19. Annotations ============================================ -->
 
 <!-- 20. Graphics =============================================== -->
