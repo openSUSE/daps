@@ -423,6 +423,8 @@
 
     <html>
       <xsl:call-template name="root.attributes"/>
+      <!-- Add xml:lang and lang attributes: -->
+      <xsl:call-template name="locale.html.attributes"/>
       <xsl:call-template name="html.head">
         <xsl:with-param name="prev" select="$prev"/>
         <xsl:with-param name="next" select="$next"/>
