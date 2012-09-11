@@ -50,22 +50,9 @@
   
   <xsl:template match="keycombo">
     <xsl:variable name="action" select="@action"/>
-    <xsl:variable name="joinchar">
-      <xsl:choose>
-        <xsl:when test="$action='seq'">
-          <xsl:text> </xsl:text>
-        </xsl:when>
-        <xsl:when test="$action='simul'">+</xsl:when>
-        <xsl:when test="$action='press'">-</xsl:when>
-        <xsl:when test="$action='click'">-</xsl:when>
-        <xsl:when test="$action='double-click'">-</xsl:when>
-        <xsl:when test="$action='other'"/>
-        <xsl:otherwise>+</xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     <xsl:for-each select="*">
       <xsl:if test="position()&gt;1">
-        <span class="key-connector"><xsl:value-of select="$joinchar"/></span>
+        <span class="key-connector">–</span>
       </xsl:if>
       <xsl:apply-templates select="."/>
     </xsl:for-each>
