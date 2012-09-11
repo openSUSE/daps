@@ -33,16 +33,16 @@
     <refsynopsisdiv id="daps_init.synopsis">
         <title>Synopsis</title>
         <cmdsynopsis>
-      <command>&daps_init;</command>
-      <arg choice="req">-d
-        <replaceable>PATH_TO_DOC_DIR</replaceable></arg>
-      <arg choice="opt">-r <replaceable>ROOT ELEMENT</replaceable></arg>
-    </cmdsynopsis>
+            <command>&daps_init;</command>
+            <arg choice="req">-d <replaceable>PATH_TO_DOC_DIR</replaceable></arg>
+            <arg choice="opt">-r <replaceable>ROOT ELEMENT</replaceable></arg>
+        </cmdsynopsis>
     </refsynopsisdiv>
     <refsect1>
         <title>Description</title>
         <para>&daps_init; is used in daps to create a new documentation project from scratch. It
-            automatically sets up the key files and directory structure needed and creates an example document which can be used to explore daps´ functionality</para>
+            automatically sets up the key files and directory structure needed and creates an
+            example document which can be used to explore daps´ functionality</para>
     </refsect1>
     <refsect1>
         <title>Options</title>
@@ -54,14 +54,22 @@
             <arg choice="req">-r (article|book)</arg>
         </cmdsynopsis>
     </refsect1>
-
-    <!-- Examples -->
+    <refsect1>
+        <title>Example</title>
+        <cmdsynopsis>
+            <command>daps-init -d /tmp -r article</command>
+        </cmdsynopsis>
+        <para>For example this command creates a documentation poject in the directory /tmp with an
+            article as example document</para>
+    </refsect1>
 
     <refsect1 id="daps_init.moreinfo">
         <title>See Also</title>
         <variablelist>
             <varlistentry>
-                <term><ulink url="http://daps.sf.net"/></term>
+                <term>
+                    <ulink url="http://daps.sf.net"/>
+                </term>
                 <listitem>
                     <para>DAPS project homepage</para>
                 </listitem>
