@@ -1002,6 +1002,7 @@ html, body {
     text-transform: none;
     /* There might be code or commands within links. The following doesn't help, however. */
     text-decoration: none !important;
+    display: inline-block;
 }
 
 
@@ -1160,10 +1161,6 @@ html, body {
     line-height: 120%;
 }
 
-#_content .procedure-title {
-
-}
-
 #_content .table-title, #_content .example-title, #_content .procedure-title {
     margin: 17px 0 10px;
     padding: 0;
@@ -1189,8 +1186,13 @@ html, body {
     margin: 10px 0 17px;
 }
 
-#_content .procedure-contents > p, #_content .procedure-contents > ol > li:first-child > p  {
+#_content .procedure-contents > p:first-child, #_content .procedure-contents > ol:first-child > li:first-child > p:first-child  {
     margin-top: 0;
+}
+
+#_content .procedure-contents > p {
+    margin-left: 12px;
+    margin-right: 17px;
 }
 
 #_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
