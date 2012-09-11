@@ -70,40 +70,41 @@
             <varlistentry>
                 <term>Directory structure Example</term>
                 <listitem>
+                    <para>A directory created by &daps_init; normally looks like this</para>
                     <screen>
-            EXAMPLE_DOC_DIR/ (1)
-              |--DC* (2)
+            EXAMPLE_DOC_DIR/ <co id="co.daps-init.root"/>
+              |--DC* <co id="co.daps-init.DC"/>
                  |--images/
-                 |   |--src/ (3)
+                 |   |--src/ <co id="co.daps-init.imagesrc"/>
                  |   |--dia/
                  |   |--eps/
                  |   |--fig/
                  |   |--pdf/
                  |   |--png/
                  |   |--svg/
-                 |--xml/ (4)
-                    |--MAIN*.xml (5)
+                 |--xml/ <co id="co.daps-init.xml"/>
+                    |--MAIN*.xml <co id="co.daps-init.MAIN"/>
         </screen>
-                    <orderedlist>
-                        <listitem>
+                    <calloutlist>
+                        <callout arearefs="co.daps-init.root">
                             <para>"Working directory" for the respective documentation
                                 project</para>
-                        </listitem>
-                        <listitem>
+                        </callout>
+                        <callout arearefs="co.daps-init.DC">
                             <para>DC-file defining the documentation project</para>
-                        </listitem>
-                        <listitem>
+                        </callout>
+                        <callout arearefs="co.daps-init.imagesrc">
                             <para>Top-level Directory for images used in the documentation. Contains
                                 sub-directories for images in different formats</para>
-                        </listitem>
-                        <listitem>
+                        </callout>
+                        <callout arearefs="co.daps-init.xml">
                             <para>XML-file directory. Also holds entity declaration files</para>
-                        </listitem>
-                        <listitem>
+                        </callout>
+                        <callout arearefs="co.daps-init.MAIN">
                             <para>Main file of the documentation project. It contains references to
                                 other books, chapters etc.</para>
-                        </listitem>
-                    </orderedlist>
+                        </callout>
+                    </calloutlist>
                 </listitem>
             </varlistentry>
 
