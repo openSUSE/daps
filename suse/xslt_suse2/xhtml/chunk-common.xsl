@@ -413,6 +413,9 @@
     <xsl:param name="content">
       <xsl:apply-imports/>
     </xsl:param>
+    <xsl:variable name="lang">
+      <xsl:apply-templates select="(ancestor-or-self::*/@lang)[last()]" mode="html.lang.attribute"/>
+    </xsl:variable>
 
     <!--<xsl:call-template name="log.message">
       <xsl:with-param name="level">Info</xsl:with-param>
@@ -421,10 +424,8 @@
 
     <xsl:call-template name="user.preroot"/>
 
-    <html>
+    <html lang="{$lang}" xml:lang="{$lang}">
       <xsl:call-template name="root.attributes"/>
-      <!-- Add xml:lang and lang attributes: -->
-      <xsl:call-template name="locale.html.attributes"/>
       <xsl:call-template name="html.head">
         <xsl:with-param name="prev" select="$prev"/>
         <xsl:with-param name="next" select="$next"/>
@@ -503,13 +504,9 @@
     <xsl:param name="node" select="."/>
     
     <xsl:if test="$daps.header.js != ''">
-      
-      <xsl:call-template name="log.message">
-        <xsl:with-param name="level">Info</xsl:with-param>
-        <xsl:with-param name="message">Adding script element</xsl:with-param>
+      <xsl:call-template name="make.script.link">
+        <xsl:with-param name="script.filename" select="$daps.header.js"/>
       </xsl:call-template>
-      <script type="text/javascript" src="{$daps.header.js}">
-      </script>
     </xsl:if>
   </xsl:template>
   
