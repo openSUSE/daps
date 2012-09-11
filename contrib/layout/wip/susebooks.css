@@ -801,6 +801,11 @@ html, body {
     padding: 20px 0 0;
 }
 
+/* FUXME! */
+#_content .title + .title {
+    margin-top: -20px;
+}
+
 #_content .name {
     color: #439539;
 }
@@ -833,22 +838,26 @@ html, body {
 }
 
 #_content .title:hover .permalink, #_content .title:focus .permalink, #_content .title:active .permalink,
-#_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink {
+#_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink,
+#_content .table-title:hover .permalink, #_content .table-title:focus .permalink, #_content .table-title:active .permalink,
+#_content .example-title:hover .permalink, #_content .example-title:focus .permalink, #_content .example-title:active .permalink,
+#_content .figure-title:hover .permalink, #_content .figure-title:focus .permalink, #_content .figure-title:active .permalink,
+#_content .procedure-title:hover .permalink, #_content .procedure-title:focus .permalink, #_content .procedure-title:active .permalink {
     opacity: 1;
 }
 
-#_content .page-toc {
+#_content .toc {
     padding: 17px;
 }
 
-#_content .chapter > .titlepage {
+#_content .chapter > .line {
     margin: 0 0 36px 0;
     border-bottom: 1px solid #439539;
     width: 100%;
 }
 
-#_content .page-toc a {
-        text-decoration: none;
+#_content .toc a {
+    text-decoration: none;
 }
 
 /* Thou shalt not ... */
@@ -944,9 +953,18 @@ html, body {
     color: #333;
 }
 
-#_content p a, .share a, .print a {
+#_content p a, .share a, .print a, #_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref, #_content .example-title .xref,
+#_content .figure-title .xref, #_content .procedure-title .xref {
     color: #439539;
+}
+
+#_content p a, .share a, .print a {
     text-decoration: none;
+}
+
+#_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref, #_content .example-title .xref,
+#_content .figure-title .xref, #_content .procedure-title .xref {
+    text-decoration: underline;
 }
 
 #_content p a:hover, #_content p a:focus, #_content p a:active,
@@ -960,13 +978,28 @@ html, body {
     color: #5C3566;
 }
 
+#_content .title .xref:hover, #_content .title .xref:focus,#_content .title .xref:active,
+#_content .subtitle .xref:hover, #_content .subtitle .xref:focus, #_content .subtitle .xref:active,
+#_content .table-title .xref:hover, #_content .table-title .xref:focus, #_content .table-title .xref:active,
+#_content .figure-title .xref:hover, #_content .figure-title .xref:focus, #_content .figure-title .xref:active,
+#_content .example-title .xref:hover, #_content .example-title .xref:focus, #_content .example-title .xref:active,
+#_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active {
+    color: #439539;
+    text-decoration: none;
+}
+
+#_content p a:visited {
+    color: #5C3566;
+}
+
 #_content code, #_content .command {
     font: normal 100% 'Droid Sans Mono', monospace;
     padding: 0px 4px;
-    border: 1px solid #EFEFF0;
+    border: 1px solid #D1D1D3;
     border-radius: 3px;
-    background-color: #EFEFF0;
+    background-color: #FFF;
     color: #333;
+    text-transform: none;
     /* There might be code or commands within links. The following doesn't help, however. */
     text-decoration: none !important;
 }
@@ -993,7 +1026,11 @@ html, body {
     padding: 10px;
     background-color: #202020;
     border-radius: 5px;
-    margin: 10px 0 0;
+    margin: 5px 0;
+}
+    
+#_content .example .screen-wrap {
+    margin: 10px 0 17px;
 }
 
 #_content .screen {
@@ -1010,6 +1047,7 @@ html, body {
     background-color: transparent;
     width: 100% !important;
     font-size: 100%;
+    border: none;
 }
 
 #_content .screen code {
@@ -1063,7 +1101,6 @@ html, body {
 #_content .figure-title {
     padding: 10px;
     margin: 0;
-    color: #FFF !important;
     width: auto;
 }
 
@@ -1124,11 +1161,10 @@ html, body {
 }
 
 #_content .procedure-title {
-    margin: 0 10px;
-    padding: 0 0 5px;
+
 }
 
-#_content .table-title {
+#_content .table-title, #_content .example-title, #_content .procedure-title {
     margin: 17px 0 10px;
     padding: 0;
 }
@@ -1137,22 +1173,40 @@ html, body {
     text-transform: none;
 }
 
-#_content div.procedure {
+#_content .procedure-contents {
     font-size: 16px;
     border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
-    padding: 5px 5px 5px 2px; /* -3px of border on the left, so it sits right there with any other lists etc. */
-    background-color: #f7faf6;
+    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
+    padding: 3px 5px 5px 2px;
+    background-color: #F7FAF6;
     display: block;
 }
 
+#_content .procedure-title + .procedure-contents {
+    margin: 10px 0 17px;
+}
+
+#_content .procedure-contents > p, #_content .procedure-contents > ol > li:first-child > p  {
+    margin-top: 0;
+}
+
 #_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
-    padding: 0 0 0 20px;
-    margin: 0 10px 0 10px;
     display: block;
     color: #439539;
     font-weight: bold;
+}
+
+#_content ol.procedure {
+    padding: 0 0 0 30px;
+    margin: 0 10px;
+}
+
+#_content ol.substeps, #_content ol.orderedlist {
+    padding: 0 0 0 35px;
+    margin: 0 0 0 10px;
 }
 
 #_content ol.procedure, #_content ol.orderedlist {
@@ -1163,14 +1217,11 @@ html, body {
     list-style-type: lower-latin;
 }
 
-#_content div.procedure > ol.procedure {
-    margin-top: -10px;
-}
-
 #_content .table-contents {
     /* Yup, let's make this scroll... While ugly, there seems to be no better
     way to avoid the table running off the page border...(?) */
     overflow: auto;
+    margin: 0 0 17px 0;
 }
 
 #_content .table table {
@@ -1180,37 +1231,32 @@ html, body {
     table-layout: fixed;
 }
 
-
-#_content table .screen-wrap {
-    margin: 0;
-}
-
 #_content table p {
     margin: 0;
 }
 
 #_content .table th {
     font-weight: bold;
-    background-color: #EFEFF0;
+    background-color: #D1D1D3;
 }
 
 #_content .table td, #_content .table th {
-    border: 1px solid #999;
     margin: 0;
-    padding: 3px;
+    padding: 3px 5px;
     overflow: hidden;
 }
 
 #_content .table th {
     vertical-align: middle;
+    border: 1px solid #999;
 }
 
-#_content .table tr:hover {
-    background-color: #ebf3e9;
+#_content .table tr:nth-child(even) {
+    background-color: #EFEFF0;
 }
 
 #_content .chapter ul {
-    padding: 5px 0 5px 25px;
+    padding: 5px 0 5px 35px;
     margin: 0 10px 0 10px;
     display: block;
     color: #439539;

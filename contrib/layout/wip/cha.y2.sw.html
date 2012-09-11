@@ -14,14 +14,14 @@
         <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
         <script type="text/javascript" src="susebooks.js"></script>
     </head>
-    <body onload="show(); labelInputFind();">
+    <body onload="show(); labelInputFind(); init()">
         <div id="_outer-wrap">
             <div id="_white-bg">
                 <div id="_header">
                     <div id="_logo"><img src="style_images/logo.png" alt="SUSE" /></div>
                     <div class="pickers">
                         <div class="inactive" id="_language-picker">
-                            <a href="#" onclick="activate('_language-picker')" id="_language-picker-button"><span class="picker">English</span></a>
+                            <a href="#" onclick="activate('_language-picker'); return false()" id="_language-picker-button"><span class="picker">English</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
                                 <h6>Select a Language</h6>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="inactive" id="_format-picker">
-                            <a href="#" onclick="activate('_format-picker')" id="_format-picker-button"><span class="picker">Web Page</span></a>
+                            <a href="#" onclick="activate('_format-picker'); return false()" id="_format-picker-button"><span class="picker">Web Page</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
                                 <h6>Select a Format</h6>
@@ -60,7 +60,7 @@
             <div id="_toolbar-wrap">
                <div id="_toolbar">
                    <div id="_toc-area" class="inactive">
-                           <a href="#" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area')">
+                       <a href="#" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area'); return false()">
                                 <span class="tool-spacer">
                                    <span class="toc-icon">&nbsp;</span>
                                    <span class="clearme"></span>
@@ -731,7 +731,7 @@
                    </div>
                    <div id="_find-area" class="active">
                        <div class="inactive-contents">
-                           <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area')">
+                           <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area'); return false()">
                                <span class="pad-tools-50-out">
                                    <span class="pad-tools-50-in">
                                        <span class="tool-spacer">
@@ -785,14 +785,14 @@
                     <div class="version-info">
                         This page documents <span style="font-weight: bold;">SUSE Linux <!--Enterprise Management Pack for System Center Operations Manager--> R2 2007</span>.
                     </div>
-                    <div class="titlepage">
+                    <div class="line">
                         <h2 class="title">
                             <a id="cha.y2.sw"></a>
                             <span class="number">5. </span>
                             <span class="name">Installing or Removing Software</span>
                             <a class="permalink" title="Permalink" href="#cha.y2.sw" onclick="scroll('cha.y2.sw'); return false;">#</a>
                         </h2>
-                        <dl class="page-toc">
+                        <dl class="toc">
                             <dt>
                                 <span class="sect1">
                                     <a href="cha.y2.sw.html#sec.onlineupdate.terms" onclick="scroll('sec.onlineupdate.terms'); return false;"><span class="number">5.1. </span><span class="name">Definition of Terms</span></a>
@@ -1066,6 +1066,7 @@
                                     <span class="guimenu">Cleanup when deleting packages</span>.</p>
                             </div>
                             <div class="procedure">
+                                <div class="procedure-contents">
                                 <ol class="procedure">
                                     <li>
                                         <p> Search for packages as described in <a class="xref"
@@ -1123,6 +1124,7 @@
                                             automatically terminates. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                             <div class="admonition note">
                                 <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
@@ -1165,6 +1167,7 @@
                             <p> Which of the aspects has the highest importance for choosing the update candidates depends
                                 on the respective update option you choose. </p>
                             <div class="procedure">
+                                <div class="procedure-contents">
                                 <ol class="procedure">
                                     <li>
                                         <p> To update all installed packages to the latest version, choose <span class="guimenu"
@@ -1241,6 +1244,7 @@
                                             class="guimenu">Accept</span> to start the mass update. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                         </div>
                         <div class="sect2">
@@ -1290,8 +1294,8 @@
                             <div class="figure" style="width: 544px;">
                                 <a id="fig.y2.sw.packconfl"></a>
                                 <img src="images/yast2_package_conflict.png" alt="Conflict Management of the Software Manager"/>
-                                <div class="title-wrap"><p class="title"><span class="number">Figure 5.1.</span> <span class="name"> Conflict Management of the Software Manager</span>
-                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.packconfl" onclick="scroll('fig.y2.sw.packconfl');return false;">#</a></p></div>
+                                <div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 5.1.</span> <span class="name"> Conflict Management of the Software Manager</span>
+                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.packconfl" onclick="scroll('fig.y2.sw.packconfl');return false;">#</a></h6></div>
                                 
                             </div>
                         </div>
@@ -1390,6 +1394,7 @@
                                 </div>
                             </div>
                             <div class="procedure">
+                                <div class="procedure-contents">
                                 <p> Certain packages are dependent on other packages, such as shared libraries. On the other
                                     hand, some packages cannot coexist with others on the system. If possible, YaST automatically
                                     resolves these dependencies or conflicts. If your choice results in a dependency conflict
@@ -1454,6 +1459,7 @@
                                             automatically terminates. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                             <div class="admonition note">
                                 <img class="symbol" src="style_images/icon-note.png" title="Note" alt="Note"/>
@@ -1497,6 +1503,7 @@
                             <p> Which of the aspects has the highest importance for choosing the update candidates depends
                                 on the respective update option you choose. </p>
                             <div class="procedure">
+                                <div class="procedure-contents">
                                 <ol class="procedure">
                                     <li>
                                         <p> To view the list of packages that can be updated (packages with higher versions are
@@ -1544,6 +1551,7 @@
                                             class="guimenu">Apply</span> to start the mass update. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                         </div>
                         <div class="sect2">
@@ -1590,8 +1598,8 @@
                             <div class="figure" style="width: 465px;">
                                 <a id="fig.y2.sw.gtk.packconfl"></a>
                                 <img src="images/yast2_gtk_package_conflict.png" alt="Conflict Management of the Software Manager"/>
-                                <div class="title-wrap"><p class="title"><span class="number">Figure 5.2.</span> <span class="name"> Conflict Management of the Software Manager</span>
-                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.gtk.packconfl" onclick="scroll('sec.y2.gtk.packconfl');return false;">#</a></p></div>
+                                <div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 5.2.</span> <span class="name"> Conflict Management of the Software Manager</span>
+                                    <a class="permalink" title="Permalink" href="#fig.y2.sw.gtk.packconfl" onclick="scroll('sec.y2.gtk.packconfl');return false;">#</a></h6></div>
                             </div>
                         </div>
                     </div>
@@ -1648,6 +1656,7 @@
                             <p> To add repositories from the <span class="guimenu">Configured Software Repositories</span>
                                 dialog in YaST proceed as follows: </p>
                             <div class="procedure">
+                                <div class="procedure-contents">
                                 <ol class="procedure">
                                     <li>
                                         <p> Click <span class="guimenu">Add</span>. </p>
@@ -1683,6 +1692,7 @@
                                             configuration dialog. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                             <p> Now you can install software from this repository as described in <a class="xref"
                                 href="cha.y2.sw.html#sec.y2.sw.qt" title="5.2. Using the KDE Interface (Qt)">Section 5.2,
@@ -1696,9 +1706,10 @@
                                 Thunderbird). </p>
                             <div class="procedure">
                                 <a id="id2628272"></a>
-                                <p class="title">
+                                <h6 class="procedure-title">
                                     <span class="number">Procedure 5.1.</span> <span class="name">Configuring Community Repositories</span>
-                                </p>
+                                </h6>
+                                <div class="procedure-contents">
                                 <ol class="procedure">
                                     <li>
                                         <p> Start YaST and select <span class="guimenu">Software</span> → <span class="guimenu"
@@ -1727,6 +1738,7 @@
                                             software repositories configuration. </p>
                                     </li>
                                 </ol>
+                                </div>
                             </div>
                         </div>
                         <div class="sect2">
@@ -1886,6 +1898,7 @@
                                     </div>
                                 </div>
                                 <div class="procedure">
+                                    <div class="procedure-contents">
                                     <ol class="procedure">
                                         <li>
                                             <p> Whenever software updates are available, the applet icon appears in the panel.
@@ -1912,13 +1925,14 @@
                                             </p>
                                         </li>
                                     </ol>
+                                    </div>
                                 </div>
                                 
                                 <div class="figure" style="width: 579px;">
                                     <a id="id2628836"></a>
                                     <img src="images/kupdater_updates.png" alt="KDE Software Updater"/>
-                                    <div class="title-wrap"><p class="title"><span class="number">Figure 5.3.</span> <span class="name">KDE Software Updater</span>
-                                        <a class="permalink" title="Permalink" href="#id2628836" onclick="scroll('id2628836');return false;">#</a></p></div>
+                                    <div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 5.3.</span> <span class="name">KDE Software Updater</span>
+                                        <a class="permalink" title="Permalink" href="#id2628836" onclick="scroll('id2628836');return false;">#</a></h6></div>
                                     
                                 </div>
                             </div>
@@ -2043,9 +2057,10 @@
                                 </div>
                                 <div class="procedure">
                                     <a id="id2629201"></a>
-                                    <p class="title">
+                                    <h6 class="procedure-title">
                                         <span class="number">Procedure 5.2.</span> <span class="name">Installing Patches</span>
-                                    </p>
+                                    </h6>
+                                    <div class="procedure-contents">
                                     <ol class="procedure">
                                         <li>
                                             <p> Whenever new patches are available, a notification message will appear and the Update
@@ -2071,12 +2086,13 @@
                                                 and proceed with <span class="guimenu">Authenticate</span>. </p>
                                         </li>
                                     </ol>
+                                    </div>
                                 </div>
                                 <div class="figure" style="width: 686px;">
                                     <a id="id2629297"></a>
                                     <img src="images/gupdater_updates.png" alt="GNOME Update Applet"/>
-                                    <div class="title-wrap"><p class="title"><span class="number">Figure 5.4.</span> <span class="name">GNOME Update Applet</span>
-                                        <a class="permalink" title="Permalink" href="#id2629297" onclick="scroll('id2629297');return false;">#</a></p></div>
+                                    <div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 5.4.</span> <span class="name">GNOME Update Applet</span>
+                                        <a class="permalink" title="Permalink" href="#id2629297" onclick="scroll('id2629297');return false;">#</a></h6></div>
                                 </div>
                                 
                                 <p> The YaST Online Update offers advanced features to customize the patch installation.
@@ -2172,9 +2188,9 @@ cnf zypper</pre></div>
                         <p>This section 1 features a table with 4 columns and 3 rows:</p>
                         <div class="table">
                             <a id="id2524277"></a>
-                            <p class="title">
+                            <h6 class="table-title">
                                 <span class="number">Table 1.1. </span><span class="name">Example Table</span>
-                            </p>
+                            </h6>
                             <div class="table-contents">
                                 <table summary="Example Table" border="1">
                                     <colgroup>
@@ -2203,6 +2219,11 @@ cnf zypper</pre></div>
                                             <td><p>Row 2, Cell 2</p></td>
                                             <td><p>Row 2, Cell 3</p></td>
                                             <td><p>Row 2, Cell 4</p></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><div class="screen-wrap"><pre class="screen">xsltproc --output foo-bar.fo $DB/fo/docbook.xsl foo.xml</pre></div></td>
+                                            <td><p>Row 3, Cell 3</p></td>
+                                            <td><p>Row 4, Cell 4</p></td>
                                         </tr>
                                     </tbody>
                                 </table>
