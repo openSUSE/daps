@@ -414,10 +414,10 @@
       <xsl:apply-imports/>
     </xsl:param>
 
-    <xsl:call-template name="log.message">
+    <!--<xsl:call-template name="log.message">
       <xsl:with-param name="level">Info</xsl:with-param>
       <xsl:with-param name="message">chunkelement-content: <xsl:value-of select="local-name()"/></xsl:with-param>
-    </xsl:call-template>
+    </xsl:call-template>-->
 
     <xsl:call-template name="user.preroot"/>
 
@@ -496,7 +496,21 @@
     <xsl:value-of select="$chunk.append"/>
   </xsl:template>
   
-
+  
+  <xsl:template name="user.head.content">
+    <xsl:param name="node" select="."/>
+    
+    <xsl:if test="$daps.header.js != ''">
+      
+      <xsl:call-template name="log.message">
+        <xsl:with-param name="level">Info</xsl:with-param>
+        <xsl:with-param name="message">Adding script element</xsl:with-param>
+      </xsl:call-template>
+      <script type="text/javascript" src="{$daps.header.js}">
+      </script>
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template name="user.footer.content">
     <div id="_footer">
       <p>© 2012 SUSE</p>

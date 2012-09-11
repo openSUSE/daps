@@ -116,6 +116,7 @@ task before
   
   <xsl:param name="daps.header.logo">style_images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
+  <xsl:param name="daps.header.js">susebook.js</xsl:param>
   
   <!-- Should I generate breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
