@@ -44,9 +44,76 @@
     </refsect1>
     <refsect1>
         <title>Options</title>
-        <para><!--Options--></para>
+        <para>List of options and their usage</para>
+        <variablelist>
+            <varlistentry>
+                <term>DAPS installation directory. Default: /usr/share/daps</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-d, --dapsroot<replaceable>DAPSROOT</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Define the input ENV-file</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="req">-e, --envfile<replaceable>PATH_TO_ENVFILE</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Set the output directory. Default: current directory</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-o, --outputdir<replaceable>PATH_TO_OUTPUTDIR</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Define the product name in the output file´s header. Default: unset</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-p, --product<replaceable>PRODUCTNAME</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Set the root directory for custom stylsheets. If not spezified no custom stylesheets and css will be set. Default: unset</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-s, --styleroot<replaceable>STYLESHEETDIR</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Set the title of the manual. Default: automatic title determination</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-t, --title<replaceable>TITLE</replaceable></arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Display the help of the command</term>
+                <listitem><cmdsynopsis>
+                    <command>&daps_envconvert;</command>
+                    <arg choice="opt">-h, --help</arg>
+                </cmdsynopsis></listitem>
+            </varlistentry>
+             </variablelist>
     </refsect1>
-    
+    <refsect1>
+        <title>Examples</title>
+        <para><!--Example--></para>
+    </refsect1>
+    <refsect1 id="daps_envconvert.moreinfo">
+        <title>See Also</title>
+        <variablelist>
+            <varlistentry>
+                <term>
+                    <ulink url="http://daps.sf.net"/>
+                </term>
+                <listitem>
+                    <para>DAPS project homepage</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
     
     
 </refentry>
