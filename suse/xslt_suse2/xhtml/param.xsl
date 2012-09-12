@@ -121,14 +121,17 @@ task before
   <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
   <xsl:param name="daps.header.js">susebooks.js</xsl:param>
   
-  <!-- Should I generate breadcrumbs navigation?  -->
+  <!-- Create breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
   
-  <!-- Should I generate the language and format areas in the header? -->
+  <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>
   
   <!-- Separator between separate links: -->
   <xsl:param name="daps.breadcrumbs.sep">&#xa0;›&#xa0;</xsl:param>
+  
+  <!--  Create permalinks?-->
+  <xsl:param name="generate.permalinks" select="1"/>
   
   <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
   <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>

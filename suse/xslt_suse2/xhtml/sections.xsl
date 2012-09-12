@@ -88,10 +88,8 @@
     <xsl:call-template name="create.header.title">
       <xsl:with-param name="node" select=".."/>
     </xsl:call-template>
-    <xsl:comment>
-      <xsl:copy-of select="$title"/>
-    </xsl:comment>
-    <!--<xsl:if test="">-->
+    
+    <xsl:if test="$generate.permalinks != 0">
       <a title="Permalink" class="permalink">
           <xsl:attribute name="href">
             <xsl:call-template name="href.target">
@@ -100,7 +98,7 @@
           </xsl:attribute>
         <xsl:text>#</xsl:text>
       </a>
-    <!--</xsl:if>-->
+    </xsl:if>
   </xsl:element>
 </xsl:template>
   
