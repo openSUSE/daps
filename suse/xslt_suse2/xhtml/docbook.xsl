@@ -29,6 +29,8 @@
   
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
  <xsl:include href="param.xsl"/>
+ <xsl:include href="create-permalink.xsl"/>
+ 
  <xsl:include href="autotoc.xsl"/>
  <xsl:include href="lists.xsl"/>
  <xsl:include href="verbatim.xsl"/>

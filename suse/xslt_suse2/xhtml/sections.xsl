@@ -89,16 +89,9 @@
       <xsl:with-param name="node" select=".."/>
     </xsl:call-template>
     
-    <xsl:if test="$generate.permalinks != 0">
-      <a title="Permalink" class="permalink">
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="$section"/>
-            </xsl:call-template>
-          </xsl:attribute>
-        <xsl:text>#</xsl:text>
-      </a>
-    </xsl:if>
+    <xsl:call-template name="create.permalink">
+       <xsl:with-param name="object" select="$section"/>
+    </xsl:call-template>
   </xsl:element>
 </xsl:template>
   

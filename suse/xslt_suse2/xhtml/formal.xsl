@@ -59,19 +59,12 @@
   
     <div class="figure-title-wrap">
       <p class="figure-title">
-         <xsl:copy-of select="$title"/>
-        <!-- permalink -->
-        <a title="Permalink" class="permalink">
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="$object"/>
-            </xsl:call-template>
-          </xsl:attribute>
-        <xsl:text>#</xsl:text>
-      </a>
+        <xsl:copy-of select="$title"/>
+        <xsl:call-template name="create.permalink">
+          <xsl:with-param name="object" select="$object"/>
+        </xsl:call-template>
       </p>
     </div>
 </xsl:template>
-  
 
 </xsl:stylesheet>
