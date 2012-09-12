@@ -58,4 +58,30 @@
     </xsl:for-each>
   </xsl:template>
   
+  <xsl:template match="function/parameter" priority="2">
+    <xsl:call-template name="inline.italicseq"/>
+    <xsl:if test="following-sibling::*">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="parameter">
+    <xsl:call-template name="inline.italicseq"/>
+  </xsl:template>
+  
+  <xsl:template match="function/replaceable" priority="2">
+    <xsl:call-template name="inline.italicseq"/>
+    <xsl:if test="following-sibling::*">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="replaceable" priority="1">
+    <xsl:call-template name="inline.italicseq"/>
+  </xsl:template>
+  
+  <xsl:template match="command">
+    <xsl:call-template name="inline.monoseq"/>
+  </xsl:template>
+  
 </xsl:stylesheet>
