@@ -56,9 +56,9 @@
       <xsl:with-param name="node" select="$object"/>
     </xsl:call-template>
   </xsl:param>
-  
-    <div class="figure-title-wrap">
-      <p class="figure-title">
+    
+    <div class="{concat(local-name(),'-title-wrap')}">
+      <p class="{concat(local-name(), '-title')}">
         <xsl:copy-of select="$title"/>
         <xsl:call-template name="create.permalink">
           <xsl:with-param name="object" select="$object"/>
