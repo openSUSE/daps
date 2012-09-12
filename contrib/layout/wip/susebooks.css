@@ -67,13 +67,13 @@ html, body {
     min-width: 450px;
 }
 
-#_header, #_footer, #_toolbar-bottom, .chapter {
+#_header, #_footer, #_toolbar-bottom, .chapter, .preface, .book, .set {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
 }
 
-#_footer, #_toolbar-bottom, .chapter {
+#_footer, #_toolbar-bottom, .chapter, .preface, .book, .set {
     overflow: hidden;
 }
 
@@ -84,7 +84,7 @@ html, body {
     padding: 0;
 }
 
-#_header, #_footer, #_content .chapter {
+#_header, #_footer, #_header, #_footer, .chapter, .preface, .book, .set {
     padding: 0 10px;
 }
 
@@ -747,6 +747,9 @@ html, body {
 #_content a[id] {
     position: relative;
     top: -30px;
+    display: block;
+    width: 0;
+    height: 0;
 }
 
 .version-info {
@@ -762,7 +765,7 @@ html, body {
     border-radius: 3px;
 }
 
-#_content .chapter .title {
+#_content .title {
     font-size: 32px;
     font-weight: normal;
     padding: 30px 0 5px;
@@ -929,15 +932,15 @@ html, body {
 
 /* Text styles */
 
-#_content em, i, .guimenu {
+em, i, .guimenu {
     font-style: italic;
 }
 
-#_content em .guimenu, i .guimenu {
+#_content em .guimenu, #_content i .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-#_content strong, b {
+strong, b {
     font-weight: bold;
 }
 
@@ -953,28 +956,27 @@ html, body {
     color: #333;
 }
 
-#_content p a, .share a, .print a, #_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref, #_content .example-title .xref,
-#_content .figure-title .xref, #_content .procedure-title .xref {
+#_content .ulink, #_content .xref, .share a, .print a {
     color: #439539;
-}
-
-#_content p a, .share a, .print a {
     text-decoration: none;
 }
 
 #_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref, #_content .example-title .xref,
-#_content .figure-title .xref, #_content .procedure-title .xref {
+#_content .figure-title .xref, #_content .procedure-title .xref, #_content .title .ulink, #_content .subtitle .ulink,
+#_content .table-title .ulink, #_content .example-title .ulink, #_content .figure-title .ulink, #_content .procedure-title .ulink {
     text-decoration: underline;
 }
 
-#_content p a:hover, #_content p a:focus, #_content p a:active,
-#_content p a:visited:hover, #_content p a:visited:focus, #_content p a:visited:active,
+#_content .xref:hover, #_content .xref:focus, #_content .xref:active,
+#_content .xref:visited:hover, #_content .xref:visited:focus, #_content .xref:visited:active,
+#_content .ulink:hover, #_content .ulink:focus, #_content .ulink:active,
+#_content .ulink:visited:hover, #_content .ulink:visited:focus, #_content .ulink:visited:active,
 .share a:hover, .print a:hover, .share a:focus, .print a:focus {
     color: #439539;
     text-decoration: underline;
 }
 
-#_content p a:visited {
+#_content .xref:visited, #_content .ulink:visited {
     color: #5C3566;
 }
 
@@ -997,7 +999,6 @@ html, body {
     padding: 0px 4px;
     border: 1px solid #D1D1D3;
     border-radius: 3px;
-    background-color: #FFF;
     color: #333;
     text-transform: none;
     /* There might be code or commands within links. The following doesn't help, however. */
@@ -1046,9 +1047,9 @@ html, body {
 #_content .screen code, #_content .screen .command {
     border-radius: 0;
     background-color: transparent;
-    width: 100% !important;
     font-size: 100%;
     border: none;
+    padding: 0;
 }
 
 #_content .screen code {
@@ -1257,7 +1258,7 @@ html, body {
     background-color: #EFEFF0;
 }
 
-#_content .chapter ul {
+#_content ul {
     padding: 5px 0 5px 35px;
     margin: 0 10px 0 10px;
     display: block;
@@ -1265,7 +1266,7 @@ html, body {
     list-style-type: bullet;
 }
 
-#_content .procedure li p {
+#_content li p {
     font-weight: normal;
 }
 
