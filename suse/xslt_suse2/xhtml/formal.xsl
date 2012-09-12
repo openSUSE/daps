@@ -7,30 +7,70 @@
   exclude-result-prefixes="exsl">
 
 
+  <xsl:template match="procedure|example|table|figure|variablelist" 
+    mode="object.label.template">
+    <xsl:call-template name="gentext.template">
+      <xsl:with-param name="context" select="'styles'"/>
+      <xsl:with-param name="name" 
+        select="concat( local-name(),'-label')"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match="procedure|example|table|figure|variablelist"
+    mode="object.title.template">
+    <xsl:call-template name="gentext.template">
+      <xsl:with-param name="context" select="'styles'"/>
+      <xsl:with-param name="name" 
+        select="concat( local-name(),'-title')"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+
+  <xsl:template name="create.formal.title">
+    <xsl:param name="node" select="."/>
+    <xsl:variable name="label.template">
+      <xsl:apply-templates select="$node" mode="object.label.template"/>
+    </xsl:variable>
+    
+    <xsl:if test="$label.template != ''">
+      <span class="number">
+        <xsl:call-template name="substitute-markup">
+          <xsl:with-param name="template" select="$label.template"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+      </span>
+    </xsl:if>
+    <span class="name">
+      <xsl:apply-templates select="$node" mode="title.markup">
+        <xsl:with-param name="allow-anchors" select="1"/>
+      </xsl:apply-templates>
+      <xsl:text> </xsl:text>
+    </span>
+  </xsl:template>
+  
+
 <xsl:template name="formal.object.heading">
   <xsl:param name="object" select="."/>
   <xsl:param name="title">
-<!--    <xsl:apply-templates select="$object" mode="object.title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates>-->
-    <xsl:call-template name="create.header.title">
+    <xsl:call-template name="create.formal.title">
       <xsl:with-param name="node" select="$object"/>
     </xsl:call-template>
   </xsl:param>
   
-  <xsl:choose>
-    <xsl:when test="$make.clean.html != 0">
-      <xsl:variable name="html.class" select="concat(local-name($object),'-title')"/>
-      <div class="{$html.class}">
-        <xsl:copy-of select="$title"/>
-      </div>
-    </xsl:when>
-    <xsl:otherwise>
-      <p class="title">
-          <xsl:copy-of select="$title"/>
+    <div class="figure-title-wrap">
+      <p class="figure-title">
+         <xsl:copy-of select="$title"/>
+        <!-- permalink -->
+        <a title="Permalink" class="permalink">
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="$object"/>
+            </xsl:call-template>
+          </xsl:attribute>
+        <xsl:text>#</xsl:text>
+      </a>
       </p>
-    </xsl:otherwise>
-  </xsl:choose>
+    </div>
 </xsl:template>
   
 
