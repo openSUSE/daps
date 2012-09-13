@@ -30,7 +30,7 @@
        <li><span class="ds-label">Filename: </span><xsl:value-of select="$filename"/></li>
        <li><span class="ds-label">Maintainer: </span><xsl:value-of select="$dpfilenamenode/@maintainer"/></li>
        <li>
-         <span class="ds_label">Status: </span><xsl:value-of select="$dpfilenamenode/@status"/>
+         <span class="ds-label">Status: </span><xsl:value-of select="$dpfilenamenode/@status"/>
          <xsl:if test="$dpfilenamenode/@prelim = 'yes'">
            <xsl:text>, preliminary</xsl:text>
          </xsl:if>
