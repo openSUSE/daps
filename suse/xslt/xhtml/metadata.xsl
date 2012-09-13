@@ -18,17 +18,17 @@
 
  <xsl:variable name="metafilenodes" select="document($metafilename,.)/*/dp:filename"/>
  <xsl:variable name="dpfilenamenode" select="$metafilenodes[generate-id(.) =   generate-id(key('status', $filename))]"/>
-  <div class="doc-status">
+ 
    <xsl:choose>
     <xsl:when test="count($dpfilenamenode) = 0">
      <xsl:message>WARNING: Could not retrieve metadata for filename <xsl:value-of select="concat(&quot;'&quot;, $filename, &quot;' &quot;)"/></xsl:message>
-      <span class="ds-error">Status information could not be retrieved.</span>
     </xsl:when>
     <xsl:otherwise>
-      <span class="ds-head">Status information</span>
+     <div class="docstatus">
+      <span class="ds_head">Status information</span>
       <ul>
-       <li><span class="ds-label">Filename: </span><xsl:value-of select="$filename"/></li>
-       <li><span class="ds-label">Maintainer: </span><xsl:value-of select="$dpfilenamenode/@maintainer"/></li>
+       <li><span class="ds_label">Filename: </span><xsl:value-of select="$filename"/></li>
+       <li><span class="ds_label">Maintainer: </span><xsl:value-of select="$dpfilenamenode/@maintainer"/></li>
        <li>
          <span class="ds_label">Status: </span><xsl:value-of select="$dpfilenamenode/@status"/>
          <xsl:if test="$dpfilenamenode/@prelim = 'yes'">
@@ -36,9 +36,9 @@
          </xsl:if>
        </li>
       </ul>
+     </div>
     </xsl:otherwise>
    </xsl:choose>
-  </div>
 </xsl:template>
 
 </xsl:stylesheet>
