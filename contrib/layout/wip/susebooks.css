@@ -1183,7 +1183,7 @@ strong, b {
     display: block;
 }
 
-#_content .procedure-title + .procedure-contents {
+#_content .procedure-title-wrap + .procedure-contents {
     margin: 10px 0 17px;
 }
 
@@ -1273,6 +1273,56 @@ strong, b {
 #_content .procedure > p {
     margin: 0 10px 5px;
 }
+
+/* Review features */
+
+.remark, .doc-status {
+    background-color: #E6E0E8;
+    color: #000;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.remark {
+    padding: 1px 5px;
+    border-left: 3px solid #5C3566;
+}
+
+.remark .remark {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.doc-status {
+    margin: 0 auto;
+    min-width: 380px;
+    max-width: 978px;
+    padding: 10px;
+}
+
+.doc-status li {
+    color: #000;
+}
+
+.ds-error {
+    font-style: italic;
+}
+
+
+.ds-label {
+    font-weight: bold;
+}
+
+.ds-head {
+    font-style: normal;
+    font-size: 22px;
+}
+
+body.draft {
+    background: url(style_images/draft.png) no-repeat fixed left 50%;
+}
+
 
 @media print {
     #_fixed-header-wrap, #_toolbar-wrap, .pickers, #_inward, #_footer-wrap {

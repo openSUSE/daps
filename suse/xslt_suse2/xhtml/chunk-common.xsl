@@ -403,7 +403,14 @@
     <xsl:attribute name="onload">show(); labelInputFind();</xsl:attribute>
   </xsl:template>
   
-
+  <xsl:template name="body.class.attribute">
+    <xsl:if test="($draft.mode = 'yes' or
+                  ($draft.mode = 'maybe' and
+                  ancestor-or-self::*[@status][1]/@status = 'draft'))
+                  and $draft.watermark.image != ''">
+      <xsl:attribute name="class">draft</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
   <!-- ===================================================== -->
   
   <xsl:template name="chunk-element-content">
@@ -434,6 +441,7 @@
       <body>
         <xsl:call-template name="body.attributes"/>
         <xsl:call-template name="body.onload.attribute"/>
+        <xsl:call-template name="body.class.attribute"/>
         <div id="_outer-wrap">
           <div id="_white-bg">
             <div id="_header">

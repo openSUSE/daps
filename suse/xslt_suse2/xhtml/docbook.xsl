@@ -39,6 +39,6 @@
  <xsl:include href="sections.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
- <!--SUSE specific-->
+ 
  <xsl:include href="metadata.xsl"/>
 </xsl:stylesheet>
