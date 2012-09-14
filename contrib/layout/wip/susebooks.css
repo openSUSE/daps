@@ -67,13 +67,17 @@ html, body {
     min-width: 450px;
 }
 
-#_header, #_footer, #_toolbar-bottom, .set, .book, .article, .part, .chapter, .preface, .appendix {
+#_header, #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
+#_content > .appendix {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
 }
 
-#_footer, #_toolbar-bottom, .set, .book, .article, .part, .chapter, .preface, .appendix {
+#_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter,
+#_content > .preface, #_content > .appendix {
     overflow: hidden;
 }
 
@@ -82,10 +86,6 @@ html, body {
     min-width: 420px;
     max-width: 1018px;
     padding: 0;
-}
-
-#_header, #_footer, #_header, #_footer, .set, .book, .article, .part, .chapter, .preface, .appendix {
-    padding: 0 10px;
 }
 
 /* to be able to position various elements and be able to use z-index*/
@@ -115,7 +115,18 @@ html, body {
 
 #_logo {
     float: left;
-    margin: 22px 22px 22px 0;
+    margin: 22px 22px 27px 0;
+    width: 81px;
+    height: 38px;
+}
+
+#_logo img {
+    width: 81px;
+    height: 38px;
+    color: #439539;
+    line-height: 55px;
+    font-weight: bold;
+    display: block;
 }
 
 #_header .crumbs {
@@ -738,8 +749,9 @@ html, body {
 
 /* .CHAPTER/... AREA */
 
- .set, .book, .article, .part, .chapter, .preface, .appendix {
+#_content > .set, #_content > .book, #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface, #_content > .appendix {
     margin-bottom: 75px;
+    padding: 0 10px;
 }
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
@@ -866,11 +878,11 @@ html, body {
     opacity: 1;
 }
 
-#_content .toc {
+#_content .titlepage .toc {
     padding: 17px;
 }
 
-#_content .chapter > .line {
+#_content .line {
     margin: 0 0 36px 0;
     border-bottom: 1px solid #439539;
     width: 100%;
