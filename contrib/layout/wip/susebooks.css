@@ -67,13 +67,13 @@ html, body {
     min-width: 450px;
 }
 
-#_header, #_footer, #_toolbar-bottom, .chapter, .preface, .book, .set {
+#_header, #_footer, #_toolbar-bottom, .set, .book, .article, .part, .chapter, .preface, .appendix {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
 }
 
-#_footer, #_toolbar-bottom, .chapter, .preface, .book, .set {
+#_footer, #_toolbar-bottom, .set, .book, .article, .part, .chapter, .preface, .appendix {
     overflow: hidden;
 }
 
@@ -84,7 +84,7 @@ html, body {
     padding: 0;
 }
 
-#_header, #_footer, #_header, #_footer, .chapter, .preface, .book, .set {
+#_header, #_footer, #_header, #_footer, .set, .book, .article, .part, .chapter, .preface, .appendix {
     padding: 0 10px;
 }
 
@@ -736,9 +736,9 @@ html, body {
 }
 
 
-/* .CHAPTER AREA */
+/* .CHAPTER/... AREA */
 
-#_content .chapter {
+ .set, .book, .article, .part, .chapter, .preface, .appendix {
     margin-bottom: 75px;
 }
 
@@ -764,6 +764,23 @@ html, body {
     font-size: 13px;
     border-radius: 3px;
 }
+
+#_content .book .title, #_content .set .title {
+    font-size: 48px;
+    font-weight: normal;
+    line-height: 120%;
+    width: auto;
+    clear: both;
+    text-align: center;
+    color: #439539;
+    padding: 70px 0;
+    /*padding: 200px 36px 36px 36px;*/
+}
+
+/*#_content .book .titlepage > div > div:first-child {
+    background: url(style_images/chameleon.jpg) scroll no-repeat bottom left;
+    height: 400px;
+}*/
 
 #_content .title {
     font-size: 32px;
@@ -862,6 +879,14 @@ html, body {
 #_content .toc a {
     text-decoration: none;
 }
+
+#_content .legalnotice p {
+    font-size: 12px;
+    color: #666;
+    line-height: 140%;
+    margin: 5px 0 0 0;
+}
+
 
 /* Thou shalt not ... */
 
@@ -996,14 +1021,18 @@ strong, b {
 
 #_content code, #_content .command {
     font: normal 100% 'Droid Sans Mono', monospace;
-    padding: 0px 4px;
+    padding: 0 4px;
     border: 1px solid #D1D1D3;
     border-radius: 3px;
     color: #333;
     text-transform: none;
-    /* There might be code or commands within links. The following doesn't help, however. */
-    text-decoration: none !important;
     display: inline-block;
+}
+
+
+#_content code code, #_content code .command, #_content .command code {
+    padding: 0;
+    border: none;
 }
 
 
@@ -1146,6 +1175,14 @@ strong, b {
     border-color: #999;
     border-style: solid;
     font-weight: normal;
+    white-space: nowrap;
+}
+
+#_content a:hover .keycap, #_content a:focus .keycap, #_content a:active .keycap,
+#_content a:hover .command, #_content a:focus .command, #_content a:active .command,
+#_content a:hover code, #_content a:focus code, #_content a:active code {
+    background-color: #f7faf6;
+    border-color: #439539;
 }
 
 /* We put an ndash character between keycaps that are part of an accelerator */
