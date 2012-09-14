@@ -51,7 +51,7 @@
   <xsl:param name="footer.rule" select="0"/>
 
 <!-- 9. Meta/*Info and Titlepages =============================== -->
-  <xsl:param name="generate.legalnotice.link" select="1"/>
+  <xsl:param name="generate.legalnotice.link" select="0"/>
   
 <!-- 10. Reference Pages ======================================== -->
 
