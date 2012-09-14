@@ -1136,6 +1136,33 @@ strong, b {
     overflow: hidden;
 }
 
+
+/* The following three rules should be considered make-shift fixes for DocBook's
+obnoxious image handling:
+   a) images on a web page should by default be as wide and tall as their pixel size
+      and the monitor allow, no? Now they are.
+   b) DocBook creates non-sensical tables and div.mediaobjects around images, so
+      let's style those, too.
+   c) Making a div that's exactly as wide as needed is a bit tricky (unless it's
+      floating ... should ponder that some time), so now there's a 100%-width
+      grey frame around images that should make people think that that's okay...*/
+/* Begin special rules */
+
+#_content .figure .mediaobject {
+    padding: 20px 10px;
+    background-color: #333;
+}
+
+#_content .figure table {
+    margin: 0 auto;
+}
+
+#_content .informalfigure table, #_content .informalfigure img, #_content .figure table {
+    width: auto !important;
+}
+
+/* End special rules*/
+
 #_content .figure img {
     padding: 1px;
     background-color: #FFF;
