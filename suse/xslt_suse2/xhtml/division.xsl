@@ -5,7 +5,7 @@
 
    Author(s): Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
-
+   
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -57,6 +57,43 @@
         <xsl:with-param name="node" select="$node"/>
       </xsl:call-template>
     </h1>
+  </xsl:template>
+
+
+  <xsl:template match="book">
+    <xsl:call-template name="id.warning"/>
+    
+    <div>
+      <xsl:apply-templates select="." mode="common.html.attributes"/>
+      <xsl:call-template name="id.attribute">
+        <xsl:with-param name="conditional" select="0"/>
+      </xsl:call-template>
+      
+      <xsl:call-template name="book.titlepage"/>
+      
+      <xsl:apply-templates select="dedication" mode="dedication"/>
+      <xsl:apply-templates select="acknowledgements" mode="acknowledgements"/>
+      
+      <xsl:variable name="toc.params">
+        <xsl:call-template name="find.path.params">
+          <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <xsl:call-template name="make.lots">
+        <xsl:with-param name="toc.params" select="$toc.params"/>
+        <xsl:with-param name="toc">
+          <xsl:call-template name="division.toc">
+            <xsl:with-param name="toc.title.p" select="contains($toc.params, 'title')"/>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
+      
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/legalnotice"/>
+      <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/legalnotice"/>
+      
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
   
 </xsl:stylesheet>

@@ -40,6 +40,7 @@
  <xsl:include href="division.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
+ <xsl:include href="titlepage.templates.xsl"/>
  
  <xsl:include href="metadata.xsl"/>
 </xsl:stylesheet>
