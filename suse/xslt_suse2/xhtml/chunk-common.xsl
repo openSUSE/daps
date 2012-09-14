@@ -180,7 +180,7 @@
     <xsl:param name="next"/>
 
     <div class="buttons">
-      <a class="top-button button">Top</a>
+      <a class="top-button button" href="#">Top</a>
       <div class="button">
         <xsl:call-template name="header.navigation">
           <xsl:with-param name="next" select="$next"/>
@@ -455,12 +455,13 @@
             <div class="clearme"></div>
             </div>
           </div>
-          <xsl:call-template name="fixed-header-wrap">
+          
+          <xsl:call-template name="toolbar-wrap">
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
           
-          <xsl:call-template name="toolbar-wrap">
+          <xsl:call-template name="fixed-header-wrap">
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
