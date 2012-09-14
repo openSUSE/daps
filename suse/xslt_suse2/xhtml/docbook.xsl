@@ -37,6 +37,7 @@
  <xsl:include href="component.xsl"/>
  <xsl:include href="formal.xsl"/>
  <xsl:include href="sections.xsl"/>
+ <xsl:include href="division.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
  
