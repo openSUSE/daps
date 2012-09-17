@@ -29,7 +29,14 @@
   <xsl:import href="&www;/chunk-common.xsl"/>
   
 
-   <!-- ===================================================== -->
+  <xsl:template name="clearme">
+    <xsl:param name="wrapper">div</xsl:param>
+    <xsl:element name="{$wrapper}" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:attribute name="class">clearme</xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+  <!-- ===================================================== -->
   <xsl:template match="chapter|appendix|article|book|part|glossary|sect1|bibliography"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
@@ -188,7 +195,7 @@
           <!--<xsl:with-param name="nav.context" select="$nav.context"/>-->
         </xsl:call-template>
       </div>
-      <div class="clearme"></div>
+      <xsl:call-template name="clearme"/>
     </div>
   </xsl:template>
 
@@ -208,7 +215,7 @@
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>
         </xsl:call-template>
-        <div class="clearme"></div>
+        <xsl:call-template name="clearme"/>
       </div>
     </div>
   </xsl:template>
@@ -241,7 +248,7 @@
             <label id="_find-input-label"
               onclick="document.getElementById('_find-input').focus(); return false;"
               >Find</label>
-            <div class="clearme"></div>
+            <xsl:call-template name="clearme"/>
           </div>
         </form>
       </div>
@@ -263,7 +270,9 @@
             onclick="activate('_toc_rea')" title="Contents">
             <span class="tool-spacer">
               <span class="toc-icon"> </span>
-              <span class="clearme"></span>
+              <xsl:call-template name="clearme">
+                <xsl:with-param name="wrapper">span</xsl:with-param>
+              </xsl:call-template>
             </span>
             <span class="tool-label">Contents</span>
           </a>
@@ -278,7 +287,7 @@
               <div class="bubble-toc">
                 <!-- FIXME -->
               </div>
-              <div class="clearme"></div>
+              <xsl:call-template name="clearme"/>
             </div>
           </div>
         </div>
@@ -452,7 +461,7 @@
                 <xsl:with-param name="next" select="$next"/>
               </xsl:call-template>
               
-            <div class="clearme"></div>
+              <xsl:call-template name="clearme"/>
             </div>
           </div>
           
