@@ -74,6 +74,7 @@
     -->
     <xsl:choose>
       <xsl:when test="self::article">0</xsl:when>
+      <xsl:when test="self::book">0</xsl:when>
       <xsl:when test="ancestor-or-self::preface and
         number($preface.autolabel) = 0">0</xsl:when>
       <xsl:when test="ancestor-or-self::glossary">0</xsl:when>
