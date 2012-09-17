@@ -66,6 +66,24 @@
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="depth" select="1"/>
   <xsl:param name="depth.from.context" select="8"/>
+  
+  <xsl:variable name="label.in.toc">
+    <!-- Flag all elements which do not need an label 
+        0 = no, don't create a label
+        1 = yes, create a label
+    -->
+    <xsl:choose>
+      <xsl:when test="self::article">0</xsl:when>
+      <xsl:when test="ancestor-or-self::preface and
+        number($preface.autolabel) = 0">0</xsl:when>
+      <xsl:when test="ancestor-or-self::glossary">0</xsl:when>
+      <xsl:when test="ancestor-or-self::bibliography">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+ <!-- <xsl:message>label.in.toc: <xsl:value-of select="concat(local-name(),
+    ':', $label.in.toc )"/></xsl:message>-->
 
  <span>
   <xsl:attribute name="class"><xsl:value-of select="local-name(.)"/></xsl:attribute>
@@ -81,15 +99,16 @@
     
   <!-- * if $autotoc.label.in.hyperlink is non-zero, then output the label -->
   <!-- * as part of the hyperlinked title -->
-  <xsl:if test="not($autotoc.label.in.hyperlink = 0)">
-    <xsl:variable name="label">
-      <span class="number">
-        <xsl:apply-templates select="." mode="label.markup"/>
-        <xsl:value-of select="$autotoc.label.separator"/>
-         <xsl:text> </xsl:text>
-      </span>
-    </xsl:variable>
-    <xsl:copy-of select="$label"/>
+  <xsl:if test="not($autotoc.label.in.hyperlink = 0) and 
+                number($label.in.toc) != 0">
+      <xsl:variable name="label">
+        <span class="number">
+          <xsl:apply-templates select="." mode="label.markup"/>
+          <xsl:value-of select="$autotoc.label.separator"/>
+          <xsl:text> </xsl:text>
+        </span>
+      </xsl:variable>
+      <xsl:copy-of select="$label"/>
   </xsl:if>
 
   <span class="name">
