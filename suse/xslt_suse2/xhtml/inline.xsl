@@ -28,6 +28,26 @@
   </xsl:template>
   
   
+  <xsl:template match="email">
+    <!--<span>-->
+    <xsl:if test="not($email.delimiters.enabled = 0)">
+      <xsl:text>&lt;</xsl:text>
+    </xsl:if>
+    <a>
+      <xsl:apply-templates select="." mode="common.html.attributes"/>
+      <xsl:call-template name="id.attribute"/>
+      <xsl:attribute name="href">
+        <xsl:text>mailto:</xsl:text>
+        <xsl:value-of select="."/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </a>
+    <xsl:if test="not($email.delimiters.enabled = 0)">
+      <xsl:text>&gt;</xsl:text>
+    </xsl:if>
+    <!--</span>-->
+  </xsl:template>
+  
   <xsl:template match="keycap">
     <!-- See also Ticket#84 -->
     <xsl:choose>
