@@ -3,7 +3,43 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
+
   <!-- article titlepage templates -->
+    <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
+    <div xsl:use-attribute-sets="article.titlepage.recto.style">
+      <span >
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">Authors</xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>: </xsl:text>
+      </span>
+      <xsl:call-template name="person.name.list">
+        <xsl:with-param name="person.list" select="author|corpauthor"/>
+      </xsl:call-template>
+      
+    </div>
+    <xsl:if test="othercredit|editor">
+      <div>
+        <xsl:call-template name="person.name.list">
+        <xsl:with-param name="person.list" select="othercredit|editor"/>
+      </xsl:call-template>
+      </div>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="author" mode="article.titlepage.recto.auto.mode">
+    <div xsl:use-attribute-sets="book.titlepage.recto.style">
+      <span>
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">Authors</xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>: </xsl:text>
+      </span>
+      <xsl:call-template name="person.name"/>
+    </div>
+  </xsl:template>
+
+  
   <xsl:template name="article.titlepage.recto">
         <xsl:choose>
             <xsl:when test="articleinfo/title">
@@ -68,8 +104,7 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
   </xsl:template>
 
-  <!-- book titlepage templates -->
-  
+  <!-- book titlepage templates -->  
   <xsl:template name="book.titlepage.separator"/>
   
   <xsl:template name="book.titlepage.recto">
@@ -151,6 +186,7 @@
       </span>
       <xsl:call-template name="person.name"/>
     </div>
-</xsl:template>
+  </xsl:template>
+
 
 </xsl:stylesheet>
