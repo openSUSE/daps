@@ -97,7 +97,6 @@
             </xsl:when>
         </xsl:choose>
         
-        <xsl:message>book.titlepage.recto</xsl:message>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
