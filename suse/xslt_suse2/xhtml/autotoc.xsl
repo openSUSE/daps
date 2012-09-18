@@ -125,18 +125,8 @@
 
     <xsl:call-template name="subtoc">
       <xsl:with-param name="toc-context" select="$toc-context"/>
-      <xsl:with-param name="nodes" select="EMPTY|article"/>
-    </xsl:call-template>
-  </xsl:template>
-  
-  
-  <xsl:template match="article" mode="toc">
-    <xsl:param name="toc-context" select="."/>
-
-    <xsl:call-template name="subtoc">
-      <xsl:with-param name="toc-context" select="$toc-context"/>
       <xsl:with-param name="nodes" select="EMPTY"/>
     </xsl:call-template>
   </xsl:template>
-    
+
 </xsl:stylesheet>
