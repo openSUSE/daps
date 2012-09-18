@@ -31,7 +31,7 @@
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
       <span>
       <xsl:call-template name="gentext">
-        <xsl:with-param name="key">Authors</xsl:with-param>
+        <xsl:with-param name="key">Author</xsl:with-param>
       </xsl:call-template>
       <xsl:text>: </xsl:text>
       </span>
