@@ -143,7 +143,6 @@
         
         <!--<xsl:message> >> Begin For loop:</xsl:message>-->
         <xsl:for-each select="$setdiff">
-          <xsl:message>  <xsl:value-of select="local-name(.)"/></xsl:message>
           <xsl:apply-templates select="." mode="breadcrumbs"/>
           <xsl:if test="position() != last()">
             <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
