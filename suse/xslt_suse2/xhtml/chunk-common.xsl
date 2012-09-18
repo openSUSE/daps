@@ -37,7 +37,8 @@
   </xsl:template>
 
   <!-- ===================================================== -->
-  <xsl:template match="chapter|appendix|article|book|part|glossary|sect1|bibliography"
+  <xsl:template
+    match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
@@ -113,6 +114,11 @@
 
     <!--<xsl:if test="$debug">
               <xsl:message>breadcrumbs.navigation:
+    count(setdiff):  <xsl:value-of select="count($setdiff)"/>
+    $setdiff:        <xsl:for-each select="$setdiff">
+      <xsl:value-of select="local-name()"/>
+      <xsl:text>, </xsl:text>
+    </xsl:for-each>
     Element:  <xsl:value-of select="local-name(.)"/>
     prev:     <xsl:value-of select="local-name($prev)"/>
     next:     <xsl:value-of select="local-name($next)"/>
@@ -124,22 +130,26 @@
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        <!-- TODO: Do we need an icon always? -->
-        <!--<xsl:if test="$rootid = ''">-->
+        <!-- TODO: Do we need always an icon? -->
              <a href="{concat($root.filename, $html.ext)}"
                class="book-link"
                title="Documentation">
                   <span class="book-icon">&nbsp;</span>
              </a>
+        <!-- <xsl:if test="$rootid = '' or 
+                      generate-id(key('id', $rootid)) = generate-id($home)">-->
           <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
         <!--</xsl:if>-->
         
+        <!--<xsl:message> >> Begin For loop:</xsl:message>-->
         <xsl:for-each select="$setdiff">
+          <xsl:message>  <xsl:value-of select="local-name(.)"/></xsl:message>
           <xsl:apply-templates select="." mode="breadcrumbs"/>
           <xsl:if test="position() != last()">
             <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
           </xsl:if>
         </xsl:for-each>
+        <!--<xsl:message> >> End For loop:</xsl:message>-->
       </div>
     </xsl:if>
   </xsl:template>
