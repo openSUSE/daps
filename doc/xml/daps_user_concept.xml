@@ -250,18 +250,20 @@
    <title>Single Deliverables (Article or Book)</title>
    <para>
     The most elementary case of a documentation project is probably a white
-    paper or article. Typically, its contents is covered in a single XML
-    file with <sgmltag>article</sgmltag> as root element. In this case, the
+    paper or article. Typically, its content can be contained in a single XML
+    file with <sgmltag>article</sgmltag> as the root element. In this case, this
     single XML file would be the Main file as it specifies the highest-level
     object in your documentation project (<sgmltag>article</sgmltag>). Apart
     from document title and body, the file can contain other information
-    such as legal notice, release information, author data etc. An article
+    such as a legal notice, release information, author data etc. An article
     may be structured into sections (by use of <sgmltag>section</sgmltag>
     elements or <sgmltag>sect1</sgmltag>, <sgmltag>sect2</sgmltag> etc.).
    </para>
    <tip>
     <title>Creating an Example Document</title>
     <para>
+     <remark>Is the following (xref) good style? I found it irritating when I
+     first stumbled upon it. -- sknorr, 2012-09-18</remark>
      <xref linkend="pro.daps.init" xrefstyle="select:title"/> allows you to
      automatically set up an example article or book, together with a &dc;
      file. The examples below are based on the output of
@@ -317,9 +319,9 @@
      </screen>
    </example>
    <para>
-    Let us assume the XML file shown in <xref linkend="ex.daps.main.art"/>
+    Let us assume, the XML file shown in <xref linkend="ex.daps.main.art"/>
     is named <filename>MAIN-DAPS-example-article.xml</filename> and you want
-    to publish it in default DocBook layout, without any special
+    to publish it using the default DocBook layout and have no special
     requirements. To generate output, you usually create a &dc; file per
     article or book, specifying a number of parameters such as the Main file
     or which layout to use. Of the multiple parameters that can be set in
@@ -344,15 +346,15 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
    <para>
     The example above is a bit artificial, though: If you do not want to
     specify any further parameters (apart from the Main file), you can also
-    set the <parameter>MAIN</parameter> parameter as command line option
-    during generation of the output format. In that case, you can do
-    completely without &dc; file. For details, refer to
+    set the <parameter>MAIN</parameter> parameter as a command line option
+    when generating the output format. In that case, you can do
+    completely without a &dc; file. For details, refer to
     <xref linkend="cha.daps.user.output"/>.
    </para>
 <!-- <screen>daps -m xml/MAIN-daps-example.xml html</screen>-->
    <para>
-    In case your documentation project does not consist of an article, but a
-    single book, the basic setup of Main file and &dc; file is similar:
+    In case your documentation project consists of a single book, instead of an
+    article (as assumed before), the basic setup of Main file and &dc; file is similar:
    </para>
    <example id="ex.daps.main.book">
     <title>Main File of a Book (DocBook 4.x)</title>
@@ -394,25 +396,25 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
 </screen>
    </example>
    <para>
-    In the example above, the book contents is also covered in a single XML
-    file with <sgmltag>book</sgmltag> as root element. In contrast to an
-    article, books can have more structure levels: they are usually divided
-    into <sgmltag>chapter</sgmltag> elements (that may contain sections and
-    subsections) as outlined in <xref linkend="ex.daps.main.book"/>. In
-    addition to chapters, books may also contain other structure elements
-    such as <sgmltag>preface</sgmltag>, <sgmltag>glossary</sgmltag>, or
-    <sgmltag>appendix</sgmltag>. As additional structure level, books may
-    also contain parts. For a complete reference, see
-    <citetitle>&tdg;</citetitle>, available at
+    In the above example, the book's contents are also contained in a single XML
+    file, however, this time with <sgmltag>book</sgmltag> as the root element.
+    In contrast to an article, books can contain more structural levels: they 
+    are usually divided into <sgmltag>chapter</sgmltag> elements (that may
+    contain sections and subsections) as outlined in 
+    <xref linkend="ex.daps.main.book"/>. In addition to chapters, books may 
+    also contain other structural elements such as <sgmltag>preface</sgmltag>,
+    <sgmltag>glossary</sgmltag>, and <sgmltag>appendix</sgmltag>. A further
+    additional structural level is called <sgmltag>part</sgmltag>. For a 
+    complete reference, see <citetitle>&tdg;</citetitle>, available at
     <ulink
      url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
    </para>
    <para>
-    Let us assume the XML file shown in <xref linkend="ex.daps.main.book"/>
+    Let us assume, the XML file shown in <xref linkend="ex.daps.main.book"/>
     is named <filename>MAIN-DAPS-example-book.xml</filename> and you want to
     publish it in a custom layout. To generate output, you would create a
     &dc; file pointing to the Main file of the book, and additionally
-    specifying a set of custom stylesheets.
+    specify a set of custom stylesheets.
    </para>
    <example id="ex.daps.dc.book">
     <title>&dc; File For a Book with Custom Layout</title>
@@ -449,9 +451,9 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     <sgmltag>set</sgmltag>, the Main file is the one that contains the
     <sgmltag>set</sgmltag> element. In the following example, the components
     of the set (individual books) are not part of the Main file, but have
-    been put into separate document files (<sgmltag>book*.xml</sgmltag>),
-    that are then assembled in the Main file using XIncludes. Note that this
-    is not specific for a set&mdash;it is mainly a means of modularizing
+    been put into separate document files (<code>book*.xml</code>),
+    that are then assembled in the Main file using <literal>XIncludes</literal>.
+    Note that this is not specific to sets&mdash;it is mainly a means of modularizing
     your documents. You can also use XIncludes for splitting up books,
     articles or chapters into separate files. For more information, refer to
     <ulink
@@ -749,10 +751,10 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
     </para>
    </callout>
    <callout arearefs="co.docdir.xml">
-    <para> Directory holding the Main XML file and all other XML files for the
+    <para>Directory holding the Main XML file and all other XML files for the
      documentation project. If you declare entities in one or more external
      files (for example, in <filename>entity-decl.ent</filename>), put the
-     entity declaration files here, too. </para>
+     entity declaration files here, too.</para>
    </callout>
    <callout arearefs="co.docdir.main">
     <para> The Main file of the documentation project. It contains the
