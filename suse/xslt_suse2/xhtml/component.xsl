@@ -98,7 +98,7 @@
     </xsl:element>
   </xsl:template>  
 
-  <xsl:template match="chapter">
+  <xsl:template match="chapter|preface|appendix|glossary">
     <xsl:call-template name="id.warning"/>
     
     <xsl:element name="{$div.element}" namespace="http://www.w3.org/1999/xhtml">
