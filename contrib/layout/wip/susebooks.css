@@ -69,7 +69,8 @@ html, body {
 
 #_header, #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
-#_content > .appendix {
+#_content > .appendix, #_content > .glossary, #_content > .reference,
+#_content > .bibliography {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
@@ -77,7 +78,8 @@ html, body {
 
 #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter,
-#_content > .preface, #_content > .appendix {
+#_content > .preface, #_content > .appendix, #_content > .glossary,
+#_content > .reference, #_content > .bibliography {
     overflow: hidden;
 }
 
@@ -749,7 +751,9 @@ html, body {
 
 /* .CHAPTER/... AREA */
 
-#_content > .set, #_content > .book, #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface, #_content > .appendix {
+#_content > .set, #_content > .book, #_content > .article, #_content > .part,
+#_content > .chapter, #_content > .preface, #_content > .appendix,
+#_content > .glossary, #_content > .reference, #_content > .bibliography {
     margin-bottom: 75px;
     padding: 0 10px;
 }
@@ -762,6 +766,10 @@ html, body {
     display: block;
     width: 0;
     height: 0;
+}
+
+#_content .screen a[id] {
+    display: none;
 }
 
 .version-info {
@@ -999,14 +1007,17 @@ strong, b {
     color: #333;
 }
 
-#_content .ulink, #_content .xref, #_content .email, .share a, .print a {
+#_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
+#_content .glossseealso, .share a, .print a {
     color: #439539;
     text-decoration: none;
 }
 
-#_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref, #_content .example-title .xref,
-#_content .figure-title .xref, #_content .procedure-title .xref, #_content .title .ulink, #_content .subtitle .ulink,
-#_content .table-title .ulink, #_content .example-title .ulink, #_content .figure-title .ulink, #_content .procedure-title .ulink {
+#_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref,
+#_content .example-title .xref, #_content .figure-title .xref,
+#_content .procedure-title .xref, #_content .title .ulink, #_content .subtitle .ulink,
+#_content .table-title .ulink, #_content .example-title .ulink,
+#_content .figure-title .ulink, #_content .procedure-title .ulink {
     text-decoration: underline;
 }
 
@@ -1014,12 +1025,19 @@ strong, b {
 #_content .xref:visited:hover, #_content .xref:visited:focus, #_content .xref:visited:active,
 #_content .ulink:hover, #_content .ulink:focus, #_content .ulink:active,
 #_content .ulink:visited:hover, #_content .ulink:visited:focus, #_content .ulink:visited:active,
+#_content .email:hover, #_content .email:focus, #_content .email:active,
+#_content .email:visited:hover, #_content .email:visited:focus, #_content .email:visited:active,
+#_content .glosssee:hover, #_content .glosssee:focus, #_content .glosssee:active,
+#_content .glosssee:visited:hover, #_content .glosssee:visited:focus, #_content .glosssee:visited:active,
+#_content .glossseealso:hover, #_content .glossseealso:focus, #_content .glossseealso:active,
+#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active,
 .share a:hover, .print a:hover, .share a:focus, .print a:focus {
     color: #439539;
     text-decoration: underline;
 }
 
-#_content .xref:visited, #_content .ulink:visited {
+#_content .xref:visited, #_content .ulink:visited, #_content .email:visited,
+#_content .glosssee:visited, #_content .glossseealso:visited {
     color: #5C3566;
 }
 
@@ -1112,17 +1130,17 @@ strong, b {
     font-size: 16px;
 }
 
-#_content .variablelist dt {
+#_content .variablelist dt, #_content .glossary dt {
     font-weight: bold;
     color: #333;
 }
 
-#_content .variablelist dd {
+#_content .variablelist dd, #_content .glossary dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
 
-#_content .variablelist dd p {
+#_content .variablelist dd p, #_content .glossary dd p {
     margin: 0;
 }
 
