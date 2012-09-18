@@ -104,7 +104,8 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
   </xsl:template>
 
-  <!-- book titlepage templates -->  
+  <!-- book titlepage templates --> 
+  <xsl:template name="set.titlepage.separator"/>
   <xsl:template name="book.titlepage.separator"/>
   
   <xsl:template name="book.titlepage.recto">
@@ -169,6 +170,10 @@
     </div>
     <xsl:if test="othercredit|editor">
       <div>
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">Contributors</xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>: </xsl:text>
         <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="othercredit|editor"/>
       </xsl:call-template>
