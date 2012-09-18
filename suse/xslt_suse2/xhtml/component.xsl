@@ -136,7 +136,7 @@
     </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="chapter/subtitle                      |chapter/chapterinfo/subtitle                      |chapter/info/subtitle                      |chapter/docinfo/subtitle" mode="titlepage.mode" priority="2">
+  <xsl:template match="chapter/subtitle|chapter/chapterinfo/subtitle|chapter/info/subtitle|chapter/docinfo/subtitle" mode="titlepage.mode" priority="2">
     <xsl:call-template name="component.subtitle">
       <xsl:with-param name="node" select="ancestor::chapter[1]"/>
     </xsl:call-template>
