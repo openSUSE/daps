@@ -127,6 +127,14 @@
       <xsl:with-param name="toc-context" select="$toc-context"/>
       <xsl:with-param name="nodes" select="EMPTY"/>
     </xsl:call-template>
+    
+    <xsl:apply-templates select="(bookinfo/abstract|abstract)[1]" mode="toc"/>
+  </xsl:template>
+  
+  <xsl:template match="abstract" mode="toc">
+    <dd class="toc-abstract">
+      <xsl:apply-templates/>
+    </dd>
   </xsl:template>
 
 </xsl:stylesheet>
