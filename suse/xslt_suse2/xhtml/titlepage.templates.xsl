@@ -7,7 +7,7 @@
   <!-- article titlepage templates -->
     <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="article.titlepage.recto.style">
-      <span >
+      <span class="contributor-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Authors</xsl:with-param>
       </xsl:call-template>
@@ -16,20 +16,19 @@
       <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="author|corpauthor"/>
       </xsl:call-template>
-      
     </div>
     <xsl:if test="othercredit|editor">
       <div>
         <xsl:call-template name="person.name.list">
-        <xsl:with-param name="person.list" select="othercredit|editor"/>
-      </xsl:call-template>
+          <xsl:with-param name="person.list" select="othercredit|editor"/>
+        </xsl:call-template>
       </div>
     </xsl:if>
   </xsl:template>
   
   <xsl:template match="author" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span>
+      <span class="contributor-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Author</xsl:with-param>
       </xsl:call-template>
@@ -158,7 +157,7 @@
 
   <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span >
+      <span class="contributor-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Authors</xsl:with-param>
       </xsl:call-template>
@@ -170,10 +169,17 @@
     </div>
     <xsl:if test="othercredit|editor">
       <div>
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key">Contributors</xsl:with-param>
-        </xsl:call-template>
-        <xsl:text>: </xsl:text>
+        <span class="contributor-label">
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key">
+             <xsl:choose>
+               <xsl:when test="count(othercredit|editor) > 1">Contributors</xsl:when>
+               <xsl:otherwise>Contributor</xsl:otherwise>
+             </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>: </xsl:text>
+        </span>
         <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="othercredit|editor"/>
       </xsl:call-template>
@@ -183,9 +189,9 @@
 
   <xsl:template match="author" mode="book.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span>
+      <span class="contributor-label">
       <xsl:call-template name="gentext">
-        <xsl:with-param name="key">Authors</xsl:with-param>
+        <xsl:with-param name="key">Author</xsl:with-param>
       </xsl:call-template>
       <xsl:text>: </xsl:text>
       </span>
