@@ -266,7 +266,8 @@
       <!-- Use $root.filename, if we have set $rootid to a book, for
            example
       -->
-      <xsl:when test="not($recursive) and generate-id(key('id', $rootid)) = generate-id(.)">
+      <xsl:when test="not($recursive) and $rooid != '' and
+                      generate-id(key('id', $rootid)) = generate-id(.)">
         <xsl:value-of select="$root.filename"/>
         <xsl:if test="not($recursive)">
           <xsl:value-of select="$html.ext"/>
