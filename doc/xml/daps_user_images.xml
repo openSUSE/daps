@@ -18,7 +18,10 @@
   for example), the source images you provide and reference in your XML
   sources are automatically transformed into the appropriate output formats.
   For example, SVG images are converted to PNG for HTML builds, or color
-  images to grayscale for black-and-white PDFs. For basic information about
+  images to grayscale for black-and-white PDFs.<remark>taroth 2012-09-19:
+  maybe it would make sense to include the basic information also
+  here (by using phrase entities) and to remove the next sentence?</remark> 
+  For basic information about
   image handling (such as supported formats, where to store the images in
   your documentation directory, and how to reference them in your XML
   files), refer to <xref linkend="sec.daps.quick.imgs"/>.
@@ -36,6 +39,8 @@
     entity-relationship diagrams, UML diagrams, and flowcharts. It stores these
     diagrams in a custom XML-based vector format called DIA.
    </para>
+   <remark>taroth 2012-09-19: I would first mention what DIA is and then with
+   which tool to create the format</remark>
    <para>
     Being a vector format, DIA is resolution-independent, meaning that an image
     in this format can be displayed or printed as large or small as you wish
@@ -55,14 +60,26 @@
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.eps">
    <title><acronym>EPS</acronym></title>
+   <!--taroth 2012-09-19: using the acronym element in a title element leads to
+   stylesheets problems in PDF output - please file a bug for toms-->
    <important>
     <title>Using EPS files is not recommended</title>
+    <remark>taroth 2012-09-19: use title-style capitalization also for admonition
+    titles, see http://svn.opensuse.org/svn/opensuse-doc/trunk/documents/styleguide/en/xml/opensuse_documentation_styleguide.xml,
+    id=sec.edrules.cap</remark>
     <para>
      <acronym>EPS</acronym> support in DAPS is experimental and currently only
      supported in combination with the XEP formatter. Even then, it might lead
      to longer document creation times.
     </para>
    </important>
+   <remark>taroth 2012-09-19: the admonition title appears a bit strange, provided 
+   that we support the format, even if it is experimental</remark>
+   <!--taroth 2012-09-19: how about rephrasing to something like this:
+   Limitations for Using EPS Files
+   <acronym>EPS</acronym> support in &dapsacr; is in experimental stage. Using 
+   EPS files is only supported in combination with the XEP formatter and may
+   lead to longer document creation times.-->
    <para>
     The <emphasis>Encapsulated Postscript</emphasis> format is a general purpose
     vector image format. As a Postscript-based format, it is similar to
@@ -90,6 +107,7 @@
    <title><acronym>PDF</acronym></title>
    <important>
     <title>Using PDF files is not recommended</title>
+     <!--taroth 2012-09-19: use title-style capitalization, see remark above-->
     <para>
      <acronym>PDF</acronym> support in DAPS is experimental and currently only
      supported in combination with the XEP formatter. Even then, it might lead
@@ -118,12 +136,18 @@
    </para>
    <tip>
     <title>Use <command>daps optipng</command> to make PNG files smaller</title>
+     <!--taroth 2012-09-19: use title-style capitalization, see remark above-->
     <para>You can decrease the file size of PNG images without altering their
-     look. This is achieved by removing unused colors and alpha channels.
+     look. This can be achieved by a &daps; command that removes unused colors 
+     and alpha channels.
     </para>
     <para>
      To run <command>optipng</command> over an entire book's PNG images, use
      <command>daps -d DC-your-dc-file optipng</command>.
+     <!--taroth 2012-09-19: please use a replaceable element and let's use a
+     consistent naming scheme throughout the book: in the chapter before, I used
+     <replaceable>PATH_TO_&dc;_FILE</replaceable> but we can also call it
+     <replaceable>YOUR_&dc;_FILE</replaceable>-->
     </para>
    </tip>
   </sect2>
@@ -159,6 +183,9 @@
   <title>Managing Images</title>
    <sect2 id="sec.daps.user.imgs.dir">
     <title>Organisation of the <code>images</code> Directory</title>
+    <!--taroth 2012-09-19: the following contents is already part of the QSG,
+    no problem to mention it here as well, but let's merge the contents and 
+    use a phrase-entity-->
     <para>
      &dapsacr; requires you to use a specific directory structure for images. All
      images that you reference from your DocBook files must be stored in
@@ -198,6 +225,14 @@
       (<filename>aCamelCasedFileName</filename>).
      </para>
     </important>
+    <!--taroth 2012-09-19: the contents of the first admonition is already part
+    of the QSG - how about merging both admonitions and use the same one in
+    both? e.g.
+    File Name Requirements
+    - unique file names: ...
+    - no spaces in file names: ...
+    BTW, we could also turn this into a regular section to avoid having too many
+    admonitions-->
     <para>
      It is a good idea to find a consistent file naming scheme. For instance, when
      documenting software, it might prove helpful to include the name of the
