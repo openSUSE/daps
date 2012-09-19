@@ -15,12 +15,12 @@
  XML documents.">
  
 <!ENTITY daps-description-long 
-"The &dapslong; (&dapsacr;) is developed as open source software for Linux
+"The &dapslong; (&dapsacr;) is developed as open source software for Linux*
  operating systems and is licensed under the GPL. A number of integrated
  tools, stylesheets, scripts, and makefiles help technical writers in the
  editing, translation and publishing process. &dapsacr; supports single
  source publishing into a number of different output formats, and is suited
- both for small documentation projects as well as for comprehensive projects,
+ both for small documentation projects and for comprehensive projects,
  created by multiple authors in a collaborative effort.">
   
 <!ENTITY daps-feedback  
@@ -41,32 +41,32 @@
  planned for version 2.0."> 
  
 <!ENTITY daps-sys-req-sw
-' <para>In addition to &dapsacr;, you need the following software:</para>
-   <itemizedlist>
-    <listitem>
-     <para> An XML (or text) editor of your choice. </para>
-    </listitem>
-    <listitem>
-     <para>For generating PDF output: an FO formatter, like 
-      <ulink url="http://projects.apache.org/projects/fop.html">FOP</ulink> or 
-      <ulink url="http://www.renderx.com">XEP</ulink>. 
-      <ulink url="http://www.antennahouse.com">Antenna House Formatter</ulink> 
-      is currently not supported. Whereas FOP is an open source product,
-      both XEP and Antenna House are commercial products.</para>
-    </listitem>
-   </itemizedlist>
+'  <para>&dapsacr; runs on any modern Linux* system. It has not been
+    attempted to port &dapsacr; to Windows* or Mac OS X* yet.</para>
    <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
    dependencies on other software packages are automatically resolved during 
    installation.</para>
-   <para>For installing the &dapsacr; sources on other Linux distributions (with 
+'>
+<!ENTITY daps-sys-req-sw-continued
+'  <para>To install the &dapsacr; sources on other Linux distributions (with 
    <literal>configure</literal>, <literal>make</literal>, and 
    <literal>make install</literal>), make sure the following packages or 
    tools are installed on your system. Otherwise the installation scripts will
    fail.</para>
      <itemizedlist>
       <listitem>
+       <para>bash, version 4.0 or higher</para>
+      </listitem>
+      <listitem>
+       <para>checkbot (this software is sometimes packaged as
+       <systemitem class="resource">perl-checkbot</systemitem>)</para>
+      </listitem>
+      <listitem>
        <para>convert (included in the 
       <systemitem class="resource">ImageMagick</systemitem> package)</para>
+      </listitem>
+      <listitem>
+       <para>Dia</para>
       </listitem>
       <listitem>
        <para>DocBook 4</para>
@@ -75,7 +75,40 @@
        <para>DocBook 4 Stylesheets (usually a separate package)</para>
       </listitem>
       <listitem>
+       <para>exiftool (also packaged as
+       <systemitem class="resource">libimage-exiftool-perl</systemitem>)</para>
+      </listitem>   
+      <listitem>
+       <para>fam</para>
+      </listitem>
+      <listitem>
+       <para>ghostscript (also packaged as
+       <systemitem class="resource">ghostscript-lbrary</systemitem>)</para>
+      </listitem>
+      <listitem>
+       <para>Inkscape</para>
+      </listitem>
+      <listitem>
        <para>make</para>
+      </listitem>
+      <listitem>
+       <para>optipng</para>
+      </listitem>
+      <listitem>
+       <para>poppler-tools (also packaged as
+       <systemitem class="resource">poppler-utils</systemitem>)</para>
+      </listitem>
+      <listitem>
+       <para>python</para>
+      </listitem>
+      <listitem>
+       <para>python-xml</para>
+      </listitem>
+      <listitem>
+       <para>sgml-skel</para>
+      </listitem>
+      <listitem>
+       <para>TransFig</para>
       </listitem>
       <listitem>
      <para>xmlcatalog (usually part of the package 
@@ -92,14 +125,54 @@
       </listitem>
       <listitem>
        <para>xsltproc (if not available as a separate package, it may be 
-       included in  <systemitem class="resource">libxslt</systemitem>)</para>
+       included in <systemitem class="resource">libxslt</systemitem>)</para>
       </listitem>
      </itemizedlist>
      <para>During the installation procedure, the <filename>convert</filename> 
      script informs you about any further missing software packages. Refer to 
      <xref linkend="pro.daps.quick.inst.tarball"/> for more information.
      </para>'>
-     
+
+<!ENTITY daps-addon
+'  <para>In addition to &dapsacr;, you need the following software:</para>
+   <itemizedlist>
+    <listitem>
+     <para>An XML (or text) editor of your choice.</para>
+    </listitem>
+    <listitem>
+     <para>For generating PDF output: an FO formatter, like 
+      <ulink url="http://projects.apache.org/projects/fop.html">FOP</ulink> or 
+      <ulink url="http://www.renderx.com">XEP</ulink>. 
+      <ulink url="http://www.antennahouse.com">Antenna House Formatter</ulink> 
+      is currently not supported. Whereas FOP is an open source product,
+      both XEP and Antenna House are commercial products.</para>
+    </listitem>
+   </itemizedlist>
+   <para>To add further components like version management or a workflow
+   mechanism for your projects, use &dapsacr; in combination with the following 
+   software:</para>
+  <itemizedlist>
+   <listitem>
+    <para>Any version management system, like CVS, Subversion, Mercurial or Git.
+      </para>
+   </listitem>
+   <listitem>
+    <para>&dm;, a command-line tool for adding and retrieving the meta information 
+     of all files belonging to a documentation project. &dm; is especially useful 
+     for larger, collaborative projects where it helps you keep track of 
+     owners (authors) and editing statuses of all files. However, &dm; requires 
+     hosting your documentation files on a Subversion server. 
+     </para>
+   </listitem>
+  </itemizedlist>
+  <para>
+   Together with the software components mentioned above, &dapsacr; can be
+   used as a fully-fledged authoring and content management system for documentation
+   projects based on DocBook.
+  </para>
+' >
+
+
 <!ENTITY daps-sys-req-hw 
 '   <variablelist>
      <varlistentry>
@@ -125,32 +198,6 @@
      </listitem>
     </varlistentry>
     </variablelist>'>
-
-
-<!ENTITY daps-addon
-' <para>To add further components like version management or a workflow
-   mechanism for your projects, use &dapsacr; in combination with the following 
-   software:</para>
-  <itemizedlist>
-   <listitem>
-    <para>Any version management system, like CVS, Subversion, Mercurial or Git.
-      </para>
-   </listitem>
-   <listitem>
-    <para>&dm;, a command-line tool for adding and retrieving the meta information 
-     of all files belonging to a documentation project. &dm; is especially useful 
-     for larger, collaborative projects where it helps you keep track of 
-     owners (authors) and editing statuses of all files. However, &dm; requires 
-     hosting your documentation files on a Subversion server. 
-     </para>
-   </listitem>
-  </itemizedlist>
-
-  <para>
-   Together with the software components mentioned above, &dapsacr; can be
-   used as a fully-fledged authoring and content management system for documentation
-   projects based on DocBook.
-  </para>'>  
   
 <!ENTITY daps-img-formats
 " <para>&dapsacr; supports the following types of images:</para>
