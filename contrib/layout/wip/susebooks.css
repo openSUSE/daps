@@ -991,7 +991,7 @@ em, i, .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b {
+strong, b, #_content .contributor-label {
     font-weight: bold;
 }
 
@@ -1325,41 +1325,48 @@ obnoxious image handling:
     list-style-type: lower-latin;
 }
 
-#_content .table-contents {
+#_content .table-contents, #_content .informaltable {
     /* Yup, let's make this scroll... While ugly, there seems to be no better
     way to avoid the table running off the page border...(?) */
     overflow: auto;
-    margin: 0 0 24px 0;
 }
 
-#_content .table table {
+#_content .table-contents {
+    margin: 0 0 24px 0;
+}
+#_content .informaltable {
+    margin: 10px 0 24px 0;
+}
+
+
+#_content .table table, #_content .informaltable table {
     border: 1px solid #999;
     max-width: 100%;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-#_content table p {
+#_content table p, #_content .informaltable table p {
     margin: 0;
 }
 
-#_content .table th {
+#_content .table th, #_content .informaltable th {
     font-weight: bold;
     background-color: #D1D1D3;
 }
 
-#_content .table td, #_content .table th {
+#_content .table td, #_content .table th, #_content .informaltable td, #_content .informaltable th {
     margin: 0;
     padding: 3px 5px;
     overflow: hidden;
 }
 
-#_content .table th {
+#_content .table th, #_content .informaltable th {
     vertical-align: middle;
     border: 1px solid #999;
 }
 
-#_content .table tr:nth-child(even) {
+#_content .table tr:nth-child(even), #_content .informaltable tr:nth-child(even) {
     background-color: #EFEFF0;
 }
 
