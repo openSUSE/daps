@@ -40,10 +40,8 @@
         </xsl:attribute>
       </img>
       <h6>
-        <xsl:call-template name="anchor"/>
-        <xsl:if test="$admon.textlabel != 0 or title or info/title">
-            <xsl:apply-templates select="." mode="object.title.markup"/>
-        </xsl:if>
+          <xsl:call-template name="anchor"/>
+          <xsl:apply-templates select="." mode="object.title.markup"/>
       </h6>
       <xsl:apply-templates/>
     </div>
