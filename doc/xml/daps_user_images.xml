@@ -10,7 +10,7 @@
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
  <para>
-  <remark>taroth 2012-03-14: todo: also add advanced feature like listings
+  <remark>taroth 2012-03-14: todo: also add advanced features like listings
   with daps etc.</remark>
  </para>
  <para>
@@ -30,26 +30,26 @@
  <sect1 id="sec.daps.user.imgs.usage">
   <title>Where to Use Which Image Type<remark>Make this a sect2? sknorr, 31-08-2012</remark></title>
   <sect2 id="sec.daps.user.imgs.usage.dia">
-   <title><acronym>DIA</acronym></title>
+   <title>DIA</title>
    <para>
-    The software Dia is a diagram editor which can be used to draw
+    The software <ulink url="https://live.gnome.org/Dia">Dia</ulink> is a diagram editor which can be used to draw
     entity-relationship diagrams, UML diagrams, and flowcharts. It stores these
-    diagrams in a custom XML-based vector format called <acronym>DIA</acronym>.
+    diagrams in a custom XML-based vector format called DIA.
    </para>
    <para>
-    Being a vector format, the <acronym>DIA</acronym> format is
-    resolution-independent, meaning that an image made in it can be displayed or
-    printed as large or small as you wish without artifacts.
+    Being a vector format, DIA is resolution-independent, meaning that an image
+    in this format can be displayed or printed as large or small as you wish
+    without artifacts.
    </para>
    <para>
     Dia makes it very easy to connect elements, to add text and to use simple
     fill and border colors. Although it can import <acronym>SVG</acronym> files as
-    shapes, it is not useful for drawing shapes freely itself. It also make it
+    shapes, it is not useful for drawing shapes freely itself. It also makes it
     relatively hard to create complex or effect-laden vector illustrations and
     information graphics.
    </para>
    <para>
-    <acronym>DIA</acronym> files are automatically compressed when saving, thus
+    DIA files are automatically compressed when saving, thus
     they are often quite small.
    </para>
   </sect2>
@@ -80,9 +80,10 @@
    <title><acronym>FIG</acronym></title>
    <para>
     <acronym>FIG</acronym> is a vector image format that can be created with the
-    software Xfig. While you should create new illustrations as
-    <acronym>SVG</acronym> files and new diagrams as <acronym>DIA</acronym>, the
-    support for <acronym>FIG</acronym> can help when working with legacy images.
+    software <ulink url="http://www.xfig.org">Xfig</ulink>. While you should
+    create new illustrations as <acronym>SVG</acronym> files and new diagrams as
+    <acronym>DIA</acronym>, the support for <acronym>FIG</acronym> files can help
+    when working with legacy images.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.pdf">
@@ -109,7 +110,7 @@
    <para>
     The <emphasis>Portable Network Graphics</emphasis> format can be used whenever
     you wish to use a raster, that is, point-based image. A good example for when
-    to use <acronym>PNG</acronym> are screenshots and photographs.
+    to use <acronym>PNG</acronym> files are screenshots and photographs.
    </para>
    <para>
     <acronym>PNG</acronym> files can be created with a number of applications,
@@ -134,21 +135,24 @@
     displayed in most browsers and edited in many graphics programs.
    </para>
    <para>
-    A good open-source <acronym>SVG</acronym> editor is Inkscape. Inkscape is
+    A good open-source <acronym>SVG</acronym> editor is
+    <ulink url="http://inkscape.org/">Inkscape</ulink>, which is
     available for most operating systems. You can also create <acronym>SVG</acronym>
     files from many Adobe* products, for instance, from Illustrator*. SVG is the
     preferred vector image format for &dapsacr;.
    </para>
-   <tip>
-    <title>Check your images in Inkscape</title>
+   <important>
+    <title>Save <emphasis>Plain SVG</emphasis> files</title>
     <para>
-     Internally, whenever &dapsacr; needs to convert <acronym>SVG</acronym>
-     images to raster images, it uses Inkscape. This happens, for instance when
-     exporting to HTML. Therefore, you should check whether your
-     <literal>SVG</literal> images render appropriately in Inkscape before
-     including them, even if you do not use Inkscape otherwise.
+     If your SVG editor offers you the choice of saving your file in a custom
+     SVG-based format or <emphasis>Plain SVG</emphasis> (or more formally,
+     <emphasis>standard SVG</emphasis>), always use the plain version.
     </para>
-   </tip>
+    <para>
+     The components used by &dapsacr; for working with SVG files might otherwise
+     not be compatible with the files your graphics editor generates.
+    </para>
+   </important>
   </sect2>
  </sect1>
  <sect1>
@@ -158,32 +162,150 @@
     <para>
      &dapsacr; requires you to use a specific directory structure for images. All
      images that you reference from your DocBook files must be stored in
-     a sub-directory of the project directory, that is, the directory where the
-     <acronym>DC</acronym> file lies. named
+     a sub-directory of the project directory named
      <filename>images/src/file_extension</filename>. For instance, <acronym>PNG</acronym>
-     should be stored under <filename>images/src/png</filename>. If you used
+     files must be stored under <filename>images/src/png</filename>. If you used
      <command>daps-init</command> to set up your project, the appropriate
      directories should already exist.
     </para>
     <important>
-     <title>Use unique filenames</title>
+     <title>Use unique file names</title>
      <para>
-      Make sure you store just one file with a particular name within the
+      Always store just one file with a particular name within the
       <filename>images/src</filename> folder of a project. Having, for instance,
-      a file named <filename>example.png</filename> and another called
-      <filename>example.svg</filename> in the same project will generally lead to
-      confusion among the authors about which file to use where, which is current
-      and so on.
+      a file called <filename>example.png</filename> and another called
+      <filename>example.svg</filename> in the same project will often lead to
+      questions like:
+     </para>
+     <itemizedlist>
+      <listitem><para>Which file should be used where?</para></listitem>
+      <listitem><para>Are both similarly named files current, or is one outdated?</para></listitem>
+     </itemizedlist>
+     <para>
+      When invoking &dapsacr; with the parameter <command><parameter>-v</parameter></command>,
+      a warning will be printed whenever a file name appears twice within a project.
+     </para>
+    </important>
+    <important>
+     <title>Avoid spaces in file names</title>
+     <para>
+      The <command>make</command> command on which &dapsacr; is built has trouble
+      understanding spaces in file names 
      </para>
      <para>
-      When invoking &dapsacr; with the option <command>-v</command>, a warning
-      will be printed whenever a filename appears twice within a project.
+      Instead, you can use either underscores (<filename>_</filename>), hyphens
+      (<filename>-</filename>) or you can camel-case your file names
+      (<filename>aCamelCasedFileName</filename>).
      </para>
     </important>
     <para>
-     ...
+     It is a good idea to find a consistent file naming scheme. For instance, when
+     documenting software, it might prove helpful to include the name of the
+     application that a screenshot is made of at the beginning of the file name.
+     You could also use prefixes like <filename>screenshot_</filename> and
+     <filename>diagram_</filename> to separate between different types of images.
     </para>
    </sect2>
+  <sect2>
+   <title>Gaining an Overview over Images Used</title>
+   <para>
+    To find out which images are used and unused in a project or referenced in a
+    DocBook file but missing from the file system, &dapsacr; offers
+    a handful of sub-commands that check your project for such relationships.
+    <remark>"Relationships" is really not a good word. Ideas for improvement
+     welcome.--sknorr, 2012-09-17</remark>
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> projectgraphics</command></term>
+     <listitem><para>Lists all graphics used by the DocBook files referenced in the
+      current &dc; file.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> missinggraphics</command></term>
+     <listitem><para>Lists all graphics that are referenced in your DocBook files,
+     but could not be found in the file system. In case there are any missing
+     graphics, you will not be able to build your project.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> remaininggraphics</command></term>
+     <listitem><para>Lists all graphics that are not referenced in the given &dc;
+      file.
+     </para>
+     <important>
+      <title>Use a set to check for unnecessary graphics </title>
+      <para>
+       If you are storing multiple &dc; files in the same project folder, you
+       should always use the &dc; file of a set containing all articles and books
+       in the project folder to check whether graphics are indeed unnecessary.       
+      </para>
+     </important>
+     </listitem>
+    </varlistentry>    
+   </variablelist>
+   <para>
+    In general, all of the above sub-commands should be used together with another
+    command. By themselves, they do not generate output fit for on-screen reading.
+    Instead, output will look like this:
+   </para>
+   <screen>/home/user/repository/documents/project/en/images/src/dia/example_dia.dia /home/
+user/repository/documents/distribution/en/images/src/png/example_png1.png /home/
+user/repository/documents/distribution/en/images/src/png/example_png2.png /home/
+user/repository/documents/distribution/en/images/src/png/example_png3.png /home/
+user/repository/documents/distribution/en/images/src/png/example_png4.png /home/
+user/repository/documents/distribution/en/images/src/png/example_png5.png /home/
+user/repository/documents/distribution/en/images/src/png/example_png6.png /home/
+user/repository/documents/distribution/en/images/src/svg/example_svg.svg /home/u
+ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</screen>
+   <para>
+    To add a line break after each file name, use the
+    <command><parameter>--pretty</parameter></command> parameter. For instance,
+    to count the number of images used in a given output file, you could use
+    the following (<command>wc</command> is a command used to count words, or in
+    this case, lines):
+   </para>
+    <screen>$ <command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> projectgraphics <parameter>--pretty</parameter> | wc <parameter>-l</parameter></command></screen>
+      
+  </sect2>
+  <sect2>
+   <title>Working with Generated Images</title>
+   <para>
+    &dapsacr; automatically generates appropriate image formats for each output
+    format from your source files. If an image referenced from your DocBook
+    files is changed, &dapsacr; will notice when trying to build for the next
+    time and generate new versions of the image automatically.
+   </para>
+   <sect3>
+    <title>Gaining an Overview over Images Generated</title>
+    <para>
+     As with source images, &dapsacr; can generate lists of generated images that
+     have been generated for use with the various output formats.
+    </para>
+    <variablelist>
+     <varlistentry>
+      <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> xmlgraphics</command></term>
+      <listitem><para>Lists all generated color images.</para></listitem>
+     </varlistentry>
+     <varlistentry>
+      <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> xmlgraphics-bw</command></term>
+      <listitem><para>Lists all generated black-and-white images.</para></listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3>
+    <title>Cleaning Up the Generated Images Directory</title>
+    <para>
+     In rare cases, such as for instance when a file previously had an incorrect
+     timestamp or when you have changed your global &dapsacr; configuration, &dapsacr;
+     might wrongly assume that an already generated file should be inserted into
+     your output format when in reality the file should be re-generated. In such
+     a case, you can use
+     <command>daps -d DC-<replaceable>YOUR_DC_FILE</replaceable> clean-images</command>
+     to delete all images generated for a certain &dc; file.
+    </para>
+   </sect3>   
+  </sect2>
+  
  </sect1>
  
  

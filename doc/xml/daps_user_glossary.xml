@@ -30,7 +30,7 @@
   <glossdef>
    <para> DAPS provides authors of technical documentation with an easy-to-use toolchain to convert
     their DocBook documents into various output formats. </para>
-  </glossdef></glossentry>
+  </glossdef></glossentry>  
  <glossentry id="glos.docbook"><glossterm>DocBook</glossterm>
   <glossdef>
    <para>DocBook is a semantic markup language for technical documentation published as a DTD.
@@ -68,15 +68,24 @@
      <para> Internal formats of the formatter. </para>
     </listitem>
    </itemizedlist>
-   <para> Well-known formatters include Apache FOP, XEP, and Antenna House Formatter. Whereas the
+   <para>Well-known formatters include Apache FOP, XEP, and Antenna House Formatter. Whereas the
     former is an open-source product, the latter two are proprietary solutions. Antenna
-    House Formatter is incompatible with DAPS. </para>
+    House Formatter is incompatible with DAPS.</para>
   </glossdef></glossentry>
  <glossentry id="glos.fo"><glossterm>Formatting Objects</glossterm><acronym>FO</acronym>
   <glosssee otherterm="glos.xslfo"/>
  </glossentry>
  <glossentry id="glos.FOP"><glossterm>Formatting Objects Processor</glossterm><acronym>FOP</acronym>
   <glosssee otherterm="glos.formatter"/></glossentry>
+ <glossentry id="glos.mainelement"><glossterm id="term.deliverable">Main Element</glossterm>
+  <glossdef>
+   <para>
+    Within this guide, main element refers to any XML element that is commonly 
+    used to create a coherent whole in an output format. In other words, either 
+    a <sgmltag>book</sgmltag>, an <sgmltag>article</sgmltag>, or a 
+    <sgmltag>set</sgmltag>.
+   </para>
+  </glossdef></glossentry>
  <glossentry id="glos.pdf"><glossterm>Portable Document Format</glossterm><acronym>PDF</acronym>
   <glossdef>
    <para>
@@ -91,7 +100,7 @@
    <para>
     PIs can be used to mark certain content as having to be treated differently
     by writing an instruction enclosed in <code>&lt;?</code> and <code>?&gt;</code>.
-    This is commonly used within (X)HTML Web pages to mark parts of the file as
+    This is commonly used within (X)HTML web pages to mark parts of the file as
     being written in server-side scripting language PHP.
    </para>
    <para>In DocBook, Processing Instructions can also be used for somewhat more
@@ -108,6 +117,21 @@
     of text depending on a product's target group, for instance, on whether
     documentation is generated for the entry-level or for the professional
     version of a product.
+   </para>
+  </glossdef></glossentry>
+ <glossentry id="glos.project"><glossterm>Project</glossterm>
+  <glossdef>
+   <para>
+    A project consist of all the files that lie in a directory structure as 
+    required by &dapsacr;, with the first directory level containing any &dc;
+    files and sub-directories for <filename>xml</filename> files and
+    <filename>images</filename>. When the first
+    <xref linkend="glos.mainelement"/> is built, an additional
+    sub-directory called <filename>build</filename> will be created.
+   </para>
+   <para>
+    Such a <emphasis>project directory</emphasis> may contain the source files
+    for multiple main elements.
    </para>
   </glossdef></glossentry>
  <glossentry id="glos.svg"><glossterm>Scalable Vector Graphics</glossterm><acronym>SVG</acronym>
