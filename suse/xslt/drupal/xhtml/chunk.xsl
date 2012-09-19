@@ -31,6 +31,16 @@
     <xsl:variable name="this" select="."/>
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
+    <xsl:variable name="next.book" 
+      select="($next/ancestor-or-self::book |
+               $next/ancestor-or-self::article)[last()]"/>
+    <xsl:variable name="prev.book"
+      select="($prev/ancestor-or-self::book |
+               $prev/ancestor-or-self::article)[last()]"/>
+  <xsl:variable name="this.book" 
+      select="(ancestor-or-self::book|ancestor-or-self::article)[last()]"/>
+  <xsl:variable name="isnext"  select="generate-id($this.book) = generate-id($next.book)"/>
+  <xsl:variable name="isprev"  select="generate-id($this.book) = generate-id($prev.book)"/>
 
     <!--<xsl:message>html.head gefunden: <xsl:apply-templates select="$this" 
       mode="title.markup"/></xsl:message>-->
@@ -88,7 +98,7 @@
         </link>
       </xsl:if>
 
-      <xsl:if test="$prev">
+      <xsl:if test="$prev and $isprev">
         <link rel="previous">
           <xsl:attribute name="href">
             <xsl:call-template name="href.target">
@@ -101,7 +111,7 @@
         </link>
       </xsl:if>
 
-      <xsl:if test="$next">
+      <xsl:if test="$next and $isnext">
         <link rel="next">
           <xsl:attribute name="href">
             <xsl:call-template name="href.target">
