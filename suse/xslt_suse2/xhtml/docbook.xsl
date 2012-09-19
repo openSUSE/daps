@@ -28,6 +28,9 @@
 	exclude-result-prefixes="exsl">
   
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
+ 
+ <xsl:include href="../common/titles.xsl"/>
+ 
  <xsl:include href="param.xsl"/>
  <xsl:include href="create-permalink.xsl"/>
  
@@ -41,6 +44,6 @@
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
- 
+
  <xsl:include href="metadata.xsl"/>
 </xsl:stylesheet>
