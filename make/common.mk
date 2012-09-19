@@ -919,12 +919,12 @@ dist-graphics:
     # also add SVGs if available
     ifdef SVGONLINE
 	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
-	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/svg% \
 	  $(SVGONLINE)
     endif
     ifdef PDFONLINE
 	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
-	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/pdf% \
 	  $(PDFONLINE)
     endif
 	bzip2 -9f $(TARBALL)
