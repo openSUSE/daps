@@ -10,8 +10,12 @@
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
  <para>
-  <remark>taroth 2012-03-14: todo: also add advanced features like listings
-  with daps etc.</remark>
+  This chapter describes:
+  <itemizedlist>
+   <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para></listitem>
+   <listitem><para>how you can use &dapsacr; to generate lists of used, unused and missing images.</para></listitem>
+  </itemizedlist>
+  
  </para>
  <para>
   Depending on the output format you generate with &dapsacr; (PDF or HTML
@@ -31,7 +35,7 @@
   &daps-img-formats;
  </sect1>
  <sect1 id="sec.daps.user.imgs.usage">
-  <title>Where to Use Which Image Type<remark>Make this a sect2? sknorr, 31-08-2012</remark></title>
+  <title>Where to Use Which Image Type</title>
   <sect2 id="sec.daps.user.imgs.usage.dia">
    <title>DIA</title>
    <para>
@@ -60,26 +64,14 @@
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.eps">
    <title><acronym>EPS</acronym></title>
-   <!--taroth 2012-09-19: using the acronym element in a title element leads to
-   stylesheets problems in PDF output - please file a bug for toms-->
    <important>
-    <title>Using EPS files is not recommended</title>
-    <remark>taroth 2012-09-19: use title-style capitalization also for admonition
-    titles, see http://svn.opensuse.org/svn/opensuse-doc/trunk/documents/styleguide/en/xml/opensuse_documentation_styleguide.xml,
-    id=sec.edrules.cap</remark>
+    <title>EPS Image Support in &dapsacr; Is Experimental</title>
     <para>
-     <acronym>EPS</acronym> support in DAPS is experimental and currently only
-     supported in combination with the XEP formatter. Even then, it might lead
+     <acronym>EPS</acronym> support in &dapsacr; is experimental and currently
+     only supported in combination with the XEP formatter. It might also lead
      to longer document creation times.
     </para>
    </important>
-   <remark>taroth 2012-09-19: the admonition title appears a bit strange, provided 
-   that we support the format, even if it is experimental</remark>
-   <!--taroth 2012-09-19: how about rephrasing to something like this:
-   Limitations for Using EPS Files
-   <acronym>EPS</acronym> support in &dapsacr; is in experimental stage. Using 
-   EPS files is only supported in combination with the XEP formatter and may
-   lead to longer document creation times.-->
    <para>
     The <emphasis>Encapsulated Postscript</emphasis> format is a general purpose
     vector image format. As a Postscript-based format, it is similar to
@@ -106,11 +98,10 @@
   <sect2 id="sec.daps.user.imgs.usage.pdf">
    <title><acronym>PDF</acronym></title>
    <important>
-    <title>Using PDF files is not recommended</title>
-     <!--taroth 2012-09-19: use title-style capitalization, see remark above-->
+    <title>PDF Image Support in &dapsacr; Is Experimental</title>
     <para>
-     <acronym>PDF</acronym> support in DAPS is experimental and currently only
-     supported in combination with the XEP formatter. Even then, it might lead
+     <acronym>PDF</acronym> support in &dapsacr; is experimental and currently
+     only supported in combination with the XEP formatter. It might also lead
      to longer document creation times.
     </para>
    </important>
@@ -135,19 +126,14 @@
     among them is the GIMP graphics editor.
    </para>
    <tip>
-    <title>Use <command>daps optipng</command> to make PNG files smaller</title>
-     <!--taroth 2012-09-19: use title-style capitalization, see remark above-->
+    <title>Use <command>daps optipng</command> to Make PNG Files Smaller</title>
     <para>You can decrease the file size of PNG images without altering their
      look. This can be achieved by a &daps; command that removes unused colors 
      and alpha channels.
     </para>
     <para>
      To run <command>optipng</command> over an entire book's PNG images, use
-     <command>daps -d DC-your-dc-file optipng</command>.
-     <!--taroth 2012-09-19: please use a replaceable element and let's use a
-     consistent naming scheme throughout the book: in the chapter before, I used
-     <replaceable>PATH_TO_&dc;_FILE</replaceable> but we can also call it
-     <replaceable>YOUR_&dc;_FILE</replaceable>-->
+     <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> optipng</command>.
     </para>
    </tip>
   </sect2>
@@ -166,7 +152,7 @@
     preferred vector image format for &dapsacr;.
    </para>
    <important>
-    <title>Save <emphasis>Plain SVG</emphasis> files</title>
+    <title>Save <emphasis>Plain SVG</emphasis> Files</title>
     <para>
      If your SVG editor offers you the choice of saving your file in a custom
      SVG-based format or <emphasis>Plain SVG</emphasis> (or more formally,
@@ -196,7 +182,7 @@
      directories should already exist.
     </para>
     <important>
-     <title>Use unique file names</title>
+     <title>Use Unique File Names</title>
      <para>
       Always store just one file with a particular name within the
       <filename>images/src</filename> folder of a project. Having, for instance,
@@ -252,23 +238,23 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> projectgraphics</command></term>
+     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command></term>
      <listitem><para>Lists all graphics used by the DocBook files referenced in the
       current &dc; file.</para></listitem>
     </varlistentry>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> missinggraphics</command></term>
+     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> missinggraphics</command></term>
      <listitem><para>Lists all graphics that are referenced in your DocBook files,
      but could not be found in the file system. In case there are any missing
      graphics, you will not be able to build your project.</para></listitem>
     </varlistentry>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> remaininggraphics</command></term>
+     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> remaininggraphics</command></term>
      <listitem><para>Lists all graphics that are not referenced in the given &dc;
       file.
      </para>
      <important>
-      <title>Use a set to check for unnecessary graphics </title>
+      <title>Use a <sgmltag>set</sgmltag> to Check for Unnecessary Graphics </title>
       <para>
        If you are storing multiple &dc; files in the same project folder, you
        should always use the &dc; file of a set containing all articles and books
@@ -299,7 +285,7 @@ ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</scr
     the following (<command>wc</command> is a command used to count words, or in
     this case, lines):
    </para>
-    <screen>$ <command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> projectgraphics <parameter>--pretty</parameter> | wc <parameter>-l</parameter></command></screen>
+   <screen>$ <command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics <parameter>--pretty</parameter> | wc <parameter>-l</parameter></command></screen>
       
   </sect2>
   <sect2>
@@ -318,11 +304,11 @@ ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</scr
     </para>
     <variablelist>
      <varlistentry>
-      <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> xmlgraphics</command></term>
+      <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics</command></term>
       <listitem><para>Lists all generated color images.</para></listitem>
      </varlistentry>
      <varlistentry>
-      <term><command>daps <parameter>-d</parameter> DC-<replaceable>YOUR_DC_FILE</replaceable> xmlgraphics-bw</command></term>
+      <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics-bw</command></term>
       <listitem><para>Lists all generated black-and-white images.</para></listitem>
      </varlistentry>
     </variablelist>
@@ -335,7 +321,7 @@ ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</scr
      might wrongly assume that an already generated file should be inserted into
      your output format when in reality the file should be re-generated. In such
      a case, you can use
-     <command>daps -d DC-<replaceable>YOUR_DC_FILE</replaceable> clean-images</command>
+     <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> clean-images</command>
      to delete all images generated for a certain &dc; file.
     </para>
    </sect3>   
