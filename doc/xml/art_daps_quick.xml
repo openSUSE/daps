@@ -36,13 +36,9 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.quick.req">
-  <title>Requirements and Additional Software</title>
+  <title>System Requirements</title>
 
-  <para>
-   &dapsacr; is a lean solution that does not require a lot of system
-   resources.
-  </para>
-
+  &daps-sys-req-general;
   <sect2 id="sec.daps.quick.req.hw">
    <title>Hardware Requirements</title>
    &daps-sys-req-hw;
@@ -51,8 +47,8 @@
   <sect2 id="sec.daps.quick.req.sw">
    <title>Software Requirements</title>
    &daps-sys-req-sw;
-   <para>For installing the &dapsacr; sources on other Linux distributions, see
-    the User Guide's <xref linkend="sec.daps.user.req.sw"/></para>
+   <para>For installing the &dapsacr; sources on other Linux distributions, refer
+    to the User Guide's <xref linkend="sec.daps.user.req.sw"/>.</para>
   </sect2>
   <sect2 id="sec.daps.quick.addon.sw">
     <title>Additional Software</title>
@@ -75,197 +71,20 @@
  
  <sect1 id="sec.daps.quick.inst">
   <title>Installation</title>
-  <para>
-   The &dapslong; can be installed and used on any Linux distribution.
-   Currently, &dapsacr; is available as RPM package for the &osuse;
-   distribution.
-   <remark>taroth 2012-03-20: (and the &sle; products based on
-    &osuse;)???</remark>
-   Eventually, RPM packages for further distributions may become available.
-   In the meantime, you can download a tarball with the &dapsacr; sources
-   and install them on any distribution as described in
-   <xref linkend="pro.daps.quick.inst.tarball"/>.
-  </para>
+  &daps-install;
 
   <sect2 id="sec.daps.quick.inst.osuse">
    <title>Installing &dapsacr; on &osuse;</title>
-   <para>
-    For &osuse;, the <systemitem class="resource">daps</systemitem> package
-    is available from the
-    <systemitem class="service">&suse-dapsrepo;</systemitem> repository at
-    <ulink
-     url="http://download.opensuse.org/repositories"></ulink>.
-    For the complete path to the repository, add the version number of your
-    &osuse; installation. For example, the complete repository URL for
-    &osuse;
-    <productnumber>12.2</productnumber>
-    is:
-    <ulink
-     url="http://download.opensuse.org/repositories/Documentation:/Tools/openSUSE_12.1/"></ulink>
-   </para>
-   <para>
-    For basic details on how to add software repositories and how to install
-    software on &osuse;, refer to the &osuse; <citetitle>Reference
-    Guide</citetitle>. The guide is available from
-    <ulink
-     url="http://www.suse.com/documentation"></ulink>.
-   </para>
-   <para>
-    Choose one of the following installation methods. Dependencies to other
-    packages that are required by &dapsacr; are automatically resolved.
-   </para>
-   <variablelist>
-    <varlistentry>
-     <term>1-Click Installation from the Internet</term>
-     <listitem>
-      <para>
-       Go to <ulink url="http://software.opensuse.org/"/> and search for the
-       <systemitem class="resource">daps</systemitem>. On the resulting
-       page, click <menuchoice><guimenu>daps</guimenu><guimenu>Show other
-       versions</guimenu> <guimenu>Show unstable
-       packages</guimenu></menuchoice>. Select the version that is provided
-       by the repository
-       <systemitem class="service">&suse-dapsrepo;</systemitem>. To start
-       installation of the package click the <guimenu>1-Click
-       Install</guimenu> link next to the selected package.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Installation with &yast; (GUI)</term>
-     <listitem>
-      <para>
-       Add the <systemitem class="service">&suse-dapsrepo;</systemitem>
-       repository that matches your &osuse; version&mdash;see the
-       introduction to this section. From this repository, install the
-       <systemitem
-        class="resource">daps</systemitem> package. For
-       more information on installing packages with &yast; refer to the
-       &osuse; <citetitle>Reference Guide</citetitle>, chapter
-       <citetitle>Installing Or Removing Software</citetitle>.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Installation with <command>zypper</command> (command line)</term>
-     <listitem>
-      <para>
-       Add the <systemitem class="service">&suse-dapsrepo;</systemitem>
-       repository that matches your &osuse; version&mdash;see the
-       introduction to this section. From this repository, install the
-       <systemitem
-        class="resource">daps</systemitem> package. For
-       more information on installing packages with &yast; refer to the
-       &osuse; <citetitle>Reference Guide</citetitle>, chapter
-       <citetitle>Managing Software with Command Line Tools</citetitle>.
-      </para>
-     </listitem>
-    </varlistentry>
-   </variablelist>
+   &daps-install-osuse;
   </sect2>
 
   <sect2 id="sec.daps.quick.inst.other">
    <title>Installing &dapsacr; on Other Linux Distributions</title>
    <para>
-    For installation on other Linux distributions, the &dapsacr; sources are
-    available as tarball. They can be installed with
-    <literal>configure</literal>, <literal>make</literal>, and <literal>make
-    install</literal>.
+    Please refer to the &dapsacr; User Guide for instructions on how to install
+    &dapsacr; on other Linux distributions:
+    <xref linkend="sec.daps.user.inst.tarball"/>.
    </para>
-   <procedure id="pro.daps.quick.inst.tarball">
-    <title>Installing the &dapsacr; Sources</title>
-    <para>
-     Before starting the installation, check the &dapsacr;
-     <xref
-      linkend="sec.daps.quick.req" xrefstyle="select:title"/> and
-     make sure to have all required packages and tools installed.
-    </para>
-    <step>
-     <para>
-      Go to <ulink url="http://sourceforge.net/projects/daps/files/"/> and
-      download the &dapsacr; source tarball,
-      <filename>daps-<replaceable>versionnumber</replaceable>.tar.bz2</filename>.
-     </para>
-    </step>
-    <step>
-     <para>
-      Unpack the tarball:
-     </para>
-<screen>tar xvf daps-<replaceable>versionnumber</replaceable>.tar.bz2</screen>
-    </step>
-    <step id="daps.quick.inst.configure">
-     <para>
-      Change to the newly created <filename>daps</filename> subdirectory and
-      start the configure script:
-     </para>
-<screen>$ ./configure</screen>
-     <para>
-      If you want to adjust the &dapsacr; installation paths:
-     </para>
-     <substeps>
-      <step>
-       <para>
-        View the available options with
-       </para>
-<screen>$ ./configure <option>--help</option></screen>
-      </step>
-      <step>
-       <para>
-        Run the configure script with the desired option.
-       </para>
-      </step>
-     </substeps>
-     <para>
-      The script checks your system for any software relevant to &dapsacr;
-      or the &dapsacr; installation process. It also creates a makefile that
-      will be used during installation. Based on the analysis, the script
-      shows a summary that includes the following information:
-     </para>
-     <itemizedlist>
-      <listitem>
-       <para>
-        the &dapsacr; installation paths,
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        an overview of &dapsacr; features that will be available on your
-        system if you install &dapsacr; now, and
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        which software is still missing to enable the remaining &dapsacr;
-        features as well.
-       </para>
-      </listitem>
-     </itemizedlist>
-    </step>
-    <step>
-     <para>
-      Check the summary carefully.
-     </para>
-    </step>
-    <step>
-     <para>
-      Install missing packages, if necessary. After installing new packages,
-      repeat <xref linkend="daps.quick.inst.configure"/> and check the
-      summary again.
-     </para>
-    </step>
-    <step>
-     <para>
-      If everything is prepared according to your wishes, enter:
-     </para>
-<screen>$ make</screen>
-    </step>
-    <step>
-     <para>
-      Start the installation process with:
-     </para>
-<screen>$ sudo make install</screen>
-    </step>
-   </procedure>
   </sect2>
 
   <sect2 id="sec.daps.quick.inst.formatter">
@@ -323,14 +142,14 @@
   |--&dc;*<co id="co.quick.docdir.dc"/>
      |--images/
      |   |--src/<co id="co.quick.docdir.img.src"/>
-     |   |  |--dia/
-     |   |  |--eps/
-     |   |  |--fig/
-     |   |  |--pdf/
-     |   |  |--png/
-     |   |  |--svg/
+     |      |--dia/
+     |      |--eps/
+     |      |--fig/
+     |      |--pdf/
+     |      |--png/
+     |      |--svg/
      |--xml/<co id="co.quick.docdir.xml"/> 
-     |   |--MAIN*.xml<co id="co.quick.docdir.main"/></screen>
+         |--MAIN*.xml<co id="co.quick.docdir.main"/></screen>
    </example>
    <calloutlist>
     <callout arearefs="co.quick.docdir.base">
@@ -392,20 +211,20 @@
      Create a directory that you want to use as your documentation
      directory:
     </para>
-<screen>$ mkdir <replaceable>DOC_DIR</replaceable></screen>
+<screen>$ <command>mkdir <replaceable>DOC_DIR</replaceable></command></screen>
    </step>
    <step>
     <para>
      Create the default directory structure for &dapsacr; (containing an
      example <sgmltag>book</sgmltag>):
     </para>
-<screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></screen>
+<screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></command></screen>
     <para>
      With the <option>-r</option> option, you can also set another root
      element, such as <sgmltag>article</sgmltag>, for example. To create the
      default directory structure with an <sgmltag>article</sgmltag> example:
     </para>
-<screen>$ daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</screen>
+<screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
    </step>
    <step>
     <para>
@@ -422,7 +241,7 @@
      (<filename>&dc;-daps-example</filename>) to use and the output format
      (color PDF) to create:
     </para>
-<screen>$ daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</screen>
+<screen>$ <command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</command></screen>
     <para>
      For creation of the PDF, &dapsacr; uses FOP by default (if no other
      formatter is specified) and applies the default DocBook stylesheets (if
@@ -497,7 +316,7 @@
      <command>warn-images</command> subcommand. It lists all images with
      non-unique base names for a particular documentation project.
     </para>
-<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</screen>
+<screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
    </important>
   </sect2>
 
@@ -548,7 +367,7 @@
    syntax of the <command>daps</command> command:
   </para>
 
-<screen>$ daps [--global-options] subcommand [--command-options] [arguments]</screen>
+<screen>$ <command>daps [--global-options] subcommand [--command-options] [arguments]</command></screen>
 
   <para>
    <xref linkend="ex.daps.syntax"/> shows an example command that generates
@@ -558,8 +377,7 @@
 
   <example id="ex.daps.syntax">
    <title>&dapsacr; Syntax</title>
-<screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> &dc;-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/>
-   </screen>
+<screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> &dc;-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/></screen>
    <calloutlist>
     <callout arearefs="co.daps.syntax.main">
      <para>
@@ -601,20 +419,20 @@
    global options and the available subcommands, use the command:
   </para>
 
-<screen>$ daps help</screen>
+<screen>$ <command>daps help</command></screen>
 
   <para>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-<screen>$ daps help <replaceable>subcommand</replaceable></screen>
+<screen>$ <command>daps help <replaceable>subcommand</replaceable></command></screen>
 
   <para>
    For example, if you want more information about generating HTML output,
    run:
   </para>
 
-<screen>$ daps help html</screen>
+<screen>$ <command>daps help html</command></screen>
 
   <para>
    The following section introduces the key <command>daps</command> commands
@@ -673,17 +491,17 @@ make: *** [validate] Error 3</screen>
     Independent of the individual output format you want to create, you need
     to specify the &dclong; file to use:
    </para>
-<screen>$ daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></screen>
+<screen>$ <command>daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></command></screen>
    <para>
     For example:
    </para>
-<screen>$ daps -d &dc;-daps-example color-pdf</screen>
+<screen>$ <command>daps -d &dc;-daps-example color-pdf</command></screen>
    <para>
     If your current directory is not the documentation directory where the
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>
-<screen>$ daps -d /svn/daps/example/&dc;-daps-example color-pdf</screen>
+<screen>$ <command>daps -d /svn/daps/example/&dc;-daps-example color-pdf</command></screen>
    <para>
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.
@@ -992,7 +810,7 @@ make: *** [validate] Error 3</screen>
      use the following command to build the first chapter of the book
      (without the book's title page, table of contents etc.):
     </para>
-<screen>$ daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
+<screen>$ <command>daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</command></screen>
    </sect3>
    <sect3 id="sec.daps.quick.output.adv.review">
     <title>Output with Remarks or Draft Watermark</title>
@@ -1003,13 +821,13 @@ make: *** [validate] Error 3</screen>
      the following command to build a color PDF that has a
      <literal>DRAFT</literal> watermark printed on each page:
     </para>
-<screen>$ daps -d &dc;-daps-example color-pdf --draft</screen>
+<screen>$ <command>daps -d &dc;-daps-example color-pdf --draft</command></screen>
     <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
      editorial remarks or questions to the proofreader), include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
-<screen>$ daps -d &dc;-daps-example color-pdf --remarks</screen>
+<screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
     <para>
      By default, the content of remark elements is shown in italics in the
      output format. Enabling remarks automatically turns draft mode on.

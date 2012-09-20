@@ -39,9 +39,17 @@
 <!ENTITY daps-db-versions 
 "Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
  planned for version 2.0."> 
- 
+
+<!ENTITY daps-sys-req-general
+'  <para>
+  &dapsacr; itself is a lean solution that does not require a lot of system
+  resources. However, it does use components that may need a stronger processor
+  and more RAM, for instance for creating PDF output files.
+ </para>
+'>
+
 <!ENTITY daps-sys-req-sw
-'  <para>&dapsacr; runs on any modern Linux* system. It has not been
+'  <para>&dapsacr; runs on any modern Linux system. It has not been
     attempted to port &dapsacr; to Windows* or Mac OS X* yet.</para>
    <para>When installing &dapsacr; as an RPM package (on any SUSE-based system), 
    dependencies on other software packages are automatically resolved during 
@@ -51,7 +59,7 @@
 '  <para>To install the &dapsacr; sources on other Linux distributions (with 
    <literal>configure</literal>, <literal>make</literal>, and 
    <literal>make install</literal>), make sure the following packages or 
-   tools are installed on your system. Otherwise the installation scripts will
+   tools are installed on your system. Else, the installation scripts will
    fail.</para>
      <itemizedlist>
       <listitem>
@@ -130,7 +138,7 @@
      </itemizedlist>
      <para>During the installation procedure, the <filename>convert</filename> 
      script informs you about any further missing software packages. Refer to 
-     <xref linkend="pro.daps.quick.inst.tarball"/> for more information.
+     <xref linkend="pro.daps.user.inst.tarball"/> for more information.
      </para>'>
 
 <!ENTITY daps-addon
@@ -172,7 +180,6 @@
   </para>
 ' >
 
-
 <!ENTITY daps-sys-req-hw 
 '   <variablelist>
      <varlistentry>
@@ -197,8 +204,67 @@
        documentation sources and  the number of output formats you want to generate.</para>
      </listitem>
     </varlistentry>
-    </variablelist>'>
-  
+    </variablelist>
+'>
+
+<!ENTITY daps-install
+'  <para>
+    The &dapslong; can be installed and used on any Linux distribution.
+    Currently, &dapsacr; is available as an RPM package for the &osuse;
+    distribution.
+    <remark>taroth 2012-03-20: (and the &sle; products based on
+    &osuse;)???</remark><remark>Not yet ... -- sknorr, 2012-09-20</remark>
+    Eventually, packages for other distributions may become available.
+    In the meantime, you can download a tar archive with the &dapsacr; sources
+    and install them on any distribution as described in
+    <xref linkend="sec.daps.user.inst.tarball"/>.
+  </para>
+'>
+
+<!ENTITY daps-install-osuse
+'  <para>
+   There are a few ways to install &dapsacr; on &osuse;, one of the simplest
+   ways to always stay up-to-date with the latest version of &dapsacr; is to
+   install the <systemitem class="resource">daps</systemitem> package from the
+   <systemitem class="service">&suse-dapsrepo;</systemitem> repository via the
+   1-Click Install as outlined below.
+  </para>
+  <procedure>
+   <title>Installing &dapsacr; via 1-Click Install</title>
+   <step><para>Open your browser and go to
+    <ulink url="http://software.opensuse.org/"/>.</para>
+   </step>
+   <step>
+    <para>Enter <systemitem class="resource">daps</systemitem>.</para>
+   </step>
+   <step>
+    <para>On the resulting page, click <menuchoice><guimenu>daps</guimenu>
+    <guimenu>Show other versions</guimenu>
+    <guimenu>Show unstable packages</guimenu></menuchoice>.</para>
+   </step>
+   <step>
+    <para>Look for the version from the repository
+    <systemitem class="service">&suse-dapsrepo;</systemitem> and click the
+    <guimenu>1-Click Install</guimenu> link next to it. A window called
+    <guimenu>Yast&ndash;1-Click Install</guimenu> should appear.</para>
+   </step>
+   <step><para>Now follow the instructions and click <guimenu>Next</guimenu>,
+   <guimenu>Trust</guimenu>, and finally <guimenu>Finish</guimenu>,
+   respectively.</para>
+   </step>
+  </procedure>
+  <para>
+   If you are already well-versed in the usage of &osuse;, you can of course also
+   add the <systemitem class="service">&suse-dapsrepo;</systemitem> repository
+   with either <command>zypper</command> or <guimenu>YaST</guimenu>.
+  </para>
+  <para>
+   You may also use the <systemitem class="resource">daps</systemitem> package
+   that shipped with your version of &osuse;, however, you then might miss out
+   on the latest features and bug fixes in &dapsacr;.
+  </para>
+'>
+
 <!ENTITY daps-img-formats
 " <para>&dapsacr; supports the following types of images:</para>
   <itemizedlist>
