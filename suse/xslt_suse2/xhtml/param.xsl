@@ -123,6 +123,8 @@ task before
   
   <!-- Create breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
+  <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
+  <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
   
   <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>
@@ -133,9 +135,6 @@ task before
   <!--  Create permalinks?-->
   <xsl:param name="generate.permalinks" select="1"/>
   
-  <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
-  <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
-
   <!-- Should information from SVN properties be used? yes=1|no=0 -->
   <xsl:param name="use.meta" select="0"/>
   
