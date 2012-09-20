@@ -126,6 +126,10 @@ task before
   <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
   <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
   
+  <xsl:param name="bubbletoc.section.depth">2</xsl:param>
+  <xsl:param name="bubbletoc.max.depth">8</xsl:param>
+  
+  
   <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>
   
