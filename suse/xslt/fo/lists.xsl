@@ -90,6 +90,21 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
+  <xsl:variable name="lines">
+    <xsl:call-template name="dbfo-attribute">
+      <xsl:with-param name="pis"
+        select="processing-instruction('dbsuse-fo')"/>
+      <xsl:with-param name="attribute" select="'lines'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="border">
+    <xsl:call-template name="dbfo-attribute">
+      <xsl:with-param name="pis"
+        select="processing-instruction('dbsuse-fo')"/>
+      <xsl:with-param name="attribute" select="'border'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="default.border">0.5pt solid black</xsl:variable>
 
   <!-- termlength is irrelevant -->
 
@@ -114,18 +129,32 @@
   </xsl:variable>
 
   <!-- nested lists don't add extra list-block spacing -->
-  <xsl:choose>
-    <xsl:when test="ancestor::listitem">
-      <fo:block id="blub{$id}">
-        <xsl:copy-of select="$content"/>
-      </fo:block>
-    </xsl:when>
-    <xsl:otherwise>
-      <fo:block id="foo{$id}">
-        <xsl:copy-of select="$content"/>
-      </fo:block>
-    </xsl:otherwise>
-  </xsl:choose>
+  <fo:block id="{$id}">
+    
+    <xsl:if test="$lines != ''">
+      <xsl:message>variablelist</xsl:message>
+      <xsl:choose>
+        <xsl:when test="$border != ''">
+          <xsl:attribute name="border-top">
+            <xsl:value-of select="$border"/>
+          </xsl:attribute>
+          <xsl:attribute name="border-bottom">
+            <xsl:value-of select="$border"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="border-top">
+            <xsl:value-of select="$default.border"/>
+          </xsl:attribute>
+          <xsl:attribute name="border-bottom">
+            <xsl:value-of select="$default.border"/>
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      
+    </xsl:if>
+    <xsl:copy-of select="$content"/>
+  </fo:block>
 </xsl:template>
 
 
