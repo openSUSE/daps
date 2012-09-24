@@ -27,7 +27,7 @@
     exclude-result-prefixes="exsl l t">
   
   <xsl:import href="&www;/chunk-common.xsl"/>
-  
+  <xsl:import href="../common/navigation.xsl"/>
 
   <xsl:template name="clearme">
     <xsl:param name="wrapper">div</xsl:param>
@@ -35,6 +35,7 @@
       <xsl:attribute name="class">clearme</xsl:attribute>
     </xsl:element>
   </xsl:template>
+
 
   <!-- ===================================================== -->
   <xsl:template
@@ -59,34 +60,6 @@
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="debug"/>
-    <!-- The next.book, prev.book, and this.book variables contains the
-       ancestor or self nodes for book or article, but only one node.
-  -->
-    <xsl:variable name="next.book"
-      select="($next/ancestor-or-self::book |
-             $next/ancestor-or-self::article)[last()]"/>
-    <xsl:variable name="prev.book"
-      select="($prev/ancestor-or-self::book |
-             $prev/ancestor-or-self::article)[last()]"/>
-    <xsl:variable name="this.book"
-      select="(ancestor-or-self::book|ancestor-or-self::article)[last()]"/>
-
-    <!-- Compare the current "book" ID (be it really a book or an article)
-       with the "next" or "previous" book or article ID
-  -->
-    <xsl:variable name="isnext"
-      select="generate-id($this.book) = generate-id($next.book)"/>
-    <xsl:variable name="isprev"
-      select="generate-id($this.book) = generate-id($prev.book)"/>
-
-    <xsl:variable name="home" select="/*[1]"/>
-    <xsl:variable name="up" select="parent::*"/>
-    <xsl:variable name="row2"
-      select="(count($prev) > 0 and $isprev) or
-                                    (count($up) &gt; 0 and 
-                                     generate-id($up) != generate-id($home) and 
-                                     $navig.showtitles != 0) or
-                                    (count($next) > 0 and $isnext)"/>
 
     <!-- 
      We use two node sets and calculate the set difference
@@ -112,21 +85,6 @@
       select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
 
-    <!--<xsl:if test="$debug">
-              <xsl:message>breadcrumbs.navigation:
-    count(setdiff):  <xsl:value-of select="count($setdiff)"/>
-    $setdiff:        <xsl:for-each select="$setdiff">
-      <xsl:value-of select="local-name()"/>
-      <xsl:text>, </xsl:text>
-    </xsl:for-each>
-    Element:  <xsl:value-of select="local-name(.)"/>
-    prev:     <xsl:value-of select="local-name($prev)"/>
-    next:     <xsl:value-of select="local-name($next)"/>
-    rootid:   <xsl:value-of select="$rootid"/>
-    isnext:   <xsl:value-of select="$isnext"/>
-    isprev:   <xsl:value-of select="$isprev"/>
-</xsl:message>
-</xsl:if>-->
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
@@ -264,57 +222,73 @@
     </div>
   </xsl:template>
   
-  
   <!-- ===================================================== -->
   <xsl:template name="toolbar-wrap">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
     
+    <xsl:variable name="rootnode"  select="generate-id(/*) = generate-id(.)"/>
+    
     <div id="_toolbar-wrap">
       <div id="_toolbar">
-        <div id="_toc-area" class="inactive">
-          <a id="_toc-area-button" class="tool"
-            href="#"
-            onclick="activate('_toc_rea')" title="Contents">
-            <span class="tool-spacer">
-              <span class="toc-icon"> </span>
-              <xsl:call-template name="clearme">
-                <xsl:with-param name="wrapper">span</xsl:with-param>
-              </xsl:call-template>
-            </span>
-            <span class="tool-label">Contents</span>
-          </a>
-          <div class="active-contents bubble-corner"> </div>
-          <div class="active-contents bubble">
-            <div class="bubble-container">
-              <h6>
-                <xsl:apply-templates mode="title.markup"
-                  select="(ancestor-or-self::book |
-                  ancestor-or-self::article)[1]"/>
-              </h6>
-              <div class="bubble-toc">
-                <!-- FIXME -->
+        <xsl:choose>
+          <xsl:when test="$rootnode">
+            <!-- We don't need it for a set -->
+            <div id="_toc-area" class="inactive"> </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div id="_toc-area" class="inactive">
+              <a id="_toc-area-button" class="tool"
+                href="#"
+                onclick="activate('_toc_rea')" title="Contents">
+                <span class="tool-spacer">
+                  <span class="toc-icon"> </span>
+                  <xsl:call-template name="clearme">
+                    <xsl:with-param name="wrapper">span</xsl:with-param>
+                  </xsl:call-template>
+                </span>
+                <span class="tool-label">Contents</span>
+              </a>
+              <div class="active-contents bubble-corner"> </div>
+              <div class="active-contents bubble">
+                <div class="bubble-container">
+                  <h6>
+                    <xsl:apply-templates mode="title.markup"
+                      select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
+                  </h6>
+                  <div class="bubble-toc">
+                    <xsl:call-template name="bubble-toc"/>
+                  </div>
+                  <xsl:call-template name="clearme"/>
+                </div>
               </div>
-              <xsl:call-template name="clearme"/>
             </div>
-          </div>
-        </div>
-                
-        <div id="_nav-area" class="inactive">
-          <!-- FIXME: style attr. needs to be moved to CSS file -->
-          <div class="tool">
-            <span style="float:right;">
-              <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
-              <!-- Add navigation -->
-              <xsl:call-template name="header.navigation">
-                <xsl:with-param name="next" select="$next"/>
-                <xsl:with-param name="prev" select="$prev"/>
-                <xsl:with-param name="nav.context" select="$nav.context"/>
-              </xsl:call-template>
-            </span>
-          </div>
-        </div>
+          </xsl:otherwise>
+        </xsl:choose>
+        
+        <xsl:choose>
+          <xsl:when test="$rootnode">
+            <!-- We don't need it for a set -->
+            <div id="_nav-area" class="inactive"></div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div id="_nav-area" class="inactive">
+              <div class="tool">
+                <span class="nav-inner">
+                  <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
+                  <!-- Add navigation -->
+                  <xsl:call-template name="header.navigation">
+                    <xsl:with-param name="next" select="$next"/>
+                    <xsl:with-param name="prev" select="$prev"/>
+                    <xsl:with-param name="nav.context" select="$nav.context"/>
+                  </xsl:call-template>
+                </span>
+              </div>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+        
         <xsl:call-template name="create-find-area">
           <xsl:with-param name="next" select="$next"/>
           <xsl:with-param name="prev" select="$prev"/>
@@ -325,30 +299,28 @@
     </div>
   </xsl:template>
   
+  <!-- ===================================================== -->
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
     <xsl:param name="nav.context"/>
     
-   <xsl:variable name="next.book" 
-    select="($next/ancestor-or-self::book |
-             $next/ancestor-or-self::article)[last()]"/>
-  <xsl:variable name="prev.book"
-    select="($prev/ancestor-or-self::book |
-             $prev/ancestor-or-self::article)[last()]"/>
-  <xsl:variable name="this.book" 
-    select="(ancestor-or-self::book|ancestor-or-self::article)[last()]"/>
-  
-  <xsl:variable name="isnext"  select="generate-id($this.book) = generate-id($next.book)"/>
-  <xsl:variable name="isprev"  select="generate-id($this.book) = generate-id($prev.book)"/>
-  
-  <xsl:variable name="home" select="/*[1]"/>
-  <xsl:variable name="up" select="parent::*"/>
-  <xsl:variable name="row2" select="(count($prev) > 0 and $isprev) or
-                                    (count($up) &gt; 0 and 
-                                     generate-id($up) != generate-id($home) and 
-                                     $navig.showtitles != 0) or
-                                    (count($next) > 0 and $isnext)"/>
+    <xsl:variable name="needs.navig">
+      <xsl:call-template name="is.node.in.navig">
+        <xsl:with-param name="next" select="$next"/>
+        <xsl:with-param name="prev" select="$prev"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="isnext">
+      <xsl:call-template name="is.next.node.in.navig">
+        <xsl:with-param name="next" select="$next"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="isprev">
+      <xsl:call-template name="is.prev.node.in.navig">
+        <xsl:with-param name="prev" select="$prev"/>
+      </xsl:call-template>
+    </xsl:variable>
   
   <!-- 
      We use two node sets and calculate the set difference
@@ -371,19 +343,7 @@
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
-    
-<!--<xsl:if test="$debug">
-              <xsl:message>breadcrumbs.navigation:
-    Element:  <xsl:value-of select="local-name(.)"/>
-    prev:     <xsl:value-of select="local-name($prev)"/>
-    next:     <xsl:value-of select="local-name($next)"/>
-    rootid:   <xsl:value-of select="$rootid"/>
-    isnext:   <xsl:value-of select="$isnext"/>
-    isprev:   <xsl:value-of select="$isprev"/>
-</xsl:message>
-</xsl:if>-->
-    
-     <xsl:if test="$row2">
+     <xsl:if test="$needs.navig">
        <xsl:if test="count($prev) >0 and $isprev">
         <a accesskey="p" class="tool-spacer">
           <xsl:attribute name="title">
@@ -415,7 +375,6 @@
      </xsl:if>
   </xsl:template>
 
-
   <xsl:template name="body.onload.attribute">
     <!-- TODO: Add parameter to control it -->
     <xsl:attribute name="onload">show(); labelInputFind();</xsl:attribute>
@@ -429,8 +388,8 @@
       <xsl:attribute name="class">draft</xsl:attribute>
     </xsl:if>
   </xsl:template>
-  <!-- ===================================================== -->
   
+  <!-- ===================================================== -->
   <xsl:template name="chunk-element-content">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
