@@ -14,7 +14,8 @@
       $rootid node and needs to be included in navigation. 
     
     * is.node.in.rootid.node(next=NODE, prev=NODE)
-      Returns boolean, if the previous, next, up and home link
+      Returns boolean, if the previous, next, up and home link is inside
+      the descendants of $rootid node
     
 
    Author:    Thomas Schraitle <toms@opensuse.org>
