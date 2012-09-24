@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   Purpose:
+     Create customized title pages for book and article
+     
+   See Also:
+     * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
+     * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+              Stefan Knorr <sknorr (AT) suse DOT de>
+   Copyright: 2012, Thomas Schraitle
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
 
   <!-- article titlepage templates -->
-    <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
+  <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="article.titlepage.recto.style">
       <span class="contributor-label">
       <xsl:call-template name="gentext">
@@ -38,7 +51,6 @@
     </div>
   </xsl:template>
 
-  
   <xsl:template name="article.titlepage.recto">
         <xsl:choose>
             <xsl:when test="articleinfo/title">
@@ -103,6 +115,7 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
   </xsl:template>
 
+  <!-- ===================================================== -->
   <!-- book titlepage templates --> 
   <xsl:template name="set.titlepage.separator"/>
   <xsl:template name="book.titlepage.separator"/>
@@ -198,6 +211,5 @@
       <xsl:call-template name="person.name"/>
     </div>
   </xsl:template>
-
 
 </xsl:stylesheet>
