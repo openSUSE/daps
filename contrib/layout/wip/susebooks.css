@@ -1,3 +1,11 @@
+/*
+Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
+For additional support for Vietnamese, add "vietnamese," after "&subset=".
+Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
+Consider page load time.
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,600italic,400italic&subset=latin,cyrillic-ext,latin-ext,greek);
+
 /* Reset everything */
 /* From http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
 html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
@@ -26,14 +34,6 @@ table {
 a {
     text-decoration: none;
 }
-
-/*
-Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
-For additional support for Vietnamese, add "vietnamese," after "&subset=".
-Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
-Consider page load time.
-*/
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic&subset=latin,cyrillic-ext);
 
 
 /* PAGE BOILERPLATE AND NAVIGATION */
@@ -127,7 +127,7 @@ html, body {
     height: 38px;
     color: #439539;
     line-height: 55px;
-    font-weight: bold;
+    font-weight: 600;
     display: block;
 }
 
@@ -818,7 +818,7 @@ html, body {
 }
 
 #_content .sect2 .title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: normal;
     padding: 40px 0 0;
 }
@@ -831,7 +831,7 @@ html, body {
 
 #_content .sect4 .title {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     padding: 20px 0 0;
 }
 
@@ -935,9 +935,17 @@ html, body {
     background: url(style_images/dots-yellow.png) repeat-x scroll top;
 }
 
+#_content .note ul {
+    color: #333;
+}
+
 #_content .important {
     border-color: #BB7B03;
     background: url(style_images/dots-orange.png) repeat-x scroll top;
+}
+
+#_content .important ul {
+    color: #BB7B03;
 }
 
 #_content .warning, .caution {
@@ -945,9 +953,13 @@ html, body {
     background: url(style_images/dots-red.png) repeat-x scroll top;
 }
 
+#_content .warning ul, #_content .warning ul {
+    color: #333;
+}
+
 #_content .admonition h6 {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     vertical-align: middle;
     display: table-cell;
     height: 36px;
@@ -992,7 +1004,7 @@ em, i, .guimenu {
 }
 
 strong, b, #_content .contributor-label {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #_content p {
@@ -1003,8 +1015,31 @@ strong, b, #_content .contributor-label {
 }
 
 #_content .abstract {
-    font-weight: bold;
+    font-weight: 600;
+    background-color: #F7FAF6;
+    border-left: 3px solid #9CC897;
+    padding: 3px 10px 5px 10px;
+    margin: 24px 0 0;
+}
+#_content .abstract * {
+    
     color: #333;
+}
+
+#_content .abstract .titlepage {
+    display: none;
+    }
+
+#_content .abstract .titlepage + p {
+    margin-top: 0;
+}
+
+#_content .abstract li p {
+    font-weight: 600;
+}
+
+#_content .abstract li:first-child p:first-child {
+    margin-top: 0;
 }
 
 #_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
@@ -1125,14 +1160,17 @@ strong, b, #_content .contributor-label {
     color: #76AD2D;
 }
 
-#_content .variablelist, #_content .glossary, #_content .toc {
+#_content .calloutlist {
+    margin: -14px 0 24px;
+}
+
+#_content .variablelist, #_content .toc {
     margin: 24px 0;
-    font-size: 16px;
 }
 
 #_content .variablelist dt, #_content .glossary dt {
-    font-weight: bold;
-    color: #333;
+    font-weight: 600;
+    color: #000;
 }
 
 #_content .variablelist dd, #_content .glossary dd {
@@ -1304,7 +1342,7 @@ obnoxious image handling:
 #_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
     display: block;
     color: #439539;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #_content ol.procedure {
@@ -1351,7 +1389,7 @@ obnoxious image handling:
 }
 
 #_content .table th, #_content .informaltable th {
-    font-weight: bold;
+    font-weight: 600;
     background-color: #D1D1D3;
 }
 
@@ -1371,8 +1409,8 @@ obnoxious image handling:
 }
 
 #_content ul {
-    padding: 5px 0 5px 35px;
-    margin: 0 10px 0 10px;
+    padding: 5px 0 0 35px;
+    margin: 0 10px;
     display: block;
     color: #439539;
     list-style-type: bullet;
@@ -1423,7 +1461,7 @@ obnoxious image handling:
 
 
 .ds-label {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .ds-head {
