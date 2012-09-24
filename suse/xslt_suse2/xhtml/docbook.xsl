@@ -33,7 +33,7 @@
  
  <xsl:include href="param.xsl"/>
  <xsl:include href="create-permalink.xsl"/>
- 
+
  <xsl:include href="autotoc.xsl"/>
  <xsl:include href="lists.xsl"/>
  <xsl:include href="verbatim.xsl"/>
@@ -43,6 +43,7 @@
  <xsl:include href="division.xsl"/>
  <xsl:include href="inline.xsl"/>
  <xsl:include href="admon.xsl"/>
+ <xsl:include href="block.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
 
  <xsl:include href="metadata.xsl"/>
