@@ -27,7 +27,6 @@
     exclude-result-prefixes="exsl l t">
   
   <xsl:import href="&www;/chunk-common.xsl"/>
-  <xsl:import href="../common/navigation.xsl"/>
 
   <xsl:template name="clearme">
     <xsl:param name="wrapper">div</xsl:param>
