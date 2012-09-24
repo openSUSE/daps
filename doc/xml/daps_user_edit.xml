@@ -8,19 +8,28 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.edit">
- <title>Editing DocBook-XML</title>
+ <title>Editing DocBook XML</title>
  <abstract>
-  &daps-editor;
- </abstract>
-<!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
-     be a great idea-->
-<!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
-     tips/instructions for individual editors?-->
+  <para>This chapter describes:
+  <itemizedlist>
+   <listitem><para>how to choose an editor for editing DocBook XML files,</para></listitem>
+   <listitem><para>how to check the contents of your DocBook files for mistakes, and</para></listitem>
+   <listitem><para>how to adapt your documentation to fit multiple similar product versions at once</para></listitem>
+  </itemizedlist></para></abstract>
+
+ <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
+  be a great idea-->
+ <!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
+  tips/instructions for individual editors?-->
  <sect1 id="sec.daps.user.edit.basics">
   <title>Basic Structural Elements</title>
-&db-structure-elements;
+  &db-structure-elements;
  </sect1>
- <sect1 id="sec.daps.user.edit.macros">
+
+<sect1>
+ <title>Choice of Editor</title>
+ &daps-editor;
+ <sect2 id="sec.daps.user.edit.macros">
   <title>Editor Macros for Inserting Complex Elements</title>
   <remark>taroth 2012-06-15: todo - move to appendix as discussed with Frank today</remark>
   <para>
@@ -34,23 +43,23 @@
    if you need to insert the child elements of complex XML constructs
    consecutively.
   </para>
-
+  
   <para>
    Most editors allow you to define or record macros which you can use for
    automatically inserting empty <quote>skeletons</quote> for a complex XML
    construct as illustrated by <xref linkend="ex.daps.user.vle"/>.
   </para>
-
+  
   <example id="ex.daps.user.vle">
    <title>A <sgmltag>varlistentry</sgmltag> Element</title>
    <screen>&lt;varlistentry&gt;
-  &lt;term&gt;&lt;/term&gt;
-  &lt;listitem&gt;
+    &lt;term&gt;&lt;/term&gt;
+    &lt;listitem&gt;
     &lt;para&gt;&lt;/para&gt;
-  &lt;/listitem&gt;
-&lt;/varlistentry&gt;</screen>
+    &lt;/listitem&gt;
+    &lt;/varlistentry&gt;</screen>
   </example>
-
+  
   <para>
    For Emacs, &dapsacr; already includes macros for adding elements such as
    <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>,
@@ -60,7 +69,7 @@
    Emacs' main XML editing modes, either <literal>nxml</literal> or
    <literal>psgml</literal>.
   </para>
-
+  
   <procedure>
    <title>Configuring Emacs to Use the DocBook Macros</title>
    <step>
@@ -81,12 +90,13 @@
     </para>
    </step>
   </procedure>
-
+  
   <para>
    For an overview, which macros are available and how to use them, refer to
    <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
   </para>
- </sect1>
+ </sect2>
+</sect1>
 
  <sect1 id="sec.daps.user.edit.spell">
   <title>Spell Checking</title>
@@ -1195,9 +1205,7 @@ PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
 <title>For More Information</title>
 <para>
    For a complete DocBook reference see
-   <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
-   <citetitle>&tdg;</citetitle>
- </ulink>.
+   <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle></ulink>.
   </para>
 <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
