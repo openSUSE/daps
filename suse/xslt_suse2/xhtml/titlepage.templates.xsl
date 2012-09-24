@@ -197,35 +197,41 @@
   </xsl:template>
 
   <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
-    <p xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span class="contributor-label">
-      <xsl:call-template name="gentext">
-        <xsl:with-param name="key">Authors</xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>: </xsl:text>
-      </span>
-      <xsl:call-template name="person.name.list">
-        <xsl:with-param name="person.list" select="author|corpauthor"/>
-      </xsl:call-template>
-    </p>
-    <xsl:if test="othercredit|editor">
-      <div>
-        <span class="contributor-label">
+    <div>
+      <xsl:call-template name="generate.class.attribute"/>
+      <div xsl:use-attribute-sets="book.titlepage.recto.style">
+        <span class="authorgroup-label">
           <xsl:call-template name="gentext">
-            <xsl:with-param name="key">
-             <xsl:choose>
-               <xsl:when test="count(othercredit|editor) > 1">Contributors</xsl:when>
-               <xsl:otherwise>Contributor</xsl:otherwise>
-             </xsl:choose>
-            </xsl:with-param>
+            <xsl:with-param name="key">Authors</xsl:with-param>
           </xsl:call-template>
           <xsl:text>: </xsl:text>
         </span>
         <xsl:call-template name="person.name.list">
-        <xsl:with-param name="person.list" select="othercredit|editor"/>
-      </xsl:call-template>
+          <xsl:with-param name="person.list" select="author|corpauthor"
+          />
+        </xsl:call-template>
       </div>
-    </xsl:if>
+      <xsl:if test="othercredit|editor">
+        <div>
+          <span class="contributor-label">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">
+                <xsl:choose>
+                  <xsl:when test="count(othercredit|editor) > 1"
+                    >Contributors</xsl:when>
+                  <xsl:otherwise>Contributor</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>: </xsl:text>
+          </span>
+          <xsl:call-template name="person.name.list">
+            <xsl:with-param name="person.list"
+              select="othercredit|editor"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
+    </div>
   </xsl:template>
 
   <xsl:template match="author" mode="book.titlepage.recto.auto.mode">
