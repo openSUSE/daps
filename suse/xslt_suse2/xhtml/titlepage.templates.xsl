@@ -82,15 +82,6 @@
             </xsl:when>
         </xsl:choose>
         
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/corpauthor"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/corpauthor"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/corpauthor"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/authorgroup"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/authorgroup"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/authorgroup"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/author"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/author"/>
-        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/othercredit"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/othercredit"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/othercredit"/>
@@ -113,6 +104,16 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/abstract"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/abstract"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
+        <!-- Moved authors and authorgroups here: -->
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/corpauthor"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/corpauthor"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/corpauthor"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/authorgroup"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/authorgroup"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/authorgroup"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/author"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/author"/>
+       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
   </xsl:template>
 
   <!-- ===================================================== -->
