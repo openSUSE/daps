@@ -130,6 +130,8 @@ task before
   <xsl:param name="bubbletoc.section.depth">2</xsl:param>
   <xsl:param name="bubbletoc.max.depth">8</xsl:param>
   
+  <!-- Create version information before title? -->
+  <xsl:param name="generate.version.info" select="1"/>
   
   <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>

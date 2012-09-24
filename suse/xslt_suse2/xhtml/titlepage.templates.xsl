@@ -16,7 +16,23 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
+  <xsl:template name="add.version.info">
+    <xsl:variable name="products"
+      select="ancestor-or-self::*/*/productname | ancestor-or-self::*/*/productnumber"/>
+    <xsl:if test="$generate.version.info != 0 and $products">
+      <div class="version-info">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">version.info</xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates select="ancestor-or-self::*/*/productname"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="ancestor-or-self::*/*/productnumber"/>
+      </div>
+    </xsl:if>
+  </xsl:template>
 
+
+  <!-- ===================================================== -->
   <!-- article titlepage templates -->
   <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="article.titlepage.recto.style">
@@ -56,6 +72,7 @@
   </xsl:template>
 
   <xsl:template name="article.titlepage.recto">
+        <xsl:call-template name="add.version.info"/>
         <xsl:choose>
             <xsl:when test="articleinfo/title">
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/title"/>
@@ -126,6 +143,8 @@
   <xsl:template name="book.titlepage.separator"/>
   
   <xsl:template name="book.titlepage.recto">
+    <xsl:call-template name="add.version.info"/>
+    
         <xsl:choose>
             <xsl:when test="bookinfo/title">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
@@ -178,7 +197,7 @@
   </xsl:template>
 
   <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
-    <div xsl:use-attribute-sets="book.titlepage.recto.style">
+    <p xsl:use-attribute-sets="book.titlepage.recto.style">
       <span class="contributor-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Authors</xsl:with-param>
@@ -188,7 +207,7 @@
       <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="author|corpauthor"/>
       </xsl:call-template>
-    </div>
+    </p>
     <xsl:if test="othercredit|editor">
       <div>
         <span class="contributor-label">
