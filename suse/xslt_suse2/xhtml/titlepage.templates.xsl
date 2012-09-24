@@ -36,7 +36,7 @@
   <!-- article titlepage templates -->
   <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="article.titlepage.recto.style">
-      <span class="contributor-label">
+      <span class="authorgroup-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Authors</xsl:with-param>
       </xsl:call-template>
@@ -57,7 +57,7 @@
   
   <xsl:template match="author" mode="article.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span class="contributor-label">
+      <span class="authorgroup-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Author</xsl:with-param>
       </xsl:call-template>
@@ -213,7 +213,7 @@
       </div>
       <xsl:if test="othercredit|editor">
         <div>
-          <span class="contributor-label">
+          <span class="authorgroup-label">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">
                 <xsl:choose>
@@ -236,7 +236,7 @@
 
   <xsl:template match="author" mode="book.titlepage.recto.auto.mode">
     <div xsl:use-attribute-sets="book.titlepage.recto.style">
-      <span class="contributor-label">
+      <span class="authorgroup-label">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">Author</xsl:with-param>
       </xsl:call-template>
