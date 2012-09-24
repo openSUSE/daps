@@ -1003,7 +1003,7 @@ em, i, .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, #_content .contributor-label, .productname, .productnumber {
+strong, b, #_content .authorgroup-label, .productname, .productnumber {
     font-weight: 600;
 }
 
@@ -1021,14 +1021,17 @@ strong, b, #_content .contributor-label, .productname, .productnumber {
     padding: 3px 10px 5px 10px;
     margin: 24px 0 0;
 }
-#_content .abstract * {
-    
+#_content .abstract p {
     color: #333;
+}
+
+#_content .abstract p:first-child {
+    margin-top: 0;
 }
 
 #_content .abstract .titlepage {
     display: none;
-    }
+}
 
 #_content .abstract .titlepage + p {
     margin-top: 0;
@@ -1040,6 +1043,10 @@ strong, b, #_content .contributor-label, .productname, .productnumber {
 
 #_content .abstract li:first-child p:first-child {
     margin-top: 0;
+}
+
+#_content .abstract + .authorgroup {
+    margin: 10px 0;
 }
 
 #_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
