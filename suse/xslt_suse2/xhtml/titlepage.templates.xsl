@@ -51,6 +51,10 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
+    <xsl:apply-templates select="."/>
+  </xsl:template>
+
   <xsl:template name="article.titlepage.recto">
         <xsl:choose>
             <xsl:when test="articleinfo/title">
@@ -146,6 +150,23 @@
             </xsl:when>
         </xsl:choose>
         
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/releaseinfo"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/releaseinfo"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/copyright"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/copyright"/>
+    
+        <!-- Legal notice removed from here, now positioned at the bottom of the page, see: division.xsl -->
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/pubdate"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/pubdate"/>
+    
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revision"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revision"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revhistory"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revhistory"/>
+    
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/abstract"/>
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/abstract"/>
+    
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
@@ -154,19 +175,6 @@
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/author"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/othercredit"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/othercredit"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/releaseinfo"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/releaseinfo"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/copyright"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/copyright"/>
-        <!-- Legal notice removed from here, now positioned at the bottom of the page, see: division.xsl -->
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/pubdate"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/pubdate"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revision"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revision"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revhistory"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revhistory"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/abstract"/>
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/abstract"/>
   </xsl:template>
 
   <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
@@ -213,4 +221,7 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="abstract" mode="book.titlepage.recto.auto.mode">
+    <xsl:apply-templates select="."/>
+  </xsl:template>  
 </xsl:stylesheet>
