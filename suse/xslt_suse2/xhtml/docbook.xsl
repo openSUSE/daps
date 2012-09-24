@@ -37,6 +37,7 @@
 
  <xsl:include href="autotoc.xsl"/>
  <xsl:include href="lists.xsl"/>
+ <xsl:include href="callout.xsl"/>
  <xsl:include href="verbatim.xsl"/>
  <xsl:include href="component.xsl"/>
  <xsl:include href="formal.xsl"/>

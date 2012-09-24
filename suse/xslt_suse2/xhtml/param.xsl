@@ -29,6 +29,7 @@
 
 <!-- 2. Callouts ================================================ -->
   <xsl:param name="callout.graphics.path">callouts/</xsl:param>
+  <xsl:param name="callout.graphics" select="0"/>
 
 <!-- 3. EBNF ==================================================== -->
 
