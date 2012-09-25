@@ -118,4 +118,9 @@
     </xsl:if>
 </xsl:template>
   
+  <xsl:template match="productname">
+    <xsl:call-template name="inline.charseq"/>
+    <!-- We don't want to process @class attribute here -->
+  </xsl:template>
+  
 </xsl:stylesheet>
