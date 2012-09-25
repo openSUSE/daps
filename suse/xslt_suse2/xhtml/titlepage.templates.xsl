@@ -32,28 +32,53 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template name="add.authorgroup">
+    <div>
+      <xsl:call-template name="generate.class.attribute"/>
+      <div>
+        <span class="authorgroup-label">
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key">
+              <xsl:choose>
+                <xsl:when test="count(author|corpauthor) > 1">Authors</xsl:when>
+                <xsl:otherwise>Author</xsl:otherwise>
+              </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>: </xsl:text>
+        </span>
+        <xsl:call-template name="person.name.list">
+          <xsl:with-param name="person.list" 
+            select="author|corpauthor"/>
+        </xsl:call-template>
+      </div>
+      <xsl:if test="othercredit|editor">
+        <div>
+          <span class="authorgroup-label">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">
+                <xsl:choose>
+                  <xsl:when test="count(othercredit|editor) > 1"
+                    >Contributors</xsl:when>
+                  <xsl:otherwise>Contributor</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>: </xsl:text>
+          </span>
+          <xsl:call-template name="person.name.list">
+            <xsl:with-param name="person.list"
+              select="othercredit|editor"/>
+          </xsl:call-template>
+        </div>
+      </xsl:if>
+    </div>
+  </xsl:template>
 
   <!-- ===================================================== -->
   <!-- article titlepage templates -->
   <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
-    <div xsl:use-attribute-sets="article.titlepage.recto.style">
-      <span class="authorgroup-label">
-      <xsl:call-template name="gentext">
-        <xsl:with-param name="key">Authors</xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>: </xsl:text>
-      </span>
-      <xsl:call-template name="person.name.list">
-        <xsl:with-param name="person.list" select="author|corpauthor"/>
-      </xsl:call-template>
-    </div>
-    <xsl:if test="othercredit|editor">
-      <div>
-        <xsl:call-template name="person.name.list">
-          <xsl:with-param name="person.list" select="othercredit|editor"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
+    <xsl:call-template name="add.authorgroup"/>
   </xsl:template>
   
   <xsl:template match="author" mode="article.titlepage.recto.auto.mode">
@@ -195,41 +220,7 @@
   </xsl:template>
 
   <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
-    <div>
-      <xsl:call-template name="generate.class.attribute"/>
-      <div xsl:use-attribute-sets="book.titlepage.recto.style">
-        <span class="authorgroup-label">
-          <xsl:call-template name="gentext">
-            <xsl:with-param name="key">Authors</xsl:with-param>
-          </xsl:call-template>
-          <xsl:text>: </xsl:text>
-        </span>
-        <xsl:call-template name="person.name.list">
-          <xsl:with-param name="person.list" select="author|corpauthor"
-          />
-        </xsl:call-template>
-      </div>
-      <xsl:if test="othercredit|editor">
-        <div>
-          <span class="authorgroup-label">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">
-                <xsl:choose>
-                  <xsl:when test="count(othercredit|editor) > 1"
-                    >Contributors</xsl:when>
-                  <xsl:otherwise>Contributor</xsl:otherwise>
-                </xsl:choose>
-              </xsl:with-param>
-            </xsl:call-template>
-            <xsl:text>: </xsl:text>
-          </span>
-          <xsl:call-template name="person.name.list">
-            <xsl:with-param name="person.list"
-              select="othercredit|editor"/>
-          </xsl:call-template>
-        </div>
-      </xsl:if>
-    </div>
+    <xsl:call-template name="add.authorgroup"/>
   </xsl:template>
 
   <xsl:template match="author" mode="book.titlepage.recto.auto.mode">
