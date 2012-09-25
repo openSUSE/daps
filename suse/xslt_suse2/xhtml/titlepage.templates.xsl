@@ -28,7 +28,6 @@
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="$products[self::productnumber]"/>
       </div>
-      <xsl:call-template name="clearme"/>
     </xsl:if>
   </xsl:template>
 
@@ -75,6 +74,32 @@
     </div>
   </xsl:template>
 
+
+  <!-- ===================================================== -->
+  <xsl:template name="part.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="preface.titlepage.before.recto">
+    <xsl:message>preface.titlepage.before.recto</xsl:message>
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="appendix.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="glossary.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="reference.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="chapter.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  <xsl:template name="bibliography.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
+  
+
   <!-- ===================================================== -->
   <!-- article titlepage templates -->
   <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
@@ -95,6 +120,10 @@
 
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
     <xsl:apply-templates select="."/>
+  </xsl:template>
+
+  <xsl:template name="article.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
   </xsl:template>
 
   <xsl:template name="article.titlepage.recto">
@@ -166,6 +195,10 @@
   <!-- book titlepage templates --> 
   <xsl:template name="set.titlepage.separator"/>
   <xsl:template name="book.titlepage.separator"/>
+  
+  <xsl:template name="book.titlepage.before.recto">
+    <xsl:call-template name="add.version.info"/>
+  </xsl:template>
   
   <xsl:template name="book.titlepage.recto">
         <xsl:choose>
