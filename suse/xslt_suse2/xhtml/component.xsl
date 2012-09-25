@@ -98,7 +98,7 @@
     </xsl:element>
   </xsl:template>  
 
-  <xsl:template match="chapter|preface|appendix|glossary">
+  <xsl:template match="chapter|preface|appendix">
     <xsl:call-template name="id.warning"/>
     
     <xsl:element name="{$div.element}" namespace="http://www.w3.org/1999/xhtml">
@@ -134,14 +134,15 @@
           <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
         </xsl:call-template>
       </xsl:variable>
+      <div class="line">
       <xsl:if test="contains($toc.params, 'toc')">
-        <div class="line">
+
         <xsl:call-template name="component.toc">
           <xsl:with-param name="toc.title.p" select="contains($toc.params, 'title')"/>
         </xsl:call-template>
         <xsl:call-template name="component.toc.separator"/>
-        </div>
       </xsl:if>
+      </div>
       <xsl:apply-templates/>
       <xsl:call-template name="process.footnotes"/>
     </xsl:element>
