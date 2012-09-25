@@ -110,7 +110,24 @@
       </xsl:call-template>
       
       <xsl:call-template name="component.separator"/>
-      <xsl:call-template name="chapter.titlepage"/>
+      <xsl:choose>
+        <xsl:when test="self::appendix">
+          <xsl:call-template name="appendix.titlepage"/>
+        </xsl:when>
+        <xsl:when test="self::chapter">
+          <xsl:call-template name="chapter.titlepage"/>
+        </xsl:when>
+        <xsl:when test="self::glossary">
+          <xsl:call-template name="glossary.titlepage"/>
+        </xsl:when>
+        <xsl:when test="self::preface">
+          <xsl:call-template name="preface.titlepage"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>Don't know how to call titlepage for <xsl:value-of select="local-name()"/></xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+      
       
       <xsl:variable name="toc.params">
         <xsl:call-template name="find.path.params">
