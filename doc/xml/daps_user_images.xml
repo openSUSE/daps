@@ -9,71 +9,64 @@
 ]>
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
- <para>
+ <abstract><para>
   This chapter describes:
   <itemizedlist>
    <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para></listitem>
    <listitem><para>how you can use &dapsacr; to generate lists of used, unused and missing images.</para></listitem>
-  </itemizedlist>
-  
- </para>
- <para>
-  Depending on the output format you generate with &dapsacr; (PDF or HTML
-  for example), the source images you provide and reference in your XML
-  sources are automatically transformed into the appropriate output formats.
-  For example, SVG images are converted to PNG for HTML builds, or color
-  images to grayscale for black-and-white PDFs.<remark>taroth 2012-09-19:
-  maybe it would make sense to include the basic information also
-  here (by using phrase entities) and to remove the next sentence?</remark> 
-  For basic information about
-  image handling (such as supported formats, where to store the images in
-  your documentation directory, and how to reference them in your XML
-  files), refer to <xref linkend="sec.daps.quick.imgs"/>.
- </para>
- <sect1 id="sec.daps.user.imgs.types">
-  <title>Supported Image Types</title>
-  &daps-img-formats;
- </sect1>
+  </itemizedlist></para></abstract>
+
  <sect1 id="sec.daps.user.imgs.usage">
-  <title>Where to Use Which Image Type</title>
+  <title>Image Types</title>
+  <para>
+   Depending on the output format you generate with &dapsacr; (PDF or HTML
+   for example), the source images you provide and reference in your XML
+   sources are automatically transformed into the appropriate output formats.
+   For example, when building an HTML deliverable, SVG images are converted to
+   PNG, and when building a grayscale PDF deliverable, color images are also
+   converted to grayscale. Thus, only the decision which file format should be
+   the source is very important. As you might imagine, the appropriate source
+   format depends on the purpose of the image.
+  </para>
+  &daps-img-formats;
+  <important>
+   <title>PDF and EPS Image Support in &dapsacr; Is Experimental</title>
+   <para>
+    <acronym>PDF</acronym> and <acronym>EPS</acronym> support in &dapsacr; is
+    experimental and currently only supported in combination with the XEP
+    formatter. Using either format might also lead to longer document creation times.
+   </para>
+  </important>
   <sect2 id="sec.daps.user.imgs.usage.dia">
    <title>DIA</title>
    <para>
-    The software <ulink url="https://live.gnome.org/Dia">Dia</ulink> is a diagram editor which can be used to draw
-    entity-relationship diagrams, UML diagrams, and flowcharts. It stores these
-    diagrams in a custom XML-based vector format called DIA.
+    DIA is an image format suited especially well to creating diagrams. DIA is a
+    vector format which means it is resolution-independent. In other words, an image
+    in this format can be displayed or printed without pixel artifacts as large or
+    small as you wish.
    </para>
-   <remark>taroth 2012-09-19: I would first mention what DIA is and then with
-   which tool to create the format</remark>
    <para>
-    Being a vector format, DIA is resolution-independent, meaning that an image
-    in this format can be displayed or printed as large or small as you wish
-    without artifacts.
+    To create DIA files, there is a software of the same name, called
+    <ulink url="https://live.gnome.org/Dia">Dia</ulink>. Dia is a diagram editor
+    which can be used to draw entity-relationship diagrams, UML diagrams, and
+    flowcharts.
    </para>
    <para>
     Dia makes it very easy to connect elements, to add text and to use simple
     fill and border colors. Although it can import <acronym>SVG</acronym> files as
-    shapes, it is not useful for drawing shapes freely itself. It also makes it
+    shapes, it is not useful for freely drawing shapes itself. It also makes it
     relatively hard to create complex or effect-laden vector illustrations and
     information graphics.
    </para>
    <para>
-    DIA files are automatically compressed when saving, thus
+    DIA files are XML files that are automatically compressed when saving, thus
     they are often quite small.
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.eps">
    <title><acronym>EPS</acronym></title>
-   <important>
-    <title>EPS Image Support in &dapsacr; Is Experimental</title>
-    <para>
-     <acronym>EPS</acronym> support in &dapsacr; is experimental and currently
-     only supported in combination with the XEP formatter. It might also lead
-     to longer document creation times.
-    </para>
-   </important>
    <para>
-    The <emphasis>Encapsulated Postscript</emphasis> format is a general purpose
+    The <emphasis>Encapsulated Postscript</emphasis> (EPS) format is a general purpose
     vector image format. As a Postscript-based format, it is similar to
     <acronym>PDF</acronym>. There is currently no mainstream Linux image editor
     software that creates <acronym>EPS</acronym> files natively, although a number
@@ -97,14 +90,6 @@
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.pdf">
    <title><acronym>PDF</acronym></title>
-   <important>
-    <title>PDF Image Support in &dapsacr; Is Experimental</title>
-    <para>
-     <acronym>PDF</acronym> support in &dapsacr; is experimental and currently
-     only supported in combination with the XEP formatter. It might also lead
-     to longer document creation times.
-    </para>
-   </important>
    <para>
     The <emphasis>Portable Document File</emphasis> format is a general purpose,
     page-based fixed-layout document format. <acronym>PDF</acronym> is a
@@ -144,13 +129,6 @@
     vector image format. <acronym>SVG</acronym> is an XML format which can be
     displayed in most browsers and edited in many graphics programs.
    </para>
-   <para>
-    A good open-source <acronym>SVG</acronym> editor is
-    <ulink url="http://inkscape.org/">Inkscape</ulink>, which is
-    available for most operating systems. You can also create <acronym>SVG</acronym>
-    files from many Adobe* products, for instance, from Illustrator*. SVG is the
-    preferred vector image format for &dapsacr;.
-   </para>
    <important>
     <title>Save <emphasis>Plain SVG</emphasis> Files</title>
     <para>
@@ -163,29 +141,33 @@
      not be compatible with the files your graphics editor generates.
     </para>
    </important>
+   <para>
+    A good open-source <acronym>SVG</acronym> editor is
+    <ulink url="http://inkscape.org/">Inkscape</ulink>, which is
+    available for most operating systems. You can also create <acronym>SVG</acronym>
+    files from many Adobe products, for instance, from Illustrator*. SVG is the
+    preferred vector image format for &dapsacr;.
+   </para>
   </sect2>
  </sect1>
  <sect1>
   <title>Managing Images</title>
    <sect2 id="sec.daps.user.imgs.dir">
     <title>Organisation of the <code>images</code> Directory</title>
-    <!--taroth 2012-09-19: the following contents is already part of the QSG,
-    no problem to mention it here as well, but let's merge the contents and 
-    use a phrase-entity-->
     <para>
-     &dapsacr; requires you to use a specific directory structure for images. All
-     images that you reference from your DocBook files must be stored in
-     a sub-directory of the project directory named
-     <filename>images/src/file_extension</filename>. For instance, <acronym>PNG</acronym>
-     files must be stored under <filename>images/src/png</filename>. If you used
-     <command>daps-init</command> to set up your project, the appropriate
-     directories should already exist.
+     &daps-images-dir; For a longer reference to the directory
+     structure, see <xref linkend="sec.daps.user.basics.dirstruct"/>.
     </para>
     <important>
      <title>Use Unique File Names</title>
      <para>
       Always store just one file with a particular name within the
-      <filename>images/src</filename> folder of a project. Having, for instance,
+      <filename>images/src</filename> folder of a project. As &dapsacr; tries to 
+      create any missing image formats from original images, it will not know
+      which one of the duplicate files to use for converting to the missing formats.
+     </para>
+     <para>
+      Additionally, having, for instance,
       a file called <filename>example.png</filename> and another called
       <filename>example.svg</filename> in the same project will often lead to
       questions like:
