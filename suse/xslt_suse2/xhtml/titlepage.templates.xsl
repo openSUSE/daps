@@ -80,7 +80,6 @@
     <xsl:call-template name="add.version.info"/>
   </xsl:template>
   <xsl:template name="preface.titlepage.before.recto">
-    <xsl:message>preface.titlepage.before.recto</xsl:message>
     <xsl:call-template name="add.version.info"/>
   </xsl:template>
   <xsl:template name="appendix.titlepage.before.recto">
