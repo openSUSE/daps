@@ -130,6 +130,9 @@ task before
   <xsl:param name="bubbletoc.section.depth">2</xsl:param>
   <xsl:param name="bubbletoc.max.depth">8</xsl:param>
   
+  <!-- Separator for chapter and book name in the XHTML output -->
+  <xsl:param name="head.content.title.separator"> | </xsl:param>
+  
   <!-- Create version information before title? -->
   <xsl:param name="generate.version.info" select="1"/>
   
