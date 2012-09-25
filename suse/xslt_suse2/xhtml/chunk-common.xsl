@@ -456,6 +456,7 @@
 
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
+            <xsl:call-template name="add.version.info"/>
             <xsl:if test="$use.meta != 0">
               <!--
                 On every structural element (like chapter, preface, ...) we

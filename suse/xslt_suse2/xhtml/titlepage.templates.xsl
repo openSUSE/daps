@@ -24,10 +24,11 @@
         <xsl:call-template name="gentext">
           <xsl:with-param name="key">version.info</xsl:with-param>
         </xsl:call-template>
-        <xsl:apply-templates select="ancestor-or-self::*/*/productname"/>
+        <xsl:apply-templates select="$products[self::productname]"/>
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="ancestor-or-self::*/*/productnumber"/>
+        <xsl:apply-templates select="$products[self::productnumber]"/>
       </div>
+      <xsl:call-template name="clearme"/>
     </xsl:if>
   </xsl:template>
 
@@ -72,7 +73,6 @@
   </xsl:template>
 
   <xsl:template name="article.titlepage.recto">
-        <xsl:call-template name="add.version.info"/>
         <xsl:choose>
             <xsl:when test="articleinfo/title">
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/title"/>
@@ -143,8 +143,6 @@
   <xsl:template name="book.titlepage.separator"/>
   
   <xsl:template name="book.titlepage.recto">
-    <xsl:call-template name="add.version.info"/>
-    
         <xsl:choose>
             <xsl:when test="bookinfo/title">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
