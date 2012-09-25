@@ -117,9 +117,6 @@
         <xsl:when test="self::chapter">
           <xsl:call-template name="chapter.titlepage"/>
         </xsl:when>
-        <xsl:when test="self::glossary">
-          <xsl:call-template name="glossary.titlepage"/>
-        </xsl:when>
         <xsl:when test="self::preface">
           <xsl:call-template name="preface.titlepage"/>
         </xsl:when>
