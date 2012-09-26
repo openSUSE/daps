@@ -384,6 +384,11 @@
     <xsl:attribute name="onload">init();</xsl:attribute>
   </xsl:template>
   
+    <xsl:template name="_content.onclick.attribute">
+    <!-- TODO: Add parameter to control it -->
+    <xsl:attribute name="onclick">deactivate(); return false;</xsl:attribute>
+  </xsl:template>
+  
   <xsl:template name="body.class.attribute">
     <xsl:if test="($draft.mode = 'yes' or
                   ($draft.mode = 'maybe' and
@@ -462,6 +467,7 @@
 
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
+            <xsl:call-template name="_content.onclick.attribute"/>
             <xsl:if test="$use.meta != 0">
               <!--
                 On every structural element (like chapter, preface, ...) we
