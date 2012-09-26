@@ -381,7 +381,7 @@
 
   <xsl:template name="body.onload.attribute">
     <!-- TODO: Add parameter to control it -->
-    <xsl:attribute name="onload">show(); labelInputFind(); init();</xsl:attribute>
+    <xsl:attribute name="onload">init();</xsl:attribute>
   </xsl:template>
   
   <xsl:template name="body.class.attribute">
