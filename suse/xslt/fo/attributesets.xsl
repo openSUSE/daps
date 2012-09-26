@@ -195,6 +195,7 @@
                       self::glossary or 
                       self::appendix"><xsl:value-of select="1.2 * $body.font.master"/>pt</xsl:when>
       <xsl:when test="self::sect1"><xsl:value-of select="$body.font.master"/>pt</xsl:when>
+      <xsl:otherwise><xsl:value-of select="$body.font.master"/>pt</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
   <xsl:attribute name="keep-with-next">
@@ -222,6 +223,7 @@
                       self::glossary or 
                       self::appendix">bold</xsl:when>
       <xsl:when test="self::sect1">normal</xsl:when>
+      <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
