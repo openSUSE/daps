@@ -14,14 +14,14 @@
         <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
         <script type="text/javascript" src="susebooks.js"></script>
     </head>
-    <body onload="show(); labelInputFind(); init()">
+    <body onload="init()">
         <div id="_outer-wrap">
             <div id="_white-bg">
                 <div id="_header">
                     <div id="_logo"><img src="style_images/logo.png" alt="SUSE" /></div>
                     <div class="pickers">
                         <div class="inactive" id="_language-picker">
-                            <a href="#" onclick="activate('_language-picker'); return false()" id="_language-picker-button"><span class="picker">English</span></a>
+                            <a href="#" onclick="activate('_language-picker'); return false;" id="_language-picker-button"><span class="picker">English</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
                                 <h6>Select a Language</h6>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="inactive" id="_format-picker">
-                            <a href="#" onclick="activate('_format-picker'); return false()" id="_format-picker-button"><span class="picker">Web Page</span></a>
+                            <a href="#" onclick="activate('_format-picker'); return false;" id="_format-picker-button"><span class="picker">Web Page</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
                             <div class="bubble active-contents">
                                 <h6>Select a Format</h6>
@@ -60,7 +60,7 @@
             <div id="_toolbar-wrap">
                <div id="_toolbar">
                    <div id="_toc-area" class="inactive">
-                       <a href="#" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area'); return false()">
+                       <a href="index.html" id="_toc-area-button" class="tool" title="Contents" onclick="activate('_toc-area'); return false;">
                                 <span class="tool-spacer">
                                    <span class="toc-icon">&nbsp;</span>
                                    <span class="clearme"></span>
@@ -731,7 +731,7 @@
                    </div>
                    <div id="_find-area" class="active">
                        <div class="inactive-contents">
-                           <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area'); return false()">
+                           <a href="#" id="_find-area-button" class="tool" title="Find" onclick="activate('_find-area'); return false;">
                                <span class="pad-tools-50-out">
                                    <span class="pad-tools-50-in">
                                        <span class="tool-spacer">
@@ -780,7 +780,7 @@
                 </div>
             </div>
             
-            <div id="_content" onclick="deactivate();">
+            <div id="_content" onclick="deactivate(); return false;">
                 <div class="chapter">
                     <div class="version-info">
                         This page documents <span style="font-weight: bold;">SUSE Linux <!--Enterprise Management Pack for System Center Operations Manager--> R2 2007</span>.
