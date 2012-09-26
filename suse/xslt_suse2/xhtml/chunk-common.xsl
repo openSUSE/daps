@@ -239,8 +239,14 @@
           <xsl:otherwise>
             <div id="_toc-area" class="inactive">
               <a id="_toc-area-button" class="tool"
-                href="#"
-                onclick="activate('_toc_rea')" title="Contents">
+                
+                onclick="activate('_toc-area'); return false;" title="Contents">
+                <xsl:attribute name="href">
+                  <xsl:call-template name="href.target">
+                    <!-- FIXME: -->
+                    <xsl:with-param name="object" select="/*"/>
+                  </xsl:call-template>
+                </xsl:attribute>
                 <span class="tool-spacer">
                   <span class="toc-icon"> </span>
                   <xsl:call-template name="clearme">
@@ -402,7 +408,8 @@
 
     <!--<xsl:call-template name="log.message">
       <xsl:with-param name="level">Info</xsl:with-param>
-      <xsl:with-param name="message">chunkelement-content: <xsl:value-of select="local-name()"/></xsl:with-param>
+      <xsl:with-param name="message">object.title.markup.textonly=<xsl:apply-templates select="." mode="title.markup.textonly"/>
+      </xsl:with-param>
     </xsl:call-template>-->
 
     <xsl:call-template name="user.preroot"/>
