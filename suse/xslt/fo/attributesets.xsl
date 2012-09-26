@@ -226,7 +226,18 @@
       <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
-  <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
+  <xsl:attribute name="font-family">
+    <xsl:choose>
+      <xsl:when test="self::part or self::chapter or self::appendix or
+                      self::glossary or self::preface or self::reference">
+        <xsl:value-of select="$sans.font.family"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$body.font.family"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:attribute>
 </xsl:attribute-set>
 
 
