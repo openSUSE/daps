@@ -1,3 +1,11 @@
+                      var deactivatePosition = -1;
+           
+           function init() {
+               if(window.addEventListener) {
+                   window.addEventListener("scroll", scrollDeactivator, false);
+               }
+           }
+            
            function show() {
                 document.getElementById('_share-print').style.display = 'block';
                 if ((document.URL.lastIndexOf('http', 0) === 0) || (document.URL.lastIndexOf('spdy', 0) === 0)) {
@@ -16,24 +24,33 @@
                     else if ((element == '_toc-area')) {
                         document.getElementById('_find-area').className = 'inactive';
                     }
-                    document.getElementById(element + '-button').onclick = function() {deactivate();};
+                    document.getElementById(element + '-button').onclick = function() {deactivate(); return false;};
                 }
                 else {
                     alert('Eek! This element can\'t be activated.');
                 }
-                return false;
+                deactivatePosition = currentYPosition();
             }
 
+
+            function scrollDeactivator() {
+                if (deactivatePosition != -1) {
+                    var diffPosition = currentYPosition() - deactivatePosition;
+                        if ((diffPosition < -100) || (diffPosition > 100)) {
+                            deactivate();
+                        }
+                }
+            }
             
             function deactivate() {
                 document.getElementById('_toc-area').className = 'inactive';
                 document.getElementById('_find-area').className = 'active';
                 document.getElementById('_language-picker').className = 'inactive';
                 document.getElementById('_format-picker').className = 'inactive';
-                document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area');};
-                document.getElementById('_find-area-button').onclick = function() {activate('_find-area');};
-                document.getElementById('_language-picker-button').onclick = function() {activate('_language-picker');};
-                document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker');};
+                document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area'); return false;};
+                document.getElementById('_find-area-button').onclick = function() {activate('_find-area'); return false;};
+                document.getElementById('_language-picker-button').onclick = function() {activate('_language-picker'); return false;};
+                document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker'); return false;};
                 return false;
             }
             
@@ -53,9 +70,8 @@
                     window.open(shareURL, 'sharer', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
                 }
                 
-                // This calls a Novell recommendation form... which accepts anything for an input URL, thankfully.
                 else if (service == 'mail') {
-                    shareURL = 'http://www.novell.com/info/sendemail.jsp?url=' + u;
+                    shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
                     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
                 }
                 else {
