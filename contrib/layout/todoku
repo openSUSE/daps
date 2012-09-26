@@ -4,28 +4,46 @@ Webseitenbugs
 Status: * = NEW, W = WONTFIX, F = FIXED, L = Later, I = IRREPRODUCIBLE
 Priority: P1 (very important) ... P5 (nice to have)
 
-#8  L P5 Glossar/kontextuelle Erklärung andenken/Definition of Terms
-#16 * P2 Tom: style="list-style-type: bullet/disc;" aus DocBook-Stil entfernen
-#17 * P1 Frank: Bildbreite aus Bildern auslesen und in umrahmenden div einfügen (+2px)
-      => saxon + DB Extensions(?)
-#18 * P4 Tom: div.procedure und ol.procedure ist unnötig/verkompliziert Dinge: div.procedure > ol sinnvoller
-#25 * P3 Unter IE testen
-#26 * P1 Tanjas Anmerkung zu Architekturen/Pfeilen für selbige einbeziehen
-#28 * P4 Herausfinden, warum Epiphany Droid Sans Mono Fett nicht mag
-#31 * P2 Tom: Schrifteinbindung (Open Sans, Droid Sans Mono) per <link> direkt im HTML, sprachoptimiert (nur dann Kyrillisch/Griechisch einbinden, wenn benötigt)
-#43 * P4 z-Indizes organisieren
-#44 * P1 Jürgen: Suche einbauen (von GSoC-Projekt)
-#45 * P4 externe Links kennzeichnen
-#50 * P2 Tom: valign töten!!!!!
-#51 * P2 Picker verstecken, wenn kein JS aktiviert ist/die Doku paketiert ist
-#52 * P2 Tom/Stefan: inaktiven Vor-/Zurück-Button bauen, so as not to confuse people ("glow effect", stripes?)
-#53 * P3 Tom/Stefan: Klasse für direkt aufeinander folgende Überschriften einfügen
-#55 * P1 div.line um erste Überschrift und .page-toc herumbasteln (glossary-Template?)
-#56 * P2  Ans Ende der Seite Vor-/Zurück-Knöpfe bauen... (siehe selfhtml.org)
-#59 * P1 Tom: .list-of-{$titles}s werden nicht in .name/.number aufgespaltet (lots)
-#64 * P3 Tom: Lizenztexte kleiner ausgeben als restlichen Inhalt (GFDL) → "role" so modfizieren, dass die Lizenz-sect im XHTML eine class bekommt
-#66 * P1 Tom: Gliederungszahlen für Kapitel sind inkonsistent formatiert, je nachdem, ob sie in der ToC oder im Titel stehen
-#71 * ?? Brotkrumen: "›" auf höchster Ebene vorhanden, aber nicht sinnreich
-#73 * P1 Titel von Glossaren ist immer der Buchtitel (statt "Glossary" o. ä., selbst wenn ein Titel gesetzt ist)
-#74 * P3 div.line um erste Überschrift und .page-toc herumbasteln (für Artikel aber noch relevant) (article-Template?)
-#75 * P1 Implement Bubble-Toc
+#8  * P5 Glossary/Definiion of Terms: think about contextual explanations
+         (tooltips..?)
+#16 * P2 Tom: Remove style="list-style-type: bullet/disc;" from DocBook template
+#17 * P1 Frank: Gather image widths directly from images, write it (+2px) into
+         framing div.figure => saxon + DB Extensions(?)
+#18 * P4 Tom: div.procedure > ol.procedure is unnecessarily complicated:
+         div.procedure > ol more useful
+#25 * P3 Test with IE
+#26 * P1 Implement arrows for architectures
+#28 * P4 Find out why Epiphany doesn't like Droid Sans Mono Bold
+#31 * P2 Tom: Embed fonts (Open Sans, Droid Sans Mono) via <link> directly from
+         HTML, optimize for languages (only add Cyrillic/Greek if necessary)
+#43 * P4 Organize z indices
+#44 * P1 Implement search (from GSoC project)
+#45 * P4 Mark external links (add arrow ↑)
+#50 * P2 Tom: kill valign!!!!!
+#51 * P2 Hide pickers if JS is not activated/documentation is packaged
+#52 * P2 Tom/Stefan: Show deactivated back/forward button on first/last page
+         (glow, stripes?)
+#53 * P3 Tom/Stefan: add special class for headlines directly following each
+         other
+#55 * P1 div.line after first headline (around .page-toc) (glossary-Template?)
+#56 * P2 Add back/forward buttons to the end of the page (as on de.selfhtml.org)
+#59 * P1 Tom: .list-of-{$titles}s are not split into .name/.number (lots)
+#64 * P3 Tom/Stefan: let license texts (GFDL) have smaller font size than
+         other content (foldable?) → role="legal" should add a class in XHTML
+#66 * P1 Tom: inconsistent outline numbers (depends on whether they are
+         contained in headlines or in TOCs)
+#71 * -- Breadcrumbs: less than useful "›" on the highest level
+#73 * P1 Title of Glossaries is book title even if another title is set
+#74 * P3 div.line after first headline (around .page-toc) (article-Template?)
+#75 * P1 Implement bubble TOC
+#76 * -- Remove tables, div.mediaobjects from figures/informalfigures
+#77 F P1 Remove bubble/scrolling bug
+#78 * -- Find a good way to host fonts on SUSE servers
+#79 * -- Breadcrumbs: decide what the highest level should be
+#80 * P5 Adapt new stylesheet to OpenSUSE (exchange logo) and DAPS (blue/brown)
+#81 * P1 Decide how article pages should differ from books and sets (it's
+         likely beneficial if articles and sets use largely the same set of
+         controls, i.e. no TOC bubble, no Navigation)
+#82 * -- Load languages/formats into picker from external file (iframe/json?)
+         (iframe will likely lead to bubbles that are too tall/too small, 
+         whereas json would mean, we could adapt the height)
