@@ -27,7 +27,7 @@
                     document.getElementById(element + '-button').onclick = function() {deactivate(); return false;};
                 }
                 else {
-                    alert('Eek! This element can\'t be activated.');
+                    alert('Eek! The element '+ element +' can\'t be activated.');
                 }
                 deactivatePosition = currentYPosition();
             }
@@ -75,7 +75,7 @@
                     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
                 }
                 else {
-                    alert('Eek! This sharing service must be new.');
+                    alert('Eek! The sharing service '+ service +' must be new.');
                 }
                 
             }
