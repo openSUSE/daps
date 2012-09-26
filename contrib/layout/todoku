@@ -1,38 +1,31 @@
 Webseitenbugs
 =============
 
-Status: * = NEW, W = WONTFIX, F = FIXED, I = IRREPRODUCIBLE
+Status: * = NEW, W = WONTFIX, F = FIXED, L = Later, I = IRREPRODUCIBLE
+Priority: P1 (very important) ... P5 (nice to have)
 
-
-#8  * Glossar/kontextuelle Erklärung andenken/Definition of Terms
-#16 * Tom: style="list-style-type: bullet/disc;" aus Doc-Book-Stil entfernen
-#17 * Frank: Bildbreite aus Bildern auslesen und in umrahmenden div einfügen (+2px)
-#18 * Tom: div.procedure und ol.procedure ist unnötig/verkompliziert Dinge: div.procedure > ol sinnvoller
-#25 * Unter IE testen
-#26 * Tanjas Anmerkung zu Architekturen/Pfeilen für selbige einbeziehen
-#28 * Herausfinden, warum Epiphany Droid Sans Mono Fett nicht mag
-#31 * Tom: Schrifteinbindung (Open Sans, Droid Sans Mono) per <link> direkt im HTML, sprachoptimiert (nur dann Kyrillisch/Griechisch einbinden, wenn benötigt)
-#43 * z-Indizes organisieren
-#44 * Jürgen: Suche einbauen (von GSoC-Projekt)
-#45 * externe Links kennzeichnen
-#46 F Callouts im Text
-#50 * Tom: valign töten!!!!!
-#51 * Picker verstecken, wenn kein JS aktiviert ist/die Doku paketiert ist
-#52 * Tom/Stefan: inaktiven Vor-/Zurück-Button bauen, so as not to confuse people
-#53 * Tom/Stefan: Klasse für direkt aufeinander folgende Überschriften einfügen
-#54 F Tom: Vor Warnhinweisüberschriften den Typ des Hinweis hinzufügen
-#55 F div.line um erste Überschrift und .page-toc herumbasteln (teilweise gefixt, für Artikel aber noch relevant)
-#56 * Ans Ende der Seite Vor-/Zurück-Knöpfe bauen...
-#59 * Tom: .list-of-{$titles}s werden nicht in .name/.number aufgespaltet
-#60 F Tom: Keine .variablelist-titles erzeugen, wenn nicht benötigt
-#62 F Tom: Abstract in Titelseiten von Büchern und in Sets
-#64 * Tom: Lizenztexte kleiner ausgeben als restlichen Inhalt (GFDL) → "role" so modfizieren, dass die Lizenz-sect im XHTML eine class bekommt
-#65 F HTML-Seitentitel für Kapitel hilfreicher gestalten: "Chapter x. Name of Chapter" -> "Name of Chapter &ndash; Name of Book" (Prinzip: wichtigste Information zuerst, sodass man mit dem Auge nur den Anfang lesen muss -- ist auch hilfreich, wenn man viele Tabs benutzt, derzeit wird nämlich nach "Chapt..." alles bei mir abgeschnitten)
-#66 * Tom: Gliederungszahlen für Kapitel sind inkonsistent formatiert, je nachdem, ob sie in der ToC oder im Titel stehen
-#67 F Bei Examples mit Callouts: zu kleiner Abstand unten, zu großer oben: cha.daps.user.features.html#ex.daps.dc.user
-#68 F Auf der ToC-Seite zuerst den Abstract, dann die Autoren nennen, Abstract-Titel entfernen
-#69 F Abstracts beinhalten _leere_ div.titlepages -- entfernen
-#70 F Um ein Glossar (Einträge: <dt>, Definitionen: <dd>) herum baut DocBook keine <dl>
-#71 * Brotkrumen: "›" auf höchster Ebene vorhanden, aber nicht sinnreich
-#72 F div.version-info noch nicht umgesetzt
-#73 * Titel von Glossaren ist immer der Buchtitel (statt "Glossary" o. ä., selbst wenn ein Titel gesetzt ist)
+#8  L P5 Glossar/kontextuelle Erklärung andenken/Definition of Terms
+#16 * P2 Tom: style="list-style-type: bullet/disc;" aus DocBook-Stil entfernen
+#17 * P1 Frank: Bildbreite aus Bildern auslesen und in umrahmenden div einfügen (+2px)
+      => saxon + DB Extensions(?)
+#18 * P4 Tom: div.procedure und ol.procedure ist unnötig/verkompliziert Dinge: div.procedure > ol sinnvoller
+#25 * P3 Unter IE testen
+#26 * P1 Tanjas Anmerkung zu Architekturen/Pfeilen für selbige einbeziehen
+#28 * P4 Herausfinden, warum Epiphany Droid Sans Mono Fett nicht mag
+#31 * P2 Tom: Schrifteinbindung (Open Sans, Droid Sans Mono) per <link> direkt im HTML, sprachoptimiert (nur dann Kyrillisch/Griechisch einbinden, wenn benötigt)
+#43 * P4 z-Indizes organisieren
+#44 * P1 Jürgen: Suche einbauen (von GSoC-Projekt)
+#45 * P4 externe Links kennzeichnen
+#50 * P2 Tom: valign töten!!!!!
+#51 * P2 Picker verstecken, wenn kein JS aktiviert ist/die Doku paketiert ist
+#52 * P2 Tom/Stefan: inaktiven Vor-/Zurück-Button bauen, so as not to confuse people ("glow effect", stripes?)
+#53 * P3 Tom/Stefan: Klasse für direkt aufeinander folgende Überschriften einfügen
+#55 * P1 div.line um erste Überschrift und .page-toc herumbasteln (glossary-Template?)
+#56 * P2  Ans Ende der Seite Vor-/Zurück-Knöpfe bauen... (siehe selfhtml.org)
+#59 * P1 Tom: .list-of-{$titles}s werden nicht in .name/.number aufgespaltet (lots)
+#64 * P3 Tom: Lizenztexte kleiner ausgeben als restlichen Inhalt (GFDL) → "role" so modfizieren, dass die Lizenz-sect im XHTML eine class bekommt
+#66 * P1 Tom: Gliederungszahlen für Kapitel sind inkonsistent formatiert, je nachdem, ob sie in der ToC oder im Titel stehen
+#71 * ?? Brotkrumen: "›" auf höchster Ebene vorhanden, aber nicht sinnreich
+#73 * P1 Titel von Glossaren ist immer der Buchtitel (statt "Glossary" o. ä., selbst wenn ein Titel gesetzt ist)
+#74 * P3 div.line um erste Überschrift und .page-toc herumbasteln (für Artikel aber noch relevant) (article-Template?)
+#75 * P1 Implement Bubble-Toc
