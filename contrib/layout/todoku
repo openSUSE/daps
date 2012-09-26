@@ -20,18 +20,19 @@ Status: * = NEW, W = WONTFIX, F = FIXED, I = IRREPRODUCIBLE
 #51 * Picker verstecken, wenn kein JS aktiviert ist/die Doku paketiert ist
 #52 * Tom/Stefan: inaktiven Vor-/Zurück-Button bauen, so as not to confuse people
 #53 * Tom/Stefan: Klasse für direkt aufeinander folgende Überschriften einfügen
-#54 * Tom: Vor Warnhinweisüberschriften den Typ des Hinweis hinzufügen
+#54 F Tom: Vor Warnhinweisüberschriften den Typ des Hinweis hinzufügen
 #55 F div.line um erste Überschrift und .page-toc herumbasteln (teilweise gefixt, für Artikel aber noch relevant)
 #56 * Ans Ende der Seite Vor-/Zurück-Knöpfe bauen...
 #59 * Tom: .list-of-{$titles}s werden nicht in .name/.number aufgespaltet
-#60 * Tom: Keine .variablelist-titles erzeugen, wenn nicht benötigt
+#60 F Tom: Keine .variablelist-titles erzeugen, wenn nicht benötigt
 #62 F Tom: Abstract in Titelseiten von Büchern und in Sets
 #64 * Tom: Lizenztexte kleiner ausgeben als restlichen Inhalt (GFDL) → "role" so modfizieren, dass die Lizenz-sect im XHTML eine class bekommt
-#65 * HTML-Seitentitel für Kapitel hilfreicher gestalten: "Chapter x. Name of Chapter" -> "Name of Chapter &ndash; Name of Book" (Prinzip: wichtigste Information zuerst, sodass man mit dem Auge nur den Anfang lesen muss -- ist auch hilfreich, wenn man viele Tabs benutzt, derzeit wird nämlich nach "Chapt..." alles bei mir abgeschnitten)
+#65 F HTML-Seitentitel für Kapitel hilfreicher gestalten: "Chapter x. Name of Chapter" -> "Name of Chapter &ndash; Name of Book" (Prinzip: wichtigste Information zuerst, sodass man mit dem Auge nur den Anfang lesen muss -- ist auch hilfreich, wenn man viele Tabs benutzt, derzeit wird nämlich nach "Chapt..." alles bei mir abgeschnitten)
 #66 * Tom: Gliederungszahlen für Kapitel sind inkonsistent formatiert, je nachdem, ob sie in der ToC oder im Titel stehen
 #67 F Bei Examples mit Callouts: zu kleiner Abstand unten, zu großer oben: cha.daps.user.features.html#ex.daps.dc.user
 #68 F Auf der ToC-Seite zuerst den Abstract, dann die Autoren nennen, Abstract-Titel entfernen
-#69 * Abstracts beinhalten _leere_ div.titlepages -- entfernen
-#70 * Um ein Glossar (Lemma: <dt>, Definitionen: <dd>) herum baut DocBook keine <dl>
+#69 F Abstracts beinhalten _leere_ div.titlepages -- entfernen
+#70 F Um ein Glossar (Einträge: <dt>, Definitionen: <dd>) herum baut DocBook keine <dl>
 #71 * Brotkrumen: "›" auf höchster Ebene vorhanden, aber nicht sinnreich
-#72 F div.version-info noch nicht umgesetzt (eventuell noch weitere Anpassungen nötig)
+#72 F div.version-info noch nicht umgesetzt
+#73 * Titel von Glossaren ist immer der Buchtitel (statt "Glossary" o. ä., selbst wenn ein Titel gesetzt ist)
