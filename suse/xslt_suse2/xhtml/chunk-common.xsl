@@ -239,7 +239,6 @@
           <xsl:otherwise>
             <div id="_toc-area" class="inactive">
               <a id="_toc-area-button" class="tool"
-                
                 onclick="activate('_toc-area'); return false;" title="Contents">
                 <xsl:attribute name="href">
                   <xsl:call-template name="href.target">
@@ -382,7 +381,7 @@
 
   <xsl:template name="body.onload.attribute">
     <!-- TODO: Add parameter to control it -->
-    <xsl:attribute name="onload">show(); labelInputFind();</xsl:attribute>
+    <xsl:attribute name="onload">show(); labelInputFind(); init();</xsl:attribute>
   </xsl:template>
   
   <xsl:template name="body.class.attribute">
