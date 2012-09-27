@@ -68,7 +68,7 @@
   </xsl:choose>
   </xsl:template>
 
-<xsl:template name="toc.line">
+  <xsl:template name="toc.line">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="depth" select="1"/>
   <xsl:param name="depth.from.context" select="8"/>
@@ -143,8 +143,38 @@
     </dd>
   </xsl:template>
 
+  <xsl:template match="figure|table|example|equation|procedure" mode="toc">
+    <xsl:param name="toc-context" select="."/>
+
+    <xsl:element name="{$toc.listitem.type}"
+      namespace="http://www.w3.org/1999/xhtml">
+      <xsl:variable name="label">
+        <span class="number">
+          <xsl:apply-templates select="." mode="label.markup"/>
+          <xsl:value-of select="$autotoc.label.separator"/>
+          <xsl:text> </xsl:text>
+        </span>
+      </xsl:variable>
+      
+      <span>
+        <xsl:attribute name="class"><xsl:value-of select="local-name(.)"/></xsl:attribute>
+        <a>
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="toc-context" select="$toc-context"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:copy-of select="$label"/>
+          
+          <span class="name">
+            <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+          </span>
+        </a>
+      </span>
+      
+    </xsl:element>
+  </xsl:template>
 
   <!-- ===================================================== -->
   
-
 </xsl:stylesheet>
