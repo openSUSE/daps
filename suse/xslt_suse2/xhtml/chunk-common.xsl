@@ -386,7 +386,7 @@
   
     <xsl:template name="_content.onclick.attribute">
     <!-- TODO: Add parameter to control it -->
-    <xsl:attribute name="onclick">deactivate(); return false;</xsl:attribute>
+    <xsl:attribute name="onclick">deactivate(); return true;</xsl:attribute>
   </xsl:template>
   
   <xsl:template name="body.class.attribute">
