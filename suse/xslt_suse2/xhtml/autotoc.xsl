@@ -111,7 +111,6 @@
       <xsl:variable name="label">
         <span class="number">
           <xsl:apply-templates select="." mode="label.markup"/>
-          <xsl:value-of select="$autotoc.label.separator"/>
           <xsl:text> </xsl:text>
         </span>
       </xsl:variable>
@@ -151,7 +150,6 @@
       <xsl:variable name="label">
         <span class="number">
           <xsl:apply-templates select="." mode="label.markup"/>
-          <xsl:value-of select="$autotoc.label.separator"/>
           <xsl:text> </xsl:text>
         </span>
       </xsl:variable>
