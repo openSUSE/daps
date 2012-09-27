@@ -36,6 +36,7 @@
  <xsl:include href="create-permalink.xsl"/>
 
  <xsl:include href="autotoc.xsl"/>
+ <xsl:include href="autobubbletoc.xsl"/> 
  <xsl:include href="lists.xsl"/>
  <xsl:include href="callout.xsl"/>
  <xsl:include href="verbatim.xsl"/>
