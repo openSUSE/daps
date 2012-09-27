@@ -87,7 +87,6 @@
   </xsl:template>
   <xsl:template name="glossary.titlepage.before.recto">
     <xsl:call-template name="add.version.info"/>
-    <div class="line"></div>
   </xsl:template>
   <xsl:template name="reference.titlepage.before.recto">
     <xsl:call-template name="add.version.info"/>
