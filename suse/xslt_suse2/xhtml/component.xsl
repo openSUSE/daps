@@ -56,7 +56,7 @@
       <xsl:with-param name="conditional" select="0"/>
     </xsl:call-template>
     <xsl:call-template name="create.header.title">
-      <xsl:with-param name="node" select=".."/>
+      <xsl:with-param name="node" select="$node"/>
     </xsl:call-template>
   </xsl:element>
   </xsl:template>
