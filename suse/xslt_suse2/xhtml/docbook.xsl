@@ -65,6 +65,7 @@
       <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
     </xsl:if>
   </xsl:param>
+   
   <title>
     <xsl:copy-of select="$title"/>
   </title>
@@ -95,7 +96,13 @@
   <meta name="generator" content="DocBook {$DistroTitle} V{$VERSION}"/>
 
   <xsl:if test="$generate.meta.abstract != 0">
-    <xsl:variable name="info" select="(articleinfo                                       |bookinfo                                       |prefaceinfo                                       |chapterinfo                                       |appendixinfo                                       |sectioninfo                                       |sect1info                                       |sect2info                                       |sect3info                                       |sect4info                                       |sect5info                                       |referenceinfo                                       |refentryinfo                                       |partinfo                                       |info                                       |docinfo)[1]"/>
+    <xsl:variable name="info" select="(articleinfo|bookinfo|prefaceinfo|chapterinfo|appendixinfo|
+              sectioninfo|sect1info|sect2info|sect3info|sect4info|sect5info
+             |referenceinfo
+             |refentryinfo
+             |partinfo
+             |info
+             |docinfo)[1]"/>
     <xsl:if test="$info and $info/abstract">
       <meta name="description">
         <xsl:attribute name="content">
