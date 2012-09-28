@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Purpose:
+     Split label and title in formal headers like procedure, example,
+     and others
 
+   Author(s):    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
@@ -47,8 +55,8 @@
     </span>
   </xsl:template>
   
-
-<xsl:template name="formal.object.heading">
+  <!-- ===================================================== -->
+  <xsl:template name="formal.object.heading">
   <xsl:param name="object" select="."/>
   <xsl:param name="title">
     <xsl:call-template name="create.formal.title">
@@ -64,6 +72,6 @@
         </xsl:call-template>
       </p>
     </div>
-</xsl:template>
+  </xsl:template>
 
 </xsl:stylesheet>
