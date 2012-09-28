@@ -113,7 +113,7 @@
   <!-- ===================================================== -->
   <xsl:template name="pickers">
     <xsl:if test="$generate.pickers != 0">
-    <div class="pickers">
+    <div id="_pickers">
       <div id="_language-picker" class="inactive">
         <a id="_language-picker-button"
           onclick="activate('_language-picker')" href="#">
@@ -452,7 +452,7 @@
       select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
     <xsl:if test="$needs.navig">
-      <div id="_bottom_navigation">
+      <div id="_bottom-navigation">
         <xsl:if test="count($next) >0 and $isnext">
           <a class="nav-link">
             <xsl:attribute name="href">
@@ -498,12 +498,17 @@
   </xsl:template>
   
   <xsl:template name="body.class.attribute">
-    <xsl:if test="($draft.mode = 'yes' or
-                  ($draft.mode = 'maybe' and
-                  ancestor-or-self::*[@status][1]/@status = 'draft'))
-                  and $draft.watermark.image != ''">
-      <xsl:attribute name="class">draft</xsl:attribute>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="($draft.mode = 'yes' or
+                    ($draft.mode = 'maybe' and
+                    ancestor-or-self::*[@status][1]/@status = 'draft'))
+                    and $draft.watermark.image != ''">
+        <xsl:attribute name="class">draft offline</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="class">offline</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <!-- ===================================================== -->
