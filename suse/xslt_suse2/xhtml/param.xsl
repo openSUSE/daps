@@ -43,6 +43,7 @@
   <xsl:param name="section.label.includes.component.label" select="1"/>
 
 <!-- 7. HTML ==================================================== -->
+  <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
   <xsl:param name="html.stylesheet">susebooks.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/> 
