@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Purpose:
+     Process inline elements
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2012, Thomas Schraitle
+
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
@@ -66,7 +75,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
   
   <xsl:template match="keycombo">
     <xsl:variable name="action" select="@action"/>
