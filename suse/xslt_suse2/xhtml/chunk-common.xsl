@@ -461,7 +461,7 @@
               </xsl:call-template>
             </xsl:attribute>
             <span class="next-icon">&#xa0;</span>
-            <span class="next-label">
+            <span class="nav-label">
               <xsl:apply-templates select="$next"
                 mode="object.title.markup"/>
             </span>
@@ -475,7 +475,7 @@
               </xsl:call-template>
             </xsl:attribute>
             <span class="prev-icon">&#xa0;</span>
-            <span class="prev-label">
+            <span class="nav-label">
               <xsl:apply-templates select="$prev"
                 mode="object.title.markup"/>
             </span>
