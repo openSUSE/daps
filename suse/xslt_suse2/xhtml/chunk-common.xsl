@@ -347,7 +347,7 @@
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
-     <xsl:if test="$needs.navig">
+  <xsl:if test="$needs.navig">
        <xsl:if test="count($prev) >0 and $isprev">
         <a accesskey="p" class="tool-spacer">
           <xsl:attribute name="title">
@@ -404,6 +404,86 @@
         </xsl:call-template></a></div>
       <xsl:call-template name="clearme"/>
     </div>
+  </xsl:template>
+
+  <!-- ===================================================== -->
+  <xsl:template name="bottom.navigation">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    <xsl:param name="nav.context"/>
+    <xsl:variable name="needs.navig">
+      <xsl:call-template name="is.node.in.navig">
+        <xsl:with-param name="next" select="$next"/>
+        <xsl:with-param name="prev" select="$prev"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="isnext">
+      <xsl:call-template name="is.next.node.in.navig">
+        <xsl:with-param name="next" select="$next"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="isprev">
+      <xsl:call-template name="is.prev.node.in.navig">
+        <xsl:with-param name="prev" select="$prev"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <!-- 
+     We use two node sets and calculate the set difference
+     with the following, general XPath expression:
+     
+      setdiff = $node-set1[count(.|$node-set2) != count($node-set2)]
+     
+     $node-set1 contains the ancestors of all nodes, starting with the
+     current node (but the current node is NOT included in the set)
+     
+     $node-set2 contains the ancestors of all nodes starting from the 
+     node which points to the $rootid parameter
+     
+     For example:
+     node-set1: {/, set, book, chapter}
+     node-set2: {/, set, } 
+     setdiff:   {        book, chapter}
+     
+  -->
+    <xsl:variable name="ancestorrootnode"
+      select="key('id', $rootid)/ancestor::*"/>
+    <xsl:variable name="setdiff"
+      select="ancestor::*[count(. | $ancestorrootnode) 
+                                != count($ancestorrootnode)]"/>
+    <xsl:if test="$needs.navig">
+      <div id="_bottom_navigation">
+        <xsl:if test="count($next) >0 and $isnext">
+          <a class="nav-link">
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="$next"/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <span class="next-icon">&#xa0;</span>
+            <span class="next-label">
+              <xsl:apply-templates select="$next"
+                mode="object.title.markup"/>
+            </span>
+          </a>
+        </xsl:if>
+        <xsl:if test="count($prev) >0 and $isprev">
+          <a class="nav-link">
+            <xsl:attribute name="href">
+              <xsl:call-template name="href.target">
+                <xsl:with-param name="object" select="$prev"/>
+              </xsl:call-template>
+            </xsl:attribute>
+            <span class="prev-icon">&#xa0;</span>
+            <span class="prev-label">
+              <xsl:apply-templates select="$prev"
+                mode="object.title.markup"/>
+            </span>
+          </a>
+      </xsl:if>
+      </div>
+    </xsl:if>
+
   </xsl:template>
 
   <!-- ===================================================== -->
@@ -528,11 +608,15 @@
             
             <div class="page-bottom">
               <!-- bottom-navigation -->
+              <xsl:call-template name="bottom.navigation">
+                <xsl:with-param name="prev" select="$prev"/>
+                <xsl:with-param name="next" select="$next"/>
+                <xsl:with-param name="nav.context" select="$nav.context"/>
+              </xsl:call-template>
               <xsl:call-template name="share.and.print">
                 <xsl:with-param name="prev" select="$prev"/>
                 <xsl:with-param name="next" select="$next"/>
-                <xsl:with-param name="nav.context" select="$nav.context"
-                />
+                <xsl:with-param name="nav.context" select="$nav.context"/>
               </xsl:call-template>
             </div>
           </div>
