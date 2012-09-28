@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   Purpose:
-     Split label and title in formal headers like procedure, example,
-     and others
+     Splitting formal-wise titles into number and title
 
    Author(s):    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
