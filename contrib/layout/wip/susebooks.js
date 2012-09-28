@@ -1,32 +1,35 @@
            var deactivatePosition = -1;
            
            function init() {
-               if(window.addEventListener) {
+               if( window.addEventListener ) {
                    window.addEventListener("scroll", scrollDeactivator, false);
                }
                if ( document.getElementById('_share-print') ) {
                  document.getElementById('_share-print').style.display = 'block';
-                 if ((document.URL.lastIndexOf('http', 0) === 0) || (document.URL.lastIndexOf('spdy', 0) === 0)) {
-                     document.getElementById('_share-print').className = 'online';
-                 }
+               }
+               
+               if ((document.URL.lastIndexOf('http', 0) === 0) || (document.URL.lastIndexOf('spdy', 0) === 0)) {
+                     toggleClass('body', 'offline', 'online');
                }
                labelInputFind();
                return false;
             }
             
-            function activate(element) {
+            function activate( elm ) {
+                var element = elm;
                 if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
                     deactivate();
                     if ( document.getElementById(element) ) {
-                      document.getElementById(element).className = 'active';
+                      toggleClass( element , 'inactive', 'active' );
                       if ((element == '_find-area')) {
                           document.getElementById('_find-input').focus();
                       }
                       else if ((element == '_toc-area')) {
-                          document.getElementById('_find-area').className = 'inactive';
+                          toggleClass( '_find-area', 'active', 'inactive' );
                       }
                       document.getElementById(element + '-button').onclick = function() {deactivate(); return false;};
                     }
+
                 }
                 else {
                     alert('Eek! The element '+ element +' can\'t be activated.');
@@ -38,25 +41,21 @@
             function scrollDeactivator() {
                 if (deactivatePosition != -1) {
                     var diffPosition = currentYPosition() - deactivatePosition;
-                        if ((diffPosition < -100) || (diffPosition > 100)) {
+                        if ((diffPosition < -300) || (diffPosition > 300)) {
                             deactivate();
                         }
                 }
             }
             
             function deactivate() {
-                if ( document.getElementById('_toc-area') ) {
-                    document.getElementById('_toc-area').className = 'inactive';
+                var changeClass = new Array('_toc-area','_language-picker','_format-picker');
+                
+                for (var i = 0; i < changeClass.length; ++i) {
+                    if ( document.getElementById( changeClass[i] ) ) {
+                        toggleClass( changeClass[i] , 'active', 'inactive');
+                    }
                 }
-                if ( document.getElementById('_find-area') ) {
-                    document.getElementById('_find-area').className = 'active';
-                }
-                if ( document.getElementById('_language-picker') ) {
-                    document.getElementById('_language-picker').className = 'inactive';
-                }
-                if ( document.getElementById('_format-picker') ) {
-                    document.getElementById('_format-picker').className = 'inactive';
-                }
+                
                 if ( document.getElementById('_toc-area-button') ) {
                     document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area'); return false;};
                 }
@@ -69,26 +68,32 @@
                 if ( document.getElementById('_format-picker-button') ) {
                     document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker'); return false;};
                 }
+
+                if ( document.getElementById('_find-area') && document.getElementById('_find-area-button') ) {
+                    toggleClass( '_find-area', 'inactive', 'active' );
+                    document.getElementById('_find-area-button').onclick = function() {activate('_find-area'); return false;};
+                }
+                
                 return false;
             }
             
-            function share(service) {
-                u = encodeURIComponent(document.URL);
-                t = encodeURIComponent(document.title);
-                if (service == 'fb') {
+            function share( service ) {
+                u = encodeURIComponent( document.URL );
+                t = encodeURIComponent( document.title );
+                if ( service == 'fb' ) {
                     shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
                     window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
                 }
-                else if (service == 'tw') {
+                else if ( service == 'tw' ) {
                     shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
                     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
                 }
-                else if (service == 'gp') {
+                else if ( service == 'gp' ) {
                     shareURL = 'https://plus.google.com/share?url=' + u;
                     window.open(shareURL, 'sharer', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
                 }
                 
-                else if (service == 'mail') {
+                else if ( service == 'mail' ) {
                     shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
                     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
                 }
@@ -166,4 +171,33 @@
                     }
                 }
                 return false;
+            }
+            
+            function addClass(elm, cls) {
+                var matchable = new RegExp ('(?:^|\\s)' + cls + '(?!\\S)', 'g');
+                if ( elm == 'body') {
+                    if ( !(document.body.className.match( matchable )) ) {
+                        document.body.className += ' ' + cls;
+                    }
+                }
+                if ( document.getElementById( elm ) ) {
+                    if ( !(document.getElementById( elm ).className.match( matchable )) ) {
+                        document.getElementById( elm ).className += ' ' + cls;
+                    }
+                }
+            }
+            
+            function rmClass(elm, cls) {
+                var replaceable = new RegExp ('(?:^|\\s)' + cls + '(?!\\S)', 'g');
+                if ( elm == 'body') {
+                    document.body.className = document.body.className.replace( replaceable , '' );
+                }
+                if ( document.getElementById( elm ) ) {
+                    document.getElementById( elm ).className = document.getElementById( elm ).className.replace( replaceable , '' );
+                }
+            }
+            
+            function toggleClass(elm, clsOld, clsNew) {
+                rmClass(elm, clsOld);
+                addClass(elm, clsNew);
             }
