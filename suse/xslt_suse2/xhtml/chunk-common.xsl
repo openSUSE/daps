@@ -451,7 +451,7 @@
     <xsl:variable name="setdiff"
       select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
-    <xsl:if test="$needs.navig">
+    <xsl:if test="$needs.navig and not(self::set)">
       <div id="_bottom-navigation">
         <xsl:if test="count($next) >0 and $isnext">
           <a class="nav-link">
@@ -483,7 +483,6 @@
       </xsl:if>
       </div>
     </xsl:if>
-
   </xsl:template>
 
   <!-- ===================================================== -->
@@ -612,7 +611,6 @@
             <xsl:copy-of select="$content"/>
             
             <div class="page-bottom">
-              <!-- bottom-navigation -->
               <xsl:call-template name="bottom.navigation">
                 <xsl:with-param name="prev" select="$prev"/>
                 <xsl:with-param name="next" select="$next"/>
