@@ -379,12 +379,40 @@
      </xsl:if>
   </xsl:template>
 
+
+  <xsl:template name="share.and.print">
+    <xsl:param name="prev" select="/foo"/>
+    <xsl:param name="next" select="/foo"/>
+    <xsl:param name="nav.context"/>
+    
+    <div id="_share-print">
+      <xsl:if test="$generate.sharelinks != 0">
+        <div class="online-contents share">
+          <strong><xsl:call-template name="gentext">
+              <xsl:with-param name="key">sharethispage</xsl:with-param>
+            </xsl:call-template></strong>
+          <!-- &#x2022; = &bull; -->
+          <a href="javascript:share('fb')">Facebook</a> &#x2022; <a
+            href="javascript:share('gp')">Google+</a> &#x2022; <a
+            href="javascript:share('tw')">Twitter</a> &#x2022; <a
+            href="javascript:share('mail');">Mail</a>
+        </div>
+      </xsl:if>
+      <div class="print"><a href="javascript:print()">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">printthispage</xsl:with-param>
+        </xsl:call-template></a></div>
+      <xsl:call-template name="clearme"/>
+    </div>
+  </xsl:template>
+
+  <!-- ===================================================== -->
   <xsl:template name="body.onload.attribute">
     <!-- TODO: Add parameter to control it -->
     <xsl:attribute name="onload">init();</xsl:attribute>
   </xsl:template>
   
-    <xsl:template name="_content.onclick.attribute">
+  <xsl:template name="_content.onclick.attribute">
     <!-- TODO: Add parameter to control it -->
     <xsl:attribute name="onclick">deactivate(); return true;</xsl:attribute>
   </xsl:template>
@@ -495,7 +523,18 @@
               </xsl:call-template>
               <xsl:comment>/htdig_noindex</xsl:comment>
             </xsl:if>
+            
             <xsl:copy-of select="$content"/>
+            
+            <div class="page-bottom">
+              <!-- bottom-navigation -->
+              <xsl:call-template name="share.and.print">
+                <xsl:with-param name="prev" select="$prev"/>
+                <xsl:with-param name="next" select="$next"/>
+                <xsl:with-param name="nav.context" select="$nav.context"
+                />
+              </xsl:call-template>
+            </div>
           </div>
           
           <div id="_inward"></div>
@@ -511,7 +550,7 @@
           <xsl:with-param name="nav.context" select="$nav.context"/>
         </xsl:call-template>
         -->
-
+        
         <xsl:call-template name="user.footer.navigation">
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>

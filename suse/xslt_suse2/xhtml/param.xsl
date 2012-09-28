@@ -140,6 +140,9 @@ task before
   <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>
   
+  <!-- Create shared links for Facebook, Google+, Twitter? -->
+  <xsl:param name="generate.sharelinks" select="1"/>
+  
   <!-- Separator between separate links: -->
   <xsl:param name="daps.breadcrumbs.sep">&#xa0;›&#xa0;</xsl:param>
   
