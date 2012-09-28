@@ -41,6 +41,9 @@
     match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
+    <xsl:variable name="title">
+      <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+    </xsl:variable>
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
@@ -51,7 +54,7 @@
           <xsl:with-param name="context" select="."/>
         </xsl:call-template>
       </xsl:attribute>
-      <xsl:apply-templates select="." mode="title.markup"/>
+      <xsl:value-of select="string($title)"/>
     </xsl:element>
   </xsl:template>
   
