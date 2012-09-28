@@ -14,12 +14,12 @@
         <link rel="next" href="cha.onlineupdate.you.html" title="Chapter 6. YaST Online Update"/>
         <script type="text/javascript" src="susebooks.js"></script>
     </head>
-    <body onload="init()">
+    <body onload="init()" class="offline">
         <div id="_outer-wrap">
             <div id="_white-bg">
                 <div id="_header">
                     <div id="_logo"><img src="style_images/logo.png" alt="SUSE" /></div>
-                    <div class="pickers">
+                    <div id="_pickers" class="online-contents">
                         <div class="inactive" id="_language-picker">
                             <a href="#" onclick="activate('_language-picker'); return false;" id="_language-picker-button"><span class="picker">English</span></a>
                             <div class="bubble-corner active-contents">&nbsp;</div>
@@ -780,7 +780,7 @@
                 </div>
             </div>
             
-            <div id="_content" onclick="deactivate(); return false;">
+            <div id="_content" onclick="deactivate(); return true;">
                 <div class="chapter">
                     <div class="version-info">
                         This page documents <span style="font-weight: bold;">SUSE Linux <!--Enterprise Management Pack for System Center Operations Manager--> R2 2007</span>.
@@ -2306,7 +2306,20 @@ cnf zypper</pre></div>
                             </table>
                             </div>
                     </div>
-                    <div id="_share-print" class="offline">
+                </div>
+                <div class="page-bottom">
+                    <div id="_bottom-navigation">
+                        <div class="nav-link">
+                            <span class="next-icon" title="Next Chapter">&nbsp;</span>
+                            <a href="#" class="nav-label">Part II Managing and Updating Software</a>
+                        </div>
+                        <div class="nav-link">
+                            <span class="prev-icon" title="Next Chapter">&nbsp;</span>
+                            <a href="#" class="nav-label">Chapter 2. YaST Online Update</a>
+                        </div>
+                    </div>
+                    
+                    <div id="_share-print">
                         <div class="online-contents share"><strong>Share this page:</strong> 
                             <a href="javascript:share('fb')">Facebook</a> &bull; 
                             <a href="javascript:share('gp')">Google+</a> &bull; 
