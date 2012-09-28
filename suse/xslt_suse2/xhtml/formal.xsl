@@ -7,21 +7,20 @@
   exclude-result-prefixes="exsl">
 
 
-  <xsl:template match="procedure|example|table|figure|variablelist" 
+  <xsl:template
+    match="procedure|example|table|figure|variablelist|itemizedlist|orderedlist"
     mode="object.label.template">
     <xsl:call-template name="gentext.template">
       <xsl:with-param name="context" select="'styles'"/>
-      <xsl:with-param name="name" 
-        select="concat( local-name(),'-label')"/>
+      <xsl:with-param name="name" select="concat( local-name(),'-label')"/>
     </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="procedure|example|table|figure|variablelist"
+  <xsl:template match="procedure|example|table|figure|variablelist|itemizedlist|orderedlist"
     mode="object.title.template">
     <xsl:call-template name="gentext.template">
       <xsl:with-param name="context" select="'styles'"/>
-      <xsl:with-param name="name" 
-        select="concat( local-name(),'-title')"/>
+      <xsl:with-param name="name" select="concat( local-name(),'-title')"/>
     </xsl:call-template>
   </xsl:template>
   
