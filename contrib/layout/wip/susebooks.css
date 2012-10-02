@@ -47,12 +47,12 @@ a {
 }
 
 ::selection { /* Green Selections */
-    background: #439539;
+    background-color: #439539;
     color: #FFF;
 }
 
 ::-moz-selection {
-    background: #439539;
+    background-color: #439539;
     color: #FFF;
 }
 
@@ -70,7 +70,7 @@ html, body {
 #_header, #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
-#_content > .bibliography {
+#_content > .refentry, #_content > .bibliography, #_content > .page-bottom {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
@@ -79,7 +79,8 @@ html, body {
 #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter,
 #_content > .preface, #_content > .appendix, #_content > .glossary,
-#_content > .reference, #_content > .bibliography {
+#_content > .reference, #_content > .refentry, #_content > .bibliography,
+#_content > .page-bottom {
     overflow: hidden;
 }
 
@@ -181,6 +182,13 @@ html, body {
     display: block;
 }
 
+.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon {
+    background-image: url(style_images/icons.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}
+
+
 #_header .book-link {
     display: inline-block;
     vertical-align: middle;
@@ -193,7 +201,7 @@ html, body {
 }
 
 #_header .book-icon {
-    background: url(style_images/icons.png) no-repeat scroll 0px 0px;
+    background-position: 0px 0px;
 }
 
 #_header .book-icon:hover, #header .book-icon:focus, #header .book-icon:active {
@@ -206,25 +214,25 @@ html, body {
 }
 
 #_fixed-header .book-icon {
-    background: url(style_images/icons.png) no-repeat scroll 0px -72px;
+    background-position: 0px -72px;
     margin: 1px 0;
     width: 18px;
     height: 15px;
 }
 
 #_fixed-header .book-icon:hover, #fixed-header .book-icon:focus, #fixed-header .book-icon:active {
-    background: url(style_images/icons.png) no-repeat scroll -18px -72px;
+    background-position: -18px -72px;
 }
 
 /* Language and Format Pickers*/
 
-.pickers {
+#_pickers {
     float: right;
     padding: 5px 0;
     background-color: #FFF;
 }
 
-.pickers .inactive, .pickers .active {
+#_pickers .inactive, #_pickers .active {
     float: left;
 }
 
@@ -234,7 +242,7 @@ html, body {
     padding: 0 10px;
     border-radius: 3px;
     float: left;
-    background: #333;
+    background-color: #333;
     height: 24px;
     line-height: 24px;
     font-size: 13px;
@@ -247,11 +255,11 @@ html, body {
     text-decoration: underline;
 }
 
-.pickers .bubble-corner {
+#_pickers .bubble-corner {
     top: 24px;
 }
 
-.pickers .bubble {
+#_pickers .bubble {
     right: 0;
     top: 43px;
     max-width: 400px;
@@ -259,7 +267,7 @@ html, body {
     padding: 0 10px 10px;
 }
 
-.pickers .bubble h6 {
+#_pickers .bubble h6 {
     color: #FFF;
     border-bottom: 1px solid #FFF;
     padding: 10px 0 5px;
@@ -267,7 +275,7 @@ html, body {
     margin: 0 0 5px 0;
 }
 
-.pickers .bubble a {
+#_pickers .bubble a {
     color: #FFF;
     display: block;
     text-decoration: none;
@@ -276,19 +284,19 @@ html, body {
 }
 
 
-.pickers .bubble a:hover, .pickers .bubble a:focus, .pickers .bubble a:active {
+#_pickers .bubble a:hover, #_pickers .bubble a:focus, #_pickers .bubble a:active {
     text-decoration: underline;
     background-color: #666;
 }
 
-.pickers .bubble .selected {
+#_pickers .bubble .selected {
     background-color: #5E9632;
     background-image: url(style_images/picker-bg.png);
     background-repeat: no-repeat;
     background-position: right top;
 }
 
-.pickers .bubble .selected:hover, .pickers .bubble .selected:focus, .pickers .bubble .selected:active {
+#_pickers .bubble .selected:hover, #_pickers .bubble .selected:focus, #_pickers .bubble .selected:active {
     text-decoration: underline;
     background-color: #76AD2D;
 }
@@ -329,7 +337,7 @@ html, body {
     height: 56px;
 }
 
-.tool, #_nav-area .tool-spacer {
+.tool, #_nav-area .tool-spacer, .bubble {
     transition: all 0.2s ease-in-out 0.1s;
     /* Clean this up later when browser support is there*/
     -moz-transition: all 0.2s ease-in-out 0.1s;
@@ -419,7 +427,7 @@ html, body {
 }
 
 .toc-icon {
-    background: url(style_images/icons.png) no-repeat scroll -36px 0px;
+    background-position: -36px 0px;
 }
 
 
@@ -428,7 +436,7 @@ html, body {
 }
 
 .find-icon {
-    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
+    background-position: -72px 0px;
 }
 
 
@@ -437,7 +445,7 @@ html, body {
 }
 
 #_toolbar .prev-icon {
-    background: url(style_images/icons.png) no-repeat scroll -144px 0px;
+    background-position: -144px 0px;
 }
 
 
@@ -446,7 +454,7 @@ html, body {
 }
 
 #_toolbar .next-icon {
-    background: url(style_images/icons.png) no-repeat scroll -180px 0px;
+    background-position: -180px 0px;
 }
 
 
@@ -468,6 +476,7 @@ html, body {
     background-color: #333;
     position: absolute;
     z-index: 70;
+    box-shadow: 1px 1px 3px 0px #333;
 }
 
 #_toolbar .bubble-corner {
@@ -510,21 +519,14 @@ html, body {
 }
 
 .bubble-toc > ol {
-    width: 100%;
+    width: 50%;
 }
 
-.bubble-toc > ol > li > ol {
-    padding: 0 10px;
+.bubble-toc > ol > li.inactive > ol{
+    display: none;
 }
 
-.bubble-toc > ol > li > ol > li {
-    width: 33.33%;
-    float: left;
-}
 
-.bubble-toc > ol > li > ol > li > ol {
-    padding: 0 10px;
-}
 
 .bubble a:hover, .bubble a:focus, .bubble a:active {
     text-decoration: underline;
@@ -562,7 +564,7 @@ html, body {
 }
 
 #_find-input:focus + #_find-button {
-    background: url(style_images/icons.png) no-repeat scroll -108px 0px !important;
+    background-position: -108px 0px !important;
 }
 
 #_find-button {
@@ -570,12 +572,12 @@ html, body {
     height: 36px;
     display: block;
     margin: 0 0 0 -18px;
-    background: url(style_images/icons.png) no-repeat scroll -72px 0px;
+    background-position: -72px 0px;
     float: left;
 }
 
 #_find-input:focus + #_find-button:hover {
-    background: url(style_images/icons.png) no-repeat scroll -108px -36px !important;
+    background-position: -108px -36px !important;
 }
 
 #_find-input-label {
@@ -632,7 +634,6 @@ html, body {
 }
 
 #_fixed-header .prev-icon, #_fixed-header .next-icon {
-    background-image: url(style_images/icons.png);
     height: 15px;
     width: 18px;
     display: block;
@@ -664,12 +665,78 @@ html, body {
     background-position: -126px -72px;
 }
 
+/* Page bottom */
 
-/* Sharing and printing (bottom of the page) */
+#_content > .page-bottom {
+    margin-top: 30px;
+    margin-bottom: 80px;
+    padding: 10px 10px 0;
+}
+
+#_bottom-navigation {
+    border-top: 1px solid #999;
+}
+
+#_bottom-navigation .nav-link {
+    display: block;
+    clear: both;
+    margin: 20px 0 0 0;
+    height: 36px;
+}
+
+#_bottom-navigation .prev-icon, #_bottom-navigation .next-icon {
+    width: 36px;
+    height: 36px;
+    display: block;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+#_bottom-navigation .prev-icon {
+    background-position: -216px 0;
+}
+
+#_bottom-navigation .nav-link:hover .prev-icon  {
+    background-position: -216px -36px;
+}
+
+
+#_bottom-navigation .next-icon {
+    background-position: -252px 0;
+}
+
+#_bottom-navigation .nav-link:hover .next-icon {
+    background-position: -252px -36px;
+}
+
+
+#_bottom-navigation .nav-label {
+    line-height: 36px;
+    display: block;
+    float: left;
+    color: #333;
+    overflow: ellipsis;
+    height: 36px;
+}
+
+#_bottom-navigation .nav-label, .share a, .print a {
+    color: #333;
+    text-decoration: none;
+}
+
+#_bottom-navigation .nav-link:hover .nav-label,
+#_bottom-navigation .nav-link:focus .nav-label,
+#_bottom-navigation .nav-link:active .nav-label,
+.share:hover a, .print a:hover, .share:focus a, .print a:focus,
+.share:active a, .print a:active {
+    color: #439539;
+}
+
 #_share-print {
-    margin: 30px 0 0 0;
+    margin: 20px 0 0 0;
     padding: 20px 0 0 0;
     border-top: 1px solid #999;
+    clear: both;
 }
 
 .offline .online-contents {
@@ -753,10 +820,11 @@ html, body {
 
 #_content > .set, #_content > .book, #_content > .article, #_content > .part,
 #_content > .chapter, #_content > .preface, #_content > .appendix,
-#_content > .glossary, #_content > .reference, #_content > .bibliography {
-    margin-bottom: 75px;
+#_content > .glossary, #_content > .reference, #_content > .refentry,
+#_content > .bibliography {
     padding: 0 10px;
 }
+
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
 /* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
@@ -823,7 +891,7 @@ html, body {
     padding: 40px 0 0;
 }
 
-#_content .sect3 .title {
+#_content .sect3 .title, #_content .refentry h2 {
     font-size: 20px;
     font-weight: normal;
     padding: 30px 0 0;
@@ -846,11 +914,12 @@ html, body {
     margin-top: -20px;
 }
 
-#_content .name {
+#_content .name, #_content .refentry h2, .refentrytitle a {
     color: #439539;
 }
 
-#_content a:hover .name, #_content a:focus .name, #_content a:active .name {
+#_content a:hover .name, #_content a:focus .name, #_content a:active .name,
+#_content .refentrytitle a:hover, #_content .refentrytitle a:focus, #_content .refentrytitle a:active {
     text-decoration: underline;
 }
 
@@ -1003,7 +1072,7 @@ em, i, .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, #_content .authorgroup-label, .productname, .productnumber, .toc-title {
+strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title {
     font-weight: 600;
 }
 
@@ -1054,7 +1123,7 @@ strong, b, #_content .authorgroup-label, .productname, .productnumber, .toc-titl
 }
 
 #_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
-#_content .glossseealso, .share a, .print a {
+#_content .glossseealso {
     color: #439539;
     text-decoration: none;
 }
@@ -1076,8 +1145,7 @@ strong, b, #_content .authorgroup-label, .productname, .productnumber, .toc-titl
 #_content .glosssee:hover, #_content .glosssee:focus, #_content .glosssee:active,
 #_content .glosssee:visited:hover, #_content .glosssee:visited:focus, #_content .glosssee:visited:active,
 #_content .glossseealso:hover, #_content .glossseealso:focus, #_content .glossseealso:active,
-#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active,
-.share a:hover, .print a:hover, .share a:focus, .print a:focus {
+#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active {
     color: #439539;
     text-decoration: underline;
 }
@@ -1518,7 +1586,7 @@ body.draft {
 
 
 @media print {
-    #_fixed-header-wrap, #_toolbar-wrap, .pickers, #_inward, #_footer-wrap {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap {
         display: none;
     }
     
