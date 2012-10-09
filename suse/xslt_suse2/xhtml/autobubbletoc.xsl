@@ -76,7 +76,8 @@
         <xsl:value-of select="$autotoc.label.separator"/>
       </xsl:if>
     </xsl:if>
-    <a>
+    <li>
+      <a>
       <xsl:attribute name="href">
         <xsl:call-template name="href.target">
           <xsl:with-param name="context" select="$toc-context"/>
@@ -94,18 +95,19 @@
       </xsl:if>
       
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-    </a>
+      </a>
     <!--  -->
     <xsl:if test="( (self::set or self::book or self::part) or 
       $bubbletoc.section.depth &gt; $depth) and 
       count($nodes)>0 and 
       $bubbletoc.max.depth > $depth.from.context">
-      <li>
+      <ol>
         <xsl:apply-templates mode="bubble-toc" select="$nodes">
           <xsl:with-param name="toc-context" select="$toc-context"/>
         </xsl:apply-templates>
-      </li>
+      </ol>
     </xsl:if>
+    </li>
   </xsl:template>
   
   
