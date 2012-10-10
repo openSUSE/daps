@@ -63,52 +63,60 @@
     </xsl:variable>
     
     <xsl:variable name="depth.from.context" select="count(ancestor::*)-count($toc-context/ancestor::*)"/>
-    
-    <!--<xsl:call-template name="toc.line">
-      <xsl:with-param name="toc-context" select="$toc-context"/>
-    </xsl:call-template>-->
-    <xsl:if test="$autotoc.label.in.hyperlink = 0">
-      <xsl:variable name="label">
-        <xsl:apply-templates select="." mode="label.markup"/>
-      </xsl:variable>
-      <xsl:copy-of select="$label"/>
-      <xsl:if test="$label != ''">
-        <xsl:value-of select="$autotoc.label.separator"/>
-      </xsl:if>
-    </xsl:if>
-    <li>
-      <a>
-      <xsl:attribute name="href">
-        <xsl:call-template name="href.target">
-          <xsl:with-param name="context" select="$toc-context"/>
+    <xsl:choose>
+      <xsl:when test="$depth.from.context = 0">
+        <xsl:apply-templates mode="bubble-toc" select="$nodes">
           <xsl:with-param name="toc-context" select="$toc-context"/>
-        </xsl:call-template>
-      </xsl:attribute>
-      <xsl:if test="not($autotoc.label.in.hyperlink = 0)">
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+      <!--<xsl:call-template name="toc.line">
+        <xsl:with-param name="toc-context" select="$toc-context"/>
+      </xsl:call-template>-->
+      <xsl:if test="$autotoc.label.in.hyperlink = 0">
         <xsl:variable name="label">
           <xsl:apply-templates select="." mode="label.markup"/>
         </xsl:variable>
         <xsl:copy-of select="$label"/>
         <xsl:if test="$label != ''">
           <xsl:value-of select="$autotoc.label.separator"/>
+          </xsl:if>
         </xsl:if>
-      </xsl:if>
+      <li>
+        <a>
+        <xsl:attribute name="href">
+          <xsl:call-template name="href.target">
+            <xsl:with-param name="context" select="$toc-context"/>
+            <xsl:with-param name="toc-context" select="$toc-context"/>
+          </xsl:call-template>
+        </xsl:attribute>
+        <xsl:if test="not($autotoc.label.in.hyperlink = 0)">
+          <xsl:variable name="label">
+            <xsl:apply-templates select="." mode="label.markup"/>
+          </xsl:variable>
+          <xsl:copy-of select="$label"/>
+          <xsl:if test="$label != ''">
+            <xsl:value-of select="$autotoc.label.separator"/>
+          </xsl:if>
+        </xsl:if>
       
-      <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-      </a>
-    <!--  -->
-    <xsl:if test="( (self::set or self::book or self::part) or 
-      $bubbletoc.section.depth &gt; $depth) and 
-      count($nodes)>0 and 
-      $bubbletoc.max.depth > $depth.from.context">
-      <ol>
-        <xsl:apply-templates mode="bubble-toc" select="$nodes">
-          <xsl:with-param name="toc-context" select="$toc-context"/>
-        </xsl:apply-templates>
-      </ol>
-    </xsl:if>
-    </li>
-  </xsl:template>
+        <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+          </a>
+        <!--  -->
+      <xsl:if test="( (self::set or self::book or self::part) or 
+        $bubbletoc.section.depth &gt; $depth) and 
+        count($nodes) &gt; 0 and 
+        $bubbletoc.max.depth &gt; $depth.from.context">
+        <ol>
+          <xsl:apply-templates mode="bubble-toc" select="$nodes">
+            <xsl:with-param name="toc-context" select="$toc-context"/>
+          </xsl:apply-templates>
+        </ol>
+      </xsl:if>
+      </li>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
   
   
   <xsl:template match="book" mode="bubble-toc">
@@ -239,7 +247,7 @@
   <xsl:template match="index" mode="bubble-toc">
     <xsl:param name="toc-context" select="."/>
     
-    <!-- If the index tag is not empty, it should be it in the TOC -->
+    <!-- If the index tag is not empty, it should be in the TOC -->
     <xsl:if test="* or $generate.index != 0">
       <xsl:call-template name="bubble-subtoc">
         <xsl:with-param name="toc-context" select="$toc-context"/>
