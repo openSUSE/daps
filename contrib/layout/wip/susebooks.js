@@ -1,3 +1,19 @@
+$(document).ready(function() {
+    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">›</span>');
+    $('.arrow').click(function(e) {
+        $('#_bubble-toc > ol > li').removeClass('active');
+        $('#_bubble-toc > ol > li').addClass('inactive');
+        $(this).parent('*').parent('li').removeClass('inactive');
+        $(this).parent('*').parent('li').addClass('active');
+        e.preventDefault();
+        return false;
+    });
+    $('#bubble-toc a').click(function(e) {
+        e.stopPropagation();
+        return true;
+    });
+});
+
            var deactivatePosition = -1;
            
            function init() {

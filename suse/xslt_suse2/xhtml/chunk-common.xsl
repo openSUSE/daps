@@ -264,7 +264,7 @@
                     <xsl:apply-templates mode="title.markup"
                       select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
                   </h6>
-                  <div class="bubble-toc">
+                  <div id="_bubble-toc">
                     <xsl:call-template name="bubble-toc"/>
                   </div>
                   <xsl:call-template name="clearme"/>
@@ -655,10 +655,14 @@
   
   <xsl:template name="user.head.content">
     <xsl:param name="node" select="."/>
-    
-    <xsl:if test="$daps.header.js != ''">
+    <xsl:if test="$daps.header.js.library != ''">
       <xsl:call-template name="make.script.link">
-        <xsl:with-param name="script.filename" select="$daps.header.js"/>
+        <xsl:with-param name="script.filename" select="$daps.header.js.library"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$daps.header.js.custom != ''">
+      <xsl:call-template name="make.script.link">
+        <xsl:with-param name="script.filename" select="$daps.header.js.custom"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>

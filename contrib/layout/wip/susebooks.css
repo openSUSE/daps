@@ -493,9 +493,22 @@ html, body {
     padding: 0 10px 10px;
 }
 
-.bubble-toc {
+#_bubble-toc {
+    overflow: hidden;
+    height: 400px;
+    position: relative;
+}
+
+#_bubble-toc ol {
     overflow: auto;
-    max-height: 400px;
+}
+
+#_bubble-toc > ol {
+    width: 50%;
+    padding: 0;
+    margin:0;
+    background-color: #666;
+    height: 100%;
 }
 
 
@@ -514,19 +527,99 @@ html, body {
     padding: 5px 25px 5px 5px;
     line-height: 22px;
 }
-.bubble-toc ol {
+/*#_bubble-toc ol {
     list-style-type: none;
-}
+}*/
 
-.bubble-toc > ol {
+/*#_bubble-toc {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 980px;
+    height: 400px;
+    border: 1px solid #F0F;
+}*/
+
+#_bubble-toc .active ol {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
     width: 50%;
+    background-color: #333;
+    padding: 0;
+    margin:0;
+    height: 100%;
 }
 
-.bubble-toc > ol > li.inactive > ol{
-    display: none;
+#_bubble-toc .inactive ol {
+    display: none !important;
 }
 
+#_bubble-toc .inactive {
+    background-color: #666;
+}
 
+#_bubble-toc .inactive a:hover {
+    color: #FFF;
+    background-color: #999;
+}
+
+#_bubble-toc .inactive a:hover .arrow {
+    color: #000;
+    background-color: #666;
+}
+
+#_bubble-toc .arrow {
+    font-weight: bold;
+    background-color: #666;
+    position: absolute; right: -30px;
+    top: 0;
+    display: block;
+    width: 30px;
+    text-align: center;
+    height: 100%;
+    font-size: 16px;
+    margin:0;
+}
+
+#_bubble-toc .inactive a .arrow:hover {
+    color: #FFF;
+    background-color: #333;
+}
+
+#_bubble-toc .active .arrow {
+    color: #FFF;
+    background-color: #333;
+}
+
+#_bubble-toc .active > a, #_bubble-toc .inactive > a {
+    margin-right: 30px;
+}
+
+#_bubble-toc .active > a {
+    background-color: #999;
+    color: #FFF;
+}
+
+#_bubble-toc > ol a {
+    background-color: #666;
+    display: block;
+    position: relative;
+    padding: 10px;
+}
+
+#_bubble-toc ol ol a {
+    background-color: #333;
+    display: block;
+    position: relative; padding:
+    10px;
+}
+
+#_bubble-toc li {
+    display: block;
+    clear: both;
+}
 
 .bubble a:hover, .bubble a:focus, .bubble a:active {
     text-decoration: underline;

@@ -121,7 +121,8 @@ task before
   
   <xsl:param name="daps.header.logo">style_images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
-  <xsl:param name="daps.header.js">susebooks.js</xsl:param>
+  <xsl:param name="daps.header.js.library">jquery-1.4.2.min.js</xsl:param>
+  <xsl:param name="daps.header.js.custom">susebooks.js</xsl:param>
   
   <!-- Create breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
@@ -129,7 +130,7 @@ task before
   <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
   
   <xsl:param name="bubbletoc.section.depth">2</xsl:param>
-  <xsl:param name="bubbletoc.max.depth">8</xsl:param>
+  <xsl:param name="bubbletoc.max.depth">2</xsl:param>
   
   <!-- Separator for chapter and book name in the XHTML output -->
   <xsl:param name="head.content.title.separator"> | </xsl:param>

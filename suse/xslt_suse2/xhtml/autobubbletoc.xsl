@@ -82,7 +82,7 @@
           <xsl:value-of select="$autotoc.label.separator"/>
           </xsl:if>
         </xsl:if>
-      <li>
+      <li class="inactive">
         <a>
         <xsl:attribute name="href">
           <xsl:call-template name="href.target">
