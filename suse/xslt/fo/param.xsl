@@ -232,5 +232,8 @@ set       nop
 <!--  -->
 <xsl:param name="orderedlist.label.width">1em</xsl:param>
 
+  
+  <!-- Should XEP use PDF annotations?  -->
+  <xsl:param name="use.xep.annotate.pdf" select="1"/>
 
 </xsl:stylesheet>
