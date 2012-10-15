@@ -1,10 +1,10 @@
 $(document).ready(function() {
-    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">›</span>');
-    $('.arrow').click(function(e) {
+    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
+    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').click(function(e) {
         $('#_bubble-toc > ol > li').removeClass('active');
         $('#_bubble-toc > ol > li').addClass('inactive');
-        $(this).parent('*').parent('li').removeClass('inactive');
-        $(this).parent('*').parent('li').addClass('active');
+        $(this).parent('li').removeClass('inactive');
+        $(this).parent('li').addClass('active');
         e.preventDefault();
         return false;
     });

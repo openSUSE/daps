@@ -185,7 +185,6 @@ html, body {
 .toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon {
     background-image: url(style_images/icons.png);
     background-repeat: no-repeat;
-    background-attachment: scroll;
 }
 
 
@@ -507,8 +506,9 @@ html, body {
     width: 50%;
     padding: 0;
     margin:0;
-    background-color: #666;
+    background-color: #333;
     height: 100%;
+    border-right: 1px solid #666;
 }
 
 
@@ -543,54 +543,40 @@ html, body {
 #_bubble-toc .active ol {
     display: block;
     position: absolute;
-    left: 50%;
+    right: -1px;
     top: 0;
     width: 50%;
     background-color: #333;
     padding: 0;
     margin:0;
     height: 100%;
+    border-left: 1px solid #666;
 }
 
 #_bubble-toc .inactive ol {
     display: none !important;
 }
 
-#_bubble-toc .inactive {
-    background-color: #666;
-}
-
 #_bubble-toc .inactive a:hover {
-    color: #FFF;
+    color: #000;
     background-color: #999;
 }
 
-#_bubble-toc .inactive a:hover .arrow {
-    color: #000;
-    background-color: #666;
-}
-
 #_bubble-toc .arrow {
-    font-weight: bold;
-    background-color: #666;
-    position: absolute; right: -30px;
+    position: absolute;
+    right: -30px;
     top: 0;
     display: block;
     width: 30px;
-    text-align: center;
     height: 100%;
-    font-size: 16px;
-    margin:0;
+    margin: 0;
+    background-image: url(style_images/arrow.png);
+    background-position: -30px 8.5px;
+    background-repeat: no-repeat;
 }
 
-#_bubble-toc .inactive a .arrow:hover {
-    color: #FFF;
-    background-color: #333;
-}
-
-#_bubble-toc .active .arrow {
-    color: #FFF;
-    background-color: #333;
+#_bubble-toc .inactive a:hover .arrow {
+    background-position: 0px 9px;
 }
 
 #_bubble-toc .active > a, #_bubble-toc .inactive > a {
@@ -598,22 +584,20 @@ html, body {
 }
 
 #_bubble-toc .active > a {
-    background-color: #999;
+    background-color: #666;
     color: #FFF;
 }
-
-#_bubble-toc > ol a {
+#_bubble-toc .active {
     background-color: #666;
-    display: block;
-    position: relative;
-    padding: 10px;
 }
 
-#_bubble-toc ol ol a {
-    background-color: #333;
+#_bubble-toc .inactive:hover {
+    background-color: #999;
+}
+
+#_bubble-toc a {
     display: block;
-    position: relative; padding:
-    10px;
+    position: relative;
 }
 
 #_bubble-toc li {
@@ -1333,6 +1317,10 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .calloutlist {
+    margin: 10px 0 24px;
+}
+
+#_content .example + .calloutlist {
     margin: -14px 0 24px;
 }
 
