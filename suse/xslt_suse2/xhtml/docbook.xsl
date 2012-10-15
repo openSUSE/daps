@@ -61,10 +61,24 @@
  <xsl:template name="head.content">
   <xsl:param name="node" select="."/>
   <xsl:param name="title">
-    <xsl:apply-templates select="title" mode="title.markup.textonly"/>
+    <xsl:choose>
+      <xsl:when test="(bookinfo | articleinfo | setinfo)/title">
+        <xsl:apply-templates select="(bookinfo | articleinfo | setinfo)/title" mode="title.markup.textonly"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="title" mode="title.markup.textonly"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="not(self::book or self::article or self::set)">
       <xsl:copy-of select="$head.content.title.separator"/>
-      <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
+      <xsl:choose>
+        <xsl:when test="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title">
+          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title" mode="title.markup.textonly"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:param>
    
