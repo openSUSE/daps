@@ -18,6 +18,7 @@ import optparse
 
 import logging
 import textwrap
+import shutil
 
 # Only add additional path, when we are in our repository:
 __=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../lib/python"))
@@ -218,7 +219,7 @@ if __name__=="__main__":
   except (etree.XIncludeError, etree.XMLSyntaxError), e:
      log.critical("ERROR in file '%s': %s " % (f, e))
      sys.exit(10)
-  except IOError, e:
+  except (IOError, shutil.Error), e:
     log.critical(e)
     sys.exit(10)
   except docbook.FileNotFoundError, e:
