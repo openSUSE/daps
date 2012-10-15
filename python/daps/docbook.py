@@ -85,6 +85,9 @@ class EPUB2(object):
     self.myxslt  = options.CUSTOMIZATIONLAYER if options.CUSTOMIZATIONLAYER else self.STYLESHEET
     self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
     
+    # Set IMG_SRC_PATH only, when --image-dir is NOT set
+    #self.IMG_SRC_PATH = "images" if not options.IMAGEDIR else options.IMAGEDIR
+    
     self.xmlparser = etree.XMLParser(remove_blank_text=True, no_network=True, dtd_validation=bool(self.dtd))
     self.xmltree = etree.parse(self.xmlfile, self.xmlparser)
     self.xmltree.xinclude()
@@ -254,8 +257,15 @@ class EPUB2(object):
     log.debug("copy_images")
     images=self.get_image_refs()
     log.debug("  found %i images" % len(images))
+    
+    #if not self.IMG_SRC_PATH:
+    #   fragment=os.path.join(self.tmpdir, self.OEBPS_DIR)
+    #else:
+    fragment=os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH)
+    log.debug("  fragment=%s" % fragment )
+    
     for img in images:
-       newimg = os.path.join(self.tmpdir, self.OEBPS_DIR, self.IMG_SRC_PATH, os.path.basename(img.attrib["fileref"]))
+       newimg = os.path.join(fragment, os.path.basename(img.attrib["fileref"]))
        fullimg = os.path.join(self.imgsrcpath, img.attrib["fileref"])
        log.debug("  copying image from %s to %s" % (fullimg, newimg))
        shutil.copyfile(fullimg, newimg)

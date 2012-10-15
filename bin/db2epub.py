@@ -134,7 +134,7 @@ def main():
      help="Embed OTF FILE in .epub")
   parser.add_option("-i", "--image-dir",
      dest="IMAGEDIR",
-     help="Points to the image path")
+     help="Points to the image path (default %default)")
   parser.add_option("-d", "--dtd",
      dest="DTD",
      help="Validate with given DocBook DTD")
@@ -168,7 +168,7 @@ def main():
      DTD=None,
      # OTFFILES=[],
      # XSLTPARAMS=[],
-     # IMAGEDIR=None,
+     IMAGEDIR="images",
      CUSTOMIZATIONLAYER=os.path.join(docbook.DBPATH, "epub/docbook.xsl"),
      OUTPUTFILE=None,
      )  
