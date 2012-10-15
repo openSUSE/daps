@@ -86,7 +86,7 @@ class EPUB2(object):
     self.epubfile = options.OUTPUTFILE if options.OUTPUTFILE else os.path.splitext(self.xmlfile)[0]+".epub"
     
     # Set IMG_SRC_PATH only, when --image-dir is NOT set
-    #self.IMG_SRC_PATH = "images" if not options.IMAGEDIR else options.IMAGEDIR
+    # self.IMG_SRC_PATH = "images" if not options.IMAGEDIR else options.IMAGEDIR
     
     self.xmlparser = etree.XMLParser(remove_blank_text=True, no_network=True, dtd_validation=bool(self.dtd))
     self.xmltree = etree.parse(self.xmlfile, self.xmlparser)
