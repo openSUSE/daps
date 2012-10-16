@@ -50,6 +50,7 @@ class FileNotFoundError(Exception):
 class EPUB2(object):
   """Transforms a DocBook 4 file into a EPUB file, version 2
   """
+  # The image path *inside* the EPUB temporary directory
   IMG_SRC_PATH="images"
   #
   CALLOUT_EXT = ".png"
@@ -95,6 +96,7 @@ class EPUB2(object):
     # Calculated values for properties
     self._has_callouts = int(self.xmltree.xpath("count(//co)"))
     self._has_admons = int(self.xmltree.xpath("count(//note | //caution | //tip | //warning | //important)"))
+    self._has_imagobjects = int(self.xmltree.xpath("count(imageobject)"))
   
   
   def getxsltparam(self, param):
@@ -361,6 +363,11 @@ class EPUB2(object):
   def has_admons(self):
     """Checks, if the document contains any admonition elements (property)"""
     return bool(self._has_admons)
+ 
+  @property
+  def has_imagesobjects(self):
+     """Checks, if the document contains any imageobject elements (property)"""
+     return bool(self._has_imagobjects)
  
   def write_mimetype(self):
     """Write the mimetype file and returns the absolute path of the file 'mimetype'"""
