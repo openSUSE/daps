@@ -316,23 +316,49 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="remark">
+    <xsl:if test="$show.comments != 0">
+      <xsl:choose>
+        <xsl:when test="$xep.extensions != 0 and $use.xep.annotate.pdf != 0">
+          <!-- See http://www.renderx.com/reference.html#PDF%20Note%20Annotations -->
+          <fo:inline>
+            <rx:pdf-comment content="{string(.)}" title="Comment">
+              <!-- Attribute color, opacity -->
+              <rx:pdf-sticky-note icon-type="comment"/>
+            </rx:pdf-comment>
+          </fo:inline>
+        </xsl:when>
+        <xsl:otherwise>
+          <fo:inline xsl:use-attribute-sets="remark.properties">
+            <xsl:call-template name="inline.charseq"/>
+          </fo:inline>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="remark[&comment.block.parents;]">
   <xsl:if test="$show.comments != 0">
-    <fo:block xsl:use-attribute-sets="remark.properties">
-      <xsl:call-template name="inline.charseq"/>
-    </fo:block>
+    <xsl:choose>
+      <xsl:when test="$xep.extensions != 0 and $use.xep.annotate.pdf != 0">
+        <!-- See http://www.renderx.com/reference.html#PDF%20Note%20Annotations -->
+        <fo:block>
+          <fo:inline>
+          <rx:pdf-comment content="{string(.)}" title="Comment">
+            <!-- Attribute color, opacity -->
+            <rx:pdf-sticky-note icon-type="comment"/>
+          </rx:pdf-comment>
+          </fo:inline>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block xsl:use-attribute-sets="remark.properties">
+          <xsl:call-template name="inline.charseq"/>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:if>
 </xsl:template>
-
-
-<xsl:template match="remark">
-  <xsl:if test="$show.comments != 0">
-    <fo:inline xsl:use-attribute-sets="remark.inline.properties">
-      <xsl:call-template name="inline.charseq"/>
-    </fo:inline>
-  </xsl:if>
-</xsl:template>
-
 
 <xsl:template match="productname" priority="10">
   <xsl:call-template name="inline.charseq"/> 

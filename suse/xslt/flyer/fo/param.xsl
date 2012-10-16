@@ -235,5 +235,6 @@
   <xsl:value-of select="$sans.font.family"/>
 </xsl:param>
 
-
+ <!-- Should XEP use PDF annotations?  -->
+  <xsl:param name="use.xep.annotate.pdf" select="1"/>
 </xsl:stylesheet>
