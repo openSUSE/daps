@@ -9,15 +9,23 @@
 ]>
 <chapter id="cha.daps.user.features">
  <title>Conceptual Overview</title>
- <abstract><para>
+ <abstract>
+  <para>
   This chapter describes:
   <itemizedlist>
-   <listitem><para>the features that make &dapsacr; stand out: from creating HTML
-    and PDF output to automatically profiling documents,</para></listitem>
-   <listitem><para>how to configure &dapsacr;, and</para></listitem>
-   <listitem><para>the basics of working with &dapsacr;.</para></listitem>
-  </itemizedlist></para></abstract>
- 
+   <listitem><para>the features that make &dapsacr; stand out: from creating 
+   multiple output formats to automatically profiling documents,</para>
+    </listitem>
+    <listitem>
+     <para>how to configure &dapsacr;, and</para>
+    </listitem>
+    <listitem>
+     <para>the basics of working with &dapsacr;.</para>
+    </listitem>
+   </itemizedlist>
+  </para>
+ </abstract>
+
  <sect1 id="sec.daps.user.dbversions">
   <title>Supported DocBook Versions</title>
   <para>
@@ -54,8 +62,7 @@
       documentation projects (or for individual books within your set).
 <!--You do not need to define custom stylesheets for <emphasis>all</emphasis> 
      output formats&mdash;in case a custom layout cannot be found, &dapsacr; 
-     will automatically fall back to the DocBook stylesheets.-->
-     </para>
+     will automatically fall back to the DocBook stylesheets.--></para>
      <para>
       Apart from that, &dapsacr; allows you to change individual layout
       parameters by passing string parameters to xsltproc for HTML or PDF
@@ -213,19 +220,16 @@
    use the &dapsacr; initialization script <command>daps-init</command>. For
    instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
    script automatically creates the
-   <xref linkend="sec.daps.user.basics.files"
-    xrefstyle="select:title"/>
+   <xref linkend="sec.daps.user.basics.files" xrefstyle="select:title"/>
    and
-   <xref
-    linkend="sec.daps.user.basics.dirstruct" xrefstyle="select:title"/>
+   <xref linkend="sec.daps.user.basics.dirstruct" xrefstyle="select:title"/>
    that you need to get started with &dapsacr;.
   </para>
 
   <para>
    To migrate existing DocBook projects so that you can manage and publish
    them with &dapsacr;, follow the step-by-step instructions in
-   <xref
-   linkend="pro.daps.quick.migrate"/>.
+   <xref linkend="pro.daps.quick.migrate"/>.
   </para>
 
   <sect2 id="sec.daps.user.basics.files">
@@ -238,15 +242,13 @@
     <listitem>
      <para>
       Small documentation projects, consisting of
-      <xref
-       linkend="sec.daps.user.basics.single" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.basics.single" xrefstyle="select:title"/>
      </para>
     </listitem>
     <listitem>
      <para>
       Larger documentation projects, consisting of
-      <xref
-       linkend="sec.daps.user.basics.multiple" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.basics.multiple" xrefstyle="select:title"/>
      </para>
     </listitem>
    </itemizedlist>
@@ -282,7 +284,7 @@
    </para>
    <example id="ex.daps.main.art">
     <title>Main File of an Article (DocBook 4.x)</title>
-<screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;article lang="en" id="art.template"&gt;
@@ -338,7 +340,7 @@
    </para>
    <example id="ex.daps.user.dc.art.simple">
     <title>Basic &dc; File for an Article</title>
-<screen>## Doc config file for the DAPS example article
+    <screen>## Doc config file for the DAPS example article
 ## See /etc/daps/config for documentation of the settings below
 ##
 
@@ -364,7 +366,7 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
    </para>
    <example id="ex.daps.main.book">
     <title>Main File of a Book (DocBook 4.x)</title>
-<screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;book id="book.template" lang="en"&gt;
@@ -412,8 +414,7 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
     <sgmltag>glossary</sgmltag>, and <sgmltag>appendix</sgmltag>. A further
     additional structural level is called <sgmltag>part</sgmltag>. For a 
     complete reference, see <citetitle>&tdg;</citetitle>, available at
-    <ulink
-     url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
+    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
    </para>
    <para>
     Let us assume, the XML file shown in <xref linkend="ex.daps.main.book"/>
@@ -424,7 +425,7 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
    </para>
    <example id="ex.daps.dc.book">
     <title>&dc; File For a Book with Custom Layout</title>
-<screen>## Doc config file for the DAPS example book 
+    <screen>## Doc config file for the DAPS example book 
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -445,8 +446,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
      original DocBook stylesheet root directory, but it but does not need to 
      contain stylesheets for all output formats. If &dapsacr; cannot find a 
      custom stylesheet for a specific output format, it uses the 
-     default DocBook layout instead.-->
-    </callout>
+     default DocBook layout instead.--></callout>
    </calloutlist>
   </sect2>
 
@@ -462,14 +462,14 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     Note that this is not specific to sets&mdash;it is mainly a means of modularizing
     your documents. You can also use XIncludes for splitting up books,
     articles or chapters into separate files. For more information, refer to
-    <ulink
-     url="http://www.docbook.org/tdg51/en/html/ch02.html">
+    <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
     <citetitle>Physical Divisions: Breaking a Document into Separate
-    Files</citetitle> </ulink>.
+    Files</citetitle>
+    </ulink>.
    </para>
    <example id="ex.daps.main.set">
     <title>Main File of a Set (DocBook 4.x)</title>
-<screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
 
 &lt;set lang="en"&gt;
@@ -498,7 +498,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
    </para>
    <example id="ex.daps.dc.quick">
     <title>&dc; File For a Book in a Set</title>
-<screen>## Doc config file for &dapsquick;
+    <screen>## Doc config file for &dapsquick;
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -553,7 +553,7 @@ EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:lab
    </example>
    <example id="ex.daps.dc.user">
     <title>&dc; File For Another Book in the Same Set</title>
-<screen>## Doc config file for &dapsuser;
+    <screen>## Doc config file for &dapsuser;
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -618,8 +618,7 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
      <callout arearefs="co.daps.dc.user.formatter"> &daps-co-formatter;
        <para>
        For supported formatters, refer to
-       <xref
-        linkend="sec.daps.quick.req.sw"/>. In this example, XEP
+       <xref linkend="sec.daps.quick.req.sw"/>. In this example, XEP
        is specified as PDF formatter.
       </para>
      </callout>
@@ -637,7 +636,7 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
    </para>
    <example id="ex.daps.dc.set">
     <title>&dc; File for a Set</title>
-<screen>## Doc config file for the &dapsacr; Documentation Set
+    <screen>## Doc config file for the &dapsacr; Documentation Set
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -663,7 +662,8 @@ HTML_CSS="./daps.css" <co id="co.daps.dc.set.css"/>
 EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.set.css" xrefstyle="select:label nopage"/>
 
 ## enable sourcing
-export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
+export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/>
+    </screen>
     <calloutlist>
      <callout arearefs="co.daps.dc.set.main"> &daps-co-main; </callout>
      <callout arearefs="co.daps.dc.set.rootid"> &daps-co-rootid; <para>
@@ -717,7 +717,8 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
 
   <example id="ex.daps.dir.doc">
    <title>Required Directory Structure</title>
-<screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
+   <screen>
+    <replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
   |--&dc;-* <co id="co.docdir.dc"/>
      |--images/
      |   |--src/<co id="co.docdir.img.src"/>
@@ -728,7 +729,8 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
      |   |  |--png/
      |   |  |--svg/
      |--xml/<co id="co.docdir.xml"/> 
-     |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
+     |   |--MAIN*.xml<co id="co.docdir.main"/>
+   </screen>
   </example>
 
   <calloutlist>
@@ -764,8 +766,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    <callout arearefs="co.docdir.main">
     <para> The Main file of the documentation project. It contains the
       <quote>starting point</quote> (the highest-level object) of your
-     documentation project. For more information, refer to <xref
-      linkend="sec.daps.user.basics.files"/>.</para>
+     documentation project. For more information, refer to <xref linkend="sec.daps.user.basics.files"/>.</para>
    </callout>
   </calloutlist>
   <sect2 id="sec.daps.user.oview.dir.build">
@@ -785,13 +786,15 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    </para>
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
-    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
+    <screen>
+     <replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
   |--build/ <co id="co.builddir"/> 
      |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>    
      |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>    
      |--.images/ <co id="co.builddir.img"/>    
      |--.profiled/ <co id="co.builddir.profiled"/>
-     |--.tmp/ <co id="co.builddir.tmp"/></screen>
+     |--.tmp/ <co id="co.builddir.tmp"/>
+    </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.docdir">
@@ -832,7 +835,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
     </callout>
    </calloutlist>
   </sect2>
-  </sect1>
+ </sect1>
 <!--taroth 2012-04-25: it is recommended to use absolute paths in DC files, but the
  following parameters also allow for relative paths:
  BUILD_DIR
