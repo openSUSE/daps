@@ -15,7 +15,38 @@
 <xsl:param name="preferred.mediaobject.role">epub</xsl:param>
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
+<xsl:param name="epub.oebps.dir"   select="concat($base.dir, 'OEBPS/')"/>
+<xsl:param name="epub.metainf.dir" select="concat($base.dir, 'META-INF/')"/>   
+<xsl:param name="epub.container.filename" select="concat($epub.metainf.dir, 'container.xml')"/>
+  
+  <xsl:template name="container">
+    <xsl:call-template name="write.chunk">
+      <!-- This is needed to fix generation of META-INF/ directory -->
+      <xsl:with-param name="filename" select="$epub.container.filename"/>
+      <xsl:with-param name="method" select="'xml'" />
+      <xsl:with-param name="encoding" select="'utf-8'" />
+      <xsl:with-param name="indent" select="'no'" />
+      <xsl:with-param name="quiet" select="$chunk.quietly" />
+      <xsl:with-param name="doctype-public" select="''"/> <!-- intentionally blank -->
+      <xsl:with-param name="doctype-system" select="''"/> <!-- intentionally blank -->
 
+      <xsl:with-param name="content">
+        <xsl:element namespace="urn:oasis:names:tc:opendocument:xmlns:container" name="container">
+          <xsl:attribute name="version">1.0</xsl:attribute>
+          <xsl:element namespace="urn:oasis:names:tc:opendocument:xmlns:container" name="rootfiles">
+            <xsl:element namespace="urn:oasis:names:tc:opendocument:xmlns:container" name="rootfile">
+              <xsl:attribute name="full-path">
+                <xsl:value-of select="$epub.opf.filename" />
+              </xsl:attribute>
+              <xsl:attribute name="media-type">
+                <xsl:text>application/oebps-package+xml</xsl:text>
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:element>
+        </xsl:element>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
 <xsl:template match="keycap">
    <!-- See also Ticket#84 -->
    <xsl:param name="key.contents"  select="."/>
