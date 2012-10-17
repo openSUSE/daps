@@ -29,74 +29,22 @@
 <sect1>
  <title>Choice of Editor</title>
  &daps-editor;
- <sect2 id="sec.daps.user.edit.macros">
-  <title>Editor Macros for Inserting Complex Elements</title>
-  <remark>taroth 2012-06-15: todo - move to appendix as discussed with Frank today</remark>
-  <para>
+ <para>
    XML elements can be nested deeply. Constructs like
    <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
    <sgmltag>image</sgmltag> often have a lot of child elements&mdash;some of them
-   required, some optional.
-   If you
-   have an editor with schema support, it will tell you which elements are
-   allowed at the current cursor position, but nevertheless it is cumbersome
-   if you need to insert the child elements of complex XML constructs
-   consecutively.
-  </para>
+   required, some optional. If you have an editor with schema support, it will 
+   tell you which elements are allowed at the current cursor position, but 
+   nevertheless it is cumbersome if you need to insert the child elements of 
+   complex XML constructs consecutively.</para>
   
   <para>
    Most editors allow you to define or record macros which you can use for
    automatically inserting empty <quote>skeletons</quote> for a complex XML
-   construct as illustrated by <xref linkend="ex.daps.user.vle"/>.
-  </para>
-  
-  <example id="ex.daps.user.vle">
-   <title>A <sgmltag>varlistentry</sgmltag> Element</title>
-   <screen>&lt;varlistentry&gt;
-    &lt;term&gt;&lt;/term&gt;
-    &lt;listitem&gt;
-    &lt;para&gt;&lt;/para&gt;
-    &lt;/listitem&gt;
-    &lt;/varlistentry&gt;</screen>
-  </example>
-  
-  <para>
-   For Emacs, &dapsacr; already includes macros for adding elements such as
-   <sgmltag>listitem</sgmltag>, <sgmltag>figure</sgmltag>,
-   <sgmltag>indexterm</sgmltag> etc. The macros are defined in
-   <filename>docbook_macros.el</filename> and are added to your system during
-   the installation of &dapsacr;. They require that you use one of
-   Emacs' main XML editing modes, either <literal>nxml</literal> or
-   <literal>psgml</literal>.
-  </para>
-  
-  <procedure>
-   <title>Configuring Emacs to Use the DocBook Macros</title>
-   <step>
-    <para>
-     To load the DocBook macros, open your Emacs customization file
-     (<filename>~/.emacs</filename> or <filename>~/.gnu-emacs</filename>).
-    </para>
-   </step>
-   <step>
-    <para>
-     Insert the following line:
-    </para>
-    <screen>(load "/usr/share/emacs/site-lisp/docbook_macros.el" t t)</screen>
-   </step>
-   <step>
-    <para>
-     Save the Emacs customization file and restart Emacs.
-    </para>
-   </step>
-  </procedure>
-  
-  <para>
-   For an overview, which macros are available and how to use them, refer to
-   <ulink url="http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros"></ulink>.
-  </para>
- </sect2>
-</sect1>
+   construct. For Emacs, &dapsacr; already includes macros for adding DocBook
+   elements. For details, refer to 
+   <xref linkend="sec.daps.user.editors.emacs.macros"/>. </para>
+ </sect1>
 
  <sect1 id="sec.daps.user.edit.spell">
   <title>Spell Checking</title>
@@ -204,116 +152,14 @@
 
 
   <para>
-   <remark>taroth 2012-06-15: move the following editor-specific content to
-  the appendix as discussed with Frank today</remark>
-   For your convenience, you can also integrate &daps-spell; (plus a custom
+   For your convenience, you can integrate &daps-spell; (plus a custom
    &aspell; dictionary, if needed) into your XML editor, so that spelling is
    checked <quote>on the fly</quote> during editing. Consult your editor's
    documentation on how to integrate a custom dictionary. If you use &jedit;,
-   proceed as outlined in <xref linkend="pro.daps.spellcheck.jedit"/>.
+   proceed as outlined in <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
   </para>
 
-  <remark>toms 2012-06-15: Restructure the following procedure into
-     smaller pieces like steps and substeps? Or in sections? 15 steps
-     seems a bit overwhelming. :)</remark>
-  <procedure id="pro.daps.spellcheck.jedit">
-   <title>Integrating &daps-spell; into &jedit;</title>
-   <para>
-    <remark>taroth 2012-05-24: check and adjust as the spellchecker will
-   evolve in the future</remark>
-   </para>
-   <step>
-    <para>Start &jedit; and select <menuchoice><guimenu>Plugins</guimenu>
-      <guimenu>Plugin Manager</guimenu>
-     </menuchoice>.
-    </para>
-   </step>
-   <step>
-    <para>If the <guimenu>Spell Check</guimenu> plug-in is not already
-    installed, install and activate it.
-    </para>
-   </step>
-   <step>
-    <para>Close and restart &jedit;.</para>
-   </step>
-   <step>
-    <para>Select <menuchoice>
-      <guimenu>Plugins</guimenu>
-      <guimenu>Plugin Options</guimenu>
-     </menuchoice>.</para>
-   </step>
-   <step>
-    <para>In the left navigation pane, select <menuchoice>
-      <guimenu>Spell Check</guimenu>
-      <guimenu>General</guimenu>
-     </menuchoice>.</para>
-   </step>
-   <step>
-    <para>Set <guimenu>Spell-checking engine</guimenu> to
-      <guimenu>Aspell</guimenu> and select the <guimenu>Dictionary to
-      use</guimenu>, for example <literal>en_US</literal>. </para>
-   </step>
-   <step>
-    <para>If the desired dictionary does not appear in the drop-down list,
-     install the respective &aspell; dictionary for the language and
-     click <guimenu>Refresh list</guimenu>. </para>
-   </step>
-   <step>
-    <para>In the left navigation pane, switch to <menuchoice>
-      <guimenu>Spell Check</guimenu>
-      <guimenu>Syntax handling</guimenu>
-     </menuchoice>.</para>
-   </step>
-   <step>
-    <para>In the table, activate the <guimenu>markup</guimenu> entry and click
-      <guimenu>Edit</guimenu> next to it.</para>
-   </step>
-   <step>
-    <para>In the <guimenu>Token types picker</guimenu>, activate the following
-    entries:</para>
-    <itemizedlist>
-     <listitem>
-      <para>NULL</para>
-     </listitem>
-     <listitem>
-      <para>COMMENT1</para>
-     </listitem>
-     <listitem>
-      <para>LITERAL1</para>
-     </listitem>
-    </itemizedlist>
-   </step>
-   <step>
-    <para>In the left navigation pane, switch to <menuchoice>
-      <guimenu>Spell Check</guimenu>
-      <guimenu>Aspell Engine</guimenu>
-     </menuchoice>.</para>
-   </step>
-   <step>
-    <para>Set the path to the <guimenu>Aspell executable filename</guimenu>.  
-    Select <guimenu>Enable markup mode</guimenu>.</para>
-   </step>
-   <step>
-    <para>To use an additional custom &aspell; dictionary, specify the path to the
-     custom dictionary in the input field below <guimenu>Additional
-     parameters</guimenu>:</para>
-    <screen>--extra-dicts=<replaceable>PATH_TO_CUSTOM_DICT</replaceable></screen>
-    <para>For example:</para>
-    <screen>--extra-dicts=/home/tux/custom_aspell.rws</screen>
-   </step>
-   <step>
-    <para>Confirm your settings in the plugin options dialog with
-      <guimenu>OK</guimenu> or <guimenu>Apply</guimenu>.</para>
-   </step>
-   <step>
-    <para>To execute a spell check during editing, select <menuchoice>
-      <guimenu>Plugins</guimenu>
-      <guimenu>Spell Check</guimenu>
-      <guimenu>Highlight misspelled words</guimenu>
-     </menuchoice> (or use the keyboard shortcut assigned to that menu
-     item).</para>
-   </step>
-  </procedure>
+ 
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
   <title>Checking Links to Web Pages</title>
