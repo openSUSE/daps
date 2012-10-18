@@ -7,7 +7,7 @@
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
-  <xsl:import href="&www;;/xhtml5/docbook.xsl"/>
-
+  <xsl:import href="&www;/xhtml5/docbook.xsl"/>
+  <xsl:import href="../xhtml/param.xsl"/>
   
 </xsl:stylesheet>
