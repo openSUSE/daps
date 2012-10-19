@@ -61,8 +61,15 @@ Priority: P1 (very important) ... P5 (nice to have)
 #90 * P2 Tom: <refentry>s don't get a title. That would be useful, though.
 #91 * P1 Tom/Stefan: Lots of books don't have HTML <title>s any more..?
 #92 * P2 Stefan: Rewrite JS to J-Query which should make it shorter and safer
-#93 * P2 Tom: Don't generate TOCs for parts any more, as they tended to confuse
+#93 * P2 nbg-discuss Tom: Don't generate TOCs for parts any more, as they tended to confuse
          in user testing
+         Problem: part toc an be easily suppressed (generate.toc, see revision 2152). 
+         However, it turns out, the page is almost useless as it doesn't provide any 
+         information to the reader.
+         Solutions:
+         1. Remove part titlepage altogether. Needs heavy(?) customizations in chunking
+            templates
+         2. Show chapter abstracts, similar to set titlepage
 #94 * P3 Callouts in cha.new.bash.html#sec.new.bash.start slightly too far to
          the right
 #95 * P1 Tom: Outline inconsistency (superfluous dots in the Bubble TOC
