@@ -337,7 +337,7 @@ html, body {
     height: 56px;
 }
 
-.tool, #_nav-area .tool-spacer, .bubble {
+.tool, #_nav-area a.tool-spacer, .bubble {
     transition: all 0.2s ease-in-out 0.1s;
     /* Clean this up later when browser support is there*/
     -moz-transition: all 0.2s ease-in-out 0.1s;
@@ -413,7 +413,7 @@ html, body {
 
 .inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
 .inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
-#_nav-area .tool-spacer:hover, #_nav-area .tool-spacer:focus, #_nav-area .tool-spacer:active {
+#_nav-area a.tool-spacer:hover, #_nav-area a.tool-spacer:focus, #_nav-area a.tool-spacer:active {
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -444,21 +444,27 @@ html, body {
     background-position: -72px -36px;
 }
 
-#_toolbar .prev-icon {
+#_toolbar a.tool-spacer .prev-icon {
     background-position: -144px 0px;
 }
 
+#_toolbar span.tool-spacer .prev-icon {
+    background-position: -216px 0px;
+}
 
-#_toolbar .active .prev-icon, #_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
+#_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
     background-position: -144px -36px;
 }
 
-#_toolbar .next-icon {
+#_toolbar a.tool-spacer .next-icon {
     background-position: -180px 0px;
 }
 
+#_toolbar span.tool-spacer .next-icon {
+    background-position: -216px -36px;
+}
 
-#_toolbar .active .next-icon, #_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
+#_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
     background-position: -180px -36px;
 }
 
@@ -681,7 +687,7 @@ html, body {
     margin: 0 10px 0 5px;
 }
 
-#_fixed-header .buttons a {
+#_fixed-header .buttons .tool-spacer {
     display: block;
     float: left;
 }
@@ -706,19 +712,27 @@ html, body {
     color: #439539;
 }
 
-#_fixed-header .prev-icon {
+#_fixed-header a.tool-spacer .prev-icon {
     background-position: -36px -72px;
 }
 
-#_fixed-header .prev-icon:hover, #_fixed-header .prev-icon:focus, #_fixed-header .prev-icon:active {
+#_fixed-header span.tool-spacer .prev-icon {
+    background-position: -144px -72px;
+}
+
+#_fixed-header a:hover .prev-icon, #_fixed-header a:focus .prev-icon, #_fixed-header a:active .prev-icon {
     background-position: -54px -72px;
 }
 
-#_fixed-header .next-icon {
+#_fixed-header a.tool-spacer .next-icon {
     background-position: -108px -72px;
 }
 
-#_fixed-header .next-icon:hover, #_fixed-header .next-icon:focus, #_fixed-header .next-icon:active {
+#_fixed-header span.tool-spacer .next-icon {
+    background-position: -162px -72px;
+}
+
+#_fixed-header a:hover .next-icon, #_fixed-header a:focus .next-icon, #_fixed-header a:active .next-icon {
     background-position: -126px -72px;
 }
 

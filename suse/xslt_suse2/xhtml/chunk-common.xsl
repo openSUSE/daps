@@ -351,35 +351,49 @@
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
                                 != count($ancestorrootnode)]"/>
   <xsl:if test="$needs.navig">
-       <xsl:if test="count($prev) >0 and $isprev">
-        <a accesskey="p" class="tool-spacer">
-          <xsl:attribute name="title">
-            <xsl:apply-templates select="$prev"
-              mode="object.title.markup"/>
-          </xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="$prev"/>
-            </xsl:call-template>
-          </xsl:attribute>
-          <span class="prev-icon">&#xa0;</span>
-        </a>
-       </xsl:if>
-       <xsl:if test="count($next) >0 and $isnext">
-        <a accesskey="n" class="tool-spacer">
-          <xsl:attribute name="title">
-            <xsl:apply-templates select="$next"
-              mode="object.title.markup"/>
-          </xsl:attribute>
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="$next"/>
-            </xsl:call-template>
-          </xsl:attribute>
-          <span class="next-icon">&#xa0;</span>
-        </a>
-       </xsl:if>
-     </xsl:if>
+       <xsl:choose>
+         <xsl:when test="count($prev) >0 and $isprev">
+           <a accesskey="p" class="tool-spacer">
+             <xsl:attribute name="title">
+               <xsl:apply-templates select="$prev"
+                 mode="object.title.markup"/>
+             </xsl:attribute>
+             <xsl:attribute name="href">
+               <xsl:call-template name="href.target">
+                 <xsl:with-param name="object" select="$prev"/>
+               </xsl:call-template>
+             </xsl:attribute>
+             <span class="prev-icon">&#xa0;</span>
+           </a>
+         </xsl:when>
+         <xsl:otherwise>
+           <span class="tool-spacer">
+             <span class="prev-icon">&#xa0;</span>
+           </span>
+         </xsl:otherwise>
+       </xsl:choose>
+       <xsl:choose>
+         <xsl:when test="count($next) >0 and $isnext">
+           <a accesskey="n" class="tool-spacer">
+             <xsl:attribute name="title">
+               <xsl:apply-templates select="$next"
+                 mode="object.title.markup"/>
+             </xsl:attribute>
+             <xsl:attribute name="href">
+               <xsl:call-template name="href.target">
+                 <xsl:with-param name="object" select="$next"/>
+               </xsl:call-template>
+             </xsl:attribute>
+             <span class="next-icon">&#xa0;</span>
+           </a>
+         </xsl:when>
+         <xsl:otherwise>
+           <span class="tool-spacer">
+             <span class="next-icon">&#xa0;</span>
+           </span>
+         </xsl:otherwise>
+       </xsl:choose>
+    </xsl:if>
   </xsl:template>
 
 
