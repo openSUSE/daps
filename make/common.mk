@@ -131,7 +131,11 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 ifeq ($(MAKECMDGOALS), html)
   HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 else
-  HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+  ifeq ($(MAKECMDGOALS), html-dir-name)
+    HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+  else
+    HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
+  endif
 endif
 
 
