@@ -450,34 +450,35 @@
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
      <screen>
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
 &lt;chapter id="frog.features"&gt;
  [...]
  &lt;simplelist&gt;
-   &lt;member&gt;Common Feature 1&lt;/member&gt; <co id="co.daps.no.prof.attr"/>
-   &lt;member&gt;Common Feature 2&lt;/member&gt; <xref linkend="co.daps.no.prof.attr" xrefstyle="select:label nopage"/>
-   &lt;member&gt;Common Feature 3&lt;/member&gt; <xref linkend="co.daps.no.prof.attr" xrefstyle="select:label nopage"/>
-   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt; <co id="co.daps.profcond.value1"/>
-   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.profcond.value2"/>
-   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.profcond.value2" xrefstyle="select:label nopage"/>
-   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.profcond.profvendor"/>
+   &lt;member&gt;Common Feature 1&lt;/member&gt; <co id="co.daps.xml.no.prof.attr"/>
+   &lt;member&gt;Common Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.no.prof.attr" xrefstyle="select:label nopage"/>
+   &lt;member&gt;Common Feature 3&lt;/member&gt; <xref linkend="co.daps.xml.no.prof.attr" xrefstyle="select:label nopage"/>
+   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value1"/>
+   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value2"/>
+   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.profcond.value2" xrefstyle="select:label nopage"/>
+   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.profvendor"/>
  &lt;/simplelist&gt; 
  [...]
 &lt;/chapter&gt;</screen>
      <calloutlist>
-      <callout arearefs="co.daps.no.prof.attr">
+      <callout arearefs="co.daps.xml.no.prof.attr">
        <para>Unprofiled listitems. The common features 1-3 are available in all
        software editions or versions.</para>
       </callout>
-      <callout arearefs="co.daps.profcond.value1">
+      <callout arearefs="co.daps.xml.profcond.value1">
        <para>Listitem profiled with attribute 
        <sgmltag class="attribute">condition</sgmltag> and attribute value 
        <literal>basic</literal>. <literal>Basic&nbsp;Feature&nbsp;1</literal>
        is only available in the basic software edition for home users.</para>
       </callout>
-      <callout arearefs="co.daps.profcond.value2">
+      <callout arearefs="co.daps.xml.profcond.value2">
        <para>Listitem profiled with attribute 
        <sgmltag class="attribute">condition</sgmltag> and attribute value 
        <literal>professional</literal>. 
@@ -485,7 +486,7 @@
        and <literal>Professional&nbsp;Feature&nbsp;2</literal> are only available
        in the professional software edition for enterprise customers.</para>
       </callout>
-      <callout arearefs="co.daps.profcond.profvendor">
+      <callout arearefs="co.daps.xml.profcond.profvendor">
        <para>Listitem profiled with two attributes: Attribute 
          <sgmltag class="attribute">condition</sgmltag> with attribute value 
            <literal>professional</literal> and attribute 
@@ -500,9 +501,9 @@
      <title>Main File With PI for Profiling </title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.pi.profiling"/> 
- type="text/xml" <xref linkend="co.daps.pi.profiling" xrefstyle="select:label nopage"/>
- title="Profiling step"?&gt; <xref linkend="co.daps.pi.profiling" xrefstyle="select:label nopage"/>
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling"/> 
+ type="text/xml" <xref linkend="co.daps.main.pi.profiling" xrefstyle="select:label nopage"/>
+ title="Profiling step"?&gt; <xref linkend="co.daps.main.pi.profiling" xrefstyle="select:label nopage"/>
 &lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
@@ -517,7 +518,7 @@
  [...]
 &lt;/article&gt;</screen>
      <calloutlist>
-      <callout arearefs="co.daps.pi.profiling">
+      <callout arearefs="co.daps.main.pi.profiling">
        <para>Processing instruction (PI) in the header of the Main file. If it 
        is missing, any profiling parameters in the &dc; file will be ignored.
        </para>
@@ -529,31 +530,76 @@
      </calloutlist>
     </example>
 
-    <example id="ex.daps.main.pa.home">
-     <title>&dc; File with Profiling for Frog Home Edition</title>
-     <screen>## Doc Config File for Frog Home Edition
+    <example id="ex.daps.dc.pa.home">
+     <title>&dc; File with Profiling for Home Edition</title>
+     <screen>## Doc Config File for Frog Sound Recordings
+## (Home Edition)
 
 ## Mandatory Parameters
-MAIN="art_frog.xml"
+MAIN="art_frog.xml" <co id="co.dc.pa.main1"/>
 
 ## Profiling
-PROFCONDITION="basic" <co id="daps.dc.pa.basic"/>
+PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
 [...]</screen>
+     <calloutlist>
+      <callout arearefs="co.dc.pa.main1">
+       <para></para>
+      </callout>
+      <callout arearefs="co.dc.pa.profcond.basic">
+       <para></para>
+      </callout>
+     </calloutlist>
     </example>
 
-    <example id="ex.daps.main.pa.prof">
-     <title>&dc; File with Profiling for Frog Professional Edition</title>
-     <screen>## Doc Config File for Frog Professional Edition
+    <example id="ex.daps.cd.pa.prof">
+     <title>&dc; File with Profiling for Professional Edition</title>
+     <screen>## Doc Config File for Frog Sound Recordings
+## (Professional Edition)
 
 ## Mandatory Parameters
-MAIN="art_frog.xml"
+MAIN="art_frog.xml" <co id="co.dc.pa.main2"/>
 
 ## Profiling
-PROFCONDITION="professional" <co id="daps.dc.pa.prof"/>
-PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
+PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
 [...]</screen>
+ <calloutlist>
+      
+      <callout arearefs="co.dc.pa.main2">
+       <para></para>
+      </callout>
+      <callout arearefs="co.dc.pa.profcond.prof1">
+       <para></para>
+      </callout>
+     </calloutlist>
     </example>
 
+    <example id="ex.daps.cd.pa.prof.oem">
+     <title>&dc; File with Profiling for Professional Edition (OEM Version)</title>
+     <screen>## Doc Config File for Frog Sound Recordings 
+## (Professional Edition, OEM Version)
+
+## Mandatory Parameters
+MAIN="art_frog.xml" <co id="co.dc.pa.main3"/>
+
+## Profiling
+PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof2"/>
+PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
+[...]</screen>
+ <calloutlist>
+      <callout arearefs="co.dc.pa.main3">
+       <para></para>
+      </callout>
+      <callout arearefs="co.dc.pa.profcond.prof2">
+       <para></para>
+      </callout>
+      <callout arearefs="co.dc.pa.profvendor.oem">
+       <para></para>
+      </callout>
+     </calloutlist>
+    </example>
+
+    <!--taroth 2012-10-19: todo - move to next section as this explains stuff
+    for productname entities-->
     <example id="ex.daps.main.decl">
      <title>External Entity File with Profiling Attributes</title>
      <screen>
