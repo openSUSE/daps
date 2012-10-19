@@ -449,7 +449,8 @@
     files that you need to consider (XML files, Main file, and &dc; file). </para>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
-     <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+     <screen>
+      <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
 &lt;chapter id="frog.features"&gt;
@@ -498,25 +499,36 @@
     <example id="ex.daps.main.pi">
      <title>Main File With PI for Profiling </title>
      <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
- type="text/xml"
- title="Profiling step"?&gt;
-&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
+&lt;?xml-stylesheet 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.pi.profiling"/> 
+ type="text/xml" <xref linkend="co.daps.pi.profiling" xrefstyle="select:label nopage"/>
+ title="Profiling step"?&gt; <xref linkend="co.daps.pi.profiling" xrefstyle="select:label nopage"/>
+&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+                         "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]&gt;  
 
-&lt;article lang="en" id="art.frog"&gt;
- &lt;title&gt;Frog Product Description&lt;/title&gt;
- &lt;abstract>
- [...]
- &lt;/abstract&gt;
- &lt;xi:include href="frog_features.xml" 
-                xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt; 
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
  [...]
 &lt;/article&gt;</screen>
+     <calloutlist>
+      <callout arearefs="co.daps.pi.profiling">
+       <para>Processing instruction (PI) in the header of the Main file. If it 
+       is missing, any profiling parameters in the &dc; file will be ignored.
+       </para>
+       <para>
+        <remark>taroth 2012-10-19: todo - also explain the other lines of 
+       the screen?</remark>
+       </para>
+      </callout>
+     </calloutlist>
     </example>
+
     <example id="ex.daps.main.pa.home">
      <title>&dc; File with Profiling for Frog Home Edition</title>
      <screen>## Doc Config File for Frog Home Edition
