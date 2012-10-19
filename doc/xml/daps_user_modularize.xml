@@ -10,10 +10,6 @@
 <chapter id="cha.daps.user.modular">
  <title>Modularizing Documentation Projects</title>
  <para>
-  <remark>taroth 2012-06-22: profiling, dynamic productname/productnumber,
- XIncludes</remark>
- </para>
- <para>
   This chapter describes:
   <itemizedlist>
    <!--<listitem>
@@ -113,14 +109,14 @@
   &db-profiling-intro;
   &db-profiling; 
 
- <sect2 id="sec.daps.user.edit.profile.basics">
+ <sect2 id="sec.daps.user.modular.profile.basics">
    <title>Introduction to DocBook Profiling</title>
    <para>DocBook offers profiling attributes for various purposes as illustrated
     in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
     <citetitle>Table 26.1. Profiling attributes</citetitle>
     </ulink>. Currently, not
     all of them are supported by &dapsacr;. For details, refer to 
-    <xref linkend="sec.daps.user.edit.profile.daps"/>.</para>
+    <xref linkend="sec.daps.user.modular.profile.daps"/>.</para>
    <para>Generally, profiling attributes can be used on a large number of 
    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
    or <sgmltag>chapter</sgmltag> down to low-level elements like 
@@ -297,31 +293,31 @@
       values in _one_ attribute? Could be useful.
     </remark>
   </sect2>
-  <sect2 id="sec.daps.user.edit.profile.daps">
+  <sect2 id="sec.daps.user.modular.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
    <para>To create multiple documentation variants of the same pool of DocBook 
     files with &dapsacr;, the following requirements need to be fulfilled:</para>
    <orderedlist>
     <listitem><!--XML Files: Profiling Attributes-->
      <para>
-      <xref linkend="sec.daps.user.edit.profile.daps.pa" xrefstyle="select:title"/>
+      <xref linkend="sec.daps.user.modular.profile.daps.pa" xrefstyle="select:title"/>
      </para>
     </listitem>
     <listitem><!--Main File: Processing Instruction-->
      <para>
-      <xref linkend="sec.daps.user.edit.profile.daps.pi" xrefstyle="select: title"/>
+      <xref linkend="sec.daps.user.modular.profile.daps.pi" xrefstyle="select: title"/>
      </para>
     </listitem>
     <listitem><!--&dc; File: Profiling Parameters-->
      <para>
-      <xref linkend="sec.daps.user.edit.profile.daps.pp" xrefstyle="select: title"/>
+      <xref linkend="sec.daps.user.modular.profile.daps.pp" xrefstyle="select: title"/>
      </para>
     </listitem>
    </orderedlist>
  <para>For a comprehensive example showing all requirements in detail,
- refer to <xref linkend="sec.daps.user.edit.profile.daps.ex"/>.</para>
+ refer to <xref linkend="sec.daps.user.modular.profile.daps.ex"/>.</para>
 
-   <sect3 id="sec.daps.user.edit.profile.daps.pa">
+   <sect3 id="sec.daps.user.modular.profile.daps.pa">
     <title>XML Files: Profiling Attributes</title>
     <para>In your DocBook XM files, only use profiling attributes that are supported 
     by &dapsacr;&mdash;refer to <xref linkend="tab.daps.profiling"/>. In &dapsacr;,
@@ -411,7 +407,7 @@
      </tgroup>
     </table>
    </sect3>
-   <sect3 id="sec.daps.user.edit.profile.daps.pi">
+   <sect3 id="sec.daps.user.modular.profile.daps.pi">
     <title>Main File: Processing Instruction</title>
     <para> 
       To activate generation of profiled output in &dapsacr;, the following 
@@ -431,7 +427,7 @@
         your &dc; files contain profiling parameters. </para>
     </tip>
    </sect3>
-   <sect3 id="sec.daps.user.edit.profile.daps.pp">
+   <sect3 id="sec.daps.user.modular.profile.daps.pp">
     <title>&dc; Files: Profiling Parameters</title>
     <para>Depending on the profiling attributes used in your XML files, a &dc;
        file may contain multiple profiling parameters. They define 
@@ -441,18 +437,18 @@
         The spelling of the values must be the same that is used in the XML
         files.</para>
    </sect3>
-   <sect3 id="sec.daps.user.edit.profile.daps.productentities">
+   <sect3 id="sec.daps.user.modular.profile.daps.productentities">
     <title>Combining Entities and Profiling</title>
     <para>
      <remark>taroth 2012-06-18: todo - combine profiling and entities</remark>
     </para>
    </sect3>
 
-   <sect3 id="sec.daps.user.edit.profile.daps.ex">
+   <sect3 id="sec.daps.user.modular.profile.daps.ex">
     <title>Profiling Example</title>
     <para>In the following, find a  comprehensive example that shows the basic 
     &dapsacr; profiling requirements in more detail. It is based on the examples in
-    <xref linkend="sec.daps.user.edit.profile.basics"/> and shows all files
+    <xref linkend="sec.daps.user.modular.profile.basics"/> and shows all files
     that you need to consider (XML files, Main file, and &dc; file). </para>
 <remark>taroth 2012-06-22: FIXME - add callouts</remark>
     <example id="ex.daps.xml.pa">
@@ -527,7 +523,7 @@ PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
  </sect3>
   </sect2>
  </sect1>
- <!--<sect2 id="sec.daps.user.edit.profiling.attributes">
+ <!--<sect2 id="sec.daps.user.modular.profiling.attributes">
   <title>Using Profiling Attributes in XML Files</title>
   
   <remark>toms 2012-06-15: The following example is a bit unfortunate
@@ -668,7 +664,7 @@ PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
   <para>For more details about using profiling attributes, refer to 
   <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
   </sect2>
-  <sect2 id="sec.daps.user.edit.profiling.pi">
+  <sect2 id="sec.daps.user.modular.profiling.pi">
   <title>Adding a Processing Instruction to the Main File</title>
   <para>For the profiling process to take effect, &dapsacr; needs a certain
   processing instruction (PI):</para>
@@ -721,7 +717,7 @@ PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
   </note>
   </sect2>
   
-  <sect2 id="sec.daps.user.edit.profiling.params">
+  <sect2 id="sec.daps.user.modular.profiling.params">
   <title>Adding Profiling Parameters to the &dc; File</title>
   <para>If using profiling attributes in your XML sources, you need to define 
   which of them should be interpreted by &dapsacr; during generation of output.
@@ -730,7 +726,7 @@ PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
   profiling attributes used in your XML files, a &dc; file may contain multiple 
   profiling parameters. For a list of DocBook profiling attributes supported by
   &dapsacr; and the corresponding &dapsacr; parameters, refer to 
-  <xref linkend="sec.daps.user.edit.profiling.supported"/>.</para>
+  <xref linkend="sec.daps.user.modular.profiling.supported"/>.</para>
   <para>For each profiling parameter, set the respective attribute values for 
   which you want to filter during the profiling process. The spelling 
   of the values must be the same that is used in the XML files. You can also assign 
