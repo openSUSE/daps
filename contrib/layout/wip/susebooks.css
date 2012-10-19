@@ -182,7 +182,8 @@ html, body {
     display: block;
 }
 
-.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon {
+.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon, #_find-button,
+#_content .ulink:after, .bubble-corner {
     background-image: url(style_images/icons.png);
     background-repeat: no-repeat;
 }
@@ -266,7 +267,7 @@ html, body {
     padding: 0 10px 10px;
 }
 
-#_pickers .bubble h6 {
+.bubble h6 {
     color: #FFF;
     border-bottom: 1px solid #FFF;
     padding: 10px 0 5px;
@@ -462,13 +463,13 @@ html, body {
 }
 
 .bubble-corner {
-    background-image: url(style_images/corner.png);
-    width: 30px;
+    background-position: -288px -72px;
+    width: 36px;
     height: 15px;
     position: relative;
     z-index: 40;
     left: 50%;
-    margin: 0 0 0 -15px;
+    margin: 0 0 0 -18px;
 }
 
 .bubble {
@@ -511,15 +512,6 @@ html, body {
     border-right: 1px solid #666;
 }
 
-
-#_toolbar .bubble h6 { /* Currently the same as .pickers .bubble h6 */
-    color: #FFF;
-    border-bottom: 1px solid #FFF;
-    padding: 10px 0 5px;
-    display: block;
-    margin: 0 0 5px 0;
-}
-
 #_toolbar .bubble a {
     color: #FFF;
     display: block;
@@ -527,18 +519,6 @@ html, body {
     padding: 5px 25px 5px 5px;
     line-height: 22px;
 }
-/*#_bubble-toc ol {
-    list-style-type: none;
-}*/
-
-/*#_bubble-toc {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 980px;
-    height: 400px;
-    border: 1px solid #F0F;
-}*/
 
 #_bubble-toc .active ol {
     display: block;
@@ -564,7 +544,7 @@ html, body {
 
 #_bubble-toc .arrow {
     position: absolute;
-    right: -30px;
+    right: -0px;
     top: 0;
     display: block;
     width: 30px;
@@ -580,7 +560,7 @@ html, body {
 }
 
 #_bubble-toc .active > a, #_bubble-toc .inactive > a {
-    margin-right: 30px;
+    padding: 5px 30px 5px 5px;
 }
 
 #_bubble-toc .active > a {
@@ -665,7 +645,7 @@ html, body {
     left: 5px;
     top: -36px;
     z-index: 200;
-    color: #333;
+    color: #666;
     font-style: italic;
     display: none;
     float: left;
@@ -744,7 +724,7 @@ html, body {
 
 /* Page bottom */
 
-#_content > .page-bottom {
+#_content .page-bottom {
     margin-top: 30px;
     margin-bottom: 80px;
     padding: 10px 10px 0;
@@ -770,20 +750,20 @@ html, body {
 }
 
 #_bottom-navigation .prev-icon {
-    background-position: -216px 0;
+    background-position: -252px 0;
 }
 
 #_bottom-navigation .nav-link:hover .prev-icon  {
-    background-position: -216px -36px;
+    background-position: -252px -36px;
 }
 
 
 #_bottom-navigation .next-icon {
-    background-position: -252px 0;
+    background-position: -288px 0;
 }
 
 #_bottom-navigation .nav-link:hover .next-icon {
-    background-position: -252px -36px;
+    background-position: -288px -36px;
 }
 
 
@@ -904,13 +884,26 @@ html, body {
 
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
-/* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
+/* Works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
 #_content a[id] {
     position: relative;
     top: -30px;
     display: block;
     width: 0;
     height: 0;
+}
+
+#_content .ulink:after {
+    content: "\0020\2197";
+    color: transparent;
+    width: 18px;
+    height: 15px;
+    display: inline-block;
+    text-decoration: none;
+    background-position: -198px -72px;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 2px;
 }
 
 #_content .screen a[id] {
@@ -1133,6 +1126,7 @@ html, body {
     margin: 0 10px 0 0;
     background-repeat: no-repeat;
     float: left;
+    overflow: hidden;
 }
 
 #_content .admonition p {
@@ -1149,7 +1143,7 @@ em, i, .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title {
+strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
     font-weight: 600;
 }
 
@@ -1605,7 +1599,7 @@ obnoxious image handling:
     margin: 0 10px;
     display: block;
     color: #439539;
-    list-style-type: bullet;
+    list-style-type: disc;
 }
 
 #_content li p {
@@ -1667,7 +1661,7 @@ body.draft {
 
 
 @media print {
-    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
         display: none;
     }
     
@@ -1684,6 +1678,13 @@ body.draft {
     .title {
         page-break-after: avoid;
         break-after: avoid;
+    }
+    
+    #_content .ulink:after {
+        color: inherit;
+        background-image: none;
+        width: auto;
+        height: auto;
     }
 
 }
