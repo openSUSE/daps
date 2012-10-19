@@ -6,7 +6,7 @@
   
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/epub/docbook.xsl"/>
 
-<xsl:param name="base.dir">epub/OEBPS/</xsl:param>
+<xsl:param name="base.dir">./epub/</xsl:param>
 <xsl:param name="use.id.as.filename" select="1"/>
 
 <xsl:param name="header.rule" select="false()"/>
@@ -15,10 +15,7 @@
 <xsl:param name="preferred.mediaobject.role">epub</xsl:param>
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
-<xsl:param name="epub.oebps.dir"   select="'epub/OEBPS/'"/>
-<xsl:param name="epub.metainf.dir" select="'epub/META-INF/'"/>   
-  
-  
+
 <xsl:template match="keycap">
    <!-- See also Ticket#84 -->
    <xsl:param name="key.contents"  select="."/>
