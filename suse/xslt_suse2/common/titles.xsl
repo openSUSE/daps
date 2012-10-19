@@ -28,10 +28,10 @@
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
-   <xsl:call-template name="gentext">
-    <xsl:with-param name="key">admonseparator</xsl:with-param>
-   </xsl:call-template>
     <xsl:if test="$title">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">admonseparator</xsl:with-param>
+      </xsl:call-template>
       <xsl:apply-templates select="$title" mode="title.markup">
         <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
       </xsl:apply-templates>
