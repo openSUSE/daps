@@ -137,7 +137,7 @@
           <a class="selected" href="#">Web Page</a>
           <a href="#">Single Web Page</a>
           <a href="#">PDF</a>
-          <a href="#">E-Book (EBPU)</a>
+          <a href="#">E-Book (EPUB)</a>
         </div>
       </div>
     </div>
