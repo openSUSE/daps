@@ -14,9 +14,7 @@
   <itemizedlist>
    <!--<listitem>
     <para>how to use XIncludes,</para>
-   </listitem>-->
-   <listitem>
-    <para>how to create document variants by using profiling, and</para>
+   </listitem>--><listitem><para>how to create document variants by using profiling, and</para>
    </listitem>
    <listitem>
     <para>how to combine profiling and entities.</para>
@@ -102,7 +100,7 @@
   
   4. Entities and Profiling as explained above
   
- </remark>--> 
+ </remark>-->
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
    
@@ -135,11 +133,12 @@
    in all files belonging to a documentation project.</para>
    <para>
     <xref linkend="ex.daps.profile.one"/> shows how to profile 
-   product-specific information in a software description. The software is 
-   available in two editions: a basic edition for home users and a professional 
-   edition for enterprise customers. Both editions share common features, but 
-   some features are only available in the basic or the professional 
-   edition, respectively.</para>
+   product-specific information in a software description. Let us assume we have 
+   to write documentation for the fictional software 
+   <literal>Frog Sound Recordings</literal>. The software is available in 
+   two editions: a basic edition for home users and a professional edition for 
+   enterprise customers. Both editions share common features, but some features 
+   are only available in the basic or the professional edition, respectively.</para>
 
    <example id="ex.daps.profile.one">
     <title>Product-specific Profiling (One Attribute)</title>
@@ -289,7 +288,7 @@
      </tbody>
     </tgroup>
    </table>
-    <remark>toms 2012-09-25: Maybe describe the use of two or more profiling
+   <remark>toms 2012-09-25: Maybe describe the use of two or more profiling
       values in _one_ attribute? Could be useful.
     </remark>
   </sect2>
@@ -314,7 +313,7 @@
      </para>
     </listitem>
    </orderedlist>
- <para>For a comprehensive example showing all requirements in detail,
+   <para>For a comprehensive example showing all requirements in detail,
  refer to <xref linkend="sec.daps.user.modular.profile.daps.ex"/>.</para>
 
    <sect3 id="sec.daps.user.modular.profile.daps.pa">
@@ -430,38 +429,71 @@
    <sect3 id="sec.daps.user.modular.profile.daps.pp">
     <title>&dc; Files: Profiling Parameters</title>
     <para>Depending on the profiling attributes used in your XML files, a &dc;
-       file may contain multiple profiling parameters. They define 
-        which of the profiling attributes should be interpreted by &dapsacr;
-        when generating output. For each profiling parameter, set the respective 
-        attribute values for which you want to filter during the profiling process. 
-        The spelling of the values must be the same that is used in the XML
-        files.</para>
+       file may contain multiple profiling parameters, see 
+       <xref linkend="tab.daps.profiling"/>. Profiling parameters define which 
+       of the profiling attributes should be interpreted by &dapsacr;
+       when generating output. For each profiling parameter, set the respective 
+       attribute values for which you want to filter during the profiling process. 
+       The spelling of the values must be the same that is used in the XML
+       files.</para>
    </sect3>
-   
+
    <sect3 id="sec.daps.user.modular.profile.daps.ex">
     <title>Profiling Example</title>
     <para>In the following, find a  comprehensive example that shows the basic 
     &dapsacr; profiling requirements in more detail. It is based on the examples in
-    <xref linkend="sec.daps.user.modular.profile.basics"/> and shows all files
-    that you need to consider (XML files, Main file, and &dc; file). </para>
+    <xref linkend="sec.daps.user.modular.profile.basics"/> about the fictional
+    software <literal>Frog Sound Recordings</literal> which is available
+    in a basic edition, a professional edition and a professional OEM edition, 
+    shipped by an OEM vendor. The following example shows <emphasis>all</emphasis> 
+    files that you need to consider (XML files, Main file, and &dc; file). </para>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
-     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+     <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
 &lt;chapter id="frog.features"&gt;
  [...]
  &lt;simplelist&gt;
-   &lt;member&gt;Common Feature 1&lt;/member&gt;
-   &lt;member&gt;Common Feature 2&lt;/member&gt;
-   &lt;member&gt;Common Feature 3&lt;/member&gt;
-   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
-   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
-   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
-   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+   &lt;member&gt;Common Feature 1&lt;/member&gt; <co id="co.daps.no.prof.attr"/>
+   &lt;member&gt;Common Feature 2&lt;/member&gt; <xref linkend="co.daps.no.prof.attr" xrefstyle="select:label nopage"/>
+   &lt;member&gt;Common Feature 3&lt;/member&gt; <xref linkend="co.daps.no.prof.attr" xrefstyle="select:label nopage"/>
+   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt; <co id="co.daps.profcond.value1"/>
+   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.profcond.value2"/>
+   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.profcond.value2" xrefstyle="select:label nopage"/>
+   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.profcond.profvendor"/>
  &lt;/simplelist&gt; 
  [...]
 &lt;/chapter&gt;</screen>
+     <calloutlist>
+      <callout arearefs="co.daps.no.prof.attr">
+       <para>Unprofiled listitems. The common features 1-3 are available in all
+       software editions or versions.</para>
+      </callout>
+      <callout arearefs="co.daps.profcond.value1">
+       <para>Listitem profiled with attribute 
+       <sgmltag class="attribute">condition</sgmltag> and attribute value 
+       <literal>basic</literal>. <literal>Basic&nbsp;Feature&nbsp;1</literal>
+       is only available in the basic software edition for home users.</para>
+      </callout>
+      <callout arearefs="co.daps.profcond.value2">
+       <para>Listitem profiled with attribute 
+       <sgmltag class="attribute">condition</sgmltag> and attribute value 
+       <literal>professional</literal>. 
+       <literal>Professional&nbsp;Feature&nbsp;1</literal>
+       and <literal>Professional&nbsp;Feature&nbsp;2</literal> are only available
+       in the professional software edition for enterprise customers.</para>
+      </callout>
+      <callout arearefs="co.daps.profcond.profvendor">
+       <para>Listitem profiled with two attributes: Attribute 
+         <sgmltag class="attribute">condition</sgmltag> with attribute value 
+           <literal>professional</literal> and attribute 
+           <sgmltag class="attribute">vendor</sgmltag> with attribute value 
+           <literal>oemcompany</literal>. <literal>OEM&nbsp;Feature&nbsp;1</literal> 
+           is only available in the professional OEM software edition for 
+           enterprise customers.</para>
+      </callout>
+     </calloutlist>
     </example>
     <example id="ex.daps.main.pi">
      <title>Main File With PI for Profiling </title>
@@ -480,7 +512,8 @@
  &lt;abstract>
  [...]
  &lt;/abstract&gt;
- &lt;xi:include href="frog_features.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
+ &lt;xi:include href="frog_features.xml" 
+                xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
  [...]
 &lt;/article&gt;</screen>
     </example>
@@ -495,8 +528,8 @@ MAIN="art_frog.xml"
 PROFCONDITION="basic" <co id="daps.dc.pa.basic"/>
 [...]</screen>
     </example>
-  
-   <example id="ex.daps.main.pa.prof">
+
+    <example id="ex.daps.main.pa.prof">
      <title>&dc; File with Profiling for Frog Professional Edition</title>
      <screen>## Doc Config File for Frog Professional Edition
 
@@ -508,12 +541,14 @@ PROFCONDITION="professional" <co id="daps.dc.pa.prof"/>
 PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
 [...]</screen>
     </example>
-   
-  <example id="ex.daps.main.decl">
-   <title>External Entity File with Profiling Attributes</title>
-   <screen><remark>taroth 2012-06-22: FIXME</remark></screen>
-  </example>
- </sect3>
+
+    <example id="ex.daps.main.decl">
+     <title>External Entity File with Profiling Attributes</title>
+     <screen>
+      <remark>taroth 2012-06-22: FIXME</remark>
+     </screen>
+    </example>
+   </sect3>
   </sect2>
  </sect1>
  <sect1 id="sec.daps.user.modular.productentities">
@@ -817,5 +852,5 @@ PROFVENDOR="oemcompany" <co id="daps.dc.pa.vendor"/>
   <xref linkend="ex.daps.profiling"/>. It will contain all Quick
   Starts that are profiled with <literal>os="sles"</literal>.</para>
   </sect2>-->
- 
+
 </chapter>
