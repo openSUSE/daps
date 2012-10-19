@@ -12,10 +12,18 @@
  <abstract>
   <para>This chapter describes:
   <itemizedlist>
-   <listitem><para>how to choose an editor for editing DocBook XML files,</para></listitem>
-   <listitem><para>how to check the contents of your DocBook files for mistakes, and</para></listitem>
-   <listitem><para>how to adapt your documentation to fit multiple similar product versions at once</para></listitem>
-  </itemizedlist></para></abstract>
+   <listitem><para>how to choose an editor for editing DocBook XML files,</para>
+    </listitem>
+    <listitem>
+     <para>how to check the contents of your DocBook files for mistakes, and</para>
+    </listitem>
+    <listitem>
+     <para>how to adapt your documentation to fit multiple similar product 
+     versions at once</para>
+    </listitem>
+   </itemizedlist>
+  </para>
+ </abstract>
 
  <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
   be a great idea-->
@@ -26,8 +34,8 @@
   &db-structure-elements;
  </sect1>
 
-<sect1>
- <title>Choice of Editor</title>
+ <sect1>
+  <title>Choice of Editor</title>
  &daps-editor;
  <para>
    XML elements can be nested deeply. Constructs like
@@ -37,7 +45,7 @@
    tell you which elements are allowed at the current cursor position, but 
    nevertheless it is cumbersome if you need to insert the child elements of 
    complex XML constructs consecutively.</para>
-  
+
   <para>
    Most editors allow you to define or record macros which you can use for
    automatically inserting empty <quote>skeletons</quote> for a complex XML
@@ -95,13 +103,13 @@
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking a Single XML File</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>Checks the specified file with the default dictionary. Suggests
      alternative spellings for each misspelled word and waits for user
      interaction.</para>
@@ -158,8 +166,8 @@
    documentation on how to integrate a custom dictionary. If you use &jedit;,
    proceed as outlined in <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
   </para>
-
  
+
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
   <title>Checking Links to Web Pages</title>
@@ -203,13 +211,13 @@
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Checking Links in a Single XML File</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable></screen>
+     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
       Checks the <sgmltag>ulink</sgmltag> elements in the specified file. At
       the end of the check, &dapsacr; returns an HTML file with a list of all
@@ -248,21 +256,22 @@
   &db-profiling-intro;
   &db-profiling; 
   <para>For details, refer to <xref linkend="sec.daps.user.modular.profile"/>.</para>
-</sect1>
- 
+ </sect1>
   
 
 
 
-<sect1 id="sec.daps.user.edit.more">
-<title>For More Information</title>
-<para>
+
+ <sect1 id="sec.daps.user.edit.more">
+  <title>For More Information</title>
+  <para>
    For a complete DocBook reference see
-   <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle></ulink>.
+   <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle>
+   </ulink>.
   </para>
-<para>Useful tips and tricks around using DocBook and the DocBook stylesheets
+  <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
    can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
    Developers and Writers</citetitle>, available at 
    <ulink url="http://doccookbook.sourceforge.net/"></ulink>.</para>
-</sect1>
+ </sect1>
 </chapter>
