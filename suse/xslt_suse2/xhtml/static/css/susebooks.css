@@ -1,0 +1,1774 @@
+/*
+Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
+For additional support for Vietnamese, add "vietnamese," after "&subset=".
+Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
+Consider page load time.
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,600italic,400italic&subset=latin,cyrillic-ext,latin-ext,greek);
+
+/* Reset everything */
+/* From http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
+a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
+sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+menu, nav, output, section, summary, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* PAGE BOILERPLATE AND NAVIGATION */
+
+/* Common */
+
+.clearme {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+::selection { /* Green Selections */
+    background-color: #439539;
+    color: #FFF;
+}
+
+::-moz-selection {
+    background-color: #439539;
+    color: #FFF;
+}
+
+body {
+    background-color: #FFF;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    line-height: 140%;
+}
+
+html, body {
+    height: 100%;
+    min-width: 450px;
+}
+
+#_header, #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
+#_content > .appendix, #_content > .glossary, #_content > .reference,
+#_content > .refentry, #_content > .bibliography, #_content > .page-bottom {
+    margin: 0 auto;
+    min-width: 400px;
+    max-width: 998px;
+}
+
+#_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter,
+#_content > .preface, #_content > .appendix, #_content > .glossary,
+#_content > .reference, #_content > .refentry, #_content > .bibliography,
+#_content > .page-bottom {
+    overflow: hidden;
+}
+
+#_toolbar {
+    margin: 0 auto;
+    min-width: 420px;
+    max-width: 1018px;
+    padding: 0;
+}
+
+/* to be able to position various elements and be able to use z-index*/
+#_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
+    position: relative; 
+}
+
+#_content {
+    background: url(style_images/dots-gray.png) repeat-x scroll 0px 0px;
+    min-height: 139px;
+    clear: both;
+    min-width: 400px;
+}
+
+#_white-bg {
+    background-color: #FFF;
+    width: 100%;
+    z-index: 5;
+    min-width: 440px;
+}
+
+#_content {
+    z-index: 0;
+}
+
+/* Header Area */
+
+#_logo {
+    float: left;
+    margin: 22px 22px 27px 0;
+    width: 81px;
+    height: 38px;
+}
+
+#_logo img {
+    width: 81px;
+    height: 38px;
+    color: #439539;
+    line-height: 55px;
+    font-weight: 600;
+    display: block;
+}
+
+#_header .crumbs {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    height: 36px;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 0 0 2px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 0 0 110px;
+    height: 36px;
+    max-width: 70%;
+    max-width: calc(100% - 120px);
+    max-width: -moz-calc(100% - 120px);
+    max-width: -webkit-calc(100% - 120px);
+}
+
+#_header .crumbs a.crumb, #_header .crumbs > span {
+    display: inline;
+    overflow: hidden;
+}
+
+#_fixed-header .crumbs {
+    padding: 0 10px;
+}
+
+#_header .crumbs a, #_header .crumbs span {
+    margin: 0 0 0 5px;
+    font-size: 16px;
+}
+
+.crumbs span {
+    color: #666;
+}
+
+.crumbs a {
+    color: #333;
+    text-decoration: none;
+}
+
+.crumbs a:hover, .crumbs a:focus, .crumbs a:active {
+    color: #439539;
+    text-decoration: none;
+}
+
+.book-icon, .toc-icon, .find-icon, .tools-icon {
+    display: block;
+}
+
+.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon {
+    background-image: url(style_images/icons.png);
+    background-repeat: no-repeat;
+}
+
+
+#_header .book-link {
+    display: inline-block;
+    vertical-align: middle;
+    height: 36px;
+}
+
+.toc-icon, .find-icon, .tools-icon, #_header .book-icon, #_toolbar .prev-icon, #_toolbar .next-icon {
+    width: 36px;
+    height: 36px;
+}
+
+#_header .book-icon {
+    background-position: 0px 0px;
+}
+
+#_header .book-icon:hover, #header .book-icon:focus, #header .book-icon:active {
+    background-position: 0px -36px;
+}
+
+#_fixed-header .crumbs span, #_fixed-header .crumbs a {
+    display: block;
+    float: left;
+}
+
+#_fixed-header .book-icon {
+    background-position: 0px -72px;
+    margin: 1px 0;
+    width: 18px;
+    height: 15px;
+}
+
+#_fixed-header .book-icon:hover, #fixed-header .book-icon:focus, #fixed-header .book-icon:active {
+    background-position: -18px -72px;
+}
+
+/* Language and Format Pickers*/
+
+#_pickers {
+    float: right;
+    padding: 5px 0;
+    background-color: #FFF;
+}
+
+#_pickers .inactive, #_pickers .active {
+    float: left;
+}
+
+.picker {
+    margin: 0 0 0 5px;
+    display: block;
+    padding: 0 10px;
+    border-radius: 3px;
+    float: left;
+    background-color: #333;
+    height: 24px;
+    line-height: 24px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.picker:hover, .picker:focus, .picker:active, .active .picker {
+    background-color: #666;
+    text-decoration: underline;
+}
+
+#_pickers .bubble-corner {
+    top: 24px;
+}
+
+#_pickers .bubble {
+    right: 0;
+    top: 43px;
+    max-width: 400px;
+    min-width: 200px;
+    padding: 0 10px 10px;
+}
+
+#_pickers .bubble h6 {
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    padding: 10px 0 5px;
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+#_pickers .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+
+
+#_pickers .bubble a:hover, #_pickers .bubble a:focus, #_pickers .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+#_pickers .bubble .selected {
+    background-color: #5E9632;
+    background-image: url(style_images/picker-bg.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+#_pickers .bubble .selected:hover, #_pickers .bubble .selected:focus, #_pickers .bubble .selected:active {
+    text-decoration: underline;
+    background-color: #76AD2D;
+}
+
+
+/* Toolbar */
+
+#_toolbar-wrap{
+    margin: 0 0 15px;
+    width: 100%;
+    min-width: 400px;
+    background-image: url(style_images/dots-grayongreen.png);
+    background-color: #76AD2D;
+    position: relative;
+    z-index: 4;
+}
+
+#_toolbar {
+    height: 56px;
+    min-width: 400px;
+}
+
+.tool {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+#_toc-area {
+    float: left;
+    height: 56px;
+}
+
+#_nav-area, #_find-area {
+    float: right;
+    height: 56px;
+}
+
+.tool, #_nav-area .tool-spacer, .bubble {
+    transition: all 0.2s ease-in-out 0.1s;
+    /* Clean this up later when browser support is there*/
+    -moz-transition: all 0.2s ease-in-out 0.1s;
+    -webkit-transition: all 0.2s ease-in-out 0.1s;
+    -o-transition: all 0.2s ease-in-out 0.1s;
+}
+
+
+.active .active-contents, .inactive .inactive-contents {
+    display: block;
+}
+
+.inactive .active-contents, .active .inactive-contents {
+    display: none;
+}
+
+.active-contents {
+    z-index: 10;
+    position: relative;
+}
+
+
+#_toc-area, #_nav-area, #_find-area {
+    width: 33.3%;
+}
+
+
+.pad-tools-50-out {
+    float: left;
+    left: 50%;
+    position: relative;
+}
+
+
+.pad-tools-50-in {
+    float: left;
+    left: -50%;
+    position: relative;
+}
+
+.tool-label {
+    float: left;
+    display: block;
+    vertical-align: middle;
+    line-height: 56px;
+    color: #FFF;
+    font-weight: normal;
+}
+
+#_toc-area .tool-label, #_find-area .tool-label {
+    padding: 0 0 0 10px;
+}
+
+#_nav-area .tool-label {
+    padding: 0 10px 0 0;
+}
+
+.nav-inner {
+    float: right;
+}
+
+#_toolbar .tool-spacer {
+    padding: 10px;
+    display: block;
+    float: left;
+}
+
+#_fixed-header .tool-spacer {
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
+.inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
+#_nav-area .tool-spacer:hover, #_nav-area .tool-spacer:focus, #_nav-area .tool-spacer:active {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.active .tool {
+    background-color: rgba(255,255,255,0.3);
+}
+
+.toc-icon, .find-icon, .tools-icon, #_toolbar .prev-icon, #_toolbar .next-icon {
+    float: left;
+    display: block;
+}
+
+.toc-icon {
+    background-position: -36px 0px;
+}
+
+
+.active .toc-icon, a:hover .toc-icon, a:focus .toc-icon, a:active .toc-icon {
+    background-position: -36px -36px;
+}
+
+.find-icon {
+    background-position: -72px 0px;
+}
+
+
+.active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
+    background-position: -72px -36px;
+}
+
+#_toolbar .prev-icon {
+    background-position: -144px 0px;
+}
+
+
+#_toolbar .active .prev-icon, #_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
+    background-position: -144px -36px;
+}
+
+#_toolbar .next-icon {
+    background-position: -180px 0px;
+}
+
+
+#_toolbar .active .next-icon, #_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
+    background-position: -180px -36px;
+}
+
+.bubble-corner {
+    background-image: url(style_images/corner.png);
+    width: 30px;
+    height: 15px;
+    position: relative;
+    z-index: 40;
+    left: 50%;
+    margin: 0 0 0 -15px;
+}
+
+.bubble {
+    background-color: #333;
+    position: absolute;
+    z-index: 70;
+    box-shadow: 1px 1px 3px 0px #333;
+}
+
+#_toolbar .bubble-corner {
+    top: -3px;
+}
+#_toolbar .bubble {
+    top: 66px;
+    left: 0;
+    width: 100%;
+    padding: 0;
+}
+
+#_toolbar .bubble-container {
+    padding: 0 10px 10px;
+}
+
+#_bubble-toc {
+    overflow: hidden;
+    height: 400px;
+    position: relative;
+}
+
+#_bubble-toc ol {
+    overflow: auto;
+}
+
+#_bubble-toc > ol {
+    width: 50%;
+    padding: 0;
+    margin:0;
+    background-color: #333;
+    height: 100%;
+    border-right: 1px solid #666;
+}
+
+
+#_toolbar .bubble h6 { /* Currently the same as .pickers .bubble h6 */
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    padding: 10px 0 5px;
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+#_toolbar .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+/*#_bubble-toc ol {
+    list-style-type: none;
+}*/
+
+/*#_bubble-toc {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 980px;
+    height: 400px;
+    border: 1px solid #F0F;
+}*/
+
+#_bubble-toc .active ol {
+    display: block;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    width: 50%;
+    background-color: #333;
+    padding: 0;
+    margin:0;
+    height: 100%;
+    border-left: 1px solid #666;
+}
+
+#_bubble-toc .inactive ol {
+    display: none !important;
+}
+
+#_bubble-toc .inactive a:hover {
+    color: #000;
+    background-color: #999;
+}
+
+#_bubble-toc .arrow {
+    position: absolute;
+    right: -30px;
+    top: 0;
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0;
+    background-image: url(style_images/arrow.png);
+    background-position: -30px 8.5px;
+    background-repeat: no-repeat;
+}
+
+#_bubble-toc .inactive a:hover .arrow {
+    background-position: 0px 9px;
+}
+
+#_bubble-toc .active > a, #_bubble-toc .inactive > a {
+    margin-right: 30px;
+}
+
+#_bubble-toc .active > a {
+    background-color: #666;
+    color: #FFF;
+}
+#_bubble-toc .active {
+    background-color: #666;
+}
+
+#_bubble-toc .inactive:hover {
+    background-color: #999;
+}
+
+#_bubble-toc a {
+    display: block;
+    position: relative;
+}
+
+#_bubble-toc li {
+    display: block;
+    clear: both;
+}
+
+.bubble a:hover, .bubble a:focus, .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+
+#_find-area form {
+    margin: 0 0 0 50% !important;
+}
+
+.find-form {
+    padding: 10px;
+    margin: 0 0 0 -110px;
+    display: block;
+    width: 200px;
+}
+
+#_find-input {
+    width: 155px;
+    height: 34px;
+    padding: 0 20px 0 5px;
+    font: 16px 'Open Sans', Helvetica, FreeSans, sans-serif;
+    display: block;
+    background-color: #FFF;
+    border: 1px solid #CCE9A7;
+    float: left;
+    outline: none;
+    z-index: 0;
+}
+
+#_find-input:focus {
+    background-color: #FFF;
+    border: 1px solid #FFF;
+}
+
+#_find-input:focus + #_find-button {
+    background-position: -108px 0px !important;
+}
+
+#_find-button {
+    width: 36px;
+    height: 36px;
+    display: block;
+    margin: 0 0 0 -18px;
+    background-position: -72px 0px;
+    float: left;
+}
+
+#_find-input:focus + #_find-button:hover {
+    background-position: -108px -36px !important;
+}
+
+#_find-input-label {
+    cursor: text;
+    line-height: 36px;
+    height: 36px;
+    position: relative;
+    left: 5px;
+    top: -36px;
+    z-index: 200;
+    color: #333;
+    font-style: italic;
+    display: none;
+    float: left;
+}
+
+
+/* Smaller, fixed header */
+
+#_fixed-header-wrap {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 5px 5px #FFF;
+    border-bottom: 1px solid #CCC;
+    background-color: #EFEFF0;
+    padding: 3px 0;
+    line-height: 100%;
+}
+
+#_fixed-header {
+    max-width: 1018px;
+    min-width: 380px;
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    margin: 0 auto;
+}
+
+#_fixed-header .buttons {
+    display: block;
+    float: right;
+    margin: 0 10px 0 5px;
+}
+
+#_fixed-header .buttons a {
+    display: block;
+    float: left;
+}
+
+#_fixed-header .button {
+    float: left;
+}
+
+#_fixed-header .prev-icon, #_fixed-header .next-icon {
+    height: 15px;
+    width: 18px;
+    display: block;
+}
+
+#_fixed-header .top-button {
+    color: #333;
+    margin-right: 10px;
+}
+
+#_fixed-header .top-button:hover, #_fixed-header .top-button:focus, #_fixed-header .top-button:active {
+    text-decoration: none;
+    color: #439539;
+}
+
+#_fixed-header .prev-icon {
+    background-position: -36px -72px;
+}
+
+#_fixed-header .prev-icon:hover, #_fixed-header .prev-icon:focus, #_fixed-header .prev-icon:active {
+    background-position: -54px -72px;
+}
+
+#_fixed-header .next-icon {
+    background-position: -108px -72px;
+}
+
+#_fixed-header .next-icon:hover, #_fixed-header .next-icon:focus, #_fixed-header .next-icon:active {
+    background-position: -126px -72px;
+}
+
+/* Page bottom */
+
+#_content > .page-bottom {
+    margin-top: 30px;
+    margin-bottom: 80px;
+    padding: 10px 10px 0;
+}
+
+#_bottom-navigation {
+    border-top: 1px solid #999;
+}
+
+#_bottom-navigation .nav-link {
+    display: block;
+    clear: both;
+    margin: 20px 0 0 0;
+    height: 36px;
+}
+
+#_bottom-navigation .prev-icon, #_bottom-navigation .next-icon {
+    width: 36px;
+    height: 36px;
+    display: block;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+#_bottom-navigation .prev-icon {
+    background-position: -216px 0;
+}
+
+#_bottom-navigation .nav-link:hover .prev-icon  {
+    background-position: -216px -36px;
+}
+
+
+#_bottom-navigation .next-icon {
+    background-position: -252px 0;
+}
+
+#_bottom-navigation .nav-link:hover .next-icon {
+    background-position: -252px -36px;
+}
+
+
+#_bottom-navigation .nav-label {
+    line-height: 36px;
+    display: block;
+    float: left;
+    color: #333;
+    overflow: ellipsis;
+    height: 36px;
+}
+
+#_bottom-navigation .nav-label, .share a, .print a {
+    color: #333;
+    text-decoration: none;
+}
+
+#_bottom-navigation .nav-link:hover .nav-label,
+#_bottom-navigation .nav-link:focus .nav-label,
+#_bottom-navigation .nav-link:active .nav-label,
+.share:hover a, .print a:hover, .share:focus a, .print a:focus,
+.share:active a, .print a:active {
+    color: #439539;
+}
+
+#_share-print {
+    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 1px solid #999;
+    clear: both;
+}
+
+.offline .online-contents {
+    visibility: hidden;
+}
+
+.share, .print {
+    width: 49.98%;
+    display: block;
+}
+
+.share {
+    float: left;
+}
+
+.print {
+    float: right;
+    text-align: right !important;
+}
+
+/* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
+#_inward, #_footer-wrap {
+    height: 80px;
+}
+
+#_inward {
+    z-index: -1;
+}
+
+#_footer-wrap {
+    width: 100%;
+    overflow: hidden;
+    background-color: #EFEFF0;
+    
+}
+
+#_outer-wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -80px;
+}
+
+
+/* Footer contents */
+
+#_footer {
+    font-family: Helvetica, FreeSans, sans-serif;
+    z-index: 2; /* Else, #_inward overlays the footer */
+}
+
+#_footer li, #_footer p {
+    display: block;
+    float: left;
+    line-height: 80px;
+    margin: 0 30px 0 0;
+    font-size: 12px;
+}
+
+#_footer a {
+    text-decoration: none;
+    color: #666;
+}
+
+#_footer a:hover, #_footer a:focus, #_footer a:active {
+    text-decoration: underline;
+    color: #76AD2D;
+}
+
+#_footer p {
+    color: #333;
+}
+
+#_suse_phone {
+    margin: 0 !important;
+    float: right !important;
+}
+
+
+/* .CHAPTER/... AREA */
+
+#_content > .set, #_content > .book, #_content > .article, #_content > .part,
+#_content > .chapter, #_content > .preface, #_content > .appendix,
+#_content > .glossary, #_content > .reference, #_content > .refentry,
+#_content > .bibliography {
+    padding: 0 10px;
+}
+
+
+/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
+/* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
+#_content a[id] {
+    position: relative;
+    top: -30px;
+    display: block;
+    width: 0;
+    height: 0;
+}
+
+#_content .screen a[id] {
+    display: none;
+}
+
+.version-info {
+    color: #439539;
+    font-weight: normal;
+    background-color: rgba(255,255,255,0.45);
+    border: 1px solid #439539;
+    padding: 3px 5px;
+    line-height: 120%;
+    float: right;
+    margin: 5px 0 10px;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
+#_content .book .title, #_content .set .title {
+    font-size: 48px;
+    font-weight: normal;
+    line-height: 120%;
+    width: auto;
+    clear: both;
+    text-align: center;
+    color: #439539;
+    padding: 70px 0;
+    /*padding: 200px 36px 36px 36px;*/
+}
+
+/*#_content .book .titlepage > div > div:first-child {
+    background: url(style_images/chameleon.jpg) scroll no-repeat bottom left;
+    height: 400px;
+}*/
+
+#_content .title {
+    font-size: 32px;
+    font-weight: normal;
+    padding: 30px 0 5px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+#_content .sect1 .title {
+    font-size: 28px;
+    font-weight: normal;
+    padding: 50px 0 5px;
+}
+
+#_content .sect2 .title {
+    font-size: 22px;
+    font-weight: normal;
+    padding: 40px 0 0;
+}
+
+#_content .sect3 .title, #_content .refentry h2 {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 30px 0 0;
+}
+
+#_content .sect4 .title {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 20px 0 0;
+}
+
+#_content .sect5 .title {
+    font-size: 16px;
+    font-weight: normal;
+    padding: 20px 0 0;
+}
+
+/* FUXME! */
+#_content .title + .title {
+    margin-top: -20px;
+}
+
+#_content .name, #_content .refentry h2, .refentrytitle a {
+    color: #439539;
+}
+
+#_content a:hover .name, #_content a:focus .name, #_content a:active .name,
+#_content .refentrytitle a:hover, #_content .refentrytitle a:focus, #_content .refentrytitle a:active {
+    text-decoration: underline;
+}
+
+#_content .number, #_content .subtitle {
+    color: #666;
+}
+
+#_content .permalink {
+    opacity: 0;
+    font-size: 75%;
+    text-decoration: none;
+    color: #999;
+    font-weight: normal;
+    line-height: 100%;
+    transition: opacity 0.2s ease-in-out 0.1s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: opacity 0.2s ease-in-out 0.1s;
+    -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+    -o-transition: opacity 0.2s ease-in-out 0.1s;
+}
+
+#_content .permalink:hover, #_content .permalink:focus, #_content .permalink:active {
+    color: #439539;
+    text-decoration: none !important;
+}
+
+#_content .title:hover .permalink, #_content .title:focus .permalink, #_content .title:active .permalink,
+#_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink,
+#_content .table-title:hover .permalink, #_content .table-title:focus .permalink, #_content .table-title:active .permalink,
+#_content .example-title:hover .permalink, #_content .example-title:focus .permalink, #_content .example-title:active .permalink,
+#_content .figure-title:hover .permalink, #_content .figure-title:focus .permalink, #_content .figure-title:active .permalink,
+#_content .procedure-title:hover .permalink, #_content .procedure-title:focus .permalink, #_content .procedure-title:active .permalink {
+    opacity: 1;
+}
+
+#_content .line .toc {
+    padding: 0 17px 24px;
+}
+
+#_content .line {
+    margin: 17px 0 36px 0;
+    border-bottom: 1px solid #439539;
+    width: 100%;
+}
+
+#_content .toc a {
+    text-decoration: none;
+}
+
+#_content .legalnotice {
+    margin: 40px 0 0;
+    border-top: 1px solid #999;
+    padding: 10px 0 0;
+}
+
+#_content .legalnotice p {
+    font-size: 12px;
+    color: #666;
+    line-height: 140%;
+    margin: 5px 0 0 0;
+}
+
+
+/* Thou shalt not ... */
+
+#_content .admonition {
+    border-width: 1px;
+    border-radius: 5px;
+    border-style: solid;
+    padding: 10px;
+    margin: 24px 0;
+    background-color: #FFF;
+}
+
+#_content .tip {
+    border-color: #439539;
+    background: url(style_images/dots-green.png) repeat-x scroll top;
+}
+
+#_content .note {
+    border-color: #333;
+    background: url(style_images/dots-yellow.png) repeat-x scroll top;
+}
+
+#_content .note ul {
+    color: #333;
+}
+
+#_content .important {
+    border-color: #BB7B03;
+    background: url(style_images/dots-orange.png) repeat-x scroll top;
+}
+
+#_content .important ul {
+    color: #BB7B03;
+}
+
+#_content .warning, .caution {
+    border-color: #8C0000;
+    background: url(style_images/dots-red.png) repeat-x scroll top;
+}
+
+#_content .warning ul, #_content .warning ul {
+    color: #333;
+}
+
+#_content .admonition h6 {
+    font-size: 16px;
+    font-weight: 600;
+    vertical-align: middle;
+    display: table-cell;
+    height: 36px;
+}
+
+#_content .tip h6 {
+    color: #439539;
+}
+
+#_content .note h6 {
+    color: #333;
+}
+
+#_content .important h6 {
+    color: #BB7B03;
+}
+
+#_content .warning h6, .caution h6 {
+    color: #8C0000;
+}
+
+#_content .symbol {
+    width: 36px;
+    height: 36px;
+    margin: 0 10px 0 0;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+#_content .admonition p {
+    margin: 10px 0 0 !important;
+}
+
+/* Text styles */
+
+em, i, .guimenu {
+    font-style: italic;
+}
+
+#_content em .guimenu, #_content i .guimenu {
+    font-style: normal; /* Don't use italics within italics... */
+}
+
+strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title {
+    font-weight: 600;
+}
+
+#_content p {
+    font-size: 16px;
+    color: #000;
+    text-align: left;
+    margin: 10px 0 0;
+}
+
+#_content .abstract {
+    font-weight: 600;
+    background-color: #F7FAF6;
+    border-left: 3px solid #9CC897;
+    padding: 3px 10px 5px 10px;
+    margin: 24px 0 0;
+}
+#_content .abstract p, .toc-title {
+    color: #333;
+}
+
+#_content .abstract p:first-child {
+    margin-top: 0;
+}
+
+#_content .abstract .titlepage {
+    display: none;
+}
+
+#_content .abstract .titlepage + p {
+    margin-top: 0;
+}
+
+#_content .abstract li p {
+    font-weight: 600;
+}
+
+#_content .abstract li:first-child p:first-child {
+    margin-top: 0;
+}
+
+#_content .abstract + .authorgroup {
+    margin: 10px 0;
+}
+
+#_content .authorgroup {
+    color: #333;
+}
+
+#_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
+#_content .glossseealso {
+    color: #439539;
+    text-decoration: none;
+}
+
+#_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref,
+#_content .example-title .xref, #_content .figure-title .xref,
+#_content .procedure-title .xref, #_content .title .ulink, #_content .subtitle .ulink,
+#_content .table-title .ulink, #_content .example-title .ulink,
+#_content .figure-title .ulink, #_content .procedure-title .ulink {
+    text-decoration: underline;
+}
+
+#_content .xref:hover, #_content .xref:focus, #_content .xref:active,
+#_content .xref:visited:hover, #_content .xref:visited:focus, #_content .xref:visited:active,
+#_content .ulink:hover, #_content .ulink:focus, #_content .ulink:active,
+#_content .ulink:visited:hover, #_content .ulink:visited:focus, #_content .ulink:visited:active,
+#_content .email:hover, #_content .email:focus, #_content .email:active,
+#_content .email:visited:hover, #_content .email:visited:focus, #_content .email:visited:active,
+#_content .glosssee:hover, #_content .glosssee:focus, #_content .glosssee:active,
+#_content .glosssee:visited:hover, #_content .glosssee:visited:focus, #_content .glosssee:visited:active,
+#_content .glossseealso:hover, #_content .glossseealso:focus, #_content .glossseealso:active,
+#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active {
+    color: #439539;
+    text-decoration: underline;
+}
+
+#_content .xref:visited, #_content .ulink:visited, #_content .email:visited,
+#_content .glosssee:visited, #_content .glossseealso:visited {
+    color: #5C3566;
+}
+
+#_content .title .xref:hover, #_content .title .xref:focus,#_content .title .xref:active,
+#_content .subtitle .xref:hover, #_content .subtitle .xref:focus, #_content .subtitle .xref:active,
+#_content .table-title .xref:hover, #_content .table-title .xref:focus, #_content .table-title .xref:active,
+#_content .figure-title .xref:hover, #_content .figure-title .xref:focus, #_content .figure-title .xref:active,
+#_content .example-title .xref:hover, #_content .example-title .xref:focus, #_content .example-title .xref:active,
+#_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active {
+    color: #439539;
+    text-decoration: none;
+}
+
+#_content p a:visited {
+    color: #5C3566;
+}
+
+#_content code, #_content .command {
+    font: normal 100% 'Droid Sans Mono', monospace;
+    padding: 0 4px;
+    border: 1px solid #D1D1D3;
+    border-radius: 3px;
+    color: #333;
+    text-transform: none;
+    display: inline-block;
+}
+
+
+#_content code code, #_content code .command, #_content .command code {
+    padding: 0;
+    border: none;
+}
+
+
+#_content .name code, #_content .name .command, #_content a .command, #_content a code,
+#_content .admonition h6 .command, #_content .admonition h6 code {
+    color: inherit;
+}
+
+#_content .admonition h6 .command, #_content .admonition h6 code {
+    border-color: #D1D1D3;
+}
+
+#_content code {
+    font-weight: normal;
+}
+
+#_content .command {
+    font-weight: bold;
+}
+
+#_content .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+    padding: 10px;
+    background-color: #202020;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+    
+#_content .example .screen-wrap {
+    margin: 10px 0 24px;
+}
+
+#_content .screen {
+    font: normal 13px 'Droid Sans Mono', monospace;
+    color: #FFF;
+    line-height: 125%;
+    display: block;  
+    overflow: auto;
+    background-color: #202020;
+}
+
+#_content .screen code, #_content .screen .command {
+    border-radius: 0;
+    background-color: transparent;
+    font-size: 100%;
+    border: none;
+    padding: 0;
+}
+
+#_content .screen code {
+    color: #FFF;
+}
+
+#_content .screen .command {
+    color: #76AD2D;
+}
+
+#_content .calloutlist {
+    margin: 10px 0 24px;
+}
+
+#_content .example + .calloutlist {
+    margin: -14px 0 24px;
+}
+
+#_content .calloutlist table {
+    width: 100%;
+}
+
+#_content .callout {
+    display: inline-block;
+    padding: 1px 5px 1.5px;
+    margin: 0 5px;
+    border-radius: 10px;
+    background-color: #439539;
+    color: #FFF;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 600;
+}
+
+#_content .calloutlist .callout {
+    position: relative;
+    top: -2px;
+}
+
+#_content .variablelist, #_content .toc {
+    margin: 24px 0;
+}
+
+#_content .line .toc {
+    margin: 0;
+}
+
+#_content .variablelist dt, #_content .glossary dt {
+    font-weight: 600;
+    color: #000;
+}
+
+#_content .toc dt {
+    margin-bottom: 5px;
+} 
+
+#_content .variablelist dd, #_content .glossary dd, #_content .toc dd {
+    margin: 0 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+#_content .list-of-figures dl, #_content .list-of-tables dl,
+#_content .list-of-examples dl, #_content .list-of-procedures dl,
+#_content .list-of-equations dl {
+    margin: 5px 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+#_content .variablelist dd p, #_content .glossary dd p, #_content .toc dd p {
+    margin: 0;
+}
+
+#_content div.figure {
+    max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    color: #999;
+    margin: 24px 0;
+    border: 1px solid #202020;
+    overflow: hidden;
+}
+
+
+/* The following three rules should be considered make-shift fixes for DocBook's
+obnoxious image handling:
+   a) images on a web page should by default be as wide and tall as their pixel size
+      and the monitor allow, no? Now they are.
+   b) DocBook creates non-sensical tables and div.mediaobjects around images, so
+      let's style those, too.
+   c) Making a div that's exactly as wide as needed is a bit tricky (unless it's
+      floating ... should ponder that some time), so now there's a 100%-width
+      grey frame around images that should make people think that that's okay...*/
+/* Begin special rules */
+
+#_content .figure .mediaobject {
+    padding: 20px 10px;
+    background-color: #333;
+}
+
+#_content .figure table {
+    margin: 0 auto;
+}
+
+#_content .informalfigure table, #_content .informalfigure img, #_content .figure table {
+    width: auto !important;
+}
+
+/* End special rules*/
+
+#_content .figure img {
+    padding: 1px;
+    background-color: #FFF;
+    /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+    max-width: 100%;
+    max-width: calc(100% - 2px);
+    max-width: -moz-calc(100% - 2px);
+    max-width: -webkit-calc(100% - 2px);
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+}
+
+#_content .figure-title {
+    padding: 10px;
+    margin: 0;
+    width: auto;
+}
+
+#_content div.figure .figure-title-wrap {
+    background-color: #202020;
+    width: 100%;
+    overflow: hidden;
+}
+
+#_content div.figure a {
+    height: 0;
+    width: 0;
+}
+
+#_content div.figure .number, #_content div.figure .permalink:hover, #_content div.figure .permalink:focus, #_content div.figure .permalink:active {
+    color: #76AD2D;
+    text-decoration: none;
+}
+
+#_content div.figure .name, #_content div.figure .permalink {
+    color: #FFF;
+}
+
+#_content .informalfigure img {
+    max-width: 100%;
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+    text-align: center;
+    color: #999;
+    margin: 24px 0;
+    padding: 1px;
+    border: 1px solid #202020;
+}
+
+#_content .keycap {
+    color: #333;
+    font-size: 13px;
+    padding: 0px 5px;
+    background-color: #EFEFF0;
+    border-radius: 3px;
+    border-width: 1px 2px 2px 1px;
+    border-color: #999;
+    border-style: solid;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+#_content a:hover .keycap, #_content a:focus .keycap, #_content a:active .keycap,
+#_content a:hover .command, #_content a:focus .command, #_content a:active .command,
+#_content a:hover code, #_content a:focus code, #_content a:active code {
+    background-color: #f7faf6;
+    border-color: #439539;
+}
+
+/* We put an ndash character between keycaps that are part of an accelerator */
+#_content .key-connector {
+    margin: 0 -1px; 
+    color: #666;
+}
+
+#_content .procedure-title, #_content .table-title, #_content .example-title, #_content .figure-title {
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: left;
+    line-height: 120%;
+}
+
+#_content .table-title, #_content .example-title, #_content .procedure-title {
+    margin: 24px 0 10px;
+    padding: 0;
+}
+
+#_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap {
+    text-transform: none;
+}
+
+#_content .procedure-contents {
+    font-size: 16px;
+    border-left: 3px solid #9CC897;
+    font-weight: normal;
+    margin: 17px 0 17px;
+    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
+    padding: 3px 5px 5px 2px;
+    background-color: #F7FAF6;
+    display: block;
+}
+
+#_content .procedure-title-wrap + .procedure-contents {
+    margin: 10px 0 24px;
+}
+
+#_content .procedure-contents > p:first-child, #_content .procedure-contents > ol:first-child > li:first-child > p:first-child  {
+    margin-top: 0;
+}
+
+#_content .procedure-contents > p {
+    margin-left: 12px;
+    margin-right: 17px;
+}
+
+#_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
+    display: block;
+    color: #439539;
+    font-weight: 600;
+}
+
+#_content ol.procedure {
+    padding: 0 0 0 30px;
+    margin: 0 10px;
+}
+
+#_content ol.substeps, #_content ol.orderedlist {
+    padding: 0 0 0 35px;
+    margin: 0 0 0 10px;
+}
+
+#_content ol.procedure, #_content ol.orderedlist {
+    list-style-type: decimal;
+}
+
+#_content ol.substeps {
+    list-style-type: lower-latin;
+}
+
+#_content .table-contents, #_content .informaltable {
+    /* Yup, let's make this scroll... While ugly, there seems to be no better
+    way to avoid the table running off the page border...(?) */
+    overflow: auto;
+}
+
+#_content .table-contents {
+    margin: 0 0 24px 0;
+}
+#_content .informaltable {
+    margin: 10px 0 24px 0;
+}
+
+
+#_content .table table, #_content .informaltable table {
+    border: 1px solid #999;
+    max-width: 100%;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+#_content table p, #_content .informaltable table p {
+    margin: 0;
+}
+
+#_content .table th, #_content .informaltable th {
+    font-weight: 600;
+    background-color: #D1D1D3;
+}
+
+#_content .table td, #_content .table th, #_content .informaltable td, #_content .informaltable th {
+    margin: 0;
+    padding: 3px 5px;
+    overflow: hidden;
+}
+
+#_content .table th, #_content .informaltable th {
+    vertical-align: middle;
+    border: 1px solid #999;
+}
+
+#_content .table tr:nth-child(even), #_content .informaltable tr:nth-child(even) {
+    background-color: #EFEFF0;
+}
+
+#_content ul {
+    padding: 5px 0 0 35px;
+    margin: 0 10px;
+    display: block;
+    color: #439539;
+    list-style-type: bullet;
+}
+
+#_content li p {
+    font-weight: normal;
+}
+
+#_content .procedure > p {
+    margin: 0 10px 5px;
+}
+
+/* Review features */
+
+.remark, .doc-status {
+    background-color: #E6E0E8;
+    color: #000;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.remark {
+    padding: 1px 5px;
+    border-left: 3px solid #5C3566;
+}
+
+.remark .remark {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.doc-status {
+    margin: 0 auto;
+    min-width: 380px;
+    max-width: 978px;
+    padding: 10px;
+}
+
+.doc-status li {
+    color: #000;
+}
+
+.ds-error {
+    font-style: italic;
+}
+
+
+.ds-label {
+    font-weight: 600;
+}
+
+.ds-head {
+    font-style: normal;
+    font-size: 22px;
+}
+
+body.draft {
+    background: url(style_images/draft.png) no-repeat fixed left 50%;
+}
+
+
+@media print {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap {
+        display: none;
+    }
+    
+    #_share-print {
+        visibility: hidden;
+    }
+    
+    .figure, .informalfigure, .admonition, p, table {
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002.*/
+        /* Webkit does, though. */
+        page-break-inside: avoid;
+    }
+    
+    .title {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+}
+
+@media only screen and (max-width: 700px) {
+    .find-form {
+        margin: 0 0 0 -72.5px;
+        width: 125px;
+    }
+
+    #_find-input {
+       width: 80px;
+    }
+}
+
+
+@media only screen and (max-width: 640px) {
+    #_toolbar {
+        height: 98px;
+    }
+    
+    #_toc-area, #_nav-area {
+        width: 49.98%;
+    }
+    
+    #_find-area {
+        height: 42px;
+        background-color: #439539;
+        width: 100%;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+    
+    #_find-area form {
+        margin: 0 !important;
+    }
+    
+    .find-form {
+        padding: 10px;
+        margin: 0;
+        display: block;
+        width: 100%;
+    }
+
+    #_find-input {
+        /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+        width: 91%;
+        width: calc(100% - 44px);
+        width: -moz-calc(100% - 44px);
+        width: -webkit-calc(100% - 44px);
+        height: 20px;
+        margin: 0 auto;
+        padding: 0 20px 0 1px;
+        font-size: 13px;
+        border: 1px solid #CDE8A8;
+        border-radius: 3px;
+    }
+    
+    #_find-input:focus {
+        border: 1px solid #FFF;
+    }
+    
+    #_find-button {
+        width: 18px;
+        height: 15px;
+        margin: 3px 0 3px -20px;
+        background-position: -72px -72px;
+        float: left;
+    }
+
+    #_find-input:focus + #_find-button {
+        background-position: -72px -72px !important;
+    }
+
+
+    #_find-input:focus + #_find-button:hover {
+        background-position: -90px -72px !important;
+    }
+    
+    #_find-input-label {
+        line-height: 20px;
+        height: 20px;
+        left: 3px;
+        top: -21px;
+        font-size: 13px;
+        clear: both;
+    }
+}
