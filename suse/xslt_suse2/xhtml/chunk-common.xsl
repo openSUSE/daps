@@ -212,8 +212,7 @@
           <div class="find-form">
             <input type="text" id="_find-input" value=""
               onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
-            <input type="image" id="_find-button" alt="Find"
-              title="Find" src="style_images/blank.png"/>
+            <button id="_find-button" alt="Find" title="Find">Find</button>
             <label id="_find-input-label"
               onclick="document.getElementById('_find-input').focus(); return false;"
               >Find</label>

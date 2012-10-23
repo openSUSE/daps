@@ -91,13 +91,17 @@ html, body {
     padding: 0;
 }
 
+#_toolbar *, #_header * {
+    outline: 0;
+}
+
 /* to be able to position various elements and be able to use z-index*/
 #_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
     position: relative; 
 }
 
 #_content {
-    background: url(style_images/dots-gray.png) repeat-x scroll 0px 0px;
+    background: url(../images/dots-gray.png) repeat-x scroll 0px 0px;
     min-height: 139px;
     clear: both;
     min-width: 400px;
@@ -182,8 +186,9 @@ html, body {
     display: block;
 }
 
-.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon {
-    background-image: url(style_images/icons.png);
+.toc-icon, .find-icon, .tools-icon, .book-icon, .prev-icon, .next-icon, #_find-button,
+#_content .ulink:after, .bubble-corner {
+    background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
 
@@ -266,7 +271,7 @@ html, body {
     padding: 0 10px 10px;
 }
 
-#_pickers .bubble h6 {
+.bubble h6 {
     color: #FFF;
     border-bottom: 1px solid #FFF;
     padding: 10px 0 5px;
@@ -290,7 +295,7 @@ html, body {
 
 #_pickers .bubble .selected {
     background-color: #5E9632;
-    background-image: url(style_images/picker-bg.png);
+    background-image: url(../images/picker-bg.png);
     background-repeat: no-repeat;
     background-position: right top;
 }
@@ -307,7 +312,7 @@ html, body {
     margin: 0 0 15px;
     width: 100%;
     min-width: 400px;
-    background-image: url(style_images/dots-grayongreen.png);
+    background-image: url(../images/dots-grayongreen.png);
     background-color: #76AD2D;
     position: relative;
     z-index: 4;
@@ -336,7 +341,7 @@ html, body {
     height: 56px;
 }
 
-.tool, #_nav-area .tool-spacer, .bubble {
+.tool, #_nav-area a.tool-spacer, .bubble {
     transition: all 0.2s ease-in-out 0.1s;
     /* Clean this up later when browser support is there*/
     -moz-transition: all 0.2s ease-in-out 0.1s;
@@ -412,7 +417,7 @@ html, body {
 
 .inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
 .inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
-#_nav-area .tool-spacer:hover, #_nav-area .tool-spacer:focus, #_nav-area .tool-spacer:active {
+#_nav-area a.tool-spacer:hover, #_nav-area a.tool-spacer:focus, #_nav-area a.tool-spacer:active {
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -443,32 +448,38 @@ html, body {
     background-position: -72px -36px;
 }
 
-#_toolbar .prev-icon {
+#_toolbar a.tool-spacer .prev-icon {
     background-position: -144px 0px;
 }
 
+#_toolbar span.tool-spacer .prev-icon {
+    background-position: -216px 0px;
+}
 
-#_toolbar .active .prev-icon, #_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
+#_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
     background-position: -144px -36px;
 }
 
-#_toolbar .next-icon {
+#_toolbar a.tool-spacer .next-icon {
     background-position: -180px 0px;
 }
 
+#_toolbar span.tool-spacer .next-icon {
+    background-position: -216px -36px;
+}
 
-#_toolbar .active .next-icon, #_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
+#_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
     background-position: -180px -36px;
 }
 
 .bubble-corner {
-    background-image: url(style_images/corner.png);
-    width: 30px;
+    background-position: -288px -72px;
+    width: 36px;
     height: 15px;
     position: relative;
     z-index: 40;
     left: 50%;
-    margin: 0 0 0 -15px;
+    margin: 0 0 0 -18px;
 }
 
 .bubble {
@@ -511,15 +522,6 @@ html, body {
     border-right: 1px solid #666;
 }
 
-
-#_toolbar .bubble h6 { /* Currently the same as .pickers .bubble h6 */
-    color: #FFF;
-    border-bottom: 1px solid #FFF;
-    padding: 10px 0 5px;
-    display: block;
-    margin: 0 0 5px 0;
-}
-
 #_toolbar .bubble a {
     color: #FFF;
     display: block;
@@ -527,18 +529,6 @@ html, body {
     padding: 5px 25px 5px 5px;
     line-height: 22px;
 }
-/*#_bubble-toc ol {
-    list-style-type: none;
-}*/
-
-/*#_bubble-toc {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 980px;
-    height: 400px;
-    border: 1px solid #F0F;
-}*/
 
 #_bubble-toc .active ol {
     display: block;
@@ -564,13 +554,13 @@ html, body {
 
 #_bubble-toc .arrow {
     position: absolute;
-    right: -30px;
+    right: -0px;
     top: 0;
     display: block;
     width: 30px;
     height: 100%;
     margin: 0;
-    background-image: url(style_images/arrow.png);
+    background-image: url(../images/arrow.png);
     background-position: -30px 8.5px;
     background-repeat: no-repeat;
 }
@@ -580,7 +570,7 @@ html, body {
 }
 
 #_bubble-toc .active > a, #_bubble-toc .inactive > a {
-    margin-right: 30px;
+    padding: 5px 30px 5px 5px;
 }
 
 #_bubble-toc .active > a {
@@ -651,10 +641,17 @@ html, body {
     margin: 0 0 0 -18px;
     background-position: -72px 0px;
     float: left;
+    color: transparent;
+    border: 0;
+    background-color: transparent;
 }
 
-#_find-input:focus + #_find-button:hover {
+#_find-input:focus + #_find-button:hover, #_find-button:active {
     background-position: -108px -36px !important;
+}
+
+button:focus::-moz-focus-inner, button::-moz-focus-inner {
+    border: none;
 }
 
 #_find-input-label {
@@ -665,7 +662,7 @@ html, body {
     left: 5px;
     top: -36px;
     z-index: 200;
-    color: #333;
+    color: #666;
     font-style: italic;
     display: none;
     float: left;
@@ -701,7 +698,7 @@ html, body {
     margin: 0 10px 0 5px;
 }
 
-#_fixed-header .buttons a {
+#_fixed-header .buttons .tool-spacer {
     display: block;
     float: left;
 }
@@ -726,25 +723,33 @@ html, body {
     color: #439539;
 }
 
-#_fixed-header .prev-icon {
+#_fixed-header a.tool-spacer .prev-icon {
     background-position: -36px -72px;
 }
 
-#_fixed-header .prev-icon:hover, #_fixed-header .prev-icon:focus, #_fixed-header .prev-icon:active {
+#_fixed-header span.tool-spacer .prev-icon {
+    background-position: -144px -72px;
+}
+
+#_fixed-header a:hover .prev-icon, #_fixed-header a:focus .prev-icon, #_fixed-header a:active .prev-icon {
     background-position: -54px -72px;
 }
 
-#_fixed-header .next-icon {
+#_fixed-header a.tool-spacer .next-icon {
     background-position: -108px -72px;
 }
 
-#_fixed-header .next-icon:hover, #_fixed-header .next-icon:focus, #_fixed-header .next-icon:active {
+#_fixed-header span.tool-spacer .next-icon {
+    background-position: -162px -72px;
+}
+
+#_fixed-header a:hover .next-icon, #_fixed-header a:focus .next-icon, #_fixed-header a:active .next-icon {
     background-position: -126px -72px;
 }
 
 /* Page bottom */
 
-#_content > .page-bottom {
+#_content .page-bottom {
     margin-top: 30px;
     margin-bottom: 80px;
     padding: 10px 10px 0;
@@ -770,20 +775,20 @@ html, body {
 }
 
 #_bottom-navigation .prev-icon {
-    background-position: -216px 0;
+    background-position: -252px 0;
 }
 
 #_bottom-navigation .nav-link:hover .prev-icon  {
-    background-position: -216px -36px;
+    background-position: -252px -36px;
 }
 
 
 #_bottom-navigation .next-icon {
-    background-position: -252px 0;
+    background-position: -288px 0;
 }
 
 #_bottom-navigation .nav-link:hover .next-icon {
-    background-position: -252px -36px;
+    background-position: -288px -36px;
 }
 
 
@@ -904,13 +909,26 @@ html, body {
 
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
-/* Works in IE 7+, Firefox, Opera and Webkit-based browsers had it far earlier. */
+/* Works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
 #_content a[id] {
     position: relative;
     top: -30px;
     display: block;
     width: 0;
     height: 0;
+}
+
+#_content .ulink:after {
+    content: "\0020\2197";
+    color: transparent;
+    width: 18px;
+    height: 15px;
+    display: inline-block;
+    text-decoration: none;
+    background-position: -180px -72px;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 2px;
 }
 
 #_content .screen a[id] {
@@ -943,7 +961,7 @@ html, body {
 }
 
 /*#_content .book .titlepage > div > div:first-child {
-    background: url(style_images/chameleon.jpg) scroll no-repeat bottom left;
+    background: url(../images/chameleon.jpg) scroll no-repeat bottom left;
     height: 400px;
 }*/
 
@@ -968,7 +986,7 @@ html, body {
     padding: 40px 0 0;
 }
 
-#_content .sect3 .title, #_content .refentry h2 {
+#_content .sect3 .title, #_content .refentry h2, h2 {
     font-size: 20px;
     font-weight: normal;
     padding: 30px 0 0;
@@ -991,7 +1009,7 @@ html, body {
     margin-top: -20px;
 }
 
-#_content .name, #_content .refentry h2, .refentrytitle a {
+#_content .name, #_content .refentry h2, .refentrytitle a, h2 {
     color: #439539;
 }
 
@@ -1073,12 +1091,12 @@ html, body {
 
 #_content .tip {
     border-color: #439539;
-    background: url(style_images/dots-green.png) repeat-x scroll top;
+    background: url(../images/dots-green.png) repeat-x scroll top;
 }
 
 #_content .note {
     border-color: #333;
-    background: url(style_images/dots-yellow.png) repeat-x scroll top;
+    background: url(../images/dots-yellow.png) repeat-x scroll top;
 }
 
 #_content .note ul {
@@ -1087,7 +1105,7 @@ html, body {
 
 #_content .important {
     border-color: #BB7B03;
-    background: url(style_images/dots-orange.png) repeat-x scroll top;
+    background: url(../images/dots-orange.png) repeat-x scroll top;
 }
 
 #_content .important ul {
@@ -1096,7 +1114,7 @@ html, body {
 
 #_content .warning, .caution {
     border-color: #8C0000;
-    background: url(style_images/dots-red.png) repeat-x scroll top;
+    background: url(../images/dots-red.png) repeat-x scroll top;
 }
 
 #_content .warning ul, #_content .warning ul {
@@ -1133,6 +1151,7 @@ html, body {
     margin: 0 10px 0 0;
     background-repeat: no-repeat;
     float: left;
+    overflow: hidden;
 }
 
 #_content .admonition p {
@@ -1149,11 +1168,11 @@ em, i, .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title {
+strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
     font-weight: 600;
 }
 
-#_content p {
+#_content p, .simplelist td {
     font-size: 16px;
     color: #000;
     text-align: left;
@@ -1605,7 +1624,7 @@ obnoxious image handling:
     margin: 0 10px;
     display: block;
     color: #439539;
-    list-style-type: bullet;
+    list-style-type: disc;
 }
 
 #_content li p {
@@ -1662,12 +1681,12 @@ obnoxious image handling:
 }
 
 body.draft {
-    background: url(style_images/draft.png) no-repeat fixed left 50%;
+    background: url(../images/draft.png) no-repeat fixed left 50%;
 }
 
 
 @media print {
-    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
         display: none;
     }
     
@@ -1684,6 +1703,13 @@ body.draft {
     .title {
         page-break-after: avoid;
         break-after: avoid;
+    }
+    
+    #_content .ulink:after {
+        color: inherit;
+        background-image: none;
+        width: auto;
+        height: auto;
     }
 
 }
@@ -1744,14 +1770,6 @@ body.draft {
     
     #_find-input:focus {
         border: 1px solid #FFF;
-    }
-    
-    #_find-button {
-        width: 18px;
-        height: 15px;
-        margin: 3px 0 3px -20px;
-        background-position: -72px -72px;
-        float: left;
     }
 
     #_find-input:focus + #_find-button {
