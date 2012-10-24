@@ -1,3 +1,29 @@
+/* http://stackoverflow.com/questions/5489869/is-there-a-plugin-that-makes-the-jquery-id-selector-dot-safe
+   We use lots of .'s in our IDs. The following "helps". Note that you can't use
+   selectors like #id.class any more, unless the ID starts with an underscore.
+*/
+
+(function($){
+ $.fn._init = $.fn.init;
+ $.fn.init = function ( selector, context, rootjQuery ) {
+  if (typeof selector == 'string' && selector.match(/^#(?!_)/)) {
+   if (/\./.test(selector)) {
+       var reconstructed = '#';
+       selector = selector.replace(/\#/, '');
+       var bar = selector.match(/\./g).length + 1;
+       for (var i=0; i < bar; ++i) {
+           reconstructed = reconstructed.concat(selector.match(/[^\s\.]*/));
+           if (i < bar-1) reconstructed = reconstructed.concat('\\.');
+           selector = selector.replace(/[^\s\.\\]*\./, '');
+       }
+       selector = reconstructed;
+   }
+  }
+  return new $.fn._init(selector,context,rootjQuery);
+}
+})(jQuery);
+
+
 $(document).ready(function() {
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').click(function(e) {
@@ -12,6 +38,38 @@ $(document).ready(function() {
         e.stopPropagation();
         return true;
     });
+    
+  // http://css-tricks.com/snippets/jquery/smooth-scrolling/
+  function filterPath(string) {
+  return string
+    .replace(/^\//,'')
+    .replace(/(index|default).[a-zA-Z]{3,4}$/,'')
+    .replace(/\/$/,'');
+  }
+  var locationPath = filterPath(location.pathname);
+  
+  $('a[href*=#]').each(function() {
+    $(this).click(function(event) {
+    var thisPath = filterPath(this.pathname) || locationPath;
+    if (  locationPath == thisPath
+    && (location.hostname == this.hostname || !this.hostname)) {
+      if ( this.hash.replace(/#/,'') ) {
+      var $target = $(this.hash), target = this.hash;
+      if ($target.length != 0) {
+        var targetOffset = $target.offset().top;
+          event.preventDefault();
+          $('html').animate({scrollTop: targetOffset}, 400, function() {
+            location.hash = target;
+          });
+      }
+      }
+      else {
+          event.preventDefault();
+          $('html').animate({scrollTop: 0}, 400);
+      }
+    }
+   });	
+  });
 });
 
            var deactivatePosition = -1;
@@ -118,10 +176,6 @@ $(document).ready(function() {
                 }
                 
             }
-            
-            
-            // Smooth scrolling thanks to Andrew Johnson
-            
            
            function currentYPosition() {
                // Firefox, Chrome, Opera, Safari
@@ -133,45 +187,6 @@ $(document).ready(function() {
                if (document.body.scrollTop) return document.body.scrollTop;
                return 0;
            }
-           
-           function elmYPosition(element) {
-               var elm = document.getElementById(element);
-               var y = elm.offsetTop;
-               var node = elm;
-               while (node.offsetParent && node.offsetParent != document.body) {
-               node = node.offsetParent;
-               y += node.offsetTop;
-               } return y;
-           }
-           
-           function scroll(element) {
-               var startY = currentYPosition();
-               var stopY = elmYPosition(element);
-               var distance = stopY > startY ? stopY - startY : startY - stopY;
-               if (distance < 100) {
-                   scrollTo(0, stopY);
-               }
-               else {
-                   var speed = Math.round(distance / 100);
-                   if (speed >= 20) speed = 20;
-                   var step = Math.round(distance / 25);
-                   var leapY = stopY > startY ? startY + step : startY - step;
-                   var timer = 0;
-                   if (stopY > startY) {
-                       for ( var i=startY; i<stopY; i+=step ) {
-                           setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
-                           leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-                       }
-                   }
-                   else {
-                       for ( var i=startY; i>stopY; i-=step ) {
-                       setTimeout('window.scrollTo(0, '+leapY+')', timer * speed);
-                       leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-                       }
-                   }
-                }
-                window.location.href = "#" + element;
-            }
             
             function unlabelInputFind() {
                 if ( document.getElementById('_find-input-label') ) {
