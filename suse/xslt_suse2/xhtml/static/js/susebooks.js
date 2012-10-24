@@ -6,29 +6,57 @@
 (function($){
  $.fn._init = $.fn.init;
  $.fn.init = function ( selector, context, rootjQuery ) {
-  if (typeof selector == 'string' && selector.match(/^#(?!_)/)) {
-   if (/\./.test(selector)) {
-       var reconstructed = '#';
+  if (typeof selector == 'string' && /^#(?!_)/.test(selector)
+      && /\./.test(selector)) {
+       var construct= '#';
        selector = selector.replace(/\#/, '');
-       var bar = selector.match(/\./g).length + 1;
-       for (var i=0; i < bar; ++i) {
-           reconstructed = reconstructed.concat(selector.match(/[^\s\.]*/));
-           if (i < bar-1) reconstructed = reconstructed.concat('\\.');
+       var parts = selector.match(/\./g).length + 1;
+       for (var i=0; i < parts; ++i) {
+           construct += selector.match(/[^\s\.]*/);
+           if (i < parts-1) { construct += '\\.'; }
            selector = selector.replace(/[^\s\.\\]*\./, '');
        }
-       selector = reconstructed;
+       selector = construct;
    }
-  }
   return new $.fn._init(selector,context,rootjQuery);
 }
 })(jQuery);
 
 
+
+var deactivatePosition = -1;
+
 $(document).ready(function() {
+    if( window.addEventListener ) {
+        window.addEventListener('scroll', scrollDeactivator, false);
+    }
+    
+    $('#_share-print').show;
+    
+    if (location.protocol.match(/^(http|spdy)/)) {
+        $('body').removeClass('offline');
+    }
+    labelInputFind();
+    
+    $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
+    $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
+    $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
+    $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
+    $('#_content').click(function(){deactivate(); return true;});
+    $('#_find-input').focus(function(){unlabelInputFind();});
+    $('#_find-input').blur(function(){labelInputFind();});
+    $('#_find-input-label').click(function(){$('#_find-input').focus();});
+    
+    $('#_share-fb').click(function(){share('fb');});
+    $('#_share-gp').click(function(){share('gp');});
+    $('#_share-tw').click(function(){share('tw');});
+    $('#_share-mail').click(function(){share('mail');});
+    $('#_print-button').click(function(){print();});
+
+
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').click(function(e) {
-        $('#_bubble-toc > ol > li').removeClass('active');
-        $('#_bubble-toc > ol > li').addClass('inactive');
+        exchClass('#_bubble-toc > ol > li', 'active', 'inactive');
         $(this).parent('li').removeClass('inactive');
         $(this).parent('li').addClass('active');
         e.preventDefault();
@@ -72,163 +100,84 @@ $(document).ready(function() {
   });
 });
 
-           var deactivatePosition = -1;
-           
-           function init() {
-               if( window.addEventListener ) {
-                   window.addEventListener("scroll", scrollDeactivator, false);
-               }
-               if ( document.getElementById('_share-print') ) {
-                 document.getElementById('_share-print').style.display = 'block';
-               }
-               
-               if ((document.URL.lastIndexOf('http', 0) === 0) || (document.URL.lastIndexOf('spdy', 0) === 0)) {
-                     toggleClass('body', 'offline', 'online');
-               }
-               labelInputFind();
-               return false;
+function activate( elm ) {
+    var element = elm;
+    if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
+        deactivate();
+        if ( document.getElementById(element) ) {
+            exchClass( '#' + element , 'inactive', 'active' );
+            if ((element == '_find-area')) {
+                $('#_find-input').focus();
             }
-            
-            function activate( elm ) {
-                var element = elm;
-                if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
-                    deactivate();
-                    if ( document.getElementById(element) ) {
-                      toggleClass( element , 'inactive', 'active' );
-                      if ((element == '_find-area')) {
-                          document.getElementById('_find-input').focus();
-                      }
-                      else if ((element == '_toc-area')) {
-                          toggleClass( '_find-area', 'active', 'inactive' );
-                      }
-                      document.getElementById(element + '-button').onclick = function() {deactivate(); return false;};
-                    }
+            else if ((element == '_toc-area')) {
+                exchClass( '#_find-area', 'active', 'inactive' );
+                deactivatePosition = $('html').scrollTop();
+            }
+            $('#' + element + '-button').unbind('click');
+            $('#' + element + '-button').click(function(){deactivate(); return false;});
+        }
+    }
+}
 
-                }
-                else {
-                    alert('Eek! The element '+ element +' can\'t be activated.');
-                }
-                deactivatePosition = currentYPosition();
-            }
+function scrollDeactivator() {
+    if (deactivatePosition != -1) {
+        var diffPosition = $('html').scrollTop() - deactivatePosition;
+        if ((diffPosition < -300) || (diffPosition > 300)) {
+            deactivate();
+        }
+    }
+}
+            
+function deactivate() {
+    var changeClass = new Array('_toc-area','_language-picker','_format-picker');
+    for (var i = 0; i < changeClass.length; ++i) {
+            exchClass( '#' + changeClass[i] , 'active', 'inactive');
+            $('#' + changeClass[i] + '-button').unbind('click');
+    }
+    $('#_find-area-button').unbind('click');
+    $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
+    $('#_find-area-button').click(function(){activate('_find-area'); return false;});
+    $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
+    $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
+    exchClass( '#_find-area', 'inactive', 'active' );
+}
+            
+function share( service ) {
+    u = encodeURIComponent( document.URL );
+    t = encodeURIComponent( document.title );
+    if ( service == 'fb' ) {
+        shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
+        window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
+    }
+    else if ( service == 'tw' ) {
+        shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
+        window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
+    }
+    else if ( service == 'gp' ) {
+        shareURL = 'https://plus.google.com/share?url=' + u;
+        window.open(shareURL, 'sharer', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+    }
+    
+    else if ( service == 'mail' ) {
+        shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
+        window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
+    }
+    else {
+        alert('Eek! The sharing service '+ service +' is new to me.');
+    }
+}
+            
+function unlabelInputFind() {
+    $('#_find-input-label').hide();
+}
 
-
-            function scrollDeactivator() {
-                if (deactivatePosition != -1) {
-                    var diffPosition = currentYPosition() - deactivatePosition;
-                        if ((diffPosition < -300) || (diffPosition > 300)) {
-                            deactivate();
-                        }
-                }
-            }
+function labelInputFind() {
+    if ( !($('#_find-input').val()) ) {
+        $('#_find-input-label').show();
+    }
+}
             
-            function deactivate() {
-                var changeClass = new Array('_toc-area','_language-picker','_format-picker');
-                
-                for (var i = 0; i < changeClass.length; ++i) {
-                    if ( document.getElementById( changeClass[i] ) ) {
-                        toggleClass( changeClass[i] , 'active', 'inactive');
-                    }
-                }
-                
-                if ( document.getElementById('_toc-area-button') ) {
-                    document.getElementById('_toc-area-button').onclick = function() {activate('_toc-area'); return false;};
-                }
-                if ( document.getElementById('_find-area-button') ) {
-                    document.getElementById('_find-area-button').onclick = function() {activate('_find-area'); return false;};
-                }
-                if ( document.getElementById('_language-picker-button') ) {
-                    document.getElementById('_language-picker-button').onclick = function() {activate('_language-picker'); return false;};
-                }
-                if ( document.getElementById('_format-picker-button') ) {
-                    document.getElementById('_format-picker-button').onclick = function() {activate('_format-picker'); return false;};
-                }
-
-                if ( document.getElementById('_find-area') && document.getElementById('_find-area-button') ) {
-                    toggleClass( '_find-area', 'inactive', 'active' );
-                    document.getElementById('_find-area-button').onclick = function() {activate('_find-area'); return false;};
-                }
-                
-                return false;
-            }
-            
-            function share( service ) {
-                u = encodeURIComponent( document.URL );
-                t = encodeURIComponent( document.title );
-                if ( service == 'fb' ) {
-                    shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
-                    window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
-                }
-                else if ( service == 'tw' ) {
-                    shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
-                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
-                }
-                else if ( service == 'gp' ) {
-                    shareURL = 'https://plus.google.com/share?url=' + u;
-                    window.open(shareURL, 'sharer', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
-                }
-                
-                else if ( service == 'mail' ) {
-                    shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
-                    window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
-                }
-                else {
-                    alert('Eek! The sharing service '+ service +' is new to me.');
-                }
-                
-            }
-           
-           function currentYPosition() {
-               // Firefox, Chrome, Opera, Safari
-               if (self.pageYOffset) return self.pageYOffset;
-               // Internet Explorer 6 - standards mode
-               if (document.documentElement && document.documentElement.scrollTop)
-               return document.documentElement.scrollTop;
-               // Internet Explorer 6, 7 and 8
-               if (document.body.scrollTop) return document.body.scrollTop;
-               return 0;
-           }
-            
-            function unlabelInputFind() {
-                if ( document.getElementById('_find-input-label') ) {
-                    document.getElementById('_find-input-label').style.display = 'none';
-                }
-                return false;
-            }
-            
-            function labelInputFind() {
-                if ( document.getElementById('_find-input') && document.getElementById('_find-input-label') ) {
-                    if (document.getElementById('_find-input').value == '') {
-                        document.getElementById('_find-input-label').style.display = 'block';
-                    }
-                }
-                return false;
-            }
-            
-            function addClass(elm, cls) {
-                var matchable = new RegExp ('(?:^|\\s)' + cls + '(?!\\S)', 'g');
-                if ( elm == 'body') {
-                    if ( !(document.body.className.match( matchable )) ) {
-                        document.body.className += ' ' + cls;
-                    }
-                }
-                if ( document.getElementById( elm ) ) {
-                    if ( !(document.getElementById( elm ).className.match( matchable )) ) {
-                        document.getElementById( elm ).className += ' ' + cls;
-                    }
-                }
-            }
-            
-            function rmClass(elm, cls) {
-                var replaceable = new RegExp ('(?:^|\\s)' + cls + '(?!\\S)', 'g');
-                if ( elm == 'body') {
-                    document.body.className = document.body.className.replace( replaceable , '' );
-                }
-                if ( document.getElementById( elm ) ) {
-                    document.getElementById( elm ).className = document.getElementById( elm ).className.replace( replaceable , '' );
-                }
-            }
-            
-            function toggleClass(elm, clsOld, clsNew) {
-                rmClass(elm, clsOld);
-                addClass(elm, clsNew);
-            }
+function exchClass(path, clsOld, clsNew) {
+    $(path).addClass(clsNew);
+    $(path).removeClass(clsOld);
+}

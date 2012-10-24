@@ -118,8 +118,7 @@
     <xsl:if test="$generate.pickers != 0">
     <div id="_pickers">
       <div id="_language-picker" class="inactive">
-        <a id="_language-picker-button"
-          onclick="activate('_language-picker')" href="#">
+        <a id="_language-picker-button" href="#">
           <span class="picker">English</span>
         </a>
         <div class="bubble-corner active-contents"> </div>
@@ -128,8 +127,7 @@
         </div>
       </div>
       <div id="_format-picker" class="inactive">
-        <a id="_format-picker-button"
-          onclick="activate('_format-picker')" href="#">
+        <a id="_format-picker-button" href="#">
           <span class="picker">Web Page</span>
         </a>
         <div class="bubble active-contents">
@@ -195,8 +193,7 @@
     
     <div id="_find-area" class="active">
       <div class="inactive-contents">
-        <a href="#" id="_find-area-button" class="tool" title="Find"
-          onclick="activate('_find-area')">
+        <a href="#" id="_find-area-button" class="tool" title="Find">
           <span class="pad-tools-50-out">
             <span class="pad-tools-50-in">
               <span class="tool-spacer">
@@ -210,12 +207,9 @@
       <div class="active-contents">
         <form action="post">
           <div class="find-form">
-            <input type="text" id="_find-input" value=""
-              onfocus="unlabelInputFind();" onblur="labelInputFind();"/>
+            <input type="text" id="_find-input" value=""/>
             <button id="_find-button" alt="Find" title="Find">Find</button>
-            <label id="_find-input-label"
-              onclick="document.getElementById('_find-input').focus(); return false;"
-              >Find</label>
+            <label id="_find-input-label">Find</label>
             <xsl:call-template name="clearme"/>
           </div>
         </form>
@@ -240,8 +234,7 @@
           </xsl:when>
           <xsl:otherwise>
             <div id="_toc-area" class="inactive">
-              <a id="_toc-area-button" class="tool"
-                onclick="activate('_toc-area'); return false;" title="Contents">
+              <a id="_toc-area-button" class="tool" title="Contents">
                 <xsl:attribute name="href">
                   <xsl:call-template name="href.target">
                     <!-- FIXME: -->
@@ -408,16 +401,16 @@
               <xsl:with-param name="key">sharethispage</xsl:with-param>
             </xsl:call-template></strong>
           <!-- &#x2022; = &bull; -->
-          <a href="javascript:share('fb')">Facebook</a> &#x2022; <a
-            href="javascript:share('gp')">Google+</a> &#x2022; <a
-            href="javascript:share('tw')">Twitter</a> &#x2022; <a
-            href="javascript:share('mail');">Mail</a>
+          <span id="_share-fb">Facebook</span> &#x2022; <span
+            id="_share-gp">Google+</span> &#x2022; <span
+            id="_share-tw">Twitter</span> &#x2022; <span
+            id="_share-mail">Mail</span>
         </div>
       </xsl:if>
-      <div class="print"><a href="javascript:print()">
+      <div class="print"><span id="_print-button">
         <xsl:call-template name="gentext">
           <xsl:with-param name="key">printthispage</xsl:with-param>
-        </xsl:call-template></a></div>
+        </xsl:call-template></span></div>
       <xsl:call-template name="clearme"/>
     </div>
   </xsl:template>
@@ -502,16 +495,7 @@
   </xsl:template>
 
   <!-- ===================================================== -->
-  <xsl:template name="body.onload.attribute">
-    <!-- TODO: Add parameter to control it -->
-    <xsl:attribute name="onload">init();</xsl:attribute>
-  </xsl:template>
-  
-  <xsl:template name="_content.onclick.attribute">
-    <!-- TODO: Add parameter to control it -->
-    <xsl:attribute name="onclick">deactivate(); return true;</xsl:attribute>
-  </xsl:template>
-  
+
   <xsl:template name="body.class.attribute">
     <xsl:choose>
       <xsl:when test="($draft.mode = 'yes' or
@@ -555,7 +539,6 @@
 
       <body>
         <xsl:call-template name="body.attributes"/>
-        <xsl:call-template name="body.onload.attribute"/>
         <xsl:call-template name="body.class.attribute"/>
         <div id="_outer-wrap">
           <div id="_white-bg">
@@ -595,7 +578,6 @@
 
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
-            <xsl:call-template name="_content.onclick.attribute"/>
             <xsl:if test="$use.meta != 0">
               <!--
                 On every structural element (like chapter, preface, ...) we
