@@ -666,6 +666,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     font-style: italic;
     display: none;
     float: left;
+    user-select: none;
+    /* Clear this out later. */
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 
@@ -801,16 +805,80 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 36px;
 }
 
-#_bottom-navigation .nav-label, .share a, .print a {
+#_bottom-navigation .nav-label {
     color: #333;
     text-decoration: none;
 }
 
+#_share-print span {
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid rgba(20,20,20,0.2);
+    padding: 1px 5px;
+}
+
+#_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
+#_print-button:before {
+    line-height: 22px;
+    font-size: 14px;
+    font-weight: 600;
+    height: 22px;
+    width: 16px;
+    display: block;
+    float: left;
+    text-align: center;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+    margin: -1px 4px -2px -5px;
+    overflow: hidden;
+}
+
+#_share-fb:before {
+    background-color: #3B5998;
+    color: #FFF;
+    content: "f";
+}
+
+#_share-gp:before {
+    background-color: #D54433;
+    color: #FFF;
+    content: "+1";
+}
+
+#_share-tw:before {
+    background-color: #00BBF5;
+    color: #FFF;
+    content: "#";
+}
+
+#_share-mail:before {
+    background-color: #666;
+    color: #FFF;
+    content: "@";
+}
+
+
+#_print-button:before {
+    background-color: #666;
+    color: #FFF;
+    content: "\1F0CF";
+}
+
+#_share-print span {
+    background-color: #EEE;
+    color: #333;
+}
+
+#_share-print span:hover, #_share-print span:focus,
+#_share-print span:active {
+    border: 1px solid rgba(20,20,20,0.5);
+    opacity: 0.9;
+}
+
 #_bottom-navigation .nav-link:hover .nav-label,
 #_bottom-navigation .nav-link:focus .nav-label,
-#_bottom-navigation .nav-link:active .nav-label,
-.share:hover a, .print a:hover, .share:focus a, .print a:focus,
-.share:active a, .print a:active {
+#_bottom-navigation .nav-link:active .nav-label {
     color: #439539;
 }
 
@@ -826,7 +894,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .share, .print {
-    width: 49.98%;
     display: block;
 }
 
@@ -835,6 +902,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .print {
+    
     float: right;
     text-align: right !important;
 }
