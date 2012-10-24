@@ -912,10 +912,19 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 /* Works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
 #_content a[id] {
     position: relative;
-    top: -30px;
+    top: -33px;
     display: block;
     width: 0;
     height: 0;
+}
+
+#_content a[id]:target + span, #_content a[id]:target + span + span, #_content a[id]:target + div span {
+    background-color: rgba(255,255,0,0.3);
+    transition: background-color 0.2s ease-out 0.3s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: background-color 0.2s ease-out 0.3s;
+    -webkit-transition: background-color 0.2s ease-out 0.3s;
+    -o-transition: background-color 0.2s ease-out 0.3s;
 }
 
 #_content .ulink:after {
