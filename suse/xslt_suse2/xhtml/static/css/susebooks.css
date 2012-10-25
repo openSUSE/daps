@@ -816,6 +816,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-radius: 5px;
     border: 1px solid rgba(20,20,20,0.2);
     padding: 1px 5px;
+    color: #333;
+    background-color: #EFEFF0;
 }
 
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
@@ -836,20 +838,29 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_share-fb:before {
     background-color: #3B5998;
-    color: #FFF;
+    color: transparent;
     content: "f";
+    background-image: url(../images/icons.png);
+    background-position: -271px -88px;
+    background-repeat: no-repeat;
 }
 
 #_share-gp:before {
     background-color: #D54433;
-    color: #FFF;
+    color: transparent;
     content: "+1";
+    background-image: url(../images/icons.png);
+    background-position: -289px -88px;
+    background-repeat: no-repeat;
 }
 
 #_share-tw:before {
     background-color: #00BBF5;
-    color: #FFF;
+    color: transparent;
     content: "#";
+    background-image: url(../images/icons.png);
+    background-position: -307px -88px;
+    background-repeat: no-repeat;
 }
 
 #_share-mail:before {
@@ -861,19 +872,17 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_print-button:before {
     background-color: #666;
-    color: #FFF;
-    content: "\1F0CF";
-}
-
-#_share-print span {
-    background-color: #EEE;
-    color: #333;
+    color: transparent;
+    content: "[]";
+    background-image: url(../images/icons.png);
+    background-position: -253px -88px;
+    background-repeat: no-repeat;
 }
 
 #_share-print span:hover, #_share-print span:focus,
 #_share-print span:active {
     border: 1px solid rgba(20,20,20,0.5);
-    opacity: 0.9;
+    background: #DEDEDE;
 }
 
 #_bottom-navigation .nav-link:hover .nav-label,
