@@ -80,6 +80,7 @@ BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
+BuildRequires:  xml-commons-jaxp-1.3-apis
 %if 0%{?suse_version} >= 1140
 BuildRequires:  xmlgraphics-fop >= 0.94
 %else
@@ -111,6 +112,7 @@ Requires:       python-lxml
 Requires:       sgml-skel
 Requires:       svg-dtd
 Requires:       transfig
+Requires:       xml-commons-jaxp-1.3-apis
 %if 0%{?suse_version} >= 1140
 Requires:       xmlgraphics-fop >= 0.94
 %else
