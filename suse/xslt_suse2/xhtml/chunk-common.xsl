@@ -96,17 +96,11 @@
                title="Documentation">
                   <span class="book-icon">&nbsp;</span>
              </a>
-        <!-- <xsl:if test="$rootid = '' or 
-                      generate-id(key('id', $rootid)) = generate-id($home)">-->
-          <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-        <!--</xsl:if>-->
         
         <!--<xsl:message> >> Begin For loop:</xsl:message>-->
         <xsl:for-each select="$setdiff">
+          <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
           <xsl:apply-templates select="." mode="breadcrumbs"/>
-          <xsl:if test="position() != last()">
-            <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-          </xsl:if>
         </xsl:for-each>
         <!--<xsl:message> >> End For loop:</xsl:message>-->
       </div>
