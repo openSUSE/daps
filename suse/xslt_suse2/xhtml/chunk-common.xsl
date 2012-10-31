@@ -94,7 +94,7 @@
              <a href="{concat($root.filename, $html.ext)}"
                class="book-link"
                title="Documentation">
-                  <span class="book-icon">&nbsp;</span>
+                  <span class="book-icon">Documentation</span>
              </a>
         
         <!--<xsl:message> >> Begin For loop:</xsl:message>-->
@@ -191,7 +191,7 @@
           <span class="pad-tools-50-out">
             <span class="pad-tools-50-in">
               <span class="tool-spacer">
-                <span class="find-icon">&nbsp;</span>
+                <span class="find-icon">Find</span>
               </span>
               <span class="tool-label">Find</span>
             </span>
@@ -236,7 +236,7 @@
                   </xsl:call-template>
                 </xsl:attribute>
                 <span class="tool-spacer">
-                  <span class="toc-icon"> </span>
+                  <span class="toc-icon">Contents</span>
                   <xsl:call-template name="clearme">
                     <xsl:with-param name="wrapper">span</xsl:with-param>
                   </xsl:call-template>
@@ -351,12 +351,12 @@
                  <xsl:with-param name="object" select="$prev"/>
                </xsl:call-template>
              </xsl:attribute>
-             <span class="prev-icon">&#xa0;</span>
+             <span class="prev-icon">←</span>
            </a>
          </xsl:when>
          <xsl:otherwise>
            <span class="tool-spacer">
-             <span class="prev-icon">&#xa0;</span>
+             <span class="prev-icon">←</span>
            </span>
          </xsl:otherwise>
        </xsl:choose>
@@ -372,12 +372,12 @@
                  <xsl:with-param name="object" select="$next"/>
                </xsl:call-template>
              </xsl:attribute>
-             <span class="next-icon">&#xa0;</span>
+             <span class="next-icon">→</span>
            </a>
          </xsl:when>
          <xsl:otherwise>
            <span class="tool-spacer">
-             <span class="next-icon">&#xa0;</span>
+             <span class="next-icon">→</span>
            </span>
          </xsl:otherwise>
        </xsl:choose>
@@ -465,7 +465,7 @@
                 <xsl:with-param name="object" select="$next"/>
               </xsl:call-template>
             </xsl:attribute>
-            <span class="next-icon">&#xa0;</span>
+            <span class="next-icon">→</span>
             <span class="nav-label">
               <xsl:apply-templates select="$next"
                 mode="object.title.markup"/>
@@ -479,7 +479,7 @@
                 <xsl:with-param name="object" select="$prev"/>
               </xsl:call-template>
             </xsl:attribute>
-            <span class="prev-icon">&#xa0;</span>
+            <span class="prev-icon">←</span>
             <span class="nav-label">
               <xsl:apply-templates select="$prev"
                 mode="object.title.markup"/>
