@@ -1781,8 +1781,8 @@ body.draft {
     }
     
     .figure, .informalfigure, .admonition, p, table {
-        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open since 2002.*/
-        /* Webkit does, though. */
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open
+           since 2002. Webkit is cool, though. */
         page-break-inside: avoid;
     }
     
@@ -1813,9 +1813,12 @@ body.draft {
 
 
 @media only screen and (max-width: 640px) {
+    /* Turn the following on again, when we have re-enabled the Find area. */
+    /*
     #_toolbar {
         height: 98px;
     }
+    */
     
     #_toc-area, #_nav-area {
         width: 49.98%;

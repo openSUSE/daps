@@ -288,11 +288,13 @@
           </xsl:otherwise>
         </xsl:choose>
         
-        <xsl:call-template name="create-find-area">
+        <!-- Do not create a Find area for now, instead of focus on remaining
+             missing essentials. Make Find functional later. -->
+        <!-- <xsl:call-template name="create-find-area">
           <xsl:with-param name="next" select="$next"/>
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
+        </xsl:call-template> -->
         
       </div>
     </div>
