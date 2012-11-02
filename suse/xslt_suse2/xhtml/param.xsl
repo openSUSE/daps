@@ -109,6 +109,7 @@ task before
 
 <!-- 20. Graphics =============================================== -->
   <xsl:param name="img.src.path">images/</xsl:param><!-- DB XSL Version >=1.67.1 -->
+  <xsl:param name="make.graphic.viewport" select="0"/> <!-- Do not create tables around graphics. -->
   
 <!-- 21. Chunking =============================================== -->
   <!-- The base directory of chunks -->
@@ -133,7 +134,6 @@ task before
 <!-- 27. Localization =========================================== -->
   <!-- Use customized language files -->
   <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
-  
 
 <!-- 28. SUSE specific parameters =============================== -->
   <!--  -->
