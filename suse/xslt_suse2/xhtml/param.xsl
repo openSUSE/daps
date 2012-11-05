@@ -64,7 +64,7 @@ set       toc,title
 
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="css.decoration" select="0"/>
-  <xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
+  <xsl:param name="draft.watermark.image">static/images/draft_html.png</xsl:param>
   <xsl:param name="html.stylesheet">susebooks.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/> 
 
@@ -139,10 +139,10 @@ task before
   <!--  -->
   <xsl:param name="admon.graphics.prefix">icon-</xsl:param>
   
-  <xsl:param name="daps.header.logo">style_images/logo.png</xsl:param>
+  <xsl:param name="daps.header.logo">static/images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
-  <xsl:param name="daps.header.js.library">jquery-1.4.2.min.js</xsl:param>
-  <xsl:param name="daps.header.js.custom">susebooks.js</xsl:param>
+  <xsl:param name="daps.header.js.library">static/js/jquery-1.4.2.min.js</xsl:param>
+  <xsl:param name="daps.header.js.custom">static/js/susebooks.js</xsl:param>
   
   <!-- Create breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
