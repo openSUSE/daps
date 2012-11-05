@@ -66,6 +66,9 @@ $(document).ready(function() {
         e.stopPropagation();
         return true;
     });
+    $('#_bubble-toc ol > li').filter(':not(:has(ol))').children('a').addClass('leads-to-page');
+    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
+    $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
     
   // http://css-tricks.com/snippets/jquery/smooth-scrolling/
   function filterPath(string) {
@@ -88,12 +91,15 @@ $(document).ready(function() {
           event.preventDefault();
           $('html').animate({scrollTop: targetOffset}, 400, function() {
             location.hash = target;
+            console.log('Iran!');
           });
       }
       }
       else {
           event.preventDefault();
-          $('html').animate({scrollTop: 0}, 400);
+          $('html').animate({scrollTop: 0}, 400, function() {
+             location = location.pathname + '#';
+          });
       }
     }
    });	

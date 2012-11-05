@@ -113,17 +113,27 @@
     <div id="_pickers">
       <div id="_language-picker" class="inactive">
         <a id="_language-picker-button" href="#">
-          <span class="picker">English</span>
+          <span class="picker">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
+            </xsl:call-template>
+          </span>
         </a>
         <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
-          
+          <h6>Select a Language</h6>
+          <a class="selected" href="#">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </div>
       </div>
       <div id="_format-picker" class="inactive">
         <a id="_format-picker-button" href="#">
           <span class="picker">Web Page</span>
         </a>
+        <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
           <h6>Select a Format</h6>
           <a class="selected" href="#">Web Page</a>

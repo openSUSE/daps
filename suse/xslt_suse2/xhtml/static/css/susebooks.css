@@ -311,7 +311,7 @@ html, body {
 
 #_pickers .bubble .selected {
     background-color: #5E9632;
-    background-image: url(../images/picker-bg.png);
+    background-image: url(../images/tick.png);
     background-repeat: no-repeat;
     background-position: right top;
 }
@@ -564,8 +564,12 @@ html, body {
 }
 
 #_bubble-toc .inactive a:hover {
-    color: #000;
-    background-color: #999;
+    color: #FFF;
+    background-color: #666;
+}
+
+#_bubble-toc .leads-to-page:hover {
+    text-decoration: underline;
 }
 
 #_bubble-toc .arrow {
@@ -581,8 +585,21 @@ html, body {
     background-repeat: no-repeat;
 }
 
+#_bubble-toc .tick {
+    position: absolute;
+    right: -0px;
+    top: 0;
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0;
+    background-image: url(../images/arrow.png);
+    background-position: -30px 8.5px;
+    background-repeat: no-repeat;
+}
+
 #_bubble-toc .inactive a:hover .arrow {
-    background-position: 0px 9px;
+    /*background-position: 0px 9px;*/
 }
 
 #_bubble-toc .active > a, #_bubble-toc .inactive > a {
@@ -590,7 +607,7 @@ html, body {
 }
 
 #_bubble-toc .active > a {
-    background-color: #666;
+    background-color: #5E9632;
     color: #FFF;
 }
 #_bubble-toc .active {
@@ -826,11 +843,12 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_share-print span {
     cursor: pointer;
     display: inline-block;
-    border-radius: 5px;
+    border-radius: 3px;
     border: 1px solid rgba(20,20,20,0.2);
     padding: 1px 7px;
     color: #333;
     background-color: #EFEFF0;
+    font-size: 14px;
 }
 
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
@@ -843,9 +861,9 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     display: block;
     float: left;
     text-align: center;
-    border-radius: 4px 0 0 4px;
+    border-radius: 2px 0 0 2px;
     border: 1px solid rgba(0,0,0,0.2);
-    margin: -1px 7px -2px -7px;
+    margin: -1px 6px -2px -7px;
     overflow: hidden;
 }
 
