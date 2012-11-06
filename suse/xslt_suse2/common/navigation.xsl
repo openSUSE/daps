@@ -96,8 +96,7 @@
       </xsl:message>
     </xsl:if>
     <!-- Return our result: -->
-    <xsl:value-of name="result"
-      select="(count($prev) > 0 and $isprev) or
+    <xsl:value-of select="(count($prev) > 0 and $isprev) or
       (count($up) &gt; 0 and 
       generate-id($up) != generate-id($home) and 
       $navig.showtitles != 0) or
