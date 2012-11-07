@@ -375,7 +375,7 @@ html, body {
 }
 
 .active-contents {
-    z-index: 10;
+    z-index: 6;
     position: relative;
 }
 
@@ -493,7 +493,7 @@ html, body {
     width: 36px;
     height: 15px;
     position: relative;
-    z-index: 40;
+    z-index: 7;
     left: 50%;
     margin: 0 0 0 -18px;
 }
@@ -501,7 +501,7 @@ html, body {
 .bubble {
     background-color: #333;
     position: absolute;
-    z-index: 70;
+    z-index: 8;
     box-shadow: 1px 1px 3px 0px #333;
 }
 
@@ -692,7 +692,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     position: relative;
     left: 5px;
     top: -36px;
-    z-index: 200;
+    z-index: 2;
     color: #666;
     font-style: italic;
     display: none;
@@ -1026,7 +1026,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 0;
 }
 
-#_content a[id]:target + span, #_content a[id]:target + span + span, #_content a[id]:target + div span {
+#_content [id]:target > span, #_content .admonition[id]:target > h6 {
     background-color: rgba(255,255,0,0.3);
     transition: background-color 0.2s ease-out 0.3s;
     /* Clean the below up in Q3 2013 or so... */
@@ -1093,32 +1093,35 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_content .sect1 .title {
     font-size: 28px;
-    font-weight: normal;
     padding: 50px 0 5px;
 }
 
 #_content .sect2 .title {
     font-size: 22px;
-    font-weight: normal;
     padding: 40px 0 0;
 }
 
 #_content .sect3 .title, #_content .refentry h2, h2 {
     font-size: 20px;
     font-weight: normal;
-    padding: 30px 0 0;
+    padding: 33px 0 0;
+}
+
+#_content .sect4 .title, #_content .sect5 .title {
+    font-size: 16px;
+    padding: 53px 0 0;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
 }
 
 #_content .sect4 .title {
-    font-size: 16px;
     font-weight: 600;
-    padding: 20px 0 0;
 }
 
 #_content .sect5 .title {
-    font-size: 16px;
     font-weight: normal;
-    padding: 20px 0 0;
 }
 
 /* FUXME! */
@@ -1198,8 +1201,11 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 /* Thou shalt not ... */
 
 #_content .admonition {
-    border-width: 1px;
-    border-radius: 5px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 3px;
+    border-radius: 3px;
     border-style: solid;
     padding: 10px;
     margin: 24px 0;
@@ -1212,12 +1218,12 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_content .note {
-    border-color: #333;
+    border-color: #666;
     background: url(../images/dots-yellow.png) repeat-x scroll top;
 }
 
 #_content .note ul {
-    color: #333;
+    color: #666;
 }
 
 #_content .important {
@@ -1277,7 +1283,12 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 /* Text styles */
 
-em, i, .guimenu {
+#_content span, #_content a, #_content p, #_content em, #_content strong {
+    position: relative;
+    z-index: 2;
+}
+
+em, i, #_content .guimenu {
     font-style: italic;
 }
 
@@ -1493,6 +1504,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .variablelist dt, #_content .glossary dt {
     font-weight: 600;
     color: #000;
+    padding-top: 33px;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
 }
 
 #_content .toc dt {
@@ -1520,9 +1536,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     min-height: 60px;
     text-align: center;
     color: #999;
-    margin: 24px 0;
-    border: 1px solid #202020;
+    margin: 24px 0 -9px;
     overflow: hidden;
+    position: relative;
+    padding-top: 33px;
+    top: -33px;
 }
 
 #_content div.figure .mediaobject {
@@ -1533,6 +1551,9 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     padding: 12px 10px;
     background-color: #333;
     overflow: hidden;
+    border-top: 1px solid #202020;
+    border-left: 1px solid #202020;
+    border-right: 1px solid #202020;
 }
 
 #_content .figure img {
@@ -1627,8 +1648,18 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .table-title, #_content .example-title, #_content .procedure-title {
-    margin: 24px 0 10px;
-    padding: 0;
+    position: relative;
+    top: -33px;
+    padding-top: 33px;
+    z-index: 1;
+}
+
+#_content .example-title, #_content .procedure-title {
+    margin: 24px 0 -33px;
+}
+
+#_content .table-title {
+    margin: 24px 0 -23px;
 }
 
 #_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap {
