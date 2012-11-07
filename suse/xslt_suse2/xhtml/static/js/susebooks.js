@@ -91,7 +91,6 @@ $(document).ready(function() {
           event.preventDefault();
           $('html').animate({scrollTop: targetOffset}, 400, function() {
             location.hash = target;
-            console.log('Iran!');
           });
       }
       }
