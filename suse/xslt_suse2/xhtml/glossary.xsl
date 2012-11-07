@@ -77,5 +77,59 @@
       
     </xsl:element>
   </xsl:template>
-  
+ 
+
+<xsl:template match="glossentry">
+  <xsl:choose>
+    <xsl:when test="$glossentry.show.acronym = 'primary'">
+      <dt>
+        <xsl:call-template name="id.attribute">
+          <xsl:with-param name="force" select="1"/>
+        </xsl:call-template>
+        <span>
+        <xsl:choose>
+          <xsl:when test="acronym|abbrev">
+            <xsl:apply-templates select="acronym|abbrev"/>
+            <xsl:text> (</xsl:text>
+            <xsl:apply-templates select="glossterm"/>
+            <xsl:text>)</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="glossterm"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        </span>
+      </dt>
+    </xsl:when>
+    <xsl:when test="$glossentry.show.acronym = 'yes'">
+      <dt>
+        <xsl:call-template name="id.attribute">
+          <xsl:with-param name="force" select="1"/>
+        </xsl:call-template>
+        <span>
+        <xsl:apply-templates select="glossterm"/>
+
+        <xsl:if test="acronym|abbrev">
+          <xsl:text> (</xsl:text>
+          <xsl:apply-templates select="acronym|abbrev"/>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+        </span>
+      </dt>
+    </xsl:when>
+    <xsl:otherwise>
+      <dt>
+        <xsl:call-template name="id.attribute">
+          <xsl:with-param name="force" select="1"/>
+        </xsl:call-template>
+        <span>
+        <xsl:apply-templates select="glossterm"/>
+        </span>
+      </dt>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:apply-templates select="indexterm|revhistory|glosssee|glossdef"/>
+</xsl:template>
+
 </xsl:stylesheet>

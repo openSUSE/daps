@@ -64,12 +64,16 @@
   </xsl:param>
     
     <div class="{concat(local-name(),'-title-wrap')}">
-      <p class="{concat(local-name(), '-title')}">
+      <h6 class="{concat(local-name(), '-title')}">
+        <xsl:call-template name="id.attribute">
+          <xsl:with-param name="node" select="$object"/>
+          <xsl:with-param name="force" select="1"/>
+        </xsl:call-template>
         <xsl:copy-of select="$title"/>
         <xsl:call-template name="create.permalink">
           <xsl:with-param name="object" select="$object"/>
         </xsl:call-template>
-      </p>
+      </h6>
     </div>
   </xsl:template>
 

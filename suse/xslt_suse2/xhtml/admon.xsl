@@ -14,6 +14,7 @@
   exclude-result-prefixes="exsl">
   
   <xsl:template name="graphical.admonition">
+    <xsl:param name="admonition" select="."/>
     <xsl:variable name="admon.type">
       <xsl:choose>
         <xsl:when test="local-name(.)='note'">Note</xsl:when>
@@ -31,6 +32,10 @@
     </xsl:variable>
     
     <div>
+      <xsl:call-template name="id.attribute">
+        <xsl:with-param name="node" select="$admonition"/>
+        <xsl:with-param name="force" select="1"/>
+      </xsl:call-template>
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class">admonition <xsl:value-of select="local-name()"/></xsl:with-param>
       </xsl:call-template>
@@ -40,8 +45,7 @@
         </xsl:attribute>
       </img>
       <h6>
-          <xsl:call-template name="anchor"/>
-          <xsl:apply-templates select="." mode="object.title.markup"/>
+        <xsl:apply-templates select="." mode="object.title.markup"/>
       </h6>
       <xsl:apply-templates/>
     </div>

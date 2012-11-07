@@ -36,14 +36,6 @@
                     </xsl:choose>
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:call-template name="anchor">
-                <xsl:with-param name="conditional">
-                    <xsl:choose>
-                        <xsl:when test="title">0</xsl:when>
-                        <xsl:otherwise>1</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
-            </xsl:call-template>
             
             <xsl:if test="(title or info/title)">
                 <xsl:call-template name="formal.object.heading"/>
