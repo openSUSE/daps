@@ -27,11 +27,9 @@ Priority: P1 (very important) ... P5 (nice to have)
 #74 * P3 div.line after first headline (around .page-toc) (article-Template?)
 #76 * P3 Remove tables, div.mediaobjects from figures/informalfigures
 #78 * P4 Find a good way to host fonts on SUSE servers
-#79 * P2 #nbg-discuss Breadcrumbs: decide what the highest level should be
+#79 * P2 Breadcrumbs: modify highest level/second highest level (as discussed)
 #80 * P5 Adapt new stylesheet to OpenSUSE (exchange logo) and DAPS (blue/brown)
-#81 * P1 #nbg-discuss Decide how article pages should differ from books and sets
-         (it's likely beneficial if articles and sets use largely the same set
-         of controls, i.e. no TOC bubble, no Navigation)
+#81 * P1 Make single articles look like (upcoming) single HTML 
 #82 * P5 Load languages/formats into picker from external file (iframe/json?)
          (iframe will likely lead to bubbles that are too tall/too small, 
          whereas json would mean that we could adapt the height, but might
@@ -42,24 +40,13 @@ Priority: P1 (very important) ... P5 (nice to have)
          besides EN-US) (Note: Hungarian might be tricky, as "Procedure
          1.5" becomes "1.5 Procedure")
 #90 * P2 Tom: <refentry>s don't get a title. That would be useful, though.
-#93 * P2 nbg-discuss Tom: Don't generate TOCs for parts any more, as they tended
-         to confuse in user testing
-         Problem: part toc can be easily suppressed (generate.toc, see revision
-         2152). However, it turns out, the page is almost useless as it doesn't
-         provide any information to the reader.
-         Solutions:
-         1. Remove part titlepage altogether. Needs heavy(?) customizations in
-            chunking templates [Another problem is that people have been linking
-            to these pages in the past – while we might be able to redirect to
-            the first chapter of the set that might not be the most intuitive
-            solution.]
-         2. Show chapter abstracts, similar to set titlepage
+#93 * P2 On part pages, show chapter abstracts, similar to set titlepages
 #94 * P3 Callouts in cha.new.bash.html#sec.new.bash.start slightly too far to
          the right – can regulate that via margins but that would result in them
          looking wrong elsewhere
 #95 * P1 Tom: Still some outline inconsistency (superfluous dots in the Bubble
          TOC and forward/back buttons)
-#96 * P1 Tom: Many books don't know where they begin and end any more (judging
+#96 F P1 Tom: Many books don't know where they begin and end any more (judging
          by the ←/→ navigation buttons on the top (we even have links leading
          to 404 if a book (that has a set above it) is built without the set
          being built).
