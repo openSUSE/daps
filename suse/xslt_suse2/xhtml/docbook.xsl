@@ -47,6 +47,8 @@
  <xsl:include href="sections.xsl"/>
  <xsl:include href="division.xsl"/>
  <xsl:include href="inline.xsl"/>
+ <xsl:include href="xref.xsl"/>
+ <xsl:include href="html.xsl"/>
  <xsl:include href="admon.xsl"/>
  <xsl:include href="block.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
@@ -133,5 +135,5 @@
 
   <xsl:apply-templates select="." mode="head.keywords.content"/>
 </xsl:template>
- 
+
 </xsl:stylesheet>
