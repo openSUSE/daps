@@ -326,6 +326,7 @@
         <xsl:with-param name="prev" select="$prev"/>
       </xsl:call-template>
     </xsl:variable>
+    <xsl:message>next: <xsl:value-of select="$isnext"/>, prev: <xsl:value-of select="$isprev"/></xsl:message>
   
   <!-- 
      We use two node sets and calculate the set difference
@@ -350,7 +351,8 @@
                                 != count($ancestorrootnode)]"/>
   <xsl:if test="$needs.navig">
        <xsl:choose>
-         <xsl:when test="count($prev) >0 and $isprev">
+         <xsl:when test="count($prev) > 0 and $isprev = 'true'">
+           <xsl:message>Prev!</xsl:message>
            <a accesskey="p" class="tool-spacer">
              <xsl:attribute name="title">
                <xsl:apply-templates select="$prev"
@@ -371,7 +373,8 @@
          </xsl:otherwise>
        </xsl:choose>
        <xsl:choose>
-         <xsl:when test="count($next) >0 and $isnext">
+         <xsl:when test="count($next) > 0 and $isnext = 'true'">
+           <xsl:message>Next!</xsl:message>
            <a accesskey="n" class="tool-spacer">
              <xsl:attribute name="title">
                <xsl:apply-templates select="$next"
