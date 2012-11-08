@@ -101,6 +101,9 @@ if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
 else
  echo $PROC $STYLE
 fi #MISSING: if loop to check nonet/noval and saxon (=Error)
-$PROC $NONET $NOVAL $OP $STYLE $DOC #Calling the processor with given options
+$PROC $NONET $NOVAL $OP $STYLE $DOC #Calling the processor with given options saxon doesn't work with this, cause
+   # of the output/$OP, either seperate output command and value or keep, commands in seperate variables and call
+   # whichever is apropiate (or check in while loop for processor and change from there)
 echo "Who da best?"
 exit 0;
+#MISSING:  write a seperate daps-saxon wrapperscript to implement saxonutils (daps ticket nr. 94, get saxon6 packet from toms and test it
