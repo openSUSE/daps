@@ -1,0 +1,21 @@
+---------------------------------------------------------------------
+                       Troubleshooting
+---------------------------------------------------------------------
+
+
+
+1. I get the following error message:
+
+Problem:
+[Fatal Error] FOO.svg:1:1: Premature end of file.
+[error] Failed to create image file:FOO.svg of type null
+
+Solution:
+Your SVG file contains an empty namespace. Every SVG file MUST HAVE
+a SVG namespace which is "http://www.w3.org/2000/svg". Check, if your
+SVG file contains this line in the root element as like this:
+
+  <svg xmlns="http://www.w3.org/2000/svg" ...>
+
+
+
