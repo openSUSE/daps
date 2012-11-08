@@ -1,0 +1,106 @@
+#!/bin/bash
+#First go at a xslt wrapper script for daps
+#30.10.12 Kilian Petsch
+
+DOC=""
+ME=$(basename $0)
+# Help function to preserve readability of the while loop
+usage () {
+	echo "
+	Usage: daps-xslt [OPTIONS] -sStylesheet -oOUTPUTFILE -fXMLDOKUMENT
+	 This is a wrapper script for daps to define which xsltprocessor it should use.
+	Usage:
+	daps-xslt [OPTIONS] XSLT-PROCESSOR XSLT-STYLESHEET XML-DOCUMENT
+	XSLT-PROCESSOR (Define one):
+	-X,--xsltproc: Use xsltproc
+	-S,--saxon: Use saxon
+	XSLT-STYLESHEET:
+	-s,--stylesheet: Define the XSLT-stylesheet used,
+	you may only define '-s' to use the default stylesheet 
+	XML-DOCUMENT:
+	-f,--file: Define the XML-Document that should be used
+
+	The above options are mandatory and need to be used.
+	
+	The following options are optional:
+	-x,--xinclude: Define xinclude
+	-p,--param: Define a value for the stringparameter
+	-n,--nonet: Activate nonet (only xsltproc)
+	-v,--novalid: Activate novalid (only xsltproc)
+	-h,--help: Display the help "
+	
+}
+
+ARGS=`getopt -o "hXSxp:no:vs::f:" -l "help,xsltproc:,saxon:,xinclude,param:,nonet,output:,novalid,stylesheet::file:" \
+	 -n "$ME" -- "$@"` #everything after -n is wrong probably
+
+eval set -- "$ARGS"
+while true;
+do
+ case "$1" in 
+  -h|--help)
+   usage   
+   exit 0;;
+  -X|--xsltproc)
+   echo "xsltproc"
+   PROC=xsltproc
+   shift;;
+  -S|--saxon)
+   echo "saxon"
+   PROC=saxon
+   shift;;
+  -x|--xinclude)
+   XIN=1
+   shift;;
+  -p|--param)
+   if [ -n "$2" ];
+   then
+    echo "paramvalue= $2"
+    PVAL=$2
+   else
+    echo "Error no value given"
+    exit 2
+   fi
+   shift 2;;
+  -n|--nonet) #only xsltproc
+   NONET="--nonet"
+   shift;;
+  -v|--novalid) #only xsltproc
+   NOVAL="--novalid"
+   shift;;  
+  -s|--stylesheet)
+   if [ -f "$2" ];
+   then
+    echo "Stylesheet: $2"
+    STYLE=$2
+    shift 2
+   else
+    echo "Using default Stylesheet"
+    STYLE=/MY/COOL/STYLESHEET
+    shift 2
+   fi
+   ;;
+  -f|--file) #option to add the file to prevent options from using filename as their parameter
+   DOC=$2
+   echo "Using file" $DOC
+   shift 2
+   ;;
+  -o|--output)
+   echo "Generating output file" $2
+   OP="--output $2"
+   shift 2;;
+  --)
+   shift ;
+   break;; 
+ esac
+done 
+#Now there should be now leftover paramters
+#Check if all mandatory components are given
+if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
+ echo "Error necessary argument missing! Make sure you have a xsltprocessor, a stylesheet and a document defined"
+else
+ echo $PROC $STYLE
+fi #MISSING: if loop to check nonet/noval and saxon (=Error)
+$PROC $NONET $NOVAL $OP $STYLE $DOC #Calling the processor with given options
+echo "Who da best?"
+exit 0;
