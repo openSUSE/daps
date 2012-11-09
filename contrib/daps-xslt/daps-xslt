@@ -8,9 +8,8 @@ ME=$(basename $0)
 usage () {
 	echo "
 	Usage: daps-xslt [OPTIONS] -sStylesheet -oOUTPUTFILE -fXMLDOKUMENT
-	 This is a wrapper script for daps to define which xsltprocessor it should use.
-	Usage:
-	daps-xslt [OPTIONS] XSLT-PROCESSOR XSLT-STYLESHEET XML-DOCUMENT
+	This is a wrapper script for daps to define which xsltprocessor it should use.
+	
 	XSLT-PROCESSOR (Define one):
 	-X,--xsltproc: Use xsltproc
 	-S,--saxon: Use saxon
@@ -23,17 +22,17 @@ usage () {
 	The above options are mandatory and need to be used.
 	
 	The following options are optional:
-	-x,--xinclude: Define xinclude
+	-x,--xinclude: do XInclude processing on document input
 	-p,--param: Define a value for the stringparameter
-	-n,--nonet: Activate nonet (only xsltproc)
-	-v,--novalid: Activate novalid (only xsltproc)
-	-h,--help: Display the help "
+	-n,--nonet: refuse to fetch DTDs or entities over network (only xsltproc)
+	-v,--novalid: skip the Dtd loading phase (only xsltproc)
+	-h,--help: Display this help " 
 	
 }
 #function to call different processors and check for nonvalid options
 processor () {
 	if [ xsltproc = $PROC ]; then
-		$PROC $NONET $NOVAL $OP $STYLE $DOC
+		$PROC $NONET $XIN $NOVAL $OP $STYLE $DOC
 	elif [ saxon = $PROC ] && [[ -n $NONET || -n $NOVAL ]]; then
 		echo "Error nonet and noval are xsltproc-only options"
 		exit 3
@@ -48,73 +47,67 @@ ARGS=`getopt -o "hXSxp:no:vs::f:" -l "help,xsltproc:,saxon:,xinclude,param:,none
 	 -n "$ME" -- "$@"` #everything after -n is wrong probably
 
 eval set -- "$ARGS"
-while true;
-do
- case "$1" in 
-  -h|--help)
-   usage   
-   exit 0;;
-  -X|--xsltproc)
-   echo "xsltproc"
-   PROC=xsltproc
-   shift;;
-  -S|--saxon)
-   echo "saxon"
-   PROC=saxon
-   shift;;
-  -x|--xinclude)
-   XIN=1 #Missing
-   shift;;
-  -p|--param) #Missing
-   if [ -n "$2" ];
-   then
-    echo "paramvalue= $2"
-    PVAL=$2
-   else
-    echo "Error no value given"
-    exit 2
-   fi
-   shift 2;;
-  -n|--nonet) #only xsltproc
-   NONET="--nonet"
-   shift;;
-  -v|--novalid) #only xsltproc
-   NOVAL="--novalid"
-   shift;;  
-  -s|--stylesheet)
-   if [ -f "$2" ];
-   then
-    echo "Stylesheet: $2"
-    STYLE=$2
-    shift 2
-   else
-    echo "Using default Stylesheet"
-    STYLE=/MY/COOL/STYLESHEET
-    shift 2
-   fi
-   ;;
-  -f|--file) #option to add the file to prevent options from using filename as their parameter
-   DOC=$2
-   echo "Using file" $DOC
-   shift 2
-   ;;
-  -o|--output)
-   echo "Generating output file" $2
-   OP="-o $2"
-   shift 2;;
-  --)
-   shift ;
-   break;; 
- esac
+while true; do
+	case "$1" in
+		-h|--help)
+			usage
+			exit 0;;
+		-X|--xsltproc)
+			echo "xsltproc"
+			PROC=xsltproc
+			shift;;
+		-S|--saxon)
+			echo "saxon"
+			PROC=saxon
+			shift;;
+		-x|--xinclude)
+			XIN="--xinclude" 
+			shift;;
+		-p|--param) #Implementation missing
+			if [ -n "$2" ]; then
+				echo "paramvalue= $2"
+				PVAL=$2
+			else
+				echo "Error no value given"
+				exit 2
+			fi
+			shift 2;;
+		-n|--nonet) #only xsltproc
+			NONET="--nonet"
+			shift;;
+		-v|--novalid) #only xsltproc
+			NOVAL="--novalid"
+			shift;;  
+		-s|--stylesheet)
+			if [ -f "$2" ]; then
+				echo "Stylesheet: $2"
+				STYLE=$2
+				shift 2
+			else
+				echo "Using default Stylesheet"
+				STYLE=/MY/COOL/STYLESHEET
+				shift 2
+			fi;;
+		-f|--file) #option to add the file to prevent options from using filename as their parameter
+			DOC=$2
+			echo "Using file" $DOC
+			shift 2;;
+		-o|--output)
+			echo "Generating output file" $2
+			OP="-o $2"
+			shift 2;;
+		--)
+			shift ;
+			break;; 
+	esac
 done 
 #Now there should be now leftover paramters
 #Check if all mandatory components are given
 if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
- echo "Error necessary argument missing! Make sure you have a xsltprocessor, a stylesheet and a document defined"
+	echo "Error necessary argument missing! Make sure you have all necessary components defined"
+	exit 6;
 else
- echo $PROC $STYLE
-fi #MISSING: if loop to check nonet/noval and saxon (=Error)
+	echo $PROC $STYLE
+fi 
 processor  #Calling processor function
-echo "Who da best?"
-exit 0;
-#MISSING:  write a seperate daps-saxon wrapperscript to implement saxonutils (daps ticket nr. 94, get saxon6 packet from toms and test it
+	exit 0;
