@@ -1,0 +1,21 @@
+#!/bin/bash
+#wrapper script for saxon
+
+# Used to enable XIncludes
+XINCLUDEFLAG="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+# Used to enable XML Catalog configuration
+CATALOGPROP="CatalogManager.properties"
+# The DocBook JAR file for extension functions
+SAXON_JAR="${DBXSLT}/extensions/saxon65.jar"
+# We need additional JAR files (mostly due to XInclude resolution)
+export ADDITIONAL_JARS="xerces-j2.jar xerces-j2-xml-apis.jar"
+# Use special options to switch XML parser to Xerces:
+export ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=\
+org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
+    -Djavax.xml.parsers.SAXParserFactory=\
+org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG}"
+# Extend CLASSPATH variable
+export CLASSPATH="${CATALOGPROP}:${SAXON_JAR}"
+
+# Run original saxon script:
+saxon6 $@

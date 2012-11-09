@@ -30,6 +30,19 @@ usage () {
 	-h,--help: Display the help "
 	
 }
+#function to call different processors and check for nonvalid options
+processor () {
+	if [ xsltproc = $PROC ]; then
+		$PROC $NONET $NOVAL $OP $STYLE $DOC
+	elif [ saxon = $PROC ] && [[ -n $NONET || -n $NOVAL ]]; then
+		echo "Error nonet and noval are xsltproc-only options"
+		exit 3
+	else
+		./daps-saxon $OP $DOC $STYLE #calling saxon via a wrapperscript which enables XInclude, XML catalog etc.
+	fi
+}	
+		
+
 
 ARGS=`getopt -o "hXSxp:no:vs::f:" -l "help,xsltproc:,saxon:,xinclude,param:,nonet,output:,novalid,stylesheet::file:" \
 	 -n "$ME" -- "$@"` #everything after -n is wrong probably
@@ -50,9 +63,9 @@ do
    PROC=saxon
    shift;;
   -x|--xinclude)
-   XIN=1
+   XIN=1 #Missing
    shift;;
-  -p|--param)
+  -p|--param) #Missing
    if [ -n "$2" ];
    then
     echo "paramvalue= $2"
@@ -87,7 +100,7 @@ do
    ;;
   -o|--output)
    echo "Generating output file" $2
-   OP="--output $2"
+   OP="-o $2"
    shift 2;;
   --)
    shift ;
@@ -101,9 +114,7 @@ if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
 else
  echo $PROC $STYLE
 fi #MISSING: if loop to check nonet/noval and saxon (=Error)
-$PROC $NONET $NOVAL $OP $STYLE $DOC #Calling the processor with given options saxon doesn't work with this, cause
-   # of the output/$OP, either seperate output command and value or keep, commands in seperate variables and call
-   # whichever is apropiate (or check in while loop for processor and change from there)
+processor  #Calling processor function
 echo "Who da best?"
 exit 0;
 #MISSING:  write a seperate daps-saxon wrapperscript to implement saxonutils (daps ticket nr. 94, get saxon6 packet from toms and test it
