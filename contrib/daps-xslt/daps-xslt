@@ -1,8 +1,12 @@
 #!/bin/bash
 #First go at a xslt wrapper script for daps
 #30.10.12 Kilian Petsch
+#TODO:-add options for xsltproc
+#     -add options for saxon
+#     -remove unnecessary echo or make them silent (verbose option)
+#     -update help with new options
+#     -test stringparam and param with saxon
 
-DOC=""
 ME=$(basename $0)
 # Help function to preserve readability of the while loop
 usage () {
@@ -13,11 +17,13 @@ usage () {
 	XSLT-PROCESSOR (Define one):
 	-X,--xsltproc: Use xsltproc
 	-S,--saxon: Use saxon
+
 	XSLT-STYLESHEET:
 	-s,--stylesheet: Define the XSLT-stylesheet used,
-	you may only define '-s' to use the default stylesheet 
+	you may only define '-s' to use the default stylesheet
+	 
 	XML-DOCUMENT:
-	-f,--file: Define the XML-Document that should be used
+	-f,--file Define the XML-Document that should be used
 
 	The above options are mandatory and need to be used.
 	
@@ -32,19 +38,19 @@ usage () {
 #function to call different processors and check for nonvalid options
 processor () {
 	if [ xsltproc = $PROC ]; then
-		$PROC $NONET $XIN $NOVAL $OP $STYLE $DOC
+		$PROC $NONET $XIN $NOVAL ${PARAM} ${STRINGPARAM} $OP $STYLE $DOC
 	elif [ saxon = $PROC ] && [[ -n $NONET || -n $NOVAL ]]; then
 		echo "Error nonet and noval are xsltproc-only options"
 		exit 3
-	else
-		./daps-saxon $OP $DOC $STYLE #calling saxon via a wrapperscript which enables XInclude, XML catalog etc.
+	else  #saxon via a wrapperscript which enables XInclude, XML catalog etc.
+		./daps-saxon $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAN}  
 	fi
 }	
 		
 
 
-ARGS=`getopt -o "hXSxp:no:vs::f:" -l "help,xsltproc:,saxon:,xinclude,param:,nonet,output:,novalid,stylesheet::file:" \
-	 -n "$ME" -- "$@"` #everything after -n is wrong probably
+ARGS=`getopt -o "hXSxno:vs:f:" -l "help,xsltproc:,saxon:,xinclude,param:,stringparam:,nonet,output:,novalid, 
+stylesheet:file:" -n "$ME" -- "$@"` #everything after -n is wrong probably
 
 eval set -- "$ARGS"
 while true; do
@@ -53,23 +59,35 @@ while true; do
 			usage
 			exit 0;;
 		-X|--xsltproc)
-			echo "xsltproc"
+			echo "Using xsltproc"
 			PROC=xsltproc
 			shift;;
 		-S|--saxon)
-			echo "saxon"
+			echo "Using saxon"
 			PROC=saxon
 			shift;;
 		-x|--xinclude)
-			XIN="--xinclude" 
+			XIN="--xinclude" #only needed in xsltproc
 			shift;;
-		-p|--param) #Implementation missing
-			if [ -n "$2" ]; then
-				echo "paramvalue= $2"
-				PVAL=$2
+		--param) #Implementation missing, no value is not detected next argument ist taken instead
+			if [[ "$2" =~ \= ]]; then
+				PARAM+="$1 $2 "
+				SPARAM+="$2 "
+				echo ${PARAM}
 			else
-				echo "Error no value given"
-				exit 2
+				echo "Error. --param requires 'KEY=VALUE' as options"
+				exit 2;
+			fi
+			shift 2;;
+		--stringparam)
+			if [[ "$2" =~ \= ]]; then #Test auf Leerzeichen
+				 # --stringparam $2 hinten ans array dranhängen, mit doublequotes
+				STRINGPARAM+="$1 $2 "
+				SSTRINGPARAM+="$2 "
+				echo ${STRINGPARAM}
+			else
+				echo "Error. --stringparam requires 'KEY=VALUE' as options"
+				exit 2;
 			fi
 			shift 2;;
 		-n|--nonet) #only xsltproc
@@ -79,15 +97,10 @@ while true; do
 			NOVAL="--novalid"
 			shift;;  
 		-s|--stylesheet)
-			if [ -f "$2" ]; then
-				echo "Stylesheet: $2"
-				STYLE=$2
-				shift 2
-			else
-				echo "Using default Stylesheet"
-				STYLE=/MY/COOL/STYLESHEET
-				shift 2
-			fi;;
+			echo "Stylesheet: $2"
+			STYLE=$2
+			shift 2
+			;;
 		-f|--file) #option to add the file to prevent options from using filename as their parameter
 			DOC=$2
 			echo "Using file" $DOC
@@ -101,7 +114,7 @@ while true; do
 			break;; 
 	esac
 done 
-#Now there should be now leftover paramters
+#Now there should be now leftover parameters
 #Check if all mandatory components are given
 if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
 	echo "Error necessary argument missing! Make sure you have all necessary components defined"
