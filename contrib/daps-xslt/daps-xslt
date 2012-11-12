@@ -1,8 +1,7 @@
 #!/bin/bash
 #First go at a xslt wrapper script for daps
 #30.10.12 Kilian Petsch
-#TODO:-add options for xsltproc
-#     -add options for saxon
+#TODO:-options for saxon and xsltproc: with bareword, specific options come after, check after while loop if $1=S or X, then shift, then save rest ($@) in a variable and add this variable to the call in function processor
 #     -remove unnecessary echo or make them silent (verbose option)
 #     -update help with new options
 #     -test stringparam and param with saxon
@@ -47,9 +46,9 @@ processor () {
 	fi
 }	
 		
+export POSIXLY_CORRECT=1
 
-
-ARGS=`getopt -o "hXSxno:vs:f:" -l "help,xsltproc,saxon,xinclude,param:,stringparam:,nonet,output:,novalid, 
+ARGS=`getopt -o "hxno:vs:f:" -l "help,xinclude,param:,stringparam:,nonet,output:,novalid, 
 stylesheet:file:" -n "$ME" -- "$@"` 
 
 eval set -- "$ARGS"
@@ -58,14 +57,14 @@ while true; do
 		-h|--help)
 			usage
 			exit 0;;
-		-X|--xsltproc)
-			echo "Using xsltproc"
-			PROC=xsltproc
-			shift;;
-		-S|--saxon)
-			echo "Using saxon"
-			PROC=saxon
-			shift;;
+#		-X|--xsltproc)
+#			echo "Using xsltproc"
+#			PROC=xsltproc
+#			shift;;
+#		-S|--saxon)
+#			echo "Using saxon"
+#			PROC=saxon
+#			shift;;
 		-x|--xinclude)
 			XIN="--xinclude" #only needed in xsltproc
 			shift;;
@@ -120,7 +119,18 @@ while true; do
 			shift ;
 			break;; 
 	esac
-done 
+done
+unset POSIXLY_CORRECT
+if [[ xsltproc = $1 || saxon = $1 ]]; then
+	PROC=$1
+	shift;
+else
+	echo "Error nonvalid processor"
+	exit 1;
+fi
+REST=$@
+echo $REST
+ 
 #Now there should be now leftover parameters
 #Check if all mandatory components are given
 if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
