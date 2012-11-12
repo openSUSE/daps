@@ -49,8 +49,8 @@ processor () {
 		
 
 
-ARGS=`getopt -o "hXSxno:vs:f:" -l "help,xsltproc:,saxon:,xinclude,param:,stringparam:,nonet,output:,novalid, 
-stylesheet:file:" -n "$ME" -- "$@"` #everything after -n is wrong probably
+ARGS=`getopt -o "hXSxno:vs:f:" -l "help,xsltproc,saxon,xinclude,param:,stringparam:,nonet,output:,novalid, 
+stylesheet:file:" -n "$ME" -- "$@"` 
 
 eval set -- "$ARGS"
 while true; do
@@ -109,6 +109,9 @@ while true; do
 			echo "Generating output file" $2
 			OP="-o $2"
 			shift 2;;
+	#	-r|--repeat) #xsltproc only
+			
+				
 		--)
 			shift ;
 			break;; 
