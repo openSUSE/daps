@@ -71,7 +71,9 @@ while true; do
 			shift;;
 		--param) #Implementation missing, no value is not detected next argument ist taken instead
 			if [[ "$2" =~ \= ]]; then
-				PARAM+="$1 $2 "
+                            PARAM=${2/=/ }
+                            PARAM="$1 $PARAM "
+#				PARAM+="$1 $2 "
 				SPARAM+="$2 "
 				echo ${PARAM}
 			else
@@ -82,7 +84,9 @@ while true; do
 		--stringparam)
 			if [[ "$2" =~ \= ]]; then #Test auf Leerzeichen
 				 # --stringparam $2 hinten ans array dranhängen, mit doublequotes
-				STRINGPARAM+="$1 $2 "
+                            STRINGPARAM=${2/=/ }
+                            STRINGPARAM="$1 $PARAM "
+#				STRINGPARAM+="$1 $2 "
 				SSTRINGPARAM+="$2 "
 				echo ${STRINGPARAM}
 			else
