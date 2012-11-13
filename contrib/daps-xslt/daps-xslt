@@ -62,8 +62,8 @@ while true; do
 			XIN="--xinclude" #only needed in xsltproc
 			shift;;
 		--param) 
-			if [[ "$2" =~ \= ]]; then
-                            	PARAM=${2/=/ }
+			if [[ "$2" =~ \= ]]; then #Test for equal sign
+                            	PARAM=${2/=/ } #Removing equal sign for xsltproc
                     		PARAM="$1 $PARAM "
 				SPARAM+="$2 "
 				echo ${PARAM}
@@ -74,8 +74,8 @@ while true; do
 			shift 2;;
 		--stringparam)
 			if [[ "$2" =~ \= ]]; then #Test for equal sign 
-                            	STRINGPARAM=${2/=/ }
-                           	STRINGPARAM="$1 $PARAM "
+                            	STRINGPARAM=${2/=/ } #Removing equal sign for xsltproc
+                           	STRINGPARAM="$1 $STRINGPARAM "
 				SSTRINGPARAM+="$2 "
 				echo ${STRINGPARAM}
 			else
@@ -102,7 +102,7 @@ while true; do
 	esac
 done
 unset POSIXLY_CORRECT
-if [[ xsltproc = $1 || saxon = $1 ]]; then
+if [[ xsltproc = $1 || saxon = $1 ]]; then #checking for valid processor
 	PROC=$1
 	shift;
 else
@@ -112,8 +112,7 @@ fi
 REST=$@
 echo $REST
  
-#Now there should be now leftover parameters
-#Check if all mandatory components are given
+#Check if all mandatory options are set
 if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
 	echo "Error necessary argument missing! Make sure you have all necessary components defined"
 	exit 6;
