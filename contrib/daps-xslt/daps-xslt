@@ -1,10 +1,6 @@
 #!/bin/bash
 #First go at a xslt wrapper script for daps
 #30.10.12 Kilian Petsch
-#TODO:-options for saxon and xsltproc: with bareword, specific options come after, check after while loop if $1=S or X, then shift, then save rest ($@) in a variable and add this variable to the call in function processor
-#     -remove unnecessary echo or make them silent (verbose option)
-#     -update help with new options
-#     -test stringparam and param with saxon
 
 ME=$(basename $0)
 # Help function to preserve readability of the while loop
@@ -66,7 +62,6 @@ while true; do
                             	PARAM=${2/=/ } #Removing equal sign for xsltproc
                     		PARAM="$1 $PARAM "
 				SPARAM+="$2 "
-				echo ${PARAM}
 			else
 				echo "Error. --param requires 'KEY=VALUE' as options"
 				exit 2;
@@ -77,23 +72,19 @@ while true; do
                             	STRINGPARAM=${2/=/ } #Removing equal sign for xsltproc
                            	STRINGPARAM="$1 $STRINGPARAM "
 				SSTRINGPARAM+="$2 "
-				echo ${STRINGPARAM}
 			else
 				echo "Error. --stringparam requires 'KEY=VALUE' as options"
 				exit 2;
 			fi
 			shift 2;;
 		-s|--stylesheet)
-			echo "Stylesheet: $2"
 			STYLE=$2
 			shift 2
 			;;
 		-f|--file) #option to add the file to prevent options from using filename as their parameter
 			DOC=$2
-			echo "Using file" $DOC
 			shift 2;;
 		-o|--output)
-			echo "Generating output file" $2
 			OP="-o $2"
 			shift 2;;
 		--)
