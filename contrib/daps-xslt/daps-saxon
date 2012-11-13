@@ -1,6 +1,7 @@
 #!/bin/bash
 #wrapper script for saxon
 
+saxon() {
 # Used to enable XIncludes
 XINCLUDEFLAG="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
 # Used to enable XML Catalog configuration
@@ -26,3 +27,5 @@ if [[ 12.2 = $OS ]]; then
 else
 	 saxon $@
 fi
+}
+

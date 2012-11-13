@@ -32,6 +32,8 @@ The following options are optional:
 -x,--xinclude: do XInclude processing on document input
 --param name value : pass a (parameter,value) pair
 --stringparam name value : pass a (parameter, UTF8 string value) pair
+--nonet: refuse to fetch DTDs or entities over network
+--novalid: skip the Dtd loading phase
 -h,--help: Display this help 
 	
 After this options define your xsltprocessor (saxon6 or xsltproc),
@@ -42,14 +44,14 @@ See man saxon or man xsltproc for these options"
 #function to call different processors and check for nonvalid options
 processor () {
 	if [[ xsltproc = $PROC ]]; then
-		$PROC $REST $XIN ${PARAM} ${STRINGPARAM} $OP $STYLE $DOC
+		$PROC $REST $XIN $NONET $NOVALID ${PARAM} ${STRINGPARAM} $OP $STYLE $DOC
 	elif [[ saxon = $PROC && -n $NONET || -n $NOVAL ]]; then
 		echo "Error nonet and noval are xsltproc-only options"
 		exit 3
 	else
                 # saxon via a wrapperscript which enables XInclude,
                 # XML catalog etc.
-		./daps-saxon $REST $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAN}  
+		run-saxon $REST $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAN}  
 	fi
 }	
 # debug funtion to check if all variables are correct
@@ -63,11 +65,44 @@ debug() {
 		echo $REST;
 	fi
 }    
-		
+	
+run-saxon() {
+	# Used to enable XIncludes
+	XINCLUDEFLAG="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+	# Used to enable XML Catalog configuration
+	# CATALOGPROP="CatalogManager.properties"
+	# The DocBook JAR file for extension functions
+	SAXON_JAR="${DBXSLT}/extensions/saxon65.jar"
+	# We need additional JAR files (mostly due to XInclude resolution)
+	export ADDITIONAL_JARS="xerces-j2.jar xerces-j2-xml-apis.jar"
+	# Use special options to switch XML parser to Xerces:
+	ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=\
+		org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
+		    -Djavax.xml.parsers.SAXParserFactory=\
+		    org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
+		    -Dxml.catalog.files=/etc/xml/catalog \
+		 "
+	if [[ -n $DEBUG ]]; then 
+		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=1"
+		export ADDITIONAL_FLAGS;
+	fi
+	# Extend CLASSPATH variable
+	 export CLASSPATH="${CATALOGPROP}:${SAXON_JAR}"
+
+	# Check OS version because of different saxon script names in different versions
+	OS=$(cat /etc/SuSE-release | grep "VERSION" | awk {'print $3'})
+	if [[ 12.2 = $OS ]]; then
+	        saxon6 $@
+	else		         
+		saxon $@
+	fi
+}
+
+
 export POSIXLY_CORRECT=1
 
 ARGS=`getopt -o "hxno:vs:f:" -l "help,xinclude,param:,stringparam:,nonet,output:,novalid, 
-stylesheet:,file:,debug" -n "$ME" -- "$@"` 
+stylesheet:,file:,debug,nonet,novalid" -n "$ME" -- "$@"` 
 
 eval set -- "$ARGS"
 while true; do
@@ -110,7 +145,13 @@ while true; do
 			shift 2;;
 		--debug)
 			DEBUG=1
-			shift;;	
+			shift;;
+		--nonet)
+			NONET="--nonet"	
+			shift;;
+		--novalid)
+			NOVALID=--novalid
+			shift;;
 		--)
 			shift ;
 			break;; 
