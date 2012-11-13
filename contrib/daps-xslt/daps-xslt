@@ -2,11 +2,19 @@
 #First go at a xslt wrapper script for daps
 #30.10.12 Kilian Petsch
 
-ME=$(basename $0)
+
+#
+# TODO
+# --xinclude
+# --nonet
+# --novalid (see Ticket 94)
+#
+
+ME="$(basename $0)"
 # Help function to preserve readability of the while loop
 usage () {
 	echo "
-	Usage: daps-xslt [OPTIONS] -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSLTPROCESSOR> [OPTIONS]
+	Usage: daps-xslt [OPTIONS] -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSLTPROCESSOR> [PROCESSOR SPECIFIC OPTIONS]
 	This is a wrapper script for daps to define which xsltprocessor it should use.
 	
 	XSLT-STYLESHEET:
@@ -33,12 +41,14 @@ usage () {
 }
 #function to call different processors and check for nonvalid options
 processor () {
-	if [ xsltproc = $PROC ]; then
+	if [[ xsltproc = $PROC ]]; then
 		$PROC $REST $XIN ${PARAM} ${STRINGPARAM} $OP $STYLE $DOC
-	elif [ saxon = $PROC ] && [[ -n $NONET || -n $NOVAL ]]; then
+	elif [[ saxon = $PROC && -n $NONET || -n $NOVAL ]]; then
 		echo "Error nonet and noval are xsltproc-only options"
 		exit 3
-	else  #saxon via a wrapperscript which enables XInclude, XML catalog etc.
+	else
+                # saxon via a wrapperscript which enables XInclude,
+                # XML catalog etc.
 		./daps-saxon $REST $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAN}  
 	fi
 }	
@@ -58,8 +68,8 @@ while true; do
 			XIN="--xinclude" #only needed in xsltproc
 			shift;;
 		--param) 
-			if [[ "$2" =~ \= ]]; then #Test for equal sign
-                            	PARAM=${2/=/ } #Removing equal sign for xsltproc
+			if [[ $2 =~ \= ]]; then #Test for equal sign
+                            	PARAM="${2/=/ }" #Removing equal sign for xsltproc
                     		PARAM="$1 $PARAM "
 				SPARAM+="$2 "
 			else
@@ -68,8 +78,8 @@ while true; do
 			fi
 			shift 2;;
 		--stringparam)
-			if [[ "$2" =~ \= ]]; then #Test for equal sign 
-                            	STRINGPARAM=${2/=/ } #Removing equal sign for xsltproc
+			if [[ $2 =~ \= ]]; then #Test for equal sign 
+                            	STRINGPARAM="${2/=/ }" #Removing equal sign for xsltproc
                            	STRINGPARAM="$1 $STRINGPARAM "
 				SSTRINGPARAM+="$2 "
 			else
@@ -78,11 +88,11 @@ while true; do
 			fi
 			shift 2;;
 		-s|--stylesheet)
-			STYLE=$2
+			STYLE="$2"
 			shift 2
 			;;
 		-f|--file) #option to add the file to prevent options from using filename as their parameter
-			DOC=$2
+			DOC="$2"
 			shift 2;;
 		-o|--output)
 			OP="-o $2"
@@ -100,11 +110,11 @@ else
 	echo "Error nonvalid processor"
 	exit 1;
 fi
-REST=$@
+REST="$@"
 echo $REST
  
 #Check if all mandatory options are set
-if [ -z "$PROC" ] || [ -z "$STYLE" ] || [ -z "$DOC" ]; then
+if [[ -z "$PROC" || -z "$STYLE" || -z "$DOC" ]]; then
 	echo "Error necessary argument missing! Make sure you have all necessary components defined"
 	exit 6;
 else

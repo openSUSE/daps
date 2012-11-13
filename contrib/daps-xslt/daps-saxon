@@ -18,9 +18,8 @@ org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG}"
 export CLASSPATH="${CATALOGPROP}:${SAXON_JAR}"
 
 # Check OS version because of different saxon script names in different versions
-OS=`cat /etc/SuSE-release | awk {'print $2'}`
-OS=${OS//=/ }
-if [ 12.2 == $OS ]; then
+OS=$(cat /etc/SuSE-release | grep "VERSION" | awk {'print $3'})
+if [[ 12.2 = $OS ]]; then
 	saxon6 $@
 else
 	 saxon $@
