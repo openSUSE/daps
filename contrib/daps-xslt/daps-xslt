@@ -14,29 +14,29 @@ ME="$(basename $0)"
 # Help function to preserve readability of the while loop
 usage () {
 	echo "
-	Usage: daps-xslt [OPTIONS] -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSLTPROCESSOR> [PROCESSOR SPECIFIC OPTIONS]
-	This is a wrapper script for daps to define which xsltprocessor it should use.
-	
-	XSLT-STYLESHEET:
-	-s,--stylesheet: Define the XSLT-stylesheet used,
-	you may only define '-s' to use the default stylesheet
-	 
-	XML-DOCUMENT:
-	-f,--file Define the XML-Document that should be used
-	The above options are mandatory and need to be used.
-	
-	OUTPUT:
-	-o,--output Create or write to an existing document
+Usage: daps-xslt [OPTIONS] -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSLTPROCESSOR> [PROCESSOR SPECIFIC OPTIONS]
+This is a wrapper script for daps to define which xsltprocessor it should use.
 		
-	The following options are optional:
-	-x,--xinclude: do XInclude processing on document input
-	--param name value : pass a (parameter,value) pair
-	--stringparam name value : pass a (parameter, UTF8 string value) pair
-	-h,--help: Display this help 
+XSLT-STYLESHEET:
+-s,--stylesheet: Define the XSLT-stylesheet used,
+you may only define '-s' to use the default stylesheet
+	 
+XML-DOCUMENT:
+-f,--file Define the XML-Document that should be used
+The above options are mandatory and need to be used.
 	
-	After this options define your xsltprocessor (saxon6 or xsltproc),
-	then specify the options unique to it.
-	See man saxon or man xsltproc for these options" 
+OUTPUT:
+-o,--output Create or write to an existing document
+		
+The following options are optional:
+-x,--xinclude: do XInclude processing on document input
+--param name value : pass a (parameter,value) pair
+--stringparam name value : pass a (parameter, UTF8 string value) pair
+-h,--help: Display this help 
+	
+After this options define your xsltprocessor (saxon6 or xsltproc),
+then specify the options unique to it.
+See man saxon or man xsltproc for these options" 
 	
 }
 #function to call different processors and check for nonvalid options
@@ -52,6 +52,17 @@ processor () {
 		./daps-saxon $REST $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAN}  
 	fi
 }	
+# debug funtion to check if all variables are correct
+debug() {
+	if [[ -n $DEBUG ]]; then
+		echo $PARAM $SPARAM
+		echo $STRINGPARAM $SSTRINGPARAM
+		echo "Sourcedocument: $DOC"
+		echo "Stylesheet $STYLE"
+		echo "Output file $OP"
+		echo $REST;
+	fi
+}    
 		
 export POSIXLY_CORRECT=1
 
@@ -114,14 +125,7 @@ else
 	exit 1;
 fi
 REST="$@"
-
-[[ -n $DEBUG ]] && echo $PARAM $SPARAM
-[[ -n $DEBUG ]] && echo $STRINGPARAM $SSTRINGPARAM
-[[ -n $DEBUG ]] && echo "Sourcedocument: $DOC"
-[[ -n $DEBUG ]] && echo "Stylesheet $STYLE"
-[[ -n $DEBUG ]] && echo "Output file $OP"
-[[ -n $DEBUG ]] && echo $REST
- 
+debug #calling debug funtion
 #Check if all mandatory options are set
 if [[ -z "$PROC" || -z "$STYLE" || -z "$DOC" ]]; then
 	echo "Error necessary argument missing! Make sure you have all necessary components defined"
