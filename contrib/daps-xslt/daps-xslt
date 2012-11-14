@@ -24,7 +24,11 @@ you may only define '-s' to use the default stylesheet
 XML-DOCUMENT:
 -f,--file Define the XML-Document that should be used
 The above options are mandatory and need to be used.
-	
+
+XSLTPROCESSOR:
+Define your xsltprocessor (xsltproc or saxon) and options specific to it.
+See man saxon or man xsltproc for these options 
+						
 OUTPUT:
 -o,--output Create or write to an existing document
 		
@@ -34,11 +38,9 @@ The following options are optional:
 --stringparam name value : pass a (parameter, UTF8 string value) pair
 --nonet: refuse to fetch DTDs or entities over network
 --novalid: skip the Dtd loading phase
--h,--help: Display this help 
+--debug: Activate a debug mode which outputs all variable values used
+-h,--help: Display this help" 
 	
-After this options define your xsltprocessor (saxon6 or xsltproc),
-then specify the options unique to it.
-See man saxon or man xsltproc for these options" 
 	
 }
 #function to call different processors and check for nonvalid options
@@ -80,10 +82,10 @@ run-saxon() {
 org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 	-Djavax.xml.parsers.SAXParserFactory=\
 org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
-	-Dxml.catalog.files=/etc/xml/catalog \
-		 "
+	-Dxml.catalog.files=file:///etc/xml/catalog \
+	"
 	if [[ -n $DEBUG ]]; then 
-		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=1"
+		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=3"
 	fi
 	export ADDITIONAL_FLAGS
 	# Extend CLASSPATH variable
