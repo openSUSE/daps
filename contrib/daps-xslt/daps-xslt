@@ -38,6 +38,8 @@ The following options are optional:
 --stringparam name value : pass a (parameter, UTF8 string value) pair
 --nonet: refuse to fetch DTDs or entities over network
 --novalid: skip the Dtd loading phase
+--catalog: Define additional xml-catalogs needed (Default catalogs: /etc/xml/catalog,
+	   /usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml
 --debug: Activate a debug mode which outputs all variable values used
 -h,--help: Display this help" 
 	
@@ -82,7 +84,7 @@ run-saxon() {
 org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 	-Djavax.xml.parsers.SAXParserFactory=\
 org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
-	-Dxml.catalog.files=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml;/local/doc/daps/etc/catalog.xml;/etc/xml/catalog \
+	-Dxml.catalog.files=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml;/etc/xml/catalog;${CATALOG} \
 	"
 	if [[ -n $DEBUG ]]; then 
 		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=3"
@@ -104,7 +106,7 @@ org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
 export POSIXLY_CORRECT=1
 
 ARGS=`getopt -o "hxno:vs:f:" -l "help,xinclude,param:,stringparam:,nonet,output:,novalid, 
-stylesheet:,file:,debug,nonet,novalid" -n "$ME" -- "$@"` 
+stylesheet:,file:,debug,nonet,novalid,catalog:" -n "$ME" -- "$@"` 
 
 eval set -- "$ARGS"
 while true; do
@@ -154,6 +156,9 @@ while true; do
 		--novalid)
 			NOVALID=--novalid
 			shift;;
+		--catalog)
+			CATALOG="$2i;"
+			shift 2;;	
 		--)
 			shift ;
 			break;; 
