@@ -41,7 +41,7 @@ article/appendix  nop
 article   toc,title
 book      toc,title,figure,table,example,equation
 chapter   toc,title
-part      title
+part      toc,title
 preface   toc,title
 qandadiv  toc
 qandaset  toc

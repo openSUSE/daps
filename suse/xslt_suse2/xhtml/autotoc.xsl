@@ -125,20 +125,60 @@
 </xsl:template>
   
   <!-- http://sagehill.net/docbookxsl/TOCcontrol.html#BriefSetToc -->
-  <xsl:template match="book" mode="toc">
+  <xsl:template match="book|part/appendix|chapter|toc|lot|index|glossary|
+                       bibliography|article|preface|refentry|reference" mode="toc">
     <xsl:param name="toc-context" select="."/>
 
     <xsl:call-template name="subtoc">
       <xsl:with-param name="toc-context" select="$toc-context"/>
       <xsl:with-param name="nodes" select="EMPTY"/>
     </xsl:call-template>
-    
-    <xsl:apply-templates select="(bookinfo/abstract|abstract)[1]" mode="toc"/>
+    <xsl:choose>
+      <xsl:when test="self::book">
+        <xsl:apply-templates select="(bookinfo/abstract|abstract)[1]" mode="toc"/>
+      </xsl:when>
+      <xsl:when test="self::appendix|self::chapter|self::toc|self::lot|
+                      self::index|self::glossary|self::bibliography|
+                      self::article|self::preface|self::refentry|self::reference
+                  and local-name($toc-context) = 'part'">
+        <xsl:choose>
+          <xsl:when test="chapterinfo/abstract != 0 or abstract != 0">
+            <xsl:apply-templates select="(chapterinfo/abstract|abstract)[1]" mode="toc"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="(para)[1]" mode="toc">
+              <xsl:with-param name="trim" select="1"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
-  
-  <xsl:template match="abstract" mode="toc">
-    <dd class="toc-abstract">
+
+  <xsl:template match="abstract|para" mode="toc">
+    <xsl:param name="trim" select="0"/>
+    <xsl:param name="teaser">
       <xsl:apply-templates/>
+    </xsl:param>
+    <dd class="toc-abstract">
+      <xsl:choose>
+        <xsl:when test="$trim = 1
+                    and string-length(normalize-space($teaser)) &gt; 300">
+            <p>
+            <xsl:value-of select="substring(normalize-space($teaser),1,300)"/>
+            <xsl:value-of select="'…'"/>
+            </p>
+        </xsl:when>
+        <xsl:when test="$trim = 1
+                    and string-length(normalize-space($teaser)) &lt;= 300">
+            <p>
+            <xsl:apply-templates/>
+            </p>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </dd>
   </xsl:template>
 
