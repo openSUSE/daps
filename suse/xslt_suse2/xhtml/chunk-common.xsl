@@ -144,6 +144,7 @@
 
     <div class="buttons">
       <a class="top-button button" href="#">Top</a>
+      <xsl:if test="not(self::set|self::article)">
       <div class="button">
         <xsl:call-template name="header.navigation">
           <xsl:with-param name="next" select="$next"/>
@@ -151,6 +152,7 @@
           <!--<xsl:with-param name="nav.context" select="$nav.context"/>-->
         </xsl:call-template>
       </div>
+      </xsl:if>
       <xsl:call-template name="clearme"/>
     </div>
   </xsl:template>
@@ -256,8 +258,7 @@
         </xsl:choose>
         
         <xsl:choose>
-          <xsl:when test="$rootnode">
-            <!-- We don't need it for a set -->
+          <xsl:when test="self::set|self::article">
             <div id="_nav-area" class="inactive"></div>
           </xsl:when>
           <xsl:otherwise>
