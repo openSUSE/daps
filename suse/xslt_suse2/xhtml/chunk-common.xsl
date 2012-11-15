@@ -63,48 +63,33 @@
     <xsl:param name="next"/>
     <xsl:param name="debug"/>
 
-    <!-- 
-     We use two node sets and calculate the set difference
-     with the following, general XPath expression:
-     
-      setdiff = $node-set1[count(.|$node-set2) != count($node-set2)]
-     
-     $node-set1 contains the ancestors of all nodes, starting with the
-     current node (but the current node is NOT included in the set)
-     
-     $node-set2 contains the ancestors of all nodes starting from the 
-     node which points to the $rootid parameter
-     
-     For example:
-     node-set1: {/, set, book, chapter}
-     node-set2: {/, set, } 
-     setdiff:   {        book, chapter}
-     
-  -->
-    <xsl:variable name="ancestorrootnode"
-      select="key('id', $rootid)/ancestor::*"/>
-    <xsl:variable name="setdiff"
-      select="ancestor::*[count(. | $ancestorrootnode) 
-                                != count($ancestorrootnode)]"/>
-
-
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        <!-- TODO: Do we need always an icon? -->
-             <a href="{concat($root.filename, $html.ext)}"
+        
+        <!--<xsl:message> >> Begin For loop:</xsl:message>-->
+        <xsl:for-each select="ancestor::*">
+              <xsl:call-template name="breadcrumbs.create.link"/>
+        </xsl:for-each>
+        <!--<xsl:message> >> End For loop:</xsl:message>-->
+        <xsl:call-template name="breadcrumbs.create.link"/>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="breadcrumbs.create.link">
+             <xsl:choose>
+           <xsl:when test="not(ancestor::*)">
+              <a href="{concat($root.filename, $html.ext)}"
                class="book-link"
                title="Documentation">
                   <span class="book-icon">Documentation</span>
-             </a>
-        
-        <!--<xsl:message> >> Begin For loop:</xsl:message>-->
-        <xsl:for-each select="$setdiff">
-          <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-          <xsl:apply-templates select="." mode="breadcrumbs"/>
-        </xsl:for-each>
-        <!--<xsl:message> >> End For loop:</xsl:message>-->
-      </div>
-    </xsl:if>
+              </a>
+           </xsl:when>
+           <xsl:otherwise>
+             <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
+             <xsl:apply-templates select="." mode="breadcrumbs"/>
+           </xsl:otherwise>
+         </xsl:choose>
   </xsl:template>
 
   <!-- ===================================================== -->
