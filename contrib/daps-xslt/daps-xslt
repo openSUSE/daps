@@ -81,7 +81,7 @@ run-saxon() {
 	export ADDITIONAL_JARS="xml-commons-resolver12.jar xerces-j2.jar xerces-j2-xml-apis.jar"
 	# Use special options to switch XML parser to Xerces:
 	ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=\
- org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
+org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 	-Djavax.xml.parsers.SAXParserFactory=\
 org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
 	-Dxml.catalog.files=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml;/etc/xml/catalog;${CATALOG} \
