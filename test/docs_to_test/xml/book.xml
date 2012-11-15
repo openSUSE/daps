@@ -429,6 +429,17 @@
               </caution>
             </listitem>
           </varlistentry>
+          <varlistentry>
+            <term>Variablelist with elements</term>
+            <listitem>
+              <note>
+                <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                  eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                  voluptua.</para>
+              </note>
+            </listitem>
+          </varlistentry>
+
         </variablelist>
       </sect1>
       <sect1 id="lists.calloutlist">
@@ -713,7 +724,7 @@
           invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
 
       </sect1>
-      
+
     </chapter>
     <chapter id="screens">
       <title>Screens</title>
@@ -747,7 +758,65 @@
       <abstract>
         <para>Lore ipsum...</para>
       </abstract>
+      <variablelist>
+        <title>Links and Cross References</title>
+        <varlistentry>
+          <term>Only link</term>
+          <listitem>
+            <para>
+              <ulink url="www.Lorem.ipsum"/>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Link with name</term>
+          <listitem>
+            <para>
+              <ulink url="www.Ipsum.lorem">ed diam voluptua</ulink>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Cross References - footnot</term>
+          <listitem>
+            <para>
+              <footnoteref linkend="links-and-xrefs"/>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Cross References - biblioref</term>
+          <listitem>
+            <para>
+              <biblioref linkend="inlines"/>
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+
     </chapter>
+    <chapter id="inline-media">
+      <title>Inline media</title>
+      <para>
+        <inlinemediaobject>
+          <audioobject>
+            <audiodata/>
+          </audioobject>
+          <imageobject>
+            <imagedata/>
+          </imageobject>
+          <textobject>
+            <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat.</para>
+          </textobject>
+        </inlinemediaobject>
+      </para>
+      <para>
+        <inlinegraphic/>
+      </para>
+    </chapter>
+
   </part>
   <part id="profiling">
     <title>Profiling</title>
