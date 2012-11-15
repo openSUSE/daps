@@ -75,7 +75,8 @@
       </xsl:call-template>
       
       <xsl:call-template name="article.titlepage"/>
-      
+
+      <div class="line">
       <xsl:variable name="toc.params">
         <xsl:call-template name="find.path.params">
           <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
@@ -90,7 +91,7 @@
           </xsl:call-template>
         </xsl:with-param>
       </xsl:call-template>
-      
+      </div>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/legalnotice"/>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/legalnotice"/>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/legalnotice"/>
