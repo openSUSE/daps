@@ -18,28 +18,28 @@ Usage: daps-xslt [OPTIONS] -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSL
 This is a wrapper script for daps to define which xsltprocessor it should use.
 		
 XSLT-STYLESHEET:
--s,--stylesheet: Define the XSLT-stylesheet used 
+-s,--stylesheet: Define the XSLT-stylesheet used. 
 	 
 XML-DOCUMENT:
--f,--file Define the XML-Document that should be used
+-f,--file Define the XML-Document that should be used.
 
 XSLTPROCESSOR:
-Define your xsltprocessor (xsltproc or saxon) and options specific to it.
-See man saxon or man xsltproc for these options 
+Define the xsltprocessor (xsltproc or saxon) and options specific to it.
+See man saxon or man xsltproc for these options. 
 						
 OUTPUT:
--o,--output Create or write to an existing document
+-o,--output Create or write to an existing document.
 		
 The following options are optional:
--x,--xinclude: do XInclude processing on document input
---param name value : pass a (parameter,value) pair
---stringparam name value : pass a (parameter, UTF8 string value) pair
---nonet: refuse to fetch DTDs or entities over network
---novalid: skip the Dtd loading phase
+-x,--xinclude: do XInclude processing on document input.
+--param name value : pass a (parameter,value) pair.
+--stringparam name value : pass a (parameter, UTF8 string value) pair.
+--nonet: refuse to fetch DTDs or entities over network.
+--novalid: skip the Dtd loading phase.
 --catalog: Define additional xml-catalogs needed (Default catalogs: /etc/xml/catalog,
-	   /usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml
---debug: Activate a debug mode which outputs all variable values used
--h,--help: Display this help" 
+	   /usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml).
+--debug: Activate a debug mode which outputs all variable values used.
+-h,--help: Display this help." 
 	
 	
 }
@@ -56,7 +56,7 @@ processor () {
 		run-saxon $REST $OP $DOC $STYLE ${SPARAM} ${SSTRINGPARAM}  
 	fi
 }	
-# debug funtion to check if all variables are correct
+# debug function to check if all variables are correct
 debug() {
 	if [[ -n $DEBUG ]]; then
 		echo $PARAM $SPARAM
@@ -84,9 +84,10 @@ org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 org.apache.xerces.jaxp.SAXParserFactoryImpl ${XINCLUDEFLAG} \
 	-Dxml.catalog.files=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml;/etc/xml/catalog;${CATALOG} \
 	"
-	if [[ -n $DEBUG ]]; then 
-		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=3"
-	fi
+#Changing the verbosity this way does not work, needs to be changed manually in CatalogManager.properties
+#	if [[ -n $DEBUG ]]; then 
+#		ADDITIONAL_FLAGS+="-Dxml.catalog.verbosity=3"
+#	fi
 	export ADDITIONAL_FLAGS
 	# Extend CLASSPATH variable
 	 export CLASSPATH="${CATALOGPROP}:${SAXON_JAR}"
