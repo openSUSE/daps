@@ -643,6 +643,7 @@
             </tbody>
           </tgroup>
         </table>
+
         <para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
           tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
 
@@ -816,7 +817,46 @@
         <inlinegraphic/>
       </para>
     </chapter>
-
+    <chapter id="citations">
+      <title>Citations</title>
+      <variablelist>
+        <varlistentry>
+          <term>Citation</term>
+          <listitem>
+            <para>
+              <citation>At vero eos et accusam et justo duo dolores et ea rebum.</citation>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Bibliod citation </term>
+          <listitem>
+            <para>
+              <citebiblioid>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                ut aliquip ex ea commodo consequat.</citebiblioid>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Refentry citation</term>
+          <listitem>
+            <para>
+              <citerefentry>
+                <refentrytitle>Lorem ipsum dolor sit amet</refentrytitle>
+              </citerefentry>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Title citation</term>
+          <listitem>
+            <para>
+              <citetitle>quis nostrud exercitation ullamco laboris nisi ut aliquip</citetitle>
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </chapter>
   </part>
   <part id="profiling">
     <title>Profiling</title>
@@ -845,8 +885,15 @@
         <para>
           <sgmltag class="genentity">ent4</sgmltag>:&ent4;</para>
       </sect1>
-
+      <sect1 id="sec.booktest3.3">
+        <title>Section 1.3</title>
+        <para lang="en">para with lang en</para>
+        <para lang="de">para with lang de</para>
+        <para lang="es">para with lang es</para>
+        <para lang="cn">para with lang cn</para>
+      </sect1>
     </chapter>
+
   </part>
 
 </book>
