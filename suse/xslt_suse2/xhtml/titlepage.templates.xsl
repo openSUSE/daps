@@ -190,6 +190,10 @@
        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
   </xsl:template>
 
+  <xsl:template name="article.titlepage.separator">
+    <!-- Don't insert a horizontal rule after article titles. -->
+  </xsl:template>
+
   <!-- ===================================================== -->
   <!-- book titlepage templates --> 
   <xsl:template name="set.titlepage.separator"/>
