@@ -65,31 +65,32 @@
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        
-        <!--<xsl:message> >> Begin For loop:</xsl:message>-->
-        <xsl:for-each select="ancestor::*">
-              <xsl:call-template name="breadcrumbs.create.link"/>
-        </xsl:for-each>
-        <!--<xsl:message> >> End For loop:</xsl:message>-->
-        <xsl:call-template name="breadcrumbs.create.link"/>
+        <xsl:variable name="rootname" select="local-name(/*)"/>
+        <xsl:choose>
+          <xsl:when test="$rootname = 'book'
+                       or $rootname = 'set'">
+            <xsl:for-each select="ancestor-or-self::*">
+              <xsl:choose>
+                <xsl:when test="not(ancestor::*)">
+                  <a href="{concat($root.filename, $html.ext)}"
+                  class="book-link"
+                  title="Documentation">
+                    <span class="book-icon">Documentation</span>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
+                  <xsl:apply-templates select="." mode="breadcrumbs"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="breadcrumbs"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="breadcrumbs.create.link">
-             <xsl:choose>
-           <xsl:when test="not(ancestor::*)">
-              <a href="{concat($root.filename, $html.ext)}"
-               class="book-link"
-               title="Documentation">
-                  <span class="book-icon">Documentation</span>
-              </a>
-           </xsl:when>
-           <xsl:otherwise>
-             <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
-             <xsl:apply-templates select="." mode="breadcrumbs"/>
-           </xsl:otherwise>
-         </xsl:choose>
   </xsl:template>
 
   <!-- ===================================================== -->
