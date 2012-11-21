@@ -54,6 +54,9 @@
           <xsl:with-param name="context" select="."/>
         </xsl:call-template>
       </xsl:attribute>
+      <xsl:if test="$class = 'single-crumb'">
+        <span class="book2-icon"> </span>
+      </xsl:if>
       <xsl:value-of select="string($title)"/>
     </xsl:element>
   </xsl:template>
@@ -63,15 +66,42 @@
     <xsl:param name="next"/>
     <xsl:param name="debug"/>
 
+    <xsl:variable name="rootelementname">
+      <xsl:choose>
+        <xsl:when test="local-name(key('id', $rootid)) != ''">
+          <xsl:value-of select="local-name(key('id', $rootid))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="local-name(/*)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+<!-- What's the general idea here? Well...
+#1 My $rootid is not an article, so my ancestor and myself are iterated through, to see who qualifies to become a breadcrumb
+  #1 I am an ancestor of the $rootid, so I am not part of the breadcrumbs (because I should not exist in the output)
+  #2 I am the $rootid or, if none exists, the XML root element – I get that fancy book icon
+  #3 I am just a lowly element, but when I am all grown up, I will become a proper breadcrumb.
+#2 My $rootid is an article, in fact, I am the $rootid, so I get a single crumb and am not bothered with anything more
+
+What does not work?
+* not(ancestor-or-self::*[key('id', $rootid)]) doesn't ever seem to deliver anything back, but I would like to have
+  sets here, if I am building just a single book
+* not(ancestor::*) or . = *[key('id', $rootid)] – the first part works, and thanks to the fact that the previous condition
+  doesn't work, it will always return the set (i.e. /*), even though the set should already be excluded when building a book;
+  the second part does not work at all.
+-->
+
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        <xsl:variable name="rootname" select="local-name(/*)"/>
         <xsl:choose>
-          <xsl:when test="$rootname = 'book'
-                       or $rootname = 'set'">
+          <xsl:when test="$rootelementname != 'article'">
             <xsl:for-each select="ancestor-or-self::*">
               <xsl:choose>
-                <xsl:when test="not(ancestor::*)">
+                <xsl:when test="not(ancestor-or-self::*[key('id', $rootid)])">
+                  <xsl:message><xsl:value-of select="$rootid"/>: <xsl:value-of select="local-name(.)"/>, YES</xsl:message>
+                </xsl:when>
+                <xsl:when test="not(ancestor::*) or . = *[key('id', $rootid)]">
                   <a href="{concat($root.filename, $html.ext)}"
                   class="book-link"
                   title="Documentation">
@@ -86,7 +116,9 @@
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="." mode="breadcrumbs"/>
+            <xsl:apply-templates select="." mode="breadcrumbs">
+              <xsl:with-param name="class">single-crumb</xsl:with-param>
+            </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -107,7 +139,7 @@
         </a>
         <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
-          <h6>Select a Language</h6>
+          <h6>Select a Language</h6><!-- FIXME: Add localization -->
           <a class="selected" href="#">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
@@ -121,7 +153,7 @@
         </a>
         <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
-          <h6>Select a Format</h6>
+          <h6>Select a Format</h6><!-- FIXME: Add localization -->
           <a class="selected" href="#">Web Page</a>
           <a href="#">Single Web Page</a>
           <a href="#">PDF</a>
@@ -144,7 +176,7 @@
     <xsl:param name="next"/>
 
     <div class="buttons">
-      <a class="top-button button" href="#">Top</a>
+      <a class="top-button button" href="#">Top</a><!-- FIXME: Add localization -->
       <xsl:if test="not(self::set|self::article)">
       <div class="button">
         <xsl:call-template name="header.navigation">
@@ -185,13 +217,13 @@
     
     <div id="_find-area" class="active">
       <div class="inactive-contents">
-        <a href="#" id="_find-area-button" class="tool" title="Find">
+        <a href="#" id="_find-area-button" class="tool" title="Find"><!-- FIXME: Add localization -->
           <span class="pad-tools-50-out">
             <span class="pad-tools-50-in">
               <span class="tool-spacer">
-                <span class="find-icon">Find</span>
+                <span class="find-icon">Find</span><!-- FIXME: Add localization -->
               </span>
-              <span class="tool-label">Find</span>
+              <span class="tool-label">Find</span><!-- FIXME: Add localization -->
             </span>
           </span>
         </a>
@@ -200,8 +232,8 @@
         <form action="post">
           <div class="find-form">
             <input type="text" id="_find-input" value=""/>
-            <button id="_find-button" alt="Find" title="Find">Find</button>
-            <label id="_find-input-label">Find</label>
+            <button id="_find-button" alt="Find" title="Find">Find</button><!-- FIXME: Add localization -->
+            <label id="_find-input-label">Find</label><!-- FIXME: Add localization -->
             <xsl:call-template name="clearme"/>
           </div>
         </form>
@@ -214,81 +246,91 @@
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
-    
     <xsl:variable name="rootnode"  select="generate-id(/*) = generate-id(.)"/>
-    
-    <div id="_toolbar-wrap">
-      <div id="_toolbar">
-        <xsl:choose>
-          <xsl:when test="$rootnode">
-            <!-- We don't need it for a set -->
-            <div id="_toc-area" class="inactive"> </div>
-          </xsl:when>
-          <xsl:otherwise>
-            <div id="_toc-area" class="inactive">
-              <a id="_toc-area-button" class="tool" title="Contents">
-                <xsl:attribute name="href">
-                  <xsl:call-template name="href.target">
-                    <!-- FIXME: -->
-                    <xsl:with-param name="object" select="/*"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <span class="tool-spacer">
-                  <span class="toc-icon">Contents</span>
-                  <xsl:call-template name="clearme">
-                    <xsl:with-param name="wrapper">span</xsl:with-param>
-                  </xsl:call-template>
-                </span>
-                <span class="tool-label">Contents</span>
-              </a>
-              <div class="active-contents bubble-corner"> </div>
-              <div class="active-contents bubble">
-                <div class="bubble-container">
-                  <h6>
-                    <xsl:apply-templates mode="title.markup"
-                      select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
-                  </h6>
-                  <div id="_bubble-toc">
-                    <xsl:call-template name="bubble-toc"/>
+    <xsl:variable name="rootelementname">
+    <xsl:choose>
+      <xsl:when test="local-name(key('id', $rootid)) != ''">
+        <xsl:value-of select="local-name(key('id', $rootid))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="local-name(/*)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$rootelementname != 'article'">
+      <div id="_toolbar-wrap">
+        <div id="_toolbar">
+          <xsl:choose>
+            <xsl:when test="$rootnode">
+              <!-- We don't need it for a set -->
+              <div id="_toc-area" class="inactive"> </div>
+            </xsl:when>
+            <xsl:otherwise>
+              <div id="_toc-area" class="inactive">
+                <a id="_toc-area-button" class="tool" title="Contents">
+                  <xsl:attribute name="href">
+                    <xsl:call-template name="href.target">
+                      <!-- FIXME: -->
+                      <xsl:with-param name="object" select="/*"/>
+                    </xsl:call-template>
+                  </xsl:attribute>
+                  <span class="tool-spacer">
+                    <span class="toc-icon">Contents</span><!-- FIXME: Add localization -->
+                    <xsl:call-template name="clearme">
+                      <xsl:with-param name="wrapper">span</xsl:with-param>
+                    </xsl:call-template>
+                  </span>
+                  <span class="tool-label">Contents</span><!-- FIXME: Add localization -->
+                </a>
+                <div class="active-contents bubble-corner"> </div>
+                <div class="active-contents bubble">
+                  <div class="bubble-container">
+                    <h6>
+                      <xsl:apply-templates mode="title.markup"
+                        select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
+                    </h6>
+                    <div id="_bubble-toc">
+                      <xsl:call-template name="bubble-toc"/>
+                    </div>
+                    <xsl:call-template name="clearme"/>
                   </div>
-                  <xsl:call-template name="clearme"/>
                 </div>
               </div>
-            </div>
-          </xsl:otherwise>
-        </xsl:choose>
-        
-        <xsl:choose>
-          <xsl:when test="self::set|self::article">
-            <div id="_nav-area" class="inactive"></div>
-          </xsl:when>
-          <xsl:otherwise>
-            <div id="_nav-area" class="inactive">
-              <div class="tool">
-                <span class="nav-inner">
-                  <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
-                  <!-- Add navigation -->
-                  <xsl:call-template name="header.navigation">
-                    <xsl:with-param name="next" select="$next"/>
-                    <xsl:with-param name="prev" select="$prev"/>
-                    <xsl:with-param name="nav.context" select="$nav.context"/>
-                  </xsl:call-template>
-                </span>
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:choose>
+            <xsl:when test="self::set|self::article">
+              <div id="_nav-area" class="inactive"></div>
+            </xsl:when>
+            <xsl:otherwise>
+              <div id="_nav-area" class="inactive">
+                <div class="tool">
+                  <span class="nav-inner">
+                    <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
+                    <!-- Add navigation -->
+                    <xsl:call-template name="header.navigation">
+                      <xsl:with-param name="next" select="$next"/>
+                      <xsl:with-param name="prev" select="$prev"/>
+                      <xsl:with-param name="nav.context" select="$nav.context"/>
+                    </xsl:call-template>
+                  </span>
+                </div>
               </div>
-            </div>
-          </xsl:otherwise>
-        </xsl:choose>
-        
-        <!-- Do not create a Find area for now, instead of focus on remaining
-             missing essentials. Make Find functional later. -->
-        <!-- <xsl:call-template name="create-find-area">
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template> -->
-        
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <!-- Do not create a Find area for now, instead of focus on remaining
+               missing essentials. Make Find functional later. -->
+          <!-- <xsl:call-template name="create-find-area">
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="prev" select="$prev"/>
+            <xsl:with-param name="nav.context" select="$nav.context"/>
+          </xsl:call-template> -->
+
+        </div>
       </div>
-    </div>
+    </xsl:if>
   </xsl:template>
   
   <!-- ===================================================== -->
@@ -397,7 +439,7 @@
           <span id="_share-fb">Facebook</span> &#x2022; <span
             id="_share-gp">Google+</span> &#x2022; <span
             id="_share-tw">Twitter</span> &#x2022; <span
-            id="_share-mail">Mail</span>
+            id="_share-mail">E-Mail</span>
         </div>
       </xsl:if>
       <div class="print"><span id="_print-button">
