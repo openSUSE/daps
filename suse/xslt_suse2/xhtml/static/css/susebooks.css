@@ -14,21 +14,20 @@ sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
 fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
 menu, nav, output, section, summary, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
-	display: block;
+    display: block;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 a {
@@ -182,12 +181,38 @@ html, body {
     text-decoration: none;
 }
 
+
+#_header .crumbs .single-crumb {
+    line-height: 36px;
+    padding: 0 10px 0 0;
+    margin: 0;
+    height: 36px;
+    display: block;
+    background-color: #EFEFF0;
+    border-radius: 18px;
+}
+
+#_header .crumbs .single-crumb:hover, #_header .crumbs .single-crumb:focus, #_header .crumbs .single-crumb:active {
+    background-color: #999;
+    color: #FFF;
+}
+
+#_header .crumbs .book2-icon {
+    width: 36px;
+    height: 36px;
+    background-position: 0px 0px;
+    margin: -4px 5px 0 0;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .book-icon, .toc-icon, .find-icon, .tools-icon {
     display: block;
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
-#_find-button, #_content .ulink:after, .bubble-corner {
+#_find-button, #_content .ulink:after, .bubble-corner, .book2-icon {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
