@@ -48,16 +48,31 @@
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
       </xsl:call-template>
-      <xsl:attribute name="href">
-        <xsl:call-template name="href.target">
-          <xsl:with-param name="object" select="."/>
-          <xsl:with-param name="context" select="."/>
-        </xsl:call-template>
-      </xsl:attribute>
-      <xsl:if test="$class = 'single-crumb'">
-        <span class="book2-icon"> </span>
-      </xsl:if>
-      <xsl:value-of select="string($title)"/>
+      <xsl:choose>
+        <xsl:when test="$class='book-link'">
+          <xsl:attribute name="href">
+            <xsl:value-of select="concat($root.filename, $html.ext)"/>
+          </xsl:attribute>
+          <xsl:attribute name="title">
+            <xsl:value-of select="string($title)"/>
+          </xsl:attribute>
+          <span class="book-icon">
+            <xsl:value-of select="string($title)"/>
+          </span>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="href">
+            <xsl:call-template name="href.target">
+              <xsl:with-param name="object" select="."/>
+              <xsl:with-param name="context" select="."/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:if test="$class = 'single-crumb'">
+            <span class="book2-icon"> </span>
+          </xsl:if>
+          <xsl:value-of select="string($title)"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
   
@@ -76,37 +91,21 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
-<!-- What's the general idea here? Well...
-#1 My $rootid is not an article, so my ancestor and myself are iterated through, to see who qualifies to become a breadcrumb
-  #1 I am an ancestor of the $rootid, so I am not part of the breadcrumbs (because I should not exist in the output)
-  #2 I am the $rootid or, if none exists, the XML root element – I get that fancy book icon
-  #3 I am just a lowly element, but when I am all grown up, I will become a proper breadcrumb.
-#2 My $rootid is an article, in fact, I am the $rootid, so I get a single crumb and am not bothered with anything more
-
-What does not work?
-* not(ancestor-or-self::*[key('id', $rootid)]) doesn't ever seem to deliver anything back, but I would like to have
-  sets here, if I am building just a single book
-* not(ancestor::*) or . = *[key('id', $rootid)] – the first part works, and thanks to the fact that the previous condition
-  doesn't work, it will always return the set (i.e. /*), even though the set should already be excluded when building a book;
-  the second part does not work at all.
--->
-
+    
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
         <xsl:choose>
           <xsl:when test="$rootelementname != 'article'">
             <xsl:for-each select="ancestor-or-self::*">
               <xsl:choose>
-                <xsl:when test="not(ancestor-or-self::*[key('id', $rootid)])">
-                  <xsl:message><xsl:value-of select="$rootid"/>: <xsl:value-of select="local-name(.)"/>, YES</xsl:message>
-                </xsl:when>
-                <xsl:when test="not(ancestor::*) or . = *[key('id', $rootid)]">
-                  <a href="{concat($root.filename, $html.ext)}"
-                  class="book-link"
-                  title="Documentation">
-                    <span class="book-icon">Documentation</span>
-                  </a>
+               <!-- This works for all common cases, but will do foolish things when you build
+                    a $rootid that is nested more than one level deep within the root element
+                    and that $rootid is not an article. Sorry for the pain. -->
+                <xsl:when test="$rootid != '' and not(ancestor::*)"/>
+                <xsl:when test="not(ancestor::*) or self::*[@id = string($rootid)]">
+                  <xsl:apply-templates select="." mode="breadcrumbs">
+                    <xsl:with-param name="class">book-link</xsl:with-param>
+                  </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                   <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
