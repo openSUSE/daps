@@ -39,6 +39,7 @@ $(document).ready(function() {
     labelInputFind();
     
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
+    $('.single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
@@ -107,11 +108,17 @@ $(document).ready(function() {
 
 function activate( elm ) {
     var element = elm;
-    if ((element == '_toc-area') || (element == '_find-area') || (element == '_language-picker' || element == '_format-picker')) {
+    if ((element == '_toc-area') || (element == '_find-area') ||
+        (element == '_language-picker' || element == '_format-picker') ||
+        (element == '_fixed-header-wrap')) {
         deactivate();
-        if ( document.getElementById(element) ) {
-            exchClass( '#' + element , 'inactive', 'active' );
-            if ((element == '_find-area')) {
+        exchClass( '#' + element , 'inactive', 'active' );
+        if (element == '_fixed-header-wrap') {
+            $('.single-crumb').unbind('click');
+            $('.single-crumb').click(function(){deactivate(); return false;});
+        }
+        else {
+            if (element == '_find-area') {
                 $('#_find-input').focus();
             }
             else if ((element == '_toc-area')) {
@@ -139,11 +146,14 @@ function deactivate() {
             exchClass( '#' + changeClass[i] , 'active', 'inactive');
             $('#' + changeClass[i] + '-button').unbind('click');
     }
+    $('.single-crumb').unbind('click');
+    exchClass('#_fixed-header-wrap', 'active', 'inactive');
     $('#_find-area-button').unbind('click');
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_find-area-button').click(function(){activate('_find-area'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
+    $('.single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     exchClass( '#_find-area', 'inactive', 'active' );
 }
             

@@ -35,15 +35,28 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:variable name="rootelementname">
+    <xsl:choose>
+      <xsl:when test="local-name(key('id', $rootid)) != ''">
+        <xsl:value-of select="local-name(key('id', $rootid))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="local-name(/*)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <!-- ===================================================== -->
   <xsl:template
     match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
+    <xsl:param name="context">header</xsl:param>
+
     <xsl:variable name="title">
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
     </xsl:variable>
+
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
@@ -71,6 +84,11 @@
             <span class="book2-icon"> </span>
           </xsl:if>
           <xsl:value-of select="string($title)"/>
+          <xsl:if test="$context = 'fixed-header'">
+            (<xsl:call-template name="gentext">
+              <xsl:with-param name="key">contentsoverview</xsl:with-param>
+            </xsl:call-template>)
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
@@ -79,18 +97,8 @@
   <xsl:template name="breadcrumbs.navigation">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
+    <xsl:param name="context">header</xsl:param>
     <xsl:param name="debug"/>
-
-    <xsl:variable name="rootelementname">
-      <xsl:choose>
-        <xsl:when test="local-name(key('id', $rootid)) != ''">
-          <xsl:value-of select="local-name(key('id', $rootid))"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="local-name(/*)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
@@ -117,6 +125,7 @@
           <xsl:otherwise>
             <xsl:apply-templates select="." mode="breadcrumbs">
               <xsl:with-param name="class">single-crumb</xsl:with-param>
+              <xsl:with-param name="context" select="$context"/>
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
@@ -223,11 +232,12 @@
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
     
-    <div id="_fixed-header-wrap">
+    <div id="_fixed-header-wrap" class="inactive">
       <div id="_fixed-header">
         <xsl:call-template name="breadcrumbs.navigation">
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>
+          <xsl:with-param name="context">fixed-header</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="create.header.buttons">
           <xsl:with-param name="prev" select="$prev"/>
@@ -235,6 +245,20 @@
         </xsl:call-template>
         <xsl:call-template name="clearme"/>
       </div>
+      <xsl:if test="$rootelementname = 'article'">
+      <div class="active-contents bubble">
+        <div class="bubble-container">
+          <h6>
+            <xsl:apply-templates mode="title.markup"
+              select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
+          </h6>
+          <div id="_bubble-toc">
+            <xsl:call-template name="bubble-toc"/>
+          </div>
+          <xsl:call-template name="clearme"/>
+        </div>
+      </div>
+      </xsl:if>
     </div>
   </xsl:template>
   
@@ -283,16 +307,6 @@
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
     <xsl:variable name="rootnode"  select="generate-id(/*) = generate-id(.)"/>
-    <xsl:variable name="rootelementname">
-    <xsl:choose>
-      <xsl:when test="local-name(key('id', $rootid)) != ''">
-        <xsl:value-of select="local-name(key('id', $rootid))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="local-name(/*)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    </xsl:variable>
         <xsl:variable name="localisationcontents">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">contentsoverview</xsl:with-param>
