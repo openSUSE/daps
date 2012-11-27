@@ -138,7 +138,11 @@
         </a>
         <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
-          <h6>Select a Language</h6><!-- FIXME: Add localization -->
+          <h6>
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">selectlanguage</xsl:with-param>
+            </xsl:call-template>
+          </h6>
           <a class="selected" href="#">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
@@ -152,11 +156,31 @@
         </a>
         <div class="bubble-corner active-contents"> </div>
         <div class="bubble active-contents">
-          <h6>Select a Format</h6><!-- FIXME: Add localization -->
-          <a class="selected" href="#">Web Page</a>
-          <a href="#">Single Web Page</a>
-          <a href="#">PDF</a>
-          <a href="#">E-Book (EPUB)</a>
+          <h6>
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">selectformat</xsl:with-param>
+            </xsl:call-template>
+          </h6>
+          <a class="selected" href="#">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">formathtml</xsl:with-param>
+            </xsl:call-template>
+          </a>
+          <a href="#">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">formatsinglehtml</xsl:with-param>
+            </xsl:call-template>
+          </a>
+          <a href="#">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">formatpdf</xsl:with-param>
+            </xsl:call-template>
+          </a>
+          <a href="#">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">formatepub</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </div>
       </div>
     </div>
@@ -175,7 +199,11 @@
     <xsl:param name="next"/>
 
     <div class="buttons">
-      <a class="top-button button" href="#">Top</a><!-- FIXME: Add localization -->
+      <a class="top-button button" href="#">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">totopofpage</xsl:with-param>
+        </xsl:call-template>
+      </a>
       <xsl:if test="not(self::set|self::article)">
       <div class="button">
         <xsl:call-template name="header.navigation">
@@ -213,16 +241,21 @@
   <xsl:template name="create-find-area">
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
+    <xsl:variable name="localisationfind">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">find</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
     
     <div id="_find-area" class="active">
       <div class="inactive-contents">
-        <a href="#" id="_find-area-button" class="tool" title="Find"><!-- FIXME: Add localization -->
+        <a href="#" id="_find-area-button" class="tool" title="{$localisationfind}">
           <span class="pad-tools-50-out">
             <span class="pad-tools-50-in">
               <span class="tool-spacer">
-                <span class="find-icon">Find</span><!-- FIXME: Add localization -->
+                <span class="find-icon"><xsl:value-of select="$localisationfind"/></span>
               </span>
-              <span class="tool-label">Find</span><!-- FIXME: Add localization -->
+              <span class="tool-label"><xsl:value-of select="$localisationfind"/></span>
             </span>
           </span>
         </a>
@@ -230,9 +263,13 @@
       <div class="active-contents">
         <form action="post">
           <div class="find-form">
-            <input type="text" id="_find-input" value=""/>
-            <button id="_find-button" alt="Find" title="Find">Find</button><!-- FIXME: Add localization -->
-            <label id="_find-input-label">Find</label><!-- FIXME: Add localization -->
+            <input type="text" id="_find-input" value="{$localisationfind}"/>
+            <button id="_find-button" alt="{$localisationfind}" title="{$localisationfind}">
+              <xsl:value-of select="$localisationfind"/>
+            </button>
+            <label id="_find-input-label">
+              <xsl:value-of select="$localisationfind"/>
+            </label>
             <xsl:call-template name="clearme"/>
           </div>
         </form>
@@ -256,6 +293,12 @@
       </xsl:otherwise>
     </xsl:choose>
     </xsl:variable>
+        <xsl:variable name="localisationcontents">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">contentsoverview</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+
     <xsl:if test="$rootelementname != 'article'">
       <div id="_toolbar-wrap">
         <div id="_toolbar">
@@ -266,7 +309,7 @@
             </xsl:when>
             <xsl:otherwise>
               <div id="_toc-area" class="inactive">
-                <a id="_toc-area-button" class="tool" title="Contents">
+                <a id="_toc-area-button" class="tool" title="{$localisationcontents}">
                   <xsl:attribute name="href">
                     <xsl:call-template name="href.target">
                       <!-- FIXME: -->
@@ -274,12 +317,16 @@
                     </xsl:call-template>
                   </xsl:attribute>
                   <span class="tool-spacer">
-                    <span class="toc-icon">Contents</span><!-- FIXME: Add localization -->
+                    <span class="toc-icon">
+                      <xsl:value-of select="$localisationcontents"/>
+                    </span>
                     <xsl:call-template name="clearme">
                       <xsl:with-param name="wrapper">span</xsl:with-param>
                     </xsl:call-template>
                   </span>
-                  <span class="tool-label">Contents</span><!-- FIXME: Add localization -->
+                  <span class="tool-label">
+                    <xsl:value-of select="$localisationcontents"/>
+                  </span>
                 </a>
                 <div class="active-contents bubble-corner"> </div>
                 <div class="active-contents bubble">
@@ -306,7 +353,11 @@
               <div id="_nav-area" class="inactive">
                 <div class="tool">
                   <span class="nav-inner">
-                    <span class="tool-label">Navigation</span><!-- FIXME: Add localization -->
+                    <span class="tool-label">
+                      <xsl:call-template name="gentext">
+                        <xsl:with-param name="key">navigation</xsl:with-param>
+                      </xsl:call-template>
+                    </span>
                     <!-- Add navigation -->
                     <xsl:call-template name="header.navigation">
                       <xsl:with-param name="next" select="$next"/>
@@ -433,12 +484,29 @@
         <div class="online-contents share">
           <strong><xsl:call-template name="gentext">
               <xsl:with-param name="key">sharethispage</xsl:with-param>
-            </xsl:call-template></strong>
+            </xsl:call-template>
+          </strong>
           <!-- &#x2022; = &bull; -->
-          <span id="_share-fb">Facebook</span> &#x2022; <span
-            id="_share-gp">Google+</span> &#x2022; <span
-            id="_share-tw">Twitter</span> &#x2022; <span
-            id="_share-mail">E-Mail</span>
+          <span id="_share-fb">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">shareviafacebook</xsl:with-param>
+            </xsl:call-template>
+          </span> &#x2022; 
+          <span id="_share-gp">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">shareviagoogleplus</xsl:with-param>
+            </xsl:call-template>
+          </span> &#x2022; 
+          <span id="_share-tw">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">shareviatwitter</xsl:with-param>
+            </xsl:call-template>
+          </span> &#x2022; 
+          <span id="_share-mail">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">shareviaemail</xsl:with-param>
+            </xsl:call-template>
+          </span>
         </div>
       </xsl:if>
       <div class="print"><span id="_print-button">
@@ -701,28 +769,35 @@
       <p>© 2012 SUSE</p>
       <ul>
         <li>
-          <a href="http://www.suse.com/company/careers/" target="_top"
-            >Careers</a>
+          <a href="http://www.suse.com/company/careers/" target="_top">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">susecareers</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </li>
         <li>
-          <a href="http://www.suse.com/company/legal/" target="_top"
-            >Legal</a>
+          <a href="http://www.suse.com/company/legal/" target="_top">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">suselegal</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </li>
         <li>
-          <a
-            href="http://www.suse.com/common/inc/feedback_overlay.html?iframe=true"
-            class="feedback">Feedback</a>
+          <a href="http://www.suse.com/company/" target="_top">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">suseabout</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </li>
         <li>
-          <a href="http://www.suse.com/company/" target="_top">About</a>
-        </li>
-        <li>
-          <a
-            href="http://www.suse.com/ContactsOffices/contacts_offices.jsp"
-            target="_top">Contact Us</a>
+          <a href="http://www.suse.com/ContactsOffices/contacts_offices.jsp"
+            target="_top">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">susecontact</xsl:with-param>
+            </xsl:call-template>
+          </a>
         </li>
       </ul>
-      <p id="_suse_phone">+420-283-007-311</p>
     </div>
     
   </xsl:template>
