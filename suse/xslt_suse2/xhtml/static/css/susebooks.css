@@ -270,6 +270,26 @@ html, body {
     background-position: -18px -72px;
 }
 
+#_fixed-header .book2-icon {
+    width: 18px;
+    height: 15px;
+    margin: 1px 0;
+    background-position: -199px -72px;
+}
+
+.inactive #_fixed-header a:hover .book2-icon {
+    background-position: -217px -72px;
+}
+
+.active #_fixed-header .book2-icon {
+    background-position: -235px -72px;
+}
+
+.active #_fixed-header a:hover .book2-icon {
+    background-position: -253px -72px;
+}
+
+
 /* Language and Format Pickers*/
 
 #_pickers {
@@ -549,8 +569,12 @@ html, body {
     padding: 0;
 }
 
-#_toolbar .bubble-container, #_fixed-header-wrap .bubble-container {
+#_toolbar .bubble-container {
     padding: 0 10px 10px;
+}
+
+#_fixed-header-wrap .bubble-container {
+    padding: 10px;
 }
 
 #_bubble-toc {
