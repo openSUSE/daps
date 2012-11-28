@@ -28,24 +28,6 @@
   
   <xsl:import href="&www;/chunk-common.xsl"/>
 
-  <xsl:template name="clearme">
-    <xsl:param name="wrapper">div</xsl:param>
-    <xsl:element name="{$wrapper}" namespace="http://www.w3.org/1999/xhtml">
-      <xsl:attribute name="class">clearme</xsl:attribute>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:variable name="rootelementname">
-    <xsl:choose>
-      <xsl:when test="local-name(key('id', $rootid)) != ''">
-        <xsl:value-of select="local-name(key('id', $rootid))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="local-name(/*)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
   <!-- ===================================================== -->
   <xsl:template
     match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
@@ -134,86 +116,25 @@
   </xsl:template>
 
   <!-- ===================================================== -->
-  <xsl:template name="pickers">
-    <xsl:if test="$generate.pickers != 0">
-    <div id="_pickers">
-      <div id="_language-picker" class="inactive">
-        <a id="_language-picker-button" href="#">
-          <span class="picker">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
-            </xsl:call-template>
-          </span>
-        </a>
-        <div class="bubble-corner active-contents"> </div>
-        <div class="bubble active-contents">
-          <h6>
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">selectlanguage</xsl:with-param>
-            </xsl:call-template>
-          </h6>
-          <a class="selected" href="#">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">LocalisedLanguageName</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </div>
-      </div>
-      <div id="_format-picker" class="inactive">
-        <a id="_format-picker-button" href="#">
-          <span class="picker">Web Page</span>
-        </a>
-        <div class="bubble-corner active-contents"> </div>
-        <div class="bubble active-contents">
-          <h6>
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">selectformat</xsl:with-param>
-            </xsl:call-template>
-          </h6>
-          <a class="selected" href="#">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">formathtml</xsl:with-param>
-            </xsl:call-template>
-          </a>
-          <a href="#">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">formatsinglehtml</xsl:with-param>
-            </xsl:call-template>
-          </a>
-          <a href="#">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">formatpdf</xsl:with-param>
-            </xsl:call-template>
-          </a>
-          <a href="#">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">formatepub</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </div>
-      </div>
-    </div>
-    </xsl:if>
+  <xsl:template name="picker.selection">
+    <a class="selected" href="#">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">formathtml</xsl:with-param>
+      </xsl:call-template>
+    </a>
+    <a  href="#">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">formatsinglehtml</xsl:with-param>
+      </xsl:call-template>
+    </a>
   </xsl:template>
 
   <!-- ===================================================== -->
-  <xsl:template name="create.header.logo">
-    <div id="_logo">
-      <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
-    </div>
-  </xsl:template>
 
-  <xsl:template name="create.header.buttons">
+  <xsl:template name="create.header.buttons.nav">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
-
-    <div class="buttons">
-      <a class="top-button button" href="#">
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key">totopofpage</xsl:with-param>
-        </xsl:call-template>
-      </a>
-      <xsl:if test="not(self::set|self::article)">
+    <xsl:if test="not(self::set|self::article)">
       <div class="button">
         <xsl:call-template name="header.navigation">
           <xsl:with-param name="next" select="$next"/>
@@ -221,10 +142,8 @@
           <!--<xsl:with-param name="nav.context" select="$nav.context"/>-->
         </xsl:call-template>
       </div>
-      </xsl:if>
-      <xsl:call-template name="clearme"/>
-    </div>
-  </xsl:template>
+    </xsl:if>
+</xsl:template>
 
   <!-- ===================================================== -->
   <xsl:template name="fixed-header-wrap">
@@ -398,7 +317,7 @@
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
     <xsl:param name="nav.context"/>
-    
+
     <xsl:variable name="needs.navig">
       <xsl:call-template name="is.node.in.navig">
         <xsl:with-param name="next" select="$next"/>
@@ -484,49 +403,6 @@
   </xsl:template>
 
 
-  <xsl:template name="share.and.print">
-    <xsl:param name="prev" select="/foo"/>
-    <xsl:param name="next" select="/foo"/>
-    <xsl:param name="nav.context"/>
-    
-    <div id="_share-print">
-      <xsl:if test="$generate.sharelinks != 0">
-        <div class="online-contents share">
-          <strong><xsl:call-template name="gentext">
-              <xsl:with-param name="key">sharethispage</xsl:with-param>
-            </xsl:call-template>
-          </strong>
-          <!-- &#x2022; = &bull; -->
-          <span id="_share-fb">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviafacebook</xsl:with-param>
-            </xsl:call-template>
-          </span> &#x2022; 
-          <span id="_share-gp">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviagoogleplus</xsl:with-param>
-            </xsl:call-template>
-          </span> &#x2022; 
-          <span id="_share-tw">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviatwitter</xsl:with-param>
-            </xsl:call-template>
-          </span> &#x2022; 
-          <span id="_share-mail">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviaemail</xsl:with-param>
-            </xsl:call-template>
-          </span>
-        </div>
-      </xsl:if>
-      <div class="print"><span id="_print-button">
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key">printthispage</xsl:with-param>
-        </xsl:call-template></span></div>
-      <xsl:call-template name="clearme"/>
-    </div>
-  </xsl:template>
-
   <!-- ===================================================== -->
   <xsl:template name="bottom.navigation">
     <xsl:param name="prev" select="/foo"/>
@@ -606,22 +482,6 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- ===================================================== -->
-
-  <xsl:template name="body.class.attribute">
-    <xsl:choose>
-      <xsl:when test="($draft.mode = 'yes' or
-                    ($draft.mode = 'maybe' and
-                    ancestor-or-self::*[@status][1]/@status = 'draft'))
-                    and $draft.watermark.image != ''">
-        <xsl:attribute name="class">draft offline</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="class">offline</xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
   <!-- ===================================================== -->
   <xsl:template name="chunk-element-content">
     <xsl:param name="prev"/>
@@ -757,59 +617,6 @@
       </body>
     </html>
     <xsl:value-of select="$chunk.append"/>
-  </xsl:template>
-  
-  
-  <xsl:template name="user.head.content">
-    <xsl:param name="node" select="."/>
-    <xsl:if test="$daps.header.js.library != ''">
-      <xsl:call-template name="make.script.link">
-        <xsl:with-param name="script.filename" select="$daps.header.js.library"/>
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$daps.header.js.custom != ''">
-      <xsl:call-template name="make.script.link">
-        <xsl:with-param name="script.filename" select="$daps.header.js.custom"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template name="user.footer.content">
-    <div id="_footer">
-      <p>© 2012 SUSE</p>
-      <ul>
-        <li>
-          <a href="http://www.suse.com/company/careers/" target="_top">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">susecareers</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </li>
-        <li>
-          <a href="http://www.suse.com/company/legal/" target="_top">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">suselegal</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </li>
-        <li>
-          <a href="http://www.suse.com/company/" target="_top">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">suseabout</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </li>
-        <li>
-          <a href="http://www.suse.com/ContactsOffices/contacts_offices.jsp"
-            target="_top">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">susecontact</xsl:with-param>
-            </xsl:call-template>
-          </a>
-        </li>
-      </ul>
-    </div>
-    
   </xsl:template>
 
 </xsl:stylesheet>

@@ -148,9 +148,32 @@ task before
   <xsl:param name="generate.breadcrumbs" select="1"/>
   <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
   <xsl:param name="breadcrumbs.next">&#9654;<!--&#9658;--></xsl:param>
+
+  <!--  Bubble TOC options -->
+  <xsl:param name="rootelementname">
+    <xsl:choose>
+      <xsl:when test="local-name(key('id', $rootid)) != ''">
+        <xsl:value-of select="local-name(key('id', $rootid))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="local-name(/*)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   
   <xsl:param name="bubbletoc.section.depth">2</xsl:param>
   <xsl:param name="bubbletoc.max.depth">2</xsl:param>
+
+  <xsl:param name="bubbletoc.max.depth.shallow">
+    <xsl:choose>
+      <xsl:when test="$rootelementname = 'article'">
+        <xsl:value-of select="1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="0"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
   
   <!-- Separator for chapter and book name in the XHTML output -->
   <xsl:param name="head.content.title.separator"> | </xsl:param>
