@@ -76,6 +76,12 @@ html, body {
     max-width: 998px;
 }
 
+.single #_content div.part, .single #_content div.chapter, .single #_content div.preface,
+.single #_content div.appendix, .single #_content div.glossary, .single #_content div.reference,
+.single #_content div.refentry, .single #_content div.bibliography, .single #_content div.page-bottom {
+    padding-top: 40px;
+}
+
 #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter,
 #_content > .preface, #_content > .appendix, #_content > .glossary,
@@ -277,7 +283,8 @@ html, body {
     background-position: -199px -72px;
 }
 
-.inactive #_fixed-header a:hover .book2-icon {
+.inactive #_fixed-header a:hover .book2-icon, .inactive #_fixed-header a:focus .book2-icon,
+.inactive #_fixed-header a:active .book2-icon {
     background-position: -217px -72px;
 }
 
@@ -285,7 +292,8 @@ html, body {
     background-position: -235px -72px;
 }
 
-.active #_fixed-header a:hover .book2-icon {
+.active #_fixed-header a:hover .book2-icon, .active #_fixed-header a:focus .book2-icon,
+.active #_fixed-header a:active .book2-icon{
     background-position: -253px -72px;
 }
 
@@ -1050,12 +1058,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     color: #333;
 }
 
-#_suse_phone {
-    margin: 0 !important;
-    float: right !important;
-}
-
-
 /* .CHAPTER/... AREA */
 
 #_content > .set, #_content > .book, #_content > .article, #_content > .part,
@@ -1067,7 +1069,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
-/* Works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
+/* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
 #_content a[id] {
     position: relative;
     top: -33px;
@@ -1116,6 +1118,11 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-radius: 3px;
 }
 
+.single .version-info {
+    position: relative;
+    top: 70px;
+}
+
 #_content .book .title, #_content .set .title {
     font-size: 48px;
     font-weight: normal;
@@ -1125,40 +1132,46 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-align: center;
     color: #439539;
     padding: 70px 0;
-    /*padding: 200px 36px 36px 36px;*/
 }
 
-/*#_content .book .titlepage > div > div:first-child {
-    background: url(../images/chameleon.jpg) scroll no-repeat bottom left;
-    height: 400px;
-}*/
-
-#_content .title {
+#_content .title, #_content .chapter .title, #_content .preface .title,
+#_content .appendix .title, #_content .bibliography .title,
+#_content .reference .title, #_content .part .title {
     font-size: 32px;
     font-weight: normal;
     padding: 30px 0 5px;
     line-height: 120%;
     width: 100%;
+    text-align: left;
     clear: both;
 }
 
-#_content .sect1 .title {
+.single #_content .title, .single #_content .chapter .title,
+.single #_content .preface .title, single #_content .appendix .title,
+.single #_content .bibliography .title, .single #_content .reference .title,
+.single #_content .part .title {
+    padding: 100px 0 5px;
+}
+
+#_content .sect1 .title, .single #_content .sect1 .title {
     font-size: 28px;
     padding: 50px 0 5px;
 }
 
-#_content .sect2 .title {
+#_content .sect2 .title, .single #_content .sect2 .title {
     font-size: 22px;
     padding: 40px 0 0;
 }
 
-#_content .sect3 .title, #_content .refentry h2, h2 {
+#_content .sect3 .title, .single #_content .sect3 .title,
+#_content .refentry h2, h2 {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
 }
 
-#_content .sect4 .title, #_content .sect5 .title {
+#_content .sect4 .title, .single #_content .sect4 .title,
+#_content .sect5 .title, .single #_content .sect5 .title {
     font-size: 16px;
     padding: 53px 0 0;
     margin: 0 0 -33px;

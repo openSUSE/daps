@@ -17,19 +17,28 @@
   xmlns="http://www.w3.org/1999/xhtml">
 
   <xsl:template name="add.version.info">
-    <xsl:variable name="products"
-      select="ancestor-or-self::*/*/productname | ancestor-or-self::*/*/productnumber"/>
-    <xsl:if test="$generate.version.info != 0 and $products">
-      <div class="version-info">
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key">version.info</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates select="$products[self::productname]"/>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="$products[self::productnumber]"/>
-      </div>
+    <xsl:variable name="products" select="ancestor-or-self::*/*/productname[1] |
+                                          ancestor-or-self::*/*/productnumber[1]"/>
+    <xsl:if test="$generate.version.info != 0 and $products and
+                  (local-name(.) = 'article' or local-name(.) = 'book')">
+      <xsl:call-template name="add.version.info.inner">
+        <xsl:with-param name="products" select="$products"/>
+      </xsl:call-template>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template name="add.version.info.inner">
+    <xsl:param name="products"/>
+    <div class="version-info">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">version.info</xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates select="$products[self::productname]"/>
+      <xsl:text> </xsl:text>
+      <xsl:apply-templates select="$products[self::productnumber]"/>
+    </div>
+  </xsl:template>
+
 
   <xsl:template name="add.authorgroup">
     <div>

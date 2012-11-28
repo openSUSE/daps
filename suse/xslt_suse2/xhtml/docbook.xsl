@@ -85,7 +85,8 @@
       <xsl:copy-of select="$head.content.title.separator"/>
       <xsl:choose>
         <xsl:when test="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title">
-          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title" mode="title.markup.textonly"/>
+          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title"
+           mode="title.markup.textonly"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
@@ -285,7 +286,8 @@
   <xsl:template name="create.header.buttons.nav">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
-    <!-- This is a stub. The version in chunk-common does something, though. -->
+    <!-- This is a stub, intentionally.
+         The version in chunk-common does something, though. -->
   </xsl:template>
 
   <xsl:template name="fixed-header-wrap">
@@ -366,22 +368,22 @@
                     ($draft.mode = 'maybe' and
                     ancestor-or-self::*[@status][1]/@status = 'draft'))
                     and $draft.watermark.image != ''">
-        <xsl:attribute name="class">draft offline</xsl:attribute>
+        <xsl:attribute name="class">draft offline single</xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:attribute name="class">offline</xsl:attribute>
+        <xsl:attribute name="class">offline single</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
 <xsl:template match="*" mode="process.root">
-  <xsl:variable name="doc" select="self::*"/>
   <xsl:param name="prev"/>
   <xsl:param name="next"/>
   <xsl:param name="nav.context"/>
   <xsl:param name="content">
     <xsl:apply-imports/>
   </xsl:param>
+  <xsl:variable name="doc" select="self::*"/>
   <xsl:variable name="lang">
     <xsl:apply-templates select="(ancestor-or-self::*/@lang)[last()]" mode="html.lang.attribute"/>
   </xsl:variable>
@@ -390,7 +392,6 @@
 
   <html lang="{$lang}" xml:lang="{$lang}">
     <xsl:call-template name="root.attributes"/>
-    <xsl:call-template name="html.head"/>
     <head>
       <xsl:call-template name="system.head.content">
         <xsl:with-param name="node" select="$doc"/>
@@ -410,6 +411,10 @@
           <div id="_header">
             <xsl:call-template name="create.header.logo"/>
             <xsl:call-template name="pickers"/>
+            <xsl:call-template name="breadcrumbs.navigation">
+              <xsl:with-param name="prev" select="$prev"/>
+              <xsl:with-param name="next" select="$next"/>
+            </xsl:call-template>
             <xsl:call-template name="clearme"/>
           </div>
         </div>

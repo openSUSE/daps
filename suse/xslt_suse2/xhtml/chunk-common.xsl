@@ -619,4 +619,31 @@
     <xsl:value-of select="$chunk.append"/>
   </xsl:template>
 
+  <xsl:template name="body.class.attribute">
+    <xsl:choose>
+      <xsl:when test="($draft.mode = 'yes' or
+                    ($draft.mode = 'maybe' and
+                    ancestor-or-self::*[@status][1]/@status = 'draft'))
+                    and $draft.watermark.image != ''">
+        <xsl:attribute name="class">draft offline</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="class">offline</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+<!-- ======================================================================= -->
+
+  <xsl:template name="add.version.info">
+    <xsl:variable name="products" select="ancestor-or-self::*/*/productname[1] |
+                                          ancestor-or-self::*/*/productnumber[1]"/>
+    <xsl:if test="$generate.version.info != 0 and $products">
+      <xsl:call-template name="add.version.info.inner">
+        <xsl:with-param name="products" select="$products"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+
 </xsl:stylesheet>
