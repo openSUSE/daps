@@ -248,10 +248,6 @@
       <xsl:if test="$rootelementname = 'article'">
       <div class="active-contents bubble">
         <div class="bubble-container">
-          <h6>
-            <xsl:apply-templates mode="title.markup"
-              select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
-          </h6>
           <div id="_bubble-toc">
             <xsl:call-template name="bubble-toc"/>
           </div>

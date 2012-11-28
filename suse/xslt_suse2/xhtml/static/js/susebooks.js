@@ -60,9 +60,13 @@ $(document).ready(function() {
         exchClass('#_bubble-toc > ol > li', 'active', 'inactive');
         $(this).parent('li').removeClass('inactive');
         $(this).parent('li').addClass('active');
-        e.preventDefault();
+        e.stopPropagation();
         return false;
     });
+    $('#_bubble-toc ol > li').not(':has(ol)').children('a').click(function(e) {
+        deactivate();
+    });
+    $('#_bubble-toc > ol').not(':has(li > ol)').addClass('full-width');
     $('#bubble-toc a').click(function(e) {
         e.stopPropagation();
         return true;
@@ -116,6 +120,8 @@ function activate( elm ) {
         if (element == '_fixed-header-wrap') {
             $('.single-crumb').unbind('click');
             $('.single-crumb').click(function(){deactivate(); return false;});
+            exchClass( '#_find-area', 'active', 'inactive' );
+            deactivatePosition = $('html').scrollTop();
         }
         else {
             if (element == '_find-area') {

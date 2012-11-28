@@ -12,11 +12,33 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="exsl">
-  
+
+  <xsl:variable name="rootelementname">
+    <xsl:choose>
+      <xsl:when test="local-name(key('id', $rootid)) != ''">
+        <xsl:value-of select="local-name(key('id', $rootid))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="local-name(/*)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:param name="bubbletoc.max.depth.shallow">
+    <xsl:choose>
+      <xsl:when test="$rootelementname = 'article'">
+        <xsl:value-of select="1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
   <xsl:template name="bubble-toc">
-    <xsl:param name="node" 
-      select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
-    
+  <xsl:param name="node" select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
+
+
     <ol>
       <xsl:apply-templates select="$node" mode="bubble-toc"/>
     </ol>
@@ -106,7 +128,9 @@
       <xsl:if test="( (self::set or self::book or self::part) or 
         $bubbletoc.section.depth &gt; $depth) and 
         count($nodes) &gt; 0 and 
-        $bubbletoc.max.depth &gt; $depth.from.context">
+        $bubbletoc.max.depth &gt; $depth.from.context and
+        ($bubbletoc.max.depth.shallow = '0' or
+        $bubbletoc.max.depth.shallow &gt; $depth.from.context)">
         <ol>
           <xsl:apply-templates mode="bubble-toc" select="$nodes">
             <xsl:with-param name="toc-context" select="$toc-context"/>

@@ -66,7 +66,8 @@ html, body {
     min-width: 450px;
 }
 
-#_header, #_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_header, #_footer, #_toolbar-bottom,
+#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
 #_content > .refentry, #_content > .bibliography, #_content > .page-bottom {
@@ -525,9 +526,17 @@ html, body {
 
 .bubble {
     background-color: #333;
-    position: absolute;
     z-index: 8;
+}
+
+#_toolbar .bubble, #_header .bubble {
+    position: absolute;
     box-shadow: 1px 1px 3px 0px #333;
+}
+
+#_fixed-header-wrap .bubble {
+    position: relative;
+    margin: 4px 0 -3px;
 }
 
 #_toolbar .bubble-corner {
@@ -540,7 +549,7 @@ html, body {
     padding: 0;
 }
 
-#_toolbar .bubble-container, #_fixed-header .bubble-container {
+#_toolbar .bubble-container, #_fixed-header-wrap .bubble-container {
     padding: 0 10px 10px;
 }
 
@@ -563,7 +572,12 @@ html, body {
     border-right: 1px solid #666;
 }
 
-#_toolbar .bubble a {
+#_bubble-toc > ol.full-width {
+    width: 100%;
+    border-right: none;
+}
+
+#_toolbar .bubble a, #_fixed-header-wrap .bubble a {
     color: #FFF;
     display: block;
     text-decoration: none;
@@ -598,19 +612,6 @@ html, body {
 }
 
 #_bubble-toc .arrow {
-    position: absolute;
-    right: -0px;
-    top: 0;
-    display: block;
-    width: 30px;
-    height: 100%;
-    margin: 0;
-    background-image: url(../images/arrow.png);
-    background-position: -30px 8.5px;
-    background-repeat: no-repeat;
-}
-
-#_bubble-toc .tick {
     position: absolute;
     right: -0px;
     top: 0;
