@@ -13,6 +13,7 @@
 
 
 <xsl:import href="&db;/profiling/profile.xsl"/>
+<xsl:import href="&db;/common/l10n.xsl"/>
 <xsl:import href="&db;/common/pi.xsl"/>
 <xsl:import href="&db;/lib/lib.xsl"/>
 <xsl:import href="profile-rootid.xsl"/>
