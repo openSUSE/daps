@@ -32,6 +32,11 @@
 
 <xsl:param name="pubdate"/>
 
+<xsl:param name="l10n.gentext.default.language">en</xsl:param>
+<xsl:param name="l10n.gentext.language"/>
+<xsl:param name="l10n.gentext.use.xref.language" select="0"/>
+<xsl:param name="l10n.lang.value.rfc.compliant" select="1"/>
+ 
 
 <!--
   Template for adding a missing xml:base attribute
