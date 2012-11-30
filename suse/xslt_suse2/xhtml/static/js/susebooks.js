@@ -39,7 +39,7 @@ $(document).ready(function() {
     labelInputFind();
     
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
-    $('#_toolbar .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
+    $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
