@@ -72,6 +72,7 @@
       </xsl:call-template>
       <xsl:call-template name="id.attribute">
         <xsl:with-param name="conditional" select="0"/>
+        <xsl:with-param name="force" select="1"/>
       </xsl:call-template>
       
       <xsl:call-template name="article.titlepage"/>
@@ -110,6 +111,7 @@
       </xsl:call-template>
       <xsl:call-template name="id.attribute">
         <xsl:with-param name="conditional" select="0"/>
+        <xsl:with-param name="force" select="1"/>
       </xsl:call-template>
       
       <xsl:call-template name="component.separator"/>
