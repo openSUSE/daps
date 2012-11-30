@@ -397,7 +397,7 @@ case "$SUBCMD" in
     stat)
         # All files including status column
         set_env_base
-        docmanager --docconfig "$DOCCONF" dg -P \
+        docmanager --docconfig "$DOCCONF" dg -P -s \
             -q "$QSTRING" "$@"
         ;;
     mystat|work)
@@ -491,7 +491,7 @@ case "$SUBCMD" in
 #§
 #§  ds<VALUE> 
 #§    Variants: dscomments, dsedited, dsediting, dsproofed, dsproofing, 
-#§              dsprelim, dsnoprelim 
+#§              dsprelim, dsnoprelim, dstrans
 #§    Set property or value on file(s) 
 #§    Usage: $PROG ds<VALUE> FILELIST 
 
@@ -526,6 +526,10 @@ case "$SUBCMD" in
     dsproofing)
         # set files to proofing
         docmanager --docconfig "$DOCCONF" ds -P "$@"
+        ;;
+    dstrans)
+        # set files to trans=yes
+        docmanager --docconfi "$DOCCONF" ds -T "$@"
         ;;
     --) shift; break ;;
     *) exit_on_error "Unknown subcommand"
