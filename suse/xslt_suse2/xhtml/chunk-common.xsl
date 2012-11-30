@@ -262,7 +262,7 @@
                   <div class="bubble-container">
                     <h6>
                       <xsl:apply-templates mode="title.markup"
-                        select="(ancestor-or-self::book | ancestor-or-self::article)[1]"/>
+                        select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
                     </h6>
                     <div id="_bubble-toc">
                       <xsl:call-template name="bubble-toc"/>
@@ -645,5 +645,12 @@
     </xsl:if>
   </xsl:template>
 
+<!-- ======================================================================= -->
+
+  <xsl:template name="bubble-toc">
+    <xsl:call-template name="bubble-toc.inner">
+      <xsl:with-param name="node" select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
+    </xsl:call-template>
+  </xsl:template>
 
 </xsl:stylesheet>

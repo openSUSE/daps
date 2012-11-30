@@ -39,7 +39,7 @@ $(document).ready(function() {
     labelInputFind();
     
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
-    $('.single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
+    $('#_toolbar .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
@@ -61,16 +61,13 @@ $(document).ready(function() {
         $(this).parent('li').removeClass('inactive');
         $(this).parent('li').addClass('active');
         e.stopPropagation();
+        e.preventDefault();
         return false;
     });
     $('#_bubble-toc ol > li').not(':has(ol)').children('a').click(function(e) {
         deactivate();
     });
     $('#_bubble-toc > ol').not(':has(li > ol)').addClass('full-width');
-    $('#bubble-toc a').click(function(e) {
-        e.stopPropagation();
-        return true;
-    });
     $('#_bubble-toc ol > li').filter(':not(:has(ol))').children('a').addClass('leads-to-page');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');

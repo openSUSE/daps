@@ -14,8 +14,14 @@
   exclude-result-prefixes="exsl">
 
   <xsl:template name="bubble-toc">
-  <xsl:param name="node" select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
-
+    <xsl:call-template name="bubble-toc.inner">
+      <xsl:with-param name="node" select="((ancestor-or-self::set |
+        ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template name="bubble-toc.inner">
+  <xsl:param name="node"/>
     <ol>
       <xsl:apply-templates select="$node" mode="bubble-toc"/>
     </ol>
@@ -118,8 +124,17 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-  
-  
+
+    <xsl:template match="set" mode="bubble-toc">
+    <xsl:param name="toc-context" select="."/>
+    
+    <xsl:call-template name="bubble-subtoc">
+      <xsl:with-param name="toc-context" select="$toc-context"/>
+      <xsl:with-param name="nodes" 
+        select="set|book|bridgehead[$bridgehead.in.toc != 0]"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="book" mode="bubble-toc">
     <xsl:param name="toc-context" select="."/>
     
