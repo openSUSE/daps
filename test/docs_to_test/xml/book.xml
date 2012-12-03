@@ -624,7 +624,6 @@
             </tbody>
           </tgroup>
         </table>
-
         <para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
           tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
         <table>
@@ -643,10 +642,13 @@
             </tbody>
           </tgroup>
         </table>
- 
         <informaltable>
           <tgroup cols="2">
-            <thead><row><entry>Informal Table</entry></row></thead>
+            <thead>
+              <row>
+                <entry>Informal Table</entry>
+              </row>
+            </thead>
             <tbody>
               <row>
                 <entry>Lorem ipsum dolor</entry>
@@ -757,13 +759,16 @@
 --> /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
         <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
           invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
+
         <!-- FIXME: example, title with screen -->
       </sect1>
+
+
 
     </chapter>
     <chapter id="other">
       <title>Other blockelements</title>
-      
+
       <highlights>
         <para> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -786,11 +791,111 @@
       </example>
 
     </chapter>
-    <!-- FIXME: Add chapter for admonitions (tip, caution, warning, ...) 
-        * add lists inside an admonition element
-        * add table inside an admonition element
-        * nested lists and admonitions
-    -->
+
+    <chapter id="admonitions">
+      <title>Admonotions</title>
+      <sect1 id="simpleadmonitions">
+        <title/>
+        <caution>
+          <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.</para>
+        </caution>
+        <warning>
+          <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur.</para>
+        </warning>
+        <tip>
+          <para>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+            mollit anim id est laborum.</para>
+        </tip>
+        <important>
+          <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.</para>
+        </important>
+      </sect1>
+      <sect1 id="nestedadmonitions">
+        <title>Nested admonitions</title>
+        <caution>
+          <itemizedlist>
+            <listitem>
+              <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.</para>
+            </listitem>
+            <listitem>
+              <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua.</para>
+            </listitem>
+            <listitem>
+              <warning>
+                <para>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                  deserunt mollit anim id est laborum.</para>
+              </warning>
+            </listitem>
+          </itemizedlist>
+        </caution>
+        <tip>
+          <variablelist>
+            <varlistentry>
+              <term>Lorem Ipsum</term>
+              <listitem>
+                <important>
+                  <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.</para>
+                </important>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Duis aute</term>
+              <listitem>
+                <caution>
+                  <orderedlist>
+                    <listitem>
+                      <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                        dolore eu fugiat nulla pariatur.</para>
+                    </listitem>
+                    <listitem>
+                      <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua.</para>
+                    </listitem>
+                  </orderedlist>
+                </caution>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>Lorem ipsum</term>
+              <listitem>
+                <warning>
+                  <table id="tableinadmonition">
+                    <title>magna aliqua</title>
+                    <tgroup cols="2">
+                      <tbody>
+                        <row>
+                          <entry>dolor sit amet</entry>
+                          <entry>consectetur adipisicing elit</entry>
+                        </row>
+                        <row>
+                          <entry>Duis aute irure dolor in reprehenderit</entry>
+                          <entry>in voluptate velit esse cillum</entry>
+                        </row>
+                        <row>
+                          <entry>
+                            <caution>
+                              <para>dolore eu fugiat nulla pariatur.</para>
+                            </caution>
+                          </entry>
+                          <entry>Lorem ipsum dolor sit amet</entry>
+                        </row>
+                      </tbody>
+                    </tgroup>
+                  </table>
+                </warning>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </tip>
+      </sect1>
+    </chapter>
   </part>
   <part id="inlines">
     <title>Inline Elements</title>
@@ -835,14 +940,19 @@
         </varlistentry>
       </variablelist>
     </chapter>
-    
+
     <chapter id="inline-media">
       <title>Inline media</title>
       <para>
-        <!-- FIXME: Add fileref -->
         <inlinemediaobject>
           <imageobject role="html">
-            <imagedata fileref="dummy.jpg"/>
+            <imagedata fileref="../images/src/png/testbild.png" width="50"/>
+          </imageobject>
+          <imageobject role="pdf">
+            <imagedata fileref="../images/src/png/testbild.png" width="75"/>
+          </imageobject>
+          <imageobject role="fo">
+            <imagedata fileref="../images/src/png/testbild.png" width="25"/>
           </imageobject>
           <textobject>
             <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
@@ -930,7 +1040,5 @@
         <para lang="cn">para with lang cn</para>
       </sect1>
     </chapter>
-
   </part>
-
 </book>
