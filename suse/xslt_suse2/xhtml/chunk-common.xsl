@@ -636,8 +636,8 @@
 <!-- ======================================================================= -->
 
   <xsl:template name="add.version.info">
-    <xsl:variable name="products" select="ancestor-or-self::*/*/productname[1] |
-                                          ancestor-or-self::*/*/productnumber[1]"/>
+    <xsl:variable name="products" select="(ancestor-or-self::*/*/productname)[last()] |
+                                          (ancestor-or-self::*/*/productnumber)[last()]"/>
     <xsl:if test="$generate.version.info != 0 and $products">
       <xsl:call-template name="add.version.info.inner">
         <xsl:with-param name="products" select="$products"/>
