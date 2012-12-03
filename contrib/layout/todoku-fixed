@@ -37,6 +37,7 @@ Status: W = WONTFIX, F = FIXED
 #40 W Nach-Oben-/Nach-Unten-Pfeile neben Absätzen einblenden (?)
 #41 F Herausfinden, warum deactivate() undefiniert ist (aber trotzdem geht)
 #42 W Herausfinden, warum Suchleiste alles überlagert [Die Toolbar liegt jetzt über dem fixen Kopf, also hat sich das Problem vorerst gelöst]
+#43 F P4 Organize z indices
 #45 F P4 Mark external links (add arrow ↑)
 #47 F div.line zu div.titlepage (nur für .chapter > .titlepage)
 #48 F Version und Produkt prominent auf der Seite platzieren
@@ -65,9 +66,12 @@ Status: W = WONTFIX, F = FIXED
 #71 F P1 Breadcrumbs: less than useful "›" on the highest level
 #72 F div.version-info noch nicht umgesetzt
 #73 F P1 Title of Glossaries is book title even if another title is set
+#74 F P3 div.line after first headline (around .page-toc) (article-Template?)
 #75 F P1 Implement bubble TOC
+#76 F P3 Remove tables, div.mediaobjects from figures/informalfigures
 #77 F P1 Remove bubble/scrolling bug (page scrolls to top, bubble hides
          automatically
+#81 F P1 Make single articles look like (upcoming) single HTML 
 #83 F P2 Stefan: Increase margin-top in list-of-{$title}s and in normal toc for
          chapters, appendices, preface, and glossaries
 #85 F P1 Enable Sharing & Printing
@@ -76,3 +80,14 @@ Status: W = WONTFIX, F = FIXED
 #89 F P1 Stefan: Manpage does not yet have a style (HA Guide → HA OCF Agents)
 #91 F P1 Tom/Stefan: Lots of books don't have HTML <title>s any more..?
 #92 F P2 Stefan: Rewrite JS to J-Query which should make it shorter and safer
+#96 F P1 Tom: Many books don't know where they begin and end any more (judging
+         by the ←/→ navigation buttons on the top (we even have links leading
+         to 404 if a book (that has a set above it) is built without the set
+         being built).
+#97 F P1 HA-all gets some *very* odd version names/numbers. See e.g.
+         SLE-ha-all/art_ha_quick_nfs.html
+#98 F P1 Do 1-HTML
+#100W P1 Chrome does not like my yellow backgrounds for :target + ... + ...
+#103F P2 Impossible to mark glossary definitions – better rethink <a id>
+         structure and favour giving the elements themselves IDs (pos:rel;
+         top:-x;padd-top:x;mar-bot:-x; x=30px)
