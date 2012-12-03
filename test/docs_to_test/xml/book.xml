@@ -759,12 +759,14 @@
 --> /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
         <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
           invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
-
-        <!-- FIXME: example, title with screen -->
+        <example>
+          <title>Lorem Ipsum</title>
+          <screen>xsltproc --output foo.fo --stringparam base.dir helloworld/ /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
+          <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</para>
+        </example>
       </sect1>
-
-
-
+      
     </chapter>
     <chapter id="other">
       <title>Other blockelements</title>
