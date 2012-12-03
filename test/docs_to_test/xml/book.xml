@@ -643,10 +643,8 @@
             </tbody>
           </tgroup>
         </table>
-
-        
+ 
         <informaltable>
-         
           <tgroup cols="2">
             <thead><row><entry>Informal Table</entry></row></thead>
             <tbody>
@@ -656,7 +654,8 @@
               </row>
             </tbody>
           </tgroup>
-        </informaltable><para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+        </informaltable>
+        <para> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
           tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
       </sect1>
 
@@ -758,11 +757,13 @@
 --> /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
         <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
           invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
+        <!-- FIXME: example, title with screen -->
       </sect1>
 
     </chapter>
     <chapter id="other">
       <title>Other blockelements</title>
+      
       <highlights>
         <para> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -785,7 +786,11 @@
       </example>
 
     </chapter>
-
+    <!-- FIXME: Add chapter for admonitions (tip, caution, warning, ...) 
+        * add lists inside an admonition element
+        * add table inside an admonition element
+        * nested lists and admonitions
+    -->
   </part>
   <part id="inlines">
     <title>Inline Elements</title>
@@ -813,7 +818,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>Cross References - footnot</term>
+          <term>Cross References - footnote</term>
           <listitem>
             <para>
               <footnoteref linkend="links-and-xrefs"/>
@@ -829,18 +834,15 @@
           </listitem>
         </varlistentry>
       </variablelist>
-
-
     </chapter>
+    
     <chapter id="inline-media">
       <title>Inline media</title>
       <para>
+        <!-- FIXME: Add fileref -->
         <inlinemediaobject>
-          <audioobject>
-            <audiodata/>
-          </audioobject>
-          <imageobject>
-            <imagedata/>
+          <imageobject role="html">
+            <imagedata fileref="dummy.jpg"/>
           </imageobject>
           <textobject>
             <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
