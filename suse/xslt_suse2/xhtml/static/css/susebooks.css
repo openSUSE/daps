@@ -219,7 +219,8 @@ html, body {
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
-#_find-button, #_content .ulink:after, .bubble-corner, .book2-icon {
+#_find-button, #_content .ulink:after, .bubble-corner, .book2-icon,
+#_print-button:before, #_share-fb:before , #_share-gp:before , #_share-tw:before {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
@@ -927,29 +928,20 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_share-fb:before {
     background-color: #3B5998;
-    color: transparent;
-    content: "f";
-    background-image: url(../images/icons.png);
+    content: " ";
     background-position: -271px -88px;
-    background-repeat: no-repeat;
 }
 
 #_share-gp:before {
     background-color: #D54433;
-    color: transparent;
-    content: "+1";
-    background-image: url(../images/icons.png);
+    content: " ";
     background-position: -289px -88px;
-    background-repeat: no-repeat;
 }
 
 #_share-tw:before {
     background-color: #00BBF5;
-    color: transparent;
-    content: "#";
-    background-image: url(../images/icons.png);
+    content: " ";
     background-position: -307px -88px;
-    background-repeat: no-repeat;
 }
 
 #_share-mail:before {
@@ -961,11 +953,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_print-button:before {
     background-color: #666;
-    color: transparent;
-    content: "[]";
-    background-image: url(../images/icons.png);
+    content: " ";
     background-position: -253px -88px;
-    background-repeat: no-repeat;
 }
 
 #_share-print span:hover, #_share-print span:focus,
@@ -1000,9 +989,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .print {
-    
     float: right;
-    text-align: right !important;
 }
 
 /* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
@@ -1101,6 +1088,12 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     top: 2px;
 }
 
+#_content .legalnotice .ulink:after {
+    background-position: -180px -101px;
+    width: 18px;
+    height: 10px;
+}
+
 #_content .screen a[id] {
     display: none;
 }
@@ -1123,15 +1116,23 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     top: 70px;
 }
 
-#_content .book .title, #_content .set .title {
+#_content .book .title, #_content .set .title, #_content .article .title {
     font-size: 48px;
-    font-weight: normal;
+    font-weight: 600;
     line-height: 120%;
     width: auto;
     clear: both;
-    text-align: center;
     color: #439539;
-    padding: 70px 0;
+    padding: 70px 0 50px;
+}
+
+#_content .set .subtitle, #_content .book .subtitle, #_content .article .subtitle {
+    font-size: 28px;
+    font-weight: normal;
+    margin: -40px 0 50px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
 }
 
 #_content .title, #_content .chapter .title, #_content .preface .title,
@@ -1142,19 +1143,29 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     padding: 30px 0 5px;
     line-height: 120%;
     width: 100%;
-    text-align: left;
     clear: both;
 }
 
 .single #_content .title, .single #_content .chapter .title,
 .single #_content .preface .title, single #_content .appendix .title,
 .single #_content .bibliography .title, .single #_content .reference .title,
-.single #_content .part .title {
-    padding: 100px 0 5px;
+.single #_content .part .title, .single #_content .article .title {
+    padding-top: 100px;
+}
+
+
+#_content .sect1 .subtitle, #_content .chapter .subtitle {
+    font-size: 16px;
+    font-weight: normal;
+    padding: 10px 0 20px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
 }
 
 #_content .sect1 .title, .single #_content .sect1 .title {
     font-size: 28px;
+    font-weight: normal;
     padding: 50px 0 5px;
     text-align: left;
 }
@@ -1229,12 +1240,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-decoration: none !important;
 }
 
-#_content .title:hover .permalink, #_content .title:focus .permalink, #_content .title:active .permalink,
-#_content .subtitle:hover .permalink, #_content .subtitle:focus .permalink, #_content .subtitle:active .permalink,
-#_content .table-title:hover .permalink, #_content .table-title:focus .permalink, #_content .table-title:active .permalink,
-#_content .example-title:hover .permalink, #_content .example-title:focus .permalink, #_content .example-title:active .permalink,
-#_content .figure-title:hover .permalink, #_content .figure-title:focus .permalink, #_content .figure-title:active .permalink,
-#_content .procedure-title:hover .permalink, #_content .procedure-title:focus .permalink, #_content .procedure-title:active .permalink {
+#_content *:hover > .permalink {
     opacity: 1;
 }
 
@@ -1254,11 +1260,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_content .legalnotice {
     margin: 40px 0 0;
-    border-top: 1px solid #999;
     padding: 10px 0 0;
 }
 
-#_content .legalnotice p {
+#_content .legalnotice p, #_content .legalnotice td {
     font-size: 12px;
     color: #666;
     line-height: 140%;
@@ -1276,7 +1281,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-radius: 3px;
     border-style: solid;
     padding: 10px;
-    margin: 24px 0;
+    margin: 17px 0 24px;
     background-color: #FFF;
 }
 
@@ -1422,9 +1427,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 #_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref,
 #_content .example-title .xref, #_content .figure-title .xref,
-#_content .procedure-title .xref, #_content .title .ulink, #_content .subtitle .ulink,
+#_content .procedure-title .xref, #_content .orderedlist-title .xref,
+#_content .title .ulink, #_content .subtitle .ulink,
 #_content .table-title .ulink, #_content .example-title .ulink,
-#_content .figure-title .ulink, #_content .procedure-title .ulink {
+#_content .figure-title .ulink, #_content .procedure-title .ulink
+#_content .orderedlist-title .ulink {
     text-decoration: underline;
 }
 
@@ -1452,7 +1459,8 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .table-title .xref:hover, #_content .table-title .xref:focus, #_content .table-title .xref:active,
 #_content .figure-title .xref:hover, #_content .figure-title .xref:focus, #_content .figure-title .xref:active,
 #_content .example-title .xref:hover, #_content .example-title .xref:focus, #_content .example-title .xref:active,
-#_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active {
+#_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active,
+#_content .orderedlist-title .xref:hover, #_content .orderedlist-title .xref:focus, #_content .orderedlist-title .xref:active {
     color: #439539;
     text-decoration: none;
 }
@@ -1660,6 +1668,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content div.figure .number, #_content div.figure .permalink:hover, #_content div.figure .permalink:focus, #_content div.figure .permalink:active {
     color: #76AD2D;
     text-decoration: none;
+    font-weight: normal;
 }
 
 #_content div.figure .name, #_content div.figure .permalink {
@@ -1674,12 +1683,6 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     padding: 1px;
     border: 1px solid #202020;
     width: auto;
-}
-
-#_content .procedure-contents > .informalfigure {
-    margin-left: 10px;
-    margin-right: 10px;
-
 }
 
 #_content .keycap {
@@ -1708,7 +1711,8 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     color: #666;
 }
 
-#_content .procedure-title, #_content .table-title, #_content .example-title, #_content .figure-title {
+#_content .procedure-title, #_content .table-title, #_content .example-title,
+#_content .figure-title, .orderedlist-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
@@ -1723,7 +1727,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     z-index: 1;
 }
 
-#_content .example-title, #_content .procedure-title {
+#_content .example-title, #_content .procedure-title, #_content .orderedlist-title {
     margin: 24px 0 -33px;
 }
 
@@ -1731,7 +1735,12 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin: 24px 0 -23px;
 }
 
-#_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap {
+#_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap,
+#_content .table-title code, #_content .table-title .command, #_content .table-title .keycap,
+#_content .example-title code, #_content .example-title .command, #_content .example-title .keycap,
+#_content .figure-title code, #_content .figure-title .command, #_content .figure-title .keycap,
+#_content .orderedlist-title code, #_content .orderedlist-title .command, #_content .orderedlist-title .keycap
+{
     text-transform: none;
 }
 
@@ -1751,11 +1760,17 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin: 10px 0 24px;
 }
 
-#_content .procedure-contents > p:first-child, #_content .procedure-contents > ol:first-child > li:first-child > p:first-child  {
+#_content .procedure-contents > p:first-child,
+#_content .procedure-contents > ol:first-child > li:first-child > p:first-child {
     margin-top: 0;
 }
 
-#_content .procedure-contents > p {
+#_content .procedure-contents > .admonition {
+    margin-top: 4px;
+}
+
+#_content .procedure-contents > p, #_content .procedure-contents > .informalfigure,
+#_content .procedure-contents > .admonition {
     margin-left: 12px;
     margin-right: 17px;
 }
@@ -1774,6 +1789,10 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content ol.substeps, #_content ol.orderedlist {
     padding: 0 0 0 35px;
     margin: 0 0 0 10px;
+}
+
+#_content .orderedlist-title-wrap + ol.orderedlist {
+    margin-top: 40px;
 }
 
 #_content ol.procedure, #_content ol.orderedlist {
@@ -1818,6 +1837,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin: 0;
     padding: 3px 5px;
     overflow: hidden;
+    vertical-align: top;
 }
 
 #_content .table th, #_content .informaltable th {
