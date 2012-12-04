@@ -399,6 +399,25 @@
           </varlistentry>
         </variablelist>
       </sect1>
+      <sect1 id="lists.task">
+        <title>Task</title>
+        <task>
+          <title>Task</title>
+          <procedure>
+            <step>
+              <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex ea commodo consequat.</para>
+            </step>
+            <step>
+              <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit</para>
+            </step>
+            <step>
+              <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.</para>
+            </step>
+          </procedure>
+        </task>
+      </sect1>
       <sect1 id="lists.elementsinside">
         <title>Lists with elements</title>
         <variablelist>
@@ -760,13 +779,13 @@
         <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
           invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. </para>
         <example>
-          <title>Lorem Ipsum</title>
+          <title>Screens in Examples</title>
           <screen>xsltproc --output foo.fo --stringparam base.dir helloworld/ /usr/share/xml/docbook/stylesheet/nwalsh/current/fo/docbook.xsl foo.xml</screen>
           <para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
             tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</para>
         </example>
       </sect1>
-      
+
     </chapter>
     <chapter id="other">
       <title>Other blockelements</title>
@@ -815,6 +834,11 @@
           <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua.</para>
         </important>
+        <note>
+          <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.</para>
+        </note>
+
       </sect1>
       <sect1 id="nestedadmonitions">
         <title>Nested admonitions</title>
@@ -928,7 +952,7 @@
           <term>Cross References - footnote</term>
           <listitem>
             <para>
-              <footnoteref linkend="links-and-xrefs"/>
+              <footnoteref linkend="footnote"/>
             </para>
           </listitem>
         </varlistentry>
@@ -937,10 +961,15 @@
           <listitem>
             <para>
               <biblioref linkend="inlines"/>
+              <footnote id="footnote">
+                <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo consequat.</para>
+              </footnote>
             </para>
           </listitem>
         </varlistentry>
       </variablelist>
+
     </chapter>
 
     <chapter id="inline-media">
@@ -963,7 +992,7 @@
         </inlinemediaobject>
       </para>
       <para>
-        <inlinegraphic/>
+        <inlinegraphic fileref="../images/src/png/testbild.png"/>
       </para>
     </chapter>
     <chapter id="citations">
