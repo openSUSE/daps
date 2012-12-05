@@ -626,13 +626,15 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
   <para>For maximum flexibility, you can also combine the use of entities with
-  the use of profiling.</para>
+  the use of profiling. For example, you can define an entity &amp;productname; 
+  and an entity &amp;productnumber; to be used in multiple documentation projects.
+  By adding profiling to the entities you can have them replaced with different
+  values in the output, depending on the context.</para>
 
   <example id="ex.daps.main.decl">
-   <title>External Entity File with Profiling Attributes</title>
-   <screen>
-      <remark>taroth 2012-06-22: FIXME</remark>
-     </screen>
+   <title>Entities with Profiling Attributes</title>
+   <screen>&lt;!ENTITY productname  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;&lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording (Professional Edition)&lt;/phrase&gt;'>
+&lt;!ENTITY productnumber  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;&lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
   </example>
 
  </sect1>
