@@ -543,10 +543,15 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
 [...]</screen>
      <calloutlist>
       <callout arearefs="co.dc.pa.main1">
-       <para></para>
+       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.basic">
-       <para></para>
+       <para>&dapsacr; profiling parameter for the 
+       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
+       defines that XML elements tagged with 
+       <sgmltag class="attribute">condition="basic"</sgmltag> are included in 
+       the output.</para>
       </callout>
      </calloutlist>
     </example>
@@ -565,10 +570,15 @@ PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
  <calloutlist>
       
       <callout arearefs="co.dc.pa.main2">
-       <para></para>
+       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof1">
-       <para></para>
+       <para>&dapsacr; profiling parameter for the 
+       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
+       defines that XML elements tagged with 
+       <sgmltag class="attribute">condition="professional"</sgmltag> are included in 
+       the output.</para>
       </callout>
      </calloutlist>
     </example>
@@ -587,24 +597,24 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 [...]</screen>
  <calloutlist>
       <callout arearefs="co.dc.pa.main3">
-       <para></para>
+       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof2">
-       <para></para>
+       <para>&dapsacr; profiling parameter for the 
+       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
+       defines that XML elements tagged with 
+       <sgmltag class="attribute">condition="professional"</sgmltag> are included in 
+       the output.</para>
       </callout>
       <callout arearefs="co.dc.pa.profvendor.oem">
-       <para></para>
+       <para>&dapsacr; profiling parameter for the 
+       <sgmltag class="attribute">vendor</sgmltag> profiling attribute. It 
+       defines that XML elements tagged with 
+       <sgmltag class="attribute">vendor="oemcompany"</sgmltag> are included in 
+       the output.</para>
       </callout>
      </calloutlist>
-    </example>
-
-    <!--taroth 2012-10-19: todo - move to next section as this explains stuff
-    for productname entities-->
-    <example id="ex.daps.main.decl">
-     <title>External Entity File with Profiling Attributes</title>
-     <screen>
-      <remark>taroth 2012-06-22: FIXME</remark>
-     </screen>
     </example>
    </sect3>
   </sect2>
@@ -612,6 +622,14 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
   <para></para>
+  
+    <example id="ex.daps.main.decl">
+     <title>External Entity File with Profiling Attributes</title>
+     <screen>
+      <remark>taroth 2012-06-22: FIXME</remark>
+     </screen>
+    </example>
+
  </sect1>
  
  <!--<sect2 id="sec.daps.user.modular.profiling.attributes">
