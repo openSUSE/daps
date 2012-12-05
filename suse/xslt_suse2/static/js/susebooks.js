@@ -27,6 +27,44 @@
 var deactivatePosition = -1;
 
 $(document).ready(function() {
+
+    // http://css-tricks.com/snippets/jquery/smooth-scrolling/
+
+    function filterPath(string) {
+        return string
+        .replace(/^\//,'')
+        .replace(/(index|default).[a-zA-Z]{3,4}$/,'')
+        .replace(/\/$/,'');
+    }
+    var locationPath = filterPath(location.pathname);
+
+    $('a[href*=#]').each(function() {
+        $(this).click(function(event) {
+            var thisPath = filterPath(this.pathname) || locationPath;
+            if (  locationPath == thisPath
+                  && (location.hostname == this.hostname || !this.hostname)) {
+                if ( this.hash.replace(/#/,'') ) {
+                    var $target = $(this.hash), target = this.hash;
+                    if ($target.length != 0) {
+                        var targetOffset = $target.offset().top;
+                        event.preventDefault();
+                        $('html').animate({scrollTop: targetOffset}, 400, function() {
+                            location.hash = target;
+                        });
+                    }
+                }
+            else {
+                event.preventDefault();
+                $('html').animate({scrollTop: 0}, 400, function() {
+                    location = location.pathname + '#';
+                });
+            }
+        }
+    });
+  });
+
+    // The other things.
+
     if( window.addEventListener ) {
         window.addEventListener('scroll', scrollDeactivator, false);
     }
@@ -39,6 +77,7 @@ $(document).ready(function() {
     labelInputFind();
     
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
+    $('#_fixed-header .single-crumb').unbind('click');
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
@@ -54,7 +93,7 @@ $(document).ready(function() {
     $('#_share-mail').click(function(){share('mail');});
     $('#_print-button').click(function(){print();});
 
-
+    $('#_bubble-toc ol > li').filter(':has(ol)').children('a').unbind('click');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').click(function(e) {
         exchClass('#_bubble-toc > ol > li', 'active', 'inactive');
@@ -71,40 +110,7 @@ $(document).ready(function() {
     $('#_bubble-toc ol > li').filter(':not(:has(ol))').children('a').addClass('leads-to-page');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
-    
-  // http://css-tricks.com/snippets/jquery/smooth-scrolling/
-  function filterPath(string) {
-  return string
-    .replace(/^\//,'')
-    .replace(/(index|default).[a-zA-Z]{3,4}$/,'')
-    .replace(/\/$/,'');
-  }
-  var locationPath = filterPath(location.pathname);
-  
-  $('a[href*=#]').each(function() {
-    $(this).click(function(event) {
-    var thisPath = filterPath(this.pathname) || locationPath;
-    if (  locationPath == thisPath
-    && (location.hostname == this.hostname || !this.hostname)) {
-      if ( this.hash.replace(/#/,'') ) {
-      var $target = $(this.hash), target = this.hash;
-      if ($target.length != 0) {
-        var targetOffset = $target.offset().top;
-          event.preventDefault();
-          $('html').animate({scrollTop: targetOffset}, 400, function() {
-            location.hash = target;
-          });
-      }
-      }
-      else {
-          event.preventDefault();
-          $('html').animate({scrollTop: 0}, 400, function() {
-             location = location.pathname + '#';
-          });
-      }
-    }
-   });	
-  });
+
 });
 
 function activate( elm ) {
