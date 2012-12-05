@@ -65,8 +65,10 @@ set       toc,title
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="draft.watermark.image">static/images/draft_html.png</xsl:param>
-  <xsl:param name="html.stylesheet">susebooks.css</xsl:param>
-  <xsl:param name="make.clean.html" select="1"/> 
+  <xsl:param name="docbook.css.link" select="0"/>
+  <xsl:param name="html.stylesheet">static/css/susebooks.css</xsl:param>
+  <xsl:param name="make.clean.html" select="1"/>
+  <xsl:param name="make.valid.html" select="1"/>
 
 <!-- 8. XSLT Processing ========================================= -->
   <!-- Rule over footers? -->
