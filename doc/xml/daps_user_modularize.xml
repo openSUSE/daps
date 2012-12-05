@@ -451,6 +451,7 @@
      <title>XML File With Profiling Attributes</title>
      <screen>
       
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -543,7 +544,8 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
 [...]</screen>
      <calloutlist>
       <callout arearefs="co.dc.pa.main1">
-       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       <para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. 
        See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.basic">
@@ -567,10 +569,11 @@ MAIN="art_frog.xml" <co id="co.dc.pa.main2"/>
 ## Profiling
 PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
 [...]</screen>
- <calloutlist>
-      
+     <calloutlist>
+
       <callout arearefs="co.dc.pa.main2">
-       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       <para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. 
        See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof1">
@@ -595,9 +598,10 @@ MAIN="art_frog.xml" <co id="co.dc.pa.main3"/>
 PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof2"/>
 PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 [...]</screen>
- <calloutlist>
+     <calloutlist>
       <callout arearefs="co.dc.pa.main3">
-       <para><parameter>MAIN</parameter> parameter referencing the Main file. 
+       <para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. 
        See <xref linkend="ex.daps.main.pi"/>.</para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof2">
@@ -621,312 +625,17 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  </sect1>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
-  <para></para>
-  
-    <example id="ex.daps.main.decl">
-     <title>External Entity File with Profiling Attributes</title>
-     <screen>
+  <para>For maximum flexibility, you can also combine the use of entities with
+  the use of profiling.</para>
+
+  <example id="ex.daps.main.decl">
+   <title>External Entity File with Profiling Attributes</title>
+   <screen>
       <remark>taroth 2012-06-22: FIXME</remark>
      </screen>
-    </example>
+  </example>
 
  </sect1>
- 
- <!--<sect2 id="sec.daps.user.modular.profiling.attributes">
-  <title>Using Profiling Attributes in XML Files</title>
-  
-  <remark>toms 2012-06-15: The following example is a bit unfortunate
-  as the os attribute in xi:include is by definition not allowed.
-  Actually it is a "hack". ;)
-  Better show a chapter that contains some paras with and without os.
-  This is more compatible.
-  </remark>
-  
-  <example id="ex.daps.profiling">
-  <title>Profiling Articles Within a Book</title>
-  <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-  [...]    
-  &lt;book lang="en" id="book.quickstarts"&gt;
-  &lt;bookinfo&gt;
-  &lt;title&gt;Quick Start Manuals&lt;/title&gt;
-  &lt;productname&gt;&amp;productname;&lt;/productname&gt;
-  &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt;
-  &lt;date&gt;&lt;?dbtimestamp format="B d, Y"?&gt;&lt;/date&gt;
-  &lt;xi:include href="common_copyright_gfdl.xml" <co id="co.daps.prof.all"/> 
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt; 
-  &lt;/bookinfo&gt;
-  &lt;xi:include os="sled;osuse" href="art_kde_quick.xml" <co id="co.daps.prof.sled.osuse"/>
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt; 
-  &lt;xi:include os="sled;osuse" href="art_gnome_quick.xml" <xref linkend="co.daps.prof.sled.osuse" xrefstyle="select:label nopage"/>
-  xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
-  &lt;xi:include os="sled" href="art_sled_install_quick.xml" <co id="co.daps.prof.sled"/>
-  xmlns:xi="http://www.w3.org/2001/XInclude"  /&gt; 
-  &lt;xi:include os="sles" href="art_sles_install_quick.xml" <co id="co.daps.prof.sles"/>
-  xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
-  &lt;xi:include os="sled;sles;osuse" href="art_apparmor_quick.xml" <co id="co.daps.prof.sled.sles.osuse"/> 
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;  
-  &lt;xi:include os="sled;sles" href="art_audit_quick.xml" <co id="co.daps.prof.sled.sles"/>  
-  xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
-  &lt;xi:include os="sled" href="art_libreoffice_quick.xml" <xref linkend="co.daps.prof.sled" xrefstyle="select:label nopage"/> 
-  xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
-  &lt;xi:include os="sles" href="art_lxc_quick.xml" <xref linkend="co.daps.prof.sles" xrefstyle="select:label nopage"/>
-  xmlns:xi="http://www.w3.org/2001/XInclude" /&gt; 
-  &lt;/book&gt;</screen>
-  </example>
-  <para>The example above shows a book named 
-  <citetitle>Quick Start Manuals</citetitle> that contains a number of articles, 
-  for example <citetitle>KDE Quick Start</citetitle> and
-  <citetitle>LXC Quick Start</citetitle>. The <literal>os</literal> attribute 
-  is used for profiling contents according to products. The attribute values 
-  refer to the following products:</para>
-  <itemizedlist>
-  <listitem>
-  <para>
-  <literal>os="sled"</literal>: &sled;</para>
-  </listitem>
-  <listitem>
-  <para>
-  <literal>os="sles"</literal>: &sles;</para>
-  </listitem>
-  <listitem>
-  <para>
-  <literal>os="osuse"</literal>: &osuse;</para>
-  </listitem>
-  </itemizedlist>
-  <calloutlist>
-  <callout arearefs="co.daps.prof.all">
-  <para>This XInclude does not contain any profiling attributes, meaning the 
-  contents of this file will always be included in the output.</para>
-  </callout>
-  <callout arearefs="co.daps.prof.sled.osuse">
-  <para>This XInclude is profiled for both &sled; and &osuse;: If the book
-  <citetitle>GNOME Quick Start</citetitle> is generated for &sled; or &osuse;, 
-  the articles <citetitle>KDE Quick Start</citetitle> and 
-  <citetitle>GNOME Quick Start</citetitle> will be included in the book. 
-  If the same book is generated for &sles;, this articles will be excluded.
-  </para>
-  </callout>
-  <callout arearefs="co.daps.prof.sled">
-  <para>This XInclude is profiled for &sled;. This means if the book 
-  <citetitle>Quick Start Manuals</citetitle> is generated for &sled;, the 
-  articles <citetitle>SLED Installation Quick Start</citetitle> and 
-  <citetitle>LibreOffice Quick Start</citetitle> will be included.
-  For &osuse; and &sles;, this articles will be excluded from the book.</para>
-  </callout>
-  <callout arearefs="co.daps.prof.sles">
-  <para>This XInclude is profiled for &sles;. This means if the book 
-  <citetitle>Quick Start Manuals</citetitle> is generated for &sles;, the 
-  articles <citetitle>SLES Installation Quick Start</citetitle> and 
-  <citetitle>LXC Quick Start</citetitle> will be included. For
-  &osuse; and &sled;, this articles will be excluded from the book.</para>
-  </callout>
-  <callout arearefs="co.daps.prof.sled.sles.osuse">
-  <para>This XInclude is profiled for all three products: &sles;, &sled;, and
-  &osuse;, meaning the article <citetitle>AppArmor Quick Start</citetitle> will
-  be included in the book <citetitle>Quick Start Manuals</citetitle> 
-  for all of these products. </para>
-  </callout>
-  <callout arearefs="co.daps.prof.sled.sles">
-  <para>This XInclude is profiled for both &sled; and &sles;. This means if 
-  the book <citetitle>Quick Start Manuals</citetitle> is generated for &sles;
-  or &sled;, the article <citetitle>Audit Quick Start</citetitle> will be 
-  included. For &osuse;, this article will be excluded from the book.</para>
-  </callout>
-  </calloutlist>
-  <para>The following example demonstrates how to profile inline
-  elements, like one sentence or a cross-reference in a paragraph:</para>
-  <example id="ex.daps.profiling.inline">
-  <title>Profiling Inline Elements</title>
-  <screen>&lt;para&gt;If you choose this option, your credentials are stored in
-  KWalletManager. <co id="co.daps.prof.inline.start"/>&lt;phrase os="sled"&gt;For more information on 
-  KWalletManager, see &lt;xref linkend="cha.kde.kwallet"/&gt;.&lt;/phrase&gt;<co id="co.daps.prof.inline.end"/> 
-  &lt;/para&gt;
-  </screen>
-  </example>
-  <calloutlist>
-  <callout arearefs="co.daps.prof.inline.start">
-  <para>Start tag of a <sgmltag>phrase</sgmltag> element with 
-  a profiling attribute:  <literal>os=sled"</literal>. The 
-  <sgmltag>phrase</sgmltag> element is used 
-  to profile contents within a <sgmltag>para</sgmltag> element
-  &mdash;in this  case a sentence containing a cross-reference.</para>
-  </callout>
-  <callout arearefs="co.daps.prof.inline.end">
-  <para>End tag of the profiled <sgmltag>phrase</sgmltag> element.</para>
-  </callout>
-  </calloutlist>
-  
-  <remark>toms 2012-06-15: Maybe better add a list and show what's
-  going on with and without the os profiling attribute? Something
-  like itemizedlist/listitem/para with screen.</remark>
-  
-  <para>If the XML file containing this text snippet is profiled for &sled;
-  (<literal>os="sled"</literal>), both sentences will be included in the output:
-  <literal>If you choose this options, your credentials are stored in 
-  KWalletManager. For more information on KWalletManager, see Chapter 8, 
-  Managing Passwords with KWallet Manager (KDE User Guide).</literal>
-  In all other cases, the content of the profiled <sgmltag>phrase</sgmltag>
-  element is omitted and the output will be as follows:
-  <literal>If you choose this options, your credentials are stored in 
-  KWalletManager.</literal>
-  </para>
-  <para>For more details about using profiling attributes, refer to 
-  <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.</para>
-  </sect2>
-  <sect2 id="sec.daps.user.modular.profiling.pi">
-  <title>Adding a Processing Instruction to the Main File</title>
-  <para>For the profiling process to take effect, &dapsacr; needs a certain
-  processing instruction (PI):</para>
-  
-  <para>For all documentation projects that need profiling, add 
-  this line to the header (prolog) of the Main<remark>toms
-  2012-06-15: Main: upper case or lower case?</remark> file that is 
-  referenced by the <parameter>MAIN</parameter> parameter 
-  in the &dc; file.</para>
-  
-  <remark>toms 2012-06-15: I would describe the components of the
-  PI (?xml-stylesheet, href, type). A single callout is a bit useless
-  IMHO. :) Futhermore, I would only include the header without any
-  root element, which restricts the focus on the very important
-  line(s).</remark>
-  
-  <example id="ex.daps.main.profiling">
-  <title>Main File with Processing Instruction for Profiling </title>
-  <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-  &lt;?xml-stylesheet
-  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml" <co id="co.daps.profile.main"/> 
-  title="Profiling step" ?&gt;
-  &lt;!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
-  [&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
-  %entities;
-  ]&gt;
-  
-  &lt;set lang="en"&gt;
-  &lt;title&gt;&dapsacr; Documentation&lt;/title&gt;
-  &lt;xi:include href="book_daps_user.xml" 
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-  &lt;xi:include href="book_daps_quickstarts.xml" 
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
-  &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml" 
-  xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;             
-  &lt;/set&gt;</screen>
-  </example>
-  <calloutlist>
-  <callout arearefs="co.daps.profile.main">
-  <para>Processing instruction line for  profiling. </para>
-  </callout>
-  </calloutlist>
-  <note>
-  <title>Only Required in the Main File</title>
-  <para>You may also add the processing instruction line to all files of your
-  documentation project, it does not hurt. But &dapsacr; only checks the Main 
-  file referenced in the &dc; file for this processing instruction. If it is 
-  missing there, any profiling parameters in the &dc; file will be ignored 
-  during generation of the output.</para>
-  </note>
-  </sect2>
-  
-  <sect2 id="sec.daps.user.modular.profiling.params">
-  <title>Adding Profiling Parameters to the &dc; File</title>
-  <para>If using profiling attributes in your XML sources, you need to define 
-  which of them should be interpreted by &dapsacr; during generation of output.
-  For this purpose, add profiling parameters (<parameter>PROF*</parameter>) to the 
-  &dc; files of the documentation projects that need profiling. Depending on the
-  profiling attributes used in your XML files, a &dc; file may contain multiple 
-  profiling parameters. For a list of DocBook profiling attributes supported by
-  &dapsacr; and the corresponding &dapsacr; parameters, refer to 
-  <xref linkend="sec.daps.user.modular.profiling.supported"/>.</para>
-  <para>For each profiling parameter, set the respective attribute values for 
-  which you want to filter during the profiling process. The spelling 
-  of the values must be the same that is used in the XML files. You can also assign 
-  multiple attribute values to a profiling parameter&mdash;for example, if you 
-  want to cover multiple processor architectures in the same document. 
-  A &dc; file containing the following line <literal>PROFARCH=s390;systemz</literal>
-  would create an output that contains all contents profiled for either 
-  <literal>s390</literal> or <literal>systemz</literal> architectures or both.
-  <remark>toms 2012-06-15: maybe add: "..., but not x86_64.</remark>
-  </para>
-  <para>Create an individual &dc; file for each document variant that you want 
-  to generate from a pool of common XML files. 
-  <xref linkend="ex.daps.profiling.dc.osuse" xrefstyle="select:label"/> and 
-  <xref linkend="ex.daps.profiling.dc.sles" xrefstyle="select:label"/> show 
-  two Main files that can be used to generate 
-  product-specific documentation from the XML file in 
-  <xref linkend="ex.daps.profiling"/>.
-  </para>
-  <example id="ex.daps.profiling.dc.osuse">
-  <title>Profiling Parameters in Product-specific &dc; File (&osuse;)</title>
-  <screen>## Doc Config File for openSUSE Quick Start Guide
-  
-  ## Mandatory Parameters
-  MAIN="MAIN.opensuse.xml"
-  
-  ## Optional Parameters
-  ROOTID="book.quickstarts"
-  
-  ## Profiling
-  PROFOS="osuse" <co id="daps.param.profos.osuse"/>
-  PROFARCH="x86;i586" <co id="daps.param.profarch.osuse"/>
-  
-  [...]</screen>
-  </example>
-  <calloutlist>
-  <callout arearefs="daps.param.profos.osuse">
-  <para>Profiling parameter. Filters the XML files of the documentation 
-  project for elements with a <literal>os="osuse"</literal> profiling
-  attribute and includes their content in the generated output. 
-  </para>
-  </callout>
-  <callout arearefs="daps.param.profarch.osuse">
-  <para>Profiling parameter. Filters the XML files of the documentation 
-  project for elements with a <literal>arch="x86"</literal> or 
-  <literal>arch="i586"</literal> profiling attribute or <sgmltag>arch</sgmltag>
-  attributes that includes both attribute values. Includes their content in 
-  the generated output. 
-  </para>
-  </callout>
-  </calloutlist>
-  <para>You can use this &dc; file to generate an &osuse;-specific version
-  of the <citetitle>Quick Start Manuals</citetitle> displayed in
-  <xref linkend="ex.daps.profiling"/>. It will contain all Quick
-  Starts that are profiled with <literal>os="osuse"</literal>. 
-  </para>
-  <example id="ex.daps.profiling.dc.sles">
-  <title>Profiling Parameters in Product-specific &dc; File (&sles;)</title>
-  <screen>## Doc Config File for SLES Quick Start Guide
-  
-  ## Mandatory Parameters
-  MAIN="MAIN.SLES.xml"
-  
-  ## Optional Parameters
-  ROOTID="book.quickstarts"
-  
-  ## Profiling
-  PROFOS="sles" <co id="daps.param.profos.sles"/>
-  PROFARCH="s390;systemz" <co id="daps.param.profarch.sles"/>
-  
-  [...]</screen>
-  <calloutlist>
-  <callout arearefs="daps.param.profos.sles">
-  <para>Profiling parameter. Filters the XML files of the documentation 
-  project for elements with a <literal>os="sles"</literal> profiling
-  attribute and includes their content in the generated output. 
-  </para>
-  </callout>
-  <callout arearefs="daps.param.profarch.sles">
-  <para>Profiling parameter. Filters the XML files of the documentation 
-  project for elements with a <literal>arch="s390"</literal> or 
-  <literal>arch="systemz"</literal> profiling attribute or <sgmltag>arch</sgmltag>
-  attributes that includes both attribute values. Includes their content in 
-  the generated output. 
-  </para>
-  </callout>
-  </calloutlist>
-  </example>
-  <para>You can use this &dc; file to generate a &sles;-specific version
-  of the <citetitle>Quick Start Manuals</citetitle> displayed in
-  <xref linkend="ex.daps.profiling"/>. It will contain all Quick
-  Starts that are profiled with <literal>os="sles"</literal>.</para>
-  </sect2>-->
+
 
 </chapter>
