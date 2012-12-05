@@ -78,7 +78,7 @@
         <xsl:apply-templates select="(bookinfo | articleinfo | setinfo)/title" mode="title.markup.textonly"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates select="title" mode="title.markup.textonly"/>
+            <xsl:apply-templates select="(title|refmeta/refentrytitle)[last()]" mode="title.markup.textonly"/>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="not(self::book or self::article or self::set)">
@@ -144,10 +144,14 @@
     </xsl:if>
   </xsl:if>
 
-  <xsl:apply-templates select="." mode="head.keywords.content"/>
-</xsl:template>
+    <xsl:apply-templates select="." mode="head.keywords.content"/>
+  </xsl:template>
 
-  <xsl:template match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
+  <xsl:template match="refentry" mode="titleabbrev.markup">
+    <xsl:value-of select="refmeta/refentrytitle[text()]"/>
+  </xsl:template>
+
+  <xsl:template match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set|refentry"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
     <xsl:param name="context">header</xsl:param>

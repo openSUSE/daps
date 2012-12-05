@@ -30,7 +30,7 @@
 
   <!-- ===================================================== -->
   <xsl:template
-    match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set"
+    match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set|refentry"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
     <xsl:param name="context">header</xsl:param>
