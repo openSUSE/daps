@@ -452,6 +452,7 @@
      <screen>
       
       
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -558,7 +559,7 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
      </calloutlist>
     </example>
 
-    <example id="ex.daps.cd.pa.prof">
+    <example id="ex.daps.dc.pa.prof">
      <title>&dc; File with Profiling for Professional Edition</title>
      <screen>## Doc Config File for Frog Sound Recordings
 ## (Professional Edition)
@@ -586,7 +587,7 @@ PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
      </calloutlist>
     </example>
 
-    <example id="ex.daps.cd.pa.prof.oem">
+    <example id="ex.daps.dc.pa.prof.oem">
      <title>&dc; File with Profiling for Professional Edition (OEM Version)</title>
      <screen>## Doc Config File for Frog Sound Recordings 
 ## (Professional Edition, OEM Version)
@@ -627,17 +628,88 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   <title>Combining Entities and Profiling</title>
   <para>For maximum flexibility, you can also combine the use of entities with
   the use of profiling. For example, you can define an entity &amp;productname; 
-  and an entity &amp;productnumber; to be used in multiple documentation projects.
-  By adding profiling to the entities you can have them replaced with different
-  values in the output, depending on the context.</para>
+  and an entity &amp;productnumber; in an external entity file to be used in 
+  multiple documentation projects. By adding profiling to the entities you can 
+  have them replaced with different values in the output, depending on the context.</para>
 
   <example id="ex.daps.main.decl">
-   <title>Entities with Profiling Attributes</title>
-   <screen>&lt;!ENTITY productname  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;&lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording (Professional Edition)&lt;/phrase&gt;'>
-&lt;!ENTITY productnumber  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;&lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
+   <title>External Entity File with Profiling Attributes</title>
+   <screen>&lt;!-- General Entities Defined in entity-decl.ent--&gt;                                                        -->
+&lt;!ENTITY productname  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;&lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording (Professional Edition)&lt;/phrase&gt;'>
+&lt;!ENTITY productnumber  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;&lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;
+[...]</screen>
   </example>
+  <para>For example, you can use both entities of 
+  <xref linkend="ex.daps.main.decl" xrefstyle="select:label"/> 
+  in a product description like the following:</para>
+  <example id="ex.daps.art.prof.ent">
+   <title>FIXME</title>
+   <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;?xml-stylesheet 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml" 
+ title="Profiling step"?&gt; 
+&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+                         "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]&gt;  
 
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt; 
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+  &lt;abstract&gt;&lt;para&gt;&amp;productname; &amp;productnumber; is a software
+  for recording, editing, and mixing audio data.&lt;/para&gt;&lt;/abstract&gt;
+ [...]
+&lt;/article&gt;</screen>
+  </example>
+  <para>Depending on the &dc; file you use, the abstract contained in the source 
+  code above will result in one of the following outputs:</para>
+  <table id="tab.daps.profile.output.four" rowsep="1">
+   <title>Output of <xref linkend="ex.daps.main.decl" xrefstyle="select:
+     label"/> and <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:
+     label"/>
+   </title>
+   <tgroup cols="2">
+    <colspec colnum="1" colname="1" colwidth="50*"/>
+    <colspec colnum="2" colname="2" colwidth="50*"/>
+    <thead>
+     <row>
+      <entry colname="1">
+       <para>&dc; File</para>
+      </entry>
+      <entry colname="2">
+       <para>Output</para>
+      </entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry colname="1">
+       <para>
+        <xref linkend="ex.daps.dc.pa.home" xrefstyle="select:title"/>
+       </para>
+       <para>
+        <xref linkend="ex.daps.dc.pa.prof" xrefstyle="select:title"/>
+       </para>
+       <para>
+        <xref linkend="ex.daps.dc.pa.prof.oem" xrefstyle="select:title"/>
+       </para>
+      </entry>
+      <entry colname="2">
+       <para>Frog Sound Recordings (Basic Edition) 1.0 is a software for recording,
+       editing, and mixing audio data.</para>
+       <para>Frog Sound Recordings (Professional Edition) 4.2 is a software for 
+       recording, editing, and mixing audio data.</para>
+       <para>Gecko Sound Recordings (Professional Edition) 4.21 is a software for 
+       recording, editing, and mixing audio data.</para>
+      </entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </sect1>
-
 
 </chapter>
