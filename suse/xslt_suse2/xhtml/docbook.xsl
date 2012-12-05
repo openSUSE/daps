@@ -164,19 +164,22 @@
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
       </xsl:call-template>
-          <xsl:attribute name="href">
-            <xsl:call-template name="href.target">
-              <xsl:with-param name="object" select="."/>
-              <xsl:with-param name="context" select="."/>
-            </xsl:call-template>
-          </xsl:attribute>
-            <span class="book2-icon"> </span>
-          <xsl:value-of select="string($title)"/>
-          <xsl:if test="$context = 'fixed-header'">
-            (<xsl:call-template name="gentext">
-              <xsl:with-param name="key">contentsoverview</xsl:with-param>
-            </xsl:call-template>)
-          </xsl:if>
+      <xsl:attribute name="href">
+        <xsl:call-template name="href.target">
+          <xsl:with-param name="object" select="."/>
+          <xsl:with-param name="context" select="."/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <span class="book2-icon"> </span>
+      <xsl:if test="$context = 'fixed-header'">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">showcontentsoverview</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">admonseparator</xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:value-of select="string($title)"/>
     </xsl:element>
   </xsl:template>
 

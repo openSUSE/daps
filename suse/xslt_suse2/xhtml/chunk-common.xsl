@@ -65,12 +65,15 @@
           <xsl:if test="$class = 'single-crumb'">
             <span class="book2-icon"> </span>
           </xsl:if>
-          <xsl:value-of select="string($title)"/>
           <xsl:if test="$context = 'fixed-header'">
-            (<xsl:call-template name="gentext">
-              <xsl:with-param name="key">contentsoverview</xsl:with-param>
-            </xsl:call-template>)
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">showcontentsoverview</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">admonseparator</xsl:with-param>
+            </xsl:call-template>
           </xsl:if>
+          <xsl:value-of select="string($title)"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
