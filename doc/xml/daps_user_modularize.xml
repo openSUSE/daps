@@ -626,17 +626,26 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  </sect1>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
-  <para>For maximum flexibility, you can also combine the use of entities with
-  the use of profiling. For example, you can define an entity &amp;productname; 
-  and an entity &amp;productnumber; in an external entity file to be used in 
-  multiple documentation projects. By adding profiling to the entities you can 
-  have them replaced with different values in the output, depending on the context.</para>
+  <para>For maximum flexibility in generating documentation variants from the same
+  source, you can also combine entities and profiling. For modularized documents, 
+  it makese sense to declare entities in a separate file (for example, 
+  <filename>entity-decl.ent</filename>), which can then be used in multiple 
+  documentation projects. In order to replace entities like 
+  <literal>&amp;productname;</literal> or <literal>&amp;productnumber;</literal>
+  with different values in the output, use profiling within the entity.</para>
 
   <example id="ex.daps.main.decl">
    <title>External Entity File with Profiling Attributes</title>
    <screen>&lt;!-- General Entities Defined in entity-decl.ent--&gt;                                                        -->
-&lt;!ENTITY productname  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;&lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording (Professional Edition)&lt;/phrase&gt;'>
-&lt;!ENTITY productnumber  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;&lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;&lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;
+&lt;!ENTITY productname  
+  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;
+   &lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;
+   &lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording 
+       (Professional Edition)&lt;/phrase&gt;'&gt;
+&lt;!ENTITY productnumber  
+  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
+   &lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;
+   &lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;
 [...]</screen>
   </example>
   <para>For example, you can use both entities of 
