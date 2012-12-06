@@ -450,6 +450,7 @@ using XIncludes, using separate entity files</remark>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
      <screen>
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -635,7 +636,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 
   <example id="ex.daps.main.decl">
    <title>Separate Entity File with Profiling Attributes</title>
-   <screen><?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
+   <screen>
+    <?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
@@ -653,7 +655,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   <example id="ex.daps.art.prof.ent">
    <title>XML File with Entities <literal>&amp;productname;</literal> and
    <literal>&amp;productnumber;</literal> Entity</title>
-   <screen><?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+   <screen>
+    <?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml" 
@@ -734,8 +737,11 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     </tbody>
    </tgroup>
   </table>
-  <para><remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
-  need productname/productnumber in setinfo/bookinfo/articleinfo</remark></para>
+  <para>
+   <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
+  need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
+  https://sourceforge.net/p/daps/tickets/48/</remark>
+  </para>
  </sect1>
 
 </chapter>
