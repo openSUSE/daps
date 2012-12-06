@@ -451,6 +451,8 @@ using XIncludes, using separate entity files</remark>
      <title>XML File With Profiling Attributes</title>
      <screen>
       
+      
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -630,11 +632,11 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   <filename>entity-decl.ent</filename>, and to re-use it in multiple documentation 
   projects. For multiple use of entities like <literal>&amp;productname;</literal>
   or <literal>&amp;productnumber;</literal>, declare them in a separate file and
-  add profiling within the entities as shown in <xref linkend="ex.daps.main.decl"/>. 
+  add profiling within the entities as shown in <xref linkend="ex.daps.ent.decl.profiling"/>. 
   During generation of output, &dapsacr; then automatically replaces the entities 
   with different values during output, depending on the context.</para>
 
-  <example id="ex.daps.main.decl">
+  <example id="ex.daps.ent.decl.profiling">
    <title>Separate Entity File with Profiling Attributes</title>
    <screen>
     <?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
@@ -650,17 +652,19 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
   </example>
   <para>For example, you can use both entities of 
-  <xref linkend="ex.daps.main.decl" xrefstyle="select:label"/> 
+  <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> 
   in a product description like the following:</para>
+  
   <example id="ex.daps.art.prof.ent">
    <title>XML File with Entities <literal>&amp;productname;</literal> and
-   <literal>&amp;productnumber;</literal> Entity</title>
+   <literal>&amp;productnumber;</literal>
+   </title>
    <screen>
     <?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
- type="text/xml" 
- title="Profiling step"?&gt; 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling2"/>
+ type="text/xml" <xref linkend="co.daps.main.pi.profiling2" xrefstyle="select:label nopage"/>
+ title="Profiling step"?&gt; <xref linkend="co.daps.main.pi.profiling2" xrefstyle="select:label nopage"/>
 &lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
@@ -672,20 +676,38 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
   &lt;abstract&gt;
-   &lt;para&gt;
+   &lt;para&gt; <co id="co.daps.main.product.entities"/>
     &amp;productname; &amp;productnumber; is a software for recording, editing, 
     and mixing audio data.
-   &lt;/para&gt;
+   &lt;/para&gt; 
   &lt;/abstract&gt;
  [...]
 &lt;/article&gt;</screen>
+   <calloutlist>
+    <callout arearefs="co.daps.main.pi.profiling2">
+     <para>Processing instruction (PI) in the header of the Main file. If it 
+       is missing, any profiling parameters in the &dc; file will be ignored.
+       </para>
+    </callout>
+    <callout arearefs="co.daps.main.product.entities">
+     <para>Paragraph containing the entities <literal>&amp;productname;</literal> 
+     and <literal>&amp;productnumber;</literal>. In any output format, the entities 
+     will automatically be replaced with different values, depending on the profiling 
+     parameters contained in the &dc; file that you use for generating the output. 
+     For an example, refer to <xref linkend="tab.daps.profile.output.four" 
+     xrefstyle="select:label"/>. </para>
+    </callout>
+   </calloutlist>
   </example>
-  <para>Depending on the &dc; file you use, the text in the source code above 
-  will result in one of the following outputs:</para>
+  <para><xref linkend="tab.daps.profile.output.four" 
+     xrefstyle="select:label"/> shows output variants that can be generated 
+     from the XML source code shown in <xref linkend="ex.daps.art.prof.ent" 
+     xrefstyle="select:label"/> plus the entity declaration in 
+     <xref linkend="ex.daps.ent.decl.profiling" 
+     xrefstyle="select:label"/> by using different &dc; files.</para>
   <table id="tab.daps.profile.output.four" rowsep="1">
-   <title>Output of <xref linkend="ex.daps.main.decl" xrefstyle="select:
-     label"/> and <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:
-     label"/>
+   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" 
+   xrefstyle="select:label"/>
    </title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
