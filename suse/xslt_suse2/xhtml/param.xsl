@@ -22,13 +22,13 @@
   <!-- Use graphics in admonitions?  0=no, 1=yes -->
   <xsl:param name="admon.graphics" select="1"/>
   <!-- Path to admonition graphics -->
-  <xsl:param name="admon.graphics.path">admon/</xsl:param>
+  <xsl:param name="admon.graphics.path">static/images/</xsl:param>
   <!-- Specifies the CSS style attribute that should be added to admonitions -->
   <xsl:param name="admon.style" select="''"/>
 
 
 <!-- 2. Callouts ================================================ -->
-  <xsl:param name="callout.graphics.path">callouts/</xsl:param>
+  <xsl:param name="callout.graphics.path">static/images/</xsl:param>
   <xsl:param name="callout.graphics" select="0"/>
 
 <!-- 3. EBNF ==================================================== -->
