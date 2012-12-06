@@ -147,8 +147,8 @@
   &lt;member&gt;Common Feature 2&lt;/member&gt;
   &lt;member&gt;Common Feature 3&lt;/member&gt;
   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
    <para>When generated for the basic edition or for the professional edition, 
@@ -242,9 +242,9 @@
   &lt;member&gt;Common Feature 2&lt;/member&gt;
   &lt;member&gt;Common Feature 3&lt;/member&gt;
   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt;
-  &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt;
-  &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
+  &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
    <para>When generated for the professional edition or for the professional 
@@ -450,9 +450,6 @@
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
      <screen>
-      
-      
-      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -463,9 +460,9 @@
    &lt;member&gt;Common Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.no.prof.attr" xrefstyle="select:label nopage"/>
    &lt;member&gt;Common Feature 3&lt;/member&gt; <xref linkend="co.daps.xml.no.prof.attr" xrefstyle="select:label nopage"/>
    &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value1"/>
-   &lt;member condition="professional"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value2"/>
-   &lt;member condition="professional"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.profcond.value2" xrefstyle="select:label nopage"/>
-   &lt;member condition="professional" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.profvendor"/>
+   &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.value2"/>
+   &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt; <xref linkend="co.daps.xml.profcond.value2" xrefstyle="select:label nopage"/>
+   &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <co id="co.daps.xml.profcond.profvendor"/>
  &lt;/simplelist&gt; 
  [...]
 &lt;/chapter&gt;</screen>
@@ -483,7 +480,7 @@
       <callout arearefs="co.daps.xml.profcond.value2">
        <para>Listitem profiled with attribute 
        <sgmltag class="attribute">condition</sgmltag> and attribute value 
-       <literal>professional</literal>. 
+       <literal>prof</literal>. 
        <literal>Professional&nbsp;Feature&nbsp;1</literal>
        and <literal>Professional&nbsp;Feature&nbsp;2</literal> are only available
        in the professional software edition for enterprise customers.</para>
@@ -491,7 +488,7 @@
       <callout arearefs="co.daps.xml.profcond.profvendor">
        <para>Listitem profiled with two attributes: Attribute 
          <sgmltag class="attribute">condition</sgmltag> with attribute value 
-           <literal>professional</literal> and attribute 
+           <literal>prof</literal> and attribute 
            <sgmltag class="attribute">vendor</sgmltag> with attribute value 
            <literal>oemcompany</literal>. <literal>OEM&nbsp;Feature&nbsp;1</literal> 
            is only available in the professional OEM software edition for 
@@ -568,7 +565,7 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
 MAIN="art_frog.xml" <co id="co.dc.pa.main2"/>
 
 ## Profiling
-PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
+PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
 [...]</screen>
      <calloutlist>
 
@@ -581,7 +578,7 @@ PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
        <para>&dapsacr; profiling parameter for the 
        <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
        defines that XML elements tagged with 
-       <sgmltag class="attribute">condition="professional"</sgmltag> are included in 
+       <sgmltag class="attribute">condition="prof"</sgmltag> are included in 
        the output.</para>
       </callout>
      </calloutlist>
@@ -596,7 +593,7 @@ PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof1"/>
 MAIN="art_frog.xml" <co id="co.dc.pa.main3"/>
 
 ## Profiling
-PROFCONDITION="professional" <co id="co.dc.pa.profcond.prof2"/>
+PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof2"/>
 PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 [...]</screen>
      <calloutlist>
@@ -609,7 +606,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        <para>&dapsacr; profiling parameter for the 
        <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
        defines that XML elements tagged with 
-       <sgmltag class="attribute">condition="professional"</sgmltag> are included in 
+       <sgmltag class="attribute">condition="prof"</sgmltag> are included in 
        the output.</para>
       </callout>
       <callout arearefs="co.dc.pa.profvendor.oem">
@@ -627,33 +624,36 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
   <para>For maximum flexibility in generating documentation variants from the same
-  source, you can also combine entities and profiling. For modularized documents, 
-  it makese sense to declare entities in a separate file (for example, 
-  <filename>entity-decl.ent</filename>), which can then be used in multiple 
-  documentation projects. In order to replace entities like 
-  <literal>&amp;productname;</literal> or <literal>&amp;productnumber;</literal>
-  with different values in the output, use profiling within the entity.</para>
+  source, &dapsacr; also supports the combination of entities and profiling. For
+  modularization, it is useful to declare entities in a separate file, for example, 
+  <filename>entity-decl.ent</filename>, and to re-use it in multiple documentation 
+  projects. For multiple use of entities like <literal>&amp;productname;</literal>
+  or <literal>&amp;productnumber;</literal>, declare them in a separate file and
+  add profiling within the entities as shown in <xref linkend="ex.daps.main.decl"/>. 
+  During generation of output, &dapsacr; then automatically replaces the entities 
+  with different values during output, depending on the context.</para>
 
   <example id="ex.daps.main.decl">
-   <title>External Entity File with Profiling Attributes</title>
-   <screen>&lt;!-- General Entities Defined in entity-decl.ent--&gt;                                                        -->
+   <title>Separate Entity File with Profiling Attributes</title>
+   <screen><?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
+
 &lt;!ENTITY productname  
-  '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic Edition)&lt;/phrase&gt;
-   &lt;phrase cond="professional"&gt;Frog Sound Recordings (Professional Edition)&lt;/phrase&gt;
-   &lt;phrase cond="professional" vendor="oemcompany"&gt;Gecko Sound Recording 
-       (Professional Edition)&lt;/phrase&gt;'&gt;
+ '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
+  &lt;phrase cond="prof"&gt;Frog Sound Recordings (Professional)&lt;/phrase&gt;
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;Gecko Sound Recording (Professional)&lt;/phrase&gt;'&gt;
+
 &lt;!ENTITY productnumber  
-  '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
-   &lt;phrase cond="professional"&gt;4.2&lt;/phrase&gt;
-   &lt;phrase cond="professional" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;
-[...]</screen>
+ '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
+  &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
   </example>
   <para>For example, you can use both entities of 
   <xref linkend="ex.daps.main.decl" xrefstyle="select:label"/> 
   in a product description like the following:</para>
   <example id="ex.daps.art.prof.ent">
-   <title>FIXME</title>
-   <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+   <title>XML File with Entities <literal>&amp;productname;</literal> and
+   <literal>&amp;productnumber;</literal> Entity</title>
+   <screen><?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml" 
@@ -669,13 +669,17 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 &lt;article lang="en" id="art.frog"&gt; 
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
-  &lt;abstract&gt;&lt;para&gt;&amp;productname; &amp;productnumber; is a software
-  for recording, editing, and mixing audio data.&lt;/para&gt;&lt;/abstract&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    &amp;productname; &amp;productnumber; is a software for recording, editing, 
+    and mixing audio data.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
  [...]
 &lt;/article&gt;</screen>
   </example>
-  <para>Depending on the &dc; file you use, the abstract contained in the source 
-  code above will result in one of the following outputs:</para>
+  <para>Depending on the &dc; file you use, the text in the source code above 
+  will result in one of the following outputs:</para>
   <table id="tab.daps.profile.output.four" rowsep="1">
    <title>Output of <xref linkend="ex.daps.main.decl" xrefstyle="select:
      label"/> and <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:
@@ -696,23 +700,35 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     </thead>
     <tbody>
      <row>
-      <entry colname="1">
+      <entry>
        <para>
         <xref linkend="ex.daps.dc.pa.home" xrefstyle="select:title"/>
        </para>
+      </entry>
+      <entry>
+       <para>Frog Sound Recordings (Basic)&nbsp;1.0 is a software for recording,
+       editing, and mixing audio data.</para>
+      </entry>
+     </row>
+     <row>
+      <entry>
        <para>
         <xref linkend="ex.daps.dc.pa.prof" xrefstyle="select:title"/>
        </para>
+      </entry>
+      <entry>
+       <para>Frog Sound Recordings (Professional)&nbsp;4.2 is a software for 
+       recording, editing, and mixing audio data.</para>
+      </entry>
+     </row>
+     <row>
+      <entry>
        <para>
         <xref linkend="ex.daps.dc.pa.prof.oem" xrefstyle="select:title"/>
        </para>
       </entry>
-      <entry colname="2">
-       <para>Frog Sound Recordings (Basic Edition) 1.0 is a software for recording,
-       editing, and mixing audio data.</para>
-       <para>Frog Sound Recordings (Professional Edition) 4.2 is a software for 
-       recording, editing, and mixing audio data.</para>
-       <para>Gecko Sound Recordings (Professional Edition) 4.21 is a software for 
+      <entry>
+       <para>Gecko Sound Recordings (Professional)&nbsp;4.21 is a software for 
        recording, editing, and mixing audio data.</para>
       </entry>
      </row>
