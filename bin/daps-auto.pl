@@ -24,7 +24,7 @@ my $builddir      = "";
 my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
 my $to_rsync      = "";
-my @vformats      = qw(color-pdf epub html htmlsingle pdf txt); # valid formats
+my @vformats      = qw(color-pdf epub html htmlsingle pdf single-html txt); # valid formats
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -340,17 +340,22 @@ sub set_daps_cmd_and_log {
     # return values:
     # $dapscmd, $dapslog
     #
-    my ($set, $dcpath, $format, $styleroot, $fb_styleroot) = @_;
-    my $bookname;
-    my $dapscmd;
-    my $dapslog;
+    my $set = "";
+    my $dcpath = "";
+    my $format = "";
+    my $styleroot = "";
+    my $fb_styleroot = "";
+    ($set, $dcpath, $format, $styleroot, $fb_styleroot) = @_;
+    my $bookname = "";;
+    my $dapscmd = "";
+    my $dapslog = "";
     my $set_builddir = catdir($builddir, "$set");
 
     # set daps binary to ${dapsroot}/bin/daps if dapsroot is set
     # (otherwise use /usr/bin/daps, see above)
     #
     if ( "$dapsroot" ne "" ) {
-        $dapsbin = "${dapsroot}/bin/daps"
+        $dapsbin = "${dapsroot}/bin/daps";
     }
 
     if ( ! -d $set_builddir ) {
@@ -361,9 +366,9 @@ sub set_daps_cmd_and_log {
     # daps command
     #
     $dapscmd =  "$dapsbin --builddir=\"$set_builddir\" --docconfig=\"$dcpath\"";
-    $dapscmd .= " --dapsroot=\"$dapsroot\"" if $dapsroot ne "";
-    $dapscmd .= " --styleroot=\"$styleroot\"" if $styleroot ne "";
-    $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot ne "";
+    $dapscmd .= " --dapsroot=\"$dapsroot\"" if $dapsroot;
+    $dapscmd .= " --styleroot=\"$styleroot\"" if $styleroot;
+    $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot;
     $dapscmd .= " --debug" if $debug; 
     $dapscmd .= " $format";
     if ( $format =~ /^html.*/ or $format =~ /.*pdf$/ ) {
@@ -403,7 +408,8 @@ sub build {
     # ----
     # clean up previous build results
     my ($dapsclean, undef) = set_daps_cmd_and_log("$set", "$dcpath", "clean-results");
-    system("$dapsclean clean-results >/dev/null")  == 0
+    print "Clean up: $dapsclean" if $verbose;
+    system("$dapsclean >/dev/null")  == 0
         or warn "${bcol}Failed to run \"$dapsclean\".${ecol}\n";
 
     # ----
@@ -439,7 +445,7 @@ sub build {
         }
         make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
         # HTML/HTMLsingle do not return single files, but files and directories
-        if ( $format =~ /^html.*/ ) {
+        if ( $format =~ /^(single-)?html.*/ ) {
             my $resultdir = dirname($dapsresult);
             dirmove($resultdir, $syncsubdir)or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
         } else {
@@ -523,6 +529,8 @@ sub rsync {
         dest => "$rsync_target",
     } );
 
+    print scalar($rsync->lastcmd) if $verbose;
+    
     # check return code
     my $rsync_status = $rsync->status;
     # error handling
