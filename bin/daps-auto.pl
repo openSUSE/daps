@@ -173,12 +173,22 @@ foreach my $set (@sets) {
     }
     @dcfiles = split /, */, $cfg->val("$set", 'dcfiles');
     @formats = split /, */, $cfg->val("$set", 'formats');
-    my $workdir = $cfg->val("$set", 'workdir');
+    my $workdir      = $cfg->val("$set", 'workdir');
+    my $styleroot    = $cfg->val("$set", 'styleroot');
+    my $fb_styleroot = $cfg->val("$set", 'fb_styleroot');
     # Working Direcory
-    if ( ! -d $workdir ) {
+    unless ( -d $workdir ) {
         warn "${bcol}Invalid working directory \"$workdir\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
         next;
     }
+    unless ( -z $styleroot && -d $styleroot ) {
+        warn "${bcol}Invalid styleroot directory \"$styleroot\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
+        next;
+    }
+    unless ( -z $fb_styleroot && -d $fb_styleroot ) {
+        warn "${bcol}Invalid styleroot directory \"$fb_styleroot\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
+        next;
+    }    
     unless ( $nosvnup) {
         print "  Doing an svn up on\n  $workdir\n  " if $verbose;
         system("/usr/bin/svn up $workdir$devnull") == 0
@@ -202,12 +212,20 @@ foreach my $set (@sets) {
         } else {
             foreach my $dcfile ( @dcfiles ) {
                 print "  * $dcfile: \U$format...";
-                my $dcpath = catfile("$workdir", "$dcfile");
+                my $dcpath  = catfile("$workdir", "$dcfile");
+                my $dapscmd = "";
+                my $dapslog = "";
                 unless ( -f $dcpath ) {
+                    # wrong DC file
                     warn "${bcol}Invalid DC-file \"$dcfile\" in config for section [$set].\n-> Skipping $dcfile${ecol}.\n";
                     next;
                 } else {
-                    my ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
+                    # set dapsbin and log file location
+                    if ( "$styleroot" ne "" ) {
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format", "$styleroot", "$fb_styleroot");
+                    } else {
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");                        
+                    }
                     my $buildresult = build("$set", "$syncdir", "$format", "$dcpath", "$dapscmd", "$dapslog");
                     # if build was not successful, $buildresult == 0
                     next unless $buildresult;
@@ -322,11 +340,18 @@ sub set_daps_cmd_and_log {
     # return values:
     # $dapscmd, $dapslog
     #
-    my ($set, $dcpath, $format) = @_;
+    my ($set, $dcpath, $format, $styleroot, $fb_styleroot) = @_;
     my $bookname;
     my $dapscmd;
     my $dapslog;
     my $set_builddir = catdir($builddir, "$set");
+
+    # set daps binary to ${dapsroot}/bin/daps if dapsroot is set
+    # (otherwise use /usr/bin/daps, see above)
+    #
+    if ( "$dapsroot" ne "" ) {
+        $dapsbin = "${dapsroot}/bin/daps"
+    }
 
     if ( ! -d $set_builddir ) {
         mkdir($set_builddir, 0755) or die "${bcol}Failed to create directory $set_builddir${ecol}";
@@ -337,6 +362,8 @@ sub set_daps_cmd_and_log {
     #
     $dapscmd =  "$dapsbin --builddir=\"$set_builddir\" --docconfig=\"$dcpath\"";
     $dapscmd .= " --dapsroot=\"$dapsroot\"" if $dapsroot ne "";
+    $dapscmd .= " --styleroot=\"$styleroot\"" if $styleroot ne "";
+    $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot ne "";
     $dapscmd .= " --debug" if $debug; 
     $dapscmd .= " $format";
     if ( $format =~ /^html.*/ or $format =~ /.*pdf$/ ) {
