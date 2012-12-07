@@ -181,11 +181,11 @@ foreach my $set (@sets) {
         warn "${bcol}Invalid working directory \"$workdir\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
         next;
     }
-    unless ( -z $styleroot && -d $styleroot ) {
+    unless ( "$styleroot" eq "" && -d $styleroot ) {
         warn "${bcol}Invalid styleroot directory \"$styleroot\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
         next;
     }
-    unless ( -z $fb_styleroot && -d $fb_styleroot ) {
+    unless ( "$fb_styleroot" eq "" && -d $fb_styleroot ) {
         warn "${bcol}Invalid styleroot directory \"$fb_styleroot\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
         next;
     }    
