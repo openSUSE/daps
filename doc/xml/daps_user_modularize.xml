@@ -453,6 +453,8 @@ using XIncludes, using separate entity files</remark>
       
       
       
+      
+      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -639,6 +641,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   <example id="ex.daps.ent.decl.profiling">
    <title>Separate Entity File with Profiling Attributes</title>
    <screen>
+    
     <?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
@@ -651,15 +654,41 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
   &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
   </example>
-  <para>For example, you can use both entities of 
+  <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
+    need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
+    https://sourceforge.net/p/daps/tickets/48/</remark>
+  <para>After declaring the entities as shown in
   <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> 
-  in a product description like the following:</para>
-  
+  you can use them throughout your documents. For &dapsacr; to process them 
+  correctly, you only need to <quote>introduce</quote> the entities once as
+  shown in <xref linkend="ex.daps.art.prof.ent"/>.</para>
+  <procedure>
+   <step>
+    <para>Insert one of the respective elements <sgmltag>setinfo</sgmltag>, 
+    <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your set, 
+    book, or article. 
+    </para>
+   </step>
+   <step>
+    <para>Within the <sgmltag>setinfo</sgmltag>, <sgmltag>bookinfo</sgmltag>, 
+    or <sgmltag>articleinfo</sgmltag>, add both a <sgmltag>productname</sgmltag> 
+    and <sgmltag>productnumber</sgmltag> element.   
+    </para>
+   </step>
+   <step>
+    <para>Use the <literal>&amp;productname;</literal> and 
+   <literal>&amp;productnumber;</literal> entity within the respective elements.
+   </para>
+   </step>
+  </procedure>
+  <para>Then use them in the text wherever you need them.</para>
+
   <example id="ex.daps.art.prof.ent">
    <title>XML File with Entities <literal>&amp;productname;</literal> and
    <literal>&amp;productnumber;</literal>
    </title>
    <screen>
+    
     <?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling2"/>
@@ -675,9 +704,13 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 &lt;article lang="en" id="art.frog"&gt; 
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+  &lt;articleinfo&gt; <co id="co.daps.articleinfo"/>
+   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <co id="co.daps.articleinfo.productname"/>
+   &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <co id="co.daps.articleinfo.productnumber"/>
+ &lt;/articleinfo&gt;
   &lt;abstract&gt;
-   &lt;para&gt; <co id="co.daps.main.product.entities"/>
-    &amp;productname; &amp;productnumber; is a software for recording, editing, 
+   &lt;para&gt; 
+    &amp;productname; &amp;productnumber; is a software for recording, editing, <co id="co.daps.main.product.entities"/>
     and mixing audio data.
    &lt;/para&gt; 
   &lt;/abstract&gt;
@@ -689,25 +722,37 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        is missing, any profiling parameters in the &dc; file will be ignored.
        </para>
     </callout>
+    <callout arearefs="co.daps.articleinfo">
+     <para>Element <sgmltag>articleinfo</sgmltag>.</para>
+    </callout>
+    <callout arearefs="co.daps.articleinfo.productname">
+     <para>Element <sgmltag>productname</sgmltag> and entity 
+     <literal>&amp;productname;</literal>.</para>
+    </callout>
+    <callout arearefs="co.daps.articleinfo.productnumber">
+     <para>Element <sgmltag>productnumber</sgmltag> and entity 
+     <literal>&amp;productnumber;</literal>.</para>
+    </callout>
     <callout arearefs="co.daps.main.product.entities">
      <para>Paragraph containing the entities <literal>&amp;productname;</literal> 
-     and <literal>&amp;productnumber;</literal>. In any output format, the entities 
-     will automatically be replaced with different values, depending on the profiling 
-     parameters contained in the &dc; file that you use for generating the output. 
-     For an example, refer to <xref linkend="tab.daps.profile.output.four" 
-     xrefstyle="select:label"/>. </para>
+      and <literal>&amp;productnumber;</literal>. </para>
     </callout>
    </calloutlist>
   </example>
-  <para><xref linkend="tab.daps.profile.output.four" 
-     xrefstyle="select:label"/> shows output variants that can be generated 
-     from the XML source code shown in <xref linkend="ex.daps.art.prof.ent" 
-     xrefstyle="select:label"/> plus the entity declaration in 
-     <xref linkend="ex.daps.ent.decl.profiling" 
-     xrefstyle="select:label"/> by using different &dc; files.</para>
+  <para>In any output format, the entities (<xref linkend="co.daps.articleinfo.productname" 
+  xrefstyle="select:label nopage"/>, <xref linkend="co.daps.articleinfo.productnumber" 
+  xrefstyle="select:label nopage"/>, <xref linkend="co.daps.main.product.entities" 
+  xrefstyle="select:label nopage"/>) will automatically be replaced with different
+  values, depending on the profiling parameters contained in the &dc; file that 
+  you use for generating the output. For an example, refer to 
+  <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
+  <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/> shows
+  output variants that can be generated from the XML code shown in 
+  <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/> plus the entity
+  declaration in <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> 
+  by using different &dc; files.</para>
   <table id="tab.daps.profile.output.four" rowsep="1">
-   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" 
-   xrefstyle="select:label"/>
+   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/>
    </title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
@@ -759,11 +804,9 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     </tbody>
    </tgroup>
   </table>
-  <para>
-   <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
-  need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
-  https://sourceforge.net/p/daps/tickets/48/</remark>
-  </para>
+
+ 
+ 
  </sect1>
 
 </chapter>
