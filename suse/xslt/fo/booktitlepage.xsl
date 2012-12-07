@@ -45,7 +45,7 @@
             y="12.5"
             font-size="11pt"
             font-family="{$sans.font.family}">
-        <xsl:apply-templates
+        <xsl:apply-templates mode="book.titlepage.recto"
             select="self::book/bookinfo/productnumber" /></svg:text>
       <svg:text
             id="date.text"
@@ -193,6 +193,14 @@
 
 </xsl:template>
 
+
+<xsl:template match="productnumber" mode="book.titlepage.recto">
+  <xsl:variable name="text">
+    <xsl:apply-templates select="node()"/>
+  </xsl:variable>
+  
+  <xsl:value-of select="string($text)"/>
+</xsl:template>
 
 <xsl:template match="productname" mode="book.titlepage.recto">
   <!-- Needed to avoid TM, (R), and other symbols -->
