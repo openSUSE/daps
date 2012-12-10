@@ -22,7 +22,7 @@
    <xsl:choose>
     <xsl:when test="count($dpfilenamenode) = 0">
      <xsl:message>WARNING: Could not retrieve metadata for filename <xsl:value-of select="concat(&quot;'&quot;, $filename, &quot;' &quot;)"/></xsl:message>
-      <span class="ds-error">Status information could not be retrieved.</span>
+      <span class="ds-error">No Status Information available.</span>
     </xsl:when>
     <xsl:otherwise>
       <span class="ds-head">Status information</span>
