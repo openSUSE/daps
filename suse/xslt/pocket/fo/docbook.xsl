@@ -42,10 +42,6 @@
     </xsl:message>
   </xsl:if>
   
-  <xsl:if test="$projectfile = ''">
-    <xsl:message>WARNING: Parameter for projectfile is empty!</xsl:message>
-  </xsl:if>
-  
   <!-- Explicitly insert the original message, xsl:apply-imports don't
     work here
   -->
