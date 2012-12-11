@@ -101,6 +101,53 @@ using XIncludes, using separate entity files</remark>
   4. Entities and Profiling as explained above
   
  </remark>-->
+
+ <sect1 id="sec.daps.user.modular.xi">
+  <title>Splitting up Documents into XIncludes</title>
+  <para>Instead of putting the contents of a complete article or book into the 
+  Main file, DocBook allows you to divide the text into separate document files,
+  that are then assembled in the Main file using <literal>XIncludes</literal>.
+  For an example, see <xref linkend="ex.daps.main.set"/>. XIncludes can be used 
+  for splitting up sets, books, articles or chapters into separate files. For 
+  more information, refer to
+  <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
+  <citetitle>Physical Divisions: Breaking a Document into Separate 
+  Files</citetitle>
+   </ulink>. 
+  </para>
+ </sect1>
+ <sect1 id="sec.daps.user.modular.ent.separate">
+  <title>Declaring Entities in a Separate File</title>
+  <para>If you declare entities in the document type declaration of individual 
+  XML files, it becomes very cumbersome to keep a consistent set of entities
+  if you maintain a large number of documents for a product. For large 
+  documentation projects, it is therefore useful to put all entity declarations 
+  into a separate file and then reference that file in the individual XML files.</para>
+  <example id="ex.daps.ent.decl.separate">
+   <title>Separate Entity File <filename>entity-decl.ent</filename>
+   </title>
+   <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
+&lt;!ENTITY exampleuser "tux"&gt;
+&lt;!ENTITY exampleuserII "wilber"&gt;
+&lt;!ENTITY examplegroup "users"&gt;
+[...]</screen>
+  </example>
+  <example id="ex.daps.ent.decl.reference">
+   <title>Referencing A Separate Entity File</title>
+   <screen>&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]&gt;  
+&lt;chapter&gt;
+&lt;title&gt;Managing User Accounts&lt;/title&gt;
+[...]</screen>
+  </example>
+  <para>For more information, refer to <ulink 
+  url="http://www.sagehill.net/docbookxsl/ModularDoc.html">
+  <citetitle>Modular DocBook Files</citetitle></ulink>.</para>
+ </sect1>
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
    
@@ -450,11 +497,6 @@ using XIncludes, using separate entity files</remark>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
      <screen>
-      
-      
-      
-      
-      
       <?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -629,11 +671,12 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
   <para>For maximum flexibility in generating documentation variants from the same
-  source, &dapsacr; also supports the combination of entities and profiling. For
-  modularization, it is useful to declare entities in a separate file, for example, 
-  <filename>entity-decl.ent</filename>, and to re-use it in multiple documentation 
-  projects. For multiple use of entities like <literal>&amp;productname;</literal>
-  or <literal>&amp;productnumber;</literal>, declare them in a separate file and
+  source, &dapsacr; also supports the combination of entities and profiling. As 
+  you already learned in <xref linkend="sec.daps.user.modular.ent.separate"/>,
+  it is useful for modularization purposes to declare entities in a separate file
+  and to re-use it in multiple documentation projects. For multiple use of 
+  entities like <literal>&amp;productname;</literal> or 
+  <literal>&amp;productnumber;</literal>, declare them in a separate file and
   add profiling within the entities as shown in <xref linkend="ex.daps.ent.decl.profiling"/>. 
   During generation of output, &dapsacr; then automatically replaces the entities 
   with different values during output, depending on the context.</para>
@@ -668,7 +711,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your set, 
     book, or article. 
     <remark>taroth 2012-12-07: if I have a set, does it need to be in all *info
-    elements (setinfo, bookinfo, articleinfo)?</remark></para>
+    elements (setinfo, bookinfo, articleinfo)?</remark>
+    </para>
    </step>
    <step>
     <para>Within the <sgmltag>setinfo</sgmltag>, <sgmltag>bookinfo</sgmltag>, 
@@ -689,7 +733,6 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <literal>&amp;productnumber;</literal>
    </title>
    <screen>
-    
     <?dbsuse-fo font-size="0.65em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling2"/>
@@ -698,8 +741,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 &lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
-%entities;
-]&gt;  
+%entities; 
+]&gt;  <co id="co.daps.main.reference.ent"/>
 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 &lt;article lang="en" id="art.frog"&gt; 
@@ -723,6 +766,10 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        is missing, any profiling parameters in the &dc; file will be ignored.
        </para>
     </callout>
+    <callout arearefs="co.daps.main.reference.ent">
+     <para>Reference to the separate entity declaration 
+    file (with a parameter entity).</para>
+    </callout>
     <callout arearefs="co.daps.articleinfo">
      <para>Element <sgmltag>articleinfo</sgmltag>.</para>
     </callout>
@@ -740,10 +787,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     </callout>
    </calloutlist>
   </example>
-  <para>In any output format, the entities (<xref linkend="co.daps.articleinfo.productname" 
-  xrefstyle="select:label nopage"/>, <xref linkend="co.daps.articleinfo.productnumber" 
-  xrefstyle="select:label nopage"/>, <xref linkend="co.daps.main.product.entities" 
-  xrefstyle="select:label nopage"/>) will automatically be replaced with different
+  <para>In any output format, the entities (<xref linkend="co.daps.articleinfo.productname" xrefstyle="select:label nopage"/>, <xref linkend="co.daps.articleinfo.productnumber" xrefstyle="select:label nopage"/>, <xref linkend="co.daps.main.product.entities" xrefstyle="select:label nopage"/>) will automatically be replaced with different
   values, depending on the profiling parameters contained in the &dc; file that 
   you use for generating the output. For an example, refer to 
   <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
