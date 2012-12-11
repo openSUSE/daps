@@ -209,7 +209,7 @@
 
 
 <xsl:template match="bookinfo/authorgroup" mode="book.titlepage.verso.auto.mode">
-   <fo:block id="authors-list" font-size="9pt" space-before="1.5em">
+   <fo:block font-size="9pt" space-before="1.5em">
     <fo:inline font-weight="bold">
       <xsl:call-template name="gentext">
          <xsl:with-param name="key" select="'ListofAuthors'"/>
