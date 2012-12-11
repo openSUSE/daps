@@ -64,13 +64,14 @@ body {
 html, body {
     height: 100%;
     min-width: 450px;
+    font-size: 16px;
 }
 
 #_header, #_footer, #_toolbar-bottom,
 #_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
-#_content > .refentry, #_content > .bibliography, #_content > .index
+#_content > .refentry, #_content > .bibliography, #_content > .index,
 #_content > .page-bottom {
     margin: 0 auto;
     min-width: 400px;
@@ -174,7 +175,6 @@ html, body {
 
 #_header .crumbs a, #_header .crumbs span {
     margin: 0 0 0 5px;
-    font-size: 16px;
 }
 
 .crumbs span {
@@ -1206,11 +1206,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     font-weight: normal;
 }
 
-/* FUXME! */
-#_content .title + .title {
-    margin-top: -20px;
-}
-
 #_content .name, #_content .refentry h2, .refentrytitle a, h2 {
     color: #439539;
 }
@@ -1277,10 +1272,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 /* Thou shalt not ... */
 
 #_content .admonition {
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 3px;
+    border-width: 1px;
     border-radius: 3px;
     border-style: solid;
     padding: 10px;
@@ -1321,7 +1313,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_content .admonition h6 {
-    font-size: 16px;
     font-weight: 600;
     vertical-align: middle;
     display: table-cell;
@@ -1377,19 +1368,17 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content p, .simplelist td {
-    font-size: 16px;
     color: #000;
     text-align: left;
     margin: 10px 0 0;
 }
 
 #_content .abstract {
-    font-weight: 600;
-    background-color: #F7FAF6;
-    border-left: 3px solid #9CC897;
-    padding: 3px 10px 5px 10px;
     margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 140%;
 }
+
 #_content .abstract p, .toc-title {
     color: #333;
 }
@@ -1404,10 +1393,6 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 #_content .abstract .titlepage + p {
     margin-top: 0;
-}
-
-#_content .abstract li p {
-    font-weight: 600;
 }
 
 #_content .abstract li:first-child p:first-child {
@@ -1473,10 +1458,10 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content code, #_content .command {
-    font: normal 100% 'Droid Sans Mono', monospace;
+    font-family: 'Droid Sans Mono', monospace;
+    font-weight: normal;
     padding: 0 4px;
-    border: 1px solid #D1D1D3;
-    border-radius: 3px;
+    border-bottom: 1px solid #C1C1C3;
     color: #333;
     text-transform: none;
     display: inline-block;
@@ -1508,9 +1493,10 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 #_content .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
     padding: 10px;
-    background-color: #202020;
+    background-color: #EFEFF0;
     border-radius: 5px;
     margin: 5px 0;
+    border: 1px solid #999;
 }
     
 #_content .example .screen-wrap {
@@ -1519,11 +1505,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 #_content .screen {
     font: normal 13px 'Droid Sans Mono', monospace;
-    color: #FFF;
+    color: #333;
     line-height: 125%;
     display: block;  
     overflow: auto;
-    background-color: #202020;
+    background-color: #EFEFF0;
 }
 
 #_content .screen code, #_content .screen .command {
@@ -1535,15 +1521,20 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .screen code {
-    color: #FFF;
+    color: #333;
 }
 
+
 #_content .screen .command {
-    color: #76AD2D;
+    color: #439539;
 }
 
 #_content .calloutlist {
     margin: 10px 0 24px;
+}
+
+#_content .calloutlist td[width="5%"] {
+    width: 45px;
 }
 
 #_content .example + .calloutlist {
@@ -1569,7 +1560,8 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 #_content .calloutlist .callout {
     position: relative;
-    top: -2px;
+    top: 2px;
+    float: right;
 }
 
 #_content .variablelist, #_content .toc {
@@ -1748,7 +1740,6 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .procedure-contents {
-    font-size: 16px;
     border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
