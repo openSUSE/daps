@@ -795,6 +795,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     margin: 0 10px 0 5px;
 }
 
+#_fixed-header div.button {
+    margin-left: 10px;;
+}
+
 #_fixed-header .buttons .tool-spacer {
     display: block;
     float: left;
@@ -811,7 +815,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_fixed-header .top-button {
     color: #333;
-    margin-right: 10px;
 }
 
 #_fixed-header .top-button:hover, #_fixed-header .top-button:focus, #_fixed-header .top-button:active {
@@ -1465,6 +1468,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     color: #333;
     text-transform: none;
     display: inline-block;
+    line-height: 120%;
 }
 
 
@@ -1674,7 +1678,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     max-width: 100%;
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
     color: #999;
-    margin: 24px 0;
+    margin: 17px 0 24px;
     padding: 1px;
     border: 1px solid #202020;
     width: auto;
@@ -1707,7 +1711,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .procedure-title, #_content .table-title, #_content .example-title,
-#_content .figure-title, .orderedlist-title {
+#_content .figure-title, .orderedlist-title, .variablelist-title, .itemizedlist-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
@@ -1715,14 +1719,16 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     line-height: 120%;
 }
 
-#_content .table-title, #_content .example-title, #_content .procedure-title {
+#_content .table-title, #_content .example-title, #_content .procedure-title,
+.variablelist-title, .itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-#_content .example-title, #_content .procedure-title, #_content .orderedlist-title {
+#_content .example-title, #_content .procedure-title, #_content .orderedlist-title,
+.variablelist-title, .itemizedlist-title {
     margin: 24px 0 -33px;
 }
 
@@ -1734,7 +1740,9 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .table-title code, #_content .table-title .command, #_content .table-title .keycap,
 #_content .example-title code, #_content .example-title .command, #_content .example-title .keycap,
 #_content .figure-title code, #_content .figure-title .command, #_content .figure-title .keycap,
-#_content .orderedlist-title code, #_content .orderedlist-title .command, #_content .orderedlist-title .keycap
+#_content .orderedlist-title code, #_content .orderedlist-title .command, #_content .orderedlist-title .keycap,
+.variablelist-title code, .variablelist-title .command, .variablelist-title .keycap,
+ .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap
 {
     text-transform: none;
 }
@@ -1745,7 +1753,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin: 17px 0 17px;
     /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
     On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
-    padding: 3px 5px 5px 2px;
+    padding: 3px 5px 6px 2px;
     background-color: #F7FAF6;
     display: block;
 }
