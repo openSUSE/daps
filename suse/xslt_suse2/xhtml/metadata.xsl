@@ -5,14 +5,44 @@
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:dp="urn:x-suse:xmlns:docproperties" 
-  xmlns="http://www.w3.org/1999/xhtml">
+  xmlns:dp="urn:x-suse:xmlns:docproperties"
+  xmlns:date="http://exslt.org/dates-and-times"
+  xmlns="http://www.w3.org/1999/xhtml"
+  extension-element-prefixes="date"
+  exclude-result-prefixes="date">
 
- <!-- Use a key, to find the node dp:filename in 'METAFILE' -->
+ <!-- Use a key to find the node dp:filename in 'METAFILE' -->
  <xsl:param name="metafilename" select="'METAFILE'"/>
  <xsl:key name="status" match="dp:filename" use="self::dp:filename"/>
- 
- 
+
+  <xsl:template name="titlepage.timestamp">
+    <xsl:variable name="format">
+      <xsl:call-template name="gentext.template">
+        <xsl:with-param name="context" select="'datetime'"/>
+        <xsl:with-param name="name" select="'titlepage.format'"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="date">
+      <xsl:choose>
+        <xsl:when test="function-available('date:date-time')">
+          <xsl:value-of select="date:date-time()"/>
+        </xsl:when>
+        <xsl:when test="function-available('date:dateTime')">
+          <!-- Xalan quirk -->
+          <xsl:value-of select="date:dateTime()"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <p class="ds-message">
+      Last built on
+      <xsl:call-template name="datetime.format">
+        <xsl:with-param name="date" select="$date"/>
+        <xsl:with-param name="format" select="$format"/>
+        <xsl:with-param name="padding" select="1"/>
+      </xsl:call-template>
+    </p>
+  </xsl:template>
+
 <xsl:template name="getmetadata">
  <xsl:param name="filename" select="'UNKNOWN'"/>
 
@@ -21,8 +51,10 @@
   <div class="doc-status">
    <xsl:choose>
     <xsl:when test="count($dpfilenamenode) = 0">
-     <xsl:message>WARNING: Could not retrieve metadata for filename <xsl:value-of select="concat(&quot;'&quot;, $filename, &quot;' &quot;)"/></xsl:message>
-      <span class="ds-error">No Status Information available.</span>
+     <xsl:message>WARNING: Could not retrieve metadata for filename 
+      <xsl:value-of select="concat(&quot;'&quot;, $filename, &quot;' &quot;)"/>.
+      Type &quot;man docmanager&quot; to learn more.</xsl:message>
+      <p class="ds-message">No Status Information available.</p>
     </xsl:when>
     <xsl:otherwise>
       <span class="ds-head">Status information</span>
@@ -38,6 +70,7 @@
       </ul>
     </xsl:otherwise>
    </xsl:choose>
+  <xsl:call-template name="titlepage.timestamp"/>
   </div>
 </xsl:template>
 
