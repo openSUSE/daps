@@ -1107,8 +1107,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 .version-info {
     color: #439539;
     font-weight: normal;
-    background-color: rgba(255,255,255,0.45);
-    border: 1px solid #439539;
+    background-color: rgba(255,255,255,0.7);
     padding: 3px 5px;
     line-height: 120%;
     float: right;
@@ -1422,7 +1421,8 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .title .ulink, #_content .subtitle .ulink,
 #_content .table-title .ulink, #_content .example-title .ulink,
 #_content .figure-title .ulink, #_content .procedure-title .ulink
-#_content .orderedlist-title .ulink {
+#_content .orderedlist-title .ulink, #_content .itemizedlist-title .ulink,
+#_content .variablelist-title .ulink {
     text-decoration: underline;
 }
 
@@ -1451,7 +1451,9 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .figure-title .xref:hover, #_content .figure-title .xref:focus, #_content .figure-title .xref:active,
 #_content .example-title .xref:hover, #_content .example-title .xref:focus, #_content .example-title .xref:active,
 #_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active,
-#_content .orderedlist-title .xref:hover, #_content .orderedlist-title .xref:focus, #_content .orderedlist-title .xref:active {
+#_content .orderedlist-title .xref:hover, #_content .orderedlist-title .xref:focus, #_content .orderedlist-title .xref:active,
+#_content .itemizedlist-title .xref:hover, #_content .itemizedlist-title .xref:focus, #_content .itemizedlist-title .xref:active,
+#_content .variablelist-title .xref:hover, #_content .variablelist-title .xref:focus, #_content .variablelist-title .xref:active {
     color: #439539;
     text-decoration: none;
 }
@@ -1711,7 +1713,8 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .procedure-title, #_content .table-title, #_content .example-title,
-#_content .figure-title, .orderedlist-title, .variablelist-title, .itemizedlist-title {
+#_content .figure-title, #_content .orderedlist-title, #_content .variablelist-title,
+#_content .itemizedlist-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
@@ -1720,21 +1723,29 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .table-title, #_content .example-title, #_content .procedure-title,
-.variablelist-title, .itemizedlist-title {
+#_content .variablelist-title, #_content.itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-#_content .example-title, #_content .procedure-title, #_content .orderedlist-title,
-.variablelist-title, .itemizedlist-title {
+#_content .example-title, #_content .procedure-title, #_content .orderedlist-title {
     margin: 24px 0 -33px;
+}
+
+#_content .itemizedlist-title {
+    margin: 24px 0 -10px;
 }
 
 #_content .table-title {
     margin: 24px 0 -23px;
 }
+
+#_content .variablelist-title {
+    margin: 24px 0 -53px;
+}
+
 
 #_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap,
 #_content .table-title code, #_content .table-title .command, #_content .table-title .keycap,
@@ -1867,6 +1878,10 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin: 0 10px 5px;
 }
 
+div.itemizedlist {
+    margin: 0 0 24px;
+}
+
 /* Review features */
 
 .remark, .doc-status {
@@ -1898,8 +1913,9 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     color: #000;
 }
 
-.ds-error {
+p.ds-message {
     font-style: italic;
+    margin: 0 !important;
 }
 
 
