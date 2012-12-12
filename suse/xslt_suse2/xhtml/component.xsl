@@ -59,6 +59,9 @@
       <xsl:with-param name="node" select="$node"/>
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
+    <xsl:call-template name="create.permalink.singlehtml">
+      <xsl:with-param name="object" select="$node"/>
+    </xsl:call-template>
   </xsl:element>
   </xsl:template>
   

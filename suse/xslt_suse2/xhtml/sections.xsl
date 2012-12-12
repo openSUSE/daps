@@ -89,7 +89,7 @@
       <xsl:with-param name="node" select=".."/>
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
-    
+    <xsl:text> </xsl:text>
     <xsl:call-template name="create.permalink">
        <xsl:with-param name="object" select="$section"/>
     </xsl:call-template>

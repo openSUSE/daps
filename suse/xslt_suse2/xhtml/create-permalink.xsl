@@ -21,7 +21,16 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
-  
+
+  <!-- The below template is replaced by a template of the same name in
+       chunk-common, if that file is included. -->
+  <xsl:template name="create.permalink.singlehtml">
+    <xsl:param name="object" select="."/>
+    <xsl:call-template name="create.permalink">
+      <xsl:with-param name="object" select="$object"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template name="create.permalink">
     <xsl:param name="object" select="."/>
     

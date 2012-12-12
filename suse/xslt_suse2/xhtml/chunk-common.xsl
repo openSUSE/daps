@@ -656,4 +656,9 @@
     </xsl:call-template>
   </xsl:template>
 
+<!-- ======================================================================= -->
+
+  <xsl:template name="create.permalink.singlehtml"/>
+  <!-- Nothing here, so we don't create permalinks for chapters and parts... -->
+
 </xsl:stylesheet>
