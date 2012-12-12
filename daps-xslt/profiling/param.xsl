@@ -27,4 +27,10 @@
 <!-- rootid: Process only this element and their children  -->
 <xsl:param name="rootid"/>
 
+  <xsl:param name="l10n.gentext.default.language">en</xsl:param>
+  <xsl:param name="l10n.gentext.language"/>
+  <xsl:param name="l10n.gentext.use.xref.language" select="0"/>
+  <xsl:param name="l10n.lang.value.rfc.compliant" select="1"/>
+  
+
 </xsl:stylesheet>

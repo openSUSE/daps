@@ -16,7 +16,8 @@
 <xsl:import href="&db;/common/l10n.xsl"/>
 <xsl:import href="&db;/common/pi.xsl"/>
 <xsl:import href="&db;/lib/lib.xsl"/>
-<xsl:import href="profile-rootid.xsl"/>
+  
+<xsl:include href="profile-rootid.xsl"/>
   
 <xsl:include href="xml-stylesheet.xsl"/>
 <xsl:include href="check.profiling.xsl"/>
@@ -32,10 +33,6 @@
 
 <xsl:param name="pubdate"/>
 
-<xsl:param name="l10n.gentext.default.language">en</xsl:param>
-<xsl:param name="l10n.gentext.language"/>
-<xsl:param name="l10n.gentext.use.xref.language" select="0"/>
-<xsl:param name="l10n.lang.value.rfc.compliant" select="1"/>
  
 
 <!--
@@ -124,7 +121,9 @@
   <xsl:call-template name="pi.dbtimestamp"/>
 </xsl:template>
 
-<xsl:template match="processing-instruction()|processing-instruction('xml-stylesheet')" mode="profile">
+<xsl:template
+  match="processing-instruction()|processing-instruction('xml-stylesheet')"
+  mode="profile" priority="2">
    <xsl:processing-instruction name="{local-name()}">
       <xsl:value-of select="."/>
    </xsl:processing-instruction>
