@@ -18,7 +18,6 @@ import optparse
 
 import logging
 import textwrap
-import shutil
 
 # Only add additional path, when we are in our repository:
 __=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../lib/python"))
@@ -135,7 +134,7 @@ def main():
      help="Embed OTF FILE in .epub")
   parser.add_option("-i", "--image-dir",
      dest="IMAGEDIR",
-     help="Points to the image path (default %default)")
+     help="Points to the image path")
   parser.add_option("-d", "--dtd",
      dest="DTD",
      help="Validate with given DocBook DTD")
@@ -169,7 +168,7 @@ def main():
      DTD=None,
      # OTFFILES=[],
      # XSLTPARAMS=[],
-     IMAGEDIR="images",
+     # IMAGEDIR=None,
      CUSTOMIZATIONLAYER=os.path.join(docbook.DBPATH, "epub/docbook.xsl"),
      OUTPUTFILE=None,
      )  
@@ -219,7 +218,7 @@ if __name__=="__main__":
   except (etree.XIncludeError, etree.XMLSyntaxError), e:
      log.critical("ERROR in file '%s': %s " % (f, e))
      sys.exit(10)
-  except (IOError, shutil.Error), e:
+  except IOError, e:
     log.critical(e)
     sys.exit(10)
   except docbook.FileNotFoundError, e:
