@@ -58,6 +58,11 @@ $(IMG_DIRECTORIES):
 	mkdir -p $@
 
 #------------------------------------------------------------------------
+# test for optipng
+#
+HAVE_OPTIPNG := $(shell which --skip-alias --skip-functions optipng 2>/dev/null)
+
+#------------------------------------------------------------------------
 # xslt stylsheets
 #
 STYLEGFX       := $(DAPSROOT)/daps-xslt/common/get-graphics.xsl
@@ -215,12 +220,27 @@ endif
 #
 .PHONY: optipng
 optipng:
-	exiftool -Comment=optipng -overwrite_original -P \
-	$(shell for i in $(USED_PNG); do  \
-		exiftool -Comment $$i  | grep optipng > /dev/null || \
-		optipng -o2 $$i > /dev/null; \
-		echo "$$i "; \
-		done )
+  ifndef HAVE_OPTIPNG
+	@ccecho "error" "Error: optipng is not installed" && false
+  else
+    ifdef USED_PNG
+	( j=0; \
+	for i in $(USED_PNG); do  \
+	  if [[ -z $$(exiftool -Comment $$i | grep optipng) ]]; then \
+	    let "j += 1"; \
+	    optipng -o2 $$i >/dev/null 2>&1; \
+	    exiftool -Comment=optipng -overwrite_original -P $$i >/dev/null || true; \
+	  fi \
+	done; \
+	if [ 0 == $$j ]; then \
+	  ccecho "result" "No files needed optimization"; \
+	else \
+	  ccecho "result" "$$j files have been optimized."; \
+	fi )
+    else
+	@ccecho "warn" "Warning: This document does not contain any PNGs to optimize."
+    endif
+  endif
 
 #---------------
 # Warnings
@@ -235,10 +255,10 @@ endif
 # for novell.com/documentation publishing
 #
 ifdef HTMLROOT
-  ifdef WRONG_CAP
+    ifdef WRONG_CAP
 	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >&2
+    endif
   endif
-endif
 
 #------------------------------------------------------------------------
 # The "real" image generation 
@@ -265,8 +285,10 @@ endif
 #
 # existing color PNGs
 $(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
+  ifdef HAVE_OPTIPNG
 	@exiftool -Comment $< | grep optipng > /dev/null || \
 	  ccecho "warn" " $< not optimized." >&2
+  endif
 	ln -sf $< $@
 
 # created PNGs
@@ -307,9 +329,11 @@ rm -f $@; \
 fi
 endef
 
-define run_optipng
-optipng -o2 $@ >& /dev/null
-endef
+ifdef HAVE_OPTIPNG
+  define run_optipng
+optipng -o2 $@ >/dev/null 2>&1
+  endef
+endif
 
 # SVG -> PNG
 # create color PNGs from SVGs
@@ -461,3 +485,6 @@ ifeq ($(VERBOSITY),1)
 endif
 	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL) && \
 	  ( test -f $< || false )
+
+
+
