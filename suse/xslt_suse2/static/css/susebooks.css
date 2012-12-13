@@ -1130,6 +1130,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     color: #439539;
     padding: 70px 0 50px;
 }
+#_content .book .title .citetitle, #_content .set .title .citetitle,
+#_content .article .title .citetitle {
+    font-style: normal;
+}
 
 #_content .set .subtitle, #_content .book .subtitle, #_content .article .subtitle {
     font-size: 28px;
@@ -1182,7 +1186,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_content .sect3 .title, .single #_content .sect3 .title,
-#_content .refentry h2, h2 {
+#_content .refentry h2, h2, .indexdiv h3 {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
@@ -1208,7 +1212,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     font-weight: normal;
 }
 
-#_content .name, #_content .refentry h2, .refentrytitle a, h2 {
+#_content .name, #_content .refentry h2, .refentrytitle a, h2, .indexdiv h3 {
     color: #439539;
 }
 
@@ -1279,17 +1283,16 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-style: solid;
     padding: 10px;
     margin: 17px 0 24px;
-    background-color: #FFF;
 }
 
 #_content .tip {
     border-color: #439539;
-    background: url(../images/dots-green.png) repeat-x scroll top;
+    background: #FFF url(../images/dots-green.png) repeat-x scroll top;
 }
 
 #_content .note {
     border-color: #666;
-    background: url(../images/dots-yellow.png) repeat-x scroll top;
+    background: #FFF url(../images/dots-yellow.png) repeat-x scroll top;
 }
 
 #_content .note ul {
@@ -1298,7 +1301,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_content .important {
     border-color: #BB7B03;
-    background: url(../images/dots-orange.png) repeat-x scroll top;
+    background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
 }
 
 #_content .important ul {
@@ -1307,7 +1310,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_content .warning, .caution {
     border-color: #8C0000;
-    background: url(../images/dots-red.png) repeat-x scroll top;
+    background: #FFF url(../images/dots-red.png) repeat-x scroll top;
 }
 
 #_content .warning ul, #_content .warning ul {
@@ -1410,7 +1413,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 #_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
-#_content .glossseealso {
+#_content .glossseealso, #_content .indexterm {
     color: #439539;
     text-decoration: none;
 }
@@ -1435,13 +1438,16 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 #_content .glosssee:hover, #_content .glosssee:focus, #_content .glosssee:active,
 #_content .glosssee:visited:hover, #_content .glosssee:visited:focus, #_content .glosssee:visited:active,
 #_content .glossseealso:hover, #_content .glossseealso:focus, #_content .glossseealso:active,
-#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active {
+#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active,
+#_content .indexterm:hover, #_content .indexterm:focus, #_content .indexterm:active,
+#_content .indexterm:visited:hover, #_content .indexterm:visited:focus, #_content .indexterm:visited:active  {
     color: #439539;
     text-decoration: underline;
 }
 
 #_content .xref:visited, #_content .ulink:visited, #_content .email:visited,
-#_content .glosssee:visited, #_content .glossseealso:visited {
+#_content .glosssee:visited, #_content .glossseealso:visited,
+#_content .indexterm:visited {
     color: #5C3566;
 }
 
@@ -1592,7 +1598,14 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     margin-bottom: 5px;
 } 
 
-#_content .variablelist dd, #_content .glossary dd, #_content .toc dd {
+.indexdiv h3 {
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+
+#_content .variablelist dd, #_content .glossary dd, #_content .toc dd,
+.indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
