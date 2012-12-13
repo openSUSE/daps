@@ -10,8 +10,84 @@
 <appendix id="app.daps.user.migrate">
  <title>Migration of Existing DocBook Projects</title>
  <para>
-  To migrate existing DocBook projects so that you can manage and publish
-  them with &dapsacr;, follow the step-by-step instructions in
-  <xref linkend="sec.daps.quick.migrate"/>.
- </para>
+   This section provides instructions how to migrate existing DocBook
+   projects so that you can use &dapsacr; for managing and publishing them.
+  </para>
+
+  <procedure id="pro.daps.user.migrate">
+   <title>Making DocBook Projects Compatible with &dapsacr;</title>
+   <step>
+    <para>
+     If your XML files are distributed across several subdirectories,
+     flatten the hierarchy and put all XML files directly into the
+     <filename>xml</filename> subdirectory that is required by &dapsacr;.
+     See
+     <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>.
+     Hosting multiple documentation projects in the same
+     <filename>xml</filename> directory is fine as long as the file names
+     are unique. You can put multiple Main files there.
+    </para>
+   </step>
+   <step>
+    <para>
+     If you have any XIncludes or entity declaration files, also put them
+     into the <filename>xml</filename> subdirectory.
+    </para>
+   </step>
+   <step>
+    <para>
+     Depending on the file type of your source images, add them to the
+     respective subdirectories in
+     <filename><replaceable>YOUR_DOC_DIR</replaceable>/images/src</filename>.
+     The <filename>image</filename> directory and its substructure is
+     required by &dapsacr;. For details, refer to
+     <xref linkend="ex.daps.dir.doc" xrefstyle="select:title"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Make sure that the base names of your image files are unique. For
+     details, refer to <xref linkend="sec.daps.user.imgs.dir"/>.
+    </para>
+   </step>
+   <step>
+    <para>
+     Adjust all references of image files, Xincludes, and entity
+     declarations, in the existing XML files to match the structure required
+     by &dapsacr;. The references must not include any absolute or relative
+     path, the plain file name is enough.
+     <remark>taroth 2012-04-12: maybe add examples for
+      image names, Xincludes and entity-decl? see commented section
+      below</remark>
+    </para>
+   </step>
+   <step>
+    <para>
+     For each deliverable (book, article, set) that you want to generate
+     from your XML files, create a &dclong; file. For more information,
+     refer to <xref linkend="sec.daps.user.basics.files"/>. Find a template
+     for &dc; files in your installed system in
+     <filename>/usr/share/daps/init_templates/&dc;-file.template</filename>.
+    </para>
+   </step>
+  </procedure>
+
+  <para>
+   If you have already used &dapsacr;' predecessor <literal>susedoc</literal>,
+   use the <filename>/usr/bin/daps-envconvert</filename> script for
+   migrating your ENV files to &dc; files. For a short overview of the main
+   changes, refer to
+   <filename>/usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x</filename>.
+   In contrast to susedoc, &dapsacr; uses the DocBook layout by default. The
+   &suse; stylesheets have been moved to a separate package,
+   <systemitem class="resource">suse-xsl-stylesheets</systemitem>. It is
+   available from the &suse-dapsrepo; repository. If you want to continue
+   using the &suse;-layout for your documentation projects, install this
+   package in addition to &dapsacr;. To make &dapsacr; use the &suse;
+   layout, adjust the <parameter>STYLEROOT</parameter> parameter in the &dc;
+   files of your documentation projects.
+<!--taroth 2012-04-30: enable this xref as soon
+  as chapter contains some information: For more information, refer to 
+  <xref linkend="cha.daps.user.layout"/>.-->
+  </para>
 </appendix>
