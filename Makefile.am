@@ -76,7 +76,6 @@ catalogdir     = @sysconfdir@/xml
 dapslibdir     = $(pkgdatadir)/lib
 dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
-dapspythondir  = $(pkgpythondir)
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
 ttfontsdir     = @datadir@/fonts/truetype
@@ -119,7 +118,6 @@ dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)
 dist_ttfonts_DATA       = $(wildcard fonts/*.ttf)
-dist_dapspython_DATA    = $(wildcard python/daps/*)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
@@ -142,7 +140,7 @@ all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
 
 #---------------------------Local INSTALLATION--------------------------------
 
-INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(dapspythondir)
+INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir)
 
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
