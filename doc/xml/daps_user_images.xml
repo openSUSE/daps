@@ -158,57 +158,20 @@
      &daps-images-dir; For a longer reference to the directory
      structure, see <xref linkend="sec.daps.user.basics.dirstruct"/>.
     </para>
-    <important>
-     <title>Use Unique File Names</title>
-     <para>
-      Always store just one file with a particular name within the
-      <filename>images/src</filename> folder of a project. As &dapsacr; tries to 
-      create any missing image formats from original images, it will not know
-      which one of the duplicate files to use for converting to the missing formats.
-     </para>
-     <para>
-      Additionally, having, for instance,
-      a file called <filename>example.png</filename> and another called
-      <filename>example.svg</filename> in the same project will often lead to
-      questions like:
-     </para>
-     <itemizedlist>
-      <listitem><para>Which file should be used where?</para></listitem>
-      <listitem><para>Are both similarly named files current, or is one outdated?</para></listitem>
-     </itemizedlist>
-     <para>
-      When invoking &dapsacr; with the parameter <command><parameter>-v</parameter></command>,
-      a warning will be printed whenever a file name appears twice within a project.
-     </para>
-    </important>
-    <important>
-     <title>Avoid spaces in file names</title>
-     <para>
-      The <command>make</command> command on which &dapsacr; is built has trouble
-      understanding spaces in file names 
-     </para>
-     <para>
-      Instead, you can use either underscores (<filename>_</filename>), hyphens
-      (<filename>-</filename>) or you can camel-case your file names
-      (<filename>aCamelCasedFileName</filename>).
-     </para>
-    </important>
-    <!--taroth 2012-09-19: the contents of the first admonition is already part
-    of the QSG - how about merging both admonitions and use the same one in
-    both? e.g.
-    File Name Requirements
-    - unique file names: ...
-    - no spaces in file names: ...
-    BTW, we could also turn this into a regular section to avoid having too many
-    admonitions-->
-    <para>
-     It is a good idea to find a consistent file naming scheme. For instance, when
-     documenting software, it might prove helpful to include the name of the
-     application that a screenshot is made of at the beginning of the file name.
-     You could also use prefixes like <filename>screenshot_</filename> and
-     <filename>diagram_</filename> to separate between different types of images.
-    </para>
-   </sect2>
+  </sect2>
+  <sect2 id="sec.daps.user.imgs.req">
+   <title>Filename Requirements</title>
+   &daps-img-names-req;
+  </sect2>
+
+ <sect2 id="sec.daps.user.imgs.refer">
+  <title>Referencing Images</title>
+  &daps-img-ref;
+  <example id="ex.daps.user.xml.img.ref">
+   <title>Image Reference in an XML File</title>
+   &ex-daps-img-ref;
+  </example>
+ </sect2>
   <sect2>
    <title>Gaining an Overview over Images Used</title>
    <para>
