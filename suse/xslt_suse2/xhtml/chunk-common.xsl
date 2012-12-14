@@ -39,7 +39,6 @@
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
     </xsl:variable>
 
-    <xsl:message><xsl:value-of select="string(local-name(.))"/> </xsl:message>
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
