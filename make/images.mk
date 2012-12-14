@@ -245,6 +245,7 @@ optipng:
 #---------------
 # Warnings
 #
+.PHONY: warn-images
 warn-images:
 ifdef DOUBLEIMG
 	@ccecho "warn" "Image names are not unique, multiple sources available for the following images:\n$(subst $(SPACE),\n,$(DOUBLEIMG))" >&2
@@ -254,6 +255,9 @@ endif
 # therefore we make it dependend on HTMLROOT which also is only used
 # for novell.com/documentation publishing
 #
+
+.PHONY: warn-cap
+warn-cap:
 ifdef HTMLROOT
     ifdef WRONG_CAP
 	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >&2
