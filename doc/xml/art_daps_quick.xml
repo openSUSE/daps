@@ -7,15 +7,23 @@
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
 ]>
-
 <article lang="en" id="art.daps.quick">
-<?suse-quickstart columns="no" version="2" color="daps" url="http://daps.sourceforge.net"?>
+ <?suse-quickstart columns="no" version="2" color="daps" url="http://daps.sourceforge.net"?>
  <title>&dapsacr; Quick Start Guide</title>
  <articleinfo>
   <authorgroup>
-   <author><firstname>Tanja</firstname><surname>Roth</surname></author>
-   <author><firstname>Christopher-Julian</firstname><surname>Zwickl</surname></author>
-   <author><firstname>Stefan</firstname><surname>Knorr</surname></author>
+   <author>
+    <firstname>Tanja</firstname>
+    <surname>Roth</surname>
+   </author>
+   <author>
+    <firstname>Christopher-Julian</firstname>
+    <surname>Zwickl</surname>
+   </author>
+   <author>
+    <firstname>Stefan</firstname>
+    <surname>Knorr</surname>
+   </author>
   </authorgroup>
  </articleinfo>
  <abstract>
@@ -26,7 +34,7 @@
   <para>
      &daps-quickstart-abstract;
   </para>
-  
+
  </abstract>
  <sect1 id="sec.daps.quick.audience">
   <title>Target Audience</title>
@@ -58,7 +66,7 @@
     respective requirements are covered in detail.</para>
   </sect2>
   <sect2 id="sec.daps.quick.addon.sw">
-    <title>Additional Software</title>
+   <title>Additional Software</title>
    &daps-addon;
   </sect2>
 
@@ -75,7 +83,7 @@
    </para>
   </sect2>
  </sect1>
- 
+
  <sect1 id="sec.daps.quick.inst">
   <title>Installation</title>
   &daps-install;
@@ -115,11 +123,9 @@
    use the &dapsacr; initialization script <command>daps-init</command>. For
    instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
    script automatically creates the
-   <xref
-    linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/>
+   <xref linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/>
    and
-   <xref
-    linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/>
+   <xref linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/>
    that you need to get started with &dapsacr;.
   </para>
 
@@ -145,7 +151,7 @@
    </para>
    <example id="ex.daps.quick.dir.doc">
     <title>Directory Structure</title>
-<screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.quick.docdir.base"/>
+    <screen><replaceable>YOUR_DOC_DIR/</replaceable><co id="co.quick.docdir.base"/>
   |--&dc;*<co id="co.quick.docdir.dc"/>
      |--images/
      |   |--src/<co id="co.quick.docdir.img.src"/>
@@ -156,7 +162,8 @@
      |      |--png/
      |      |--svg/
      |--xml/<co id="co.quick.docdir.xml"/> 
-         |--MAIN*.xml<co id="co.quick.docdir.main"/></screen>
+         |--MAIN*.xml<co id="co.quick.docdir.main"/>
+    </screen>
    </example>
    <calloutlist>
     <callout arearefs="co.quick.docdir.base">
@@ -169,8 +176,7 @@
      <para>
       &dc; file defining the documentation project.
 <!--For more information,
-      refer to <xref linkend="sec.daps.user.oview.docproject"/>.-->
-     </para>
+      refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
     </callout>
     <callout arearefs="co.quick.docdir.img.src">
      <para>
@@ -212,26 +218,27 @@
   </para>
 
   <procedure id="pro.daps.init">
-   <title>Using <command>daps-init</command></title>
+   <title>Using <command>daps-init</command>
+   </title>
    <step>
     <para>
      Create a directory that you want to use as your documentation
      directory:
     </para>
-<screen>$ <command>mkdir <replaceable>DOC_DIR</replaceable></command></screen>
+    <screen>$ <command>mkdir <replaceable>DOC_DIR</replaceable>&nbsp;</command></screen>
    </step>
    <step>
     <para>
      Create the default directory structure for &dapsacr; (containing an
      example <sgmltag>book</sgmltag>):
     </para>
-<screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable></command></screen>
+    <screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;</command></screen>
     <para>
      With the <option>-r</option> option, you can also set another root
      element, such as <sgmltag>article</sgmltag>, for example. To create the
      default directory structure with an <sgmltag>article</sgmltag> example:
     </para>
-<screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
+    <screen>$ <command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
    </step>
    <step>
     <para>
@@ -248,7 +255,7 @@
      (<filename>&dc;-daps-example</filename>) to use and the output format
      (color PDF) to create:
     </para>
-<screen>$ <command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</command></screen>
+    <screen>$ <command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</command></screen>
     <para>
      For creation of the PDF, &dapsacr; uses FOP by default (if no other
      formatter is specified) and applies the default DocBook stylesheets (if
@@ -281,8 +288,8 @@
 &db-structure-elements;
  </sect1>
  <sect1 id="sec.daps.quick.validate">
-   <title>Validation</title>
-   <para>
+  <title>Validation</title>
+  <para>
     Generating any output requires that your XML files are well-formed and
     can be validated. As soon as any output command is executed, &dapsacr;
     automatically runs a validation check first. If it fails, &dapsacr;
@@ -290,16 +297,15 @@
     error, the respective file name and the line number where the error
     occured.
 <!-- In addition, &dapsacr; shows the path to the profiled XML
-    sources and the total number of errors. -->
-   </para>
-   <example>
-    <title>Parser Output For Validation Errors (link to unknown ID)</title>
-<screen>daps_user_concept.xml:60: element xref: validity error: 
+    sources and the total number of errors. --></para>
+  <example>
+   <title>Parser Output For Validation Errors (link to unknown ID)</title>
+   <screen>daps_user_concept.xml:60: element xref: validity error: 
 IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
-   </example>
+  </example>
  </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
@@ -318,43 +324,72 @@ make: *** [validate] Error 3</screen>
   </sect2>
 
   <sect2 id="sec.daps.quick.imgs.path">
-   <title>Location of the Images</title>
+   <title>Organization of the <filename>images</filename> Directory</title>
    <para>
     &daps-images-dir; For a longer reference to the directory
     structure, see <xref linkend="sec.daps.quick.basics.dirstruct"/>.
    </para>
-   <important>
-    <title>Unique Image Names</title>
-    <para>
-     The base names of your images need to be unique throughout the image
-     subdirectories. &dapsacr; processes images in parallel processes. For
-     example, if both <filename>images/src/svg/AAA.svg</filename> and
-     <filename>images/src/png/AAA.png</filename> exist, it is unpredictable
-     if the SVG or the PNG will appear in your output document. Therefore,
-     use different base names: <filename>images/src/svg/AAA.svg</filename>
-     and <filename>images/src/svg/BBB.png</filename>.
-    </para>
-    <para>
-     To search for common image names, use the
-     <command>warn-images</command> subcommand. It lists all images with
-     non-unique base names for a particular documentation project.
-    </para>
-<screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
-   </important>
   </sect2>
 
-  <sect2 id="sec.daps.quick.imgs.refer">
-   <title>Referencing Images</title>
-   <para>
+  <sect2 id="sec.daps.quick.imgs.req">
+   <title>Filename Requirements</title>
+   <variablelist>
+    <varlistentry>
+     <term>Unique Image Names</term>
+     <listitem>
+      <para>Always store just one file with a particular name within the
+      <filename>images/src</filename> folder of a project. As &dapsacr; tries to 
+      create any missing image formats from original images, it will otherwise 
+      not know which one of the duplicate files to use for converting to the 
+      missing formats.</para>
+      <para>Additionally, having a file called <filename>example.png</filename> 
+      and another called <filename>example.svg</filename> in the same documentation 
+      project will often lead to  questions like:
+     </para>
+      <itemizedlist>
+       <listitem>
+        <para>Which file to use where?</para>
+       </listitem>
+       <listitem>
+        <para>Do both display the same content?</para>
+       </listitem>
+       <listitem>
+        <para>Are both files current, or is one outdated?</para>
+       </listitem>
+      </itemizedlist>
+      <para>To search for common image names, use the <command>warn-images</command> 
+      subcommand. It lists all images with non-unique base names for a particular
+      documentation project:
+    </para>
+      <screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>No Spaces In Filenames</term>
+     <listitem>
+      <para>Avoid spaces in filenames because the <command>make</command> command 
+       in &dapsacr; has trouble understanding them. Use underscores 
+       (<filename>_</filename>) or hyphens (<filename>-</filename>) instead. 
+       Camel-cased filenames (<filename>aCamelCasedFileName</filename>) or 
+       filenames only differing in upper or lower case spelling may lead to 
+       problems if multiple file systems are used anywhere in the process chain
+       between generation and publishing of the output formats.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+ </sect2>
+
+ <sect2 id="sec.daps.quick.imgs.refer">
+  <title>Referencing Images</title>
+  <para>
     Provided your images are located in the required default directory,
     &dapsacr; automatically finds the path to your images. Therefore,
     referencing images in your XML sources is very straightforward: you do
     not need to include any path in the
-    <sgmltag
-     class="attribute">fileref</sgmltag> attribute&mdash;the
+    <sgmltag class="attribute">fileref</sgmltag> attribute&mdash;the
     file name is enough.
    </para>
-   <para>
+  <para>
     Furthermore, DocBook allows you to reference more than one image to
     distinguish between different output formats. For example, you can add
     two references pointing to the same file, but using different images
@@ -362,12 +397,11 @@ make: *** [validate] Error 3</screen>
     <sgmltag class="attribute">role</sgmltag> attribute to specify the
     output format, for example <sgmltag class="attvalue">fo</sgmltag> or
     <sgmltag class="attvalue">html</sgmltag>. See
-    <xref
-     linkend="ex.xml.img.ref"/>.
+    <xref linkend="ex.xml.img.ref"/>.
    </para>
-   <example id="ex.xml.img.ref">
-    <title>Image Reference in an XML File</title>
-<screen>&lt;figure&gt;
+  <example id="ex.xml.img.ref">
+   <title>Image Reference in an XML File</title>
+   <screen>&lt;figure&gt;
   &lt;title&gt;Main Window&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject role="fo"&gt;
@@ -378,97 +412,97 @@ make: *** [validate] Error 3</screen>
     &lt;/imageobject&gt;
   &lt;/mediaobject&gt;
 &lt;/figure&gt;</screen>
-   </example>
-  </sect2>
- </sect1>
- <sect1 id="sec.daps.quick.syntax">
-  <title>Basic &dapsacr; Syntax</title>
+  </example>
+ </sect2>
+</sect1>
+<sect1 id="sec.daps.quick.syntax">
+ <title>Basic &dapsacr; Syntax</title>
 
-  <para>
+ <para>
    Before introducing the key <command>daps</command> commands to create
    output formats from your XML documents, let's get familiar with the basic
    syntax of the <command>daps</command> command:
   </para>
 
-<screen>$ <command>daps [--global-options] subcommand [--command-options] [arguments]</command></screen>
+ <screen>$ <command>daps [--global-options] subcommand [--command-options] [arguments]</command></screen>
 
-  <para>
-   <xref linkend="ex.daps.syntax"/> shows an example command that generates
+ <para>
+  <xref linkend="ex.daps.syntax"/> shows an example command that generates
    HTML output. Global options are used to specify the level of verbosity,
    and the &dclong; file for creating the output.
   </para>
 
-  <example id="ex.daps.syntax">
-   <title>&dapsacr; Syntax</title>
-<screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> &dc;-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/></screen>
-   <calloutlist>
-    <callout arearefs="co.daps.syntax.main">
-     <para>
+ <example id="ex.daps.syntax">
+  <title>&dapsacr; Syntax</title>
+  <screen>daps<co id="co.daps.syntax.main"/> --debug<co id="co.daps.syntax.debug"/> -d<co id="co.daps.syntax.dc"/> &dc;-daps-example html<co id="co.daps.syntax.output"/> --static<co id="co.daps.syntax.static"/></screen>
+  <calloutlist>
+   <callout arearefs="co.daps.syntax.main">
+    <para>
       Main command: <command>daps</command>
-     </para>
-    </callout>
-    <callout arearefs="co.daps.syntax.debug">
-     <para>
+    </para>
+   </callout>
+   <callout arearefs="co.daps.syntax.debug">
+    <para>
       Global Option <option>--debug</option>: Sets the highest verbosity
       level (number of messages shown during the transformation process from
       XML to HTML).
      </para>
-    </callout>
-    <callout arearefs="co.daps.syntax.dc">
-     <para>
+   </callout>
+   <callout arearefs="co.daps.syntax.dc">
+    <para>
       Global Option <option>-d</option>: Defines the relative or absolute
       path to the &dclong; file. In this example, <command>daps</command> is
       called in the same directory that holds the &dclong; file.
      </para>
-    </callout>
-    <callout arearefs="co.daps.syntax.output">
-     <para>
+   </callout>
+   <callout arearefs="co.daps.syntax.output">
+    <para>
       Subcommand <command>html</command>: Defines the output format to
       create.
      </para>
-    </callout>
-    <callout arearefs="co.daps.syntax.static">
-     <para>
+   </callout>
+   <callout arearefs="co.daps.syntax.static">
+    <para>
       Command option <option>--static</option>: Tells &dapsacr; to copy CSS
       and image files to the same location like the HTML files. For more
       information, see <xref linkend="table.daps.output.overview"/>.
      </para>
-    </callout>
-   </calloutlist>
-  </example>
+   </callout>
+  </calloutlist>
+ </example>
 
-  <para>
+ <para>
    Generally, &dapsacr; can be executed with or without options. To view the
    global options and the available subcommands, use the command:
   </para>
 
-<screen>$ <command>daps help</command></screen>
+ <screen>$ <command>daps help</command></screen>
 
-  <para>
+ <para>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-<screen>$ <command>daps help <replaceable>subcommand</replaceable></command></screen>
+ <screen>$ <command>daps help <replaceable>subcommand</replaceable>&nsp;</command></screen>
 
-  <para>
+ <para>
    For example, if you want more information about generating HTML output,
    run:
   </para>
 
-<screen>$ <command>daps help html</command></screen>
+ <screen>$ <command>daps help html</command></screen>
 
-  <para>
+ <para>
    The following section introduces the key <command>daps</command> commands
    needed to create output formats from XML files. All examples are based on
    the example files that are provided by the &dapsacr; initialization
    script. For more information, refer to
    <xref linkend="sec.daps.quick.init"/>.
   </para>
- </sect1>
- <sect1 id="sec.daps.quick.output">
-  <title>Output Formats</title>
+</sect1>
+<sect1 id="sec.daps.quick.output">
+ <title>Output Formats</title>
 
-  <para>
+ <para>
    &dapsacr; supports a number of different output formats, including
    <quote>exotic</quote> formats like man pages or ASCII text.
 <!--For an
@@ -476,123 +510,122 @@ make: *** [validate] Error 3</screen>
    help</command>. The output formats are listed below
    <menuchoice><guimenu>Subcommands</guimenu> <guimenu>Generate
    Books</guimenu> </menuchoice>.-->
-  </para>
+ </para>
 
-  <para>
+ <para>
    By default, the DocBook stylesheets are used for generating output
    formats. But &dapsacr; also allows you to customize your output formats
    in a very flexible way.
    <remark>taroth 2012-03-19: add xref to advanced
     chapter</remark>
-  </para>
+ </para>
 
- 
 
-  <sect2 id="sec.daps.quick.output.syntax">
-   <title>Basic Syntax for Generating Output</title>
-   <para>
+
+ <sect2 id="sec.daps.quick.output.syntax">
+  <title>Basic Syntax for Generating Output</title>
+  <para>
     Independent of the individual output format you want to create, you need
     to specify the &dclong; file to use:
    </para>
-<screen>$ <command>daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable></command></screen>
-   <para>
+  <screen>$ <command>daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nsbp;</command></screen>
+  <para>
     For example:
    </para>
-<screen>$ <command>daps -d &dc;-daps-example color-pdf</command></screen>
-   <para>
+  <screen>$ <command>daps -d &dc;-daps-example color-pdf</command></screen>
+  <para>
     If your current directory is not the documentation directory where the
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>
-<screen>$ <command>daps -d /svn/daps/example/&dc;-daps-example color-pdf</command></screen>
-   <para>
+  <screen>$ <command>daps -d /svn/daps/example/&dc;-daps-example color-pdf</command></screen>
+  <para>
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.
    </para>
-  </sect2>
+ </sect2>
 
-  <sect2 id="sec.daps.quick.output.formats">
-   <title>Generating Different Output Formats</title>
-   <para>
+ <sect2 id="sec.daps.quick.output.formats">
+  <title>Generating Different Output Formats</title>
+  <para>
     The following table gives an overview of the &dapsacr; subcommands for
     generating output formats.
    </para>
-   <table id="table.daps.output.overview">
-    <title>&dapsacr; Output Commands and Formats</title>
-    <tgroup cols="3">
-     <colspec colnum="1" colname="1" colwidth="18*"/>
-     <colspec colnum="2" colname="2" colwidth="41*"/>
-     <colspec colnum="3" colname="3" colwidth="41*"/>
-     <thead>
-      <row>
-       <entry>
-        <para>
+  <table id="table.daps.output.overview">
+   <title>&dapsacr; Output Commands and Formats</title>
+   <tgroup cols="3">
+    <colspec colnum="1" colname="1" colwidth="18*"/>
+    <colspec colnum="2" colname="2" colwidth="41*"/>
+    <colspec colnum="3" colname="3" colwidth="41*"/>
+    <thead>
+     <row>
+      <entry>
+       <para>
          Subcommand
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Output
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Note
         </para>
-       </entry>
-      </row>
-     </thead>
-     <tbody>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>
+       <para>
          color-pdf
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a color PDF (without any crop marks). Open the result in a
          PDF viewer.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Requires an FO formatter.
 <!--It is also possible to create one PDF 
         containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
         for large documentation projects you might run into problems with the
-         java memory stack.-->
-        </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+         java memory stack.--></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          pdf
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a black-and-white PDF with crop marks, suitable for
          hand-off to a printing shop. Open the result in a PDF viewer.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Requires an FO formatter. Creation of crop marks is currently only
          supported by the XEP FO formatter. All color images are
          automatically converted to grayscale images.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          html
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a subdirectory containing individual HTML files for all
          chapters of a book (including also preface, glossary or appendix
          files).
@@ -602,76 +635,76 @@ make: *** [validate] Error 3</screen>
          browser to view the generated HTML from the starting point (ROOTID
          of the top-level element).
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Images and CSS files are only linked in the resulting directory
          that contains the HTML files. To copy these files to the same
          location like the HTML files, use the <option>--static</option>
          option. This is useful for creating distributable HTML builds.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          html-single
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a single HTML file, named after the &dc; file used to
          create the output. Open the generated <filename>*.html</filename>
          file in a Web browser.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Single HTML files are more convenient for full text searches.
          Images and CSS files are only linked in the resulting directory
          that contains the HTML files. To copy these files to the same
          location like the HTML files, use the <option>--static</option>
          option. This is useful for creating distributable HTML builds.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          epub
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates an &epub; document. Open the result in an portable e-book
          reader (or with a software like Calibre).
         </para>
-       </entry>
-       <entry>
-        <para>
-         <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+      </entry>
+      <entry>
+       <para>
+        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
         conversion of articles to epub?</remark>
-         <remark>toms, 2012-04-15: This seems to be an issue with the
+        <remark>toms, 2012-04-15: This seems to be an issue with the
            current DocBook stylesheets. Need to check this.</remark>
-        </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          webhelp
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a DocBook &webh; output. Open the generated
          <filename>index.html</filename> file in a Web browser to view the
          generated HTML from the starting point (ROOTID of the top-level
          element).
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Experimental feature. Requires a very recent version of the DocBook
          stylesheets. DocBook &webh; consists of HTML pages with an
          additional pane, featuring a table of contents and a search
@@ -680,41 +713,41 @@ make: *** [validate] Error 3</screen>
          function weights the search results so that the most relevant
          results are listed first.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          txt
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates an ASCII text output. Open the result in a text editor.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          All images are removed from the output, but their location is
          indicated in the text by the respective image base name printed in
          square brackets. A table of contents is automatically generated and
          is available at the beginning of the text document.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          man
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates one or multiple man pages.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          To create man pages, your XML files must contain at least one
          <sgmltag>refentry</sgmltag>&mdash;be it in a
          <sgmltag>chapter</sgmltag>, <sgmltag>appendix</sgmltag>, or
@@ -732,61 +765,61 @@ make: *** [validate] Error 3</screen>
         refmeta element. If you are processing many refentrys from the same
         document, make sure they will all produce unique filenames, or else
         any duplicates will overwrite each other.-->
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          jsp
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates Java Server Pages (JSP files). The generated
          <filename>jsp</filename> subdirectory contains individual JSP files
          for all chapters of a book (including also preface, glossary or
          appendix files).
 <!--They are named according to the ID of the respective 
        root element.-->
-        </para>
-       </entry>
-       <entry>
-        <para>
+       </para>
+      </entry>
+      <entry>
+       <para>
          A JSP file is an HTML page containing a reference to Java servlets
          or Java Server Side Applets.
         </para>
-       </entry>
-      </row>
-      <row>
-       <entry>
-        <para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
          wiki
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Creates a MediaWiki output in a single file. Open the result in a
          text or MediaWiki editor, and use it as raw input for a MediaWiki
          article.
         </para>
-       </entry>
-       <entry>
-        <para>
+      </entry>
+      <entry>
+       <para>
          Experimental feature. The output is very basic: Section titles are
          converted in headlines according to their hierarchy, itemized
          lists, ordered lists and <sgmltag>screen</sgmltag> elements are
          converted to the respective MediaWiki elements.
         </para>
-       </entry>
-      </row>
-     </tbody>
-    </tgroup>
-   </table>
-  </sect2>
+      </entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
+ </sect2>
 
-  <sect2 id="sec.daps.quick.output.adv">
-   <title>Advanced Output Options</title>
-   <para>
+ <sect2 id="sec.daps.quick.output.adv">
+  <title>Advanced Output Options</title>
+  <para>
     Instead of always building your complete documentation project
     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
     <sgmltag>article</sgmltag>), &dapsacr; also allows you to build an
@@ -795,9 +828,9 @@ make: *** [validate] Error 3</screen>
     to be marked as a <literal>draft</literal> version, you can tell
     &dapsacr; to do so.
    </para>
-   <sect3 id="sec.daps.quick.output.adv.partial">
-    <title>Partial Builds</title>
-    <para>
+  <sect3 id="sec.daps.quick.output.adv.partial">
+   <title>Partial Builds</title>
+   <para>
      The <quote>starting point</quote> of your documentation project is
      usually the root element defined in the Main file that is referenced in
      the respective &dclong;. Alternatively, specify a ROOTID on the command
@@ -807,31 +840,31 @@ make: *** [validate] Error 3</screen>
      <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
      <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element.
     </para>
-    <para>
+   <para>
      For example, if you have set up your working environment with
      <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
      use the following command to build the first chapter of the book
      (without the book's title page, table of contents etc.):
     </para>
-<screen>$ <command>daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</command></screen>
-   </sect3>
-   <sect3 id="sec.daps.quick.output.adv.review">
-    <title>Output with Remarks or Draft Watermark</title>
-    <para>
+   <screen>$ <command>daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</command></screen>
+  </sect3>
+  <sect3 id="sec.daps.quick.output.adv.review">
+   <title>Output with Remarks or Draft Watermark</title>
+   <para>
      For publishing a pre-release version of a document that you might want
      to send to a proofreader for review, use the <option>--draft</option>
      command option to mark the document as draft version. For example, use
      the following command to build a color PDF that has a
      <literal>DRAFT</literal> watermark printed on each page:
     </para>
-<screen>$ <command>daps -d &dc;-daps-example color-pdf --draft</command></screen>
-    <para>
+   <screen>$ <command>daps -d &dc;-daps-example color-pdf --draft</command></screen>
+   <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
      editorial remarks or questions to the proofreader), include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
-<screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
-    <para>When generating PDFs with FOP, the contents of the remark elements 
+   <screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
+   <para>When generating PDFs with FOP, the contents of the remark elements 
      is shown in italics within the text. XEP supports conversion of remark 
      elements into PDF annotations. This feature is enabled in &dapsacr; by
      default, but if you want XEP to treat remark elements like FOP does, you
@@ -839,39 +872,39 @@ make: *** [validate] Error 3</screen>
      todo - add link as soon as this is covered in &dapsuser;</remark>
      Enabling remarks automatically turns draft mode on.
     </para>
-    <note>
-     <title>Output with Remarks or Draft Watermark</title>
-     <para>
+   <note>
+    <title>Output with Remarks or Draft Watermark</title>
+    <para>
       The command options <option>--draft</option> option and
       <option>--remarks</option> are supported for HTML and PDF, but not for
       all &dapsacr; output formats.
      </para>
-    </note>
-    <para>
+   </note>
+   <para>
      By default, &dapsacr; adds a string to the base name of the output file
      to flag output formats generated with special options. Example file
      names are <filename>daps-example_draft_en.pdf</filename> or
      <filename>daps-example_remarks_draft_en.pdf</filename>.
     </para>
-   </sect3>
-  </sect2>
- </sect1>
- <sect1 id="sec.daps.quick.migrate">
-  <title>Migration of Existing DocBook Projects</title>
-  <para>
+  </sect3>
+ </sect2>
+</sect1>
+<sect1 id="sec.daps.quick.migrate">
+ <title>Migration of Existing DocBook Projects</title>
+ <para>
   To migrate existing DocBook projects so that you can manage and publish
   them with &dapsacr;, follow the step-by-step instructions in
   <xref linkend="app.daps.user.migrate"/>.
   </para>
- </sect1>
+</sect1>
  <!--<sect1 id="sec.daps.quick.config">
   <title>&dapsacr; Configuration</title>
  &daps-config;
  </sect1>-->
- <sect1 id="sec.daps.quick.more">
-  <title>For More Information</title>
+<sect1 id="sec.daps.quick.more">
+ <title>For More Information</title>
 
-  <para>
+ <para>
    This guide gave you a short introduction to&dapsacr; and guided you
    through the key tasks. To discover more, refer to the other manuals
    available on &dapsacr; at
@@ -881,20 +914,21 @@ make: *** [validate] Error 3</screen>
   <para>
    For a complete DocBook reference see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html">
-   <citetitle>&tdg;</citetitle></ulink>.
+   <citetitle>&tdg;</citetitle>
+  </ulink>.
   </para>
 
-  <remark>taroth 2012-04-19: enable links to glossary and troubleshooting chapter
+ <remark>taroth 2012-04-19: enable links to glossary and troubleshooting chapter
   as soon as they contain useful content</remark>
 
 <!-- <para>For an overview of the key terms used in the context of &dapsacr; and 
   DocBook, refer to <xref linkend="daps.glossary"/>.</para>-->
 
-  <para>
+ <para>
    If you encounter problems with &dapsacr;, check
    <xref linkend="cha.daps.user.trouble"/> for a list of common problems and
    their solution.
   </para>
- </sect1>
- <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
+</sect1>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="common_gfdl_i.xml"/>
 </article>
