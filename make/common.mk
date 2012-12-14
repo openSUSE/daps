@@ -173,6 +173,9 @@ DESKTOP_FILES_DIR := $(TMP_DIR)/$(BOOK)/desktop
 # Yelp files
 YELP_DIR := $(TMP_DIR)/yelp
 
+#page files
+PAGE_FILES_DIR := $(TMP_DIR)/mallard
+
 # Man pages
 MAN_DIR := $(RESULT_DIR)/man
 
@@ -208,6 +211,7 @@ STYLESEARCH    := $(DAPSROOT)/daps-xslt/common/search4includedfiles.xsl
 STYLELANG      := $(DAPSROOT)/daps-xslt/common/get-language.xsl
 STYLEDESK      := $(DAPSROOT)/daps-xslt/desktop/docbook.xsl
 STYLE_DOCUMENT := $(DAPSROOT)/daps-xslt/yelp/docbook.xsl
+STYLE_MALLARD  := $(DAPSROOT)/daps-xslt/mallard/docbook.xsl
 STYLELINKS     := $(DAPSROOT)/daps-xslt/common/get-links.xsl
 STYLEBURN      := $(DAPSROOT)/daps-xslt/common/reduce-from-set.xsl
 STYLEINDEX     := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl

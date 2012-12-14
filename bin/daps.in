@@ -244,8 +244,8 @@ SUBCOMMANDS+=("man=build_man")
 SUBCOMMANDS+=("missinggraphics=filelists")
 SUBCOMMANDS+=("nothing=no_opts")
 SUBCOMMANDS+=("offspring=no_opts")
-SUBCOMMANDS+=("online-docs=build_generic")
-SUBCOMMANDS+=("online-localized=build_generic")
+SUBCOMMANDS+=("online-docs=online-docs")
+SUBCOMMANDS+=("online-localized=online-docs")
 SUBCOMMANDS+=("optipng=build_generic")
 SUBCOMMANDS+=("package-html=packaging")
 SUBCOMMANDS+=("package-jsp=packaging")
@@ -346,7 +346,7 @@ HELP_SUBCOMMAND+=("man=Build one or more man pages from suitable XML sources. Al
 HELP_SUBCOMMAND+=("missinggraphics=Prints a list of images that are referenced in the XML sources but are missing\nin the images' source directory.")
 HELP_SUBCOMMAND+=("nothing=DEBUGGING: Benchmarking target.")
 HELP_SUBCOMMAND+=("offspring=")
-HELP_SUBCOMMAND+=("online-docs=Creates a bigfile for the complete set and a tarball including all referenced\ngraphics in PNG format.")
+HELP_SUBCOMMAND+=("online-docs=Creates a bigfile for the complete set, a tarball including all referenced\ngraphics in PNG format, color-pdf and epub builds as well as an archive with\na single-html build.")
 HELP_SUBCOMMAND+=("online-localized=")
 HELP_SUBCOMMAND+=("optipng=Reduce the size of the source PNG images using 'optipng'.\nNOTE: This command will directly alter your source images!")
 HELP_SUBCOMMAND+=("package-html=Create all archives and files needed for packaging an HTML document.")
@@ -514,8 +514,9 @@ Subcommands:
     package-src               Provide profiled XML sources and graphics
 
   Deploying:
-    online-docs               Provide a profiled XML bigfile and a graphics
-                              tarball (PNG only)
+    online-docs               Provide a profiled XML bigfile, a graphics
+                              tarball (PNG only), color-pdf, epub, and
+                              a single-html archive.
 
   Other Commands:
     checklink                 Linkchecker for links from <ulink> tags

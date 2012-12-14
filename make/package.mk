@@ -9,6 +9,11 @@
 .PHONY: package-html
 package-html: PACKDIR = $(RESULT_DIR)/package/html
 package-html: dist-html dist-desktop-files dist-document-files-html
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy HTML tarball
@@ -29,6 +34,7 @@ package-html: dist-html dist-desktop-files dist-document-files-html
 	  ccecho "info" "No document files for GNOME yelp available"; \
 	fi
 	@ccecho "result" "Find the package-html results at:\n$(PACKDIR)"
+  endif
 
 #--------------
 # package-pdf
@@ -41,6 +47,11 @@ package-html: dist-html dist-desktop-files dist-document-files-html
 .PHONY: package-pdf
 package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
 package-pdf: color-pdf dist-document-files-pdf
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy color PDF
@@ -53,6 +64,7 @@ package-pdf: color-pdf dist-document-files-pdf
 	  ccecho "info" "No PDF document files for GNOME yelp available"; \
 	fi
 	@ccecho "result" "Find the package-pdf results at:\n$(PACKDIR)"
+endif
 
 #--------------
 #
@@ -63,12 +75,18 @@ package-pdf: color-pdf dist-document-files-pdf
 .PHONY: package-jsp
 package-jsp: PACKDIR = $(RESULT_DIR)/package/jsp
 package-jsp: dist-jsp
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
 # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
 # copy JSP tarball
 	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-jsp.tar.bz2 \
 	  $(PACKDIR)/$(BOOK)_$(LL)-jsp.tar.bz2
 	@ccecho "result" "Find the package-jsp results at:\n$(PACKDIR)"
+  endif
 
 #------------------
 # package-src 
@@ -90,14 +108,19 @@ package-src: E-FILES = $(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s\n", $$2}
 endif
 package-src: dist-graphics dist-xml
 package-src:
-# remove old stuff
+ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+else
+  # remove old stuff
 	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
-ifdef ROOTID
+  ifdef ROOTID
 	@ccecho "warn" "Warning: You specified a ROOTID. Sources may NOT be generated\nfor the whole set if !" >&2
-endif
+  endif
 # "copy" source files tarball (dist-xml) to an uncompressed tarball
 	bzcat $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 > $(PACKDIR)/$(BOOK)_$(LL).tar
-ifdef USED
+  ifdef USED
 # "copy" graphics to an uncompressed tarball
 	bzcat $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar.bz2 > \
 		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
@@ -106,16 +129,17 @@ ifdef USED
 		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
 # remove graphics archive
 	rm -f $(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
-else
+  else
 	@ccecho "info" "Selected book/set contains no graphics"
-endif
-ifdef DEF_FILE
+  endif
+  ifdef DEF_FILE
 # add DC-Files from DEF file
 	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
 	  --transform=s%$(DOC_DIR)/%% $(addprefix $(DOC_DIR)/, $(E-FILES))
-endif
+  endif
 	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
 	@ccecho "result" "Find the sources at:\n$(PACKDIR)/$(BOOK)_$(LL).tar.bz2"
+endif
 
 package-src-name:
 	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
@@ -128,97 +152,159 @@ package-src-name:
 # * Graphics tarball (book only)
 # * Color PDF
 #
+
+ifndef LOCDROP_EXPORT_DIR
+  LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
+else
+  LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(BOOK),$(LOCDROP_EXPORT_DIR))
+endif
+
+ifdef USESVN
+  TO_TRANS_FILES := $(shell svn pl -v --xml $(DOCFILES) | xsltproc $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl -)
+endif
+TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(BOOK)$(LANGSTRING).tar.bz2
+
+NO_TRANS_FILES := $(filter-out $(TOTRANSFILES), $(SRCFILES))
+NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(BOOK)$(LANGSTRING).tar
+
+
 .PHONY: locdrop
-locdrop: INCLUDED = $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
-			$(shell xsltproc --nonet --xinclude $(STYLESEARCH) \
-			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
-			$(notdir $(MAIN)))
-locdrop: TOTRANSFILES = $(sort $(subst $(DOC_DIR)/xml, \
-			  $(PROFILE_PARENT_DIR)/dist, \
-			  $(shell docmanager -d $(DOCCONF) dg -P --include="doc:trans=yes" -H -A -q "%{name} ")))
-locdrop: NOTRANSFILES = $(filter-out $(TOTRANSFILES), $(INCLUDED))
-locdrop: ENTITIES     = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
-locdrop: LOCDROPDIR   = $(RESULT_DIR)/locdrop
-locdrop: TOTRANSTAR   = $(LOCDROPDIR)/locdrop-totrans-$(BOOK).tar.bz2
-locdrop: NOTRANSTAR   = $(LOCDROPDIR)/locdrop-$(BOOK).tar
-locdrop: $(PROFILEDIR)/.validate $(DISTPROFILE) link-entity-dist dist-graphics
+locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
+locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
 ifndef NOPDF
 locdrop: color-pdf
 endif
-locdrop:
-# remove old stuff
-	rm -rf $(LOCDROPDIR) && mkdir -p $(LOCDROPDIR)
-#	@echo "checking for unexpected characters: ... "
-#	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(INCLUDED) && \
-#	    echo "Found non-printable characters" || echo "OK"
-# totrans tarball
-ifdef TOTRANSFILES
-	@ccecho "warn" "No files for translation available" >&2
-	BZIP2=--best && tar chfj $(TOTRANSTAR) --absolute-names \
-	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(TOTRANSFILES)
-	@ccecho "info" "Created $(TOTRANSTAR)"
-endif
-# notrans tarball
-	tar chf $(NOTRANSTAR) --absolute-names \
-	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(NOTRANSFILES)
-	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(DOC_DIR)/%% \
-	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
-ifdef DEF_FILE
-	tar rhf $(NOTRANSTAR)  --absolute-names --transform=s%$(DOC_DIR)/%% \
+  ifndef USESVN
+	@ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"
+	exit 1
+  endif
+ ifndef TO_TRANS_FILES
+	@ccecho "error" "Fatal error: This book does not contain any files for translation"
+	exit 1
+  endif
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
+        # tarball with files for translation
+	BZIP2=--best tar chfj $(TO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(DOC_DIR)%xml% $(TO_TRANS_FILES)
+        # tarball with files not being translated
+	tar chf $(NO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(DOC_DIR)%xml% $(NO_TRANS_FILES)
+	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF)
+    ifdef DEF_FILE
+	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DEF_FILE)
-endif
-	bzip2 -9f $(NOTRANSTAR)
-	@ccecho "info" "Created $(NOTRANSTAR).bz2"
-ifdef USED
-# copy graphics
-	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar.bz2 \
-	  $(LOCDROPDIR)/$(BOOK)_$(LL)-graphics.tar.bz2
-	@ccecho "info" "Created $(LOCDROPDIR)/$(BOOK)_$(LL)-graphics.tar.bz2"
-else
-	@ccecho "info" "Selected book/set contains no graphics"
-endif
+    endif
+	bzip2 -9f $(NO_TRANS_TAR)
+        # graphics tarball
+	BZIP2=--best tar rfh \
+	  $(LOCDROP_EXPORT_BOOKDIR)/$(BOOK)$(LANGSTRING)-graphics.tar.bz2 \
+	  --absolute-names --transform=s%$(DOC_DIR)/%% $(USED_ALL)
+    ifneq ($(NOPDF),1)
+	cp $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf $(LOCDROP_EXPORT_BOOKDIR)
+    endif
+	@ccecho "result" "Find the locdrop results at:\n$(LOCDROP_EXPORT_BOOKDIR)"
+  endif
+
+
+#----
+# also creates $(LOCDROP_EXPORT_DIR)
 #
-# PDF generation can be switched off via wrapper script
-#
-ifneq ($(NOPDF), 1)
-# copy color PDF
-	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(LOCDROPDIR)
-	@ccecho "info" "Created $(LOCDROPDIR)/$(TMP_BOOK)_$(LL).pdf"
-endif
-	@ccecho "result" "Find the locdrop results at:\n$(LOCDROPDIR)"
+$(LOCDROP_EXPORT_BOOKDIR):
+	mkdir -p $@
+
 
 #--------------
 # online-docs
 #
-# * "bigfile"
-# * Graphics tarball (set)
+
+# need by SUSE to publish documents on www.suse.com/documentation
+# when _NOT_ called with --noset creates the following files
+# $OD_EXPORT_DIR/
+#   |-set_bigfile.xml
+#   |-set_graphics_png.tar.bz2
+#   |-$DOCNAME
+#   |   |-book.epub
+#   |   |-book.color-pfd
+#   |   |-book.dist-single-html
 #
-# TODO:
-# Build PDFs for all books / articles in set in order to be able to
-# automatically provide them with the online docs target.
-# Needed: Stylesheet that returns book and article IDs
-# Code: See target dist in common.mk
-# Problem: Articles are not allowed in <set> and therefore must be
-#          placed in a book. In some cases we do not want such a book
-#          to be printed (e.g. when delivering quickstarts), in other
-#          cases we explicitly want such a book (openSUSE StartUp)
-#
-.PHONY: online-docs
-online-docs: ODDIR = $(RESULT_DIR)/online-docs
-online-docs: dist-graphics-png $(TMP_XML)
-# remove old stuff
-	rm -rf $(ODDIR) && mkdir $(ODDIR)
-# copy bigfile
-	cp $(TMP_XML) $(ODDIR)/$(notdir $(MAIN))
-ifdef USED
-# copy graphics
-	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-png-graphics.tar.bz2 \
-	  $(ODDIR)/$(BOOK)_$(LL)-graphics.tar.bz2
-	@ccecho "info" "Created $(ODDIR)/$(BOOK)_$(LL)-graphics.tar.bz2"
+# When called with --noset, all files are copied to $OD_EXPORT_DIR/$DOCNAME
+# The bigfile generated with this option has all links pointing to
+# locations outside the specified ROOTID converted to text
+# (same as the bigfile target)
+
+ifndef OD_EXPORT_DIR
+  OD_EXPORT_DIR     := $(RESULT_DIR)/online-docs
+  OD_EXPORT_BOOKDIR := $(OD_EXPORT_DIR)
 else
-	@ccecho "info" "Selected book/set contains no graphics"
+  OD_EXPORT_BOOKDIR := $(addsuffix /$(BOOK),$(OD_EXPORT_DIR))
 endif
-	@ccecho "result" "Find the online-docs results at:\n$(ODDIR)"
+
+ifeq ($(NOSET),1)
+  OD_BIGFILE  := $(OD_EXPORT_DIR)/$(BOOK)/$(BOOK)$(LANGSTRING).xml
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(BOOK)/$(BOOK)$(LANGSTRING)-png-graphics.tar.bz2
+else
+  OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING).xml
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/set$(LANGSTRING)-png-graphics.tar.bz2
+endif
+
+.PHONY: online-docs
+online-docs: | $(OD_EXPORT_BOOKDIR)
+online-docs: $(OD_BIGFILE) $(OD_GRAPHICS) warn-cap
+online-docs: color-pdf dist-htmlsingle epub 
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
+	cp $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf \
+	   $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-htmlsingle.tar.bz2 \
+	   $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub $(OD_EXPORT_BOOKDIR)
+	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
+  endif
+
+#----
+# also creates $(OD_EXPORT_DIR)
+#
+$(OD_EXPORT_BOOKDIR):
+	mkdir -p $@
+
+#----
+# creates a bigfile either for a book (with --noset) or for the complete set
+#
+$(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
+  ifeq ($(NOSET),1)
+    ifeq ($(VERBOSITY),1)
+	@ccecho "info" "Creating bigfile for book"
+    endif
+	xsltproc --xinclude --output $@ $(ROOTSTRING) \
+	  $(STYLEBURN) $(PROFILED_MAIN) $(DEVNULL)
+  else
+    ifeq ($(VERBOSITY),1)
+	@ccecho "info" "Creating bigfile for complete set"
+    endif
+	xmllint --xinclude --output $@ $(PROFILED_MAIN)
+  endif
+
+#----
+# creates an archive with all generated png graphics
+#
+$(OD_GRAPHICS): $(PNGONLINE)
+  ifdef PNGONLINE
+    ifeq ($(VERBOSITY),2)
+	@ccecho "info" "Creating online-docs graphics tarball..."
+    endif
+	BZIP2=--best \
+	tar cjhf $@ --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  $(sort $(PNGONLINE))
+  else
+	@ccecho "info" "Selected set or book contains no graphics"
+  endif
 
 
 #--------------
@@ -337,4 +423,16 @@ $(DESKTOP_FILES_DIR)/%.desktop: $(PROFILES) $(DESKTOP_FILES_DIR)
 
 
 
+#--------------
+# page-files (Mallard)
+# Create page-file for GNOME3
+#
+#-------------
+# Page file
+#
+
+$(PACK_DIR)/$(TMP_BOOK)_$(LL).page: | $(Directories)
+	xsltproc --output $@ --xinclude \
+	  --stringparam packagename $(TMP_BOOK) $(STYLE_MALLARD) \
+	  $(PROFILED_MAIN)
 

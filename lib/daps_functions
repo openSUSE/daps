@@ -71,6 +71,10 @@ function parse_args () {
                 sanitize_path "$2" "P_DEF_FILE"
                 shift 2
                 ;;
+            --export-dir)
+                P_EXPORT_DIR="$2"
+                shift 2
+                ;;
             --extra-dict)
                 sanitize_path "$2" "P_ASPELL_EXTRA_DICT"
                 shift 2
@@ -117,6 +121,10 @@ function parse_args () {
                 ;;
             --nosearch)
                 P_NOSEARCH=1
+                shift
+                ;;
+            --noset)
+                P_NOSET=1
                 shift
                 ;;
             --name)
@@ -768,7 +776,7 @@ function build_locdrop () {
     shift
 
     SHORT_OPTS="hn"
-    LONG_OPTS="def-file:,help,name:,nopdf,rootid:"
+    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -777,6 +785,7 @@ function build_locdrop () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
+        help_export-dir
         help_help
         help_name
         help_nopdf
@@ -788,6 +797,7 @@ function build_locdrop () {
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_NOPDF ]]     && export export NOPDF=1
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n $P_EXPORT_DIR ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
@@ -799,6 +809,54 @@ function build_locdrop () {
     
     call_make "$SUB_CMD" "$@"
 }
+
+###########################################################################
+#
+#  PACKAGING online-docs
+#
+#  Subcommands: online-docs online-localized
+#
+###########################################################################
+function online-docs () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="export-dir:,formatter:,help,name:,noset,rootid:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+    
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_export-dir
+        help_formatter
+        help_help
+        help_name
+        help_noset
+        help_rootid
+        echo
+        exit 0       
+    fi
+    
+    [[ -n $P_NAME ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_NOSET ]]      && export export NOSET=1
+    [[ -n $P_ROOTID ]]     && export ROOTID="$P_ROOTID"
+    [[ -n $P_EXPORT_DIR ]] && export OD_EXPORT_DIR="$P_EXPORT_DIR"
+
+    if [[ -n $P_FORMATTER ]]; then
+        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+            export FORMATTER="$P_FORMATTER"
+        else
+	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+    
+    call_make "$SUB_CMD" "$@"
+}
+
 
 ###########################################################################
 #
@@ -1392,6 +1450,12 @@ function help_def-file () {
     echo "    --def-file=FILE           Specify a DEF-* file containing build
                               information"
 }
+function help_export-dir () {
+    echo "    --export-dir=DIRECTORY    Specify a directory where to copy the results
+                              of the $TARGET command. The directory will be
+                              created if it does not exist. 
+                              Default: <BUILD_DIRECTORY>/online-docs"
+}
 function help_extra-dict () {
     echo "    --extra-dict=filename     Specify a path to an additional custom dictionary.
                               Default: unset"
@@ -1467,6 +1531,13 @@ function help_nosearch () {
     echo "    --nosearch                Deactivates creating the search tab in webhtml
                               builds.
                               Default: enabled"
+}
+function help_noset () {
+    echo "    --noset                   Creates a bigfile for the given book (specified
+                              by the rootid) rather than the complete set.
+                              Links in the bigfile that point to external
+                              targets, are replaced by text-only pointers.
+                              Default: off"
 }
 function help_pretty () {
     echo "    --pretty                  Pretty print file lists (one filename per line)"
