@@ -18,7 +18,7 @@
 
  <sect1 id="sec.daps.user.imgs.usage">
   <title>Supported Image Types</title>
-  &daps-image-intro;
+  &daps-images-intro;
   &daps-img-formats;
   <important>
    <title>PDF and EPS Image Support</title>
@@ -184,15 +184,16 @@
     </varlistentry>
     <varlistentry>
      <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> remaininggraphics</command></term>
-     <listitem><para>Lists all graphics not used in the DocBook files that are 
-     referenced in the given &dc; file.
+     <listitem><para>Lists all graphics <emphasis>not</emphasis> used in the 
+     DocBook files that are referenced in the given &dc; file.
      </para>
      <important>
       <title>Use a <sgmltag>set</sgmltag> to Check for Unnecessary Graphics </title>
       <para>
-       If you are storing multiple &dc; files in the same project folder, you
-       should always use the &dc; file of a set containing all articles and books
-       in the project folder to check whether graphics are indeed unnecessary.       
+       If you are storing multiple &dc; files in the same project folder, use the
+       &dc; file of a <sgmltag>set</sgmltag> for this check. As it contains all 
+       articles and books in the project folder, this makes sure that any graphics
+       found during the check are indeed unnecessary.       
       </para>
      </important>
      </listitem>
