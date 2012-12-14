@@ -78,8 +78,13 @@
       <xsl:when test="(bookinfo | articleinfo | setinfo)/title">
         <xsl:apply-templates select="(bookinfo | articleinfo | setinfo)/title" mode="title.markup.textonly"/>
       </xsl:when>
+      <xsl:when test="title | refmeta/refentrytitle">
+        <xsl:apply-templates select="(title | refmeta/refentrytitle)[last()]" mode="title.markup.textonly"/>
+      </xsl:when>
       <xsl:otherwise>
-            <xsl:apply-templates select="(title|refmeta/refentrytitle)[last()]" mode="title.markup.textonly"/>
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key"><xsl:value-of select="local-name(.)"/></xsl:with-param>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="not(self::book or self::article or self::set)">

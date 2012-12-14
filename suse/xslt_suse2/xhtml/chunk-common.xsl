@@ -30,7 +30,7 @@
 
   <!-- ===================================================== -->
   <xsl:template
-    match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set|refentry"
+    match="appendix|article|book|bibliography|chapter|part|preface|glossary|sect1|set|refentry|index"
                 mode="breadcrumbs">
     <xsl:param name="class">crumb</xsl:param>
     <xsl:param name="context">header</xsl:param>
@@ -39,6 +39,7 @@
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
     </xsl:variable>
 
+    <xsl:message><xsl:value-of select="string(local-name(.))"/> </xsl:message>
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="generate.class.attribute">
         <xsl:with-param name="class" select="$class"/>
