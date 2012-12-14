@@ -17,17 +17,8 @@
   </itemizedlist></para></abstract>
 
  <sect1 id="sec.daps.user.imgs.usage">
-  <title>Image Types</title>
-  <para>
-   Depending on the output format you generate with &dapsacr; (PDF or HTML
-   for example), the source images you provide and reference in your XML
-   sources are automatically transformed into the appropriate output formats.
-   For example, when building an HTML deliverable, SVG images are converted to
-   PNG, and when building a grayscale PDF deliverable, color images are also
-   converted to grayscale. Thus, only the decision which file format should be
-   the source is very important. As you might imagine, the appropriate source
-   format depends on the purpose of the image.
-  </para>
+  <title>Supported Image Types</title>
+  &daps-image-intro;
   &daps-img-formats;
   <important>
    <title>PDF and EPS Image Support in &dapsacr; Is Experimental</title>
@@ -172,14 +163,15 @@
    &ex-daps-img-ref;
   </example>
  </sect2>
-  <sect2>
+  <sect2 id="sec.daps.user.imgs.used">
    <title>Gaining an Overview over Images Used</title>
    <para>
-    To find out which images are used and unused in a project or referenced in a
+    To find out which images are used/not used in a project or referenced in a
     DocBook file but missing from the file system, &dapsacr; offers
-    a handful of sub-commands that check your project for such relationships.
+    sub-commands that check your project for such issues.
     <remark>"Relationships" is really not a good word. Ideas for improvement
-     welcome.--sknorr, 2012-09-17</remark>
+     welcome.--sknorr, 2012-09-17 - taroth 2012-12-14: replaced it with issues
+     (but not sure if that is a better term)</remark>
    </para>
    <variablelist>
     <varlistentry>
