@@ -318,6 +318,91 @@
    </listitem>
   </itemizedlist>">
   
+<!ENTITY daps-img-names-req
+' <variablelist>
+    <varlistentry>
+     <term>Unique Image Names</term>
+     <listitem>
+      <para>Always store just one file with a particular name within the
+      <filename>images/src</filename> folder of a project. As &dapsacr; tries to 
+      create any missing image formats from original images, it will otherwise 
+      not know which one of the duplicate files to use for converting to the 
+      missing formats.</para>
+      <para>Additionally, having a file called <filename>example.png</filename> 
+      and another called <filename>example.svg</filename> in the same documentation 
+      project will often lead to  questions like:
+     </para>
+      <itemizedlist>
+       <listitem>
+        <para>Which file to use where?</para>
+       </listitem>
+       <listitem>
+        <para>Do both files display the same content?</para>
+       </listitem>
+       <listitem>
+        <para>Are both files current, or is one outdated?</para>
+       </listitem>
+      </itemizedlist>
+      <para>To search for image name clashes, use the <command>warn-images</command> 
+      subcommand. It lists all images with non-unique base names for a particular
+      documentation project:
+    </para>
+      <screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>No Spaces In Filenames</term>
+     <listitem>
+      <para>Avoid spaces in filenames because the <command>make</command> command 
+       in &dapsacr; has trouble understanding them. Use underscores 
+       (<filename>_</filename>) or hyphens (<filename>-</filename>) instead. 
+       Camel-cased filenames (<filename>aCamelCasedFileName</filename>) or 
+       filenames only differing in upper or lower case spelling may lead to 
+       problems if multiple file systems are used anywhere in the process chain
+       between generation and publishing of the output formats.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+     It is a good idea to find a consistent file naming scheme. For instance, when
+     documenting software, it might prove helpful to include the name of the
+     application at the beginning of the filename or to use prefixes like 
+     <filename>screenshot_</filename> and <filename>diagram_</filename> 
+     to separate between different types of images.
+    </para>'>
+    
+<!ENTITY daps-img-ref
+' <para>
+    Provided your images are located in the required default directory,
+    &dapsacr; automatically finds the path to your images. Therefore,
+    referencing images in your XML sources is very straightforward: you do
+    not need to include any path in the
+    <sgmltag class="attribute">fileref</sgmltag> attribute&mdash;the
+    file name is enough.
+   </para>
+  <para>
+    Furthermore, DocBook allows you to reference more than one image to
+    distinguish between different output formats. For example, you can add
+    two references pointing to the same file, but using different images
+    widths for PDF and HTML output. Use the
+    <sgmltag class="attribute">role</sgmltag> attribute to specify the
+    output format, for example <sgmltag class="attvalue">fo</sgmltag> or
+    <sgmltag class="attvalue">html</sgmltag>. 
+    </para>'>
+  
+<!ENTITY ex-daps-img-ref
+'<screen>&lt;figure&gt;
+  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;mediaobject&gt;
+    &lt;imageobject role="fo"&gt;
+      &lt;imagedata fileref="screenshot.png" width="70&#37;"/&gt;
+    &lt;/imageobject&gt;
+    &lt;imageobject role="html"&gt;
+      &lt;imagedata fileref="screenshot.png" width="75&#37;"/&gt;
+    &lt;/imageobject&gt;
+  &lt;/mediaobject&gt;
+&lt;/figure&gt;</screen>'>
+   
 <!ENTITY daps-config 
   '<para>
    &dapsacr; can be customized to a large degree: per system, per user, and per 
