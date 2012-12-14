@@ -333,85 +333,15 @@ make: *** [validate] Error 3</screen>
 
   <sect2 id="sec.daps.quick.imgs.req">
    <title>Filename Requirements</title>
-   <variablelist>
-    <varlistentry>
-     <term>Unique Image Names</term>
-     <listitem>
-      <para>Always store just one file with a particular name within the
-      <filename>images/src</filename> folder of a project. As &dapsacr; tries to 
-      create any missing image formats from original images, it will otherwise 
-      not know which one of the duplicate files to use for converting to the 
-      missing formats.</para>
-      <para>Additionally, having a file called <filename>example.png</filename> 
-      and another called <filename>example.svg</filename> in the same documentation 
-      project will often lead to  questions like:
-     </para>
-      <itemizedlist>
-       <listitem>
-        <para>Which file to use where?</para>
-       </listitem>
-       <listitem>
-        <para>Do both display the same content?</para>
-       </listitem>
-       <listitem>
-        <para>Are both files current, or is one outdated?</para>
-       </listitem>
-      </itemizedlist>
-      <para>To search for common image names, use the <command>warn-images</command> 
-      subcommand. It lists all images with non-unique base names for a particular
-      documentation project:
-    </para>
-      <screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>No Spaces In Filenames</term>
-     <listitem>
-      <para>Avoid spaces in filenames because the <command>make</command> command 
-       in &dapsacr; has trouble understanding them. Use underscores 
-       (<filename>_</filename>) or hyphens (<filename>-</filename>) instead. 
-       Camel-cased filenames (<filename>aCamelCasedFileName</filename>) or 
-       filenames only differing in upper or lower case spelling may lead to 
-       problems if multiple file systems are used anywhere in the process chain
-       between generation and publishing of the output formats.</para>
-     </listitem>
-    </varlistentry>
-   </variablelist>
- </sect2>
+   &daps-img-names-req;
+  </sect2>
 
  <sect2 id="sec.daps.quick.imgs.refer">
   <title>Referencing Images</title>
-  <para>
-    Provided your images are located in the required default directory,
-    &dapsacr; automatically finds the path to your images. Therefore,
-    referencing images in your XML sources is very straightforward: you do
-    not need to include any path in the
-    <sgmltag class="attribute">fileref</sgmltag> attribute&mdash;the
-    file name is enough.
-   </para>
-  <para>
-    Furthermore, DocBook allows you to reference more than one image to
-    distinguish between different output formats. For example, you can add
-    two references pointing to the same file, but using different images
-    widths for PDF and HTML output. Use the
-    <sgmltag class="attribute">role</sgmltag> attribute to specify the
-    output format, for example <sgmltag class="attvalue">fo</sgmltag> or
-    <sgmltag class="attvalue">html</sgmltag>. See
-    <xref linkend="ex.xml.img.ref"/>.
-   </para>
-  <example id="ex.xml.img.ref">
+  &daps-img-ref;
+  <example id="ex.daps.quick.xml.img.ref">
    <title>Image Reference in an XML File</title>
-   <screen>&lt;figure&gt;
-  &lt;title&gt;Main Window&lt;/title&gt;
-  &lt;mediaobject&gt;
-    &lt;imageobject role="fo"&gt;
-      &lt;imagedata fileref="screenshot.png" width="70%"/&gt;
-    &lt;/imageobject&gt;
-    &lt;imageobject role="html"&gt;
-      &lt;imagedata fileref="screenshot.png" width="75%"/&gt;
-    &lt;/imageobject&gt;
-  &lt;/mediaobject&gt;
-&lt;/figure&gt;</screen>
+   &ex-daps-img-ref;
   </example>
  </sect2>
 </sect1>
@@ -482,7 +412,7 @@ make: *** [validate] Error 3</screen>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
- <screen>$ <command>daps help <replaceable>subcommand</replaceable>&nsp;</command></screen>
+ <screen>$ <command>daps help <replaceable>subcommand</replaceable>&nbsp;</command></screen>
 
  <para>
    For example, if you want more information about generating HTML output,
@@ -528,7 +458,7 @@ make: *** [validate] Error 3</screen>
     Independent of the individual output format you want to create, you need
     to specify the &dclong; file to use:
    </para>
-  <screen>$ <command>daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nsbp;</command></screen>
+  <screen>$ <command>daps -d <replaceable>&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</command></screen>
   <para>
     For example:
    </para>
