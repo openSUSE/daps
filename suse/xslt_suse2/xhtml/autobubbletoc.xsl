@@ -158,7 +158,18 @@
     </xsl:call-template>
   </xsl:template>
   
-  <xsl:template match="preface|chapter|appendix|article|topic" mode="bubble-toc">
+  <xsl:template match="preface|chapter|appendix|topic" mode="bubble-toc">
+    <xsl:param name="toc-context" select="."/>
+    
+    <xsl:call-template name="bubble-subtoc">
+      <xsl:with-param name="toc-context" select="$toc-context"/>
+      <xsl:with-param name="nodes"
+        select="topic|refentry|glossary|bibliography|index|
+        bridgehead[$bridgehead.in.toc != 0]"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="article" mode="bubble-toc">
     <xsl:param name="toc-context" select="."/>
     
     <xsl:call-template name="bubble-subtoc">
@@ -169,7 +180,7 @@
         bridgehead[$bridgehead.in.toc != 0]"/>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template match="sect1" mode="bubble-toc">
     <xsl:param name="toc-context" select="."/>
     <xsl:call-template name="bubble-subtoc">
