@@ -83,10 +83,7 @@
           <xsl:apply-templates select="." mode="label.markup"/>
         </xsl:variable>
         <xsl:copy-of select="$label"/>
-        <xsl:if test="$label != ''">
-          <xsl:value-of select="$autotoc.label.separator"/>
-          </xsl:if>
-        </xsl:if>
+      </xsl:if>
       <li class="inactive">
         <a>
         <xsl:attribute name="href">
@@ -99,12 +96,12 @@
           <xsl:variable name="label">
             <xsl:apply-templates select="." mode="label.markup"/>
           </xsl:variable>
-          <xsl:copy-of select="$label"/>
-          <xsl:if test="$label != ''">
-            <xsl:value-of select="$autotoc.label.separator"/>
-          </xsl:if>
+          <span class="number">
+            <xsl:copy-of select="$label"/>
+            <xsl:text> </xsl:text>
+          </span>
         </xsl:if>
-      
+
         <xsl:apply-templates select="." mode="titleabbrev.markup"/>
           </a>
         <!--  -->
