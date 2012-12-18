@@ -197,5 +197,9 @@ task before
   
   <!-- Should information from SVN properties be used? yes=1|no=0 -->
   <xsl:param name="use.meta" select="0"/>
+
+  <!-- Show arrows before and after a paragraph that applies only to a certain
+       architecture? -->
+  <xsl:param name="para.use.arch" select="1"/>
   
 </xsl:stylesheet>
