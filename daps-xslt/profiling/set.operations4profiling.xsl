@@ -15,7 +15,7 @@
                 xmlns:suse="urn:x-suse:xmlns:exsl:functions"
                 xmlns:vset="http:/www.ora.com/XSLTCookbook/namespaces/vset"
                 extension-element-prefixes="exsl exslt"
-                exclude-result-prefixes="suse">
+                exclude-result-prefixes="suse saxon exsl exslt vset">
 
 <xsl:include href="../common/vset.ops.xsl"/>
 
