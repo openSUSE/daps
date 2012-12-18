@@ -21,7 +21,7 @@
       <xsl:call-template name="common.html.attributes"/>
       <xsl:call-template name="id.attribute"/>
       <xsl:call-template name="anchor"/>
-      <!-- We are only interested in a "normal" pocessing, but suppress
+      <!-- We are only interested in a "normal" processing, but suppress
         titles anyway
       -->
       <!--<xsl:call-template name="sidebar.titlepage"/>-->
@@ -32,8 +32,8 @@
   <xsl:template match="para[@arch]">
     <xsl:variable name="arch">
       <xsl:choose>
-         <xsl:when test="@arch = 'zseries'">System&#xa0;z</xsl:when>
-         <xsl:otherwise><xsl:value-of select="@arch"/></xsl:otherwise>
+        <xsl:when test="@arch = 'zseries'">System&#xa0;z</xsl:when>
+        <xsl:otherwise><xsl:value-of select="translate(@arch, ';', '/')"/></xsl:otherwise>
       </xsl:choose>
    </xsl:variable>
     <xsl:call-template name="paragraph">
@@ -51,7 +51,7 @@
       <xsl:call-template name="anchor"/>
       <xsl:apply-templates/>
     </xsl:with-param>
-    <xsl:with-param name="archi">
+    <xsl:with-param name="arch">
       <xsl:if test="$para.use.arch">
         <xsl:value-of select="$arch"/>
       </xsl:if>
@@ -61,11 +61,10 @@
 
 <!-- Same as upstream version, but can also handle paragraphs with an
      architecture assigned to them. -->
-
   <xsl:template name="paragraph">
     <xsl:param name="class" select="''"/>
     <xsl:param name="content"/>
-    <xsl:param name="archi"/>
+    <xsl:param name="arch"/>
 
     <xsl:variable name="p">
       <p>
@@ -83,9 +82,9 @@
           </xsl:otherwise>
         </xsl:choose>
 
-        <xsl:if test="$archi != ''">
+        <xsl:if test="$arch != ''">
           <strong class="arch">
-            <xsl:value-of select="$archi"/>
+            <xsl:value-of select="$arch"/>
           </strong>
           <span class="arch-arrow-start">
           </span>
@@ -93,7 +92,7 @@
 
         <xsl:copy-of select="$content"/>
 
-        <xsl:if test="$archi != ''">
+        <xsl:if test="$arch != ''">
           <span class="arch-arrow-end">
           </span>
         </xsl:if>
