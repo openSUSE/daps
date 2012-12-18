@@ -74,4 +74,34 @@
   </div>
 </xsl:template>
 
+<xsl:template name="metadata">
+            <xsl:if test="$use.meta != 0">
+              <!--
+                On every structural element (like chapter, preface, ...) we
+                have a xml:base attribute pointing to the filename
+                If it isn't available, we point to the book filename
+              -->
+              <xsl:variable name="xmlbase.filename">
+                <xsl:variable name="_xmlbase" 
+                  select="(ancestor-or-self::chapter|
+                  ancestor-or-self::preface|
+                  ancestor-or-self::appendix|
+                  ancestor-or-self::glossary)/@xml:base"/>
+                <xsl:choose>
+                  <xsl:when test="$_xmlbase != ''">
+                    <xsl:value-of select="$_xmlbase"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="ancestor-or-self::book/@xml:base"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:comment>htdig_noindex</xsl:comment>
+              <xsl:call-template name="getmetadata">
+                <xsl:with-param name="filename" select="$xmlbase.filename"/>
+              </xsl:call-template>
+              <xsl:comment>/htdig_noindex</xsl:comment>
+            </xsl:if>
+</xsl:template>
+
 </xsl:stylesheet>

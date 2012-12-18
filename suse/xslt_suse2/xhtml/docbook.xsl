@@ -446,9 +446,10 @@
 
         <xsl:call-template name="user.header.content"/>
           <div id="_content">
-          
+            <xsl:call-template name="metadata"/>
+
             <xsl:apply-templates select="."/>
-            
+
             <div class="page-bottom">
               <xsl:call-template name="share.and.print">
                 <xsl:with-param name="prev" select="$prev"/>
