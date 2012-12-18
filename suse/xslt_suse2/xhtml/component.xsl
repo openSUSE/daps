@@ -63,9 +63,10 @@
       <xsl:with-param name="object" select="$node"/>
     </xsl:call-template>
   </xsl:element>
-  </xsl:template>
-  
-  
+  <xsl:call-template name="debug.filename-id"/>
+</xsl:template>
+
+
   <xsl:template match="article">
     <xsl:call-template name="id.warning"/>
     

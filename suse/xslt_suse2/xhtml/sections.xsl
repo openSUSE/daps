@@ -94,7 +94,46 @@
        <xsl:with-param name="object" select="$section"/>
     </xsl:call-template>
   </xsl:element>
+  <xsl:call-template name="debug.filename-id"/>
 </xsl:template>
+
+<xsl:template name="debug.filename-id">
+  <xsl:param name="node" select="."/>
+  <xsl:variable name="xmlbase" 
+    select="ancestor-or-self::*[self::chapter or 
+                                self::appendix or
+                                self::part or
+                                self::reference or 
+                                self::preface or
+                                self::glossary or
+                                self::sect1 or 
+                                self::sect2 or
+                                self::sect3 or
+                                self::sect4]/@xml:base"/>
   
+  <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
+    <div class="doc-status">
+      <ul>
+        <li>
+          <span class="ds-label">Filename: </span>
+          <xsl:value-of select="$xmlbase"/>
+        </li>
+        <li>
+          <span class="ds-label">ID: </span>
+          <xsl:choose>
+            <xsl:when test="$node/@id">
+              <xsl:text>#</xsl:text>
+              <xsl:call-template name="object.id">
+                <xsl:with-param name="object" select="$node"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise><span class="ds-message">no ID found</span></xsl:otherwise>
+          </xsl:choose>
+        </li>
+      </ul>
+    </div>
+  </xsl:if>
+</xsl:template>
+
 
 </xsl:stylesheet>
