@@ -72,16 +72,16 @@ html, body {
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
 #_content > .refentry, #_content > .bibliography, #_content > .index,
-#_content > .page-bottom {
+.page-bottom {
     margin: 0 auto;
     min-width: 400px;
     max-width: 998px;
 }
 
-.single #_content div.part, .single #_content div.chapter, .single #_content div.preface,
-.single #_content div.appendix, .single #_content div.glossary, .single #_content div.reference,
-.single #_content div.refentry, .single #_content div.bibliography, .single #_content div.index,
-.single #_content div.page-bottom
+.single div.part, .single div.chapter, .single div.preface,
+.single div.appendix, .single div.glossary, .single div.reference,
+.single div.refentry, .single div.bibliography, .single div.index,
+.single div.page-bottom
  {
     padding-top: 40px;
 }
@@ -115,6 +115,7 @@ html, body {
     min-height: 139px;
     clear: both;
     min-width: 400px;
+    z-index: 0;
 }
 
 #_white-bg {
@@ -122,10 +123,6 @@ html, body {
     width: 100%;
     z-index: 5;
     min-width: 440px;
-}
-
-#_content {
-    z-index: 0;
 }
 
 /* Header Area */
@@ -222,7 +219,7 @@ html, body {
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
-#_find-button, #_content .ulink:after, .bubble-corner, .book2-icon,
+#_find-button, .ulink:after, .bubble-corner, .book2-icon,
 #_print-button:before, #_share-fb:before , #_share-gp:before , #_share-tw:before {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
@@ -848,7 +845,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 /* Page bottom */
 
-#_content .page-bottom {
+.page-bottom {
     margin-top: 30px;
     margin-bottom: 80px;
     padding: 10px 10px 0;
@@ -1029,6 +1026,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     z-index: 2; /* Else, #_inward overlays the footer */
 }
 
+#_footer ul {
+    padding: 0;
+}
+
 #_footer li, #_footer p {
     display: block;
     float: left;
@@ -1081,7 +1082,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 
-#_content .ulink:after {
+.ulink:after {
     content: "\0020\2197";
     color: transparent;
     width: 18px;
@@ -1094,7 +1095,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     top: 2px;
 }
 
-#_content .legalnotice .ulink:after {
+.legalnotice .ulink:after {
     background-position: -180px -101px;
     width: 18px;
     height: 10px;
@@ -1121,7 +1122,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     top: 70px;
 }
 
-#_content .book .title, #_content .set .title, #_content .article .title {
+.book .title, .set .title, .article .title {
     font-size: 48px;
     font-weight: 600;
     line-height: 120%;
@@ -1130,12 +1131,12 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     color: #439539;
     padding: 70px 0 50px;
 }
-#_content .book .title .citetitle, #_content .set .title .citetitle,
-#_content .article .title .citetitle {
+.book .title .citetitle, .set .title .citetitle,
+.article .title .citetitle {
     font-style: normal;
 }
 
-#_content .set .subtitle, #_content .book .subtitle, #_content .article .subtitle {
+.set .subtitle, .book .subtitle, .article .subtitle {
     font-size: 28px;
     font-weight: normal;
     margin: -40px 0 50px;
@@ -1144,9 +1145,9 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     clear: both;
 }
 
-#_content .title, #_content .chapter .title, #_content .preface .title,
-#_content .appendix .title, #_content .bibliography .title,
-#_content .reference .title, #_content .part .title, #_content .glossary .title {
+.title, .chapter .title, .preface .title,
+.appendix .title, .bibliography .title,
+.reference .title, .part .title, .glossary .title {
     font-size: 34px;
     font-weight: normal;
     padding: 30px 0 5px;
@@ -1155,15 +1156,15 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     clear: both;
 }
 
-.single #_content .title, .single #_content .chapter .title,
-.single #_content .preface .title, single #_content .appendix .title,
-.single #_content .bibliography .title, .single #_content .reference .title,
-.single #_content .part .title, .single #_content .article .title {
+.single .title, .single .chapter .title,
+.single .preface .title, single .appendix .title,
+.single .bibliography .title, .single .reference .title,
+.single .part .title, .single .article .title {
     padding-top: 100px;
 }
 
 
-#_content .sect1 .subtitle, #_content .chapter .subtitle {
+.sect1 .subtitle, .chapter .subtitle {
     font-size: 16px;
     font-weight: normal;
     padding: 10px 0 20px;
@@ -1172,29 +1173,29 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     clear: both;
 }
 
-#_content .sect1 .title, .single #_content .sect1 .title {
+.sect1 .title, .single .sect1 .title {
     font-size: 28px;
     font-weight: normal;
     padding: 50px 0 5px;
     text-align: left;
 }
 
-#_content .sect2 .title, .single #_content .sect2 .title {
+.sect2 .title, .single .sect2 .title {
     font-size: 22px;
     padding: 40px 0 0;
     text-align: left;
 }
 
-#_content .sect3 .title, .single #_content .sect3 .title,
-#_content .refentry h2, h2, .indexdiv h3 {
+.sect3 .title, .single .sect3 .title,
+.refentry h2, h2, .indexdiv h3 {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
     text-align: left;
 }
 
-#_content .sect4 .title, .single #_content .sect4 .title,
-#_content .sect5 .title, .single #_content .sect5 .title {
+.sect4 .title, .single .sect4 .title,
+.sect5 .title, .single .sect5 .title {
     font-size: 16px;
     padding: 53px 0 0;
     margin: 0 0 -33px;
@@ -1204,24 +1205,25 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-align: left;
 }
 
-#_content .sect4 .title {
+.sect4 .title {
     font-weight: 600;
 }
 
-#_content .sect5 .title {
+.sect5 .title {
     font-weight: normal;
 }
 
-#_content .name, #_content .refentry h2, .refentrytitle a, h2, .indexdiv h3 {
+.name, .refentry h2, .refentrytitle a, h2, .indexdiv h3 {
     color: #439539;
 }
 
-#_content a:hover .name, #_content a:focus .name, #_content a:active .name,
-#_content .refentrytitle a:hover, #_content .refentrytitle a:focus, #_content .refentrytitle a:active {
+/*BR*/
+a:hover .name, a:focus .name, a:active .name,
+.refentrytitle a:hover, .refentrytitle a:focus, .refentrytitle a:active {
     text-decoration: underline;
 }
 
-#_content .number, #_content .subtitle {
+.number, .subtitle {
     color: #666;
 }
 
@@ -1229,7 +1231,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     color: #CCC;
 }
 
-#_content .permalink {
+.permalink {
     opacity: 0;
     font-size: 75%;
     text-decoration: none;
@@ -1243,35 +1245,35 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     -o-transition: opacity 0.2s ease-in-out 0.1s;
 }
 
-#_content .permalink:hover, #_content .permalink:focus, #_content .permalink:active {
+.permalink:hover, .permalink:focus, .permalink:active {
     color: #439539;
     text-decoration: none !important;
 }
 
-#_content *:hover > .permalink {
+*:hover > .permalink {
     opacity: 1;
 }
 
-#_content .line .toc {
+.line .toc {
     padding: 0 17px 24px;
 }
 
-#_content .line {
+.line {
     margin: 17px 0 36px 0;
     border-bottom: 1px solid #439539;
     width: 100%;
 }
 
-#_content .toc a {
+.toc a {
     text-decoration: none;
 }
 
-#_content .legalnotice {
+.legalnotice {
     margin: 40px 0 0;
     padding: 10px 0 0;
 }
 
-#_content .legalnotice p, #_content .legalnotice td {
+.legalnotice p, .legalnotice td {
     font-size: 12px;
     color: #666;
     line-height: 140%;
@@ -1281,7 +1283,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 /* Thou shalt not ... */
 
-#_content .admonition {
+.admonition {
     border-width: 1px;
     border-radius: 3px;
     border-style: solid;
@@ -1289,62 +1291,62 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     margin: 17px 0 24px;
 }
 
-#_content .tip {
+.tip {
     border-color: #439539;
     background: #FFF url(../images/dots-green.png) repeat-x scroll top;
 }
 
-#_content .note {
+.note {
     border-color: #666;
     background: #FFF url(../images/dots-yellow.png) repeat-x scroll top;
 }
 
-#_content .note ul {
+.note ul {
     color: #666;
 }
 
-#_content .important {
+.important {
     border-color: #BB7B03;
     background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
 }
 
-#_content .important ul {
+.important ul {
     color: #BB7B03;
 }
 
-#_content .warning, .caution {
+.warning, .caution {
     border-color: #8C0000;
     background: #FFF url(../images/dots-red.png) repeat-x scroll top;
 }
 
-#_content .warning ul, #_content .warning ul {
+.warning ul, .warning ul {
     color: #333;
 }
 
-#_content .admonition h6 {
+.admonition h6 {
     font-weight: 600;
     vertical-align: middle;
     display: table-cell;
     height: 36px;
 }
 
-#_content .tip h6 {
+.tip h6 {
     color: #439539;
 }
 
-#_content .note h6 {
+.note h6 {
     color: #333;
 }
 
-#_content .important h6 {
+.important h6 {
     color: #BB7B03;
 }
 
-#_content .warning h6, .caution h6 {
+.warning h6, .caution h6 {
     color: #8C0000;
 }
 
-#_content .symbol {
+.symbol {
     width: 36px;
     height: 36px;
     margin: 0 10px 0 0;
@@ -1353,7 +1355,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     overflow: hidden;
 }
 
-#_content .admonition p {
+.admonition p {
     margin: 10px 0 0 !important;
 }
 
@@ -1364,15 +1366,15 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     z-index: 2;
 }
 
-em, i, #_content .guimenu {
+em, i, .guimenu {
     font-style: italic;
 }
 
-#_content em .guimenu, #_content i .guimenu {
+em .guimenu, i .guimenu {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, #_content .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
+strong, b, .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
     font-weight: 600;
 }
 
@@ -1410,103 +1412,110 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 
-#_content p, .simplelist td {
+p, .simplelist td {
     color: #000;
     text-align: left;
     margin: 10px 0 0;
 }
 
-#_content .abstract {
+.abstract {
     margin: 24px 0 0;
     font-size: 18px;
     line-height: 140%;
 }
 
-#_content .abstract p, .toc-title {
+.abstract p, .toc-title {
     color: #333;
 }
 
-#_content .abstract p:first-child {
+.abstract p:first-child {
     margin-top: 0;
 }
 
-#_content .abstract .titlepage {
+.abstract .titlepage {
     display: none;
 }
 
-#_content .abstract .titlepage + p {
+.abstract .titlepage + p {
     margin-top: 0;
 }
 
-#_content .abstract li:first-child p:first-child {
+.abstract li:first-child p:first-child {
     margin-top: 0;
 }
 
-#_content .abstract + .authorgroup {
+.abstract + .authorgroup {
     margin: 10px 0;
 }
 
-#_content .authorgroup {
+.authorgroup {
     color: #333;
 }
 
-#_content .ulink, #_content .xref, #_content .email, #_content .glosssee,
-#_content .glossseealso, #_content .indexterm {
+.ulink, .link, .xref, .email, .glosssee,
+.glossseealso, .indexterm {
     color: #439539;
     text-decoration: none;
 }
 
-#_content .title .xref, #_content .subtitle .xref, #_content .table-title .xref,
-#_content .example-title .xref, #_content .figure-title .xref,
-#_content .procedure-title .xref, #_content .orderedlist-title .xref,
-#_content .title .ulink, #_content .subtitle .ulink,
-#_content .table-title .ulink, #_content .example-title .ulink,
-#_content .figure-title .ulink, #_content .procedure-title .ulink
-#_content .orderedlist-title .ulink, #_content .itemizedlist-title .ulink,
-#_content .variablelist-title .ulink {
+.title .xref, .subtitle .xref, .table-title .xref,
+.example-title .xref, .figure-title .xref,
+.procedure-title .xref, .orderedlist-title .xref,
+.itemizedlist-title .xref, .variablelist-title .xref,
+.title .link, .subtitle .link, .table-title .link,
+.example-title .link, .figure-title .link,
+.procedure-title .link, .orderedlist-title .link,
+.itemizedlist-title .link, .variablelist-title .link,
+.title .ulink, .subtitle .ulink,
+.table-title .ulink, .example-title .ulink,
+.figure-title .ulink, .procedure-title .ulink,
+.orderedlist-title .ulink, .itemizedlist-title .ulink,
+.variablelist-title .ulink {
     text-decoration: underline;
 }
 
-#_content .xref:hover, #_content .xref:focus, #_content .xref:active,
-#_content .xref:visited:hover, #_content .xref:visited:focus, #_content .xref:visited:active,
-#_content .ulink:hover, #_content .ulink:focus, #_content .ulink:active,
-#_content .ulink:visited:hover, #_content .ulink:visited:focus, #_content .ulink:visited:active,
-#_content .email:hover, #_content .email:focus, #_content .email:active,
-#_content .email:visited:hover, #_content .email:visited:focus, #_content .email:visited:active,
-#_content .glosssee:hover, #_content .glosssee:focus, #_content .glosssee:active,
-#_content .glosssee:visited:hover, #_content .glosssee:visited:focus, #_content .glosssee:visited:active,
-#_content .glossseealso:hover, #_content .glossseealso:focus, #_content .glossseealso:active,
-#_content .glossseealso:visited:hover, #_content .glossseealso:visited:focus, #_content .glossseealso:visited:active,
-#_content .indexterm:hover, #_content .indexterm:focus, #_content .indexterm:active,
-#_content .indexterm:visited:hover, #_content .indexterm:visited:focus, #_content .indexterm:visited:active  {
+.xref:hover, .xref:focus, .xref:active,
+.xref:visited:hover, .xref:visited:focus, .xref:visited:active,
+.link:hover, .link:focus, .link:active,
+.link:visited:hover, .link:visited:focus, .link:visited:active,
+.ulink:hover, .ulink:focus, .ulink:active,
+.ulink:visited:hover, .ulink:visited:focus, .ulink:visited:active,
+.email:hover, .email:focus, .email:active,
+.email:visited:hover, .email:visited:focus, .email:visited:active,
+.glosssee:hover, .glosssee:focus, .glosssee:active,
+.glosssee:visited:hover, .glosssee:visited:focus, .glosssee:visited:active,
+.glossseealso:hover, .glossseealso:focus, .glossseealso:active,
+.glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
+.indexterm:hover, .indexterm:focus, .indexterm:active,
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active  {
     color: #439539;
     text-decoration: underline;
 }
 
-#_content .xref:visited, #_content .ulink:visited, #_content .email:visited,
-#_content .glosssee:visited, #_content .glossseealso:visited,
-#_content .indexterm:visited {
+.xref:visited, .ulink:visited, .link:visited, .email:visited,
+.glosssee:visited, .glossseealso:visited,
+.indexterm:visited {
     color: #5C3566;
 }
 
-#_content .title .xref:hover, #_content .title .xref:focus,#_content .title .xref:active,
-#_content .subtitle .xref:hover, #_content .subtitle .xref:focus, #_content .subtitle .xref:active,
-#_content .table-title .xref:hover, #_content .table-title .xref:focus, #_content .table-title .xref:active,
-#_content .figure-title .xref:hover, #_content .figure-title .xref:focus, #_content .figure-title .xref:active,
-#_content .example-title .xref:hover, #_content .example-title .xref:focus, #_content .example-title .xref:active,
-#_content .procedure-title .xref:hover, #_content .procedure-title .xref:focus, #_content .procedure-title .xref:active,
-#_content .orderedlist-title .xref:hover, #_content .orderedlist-title .xref:focus, #_content .orderedlist-title .xref:active,
-#_content .itemizedlist-title .xref:hover, #_content .itemizedlist-title .xref:focus, #_content .itemizedlist-title .xref:active,
-#_content .variablelist-title .xref:hover, #_content .variablelist-title .xref:focus, #_content .variablelist-title .xref:active {
+.title .xref:hover, .title .xref:focus,.title .xref:active,
+.subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
+.table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
+.figure-title .xref:hover, .figure-title .xref:focus, .figure-title .xref:active,
+.example-title .xref:hover, .example-title .xref:focus, .example-title .xref:active,
+.procedure-title .xref:hover, .procedure-title .xref:focus, .procedure-title .xref:active,
+.orderedlist-title .xref:hover, .orderedlist-title .xref:focus, .orderedlist-title .xref:active,
+.itemizedlist-title .xref:hover, .itemizedlist-title .xref:focus, .itemizedlist-title .xref:active,
+.variablelist-title .xref:hover, .variablelist-title .xref:focus, .variablelist-title .xref:active {
     color: #439539;
     text-decoration: none;
 }
 
-#_content p a:visited {
+p a:visited {
     color: #5C3566;
 }
 
-#_content code, #_content .command {
+code, .command {
     font-family: 'Droid Sans Mono', monospace;
     font-weight: normal;
     padding: 0 4px;
@@ -1518,30 +1527,30 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 
-#_content code code, #_content code .command, #_content .command code {
+code code, code .command, .command code {
     padding: 0;
     border: none;
 }
 
 
-#_content .name code, #_content .name .command, #_content a .command, #_content a code,
-#_content .admonition h6 .command, #_content .admonition h6 code {
+.name code, .name .command, a .command, a code,
+.admonition h6 .command, .admonition h6 code {
     color: inherit;
 }
 
-#_content .admonition h6 .command, #_content .admonition h6 code {
+.admonition h6 .command, .admonition h6 code {
     border-color: #D1D1D3;
 }
 
-#_content code {
+code {
     font-weight: normal;
 }
 
-#_content .command {
+.command {
     font-weight: bold;
 }
 
-#_content .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+.screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
     padding: 10px;
     background-color: #EFEFF0;
     border-radius: 5px;
@@ -1549,11 +1558,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     border: 1px solid #999;
 }
     
-#_content .example .screen-wrap {
+.example .screen-wrap {
     margin: 10px 0 24px;
 }
 
-#_content .screen {
+.screen {
     font: normal 13px 'Droid Sans Mono', monospace;
     color: #333;
     line-height: 125%;
@@ -1562,7 +1571,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     background-color: #EFEFF0;
 }
 
-#_content .screen code, #_content .screen .command {
+.screen code, .screen .command {
     border-radius: 0;
     background-color: transparent;
     font-size: 100%;
@@ -1570,32 +1579,32 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     padding: 0;
 }
 
-#_content .screen code {
+.screen code {
     color: #333;
 }
 
 
-#_content .screen .command {
+.screen .command {
     color: #439539;
 }
 
-#_content .calloutlist {
+.calloutlist {
     margin: 10px 0 24px;
 }
 
-#_content .calloutlist td[width="5%"] {
+.calloutlist td[width="5%"] {
     width: 45px;
 }
 
-#_content .example + .calloutlist {
+.example + .calloutlist {
     margin: -14px 0 24px;
 }
 
-#_content .calloutlist table {
+.calloutlist table {
     width: 100%;
 }
 
-#_content .callout {
+.callout {
     display: inline-block;
     padding: 1px 5px 1.5px;
     margin: 0 5px;
@@ -1608,21 +1617,21 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     font-weight: 600;
 }
 
-#_content .calloutlist .callout {
+.calloutlist .callout {
     position: relative;
     top: 2px;
     float: right;
 }
 
-#_content .variablelist, #_content .toc {
+.variablelist, .toc {
     margin: 24px 0;
 }
 
-#_content .line .toc {
+.line .toc {
     margin: 0;
 }
 
-#_content .variablelist dt, #_content .glossary dt {
+.variablelist dt, .glossary dt {
     font-weight: 600;
     color: #000;
     padding-top: 33px;
@@ -1632,7 +1641,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     z-index: 1;
 }
 
-#_content .toc dt {
+.toc dt {
     margin-bottom: 5px;
 } 
 
@@ -1642,25 +1651,25 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 }
 
 
-#_content .variablelist dd, #_content .glossary dd, #_content .toc dd,
+.variablelist dd, .glossary dd, .toc dd,
 .indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
 
-#_content .list-of-figures dl, #_content .list-of-tables dl,
-#_content .list-of-examples dl, #_content .list-of-procedures dl,
-#_content .list-of-equations dl {
+.list-of-figures dl, .list-of-tables dl,
+.list-of-examples dl, .list-of-procedures dl,
+.list-of-equations dl {
     margin: 5px 0 17px 0;
     padding: 0 0 0 30px;
 }
 
-#_content .variablelist dd > p, #_content .glossary dd > p,
-#_content .toc dd > p {
+.variablelist dd > p, .glossary dd > p,
+.toc dd > p {
     margin: 0;
 }
 
-#_content div.figure {
+div.figure {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
@@ -1672,7 +1681,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     top: -33px;
 }
 
-#_content div.figure .mediaobject {
+div.figure .mediaobject {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
@@ -1685,7 +1694,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     border-right: 1px solid #202020;
 }
 
-#_content .figure img {
+.figure img {
     padding: 0;
     background-color: #FFF;
     width: auto;
@@ -1700,34 +1709,34 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
 
 
 
-#_content .figure-title {
+.figure-title {
     padding: 10px;
     margin: 0;
     width: auto;
 }
 
-#_content div.figure .figure-title-wrap {
+div.figure .figure-title-wrap {
     background-color: #202020;
     width: 100%;
     overflow: hidden;
 }
 
-#_content div.figure a {
+div.figure a {
     height: 0;
     width: 0;
 }
 
-#_content div.figure .number, #_content div.figure .permalink:hover, #_content div.figure .permalink:focus, #_content div.figure .permalink:active {
+div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
     color: #76AD2D;
     text-decoration: none;
     font-weight: normal;
 }
 
-#_content div.figure .name, #_content div.figure .permalink {
+div.figure .name, div.figure .permalink {
     color: #FFF;
 }
 
-#_content .informalfigure img {
+.informalfigure img {
     max-width: 100%;
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
     color: #999;
@@ -1737,7 +1746,7 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     width: auto;
 }
 
-#_content .keycap {
+.keycap {
     color: #333;
     font-size: 13px;
     padding: 0px 5px;
@@ -1750,22 +1759,22 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     white-space: nowrap;
 }
 
-#_content a:hover .keycap, #_content a:focus .keycap, #_content a:active .keycap,
-#_content a:hover .command, #_content a:focus .command, #_content a:active .command,
-#_content a:hover code, #_content a:focus code, #_content a:active code {
+a:hover .keycap, a:focus .keycap, a:active .keycap,
+a:hover .command, a:focus .command, a:active .command,
+a:hover code, a:focus code, a:active code {
     background-color: #f7faf6;
     border-color: #439539;
 }
 
 /* We put an ndash character between keycaps that are part of an accelerator */
-#_content .key-connector {
+.key-connector {
     margin: 0 -1px; 
     color: #666;
 }
 
-#_content .procedure-title, #_content .table-title, #_content .example-title,
-#_content .figure-title, #_content .orderedlist-title, #_content .variablelist-title,
-#_content .itemizedlist-title {
+.procedure-title, .table-title, .example-title,
+.figure-title, .orderedlist-title, .variablelist-title,
+.itemizedlist-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
@@ -1773,43 +1782,42 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     line-height: 120%;
 }
 
-#_content .table-title, #_content .example-title, #_content .procedure-title,
-#_content .variablelist-title, #_content.itemizedlist-title {
+.table-title, .example-title, .procedure-title,
+.variablelist-title, #_content.itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-#_content .example-title, #_content .procedure-title, #_content .orderedlist-title {
+.example-title, .procedure-title, .orderedlist-title {
     margin: 24px 0 -33px;
 }
 
-#_content .itemizedlist-title {
+.itemizedlist-title {
     margin: 24px 0 -10px;
 }
 
-#_content .table-title {
+.table-title {
     margin: 24px 0 -23px;
 }
 
-#_content .variablelist-title {
+.variablelist-title {
     margin: 24px 0 -53px;
 }
 
 
-#_content .procedure-title code, #_content .procedure-title .command, #_content .procedure-title .keycap,
-#_content .table-title code, #_content .table-title .command, #_content .table-title .keycap,
-#_content .example-title code, #_content .example-title .command, #_content .example-title .keycap,
-#_content .figure-title code, #_content .figure-title .command, #_content .figure-title .keycap,
-#_content .orderedlist-title code, #_content .orderedlist-title .command, #_content .orderedlist-title .keycap,
+.procedure-title code, .procedure-title .command, .procedure-title .keycap,
+.table-title code, .table-title .command, .table-title .keycap,
+.example-title code, .example-title .command, .example-title .keycap,
+.figure-title code, .figure-title .command, .figure-title .keycap,
+.orderedlist-title code, .orderedlist-title .command, .orderedlist-title .keycap,
 .variablelist-title code, .variablelist-title .command, .variablelist-title .keycap,
- .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap
-{
+ .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
     text-transform: none;
 }
 
-#_content .procedure-contents {
+.procedure-contents {
     border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
@@ -1820,100 +1828,100 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     display: block;
 }
 
-#_content .procedure-title-wrap + .procedure-contents {
+.procedure-title-wrap + .procedure-contents {
     margin: 10px 0 24px;
 }
 
-#_content .procedure-contents > p:first-child,
-#_content .procedure-contents > ol:first-child > li:first-child > p:first-child {
+.procedure-contents > p:first-child,
+.procedure-contents > ol:first-child > li:first-child > p:first-child {
     margin-top: 0;
 }
 
-#_content .procedure-contents > .admonition {
+.procedure-contents > .admonition {
     margin-top: 4px;
 }
 
-#_content .procedure-contents > p, #_content .procedure-contents > .informalfigure,
-#_content .procedure-contents > .admonition {
+.procedure-contents > p, .procedure-contents > .informalfigure,
+.procedure-contents > .admonition {
     margin-left: 12px;
     margin-right: 17px;
 }
 
-#_content ol.procedure, #_content ol.substeps, #_content ol.orderedlist {
+ol.procedure, ol.substeps, ol.orderedlist {
     display: block;
     color: #439539;
     font-weight: 600;
 }
 
-#_content ol.procedure {
+ol.procedure {
     padding: 0 0 0 30px;
     margin: 0 10px;
 }
 
-#_content ol.substeps, #_content ol.orderedlist {
+ol.substeps, ol.orderedlist {
     padding: 0 0 0 35px;
     margin: 0 0 0 10px;
 }
 
-#_content .orderedlist-title-wrap + ol.orderedlist {
+.orderedlist-title-wrap + ol.orderedlist {
     margin-top: 40px;
 }
 
-#_content ol.procedure, #_content ol.orderedlist {
+ol.procedure, ol.orderedlist {
     list-style-type: decimal;
 }
 
-#_content ol.substeps {
+ol.substeps {
     list-style-type: lower-latin;
 }
 
-#_content .table-contents, #_content .informaltable {
+.table-contents, .informaltable {
     /* Yup, let's make this scroll... While ugly, there seems to be no better
     way to avoid the table running off the page border...(?) */
     overflow: auto;
 }
 
-#_content .table-contents {
+.table-contents {
     margin: 0 0 24px 0;
 }
-#_content .informaltable {
+.informaltable {
     margin: 10px 0 24px 0;
 }
 
 
-#_content .table table, #_content .informaltable table {
+.table table, .informaltable table {
     border: 1px solid #999;
     max-width: 100%;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-#_content table p, #_content .informaltable table p {
+table p, .informaltable table p {
     margin: 0;
 }
 
-#_content .table th, #_content .informaltable th {
+.table th, .informaltable th {
     font-weight: 600;
     background-color: #D1D1D3;
 }
 
-#_content .table td, #_content .table th, #_content .informaltable td, #_content .informaltable th {
+.table td, .table th, .informaltable td, .informaltable th {
     margin: 0;
     padding: 3px 5px;
     overflow: hidden;
     vertical-align: top;
 }
 
-#_content .table th, #_content .informaltable th {
+.table th, .informaltable th {
     vertical-align: middle;
     border: 1px solid #999;
 }
 
-#_content .table tr:nth-child(even), #_content .informaltable tr:nth-child(even) {
+.table tr:nth-child(even), .informaltable tr:nth-child(even) {
     background-color: #EFEFF0;
 }
 
-#_content ul {
+ul {
     padding: 5px 0 0 35px;
     margin: 0 10px;
     display: block;
@@ -1921,11 +1929,11 @@ strong, b, #_content .authorgroup-label, .version-info .productname, .version-in
     list-style-type: disc;
 }
 
-#_content li p {
+li p {
     font-weight: normal;
 }
 
-#_content .procedure > p {
+.procedure > p {
     margin: 0 10px 5px;
 }
 
@@ -2010,7 +2018,7 @@ body.draft {
         break-after: avoid;
     }
     
-    #_content .ulink:after {
+    .ulink:after {
         color: inherit;
         background-image: none;
         width: auto;
@@ -2105,26 +2113,26 @@ body.draft {
    (subtracted from the image max-height). */
 
 @media only screen and (max-height: 970px) {
-    #_content .informalfigure img, #_content .figure img {
+    .informalfigure img, .figure img {
         max-height: 744px;
     }
 }
 
 @media only screen and (max-height: 790px) {
-    #_content .informalfigure img, #_content .figure img {
+    .informalfigure img, .figure img {
         max-height: 620px;
     }
 }
 
 @media only screen and (max-height: 690px) {
-    #_content .informalfigure img, #_content .figure img {
+    .informalfigure img, .figure img {
         max-height: 520px;
     }
 }
 
 /* Make an exception here, so we don't get stamp-sized screenshots. */
 @media only screen and (max-height: 490px) {
-    #_content .informalfigure img, #_content .figure img {
+    .informalfigure img, .figure img {
         max-height: 400px;
     }
     
