@@ -67,7 +67,7 @@ html, body {
     font-size: 16px;
 }
 
-#_header, #_footer, #_toolbar-bottom,
+#_header, #_toolbar-bottom,
 #_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
@@ -220,7 +220,8 @@ html, body {
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
 #_find-button, .ulink:after, .bubble-corner, .book2-icon,
-#_print-button:before, #_share-fb:before , #_share-gp:before , #_share-tw:before {
+#_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
+#_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
@@ -907,10 +908,11 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     display: inline-block;
     border-radius: 3px;
     border: 1px solid rgba(20,20,20,0.2);
-    padding: 1px 7px;
+    padding: 0 7px;
     color: #333;
     background-color: #EFEFF0;
     font-size: 14px;
+    height: 22px;
 }
 
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
@@ -924,8 +926,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     float: left;
     text-align: center;
     border-radius: 2px 0 0 2px;
-    border: 1px solid rgba(0,0,0,0.2);
-    margin: -1px 6px -2px -7px;
+    border: 1px solid rgba(20,20,20,0.2);
+    margin: -1px 6px -2px -8px;
     overflow: hidden;
 }
 
@@ -949,8 +951,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_share-mail:before {
     background-color: #666;
-    color: #FFF;
-    content: "@";
+    content: " ";
+    background-position: -235px -88px;
 }
 
 
@@ -964,6 +966,13 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_share-print span:active {
     border: 1px solid rgba(20,20,20,0.5);
     background: #DEDEDE;
+}
+
+#_share-print span:hover:before, #_share-print span:focus:before,
+#_share-print span:active:before {
+    border-top: 1px solid rgba(20,20,20,0.5);
+    border-left: 1px solid rgba(20,20,20,0.5);    
+    border-bottom: 1px solid rgba(20,20,20,0.5);
 }
 
 #_bottom-navigation .nav-link:hover .nav-label,
@@ -1024,6 +1033,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_footer {
     font-family: Helvetica, FreeSans, sans-serif;
     z-index: 2; /* Else, #_inward overlays the footer */
+    min-width: 380px;
+    max-width: 988px;
+    margin: 0 auto;
+    padding: 0 10px;
 }
 
 #_footer ul {
@@ -1157,7 +1170,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .single .title, .single .chapter .title,
-.single .preface .title, single .appendix .title,
+.single .preface .title, .single .appendix .title,
 .single .bibliography .title, .single .reference .title,
 .single .part .title, .single .article .title {
     padding-top: 100px;
@@ -1225,6 +1238,11 @@ a:hover .name, a:focus .name, a:active .name,
 
 .number, .subtitle {
     color: #666;
+}
+
+.page-bottom a:hover .number, .page-bottom a:focus .number,
+.page-bottom a:active .number {
+    color: #68C05E;
 }
 
 #_bubble-toc .number {
@@ -1393,8 +1411,6 @@ strong, b, .authorgroup-label, .version-info .productname, .version-info .produc
 }
 
 .arch-arrow-start, .arch-arrow-end {
-    background-image: url(../images/icons.png);
-    background-repeat: no-repeat;
     display: inline-block;
     height: 22px;
     vertical-align:bottom;
@@ -1547,7 +1563,7 @@ code {
 }
 
 .command {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
@@ -2135,8 +2151,7 @@ body.draft {
     .informalfigure img, .figure img {
         max-height: 400px;
     }
-    
-        
+
     #_bubble-toc {
         height: 300px;
     }
