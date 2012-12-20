@@ -161,11 +161,7 @@ else
 endif
 
 # EPUB
-# building epub with nwalsh's ruby scripts requires to create an intermediate
-# xml file and have the images alongside this file in images/
-# We want these files to be created in TMP_DIR. The epub file itslef will be
-# created in RESULT_DIR
-#
+EPUB_RESULT := $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
 
 # Desktop-Files
 DESKTOP_FILES_DIR := $(TMP_DIR)/$(BOOK)/desktop
@@ -216,7 +212,7 @@ STYLELINKS     := $(DAPSROOT)/daps-xslt/common/get-links.xsl
 STYLEBURN      := $(DAPSROOT)/daps-xslt/common/reduce-from-set.xsl
 STYLEINDEX     := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
 STYLESEAIND    := $(DAPSROOT)/daps-xslt/common/search4index.xsl
-STYLEEPUBDB    := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
+STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 STYLEDB2ND     := $(DAPSROOT)/daps-xslt/common/db2novdoc.xsl
 
 #------------------------------------------------------------------------
@@ -569,7 +565,7 @@ txt text: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).txt
 #
 .PHONY: epub
 epub: | $(DIRECTORIES)
-epub: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
+epub: $(EPUB_RESULT)
   ifeq ("$(EPUBCHECK)", "yes")
     epub: epub-check
   endif
@@ -1865,18 +1861,17 @@ EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
 		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
 EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
 
-
 # Images
 #
-EPUB_DOC_IMGS     := $(subst $(IMG_GENDIR)/online,$(EPUB_IMGDIR),$(PNGONLINE))
+EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/online,$(EPUB_IMGDIR),$(PNGONLINE))
 EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
-EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_CALLOUTDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
-EPUB_IMAGES  := $(EPUB_DOC_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
+EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
+EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
 
 # Stringparams
 #
-EPUBSTRINGS := --stringparam base.dir $(EPUB_TMPDIR)/OEBPS/  \
-	       --stringparam epub.oebps.dir $(EPUB_TMPDIR)/OEBPS/  \
+EPUBSTRINGS := --stringparam base.dir $(EPUB_RESDIR)/  \
+	       --stringparam epub.oebps.dir $(EPUB_RESDIR)/  \
 	       --stringparam epub.metainf.dir $(EPUB_TMPDIR)/META-INF/  \
 	       --stringparam img.src.path "" 
 
@@ -1897,7 +1892,7 @@ $(EPUB_DIRECTORIES):
 #
 .PHONY: epub-name
 epub-name:
-	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub"
+	@ccecho "result" "$(EPUB_RESULT).epub"
 
 
 #--------------
@@ -1907,8 +1902,18 @@ $(EPUBBIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
   ifeq ($(VERBOSITY),1)
 	@ccecho "info" "   Generating EPUB-bigfile"
   endif
-	xsltproc --xinclude --output $@ $(ROOTSTRING) $(STYLEEPUBDB) \
+	xsltproc --xinclude --output $@ $(ROOTSTRING) $(STYLEEPUB_BIGFILE) \
 	  $(PROFILED_MAIN)
+
+#--------------
+# Generate HTML from EPUB-bigfile 
+#
+
+$(EPUB_TMPDIR)/OEBPS/index.html: $(EPUBBIGFILE)
+  ifeq ($(VERBOSITY),1)
+	@ccecho "info" "   Creating EPUB"
+  endif
+	xsltproc $(EPUBSTRINGS) $(EPUB_CSSSTRING) $(STYLEEPUB) $< $(DEVNULL)
 
 #--------------
 # mimetype file
@@ -1919,18 +1924,19 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #--------------
 # Images
 #
-$(EPUB_IMGDIR)/%.png: | $(EPUB_IMGDIR) provide-color-images
-	(cd $(EPUB_IMGDIR); \
-	  ln -sf $(subst $(EPUB_IMGDIR),$(IMG_GENDIR)/online,$@))
+$(EPUB_ADMON_IMGS): | $(EPUB_ADMONDIR)
+$(EPUB_CALLOUT_IMGS): | $(EPUB_CALLOUTDIR)
+$(EPUB_INLINE_IMGS): | $(EPUB_IMGDIR)
 
-$(EPUB_IMGDIR)/callouts/%.png: | $(EPUB_CALLOUTDIR)
-	(cd $(EPUB_CALLOUTDIR); \
-	  ln -sf $(subst $(EPUB_CALLOUTDIR),$(STYLEIMG),$@))
 
-$(EPUB_IMGDIR)/admons/%.png : | $(EPUB_ADMONDIR)
-	(cd $(EPUB_ADMONDIR); \
-	  ln -sf $(subst $(EPUB_ADMONDIR),$(STYLEIMG),$@))
+$(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/online/%.png
+	ln -sf $< $@
 
+$(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
+	ln -sf $< $@
+
+$(EPUB_ADMONDIR)/%.png : $(STYLEIMG)/%.png
+	ln -sf $< $@
 
 #--------------
 # CSS
@@ -1939,28 +1945,28 @@ $(EPUB_CSSFILE): | $(EPUB_RESDIR)
 	(cd $(EPUB_RESDIR); ln -sf $(EPUB_CSS))
 
 #--------------
-# Generate EPUB from EPUB-bigfile 
+# Generate EPUB-file 
 #
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: missing-images
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_IMAGES) $(EPUB_TMPDIR)/mimetype 
 ifdef EPUB_CSS
-  $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUB_CSSFILE) 
+  $(EPUB_RESULT): $(EPUB_CSSFILE) 
 endif
-$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub: $(EPUBBIGFILE)
-  ifeq ($(VERBOSITY),1)
+$(EPUB_RESULT): $(EPUB_IMAGES) $(EPUB_TMPDIR)/mimetype 
+$(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
+  ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating EPUB"
   endif
-	xsltproc $(EPUBSTRINGS) $(EPUB_CSSSTRING) $(STYLEEPUBXSLT) $< $(DEVNULL)
 	(cd $(EPUB_TMPDIR); \
-	  zip -q0X $@ mimetype; \
-	  zip -qXr9D $@ *;)
-#	rm -rf $(EPUB_TMPDIR)/*
+	  zip -q0X $@.tmp mimetype; \
+	  zip -qXr9D $@.tmp \
+	   $(subst $(EPUB_TMPDIR)/,,$(EPUB_IMAGES) $(EPUB_CSSFILE)) \
+	   META-INF/ OEBPS/*.html OEBPS/*.opf OEBPS/*.ncx; \
+	  mv $@.tmp $@;)
 
 #--------------
 # Check the epub file
 #
 .PHONY: epub-check
-epub-check: $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
+epub-check: $(EPUB_RESULT)
 	@ccecho "result" "#################### BEGIN epubcheck report ####################"
 	epubcheck $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub || true
 	@ccecho "result" "#################### END epubcheck report ####################"

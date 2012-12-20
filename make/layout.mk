@@ -54,7 +54,7 @@ STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 #
 # The following variables are actually used to build the targets:
 #
-# STYLEEPUBXSLT: epub
+# STYLEEPUB:     epub
 # STYLEFO:       fo (pdf)
 # STYLEH:        html
 # STYLEJ:        jsp
@@ -86,7 +86,7 @@ HTML_STYLE        := $(H_DIR)/chunk.xsl
 HTML_SINGLE_STYLE := $(H_DIR)/docbook.xsl
 
 
-STYLEEPUBXSLT := $(firstword $(wildcard $(addsuffix \
+STYLEEPUB     := $(firstword $(wildcard $(addsuffix \
 			/epub/docbook.xsl, $(STYLE_ROOTDIRS))))
 STYLEFO       := $(firstword $(wildcard $(addsuffix \
 			/fo/docbook.xsl, $(STYLE_ROOTDIRS))))
