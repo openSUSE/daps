@@ -63,6 +63,10 @@ $(document).ready(function() {
     });
   });
 
+$(document).keyup(function(e) {
+    if (e.keyCode == 27) { deactivate() }
+});
+
     // The other things.
 
     if( window.addEventListener ) {
@@ -148,7 +152,7 @@ function scrollDeactivator() {
         }
     }
 }
-            
+
 function deactivate() {
     var changeClass = new Array('_toc-area','_language-picker','_format-picker');
     for (var i = 0; i < changeClass.length; ++i) {
@@ -165,7 +169,7 @@ function deactivate() {
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     exchClass( '#_find-area', 'inactive', 'active' );
 }
-            
+
 function share( service ) {
     u = encodeURIComponent( document.URL );
     t = encodeURIComponent( document.title );

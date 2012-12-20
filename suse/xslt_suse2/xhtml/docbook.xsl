@@ -175,6 +175,10 @@
           <xsl:with-param name="object" select="."/>
           <xsl:with-param name="context" select="."/>
         </xsl:call-template>
+      <xsl:attribute name="accesskey">
+        <xsl:call-template name="href.target">
+        <xsl:text>c</xsl:text>
+        </xsl:call-template>
       </xsl:attribute>
       <span class="book2-icon"> </span>
       <xsl:if test="$context = 'fixed-header'">

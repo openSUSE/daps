@@ -241,7 +241,8 @@
             </xsl:when>
             <xsl:otherwise>
               <div id="_toc-area" class="inactive">
-                <a id="_toc-area-button" class="tool" title="{$localisationcontents}">
+                <a id="_toc-area-button" class="tool" title="{$localisationcontents}"
+                 accesskey="c">
                   <xsl:attribute name="href">
                     <xsl:call-template name="href.target">
                       <!-- FIXME: -->
