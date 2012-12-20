@@ -143,14 +143,10 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 # HTML / HTML-SINGLE
 #
-ifeq ($(MAKECMDGOALS), html)
+ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),html html-dir-name dist-html))
   HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 else
-  ifeq ($(MAKECMDGOALS), html-dir-name)
-    HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
-  else
-    HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
-  endif
+  HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 endif
 
 
@@ -180,9 +176,6 @@ EPUB_RESULT := $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).epub
 
 # Desktop-Files
 DESKTOP_FILES_DIR := $(TMP_DIR)/$(BOOK)/desktop
-
-# Yelp files
-YELP_DIR := $(TMP_DIR)/yelp
 
 #page files
 PAGE_FILES_DIR := $(TMP_DIR)/mallard
@@ -220,8 +213,8 @@ STYLEREMARK    := $(DAPSROOT)/daps-xslt/common/get-remarks.xsl
 STYLEROOTIDS   := $(DAPSROOT)/daps-xslt/common/get-rootids.xsl
 STYLESEARCH    := $(DAPSROOT)/daps-xslt/common/search4includedfiles.xsl
 STYLELANG      := $(DAPSROOT)/daps-xslt/common/get-language.xsl
-STYLEDESK      := $(DAPSROOT)/daps-xslt/desktop/docbook.xsl
-STYLE_DOCUMENT := $(DAPSROOT)/daps-xslt/yelp/docbook.xsl
+STYLE_DESKTOP_FILES := $(DAPSROOT)/daps-xslt/desktop/docbook.xsl
+STYLE_YELP     := $(DAPSROOT)/daps-xslt/yelp/docbook.xsl
 STYLE_MALLARD  := $(DAPSROOT)/daps-xslt/mallard/docbook.xsl
 STYLELINKS     := $(DAPSROOT)/daps-xslt/common/get-links.xsl
 STYLEBURN      := $(DAPSROOT)/daps-xslt/common/reduce-from-set.xsl
@@ -248,7 +241,7 @@ STYLEDB2ND     := $(DAPSROOT)/daps-xslt/common/db2novdoc.xsl
 #
 ifdef ROOTID
   ifneq ($(MAKECMDGOALS),package-src)
-    ROOTSTRING   := --stringparam "rootid=$(ROOTID)"
+    ROOTSTRING   := --stringparam rootid "$(ROOTID)"
   endif
 endif
 
@@ -435,12 +428,12 @@ endif
 # Desktop file stringparams
 #
 
-DESKSTRINGS  := --stringparam docpath "@PATH@/" \
-                --stringparam base.dir $(DESKTOP_FILES_DIR)/
+DESKTOP_FILES_STRINGS := --stringparam docpath "@PATH@/" \
+			 --stringparam base.dir $(DESKTOP_FILES_DIR)/
 # Language
 LL           ?= $(shell xsltproc --nonet $(STYLELANG) $(MAIN))
 ifdef LL
-  DESKSTRINGS    += --stringparam uselang "$(LL)"
+  DESKTOP_FILES_STRINGS  += --stringparam uselang "$(LL)"
   WEBHELPSTRINGS +=  --stringparam webhelp.indexer.language $(LL)
   LANGSTRING     := _$(LL)
 endif
@@ -995,7 +988,7 @@ dist-graphics-png:
 dist-html: MANIFEST  = --stringparam manifest $(HTML_DIR)/HTML.manifest \
 		       --param generate.manifest 1
 dist-html: TARBALL   = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-html.tar
-dist-html: HTML-USED = $(subst $(IMG_GENDIR),$(HTML_DIR)/images/,$(sort $(PNGONLINE)))
+dist-html: HTML-USED = $(subst $(IMG_GENDIR)/online,$(HTML_DIR)/images,$(sort $(PNGONLINE)))
 dist-html: $(PROFILES) $(PROFILEDIR)/.validate $(HTML_DIR)/index.html
 dist-html: provide-color-images
   ifeq ($(VERBOSITY),1)

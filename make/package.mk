@@ -8,11 +8,11 @@ ifeq ($(MAKECMDGOALS),package-html)
   HF_FORMAT := html
 endif
 
-DESKTOPFILES_RESULT  := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)-desktop.tar.bz2
-DOCUMENTFILES_RESULT := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)-$(HF_FORMAT).document
-PAGEFILES_RESULT     := $(PACK_DIR)/$(TMP_BOOK).page
+DESKTOPFILES_RESULT  := $(PACK_DIR)/$(BOOK)$(LANGSTRING)-desktop.tar.bz2
+DOCUMENTFILES_RESULT := $(PACK_DIR)/$(BOOK)$(LANGSTRING)-$(HF_FORMAT).document
+PAGEFILES_RESULT     := $(PACK_DIR)/$(BOOK).page
 
-$(PACK_DIR) $(YELP_DIR) $(DESKTOP_FILE_DIR):
+$(PACK_DIR) $(DESKTOP_FILES_DIR):
 	mkdir -p $@
 
 #--------------
@@ -20,14 +20,13 @@ $(PACK_DIR) $(YELP_DIR) $(DESKTOP_FILE_DIR):
 #
 # If a DEF-file is specified, get additional DC-files from the DEF file
 #
-
-# fs 2012-10-25:
-# TODO: Add a --addfiles option that allows to add files from everywhere
-#       in the filesystem. 
+# ROOTID is _never_ set with package-src (see common.mk), therefore
+# we always operate on the complete set
+#
 #
 .PHONY: package-src
 package-src: | $(PACK_DIR)
-package-src: TARBALL := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)_src_all.tar
+package-src: TARBALL := $(PACK_DIR)/$(BOOK)$(LANGSTRING)_src_set.tar
 ifdef DEF_FILE
   package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
@@ -52,7 +51,6 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 package-src-name:
 	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
 
-
 #--------------
 # package-html
 #
@@ -62,64 +60,51 @@ package-src-name:
 #
 #
 .PHONY: package-html
-package-html: PACKDIR = $(RESULT_DIR)/package/html
-package-html: dist-html dist-desktop-files dist-document-files-html
+package-html:  | $(PACK_DIR)
+ifeq ($(DESKTOPFILES),1)
+  package-html: $(DESKTOPFILES_RESULT)
+endif
+ifeq ($(DOCUMENTFILES),1)
+  package-html: $(DOCUMENTFILES_RESULT)
+endif
+ifeq ($(PAGEFILES),1)
+  package-html: $(PAGEFILES_RESULT)
+endif
+package-html: dist-html
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-# remove old stuff
-	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
-# copy HTML tarball
 	cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html.tar.bz2 \
-	  $(PACKDIR)/$(BOOK)_$(LL)-html.tar.bz2
-# copy desktop files for KDE
-	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2; then \
-	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2 \
-	    $(PACKDIR)/$(BOOK)_$(LL)-desktop.tar.bz2; \
-	else \
-	 ccecho "info" "No desktop files for KDE helpcenter available"; \
-	fi
-# copy document files for GNOME
-	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2; then \
-	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-yelp.tar.bz2 \
-	    $(PACKDIR)/$(BOOK)_$(LL)-yelp.tar.bz2; \
-	else \
-	  ccecho "info" "No document files for GNOME yelp available"; \
-	fi
-	@ccecho "result" "Find the package-html results at:\n$(PACKDIR)"
+	  $(PACK_DIR)/$(BOOK)_$(LL)-html.tar.bz2
+	@ccecho "result" "Find the package-html results at:\n$(PACK_DIR)"
   endif
 
 #--------------
 # package-pdf
 #
-#  * Color PDF
-#  * desktop files (for KDE)
-#  * yelp files PDF (for GNOME)
-#  * DC-file
-#
+
 .PHONY: package-pdf
-package-pdf: PACKDIR = $(RESULT_DIR)/package/pdf
-package-pdf: color-pdf dist-document-files-pdf
+package-pdf: | $(PACK_DIR)
+ifeq ($(DESKTOPFILES),1)
+  package-pdf: $(DESKTOPFILES_RESULT)
+endif
+ifeq ($(DOCUMENTFILES),1)
+  package-pdf: $(DOCUMENTFILES_RESULT)
+endif
+ifeq ($(PAGEFILES),1)
+  package-pdf: $(PAGEFILES_RESULT)
+endif
+package-pdf: color-pdf
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-# remove old stuff
-	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
-# copy color PDF
-	cp  $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(PACKDIR)/$(BOOK)_$(LL).pdf
-# copy PDF document files for GNOME
-	if test -f $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2; then \
-	  cp $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2 \
-	    $(PACKDIR)/$(BOOK)_$(LL)-pdf-yelp.tar.bz2; \
-	else \
-	  ccecho "info" "No PDF document files for GNOME yelp available"; \
-	fi
-	@ccecho "result" "Find the package-pdf results at:\n$(PACKDIR)"
-endif
+	ln -sf $(RESULT_DIR)/$(TMP_BOOK)_$(LL).pdf $(PACK_DIR)/$(BOOK)_$(LL).pdf
+	@ccecho "result" "Find the package-pdf results at:\n$(PACK_DIR)"
+  endif
 
 #--------------
 #
@@ -342,98 +327,37 @@ endif
 
 
 #--------------
-# yelp-files
-# Create tarball with document files for GNOME
+# Document file
 #
-#
-.PHONY: dist-document-files-html
-dist-document-files-html: OUTFORMAT = html
-dist-document-files-html: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-html-yelp.tar.bz2
-dist-document-files-html: $(YELP_DIR)/%.document
-	BZIP2=--best && \
-	tar cjf $(TARBALL) --absolute-names \
-	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
-	@ccecho "result" "Find the HTML document files tarball at:\n$(TARBALL)" 
+YELPSTRINGS := --stringparam docpath "@PATH@/" \
+		--stringparam outformat "$(HF_FORMAT)" \
+		--stringparam docid "com.novell.$(DOCNAME)$(subst _,,$(LL))$(HF_FORMAT)" \
 
-.PHONY: dist-document-files-pdf
-dist-document-files-pdf: OUTFORMAT = pdf
-dist-document-files-pdf: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-pdf-yelp.tar.bz2
-dist-document-files-pdf: $(YELP_DIR)/%.document
-	BZIP2=--best && \
-	tar cjf $(TARBALL) --absolute-names \
-	  --transform=s%$(YELP_DIR)%yelp% $(YELP_DIR)
-	@ccecho "result" "Find the PDF document files tarball at:\n$(TARBALL)" 
-
-.PHONY: document-files-html
-document-files-html: OUTFORMAT = html
-document-files-html: $(YELP_DIR)/%.document
-	@ccecho "result" "Created document files in\n$(YELP_DIR)/"
-
-.PHONY: document-files-pdf
-document-files-pdf: OUTFORMAT = pdf
-document-files-pdf: $(YELP_DIR)/%.document
-	@ccecho "result" "Created document files in\n$(YELP_DIR)/"
-
-.PHONY: document-files-dir-name
-document-files-dir-name: $(YELP_DIR)
-	@ccecho "result" "$(YELP_DIR)"
-
-$(YELP_DIR):
-	mkdir -p $@
-
-$(YELP_DIR)/%.document: $(PROFILES) $(YELP_DIR)
-# clean up first
-	rm -rf $(YELP_DIR) && mkdir -p $(YELP_DIR)
-	xsltproc $(DESKSTRINGS) $(ROOTSTRING) --nonet \
-		--output $(YELP_DIR)/$(BOOK)_$(LL)-$(OUTFORMAT).document \
-		--stringparam projectfile PROJECTFILE.$(BOOK) \
-		--stringparam outformat $(OUTFORMAT) \
-		--stringparam docid com.novell.$(BOOK)$(subst _,,$(LL))$(OUTFORMAT) \
-		--xinclude $(STYLE_DOCUMENT) $(PROFILED_MAIN)
-
-#--------------
-# desktop-files
-# Create tarball with desktop files for KDE
-#
-#
-.PHONY: dist-desktop-files
-dist-desktop-files: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-desktop.tar.bz2
-dist-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
-	BZIP2=--best && \
-	tar cjf $(TARBALL) --absolute-names \
-	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
-	@ccecho "result" "Find the desktop files files tarball at:\n$(TARBALL)"
-
-.PHONY: desktop-files
-desktop-files: $(DESKTOP_FILES_DIR)/%.desktop
-	@ccecho "result" "Created desktop files in\n$(DESKTOP_FILES_DIR)"
-
-.PHONY: desktop-files-dir-name
-desktop-files-dir-name:
-	@ccecho "result" "$(DESKTOP_FILES_DIR)"
-
-$(DESKTOP_FILES_DIR):
-	mkdir -p $@
-
-$(DESKTOP_FILES_DIR)/%.desktop: $(PROFILES) $(DESKTOP_FILES_DIR)
-# clean up first
-	rm -rf $(DESKTOP_FILES_DIR) && mkdir -p $(DESKTOP_FILES_DIR)
-	xsltproc $(DESKSTRINGS) $(ROOTSTRING) --nonet \
-		--stringparam projectfile PROJECTFILE.$(BOOK) \
-		--xinclude $(STYLEDESK) $(PROFILED_MAIN)
+$(DOCUMENTFILES_RESULT): | $(PACK_DIR)
+	xsltproc $(YELPSTRINGS) $(ROOTSTRING) --output $@ --xinclude \
+	  $(STYLE_YELP) $(PROFILED_MAIN)
 
 
-
-#--------------
-# page-files (Mallard)
-# Create page-file for GNOME3
-#
 #-------------
-# Page file
+# Page file (for GNOME 3 help)
 #
 
-$(PACK_DIR)/$(TMP_BOOK)_$(LL).page: | $(Directories)
+$(PAGEFILES_RESULT): | $(PACK_DIR)
 	xsltproc --output $@ --xinclude \
 	  --stringparam packagename $(TMP_BOOK) $(STYLE_MALLARD) \
 	  $(PROFILED_MAIN)
+
+
+#--------------
+# Desktop files tarball
+#
+
+$(DESKTOPFILES_RESULT): | $(PACK_DIR)
+$(DESKTOPFILES_RESULT): | $(DESKTOP_FILES_DIR)
+	xsltproc $(DESKTOP_FILES_STRINGS) $(ROOTSTRING) --xinclude \
+	  $(STYLE_DESKTOP_FILES) $(PROFILED_MAIN)
+	BZIP2="--best" tar cjf $@ --absolute-names \
+	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
+	rm -rf $(DESKTOP_FILES_DIR)/*
+
 

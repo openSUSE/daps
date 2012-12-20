@@ -71,6 +71,14 @@ function parse_args () {
                 sanitize_path "$2" "P_DEF_FILE"
                 shift 2
                 ;;
+            --desktopfiles)
+                P_DESKTOPFILES=1
+                shift
+                ;;
+            --documentfiles)
+                P_DOCUMENTFILES=1
+                shift
+                ;;
             --export-dir)
                 P_EXPORT_DIR="$2"
                 shift 2
@@ -133,6 +141,10 @@ function parse_args () {
                 ;;
             --nogzip)
                 P_NOGZIP=1
+                shift
+                ;;
+            --pagefiles)
+                P_PAGEFILES=1
                 shift
                 ;;
             --pretty)
@@ -875,7 +887,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="hn"
-    LONG_OPTS="def-file:,formatter:,help,name:,nopdf,rootid:,set-date:"
+    LONG_OPTS="def-file:,desktopfiles,documentfiles,formatter:,help,name:,nopdf,pagefiles,rootid:,set-date:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -885,6 +897,13 @@ function packaging () {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         if [[ "package-pdf" = $SUB_CMD ]]; then
             help_formatter
+            help_documentfiles
+            help_desktopfiles
+            help_pagefiles
+        elif [[ "package-html" = $SUB_CMD ]]; then
+            help_documentfiles
+            help_desktopfiles
+            help_pagefiles
         elif [[ "package-src" = $SUB_CMD ]]; then
             help_def-file
         fi
@@ -895,7 +914,10 @@ function packaging () {
         echo
         exit 0       
     fi
-    
+
+    [[ -n $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
+    [[ -n $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
+    [[ -n $P_PAGEFILES ]]     && export export PAGEFILES=1
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
 
@@ -1460,6 +1482,14 @@ function help_def-file () {
     echo "    --def-file=FILE           Specify a DEF-* file containing build
                               information"
 }
+function help_desktopfiles () {
+    echo "    --desktopfiles            Generate .desktop files.
+                              Default: off"
+}
+function help_documentfiles () {
+    echo "    --documentfiles           Generate .document files.
+                              Default: off"
+}
 function help_export-dir () {
     echo "    --export-dir=DIRECTORY    Specify a directory where to copy the results
                               of the $TARGET command. The directory will be
@@ -1547,6 +1577,10 @@ function help_noset () {
                               by the rootid) rather than the complete set.
                               Links in the bigfile that point to external
                               targets, are replaced by text-only pointers.
+                              Default: off"
+}
+function help_pagefiles () {
+    echo "    --pagefiles               Generate .page files.
                               Default: off"
 }
 function help_pretty () {
