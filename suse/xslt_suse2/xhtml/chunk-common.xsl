@@ -462,8 +462,8 @@
             </xsl:attribute>
             <span class="next-icon">→</span>
             <span class="nav-label">
-              <xsl:apply-templates select="$next"
-                mode="object.title.markup"/>
+              <xsl:apply-templates select="$next" mode="page-bottom.label"/>
+              <xsl:apply-templates select="$next" mode="titleabbrev.markup"/>
             </span>
           </a>
         </xsl:if>
@@ -476,14 +476,33 @@
             </xsl:attribute>
             <span class="prev-icon">←</span>
             <span class="nav-label">
-              <xsl:apply-templates select="$prev"
-                mode="object.title.markup"/>
+              <xsl:apply-templates select="$prev" mode="page-bottom.label"/>
+              <xsl:apply-templates select="$prev" mode="titleabbrev.markup"/>
             </span>
           </a>
       </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template match="chapter|appendix|part" mode="page-bottom.label">
+    <xsl:variable name="template">
+      <xsl:call-template name="gentext.template">
+        <xsl:with-param name="context" select="'xref-number'"/>
+        <xsl:with-param name="name" select="local-name()"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <span class="number">
+      <xsl:call-template name="substitute-markup">
+        <xsl:with-param name="template" select="$template"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+    </span>
+  </xsl:template>
+  
+  
+  <xsl:template match="*" mode="page-bottom.label"/>
 
   <!-- ===================================================== -->
   <xsl:template name="chunk-element-content">
