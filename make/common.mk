@@ -41,11 +41,26 @@ endif
 # Paths
 
 RESULT_DIR         := $(BUILD_DIR)/$(BOOK)
-PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
 IMG_GENDIR         := $(BUILD_DIR)/.images
 TMP_DIR            := $(BUILD_DIR)/.tmp
-PYTHONPATH         := $(DAPSROOT)/lib/python
 IMG_SRCDIR         := $(DOC_DIR)/images/src
+PACK_DIR           := $(RESULT_DIR)/package
+
+#-------
+# PROFILE_PARENT_DIR
+#
+# The default location for the PROFILE_PARENT_DIR is $(BUILD_DIR)/.profiled
+# However in some rare cases a special profiling is needed - ATM this is
+# the case when setting a custom publication date (because this needs to be
+# done during profiling). These specially profiled files need to be generated
+# as intermediate files in tmp, otherwise the default profiles would have the
+# custom pubdate, too.
+
+ifdef SETDATE
+  PROFILE_PARENT_DIR := $(TMP_DIR)/profiled
+else
+  PROFILE_PARENT_DIR := $(BUILD_DIR)/.profiled
+endif
 
 #----------
 #
@@ -225,10 +240,16 @@ STYLEDB2ND     := $(DAPSROOT)/daps-xslt/common/db2novdoc.xsl
 #----------
 # Common stringparams
 #
-
-# rootid
+#-----
+# rootid stringparam
+#
+# Always set ROOTID, but not with package-src, since we always want to handle
+# the complete set with that target.
+#
 ifdef ROOTID
-  ROOTSTRING   := --stringparam rootid "$(ROOTID)"
+  ifneq ($(MAKECMDGOALS),package-src)
+    ROOTSTRING   := --stringparam "rootid=$(ROOTID)"
+  endif
 endif
 
 # meta information (author, last changed, etc)
@@ -403,6 +424,12 @@ ifdef PROFILE_URN
   endif
 endif
 
+# Allows to set a custom publication date
+#
+ifdef SETDATE
+  PROFSTRINGS += --stringparam pubdate "$(SETDATE)"
+  .INTERMEDIATE: $(PROFILES)
+endif
 
 #----------
 # Desktop file stringparams

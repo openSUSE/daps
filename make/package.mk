@@ -1,3 +1,58 @@
+
+# Help file format
+#
+ifeq ($(MAKECMDGOALS),package-pdf)
+  HF_FORMAT := pdf
+endif
+ifeq ($(MAKECMDGOALS),package-html)
+  HF_FORMAT := html
+endif
+
+DESKTOPFILES_RESULT  := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)-desktop.tar.bz2
+DOCUMENTFILES_RESULT := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)-$(HF_FORMAT).document
+PAGEFILES_RESULT     := $(PACK_DIR)/$(TMP_BOOK).page
+
+$(PACK_DIR) $(YELP_DIR) $(DESKTOP_FILE_DIR):
+	mkdir -p $@
+
+#--------------
+# package-src
+#
+# If a DEF-file is specified, get additional DC-files from the DEF file
+#
+
+# fs 2012-10-25:
+# TODO: Add a --addfiles option that allows to add files from everywhere
+#       in the filesystem. 
+#
+.PHONY: package-src
+package-src: | $(PACK_DIR)
+package-src: TARBALL := $(PACK_DIR)/$(TMP_BOOK)$(LANGSTRING)_src_all.tar
+ifdef DEF_FILE
+  package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
+endif
+package-src: $(PROFILES) $(PROFILEDIR)/.validate
+  ifdef MISSING
+	@ccecho "error" "Fatal error: The following images are missing:"
+	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
+	exit 1
+  else
+	tar chf $(TARBALL) --absolute-names \
+	  --transform=s%$(PROFILEDIR)%xml% $(PROFILES)
+	tar rfh $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(USED_ALL) $(DOCCONF)
+    ifdef DEF_FILE
+	tar rfh $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DC_FILES)
+    endif
+	bzip2 -9f $(TARBALL)
+	@ccecho "result" "Find the sources at:\n$(TARBALL).bz2"
+  endif
+
+package-src-name:
+	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
+
+
 #--------------
 # package-html
 #
@@ -88,61 +143,7 @@ package-jsp: dist-jsp
 	@ccecho "result" "Find the package-jsp results at:\n$(PACKDIR)"
   endif
 
-#------------------
-# package-src 
-# * graphics tarball
-# * Source tarball
-#
-# TODO:
-# when ROOTID is specified, check whether it is the set's ROOTID
-# e.g. with daps-xslt/common/get-headlines-ids.xsl
-#
-.PHONY: package-src
-package-src: PACKDIR = $(RESULT_DIR)/package/src
-ifdef DEF_FILE
-# Get additional DC-files from the DEF file
-# the awk scripts extracts the manual names from the second column of
-# the DEF file (ignoring comments and blank lines) and adds DC- to it
-#
-package-src: E-FILES = $(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s\n", $$2}' $(DEF_FILE))
-endif
-package-src: dist-graphics dist-xml
-package-src:
-ifdef MISSING
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-	exit 1
-else
-  # remove old stuff
-	rm -rf $(PACKDIR) && mkdir -p $(PACKDIR)
-  ifdef ROOTID
-	@ccecho "warn" "Warning: You specified a ROOTID. Sources may NOT be generated\nfor the whole set if !" >&2
-  endif
-# "copy" source files tarball (dist-xml) to an uncompressed tarball
-	bzcat $(RESULT_DIR)/$(BOOK)_$(LL).tar.bz2 > $(PACKDIR)/$(BOOK)_$(LL).tar
-  ifdef USED
-# "copy" graphics to an uncompressed tarball
-	bzcat $(RESULT_DIR)/$(TMP_BOOK)_$(LL)-graphics.tar.bz2 > \
-		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
-# concat the two archives
-	tar -A --file=$(PACKDIR)/$(BOOK)_$(LL).tar \
-		$(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
-# remove graphics archive
-	rm -f $(PACKDIR)/$(BOOK)_$(LL)-graphics.tar
-  else
-	@ccecho "info" "Selected book/set contains no graphics"
-  endif
-  ifdef DEF_FILE
-# add DC-Files from DEF file
-	tar rfh $(PACKDIR)/$(BOOK)_$(LL).tar --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(addprefix $(DOC_DIR)/, $(E-FILES))
-  endif
-	bzip2 -9f $(PACKDIR)/$(BOOK)_$(LL).tar
-	@ccecho "result" "Find the sources at:\n$(PACKDIR)/$(BOOK)_$(LL).tar.bz2"
-endif
 
-package-src-name:
-	@ccecho "result" "$(RESULT_DIR)/package/src/$(BOOK)_$(LL).tar.bz2"
 
 #--------------
 # locdrop

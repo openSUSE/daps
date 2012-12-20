@@ -159,6 +159,10 @@ function parse_args () {
 		P_STATIC=1
 		shift
 		;;
+            --set-date)
+                P_SETDATE="$2"
+                shift 2
+                ;;
             --subdirs)
                 P_SUBDIRS=1
                 shift
@@ -871,7 +875,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="hn"
-    LONG_OPTS="def-file:,formatter:,help,name:,nopdf,rootid:"
+    LONG_OPTS="def-file:,formatter:,help,name:,nopdf,rootid:,set-date:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -887,6 +891,7 @@ function packaging () {
         help_help
         help_name
         help_rootid
+        help_set-date
         echo
         exit 0       
     fi
@@ -912,6 +917,11 @@ function packaging () {
         else
 	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
+    fi
+
+    if [[ -n $P_SETDATE ]]; then
+        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
+        export SETDATE
     fi
     
     call_make "$SUB_CMD" "$@"
@@ -1552,6 +1562,11 @@ function help_rootid () {
                               (parts or chapters). Default: Usually set
                               in the DC-file; if not set the complete set
                               defined in \$MAIN will be built"
+}
+function help_set-date () {
+    echo "    --set-date=YYYY/MM/DD     Set a publication date. If not set, the current
+                              date will automatically be chosen.
+                              Default: current date"
 }
 function help_static () {
     echo "    --static                  Normally images and css files in HTML builds  
