@@ -188,7 +188,7 @@ endif
 	bzip2 -9f $(NO_TRANS_TAR)
         # graphics tarball
 	BZIP2=--best tar rfh \
-	  $(LOCDROP_EXPORT_BOOKDIR)/$(BOOK)$(LANGSTRING)-graphics.tar.bz2 \
+	  $(LOCDROP_EXPORT_BOOKDIR)/graphics-$(BOOK)$(LANGSTRING).tar.bz2 \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(USED_ALL)
     ifneq ($(NOPDF),1)
 	cp $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING).pdf $(LOCDROP_EXPORT_BOOKDIR)
