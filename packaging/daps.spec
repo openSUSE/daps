@@ -48,17 +48,6 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
-# on SLES 11 python is not noarch
-#%if 0%{?suse_version} && 0%{?suse_version} <= 1110
-# %{!?python_sitelib: %global python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-#%else
-# BuildArch:      noarch
-#%endif
-
-#%if 0%{?sles_version} == 0
-#BuildArch:      noarch
-#%endif
-
 BuildRequires:  bash >= 3.1
 BuildRequires:  dia
 BuildRequires:  docbook_4
@@ -72,11 +61,11 @@ BuildRequires:  inkscape
 BuildRequires:  libxml2-tools
 %endif
 BuildRequires:  libxslt
-#%if %sles_version >= 11
+#%%if %%sles_version >= 11
 #BuildRequires:  sles-release
-#%else
+#%%else
 #BuildRequires:  openSUSE-release
-#%endif
+#%%endif
 BuildRequires:  poppler-tools
 BuildRequires:  python-xml
 BuildRequires:  python-lxml
@@ -195,8 +184,7 @@ Recommends:     sazanami-fonts
 Recommends:     unfonts
 %endif
 
-#Obsoletes:      susedoc <= 4.3.27
-Provides:       susedoc < 4.4
+Obsoletes:      susedoc
 
 %description
 DocBook Authoring and Publishing Suite (DAPS)
