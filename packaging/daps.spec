@@ -28,7 +28,7 @@
 # Please submit bugfixes or comments via https://sourceforge.net/p/daps/tickets
 #
 Name:           daps
-Version:        1.0.2
+Version:        1.1
 Release:        0
 
 %define docbuilddir    %{_datadir}/daps
@@ -46,37 +46,41 @@ Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-# on SLES 11 python is not noarch
-%if 0%{?sles_version} == 0
 BuildArch:      noarch
-%endif
+
+# on SLES 11 python is not noarch
+#%if 0%{?suse_version} && 0%{?suse_version} <= 1110
+# %{!?python_sitelib: %global python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+#%else
+# BuildArch:      noarch
+#%endif
+
+#%if 0%{?sles_version} == 0
+#BuildArch:      noarch
+#%endif
 
 BuildRequires:  bash >= 3.1
-BuildRequires:  dejavu
 BuildRequires:  dia
 BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  fam
 BuildRequires:  fdupes
-BuildRequires:  freefont
 BuildRequires:  ghostscript-library
 BuildRequires:  ImageMagick
 BuildRequires:  inkscape
-BuildRequires:  liberation-fonts
 %if 0%{?suse_version} >= 1220
 BuildRequires:  libxml2-tools
 %endif
 BuildRequires:  libxslt
-#BuildRequires:  mplus-fonts
-%if 0%{?sles_version} > 0
-BuildRequires:  sles-release
-%else
-BuildRequires:  openSUSE-release
-%endif
+#%if %sles_version >= 11
+#BuildRequires:  sles-release
+#%else
+#BuildRequires:  openSUSE-release
+#%endif
 BuildRequires:  poppler-tools
 BuildRequires:  python-xml
 BuildRequires:  python-lxml
-BuildRequires:  sgml-skel
+#BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
 BuildRequires:  transfig
@@ -86,6 +90,22 @@ BuildRequires:  xmlgraphics-fop >= 0.94
 %else
 BuildRequires:  fop >= 0.94
 %endif
+#---
+# Fontstuff
+#
+%if 0%{?suse_version} > 1220
+BuildRequires:  fontpackages-devel
+BuildRequires:  dejavu-fonts
+BuildRequires:  gnu-free-fonts
+BuildRequires:  liberation-fonts
+BuildRequires:  mplus-fonts
+%else
+BuildRequires:  dejavu
+BuildRequires:  freefont
+BuildRequires:  liberation-fonts
+BuildRequires:  mplus-fonts
+%endif
+
 
 #
 # In order to keep the requirements list as short as possible, only packages
@@ -109,7 +129,7 @@ Requires:       make
 Requires:       poppler-tools
 Requires:       python-xml
 Requires:       python-lxml
-Requires:       sgml-skel
+#Requires:       sgml-skel
 Requires:       svg-dtd
 Requires:       transfig
 Requires:       xml-commons-jaxp-1.3-apis
@@ -145,6 +165,21 @@ Recommends:     xmlstarlet
 #------
 # Fonts
 #------
+%if 0%{?suse_version} > 1220
+Requires:       dejavu-fonts
+Requires:       gnu-free-fonts
+Requires:       liberation-fonts
+Requires:       mplus-fonts
+Recommends:     agfa-fonts
+Recommends:     fifth-leg-font
+Recommends:     linux-libertine-fonts
+# Chinese Fonts
+Recommends:     arphic-fonts
+# Japanese Fonts:
+Recommends:     sazanami-fonts
+# Korean Fonts:
+Recommends:     un-fonts
+%else
 Requires:       dejavu
 Requires:       freefont
 Requires:       liberation-fonts
@@ -153,14 +188,12 @@ Recommends:     agfa-fonts
 Recommends:     fifth-leg-font
 Recommends:     LinuxLibertine
 # Chinese Fonts
-Recommends:     FZFangSong FZHeiTi FZSongTi
 Recommends:     ttf-arphic
 # Japanese Fonts:
 Recommends:     sazanami-fonts
 # Korean Fonts:
 Recommends:     unfonts
-
-
+%endif
 
 #Obsoletes:      susedoc <= 4.3.27
 Provides:       susedoc < 4.4
@@ -214,7 +247,13 @@ edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{daps_catalog}
 
-%run_suseconfig_fonts
+%if 0%{?suse_version} > 1220
+%reconfigure_fonts_post
+%else
+if test -x sbin/conf.d/SuSEconfig.fonts
+then %run_suseconfig -m fonts
+fi
+%endif
 exit 0
 
 #----------------------
@@ -230,7 +269,13 @@ if [ -x /usr/bin/edit-xml-catalog ] ; then
   --del %{name}
 fi
 
-%run_suseconfig_fonts
+%if 0%{?suse_version} > 1220
+%reconfigure_fonts_postun
+%else
+if test -x sbin/conf.d/SuSEconfig.fonts
+then %run_suseconfig -m fonts
+fi
+%endif
 fi
 exit 0
 
@@ -241,7 +286,6 @@ exit 0
 %dir %{fontdir}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
-%dir %{python_sitelib}/%{name}
 
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
@@ -253,8 +297,6 @@ exit 0
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{docbuilddir}
 %{fontdir}/*
-%{python_sitelib}/%{name}/*
-
 
 %exclude %{_defaultdocdir}/%{name}/INSTALL
 
