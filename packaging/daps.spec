@@ -119,6 +119,7 @@ Requires:       poppler-tools
 Requires:       python-xml
 Requires:       python-lxml
 #Requires:       sgml-skel
+Requires:       suse-xsl-stylesheets
 Requires:       svg-dtd
 Requires:       transfig
 Requires:       xml-commons-jaxp-1.3-apis
@@ -145,7 +146,6 @@ Recommends:     perl-checkbot
 Recommends:     checkbot
 %endif
 Recommends:     remake
-Recommends:     suse-xsl-stylesheets
 # Internal XEP package:
 Recommends:     xep
 Recommends:     xmlformat
