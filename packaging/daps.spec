@@ -185,6 +185,7 @@ Recommends:     unfonts
 %endif
 
 Obsoletes:      susedoc
+Provides:       susedoc
 
 %description
 DocBook Authoring and Publishing Suite (DAPS)
