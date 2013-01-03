@@ -459,8 +459,10 @@ class SVNRepository(object):
       #    self.initsvnentrylist()
       if not os.path.exists(os.path.join(self.basedir, "xml/")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_XML_NOT_FOUND)
-      if not os.path.exists(os.path.join(self.basedir, "xml/.svn")):
-          raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
+      # Don't check for .svn directory, because in newer versions of SVN 
+      # the dir is located in the "root" directory.
+      #if not os.path.exists(os.path.join(self.basedir, "xml/.svn")):
+      #    raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
       
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
