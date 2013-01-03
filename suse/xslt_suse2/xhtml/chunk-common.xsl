@@ -454,7 +454,7 @@
                                 != count($ancestorrootnode)]"/>
     <xsl:if test="$needs.navig and not(self::set)">
       <div id="_bottom-navigation">
-        <xsl:if test="count($next) >0 and $isnext">
+        <xsl:if test="count($next) > 0 and $isnext = 'true'">
           <a class="nav-link">
             <xsl:attribute name="href">
               <xsl:call-template name="href.target">
@@ -468,7 +468,7 @@
             </span>
           </a>
         </xsl:if>
-        <xsl:if test="count($prev) >0 and $isprev">
+        <xsl:if test="count($prev) > 0 and $isprev = 'true'">
           <a class="nav-link">
             <xsl:attribute name="href">
               <xsl:call-template name="href.target">
