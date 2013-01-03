@@ -182,11 +182,10 @@
 in your DocBook files (or images referenced but missing from the filesystem or
 vice versa) or to list images that have been generated for use with various output 
 formats.</para>
-  <para>By default, the output of the sub-commands is a list of images, including
-  the images' absolute path, but only separated by spaces:</para>
-  <screen>
-   <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/dia/example_dia.dia <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png1.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png2.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png3.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/fig/example_fig.fig ...</screen>
-  <para>This default is useful for piping or copying the output for use with another 
+  <para>By default, the output of the sub-commands is a list of image filenames 
+  (including the absolute path), where the filenames are only separated by blanks:</para>
+  <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+  <para>This default output is useful for piping or copying the output for use with another 
   command.</para>
   
   <tip>
