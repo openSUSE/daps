@@ -175,6 +175,7 @@
           <xsl:with-param name="object" select="."/>
           <xsl:with-param name="context" select="."/>
         </xsl:call-template>
+      </xsl:attribute>
       <xsl:attribute name="accesskey">
         <xsl:call-template name="href.target">
         <xsl:text>c</xsl:text>
