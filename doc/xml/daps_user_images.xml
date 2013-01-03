@@ -9,12 +9,18 @@
 ]>
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
- <abstract><para>
+ <abstract>
+  <para>
   This chapter describes:
   <itemizedlist>
-   <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para></listitem>
-   <listitem><para>how you can use &dapsacr; to generate lists of used, unused and missing images.</para></listitem>
-  </itemizedlist></para></abstract>
+   <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para>
+    </listitem>
+    <listitem>
+     <para>how you can use &dapsacr; to generate lists of used, unused and missing images.</para>
+    </listitem>
+   </itemizedlist>
+  </para>
+ </abstract>
 
  <sect1 id="sec.daps.user.imgs.usage">
   <title>Supported Image Types</title>
@@ -51,11 +57,13 @@
     create with Dia.
    </para>
    <para>
-    
+
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.eps">
-   <title><acronym>EPS</acronym></title>
+   <title>
+    <acronym>EPS</acronym>
+   </title>
    <para>
     The <emphasis>Encapsulated Postscript</emphasis> (EPS) format is a general purpose
     vector image format. As a Postscript-based format, it is similar to
@@ -70,7 +78,9 @@
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.fig">
-   <title><acronym>FIG</acronym></title>
+   <title>
+    <acronym>FIG</acronym>
+   </title>
    <para>
     <acronym>FIG</acronym> is a vector image format that can be created with the
     software <ulink url="http://www.xfig.org">Xfig</ulink>. The support for 
@@ -80,7 +90,9 @@
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.pdf">
-   <title><acronym>PDF</acronym></title>
+   <title>
+    <acronym>PDF</acronym>
+   </title>
    <para>
     The <emphasis>Portable Document File</emphasis> format is a general purpose,
     page-based fixed-layout document format. <acronym>PDF</acronym> is a
@@ -91,7 +103,9 @@
    </para>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.png">
-   <title><acronym>PNG</acronym></title>
+   <title>
+    <acronym>PNG</acronym>
+   </title>
    <para>
     The <emphasis>Portable Network Graphics</emphasis> format can be used if
     you wish to use a raster (point-based) image. A good example for when
@@ -102,18 +116,21 @@
     including the GIMP graphics editor.
    </para>
    <tip>
-    <title>Make PNG Files Smaller with <command>daps optipng</command></title>
+    <title>Make PNG Files Smaller with <command>daps optipng</command>
+    </title>
     <para>To decrease the file size of PNG images without altering their
      look, use  <command>daps optipng</command>. It removes unused colors 
      and alpha channels.
     </para>
     <para>
      To run <command>optipng</command> over an entire book's PNG images:</para>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> optipng</screen>
+    <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> optipng</screen>
    </tip>
   </sect2>
   <sect2 id="sec.daps.user.imgs.usage.svg">
-   <title><acronym>SVG</acronym></title>
+   <title>
+    <acronym>SVG</acronym>
+   </title>
    <para>
     The <emphasis>Scalable Vector Graphics</emphasis> format is a general purpose,
     vector image format. <acronym>SVG</acronym> is an XML format which can be
@@ -138,28 +155,52 @@
    </para>
   </sect2>
  </sect1>
- <sect1>
-  <title>Managing Images</title>
-   <sect2 id="sec.daps.user.imgs.dir">
-    <title>Organisation of the <filename>images</filename> Directory</title>
-    <para>
+ <sect1 id="sec.daps.user.imgs.dir">
+  <title>Organisation of the <filename>images</filename> Directory</title>
+  <para>
      &daps-images-dir; For a longer reference to the directory
      structure, see <xref linkend="sec.daps.user.basics.dirstruct"/>.
     </para>
-  </sect2>
-  <sect2 id="sec.daps.user.imgs.req">
-   <title>Filename Requirements</title>
+ </sect1>
+ <sect1 id="sec.daps.user.imgs.req">
+  <title>Filename Requirements</title>
    &daps-img-names-req;
-  </sect2>
+  </sect1>
 
- <sect2 id="sec.daps.user.imgs.refer">
+ <sect1 id="sec.daps.user.imgs.refer">
   <title>Referencing Images</title>
   &daps-img-ref;
   <example id="ex.daps.user.xml.img.ref">
    <title>Image Reference in an XML File</title>
    &ex-daps-img-ref;
   </example>
- </sect2>
+ </sect1>
+ <sect1 id="sec.daps.user.imgs.manage">
+  <title>&dapsacr; Commands for Managing Images</title>
+  <para>&dapsacr; offers a number of sub-commands for managing images in a 
+ documentation project. For example, they allow to list all images referenced
+in your DocBook files (or images referenced but missing from the filesystem or
+vice versa) or to list images that have been generated for use with various output 
+formats.</para>
+  <para>By default, the output of the sub-commands is a list of images, including
+  the images' absolute path, but only separated by spaces:</para>
+  <screen>
+   <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/dia/example_dia.dia <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png1.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png2.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/png/example_png3.png <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH_TO_IMG_DIRECTORY</replaceable>/images/src/fig/example_fig.fig ...</screen>
+  <para>This default is useful for piping or copying the output for use with another 
+  command.</para>
+  
+  <tip>
+   <title>Formatting Command Output</title>
+   <para>For better on-screen reading (or for using the output in text files), 
+   add a line break after each filename by using the <parameter>--pretty</parameter>
+   parameter:</para>
+   <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty</screen>
+   <para>To count the number of images used in a given output file, you can also
+   combine this with the <command>wc</command> command (used to count words, or 
+   in this case, lines):</para>
+   <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty | wc -l</screen>
+  </tip>
+  
   <sect2 id="sec.daps.user.imgs.used">
    <title>Gaining an Overview over Images Used</title>
    <para>
@@ -172,85 +213,86 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command></term>
-     <listitem><para>Lists all graphics used by the DocBook files that are 
-     referenced in the current &dc; file.</para></listitem>
+     <term>
+      <command>daps <parameter>-d</parameter>
+       <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command>
+     </term>
+     <listitem>
+      <para>Lists all graphics used by the DocBook files that are 
+     referenced in the current &dc; file.</para>
+     </listitem>
     </varlistentry>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> missinggraphics</command></term>
-     <listitem><para>Lists all graphics that are referenced in your DocBook files,
+     <term>
+      <command>daps <parameter>-d</parameter>
+       <replaceable>PATH_TO_&dc;_FILE</replaceable> missinggraphics</command>
+     </term>
+     <listitem>
+      <para>Lists all graphics that are referenced in your DocBook files,
      but could not be found in the file system. In case there are any missing
-     graphics, you will not be able to build your project.</para></listitem>
+     graphics, you will not be able to build your project.</para>
+     </listitem>
     </varlistentry>
     <varlistentry>
-     <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> remaininggraphics</command></term>
-     <listitem><para>Lists all graphics <emphasis>not</emphasis> used in the 
+     <term>
+      <command>daps <parameter>-d</parameter>
+       <replaceable>PATH_TO_&dc;_FILE</replaceable> remaininggraphics</command>
+     </term>
+     <listitem>
+      <para>Lists all graphics <emphasis>not</emphasis> used in the 
      DocBook files that are referenced in the given &dc; file.
      </para>
-     <important>
-      <title>Use a <sgmltag>set</sgmltag> to Check for Unnecessary Graphics </title>
-      <para>
+      <important>
+       <title>Use a <sgmltag>set</sgmltag> to Check for Unnecessary Graphics </title>
+       <para>
        If you are storing multiple &dc; files in the same project folder, use the
        &dc; file of a <sgmltag>set</sgmltag> for this check. As it contains all 
        articles and books in the project folder, this makes sure that any graphics
        found during the check are indeed unnecessary.       
       </para>
-     </important>
+      </important>
      </listitem>
-    </varlistentry>    
+    </varlistentry>
    </variablelist>
-   <para>
-    In general, all of the above sub-commands should be used together with another
-    command. By themselves, they do not generate output fit for on-screen reading.
-    Instead, output will look like this:
-   </para>
-   <screen>/home/user/repository/documents/project/en/images/src/dia/example_dia.dia /home/
-user/repository/documents/distribution/en/images/src/png/example_png1.png /home/
-user/repository/documents/distribution/en/images/src/png/example_png2.png /home/
-user/repository/documents/distribution/en/images/src/png/example_png3.png /home/
-user/repository/documents/distribution/en/images/src/png/example_png4.png /home/
-user/repository/documents/distribution/en/images/src/png/example_png5.png /home/
-user/repository/documents/distribution/en/images/src/png/example_png6.png /home/
-user/repository/documents/distribution/en/images/src/svg/example_svg.svg /home/u
-ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</screen>
-   <para>
-    To add a line break after each file name, use the
-    <command><parameter>--pretty</parameter></command> parameter. For instance,
-    to count the number of images used in a given output file, you could use
-    the following (<command>wc</command> is a command used to count words, or in
-    this case, lines):
-   </para>
-   <screen>$ <command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics <parameter>--pretty</parameter> | wc <parameter>-l</parameter></command></screen>
-      
-  </sect2>
-  <sect2>
-   <title>Working with Generated Images</title>
-   <para>
+      </sect2>
+   <sect2>
+    <title>Working with Generated Images</title>
+    <para>
     &dapsacr; automatically generates appropriate image formats for each output
     format from your source files. If an image referenced from your DocBook
     files is changed, &dapsacr; will notice when trying to build for the next
     time and generate new versions of the image automatically.
    </para>
-   <sect3>
-    <title>Gaining an Overview over Images Generated</title>
-    <para>
+    <sect3>
+     <title>Gaining an Overview over Images Generated</title>
+     <para>
      As with source images, &dapsacr; can generate lists of generated images that
      have been generated for use with the various output formats.
     </para>
-    <variablelist>
-     <varlistentry>
-      <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics</command></term>
-      <listitem><para>Lists all generated color images.</para></listitem>
-     </varlistentry>
-     <varlistentry>
-      <term><command>daps <parameter>-d</parameter> <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics-bw</command></term>
-      <listitem><para>Lists all generated black-and-white images.</para></listitem>
-     </varlistentry>
-    </variablelist>
-   </sect3>
-   <sect3>
-    <title>Cleaning Up the Generated Images Directory</title>
-    <para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <command>daps <parameter>-d</parameter>
+         <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics</command>
+       </term>
+       <listitem>
+        <para>Lists all generated color images.</para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <command>daps <parameter>-d</parameter>
+         <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics-bw</command>
+       </term>
+       <listitem>
+        <para>Lists all generated black-and-white images.</para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </sect3>
+    <sect3>
+     <title>Cleaning Up the Generated Images Directory</title>
+     <para>
      In rare cases, such as for instance when a file previously had an incorrect
      timestamp or when you have changed your global &dapsacr; configuration, &dapsacr;
      might wrongly assume that an already generated file should be inserted into
@@ -259,10 +301,10 @@ ser/repository/documents/distribution/en/images/src/fig/example_fig.fig ...</scr
      <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> clean-images</command>
      to delete all images generated for a certain &dc; file.
     </para>
-   </sect3>   
-  </sect2>
-  
- </sect1>
- 
- 
-</chapter>
+    </sect3>
+   </sect2>
+
+  </sect1>
+
+
+ </chapter>
