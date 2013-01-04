@@ -341,27 +341,14 @@
       missing formats.</para>
       <para>Additionally, having a file called <filename>example.png</filename> 
       and another called <filename>example.svg</filename> in the same documentation 
-      project will often lead to  questions like:
-     </para>
-      <itemizedlist>
-       <listitem>
-        <para>Which file to use where?</para>
-       </listitem>
-       <listitem>
-        <para>Do both files display the same content?</para>
-       </listitem>
-       <listitem>
-        <para>Are both files current, or is one outdated?</para>
-       </listitem>
-      </itemizedlist>
-      <para>To search for image name clashes, use the <command>warn-images</command> 
-      subcommand. It lists all images with non-unique base names for a particular
-      documentation project:
-    </para>
-      <screen>$ <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> warn-images</command></screen>
+      project will often lead to  questions like: Which file to use where? Do 
+      both files display the same content? Are both files current, or is one 
+      outdated?</para>
       <para>
       When invoking &dapsacr; with the parameter <command><parameter>-v</parameter></command>,
       a warning will be printed whenever a file name appears twice within a project.
+      To specifically check for image name clashes upfront, use the 
+      <command>daps warn-images</command> subcommand.
      </para>
      </listitem>
     </varlistentry>
