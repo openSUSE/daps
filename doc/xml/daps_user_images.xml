@@ -10,14 +10,25 @@
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
  <abstract>
-  <para>
-   <remark>taroth 2013-01-04: FIXME</remark>
+  <para> 
   This chapter describes:
   <itemizedlist>
-   <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para>
+   <listitem>
+     <para>which types of images are supported by &dapsacr; and how to use them,</para>
     </listitem>
     <listitem>
-     <para>how you can use &dapsacr; to generate lists of used, unused and missing images.</para>
+     <para>the distinction between source images and generated images, and the
+     image directory structure required by &dapsacr;,</para>
+    </listitem>
+    <listitem>
+     <para>the filename requirements for source images,</para>
+    </listitem>
+    <listitem>
+     <para>how to reference images in your DocBook files,</para>
+    </listitem>
+    <listitem>
+     <para>and how to to manage source images and generated images with
+    &dapsacr; commands.</para>
     </listitem>
    </itemizedlist>
   </para>
@@ -156,7 +167,7 @@
    </para>
   </sect2>
  </sect1>
-  
+
  <sect1 id="sec.daps.user.imgs.src.gen">
   <title>Source Images and Generated Images</title>
   <para>&dapsacr; strictly discriminates between source images 
@@ -178,7 +189,7 @@
   managing both, &dapsacr; provides different subcommands. For details, refer 
   to <xref linkend="sec.daps.user.imgs.manage"/>. </para>
  </sect1>
-<sect1 id="sec.daps.user.imgs.req">
+ <sect1 id="sec.daps.user.imgs.req">
   <title>Filename Requirements</title>
    &daps-img-names-req;
   </sect1>
@@ -195,18 +206,17 @@
   <para>&dapsacr; offers a number of subcommands for managing images in a 
   documentation project. By default, the output of the subcommands is a list of 
   image filenames (including the absolute path), all printed in one line with the
-  filenames separated by blanks, see <xref linkend="ex.daps.graphics.output.default"
-  xrefstyle="select:label"/>. This default output format is useful for piping (or
+  filenames separated by blanks, see <xref linkend="ex.daps.graphics.output.default" xrefstyle="select:label"/>. This default output format is useful for piping (or
   copying and pasting) the output for use with another command.</para>
   <example id="ex.daps.graphics.output.default">
    <title>Default Output of an Image-related &dapsacr; Command</title>
    <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
-   </example>
+  </example>
   <para>For better on-screen reading (or for copying the output to an e-mail, 
   for example), use the <parameter>--pretty</parameter> parameter. It adds a line
   break after each filename, so that only one filename is shown per line&mdash;see
   <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>.</para>
-   <example id="ex.daps.graphics.output.pretty">
+  <example id="ex.daps.graphics.output.pretty">
    <title>Pretty-printed Output of an Image-related &dapsacr; Command</title>
    <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty
 <replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia 
@@ -222,8 +232,8 @@
    combine the <parameter>--pretty</parameter> parameter with the 
    <command>wc</command> command:</para>
    <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty | wc -l</screen>
-   <para>For <xref linkend="ex.daps.graphics.output.pretty" 
-   xrefstyle="select:label"/>, the command above would return the value 
+   <para>For <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>, 
+   the command above would return the value 
    <computeroutput>5</computeroutput>.</para>
   </tip>
 
@@ -243,8 +253,7 @@
    <variablelist>
     <varlistentry>
      <term>
-      <command>daps <parameter>-d</parameter>
-       <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command>
+      <command>daps <parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command>
      </term>
      <listitem>
       <para>Lists all graphics used by the DocBook files that are 
@@ -253,8 +262,7 @@
     </varlistentry>
     <varlistentry>
      <term>
-      <command>daps <parameter>-d</parameter>
-       <replaceable>PATH_TO_&dc;_FILE</replaceable> missinggraphics</command>
+      <command>daps <parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> missinggraphics</command>
      </term>
      <listitem>
       <para>Lists all graphics that are referenced in your DocBook files,
@@ -269,10 +277,10 @@
      <listitem>
       <para>Lists all graphics that are <emphasis>not</emphasis> referenced in 
       your DocBook files, but are available in the <filename>images/scr</filename> 
-      subdirectories. This command is useful if you want to clean up your source 
+      subdirectories. <remark>taroth 2013-01-04: fs, is the above correct?</remark>
+      This command is useful if you want to clean up your source 
       images and want to know which images are no longer needed for the documentation
       project.
-      <remark>taroth 2013-01-04: fs, is the above correct?</remark>
       </para>
       <important>
        <title>Use a <sgmltag>set</sgmltag> to Check for Remaining Graphics </title>
@@ -345,6 +353,6 @@
      </listitem>
     </varlistentry>
    </variablelist>
- </sect2>
-</sect1>
+  </sect2>
+ </sect1>
 </chapter>
