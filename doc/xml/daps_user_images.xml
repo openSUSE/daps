@@ -178,28 +178,43 @@
  <sect1 id="sec.daps.user.imgs.manage">
   <title>&dapsacr; Commands for Managing Images</title>
   <para>&dapsacr; offers a number of sub-commands for managing images in a 
- documentation project. For example, they allow to list all images referenced
-in your DocBook files, list any images that are referenced but missing from the 
-filesystem (or vice versa), or to list any images that have been generated for 
+ documentation project. For example, you can list all images referenced
+ in your DocBook files, list any images that are referenced, but missing from the 
+filesystem (or vice versa), or list any images that have been generated for 
 various output formats.</para>
   <para>By default, the output of the sub-commands is a list of image filenames 
   (including the absolute path), where the filenames are only separated by blanks:</para>
-  <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
-  <para>This default output is useful for piping or copying the output for use with another 
-  command.</para>
-  
+  <example id="ex.daps.graphics.output.default">
+   <title>Example Output of <command>daps projectgraphics</command>
+   </title>
+   <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+   <para>This default output is useful for piping or copying the output for use 
+    with another command.</para>
+  </example>
+  <para>For better on-screen reading (or for copying the output to a mail, 
+  for example), use the <parameter>--pretty</parameter> parameter: </para>
+  <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty</screen>
+  <para>It adds a line break after each filename as shown in 
+  <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>.</para>
+  <example id="ex.daps.graphics.output.pretty">
+   <title>Example Output of <command>daps projectgraphics --pretty</command>
+   </title>
+   <screen><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia 
+<replaceable>PATH</replaceable>/images/src/png/example_png1.png 
+<replaceable>PATH</replaceable>/images/src/png/example_png2.png 
+<replaceable>PATH</replaceable>/images/src/png/example_png3.png 
+<replaceable>PATH</replaceable>/images/src/svg/example_svg.svg 
+<replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+  </example>
   <tip>
-   <title>Formatting Command Output</title>
-   <para>For better on-screen reading (or for using the output in text files), 
-   add a line break after each filename by using the <parameter>--pretty</parameter>
-   parameter:</para>
-   <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty</screen>
-   <para>To count the number of images used in a given output file, you can also
-   combine this with the <command>wc</command> command (used to count words, or 
-   in this case, lines):</para>
+   <title>Use Pretty-Printed Output for Counting</title>
+   <para>To count the number of images listed in a given output, you can also
+   combine the <parameter>--pretty</parameter> with the <command>wc</command> 
+   command:</para>
    <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty | wc -l</screen>
+   <para>This command counts the number of lines (and thus, images) in the output.</para>
   </tip>
-  
+
   <sect2 id="sec.daps.user.imgs.used">
    <title>Gaining an Overview over Images Used</title>
    <para>
@@ -253,45 +268,45 @@ various output formats.</para>
      </listitem>
     </varlistentry>
    </variablelist>
-      </sect2>
-   <sect2>
-    <title>Working with Generated Images</title>
-    <para>
+  </sect2>
+  <sect2>
+   <title>Working with Generated Images</title>
+   <para>
     &dapsacr; automatically generates appropriate image formats for each output
     format from your source files. If an image referenced from your DocBook
     files is changed, &dapsacr; will notice when trying to build for the next
     time and generate new versions of the image automatically.
    </para>
-    <sect3>
-     <title>Gaining an Overview over Images Generated</title>
-     <para>
+   <sect3>
+    <title>Gaining an Overview over Images Generated</title>
+    <para>
      As with source images, &dapsacr; can generate lists of generated images that
      have been generated for use with the various output formats.
     </para>
-     <variablelist>
-      <varlistentry>
-       <term>
-        <command>daps <parameter>-d</parameter>
-         <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics</command>
-       </term>
-       <listitem>
-        <para>Lists all generated color images.</para>
-       </listitem>
-      </varlistentry>
-      <varlistentry>
-       <term>
-        <command>daps <parameter>-d</parameter>
-         <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics-bw</command>
-       </term>
-       <listitem>
-        <para>Lists all generated black-and-white images.</para>
-       </listitem>
-      </varlistentry>
-     </variablelist>
-    </sect3>
-    <sect3>
-     <title>Cleaning Up the Generated Images Directory</title>
-     <para>
+    <variablelist>
+     <varlistentry>
+      <term>
+       <command>daps <parameter>-d</parameter>
+        <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics</command>
+      </term>
+      <listitem>
+       <para>Lists all generated color images.</para>
+      </listitem>
+     </varlistentry>
+     <varlistentry>
+      <term>
+       <command>daps <parameter>-d</parameter>
+        <replaceable>PATH_TO_&dc;_FILE</replaceable> xmlgraphics-bw</command>
+      </term>
+      <listitem>
+       <para>Lists all generated black-and-white images.</para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+   </sect3>
+   <sect3>
+    <title>Cleaning Up the Generated Images Directory</title>
+    <para>
      In rare cases, such as for instance when a file previously had an incorrect
      timestamp or when you have changed your global &dapsacr; configuration, &dapsacr;
      might wrongly assume that an already generated file should be inserted into
@@ -300,10 +315,10 @@ various output formats.</para>
      <command>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> clean-images</command>
      to delete all images generated for a certain &dc; file.
     </para>
-    </sect3>
-   </sect2>
+   </sect3>
+  </sect2>
 
-  </sect1>
+ </sect1>
 
 
- </chapter>
+</chapter>
