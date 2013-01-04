@@ -10,7 +10,7 @@
 <chapter id="cha.daps.user.img">
  <title>Image Handling</title>
  <abstract>
-  <para>
+  <para><remark>taroth 2013-01-04: FIXME</remark>
   This chapter describes:
   <itemizedlist>
    <listitem><para>which types of images are supported by &dapsacr; and how you should use them, and</para>
@@ -180,8 +180,9 @@
   <para>&dapsacr; offers a number of sub-commands for managing images in a 
  documentation project. For example, you can list all images referenced
  in your DocBook files, list any images that are referenced, but missing from the 
-filesystem (or vice versa), or list any images that have been generated for 
-various output formats.</para>
+file system (or vice versa), or list any images that have been generated for 
+various output formats. &dapsacr; strictly discriminates between source graphics
+and graphics generated automatically for various output formats.</para>
   <para>By default, the output of the sub-commands is a list of image filenames 
   (including the absolute path), where the filenames are only separated by blanks:</para>
   <example id="ex.daps.graphics.output.default">
@@ -253,8 +254,9 @@ various output formats.</para>
        <replaceable>PATH_TO_&dc;_FILE</replaceable> remaininggraphics</command>
      </term>
      <listitem>
-      <para>Lists all graphics <emphasis>not</emphasis> used in the 
-     DocBook files that are referenced in the given &dc; file.
+      <para>Lists all graphics that are <emphasis>not</emphasis> referenced in 
+      your DocBook files, but available in the <filename>images/scr</filename> 
+      subdirectories. <remark>taroth 2013-01-04: fs, is the above correct?</remark>
      </para>
       <important>
        <title>Use a <sgmltag>set</sgmltag> to Check for Unnecessary Graphics </title>
