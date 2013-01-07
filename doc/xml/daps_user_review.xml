@@ -12,7 +12,7 @@
  <para>
   <remark>output with remarks/draft/meta-data, tarballs, bigfile, locdrop</remark>
  </para>
-  <abstract>
+ <abstract>
   <para>This chapter describes:
   <itemizedlist>
    <listitem><para>&wip;</para>
@@ -21,58 +21,77 @@
   </para>
  </abstract>
  <sect1 id="sec.daps.user.review.output.">
-   <title>Output with Remarks, Metadata or Draft Watermark</title>
+  <title>Output with Remarks, Metadata or Draft Watermark</title>
+  <para>
+   &dapsacr; offers a number of features to simplify review and
+   translation processes. For example, you can insert
+   <sgmltag>remark</sgmltag> elements in the source code and generate an
+   output format that either includes or suppresses these remarks. You
+   can also generate preview versions of your documentation with a
+   <literal>DRAFT</literal> watermark appearing on the HTML or PDF
+   output.</para>
+  <note>
+   <title>Output with Remarks or Draft Watermark</title>
    <para>
-      &dapsacr; offers a number of features to simplify review and
-      translation processes. For example, you can insert
-      <sgmltag>remark</sgmltag> elements in the source code and generate an
-      output format that either includes or suppresses these remarks. You
-      can also generate preview versions of your documentation with a
-      <literal>DRAFT</literal> watermark appearing on the HTML or PDF
-      output. If you use &dm; in addition to &dapsacr;, you can
+      The command options <option>--draft</option> option and
+      <option>--remarks</option> are supported for HTML, HTML-single, PDF and
+      &epub;, but not for all &dapsacr; output formats.
+     </para>
+  </note>
+  <para>If you use &dm; in addition to &dapsacr;, you can
       <quote>flag</quote> your XML files with meta-information (like
       workflow status). &dapsacr; offers an option to also display this
       meta-information in the generated output. <!--For handing over your files
       to review or translation, &dapsacr; can create tarballs of the XML
-      sources and graphics.--></para>
-      
-   <para>
-     For publishing a pre-release version of a document that you might want
-     to send to a proofreader for review, &dapsacr; provides several features, 
-     like enabling <literal>DRAFT</literal> watermark, including file metadata in
-     the output (like file maintainer or editing statusa use the <option>--draft</option>
-     command option to mark the document as draft version. For example, use
-     the following command to build a color PDF that has a
-     <literal>DRAFT</literal> watermark printed on each page:
-    </para>
-   <screen>$ <command>daps -d &dc;-daps-example color-pdf --draft</command></screen>
-   <para>
-     If you used <sgmltag>remark</sgmltag> elements in your XML files (for
-     editorial remarks or questions to the proofreader), include the remarks
-     in the output with the <option>--remarks</option> option:
-    </para>
-   <screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
-   <para>When generating PDFs with FOP, the contents of the remark elements 
+      sources and graphics.-->
+  </para>
+  <variablelist>
+   <varlistentry>
+    <term>Including Remark Elements in the Output</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
+     <para>When generating PDFs with FOP, the contents of the remark elements 
      is shown in italics within the text. XEP supports conversion of remark 
      elements into PDF annotations. This feature is enabled in &dapsacr; by
      default, but if you want XEP to treat remark elements like FOP does, you
      can change the respective &dapsacr; parameter.<remark>taroth 2012-10-16:
-     todo - add link as soon as this is covered in &dapsuser;</remark>
-     Enabling remarks automatically turns draft mode on.
+     todo - add link as soon as this is covered in &dapsuser;</remark> In HTML, 
+     HTML-single and &epub; output, the contents of the remark elements is shown 
+     in red within the text.
     </para>
-   <note>
-    <title>Output with Remarks or Draft Watermark</title>
-    <para>
-      The command options <option>--draft</option> option and
-      <option>--remarks</option> are supported for HTML and PDF, but not for
-      all &dapsacr; output formats.
-     </para>
-   </note>
-   <para>
+
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Building PDFs with a <literal>DRAFT</literal> Watermark</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
+     <para>Generates a PDF that has a <literal>DRAFT</literal> watermark printed 
+      on each page.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Include File Metadata in the Output</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
+     <para>If metadata to a file has been set<remark>taroth 2013-01-07: with
+     &dm;?</remark>, &dapsacr; includes the status information (filename, 
+     maintainer and workflow status) for each file in the output format.
+     <remark>taroth 2013-01-07: add how it shows up</remark></para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <note>
+   <title>Draft Mode Implied</title>
+   <para>Using the <option>--remarks</option> and <option>--meta</option> options
+      for generating output automatically turns draft mode on.</para>
+  </note>
+  <para>
+   <remark>taroth 2013-01-07: also mention meta</remark>
      By default, &dapsacr; adds a string to the base name of the output file
      to flag output formats generated with special options. Example file
      names are <filename>daps-example_draft_en.pdf</filename> or
      <filename>daps-example_remarks_draft_en.pdf</filename>.
     </para>
-  </sect1>
+ </sect1>
 </chapter>
