@@ -83,7 +83,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="gentext">
-          <xsl:with-param name="key"><xsl:value-of select="local-name(.)"/></xsl:with-param>
+          <xsl:with-param name="key" select="local-name(.)"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -177,9 +177,9 @@
         </xsl:call-template>
       </xsl:attribute>
       <xsl:attribute name="accesskey">
-        <xsl:call-template name="href.target">
-        <xsl:text>c</xsl:text>
-        </xsl:call-template>
+        <xsl:call-template name="href.target"/>
+          <!-- FIXME -->
+          <!--<xsl:text>c</xsl:text>-->
       </xsl:attribute>
       <span class="book2-icon"> </span>
       <xsl:if test="$context = 'fixed-header'">
