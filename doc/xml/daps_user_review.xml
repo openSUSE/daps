@@ -21,7 +21,7 @@
   </para>
  </abstract>
  <sect1 id="sec.daps.user.review.output.">
-  <title>Output with Remarks, Metadata or Draft Watermark</title>
+  <title>Including Remarks, Metadata or Draft Watermarks in the Output</title>
   <para>
    &dapsacr; offers a number of features to simplify review and
    translation processes. For example, you can insert
@@ -30,24 +30,33 @@
    can also generate preview versions of your documentation with a
    <literal>DRAFT</literal> watermark appearing on the HTML or PDF
    output.</para>
-  <note>
-   <title>Output with Remarks or Draft Watermark</title>
-   <para>
-      The command options <option>--draft</option> option and
-      <option>--remarks</option> are supported for HTML, HTML-single, PDF and
-      &epub;, but not for all &dapsacr; output formats.
-     </para>
-  </note>
-  <para>If you use &dm; in addition to &dapsacr;, you can
+   <para>If you use &dm; in addition to &dapsacr;, you can
       <quote>flag</quote> your XML files with meta-information (like
       workflow status). &dapsacr; offers an option to also display this
       meta-information in the generated output. <!--For handing over your files
       to review or translation, &dapsacr; can create tarballs of the XML
       sources and graphics.-->
   </para>
+  <note>
+   <title>Availability of Special Options and Draft Mode</title>
+   <para>The special options are not supported for all output formats:
+      <option>--draft</option> and <option>--remarks</option> are only available
+      in HTML, HTML-single, PDF, and &epub; output. <remark>taroth 2013-01-08:
+      fs, toms: is the following correct?</remark>The option 
+      <option>--meta</option> is only available in HTML, HTML-single, and PDF.  
+     </para>
+     <para>Using the <option>--remarks</option> and <option>--meta</option> options
+      automatically turns draft mode on.</para>
+     <para>By default, &dapsacr; adds a string to the base name of the output file
+     to flag output formats generated with special options (<option>meta</option>, 
+     <option>remarks</option>, <option>draft</option>). 
+     Example file names are <filename>daps-example_draft_en.pdf</filename> or
+     <filename>daps-example_remarks_draft_en.pdf</filename>.</para>
+  </note>
+  <para>Find a few example commands below:</para>
   <variablelist>
    <varlistentry>
-    <term>Including Remark Elements in the Output</term>
+    <term>Including Remarks in the Output</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
      <para>When generating PDFs with FOP, the contents of the remark elements 
@@ -59,7 +68,6 @@
      HTML-single and &epub; output, the contents of the remark elements is shown 
      in red within the text.
     </para>
-
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -71,27 +79,19 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Include File Metadata in the Output</term>
+    <term>Including Metadata in the Output</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
-     <para>If metadata to a file has been set<remark>taroth 2013-01-07: with
-     &dm;?</remark>, &dapsacr; includes the status information (filename, 
-     maintainer and workflow status) for each file in the output format.
-     <remark>taroth 2013-01-07: add how it shows up</remark></para>
+     <para>If metadata to a file has been set<remark>taroth 2013-01-08: which 
+     metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
+     &dapsacr; includes the metadata for each file in the output format. 
+     By default, the HTML and HTML-single outputs show filename, file maintainer 
+     and workflow status, and additionally the ID of the chapter, appendix or 
+     prefix, if available. The PDF output shows filename and the ID of the chapter, 
+     appendix or prefix, if available.<remark>taroth 2013-01-08: watch out, this
+     is probably bound to change...</remark></para>
     </listitem>
    </varlistentry>
   </variablelist>
-  <note>
-   <title>Draft Mode Implied</title>
-   <para>Using the <option>--remarks</option> and <option>--meta</option> options
-      for generating output automatically turns draft mode on.</para>
-  </note>
-  <para>
-   <remark>taroth 2013-01-07: also mention meta</remark>
-     By default, &dapsacr; adds a string to the base name of the output file
-     to flag output formats generated with special options. Example file
-     names are <filename>daps-example_draft_en.pdf</filename> or
-     <filename>daps-example_remarks_draft_en.pdf</filename>.
-    </para>
  </sect1>
 </chapter>
