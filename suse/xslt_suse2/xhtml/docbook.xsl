@@ -177,9 +177,7 @@
         </xsl:call-template>
       </xsl:attribute>
       <xsl:attribute name="accesskey">
-        <xsl:call-template name="href.target"/>
-          <!-- FIXME -->
-          <!--<xsl:text>c</xsl:text>-->
+          <xsl:text>c</xsl:text>
       </xsl:attribute>
       <span class="book2-icon"> </span>
       <xsl:if test="$context = 'fixed-header'">
