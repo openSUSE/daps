@@ -18,9 +18,12 @@
    <listitem><para>&wip;</para>
     </listitem>
    </itemizedlist>
+   <remark>taroth 2013-01-08: check for double contents with DAPS Quick Start
+   and move text snippets into entities</remark>
   </para>
+
  </abstract>
- <sect1 id="sec.daps.user.review.output.">
+ <sect1 id="sec.daps.user.review.output.special">
   <title>Including Remarks, Metadata or Draft Watermarks in the Output</title>
   <para>
    &dapsacr; offers a number of features to simplify review and
@@ -30,7 +33,7 @@
    can also generate preview versions of your documentation with a
    <literal>DRAFT</literal> watermark appearing on the HTML or PDF
    output.</para>
-   <para>If you use &dm; in addition to &dapsacr;, you can
+  <para>If you use &dm; in addition to &dapsacr;, you can
       <quote>flag</quote> your XML files with meta-information (like
       workflow status). &dapsacr; offers an option to also display this
       meta-information in the generated output. <!--For handing over your files
@@ -45,11 +48,10 @@
       fs, toms: is the following correct?</remark>The option 
       <option>--meta</option> is only available in HTML, HTML-single, and PDF.  
      </para>
-     <para>Using the <option>--remarks</option> and <option>--meta</option> options
+   <para>Using the <option>--remarks</option> and <option>--meta</option> options
       automatically turns draft mode on.</para>
-     <para>By default, &dapsacr; adds a string to the base name of the output file
-     to flag output formats generated with special options (<option>meta</option>, 
-     <option>remarks</option>, <option>draft</option>). 
+   <para>By default, &dapsacr; adds a string to the base name of the output file
+     to flag output formats generated with special options. 
      Example file names are <filename>daps-example_draft_en.pdf</filename> or
      <filename>daps-example_remarks_draft_en.pdf</filename>.</para>
   </note>
@@ -89,9 +91,44 @@
      and workflow status, and additionally the ID of the chapter, appendix or 
      prefix, if available. The PDF output shows filename and the ID of the chapter, 
      appendix or prefix, if available.<remark>taroth 2013-01-08: watch out, this
-     is probably bound to change...</remark></para>
+     is probably bound to change...</remark>
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
+ </sect1>
+ <sect1 id="sec.daps.user.review.bigfile">
+  <title>Creating an XML Bigfile</title>
+  <para>Instead of sending multiple XML files to a proofreader for review, you
+  can also transform all files included in your <sgmltag>book</sgmltag> or 
+  <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile).</para>
+  <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+  <para>&dapsacr; follows all XIncludes to create the bigfile and shows a message
+  where to find the generated output.</para>
+ </sect1>
+ <sect1 id="sec.daps.user.review.tarballs">
+  <title>FIXME</title>
+  <para>For handing over your files to review or translation, &dapsacr; can create 
+  tarballs of the XML sources and graphics.</para>
+  <remark>taroth 2013-01-08: &wip;, decide which of the following commands to mention</remark>
+    <!--dist-all                  Shortcut for running the subcommands 'validate'
+                              'checklink' 'dist-xml' 'dist-html' 'dist' and
+                              'color-pdf'
+    dist-book                 Profiled XML sources of the book
+    dist-graphics             Graphics (PNG, SVG) of the whole set
+    dist-graphics-png         PNG graphics of the whole set. SVG graphics are
+                              converted to PNG
+    dist-html                 HTML and graphics
+    dist-htmlsingle           Single-file HTML and graphics
+    dist-jsp                  JSP and graphics
+    dist-xml                  Profiled XML sources of the whole set. Identical
+                              to dist-book when using a book rather than a set.
+    locdrop                   Provide everything that is needed to translate a
+                              set-->
+
+ </sect1>
+ <sect1 id="sec.daps.user.review.locdrop">
+  <title>Packing Files for Translation</title>
+  <para>&wip;</para>
  </sect1>
 </chapter>
