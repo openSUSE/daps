@@ -3,8 +3,10 @@ Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Col
 For additional support for Vietnamese, add "vietnamese," after "&subset=".
 Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
 Consider page load time.
+Ideally, we could append &text=... and add a few common Greek characters, like
+alpha, beta, ... but that doesn't work together with the subset option.
 */
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,600italic,400italic&subset=latin,cyrillic-ext,latin-ext,greek);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic&subset=latin-ext,cyrillic);
 
 /* Reset everything */
 /* From http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
