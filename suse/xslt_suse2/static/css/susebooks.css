@@ -621,6 +621,12 @@ html, body {
     line-height: 22px;
 }
 
+.bubble a:hover .keycap, .bubble a:focus .keycap, .bubble a:active .keycap,
+.bubble a:hover .command, .bubble a:focus .command, .bubble a:active .command,
+.bubble a:hover code, .bubble a:focus code, .bubble a:active code {
+    border-color: #FFF;
+}
+
 #_bubble-toc .active ol {
     display: block;
     position: absolute;
@@ -1780,9 +1786,9 @@ div.figure .name, div.figure .permalink {
 a:hover .keycap, a:focus .keycap, a:active .keycap,
 a:hover .command, a:focus .command, a:active .command,
 a:hover code, a:focus code, a:active code {
-    background-color: #f7faf6;
     border-color: #439539;
 }
+
 
 /* We put an ndash character between keycaps that are part of an accelerator */
 .key-connector {
