@@ -4,6 +4,7 @@
     Add a wrapper div around procedures, so the title can be left-aligned while
     everything else in the procedure gets a little border on the left and thus
     is padded a bit more.
+    Also make sure, variablelist entries can be linked to.
     
     Author(s): Thomas Schraitle <toms@opensuse.org>, Stefan Knorr <sknorr@suse.de>
     Copyright: 2012, Thomas Schraitle, Stefan Knorr
@@ -15,6 +16,18 @@
     xmlns="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="exsl">
 
+
+<xsl:template match="varlistentry">
+  <dt>
+    <xsl:call-template name="id.attribute">
+      <xsl:with-param name="force" select="1"/>
+    </xsl:call-template>
+    <xsl:apply-templates select="term"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates select="listitem"/>
+  </dd>
+</xsl:template>
 
     <xsl:template match="procedure">
                 
