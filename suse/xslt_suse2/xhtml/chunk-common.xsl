@@ -94,7 +94,7 @@
                <!-- This works for all common cases, but will do foolish things when you build
                     a $rootid that is nested more than one level deep within the root element
                     and that $rootid is not an article. Sorry for the pain. -->
-                <xsl:when test="$rootid != '' and not(ancestor::*)"/>
+                <xsl:when test="$rootid != '' and not(ancestor::*) and self::*[@id != string($rootid)]"/>
                 <xsl:when test="not(ancestor::*) or self::*[@id = string($rootid)]">
                   <xsl:apply-templates select="." mode="breadcrumbs">
                     <xsl:with-param name="class">book-link</xsl:with-param>
