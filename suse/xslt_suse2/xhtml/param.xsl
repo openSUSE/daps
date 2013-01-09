@@ -82,6 +82,7 @@ set       toc,title
 
 <!-- 12. QAndASet =============================================== -->
 <xsl:param name="qanda.defaultlabel">none</xsl:param>
+<xsl:param name="qandadiv.autolabel" select="0"></xsl:param>
 
 <!-- 13. Linking ================================================ -->
 
