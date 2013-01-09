@@ -14,12 +14,11 @@
 <book id="dblayouttest" lang="en">
   <bookinfo>
     <title>DocBook Layout Test</title>
-    <subtitle>Test Document for DAPS</subtitle>
     <productname>Testing Books</productname>
-    <releaseinfo>Version 1.0</releaseinfo>
-    <releaseinfo>Revision 0</releaseinfo>
+    <productnumber>Version 1.0 Revision 0</productnumber>
     <date>
       <?dbtimestamp format="B d, Y"?></date>
+    <titleabbrev>Test Document for DAPS</titleabbrev>
     <legalnotice>
       <para>
         <ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html">GNU Free Documentation
@@ -248,7 +247,7 @@
           </listitem>
         </orderedlist>
       </sect1>
-      <sect1 id="lists.parainside">
+      <!--   <sect1 id="lists.parainside">
         <title>Lists with Para Inside</title>
         <itemizedlist>
           <title>Itemized List with Para Inside</title>
@@ -289,15 +288,16 @@
             </listitem>
           </varlistentry>
         </variablelist>
-      </sect1>
+      </sect1> -->
       <sect1 id="lists.procedure">
         <title>Simple Procedure</title>
         <procedure>
           <title>Procedure</title>
           <step>
-            <abstract>
-              <para>Excepteur sint occaecat cupidatat non proident</para>
-            </abstract>
+            <formalpara>
+              <title>Excepteur sint</title>
+              <para>occaecat cupidatat non proident</para>
+            </formalpara>
             <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit</para>
           </step>
           <step>
@@ -310,7 +310,7 @@
           </step>
         </procedure>
       </sect1>
-      <sect1 id="lists.nestedprocedure">
+      <!--   <sect1 id="lists.nestedprocedure">
         <title>Nested procedure</title>
         <variablelist>
           <varlistentry>
@@ -417,7 +417,7 @@
             </step>
           </procedure>
         </task>
-      </sect1>
+      </sect1>-->
       <sect1 id="lists.elementsinside">
         <title>Lists with elements</title>
         <variablelist>
@@ -425,7 +425,7 @@
             <term>Variablelist with elements</term>
             <listitem>
               <para>
-                <code>Ut enim ad</code>
+                <literal>Ut enim ad</literal>
                 <command>minim veniam, quis</command>
               </para>
             </listitem>
@@ -437,15 +437,6 @@
                 <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
                   eu fugiat nulla pariatur.</para>
               </important>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>Variablelist with elements</term>
-            <listitem>
-              <caution>
-                <para>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.</para>
-              </caution>
             </listitem>
           </varlistentry>
           <varlistentry>
@@ -500,12 +491,20 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry>Entry 1</entry>
-                <entry>Entry 2</entry>
+                <entry>
+                  <para>Entry 1</para>
+                </entry>
+                <entry>
+                  <para>Entry 2</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 3</entry>
-                <entry>Entry 4</entry>
+                <entry>
+                  <para>Entry 3</para>
+                </entry>
+                <entry>
+                  <para>Entry 4</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -518,18 +517,30 @@
           <tgroup cols="2">
             <thead>
               <row>
-                <entry>Head 1</entry>
-                <entry>Head 2</entry>
+                <entry>
+                  <para>Head 1</para>
+                </entry>
+                <entry>
+                  <para>Head 2</para>
+                </entry>
               </row>
             </thead>
             <tbody>
               <row>
-                <entry>Entry 1</entry>
-                <entry>Entry 2</entry>
+                <entry>
+                  <para>Entry 1</para>
+                </entry>
+                <entry>
+                  <para>Entry 2</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 3</entry>
-                <entry>Entry 4</entry>
+                <entry>
+                  <para>Entry 3</para>
+                </entry>
+                <entry>
+                  <para>Entry 4</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -600,9 +611,13 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry>Lorem ipsum</entry>
-                <entry>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-                  gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</entry>
+                <entry>
+                  <para>Lorem ipsum</para>
+                </entry>
+                <entry>
+                  <para>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                    gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -615,7 +630,9 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry>Lorem ipsum</entry>
+                <entry>
+                  <para>Lorem ipsum</para>
+                </entry>
                 <entry>
                   <screen>xsltproc --output foo-bar.fo $DB/fo/docbook.xsl<!--
                 --> foo.xml</screen>
@@ -634,7 +651,9 @@
             <colspec colname="c2" colwidth="3*"/>
             <tbody>
               <row>
-                <entry>Lorem ipsum</entry>
+                <entry>
+                  <para>Lorem ipsum</para>
+                </entry>
                 <entry>
                   <screen>xsltproc --output foo-bar.fo $DB/fo/docbook.xsl<!--
                 --> foo.xml</screen>
@@ -652,7 +671,9 @@
             <colspec colname="c2" colwidth="2*"/>
             <tbody>
               <row>
-                <entry>Lorem ipsum</entry>
+                <entry>
+                  <para>Lorem ipsum</para>
+                </entry>
                 <entry>
                   <screen>xsltproc --output foo-bar.fo $DB/fo/docbook.xsl<!--
                 --> foo.xml</screen>
@@ -665,13 +686,19 @@
           <tgroup cols="2">
             <thead>
               <row>
-                <entry>Informal Table</entry>
+                <entry>
+                  <para>Informal Table</para>
+                </entry>
               </row>
             </thead>
             <tbody>
               <row>
-                <entry>Lorem ipsum dolor</entry>
-                <entry>sit amet, consetetur sadipscing elitr</entry>
+                <entry>
+                  <para>Lorem ipsum dolor</para>
+                </entry>
+                <entry>
+                  <para>sit amet, consetetur sadipscing elitr</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -689,28 +716,43 @@
             <colspec colname="c2"/>
             <tbody>
               <row>
-                <entry namest="c1" nameend="c2" align="center">Horizontal Spanned Entry
-                  (centered)</entry>
+                <entry namest="c1" nameend="c2" align="center">
+                  <para>Horizontal Spanned Entry (centered)</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 1</entry>
-                <entry>Entry 2</entry>
+                <entry>
+                  <para>Entry 1</para>
+                </entry>
+                <entry>
+                  <para>Entry 2</para>
+                </entry>
               </row>
               <row>
-                <entry namest="c1" nameend="c2" align="left">Horizontal Spanned Entry (left
-                  aligned)</entry>
+                <entry namest="c1" nameend="c2" align="left">
+                  <para>Horizontal Spanned Entry (left aligned)</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 3</entry>
-                <entry>Entry 4</entry>
+                <entry>
+                  <para>Entry 3</para>
+                </entry>
+                <entry>
+                  <para>Entry 4</para>
+                </entry>
               </row>
               <row>
-                <entry namest="c1" nameend="c2" align="right">Horizontal Spanned Entry (right
-                  aligned)</entry>
+                <entry namest="c1" nameend="c2" align="right">
+                  <para>Horizontal Spanned Entry (right aligned)</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 5</entry>
-                <entry>Entry 6</entry>
+                <entry>
+                  <para>Entry 5</para>
+                </entry>
+                <entry>
+                  <para>Entry 6</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -727,27 +769,44 @@
           <tgroup cols="2">
             <tbody>
               <row>
-                <entry morerows="1" valign="middle">Middle Entry</entry>
-                <entry>Entry 2</entry>
+                <entry morerows="1" valign="middle">
+                  <para>Middle Entry</para>
+                </entry>
+                <entry>
+                  <para>Entry 2</para>
+                </entry>
               </row>
               <row>
-                <entry>Entry 3</entry>
+                <entry>
+                  <para>Entry 3</para>
+                </entry>
               </row>
               <row>
-                <entry morerows="1" valign="top">Top Entry</entry>
-                <entry>Entry 5</entry>
+                <entry morerows="1" valign="top">
+                  <para>Top Entry</para>
+                </entry>
+                <entry>
+                  <para>Entry 5</para>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Entry 6</para>
+                </entry>
+              </row>
+              <row>
+                <entry morerows="1" valign="bottom">
+                  <para>Bottom Entry</para>
+                </entry>
+                <entry>
+                  <para>Entry 8</para>
+                </entry>
               </row>
               <row>
                 <!--  -->
-                <entry>Entry 6</entry>
-              </row>
-              <row>
-                <entry morerows="1" valign="bottom">Bottom Entry</entry>
-                <entry>Entry 8</entry>
-              </row>
-              <row>
-                <!--  -->
-                <entry>Entry 9</entry>
+                <entry>
+                  <para>Entry 9</para>
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -787,30 +846,35 @@
       </sect1>
 
     </chapter>
-    <chapter id="other">
+    <!--    <chapter id="other">
       <title>Other blockelements</title>
-
-      <highlights>
-        <para> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-          anim id est laborum.</para>
-      </highlights>
-      <blockquote>
-        <para>Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed diam nonumy eirmod
-          tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-          accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-          sanctus est Lorem ipsum dolor sit amet.</para>
-      </blockquote>
-      <example>
-        <title>Lorem ipsum</title>
-        <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-          ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur.</para>
-      </example>
-    </chapter>
+      <abstract><para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.  </para></abstract>
+      <sect1>
+        <title>Lorem Ipsum</title>
+        <highlights>
+          <para> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+            mollit anim id est laborum.</para>
+        </highlights>
+        <blockquote>
+          <para>Lorem ipsum dolor sit amet;, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos
+            et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet.</para>
+        </blockquote>
+        <example>
+          <title>Lorem ipsum</title>
+          <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur.</para>
+        </example>
+      </sect1>
+    </chapter> -->
     <chapter id="qanda">
       <title>Q and A</title>
 
@@ -829,7 +893,8 @@
             <para>Stet clita kasd gubergren?</para>
           </question>
           <answer>
-            <para><screen>No sea</screen>: Takimata sanctus est Lorem ipsum dolor sit amet.</para>
+            <screen>No sea</screen>
+            <para>Takimata sanctus est Lorem ipsum dolor sit amet.</para>
           </answer>
         </qandaentry>
         <qandaentry>
@@ -908,13 +973,21 @@
                 <tgroup cols="2">
                   <tbody>
                     <row>
-                      <entry>Excepteur sint occaecat cupidatat non proident</entry>
-                      <entry>Sunt in culpa qui officia deserunt mollit anim id est laborum.</entry>
+                      <entry>
+                        <para>Excepteur sint occaecat cupidatat non proident</para>
+                      </entry>
+                      <entry>
+                        <para>Sunt in culpa qui officia deserunt mollit anim id est laborum.</para>
+                      </entry>
                     </row>
                     <row>
-                      <entry>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-                        dolor sit amet.</entry>
-                      <entry>At vero eos et accusam et justo duo dolores et ea rebum.</entry>
+                      <entry>
+                        <para>Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                          dolor sit amet.</para>
+                      </entry>
+                      <entry>
+                        <para>At vero eos et accusam et justo duo dolores et ea rebum.</para>
+                      </entry>
                     </row>
                   </tbody>
                 </tgroup>
@@ -929,12 +1002,13 @@
 
     <chapter id="admonitions">
       <title>Admonotions</title>
+      <abstract>
+        <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+          ea commodo consequat.</para>
+      </abstract>
       <sect1 id="simpleadmonitions">
         <title/>
-        <caution>
-          <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.</para>
-        </caution>
+
         <warning>
           <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
             ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -956,7 +1030,7 @@
       </sect1>
       <sect1 id="nestedadmonitions">
         <title>Nested admonitions</title>
-        <caution>
+        <warning>
           <itemizedlist>
             <listitem>
               <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
@@ -973,7 +1047,7 @@
               </warning>
             </listitem>
           </itemizedlist>
-        </caution>
+        </warning>
         <tip>
           <variablelist>
             <varlistentry>
@@ -988,7 +1062,7 @@
             <varlistentry>
               <term>Duis aute</term>
               <listitem>
-                <caution>
+                <warning>
                   <orderedlist>
                     <listitem>
                       <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -999,36 +1073,53 @@
                         tempor incididunt ut labore et dolore magna aliqua.</para>
                     </listitem>
                   </orderedlist>
-                </caution>
+                </warning>
               </listitem>
             </varlistentry>
             <varlistentry>
               <term>Lorem ipsum</term>
               <listitem>
                 <warning>
-                  <table id="tableinadmonition">
-                    <title>magna aliqua</title>
-                    <tgroup cols="2">
-                      <tbody>
-                        <row>
-                          <entry>dolor sit amet</entry>
-                          <entry>consectetur adipisicing elit</entry>
-                        </row>
-                        <row>
-                          <entry>Duis aute irure dolor in reprehenderit</entry>
-                          <entry>in voluptate velit esse cillum</entry>
-                        </row>
-                        <row>
-                          <entry>
-                            <caution>
-                              <para>dolore eu fugiat nulla pariatur.</para>
-                            </caution>
-                          </entry>
-                          <entry>Lorem ipsum dolor sit amet</entry>
-                        </row>
-                      </tbody>
-                    </tgroup>
-                  </table>
+                  <itemizedlist>
+                    <listitem>
+                      <table id="tableinadmonition">
+                        <title>magna aliqua</title>
+                        <tgroup cols="2">
+                          <tbody>
+                            <row>
+                              <entry>
+                                <para>dolor sit amet</para>
+                              </entry>
+                              <entry>
+                                <para>consectetur adipisicing elit</para>
+                              </entry>
+                            </row>
+                            <row>
+                              <entry>
+                                <para>Duis aute irure dolor in reprehenderit</para>
+                              </entry>
+                              <entry>
+                                <para>in voluptate velit esse cillum</para>
+                              </entry>
+                            </row>
+                            <row>
+                              <entry>
+                                <important>
+                                  <para>dolore eu fugiat nulla pariatur.</para>
+                                </important>
+                              </entry>
+                              <entry>
+                                <para>Lorem ipsum dolor sit amet</para>
+                              </entry>
+                            </row>
+                          </tbody>
+                        </tgroup>
+                      </table>
+                    </listitem>
+                  </itemizedlist>
+
+
+
                 </warning>
               </listitem>
             </varlistentry>
@@ -1062,13 +1153,14 @@
             </para>
           </listitem>
         </varlistentry>
-        <varlistentry>
+        <!--    <varlistentry>
           <term>Cross References - footnote</term>
           <listitem>
-            <para>
-              <footnoteref linkend="footnote"/>
-            </para>
-          </listitem>
+            
+            
+            <footnoteref linkend="footnote"/> 
+            
+          </listitem> 
         </varlistentry>
         <varlistentry>
           <term>Cross References - biblioref</term>
@@ -1081,79 +1173,17 @@
               </footnote>
             </para>
           </listitem>
-        </varlistentry>
+        </varlistentry>-->
       </variablelist>
 
-    </chapter>
-
-    <chapter id="inline-media">
-      <title>Inline media</title>
-      <para>
-        <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata fileref="../images/src/png/testbild.png" width="50"/>
-          </imageobject>
-          <imageobject role="pdf">
-            <imagedata fileref="../images/src/png/testbild.png" width="75"/>
-          </imageobject>
-          <imageobject role="fo">
-            <imagedata fileref="../images/src/png/testbild.png" width="25"/>
-          </imageobject>
-          <textobject>
-            <para>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat.</para>
-          </textobject>
-        </inlinemediaobject>
-      </para>
-      <para>
-        <inlinegraphic fileref="../images/src/png/testbild.png"/>
-      </para>
-    </chapter>
-    <chapter id="citations">
-      <title>Citations</title>
-      <variablelist>
-        <varlistentry>
-          <term>Citation</term>
-          <listitem>
-            <para>
-              <citation>At vero eos et accusam et justo duo dolores et ea rebum.</citation>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>Bibliod citation </term>
-          <listitem>
-            <para>
-              <citebiblioid>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-                ut aliquip ex ea commodo consequat.</citebiblioid>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>Refentry citation</term>
-          <listitem>
-            <para>
-              <citerefentry>
-                <refentrytitle>Lorem ipsum dolor sit amet</refentrytitle>
-              </citerefentry>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term>Title citation</term>
-          <listitem>
-            <para>
-              <citetitle>quis nostrud exercitation ullamco laboris nisi ut aliquip</citetitle>
-            </para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
     </chapter>
   </part>
   <part id="profiling">
     <title>Profiling</title>
     <chapter id="cha.booktest3">
       <title>Profiling</title>
+      <abstract><para>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</para></abstract>
       <sect1 id="sec.booktest3.1">
         <title>Section 1.1</title>
         <para os="arch1">para with os=arch1</para>
@@ -1166,7 +1196,7 @@
         <para os="vendor2">para with os=vendor2</para>
       </sect1>
 
-      <sect1 id="sec.booktest3.2">
+   <!--     <sect1 id="sec.booktest3.2">
         <title>Section 1.2</title>
         <para>
           <sgmltag class="genentity">ent1</sgmltag>: &ent1;</para>
@@ -1183,7 +1213,7 @@
         <para lang="de">para with lang de</para>
         <para lang="es">para with lang es</para>
         <para lang="cn">para with lang cn</para>
-      </sect1>
+      </sect1>-->
     </chapter>
   </part>
 </book>
