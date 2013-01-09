@@ -43,7 +43,6 @@ book      toc,title,figure,table,example,equation
 chapter   toc,title
 part      toc,title
 preface   toc,title
-qandadiv  toc
 qandaset  toc
 reference toc,title
 sect1     toc
@@ -82,6 +81,7 @@ set       toc,title
 <!-- 11. Tables ================================================= -->
 
 <!-- 12. QAndASet =============================================== -->
+<xsl:param name="qanda.defaultlabel">none</xsl:param>
 
 <!-- 13. Linking ================================================ -->
 
