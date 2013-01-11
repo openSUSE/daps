@@ -9,9 +9,6 @@
 ]>
 <chapter id="cha.daps.user.review">
  <title>Review and Translation Processes</title>
- <para>
-  <remark>output with remarks/draft/meta-data, tarballs, bigfile, locdrop</remark>
- </para>
  <abstract>
   <para>This chapter describes:
   <itemizedlist>
@@ -36,9 +33,7 @@
   <para>If you use &dm; in addition to &dapsacr;, you can
       <quote>flag</quote> your XML files with meta-information (like
       workflow status). &dapsacr; offers an option to also display this
-      meta-information in the generated output. <!--For handing over your files
-      to review or translation, &dapsacr; can create tarballs of the XML
-      sources and graphics.-->
+      meta-information in the generated output. 
   </para>
   <note>
    <title>Availability of Special Options and Draft Mode</title>
@@ -98,20 +93,69 @@
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.bigfile">
-  <title>Creating an XML Bigfile</title>
+  <title>Creating XML Bigfiles and Profiled XML Sources</title>
   <para>Instead of sending multiple XML files to a proofreader for review, you
   can also transform all files included in your <sgmltag>book</sgmltag> or 
-  <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile).</para>
-  <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
-  <para>&dapsacr; follows all XIncludes to create the bigfile and shows a message
-  where to find the generated output.</para>
+  <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile). If you
+  want to hand over profiled XML sources (instead of the original XML sources
+  that may apply to several products), &dapsacr; also allows for 
+  this&mdash;see the command overview below.</para>
+  <variablelist>
+   <varlistentry>
+    <term>Creating an XML Bigfile</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+     <para>&dapsacr; follows all XIncludes to create the bigfile and shows a 
+     message where to find the generated output.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Creating Profiled XML Sources</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
+     <para>If you use profiling attributes to manage document variants, 
+     &dapsacr; creates profiled XML files from your set. For details about profiling 
+     in DocBook and how to use it with &dapsacr;, refer to 
+     <xref linkend="sec.daps.user.modular.profile"/>.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.tarballs">
-  <title>FIXME</title>
-  <para>For handing over your files to review or translation, &dapsacr; can create 
-  tarballs of the XML sources and graphics.</para>
-  <remark>taroth 2013-01-08: &wip;, decide which of the following commands to mention</remark>
-    <!--dist-all                  Shortcut for running the subcommands 'validate'
+  <title>Creating Distributable Archives</title>
+  <para>For handing over your files to review or translation, or for distributing
+  your output formats, &dapsacr; can automatically create tar files of the XML 
+  sources, various output formats and/or graphics. &dapsacr; uses <literal>bz2</literal> 
+  for high compression of the archives and keeps the directory structure when 
+  generating the tar files.</para>
+  <para>Find some example commands below. For more commands, run 
+  <command>daps --help</command>.</para>
+  <variablelist>
+   <varlistentry>
+    <term>Creating a Graphics Tar File</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
+     <para>Creates a tar file of all graphics <remark>taroth 2013-01-11: 
+     check with fs: the referenced ones?</remark> that belong to the specified 
+     documentation project. 
+     </para>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
+     <para>Creates a tar file with PNG graphics <remark>taroth 2013-01-11: 
+     check with fs: the referenced ones?</remark> that belong to the specified 
+     documentation project. Any SVG graphics are automatically converted to PNG
+     format.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Creating Tar Files with Different Output Formats </term>
+    <listitem>
+     <para>&wip;</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+   <!--
+    dist-all                  Shortcut for running the subcommands 'validate'
                               'checklink' 'dist-xml' 'dist-html' 'dist' and
                               'color-pdf'
     dist-book                 Profiled XML sources of the book
@@ -129,6 +173,8 @@
  </sect1>
  <sect1 id="sec.daps.user.review.locdrop">
   <title>Packing Files for Translation</title>
-  <para>&wip;</para>
+  <para>If you have a huge documentation project of which only individual books 
+  or files are to be translated, you can mark the respective files as 
+  <literal>to be translated</literal> with &dm;.</para>
  </sect1>
 </chapter>
