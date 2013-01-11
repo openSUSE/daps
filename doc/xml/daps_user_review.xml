@@ -124,12 +124,14 @@
  <sect1 id="sec.daps.user.review.tarballs">
   <title>Creating Distributable Archives</title>
   <para>For handing over your files to review or translation, or for distributing
-  your output formats, &dapsacr; can automatically create tar files of the XML 
-  sources, various output formats and/or graphics. &dapsacr; uses <literal>bz2</literal> 
-  for high compression of the archives and keeps the directory structure when 
-  generating the tar files.</para>
-  <para>Find some example commands below. For more commands, run 
-  <command>daps --help</command>.</para>
+  your output formats in a convenient way, &dapsacr; can automatically create tar
+  files of the XML sources, various output formats and/or graphics. &dapsacr; 
+  uses <literal>bz2</literal> for high compression of the archives and keeps the
+  directory structure when generating the tar files.</para>
+  <para>If you have a huge documentation project of which only individual books 
+  or files are to be translated, you can mark the respective files as 
+  <literal>to be translated</literal> with &dm;.</para>
+  <para>Find some example commands below. </para>
   <variablelist>
    <varlistentry>
     <term>Creating a Graphics Tar File</term>
@@ -148,33 +150,38 @@
     </listitem>
    </varlistentry>
    <varlistentry>
+    <term>Creating a Tar File For Localization</term>
+    <listitem>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
+     <para>Use this command only if you manage your documentation project with
+     &dm; and have set the respective SVN properties to mark any files that are
+     to be localized. <remark>taroth 2013-01-11: add link to &dm; docs as soon as 
+     they are available</remark>
+     </para>
+     <para>The command is especially helpful if not all files in your documentation 
+     project need to be translated, but only a subset of them (for example, 
+     one of several books in a <sgmltag>set</sgmltag>). It generates 3 tar files:
+     one containing the graphics, one containing all XML files that need to
+     be localized, and one containing the remaining files of the set. The 
+     remaining files are needed for solving any cross-references between 
+     translated and untranslated content during generation of output.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term>Creating Tar Files with Different Output Formats </term>
     <listitem>
-     <para>&wip;</para>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
+     <para>Generates HTML output of the specified documentation project (including
+     HTML files, any graphics, and your CSS file defining the HTML layout) and 
+     packs the output into a tar file.</para>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
+     <para>Generates a single-file HTML output and packs the HTML file, any 
+     graphics, and your CSS file) into a tar file.</para>
     </listitem>
    </varlistentry>
   </variablelist>
-   <!--
-    dist-all                  Shortcut for running the subcommands 'validate'
-                              'checklink' 'dist-xml' 'dist-html' 'dist' and
-                              'color-pdf'
-    dist-book                 Profiled XML sources of the book
-    dist-graphics             Graphics (PNG, SVG) of the whole set
-    dist-graphics-png         PNG graphics of the whole set. SVG graphics are
-                              converted to PNG
-    dist-html                 HTML and graphics
-    dist-htmlsingle           Single-file HTML and graphics
-    dist-jsp                  JSP and graphics
-    dist-xml                  Profiled XML sources of the whole set. Identical
-                              to dist-book when using a book rather than a set.
-    locdrop                   Provide everything that is needed to translate a
-                              set-->
+  <para>For further options related to creating distributable archives with 
+  &dapsacr;, run <command>daps --help</command>.</para>
+ </sect1>
 
- </sect1>
- <sect1 id="sec.daps.user.review.locdrop">
-  <title>Packing Files for Translation</title>
-  <para>If you have a huge documentation project of which only individual books 
-  or files are to be translated, you can mark the respective files as 
-  <literal>to be translated</literal> with &dm;.</para>
- </sect1>
 </chapter>
