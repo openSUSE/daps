@@ -60,7 +60,7 @@
                                       and local-name(.) != 'qandaentry']"/>
 
   <xsl:if test="blockinfo/title|info/title|title">
-    <div class="qandadiv-title">
+    <div class="qandadiv-title-wrap">
         <xsl:apply-templates select="(blockinfo/title|info/title|title)[1]"/>
     </div>
   </xsl:if>
@@ -143,7 +143,7 @@
   </xsl:variable>
 
   <xsl:element name="h{string(number($qalevel)+1)}" namespace="http://www.w3.org/1999/xhtml">
-    <xsl:apply-templates select="." mode="class.attribute"/>
+    <xsl:attribute name="class">qandadiv-title</xsl:attribute>
     <xsl:call-template name="id.attribute">
       <xsl:with-param name="node" select=".."/>
       <xsl:with-param name="force" select="1"/>
@@ -155,6 +155,90 @@
     </xsl:if>
     <xsl:apply-templates/>
   </xsl:element>
+</xsl:template>
+
+<!-- ======================================================================= -->
+
+<xsl:template name="process.qanda.toc">
+  <ul class="qanda-toc">
+    <xsl:apply-templates select="qandadiv" mode="qandatoc.mode"/>
+    <xsl:apply-templates select="qandaset|qandaentry" mode="qandatoc.mode"/>
+  </ul>
+</xsl:template>
+
+<xsl:template match="qandadiv" mode="qandatoc.mode">
+  <li><xsl:apply-templates select="title" mode="qandatoc.mode"/>
+      <xsl:call-template name="process.qanda.toc"/>
+  </li>
+</xsl:template>
+
+<xsl:template match="question" mode="qandatoc.mode">
+  <xsl:variable name="firstch">
+    <!-- Use a titleabbrev or title if available -->
+    <xsl:choose>
+      <xsl:when test="../blockinfo/titleabbrev">
+        <xsl:apply-templates select="../blockinfo/titleabbrev[1]/node()"/>
+      </xsl:when>
+      <xsl:when test="../blockinfo/title">
+        <xsl:apply-templates select="../blockinfo/title[1]/node()"/>
+      </xsl:when>
+      <xsl:when test="../info/titleabbrev">
+        <xsl:apply-templates select="../info/titleabbrev[1]/node()"/>
+      </xsl:when>
+      <xsl:when test="../titleabbrev">
+        <xsl:apply-templates select="../titleabbrev[1]/node()"/>
+      </xsl:when>
+      <xsl:when test="../info/title">
+        <xsl:apply-templates select="../info/title[1]/node()"/>
+      </xsl:when>
+      <xsl:when test="../title">
+        <xsl:apply-templates select="../title[1]/node()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="(*[local-name(.)!='label'])[1]/node()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="deflabel">
+    <xsl:choose>
+      <xsl:when test="ancestor-or-self::*[@defaultlabel]">
+        <xsl:value-of select="(ancestor-or-self::*[@defaultlabel])[last()]                               /@defaultlabel"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$qanda.defaultlabel"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <li>
+    <xsl:apply-templates select="." mode="label.markup"/>
+    <xsl:if test="contains($deflabel,'number') and not(label)">
+      <xsl:apply-templates select="." mode="intralabel.punctuation"/>
+    </xsl:if>
+    <xsl:text> </xsl:text>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:call-template name="href.target">
+          <xsl:with-param name="object" select=".."/>
+        </xsl:call-template>
+      </xsl:attribute>
+      <xsl:value-of select="$firstch"/>
+    </a>
+    <!-- * include nested qandaset/qandaentry in TOC if user wants it -->
+    <xsl:if test="not($qanda.nested.in.toc = 0)">
+      <xsl:apply-templates select="following-sibling::answer" mode="qandatoc.mode"/>
+    </xsl:if>
+  </li>
+</xsl:template>
+
+<xsl:template match="answer" mode="qandatoc.mode">
+  <xsl:if test="descendant::question">
+    <ul>
+      <li>
+        <xsl:call-template name="process.qanda.toc"/>
+      </li>
+    </ul>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
