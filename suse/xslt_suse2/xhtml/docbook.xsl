@@ -17,8 +17,9 @@
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
 
-   Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Authors:    Thomas Schraitle <toms@opensuse.org>,
+               Stefan Knorr <sknorr@suse.de>
+   Copyright:  2012, 2013, Thomas Schraitle, Stefan Knorr
 
 -->
 
@@ -51,6 +52,7 @@
  <xsl:include href="html.xsl"/>
  <xsl:include href="admon.xsl"/>
  <xsl:include href="block.xsl"/>
+ <xsl:include href="qandaset.xsl"/>
  <xsl:include href="titlepage.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
  
