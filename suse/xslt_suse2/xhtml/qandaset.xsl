@@ -160,7 +160,10 @@
 <!-- ======================================================================= -->
 
 <xsl:template name="process.qanda.toc">
-  <ul class="qanda-toc">
+  <ul>
+    <xsl:if test="local-name(.) = 'qandaset'">
+      <xsl:attribute name="class">qanda-toc</xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates select="qandadiv" mode="qandatoc.mode"/>
     <xsl:apply-templates select="qandaset|qandaentry" mode="qandatoc.mode"/>
   </ul>
