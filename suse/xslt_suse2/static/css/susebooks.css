@@ -1808,14 +1808,14 @@ a:hover code, a:focus code, a:active code {
 }
 
 .table-title, .example-title, .procedure-title,
-.variablelist-title, #_content.itemizedlist-title {
+.variablelist-title, .itemizedlist-title, .qandadiv-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-.example-title, .procedure-title, .orderedlist-title {
+.example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
     margin: 24px 0 -33px;
 }
 
@@ -1952,6 +1952,18 @@ ul {
     display: block;
     color: #439539;
     list-style-type: disc;
+}
+
+.qanda-toc {
+    margin-bottom: 35px;
+}
+
+.qandaentry {
+    margin-bottom: 35px;
+}
+
+.answer .table-title, .answer .screen-wrap, .answer .variablelist {
+    margin-top: 10px;
 }
 
 li p {
