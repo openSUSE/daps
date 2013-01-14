@@ -10,122 +10,138 @@
 <chapter id="cha.daps.user.edit">
  <title>Editing DocBook XML</title>
  <abstract>
-  <para>This chapter describes:
-  <itemizedlist>
-   <listitem><para>how to choose an editor for editing DocBook XML files,</para>
+  <para>
+   This chapter describes:
+   <itemizedlist>
+    <listitem>
+     <para>
+      how to choose an editor for editing DocBook XML files,
+     </para>
     </listitem>
     <listitem>
-     <para>how to check the contents of your DocBook files for mistakes, and</para>
+     <para>
+      how to check the contents of your DocBook files for mistakes, and
+     </para>
     </listitem>
     <listitem>
-     <para>how to adapt your documentation to fit multiple similar product 
-     versions at once</para>
+     <para>
+      how to adapt your documentation to fit multiple similar product
+      versions at once
+     </para>
     </listitem>
    </itemizedlist>
   </para>
  </abstract>
-
- <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
+<!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
   be a great idea-->
- <!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
+<!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
   tips/instructions for individual editors?-->
  <sect1 id="sec.daps.user.edit.basics">
   <title>Basic Structural Elements</title>
   &db-structure-elements;
  </sect1>
-
  <sect1>
   <title>Choice of Editor</title>
  &daps-editor;
  <para>
    XML elements can be nested deeply. Constructs like
    <sgmltag>variablelist</sgmltag>, <sgmltag>table</sgmltag> or
-   <sgmltag>image</sgmltag> often have a lot of child elements&mdash;some of them
-   required, some optional. If you have an editor with schema support, it will 
-   tell you which elements are allowed at the current cursor position, but 
-   nevertheless it is cumbersome if you need to insert the child elements of 
-   complex XML constructs consecutively.</para>
+   <sgmltag>image</sgmltag> often have a lot of child elements&mdash;some of
+   them required, some optional. If you have an editor with schema support,
+   it will tell you which elements are allowed at the current cursor
+   position, but nevertheless it is cumbersome if you need to insert the
+   child elements of complex XML constructs consecutively.
+  </para>
 
   <para>
    Most editors allow you to define or record macros which you can use for
    automatically inserting empty <quote>skeletons</quote> for a complex XML
-   construct. For Emacs, &dapsacr; already includes macros for adding DocBook
-   elements. For details, refer to 
-   <xref linkend="sec.daps.user.editors.emacs.macros"/>. </para>
+   construct. For Emacs, &dapsacr; already includes macros for adding
+   DocBook elements. For details, refer to
+   <xref linkend="sec.daps.user.editors.emacs.macros"/>.
+  </para>
  </sect1>
-
  <sect1 id="sec.daps.user.edit.spell">
   <title>Spell Checking</title>
 
-  <para>&dapsacr; comes with a spell checker that is optimized for DocBook
-  documents: Tags and attributes are excluded from the check so that you can
-  focus on the content of the document. The spell checker is based on &aspell;
-  and can be run from the command line. By default, it starts in interactive
-  mode, but you can also run it in <quote>batch</quote> mode where it dumps 
-  a sorted list of misspelled words to standard output. &dapsacr; also allows 
-  you to specify a custom dictionary and the language to use for spelling.
+  <para>
+   &dapsacr; comes with a spell checker that is optimized for DocBook
+   documents: Tags and attributes are excluded from the check so that you
+   can focus on the content of the document. The spell checker is based on
+   &aspell; and can be run from the command line. By default, it starts in
+   interactive mode, but you can also run it in <quote>batch</quote> mode
+   where it dumps a sorted list of misspelled words to standard output.
+   &dapsacr; also allows you to specify a custom dictionary and the language
+   to use for spelling.
   </para>
+
   <para>
    In the following, find some examples on how to spell check with
    &dapsacr;. All options discussed below can be combined with each other,
    except for <option>--file</option> and <option>--rootid</option> which
    exclude each other.
   </para>
+
   <note>
-   <title>
-    <command>spellcheck</command> Options and XIncludes</title>
-   <para>All options discussed below can be combined with each other,
-   except for <option>--file</option> and <option>--rootid</option> which
-   exclude each other.</para>
-   <para>The <command>spellcheck</command> command always follows 
-   <sgmltag>xi:includes</sgmltag>, even when using the <option>--file</option>
-   option.
+   <title><command>spellcheck</command> Options and XIncludes</title>
+   <para>
+    All options discussed below can be combined with each other, except for
+    <option>--file</option> and <option>--rootid</option> which exclude each
+    other.
+   </para>
+   <para>
+    The <command>spellcheck</command> command always follows
+    <sgmltag>xi:includes</sgmltag>, even when using the
+    <option>--file</option> option.
    </para>
   </note>
+
   <variablelist>
    <varlistentry>
     <term>Spell Checking Files in a Documentation Project</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
      <para>
       Spell checks all files in the documentation project with the default
-      dictionary (<literal>en_US</literal>). One by one, the files are opened
-      in interactive mode and checked with &aspell;. To abort spell checking
-      of the current file, press <keycap>X</keycap>. The spell check continues
-      with the next file in the project.
+      dictionary (<literal>en_US</literal>). One by one, the files are
+      opened in interactive mode and checked with &aspell;. To abort spell
+      checking of the current file, press <keycap>X</keycap>. The spell
+      check continues with the next file in the project.
      </para>
      <para>
-      Uses the ROOTID defined in the specified &dc; file as starting point. You
-      can restrict the spell check to parts of the set, such as a
+      Uses the ROOTID defined in the specified &dc; file as starting point.
+      You can restrict the spell check to parts of the set, such as a
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
       <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element. To do
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking a Single XML File</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
-     <para>Checks the specified file with the default dictionary. Suggests
-     alternative spellings for each misspelled word and waits for user
-     interaction.</para>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
+     <para>
+      Checks the specified file with the default dictionary. Suggests
+      alternative spellings for each misspelled word and waits for user
+      interaction.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking XML Files in Languages Other than English</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with the dictionary
       for <replaceable>LANG</replaceable> (make sure the specified &aspell;
       dictionary is installed). Suggests alternative spellings for each
-      misspelled word and waits for user interaction. The language code used for
-      the <option>--lang</option> option is the same that is used for
+      misspelled word and waits for user interaction. The language code used
+      for the <option>--lang</option> option is the same that is used for
       the <envar>LANG</envar> environment variable and matches the directory
       names in <filename>/usr/share/locale</filename>.
      </para>
@@ -134,19 +150,21 @@
    <varlistentry>
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
-     <para>Checks the specified documentation project or file. Returns a list
-     of misspelled words to standard output. You can use the
-     <option>--list</option> option to easily collect a list of words that are
-     unknown to &aspell; and use this output as basis for a custom &aspell;
-     word list or dictionary.</para>
+     <para>
+      Checks the specified documentation project or file. Returns a list of
+      misspelled words to standard output. You can use the
+      <option>--list</option> option to easily collect a list of words that
+      are unknown to &aspell; and use this output as basis for a custom
+      &aspell; word list or dictionary.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified the specified documentation project or file with
@@ -157,35 +175,36 @@
    </varlistentry>
   </variablelist>
 
-
-
   <para>
    For your convenience, you can integrate &daps-spell; (plus a custom
    &aspell; dictionary, if needed) into your XML editor, so that spelling is
    checked <quote>on the fly</quote> during editing. Consult your editor's
-   documentation on how to integrate a custom dictionary. If you use &jedit;,
-   proceed as outlined in <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
+   documentation on how to integrate a custom dictionary. If you use
+   &jedit;, proceed as outlined in
+   <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
   </para>
- 
-
  </sect1>
  <sect1 id="sec.daps.user.edit.chklink">
   <title>Checking Links to Web Pages</title>
+
   <para>
-   To make sure that all external links (such as http, https and ftp links) in
-   your XML sources are valid (and do not give a <literal>404</literal> error
-   or similar), &dapsacr; also includes a link checker (based on
-   <literal>checkbot</literal>, see <command>man 1 checkbot</command> for more
-   information).  It searches for the <sgmltag class="attribute">url</sgmltag>
-   attribute in <sgmltag>ulink</sgmltag> elements and checks links included
-   there.  Use it to create a report of all links that caused some kind of
-   warning or error.</para>
+   To make sure that all external links (such as http, https and ftp links)
+   in your XML sources are valid (and do not give a <literal>404</literal>
+   error or similar), &dapsacr; also includes a link checker (based on
+   <literal>checkbot</literal>, see <command>man 1 checkbot</command> for
+   more information). It searches for the
+   <sgmltag class="attribute">url</sgmltag> attribute in
+   <sgmltag>ulink</sgmltag> elements and checks links included there. Use it
+   to create a report of all links that caused some kind of warning or
+   error.
+  </para>
+
   <note>
-   <title>
-    <command>checklink</command> follows XIncludes</title>
+   <title><command>checklink</command> follows XIncludes</title>
    <para>
-    The <command>checklink</command> command always follows <sgmltag>xi:includes</sgmltag>, even
-    when using the <option>--file</option> option.
+    The <command>checklink</command> command always follows
+    <sgmltag>xi:includes</sgmltag>, even when using the
+    <option>--file</option> option.
    </para>
   </note>
 
@@ -193,44 +212,44 @@
    <varlistentry>
     <term>Checking Links in a Documentation Project</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
      <para>
       Uses the ROOTID defined in the specified &dc; file as starting point.
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
       the documentation project. The resulting HTML report
-      <filename>*checkbot-localhost.html</filename> can be opened in a browser,
-      see <xref linkend="fig.daps.user.edit.chklink"/>.
+      <filename>*checkbot-localhost.html</filename> can be opened in a
+      browser, see <xref linkend="fig.daps.user.edit.chklink"/>.
      </para>
      <para>
-      If your &dc; file references a documentation <sgmltag>set</sgmltag>, you
-      probably do not want to check all files belonging to the set. You can
-      restrict the check to parts of the set, such as a
+      If your &dc; file references a documentation <sgmltag>set</sgmltag>,
+      you probably do not want to check all files belonging to the set. You
+      can restrict the check to parts of the set, such as a
       <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
       <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
       <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element. To do
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Checking Links in a Single XML File</term>
     <listitem>
-     <screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
+<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
       Checks the <sgmltag>ulink</sgmltag> elements in the specified file. At
-      the end of the check, &dapsacr; returns an HTML file with a list of all
-      links which caused some kind of warning or error. Open the resulting
-      <filename>checkbot-localhost.html</filename> file in a browser.</para>
+      the end of the check, &dapsacr; returns an HTML file with a list of
+      all links which caused some kind of warning or error. Open the
+      resulting <filename>checkbot-localhost.html</filename> file in a
+      browser.
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
 
-
   <figure id="fig.daps.user.edit.chklink">
-   <title>Example Output of <command>daps checklink</command>
-   </title>
+   <title>Example Output of <command>daps checklink</command></title>
    <mediaobject>
     <imageobject role="fo">
      <imagedata fileref="daps_chklink_report.png" width="90%"/>
@@ -244,34 +263,34 @@
   <tip>
    <title>Opening the Link Check Report</title>
    <para>
-    To directly open the link check report, use the &dapsacr; command
-    output as an argument for a browser, e.g. the command-line Web browser
-    w3m:
+    To directly open the link check report, use the &dapsacr; command output
+    as an argument for a browser, e.g. the command-line Web browser w3m:
    </para>
-   <screen>w3m -dump $(daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
+<screen>w3m -dump $(daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
   </tip>
  </sect1>
  <sect1 id="sec.daps.user.edit.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
   &db-profiling-intro;
   &db-profiling; 
-  <para>For details, refer to <xref linkend="sec.daps.user.modular.profile"/>.</para>
+  <para>
+   For details, refer to <xref linkend="sec.daps.user.modular.profile"/>.
+  </para>
  </sect1>
-  
-
-
-
-
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
+
   <para>
    For a complete DocBook reference see
    <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"><citetitle>&tdg;</citetitle>
    </ulink>.
   </para>
-  <para>Useful tips and tricks around using DocBook and the DocBook stylesheets
-   can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook 
-   Developers and Writers</citetitle>, available at 
-   <ulink url="http://doccookbook.sourceforge.net/"></ulink>.</para>
+
+  <para>
+   Useful tips and tricks around using DocBook and the DocBook stylesheets
+   can be found in <citetitle>The DoCookBook&mdash;Recipies for DocBook
+   Developers and Writers</citetitle>, available at
+   <ulink url="http://doccookbook.sourceforge.net/"></ulink>.
+  </para>
  </sect1>
 </chapter>
