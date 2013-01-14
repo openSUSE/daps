@@ -143,7 +143,7 @@ TMP_XML := $(TMP_DIR)/$(TMP_BOOK_NODRAFT).xml
 
 # HTML / HTML-SINGLE
 #
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),html html-dir-name dist-html))
+ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),html html-dir-name dist-html package-html))
   HTML_DIR := $(RESULT_DIR)/html/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
 else
   HTML_DIR := $(RESULT_DIR)/htmlsingle/$(BOOK)$(REMARK_STR)$(COMMENT_STR)$(DRAFT_STR)
