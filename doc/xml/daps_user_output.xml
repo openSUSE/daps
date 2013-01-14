@@ -105,6 +105,7 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
  </sect1>
  <sect1 id="sec.daps.user.output.validate">
   <title>Validating Your XML Sources</title>
+
   <para>
    Validating XML files within in a book or set often exceeds validation of
    the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
@@ -114,7 +115,7 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
    However, &dapsacr; can handle all those cases due to the built-in xmllint
    validator.
   </para>
-  
+
   <procedure>
    <title>Validating XML Files</title>
    <para>
@@ -136,7 +137,7 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
     <para>
      To validate all XML files in your book, article or set, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
     <para>
      If the XML files are not valid, &dapsacr; will return the parser
      errors. They include information about the type of error, the
@@ -146,26 +147,26 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
     </para>
     <para>
      If validation was successful, &dapsacr; returns: <literal>All files are
-      valid.</literal>
+     valid.</literal>
     </para>
    </step>
    <step>
     <para>
      To validate your files including remarks, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
    </step>
    <step>
     <para>
      To validate your files including XML comments, enter:
     </para>
-    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
+<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
    </step>
   </procedure>
-  
+
   <example>
    <title>Parser Output For Validation Errors</title>
-   <screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
+<screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
     Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
     make: *** [validate] Error 3
    </screen>
