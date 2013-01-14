@@ -261,7 +261,8 @@ html, body {
     background-position: 0px 0px;
 }
 
-#_header .book-icon:hover, #_header .book-icon:focus, #_header .book-icon:active {
+#_header a:hover .book-icon, #_header a:focus .book-icon,
+#_header a:active .book-icon {
     background-position: 0px -36px;
 }
 
@@ -276,7 +277,8 @@ html, body {
     width: 18px;
 }
 
-#_fixed-header .book-icon:hover, #_fixed-header .book-icon:focus, #_fixed-header .book-icon:active {
+#_fixed-header a:hover .book-icon, #_fixed-header a:focus .book-icon,
+#_fixed-header a:active .book-icon {
     background-position: -18px -72px;
 }
 
@@ -802,7 +804,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_fixed-header div.button {
-    margin-left: 10px;;
+    margin-left: 10px;
 }
 
 #_fixed-header .buttons .tool-spacer {
@@ -816,6 +818,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_fixed-header .prev-icon, #_fixed-header .next-icon {
     width: 18px;
+    margin: 1px 0;
     display: block;
 }
 
@@ -902,7 +905,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     display: block;
     float: left;
     color: #333;
-    overflow: ellipsis;
+    text-overflow: ellipsis;
     height: 36px;
 }
 
@@ -1208,7 +1211,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .sect3 .title, .single .sect3 .title,
-.refentry h2, h2, .indexdiv h3 {
+.qandaset .title, .refentry h2, h2, .indexdiv h3 {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
@@ -1216,7 +1219,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .sect4 .title, .single .sect4 .title,
-.sect5 .title, .single .sect5 .title {
+.sect5 .title, .single .sect5 .title, .question {
     font-size: 16px;
     padding: 53px 0 0;
     margin: 0 0 -33px;
@@ -1226,7 +1229,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-align: left;
 }
 
-.sect4 .title {
+.sect4 .title, .question {
     font-weight: 600;
 }
 
@@ -1234,7 +1237,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     font-weight: normal;
 }
 
-.name, .refentry h2, .refentrytitle a, h2, .indexdiv h3 {
+.name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
+.question p {
     color: #439539;
 }
 
@@ -1477,24 +1481,20 @@ p, .simplelist td {
 }
 
 .ulink, .link, .xref, .email, .glosssee,
-.glossseealso, .indexterm {
+.glossseealso, .indexterm, .qanda-toc a {
     color: #439539;
     text-decoration: none;
 }
 
-.title .xref, .subtitle .xref, .table-title .xref,
-.example-title .xref, .figure-title .xref,
-.procedure-title .xref, .orderedlist-title .xref,
-.itemizedlist-title .xref, .variablelist-title .xref,
-.title .link, .subtitle .link, .table-title .link,
-.example-title .link, .figure-title .link,
-.procedure-title .link, .orderedlist-title .link,
-.itemizedlist-title .link, .variablelist-title .link,
-.title .ulink, .subtitle .ulink,
-.table-title .ulink, .example-title .ulink,
-.figure-title .ulink, .procedure-title .ulink,
-.orderedlist-title .ulink, .itemizedlist-title .ulink,
-.variablelist-title .ulink {
+.title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
+.figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
+.itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
+.title .link, .subtitle .link, .table-title .link, .example-title .link,
+.figure-title .link, .procedure-title .link, .orderedlist-title .link, 
+.itemizedlist-title .link, .variablelist-title .link, .qandadiv-title .link,
+.title .ulink, .subtitle .ulink, .table-title .ulink, .example-title .ulink,
+.figure-title .ulink, .procedure-title .ulink, .orderedlist-title .ulink,
+.itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
     text-decoration: underline;
 }
 
@@ -1511,7 +1511,9 @@ p, .simplelist td {
 .glossseealso:hover, .glossseealso:focus, .glossseealso:active,
 .glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
 .indexterm:hover, .indexterm:focus, .indexterm:active,
-.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active  {
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active,
+.qanda-toc a:hover, .qanda-toc a:focus, .qanda-toc a:active,
+.qanda-toc a:visited:hover, .qanda-toc a:visited:focus, .qanda-toc a:visited:active {
     color: #439539;
     text-decoration: underline;
 }
@@ -1530,7 +1532,8 @@ p, .simplelist td {
 .procedure-title .xref:hover, .procedure-title .xref:focus, .procedure-title .xref:active,
 .orderedlist-title .xref:hover, .orderedlist-title .xref:focus, .orderedlist-title .xref:active,
 .itemizedlist-title .xref:hover, .itemizedlist-title .xref:focus, .itemizedlist-title .xref:active,
-.variablelist-title .xref:hover, .variablelist-title .xref:focus, .variablelist-title .xref:active {
+.variablelist-title .xref:hover, .variablelist-title .xref:focus, .variablelist-title .xref:active,
+.qandadiv-title .xref:hover, .qandadiv-title .xref:focus, .qandadiv-title .xref:active {
     color: #439539;
     text-decoration: none;
 }
@@ -1675,8 +1678,8 @@ code {
 }
 
 
-.variablelist dd, .glossary dd, .toc dd,
-.indexdiv dd {
+.variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
+.indexdiv dd, .answer {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
@@ -1798,7 +1801,7 @@ a:hover code, a:focus code, a:active code {
 
 .procedure-title, .table-title, .example-title,
 .figure-title, .orderedlist-title, .variablelist-title,
-.itemizedlist-title {
+.itemizedlist-title, .qandadiv-title {
     font-size: 14px;
     font-weight: normal;
     text-transform: uppercase;
