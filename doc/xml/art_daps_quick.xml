@@ -787,28 +787,14 @@ make: *** [validate] Error 3</screen>
      in the output with the <option>--remarks</option> option:
     </para>
    <screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
-   <para>When generating PDFs with FOP, the contents of the remark elements 
-     is shown in italics within the text. XEP supports conversion of remark 
-     elements into PDF annotations. This feature is enabled in &dapsacr; by
-     default, but if you want XEP to treat remark elements like FOP does, you
-     can change the respective &dapsacr; parameter.<remark>taroth 2012-10-16:
-     todo - add link as soon as this is covered in &dapsuser;</remark>
-     Enabling remarks automatically turns draft mode on.
-    </para>
-   <note>
-    <title>Output with Remarks or Draft Watermark</title>
-    <para>
-      The command options <option>--draft</option> option and
-      <option>--remarks</option> are supported for HTML, HTML-single, PDF and
-      &epub;, but not for all &dapsacr; output formats.
-     </para>
-   </note>
-   <para>
-     By default, &dapsacr; adds a string to the base name of the output file
-     to flag output formats generated with special options. Example file
-     names are <filename>daps-example_draft_en.pdf</filename> or
-     <filename>daps-example_remarks_draft_en.pdf</filename>.
-    </para>
+      &daps-output-remarks;
+   <para>If metadata to a file has been set<remark>taroth 2013-01-08: which 
+     metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
+     &dapsacr; can also include the metadata for each file in the output
+     format:</para>
+      <screen>$ daps -d &dc;-daps-example color-pdf --meta</screen>
+   
+   &daps-note-output-adv;
   </sect3>
  </sect2>
 </sect1>

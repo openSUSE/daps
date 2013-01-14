@@ -25,24 +25,32 @@
   <para>
    &dapsacr; offers a number of features to simplify review and
    translation processes. For example, you can insert
-   <sgmltag>remark</sgmltag> elements in the source code and generate an
+   <sgmltag>remark</sgmltag> elements in the source code (for
+   editorial remarks or questions to the proofreader) and generate an
    output format that either includes or suppresses these remarks. You
    can also generate preview versions of your documentation with a
    <literal>DRAFT</literal> watermark appearing on the HTML or PDF
    output.</para>
   <para>If you use &dm; in addition to &dapsacr;, you can
-      <quote>flag</quote> your XML files with meta-information (like
-      workflow status). &dapsacr; offers an option to also display this
-      meta-information in the generated output. 
+   <quote>flag</quote> your XML files with meta-information (like
+   workflow status). &dapsacr; offers an option to also display this
+   meta-information in the generated output. 
   </para>
   <note>
-   <title>Availability of Special Options and Draft Mode</title>
-   <para>The special options are not supported for all output formats:
-      <option>--draft</option> and <option>--remarks</option> are only available
-      in HTML, HTML-single, PDF, and &epub; output. <remark>taroth 2013-01-08:
-      fs, toms: is the following correct?</remark>The option 
-      <option>--meta</option> is only available in HTML, HTML-single, and PDF.  
-     </para>
+   <title>Availability of Advanced Output Options</title>
+   <para>Advanced output options are only supported for selected formats:</para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <option>--meta</option>: <remark>taroth 2013-01-08:fs, toms: is the 
+      following correct?</remark>Only available in HTML, HTML-single, and PDF.</para>
+    </listitem>
+    <listitem>
+     <para>
+      <option>--draft</option> and <option>--remarks</option>:
+     Only available in HTML, HTML-single, PDF, and &epub; output. </para>
+    </listitem>
+   </itemizedlist>
    <para>Using the <option>--remarks</option> and <option>--meta</option> options
       automatically turns draft mode on.</para>
    <para>By default, &dapsacr; adds a string to the base name of the output file
@@ -56,15 +64,7 @@
     <term>Including Remarks in the Output</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
-     <para>When generating PDFs with FOP, the contents of the remark elements 
-     is shown in italics within the text. XEP supports conversion of remark 
-     elements into PDF annotations. This feature is enabled in &dapsacr; by
-     default, but if you want XEP to treat remark elements like FOP does, you
-     can change the respective &dapsacr; parameter.<remark>taroth 2012-10-16:
-     todo - add link as soon as this is covered in &dapsuser;</remark> In HTML, 
-     HTML-single and &epub; output, the contents of the remark elements is shown 
-     in red within the text.
-    </para>
+     &daps-output-remarks;
     </listitem>
    </varlistentry>
    <varlistentry>
