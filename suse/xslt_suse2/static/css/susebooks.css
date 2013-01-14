@@ -1444,33 +1444,33 @@ p, .simplelist td {
     margin: 10px 0 0;
 }
 
-.abstract {
+.abstract, .highlights {
     margin: 24px 0 0;
     font-size: 18px;
     line-height: 140%;
 }
 
-.abstract p, .toc-title {
+.abstract p, .highlights p, .toc-title {
     color: #333;
 }
 
-.abstract p:first-child {
+.abstract p:first-child, .highlights p:first-child {
     margin-top: 0;
 }
 
-.abstract .titlepage {
+.abstract .titlepage, .highlights .titlepage {
     display: none;
 }
 
-.abstract .titlepage + p {
+.abstract .titlepage + p, .highlights .titlepage + p {
     margin-top: 0;
 }
 
-.abstract li:first-child p:first-child {
+.abstract li:first-child p:first-child, .highlights li:first-child p:first-child {
     margin-top: 0;
 }
 
-.abstract + .authorgroup {
+.abstract + .authorgroup, .highlights + .authorgroup {
     margin: 10px 0;
 }
 
@@ -1970,6 +1970,15 @@ div.itemizedlist {
     font-size: 20px;
     font-style: italic;
     color: #666;
+}
+
+.blockquote p {
+    font-style: italic;
+    color: #333;
+}
+
+div.blockquote {
+    margin: 17px 35px;
 }
 
 
