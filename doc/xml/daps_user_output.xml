@@ -6,29 +6,89 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [<!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
-]>
-<!--taroth 2012-05-04: todo:  mention setting the MAIN as command line option, 
+]><!--taroth 2012-05-04: todo:  mention setting the MAIN as command line option, 
 see daps_user_concept.xml, ID sec.daps.user.basics.single-->
 <chapter id="cha.daps.user.output">
  <title>Generating Output Formats</title>
  <abstract>
   <para>
    &dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. Generating
-   any output requires that your XML files are well-formed and can also be
-   validated. You can build several output formats in parallel, build your
+   <quote>exotic</quote> formats like man pages or simple text. You can build several output formats in parallel, build your
    complete documentation project (set, book, or article) or only a part of
-   it (for example, a specific chapter). If you want the output format to
-   contain meta-data about the XML files (for example, file name or workflow
-   status), to include <sgmltag>remark</sgmltag> elements or to be marked as
-   a <literal>draft</literal> version, you can tell &dapsacr; to do so by
-   specifying options on the command line. By default, &dapsacr; uses the
+   it (for example, a specific chapter). By default, &dapsacr; uses the
    regular DocBook stylesheets, but &dapsacr; also allows you to customize
    your output formats in a very flexible way.
-   <remark>taroth 2012-03-19: add xref to
-  advanced chapter</remark>
+   <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
   </para>
  </abstract>
+ <!--taroth 2013-01-14: rephrase to this pattern:<abstract>
+  <para>
+   This chapter describes:
+   <itemizedlist>
+    <listitem>
+     <para></para>
+    </listitem>
+    <listitem>
+     <para></para>
+    </listitem>
+    <listitem>
+     <para></para>
+    </listitem>
+   </itemizedlist>
+  </para>
+ </abstract>-->
+ <sect1 id="sec.daps.user.output.validate">
+ <title>Validating Your XML Sources</title>
+  &daps-validation-basics;
+  <para>Validating XML files within a book or set often exceeds validation of 
+  the current XML file, as links (<sgmltag>xref</sgmltag> elements) or 
+  XIncludes need to be resolved, too. 
+   If you use conditional text (<literal>profiling</literal>) in your DocBook
+   sources (for details, refer to <xref linkend="sec.daps.user.modular.profile"/>),
+   your XML editor cannot check validity of your XML files.</para>
+ <para>However, &dapsacr; can handle all those cases due to the built-in 
+   xmllint validator. By default, <sgmltag>remark</sgmltag> elements and XML 
+   comments are ignored during validation. However, if you intend to create a 
+   (draft) output including remarks or comments, you need to include them for
+    validation by specifying the respective &dapsacr; option.</para>
+
+ <para>
+    To validate all files that belong to your documentation project,
+    &dapsacr; only needs to know which &dc; file to use. If you have
+    specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
+    &dapsconf-user; (or if your documentation directory contains only one
+    &dc; file), &dapsacr; automatically uses the corresponding &dc; file.
+    Otherwise, specify the path to the &dc; file as described below.
+   </para>
+
+ <variablelist>
+  <varlistentry>
+   <term>Validating All XML Files in Your Book, Article or Set</term>
+   <listitem>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+    <para>If the XML files are not valid, &dapsacr; will return the parser
+     errors: </para>
+    &daps-example-validation-error; 
+        <para>If validation was successful, &dapsacr; returns: <literal>All files are
+     valid.</literal>
+    </para>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Validating Your Files Including Remarks</term>
+   <listitem>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Validating Your Files Including XML Comments</term>
+   <listitem>
+    <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</sect1>
+
  <sect1 id="cha.daps.user.output.formats">
   <title>Supported Output Formats</title>
 
@@ -97,79 +157,293 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
   </para>
  </sect1>
  <sect1 id="cha.daps.user.output.syntax">
-  <title>Basic Syntax</title>
-
+  <title>Basic Syntax for Generating Output</title>
   <para>
-   &wip;
-  </para>
+    Independent of the individual output format you want to create, you need
+    to specify the &dc; file to use:
+   </para>
+  <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
+  <para>
+    For example:
+   </para>
+  <screen>$ <command>daps -d &dc;-daps-example color-pdf</command>
+  </screen>
+  <para>
+    At the end of the transformation process, &dapsacr; shows a message
+    where to find the generated output.
+   </para>
  </sect1>
- <sect1 id="sec.daps.user.output.validate">
-  <title>Validating Your XML Sources</title>
 
-  <para>
-   Validating XML files within in a book or set often exceeds validation of
-   the current XML file, as links (<sgmltag>xref</sgmltag> elements) or
-   XIncludes need to be resolved, too. If you use conditional text
-   (<literal>profiling</literal>) in your XML sources (for creating
-   variants), your XML editor cannot check validity of your XML files.
-   However, &dapsacr; can handle all those cases due to the built-in xmllint
-   validator.
-  </para>
-
-  <procedure>
-   <title>Validating XML Files</title>
-   <para>
-    To validate all files that belong to your documentation project,
-    &dapsacr; only needs to know which &dclong; file to use. If you have
-    specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
-    &dapsconf-user; or if your documentation directory contains only one
-    &dc; file, &dapsacr; automatically uses the corresponding &dc; file.
-    Otherwise, specify the path to the &dc; file with the
-    <option>-d</option> option as described below.
-   </para>
-   <para>
-    By default, <sgmltag>remark</sgmltag> elements and XML comments are
-    ignored during validation. However, if you intend to create a (draft)
-    output including remarks or comments, you need to include them for
-    validation by specifying the respective &dapsacr; option.
-   </para>
-   <step>
-    <para>
-     To validate all XML files in your book, article or set, enter:
-    </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
-    <para>
-     If the XML files are not valid, &dapsacr; will return the parser
-     errors. They include information about the type of error, the
-     respective file name and the line number where the error occurred. In
-     addition, &dapsacr; shows the path to the profiled XML sources and the
-     total number of errors.
-    </para>
-    <para>
-     If validation was successful, &dapsacr; returns: <literal>All files are
-     valid.</literal>
-    </para>
-   </step>
-   <step>
-    <para>
-     To validate your files including remarks, enter:
-    </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
-   </step>
-   <step>
-    <para>
-     To validate your files including XML comments, enter:
-    </para>
-<screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate -comments</screen>
-   </step>
-  </procedure>
-
-  <example>
-   <title>Parser Output For Validation Errors</title>
-<screen>daps_user_concept.xml:60: element xref: validity error : IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
-    Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/MAIN.DAPS.xml does not validate
-    make: *** [validate] Error 3
-   </screen>
-  </example>
+ <sect1 id="sec.daps.user.output.formats">
+  <title>Supported Output Formats</title>
+  <para>&dapsacr; supports a number of different output formats, including also
+   <quote>exotic</quote> formats like man pages or simple text. 
+   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
+   gives an overview of the &dapsacr; subcommands for generating output 
+   formats.</para>
+  <table id="table.daps.user.output.overview">
+   <title>&dapsacr; Output Commands and Formats</title>
+   <tgroup cols="3">
+    <colspec colnum="1" colname="1" colwidth="18*"/>
+    <colspec colnum="2" colname="2" colwidth="41*"/>
+    <colspec colnum="3" colname="3" colwidth="41*"/>
+    <thead>
+     <row>
+      <entry>
+       <para>
+         Subcommand
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Output
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Note
+        </para>
+      </entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>
+       <para>
+         color-pdf
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a color PDF (without any crop marks). Open the result in a
+         PDF viewer.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Requires an FO formatter.
+<!--It is also possible to create one PDF 
+        containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
+        for large documentation projects you might run into problems with the
+         java memory stack.--></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         pdf
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a black-and-white PDF with crop marks, suitable for
+         hand-off to a printing shop. Open the result in a PDF viewer.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Requires an FO formatter. Creation of crop marks is currently only
+         supported by the XEP FO formatter. All color images are
+         automatically converted to grayscale images.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         html
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a subdirectory containing individual HTML files for all
+         chapters of a book (including also preface, glossary or appendix
+         files).
+<!--They are named according to the ID of the
+         respective root element.-->
+         Open the generated <filename>index.html</filename> file in a Web
+         browser to view the generated HTML from the starting point (ROOTID
+         of the top-level element).
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Images and CSS files are only linked in the resulting directory
+         that contains the HTML files. To copy these files to the same
+         location like the HTML files, use the <option>--static</option>
+         option. This is useful for creating distributable HTML builds.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         html-single
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a single HTML file, named after the &dc; file used to
+         create the output. Open the generated <filename>*.html</filename>
+         file in a Web browser.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Single HTML files are more convenient for full text searches.
+         Images and CSS files are only linked in the resulting directory
+         that contains the HTML files. To copy these files to the same
+         location like the HTML files, use the <option>--static</option>
+         option. This is useful for creating distributable HTML builds.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         epub
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates an &epub; document. Open the result in an portable e-book
+         reader (or with a software like Calibre).
+        </para>
+      </entry>
+      <entry>
+       <para>
+        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
+        conversion of articles to epub?</remark>
+        <remark>toms, 2012-04-15: This seems to be an issue with the
+           current DocBook stylesheets. Need to check this.</remark>
+       </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         webhelp
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a DocBook &webh; output. Open the generated
+         <filename>index.html</filename> file in a Web browser to view the
+         generated HTML from the starting point (ROOTID of the top-level
+         element).
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Experimental feature. Requires a very recent version of the DocBook
+         stylesheets. DocBook &webh; consists of HTML pages with an
+         additional pane, featuring a table of contents and a search
+         function. The table of contents can be expanded and collapsed and
+         is automatically synchronized with the contents pane. The search
+         function weights the search results so that the most relevant
+         results are listed first.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         txt
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates an ASCII text output. Open the result in a text editor.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         All images are removed from the output, but their location is
+         indicated in the text by the respective image base name printed in
+         square brackets. A table of contents is automatically generated and
+         is available at the beginning of the text document.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         man
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates one or multiple man pages.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         To create man pages, your XML files must contain at least one
+         <sgmltag>refentry</sgmltag>&mdash;be it in a
+         <sgmltag>chapter</sgmltag>, <sgmltag>appendix</sgmltag>, or
+         collected in a <sgmltag>reference</sgmltag> element. When
+         processing a DocBook document with multiple
+         <sgmltag>refentry</sgmltag> elements (regardless where they
+         appear), &dapsacr; generates one man page file per
+         <sgmltag>refentry</sgmltag> element. All other parts of the
+         document will be ignored.
+        </para>
+<!--taroth 2012-04-11: additional
+        information to be covered in User Guide: The filename for each man
+        page is generated from refentry content elements. The filename prefix
+        is the refname, and the suffix is the manvolnum from within the
+        refmeta element. If you are processing many refentrys from the same
+        document, make sure they will all produce unique filenames, or else
+        any duplicates will overwrite each other.-->
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         jsp
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates Java Server Pages (JSP files). The generated
+         <filename>jsp</filename> subdirectory contains individual JSP files
+         for all chapters of a book (including also preface, glossary or
+         appendix files).
+<!--They are named according to the ID of the respective 
+       root element.-->
+       </para>
+      </entry>
+      <entry>
+       <para>
+         A JSP file is an HTML page containing a reference to Java servlets
+         or Java Server Side Applets.
+        </para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       <para>
+         wiki
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Creates a MediaWiki output in a single file. Open the result in a
+         text or MediaWiki editor, and use it as raw input for a MediaWiki
+         article.
+        </para>
+      </entry>
+      <entry>
+       <para>
+         Experimental feature. The output is very basic: Section titles are
+         converted in headlines according to their hierarchy, itemized
+         lists, ordered lists and <sgmltag>screen</sgmltag> elements are
+         converted to the respective MediaWiki elements.
+        </para>
+      </entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </table>
  </sect1>
 </chapter>

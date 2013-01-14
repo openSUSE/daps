@@ -289,24 +289,10 @@
  </sect1>
  <sect1 id="sec.daps.quick.validate">
   <title>Validation</title>
-  <para>
-    Generating any output requires that your XML files are well-formed and
-    can be validated. As soon as any output command is executed, &dapsacr;
-    automatically runs a validation check first. If it fails, &dapsacr;
-    returns the parser errors, including information about the type of
-    error, the respective file name and the line number where the error
-    occurred.
-<!-- In addition, &dapsacr; shows the path to the profiled XML
-    sources and the total number of errors. --></para>
-  <example>
-   <title>Parser Output For Validation Errors (link to unknown ID)</title>
-   <screen>daps_user_concept.xml:60: element xref: validity error: 
-IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
-Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
-MAIN.DAPS.xml does not validate
-make: *** [validate] Error 3</screen>
-  </example>
- </sect1>
+  &daps-validation-basics;
+  
+  &daps-example-validation-error; 
+   </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
   &daps-images-intro;
