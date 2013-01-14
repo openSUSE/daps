@@ -178,6 +178,9 @@ DAPSROOT_DEFAULT="@pkgdatadir@"
 DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
 DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 
+# default builddir
+DEFAULT_BUILDDIR=${DOC_DIR}/build
+
 # user config file
 USER_CONFIG="$HOME/.daps/config"
 
@@ -1208,8 +1211,8 @@ fi
 # set all basic paths that have not been set by now
 
 #----------------------------------
-# default BUILD_DIR if not specified on the command line
-[[ -z $BUILD_DIR_CMDL ]] && BUILD_DIR=${DOC_DIR}/build
+# default BUILD_DIR if not specified elsewhere
+[[ -z $BUILD_DIR ]] && BUILD_DIR=$DEFAULT_BUILDDIR
 
 #----------------------------------
 # DocBook Stylesheet locations
