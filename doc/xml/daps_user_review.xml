@@ -10,90 +10,119 @@
 <chapter id="cha.daps.user.review">
  <title>Review and Translation Processes</title>
  <abstract>
-  <para>This chapter describes how to simplify review and translation processes 
-  with &dapsacr;:
-  <itemizedlist>
-   <listitem>
-   <para>by including remarks, metadata or draft watermarks in the output,</para>
-    </listitem>
-    <listitem>
-     <para>by transforming the multiple DocBook files in your project 
-    into one big XML file, or </para>
-    </listitem>
-    <listitem>
-     <para>by creating distributable archives (XML sources, images, or various
-     output formats)</para>
-    </listitem>
-   </itemizedlist>
-  </para>
-
- </abstract>
- <sect1 id="sec.daps.user.review.output.special">
-  <title>Including Remarks, Metadata or Draft Watermarks in the Output</title>
   <para>
-   &dapsacr; offers a number of features to simplify review and
-   translation processes. For example, you can insert
-   <sgmltag>remark</sgmltag> elements in the source code (for
-   editorial remarks or questions to the proofreader) and generate an
-   output format that either includes or suppresses these remarks. You
-   can also generate preview versions of your documentation with a
-   <literal>DRAFT</literal> watermark appearing on the HTML or PDF
-   output.</para>
-  <para>If you use &dm; in addition to &dapsacr;, you can
-   <quote>flag</quote> your XML files with meta-information (like
-   workflow status). &dapsacr; offers an option to also display this
-   meta-information in the generated output. 
-  </para>
-  <note>
-   <title>Availability of Advanced Output Options</title>
-   <para>Advanced output options are only supported for selected formats:</para>
+   This chapter describes how to simplify review and translation processes
+   with &dapsacr;:
    <itemizedlist>
     <listitem>
      <para>
-      <option>--meta</option>: <remark>taroth 2013-01-08:fs, toms: is the 
-      following correct?</remark>Only available in HTML, HTML-single, and PDF.</para>
+      by including remarks, metadata or draft watermarks in the output,
+     </para>
     </listitem>
     <listitem>
      <para>
-      <option>--draft</option> and <option>--remarks</option>:
-     Only available in HTML, HTML-single, PDF, and &epub; output. </para>
+      by transforming the multiple DocBook files in your project into one
+      big XML file, or
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      by creating distributable archives (XML sources, images, or various
+      output formats)
+     </para>
     </listitem>
    </itemizedlist>
-   <para>Using the <option>--remarks</option> and <option>--meta</option> options
-      automatically turns draft mode on.</para>
-   <para>By default, &dapsacr; adds a string to the base name of the output file
-     to flag output formats generated with special options. 
-     Example file names are <filename>daps-example_draft_en.pdf</filename> or
-     <filename>daps-example_remarks_draft_en.pdf</filename>.</para>
+  </para>
+ </abstract>
+ <sect1 id="sec.daps.user.review.output.special">
+  <title>Including Remarks, Metadata or Draft Watermarks in the Output</title>
+
+  <para>
+   &dapsacr; offers a number of features to simplify review and translation
+   processes. For example, you can insert <sgmltag>remark</sgmltag> elements
+   in the source code (for editorial remarks or questions to the
+   proofreader) and generate an output format that either includes or
+   suppresses these remarks. You can also generate preview versions of your
+   documentation with a <literal>DRAFT</literal> watermark appearing on the
+   HTML or PDF output.
+  </para>
+
+  <para>
+   If you use &dm; in addition to &dapsacr;, you can <quote>flag</quote>
+   your XML files with meta-information (like workflow status). &dapsacr;
+   offers an option to also display this meta-information in the generated
+   output.
+  </para>
+
+  <note>
+   <title>Availability of Advanced Output Options</title>
+   <para>
+    Advanced output options are only supported for selected formats:
+   </para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <option>--meta</option>:
+      <remark>taroth 2013-01-08:fs, toms: is the 
+      following correct?</remark>
+      Only available in HTML, HTML-single, and PDF.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      <option>--draft</option> and <option>--remarks</option>: Only
+      available in HTML, HTML-single, PDF, and &epub; output.
+     </para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    Using the <option>--remarks</option> and <option>--meta</option> options
+    automatically turns draft mode on.
+   </para>
+   <para>
+    By default, &dapsacr; adds a string to the base name of the output file
+    to flag output formats generated with special options. Example file
+    names are <filename>daps-example_draft_en.pdf</filename> or
+    <filename>daps-example_remarks_draft_en.pdf</filename>.
+   </para>
   </note>
-  <para>Find a few example commands below:</para>
+
+  <para>
+   Find a few example commands below:
+  </para>
+
   <variablelist>
    <varlistentry>
     <term>Including Remarks in the Output</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
      &daps-output-remarks;
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Building PDFs with a <literal>DRAFT</literal> Watermark</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
-     <para>Generates a PDF that has a <literal>DRAFT</literal> watermark printed 
-      on each page.</para>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
+     <para>
+      Generates a PDF that has a <literal>DRAFT</literal> watermark printed
+      on each page.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Including Metadata in the Output</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
-     <para>If metadata to a file has been set<remark>taroth 2013-01-08: which 
-     metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
-     &dapsacr; includes the metadata for each file in the output format. 
-     By default, the HTML and HTML-single outputs show filename, file maintainer 
-     and workflow status, and additionally the ID of the chapter, appendix or 
-     prefix, if available. The PDF output shows filename and the ID of the chapter, 
-     appendix or prefix, if available.<remark>taroth 2013-01-08: watch out, this
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
+     <para>
+      If metadata to a file has been set
+      <remark>taroth 2013-01-08: which 
+     metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>
+      , &dapsacr; includes the metadata for each file in the output format.
+      By default, the HTML and HTML-single outputs show filename, file
+      maintainer and workflow status, and additionally the ID of the
+      chapter, appendix or prefix, if available. The PDF output shows
+      filename and the ID of the chapter, appendix or prefix, if available.
+      <remark>taroth 2013-01-08: watch out, this
      is probably bound to change...</remark>
      </para>
     </listitem>
@@ -102,94 +131,128 @@
  </sect1>
  <sect1 id="sec.daps.user.review.bigfile">
   <title>Creating XML Bigfiles and Profiled XML Sources</title>
-  <para>Instead of sending multiple XML files to a proofreader for review, you
-  can also transform all files included in your <sgmltag>book</sgmltag> or 
-  <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile). If you
-  want to hand over profiled XML sources (instead of the original XML sources
-  that may apply to several products), &dapsacr; also allows for 
-  this&mdash;see the command overview below.</para>
+
+  <para>
+   Instead of sending multiple XML files to a proofreader for review, you
+   can also transform all files included in your <sgmltag>book</sgmltag> or
+   <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile). If you
+   want to hand over profiled XML sources (instead of the original XML
+   sources that may apply to several products), &dapsacr; also allows for
+   this&mdash;see the command overview below.
+  </para>
+
   <variablelist>
    <varlistentry>
     <term>Creating an XML Bigfile</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
-     <para>&dapsacr; follows all XIncludes to create the bigfile and shows a 
-     message where to find the generated output.</para>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+     <para>
+      &dapsacr; follows all XIncludes to create the bigfile and shows a
+      message where to find the generated output.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Creating Profiled XML Sources</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
-     <para>If you use profiling attributes to manage document variants, 
-     &dapsacr; creates profiled XML files from your set. For details about profiling 
-     in DocBook and how to use it with &dapsacr;, refer to 
-     <xref linkend="sec.daps.user.modular.profile"/>.</para>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
+     <para>
+      If you use profiling attributes to manage document variants, &dapsacr;
+      creates profiled XML files from your set. For details about profiling
+      in DocBook and how to use it with &dapsacr;, refer to
+      <xref linkend="sec.daps.user.modular.profile"/>.
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.tarballs">
   <title>Creating Distributable Archives</title>
-  <para>For handing over your files to review or translation, or for distributing
-  your output formats in a convenient way, &dapsacr; can automatically create tar
-  files of the XML sources, various output formats and/or graphics. &dapsacr; 
-  uses <literal>bz2</literal> for high compression of the archives and keeps the
-  directory structure when generating the tar files.</para>
-  <para>If you have a huge documentation project of which only individual books 
-  or files are to be translated, you can mark the respective files as 
-  <literal>to be translated</literal> with &dm;.</para>
-  <para>Find some example commands below. </para>
+
+  <para>
+   For handing over your files to review or translation, or for distributing
+   your output formats in a convenient way, &dapsacr; can automatically
+   create tar files of the XML sources, various output formats and/or
+   graphics. &dapsacr; uses <literal>bz2</literal> for high compression of
+   the archives and keeps the directory structure when generating the tar
+   files.
+  </para>
+
+  <para>
+   If you have a huge documentation project of which only individual books
+   or files are to be translated, you can mark the respective files as
+   <literal>to be translated</literal> with &dm;.
+  </para>
+
+  <para>
+   Find some example commands below.
+  </para>
+
   <variablelist>
    <varlistentry>
     <term>Creating a Graphics Tar File</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
-     <para>Creates a tar file of all graphics <remark>taroth 2013-01-11: 
-     check with fs: the referenced ones?</remark> that belong to the specified 
-     documentation project. 
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
+     <para>
+      Creates a tar file of all graphics
+      <remark>taroth 2013-01-11: 
+     check with fs: the referenced ones?</remark>
+      that belong to the specified documentation project.
      </para>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
-     <para>Creates a tar file with PNG graphics <remark>taroth 2013-01-11: 
-     check with fs: the referenced ones?</remark> that belong to the specified 
-     documentation project. Any SVG graphics are automatically converted to PNG
-     format.
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
+     <para>
+      Creates a tar file with PNG graphics
+      <remark>taroth 2013-01-11: 
+     check with fs: the referenced ones?</remark>
+      that belong to the specified documentation project. Any SVG graphics
+      are automatically converted to PNG format.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Creating a Tar File For Localization</term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
-     <para>Use this command only if you manage your documentation project with
-     &dm; and have set the respective SVN properties to mark any files that are
-     to be localized. <remark>taroth 2013-01-11: add link to &dm; docs as soon as 
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
+     <para>
+      Use this command only if you manage your documentation project with
+      &dm; and have set the respective SVN properties to mark any files that
+      are to be localized.
+      <remark>taroth 2013-01-11: add link to &dm; docs as soon as 
      they are available</remark>
      </para>
-     <para>The command is especially helpful if not all files in your documentation 
-     project need to be translated, but only a subset of them (for example, 
-     one of several books in a <sgmltag>set</sgmltag>). It generates 3 tar files:
-     one containing the graphics, one containing all XML files that need to
-     be localized, and one containing the remaining files of the set. The 
-     remaining files are needed for solving any cross-references between 
-     translated and untranslated content during generation of output.</para>
+     <para>
+      The command is especially helpful if not all files in your
+      documentation project need to be translated, but only a subset of them
+      (for example, one of several books in a <sgmltag>set</sgmltag>). It
+      generates 3 tar files: one containing the graphics, one containing all
+      XML files that need to be localized, and one containing the remaining
+      files of the set. The remaining files are needed for solving any
+      cross-references between translated and untranslated content during
+      generation of output.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Creating Tar Files with Different Output Formats </term>
     <listitem>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
-     <para>Generates HTML output of the specified documentation project (including
-     HTML files, any graphics, and your CSS file defining the HTML layout) and 
-     packs the output into a tar file.</para>
-     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
-     <para>Generates a single-file HTML output and packs the HTML file, any 
-     graphics, and your CSS file) into a tar file.</para>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
+     <para>
+      Generates HTML output of the specified documentation project
+      (including HTML files, any graphics, and your CSS file defining the
+      HTML layout) and packs the output into a tar file.
+     </para>
+<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
+     <para>
+      Generates a single-file HTML output and packs the HTML file, any
+      graphics, and your CSS file) into a tar file.
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
-  <para>For further options related to creating distributable archives with 
-  &dapsacr;, run <command>daps --help</command>.</para>
- </sect1>
 
+  <para>
+   For further options related to creating distributable archives with
+   &dapsacr;, run <command>daps --help</command>.
+  </para>
+ </sect1>
 </chapter>
