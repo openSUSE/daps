@@ -12,59 +12,76 @@
  <para>
   This chapter describes:
   <itemizedlist>
-  <listitem>
-   <para>how to modularize documents by splitting them into XIncludes,</para>
+   <listitem>
+    <para>
+     how to modularize documents by splitting them into XIncludes,
+    </para>
    </listitem>
    <listitem>
-    <para>how to use a consistent set of entities throughout a documentation 
-   project,</para>
+    <para>
+     how to use a consistent set of entities throughout a documentation
+     project,
+    </para>
    </listitem>
    <listitem>
-    <para>how to create document variants by using profiling, and</para>
+    <para>
+     how to create document variants by using profiling, and
+    </para>
    </listitem>
    <listitem>
-    <para>how to combine profiling and entities.</para>
+    <para>
+     how to combine profiling and entities.
+    </para>
    </listitem>
   </itemizedlist>
  </para>
-
  <sect1 id="sec.daps.user.modular.xi">
   <title>Splitting up Documents into XIncludes</title>
-  <para>Instead of putting the contents of a complete article or book into the 
-  Main file, DocBook allows you to divide the text into separate document files.
-  They are then assembled in the Main file using <literal>XIncludes</literal>
-  as shown in <xref linkend="ex.daps.main.set"/>. XIncludes can be used 
-  for splitting up sets, books, articles or chapters into separate files. For 
-  more information, refer to
-  <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
-  <citetitle>Physical Divisions: Breaking a Document into Separate 
-  Files</citetitle>
-   </ulink>. 
+
+  <para>
+   Instead of putting the contents of a complete article or book into the
+   Main file, DocBook allows you to divide the text into separate document
+   files. They are then assembled in the Main file using
+   <literal>XIncludes</literal> as shown in
+   <xref linkend="ex.daps.main.set"/>. XIncludes can be used for splitting
+   up sets, books, articles or chapters into separate files. For more
+   information, refer to
+   <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
+   <citetitle>Physical Divisions: Breaking a Document into Separate
+   Files</citetitle> </ulink>.
   </para>
-  <para>XIncludes do not cause any problems with &dapsacr; and are fully 
-  supported. For example, <command>daps</command> commands like 
-  <command>checklink</command> or <command>spellcheck</command>, 
-  for example) also follow XIncludes.</para>
+
+  <para>
+   XIncludes do not cause any problems with &dapsacr; and are fully
+   supported. For example, <command>daps</command> commands like
+   <command>checklink</command> or <command>spellcheck</command>, for
+   example) also follow XIncludes.
+  </para>
  </sect1>
  <sect1 id="sec.daps.user.modular.ent.separate">
   <title>Declaring Entities in a Separate File</title>
-  <para>If you declare entities in the document type declaration of individual 
-  XML files, it becomes cumbersome to keep a consistent set of entities
-  when maintaining a large number of documents for a product. For large 
-  documentation projects, it is therefore useful to put all entity declarations 
-  into a separate file and then reference that file in the individual XML files.</para>
+
+  <para>
+   If you declare entities in the document type declaration of individual
+   XML files, it becomes cumbersome to keep a consistent set of entities
+   when maintaining a large number of documents for a product. For large
+   documentation projects, it is therefore useful to put all entity
+   declarations into a separate file and then reference that file in the
+   individual XML files.
+  </para>
+
   <example id="ex.daps.ent.decl.separate">
-   <title>Separate Entity File <filename>entity-decl.ent</filename>
-   </title>
-   <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
+   <title>Separate Entity File <filename>entity-decl.ent</filename></title>
+<screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
 &lt;!ENTITY exampleuser "tux"&gt;
 &lt;!ENTITY exampleuserII "wilber"&gt;
 &lt;!ENTITY examplegroup "users"&gt;
 [...]</screen>
   </example>
+
   <example id="ex.daps.ent.decl.reference">
    <title>Referencing A Separate Entity File</title>
-   <screen>&lt;?xml version="1.0"?&gt;
+<screen>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent"/>
@@ -75,18 +92,26 @@
 [...]</screen>
    <calloutlist>
     <callout arearefs="co.daps.main.reference.ent">
-     <para>Reference to the separate entity declaration 
-    file (with a parameter entity).</para>
+     <para>
+      Reference to the separate entity declaration file (with a parameter
+      entity).
+     </para>
     </callout>
    </calloutlist>
   </example>
-  <para>For more information, refer to <ulink url="http://www.sagehill.net/docbookxsl/ModularDoc.html">
-  <citetitle>Modular DocBook Files: Shared text entities</citetitle>
-   </ulink>.</para>
-  <para>Separate entity files do not cause any problems with &dapsacr;&mdash;
-   during generation of output, the entities will be treated equally to entities
-   declared in individual XML files.
-   </para>
+
+  <para>
+   For more information, refer to
+   <ulink url="http://www.sagehill.net/docbookxsl/ModularDoc.html">
+   <citetitle>Modular DocBook Files: Shared text entities</citetitle>
+   </ulink>.
+  </para>
+
+  <para>
+   Separate entity files do not cause any problems with &dapsacr;&mdash;
+   during generation of output, the entities will be treated equally to
+   entities declared in individual XML files.
+  </para>
  </sect1>
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
@@ -96,40 +121,46 @@
 
  <sect2 id="sec.daps.user.modular.profile.basics">
    <title>Introduction to DocBook Profiling</title>
-   <para>DocBook offers profiling attributes for various purposes as illustrated
+   <para>
+    DocBook offers profiling attributes for various purposes as illustrated
     in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
-    <citetitle>Table 26.1. Profiling attributes</citetitle>
-    </ulink>. Currently, not
-    all of them are supported by &dapsacr;. For details, refer to 
-    <xref linkend="sec.daps.user.modular.profile.daps"/>.</para>
-   <para>Generally, profiling attributes can be used on a large number of 
-   elements&mdash;from high-level elements like <sgmltag>book</sgmltag> 
-   or <sgmltag>chapter</sgmltag> down to low-level elements like 
-   <sgmltag>para</sgmltag>. With the <sgmltag>phrase</sgmltag> element, you can 
-   even profile inline elements, like one sentence within a paragraph.<!--, see
+    <citetitle>Table 26.1. Profiling attributes</citetitle> </ulink>.
+    Currently, not all of them are supported by &dapsacr;. For details,
+    refer to <xref linkend="sec.daps.user.modular.profile.daps"/>.
+   </para>
+   <para>
+    Generally, profiling attributes can be used on a large number of
+    elements&mdash;from high-level elements like <sgmltag>book</sgmltag> or
+    <sgmltag>chapter</sgmltag> down to low-level elements like
+    <sgmltag>para</sgmltag>. With the <sgmltag>phrase</sgmltag> element, you
+    can even profile inline elements, like one sentence within a paragraph.
+<!--, see
    <xref linkend="ex.daps.profiling.inline"/>.-->
    </para>
-   <para>Based on the conditions that you want to apply, select one or more 
-   profiling attributes and add them to the text snippets that are conditional.
-   The tagged snippets will only be included in the output if the required 
-   condition is fulfilled. Any content that is valid for <emphasis>all</emphasis> 
-   conditions does <emphasis>not</emphasis> need any profiling attributes. The 
-   respective content will always be included in the output formats generated 
-   from the XML sources. You are free in defining the attribute values 
-   (<literal>condition="foo"</literal>), but they must be used consistently 
-   in all files belonging to a documentation project.</para>
    <para>
-    <xref linkend="ex.daps.profile.one"/> shows how to profile 
-   product-specific information in a software description. Let us assume we have 
-   to write documentation for the fictional software 
-   <literal>Frog Sound Recordings</literal>. The software is available in 
-   two editions: a basic edition for home users and a professional edition for 
-   enterprise customers. Both editions share common features, but some features 
-   are only available in the basic or the professional edition, respectively.</para>
-
+    Based on the conditions that you want to apply, select one or more
+    profiling attributes and add them to the text snippets that are
+    conditional. The tagged snippets will only be included in the output if
+    the required condition is fulfilled. Any content that is valid for
+    <emphasis>all</emphasis> conditions does <emphasis>not</emphasis> need
+    any profiling attributes. The respective content will always be included
+    in the output formats generated from the XML sources. You are free in
+    defining the attribute values (<literal>condition="foo"</literal>), but
+    they must be used consistently in all files belonging to a documentation
+    project.
+   </para>
+   <para>
+    <xref linkend="ex.daps.profile.one"/> shows how to profile
+    product-specific information in a software description. Let us assume we
+    have to write documentation for the fictional software <literal>Frog
+    Sound Recordings</literal>. The software is available in two editions: a
+    basic edition for home users and a professional edition for enterprise
+    customers. Both editions share common features, but some features are
+    only available in the basic or the professional edition, respectively.
+   </para>
    <example id="ex.daps.profile.one">
     <title>Product-specific Profiling (One Attribute)</title>
-    <screen>&lt;simplelist&gt;
+<screen>&lt;simplelist&gt;
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
   &lt;member&gt;Common Feature 3&lt;/member&gt;
@@ -138,48 +169,73 @@
   &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
-   <para>When generated for the basic edition or for the professional edition, 
-   respectively, the example source code would result in the following 
-   output:</para>
+   <para>
+    When generated for the basic edition or for the professional edition,
+    respectively, the example source code would result in the following
+    output:
+   </para>
    <table id="tab.daps.profile.output.one" rowsep="1">
     <title>Output of <xref linkend="ex.daps.profile.one" xrefstyle="select:
-     label"/>
-    </title>
+     label"/></title>
     <tgroup cols="2">
      <colspec colnum="1" colname="1" colwidth="50*"/>
      <colspec colnum="2" colname="2" colwidth="50*"/>
      <thead>
       <row>
        <entry colname="1">
-        <para> Basic Edition </para>
+        <para>
+         Basic Edition
+        </para>
        </entry>
        <entry colname="2">
-        <para> Professional Edition </para>
+        <para>
+         Professional Edition
+        </para>
        </entry>
       </row>
      </thead>
      <tbody>
       <row>
        <entry colname="1">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Basic Feature 1</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Basic Feature 1
+        </para>
        </entry>
        <entry colname="2">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Professional Feature 1
+        </para>
+        <para>
+         Professional Feature 2
+        </para>
        </entry>
       </row>
      </tbody>
     </tgroup>
    </table>
-   <para>If the profiling attributes are <emphasis>not</emphasis> processed during
-   output, the source code in <xref linkend="ex.daps.profile.one"/> would
-   result in the following (identical) output for both editions:</para>
+   <para>
+    If the profiling attributes are <emphasis>not</emphasis> processed
+    during output, the source code in <xref linkend="ex.daps.profile.one"/>
+    would result in the following (identical) output for both editions:
+   </para>
    <table id="tab.daps.profile.output.one.without" rowsep="1">
     <title>Output of <xref linkend="ex.daps.profile.one" xrefstyle="select:
      label"/> (Without Profiling)</title>
@@ -189,42 +245,72 @@
      <thead>
       <row>
        <entry colname="1">
-        <para> Basic Edition </para>
+        <para>
+         Basic Edition
+        </para>
        </entry>
        <entry colname="2">
-        <para> Professional Edition </para>
+        <para>
+         Professional Edition
+        </para>
        </entry>
       </row>
      </thead>
      <tbody>
       <row>
        <entry colname="1">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Basic Feature 1</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Basic Feature 1
+        </para>
+        <para>
+         Professional Feature 1
+        </para>
+        <para>
+         Professional Feature 2
+        </para>
        </entry>
        <entry colname="2">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Basic Feature 1</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Basic Feature 1
+        </para>
+        <para>
+         Professional Feature 1
+        </para>
+        <para>
+         Professional Feature 2
+        </para>
        </entry>
       </row>
      </tbody>
     </tgroup>
    </table>
-   <para>Let's suppose the professional edition of the software is also available 
-    as OEM (original equipment manufacturer) version by the vendor 
-    <literal>OEM Company</literal>. It contains additional features that are 
-    only available in the OEM version:</para>
+   <para>
+    Let's suppose the professional edition of the software is also available
+    as OEM (original equipment manufacturer) version by the vendor
+    <literal>OEM Company</literal>. It contains additional features that are
+    only available in the OEM version:
+   </para>
    <example id="ex.daps.profile.two">
     <title>Product-specific Profiling (Multiple Attributes)</title>
-    <screen>&lt;simplelist&gt;
+<screen>&lt;simplelist&gt;
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
   &lt;member&gt;Common Feature 3&lt;/member&gt;
@@ -234,42 +320,69 @@
   &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
 &lt;/simplelist&gt;</screen>
    </example>
-   <para>When generated for the professional edition or for the professional 
-    edition in the OEM version, respectively, the example source code would 
-    result in the following output:</para>
+   <para>
+    When generated for the professional edition or for the professional
+    edition in the OEM version, respectively, the example source code would
+    result in the following output:
+   </para>
    <table id="tab.daps.profile.output.two" rowsep="1">
     <title>Output of <xref linkend="ex.daps.profile.two" xrefstyle="select:
-     label"/>
-    </title>
+     label"/></title>
     <tgroup cols="2">
      <colspec colnum="1" colname="1" colwidth="50*"/>
      <colspec colnum="2" colname="2" colwidth="50*"/>
      <thead>
       <row>
        <entry colname="1">
-        <para>Professional Edition </para>
+        <para>
+         Professional Edition
+        </para>
        </entry>
        <entry colname="2">
-        <para> Professional Edition (OEM Version)</para>
+        <para>
+         Professional Edition (OEM Version)
+        </para>
        </entry>
       </row>
      </thead>
      <tbody>
       <row>
        <entry colname="1">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Professional Feature 1
+        </para>
+        <para>
+         Professional Feature 2
+        </para>
        </entry>
        <entry colname="2">
-        <para>Common Feature 1</para>
-        <para>Common Feature 2</para>
-        <para>Common Feature 3</para>
-        <para>Professional Feature 1</para>
-        <para>Professional Feature 2</para>
-        <para>OEM Feature 1</para>
+        <para>
+         Common Feature 1
+        </para>
+        <para>
+         Common Feature 2
+        </para>
+        <para>
+         Common Feature 3
+        </para>
+        <para>
+         Professional Feature 1
+        </para>
+        <para>
+         Professional Feature 2
+        </para>
+        <para>
+         OEM Feature 1
+        </para>
        </entry>
       </row>
      </tbody>
@@ -279,38 +392,47 @@
       values in _one_ attribute? Could be useful.
     </remark>
   </sect2>
+
   <sect2 id="sec.daps.user.modular.profile.daps">
    <title>Using Profiling with &dapsacr;</title>
-   <para>To create multiple documentation variants of the same pool of DocBook 
-    files with &dapsacr;, the following requirements need to be fulfilled:</para>
+   <para>
+    To create multiple documentation variants of the same pool of DocBook
+    files with &dapsacr;, the following requirements need to be fulfilled:
+   </para>
    <orderedlist>
-    <listitem><!--XML Files: Profiling Attributes-->
+    <listitem>
+<!--XML Files: Profiling Attributes-->
      <para>
       <xref linkend="sec.daps.user.modular.profile.daps.pa" xrefstyle="select:title"/>
      </para>
     </listitem>
-    <listitem><!--Main File: Processing Instruction-->
+    <listitem>
+<!--Main File: Processing Instruction-->
      <para>
       <xref linkend="sec.daps.user.modular.profile.daps.pi" xrefstyle="select: title"/>
      </para>
     </listitem>
-    <listitem><!--&dc; File: Profiling Parameters-->
+    <listitem>
+<!--&dc; File: Profiling Parameters-->
      <para>
       <xref linkend="sec.daps.user.modular.profile.daps.pp" xrefstyle="select: title"/>
      </para>
     </listitem>
    </orderedlist>
-   <para>For a comprehensive example showing all requirements in detail,
- refer to <xref linkend="sec.daps.user.modular.profile.daps.ex"/>.</para>
-
+   <para>
+    For a comprehensive example showing all requirements in detail, refer to
+    <xref linkend="sec.daps.user.modular.profile.daps.ex"/>.
+   </para>
    <sect3 id="sec.daps.user.modular.profile.daps.pa">
     <title>XML Files: Profiling Attributes</title>
-    <para>In your DocBook XM files, only use profiling attributes that are supported 
-    by &dapsacr;&mdash;refer to <xref linkend="tab.daps.profiling"/>. In &dapsacr;,
-    each profiling attribute has a corresponding profiling parameter to be used 
-    in the &dc; file. The profiling parameters define which profiling attributes 
-    and values to interpret during generation of output.</para>
-
+    <para>
+     In your DocBook XM files, only use profiling attributes that are
+     supported by &dapsacr;&mdash;refer to
+     <xref linkend="tab.daps.profiling"/>. In &dapsacr;, each profiling
+     attribute has a corresponding profiling parameter to be used in the
+     &dc; file. The profiling parameters define which profiling attributes
+     and values to interpret during generation of output.
+    </para>
     <table id="tab.daps.profiling" rowsep="1">
      <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
      <tgroup cols="3">
@@ -344,10 +466,11 @@
          </para>
         </entry>
         <entry colname="2">
-         <para>Computer or chip architecture, such as <literal>i386</literal>.</para>
+         <para>
+          Computer or chip architecture, such as <literal>i386</literal>.
+         </para>
         </entry>
-        <entry colname="3">
-         <parameter>PROFARCH</parameter>
+        <entry colname="3"><parameter>PROFARCH</parameter>
         </entry>
        </row>
        <row>
@@ -357,10 +480,11 @@
          </para>
         </entry>
         <entry colname="2">
-         <para>No preassigned semantics, general purpose attribute.</para>
+         <para>
+          No preassigned semantics, general purpose attribute.
+         </para>
         </entry>
-        <entry colname="3">
-         <parameter>PROFCONDITION</parameter>
+        <entry colname="3"><parameter>PROFCONDITION</parameter>
         </entry>
        </row>
        <row>
@@ -370,10 +494,11 @@
          </para>
         </entry>
         <entry colname="2">
-         <para>Operating system.</para>
+         <para>
+          Operating system.
+         </para>
         </entry>
-        <entry colname="3">
-         <parameter>PROFOS</parameter>
+        <entry colname="3"><parameter>PROFOS</parameter>
         </entry>
        </row>
        <row>
@@ -383,10 +508,11 @@
          </para>
         </entry>
         <entry colname="2">
-         <para>Product vendor.</para>
+         <para>
+          Product vendor.
+         </para>
         </entry>
-        <entry colname="3">
-         <parameter>PROFVENDOR</parameter>
+        <entry colname="3"><parameter>PROFVENDOR</parameter>
         </entry>
        </row>
       </tbody>
@@ -395,48 +521,58 @@
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.pi">
     <title>Main File: Processing Instruction</title>
-    <para> 
-      To activate generation of profiled output in &dapsacr;, the following 
-      processing instruction (PI) must be included in the header of the Main file:
-      </para>
-    <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-    <para>The Main file of a documentation project is the one that is referenced 
-      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the processing 
-      instruction is missing in the Main file, any profiling parameters in the &dc; 
-      file will be ignored during generation of the output. </para>
+    <para>
+     To activate generation of profiled output in &dapsacr;, the following
+     processing instruction (PI) must be included in the header of the Main
+     file:
+    </para>
+<screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+    <para>
+     The Main file of a documentation project is the one that is referenced
+     by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
+     processing instruction is missing in the Main file, any profiling
+     parameters in the &dc; file will be ignored during generation of the
+     output.
+    </para>
     <tip>
      <title>Include PI in All XML Files</title>
-     <para>For any documentation projects that need profiling, we advise to
-        include the PI in all XML files. Otherwise you might forget to move the
-        PI in case of restructuring the XML sources. Having the PI in all XML
-        files does not hurt: Generation of profiled output is only triggered if
-        your &dc; files contain profiling parameters. </para>
+     <para>
+      For any documentation projects that need profiling, we advise to
+      include the PI in all XML files. Otherwise you might forget to move
+      the PI in case of restructuring the XML sources. Having the PI in all
+      XML files does not hurt: Generation of profiled output is only
+      triggered if your &dc; files contain profiling parameters.
+     </para>
     </tip>
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.pp">
     <title>&dc; Files: Profiling Parameters</title>
-    <para>Depending on the profiling attributes used in your XML files, a &dc;
-       file may contain multiple profiling parameters, see 
-       <xref linkend="tab.daps.profiling"/>. Profiling parameters define which 
-       of the profiling attributes should be interpreted by &dapsacr;
-       when generating output. For each profiling parameter, set the respective 
-       attribute values for which you want to filter during the profiling process. 
-       The spelling of the values must be the same that is used in the XML
-       files.</para>
+    <para>
+     Depending on the profiling attributes used in your XML files, a &dc;
+     file may contain multiple profiling parameters, see
+     <xref linkend="tab.daps.profiling"/>. Profiling parameters define which
+     of the profiling attributes should be interpreted by &dapsacr; when
+     generating output. For each profiling parameter, set the respective
+     attribute values for which you want to filter during the profiling
+     process. The spelling of the values must be the same that is used in
+     the XML files.
+    </para>
    </sect3>
-
    <sect3 id="sec.daps.user.modular.profile.daps.ex">
     <title>Profiling Example</title>
-    <para>In the following, find a  comprehensive example that shows the basic 
-    &dapsacr; profiling requirements in more detail. It is based on the examples in
-    <xref linkend="sec.daps.user.modular.profile.basics"/> about the fictional
-    software <literal>Frog Sound Recordings</literal> which is available
-    in a basic edition, a professional edition and a professional OEM edition, 
-    shipped by an OEM vendor. The following example shows <emphasis>all</emphasis> 
-    files that you need to consider (XML files, Main file, and &dc; file). </para>
+    <para>
+     In the following, find a comprehensive example that shows the basic
+     &dapsacr; profiling requirements in more detail. It is based on the
+     examples in <xref linkend="sec.daps.user.modular.profile.basics"/>
+     about the fictional software <literal>Frog Sound Recordings</literal>
+     which is available in a basic edition, a professional edition and a
+     professional OEM edition, shipped by an OEM vendor. The following
+     example shows <emphasis>all</emphasis> files that you need to consider
+     (XML files, Main file, and &dc; file).
+    </para>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
-     <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
 &lt;chapter id="frog.features"&gt;
@@ -454,37 +590,47 @@
 &lt;/chapter&gt;</screen>
      <calloutlist>
       <callout arearefs="co.daps.xml.no.prof.attr">
-       <para>Unprofiled listitems. The common features 1-3 are available in all
-       software editions or versions.</para>
+       <para>
+        Unprofiled listitems. The common features 1-3 are available in all
+        software editions or versions.
+       </para>
       </callout>
       <callout arearefs="co.daps.xml.profcond.value1">
-       <para>Listitem profiled with attribute 
-       <sgmltag class="attribute">condition</sgmltag> and attribute value 
-       <literal>basic</literal>. <literal>Basic&nbsp;Feature&nbsp;1</literal>
-       is only available in the basic software edition for home users.</para>
+       <para>
+        Listitem profiled with attribute
+        <sgmltag class="attribute">condition</sgmltag> and attribute value
+        <literal>basic</literal>.
+        <literal>Basic&nbsp;Feature&nbsp;1</literal> is only available in
+        the basic software edition for home users.
+       </para>
       </callout>
       <callout arearefs="co.daps.xml.profcond.value2">
-       <para>Listitem profiled with attribute 
-       <sgmltag class="attribute">condition</sgmltag> and attribute value 
-       <literal>prof</literal>. 
-       <literal>Professional&nbsp;Feature&nbsp;1</literal>
-       and <literal>Professional&nbsp;Feature&nbsp;2</literal> are only available
-       in the professional software edition for enterprise customers.</para>
+       <para>
+        Listitem profiled with attribute
+        <sgmltag class="attribute">condition</sgmltag> and attribute value
+        <literal>prof</literal>.
+        <literal>Professional&nbsp;Feature&nbsp;1</literal> and
+        <literal>Professional&nbsp;Feature&nbsp;2</literal> are only
+        available in the professional software edition for enterprise
+        customers.
+       </para>
       </callout>
       <callout arearefs="co.daps.xml.profcond.profvendor">
-       <para>Listitem profiled with two attributes: Attribute 
-         <sgmltag class="attribute">condition</sgmltag> with attribute value 
-           <literal>prof</literal> and attribute 
-           <sgmltag class="attribute">vendor</sgmltag> with attribute value 
-           <literal>oemcompany</literal>. <literal>OEM&nbsp;Feature&nbsp;1</literal> 
-           is only available in the professional OEM software edition for 
-           enterprise customers.</para>
+       <para>
+        Listitem profiled with two attributes: Attribute
+        <sgmltag class="attribute">condition</sgmltag> with attribute value
+        <literal>prof</literal> and attribute
+        <sgmltag class="attribute">vendor</sgmltag> with attribute value
+        <literal>oemcompany</literal>.
+        <literal>OEM&nbsp;Feature&nbsp;1</literal> is only available in the
+        professional OEM software edition for enterprise customers.
+       </para>
       </callout>
      </calloutlist>
     </example>
     <example id="ex.daps.main.pi">
-     <title>Main File With PI for Profiling </title>
-     <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+     <title>Main File With PI for Profiling</title>
+<screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling"/> 
  type="text/xml" <xref linkend="co.daps.main.pi.profiling" xrefstyle="select:label nopage"/>
@@ -504,8 +650,9 @@
 &lt;/article&gt;</screen>
      <calloutlist>
       <callout arearefs="co.daps.main.pi.profiling">
-       <para>Processing instruction (PI) in the header of the Main file. If it 
-       is missing, any profiling parameters in the &dc; file will be ignored.
+       <para>
+        Processing instruction (PI) in the header of the Main file. If it is
+        missing, any profiling parameters in the &dc; file will be ignored.
        </para>
        <para>
         <remark>taroth 2012-10-19: todo - also explain the other lines of 
@@ -514,10 +661,9 @@
       </callout>
      </calloutlist>
     </example>
-
     <example id="ex.daps.dc.pa.home">
      <title>&dc; File with Profiling for Home Edition</title>
-     <screen>## Doc Config File for Frog Sound Recordings
+<screen>## Doc Config File for Frog Sound Recordings
 ## (Home Edition)
 
 ## Mandatory Parameters
@@ -529,22 +675,24 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
      <calloutlist>
       <callout arearefs="co.dc.pa.main1">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. 
-       See <xref linkend="ex.daps.main.pi"/>.</para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <xref linkend="ex.daps.main.pi"/>.
+       </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.basic">
-       <para>&dapsacr; profiling parameter for the 
-       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
-       defines that XML elements tagged with 
-       <sgmltag class="attribute">condition="basic"</sgmltag> are included in 
-       the output.</para>
+       <para>
+        &dapsacr; profiling parameter for the
+        <sgmltag class="attribute">condition</sgmltag> profiling attribute.
+        It defines that XML elements tagged with
+        <sgmltag class="attribute">condition="basic"</sgmltag> are included
+        in the output.
+       </para>
       </callout>
      </calloutlist>
     </example>
-
     <example id="ex.daps.dc.pa.prof">
      <title>&dc; File with Profiling for Professional Edition</title>
-     <screen>## Doc Config File for Frog Sound Recordings
+<screen>## Doc Config File for Frog Sound Recordings
 ## (Professional Edition)
 
 ## Mandatory Parameters
@@ -554,25 +702,26 @@ MAIN="art_frog.xml" <co id="co.dc.pa.main2"/>
 PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
 [...]</screen>
      <calloutlist>
-
       <callout arearefs="co.dc.pa.main2">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. 
-       See <xref linkend="ex.daps.main.pi"/>.</para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <xref linkend="ex.daps.main.pi"/>.
+       </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof1">
-       <para>&dapsacr; profiling parameter for the 
-       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
-       defines that XML elements tagged with 
-       <sgmltag class="attribute">condition="prof"</sgmltag> are included in 
-       the output.</para>
+       <para>
+        &dapsacr; profiling parameter for the
+        <sgmltag class="attribute">condition</sgmltag> profiling attribute.
+        It defines that XML elements tagged with
+        <sgmltag class="attribute">condition="prof"</sgmltag> are included
+        in the output.
+       </para>
       </callout>
      </calloutlist>
     </example>
-
     <example id="ex.daps.dc.pa.prof.oem">
      <title>&dc; File with Profiling for Professional Edition (OEM Version)</title>
-     <screen>## Doc Config File for Frog Sound Recordings 
+<screen>## Doc Config File for Frog Sound Recordings 
 ## (Professional Edition, OEM Version)
 
 ## Mandatory Parameters
@@ -585,22 +734,27 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
      <calloutlist>
       <callout arearefs="co.dc.pa.main3">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. 
-       See <xref linkend="ex.daps.main.pi"/>.</para>
+        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <xref linkend="ex.daps.main.pi"/>.
+       </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof2">
-       <para>&dapsacr; profiling parameter for the 
-       <sgmltag class="attribute">condition</sgmltag> profiling attribute. It 
-       defines that XML elements tagged with 
-       <sgmltag class="attribute">condition="prof"</sgmltag> are included in 
-       the output.</para>
+       <para>
+        &dapsacr; profiling parameter for the
+        <sgmltag class="attribute">condition</sgmltag> profiling attribute.
+        It defines that XML elements tagged with
+        <sgmltag class="attribute">condition="prof"</sgmltag> are included
+        in the output.
+       </para>
       </callout>
       <callout arearefs="co.dc.pa.profvendor.oem">
-       <para>&dapsacr; profiling parameter for the 
-       <sgmltag class="attribute">vendor</sgmltag> profiling attribute. It 
-       defines that XML elements tagged with 
-       <sgmltag class="attribute">vendor="oemcompany"</sgmltag> are included in 
-       the output.</para>
+       <para>
+        &dapsacr; profiling parameter for the
+        <sgmltag class="attribute">vendor</sgmltag> profiling attribute. It
+        defines that XML elements tagged with
+        <sgmltag class="attribute">vendor="oemcompany"</sgmltag> are
+        included in the output.
+       </para>
       </callout>
      </calloutlist>
     </example>
@@ -609,20 +763,25 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  </sect1>
  <sect1 id="sec.daps.user.modular.productentities">
   <title>Combining Entities and Profiling</title>
-  <para>For maximum flexibility in generating documentation variants from the same
-  source, &dapsacr; also supports the combination of entities and profiling. As 
-  you already learned in <xref linkend="sec.daps.user.modular.ent.separate"/>,
-  it is useful for modularization purposes to declare entities in a separate file
-  and to re-use it in multiple documentation projects. For multiple use of 
-  entities like <literal>&amp;productname;</literal> or 
-  <literal>&amp;productnumber;</literal>, declare them in a separate file and
-  add profiling within the entities as shown in <xref linkend="ex.daps.ent.decl.profiling"/>. 
-  During generation of output, &dapsacr; then automatically replaces the entities 
-  with different values during output, depending on the context.</para>
+
+  <para>
+   For maximum flexibility in generating documentation variants from the
+   same source, &dapsacr; also supports the combination of entities and
+   profiling. As you already learned in
+   <xref linkend="sec.daps.user.modular.ent.separate"/>, it is useful for
+   modularization purposes to declare entities in a separate file and to
+   re-use it in multiple documentation projects. For multiple use of
+   entities like <literal>&amp;productname;</literal> or
+   <literal>&amp;productnumber;</literal>, declare them in a separate file
+   and add profiling within the entities as shown in
+   <xref linkend="ex.daps.ent.decl.profiling"/>. During generation of
+   output, &dapsacr; then automatically replaces the entities with different
+   values during output, depending on the context.
+  </para>
 
   <example id="ex.daps.ent.decl.profiling">
    <title>Separate Entity File with Profiling Attributes</title>
-   <screen><?dbsuse-fo font-size="0.65em"?>
+<screen><?dbsuse-fo font-size="0.65em"?>
 &lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
@@ -635,41 +794,53 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
   &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
   &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
   </example>
+
   <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
     need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
     https://sourceforge.net/p/daps/tickets/48/</remark>
-  <para>After declaring the entities as shown in
-  <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> 
-  you can use them throughout your documents. For &dapsacr; to process them 
-  correctly, you only need to <quote>introduce</quote> the entities once as
-  shown in <xref linkend="ex.daps.art.prof.ent"/>.</para>
+
+  <para>
+   After declaring the entities as shown in
+   <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> you
+   can use them throughout your documents. For &dapsacr; to process them
+   correctly, you only need to <quote>introduce</quote> the entities once as
+   shown in <xref linkend="ex.daps.art.prof.ent"/>.
+  </para>
+
   <procedure>
    <step>
-    <para>Insert one of the respective elements <sgmltag>setinfo</sgmltag>, 
-    <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your set, 
-    book, or article. 
-    <remark>taroth 2012-12-07: Toms, Frank: if I have a set, do the product* 
+    <para>
+     Insert one of the respective elements <sgmltag>setinfo</sgmltag>,
+     <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your
+     set, book, or article.
+     <remark>taroth 2012-12-07: Toms, Frank: if I have a set, do the product* 
     entities need to be in all *info elements (setinfo, bookinfo, articleinfo)?</remark>
     </para>
    </step>
    <step>
-    <para>Within <sgmltag>setinfo</sgmltag>, <sgmltag>bookinfo</sgmltag>, 
-    or <sgmltag>articleinfo</sgmltag>, add both a <sgmltag>productname</sgmltag> 
-    and <sgmltag>productnumber</sgmltag> element.   
+    <para>
+     Within <sgmltag>setinfo</sgmltag>, <sgmltag>bookinfo</sgmltag>, or
+     <sgmltag>articleinfo</sgmltag>, add both a
+     <sgmltag>productname</sgmltag> and <sgmltag>productnumber</sgmltag>
+     element.
     </para>
    </step>
    <step>
-    <para>Use the <literal>&amp;productname;</literal> and 
-   <literal>&amp;productnumber;</literal> entity within the respective elements.
-   </para>
+    <para>
+     Use the <literal>&amp;productname;</literal> and
+     <literal>&amp;productnumber;</literal> entity within the respective
+     elements.
+    </para>
    </step>
   </procedure>
-  <para>Then use them in the text wherever you need them.</para>
+
+  <para>
+   Then use them in the text wherever you need them.
+  </para>
 
   <example id="ex.daps.art.prof.ent">
-   <title>XML File with <literal>&amp;productname;</literal> and
-   <literal>&amp;productnumber;</literal> Entities</title>
-   <screen><?dbsuse-fo font-size="0.65em"?>
+   <title>XML File with <literal>&amp;productname;</literal> and <literal>&amp;productnumber;</literal> Entities</title>
+<screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling2"/>
@@ -698,53 +869,75 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 &lt;/article&gt;</screen>
    <calloutlist>
     <callout arearefs="co.daps.main.pi.profiling2">
-     <para>Processing instruction (PI) in the header of the Main file. If it 
-       is missing, any profiling parameters in the &dc; file will be ignored.
-       </para>
+     <para>
+      Processing instruction (PI) in the header of the Main file. If it is
+      missing, any profiling parameters in the &dc; file will be ignored.
+     </para>
     </callout>
     <callout arearefs="co.daps.main.reference.ent2">
-     <para>Reference to the separate entity declaration 
-    file (with a parameter entity).</para>
+     <para>
+      Reference to the separate entity declaration file (with a parameter
+      entity).
+     </para>
     </callout>
     <callout arearefs="co.daps.articleinfo">
-     <para>Element <sgmltag>articleinfo</sgmltag>.</para>
+     <para>
+      Element <sgmltag>articleinfo</sgmltag>.
+     </para>
     </callout>
     <callout arearefs="co.daps.articleinfo.productname">
-     <para>Element <sgmltag>productname</sgmltag> and entity 
-     <literal>&amp;productname;</literal>.</para>
+     <para>
+      Element <sgmltag>productname</sgmltag> and entity
+      <literal>&amp;productname;</literal>.
+     </para>
     </callout>
     <callout arearefs="co.daps.articleinfo.productnumber">
-     <para>Element <sgmltag>productnumber</sgmltag> and entity 
-     <literal>&amp;productnumber;</literal>.</para>
+     <para>
+      Element <sgmltag>productnumber</sgmltag> and entity
+      <literal>&amp;productnumber;</literal>.
+     </para>
     </callout>
     <callout arearefs="co.daps.main.product.entities">
-     <para>Paragraph containing the entities <literal>&amp;productname;</literal> 
-      and <literal>&amp;productnumber;</literal>. </para>
+     <para>
+      Paragraph containing the entities <literal>&amp;productname;</literal>
+      and <literal>&amp;productnumber;</literal>.
+     </para>
     </callout>
    </calloutlist>
   </example>
-  <para>In any output format, the entities (<xref linkend="co.daps.articleinfo.productname" xrefstyle="select:label nopage"/>, <xref linkend="co.daps.articleinfo.productnumber" xrefstyle="select:label nopage"/>, <xref linkend="co.daps.main.product.entities" xrefstyle="select:label nopage"/>) will automatically be replaced with different
-  values, depending on the profiling parameters contained in the &dc; file that 
-  you use for generating the output. For an example, refer to 
-  <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
-  It shows
-  output variants that can be generated from the XML code in 
-  <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/> plus the entity
-  declaration in <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> 
-  by using different &dc; files.</para>
+
+  <para>
+   In any output format, the entities
+   (<xref linkend="co.daps.articleinfo.productname" xrefstyle="select:label nopage"/>,
+   <xref linkend="co.daps.articleinfo.productnumber" xrefstyle="select:label nopage"/>,
+   <xref linkend="co.daps.main.product.entities" xrefstyle="select:label nopage"/>)
+   will automatically be replaced with different values, depending on the
+   profiling parameters contained in the &dc; file that you use for
+   generating the output. For an example, refer to
+   <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
+   It shows output variants that can be generated from the XML code in
+   <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/> plus the
+   entity declaration in
+   <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> by
+   using different &dc; files.
+  </para>
+
   <table id="tab.daps.profile.output.four" rowsep="1">
-   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/>
-   </title>
+   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/></title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
     <colspec colnum="2" colname="2" colwidth="50*"/>
     <thead>
      <row>
       <entry colname="1">
-       <para>&dc; File</para>
+       <para>
+        &dc; File
+       </para>
       </entry>
       <entry colname="2">
-       <para>Output</para>
+       <para>
+        Output
+       </para>
       </entry>
      </row>
     </thead>
@@ -756,8 +949,10 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        </para>
       </entry>
       <entry>
-       <para>Frog Sound Recordings (Basic)&nbsp;1.0 is a software for recording,
-       editing, and mixing audio data.</para>
+       <para>
+        Frog Sound Recordings (Basic)&nbsp;1.0 is a software for recording,
+        editing, and mixing audio data.
+       </para>
       </entry>
      </row>
      <row>
@@ -767,8 +962,10 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        </para>
       </entry>
       <entry>
-       <para>Frog Sound Recordings (Professional)&nbsp;4.2 is a software for 
-       recording, editing, and mixing audio data.</para>
+       <para>
+        Frog Sound Recordings (Professional)&nbsp;4.2 is a software for
+        recording, editing, and mixing audio data.
+       </para>
       </entry>
      </row>
      <row>
@@ -778,8 +975,10 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
        </para>
       </entry>
       <entry>
-       <para>Gecko Sound Recordings (Professional)&nbsp;4.21 is a software for 
-       recording, editing, and mixing audio data.</para>
+       <para>
+        Gecko Sound Recordings (Professional)&nbsp;4.21 is a software for
+        recording, editing, and mixing audio data.
+       </para>
       </entry>
      </row>
     </tbody>
