@@ -70,11 +70,11 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(dist_ttfonts_DATA) $(dist_xepconf_DATA) \
 	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
 	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
-	$(dist_xsltindex_DATA) $(dist_xsltman_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltyelp_DATA) \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	TODO install-sh missing
+	$(dist_xsltindex_DATA) $(dist_xsltmallard_DATA) \
+	$(dist_xsltman_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltyelp_DATA) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
+	ChangeLog INSTALL NEWS TODO install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_python_module.m4 \
 	$(top_srcdir)/configure.ac
@@ -121,9 +121,9 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" \
 	"$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" \
 	"$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" \
 	"$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" \
-	"$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmandir)" \
-	"$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)" \
-	"$(DESTDIR)$(dapsconfdir)"
+	"$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmallarddir)" \
+	"$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" \
+	"$(DESTDIR)$(xsltyelpdir)" "$(DESTDIR)$(dapsconfdir)"
 SCRIPTS = $(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS)
 SOURCES =
 DIST_SOURCES =
@@ -149,9 +149,9 @@ DATA = $(dist_catalog_DATA) $(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_ttfonts_DATA) $(dist_xepconf_DATA) \
 	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
 	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
-	$(dist_xsltindex_DATA) $(dist_xsltman_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltyelp_DATA) \
-	$(nodist_dapsconf_DATA)
+	$(dist_xsltindex_DATA) $(dist_xsltmallard_DATA) \
+	$(dist_xsltman_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltyelp_DATA) $(nodist_dapsconf_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
@@ -382,6 +382,7 @@ xsltcontribdir = $(xsltdir)/contrib
 xsltdesktopdir = $(xsltdir)/desktop
 xsltepubdir = $(xsltdir)/epub
 xsltindexdir = $(xsltdir)/index
+xsltmallarddir = $(xsltdir)/mallard
 xsltmandir = $(xsltdir)/man
 xsltprofilingdir = $(xsltdir)/profiling
 xsltyelpdir = $(xsltdir)/yelp
@@ -419,6 +420,7 @@ dist_xsltcontrib_DATA = $(wildcard daps-xslt/contrib/*.xsl)
 dist_xsltdesktop_DATA = $(wildcard daps-xslt/desktop/*.xsl)
 dist_xsltepub_DATA = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA = $(wildcard daps-xslt/index/*.xsl)
+dist_xsltmallard_DATA = $(wildcard daps-xslt/mallard/*.xsl)
 dist_xsltman_DATA = $(wildcard daps-xslt/man/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
 dist_xsltyelp_DATA = $(wildcard daps-xslt/yelp/*.xsl)
@@ -915,6 +917,27 @@ uninstall-dist_xsltindexDATA:
 	@list='$(dist_xsltindex_DATA)'; test -n "$(xsltindexdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltindexdir)'; $(am__uninstall_files_from_dir)
+install-dist_xsltmallardDATA: $(dist_xsltmallard_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_xsltmallard_DATA)'; test -n "$(xsltmallarddir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltmallarddir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltmallarddir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltmallarddir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltmallarddir)" || exit $$?; \
+	done
+
+uninstall-dist_xsltmallardDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xsltmallard_DATA)'; test -n "$(xsltmallarddir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(xsltmallarddir)'; $(am__uninstall_files_from_dir)
 install-dist_xsltmanDATA: $(dist_xsltman_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xsltman_DATA)'; test -n "$(xsltmandir)" || list=; \
@@ -1361,7 +1384,7 @@ check: check-recursive
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)" "$(DESTDIR)$(dapsconfdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltyelpdir)" "$(DESTDIR)$(dapsconfdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1424,9 +1447,10 @@ install-data-am: install-data-local install-dist_catalogDATA \
 	install-dist_ttfontsDATA install-dist_xepconfDATA \
 	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
 	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
-	install-dist_xsltindexDATA install-dist_xsltmanDATA \
-	install-dist_xsltprofilingDATA install-dist_xsltyelpDATA \
-	install-man install-nodist_dapsconfDATA
+	install-dist_xsltindexDATA install-dist_xsltmallardDATA \
+	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
+	install-dist_xsltyelpDATA install-man \
+	install-nodist_dapsconfDATA
 
 install-dvi: install-dvi-recursive
 
@@ -1482,9 +1506,9 @@ uninstall-am: uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
 	uninstall-dist_xepconfDATA uninstall-dist_xsltcommonDATA \
 	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdesktopDATA \
 	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
-	uninstall-dist_xsltmanDATA uninstall-dist_xsltprofilingDATA \
-	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
-	uninstall-nodist_dapsconfDATA
+	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmanDATA \
+	uninstall-dist_xsltprofilingDATA uninstall-dist_xsltyelpDATA \
+	uninstall-local uninstall-man uninstall-nodist_dapsconfDATA
 
 uninstall-man: uninstall-man1
 
@@ -1509,16 +1533,16 @@ uninstall-man: uninstall-man1
 	install-dist_ttfontsDATA install-dist_xepconfDATA \
 	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
 	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
-	install-dist_xsltindexDATA install-dist_xsltmanDATA \
-	install-dist_xsltprofilingDATA install-dist_xsltyelpDATA \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-man1 install-nodist_dapsconfDATA \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-recursive uninstall uninstall-am \
+	install-dist_xsltindexDATA install-dist_xsltmallardDATA \
+	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
+	install-dist_xsltyelpDATA install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-man1 \
+	install-nodist_dapsconfDATA install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
 	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
 	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
@@ -1528,9 +1552,10 @@ uninstall-man: uninstall-man1
 	uninstall-dist_xepconfDATA uninstall-dist_xsltcommonDATA \
 	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdesktopDATA \
 	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
-	uninstall-dist_xsltmanDATA uninstall-dist_xsltprofilingDATA \
-	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
-	uninstall-man1 uninstall-nodist_dapsconfDATA
+	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmanDATA \
+	uninstall-dist_xsltprofilingDATA uninstall-dist_xsltyelpDATA \
+	uninstall-local uninstall-man uninstall-man1 \
+	uninstall-nodist_dapsconfDATA
 
 
 #---------------------------Local TARGETS--------------------------------------
