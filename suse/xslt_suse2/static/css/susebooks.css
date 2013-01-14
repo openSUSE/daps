@@ -1197,21 +1197,24 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     clear: both;
 }
 
-.sect1 .title, .single .sect1 .title {
+.sect1 .title, .single .sect1 .title,
+.chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+.bibliography .qandaset .title, .reference .qandaset .title,
+.part .qandaset .title, .glossary .qandaset .title  {
     font-size: 28px;
     font-weight: normal;
     padding: 50px 0 5px;
     text-align: left;
 }
 
-.sect2 .title, .single .sect2 .title {
+.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
     font-size: 22px;
     padding: 40px 0 0;
     text-align: left;
 }
 
 .sect3 .title, .single .sect3 .title,
-.qandaset .title, .refentry h2, h2, .indexdiv h3 {
+.sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
@@ -1219,7 +1222,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .sect4 .title, .single .sect4 .title,
-.sect5 .title, .single .sect5 .title, .question {
+.sect5 .title, .single .sect5 .title {
     font-size: 16px;
     padding: 53px 0 0;
     margin: 0 0 -33px;
@@ -1229,7 +1232,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-align: left;
 }
 
-.sect4 .title, .question {
+.sect4 .title {
     font-weight: 600;
 }
 
@@ -1238,11 +1241,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 .name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
-.question p {
+.qandaset .title {
     color: #439539;
 }
 
-/*BR*/
 a:hover .name, a:focus .name, a:active .name,
 .refentrytitle a:hover, .refentrytitle a:focus, .refentrytitle a:active {
     text-decoration: underline;
@@ -1967,6 +1969,13 @@ li p {
 div.itemizedlist {
     margin: 0 0 24px;
 }
+
+.question p {
+    font-size: 20px;
+    font-style: italic;
+    color: #666;
+}
+
 
 /* Review features */
 
