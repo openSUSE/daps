@@ -997,6 +997,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     padding: 20px 0 0 0;
     border-top: 1px solid #999;
     clear: both;
+    display: none;
 }
 
 .offline .online-contents {
@@ -1808,7 +1809,7 @@ a:hover code, a:focus code, a:active code {
 }
 
 .table-title, .example-title, .procedure-title,
-.variablelist-title, .itemizedlist-title, .qandadiv-title {
+.variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
     position: relative;
     top: -33px;
     padding-top: 33px;
@@ -1831,6 +1832,17 @@ a:hover code, a:focus code, a:active code {
     margin: 24px 0 -50px;
 }
 
+.qandaentry {
+    margin: -33px 0 22px;
+}
+
+.qanda-toc + .qandaentry {
+    padding-top: 53px;
+}
+
+.qandaentry:last-child {
+    margin: -33px 0 -23px;
+}
 
 .procedure-title code, .procedure-title .command, .procedure-title .keycap,
 .table-title code, .table-title .command, .table-title .keycap,
@@ -1955,15 +1967,16 @@ ul {
 }
 
 .qanda-toc {
-    margin-bottom: 35px;
-}
-
-.qandaentry {
     margin-bottom: 45px;
 }
 
 .qandadiv {
-    margin: 0 0 10px 0;
+    margin: 0 0 40px 0;
+    border-bottom: 1px solid #efeff0;
+}
+
+.qandadiv:last-child {
+    border-bottom: none;
 }
 
 .answer .table-title, .answer .screen-wrap, .answer .variablelist {
