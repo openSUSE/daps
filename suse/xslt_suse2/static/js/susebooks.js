@@ -83,6 +83,8 @@ $(document).keyup(function(e) {
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_fixed-header .single-crumb').unbind('click');
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
+    $('#_header .single-crumb').unbind('click');
+    $('#_header .single-crumb').click(function(){ moveToc('up'); exchClass( '#_toc-bubble-wrap', 'inactive', 'active' ); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
@@ -119,9 +121,9 @@ $(document).keyup(function(e) {
 
 function activate( elm ) {
     var element = elm;
-    if ((element == '_toc-area') || (element == '_find-area') ||
-        (element == '_language-picker' || element == '_format-picker') ||
-        (element == '_fixed-header-wrap')) {
+    if (element == '_toc-area' || element == '_find-area' ||
+        element == '_language-picker' || element == '_format-picker' ||
+        element == '_fixed-header-wrap') {
         deactivate();
         exchClass( '#' + element , 'inactive', 'active' );
         if (element == '_fixed-header-wrap') {
@@ -142,6 +144,17 @@ function activate( elm ) {
             $('#' + element + '-button').click(function(){deactivate(); return false;});
         }
     }
+}
+
+function moveToc ( direction ) {
+    if (direction = 'up') {
+        $('#_fixed-header-wrap > .bubble').detach().appendTo('#_toc-bubble-wrap');
+    }
+    else if (direction = 'down') {
+        $('#_toc-bubble-wrap > .bubble').detach().appendTo('#_fixed-header-wrap');
+    }
+    else
+        alert('I don\'t want to move to the' + direction + '.');
 }
 
 function scrollDeactivator() {
@@ -194,7 +207,7 @@ function share( service ) {
         alert('Eek! The sharing service '+ service +' is new to me.');
     }
 }
-            
+
 function unlabelInputFind() {
     $('#_find-input-label').hide();
 }
@@ -204,7 +217,7 @@ function labelInputFind() {
         $('#_find-input-label').show();
     }
 }
-            
+
 function exchClass(path, clsOld, clsNew) {
     $(path).addClass(clsNew);
     $(path).removeClass(clsOld);

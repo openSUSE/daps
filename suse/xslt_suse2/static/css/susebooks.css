@@ -565,6 +565,9 @@ html, body {
 
 #_toolbar .bubble, #_header .bubble {
     position: absolute;
+}
+
+#_toolbar .bubble, #_header .bubble, #_toc-bubble-wrap .bubble {
     box-shadow: 1px 1px 3px 0px #333;
 }
 
@@ -577,10 +580,34 @@ html, body {
     top: -3px;
 }
 #_toolbar .bubble {
-    top: 66px;
     left: 0;
     width: 100%;
     padding: 0;
+}
+
+#_toolbar .bubble {
+    top: 66px;
+}
+
+#_toc-bubble-wrap .bubble {
+    min-width: 400px;
+    max-width: 1024px;
+    padding: 10px;
+    margin: 0 auto;
+    top: 2px;
+}
+
+#_toc-bubble-wrap {
+    position:absolute;
+    top: 85px;
+    left: 0px;
+    display: none;
+    height: auto;
+    width: 100%;
+}
+
+#_toc-bubble-wrap.active {
+    display: block;
 }
 
 #_toolbar .bubble-container {
@@ -615,7 +642,7 @@ html, body {
     border-right: none;
 }
 
-#_toolbar .bubble a, #_fixed-header-wrap .bubble a {
+#_toolbar .bubble a, #_fixed-header-wrap .bubble a, #_toc-bubble-wrap .bubble a {
     color: #FFF;
     display: block;
     text-decoration: none;

@@ -452,6 +452,7 @@
         </xsl:call-template>
 
         <xsl:call-template name="user.header.content"/>
+          <div id="_toc-bubble-wrap"></div>
           <div id="_content">
             <xsl:call-template name="metadata"/>
 
