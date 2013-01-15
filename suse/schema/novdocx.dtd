@@ -257,11 +257,11 @@
 <!ELEMENT textobject         (phrase) >
 
 <!-- QandASet -->
-<!ELEMENT qandaset           (title?, (remark|indexterm)*, (qandadiv+|qandaentry+)) >
+<!ELEMENT qandaset           ((remark|indexterm)*, (qandadiv+|qandaentry+)) >
 <!ATTLIST qandaset           defaultlabel  (none | number | qanda) #IMPLIED
                              %profiling.attributes;
                              %xmlbase;>
-<!ELEMENT qandadiv           (title?, (remark|indexterm)*, (qandadiv+|qandaentry+))>
+<!ELEMENT qandadiv           (title?, (remark|indexterm)*, qandaentry+)>
 <!ATTLIST qandadiv           %profiling.attributes;
                              %xmlbase; >
 <!ELEMENT qandaentry         (question,answer*)>
