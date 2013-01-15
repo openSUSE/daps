@@ -73,7 +73,7 @@ $(document).keyup(function(e) {
         window.addEventListener('scroll', scrollDeactivator, false);
     }
     
-    $('#_share-print').show;
+    $('#_share-print').show();
     
     if (location.protocol.match(/^(http|spdy)/)) {
         $('body').removeClass('offline');
