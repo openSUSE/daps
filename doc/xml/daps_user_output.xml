@@ -56,11 +56,8 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
 
  <para>
     To validate all files that belong to your documentation project,
-    &dapsacr; only needs to know which &dc; file to use. If you have
-    specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
-    &dapsconf-user;, &dapsacr; automatically uses the corresponding &dc; file.
-    The same is true if your documentation directory contains only one
-    &dc; file. Otherwise, specify the path to the &dc; file as described below.
+    &dapsacr; only needs to know which &dc; file to use. Use the <option>-d</option>
+    option to specify it.
    </para>
 
  <variablelist>
@@ -89,75 +86,13 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
  </variablelist>
 </sect1>
 
- <sect1 id="cha.daps.user.output.formats">
-  <title>Supported Output Formats</title>
-
-  <para>
-   &dapsacr; currently lets you publish your XML sources in the following
-   output formats:
-  </para>
-
-  <itemizedlist>
-   <listitem>
-    <para>
-     PDF
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     HTML
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     HTML-single
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     &epub;
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     text
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-     man page
-    </para>
-   </listitem>
-<!-- toms 2012-03-29: Wouldn't mention that; it's mostly unsupported
-        and rather old stuff
-   -->
-<!--<listitem>
-    <para>MediaWiki</para>
-   </listitem>-->
-   <listitem>
-    <para>
-     &webh;
-    </para>
-   </listitem>
-<!-- toms 2012-03-29: Wouldn't mention that; it's rather esoteric for
-        the broader audience
-   -->
-<!--<listitem>
-    <para>JSP books</para>
-   </listitem>-->
-  </itemizedlist>
-
-  <para>
-   The number of output formats may be extended in the future, depending on
-   the output formats that are supported by DocBook stylesheets. For an
-   overview of the available output formats, run <command>daps
-   --help</command> and have a look at the subsection in
-   <citetitle>Subcommands</citetitle> that is entitled <citetitle>Generate
-   Books</citetitle>.
-  </para>
- </sect1>
- <sect1 id="cha.daps.user.output.syntax">
+ 
+ <sect1 id="sec.daps.user.output.syntax">
   <title>Basic Syntax for Generating Output</title>
+   <para>&dapsacr; supports a number of different output formats, including also
+   <quote>exotic</quote> formats like man pages or simple text. 
+   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
+   gives an overview.</para>
   <para>
     Independent of the individual output format you want to create, you need
     to specify the &dc; file to use:
@@ -176,274 +111,15 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
 
  <sect1 id="sec.daps.user.output.formats">
   <title>Supported Output Formats</title>
-  <para>&dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. 
-   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
-   gives an overview of the &dapsacr; subcommands for generating output 
-   formats.</para>
+ <para>The following table lists the main output formats and their
+ characteristics, and the &dapsacr; subcommands to generate them. Refer to 
+ <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
+ for the commands' basic syntax.</para>
+ 
   <table id="table.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
-   <tgroup cols="3">
-    <colspec colnum="1" colname="1" colwidth="18*"/>
-    <colspec colnum="2" colname="2" colwidth="41*"/>
-    <colspec colnum="3" colname="3" colwidth="41*"/>
-    <thead>
-     <row>
-      <entry>
-       <para>
-         Subcommand
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Output
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Note
-        </para>
-      </entry>
-     </row>
-    </thead>
-    <tbody>
-     <row>
-      <entry>
-       <para>
-         color-pdf
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a color PDF (without any crop marks). Open the result in a
-         PDF viewer.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Requires an FO formatter.
-<!--It is also possible to create one PDF 
-        containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
-        for large documentation projects you might run into problems with the
-         java memory stack.--></para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         pdf
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a black-and-white PDF with crop marks, suitable for
-         hand-off to a printing shop. Open the result in a PDF viewer.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Requires an FO formatter. Creation of crop marks is currently only
-         supported by the XEP FO formatter. All color images are
-         automatically converted to grayscale images.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         html
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a subdirectory containing individual HTML files for all
-         chapters of a book (including also preface, glossary or appendix
-         files).
-<!--They are named according to the ID of the
-         respective root element.-->
-         Open the generated <filename>index.html</filename> file in a Web
-         browser to view the generated HTML from the starting point (ROOTID
-         of the top-level element).
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Images and CSS files are only linked in the resulting directory
-         that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <option>--static</option>
-         option. This is useful for creating distributable HTML builds.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         html-single
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a single HTML file, named after the &dc; file used to
-         create the output. Open the generated <filename>*.html</filename>
-         file in a Web browser.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Single HTML files are more convenient for full text searches.
-         Images and CSS files are only linked in the resulting directory
-         that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <option>--static</option>
-         option. This is useful for creating distributable HTML builds.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         epub
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates an &epub; document. Open the result in an portable e-book
-         reader (or with a software like Calibre).
-        </para>
-      </entry>
-      <entry>
-       <para>
-        <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
-        conversion of articles to epub?</remark>
-        <remark>toms, 2012-04-15: This seems to be an issue with the
-           current DocBook stylesheets. Need to check this.</remark>
-       </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         webhelp
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a DocBook &webh; output. Open the generated
-         <filename>index.html</filename> file in a Web browser to view the
-         generated HTML from the starting point (ROOTID of the top-level
-         element).
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Experimental feature. Requires a very recent version of the DocBook
-         stylesheets. DocBook &webh; consists of HTML pages with an
-         additional pane, featuring a table of contents and a search
-         function. The table of contents can be expanded and collapsed and
-         is automatically synchronized with the contents pane. The search
-         function weights the search results so that the most relevant
-         results are listed first.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         txt
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates an ASCII text output. Open the result in a text editor.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         All images are removed from the output, but their location is
-         indicated in the text by the respective image base name printed in
-         square brackets. A table of contents is automatically generated and
-         is available at the beginning of the text document.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         man
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates one or multiple man pages.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         To create man pages, your XML files must contain at least one
-         <sgmltag>refentry</sgmltag>&mdash;be it in a
-         <sgmltag>chapter</sgmltag>, <sgmltag>appendix</sgmltag>, or
-         collected in a <sgmltag>reference</sgmltag> element. When
-         processing a DocBook document with multiple
-         <sgmltag>refentry</sgmltag> elements (regardless where they
-         appear), &dapsacr; generates one man page file per
-         <sgmltag>refentry</sgmltag> element. All other parts of the
-         document will be ignored.
-        </para>
-<!--taroth 2012-04-11: additional
-        information to be covered in User Guide: The filename for each man
-        page is generated from refentry content elements. The filename prefix
-        is the refname, and the suffix is the manvolnum from within the
-        refmeta element. If you are processing many refentrys from the same
-        document, make sure they will all produce unique filenames, or else
-        any duplicates will overwrite each other.-->
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         jsp
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates Java Server Pages (JSP files). The generated
-         <filename>jsp</filename> subdirectory contains individual JSP files
-         for all chapters of a book (including also preface, glossary or
-         appendix files).
-<!--They are named according to the ID of the respective 
-       root element.-->
-       </para>
-      </entry>
-      <entry>
-       <para>
-         A JSP file is an HTML page containing a reference to Java servlets
-         or Java Server Side Applets.
-        </para>
-      </entry>
-     </row>
-     <row>
-      <entry>
-       <para>
-         wiki
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Creates a MediaWiki output in a single file. Open the result in a
-         text or MediaWiki editor, and use it as raw input for a MediaWiki
-         article.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Experimental feature. The output is very basic: Section titles are
-         converted in headlines according to their hierarchy, itemized
-         lists, ordered lists and <sgmltag>screen</sgmltag> elements are
-         converted to the respective MediaWiki elements.
-        </para>
-      </entry>
-     </row>
-    </tbody>
-   </tgroup>
+   &daps-output-formats-table;
   </table>
+  &daps-output-all;
  </sect1>
 </chapter>
