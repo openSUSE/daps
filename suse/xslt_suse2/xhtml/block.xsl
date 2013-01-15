@@ -29,12 +29,28 @@
     </div>
   </xsl:template>
 
+  <xsl:template name="readable.arch.string">
+    <xsl:param name="input"/>
+    <xsl:param name="zseries-replaced">
+      <xsl:call-template name="string-replace">
+        <xsl:with-param name="input" select="$input"/>
+        <xsl:with-param name="search-string">zseries</xsl:with-param>
+        <xsl:with-param name="replace-string">System z</xsl:with-param>
+      </xsl:call-template>
+    </xsl:param>
+    <xsl:message>Blub: <xsl:value-of select="$input"/></xsl:message>
+    <xsl:call-template name="string-replace">
+      <xsl:with-param name="input" select="$zseries-replaced"/>
+      <xsl:with-param name="search-string">;</xsl:with-param>
+      <xsl:with-param name="replace-string">, </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="para[@arch]">
     <xsl:variable name="arch">
-      <xsl:choose>
-        <xsl:when test="@arch = 'zseries'">System&#xa0;z</xsl:when>
-        <xsl:otherwise><xsl:value-of select="translate(@arch, ';', '/')"/></xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="readable.arch.string">
+        <xsl:with-param name="input" select="@arch"/>
+      </xsl:call-template>
    </xsl:variable>
     <xsl:call-template name="paragraph">
     <xsl:with-param name="class">

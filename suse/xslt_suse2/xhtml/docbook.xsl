@@ -28,9 +28,9 @@
     xmlns:exsl="http://exslt.org/common"
     xmlns="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="exsl">
-  
+
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
- 
+
  <xsl:include href="../common/titles.xsl"/>
  <xsl:include href="../common/navigation.xsl"/>
 
@@ -55,7 +55,9 @@
  <xsl:include href="qandaset.xsl"/>
  <xsl:include href="titlepage.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
- 
+
+
+ <xsl:include href="../common/string-replace.xsl"/>
  <xsl:include href="metadata.xsl"/>
  
 
