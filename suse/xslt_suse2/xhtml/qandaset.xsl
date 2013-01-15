@@ -85,7 +85,9 @@
         <xsl:apply-templates select="$preamble"/>
     </div>
   </xsl:if>
-  <xsl:apply-templates select="qandadiv|qandaentry"/>
+  <div class="qandadiv">
+    <xsl:apply-templates select="qandadiv|qandaentry"/>
+  </div>
 </xsl:template>
 
 
