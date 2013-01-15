@@ -13,11 +13,11 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
  <abstract>
   <para>
    &dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. You can build several output formats in parallel, build your
-   complete documentation project (set, book, or article) or only a part of
-   it (for example, a specific chapter). By default, &dapsacr; uses the
-   regular DocBook stylesheets, but &dapsacr; also allows you to customize
-   your output formats in a very flexible way.
+   <quote>exotic</quote> formats like man pages or simple text. You can build 
+   several output formats in parallel, build your complete documentation project
+   (set, book, or article) or only a part of it (for example, a specific chapter). 
+   By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr; also 
+   allows you to customize your output formats in a very flexible way.
    <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
   </para>
  </abstract>
@@ -40,25 +40,27 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
  <sect1 id="sec.daps.user.output.validate">
  <title>Validating Your XML Sources</title>
   &daps-validation-basics;
-  <para>Validating XML files within a book or set often exceeds validation of 
+  &daps-example-validation-error; 
+  <para>Validation within your XML editor is bound to fail, as soon you use
+  <xref linkend="sec.daps.user.modular.profile" xrefstyle="select:title"/>
+  in your DocBook sources. Furthermore, validating XML files within a 
+  <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of 
   the current XML file, as links (<sgmltag>xref</sgmltag> elements) or 
-  XIncludes need to be resolved, too. 
-   If you use conditional text (<literal>profiling</literal>) in your DocBook
-   sources (for details, refer to <xref linkend="sec.daps.user.modular.profile"/>),
-   your XML editor cannot check validity of your XML files.</para>
- <para>However, &dapsacr; can handle all those cases due to the built-in 
-   xmllint validator. By default, <sgmltag>remark</sgmltag> elements and XML 
+  XIncludes need to be resolved, too. </para>
+ 
+ <para>&dapsacr; can handle all those cases due to the built-in 
+   <literal>xmllint</literal> validator. By default, <sgmltag>remark</sgmltag> elements and XML 
    comments are ignored during validation. However, if you intend to create a 
    (draft) output including remarks or comments, you need to include them for
-    validation by specifying the respective &dapsacr; option.</para>
+    validation&mdash;see the example commands below.</para>
 
  <para>
     To validate all files that belong to your documentation project,
     &dapsacr; only needs to know which &dc; file to use. If you have
     specified a value for <parameter>DOCCONF_DEFAULT</parameter> in
-    &dapsconf-user; (or if your documentation directory contains only one
-    &dc; file), &dapsacr; automatically uses the corresponding &dc; file.
-    Otherwise, specify the path to the &dc; file as described below.
+    &dapsconf-user;, &dapsacr; automatically uses the corresponding &dc; file.
+    The same is true if your documentation directory contains only one
+    &dc; file. Otherwise, specify the path to the &dc; file as described below.
    </para>
 
  <variablelist>
@@ -67,9 +69,7 @@ see daps_user_concept.xml, ID sec.daps.user.basics.single-->
    <listitem>
     <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
     <para>If the XML files are not valid, &dapsacr; will return the parser
-     errors: </para>
-    &daps-example-validation-error; 
-        <para>If validation was successful, &dapsacr; returns: <literal>All files are
+     errors. If validation was successful, &dapsacr; returns: <literal>All files are
      valid.</literal>
     </para>
    </listitem>
