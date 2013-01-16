@@ -1,6 +1,7 @@
-/* http://stackoverflow.com/questions/5489869/is-there-a-plugin-that-makes-the-jquery-id-selector-dot-safe
-   We use lots of .'s in our IDs. The following "helps". Note that you can't use
-   selectors like #id.class any more, unless the ID starts with an underscore.
+/*  We use lots of .'s in our actual documentation's IDs. The following "helps"
+    J-Query deal with this. Incidentally, it also breaks selectors like
+    #id.class (unless the ID starts with an underscore).
+   <http://stackoverflow.com/questions/5489869/is-there-a-plugin-that-makes-the-jquery-id-selector-dot-safe>
 */
 
 (function($){
@@ -23,12 +24,11 @@
 })(jQuery);
 
 
-
 var deactivatePosition = -1;
 
-$(document).ready(function() {
+$(function() {
 
-    // http://css-tricks.com/snippets/jquery/smooth-scrolling/
+    /* http://css-tricks.com/snippets/jquery/smooth-scrolling/ */
 
     function filterPath(string) {
         return string
@@ -60,12 +60,12 @@ $(document).ready(function() {
                 });
             }
         }
+        });
     });
-  });
 
-$(document).keyup(function(e) {
-    if (e.keyCode == 27) { deactivate() }
-});
+    $(document).keyup(function(e) {
+        if (e.keyCode == 27) { deactivate() }
+    });
 
     // The other things.
 
@@ -84,7 +84,7 @@ $(document).keyup(function(e) {
     $('#_fixed-header .single-crumb').unbind('click');
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     $('#_header .single-crumb').unbind('click');
-    $('#_header .single-crumb').click(function(){ moveToc('up'); exchClass( '#_toc-bubble-wrap', 'inactive', 'active' ); return false;});
+    $('#_header .single-crumb').click(function(){ moveToc('up'); return false;});
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
@@ -119,6 +119,7 @@ $(document).keyup(function(e) {
 
 });
 
+
 function activate( elm ) {
     var element = elm;
     if (element == '_toc-area' || element == '_find-area' ||
@@ -147,11 +148,20 @@ function activate( elm ) {
 }
 
 function moveToc ( direction ) {
-    if (direction = 'up') {
+    if (direction == 'up') {
         $('#_fixed-header-wrap > .bubble').detach().appendTo('#_toc-bubble-wrap');
+        exchClass( '#_toc-bubble-wrap', 'inactive', 'active' );
+        exchClass( '#_header .crumbs', 'inactive', 'active' );
+        $('#_header .single-crumb').unbind('click');
+        $('#_header .single-crumb').click(function(){ moveToc('down'); return false;});
+        deactivatePosition = $('html').scrollTop();
     }
-    else if (direction = 'down') {
+    else if (direction == 'down') {
         $('#_toc-bubble-wrap > .bubble').detach().appendTo('#_fixed-header-wrap');
+        exchClass( '#_toc-bubble-wrap', 'active', 'inactive' );
+        exchClass( '#_header .crumbs', 'active', 'inactive' );
+        $('#_header .single-crumb').unbind('click');
+        $('#_header .single-crumb').click(function(){ moveToc('up'); return false;});
     }
     else
         alert('I don\'t want to move to the' + direction + '.');
@@ -167,11 +177,13 @@ function scrollDeactivator() {
 }
 
 function deactivate() {
+    deactivatePosition = -1;
     var changeClass = new Array('_toc-area','_language-picker','_format-picker');
     for (var i = 0; i < changeClass.length; ++i) {
             exchClass( '#' + changeClass[i] , 'active', 'inactive');
             $('#' + changeClass[i] + '-button').unbind('click');
     }
+    moveToc( 'down' );
     $('#_fixed-header .single-crumb').unbind('click');
     exchClass('#_fixed-header-wrap', 'active', 'inactive');
     $('#_find-area-button').unbind('click');

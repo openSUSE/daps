@@ -203,11 +203,14 @@
     <xsl:param name="debug"/>
     
     <xsl:if test="$generate.breadcrumbs != 0">
-      <div class="crumbs">
+      <div class="crumbs inactive">
             <xsl:apply-templates select="." mode="breadcrumbs">
               <xsl:with-param name="class">single-crumb</xsl:with-param>
               <xsl:with-param name="context" select="$context"/>
             </xsl:apply-templates>
+            <xsl:if test="$context = 'header'">
+              <div class="bubble-corner active-contents"> </div>
+            </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>

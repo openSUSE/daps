@@ -201,6 +201,10 @@ html, body {
     border-radius: 18px;
 }
 
+#_header .crumbs.active {
+    height: 49px;
+}
+
 #_header .crumbs .single-crumb:hover, #_header .crumbs .single-crumb:focus, #_header .crumbs .single-crumb:active {
     background-color: #999;
     color: #FFF;
@@ -594,12 +598,11 @@ html, body {
     max-width: 1024px;
     padding: 10px;
     margin: 0 auto;
-    top: 2px;
 }
 
 #_toc-bubble-wrap {
     position:absolute;
-    top: 85px;
+    top: 83px;
     left: 0px;
     display: none;
     height: auto;
@@ -2233,7 +2236,7 @@ body.draft {
         max-height: 400px;
     }
 
-    #_bubble-toc {
-        height: 300px;
+    #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
+        max-height: 300px;
     }
 }
