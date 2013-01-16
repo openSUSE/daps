@@ -48,6 +48,10 @@ BuildRequires:  docbook-xsl-stylesheets >= 1.75
 BuildRequires:  fdupes
 BuildRequires:  libxslt
 BuildRequires:  make
+# Only needed to fix the "have choice" error between xerces-j2 and crimson
+%if 0%{?suse_version} == 1210
+BuildRequires:  xerces-j2
+%endif
 BuildRequires:  trang 
 
 Requires:       docbook
