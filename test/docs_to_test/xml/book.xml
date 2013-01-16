@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
                  type="text/xml" title="Profiling step"?>
+
+<!--<!DOCTYPE book PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"-->
 <!DOCTYPE book PUBLIC
  "-//OASIS//DTD DocBook XML V4.5//EN"
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" 
@@ -897,10 +899,9 @@
       <title>Q and A</title>
 
       <qandaset>
-        <title>Magna aliquyam erat</title>
         <qandadiv>
           <title>Lorem ipsum</title>
-          <qandaentry>
+          <qandaentry id="q.1">
             <question>
               <para>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua?</para>
@@ -917,6 +918,7 @@
             <question>
               <para>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
                 fugiat nulla pariatur?</para>
+              <para>Reference to a qandaset: <xref linkend="q.1"/>.</para>
             </question>
             <answer>
               <para>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
@@ -1237,6 +1239,10 @@
       </variablelist>
       <para>See <xref linkend="vl.links-and-xrefs"/> for more
         information.</para>
+    </chapter>
+    <chapter id="inline-in-paras">
+      <title>Inline Elements in Paragraphs</title>
+      <para>This is an <literal>literal</literal> inside a paragraph.</para>
     </chapter>
   </part>
   <part id="profiling">
