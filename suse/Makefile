@@ -11,6 +11,7 @@ DTDNAME    := novdoc
 DTDVERSION := 1.0
 DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 SUSESTYLES := /usr/share/xml/docbook/stylesheet/suse
+SUSESTYLES_BETA := /usr/share/xml/docbook/stylesheet/suse
 
 SUSEXSL_FOR-CATALOG    := for-catalog-$(PACKAGE).xml
 NOVDOC_FOR-CATALOG     := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
@@ -30,6 +31,7 @@ HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard xslt/xhtml/*.xsl))
 # Directories for installation
 PREFIX    ?= /usr/share
 STYLEDIR := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
+STYLEDIR_BETA := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse_beta
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
 all: schema/novdocx-core.rnc schema/novdocx-core.rng schema/novdocx.rng
@@ -51,9 +53,11 @@ install: create-install-dirs
 	install -m644 catalogs/*.xml $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
 	tar c --mode=u+w,go+r-w,a-s -C xslt . | (cd  $(STYLEDIR); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C xslt_suse2 . | (cd  $(STYLEDIR_BETA); tar xpv)
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR)
+	mkdir -p $(STYLEDIR_BETA)
 	mkdir -p $(DOCDIR)
 	mkdir -p $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/{dtd,rng}/$(DTDVERSION)
 	mkdir -p $(DESTDIR)/var/lib/sgml
@@ -140,7 +144,7 @@ catalogs/$(SUSEXSL_FOR-CATALOG):
 	  "file://$(SUSESTYLES)" $@
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse2-xsl/current" \
-          "file://$(SUSESTYLES)" $@
+          "file://$(SUSESTYLES_BETA)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
