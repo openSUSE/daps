@@ -261,11 +261,13 @@
 <!ATTLIST qandaset           defaultlabel  (none | number | qanda) #IMPLIED
                              %profiling.attributes;
                              %xmlbase;>
-<!ELEMENT qandadiv           (title?, (remark|indexterm)*, qandaentry+)>
+<!ELEMENT qandadiv           (title, (remark|indexterm)*, qandaentry+)>
 <!ATTLIST qandadiv           %profiling.attributes;
+                             id             ID        #IMPLIED
                              %xmlbase; >
 <!ELEMENT qandaentry         (question,answer)>
 <!ATTLIST qandaentry         %profiling.attributes;
+                             id             ID        #IMPLIED
                              %xmlbase;>
 <!ELEMENT question           (label?, para, (calloutlist|itemizedlist|orderedlist|
                               variablelist|important|note|
