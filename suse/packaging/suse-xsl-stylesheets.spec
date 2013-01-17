@@ -25,7 +25,6 @@ Version:        1.9.17
 #
 ################################################################
 
-
 %define dtdversion      1.0
 %define dtdname         novdoc
 %define regcat          %{_bindir}/sgml-register-catalog
