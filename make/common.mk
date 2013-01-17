@@ -1540,13 +1540,12 @@ ifneq ($(IS_RESDIR),static)
 	tar cph --exclude-vcs -C $(dir $<) images | \
 	  (cd $(HTML_DIR)/static; tar xpv) >/dev/null
     else
-	if [ -d $(HTML_DIR)/static/images ]; then \
-	  rm -rf $(HTML_DIR)/static/*; \
-	fi
-	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static/images
+	rm -rf $(HTML_DIR)/static && mkdir -p $(HTML_DIR)/static
+	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static
     endif
     ifdef HTML_CSS
-	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(HTML_DIR)/static/css
+	mkdir -p $(HTML_DIR)/static/css
+	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(HTML_DIR)/static/css/
     endif
 else
   copy_static_images: | $(HTML_DIR)/static
@@ -1839,7 +1838,7 @@ endif
 # needs to be PHONY, since I do not know which files need to
 # be copied/linked, we just copy/link the whole directory
 #
-.PHONY: copy_static_images
+.PHONY: copy_static_jsp_images
 ifneq ($(IS_RESDIR),static)
   copy_static_jsp_images: | $(JSP_DIR)/static
   ifdef HTML_CSS
@@ -1850,12 +1849,11 @@ ifneq ($(IS_RESDIR),static)
 	tar cph --exclude-vcs -C $(dir $<) images | \
 	  (cd $(JSP_DIR)/static; tar xpv) >/dev/null
     else
-	if [ -d $(JSP_DIR)/static/images ]; then \
-	  rm -rf $(JSP_DIR)/static/*; \
-	fi
+	rm -rf $(JSP_DIR)/static && mkdir -p $(JSP_DIR)/static
 	$(HTML_GRAPH_COMMAND) $< $(JSP_DIR)/static/images
     endif
     ifdef HTML_CSS
+	mkdir -p $(HTML_DIR)/static/css
 	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(JSP_DIR)/static/css
     endif
 else
