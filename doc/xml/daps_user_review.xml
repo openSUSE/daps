@@ -95,14 +95,14 @@
    <varlistentry>
     <term>Including Remarks in the Output</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
      &daps-output-remarks;
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Building PDFs with a <literal>DRAFT</literal> Watermark</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
      <para>
       Generates a PDF that has a <literal>DRAFT</literal> watermark printed
       on each page.
@@ -112,7 +112,7 @@
    <varlistentry>
     <term>Including Metadata in the Output</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
      <para>
       If metadata to a file has been set
       <remark>taroth 2013-01-08: which 
@@ -145,7 +145,7 @@
    <varlistentry>
     <term>Creating an XML Bigfile</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
      <para>
       &dapsacr; follows all XIncludes to create the bigfile and shows a
       message where to find the generated output.
@@ -155,13 +155,22 @@
    <varlistentry>
     <term>Creating Profiled XML Sources</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
      <para>
       If you use profiling attributes to manage document variants, &dapsacr;
       creates profiled XML files from your set. For details about profiling
       in DocBook and how to use it with &dapsacr;, refer to
       <xref linkend="sec.daps.user.modular.profile"/>.
      </para>
+     <para>
+      <note>
+       <title>Output Limitations</title>
+      </note>The output of <command>dist-xml</command> does not
+      contain any graphics and the sources may not validate after being unpacked. 
+      To create tar files containing graphics and a complete, valid set of
+      XML sources, use the command <command>package-src</command>. 
+      For further details, run <command>daps package-src --help</command> or
+      refer to <xref linkend="cha.daps.user.deploy"/>.</para>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -192,14 +201,14 @@
    <varlistentry>
     <term>Creating a Graphics Tar File</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
      <para>
       Creates a tar file of all graphics
       <remark>taroth 2013-01-11: 
      check with fs: the referenced ones?</remark>
       that belong to the specified documentation project.
      </para>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
      <para>
       Creates a tar file with PNG graphics
       <remark>taroth 2013-01-11: 
@@ -212,7 +221,7 @@
    <varlistentry>
     <term>Creating a Tar File For Localization</term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
      <para>
       Use this command only if you manage your documentation project with
       &dm; and have set the respective SVN properties to mark any files that
@@ -235,13 +244,13 @@
    <varlistentry>
     <term>Creating Tar Files with Different Output Formats </term>
     <listitem>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
      <para>
       Generates HTML output of the specified documentation project
       (including HTML files, any graphics, and your CSS file defining the
       HTML layout) and packs the output into a tar file.
      </para>
-<screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
+     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
      <para>
       Generates a single-file HTML output and packs the HTML file, any
       graphics, and your CSS file) into a tar file.
