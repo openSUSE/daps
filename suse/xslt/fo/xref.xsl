@@ -328,4 +328,29 @@
    
 </xsl:template>
 
+ <xsl:template match="question" mode="xref-to">
+   <xsl:param name="referrer"/>
+   <xsl:param name="xrefstyle"/>
+   <xsl:param name="verbose" select="1"/>
+   
+   <xsl:call-template name="gentext">
+     <xsl:with-param name="key">Question</xsl:with-param>
+   </xsl:call-template>
+   <xsl:text> </xsl:text>
+   <fo:inline font-style="italic">
+     <xsl:apply-templates select="para[1]" mode="question"/>
+   </fo:inline>
+ </xsl:template>
+  
+  <xsl:template match="question/para[1]" mode="question">
+    <!-- We don't want a block here, that's why we just process the next
+         child inside a para
+    -->
+    <xsl:apply-templates mode="question"/>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="qanda">
+    <!-- Fallback to default mode -->
+    <xsl:apply-templates select="."/>
+  </xsl:template>
 </xsl:stylesheet>
