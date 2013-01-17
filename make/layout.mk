@@ -110,7 +110,12 @@ STYLWEBHELP        := $(addsuffix /xsl/webhelp.xsl, $(STYLEWEBHELP_BASE))
 
 
 # images provided with the stylesheets
-STYLEIMG := $(firstword $(wildcard $(addsuffix /images, $(STYLE_ROOTDIRS))))
+#STYLEIMG := $(firstword $(wildcard $(addsuffix /images, $(STYLE_ROOTDIRS))))
+
+STYLEIMG := $(firstword $(wildcard \
+		$(addsuffix /static,$(STYLE_ROOTDIRS)) \
+		$(addsuffix /images,$(STYLE_ROOTDIRS))))
+IS_RESDIR := $(notdir $(STYLEIMG))
 
 #
 # CSS

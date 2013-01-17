@@ -800,6 +800,12 @@ export POSIXLY_CORRECT=1
 # original value.
 
 ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,help,main:,styleroot:,verbosity::,version -n $ME -- "$@")
+
+# Exit when getopt returns errors
+#
+GETOPT_RETURN_CODE=$?
+[[ 0 != $GETOPT_RETURN_CODE ]] && exit $GETOPT_RETURN_CODE
+
 eval set -- "$ARGS"
 
 while true ; do

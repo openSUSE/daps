@@ -316,11 +316,8 @@ HTMLSTRINGS  := --stringparam base.dir $(HTML_DIR)/ \
 		--stringparam draft.mode "$(DRAFT)" \
 	        --stringparam show.comments $(REMARKS) \
                 --stringparam use.id.as.filename 1 \
-                --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
-                --stringparam navig.graphics.path "style_images/" \
                 --stringparam navig.graphics 1 \
-                --stringparam callout.graphics.path "style_images/callouts/" \
                 --stringparam img.src.path "images/"
 
 
@@ -373,11 +370,8 @@ JSPSTRINGS   := --stringparam base.dir $(JSP_DIR)/ \
 		--stringparam draft.mode "$(DRAFT)" \
                 --stringparam show.comments $(REMARKS) \
                 --stringparam use.id.as.filename 1 \
-                --stringparam admon.graphics.path "style_images/" \
                 --stringparam admon.graphics 1 \
-                --stringparam navig.graphics.path "style_images/" \
                  --stringparam navig.graphics 1 \
-                --stringparam callout.graphics.path "style_images/callouts/" \
                 --stringparam img.src.path "images/"
 
 
@@ -1465,7 +1459,7 @@ endif
 # "Helper" targets for HTML and HTML-SINGLE
 #
 
-$(HTML_DIR):
+$(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 	mkdir -p $@
 
 .PHONY: clean_html
@@ -1494,63 +1488,94 @@ dist-htmlsingle-name dist-html-single-name:
 	@ccecho "result" "$(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-htmlsingle.tar.bz2"
 
 #---------------
-# Htmlgraphics
-# Declaring HTMLGRAPHICS as PHONY to make sure they are redone everytime
-
-.PHONY: $(HTMLGRAPHICS)
-HTMLGRAPHICS := $(HTML_DIR)/style_images $(HTML_DIR)/images
-
-ifdef STYLE_HTMLCSS
-  # Add CSS file to HTMLGRAPHICS
-  # Add a stringparam for a CSS file if defined
-  HTMLGRAPHICS += $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
-  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
-
-  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(HTML_DIR)
-	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(HTML_DIR)/
-endif
-
-# images
-$(HTML_DIR)/images: $(HTML_DIR) provide-color-images
-  ifeq ($(STATIC_HTML), 1)
-    ifdef PNGONLINE
-	test -d $@ || mkdir -p $@
-	$(HTML_GRAPH_COMMAND) $(PNGONLINE) $@
-    endif
-  else
-	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
-  endif
-
-# STYLEIMG contains admon and navig images as well as
-# callout images in callouts/
-# STYLEIMG may contain .svn directories which we do not want to copy
-# therefore we use tar with the --exclude-vcs option to copy
-# the files
+# Graphics
 #
-# style images
-$(HTML_DIR)/style_images: $(STYLEIMG) $(HTML_DIR)
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then rm -f $@; fi
-	tar cph --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(dir $(STYLEIMG)) images/ | (cd $(HTML_DIR); tar xpv) >/dev/null
-  else
-	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $@
+
+ifneq ($(IS_RESDIR),static)
+  #
+  # if RESDIR is _not_ set, we assume to have the standard DocBook ressources
+  # layout with STYLEDIR/images/ and styledir/file.css
+  # In this case we nevertheless will copy these files into a static directory
+  # in order to have roughly the same directory layout as with a real static
+  # directory (when RESDIR is set with --resdir)
+  # Therefore we need to set several stringparams
+
+
+  HTML_GFXSTRINGS = --stringparam admon.graphics.path static/images/ \
+	        --stringparam callout.graphics.path static/images/callouts/ \
+	        --stringparam navig.graphics.path static/images/
+  # With the SUSE Stylesheets we use an alternative draft image for HTML
+  # builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+  # _both_ HML and FO
+
+  HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
+		     $(wildcard $(STYLEIMG)/draft_html.png \
+		     $(STYLEIMG)/draft.png)))
+
+  ifdef HTML_DRAFT_IMG
+    HTML_GFXSTRINGS += --stringparam draft.watermark.image $(HTML_DRAFT_IMG) 
   endif
-
-# With the SUSE Stylesheets we use an alternative draft image for HTML
-# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
-# both HML and FO
-# The following is a HACK to allow draft_html.png Upstream should have
-# draft.svg and draft.png, that would make things easier...
-
-HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
-		   $(firstword $(wildcard \
-		   $(STYLEIMG)/draft_html.png \
-		   $(STYLEIMG)/draft.png)))
-ifdef HTML_DRAFT_IMG
-  HTMLSTRINGS += --stringparam draft.watermark.image $(HTML_DRAFT_IMG) 
+  ifdef HTML_CSS
+    HTML_GFXSTRINGS += --stringparam html.stylesheet static/css/$(notdir $(HTML_CSS))
+  endif
+else
+  ifdef HTML_CSS
+     $(warning $(shell ccecho "warn" "Ignoring CSS parameter since a \"static/\" directory exists"))
+  endif
 endif
+
+#---------------
+# Copy static images
+#
+# needs to be PHONY, since I do not know which files need to
+# be copied/linked, we just copy/link the whole directory
+#
+.PHONY: copy_static_images
+ifneq ($(IS_RESDIR),static)
+  copy_static_images: | $(HTML_DIR)/static
+  ifdef HTML_CSS
+    copy_static_images: | $(HTML_DIR)/static/css
+  endif
+  copy_static_images: $(STYLEIMG)
+    ifeq ($(STATIC_HTML), 1)
+	tar cph --exclude-vcs -C $(dir $<) images | \
+	  (cd $(HTML_DIR)/static; tar xpv) >/dev/null
+    else
+	if [ -d $(HTML_DIR)/static/images ]; then \
+	  rm -rf $(HTML_DIR)/static/*; \
+	fi
+	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static/images
+    endif
+    ifdef HTML_CSS
+	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(HTML_DIR)/static/css
+    endif
+else
+  copy_static_images: | $(HTML_DIR)/static
+  copy_static_images: $(STYLEIMG)
+    ifeq ($(STATIC_HTML), 1)
+	tar cph --exclude-vcs -C $(dir $<) static | \
+	  (cd $(HTML_DIR); tar xpv) >/dev/null
+    else
+	if [ -d $(HTML_DIR)/static ]; then \
+	  rm -rf $(HTML_DIR)/static; \
+	fi
+	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static
+    endif
+endif
+
+#---------------
+# Copy inline images
+#
+# needs to be PHONY, because we either create links (if no --static) or
+# copies of the images (with --static). Using a PHONY target ensures that
+# links can be overwritten with copies and vice versa
+# Thus we also need the ugly for loop instead of creating images by 
+# $(HTML_DIR)/images/% rule
+#
+.PHONY: copy_inline_images
+copy_inline_images: | $(HTML_DIR)/images
+copy_inline_images: provide-color-images
+	for IMG in $(PNGONLINE); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
 
 #---------------
 # target to generate METAFILE for html stylesheets
@@ -1572,14 +1597,15 @@ endif
 ifdef USESVN
   $(HTML_DIR)/index.html: meta
 endif
-$(HTML_DIR)/index.html: provide-color-images  warn-images
-$(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
+$(HTML_DIR)/index.html: warn-images copy_static_images copy_inline_images
+$(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR)
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating HTML pages"
   endif
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(CSSSTRING) --xinclude $(STYLEH) $(PROFILED_MAIN) $(DEVNULL)
+	xsltproc $(HTMLSTRINGS) $(HTML_GFXSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	   $(XSLTPARAM) $(MANIFEST) \
+	   --stringparam projectfile PROJECTFILE.$(BOOK) \
+	   --xinclude $(STYLEH) $(PROFILED_MAIN) $(DEVNULL)
 	if [ ! -f  $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
@@ -1590,14 +1616,15 @@ $(HTML_DIR)/index.html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
 ifdef USESVN
   $(HTML_DIR)/$(BOOK).html: meta
 endif
-$(HTML_DIR)/$(BOOK).html: provide-color-images  warn-images
+$(HTML_DIR)/$(BOOK).html: warn-images copy_static_images copy_inline_images
 $(HTML_DIR)/$(BOOK).html: $(STYLEH) $(PROFILES) $(HTML_DIR) $(HTMLGRAPHICS)
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating single HTML page"
   endif
-	xsltproc $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING)  $(XSLTPARAM) \
-	  $(MANIFEST) --stringparam projectfile PROJECTFILE.$(BOOK) \
-	  $(CSSSTRING) --output $(HTML_DIR)/$(BOOK).html \
+	xsltproc $(HTMLSTRINGS) $(HTML_GFXSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	  $(XSLTPARAM) $(MANIFEST) \
+	  --stringparam projectfile PROJECTFILE.$(BOOK) \
+	  --output $(HTML_DIR)/$(BOOK).html \
 	  --xinclude $(STYLEHSINGLE) $(PROFILED_MAIN) $(DEVNULL)
 	(cd $(HTML_DIR) && ln -sf $(BOOK).html index.html);
 
@@ -1753,7 +1780,7 @@ $(WEBHELP_DIR)/index.html: $(WEBHELPGRAPHICS) $(DOCBOOK_STYLES)/extensions
 # "Helper" targets for JSP
 #
 
-$(JSP_DIR):
+$(JSP_DIR) $(JSP_DIR)/images $(JSP_DIR)/static $(JSP_DIR)/static/css:
 	mkdir -p $@
 
 .PHONY: clean_jsp
@@ -1769,62 +1796,97 @@ clean_jsp: $(JPS_DIR)
 jsp-dir:
 	@ccecho "result" "$(JSP_DIR)"
 
+
 #---------------
-# Jspgraphics
-# Declaring JSPGRAPHICS as PHONY to make sure they are redone everytime
-
-.PHONY: $(JSPGRAPHICS)
-JSPGRAPHICS = $(JSP_DIR)/style_images $(JSP_DIR)/images
-
-ifdef STYLE_HTMLCSS
-  JSPGRAPHICS += $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS))
-  CSSSTRING    := --stringparam html.stylesheet $(notdir $(STYLE_HTMLCSS))
-
-  $(JSP_DIR)/$(notdir $(STYLE_HTMLCSS)): $(STYLE_HTMLCSS) $(JSP_DIR)
-	$(HTML_GRAPH_COMMAND) $(STYLE_HTMLCSS) $(JSP_DIR)/
-endif
-
-# images
-$(JSP_DIR)/images: $(JSP_DIR) provide-color-images
-  ifeq ($(STATIC_HTML), 1)
-    ifdef PNGONLINE
-	test -d $@ || mkdir -p $@
-	$(HTML_GRAPH_COMMAND) $(PNGONLINE) $@
-    endif
-  else
-	$(HTML_GRAPH_COMMAND) $(IMG_GENDIR)/online/ $@
-  endif
-
-# $(STYLEIMG) contains admon and navig images as well as
-# callout images in callouts/
-# STYLEIMG may contain .svn directories which we do not want to copy
-# therefore we use tar with the --exclude-vcs option to copy
-# the files
+# Graphics
 #
-# style images
-$(JSP_DIR)/style_images: $(STYLEIMG) $(JSP_DIR)
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then rm -f $@; fi
-	tar cph --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(dir $(STYLEIMG)) images/ | (cd $(JSP_DIR); tar xpv) >/dev/null
-  else
-	if [ -d $@ ]; then rm -rf $@; fi
-	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $@
+
+ifneq ($(IS_RESDIR),static)
+  #
+  # if RESDIR is _not_ set, we assume to have the standard DocBook ressources
+  # layout with STYLEDIR/images/ and styledir/file.css
+  # In this case we nevertheless will copy these files into a static directory
+  # in order to have roughly the same directory layout as with a real static
+  # directory (when RESDIR is set with --resdir)
+  # Therefore we need to set several stringparams
+
+
+  JSP_GFXSTRINGS = --stringparam admon.graphics.path static/images/ \
+	        --stringparam callout.graphics.path static/images/callouts/ \
+	        --stringparam navig.graphics.path static/images/
+  # With the SUSE Stylesheets we use an alternative draft image for HTML
+  # builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+  # _both_ HML and FO
+
+  JSP_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
+		     $(wildcard $(STYLEIMG)/draft_html.png \
+		     $(STYLEIMG)/draft.png)))
+
+  ifdef JSP_DRAFT_IMG
+    JSP_GFXSTRINGS += --stringparam draft.watermark.image $(JSP_DRAFT_IMG) 
   endif
-
-# With the SUSE Stylesheets we use an alternative draft image for HTML
-# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
-# both HML and FO
-# The following is a HACK to allow draft_html.png Upstream should have
-# draft.svg and draft.png, that would make things easier...
-
-JSP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
-		   $(firstword $(wildcard \
-		   $(STYLEIMG)/draft_html.png \
-		   $(STYLEIMG)/draft.png)))
-ifdef JSP_DRAFT_IMG
-  JSPSTRINGS += --stringparam draft.watermark.image $(JSP_DRAFT_IMG) 
+  ifdef HTML_CSS
+    JSP_GFXSTRINGS += --stringparam html.stylesheet static/css/$(notdir $(HTML_CSS))
+  endif
+else
+  ifdef HTML_CSS
+     $(warning $(shell ccecho "warn" "Ignoring CSS parameter since a \"static/\" directory exists"))
+  endif
 endif
+
+#---------------
+# Copy static images
+#
+# needs to be PHONY, since I do not know which files need to
+# be copied/linked, we just copy/link the whole directory
+#
+.PHONY: copy_static_images
+ifneq ($(IS_RESDIR),static)
+  copy_static_jsp_images: | $(JSP_DIR)/static
+  ifdef HTML_CSS
+    copy_static_jsp_images: | $(JSP_DIR)/static/css
+  endif
+  copy_static_jsp_images: $(STYLEIMG)
+    ifeq ($(STATIC_HTML), 1)
+	tar cph --exclude-vcs -C $(dir $<) images | \
+	  (cd $(JSP_DIR)/static; tar xpv) >/dev/null
+    else
+	if [ -d $(JSP_DIR)/static/images ]; then \
+	  rm -rf $(JSP_DIR)/static/*; \
+	fi
+	$(HTML_GRAPH_COMMAND) $< $(JSP_DIR)/static/images
+    endif
+    ifdef HTML_CSS
+	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(JSP_DIR)/static/css
+    endif
+else
+  copy_static_jsp_images: | $(JSP_DIR)/static
+  copy_static_jsp_images: $(STYLEIMG)
+    ifeq ($(STATIC_HTML), 1)
+	tar cph --exclude-vcs -C $(dir $<) static | \
+	  (cd $(JSP_DIR); tar xpv) >/dev/null
+    else
+	if [ -d $(JSP_DIR)/static ]; then \
+	  rm -rf $(JSP_DIR)/static; \
+	fi
+	$(HTML_GRAPH_COMMAND) $< $(JSP_DIR)/static
+    endif
+endif
+
+#---------------
+# Copy inline images
+#
+# needs to be PHONY, because we either create links (if no --static) or
+# copies of the images (with --static). Using a PHONY target ensures that
+# links can be overwritten with copies and vice versa
+# Thus we also need the ugly for loop instead of creating images by 
+# $(JSP_DIR)/images/% rule
+#
+.PHONY: copy_inline_images
+copy_inline_jsp_images: | $(JSP_DIR)/images
+copy_inline_jsp_images: provide-color-images
+	for IMG in $(PNGONLINE); do $(HTML_GRAPH_COMMAND) $$IMG $(JSP_DIR)/images; done
+
 
 #---------------
 # Generate JSP from profiled xml
@@ -1832,14 +1894,14 @@ endif
 ifdef USESVN
   $(JSP_DIR)/index.jsp: meta
 endif
+$(JSP_DIR)/index.jsp: warn-images copy_static_jsp_images copy_inline_jsp_images
 $(JSP_DIR)/index.jsp: $(STYLEJ) $(PROFILES) $(JSP_DIR)
-$(JSP_DIR)/index.jsp: provide-color-images warn-images $(JSPGRAPHICS) 
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating JSP pages"
   endif
-	xsltproc $(JSPSTRINGS) $(ROOTSTRING) $(METASTRING) \
+	xsltproc $(JSPSTRINGS) $(JSP_GFXSTRINGS) $(ROOTSTRING) $(METASTRING) \
 	  $(XHTMLSTRING) $(MANIFEST)\
-	  --stringparam projectfile PROJECTFILE.$(BOOK) $(CSSSTRING) \
+	  --stringparam projectfile PROJECTFILE.$(BOOK) \
 	  --xinclude $(STYLEJ) $(PROFILED_MAIN)
   ifdef ROOTID
 	ln -sf $(JSP_DIR)/$(ROOTID).jsp $(JSP_DIR)/index.jsp

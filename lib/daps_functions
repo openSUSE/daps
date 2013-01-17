@@ -566,8 +566,8 @@ function build_html_jsp () {
     [[ 1 = $P_META ]]     && USEMETA=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
     [[ 1 = $P_HTML4 ]]    && export HTML4="yes"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
     [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n $P_CSS ]]; then
@@ -1141,7 +1141,7 @@ function checklink () {
         help_file
         help_help
         help_rootid
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
+        echo -e "    NOTES: * Options --file and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
 
