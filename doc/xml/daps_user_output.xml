@@ -11,31 +11,25 @@
  <title>Generating Output Formats</title>
  <abstract>
   <para>
-   &dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. You can build 
-   several output formats in parallel, build your complete documentation project
-   (set, book, or article) or only a part of it (for example, a specific chapter). 
-   By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr; also 
-   allows you to customize your output formats in a very flexible way.
-   <remark>taroth 2012-03-19: add xref to advanced chapter</remark>
-  </para>
- </abstract>
- <!--taroth 2013-01-14: rephrase to this pattern:<abstract>
-  <para>
    This chapter describes:
    <itemizedlist>
     <listitem>
-     <para></para>
+     <para>how to validate your XML files,</para>
     </listitem>
     <listitem>
-     <para></para>
+     <para>the basic command syntax for generating output formats,</para>
     </listitem>
     <listitem>
-     <para></para>
+     <para>which output formats you can generate with &daps; and which commands
+     to use, and</para>
+    </listitem>
+    <listitem>
+     <para>how to do partial builds of your documentation or how to specify the 
+     Main file at the command line (instead of using a &dc; file).</para>
     </listitem>
    </itemizedlist>
   </para>
- </abstract>-->
+ </abstract>
  <sect1 id="sec.daps.user.output.validate">
   <title>Validating Your XML Sources</title>
   &daps-validation-basics;
@@ -92,6 +86,9 @@
    <quote>exotic</quote> formats like man pages or simple text. 
    <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
    gives an overview.</para>
+   <para>You can build several output formats in parallel, build your complete 
+   documentation project (set, book, or article) or only a part of it (for example, 
+   a specific chapter). </para>
   <para>
     Independent of the individual output format you want to create, you need
     to specify the &dc; file to use:
@@ -114,12 +111,16 @@
  characteristics, and the &dapsacr; subcommands to generate them. Refer to 
  <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
  for the commands' basic syntax.</para>
+ 
 
   <table id="table.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
    &daps-output-formats-table;
   </table>
   &daps-output-all;
+  <para>By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr; 
+  also allows you to customize your output formats in a very flexible way. 
+  For details, refer to <xref linkend="cha.daps.user.layout"/>.</para>
  </sect1>
  <sect1 id="sec.daps.user.output.adv">
   <title>Advanced Output Options</title>
