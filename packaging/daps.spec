@@ -34,7 +34,6 @@ Release:        0
 
 %define docbuilddir    %{_datadir}/daps
 %define regcat         %{_bindir}/sgml-register-catalog
-%define fontdir        %{_datadir}/fonts/truetype
 %define dbstyles       %{_datadir}/xml/docbook/stylesheet/nwalsh/current
 %define daps_catalog   for-catalog-%{name}.xml
 
@@ -237,13 +236,7 @@ edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{daps_catalog}
 
-%if 0%{?suse_version} > 1220
 %reconfigure_fonts_post
-%else
-if test -x sbin/conf.d/SuSEconfig.fonts
-then %run_suseconfig -m fonts
-fi
-%endif
 exit 0
 
 #----------------------
@@ -259,21 +252,19 @@ if [ -x /usr/bin/edit-xml-catalog ] ; then
   --del %{name}
 fi
 
-%if 0%{?suse_version} > 1220
-%reconfigure_fonts_postun
-%else
-if test -x sbin/conf.d/SuSEconfig.fonts
-then %run_suseconfig -m fonts
-fi
-%endif
+%reconfigure_fonts_post
 fi
 exit 0
+
+#----------------------
+%posttrans
+%reconfigure_fonts_posttrans
 
 #----------------------
 %files
 %defattr(-,root,root)
 
-%dir %{fontdir}
+%dir %{_ttfontsdir}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
@@ -286,8 +277,7 @@ exit 0
 %{_bindir}/*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{docbuilddir}
-%{fontdir}/*
-
+%{_ttfontsdir}/*
 %exclude %{_defaultdocdir}/%{name}/INSTALL
 
 #----------------------
