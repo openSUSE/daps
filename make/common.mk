@@ -988,11 +988,10 @@ dist-html: provide-color-images
   ifeq ($(VERBOSITY),1)
 	@echo "   Creating tarball..."
   endif
-	tar rhf $(TARBALL) --exclude-vcs --no-recursion \
+	tar rhf $(TARBALL) --exclude-vcs \
 	  -T $(HTML_DIR)/HTML.manifest \
 	  --absolute-names --transform=s%$(RESULT_DIR)/html/%% \
-	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/style_images/* \
-	  $(HTML_DIR)/$(notdir $(STYLE_HTMLCSS))
+	  $(HTML-USED) $(HTML_DIR)/index.html $(HTML_DIR)/static
   ifeq ($(INCLUDE_MANIFEST),1)
 	sed s#$(RESULT_DIR)/html/##g < $(HTML_DIR)/HTML.manifest > $(HTML_DIR)/$(TMP_BOOK)$(LANGSTRING).manifest
 	tar rhf $(TARBALL) --absolute-names \
