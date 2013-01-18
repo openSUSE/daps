@@ -32,11 +32,16 @@
  </abstract>
  <sect1 id="sec.daps.user.output.validate">
   <title>Validating Your XML Sources</title>
+   <remark role="clarity">toms 2013-01-18: I would rephrase to: "Generating any output 
+     requires that your XML files are valid." </remark>
   &daps-validation-basics;
   &daps-example-validation-error; 
   <para>Validation within your XML editor is bound to fail, as soon you use
   <xref linkend="sec.daps.user.modular.profile" xrefstyle="select:title"/>
-  in your DocBook sources. Furthermore, validating XML files within a 
+  in your DocBook sources.<remark role="layout">toms 2013-01-18: The sentence looks a
+    bit odd in our PDF. Maybe add the xref inside brackets at the end of
+    the sentence?</remark>
+  Furthermore, validating XML files within a 
   <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of 
   the current XML file, as links (<sgmltag>xref</sgmltag> elements) or 
   XIncludes need to be resolved, too. </para>
@@ -68,12 +73,18 @@
     <term>Validating Your Files Including Remarks</term>
     <listitem>
      <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+     <remark role="idea">toms 2013-01-18: Maybe add/show the tag
+       <sgmltag>remark</sgmltag> to show the reader, there is really a
+       remark tag. Maybe confusing as remark is a general term.</remark>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Validating Your Files Including XML Comments</term>
     <listitem>
      <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
+     <remark role="idea">toms 2013-01-18: Maybe add/show <sgmltag class="sgmlcomment">
+       Comment</sgmltag> as further information/description to the
+       reader.</remark>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -86,7 +97,12 @@
    <quote>exotic</quote> formats like man pages or simple text. 
    <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
    gives an overview.</para>
-   <para>You can build several output formats in parallel, build your complete 
+   <para>You can build several output formats in parallel,<remark
+     role="clarity">toms 2013-01-18: Ambiguous? "Parallel" could also
+     be understood to create different output formats at the same time.
+     If I understood you correct, you wanted to say that each format
+     lives peacefully together. You can't *build* them together tough.
+   </remark> build your complete 
    documentation project (set, book, or article) or only a part of it (for example, 
    a specific chapter). </para>
   <para>
@@ -112,7 +128,10 @@
  <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
  for the commands' basic syntax.</para>
  
-
+  <remark role="layout">toms 2013-01-18: Maybe reduce table to two
+    columns. That gives you a wider second column. Insert your note
+    below each description as a separate para/formalpara.</remark>
+  <remark>toms 2013-01-18: According to DocBook: Web Help -> WebHelp</remark>
   <table id="table.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
    &daps-output-formats-table;

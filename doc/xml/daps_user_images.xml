@@ -45,10 +45,18 @@
  </abstract>
  <sect1 id="sec.daps.user.imgs.usage">
   <title>Supported Image Types</title>
+  <remark role="layout">toms 2013-01-18: 
+  I don't think filename for the filetype is appropriate here.
+  Actually, it's a format and is written in lowercase. I would
+  omit the filename tag completely.
+  </remark>
   &daps-images-intro;
   &daps-img-formats;
+  <remark role="idea">toms 2013-01-18: Maybe group the image formats in
+     regards to bitmap and vector formats? Or introduce this group after
+     the previous list?</remark>
   <important>
-   <title>PDF and EPS Image Support</title>
+   <title><remark>toms 2013-01-18: Add "Limited"?</remark>PDF and EPS Image Support</title>
    <para>
     Support for <acronym>PDF</acronym> and <acronym>EPS</acronym> image
     formats in &dapsacr; is experimental. Currently, both formats are only
@@ -83,7 +91,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.eps">
-   <title><acronym>EPS</acronym></title>
+   <title>EPS</title>
    <para>
     The <emphasis>Encapsulated Postscript</emphasis> (EPS) format is a
     general purpose vector image format. As a Postscript-based format, it is
@@ -100,7 +108,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.fig">
-   <title><acronym>FIG</acronym></title>
+   <title>FIG</title>
    <para>
     <acronym>FIG</acronym> is a vector image format that can be created with
     the software <ulink url="http://www.xfig.org">Xfig</ulink>. The support
@@ -111,7 +119,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.pdf">
-   <title><acronym>PDF</acronym></title>
+   <title>PDF</title>
    <para>
     The <emphasis>Portable Document File</emphasis> format is a general
     purpose, page-based fixed-layout document format. <acronym>PDF</acronym>
@@ -123,7 +131,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.png">
-   <title><acronym>PNG</acronym></title>
+   <title>PNG</title>
    <para>
     The <emphasis>Portable Network Graphics</emphasis> format can be used if
     you wish to use a raster (point-based) image. A good example for when to
@@ -148,7 +156,7 @@
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.svg">
-   <title><acronym>SVG</acronym></title>
+   <title>SVG</title>
    <para>
     The <emphasis>Scalable Vector Graphics</emphasis> format is a general
     purpose, vector image format. <acronym>SVG</acronym> is an XML format
@@ -172,7 +180,14 @@
     files from many Adobe products, for instance, from Illustrator*. SVG is
     the preferred vector image format for &dapsacr;.
    </para>
+   <remark role="idea">toms 2013-01-18: It would be nice -- although a
+     bit difficult -- to add a conversion matrix as an addition sect2. 
+     That would allow the reader what can he expect when he wants to 
+     convert from format X to format Y. (Maybe something for Nadja?) ;)
+   </remark>
   </sect2>
+ 
+ 
  </sect1>
  <sect1 id="sec.daps.user.imgs.src.gen">
   <title>Source Images and Generated Images</title>
@@ -288,6 +303,13 @@
     and reduce the size of your PNGs with an optimizer that recompresses the
     files to a smaller size.
    </para>
+    
+   <remark role="layout">toms 2013-01-18: As already discussed, maybe
+     exchange the content of term and listitem? Or in other words, 
+     add a brief explanation inside the term and move the commmand to a
+     screen inside the listitem?
+     </remark>
+    
    <variablelist>
     <varlistentry>
      <term><command>$ daps <parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics</command>

@@ -84,18 +84,29 @@
 <screen>&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent"/>
-%entities; <xref linkend="co.daps.main.reference.ent" xrefstyle="select:label nopage"/>
-]&gt;  <xref linkend="co.daps.main.reference.ent" xrefstyle="select:label nopage"/>
+[
+  &lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent"/>
+  %entities; <co id="co.daps.main.reference.load"/>
+]&gt; 
 &lt;chapter&gt;
 &lt;title&gt;Managing User Accounts&lt;/title&gt;
 [...]</screen>
    <calloutlist>
     <callout arearefs="co.daps.main.reference.ent">
      <para>
-      Reference to the separate entity declaration file (with a parameter
-      entity).
+      Reference to the separate entity declaration file (with the
+       <sgmltag class="starttag">!ENTITY</sgmltag> keyword).
      </para>
+    </callout>
+    <callout arearefs="co.daps.main.reference.load">
+      <para>Load the external entity file declared in the previous line.</para>
+      <remark>toms 2013-01-18: Added this new callout. 
+      The general idea is to separate between declaration (that is
+      "co.daps.main.reference.ent") and loading (that is
+      "co.daps.main.reference.load").
+      Also it looks better to have a screen with 2 callouts instead of
+      just one. ;)
+      </remark>
     </callout>
    </calloutlist>
   </example>
@@ -112,10 +123,14 @@
    during generation of output, the entities will be treated equally to
    entities declared in individual XML files.
   </para>
+  
+  <remark role="idea">toms 2013-01-18: Should we mention that it is
+    possible to declare/use more than one entity declaration files?</remark>
  </sect1>
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
-   
+  <remark role="layout">toms 2013-01-18: the word "profiling" should be
+    included in emphasis, not in literal.</remark>
   &db-profiling-intro;
   &db-profiling; 
 
@@ -523,9 +538,13 @@
     <para>
      To activate generation of profiled output in &dapsacr;, the following
      processing instruction (PI) must be included in the header of the Main
-     file:
+     file <remark>toms 2013-01-18: add "before the root element" as
+       further clarification?</remark>:
     </para>
-<screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+    <remark role="typo">toms 2013-01-18: Added complete PI</remark>
+<screen>&lt;?xml-stylesheet
+  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+  type="text/xml" ?></screen>
     <para>
      The Main file of a documentation project is the one that is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
@@ -598,7 +617,7 @@
        <para>
         Listitem profiled with attribute
         <sgmltag class="attribute">condition</sgmltag> and attribute value
-        <literal>basic</literal>.
+        <sgmltag class="attvalue">basic</sgmltag>.
         <literal>Basic&nbsp;Feature&nbsp;1</literal> is only available in
         the basic software edition for home users.
        </para>
@@ -607,7 +626,7 @@
        <para>
         Listitem profiled with attribute
         <sgmltag class="attribute">condition</sgmltag> and attribute value
-        <literal>prof</literal>.
+        <sgmltag class="attvalue">prof</sgmltag>.
         <literal>Professional&nbsp;Feature&nbsp;1</literal> and
         <literal>Professional&nbsp;Feature&nbsp;2</literal> are only
         available in the professional software edition for enterprise
@@ -618,22 +637,28 @@
        <para>
         Listitem profiled with two attributes: Attribute
         <sgmltag class="attribute">condition</sgmltag> with attribute value
-        <literal>prof</literal> and attribute
+        <sgmltag class="attvalue">prof</sgmltag> and attribute
         <sgmltag class="attribute">vendor</sgmltag> with attribute value
-        <literal>oemcompany</literal>.
+        <sgmltag class="attvalue">oemcompany</sgmltag>.
         <literal>OEM&nbsp;Feature&nbsp;1</literal> is only available in the
         professional OEM software edition for enterprise customers.
        </para>
       </callout>
      </calloutlist>
     </example>
+     
+    <remark role="layout">toms 2013-01-18: The callout circles are
+      misplaced: a PI starts with &lt;?foo ...?>. 
+      Alternative: add &lt;emphasis role="strong">...&lt;/emphasis>
+      around each line of your PI and explain each line with a co.
+    </remark>
     <example id="ex.daps.main.pi">
      <title>Main File With PI for Profiling</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;?xml-stylesheet 
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling"/> 
- type="text/xml" <xref linkend="co.daps.main.pi.profiling" xrefstyle="select:label nopage"/>
- title="Profiling step"?&gt; <xref linkend="co.daps.main.pi.profiling" xrefstyle="select:label nopage"/>
+&lt;?xml-stylesheet <co id="co.daps.main.pi.profiling"/> 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml"
+ title="Profiling step"?&gt; 
 &lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
