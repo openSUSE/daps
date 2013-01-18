@@ -31,7 +31,7 @@
     </listitem>
     <listitem>
      <para>
-      the basics of working with &dapsacr;.
+      the basic syntax of <command>daps</command> commands.
      </para>
     </listitem>
    </itemizedlist>
@@ -59,7 +59,7 @@
      <para>
       &dapsacr; lets you publish your XML sources in a number of different
       output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;,
-      text, man pages, or MediaWiki. For details, refer to
+      text, and man pages. For details, refer to
       <xref linkend="cha.daps.user.output"/>.
       <remark>taroth 2012-04-24: decide 
        where to point to: book chapter or QS?</remark>
@@ -94,7 +94,7 @@
       <sgmltag>indexterm</sgmltag>. Instead of inserting the child elements
       successively, you will get a <quote>skeleton</quote> that includes all
       required child elements and is ready to be filled with contents. For
-      details, refer to <xref linkend="cha.daps.user.edit"/>.
+      details, refer to <xref linkend="sec.daps.user.editors.emacs.macros"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -107,7 +107,7 @@
       XIncludes need to be resolved, too. With &dapsacr;, you can check
       validity of all files that belong to a documentation project with a
       single command. For details, refer to
-      <xref linkend="cha.daps.user.edit"/>.
+      <xref linkend="sec.daps.user.output.validate"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -118,7 +118,7 @@
       &dapsacr; supports spell checking of your XML sources with &aspell;
       from the command line.Depending on the XML editor you use, you can
       also integrate a custom &aspell; dictionary into your editor. For
-      details, refer to <xref linkend="cha.daps.user.edit"/> and
+      details, refer to <xref linkend="sec.daps.user.edit.spell"/> and
       <xref linkend="sec.daps.user.editors.jedit.spellcheck"/>.
      </para>
     </listitem>
@@ -132,7 +132,7 @@
       &dapsacr; also includes a link checker (based on
       <literal>checkbot</literal>). Use it to create a report of all links
       that caused some kind of warning or error. For details, refer to
-      <xref linkend="cha.daps.user.edit"/>.
+      <xref linkend="sec.daps.user.edit.chklink"/>.
      </para>
     </listitem>
    </varlistentry>
@@ -292,7 +292,7 @@
     </para>
    </tip>
    <para>
-    Find a simple example in <xref linkend="ex.daps.main.art"/>.
+    Find a simple example in <xref linkend="ex.daps.main.art" xrefstyle="select:label"/>.
    </para>
    <example id="ex.daps.main.art">
     <title>Main File of an Article (DocBook 4.x)</title>
@@ -339,13 +339,13 @@
      </screen>
    </example>
    <para>
-    Let us assume, the XML file shown in <xref linkend="ex.daps.main.art"/>
-    is named <filename>MAIN-DAPS-example-article.xml</filename> and you want
-    to publish it using the default DocBook layout and have no special
-    requirements. To generate output, you usually create a &dc; file per
-    article or book, specifying a number of parameters such as the Main file
-    or which layout to use. Of the multiple parameters that can be set in
-    the &dc; file, the only one required is <parameter>MAIN</parameter>,
+    Let us assume, the XML file shown in <xref linkend="ex.daps.main.art" 
+    xrefstyle="select:label"/> is named 
+    <filename>MAIN-DAPS-example-article.xml</filename> and you want to publish 
+    it using the default DocBook layout. To generate output, you usually create 
+    a &dc; file per article or book, specifying a number of parameters such as 
+    the Main file or which layout to use. Of the multiple parameters that can be
+    set in the &dc; file, the only one required is <parameter>MAIN</parameter>,
     pointing to the XML file that you want to process. Therefore, a very
     basic &dc; file for the article in <xref linkend="ex.daps.main.art"/>
     could look as follows:
@@ -422,7 +422,8 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
     element. In contrast to an article, books can contain more structural
     levels: they are usually divided into <sgmltag>chapter</sgmltag>
     elements (that may contain sections and subsections) as outlined in
-    <xref linkend="ex.daps.main.book"/>. In addition to chapters, books may
+    <xref linkend="ex.daps.main.book" xrefstyle="select:label"/>. 
+    In addition to chapters, books may
     also contain other structural elements such as
     <sgmltag>preface</sgmltag>, <sgmltag>glossary</sgmltag>, and
     <sgmltag>appendix</sgmltag>. A further additional structural level is
@@ -431,7 +432,7 @@ MAIN="MAIN-DAPS-example-article.xml" <co id="co.daps.dc.art.main"/>
     <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
    </para>
    <para>
-    Let us assume, the XML file shown in <xref linkend="ex.daps.main.book"/>
+    Let us assume the XML file shown in <xref linkend="ex.daps.main.book"/>
     is named <filename>MAIN-DAPS-example-book.xml</filename> and you want to
     publish it in a custom layout. To generate output, you would create a
     &dc; file pointing to the Main file of the book, and additionally
@@ -477,11 +478,10 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     <literal>XIncludes</literal>. Note that this is not specific to
     sets&mdash;it is mainly a means of modularizing your documents. You can
     also use XIncludes for splitting up books, articles or chapters into
-    separate files. For more information, refer to
-    <ulink url="http://www.docbook.org/tdg51/en/html/ch02.html">
-    <citetitle>Physical Divisions: Breaking a Document into Separate
-    Files</citetitle>
-    </ulink>.
+    separate files. For more information, refer to 
+    <xref linkend="sec.daps.user.modular.xi"/> and <ulink 
+    url="http://www.docbook.org/tdg51/en/html/ch02.html"><citetitle>Physical 
+    Divisions: Breaking a Document into Separate Files</citetitle></ulink>.
    </para>
    <example id="ex.daps.main.set">
     <title>Main File of a Set (DocBook 4.x)</title>
@@ -724,7 +724,8 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/>
   <para>
    For &dapsacr; to work out of the box, your XML files and images must be
    organized in a specific structure within your documentation directory.
-   <xref linkend="ex.daps.dir.doc"/> shows the required structure including
+   <xref linkend="ex.daps.dir.doc" xrefstyle="select:label"/> shows the required
+   structure including
    the key files for a &dapsacr; documentation project. You can also create
    multiple documentation directories for individual documentation projects,
    but they all need the substructure outlined below.
@@ -732,8 +733,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/>
 
   <example id="ex.daps.dir.doc">
    <title>Required Directory Structure</title>
-   <screen>
-    <replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
+   <screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
   |--&dc;-* <co id="co.docdir.dc"/>
      |--images/
      |   |--src/<co id="co.docdir.img.src"/>
@@ -810,8 +810,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/>
    </para>
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
-    <screen>
-     <replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
   |--build/ <co id="co.builddir"/> 
      |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>    
      |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>    
@@ -884,7 +883,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/>
 
   <example id="ex.daps.user.syntax">
    <title>&dapsacr; Syntax</title>
-   <screen>daps<co id="co.daps.user.syntax.main"/> --debug<co id="co.daps.user.syntax.debug"/> -d<co id="co.daps.user.syntax.dc"/> &dc;-daps-example html<co id="co.daps.user.syntax.output"/> --static<co id="co.daps.user.syntax.static"/>
+   <screen>$ daps<co id="co.daps.user.syntax.main"/> --debug<co id="co.daps.user.syntax.debug"/> -d<co id="co.daps.user.syntax.dc"/> &dc;-daps-example html<co id="co.daps.user.syntax.output"/> --static<co id="co.daps.user.syntax.static"/>
    </screen>
    <calloutlist>
     <callout arearefs="co.daps.user.syntax.main">
