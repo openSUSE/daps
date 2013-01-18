@@ -34,8 +34,6 @@
  </abstract>
 <!--taroth 2012-03-08: building an appliance with a pre-configured jedit would
   be a great idea-->
-<!--taroth 2012-03-08: another idea: add an appendix chapter with configuration
-  tips/instructions for individual editors?-->
  <sect1 id="sec.daps.user.edit.basics">
   <title>Basic Structural Elements</title>
   &db-structure-elements;
@@ -100,7 +98,7 @@
    <varlistentry>
     <term>Spell Checking Files in a Documentation Project</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck</screen>
      <para>
       Spell checks all files in the documentation project with the default
       dictionary (<literal>en_US</literal>). One by one, the files are
@@ -117,13 +115,13 @@
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Spell Checking a Single XML File</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
       Checks the specified file with the default dictionary. Suggests
       alternative spellings for each misspelled word and waits for user
@@ -134,7 +132,7 @@
    <varlistentry>
     <term>Spell Checking XML Files in Languages Other than English</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with the dictionary
@@ -150,7 +148,7 @@
    <varlistentry>
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file. Returns a list of
@@ -164,7 +162,7 @@
    <varlistentry>
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
 [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified the specified documentation project or file with
@@ -212,7 +210,7 @@
    <varlistentry>
     <term>Checking Links in a Documentation Project</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink</screen>
      <para>
       Uses the ROOTID defined in the specified &dc; file as starting point.
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
@@ -230,13 +228,13 @@
       so, specify the ID of the respective element with the
       <option>--rootid</option> option:
      </para>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --rootid=<replaceable>ID</replaceable>&nbsp;</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Checking Links in a Single XML File</term>
     <listitem>
-<screen>daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink --file=<replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
       Checks the <sgmltag>ulink</sgmltag> elements in the specified file. At
       the end of the check, &dapsacr; returns an HTML file with a list of
@@ -266,7 +264,7 @@
     To directly open the link check report, use the &dapsacr; command output
     as an argument for a browser, e.g. the command-line Web browser w3m:
    </para>
-<screen>w3m -dump $(daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
+<screen>$ w3m -dump $(daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>
   </tip>
  </sect1>
  <sect1 id="sec.daps.user.edit.profile">
