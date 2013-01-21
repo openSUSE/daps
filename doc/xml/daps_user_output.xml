@@ -32,15 +32,11 @@
  </abstract>
  <sect1 id="sec.daps.user.output.validate">
   <title>Validating Your XML Sources</title>
-   <remark role="clarity">toms 2013-01-18: I would rephrase to: "Generating any output 
-     requires that your XML files are valid." Add "valid" to glossary?</remark>
   &daps-validation-basics;
   &daps-example-validation-error; 
-  <para>Validation within your XML editor is bound to fail, as soon you use
-  <xref linkend="sec.daps.user.modular.profile" xrefstyle="select:title"/>
-  in your DocBook sources.<remark role="layout">toms 2013-01-18: The sentence looks a
-    bit odd in our PDF. Maybe add the xref inside brackets at the end of
-    the sentence?</remark>
+  <para>Validation within your XML editor is bound to fail, as soon you
+  use profiling in your DocBook sources. Profiling is similar to conditional text,
+  for details, refer to  <xref linkend="sec.daps.user.modular.profile"/>.
   Furthermore, validating XML files within a 
   <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of 
   the current XML file, as links (<sgmltag>xref</sgmltag> elements) or 
@@ -70,21 +66,15 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Your Files Including Remarks</term>
+    <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
     <listitem>
      <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
-     <remark role="idea">toms 2013-01-18: Maybe add/show the tag
-       <sgmltag>remark</sgmltag> to show the reader, there is really a
-       remark tag. Maybe confusing as remark is a general term.</remark>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Validating Your Files Including XML Comments</term>
+    <term>Validating Your Files Including XML Comments (<sgmltag class="sgmlcomment">Comment</sgmltag>)</term>
     <listitem>
      <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
-     <remark role="idea">toms 2013-01-18: Maybe add/show <sgmltag class="sgmlcomment">
-       Comment</sgmltag> as further information/description to the
-       reader.</remark>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -97,12 +87,8 @@
    <quote>exotic</quote> formats like man pages or simple text. 
    <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
    gives an overview.</para>
-   <para>You can build several output formats in parallel,<remark
-     role="clarity">toms 2013-01-18: Ambiguous? "Parallel" could also
-     be understood to create different output formats at the same time.
-     If I understood you correct, you wanted to say that each format
-     lives peacefully together. You can't *build* them together tough.
-   </remark> build your complete 
+  <para>You can build several output formats (without them interfering with each
+   other in the <filename>build</filename> directory), build your complete 
    documentation project (set, book, or article) or only a part of it (for example, 
    a specific chapter). </para>
   <para>
@@ -127,14 +113,15 @@
  characteristics, and the &dapsacr; subcommands to generate them. Refer to 
  <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
  for the commands' basic syntax.</para>
- 
-  <remark role="layout">toms 2013-01-18: Maybe reduce table to two
-    columns. That gives you a wider second column. Insert your note
-    below each description as a separate para/formalpara.</remark>
-  <remark>toms 2013-01-18: According to DocBook: Web Help -> WebHelp</remark>
+
+  <remark>toms 2013-01-18: According to DocBook: Web Help -> WebHelp - 
+  taroth 2013-01-21: hm, I already did some research on that topic some months ago 
+  and I found lots of different spellings even within the project itself, that's 
+  why in the end I decided to use the spelling that seemed most reasonable to
+  me...</remark>
   <table id="table.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
-   &daps-output-formats-table;
+  &daps-output-formats-table;
   </table>
   &daps-output-all;
   <para>By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr; 
@@ -171,12 +158,14 @@
    <varlistentry>
     <term>Specifying the &main; file on the Command Line</term>
     <listitem>
-     <screen>$ daps -m <replaceable>PATH_TO_MAIN_FILE</replaceable></screen>
+     <screen>$ daps -m <replaceable>PATH_TO_MAIN_FILE</replaceable>
+     </screen>
      <para>If you do not need to specify any further parameters than the Main 
      file, you can do completely without a &dc; file. With the <option>-m</option> 
      option you can specify the &main; file defining your document. The options
-     <option>-m</option> and <option>-d</option> exclude each other.</para></listitem>
-    </varlistentry>
-   </variablelist>
-  </sect1>
- </chapter>
+     <option>-m</option> and <option>-d</option> exclude each other.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </sect1>
+</chapter>

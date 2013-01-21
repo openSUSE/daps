@@ -682,8 +682,8 @@
   
 <!ENTITY daps-validation-basics
 ' <para>
-    Generating any output requires that your XML files are well-formed and
-    can be validated. As soon as any output command is executed, &dapsacr;
+    Generating any output requires that your XML files are valid. As soon as any
+    output command is executed, &dapsacr;
     automatically runs a validation check first. If it fails, &dapsacr;
     returns the parser errors, including information about the type of
     error, the respective file name and the line number where the error
@@ -749,10 +749,9 @@ make: *** [validate] Error 3</screen>
    </itemizedlist>
   </tip>'>
 <!ENTITY daps-output-formats-table
-'<tgroup cols="3">
-    <colspec colnum="1" colname="1" colwidth="18*"/>
-    <colspec colnum="2" colname="2" colwidth="41*"/>
-    <colspec colnum="3" colname="3" colwidth="41*"/>
+'<tgroup cols="2">
+    <colspec colnum="1" colname="1" colwidth="23*"/>
+    <colspec colnum="2" colname="2" colwidth="77*"/>
     <thead>
      <row>
       <entry>
@@ -762,12 +761,7 @@ make: *** [validate] Error 3</screen>
       </entry>
       <entry>
        <para>
-         Output
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Note
+         Output/Note
         </para>
       </entry>
      </row>
@@ -784,16 +778,15 @@ make: *** [validate] Error 3</screen>
          Creates a color PDF (without any crop marks). Open the result in a
          PDF viewer.
         </para>
-      </entry>
-      <entry>
        <para>
-         Requires an FO formatter.
+        Requires an FO formatter.
         <!--It is also possible to create one PDF 
         containing all the contents of a <sgmltag>set</sgmltag>&mdash; however,
         for large documentation projects you might run into problems with the
-         java memory stack.--></para>
+         java memory stack.-->
+       </para>
       </entry>
-     </row>
+      </row>
      <row>
       <entry>
        <para>
@@ -804,16 +797,13 @@ make: *** [validate] Error 3</screen>
        <para>
          Creates a black-and-white PDF with crop marks, suitable for
          hand-off to a printing shop. Open the result in a PDF viewer.
-        </para>
-      </entry>
-      <entry>
-       <para>
-         Requires an FO formatter. Creation of crop marks is currently only
+       </para>
+       <para>Requires an FO formatter. Creation of crop marks is currently only
          supported by the XEP FO formatter. All color images are
          automatically converted to grayscale images.
         </para>
       </entry>
-     </row>
+      </row>
      <row>
       <entry>
        <para>
@@ -830,16 +820,14 @@ make: *** [validate] Error 3</screen>
          browser to view the generated HTML from the starting point (ROOTID
          of the top-level element).
         </para>
-      </entry>
-      <entry>
        <para>
          Images and CSS files are only linked in the resulting directory
          that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <option>--static</option>
+         location like the HTML files, use the <option>-/-static</option>
          option. This is useful for creating distributable HTML builds.
-        </para>
-      </entry>
-     </row>
+       </para>
+       </entry>
+      </row>
      <row>
       <entry>
        <para>
@@ -852,17 +840,15 @@ make: *** [validate] Error 3</screen>
          create the output. Open the generated <filename>*.html</filename>
          file in a Web browser.
         </para>
-      </entry>
-      <entry>
        <para>
          Single HTML files are more convenient for full text searches.
          Images and CSS files are only linked in the resulting directory
          that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <option>--static</option>
+         location like the HTML files, use the <option>-/-static</option>
          option. This is useful for creating distributable HTML builds.
-        </para>
-      </entry>
-     </row>
+       </para>
+       </entry>
+      </row>
      <row>
       <entry>
        <para>
@@ -874,21 +860,19 @@ make: *** [validate] Error 3</screen>
          Creates an &epub; document. Open the result in an portable e-book
          reader (or with a software like Calibre).
         </para>
-      </entry>
-      <entry>
        <para>
         <remark>taroth 2012-03-23: check with fs/toms: only books? what about 
         conversion of articles to epub?</remark>
         <remark>toms, 2012-04-15: This seems to be an issue with the
            current DocBook stylesheets. Need to check this.</remark>
        </para>
-      </entry>
+       </entry>
      </row>
      <row>
       <entry>
        <para>
          webhelp
-        </para>
+       </para>
       </entry>
       <entry>
        <para>
@@ -897,8 +881,6 @@ make: *** [validate] Error 3</screen>
          generated HTML from the starting point (ROOTID of the top-level
          element).
         </para>
-      </entry>
-      <entry>
        <para>
          Experimental feature. Requires a very recent version of the DocBook
          stylesheets. DocBook &webh; consists of HTML pages with an
@@ -920,8 +902,6 @@ make: *** [validate] Error 3</screen>
        <para>
          Creates an ASCII text output. Open the result in a text editor.
         </para>
-      </entry>
-      <entry>
        <para>
          All images are removed from the output, but their location is
          indicated in the text by the respective image base name printed in
@@ -940,8 +920,6 @@ make: *** [validate] Error 3</screen>
        <para>
          Creates one or multiple man pages.
         </para>
-      </entry>
-      <entry>
        <para>
          To create man pages, your XML files must contain at least one
          <sgmltag>refentry</sgmltag>&mdash;be it in a
@@ -978,8 +956,6 @@ make: *** [validate] Error 3</screen>
          appendix files). The JSP files are named according to the ID of the 
          respective root element.
        </para>
-      </entry>
-      <entry>
        <para>
          A JSP file is an HTML page containing a reference to Java servlets
          or Java Server Side Applets.
@@ -998,9 +974,7 @@ make: *** [validate] Error 3</screen>
          text or MediaWiki editor, and use it as raw input for a MediaWiki
          article.
         </para>
-      </entry>
-      <entry>
-       <para>
+        <para>
          Experimental feature. The output is very basic: Section titles are
          converted in headlines according to their hierarchy, itemized
          lists, ordered lists and <sgmltag>screen</sgmltag> elements are
