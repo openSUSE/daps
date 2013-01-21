@@ -2,7 +2,7 @@
 
 <!ENTITY audience
 "This document is intended for users who want to make efficient use of
- DocBook-XML for editing and publishing their documentation&mdash;be it
+ DocBook XML for editing and publishing their documentation&mdash;be it
  documentation sets, individual books, or articles. Key knowledge of XML
  and DocBook is required, as well as key knowledge of using the Bash Shell
  (or command line interfaces in general).">
@@ -226,7 +226,8 @@
     <remark>taroth 2012-03-20: (and the &sle; products based on
     &osuse;)???</remark><remark>Not yet ... -- sknorr, 2012-09-20</remark>
     Eventually, packages for other distributions may become available.
-    In the meantime, you can download a tar archive with the &dapsacr; sources
+    In the meantime, you can download a tarball (a <filename>*.tar</filename> 
+    archive) with the &dapsacr; sources
     and install them on any distribution as described in
     <xref linkend="sec.daps.user.inst.tarball"/>.
   </para>
@@ -451,10 +452,10 @@
    </para>
    <variablelist>
     <varlistentry>
-     <term>Main File</term>
+     <term>&main; File</term>
      <listitem>
       <para>
-       An XML file containing the <quote>starting point</quote> (the
+       A DocBook XML file containing the <quote>starting point</quote> (the
      highest-level object) of your documentation project (for example, 
        <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>). For larger
        documentation projects, it is good practice to name the file
@@ -468,7 +469,7 @@
      <listitem>
       <para>
       A configuration file defining a number of parameters for your
-      documentation deliverable (for example, the main file, layout variants, or 
+      documentation deliverable (for example, the &main; file, layout variants, or 
       which profiling information to use). Of the multiple parameters that
       can be set  in the &dc; file, the only one required is
       <parameter>MAIN</parameter>, pointing to the XML file that you want to
@@ -483,10 +484,10 @@
    
 <!ENTITY daps-co-main
  ' <para>
-   Specifies the Main XML file. It contains the highest-level object 
-   (root element) of your documentation project. The Main file must be located 
+   Specifies the &main; XML file. It contains the highest-level object 
+   (root element) of your documentation project. The &main; file must be located 
    in <filename><replaceable>YOUR_DOC_DIR</replaceable>/xml/</filename>. 
-   Therefore, you only need to specify the Main&#39;s file name in the &dc; file
+   Therefore, you only need to specify the &main;&#39;s file name in the &dc; file
    (no path).</para>'>
    
 <!ENTITY daps-co-rootid
