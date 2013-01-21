@@ -40,8 +40,8 @@
 
   <para>
    Instead of putting the contents of a complete article or book into the
-   Main file, DocBook allows you to divide the text into separate document
-   files. They are then assembled in the Main file using
+   &main; file, DocBook allows you to divide the text into separate document
+   files. They are then assembled in the &main; file using
    <literal>XIncludes</literal> as shown in
    <xref linkend="ex.daps.main.set"/>. XIncludes can be used for splitting
    up sets, books, articles or chapters into separate files. For more
@@ -421,7 +421,7 @@
      </para>
     </listitem>
     <listitem>
-<!--Main File: Processing Instruction-->
+<!--&main; file: Processing Instruction-->
      <para>
       <xref linkend="sec.daps.user.modular.profile.daps.pi" xrefstyle="select: title"/>
      </para>
@@ -534,7 +534,7 @@
     </table>
    </sect3>
    <sect3 id="sec.daps.user.modular.profile.daps.pi">
-    <title>Main File: Processing Instruction</title>
+    <title>&main; file: Processing Instruction</title>
     <para>
      To activate generation of profiled output in &dapsacr;, the following
      processing instruction (PI) must be included in the header of the Main
@@ -546,9 +546,9 @@
   href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
   type="text/xml" ?></screen>
     <para>
-     The Main file of a documentation project is the one that is referenced
+     The &main; file of a documentation project is the one that is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
-     processing instruction is missing in the Main file, any profiling
+     processing instruction is missing in the &main; file, any profiling
      parameters in the &dc; file will be ignored during generation of the
      output.
     </para>
@@ -586,7 +586,7 @@
      which is available in a basic edition, a professional edition and a
      professional OEM edition, shipped by an OEM vendor. The following
      example shows <emphasis>all</emphasis> files that you need to consider
-     (XML files, Main file, and &dc; file).
+     (XML files, &main; file, and &dc; file).
     </para>
     <example id="ex.daps.xml.pa">
      <title>XML File With Profiling Attributes</title>
@@ -653,7 +653,7 @@
       around each line of your PI and explain each line with a co.
     </remark>
     <example id="ex.daps.main.pi">
-     <title>Main File With PI for Profiling</title>
+     <title>&main; file With PI for Profiling</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;?xml-stylesheet <co id="co.daps.main.pi.profiling"/> 
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
@@ -675,7 +675,7 @@
      <calloutlist>
       <callout arearefs="co.daps.main.pi.profiling">
        <para>
-        Processing instruction (PI) in the header of the Main file. If it is
+        Processing instruction (PI) in the header of the &main; file. If it is
         missing, any profiling parameters in the &dc; file will be ignored.
        </para>
        <para>
@@ -699,7 +699,7 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
      <calloutlist>
       <callout arearefs="co.dc.pa.main1">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <parameter>MAIN</parameter> parameter referencing the &main; file. See
         <xref linkend="ex.daps.main.pi"/>.
        </para>
       </callout>
@@ -728,7 +728,7 @@ PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
      <calloutlist>
       <callout arearefs="co.dc.pa.main2">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <parameter>MAIN</parameter> parameter referencing the &main; file. See
         <xref linkend="ex.daps.main.pi"/>.
        </para>
       </callout>
@@ -758,7 +758,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
      <calloutlist>
       <callout arearefs="co.dc.pa.main3">
        <para>
-        <parameter>MAIN</parameter> parameter referencing the Main file. See
+        <parameter>MAIN</parameter> parameter referencing the &main; file. See
         <xref linkend="ex.daps.main.pi"/>.
        </para>
       </callout>
@@ -894,7 +894,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <calloutlist>
     <callout arearefs="co.daps.main.pi.profiling2">
      <para>
-      Processing instruction (PI) in the header of the Main file. If it is
+      Processing instruction (PI) in the header of the &main; file. If it is
       missing, any profiling parameters in the &dc; file will be ignored.
      </para>
     </callout>
