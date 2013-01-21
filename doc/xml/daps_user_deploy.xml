@@ -33,7 +33,7 @@
   KDE and GNOME desktop environments as well as into Web user interfaces
   (via JSP), &dapsacr; offers a number of options to produce the
   corresponding output: For example, you can create source packages, HTML
-  tar files, color PDFs, and files for the KDE or GNOME help system with the 
+  tarballs, color PDFs, and files for the KDE or GNOME help system with the 
   <command>daps package-*</command> commands.
  </para>
  <para>Find a list of the most important commands below. <remark>taroth 2013-01-17: 
@@ -45,7 +45,7 @@
    <listitem>
     <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> package-html --pagefiles</screen>
     <para>Generates HTML output and packs the HTML files, any graphics, and your 
-    CSS file) into a tar file. Additionally generates a <filename>*.pages</filename>
+    CSS file) into a tarball. Additionally generates a <filename>*.pages</filename>
     file that you can use for the GNOME help system Yelp. If you need files
     for former Yelp versions, use the <option>--documentfiles</option> option. 
     To generate files for the KDE3 help system, use the 
@@ -53,7 +53,7 @@
    </listitem>
   </varlistentry>
   <varlistentry>
-   <term>Generating a JSP Tar File</term>
+   <term>Generating a JSP Tarball</term>
    <listitem>
     <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> package-jsp</screen>
     <para>Creates all archives and files needed for packaging a JSP
@@ -75,12 +75,12 @@
    </listitem>
   </varlistentry>
   <varlistentry>
-   <term>Creating a Tar File with All Sources (Including Graphics)</term>
+   <term>Creating a Tarball with All Sources (Including Graphics)</term>
    <listitem>
     <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
     <para>
       If you use profiling attributes to manage document variants, &dapsacr;
-      creates a distributable tar file containg the sources of the complete
+      creates a distributable tarball containg the sources of the complete
       set, including the graphics. For details about profiling
       in DocBook and how to use it with &dapsacr;, refer to
       <xref linkend="sec.daps.user.modular.profile"/>.</para>

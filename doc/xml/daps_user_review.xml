@@ -162,7 +162,7 @@
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
      <para>
       If you use profiling attributes to manage document variants, &dapsacr;
-      creates a tar file with profiled XML files from your set. For details about
+      creates a tarball with profiled XML files from your set. For details about
       profiling in DocBook and how to use it with &dapsacr;, refer to
       <xref linkend="sec.daps.user.modular.profile"/>.
      </para>
@@ -170,7 +170,7 @@
       <title>Output Limitations</title>
       <para>The output of <command>dist-xml</command> does not
       contain any graphics and the XML sources may not validate after being unpacked. 
-      To create tar files containing graphics and a complete, valid set of
+      To create tarballs containing graphics and a complete, valid set of
       XML sources, use the command <command>package-src</command>. 
       For further details, run <command>daps package-src --help</command> or
       refer to <xref linkend="cha.daps.user.deploy"/>.</para>
@@ -185,7 +185,7 @@
   <para>
    For handing over your files to review or translation, or for distributing
    your output formats in a convenient way, &dapsacr; can automatically
-   create tar files of the XML sources, various output formats and/or
+   create tarballs of the XML sources, various output formats and/or
    graphics. &dapsacr; uses <literal>bz2</literal> for high compression of
    the archives and keeps the directory structure when generating the tar
    files.
@@ -203,18 +203,18 @@
 
   <variablelist>
    <varlistentry>
-    <term>Creating a Graphics Tar File</term>
+    <term>Creating a Graphics Tarball</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
      <para>
-      Creates a tar file of all graphics
+      Creates a tarball of all graphics
       <remark>taroth 2013-01-11: 
      check with fs: the referenced ones?</remark>
       that belong to the specified documentation project.
      </para>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
      <para>
-      Creates a tar file with PNG graphics
+      Creates a tarball with PNG graphics
       <remark>taroth 2013-01-11: 
      check with fs: the referenced ones?</remark>
       that belong to the specified documentation project. Any SVG graphics
@@ -223,7 +223,7 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Creating a Tar File For Localization</term>
+    <term>Creating a Tarball For Localization</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
      <para>
@@ -237,7 +237,7 @@
       The command is especially helpful if not all files in your
       documentation project need to be translated, but only a subset of them
       (for example, one of several books in a <sgmltag>set</sgmltag>). It
-      generates 3 tar files: one containing the graphics, one containing all
+      generates 3 tarballs: one containing the graphics, one containing all
       XML files that need to be localized, and one containing the remaining
       files of the set. The remaining files are needed for solving any
       cross-references between translated and untranslated content during
@@ -246,18 +246,18 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Creating Tar Files with Different Output Formats </term>
+    <term>Creating Tarballs with Different Output Formats </term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
      <para>
       Generates HTML output of the specified documentation project
       (including HTML files, any graphics, and your CSS file defining the
-      HTML layout) and packs the output into a tar file.
+      HTML layout) and packs the output into a tarballs.
      </para>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
      <para>
       Generates a single-file HTML output and packs the HTML file, any
-      graphics, and your CSS file) into a tar file.
+      graphics, and your CSS file) into a tarball.
      </para>
     </listitem>
    </varlistentry>
