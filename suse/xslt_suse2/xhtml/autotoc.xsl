@@ -137,7 +137,7 @@
     </xsl:call-template>
     <xsl:choose>
       <xsl:when test="self::book">
-        <xsl:apply-templates select="(bookinfo/abstract|abstract)[1]" mode="toc"/>
+        <xsl:apply-templates select="(bookinfo/abstract|abstract|bookinfo/highlights|highlights)[1]" mode="toc"/>
       </xsl:when>
       <xsl:when test="self::appendix|self::chapter|self::toc|self::lot|
                       self::index|self::glossary|self::bibliography|
@@ -145,7 +145,7 @@
                   and local-name($toc-context) = 'part'">
         <xsl:choose>
           <xsl:when test="chapterinfo/abstract != 0 or abstract != 0">
-            <xsl:apply-templates select="(chapterinfo/abstract|abstract)[1]" mode="toc"/>
+            <xsl:apply-templates select="(chapterinfo/abstract|abstract|chapterinfo/highlights|highlights)[1]" mode="toc"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="(para)[1]" mode="toc">
@@ -158,7 +158,7 @@
   </xsl:template>
 
 
-  <xsl:template match="abstract|para" mode="toc">
+  <xsl:template match="abstract|highlights|para" mode="toc">
     <xsl:param name="trim" select="0"/>
     <xsl:param name="teaser">
       <xsl:apply-templates/>
