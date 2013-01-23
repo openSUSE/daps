@@ -1428,7 +1428,7 @@ em, i, .guimenu {
     font-style: italic;
 }
 
-em .guimenu, i .guimenu {
+em .guimenu, i .guimenu, .question em {
     font-style: normal; /* Don't use italics within italics... */
 }
 
@@ -2029,6 +2029,11 @@ div.itemizedlist {
     font-style: italic;
     color: #666;
 }
+
+.question p + p {
+    margin-top: 2px;
+}
+
 
 .blockquote p {
     font-style: italic;
