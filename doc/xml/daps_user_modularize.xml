@@ -144,8 +144,6 @@
  </sect1>
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
-  <remark role="layout">toms 2013-01-18: the word "profiling" should be
-    included in emphasis, not in literal.</remark>
   &db-profiling-intro;
   &db-profiling; 
 
@@ -193,9 +191,9 @@
   &lt;member&gt;Common Feature 1&lt;/member&gt;
   &lt;member&gt;Common Feature 2&lt;/member&gt;
   &lt;member&gt;Common Feature 3&lt;/member&gt;
-  &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+  <emphasis role="strong">&lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
   &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
-  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;</emphasis>
 &lt;/simplelist&gt;</screen>
    </example>
    <para>
@@ -346,7 +344,7 @@
   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
   &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
   &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
-  &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;
+ <emphasis role="strong"> &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;</emphasis>
 &lt;/simplelist&gt;</screen>
    </example>
    <para>
@@ -418,8 +416,8 @@
     </tgroup>
    </table>
    <remark>toms 2012-09-25: Maybe describe the use of two or more profiling
-      values in _one_ attribute? Could be useful.
-    </remark>
+      values in _one_ attribute? Could be useful. - taroth 2013-01-25: let's do
+      that for next revision</remark>
   </sect2>
 
   <sect2 id="sec.daps.user.modular.profile.daps">
@@ -552,14 +550,14 @@
     <title>&main; file: Processing Instruction</title>
     <para>
      To activate generation of profiled output in &dapsacr;, the following
-     processing instruction (PI) must be included in the header of the Main
-     file <remark>toms 2013-01-18: add "before the root element" as
-       further clarification?</remark>:
+     processing instruction (PI) must be included in the header of the &main;
+     file, before the root element:
     </para>
-    <remark role="typo">toms 2013-01-18: Added complete PI</remark>
 <screen>&lt;?xml-stylesheet
   href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
   type="text/xml" ?></screen>
+  <remark>taroth 2013-01-25: toms: anything to say about the individual
+  lines? please advise</remark>
     <para>
      The &main; file of a documentation project is the one that is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
@@ -662,18 +660,13 @@
      </calloutlist>
     </example>
      
-    <remark role="layout">toms 2013-01-18: The callout circles are
-      misplaced: a PI starts with &lt;?foo ...?>. 
-      Alternative: add &lt;emphasis role="strong">...&lt;/emphasis>
-      around each line of your PI and explain each line with a co.
-    </remark>
     <example id="ex.daps.main.pi">
      <title>&main; file With PI for Profiling</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;?xml-stylesheet <co id="co.daps.main.pi.profiling"/> 
+<emphasis role="strong">&lt;?xml-stylesheet  
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
  type="text/xml"
- title="Profiling step"?&gt; 
+ title="Profiling step"?&gt;</emphasis> 
 &lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
@@ -687,19 +680,11 @@
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
  [...]
 &lt;/article&gt;</screen>
-     <calloutlist>
-      <callout arearefs="co.daps.main.pi.profiling">
-       <para>
-        Processing instruction (PI) in the header of the &main; file. If it is
+        <para>
+         If the processing instruction (PI)  is
         missing, any profiling parameters in the &dc; file will be ignored.
        </para>
-       <para>
-        <remark>taroth 2012-10-19: todo - also explain the other lines of 
-       the screen?</remark>
-       </para>
-      </callout>
-     </calloutlist>
-    </example>
+     </example>
     <example id="ex.daps.dc.pa.home">
      <title>&dc; File with Profiling for Home Edition</title>
 <screen>## Doc Config File for Frog Sound Recordings
@@ -824,14 +809,14 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 &lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
- '&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
+ <emphasis role="strong">'&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
   &lt;phrase cond="prof"&gt;Frog Sound Recordings (Professional)&lt;/phrase&gt;
-  &lt;phrase cond="prof" vendor="oemcompany"&gt;Gecko Sound Recording (Professional)&lt;/phrase&gt;'&gt;
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;Gecko Sound Recording (Professional)&lt;/phrase&gt;'&gt;</emphasis>
 
 &lt;!ENTITY productnumber  
- '&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
+ <emphasis role="strong">'&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
   &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
-  &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</screen>
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</emphasis></screen>
   </example>
 
   <remark>taroth 2012-12-06: open issue - check with fs and toms why/if we 
@@ -852,7 +837,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
      Insert one of the respective elements <sgmltag>setinfo</sgmltag>,
      <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your
      set, book, or article.
-     <remark>taroth 2012-12-07: Toms, Frank: if I have a set, do the product* 
+     <remark>taroth 2012-12-07: toms, fs: if I have a set, do the product* 
     entities need to be in all *info elements (setinfo, bookinfo, articleinfo)?</remark>
     </para>
    </step>
@@ -881,16 +866,20 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <title>XML File with <literal>&amp;productname;</literal> and <literal>&amp;productnumber;</literal> Entities</title>
 <screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;?xml-stylesheet 
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" <co id="co.daps.main.pi.profiling2"/>
- type="text/xml" <xref linkend="co.daps.main.pi.profiling2" xrefstyle="select:label nopage"/>
- title="Profiling step"?&gt; <xref linkend="co.daps.main.pi.profiling2" xrefstyle="select:label nopage"/>
-&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+
+<emphasis role="strong">&lt;?xml-stylesheet 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml" 
+ title="Profiling step"?&gt;</emphasis> <co id="co.daps.main.pi.profiling2"/>
+
+<emphasis role="strong">&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
                          "http://www.docbook.org/xml/4.5/docbookx.dtd"
-[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent2"/>
-%entities; <xref linkend="co.daps.main.reference.ent2" xrefstyle="select:label nopage"/>
-]&gt; <xref linkend="co.daps.main.reference.ent2" xrefstyle="select:label nopage"/>
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"> 
+%entities; 
+ ]&gt;</emphasis> <co id="co.daps.main.reference.ent2"/>
+ 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
+
 &lt;article lang="en" id="art.frog"&gt; 
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
