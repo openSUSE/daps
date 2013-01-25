@@ -99,23 +99,15 @@
      </para>
     </callout>
     <callout arearefs="co.daps.main.reference.load">
-      <para>Load the external entity file declared in the previous line.</para>
-      <remark>toms 2013-01-18: Added this new callout. 
-      The general idea is to separate between declaration (that is
-      "co.daps.main.reference.ent") and loading (that is
-      "co.daps.main.reference.load").
-      Also it looks better to have a screen with 2 callouts instead of
-      just one. ;)
-      </remark>
-    </callout>
+      <para>Loads the external entity file declared in the previous line.</para>
+     </callout>
    </calloutlist>
   </example>
 
   <para>
    For more information, refer to
    <ulink url="http://www.sagehill.net/docbookxsl/ModularDoc.html">
-   <citetitle>Modular DocBook Files: Shared text entities</citetitle>
-   </ulink>.
+   <citetitle>Modular DocBook Files: Shared text entities</citetitle></ulink>.
   </para>
 
   <para>
@@ -123,9 +115,32 @@
    during generation of output, the entities will be treated equally to
    entities declared in individual XML files.
   </para>
-  
-  <remark role="idea">toms 2013-01-18: Should we mention that it is
-    possible to declare/use more than one entity declaration files?</remark>
+  <para>It is also possible to use multiple entity files by including them into
+  the separate entity file that is referenced in the XML file.</para>
+  <example id="ex.daps.ent.decl.separate.multi">
+   <title>Referencing Entity Files Within an Entity File</title>
+  <screen>&lt;?xml version="1.0" encoding="iso-8859-1" ?&gt;
+&lt;!ENTITY exampleuser "tux"&gt;
+&lt;!ENTITY exampleuserII "wilber"&gt;
+&lt;!ENTITY examplegroup "users"&gt;
+[...]
+&lt;ENTITY % network-entities SYSTEM "network-decl.ent"> <xref linkend="co.daps.main.reference.ent" xrefstyle="select:label nopage"/>
+%network-entities; <xref linkend="co.daps.main.reference.load" xrefstyle="select:label nopage"/>
+&lt;ENTITY % more-entities SYSTEM "another-decl.ent"> <xref linkend="co.daps.main.reference.ent" xrefstyle="select:label nopage"/>
+%more-entities; <xref linkend="co.daps.main.reference.load" xrefstyle="select:label nopage"/>
+</screen>
+<calloutlist>
+    <callout arearefs="co.daps.main.reference.ent">
+     <para>
+      Reference to the separate entity declaration file (with the
+       <sgmltag class="starttag">!ENTITY</sgmltag> keyword).
+     </para>
+    </callout>
+    <callout arearefs="co.daps.main.reference.load">
+      <para>Loads the external entity file declared in the previous line.</para>
+     </callout>
+   </calloutlist>
+  </example>
  </sect1>
  <sect1 id="sec.daps.user.modular.profile">
   <title>Profiling&mdash;Support for Document Variants</title>
