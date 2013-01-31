@@ -454,7 +454,7 @@
   </fo:inline>
 </xsl:template>
 
-<xsl:template match="citetitle|envar|emphasis|
+<xsl:template match="acronym|citetitle|envar|emphasis|
                      guimenu|guilabel|guibutton|
                      keycombo|literal|
                      option|productname|phrase|quote|replaceable|
