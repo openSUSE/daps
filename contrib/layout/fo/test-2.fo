@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <fo:layout-master-set>
+    <!-- Seiten definieren -->
+    <fo:simple-page-master master-name="blank"
+       page-height="15cm" page-width="10cm">
+      <fo:region-body background-color="gray"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="first"
+       reference-orientation="-270"
+       page-height="15cm" page-width="10cm"
+       margin-top="1cm" margin-bottom="1cm"
+       margin-left="1cm" margin-right="2cm">
+      <fo:region-body margin-bottom="30pt"/>
+      <fo:region-after region-name="first-after" extent="30pt" background-color="teal"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="odd" 
+      page-height="15cm" page-width="10cm"
+      margin-top="1cm" margin-bottom="1cm"
+      margin-left="1cm" margin-right="2cm">
+      <fo:region-body background-color="red" margin-bottom="30pt"/>
+      <fo:region-after region-name="odd-after" extent="30pt" background-color="teal"/>
+    </fo:simple-page-master>
+    <fo:simple-page-master master-name="even"
+      page-height="15cm" page-width="10cm"
+      margin-top="1cm" margin-bottom="1cm" 
+      margin-left="2cm" margin-right="1cm">
+      <fo:region-body background-color="green" margin-bottom="30pt"/>
+      <fo:region-after region-name="even-after" extent="30pt" background-color="teal"/>
+    </fo:simple-page-master>
+
+    <!-- Seiten zusammenfassen -->
+    <fo:page-sequence-master master-name="page">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="blank" 
+          blank-or-not-blank="blank"/>
+        <fo:conditional-page-master-reference master-reference="first"
+          page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="even"
+          odd-or-even="even"/>
+        <fo:conditional-page-master-reference master-reference="odd"
+          odd-or-even="odd"/>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+  </fo:layout-master-set>
+
+  <fo:page-sequence master-reference="page">
+    <fo:static-content flow-name="first-after">
+      <fo:block text-align="right">
+        <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="odd-after">
+      <fo:block text-align="right">
+        <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+    <fo:static-content flow-name="even-after">
+      <fo:block text-align="left">
+        <fo:page-number/>
+      </fo:block>
+    </fo:static-content>
+    <fo:flow flow-name="xsl-region-body" font-family="AndaleSans">
+      <fo:block text-align="justify">
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        </fo:block>
+      <fo:block text-align="justify" text-align-last="justify">Hallo<fo:leader 
+         leader-pattern="use-content">€</fo:leader>Welt</fo:block>
+      <fo:block text-align="justify" font-family="MPlusSans">
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+      </fo:block>
+      <fo:block page-break-before="always"><fo:leader/></fo:block>
+      <!--<fo:block><fo:leader/></fo:block>-->
+    </fo:flow>
+  </fo:page-sequence>
+  
+  <fo:page-sequence master-reference="page">
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block>
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+        The quick brown fox jumps over the lazy dog.
+      </fo:block>
+      
+      <!--<fo:list-block provisional-distance-between-starts="12pt"
+        provisional-label-separation="5pt">
+        <fo:list-item>
+          <fo:list-item-label>
+            <fo:block border="0.7pt solid green">*</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body 
+            start-indent="body-start()">
+            <fo:block border="0.7pt solid red">This is a list. Jay!! This is a nice list.</fo:block>
+            <fo:list-block provisional-distance-between-starts="12pt"
+        provisional-label-separation="5pt">
+        <fo:list-item>
+          <fo:list-item-label>
+            <fo:block border="0.7pt solid green">*</fo:block>
+          </fo:list-item-label>
+          <fo:list-item-body 
+            start-indent="body-start()">
+            <fo:block border="0.7pt solid red">This is a list. Jay!! This is a nice list.</fo:block>
+            
+            
+          </fo:list-item-body>
+        </fo:list-item>
+      </fo:list-block>
+            
+          </fo:list-item-body>
+        </fo:list-item>
+      </fo:list-block>-->
+      
+      
+      <fo:table width="100%" space-before="1em">
+        <fo:table-body border="1pt solid gray">
+          <fo:table-row>
+            <fo:table-cell background-color="orange">
+              <fo:block>A</fo:block>
+            </fo:table-cell>
+            <fo:table-cell reference-orientation="90" width="5em">
+              <fo:block>B</fo:block>
+            </fo:table-cell>
+            <fo:table-cell>
+              <fo:block>C</fo:block>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>
