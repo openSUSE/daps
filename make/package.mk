@@ -334,6 +334,7 @@ YELPSTRINGS := --stringparam docpath "@PATH@/" \
 		--stringparam docid "com.novell.$(DOCNAME)$(subst _,,$(LL))$(HF_FORMAT)" \
 
 $(DOCUMENTFILES_RESULT): | $(PACK_DIR)
+$(DOCUMENTFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	xsltproc $(YELPSTRINGS) $(ROOTSTRING) --output $@ --xinclude \
 	  $(STYLE_YELP) $(PROFILED_MAIN)
 
@@ -343,6 +344,7 @@ $(DOCUMENTFILES_RESULT): | $(PACK_DIR)
 #
 
 $(PAGEFILES_RESULT): | $(PACK_DIR)
+$(PAGEFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	xsltproc --output $@ --xinclude \
 	  --stringparam packagename $(TMP_BOOK) $(STYLE_MALLARD) \
 	  $(PROFILED_MAIN)
@@ -354,6 +356,7 @@ $(PAGEFILES_RESULT): | $(PACK_DIR)
 
 $(DESKTOPFILES_RESULT): | $(PACK_DIR)
 $(DESKTOPFILES_RESULT): | $(DESKTOP_FILES_DIR)
+$(DESKTOPFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	xsltproc $(DESKTOP_FILES_STRINGS) $(ROOTSTRING) --xinclude \
 	  $(STYLE_DESKTOP_FILES) $(PROFILED_MAIN)
 	BZIP2="--best" tar cjf $@ --absolute-names \
