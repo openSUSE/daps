@@ -887,7 +887,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="hn"
-    LONG_OPTS="def-file:,desktopfiles,documentfiles,formatter:,help,name:,nopdf,pagefiles,rootid:,set-date:"
+    LONG_OPTS="def-file:,desktopfiles,documentfiles,formatter:,help,name:,nopdf,pagefiles,rootid:,set-date:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -900,10 +900,12 @@ function packaging () {
             help_documentfiles
             help_desktopfiles
             help_pagefiles
+            help_xsltparam "creates the .fo file from the profiled sources"
         elif [[ "package-html" = $SUB_CMD ]]; then
             help_documentfiles
             help_desktopfiles
             help_pagefiles
+            help_xsltparam "creates the .html files from the profiled sources"
         elif [[ "package-src" = $SUB_CMD ]]; then
             help_def-file
         fi
@@ -920,6 +922,7 @@ function packaging () {
     [[ -n $P_PAGEFILES ]]     && export export PAGEFILES=1
     [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n $P_DEF_FILE ]]; then
         if [[ -f $P_DEF_FILE ]]; then
