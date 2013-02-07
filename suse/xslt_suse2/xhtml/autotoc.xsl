@@ -46,9 +46,18 @@
               <div class="toc">
                 <!--<xsl:copy-of select="$toc.title"/>-->
                 <xsl:element name="{$toc.list.type}" namespace="http://www.w3.org/1999/xhtml">
-                  <xsl:apply-templates select="$nodes.plus" mode="toc">
-                    <xsl:with-param name="toc-context" select="$toc-context"/>
-                  </xsl:apply-templates>
+                  <xsl:choose>
+                    <xsl:when test="local-name($toc-context) = 'part' or local-name($toc-context) = 'set'">
+                      <xsl:apply-templates select="$nodes.plus" mode="toc-abstract">
+                        <xsl:with-param name="toc-context" select="$toc-context"/>
+                      </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:apply-templates select="$nodes.plus" mode="toc">
+                        <xsl:with-param name="toc-context" select="$toc-context"/>
+                      </xsl:apply-templates>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:element>
               </div>
             </xsl:if>
@@ -57,9 +66,18 @@
             <xsl:if test="$nodes">
               <div class="toc">
                 <xsl:element name="{$toc.list.type}" namespace="http://www.w3.org/1999/xhtml">
-                  <xsl:apply-templates select="$nodes" mode="toc">
-                    <xsl:with-param name="toc-context" select="$toc-context"/>
-                  </xsl:apply-templates>
+                  <xsl:choose>
+                    <xsl:when test="local-name($toc-context) = 'part' or local-name($toc-context) = 'set'">
+                      <xsl:apply-templates select="$nodes" mode="toc-abstract">
+                        <xsl:with-param name="toc-context" select="$toc-context"/>
+                      </xsl:apply-templates>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:apply-templates select="$nodes" mode="toc">
+                        <xsl:with-param name="toc-context" select="$toc-context"/>
+                      </xsl:apply-templates>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:element>
               </div>
             </xsl:if>
@@ -68,7 +86,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
 
   <xsl:template name="toc.line">
     <xsl:param name="toc-context" select="."/>
@@ -128,7 +145,7 @@
 
   <!-- http://sagehill.net/docbookxsl/TOCcontrol.html#BriefSetToc -->
   <xsl:template match="book|part/appendix|chapter|toc|lot|index|glossary|
-                       bibliography|article|preface|refentry|reference" mode="toc">
+                       bibliography|article|preface|refentry|reference" mode="toc-abstract">
     <xsl:param name="toc-context" select="."/>
 
     <xsl:call-template name="subtoc">
@@ -137,31 +154,31 @@
     </xsl:call-template>
     <xsl:choose>
       <xsl:when test="self::book">
-        <xsl:apply-templates select="(bookinfo/abstract|abstract|bookinfo/highlights|highlights)[1]" mode="toc"/>
+        <xsl:apply-templates select="(bookinfo/abstract|bookinfo/highlights|abstract|highlights)[1]" mode="toc-abstract"/>
       </xsl:when>
       <xsl:when test="self::appendix|self::chapter|self::toc|self::lot|
                       self::index|self::glossary|self::bibliography|
                       self::article|self::preface|self::refentry|self::reference
                   and local-name($toc-context) = 'part'">
         <xsl:choose>
-          <xsl:when test="chapterinfo/abstract != 0 or abstract != 0">
-            <xsl:apply-templates select="(chapterinfo/abstract|abstract|chapterinfo/highlights|highlights)[1]" mode="toc"/>
+          <xsl:when test="*[contains(local-name(), 'info')]/abstract|
+                          *[contains(local-name(), 'info')]/highlights|
+                          abstract|highlights">
+            <xsl:apply-templates select="(*[contains(local-name(), 'info')]/abstract|
+                                          *[contains(local-name(), 'info')]/highlights|
+                                          abstract|highlights)[1]" mode="toc-abstract"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="(para)[1]" mode="toc">
+            <xsl:apply-templates select="(para)[1]" mode="toc-abstract">
               <xsl:with-param name="trim" select="1"/>
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-
-  <xsl:template match="abstract|highlights|para" mode="toc">
+  <xsl:template match="abstract|highlights|para" mode="toc-abstract">
     <xsl:param name="trim" select="0"/>
     <xsl:param name="teaser">
       <xsl:apply-templates/>
