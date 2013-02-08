@@ -416,7 +416,7 @@ case "$SUBCMD" in
         # Your files with status column sorted after deadline
         set_env_base
         docmanager --docconfig "$DOCCONF" dg -P \
-            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k7
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k3
         ;;
     statp)
         # All files with status column sorted after priority
@@ -428,7 +428,7 @@ case "$SUBCMD" in
         # Your files with status column sorted after priority
         set_env_base
         docmanager --docconfig "$DOCCONF" dg -P \
-            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k6
+            -q "$MY_QSTRING" --include $MAINTAINER "$@" | sort_after_head -k2
         ;;
 # -------------------------------------------
 # TRANS
