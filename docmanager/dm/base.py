@@ -770,8 +770,7 @@ Your friendly "DocManager Reminder". :-) Have you:
        # Set the properties
        #
        #
-       if os.path.exists(".svn"):
-        try:
+       try:
             logmsg = "\n".join([logmsg, "Set properties %s" % xx])
             if not properties.get("dryrun", False):
               f.setprops(**properties)
@@ -786,19 +785,16 @@ Your friendly "DocManager Reminder". :-) Have you:
             
             print "    %s.\n" % green("Successful")
     
-        except (dmexcept.DocManagerPropertyException,
+       except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
     
-        except (dmexcept.DocManagerPropertyException,
+       except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
 
-       # Neither in branch nor in trunk
-       else:
-         raise dmexcept.DocManagerEnvironment(dmexcept.WRONG_DIRECTORY_ERROR)
 
        # Commit any changes
        # f.commit(logmsg)
