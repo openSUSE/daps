@@ -7,7 +7,7 @@
                 extension-element-prefixes="date"
                 version='1.0'>
 
-<xsl:attribute-set name="page.attributs">
+<xsl:attribute-set name="page.attributes">
  <xsl:attribute name="language">
   <xsl:call-template name="l10n.language"/>
  </xsl:attribute>
@@ -53,7 +53,7 @@
   </xsl:variable>
   
 
-  <fo:page-sequence xsl:use-attribute-sets="page.attributs"
+  <fo:page-sequence xsl:use-attribute-sets="page.attributes"
                     hyphenate="{$hyphenate}"
                     master-reference="{$master-reference}">
    <xsl:attribute name="format">
@@ -86,7 +86,7 @@
         <xsl:with-param name="master-reference" select="$master-reference"/>
       </xsl:call-template>
 
-      <fo:block span="all">
+      <fo:block span="all" id="{$id}">
         <xsl:apply-templates select="articleinfo/author|
                                      articleinfo/authorgroup"
                              mode="article.titlepage.recto.auto.mode"/>
