@@ -183,7 +183,8 @@ Recommends:     sazanami-fonts
 Recommends:     unfonts
 %endif
 
-Obsoletes:      susedoc
+Obsoletes:      susedoc < 4.3.32
+Provides:       susedoc = 4.3.32
 
 %description
 DocBook Authoring and Publishing Suite (DAPS)
