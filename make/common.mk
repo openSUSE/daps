@@ -2136,9 +2136,14 @@ $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
 #---------------
 # show productname and productnumber
 .PHONY: productinfo
-productinfo: $(TMP_XML) 
-	@echo -n "PRODUCTNAME=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productname" $< 2>/dev/null)\" "
-	@echo -n "PRODUCTNUMBER=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productnumber" $< 2>/dev/null)\""
+productinfo: $(TMP_XML)
+  ifdef ROOTID
+	@echo -n "PRODUCTNAME=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*[contains(.,'info')]/productname[1]" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*[contains(.,'info')]/productnumber[1]" $< 2>/dev/null)\""
+  else
+	@echo -n "PRODUCTNAME=\"$(shell xml sel -t -v "(/*/*/productname)[1]" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell xml sel -t -v "(/*/*/productnumber)[1]" $< 2>/dev/null)\""
+  endif
 
 #---------------
 # Funstuff
