@@ -80,6 +80,8 @@
 <!-- 19. Pagination and General Styles ========================== -->
   <xsl:param name="paper.type" select="'A4'"/>
   <xsl:param name="double.sided" select="1"/>
+<!--  <xsl:param name="force.blank.pages" select="0"/> – This doesn't seem to
+        work, hence: keep the adaptations in pagesetup.xsl for now.-->
 
   <xsl:param name="page.margin.top" select="'19mm'"/>
   <xsl:param name="body.margin.top" select="'0mm'"/>
@@ -90,9 +92,22 @@
   <xsl:param name="page.margin.outer" select="'22.5mm'"/>
   <xsl:param name="body.margin.outer" select="'0mm'"/>
 
+  <xsl:param name="header.rule" select="0"/>
+      <!-- Not sure how to not generate any header at all – this seems close
+           enough for now.-->
+  <xsl:param name="footer.rule" select="0"/>
+
 <!-- 20. Font Families ========================================== -->
-  
-  
+  <xsl:param name="body.font.family">'PT Serif', serif</xsl:param>
+  <xsl:param name="dingbat.font.family">'PT Serif', serif</xsl:param>
+  <xsl:param name="sans.font.family">'Open Sans', sans-serif</xsl:param>
+  <xsl:param name="title.font.family">'Open Sans', sans-serif</xsl:param>
+  <xsl:param name="monospace.font.family">'DejaVu Sans Mono', monospace</xsl:param>
+  <xsl:param name="symbol.font.family">'OpenSymbol'</xsl:param>
+
+  <xsl:param name="body.font.master" select="'&normal;'"/>
+  <xsl:param name="footnote.font.size" select="'&x-small;'"/>
+
 <!-- 21. Property Sets ========================================== -->
   
   
