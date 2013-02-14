@@ -1,0 +1,919 @@
+-------------------------------------------------------------------
+Wed Feb 14 11:47:26 UTC 2013 - fsundermeyer@opensuse.org
+
+Version 1.1.4:
+
+[NOTE: Test releases 1.1 to 1.1.3 have not been publicly released]
+
+daps-auto.pl:
+  * a perl script to automatically build documents and deploy them
+    to a remote machine via rsync
+
+EPUB:
+  * completely rewrote the epub generating code
+  * no longer needs an external script (db2epub.ruby) for
+    epub-file generation - now everything is handled in
+    make itself
+
+HTML/HTML-Single/JSP:
+  * added a --clean switch which clears the directory
+    before generating a new version
+
+Packaging:
+  * completely rewrote the code for package-src
+    - new option --set-date allows to set a publication date
+      (default: current date)
+  * new options for package-html and package-pdf
+    --desktopfiles: generates an archive with desktopfiles for KDE3
+    --documentfiles: generates a documnet file for KDE4/GNOME2
+    --pagefiles: generates a page file for GNOME3
+  * completely rewrote online-docs
+    - now automatically generates epub, color-pdf and single-html archive
+    - new option --export-dir to specify a results directory
+  * completely rewrote locdrop
+    - new option --export-dir to specify a results directory
+
+Spellchecking:
+  * no longer a stand-alone program
+  * use "daps -d DC-file spellcheck" to check single files
+    (--file option), complete documents (via DC-file) or
+    parts of a document (vi ROOTID)
+  * can be configured via config variables ASPELL_*
+
+Emacs macros for DocBook:
+  * Now supports nxml-mode
+
+Documentation:
+  * Significant additions
+
+Misc:
+  * Added a --manifest option to dist-html which adds a manifest
+    files containing the html-files in the same order as in the
+    document
+  * Replaced bash 4 only code with bash 3 compatible code
+    (bash 4 is no longer a prerequisite for daps)
+  * added support for a static/ directory containing resources
+    for HTML builds (images, js and css files). If present in
+    STYLEROOT, it will be copied as-is and links CSS, JS and
+    style-image links in the HTML source will point there
+
+Bugfixes:
+  * Ticket #77 Lang variable ($LL) might not be set
+  * Ticket #104 Inconsistent Tar Ball for dist-graphics
+  * Ticket #113 (daps-xslt/mallard/docbook.xsl missing)
+  * Ticket #114 (package-html with easy file names wanted)
+  * Ticket #121 package-pdf: --xsltparam missing
+  * Ticket #122 package-pdf: --documentfiles fails with clean sources
+  * Ticket #127	productinfo sometimes fails and is slow
+  * Corrected the webhelp.indexer.language setting
+  * a misplaced >/dev/null prevented the svg2svg conversion,
+    resulting in 0 byte SVGs
+  * added proper error handling to setfiles, sourcefiles, docfiles
+    computing
+  * html-single output in a separate htmlsingle/ directory
+  * Raised FOP_STACK to 2048k, because otherwise FOP builds on
+    x86_64 fail
+  * Fixed a bug in listing the double images. backup images like
+    foo.svg~ or foo.svg.~ were listed, too
+  * EPUB generation failed when no CSS file was specified. This
+    is fixed now
+  * Fixed sed statements for preserving and recovering entities;
+    the former statements did not match all entity declarations
+    possible and recovering was error-prone
+  * Only use optipng when it is available
+  * Fixed targets warn-images and warn-cap
+
+
+-------------------------------------------------------------------
+Thu May  3 20:24:49 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0.2 (Bugfix Release):
+
+* Important:
+  - in order to avoid confusion with short options for daps itself
+    (such as -d for --docconfig and --draft),
+    the subcommands only support long options now. The following
+    short options for subcommands are no longer supported:
+     -c (use --comments)
+     -d (use --draft)
+     -f (use --file)
+     -m (use --meta)
+     -n (use --name)
+     -p (use --pretty)
+     -r (use --remarks)
+     -s (use --show)
+  - the only short option that will remain is -h (help)
+
+* Bugfixes:
+  - added proper help texts for subcommands
+  - target warn-images did not work
+  - target missinggraphics did not show all missing images
+  - daps failed with a useless error message when $MAIN was not
+    well-formed. The fix produces a useful error message now
+  - --remarks option did not work with DocBook stylesheets
+  - paths specified on the command line or the config file had to
+    be absolute. The fix now allows to also specify relative paths
+    for all configurable directories and files
+  - COMMENTS_STR, DRAFT_STR and REMARK_STR were not correctly unset
+    when one of these modes was not set on the command line but
+    implied by another mode (e.g. --meta). The result was a wrong
+    filename
+  - target webhelp-dir-name was missing
+  - draft.png was not shown in PDF/HTML draft builds when using the
+    DocBook Stylesheets
+  - Due to a variable name mismatch, the --name option did not work
+    properly
+  - target showvariable exited with an error if requested variable
+    was empty
+  - config options FOP_CONFIG and XEP_CONFIG were not used. The fix
+    renames them to FOP_CONFIG_FILE and XEP_CONFIG_FILE - these
+    variables are used in the wrapper scripts
+  - FOP_WRAPPER and XEP_WRAPPER were not set correctly when
+    DAPSROOT was set
+  - disabled Permalink generation for PDFs (this is an HTML-only
+    feature)
+  - images were not cerrectly references for target jsp
+  - the DEF file was not correctly packaged in target locdrop
+  - fixed webhelp target. Wildcards do not work in classpath
+    expression, resolved them with $(wildcard $(firstword())
+  - Warning message "DEF file is missing" was issued for targets
+    that do not have a --def-file option
+  - targets package-html and package-pdf failed with an error on
+    desktop files generation
+  - target remaininggraphics always returned an empty list
+  - SVG to SVG conversions generated useless error messages
+
+* Stylesheets:
+  - removed obsolete stuff for @role=productname,
+    productnumber, or productnameref
+    
+* Documentation:
+  - Quick Start Guide: Finished
+  - User Guide: Significant additions, but still work in progress
+  - Updated README.upgrade_from_susedoc_4.x
+
+
+-------------------------------------------------------------------
+Tue Apr  3 10:04:42 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0:
+
+Bugfix:
+ - Use XEP/FOP wrapper scripts by default 
+
+-------------------------------------------------------------------
+Mon Apr  2 14:22:05 UTC 2012 - fsundermeyer@opensuse.org
+
+version 1.0 RC5:
+
+* Bugfix:
+  - Setting stack size for FOP to 512k in wrapper script, otherwise
+    builds on i586 fail during hyphenation
+
+-------------------------------------------------------------------
+Mon Apr  2 12:28:49 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0 RC4
+
+* Bugfix:
+  - Not all links were dereferenced with --static
+
+
+-------------------------------------------------------------------
+Fri Mar 30 19:37:13 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0 RC3
+
+* Bugfixes:
+  - Issuing hint on missing formatter scripts only when verbosity
+    is >= 1
+  - spec-file: Fixed typo on suse-xsl-stylesheet recommends
+               python-xml needs to be a general requirement
+  - fixed path to callouts and style images for FO
+
+
+* Lots of minor documentation fixes/enhancements 
+
+-------------------------------------------------------------------
+Thu Mar 29 09:12:37 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0 RC2 
+
+* Bugfixes:
+  - issue a hint rather than exiting when XEP/FOP_WRAPPER do not
+    exist
+  - daps_xslt/yelp/*.xsl was not installed by make install
+
+-------------------------------------------------------------------
+Wed Mar 28 08:44:22 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0 RC1
+
+* Bugfixes:
+  - fixed minor package building issues
+  - inkscape always returns 0, even in case of an error. Added
+    a workaround, so daps now exits when an image conversion with
+    inkscape fails
+  - --main option should work now
+  - Fixed errors on setting the fallback stylesheets
+  - comments and remarks did not show up in the docs when requested
+    (again ;-(( ) - this is fixed now
+* much better error handling - daps will now exit when wrong paths
+  or a non existing ROOTID are entered in the user config file
+  or the DC file
+* significant enhancements to the Documentation
+  (Reference & Quickstart)
+
+-------------------------------------------------------------------
+Tue Mar 20 13:14:16 UTC 2012 - fsundermeyer@opensuse.org
+
+* Bugfix: Target for index generation had wrong ending
+  (.idx instead of .ind)
+
+-------------------------------------------------------------------
+Fri Mar 16 16:01:26 UTC 2012 - fsundermeyer@opensuse.org
+
+* Bugfix: Typo in Makefile caused wrong catalog entries 
+
+-------------------------------------------------------------------
+Thu Mar 15 15:38:26 UTC 2012 - fsundermeyer@opensuse.org
+
+* showvariable now only shows the result to make it better suited
+  for script usage 
+
+-------------------------------------------------------------------
+Thu Mar 15 10:12:39 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0beta2:
+
+* Bugfix:
+  Finally found the correct solution for adding/removing catalog
+  entries in the spec file
+* Enhancement: webhelp suppport 
+
+-------------------------------------------------------------------
+Wed Mar  7 15:54:22 UTC 2012 - fsundermeyer@opensuse.org
+
+Version 1.0beta1:
+
+* Rebuild large parts to make DAPS distribution-independent.
+  - rewrote Makefile for automake/autoconf
+    => configure; make; make install is now supported
+  - thorough cross-distribution testing is still needed, basic tests
+    have been run on RedHat, Debian and Ubuntu
+
+* removal of custom stylesheets
+  DAPS no longer uses the SUSE stylesheets as a default. It even no
+  longer contains the SUSE stylesheets - they are now available as a
+  separate package (suse-xsl-stylesheets in Documentation:Tools).
+
+  - By default DAPS uses the generic DocBook stylesheets now
+  - Custom stylesheets such as the SUSE stylesheets can be used by
+    specifying up to four parameters on the command line/the config
+    files:
+    * Styleroot:
+      Directory containing the custom stylesheets. Must have the same
+      directory structure as the original DocBook stylesheet root
+      directory. Does _not_ need to contain stylesheets for all output
+      formats. If stylesheets are not found, DAPS will automatically
+      fall back to the DocBook stylesheets.
+      - Variable: STYLEROOT
+      - Parameter: --styleroot
+      - Value: absolute path to directory
+    * Fallback styleroot
+      Custom fallback styleroot. If DAPS cannot find styles for the
+      given output format, it will automatically fall back to the
+      DocBook stylesheets. This config option will add a custom
+      fallback directory with higher priority. The DocBook stylesheets
+      will remain as a last resort, however.
+      - Variable: FALLBACK_STYLEROOT
+      - Parameter: --fb_styleroot
+      - Value: absolute path to directory
+    * CSS files:
+      Specify CSS files for HTML and/or CSS. By default no CSS file
+      will be used.
+      - Variables: HTML_CSS, EPUB_CSS
+      - Parameter: --css for html and epub targets
+        (daps -d <DC> html--css <CSS> )
+      - Value: absolute path to file
+
+* rewrote FOP formatter handling - both supported formatters (FOP/XEP) are
+  now controlled by the following variables:
+  *_WRAPPER (wrapper script, libexec/daps-fop, libexec/daps-xep by default)
+  *_CONFIG (xml config file, etc/daps/xep/xep-daps.xml and
+            etc/daps/fop/fop-daps.xml by default. A specific fop-daps.xml
+            is installed for RedHat and SUSE by default)
+  *_OPTIONS (Command line options)
+  
+      
+* renaming of parameters and variables
+  In order to make parameters and variables "self-speaking" the
+  following has been renamed:
+
+  - File ENV-file to DC-file (doc config file)
+  - Variable BASE_DIR to DOC_DIR (doc dir) => Terminology!
+  - Variable DTDROOT to DAPSROOT (daps installation directory)
+  - Variable FOP_TYPE to FORMATTER
+  
+  - command line switch --fop to --formatter
+  - command line switch -e/--envfile has been renamed to
+    -d/--docconfig (-e/--envfile will still be supported)
+
+    
+* global parameter --base_dir no longer supported
+
+  Instead of specifying --base_dir with daps, you now need to specify a
+  full path (either relative or absolute) to the DC-file. However, the
+  "magic" that automatically tries to determine the path to a DC-file
+  when you do not specify a path or not even a DC file, still applies.
+  Therefore you only need to specify a valid path to the DC-file in
+  cases where you would have used --base_dir with previous DAPS
+  versions.
+
+* --main parameter / MAIN
+
+  Instead of calling daps with -d/--docconfig you can also directly
+  specify a MAIN with --main=<PATH>. You need to specify a valid
+  relative or absolute path. If you just specify a
+  file name, ./xml/$MAIN is automatically assumed.
+
+* packaging
+
+  The former DAPS version has been split into two packages:
+  - daps
+  - suse-xsl-stylesheets (SUSE stylesheets, NovDOC DTD, SUSE aspell
+    wordlist)
+
+* other DAPS changes since 0.9.2 in brief:
+  - stylesheet images have been moved to fit the directory structure used
+    in the original stylesheets
+  - new variable STYLEDEVEL which can be used when developing stylesheets.
+    STYLEDEVEL _always_ takes precedence over STYLEROOT and can be set in
+    $USER_CONFIG
+  - Rewrote handling of profiling variables PROFARCH, PROFCONDITION,
+    PROFVENDOR, PROFOS - all 4 are now fully supported (formerly only
+    PROFOS and PROFARCH were fully supported)
+  - created catalog entry to resolve stylesheets in daps_xslt
+  - daps init has been moved to a separate script bin/daps-init
+  - each SUSE stylesheet file now contains a short overview of purpose
+    and parameters
+  - lots of stylesheet bugfixes
+  - license: GPL 2.0 or 3.0 at your choice
+  - fixed target man for man-page generation; man pages are not gzip'ed
+    by default (unless you specify --nogzip); manpage subdirectories
+    (man1, man2,...) are no longer created by default, but can rather be
+    enabled via the --subdirs switch
+  - new parameter --check for target epub checks build with epubcheck
+  - added very basic DocBook5 support (with xslt 1.0 stylesheets only)
+    still a lot to do on this front
+  - Default HTML format is now XHTML 1.0 (instead of HTML 4.01). Use
+    --html4 to generate HTML 4.01
+  - auto generate SUSE HTML4 stylesheets from XHTML stylesheets
+  - binaries that are only called from withion make have been moved to
+    libexec/
+
+-------------------------------------------------------------------
+Mon Jan  9 15:30:47 UTC 2012 - toms@suse.de
+
+- Really fixed bnc#739213,
+- Added COPYING-{2.0,3.0} files
+
+-------------------------------------------------------------------
+Wed Dec 28 11:48:06 UTC 2011 - ke@suse.de
+
+- Remove fetch_source.
+
+-------------------------------------------------------------------
+Wed Dec 28 08:39:57 UTC 2011 - ke@suse.de
+
+- BuildRequire exiftool that's now available as a subpackage on
+  Factory.
+
+-------------------------------------------------------------------
+Thu Dec 15 14:07:13 UTC 2011 - fsundermeyer@opensuse.org
+
+New version 0.9.2
+
+- BUGFIXES:
+  * fixed misspelled variablename in fo generating target
+  * remarks in HTML and PDF builds were only shown when comments
+    were turned on, too. This had been fixed earlier but the fix
+    seems to have been reverted by mistake. Re-enabled the fix in
+    the inline.xslt stxlesheets for fo and html
+- -r/--remarls now implies draft mode
+- -m/--meta now implies draft mode but does not imply remarks
+  anymore
+
+-------------------------------------------------------------------
+Thu Dec 15 10:39:31 UTC 2011 - ke@suse.de
+
+- Set license to GPL-2.0+.
+
+-------------------------------------------------------------------
+Thu Dec 15 06:49:50 UTC 2011 - ke@suse.de
+
+- On 12.1, BuildRequire perl-Image-ExifTool.
+
+-------------------------------------------------------------------
+Fri Dec  9 11:53:10 UTC 2011 - fsundermeyer@opensuse.org
+
+- BUGFIX: Misspelled variable name in fo generation for FOP
+- Styleshhet changes:
+  * added first draft of release notes stylesheets 
+
+-------------------------------------------------------------------
+Wed Dec  7 13:54:43 UTC 2011 - fsundermeyer@opensuse.org
+
+- Stylesheet changes:
+  Fixed bugs:
+  * bnc#573835: pdf-color: title in PDF properties too general
+  * bnc#703483: FOP: No Hyphenation?
+  * bnc#706452: FOP: Too much Whitespace Behind <ulink> and <filename>
+  * bnc#711526: Layout: sect3 can not be distinguished from a sect4
+  * bnc#719848: daps stylesheets: Make metadata for PDF draft mode optional  
+
+- Program changes:
+  * New version 0.9.1
+  * NEW FEATURES:
+    - "daps -h <subcommand>" now shows help for subcommand
+    - New config option XSLTPARAM / cmdline switch --xsltparam:
+      can be used to overwrite one or more stylesheet
+      parameters. Using that option/switch it is possible to change
+      the pagesize, pageformat, alignment, margins, etc. etc.
+      without having to rewrite the stylesheets directly
+    - subcommand getimages can now be run with a rootid or a filename
+    - subcommands getimages and checklink can now be invoked without
+      a filename or a rootid - in this case the rootid provided by
+      the ENV-file is used
+    - new general command line switch --version
+    - new switch -m/--meta for pdf builds (adds same functionality as
+      for the html builds)
+  * completely rewrote lib/daps_functions:
+    - now has a generic option parser
+    - functions setup_builddir and format_options have been
+      combined into one function called init_env
+    - one single function that invokes make: call_make
+    - logging can be turned on/off within each function invoking
+      call_make by setting WRITE_LOG to 1/0 (default: 1 (on))
+    - the make command is now set up here rather than in bin/daps
+    - getimages now uses make to create the image list (rather than
+      using /usr/bin/xml)
+    - new function no_opts for subcommands that have no command line
+      switches
+  * pretty printing has been moved from lib/daps_functions into the
+    makefiles
+  * BUGFIXES:
+    - We now do an early! check whether a subcommand is correct
+      or not function run_subcmds has therefore been replaced by an
+      associative hash; the hash's key/value pairs can be eval'd to
+      call the function
+    - .fo files will always be regenerated by using PHONY targets
+      This also keeps the .fo file, which is desireable for debugging
+      purposes
+  
+-------------------------------------------------------------------
+Fri Oct  7 12:28:15 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfixes on .document and .desktop file generation 
+
+-------------------------------------------------------------------
+Fri Oct  7 08:13:54 UTC 2011 - toms@suse.de
+
+- Updated Quick Start/Flyer design
+
+-------------------------------------------------------------------
+Thu Oct  6 11:59:03 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: image copying on static html builds
+
+-------------------------------------------------------------------
+Thu Oct  6 10:39:58 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: css file was not properly copied when using --static on
+  HTML builds 
+
+-------------------------------------------------------------------
+Fri Sep 30 22:25:08 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfixing HTML generation. Copying/linking images and CSS made 
+  problems when old builöds were present. This fix ensures images/css
+  files get removed before trying to create them 
+
+-------------------------------------------------------------------
+Fri Sep 30 14:48:36 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 8:
+
+- new option "--static" for html builds copies images and css files
+  rather than linking them (which is the default)
+- document-files-html / document-files-pdf / desktop-files now only
+  generate the desktop files rather than creating tarballs
+  * tarballs are generated with dist-document-files-html, dist-...
+  * document-files-dir-name, desktop-files-dir-name show the
+    directory names for the generated desktop files
+- new file names for PDFs:
+  color: ($BOOK|$ROOTID)_$LANG.pdf
+  print: ($BOOK|$ROOTID)-print_$LANG.pdf
+- new option --def-file=DEFFILE for target package-src. If specified
+  also adds all ENV files referenced in the DEF-file to the tarball
+- new option --def-file=DEFFILE for target locdrop adds the DEF-file
+  to the notrans tarball
+- Bugfix:
+  * get name targets (pdf-name, html-dir-name,...) now support
+    options --name, --rootid, -cdr
+
+-------------------------------------------------------------------
+Mon Sep 26 15:36:46 UTC 2011 - fsundermeyer@opensuse.org
+
+- spec file changes so daps builds for SLE 11 / 11.1:
+  * checkbot is a recommendation for SLE
+  * require python-xml for < 1120
+  * replace make_install macro with a literal make install call,
+    since 11.1/SLE 11 do not have the macro
+- use the tar option --transform instead of --xform in order to be
+  compatible with older tar versions
+- Bugfix Makefile: global option -d has been replaced with --debug
+    
+-------------------------------------------------------------------
+Mon Sep 26 11:45:24 UTC 2011 - fsundermeyer@opensuse.org
+
+- target validate now also warns about missing graphics
+- Bugfix: verbosity switch -v works correctly now
+
+-------------------------------------------------------------------
+Tue Sep 20 11:53:36 UTC 2011 - fsundermeyer@opensuse.org
+
+- verbosity can now also be set to "0" on the command line (needed
+  for scripting)
+- renamed "--verbose" switch to "--verbosity"
+- Specfile: Requires: fam
+
+-------------------------------------------------------------------
+Mon Sep 19 11:52:50 UTC 2011 - fsundermeyer@opensuse.org
+
+- Specfile: fixed %{ext_man}
+- fetch_source now also copies the spec file if needed
+
+-------------------------------------------------------------------
+Mon Sep 19 10:46:07 UTC 2011 - fsundermeyer@opensuse.org
+
+- Completely rewrote the verbosity stuff:
+  * Verbosity none: only display on line with result (default)
+  * Verbosity 1 (-v, --verbose=1): print the most important target results
+  * Verbosity 2 (-vv --verbose=2): print all commands called by make
+  * Default verbosity level can be overwritten in ~/.daps/config via
+    VERBOSITY=(0|1|2)
+- General option -d is no longer supported to avoid confusion with
+  subcommand option -d (draft mode) - use --debug instead
+- Replaced target clean-book with clean-results
+- Updated BUGS and TODO
+- Stylesheets:
+  * fixed bnc#573835 (PDF metadata)
+- Bugfix: BUILD_DIR is now set in the makefiles
+- Packaging:
+  * added script that generates the source tarball via
+    svn export
+  * added %{ext_man} to spec file
+
+-------------------------------------------------------------------
+Mon Sep 19 06:58:53 UTC 2011 - toms@suse.de
+
+- Applied spec file changes after Jan Engelhardt's mail on 
+  opensuse-packaging:
+  (see also http://en.opensuse.org/openSUSE:Specfile_guidelines)
+- removal of '# norootforbuild'
+- removal of Authors list, no longer desired in factory
+- removal of %clean section, no longer required
+- adding %{?_smp_mflags} whereever there is none 
+
+-------------------------------------------------------------------
+Thu Sep 15 20:32:09 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 7
+
+- DAPS now supports EPS (will be converted to PDF and PNG) and
+  PDF images; SVG sources can also be converted into PDF
+  - new dependencies for EPS and PDF support in spec file:
+    ghostscript-library, poppler tools
+- completely revised images.mk to increase readability and improved
+  inline documentation
+- sped up png optimization with optipng by using optimization level
+  2 rather than 8: almost no difference in file-size, but huge
+  difference in speed
+- Bugfixes:
+  - rewrote profiling, since the changes from beta6 introduced
+    an error that prevented profiling on changed files
+
+-------------------------------------------------------------------
+Mon Sep 12 13:44:08 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: remove duplicate entries in SRCFILE list in common.mk
+          (using sort)
+
+-------------------------------------------------------------------
+Fri Sep  9 22:33:43 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 6
+
+- DAPS can now use XML source files with any suffix
+  (not only *.xml--the KDE  project for example is using *.docbook);
+-  set default values for PROFOS and PROFARCH in case they are empty
+- Bugfixes:
+  * target validate: call function comments_remarks rather than
+    build_generic
+  * target locdrop: correct docmanager command; warn if no file has
+    doc:trans=yes
+
+-------------------------------------------------------------------
+Thu Sep  8 15:26:48 UTC 2011 - fsundermeyer@opensuse.org
+
+- this time for real:  adjusted spec file so daps also builds for
+  openSUSE_Evergreen_11.2
+
+-------------------------------------------------------------------
+Thu Sep  8 14:22:11 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 5
+
+- print filename and ids for chapter and section headlines
+  in draft mode
+- added 301 and 302 codes to dontwarn options of checkbot 
+- start image viewer in target getimages only when there are images
+
+-------------------------------------------------------------------
+Thu Aug 11 15:32:45 UTC 2011 - fsundermeyer@opensuse.org
+
+- Reverted previous change since that causes trouble with
+  11.3
+
+-------------------------------------------------------------------
+Thu Aug 11 14:58:40 UTC 2011 - fsundermeyer@opensuse.org
+
+- Adjusted spec file so daps also builds for openSUSE_Evergreen_11.2
+
+-------------------------------------------------------------------
+Thu Aug 11 14:31:50 UTC 2011 - fsundermeyer@opensuse.org
+
+- Using a stylesheet rather than the buggy /usr/bin/xml to get the
+  rootid of a file for target checklink 
+
+-------------------------------------------------------------------
+Wed Aug 10 14:37:31 UTC 2011 - toms@suse.de
+
+- Changed standard layout from Novell to SUSE (1st attempt)
+
+-------------------------------------------------------------------
+Mon Aug  8 09:56:15 UTC 2011 - fsundermeyer@opensuse.org
+
+- BUGFIX: target checklink now exits when no rootid or filename is
+          specified; rootid from ENVfile is ignored 
+
+-------------------------------------------------------------------
+Fri Aug  5 15:08:20 UTC 2011 - fsundermeyer@opensuse.org
+
+- BUGFIX: Profiling was only redone when the _xml_ source files had
+          changed, not when the entity files had changed - added a
+          dependency on *.ent to the profiling target $(PROFILES) 
+          to fix this
+
+-------------------------------------------------------------------
+Fri Aug  5 14:45:49 UTC 2011 - fsundermeyer@opensuse.org
+
+- BUGFIX: getimages function did not work in verbose or
+          debug mode 
+
+-------------------------------------------------------------------
+Thu Aug  4 14:00:20 UTC 2011 - fsundermeyer@opensuse.org
+
+- adding a workaround for the crappy xml program that has no catalog
+  support
+
+-------------------------------------------------------------------
+Thu Aug  4 12:15:56 UTC 2011 - fsundermeyer@opensuse.org
+
+- Colored output is now automatically disabled when not being on a
+  Terminal - so you now pipe daps commands to other programs
+  (e.g. a PDF Viewer or a browser) 
+
+-------------------------------------------------------------------
+Thu Aug  4 10:24:02 UTC 2011 - fsundermeyer@opensuse.org
+
+- Added option --file to target checklink
+
+-------------------------------------------------------------------
+Mon Aug  1 14:34:53 UTC 2011 - fsundermeyer@opensuse.org
+
+- Changing target validate again: when being called explicitly, it
+  now always checks profiled sources _with remarks_ ($REMARKS is
+  set to 1). Options -r and -c have been removed again. 
+- Bugfix: Using $@ instead of $SCMD_ARGS in getopts calls in
+  lib/daps_functions
+
+-------------------------------------------------------------------
+Mon Aug  1 11:33:13 UTC 2011 - fsundermeyer@opensuse.org
+
+- we need to be able to install daps and susedoc in parallel
+  internally, so removed the Obsoletes: susedoc statement
+  from the spec file
+- target validate can now be called with -r and -c, too 
+
+-------------------------------------------------------------------
+Thu Jul 28 15:25:42 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: daps-susespell: the extra-dict was not invoked correctly
+
+-------------------------------------------------------------------
+Tue Jul 26 15:34:47 UTC 2011 - fsundermeyer@opensuse.org
+
+- BUGFIX: DAPS_ENV_NAME must not be set in config
+
+-------------------------------------------------------------------
+Tue Jul 26 10:44:24 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 4
+
+- spec file:  
+  * removed obsolete python dependencies (they moved to daps-docmanager)
+  * obsoletes susedoc
+  * recommends daps-docmanager and aspell+en dicts
+- daps-susespell now has a man page and supports additional options
+  --lang and --dict
+  
+-------------------------------------------------------------------
+Mon Jul 25 20:30:30 UTC 2011 - fsundermeyer@opensuse.org
+
+- daps-susespell can now check multiple files
+- Bugfix in lib/docbook-macros: Element typo (arearefs)
+
+-------------------------------------------------------------------
+Mon Jul 25 14:26:21 UTC 2011 - fsundermeyer@opensuse.org
+
+- Target checklink (chklnk, jana) now supports --rootid 
+
+-------------------------------------------------------------------
+Mon Jul 25 08:19:17 UTC 2011 - fsundermeyer@opensuse.org
+
+- Added exits after target calls
+- Improved help/README on target init 
+
+-------------------------------------------------------------------
+Fri Jul 22 21:21:46 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: daps init help now works correctly 
+- Added a quickstart README
+- Improved error handling and verbose output
+- The majority of targets now write a logfile
+
+-------------------------------------------------------------------
+Thu Jul 21 15:28:02 UTC 2011 - fsundermeyer@opensuse.org
+
+Beta 3
+
+- Bugfix: USEMETA now works correctly
+- added new binary daps-susepell (Spellchecker)
+- added new target getimages
+
+-------------------------------------------------------------------
+Wed Jul 20 15:34:47 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfixes
+  * replaced @VERSION@ and @DATE@ in daps man page
+  * daps error messages now go to STDERR
+  * DTDROOT/xslt (STYLEDEVEL) is the new defaul-LAYOUTROOT
+  * Fixed the long-standing bug that required to activate remarks
+    _and_ comments in order to see remarks
+    
+- new optional config option for ~/.daps/config: DAPS_ENV_DEFAULT
+  to specify a default ENVFILE. If set, will be automatically used
+  unless an alternative ENVFILE is specified on the commandline via
+  -e/--envfile or via a sourced ENVFILE by DAPS_ENV_NAME
+
+- added new target showenv that print variables ENVFILE and BASE_DIR;
+  can output more variables if needed
+
+
+-------------------------------------------------------------------
+Tue Jul 19 21:16:20 UTC 2011 - fsundermeyer@opensuse.org
+
+- format_options needs to be called from the main call_make functions 
+
+-------------------------------------------------------------------
+Tue Jul 19 14:43:00 UTC 2011 - fsundermeyer@opensuse.org
+
+- Bugfix: Sourcing an ENV with DAPS_ENV_NAME set did not work
+- Bugfix: Command line arguments for comments, drafts and remarks
+  were not properly exported
+  
+-------------------------------------------------------------------
+Thu Jul 14 15:25:29 UTC 2011 - fsundermeyer@opensuse.org
+
+- Moved daps-xmlformat to bin
+- specifying a default ENVfile with DAPS_ENV_NAME=<ENV> in
+  ~/.daps/config now also works when BASE_DIR is specified 
+
+-------------------------------------------------------------------
+Thu Jul 14 14:20:05 UTC 2011 - fsundermeyer@opensuse.org
+
+- added a new subcommend: init, which creates a working environment incl.
+  an ENV file and a xml/MAIN 
+
+-------------------------------------------------------------------
+Wed Jul 13 15:06:17 UTC 2011 - fsundermeyer@opensuse.org
+
+- Fixed a bug in xslt/misc/get-all-used-files.xsl; common.mk needed
+  to be changed, too
+- error messages are directed to /dev/null when calling make_nolog
+
+-------------------------------------------------------------------
+Wed Jul 13 13:28:48 UTC 2011 - fsundermeyer@opensuse.org
+
+- LOG_DIR was not exported
+- when running showvariable the date was always printed with the
+  result - this is hopefully fixed now
+- Expanded ENV conversion example in the upgrade README
+  
+-------------------------------------------------------------------
+Wed Jul 13 11:47:00 UTC 2011 - fsundermeyer@opensuse.org
+
+- replaced the last remnants of "susedoc" with "daps" 
+
+-------------------------------------------------------------------
+Wed Jul 13 08:56:17 UTC 2011 - fsundermeyer@opensuse.org
+
+- Removed copy pdf from package PDF
+
+-------------------------------------------------------------------
+Wed Jul 13 07:56:05 UTC 2011 - fsundermeyer@opensuse.org
+
+- fixed dist-graphics (images were packed with absolute path)
+- fixed HTML-USED (imagelist was wrong)
+- fixed USED (removed double entries)
+- added --extra-files option to package-src in order to be able
+  to pack additional ENVfiles
+- added --fop option for package-pdf
+- packaging targets now have their own function in daps_functions
+
+-------------------------------------------------------------------
+Mon Jul 11 09:41:38 UTC 2011 - fsundermeyer@opensuse.org
+
+- lib/daps_functions: Fixed xep wrapper call
+  (susedoc-xep -> daps-xep) 
+
+-------------------------------------------------------------------
+Fri Jul  8 13:15:49 UTC 2011 - fsundermeyer@opensuse.org
+
+- common.mk: Another fix for projectfiles/reminingfiles: $INCLUDED
+  must include $MAIN, otherwise getentityname.py will be called with
+  an empty $INCLUDED if the book only contains a single MAIN file 
+
+-------------------------------------------------------------------
+Fri Jul  8 12:32:42 UTC 2011 - fsundermeyer@opensuse.org
+
+- common.mk: MAIN was missing in projectfiles; fixed remainingfiles
+- added TODO for man page generation, init target 
+
+-------------------------------------------------------------------
+Fri Jul  8 08:15:53 CEST 2011 - ke@suse.de
+
+- Remove my name from the authors' list.
+
+-------------------------------------------------------------------
+Thu Jul  7 09:33:47 UTC 2011 - fsundermeyer@opensuse.org
+
+- Changed the IDs in /etc/xml/suse-catalog.xml to something that
+  makes more sense
+
+-------------------------------------------------------------------
+Thu Jul  7 08:07:09 UTC 2011 - fsundermeyer@opensuse.org
+
+-  Fix for -e/-b options
+
+-------------------------------------------------------------------
+Wed Jul  6 15:11:21 UTC 2011 - fsundermeyer@opensuse.org
+
+- added short options -b and -e for basedir and envfile
+- reformatted help
+
+-------------------------------------------------------------------
+Fri Jul  1 21:58:37 UTC 2011 - fsundermeyer@opensuse.org
+
+First beta of the DocBook Authoring and Publishing Suite (daps),
+the successor of susedoc. Major changes compared to susedoc:
+
+* make calls have been replaced by central wrapper script daps
+  with svn/git style syntax
+* Independent from shell environment
+* All output generated by susedoc is placed in <wd>/build (default)
+  or in <BUILDDIR> (can be spcified on the copmmand line)
+* Strict separation between generated content and source files
+* Typical Linux configuration style hierarchy established:
+  - System wide configuration ( /etc/daps/config )
+  - User configuration ( ~/.daps/config )
+  - Book specific (ENVfile)
+  - Command line
+* STDOUT output much less verbose, log file is written
+* Debugging function
+* bugfixes
+
+
+
