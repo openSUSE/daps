@@ -1,0 +1,336 @@
+#!/bin/bash
+#
+# Wrapper script which let's you use either xsltproc or saxon6
+# with the same command
+# Copyright (C) 2012  Kilian Petsch <kpetsch@suse.de> and
+#                     Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Version 1.0 (November 2012)
+#
+# Authors:
+# Kilian Petsch <kpetsch@suse.de>
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+
+
+#
+# TODO
+# - stylesheet urn??
+#
+# Saxon9 support (see ticket #94)
+#
+
+ME="$(basename $0)"
+XSLTPROC="/usr/bin/xsltproc"
+SAXON="/usr/bin/saxon"
+# TODO: we may need to change this path with configure 
+DBXSLT=/usr/share/xml/docbook/stylesheet/nwalsh/current
+
+# list of stringparams
+declare -a STRPARMS
+# list of params
+declare -a PARMS
+# final list of stringparams/params
+declare -a PARAMETERS
+
+unset DEBUG STRPARMS PARMS CATALOG
+
+# setting catalog for the resolver
+#
+# $XML_DEVEL_CATALOG is set in daps.bin when using an SVN checkout
+# $XML_MAIN_CATALOG is set it the DAPS main config file
+#
+if [[ -n $XML_DEVEL_CATALOG ]]; then
+    MAIN_CATALOG=$XML_DEVEL_CATALOG
+else
+    if [[ -n $XML_MAIN_CATALOG ]]; then
+        MAIN_CATALOG=$XML_MAIN_CATALOG
+    else
+        MAIN_CATALOG=/etc/xml/catalog
+    fi
+fi
+
+# Help function to preserve readability of the while loop
+usage () {
+	echo "
+Usage: daps-xslt -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> <XSLTPROCESSOR> [XSLT-PROCESSOR SPECIFIC OPTIONS]
+Wrapper script for DAPS to use either xsltproc or saxon as an XSLT processor.
+
+Mandatory parameters:
+ --stylesheet=STYLESHEET,     Path to the stylesheet to be used. Mandatory.
+
+ --file=XMLDOCUMENT,          XML document to which the stylesheet will be
+ -f XMLDOCUMENT               applied. Mandatory.
+		
+ --output=OUTPUTFILE,         Specify a file for output. If not used, output
+ - o OUTPUTFILE               goes to STDOUT. Optional.
+
+
+Optional parameters:
+ --catalog                    Define additional XML catalogs to be used for
+                              resolving identifiers. (Default catalog:
+                              /etc/xml/catalog). Optional.
+
+ --debug                      Activate a debugging mode (verbose).
+
+ --help, -h                   Print this help.
+
+ --param=KEY=VALUE            Pass a parameter KEY with the numeric value VALUE
+                              to the stylesheet. The key-value pair must be
+                              written as KEY=VALUE. Use --stringparam to pass
+                              string values. You may pass multiple key/value
+                              pairs up to a maximum of 32. If the same key/value
+                              pair is passed more than once, the last one \"wins\".
+                              Optional.                    
+
+ --stringparam='\"KEY=VALUE\"'  Pass a parameter KEY with the string value VALUE
+                              to the stylesheet. The key-value pair must be
+                              written as '\"KEY=VALUE\"' (mind the quoting!).
+                              Use --param to pass numeric values.
+                              You may pass multiple key/value pairs up to a
+                              maximum of 32. If the same key/value pair is
+                              passed more than once, the last one \"wins\".
+                              Optional.
+
+ --xinclude,                  Process the input document using the XInclude
+ -x                           specification. Optional.
+
+
+XSLT-processor:
+  Define the XSLT processor, xsltproc or saxon6 (mandatory) and
+  processor-specific options (optional, see the respective man pages
+  for details)."
+        exit;
+}
+
+function exit_on_error () {
+    echo -e "ERROR: $1" >&2
+    exit 1;
+}
+
+run-saxon() {
+    local DOCBOOK_CATALOG SAXON_ARGS
+    # TODO fs 2012-11-24
+    # check whether this works with other distributions
+    # -dependencies in spec-file may need to be enhanced because of
+    #  the additional jars
+
+    DOCBOOK_CATALOG=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml
+    
+    # if the stylesheet location is a link, saxon needs -u
+    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} ]]; then
+        SAXON_ARGS="-u"
+    else
+        SAXON_ARGS=""
+    fi
+    
+    # Add the DocBook extensions to the CLASSPATH
+    CLASSPATH="${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+
+    # Additional JAR files (mostly due to XInclude resolution)
+    ADDITIONAL_JARS="xml-commons-resolver12.jar xerces-j2.jar xerces-j2-xml-apis.jar"
+
+    # Use special options to switch XML parser to Xerces:
+    ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
+-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl \
+-Dxml.catalog.files=${MAIN_CATALOG};${DOCBOOK_CATALOG};${CATALOG}"
+
+    # enable XIncludes if requested
+    if [[ -n $XINCLUDE ]]; then
+        ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS \
+-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+    fi
+       
+    export ADDITIONAL_FLAGS ADDITIONAL_JARS CLASSPATH
+
+    if [[ -n $DEBUG ]]; then
+        echo "---------------------------------------------------------"
+        echo -e "Running the following command:\nCLASSPATH=\"$CLASSPATH\" \ \nADDITIONAL_JARS=\"$ADDITIONAL_JARS\" \ \nADDITIONAL_FLAGS=\"$ADDITIONAL_FLAGS\" \ \n$SAXON $SAXON_ARGS $@"
+        echo "---------------------------------------------------------"
+    fi
+    eval "$SAXON $SAXON_ARGS $@"
+}
+
+process_params () {
+    # Function to create a list of params and stringparams for xsltproc
+    # This function ensure that we can pass a certain parameter twice, with
+    # that last one specified taking precedence. This is needed to overwrite
+    # stringparams already set in the makefiles.
+    # Natively xsltproc does not support specifying a parameter twice, so
+    # something like xsltproc --param foo bar --param foo baz will result
+    # in an error.
+    # This function takes care that all key/value with the same key are
+    # deleted, except the last one specified.
+    #
+    # This functions takes two parameters
+    # * PREFIX which must be either "param" or "stringparam"
+    # * a list of KEY=VALUE pairs (param(stringparam values passed to this
+    #   script
+    #
+
+    local I KEY RESULT SEEN STR_PAR VALUE
+    local -a KEYLIST
+    local -a PARAMLIST
+    
+  
+    PREFIX=$1
+    shift
+    PARAMLIST=( "$@" )
+    
+#    if [[ param != $PREFIX && stringparam != $PREFIX ]]; then
+#        exit 1
+#    fi
+
+    # initialize KEYLIST with an empty value
+    KEYLIST[0]=""
+
+    for ((I=${#PARAMLIST[@]}-1; I>=0; I--)); do
+        SEEN=0
+        STR_PAR=${PARAMLIST[$I]}
+        # get rid of the double quotes of stringparams
+        # (${STR_PAR:1:-1} removes first and last charater of $STR_PAR)
+        #
+        STR_PAR=${STR_PAR:1:-1}
+        # split into KEY/VALUE at first "="
+        KEY=${STR_PAR%%=*} # delete "=VALUE" part
+        if [[ stringparam = $PREFIX ]];then
+            VALUE="\"${STR_PAR#*=}\"" # delete "KEY=" part
+        else
+            VALUE=${STR_PAR#*=}
+        fi
+        #
+        # we need to stay Bash 3.x compatible, therefore no
+        # associative arrays, but rather using a list
+
+        for ELEM in "${KEYLIST[@]}"; do
+            if [[ $KEY = $ELEM ]]; then
+                SEEN=1
+                break
+            fi
+        done
+        if [[ 0 = $SEEN ]]; then
+            KEYLIST+=("$KEY")
+            RESULT="$RESULT --$PREFIX $KEY $VALUE"
+        fi
+    done
+    echo "$RESULT"
+}
+
+
+
+#----------------------------------------------------------------------------
+# MAIN
+
+[[ -z $1 ]] && usage
+
+export POSIXLY_CORRECT=1
+
+ARGS=$(getopt -o "hxno:vs:f:" -l "help,xinclude,param:,stringparam:,nonet,output:,novalid,stylesheet:,file:,debug,catalog:" -n "$ME" -- "$@")
+eval set -- "$ARGS"
+
+while true; do
+    case "$1" in
+	-h|--help)
+	    usage
+	    exit 0;;
+	-x|--xinclude)
+	    XINCLUDE="--xinclude" #only needed in xsltproc
+	    shift;;
+	--param)
+            # Test for equal sign
+	    if [[ $2 =~ \= ]]; then
+                PARMS+=("\"$2\"")
+	    else
+		exit_on_error "--param requires \"KEY=VALUE\" as parameter"
+	    fi
+	    shift 2;;
+	--stringparam)
+            # check for equal sign
+            if [[ $2 =~ \= ]]; then
+                STRPARMS+=("\"$2\"")
+            fi
+                # check for quoting
+#                if [[ \" = ${2:0:1} && \" = ${2: -1} ]]; then
+#                    STRPARMS+=("$2")
+#                else
+#                    exit_on_error "Error, parameter $2\nfor --stringparam is not correctly quoted, use '\"KEY=VALUE\"'"
+#                fi
+#            fi
+	    shift 2;;
+	-s|--stylesheet)
+	    STYLESHEET="$2"
+	    shift 2
+	    ;;
+	-f|--file)
+	    XMLFILE="$2"
+	    shift 2;;
+	-o|--output)
+	    OUTPUT="-o $2"
+	    shift 2;;
+	--debug)
+	    DEBUG=1
+	    shift;;
+	--catalog)
+            # TODO: 
+            # allow multiple calls of this parameter; if saxon, then use ";" as
+            # separator, if xsltproc use " " and export XML_CATALOG_FILES
+	    CATALOG="$CATALOG $2;"
+	    shift 2;;	
+	--)
+	    shift
+	    break;;
+        *) exit_on_error "Internal error!" ;;
+    esac
+done
+
+unset POSIXLY_CORRECT
+
+#-----
+# Getting the xsltprocessor
+#
+if [[ $1 =~ xsltproc || $1 =~ saxon ]]; then 
+    PROCESSOR=$1
+    shift;
+else
+    exit_on_error "invalid xsltprocessor must be either xsltproc or saxon"
+    exit 1;
+fi
+PROCESSOR_ARGS="$@"
+
+#-----
+# Check if all mandatory options are set
+#
+[[ -z $STYLESHEET ]] && exit_on_error "you must specify a stylesheet with --stylesheet <STYLESHEET>"
+[[ -z $XMLFILE ]] && exit_on_error "you must specify an XML file with --file"
+
+#-----
+# run the XSLT processor
+#
+if [[ $PROCESSOR =~ xsltproc ]]; then
+    # Process stringparam and param values for xsltproc
+    if [[ -n "${STRPARMS[@]}" ]]; then
+        PARAMETERS=("$(process_params "stringparam" "${STRPARMS[@]}")") || exit_on_error "wrong parameter for function process_params, must be either \"param\" or \"stringparam\""
+    fi
+    if [[ -n "${PARMS[@]}" ]]; then
+        PARAMETERS+=("$(process_params "param" "${PARMS[@]}")") || exit_on_error "wrong parameter  for function process_params, must be either \"param\" or \"stringparam\""
+    fi
+    
+    COMMAND="$XSLTPROC $PROCESSOR_ARGS $XINCLUDE ${PARAMETERS[@]} $OUTPUT $STYLESHEET $XMLFILE"
+    if [[ -n $DEBUG ]]; then
+        echo "---------------------------------------------------------"
+        echo -e "Running the following command:\n$COMMAND"
+        echo "---------------------------------------------------------"
+    fi
+    # expand the catalog
+    [[ -n $CATALOG ]] && export XML_CATALOG_FILES="$XML_CATALOG_FILES $CATALOG"
+    eval "$COMMAND"
+else
+    # resolve URNs
+#    if [[ urn: = ${STYLESHEET:0:4} ]]; then
+#        STYLESHEET=$(xmlcatalog $MAIN_CATALOG $STYLESHEET) || exit_on_error "The stylesheet is an URN which I cannot resolve using /etc/xml/catalog."
+#    fi
+    run-saxon "$PROCESSOR_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
+fi
+
+exit;
+
+

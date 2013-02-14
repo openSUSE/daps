@@ -8,6 +8,17 @@
 # daps = DocBook Authoring and Publishing Suite
 
 
+# fs 2012-10-26: TODO
+#
+# Allow multiple DC-files specified with -d:
+# daps -d DC1 -d DC2 -d DC3
+# when parsing the options, add them to an array:
+# declare -a DC_FILE_LIST
+# DC_FILE_LIST=("$DC_FILE_LIST[@]}" $2)
+# and then, in the very last line of this script, iterate over the array
+# and call the eval command
+#
+
 VERSION=@PACKAGE_VERSION@
 
 # autoconf replaces @foo@ stuff with ${prefix}/.. if @foo@ has not
@@ -33,6 +44,11 @@ export prefix=@prefix@
 # DISTVER, PRODUCTNAME, and PRODUCTNAMEREG are only need for resolving the
 # suse-PIs. Once we get rid of that, remove these variables fom the list
 #
+
+# TODO fs 2012-12-20:
+# A lot of variables get exported in lib/daps_functions _and_ here - this is
+# not necessary. Clean up!
+
 
 declare -a VARLIST
 VARLIST=(
@@ -69,7 +85,9 @@ VARLIST=(
     FALLBACK_STYLEROOT
     FOP_CONFIG_FILE
     FOP_OPTIONS
+    FOP_STACKSIZE
     FOP_WRAPPER
+    FORCE_REBUILD
     FORMATTER
     GZIP_MAN
     HTML4
@@ -82,8 +100,16 @@ VARLIST=(
     LIB_DIR
     LIBEXEC_DIR
     MAIN
+    META
+    META_STR
+    NAME
+    NODC
+    NOENT
+    NOGZIP
+    NOIMG
     NOPDF
     NOSET
+    NOXML
     PAGEFILES
     PDFNAME
     PROFARCH
@@ -98,13 +124,15 @@ VARLIST=(
     ROOTID
     STYLEDEVEL
     STYLEROOT
-    USEMETA
+    TARGET
     WH_SEARCH
     VERBOSITY
     XEP_CONFIG_FILE
     XEP_OPTIONS
     XEP_WRAPPER
+    XML_DEVEL_CATALOG
     XSLTPARAM
+    XSLTPROCESSOR
 )
 # unset all for a fresh start, but preserve $DOCCONF - it might have been set
 # by having sourced a DC-file
@@ -145,14 +173,17 @@ unset "${UNSETLIST[@]}"
 # PATHLIST contains all variables holding a path. Relative paths need to be 
 # made absolute and we need this list in order to know which variables hold
 # path information
-
+#
+# This list must not include FALLBACK_STYLEROOT, since we allow multiple
+# values here.
+# TODO: Check multiple FALLBACK_STYLEROOT paths
+#
 declare -a PATHLIST
 PATHLIST=(
     BUILD_DIR
     DAPSROOT
     DOCCONF_DEFAULT
     EPUB_CSS
-    FALLBACK_STYLEROOT
     FOP_CONFIG_FILE
     FOP_WRAPPER
     HTML_CSS
@@ -181,6 +212,15 @@ DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 # user config file
 USER_CONFIG="$HOME/.daps/config"
 
+# if run from a terminal, set default verbosity to 1, otherwise (script, pipe)
+# set it to 0
+
+if [[ -t 1 ]]; then
+    VERBOSITY=1
+else
+    VERBOSITY=0
+fi
+
 #---------------------------------------------------
 # SUBCOMMANDS
 #
@@ -198,201 +238,344 @@ USER_CONFIG="$HOME/.daps/config"
 ## or not by just testing if ${SUBCOMMANDS[$SUBCMD]} is set
 
 declare -a SUBCOMMANDS
-SUBCOMMANDS+=("all=build_pdfs")
-SUBCOMMANDS+=("bigfile-reduced=build_generic")
+declare -a HELP_SUBCOMMAND
+
 SUBCOMMANDS+=("bigfile=build_generic")
-SUBCOMMANDS+=("check=no_opts")
+HELP_SUBCOMMAND+=("bigfile=Creates a single XML file (bigfile) from the MAIN-file referenced in the\nDC-file or specified on the command line by following all xi:includes.\nIf a ROOTID is specified, all xref-links pointing to locations outside the\nscope defined by the ROOTID, are replaced by text-links.")
+
 SUBCOMMANDS+=("checklink=checklink")
-SUBCOMMANDS+=("chklink=checklink")
-SUBCOMMANDS+=("clean-all=no_opts")
-SUBCOMMANDS+=("clean-images=no_opts")
-SUBCOMMANDS+=("clean-results=no_opts")
-SUBCOMMANDS+=("clean=no_opts")
-SUBCOMMANDS+=("color-pdf-name=show_names")
-SUBCOMMANDS+=("color-pdf=build_pdfs")
-SUBCOMMANDS+=("db2novdoc=build_generic")
-SUBCOMMANDS+=("debug=build_generic")
-SUBCOMMANDS+=("desktop-files-dir-name=show_names")
-SUBCOMMANDS+=("desktop-files=build_generic")
-SUBCOMMANDS+=("dist-all=profile_first")
-SUBCOMMANDS+=("dist-book=build_generic")
-SUBCOMMANDS+=("dist-desktop-files=build_generic")
-SUBCOMMANDS+=("dist-document-files-html=build_generic")
-SUBCOMMANDS+=("dist-document-files-pdf=build_generic")
-SUBCOMMANDS+=("dist-graphics-png=build_generic")
-SUBCOMMANDS+=("dist-graphics=build_generic")
-SUBCOMMANDS+=("dist-html-name=show_names")
-SUBCOMMANDS+=("dist-html-single=build_generic")
-SUBCOMMANDS+=("dist-html=build_generic")
-SUBCOMMANDS+=("dist-htmlsingle=build_generic")
-SUBCOMMANDS+=("dist-jsp=build_generic")
-SUBCOMMANDS+=("dist-xml=build_generic")
-SUBCOMMANDS+=("dist=build_generic")
-SUBCOMMANDS+=("document-files-dir-name=show_names")
-SUBCOMMANDS+=("document-files-html=build_generic")
-SUBCOMMANDS+=("document-files-pdf=build_generic")
-SUBCOMMANDS+=("epub-name=show_names")
-SUBCOMMANDS+=("epub=build_epub")
-SUBCOMMANDS+=("force=build_pdfs")
-SUBCOMMANDS+=("getimages=getimages")
-SUBCOMMANDS+=("html-dir-name=show_names")
-SUBCOMMANDS+=("html-single-name=show_names")
-SUBCOMMANDS+=("html-single=build_html_jsp")
-SUBCOMMANDS+=("html=build_html_jsp")
-SUBCOMMANDS+=("htmlsingle-name=show_names")
-SUBCOMMANDS+=("htmlsingle=build_html_jsp")
-SUBCOMMANDS+=("jana=checklink")
-SUBCOMMANDS+=("jsp-dir-name=show_names")
-SUBCOMMANDS+=("jsp=build_html_jsp")
-SUBCOMMANDS+=("locdrop=build_locdrop")
-SUBCOMMANDS+=("man=build_man")
-SUBCOMMANDS+=("missinggraphics=filelists")
-SUBCOMMANDS+=("nothing=no_opts")
-SUBCOMMANDS+=("offspring=no_opts")
-SUBCOMMANDS+=("online-docs=online-docs")
-SUBCOMMANDS+=("online-localized=online-docs")
-SUBCOMMANDS+=("optipng=build_generic")
-SUBCOMMANDS+=("package-html=packaging")
-SUBCOMMANDS+=("package-jsp=packaging")
-SUBCOMMANDS+=("package-pdf=packaging")
-SUBCOMMANDS+=("package-src-name=show_names")
-SUBCOMMANDS+=("package-src=packaging")
-SUBCOMMANDS+=("package=packaging")
-SUBCOMMANDS+=("pdf-color-name=show_names")
-SUBCOMMANDS+=("pdf-color=build_pdfs")
-SUBCOMMANDS+=("pdf-name=show_names")
-SUBCOMMANDS+=("pdf=build_pdfs")
-SUBCOMMANDS+=("penguin=no_opts")
-SUBCOMMANDS+=("productinfo=build_generic")
-SUBCOMMANDS+=("prof=build_generic")
-SUBCOMMANDS+=("profile=build_generic")
-SUBCOMMANDS+=("profiledir=comments_remarks")
-SUBCOMMANDS+=("projectfiles=filelists")
-SUBCOMMANDS+=("projectgraphics=filelists")
-SUBCOMMANDS+=("provide-color-images=build_generic")
-SUBCOMMANDS+=("provide-epub-images=build_generic")
-SUBCOMMANDS+=("provide-images=build_generic")
-SUBCOMMANDS+=("real-clean=no_opts")
-SUBCOMMANDS+=("remainingfiles=filelists")
-SUBCOMMANDS+=("remaininggraphics=filelists")
-SUBCOMMANDS+=("showenv=showenv")
-SUBCOMMANDS+=("showvariable=profile_first")
-SUBCOMMANDS+=("spellcheck=spellcheck")
-SUBCOMMANDS+=("text=build_generic")
-SUBCOMMANDS+=("text-name=show_names")
-SUBCOMMANDS+=("txt=build_generic")
-SUBCOMMANDS+=("txt-name=show_names")
-SUBCOMMANDS+=("validate=comments_remarks")
-SUBCOMMANDS+=("warn-images=filelists")
-SUBCOMMANDS+=("webhelp=webhelp")
-SUBCOMMANDS+=("webhelp-dir-name=show_names")
-SUBCOMMANDS+=("wiki-name=show_names")
-SUBCOMMANDS+=("wiki=build_generic")
-SUBCOMMANDS+=("xmlfiles=filelists")
-SUBCOMMANDS+=("xmlgraphics-bw=filelists")
-SUBCOMMANDS+=("xmlgraphics=filelists")
-
-#---------------------------------------------------
-# HELP texts for subcommands
-#
-# Fake associative array with
-#  Key   = subcommand
-#  Value = help text
-# 
-
-declare -a HELP_SUBCOMMAND 
-    
-HELP_SUBCOMMAND+=("all=Build a color PDF document from the XML sources.")
-HELP_SUBCOMMAND+=("bigfile-reduced=Creates a single XML file (bigfile) from the MAIN-file referenced in the\nDC-file or specified on the command line starting at the given rootid\nby following all xi:includes.")
-HELP_SUBCOMMAND+=("bigfile=Creates a single XML file (bigfile) from the MAIN-file referenced in the\nDC-file or specified on the command line by following all xi:includes.\nA rootid parameter is ignored.")
-HELP_SUBCOMMAND+=("check=DEBUGGING: Shows a list of internal variables and their values.")
 HELP_SUBCOMMAND+=("checklink=Validates ftp and http(s) links in XML sources.")
-HELP_SUBCOMMAND+=("chklink=Validates ftp and http(s) links in XML sources.")
-HELP_SUBCOMMAND+=("clean-all=Removes all data (documents, images, logfiles, profiled XML, ...) generated\nby DAPS.")
-HELP_SUBCOMMAND+=("clean-images=Removes the results of all image conversions generated by DAPS.")
-HELP_SUBCOMMAND+=("clean-results=Removes all generated documents and logfiles for a given DC- or MAIN-file.\nImage conversion results and profiled XML sources will not be deleted.")
-HELP_SUBCOMMAND+=("clean=Removes all profiled XML sources and temporary files generated by DAPS.")
-HELP_SUBCOMMAND+=("color-pdf-name=Print the file name that would result when building a color PDF.")
-HELP_SUBCOMMAND+=("color-pdf=Build a color PDF document from the XML sources.")
-HELP_SUBCOMMAND+=("db2novdoc=Converts DocBook4 XML sources to NovDoc (a subset of DocBook4).")
-HELP_SUBCOMMAND+=("debug=DEBUGGING: Reserved for adding debug targets")
-HELP_SUBCOMMAND+=("desktop-files-dir-name=Print the directory name that would result when building KDE desktop files.")
-HELP_SUBCOMMAND+=("desktop-files=Create desktop files for KDE.")
-HELP_SUBCOMMAND+=("dist-all=Creates tar archives with source graphics, source XML, and the resulting\nHTML build. Also builds a color PDF document.")
-HELP_SUBCOMMAND+=("dist-book=Creates a tar archive with the XML sources specified by rootid.\nNOTE: Graphics are not included and the unpacked sources may not validate.\n      To create tarballs containing images and a complete, valid set\n      of XML sources, use the command 'package-src'.")
-HELP_SUBCOMMAND+=("dist-desktop-files=Create a tar archive with desktop files for KDE.")
-HELP_SUBCOMMAND+=("dist-document-files-html=Create a tar archive with document files for an HTML document referenced\nin the GNOME help system.")
-HELP_SUBCOMMAND+=("dist-document-files-pdf=Create document files for a PDF document referenced in the GNOME help system.")
-HELP_SUBCOMMAND+=("dist-graphics-png=Create a tar archive with all images from the set referenced\nin the DC- or the MAIN-file. All images will be converted to PNG.")
-HELP_SUBCOMMAND+=("dist-graphics=Create a tar archive with all images from the set referenced in the\nDC- or the MAIN-file. Images will be included in their 'native'\nformat.")
-HELP_SUBCOMMAND+=("dist-html-name=Print the file name that would result when building a distributable tar archive\nof an HTML document.")
-HELP_SUBCOMMAND+=("dist-html-single=Print the file name that would result when building a distributable tar archive\nof a single file HTML document.")
-HELP_SUBCOMMAND+=("dist-html=Creates a distributable tar archive of an HTML document (including images).")
-HELP_SUBCOMMAND+=("dist-htmlsingle=Creates a distributable tar archive of a single file HTML document\n(including images).")
-HELP_SUBCOMMAND+=("dist-jsp=Creates a distributable tar archive of a JSP document (including images).")
-HELP_SUBCOMMAND+=("dist-xml=Creates a tar archive with the XML sources specified by The MAIN file.\nNOTE: Graphics are not included and the unpacked sources may not validate.\n      To create tarballs containing images and a complete, valid set of\n      XML sources, use the command 'package-src'.")
-HELP_SUBCOMMAND+=("document-files-dir-name=Print the directory name that would result when building\nGNOME document files.")
-HELP_SUBCOMMAND+=("document-files-html=Create document files for an HTML document referenced in the GNOME help system.")
-HELP_SUBCOMMAND+=("document-files-pdf=Create document files for a PDF document referenced in the GNOME help system.")
-HELP_SUBCOMMAND+=("epub-name=Print the file name that would result when building an eBook.")
-HELP_SUBCOMMAND+=("epub=Build an eBook from the XML sources.")
-HELP_SUBCOMMAND+=("getimages=List and/or display images (in a viewer of your choice) referenced in an\nXML file or by rootid.")
-HELP_SUBCOMMAND+=("html-dir-name=Print the directory name that would result when building an HTML book.")
-HELP_SUBCOMMAND+=("html-single-name=Print the file name that would result when building a single file HTML document.")
-HELP_SUBCOMMAND+=("html-single=Build a single file HTML document from the XML sources.")
-HELP_SUBCOMMAND+=("html=Build an HTML document from the XML sources.")
-HELP_SUBCOMMAND+=("htmlsingle-name=Print the file name that would result when building a single file HTML book.")
-HELP_SUBCOMMAND+=("htmlsingle=Build a single file HTML document from the XML sources.")
-HELP_SUBCOMMAND+=("jana=Validates ftp and http(s) links in XML sources.")
-HELP_SUBCOMMAND+=("jsp-dir-name=Print the file name that would result when building a JSP document.")
-HELP_SUBCOMMAND+=("jsp=Build a JSP document from the XML sources.")
-HELP_SUBCOMMAND+=("locdrop=Create all tar archives required to distribute a complete set for translation.\nRequires SVN hosting of the sources - files that need to be translated\nhave to be marked with the property doc:trans=yes.")
-HELP_SUBCOMMAND+=("man=Build one or more man pages from suitable XML sources. All <refentry> parts\nfrom the source file(s) will be transformed to man pages.")
-HELP_SUBCOMMAND+=("missinggraphics=Prints a list of images that are referenced in the XML sources but are missing\nin the images' source directory.")
-HELP_SUBCOMMAND+=("nothing=DEBUGGING: Benchmarking target.")
-HELP_SUBCOMMAND+=("offspring=")
-HELP_SUBCOMMAND+=("online-docs=Creates a bigfile for the complete set, a tarball including all referenced\ngraphics in PNG format, color-pdf and epub builds as well as an archive with\na single-html build.")
-HELP_SUBCOMMAND+=("online-localized=")
-HELP_SUBCOMMAND+=("optipng=Reduce the size of the source PNG images using 'optipng'.\nNOTE: This command will directly alter your source images!")
-HELP_SUBCOMMAND+=("package-html=Create all archives and files needed for packaging an HTML document.")
-HELP_SUBCOMMAND+=("package-jsp=Create all archives and files needed for packaging a JSP document.")
-HELP_SUBCOMMAND+=("package-pdf=Create all archives and files needed for packaging a color PDF document.")
-HELP_SUBCOMMAND+=("package-src-name=Print the file name that would result when building a distributable source\narchive.")
-HELP_SUBCOMMAND+=("package-src=Creates a distributable source archive containg the sources of the complete set\nincluding the images.")
-HELP_SUBCOMMAND+=("pdf-color-name=Print the file name that would result when building a color PDF.")
-HELP_SUBCOMMAND+=("pdf-color=Build a color PDF document from the XML sources.")
-HELP_SUBCOMMAND+=("pdf-name=Print the file name that would result when building a grayscale PDF document.")
-HELP_SUBCOMMAND+=("pdf=Build a grayscale PDF document from the XML sources (with cropmarks if using\nthe XEP formatter).")
-HELP_SUBCOMMAND+=("penguin=")
-HELP_SUBCOMMAND+=("productinfo=Print the contents of the tags <productname> and <productnumber for the given ROOTID")
-HELP_SUBCOMMAND+=("prof=Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory.")
-HELP_SUBCOMMAND+=("profile=Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory.")
-HELP_SUBCOMMAND+=("profiledir=Print the directory name that would result when profiling the XML sources.")
-HELP_SUBCOMMAND+=("projectfiles=Print a list of all project files (XML sources, entity declarations, DC-file)\nused by the document referenced by the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("projectgraphics=Print a list of all source image used in the document referenced\nby the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("provide-color-images=Convert all image files used in the document referenced by the DC- or MAIN-file.\nAll files will be converted to PNG, '.dia', '.eps', and '.fig' files\nwill also be converted into SVG and PDF. '.svg' files  will also\nbe converted into PDF.")
-HELP_SUBCOMMAND+=("provide-epub-images=Prepare converted images for inclusion into an eBook.")
-HELP_SUBCOMMAND+=("provide-images=Convert all image files used in the document referenced by the DC- or MAIN-file\nto grayscale. All files will be converted to PNG, '.dia', '.eps', and\n'.fig' files will also be converted into SVG and PDF. '.svg' files  will\nalso be converted into PDF.")
-HELP_SUBCOMMAND+=("real-clean=Removes all data (documents, images, logfiles, profiled XML, ...) generated\nby DAPS")
-HELP_SUBCOMMAND+=("remainingfiles=Print a list of all source XML files _not_ used in the document referenced\nby the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("remaininggraphics=Print a list of all source images _not_ used in the document referenced\nby the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("showenv=DEBUGGING: Target reserved for daps-docmanager")
-HELP_SUBCOMMAND+=("showvariable=DEBUGGING: Show the value of a given variable.\nUsage: showvariable VARIABLE=<VARNAME>")
-HELP_SUBCOMMAND+=("spellcheck=Spellchecks the file specified with --file or the document specified by rootid.")
-HELP_SUBCOMMAND+=("text=Build an ASCII text document the from the XML sources.")
-HELP_SUBCOMMAND+=("text-name=Print the file name that would result when building an ASCII text document.")
-HELP_SUBCOMMAND+=("txt=Build am ASCII text document the from the XML sources.")
-HELP_SUBCOMMAND+=("txt-name=Print the file name that would result when building an ASCII text document.")
-HELP_SUBCOMMAND+=("validate=Validate the profiled XML sources referenced by the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("warn-images=Print a list of source images with non-unique names.")
-HELP_SUBCOMMAND+=("webhelp=Build an HTML document with a table of contents/search frame (aka webhelp)\nfrom the XML sources.")
-HELP_SUBCOMMAND+=("webhelp-dir-name=Print the directory name that would result when building a webhelp document.")
-HELP_SUBCOMMAND+=("wiki=Build a MediaWiki document from the XML sources. Images need to be uploaded\nmanually to the Wiki.")
-HELP_SUBCOMMAND+=("wiki-name=Print the file name that would result when building a MediaWiki document.")
-HELP_SUBCOMMAND+=("xmlfiles=Print a list of all XML files used in the document referenced\nby the DC- or MAIN-file.")
-HELP_SUBCOMMAND+=("xmlgraphics=Print the list of generated images that will directly be used\nwhen building a document.")
-HELP_SUBCOMMAND+=("xmlgraphics-bw=Print the list of generated grayscale images that will directly be used\nwhen building a document.")
 
+SUBCOMMANDS+=("clean=no_opts")
+HELP_SUBCOMMAND+=("clean=Removes all profiled XML sources and temporary files generated by DAPS.")
+
+SUBCOMMANDS+=("clean-all=no_opts")
+HELP_SUBCOMMAND+=("clean-all=Removes all data (documents, images, logfiles, profiled XML, ...) generated\nby DAPS.")
+
+SUBCOMMANDS+=("clean-images=no_opts")
+HELP_SUBCOMMAND+=("clean-images=Removes the results of all image conversions generated by DAPS.")
+
+SUBCOMMANDS+=("clean-package=no_opts")
+HELP_SUBCOMMAND+=("clean-package=Removes all generated package data for a given DC- or MAIN-file.\nImage conversion results and profiled XML sources will not be deleted.")
+
+SUBCOMMANDS+=("clean-results=no_opts")
+HELP_SUBCOMMAND+=("clean-results=Removes all generated documents and logfiles for a given DC- or MAIN-file.\nImage conversion results and profiled XML sources will not be deleted.")
+
+SUBCOMMANDS+=("color-pdf=build_pdfs")
+HELP_SUBCOMMAND+=("color-pdf=Build a color PDF document from the XML sources.")
+
+SUBCOMMANDS+=("color-pdf-name=show_names")
+HELP_SUBCOMMAND+=("color-pdf-name=Print the file name that would result when building a color PDF.")
+
+SUBCOMMANDS+=("dapsenv=debugging")
+HELP_SUBCOMMAND+=("dapsenv=DEBUGGING: Shows a list of internal variables and their values.")
+
+SUBCOMMANDS+=("debug=debugging")
+HELP_SUBCOMMAND+=("debug=DEBUGGING: for developing purposes only.")
+
+SUBCOMMANDS+=("dist-html=build_generic")
+HELP_SUBCOMMAND+=("dist-html=Creates a distributable tar archive of an HTML document (including images).")
+
+SUBCOMMANDS+=("dist-html-name=show_names")
+HELP_SUBCOMMAND+=("dist-html-name=Print the file name that would result when building a distributable tar archive\nof an HTML document.")
+
+SUBCOMMANDS+=("dist-jsp=build_generic")
+HELP_SUBCOMMAND+=("dist-jsp=Creates a distributable tar archive of a JSP document (including images and css).")
+
+SUBCOMMANDS+=("dist-jsp-name=show_names")
+HELP_SUBCOMMAND+=("dist-jsp-name=Print the file name that would result when building a distributable tar archive\nof a JSP document.")
+
+SUBCOMMANDS+=("dist-single-html=build_generic")
+HELP_SUBCOMMAND+=("dist-single-html=Creates a distributable tar archive of a single file HTML document\n(including images and css).")
+
+SUBCOMMANDS+=("dist-single-html-name=show_names")
+HELP_SUBCOMMAND+=("dist-single-html-name=Print the file name that would result when building a distributable tar archive\nof a single HTML document.")
+
+SUBCOMMANDS+=("dist-webhelp=build_generic")
+HELP_SUBCOMMAND+=("dist-webhelp=Creates a distributable tar archive of a webhelp document\n(including images and css).")
+
+SUBCOMMANDS+=("dist-webhelp-name=show_names")
+HELP_SUBCOMMAND+=("dist-webhelp-name=Print the file name that would result when building a distributable tar archive\nof a webhelp document.")
+
+SUBCOMMANDS+=("epub=build_epub")
+HELP_SUBCOMMAND+=("epub=Build an eBook from the XML sources.")
+
+SUBCOMMANDS+=("epub-name=show_names")
+HELP_SUBCOMMAND+=("epub-name=Print the file name that would result when building an eBook.")
+
+SUBCOMMANDS+=("getimages=getimages")
+HELP_SUBCOMMAND+=("getimages=List and/or display images (in a viewer of your choice) referenced in an\nXML file or by rootid.")
+
+SUBCOMMANDS+=("html=build_html_jsp")
+HELP_SUBCOMMAND+=("html=Build an HTML document from the XML sources.")
+
+SUBCOMMANDS+=("html-dir-name=show_names")
+HELP_SUBCOMMAND+=("html-dir-name=Print the directory name that would result when building an HTML book.")
+
+SUBCOMMANDS+=("jsp=build_html_jsp")
+HELP_SUBCOMMAND+=("jsp=Build a JSP document from the XML sources.")
+
+SUBCOMMANDS+=("jsp-dir-name=show_names")
+HELP_SUBCOMMAND+=("jsp-dir-name=Print the directory name that would result when building a JSP book.")
+
+SUBCOMMANDS+=("list-images-missing=filelists")
+HELP_SUBCOMMAND+=("list-images-missing=Prints a list of images that are referenced in the XML sources but are missing\nin the images' source directory.")
+
+SUBCOMMANDS+=("list-images-multisrc=filelists")
+HELP_SUBCOMMAND+=("list-images-multisrc=List images for which mutiple sources exist.")
+
+SUBCOMMANDS+=("list-srcfiles=filelists")
+HELP_SUBCOMMAND+=("list-srcfiles=List all source files used to build the document specified by\nthe DC-file (XML-files, images, entity declarations, DC-file).\nUse the --no* options to exclude certain types.")
+
+SUBCOMMANDS+=("list-srcfiles-unused=filelists")
+HELP_SUBCOMMAND+=("list-srcfiles-unused=Print a list of all source XML files from the xml directory\n and images from images/src/ _not_ used in the document referenced by the DC- or MAIN-file.")
+
+SUBCOMMANDS+=("locdrop=build_locdrop")
+HELP_SUBCOMMAND+=("locdrop=Create all tar archives required to distribute a complete set for translation.\nRequires SVN hosting of the sources - files that need to be translated\nhave to be marked with the property doc:trans=yes.")
+
+SUBCOMMANDS+=("man=build_man")
+HELP_SUBCOMMAND+=("man=Build one or more man pages from suitable XML sources. All <refentry> parts\nfrom the source file(s) will be transformed to man pages.")
+
+SUBCOMMANDS+=("man-dir-name=show_names")
+HELP_SUBCOMMAND+=("man-dir-name=Print the directory name that would result when building man pages.")
+
+SUBCOMMANDS+=("mobi=build_epub")
+HELP_SUBCOMMAND+=("mobi=Build an eBook for Amazon Kindle readers from the XML sources.")
+
+SUBCOMMANDS+=("mobi-name=show_names")
+HELP_SUBCOMMAND+=("mobi-name=Print the file name that would result when building an Amazon Kindle book.")
+
+SUBCOMMANDS+=("nothing=debugging")
+HELP_SUBCOMMAND+=("nothing=DEBUGGING: Benchmarking target.")
+
+SUBCOMMANDS+=("online-docs=online-docs")
+HELP_SUBCOMMAND+=("online-docs=Creates a bigfile for the complete set, a tarball including all referenced\ngraphics in PNG format, color-pdf and epub builds as well as an archive with\na single-html build.")
+
+SUBCOMMANDS+=("optipng=build_generic")
+HELP_SUBCOMMAND+=("optipng=Reduce the size of the source PNG images using 'optipng'.\nNOTE: This command will directly alter your source images!")
+
+SUBCOMMANDS+=("package-dir-name=show_names")
+HELP_SUBCOMMAND+=("package-dir-name=Print the directory name that would result when building\na html, jsp, pdf package.")
+
+SUBCOMMANDS+=("package-html=packaging")
+HELP_SUBCOMMAND+=("package-html=Create all archives and files needed for packaging an HTML document.")
+
+SUBCOMMANDS+=("package-jsp=packaging")
+HELP_SUBCOMMAND+=("package-jsp=Create all archives and files needed for packaging a JSP document.")
+
+SUBCOMMANDS+=("package-pdf=packaging")
+HELP_SUBCOMMAND+=("package-pdf=Create all archives and files needed for packaging a color PDF document.")
+
+SUBCOMMANDS+=("package-src=packaging")
+HELP_SUBCOMMAND+=("package-src=Creates a distributable source archive containg the profiled sources of the complete set\nincluding the original source images.")
+
+SUBCOMMANDS+=("package-src-name=show_names")
+HELP_SUBCOMMAND+=("package-src-name=Print the file name that would result when building a distributable source\narchive.")
+
+SUBCOMMANDS+=("pdf=build_pdfs")
+HELP_SUBCOMMAND+=("pdf=Build a grayscale PDF document from the XML sources (with cropmarks if using\nthe XEP formatter).")
+
+SUBCOMMANDS+=("pdf-name=show_names")
+HELP_SUBCOMMAND+=("pdf-name=Print the file name that would result when building a grayscale PDF document.")
+
+SUBCOMMANDS+=("productinfo=build_generic")
+HELP_SUBCOMMAND+=("productinfo=Print the contents of the tags <productname> and <productnumber for the given ROOTID")
+
+SUBCOMMANDS+=("profile=build_generic")
+HELP_SUBCOMMAND+=("profile=Create profiled souces from the original XML sources. If the MAIN-file does\nnot contain profiling instructions, link the files into the profile directory.")
+
+SUBCOMMANDS+=("real-clean=no_opts")
+HELP_SUBCOMMAND+=("real-clean=Removes all data (documents, images, logfiles, profiled XML, ...) generated\nby DAPS")
+
+SUBCOMMANDS+=("showenv=showenv")
+HELP_SUBCOMMAND+=("showenv=DEBUGGING: Target reserved for daps-docmanager")
+
+SUBCOMMANDS+=("showvariable=debugging")
+HELP_SUBCOMMAND+=("showvariable=DEBUGGING: Show the value of a given variable.\nUsage: showvariable VARIABLE=<VARNAME>")
+
+SUBCOMMANDS+=("single-html=build_html_jsp")
+HELP_SUBCOMMAND+=("single-html=Build a single file HTML document from the XML sources.")
+
+SUBCOMMANDS+=("single-html-name=show_names")
+HELP_SUBCOMMAND+=("single-html-name=Print the file name that would result when building a single file HTML document.")
+
+SUBCOMMANDS+=("spellcheck=spellcheck")
+HELP_SUBCOMMAND+=("spellcheck=Spellchecks the file specified with --file or the document specified by rootid.")
+
+SUBCOMMANDS+=("text=build_generic")
+HELP_SUBCOMMAND+=("text=Build an ASCII text document the from the XML sources.")
+
+SUBCOMMANDS+=("text-name=show_names")
+HELP_SUBCOMMAND+=("text-name=Print the file name that would result when building an ASCII text document.")
+
+SUBCOMMANDS+=("validate=comments_remarks")
+HELP_SUBCOMMAND+=("validate=Validate the profiled XML sources referenced by the DC- or MAIN-file.")
+
+SUBCOMMANDS+=("webhelp=webhelp")
+HELP_SUBCOMMAND+=("webhelp=Build an HTML document with a table of contents/search frame (aka webhelp)\nfrom the XML sources.")
+
+SUBCOMMANDS+=("webhelp-dir-name=show_names")
+HELP_SUBCOMMAND+=("webhelp-dir-name=Print the directory name that would result when building a webhelp document.")
+
+#
+# deprecated targets
+#
+
+SUBCOMMANDS+=("all=deprecated")
+HELP_SUBCOMMAND+=("all=This command is deprecated, use \"color-pdf\" instead.")
+
+SUBCOMMANDS+=("bigfile-reduced=deprecated")
+HELP_SUBCOMMAND+=("bigfile-reduced=This command is no longer supported.")
+
+SUBCOMMANDS+=("check=deprecated")
+HELP_SUBCOMMAND+=("check=This command is deprecated, use \"dapsenv\" instead.")
+
+SUBCOMMANDS+=("chklink=deprecated")
+HELP_SUBCOMMAND+=("chklink=This command is deprecated, use \"checklink\" instead.")
+
+SUBCOMMANDS+=("db2novdoc=deprecated")
+HELP_SUBCOMMAND+=("db2novdoc=This command is no longer supported.")
+
+SUBCOMMANDS+=("desktop-files=deprecated")
+HELP_SUBCOMMAND+=("desktop-files=This command is deprecated, use \"package-src --desktopfiles\" instead.")
+
+SUBCOMMANDS+=("desktop-files-dir-name=deprecated")
+HELP_SUBCOMMAND+=("desktop-files-dir-name=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist=deprecated")
+HELP_SUBCOMMAND+=("dist=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-all=deprecated")
+HELP_SUBCOMMAND+=("dist-all=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-book=deprecated")
+HELP_SUBCOMMAND+=("dist-book=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-desktop-files=deprecated")
+HELP_SUBCOMMAND+=("dist-desktop-files=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-document-files-html=deprecated")
+HELP_SUBCOMMAND+=("dist-document-files-html=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-document-files-pdf=deprecated")
+HELP_SUBCOMMAND+=("dist-document-files-pdf=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-graphics=deprecated")
+HELP_SUBCOMMAND+=("dist-graphics=This command is deprecated, use \"package-src\" instead.")
+
+SUBCOMMANDS+=("dist-graphics-png=deprecated")
+HELP_SUBCOMMAND+=("dist-graphics-png=This command is no longer supported.")
+
+SUBCOMMANDS+=("dist-html-single=deprecated")
+HELP_SUBCOMMAND+=("dist-html-single=This command is deprecated, use \"dist-single-html\" instead.")
+
+SUBCOMMANDS+=("dist-htmlsingle=deprecated")
+HELP_SUBCOMMAND+=("dist-htmlsingle=This command is deprecated, use \"dist-single-html\" instead.")
+
+SUBCOMMANDS+=("dist-xml=deprecated")
+HELP_SUBCOMMAND+=("dist-xml=This command is deprecated, use \"package-src\" instead.")
+
+SUBCOMMANDS+=("dist=deprecated")
+HELP_SUBCOMMAND+=("dist=This command is no longer supported.")
+
+SUBCOMMANDS+=("document-files-dir-name=deprecated")
+HELP_SUBCOMMAND+=("document-files-dir-name=This command is no longer supported.")
+
+SUBCOMMANDS+=("document-files-html=deprecated")
+HELP_SUBCOMMAND+=("document-files-html=This command is deprecated, use \"package-html --documentfiles\" instead.")
+
+SUBCOMMANDS+=("document-files-pdf=deprecated")
+HELP_SUBCOMMAND+=("document-files-pdf=This command is deprecated, use \"package-pdf --documentfiles\" instead.")
+
+SUBCOMMANDS+=("force=deprecated")
+HELP_SUBCOMMAND+=("force=This command is no longer supported.")
+
+SUBCOMMANDS+=("htmlsingle=deprecated")
+HELP_SUBCOMMAND+=("htmlsingle=This command is deprecated, use \"single-html\" instead.")
+
+SUBCOMMANDS+=("htmlsingle-name=deprecated")
+HELP_SUBCOMMAND+=("htmlsingle-name=This command is deprecated, use \"single-html-name\" instead.")
+
+SUBCOMMANDS+=("html-single=deprecated")
+HELP_SUBCOMMAND+=("html-single=This command is deprecated, use \"single-html\" instead.")
+
+SUBCOMMANDS+=("html-single-name=deprecated")
+HELP_SUBCOMMAND+=("html-single-name=This command is deprecated, use \"single-html-name\" instead.")
+
+SUBCOMMANDS+=("jana=deprecated")
+HELP_SUBCOMMAND+=("jana=This command is deprecated, use \"checklink\" instead.")
+
+SUBCOMMANDS+=("link-entity-dist=deprecated")
+HELP_SUBCOMMAND+=("link-entity-dist=This command is no longer supported.")
+
+SUBCOMMANDS+=("missinggraphics=deprecated")
+HELP_SUBCOMMAND+=("missinggraphics=This command is deprecated, use \"list-images-missing\" instead.")
+
+SUBCOMMANDS+=("online-localized=deprecated")
+HELP_SUBCOMMAND+=("online-localized=\nThis command is deprecated, use \"online-docs --noset\" instead.")
+
+SUBCOMMANDS+=("offspring=deprecated")
+HELP_SUBCOMMAND+=("offspring=This command is no longer supported.")
+
+SUBCOMMANDS+=("pdf-color=deprecated")
+HELP_SUBCOMMAND+=("pdf-color=This command is deprecated, use \"color-pdf\" instead.")
+
+SUBCOMMANDS+=("pdf-color-name=deprecated")
+HELP_SUBCOMMAND+=("pdf-color-name=This command is deprecated, use \"color-pdf-name\" instead.")
+
+SUBCOMMANDS+=("penguin=deprecated")
+HELP_SUBCOMMAND+=("penguin=This command is no longer supported.")
+
+SUBCOMMANDS+=("prof=deprecated")
+HELP_SUBCOMMAND+=("prof=This command is deprecated, use \"profile\" instead.")
+
+SUBCOMMANDS+=("profiledir=deprecated")
+HELP_SUBCOMMAND+=("profiledir=This command is deprecated, use \"showvariable VARIABLE=PROFILEDIR\" instead.")
+
+SUBCOMMANDS+=("projectfiles=deprecated")
+HELP_SUBCOMMAND+=("projectfiles=This command is deprecated, use \"list-srcfiles --noimg\" instead.")
+
+SUBCOMMANDS+=("projectgraphics=deprecated")
+HELP_SUBCOMMAND+=("projectgraphics=This command is deprecated, use \"list-srcfiles --nodc --noent --noxml\" instead.")
+
+SUBCOMMANDS+=("provide-images=deprecated")
+HELP_SUBCOMMAND+=("provide-images=This command is no longer supported.")
+
+SUBCOMMANDS+=("provide-color-images=deprecated")
+HELP_SUBCOMMAND+=("provide-color-images=This command is no longer supported.")
+
+SUBCOMMANDS+=("provide-epub-images=deprecated")
+HELP_SUBCOMMAND+=("provide-epub-images=This command is no longer supported.")
+
+SUBCOMMANDS+=("remainingfiles=deprecated")
+HELP_SUBCOMMAND+=("remainingfiles=This command is deprecated, use \"list-srcfiles-unused --noimg\" instead.")
+
+SUBCOMMANDS+=("remaininggraphics=deprecated")
+HELP_SUBCOMMAND+=("remaininggraphics=This command is deprecated, use \"list-srcfiles-unused --noxml\" instead.")
+
+SUBCOMMANDS+=("txt=deprecated")
+HELP_SUBCOMMAND+=("txt=This command is deprecated, use \"text\" instead.")
+
+SUBCOMMANDS+=("txt-name=deprecated")
+HELP_SUBCOMMAND+=("txt-name=This command is deprecated, use \"text-name\" instead.")
+
+SUBCOMMANDS+=("warn-images=deprecated")
+HELP_SUBCOMMAND+=("warn-images=Print a list of source images with non-unique names\nThis command is deprecated, use \"list-images-multisrc\" instead.")
+
+SUBCOMMANDS+=("wiki=deprecated")
+HELP_SUBCOMMAND+=("wiki=This command is no longer supported.")
+
+SUBCOMMANDS+=("wiki-name=deprecated")
+HELP_SUBCOMMAND+=("wiki-name=This command is no longer supported.")
+
+SUBCOMMANDS+=("xmlfiles=deprecated")
+HELP_SUBCOMMAND+=("xmlfiles=This command is deprecated, use \"list-srcfiles --nodc --noent --noimg\" instead.")
+
+SUBCOMMANDS+=("xmlgraphics-bw=deprecated")
+HELP_SUBCOMMAND+=("xmlgraphics-bw=This command is no longer supported.")
+
+SUBCOMMANDS+=("xmlgraphics=deprecated")
+HELP_SUBCOMMAND+=("xmlgraphics=This command is no longer supported.")
 
 # ----------------------------------------------------------------------------
 # FUNCTIONS
@@ -421,8 +604,9 @@ Global Options:
                             Default: 1 (when the output does not go to a
                                         terminal, colored output will be
                                         disabled automatically)
-  --debug                   Print debugging messages. Far more verbose than the
-                             --verbosity options
+  --debug                   Print debugging messages. Alternatively see the
+                            --verbose options for an output that is better
+                            readable. 
   --docconfig=DC-file,
   -d DC-file                Path to doc config file to use. Mandatory
                             unless there is only a single DC-file in the current
@@ -430,15 +614,19 @@ Global Options:
                             value (DOCCONF_DEFAULT) in $USER_CONFIG.
                             Note: Options --docconfig and --main exclude
                                   each other.
-  --fb_styleroot            Fallback styleroot directory. Can only be used in
+  --fb_styleroot            Fallback styleroot directories. Can only be used in
                             conjunction with --styleroot. By default, the
                             DocBook stylesheets are used as a fallback if
                             custom styles for an output format are  not present.
-                            With this option you can specify an alternative
-                            fallback. Useful if you have forks of your custom
-                            stylesheets. The DocBook stylesheets will be used
-                            as a last resort.
-                            Specify only the file name, not an absolute path.
+                            With this option you can specify a list of
+                            alternative fallbacks (space separated absolute
+                            paths). The directories will be tested in the order
+                            specified, the first one that applies to the
+                            requested format, will be used.  The original
+                            DocBook stylesheets will be used as a last resort.
+                            Useful if you have forks of your custom stylesheets.
+  --force                   Force a rebuild of the document even when an
+                            up-to-date version exists.
   --help, -h                Help
   --main, -m                Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
@@ -451,63 +639,62 @@ Global Options:
                             defined for all output formats.
   --verbosity=0, -v0        Verbosity Level 0 (print 1 line of results)
   --verbosity=1, -v1, -v    Verbosity Level 1 (print intermediate results)
-  --verbosity=2, -v2, -vv   Verbosity Level 2 (print all commands, very verbose)
+  --verbosity=2, -v2, -vv   Verbosity Level 2 (print all files created)
+  --verbosity=3, -v3, -vvv  Verbosity Level 3 (print all commands, very verbose)
 
   --version                 Print version number
 
+  --xsltprocessor=PROCESSOR Specify an xslt processor that is used to transorm
+                            the XML files. Currently supported are \"xsltproc\"
+                            and \"saxon\" (version 6).
+                            Default: xsltproc
   
 Subcommands:
    help                       Print this help
 
   Generate Books:
-    color-pdf, pdf-color      Color pdf book
+    color-pdf                 Color pdf book
     epub                      ePUB book
     html                      HTML book
-    html-single, htmlsingle   Single file HTML book
     jsp                       JSP book
     man                       man pages
+    mobi                      Amazon Kindle eBook
     pdf                       grayscale pdf (with cropmarks when using XEP)
-    txt, text                 ASCII book
+    single-html               Single file HTML book
+    text                      ASCII book
     webhelp                   HTML book with collapsable TOC and search
     wiki                      Single file MediaWiki book
 
 
   Create Distributable Archives:
-    dist-all                  Shortcut for running the subcommands 'validate'
-                              'checklink' 'dist-xml' 'dist-html' 'dist' and
-                              'color-pdf'
-    dist-book                 Profiled XML sources of the book
-    dist-graphics             Graphics (PNG, SVG) of the whole set
-    dist-graphics-png         PNG graphics of the whole set. SVG graphics are
-                              converted to PNG
-    dist-html                 HTML and graphics
-    dist-htmlsingle           Single-file HTML and graphics
-    dist-jsp                  JSP and graphics
-    dist-xml                  Profiled XML sources of the whole set. Identical
-                              to dist-book when using a book rather than a set.
+    dist-html                 HTML, css, and graphics
+    dist-htmlsingle           Single-file HTML. css, and graphics
+    dist-jsp                  JSP, css, and graphics
+    dist-webhelp              Webhelp css, js, and graphics
     locdrop                   Provide everything that is needed to translate a
                               set
 
   File lists:
-    projectfiles              Print project files (XML sources, entity
-                              declarations, DC-file) used by the book
-    projectgraphics           Print source graphics used by the book
-    missinggraphics           Print missing images
-    remainingfiles            Print XML source files _not_ used by the book
-    remaininggraphics         Print source graphics _not_ used by the book
-    warn-images               Print a list of non-unique image files
-    xmlfiles                  Print XML source files used by the book
-    xmlgraphics               Print (generated) color graphics really used to
-                              generate the books
-    xmlgraphics-bw            Print (generated) grayscale graphics really used
-                              to generate the books
+    list-srcfiles             List source files (XML sources, images, entity
+                              declarations, DC-file) used by the document
+                              reference by the DC-file
+    list-srcfiles-unused      List files from the xml/ and images/src/
+                              directories not used by the document reference
+                              by the DC-file
+    list-images-missing       List images referenced in the XML sources but
+                              missing in the images' source directory
+    list-images-multisrc      List images for which mutiple sources exist
+                              (e.g. foo.svg and foo.png)
 
   Cleaning up:
     clean                     Remove all profiled sources and temporary files
     clean-images              Remove all generated images
+    clean-package             Remove all generated package data forthe given
+                              DC-file. Generated images and profiled sources
+                              will _not_ be deleted.
     clean-results             Remove all generated books, archives, and log
-                              files. Generated images and profiled sources will
-                              _not_ be deleted.
+                              files for the given DC-file. Generated images
+                              and profiled sources will _not_ be deleted.
     clean-all, real-clean     Remove everything generated by $ME
 
   Packaging:
@@ -525,11 +712,10 @@ Subcommands:
 
   Other Commands:
     checklink                 Linkchecker for links from <ulink> tags
-    db2novdoc                 Convert DocBook XML sources to NovDoc
     getimages                 List or display images from a profiled DocBook
                               XML file
     optipng                   Optimize (size) source PNGs
-    profile, prof             Profile XML sources
+    profile                   Profile XML sources
     spellcheck                Spellchecks the file specified with --file or the
                               document specified by rootid.
     validate                  Validate profiled sources. Automatically profiles
@@ -540,27 +726,17 @@ Subcommands:
                               may be one of color-pdf, epub, html-single,
                               pdf, txt
     <target>-dir-name         Print resulting directory name for <target>.
-                              <target> may be either html or jsp
+                              <target> may be html, jsp, man, or webhelp
 
   Debugging:
-    check                     Print a list of the most important make variables
+    dapsenv                   Print a list of the most important make variables
                               and their value
-    profiledir                Print the profiling directory currently used
     showvariable              Print value of a given make variable:
                               $ME showvariable VARIABLE=<MAKE_VARIABLE>
 
 Type '$ME <subcommand> -h' for help on a specific subcommand.
 "
 }
-
-#    online-localized          Provide a profiled XML bigfile and a graphics
-#                              tarball (PNG only). All xrefs to other books from
-#                              the set are replaced by ulinks pointing to
-#                              <?provo dirname?>/id plus text like \"See book
-#                              FOO, chapter BAR\" Useful for delivering
-#                              translated manuals, when only part of the set
-#                              has been translated
-
 
 # ---------
 # Verbose error handling
@@ -637,19 +813,16 @@ function sanitize_path () {
         if [[ 0 = $? ]]; then
             eval "$VARNAME=$ABSPATH"
         else
-            if [[ $VARNAME =~ _WRAPPER ]]; then
-                # issue warnings only for FOP_WRAPPER and XEP_WRAPPER
-                # if path does not exist
-                echo "HINT: $VARNAME=$MYPATH: Path does not exist"
-            else
-                # exit for all other variables if MYPATH is invalid
-                exit_on_error "$VARNAME=$MYPATH: Path does not exist"
-            fi
+            exit_on_error "$VARNAME=$MYPATH: Path does not exist"
         fi
     else
         # path is already absolute, set to MYPATH (because of having cut
         # the trailing /
-        eval "$VARNAME=$MYPATH"
+        if [[ -d $MYPATH || -f $MYPATH ]]; then
+            eval "$VARNAME=$MYPATH"
+        else
+            exit_on_error "$VARNAME=$MYPATH: Path does not exist"
+        fi
     fi
 }
 
@@ -708,7 +881,7 @@ function autoset_docconf () {
         fi
         # set DOC_DIR
         DOC_DIR=$(dirname "$DOCCONF_CMDL")
-        if [[ 1 -le $VERBOSITY ]]; then
+        if [[ 2 -le $VERBOSITY ]]; then
             echo "Using automatically detected DOCCONF $DOCCONF_CMDL"
         fi
     else
@@ -738,7 +911,7 @@ function set_mainfile () {
             if [[ -z "$DOC_DIR" ]]; then
                 DOC_DIR="$PWD"
             fi
-            if [[ 1 -le $VERBOSITY ]]; then
+            if [[ 2 -le $VERBOSITY ]]; then
                 echo "Using MAIN file $MAIN_CMDL"
             fi
         else
@@ -770,6 +943,7 @@ function recover_cmdl_values () {
     test -n "$MAIN_CMDL"      && MAIN="$MAIN_CMDL"
     test -n "$STYLEROOT_CMDL" && STYLEROOT="$STYLEROOT_CMDL"
     test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
+    test -n "$XSLTPROCESSOR_CMDL" && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
 }
 
 # ----------------------------------------------------------------------------
@@ -799,7 +973,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,help,main:,styleroot:,verbosity::,version -n $ME -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n $ME -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -848,10 +1022,18 @@ while true ; do
             shift
             ;;
         --fb_styleroot)
-            # make path absolute and strip trailing slash
-            sanitize_path "$2" "FALLBACK_STYLEROOT_CMDL"
+            # We are allowing multiple values, space-seperated
+            for FBS in $2; do
+                # make path absolute and strip trailing slash
+                sanitize_path "$FBS" "FBS_LIST"
+                FALLBACK_STYLEROOT_CMDL="$FALLBACK_STYLEROOT_CMDL $FBS_LIST"
+            done
             FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
             shift 2
+            ;;
+        --force)
+            FORCE_REBUILD=1
+            shift
             ;;
         -h|--help)
             # if it's just "-h/--help", then print the global daps help
@@ -888,10 +1070,12 @@ while true ; do
             else
                 if [[ 0 = $2 ]]; then
                     VERBOSITY_CMDL=0
-                 elif [[ 1 = $2 || "" = $2 ]]; then
+                elif [[ 1 = $2 || "" = $2 ]]; then
                     VERBOSITY_CMDL=1
-                else
+                elif [[ 2 = $2 || "v" = $2 ]]; then
                     VERBOSITY_CMDL=2
+                else
+                    VERBOSITY_CMDL=3
                 fi
             fi
             VERBOSITY="$VERBOSITY_CMDL"
@@ -900,6 +1084,12 @@ while true ; do
         --version)
             echo "$ME $VERSION"
             exit 0
+            ;;
+        --xsltprocessor)
+            which $2 >/dev/null 2>&1 || exit_on_error "Cannot find the XSLT processor \"$2\"."
+            XSLTPROCESSOR_CMDL="$2"
+            XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
+            shift 2
             ;;
         --) shift ; break ;;
         *) exit_on_error "Internal error!" ;;
@@ -916,7 +1106,9 @@ fi
 # Check FALLBACK_STYLEROOT and STYLEROOT
 #
 if [[ -n $FALLBACK_STYLEROOT && -z $STYLEROOT ]]; then
-    echo "--styleroot is not specified, ignoring --fb_styleroot"
+    if [[ 0 != $VERBOSITY ]]; then
+        echo "Warning: --styleroot is not specified, ignoring --fb_styleroot"
+    fi
 fi 
 
 
@@ -958,7 +1150,7 @@ else
 fi
 
 # Now that we have the subcommand
-# - check whether it is valis
+# - check whether it is valid
 # - get the function from lib/daps_functions that needs to be called for $SUBCMD
 # - get it's help text
 FUNCTION=$(arrayGet "SUBCOMMANDS" "$SUBCMD")
@@ -1029,7 +1221,8 @@ if [[ -n $DAPSROOT ]]; then
         PYTHON_DIR="${DAPSROOT}/python"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
-        XML_CATALOG_FILES="$XML_CATALOG_FILES $DAPSROOT/etc/catalog.xml"
+        XML_DEVEL_CATALOG="$DAPSROOT/etc/catalog.xml"
+        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
     fi
 else
     # default DAPSROOT
@@ -1113,7 +1306,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
         if [[ -e "$DOCCONF_NAME" ]]; then
             sanitize_path "$DOCCONF_NAME" "DOCCONF_CMDL"
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
-            if [[ 1 -le $VERBOSITY ]]; then
+            if [[ 2 -le $VERBOSITY ]]; then
                 echo "Using previously sourced DOCCONF $DOCCONF_CMDL"
             fi
         else
@@ -1124,7 +1317,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
         if [[ -e $DOCCONF_DEFAULT ]]; then
             sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_CMDL"
             DOC_DIR=$(dirname "$DOCCONF_CMDL")
-            if [[ 1 -le $VERBOSITY ]]; then
+            if [[ 2 -le $VERBOSITY ]]; then
                 echo "Using DOCCONF $DOCCONF_DEFAULT from config files"
             fi
         else
@@ -1275,7 +1468,6 @@ export "${VARLIST[@]}"
 # subcommand function
 #
 WRITE_LOG=1
-
 eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
 
 

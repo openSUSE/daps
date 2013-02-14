@@ -23,7 +23,7 @@
 
 
 <!-- ALWAYS use a trailing slash! -->
-<xsl:param name="img.src.path">images/</xsl:param>
+<xsl:param name="img.src.path"/>
 
 
 <xsl:template match="node() | @*">

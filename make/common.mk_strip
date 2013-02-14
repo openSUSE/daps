@@ -1,0 +1,545 @@
+# Copyright (C) 2004 - 2011 SUSE Linux Products GmbH
+#
+# Authors:
+# Jörg Arndt
+# Berthold Gunreben <bg at suse dot de>
+# Karl Eichwalder   <ke at suse dot de>
+# Jana Jaeger      
+# Thomas Schraitle  <toms at suse dot de>
+# Frank Sundermeyer <fs at suse dot de>
+#
+# Please submit to feedback or patches to
+# <fs at suse dot de> or <toms at suse dot de>
+# 
+# Make file to build "books" from DocBook XML sources
+# Provides the core functionality for the daps package
+
+DISTPROFILE := $(subst $(DOC_DIR)/xml/,$(PROFILE_PARENT_DIR)/dist/,$(SRCFILES))
+
+
+#------------------------------------------------------------------------
+# Include the other make files
+#
+include $(DAPSROOT)/make/images.mk
+include $(DAPSROOT)/make/package.mk
+
+#------------------------------------------------------------------------
+#
+# define the targets for building books
+#
+
+
+
+
+#--------------
+# WIKI
+#
+.PHONY: wiki
+wiki: | $(DIRECTORIES)
+wiki: $(PROFILEDIR)/.validate $(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki
+	@ccecho "result" "Find the WIKI book at:\n$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki"
+
+
+#--------------
+# FORCE
+#
+.PHONY: force
+force: | $(DIRECTORIES)
+force: $(PROFILEDIR)/.validate
+	touch $(MAIN)
+	rm -f $(TMP_DIR)/$(TMP_BOOK)-$(FORMATTER).fo # pdf only!
+	$(MAKE) pdf
+
+
+
+#------------------------------------------------------------------------
+#
+# dist targets
+#
+# Question:
+# Do we want to package sources that may not validate? Adding a dependency on
+# $(PROFILEDIR)/.validate will prevent us from doing so
+
+#--------------
+# dist: create b/w PDFs for all chapters 
+#
+.PHONY: dist
+dist: ROOTIDS = $(shell xsltproc --xinclude $(STYLEROOTIDS) \
+		$(PROFILED_MAIN))
+dist: | $(DIRECTORIES)
+dist: $(PROFILEDIR)/.validate
+	for i in $(ROOTIDS); do \
+	    make pdf ROOTID=$$i; \
+	done
+
+#--------------
+# dist-xml:
+
+# create tarball with xml files for the _whole set_ plus entity declaration
+# files and the DC-file that is sourced. Such an archive is needed to
+# distribute a book. Only packaging the book itself is not sufficient, because
+# it may link into other books of the set and therefore need sources from
+# the whole set in order to properly build.
+#
+# The major problem when creating dist-xml and dist-book are the entities.
+# On the one hand we want to package profiled sources, but on the other
+# hand we don't want those sources to come with original entities rather than
+# resolved ones ( "&prodcut;" instead of "openSUSE"). Unfortunately entities
+# _are_ resolved during profiling, so we need to recover them and modify
+# the profiled sources after profiling.
+# Therefore we cannot use the profiled sources from $PROFILEDIR directly, but
+# will create prolifeled sources with recovered entities in
+# $(PROFILE_PARENT_DIR)/dist/
+#
+# TODO:
+# Whenever a file gets profiled, its header is being rewritten to out
+# standard NOVDOC header including an entity link to entity-decl.ent
+# This may not want we want, espacially if the original header was DOCBOOK
+# and/or included "manual" entity declaration (they will simply be overwritten) 
+#
+# $(PROFILE_PARENT_DIR)/dist/ is an intermediate directory, therefore the files
+# will always be deleted and freshly created each time. This is wanted and
+# needed
+#
+.PHONY: dist-xml
+dist-xml: $(DISTPROFILE)
+dist-xml: link-entity-dist
+dist-xml: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
+			$(shell xsltproc --nonet --xinclude $(STYLESEARCH) \
+			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
+			$(notdir $(MAIN))))
+dist-xml: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
+dist-xml: TARBALL  = $(RESULT_DIR)/$(BOOK)$(LANGSTRING).tar
+dist-xml:
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+  endif
+	tar chf $(TARBALL) --absolute-names \
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
+	tar rhf $(TARBALL)  --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
+	bzip2 -9f $(TARBALL)
+	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
+
+#--------------
+# dist-book: Create an archive with profiled xml, DC-file, and entity
+# declarations. Entities in xml sources are preserved, see explanation
+# on dist-xml target
+#
+.PHONY: dist-book
+dist-book: $(DISTPROFILE)
+dist-book: link-entity-dist
+dist-book: INCLUDED = $(sort $(addprefix $(PROFILE_PARENT_DIR)/dist/,\
+			$(shell xsltproc --nonet $(ROOTSTRING) \
+			--xinclude $(STYLESEARCH) \
+			$(PROFILE_PARENT_DIR)/dist/$(notdir $(MAIN))) \
+			$(notdir $(MAIN))))
+dist-book: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(INCLUDED))
+dist-book: TARBALL  = $(RESULT_DIR)/$(BOOK)$(LANGSTRING).tar
+dist-book:
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+  endif
+	tar chf $(TARBALL) --absolute-names \
+	  --transform=s%$(PROFILE_PARENT_DIR)/dist%xml% $(INCLUDED)
+	tar rhf $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
+	  $(DOCCONF) $(addprefix $(DOC_DIR)/xml/,$(ENTITIES))
+	bzip2 -9f $(TARBALL)
+	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
+
+#--------------
+# dist-graphics
+# always packs the colour images provided by provide-color-images. It generates
+# them in $IMG_GENDIR/{png,svg}. However, in the tarball we need to rewrite
+# this directory to images/src/{png,svg}, because this is the place graphics
+# need to be when starting a project 
+#
+# In order to properly calculate the USED* variables from the original XML
+# sources, we need to have an up-to-date profiled version of these sources.
+# This requires a "make profile" run before make dist-graphics! The daps
+# wrapper script automatically takes care of it
+#
+.PHONY: dist-graphics
+dist-graphics: provide-color-images
+dist-graphics: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-graphics.tar
+dist-graphics:
+  ifdef USED
+    ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+    endif
+    ifdef PNGONLINE
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  $(PNGONLINE);
+    endif
+    # also add SVGs if available
+    ifdef SVGONLINE
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/svg% \
+	  $(SVGONLINE)
+    endif
+    ifdef PDFONLINE
+	tar rhf $(TARBALL) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/pdf% \
+	  $(PDFONLINE)
+    endif
+	bzip2 -9f $(TARBALL)
+	@ccecho "result" "Find the tarball at:\n$(TARBALL).bz2"
+  else
+	@ccecho "info" "Selected book contains no graphics"
+  endif
+
+#--------------
+# dist-graphics-png
+# creates an archive with all graphics in png format
+#
+.PHONY: dist-graphics-png
+dist-graphics-png: provide-color-images
+dist-graphics-png: TARBALL = $(RESULT_DIR)/$(TMP_BOOK)$(LANGSTRING)-png-graphics.tar.bz2
+dist-graphics-png:
+  ifdef PNGONLINE
+    ifeq ($(VERBOSITY),1)
+	@echo "   Creating tarball..."
+    endif
+	BZIP2=--best \
+	tar cjhf $(TARBALL) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  $(sort $(PNGONLINE))
+	@ccecho "result" "Find the tarball at:\n$(TARBALL)"
+  else
+	@ccecho "info" "Selected book contains no graphics"
+  endif
+
+
+
+
+
+#---------------
+# dist-all
+#
+# calls validate and chklink and creates dist-xml dist-html dist color-pdf
+#
+.PHONY: dist-all
+dist-all: validate chklink dist-xml dist-html color-pdf
+
+#------------------------------------------------------------------------
+# Remove stuff
+#
+
+.INTERMEDIATE: $(PROFILE_PARENT_DIR)/dist/%.xml
+.INTERMEDIATE: $(TMP_DIR)/dist/%.xml
+
+#------------------------------------------------------------------------
+#
+# General Helper targets
+#
+
+
+
+
+
+#------------------------------------------------------------------------
+#
+# "Helper" targets for profiling ( $PROFILES and $DISTPROFILE)
+# 
+
+$(PROFILE_PARENT_DIR)/dist:
+	mkdir -p $@
+
+$(TMP_DIR)/dist/xml:
+	mkdir -p $@
+
+$(PROFILESUBDIRS):
+	mkdir -p $@
+
+
+$(PROFILES): $(PROFILEDIR)/PROJECTFILE.$(BOOK) $(wildcard $(DOC_DIR)/xml/*.ent)
+$(TMPDIST): $(TMP_DIR)/dist/PROJECTFILE.$(BOOK)
+
+#---------------
+# Profiling for $DISTPROFILE
+# (needed for dist-xml and dist-book)
+#
+# Preserves the entities by calling entities-exchange.sh before
+# and after the profiling, for more information also see the explanations for
+# dist-xml
+#
+# During the profiling, we have to protect all entities in the text,
+# because they would be resolved else. The intermediate files without
+# entities resides in tmp/dist/xml . The sed scripts that are used to
+# protect the entities and convert them back are 
+# $(DAPSROOT)/etc/entities.preserve.sed and
+# $(DAPSROOT)/etc/entities.recover.sed. Intermediate profiled sources in
+# $TMP_DIR/dist/%.xml are used for this.
+#
+# We want $(PROFILE_PARENT_DIR)/dist/*.xml to be recreated everytime to
+# be on the safe side. Explicitly marking the XML files as intermediate
+# will cause make to automatically delete them in any case and prevent us
+# from having to manually remove them
+#
+# If no profiling stylesheet ($stylenov) is defined, we do not need to
+# bother with all the stuff from above, but rather directly link to the
+# original sources
+#
+# If not for the IMMEDIATE declarations from above, the dependencies
+# on the PHONY link-entity* targets ensure that the profiling in
+# dist is _always_ redone
+#
+
+$(PROFILE_PARENT_DIR)/dist/%: $(PROFILE_PARENT_DIR)/dist
+  ifdef PROFILE_URN
+    $(PROFILE_PARENT_DIR)/dist/%: $(TMP_DIR)/dist/xml/%
+    ifeq ($(VERBOSITY),1)
+	@echo "   Profiling $(notdir $<)"
+    endif
+	$(LIBEXEC_DIR)/entities-exchange.sh -s -d preserve $<
+	xsltproc --nonet --output $@ \
+		$(subst show.comments 1,show.comments 0, \
+		  $(subst keep.xml.comments 1,keep.xml.comments 0, \
+		  $(PROFSTRINGS))) \
+		  --stringparam filename "$(notdir $<)" \
+		  $(PROFILE_URN) $<
+	$(LIBEXEC_DIR)/entities-exchange.sh -d recover $@
+  else
+$(PROFILE_PARENT_DIR)/dist/%: $(DOC_DIR)/xml/% link-entity-noprofile
+	ln -sf $< $@
+  endif
+
+#
+# the TMP stuff
+#
+$(TMP_DIR)/dist/xml/%: $(TMP_DIR)/dist/xml
+$(TMP_DIR)/dist/xml/%: $(DOC_DIR)/xml/% link-entity-dist
+	$(LIBEXEC_DIR)/entities-exchange.sh -s -o $(dir $@) -d preserve $<
+
+
+#------------------------------------------------------------------------
+#
+# Entity resolution
+#
+
+# link entity declaration files
+#
+# We need to link the entity-decl.ent in addition to all other xml files
+# because the entities are not resolved when just linking.
+#
+# Usually link-entity is used, but the targets dist-xml and dist-book use
+# their own profiling directories $(PROFILE_PARENT_DIR)/dist and
+# $(TMP_DIR)/dist (see description of these targets for more information)
+# and therefor need a separate link-entity-dist target
+
+
+.PHONY: link-entity-dist
+link-entity-dist: $(PROFILE_PARENT_DIR)/dist $(TMP_DIR)/dist/xml
+link-entity-dist: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
+link-entity-dist:
+  ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+  endif
+	if test -n "$(ENTITIES)"; then \
+	  for i in $(ENTITIES); do \
+	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILE_PARENT_DIR)/dist/$$i; \
+	    ln -sf $(DOC_DIR)/xml/$$i $(TMP_DIR)/dist/xml/$$i; \
+	  done \
+	fi
+
+#---------------
+# Create projectfile
+#
+# This files is used to resolve the PIs for the &productname; &productnamereg;
+# ... entities. And while we are at it, we can as well ad some additional
+# information (although it is currently not used)
+#
+# IMPORTANT:
+# We need to link the entity files here instead of using a separate PHONY
+# target to do this job (which would make things a bit more clear), because
+# otherwise the profiling would be redone every time
+#
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): | $(DIRECTORIES)
+$(PROFILEDIR)/PROJECTFILE.$(BOOK): $(DOCCONF)
+  ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+  endif
+#	echo "-----> $(LIBEXEC_DIR)/getentityname.py $(DOCFILES) "
+	if test -n "$(ENTITIES)"; then \
+	  for i in $(ENTITIES); do \
+	    ln -sf $(DOC_DIR)/xml/$$i $(PROFILEDIR)/; \
+	  done \
+	fi
+  ifeq ($(VERBOSITY),1)
+	@echo "   Writing projectfile"
+  endif
+	@echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@
+	@echo "<!DOCTYPE docproperties [  " >> $@
+	@echo "<!ENTITY % ISOlat1 PUBLIC  " >> $@
+	@echo " \"ISO 8879:1986//ENTITIES Added Latin 1//EN//XML\" " >> $@
+	@echo " \"http://www.oasis-open.org/docbook/xml/4.3/ent/iso-lat1.ent\">" >> $@
+	@echo "<!ENTITY % ISOlat2 PUBLIC  " >> $@
+	@echo " \"ISO 8879:1986//ENTITIES Added Latin 2//EN//XML\" " >> $@
+	@echo " \"http://www.oasis-open.org/docbook/xml/4.3/ent/iso-lat2.ent\">" >> $@
+	@echo "<!ENTITY % ISOnum PUBLIC  " >> $@
+	@echo " \"ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML\" " >> $@
+	@echo " \"http://www.oasis-open.org/docbook/xml/4.3/ent/iso-num.ent\">" >> $@
+	@echo "<!ENTITY % ISOpub PUBLIC  " >> $@
+	@echo " \"ISO 8879:1986//ENTITIES Publishing//EN//XML\" " >> $@
+	@echo " \"http://www.oasis-open.org/docbook/xml/4.3/ent/iso-pub.ent\">" >> $@
+	@if test -n "$(ENTITIES)"; then \
+	  echo "<!ENTITY % entities SYSTEM " >> $@; \
+	  echo "             \"entity-decl.ent\"> "  >> $@; \
+	  echo " %ISOlat1; %ISOlat2; %ISOnum; %ISOpub; %entities;]>" >> $@; \
+	else \
+	  echo " %ISOlat1; %ISOlat2; %ISOnum; %ISOpub;]>" >> $@; \
+	fi
+	@echo "<docproperties xmlns=\"urn:x-suse:xmlns:docproperties\" version=\"1.0\">" >> $@
+	@echo " <productspec>" >> $@
+  ifdef TITLE
+	@echo "  <title>$(TITLE)</title>" >> $@
+  endif
+	@echo "  <bookname>$(BOOK)</bookname>" >> $@
+  ifdef PRODUCTNAME
+	@echo "  <productname>$(PRODUCTNAME)</productname>" >> $@
+  endif
+  ifdef PRODUCTNAMEREG
+	@echo "  <productnamereg>$(PRODUCTNAMEREG)</productnamereg>" >> $@
+  endif
+  ifdef DISTVER
+	@echo "  <productnumber>$(DISTVER)</productnumber>" >> $@
+  endif
+  ifdef HTMLROOT
+	@echo "  <htmlroot>$(HTMLROOT)</htmlroot>" >> $@
+  endif
+  ifdef ROOTID
+	@echo "  <rootid>$(ROOTID)</rootid>" >> $@
+  endif
+  ifdef MAIN
+	@echo "  <main>$(MAIN)</main>" >> $@
+  endif
+  ifdef PROFOS
+	@echo "  <profos>$(PROFOS)</profos>" >> $@
+  endif
+  ifdef PROFARCH
+	@echo "  <profarch>$(PROFARCH)</profarch>" >> $@
+  endif
+  ifdef LAYOUT
+	@echo "  <layout>$(LAYOUT)</layout>" >> $@
+  endif
+  ifdef PACKAGENAME
+	@echo "  <packagename>$(PACKAGENAME)</packagename>" >> $@
+  endif
+  ifdef PDFNAME
+	@echo "  <pdfname>$(PDFNAME)</pdfname>" >> $@
+  endif
+  ifdef REMARKS
+	@echo "  <remark>$(REMARKS)</remark>" >> $@
+  endif
+  ifdef COMMENTS
+	@echo "  <comments>$(COMMENTS)</comments>" >> $@
+  endif
+	@echo " </productspec>" >> $@
+	@echo "</docproperties>" >> $@
+
+
+
+#------------------------------------------------------------------------
+#
+# "Helper" targets for WIKI
+#
+
+STYLE_CUSTOM          := $(STYLEROOT)
+ifdef STYLEROOT
+  STYLE_CUSTOM_FALLBACK := $(FALLBACK_STYLEROOT)
+endif
+STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
+                  $(STYLE_CUSTOM_FALLBACK) $(DOCBOOK_STYLES) )
+
+STYLEWIKI     := $(firstword $(wildcard $(addsuffix \
+			/db2mediawiki/docbook.xsl, $(STYLE_ROOTDIRS))))
+
+# Print result file
+#
+.PHONY: wiki-name
+wiki-name:
+	@ccecho "result" "wiki/$(BOOK)/$(ROOTID).wiki"
+
+# Generate wiki from profiled xml
+$(RESULT_DIR)/$(TMP_BOOK_NODRAFT).wiki: $(STYLEWIKI) $(PROFILES) 
+  ifeq ($(VERBOSITY),1)
+	@echo "   Creating mediawiki files"
+  endif
+	xsltproc --output $@ $(ROOTSTRING) --xinclude $(STYLEWIKI) \
+	  $(PROFILED_MAIN)
+
+
+#------------------------------------------------------------------------
+# Miscellaneous
+# should be moved to make/misc.mk
+#
+
+
+#---------------
+# DocBook to NovDoc conversion
+#
+
+.PHONY: db2novdoc 
+db2novdoc: $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml 
+  ifeq ($(VERBOSITY),1)
+	@echo "   Converting to Novdoc"
+  endif
+	xsltproc --output $< $(ROOTSTRING) $(STYLEDB2ND) $(TMP_XML)
+  ifeq ($(VERBOSITY),1)
+	@echo "   Running xmllint"
+  endif
+	xmllint --noent --valid \
+		--noout $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml
+  ifeq ($(VERBOSITY),1)
+	@echo "   Moving results"
+  endif
+	mv -iv $(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml \
+		$(DOC_DIR)/xml/
+
+$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: ENTITIES = $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES))
+$(TMP_DIR)/$(TMP_BOOK_NODRAFT)/$(BOOK)-novdoc.xml: $(TMP_XML)
+  ifeq ($(VERBOSITY),1)
+	@echo "   Linking entities"
+  endif
+	mkdir -p $(dir $@)
+	ln -sf $< $@
+	if test -n "$(ENTITIES)"; then \
+	  for i in $(ENTITIES); do \
+	    ln -sf $(DOC_DIR)/xml/$$i $(dir $@); \
+	  done \
+	fi
+
+
+
+#---------------
+# Funstuff
+#
+.PHONY: penguin
+penguin:
+	@echo -e "\033[32m"
+	@echo " >o)"
+	@echo " /\\"
+	@echo "_\_v"
+	@echo -e "\033[m\017"
+
+.PHONY: offspring
+offspring:
+	@echo -e "\033[32m"
+	@echo "(o_ (o_ (o_ (o_"
+	@echo "(/) (/) (/) (/)"
+	@echo -e "\033[m\017"
+
+#------------------------------------------------------------------------
+#
+# Debugging
+#
+
+#---------------
+# Print profile directory
+# obsolete
+#
+.PHONY: profiledir
+profiledir:
+	@ccecho "result" "$(PROFILEDIR)"

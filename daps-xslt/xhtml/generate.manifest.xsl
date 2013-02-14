@@ -10,6 +10,9 @@
   <xsl:import href="&db;/chunk-common.xsl"/>
   <xsl:include href="&db;/chunk-code.xsl"/>
   
+  <xsl:param name="generate.manifest" select="1"/>
+  <xsl:param name="manifest">MANIFEST</xsl:param>
+
   <xsl:template match="/">
     <xsl:call-template name="generate.manifest"/>
   </xsl:template>

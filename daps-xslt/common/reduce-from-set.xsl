@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Extract a division and all its descendants by providing a ID
+     Extract a division and all its descendants by providing a ID;
+     if no rootid parameter is given, the complete set is copied.
      
    Parameters:
      * rootid
@@ -40,7 +41,8 @@
   </xsl:template>
   
   <xsl:template name="normal.process">
-    <xsl:message terminate="yes">ERROR: No rootid given. Nothing to do.</xsl:message>
+    <!-- No rootid parameter given, copy the complete tree -->
+    <xsl:copy-of select="/"/>
   </xsl:template>
 
   <xsl:template match="node()" mode="process.root">

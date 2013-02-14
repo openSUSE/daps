@@ -100,22 +100,6 @@ BUILD_DIR=""
 #
 CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
 
-## Key:         COMMENTS
-## ---------------------
-## Description: Create profiled sources with XML comments?
-## Type:        yesno
-## Default:     "no"
-#
-# By default XML comments ( <!-- --> ) will be stripped when profiling
-# sources, so whenever you create source archives with daps
-# (e.g. via dist-xml or locdrop), the XML files will contain no comments.
-# Change this by setting COMMENTS="yes". Has no effect on book creation
-# (html, pdf, etc). Can also be set to "yes" with the -c switch on teh command
-# line
-# Also see COMMENT_STR, DRAFT and REMARKS
-#
-COMMENTS="no"
-
 ## Key:         COLOR
 ## ------------------
 ## Description: Colored output?
@@ -127,15 +111,6 @@ COMMENTS="no"
 # turn off this behaviour by setting COLOR to "no"
 #
 COLOR="yes"
-
-## Key:         COMMENT_STR
-## ------------------------
-## Description: String to be appended to file/directory names when comments
-##              are turned on
-## Type:        String
-## Default:     "_comments"
-#
-COMMENT_STR="_comments"
 
 ## Key:         CONF_PREFIX
 ## ------------------------             
@@ -301,6 +276,26 @@ FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
 #
 FOP_OPTIONS="-q"
 
+
+## Key:         FOP_STACKSIZE
+## --------------------------
+## Description: Java stack size for the FOP pdf formatter
+## Type:        String
+## Default:     "-Xss2048K"
+#
+# Needs to be specified as -Xss<size>
+# <size> can either be specified in kilobytes (K) or megabytes (m)
+# Example:
+#  -Xss2048K
+#  -Xss2m
+#
+# Increase this value (e.g. to 3 or 4 MB) if you experience strange
+# problems when building PDFs with FOP (especially on 64bit machines)
+#
+# Also see FORMATTER, FOP-*
+#
+FOP_STACKSIZE="-Xss2048K"
+
 ## Key:         FOP_WRAPPER
 ## -----------------------
 ## Description: Wrapper script for the FOP pdf formatter
@@ -414,6 +409,37 @@ JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xer
 # This value is usually set in a book specific DC-file.
 #
 MAIN=""
+
+
+## Key:         META
+## --------------------
+## Description: Print SVN meta information in HTML and PDF builds
+## Type:        yesno
+## Default:     "no"
+#
+# If your XML sources are hosted on an SVN server, adds the following status
+# information for each file to HTML and PDF builds if set to "yes":
+#  * filename
+#  * maintainer (content of SVN property doc:maintainer)
+#  * status (content of SVN property doc:status)
+# Useful for proofreading.
+# Implies that remarks are turned on.
+# This value can be set to "yes" using the -m switch on the command line 
+# Also see REMARKS
+#
+META="no"
+
+
+## Key:         META_STR
+## ----------------------
+## Description: String to be appended to file/directory names when meta
+##              is turned on
+## Type:        String
+## Default:     "_meta"
+#
+#
+META_STR="_meta"
+
 
 ## Key:         PDFNAME
 ## --------------------
@@ -555,35 +581,6 @@ STYLEDEVEL=""
 STYLEROOT=""
 
 
-## Key:         USEMETA
-## --------------------
-## Description: Print SVN meta information in HTML and PDF builds
-## Type:        yesno
-## Default:     "no"
-#
-# If your XML sources are hosted on an SVN server, adds the following status
-# information for each file to HTML and PDF builds if set to "yes":
-#  * filename
-#  * maintainer (content of SVN property doc:maintainer)
-#  * status (content of SVN property doc:status)
-# Useful for proofreading.
-# Implies that remarks are turned on.
-# This value can be set to "yes" using the -m switch on the command line 
-# Also see REMARKS
-#
-USEMETA="no"
-
-## Key:         VERBOSITY
-## --------------------
-## Description: Verbosity level
-## Type:        number
-## Default:     0
-#
-# VERBOSITY=0: print only final results message (default)
-# VERBOSITY=1: results of each target that is called
-# VERBOSITY=2: detailed output of each target
-#
-VERBOSITY=0
 
 ## Key:         WH_SEARCH
 ## --------------------
@@ -657,3 +654,14 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 # Can also be placed in an DC-file if being a per-book setting
 #
 XSLTPARAM=""
+
+## Key: XSLTPROCESSOR        
+## --------------------
+## Description: Patzh to XSLT processor. 
+## Type:        Path to executable
+## Default:     "/usr/bin/xsltproc"
+#
+# Define which XSLT processor to use.  Currently supported are "xsltproc" and
+# "saxon". Saxon needs to be saxon6, saxon 8 and 9 are not supported.
+#
+XSLTPROCESSOR="/usr/bin/xsltproc"
