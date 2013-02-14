@@ -23,11 +23,14 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   exclude-result-prefixes="exsl">
-  
-  
+
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
+
   <xsl:include href="param.xsl"/>
+  <xsl:include href="pagesetup.xsl"/>
+
+
   <xsl:include href="attributesets.xsl"/>
 
 </xsl:stylesheet>
