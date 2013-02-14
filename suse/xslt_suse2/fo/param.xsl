@@ -78,8 +78,18 @@
   
   
 <!-- 19. Pagination and General Styles ========================== -->
-  
-  
+  <xsl:param name="paper.type" select="'A4'"/>
+  <xsl:param name="double.sided" select="1"/>
+
+  <xsl:param name="page.margin.top" select="'19mm'"/>
+  <xsl:param name="body.margin.top" select="'0mm'"/>
+  <xsl:param name="page.margin.bottom" select="'18.9mm'"/>
+  <xsl:param name="body.margin.bottom" select="'30.5mm'"/>
+  <xsl:param name="page.margin.inner" select="'22.5mm'"/>
+  <xsl:param name="body.margin.inner" select="'0mm'"/>
+  <xsl:param name="page.margin.outer" select="'22.5mm'"/>
+  <xsl:param name="body.margin.outer" select="'0mm'"/>
+
 <!-- 20. Font Families ========================================== -->
   
   
