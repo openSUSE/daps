@@ -89,9 +89,9 @@ endif
 
 # XML source files for the whole set
 #
-SRCFILES     := $(sort $(shell echo "$(SETFILES)" | xsltproc \
-		  --stringparam xml.or.img xml \
-		  $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - ))
+SRCFILES := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
+	      --stringparam "xml.or.img=xml" \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
 # check
 ifndef SRCFILES
@@ -105,10 +105,10 @@ endif
 #       correctly
 #
 ifdef ROOTSTRING
-  DOCFILES  := $(shell echo "$(SETFILES)" | xsltproc \
-		--stringparam rootid "$(ROOTID)" \
-		--stringparam xml.or.img xml \
-		$(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl - )
+  DOCFILES := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
+	      --stringparam "xml.or.img=xml" --stringparam "rootid=$(ROOTID)" \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
+
   # check
   ifndef DOCFILES
     $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
