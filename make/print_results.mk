@@ -66,6 +66,7 @@ package-src-name:
 	@ccecho "result" "$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)_src_set.tar.bz2"
 
 .PHONY: package-dir-name
+package-dir-name:
 	@ccecho "result" "$(PACK_DIR)/"
 
 #---------------
