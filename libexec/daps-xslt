@@ -216,19 +216,24 @@ process_params () {
 }
 
 # function to check if input is coming from a pipe
-piped_input () {
-    if [[ -p /dev/fd/0 ]]; then
-	while read data; do
-	    XMLFULL="$XMLFULL$data "
-        done
-        if [[ $PROCESSOR =~ saxon ]]; then
-            # saxon does not support getting input from STDIN ;-((
-            XML_TMP_FILE=$(mktemp -q --tmpdir daps_saxon.XXXXXXXX) || exit_on_error "Could not create a temporary file for saxon"
-            echo "$XMLFULL" >> $XML_TMP_FILE
-            XMLFILE=$XML_TMP_FILE
-        fi
-    fi
-}
+#
+# Not needed ATM since we always use --file in DAPS
+# commenting the code in case it is needed in the future
+#
+# piped_input () {
+#    if [[ $PROCESSOR =~ saxon ]]; then
+#        XML_TMP_FILE=$(mktemp -q --tmpdir daps_saxon.XXXXXXXX) || exit_on_error "Could not create a temporary file for saxon"
+#        cat > $XML_TMP_FILE
+#        XMLFILE=$XML_TMP_FILE
+#        [[ -s $XMLFILE ]] || exit_on_error "Did not get XML data via pipe" 
+#    else
+#	while read data; do
+#            echo $data
+#	    XMLFULL="$XMLFULL$data "
+#        done
+#        [[ -z $XMLFULL ]] && exit_on_error "Did not get XML data via pipe" 
+#    fi
+#}
 
 #----------------------------------------------------------------------------
 # MAIN
@@ -319,7 +324,18 @@ PROCESSOR_ARGS="$@"
 #----
 # Get input from pipe (in case a pipe exists)
 #
-piped_input
+# Not needed ATM since we always use --file in DAPS
+# commenting the code in case it is needed in the future
+# BEWARE:
+# This code covers the following cases: 
+# * cat foo | daps_xslt 
+# * daps_xslt --file
+# * daps_xslt < foo (this works by chance since STDIN is seekable in this
+#                    special case)
+# Input coming from a pseudo-Terminal (ok, this is a rare cornercase) is
+# not supported (cat foo > /dev/pts1 && daps_xslt < /dev/pts/1 )
+#
+# [[ -t 0 ]] || piped_input
 
 
 #-----
@@ -345,26 +361,26 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
     if [[ -n $DEBUG ]]; then
         echo "---------------------------------------------------------"
         echo "Running the following command:"
-        if [[ -n "$XMLFULL" ]]; then
-            echo -e "$XMLFULL | $COMMAND -"
-        else
-            echo -e "$COMMAND"
-        fi
+        echo -e "$COMMAND"
+#        Needed when enabling pipe input        
+#        if [[ -n "$XMLFULL" ]]; then
+#            echo -e "$XMLFULL | $COMMAND -"
+#        else
+#            echo -e "$COMMAND"
+#        fi
         echo "---------------------------------------------------------"
     fi
     # expand the catalog
     [[ -n $CATALOG ]] && export XML_CATALOG_FILES="$XML_CATALOG_FILES $CATALOG"
-    if [[ -n "$XMLFULL" ]]; then
-        eval "echo \"$XMLFULL\" | $COMMAND -"
-    else
-        eval "$COMMAND"
-    fi
+    eval "$COMMAND"
+#    Needed when enabling pipe input         
+#    if [[ -n "$XMLFULL" ]]; then
+#        eval "echo \"$XMLFULL\" | $COMMAND -"
+#    else
+#        eval "$COMMAND"
+#    fi
     
 else
-    # resolve URNs
-#    if [[ urn: = ${STYLESHEET:0:4} ]]; then
-#        STYLESHEET=$(xmlcatalog $MAIN_CATALOG $STYLESHEET) || exit_on_error "The stylesheet is an URN which I cannot resolve using /etc/xml/catalog."
-#    fi
          run-saxon "$PROCESSOR_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
 fi
 

@@ -71,10 +71,12 @@ ifdef CHECK_WELLFORMED
 endif
 
 SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \
+	      --output $(SETFILES_TMP) \
 	      --stringparam "xml.src.path=$(DOC_DIR)/xml/" \
 	      --stringparam "mainfile=$(notdir $(MAIN))" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
-	      --file $(MAIN) $(XSLTPROCESSOR) | tr \" \')
+	      --file $(MAIN) $(XSLTPROCESSOR) | tr \" \' > $(SETFILES_TMP) && \
+	      echo 1)
 
 # $(shell) does not cause make to exit in case it fails, so we need to
 # check manually
@@ -84,8 +86,8 @@ endif
 
 # XML source files for the whole set
 #
-SRCFILES := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
-	      --stringparam "xml.or.img=xml" \
+SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+	      --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
 # check
@@ -96,8 +98,8 @@ endif
 # XML source files for the currently used document (defined by the rootid)
 #
 ifdef ROOTSTRING
-  DOCFILES := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
-	      --stringparam "xml.or.img=xml" --stringparam "$(ROOTSTRING)" \
+  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+	      --stringparam "$(ROOTSTRING)" --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
   # check
