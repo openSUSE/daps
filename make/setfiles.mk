@@ -9,11 +9,6 @@
 # <fsundermeyer at opensuse dot org>
 #
 
-# TODO:
-# find a solution for SRCFILES and DOCFILES, so we can also
-# use $XSLTPROC with these calls
-
-
 #--------------------------------------------------
 # Profiling stringparams
 #
@@ -100,13 +95,9 @@ endif
 
 # XML source files for the currently used document (defined by the rootid)
 #
-# TODO: replace --stringparam rootid "$(ROOTID)" with $(ROOTSTRING) once
-#       we can use $(XSLTPROC) - otherwise package-src will not work
-#       correctly
-#
 ifdef ROOTSTRING
   DOCFILES := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
-	      --stringparam "xml.or.img=xml" --stringparam "rootid=$(ROOTID)" \
+	      --stringparam "xml.or.img=xml" --stringparam "$(ROOTSTRING)" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
   # check
