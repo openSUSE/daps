@@ -99,12 +99,9 @@ IMGFORMATS := dia eps fig pdf png svg
 
 # get all images used in the current Document
 #
-# TODO: replace --stringparam rootid "$(ROOTID)" with $(ROOTSTRING) once
-#       we can use $(XSLTPROC) - otherwise package-src will not work
-#       correctly
 
 USED := $(sort $(shell echo "$(SETFILES)" | $(XSLTPROC) \
-         --stringparam "xml.or.img=img" --stringparam "rootid=$(ROOTID)" \
+         --stringparam "xml.or.img=img" --stringparam "$(ROOTSTRING)" \
          --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
 # PNG and PDF can be directly taken from the USED list - the filter function
