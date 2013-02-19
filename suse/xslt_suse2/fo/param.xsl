@@ -80,9 +80,9 @@
 <!-- 19. Pagination and General Styles ========================== -->
   <xsl:param name="paper.type" select="'A4'"/>
   <xsl:param name="double.sided" select="1"/>
-<!--  <xsl:param name="force.blank.pages" select="0"/> – This doesn't work with
-        DocBook stylesheets 1.77.1 or below, hence keep the adaptations in
-        pagesetup.xsl for now.-->
+  <!-- <xsl:param name="force.blank.pages" select="0"/> – This doesn't work with
+       DocBook stylesheets 1.77.1 or below, hence keep the adaptations in
+       pagesetup.xsl for now.-->
 
   <xsl:param name="page.margin.top" select="'19mm'"/>
   <xsl:param name="body.margin.top" select="'0mm'"/>
@@ -95,6 +95,20 @@
 
   <xsl:param name="header.rule" select="0"/>
   <xsl:param name="footer.rule" select="0"/>
+  <xsl:param name="footer.column.widths">28.5 108 28.5</xsl:param>
+    <!-- These are actual millimeters, even though this only needs to be a
+         proportion. -->
+  <xsl:attribute-set name="footer.content.properties">
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$sans.font.family"/>
+    </xsl:attribute>
+    <xsl:attribute name="font-size">
+      <xsl:text>&small;pt</xsl:text>
+    </xsl:attribute>
+    <xsl:attribute name="margin-left">
+      <xsl:value-of select="$title.margin.left"/>
+    </xsl:attribute>
+  </xsl:attribute-set>
 
 <!-- 20. Font Families ========================================== -->
   <xsl:param name="body.font.family">'PT Serif', serif</xsl:param>
