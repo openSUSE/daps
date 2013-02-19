@@ -13,9 +13,6 @@
 
 PROFILES      := $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
 
-ENTITIES := $(addprefix $(DOC_DIR)/xml/,\
-	      $(shell $(LIBEXEC_DIR)/getentityname.py $(SRCFILES)))
-
 # Will be used on profiling only
 #
 ifdef HTMLROOT
@@ -29,9 +26,20 @@ ifdef SETDATE
   .INTERMEDIATE: $(PROFILES)
 endif
 
+# Resolve profile urn because saxon does not accept urns
+#
+ifeq ($(shell expr substr $(PROFILE_URN) 1 4),urn:)
+  PROFILE_STYLESHEET := $(shell xmlcatalog $(XML_MAIN_CATALOG) $(PROFILE_URN) 2>/dev/null)
+else
+  PROFILE_STYLESHEET := $(PROFILE_URN)
+endif
+PROFILE_STYLESHEET := $(subst file://,,$(PROFILE_STYLESHEET))
+ifndef PROFILE_STYLESHEET
+  $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+endif
 
 .PHONY: profile
-profile: $(PROFILES) $(ENTITIES)
+profile: $(PROFILES)
   ifeq ($(MAKECMDGOALS),profile)
 	@ccecho "result" "Profiled sources can be found at\n$(PROFILEDIR)"
   endif
@@ -48,17 +56,14 @@ profile: $(PROFILES) $(ENTITIES)
 # entities are already resolved
 #
 
-$(PROFILES): | $(PROFILEDIR)
-$(PROFILES): $(ENTITIES)
-
-$(PROFILEDIR)/%: $(DOC_DIR)/xml/%
+$(PROFILEDIR)/%: $(DOC_DIR)/xml/% | $(PROFILEDIR)
   ifeq ($(VERBOSITY),2)
 	@(tput el1; echo -en "\r   Profiling $<")
   endif
   ifdef PROFILE_URN
 	$(XSLTPROC) --output $@ $(PROFSTRINGS) $(HROOTSTRING) \
-	  --stringparam "filename=$(notdir $<)" --stylesheet $(PROFILE_URN) \
-	  --file $< xsltproc
+	  --stringparam "filename=$(notdir $<)" --stylesheet $(PROFILE_STYLESHEET) \
+	  --file $< $(XSLTPROCESSOR)
   else
         # The xmllint command works nicely with one exception:
         # The entity declarations are always written literally
