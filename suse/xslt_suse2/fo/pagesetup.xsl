@@ -14,8 +14,12 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   exclude-result-prefixes="exsl">
 
-
+<!-- Replacement for the force.blank.pages parameter. Remove once we've moved
+    past 1.77.1 -->
 <xsl:template name="initial.page.number">auto</xsl:template>
 <xsl:template name="force.page.count">no-force</xsl:template>
+<!-- End replacement for force.blank.pages -->
+
+<xsl:template name="header.table"/>
 
 </xsl:stylesheet>
