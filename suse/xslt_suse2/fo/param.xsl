@@ -98,20 +98,9 @@
   <xsl:param name="footer.column.widths">28.5 108 28.5</xsl:param>
     <!-- These are actual millimeters, even though this only needs to be a
          proportion. -->
-  <xsl:attribute-set name="footer.content.properties">
-    <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>, <xsl:value-of select="$symbol.font.family"/>
-    </xsl:attribute>
-    <xsl:attribute name="font-size">
-      <xsl:text>&small;pt</xsl:text>
-    </xsl:attribute>
-    <xsl:attribute name="margin-left">
-      <xsl:value-of select="$title.margin.left"/>
-    </xsl:attribute>
-  </xsl:attribute-set>
 
 <!-- 20. Font Families ========================================== -->
-  <xsl:param name="body.font.family">'PT Serif', serif</xsl:param>
+  <xsl:param name="body.font.family">'Charis SIL', serif</xsl:param>
   <xsl:param name="dingbat.font.family">'PT Serif', serif</xsl:param>
   <xsl:param name="sans.font.family">'Open Sans', sans-serif</xsl:param>
   <xsl:param name="title.font.family">'Open Sans', sans-serif</xsl:param>
@@ -119,7 +108,7 @@
   <xsl:param name="symbol.font.family">'OpenSymbol'</xsl:param>
 
   <xsl:param name="body.font.master" select="'&normal;'"/>
-  <xsl:param name="footnote.font.size" select="'&x-small;'"/>
+  <xsl:param name="footnote.font.size" select="'&small;'"/>
 
 <!-- 21. Property Sets ========================================== -->
   
