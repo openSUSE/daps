@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
-     Contains all parameters for XSL-FO
-     (Sorted against the list in "Part 2. FO Parameter Reference" in
-      the DocBook XSL Stylesheets User Reference, see link below)
-     
+    Contains all parameters for XSL-FO
+    (Sorted against the list in "Part 2. FO Parameter Reference" in
+    the DocBook XSL Stylesheets User Reference, see link below)
+
    See Also:
      * http://docbook.sourceforge.net/release/xsl/current/doc/fo/index.html
 
@@ -100,7 +100,7 @@
          proportion. -->
   <xsl:attribute-set name="footer.content.properties">
     <xsl:attribute name="font-family">
-      <xsl:value-of select="$sans.font.family"/>
+      <xsl:value-of select="$sans.font.family"/>, <xsl:value-of select="$symbol.font.family"/>
     </xsl:attribute>
     <xsl:attribute name="font-size">
       <xsl:text>&small;pt</xsl:text>
