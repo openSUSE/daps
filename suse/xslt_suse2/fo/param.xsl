@@ -72,8 +72,8 @@
   
   
 <!-- 17. Miscellaneous ========================================== -->
-  
-  
+  <xsl:param name="hyphenate.verbatim" select="'1'"/>
+
 <!-- 18. Graphics =============================================== -->
   
   
@@ -95,17 +95,17 @@
 
   <xsl:param name="header.rule" select="0"/>
   <xsl:param name="footer.rule" select="0"/>
-  <xsl:param name="footer.column.widths">28.5 108 28.5</xsl:param>
+  <xsl:param name="footer.column.widths" select="'28.5 108 28.5'"/>
     <!-- These are actual millimeters, even though this only needs to be a
          proportion. -->
 
 <!-- 20. Font Families ========================================== -->
   <xsl:param name="body.font.family">'Charis SIL', serif</xsl:param>
-  <xsl:param name="dingbat.font.family">'PT Serif', serif</xsl:param>
+  <xsl:param name="dingbat.font.family">'FreeSerif', serif</xsl:param>
   <xsl:param name="sans.font.family">'Open Sans', sans-serif</xsl:param>
   <xsl:param name="title.font.family">'Open Sans', sans-serif</xsl:param>
   <xsl:param name="monospace.font.family">'DejaVu Sans Mono', monospace</xsl:param>
-  <xsl:param name="symbol.font.family">'OpenSymbol'</xsl:param>
+  <xsl:param name="symbol.font.family">'FreeSerif'</xsl:param>
 
   <xsl:param name="body.font.master" select="'&normal;'"/>
   <xsl:param name="footnote.font.size" select="'&small;'"/>
