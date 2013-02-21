@@ -31,7 +31,7 @@
 
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
-
+  <xsl:include href="admon.xsl"/>
   <xsl:include href="param.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 
