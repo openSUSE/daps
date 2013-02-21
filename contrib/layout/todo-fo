@@ -4,4 +4,11 @@ FO Stylesheet Bugs
 Status: * = NEW, W = WONTFIX, F = FIXED, L = Later, I = IRREPRODUCIBLE
 Priority: P1 (very important) ... P5 (nice to have)
 
-#1  * P1 Remove ugly line at the top of pages
+#1  F P1  Remove ugly line at the top of pages
+#2  * P1  Either find better serif font or adapt size, so x-height/ascenders
+          better match Open Sans/DejaVu Sans Mono – no luck thus far among open
+          fonts
+#3  * P1  Re: "verbatim" areas: Find out why FOP tries to hyphenate after many
+          single " " or "-", no matter where they are on the line (See e.g.
+          "Example 5.3.  Pretty-printed Output ..." in the DAPS User Guide);
+          DcBk-FO parameter hyphenate.verbatim.characters might be relevant.
