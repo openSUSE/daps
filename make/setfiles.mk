@@ -99,7 +99,7 @@ endif
 #
 ifdef ROOTSTRING
   DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
-	      --stringparam "$(ROOTSTRING)" --file $(SETFILES_TMP) \
+	      $(ROOTSTRING) --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
   # check

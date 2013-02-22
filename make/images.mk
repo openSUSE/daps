@@ -101,7 +101,7 @@ IMGFORMATS := dia eps fig pdf png svg
 #
 
 USED := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=img" \
-	 --stringparam "$(ROOTSTRING)" --file $(SETFILES_TMP) \
+	 $(ROOTSTRING) --file $(SETFILES_TMP) \
          --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
 # PNG and PDF can be directly taken from the USED list - the filter function
