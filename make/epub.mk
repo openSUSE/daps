@@ -41,9 +41,19 @@ EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
 
 # Stringparams
 #
-EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
-	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
-	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
+#EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
+#	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
+#	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
+#	       --stringparam "img.src.path=images/"
+
+#
+# Due to a bug in the DocBook ePUB stylesheets, only relative
+# paths work; the stylesheet has to be run from $(EPUB_TMPDIR)
+# ;-((((((
+#
+EPUBSTRINGS := --stringparam "base.dir=OEBPS/" \
+	       --stringparam "epub.oebps.dir=OEBPS/" \
+	       --stringparam "epub.metainf.dir=META-INF/" \
 	       --stringparam "img.src.path=images/"
 
 ifdef EPUB_CSS
@@ -100,8 +110,9 @@ $(EPUB_TMPDIR)/OEBPS/index.html: $(EPUBBIGFILE)
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
-	$(XSLTPROC) $(EPUBSTRINGS) --stylesheet $(STYLEEPUB) \
-	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL) 
+	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) \
+	  --stylesheet $(STYLEEPUB) --file $< \
+	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
 
 
 #--------------
