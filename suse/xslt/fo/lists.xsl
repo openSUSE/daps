@@ -132,7 +132,6 @@
   <fo:block id="{$id}">
     
     <xsl:if test="$lines != ''">
-      <xsl:message>variablelist</xsl:message>
       <xsl:choose>
         <xsl:when test="$border != ''">
           <xsl:attribute name="border-top">
