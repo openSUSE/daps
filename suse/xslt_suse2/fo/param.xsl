@@ -10,7 +10,7 @@
 
    Author(s):    Stefan Knorr <sknorr@suse.de>
                  Thomas Schraitle <toms@opensuse.org>
-                 
+
    Copyright: 2013, Stefan Knorr, Thomas Schraitle
 
 -->
@@ -27,8 +27,12 @@
   
   
 <!-- 2. Callouts ================================================ -->
-  
-  
+  <xsl:param name="callout.graphics" select="0"/>
+  <xsl:param name="callout.unicode" select="1"/>
+  <xsl:param name="callout.unicode.font">SUSE Docudings</xsl:param>
+  <xsl:param name="callout.unicode.number.limit">20</xsl:param>
+  <xsl:param name="callout.unicode.start.character">9312</xsl:param>
+
 <!-- 3. ToC/LoT/Index Generation ================================ -->
   
   
