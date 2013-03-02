@@ -28,7 +28,7 @@
   <xsl:choose>
     <xsl:when test="local-name($node)='note'"><xsl:text>N</xsl:text></xsl:when>
     <xsl:when test="local-name($node)='warning'"><xsl:text>W</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='caution'"><xsl:text>W</xsl:text></xsl:when>
+    <xsl:when test="local-name($node)='caution'"><xsl:text>C</xsl:text></xsl:when>
       <!-- We don't have different symbols for the above two (yet). -->
     <xsl:when test="local-name($node)='tip'"><xsl:text>T</xsl:text></xsl:when>
     <xsl:when test="local-name($node)='important'"><xsl:text>I</xsl:text></xsl:when>
