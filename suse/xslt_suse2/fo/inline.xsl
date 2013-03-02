@@ -28,7 +28,9 @@
   </xsl:param>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties">
-    <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    <xsl:if test="local-name(parent::*) != 'title'">
+      <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
       <xsl:attribute name="direction">
