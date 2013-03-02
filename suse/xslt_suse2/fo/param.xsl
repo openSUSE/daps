@@ -111,12 +111,6 @@
   <xsl:param name="body.font.size">
     <xsl:value-of select="$body.font.master"/><xsl:text>*&serif-factor;pt</xsl:text>
   </xsl:param>
-  <xsl:param name="body.font.size.monospace">
-    <xsl:value-of select="$body.font.master"/><xsl:text>pt</xsl:text>
-  </xsl:param>
-    <xsl:param name="body.font.size.sans">
-    <xsl:value-of select="$body.font.master"/><xsl:text>pt</xsl:text>
-  </xsl:param>
   <xsl:param name="footnote.font.size" select="'&small;'"/>
 
 <!-- 21. Property Sets ========================================== -->
