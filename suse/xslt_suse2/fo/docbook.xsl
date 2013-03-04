@@ -32,6 +32,7 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
 
+  <xsl:include href="callout.xsl"/>
   <xsl:include href="param.xsl"/>
   <xsl:include href="inline.xsl"/>
   <xsl:include href="admon.xsl"/>

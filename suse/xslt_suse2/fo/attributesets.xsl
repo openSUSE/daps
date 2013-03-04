@@ -37,7 +37,42 @@
       <xsl:value-of select="$title.margin.left"/>
     </xsl:attribute>
   </xsl:attribute-set>
-  
+
+  <xsl:attribute-set name="section.title.properties">
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"></xsl:value-of>
+    </xsl:attribute>
+    <xsl:attribute name="font-weight">400</xsl:attribute>
+    <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+    <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
+    <xsl:attribute name="space-before.optimum">1.0em</xsl:attribute>
+    <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
+    <xsl:attribute name="text-align">start</xsl:attribute>
+    <xsl:attribute name="start-indent"><xsl:value-of select="$title.margin.left"></xsl:value-of></xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="section.title.level1.properties">
+    <xsl:attribute name="font-size">&super-large;pt</xsl:attribute>
+    <xsl:attribute name="font-weight">300</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.level2.properties">
+    <xsl:attribute name="font-size">&xxx-large;pt</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.level3.properties">
+    <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.level4.properties">
+    <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.level5.properties">
+    <xsl:attribute name="font-size">&large;pt</xsl:attribute>
+    <xsl:attribute name="font-weight">700</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="section.title.level6.properties">
+    <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    <xsl:attribute name="font-weight">700</xsl:attribute>
+  </xsl:attribute-set>
+
 <xsl:attribute-set name="monospace.verbatim.properties" use-attribute-sets="verbatim.properties monospace.properties">
   <xsl:attribute name="text-align">start</xsl:attribute>
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
