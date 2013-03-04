@@ -27,60 +27,56 @@
   
   
 <!-- 2. Callouts ================================================ -->
-  <xsl:param name="callout.graphics" select="0"/>
-  <xsl:param name="callout.unicode" select="1"/>
-  <xsl:param name="callout.unicode.font">SUSE Docudings</xsl:param>
-  <xsl:param name="callout.unicode.number.limit">20</xsl:param>
-  <xsl:param name="callout.unicode.start.character">9312</xsl:param>
+
 
 <!-- 3. ToC/LoT/Index Generation ================================ -->
-  
-  
+
+
 <!-- 4. Processor Extensions ==================================== -->
-  
-  
+
+
 <!-- 5. Stylesheet Extensions =================================== -->
-  
-  
+
+
 <!-- 6. Automatic labelling ===================================== -->
-  
-  
+  <xsl:param name="section.autolabel" select="1"/>
+
 <!-- 7. XSLT Processing  ======================================== -->
-  
-  
+
+
 <!-- 8. Meta/*Info ============================================== -->
-  
-  
+
+
 <!-- 9. Reference Pages ========================================= -->
-  
-  
-<!-- 10. Tabels ================================================= -->
-  
-  
+
+
+<!-- 10. Tables ================================================= -->
+
+
 <!-- 11. Linking ================================================ -->
-  
-  
+
+
 <!-- 12. Cross References ======================================= -->
-  
-  
+
+
 <!-- 13. Lists ================================================== -->
-  
-  
+
+
 <!-- 14. QAndASet =============================================== -->
-  
-  
+
+
 <!-- 15. Bibliography =========================================== -->
-  
-  
+
+
 <!-- 16. Glossary =============================================== -->
-  
-  
+
+
 <!-- 17. Miscellaneous ========================================== -->
   <xsl:param name="hyphenate.verbatim" select="'1'"/>
 
 <!-- 18. Graphics =============================================== -->
-  
-  
+
+
 <!-- 19. Pagination and General Styles ========================== -->
   <xsl:param name="paper.type" select="'A4'"/>
   <xsl:param name="double.sided" select="1"/>
@@ -104,11 +100,11 @@
          proportion. -->
 
 <!-- 20. Font Families ========================================== -->
-  <xsl:param name="body.font.family">'Charis SIL', serif</xsl:param>
+  <xsl:param name="body.font.family">'&serif;', serif</xsl:param>
   <xsl:param name="dingbat.font.family">'FreeSerif', serif</xsl:param>
-  <xsl:param name="sans.font.family">'Open Sans', sans-serif</xsl:param>
-  <xsl:param name="title.font.family">'Open Sans', sans-serif</xsl:param>
-  <xsl:param name="monospace.font.family">'DejaVu Sans Mono', monospace</xsl:param>
+  <xsl:param name="sans.font.family">'&sans;', sans-serif</xsl:param>
+  <xsl:param name="title.font.family">'&sans;', sans-serif</xsl:param>
+  <xsl:param name="monospace.font.family">'&mono;', monospace</xsl:param>
   <xsl:param name="symbol.font.family">'FreeSerif'</xsl:param>
 
   <xsl:param name="body.font.master" select="'&normal;'"/>
