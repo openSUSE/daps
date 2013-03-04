@@ -22,7 +22,7 @@
   <xsl:param name="conum" select='1'/>
   <xsl:param name="cowidth">
     <xsl:choose>
-      <xsl:when test="$conum &lt; 9 and $conum &gt; 0">
+      <xsl:when test="$conum &lt; 10 and $conum &gt; 0">
         <xsl:text>100px</xsl:text>
       </xsl:when>
       <xsl:when test="$conum &lt; 100 and $conum &gt; 9">
@@ -51,7 +51,7 @@
               <xsl:when test="$conum = 2 or $conum = 3">
                 <xsl:text>27px</xsl:text>
               </xsl:when>
-              <xsl:when test="$conum = 6 or $conum = 8">
+              <xsl:when test="$conum = 6 or $conum = 9 or $conum = 8">
                 <xsl:text>26px</xsl:text>
               </xsl:when>
               <xsl:when test="$conum = 4 or $conum &gt; 10">

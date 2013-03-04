@@ -5,10 +5,15 @@ Status: * = NEW, W = WONTFIX, F = FIXED, L = Later, I = IRREPRODUCIBLE
 Priority: P1 (very important) ... P5 (nice to have)
 
 #1  F P1  Remove ugly line at the top of pages
-#2  * P1  Either find better serif font or adapt size, so x-height/ascenders
+#2  F P1  Either find better serif font or adapt size, so x-height/ascenders
           better match Open Sans/DejaVu Sans Mono – no luck thus far among open
           fonts
 #3  * P1  Re: "verbatim" areas: Find out why FOP tries to hyphenate after many
           " " or "-" characters, no matter where they are on the line (See e.g.
           "Example 5.3.  Pretty-printed Output ..." in the DAPS User Guide);
           DcBk-FO parameter hyphenate.verbatim.characters might be relevant.
+#4  * P1  Set various things in monospaced font, like commands and keycaps
+#5  * P2  TOC: Make sure entire line is a link, not just the page number
+#6  * P1  Make sure all titles are set in &sans; (Examples/Figures, in TOC,
+          etc.)
+#7  * P3  <refentry>s don't get linked to from the TOC
