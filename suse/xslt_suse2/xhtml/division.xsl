@@ -24,12 +24,7 @@
     <xsl:variable name="label.template">
       <xsl:apply-templates select="$node" mode="object.label.template"/>
     </xsl:variable>
-    <!--<xsl:message>********* division.title: <xsl:value-of
-      select="$label.template"/>=<xsl:call-template name="substitute-markup">
-          <xsl:with-param name="template" select="$label.template"/>
-        </xsl:call-template>
-    </xsl:message>-->
-    
+
     <xsl:if test="$label.template != ''">
       <span class="number">
         <xsl:call-template name="substitute-markup">
