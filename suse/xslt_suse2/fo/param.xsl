@@ -60,7 +60,7 @@
 
 
 <!-- 13. Lists ================================================== -->
-
+  <xsl:param name="variablelist.term.break.after" select="1"/>
 
 <!-- 14. QAndASet =============================================== -->
 
@@ -73,6 +73,7 @@
 
 <!-- 17. Miscellaneous ========================================== -->
   <xsl:param name="hyphenate.verbatim" select="'1'"/>
+  <xsl:param name="variablelist.as.blocks" select="1"/>
 
 <!-- 18. Graphics =============================================== -->
 
