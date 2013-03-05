@@ -40,6 +40,7 @@
 
 <!-- 6. Automatic labelling ===================================== -->
   <xsl:param name="section.autolabel" select="1"/>
+  <xsl:param name="section.label.includes.component.label" select="1"/>
 
 <!-- 7. XSLT Processing  ======================================== -->
 
