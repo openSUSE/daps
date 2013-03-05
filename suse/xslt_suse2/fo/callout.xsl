@@ -11,8 +11,8 @@
 -->
 <!DOCTYPE xsl:stylesheets 
 [
-  <!ENTITY % fontsizes SYSTEM "font-sizes.ent">
-  %fontsizes;
+  <!ENTITY % fonts SYSTEM "fonts.ent">
+  %fonts;
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
