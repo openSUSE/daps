@@ -32,10 +32,15 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
 
-  <xsl:include href="callout.xsl"/>
   <xsl:include href="param.xsl"/>
+
+  <xsl:include href="callout.xsl"/>
+<xsl:include href="sections.xsl"/>
   <xsl:include href="inline.xsl"/>
+  <xsl:include href="division.xsl"/>
   <xsl:include href="admon.xsl"/>
+  <xsl:include href="component.xsl"/>
+  <xsl:include href="titlepage.templates.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 
 
