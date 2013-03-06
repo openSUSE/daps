@@ -30,7 +30,7 @@
 
 
 <!-- 3. ToC/LoT/Index Generation ================================ -->
-
+<xsl:param name="autotoc.label.separator" select="' '"/>
 
 <!-- 4. Processor Extensions ==================================== -->
 
@@ -70,11 +70,21 @@
 
 
 <!-- 16. Glossary =============================================== -->
-
+  <xsl:param name="glossary.as.blocks" select="1"/>
 
 <!-- 17. Miscellaneous ========================================== -->
   <xsl:param name="hyphenate.verbatim" select="'1'"/>
   <xsl:param name="variablelist.as.blocks" select="1"/>
+  <xsl:param name="formal.title.placement">
+figure after
+example before
+equation before
+table before
+procedure before
+task before
+</xsl:param>
+<xsl:param name="menuchoice.separator" select ="'›'"/>
+<xsl:param name="menuchoice.menu.separator" select ="'›'"/>
 
 <!-- 18. Graphics =============================================== -->
 
@@ -100,6 +110,8 @@
   <xsl:param name="footer.column.widths" select="'28.5 108 28.5'"/>
     <!-- These are actual millimeters, even though this only needs to be a
          proportion. -->
+
+  <xsl:param name="body.start.indent" select="'0'"/>
 
 <!-- 20. Font Families ========================================== -->
   <xsl:param name="body.font.family">'&serif;', serif</xsl:param>

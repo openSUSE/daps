@@ -79,6 +79,16 @@
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="variablelist.term.properties">
+  <xsl:attribute name="font-weight">600</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="glossterm.block.properties">
+  <xsl:attribute name="font-weight">600</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
+</xsl:attribute-set>
+
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <xsl:attribute-set name="title.name.color">
