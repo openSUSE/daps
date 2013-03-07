@@ -83,8 +83,8 @@ table before
 procedure before
 task before
 </xsl:param>
-<xsl:param name="menuchoice.separator" select ="'›'"/>
-<xsl:param name="menuchoice.menu.separator" select ="'›'"/>
+<xsl:param name="menuchoice.separator" select ="' › '"/>
+<xsl:param name="menuchoice.menu.separator" select ="' › '"/>
 
 <!-- 18. Graphics =============================================== -->
 
@@ -114,11 +114,11 @@ task before
   <xsl:param name="body.start.indent" select="'0'"/>
 
 <!-- 20. Font Families ========================================== -->
-  <xsl:param name="body.font.family">'&serif;', serif</xsl:param>
+  <xsl:param name="body.font.family">&serif;, serif</xsl:param>
   <xsl:param name="dingbat.font.family">'FreeSerif', serif</xsl:param>
-  <xsl:param name="sans.font.family">'&sans;', sans-serif</xsl:param>
-  <xsl:param name="title.font.family">'&sans;', sans-serif</xsl:param>
-  <xsl:param name="monospace.font.family">'&mono;', monospace</xsl:param>
+  <xsl:param name="sans.font.family">&sans;, sans-serif</xsl:param>
+  <xsl:param name="title.font.family">&sans;, sans-serif</xsl:param>
+  <xsl:param name="monospace.font.family">&mono;, monospace</xsl:param>
   <xsl:param name="symbol.font.family">'FreeSerif'</xsl:param>
 
   <xsl:param name="body.font.master" select="'&normal;'"/>
