@@ -42,7 +42,7 @@
             style="fill:#439539; stroke: none">
           <xsl:attribute name="width"><xsl:value-of select="$cowidth"/></xsl:attribute>
         </svg:rect>
-        <svg:text y="79px" style="fill:#FFF; font-family: '&sans;', sans-serif; font-size: 80px; font-weight: 600;">
+        <svg:text y="79px" style="fill:#FFF; font-family: &sans;, sans-serif; font-size: 80px; font-weight: 600;">
           <xsl:attribute name="x">
             <xsl:choose>
               <xsl:when test="$conum = 5 or $conum = 7">
