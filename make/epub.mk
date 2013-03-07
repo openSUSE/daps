@@ -25,11 +25,13 @@ STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 #
 EPUB_TMPDIR      := $(TMP_DIR)/epub
 EPUB_RESDIR      := $(EPUB_TMPDIR)/OEBPS
-EPUB_IMGDIR      := $(EPUB_RESDIR)/images
+#EPUB_IMGDIR      := $(EPUB_RESDIR)/images
+EPUB_IMGDIR      := $(EPUB_RESDIR)
 EPUB_ADMONDIR    := $(EPUB_IMGDIR)/admons
 EPUB_CALLOUTDIR  := $(EPUB_IMGDIR)/callouts
-EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
-		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
+#EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
+#		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
+EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
 EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
 
 # Images
@@ -41,23 +43,16 @@ EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
 
 # Stringparams
 #
-#EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
-#	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
-#	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
-#	       --stringparam "img.src.path=images/"
-
-#
-# Due to a bug in the DocBook ePUB stylesheets, only relative
-# paths work; the stylesheet has to be run from $(EPUB_TMPDIR)
-# ;-((((((
-#
-EPUBSTRINGS := --stringparam "base.dir=OEBPS/" \
-	       --stringparam "epub.oebps.dir=OEBPS/" \
-	       --stringparam "epub.metainf.dir=META-INF/" \
-	       --stringparam "img.src.path=images/"
+EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
+	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
+	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
+	       --stringparam "img.src.path=\"\"" \
+               --stringparam "callout.graphics.path=callouts/" \
+               --stringparam "callout.graphics.number.limit=30" \
+               --stringparam "admon.graphics.path=admons/"
 
 ifdef EPUB_CSS
-  EPUBSTRINGS += --stringparam "html.stylesheet=$(EPUB_CSSFILE)"
+  EPUBSTRINGS += --stringparam "html.stylesheet=$(notdir $(EPUB_CSSFILE))"
 endif
 
 # building epub requires to create an intermediate bigfile
@@ -110,9 +105,8 @@ $(EPUB_TMPDIR)/OEBPS/index.html: $(EPUBBIGFILE)
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
-	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) \
-	  --stylesheet $(STYLEEPUB) --file $< \
-	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
+	$(XSLTPROC) $(EPUBSTRINGS) --stylesheet $(STYLEEPUB) \
+	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL) 
 
 
 #--------------
@@ -156,6 +150,9 @@ $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating EPUB"
   endif
+# Fix needed due to bug? in DocBook ePUB stylesheets
+#
+	sed -i 's:\(rootfile full-path="\)$(EPUB_TMPDIR)/\(OEBPS/content.opf"\):\1\2:' $(EPUB_TMPDIR)/META-INF/container.xml
 	(cd $(EPUB_TMPDIR); \
 	  zip -q0X $@.tmp mimetype; \
 	  zip -qXr9D $@.tmp \
