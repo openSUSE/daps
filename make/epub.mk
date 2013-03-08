@@ -23,33 +23,51 @@ STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 
 # Directories
 #
+# TODO:
+# Check image directory with daps 1.x branch - there it works
+#
+#
+
+# Admonitions do not work due to a bug in the official DocBook Stylesheets:
+# https://sourceforge.net/tracker/?func=detail&aid=2849681&group_id=21935&atid=373747
+#
+
+
 EPUB_TMPDIR      := $(TMP_DIR)/epub
 EPUB_RESDIR      := $(EPUB_TMPDIR)/OEBPS
 #EPUB_IMGDIR      := $(EPUB_RESDIR)/images
 EPUB_IMGDIR      := $(EPUB_RESDIR)
-EPUB_ADMONDIR    := $(EPUB_IMGDIR)/admons
+#EPUB_ADMONDIR    := $(EPUB_IMGDIR)/admons
 EPUB_CALLOUTDIR  := $(EPUB_IMGDIR)/callouts
 #EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
 #		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
-EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
+EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_CALLOUTDIR)
 EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
 
 # Images
 #
 EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/online,$(EPUB_IMGDIR),$(PNGONLINE))
-EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
+#EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
 EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
-EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
+#EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
+EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_CALLOUT_IMGS)
 
 # Stringparams
+# TODO
+# Check quoting issues with "img.src.path=\"\""
 #
+
 EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
 	       --stringparam "img.src.path=\"\"" \
                --stringparam "callout.graphics.path=callouts/" \
-               --stringparam "callout.graphics.number.limit=30" \
-               --stringparam "admon.graphics.path=admons/"
+               --param "callout.graphics.number.limit=30" \
+               --stringparam "callout.graphics.extension=.png"
+
+
+#--param "admon.graphic=1"
+#--stringparam "admon.graphics.path=admons/"
 
 ifdef EPUB_CSS
   EPUBSTRINGS += --stringparam "html.stylesheet=$(notdir $(EPUB_CSSFILE))"
@@ -118,7 +136,7 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #--------------
 # Images
 #
-$(EPUB_ADMON_IMGS): | $(EPUB_ADMONDIR)
+#$(EPUB_ADMON_IMGS): | $(EPUB_ADMONDIR)
 $(EPUB_CALLOUT_IMGS): | $(EPUB_CALLOUTDIR)
 $(EPUB_INLINE_IMGS): | $(EPUB_IMGDIR)
 
@@ -129,8 +147,8 @@ $(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/online/%.png
 $(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
 	ln -sf $< $@
 
-$(EPUB_ADMONDIR)/%.png : $(STYLEIMG)/%.png
-	ln -sf $< $@
+#$(EPUB_ADMONDIR)/%.png : $(STYLEIMG)/%.png
+#	ln -sf $< $@
 
 #--------------
 # CSS
