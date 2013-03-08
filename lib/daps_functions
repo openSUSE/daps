@@ -363,13 +363,13 @@ function call_make () {
         #
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
+    MAKE_BIN="/usr/bin/make"
     if [[ 1 = $DEBUG || 3 = $VERBOSITY ]]; then
         # use remake if installed when in debug or highest verbosity mode
-        MAKE_BIN="/usr/bin/remake"
+        IS_REMAKE=$(which remake 2>/dev/null)
+        [[ -n $IS_REMAKE ]] && MAKE_BIN="/usr/bin/remake"
         MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
-        else
-        MAKE_BIN="/usr/bin/make"
-        fi
+    fi
     if [[ 0 = $VERBOSITY || 1 = $VERBOSITY || 2 = $VERBOSITY ]]; then
         # calculate Number of CPUs (cores) for -j option, set to "1" if empty
         CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
