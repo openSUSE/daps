@@ -122,6 +122,9 @@
 
   <xsl:variable name="number">
       <xsl:apply-templates select="($node/parent::*|$node/parent::*[contains(local-name(), 'info')]/parent::*)[last()]" mode="label.markup"/>
+        <!-- I have absolutely no idea why this works that way – [1] should work
+             the other way around, and [last()] should do what I want. Maybe
+             this is a libxml/xsltproc bug. -->
   </xsl:variable>
 
   <xsl:if test="$number != ''">
