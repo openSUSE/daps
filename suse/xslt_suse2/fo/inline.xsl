@@ -109,19 +109,19 @@
 <xsl:template match="keycap">
   <xsl:choose>
     <xsl:when test="@function and normalize-space(.) = ''">
-      <xsl:call-template name="inline.boldmonoseq">
+      <xsl:call-template name="inline.monoseq">
         <xsl:with-param name="content">
           <xsl:call-template name="gentext.template">
             <xsl:with-param name="context" select="'msgset'"/>
-              <!-- This context is called keycap in the upcoming upstream
-                   release. -->
+              <!-- This context is called 'keycap' instead in the upcoming
+                   upstream release – use this later on. -->
             <xsl:with-param name="name" select="@function"/>
           </xsl:call-template>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="inline.boldseq"/>
+      <xsl:call-template name="inline.monoseq"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
