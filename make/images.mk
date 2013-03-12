@@ -277,7 +277,7 @@ list-images-missing:
 
 # List images with non-unique names
 #
-.PHONY: list-images-multisrc warn-images
+.PHONY: list-images-multisrc
 list-images-multisrc warn-images:
   ifdef DOUBLEIMG
 	@ccecho "warn" "Image names not unique, multiple sources available for the following images:"
@@ -287,7 +287,9 @@ list-images-multisrc warn-images:
 	@echo "$(DOUBLEIMG)"
     endif
   else
-	@ccecho "info" "All images for document \"$(DOCNAME)\" exist."
+    ifeq ($(MAKECMDGOALS),list-images-multisrc)
+	@ccecho "info" "All images for document \"$(DOCNAME)\" have unique names."
+    endif
   endif
 
 #------------------------------------------------------------------------
