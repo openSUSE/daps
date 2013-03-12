@@ -156,5 +156,16 @@
   </fo:instream-foreign-object>
 </xsl:template>
 
+<xsl:template match="keycombo">
+  <xsl:variable name="joinchar">–</xsl:variable>
+  <xsl:for-each select="*">
+    <xsl:if test="position()>1">
+      <fo:inline space-start="-0.105em" space-end="-0.105em" color="#666">
+        <xsl:value-of select="$joinchar"/>
+      </fo:inline>
+    </xsl:if>
+    <xsl:apply-templates select="."/>
+  </xsl:for-each>
+</xsl:template>
 
 </xsl:stylesheet>
