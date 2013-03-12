@@ -28,7 +28,7 @@
   </xsl:param>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties">
-    <xsl:if test="local-name(ancestor::*) != 'title'">
+    <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -54,7 +54,7 @@
   </xsl:param>
 
   <fo:inline font-weight="bold" xsl:use-attribute-sets="monospace.properties">
-    <xsl:if test="local-name(ancestor::*) != 'title'">
+    <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -80,7 +80,7 @@
   </xsl:param>
 
   <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties">
-    <xsl:if test="local-name(ancestor::*) != 'title'">
+    <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
     </xsl:if>
     <xsl:call-template name="anchor"/>
