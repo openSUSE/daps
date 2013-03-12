@@ -14,7 +14,7 @@
   <!ENTITY % fonts SYSTEM "fonts.ent">
   %fonts;
 ]>
-<xsl:stylesheet  version="1.0"
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
@@ -103,18 +103,15 @@
   </xsl:call-template>
 </xsl:template>
 
-
-<!-- This template is only almost the same version as that in the upcoming
-     1.77.2 upstream release. However, we probably want to use upstream's
-     "keycap" context, then.-->
 <xsl:template match="keycap">
   <xsl:variable name="cap">
     <xsl:choose>
       <xsl:when test="@function and normalize-space(.) = ''">
         <xsl:call-template name="gentext.template">
           <xsl:with-param name="context" select="'msgset'"/>
-            <!-- This context is called 'keycap' instead in the upcoming
-                  upstream release – use this later on. -->
+            <!-- This context is called "keycap" instead in the upcoming
+                 upstream release – TODO: use "keycap" when we've switched to
+                 1.77.2. -->
           <xsl:with-param name="name" select="@function"/>
         </xsl:call-template>
       </xsl:when>
@@ -123,24 +120,38 @@
       </xsl:otherwise>
    </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="instream-font-size" select="70"/>
+  <xsl:variable name="font-metrics-ratio" select="0.70"/>
+    <!-- Only use a monospaced font for the keycaps, else this metrics-ratio
+         won't work out all that well – it is used both for determining the
+         width of the key image being shown as well as centering the text on the
+         image. -->
+  <xsl:variable name="width">
+    <xsl:value-of select="string-length(normalize-space($cap))*$instream-font-size*$font-metrics-ratio"/>
+  </xsl:variable>
 
-    <fo:instream-foreign-object content-height=".93em" alignment-baseline="alphabetic"
-      alignment-adjust="-0.185em">
-    <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="55" height="100">
+  <fo:instream-foreign-object content-height="1.1em" alignment-baseline="alphabetic"
+    alignment-adjust="-0.2em" padding-end="0.1em" padding-start="0.1em">
+    <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100"
+      width="{$width + 55}">
       <svg:defs>
         <svg:linearGradient id="svg-gr-recessed" x1="0.05" y1="0.05" x2=".95" y2=".95">
           <svg:stop style="stop-color:#999;stop-opacity:1" offset="0" />
-          <svg:stop style="stop-color:#999;stop-opacity:1" offset="0.25" />
-          <svg:stop style="stop-color:#666;stop-opacity:1" offset="0.75" />
+          <svg:stop style="stop-color:#999;stop-opacity:1" offset="0.4" />
+          <svg:stop style="stop-color:#666;stop-opacity:1" offset="0.6" />
           <svg:stop style="stop-color:#666;stop-opacity:1" offset="1" />
         </svg:linearGradient>
-     </svg:defs>
-       <svg:rect width="55" height="100" rx="10" ry="10" x="0" y="0"
-         style="fill:url(#svg-gr-recessed);fill-opacity:1;stroke:none" />
-       <svg:rect width="40" height="85" rx="7.5" ry="7.5" x="5" y="5"
-          style="fill:#efeff0;fill-opacity:1;stroke:none" />
-       <svg:text style="font-family: &mono;; font-size: 70px;"
-         x="30" y="70" text-anchor="middle"><xsl:value-of select="$cap"/></svg:text>
+      </svg:defs>
+      <svg:rect height="100" rx="10" ry="10" x="0" y="0"
+        style="fill:url(#svg-gr-recessed);fill-opacity:1;stroke:none"
+        width="{$width+55}">
+      </svg:rect>
+      <svg:rect height="85" rx="7.5" ry="7.5" x="5" y="5"
+        style="fill:#efeff0;fill-opacity:1;stroke:none" width="{$width+40}">
+      </svg:rect>
+      <svg:text font-family="&mono;" text-anchor="middle" x="{$width div 2 + 23}"
+        y="{$instream-font-size}"
+        font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>
   </fo:instream-foreign-object>
 </xsl:template>
