@@ -136,18 +136,18 @@
       width="{$width + 55}">
       <svg:defs>
         <svg:linearGradient id="svg-gr-recessed" x1="0.05" y1="0.05" x2=".95" y2=".95">
-          <svg:stop style="stop-color:#999;stop-opacity:1" offset="0" />
-          <svg:stop style="stop-color:#999;stop-opacity:1" offset="0.4" />
-          <svg:stop style="stop-color:#666;stop-opacity:1" offset="0.6" />
-          <svg:stop style="stop-color:#666;stop-opacity:1" offset="1" />
+          <svg:stop stop-color="#999" stop-opacity="1" offset="0" />
+          <svg:stop stop-color="#999" stop-opacity="1" offset="0.4" />
+          <svg:stop stop-color="#666" stop-opacity="1" offset="0.6" />
+          <svg:stop stop-color="#666" stop-opacity="1" offset="1" />
         </svg:linearGradient>
       </svg:defs>
       <svg:rect height="100" rx="10" ry="10" x="0" y="0"
-        style="fill:url(#svg-gr-recessed);fill-opacity:1;stroke:none"
+        fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"
         width="{$width+55}">
       </svg:rect>
       <svg:rect height="85" rx="7.5" ry="7.5" x="5" y="5"
-        style="fill:#efeff0;fill-opacity:1;stroke:none" width="{$width+40}">
+        fill="#efeff0" fill-opacity="1" stroke="none" width="{$width+40}">
       </svg:rect>
       <svg:text font-family="&mono;" text-anchor="middle" x="{$width div 2 + 23}"
         y="{$instream-font-size}"
