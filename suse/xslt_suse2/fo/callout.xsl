@@ -35,7 +35,7 @@
   </xsl:variable>
 
   <fo:instream-foreign-object content-height="0.9em" alignment-baseline="alphabetic"
-    alignment-adjust="-0.1em" padding-end="0.1em" padding-start="0.1em">
+    alignment-adjust="-0.1em" space-end="0.2em" space-start="0.1em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100px" width="{$width}">
       <svg:rect height="100" rx="50" ry="50" x="0" y="0"
         fill="#439539" stroke="none" width="{$width}">

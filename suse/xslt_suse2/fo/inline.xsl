@@ -131,7 +131,7 @@
   </xsl:variable>
 
   <fo:instream-foreign-object content-height="1em" alignment-baseline="alphabetic"
-    alignment-adjust="-0.2em" padding-end="0.1em" padding-start="0.1em">
+    alignment-adjust="-0.2em" space-end="0.1em" space-start="0.1em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100"
       width="{$width + 55}">
       <svg:defs>
@@ -160,7 +160,7 @@
   <xsl:variable name="joinchar">–</xsl:variable>
   <xsl:for-each select="*">
     <xsl:if test="position()>1">
-      <fo:inline space-start="-0.105em" space-end="-0.105em" color="#666">
+      <fo:inline space-start="-0.05em" space-end="0" color="#666">
         <xsl:value-of select="$joinchar"/>
       </fo:inline>
     </xsl:if>
