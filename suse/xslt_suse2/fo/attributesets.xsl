@@ -46,9 +46,12 @@
     </xsl:attribute>
     <xsl:attribute name="font-weight">normal</xsl:attribute>
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-    <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
-    <xsl:attribute name="space-before.optimum">1.0em</xsl:attribute>
-    <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
+    <xsl:attribute name="space-before.minimum">2.8em</xsl:attribute>
+    <xsl:attribute name="space-before.optimum">3.0em</xsl:attribute>
+    <xsl:attribute name="space-before.maximum">3.2em</xsl:attribute>
+    <xsl:attribute name="space-after.minimum">0.5em</xsl:attribute>
+    <xsl:attribute name="space-after.optimum">0.7em</xsl:attribute>
+    <xsl:attribute name="space-after.maximum">0.9em</xsl:attribute>
     <xsl:attribute name="text-align">start</xsl:attribute>
     <xsl:attribute name="start-indent"><xsl:value-of select="$title.margin.left"></xsl:value-of></xsl:attribute>
   </xsl:attribute-set>
