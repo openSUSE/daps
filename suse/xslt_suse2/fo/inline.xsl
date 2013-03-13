@@ -121,7 +121,7 @@
    </xsl:choose>
   </xsl:variable>
   <xsl:variable name="instream-font-size" select="70"/>
-  <xsl:variable name="font-metrics-ratio" select="0.70"/>
+  <xsl:variable name="font-metrics-ratio" select="&mono-ratio;"/>
     <!-- Only use a monospaced font for the keycaps, else this metrics-ratio
          won't work out all that well – it is used both for determining the
          width of the key image being shown as well as centering the text on the
@@ -130,7 +130,7 @@
     <xsl:value-of select="string-length(normalize-space($cap))*$instream-font-size*$font-metrics-ratio"/>
   </xsl:variable>
 
-  <fo:instream-foreign-object content-height="1.1em" alignment-baseline="alphabetic"
+  <fo:instream-foreign-object content-height="1em" alignment-baseline="alphabetic"
     alignment-adjust="-0.2em" padding-end="0.1em" padding-start="0.1em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100"
       width="{$width + 55}">
