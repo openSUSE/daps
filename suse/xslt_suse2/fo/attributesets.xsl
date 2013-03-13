@@ -12,7 +12,9 @@
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
   %fonts;
+  %colors;
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -89,14 +91,21 @@
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="shade.verbatim.style">
+  <xsl:attribute name="background-color">&light-gray-old;</xsl:attribute>
+  <xsl:attribute name="padding">0.5em</xsl:attribute>
+  <xsl:attribute name="start-indent">0.5em</xsl:attribute>
+  <xsl:attribute name="end-indent">0.5em</xsl:attribute>
+</xsl:attribute-set>
+
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <xsl:attribute-set name="title.name.color">
-  <xsl:attribute name="color">#439539</xsl:attribute>
+  <xsl:attribute name="color">&dark-green;</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="title.number.color">
-  <xsl:attribute name="color">#666666</xsl:attribute>
+  <xsl:attribute name="color">&mid-gray;</xsl:attribute>
 </xsl:attribute-set>
 
 </xsl:stylesheet>

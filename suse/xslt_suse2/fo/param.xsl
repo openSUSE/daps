@@ -8,16 +8,18 @@
    See Also:
      * http://docbook.sourceforge.net/release/xsl/current/doc/fo/index.html
 
-   Author(s):    Stefan Knorr <sknorr@suse.de>
-                 Thomas Schraitle <toms@opensuse.org>
+   Author(s):   Stefan Knorr <sknorr@suse.de>
+                Thomas Schraitle <toms@opensuse.org>
 
-   Copyright: 2013, Stefan Knorr, Thomas Schraitle
+   Copyright:   2013, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
   %fonts;
+  %colors;
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -85,6 +87,7 @@ task before
 </xsl:param>
 <xsl:param name="menuchoice.separator" select ="' › '"/>
 <xsl:param name="menuchoice.menu.separator" select ="' › '"/>
+<xsl:param name="shade.verbatim" select="1"/>
 
 <!-- 18. Graphics =============================================== -->
 
