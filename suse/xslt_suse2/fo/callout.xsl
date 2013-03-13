@@ -47,7 +47,6 @@
           <xsl:choose>
             <xsl:when test="substring($conum,1,1) = 1">
               <xsl:value-of select="($width div 2) - 7"/>
-              <xsl:message>I apply: <xsl:value-of select="$conum"/></xsl:message>
             </xsl:when>
               <!-- Callout (1) as well as (10) and up will be horribly
                    off-center if they are not special-cased. -->
