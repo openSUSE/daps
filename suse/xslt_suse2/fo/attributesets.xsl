@@ -168,6 +168,18 @@
   <xsl:attribute name="font-weight">700</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="formal.title.properties" use-attribute-sets="normal.para.spacing">
+  <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
+  <xsl:attribute name="font-weight">600</xsl:attribute>
+  <xsl:attribute name="font-size">&small;</xsl:attribute>
+  <xsl:attribute name="text-transform">uppercase</xsl:attribute>
+  <xsl:attribute name="color">&dark-green;</xsl:attribute>
+  <xsl:attribute name="hyphenate">false</xsl:attribute>
+  <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
+</xsl:attribute-set>
+
 
 <!-- 22. Profiling ============================================== -->
 
