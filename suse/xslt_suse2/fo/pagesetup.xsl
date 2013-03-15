@@ -383,12 +383,9 @@
   <xsl:param name="pageclass"/>
   <xsl:param name="default-pagemaster"/>
 
-  <xsl:message>Schauz: <xsl:value-of select="local-name(.)"/>, <xsl:value-of select="@role"/></xsl:message>
-
   <xsl:choose>
     <xsl:when test="self::appendix[@role='legal']">
       <xsl:text>legal</xsl:text>
-      <xsl:message>Hallo!</xsl:message>
       <xsl:if test="$draft.mode = 'yes'">
         <xsl:text>-draft</xsl:text>
       </xsl:if>
