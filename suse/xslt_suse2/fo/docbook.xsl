@@ -45,5 +45,6 @@
 
 
   <xsl:include href="attributesets.xsl"/>
+  <xsl:include href="../common/titles.xsl"/>
 
 </xsl:stylesheet>

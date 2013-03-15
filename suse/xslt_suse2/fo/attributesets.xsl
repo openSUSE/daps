@@ -18,14 +18,24 @@
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
   %colors;
+  %metrics;
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <!-- 1. Admonitions  ============================================ -->
+
+<xsl:attribute-set name="admonition.title.properties">
+  <xsl:attribute name="font-family"><xsl:value-of select="$title.font.family"/></xsl:attribute>
+  <xsl:attribute name="font-size">&x-large;</xsl:attribute>
+  <xsl:attribute name="font-weight">600</xsl:attribute>
+  <xsl:attribute name="hyphenate">false</xsl:attribute>
+  <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+</xsl:attribute-set>
 
 
 <!-- 2. Callouts ================================================ -->
