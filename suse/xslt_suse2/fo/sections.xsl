@@ -3,15 +3,18 @@
   Purpose:
     Restyle titles of chapters, etc.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr
+  Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
   %fonts;
+  %colors;
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -157,6 +160,88 @@
         </fo:block>
       </xsl:otherwise>
     </xsl:choose>
+  </fo:block>
+</xsl:template>
+
+<!-- ======================================================================= -->
+
+<xsl:template match="sect1[@role='legal']">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <fo:block id="{$id}"
+            xsl:use-attribute-sets="section.level1.properties">
+    <fo:block font-size="&small;pt" font-weight="bold"
+              space-before="1.12em" space-after="0.75em"
+       keep-with-next="always">
+      <xsl:value-of select="title" /> 
+    </fo:block>
+    <fo:block font-size="&xxx-small;pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="sect2[parent::sect1[@role='legal']]">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <fo:block id="{$id}"
+            xsl:use-attribute-sets="section.level2.properties">
+    <fo:block font-size="&x-small;pt"
+      keep-with-next="always"
+      space-before="1.12em" space-after="0.5em" 
+      space-after.precedence="2">
+      <xsl:value-of select="title"/> 
+    </fo:block>
+    <fo:block font-size="&xxx-small;pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="sect3[ancestor::sect1[@role='legal']]">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <fo:block id="{$id}"
+            xsl:use-attribute-sets="section.level3.properties">
+    <fo:block font-size="&x-small;pt" font-style="italic"
+      space-before="1.12em" space-after="0.5em" >
+      <xsl:value-of select="title"/> 
+    </fo:block>
+    <fo:block font-size="&xxx-small;pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="sect4[ancestor::sect1[@role='legal']]">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <fo:block id="{$id}"
+            xsl:use-attribute-sets="section.level4.properties">
+    <fo:block font-size="&x-small;pt" font-weight="normal">
+      <xsl:value-of select="title"/> 
+    </fo:block>
+    <fo:block font-size="&xxx-small;pt">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="screen[ancestor::sect1[@role='legal']]">
+  <fo:block xsl:use-attribute-sets="monospace.verbatim.properties shade.verbatim.style"
+            font-size="&xxx-small;pt"
+            white-space-collapse='false'
+            white-space-treatment='preserve'
+            linefeed-treatment='preserve'>
+    <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
 
