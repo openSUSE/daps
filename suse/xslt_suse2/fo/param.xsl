@@ -18,8 +18,10 @@
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
   %colors;
+  %metrics;
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -107,14 +109,15 @@ task before
 <xsl:param name="body.margin.top" select="'0mm'"/>
 <xsl:param name="page.margin.bottom" select="'18.9mm'"/>
 <xsl:param name="body.margin.bottom" select="'30.5mm'"/>
-<xsl:param name="page.margin.inner" select="'22.5mm'"/>
+<xsl:param name="page.margin.inner" select="'&column;mm'"/>
 <xsl:param name="body.margin.inner" select="'0mm'"/>
-<xsl:param name="page.margin.outer" select="'22.5mm'"/>
+<xsl:param name="page.margin.outer" select="'&column;mm'"/>
 <xsl:param name="body.margin.outer" select="'0mm'"/>
 
 <xsl:param name="header.rule" select="0"/>
 <xsl:param name="footer.rule" select="0"/>
-<xsl:param name="footer.column.widths" select="'28.5 108 28.5'"/>
+<xsl:param name="footer.column.widths"
+  select="concat(&column; + &gutter;, ' ', 4 * &column; + 3 * &gutter;, ' ', &column; + &gutter;)"/>
   <!-- These are actual millimeters, even though this only needs to be a
        proportion. -->
 
