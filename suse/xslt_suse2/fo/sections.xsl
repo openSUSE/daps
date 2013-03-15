@@ -13,8 +13,10 @@
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
   %colors;
+  %metrics;
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -237,10 +239,13 @@
 
 <xsl:template match="screen[ancestor::sect1[@role='legal']]">
   <fo:block xsl:use-attribute-sets="monospace.verbatim.properties shade.verbatim.style"
-            font-size="&xxx-small;pt"
+            font-size="{&xxx-small; - 1}pt"
             white-space-collapse='false'
             white-space-treatment='preserve'
             linefeed-treatment='preserve'>
+            <!-- I seriously hope no one is going to beat me up over this font
+                 size – but the screens in the GPL really do look better this
+                 way. -->
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
