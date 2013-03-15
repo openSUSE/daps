@@ -3,18 +3,24 @@
   Purpose:
     Restyle titles of chapters, etc.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr
+  Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
+  %colors;
+  %metrics;
 ]>
-<xsl:stylesheet  version="1.0"
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <xsl:template name="component.title">
@@ -113,7 +119,6 @@
 
 
 <xsl:template name="title.split">
-
   <xsl:param name="node" select="."/>
 
   <xsl:variable name="title">
@@ -136,6 +141,40 @@
   <fo:inline xsl:use-attribute-sets="title.name.color">
     <xsl:copy-of select="$title"/>
   </fo:inline>
+</xsl:template>
+
+<!-- Below, there are three templates (#1, #2, #3) that roughly do the following:
+        #1.1  match appendices that have a role='legal' attribute
+        #1.2  apply all upstream templates on it, then converted the tree fragment
+              we just created to a node-set
+        #1.3, 2
+              let said node-set run through a template that copies everything
+        #3    except for the part we want to wrap in a fo:block with the span
+              attribute set.-->
+
+<xsl:template match="appendix[@role='legal']">
+  <xsl:variable name="tree-fragment">
+    <xsl:apply-imports/>
+  </xsl:variable>
+
+  <xsl:variable name="converted-fragment" select="exsl:node-set($tree-fragment)/*"/>
+  <xsl:apply-templates select="$converted-fragment" mode="minor.adjustments"/>
+</xsl:template>
+
+<xsl:template match="node() | @*" mode="minor.adjustments">
+  <xsl:copy>
+    <xsl:apply-templates select="@* | node()" mode="minor.adjustments"/>
+  </xsl:copy>
+</xsl:template>
+
+<xsl:template match="fo:flow/fo:block[1]" mode="minor.adjustments">
+  <!-- This template lets us add another block element around the appendix
+       template, so we can set the span="all" attribute at the appropriate
+       level. -->
+
+    <fo:block span="all">
+      <xsl:apply-templates select="*" mode="minor.adjustments"/>
+    </fo:block>
 </xsl:template>
 
 </xsl:stylesheet>
