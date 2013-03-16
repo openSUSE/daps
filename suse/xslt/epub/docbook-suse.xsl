@@ -11,9 +11,10 @@
   xmlns:str="http://exslt.org/strings"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xtext="xalan://com.nwalsh.xalan.Text"
+  xmlns:date="http://exslt.org/dates-and-times"
 
-  extension-element-prefixes="stext xtext"
-  exclude-result-prefixes="exsl db dc h ncx ng opf stext str xtext"
+  extension-element-prefixes="stext xtext date"
+  exclude-result-prefixes="exsl db dc h ncx ng opf stext str xtext date"
 
   version="1.0">
 
@@ -526,8 +527,34 @@
 
 
   <xsl:template match="date" mode="opf.metadata">
+    <xsl:variable name="thisdate">
+      <xsl:apply-templates/>
+    </xsl:variable>
+    
     <dc:date>
-      <xsl:value-of select="normalize-space(string(.))"/>
+      <xsl:choose>
+        <xsl:when test="string($thisdate) != ''">
+          <xsl:value-of select="$thisdate"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="date">
+            <xsl:choose>
+              <xsl:when test="function-available('date:date-time')">
+                <xsl:value-of select="date:date-time()"/>
+              </xsl:when>
+              <xsl:when test="function-available('date:dateTime')">
+                <!-- Xalan quirk -->
+                <xsl:value-of select="date:dateTime()"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:call-template name="datetime.format">
+            <xsl:with-param name="date" select="$date"/>
+            <xsl:with-param name="format" select="'Y-m-d'"/>
+            <xsl:with-param name="padding" select="1"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </dc:date>
   </xsl:template>
 
@@ -1396,7 +1423,7 @@
       <xsl:with-param name="content">
         <html xmlns="http://www.w3.org/1999/xhtml">
           <head>
-            <title name="title">Cover</title>
+            <title>Cover</title>
             <style type="text/css">
               <!-- Help the cover image scale nicely in the CSS then apply a max-width to look better in Adobe Digital Editions -->
               <xsl:text> img { max-width: 100%; }</xsl:text>
