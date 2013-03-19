@@ -12,9 +12,13 @@
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
+  %colors;
+  %metrics;
 ]>
-<xsl:stylesheet  version="1.0"
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
@@ -34,13 +38,15 @@
     </xsl:choose>
   </xsl:variable>
 
+  <fo:leader leader-pattern="space" leader-length="0.2em"/>
+
   <fo:instream-foreign-object content-height="0.9em" alignment-baseline="alphabetic"
-    alignment-adjust="-0.1em" padding-end="0.2em" padding-start="0.1em">
+    alignment-adjust="-0.15em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100px" width="{$width}">
       <svg:rect height="100" rx="50" ry="50" x="0" y="0"
-        fill="#439539" stroke="none" width="{$width}">
+        fill="&dark-green;" stroke="none" width="{$width}">
       </svg:rect>
-      <svg:text y="{$instream-font-size - 1}" fill="#FFF" font-family="&sans;, sans-serif"
+      <svg:text y="{$instream-font-size - 1}" fill="&white;" font-family="&sans;, sans-serif"
         font-size="{$instream-font-size}" font-weight="600"
         text-anchor="middle">
         <xsl:attribute name="x">
@@ -55,6 +61,8 @@
         </xsl:attribute><xsl:value-of select="$conum"/></svg:text>
     </svg:svg>
   </fo:instream-foreign-object>
+
+  <fo:leader leader-pattern="space" leader-length="0.2em"/>
 </xsl:template>
 
 
