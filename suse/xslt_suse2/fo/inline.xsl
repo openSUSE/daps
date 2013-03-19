@@ -12,7 +12,11 @@
 <!DOCTYPE xsl:stylesheets 
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
+  <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
+  %colors;
+  %metrics;
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -130,16 +134,21 @@
     <xsl:value-of select="string-length(normalize-space($cap))*$instream-font-size*$font-metrics-ratio"/>
   </xsl:variable>
 
+  <xsl:if test="not(parent::keycombo) or
+                  (parent::keycombo and not(preceding-sibling::*))">
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  </xsl:if>
+
   <fo:instream-foreign-object content-height="1em" alignment-baseline="alphabetic"
-    alignment-adjust="-0.2em" space-end="0.1em" space-start="0.1em">
+    alignment-adjust="-0.2em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100"
       width="{$width + 55}">
       <svg:defs>
         <svg:linearGradient id="svg-gr-recessed" x1="0.05" y1="0.05" x2=".95" y2=".95">
-          <svg:stop stop-color="#999" stop-opacity="1" offset="0" />
-          <svg:stop stop-color="#999" stop-opacity="1" offset="0.4" />
-          <svg:stop stop-color="#666" stop-opacity="1" offset="0.6" />
-          <svg:stop stop-color="#666" stop-opacity="1" offset="1" />
+          <svg:stop stop-color="&light-gray;" stop-opacity="1" offset="0" />
+          <svg:stop stop-color="&light-gray;" stop-opacity="1" offset="0.4" />
+          <svg:stop stop-color="&mid-gray;" stop-opacity="1" offset="0.6" />
+          <svg:stop stop-color="&mid-gray;" stop-opacity="1" offset="1" />
         </svg:linearGradient>
       </svg:defs>
       <svg:rect height="100" rx="10" ry="10" x="0" y="0"
@@ -147,13 +156,19 @@
         width="{$width+55}">
       </svg:rect>
       <svg:rect height="85" rx="7.5" ry="7.5" x="5" y="5"
-        fill="#efeff0" fill-opacity="1" stroke="none" width="{$width+40}">
+        fill="&light-gray-old;" fill-opacity="1" stroke="none" width="{$width+40}">
       </svg:rect>
       <svg:text font-family="&mono;" text-anchor="middle" x="{$width div 2 + 23}"
-        y="{$instream-font-size}"
+        y="{$instream-font-size}" color="&dark-gray;"
         font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>
   </fo:instream-foreign-object>
+
+  <xsl:if test="not(parent::keycombo) or
+                  (parent::keycombo and not(following-sibling::*))">
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  </xsl:if>
+
 </xsl:template>
 
 <xsl:template match="keycombo">
