@@ -13,8 +13,10 @@
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
+  <!ENTITY % metrics SYSTEM "metrics.ent">
   %fonts;
   %colors;
+  %metrics;
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -55,6 +57,9 @@
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
+  <xsl:variable name="color">
+    <xsl:call-template name="admon.symbol.color"/>
+  </xsl:variable>
   <xsl:variable name="graphic.width">36pt</xsl:variable>
 
   <fo:block id="{$id}"
@@ -64,15 +69,15 @@
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
             <fo:block font-family="'SUSE Docudings', sans-serif"
-              font-size="{$graphic.width}">
+              font-size="{$graphic.width}" line-height="1em" color="{$color}">
                 <!-- Let's assume that the admonition icons fit into a square -->
-              <xsl:attribute name="color"><xsl:call-template name="admon.symbol.color"/></xsl:attribute>
             <xsl:call-template name="admon.symbol.letter"/>
             </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
             <xsl:if test="$admon.textlabel != 0 or title or info/title">
-              <fo:block xsl:use-attribute-sets="admonition.title.properties">
+              <fo:block xsl:use-attribute-sets="admonition.title.properties"
+                color="{$color}">
                 <xsl:apply-templates select="." mode="object.title.markup">
       <xsl:with-param name="allow-anchors" select="1"/>
     </xsl:apply-templates>
