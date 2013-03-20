@@ -4,9 +4,16 @@
     Adapt inline monospaced font, so its x-height is about as tall as that of
     the serif font (Charis SIL), we use for the body text.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+    You might notice the pattern of using fo:leaders for distancing inline
+    elements from each other instead of simply using paddings/margins: that is
+    because FOP (at least v1.1) seems to apply margins and paddings only after
+    laying out the text. Therefore, any element that a margin is applied to may
+    be pushed behind the text. We do not approve.
 
-  Copyright:  2013, Stefan Knorr
+  Author(s):  Stefan Knorr <sknorr@suse.de>
+              Thomas Schraitle
+
+  Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheets 
@@ -32,8 +39,15 @@
   </xsl:param>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties">
+    <xsl:if test="parent::para|parent::title">
+      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
+    </xsl:if>
     <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -45,8 +59,12 @@
       </xsl:attribute>
     </xsl:if>
     <xsl:copy-of select="$content"/>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    </xsl:if>
   </fo:inline>
 </xsl:template>
+
 
 <xsl:template name="inline.boldmonoseq">
   <xsl:param name="content">
@@ -58,8 +76,15 @@
   </xsl:param>
 
   <fo:inline font-weight="bold" xsl:use-attribute-sets="monospace.properties">
+    <xsl:if test="parent::para|parent::title">
+      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
+    </xsl:if>
     <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -71,8 +96,12 @@
       </xsl:attribute>
     </xsl:if>
     <xsl:copy-of select="$content"/>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    </xsl:if>
   </fo:inline>
 </xsl:template>
+
 
 <xsl:template name="inline.italicmonoseq">
   <xsl:param name="content">
@@ -84,8 +113,15 @@
   </xsl:param>
 
   <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties">
+    <xsl:if test="parent::para|parent::title">
+      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
+    </xsl:if>
     <xsl:if test="not(ancestor::title or ancestor::term)">
       <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -97,6 +133,9 @@
       </xsl:attribute>
     </xsl:if>
     <xsl:copy-of select="$content"/>
+    <xsl:if test="parent::para|parent::title">
+       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    </xsl:if>
   </fo:inline>
 </xsl:template>
 
@@ -134,9 +173,11 @@
     <xsl:value-of select="string-length(normalize-space($cap))*$instream-font-size*$font-metrics-ratio"/>
   </xsl:variable>
 
-  <xsl:if test="not(parent::keycombo) or
-                  (parent::keycombo and not(preceding-sibling::*))">
-    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  <xsl:if test="not(parent::keycombo)">
+    <xsl:if test="(preceding-sibling::*|preceding-sibling::text()) and
+                  not(preceding-sibling::remark)">
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    </xsl:if>
   </xsl:if>
 
   <fo:instream-foreign-object content-height="1em" alignment-baseline="alphabetic"
@@ -164,15 +205,23 @@
     </svg:svg>
   </fo:instream-foreign-object>
 
-  <xsl:if test="not(parent::keycombo) or
-                  (parent::keycombo and not(following-sibling::*))">
+  <xsl:if test="not(parent::keycombo)">
+    <xsl:if test="(following-sibling::*|following-sibling::text()) and
+                  not(following-sibling::remark)">
     <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    </xsl:if>
   </xsl:if>
 
 </xsl:template>
 
 <xsl:template match="keycombo">
   <xsl:variable name="joinchar">–</xsl:variable>
+
+  <xsl:if test="(preceding-sibling::*|preceding-sibling::text()) and
+                not(preceding-sibling::remark)">
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  </xsl:if>
+
   <xsl:for-each select="*">
     <xsl:if test="position()>1">
       <fo:inline space-start="-0.05em" space-end="0" color="#666">
@@ -181,6 +230,11 @@
     </xsl:if>
     <xsl:apply-templates select="."/>
   </xsl:for-each>
+
+  <xsl:if test="(following-sibling::*|following-sibling::text()) and
+                not(following-sibling::remark)">
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
