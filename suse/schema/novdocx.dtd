@@ -349,6 +349,7 @@
 
 <!ATTLIST appendix
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase; >
 
@@ -417,7 +418,7 @@
 <!ATTLIST citetitle
                %profiling.attributes;
                %xmlbase;
-	        pubwork (article|bbs|book|cdrom|chapter|dvd|emailmessage|gopher|
+               pubwork (article|bbs|book|cdrom|chapter|dvd|emailmessage|gopher|
                          journal|manuscript|newsposting|part|refentry|section|
                          series|set|webpage|wiki) #IMPLIED >
 
@@ -488,6 +489,7 @@
                %xmlbase;>
 
 <!ATTLIST glossary
+               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
@@ -515,6 +517,7 @@
                %xmlbase;>
 
 <!ATTLIST index
+               role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -644,6 +647,7 @@
 
 <!ATTLIST part
                revision       CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
                conformance    CDATA     #IMPLIED
                id             ID        #IMPLIED
                %profiling.attributes;
@@ -659,6 +663,7 @@
                %xmlbase;>
 
 <!ATTLIST preface
+               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
                %profiling.attributes;
                %xmlbase; >
@@ -710,6 +715,7 @@
                %xmlbase;>
 
 <!ATTLIST refentry
+               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
                %profiling.attributes; 
                %xmlbase; >
