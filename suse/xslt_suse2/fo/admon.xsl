@@ -62,16 +62,16 @@
   </xsl:variable>
   <xsl:variable name="graphic.width">36pt</xsl:variable>
 
-  <fo:block id="{$id}"
-            xsl:use-attribute-sets="graphical.admonition.properties">
-    <fo:list-block provisional-distance-between-starts="{$graphic.width} + 18pt"
-                    provisional-label-separation="18pt">
+  <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
+    <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
+                    provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
             <fo:block font-family="'SUSE Docudings', sans-serif"
-              font-size="{$graphic.width}" line-height="1em" color="{$color}">
+              font-size="{$graphic.width}" line-height="1.05em" color="{$color}"
+               text-align="end">
                 <!-- Let's assume that the admonition icons fit into a square -->
-            <xsl:call-template name="admon.symbol.letter"/>
+                <xsl:call-template name="admon.symbol.letter"/>
             </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
