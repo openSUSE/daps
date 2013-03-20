@@ -31,7 +31,7 @@
 
 <xsl:attribute-set name="admonition.title.properties">
   <xsl:attribute name="font-family"><xsl:value-of select="$title.font.family"/></xsl:attribute>
-  <xsl:attribute name="font-size">&x-large;</xsl:attribute>
+  <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
   <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
@@ -181,7 +181,7 @@
 <xsl:attribute-set name="formal.title.properties" use-attribute-sets="normal.para.spacing">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
   <xsl:attribute name="font-weight">600</xsl:attribute>
-  <xsl:attribute name="font-size">&small;</xsl:attribute>
+  <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
   <xsl:attribute name="color">&dark-green;</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>

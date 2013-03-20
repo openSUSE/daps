@@ -132,11 +132,11 @@ task before
 <xsl:param name="monospace.font.family">&mono;, monospace</xsl:param>
 <xsl:param name="symbol.font.family">'FreeSerif'</xsl:param>
 
-<xsl:param name="body.font.master" select="'&normal;'"/>
+<xsl:param name="body.font.master" select="'&normal;pt'"/>
 <xsl:param name="body.font.size">
   <xsl:value-of select="$body.font.master"/><xsl:text>*&serif-factor;pt</xsl:text>
 </xsl:param>
-<xsl:param name="footnote.font.size" select="'&small;'"/>
+<xsl:param name="footnote.font.size" select="'&small;pt'"/>
 
 
 <!-- 21. Property Sets ========================================== -->
