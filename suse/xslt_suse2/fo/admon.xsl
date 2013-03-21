@@ -62,7 +62,8 @@
   </xsl:variable>
   <xsl:variable name="graphic.width">36pt</xsl:variable>
 
-  <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
+  <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties"
+    keep-together="always">
     <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
                     provisional-label-separation="&gutter;mm">
       <fo:list-item>
