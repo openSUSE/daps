@@ -95,11 +95,20 @@
 
 <!-- 17. Miscellaneous ========================================== -->
 
+<xsl:variable name="verbatim-start-end-indent">
+  <!-- XEP does not allow adding a length value to the result of a core
+       function -->
+  inherited-property-value()
+  <xsl:if test="$xep.extensions = 0">+ 0.5em</xsl:if>
+</xsl:variable>
+
 <xsl:attribute-set name="shade.verbatim.style">
   <xsl:attribute name="background-color">&light-gray-old;</xsl:attribute>
   <xsl:attribute name="padding">0.5em</xsl:attribute>
-  <xsl:attribute name="start-indent">0.5em</xsl:attribute>
-  <xsl:attribute name="end-indent">0.5em</xsl:attribute>
+  <xsl:attribute name="start-indent"><xsl:value-of select="$verbatim-start-end-indent"/>
+  </xsl:attribute>
+  <xsl:attribute name="end-indent"><xsl:value-of select="$verbatim-start-end-indent"/>
+  </xsl:attribute>
 </xsl:attribute-set>
 
 
