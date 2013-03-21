@@ -51,7 +51,7 @@ BuildRequires:  make
 %if 0%{?suse_version} == 1210
 BuildRequires:  xerces-j2
 %endif
-BuildRequires:  trang 
+BuildRequires:  trang
 
 Requires:       docbook
 Requires:       docbook-xsl-stylesheets >= 1.75
@@ -60,6 +60,9 @@ Requires:       libxslt
 Recommends:     daps
 Recommends:     docbook5
 Recommends:     docbook5-xsl-stylesheets
+Recommends:     google-opensans-fonts
+Recommends:     sil-charis-fonts
+Recommends:     dejavu-fonts
 
 %description
 SUSE-branded DocBook stylesheets for XSLT 1.0
