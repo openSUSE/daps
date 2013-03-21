@@ -75,6 +75,7 @@
             </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
+            <fo:block padding-start="{(&gutter;-1) div 2}mm" border-start-width="1mm" border-start-style="solid" border-start-color="{$color}">
             <xsl:if test="$admon.textlabel != 0 or title or info/title">
               <fo:block xsl:use-attribute-sets="admonition.title.properties"
                 color="{$color}">
@@ -85,6 +86,7 @@
             </xsl:if>
             <fo:block xsl:use-attribute-sets="admonition.properties">
               <xsl:apply-templates/>
+            </fo:block>
             </fo:block>
           </fo:list-item-body>
       </fo:list-item>
