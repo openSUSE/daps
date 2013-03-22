@@ -21,7 +21,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  exclude-result-prefixes="exsl">
 
 <xsl:template name="component.title">
   <xsl:param name="node" select="."/>
@@ -143,6 +144,7 @@
   </fo:inline>
 </xsl:template>
 
+
 <!-- Below, there are three templates (#1, #2, #3) that roughly do the following:
         #1.1  match appendices that have a role='legal' attribute
         #1.2  apply all upstream templates on it, then converted the tree fragment
@@ -161,11 +163,13 @@
   <xsl:apply-templates select="$converted-fragment" mode="minor.adjustments"/>
 </xsl:template>
 
+
 <xsl:template match="node() | @*" mode="minor.adjustments">
   <xsl:copy>
     <xsl:apply-templates select="@* | node()" mode="minor.adjustments"/>
   </xsl:copy>
 </xsl:template>
+
 
 <xsl:template match="fo:flow/fo:block[1]" mode="minor.adjustments">
   <!-- This template lets us add another block element around the appendix
