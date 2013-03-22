@@ -20,36 +20,63 @@
 ]>
 <xsl:stylesheet  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:svg="http://www.w3.org/2000/svg">
 
 
 <xsl:template match="note|important|warning|caution|tip">
   <xsl:call-template name="graphical.admonition"/>
 </xsl:template>
 
-<xsl:template name="admon.symbol.letter">
+<xsl:template name="admon.symbol">
+  <xsl:param name="color" select="'&dark-green;'"/>
   <xsl:param name="node" select="."/>
+
   <xsl:choose>
-    <xsl:when test="local-name($node)='note'"><xsl:text>N</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='warning'"><xsl:text>W</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='caution'"><xsl:text>C</xsl:text></xsl:when>
-      <!-- We don't have different symbols for the above two (yet). -->
-    <xsl:when test="local-name($node)='tip'"><xsl:text>T</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='important'"><xsl:text>I</xsl:text></xsl:when>
-    <xsl:otherwise>N</xsl:otherwise>
+    <xsl:when test="local-name($node)='warning' or local-name($node)='caution'">
+    <!-- The symbol for these two is currently the same -->
+      <svg:svg width="36" height="36">
+        <svg:path d="M 18,0 C 8.06,0 0,8.06 0,18 0,27.94 8.06,36 18,36 27.94,36 36,27.94 36,18 36,8.06 27.94,0 18,0 z m 0,7 c 0.62,0 1,0.51 1,1.13 l 0,9.88 1,0 0,-8.53 c 0,-0.62 0.38,-1.13 1,-1.13 0.62,0 1,0.51 1,1.13 L 22,22 l 1,0 0,-4.78 c 0,-0.62 0.29,-1.13 0.91,-1.13 0.62,0 1.09,0.17 1.09,1.13 L 25,22.5 c -8.8e-4,3.6 -3.41,6.5 -7,6.5 -3.59,-9e-4 -7,-2.92 -7,-5.84 l 0,-9.31 c 0,-0.96 0.38,-1.47 1,-1.47 0.62,0 1,0.51 1,1.13 l 0,5.5 1,0 0,-9.53 c -2e-5,-0.62 0.38,-1.13 1,-1.13 0.62,0 1,0.5 1,1.13 L 16,18 17,18 17,8.13 C 17.04,7.51 17.38,7 18,7 z"
+          fill="{$color}"/>
+      </svg:svg>
+    </xsl:when>
+    <xsl:when test="local-name($node)='tip'">
+      <svg:svg width="36" height="36">
+        <svg:path d="M 18,0 C 8.06,0 0,8.06 0,18 0,27.94 8.06,36 18,36 27.94,36 36,27.94 36,18 36,8.06 27.94,0 18,0 z m 0,4.75 c 4.62,0 8.43,3.69 8.38,8.31 -0.052,4.47 -3.11,6.6 -4.19,11.56 l -8.03,2.19 C 14.12,26.35 14.07,25.92 14,25.5 l 4.5,-1.25 -4.78,0 C 12.57,19.55 9.7,17.4 9.66,13.06 9.6,8.44 13.38,4.75 18,4.75 z m -0.88,8.56 -0.41,0.72 -1.97,0 c -1.18,0 -1.39,0.28 -1.19,1 l 1.94,7 c 0.073,0.24 0.31,0.38 0.5,0.38 0.29,0 0.54,-0.16 0.53,-0.5 l -1.88,-6.88 1.47,0 c -0.14,0.24 -0.068,0.58 0.19,0.69 0.47,0.2 0.54,-0.07 0.78,-0.31 0.03,0.12 0.09,0.26 0.22,0.31 0.48,0.19 0.54,-0.07 0.78,-0.31 0.03,0.12 0.11,0.3 0.25,0.34 0.52,0.14 0.51,0.04 0.94,-0.72 l 2.06,0 -1.88,6.88 c 0,0.33 0.25,0.49 0.53,0.5 0.28,0.01 0.45,-0.2 0.5,-0.38 l 1.94,-7 c 0.2,-0.72 0,-1 -1.19,-1 l -1.38,0 C 20.17,13.52 20.12,13.21 19.81,13.13 19.41,13.02 19.27,13.23 19.03,13.47 19.01,13.33 18.96,13.18 18.81,13.13 18.39,12.96 18.27,13.21 18.03,13.47 18.01,13.33 17.97,13.22 17.81,13.13 17.54,12.96 17.24,13.11 17.13,13.31 z M 22,25.69 c -0.07,0.47 -0.1,0.1 -0.13,1.5 l -7.5,2.06 C 14.23,28.75 14.21,28.29 14.19,27.81 z M 21.81,28.25 c 0.029,0.62 -0.18,1.19 -0.44,1.63 l -5.19,1.38 c -0.53,-0.27 -0.99,-0.65 -1.34,-1.13 z"
+          fill="{$color}"/>
+      </svg:svg>
+    </xsl:when>
+    <xsl:when test="local-name($node)='important'">
+      <svg:svg width="36" height="36">
+        <svg:path d="M 18,0 C 8,0 0,8 0,18 0,28 8,36 18,36 28,36 36,28 36,18 36,8 28,0 18,0 z m -2.5,7 5.125,0 -0.75,14.5 -3.625,0 L 15.5,7 z M 18,24 c 0.8,0 1.5,0.25 1.9,0.625 0.45,0.45 0.65,1 0.65,1.9 -10e-6,0.75 -0.25,1.4 -0.65,1.85 C 19.45,28.75 18.8,29 18,29 17.15,29 16.55,28.75 16.1,28.35 15.65,27.9 15.4,27.3 15.4,26.5 c 0,-0.83 0.25,-1.45 0.65,-1.85 C 16.55,24.2 17.15,24 18,24 z"
+          fill="{$color}"/>
+      </svg:svg>
+    </xsl:when>
+    <xsl:otherwise>
+      <svg:svg width="36" height="36">
+        <svg:path d="M 18,0 C 8.06,0 0,8.06 0,18 0,27.94 8.06,36 18,36 27.94,36 36,27.94 36,18 36,8.06 27.94,0 18,0 z m -6.13,6.25 c 0.32,0 0.63,0.13 0.88,0.38 L 26,19.88 27.06,27.5 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 C 26.81,27.94 26.69,28 26.56,28 L 18.94,26.94 5.156,13.16 c -0.195,-0.195 -0.195,-0.49 0,-0.69 0.2,-0.2 0.49,-0.2 0.69,0 L 19.47,26.06 26,26.94 25.13,20.41 12.22,7.5 C 12.02,7.3 11.7,7.3 11.5,7.5 l -3.53,3.53 c -0.2,0.2 -0.2,0.52 0,0.72 l 11.5,11.5 3.34,0.53 -0.53,-3.38 L 11.5,9.63 c -0.2,-0.2 -0.2,-0.52 0,-0.72 0.2,-0.2 0.52,-0.2 0.72,0 L 23.19,19.88 23.88,24.31 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 -0.1,0.1 -0.22,0.16 -0.34,0.16 L 18.94,24.13 7.09,12.28 c -0.49,-0.49 -0.49,-1.29 0,-1.78 l 3.88,-3.88 C 11.2,6.38 11.56,6.25 11.88,6.25 z"
+          fill="{$color}"/>
+      </svg:svg>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 <xsl:template name="admon.symbol.color">
   <xsl:param name="node" select="."/>
   <xsl:choose>
-    <xsl:when test="local-name($node)='note'"><xsl:text>&darker-gray;</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='warning'"><xsl:text>&dark-blood;</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='caution'"><xsl:text>&dark-blood;</xsl:text></xsl:when>
+    <xsl:when test="local-name($node)='warning' or local-name($node)='caution'">
+      <xsl:text>&dark-blood;</xsl:text>
+    </xsl:when>
       <!-- We don't have different symbols for the above two (yet). -->
-    <xsl:when test="local-name($node)='tip'"><xsl:text>&dark-green;</xsl:text></xsl:when>
-    <xsl:when test="local-name($node)='important'"><xsl:text>&mid-orange;</xsl:text></xsl:when>
-    <xsl:otherwise>N</xsl:otherwise>
+    <xsl:when test="local-name($node)='tip'">
+      <xsl:text>&dark-green;</xsl:text>
+    </xsl:when>
+    <xsl:when test="local-name($node)='important'">
+      <xsl:text>&mid-orange;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>&darker-gray;</xsl:text>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
@@ -60,23 +87,26 @@
   <xsl:variable name="color">
     <xsl:call-template name="admon.symbol.color"/>
   </xsl:variable>
-  <xsl:variable name="graphic.width">36pt</xsl:variable>
+  <xsl:variable name="graphic.width">10</xsl:variable>
 
-  <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties"
-    keep-together="always">
+  <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
     <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
                     provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:block font-family="'SUSE Docudings', sans-serif"
-              font-size="{$graphic.width}" line-height="1.05em" color="{$color}"
-               text-align="end">
-                <!-- Let's assume that the admonition icons fit into a square -->
-                <xsl:call-template name="admon.symbol.letter"/>
+            <fo:block start-indent="{&column; - $graphic.width}mm">
+              <fo:instream-foreign-object content-width="{$graphic.width}mm">
+                <xsl:call-template name="admon.symbol">
+                  <xsl:with-param name="color" select="$color"/>
+                </xsl:call-template>
+              </fo:instream-foreign-object>
             </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
-            <fo:block padding-start="{(&gutter;-1) div 2}mm" border-start-width="1mm" border-start-style="solid" border-start-color="{$color}">
+            <fo:block padding-start="{(&gutter;-1) div 2}mm"
+              border-start-width="1mm" border-start-style="solid"
+              border-start-color="{$color}" padding-before="3mm"
+              padding-after="3mm">
             <xsl:if test="$admon.textlabel != 0 or title or info/title">
               <fo:block xsl:use-attribute-sets="admonition.title.properties"
                 color="{$color}">

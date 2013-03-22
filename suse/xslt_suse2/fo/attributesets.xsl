@@ -37,6 +37,14 @@
   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="graphical.admonition.properties">
+  <xsl:attribute name="space-before.optimum">1.5em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">1.2em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">1.7em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">1.5em</xsl:attribute>
+  <xsl:attribute name="space-after.minimum">1.2em</xsl:attribute>
+  <xsl:attribute name="space-after.maximum">1.7em</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 2. Callouts ================================================ -->
 
