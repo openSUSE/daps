@@ -87,14 +87,17 @@
   <xsl:variable name="color">
     <xsl:call-template name="admon.symbol.color"/>
   </xsl:variable>
-  <xsl:variable name="graphic.width">10</xsl:variable>
+  <xsl:variable name="graphic.width" select="10"/>
 
   <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
     <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
                     provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:block start-indent="{&column; - $graphic.width}mm">
+            <fo:block start-indent="{ &column; - $graphic.width }mm"
+              padding-before="3mm" padding-after="3mm">
+              <!-- TODO: fix start-indent for the case that an admonition
+                         within an indented area. -->
               <fo:instream-foreign-object content-width="{$graphic.width}mm">
                 <xsl:call-template name="admon.symbol">
                   <xsl:with-param name="color" select="$color"/>
@@ -103,8 +106,8 @@
             </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
-            <fo:block padding-start="{(&gutter;-1) div 2}mm"
-              border-start-width="1mm" border-start-style="solid"
+            <fo:block padding-start="{(&gutter; - 0.75) div 2}mm"
+              border-start-width="0.75mm" border-start-style="solid"
               border-start-color="{$color}" padding-before="3mm"
               padding-after="3mm">
             <xsl:if test="$admon.textlabel != 0 or title or info/title">
