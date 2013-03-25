@@ -65,7 +65,6 @@ body {
 
 html, body {
     height: 100%;
-    /*min-width: 450px;*/
     min-width: 200px;
     font-size: 16px;
 }
@@ -100,7 +99,6 @@ html, body {
 
 #_toolbar {
     margin: 0 auto;
-    /*min-width: 420px;*/
     min-width: 170px;
     max-width: 1018px;
     padding: 0;
@@ -128,7 +126,6 @@ html, body {
     background-color: #FFF;
     width: 100%;
     z-index: 5;
-    /*min-width: 440px;*/
     min-width: 190px;
 }
 
@@ -238,8 +235,7 @@ html, body {
     background-repeat: no-repeat;
 }
 
-/* A somewhat ugly trick to make the documents look okay even without stylesheet*/
-
+/* A somewhat ugly trick to make the documents look okay even without stylesheet. */
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, #_find-button {
     overflow: hidden;
     height: 0 !important;
@@ -386,7 +382,8 @@ html, body {
     background-position: right top;
 }
 
-#_pickers .bubble .selected:hover, #_pickers .bubble .selected:focus, #_pickers .bubble .selected:active {
+#_pickers .bubble .selected:hover, #_pickers .bubble .selected:focus,
+#_pickers .bubble .selected:active {
     text-decoration: underline;
     background-color: #76AD2D;
 }
@@ -397,7 +394,6 @@ html, body {
 #_toolbar-wrap {
     margin: 0 0 15px;
     width: 100%;
-    /*min-width: 400px;*/
     min-width: 150px;
     background-image: url(../images/dots-grayongreen.png);
     background-color: #76AD2D;
@@ -407,7 +403,6 @@ html, body {
 
 #_toolbar {
     height: 56px;
-    /*min-width: 400px;*/
     min-width: 150px;
 }
 
@@ -689,7 +684,8 @@ html, body {
     background-color: #666;
 }
 
-#_bubble-toc .leads-to-page:hover {
+#_bubble-toc .leads-to-page .name:hover, #_bubble-toc .leads-to-page .name:focus,
+#_bubble-toc .leads-to-page .name:active {
     text-decoration: underline;
 }
 
@@ -704,10 +700,6 @@ html, body {
     background-image: url(../images/arrow.png);
     background-position: -30px 8.5px;
     background-repeat: no-repeat;
-}
-
-#_bubble-toc .inactive a:hover .arrow {
-    /*background-position: 0px 9px;*/
 }
 
 #_bubble-toc .active > a, #_bubble-toc .inactive > a {
@@ -827,7 +819,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_fixed-header {
     max-width: 1018px;
-    /*min-width: 380px;*/
     min-width: 130px;
     display: block;
     width: 100%;
@@ -1083,7 +1074,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_footer {
     font-family: Helvetica, FreeSans, sans-serif;
     z-index: 2; /* Else, #_inward overlays the footer */
-    /*min-width: 380px;*/
     min-width: 130px;
     max-width: 988px;
     margin: 0 auto;
@@ -1301,6 +1291,10 @@ a:hover .name, a:focus .name, a:active .name,
 
 #_bubble-toc .number {
     color: #CCC;
+}
+
+#_bubble-toc .name {
+    color: #FFF;
 }
 
 .permalink {
@@ -1650,7 +1644,7 @@ code {
 
 
 .screen .command {
-    color: #439539;
+    color: #306928;
 }
 
 .calloutlist {
@@ -2117,22 +2111,22 @@ body.draft {
     #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
         display: none;
     }
-    
+
     #_share-print {
         visibility: hidden;
     }
-    
+
     .figure, .informalfigure, .admonition, p, table {
         /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open
            since 2002. Webkit is cool, though. */
         page-break-inside: avoid;
     }
-    
+
     .title {
         page-break-after: avoid;
         break-after: avoid;
     }
-    
+
     .ulink:after {
         color: inherit;
         background-image: none;
@@ -2161,7 +2155,7 @@ body.draft {
         height: 98px;
     }
     */
-    
+
     #_toc-area, #_nav-area {
         width: 49.98%;
     }
@@ -2173,11 +2167,11 @@ body.draft {
         padding: 0 !important;
         overflow: hidden;
     }
-    
+
     #_find-area form {
         margin: 0 !important;
     }
-    
+
     .find-form {
         padding: 10px;
         margin: 0;
@@ -2198,7 +2192,7 @@ body.draft {
         border: 1px solid #CDE8A8;
         border-radius: 3px;
     }
-    
+
     #_find-input:focus {
         border: 1px solid #FFF;
     }
@@ -2211,7 +2205,7 @@ body.draft {
     #_find-input:focus + #_find-button:hover {
         background-position: -90px -72px !important;
     }
-    
+
     #_find-input-label {
         line-height: 20px;
         height: 20px;
@@ -2229,28 +2223,34 @@ body.draft {
     }
 
     #_toolbar {
-        min-height: 112px;
+        min-height: 113px;
     }
 
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
     }
+    #_nav-area {
+        border-top: 1px solid #7DC24D;
+    }
+
+    #_nav-area .tool-spacer {
+        position: absolute;
+    }
 
     #_nav-area .tool-spacer:nth-child(2) {
-        position: absolute;
         left: 0;
     }
-    
+
     #_nav-area .tool-spacer:nth-child(3) {
-        float: right;
+        right: 0;
     }
-    
+
     #_nav-area .tool-label {
         padding: 0 10px;
-        margin-left: 56px;
+        margin: 0 56px;
         float: left;
     }
-    
+
     .nav-inner {
         float: none;
         width: auto;
@@ -2274,20 +2274,20 @@ body.draft {
         height: auto;
         z-index: 7;
         height: 100%;
-        max-height: 100%;
+        overflow-y: scroll;
     }
-    
+
     #_bubble-toc {
         height: auto;
-        max-height: 100%;
+        max-height: 2000%;
         position: static;
+        overflow: hidden;
     }
-    
+
     .bubble-container {
-        position: absolute;
+        position: static;
         width: auto;
-        height: 100%;
-        max-height: 100%;
+        height: auto;
     }
 
     #_white-bg {
@@ -2297,6 +2297,14 @@ body.draft {
     /* Make-shift..? */
     #_fixed-header-wrap, .print {
         display: none;
+    }
+
+    .offline #_share-print {
+        /* Ugly trick -- the JS would otherwise override my display:none */
+        height: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
     }
 
     /* To avoid ugly word-wrap issues (as long as the page is wide enough,
@@ -2317,7 +2325,7 @@ body.draft {
         margin: 0;
     }
 
-    #_footer p{
+    #_footer p {
         text-align: right;
     }
 
@@ -2336,6 +2344,60 @@ body.draft {
 
     #_outer-wrap {
         margin: 0 auto -155px;
+    }
+
+    #_content ul, #_content ol {
+        padding-left: 10px;
+    }
+
+    .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
+    .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
+    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+        padding-left: 10px;
+    }
+
+    .admonition .symbol {
+        float: none;
+        padding-left: calc(50% - 18px);
+        padding-left: -moz-calc(50% - 18px);
+        padding-left: -webkit-calc(50% - 18px);
+        padding-bottom: 10px;
+    }
+
+    .bubble-closer {
+        width: 24px;
+        height: 24px;
+        background-image: url(../images/icons.png);
+        background-position: -72px -87px;
+        display: block;
+        float: right;
+        padding: 0;
+        margin: 0;
+        background-color: transparent !important;
+        cursor: pointer;
+    }
+
+    .bubble-closer:hover, .bubble-closer:focus, .bubble-closer:active {
+        background-position: -96px -87px;
+    }
+
+    .bubble h6 {
+        min-height: 24px;
+    }
+
+    .screen-wrap {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        margin-right: -10px;
+    }
+
+    .example-contents > .screen-wrap, .admonition > .screen-wrap,
+    .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
+    .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
+    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap {
+        margin-left: -10px;
+        margin-right: -10px;
     }
 }
 

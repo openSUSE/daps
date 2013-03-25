@@ -116,7 +116,8 @@ $(function() {
     $('#_bubble-toc ol > li').filter(':not(:has(ol))').children('a').addClass('leads-to-page');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
-
+    $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
+    $('.bubble-closer').click(function(){deactivate(); return false;});
 });
 
 
@@ -140,6 +141,10 @@ function activate( elm ) {
             else if ((element == '_toc-area')) {
                 exchClass( '#_find-area', 'active', 'inactive' );
                 deactivatePosition = $('html').scrollTop();
+                if ( $(window).width() < 450 ) {
+                    $('body').css('overflow', 'hidden');
+                    $('body').css('height', '100%');
+                }
             }
             $('#' + element + '-button').unbind('click');
             $('#' + element + '-button').click(function(){deactivate(); return false;});
@@ -168,7 +173,7 @@ function moveToc ( direction ) {
 }
 
 function scrollDeactivator() {
-    if (deactivatePosition != -1) {
+    if (deactivatePosition != -1 && $(window).width() > 450 ) {
         var diffPosition = $('html').scrollTop() - deactivatePosition;
         if ((diffPosition < -300) || (diffPosition > 300)) {
             deactivate();
@@ -193,6 +198,8 @@ function deactivate() {
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
     exchClass( '#_find-area', 'inactive', 'active' );
+    $('body').css('overflow', 'auto');
+    $('body').css('height', 'auto');
 }
 
 function share( service ) {
