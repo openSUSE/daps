@@ -65,7 +65,8 @@ body {
 
 html, body {
     height: 100%;
-    min-width: 450px;
+    /*min-width: 450px;*/
+    min-width: 200px;
     font-size: 16px;
 }
 
@@ -76,7 +77,8 @@ html, body {
 #_content > .refentry, #_content > .bibliography, #_content > .index,
 .page-bottom {
     margin: 0 auto;
-    min-width: 400px;
+    /*min-width: 400px;*/
+    min-width: 150px;
     max-width: 998px;
 }
 
@@ -98,7 +100,8 @@ html, body {
 
 #_toolbar {
     margin: 0 auto;
-    min-width: 420px;
+    /*min-width: 420px;*/
+    min-width: 170px;
     max-width: 1018px;
     padding: 0;
 }
@@ -116,7 +119,8 @@ html, body {
     background: url(../images/dots-gray.png) repeat-x scroll 0px 0px;
     min-height: 139px;
     clear: both;
-    min-width: 400px;
+    /*min-width: 400px;*/
+    min-width: 150px;
     z-index: 0;
 }
 
@@ -124,7 +128,8 @@ html, body {
     background-color: #FFF;
     width: 100%;
     z-index: 5;
-    min-width: 440px;
+    /*min-width: 440px;*/
+    min-width: 190px;
 }
 
 /* Header Area */
@@ -392,7 +397,8 @@ html, body {
 #_toolbar-wrap {
     margin: 0 0 15px;
     width: 100%;
-    min-width: 400px;
+    /*min-width: 400px;*/
+    min-width: 150px;
     background-image: url(../images/dots-grayongreen.png);
     background-color: #76AD2D;
     position: relative;
@@ -401,7 +407,8 @@ html, body {
 
 #_toolbar {
     height: 56px;
-    min-width: 400px;
+    /*min-width: 400px;*/
+    min-width: 150px;
 }
 
 .tool {
@@ -820,7 +827,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_fixed-header {
     max-width: 1018px;
-    min-width: 380px;
+    /*min-width: 380px;*/
+    min-width: 130px;
     display: block;
     width: 100%;
     font-size: 12px;
@@ -902,6 +910,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     clear: both;
     margin: 20px 0 0 0;
     height: 36px;
+    overflow: hidden;
 }
 
 #_bottom-navigation .prev-icon, #_bottom-navigation .next-icon {
@@ -933,7 +942,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_bottom-navigation .nav-label {
     line-height: 36px;
     display: block;
-    float: left;
     color: #333;
     text-overflow: ellipsis;
     height: 36px;
@@ -1075,7 +1083,8 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_footer {
     font-family: Helvetica, FreeSans, sans-serif;
     z-index: 2; /* Else, #_inward overlays the footer */
-    min-width: 380px;
+    /*min-width: 380px;*/
+    min-width: 130px;
     max-width: 988px;
     margin: 0 auto;
     padding: 0 10px;
@@ -2213,6 +2222,123 @@ body.draft {
     }
 }
 
+/* Mobile layout */
+@media only screen and (max-width: 450px) {
+    #_toc-area, #_nav-area {
+        width: 100%;
+    }
+
+    #_toolbar {
+        min-height: 112px;
+    }
+
+    #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
+        max-height: 300px;
+    }
+
+    #_nav-area .tool-spacer:nth-child(2) {
+        position: absolute;
+        left: 0;
+    }
+    
+    #_nav-area .tool-spacer:nth-child(3) {
+        float: right;
+    }
+    
+    #_nav-area .tool-label {
+        padding: 0 10px;
+        margin-left: 56px;
+        float: left;
+    }
+    
+    .nav-inner {
+        float: none;
+        width: auto;
+    }
+
+    #_header .crumbs {
+        display: none;
+    }
+
+    #_logo {
+        margin: 22px 10px 22px 53px;
+    }
+    
+    #_toolbar .active .bubble-corner {
+        display: none;
+    }
+
+    #_toolbar .bubble {
+        position: fixed;
+        top: 0;
+        height: auto;
+        z-index: 7;
+        height: 100%;
+        max-height: 100%;
+    }
+    
+    #_bubble-toc {
+        height: auto;
+        max-height: 100%;
+        position: static;
+    }
+    
+    .bubble-container {
+        position: absolute;
+        width: auto;
+        height: 100%;
+        max-height: 100%;
+    }
+
+    #_white-bg {
+        position: static;
+    }
+
+    /* Make-shift..? */
+    #_fixed-header-wrap, .print {
+        display: none;
+    }
+
+    /* To avoid ugly word-wrap issues (as long as the page is wide enough,
+       though, inline-block'ing these elements helps us to avoid wrapping at
+       all.) */
+    code, .command {
+        display: inline;
+    }
+
+    #_footer {
+        height: auto;
+    }
+
+    #_footer li, #_footer p {
+        line-height: 250%;
+        float: none;
+        width: 100%;
+        margin: 0;
+    }
+
+    #_footer p{
+        text-align: right;
+    }
+
+    #_footer ul {
+        margin: 0;
+    }
+
+    #_footer a {
+      display: block;
+      border-top: 1px solid #FFF;
+    }
+
+    #_inward, #_footer-wrap {
+        height: 155px;
+    }
+
+    #_outer-wrap {
+        margin: 0 auto -155px;
+    }
+}
+
 /* Optimize images for various screen heights. Some (1080 and 1024, 800 and 768
    etc.) are bucketed. We assume 110px for added browser chrome (subtracted from
    the @media max-height), and 170px for giving the image some context
@@ -2236,12 +2362,14 @@ body.draft {
     }
 }
 
-/* Make an exception here, so we don't get stamp-sized screenshots. */
 @media only screen and (max-height: 490px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
     .informalfigure img, .figure img {
         max-height: 400px;
     }
+}
 
+@media only screen and (max-height: 490px) and (min-width: 451px) {
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
     }
