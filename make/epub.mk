@@ -131,7 +131,7 @@ $(EPUB_TMPDIR)/OEBPS/index.html: $(EPUBBIGFILE)
 # mimetype file
 #
 $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
-	@echo "application/epub+zip" > $@
+	@echo -n "application/epub+zip" > $@
 
 #--------------
 # Images
