@@ -2280,14 +2280,50 @@ body.draft {
     #_bubble-toc {
         height: auto;
         max-height: 2000%;
-        position: static;
+        position: relative;
+        top: 45px;
         overflow: hidden;
+        padding-bottom: 5px;
     }
 
     .bubble-container {
         position: static;
         width: auto;
         height: auto;
+    }
+
+    .bubble-closer {
+        width: 24px;
+        height: 24px;
+        background-image: url(../images/icons.png);
+        background-position: -72px -87px;
+        display: block;
+        float: right;
+        padding: 0;
+        margin: 0;
+        background-color: transparent !important;
+        cursor: pointer;
+    }
+
+    .bubble-closer:hover, .bubble-closer:focus, .bubble-closer:active {
+        background-position: -96px -87px;
+    }
+
+    .bubble h6 {
+        min-height: 24px;
+    }
+
+    #_toc-area .bubble h6 {
+        position: fixed;
+        background-color: #333;
+        z-index: 9;
+        left: 0;
+        top: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: -moz-calc(100% - 20px);
+        width: -webkit-calc(100% - 20px);
+        width: calc(100% - 20px);
     }
 
     #_white-bg {
@@ -2364,27 +2400,6 @@ body.draft {
         padding-bottom: 10px;
     }
 
-    .bubble-closer {
-        width: 24px;
-        height: 24px;
-        background-image: url(../images/icons.png);
-        background-position: -72px -87px;
-        display: block;
-        float: right;
-        padding: 0;
-        margin: 0;
-        background-color: transparent !important;
-        cursor: pointer;
-    }
-
-    .bubble-closer:hover, .bubble-closer:focus, .bubble-closer:active {
-        background-position: -96px -87px;
-    }
-
-    .bubble h6 {
-        min-height: 24px;
-    }
-
     .screen-wrap {
         border-left: none;
         border-right: none;
@@ -2395,9 +2410,47 @@ body.draft {
     .example-contents > .screen-wrap, .admonition > .screen-wrap,
     .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
     .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
-    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap {
+    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap,
+    .procedure-contents, .procedure-title-wrap + .procedure-contents, div.figure {
         margin-left: -10px;
         margin-right: -10px;
+    }
+
+    div.figure {
+        /* Remove proprietary attributes later on */
+        max-width: -moz-calc(100% + 20px);
+        max-width: -webkit-calc(100% + 20px);
+        max-width: calc(100% + 20px);
+    }
+    #_content ol.procedure {
+        padding-left: 20px;
+    }
+
+    .book .title, .set .title, .article .title {
+        font-size: 36px;
+    }
+
+    .title, .chapter .title, .preface .title,
+    .appendix .title, .bibliography .title,
+    .reference .title, .part .title, .glossary .title {
+        font-size: 30px;
+    }
+
+    .sect1 .title, .single .sect1 .title,
+    .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+    .bibliography .qandaset .title, .reference .qandaset .title,
+    .part .qandaset .title, .glossary .qandaset .title, .set .subtitle,
+    .book .subtitle, .article .subtitle {
+        font-size: 22px;
+    }
+
+    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
+        font-size: 20px;
+    }
+
+    .sect3 .title, .single .sect3 .title,
+    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
+        font-size: 18px;
     }
 }
 
