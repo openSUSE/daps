@@ -166,6 +166,10 @@ function moveToc ( direction ) {
         $('#_header .single-crumb').unbind('click');
         $('#_header .single-crumb').click(function(){ moveToc('down'); return false;});
         deactivatePosition = $('html').scrollTop();
+        if ( $(window).width() < 450 ) {
+            $('body').css('overflow', 'hidden');
+            $('body').css('height', '100%');
+        }
     }
     else if (direction == 'down') {
         $('#_toc-bubble-wrap > .bubble').detach().appendTo('#_fixed-header-wrap');

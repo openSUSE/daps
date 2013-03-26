@@ -122,7 +122,6 @@ html, body {
     background: url(../images/dots-gray.png) repeat-x scroll 0px 0px;
     min-height: 139px;
     clear: both;
-    /*min-width: 400px;*/
     min-width: 150px;
     z-index: 0;
 }
@@ -602,7 +601,7 @@ html, body {
 }
 
 #_toc-bubble-wrap .bubble {
-    min-width: 400px;
+    min-width: 150px;
     max-width: 1024px;
     padding: 10px;
     margin: 0 auto;
@@ -738,7 +737,7 @@ html, body {
     background-color: #666;
 }
 
-#_toolbar .bubble-back {
+#_bubble-toc .bubble-back {
     display: none;
 }
 
@@ -2283,6 +2282,38 @@ body.draft {
         display: none !important;
     }
 
+    #_header .crumbs .single-crumb {
+        padding-right: 0;
+        width: 36px;
+        z-index: 12;
+        position: relative;
+    }
+
+    #_header .crumbs.active .single-crumb {
+        padding-right: 10px;
+        width: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        min-height: 35px;
+        border-radius: 0;
+        background-color: #333;
+        border-bottom: 1px solid #FFF;
+        color: #FFF;
+    }
+
+    #_header .crumbs.active .single-crumb a {
+        margin: 10px;
+    }
+    #_header .crumbs.active .book2-icon {
+        background-position: -72px -87px;
+        width: 24px;
+        height: 24px;
+        float: right;
+        margin-top: 5px;
+        margin-right: 5px;
+    }
+
     #_header .crumbs {
         right: 10px;
         left: auto;
@@ -2407,6 +2438,15 @@ body.draft {
         width: calc(100% - 20px);
     }
 
+    #_toc-bubble-wrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 6;
+        height: 100%;
+        background-color: #333;
+    }
+
     #_white-bg {
         position: static;
     }
@@ -2474,6 +2514,7 @@ body.draft {
 
     .admonition .symbol {
         float: none;
+        /* Remove proprietary attributes later on */
         padding-left: calc(50% - 18px);
         padding-left: -moz-calc(50% - 18px);
         padding-left: -webkit-calc(50% - 18px);
