@@ -69,16 +69,21 @@ html, body {
     font-size: 16px;
 }
 
-#_header, #_toolbar-bottom,
+#_toolbar-bottom,
 #_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
 #_content > .refentry, #_content > .bibliography, #_content > .index,
 .page-bottom {
     margin: 0 auto;
-    /*min-width: 400px;*/
     min-width: 150px;
     max-width: 998px;
+}
+
+#_header {
+    margin: 0 auto;
+    min-width: 150px;
+    max-width: 1018px;
 }
 
 .single div.part, .single div.chapter, .single div.preface,
@@ -733,6 +738,9 @@ html, body {
     background-color: #666;
 }
 
+#_toolbar .bubble-back {
+    display: none;
+}
 
 #_find-area form {
     margin: 0 0 0 50% !important;
@@ -1276,8 +1284,14 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 a:hover .name, a:focus .name, a:active .name,
-.refentrytitle a:hover, .refentrytitle a:focus, .refentrytitle a:active {
+.bubble a.leads-to-page:hover .name, a.leads-to-page:focus .name,
+a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
+.refentrytitle a:active {
     text-decoration: underline;
+}
+
+.bubble a:hover .name, .bubble a:focus .name, .bubble a:active .name {
+    text-decoration: none;
 }
 
 .number, .subtitle {
@@ -2226,9 +2240,18 @@ body.draft {
         min-height: 113px;
     }
 
+    #_toolbar.one-line {
+        min-height: 56px;
+    }
+
+    .one-line #_nav-area {
+        display: none;
+    }
+
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
     }
+
     #_nav-area {
         border-top: 1px solid #7DC24D;
     }
@@ -2256,8 +2279,13 @@ body.draft {
         width: auto;
     }
 
+    #_header .crumbs * + * {
+        display: none !important;
+    }
+
     #_header .crumbs {
-        display: none;
+        right: 10px;
+        left: auto;
     }
 
     #_logo {
@@ -2284,6 +2312,17 @@ body.draft {
         top: 45px;
         overflow: hidden;
         padding-bottom: 5px;
+    }
+
+    #_bubble-toc ol, #_bubble-toc .active ol {
+        width: 100%;
+        border: none;
+        background-color: #333;
+    }
+
+    #_bubble-toc .active ol {
+        z-index: 8;
+        right: -1px;
     }
 
     .bubble-container {
@@ -2313,6 +2352,47 @@ body.draft {
         min-height: 24px;
     }
 
+    #_bubble-toc .bubble-back {
+        display: block;
+        margin-top: 45px;
+    }
+
+    #_bubble-toc .bubble-back a {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    #_bubble-toc ol ol li {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #_bubble-toc ol ol li:last-child {
+        margin-bottom: 5px;
+    }
+
+    #_bubble-toc .active ol {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 8;
+        overflow-y: scroll;
+    }
+
+    .back-icon {
+        width: 24px;
+        height: 24px;
+        background-image: url(../images/icons.png);
+        background-position: -120px -87px;
+        display: block;
+    }
+
+    .bubble-back:hover .back-icon, .bubble-back:focus .back-icon,
+    .bubble-back:active .back-icon {
+        background-position: -144px -87px;
+    }
+
     #_toc-area .bubble h6 {
         position: fixed;
         background-color: #333;
@@ -2330,13 +2410,12 @@ body.draft {
         position: static;
     }
 
-    /* Make-shift..? */
     #_fixed-header-wrap, .print {
         display: none;
     }
 
     .offline #_share-print {
-        /* Ugly trick -- the JS would otherwise override my display:none */
+        /* Ugly trick -- the JS would otherwise override my display: none */
         height: 0;
         padding: 0;
         margin: 0;

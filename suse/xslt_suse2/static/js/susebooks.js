@@ -115,9 +115,12 @@ $(function() {
     $('#_bubble-toc > ol').not(':has(li > ol)').addClass('full-width');
     $('#_bubble-toc ol > li').filter(':not(:has(ol))').children('a').addClass('leads-to-page');
     $('#_bubble-toc ol > li').filter(':has(ol)').children('a').append('<span class="arrow">&nbsp;</span>');
+    $('#_bubble-toc ol ol').prepend('<li class="bubble-back"><a href="#"><span class="back-icon">&nbsp;</span></a></li>');
+    $('.bubble-back').click(function(){exchClass('#_bubble-toc > ol > li', 'active', 'inactive'); return false;});
     $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
     $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
     $('.bubble-closer').click(function(){deactivate(); return false;});
+    if ( $('#_nav-area').not(':has(span)') ) { $('#_toolbar').addClass('one-line'); };
 });
 
 
