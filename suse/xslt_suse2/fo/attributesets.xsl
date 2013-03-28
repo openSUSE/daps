@@ -146,7 +146,7 @@
 <xsl:variable name="hook">
   <xsl:choose>
     <xsl:when test="$fop1.extensions != 0">&#160;</xsl:when>
-      <!-- FOP doesn't like either " " or "&#32;" – no-break space works however-->
+      <!-- FOP doesn't like either " " or "&#32;" – no-break space works however. -->
     <xsl:otherwise>&#8617;</xsl:otherwise>
   </xsl:choose>
 </xsl:variable>

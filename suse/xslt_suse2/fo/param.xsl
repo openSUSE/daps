@@ -130,7 +130,7 @@ task before
 <xsl:param name="sans.font.family">&sans;, sans-serif</xsl:param>
 <xsl:param name="title.font.family">&sans;, sans-serif</xsl:param>
 <xsl:param name="monospace.font.family">&mono;, monospace</xsl:param>
-<xsl:param name="symbol.font.family">'FreeSerif'</xsl:param>
+<xsl:param name="symbol.font.family">&symbol;</xsl:param>
 
 <xsl:param name="body.font.master" select="'&normal;'"/>
 <xsl:param name="body.font.size">
