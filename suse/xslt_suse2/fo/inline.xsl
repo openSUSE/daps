@@ -38,7 +38,7 @@
     </xsl:call-template>
   </xsl:param>
 
-  <fo:inline xsl:use-attribute-sets="monospace.properties">
+  <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal">
     <xsl:if test="parent::para|parent::title">
       <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
@@ -113,7 +113,7 @@
   </xsl:param>
 
   <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties">
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="parent::para|parent::title" font-weight="normal">
       <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
