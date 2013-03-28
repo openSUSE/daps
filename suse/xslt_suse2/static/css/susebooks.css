@@ -158,7 +158,6 @@ html, body {
     height: 36px;
     text-overflow: ellipsis;
     margin: 0;
-    padding: 0 0 2px 0;
     overflow: hidden;
     white-space: nowrap;
     margin: 0 0 0 110px;
@@ -200,7 +199,7 @@ html, body {
 #_header .crumbs .single-crumb {
     line-height: 36px;
     padding: 0 10px 0 0;
-    margin: 0;
+    margin: 0 0 0 10px;
     height: 36px;
     display: block;
     background-color: #EFEFF0;
@@ -220,7 +219,7 @@ html, body {
 #_header .crumbs .book2-icon {
     width: 36px;
     height: 36px;
-    background-position: 0px 0px;
+    background-position: -36px 0px;
     margin: -4px 5px 0 0;
     padding: 0;
     display: inline-block;
@@ -518,45 +517,45 @@ html, body {
 }
 
 .toc-icon {
-    background-position: -36px 0px;
-}
-
-
-.active .toc-icon, a:hover .toc-icon, a:focus .toc-icon, a:active .toc-icon {
-    background-position: -36px -36px;
-}
-
-.find-icon {
     background-position: -72px 0px;
 }
 
 
-.active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
+.active .toc-icon, a:hover .toc-icon, a:focus .toc-icon, a:active .toc-icon {
     background-position: -72px -36px;
 }
 
+.find-icon {
+    background-position: -108px 0px;
+}
+
+
+.active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
+    background-position: -108px -36px;
+}
+
 #_toolbar a.tool-spacer .prev-icon {
-    background-position: -144px 0px;
-}
-
-#_toolbar span.tool-spacer .prev-icon {
-    background-position: -216px 0px;
-}
-
-#_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
-    background-position: -144px -36px;
-}
-
-#_toolbar a.tool-spacer .next-icon {
     background-position: -180px 0px;
 }
 
+#_toolbar span.tool-spacer .prev-icon {
+    background-position: -252px 0px;
+}
+
+#_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
+    background-position: -180px -36px;
+}
+
+#_toolbar a.tool-spacer .next-icon {
+    background-position: -216px 0px;
+}
+
 #_toolbar span.tool-spacer .next-icon {
-    background-position: -216px -36px;
+    background-position: -252px -36px;
 }
 
 #_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
-    background-position: -180px -36px;
+    background-position: -216px -36px;
 }
 
 .bubble-corner {
@@ -609,7 +608,7 @@ html, body {
 
 #_toc-bubble-wrap {
     position:absolute;
-    top: 83px;
+    top: 82px;
     left: 0px;
     display: none;
     height: auto;
@@ -777,7 +776,7 @@ html, body {
     width: 36px;
     display: block;
     margin: 0 0 0 -18px;
-    background-position: -72px 0px;
+    background-position: -108px 0px;
     float: left;
     border: 0;
     background-color: transparent;
@@ -920,20 +919,20 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_bottom-navigation .prev-icon {
-    background-position: -252px 0;
+    background-position: -288px 0;
 }
 
 #_bottom-navigation .nav-link:hover .prev-icon  {
-    background-position: -252px -36px;
+    background-position: -288px -36px;
 }
 
 
 #_bottom-navigation .next-icon {
-    background-position: -288px 0;
+    background-position: -324px 0;
 }
 
 #_bottom-navigation .nav-link:hover .next-icon {
-    background-position: -288px -36px;
+    background-position: -324px -36px;
 }
 
 
@@ -2239,13 +2238,14 @@ body.draft {
         min-height: 113px;
     }
 
-    #_toolbar.one-line {
+    #_toolbar.only-toc, #_toolbar.only-nav {
         min-height: 56px;
     }
 
-    .one-line #_nav-area {
+    .only-toc #_nav-area, .only-nav #_toc-area {
         display: none;
     }
+
 
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
@@ -2321,7 +2321,12 @@ body.draft {
         margin-right: 10px;
         margin-left: 53px;
     }
-    
+
+    #_header .book2-icon:hover, #_header .book2-icon:focus,
+    #_header .book2-icon:active {
+        background-position: -36px -36px;
+    }
+
     #_toolbar .active .bubble-corner {
         display: none;
     }
@@ -2347,6 +2352,11 @@ body.draft {
         top: 35px;
     }
 
+    #_toc-bubble-wrap .bubble {
+        height: 100%;
+        max-height: 100%;
+    }
+
     #_bubble-toc ol, #_bubble-toc .active ol {
         width: 100%;
         border: none;
@@ -2359,9 +2369,11 @@ body.draft {
     }
 
     .bubble-container {
-        position: static;
+        position: relative;
         width: auto;
-        height: auto;
+        height: 100%;
+        overflow-y: auto;
+        z-index: 7;
     }
 
     .bubble-closer {
@@ -2410,7 +2422,7 @@ body.draft {
         left: 0;
         height: 100%;
         z-index: 8;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .back-icon {
@@ -2462,6 +2474,11 @@ body.draft {
         padding: 0;
         margin: 0;
         border: none;
+    }
+
+    .line .toc {
+        padding-left: 0;
+        padding-right: 0;
     }
 
     /* To avoid ugly word-wrap issues (as long as the page is wide enough,

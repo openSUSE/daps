@@ -121,9 +121,12 @@ $(function() {
     $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
     $('.bubble-closer').click(function(){deactivate(); return false;});
 
-    if ( $('#_nav-area *)') ) {
-        $('#_toolbar').addClass('one-line');
-    };
+    if ( !( $('#_nav-area div').length ) ) {
+        $('#_toolbar').addClass('only-toc');
+    }
+    else if ( !( $('#_toc-area div').length && $('#_nav-area div').length ) ) {
+        $('#_toolbar').addClass('only-nav');
+    }
 });
 
 
