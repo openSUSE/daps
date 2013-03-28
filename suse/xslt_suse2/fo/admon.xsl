@@ -3,7 +3,7 @@
   Purpose:
     Re-Style admonitions
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
               Thomas Schraitle <toms@opensuse.org>
 
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
@@ -53,6 +53,7 @@
       </svg:svg>
     </xsl:when>
     <xsl:otherwise>
+      <!-- It's a note. (Or something undefined.) -->
       <svg:svg width="36" height="36">
         <svg:path d="M 18,0 C 8.06,0 0,8.06 0,18 0,27.94 8.06,36 18,36 27.94,36 36,27.94 36,18 36,8.06 27.94,0 18,0 z m -6.13,6.25 c 0.32,0 0.63,0.13 0.88,0.38 L 26,19.88 27.06,27.5 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 C 26.81,27.94 26.69,28 26.56,28 L 18.94,26.94 5.156,13.16 c -0.195,-0.195 -0.195,-0.49 0,-0.69 0.2,-0.2 0.49,-0.2 0.69,0 L 19.47,26.06 26,26.94 25.13,20.41 12.22,7.5 C 12.02,7.3 11.7,7.3 11.5,7.5 l -3.53,3.53 c -0.2,0.2 -0.2,0.52 0,0.72 l 11.5,11.5 3.34,0.53 -0.53,-3.38 L 11.5,9.63 c -0.2,-0.2 -0.2,-0.52 0,-0.72 0.2,-0.2 0.52,-0.2 0.72,0 L 23.19,19.88 23.88,24.31 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 -0.1,0.1 -0.22,0.16 -0.34,0.16 L 18.94,24.13 7.09,12.28 c -0.49,-0.49 -0.49,-1.29 0,-1.78 l 3.88,-3.88 C 11.2,6.38 11.56,6.25 11.88,6.25 z"
           fill="{$color}"/>
@@ -65,9 +66,9 @@
   <xsl:param name="node" select="."/>
   <xsl:choose>
     <xsl:when test="local-name($node)='warning' or local-name($node)='caution'">
+      <!-- The symbol for these two is currently the same -->
       <xsl:text>&dark-blood;</xsl:text>
     </xsl:when>
-      <!-- We don't have different symbols for the above two (yet). -->
     <xsl:when test="local-name($node)='tip'">
       <xsl:text>&dark-green;</xsl:text>
     </xsl:when>
@@ -75,6 +76,7 @@
       <xsl:text>&mid-orange;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
+      <!-- It's a note. (Or something undefined.) -->
       <xsl:text>&darker-gray;</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
