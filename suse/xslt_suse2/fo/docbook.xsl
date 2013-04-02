@@ -34,6 +34,7 @@
 
   <xsl:include href="param.xsl"/>
 
+  <xsl:include href="autotoc.xsl"/>
   <xsl:include href="callout.xsl"/>
   <xsl:include href="xref.xsl"/>
   <xsl:include href="sections.xsl"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Restyle titles of chapters, etc.
 
@@ -86,8 +86,8 @@
     <xsl:if test="count($nodes) &gt; 0 and contains($toc.params, 'toc')">
       <xsl:call-template name="division.toc">
         <xsl:with-param name="toc-context" select="$part"/>
-        <xsl:with-param name="toc.title.p" 
-                        select="contains($toc.params, 'title')"/>
+        <xsl:with-param name="toc.title.p" select="false()"/>
+        <xsl:with-param name="toc.max.depth" select="1"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:if>
