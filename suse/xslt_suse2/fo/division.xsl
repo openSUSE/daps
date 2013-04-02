@@ -65,7 +65,6 @@
   <xsl:param name="part" select="."/>
   <xsl:param name="actually-do" select="0"/>
 
-
   <xsl:variable name="toc.params">
     <xsl:call-template name="find.path.params">
       <xsl:with-param name="node" select="$part"/>
@@ -84,11 +83,12 @@
 
   <xsl:if test="$actually-do = 1">
     <xsl:if test="count($nodes) &gt; 0 and contains($toc.params, 'toc')">
-      <xsl:call-template name="division.toc">
-        <xsl:with-param name="toc-context" select="$part"/>
-        <xsl:with-param name="toc.title.p" select="false()"/>
-        <xsl:with-param name="toc.max.depth" select="1"/>
-      </xsl:call-template>
+      <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
+        provisional-label-separation="&gutter;mm">
+        <xsl:call-template name="division.part.toc">
+          <xsl:with-param name="toc-context" select="$part"/>
+        </xsl:call-template>
+      </fo:list-block>
     </xsl:if>
   </xsl:if>
 </xsl:template>
@@ -168,7 +168,7 @@
       <fo:block id="{$id}">
         <xsl:call-template name="part.titlepage"/>
       </fo:block>
-      <fo:block>
+      <fo:block space-before="{&column;}mm">
         <xsl:call-template name="generate.part.toc">
           <xsl:with-param name="actually-do" select="1"/>
         </xsl:call-template>

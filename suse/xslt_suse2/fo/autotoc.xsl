@@ -21,9 +21,8 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version='1.0'>
 
-<xsl:template name="division.toc">
+<xsl:template name="division.part.toc">
   <xsl:param name="toc-context" select="."/>
-  <xsl:param name="toc.title.p" select="true()"/>
 
   <xsl:variable name="cid">
     <xsl:call-template name="object.id">
@@ -43,18 +42,11 @@
                         |$toc-context/glossary
                         |$toc-context/index"/>
 
-  <xsl:if test="$nodes">
-    <fo:block id="toc...{$cid}" xsl:use-attribute-sets="toc.margin.properties">
-      <xsl:if test="$toc.title.p">
-        <xsl:call-template name="table.of.contents.titlepage"/>
-      </xsl:if>
-      <xsl:apply-templates select="$nodes" mode="part.toc">
-        <xsl:with-param name="toc-context" select="$toc-context"/>
-      </xsl:apply-templates>
-    </fo:block>
-  </xsl:if>
-</xsl:template>
 
+  <xsl:apply-templates select="$nodes" mode="part.toc">
+    <xsl:with-param name="toc-context" select="$toc-context"/>
+  </xsl:apply-templates>
+</xsl:template>
 
 <xsl:template match="reference" mode="part.toc">
   <xsl:param name="toc-context" select="."/>
@@ -91,7 +83,6 @@
   <xsl:call-template name="toc.part.line">
     <xsl:with-param name="toc-context" select="$toc-context"/>
   </xsl:call-template>
-
 </xsl:template>
 
 
@@ -126,23 +117,35 @@
     <xsl:apply-templates select="." mode="label.markup"/>
   </xsl:variable>
 
-  <fo:block font-family="{$title.fontset}" size="&large;" start-indent="{&column; + &gutter;}mm">
-    <fo:inline keep-with-next.within-line="always">
-      <fo:basic-link internal-destination="{$id}">
-        <xsl:if test="$label != ''">
-          <xsl:copy-of select="$label"/>
-          <xsl:value-of select="$autotoc.label.separator"/>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-      </fo:basic-link>
-    </fo:inline>
-    <fo:inline keep-together.within-line="always">
-      <xsl:text> </xsl:text>
-      <fo:basic-link internal-destination="{$id}">
-        <fo:page-number-citation ref-id="{$id}"/>
-      </fo:basic-link>
-    </fo:inline>
-  </fo:block>
+  <fo:list-item>
+    <fo:list-item-label end-indent="label-end()">
+      <fo:block text-align="end" font-family="{$title.fontset}"
+        font-size="&large;pt" color="&mid-gray;" line-height="1.5em">
+        <fo:basic-link internal-destination="{$id}">
+          <xsl:if test="$label != ''">
+            <xsl:copy-of select="$label"/>
+          </xsl:if>
+        </fo:basic-link>
+      </fo:block>
+    </fo:list-item-label>
+    <fo:list-item-body start-indent="body-start()">
+      <fo:block line-height="1.5em">
+        <fo:inline keep-with-next.within-line="always"
+        font-family="{$title.fontset}" font-size="&large;pt">
+          <fo:basic-link internal-destination="{$id}">
+            <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+          </fo:basic-link>
+        </fo:inline>
+        <fo:inline keep-together.within-line="always" color="&dark-green;"
+          font-size="&large;pt" font-family="&serif;">
+          <fo:basic-link internal-destination="{$id}">
+            <fo:leader leader-pattern="space" leader-length="&gutter;mm"/>
+            <fo:page-number-citation ref-id="{$id}"/>
+          </fo:basic-link>
+        </fo:inline>
+      </fo:block>
+    </fo:list-item-body>
+  </fo:list-item>
 </xsl:template>
 
 </xsl:stylesheet>
