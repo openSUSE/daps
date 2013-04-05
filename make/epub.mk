@@ -33,7 +33,7 @@ STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 #
 
 
-EPUB_TMPDIR      := $(TMP_DIR)/epub
+EPUB_TMPDIR      := $(TMP_DIR)/epub_$(DOCNAME)
 EPUB_RESDIR      := $(EPUB_TMPDIR)/OEBPS
 #EPUB_IMGDIR      := $(EPUB_RESDIR)/images
 EPUB_IMGDIR      := $(EPUB_RESDIR)
@@ -61,7 +61,8 @@ EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
 	       --stringparam "img.src.path=\"\"" \
-               --stringparam "callout.graphics.path=callouts/" \
+	       --param "callout.graphics=1" \
+	       --stringparam "callout.graphics.path=callouts/" \
                --param "callout.graphics.number.limit=30" \
                --stringparam "callout.graphics.extension=.png"
 
