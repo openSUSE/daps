@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0"
   xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
   exclude-result-prefixes="l">
   
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/epub/docbook.xsl"/>
