@@ -46,7 +46,7 @@ EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
 
 # Images
 #
-EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/online,$(EPUB_IMGDIR),$(PNGONLINE))
+EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/online,$(EPUB_IMGDIR),$(FOR_HTML_IMAGES))
 #EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
 EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
 #EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)

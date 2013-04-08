@@ -116,15 +116,15 @@ endif
 
 # inline Images
 #
-HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(PNGONLINE))
+HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/online/,$(HTML_DIR)/images/,$(FOR_HTML_IMAGES))
 
 #--------------
 # HTML
 #
 .PHONY: html
 html: list-images-multisrc list-images-missing copy_static_images
-ifdef PNGONLINE
-  html: $(ONLINE_IMAGES) copy_inline_images
+ifdef FOR_HTML_IMAGES
+  html: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
   ifneq ($(IS_STATIC),static)
@@ -139,8 +139,8 @@ html: $(HTML_RESULT)
 #
 .PHONY: single-html
 single-html: list-images-multisrc list-images-missing copy_static_images
-ifdef PNGONLINE
-  single-html: $(ONLINE_IMAGES) copy_inline_images
+ifdef FOR_HTML_IMAGES
+  single-html: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
   ifneq ($(IS_STATIC),static)
@@ -155,8 +155,8 @@ single-html: $(HTMLSINGLE_RESULT)
 #
 .PHONY: jsp
 jsp: list-images-multisrc list-images-missing copy_static_images
-ifdef PNGONLINE
-  jsp: $(ONLINE_IMAGES) copy_inline_images
+ifdef FOR_HTML_IMAGES
+  jsp: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
   ifneq ($(IS_STATIC),static)
@@ -225,8 +225,8 @@ endif
 #
 .PHONY: copy_inline_images
 copy_inline_images: | $(HTML_DIR)/images
-copy_inline_images: $(ONLINE_IMAGES)
-	for IMG in $(PNGONLINE); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
+copy_inline_images: $(FOR_HTML_IMAGES)
+	for IMG in $(FOR_HTML_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
 
 
 # copy CSS file.

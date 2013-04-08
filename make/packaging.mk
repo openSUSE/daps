@@ -265,17 +265,17 @@ $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
   endif
 
 #----
-# creates an archive with all generated png graphics
+# creates an archive with all generated graphics for HTML/EPUB
 #
-$(OD_GRAPHICS): $(PNGONLINE)
-  ifdef PNGONLINE
+$(OD_GRAPHICS): $(FOR_HTML_IMAGES)
+  ifdef FOR_HTML_IMAGES
     ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating online-docs graphics tarball..."
     endif
 	BZIP2=--best \
 	tar cjhf $@ --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
-	  $(sort $(PNGONLINE))
+	  $(sort $(FOR_HTML_IMAGES))
   else
 	@ccecho "info" "Selected set or book contains no graphics"
   endif

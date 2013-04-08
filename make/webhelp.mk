@@ -107,8 +107,8 @@ $(WEBHELP_DIR)/$(notdir $(HTML_CSS)): $(HTML_CSS)
 # images
 wh_copy_inline_images: | $(WEBHELP_DIR)/images
 wh_copy_inline_images: $(ONLINE_IMAGES)
-  ifdef PNGONLINE
-	for IMG in $(PNGONLINE); do \
+  ifdef FOR_HTML_IMAGES
+	for IMG in $(FOR_HTML_IMAGES); do \
 	  $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; \
 	done
   endif
@@ -183,7 +183,7 @@ $(WEBHELP_DIR)/index.html: $(DOCFILES) $(DOCBOOK_STYLES)/extensions
 $(WEBHELP_DIR)/index.html: $(PROFILES) $(PROFILEDIR)/.validate
 $(WEBHELP_DIR)/index.html: list-images-multisrc list-images-missing
 $(WEBHELP_DIR)/index.html: wh_copy_static_images copy_common
-ifdef PNGONLINE
+ifdef FOR_HTML_IMAGES
   $(WEBHELP_DIR)/index.html: wh_copy_inline_images
 endif
 ifneq ("$(WH_SEARCH)", "no")

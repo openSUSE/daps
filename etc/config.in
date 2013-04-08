@@ -122,7 +122,18 @@ COLOR="yes"
 #
 CONF_PREFIX="DC-"
 
-## Key:         CONVERT_OPTS
+## Key:         CONVERT_OPTS_JPG
+## -------------------------
+## Description: Command line options for "convert" to convert color JPGs
+##              to grayscale
+## Type:        String
+## Default:     "-type grayscale"
+#
+# Do not change unless you really know what you do.
+#
+CONVERT_OPTS_JPG="-type grayscale"
+
+## Key:         CONVERT_OPTS_PNG
 ## -------------------------
 ## Description: Command line options for "convert" to convert color PNGs
 ##              to grayscale
@@ -131,7 +142,7 @@ CONF_PREFIX="DC-"
 #
 # Do not change unless you really know what you do.
 #
-CONVERT_OPTS="-type grayscale -colors 256"
+CONVERT_OPTS_PNG="-type grayscale -colors 256"
 
 ## Key:         DOCCONF_DEFAULT
 ## -----------------------------

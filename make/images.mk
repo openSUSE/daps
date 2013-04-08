@@ -44,6 +44,8 @@
 #........|...........|..........
 #  FIG   |   PNG     | SVG,PDF
 #........|...........|..........
+#  JPG   |   JPG     |   JPG
+#........|...........|..........
 #  PNG   |   PNG     |   PNG
 #........|...........|..........
 #  PDF   |   PNG     |   PDF
@@ -68,6 +70,7 @@
 .PRECIOUS: $(IMG_GENDIR)/gen/png/%.png
 .PRECIOUS: $(IMG_GENDIR)/gen/pdf/%.pdf
 .PRECIOUS: $(IMG_GENDIR)/gen/svg/%.svg
+.PRECIOUS: $(IMG_GENDIR)/gen/jpg/%.jpg
 
 #------------------------------------------------------------------------
 # Check for optipng
@@ -89,12 +92,14 @@ STYLESVG2GRAY  := $(DAPSROOT)/daps-xslt/common/svg.color2grayscale.xsl
 SRCDIA     := $(wildcard $(IMG_SRCDIR)/dia/*.dia)
 SRCEPS     := $(wildcard $(IMG_SRCDIR)/eps/*.eps)
 SRCFIG     := $(wildcard $(IMG_SRCDIR)/fig/*.fig)
+SRCJPG     := $(wildcard $(IMG_SRCDIR)/jpg/*.jpg)
 SRCPDF     := $(wildcard $(IMG_SRCDIR)/pdf/*.pdf)
 SRCPNG     := $(wildcard $(IMG_SRCDIR)/png/*.png)
 SRCSVG     := $(wildcard $(IMG_SRCDIR)/svg/*.svg)
-SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCPDF) $(SRCPNG) $(SRCSVG)
+SRCALL     := $(SRCDIA) $(SRCEPS) $(SRCFIG) $(SRCJPG) $(SRCPDF) \
+		$(SRCPNG) $(SRCSVG)
 IMGDIRS    := $(sort $(dir $(SRCALL)))
-IMGFORMATS := dia eps fig pdf png svg
+IMGFORMATS := dia eps fig jpg pdf png svg
 
 
 # get all images used in the current Document
@@ -104,9 +109,10 @@ USED := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=img" \
 	 $(ROOTSTRING) --file $(SETFILES_TMP) \
          --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
-# PNG and PDF can be directly taken from the USED list - the filter function
-# generates lists of all PNG common to USED and SCRPNG
+# JPG, PNG and PDF can be directly taken from the USED list - the filter
+# function generates lists of all PNG common to USED and SCRPNG
 #
+USED_JPG := $(filter $(addprefix $(IMG_SRCDIR)/jpg/,$(USED)), $(SRCJPG))
 USED_PNG := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPNG))
 USED_PDF := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPDF))
 
@@ -127,7 +133,8 @@ USED_FIG := $(filter \
 USED_SVG := $(filter \
 	$(addprefix $(IMG_SRCDIR)/svg/,$(addsuffix .svg,$(basename $(USED)))), \
 	$(SRCSVG))
-USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_PNG) $(USED_PDF) $(USED_SVG)
+USED_ALL := $(USED_DIA) $(USED_EPS) $(USED_FIG) $(USED_JPG) $(USED_PNG) \
+		$(USED_PDF) $(USED_SVG)
 
 # generated images
 #
@@ -143,7 +150,10 @@ GEN_SVG := $(subst .dia,.svg,$(notdir $(USED_DIA))) \
 		$(subst .fig,.svg,$(notdir $(USED_FIG)))
 
 # color images (used for manual creation)
+# (JPGs are never generated, but rather taken as are, therefore no
+#  GEN_JPG
 #
+JPGONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, $(notdir $(USED_JPG))))
 PDFONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
 		$(notdir $(USED_PDF)) $(GEN_PDF)))
 PNGONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
@@ -153,6 +163,7 @@ SVGONLINE := $(sort $(addprefix $(IMG_GENDIR)/online/, \
 
 # grayscale images (used for manual creation)
 #
+JPGPRINT := $(addprefix $(IMG_GENDIR)/print/, $(notdir $(USED_JPG)))
 PDFPRINT := $(addprefix $(IMG_GENDIR)/print/, $(notdir $(USED_PDF)) $(GEN_PDF))
 PNGPRINT := $(addprefix $(IMG_GENDIR)/print/, $(notdir $(USED_PNG)) $(GEN_PNG))
 SVGPRINT := $(addprefix $(IMG_GENDIR)/print/, $(notdir $(USED_SVG)) $(GEN_SVG))
@@ -207,8 +218,9 @@ MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
 # html, pdf, etc.
 #
 
-PRINT_IMAGES  := $(SVGPRINT) $(PNGPRINT) $(PDFPRINT)
-ONLINE_IMAGES := $(SVGONLINE) $(PNGONLINE) $(PDFONLINE)
+ONLINE_IMAGES   := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
+PRINT_IMAGES    := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
+FOR_HTML_IMAGES := $(JPGONLINE) $(PNGONLINE)
 
 $(ONLINE_IMAGES): | $(IMG_DIRECTORIES)
 $(PRINT_IMAGES): | $(IMG_DIRECTORIES)
@@ -302,7 +314,7 @@ list-images-multisrc warn-images:
 #
 # We assume source images are generally color images, regardless of the format.
 # Since b/w PDFs (for the print shop) need grayscale images, we transfer
-# PNGs and SVGs to grayscale as well.
+# JPGs, PNGs and SVGs to grayscale as well.
 #
 # All conversions are done via $IMAGES_GENDIR/gen/
 # Color images are placed in $IMAGES_GENDIR/online/
@@ -339,14 +351,14 @@ $(IMG_GENDIR)/print/%.png: $(IMG_SRCDIR)/png/%.png
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
-	convert $< $(CONVERT_OPTS) $@ $(DEVNULL)
+	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 # from generated color PNGs
 $(IMG_GENDIR)/print/%.png: $(IMG_GENDIR)/gen/png/%.png
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
-	convert $< $(CONVERT_OPTS) $@ $(DEVNULL)
+	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 #---------------
 # Create color PNGs from other formats
@@ -522,4 +534,28 @@ endif
 	  ( test -f $< || false )
 
 
+#------------------------------------------------------------------------
+# JPG
+#
+# JPGs are always taken as are and there is no conversion from another format
+# into JPG
+# Therefore we only need to create links to the online dir and convert to
+# grayscale for b/w PDFs
+#
+
+#---------------
+# Link JPGs
+#
+
+$(IMG_GENDIR)/online/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg
+	ln -sf $< $@
+
+#---------------
+# Create grayscale JPGs
+#
+$(IMG_GENDIR)/print/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg
+ifeq ($(VERBOSITY),2)
+	@echo "   Converting $(notdir $<) to grayscale"
+endif
+	convert $< $(CONVERT_OPTS_JPG) $@ $(DEVNULL)
 
