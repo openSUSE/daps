@@ -17,12 +17,13 @@
 
   version="1.0">
 
-  <xsl:import href="../xhtml-1_1/docbook.xsl" />
-  <xsl:import href="../xhtml-1_1/chunk-common.xsl" />
-  <xsl:include href="../xhtml-1_1/chunk-code.xsl" />
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml-1_1/docbook.xsl" />
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current//chunk-common.xsl" />
+  <xsl:include href="http://docbook.sourceforge.net/release/xsl/current//chunk-code.xsl" />
 
 
   <!-- We want a separate TOC file, please -->
+  <!--<xsl:param name="generate.manifest" select="1"/>-->
   <xsl:param name="chunk.tocs.and.lots">1</xsl:param>
   <xsl:param name="toc.section.depth">2</xsl:param>
   <xsl:param name="generate.toc">
@@ -165,6 +166,12 @@
                   <xsl:apply-templates
                     select="key('id',$rootid)" mode="process.root" />
                   <xsl:call-template name="ncx" />
+                  
+                  <xsl:if test="$generate.manifest != 0">
+                    <xsl:call-template name="generate.manifest">
+                      <xsl:with-param name="node" select="key('id',$rootid)"/>
+                    </xsl:call-template>
+                </xsl:if>
                 </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
@@ -182,6 +189,11 @@
               <xsl:call-template name="opf" />
               <xsl:call-template name="cover" />
               <xsl:call-template name="container" />
+              <xsl:if test="$generate.manifest != 0">
+                <xsl:call-template name="generate.manifest">
+                  <xsl:with-param name="node" select="/"/>
+                </xsl:call-template>
+              </xsl:if>
             </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
