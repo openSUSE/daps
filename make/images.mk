@@ -114,7 +114,7 @@ USED := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=img" \
 #
 USED_JPG := $(filter $(addprefix $(IMG_SRCDIR)/jpg/,$(USED)), $(SRCJPG))
 USED_PNG := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPNG))
-USED_PDF := $(filter $(addprefix $(IMG_SRCDIR)/png/,$(USED)), $(SRCPDF))
+USED_PDF := $(filter $(addprefix $(IMG_SRCDIR)/pdf/,$(USED)), $(SRCPDF))
 
 # For HTML builds SVG and EPS are not directly used, but rather converted to PNG
 # DIA and FIG are never directly used in the XML sources, but converted
@@ -145,6 +145,7 @@ GEN_PDF := $(subst .dia,.pdf,$(notdir $(USED_DIA))) \
 GEN_PNG := $(subst .dia,.png,$(notdir $(USED_DIA))) \
 		$(subst .eps,.png,$(notdir $(USED_EPS))) \
 		$(subst .fig,.png,$(notdir $(USED_FIG))) \
+		$(subst .pdf,.png,$(notdir $(USED_PDF))) \
 		$(subst .svg,.png,$(notdir $(USED_SVG)))
 GEN_SVG := $(subst .dia,.svg,$(notdir $(USED_DIA))) \
 		$(subst .fig,.svg,$(notdir $(USED_FIG)))
