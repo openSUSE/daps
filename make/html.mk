@@ -276,8 +276,7 @@ $(HTMLSINGLE_RESULT): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 	@ccecho "info" "   Creating single HTML page"
   endif
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  --output $(HTML_DIR)/$(DOCNAME).html --xinclude \
-	  --stylesheet $(STYLEHTMLSINGLE) --file $(PROFILED_MAIN) \
-	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-	(cd $(HTML_DIR) && ln -sf $(DOCNAME).html index.html)
+	  --output $@ --xinclude --stylesheet $(STYLEHTMLSINGLE) \
+	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
+	(cd $(HTML_DIR) && ln -sf $@ index.html)
 
