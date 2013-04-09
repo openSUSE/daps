@@ -111,19 +111,21 @@
     <term>Including Metadata in the Output</term>
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
-     <para>
-      If metadata to a file has been set,
-      <remark>taroth 2013-01-08: which 
-     metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>
-      &dapsacr; includes the metadata for each file in the output format.
-      By default, the HTML and HTML-single outputs show filename, file
-      maintainer and workflow status, and additionally the ID of the
-      chapter, appendix or prefix, if available. The PDF output shows
-      filename and the ID of the chapter, appendix or prefix, if available.
-      <remark>taroth 2013-01-08: watch out, this
-     is probably bound to change...</remark>
-     </para>
-    </listitem>
+     <para> If metadata to a file has been set, &dapsacr; includes the
+     metadata for each file in the output format. </para>
+     <note>
+      <title>Only with &dm;</title>
+      <para>This command currently only works if you manage your documentation
+       project with &dm; and have set the respective SVN properties with
+       &dm;. </para>
+      <para>By default, the HTML and HTML-single outputs then show filename, file
+       maintainer and workflow status, and additionally the ID of the chapter,
+       appendix or prefix, if available. The PDF output shows filename and the
+       ID of the chapter, appendix or prefix, if available. <remark>taroth
+        2013-01-08: watch out, this is probably bound to change...</remark>
+      </para>
+     </note>
+     </listitem>
    </varlistentry>
   </variablelist>
  </sect1>
