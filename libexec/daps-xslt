@@ -5,16 +5,34 @@
 # Copyright (C) 2012  Kilian Petsch <kpetsch@suse.de> and
 #                     Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
-# Version 1.0 (November 2012)
+# Version 1.1 (April 2013)
 #
 # Authors:
 # Kilian Petsch <kpetsch@suse.de>
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
-
-
 #
-# TODO
-# - stylesheet urn??
+# NOTE:
+#
+# Setting the catalog for the resolver
+#
+# xsltproc and saxon have different ways to determine which catalogs to use
+# for resolving Identifiers, URI, etc 
+# * xsltproc: reads $XML_CATALOG_FILES
+# * saxon: uses a JAVA resolver class which uses the catalogs= setting in the
+#          system wide CatalogManager.properties file
+#          (e.g. /etc/java/resolver/CatalogManager.properties)
+#
+# DAPS sets and exports $XML_CATALOG_FILES, so we will use these settings for
+# this wrapper as well (for both, xsltproc and saxon). Catalogs added with
+# --catalog will be added to the existing $XML_CATALOG_FILES
+#
+# If this script is called from the command-line, it will also use
+# $XML_CATALOG_FILES. If not set (probably the case on systems with no
+# xsltproc), saxon will use the defaults from CatalogManager.properties
+#
+# If using xsltproc and if no additional catalogs have been specified with
+# --catalog, there is nothing to do, because XML_CATALOG_FILES is either set
+# system wide or exported by DAPS
 #
 # Saxon9 support (see ticket #94)
 #
@@ -32,22 +50,7 @@ declare -a PARMS
 # final list of stringparams/params
 declare -a PARAMETERS
 
-unset DEBUG STRPARMS PARMS CATALOG XMLFULL
-
-# setting catalog for the resolver
-#
-# $XML_DEVEL_CATALOG is set in daps.bin when using an SVN checkout
-# $XML_MAIN_CATALOG is set it the DAPS main config file
-#
-if [[ -n $XML_DEVEL_CATALOG ]]; then
-    MAIN_CATALOG=$XML_DEVEL_CATALOG
-else
-    if [[ -n $XML_MAIN_CATALOG ]]; then
-        MAIN_CATALOG=$XML_MAIN_CATALOG
-    else
-        MAIN_CATALOG=/etc/xml/catalog
-    fi
-fi
+unset ADDITIONAL_CATALOGS DEBUG PARMS STRPARMS XMLFULL
 
 # Help function to preserve readability of the while loop
 usage () {
@@ -66,9 +69,9 @@ Mandatory parameters:
 
 
 Optional parameters:
- --catalog                    Define additional XML catalogs to be used for
-                              resolving identifiers. (Default catalog:
-                              /etc/xml/catalog). Optional.
+ --catalogs                   Define a space-seperated list of XML catalogs
+                              for resolving identifiers. to be used in addition
+                              to the system wide default catalog.
 
  --debug                      Activate a debugging mode (verbose).
 
@@ -77,9 +80,10 @@ Optional parameters:
  --param=KEY=VALUE            Pass a parameter KEY with the numeric value VALUE
                               to the stylesheet. The key-value pair must be
                               written as KEY=VALUE. Use --stringparam to pass
-                              string values. You may pass multiple key/value
-                              pairs up to a maximum of 32. If the same key/value
-                              pair is passed more than once, the last one \"wins\".
+                              string values. You may pass up to 32 key/value
+                              pairs by using this parameter multiple times. If
+                              the same key/value pair is passed more than once,
+                              the last one \"wins\".
                               Optional.                    
 
  --stringparam='\"KEY=VALUE\"'  Pass a parameter KEY with the string value VALUE
@@ -108,23 +112,24 @@ function exit_on_error () {
 }
 
 run-saxon() {
-    local DOCBOOK_CATALOG SAXON_ARGS
+    local CATALOGS SAXON_ARGS
     # TODO fs 2012-11-24
     # check whether this works with other distributions
     # -dependencies in spec-file may need to be enhanced because of
     #  the additional jars
 
-    DOCBOOK_CATALOG=/usr/share/xml/docbook/stylesheet/nwalsh/current/catalog.xml
-    
+    # replace [:space:] with ";" but retain spaces in filenames
+    CATALOGS=$(echo $XML_CATALOG_FILES | sed 's/\([^\\]\) /\1;/g')
+
     # if the stylesheet location is a link, saxon needs -u
-    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} ]]; then
+    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
         SAXON_ARGS="-u"
     else
         SAXON_ARGS=""
     fi
     
     # Add the DocBook extensions to the CLASSPATH
-    CLASSPATH="${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+    CLASSPATH="CatalogManager.properties:${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
 
     # Additional JAR files (mostly due to XInclude resolution)
     ADDITIONAL_JARS="xml-commons-resolver12.jar xerces-j2.jar xerces-j2-xml-apis.jar"
@@ -132,7 +137,7 @@ run-saxon() {
     # Use special options to switch XML parser to Xerces:
     ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl \
--Dxml.catalog.files=${MAIN_CATALOG};${DOCBOOK_CATALOG};${CATALOG}"
+-Dxml.catalog.files=$CATALOGS"
 
     # enable XIncludes if requested
     if [[ -n $XINCLUDE ]]; then
@@ -176,9 +181,9 @@ process_params () {
     shift
     PARAMLIST=( "$@" )
     
-#    if [[ param != $PREFIX && stringparam != $PREFIX ]]; then
-#        exit 1
-#    fi
+    if [[ param != $PREFIX && stringparam != $PREFIX ]]; then
+        exit_on_error "Error:\nFirst parameter when calling process_params must be \"param\" or \"stringparam\"!"
+    fi
 
     # initialize KEYLIST with an empty value
     KEYLIST[0]=""
@@ -215,25 +220,6 @@ process_params () {
     echo "$RESULT"
 }
 
-# function to check if input is coming from a pipe
-#
-# Not needed ATM since we always use --file in DAPS
-# commenting the code in case it is needed in the future
-#
-# piped_input () {
-#    if [[ $PROCESSOR =~ saxon ]]; then
-#        XML_TMP_FILE=$(mktemp -q --tmpdir daps_saxon.XXXXXXXX) || exit_on_error "Could not create a temporary file for saxon"
-#        cat > $XML_TMP_FILE
-#        XMLFILE=$XML_TMP_FILE
-#        [[ -s $XMLFILE ]] || exit_on_error "Did not get XML data via pipe" 
-#    else
-#	while read data; do
-#            echo $data
-#	    XMLFULL="$XMLFULL$data "
-#        done
-#        [[ -z $XMLFULL ]] && exit_on_error "Did not get XML data via pipe" 
-#    fi
-#}
 
 #----------------------------------------------------------------------------
 # MAIN
@@ -241,8 +227,7 @@ process_params () {
 [[ -z $1 ]] && usage
 
 export POSIXLY_CORRECT=1
-
-ARGS=$(getopt -o "hxno:vs:f:" -l "help,xinclude,param:,stringparam:,nonet,output:,novalid,stylesheet:,file:,debug,catalog:" -n "$ME" -- "$@")
+ARGS=$(getopt -o "f:hno:s:vx" -l "catalogs:,debug,file:,help,nonet,novalid,output:,param:,stringparam:,stylesheet:,xinclude" -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
@@ -252,7 +237,8 @@ while true; do
 	    usage
 	    exit 0;;
 	-x|--xinclude)
-	    XINCLUDE="--xinclude" #only needed in xsltproc
+            #only needed in xsltproc
+	    XINCLUDE="--xinclude"
 	    shift;;
 	--param)
             # Test for equal sign
@@ -267,13 +253,6 @@ while true; do
             if [[ $2 =~ \= ]]; then
                 STRPARMS+=("\"$2\"")
             fi
-                # check for quoting
-#                if [[ \" = ${2:0:1} && \" = ${2: -1} ]]; then
-#                    STRPARMS+=("$2")
-#                else
-#                    exit_on_error "Error, parameter $2\nfor --stringparam is not correctly quoted, use '\"KEY=VALUE\"'"
-#                fi
-#            fi
 	    shift 2;;
 	-s|--stylesheet)
 	    STYLESHEET="$2"
@@ -287,25 +266,18 @@ while true; do
 	    shift 2;;
 	--debug)
 	    DEBUG=1
+            export VERBOSE=1
 	    shift;;
 	--catalog)
-            # TODO: 
-            # allow multiple calls of this parameter; if saxon, then use ";" as
-            # separator, if xsltproc use " " and export XML_CATALOG_FILES
-	    CATALOG="$CATALOG $2;"
+            XML_CATALOG_FILES="$2 $XML_CATALOG_FILES";
+	    export XML_CATALOG_FILES
 	    shift 2;;
-#	--input)
-	    
 	--)
 	    shift
 	    break;;
         *) exit_on_error "Internal error!" ;;
     esac
 done
-# -input param
-# -check input+param together
-# -aufruf für xsltproc bei input zu ändern (mit echo)
-# -
 
 unset POSIXLY_CORRECT
 
@@ -320,23 +292,6 @@ else
     exit 1;
 fi
 PROCESSOR_ARGS="$@"
-
-#----
-# Get input from pipe (in case a pipe exists)
-#
-# Not needed ATM since we always use --file in DAPS
-# commenting the code in case it is needed in the future
-# BEWARE:
-# This code covers the following cases: 
-# * cat foo | daps_xslt 
-# * daps_xslt --file
-# * daps_xslt < foo (this works by chance since STDIN is seekable in this
-#                    special case)
-# Input coming from a pseudo-Terminal (ok, this is a rare cornercase) is
-# not supported (cat foo > /dev/pts1 && daps_xslt < /dev/pts/1 )
-#
-# [[ -t 0 ]] || piped_input
-
 
 #-----
 # Check if all mandatory options are set
@@ -362,35 +317,12 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
         echo "---------------------------------------------------------"
         echo "Running the following command:"
         echo -e "$COMMAND"
-#        Needed when enabling pipe input        
-#        if [[ -n "$XMLFULL" ]]; then
-#            echo -e "$XMLFULL | $COMMAND -"
-#        else
-#            echo -e "$COMMAND"
-#        fi
         echo "---------------------------------------------------------"
     fi
-    # expand the catalog
-    [[ -n $CATALOG ]] && export XML_CATALOG_FILES="$XML_CATALOG_FILES $CATALOG"
     eval "$COMMAND"
-#    Needed when enabling pipe input         
-#    if [[ -n "$XMLFULL" ]]; then
-#        eval "echo \"$XMLFULL\" | $COMMAND -"
-#    else
-#        eval "$COMMAND"
-#    fi
-    
 else
          run-saxon "$PROCESSOR_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
 fi
-
-#-----
-# Cleanup
-#
-if [[ -n $XML_TMP_FILE ]]; then
-    rm -f $XML_TMP_FILE
-fi
-
 
 exit;
 
