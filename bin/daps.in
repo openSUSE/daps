@@ -135,6 +135,7 @@ VARLIST=(
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
     XSLTPARAM
+    XSLTPROC
     XSLTPROCESSOR
 )
 # unset all for a fresh start, but preserve $DOCCONF - it might have been set
@@ -1241,6 +1242,11 @@ else
     CONFIG="$DEFAULT_CONFIG"
 fi
 
+# Path to the xslt processor wrapper script
+#
+XSLTPROC=${DAPSROOT}/libexec/daps-xslt
+
+
 # ---------------------------------------------
 # Source functions and system config
 #
@@ -1424,6 +1430,8 @@ fi
 export XML_CATALOG_FILES
 
 
+
+
 # ----------------------------------------------------------------------------
 # Set paths
 #
@@ -1437,8 +1445,8 @@ export XML_CATALOG_FILES
 # DocBook Stylesheet locations
 #
 # get DocBook version first ...
-DOCBOOK_VERSION=$(xsltproc \
-    ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl $MAIN) || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
+
+DOCBOOK_VERSION=$(eval "$XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
 
 #    || { DOCBOOK_VERSION=4; \
 #      "Could not get DocBook version, assuming DocBook 4"; } 

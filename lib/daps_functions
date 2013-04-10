@@ -260,10 +260,9 @@ function init_env {
     # test if ROOTID exist
     #
     if [[ -n $ROOTID ]]; then
-        EXISTS_ROOTID=$(xsltproc --stringparam rootid $ROOTID --xinclude \
-            ${DAPSROOT}/daps-xslt/common/check_rootid.xsl $MAIN 2>/dev/null)
+        EXISTS_ROOTID=$(eval "$XSLTPROC --stringparam \"rootid=$ROOTID\" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
         if [[ "yes" != $EXISTS_ROOTID ]]; then
-            exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
+            exit_on_error "$XML_CATALOG_FILES Fatal: ROOTID \"$ROOTID\" does not exist"
         fi
     fi
     
@@ -1190,7 +1189,7 @@ function checklink () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE" 
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1266,7 +1265,7 @@ function getimages () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(xsltproc $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl $P_FILE) || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1292,7 +1291,7 @@ function getimages () {
 
     # get the image list
     # we can use projectgraphics, since it returns images for a given rootid
-    IMGLIST=( $(call_make projectgraphics) )
+    IMGLIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1) )
     if [[ 0 != $? ]]; then
         exit_on_error "Failed to get list of images"
     fi
@@ -1309,7 +1308,7 @@ function getimages () {
 	            echo "${IMAGE}"
                 fi
             done  | column -t
-            if [[ $SHOW && ${#IM[@]} ]]; then
+            if [[ $SHOW ]]; then
                 eval "$IMG_VIEWER ${IMGLIST[@]} &"
             fi
         fi
@@ -1725,10 +1724,10 @@ function help_viewer () {
                               Default: IMG_VIEWER setting from config file"
 }
 function help_xsltparam () {
-    echo "    --xsltparam=STRING        Add one or more xsltproc parameters in the form of
+    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in the form of
                               \"'--stringparam KEY=VALUE' --param KEY=VALUE\". The
                               given string will be passed unmodified to the
-                              xsltproc call that $1.
+                              xsltprocessor call that $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
                               Note: You MUST quote the string with double and

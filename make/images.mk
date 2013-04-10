@@ -438,17 +438,24 @@ $(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),2)
 	@echo "   Fixing $(notdir $<)"
 endif
-	xsltproc --novalid $(STYLESVG) $< > $@
+	$(XSLTPROC) --stylesheet $(STYLESVG) --file $< \
+	  --output $@ --xsltproc_args "--novalid" $(XSLTPROCESSOR) $(DEVNULL)
 
 #---------------
 # Create grayscale SVGs used in the manuals
 #
-$(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
+# Before generating grayscale SVGs we need to fix the original using
+# $(STYLESVG) - as is done for color SVGs as well (see above). Instead of
+# generating it and piping the result to the grayscale conversion (as it was
+# done in 1.x), generate and use the online version - it will probably be
+# needed anyway
+#
+$(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/online/%.svg
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
-	xsltproc --novalid $(STYLESVG) $< | \
-	xsltproc --novalid $(STYLESVG2GRAY) - > $@
+	$(XSLTPROC) --stylesheet $(STYLESVG2GRAY) --file $< \
+	  --output $@ --xsltproc_args "--novalid" $(XSLTPROCESSOR) $(DEVNULL)
 
 #---------------
 # Create color SVGs from other formats

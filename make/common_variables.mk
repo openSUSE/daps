@@ -16,8 +16,6 @@
 #SHELL := /bin/bash -x
 SHELL := /bin/bash
 
-XSLTPROC := ${DAPSROOT}/libexec/daps-xslt
-
 #--------------------------------------------------
 # CHECKS
 #
