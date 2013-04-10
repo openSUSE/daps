@@ -114,16 +114,26 @@
      <para> If metadata to a file has been set, &dapsacr; includes the
      metadata for each file in the output format. </para>
      <note>
-      <title>Restrictions for the 
-       <option>--meta</option> Option</title>
-      <para>This command currently only works if profiling is activated manage your documentation
-       project with &dm; and have set the respective SVN properties with
-       &dm;. </para>
-      <para>By default, the HTML and HTML-single outputs then show filename, file
-       maintainer and workflow status, and additionally the ID of the chapter,
-       appendix or prefix, if available. The PDF output shows filename and the
-       ID of the chapter, appendix or prefix, if available. <remark>taroth
-        2013-01-08: watch out, this is probably bound to change...</remark>
+      <title>Restrictions of the <option>--meta</option> Option</title>
+      <para>As the <option>--meta</option> relies on certain mechanisms and SVN
+       properties, including metadata in the output only works under the
+       following conditions:</para>
+      <itemizedlist>
+       <listitem>
+        <para>Profiling is activated in your XML sources. For details, refer to
+          <xref linkend="sec.daps.user.modular.profile.daps.pi"/>.</para>
+       </listitem>
+       <listitem>
+        <para>You manage your documentation project with &dm;. and have set
+         the respective SVN properties.</para>
+       </listitem>
+      </itemizedlist>
+      <para>By default, the HTML and HTML-single outputs then show filename,
+       file maintainer and workflow status, and additionally the ID of the
+       chapter, appendix or prefix, if available. The PDF output shows filename
+       and the ID of the chapter, appendix or prefix, if available.
+        <remark>taroth 2013-01-08: watch out, this is probably bound to
+        change...</remark>
       </para>
      </note>
      </listitem>
