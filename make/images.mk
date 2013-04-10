@@ -402,7 +402,7 @@ ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
-	convert $< $@ $(DEVNULL)
+	convert $< $@ $(DEVNULL) $(ERR_DEVNULL)
 	$(run_optipng)
 
 # PDF -> PNG
@@ -522,7 +522,7 @@ ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PDF"
 endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite -dEPSCrop \
-	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $< $(DEVNULL)
+	  -dCompatibilityLevel=1.4 -dBATCH -dNOPAUSE $< $(DEVNULL) $(ERR_DEVNULL)
 
 # SVG -> PDF
 # Color SVGs from are transformed via stylesheet in order to wipe out
