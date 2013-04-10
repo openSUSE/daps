@@ -1,7 +1,7 @@
 /*  We use lots of .'s in our actual documentation's IDs. The following "helps"
     J-Query deal with this. Incidentally, it also breaks selectors like
     #id.class (unless the ID starts with an underscore).
-   <http://stackoverflow.com/questions/5489869/is-there-a-plugin-that-makes-the-jquery-id-selector-dot-safe>
+    <http://stackoverflow.com/questions/5489869/is-there-a-plugin-that-makes-the-jquery-id-selector-dot-safe>
 */
 
 (function($){
@@ -185,7 +185,7 @@ function moveToc ( direction ) {
         $('#_header .single-crumb').click(function(){ moveToc('up'); return false;});
     }
     else
-        alert('I don\'t want to move to the' + direction + '.');
+        alert('I can\'t move to the' + direction + '.');
 }
 
 function scrollDeactivator() {
@@ -242,7 +242,7 @@ function share( service ) {
         window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
     }
     else {
-        alert('Eek! The sharing service '+ service +' is new to me.');
+        alert('I can\'t share via '+ service +'.');
     }
 }
 
