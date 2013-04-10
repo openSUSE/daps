@@ -104,10 +104,9 @@
 <!-- 17. Miscellaneous ========================================== -->
 
 <xsl:variable name="verbatim-start-end-indent">
-  <!-- XEP does not allow adding a length value to the result of a core
-       function -->
-  inherited-property-value()
-  <xsl:if test="$xep.extensions = 0">+ 0.5em</xsl:if>
+  <!-- XEP does not like adding a length value to the result of a core
+       function – the result seems ok, though -->
+  inherited-property-value()+ 0.5em
 </xsl:variable>
 
 <xsl:attribute-set name="shade.verbatim.style">
