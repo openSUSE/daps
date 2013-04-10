@@ -84,7 +84,13 @@ Optional parameters:
                               pairs by using this parameter multiple times. If
                               the same key/value pair is passed more than once,
                               the last one \"wins\".
-                              Optional.                    
+                              Optional.
+
+ --saxon6_args=\"LIST\"       saxon6 specific options (see saxon6 --help).
+                              \"LIST\" is a list of options specified in the same
+                              way as when calling saxon6 directly.
+                              If double-quotes need to be passed on, LIST needs
+                              to be put in single quotes                    
 
  --stringparam='\"KEY=VALUE\"'  Pass a parameter KEY with the string value VALUE
                               to the stylesheet. The key-value pair must be
@@ -95,7 +101,13 @@ Optional parameters:
                               passed more than once, the last one \"wins\".
                               Optional.
 
- --xinclude,                  Process the input document using the XInclude
+ --xsltproc_args=\"LIST\"     xsltproc specific options (see man xsltptroc).
+                              \"LIST\" is a list of options specified in the same
+                              way as when calling xsltproc directly.
+                              If double-quotes need to be passed on, LIST needs
+                              to be put in single quotes
+
+ --xinclude                   Process the input document using the XInclude
  -x                           specification. Optional.
 
 
@@ -121,11 +133,15 @@ run-saxon() {
     # replace [:space:] with ";" but retain spaces in filenames
     CATALOGS=$(echo $XML_CATALOG_FILES | sed 's/\([^\\]\) /\1;/g')
 
-    # if the stylesheet location is a link, saxon needs -u
-    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
-        SAXON_ARGS="-u"
-    else
+    if [[ -n $DEBUG ]]; then
         SAXON_ARGS=""
+    else
+        # Recover silently from recoverable errors
+        SAXON_ARGS="-w0"
+        if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
+            # if the stylesheet location is a link, saxon needs -u
+            SAXON_ARGS="$SAXON_ARGS -u"
+        fi
     fi
     
     # Add the DocBook extensions to the CLASSPATH
@@ -227,19 +243,29 @@ process_params () {
 [[ -z $1 ]] && usage
 
 export POSIXLY_CORRECT=1
-ARGS=$(getopt -o "f:hno:s:vx" -l "catalogs:,debug,file:,help,nonet,novalid,output:,param:,stringparam:,stylesheet:,xinclude" -n "$ME" -- "$@")
+ARGS=$(getopt -o "f:hno:s:v" -l "catalogs:,debug,file:,help,nonet,novalid,output:,param:,saxon6_args:,stringparam:,stylesheet:,xinclude,xsltproc_args:" -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
 while true; do
     case "$1" in
+	--catalog)
+            XML_CATALOG_FILES="$2 $XML_CATALOG_FILES";
+	    export XML_CATALOG_FILES
+	    shift 2;;
+	--debug)
+	    DEBUG=1
+            export VERBOSE=1
+	    shift;;
+	-f|--file)
+	    XMLFILE="$2"
+	    shift 2;;
 	-h|--help)
 	    usage
 	    exit 0;;
-	-x|--xinclude)
-            #only needed in xsltproc
-	    XINCLUDE="--xinclude"
-	    shift;;
+	-o|--output)
+	    OUTPUT="-o $2"
+	    shift 2;;
 	--param)
             # Test for equal sign
 	    if [[ $2 =~ \= ]]; then
@@ -248,30 +274,27 @@ while true; do
 		exit_on_error "--param requires \"KEY=VALUE\" as parameter"
 	    fi
 	    shift 2;;
+	-s|--stylesheet)
+	    STYLESHEET="$2"
+	    shift 2
+	    ;;
+        --saxon6_args)
+            SAXON6_ARGS="$2"
+            shift 2
+            ;;
 	--stringparam)
             # check for equal sign
             if [[ $2 =~ \= ]]; then
                 STRPARMS+=("\"$2\"")
             fi
 	    shift 2;;
-	-s|--stylesheet)
-	    STYLESHEET="$2"
-	    shift 2
-	    ;;
-	-f|--file)
-	    XMLFILE="$2"
-	    shift 2;;
-	-o|--output)
-	    OUTPUT="-o $2"
-	    shift 2;;
-	--debug)
-	    DEBUG=1
-            export VERBOSE=1
+	-x|--xinclude)
+	    XINCLUDE="--xinclude"
 	    shift;;
-	--catalog)
-            XML_CATALOG_FILES="$2 $XML_CATALOG_FILES";
-	    export XML_CATALOG_FILES
-	    shift 2;;
+        --xsltproc_args)
+            XSLTPROC_ARGS="$2"
+            shift 2
+            ;;
 	--)
 	    shift
 	    break;;
@@ -311,7 +334,7 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
         PARAMETERS+=("$(process_params "param" "${PARMS[@]}")") || exit_on_error "wrong parameter  for function process_params, must be either \"param\" or \"stringparam\""
     fi
     
-    COMMAND="$XSLTPROC $PROCESSOR_ARGS $XINCLUDE ${PARAMETERS[@]} $OUTPUT $STYLESHEET $XMLFILE"
+    COMMAND="$XSLTPROC $XSLTPROC_ARGS $XINCLUDE ${PARAMETERS[@]} $OUTPUT $STYLESHEET $XMLFILE"
     
     if [[ -n $DEBUG ]]; then
         echo "---------------------------------------------------------"
@@ -321,7 +344,7 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
     fi
     eval "$COMMAND"
 else
-         run-saxon "$PROCESSOR_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
+         run-saxon "$SAXON6_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
 fi
 
 exit;
