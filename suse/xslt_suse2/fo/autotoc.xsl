@@ -109,6 +109,8 @@
 <xsl:template name="toc.part.line">
   <xsl:param name="toc-context" select="NOTANODE"/>
 
+  <xsl:variable name="line-height" select="'1.25em'"/>
+
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -120,7 +122,7 @@
   <fo:list-item>
     <fo:list-item-label end-indent="label-end()">
       <fo:block text-align="end" font-family="{$title.fontset}"
-        font-size="&large;pt" color="&mid-gray;" line-height="1.5em">
+        font-size="&large;pt" color="&mid-gray;" line-height="{$line-height}">
         <fo:basic-link internal-destination="{$id}">
           <xsl:if test="$label != ''">
             <xsl:copy-of select="$label"/>
@@ -129,7 +131,7 @@
       </fo:block>
     </fo:list-item-label>
     <fo:list-item-body start-indent="body-start()">
-      <fo:block line-height="1.5em">
+      <fo:block line-height="{$line-height}" padding-after="{&gutter; div 2}mm">
         <fo:inline keep-with-next.within-line="always"
         font-family="{$title.fontset}" font-size="&large;pt">
           <fo:basic-link internal-destination="{$id}">
@@ -139,7 +141,7 @@
         <fo:inline keep-together.within-line="always" color="&dark-green;"
           font-size="&large;pt" font-family="&serif;">
           <fo:basic-link internal-destination="{$id}">
-            <fo:leader leader-pattern="space" leader-length="&gutter;mm"/>
+            <fo:leader leader-pattern="space" leader-length="{&column; div 2}mm"/>
             <fo:page-number-citation ref-id="{$id}"/>
           </fo:basic-link>
         </fo:inline>
