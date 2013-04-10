@@ -114,8 +114,9 @@
      <para> If metadata to a file has been set, &dapsacr; includes the
      metadata for each file in the output format. </para>
      <note>
-      <title>Only with &dm;</title>
-      <para>This command currently only works if you manage your documentation
+      <title>Restrictions for the 
+       <option>--meta</option> Option</title>
+      <para>This command currently only works if profiling is activated manage your documentation
        project with &dm; and have set the respective SVN properties with
        &dm;. </para>
       <para>By default, the HTML and HTML-single outputs then show filename, file
@@ -204,19 +205,14 @@
     <listitem>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
      <para>
-      Creates a tarball of all graphics
-      <remark>taroth 2013-01-11: 
-     check with fs: the referenced ones?</remark>
-      that belong to the specified documentation project.
+      Creates a tarball of all graphics that are referenced in the XML sources
+      of the specified documentation project. The graphics will be included in
+      their original format.
      </para>
      <screen>$ daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
-     <para>
-      Creates a tarball with PNG graphics
-      <remark>taroth 2013-01-11: 
-     check with fs: the referenced ones?</remark>
-      that belong to the specified documentation project. Any SVG graphics
-      are automatically converted to PNG format.
-     </para>
+     <para> Creates a tarball of all graphics that are referenced in the XML
+      sources of the specified documentation project. All graphics will be
+      converted to PNG format.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
