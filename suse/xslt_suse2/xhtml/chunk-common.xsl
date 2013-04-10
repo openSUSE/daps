@@ -8,8 +8,9 @@
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
 
-   Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Author:    Thomas Schraitle <toms@opensuse.org>,
+              Stefan Knorr <sknorr@suse.de>
+   Copyright: 2012, 2013, Thomas Schraitle, Stefan Knorr
 
 -->
 
@@ -91,11 +92,8 @@
           <xsl:when test="$rootelementname != 'article'">
             <xsl:for-each select="ancestor-or-self::*">
               <xsl:choose>
-               <!-- This works for all common cases, but will do foolish things when you build
-                    a $rootid that is nested more than one level deep within the root element
-                    and that $rootid is not an article. Sorry for the pain. -->
-                <xsl:when test="$rootid != '' and not(ancestor::*) and (@id != string($rootid) or @id != '')"/>
-                <xsl:when test="not(ancestor::*) or self::*[@id = string($rootid)]">
+                <xsl:when test="$rootid != '' and descendant::*[@id = string($rootid)]"/>
+                <xsl:when test="not(ancestor::*) or @id = string($rootid)">
                   <xsl:apply-templates select="." mode="breadcrumbs">
                     <xsl:with-param name="class">book-link</xsl:with-param>
                   </xsl:apply-templates>
@@ -245,7 +243,6 @@
                  accesskey="c">
                   <xsl:attribute name="href">
                     <xsl:call-template name="href.target">
-                      <!-- FIXME: -->
                       <xsl:with-param name="object" select="/*"/>
                     </xsl:call-template>
                   </xsl:attribute>
@@ -517,12 +514,6 @@
       <xsl:apply-templates select="(ancestor-or-self::*/@lang)[last()]" mode="html.lang.attribute"/>
     </xsl:variable>
 
-    <!--<xsl:call-template name="log.message">
-      <xsl:with-param name="level">Info</xsl:with-param>
-      <xsl:with-param name="message">object.title.markup.textonly=<xsl:apply-templates select="." mode="title.markup.textonly"/>
-      </xsl:with-param>
-    </xsl:call-template>-->
-
     <xsl:call-template name="user.preroot"/>
 
     <html lang="{$lang}" xml:lang="{$lang}">
@@ -565,12 +556,6 @@
             <xsl:with-param name="nav.context" select="$nav.context"/>
           </xsl:call-template>
 
-        <!--<xsl:call-template name="header.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>-->
-
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
             <xsl:call-template name="metadata"/>
@@ -597,14 +582,6 @@
         <div id="_footer-wrap">
         <xsl:call-template name="user.footer.content"/>
 
-        <!--
-        <xsl:call-template name="footer.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
-        -->
-        
         <xsl:call-template name="user.footer.navigation">
           <xsl:with-param name="prev" select="$prev"/>
           <xsl:with-param name="next" select="$next"/>

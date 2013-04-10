@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-   Purpose:
-     Transform DocBook's block elements
-     
-   Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
-     
+<!--
+  Purpose:
+    Transform DocBook's block elements
+
+  Author:     Thomas Schraitle <toms@opensuse.org>,
+              Stefan Knorr <sknorr@suse.de>
+  Copyright:  2012, 2013, Thomas Schraitle, Stefan Knorr
+
 -->
 
 <xsl:stylesheet version="1.0"
@@ -22,8 +23,7 @@
       <xsl:call-template name="id.attribute"/>
       <xsl:call-template name="anchor"/>
       <!-- We are only interested in a "normal" processing, but suppress
-        titles anyway
-      -->
+           titles anyway -->
       <!--<xsl:call-template name="sidebar.titlepage"/>-->
       <xsl:apply-templates select="*[not(self::title)]"/>
     </div>
@@ -38,7 +38,6 @@
         <xsl:with-param name="replace-string">System z</xsl:with-param>
       </xsl:call-template>
     </xsl:param>
-    <xsl:message>Blub: <xsl:value-of select="$input"/></xsl:message>
     <xsl:call-template name="string-replace">
       <xsl:with-param name="input" select="$zseries-replaced"/>
       <xsl:with-param name="search-string">;</xsl:with-param>
