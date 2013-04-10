@@ -1224,7 +1224,7 @@ if [[ -n $DAPSROOT ]]; then
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
         XML_DEVEL_CATALOG="$DAPSROOT/etc/catalog.xml"
-        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
+#        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
     fi
 else
     # default DAPSROOT
@@ -1399,9 +1399,26 @@ else
 fi
 
 # XML_CATALOG_FILES
+#
+# XML_MAIN_CATALOG is set via config. If it differs from the system setting for
+# XML_CATALOG_FILES, add it to XML_CATALOG_FILES (in first place)
+#
+# Next, check if XML_DEVEL_CATALOG is set. If so, add it to XML_CATALOG_FILES
+# (in first place). XML_DEVEL_CATALOG is automatically set by this script when
+# working from an SVN checkout
+#
 if [[ -n $XML_CATALOG_FILES ]]; then
-    export XML_CATALOG_FILES
+    if [[ $XML_CATALOG_FILES != $XML_MAIN_CATALOG ]]; then
+        XML_CATALOG_FILES="$XML_MAIN_CATALOG $XML_CATALOG_FILES"
+    fi
+else
+    XML_CATALOG_FILES="$XML_MAIN_CATALOG"
 fi
+if [[ -n $XML_DEVEL_CATALOG ]]; then
+    XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
+fi
+export XML_CATALOG_FILES
+
 
 # ----------------------------------------------------------------------------
 # Set paths
