@@ -9,12 +9,88 @@
 ]>
 <chapter id="cha.daps.user.layout">
  <title>Customizing Layout of the Output Formats</title>
- <para>
-  <remark>topics:
-  adjusting stylesheet parameters </remark>
- </para>
- <para>
-  &wip;
- </para>
- <!--http://docbook.sourceforge.net/release/xsl/current/doc/index.html-->
+ <abstract>
+  <para>
+   This chapter describes:
+   <itemizedlist>
+    <listitem>
+     <para>
+      &wip;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      &wip;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      &wip;
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      </para>
+    </listitem>
+    <listitem>
+     <para>
+      &wip;
+      </para>
+    </listitem>
+   </itemizedlist>
+  </para>
+ </abstract>
+ <sect1 id="sec.daps.user.layout.xslt">
+  <title>Modifying Individual XSLT Processor Parameters </title>
+  <para>If you use the default DocBook layout and want to adjust individual 
+   parameters, you can use the <option>--xsltparam</option>. With the option,
+   you can pass on values for an XSLT parameter directly to the XSLT processor.
+   This is useful to temporarily overwrite style sheet parameters such as
+   margins. </para>
+  <para>For larger or more complex modifications, such as adjustments of the
+   title page layout, for example, it is advisable to develop your own set of
+   stylesheets instead. </para>
+  <para>For a list of XSLT parameters to modify, refer to one of the following
+   parameter references at <ulink 
+   url="http://docbook.sourceforge.net/release/xsl/current/doc/index.html"/>:</para>
+   <itemizedlist>
+    <listitem>
+     <para>HTML Parameter Reference: <ulink
+       url="http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html"
+      /></para>
+    </listitem>
+    <listitem>
+     <para>FO Parameter Reference: 
+      <ulink
+       url="http://docbook.sourceforge.net/release/xsl/current/doc/fo/index.html"
+      /></para></listitem>
+    <listitem>
+     <para> Manpages Parameter Reference: <ulink
+     url="http://docbook.sourceforge.net/release/xsl/current/doc/manpages/index.html"/>
+     </para>
+    </listitem>
+   </itemizedlist>
+   <example>
+    <title>&wip;</title>
+    <para>By default, the DocBook stylesheets display the contents of a
+     <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
+     set the parameter <parameter>variablelist.as.table</parameter> to the value
+     <literal>0</literal>. Execute the following command:</para>
+    <screen>daps html --xsltparam<co id="co.1"/> "'<co id="co.2"/>--stringparam<co id="co.3"/> variablelist.as.table<co id="co.4"/> 0<co id="co.5"/>'"</screen>
+    <calloutlist>
+     <callout arearefs="co.1"><para>&wip;</para></callout>
+     <callout arearefs="co.2"><para>&wip;</para></callout>
+     <callout arearefs="co.3"><para>&wip;</para></callout>
+     <callout arearefs="co.4"><para>&wip;</para></callout>
+     <callout arearefs="co.5"><para>&wip;</para></callout>
+    </calloutlist>
+  </example>
+     
+   <para>&wip;: Add one or more xslt processor parameters in the form of "'--stringparam
+   KEY=VALUE' --param KEY=VALUE". The given string will be passed unmodified to
+   the xsltprocessor call that creates the .fo file from the profiled sources.
+   Note:
+   You MUST quote the string with double and single quotes:
+   --xsltproc="'STRING'"</para>
+ </sect1>
 </chapter>
