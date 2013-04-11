@@ -160,8 +160,9 @@ run-saxon() {
 
     # Use special options to switch XML parser to Xerces:
     ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
--Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl \
--Dxml.catalog.files=$CATALOGS"
+-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"
+    # Add catalogs, if specified
+    [[ -n $CATALOGS ]] && ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS -Dxml.catalog.files=$CATALOGS"
 
     # enable XIncludes if requested
     if [[ -n $XINCLUDE ]]; then
