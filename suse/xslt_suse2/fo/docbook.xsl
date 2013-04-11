@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Transform DocBook document into XSL-FO file
 
@@ -42,6 +42,7 @@
   <xsl:include href="division.xsl"/>
   <xsl:include href="admon.xsl"/>
   <xsl:include href="component.xsl"/>
+  <xsl:include href="block.xsl"/>
   <xsl:include href="titlepage.templates.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 
