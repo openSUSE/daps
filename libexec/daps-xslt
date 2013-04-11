@@ -88,10 +88,11 @@ Optional parameters:
                               Optional.
 
  --saxon6_args=\"LIST\"       saxon6 specific options (see saxon6 --help).
-                              \"LIST\" is a list of options specified in the same
-                              way as when calling saxon6 directly.
+                              \"LIST\" is a list of options specified in the
+                              same way as when calling saxon6 directly.
                               If double-quotes need to be passed on, LIST needs
-                              to be put in single quotes                    
+                              to be put in single quotes.
+                              This parameter is ignored when using xsltproc.
 
  --stringparam='\"KEY=VALUE\"'  Pass a parameter KEY with the string value VALUE
                               to the stylesheet. The key-value pair must be
@@ -106,10 +107,11 @@ Optional parameters:
                               \"LIST\" is a list of options specified in the same
                               way as when calling xsltproc directly.
                               If double-quotes need to be passed on, LIST needs
-                              to be put in single quotes
+                              to be put in single quotes.
+                              This parameter is ignored when using saxon.
 
  --xinclude                   Process the input document using the XInclude
- -x                           specification. Optional.
+                              specification.
 
 
 XSLT-processor:
