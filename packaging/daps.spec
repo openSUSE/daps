@@ -51,7 +51,7 @@ BuildArch:      noarch
 BuildRequires:  bash >= 3.1
 BuildRequires:  dia
 BuildRequires:  docbook_4
-BuildRequires:  docbook-xsl-stylesheets >= 1.75
+BuildRequires:  docbook-xsl-stylesheets >= 1.77
 BuildRequires:  fam
 BuildRequires:  fdupes
 BuildRequires:  ghostscript-library
@@ -107,7 +107,7 @@ PreReq:         sgml-skel
 Requires:       bash >= 3.1
 Requires:       dia
 Requires:       docbook_4
-Requires:       docbook-xsl-stylesheets >= 1.75
+Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       fam
 Requires:       ghostscript-library
 Requires:       ImageMagick
