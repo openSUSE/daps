@@ -42,7 +42,6 @@
   <xsl:include href="division.xsl"/>
   <xsl:include href="admon.xsl"/>
   <xsl:include href="component.xsl"/>
-  <xsl:include href="block.xsl"/>
   <xsl:include href="titlepage.templates.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 

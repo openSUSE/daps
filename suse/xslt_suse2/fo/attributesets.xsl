@@ -106,7 +106,7 @@
 <xsl:variable name="verbatim-start-end-indent">
   <!-- XEP does not like adding a length value to the result of a core
        function – the result seems ok, though -->
-  inherited-property-value()+ 0.5em
+  inherited-property-value() + 0.5em
 </xsl:variable>
 
 <xsl:attribute-set name="shade.verbatim.style">
@@ -134,6 +134,15 @@
   <xsl:attribute name="margin-left">
     <xsl:value-of select="$title.margin.left"/>
   </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="para.properties" use-attribute-sets="normal.para.spacing">
+    <xsl:attribute name="text-align">
+      <xsl:choose>
+        <xsl:when test="ancestor::entry">start</xsl:when>
+        <xsl:otherwise>inherit</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
 </xsl:attribute-set>
 
 
