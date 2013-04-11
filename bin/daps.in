@@ -742,11 +742,20 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 "
 }
 
+
+# ---------
+# Clean up
+#
+function clean_daps () {
+    [[ -f $SETFILES_TMP ]] && rm -f $SETFILES_TMP
+}
+
 # ---------
 # Verbose error handling
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
+    clean_daps
     exit 1;
 }
 
@@ -949,6 +958,9 @@ function recover_cmdl_values () {
     test -n "$VERBOSITY_CMDL" && VERBOSITY="$VERBOSITY_CMDL"
     test -n "$XSLTPROCESSOR_CMDL" && XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
 }
+
+
+trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
 # ----------------------------------------------------------------------------
 # Parsing the command line arguments with GNU getopt
