@@ -1,8 +1,14 @@
 #!/bin/bash
-# Customized fop executable for daps
-# Use environment variable VERBOSE to get more debugging output
+# Customized fop executable for DAPS
 
-__VERSION__="$Id: daps-fop 43536 2009-08-11 22:10:56Z jw $"
+# Get the first 2 digits from the version number
+# 1.0 -> 10, 1.0.1 -> 10
+FOP_VERSION=$(fop -version 2>/dev/null | cut -d " " -f 3 | tr -d ".")
+FOP_VERSION=${FOP_VERSION:0:2}
+# set the nocs parameter for FOP >= 1.1
+# (other command line options are defined in the DAPS config file
+# as FOP_OPTIONS)
+[[ $FOP_VERSION -ge 11 ]] && OPTS="-nocs"
 
 #FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
 FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
@@ -11,4 +17,5 @@ FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACKSIZE" \
 ADDITIONAL_JARS="batik-all excalibur/avalon-framework-impl" \
 ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver" \
-fop -c ${FOP_CONFIG_FILE} "$@"
+fop $OPTS -c $FOP_CONFIG_FILE "$@"
+
