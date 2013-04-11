@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Adapt inline monospaced font, so its x-height is about as tall as that of
     the serif font (Charis SIL), we use for the body text.
@@ -10,8 +10,8 @@
     laying out the text. Therefore, any element that a margin is applied to may
     be pushed behind the text. We do not approve.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
-              Thomas Schraitle
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>
 
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
@@ -112,8 +112,9 @@
     </xsl:call-template>
   </xsl:param>
 
-  <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties">
-    <xsl:if test="parent::para|parent::title" font-weight="normal">
+  <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties"
+     font-weight="normal">
+    <xsl:if test="parent::para|parent::title">
       <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
