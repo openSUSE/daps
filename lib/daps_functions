@@ -1352,7 +1352,6 @@ function spellcheck () {
     fi
 
     [[ -n $P_FILE ]] && FILELIST[0]="$P_FILE"
-    [[ -n $P_LANG ]] && ASPELL_LANG="$P_LANG"
     [[ 1 = $P_LIST ]] && LISTMODE=1
 
     # extra dictionary
@@ -1382,6 +1381,20 @@ function spellcheck () {
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
         fi
     fi
+
+    # Set language - if not specified try to get from $MAIN
+    #
+    if [[ -n $P_LANG ]]; then
+        ASPELL_LANG="$P_LANG"
+    else
+        ASPELL_LANG=$(eval "$XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
+        if [[ -n $ASPELL_LANG ]]; then
+            ccecho "info" "Using language $ASPELL_LANG."
+        else
+            exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
+        fi
+    fi
+        
     #------------------
     # create spellchecking command to eval
     #

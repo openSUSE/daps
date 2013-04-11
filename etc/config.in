@@ -38,15 +38,17 @@ ASPELL_EXTRA_DICT=""
 ## ----------------------             
 ## Description: Language for spell checker
 ## Type:        String
-## Default:     en_US
+## Default:     ""
 #
 # NOTE:  Language to use for spellchecker. It uses the same format as the
 #        LANG environmental variable: It consists of  the two letter ISO 639
 #        language code (e.g. 'en' for English) and an optional two letter
 #        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
 #        English). Make sure the respective dictionary for aspell is installed.
+# By default DAPS tries to get the language from the "lang" attribute of the
+# MAIN file.
 #
-ASPELL_LANG=en_US
+ASPELL_LANG=""
 
 ## Key:         ASPELL_SKIP_TAGS
 ## ----------------------             
