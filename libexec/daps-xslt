@@ -5,7 +5,7 @@
 # Copyright (C) 2012  Kilian Petsch <kpetsch@suse.de> and
 #                     Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
-# Version 1.1 (April 2013)
+# Version 2.0 (April 2013)
 #
 # Authors:
 # Kilian Petsch <kpetsch@suse.de>
@@ -43,14 +43,15 @@ SAXON="/usr/bin/saxon"
 # TODO: we may need to change this path with configure 
 DBXSLT=/usr/share/xml/docbook/stylesheet/nwalsh/current
 
+unset DEBUG OUTPUT PARAMETERS PARMS SAXON6_ARGS STRPARMS STYLESHEET
+unset XINCLUDE XMLFILE XML_TMP_FILE XSLTPROC_ARGS
+
 # list of stringparams
 declare -a STRPARMS
 # list of params
 declare -a PARMS
 # final list of stringparams/params
 declare -a PARAMETERS
-
-unset ADDITIONAL_CATALOGS DEBUG PARMS STRPARMS XMLFULL
 
 # Help function to preserve readability of the while loop
 usage () {
@@ -118,8 +119,13 @@ XSLT-processor:
         exit;
 }
 
+function cleanup () {
+    [[ -f $XML_TMP_FILE ]] && rm -f $XML_TMP_FILE
+}
+
 function exit_on_error () {
     echo -e "ERROR: $1" >&2
+    cleanup
     exit 1;
 }
 
@@ -188,7 +194,7 @@ process_params () {
     #   script
     #
 
-    local I KEY RESULT SEEN STR_PAR VALUE
+    local ELEM I KEY PREFIX RESULT SEEN STR_PAR VALUE
     local -a KEYLIST
     local -a PARAMLIST
     
@@ -236,9 +242,18 @@ process_params () {
     echo "$RESULT"
 }
 
+piped_input () {
+    XML_TMP_FILE=$(mktemp -q daps_xslt_input.XXXXXXXX) || exit_on_error "Could not save piped input into a temporary file"
+    cat > $XML_TMP_FILE
+    XMLFILE=$XML_TMP_FILE
+    [[ -s $XMLFILE ]] || exit_on_error "Did not get XML data via pipe"
+}
 
 #----------------------------------------------------------------------------
 # MAIN
+
+# enable interruption/abortion via Ctrl-Z/Ctrl-C
+trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
 [[ -z $1 ]] && usage
 
@@ -317,10 +332,34 @@ fi
 PROCESSOR_ARGS="$@"
 
 #-----
-# Check if all mandatory options are set
+# Check if stylesheet has been specified
 #
 [[ -z $STYLESHEET ]] && exit_on_error "you must specify a stylesheet with --stylesheet <STYLESHEET>"
-[[ -z $XMLFILE && -t 0 ]] && exit_on_error "you must either specify an XML file with --file or pipe it into $ME"
+
+#----
+# Get input from pipe (in case a pipe exists)
+#
+# Not needed ATM since we always use --file in DAPS
+# commenting the code in case it is needed in the future
+# BEWARE:
+# This code covers the following cases: 
+# * cat foo | daps_xslt 
+# * daps_xslt --file
+# * daps_xslt < foo
+# Input coming from a pseudo-Terminal (ok, this is a rare cornercase) is
+# not supported (cat foo > /dev/pts1 && daps_xslt < /dev/pts/1 )
+
+if [[ -z $XMLFILE ]]; then
+    if [[ -p /dev/stdin ]]; then
+        # pipe
+        piped_input
+    elif [[ ! -t 0 && ! -p /dev/stdin ]]; then
+        # redirected with < foo
+        piped_input
+    else
+        exit_on_error "You must either specify an XML file with --file or pipe it into $ME"
+    fi
+fi
 
 #-----
 # run the XSLT processor
@@ -347,6 +386,11 @@ else
          run-saxon "$SAXON6_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
 fi
 
-exit;
+#-----
+# Cleanup
+#
+cleanup
+
+exit 0;
 
 
