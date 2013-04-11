@@ -23,16 +23,16 @@ SHELL := /bin/bash
 # Double-check whther they are set
 #
 ifndef BUILD_DIR
-  $(error Fatal error: No path to build directory set)
+  $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
 endif
 ifndef DOC_DIR
-  $(error Fatal error: No path to working directory set)
+  $(error $(shell ccecho "error" "Fatal error: No path to working directory set"))
 endif
 ifndef MAIN
-  $(error Fatal error: No MAIN file set)
+  $(error $(shell ccecho "error" "Fatal error: No MAIN file set"))
 endif
 ifndef XSLTPROCESSOR
-  $(error Fatal error: No XSLT processor file set)
+  $(error $(shell ccecho "error" "Fatal error: No XSLT processor file set"))
 endif
 
 #--------------------------------------------------
@@ -104,16 +104,17 @@ ifndef PROFILE_URN
   PROFILE_URN := $(shell $(XSLTPROC) \
 	--stylesheet $(DAPSROOT)/daps-xslt/common/get-xml-stylesheet.xsl \
 	--file $(MAIN) $(XSLTPROCESSOR))
-  # The following is not accurate, since it will find urn: anywhere in the
-  # string, but it will probably work...
-#  ifeq ($(findstring urn:,$(URN)),urn:)
-#    ifdef XML_DEV_CATALOG
-#      PROFILE_URN := $(shell xmlcatalog $(XML_DEV_CATALOG) $(URN))
-#    else
-#      PROFILE_URN := $(shell xmlcatalog $(XML_MAIN_CATALOG) $(URN))
-#    endif
-#  endif
 endif
+
+# Issue a warning when specifying --meta without profiling
+#
+ifeq ($(META),1)
+  ifndef PROFILE_URN
+    $(warning $(shell ccecho "warn" "Did not find a profiling URN. Displaying meta information only works with profiling."))
+  endif
+endif
+
+
 #
 # 2. Set PROFILEDIR
 #
