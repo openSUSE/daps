@@ -43,7 +43,7 @@ SAXON="/usr/bin/saxon"
 # TODO: we may need to change this path with configure 
 DBXSLT=/usr/share/xml/docbook/stylesheet/nwalsh/current
 
-unset DEBUG OUTPUT PARAMETERS PARMS SAXON6_ARGS STRPARMS STYLESHEET
+unset DEBUG ERR_CODE OUTPUT PARAMETERS PARMS SAXON6_ARGS STRPARMS STYLESHEET
 unset XINCLUDE XMLFILE XML_TMP_FILE XSLTPROC_ARGS
 
 # list of stringparams
@@ -385,15 +385,21 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
         echo "---------------------------------------------------------"
     fi
     eval "$COMMAND"
+    # capture xsltproc return value
+    ERR_CODE=$?
 else
          run-saxon "$SAXON6_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
+         # capture saxon6 return value
+         ERR_CODE=$?
 fi
+
 
 #-----
 # Cleanup
 #
 cleanup
 
-exit 0;
+
+exit $ERR_CODE;
 
 
