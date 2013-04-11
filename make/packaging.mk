@@ -295,9 +295,8 @@ ifndef LOCDROP_EXPORT_DIR
 else
   LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
 endif
-
 ifdef USESVN
-  TO_TRANS_FILES := $(shell svn pl -v --xml $(DOCFILES) | xsltproc $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl -)
+  TO_TRANS_FILES := $(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR))
 endif
 TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 
