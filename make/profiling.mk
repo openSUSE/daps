@@ -28,14 +28,16 @@ endif
 
 # Resolve profile urn because saxon does not accept urns
 #
-ifeq ($(shell expr substr $(PROFILE_URN) 1 4),urn:)
-  PROFILE_STYLESHEET := $(shell xmlcatalog $(XML_MAIN_CATALOG) $(PROFILE_URN) 2>/dev/null)
-else
-  PROFILE_STYLESHEET := $(PROFILE_URN)
-endif
-PROFILE_STYLESHEET := $(subst file://,,$(PROFILE_STYLESHEET))
-ifndef PROFILE_STYLESHEET
-  $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+ifdef PROFILE_URN
+  ifeq ($(shell expr substr $(PROFILE_URN) 1 4),urn:)
+    PROFILE_STYLESHEET := $(shell xmlcatalog $(XML_MAIN_CATALOG) $(PROFILE_URN) 2>/dev/null)
+  else
+    PROFILE_STYLESHEET := $(PROFILE_URN)
+  endif
+  PROFILE_STYLESHEET := $(subst file://,,$(PROFILE_STYLESHEET))
+  ifndef PROFILE_STYLESHEET
+    $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
+  endif
 endif
 
 .PHONY: profile
