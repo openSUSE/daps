@@ -14,18 +14,26 @@
    This chapter describes:
    <itemizedlist>
     <listitem>
-     <para>how to validate your XML files,</para>
+     <para>
+      how to validate your XML files,
+     </para>
     </listitem>
     <listitem>
-     <para>the basic command syntax for generating output formats,</para>
+     <para>
+      the basic command syntax for generating output formats,
+     </para>
     </listitem>
     <listitem>
-     <para>which output formats you can generate with &daps; and which commands
-     to use, and</para>
+     <para>
+      which output formats you can generate with &daps; and which commands
+      to use, and
+     </para>
     </listitem>
     <listitem>
-     <para>how to do partial builds of your documentation or how to specify the 
-     &main; file at the command line (instead of using a &dc; file).</para>
+     <para>
+      how to do partial builds of your documentation or how to specify the
+      &main; file at the command line (instead of using a &dc; file).
+     </para>
     </listitem>
    </itemizedlist>
   </para>
@@ -34,136 +42,168 @@
   <title>Validating Your XML Sources</title>
   &daps-validation-basics;
   &daps-example-validation-error; 
-  <para>Validation within your XML editor is bound to fail, as soon you
-  use profiling in your DocBook sources. Profiling is similar to conditional text,
-  for details, refer to  <xref linkend="sec.daps.user.modular.profile"/>.
-  Furthermore, validating XML files within a 
-  <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of 
-  the current XML file, as links (<sgmltag>xref</sgmltag> elements) or 
-  XIncludes need to be resolved, too. </para>
-
-  <para>&dapsacr; can handle all those cases due to the built-in 
-   <literal>xmllint</literal> validator. By default, <sgmltag>remark</sgmltag> elements and XML 
-   comments are ignored during validation. However, if you intend to create a 
-   (draft) output including remarks or comments, you need to include them for
-    validation&mdash;see the example commands below.</para>
+  <para>
+   Validation within your XML editor is bound to fail, as soon you use
+   profiling in your DocBook sources. Profiling is similar to conditional
+   text, for details, refer to
+   <xref linkend="sec.daps.user.modular.profile"/>. Furthermore, validating
+   XML files within a <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag>
+   often exceeds validation of the current XML file, as links
+   (<sgmltag>xref</sgmltag> elements) or XIncludes need to be resolved, too.
+  </para>
 
   <para>
-    To validate all files that belong to your documentation project,
-    &dapsacr; only needs to know which &dc; file to use. Use the <option>-d</option>
-    option to specify it.
-   </para>
+   &dapsacr; can handle all those cases due to the built-in
+   <literal>xmllint</literal> validator. By default,
+   <sgmltag>remark</sgmltag> elements and XML comments are ignored during
+   validation. However, if you intend to create a (draft) output including
+   remarks or comments, you need to include them for validation&mdash;see
+   the example commands below.
+  </para>
+
+  <para>
+   To validate all files that belong to your documentation project,
+   &dapsacr; only needs to know which &dc; file to use. Use the
+   <option>-d</option> option to specify it.
+  </para>
 
   <variablelist>
    <varlistentry>
     <term>Validating All XML Files in Your Book, Article or Set</term>
     <listitem>
-     <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
-     <para>If the XML files are not valid, &dapsacr; will return the parser
-     errors. If validation was successful, &dapsacr; returns: <literal>All files are
-     valid.</literal>
+<screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+     <para>
+      If the XML files are not valid, &dapsacr; will return the parser
+      errors. If validation was successful, &dapsacr; returns: <literal>All
+      files are valid.</literal>
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
     <listitem>
-     <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+<screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Validating Your Files Including XML Comments (<sgmltag class="sgmlcomment">Comment</sgmltag>)</term>
     <listitem>
-     <screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
+<screen>$ daps -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
     </listitem>
    </varlistentry>
   </variablelist>
  </sect1>
-
-
  <sect1 id="sec.daps.user.output.syntax">
   <title>Basic Syntax for Generating Output</title>
-  <para>&dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. 
-   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
-   gives an overview.</para>
-  <para>You can build several output formats (without them interfering with each
-   other in the <filename>build</filename> directory), build your complete 
-   documentation project (set, book, or article) or only a part of it (for example, 
-   a specific chapter). </para>
-  <para>
-    Independent of the individual output format you want to create, you need
-    to specify the &dc; file to use:
-   </para>
-  <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
-  <para>
-    For example:
-   </para>
-  <screen>$ <command>daps -d &dc;-daps-example color-pdf</command>
-  </screen>
-  <para>
-    At the end of the transformation process, &dapsacr; shows a message
-    where to find the generated output.
-   </para>
- </sect1>
 
+  <para>
+   &dapsacr; supports a number of different output formats, including also
+   <quote>exotic</quote> formats like man pages or simple text.
+   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
+   gives an overview.
+  </para>
+
+  <para>
+   You can build several output formats (without them interfering with each
+   other in the <filename>build</filename> directory), build your complete
+   documentation project (set, book, or article) or only a part of it (for
+   example, a specific chapter).
+  </para>
+
+  <para>
+   Independent of the individual output format you want to create, you need
+   to specify the &dc; file to use:
+  </para>
+
+<screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
+
+  <para>
+   For example:
+  </para>
+
+<screen>$ <command>daps -d &dc;-daps-example color-pdf</command>
+  </screen>
+
+  <para>
+   At the end of the transformation process, &dapsacr; shows a message where
+   to find the generated output.
+  </para>
+ </sect1>
  <sect1 id="sec.daps.user.output.formats">
   <title>Supported Output Formats</title>
-  <para>The following table lists the main output formats and their
- characteristics, and the &dapsacr; subcommands to generate them. Refer to 
- <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
- for the commands' basic syntax.</para>
+
+  <para>
+   The following table lists the main output formats and their
+   characteristics, and the &dapsacr; subcommands to generate them. Refer to
+   <xref linkend="sec.daps.user.output.syntax" xrefstyle="select:label"/>
+   for the commands' basic syntax.
+  </para>
 
   <remark>toms 2013-01-18: According to DocBook: Web Help -> WebHelp - 
   taroth 2013-01-21: hm, I already did some research on that topic some months ago 
   and I found lots of different spellings even within the project itself, that's 
   why in the end I decided to use the spelling that seemed most reasonable to
   me...</remark>
+
   <table id="table.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
   &daps-output-all;
-  <para>By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr; 
-  also allows you to customize your output formats in a very flexible way. 
-  For details, refer to <xref linkend="cha.daps.user.layout"/>.</para>
+  <para>
+   By default, &dapsacr; uses the regular DocBook stylesheets, but &dapsacr;
+   also allows you to customize your output formats in a very flexible way.
+   For details, refer to <xref linkend="cha.daps.user.layout"/>.
+  </para>
  </sect1>
  <sect1 id="sec.daps.user.output.adv">
   <title>Advanced Output Options</title>
-  <para>In the following, find some example commands for special use cases, like
-  doing partial builds of your documentation project or specifying no further 
-  parameters than the &main; file for an output. In the last case, you can do
-  completely without a &dc; file.</para>
-  <para>For further advanced output options like including 
-  remarks, metadata or draft watermarks in the output, creating one big XMl file
-  or creating distributable archives, refer to <xref linkend="cha.daps.user.review"/>.</para>
+
+  <para>
+   In the following, find some example commands for special use cases, like
+   doing partial builds of your documentation project or specifying no
+   further parameters than the &main; file for an output. In the last case,
+   you can do completely without a &dc; file.
+  </para>
+
+  <para>
+   For further advanced output options like including remarks, metadata or
+   draft watermarks in the output, creating one big XMl file or creating
+   distributable archives, refer to <xref linkend="cha.daps.user.review"/>.
+  </para>
+
   <variablelist>
    <varlistentry>
     <term>Building Only Parts of Your Documentation Project</term>
     <listitem>
-     <screen>$ daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
-     <para>Instead of always building your complete documentation project
-    (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
-    <sgmltag>article</sgmltag>), &dapsacr; also allows you do partial builds.
-    The <quote>starting point</quote> of your documentation project is usually 
-    the root element defined in the &main; file that is referenced in the respective
-    &dclong;. Alternatively, specify a  ROOTID on the command line to build only
-    a part of your documentation project by using the ID
-     of a <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
-     <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
-     <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element.
-   </para>
+<screen>$ daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
+     <para>
+      Instead of always building your complete documentation project
+      (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+      <sgmltag>article</sgmltag>), &dapsacr; also allows you do partial
+      builds. The <quote>starting point</quote> of your documentation
+      project is usually the root element defined in the &main; file that is
+      referenced in the respective &dclong;. Alternatively, specify a ROOTID
+      on the command line to build only a part of your documentation project
+      by using the ID of a <sgmltag>book</sgmltag>,
+      <sgmltag>article</sgmltag>, <sgmltag>glossary</sgmltag>,
+      <sgmltag>appendix</sgmltag>, <sgmltag>part</sgmltag>, or
+      <sgmltag>chapter</sgmltag> element.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Specifying the &main; file on the Command Line</term>
     <listitem>
-     <screen>$ daps -m <replaceable>PATH_TO_MAIN_FILE</replaceable>
+<screen>$ daps -m <replaceable>PATH_TO_MAIN_FILE</replaceable>
      </screen>
-     <para>If you do not need to specify any further parameters than the &main;
-     file, you can do completely without a &dc; file. With the <option>-m</option> 
-     option you can specify the &main; file defining your document. The options
-     <option>-m</option> and <option>-d</option> exclude each other.</para>
+     <para>
+      If you do not need to specify any further parameters than the &main;
+      file, you can do completely without a &dc; file. With the
+      <option>-m</option> option you can specify the &main; file defining
+      your document. The options <option>-m</option> and <option>-d</option>
+      exclude each other.
+     </para>
     </listitem>
    </varlistentry>
   </variablelist>
