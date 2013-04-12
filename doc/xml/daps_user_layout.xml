@@ -76,12 +76,10 @@
      <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
      set the parameter <parameter>variablelist.as.table</parameter> to the value
      <literal>0</literal> by executing the following command:</para>
-    <screen>daps html --xsltparam<co id="co.xsltparam"/> "'<co
-    id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co
-     id="co.param"/>&nbsp;0<co id="co.value"/>'"<xref linkend="co.quote"/></screen>
+    <screen>daps html --xsltparam<co id="co.xsltparam"/> "'<co id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co id="co.param"/>&nbsp;0<co id="co.value"/>'"<xref linkend="co.quote" xrefstyle="select:label nopage"/></screen>
    <calloutlist>
     <callout arearefs="co.xsltparam">
-     <para>As value of <option>--xsltparam</option> add one or more
+     <para>As value of <option>--xsltparam</option>, add one or more
        <literal>xsltproc</literal> parameters in the form of
         <option>"'--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable>'"</option>.
      </para>
@@ -93,7 +91,7 @@
      <para>Name of the parameter to adjust.</para>
     </callout>
     <callout arearefs="co.value">
-     <para>Value for <xref linkend="co.param"/>. It will be passed on unmodified
+     <para>Value for <xref linkend="co.param" xrefstyle="select:label nopage"/>. It will be passed on unmodified
       to the XSLT processor call that creates the <filename>.fo</filename> file
       from the profiled XML sources. </para>
     </callout>
