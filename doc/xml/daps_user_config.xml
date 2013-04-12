@@ -9,12 +9,56 @@
 ]>
 <chapter id="cha.daps.user.config">
  <title>Configuring &dapsacr;</title>
- <para>
-  <remark>~/.daps/conf</remark>
- </para>
-   &daps-config;
-   <para>For adjusting a few parameters that you want to set to custom
-   values...&wip;</para>
+ <abstract>
+  <para>
+   This chapter covers:
+   <itemizedlist>
+    <listitem>
+     <para>
+      how to customize &dapsacr; behavior by adjusting or creating a local
+      configuration file,
+     </para>
+    </listitem>
+    <listitem>
+     <para> an example of a system-wide &dapsacr; configuration file,
+      including annotations about all parameters that you can modify. </para>
+    </listitem>
+   </itemizedlist>
+   <remark>taroth 2013-04-12: todo: also add example of &dapsconf-user; for
+    the future</remark>
+  </para>
+ </abstract>
+    &daps-config;
+ <para>For adjusting a few parameters that you want to set to custom values, do
+   <emphasis>not </emphasis> edit the system-wide &dapsacr; configuration
+  file. Instead, check if the file &dapsconf-user; already exists. If not,
+  create the file and modify it as described below:</para>
+ <procedure>
+  <step>
+   <para>Open both &dapsconf-user; and &dapsconf-sys; in a text
+    editor.</para>
+  </step>
+  <step>
+   <para>Select which parameters you want to modify. </para>
+  </step>
+  <step>
+   <para>Copy <emphasis>only those</emphasis> to &dapsconf-user;.</para>
+   <note>
+    <title>Parameter Incompatibilities Between Configuration Files</title>
+    <para>If copying <emphasis>all</emphasis> parameters from &dapsconf-sys;
+     to &dapsconf-user;, this will raise the risk of parameter
+     incompatibilities as soon as you update to a higher &dapsacr; version.
+     As the settings in the custom &dapsacr; configuration file will
+     override the settings in &dapsconf-sys; by default, any parameter
+     incompatibilities between the files may lead to unexpected behavior of
+     &dapsacr;.</para></note>
+  </step>
+  <step>
+   <para>Save &dapsconf-user; and test if your changes lead to the expected
+    results.</para>
+  </step>
+ </procedure>
+ 
  <example>
   <title>Example of &dapsconf-sys; (&dapsacr; 1.0)</title>
   <!--taroth 2013-04-12: copied from DAPS SVN:
