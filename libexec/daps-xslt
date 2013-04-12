@@ -141,7 +141,7 @@ run-saxon() {
     # replace [:space:] with ";" but retain spaces in filenames
     CATALOGS=$(echo $XML_CATALOG_FILES | sed 's/\([^\\]\) /\1;/g')
 
-    if [[ -n $DEBUG ]]; then
+    if [[ -n "$DEBUG" ]]; then
         SAXON_ARGS=""
     else
         # Recover silently from recoverable errors
@@ -162,17 +162,17 @@ run-saxon() {
     ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"
     # Add catalogs, if specified
-    [[ -n $CATALOGS ]] && ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS -Dxml.catalog.files=$CATALOGS"
+    [[ -n "$CATALOGS" ]] && ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS -Dxml.catalog.files=$CATALOGS"
 
     # enable XIncludes if requested
-    if [[ -n $XINCLUDE ]]; then
+    if [[ -n "$XINCLUDE" ]]; then
         ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS \
 -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
     fi
        
     export ADDITIONAL_FLAGS ADDITIONAL_JARS CLASSPATH
 
-    if [[ -n $DEBUG ]]; then
+    if [[ -n "$DEBUG" ]]; then
         echo "---------------------------------------------------------"
         echo -e "Running the following command:\nCLASSPATH=\"$CLASSPATH\" \ \nADDITIONAL_JARS=\"$ADDITIONAL_JARS\" \ \nADDITIONAL_FLAGS=\"$ADDITIONAL_FLAGS\" \ \n$SAXON $SAXON_ARGS $@"
         echo "---------------------------------------------------------"
@@ -258,7 +258,7 @@ piped_input () {
 # enable interruption/abortion via Ctrl-Z/Ctrl-C
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
-[[ -z $1 ]] && usage
+[[ -z "$1" ]] && usage
 
 export POSIXLY_CORRECT=1
 ARGS=$(getopt -o "f:hno:s:v" -l "catalogs:,debug,file:,help,nonet,novalid,output:,param:,saxon6_args:,stringparam:,stylesheet:,xinclude,xsltproc_args:" -n "$ME" -- "$@")
@@ -337,7 +337,7 @@ PROCESSOR_ARGS="$@"
 #-----
 # Check if stylesheet has been specified
 #
-[[ -z $STYLESHEET ]] && exit_on_error "you must specify a stylesheet with --stylesheet <STYLESHEET>"
+[[ -z "$STYLESHEET" ]] && exit_on_error "you must specify a stylesheet with --stylesheet <STYLESHEET>"
 
 #----
 # Get input from pipe (in case a pipe exists)
@@ -352,7 +352,7 @@ PROCESSOR_ARGS="$@"
 # Input coming from a pseudo-Terminal (ok, this is a rare cornercase) is
 # not supported (cat foo > /dev/pts1 && daps_xslt < /dev/pts/1 )
 
-if [[ -z $XMLFILE ]]; then
+if [[ -z "$XMLFILE" ]]; then
     if [[ -p /dev/stdin ]]; then
         # pipe
         piped_input
@@ -378,7 +378,7 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
     
     COMMAND="$XSLTPROC $XSLTPROC_ARGS $XINCLUDE ${PARAMETERS[@]} $OUTPUT $STYLESHEET $XMLFILE"
     
-    if [[ -n $DEBUG ]]; then
+    if [[ -n "$DEBUG" ]]; then
         echo "---------------------------------------------------------"
         echo "Running the following command:"
         echo -e "$COMMAND"

@@ -7,18 +7,6 @@
 #
 # daps = DocBook Authoring and Publishing Suite
 
-
-# fs 2012-10-26: TODO
-#
-# Allow multiple DC-files specified with -d:
-# daps -d DC1 -d DC2 -d DC3
-# when parsing the options, add them to an array:
-# declare -a DC_FILE_LIST
-# DC_FILE_LIST=("$DC_FILE_LIST[@]}" $2)
-# and then, in the very last line of this script, iterate over the array
-# and call the eval command
-#
-
 VERSION=@PACKAGE_VERSION@
 
 # autoconf replaces @foo@ stuff with ${prefix}/.. if @foo@ has not
@@ -141,9 +129,9 @@ VARLIST=(
 # unset all for a fresh start, but preserve $DOCCONF - it might have been set
 # by having sourced a DC-file
 
-[[ -n $DOCCONF ]] && DOCCONF_SAVE=$DOCCONF
+[[ -n "$DOCCONF" ]] && DOCCONF_SAVE=$DOCCONF
 unset "${VARLIST[@]}"
-[[ -n $DOCCONF_SAVE ]] && DOCCONF=$DOCCONF_SAVE
+[[ -n "$DOCCONF_SAVE" ]] && DOCCONF=$DOCCONF_SAVE
 
 
 # VARLIST contains all variables that can be set via config or command line.
@@ -807,10 +795,10 @@ function sanitize_path () {
     
     MYPATH=$1
     VARNAME=$2
-    [[ -n $3 ]] && BASEDIR=$3
+    [[ -n "$3" ]] && BASEDIR=$3
 
     # Do nothing if $1 is an empty value
-    [[ -z $MYPATH ]] && return
+    [[ -z "$MYPATH" ]] && return
     
     # ignore values that need to be set by configure
     # (makes it possible to directly use a SVN checkout)
@@ -821,7 +809,7 @@ function sanitize_path () {
     MYPATH=${MYPATH%/} # remove trailing slash
 
     if [[ "/" != ${MYPATH:0:1} ]]; then
-        [[ -n $BASEDIR ]] && MYPATH="${BASEDIR}/${MYPATH}"
+        [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
         if [[ 0 = $? ]]; then
             eval "$VARNAME=$ABSPATH"
@@ -849,7 +837,7 @@ function check_pathlist () {
 
     for DIR in ${PATHLIST[@]}; do
         eval "VAL=\$$DIR"
-        if [[ -n $VAL ]]; then
+        if [[ -n "$VAL" ]]; then
             sanitize_path "$VAL" "$DIR" "$BASEDIR"
         fi
     done
@@ -928,7 +916,7 @@ function set_mainfile () {
                 echo "Using MAIN file $MAIN_CMDL"
             fi
         else
-            if [[ -n $DOC_DIR ]]; then
+            if [[ -n "$DOC_DIR" ]]; then
                 if [[ -e "${DOC_DIR}/xml/$MAINFILE" ]]; then
                     MAIN_CMDL="${DOC_DIR}/xml/$MAINFILE"
                 elif [[ -e "${DOC_DIR}/$MAINFILE" ]]; then
@@ -1115,13 +1103,13 @@ done
 
 # You can only specify DOCCONF or MAIN, not both
 #
-if [[ -n $DOCCONF_CMDL && -n $MAIN_CMDL ]]; then
+if [[ -n "$DOCCONF_CMDL" && -n "$MAIN_CMDL" ]]; then
     exit_on_error "The options -d/--docconfig and --main exclude each other."
 fi
 
 # Check FALLBACK_STYLEROOT and STYLEROOT
 #
-if [[ -n $FALLBACK_STYLEROOT && -z $STYLEROOT ]]; then
+if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     if [[ 0 != $VERBOSITY ]]; then
         echo "Warning: --styleroot is not specified, ignoring --fb_styleroot"
     fi
@@ -1138,7 +1126,7 @@ unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 # SUBCOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
 # is displayed.
 
-if [[ -z $1 ]] || [[ help = $1 && -z $2 ]]; then
+if [[ -z "$1" ]] || [[ help = $1 && -z "$2" ]]; then
     # Call: "$ME" or "$ME help"
     #
     daps_help
@@ -1149,7 +1137,7 @@ elif [[ help = $2 ]]; then
     #
     SUBCMD=$1
     declare -a SCMD_ARGS=( "-h" )
-elif [[ help = $1 && -n $2 ]]; then
+elif [[ help = $1 && -n "$2" ]]; then
     # Call: "$ME help foo"
     # Rewrite to "$ME foo -h"
     #
@@ -1214,16 +1202,16 @@ esac
 
 # source the user config for the first time to get DAPSROOT
 #
-if [[ -f $USER_CONFIG && -z $DAPSROOT_CMDL ]]; then
+if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
     source "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
-    [[ -n $DAPSROOT ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
+    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
         $(readlink -en $(dirname $USER_CONFIG))
     recover_cmdl_values
 fi
 
 # IF we have a custom DAPSROOT, $DAPSROOT is set by now - if not, use the default
-if [[ -n $DAPSROOT ]]; then
+if [[ -n "$DAPSROOT" ]]; then
     # custom DAPSROOT was set
     if [[ ! -d "$DAPSROOT" ]]; then
         exit_on_error exit_on_error "DAPSROOT \"$2\" is not a valid directory"
@@ -1276,7 +1264,7 @@ if [[ -f $USER_CONFIG ]]; then
 #    MY_BASEDIR=$(readlink -en $(dirname $USER_CONFIG))
 #    check_pathlist "$MY_BASEDIR"
     # make DAPSROOT path absolute and remove trailing /
-    [[ -n $DAPSROOT ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
+    [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
         $(readlink -en $(dirname $USER_CONFIG))
 fi
 recover_cmdl_values
@@ -1317,11 +1305,11 @@ fi
 # The real values will be set when calling recover_cmdl_values
 
 # set DOCCONF_CMDL if DC-file was sourced
-[[ -n $DOCCONF && -z $DOCCONF_CMDL ]] && DOCCONF_CMDL=$DOCCONF 
+[[ -n "$DOCCONF" && -z "$DOCCONF_CMDL" ]] && DOCCONF_CMDL=$DOCCONF 
 
-if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
+if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
 # DOCCONF and MAIN were not set on the command line, check other possibilities
-    if [[ -n $DOCCONF_NAME ]]; then
+    if [[ -n "$DOCCONF_NAME" ]]; then
     # check if DOCCONF was sourced
     # takes precedence over a default set in config
         if [[ -e "$DOCCONF_NAME" ]]; then
@@ -1333,7 +1321,7 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
         else
             exit_on_error "Cannot find previously sourced DOCCONF \"$DOCCONF_NAME\".\nWhen sourcing the doc config, you either need to run $ME from the directory\nwhere you sourced the config, or you need to provide an absolute path when\nsourcing the doc config."
         fi
-    elif [[ -n $DOCCONF_DEFAULT ]]; then
+    elif [[ -n "$DOCCONF_DEFAULT" ]]; then
     # check if a default value was specified in the user/system config file
         if [[ -e $DOCCONF_DEFAULT ]]; then
             sanitize_path "$DOCCONF_DEFAULT" "DOCCONF_CMDL"
@@ -1348,10 +1336,10 @@ if [[ -z $DOCCONF_CMDL && -z $MAIN_CMDL ]]; then
     # try to automatically set DOCCONF
         autoset_docconf
     fi
-elif [[ -n $MAIN_CMDL ]]; then
+elif [[ -n "$MAIN_CMDL" ]]; then
     # MAIN was set on the command line or in the user config
     set_mainfile "$MAIN_CMDL"
-elif [[ -n $DOCCONF_CMDL ]]; then
+elif [[ -n "$DOCCONF_CMDL" ]]; then
     # check if DOCCONF is a regular file
     if [[ -e $DOCCONF_CMDL ]]; then
         sanitize_path "$DOCCONF_CMDL" "DOCCONF_CMDL"
@@ -1371,7 +1359,7 @@ fi
 
 # FINALLY! Source the DOCCONF file, recover the command line values
 
-[[ -n $DOCCONF_CMDL ]] && source $DOCCONF_CMDL
+[[ -n "$DOCCONF_CMDL" ]] && source $DOCCONF_CMDL
 
 # FOP/XEP CONFIG and WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
@@ -1405,10 +1393,10 @@ fi
 #
 
 # book name
-if [[ -n $PDFNAME ]]; then
+if [[ -n "$PDFNAME" ]]; then
     export BOOK="$PDFNAME"
 else
-    if [[ -n $DOCCONF ]]; then
+    if [[ -n "$DOCCONF" ]]; then
         DC_FILE=$(basename $DOCCONF)
         export BOOK="${DC_FILE#${CONF_PREFIX}*}"
     elif [[ -n "$MAIN_CMDL" ]]; then
@@ -1426,17 +1414,17 @@ fi
 # (in first place). XML_DEVEL_CATALOG is automatically set by this script when
 # working from an SVN checkout
 #
-if [[ -n $XML_CATALOG_FILES ]]; then
+if [[ -n "$XML_CATALOG_FILES" ]]; then
     if [[ $XML_CATALOG_FILES != $XML_MAIN_CATALOG ]]; then
         XML_CATALOG_FILES="$XML_MAIN_CATALOG $XML_CATALOG_FILES"
     fi
 else
     XML_CATALOG_FILES="$XML_MAIN_CATALOG"
 fi
-if [[ -n $XML_USER_CATALOGS ]]; then
+if [[ -n "$XML_USER_CATALOGS" ]]; then
     XML_CATALOG_FILES="$XML_USER_CATALOGS $XML_CATALOG_FILES"
 fi
-if [[ -n $XML_DEVEL_CATALOG ]]; then
+if [[ -n "$XML_DEVEL_CATALOG" ]]; then
     XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
 fi
 export XML_CATALOG_FILES
@@ -1451,7 +1439,7 @@ export XML_CATALOG_FILES
 
 #----------------------------------
 # default BUILD_DIR if not specified elsewhere
-[[ -z $BUILD_DIR ]] && BUILD_DIR=${DOC_DIR}/build
+[[ -z "$BUILD_DIR" ]] && BUILD_DIR=${DOC_DIR}/build
 
 #----------------------------------
 # DocBook Stylesheet locations

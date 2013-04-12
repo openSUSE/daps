@@ -127,7 +127,7 @@ ENV_FILENAME=$(basename $ENV)
 ENV_DIRNAME=$(dirname $ENV)
 DC_FILENAME="DC-${ENV_FILENAME#ENV-*}"
 
-if [[ -n $OUTDIR ]]; then
+if [[ -n "$OUTDIR" ]]; then
     DC="${OUTDIR}/DC_FILENAME" # result filname
 else
     DC="${ENV_DIRNAME}/$DC_FILENAME" # result filname
@@ -137,8 +137,8 @@ fi
 # ---------
 # Checks
 #
-[[ -z $ENV ]] && exit_on_error "You must specify an ENV-file."
-[[ -z $PRODUCT ]] && ccecho "warn" "Warning: No product name specified"
+[[ -z "$ENV" ]] && exit_on_error "You must specify an ENV-file."
+[[ -z "$PRODUCT" ]] && ccecho "warn" "Warning: No product name specified"
 
 if [[ -z "$DAPSROOT" && -z "$TITLE" ]]; then
     if [[ -f ${DAPSROOT_DEFAULT}/$GET_TITLE_SS ]]; then
@@ -164,14 +164,14 @@ fi
 # Source EV file
 
 source "$ENV"
-[[ -z $MAIN ]] && echo "Fatal error: Mandatory parameter MAIN does not exist"
+[[ -z "$MAIN" ]] && echo "Fatal error: Mandatory parameter MAIN does not exist"
 
 # ---------
 # Automatically get book title
 #
 
-if [[ -z $TITLE ]]; then
-    [[ -n $ROOTID ]] && ROOTSTRING="--stringparam rootid \"$ROOTID\""
+if [[ -z "$TITLE" ]]; then
+    [[ -n $"ROOTID" ]] && ROOTSTRING="--stringparam rootid \"$ROOTID\""
     #
     # BOOKTITLE=$(xsltproc ...) does not work (no clue why)
     # therefore using eval
@@ -197,50 +197,50 @@ fi
 echo -n "## ---------------------------- 
 ## Doc Config File" > $DC
 
-if [[ -n $PRODUCT ]]; then
+if [[ -n "$PRODUCT" ]]; then
     echo " for $PRODUCT" >> $DC
 else
     echo >> $DC
 fi
 
 # write book title
-[[ -n $BOOKTITLE ]] && echo "## $BOOKTITLE" >> $DC
+[[ -n "$BOOKTITLE" ]] && echo "## $BOOKTITLE" >> $DC
 
 echo "## ----------------------------
 ##
 ## Basics" >> $DC
-if [[ -n $MAIN ]]; then
+if [[ -n "$MAIN" ]]; then
     echo "MAIN=\"$MAIN\"" >> $DC
 fi
-[[ -n $ROOTID ]] && echo "ROOTID=\"$ROOTID\"" >> $DC
-[[ -n $PDFNAME ]] && echo "PDFNAME=\"$PDFNAME\"" >> $DC
+[[ -n "$ROOTID" ]] && echo "ROOTID=\"$ROOTID\"" >> $DC
+[[ -n "$PDFNAME" ]] && echo "PDFNAME=\"$PDFNAME\"" >> $DC
 
 # write Layout section
-if [[ -n $COMMENTS || -n $DRAFT || -n $REMARKS || -n $XSLTPARAM ]]; then
+if [[ -n "$COMMENTS" || -n "$DRAFT" || -n "$REMARKS" || -n "$XSLTPARAM" ]]; then
     echo -e "\n## Layout" >> $DC
-    [[ -n $COMMENTS ]] && echo "COMMENTS=\"$COMMENTS\"" >> $DC
-    [[ -n $DRAFT ]] && echo "DRAFT=\"$DRAFT\"" >> $DC
-    [[ -n $REMARKS ]] && echo "REMARKS=\"$REMARKS\"" >> $DC
-    [[ -n $XSLTPARAM ]] && echo "XSLTPARAM=\"$XSLTPARAM\"" >> $DC
+    [[ -n "$COMMENTS" ]] && echo "COMMENTS=\"$COMMENTS\"" >> $DC
+    [[ -n "$DRAFT" ]] && echo "DRAFT=\"$DRAFT\"" >> $DC
+    [[ -n "$REMARKS" ]] && echo "REMARKS=\"$REMARKS\"" >> $DC
+    [[ -n "$XSLTPARAM" ]] && echo "XSLTPARAM=\"$XSLTPARAM\"" >> $DC
 fi
 
 # write profiling section
-if [[ -n $PROFOS || -n $PROFARCH ]]; then
+if [[ -n "$PROFOS" || -n $PROFARCH ]]; then
     echo -e "\n## Profiling" >> $DC
-    [[ -n $PROFOS ]] && echo "PROFOS=\"$PROFOS\"" >> $DC
-    [[ -n $PROFARCH ]] && echo "PROFARCH=\"$PROFARCH\"" >> $DC
+    [[ -n "$PROFOS" ]] && echo "PROFOS=\"$PROFOS\"" >> $DC
+    [[ -n "$PROFARCH" ]] && echo "PROFARCH=\"$PROFARCH\"" >> $DC
 fi
 
 # write Provo section
-if [[ -n $HTMLROOT ]]; then
+if [[ -n "$HTMLROOT" ]]; then
     echo -e "\n## Provo
 HTMLROOT=\"$HTMLROOT\"" >> $DC
 fi
 
-if [[ -n $STYLEROOT ]]; then
+if [[ -n "$STYLEROOT" ]]; then
     # write stylesheet section
     echo -e "\n## stylesheet location" >> $DC
-    if [[ -n $LAYOUT ]]; then
+    if [[ -n "$LAYOUT" ]]; then
         echo "STYLEROOT=\"${STYLEROOT}/$LAYOUT\"
 FALLBACK_STYLEROOT=\"$STYLEROOT\"" >> $DC
     else
@@ -251,12 +251,12 @@ EPUB_CSS=\"${STYLEROOT}/epub/susebooks.css\"" >> $DC
 fi
     
 # write obsolete section
-if [[ -n $DISTVER || -n $PRODCTNAME || -n $PRODUCTNAMEREG || -n $PKGNAME ]]; then
+if [[ -n "$DISTVER" || -n "$PRODCTNAME" || -n "$PRODUCTNAMEREG" || -n "$PKGNAME" ]]; then
     echo -e "\n## obsolete" >> $DC
-    [[ -n $DISTVER ]] && echo "DISTVER=\"$DISTVER\"" >> $DC
-    [[ -n $PRODUCTNAME ]] && echo "PRODUCTNAME=\"$PRODUCTNAME\"" >> $DC
-    [[ -n $PRODUCTNAMEREG ]] && echo "PRODUCTNAMEREG=\"$PRODUCTNAMEREG\"" >> $DC
-    [[ -n $PKGNAME ]] && echo "PKGNAME=\"$PKGNAME\"" >> $DC
+    [[ -n "$DISTVER" ]] && echo "DISTVER=\"$DISTVER\"" >> $DC
+    [[ -n "$PRODUCTNAME" ]] && echo "PRODUCTNAME=\"$PRODUCTNAME\"" >> $DC
+    [[ -n "$PRODUCTNAMEREG" ]] && echo "PRODUCTNAMEREG=\"$PRODUCTNAMEREG\"" >> $DC
+    [[ -n "$PKGNAME" ]] && echo "PKGNAME=\"$PKGNAME\"" >> $DC
 fi
 
 # write sourcing section

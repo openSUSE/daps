@@ -259,7 +259,7 @@ function init_env {
 
     # test if ROOTID exist
     #
-    if [[ -n $ROOTID ]]; then
+    if [[ -n "$ROOTID" ]]; then
         EXISTS_ROOTID=$(eval "$XSLTPROC --stringparam \"rootid=$ROOTID\" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
         if [[ "yes" != $EXISTS_ROOTID ]]; then
             exit_on_error "$XML_CATALOG_FILES Fatal: ROOTID \"$ROOTID\" does not exist"
@@ -366,13 +366,13 @@ function call_make () {
     if [[ 1 = $DEBUG || 3 = $VERBOSITY ]]; then
         # use remake if installed when in debug or highest verbosity mode
         IS_REMAKE=$(which remake 2>/dev/null)
-        [[ -n $IS_REMAKE ]] && MAKE_BIN="/usr/bin/remake"
+        [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
         MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
     fi
     if [[ 0 = $VERBOSITY || 1 = $VERBOSITY || 2 = $VERBOSITY ]]; then
         # calculate Number of CPUs (cores) for -j option, set to "1" if empty
         CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
-        test -z "$CORE_NO" && CORE_NO=1
+        [[ -z "$CORE_NO" ]] && CORE_NO=1
         MAKE_OPTIONS="$MAKE_OPTIONS -j${CORE_NO}"
         [[ 1 != $DEBUG ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
@@ -396,10 +396,10 @@ function call_make () {
               BOOK: $BOOK
 
 "
-        if [[ -n $STYLEDEVEL ]]; then
+        if [[ -n "$STYLEDEVEL" ]]; then
             echo "         STYLEROOT: $STYLEDEVEL"
         else
-            if [[ -n $STYLEROOT ]]; then
+            if [[ -n "$STYLEROOT" ]]; then
                 echo "         STYLEROOT: $STYLEROOT"
             else
                 echo "         STYLEROOT: $DOCBOOK_STYLES"   
@@ -525,11 +525,11 @@ function build_pdfs () {
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode with remarks
     [[ 1 = $P_META ]]     && META=1
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
     
-    if [[ -n $P_FORMATTER ]]; then
+    if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
         else
@@ -586,11 +586,11 @@ function build_html_jsp () {
     [[ 1 = $P_META ]]     && META=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
     [[ 1 = $P_HTML4 ]]    && export HTML4="yes"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
-    if [[ -n $P_CSS ]]; then
+    if [[ -n "$P_CSS" ]]; then
         if [[ $P_CSS = "none" ]]; then
             unset HTML_CSS
         else
@@ -653,10 +653,10 @@ function webhelp () {
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ 1 = $P_NOSEARCH ]] && export WH_SEARCH="no"
-    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n "$P_CSS" ]]; then
         if [[ -f "$P_CSS" ]]; then
@@ -703,8 +703,8 @@ function build_epub () {
     fi
     
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     # Checking ePUBs requires a minimum verbosity level of 1
     if [[ 1 = $P_CHECK ]]; then
@@ -755,9 +755,9 @@ function build_man () {
         exit 0
     fi
 
-    [[ -n $P_NOGZIP ]]    && export GZIP_MAN="no"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_SUBDIRS ]]   && export MAN_SUBDIRS="yes"
+    [[ -n "$P_NOGZIP" ]]    && export GZIP_MAN="no"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_SUBDIRS" ]]   && export MAN_SUBDIRS="yes"
     
     call_make "$SUB_CMD" "$@"
 }
@@ -794,8 +794,8 @@ function build_generic () {
     fi
 
     [[ 1 = $P_MANIFEST ]] && INCLUDE_MANIFEST=1
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     
     call_make "$SUB_CMD" "$@"
 }
@@ -831,14 +831,14 @@ function build_locdrop () {
         exit 0
     fi
     
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_NOPDF ]]     && export export NOPDF=1
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_EXPORT_DIR ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOPDF" ]]     && export export NOPDF=1
+    [[ -n "$P_ROOTID2" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_EXPORT_DIR" ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
-    elif [[ -z $P_DEF_FILE && 0 != $VERBOSITY ]]; then
+    elif [[ -z "$P_DEF_FILE" && 0 != $VERBOSITY ]]; then
         ccecho "warn" "Warning: No DEF file was specified"
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
@@ -878,12 +878,12 @@ function online-docs () {
         exit 0       
     fi
     
-    [[ -n $P_NAME ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_NOSET ]]      && export export NOSET=1
-    [[ -n $P_ROOTID ]]     && export ROOTID="$P_ROOTID"
-    [[ -n $P_EXPORT_DIR ]] && export OD_EXPORT_DIR="$P_EXPORT_DIR"
+    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOSET" ]]      && export export NOSET=1
+    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
+    [[ -n "$P_EXPORT_DIR" ]] && export OD_EXPORT_DIR="$P_EXPORT_DIR"
 
-    if [[ -n $P_FORMATTER ]]; then
+    if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
         else
@@ -938,14 +938,14 @@ function packaging () {
         exit 0       
     fi
 
-    [[ -n $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
-    [[ -n $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
-    [[ -n $P_PAGEFILES ]]     && export export PAGEFILES=1
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_XSLTPARAM ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
+    [[ -n "$P_DOCUMENTFILES" ]] && export export DOCUMENTFILES=1
+    [[ -n "$P_PAGEFILES" ]]     && export export PAGEFILES=1
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
-    if [[ -n $P_DEF_FILE ]]; then
+    if [[ -n "$P_DEF_FILE" ]]; then
         if [[ -f $P_DEF_FILE ]]; then
             export DEF_FILE="$P_DEF_FILE"
         else
@@ -957,7 +957,7 @@ function packaging () {
        fi
     fi
 
-    if [[ -n $P_FORMATTER ]]; then
+    if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
         else
@@ -965,7 +965,7 @@ function packaging () {
         fi
     fi
 
-    if [[ -n $P_SETDATE ]]; then
+    if [[ -n "$P_SETDATE" ]]; then
         SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
         export SETDATE
     fi
@@ -1009,8 +1009,8 @@ function profile_first () {
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     
     # we do not want to write a logfile this time
     WRITE_LOG=0   
@@ -1139,8 +1139,8 @@ function show_names () {
     [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -1177,17 +1177,17 @@ function checklink () {
 	exit 0
     fi
 
-    if [[ -z $P_ROOTID && -z $P_FILE ]]; then
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
         if [[ 0 != $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
-    elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
                 
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
-    if [[ -n $P_FILE ]]; then
+    if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
             export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE" 
         else
@@ -1250,18 +1250,18 @@ function getimages () {
     [[ 1 = $P_COMPACT ]]  && COMPACT=1
     [[ 1 = $P_MODIFIED ]] && MOD=1
     [[ 1 = $P_SHOW ]]     && SHOW=1
-    [[ -n $P_VIEWER ]] && IMG_VIEWER="$P_VIEWER"
+    [[ -n "$P_VIEWER" ]] && IMG_VIEWER="$P_VIEWER"
 
     # set ROOTID - either directly or via $FILE
-    if [[ -z $P_ROOTID && -z $P_FILE ]]; then
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
         if [[ 0 != $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
-    elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
                 
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
@@ -1273,7 +1273,7 @@ function getimages () {
 
     # IMG_VIEWER may also be set via config file:
     if [[ $SHOW ]]; then
-        if [[ -z $IMG_VIEWER ]]; then
+        if [[ -z "$IMG_VIEWER" ]]; then
             exit_on_error "Please specify an image viewer via command-line (--viewer) or via config file"
         else
             IMG_VIEWER=$(which $IMG_VIEWER 2>/dev/null)
@@ -1351,12 +1351,12 @@ function spellcheck () {
 	exit 0
     fi
 
-    [[ -n $P_FILE ]] && FILELIST[0]="$P_FILE"
+    [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = $P_LIST ]] && LISTMODE=1
 
     # extra dictionary
     # check and absolutize path
-    if [[ -n $P_ASPELL_EXTRA_DICT ]]; then
+    if [[ -n "$P_ASPELL_EXTRA_DICT" ]]; then
         if [[ -e $P_ASPELL_EXTRA_DICT ]]; then
             sanitize_path "$P_ASPELL_EXTRA_DICT" "ASPELL_EXTRA_DICT"
         else
@@ -1365,17 +1365,17 @@ function spellcheck () {
     fi
     
     # set FILELIST if rootid was specified
-    if [[ -z $P_ROOTID && -z $P_FILE ]]; then
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
         if [[ 0 != $VERBOSITY ]]; then
             ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
         fi
-    elif [[ -n $P_ROOTID && -n $P_FILE ]]; then
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file and --rootid exclude one another.\nPlease specify only one of these options"
     fi
                 
-    [[ -n $P_ROOTID ]] && export ROOTID="$P_ROOTID"
+    [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
-    if [[ -z ${FILELIST[0]} ]]; then ## --file was not specified
+    if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
         FILELIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
         if [[ 0 != $? ]]; then
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
@@ -1384,11 +1384,11 @@ function spellcheck () {
 
     # Set language - if not specified try to get from $MAIN
     #
-    if [[ -n $P_LANG ]]; then
+    if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
         ASPELL_LANG=$(eval "$XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
-        if [[ -n $ASPELL_LANG ]]; then
+        if [[ -n "$ASPELL_LANG" ]]; then
             ccecho "info" "Using language $ASPELL_LANG."
         else
             exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
@@ -1407,7 +1407,7 @@ function spellcheck () {
     done
     # now create the command
     SPELLCMD="/usr/bin/aspell --mode=sgml ${SKIPLIST[@]} --encoding=utf-8 --lang=$ASPELL_LANG"
-    if [[ -n $ASPELL_EXTRA_DICT ]]; then
+    if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
     
@@ -1416,7 +1416,7 @@ function spellcheck () {
         test -f $FILE || ccecho "warn" "File $FILE does not exist"
         if [[ 1 = $LISTMODE ]]; then
             LISTOUTPUT=$(eval "$SPELLCMD list < $FILE | sort -u")
-            [[ -n $LISTOUTPUT ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
+            [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""
         else
             echo "Checking $FILE..."
@@ -1455,9 +1455,9 @@ function debugging () {
         exit 0
     fi
 
-    [[ -n $P_NAME ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n $P_ROOTID ]]    && export ROOTID="$P_ROOTID"
-    [[ -n $P_TARGET ]]    && export TARGET="$P_TARGET"
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_TARGET" ]]    && export TARGET="$P_TARGET"
     
     call_make "$SUB_CMD" "$@"
 }

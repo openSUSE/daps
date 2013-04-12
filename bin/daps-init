@@ -37,7 +37,7 @@ Options:
 #
 
 # show help when called with no arguments
-[[ -z $1 ]] && usage
+[[ -z "$1" ]] && usage
 
 ME=$(basename $0)
 CONT=
@@ -90,7 +90,7 @@ done
 
 [[ -z "$DOC_DIR" ]] && exit_on_error "You must specify a directory with -d. See \"$ME -h for details"
 # default ROOTELEMENT is book
-[[ -z $ROOTELEMENT ]] && ROOTELEMENT=book
+[[ -z "$ROOTELEMENT" ]] && ROOTELEMENT=book
 
 # ----------
 # Process DOCCONFIG and create directories
