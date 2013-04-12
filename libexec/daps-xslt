@@ -257,6 +257,7 @@ piped_input () {
 
 # enable interruption/abortion via Ctrl-Z/Ctrl-C
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
+trap "cleanup" ERR EXIT 
 
 [[ -z "$1" ]] && usage
 
@@ -396,9 +397,7 @@ fi
 
 #-----
 # Cleanup
-#
-cleanup
-
+# done via trap, see above
 
 exit $ERR_CODE;
 

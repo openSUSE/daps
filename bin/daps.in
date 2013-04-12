@@ -949,6 +949,7 @@ function recover_cmdl_values () {
 
 
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
+trap "clean_daps" ERR EXIT 
 
 # ----------------------------------------------------------------------------
 # Parsing the command line arguments with GNU getopt
@@ -1512,9 +1513,7 @@ export SETFILES_TMP
 WRITE_LOG=1
 eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
 
-#---
 # remove the tmp SETFILE
-#
-clean_daps
+# done via trap, see above
 
 exit;
