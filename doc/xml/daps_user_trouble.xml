@@ -10,7 +10,7 @@
 <chapter id="cha.daps.user.trouble">
  <title>Troubleshooting</title>
  <abstract>
-  <para>
+  <para><remark>taroth 2013-04-12: switch to quandaset in the future</remark>
    This chapter lists common problems and possible solutions, sorted into
    categories.
   </para>
@@ -19,14 +19,12 @@
  offo.sourceforeg.net in troubleshooting section and add xref</remark>
  <sect1 id="sec.daps.user.trouble.inst">
   <title>Installation and First Steps</title>
-
   <para>
    <remark>taroth 2012-06-01: FIXME</remark>
   </para>
  </sect1>
  <sect1 id="sec.daps.user.trouble.output">
   <title>Generating Output</title>
-
   <variablelist>
    <varlistentry>
     <term>Profiling Does Not Work as Expected?</term>
@@ -75,27 +73,46 @@
  </sect1>
  <sect1 id="sec.daps.user.trouble.misc">
   <title>Miscellaneous</title>
-
-  <para>
-   &dapsacr; is less verbose than its predecessor
-   <literal>susedoc</literal>. If you should run into problems with
-   &dapsacr; that you cannot classify, check the &dapsacr; log files in
-   <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
-   A complete log file of the latest
-   <command>daps&nbsp;<replaceable>subcommand</replaceable> </command> that
-   was executed is available in
-   <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
-  </para>
-
-  <para>
-   In case of an error the complete log will be shown on the screen
-   (STDOUT).
-  </para>
-
-  <para>
-   To get the same level of output as with susedoc 4.x, run
-   <command>daps</command> with the <option>-v</option> option. For more
-   details, use the <option>--debug</option> option.
-  </para>
+  <variablelist>
+   <varlistentry>
+    <term>Verbosity Level</term>
+    <listitem>
+     <para>&dapsacr; is less verbose than its predecessor
+       <literal>susedoc</literal>. To get the same level of output as with
+      susedoc 4.x, run <command>daps</command> with the <option>-v</option>
+      option. For more details, use the <option>--debug</option> option. </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <variablelist>
+   <varlistentry>
+    <term>Log Files</term>
+    <listitem>
+     <para> If you should run into problems with &dapsacr; that you cannot
+      classify, check the &dapsacr; log files in
+        <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
+      A complete log file of the latest
+      <command>daps&nbsp;<replaceable>subcommand</replaceable> </command>
+      that was executed is available in <filename>
+       <replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
+     </para>
+     <para> In case of an error the complete log will be shown on the screen
+      (STDOUT). </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Version Incompatibilities</term>
+    <listitem>
+     <para>If, after an update to a higher &dapsacr; version, you experience
+      strange effects that are difficult to debug, check your custom
+      &dapsacr; config file (&dapsconf-user;) against the system-wide
+      configuration file (&dapsconf-sys;) for any parameters that may have
+      changed. As the settings in the custom &dapsacr; configuration file
+      will override the settings in &dapsconf-sys; by default, any parameter
+      incompatibilities between the files may lead to unexpected behavior of
+      &dapsacr;.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </sect1>
 </chapter>
