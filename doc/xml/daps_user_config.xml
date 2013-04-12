@@ -8,9 +8,678 @@
 %entities;
 ]>
 <chapter id="cha.daps.user.config">
- <title>Customizing/Configuring &dapsacr;</title>
+ <title>Configuring &dapsacr;</title>
  <para>
   <remark>~/.daps/conf</remark>
  </para>
    &daps-config;
- </chapter>
+   <para>For adjusting a few parameters that you want to set to custom
+   values...&wip;</para>
+ <example>
+  <title>Example of &dapsconf-sys; (&dapsacr; 1.0)</title>
+  <!--taroth 2013-04-12: copied from DAPS SVN:
+   daps/svn/branches/daps_1.x/etc/conf-->
+   
+  <screen>###########################
+# DAPS configuration file #
+###########################
+#
+# Copyright (C) 2011,2012 fsundermeyer@opensuse.org
+# Authors: fsundermeyer@opensuse.org
+#
+
+#------------------------------------------------------------
+# Customizing:
+#
+# Override any setting below in
+# $HOME/.daps/config
+# or on the commandline
+#------------------------------------------------------------
+#
+# The environment is set up using the following hierachy
+# (1 == always wins)
+#
+# 1. Command line 
+#    - either as a real option
+#    - or as variable declaration (FOO=bar)
+#
+# 2. DC-file
+# 3. $USER_RC (user config file)
+# 4. $DAPSROOT/etc/system-profile
+
+## Key:         ASPELL_EXTRA_DICT
+## ----------------------             
+## Description: Additional dictionary for spell checker
+## Type:        Absolute path to distionary
+## Default:     ""
+#
+# Specify an additional (custom) dictionary
+ASPELL_EXTRA_DICT=""
+
+## Key:         ASPELL_LANG
+## ----------------------             
+## Description: Language for spell checker
+## Type:        String
+## Default:     en_US
+#
+# NOTE:  Language to use for spellchecker. It uses the same format as the
+#        LANG environmental variable: It consists of  the two letter ISO 639
+#        language code (e.g. 'en' for English) and an optional two letter
+#        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
+#        English). Make sure the respective dictionary for aspell is installed.
+#
+ASPELL_LANG=en_US
+
+## Key:         ASPELL_SKIP_TAGS
+## ----------------------             
+## Description: list of DOcBook XML tags which content should _not_ be
+##              spell-checked
+## Type:        List
+## Default:     ( author command email envar filename firstname guimenu
+##                keycap literal option remark screen surname systemitem
+##                ulink varname xref )
+#
+# NOTE: Spece separated list of tags, needs to be enclosed in brackets
+#
+ASPELL_SKIP_TAGS=(
+    author 
+    command
+    email                 
+    envar
+    filename                
+    firstname
+    guimenu
+    keycap
+    literal                
+    option                
+    remark
+    screen
+    surname
+    systemitem
+    ulink
+    varname
+    xref
+)
+
+## Key:         BUILD_DIR
+## ----------------------             
+## Description: Build directory where all daps generated files will go
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+# Allows to completely separate the output daps generates from the sources
+# If not set it is automatically resolved to $DOC_DIR/build/$BOOK
+BUILD_DIR=""
+
+## Key:         CB_OPTIONS
+## ------------------------             
+## Description: Command line options for /usr/bin/checkbot
+## Type:        String
+## Default:     "--dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
+#
+# 
+# Also see 'man 1 checkbot'. Do not change unless you really know what you do.
+#
+CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
+
+## Key:         COMMENTS
+## ---------------------
+## Description: Create profiled sources with XML comments?
+## Type:        yesno
+## Default:     "no"
+#
+# By default XML comments ( <!-- --> ) will be stripped when profiling
+# sources, so whenever you create source archives with daps
+# (e.g. via dist-xml or locdrop), the XML files will contain no comments.
+# Change this by setting COMMENTS="yes". Has no effect on book creation
+# (html, pdf, etc). Can also be set to "yes" with the -c switch on teh command
+# line
+# Also see COMMENT_STR, DRAFT and REMARKS
+#
+COMMENTS="no"
+
+## Key:         COLOR
+## ------------------
+## Description: Colored output?
+## Type:        yesno
+## Default:     "yes"
+#
+# By default errors, results, warnings and certain info messages are printed
+# in color using bash olor codes. In cron jobs and scripts you probably want to
+# turn off this behaviour by setting COLOR to "no"
+#
+COLOR="yes"
+
+## Key:         COMMENT_STR
+## ------------------------
+## Description: String to be appended to file/directory names when comments
+##              are turned on
+## Type:        String
+## Default:     "_comments"
+#
+COMMENT_STR="_comments"
+
+## Key:         CONF_PREFIX
+## ------------------------             
+## Description: Common prefix for all doc config files
+## Type:        String
+## Default:     "DC-"
+#
+# Also see PDFNAME
+#
+CONF_PREFIX="DC-"
+
+## Key:         CONVERT_OPTS
+## -------------------------
+## Description: Command line options for "convert" to convert color PNGs
+##              to grayscale
+## Type:        String
+## Default:     "-type grayscale -colors 256"
+#
+# Do not change unless you really know what you do.
+#
+CONVERT_OPTS="-type grayscale -colors 256"
+
+## Key:         DOCCONF_DEFAULT
+## -----------------------------
+## Description: Specify a default DC-file that is used whenever
+##              no DC-file is specified on the command line or via
+##              DOCCONF_NAME in the DC-FILE
+## Type:        String
+## Default:     ""
+#
+# This value is usually set in a book specific DC-file
+#
+DOCCONF_DEFAULT=""
+
+## Key:         DIA_OPTIONS
+## -------------------------
+## Description: Command line options for dia to convert DIA to SVG
+## Type:        String
+## Default:     "-t cairo-svg"
+#
+# Do not change unless you really know what you do.
+#
+DIA_OPTIONS="-t cairo-svg"
+
+## Key: DOCBOOK4_STYLE_URI        
+## ------------------
+## Description: URI to DocBook 4 stlysheets
+## Type:        URI
+## Default:     "http://docbook.sourceforge.net/release/xsl/current/"
+#
+# URI to the DocBook 4 stylesheets that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# Note:
+# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
+#
+DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
+
+## Key: DOCBOOK5_STYLE_URI        
+## ------------------
+## Description: URI to DocBook 5 stlysheets
+## Type:        URI
+## Default:     "http://docbook.sourceforge.net/release/xsl-ns/current/"
+#
+# URI to the DocBook 5 stylesheets that can be resolved by xmlcatalog
+# There should be no need to change this entry
+# Note:
+# URI _must_ end with a "/", otherwise it will not be resolved on Ubuntu
+#
+DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
+
+## Key: DOCBOOK5_RNG_URI        
+## ------------------
+## Description: URI to DocBook 5 Relax NG schema
+## Type:        URI
+## Default:     "http://docbook.org/xml/5.0/rng/docbook.rng"
+#
+# URI to the DocBook 5 Relax NG schema that can be resolved by xmlcatalog
+# There should be no need to change this entry
+#
+DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbook.rng"
+
+## Key:         DRAFT
+## ------------------
+## Description: Print "DRAFT" watermarks in HTML or PDF builds
+## Type:        yesno
+## Default:     "no"
+#
+# Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
+# Is ignored for any other output format and has no effect on profiling.
+# This value can be set to "yes" using the -d switch on the command line 
+# Also see COMMENTS and REMARKS
+#
+DRAFT="no"
+
+## Key:         DRAFT_STR
+## ----------------------
+## Description: String to be appended to file/directory names when draft
+##              is turned on
+## Type:        String
+## Default:     "_draft"
+#
+#
+DRAFT_STR="_draft"
+
+## Key:         EPUB_CHECK
+## ------------------------
+## Description: Check generated ePUB file with epubcheck
+## Type:        yesno
+## Default:     "no"
+#
+# Useful to find errors within an epub file when devolping stylesheets  
+#
+EPUBCHECK="no"
+
+## Key:         EPUB_CSS
+## ------------------------
+## Description: Absolute path to CSS file for EPUB builds
+## Type:        Path to file
+## Default:     ""
+#
+EPUB_CSS=""
+
+## Key:         FALLBACK_STYLEROOT
+## ----------------------
+## Description: Fallback styleroot directory.
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+# When having specified custom stylesheets with STYLEROOT, the fallback
+# for styles not specified in the custom STYLEROOT are the DocBook stylesheets
+# Specify an alternative fallback with this option. Useful if you have a 
+# fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
+# for directory that only has fo styles, html versions of that document would 
+# be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
+# directory containing your original custom stylesheets (which also have
+# html stylesheets) will create html versions with your custom styles. The
+# DocBook stylesheets remain as a last fallback resort.
+#
+# This option is ignored when not specifying STYLEROOT at the same time.
+# Also see STYLEROOT
+#
+FALLBACK_STYLEROOT=""
+
+## Key:         FOP_CONFIG_FILE
+## -----------------------
+## Description: Config file for the FOP pdf formatter
+## Type:        Path
+## Default:     "@sysconfdir@/daps/fop/fop-daps.xml"
+#
+# Specify a config file for FOP
+# Also see FORMATTER, FOP-*
+#
+FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
+
+## Key:         FOP_OPTIONS
+## -----------------------
+## Description: Command line options for the FOP pdf formatter
+## Type:        String
+## Default:     "-q" (turn on quiet mode)
+#
+# Specify command line options for the FOP formatter.
+# Also see FORMATTER, FOP-*
+#
+FOP_OPTIONS="-q"
+
+## Key:         FOP_WRAPPER
+## -----------------------
+## Description: Wrapper script for the FOP pdf formatter
+## Type:        PATH to script
+## Default:     "@pkgdatadir@/libexec/daps-fop""
+#
+# Optional wrapper script for calling FOP. The default "fop" will run
+# the first fop executable found in your path (usually this will be
+# /usr/bin/fop)
+# Also see FORMATTER, FOP-*
+#
+FOP_WRAPPER="@pkgdatadir@/libexec/daps-fop"
+
+## Key:         FORMATTER
+## --------------------
+## Description: Specify the PDF formatter to use
+## Type:        String (fop,xep)
+## Default:     "fop"
+#
+# Specify which PDF formatter to use. Currently only fop or xep are supported
+# Also see FOP_*, XEP_*
+#
+FORMATTER="fop"
+
+## Key:         GZIP_MAN
+## ------------------
+## Description: Compress man pages with gzip
+## Type:        yesno
+## Default:     "yes"
+#
+# By default man pages created with the "man" target will be compressed with
+# gzip
+#
+GZIP_MAN="yes"
+
+## Key:         HTML4
+## ------------------------
+## Description: Use HTML4 instead of XHTML for HTML output
+## Type:        yesno
+## Default:     no
+#
+HTML4="no"
+
+## Key:         HTML_CSS
+## ------------------------
+## Description: Absolute path to CSS file for HTML builds
+## Type:        Path to file
+## Default:     ""
+#
+HTML_CSS=""
+
+## Key:         HTMLROOT
+## ------------------------
+## Description: Set HTMLROOT for novell.com/documentation
+## Type:        String
+## Default:     ""
+#
+# Only needed for novell.com/documentation
+#
+HTMLROOT=""
+
+## Key:         IMG_VIEWER
+## ------------------------
+## Description: Image viewer to be used with target getimages
+## Type:        String
+## Default:     ""
+#
+# Command (gpicview) or full path (/usr/bin/gpicview) to an image viewer
+#
+IMG_VIEWER=""
+
+## Key:         INCLUDE_MANIFEST
+## -----------------------------
+## Description: Include a manifest file to the archive created by dist-html
+##              containing  list of included HTML files
+## Type:        Bool
+## Default:     ""
+#
+# Only affects the dist-html subcommand
+#
+INCLUDE_MANIFEST=""
+
+## Key:         INK_OPTIONS
+## ------------------------
+## Description: Command line options for inkscape to convert SVG to PNG
+## Type:        String
+## Default:     "-z -w 800"
+#
+# Do not change unless you really know what you do.
+#
+INK_OPTIONS="-z -w 800"
+
+## Key:         JING_FLAGS
+## ------------------------
+## Description: Flags for jing
+## Type:        String, whitespace-separated
+## Default:     "-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+#
+# The default flag enables jing to follow xi:includes
+# Do not change unless you really know what you do.
+#
+JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+
+## Key:         MAIN
+## -----------------
+## Description: Filename of the set/book defining XML file
+## Type:        filename (filename only, no absolute path)
+## Default:     ""
+#
+# Name of the MAIN XML file. Mandatory.
+# This value is usually set in a book specific DC-file.
+#
+MAIN=""
+
+## Key:         PDFNAME
+## --------------------
+## TODO:        Rename variable
+## Description: Custom name for generated files
+## Type:        String
+## Default:     ""
+#
+# By default the directory/filenames will be generated by stripping the
+# CONF_PREFIX from the DC-file's name. Use this setting to choose a custom
+# name.
+# This value is usually set in a book specific DC-file.
+# ATTENTION: Do not specify this value in a global config file if you generate
+#            more than a single book, otherwise previous book builds will always
+#            be overwritten by a new build
+#
+PDFNAME=""
+
+## Key:         PROFARCH
+## ---------------------
+## Description: Profiling values for the attribute arch=""
+## Type:        String (e.g. i386, x86_64)
+## Default:     ""
+#
+# This value is usually set in a book specific DC-file.
+#
+PROFARCH=""
+
+## Key:         PROFCONDITION
+## ---------------------------
+## Description: Profiling values for the attribute condition=""
+## Type:        String
+## Default:     ""
+#
+# This value is usually set in a book specific DC-file.
+#
+PROFCONDITION=""
+
+## Key:         PROFILE_URN
+## ---------------------------
+## Description: URN for profiling stylesheet
+## Type:        urn (String)
+## Default:     ""
+#
+# In order to use profiling, the urn to a profiling stylesheet _either_ has
+# to be specified in the header of the main file ($MAIN) via&lt;?xml-stylesheet/&gt;
+# or via this variable. Valid urns can be found in the DAPS installation
+# directory in etc/catalog.xml
+PROFILE_URN=""
+
+## Key:         PROFOS
+## -------------------
+## Description: Profiling values for the attribute os=""
+## Type:        String
+## Default:     ""
+#
+# This value is usually set in a book specific DC-file.
+#
+PROFOS=""
+
+## Key:         PROFVENDOR
+## -----------------------
+## Description: Profiling values for the attribute vendor=""
+## Type:        String
+## Default:     ""
+#
+# This value is usually set in a book specific DC-file.
+#
+PROFVENDOR=""
+
+## Key:         REMARK
+## -------------------
+## Description: Generate books with remarks?
+## Type:        yesno
+## Default:     "no"
+#
+# By default remarks are ignored when generating books. Set this parameter to
+# "yes" to include remarks. Useful for proofreading.
+# This value can be set to "yes" using the -r switch on the command line 
+# Also see COMMENTS and DRAFT
+#
+REMARKS="no"
+
+## Key:         REMARKS_STR
+## ------------------------
+## Description: String to be appended to file/directory names when remarks
+##              are turned on
+## Type:        String
+## Default:     "_remarks"
+#
+REMARK_STR="_remarks"
+
+## Key:         ROOTID
+## -------------------
+## Description: ID of the book/chapter/etc. to generate
+## Type:        String (must be a valid id from the set defined in MAIN)
+## Default:     ""
+#
+# When not set, the complete book defined in MAIN is build. If MAIN defines a
+# set of several books, you need to specify the id of a book (&lt;book id=""&gt;) in
+# order to build the single book. daps also supports building single
+# articles, parts, and chapters.
+# This value is usually set in a book specific DC-file and can also be set
+# using the command line switch --rootid=""
+#
+ROOTID=""
+
+## Key:      STYLEDEVEL
+## -------------------
+## Description: Custom Stylesheet directory for development purposes.
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+#
+# By default daps uses the DocBook Stylesheets to create output. If you are
+# developing your own set of stylesheets, you may want to set STYLEDEVEL in
+# ~/.daps/config. If set STYLEDEVEL _always_ takes precedence over STYLEROOT!
+# You may also want to set FALLBACK_STYLEROOT alomngside with STYLEDEVEL
+#
+# See also STYLEROOT, FALLBACK_STYLEROOT
+#
+# Do NOT use unless you really know what you are doing.
+#
+STYLEDEVEL=""
+
+## Key:      STYLEROOT     
+## -------------------
+## Description: Custom Stylesheet directory.
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+# By default daps uses the DocBook Stylesheets to create output. If you have
+# your own set of stylesheets, specify the absolute path to the stylesheet
+# directory here. The DocBook stylesheets will be used as a fallback in case
+# styles are not defined for all output formats.
+#
+# See also FALLBACK_STYLEROOT
+#
+STYLEROOT=""
+
+
+## Key:         USEMETA
+## --------------------
+## Description: Print SVN meta information in HTML and PDF builds
+## Type:        yesno
+## Default:     "no"
+#
+# If your XML sources are hosted on an SVN server, adds the following status
+# information for each file to HTML and PDF builds if set to "yes":
+#  * filename
+#  * maintainer (content of SVN property doc:maintainer)
+#  * status (content of SVN property doc:status)
+# Useful for proofreading.
+# Implies that remarks are turned on.
+# This value can be set to "yes" using the -m switch on the command line 
+# Also see REMARKS
+#
+USEMETA="no"
+
+## Key:         VERBOSITY
+## --------------------
+## Description: Verbosity level
+## Type:        number
+## Default:     0
+#
+# VERBOSITY=0: print only final results message (default)
+# VERBOSITY=1: results of each target that is called
+# VERBOSITY=2: detailed output of each target
+#
+VERBOSITY=0
+
+## Key:         WH_SEARCH
+## --------------------
+## Description: Enable/Disbale webhelp search feature
+## Type:        yesno
+## Default:     yes
+#
+#
+WH_SEARCH="yes"
+
+## Key:         XEP_CONFIG_FILE
+## -----------------------
+## Description: Config file for the XEP pdf formatter
+## Type:        Path
+## Default:     "@sysconfdir@/daps/xep/xep-daps.xml"
+#
+# Specify a config file for XEP
+# Also see FORMATTER, XEP-*
+#
+XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
+
+## Key:         XEP_OPTIONS
+## -----------------------
+## Description: Command line options for the XEP pdf formatter
+## Type:        String
+## Default:     "-q" (turn on quiet mode)
+#
+# Specify command line options for the XEP formatter.
+# Also see FORMATTER, XEP-*
+#
+XEP_OPTIONS="-q"
+
+## Key:         XEP_WRAPPER
+## -----------------------
+## Description: Wrapper script for the XEP pdf formatter
+## Type:        PATH to script
+## Default:     "@pkgdatadir@/libexec/daps-xep"
+#
+# Optional wrapper script for calling XEP. The default "xep" will run
+# the first xep binary found in your path (usually this will be
+# /usr/bin/xep)
+# Also see FORMATTER, XEP-*
+#
+XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
+
+## Key:         XML_MAIN_CATALOG
+## -----------------------
+## Description: Main XML catalog file
+## Type:        PATH to file
+## Default:     "/etc/xml/catalog"
+#
+# Path to the main XML catalog used to resolve URIs. /etc/xml/catalog is
+# the standard location used by most (all?) Linux distributions. Only
+# change if the main catalog is located elsewhere on you distribution.
+#
+XML_MAIN_CATALOG="/etc/xml/catalog"
+
+## Key: XSLTPARAM        
+## --------------------
+## Description: String passed to xsltproc for HTML and PDF builds
+## Type:        number
+## Default:     ""
+#
+# With XSLTPARAM you can overwrite stylesheet settings without having
+# to touch the stylesheet files directly. You may overwrite parameters
+# by specifying "--stringparam &lt;PARAM_NAME&gt; &lt;NEW_VALUE&gt;"
+# Example:
+# Set the pagesize for PDFs to 200x100 mm
+# XSLTPARAM="--stringparam page.height 200mm --stringparam page.width 100mm"
+#
+# Can also be placed in an DC-file if being a per-book setting
+#
+XSLTPARAM=""</screen>
+
+ </example>
+ 
+</chapter>
