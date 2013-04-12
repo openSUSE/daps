@@ -42,11 +42,11 @@
  </abstract>
  <sect1 id="sec.daps.user.layout.xslt">
   <title>Modifying Individual XSLT Processor Parameters </title>
-  <para>If you use the default DocBook layout and want to adjust individual 
-   parameters, you can use the <option>--xsltparam</option>. With the option,
-   you can pass on values for an XSLT parameter directly to the XSLT processor.
-   This is useful to temporarily overwrite style sheet parameters such as
-   margins. </para>
+  <para>If you use the default DocBook layout and want to adjust individual
+   parameters, you can use the <option>--xsltparam</option> option. It will pass
+   on values for an XSLT parameter directly to the XSLT processor, which is
+   useful to temporarily overwrite style sheet parameters such as margins, for
+   example.</para>
   <para>For larger or more complex modifications, such as adjustments of the
    title page layout, for example, it is advisable to develop your own set of
    stylesheets instead. </para>
@@ -71,26 +71,33 @@
     </listitem>
    </itemizedlist>
    <example>
-    <title>&wip;</title>
+    <title>Adjusting the Layout of Variablelists</title>
     <para>By default, the DocBook stylesheets display the contents of a
      <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
      set the parameter <parameter>variablelist.as.table</parameter> to the value
-     <literal>0</literal>. Execute the following command:</para>
-    <screen>daps html --xsltparam<co id="co.1"/> "'<co id="co.2"/>--stringparam<co id="co.3"/> variablelist.as.table<co id="co.4"/> 0<co id="co.5"/>'"</screen>
-    <calloutlist>
-     <callout arearefs="co.1"><para>&wip;</para></callout>
-     <callout arearefs="co.2"><para>&wip;</para></callout>
-     <callout arearefs="co.3"><para>&wip;</para></callout>
-     <callout arearefs="co.4"><para>&wip;</para></callout>
-     <callout arearefs="co.5"><para>&wip;</para></callout>
-    </calloutlist>
+     <literal>0</literal> by executing the following command:</para>
+    <screen>daps html --xsltparam<co id="co.xsltparam"/> "'<co
+    id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co
+     id="co.param"/>&nbsp;0<co id="co.value"/>'"<xref linkend="co.quote"/></screen>
+   <calloutlist>
+    <callout arearefs="co.xsltparam">
+     <para>As value of <option>--xsltparam</option> add one or more
+       <literal>xsltproc</literal> parameters in the form of
+        <option>"'--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable>'"</option>.
+     </para>
+    </callout>
+    <callout arearefs="co.quote">
+     <para>You must quote the string with double and single quotes.</para>
+    </callout>
+    <callout arearefs="co.param">
+     <para>Name of the parameter to adjust.</para>
+    </callout>
+    <callout arearefs="co.value">
+     <para>Value for <xref linkend="co.param"/>. It will be passed on unmodified
+      to the XSLT processor call that creates the <filename>.fo</filename> file
+      from the profiled XML sources. </para>
+    </callout>
+   </calloutlist>
   </example>
-     
-   <para>&wip;: Add one or more xslt processor parameters in the form of "'--stringparam
-   KEY=VALUE' --param KEY=VALUE". The given string will be passed unmodified to
-   the xsltprocessor call that creates the .fo file from the profiled sources.
-   Note:
-   You MUST quote the string with double and single quotes:
-   --xsltproc="'STRING'"</para>
  </sect1>
 </chapter>
