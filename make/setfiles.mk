@@ -75,8 +75,7 @@ SETFILES := $(shell $(XSLTPROC) $(PROFSTRINGS) \
 	      --stringparam "xml.src.path=$(DOC_DIR)/xml/" \
 	      --stringparam "mainfile=$(notdir $(MAIN))" \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/get-all-used-files.xsl \
-	      --file $(MAIN) $(XSLTPROCESSOR) | tr \" \' > $(SETFILES_TMP) && \
-	      echo 1)
+	      --file $(MAIN) $(XSLTPROCESSOR) && echo 1)
 
 # $(shell) does not cause make to exit in case it fails, so we need to
 # check manually
