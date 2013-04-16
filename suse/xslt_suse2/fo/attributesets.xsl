@@ -14,7 +14,7 @@
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
@@ -86,6 +86,22 @@
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="lists.label.properties">
+  <xsl:attribute name="text-align">end</xsl:attribute>
+  <xsl:attribute name="color">&dark-green;</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="orderedlist.label.properties"
+  use-attribute-sets="lists.label.properties">
+  <xsl:attribute name="font-family">&sans;</xsl:attribute>
+  <xsl:attribute name="font-weight">600</xsl:attribute>
+</xsl:attribute-set>
+<xsl:attribute-set name="itemizedlist.label.properties"
+  use-attribute-sets="lists.label.properties">
+  <xsl:attribute name="font-family">&serif;</xsl:attribute>
+    <!-- -->
+  <xsl:attribute name="line-height">&normal;pt</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 14. QAndASet =============================================== -->
 
@@ -139,6 +155,8 @@
 <xsl:attribute-set name="para.properties" use-attribute-sets="normal.para.spacing">
     <xsl:attribute name="text-align">
       <xsl:choose>
+        <!-- or ancestor::procedure or ancestor::orderedlist or
+             ancestor::itemizedlist or ancestor::calloutlist ??-->
         <xsl:when test="ancestor::entry">start</xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
