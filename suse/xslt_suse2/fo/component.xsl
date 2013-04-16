@@ -9,7 +9,7 @@
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
@@ -136,7 +136,7 @@
   <xsl:if test="$number != ''">
     <fo:inline xsl:use-attribute-sets="title.number.color">
       <xsl:copy-of select="$number"/>
-      <xsl:text> </xsl:text>
+      <fo:leader leader-pattern="space" leader-length="&gutter;mm"/>
     </fo:inline>
   </xsl:if>
   <fo:inline xsl:use-attribute-sets="title.name.color">
