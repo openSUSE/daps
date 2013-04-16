@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Unconditionally use a filled circle as the bullet before lists.
 
@@ -34,9 +34,9 @@
   </xsl:variable>
 
   <fo:inline font-size="{$size * 1.7}pt">
-      <!-- We want nice large bullets like we get in the browser. I wonder if
-           this is actually the best approach or if we should just use an inline
-           SVG. -->
+    <!-- We want nice large bullets like we get in the browser. I wonder if
+         this is actually the best approach or if we should just use an inline
+         SVG. -->
     <xsl:text>&#x2022;</xsl:text>
   </fo:inline>
 </xsl:template>

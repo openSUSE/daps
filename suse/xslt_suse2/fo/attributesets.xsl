@@ -95,11 +95,14 @@
   use-attribute-sets="lists.label.properties">
   <xsl:attribute name="font-family">&sans;</xsl:attribute>
   <xsl:attribute name="font-weight">600</xsl:attribute>
+  <xsl:attribute name="font-size"><xsl:value-of select="1 div &serif-factor;"/>em</xsl:attribute>
+  <xsl:attribute name="line-height"><xsl:value-of select="1.5 div &serif-factor;"/>em</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="itemizedlist.label.properties"
   use-attribute-sets="lists.label.properties">
   <xsl:attribute name="font-family">&serif;</xsl:attribute>
-    <!-- -->
+    <!-- Charis has perfectly round bullets, while Open Sans has an odd squircle.
+         -->
   <xsl:attribute name="line-height">&normal;pt</xsl:attribute>
 </xsl:attribute-set>
 
@@ -161,6 +164,7 @@
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
+    <xsl:attribute name="line-height">1.5em</xsl:attribute>
 </xsl:attribute-set>
 
 
