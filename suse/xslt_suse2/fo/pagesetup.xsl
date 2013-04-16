@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-   Purpose:
-     Remove blank pages from PDF output – we really don't need them if people
-     are supposed to print books on their own.
-     Output license [@role=legal] pages in multiple columns, to save space.
+<!--
+  Purpose:
+    Remove blank pages from PDF output – we really don't need them if people
+    are supposed to print books on their own.
+    Output license [@role=legal] pages in multiple columns, to save space.
 
-   Authors:    Stefan Knorr <sknorr@suse.de>
-   Copyright:  2013, Stefan Knorr
+  Authors:    Stefan Knorr <sknorr@suse.de>
+  Copyright:  2013, Stefan Knorr
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">

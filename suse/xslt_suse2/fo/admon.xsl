@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Re-Style admonitions
 
@@ -9,7 +9,7 @@
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
@@ -109,17 +109,17 @@
               border-start-width="0.75mm" border-start-style="solid"
               border-start-color="{$color}" padding-before="3mm"
               padding-after="3mm">
-            <xsl:if test="$admon.textlabel != 0 or title or info/title">
-              <fo:block xsl:use-attribute-sets="admonition.title.properties"
-                color="{$color}">
-                <xsl:apply-templates select="." mode="object.title.markup">
-      <xsl:with-param name="allow-anchors" select="1"/>
-    </xsl:apply-templates>
+              <xsl:if test="$admon.textlabel != 0 or title or info/title">
+                <fo:block xsl:use-attribute-sets="admonition.title.properties"
+                  color="{$color}">
+                  <xsl:apply-templates select="." mode="object.title.markup">
+                    <xsl:with-param name="allow-anchors" select="1"/>
+                  </xsl:apply-templates>
+                </fo:block>
+              </xsl:if>
+              <fo:block xsl:use-attribute-sets="admonition.properties">
+                <xsl:apply-templates/>
               </fo:block>
-            </xsl:if>
-            <fo:block xsl:use-attribute-sets="admonition.properties">
-              <xsl:apply-templates/>
-            </fo:block>
             </fo:block>
           </fo:list-item-body>
       </fo:list-item>

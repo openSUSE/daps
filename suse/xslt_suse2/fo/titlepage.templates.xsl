@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Restyle titles of chapters, etc.
 
@@ -8,7 +8,7 @@
   Copyright:  2013, Stefan Knorr
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">

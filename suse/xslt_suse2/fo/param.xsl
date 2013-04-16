@@ -14,7 +14,7 @@
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
