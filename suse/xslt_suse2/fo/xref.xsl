@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
-    Re-Style admonitions
+    Add an arrow after outward links to highlight them.
 
   Author(s):  Stefan Knorr <sknorr@suse.de>
               Thomas Schraitle <toms@opensuse.org>
@@ -9,7 +9,7 @@
   Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
-<!DOCTYPE xsl:stylesheets 
+<!DOCTYPE xsl:stylesheet
 [
   <!ENTITY % fonts SYSTEM "fonts.ent">
   <!ENTITY % colors SYSTEM "colors.ent">
@@ -94,7 +94,7 @@
 
 
 <xsl:template name="image-after-link">
-  <fo:instream-foreign-object content-height="0.7em">
+  <fo:instream-foreign-object content-height="0.65em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="100"
       height="100">
       <svg:rect width="54" height="54" x="0" y="46"
