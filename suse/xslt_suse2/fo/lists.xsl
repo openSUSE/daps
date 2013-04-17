@@ -87,7 +87,7 @@
   <!-- nested lists don't add extra list-block spacing -->
   <xsl:choose>
     <xsl:when test="ancestor::listitem">
-      <fo:list-block id="{$id}" xsl:use-attribute-sets="itemizedlist.properties">
+      <fo:list-block id="{$id}" xsl:use-attribute-sets="list.block.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column">
             <xsl:value-of select="$keep.together"/>
@@ -98,7 +98,7 @@
     </xsl:when>
     <xsl:otherwise>
       <fo:list-block id="{$id}" 
-        xsl:use-attribute-sets="list.block.spacing itemizedlist.properties">
+        xsl:use-attribute-sets="list.block.spacing list.block.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column">
             <xsl:value-of select="$keep.together"/>
@@ -142,7 +142,7 @@
   <!-- nested lists don't add extra list-block spacing -->
   <xsl:choose>
     <xsl:when test="ancestor::listitem">
-      <fo:list-block id="{$id}" xsl:use-attribute-sets="orderedlist.properties">
+      <fo:list-block id="{$id}" xsl:use-attribute-sets="list.block.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column"><xsl:value-of
                           select="$keep.together"/></xsl:attribute>
@@ -152,7 +152,7 @@
     </xsl:when>
     <xsl:otherwise>
       <fo:list-block id="{$id}"
-        xsl:use-attribute-sets="list.block.spacing orderedlist.properties">
+        xsl:use-attribute-sets="list.block.spacing list.block.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column">
             <xsl:value-of select="$keep.together"/>
@@ -162,6 +162,109 @@
       </fo:list-block>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+
+<xsl:template match="procedure">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:variable name="param.placement"
+                select="substring-after(normalize-space($formal.title.placement),
+                                        concat(local-name(.), ' '))"/>
+
+  <xsl:variable name="placement">
+    <xsl:choose>
+      <xsl:when test="contains($param.placement, ' ')">
+        <xsl:value-of select="substring-before($param.placement, ' ')"/>
+      </xsl:when>
+      <xsl:when test="$param.placement = ''">before</xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$param.placement"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Preserve order of PIs and comments -->
+  <xsl:variable name="preamble"
+        select="*[not(self::step
+                  or self::title
+                  or self::titleabbrev)]
+                |comment()[not(preceding-sibling::step)]
+                |processing-instruction()[not(preceding-sibling::step)]"/>
+
+  <xsl:variable name="steps" 
+                select="step
+                        |comment()[preceding-sibling::step]
+                        |processing-instruction()[preceding-sibling::step]"/>
+
+  <fo:block id="{$id}" xsl:use-attribute-sets="list.block.properties list.block.spacing">
+    <xsl:if test="./title and $placement = 'before'">
+      <!-- n.b. gentext code tests for $formal.procedures and may make an "informal" -->
+      <!-- heading even though we called formal.object.heading. odd but true. -->
+      <xsl:call-template name="formal.object.heading"/>
+    </xsl:if>
+
+    <xsl:apply-templates select="$preamble"/>
+
+    <fo:list-block
+      xsl:use-attribute-sets="list.block.spacing list.block.properties">
+      <xsl:apply-templates select="$steps"/>
+    </fo:list-block>
+
+    <xsl:if test="./title and $placement != 'before'">
+      <!-- n.b. gentext code tests for $formal.procedures and may make an "informal" -->
+      <!-- heading even though we called formal.object.heading. odd but true. -->
+      <xsl:call-template name="formal.object.heading"/>
+    </xsl:if>
+  </fo:block>
+</xsl:template>
+
+
+<xsl:template match="substeps">
+  <fo:list-block xsl:use-attribute-sets="list.block.spacing list.block.properties">
+    <xsl:apply-templates/>
+  </fo:list-block>
+</xsl:template>
+
+
+<xsl:template match="procedure/step|substeps/step">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:variable name="keep.together">
+    <xsl:call-template name="pi.dbfo_keep-together"/>
+  </xsl:variable>
+
+  <fo:list-item xsl:use-attribute-sets="list.item.spacing">
+    <xsl:if test="$keep.together != ''">
+      <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                      select="$keep.together"/></xsl:attribute>
+    </xsl:if>
+    <fo:list-item-label end-indent="label-end()"
+      xsl:use-attribute-sets="orderedlist.label.properties">
+      <fo:block id="{$id}">
+        <!-- dwc: fix for one step procedures. Use a bullet if there's no step 2 -->
+        <xsl:choose>
+          <xsl:when test="count(../step) = 1">
+            <xsl:call-template name="itemizedlist.label.markup"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="number">
+              <xsl:with-param name="recursive" select="0"/>
+            </xsl:apply-templates>.
+          </xsl:otherwise>
+        </xsl:choose>
+      </fo:block>
+    </fo:list-item-label>
+    <fo:list-item-body start-indent="body-start()">
+      <fo:block>
+        <xsl:apply-templates/>
+      </fo:block>
+    </fo:list-item-body>
+  </fo:list-item>
 </xsl:template>
 
 </xsl:stylesheet>
