@@ -1994,14 +1994,20 @@ table p, .informaltable table p {
     margin: 0;
     padding: 3px 5px;
     overflow: hidden;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
-.table th, .informaltable th {
+.table th, .informaltable th,
+.table td[colspan], .informaltable td[colspan],
+.table td[rowspan], .informaltable td[rowspan] {
     vertical-align: middle;
     border: 1px solid #999;
 }
 
+.table td, .informaltable td{
+    vertical-align: middle;
+    border-right: 1px solid #999;
+}
 .table tr:nth-child(even), .informaltable tr:nth-child(even) {
     background-color: #EFEFF0;
 }
