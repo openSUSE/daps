@@ -103,8 +103,11 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="list.block.properties">
-  <xsl:attribute name="provisional-label-separation"><xsl:value-of select="&gutter; div 2"/>mm</xsl:attribute>
-  <xsl:attribute name="provisional-distance-between-starts"><xsl:value-of select="(&column; + &gutter;) div 2"/>mm</xsl:attribute>
+  <xsl:attribute name="provisional-label-separation">&gutterfragment;mm</xsl:attribute>
+  <xsl:attribute name="provisional-distance-between-starts">&columnfragment;mm</xsl:attribute>
+</xsl:attribute-set>
+<xsl:attribute-set name="orderedlist.properties" use-attribute-sets="list.block.properties">
+  <xsl:attribute name="provisional-distance-between-starts">&columnfragment;mm</xsl:attribute>
 </xsl:attribute-set>
 
 

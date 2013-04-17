@@ -49,8 +49,7 @@
   </fo:block>
 
   <fo:block>
-    <xsl:attribute name="margin-{$direction.align.start}">
-      <xsl:value-of select="(&column; + &gutter;) div 2"/>mm
+    <xsl:attribute name="margin-{$direction.align.start}">&columnfragment;mm
     </xsl:attribute>
     <xsl:apply-templates select="listitem"/>
   </fo:block>
@@ -112,89 +111,55 @@
 </xsl:template>
 
 
-<xsl:template match="itemizedlist/listitem">
-  <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
+<xsl:template match="orderedlist">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
 
   <xsl:variable name="keep.together">
     <xsl:call-template name="pi.dbfo_keep-together"/>
   </xsl:variable>
 
-  <xsl:variable name="item.contents">
-    <fo:list-item-label end-indent="label-end()"
-      xsl:use-attribute-sets="itemizedlist.label.properties">
-      <fo:block>
-        <xsl:call-template name="itemizedlist.label.markup"/>
-      </fo:block>
-    </fo:list-item-label>
-    <fo:list-item-body start-indent="body-start()">
-      <fo:block>
-        <xsl:apply-templates/>
-      </fo:block>
-    </fo:list-item-body>
+  <xsl:if test="title">
+    <xsl:apply-templates select="title" mode="list.title.mode"/>
+  </xsl:if>
+
+  <!-- Preserve order of PIs and comments -->
+  <xsl:apply-templates
+      select="*[not(self::listitem
+                or self::title
+                or self::titleabbrev)]
+              |comment()[not(preceding-sibling::listitem)]
+              |processing-instruction()[not(preceding-sibling::listitem)]"/>
+
+  <xsl:variable name="content">
+    <xsl:apply-templates 
+          select="listitem
+                  |comment()[preceding-sibling::listitem]
+                  |processing-instruction()[preceding-sibling::listitem]"/>
   </xsl:variable>
 
+  <!-- nested lists don't add extra list-block spacing -->
   <xsl:choose>
-    <xsl:when test="parent::*/@spacing = 'compact'">
-      <fo:list-item id="{$id}" xsl:use-attribute-sets="compact.list.item.spacing">
+    <xsl:when test="ancestor::listitem">
+      <fo:list-block id="{$id}" xsl:use-attribute-sets="orderedlist.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column"><xsl:value-of
                           select="$keep.together"/></xsl:attribute>
         </xsl:if>
-        <xsl:copy-of select="$item.contents"/>
-      </fo:list-item>
+        <xsl:copy-of select="$content"/>
+      </fo:list-block>
     </xsl:when>
     <xsl:otherwise>
-      <fo:list-item id="{$id}" xsl:use-attribute-sets="list.item.spacing">
+      <fo:list-block id="{$id}"
+        xsl:use-attribute-sets="list.block.spacing orderedlist.properties">
         <xsl:if test="$keep.together != ''">
-          <xsl:attribute name="keep-together.within-column"><xsl:value-of
-                          select="$keep.together"/></xsl:attribute>
+          <xsl:attribute name="keep-together.within-column">
+            <xsl:value-of select="$keep.together"/>
+          </xsl:attribute>
         </xsl:if>
-        <xsl:copy-of select="$item.contents"/>
-      </fo:list-item>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-
-<xsl:template match="orderedlist/listitem">
-  <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
-
-  <xsl:variable name="keep.together">
-    <xsl:call-template name="pi.dbfo_keep-together"/>
-  </xsl:variable>
-
-  <xsl:variable name="item.contents">
-    <fo:list-item-label end-indent="label-end()"
-      xsl:use-attribute-sets="orderedlist.label.properties">
-      <fo:block text-align="end">
-        <xsl:apply-templates select="." mode="item-number"/>
-      </fo:block>
-    </fo:list-item-label>
-    <fo:list-item-body start-indent="body-start()">
-      <fo:block>
-        <xsl:apply-templates/>
-      </fo:block>
-    </fo:list-item-body>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="parent::*/@spacing = 'compact'">
-      <fo:list-item id="{$id}" xsl:use-attribute-sets="compact.list.item.spacing">
-        <xsl:if test="$keep.together != ''">
-          <xsl:attribute name="keep-together.within-column"><xsl:value-of
-            select="$keep.together"/></xsl:attribute>
-        </xsl:if>
-        <xsl:copy-of select="$item.contents"/>
-      </fo:list-item>
-    </xsl:when>
-    <xsl:otherwise>
-      <fo:list-item id="{$id}" xsl:use-attribute-sets="list.item.spacing">
-        <xsl:if test="$keep.together != ''">
-          <xsl:attribute name="keep-together.within-column"><xsl:value-of
-            select="$keep.together"/></xsl:attribute>
-        </xsl:if>
-        <xsl:copy-of select="$item.contents"/>
-      </fo:list-item>
+        <xsl:copy-of select="$content"/>
+      </fo:list-block>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
