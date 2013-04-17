@@ -44,9 +44,8 @@ attlist_include &=
   attribute arch { text }?
 fallback = element xi:fallback { attlist_fallback, any }
 attlist_fallback &= empty
-xi_include.def = \include
-xi_include.opt = \include?
-# End of NOVDOC.DEACTIVATE.XINCLUDE
+xi_include.def = notAllowed
+xi_include.opt = notAllowed
 admonitions = important | note | tip | warning
 lists =
   itemizedlist | orderedlist | simplelist | variablelist | calloutlist
@@ -149,6 +148,7 @@ article =
        | figure
        | table
        | procedure
+       | qandaset
        | bridgehead
        | remark
        | abstract
@@ -175,7 +175,7 @@ preface =
   element preface {
     attlist_preface,
     title,
-    (((all | procedure)+, sect1*)
+    (((all | procedure | qandaset)+, sect1*)
      | sect1+)
   }
 part =
@@ -191,14 +191,14 @@ appendix =
   element appendix {
     attlist_appendix,
     title,
-    (all | procedure)+,
+    (all | procedure | qandaset)+,
     (sect1* | refentry* | msgset?)
   }
 chapter =
   element chapter {
     attlist_chapter,
     title,
-    (abstract | all | procedure)+,
+    (abstract | all | procedure | qandaset)+,
     (sect1* | refentry* | msgset? | xi_include.opt)
   }
 abstract = element abstract { attlist_abstract, title?, para+ }
@@ -211,14 +211,19 @@ sect1 =
   element sect1 {
     attlist_sect1,
     title,
-    (all | procedure)+,
+    (all | procedure | qandaset)+,
     (sect2* | refentry* | msgset?)
   }
 sect2 =
-  element sect2 { attlist_sect2, title, (all | procedure)+, sect3* }
+  element sect2 {
+    attlist_sect2, title, (all | procedure | qandaset)+, sect3*
+  }
 sect3 =
-  element sect3 { attlist_sect3, title, (all | procedure)+, sect4* }
-sect4 = element sect4 { attlist_sect4, title, (all | procedure)+ }
+  element sect3 {
+    attlist_sect3, title, (all | procedure | qandaset)+, sect4*
+  }
+sect4 =
+  element sect4 { attlist_sect4, title, (all | procedure | qandaset)+ }
 partintro = element partintro { attlist_partintro, all+, sect1* }
 # inlines
 application =
@@ -388,6 +393,94 @@ mediaobject =
 imageobject = element imageobject { attlist_imageobject, imagedata }
 imagedata = element imagedata { attlist_imagedata, empty }
 textobject = element textobject { attlist_textobject, phrase }
+# QandASet
+qandaset =
+  element qandaset {
+    attlist_qandaset, (remark | indexterm)*, (qandadiv+ | qandaentry+)
+  }
+attlist_qandaset &=
+  attribute defaultlabel { "none" | "number" | "qanda" }?,
+  profiling.attributes,
+  xmlbase
+qandadiv =
+  element qandadiv {
+    attlist_qandadiv, title, (remark | indexterm)*, qandaentry+
+  }
+attlist_qandadiv &=
+  profiling.attributes,
+  attribute id { xsd:ID }?,
+  xmlbase
+qandaentry = element qandaentry { attlist_qandaentry, question, answer }
+attlist_qandaentry &=
+  profiling.attributes,
+  attribute id { xsd:ID }?,
+  xmlbase
+question =
+  element question {
+    attlist_question,
+    label?,
+    para,
+    (calloutlist
+     | itemizedlist
+     | orderedlist
+     | variablelist
+     | important
+     | note
+     | tip
+     | warning
+     | screen
+     | formalpara
+     | para
+     | mediaobject
+     | informalfigure
+     | informaltable
+     | example
+     | figure
+     | table
+     | procedure
+     | remark
+     | indexterm)*
+  }
+attlist_question &= profiling.attributes, xmlbase
+answer =
+  element answer {
+    attlist_answer,
+    label?,
+    (calloutlist
+     | itemizedlist
+     | orderedlist
+     | variablelist
+     | important
+     | note
+     | tip
+     | warning
+     | screen
+     | formalpara
+     | para
+     | mediaobject
+     | informalfigure
+     | informaltable
+     | example
+     | figure
+     | table
+     | procedure
+     | remark
+     | indexterm)+
+  }
+attlist_answer &= profiling.attributes, xmlbase
+label =
+  element label {
+    attlist_label,
+    (text
+     | emphasis
+     | trademark
+     | ulink
+     | remark
+     | subscript
+     | superscript
+     | indexterm)*
+  }
+attlist_label &= empty
 # glossary
 glossary =
   element glossary {
@@ -492,14 +585,16 @@ refpurpose =
 refclass = element refclass { attlist_refclass, (text | application)* }
 refsect1 =
   element refsect1 {
-    attlist_refsect1, title, (all | procedure)*, refsect2*
+    attlist_refsect1, title, (all | procedure | qandaset)*, refsect2*
   }
 refsect2 =
   element refsect2 {
-    attlist_refsect2, title, (all | procedure)*, refsect3*
+    attlist_refsect2, title, (all | procedure | qandaset)*, refsect3*
   }
 refsect3 =
-  element refsect3 { attlist_refsect3, title, (all | procedure)* }
+  element refsect3 {
+    attlist_refsect3, title, (all | procedure | qandaset)*
+  }
 # change added condition and userlevel
 attlist_abstract &=
   attribute id { xsd:ID }?,
@@ -507,6 +602,7 @@ attlist_abstract &=
   xmlbase
 attlist_appendix &=
   attribute id { xsd:ID }?,
+  attribute role { text }?,
   profiling.attributes,
   xmlbase
 attlist_application &= profiling.attributes, xmlbase
@@ -629,6 +725,7 @@ attlist_formalpara &=
   profiling.attributes,
   xmlbase
 attlist_glossary &=
+  attribute role { text }?,
   attribute id { xsd:ID }?,
   profiling.attributes,
   xmlbase
@@ -643,7 +740,10 @@ attlist_glossentry &=
   profiling.attributes,
   xmlbase
 attlist_guimenu &= profiling.attributes, xmlbase
-attlist_index &= profiling.attributes, xmlbase
+attlist_index &=
+  attribute role { text }?,
+  profiling.attributes,
+  xmlbase
 attlist_informalfigure &=
   attribute pgwide { text }?,
   profiling.attributes,
@@ -729,6 +829,9 @@ attlist_orderedlist &=
   attribute id { xsd:ID }?,
   [ a:defaultValue = "normal" ]
   attribute spacing { "compact" | "normal" }?,
+  attribute numeration {
+    "arabic" | "loweralpha" | "lowerroman" | "upperalpha" | "upperroman"
+  }?,
   profiling.attributes,
   xmlbase
 attlist_para &=
@@ -737,6 +840,7 @@ attlist_para &=
   xmlbase
 attlist_part &=
   attribute revision { text }?,
+  attribute role { text }?,
   attribute conformance { text }?,
   attribute id { xsd:ID }?,
   profiling.attributes,
@@ -747,6 +851,7 @@ attlist_phrase &=
   profiling.attributes,
   xmlbase
 attlist_preface &=
+  attribute role { text }?,
   attribute id { xsd:ID }?,
   profiling.attributes,
   xmlbase
@@ -777,6 +882,7 @@ attlist_refname &= profiling.attributes, xmlbase
 attlist_refnamediv &= profiling.attributes, xmlbase
 attlist_refpurpose &= profiling.attributes, xmlbase
 attlist_refentry &=
+  attribute role { text }?,
   attribute id { xsd:ID }?,
   profiling.attributes,
   xmlbase
@@ -976,6 +1082,13 @@ attlist_xref &=
   attribute xrefstyle { text }?,
   profiling.attributes,
   xmlbase
+start = \include | set
+any =
+  (element * {
+     attribute * { text }*,
+     any
+   }
+   | text)*
 # End of %__HIDE__
 
 # Entities which are used by SUSE
