@@ -87,8 +87,8 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="lists.label.properties">
-  <xsl:attribute name="text-align">end</xsl:attribute>
   <xsl:attribute name="color">&dark-green;</xsl:attribute>
+  <xsl:attribute name="text-align">end</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="orderedlist.label.properties"
@@ -100,11 +100,13 @@
 </xsl:attribute-set>
 <xsl:attribute-set name="itemizedlist.label.properties"
   use-attribute-sets="lists.label.properties">
-  <xsl:attribute name="font-family">&serif;</xsl:attribute>
-    <!-- Charis has perfectly round bullets, while Open Sans has an odd squircle.
-         -->
-  <xsl:attribute name="line-height">&normal;pt</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:attribute-set name="list.block.properties">
+  <xsl:attribute name="provisional-label-separation"><xsl:value-of select="&gutter; div 2"/>mm</xsl:attribute>
+  <xsl:attribute name="provisional-distance-between-starts"><xsl:value-of select="(&column; + &gutter;) div 2"/>mm</xsl:attribute>
+</xsl:attribute-set>
+
 
 <!-- 14. QAndASet =============================================== -->
 
