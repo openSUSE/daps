@@ -300,12 +300,15 @@ ifdef USESVN
 endif
 TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 
-NO_TRANS_FILES := $(filter-out $(TOTRANSFILES), $(SRCFILES))
+NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES), $(SRCFILES))
 NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 
 .PHONY: locdrop
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
 locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
+  ifdef DEF_FILE
+    locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
+  endif
   ifndef USESVN
 	@ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"
 	exit 1
@@ -329,7 +332,7 @@ locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
 	  $(DOCCONF)
     ifdef DEF_FILE
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
-	  $(DEF_FILE)
+	  $(DEF_FILE) $(DC_FILES)
     endif
 	bzip2 -9f $(NO_TRANS_TAR)
         # graphics tarball
