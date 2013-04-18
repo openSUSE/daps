@@ -60,8 +60,8 @@
           <xsl:choose>
             <xsl:when test="ancestor::book and ($double.sided != 0)">
               <fo:retrieve-marker retrieve-class-name="section.head.marker"
-                                  retrieve-position="first-including-carryover"
-                                  retrieve-boundary="page-sequence"/>
+                retrieve-position="first-including-carryover"
+                retrieve-boundary="page-sequence"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="titleabbrev.markup"/>
@@ -227,24 +227,22 @@
 
 <xsl:template name="user.pagemasters">
   <!-- New page-master for License pages -->
-    <fo:simple-page-master master-name="legal-first"
-                           page-width="{$page.width}"
-                           page-height="{$page.height}"
-                           margin-top="{$page.margin.top}"
-                           margin-bottom="{$page.margin.bottom}">
+
+    <fo:simple-page-master master-name="legal-first" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
       <xsl:attribute name="margin-{$direction.align.start}">
         <xsl:value-of select="$page.margin.inner"/>
-	<xsl:if test="$fop.extensions != 0">
-	  <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
         </xsl:if>
       </xsl:attribute>
       <xsl:attribute name="margin-{$direction.align.end}">
         <xsl:value-of select="$page.margin.outer"/>
       </xsl:attribute>
       <fo:region-body margin-bottom="{$body.margin.bottom}"
-                      margin-top="{$body.margin.top}"
-                      column-gap="&gutter;mm"
-                      column-count="2">
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm"
+        column-count="2">
         <xsl:attribute name="margin-{$direction.align.start}">
           <xsl:value-of select="$body.margin.inner"/>
         </xsl:attribute>
@@ -257,9 +255,8 @@
                         precedence="{$region.before.precedence}"
                         display-align="before"/>
       <fo:region-after region-name="xsl-region-after-first"
-                       extent="{$region.after.extent}"
-                        precedence="{$region.after.precedence}"
-                       display-align="after"/>
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
       <xsl:call-template name="region.inner">
         <xsl:with-param name="sequence">first</xsl:with-param>
         <xsl:with-param name="pageclass">legal</xsl:with-param>
@@ -270,24 +267,20 @@
       </xsl:call-template>
     </fo:simple-page-master>
 
-    <fo:simple-page-master master-name="legal-odd"
-                           page-width="{$page.width}"
-                           page-height="{$page.height}"
-                           margin-top="{$page.margin.top}"
-                           margin-bottom="{$page.margin.bottom}">
+    <fo:simple-page-master master-name="legal-odd" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
       <xsl:attribute name="margin-{$direction.align.start}">
         <xsl:value-of select="$page.margin.inner"/>
-	<xsl:if test="$fop.extensions != 0">
-	  <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
         </xsl:if>
       </xsl:attribute>
       <xsl:attribute name="margin-{$direction.align.end}">
         <xsl:value-of select="$page.margin.outer"/>
       </xsl:attribute>
       <fo:region-body margin-bottom="{$body.margin.bottom}"
-                      margin-top="{$body.margin.top}"
-                      column-gap="&gutter;mm"
-                      column-count="2">
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm" column-count="2">
         <xsl:attribute name="margin-{$direction.align.start}">
           <xsl:value-of select="$body.margin.inner"/>
         </xsl:attribute>
@@ -296,13 +289,11 @@
         </xsl:attribute>
       </fo:region-body>
       <fo:region-before region-name="xsl-region-before-odd"
-                        extent="{$region.before.extent}"
-                        precedence="{$region.before.precedence}"
-                        display-align="before"/>
+        extent="{$region.before.extent}" precedence="{$region.before.precedence}"
+        display-align="before"/>
       <fo:region-after region-name="xsl-region-after-odd"
-                       extent="{$region.after.extent}"
-                        precedence="{$region.after.precedence}"
-                       display-align="after"/>
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
       <xsl:call-template name="region.inner">
         <xsl:with-param name="sequence">odd</xsl:with-param>
         <xsl:with-param name="pageclass">legal</xsl:with-param>
@@ -313,24 +304,20 @@
       </xsl:call-template>
     </fo:simple-page-master>
 
-    <fo:simple-page-master master-name="legal-even"
-                           page-width="{$page.width}"
-                           page-height="{$page.height}"
-                           margin-top="{$page.margin.top}"
-                           margin-bottom="{$page.margin.bottom}">
+    <fo:simple-page-master master-name="legal-even" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
       <xsl:attribute name="margin-{$direction.align.start}">
         <xsl:value-of select="$page.margin.outer"/>
-  <xsl:if test="$fop.extensions != 0">
-    <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
         </xsl:if>
       </xsl:attribute>
       <xsl:attribute name="margin-{$direction.align.end}">
         <xsl:value-of select="$page.margin.inner"/>
       </xsl:attribute>
       <fo:region-body margin-bottom="{$body.margin.bottom}"
-                      margin-top="{$body.margin.top}"
-                      column-gap="&gutter;mm"
-                      column-count="2">
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm" column-count="2">
         <xsl:attribute name="margin-{$direction.align.start}">
           <xsl:value-of select="$body.margin.outer"/>
         </xsl:attribute>
@@ -339,13 +326,157 @@
         </xsl:attribute>
       </fo:region-body>
       <fo:region-before region-name="xsl-region-before-even"
+        extent="{$region.before.extent}" precedence="{$region.before.precedence}"
+        display-align="before"/>
+      <fo:region-after region-name="xsl-region-after-even"
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
+      <xsl:call-template name="region.outer">
+        <xsl:with-param name="sequence">even</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="region.inner">
+        <xsl:with-param name="sequence">even</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+    </fo:simple-page-master>
+
+    <fo:simple-page-master master-name="legal-first-draft" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
+      <xsl:attribute name="margin-{$direction.align.start}">
+        <xsl:value-of select="$page.margin.inner"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        </xsl:if>
+      </xsl:attribute>
+      <xsl:attribute name="margin-{$direction.align.end}">
+        <xsl:value-of select="$page.margin.outer"/>
+      </xsl:attribute>
+      <fo:region-body margin-bottom="{$body.margin.bottom}"
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm"
+        column-count="2">
+        <xsl:if test="$draft.watermark.image != ''">
+          <xsl:attribute name="background-image">
+            <xsl:call-template name="fo-external-image">
+              <xsl:with-param name="filename" select="$draft.watermark.image"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="background-attachment">fixed</xsl:attribute>
+          <xsl:attribute name="background-repeat">no-repeat</xsl:attribute>
+          <xsl:attribute name="background-position-horizontal">center</xsl:attribute>
+          <xsl:attribute name="background-position-vertical">center</xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="margin-{$direction.align.start}">
+          <xsl:value-of select="$body.margin.inner"/>
+        </xsl:attribute>
+        <xsl:attribute name="margin-{$direction.align.end}">
+          <xsl:value-of select="$body.margin.outer"/>
+        </xsl:attribute>
+      </fo:region-body>
+      <fo:region-before region-name="xsl-region-before-first"
                         extent="{$region.before.extent}"
                         precedence="{$region.before.precedence}"
                         display-align="before"/>
+      <fo:region-after region-name="xsl-region-after-first"
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
+      <xsl:call-template name="region.inner">
+        <xsl:with-param name="sequence">first</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="region.outer">
+        <xsl:with-param name="sequence">first</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+    </fo:simple-page-master>
+
+    <fo:simple-page-master master-name="legal-odd-draft" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
+      <xsl:attribute name="margin-{$direction.align.start}">
+        <xsl:value-of select="$page.margin.inner"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        </xsl:if>
+      </xsl:attribute>
+      <xsl:attribute name="margin-{$direction.align.end}">
+        <xsl:value-of select="$page.margin.outer"/>
+      </xsl:attribute>
+      <fo:region-body margin-bottom="{$body.margin.bottom}"
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm" column-count="2">
+        <xsl:if test="$draft.watermark.image != ''">
+          <xsl:attribute name="background-image">
+            <xsl:call-template name="fo-external-image">
+              <xsl:with-param name="filename" select="$draft.watermark.image"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="background-attachment">fixed</xsl:attribute>
+          <xsl:attribute name="background-repeat">no-repeat</xsl:attribute>
+          <xsl:attribute name="background-position-horizontal">center</xsl:attribute>
+          <xsl:attribute name="background-position-vertical">center</xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="margin-{$direction.align.start}">
+          <xsl:value-of select="$body.margin.inner"/>
+        </xsl:attribute>
+        <xsl:attribute name="margin-{$direction.align.end}">
+          <xsl:value-of select="$body.margin.outer"/>
+        </xsl:attribute>
+      </fo:region-body>
+      <fo:region-before region-name="xsl-region-before-odd"
+        extent="{$region.before.extent}" precedence="{$region.before.precedence}"
+        display-align="before"/>
+      <fo:region-after region-name="xsl-region-after-odd"
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
+      <xsl:call-template name="region.inner">
+        <xsl:with-param name="sequence">odd</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="region.outer">
+        <xsl:with-param name="sequence">odd</xsl:with-param>
+        <xsl:with-param name="pageclass">legal</xsl:with-param>
+      </xsl:call-template>
+    </fo:simple-page-master>
+
+    <fo:simple-page-master master-name="legal-even-draft" page-width="{$page.width}"
+      page-height="{$page.height}" margin-top="{$page.margin.top}"
+      margin-bottom="{$page.margin.bottom}">
+      <xsl:attribute name="margin-{$direction.align.start}">
+        <xsl:value-of select="$page.margin.outer"/>
+        <xsl:if test="$fop.extensions != 0">
+          <xsl:value-of select="concat(' - (',$title.margin.left,')')"/>
+        </xsl:if>
+      </xsl:attribute>
+      <xsl:attribute name="margin-{$direction.align.end}">
+        <xsl:value-of select="$page.margin.inner"/>
+      </xsl:attribute>
+      <fo:region-body margin-bottom="{$body.margin.bottom}"
+        margin-top="{$body.margin.top}" column-gap="&gutter;mm" column-count="2">
+        <xsl:if test="$draft.watermark.image != ''">
+          <xsl:attribute name="background-image">
+            <xsl:call-template name="fo-external-image">
+              <xsl:with-param name="filename" select="$draft.watermark.image"/>
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:attribute name="background-attachment">fixed</xsl:attribute>
+          <xsl:attribute name="background-repeat">no-repeat</xsl:attribute>
+          <xsl:attribute name="background-position-horizontal">center</xsl:attribute>
+          <xsl:attribute name="background-position-vertical">center</xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="margin-{$direction.align.start}">
+          <xsl:value-of select="$body.margin.outer"/>
+        </xsl:attribute>
+        <xsl:attribute name="margin-{$direction.align.end}">
+          <xsl:value-of select="$body.margin.inner"/>
+        </xsl:attribute>
+      </fo:region-body>
+      <fo:region-before region-name="xsl-region-before-even"
+        extent="{$region.before.extent}" precedence="{$region.before.precedence}"
+        display-align="before"/>
       <fo:region-after region-name="xsl-region-after-even"
-                       extent="{$region.after.extent}"
-                        precedence="{$region.after.precedence}"
-                       display-align="after"/>
+        extent="{$region.after.extent}" precedence="{$region.after.precedence}"
+        display-align="after"/>
       <xsl:call-template name="region.outer">
         <xsl:with-param name="sequence">even</xsl:with-param>
         <xsl:with-param name="pageclass">legal</xsl:with-param>
@@ -359,17 +490,37 @@
     <fo:page-sequence-master master-name="legal">
       <fo:repeatable-page-master-alternatives>
         <fo:conditional-page-master-reference master-reference="blank"
-                                              blank-or-not-blank="blank"/>
+          blank-or-not-blank="blank"/>
         <fo:conditional-page-master-reference master-reference="legal-first"
-                                              page-position="first"/>
+          page-position="first"/>
         <fo:conditional-page-master-reference master-reference="legal-odd"
-                                              odd-or-even="odd"/>
+          odd-or-even="odd"/>
         <fo:conditional-page-master-reference 
-                                              odd-or-even="even">
+          odd-or-even="even">
           <xsl:attribute name="master-reference">
             <xsl:choose>
               <xsl:when test="$double.sided != 0">legal-even</xsl:when>
               <xsl:otherwise>legal-odd</xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </fo:conditional-page-master-reference>
+      </fo:repeatable-page-master-alternatives>
+    </fo:page-sequence-master>
+
+    <fo:page-sequence-master master-name="legal-draft">
+      <fo:repeatable-page-master-alternatives>
+        <fo:conditional-page-master-reference master-reference="blank-draft"
+          blank-or-not-blank="blank"/>
+        <fo:conditional-page-master-reference master-reference="legal-first-draft"
+          page-position="first"/>
+        <fo:conditional-page-master-reference master-reference="legal-odd-draft"
+          odd-or-even="odd"/>
+        <fo:conditional-page-master-reference 
+          odd-or-even="even">
+          <xsl:attribute name="master-reference">
+            <xsl:choose>
+              <xsl:when test="$double.sided != 0">legal-even-draft</xsl:when>
+              <xsl:otherwise>legal-odd-draft</xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
         </fo:conditional-page-master-reference>
