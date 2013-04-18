@@ -15,7 +15,7 @@
 ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
 	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))
 
-USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(MAIN) $(DOCFILES) $(USED_ALL)
+USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
 
 # Using tar is the easiest way to search for files excluding versioning system
 # files and directories. A simple tar cv >/dev/null does not work, because
@@ -38,7 +38,7 @@ ifeq ($(LIST_NODC),1)
   USED_FILES := $(filter-out $(DOCCONF),$(USED_FILES))
 endif
 ifeq ($(LIST_NOXML),1)
-  USED_FILES   := $(filter-out $(DOCFILES) $(MAIN),$(USED_FILES))
+  USED_FILES   := $(filter-out $(DOCFILES),$(USED_FILES))
   UNUSED_FILES := $(filter-out $(UNUSED_XML),$(UNUSED_FILES))
 endif
 

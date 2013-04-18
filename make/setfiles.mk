@@ -105,6 +105,9 @@ ifdef ROOTSTRING
   ifndef DOCFILES
     $(error Fatal error: Could not compute the list of XML source files for "$(ROOTID)")
   endif
+  # MAIN needs to be part of the DOCFILES - we add it here to be able to
+  # perform the test above
+  DOCFILES  += $(MAIN)
 else
   DOCFILES  := $(SRCFILES)
 endif
