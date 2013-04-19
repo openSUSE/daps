@@ -93,7 +93,7 @@
         <xsl:call-template name="date">
           <xsl:with-param name="recreate" select="1"/>
         </xsl:call-template>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="node()[not(self::date)]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="date"/>
