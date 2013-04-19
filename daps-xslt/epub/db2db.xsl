@@ -50,21 +50,24 @@
 <xsl:stylesheet version="1.0"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:db="http://docbook.org/ns/docbook"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  exclude-result-prefixes="db xlink">
 
 
   <xsl:import href="&db;/common/common.xsl"/>
+  <!--<xsl:import href="&db;/common/pi.xsl"/>-->
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:import href="../common/copy.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-
+  <xsl:strip-space elements="date"/>
 
 <!-- Parameters                                                 -->
 <!-- ALWAYS use a trailing slash! -->
 <xsl:param name="img.src.path"/>
 <xsl:param name="preferred.mediaobject.role">html</xsl:param>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
+
 
 
 <xsl:template match="@spacing">
@@ -76,7 +79,72 @@
     </xsl:choose>
 </xsl:template>
   
-  
+
+<xsl:template match="bookinfo">
+  <xsl:copy>
+    <xsl:choose>
+      <xsl:when test="not(date)">
+        <xsl:call-template name="date">
+          <xsl:with-param name="recreate" select="1"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="date[processing-instruction()]">
+        <xsl:call-template name="date">
+          <xsl:with-param name="recreate" select="1"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="date"/>
+        <xsl:apply-templates select="node()[not(self::date)]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:copy>
+</xsl:template>
+
+<xsl:template name="date">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="recreate" select="0"/>
+  <xsl:param name="string" select="''"/>
+  <xsl:variable name="contents" select="normalize-space(.)"/>
+
+  <!-- Partly taken from epub3/epub3-element-mods.xsl -->
+  <xsl:variable name="normalized" 
+                select="translate($node, '0123456789', '##########')"/>
+
+  <xsl:variable name="date.ok">
+    <xsl:choose>
+      <xsl:when test="$normalized = ''">0</xsl:when>
+      <xsl:when test="string-length($string) = 4 and
+                      $normalized = '####'">1</xsl:when>
+      <xsl:when test="string-length($string) = 7 and
+                      $normalized = '####-##'">1</xsl:when>
+      <xsl:when test="string-length($string) = 10 and
+                      $normalized = '####-##-##'">1</xsl:when>
+      <xsl:when test="string-length($string) = 10 and
+                      $normalized = '####-##-##'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+    <date>
+      <xsl:choose>
+        <xsl:when test="$date.ok = 0">
+          <xsl:message>
+            <xsl:text>WARNING: wrong metadata date format. </xsl:text>
+            <xsl:text>It must be in one of these forms: </xsl:text>
+            <xsl:text>YYYY, YYYY-MM, or YYYY-MM-DD.</xsl:text>
+            <xsl:text> Using current date.</xsl:text>
+          </xsl:message>
+          <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$string"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </date>
+</xsl:template>
 
 <xsl:template match="mediaobject">
   <xsl:variable name="olist" select="imageobject"/>
