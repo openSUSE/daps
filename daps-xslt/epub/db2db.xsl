@@ -1,59 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  This file prepares the DocBook document for EPUB
-  It inserts a path for all images at the beginning
-  of each graphic name.
   
-  It copies all elements, attributes, comments, processing instruction
-  except for the @fileref attribute in imagedata element which is inside
-  an imageobject with @role="html".
+   Purpose:
+     Prepares the DocBook document for EPUB and inserts a path for all
+     images at the beginning of each graphic name.
   
-  All imageobject elements which contains everything else than @role =
-  "html" will be discarded.
+     It copies all elements, attributes, comments, processing instruction
+     except for the @fileref attribute in imagedata element which is inside
+     an imageobject with @role=$preferred.mediaobject.role.
+  
+     All imageobject elements which contains everything else than @role =
+     $preferred.mediaobject.role will be discarded.
+     
+   Parameters:
+     * rootid
+       Applies stylesheet only to part of the document
+       
+     * rootid.debug (default: 0)
+       Controls some log messages (0=no, 1=yes)
+       
+     * img.src.path
+       Image paths to be added before @fileref in imagedata
+       
+     * preferred.mediaobject.role
+       Prefers imageobjects which contains @role attribute with value
+       from this parameter
+     
+     * use.role.for.mediaobject
+       Should @role in imageobjects be used? 1=yes, 0=no
+       
+   Keys:
+     * id (applys to: @id|@xml:id)
+       Creates an index for all elements with IDs (derived from
+       rootid.xsl)
+       
+   Input:
+     DocBook 4/Novdoc document
+     
+   Output:
+     DocBook 4/Novdoc document with corrected @fileref in imagedata
+   
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2013, Thomas Schraitle
 -->
-
+<!DOCTYPE xsl:stylesheet
+[
+  <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current">
+]>
 <xsl:stylesheet version="1.0"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
-<xsl:import href="../common/rootid.xsl"/>
 
-<xsl:output method="xml" encoding="UTF-8"/>
+  <xsl:import href="&db;/common/common.xsl"/>
+  <xsl:import href="../common/rootid.xsl"/>
+  <xsl:import href="../common/copy.xsl"/>
+
+  <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 
+<!-- Parameters                                                 -->
 <!-- ALWAYS use a trailing slash! -->
 <xsl:param name="img.src.path"/>
-
-
-<xsl:template match="node() | @*">
-  <xsl:copy>
-    <xsl:apply-templates select="@* | node()"/>
-  </xsl:copy>
-</xsl:template>
-
-
-<xsl:template
-  match="imagedata[ancestor::imageobject[@role='html']]/@fileref"
-  name="imagedata-fileref">
-  <xsl:attribute name="fileref">
-    <xsl:value-of select="concat($img.src.path, .)"/>  
-  </xsl:attribute>
-</xsl:template>
-
-<!-- Do not copy images for FO-->
-<xsl:template match="imageobject[@role != 'html']"/>
+<xsl:param name="preferred.mediaobject.role">html</xsl:param>
+<xsl:param name="use.role.for.mediaobject" select="1"/>
 
 
 <xsl:template match="@spacing">
-  <xsl:choose>
-    <xsl:when test=". = 'compact'"/>
-    <xsl:otherwise>
-      <xsl:copy-of select="."/>
-    </xsl:otherwise>
-  </xsl:choose>
+    <xsl:choose>
+      <xsl:when test=". = 'compact'"/>
+      <xsl:otherwise>
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+  
+  
+
+<xsl:template match="mediaobject">
+  <xsl:variable name="olist" select="imageobject"/>
+  <xsl:variable name="object.index">
+    <xsl:call-template name="select.mediaobject.index">
+      <xsl:with-param name="olist" select="$olist"/>
+      <xsl:with-param name="count" select="1"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
+  <xsl:variable name="object" select="$olist[position() = $object.index]"/>
+
+  <xsl:copy>
+    <xsl:apply-templates select="$object"/>
+  </xsl:copy>
 </xsl:template>
 
+  <xsl:template match="imagedata">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:attribute name="fileref">
+        <xsl:value-of select="concat($img.src.path, @fileref)"/>
+      </xsl:attribute>
+    </xsl:copy>
+  </xsl:template>
+ 
 
 <xsl:template match="xref" name="xref">
     <xsl:variable name="targets" select="key('id',@linkend)"/>
@@ -106,17 +155,6 @@
         </phrase>
       </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Support for DocBook 5 -->
-<xsl:template match="db:xref">
-  <xsl:call-template name="xref"/>
-</xsl:template>
-  
-<xsl:template match="db:imageobject[@role != 'html']"/>
-
-<xsl:template match="db:imagedata[ancestor::db:imageobject[@role='html']]/@fileref">
-  <xsl:call-template name="imagedata-fileref"/>
 </xsl:template>
 
 </xsl:stylesheet>
