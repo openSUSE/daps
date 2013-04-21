@@ -189,16 +189,22 @@ dist-webhelp: webhelp
 # when _NOT_ called with --noset creates the following files
 # $OD_EXPORT_DIR/
 #   |-set_bigfile.xml
-#   |-set_graphics_png.tar.bz2
+#   |-$DOCNAME_graphics_png.tar.bz2
 #   |-$DOCNAME
 #   |   |-book.epub
 #   |   |-book.color-pfd
 #   |   |-book.dist-single-html
 #
-# When called with --noset, all files are copied to $OD_EXPORT_DIR/$DOCNAME
+# When called with --noset, or without --export-dir all files are copied
+# to $OD_EXPORT_DIR/$DOCNAME
 # The bigfile generated with this option has all links pointing to
 # locations outside the specified ROOTID converted to text
 # (same as the bigfile target)
+#
+# NOTE:
+# Generting a graphics tarball containing images for the complete
+# set is not possible, therefore we are generating tarballs for each
+# book
 
 ifndef OD_EXPORT_DIR
   OD_EXPORT_DIR     := $(RESULT_DIR)/online-docs
@@ -209,10 +215,10 @@ endif
 
 ifeq ($(NOSET),1)
   OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)/$(DOCNAME)$(LANGSTRING).xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)/$(DOCNAME)$(LANGSTRING)-png-graphics.tar.bz2
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(BOOK)/$(BOOK)$(LANGSTRING)-png-graphics.tar.bz2
 else
   OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/set$(LANGSTRING)-png-graphics.tar.bz2
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(BOOK)$(LANGSTRING)-png-graphics.tar.bz2
 endif
 
 # fs 2012-10-12:
