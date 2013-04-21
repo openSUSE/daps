@@ -69,19 +69,37 @@ endif
 #
 # If <STYLESHEETDIR>/static exists, we use it by default. We also assume that
 # parameters for [admon|callout|navig].graphics.path are correctly set in
-# the stylesheets.
+# the stylesheets. Alternatively, a customstatic directory can be specified
+# with the --resdir parameter.
+# 
 # In case we have the standard docbook layout, we need to set
 # [admon|callout|navig].graphics.path. IS_STATIC is used to determine
 # whether we have a static die (IS_STATIC=static) or not.
 #
-# Set the styleimage directory. It can either be <STYLEROOT>/static or
-# <STYLEROOT>/images. If both exist, static will be used (firstword function)
+# Set the styleimage directory. If no custom directory is set with --resdir,
+# it can either be <STYLEROOT>/static or <STYLEROOT>/images. If both exist,
+# static will be used (firstword function)
 #
-STYLEIMG := $(firstword $(wildcard \
+ifdef RES_DIR
+  STYLEIMG  := $(RES_DIR)
+  IS_STATIC := static
+else
+  STYLEIMG := $(firstword $(wildcard \
 		$(addsuffix /static,$(STYLE_ROOTDIRS)) \
 		$(addsuffix /images,$(STYLE_ROOTDIRS))))
-IS_STATIC := $(notdir $(STYLEIMG))
+  IS_STATIC := $(notdir $(STYLEIMG))
+  ifndef HTML_CSS
+    ifneq ($(IS_STATIC),static)
+      HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEHTML))*.css)))
+    endif
+  endif
+endif
 
+# Undefining HTNL CSS if set to none
+#
+ifeq ($(HTML_CSS),none)
+  override HTML_CSS :=
+endif
 
 HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
                 --param "use.id.as.filename=1" \
@@ -105,13 +123,10 @@ ifneq ($(IS_STATIC),static)
   ifdef HTML_DRAFT_IMG
     HTMLSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
   endif
-  ifdef HTML_CSS
-    HTMLSTRINGS += --stringparam "html.stylesheet=$(notdir $(HTML_CSS))"
-  endif
-else
-  ifdef HTML_CSS
-    $(warning $(shell ccecho "warn" "Ignoring CSS parameter since a \"static/\" directory exists"))
-  endif
+endif
+
+ifdef HTML_CSS
+  HTMLSTRINGS += --stringparam "html.stylesheet=$(notdir $(HTML_CSS))"
 endif
 
 # inline Images
@@ -127,12 +142,10 @@ ifdef FOR_HTML_IMAGES
   html: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
-  ifneq ($(IS_STATIC),static)
-    html: $(HTML_DIR)/$(notdir $(HTML_CSS))
-  endif
+  html: copycss
 endif
 html: $(HTML_RESULT) 
-	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
+	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META) and RES_DIR=$(RES_DIR):\n$<"
 
 #--------------
 # HTML-SINGLE
@@ -143,9 +156,7 @@ ifdef FOR_HTML_IMAGES
   single-html: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
-  ifneq ($(IS_STATIC),static)
-    single-html: $(HTML_DIR)/$(notdir $(HTML_CSS))
-  endif
+  single-html: copycss
 endif
 single-html: $(HTMLSINGLE_RESULT)
 	@ccecho "result" "SINGLE-HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
@@ -159,9 +170,7 @@ ifdef FOR_HTML_IMAGES
   jsp: $(FOR_HTML_IMAGES) copy_inline_images
 endif
 ifdef HTML_CSS
-  ifneq ($(IS_STATIC),static)
-    jsp: $(HTML_DIR)/$(notdir $(HTML_CSS))
-  endif
+  jsp: copycss
 endif
 jsp: $(HTML_RESULT) 
 	@ccecho "result" "Find the JSP book at:\n$<"
@@ -200,7 +209,7 @@ ifneq ($(IS_STATIC),static)
 	if [ -d $(HTML_DIR)/static/images ]; then \
 	  rm -rf $(HTML_DIR)/static/*; \
 	fi
-	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static/images
+	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static
     endif
 else
   copy_static_images: | $(HTML_DIR)/static
@@ -230,10 +239,13 @@ copy_inline_images: $(FOR_HTML_IMAGES)
 
 
 # copy CSS file.
-# This target is only needed when IS_STATIC != static
 #
-$(HTML_DIR)/$(notdir $(HTML_CSS)): | $(HTML_DIR)
-$(HTML_DIR)/$(notdir $(HTML_CSS)): $(HTML_CSS)
+# Make this target phony in order to make sure an existing CSS file is
+# overwritten when a different file was specified on the command line
+#
+.PHONY: copycss
+copycss $(HTML_DIR)/$(notdir $(HTML_CSS)): | $(HTML_DIR)
+copycss $(HTML_DIR)/$(notdir $(HTML_CSS)): $(HTML_CSS)
 	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/
 
 #---------------

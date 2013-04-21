@@ -171,6 +171,10 @@ function parse_args () {
 		P_REMARKS=1
 		shift
 		;;
+            --resdir)
+                P_RES_DIR="$2"
+                shift 2
+                ;;
             --rootelement)
                 ROOTELEMENT="$2"
 		shift 2
@@ -554,7 +558,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="clean,comments,css:,draft,help,html4,name:,meta,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,comments,css:,draft,help,html4,name:,meta,remarks,resdir:,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -571,6 +575,7 @@ function build_html_jsp () {
         help_meta
         help_name
         help_remarks
+        help_resdir
         help_rootid
         help_static
         help_xsltparam "creates $SUB_CMD from the profiled sources"
@@ -591,14 +596,17 @@ function build_html_jsp () {
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n "$P_CSS" ]]; then
-        if [[ $P_CSS = "none" ]]; then
-            unset HTML_CSS
-        else
-        if [[ -f $P_CSS ]]; then
+        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
             export HTML_CSS="$P_CSS"
         else
-                exit_on_error "Cannot find CSS file $P_CSS (have you specified an absolute path?)."
-            fi
+            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
+        fi
+    fi
+    if [[ -n "$P_RES_DIR" ]]; then
+        if [[ -d $P_RES_DIR ]]; then
+            export RES_DIR="$P_RES_DIR"
+        else
+            exit_on_error "Ressource directory \"P_RES_DIR\"\ndoes not exist. Please create it first."
         fi
     fi
 
@@ -881,8 +889,13 @@ function online-docs () {
     [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOSET" ]]      && export export NOSET=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
-    [[ -n "$P_EXPORT_DIR" ]] && export OD_EXPORT_DIR="$P_EXPORT_DIR"
-
+    if [[ -n "$P_EXPORT_DIR" ]]; then
+        if [[ -d $P_EXPORT_DIR ]]; then
+            export OD_EXPORT_DIR="$P_EXPORT_DIR"
+        else
+            exit_on_error "Export directory \"P_EXPORT_DIR\"\ndoes not exist. Please create it first."
+        fi
+    fi
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
@@ -1702,6 +1715,11 @@ function help_rootid () {
                               (parts or chapters). Default: Usually set
                               in the DC-file; if not set the complete set
                               defined in \$MAIN will be built"
+}
+function help_resdir () {
+    echo "    --resdir=DIRECTORY        Specify a DIRECTORY containing resource files 
+                              (css, images,and, optionally, javascript).
+                              DEFAULT: \$STYLEROOT/static"
 }
 function help_set-date () {
     echo "    --set-date=YYYY/MM/DD     Set a publication date. If not set, the current
