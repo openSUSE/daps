@@ -60,14 +60,8 @@ EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_CALLOUT_IMGS)
 EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
-	       --stringparam "img.src.path=\"\"" \
-	       --param "callout.graphics=1" \
-	       --stringparam "callout.graphics.path=callouts/" \
-               --param "callout.graphics.number.limit=30" \
-               --stringparam "callout.graphics.extension=.png"
+	       --stringparam "callout.graphics.path=callouts/"
 
-
-#--param "admon.graphic=1"
 #--stringparam "admon.graphics.path=admons/"
 
 ifdef EPUB_CSS
@@ -174,9 +168,8 @@ $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
 	sed -i 's:\(rootfile full-path="\)$(EPUB_TMPDIR)/\(OEBPS/content.opf"\):\1\2:' $(EPUB_TMPDIR)/META-INF/container.xml
 	(cd $(EPUB_TMPDIR); \
 	  zip -q0X $@.tmp mimetype; \
-	  zip -qXr9D $@.tmp \
-	   $(subst $(EPUB_TMPDIR)/,,$(EPUB_IMAGES) $(EPUB_CSSFILE)) \
-	   META-INF/ OEBPS/*.html OEBPS/*.opf OEBPS/*.ncx; \
+	  zip -qXr9D $@.tmp META-INF/ OEBPS/content.opf \
+	    $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_RESDIR)/content.opf)); \
 	  mv $@.tmp $@;)
 
 
@@ -188,7 +181,7 @@ $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
 .PHONY: epub-check
 epub-check: $(EPUB_RESULT)
 	@ccecho "result" "#################### BEGIN epubcheck report ####################"
-	epubcheck $(RESULT_DIR)/$(DOCNAME).epub || true
+	epubcheck $< || true
 	@ccecho "result" "#################### END epubcheck report ####################"
 
 #--------------
