@@ -58,7 +58,17 @@
 
 
 <!-- 10. Tables ================================================= -->
-
+<xsl:param name="default.table.width">100%</xsl:param>
+<xsl:param name="table.frame.border.color">&light-gray;</xsl:param>
+<xsl:param name="table.cell.border.color">&light-gray;</xsl:param>
+<xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-start">2mm</xsl:attribute>
+  <xsl:attribute name="padding-end">2mm</xsl:attribute>
+  <xsl:attribute name="padding-top">0.5mm</xsl:attribute>
+  <xsl:attribute name="padding-bottom">0.25mm</xsl:attribute>
+    <!-- Smaller than padding-top, to compensate for the fact that descenders
+         reserve some area at the bottom too. -->
+</xsl:attribute-set>
 
 <!-- 11. Linking ================================================ -->
 
