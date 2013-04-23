@@ -5,7 +5,7 @@
      Prepares the DocBook document for EPUB and inserts a path for all
      images at the beginning of each graphic name.
   
-     It copies all elements, attributes, comments, processing instruction
+     Copies all elements, attributes, comments, processing instruction
      except for the @fileref attribute in imagedata element which is inside
      an imageobject with @role=$preferred.mediaobject.role.
   
@@ -29,6 +29,10 @@
      * use.role.for.mediaobject
        Should @role in imageobjects be used? 1=yes, 0=no
        
+     * use.pi4date
+       Should the PI <?dbtimestamp format="..."?> created instead of
+       the current date? 0=no, 1=yes
+       
    Keys:
      * id (applys to: @id|@xml:id)
        Creates an index for all elements with IDs (derived from
@@ -51,11 +55,13 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="db xlink">
+  xmlns:date="http://exslt.org/dates-and-times"
+  exclude-result-prefixes="db xlink date">
 
 
   <xsl:import href="&db;/common/common.xsl"/>
-  <!--<xsl:import href="&db;/common/pi.xsl"/>-->
+  <!--<xsl:import href="&db;/common/pi.xsl"/>
+  <xsl:import href="&db;/lib/lib.xsl"/>-->
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:import href="../common/copy.xsl"/>
 
@@ -67,8 +73,7 @@
 <xsl:param name="img.src.path"/>
 <xsl:param name="preferred.mediaobject.role">html</xsl:param>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
-
-
+<xsl:param name="use.pi4date" select="0"/>
 
 <xsl:template match="@spacing">
     <xsl:choose>
@@ -137,7 +142,30 @@
             <xsl:text>YYYY, YYYY-MM, or YYYY-MM-DD.</xsl:text>
             <xsl:text> Using current date.</xsl:text>
           </xsl:message>
-          <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+          <xsl:choose>
+            <xsl:when test="$use.pi4date != 0">
+              <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="date">
+                <xsl:choose>
+                    <xsl:when test="function-available('date:date-time')">
+                      <xsl:value-of select="date:date-time()"/>
+                    </xsl:when>
+                    <xsl:when test="function-available('date:dateTime')">
+                      <!-- Xalan quirk -->
+                      <xsl:value-of select="date:dateTime()"/>
+                    </xsl:when>
+                  </xsl:choose>
+              </xsl:variable>
+              <xsl:value-of select="date:year($date)"/>
+              <xsl:text>-</xsl:text>
+              <xsl:value-of select="date:month-in-year($date)"/>
+              <xsl:text>-</xsl:text>
+              <xsl:value-of select="date:day-in-month($date)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$string"/>
