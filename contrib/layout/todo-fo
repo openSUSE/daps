@@ -55,9 +55,9 @@ Priority: P1 (very important) ... P5 (nice to have)
 #27 * P2  Extend monospace font size adjustment to monospace inside links/xrefs
 #28 F P1  Glossary/appendix/preface, etc. style should match chapter style
 #29 * P4  Try to avoid breaks within e.g. parameters (--\ pretty, etc.)
-#30 * P3  Some text comes out wrong when selecting it (not sure if we can do
-          anything about that) (unsure when exactly it happens – italic,
-          uppercase text?)
+#30 * P3  Some text comes out wrong when selecting it inside the PDF (not sure
+          if we can do anything about that) (unsure when exactly it happens –
+          italic, uppercase monospace?)
 #31 * P4  Find a way to filter out initial spaces before, e.g. from before
           nicely indented paras
 #32 * P5  Rather esoteric: we don't support links or cross-references in titles
@@ -67,5 +67,15 @@ Priority: P1 (very important) ... P5 (nice to have)
 #33 * P1  Book/Article/Set title pages should likely get a different style than
           Part title pages
 #34 * P2  It is not always clear what belongs to an example and what does not –
-          maybe examples should look the same as procedures? (Also an HTML bug)
+          maybe examples should look the same as procedures?
 #35 * P2  GFDL numbering broken (2 → F.2, etc.)
+#36 * P3  Mark end of parts (or beginning of next structural item?) – rule? dot?
+#37 F P2  Text in tables should not be justified
+#38 * P1  Make new layout b/w compatible – c/f daps#137
+#39 * P4  Localise draft image (use up to 10 characters from gentext:"Draft" for
+          the current language) (draft page masters currently use
+          fo-external-image; ti realise this, I would need to be able to use an
+          instream-foreign-object; so this would necessitate replacing every
+          single draft master, doing it upstream might be more sane – so not
+          doing this for now)
+#40 * P1  Adapt table layout
