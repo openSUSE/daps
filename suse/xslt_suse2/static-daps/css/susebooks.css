@@ -1,0 +1,2586 @@
+/*
+Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
+For additional support for Vietnamese, add "vietnamese," after "&subset=".
+Additional available weights are Book ("300,300italic"), Semi-bold ("500, 500italic"), and Extra-bold ("800,800italic").
+Consider page load time.
+Ideally, we could append &text=... and add a few common Greek characters, like
+alpha, beta, ... but that doesn't work together with the subset option.
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic&subset=latin-ext,cyrillic);
+
+/* Reset everything */
+/* From http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
+a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
+sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+menu, nav, output, section, summary, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* PAGE BOILERPLATE AND NAVIGATION */
+
+/* Common */
+
+.clearme {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+::selection { /* Green Selections */
+    background-color: #3465A4;
+    color: #FFF;
+}
+
+::-moz-selection {
+    background-color: #3465A4;
+    color: #FFF;
+}
+
+body {
+    background-color: #FFF;
+    font-family: 'Open Sans', 'DejaVu Sans', 'Verdana', sans-serif;
+    line-height: 140%;
+}
+
+html, body {
+    height: 100%;
+    min-width: 200px;
+    font-size: 16px;
+}
+
+#_toolbar-bottom,
+#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
+#_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
+#_content > .appendix, #_content > .glossary, #_content > .reference,
+#_content > .refentry, #_content > .bibliography, #_content > .index,
+.page-bottom {
+    margin: 0 auto;
+    min-width: 150px;
+    max-width: 998px;
+}
+
+#_header {
+    margin: 0 auto;
+    min-width: 150px;
+    max-width: 1018px;
+}
+
+.single div.part, .single div.chapter, .single div.preface,
+.single div.appendix, .single div.glossary, .single div.reference,
+.single div.refentry, .single div.bibliography, .single div.index,
+.single div.page-bottom
+ {
+    padding-top: 40px;
+}
+
+#_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter,
+#_content > .preface, #_content > .appendix, #_content > .glossary,
+#_content > .reference, #_content > .refentry, #_content > .bibliography,
+#_content > .index, #_content > .page-bottom {
+    overflow: hidden;
+}
+
+#_toolbar {
+    margin: 0 auto;
+    min-width: 170px;
+    max-width: 1018px;
+    padding: 0;
+}
+
+#_toolbar *, #_header *, .bubble * {
+    outline: 0;
+}
+
+/* to be able to position various elements and be able to use z-index*/
+#_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
+    position: relative; 
+}
+
+#_content {
+    background: url(../images/dots-gray.png) repeat-x scroll 0px 0px;
+    min-height: 139px;
+    clear: both;
+    min-width: 150px;
+    z-index: 0;
+}
+
+#_white-bg {
+    background-color: #FFF;
+    width: 100%;
+    z-index: 5;
+    min-width: 190px;
+}
+
+/* Header Area */
+
+#_logo {
+    float: left;
+    margin: 22px 22px 27px 10px;
+    width: 103px;
+    height: 38px;
+}
+
+#_logo img {
+    width: 103px;
+    height: 38px;
+    color: #3465A4;
+    line-height: 55px;
+    font-weight: 600;
+    display: block;
+}
+
+#_header .crumbs {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    height: 36px;
+    text-overflow: ellipsis;
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 0 0 140px;
+    height: 36px;
+    max-width: 70%;
+    max-width: calc(100% - 120px);
+    max-width: -moz-calc(100% - 120px);
+    max-width: -webkit-calc(100% - 120px);
+}
+
+#_header .crumbs a.crumb, #_header .crumbs > span {
+    display: inline;
+    overflow: hidden;
+}
+
+#_fixed-header .crumbs {
+    padding: 0 10px;
+}
+
+#_header .crumbs a, #_header .crumbs span {
+    margin: 0 0 0 5px;
+}
+
+.crumbs span {
+    color: #666;
+}
+
+.crumbs a {
+    color: #333;
+    text-decoration: none;
+}
+
+.crumbs a:hover, .crumbs a:focus, .crumbs a:active {
+    color: #3465A4;
+    text-decoration: none;
+}
+
+
+#_header .crumbs .single-crumb {
+    line-height: 36px;
+    padding: 0 10px 0 0;
+    margin: 0 0 0 10px;
+    height: 36px;
+    display: block;
+    background-color: #EFEFF0;
+    border-radius: 18px;
+}
+
+#_header .crumbs.active {
+    height: 49px;
+}
+
+#_header .crumbs .single-crumb:hover, #_header .crumbs .single-crumb:focus,
+#_header .crumbs .single-crumb:active {
+    background-color: #999;
+    color: #FFF;
+}
+
+#_header .crumbs .book2-icon {
+    width: 36px;
+    height: 36px;
+    background-position: -36px 0px;
+    margin: -4px 5px 0 0;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.book-icon, .toc-icon, .find-icon, .tools-icon {
+    display: block;
+}
+
+.toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
+#_find-button, .ulink:after, .bubble-corner, .book2-icon,
+#_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
+#_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
+    background-image: url(../images/icons.png);
+    background-repeat: no-repeat;
+}
+
+/* A somewhat ugly trick to make the documents look okay even without stylesheet. */
+.toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, #_find-button {
+    overflow: hidden;
+    height: 0 !important;
+}
+
+.toc-icon, .find-icon, #_header .book-icon, #_toolbar .prev-icon,
+#_toolbar .next-icon, #_find-button, #_bottom-navigation .prev-icon,
+#_bottom-navigation .next-icon {
+    padding: 36px 0 0;
+}
+
+#_fixed-header .book-icon, #_fixed-header .prev-icon, #_fixed-header .next-icon {
+    padding: 15px 0 0;
+}
+/* End ugliness. */
+
+
+#_header .book-link {
+    display: inline-block;
+    vertical-align: middle;
+    height: 36px;
+}
+
+.toc-icon, .find-icon, #_header .book-icon, #_toolbar .prev-icon, #_toolbar .next-icon {
+    width: 36px;
+}
+
+#_header .book-icon {
+    background-position: 0px 0px;
+}
+
+#_header a:hover .book-icon, #_header a:focus .book-icon,
+#_header a:active .book-icon {
+    background-position: 0px -36px;
+}
+
+#_fixed-header .crumbs span, #_fixed-header .crumbs a {
+    display: block;
+    float: left;
+}
+
+#_fixed-header .book-icon {
+    background-position: 0px -72px;
+    margin: 1px 0;
+    width: 18px;
+}
+
+#_fixed-header a:hover .book-icon, #_fixed-header a:focus .book-icon,
+#_fixed-header a:active .book-icon {
+    background-position: -18px -72px;
+}
+
+#_fixed-header .book2-icon {
+    width: 18px;
+    height: 15px;
+    margin: 1px 0;
+    background-position: -199px -72px;
+}
+
+.inactive #_fixed-header a:hover .book2-icon, .inactive #_fixed-header a:focus .book2-icon,
+.inactive #_fixed-header a:active .book2-icon {
+    background-position: -217px -72px;
+}
+
+.active #_fixed-header .book2-icon {
+    background-position: -235px -72px;
+}
+
+.active #_fixed-header a:hover .book2-icon, .active #_fixed-header a:focus .book2-icon,
+.active #_fixed-header a:active .book2-icon{
+    background-position: -253px -72px;
+}
+
+
+/* Language and Format Pickers*/
+
+#_pickers {
+    float: right;
+    padding: 5px 0;
+    background-color: #FFF;
+}
+
+#_pickers .inactive, #_pickers .active {
+    float: left;
+}
+
+.picker {
+    margin: 0 0 0 5px;
+    display: block;
+    padding: 0 10px;
+    border-radius: 3px;
+    float: left;
+    background-color: #333;
+    height: 24px;
+    line-height: 24px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #FFF;
+}
+
+.picker:hover, .picker:focus, .picker:active, .active .picker {
+    background-color: #666;
+    text-decoration: underline;
+}
+
+#_pickers .bubble-corner {
+    top: 24px;
+}
+
+#_pickers .bubble {
+    right: 0;
+    top: 43px;
+    max-width: 400px;
+    min-width: 200px;
+    padding: 0 10px 10px;
+}
+
+.bubble h6 {
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+    padding: 10px 0 5px;
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+#_pickers .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+
+
+#_pickers .bubble a:hover, #_pickers .bubble a:focus, #_pickers .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+#_pickers .bubble .selected {
+    background-color: #5E9632;
+    background-image: url(../images/tick.png);
+    background-repeat: no-repeat;
+    background-position: right top;
+}
+
+#_pickers .bubble .selected:hover, #_pickers .bubble .selected:focus,
+#_pickers .bubble .selected:active {
+    text-decoration: underline;
+    background-color: #76AD2D;
+}
+
+
+/* Toolbar */
+
+#_toolbar-wrap {
+    margin: 0 0 15px;
+    width: 100%;
+    min-width: 150px;
+    background-color: #3465A4;
+    position: relative;
+    z-index: 4;
+}
+
+#_toolbar {
+    height: 56px;
+    min-width: 150px;
+}
+
+.tool {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+#_toc-area {
+    float: left;
+    height: 56px;
+}
+
+#_nav-area, #_find-area {
+    float: right;
+    height: 56px;
+}
+
+.tool, #_nav-area a.tool-spacer, .bubble {
+    transition: all 0.2s ease-in-out 0.1s;
+    /* Clean this up later when browser support is there*/
+    -moz-transition: all 0.2s ease-in-out 0.1s;
+    -webkit-transition: all 0.2s ease-in-out 0.1s;
+    -o-transition: all 0.2s ease-in-out 0.1s;
+}
+
+
+.active .active-contents, .inactive .inactive-contents {
+    display: block;
+}
+
+.inactive .active-contents, .active .inactive-contents {
+    display: none;
+}
+
+.active-contents {
+    z-index: 6;
+    position: relative;
+}
+
+
+#_toc-area, #_nav-area, #_find-area {
+    width: 33.3%;
+}
+
+
+.pad-tools-50-out {
+    float: left;
+    left: 50%;
+    position: relative;
+}
+
+
+.pad-tools-50-in {
+    float: left;
+    left: -50%;
+    position: relative;
+}
+
+.tool-label {
+    float: left;
+    display: block;
+    vertical-align: middle;
+    line-height: 56px;
+    color: #FFF;
+    font-weight: normal;
+}
+
+#_toc-area .tool-label, #_find-area .tool-label {
+    padding: 0 0 0 10px;
+}
+
+#_nav-area .tool-label {
+    padding: 0 10px 0 0;
+}
+
+.nav-inner {
+    float: right;
+}
+
+#_toolbar .tool-spacer {
+    padding: 10px;
+    display: block;
+    float: left;
+}
+
+#_fixed-header .tool-spacer {
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.inactive #_toc-area-button:hover, .inactive #_toc-area-button:focus, .inactive #_toc-area-button:active,
+.inactive #_find-area-button:hover, .inactive #_find-area-button:focus, .inactive #_find-area-button:active,
+#_nav-area a.tool-spacer:hover, #_nav-area a.tool-spacer:focus, #_nav-area a.tool-spacer:active {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.active .tool {
+    background-color: rgba(255,255,255,0.3);
+}
+
+.toc-icon, .find-icon, .tools-icon, #_toolbar .prev-icon, #_toolbar .next-icon {
+    float: left;
+    display: block;
+}
+
+.toc-icon {
+    background-position: -72px 0px;
+}
+
+
+.active .toc-icon, a:hover .toc-icon, a:focus .toc-icon, a:active .toc-icon {
+    background-position: -72px -36px;
+}
+
+.find-icon {
+    background-position: -108px 0px;
+}
+
+
+.active .find-icon, a:hover .find-icon, a:focus .find-icon, a:active .find-icon {
+    background-position: -108px -36px;
+}
+
+#_toolbar a.tool-spacer .prev-icon {
+    background-position: -180px 0px;
+}
+
+#_toolbar span.tool-spacer .prev-icon {
+    background-position: -252px 0px;
+}
+
+#_toolbar a:hover .prev-icon, #_toolbar a:focus .prev-icon, #_toolbar a:active .prev-icon {
+    background-position: -180px -36px;
+}
+
+#_toolbar a.tool-spacer .next-icon {
+    background-position: -216px 0px;
+}
+
+#_toolbar span.tool-spacer .next-icon {
+    background-position: -252px -36px;
+}
+
+#_toolbar a:hover .next-icon, #_toolbar a:focus .next-icon, #_toolbar a:active .next-icon {
+    background-position: -216px -36px;
+}
+
+.bubble-corner {
+    background-position: -288px -72px;
+    width: 36px;
+    height: 15px;
+    position: relative;
+    z-index: 7;
+    left: 50%;
+    margin: 0 0 0 -18px;
+}
+
+.bubble {
+    background-color: #333;
+    z-index: 8;
+}
+
+#_toolbar .bubble, #_header .bubble {
+    position: absolute;
+}
+
+#_toolbar .bubble, #_header .bubble, #_toc-bubble-wrap .bubble {
+    box-shadow: 1px 1px 3px 0px #333;
+}
+
+#_fixed-header-wrap .bubble {
+    position: relative;
+    margin: 4px 0 -3px;
+}
+
+#_toolbar .bubble-corner {
+    top: -3px;
+}
+#_toolbar .bubble {
+    left: 0;
+    width: 100%;
+    padding: 0;
+}
+
+#_toolbar .bubble {
+    top: 66px;
+}
+
+#_toc-bubble-wrap .bubble {
+    min-width: 150px;
+    max-width: 1024px;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+#_toc-bubble-wrap {
+    position:absolute;
+    top: 82px;
+    left: 0px;
+    display: none;
+    height: auto;
+    width: 100%;
+}
+
+#_toc-bubble-wrap.active {
+    display: block;
+}
+
+#_toolbar .bubble-container {
+    padding: 0 10px 10px;
+}
+
+#_fixed-header-wrap .bubble-container {
+    padding: 10px;
+}
+
+#_bubble-toc {
+    overflow: hidden;
+    height: 400px;
+    position: relative;
+}
+
+#_bubble-toc ol {
+    overflow: auto;
+}
+
+#_bubble-toc > ol {
+    width: 50%;
+    padding: 0;
+    margin:0;
+    background-color: #333;
+    height: 100%;
+    border-right: 1px solid #666;
+}
+
+#_bubble-toc > ol.full-width {
+    width: 100%;
+    border-right: none;
+}
+
+#_toolbar .bubble a, #_fixed-header-wrap .bubble a, #_toc-bubble-wrap .bubble a {
+    color: #FFF;
+    display: block;
+    text-decoration: none;
+    padding: 5px 25px 5px 5px;
+    line-height: 22px;
+}
+
+.bubble a:hover .keycap, .bubble a:focus .keycap, .bubble a:active .keycap,
+.bubble a:hover .command, .bubble a:focus .command, .bubble a:active .command,
+.bubble a:hover code, .bubble a:focus code, .bubble a:active code {
+    border-color: #FFF;
+}
+
+#_bubble-toc .active ol {
+    display: block;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    width: 50%;
+    background-color: #333;
+    padding: 0;
+    margin: 0 1px 0 0;
+    height: 100%;
+    border-left: 1px solid #666;
+}
+
+#_bubble-toc .inactive ol {
+    display: none !important;
+}
+
+#_bubble-toc .inactive a:hover {
+    color: #FFF;
+    background-color: #666;
+}
+
+#_bubble-toc .leads-to-page .name:hover, #_bubble-toc .leads-to-page .name:focus,
+#_bubble-toc .leads-to-page .name:active {
+    text-decoration: underline;
+}
+
+#_bubble-toc .arrow {
+    position: absolute;
+    right: -0px;
+    top: 0;
+    display: block;
+    width: 30px;
+    height: 100%;
+    margin: 0;
+    background-image: url(../images/arrow.png);
+    background-position: -30px 8.5px;
+    background-repeat: no-repeat;
+}
+
+#_bubble-toc .active > a, #_bubble-toc .inactive > a {
+    padding: 5px 30px 5px 5px;
+}
+
+#_bubble-toc .active > a {
+    background-color: #5E9632;
+    color: #FFF;
+}
+#_bubble-toc .active {
+    background-color: #666;
+}
+
+#_bubble-toc .inactive:hover {
+    background-color: #999;
+}
+
+#_bubble-toc a {
+    display: block;
+    position: relative;
+}
+
+#_bubble-toc li {
+    display: block;
+    clear: both;
+}
+
+.bubble a:hover, .bubble a:focus, .bubble a:active {
+    text-decoration: underline;
+    background-color: #666;
+}
+
+#_bubble-toc .bubble-back {
+    display: none;
+}
+
+#_find-area form {
+    margin: 0 0 0 50% !important;
+}
+
+.find-form {
+    padding: 10px;
+    margin: 0 0 0 -110px;
+    display: block;
+    width: 200px;
+}
+
+#_find-input {
+    width: 155px;
+    height: 34px;
+    padding: 0 20px 0 5px;
+    font: 16px 'Open Sans', Helvetica, FreeSans, sans-serif;
+    display: block;
+    background-color: #FFF;
+    border: 1px solid #CCE9A7;
+    float: left;
+    z-index: 0;
+}
+
+#_find-input:focus {
+    background-color: #FFF;
+    border: 1px solid #FFF;
+}
+
+#_find-input:focus + #_find-button {
+    background-position: -108px 0px !important;
+}
+
+#_find-button {
+    width: 36px;
+    display: block;
+    margin: 0 0 0 -18px;
+    background-position: -108px 0px;
+    float: left;
+    border: 0;
+    background-color: transparent;
+}
+
+#_find-input:focus + #_find-button:hover, #_find-button:active {
+    background-position: -108px -36px !important;
+}
+
+button:focus::-moz-focus-inner, button::-moz-focus-inner {
+    border: none;
+}
+
+#_find-input-label {
+    cursor: text;
+    line-height: 36px;
+    height: 36px;
+    position: relative;
+    left: 5px;
+    top: -36px;
+    z-index: 2;
+    color: #666;
+    font-style: italic;
+    display: none;
+    float: left;
+    user-select: none;
+    /* Clear this out later. */
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+
+/* Smaller, fixed header */
+
+#_fixed-header-wrap {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 5px 5px #FFF;
+    border-bottom: 1px solid #CCC;
+    background-color: #EFEFF0;
+    padding: 3px 0;
+    line-height: 100%;
+}
+
+#_fixed-header {
+    max-width: 1018px;
+    min-width: 130px;
+    display: block;
+    width: 100%;
+    font-size: 12px;
+    margin: 0 auto;
+}
+
+#_fixed-header .buttons {
+    display: block;
+    float: right;
+    margin: 0 10px 0 5px;
+}
+
+#_fixed-header div.button {
+    margin-left: 10px;
+}
+
+#_fixed-header .buttons .tool-spacer {
+    display: block;
+    float: left;
+}
+
+#_fixed-header .button {
+    float: left;
+}
+
+#_fixed-header .prev-icon, #_fixed-header .next-icon {
+    width: 18px;
+    margin: 1px 0;
+    display: block;
+}
+
+#_fixed-header .top-button {
+    color: #333;
+}
+
+#_fixed-header .top-button:hover, #_fixed-header .top-button:focus, #_fixed-header .top-button:active {
+    text-decoration: none;
+    color: #3465A4;
+}
+
+#_fixed-header a.tool-spacer .prev-icon {
+    background-position: -36px -72px;
+}
+
+#_fixed-header span.tool-spacer .prev-icon {
+    background-position: -144px -72px;
+}
+
+#_fixed-header a:hover .prev-icon, #_fixed-header a:focus .prev-icon, #_fixed-header a:active .prev-icon {
+    background-position: -54px -72px;
+}
+
+#_fixed-header a.tool-spacer .next-icon {
+    background-position: -108px -72px;
+}
+
+#_fixed-header span.tool-spacer .next-icon {
+    background-position: -162px -72px;
+}
+
+#_fixed-header a:hover .next-icon, #_fixed-header a:focus .next-icon, #_fixed-header a:active .next-icon {
+    background-position: -126px -72px;
+}
+
+/* Page bottom */
+
+.page-bottom {
+    margin-top: 30px;
+    margin-bottom: 80px;
+    padding: 10px 10px 0;
+}
+
+#_bottom-navigation {
+    border-top: 1px solid #999;
+}
+
+#_bottom-navigation .nav-link {
+    display: block;
+    clear: both;
+    margin: 20px 0 0 0;
+    height: 36px;
+    overflow: hidden;
+}
+
+#_bottom-navigation .prev-icon, #_bottom-navigation .next-icon {
+    width: 36px;
+    height: 36px;
+    display: block;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+#_bottom-navigation .prev-icon {
+    background-position: -288px 0;
+}
+
+#_bottom-navigation .nav-link:hover .prev-icon  {
+    background-position: -288px -36px;
+}
+
+
+#_bottom-navigation .next-icon {
+    background-position: -324px 0;
+}
+
+#_bottom-navigation .nav-link:hover .next-icon {
+    background-position: -324px -36px;
+}
+
+
+#_bottom-navigation .nav-label {
+    line-height: 36px;
+    display: block;
+    color: #333;
+    text-overflow: ellipsis;
+    height: 36px;
+}
+
+#_bottom-navigation .nav-label {
+    color: #333;
+    text-decoration: none;
+}
+
+#_share-print span {
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 3px;
+    border: 1px solid rgba(20,20,20,0.2);
+    padding: 0 7px;
+    color: #333;
+    background-color: #EFEFF0;
+    font-size: 14px;
+    height: 22px;
+}
+
+#_share-mail {
+    visibility: hidden;
+}
+
+#_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
+#_print-button:before {
+    line-height: 22px;
+    font-size: 14px;
+    font-weight: 600;
+    height: 22px;
+    width: 16px;
+    display: block;
+    float: left;
+    text-align: center;
+    border-radius: 2px 0 0 2px;
+    border: 1px solid rgba(20,20,20,0.2);
+    margin: -1px 6px -2px -8px;
+    overflow: hidden;
+}
+
+#_share-fb:before {
+    background-color: #3B5998;
+    content: " ";
+    background-position: -271px -88px;
+}
+
+#_share-gp:before {
+    background-color: #D54433;
+    content: " ";
+    background-position: -289px -88px;
+}
+
+#_share-tw:before {
+    background-color: #00BBF5;
+    content: " ";
+    background-position: -307px -88px;
+}
+
+#_share-mail:before {
+    background-color: #666;
+    content: " ";
+    background-position: -235px -88px;
+}
+
+
+#_print-button:before {
+    background-color: #666;
+    content: " ";
+    background-position: -253px -88px;
+}
+
+#_share-print span:hover, #_share-print span:focus,
+#_share-print span:active {
+    border: 1px solid rgba(20,20,20,0.5);
+    background: #DEDEDE;
+}
+
+#_share-print span:hover:before, #_share-print span:focus:before,
+#_share-print span:active:before {
+    border-top: 1px solid rgba(20,20,20,0.5);
+    border-left: 1px solid rgba(20,20,20,0.5);    
+    border-bottom: 1px solid rgba(20,20,20,0.5);
+}
+
+#_bottom-navigation .nav-link:hover .nav-label,
+#_bottom-navigation .nav-link:focus .nav-label,
+#_bottom-navigation .nav-link:active .nav-label {
+    color: #3465A4;
+}
+
+#_share-print {
+    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 1px solid #999;
+    clear: both;
+    display: none;
+}
+
+.offline .online-contents {
+    visibility: hidden;
+}
+
+.share, .print {
+    display: block;
+}
+
+.share {
+    float: left;
+}
+
+.print {
+    float: right;
+}
+
+/* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
+#_inward, #_footer-wrap {
+    height: 0;
+}
+
+#_inward {
+    z-index: -1;
+}
+
+#_footer-wrap {
+    width: 100%;
+    overflow: hidden;
+    background-color: #EFEFF0;
+    
+}
+
+#_outer-wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto;
+}
+
+
+/* Footer contents */
+
+#_footer-wrap{
+    display: none;
+}
+
+/* .CHAPTER/... AREA */
+
+#_content > .set, #_content > .book, #_content > .article, #_content > .part,
+#_content > .chapter, #_content > .preface, #_content > .appendix,
+#_content > .glossary, #_content > .reference, #_content > .refentry,
+#_content > .bibliography, #_content > .index {
+    padding: 0 10px;
+}
+
+
+/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
+/* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
+#_content a[id] {
+    position: relative;
+    top: -33px;
+    display: block;
+    width: 0;
+    height: 0;
+}
+
+#_content [id]:target > span, #_content .admonition[id]:target > h6 {
+    background-color: rgba(255,255,0,0.3);
+    transition: background-color 0.2s ease-out 0.3s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: background-color 0.2s ease-out 0.3s;
+    -webkit-transition: background-color 0.2s ease-out 0.3s;
+    -o-transition: background-color 0.2s ease-out 0.3s;
+}
+
+
+.ulink:after {
+    content: "\0020\2197";
+    color: transparent;
+    width: 18px;
+    height: 15px;
+    display: inline-block;
+    text-decoration: none;
+    background-position: -180px -72px;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 2px;
+}
+
+.legalnotice .ulink:after {
+    background-position: -180px -101px;
+    width: 18px;
+    height: 10px;
+}
+
+#_content .screen a[id] {
+    display: none;
+}
+
+.version-info {
+    color: #3465A4;
+    font-weight: normal;
+    background-color: rgba(255,255,255,0.7);
+    padding: 3px 5px;
+    line-height: 120%;
+    float: right;
+    margin: 5px 0 10px;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
+.single .version-info {
+    position: relative;
+    top: 70px;
+}
+
+.book .title, .set .title, .article .title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 120%;
+    width: auto;
+    clear: both;
+    color: #3465A4;
+    padding: 70px 0 50px;
+}
+.book .title .citetitle, .set .title .citetitle,
+.article .title .citetitle {
+    font-style: normal;
+}
+
+.set .subtitle, .book .subtitle, .article .subtitle {
+    font-size: 28px;
+    font-weight: normal;
+    margin: -40px 0 50px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.title, .chapter .title, .preface .title,
+.appendix .title, .bibliography .title,
+.reference .title, .part .title, .glossary .title {
+    font-size: 36px;
+    font-weight: normal;
+    padding: 30px 0 5px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.single .title, .single .chapter .title,
+.single .preface .title, .single .appendix .title,
+.single .bibliography .title, .single .reference .title,
+.single .part .title, .single .article .title {
+    padding-top: 100px;
+}
+
+
+.sect1 .subtitle, .chapter .subtitle {
+    font-size: 16px;
+    font-weight: normal;
+    padding: 10px 0 20px;
+    margin: 0;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.sect1 .title, .single .sect1 .title,
+.chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+.bibliography .qandaset .title, .reference .qandaset .title,
+.part .qandaset .title, .glossary .qandaset .title {
+    font-size: 28px;
+    font-weight: normal;
+    padding: 50px 0 5px;
+    text-align: left;
+}
+
+.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
+    font-size: 22px;
+    padding: 40px 0 0;
+    text-align: left;
+}
+
+.sect3 .title, .single .sect3 .title,
+.sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 33px 0 0;
+    text-align: left;
+}
+
+.sect4 .title, .single .sect4 .title,
+.sect5 .title, .single .sect5 .title {
+    font-size: 16px;
+    padding: 53px 0 0;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
+    text-align: left;
+}
+
+.sect4 .title {
+    font-weight: 600;
+}
+
+.sect5 .title {
+    font-weight: normal;
+}
+
+.name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
+.qandaset .title {
+    color: #3465A4;
+}
+
+a:hover .name, a:focus .name, a:active .name,
+.bubble a.leads-to-page:hover .name, a.leads-to-page:focus .name,
+a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
+.refentrytitle a:active {
+    text-decoration: underline;
+}
+
+.bubble a:hover .name, .bubble a:focus .name, .bubble a:active .name {
+    text-decoration: none;
+}
+
+.number, .subtitle {
+    color: #666;
+}
+
+.page-bottom a:hover .number, .page-bottom a:focus .number,
+.page-bottom a:active .number {
+    color: #729FCF;
+}
+
+#_bubble-toc .number {
+    color: #CCC;
+}
+
+#_bubble-toc .name {
+    color: #FFF;
+}
+
+.permalink {
+    opacity: 0;
+    font-size: 75%;
+    text-decoration: none;
+    color: #999;
+    font-weight: normal;
+    line-height: 100%;
+    transition: opacity 0.2s ease-in-out 0.1s;
+    /* Clean the below up in Q3 2013 or so... */
+    -moz-transition: opacity 0.2s ease-in-out 0.1s;
+    -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+    -o-transition: opacity 0.2s ease-in-out 0.1s;
+}
+
+.permalink:hover, .permalink:focus, .permalink:active {
+    color: #3465A4;
+    text-decoration: none !important;
+}
+
+*:hover > .permalink {
+    opacity: 1;
+}
+
+.line .toc {
+    padding: 0 30px 24px;
+}
+
+.line {
+    margin: 17px 0 36px 0;
+    border-bottom: 1px solid #3465A4;
+    width: 100%;
+}
+
+.toc a {
+    text-decoration: none;
+}
+
+.legalnotice {
+    margin: 40px 0 0;
+    padding: 10px 0 0;
+}
+
+.legalnotice p, .legalnotice td {
+    font-size: 12px;
+    color: #666;
+    line-height: 140%;
+    margin: 5px 0 0 0;
+}
+
+
+/* Thou shalt not ... */
+
+.admonition {
+    border-width: 1px;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 10px;
+    margin: 17px 0 24px;
+}
+
+.tip {
+    border-color: #3465A4;
+    background: #FFF url(../images/dots-blue.png) repeat-x scroll top;
+}
+
+.note {
+    border-color: #666;
+    background: #FFF url(../images/dots-darkgray.png) repeat-x scroll top;
+}
+
+.note ul, .note .orderedlist, .warning ul, .warning .orderedlist {
+    color: #666;
+}
+
+.important {
+    border-color: #BB7B03;
+    background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
+}
+
+.important ul, .important .orderedlist {
+    color: #BB7B03;
+}
+
+.warning, .caution {
+    border-color: #8C0000;
+    background: #FFF url(../images/dots-red.png) repeat-x scroll top;
+}
+
+.admonition > h6 {
+    font-weight: 600;
+    vertical-align: middle;
+    display: table-cell;
+    height: 36px;
+}
+
+.tip > h6 {
+    color: #3465A4;
+}
+
+.note > h6 {
+    color: #333;
+}
+
+.important > h6 {
+    color: #BB7B03;
+}
+
+.warning > h6, .caution > h6 {
+    color: #8C0000;
+}
+
+.symbol {
+    width: 36px;
+    height: 36px;
+    margin: 0 10px 0 0;
+    background-repeat: no-repeat;
+    float: left;
+    overflow: hidden;
+}
+
+.admonition p {
+    margin: 10px 0 0 !important;
+}
+
+/* Text styles */
+
+#_content span, #_content a, #_content p, #_content em, #_content strong {
+    position: relative;
+    z-index: 2;
+}
+
+em, i, .guimenu {
+    font-style: italic;
+}
+
+em .guimenu, i .guimenu, .question em {
+    font-style: normal; /* Don't use italics within italics... */
+}
+
+strong, b, .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
+    font-weight: 600;
+}
+
+.arch {
+    background-color: #7DC24D;
+    border: 1px solid #3465A4;
+    border-radius: 3px;
+    padding: 0 4px 0 2px;
+    display: inline-block;
+    font-size: 14px;
+    height: 20px;
+    vertical-align:bottom;
+    color: #FFF;
+    text-transform: uppercase;
+    line-height: 20px;
+}
+
+.arch-arrow-start, .arch-arrow-end {
+    display: inline-block;
+    height: 22px;
+    vertical-align:bottom;
+}
+
+.arch-arrow-start {
+    background-position: -24px -88px;
+    width: 13px;
+    margin-left: -3px;
+}
+
+.arch-arrow-end {
+    background-position: -47px -88px;
+    width: 25px;
+}
+
+
+p, .simplelist td {
+    color: #000;
+    text-align: left;
+    margin: 10px 0 0;
+}
+
+.abstract, .highlights {
+    margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 140%;
+}
+
+.abstract p, .highlights p, .toc-title {
+    color: #333;
+}
+
+.abstract p:first-child, .highlights p:first-child {
+    margin-top: 0;
+}
+
+.abstract .titlepage, .highlights .titlepage {
+    display: none;
+}
+
+.abstract .titlepage + p, .highlights .titlepage + p {
+    margin-top: 0;
+}
+
+.abstract li:first-child p:first-child, .highlights li:first-child p:first-child {
+    margin-top: 0;
+}
+
+.abstract + .authorgroup, .highlights + .authorgroup {
+    margin: 10px 0;
+}
+
+.authorgroup {
+    color: #333;
+}
+
+.ulink, .link, .xref, .email, .glosssee,
+.glossseealso, .indexterm, .qanda-toc a {
+    color: #3465A4;
+    text-decoration: none;
+}
+
+.title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
+.figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
+.itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
+.title .link, .subtitle .link, .table-title .link, .example-title .link,
+.figure-title .link, .procedure-title .link, .orderedlist-title .link, 
+.itemizedlist-title .link, .variablelist-title .link, .qandadiv-title .link,
+.title .ulink, .subtitle .ulink, .table-title .ulink, .example-title .ulink,
+.figure-title .ulink, .procedure-title .ulink, .orderedlist-title .ulink,
+.itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
+    text-decoration: underline;
+}
+
+.xref:hover, .xref:focus, .xref:active,
+.xref:visited:hover, .xref:visited:focus, .xref:visited:active,
+.link:hover, .link:focus, .link:active,
+.link:visited:hover, .link:visited:focus, .link:visited:active,
+.ulink:hover, .ulink:focus, .ulink:active,
+.ulink:visited:hover, .ulink:visited:focus, .ulink:visited:active,
+.email:hover, .email:focus, .email:active,
+.email:visited:hover, .email:visited:focus, .email:visited:active,
+.glosssee:hover, .glosssee:focus, .glosssee:active,
+.glosssee:visited:hover, .glosssee:visited:focus, .glosssee:visited:active,
+.glossseealso:hover, .glossseealso:focus, .glossseealso:active,
+.glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
+.indexterm:hover, .indexterm:focus, .indexterm:active,
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active,
+.qanda-toc a:hover, .qanda-toc a:focus, .qanda-toc a:active,
+.qanda-toc a:visited:hover, .qanda-toc a:visited:focus, .qanda-toc a:visited:active {
+    color: #3465A4;
+    text-decoration: underline;
+}
+
+.xref:visited, .ulink:visited, .link:visited, .email:visited,
+.glosssee:visited, .glossseealso:visited,
+.indexterm:visited {
+    color: #5C3566;
+}
+
+.title .xref:hover, .title .xref:focus,.title .xref:active,
+.subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
+.table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
+.figure-title .xref:hover, .figure-title .xref:focus, .figure-title .xref:active,
+.example-title .xref:hover, .example-title .xref:focus, .example-title .xref:active,
+.procedure-title .xref:hover, .procedure-title .xref:focus, .procedure-title .xref:active,
+.orderedlist-title .xref:hover, .orderedlist-title .xref:focus, .orderedlist-title .xref:active,
+.itemizedlist-title .xref:hover, .itemizedlist-title .xref:focus, .itemizedlist-title .xref:active,
+.variablelist-title .xref:hover, .variablelist-title .xref:focus, .variablelist-title .xref:active,
+.qandadiv-title .xref:hover, .qandadiv-title .xref:focus, .qandadiv-title .xref:active {
+    color: #3465A4;
+    text-decoration: none;
+}
+
+p a:visited {
+    color: #5C3566;
+}
+
+code, .command, .keycap {
+    font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+    font-weight: normal;
+    padding: 0 4px;
+    border-bottom: 1px solid #C1C1C3;
+    color: #333;
+    text-transform: none;
+    display: inline-block;
+    line-height: 120%;
+}
+
+
+code code, code .command, .command code {
+    padding: 0;
+    border: none;
+}
+
+
+.name code, .name .command, a .command, a code,
+.admonition h6 .command, .admonition h6 code {
+    color: inherit;
+}
+
+.admonition h6 .command, .admonition h6 code {
+    border-color: #D1D1D3;
+}
+
+code {
+    font-weight: normal;
+}
+
+.command {
+    font-weight: 600;
+}
+
+.screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
+    padding: 10px;
+    background-color: #EFEFF0;
+    border-radius: 5px;
+    margin: 5px 0;
+    border: 1px solid #999;
+}
+    
+.example .screen-wrap {
+    margin: 10px 0 24px;
+}
+
+.screen {
+    font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+    color: #333;
+    line-height: 125%;
+    display: block;  
+    overflow: auto;
+    background-color: #EFEFF0;
+}
+
+.screen code, .screen .command {
+    border-radius: 0;
+    background-color: transparent;
+    font-size: 100%;
+    border: none;
+    padding: 0;
+}
+
+.screen code {
+    color: #333;
+}
+
+
+.screen .command {
+    color: #204A87;
+}
+
+.calloutlist {
+    margin: 10px 0 24px;
+}
+
+.calloutlist td[width="5%"] {
+    width: 45px;
+}
+
+.example + .calloutlist {
+    margin: -14px 0 24px;
+}
+
+.calloutlist table {
+    width: 100%;
+}
+
+.callout {
+    display: inline-block;
+    padding: 1px 6px 1.5px 5px;
+    margin: 0 5px;
+    border-radius: 10px;
+    background-color: #3465A4;
+    color: #FFF;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 600;
+}
+
+.calloutlist .callout {
+    position: relative;
+    top: 2px;
+    float: right;
+}
+
+.variablelist, .toc {
+    margin: 24px 0;
+}
+
+.line .toc {
+    margin: 0;
+}
+
+.variablelist dt, .glossary dt {
+    font-weight: 600;
+    color: #000;
+    padding-top: 33px;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
+}
+
+.toc dt {
+    margin-bottom: 5px;
+} 
+
+.indexdiv h3 {
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+
+.variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
+.indexdiv dd, .answer {
+    margin: 0 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+.list-of-figures dl, .list-of-tables dl,
+.list-of-examples dl, .list-of-procedures dl,
+.list-of-equations dl {
+    margin: 5px 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+.variablelist dd > p, .glossary dd > p,
+.toc dd > p {
+    margin: 0;
+}
+
+div.figure {
+    max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    color: #999;
+    margin: 24px 0 -9px;
+    overflow: hidden;
+    position: relative;
+    padding-top: 33px;
+    top: -33px;
+}
+
+div.figure .mediaobject {
+    max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    color: #999;
+    padding: 12px 10px;
+    background-color: #333;
+    overflow: hidden;
+    border-top: 1px solid #202020;
+    border-left: 1px solid #202020;
+    border-right: 1px solid #202020;
+}
+
+.figure img {
+    padding: 0;
+    background-color: #FFF;
+    width: auto;
+    margin: 0 auto;
+    /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+    max-width: 100%;
+    max-width: calc(100% - 2px);
+    max-width: -moz-calc(100% - 2px);
+    max-width: -webkit-calc(100% - 2px);
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+}
+
+
+
+.figure-title {
+    padding: 10px;
+    margin: 0;
+    width: auto;
+}
+
+div.figure .figure-title-wrap {
+    background-color: #202020;
+    width: 100%;
+    overflow: hidden;
+}
+
+div.figure a {
+    height: 0;
+    width: 0;
+}
+
+div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
+    color: #729FCF;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+div.figure .name, div.figure .permalink {
+    color: #FFF;
+}
+
+.informalfigure img {
+    max-width: 100%;
+    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+    color: #999;
+    margin: 17px 0 24px;
+    padding: 1px;
+    border: 1px solid #202020;
+    width: auto;
+}
+
+.keycap {
+    color: #333;
+    font-size: 0.75em;
+    padding: 0px 5px;
+    background-color: #EFEFF0;
+    border-radius: 3px;
+    border-width: 1px 2px 2px 1px;
+    border-color: #999;
+    border-style: solid;
+    font-weight: normal;
+    white-space: nowrap;
+    vertical-align: 0.2em;
+}
+
+a:hover .keycap, a:focus .keycap, a:active .keycap,
+a:hover .command, a:focus .command, a:active .command,
+a:hover code, a:focus code, a:active code {
+    border-color: #3465A4;
+}
+
+
+/* We put an ndash character between keycaps that are part of an accelerator */
+.key-connector {
+    margin: 0 -1px; 
+    color: #666;
+}
+
+.procedure-title, .table-title, .example-title,
+.figure-title, .orderedlist-title, .variablelist-title,
+.itemizedlist-title, .qandadiv-title {
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: left;
+    line-height: 120%;
+}
+
+.table-title, .example-title, .procedure-title,
+.variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
+    position: relative;
+    top: -33px;
+    padding-top: 33px;
+    z-index: 1;
+}
+
+.example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
+    margin: 24px 0 -33px;
+}
+
+.itemizedlist-title {
+    margin: 24px 0 -41px;
+}
+
+.table-title {
+    margin: 24px 0 -23px;
+}
+
+.variablelist-title {
+    margin: 24px 0 -50px;
+}
+
+.qandaentry {
+    margin: -33px 0 22px;
+}
+
+.qanda-toc + .qandaentry {
+    padding-top: 53px;
+}
+
+.qandaentry:last-child {
+    margin: -33px 0 -23px;
+}
+
+.procedure-title code, .procedure-title .command, .procedure-title .keycap,
+.table-title code, .table-title .command, .table-title .keycap,
+.example-title code, .example-title .command, .example-title .keycap,
+.figure-title code, .figure-title .command, .figure-title .keycap,
+.orderedlist-title code, .orderedlist-title .command, .orderedlist-title .keycap,
+.variablelist-title code, .variablelist-title .command, .variablelist-title .keycap,
+ .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
+    text-transform: none;
+}
+
+.procedure-contents {
+    border-left: 3px solid #9CC897;
+    font-weight: normal;
+    margin: 17px 0 17px;
+    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
+    padding: 3px 5px 6px 2px;
+    background-color: #F7FAF6;
+    display: block;
+}
+
+.procedure-title-wrap + .procedure-contents {
+    margin: 10px 0 24px;
+}
+
+.procedure-contents > p:first-child,
+.procedure-contents > ol:first-child > li:first-child > p:first-child {
+    margin-top: 0;
+}
+
+.procedure-contents > .admonition {
+    margin-top: 4px;
+}
+
+.procedure-contents > p, .procedure-contents > .informalfigure,
+.procedure-contents > .admonition {
+    margin-left: 12px;
+    margin-right: 17px;
+}
+
+ol.procedure, ol.substeps, ol.orderedlist {
+    display: block;
+    color: #3465A4;
+    font-weight: 600;
+}
+
+ol.procedure {
+    padding: 0 0 0 30px;
+    margin: 0 10px;
+}
+
+ol.substeps, ol.orderedlist {
+    padding: 0 0 0 35px;
+    margin: 0 0 0 10px;
+}
+
+.orderedlist-title-wrap + ol.orderedlist {
+    margin-top: 40px;
+}
+
+ol.procedure, ol.orderedlist {
+    list-style-type: decimal;
+}
+
+ol.substeps {
+    list-style-type: lower-latin;
+}
+
+.table-contents, .informaltable {
+    /* Yup, let's make this scroll... While ugly, there seems to be no better
+    way to avoid the table running off the page border...(?) */
+    overflow: auto;
+}
+
+.table-contents {
+    margin: 0 0 24px 0;
+}
+.informaltable {
+    margin: 10px 0 24px 0;
+}
+
+
+.table table, .informaltable table {
+    border: 1px solid #999;
+    max-width: 100%;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+table p, .informaltable table p {
+    margin: 0;
+}
+
+.table th, .informaltable th {
+    font-weight: 600;
+    background-color: #D1D1D3;
+}
+
+.table td, .table th, .informaltable td, .informaltable th {
+    margin: 0;
+    padding: 3px 5px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.table th, .informaltable th,
+.table td[colspan], .informaltable td[colspan],
+.table td[rowspan], .informaltable td[rowspan] {
+    vertical-align: middle;
+    border: 1px solid #999;
+}
+
+.table td, .informaltable td{
+    vertical-align: middle;
+    border-right: 1px solid #999;
+}
+.table tr:nth-child(even), .informaltable tr:nth-child(even) {
+    background-color: #EFEFF0;
+}
+
+ul {
+    padding: 5px 0 0 35px;
+    margin: 0 10px;
+    display: block;
+    color: #3465A4;
+    list-style-type: disc;
+}
+
+.qanda-toc {
+    margin-bottom: 45px;
+}
+
+.qandadiv {
+    margin: 0 0 40px 0;
+    border-bottom: 1px solid #efeff0;
+}
+
+.qandadiv:last-child {
+    border-bottom: none;
+}
+
+.answer .table-title, .answer .screen-wrap, .answer .variablelist {
+    margin-top: 10px;
+}
+
+li p {
+    font-weight: normal;
+}
+
+.procedure > p {
+    margin: 0 10px 5px;
+}
+
+div.itemizedlist {
+    margin: 0 0 24px;
+}
+
+.question p {
+    font-size: 20px;
+    font-style: italic;
+    color: #666;
+}
+
+.question p + p {
+    margin-top: 2px;
+}
+
+
+.blockquote p {
+    font-style: italic;
+    color: #333;
+}
+
+div.blockquote {
+    margin: 17px 35px;
+}
+
+
+/* Review features */
+
+.remark, .doc-status {
+    background-color: #E6E0E8;
+    color: #000;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.remark {
+    padding: 1px 5px;
+    border-left: 3px solid #5C3566;
+}
+
+.remark .remark {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.doc-status {
+    padding: 10px;
+}
+
+#_content > .doc-status {
+    margin: 0 auto;
+    min-width: 380px;
+    max-width: 978px;
+}
+
+.doc-status li {
+    color: #000;
+}
+
+.ds-message {
+    font-style: italic;
+}
+
+p.ds-message {
+    margin: 0 !important;
+}
+
+
+.ds-label {
+    font-weight: 600;
+}
+
+.ds-head {
+    font-style: normal;
+    font-size: 22px;
+}
+
+body.draft {
+    background: url(../images/draft.png) no-repeat fixed left 50%;
+}
+
+
+@media print {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
+        display: none;
+    }
+
+    #_share-print {
+        visibility: hidden;
+    }
+
+    .figure, .informalfigure, .admonition, p, table {
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open
+           since 2002. Webkit is cool, though. */
+        page-break-inside: avoid;
+    }
+
+    .title {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .ulink:after {
+        color: inherit;
+        background-image: none;
+        width: auto;
+        height: auto;
+    }
+
+}
+
+@media only screen and (max-width: 700px) {
+    .find-form {
+        margin: 0 0 0 -72.5px;
+        width: 125px;
+    }
+
+    #_find-input {
+       width: 80px;
+    }
+}
+
+
+@media only screen and (max-width: 640px) {
+    /* Turn the following on again, when we have re-enabled the Find area. */
+    /*
+    #_toolbar {
+        height: 98px;
+    }
+    */
+
+    #_toc-area, #_nav-area {
+        width: 49.98%;
+    }
+    
+    #_find-area {
+        height: 42px;
+        background-color: #3465A4;
+        width: 100%;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    #_find-area form {
+        margin: 0 !important;
+    }
+
+    .find-form {
+        padding: 10px;
+        margin: 0;
+        display: block;
+        width: 100%;
+    }
+
+    #_find-input {
+        /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+        width: 91%;
+        width: calc(100% - 44px);
+        width: -moz-calc(100% - 44px);
+        width: -webkit-calc(100% - 44px);
+        height: 20px;
+        margin: 0 auto;
+        padding: 0 20px 0 1px;
+        font-size: 13px;
+        border: 1px solid #CDE8A8;
+        border-radius: 3px;
+    }
+
+    #_find-input:focus {
+        border: 1px solid #FFF;
+    }
+
+    #_find-input:focus + #_find-button {
+        background-position: -72px -72px !important;
+    }
+
+
+    #_find-input:focus + #_find-button:hover {
+        background-position: -90px -72px !important;
+    }
+
+    #_find-input-label {
+        line-height: 20px;
+        height: 20px;
+        left: 3px;
+        top: -21px;
+        font-size: 13px;
+        clear: both;
+    }
+}
+
+/* Mobile layout */
+@media only screen and (max-width: 450px) {
+    #_toc-area, #_nav-area {
+        width: 100%;
+    }
+
+    #_toolbar {
+        min-height: 113px;
+    }
+
+    #_toolbar.only-toc, #_toolbar.only-nav {
+        min-height: 56px;
+    }
+
+    .only-toc #_nav-area, .only-nav #_toc-area {
+        display: none;
+    }
+
+
+    #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
+        max-height: 300px;
+    }
+
+    #_nav-area {
+        border-top: 1px solid #729FCF;
+    }
+
+    #_nav-area .tool-spacer {
+        position: absolute;
+    }
+
+    #_nav-area .tool-spacer:nth-child(2) {
+        left: 0;
+    }
+
+    #_nav-area .tool-spacer:nth-child(3) {
+        right: 0;
+    }
+
+    #_nav-area .tool-label {
+        padding: 0 10px;
+        margin: 0 56px;
+        float: left;
+    }
+
+    .nav-inner {
+        float: none;
+        width: auto;
+    }
+
+    #_header .crumbs * + * {
+        display: none !important;
+    }
+
+    #_header .crumbs .single-crumb {
+        padding-right: 0;
+        width: 36px;
+        z-index: 12;
+        position: relative;
+    }
+
+    #_header .crumbs.active .single-crumb {
+        padding-right: 10px;
+        width: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        min-height: 35px;
+        border-radius: 0;
+        background-color: #333;
+        border-bottom: 1px solid #FFF;
+        color: #FFF;
+        padding: 0 10px;
+    }
+
+    #_header .crumbs.active .book2-icon {
+        background-position: -72px -87px;
+        width: 24px;
+        height: 24px;
+        float: right;
+        margin-top: 5px;
+        margin-right: 20px;
+    }
+
+    #_header .crumbs {
+        right: 10px;
+        left: auto;
+    }
+
+    #_logo {
+        margin-right: 10px;
+        margin-left: 63px;
+    }
+
+    #_header .book2-icon:hover, #_header .book2-icon:focus,
+    #_header .book2-icon:active {
+        background-position: -36px -36px;
+    }
+
+    #_toolbar .active .bubble-corner {
+        display: none;
+    }
+
+    #_toolbar .bubble {
+        position: fixed;
+        top: 0;
+        height: auto;
+        z-index: 7;
+        height: 100%;
+    }
+
+    #_bubble-toc {
+        height: auto;
+        max-height: 2000%;
+        position: relative;
+        top: 45px;
+        overflow: hidden;
+        padding-bottom: 5px;
+    }
+
+    #_toc-bubble-wrap #_bubble-toc {
+        top: 35px;
+    }
+
+    #_toc-bubble-wrap .bubble {
+        height: 100%;
+        max-height: 100%;
+    }
+
+    #_bubble-toc ol, #_bubble-toc .active ol {
+        width: 100%;
+        border: none;
+        background-color: #333;
+    }
+
+    #_bubble-toc .active ol {
+        z-index: 8;
+        right: -1px;
+    }
+
+    .bubble-container {
+        position: relative;
+        width: auto;
+        height: 100%;
+        overflow-y: auto;
+        z-index: 7;
+    }
+
+    .bubble-closer {
+        width: 24px;
+        height: 24px;
+        background-image: url(../images/icons.png);
+        background-position: -72px -87px;
+        display: block;
+        float: right;
+        padding: 0;
+        margin: 0;
+        background-color: transparent !important;
+        cursor: pointer;
+    }
+
+    .bubble-closer:hover, .bubble-closer:focus, .bubble-closer:active {
+        background-position: -96px -87px;
+    }
+
+    .bubble h6 {
+        min-height: 24px;
+    }
+
+    #_bubble-toc .bubble-back {
+        display: block;
+        margin-top: 45px;
+    }
+
+    #_bubble-toc .bubble-back a {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    #_bubble-toc ol ol li {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #_bubble-toc ol ol li:last-child {
+        margin-bottom: 5px;
+    }
+
+    #_bubble-toc .active ol {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 8;
+        overflow-y: auto;
+    }
+
+    .back-icon {
+        width: 24px;
+        height: 24px;
+        background-image: url(../images/icons.png);
+        background-position: -120px -87px;
+        display: block;
+    }
+
+    .bubble-back:hover .back-icon, .bubble-back:focus .back-icon,
+    .bubble-back:active .back-icon {
+        background-position: -144px -87px;
+    }
+
+    #_toc-area .bubble h6 {
+        position: fixed;
+        background-color: #333;
+        z-index: 9;
+        left: 0;
+        top: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: -moz-calc(100% - 20px);
+        width: -webkit-calc(100% - 20px);
+        width: calc(100% - 20px);
+    }
+
+    #_toc-bubble-wrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 6;
+        height: 100%;
+        background-color: #333;
+    }
+
+    #_white-bg {
+        position: static;
+    }
+
+    #_fixed-header-wrap, .print {
+        display: none;
+    }
+
+    .offline #_share-print {
+        /* Ugly trick -- the JS would otherwise override my display: none */
+        height: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .line .toc {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* To avoid ugly word-wrap issues (as long as the page is wide enough,
+       though, inline-block'ing these elements helps us to avoid wrapping at
+       all.) */
+    code, .command {
+        display: inline;
+    }
+
+    #_inward, #_footer-wrap {
+        height: 0;
+    }
+
+    #_outer-wrap {
+        margin: 0 auto -155px;
+    }
+
+    #_content ul, #_content ol {
+        padding-left: 10px;
+    }
+
+    .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
+    .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
+    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+        padding-left: 10px;
+    }
+
+    .admonition .symbol {
+        float: none;
+        /* Remove proprietary attributes later on */
+        padding-left: calc(50% - 18px);
+        padding-left: -moz-calc(50% - 18px);
+        padding-left: -webkit-calc(50% - 18px);
+        padding-bottom: 10px;
+    }
+
+    .screen-wrap {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        margin-right: -10px;
+    }
+
+    .example-contents > .screen-wrap, .admonition > .screen-wrap,
+    .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
+    .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
+    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap,
+    .procedure-contents, .procedure-title-wrap + .procedure-contents, div.figure {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    div.figure {
+        /* Remove proprietary attributes later on */
+        max-width: -moz-calc(100% + 20px);
+        max-width: -webkit-calc(100% + 20px);
+        max-width: calc(100% + 20px);
+    }
+    #_content ol.procedure {
+        padding-left: 20px;
+    }
+
+    .book .title, .set .title, .article .title {
+        font-size: 36px;
+    }
+
+    .title, .chapter .title, .preface .title,
+    .appendix .title, .bibliography .title,
+    .reference .title, .part .title, .glossary .title {
+        font-size: 30px;
+    }
+
+    .sect1 .title, .single .sect1 .title,
+    .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+    .bibliography .qandaset .title, .reference .qandaset .title,
+    .part .qandaset .title, .glossary .qandaset .title, .set .subtitle,
+    .book .subtitle, .article .subtitle {
+        font-size: 22px;
+    }
+
+    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
+        font-size: 20px;
+    }
+
+    .sect3 .title, .single .sect3 .title,
+    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
+        font-size: 18px;
+    }
+}
+
+/* Optimize images for various screen heights. Some (1080 and 1024, 800 and 768
+   etc.) are bucketed. We assume 110px for added browser chrome (subtracted from
+   the @media max-height), and 170px for giving the image some context
+   (subtracted from the image max-height). */
+
+@media only screen and (max-height: 970px) {
+    .informalfigure img, .figure img {
+        max-height: 744px;
+    }
+}
+
+@media only screen and (max-height: 790px) {
+    .informalfigure img, .figure img {
+        max-height: 620px;
+    }
+}
+
+@media only screen and (max-height: 690px) {
+    .informalfigure img, .figure img {
+        max-height: 520px;
+    }
+}
+
+@media only screen and (max-height: 490px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .informalfigure img, .figure img {
+        max-height: 400px;
+    }
+}
+
+@media only screen and (max-height: 490px) and (min-width: 451px) {
+    #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
+        max-height: 300px;
+    }
+}
