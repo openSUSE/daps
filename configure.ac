@@ -227,14 +227,16 @@ dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
 dnl DocBook4
-for XSLT in "${DB4_XSLT_URL}xhtml/docbook.xsl" \
-            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
-            "${DB4_XSLT_URL}html/docbook.xsl" \
-            "${DB4_XSLT_URL}html/chunk.xsl" \
-            "${DB4_XSLT_URL}fo/docbook.xsl" \
-            "${DB4_XSLT_URL}manpages/docbook.xsl" \
+for XSLT in "${DB4_XSLT_URL}common/common.xsl" \
             "${DB4_XSLT_URL}epub/docbook.xsl" \
-            "${DB4_XSLT_URL}profiling/profile.xsl"; do
+            "${DB4_XSLT_URL}fo/docbook.xsl" \
+            "${DB4_XSLT_URL}html/chunk.xsl" \
+            "${DB4_XSLT_URL}html/docbook.xsl" \
+            "${DB4_XSLT_URL}lib/lib.xsl" \
+            "${DB4_XSLT_URL}manpages/docbook.xsl" \
+            "${DB4_XSLT_URL}profiling/profile.xsl" \
+            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB4_XSLT_URL}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
@@ -247,15 +249,17 @@ if test -z "$HAVE_DOCBOOK_STYLESHEETS"; then
   AC_MSG_ERROR([DocBook 4 stylesheets not found])
 fi
 
-dnl DocBook 5
-for XSLT in "${DB5_XSLT_URL}xhtml/docbook.xsl" \
-            "${DB5_XSLT_URL}xhtml/chunk.xsl" \
-            "${DB5_XSLT_URL}html/docbook.xsl" \
-            "${DB5_XSLT_URL}html/chunk.xsl" \
-            "${DB5_XSLT_URL}fo/docbook.xsl" \
-            "${DB5_XSLT_URL}manpages/docbook.xsl" \
+dnl DocBook5
+for XSLT in "${DB5_XSLT_URL}common/common.xsl" \
             "${DB5_XSLT_URL}epub/docbook.xsl" \
-            "${DB5_XSLT_URL}profiling/profile.xsl"; do
+            "${DB5_XSLT_URL}fo/docbook.xsl" \
+            "${DB5_XSLT_URL}html/chunk.xsl" \
+            "${DB5_XSLT_URL}html/docbook.xsl" \
+            "${DB5_XSLT_URL}lib/lib.xsl" \
+            "${DB5_XSLT_URL}manpages/docbook.xsl" \
+            "${DB5_XSLT_URL}profiling/profile.xsl" \
+            "${DB5_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB5_XSLT_URL}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
