@@ -131,12 +131,16 @@
 </xsl:variable>
 
 <xsl:attribute-set name="shade.verbatim.style">
-  <xsl:attribute name="background-color">&light-gray-old;</xsl:attribute>
+  <xsl:attribute name="background-color">&extra-light-gray-old;</xsl:attribute>
+  <xsl:attribute name="border">&thinline;mm solid &light-gray;</xsl:attribute>
   <xsl:attribute name="padding">0.5em</xsl:attribute>
-  <xsl:attribute name="start-indent"><xsl:value-of select="$verbatim-start-end-indent"/>
+  <xsl:attribute name="start-indent">
+    <xsl:value-of select="$verbatim-start-end-indent"/>
   </xsl:attribute>
-  <xsl:attribute name="end-indent"><xsl:value-of select="$verbatim-start-end-indent"/>
+  <xsl:attribute name="end-indent">
+    <xsl:value-of select="$verbatim-start-end-indent"/>
   </xsl:attribute>
+  
 </xsl:attribute-set>
 
 
