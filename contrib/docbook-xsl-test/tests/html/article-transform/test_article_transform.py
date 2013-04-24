@@ -54,9 +54,11 @@ def test_title_element():
 
 
 def test_head_title():
-    '''test if XML title element match with HTML title element'''
+     '''test if XML title element match with HTML title element'''
      global RESULT_TREE, XML_TITLE
      html_title = RESULT_TREE.xpath('/h:html/h:head/h:title',
                                     namespaces = {'h':'http://www.w3.org/1999/xhtml'})
      title_text = html_title[0].text
      assert title_text == XML_TITLE, 'titles dont match'
+
+
