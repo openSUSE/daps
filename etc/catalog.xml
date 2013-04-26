@@ -96,6 +96,23 @@
                    rewritePrefix="common/l10n/"/>
   </group>
 
+  <!-- 
+     HINT: If you want to develop with the latest DocBook stylesheets
+           version, proceed as follows:
+     
+     1. Download http://snapshots.docbook.org/docbook-xsl-snapshot.tar.bz2
+     2. Unpack to /tmp
+     3. Remove the comments from the following <group>:
+  -->
+  <!--<group xml:base="file:///tmp/docbook-xsl-snapshot/">
+    <rewriteSystem 
+      systemIdStartString="http://docbook.sourceforge.net/release/xsl/current" 
+      rewritePrefix="."/>
+    <rewriteURI
+      uriStartString="http://docbook.sourceforge.net/release/xsl/current" 
+      rewritePrefix="."/>
+  </group>-->
+
  <!-- Make sure the standard catalog is found as well -->
 
  <nextCatalog catalog="file:///etc/xml/catalog" />
