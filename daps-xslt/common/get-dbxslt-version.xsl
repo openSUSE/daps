@@ -13,7 +13,7 @@
      String of the version number 
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright: 2013, Thomas Schraitle
 -->
 <xsl:stylesheet  version="1.0"
   xmlns:fm="http://freshmeat.net/projects/freshmeat-submit/"
