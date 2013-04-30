@@ -86,8 +86,7 @@
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="lists.label.properties">
-  <xsl:attribute name="color">&dark-green;</xsl:attribute>
+<xsl:attribute-set name="lists.label.properties" use-attribute-sets="dark-green">
   <xsl:attribute name="text-align">end</xsl:attribute>
 </xsl:attribute-set>
 
@@ -231,12 +230,12 @@
   <xsl:attribute name="font-weight">700</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="formal.title.properties" use-attribute-sets="normal.para.spacing">
+<xsl:attribute-set name="formal.title.properties"
+  use-attribute-sets="normal.para.spacing dark-green">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
   <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
-  <xsl:attribute name="color">&dark-green;</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
   <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
   <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
@@ -257,13 +256,27 @@
 
 
 <!-- 26. Custom ================================================= -->
-<xsl:attribute-set name="title.name.color">
-  <xsl:attribute name="color">&dark-green;</xsl:attribute>
+<xsl:attribute-set name="title.name.color" use-attribute-sets="dark-green">
 </xsl:attribute-set>
 
 <xsl:attribute-set name="title.number.color">
   <xsl:attribute name="color">&mid-gray;</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="dark-green">
+  <xsl:attribute name="color">
+    <xsl:call-template name="dark-green"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:template name="dark-green">
+  <!-- This solution is somewhat pathetic – but unfortunately, while we need
+       the green color as a text color most of the time, sometimes we need it
+       for other attributes as well… -->
+  <xsl:choose>
+    <xsl:when test="$format.print = 1">&darker-gray;</xsl:when>
+    <xsl:otherwise>&dark-green;</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>

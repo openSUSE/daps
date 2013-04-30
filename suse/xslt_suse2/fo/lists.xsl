@@ -24,7 +24,9 @@
   exclude-result-prefixes="exsl">
 
 <xsl:template name="itemizedlist.label.markup">
-  <xsl:variable name="color" select="'&dark-green;'"/>
+  <xsl:variable name="color">
+    <xsl:call-template name="dark-green"/>
+  </xsl:variable>
   <!-- We want nice large bullets like we get in the browser. None of the
        fonts we are currently using seem to provide anything fitting. (You can
        get close by using a larger font – this gives you a problem with line

@@ -35,7 +35,7 @@
                  external-destination="{$ulink.url}">
     <xsl:choose>
       <xsl:when test="count(child::node())=0 or (string(.) = $url)">
-        <fo:inline hyphenate="false" color="&dark-green;">
+        <fo:inline hyphenate="false" xsl:use-attribute-sets="dark-green">
           <xsl:call-template name="hyphenate-url">
             <xsl:with-param name="url" select="$url"/>
           </xsl:call-template>
@@ -78,7 +78,7 @@
     <!-- * URL it links to, and if ulink.show is non-zero. -->
         <fo:inline hyphenate="false">
           <xsl:text> (</xsl:text>
-          <fo:inline color="&dark-green;">
+          <fo:inline xsl:use-attribute-sets="dark-green">
             <fo:basic-link external-destination="{$ulink.url}">
               <xsl:call-template name="hyphenate-url">
                 <xsl:with-param name="url" select="$url"/>
@@ -94,13 +94,18 @@
 
 
 <xsl:template name="image-after-link">
+  <xsl:variable name="fill">
+    <xsl:call-template name="dark-green"/>
+  </xsl:variable>
+
   <fo:instream-foreign-object content-height="0.65em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="100"
       height="100">
-      <svg:rect width="54" height="54" x="0" y="46"
-        fill="&dark-green;" fill-opacity="0.4"/>
+      <svg:rect width="54" height="54" x="0" y="46" fill-opacity="0.4"
+        fill="{$fill}"/>
+
       <svg:path d="M 27,0 27,16 72.7,16 17,71.75 28.25,83 84,27.3 84,73 l 16,0 0,-73 z"
-        fill="&dark-green;"/>
+        fill="{$fill}"/>
     </svg:svg>
   </fo:instream-foreign-object>
 </xsl:template>

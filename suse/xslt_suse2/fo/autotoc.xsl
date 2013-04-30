@@ -138,8 +138,8 @@
             <xsl:apply-templates select="." mode="titleabbrev.markup"/>
           </fo:basic-link>
         </fo:inline>
-        <fo:inline keep-together.within-line="always" color="&dark-green;"
-          font-size="&large;pt" font-family="&serif;">
+        <fo:inline keep-together.within-line="always" font-size="&large;pt"
+        font-family="&serif;" xsl:use-attribute-sets="dark-green">
           <fo:basic-link internal-destination="{$id}">
             <fo:leader leader-pattern="space" leader-length="{&column; div 2}mm"/>
             <fo:page-number-citation ref-id="{$id}"/>

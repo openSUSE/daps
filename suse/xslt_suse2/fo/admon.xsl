@@ -65,19 +65,27 @@
 <xsl:template name="admon.symbol.color">
   <xsl:param name="node" select="."/>
   <xsl:choose>
-    <xsl:when test="local-name($node)='warning' or local-name($node)='caution'">
-      <!-- The symbol for these two is currently the same -->
-      <xsl:text>&dark-blood;</xsl:text>
-    </xsl:when>
-    <xsl:when test="local-name($node)='tip'">
-      <xsl:text>&dark-green;</xsl:text>
-    </xsl:when>
-    <xsl:when test="local-name($node)='important'">
-      <xsl:text>&mid-orange;</xsl:text>
+    <xsl:when test="$format.print = 1">
+      <xsl:text>&darker-gray;</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-      <!-- It's a note. (Or something undefined.) -->
-      <xsl:text>&darker-gray;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="local-name($node)='warning' or
+                        local-name($node)='caution'">
+          <!-- The symbol for these two is currently the same -->
+          <xsl:text>&dark-blood;</xsl:text>
+        </xsl:when>
+        <xsl:when test="local-name($node)='tip'">
+          <xsl:text>&dark-green;</xsl:text>
+        </xsl:when>
+        <xsl:when test="local-name($node)='important'">
+          <xsl:text>&mid-orange;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- It's a note. (Or something undefined.) -->
+          <xsl:text>&darker-gray;</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

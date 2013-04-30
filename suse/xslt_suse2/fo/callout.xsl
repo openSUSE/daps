@@ -37,6 +37,9 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="color">
+    <xsl:call-template name="dark-green"/>
+  </xsl:variable>
 
   <fo:leader leader-pattern="space" leader-length="0.2em"/>
 
@@ -44,8 +47,7 @@
     alignment-adjust="-0.15em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100px" width="{$width}">
       <svg:rect height="100" rx="50" ry="50" x="0" y="0"
-        fill="&dark-green;" stroke="none" width="{$width}">
-      </svg:rect>
+        fill="{$color}" stroke="none" width="{$width}"/>
       <svg:text y="{$instream-font-size - 1}" fill="&white;" font-family="&sans;, sans-serif"
         font-size="{$instream-font-size}" font-weight="600"
         text-anchor="middle">
