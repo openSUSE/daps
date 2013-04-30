@@ -104,8 +104,11 @@
       </xsl:choose>
     </xsl:if>
   </xsl:param>
-   
+
   <title><xsl:copy-of select="$title"/></title>
+
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
 
   <xsl:if test="$html.base != ''">
     <base href="{$html.base}"/>
