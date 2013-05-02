@@ -17,6 +17,14 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
+<!-- 0. Parameters for External Manipulation =================== -->
+  <!-- Add a link to a product/company homepage to the logo -->
+  <xsl:param name="homepage" select="0"/>
+    <!-- Override this parameter from the command line by adding
+             ––xsltparam="'––stringparam homepage=http://www.example.com'"
+         (don't copy from here, for technical reasons I can't use hyphens and
+         must use dashes). -->
+
 
 <!-- 1. Admonitions  ============================================ -->
   <!-- Use graphics in admonitions?  0=no, 1=yes -->
@@ -141,11 +149,11 @@ task before
   <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
 <!-- 28. SUSE specific parameters =============================== -->
-  <!--  -->
   <xsl:param name="admon.graphics.prefix">icon-</xsl:param>
   
   <xsl:param name="daps.header.logo">static/images/logo.png</xsl:param>
-  <xsl:param name="daps.header.logo.alt">SUSE</xsl:param>
+  <xsl:param name="daps.header.logo.link">0</xsl:param>
+  <xsl:param name="daps.header.logo.alt">Logo</xsl:param>
   <xsl:param name="daps.header.js.library">static/js/jquery-1.4.2.min.js</xsl:param>
   <xsl:param name="daps.header.js.custom">static/js/susebooks.js</xsl:param>
   

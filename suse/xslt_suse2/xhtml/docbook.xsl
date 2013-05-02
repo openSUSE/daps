@@ -284,10 +284,19 @@
       </xsl:call-template>
     </a>
   </xsl:template>
-  
-    <xsl:template name="create.header.logo">
+
+  <xsl:template name="create.header.logo">
     <div id="_logo">
-      <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
+      <xsl:choose>
+        <xsl:when test="$homepage != 0">
+          <a href="{$homepage}">
+            <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </xsl:template>
   
