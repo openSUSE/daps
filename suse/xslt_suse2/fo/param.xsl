@@ -135,6 +135,8 @@ task before
 
 <xsl:param name="body.start.indent" select="'0'"/>
 
+<xsl:param name="draft.watermark.image"><xsl:value-of select="$styleroot"/>images/draft.svg</xsl:param>
+
 
 <!-- 20. Font Families ========================================== -->
 <xsl:param name="body.font.family">&serif;, serif</xsl:param>
@@ -168,6 +170,9 @@ task before
 
 
 <!-- 26. Custom ================================================= -->
+<!-- Saxon will fail if these parameters aren't declared. -->
+<xsl:param name="format.print" select="0"/>
+<xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
 
 </xsl:stylesheet>
