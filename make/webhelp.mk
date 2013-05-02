@@ -137,13 +137,13 @@ wh_copy_static_images: $(STYLEIMG)
 # The following is a HACK to allow draft_html.png Upstream should have
 # draft.svg and draft.png, that would make things easier...
 
-WEBHELP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
-		   $(firstword $(wildcard \
-		   $(STYLEIMG)/draft_html.png \
-		   $(STYLEIMG)/draft.png)))
-ifdef WEBHELP_DRAFT_IMG
-  WEBHELPSTRINGS += --stringparam "draft.watermark.image=$(WEBHELP_DRAFT_IMG)" 
-endif
+# WEBHELP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
+#		   $(firstword $(wildcard \
+#		   $(STYLEIMG)/draft_html.png \
+#		   $(STYLEIMG)/draft.png)))
+# ifdef WEBHELP_DRAFT_IMG
+#  WEBHELPSTRINGS += --stringparam "draft.watermark.image=$(WEBHELP_DRAFT_IMG)" 
+# endif
 
 # search stuff
 create_search_index: | $(WEBHELP_DIR)/search/stemmers

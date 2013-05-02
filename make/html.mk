@@ -112,17 +112,17 @@ ifneq ($(IS_STATIC),static)
   HTMLSTRINGS  += --stringparam "admon.graphics.path=static/images/" \
 		  --stringparam "callout.graphics.path=static/images/callouts/" \
 		  --stringparam "navig.graphics.path=static/images/"
-  # With the SUSE Stylesheets we use an alternative draft image for HTML
-  # builds (draft_html.png). The original DocBook Stylesheets use draft.png for
-  # _both_ HML and FO
+# With the SUSE Stylesheets we use an alternative draft image for HTML
+# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+# _both_ HML and FO
 
-  HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
-		     $(wildcard $(STYLEIMG)/draft_html.png \
-		     $(STYLEIMG)/draft.png)))
+# HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
+#		     $(wildcard $(STYLEIMG)/draft_html.png \
+#		     $(STYLEIMG)/draft.png)))
 
-  ifdef HTML_DRAFT_IMG
-    HTMLSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
-  endif
+#  ifdef HTML_DRAFT_IMG
+#    HTMLSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
+#  endif
 endif
 
 ifdef HTML_CSS
