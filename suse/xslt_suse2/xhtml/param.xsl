@@ -64,6 +64,9 @@ set       toc,title
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="docbook.css.link" select="0"/>
+  <xsl:param name="docbook.css.source"/>
+    <!-- Intentionally left empty – we already have a stylesheet, this one just
+         increases the coutn of referenced files. -->
   <xsl:param name="html.stylesheet">static/css/susebooks.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
   <xsl:param name="make.valid.html" select="1"/>
@@ -189,7 +192,7 @@ task before
   <!-- Create sharing links for Facebook, Google+, Twitter? -->
   <xsl:param name="generate.sharelinks" select="1"/>
   
-  <!-- Separator between separate links: -->
+  <!-- Separator between breadcrumbs links: -->
   <xsl:param name="daps.breadcrumbs.sep">&#xa0;›&#xa0;</xsl:param>
   
   <!--  Create permalinks?-->
