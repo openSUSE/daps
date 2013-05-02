@@ -65,8 +65,8 @@ set       toc,title
   <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="docbook.css.link" select="0"/>
   <xsl:param name="docbook.css.source"/>
-    <!-- Intentionally left empty – we already have a stylesheet, this one just
-         increases the coutn of referenced files. -->
+    <!-- Intentionally left empty – we already have a stylesheet, with this, we 
+         only override DocBook's default. -->
   <xsl:param name="html.stylesheet">static/css/susebooks.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
   <xsl:param name="make.valid.html" select="1"/>
