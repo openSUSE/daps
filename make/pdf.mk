@@ -46,9 +46,12 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
              --param "generate.permalink=0"  \
 	     --param "ulink.show=1" \
 	     --stringparam "draft.mode=$(DRAFT)" \
-	     --stringparam "draft.watermark.image=$(dir $(STYLEIMG))images/draft.png" \
-             --stringparam "callout.graphics.path=$(STYLEIMG)/callouts/" \
              --stringparam "styleroot=$(dir $(STYLEIMG))"
+
+#    --stringparam "draft.watermark.image=$(dir $(STYLEIMG))images/draft.png" \
+#    --stringparam "callout.graphics.path=$(STYLEIMG)/callouts/" \
+
+
 
 
 #----------
