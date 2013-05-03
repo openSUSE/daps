@@ -43,9 +43,13 @@
                $prev/ancestor-or-self::book)[last()]"/>
     <xsl:variable name="this.book" 
       select="(ancestor-or-self::article|ancestor-or-self::book)[last()]"/>
+    
+    <xsl:variable name="up.book"
+     select="($up/ancestor-or-self::article|$up/ancestor-or-self::book)[last()]"/>
+    
     <xsl:variable name="isnext"  select="generate-id($this.book) = generate-id($next.book)"/>
     <xsl:variable name="isprev"  select="generate-id($this.book) = generate-id($prev.book)"/>
-    <xsl:variable name="isup"    select="generate-id($this.book) = generate-id($up)"/>
+    <xsl:variable name="isup"    select="generate-id($this.book) = generate-id($up.book)"/>
 
     <!--<xsl:message>html.head: <xsl:value-of
       select="local-name()"/> "<xsl:apply-templates select="$this"
@@ -53,8 +57,11 @@
       this.book: <xsl:value-of select="local-name($this.book)"/> "<xsl:apply-templates select="$this.book" mode="title.markup"/>"
       next.book: <xsl:value-of select="local-name($next.book)"/> "<xsl:apply-templates select="$next.book" mode="title.markup"/>"
       prev.book: <xsl:value-of select="local-name($prev.book)"/> "<xsl:apply-templates select="$prev.book" mode="title.markup"/>"
+      up.book: <xsl:value-of select="local-name($up.book)"/> "<xsl:apply-templates select="$up.book" mode="title.markup"/>"
+      
       isnext: <xsl:value-of select="concat($isnext, ' ', local-name($next))"/>
       isprev: <xsl:value-of select="concat($isprev, ' ', local-name($prev))"/>
+      up: <xsl:value-of select="local-name($up)"/>  "<xsl:apply-templates select="$up" mode="title.markup"/>
       isup:   <xsl:value-of select="$isup"/>
     </xsl:message>-->
     <head>
