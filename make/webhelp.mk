@@ -66,6 +66,7 @@ WEBHELPSTRINGS := --param "keep.xml.comments=$(COMMENTS)" \
 ifeq ("$(WH_SEARCH)", "no")
   WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=false"
 endif
+
 ifdef HTML_CSS
   WEBHELPSTRINGS += --stringparam "html.stylesheet=$(notdir $(HTML_CSS))"
 endif

@@ -292,13 +292,18 @@ USESVN := $(shell svn info $(MAIN) 2>/dev/null)
 # By default graphics for the builds mentioned above are linked into the
 # result directory. However, when prodicing the --static option they are copied
 # into the result directory. Overwriting links by files with cp or overwriting
-# files with links is not üpossible by default. Therefore we need special
-# flags
+# files with links is not possible by default. Therefore we need
+# --remove-destination
+# (Using cp -rs rather than ln -sf because it only links files and creates
+# the directories rather than linking the directories. The latter has the
+# disadvantage tha one cannot write into adirectory that is just linked)
+#
 ifeq ($(STATIC_HTML), 1)
   # linking instead of copying
   HTML_GRAPH_COMMAND := cp -rL --remove-destination
 else
-  HTML_GRAPH_COMMAND := ln -sf
+  # copy directories recursively, create links on files
+  HTML_GRAPH_COMMAND := cp -rs --remove-destination
 endif
 
 #----------

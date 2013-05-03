@@ -59,7 +59,7 @@ function parse_args () {
                 if [[ $2 != "none" ]]; then
                     sanitize_path "$2" "P_CSS"
                 else
-                    P_CSS=none
+                    P_CSS="$2"
                 fi
                 shift 2
                 ;;
@@ -171,10 +171,6 @@ function parse_args () {
 		P_REMARKS=1
 		shift
 		;;
-            --resdir)
-                P_RES_DIR="$2"
-                shift 2
-                ;;
             --rootelement)
                 ROOTELEMENT="$2"
 		shift 2
@@ -189,6 +185,10 @@ function parse_args () {
                 ;;
             --set-date)
                 P_SETDATE="$2"
+                shift 2
+                ;;
+            --statdir)
+                P_STAT_DIR="$2"
                 shift 2
                 ;;
             --static)
@@ -558,7 +558,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="cdhmr"
-    LONG_OPTS="clean,comments,css:,draft,help,html4,name:,meta,remarks,resdir:,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,comments,css:,draft,help,html4,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -575,8 +575,8 @@ function build_html_jsp () {
         help_meta
         help_name
         help_remarks
-        help_resdir
         help_rootid
+        help_statdir
         help_static
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
@@ -602,11 +602,11 @@ function build_html_jsp () {
             exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
         fi
     fi
-    if [[ -n "$P_RES_DIR" ]]; then
-        if [[ -d $P_RES_DIR ]]; then
-            export RES_DIR="$P_RES_DIR"
-        else
-            exit_on_error "Ressource directory \"P_RES_DIR\"\ndoes not exist. Please create it first."
+    if [[ -n "$P_STAT_DIR" ]]; then
+        if [[ -d $P_STAT_DIR ]]; then
+            export STATIC_DIR="$P_STAT_DIR"
+         else
+            exit_on_error "\"Static\" directory \"P_STAT_DIR\"\ndoes not exist."
         fi
     fi
 
@@ -667,13 +667,10 @@ function webhelp () {
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n "$P_CSS" ]]; then
-        if [[ -f "$P_CSS" ]]; then
+        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
             export HTML_CSS="$P_CSS"
-        elif [[ $P_CSS = "none" ]]; then
-            # this allows to disable CSS from a DC file
-            unset HTML_CSS
         else
-            exit_on_error "Cannot find CSS file $P_CSS"
+            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
         fi
     fi
     
@@ -719,17 +716,14 @@ function build_epub () {
         [[ 0 = $VERBOSITY ]] && export VERBOSITY=1
         export EPUBCHECK="yes"
     fi
-        
+    
     if [[ -n "$P_CSS" ]]; then
-        if [[ -f "$P_CSS" ]]; then
+        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
             export EPUB_CSS="$P_CSS"
-        elif [[ $P_CSS = "none" ]]; then
-            # this allows to disable CSS from a DC file
-            unset EPUB_CSS
         else
-            exit_on_error "Cannot find CSS file $P_CSS"
+            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
         fi
-    fi
+    fi        
         
     call_make "$SUB_CMD" "$@"
 }
@@ -1716,11 +1710,6 @@ function help_rootid () {
                               in the DC-file; if not set the complete set
                               defined in \$MAIN will be built"
 }
-function help_resdir () {
-    echo "    --resdir=DIRECTORY        Specify a DIRECTORY containing resource files 
-                              (css, images,and, optionally, javascript).
-                              DEFAULT: \$STYLEROOT/static"
-}
 function help_set-date () {
     echo "    --set-date=YYYY/MM/DD     Set a publication date. If not set, the current
                               date will automatically be chosen.
@@ -1731,6 +1720,11 @@ function help_show () {
                               has been specified with --viewer or by setting
                               IMG_VIEWER in the config file
                               Default: off"
+}
+function help_statdir () {
+    echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files 
+                              (css, images,and, optionally, javascript).
+                              DEFAULT: \$STYLEROOT/static"
 }
 function help_static () {
     echo "    --static                  Normally images and css files in HTML builds  

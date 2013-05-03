@@ -42,7 +42,6 @@ EPUB_CALLOUTDIR  := $(EPUB_IMGDIR)/callouts
 #EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
 #		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_CALLOUTDIR)
-EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
 
 # Images
 #
@@ -64,8 +63,17 @@ EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 
 #--stringparam "admon.graphics.path=admons/"
 
-ifdef EPUB_CSS
-  EPUBSTRINGS += --stringparam "html.stylesheet=$(notdir $(EPUB_CSSFILE))"
+ifndef EPUB_CSS
+  EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)))
+  EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
+endif
+
+ifneq ($(EPUB_CSS),none)
+  EPUBSTRINGS += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
+  EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
+else
+  EPUBSTRINGS += --stringparam "html.stylesheet \"\""
+  EPUB_CSS_INFO := CSS was set to none, using no CSS
 endif
 
 # building epub requires to create an intermediate bigfile
@@ -162,6 +170,9 @@ $(EPUB_RESULT): $(EPUB_IMAGES) $(EPUB_TMPDIR)/mimetype
 $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating EPUB"
+    ifdef EPUB_CSS_INFO
+	@ccecho "info" "$(EPUB_CSS_INFO)"
+    endif
   endif
 # Fix needed due to bug? in DocBook ePUB stylesheets
 #

@@ -70,18 +70,18 @@ endif
 # If <STYLESHEETDIR>/static exists, we use it by default. We also assume that
 # parameters for [admon|callout|navig].graphics.path are correctly set in
 # the stylesheets. Alternatively, a customstatic directory can be specified
-# with the --resdir parameter.
+# with the --statdir parameter.
 # 
 # In case we have the standard docbook layout, we need to set
 # [admon|callout|navig].graphics.path. IS_STATIC is used to determine
 # whether we have a static die (IS_STATIC=static) or not.
 #
-# Set the styleimage directory. If no custom directory is set with --resdir,
+# Set the styleimage directory. If no custom directory is set with --statdir,
 # it can either be <STYLEROOT>/static or <STYLEROOT>/images. If both exist,
 # static will be used (firstword function)
 #
-ifdef RES_DIR
-  STYLEIMG  := $(RES_DIR)
+ifdef STATIC_DIR
+  STYLEIMG  := $(STATIC_DIR)
   IS_STATIC := static
 else
   STYLEIMG := $(firstword $(wildcard \
@@ -91,14 +91,11 @@ else
   ifndef HTML_CSS
     ifneq ($(IS_STATIC),static)
       HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEHTML))*.css)))
+      ifeq ($(VERBOSITY),1)
+	HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
+      endif
     endif
   endif
-endif
-
-# Undefining HTNL CSS if set to none
-#
-ifeq ($(HTML_CSS),none)
-  override HTML_CSS :=
 endif
 
 HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
@@ -116,17 +113,22 @@ ifneq ($(IS_STATIC),static)
 # builds (draft_html.png). The original DocBook Stylesheets use draft.png for
 # _both_ HML and FO
 
-# HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
-#		     $(wildcard $(STYLEIMG)/draft_html.png \
-#		     $(STYLEIMG)/draft.png)))
+  HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
+		     $(wildcard $(STYLEIMG)/draft_html.png \
+		     $(STYLEIMG)/draft.png)))
 
-#  ifdef HTML_DRAFT_IMG
-#    HTMLSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
-#  endif
+  ifdef HTML_DRAFT_IMG
+    HTMLSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
+  endif
 endif
 
 ifdef HTML_CSS
-  HTMLSTRINGS += --stringparam "html.stylesheet=$(notdir $(HTML_CSS))"
+  ifneq ($(HTML_CSS),none)
+    HTMLSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(HTML_CSS))"
+  else
+    HTML_CSS_INFO := CSS was set to none, using no CSS
+    HTMLSTRINGS += --stringparam "html.stylesheet=\"\""
+  endif
 endif
 
 # inline Images
@@ -141,11 +143,8 @@ html: list-images-multisrc list-images-missing copy_static_images
 ifdef FOR_HTML_IMAGES
   html: $(FOR_HTML_IMAGES) copy_inline_images
 endif
-ifdef HTML_CSS
-  html: copycss
-endif
 html: $(HTML_RESULT) 
-	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META) and RES_DIR=$(RES_DIR):\n$<"
+	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
 #--------------
 # HTML-SINGLE
@@ -154,9 +153,6 @@ html: $(HTML_RESULT)
 single-html: list-images-multisrc list-images-missing copy_static_images
 ifdef FOR_HTML_IMAGES
   single-html: $(FOR_HTML_IMAGES) copy_inline_images
-endif
-ifdef HTML_CSS
-  single-html: copycss
 endif
 single-html: $(HTMLSINGLE_RESULT)
 	@ccecho "result" "SINGLE-HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
@@ -169,9 +165,6 @@ jsp: list-images-multisrc list-images-missing copy_static_images
 ifdef FOR_HTML_IMAGES
   jsp: $(FOR_HTML_IMAGES) copy_inline_images
 endif
-ifdef HTML_CSS
-  jsp: copycss
-endif
 jsp: $(HTML_RESULT) 
 	@ccecho "result" "Find the JSP book at:\n$<"
 
@@ -182,7 +175,7 @@ jsp: $(HTML_RESULT)
 
 # create HTMLDIR and HTMLSIR/static:
 #
-$(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static:
+$(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 	mkdir -p $@
 
 # option --clean removes the contents of the HTML result directory
@@ -201,14 +194,14 @@ clean_html: | $(HTML_DIR)
 .PHONY: copy_static_images
 ifneq ($(IS_STATIC),static)
   copy_static_images: | $(HTML_DIR)/static
+    ifdef HTML_CSS
+      copy_static_images: | $(HTML_DIR)/static/css
+    endif
   copy_static_images: $(STYLEIMG)
     ifeq ($(STATIC_HTML), 1)
 	tar cph --exclude-vcs -C $(dir $<) images | \
 	  (cd $(HTML_DIR)/static; tar xpv) >/dev/null
     else
-	if [ -d $(HTML_DIR)/static/images ]; then \
-	  rm -rf $(HTML_DIR)/static/*; \
-	fi
 	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static
     endif
 else
@@ -218,11 +211,13 @@ else
 	tar cph --exclude-vcs -C $(dir $<) static | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
     else
-	if [ -d $(HTML_DIR)/static ]; then \
-	  rm -rf $(HTML_DIR)/static; \
-	fi
-	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/static
+	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/
     endif
+endif
+ifdef HTML_CSS
+  ifneq ($(HTML_CSS),none)
+	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(HTML_DIR)/static/css/
+  endif
 endif
 
 # inline images
@@ -237,16 +232,6 @@ copy_inline_images: | $(HTML_DIR)/images
 copy_inline_images: $(FOR_HTML_IMAGES)
 	for IMG in $(FOR_HTML_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
 
-
-# copy CSS file.
-#
-# Make this target phony in order to make sure an existing CSS file is
-# overwritten when a different file was specified on the command line
-#
-.PHONY: copycss
-copycss $(HTML_DIR)/$(notdir $(HTML_CSS)): | $(HTML_DIR)
-copycss $(HTML_DIR)/$(notdir $(HTML_CSS)): $(HTML_CSS)
-	$(HTML_GRAPH_COMMAND) $< $(HTML_DIR)/
 
 #---------------
 # Generate HTML or JSP from profiled xml
@@ -264,6 +249,9 @@ endif
 $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating HTML pages"
+    ifdef HTML_CSS_INFO
+	@ccecho "info" "$(HTML_CSS_INFO)"
+    endif
   endif
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(MANIFEST) \
 	  $(XSLTPARAM) --xinclude --stylesheet $(STYLEHTML) \
@@ -286,6 +274,9 @@ endif
 $(HTMLSINGLE_RESULT): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating single HTML page"
+    ifdef HTML_CSS_INFO
+	@ccecho "info" "$(HTML_CSS_INFO)"
+    endif
   endif
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  --output $@ --xinclude --stylesheet $(STYLEHTMLSINGLE) \
