@@ -10,7 +10,7 @@
 -->
 <!DOCTYPE xsl:stylesheet
 [
-  <!ENTITY www "http://docbook.sourceforge.net/release/xsl/current/xhtml">
+  <!ENTITY www "../../xhtml">
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:exsl="http://exslt.org/common"
@@ -47,7 +47,7 @@
     <xsl:variable name="isprev"  select="generate-id($this.book) = generate-id($prev.book)"/>
     <xsl:variable name="isup"    select="generate-id($this.book) = generate-id($up)"/>
 
-    <xsl:message>html.head gefunden: <xsl:value-of
+    <!--<xsl:message>html.head: <xsl:value-of
       select="local-name()"/> "<xsl:apply-templates select="$this"
         mode="title.markup"/>"
       this.book: <xsl:value-of select="local-name($this.book)"/> "<xsl:apply-templates select="$this.book" mode="title.markup"/>"
@@ -56,7 +56,7 @@
       isnext: <xsl:value-of select="concat($isnext, ' ', local-name($next))"/>
       isprev: <xsl:value-of select="concat($isprev, ' ', local-name($prev))"/>
       isup:   <xsl:value-of select="$isup"/>
-    </xsl:message>
+    </xsl:message>-->
     <head>
       <xsl:call-template name="system.head.content"/>
       <xsl:call-template name="head.content"/>
