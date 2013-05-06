@@ -20,7 +20,7 @@
     <xsl:param name="info-type" select="'markup-prefaced'"/>
     <xsl:variable name="products" select="(ancestor-or-self::*/*/productname)[last()] |
                                           (ancestor-or-self::*/*/productnumber)[last()]"/>
-    <xsl:message>This is the info-type here: <xsl:value-of select="$info-type"/>!</xsl:message>
+    <xsl:message>(Inner) info-type: <xsl:value-of select="$info-type"/>!</xsl:message>
     <xsl:if test="$generate.version.info != 0 and $products and
                   (local-name(.) = 'article' or local-name(.) = 'book')">
       <xsl:call-template name="add.version.info.inner">
@@ -39,13 +39,13 @@
       <xsl:apply-templates select="$products[self::productnumber]"/>
     </xsl:variable>
 
-    <xsl:message>Product: <xsl:value-of select="$output-product"/> and info-type here: <xsl:value-of select="$info-type"/>!
+    <xsl:message>(Inner) product: <xsl:value-of select="$output-product"/>, info-type: <xsl:value-of select="$info-type"/>!
     </xsl:message>
     <xsl:choose>
       <xsl:when test="starts-with($info-type, 'markup')">
         <!-- $type = 'markup' or 'markup-prefaced' -->
         <div class="version-info">
-          <xsl:if test="position = 'markup-prefaced'">
+          <xsl:if test="$info-type = 'markup-prefaced'">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">version.info</xsl:with-param>
             </xsl:call-template>
