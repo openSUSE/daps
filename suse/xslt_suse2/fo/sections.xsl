@@ -177,10 +177,26 @@
     <fo:block font-size="&small;pt" font-weight="bold"
               space-before="1.12em" space-after="0.75em"
        keep-with-next="always">
-      <xsl:value-of select="title" /> 
+      <xsl:value-of select="title" />
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
       <xsl:apply-templates/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="bridgehead[parent::sect1[@role='legal']]">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <fo:block id="{$id}"
+            xsl:use-attribute-sets="section.level2.properties">
+    <fo:block font-size="&x-small;pt"
+      keep-with-next="always"
+      space-before="1.12em" space-after="0.5em"
+      space-after.precedence="2">
+      <xsl:apply-templates/> 
     </fo:block>
   </fo:block>
 </xsl:template>
@@ -194,9 +210,9 @@
             xsl:use-attribute-sets="section.level2.properties">
     <fo:block font-size="&x-small;pt"
       keep-with-next="always"
-      space-before="1.12em" space-after="0.5em" 
+      space-before="1.12em" space-after="0.5em"
       space-after.precedence="2">
-      <xsl:value-of select="title"/> 
+      <xsl:value-of select="title"/>
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
       <xsl:apply-templates/>
@@ -213,7 +229,7 @@
             xsl:use-attribute-sets="section.level3.properties">
     <fo:block font-size="&x-small;pt" font-style="italic"
       space-before="1.12em" space-after="0.5em" >
-      <xsl:value-of select="title"/> 
+      <xsl:value-of select="title"/>
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
       <xsl:apply-templates/>
@@ -229,7 +245,7 @@
   <fo:block id="{$id}"
             xsl:use-attribute-sets="section.level4.properties">
     <fo:block font-size="&x-small;pt" font-weight="normal">
-      <xsl:value-of select="title"/> 
+      <xsl:value-of select="title"/>
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
       <xsl:apply-templates/>
