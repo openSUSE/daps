@@ -510,19 +510,38 @@
     <xsl:param name="content">
       <xsl:apply-imports/>
     </xsl:param>
+    
+    <xsl:call-template name="chunk-element-content-html">
+      <xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="next" select="$next"/>
+      <xsl:with-param name="prev" select="$prev"/>
+      <xsl:with-param name="nav.context" select="$nav.context"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- 
+     Needed to allow customization by drupal/xhtml/chunk.xsl
+     (cirumvent import issues with <xsl:apply-imports/>)
+  -->
+  <xsl:template name="chunk-element-content-html">
+    <xsl:param name="prev"/>
+    <xsl:param name="next"/>
+    <xsl:param name="nav.context"/>
+    <xsl:param name="content"/>
+    
     <xsl:variable name="lang">
       <xsl:apply-templates select="(ancestor-or-self::*/@lang)[last()]" mode="html.lang.attribute"/>
     </xsl:variable>
-
+    
     <xsl:call-template name="user.preroot"/>
-
+    
     <html lang="{$lang}" xml:lang="{$lang}">
       <xsl:call-template name="root.attributes"/>
       <xsl:call-template name="html.head">
         <xsl:with-param name="prev" select="$prev"/>
         <xsl:with-param name="next" select="$next"/>
       </xsl:call-template>
-
+      
       <body>
         <xsl:call-template name="body.attributes"/>
         <xsl:call-template name="body.class.attribute"/>
@@ -555,13 +574,13 @@
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="nav.context" select="$nav.context"/>
           </xsl:call-template>
-
+          
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
             <xsl:call-template name="metadata"/>
-
+            
             <xsl:copy-of select="$content"/>
-
+            
             <div class="page-bottom">
               <xsl:call-template name="bottom.navigation">
                 <xsl:with-param name="prev" select="$prev"/>
@@ -580,13 +599,13 @@
         </div>
         
         <div id="_footer-wrap">
-        <xsl:call-template name="user.footer.content"/>
-
-        <xsl:call-template name="user.footer.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
+          <xsl:call-template name="user.footer.content"/>
+          
+          <xsl:call-template name="user.footer.navigation">
+            <xsl:with-param name="prev" select="$prev"/>
+            <xsl:with-param name="next" select="$next"/>
+            <xsl:with-param name="nav.context" select="$nav.context"/>
+          </xsl:call-template>
         </div>
       </body>
     </html>
