@@ -15,8 +15,9 @@
 <xsl:stylesheet version="1.0"
   xmlns:exsl="http://exslt.org/common"
   xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://www.w3.org/1999/xhtml"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="exsl">
+  exclude-result-prefixes="exsl h">
   
   <xsl:import href="&www;/chunk.xsl"/>
   <!--<xsl:import href="&www;/chunk-common.xsl"/>
@@ -173,6 +174,42 @@
   </xsl:template>
   
   
+  <xsl:template name="chunk-element-content">
+    <xsl:param name="prev"/>
+    <xsl:param name="next"/>
+    <xsl:param name="nav.context"/>
+    <xsl:param name="content">
+      <xsl:apply-imports/>
+    </xsl:param>
+    
+    <xsl:variable name="full-contents">
+      <xsl:call-template name="chunk-element-content-html">
+        <xsl:with-param name="content" select="$content"/>
+        <xsl:with-param name="next" select="$next"/>
+        <xsl:with-param name="prev" select="$prev"/>
+        <xsl:with-param name="nav.context" select="$nav.context"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="html" select="exsl:node-set($full-contents)/*"/>
+    
+    <xsl:apply-templates select="$html" mode="drupal"/>
+  </xsl:template>
+  
+  <xsl:template match="node() | @*" mode="drupal">
+    <xsl:copy>
+      <xsl:apply-templates select="@* | node()" mode="drupal"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="h:div[@class='page-bottom']" mode="drupal"/>
+  <xsl:template match="h:div[@class='line']" mode="drupal"/>
+  
+ <!-- <xsl:template match="" mode="drupal">
+    
+    <xsl:apply-templates mode="drupal"/>
+  </xsl:template>-->
+  
+  <!-- ========================================================= -->
   <xsl:template name="inline.sansseq">
   <xsl:param name="content">
     <xsl:call-template name="anchor"/>
