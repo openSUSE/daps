@@ -77,6 +77,11 @@
  -->
  <xsl:template name="head.content">
   <xsl:param name="node" select="."/>
+  <xsl:param name="version">
+    <xsl:call-template name="add.version.info">
+      <xsl:with-param name="type" select="'plain'"/>
+    </xsl:call-template>
+  </xsl:param>
   <xsl:param name="title">
     <xsl:choose>
       <xsl:when test="(bookinfo | articleinfo | setinfo)/title">
@@ -102,6 +107,9 @@
           <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
         </xsl:otherwise>
       </xsl:choose>
+    </xsl:if>
+    <xsl:if test="$version != ''">
+      <xsl:text> | </xsl:text><xsl:value-of select="$version"/>
     </xsl:if>
   </xsl:param>
 

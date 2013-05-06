@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
    Purpose:
      Create customized title pages for book and article
-     
+
    See Also:
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
 
-   Author:    Thomas Schraitle <toms@opensuse.org>
-              Stefan Knorr <sknorr (AT) suse DOT de>
-   Copyright: 2012, Thomas Schraitle
+   Author:    Thomas Schraitle <toms@opensuse.org>,
+              Stefan Knorr <sknorr@suse.de>
+   Copyright: 2012, 2013, Thomas Schraitle, Stefan Knorr
 
 -->
 <xsl:stylesheet version="1.0"
@@ -17,26 +17,48 @@
   xmlns="http://www.w3.org/1999/xhtml">
 
   <xsl:template name="add.version.info">
+    <xsl:param name="info-type" select="'markup-prefaced'"/>
     <xsl:variable name="products" select="(ancestor-or-self::*/*/productname)[last()] |
                                           (ancestor-or-self::*/*/productnumber)[last()]"/>
+    <xsl:message>This is the info-type here: <xsl:value-of select="$info-type"/>!</xsl:message>
     <xsl:if test="$generate.version.info != 0 and $products and
                   (local-name(.) = 'article' or local-name(.) = 'book')">
       <xsl:call-template name="add.version.info.inner">
         <xsl:with-param name="products" select="$products"/>
+        <xsl:with-param name="info-type" select="$info-type"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
 
   <xsl:template name="add.version.info.inner">
     <xsl:param name="products"/>
-    <div class="version-info">
-      <xsl:call-template name="gentext">
-        <xsl:with-param name="key">version.info</xsl:with-param>
-      </xsl:call-template>
+    <xsl:param name="info-type"/>
+    <xsl:variable name="output-product">
       <xsl:apply-templates select="$products[self::productname]"/>
       <xsl:text> </xsl:text>
       <xsl:apply-templates select="$products[self::productnumber]"/>
-    </div>
+    </xsl:variable>
+
+    <xsl:message>Product: <xsl:value-of select="$output-product"/> and info-type here: <xsl:value-of select="$info-type"/>!
+    </xsl:message>
+    <xsl:choose>
+      <xsl:when test="starts-with($info-type, 'markup')">
+        <!-- $type = 'markup' or 'markup-prefaced' -->
+        <div class="version-info">
+          <xsl:if test="position = 'markup-prefaced'">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key">version.info</xsl:with-param>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="$output-product"/>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- $type = 'plain' -->
+        <xsl:value-of select="$output-product"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 
@@ -213,6 +235,11 @@
   </xsl:template>
   
   <xsl:template name="book.titlepage.recto">
+
+        <xsl:call-template name="add.version.info">
+          <xsl:with-param name="info-type" select="'markup'"/>
+        </xsl:call-template>
+
         <xsl:choose>
             <xsl:when test="bookinfo/title">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
