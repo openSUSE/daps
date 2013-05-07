@@ -86,32 +86,40 @@
   <xsl:param name="product">
     <xsl:call-template name="version.info"/>
   </xsl:param>
-  <xsl:param name="title">
+  <xsl:param name="structure.title">
     <xsl:choose>
-      <xsl:when test="(bookinfo | articleinfo | setinfo)/title">
-        <xsl:apply-templates select="(bookinfo | articleinfo | setinfo)/title" mode="title.markup.textonly"/>
-      </xsl:when>
-      <xsl:when test="title | refmeta/refentrytitle">
-        <xsl:apply-templates select="(title | refmeta/refentrytitle)[last()]" mode="title.markup.textonly"/>
+      <xsl:when test="self::book or self::article or self::set">
+        <xsl:apply-templates select="title|(bookinfo | articleinfo | setinfo)/title[last()]" mode="title.markup.textonly"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key" select="local-name(.)"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="((ancestor::book | ancestor::article)[last()]/title |
+                                      (ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title)[last()]"
+           mode="title.markup.textonly"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:param>
+  <xsl:param name="substructure.title">
     <xsl:if test="not(self::book or self::article or self::set)">
-      <xsl:copy-of select="$head.content.title.separator"/>
       <xsl:choose>
-        <xsl:when test="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title">
-          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/*[contains(local-name(), 'info')]/title"
-           mode="title.markup.textonly"/>
+        <xsl:when test="title | refmeta/refentrytitle">
+          <xsl:apply-templates select="(title | refmeta/refentrytitle)[last()]" mode="title.markup.textonly"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="(ancestor::book | ancestor::article)[last()]/title" mode="title.markup.textonly"/>
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="local-name(.)"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
+  </xsl:param>
+
+  <xsl:param name="title">
+    <xsl:if test="$substructure.title != ''">
+      <xsl:value-of select="concat($substructure.title, $head.content.title.separator)"/>
+    </xsl:if>
+
+    <xsl:value-of select="$structure.title"/>
+
     <xsl:if test="$product != ''">
       <xsl:value-of select="concat($head.content.title.separator, $product)"/>
     </xsl:if>
