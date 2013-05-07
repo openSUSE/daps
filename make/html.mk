@@ -281,5 +281,5 @@ $(HTMLSINGLE_RESULT): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  --output $@ --xinclude --stylesheet $(STYLEHTMLSINGLE) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-	(cd $(HTML_DIR) && ln -sf $@ index.html)
+	(cd $(HTML_DIR) && ln -sf $(notdir $@) index.html)
 
