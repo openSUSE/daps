@@ -628,18 +628,6 @@
 
 <!-- ======================================================================= -->
 
-  <xsl:template name="add.version.info">
-    <xsl:variable name="products" select="(ancestor-or-self::*/*/productname)[last()] |
-                                          (ancestor-or-self::*/*/productnumber)[last()]"/>
-    <xsl:if test="$generate.version.info != 0 and $products">
-      <xsl:call-template name="add.version.info.inner">
-        <xsl:with-param name="products" select="$products"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
-<!-- ======================================================================= -->
-
   <xsl:template name="bubble-toc">
     <xsl:call-template name="bubble-toc.inner">
       <xsl:with-param name="node" select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>

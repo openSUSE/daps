@@ -16,49 +16,86 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
-  <xsl:template name="add.version.info">
-    <xsl:param name="info-type" select="'markup-prefaced'"/>
-    <xsl:variable name="products" select="(ancestor-or-self::*/*/productname)[last()] |
-                                          (ancestor-or-self::*/*/productnumber)[last()]"/>
-    <xsl:message>(Inner) info-type: <xsl:value-of select="$info-type"/>!</xsl:message>
-    <xsl:if test="$generate.version.info != 0 and $products and
-                  (local-name(.) = 'article' or local-name(.) = 'book')">
-      <xsl:call-template name="add.version.info.inner">
-        <xsl:with-param name="products" select="$products"/>
-        <xsl:with-param name="info-type" select="$info-type"/>
+  <xsl:template name="product.name">
+    <xsl:param name="plain" select="1"/>
+
+    <xsl:choose>
+      <xsl:when test="$plain = 1">
+        <xsl:value-of select="(ancestor-or-self::*/*/productname)[last()]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productname)[last()]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="product.number">
+    <xsl:param name="plain" select="1"/>
+
+    <xsl:choose>
+      <xsl:when test="$plain = 1">
+        <xsl:value-of select="(ancestor-or-self::*/*/productnumber)[last()]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber)[last()]"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="version.info">
+    <xsl:param name="prefaced" select="0"/>
+    <xsl:param name="plain" select="1"/>
+    <xsl:variable name="product-name">
+      <xsl:call-template name="product.name">
+        <xsl:with-param name="plain" select="$plain"/>
       </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="product-number">
+      <xsl:call-template name="product.number">
+        <xsl:with-param name="plain" select="$plain"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:if test="$prefaced = 1 and ($product-name != '' or $product-number != '')">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">version.info</xsl:with-param>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$product-name"/>
+    <xsl:if test="$product-name != '' and $product-number != ''">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$product-number"/>
+  </xsl:template>
+
+
+  <xsl:template name="version.info.page-top">
+    <xsl:variable name="info-text">
+      <xsl:call-template name="version.info">
+        <xsl:with-param name="plain" select="0"/>
+        <xsl:with-param name="prefaced" select="1"/>
+      </xsl:call-template>
+    </xsl:variable>
+  
+    <xsl:if test="$generate.version.info != 0 and $info-text != '' and
+                  (local-name(.) = 'article' or local-name(.) = 'book')">
+      <div class="version-info"><xsl:value-of select="$info-text"/></div>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="add.version.info.inner">
-    <xsl:param name="products"/>
-    <xsl:param name="info-type"/>
-    <xsl:variable name="output-product">
-      <xsl:apply-templates select="$products[self::productname]"/>
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates select="$products[self::productnumber]"/>
-    </xsl:variable>
 
-    <xsl:message>(Inner) product: <xsl:value-of select="$output-product"/>, info-type: <xsl:value-of select="$info-type"/>!
-    </xsl:message>
-    <xsl:choose>
-      <xsl:when test="starts-with($info-type, 'markup')">
-        <!-- $type = 'markup' or 'markup-prefaced' -->
-        <div class="version-info">
-          <xsl:if test="$info-type = 'markup-prefaced'">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">version.info</xsl:with-param>
-            </xsl:call-template>
-          </xsl:if>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="$output-product"/>
-        </div>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- $type = 'plain' -->
-        <xsl:value-of select="$output-product"/>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template name="version.info.headline">
+    <xsl:variable name="info-text">
+      <xsl:call-template name="version.info">
+        <xsl:with-param name="plain" select="0"/>
+        <xsl:with-param name="prefaced" select="0"/>
+      </xsl:call-template>
+    </xsl:variable>
+  
+    <xsl:if test="$generate.version.info != 0 and $info-text != ''">
+      <h6 class="version-info"><xsl:value-of select="$info-text"/></h6>
+    </xsl:if>
   </xsl:template>
 
 
@@ -108,25 +145,25 @@
 
   <!-- ===================================================== -->
   <xsl:template name="part.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="preface.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="appendix.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="glossary.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="reference.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="chapter.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   <xsl:template name="bibliography.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   
 
@@ -153,7 +190,7 @@
   </xsl:template>
 
   <xsl:template name="article.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
 
   <xsl:template name="article.titlepage.recto">
@@ -231,14 +268,12 @@
   <xsl:template name="book.titlepage.separator"/>
   
   <xsl:template name="book.titlepage.before.recto">
-    <xsl:call-template name="add.version.info"/>
+    <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
   
   <xsl:template name="book.titlepage.recto">
 
-        <xsl:call-template name="add.version.info">
-          <xsl:with-param name="info-type" select="'markup'"/>
-        </xsl:call-template>
+        <xsl:call-template name="version.info.headline"/>
 
         <xsl:choose>
             <xsl:when test="bookinfo/title">

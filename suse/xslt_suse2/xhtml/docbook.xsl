@@ -77,10 +77,14 @@
  -->
  <xsl:template name="head.content">
   <xsl:param name="node" select="."/>
-  <xsl:param name="version">
-    <xsl:call-template name="add.version.info">
-      <xsl:with-param name="type" select="'plain'"/>
-    </xsl:call-template>
+  <xsl:param name="product-name">
+    <xsl:call-template name="product.name"/>
+  </xsl:param>
+  <xsl:param name="product-number">
+    <xsl:call-template name="product.number"/>
+  </xsl:param>
+  <xsl:param name="product">
+    <xsl:call-template name="version.info"/>
   </xsl:param>
   <xsl:param name="title">
     <xsl:choose>
@@ -108,8 +112,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
-    <xsl:if test="$version != ''">
-      <xsl:text> | </xsl:text><xsl:value-of select="$version"/>
+    <xsl:if test="$product != ''">
+      <xsl:text> | </xsl:text><xsl:value-of select="$product"/>
     </xsl:if>
   </xsl:param>
 
@@ -142,6 +146,13 @@
   </xsl:if>
 
   <meta name="generator" content="DocBook {$DistroTitle} V{$VERSION}"/>
+
+  <xsl:if test="$product-name != ''">
+    <meta name="product-name" content="{$product-name}"/>
+  </xsl:if>
+  <xsl:if test="$product-number != ''">
+    <meta name="product-number" content="{$product-number}"/>
+  </xsl:if>
 
   <xsl:if test="$generate.meta.abstract != 0">
     <xsl:variable name="info" select="(articleinfo|bookinfo|prefaceinfo|chapterinfo|appendixinfo|
