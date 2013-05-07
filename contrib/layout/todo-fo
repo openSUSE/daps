@@ -4,27 +4,17 @@ FO Stylesheet Bugs
 Status: * = NEW, W = WONTFIX, F = FIXED, L = Later, I = IRREPRODUCIBLE
 Priority: P1 (very important) ... P5 (nice to have)
 
-#1  F P1  Remove ugly line at the top of pages
-#2  F P1  Either find better serif font or adapt size, so x-height/ascenders
-          better match Open Sans/DejaVu Sans Mono – no luck thus far among open
-          fonts
 #3  * P1  Re: "verbatim" areas: Find out why FOP tries to hyphenate after many
           " " or "-" characters, no matter where they are on the line (See e.g.
           "Example 5.3.  Pretty-printed Output ..." in the DAPS User Guide);
           DcBk-FO parameter hyphenate.verbatim.characters might be relevant.
           (see: http://sourceforge.net/p/daps/tickets/135/ )
-#4  F P1  Set various things in monospaced font, like commands and keycaps
 #5  * P2  TOC: Make sure entire line is a link, not just the page number
-#6  * P1  Make sure all titles are set in &sans; (Examples/Figures, in TOC,
-          etc.)
 #7  * P3  <refentry>s don't get linked to from the TOC
 #8  * P3  Find out what's behind <l:gentext> keys like "fop1.body.font.family"
           etc.
-#9  * P2  Remove hyphenation in titles (ragged right text should rather not be
+#9  I P2  Remove hyphenation in titles (ragged right text should rather not be
           hyphenated)
-#10 F P1  <keycap function="..."> does not work—should add text Alt, Ctrl, etc.
-#11 F P1  Too many pages of GFDL... (fixed for books, partly fixed for articles)
-#12 F P1  <replacement>s don't get the right font size in body text
 #13 * P1  TOC is not listed in the PDF bookmarks
 #14 * P2  TOC is pretty heavy-weight (see also mockup for parts)
 #15 * P2  request for refnamediv title (see component.xsl's split.title)
@@ -42,18 +32,14 @@ Priority: P1 (very important) ... P5 (nice to have)
 #21 * P4  Deeply nested admonitions (see docs_to_test) look terrible – leaving
           out the icon in that case would improve the situation, however, the
           correct element for that case would seem to be a fo:block instead of
-          a fo:list (the case wa have in docs_to_test is tip/variablelist/
+          a fo:list (the case we have in docs_to_test is tip/variablelist/
           warning/itemizedlist/table/admonition, though something similar may
           happen if admonitions are nested in multi-column tables)
-#22 * P2  Use bigger bullets in lists
-#23 * P2  Tables with screens in them seem to contain unnecessary space at the
+#23 I P2  Tables with screens in them seem to contain unnecessary space at the
           bottom
 #24 * P1  Style headlines of examples etc. (make sure distances are right)
-#25 * P1  Unnamed/simple links don't get arrow symbol
 #26 * P1  See-alsos don't look like links (maybe they don't need to, but italic
           text seems in order)
-#27 * P2  Extend monospace font size adjustment to monospace inside links/xrefs
-#28 F P1  Glossary/appendix/preface, etc. style should match chapter style
 #29 * P4  Try to avoid breaks within e.g. parameters (--\ pretty, etc.)
 #30 * P3  Some text comes out wrong when selecting it inside the PDF (not sure
           if we can do anything about that) (unsure when exactly it happens –
@@ -68,10 +54,9 @@ Priority: P1 (very important) ... P5 (nice to have)
           Part title pages
 #34 * P2  It is not always clear what belongs to an example and what does not –
           maybe examples should look the same as procedures?
-#35 * P2  GFDL numbering broken (2 → F.2, etc.)
+#35 * P2  GFDL numbering broken (2 → F.2, etc.) – these use bridgeheads rendered
+          as sect1's in lieu of sect2's – more of a structural problem
 #36 * P3  Mark end of parts (or beginning of next structural item?) – rule? dot?
-#37 F P2  Text in tables should not be justified
-#38 F P1  Make new layout b/w compatible – c/f daps#137
 #39 * P4  Localise draft image (use up to 10 characters from gentext:"Draft" for
           the current language) (draft page masters currently use fo-external-
           image; to realise this idea, I would need to be able to use an
@@ -79,5 +64,5 @@ Priority: P1 (very important) ... P5 (nice to have)
           single draft master page, doing it upstream might be the only sane
           option – so not doing this for now)
 #40 * P1  Adapt table layout
-#41 F P1  Blank draft page master "does not exist"
 #42 * P3  Investigate better hyphenation with FOP, as described in bnc#817793
+#44 /
