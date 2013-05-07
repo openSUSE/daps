@@ -113,11 +113,11 @@
       </xsl:choose>
     </xsl:if>
     <xsl:if test="$product != ''">
-      <xsl:text> | </xsl:text><xsl:value-of select="$product"/>
+      <xsl:value-of select="concat($head.content.title.separator, $product)"/>
     </xsl:if>
   </xsl:param>
 
-  <title><xsl:copy-of select="$title"/></title>
+  <title><xsl:value-of select="$title"/></title>
 
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
