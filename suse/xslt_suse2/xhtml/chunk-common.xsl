@@ -2,8 +2,7 @@
 <!-- 
    Purpose:
      Create structure of chunked contents
-     
-     
+
    See Also:
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
@@ -19,14 +18,14 @@
   <!ENTITY www "http://docbook.sourceforge.net/release/xsl/current/xhtml">
   <!ENTITY nbsp "&#xa0;">
 ]>
-<xsl:stylesheet version="1.0"  
+<xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
     exclude-result-prefixes="exsl l t">
-  
+
   <xsl:import href="&www;/chunk-common.xsl"/>
 
   <!-- ===================================================== -->
@@ -85,7 +84,7 @@
     <xsl:param name="next"/>
     <xsl:param name="context">header</xsl:param>
     <xsl:param name="debug"/>
-    
+
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
         <xsl:choose>
@@ -123,7 +122,7 @@
         <xsl:with-param name="key">formathtml</xsl:with-param>
       </xsl:call-template>
     </a>
-    <a  href="#">
+    <a href="#">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">formatsinglehtml</xsl:with-param>
       </xsl:call-template>
@@ -151,7 +150,7 @@
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
-    
+
     <div id="_fixed-header-wrap" class="inactive">
       <div id="_fixed-header">
         <xsl:call-template name="breadcrumbs.navigation">
@@ -177,7 +176,7 @@
       </xsl:if>
     </div>
   </xsl:template>
-  
+
   <xsl:template name="create-find-area">
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
@@ -186,7 +185,7 @@
         <xsl:with-param name="key">find</xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
-    
+
     <div id="_find-area" class="active">
       <div class="inactive-contents">
         <a href="#" id="_find-area-button" class="tool" title="{$localisationfind}">
@@ -336,7 +335,7 @@
       </xsl:call-template>
     </xsl:variable>
   
-  <!-- 
+  <!--
      We use two node sets and calculate the set difference
      with the following, general XPath expression:
      
@@ -352,7 +351,6 @@
      node-set1: {/, set, book, chapter}
      node-set2: {/, set, } 
      setdiff:   {        book, chapter}
-     
   -->
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
   <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
@@ -429,20 +427,19 @@
     <!-- 
      We use two node sets and calculate the set difference
      with the following, general XPath expression:
-     
+
       setdiff = $node-set1[count(.|$node-set2) != count($node-set2)]
-     
+
      $node-set1 contains the ancestors of all nodes, starting with the
      current node (but the current node is NOT included in the set)
-     
+
      $node-set2 contains the ancestors of all nodes starting from the 
      node which points to the $rootid parameter
-     
+
      For example:
      node-set1: {/, set, book, chapter}
      node-set2: {/, set, } 
      setdiff:   {        book, chapter}
-     
   -->
     <xsl:variable name="ancestorrootnode"
       select="key('id', $rootid)/ancestor::*"/>
@@ -498,8 +495,7 @@
       <xsl:text> </xsl:text>
     </span>
   </xsl:template>
-  
-  
+
   <xsl:template match="*" mode="page-bottom.label"/>
 
   <!-- ===================================================== -->
@@ -510,7 +506,7 @@
     <xsl:param name="content">
       <xsl:apply-imports/>
     </xsl:param>
-    
+
     <xsl:call-template name="chunk-element-content-html">
       <xsl:with-param name="content" select="$content"/>
       <xsl:with-param name="next" select="$next"/>
@@ -519,29 +515,29 @@
     </xsl:call-template>
   </xsl:template>
 
-  <!-- 
+  <!--
      Needed to allow customization by drupal/xhtml/chunk.xsl
-     (cirumvent import issues with <xsl:apply-imports/>)
+     (circumvent import issues with <xsl:apply-imports/>)
   -->
   <xsl:template name="chunk-element-content-html">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
     <xsl:param name="content"/>
-    
+
     <xsl:variable name="lang">
       <xsl:apply-templates select="(ancestor-or-self::*/@lang)[last()]" mode="html.lang.attribute"/>
     </xsl:variable>
-    
+
     <xsl:call-template name="user.preroot"/>
-    
+
     <html lang="{$lang}" xml:lang="{$lang}">
       <xsl:call-template name="root.attributes"/>
       <xsl:call-template name="html.head">
         <xsl:with-param name="prev" select="$prev"/>
         <xsl:with-param name="next" select="$next"/>
       </xsl:call-template>
-      
+
       <body>
         <xsl:call-template name="body.attributes"/>
         <xsl:call-template name="body.class.attribute"/>
@@ -554,33 +550,33 @@
                 <xsl:with-param name="prev" select="$prev"/>
                 <xsl:with-param name="next" select="$next"/>
               </xsl:call-template>
-              
+
               <xsl:call-template name="clearme"/>
             </div>
           </div>
-          
+
           <xsl:call-template name="toolbar-wrap">
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
-          
+
           <xsl:call-template name="fixed-header-wrap">
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="prev" select="$prev"/>
           </xsl:call-template>
-          
+
           <xsl:call-template name="user.header.navigation">
             <xsl:with-param name="prev" select="$prev"/>
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="nav.context" select="$nav.context"/>
           </xsl:call-template>
-          
+
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
             <xsl:call-template name="metadata"/>
-            
+
             <xsl:copy-of select="$content"/>
-            
+
             <div class="page-bottom">
               <xsl:call-template name="bottom.navigation">
                 <xsl:with-param name="prev" select="$prev"/>
