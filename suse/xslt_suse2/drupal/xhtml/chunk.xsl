@@ -201,13 +201,16 @@
     </xsl:copy>
   </xsl:template>
   
+  <xsl:template match="h:div[@id='_outer-wrap']" mode="drupal">
+    <xsl:apply-templates select="h:div[@id='_content']" mode="drupal"/>
+  </xsl:template>
+  
+  <xsl:template match="h:div[@id='_white-bg']" mode="drupal"/>
+  <xsl:template match="h:div[@id='_toolbar-wrap']" mode="drupal"/>
+  <xsl:template match="h:div[@id='_fixed-header-wrap']" mode="drupal"/>
   <xsl:template match="h:div[@class='page-bottom']" mode="drupal"/>
   <xsl:template match="h:div[@class='line']" mode="drupal"/>
   
- <!-- <xsl:template match="" mode="drupal">
-    
-    <xsl:apply-templates mode="drupal"/>
-  </xsl:template>-->
   
   <!-- ========================================================= -->
   <xsl:template name="inline.sansseq">
