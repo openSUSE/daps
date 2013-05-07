@@ -731,6 +731,18 @@ Type '$ME <subcommand> -h' for help on a specific subcommand.
 "
 }
 
+function daps_commands () {
+    # show a list of available subcommands from the SUBCOMMANDS array
+    # ignore the commands set to deprecated
+    local VAL
+    
+    for VAL in "${SUBCOMMANDS[@]}"; do
+        if [[ -n "${VAL##*=deprecated}" ]]; then
+            echo ${VAL%%=*}
+        fi
+    done | sort
+}
+
 
 # ---------
 # Clean up
@@ -979,7 +991,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n $ME -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n $ME -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1005,7 +1017,11 @@ while true ; do
             COLOR_CMDL=$2
             export COLOR="$COLOR_CMDL"
             shift 2
-            ;;      
+            ;;
+        --commands)
+            daps_commands
+            exit 0
+            ;;
         -d|--docconfig|-e|--envfile)
             # make path absolute and strip trailing slash
             sanitize_path "$2" "DOCCONF_CMDL"
