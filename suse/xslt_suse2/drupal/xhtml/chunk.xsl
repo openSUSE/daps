@@ -207,6 +207,7 @@
   
   <xsl:template match="h:div[@id='_white-bg']" mode="drupal"/>
   <xsl:template match="h:div[@id='_toolbar-wrap']" mode="drupal"/>
+  <xsl:template match="h:div[@class='_footer-wrap']" mode="drupal"/>
   <xsl:template match="h:div[@id='_fixed-header-wrap']" mode="drupal"/>
   <xsl:template match="h:div[@class='page-bottom']" mode="drupal"/>
   <xsl:template match="h:div[@class='line']" mode="drupal"/>
