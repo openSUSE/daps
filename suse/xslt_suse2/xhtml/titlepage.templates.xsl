@@ -17,43 +17,20 @@
   xmlns="http://www.w3.org/1999/xhtml">
 
   <xsl:template name="product.name">
-    <xsl:param name="plain" select="1"/>
-
-    <xsl:choose>
-      <xsl:when test="$plain = 1">
-        <xsl:value-of select="(ancestor-or-self::*/*/productname)[last()]"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="(ancestor-or-self::*/*/productname)[last()]"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="(ancestor-or-self::*/*/productname)[last()]"/>
   </xsl:template>
 
   <xsl:template name="product.number">
-    <xsl:param name="plain" select="1"/>
-
-    <xsl:choose>
-      <xsl:when test="$plain = 1">
-        <xsl:value-of select="(ancestor-or-self::*/*/productnumber)[last()]"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber)[last()]"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber)[last()]"/>
   </xsl:template>
 
   <xsl:template name="version.info">
     <xsl:param name="prefaced" select="0"/>
-    <xsl:param name="plain" select="1"/>
     <xsl:variable name="product-name">
-      <xsl:call-template name="product.name">
-        <xsl:with-param name="plain" select="$plain"/>
-      </xsl:call-template>
+      <xsl:call-template name="product.name"/>
     </xsl:variable>
     <xsl:variable name="product-number">
-      <xsl:call-template name="product.number">
-        <xsl:with-param name="plain" select="$plain"/>
-      </xsl:call-template>
+      <xsl:call-template name="product.number"/>
     </xsl:variable>
 
     <xsl:if test="$prefaced = 1 and ($product-name != '' or $product-number != '')">
@@ -62,25 +39,24 @@
       </xsl:call-template>
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:value-of select="$product-name"/>
+    <xsl:copy-of select="$product-name"/>
     <xsl:if test="$product-name != '' and $product-number != ''">
       <xsl:text> </xsl:text>
     </xsl:if>
-    <xsl:value-of select="$product-number"/>
+    <xsl:copy-of select="$product-number"/>
   </xsl:template>
 
 
   <xsl:template name="version.info.page-top">
     <xsl:variable name="info-text">
       <xsl:call-template name="version.info">
-        <xsl:with-param name="plain" select="0"/>
         <xsl:with-param name="prefaced" select="1"/>
       </xsl:call-template>
     </xsl:variable>
   
     <xsl:if test="$generate.version.info != 0 and $info-text != '' and
                   (local-name(.) = 'article' or local-name(.) = 'book')">
-      <div class="version-info"><xsl:value-of select="$info-text"/></div>
+      <div class="version-info"><xsl:copy-of select="$info-text"/></div>
     </xsl:if>
   </xsl:template>
 
@@ -88,13 +64,12 @@
   <xsl:template name="version.info.headline">
     <xsl:variable name="info-text">
       <xsl:call-template name="version.info">
-        <xsl:with-param name="plain" select="0"/>
         <xsl:with-param name="prefaced" select="0"/>
       </xsl:call-template>
     </xsl:variable>
   
     <xsl:if test="$generate.version.info != 0 and $info-text != ''">
-      <h6 class="version-info"><xsl:value-of select="$info-text"/></h6>
+      <h6 class="version-info"><xsl:copy-of select="$info-text"/></h6>
     </xsl:if>
   </xsl:template>
 
