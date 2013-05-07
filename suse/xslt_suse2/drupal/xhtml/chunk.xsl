@@ -211,7 +211,7 @@
   <xsl:template match="h:div[@id='_fixed-header-wrap']" mode="drupal"/>
   <xsl:template match="h:div[@class='page-bottom']" mode="drupal"/>
   <xsl:template match="h:div[@class='line']" mode="drupal"/>
-  
+  <xsl:template match="h:link[@rel='self']" mode="drupal"/>
   
   <!-- ========================================================= -->
   <xsl:template name="inline.sansseq">
