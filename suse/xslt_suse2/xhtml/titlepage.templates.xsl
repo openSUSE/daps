@@ -166,7 +166,7 @@
   </xsl:template>
 
   <xsl:template name="article.titlepage.before.recto">
-    <xsl:call-template name="version.info.page-top"/>
+    <xsl:call-template name="version.info.headline"/>
   </xsl:template>
 
   <xsl:template name="article.titlepage.recto">
@@ -249,13 +249,10 @@
   <xsl:template name="book.titlepage.separator"/>
 
   <xsl:template name="book.titlepage.before.recto">
-<!--    <xsl:call-template name="version.info.page-top"/>-->
+    <xsl:call-template name="version.info.headline"/>
   </xsl:template>
 
   <xsl:template name="book.titlepage.recto">
-
-        <xsl:call-template name="version.info.headline"/>
-
         <xsl:choose>
             <xsl:when test="bookinfo/title">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/title"/>
