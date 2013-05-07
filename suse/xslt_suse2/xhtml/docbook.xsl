@@ -162,6 +162,11 @@
     <meta name="product-number" content="{$product-number}"/>
   </xsl:if>
 
+  <meta name="book-title" content="{$structure.title}"/>
+  <xsl:if test="$substructure.title != ''">
+    <meta name="chapter-title" content="{$substructure.title}"/>
+  </xsl:if>
+
   <xsl:if test="$generate.meta.abstract != 0">
     <xsl:variable name="info" select="(articleinfo|bookinfo|prefaceinfo|chapterinfo|appendixinfo|
               sectioninfo|sect1info|sect2info|sect3info|sect4info|sect5info
