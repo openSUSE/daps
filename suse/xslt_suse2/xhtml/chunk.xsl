@@ -34,10 +34,11 @@
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
     exclude-result-prefixes="exsl l t">
 
-<xsl:import href="docbook.xsl"/> 
-<xsl:import href="chunk-common.xsl"/>
-<xsl:include href="&www;/manifest.xsl"/>
-<xsl:include href="&www;/chunk-code.xsl"/>
+  <xsl:import href="docbook.xsl"/> 
+  <xsl:import href="chunk-common.xsl"/>
+  <xsl:include href="&www;/manifest.xsl"/>
+  <xsl:include href="&www;/chunk-code.xsl"/>
 
+  <xsl:param name="is.chunk" select="1"/>
 
 </xsl:stylesheet>

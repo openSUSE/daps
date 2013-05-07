@@ -8,8 +8,9 @@
    See Also:
      * http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
 
-   Author(s):    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Author(s):     Thomas Schraitle <toms@opensuse.org>,
+                  Stefan Knorr <sknorr@suse.de>
+   Copyright: 2012, 2013, Thomas Schraitle, Stefan Knorr
 
 -->
 
@@ -149,8 +150,10 @@ task before
   <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
 <!-- 28. SUSE specific parameters =============================== -->
+  <xsl:param name="is.chunk" select="0"/>
+
   <xsl:param name="admon.graphics.prefix">icon-</xsl:param>
-  
+
   <xsl:param name="daps.header.logo">static/images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">Logo</xsl:param>
   <xsl:param name="daps.header.js.library">static/js/jquery-1.4.2.min.js</xsl:param>
