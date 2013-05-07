@@ -55,7 +55,8 @@
     </xsl:variable>
   
     <xsl:if test="$generate.version.info != 0 and $info-text != '' and
-                  (local-name(.) = 'article' or local-name(.) = 'book')">
+                  ($is.chunk = 1 or
+                  (local-name(.) = 'article' or local-name(.) = 'book'))">
       <div class="version-info"><xsl:copy-of select="$info-text"/></div>
     </xsl:if>
   </xsl:template>
@@ -240,12 +241,17 @@
   <!-- ===================================================== -->
   <!-- book titlepage templates --> 
   <xsl:template name="set.titlepage.separator"/>
-  <xsl:template name="book.titlepage.separator"/>
-  
-  <xsl:template name="book.titlepage.before.recto">
-    <xsl:call-template name="version.info.page-top"/>
+
+  <xsl:template name="set.titlepage.before.recto">
+    <xsl:call-template name="version.info.headline"/>
   </xsl:template>
-  
+
+  <xsl:template name="book.titlepage.separator"/>
+
+  <xsl:template name="book.titlepage.before.recto">
+<!--    <xsl:call-template name="version.info.page-top"/>-->
+  </xsl:template>
+
   <xsl:template name="book.titlepage.recto">
 
         <xsl:call-template name="version.info.headline"/>
