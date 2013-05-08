@@ -114,6 +114,10 @@ $(function() {
     });
     $('#_bubble-toc > ol').not(':has(li > ol)').addClass('full-width');
     $('#_bubble-toc ol > li').not(':has(ol)').children('a').addClass('leads-to-page');
+    $('#_bubble-toc ol > li').not(':has(ol)').children('a').click(function(e) {
+        exchClass('#_bubble-toc > ol > li', 'active', 'inactive');
+        return false;
+    });
     $('#_bubble-toc ol > li').has('ol').children('a').append('<span class="arrow">&nbsp;</span>');
     $('#_bubble-toc ol ol').prepend('<li class="bubble-back"><a href="#"><span class="back-icon">&nbsp;</span></a></li>');
     $('.bubble-back').click(function(){exchClass('#_bubble-toc > ol > li', 'active', 'inactive'); return false;});
