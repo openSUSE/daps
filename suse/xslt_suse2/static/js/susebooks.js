@@ -88,7 +88,7 @@ $(function() {
     $('#_find-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_format-picker-button').click(function(){activate('_format-picker'); return false;});
     $('#_language-picker-button').click(function(){activate('_language-picker'); return false;});
-    $('#_content').click(function(){deactivate(); return true;});
+    $('html').click(function(e){deactivate(); e.stopPropagation();});
     $('#_find-input').focus(function(){unlabelInputFind();});
     $('#_find-input').blur(function(){labelInputFind();});
     $('#_find-input-label').click(function(){$('#_find-input').focus();});
