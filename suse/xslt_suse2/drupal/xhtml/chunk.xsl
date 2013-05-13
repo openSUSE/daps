@@ -213,6 +213,7 @@
   <xsl:template match="h:div[@class='line']" mode="drupal"/>
   <xsl:template match="h:link[@rel='self']" mode="drupal"/>
   <xsl:template match="h:div[@class='titlepage']" mode="drupal"/>
+  <xsl:template match="h:div[@class='sect4']/h:div[@class='titlepage']" mode="drupal"/>
   
   <!-- ========================================================= -->
   <xsl:template name="inline.sansseq">
