@@ -3,12 +3,12 @@
 
 from lxml import etree
 import os.path
-import docbook.xslt as db
+from docbook.xslt import STYLESHEETS, LOCALDBXSLPATH, xmlparser, namespaces
 
 XML_FILE = 'article.xml'
 DIRNAME = os.path.dirname(__file__)
 XML_FILE = os.path.join(DIRNAME, XML_FILE)
-DB2XHTML = os.path.join(db.LOCALDBXSLPATH, db.STYLESHEETS['xhtml-single'])
+DB2XHTML = os.path.join(LOCALDBXSLPATH, STYLESHEETS['xhtml-single'])
 
 XML_TREE = None
 XML_ROOT = None
@@ -23,10 +23,10 @@ def test_article_exists():
     assert os.path.exists(XML_FILE), 'filename %s not found' % filename
 
 
-def test_xml_parse():
+def test_xml_parse(xmlparser):
     '''checks the root element of the XML file'''
     global XML_TREE, XML_ROOT
-    XML_TREE = etree.parse(XML_FILE, db.xmlparser)    
+    XML_TREE = etree.parse(XML_FILE, xmlparser)    
     XML_ROOT = XML_TREE.getroot()
     
     assert XML_ROOT.tag == 'article', 'mismatch of root-element %s' %XML_ROOT.tag
@@ -50,11 +50,11 @@ def test_title_element():
     assert XML_TITLE != '', 'no title in your xml file!'
 
 
-def test_head_title():
+def test_head_title(namespaces):
      '''test if XML title element match with HTML title element'''
      global RESULT_TREE, XML_TITLE
      html_title = RESULT_TREE.xpath('/h:html/h:head/h:title',
-                                    namespaces = {'h':'http://www.w3.org/1999/xhtml'})
+                                    namespaces=namespaces)
      title_text = html_title[0].text
      assert title_text == XML_TITLE, 'titles dont match'
 

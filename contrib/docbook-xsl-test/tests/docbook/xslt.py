@@ -24,6 +24,7 @@ import platform
 import os
 import commands
 from lxml import etree
+import pytest
 
 __all__ = [ 'CANONICALURL', 'MAINXMLCATALOG', 'LOCALDBXSLPATH', 
             'STYLESHEETS', 'SYSTEM', 'DIST',  'XMLPARSER' ]
@@ -66,11 +67,24 @@ def getlocalpath(catalog, url):
 SYSTEM=platform.system()
 DIST=platform.linux_distribution()[0].strip()
 
-xmlparser = etree.XMLParser(ns_clean=True, 
+
+
+@pytest.fixture
+def xmlparser():
+   """Pytest fixture: returns a XMLParser object
+   """
+   return etree.XMLParser(ns_clean=True, 
                   dtd_validation=False, 
                   no_network=True, 
                   resolve_entities=False, 
                   load_dtd=False)
+
+@pytest.fixture
+def namespaces():
+   """Pytest fixture: returns a dictionary of common namespaces
+   """
+   return {'h':'http://www.w3.org/1999/xhtml'}
+
 
 if SYSTEM=="Linux":
    # Overwrite it
