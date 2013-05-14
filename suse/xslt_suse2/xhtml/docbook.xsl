@@ -98,7 +98,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="substructure.title">
+    <xsl:param name="substructure.title.short">
     <xsl:if test="not(self::book or self::article or self::set)">
       <xsl:choose>
         <xsl:when test="title | refmeta/refentrytitle">
@@ -112,10 +112,15 @@
       </xsl:choose>
     </xsl:if>
   </xsl:param>
+  <xsl:param name="substructure.title.long">
+    <xsl:if test="not(self::book or self::article or self::set)">
+       <xsl:apply-templates select="." mode="object.title.markup"/>
+    </xsl:if>
+  </xsl:param>
 
   <xsl:param name="title">
-    <xsl:if test="$substructure.title != ''">
-      <xsl:value-of select="concat($substructure.title, $head.content.title.separator)"/>
+    <xsl:if test="$substructure.title.short != ''">
+      <xsl:value-of select="concat($substructure.title.short, $head.content.title.separator)"/>
     </xsl:if>
 
     <xsl:value-of select="$structure.title"/>
@@ -163,8 +168,8 @@
   </xsl:if>
 
   <meta name="book-title" content="{$structure.title}"/>
-  <xsl:if test="$substructure.title != ''">
-    <meta name="chapter-title" content="{$substructure.title}"/>
+  <xsl:if test="$substructure.title.long != ''">
+    <meta name="chapter-title" content="{$substructure.title.long}"/>
   </xsl:if>
 
   <xsl:if test="$generate.meta.abstract != 0">
