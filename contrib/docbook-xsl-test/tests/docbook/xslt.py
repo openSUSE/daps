@@ -20,13 +20,13 @@ Contains the following variables:
   
 """
 
-
 import platform
 import os
 import commands
+from lxml import etree
 
-
-__all__ = [ 'CANONICALURL', 'MAINXMLCATALOG', 'LOCALDBXSLPATH', 'STYLESHEETS', 'SYSTEM', 'DIST' ]
+__all__ = [ 'CANONICALURL', 'MAINXMLCATALOG', 'LOCALDBXSLPATH', 
+            'STYLESHEETS', 'SYSTEM', 'DIST',  'XMLPARSER' ]
 __author__="Thomas Schraitle <tom_schr (AT) web (DOT) de>"
 
 
@@ -65,6 +65,12 @@ def getlocalpath(catalog, url):
    
 SYSTEM=platform.system()
 DIST=platform.linux_distribution()[0].strip()
+
+xmlparser = etree.XMLParser(ns_clean=True, 
+                  dtd_validation=False, 
+                  no_network=True, 
+                  resolve_entities=False, 
+                  load_dtd=False)
 
 if SYSTEM=="Linux":
    # Overwrite it
