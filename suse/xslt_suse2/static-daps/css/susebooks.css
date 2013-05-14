@@ -961,10 +961,6 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 22px;
 }
 
-#_share-mail {
-    visibility: hidden;
-}
-
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
 #_print-button:before {
     line-height: 22px;
@@ -1057,7 +1053,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 /* Footer and associated madness, see: http://ryanfait.com/resources/footer-stick-to-bottom-of-page/ */
 #_inward, #_footer-wrap {
-    height: 0;
+    height: 80px;
 }
 
 #_inward {
@@ -1075,14 +1071,48 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     min-height: 100%;
     height: auto !important;
     height: 100%;
+    margin: 0 auto -80px;
+}
+
+.nofooter #_outer-wrap {
     margin: 0 auto;
 }
 
-
 /* Footer contents */
 
-#_footer-wrap{
-    display: none;
+#_footer {
+    font-family: Helvetica, FreeSans, sans-serif;
+    z-index: 2; /* Else, #_inward overlays the footer */
+    min-width: 130px;
+    max-width: 988px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+#_footer ul {
+    padding: 0;
+}
+
+#_footer li, #_footer p {
+    display: block;
+    float: left;
+    line-height: 80px;
+    margin: 0 30px 0 0;
+    font-size: 12px;
+}
+
+#_footer a {
+    text-decoration: none;
+    color: #666;
+}
+
+#_footer a:hover, #_footer a:focus, #_footer a:active {
+    text-decoration: underline;
+    color: #76AD2D;
+}
+
+#_footer p {
+    color: #333;
 }
 
 /* .CHAPTER/... AREA */
@@ -2482,12 +2512,40 @@ body.draft {
         display: inline;
     }
 
+    #_footer {
+        height: auto;
+    }
+
+    #_footer li, #_footer p {
+        line-height: 250%;
+        float: none;
+        width: 100%;
+        margin: 0;
+    }
+
+    #_footer p {
+        text-align: right;
+    }
+
+    #_footer ul {
+        margin: 0;
+    }
+
+    #_footer a {
+      display: block;
+      border-top: 1px solid #FFF;
+    }
+
     #_inward, #_footer-wrap {
-        height: 0;
+        height: 155px;
     }
 
     #_outer-wrap {
         margin: 0 auto -155px;
+    }
+
+    .nofooter #_outer-wrap {
+        margin: 0 auto;
     }
 
     #_content ul, #_content ol {
