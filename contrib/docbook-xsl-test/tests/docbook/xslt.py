@@ -15,6 +15,9 @@ Contains the following variables:
 * LOCALDBXSLPATH
   The path to the DocBook XSL stylesheets
 
+* STYLESHEETS
+  Dictionary, maps formats to relative paths
+  
 """
 
 
@@ -23,7 +26,7 @@ import os
 import commands
 
 
-__all__ = [ 'CANONICALURL', 'MAINXMLCATALOG', 'LOCALDBXSLPATH', 'SYSTEM', 'DIST' ]
+__all__ = [ 'CANONICALURL', 'MAINXMLCATALOG', 'LOCALDBXSLPATH', 'STYLESHEETS', 'SYSTEM', 'DIST' ]
 __author__="Thomas Schraitle <tom_schr (AT) web (DOT) de>"
 
 
@@ -34,6 +37,20 @@ MAINXMLCATALOG={
    'Windows':  None,
    }
 
+STYLESHEETS={
+   'html-single':     'html/docbook.xsl',
+   'html-chunk':      'html/chunk.xsl',
+   'xhtml-single':    'xhtml/docbook.xsl',
+   'xhtml-chunk':     'xhtml/chunk.xsl',
+   'xhtml1.1-single': 'xhtml-1_1/docbook.xsl',
+   'xhtml1.1-chunk':  'xhtml-1_1/chunk.xsl',
+   'xhtml5-single':   'xhtml5/docbook.xsl',
+   'xhtml5-chunk':    'xhtml5/chunk.xsl',
+   'fo':              'fo/docbook.xsl',
+   'epub':            'epub/docbook.xsl',
+   'epub3':           'epub3/chunk.xsl',
+   }
+   
 def getlocalpath(catalog, url):
    """Returns the local path from url found in file catalog
    """
