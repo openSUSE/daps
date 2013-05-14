@@ -3,11 +3,13 @@
 
 from lxml import etree
 import os.path
+import docbook.xslt as db
 
 XML_FILE = 'article.xml'
 DIRNAME = os.path.dirname(__file__)
 XML_FILE = os.path.join(DIRNAME, XML_FILE)
-DB2XHTML = '/usr/share/xml/docbook/stylesheet/nwalsh/current/xhtml/docbook.xsl'
+DB2XHTML = os.path.join(db.LOCALDBXSLPATH, db.STYLESHEETS['xhtml-single'])
+
 XML_TREE = None
 XML_ROOT = None
 PARSER = None
@@ -22,14 +24,9 @@ def test_article_exists():
 
 
 def test_xml_parse():
-    '''checks the root element from XML file'''
-    global XML_TREE, XML_ROOT, PARSER
-    PARSER = etree.XMLParser(ns_clean=True, 
-                         dtd_validation=False, 
-                         no_network=True, 
-                         resolve_entities=False, 
-                         load_dtd=False)
-    XML_TREE = etree.parse(XML_FILE, PARSER)    
+    '''checks the root element of the XML file'''
+    global XML_TREE, XML_ROOT
+    XML_TREE = etree.parse(XML_FILE, db.xmlparser)    
     XML_ROOT = XML_TREE.getroot()
     
     assert XML_ROOT.tag == 'article', 'mismatch of root-element %s' %XML_ROOT.tag
