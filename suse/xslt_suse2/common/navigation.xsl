@@ -86,7 +86,7 @@
     <xsl:variable name="home" select="/*[1]"/>
     <xsl:variable name="up" select="parent::*"/>
     <xsl:if test="$debug">
-      <xsl:message>is.node.in.rootid.node
+      <xsl:message>
         Element:  <xsl:value-of select="local-name(.)"/>
         prev:     <xsl:value-of select="local-name($prev)"/>
         next:     <xsl:value-of select="local-name($next)"/>
@@ -96,11 +96,9 @@
       </xsl:message>
     </xsl:if>
     <!-- Return our result: -->
-    <xsl:value-of select="(count($prev) > 0 and $isprev) or
-      (count($up) &gt; 0 and 
-      generate-id($up) != generate-id($home) and 
-      $navig.showtitles != 0) or
-      (count($next) > 0 and $isnext)"/>
+    <xsl:value-of select="((count($prev) &gt; 0 and $isprev) or
+                           (count($next) &gt; 0 and $isnext)) and
+                          $navig.showtitles != 0"/>
   </xsl:template>
   
 </xsl:stylesheet>
