@@ -239,7 +239,6 @@ function share( service ) {
         shareURL = 'https://plus.google.com/share?url=' + u;
         window.open(shareURL, 'sharer', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
     }
-    
     else if ( service == 'mail' ) {
         shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
         window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
