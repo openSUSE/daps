@@ -8,13 +8,21 @@ MAIN="MAIN.DAPS.xml"
 #ROOTID="book.daps.user"
 
 ## Profiling
-PROFOS="osuse"
+
+# "quick" is not an actual OS -- it determines whether or not the links into
+# the Quick Start Guide should be added.
+PROFOS="osuse;quick"
+
 PROFARCH="x86;amd64;em64t"
 
 ## stylesheet location
 #STYLEROOT="/usr/share/xml/docbook/stylesheet/suse"
-HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css"
+#HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css"
 #EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
+
+## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## homepage at the top of the page
+XSLTPARAM="'--stringparam homepage=http://daps.sourceforge.net'"

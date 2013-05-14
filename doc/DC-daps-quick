@@ -1,4 +1,4 @@
-## ---------------------------- 
+## ----------------------------
 ## Doc Config File for DAPS
 ## DAPS Quick Start
 ## ----------------------------
@@ -8,17 +8,26 @@ MAIN="MAIN.DAPS.xml"
 ROOTID="art.daps.quick"
 
 ## Profiling
-PROFOS="osuse"
+
+# "quick" is not an actual OS -- it determines whether or not the links into
+# the Quick Start Guide should be added.
+PROFOS="osuse;quick"
+
 PROFARCH="x86;amd64;em64t"
 
 ## stylesheet location
 STYLEROOT="../suse/xslt/flyer"
 FALLBACK_STYLEROOT="../suse/xslt"
-HTML_CSS="./daps.css"
-EPUB_CSS="./daps.css"
+#HTML_CSS="./daps.css"
+#EPUB_CSS="./daps.css"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
 
-##do not show remarks directly in the (PDF) text 
-XSLTPARAM="--param use.xep.annotate.pdf 0"
+##do not show remarks directly in the (PDF) text
+XSLTPARAM="'--param use.xep.annotate.pdf=0'"
+
+
+## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## homepage at the top of the page
+XSLTPARAM="'--stringparam homepage=http://daps.sourceforge.net'"
