@@ -213,6 +213,7 @@
   <xsl:template match="h:div[@class='line']" mode="drupal"/>
   <xsl:template match="h:link[@rel='self']" mode="drupal"/>
   <xsl:template match="h:div[@class='titlepage']" mode="drupal"/>
+  <xsl:template match="h:a[@class='permalink']" mode="drupal"/>
   
   <xsl:template match="h:div[@class='sect4' or @class='sect5']/h:div[@class='titlepage']" mode="drupal">
     <xsl:apply-templates select=".//h:h5|.//h:h6" mode="drupal"/>
