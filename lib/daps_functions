@@ -80,7 +80,7 @@ function parse_args () {
                 shift
                 ;;
             --export-dir)
-                P_EXPORT_DIR="$2"
+                sanitize_path "$2" "P_EXPORT_DIR"
                 shift 2
                 ;;
             --extra-dict)
@@ -188,7 +188,7 @@ function parse_args () {
                 shift 2
                 ;;
             --statdir)
-                P_STAT_DIR="$2"
+                sanitize_path "$2" "P_STAT_DIR"
                 shift 2
                 ;;
             --static)
