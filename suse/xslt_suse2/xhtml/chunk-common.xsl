@@ -590,37 +590,25 @@
               </xsl:call-template>
             </div>
           </div>
-          
-          <div id="_inward"></div>
+
+          <xsl:if test="$add.suse.footer = 1">
+            <div id="_inward"></div>
+          </xsl:if>
         </div>
-        
+
+      <xsl:if test="$add.suse.footer = 1">
         <div id="_footer-wrap">
           <xsl:call-template name="user.footer.content"/>
-          
           <xsl:call-template name="user.footer.navigation">
             <xsl:with-param name="prev" select="$prev"/>
             <xsl:with-param name="next" select="$next"/>
             <xsl:with-param name="nav.context" select="$nav.context"/>
           </xsl:call-template>
         </div>
-      </body>
-    </html>
-    <xsl:value-of select="$chunk.append"/>
-  </xsl:template>
-
-  <xsl:template name="body.class.attribute">
-    <xsl:choose>
-      <xsl:when test="($draft.mode = 'yes' or
-                    ($draft.mode = 'maybe' and
-                    ancestor-or-self::*[@status][1]/@status = 'draft'))
-                    and $draft.watermark.image != ''">
-        <xsl:attribute name="class">draft offline</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="class">offline</xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+      </xsl:if>
+    </body>
+  </html>
+</xsl:template>
 
 <!-- ======================================================================= -->
 

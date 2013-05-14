@@ -26,6 +26,12 @@
          (don't copy from here, for technical reasons I can't use hyphens and
          must use dashes). -->
 
+  <xsl:param name="suse.content" select="1"/>
+    <!-- Set this to 0 to disable the SUSE footer and the email button:
+            ––xsltparam="'––param suse.content=0'"
+         (don't copy from here, for technical reasons I can't use hyphens and
+         must use dashes). -->
+
 
 <!-- 1. Admonitions  ============================================ -->
   <!-- Use graphics in admonitions?  0=no, 1=yes -->
@@ -158,7 +164,9 @@ task before
   <xsl:param name="daps.header.logo.alt">Logo</xsl:param>
   <xsl:param name="daps.header.js.library">static/js/jquery-1.4.2.min.js</xsl:param>
   <xsl:param name="daps.header.js.custom">static/js/susebooks.js</xsl:param>
-  
+
+  <xsl:param name="add.suse.footer" select="$suse.content"/>
+
   <!-- Create breadcrumbs navigation?  -->
   <xsl:param name="generate.breadcrumbs" select="1"/>
   <xsl:param name="breadcrumbs.prev">&#9664;<!--&#9668;--></xsl:param>
@@ -189,30 +197,33 @@ task before
       </xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  
+
   <!-- Separator for chapter and book name in the XHTML output -->
   <xsl:param name="head.content.title.separator"> | </xsl:param>
-  
+
   <!-- Create version information before title? -->
   <xsl:param name="generate.version.info" select="1"/>
-  
+
   <!-- Create the language and format areas in the header? -->
   <xsl:param name="generate.pickers" select="0"/>
-  
+
   <!-- Create sharing links for Facebook, Google+, Twitter? -->
   <xsl:param name="generate.sharelinks" select="1"/>
-  
+
+  <!-- The email share link only works with suse.com content. -->
+  <xsl:param name="allow.email.sharelink" select="$suse.content"/>
+
   <!-- Separator between breadcrumbs links: -->
   <xsl:param name="daps.breadcrumbs.sep">&#xa0;›&#xa0;</xsl:param>
-  
+
   <!--  Create permalinks?-->
   <xsl:param name="generate.permalinks" select="1"/>
-  
+
   <!-- Should information from SVN properties be used? yes=1|no=0 -->
   <xsl:param name="use.meta" select="0"/>
 
   <!-- Show arrows before and after a paragraph that applies only to a certain
        architecture? -->
   <xsl:param name="para.use.arch" select="1"/>
-  
+
 </xsl:stylesheet>

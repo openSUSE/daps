@@ -408,22 +408,27 @@
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">shareviafacebook</xsl:with-param>
             </xsl:call-template>
-          </span> &#x2022; 
+          </span> &#x2022;
           <span id="_share-gp">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">shareviagoogleplus</xsl:with-param>
             </xsl:call-template>
-          </span> &#x2022; 
+          </span> &#x2022;
           <span id="_share-tw">
             <xsl:call-template name="gentext">
               <xsl:with-param name="key">shareviatwitter</xsl:with-param>
             </xsl:call-template>
-          </span> &#x2022; 
-          <span id="_share-mail">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviaemail</xsl:with-param>
-            </xsl:call-template>
           </span>
+          <xsl:if test="$allow.email.sharelink = 1">
+            <!-- Our email form only works on suse.com pages, thus it is helpful
+                 to be able to disable it separately. -->
+            &#x2022;
+            <span id="_share-mail">
+              <xsl:call-template name="gentext">
+                <xsl:with-param name="key">shareviaemail</xsl:with-param>
+              </xsl:call-template>
+            </span>
+          </xsl:if>
         </div>
       </xsl:if>
       <div class="print"><span id="_print-button">
@@ -435,17 +440,18 @@
   </xsl:template>
 
   <xsl:template name="body.class.attribute">
-    <xsl:choose>
-      <xsl:when test="($draft.mode = 'yes' or
+    <xsl:attribute name="class">
+      <xsl:if test="($draft.mode = 'yes' or
                     ($draft.mode = 'maybe' and
                     ancestor-or-self::*[@status][1]/@status = 'draft'))
-                    and $draft.watermark.image != ''">
-        <xsl:attribute name="class">draft offline single</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="class">offline single</xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
+                    and $draft.watermark.image != ''">draft</xsl:if>
+      <xsl:text> </xsl:text>
+      <xsl:if test="$is.chunk = 1">single</xsl:if>
+      <xsl:text> </xsl:text>
+      <xsl:if test="$add.suse.footer = 0">nofooter</xsl:if>
+      <xsl:text> </xsl:text>
+      offline
+    </xsl:attribute>
   </xsl:template>
 
 <xsl:template match="*" mode="process.root">
@@ -496,47 +502,34 @@
           <xsl:with-param name="prev" select="$prev"/>
         </xsl:call-template>
 
-        <!-- Necessary? -->
-        <xsl:call-template name="user.header.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
-
         <xsl:call-template name="user.header.content"/>
-          <div id="_toc-bubble-wrap"></div>
-          <div id="_content">
-            <xsl:call-template name="metadata"/>
+        <div id="_toc-bubble-wrap"></div>
+        <div id="_content">
+          <xsl:call-template name="metadata"/>
 
-            <xsl:apply-templates select="."/>
+          <xsl:apply-templates select="."/>
 
-            <div class="page-bottom">
-              <xsl:call-template name="share.and.print">
-                <xsl:with-param name="prev" select="$prev"/>
-                <xsl:with-param name="next" select="$next"/>
-                <xsl:with-param name="nav.context" select="$nav.context"/>
-              </xsl:call-template>
-            </div>
+          <div class="page-bottom">
+            <xsl:call-template name="share.and.print">
+              <xsl:with-param name="prev" select="$prev"/>
+              <xsl:with-param name="next" select="$next"/>
+              <xsl:with-param name="nav.context" select="$nav.context"/>
+            </xsl:call-template>
           </div>
-          
+        </div>
+        <xsl:if test="$add.suse.footer = 1">
           <div id="_inward"></div>
-        </div>
-        
+        </xsl:if>
+      </div>
+
+      <xsl:if test="$add.suse.footer = 1">
+        <xsl:message>Ja, genau! <xsl:value-of select="$add.suse.footer"/></xsl:message>
         <div id="_footer-wrap">
-        <xsl:call-template name="user.footer.content"/>
-        
-        <xsl:call-template name="user.footer.navigation">
-          <xsl:with-param name="prev" select="$prev"/>
-          <xsl:with-param name="next" select="$next"/>
-          <xsl:with-param name="nav.context" select="$nav.context"/>
-        </xsl:call-template>
+          <xsl:call-template name="user.footer.content"/>
         </div>
-      </body>
-    </html>
-  <xsl:value-of select="$html.append"/>
-  
-  <!-- Generate any css files only once, not once per chunk -->
-  <xsl:call-template name="generate.css.files"/>
+      </xsl:if>
+    </body>
+  </html>
 </xsl:template>
 
   <xsl:template name="user.head.content">
