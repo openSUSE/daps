@@ -1069,7 +1069,7 @@ while true ; do
                 CALL_SCMDHELP=1
             fi
             ;;
-        --main)
+        -m|--main)
             # make path absolute and strip trailing slash
 	    sanitize_path "$2" "MAIN_CMDL"
 	    MAIN="$MAIN_CMDL"
