@@ -38,3 +38,9 @@ class TestArticleSections:
       
       res = result.xpath("/html/body/div[1]")[0].attrib.get("class")
       assert "article" in res
+      
+      res = result.xpath("/html/body/div[@class='article']/div")[0].attrib.get("class")
+      assert "titlepage" in res
+
+      
+      
