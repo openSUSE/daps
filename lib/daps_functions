@@ -237,7 +237,7 @@ function init_env {
     # Create the log directory and a link to the DC-file in R_DIR
     # (R_DIR and LOG_DIR are set in bin/daps) 
     
-    local DC_COUNT
+    local DC_COUNT TEST_ROOTID_RESULT
     
     # create directories
     
@@ -265,8 +265,11 @@ function init_env {
     #
     if [[ -n "$ROOTID" ]]; then
         EXISTS_ROOTID=$(eval "$XSLTPROC --stringparam \"rootid=$ROOTID\" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
-        if [[ "yes" != $EXISTS_ROOTID ]]; then
-            exit_on_error "$XML_CATALOG_FILES Fatal: ROOTID \"$ROOTID\" does not exist"
+        TEST_ROOTID_RESULT=$?
+        if [[ 0 == $TEST_ROOTID_RESULT  && "yes" != $EXISTS_ROOTID ]]; then
+            exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
+        elif [[ 0 != $TEST_ROOTID_RESULT && 0 != $VERBOSITY ]]; then
+            ccecho "warn" "Warning: Wasn't able to determine if ROOTID exist."
         fi
     fi
     

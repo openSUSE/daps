@@ -302,11 +302,11 @@ else
   LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
 endif
 ifdef USESVN
-  TO_TRANS_FILES := $(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR))
+  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR)))
 endif
 TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 
-NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES), $(SRCFILES))
+NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
 NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 
 .PHONY: locdrop
@@ -330,10 +330,10 @@ locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
   else
         # tarball with files for translation
 	BZIP2=--best tar chfj $(TO_TRANS_TAR) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(TO_TRANS_FILES)
+	  --transform=s%$(PROFILEDIR)/%xml/% $(TO_TRANS_FILES)
         # tarball with files not being translated
 	tar chf $(NO_TRANS_TAR) --absolute-names \
-	  --transform=s%$(DOC_DIR)/%% $(NO_TRANS_FILES)
+	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DOCCONF)
     ifdef DEF_FILE
