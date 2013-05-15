@@ -523,7 +523,6 @@
       </div>
 
       <xsl:if test="$add.suse.footer = 1">
-        <xsl:message>Ja, genau! <xsl:value-of select="$add.suse.footer"/></xsl:message>
         <div id="_footer-wrap">
           <xsl:call-template name="user.footer.content"/>
         </div>
