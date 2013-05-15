@@ -962,6 +962,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 22px;
 }
 
+.print span {
+    font-weight: 600;
+}
+
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
 #_print-button:before {
     line-height: 22px;
@@ -1034,6 +1038,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-top: 1px solid #999;
     clear: both;
     display: none;
+    color: 666;
 }
 
 .offline .online-contents {
@@ -2170,7 +2175,17 @@ body.draft {
         width: auto;
         height: auto;
     }
+}
 
+@media only screen and (max-width: 800px) {
+    .share {
+        float: right;
+    }
+
+    .print {
+        clear: both;
+        margin-top: 20px;
+    }
 }
 
 @media only screen and (max-width: 700px) {
@@ -2254,7 +2269,7 @@ body.draft {
 }
 
 /* Mobile layout */
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 480px) {
     #_toc-area, #_nav-area {
         width: 100%;
     }
