@@ -133,10 +133,11 @@ def pytest_runtest_setup(item):
 
 
 class XMLFile():
-   def __init__(self, xmlfile, localdbxslpath, xmlparser):
+   def __init__(self, xmlfile, localdbxslpath, xmlparser, namespaces):
       self._xmlfile = xmlfile
       self._basexslt = localdbxslpath
       self._xmlparser = xmlparser
+      self._ns = namespaces
       self._xslt = None
    
    def parse(self, xslt):
@@ -149,20 +150,24 @@ class XMLFile():
       return self._transform(self._xmltree)
    
    @property
-   def xmltree(self):
+   def xml(self):
       return self._xmltree
 
    @property
-   def xsltree(self):
+   def xslt(self):
       return self._xslt
+      
+   @property
+   def ns(self):
+      return self._ns
 
 
 @pytest.fixture()# scope="module"
-def xmltestfile(request, xmlfile, localdbxslpath, xmlparser):
+def xmltestfile(request, xmlfile, localdbxslpath, xmlparser, namespaces):
    """Pytest fixture: return a XMLFile object which holds all the parsing and transformation logic
    """
    # print("****", request, xmlparser)
-   return XMLFile(xmlfile[0], localdbxslpath, xmlparser)
+   return XMLFile(xmlfile[0], localdbxslpath, xmlparser, namespaces)
 
 
 # EOF
