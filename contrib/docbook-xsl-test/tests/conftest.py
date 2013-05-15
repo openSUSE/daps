@@ -64,6 +64,15 @@ else:
       #sys.path.insert(0, MYDIR)
 
 
+def pytest_report_header(config):
+   """Present extra information
+   http://pytest.org/latest/example/simple.html#adding-info-to-test-report-header
+   """
+   result=["Test cases for DocBook XSL Stylesheets"]
+   #if config.option.verbose > 0:
+   #   result.append()
+   return result
+
 @pytest.fixture()
 def xmlparser():
    """Pytest fixture: returns a XMLParser object
