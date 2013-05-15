@@ -4,12 +4,11 @@
 from lxml import etree
 import os.path
 import pytest
-# from docbook.xslt import STYLESHEETS, LOCALDBXSLPATH
+
 
 XML_FILE = 'article.xml'
 DIRNAME = os.path.dirname(__file__)
 XML_FILE = os.path.join(DIRNAME, XML_FILE)
-# DB2XHTML = os.path.join(LOCALDBXSLPATH, STYLESHEETS['xhtml-single'])
 
 XML_TREE = None
 XML_ROOT = None
@@ -18,6 +17,7 @@ XSLT_TREE = None
 TRANSFORM = None
 RESULT_TREE = None
 XML_TITLE = None
+
 
 def test_article_exists():
     ''' checks if XML file exists'''
