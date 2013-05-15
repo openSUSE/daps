@@ -3,25 +3,33 @@
 
 from __future__ import print_function
 
-from lxml import etree
+import sys
 import os.path
+
+from lxml import etree
 import pytest
+import glob
 
 
-def test_article_exists(xmlfile):
-    '''checks if XML file exists'''
-    for x in xmlfile:
-      assert os.path.exists(x), 'filename %s not found' % filename
+@pytest.mark.incremental
+class TestArticle:
+   # @classmethod
+   def setup_method(self, method):
+      self.dirname = os.path.dirname(__file__)
+      path = os.path.join(self.dirname, "*.xml")
+      self.xmlfiles = glob.glob(path)
+   
+   def test_if_xmlfiles_exists(self):
+      for i in self.xmlfiles:
+         assert os.path.exists(i)
+         
+   def test_get_root(self):
+      for i in self.xmlfiles:
+         # print("Parsing {0}...".format(i))
+         tree = etree.parse(i)
+         root=tree.getroot()
+         assert root.tag
+         assert root.tag == "article"
 
-@pytest.skip(msg="Needs fixing (XML_FILE)")
-def test_xml_parse(xmlparser):
-    '''checks the root element from XML file'''
-    tree = etree.parse(XML_FILE, xmlparser)
-    root = tree.getroot()
-
-    assert root.tag == 'article', 'mismatch of root-element %s' %root.tag
-
-
-#def test_module():
-#    '''Checks, if DBXSLT variable is not empty '''
-#    assert LOCALDBXSLPATH != ''
+   
+# EOF
