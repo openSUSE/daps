@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import sys
 import os
+import os.path
 import glob
 
 import pytest
@@ -132,13 +133,14 @@ def pytest_runtest_setup(item):
 
 
 class XMLFile():
-   def __init__(self, xmlfile, xmlparser):
+   def __init__(self, xmlfile, localdbxslpath, xmlparser):
       self._xmlfile = xmlfile
+      self._basexslt = localdbxslpath
       self._xmlparser = xmlparser
       self._xslt = None
    
    def parse(self, xslt):
-      self._xslt = xslt
+      self._xslt = os.path.join(self._basexslt, xslt)
       self._xmltree = etree.parse(self._xmlfile)
       self._xsltree = etree.parse(self._xslt)
       self._transform = etree.XSLT(self._xsltree)
@@ -156,11 +158,11 @@ class XMLFile():
 
 
 @pytest.fixture()# scope="module"
-def xmltestfile(request, xmlfile, xmlparser):
+def xmltestfile(request, xmlfile, localdbxslpath, xmlparser):
    """Pytest fixture: return a XMLFile object which holds all the parsing and transformation logic
    """
    # print("****", request, xmlparser)
-   return XMLFile(xmlfile[0], xmlparser)
+   return XMLFile(xmlfile[0], localdbxslpath, xmlparser)
 
 
 # EOF
