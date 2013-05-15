@@ -961,6 +961,11 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 22px;
 }
 
+.print span {
+    font-weight: 600;
+}
+
+
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
 #_print-button:before {
     line-height: 22px;
@@ -1033,6 +1038,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     border-top: 1px solid #999;
     clear: both;
     display: none;
+    color: #666;
 }
 
 .offline .online-contents {
@@ -1240,7 +1246,6 @@ h6.version-info {
     padding-top: 100px;
 }
 
-
 .sect1 .subtitle, .chapter .subtitle {
     font-size: 16px;
     font-weight: normal;
@@ -1252,6 +1257,7 @@ h6.version-info {
 }
 
 .sect1 .title, .single .sect1 .title,
+.section .title, .single .section .title,
 .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
 .bibliography .qandaset .title, .reference .qandaset .title,
 .part .qandaset .title, .glossary .qandaset .title {
@@ -1261,14 +1267,16 @@ h6.version-info {
     text-align: left;
 }
 
-.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
+.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+.section .section .title, .single .section .section .title {
     font-size: 22px;
     padding: 40px 0 0;
     text-align: left;
 }
 
 .sect3 .title, .single .sect3 .title,
-.sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
+.sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+.section .section .section .title, .single .section .section .section .title  {
     font-size: 20px;
     font-weight: normal;
     padding: 33px 0 0;
@@ -1276,7 +1284,8 @@ h6.version-info {
 }
 
 .sect4 .title, .single .sect4 .title,
-.sect5 .title, .single .sect5 .title {
+.sect5 .title, .single .sect5 .title,
+.section .section .section .title, .single .section .section .section .title  {
     font-size: 16px;
     padding: 53px 0 0;
     margin: 0 0 -33px;
@@ -1286,11 +1295,11 @@ h6.version-info {
     text-align: left;
 }
 
-.sect4 .title {
+.sect4 .title, .section .section .section .section .title {
     font-weight: 600;
 }
 
-.sect5 .title {
+.sect5 .title, .section .section .section .section .section .title {
     font-weight: normal;
 }
 
@@ -2615,6 +2624,7 @@ body.draft {
     }
 
     .sect1 .title, .single .sect1 .title,
+    .section .title, .single .section .title,
     .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
     .bibliography .qandaset .title, .reference .qandaset .title,
     .part .qandaset .title, .glossary .qandaset .title, .set .subtitle,
@@ -2622,12 +2632,14 @@ body.draft {
         font-size: 22px;
     }
 
-    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title {
+    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+    .section .section .title, .single .section .section .title {
         font-size: 20px;
     }
 
     .sect3 .title, .single .sect3 .title,
-    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3 {
+    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+    .section .section .section .title, .single .section .section .section .title  {
         font-size: 18px;
     }
 }
