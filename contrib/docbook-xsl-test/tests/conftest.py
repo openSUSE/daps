@@ -68,7 +68,10 @@ def pytest_report_header(config):
    """Present extra information
    http://pytest.org/latest/example/simple.html#adding-info-to-test-report-header
    """
-   result=["Test cases for DocBook XSL Stylesheets"]
+   result=["",
+           "Test cases for DocBook XSL Stylesheets",
+           ""
+          ]
    #if config.option.verbose > 0:
    #   result.append()
    return result
@@ -114,5 +117,17 @@ def localdbxslpath():
    """
    return LOCALDBXSLPATH
 
+# Taken from http://pytest.org/latest/example/simple.html#adding-info-to-test-report-header
+def pytest_runtest_makereport(item, call):
+    if "incremental" in item.keywords:
+        if call.excinfo is not None:
+            parent = item.parent
+            parent._previousfailed = item
+
+def pytest_runtest_setup(item):
+    if "incremental" in item.keywords:
+        previousfailed = getattr(item.parent, "_previousfailed", None)
+        if previousfailed is not None:
+            pytest.xfail("previous test failed (%s)" %previousfailed.name)
 
 # EOF
