@@ -56,6 +56,7 @@ else:
                  "Please set the correct path.".format(__file__, system))
 
 
+
 #def pytest_runtest_setup(item):
    #"""called for running each test
    #"""
@@ -76,7 +77,7 @@ def pytest_report_header(config):
    #   result.append()
    return result
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def xmlparser():
    """Pytest fixture: returns a XMLParser object
    """
@@ -95,14 +96,14 @@ def xmlfile(request):
    return glob.glob(path)
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def namespaces():
    """Pytest fixture: returns a dictionary of common namespaces
    """
    return {'h':'http://www.w3.org/1999/xhtml'}
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def stylesheets():
    """Pytest fixture: returns a dictionary which maps formats to relative paths
    """
@@ -110,8 +111,7 @@ def stylesheets():
 
 # -------------------------
 
-   
-@pytest.fixture
+@pytest.fixture(scope="module")
 def localdbxslpath():
    """Pytest fixture: returns the local path of the DocBook XSL stylesheets
    """
@@ -129,5 +129,38 @@ def pytest_runtest_setup(item):
         previousfailed = getattr(item.parent, "_previousfailed", None)
         if previousfailed is not None:
             pytest.xfail("previous test failed (%s)" %previousfailed.name)
+
+
+class XMLFile():
+   def __init__(self, xmlfile, xmlparser):
+      self._xmlfile = xmlfile
+      self._xmlparser = xmlparser
+      self._xslt = None
+   
+   def parse(self, xslt):
+      self._xslt = xslt
+      self._xmltree = etree.parse(self._xmlfile)
+      self._xsltree = etree.parse(self._xslt)
+      self._transform = etree.XSLT(self._xsltree)
+   
+   def transform(self):
+      return self._transform(self._xmltree)
+   
+   @property
+   def xmltree(self):
+      return self._xmltree
+
+   @property
+   def xsltree(self):
+      return self._xslt
+
+
+@pytest.fixture()# scope="module"
+def xmltestfile(request, xmlfile, xmlparser):
+   """Pytest fixture: return a XMLFile object which holds all the parsing and transformation logic
+   """
+   # print("****", request, xmlparser)
+   return XMLFile(xmlfile[0], xmlparser)
+
 
 # EOF
