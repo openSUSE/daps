@@ -24,7 +24,7 @@ my $builddir      = "";
 my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
 my $to_rsync      = "";
-my @vformats      = qw(color-pdf epub html htmlsingle pdf single-html txt); # valid formats
+my @vformats      = qw(color-pdf epub html pdf single-html text); # valid formats
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -371,11 +371,11 @@ sub set_daps_cmd_and_log {
     $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot;
     $dapscmd .= " --debug" if $debug; 
     $dapscmd .= " $format";
-    if ( $format =~ /^html.*/ or $format =~ /.*pdf$/ ) {
+    if ( $format =~ /^(single-)?html/ or $format =~ /.*pdf$/ ) {
         $dapscmd .= " --remarks" if $cfg->val("$set", 'remarks');
         $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
         $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
-        if ( $format =~ /^html.*/ ) {
+        if ( $format =~ /^(single-)?html/ ) {
             $dapscmd .= " --static";
         }
     }
@@ -445,10 +445,12 @@ sub build {
         }
         make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
         # HTML/HTMLsingle do not return single files, but files and directories
-        if ( $format =~ /^(single-)?html.*/ ) {
+        if ( $format =~ /^(single-)?html/ ) {
             my $resultdir = dirname($dapsresult);
-            dirmove($resultdir, $syncsubdir)or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
+            print "Moving $resultdir to $syncsubdir\n" if $verbose;
+            dirmove($resultdir, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
         } else {
+            print "Moving $dapsresult to $syncsubdir\n" if $verbose;
             fmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
         }
     }
