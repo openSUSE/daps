@@ -950,7 +950,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     text-decoration: none;
 }
 
-#_share-print span {
+#_share-print .bottom-button {
     cursor: pointer;
     display: inline-block;
     border-radius: 3px;
@@ -968,6 +968,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before,
 #_print-button:before {
+    content: " ";
     line-height: 22px;
     font-size: 14px;
     font-weight: 600;
@@ -984,43 +985,38 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 #_share-fb:before {
     background-color: #3B5998;
-    content: " ";
     background-position: -271px -88px;
 }
 
 #_share-gp:before {
     background-color: #D54433;
-    content: " ";
     background-position: -289px -88px;
 }
 
 #_share-tw:before {
     background-color: #00BBF5;
-    content: " ";
     background-position: -307px -88px;
 }
 
 #_share-mail:before {
     background-color: #666;
-    content: " ";
     background-position: -235px -88px;
 }
 
 
 #_print-button:before {
     background-color: #666;
-    content: " ";
     background-position: -253px -88px;
 }
 
-#_share-print span:hover, #_share-print span:focus,
+#_share-print .bottom-button:hover, #_share-print .bottom-button:focus,
 #_share-print span:active {
     border: 1px solid rgba(20,20,20,0.5);
     background: #DEDEDE;
 }
 
-#_share-print span:hover:before, #_share-print span:focus:before,
-#_share-print span:active:before {
+#_share-print .bottom-button:hover:before, #_share-print .bottom-button:focus:before,
+#_share-print .bottom-button:active:before {
     border-top: 1px solid rgba(20,20,20,0.5);
     border-left: 1px solid rgba(20,20,20,0.5);
     border-bottom: 1px solid rgba(20,20,20,0.5);
@@ -2272,6 +2268,21 @@ body.draft {
     }
 }
 
+@media only screen and (max-width: 600px) {
+    #_share-print strong {
+        display: block;
+        float: right;
+        padding: 0 0 5px;
+    }
+
+    #_share-print .share-buttons {
+        display: block;
+        float: right;
+        clear: both;
+    }
+}
+
+
 /* Mobile layout */
 @media only screen and (max-width: 480px) {
     #_toc-area, #_nav-area {
@@ -2510,6 +2521,42 @@ body.draft {
 
     #_fixed-header-wrap, .print {
         display: none;
+    }
+
+    #_share-print, .share {
+        float: none;
+    }
+
+    #_share-print strong {
+        float: left;
+    }
+
+    #_share-print .share-buttons {
+        float: none;
+    }
+
+    #_share-print .spacer {
+        display: none;
+    }
+
+    #_share-print .bottom-button {
+        padding: 10px;
+        display: block;
+        float: left;
+        border-radius: 0;
+        width: 40%;
+        width: -moz-calc(50% - 22px);
+        width: -moz-calc(50% - 22px);
+    }
+
+    #_share-fb, #_share-tw {
+        clear: both;
+    }
+
+    #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before {
+        border-radius: 2px;
+        border-width: 1px;
+        margin-left: 0;
     }
 
     .offline #_share-print {

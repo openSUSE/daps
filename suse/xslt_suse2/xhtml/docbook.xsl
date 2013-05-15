@@ -404,34 +404,38 @@
             </xsl:call-template>
           </strong>
           <!-- &#x2022; = &bull; -->
-          <span id="_share-fb">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviafacebook</xsl:with-param>
-            </xsl:call-template>
-          </span> &#x2022;
-          <span id="_share-gp">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviagoogleplus</xsl:with-param>
-            </xsl:call-template>
-          </span> &#x2022;
-          <span id="_share-tw">
-            <xsl:call-template name="gentext">
-              <xsl:with-param name="key">shareviatwitter</xsl:with-param>
-            </xsl:call-template>
-          </span>
-          <xsl:if test="$allow.email.sharelink = 1">
-            <!-- Our email form only works on suse.com pages, thus it is helpful
-                 to be able to disable it separately. -->
-            &#x2022;
-            <span id="_share-mail">
+          <span class="share-buttons">
+            <span id="_share-fb" class="bottom-button">
               <xsl:call-template name="gentext">
-                <xsl:with-param name="key">shareviaemail</xsl:with-param>
+                <xsl:with-param name="key">shareviafacebook</xsl:with-param>
               </xsl:call-template>
             </span>
-          </xsl:if>
+            <span class="spacer"> &#x2022; </span>
+            <span id="_share-gp" class="bottom-button">
+              <xsl:call-template name="gentext">
+                <xsl:with-param name="key">shareviagoogleplus</xsl:with-param>
+              </xsl:call-template>
+            </span>
+            <span class="spacer"> &#x2022; </span>
+            <span id="_share-tw" class="bottom-button">
+              <xsl:call-template name="gentext">
+                <xsl:with-param name="key">shareviatwitter</xsl:with-param>
+              </xsl:call-template>
+            </span>
+            <xsl:if test="$allow.email.sharelink = 1">
+              <!-- Our email form only works on suse.com pages, thus it is helpful
+                   to be able to disable it separately. -->
+              <span class="spacer"> &#x2022; </span>
+              <span id="_share-mail" class="bottom-button">
+                <xsl:call-template name="gentext">
+                  <xsl:with-param name="key">shareviaemail</xsl:with-param>
+                </xsl:call-template>
+              </span>
+            </xsl:if>
+          </span>
         </div>
       </xsl:if>
-      <div class="print"><span id="_print-button">
+      <div class="print"><span id="_print-button" class="bottom-button">
         <xsl:call-template name="gentext">
           <xsl:with-param name="key">printthispage</xsl:with-param>
         </xsl:call-template></span></div>
