@@ -449,14 +449,9 @@
       <xsl:if test="($draft.mode = 'yes' or
                     ($draft.mode = 'maybe' and
                     ancestor-or-self::*[@status][1]/@status = 'draft'))
-                    and $draft.watermark.image != ''">draft</xsl:if>
-      <xsl:text> </xsl:text>
-      <xsl:if test="$is.chunk = 1">single</xsl:if>
-      <xsl:text> </xsl:text>
-      <xsl:if test="$add.suse.footer = 0">nofooter</xsl:if>
-      <xsl:text> </xsl:text>
-      offline
-    </xsl:attribute>
+                    and $draft.watermark.image != ''"
+        >draft </xsl:if><xsl:if test="$is.chunk = 1">single </xsl:if><xsl:if test="$add.suse.footer = 0"
+        >nofooter </xsl:if>offline</xsl:attribute>
   </xsl:template>
 
 <xsl:template match="*" mode="process.root">
