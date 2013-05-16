@@ -16,16 +16,19 @@
   <xsl:template name="create.header.title">
     <xsl:param name="node" select="."/>
     <xsl:param name="level" select="0"/>
+    <xsl:param name="legal" select="0"/>
     <xsl:variable name="label">
       <xsl:apply-templates select="$node" mode="label.markup">
         <xsl:with-param name="allow-anchors" select="1"/>
       </xsl:apply-templates>
     </xsl:variable>
     <!-- NOTE: The gentext context is NOT considered -->
-    <span class="number">
-      <xsl:copy-of select="$label"/>
-      <xsl:text> </xsl:text>
-    </span>
+    <xsl:if test="$legal = 0">
+      <span class="number">
+        <xsl:copy-of select="$label"/>
+        <xsl:text> </xsl:text>
+      </span>
+    </xsl:if>
     <span class="name">
       <xsl:apply-templates select="$node" mode="title.markup">
         <xsl:with-param name="allow-anchors" select="1"/>
@@ -40,7 +43,13 @@
   <xsl:param name="level" select="1"/>
   <xsl:param name="allow-anchors" select="1"/>
   <xsl:param name="title"/>
-  <xsl:param name="class" select="'title'"/>
+  <xsl:variable name="legal">
+    <xsl:choose>
+      <xsl:when test="ancestor-or-self::*[@role='legal']">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="class">title<xsl:if test="$legal = 1"> legal</xsl:if></xsl:variable>
 
   <xsl:variable name="id">
     <xsl:choose>
@@ -63,7 +72,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
   <!-- HTML H level is one higher than section level -->
   <xsl:variable name="hlevel">
     <xsl:choose>
@@ -75,10 +84,10 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
   <xsl:element name="h{$hlevel}" namespace="http://www.w3.org/1999/xhtml">
     <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
-    
+
     <xsl:if test="$allow-anchors != 0">
       <xsl:call-template name="id.attribute">
         <xsl:with-param name="node" select="$section"/>
@@ -88,6 +97,7 @@
     <xsl:call-template name="create.header.title">
       <xsl:with-param name="node" select=".."/>
       <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="legal" select="$legal"/>
     </xsl:call-template>
     <xsl:text> </xsl:text>
     <xsl:call-template name="create.permalink">
