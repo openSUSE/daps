@@ -26,6 +26,7 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:date="http://exslt.org/dates-and-times"
     xmlns="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="exsl">
 
@@ -548,10 +549,15 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template name="user.footer.content">
     <div id="_footer">
-      <p>© 2012 SUSE</p>
+      <p>©
+        <xsl:if test="function-available('date:year')">
+          <xsl:value-of select="date:year()"/>
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        SUSE</p>
       <ul>
         <li>
           <a href="http://www.suse.com/company/careers/" target="_top">
