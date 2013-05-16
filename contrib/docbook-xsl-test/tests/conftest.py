@@ -133,7 +133,10 @@ def pytest_runtest_setup(item):
 
 
 class XMLFile():
-   def __init__(self, xmlfile, localdbxslpath, xmlparser, namespaces):
+   def __init__(self, xmlfile,
+               localdbxslpath=LOCALDBXSLPATH, 
+               xmlparser=xmlparser(), 
+               namespaces=namespaces()):
       self._xmlfile = xmlfile
       self._basexslt = localdbxslpath
       self._xmlparser = xmlparser
