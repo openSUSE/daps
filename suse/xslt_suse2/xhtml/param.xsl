@@ -20,14 +20,23 @@
 
 <!-- 0. Parameters for External Manipulation =================== -->
   <!-- Add a link to a product/company homepage to the logo -->
-  <xsl:param name="homepage" select="0"/>
+  <xsl:param name="homepage" select="''"/>
     <!-- Override this parameter from the command line by adding
              ––xsltparam="'––stringparam homepage=http://www.example.com'"
          (don't copy from here, for technical reasons I can't use hyphens and
          must use dashes). -->
 
+  <!-- Add a link back (up) to an external overview page. -->
+  <xsl:param name="overview-page" select="''"/>
+  <xsl:param name="overview-page-title" select="''"/>
+    <!-- Override with
+             ––xsltparam="'––stringparam homepage=http://www.example.com'"
+         (don't copy from here, for technical reasons I can't use hyphens and
+         must use dashes). -->
+
+  <!-- Toggle the SUSE footer and SUSE e-mail button -->
   <xsl:param name="suse.content" select="1"/>
-    <!-- Set this to 0 to disable the SUSE footer and the email button:
+    <!-- Ovverride with:
             ––xsltparam="'––param suse.content=0'"
          (don't copy from here, for technical reasons I can't use hyphens and
          must use dashes). -->

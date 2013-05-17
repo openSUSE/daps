@@ -242,17 +242,35 @@
     <xsl:param name="next"/>
     <xsl:param name="context">header</xsl:param>
     <xsl:param name="debug"/>
-    
+
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs inactive">
-            <xsl:apply-templates select="." mode="breadcrumbs">
-              <xsl:with-param name="class">single-crumb</xsl:with-param>
-              <xsl:with-param name="context" select="$context"/>
-            </xsl:apply-templates>
-            <xsl:if test="$context = 'header'">
-              <div class="bubble-corner active-contents"> </div>
-            </xsl:if>
+        <xsl:if test="$context = 'header'">
+          <xsl:call-template name="generate.breadcrumbs.back"/>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="breadcrumbs">
+          <xsl:with-param name="class">single-crumb</xsl:with-param>
+          <xsl:with-param name="context" select="$context"/>
+        </xsl:apply-templates>
+        <xsl:if test="$context = 'header'">
+          <div class="bubble-corner active-contents"> </div>
+        </xsl:if>
       </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="generate.breadcrumbs.back">
+    <xsl:if test="$overview-page != ''">
+      <a class="back-to-overview-link" href="$overview-page">
+        <xsl:choose>
+          <xsl:when test="$overview-page-title != 0">
+            <xsl:attribute name="title"><xsl:value-of select="$overview-page-title"/></xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="title"><xsl:value-of select="$overview-page"/></xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
     </xsl:if>
   </xsl:template>
 

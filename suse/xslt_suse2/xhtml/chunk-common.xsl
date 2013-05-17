@@ -87,6 +87,9 @@
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
+        <xsl:if test="$context = 'header'">
+          <xsl:call-template name="generate.breadcrumbs.back"/>
+        </xsl:if>
         <xsl:choose>
           <xsl:when test="$rootelementname != 'article'">
             <xsl:for-each select="ancestor-or-self::*">
