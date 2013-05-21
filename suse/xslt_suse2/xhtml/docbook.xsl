@@ -468,7 +468,7 @@
                     ($draft.mode = 'maybe' and
                     ancestor-or-self::*[@status][1]/@status = 'draft'))
                     and $draft.watermark.image != ''"
-        >draft </xsl:if><xsl:if test="$is.chunk = 1">single </xsl:if><xsl:if test="$add.suse.footer = 0"
+        >draft </xsl:if><xsl:if test="$is.chunk = 0">single </xsl:if><xsl:if test="$add.suse.footer = 0"
         >nofooter </xsl:if>offline</xsl:attribute>
   </xsl:template>
 
