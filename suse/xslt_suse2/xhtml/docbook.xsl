@@ -261,7 +261,6 @@
 
   <xsl:template name="generate.breadcrumbs.back">
     <xsl:if test="$overview-page != ''">
-      <xsl:message>HALLO: <xsl:value-of select="$overview-page"/>, .</xsl:message>
       <a class="back-to-overview-link" href="{$overview-page}">
         <xsl:choose>
           <xsl:when test="$overview-page-title != 0">
