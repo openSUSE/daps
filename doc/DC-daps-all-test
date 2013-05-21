@@ -1,0 +1,30 @@
+## ----------------------------
+## Doc Config File for DAPS
+## DocBook Authoring and Publishing Suite
+## ----------------------------
+##
+## Basics
+MAIN="MAIN.DAPS.xml"
+#ROOTID="book.daps.user"
+
+## Profiling
+
+# "quick" is not an actual OS -- it determines whether or not the links into
+# the Quick Start Guide should be added.
+PROFOS="osuse;quick"
+
+PROFARCH="x86;amd64;em64t"
+
+## stylesheet location
+#STYLEROOT="/usr/share/xml/docbook/stylesheet/suse"
+#HTML_CSS="/usr/share/xml/docbook/stylesheet/suse/html/susebooks.css"
+#EPUB_CSS="/usr/share/xml/docbook/stylesheet/suse/epub/susebooks.css"
+
+## enable sourcing
+export DOCCONF=$BASH_SOURCE
+
+## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## homepage at the top of the page
+XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
+XSLTPARAM="$XSLTPARAM --param suse.content=0"
+XSLTPARAM="$XSLTPARAM --stringparam overview-page=about:mozilla --stringparam overview-page-title=Back\ to\ DAPS\ overview"
