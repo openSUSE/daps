@@ -51,8 +51,27 @@
       </xsl:when>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="format">
+    <xsl:variable name="pi-format">
+      <xsl:call-template name="pi-attribute">
+        <xsl:with-param name="pis" select="articleinfo/date/processing-instruction('dbtimestamp')"/>
+        <xsl:with-param name="attribute">format</xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$pi-format != ''">
+        <xsl:value-of select="$pi-format"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'datetime'"/>
+          <xsl:with-param name="name" select="'format'"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="pi" select="articleinfo/date/processing-instruction('dbtimestamp')"/>
   
-
   <fo:page-sequence xsl:use-attribute-sets="page.attributes"
                     hyphenate="{$hyphenate}"
                     master-reference="{$master-reference}">
@@ -119,11 +138,27 @@
             <fo:table-row>
               <fo:table-cell>
                 <fo:block margin-top=".5em" font-size="8pt">
-                  <xsl:call-template name="datetime.format">
-                    <xsl:with-param name="date" select="$date"/>
-                    <xsl:with-param name="format">B d, Y</xsl:with-param>
-                    <xsl:with-param name="padding" select="1"/>
-                  </xsl:call-template>
+                  <xsl:choose>
+                    <xsl:when test="normalize-space(articleinfo/date/text()) = '' 
+                                    and not($pi)">
+                      <xsl:call-template name="datetime.format">
+                     <xsl:with-param name="date" select="$date"/>
+                     <xsl:with-param name="format">
+                        <xsl:choose>
+                          <xsl:when test="$pi">
+                            <xsl:value-of select="$format"/>
+                          </xsl:when>
+                          <xsl:otherwise>B d, Y</xsl:otherwise>
+                        </xsl:choose>
+                     </xsl:with-param>
+                     <xsl:with-param name="padding" select="1"/>
+                   </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:apply-templates select="articleinfo/date"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  
                 </fo:block>
               </fo:table-cell>
               <fo:table-cell>
