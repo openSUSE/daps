@@ -224,7 +224,7 @@
       <xsl:attribute name="accesskey">
           <xsl:text>c</xsl:text>
       </xsl:attribute>
-      <span class="book2-icon"> </span>
+      <span class="single-contents-icon"> </span>
       <xsl:if test="$context = 'fixed-header'">
         <xsl:call-template name="gentext">
           <xsl:with-param name="key">showcontentsoverview</xsl:with-param>
@@ -260,17 +260,22 @@
   </xsl:template>
 
   <xsl:template name="generate.breadcrumbs.back">
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="$overview-page-title != 0">
+          <xsl:value-of select="$overview-page-title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$overview-page"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:if test="$overview-page != ''">
-      <a class="back-to-overview-link" href="{$overview-page}">
-        <xsl:choose>
-          <xsl:when test="$overview-page-title != 0">
-            <xsl:attribute name="title"><xsl:value-of select="$overview-page-title"/></xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="title"><xsl:value-of select="$overview-page"/></xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
+      <a class="overview-link" href="{$overview-page}" title="{$title}">
+        <span class="overview-icon"><xsl:value-of select="$title"/></span>
       </a>
+      <span><xsl:copy-of select="$daps.breadcrumbs.sep"/></span>
     </xsl:if>
   </xsl:template>
 

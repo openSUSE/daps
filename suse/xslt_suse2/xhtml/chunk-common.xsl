@@ -52,6 +52,14 @@
             <xsl:value-of select="string($title)"/>
           </xsl:attribute>
           <span class="book-icon">
+            <xsl:choose>
+              <xsl:when test="$overview-page = ''">
+                <xsl:attribute name="class">book-icon</xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="class">book-icon lower-level</xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
             <xsl:value-of select="string($title)"/>
           </span>
         </xsl:when>
@@ -63,7 +71,7 @@
             </xsl:call-template>
           </xsl:attribute>
           <xsl:if test="$class = 'single-crumb'">
-            <span class="book2-icon"> </span>
+            <span class="single-contents-icon"> </span>
           </xsl:if>
           <xsl:if test="$context = 'fixed-header'">
             <xsl:call-template name="gentext">
@@ -87,9 +95,7 @@
 
     <xsl:if test="$generate.breadcrumbs != 0">
       <div class="crumbs">
-        <xsl:if test="$context = 'header'">
-          <xsl:call-template name="generate.breadcrumbs.back"/>
-        </xsl:if>
+        <xsl:call-template name="generate.breadcrumbs.back"/>
         <xsl:choose>
           <xsl:when test="$rootelementname != 'article'">
             <xsl:for-each select="ancestor-or-self::*">
