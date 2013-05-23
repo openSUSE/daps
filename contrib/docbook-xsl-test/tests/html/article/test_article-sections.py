@@ -40,18 +40,34 @@ class TestArticle():
       """Checks if /html/body/div[1]/@class='article'
       """
       res = self.result.xpath("/html/body/div[1]")[0].attrib.get("class")
-      assert "article" in res
+      assert "article" == res
 
-   div test_div_titlepage(self):
-      """
+   def test_div_titlepage(self):
+      """Checks for /html/body/div[@class='article']/div[@class] = 'titlepage'
       """
       res = self.result.xpath("/html/body/div[@class='article']/div[@class]")[0].attrib.get("class")
-      assert "titlepage" in res
+      assert "titlepage" == res
 
    def test_div_toc(self):
       """Checks if TOC is written in /html/body[1]/div[1]/div[2]/@class='toc'
       """
       res = self.result.xpath("/html/body/div[1]/div[2]")[0].attrib.get("class")
-      assert "toc" in res
+      assert "toc" == res
 
+   def test_div_toc_dl(self):
+      """Checks if TOC contains dl 
+      """
+      res = self.result.xpath("/html/body/div[1]/div[@class='toc']/dl")[0].attrib.get("class")
+      assert "toc" == res
+      res = self.result.xpath("/html/body/div[1]/div[@class='toc']/dl/dt")[0]
+      assert "dt" == res.tag
+
+   def test_div_toc_dl_dt_span(self):
+      """Checks if sect1 is available in toc
+      """
+      res = self.result.xpath("/html/body/div[1]/div[@class='toc']/dl/dt/span")[0].attrib.get("class")
+      assert "sect1" == res
+      
+      
+   
 # EOF
