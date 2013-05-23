@@ -65,7 +65,7 @@ class TestArticle():
    def test_div_toc_sect1(self):
       """Checks if sect1 is available in toc, both @id and text
       """
-      res = self.result.xpath("/html/body/div[1]/div[@class='toc']/dl/dt/span")[0]
+      res = self.result.xpath("/html/body/div[1]/div[@class='toc']//span[@class='sect1']")[0]
       assert "sect1" == res.attrib.get("class")
       
       dbid = self.xf.xml.xpath("/*/sect1[1]/@id")[0]
@@ -77,5 +77,20 @@ class TestArticle():
       
       assert dbtitle.text == htmltitle.text
      
+   def test_div_toc_sect2(self):
+      """Checks if sect1 is available in toc, both @id and text
+      """
+      res = self.result.xpath("/html/body/div[1]/div[@class='toc']//span[@class='sect2']")[0]
+      assert "sect2" == res.attrib.get("class")
+      
+      dbid = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/@id")[0]
+      htmlid = res.xpath("substring-after(a/@href, '#')")
+      assert dbid == htmlid
+      
+      dbtitle = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/title")[0]
+      htmltitle = res.xpath("/html/body//div[@class='toc']//span[@class='sect2']/a")[0]
+      
+      assert dbtitle.text == htmltitle.text
      
+    
 # EOF
