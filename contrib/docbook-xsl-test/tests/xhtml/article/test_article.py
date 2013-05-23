@@ -92,14 +92,14 @@ class TestArticleToc():
       """
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect4']",
                               namespaces=self.ns)
-      assert res == []
+      assert len(res) == 0
 
    def test_div_toc_sect5(self):
       """Checks if sect5 is NOT available
       """
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect5']",
                               namespaces=self.ns)
-      assert res == []
+      assert len(res) == 0
    
 
 class TestArticle():
@@ -143,7 +143,5 @@ class TestArticle():
                               namespaces=self.ns)[0].attrib.get("class")
       assert "titlepage" == res
 
-   
       
-   
 # EOF
