@@ -47,11 +47,14 @@ class TestArticleToc():
                               namespaces=self.ns)[0]
       assert "sect1" == res.attrib.get("class")
       
-      dbid = self.xf.xml.xpath("/*/sect1[1]/@id", namespaces=self.ns)[0]
-      htmlid = res.xpath("substring-after(h:a/@href, '#')", namespaces=self.ns)
+      dbid = self.xf.xml.xpath("/*/sect1[1]/@id", 
+                               namespaces=self.ns)[0]
+      htmlid = res.xpath("substring-after(h:a/@href, '#')", 
+                         namespaces=self.ns)
       assert dbid == htmlid
       
-      dbtitle = self.xf.xml.xpath("/*/sect1[1]/title", namespaces=self.ns)[0]
+      dbtitle = self.xf.xml.xpath("/*/sect1[1]/title", 
+                                  namespaces=self.ns)[0]
       htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect1']/h:a", 
                             namespaces=self.ns)[0]
       
@@ -64,11 +67,14 @@ class TestArticleToc():
                               namespaces=self.ns)[0]
       assert "sect2" == res.attrib.get("class")
       
-      dbid = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/@id", namespaces=self.ns)[0]
-      htmlid = res.xpath("substring-after(h:a/@href, '#')", namespaces=self.ns)
+      dbid = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/@id", 
+                               namespaces=self.ns)[0]
+      htmlid = res.xpath("substring-after(h:a/@href, '#')", 
+                         namespaces=self.ns)
       assert dbid == htmlid
       
-      dbtitle = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/title", namespaces=self.ns)[0]
+      dbtitle = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/title", 
+                                  namespaces=self.ns)[0]
       htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']/h:a", 
                             namespaces=self.ns)[0]
       
@@ -111,27 +117,33 @@ class TestArticle():
    def test_head_title(self):
       """Compare /html/head/title with /*/title
       """
-      restitle = self.result.xpath("/h:html/h:head/h:title", namespaces=self.ns)[0].text
+      restitle = self.result.xpath("/h:html/h:head/h:title", 
+                                   namespaces=self.ns)[0].text
       dbtitle = self.xf.xml.xpath("/*/title")[0].text
       assert restitle == dbtitle
    
    def test_head_generator(self):
       """Checks if meta[@name='generator'] contains DocBook string
       """
-      resmeta = self.result.xpath("/h:html/h:head/h:meta[@name='generator']", namespaces=self.ns)[0].attrib.get("content")
+      resmeta = self.result.xpath("/h:html/h:head/h:meta[@name='generator']", 
+                                  namespaces=self.ns)[0].attrib.get("content")
       assert "DocBook XSL Stylesheets" in resmeta
 
    def test_div_article(self):
       """Checks if /html/body/div[1]/@class='article'
       """
-      res = self.result.xpath("/h:html/h:body/h:div[1]", namespaces=self.ns)[0].attrib.get("class")
+      res = self.result.xpath("/h:html/h:body/h:div[1]", 
+                              namespaces=self.ns)[0].attrib.get("class")
       assert "article" == res
 
    def test_div_titlepage(self):
       """Checks for /html/body/div[@class='article']/div[@class] = 'titlepage'
       """
-      res = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class]", namespaces=self.ns)[0].attrib.get("class")
+      res = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class]", 
+                              namespaces=self.ns)[0].attrib.get("class")
       assert "titlepage" == res
 
-
+   
+      
+   
 # EOF
