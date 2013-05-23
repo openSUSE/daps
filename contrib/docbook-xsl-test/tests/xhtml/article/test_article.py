@@ -26,21 +26,25 @@ class TestArticleToc():
    def test_div_toc(self):
       """Checks if TOC is written in /html/body[1]/div[1]/div[2]/@class='toc'
       """
-      res = self.result.xpath("/h:html/h:body/h:div[1]/h:div[2]", namespaces=self.ns)[0].attrib.get("class")
+      res = self.result.xpath("/h:html/h:body/h:div[1]/h:div[2]", 
+                              namespaces=self.ns)[0].attrib.get("class")
       assert "toc" == res
 
    def test_div_toc_dl(self):
       """Checks if TOC contains dl 
       """
-      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl", namespaces=self.ns)[0].attrib.get("class")
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl", 
+                              namespaces=self.ns)[0].attrib.get("class")
       assert "toc" == res
-      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl/h:dt", namespaces=self.ns)[0]
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl/h:dt", 
+                              namespaces=self.ns)[0]
       assert "{{{0}}}dt".format(self.ns["h"]) == res.tag
 
    def test_div_toc_sect1(self):
       """Checks if sect1 is available in toc, both @id and text
       """
-      res = self.result.xpath("/h:html/h:body/h:div[1]/h:div[@class='toc']//h:span[@class='sect1']", namespaces=self.ns)[0]
+      res = self.result.xpath("/h:html/h:body/h:div[1]/h:div[@class='toc']//h:span[@class='sect1']",
+                              namespaces=self.ns)[0]
       assert "sect1" == res.attrib.get("class")
       
       dbid = self.xf.xml.xpath("/*/sect1[1]/@id", namespaces=self.ns)[0]
@@ -48,14 +52,16 @@ class TestArticleToc():
       assert dbid == htmlid
       
       dbtitle = self.xf.xml.xpath("/*/sect1[1]/title", namespaces=self.ns)[0]
-      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect1']/h:a", namespaces=self.ns)[0]
+      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect1']/h:a", 
+                            namespaces=self.ns)[0]
       
       assert dbtitle.text == htmltitle.text
      
    def test_div_toc_sect2(self):
       """Checks if sect2 is available in toc, both @id and text
       """
-      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']", namespaces=self.ns)[0]
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']", 
+                              namespaces=self.ns)[0]
       assert "sect2" == res.attrib.get("class")
       
       dbid = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/@id", namespaces=self.ns)[0]
@@ -63,7 +69,8 @@ class TestArticleToc():
       assert dbid == htmlid
       
       dbtitle = self.xf.xml.xpath("/*/sect1[1]/sect2[1]/title", namespaces=self.ns)[0]
-      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']/h:a", namespaces=self.ns)[0]
+      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']/h:a", 
+                            namespaces=self.ns)[0]
       
       assert dbtitle.text == htmltitle.text
      
