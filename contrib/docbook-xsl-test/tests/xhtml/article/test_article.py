@@ -79,7 +79,7 @@ class TestArticle():
       assert dbtitle.text == htmltitle.text
      
    def test_div_toc_sect2(self):
-      """Checks if sect1 is available in toc, both @id and text
+      """Checks if sect2 is available in toc, both @id and text
       """
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']", namespaces=self.ns)[0]
       assert "sect2" == res.attrib.get("class")
@@ -93,5 +93,12 @@ class TestArticle():
       
       assert dbtitle.text == htmltitle.text
      
-    
+   def test_div_toc_sect3(self):
+      """Checks if sect3 is NOT available
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect3']",
+                              namespaces=self.ns)
+      assert res == []
+   
+   
 # EOF
