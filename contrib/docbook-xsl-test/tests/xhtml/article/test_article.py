@@ -99,6 +99,19 @@ class TestArticle():
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect3']",
                               namespaces=self.ns)
       assert res == []
-   
-   
+
+   def test_div_toc_sect4(self):
+      """Checks if sect4 is NOT available
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect4']",
+                              namespaces=self.ns)
+      assert res == []
+
+   def test_div_toc_sect5(self):
+      """Checks if sect5 is NOT available
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect5']",
+                              namespaces=self.ns)
+      assert res == []
+
 # EOF
