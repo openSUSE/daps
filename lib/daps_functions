@@ -247,7 +247,7 @@ function init_env {
     fi
 
     
-    if [[ ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
+    if [[ -n $"$DOCCONF" && ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
         ln -sf $DOCCONF ${R_DIR}/$(basename "$DOCCONF")
         if [[ 0 != $? && 0 != $VERBOSITY ]]; then
             ccecho "warn" "Warning: Cannot create link to $DOCCONF in $R_DIR"

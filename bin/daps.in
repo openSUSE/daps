@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 #
 # Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
@@ -844,7 +844,7 @@ function sanitize_path () {
 # Check all paths in $PATHLIST with sanitize_path
 #
 function check_pathlist () {
-    local ABS BASEDIR DIR VAL
+    local BASEDIR DIR VAL
 
     BASEDIR=$1
 
@@ -1394,7 +1394,13 @@ XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 # make all paths absolute, remove trailing / and check
-MY_BASEDIR=$(readlink -en $(dirname $DOCCONF_CMDL))
+if [[ -n $DOCCONF_CMDL ]]; then
+    MY_BASEDIR=$(readlink -en $(dirname $DOCCONF_CMDL))
+elif [[ -n $MAIN_CMDL ]]; then
+    MY_BASEDIR=$(readlink -en $(dirname $MAIN_CMDL))
+else
+    exit_on_error "Fatal: Neither a DC nor a MAIN file is set"
+fi
 check_pathlist "$MY_BASEDIR"
 recover_cmdl_values
 
