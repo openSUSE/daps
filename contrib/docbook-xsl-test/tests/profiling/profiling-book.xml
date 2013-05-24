@@ -10,30 +10,59 @@
     </author>
   </bookinfo>
 
-  <part id="singleprof">
-    <title>Single Profiling</title>
-    <chapter id="cha.foo" os="foo">
+  <part id="singleprof-os">
+    <title>Single Profiling with os</title>
+    <chapter id="cha.os.foo" os="foo">
       <title>Chapter with os=foo</title>
       <para/>
-      <sect1 id="sec.foo.1" os="bar">
+      <sect1 id="sec.os.1" os="bar">
         <title>Section with os=bar</title>
         <para/>
       </sect1>
-      <sect1 id="sec.foo.2" os="foo">
+      <sect1 id="sec.os.2" os="foo">
         <title>Section with os=foo</title>
         <para/>
       </sect1>
-      <sect1 id="sec.foo.3">
+      <sect1 id="sec.os.3">
         <title>Seciton without any Profiling Attributes</title>
         <para>The <phrase os="foo">quick</phrase> brown fox jumps over the
           <phrase os="bar">lazy</phrase> dog.</para>
       </sect1>
     </chapter>
-    <chapter id="cha.bar" os="bar">
+    <chapter id="cha.os.bar" os="bar">
       <title>Chapter with os=bar</title>
       <para/>
     </chapter>
-    <chapter id="chap.non">
+    <chapter id="chap.os.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+  
+  <part id="singleprof-arch">
+    <title>Single Profiling with arch</title>
+    <chapter id="cha.arch.foo" arch="foo">
+      <title>Chapter with arch=foo</title>
+      <para/>
+      <sect1 id="sec.arch.1" arch="bar">
+        <title>Section with arch=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.arch.2" arch="foo">
+        <title>Section with arch=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.arch.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase arch="foo">quick</phrase> brown fox jumps over the
+          <phrase arch="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.arch.bar" arch="bar">
+      <title>Chapter with arch=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.arch.none">
       <title>Chapter without any Profiling Attributes</title>
       <para/>
     </chapter>

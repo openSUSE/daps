@@ -12,13 +12,13 @@ import conftest as conf
 DIR=os.path.dirname(__file__)
 
 
-class TestSingleProfilingBookProfileOS():
-   """Tests book profiling with one profiling parameter"""
+class TestSingleProfilingBookProfileArch():
+   """Tests book profiling with one @arch profiling parameter"""
    @classmethod
    def setup_class(cls):
       """ setup class (only once) and transform XML file
       """
-      cls.profattr = {'profile.os': "'foo'"}
+      cls.profattr = {'profile.arch': "'foo'"}
       cls.xf = conf.XMLFile( os.path.join(DIR, "profiling-book.xml") )
       cls.xf.parse( conf.STYLESHEETS["profile"] )
       cls.result = cls.xf.transform( **cls.profattr )
@@ -34,37 +34,37 @@ class TestSingleProfilingBookProfileOS():
    def test_chapter(self):
       """Checks, if the correct amount of chapters are seen
       """
-      dest = self.result.xpath("/book/part[@id='singleprof-os']/chapter")
+      dest = self.result.xpath("/book/part[@id='singleprof-arch']/chapter")
       assert len(dest) == 2
    
    def test_chapter_ids(self):
       """Checks if available chapter id's are the same
       """
-      dest = self.result.xpath("/book/part[@id='singleprof-os']/chapter/@id")
-      src= self.xf.xml.xpath("/book/part[@id='singleprof-os']/chapter[not(@os!='foo')]/@id")
+      dest = self.result.xpath("/book/part[@id='singleprof-arch']/chapter/@id")
+      src= self.xf.xml.xpath("/book/part[@id='singleprof-arch']/chapter[not(@arch!='foo')]/@id")
       assert src == dest
       
    def test_chapter_section(self):
       """Checks, if the correct amount of sect1 are seen
       """
-      dest = self.result.xpath("//chapter[@id='cha.os.foo']/sect1")
+      dest = self.result.xpath("//chapter[@id='cha.arch.foo']/sect1")
       assert len(dest) == 2
 
    def test_chapter_section_ids(self):
       """Checks if available sect1 id's are the same
       """
-      dest = self.result.xpath("//chapter[@id='cha.os.foo']/sect1/@id")
-      src=self.xf.xml.xpath("//chapter[@id='cha.os.foo']/sect1[not(@os!='foo')]/@id")
+      dest = self.result.xpath("//chapter[@id='cha.arch.foo']/sect1/@id")
+      src=self.xf.xml.xpath("//chapter[@id='cha.arch.foo']/sect1[not(@arch!='foo')]/@id")
       assert src == dest
 
    def test_inline(self):
       """Checks if correct string is seen
       """
-      dest = self.result.xpath("string(//sect1[@id='sec.os.3']/para)").split()
+      dest = self.result.xpath("string(//sect1[@id='sec.arch.3']/para)").split()
       dest = " ".join(dest)
-      para = self.xf.xml.xpath("//sect1[@id='sec.os.3']/para")[0]
+      para = self.xf.xml.xpath("//sect1[@id='sec.arch.3']/para")[0]
       res=[]
-      for i in para.xpath("node()[not(self::phrase[@os!='foo'])]"):
+      for i in para.xpath("node()[not(self::phrase[@arch!='foo'])]"):
          if hasattr(i, "text"):
             res.append(i.text)
          else:
