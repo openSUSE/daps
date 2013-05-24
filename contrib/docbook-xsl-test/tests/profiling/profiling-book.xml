@@ -69,6 +69,35 @@
     </chapter>
   </part>
 
+  <part id="singleprof-conformance">
+    <title>Single Profiling with conformance</title>
+    <chapter id="cha.conformance.foo" conformance="foo">
+      <title>Chapter with conformance=foo</title>
+      <para/>
+      <sect1 id="sec.conformance.1" conformance="bar">
+        <title>Section with conformance=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.conformance.2" conformance="foo">
+        <title>Section with conformance=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.conformance.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase conformance="foo">quick</phrase> brown fox jumps over the
+          <phrase conformance="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.conformance.bar" conformance="bar">
+      <title>Chapter with conformance=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.conformance.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+
   <part id="singleprof-os">
     <title>Single Profiling with os</title>
     <chapter id="cha.os.foo" os="foo">
@@ -126,4 +155,5 @@
       <para/>
     </chapter>
   </part>
+
 </book>
