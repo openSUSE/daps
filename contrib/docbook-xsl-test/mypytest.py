@@ -11,5 +11,5 @@ class MyPlugin:
     def pytest_sessionfinish(self):
         print("\n*** test run reporting finishing")
 
-pytest.main("-s -v", plugins=[MyPlugin()] )
+pytest.main(plugins=[MyPlugin()] )
 
