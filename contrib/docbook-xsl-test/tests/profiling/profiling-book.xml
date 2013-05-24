@@ -98,6 +98,36 @@
     </chapter>
   </part>
 
+  <part id="singleprof-revision">
+    <title>Single Profiling with revision</title>
+    <chapter id="cha.revision.foo" revision="foo">
+      <title>Chapter with revision=foo</title>
+      <para/>
+      <sect1 id="sec.revision.1" revision="bar">
+        <title>Section with revision=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.revision.2" revision="foo">
+        <title>Section with revision=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.revision.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase revision="foo">quick</phrase> brown fox jumps over the
+          <phrase revision="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.revision.bar" revision="bar">
+      <title>Chapter with revision=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.revision.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+
+
   <part id="singleprof-os">
     <title>Single Profiling with os</title>
     <chapter id="cha.os.foo" os="foo">
