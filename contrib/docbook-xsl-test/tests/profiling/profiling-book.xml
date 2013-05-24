@@ -271,4 +271,33 @@
     </chapter>
   </part>
 
+  <part id="singleprof-wordsize">
+    <title>Single Profiling with wordsize</title>
+    <chapter id="cha.wordsize.foo" wordsize="foo">
+      <title>Chapter with wordsize=foo</title>
+      <para/>
+      <sect1 id="sec.wordsize.1" wordsize="bar">
+        <title>Section with wordsize=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.wordsize.2" wordsize="foo">
+        <title>Section with wordsize=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.wordsize.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase wordsize="foo">quick</phrase> brown fox jumps over the
+          <phrase wordsize="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.wordsize.bar" wordsize="bar">
+      <title>Chapter with wordsize=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.wordsize.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+
 </book>
