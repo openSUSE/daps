@@ -68,6 +68,35 @@
     </chapter>
   </part>
   
+  <part id="singleprof-condition">
+    <title>Single Profiling with condition</title>
+    <chapter id="cha.condition.foo" condition="foo">
+      <title>Chapter with condition=foo</title>
+      <para/>
+      <sect1 id="sec.condition.1" condition="bar">
+        <title>Section with condition=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.condition.2" condition="foo">
+        <title>Section with condition=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.condition.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase condition="foo">quick</phrase> brown fox jumps over the
+          <phrase condition="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.condition.bar" condition="bar">
+      <title>Chapter with condition=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.condition.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+  
   <part id="singleprof-vendor">
     <title>Single Profiling with vendor</title>
     <chapter id="cha.vendor.foo" vendor="foo">
