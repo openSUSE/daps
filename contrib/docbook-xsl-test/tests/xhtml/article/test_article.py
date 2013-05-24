@@ -136,12 +136,25 @@ class TestArticle():
                               namespaces=self.ns)[0].attrib.get("class")
       assert "article" == res
 
-   def test_div_titlepage(self):
+   def test_div_article_titlepage(self):
       """Checks for /html/body/div[@class='article']/div[@class] = 'titlepage'
       """
       res = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class]", 
                               namespaces=self.ns)[0].attrib.get("class")
       assert "titlepage" == res
 
+   def test_div_sect1(self):
+      """Checks if a div[@class='sect1'] element is available
+      """
+      res = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='sect1']", 
+                              namespaces=self.ns)[0]
+      assert res is not None
       
+      # print(">>>", res, dir(res), res.getchildren() )
+      child = res.getchildren()[0]
+      # print("attrib:", child.attrib)
+      assert child.attrib.get('class') == 'titlepage'
+   
+   
+
 # EOF
