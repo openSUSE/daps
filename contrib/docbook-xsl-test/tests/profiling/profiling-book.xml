@@ -15,13 +15,26 @@
     <chapter id="cha.foo" os="foo">
       <title>Chapter with os=foo</title>
       <para/>
+      <sect1 id="sec.foo.1" os="bar">
+        <title>Section with os=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.foo.2" os="foo">
+        <title>Section with os=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.foo.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase os="foo">quick</phrase> brown fox jumps over the
+          <phrase os="bar">lazy</phrase> dog.</para>
+      </sect1>
     </chapter>
     <chapter id="cha.bar" os="bar">
       <title>Chapter with os=bar</title>
       <para/>
     </chapter>
     <chapter id="chap.non">
-      <title>Chapter without any Attribute</title>
+      <title>Chapter without any Profiling Attributes</title>
       <para/>
     </chapter>
   </part>
