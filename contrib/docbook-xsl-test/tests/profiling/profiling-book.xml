@@ -127,6 +127,34 @@
     </chapter>
   </part>
 
+  <part id="singleprof-revisionflag">
+    <title>Single Profiling with revisionflag</title>
+    <chapter id="cha.revisionflag.foo" revisionflag="foo">
+      <title>Chapter with revisionflag=foo</title>
+      <para/>
+      <sect1 id="sec.revisionflag.1" revisionflag="bar">
+        <title>Section with revisionflag=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.revisionflag.2" revisionflag="foo">
+        <title>Section with revisionflag=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.revisionflag.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase revisionflag="foo">quick</phrase> brown fox jumps over the
+          <phrase revisionflag="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.revisionflag.bar" revisionflag="bar">
+      <title>Chapter with revisionflag=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.revisionflag.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
 
   <part id="singleprof-os">
     <title>Single Profiling with os</title>
