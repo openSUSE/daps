@@ -12,7 +12,7 @@ import conftest as conf
 DIR=os.path.dirname(__file__)
 
 
-class TestSingleProfilingBookProfileRevision():
+class TestSingleProfilingBookProfileRevisionFlag():
    """Tests book profiling with one profiling parameter"""
    @classmethod
    def setup_class(cls):
