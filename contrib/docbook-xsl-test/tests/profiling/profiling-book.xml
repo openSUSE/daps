@@ -156,6 +156,35 @@
     </chapter>
   </part>
 
+  <part id="singleprof-security">
+    <title>Single Profiling with security</title>
+    <chapter id="cha.security.foo" security="foo">
+      <title>Chapter with security=foo</title>
+      <para/>
+      <sect1 id="sec.security.1" security="bar">
+        <title>Section with security=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.security.2" security="foo">
+        <title>Section with security=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.security.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase security="foo">quick</phrase> brown fox jumps over the
+          <phrase security="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.security.bar" security="bar">
+      <title>Chapter with security=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.security.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+
   <part id="singleprof-os">
     <title>Single Profiling with os</title>
     <chapter id="cha.os.foo" os="foo">
