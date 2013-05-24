@@ -22,8 +22,12 @@ endif
 # Allows to set a custom publication date
 #
 ifdef SETDATE
-  PROFSTRINGS += --stringparam "pubdate=$(SETDATE)"
-  .INTERMEDIATE: $(PROFILES)
+  ifdef PROFILE_URN
+    PROFSTRINGS += --stringparam "pubdate=$(SETDATE)"
+    .INTERMEDIATE: $(PROFILES)
+  else
+    $(warn $(shell ccecho "warn" "Warning: Ignoring --setdate option since $(MAIN) does not include a profiling URN"))
+  endif
 endif
 
 # Resolve profile urn because saxon does not accept urns
