@@ -185,6 +185,34 @@
     </chapter>
   </part>
 
+  <part id="singleprof-userlevel">
+    <title>Single Profiling with userlevel</title>
+    <chapter id="cha.userlevel.foo" userlevel="foo">
+      <title>Chapter with userlevel=foo</title>
+      <para/>
+      <sect1 id="sec.userlevel.1" userlevel="bar">
+        <title>Section with userlevel=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.userlevel.2" userlevel="foo">
+        <title>Section with userlevel=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.userlevel.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase userlevel="foo">quick</phrase> brown fox jumps over the
+          <phrase userlevel="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.userlevel.bar" userlevel="bar">
+      <title>Chapter with userlevel=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.userlevel.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
   <part id="singleprof-os">
     <title>Single Profiling with os</title>
     <chapter id="cha.os.foo" os="foo">
