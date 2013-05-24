@@ -40,6 +40,7 @@ STYLESHEETS={
    'xhtml5-single':   'xhtml5/docbook.xsl',
    'xhtml5-chunk':    'xhtml5/chunk.xsl',
    'fo':              'fo/docbook.xsl',
+   'profile':         'profiling/profile.xsl',
    'epub':            'epub/docbook.xsl',
    'epub3':           'epub3/chunk.xsl',
    }
@@ -149,8 +150,8 @@ class XMLFile():
       self._xsltree = etree.parse(self._xslt)
       self._transform = etree.XSLT(self._xsltree)
    
-   def transform(self):
-      return self._transform(self._xmltree)
+   def transform(self, **kwargs):
+      return self._transform(self._xmltree, **kwargs)
    
    @property
    def xml(self):
