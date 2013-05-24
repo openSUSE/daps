@@ -68,4 +68,32 @@
     </chapter>
   </part>
   
+  <part id="singleprof-vendor">
+    <title>Single Profiling with vendor</title>
+    <chapter id="cha.vendor.foo" vendor="foo">
+      <title>Chapter with vendor=foo</title>
+      <para/>
+      <sect1 id="sec.vendor.1" vendor="bar">
+        <title>Section with vendor=bar</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.vendor.2" vendor="foo">
+        <title>Section with vendor=foo</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.vendor.3">
+        <title>Seciton without any Profiling Attributes</title>
+        <para>The <phrase vendor="foo">quick</phrase> brown fox jumps over the
+          <phrase vendor="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.vendor.bar" vendor="bar">
+      <title>Chapter with vendor=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.vendor.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
 </book>
