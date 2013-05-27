@@ -274,7 +274,10 @@ endif
 #-----
 # Language
 #
-LL ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR))
+# get language string from $MAIN and transform it the same way the Docbook
+# Stylesheets do (all lowercase, "-" to "_")
+#
+LL ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr '[:upper:]'- '[:lower:]'_ )
 ifdef LL
   LANGSTRING   := _$(LL)
 endif
