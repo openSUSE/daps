@@ -104,7 +104,7 @@
     target.book: <xsl:value-of select="count($target.book)"/>
   </xsl:message>-->
   
-  <xsl:if test="$lang != 'ko'"> 
+    
     <xsl:apply-templates select="$target" mode="xref-to">
       <xsl:with-param name="referrer" select="."/>
       <xsl:with-param name="xrefstyle">
@@ -115,7 +115,7 @@
         </xsl:choose>
       </xsl:with-param>
     </xsl:apply-templates>
-  </xsl:if>
+  
   
   <xsl:text> (</xsl:text>
   <xsl:if test="$target/self::sect1 or
@@ -150,18 +150,6 @@
   </xsl:choose>
   <xsl:text>)</xsl:text>
   
-  <xsl:if test="$lang = 'ko'"> 
-    <xsl:apply-templates select="$target" mode="xref-to">
-      <xsl:with-param name="referrer" select="."/>
-      <xsl:with-param name="xrefstyle">
-        <xsl:choose>
-          <xsl:when test="$refelem = 'chapter' or
-            $refelem = 'appendix'">number</xsl:when>
-          <xsl:otherwise>nonumber</xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:apply-templates>
-  </xsl:if>
 </xsl:template>
 
 
@@ -353,4 +341,5 @@
     <!-- Fallback to default mode -->
     <xsl:apply-templates select="."/>
   </xsl:template>
+    
 </xsl:stylesheet>
