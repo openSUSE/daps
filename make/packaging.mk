@@ -303,48 +303,82 @@ else
 endif
 ifdef USESVN
   TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR)))
+  TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
-TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
+ifdef TO_TRANS_FILES
+  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+  NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
+endif
 
-NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
-NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
+TO_TRANS_IMGS := $(USED_ALL)
+TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
+
+# get all images in the current set in case set and current book differ
+ifdef ROOTID
+  USED_SET := $(shell $(XSLTPROC) --stringparam "xml.or.img=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
+
+  # USED_SET contains just the images names as mentioned in the XML sources
+  # (foo.png). The addprefix/addsuffix calls transform it into
+  # /bar/images/src/*/foo.*, wildcard resolves that string into existing files
+  # and sort removes the duplicates
+  #
+  USED_SET_ALL := $(sort $(wildcard \
+       $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(USED_SET)) ))))
+
+  ifdef TO_TRANS_IMGS
+    NO_TRANS_IMGS := $(filter-out $(TO_TRANS_IMGS),$(USED_SET_ALL))
+  else
+    NO_TRANS_IMGS := $(USED_SET_ALL)
+  endif
+  NO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-setfiles-$(DOCNAME)$(LANGSTRING).tar.bz2
+endif
 
 .PHONY: locdrop
+ifdef DEF_FILE
+  locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
+endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
 locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
-  ifdef DEF_FILE
-    locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
-  endif
   ifndef USESVN
-	@ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"
-	exit 1
+	$(error $(shell ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"))
   endif
- ifndef TO_TRANS_FILES
-	@ccecho "error" "Fatal error: This book does not contain any files for translation"
-	exit 1
+  ifndef TO_TRANS_FILES
+	$(error $(shell ccecho "error" "Fatal error: This book does not contain any files for translation"))
+  endif
+  ifndef DOCCONF
+	$(error $(shell ccecho "error" "Fatal error: locdrop is only supported when using a DC-file"))
   endif
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-	exit 1
+	$(error )
   else
         # tarball with files for translation
 	BZIP2=--best tar chfj $(TO_TRANS_TAR) --absolute-names \
 	  --transform=s%$(PROFILEDIR)/%xml/% $(TO_TRANS_FILES)
         # tarball with files not being translated
-	tar chf $(NO_TRANS_TAR) --absolute-names \
-	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
-	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
+        # contains at least the DC file
+	tar chf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DOCCONF)
+    ifdef NO_TRANS_FILES
+	tar rhf $(NO_TRANS_TAR) --absolute-names \
+	  --transform=s%$(PROFILEDIR)/%xml/% $(NO_TRANS_FILES)
+    endif
     ifdef DEF_FILE
 	tar rhf $(NO_TRANS_TAR) --absolute-names --transform=s%$(DOC_DIR)/%% \
 	  $(DEF_FILE) $(DC_FILES)
     endif
-	bzip2 -9f $(NO_TRANS_TAR)
-        # graphics tarball
-	BZIP2=--best tar cfhj \
-	  $(LOCDROP_EXPORT_BOOKDIR)/graphics-$(DOCNAME)$(LANGSTRING).tar.bz2 \
-	  --absolute-names --transform=s%$(DOC_DIR)/%% $(USED_ALL)
+	[[ -f $(NO_TRANS_TAR) ]] && bzip2 -9f $(NO_TRANS_TAR)
+    ifdef TO_TRANS_IMGS
+        # graphics tarball "translated graphics"
+	BZIP2=--best tar cfhj $(TO_TRANS_IMG_TAR) \
+	  --absolute-names --transform=s%$(DOC_DIR)/%% $(TO_TRANS_IMGS)
+    endif
+    ifdef NO_TRANS_IMGS
+        # graphics tarball "translated graphics"
+	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
+	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
+    endif
     ifneq ($(NOPDF),1)
 	$(MAKE) -f $(DAPSROOT)/make/selector.mk color-pdf DOCNAME=$(DOCNAME)
 	cp $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf $(LOCDROP_EXPORT_BOOKDIR)
