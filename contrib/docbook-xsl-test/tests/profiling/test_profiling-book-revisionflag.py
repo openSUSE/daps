@@ -18,8 +18,11 @@ class TestSingleProfilingBookProfileRevisionFlag():
    def setup_class(cls):
       """ setup class (only once) and transform XML file
       """
-      cls.profattr = {'profile.revisionflag': "'foo'"}
-      cls.xf = conf.XMLFile( os.path.join(DIR, "profiling-book.xml") )
+      cls.profattr = {'profile.revisionflag': "'off'"}
+      cls.xf = conf.XMLFile( 
+                  os.path.join(DIR, "profiling-book.xml"),
+                  xmlparser=conf.xmlparser(dtd_validation=True,load_dtd=True)
+               )
       cls.xf.parse( conf.STYLESHEETS["profile"] )
       cls.result = cls.xf.transform( **cls.profattr )
       cls.ns = conf.namespaces()
@@ -41,7 +44,7 @@ class TestSingleProfilingBookProfileRevisionFlag():
       """Checks if available chapter id's are the same
       """
       dest = self.result.xpath("/book/part[@id='singleprof-revisionflag']/chapter/@id")
-      src= self.xf.xml.xpath("/book/part[@id='singleprof-revisionflag']/chapter[not(@revisionflag!='foo')]/@id")
+      src= self.xf.xml.xpath("/book/part[@id='singleprof-revisionflag']/chapter[not(@revisionflag!='off')]/@id")
       assert src == dest
       
    def test_chapter_section(self):
@@ -54,7 +57,7 @@ class TestSingleProfilingBookProfileRevisionFlag():
       """Checks if available sect1 id's are the same
       """
       dest = self.result.xpath("//chapter[@id='cha.revisionflag.foo']/sect1/@id")
-      src=self.xf.xml.xpath("//chapter[@id='cha.revisionflag.foo']/sect1[not(@revisionflag!='foo')]/@id")
+      src=self.xf.xml.xpath("//chapter[@id='cha.revisionflag.foo']/sect1[not(@revisionflag!='off')]/@id")
       assert src == dest
 
    def test_inline(self):
@@ -64,7 +67,7 @@ class TestSingleProfilingBookProfileRevisionFlag():
       dest = " ".join(dest)
       para = self.xf.xml.xpath("//sect1[@id='sec.revisionflag.3']/para")[0]
       res=[]
-      for i in para.xpath("node()[not(self::phrase[@revisionflag!='foo'])]"):
+      for i in para.xpath("node()[not(self::phrase[@revisionflag!='off'])]"):
          if hasattr(i, "text"):
             res.append(i.text)
          else:
