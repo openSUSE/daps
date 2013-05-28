@@ -64,8 +64,8 @@ Recommends:     google-opensans-fonts
 Recommends:     sil-charis-fonts
 Recommends:     dejavu-fonts
 
-Obsoletes:      susedoc < 4.3.99
-Provides:       susedoc <= 4.3.33
+Obsoletes:      susedoc <= 4.3.33
+Provides:       susedoc = 4.3.34
 
 %description
 SUSE-branded DocBook stylesheets for XSLT 1.0
