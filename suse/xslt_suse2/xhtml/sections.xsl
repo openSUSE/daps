@@ -132,7 +132,6 @@
           <span class="ds-label">ID: </span>
           <xsl:choose>
             <xsl:when test="$node/parent::*[@id] != ''">
-              <xsl:text>#</xsl:text>
               <xsl:call-template name="object.id">
                 <xsl:with-param name="object" select="$node/parent::*"/>
               </xsl:call-template>
