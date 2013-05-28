@@ -13,8 +13,11 @@
 # * Is the profiling command successfully executed?
 # * Does the profiling directory get created?
 # * Does the profiling directory contain all files?
+#   - Does it contain files not belonging to the set?
 # * Have the entities been resolved?
 # * Does the profiled XML validate?
+# * Is a file that has changed since last profiling updated?
+#   - Have files that not have been modified been updated?
 # * In case the XML sources contain a profiling urn:
 #   - Does the XML contain the correct content?
 
@@ -33,7 +36,8 @@ DAPSEXEC="${_DAPSROOT}/bin/daps --dapsroot=\"${_DAPSROOT}\""
 _DOC_DIR="documents/"
 _MAIN="book.xml"
 MAINPATH="${_DOC_DIR}/xml/$_MAIN"
-_DOC_FILES=( appendix.xml book.xml part_blocks.xml part_inlines.xml part_profiling.xml )
+_SET_FILES=( appendix.xml book.xml part_blocks.xml part_inlines.xml part_profiling.xml )
+_NO_SET_FILE="not_in_set.xml"
 
 SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 
@@ -90,7 +94,7 @@ test_Profiling () {
 #--------------------------------
 # Does the profiling directory get created?
 #
-test_PROFILEDIR () {
+test_Profiling_PROFILEDIR () {
     assertTrue \
         " └─ The profiling directory '$_PROFILEDIR' does not exist" \
         "[ -d $_PROFILEDIR ]"
@@ -98,20 +102,27 @@ test_PROFILEDIR () {
 
 #--------------------------------
 # Does the profiling directory contain all files?
-test_Profiled_files () {
+# Does it contain files not belonging to the set?
+#
+test_Profiling_filelist () {
     local FILE MISSING
-    for FILE in "${_DOC_FILES[@]}"; do
+    for FILE in "${_SET_FILES[@]}"; do
         [ -f ${_PROFILEDIR}/$FILE ] || MISSING="$MISSING $FILE"
     done
     assertTrue \
         " └─ File(s) '$MISSING' are missing $_PROFILEDIR" \
         '[ -z "$MISSING" ]'
+    # $_NO_SET_FILE is not part of the set and therefore must not
+    # be profiled
+    assertFalse \
+        "$_NO_SET_FILE, which is not part f the set has been profiled" \
+        '[ -f ${_PROFILEDIR}/$_NO_SET_FILE ]'
 }
 
 #--------------------------------
 # Have the entities been resolved?
 #
-test_Entities_in_profiled_xml () {
+test_Profiling_Entities () {
     egrep "&ent[0-9];" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Not all entities have been resolved' \
@@ -121,7 +132,7 @@ test_Entities_in_profiled_xml () {
 #--------------------------------
 # Does the profiled XML validate?
 #
-test_Profiled_validate() {
+test_Profiling_validate() {
     xmllint --noent --postvalid --noout --nowarning --xinclude \
         ${_PROFILEDIR}/$_MAIN >/dev/null 2>&1
     assertTrue \
@@ -129,6 +140,43 @@ test_Profiled_validate() {
         "[ $? -eq 0 ]"
 }
 
+#--------------------------------
+# Is a file that has changed since last profiling updated?
+# Have files that not have been modified been updated?
+#
+test_Profiling_update() {
+    local FILE OLDDATE_FILES OLDDATE_MAIN NEWDATE_FILES NEWDATE_MAIN
+    # get date for $MAIN from profiling dir (unix timestamp)
+    OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$MAIN)
+    # "update" $MAIN
+    sleep 1
+    touch $MAINPATH
+    # the timestamps of the other files should not have changed
+    # because they haven't been updated and therefor do not need to be
+    # profiled again. In order to keep the test as simple as possible, we
+    # add the timestamps of all other files
+    OLDDATE_FILES=0
+    NEWDATE_FILES=0
+    for FILE in "${_SET_FILES[@]}"; do
+        if [[ $FILE == $_MAIN ]]; then continue; fi
+        OLDDATE_FILES=$(expr $OLDDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$FILE))
+    done
+    # rerun profiling
+    eval "$DAPSEXEC -v0 --main $MAINPATH profile >/dev/null"
+    # get new date
+    NEWDATE_MAIN=$(stat -c %Y $MAINPATH)
+    assertTrue \
+        ' └─ $MAIN has not been updated by profiling although it had changed' \
+        "[ $OLDDATE_MAIN -lt $NEWDATE_MAIN ]"
+    for FILE in "${_SET_FILES[@]}"; do
+        if [[ $FILE == $_MAIN ]]; then continue; fi
+        NEWDATE_FILES=$(expr $NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$FILE))
+    done
+    assertTrue \
+        ' └─  Files have been updated although they did not change' \
+        "[ $OLDDATE_FILES -eq $NEWDATE_FILES ]"
+}
+    
 #--------------------------------
 # Is the content correctly profiled?
 #
