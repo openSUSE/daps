@@ -75,19 +75,43 @@ def pytest_report_header(config):
            "Test cases for DocBook XSL Stylesheets",
            ""
           ]
-   #if config.option.verbose > 0:
-   #   result.append()
-   return result
+   if config.option.verbose > 0:
+      return result
 
-@pytest.fixture(scope="module")
-def xmlparser():
+# @pytest.fixture(scope="module")
+def xmlparser(encoding=None, 
+              attribute_defaults=False, 
+              dtd_validation=False, 
+              load_dtd=False, 
+              no_network=True, 
+              ns_clean=True, 
+              recover=False, 
+              # XMLSchema schema=None, 
+              remove_blank_text=False, 
+              resolve_entities=False, 
+              remove_comments=False, 
+              remove_pis=False, 
+              strip_cdata=True, 
+              target=None, 
+              compact=True):
    """Pytest fixture: returns a XMLParser object
    """
-   return etree.XMLParser(ns_clean=True, 
-                  dtd_validation=False, 
-                  no_network=True, 
-                  resolve_entities=False, 
-                  load_dtd=False)
+   print("XMLParser:", locals() )
+   return etree.XMLParser(encoding=encoding,
+                  attribute_defaults=attribute_defaults,
+                  dtd_validation=dtd_validation,
+                  load_dtd=load_dtd,
+                  no_network=no_network,
+                  ns_clean=ns_clean,
+                  recover=recover,
+                  remove_blank_text=remove_blank_text,
+                  resolve_entities=resolve_entities,
+                  remove_comments=remove_comments,
+                  remove_pis=remove_pis,
+                  strip_cdata=strip_cdata,
+                  target=target,
+                  compact=compact
+                  )
 
 @pytest.fixture
 def xmlfile(request):
