@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                      "http://www.docbook.org/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>Profiling Test With Multiple Attributes</title>
+    <author>
+      <firstname>Thomas</firstname>
+      <surname>Schraitle</surname>
+    </author>
+  </bookinfo>
+  
+  <part id="multiprof-arch-and-os">
+    <title>Multiple Profiling with arch and os</title>
+    <chapter id="cha.arch.foo" arch="foo" os="osuse">
+      <title>Chapter with arch=foo</title>
+      <para/>
+      <sect1 id="sec.arch.1" arch="bar" os="osuse">
+        <title>Section with arch=bar and os=osuse</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.arch.2" arch="foo" os="sles">
+        <title>Section with arch=foo and os=sles</title>
+        <para/>
+      </sect1>
+      <sect1 id="sec.arch.3" os="sles">
+        <title>Section with os=sles</title>
+        <para>The <phrase arch="foo">quick</phrase> brown fox jumps over the
+          <phrase arch="bar">lazy</phrase> dog.</para>
+      </sect1>
+    </chapter>
+    <chapter id="cha.arch.bar" arch="bar">
+      <title>Chapter with arch=bar</title>
+      <para/>
+    </chapter>
+    <chapter id="chap.arch.none">
+      <title>Chapter without any Profiling Attributes</title>
+      <para/>
+    </chapter>
+  </part>
+  
+</book>
