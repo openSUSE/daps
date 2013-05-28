@@ -96,7 +96,6 @@ def xmlparser(encoding=None,
               compact=True):
    """Pytest fixture: returns a XMLParser object
    """
-   print("XMLParser:", locals() )
    return etree.XMLParser(encoding=encoding,
                   attribute_defaults=attribute_defaults,
                   dtd_validation=dtd_validation,
