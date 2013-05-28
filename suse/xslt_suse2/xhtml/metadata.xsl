@@ -50,7 +50,7 @@
  <xsl:variable name="dpfilenamenode" select="$metafilenodes[generate-id(.) =   generate-id(key('status', $filename))]"/>
   <div class="doc-status">
    <xsl:choose>
-    <xsl:when test="count($dpfilenamenode) = 0">
+    <xsl:when test="count($dpfilenamenode) = 0 and $filename != ''">
      <xsl:message>WARNING: Could not retrieve metadata for filename 
       <xsl:value-of select="concat(&quot;'&quot;, $filename, &quot;' &quot;)"/>.
       Type &quot;man docmanager&quot; to learn more.</xsl:message>

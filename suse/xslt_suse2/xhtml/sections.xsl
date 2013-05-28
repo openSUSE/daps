@@ -131,10 +131,10 @@
         <li>
           <span class="ds-label">ID: </span>
           <xsl:choose>
-            <xsl:when test="$node/@id">
+            <xsl:when test="$node/parent::*[@id] != ''">
               <xsl:text>#</xsl:text>
               <xsl:call-template name="object.id">
-                <xsl:with-param name="object" select="$node"/>
+                <xsl:with-param name="object" select="$node/parent::*"/>
               </xsl:call-template>
             </xsl:when>
             <xsl:otherwise><span class="ds-message">no ID found</span></xsl:otherwise>
