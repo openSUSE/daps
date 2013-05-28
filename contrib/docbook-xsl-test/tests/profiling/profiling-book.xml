@@ -129,24 +129,24 @@
 
   <part id="singleprof-revisionflag">
     <title>Single Profiling with revisionflag</title>
-    <chapter id="cha.revisionflag.foo" revisionflag="foo">
+    <chapter id="cha.revisionflag.foo" revisionflag="off">
       <title>Chapter with revisionflag=foo</title>
       <para/>
-      <sect1 id="sec.revisionflag.1" revisionflag="bar">
+      <sect1 id="sec.revisionflag.1" revisionflag="changed">
         <title>Section with revisionflag=bar</title>
         <para/>
       </sect1>
-      <sect1 id="sec.revisionflag.2" revisionflag="foo">
+      <sect1 id="sec.revisionflag.2" revisionflag="off">
         <title>Section with revisionflag=foo</title>
         <para/>
       </sect1>
       <sect1 id="sec.revisionflag.3">
-        <title>Seciton without any Profiling Attributes</title>
-        <para>The <phrase revisionflag="foo">quick</phrase> brown fox jumps over the
-          <phrase revisionflag="bar">lazy</phrase> dog.</para>
+        <title>Section without any Profiling Attributes</title>
+        <para>The <phrase revisionflag="off">quick</phrase> brown fox jumps over the
+          <phrase revisionflag="off">lazy</phrase> dog.</para>
       </sect1>
     </chapter>
-    <chapter id="cha.revisionflag.bar" revisionflag="bar">
+    <chapter id="cha.revisionflag.bar" revisionflag="off">
       <title>Chapter with revisionflag=bar</title>
       <para/>
     </chapter>
