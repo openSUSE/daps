@@ -61,7 +61,7 @@
   <xsl:param name="title"/>
   <xsl:variable name="legal">
     <xsl:choose>
-      <xsl:when test="ancestor::*[@role='legal']">1</xsl:when>
+      <xsl:when test="$section/ancestor::*[@role='legal']">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
