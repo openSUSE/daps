@@ -20,6 +20,8 @@ class TestValidation():
               )
    
    def test_validate(self):
+      """Validates all files
+      """
       for x in self.xmlfiles:
          cmd = "xmllint --valid --noout {0}".format( os.path.join(DIR, x) )
          res = subprocess.call( cmd, shell=True )
