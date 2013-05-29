@@ -1,0 +1,40 @@
+------------------------------------------------
+                README
+------------------------------------------------
+
+Prerequisites
+=============
+
+* py.test
+* DocBook XSL stylesheet >= 1.77
+* DocBook 4.5
+
+
+How to Run the Test Suite
+=========================
+
+Use the "mypytest.py" script. Run it like this:
+
+* To run the complete test suite:
+$ mypytest.py
+
+* To run the tests in a certain directory:
+$ mypytest.py tests/xhtml
+
+* To see all the test names:
+$ mypytest.py -v
+
+* To get also error messages from tests:
+$ mypytest.py -v -s 
+
+
+How to Configure py.test
+========================
+
+Usually, use the "pytest.ini" configuration file. If you need further 
+configuration, use the "conftest.py" file.
+
+
+Links
+-----
+[1] http://pytest.org/latest/plugins.html#well-specified-hooks
