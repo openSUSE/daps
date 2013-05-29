@@ -36,7 +36,23 @@
       <xsl:text> </xsl:text>
     </span>
   </xsl:template>
-  
+
+
+<xsl:template match="sect1[@role='legal']|section[@role='legal']|
+                     part[@role='legal']|chapter[@role='legal']|
+                     appendix[@role='legal']">
+  <xsl:choose>
+    <xsl:when test="ancestor::*[@role='legal']">
+      <xsl:apply-imports/>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="legal-section">
+        <xsl:apply-imports/>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <xsl:template name="section.heading">
   <xsl:param name="section" select="."/>
@@ -45,7 +61,7 @@
   <xsl:param name="title"/>
   <xsl:variable name="legal">
     <xsl:choose>
-      <xsl:when test="ancestor-or-self::*[@role='legal']">1</xsl:when>
+      <xsl:when test="ancestor::*[@role='legal']">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
