@@ -64,6 +64,12 @@ Recommends:     google-opensans-fonts
 Recommends:     sil-charis-fonts
 Recommends:     dejavu-fonts
 
+%if 0%{?sles_version}
+Recommends:     ttf-founder-simplified
+%else
+Recommends:    wqy-microhei-fonts
+%endif
+
 Obsoletes:      susedoc <= 4.3.33
 Provides:       susedoc = 4.3.34
 
