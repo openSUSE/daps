@@ -15,7 +15,13 @@ DIR=os.path.dirname(__file__)
 class TestValidation():
    """Tests validation with xmllint"""
 
+   xmlfiles = ( "profiling-book.xml",
+                "profiling-book-multiple.xml",
+              )
+   
    def test_validate(self):
-      cmd = "xmllint --valid --noout {0}".format( os.path.join(DIR, "profiling-book.xml") )
-      res = subprocess.call( cmd, shell=True )
-      assert not res
+      for x in self.xmlfiles:
+         cmd = "xmllint --valid --noout {0}".format( os.path.join(DIR, x) )
+         res = subprocess.call( cmd, shell=True )
+         assert not res
+      
