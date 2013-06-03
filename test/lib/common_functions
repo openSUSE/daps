@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: Common functions
+#
+# ---------
+# Remove the build directory
+#
+function clean_build() {
+    rm -rf "${_DOC_DIR}/build"
+}
+
+# ---------
+# Usage
+#
+function usage () {
+    echo "Something useful"
+}
+
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    echo -e "ERROR: ${1}" >&2
+    clean_daps
+    exit 1;
+}
+
+# ---------
+# Print Test Header
+#
+function header () {
+    echo
+    echo "Test: $1"
+    echo "=================================================="
+}

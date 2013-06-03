@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: source-validation
+#
+# * Are the XML sources of the test document well formed ?
+#
+
+source lib/common_functions
+
+header "Document Source Validation"
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+test_validSources () {
+    xmllint --nonet --noout --nowarning --xinclude --loaddtd $MAINPATH  2>&1
+    assertTrue \
+        ' └─ XML sources do not validate' \
+        "[ $? -eq 0 ]"
+}
+
+
+# source shUnit2 test
+eval "source $SHUNIT2SRC"

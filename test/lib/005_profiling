@@ -5,10 +5,9 @@
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
-# Testing DAPS: profiling
+# TODO: Checks for sources that do not get profiled
 #
-# Testcases
-# All tests have to be run twice, once with saxon and once with xsltproc
+# Testing DAPS: profiling
 #
 # * Is the profiling command successfully executed?
 # * Does the profiling directory get created?
@@ -21,61 +20,35 @@
 # * In case the XML sources contain a profiling urn:
 #   - Does the XML contain the correct content?
 
-# Use _VARNAME for variables that also might be used in DAPS itself to 
-# avoid potential clashes. Just to be on the safe side.
+source lib/common_functions
 
+header "Profiling"
 
-#--------------------------------
-# Global Variable Definitions
-#
-declare -a _DOC_FILES
-
-_DAPSROOT=".."
-DAPSEXEC="${_DAPSROOT}/bin/daps --dapsroot=\"${_DAPSROOT}\""
-
-_DOC_DIR="documents/"
-_MAIN="book.xml"
-MAINPATH="${_DOC_DIR}/xml/$_MAIN"
-_SET_FILES=( appendix.xml book.xml part_blocks.xml part_inlines.xml part_profiling.xml )
-_NO_SET_FILE="not_in_set.xml"
-
-SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
-
-#--------------------------------
-# Helper functions
+# ---------
+# Test Setup
 #
 
-# Remove the build directory
-#
-clean_build() {
-    rm -rf "${_DOC_DIR}/build"
-}
-
-
-#--------------------------------
 # Initiate
 # this function is run _before_ the tests are executed
 #
-oneTimeSetUp() {
+function oneTimeSetUp() {
     # Clean up the build directory
     clean_build
     # get the profiling directory
     _PROFILEDIR=$(eval "$DAPSEXEC --main $MAINPATH showvariable VARIABLE=PROFILEDIR 2>/dev/null")
     if [ $? -ne 0 ]; then
-        echo " └─ The initial DAPS call to determine the profiling directory failed. Skipping tests"
-        exit 1
+	echo " └─ The initial DAPS call to determine the profiling directory failed. Skipping tests"
+	exit 1
     fi
 }
 
-#--------------------------------
 # Post
 # this function is run _after_ the tests are executed
 #
-oneTimeTearDown() {
+function oneTimeTearDown() {
     # Clean up the build directory
     clean_build
 }
-
 
 #---------------------------------------------------------------
 # TESTS
@@ -84,7 +57,7 @@ oneTimeTearDown() {
 #--------------------------------
 # Is the profiling command successfully executed?
 #
-test_Profiling () {
+function test_profiling () {
     eval "$DAPSEXEC -v0 --main $MAINPATH profile >/dev/null"
     assertTrue \
         ' └─ The profiling command itself failed' \
@@ -94,7 +67,7 @@ test_Profiling () {
 #--------------------------------
 # Does the profiling directory get created?
 #
-test_Profiling_PROFILEDIR () {
+function test_profilingPROFILEDIR () {
     assertTrue \
         " └─ The profiling directory '$_PROFILEDIR' does not exist" \
         "[ -d $_PROFILEDIR ]"
@@ -104,7 +77,7 @@ test_Profiling_PROFILEDIR () {
 # Does the profiling directory contain all files?
 # Does it contain files not belonging to the set?
 #
-test_Profiling_filelist () {
+function test_profilingFilelist () {
     local FILE MISSING
     for FILE in "${_SET_FILES[@]}"; do
         [ -f ${_PROFILEDIR}/$FILE ] || MISSING="$MISSING $FILE"
@@ -122,7 +95,7 @@ test_Profiling_filelist () {
 #--------------------------------
 # Have the entities been resolved?
 #
-test_Profiling_Entities () {
+function test_profilingEntities () {
     egrep "&ent[0-9];" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Not all entities have been resolved' \
@@ -132,7 +105,7 @@ test_Profiling_Entities () {
 #--------------------------------
 # Does the profiled XML validate?
 #
-test_Profiling_validate() {
+function test_profilingValidate() {
     xmllint --noent --postvalid --noout --nowarning --xinclude \
         ${_PROFILEDIR}/$_MAIN >/dev/null 2>&1
     assertTrue \
@@ -144,7 +117,7 @@ test_Profiling_validate() {
 # Is a file that has changed since last profiling updated?
 # Have files that not have been modified been updated?
 #
-test_Profiling_update() {
+function test_profilingUpdate() {
     local FILE OLDDATE_FILES OLDDATE_MAIN NEWDATE_FILES NEWDATE_MAIN
     # get date for $MAIN from profiling dir (unix timestamp)
     OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$MAIN)
@@ -180,7 +153,7 @@ test_Profiling_update() {
 #--------------------------------
 # Is the content correctly profiled?
 #
-test_Profiling_content () {
+function test_profilingContent () {
     local COUNT _PROFILEDIR
     
     # First test: no profiled paras should appear in the profiled XML
@@ -246,8 +219,6 @@ test_Profiling_content () {
         ' └─ Profiled XML contains vendor1 content that should have been filtered' \
         "[ $? -eq 0 ]"  
 }
-
-
 
 # source shUnit2 test
 eval "source $SHUNIT2SRC"
