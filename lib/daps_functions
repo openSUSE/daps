@@ -47,10 +47,6 @@ function parse_args () {
                 P_CLEAN=1
                 shift
                 ;;
-            --comments)
-		P_COMMENTS=1
-		shift
-		;;
             --compact)
                 P_COMPACT=1
                 shift
@@ -274,7 +270,7 @@ function init_env {
     fi
     
     #
-    # The DocBook stylesheets require a 0|1 for REMARKS and COMMENTS, but
+    # The DocBook stylesheets require a 0|1 for REMARKS, but
     # yes|no for DRAFT 
     # In order not to add to that confusion we will accept 0|1|yes|no for
     # all of them and export the correct value here. Since META falls
@@ -335,7 +331,7 @@ function init_env {
         COLOR=0
     fi
 
-    # Unset the strings last, because values for COMMENTS, DRAFT or REMARKS
+    # Unset the strings last, because values for DRAFT or REMARKS
     # may have been altered in-between
     [[ "no" = $DRAFT ]] && unset DRAFT_STR
     [[ 0 -eq $META ]] && unset META_STR
@@ -476,8 +472,8 @@ function call_make () {
 
     # SHORT_OPTS: Value for the getopt -o option 
     # LONG_OPTS:  VALUE for the getopt -l option
-#    SHORT_OPTS="cdhr"
-#    LONG_OPTS="comments,draft,formatter:,help,name:,remarks,rootid:"
+#    SHORT_OPTS="h"
+#    LONG_OPTS="draft,formatter:,help,name:,remarks,rootid:"
 
     # Call the argument parser
 #    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -505,8 +501,8 @@ function build_pdfs () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="cdhmr"
-    LONG_OPTS="comments,draft,formatter:,help,meta,name:,remarks,rootid:,xsltparam:"
+    SHORT_OPTS="h"
+    LONG_OPTS="draft,formatter:,help,meta,name:,remarks,rootid:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -514,7 +510,6 @@ function build_pdfs () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        help_comments
         help_draft
         help_formatter
         help_help
@@ -527,7 +522,6 @@ function build_pdfs () {
         exit 0
     fi
     
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode with remarks
@@ -560,8 +554,8 @@ function build_html_jsp () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="cdhmr"
-    LONG_OPTS="clean,comments,css:,draft,help,html4,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
+    SHORT_OPTS="h"
+    LONG_OPTS="clean,css:,draft,help,html4,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -570,7 +564,6 @@ function build_html_jsp () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
-        help_comments
         help_css
         help_draft
         help_help
@@ -587,7 +580,6 @@ function build_html_jsp () {
     fi
 
     [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode
@@ -628,8 +620,8 @@ function webhelp () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="cdhmr"
-    LONG_OPTS="clean,comments,css:,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    SHORT_OPTS="h"
+    LONG_OPTS="clean,css:,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -638,7 +630,6 @@ function webhelp () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
-        help_comments
         help_css
         help_draft
         help_help
@@ -660,7 +651,6 @@ function webhelp () {
     fi
     
     [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
@@ -692,7 +682,7 @@ function build_epub () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="hr"
+    SHORT_OPTS="h"
     LONG_OPTS="check,css:,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -817,7 +807,7 @@ function build_locdrop () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="hn"
+    SHORT_OPTS="h"
     LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -998,8 +988,8 @@ function profile_first () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="cdhr"
-    LONG_OPTS="comments,draft,help,name:,remarks,rootid:"
+    SHORT_OPTS="h"
+    LONG_OPTS="draft,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1007,7 +997,6 @@ function profile_first () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        help_comments
         help_draft
         help_name
         help_remarks
@@ -1016,7 +1005,6 @@ function profile_first () {
 	exit 0
     fi
     
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -1030,7 +1018,7 @@ function profile_first () {
 
 ###########################################################################
 #
-#  COMMENTS/REMARKS
+#  REMARKS
 #
 #  Subcommands validate and profiledir behave differently when
 #  comments or remarks are enabled
@@ -1041,8 +1029,8 @@ function comments_remarks () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="chr"
-    LONG_OPTS="comments,help,remarks"
+    SHORT_OPTS="h"
+    LONG_OPTS="help,remarks"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1050,13 +1038,11 @@ function comments_remarks () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        help_comments
         help_remarks
         echo
 	exit 0
     fi
     
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_REMARKS ]]  && REMARKS=1   
 
     # we do not want to write a logfile this time
@@ -1127,8 +1113,8 @@ function show_names () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="cdhr"
-    LONG_OPTS="comments,draft,help,name:,remarks,rootid:"
+    SHORT_OPTS="h"
+    LONG_OPTS="draft,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1136,7 +1122,6 @@ function show_names () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
                 help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-                help_comments
                 help_draft
                 help_help
                 help_name
@@ -1146,7 +1131,6 @@ function show_names () {
                 exit 0
     fi
     
-    [[ 1 = $P_COMMENTS ]] && COMMENTS=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
@@ -1171,7 +1155,7 @@ function checklink () {
     SUB_CMD=$1
     shift
 
-    SHORT_OPTS="f:h"
+    SHORT_OPTS="h"
     LONG_OPTS="file:,help,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -1238,7 +1222,7 @@ function getimages () {
     DEBUG=0
     VERBOSITY=0
     
-    SHORT_OPTS="f:hs"
+    SHORT_OPTS="h"
     LONG_OPTS="compact,file:,help,modified,rootid:,show,viewer:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
@@ -1547,10 +1531,6 @@ $2
 [[ 0 != $3 ]] && echo -e "  Command options:"
 }
 
-function help_comments () {
-    echo "    --comments                Include XML comments in profiled sources
-                              Default: off"  
-}
 function help_compact () {
     echo "    --compact                 Print the filelist on a single line.
                               Ignored when -s|--show is set.
