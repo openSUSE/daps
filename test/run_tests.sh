@@ -17,16 +17,26 @@
 
 # DAPS
 export _DAPSROOT=".."
-DAPSEXEC="${_DAPSROOT}/bin/daps --dapsroot=\"${_DAPSROOT}\""
+DAPSCMD="${_DAPSROOT}/bin/daps --dapsroot=\"${_DAPSROOT}\""
 
 # XSLT Processors
-declare -ax _XSLT_PROCESSORS=( "/usr/bin/xsltproc" "/usr/bin/saxon6" )
+declare -ax _XSLT_PROCESSORS=( "/usr/bin/xsltproc" )
+which --skip-alias --skip-functions /usr/bin/saxon6 >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
+else
+    echo
+    echo "Warning: Did not found saxon6, only testing xsltproc"
+fi
+
 
 # XML sources
-export _DOC_DIR="documents/"
+export _DOC_DIR="documents"
 export _MAIN="book.xml"
-export MAINPATH="${_DOC_DIR}/xml/$_MAIN"
-declare -ax _SET_FILES=( appendix.xml book.xml part_blocks.xml part_inlines.xml part_profiling.xml )
+export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
+export _MAIN_NOPROF="book_noprofile.xml"
+export _MAINPATH_NOPROF="${_DOC_DIR}/xml/$_MAIN_NOPROF"
+declare -ax _SET_FILES=( appendix.xml $_MAIN part_blocks.xml part_inlines.xml part_profiling.xml )
 export _NO_SET_FILE="not_in_set.xml"
 
 # Tests
@@ -47,7 +57,6 @@ export SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
-    clean_daps
     exit 1;
 }
 
@@ -96,14 +105,35 @@ for PROC in "${_XSLT_PROCESSORS[@]}"; do
     echo "###########################################################"
     echo "# $PROC "
     echo "###########################################################"
-    export DAPSEXEC="$DAPSEXEC --xsltprocessor=${PROC}"
+    export DAPSEXEC="$DAPSCMD --xsltprocessor=${PROC}"
     for TEST in "${TESTS_SORTED[@]}"; do
 
         # TODO:
         # Check return state of tests and act - if e.g. profiling fails it 
-        # does not make sense to runthe majority of other tests
+        # does not make sense to run the majority of other tests
         #
-	eval "$TEST"
+	case "$TEST" in
+	    *_source-validation)
+		eval "$TEST" ||
+		if [ $? -ne 0 ]; then
+		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
+		fi
+		;;
+	    *_profiling)
+		for MAINPATH in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
+		    export MAINPATH
+		    if [[ "$MAINPATH" =~ _noprofile ]]; then
+			export NOPROFILE=1
+		    else
+			export NOPROFILE=0
+		    fi
+		    eval "$TEST"
+		done
+		;;
+	    *)
+		eval "$TEST"
+		;;
+	esac
 	echo "...................."
     done
     echo

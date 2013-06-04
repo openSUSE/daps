@@ -22,7 +22,11 @@
 
 source lib/common_functions
 
-header "Profiling"
+if [[ 0 -eq $NOPROFILE ]]; then
+    header "Profiling with profile URN"
+else
+    header "Profiling without profile URN"
+fi
 
 # ---------
 # Test Setup
@@ -107,7 +111,7 @@ function test_profilingEntities () {
 #
 function test_profilingValidate() {
     xmllint --noent --postvalid --noout --nowarning --xinclude \
-        ${_PROFILEDIR}/$_MAIN >/dev/null 2>&1
+        ${_PROFILEDIR}/$(basename $MAINPATH) >/dev/null 2>&1
     assertTrue \
         ' └─ Profiled XML does not validate' \
         "[ $? -eq 0 ]"
@@ -120,7 +124,7 @@ function test_profilingValidate() {
 function test_profilingUpdate() {
     local FILE OLDDATE_FILES OLDDATE_MAIN NEWDATE_FILES NEWDATE_MAIN
     # get date for $MAIN from profiling dir (unix timestamp)
-    OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$MAIN)
+    OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $MAINPATH))
     # "update" $MAIN
     sleep 1
     touch $MAINPATH
@@ -137,7 +141,7 @@ function test_profilingUpdate() {
     # rerun profiling
     eval "$DAPSEXEC -v0 --main $MAINPATH profile >/dev/null"
     # get new date
-    NEWDATE_MAIN=$(stat -c %Y $MAINPATH)
+    NEWDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $MAINPATH))
     assertTrue \
         ' └─ $MAIN has not been updated by profiling although it had changed' \
         "[ $OLDDATE_MAIN -lt $NEWDATE_MAIN ]"
@@ -155,7 +159,9 @@ function test_profilingUpdate() {
 #
 function test_profilingContent () {
     local COUNT _PROFILEDIR
-    
+
+    [[ 1 -eq $NOPROFILE ]] && startSkipping
+	
     # First test: no profiled paras should appear in the profiled XML
     #             because no profiling attributes are set
     clean_build

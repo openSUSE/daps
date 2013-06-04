@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC  "-//OASIS//DTD DocBook XML V4.5//EN"
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" 
+[
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+  <!ENTITY ent3 "Entity3">
+  <!ENTITY ent4 "Entity4">
+]>
+<book id="dblayouttest" lang="en">
+ <bookinfo>
+  <title>DocBook Layout Test</title>
+  <productname>Testing Books</productname>
+  <productnumber>Version 1.0 Revision 0</productnumber>
+  <date>
+  <?dbtimestamp format="B d, Y"?></date>
+  <titleabbrev>Test Document for DAPS</titleabbrev>
+  <legalnotice>
+   <para>
+    <ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html">GNU Free Documentation
+    License</ulink>
+   </para>
+  </legalnotice>
+ </bookinfo>
+ <xi:include href="part_blocks.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/>
+ <xi:include href="part_inlines.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/>
+ <xi:include href="part_profiling.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  <xi:include href="appendix.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</book>

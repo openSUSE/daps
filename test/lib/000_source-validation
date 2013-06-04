@@ -19,7 +19,7 @@ header "Document Source Validation"
 #---------------------------------------------------------------
 
 test_validSources () {
-    xmllint --nonet --noout --nowarning --xinclude --loaddtd $MAINPATH  2>&1
+    xmllint --nonet --noout --nowarning --xinclude --loaddtd $_MAINPATH  2>&1
     assertTrue \
         ' └─ XML sources do not validate' \
         "[ $? -eq 0 ]"
