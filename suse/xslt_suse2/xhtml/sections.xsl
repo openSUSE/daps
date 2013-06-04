@@ -33,8 +33,8 @@
       <xsl:apply-templates select="$node" mode="title.markup">
         <xsl:with-param name="allow-anchors" select="1"/>
       </xsl:apply-templates>
-      <xsl:text> </xsl:text>
     </span>
+    <xsl:text> </xsl:text>
   </xsl:template>
 
 
@@ -115,7 +115,6 @@
       <xsl:with-param name="level" select="$level"/>
       <xsl:with-param name="legal" select="$legal"/>
     </xsl:call-template>
-    <xsl:text> </xsl:text>
     <xsl:call-template name="create.permalink">
        <xsl:with-param name="object" select="$section"/>
     </xsl:call-template>
