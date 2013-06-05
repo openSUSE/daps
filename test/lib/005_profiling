@@ -160,6 +160,7 @@ function test_profilingUpdate() {
 function test_profilingContent () {
     local COUNT _PROFILEDIR
 
+    # skip tests if MAIN does not contain a profiling URN
     [[ 1 -eq $NOPROFILE ]] && startSkipping
 	
     # First test: no profiled paras should appear in the profiled XML
