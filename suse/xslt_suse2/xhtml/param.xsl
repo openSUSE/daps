@@ -91,7 +91,7 @@ set       toc,title
   <xsl:param name="docbook.css.source"/>
     <!-- Intentionally left empty – we already have a stylesheet, with this, we 
          only override DocBook's default. -->
-  <xsl:param name="html.stylesheet">static/css/susebooks.css</xsl:param>
+  <xsl:param name="html.stylesheet">static/css/style.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
   <xsl:param name="make.valid.html" select="1"/>
 
@@ -172,7 +172,7 @@ task before
   <xsl:param name="daps.header.logo">static/images/logo.png</xsl:param>
   <xsl:param name="daps.header.logo.alt">Logo</xsl:param>
   <xsl:param name="daps.header.js.library">static/js/jquery-1.4.2.min.js</xsl:param>
-  <xsl:param name="daps.header.js.custom">static/js/susebooks.js</xsl:param>
+  <xsl:param name="daps.header.js.custom">static/js/script.js</xsl:param>
 
   <xsl:param name="add.suse.footer" select="$suse.content"/>
 
