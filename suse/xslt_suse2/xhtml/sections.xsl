@@ -42,7 +42,7 @@
                      part[@role='legal']|chapter[@role='legal']|
                      appendix[@role='legal']">
   <xsl:choose>
-    <xsl:when test="ancestor::*[@role='legal']">
+    <xsl:when test="ancestor::*[@role='legal'] or $is.chunk = 1">
       <xsl:apply-imports/>
     </xsl:when>
     <xsl:otherwise>
