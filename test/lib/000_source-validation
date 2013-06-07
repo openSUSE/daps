@@ -19,12 +19,15 @@ header "Document Source Validation"
 #---------------------------------------------------------------
 
 test_validSources () {
-    xmllint --nonet --noout --nowarning --xinclude --loaddtd $_MAINPATH  2>&1
-    assertTrue \
-        ' └─ XML sources do not validate' \
-        "[ $? -eq 0 ]"
+    local _MAIN_FILE
+    for _MAIN_FILE in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
+	xmllint --nonet --noout --nowarning --xinclude --loaddtd $_MAIN_FILE 2>&1
+	assertTrue \
+            " └─ XML sources for MAIN=$(basename $_MAIN_FILE) do not validate" \
+            "$?"
+    done
 }
 
 
 # source shUnit2 test
-eval "source $SHUNIT2SRC"
+eval "source $_SHUNIT2SRC"
