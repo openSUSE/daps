@@ -134,7 +134,7 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 #--------------
 # Generate PDF
 #
-$(PDF_RESULT): | $(BUILD_DIR)
+$(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
 ifeq ($(TARGET),pdf)
   $(PDF_RESULT): $(PRINT_IMAGES)
 else
