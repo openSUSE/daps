@@ -88,6 +88,7 @@ VARLIST=(
     JING_FLAGS
     LIB_DIR
     LIBEXEC_DIR
+    LOG_DIR
     MAIN
     META
     META_STR
@@ -155,7 +156,6 @@ UNSETLIST=(
     DOCCONF_CMDL
     DAPSROOT_CMDL
     FALLBACK_STYLEROOT_CMDL
-    LOG_DIR
     MAIN_CMDL
     R_DIR
     STYLEROOT_CMDL
@@ -1507,7 +1507,7 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 #----------------------------------
 # Result directory / LOG directory
 #
-R_DIR="${BUILD_DIR}/${BOOK}/"
+R_DIR="${BUILD_DIR}/${BOOK}"
 LOG_DIR="${R_DIR}/log"
 
 
