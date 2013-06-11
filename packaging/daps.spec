@@ -170,6 +170,8 @@ Recommends:     arphic-fonts
 Recommends:     sazanami-fonts
 # Korean Fonts:
 Recommends:     un-fonts
+# Arabic Fonts
+Recommends:     arabic-fonts
 %else
 Requires:       dejavu
 Requires:       freefont
@@ -184,6 +186,8 @@ Recommends:     ttf-arphic
 Recommends:     sazanami-fonts
 # Korean Fonts:
 Recommends:     unfonts
+# Arabic Fonts:
+Recommends:     fonts-arabic
 %endif
 
 Obsoletes:      susedoc < 4.3.32
