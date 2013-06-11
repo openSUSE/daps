@@ -47,7 +47,17 @@
     </xsl:when>
     <xsl:otherwise>
       <div class="legal-section">
-        <xsl:apply-imports/>
+        <xsl:choose>
+          <xsl:when test="local-name(.) = 'chapter' or
+                          local-name(.) = 'appendix'">
+            <xsl:call-template name="chapter-preface-appendix"/>
+            <!-- To avoid importing a template that doesn't set ID's the right
+                 way. -->
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-imports/>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:otherwise>
   </xsl:choose>

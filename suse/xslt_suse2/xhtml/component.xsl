@@ -106,15 +106,17 @@
     </xsl:element>
   </xsl:template>  
 
-  <xsl:template match="chapter|preface|appendix">
+  <xsl:template match="chapter|preface|appendix" name="chapter-preface-appendix">
+    <!-- Need to be able to call this template via name, too, so we can avoid
+         applying imported templates in sections.xsl/template that
+         matches "sect1[@role='legal']|…". -->
     <xsl:call-template name="id.warning"/>
-    
+
     <xsl:element name="{$div.element}" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="common.html.attributes">
         <xsl:with-param name="inherit" select="1"/>
       </xsl:call-template>
       <xsl:call-template name="id.attribute">
-        <xsl:with-param name="conditional" select="0"/>
         <xsl:with-param name="force" select="1"/>
       </xsl:call-template>
       
