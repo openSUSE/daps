@@ -38,16 +38,17 @@ export _NO_SET_FILE="not_in_set.xml"
 # Tests
 declare -a _TESTS=( "lib/000_source-validation" )
 
-# Script
-_ME=$(basename $0)
-
 # shUnit2
 export _SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 
-# Statistics
-_TEST_COUNT=0
-_TEST_PASSED=0
-_TEST_FAILED=0
+#----------
+# local
+
+# Script
+_ME=$(basename $0)
+
+# XSL-FO Processors to test
+declare -a _FO_PROCS=( "fop" "xep" )
 
 
 #--------------------------------
@@ -59,8 +60,14 @@ _TEST_FAILED=0
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
+    rm -rf "${_DOC_DIR}/build"
     exit 1;
 }
+
+# ---------
+# Handle Ctrl-Z Ctrl-C
+#
+trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
 #########################################
 # MAIN                                  #
@@ -72,7 +79,7 @@ eval set -- "$_ARGS"
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/020_color-pdf" )
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/020_pdf" )
 	    shift
 	    ;;
 	-h)
@@ -80,7 +87,7 @@ while true ; do
 	    exit 0
 	    ;;
 	--pdf)
-	    _TESTS=( "${_TESTS[@]}" "lib/020_color-pdf" )
+	    _TESTS=( "${_TESTS[@]}" "lib/020_pdf" )
 	    shift
 	    ;;
 	--profiling)
@@ -157,6 +164,18 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
 		fi
 		;;
+	    *_pdf)
+		for _FOPROC in "${_FO_PROCS[@]}"; do
+		    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
+		    # skip if XSL-FO processor does not exist
+		    [ $? -ne 0 ] && continue
+		    export _FOPROC
+		    for _PDFCMD in "pdf" "color-pdf"; do
+			export _PDFCMD
+			eval "$_TEST"
+		    done
+		done
+		;;
 	    *_profiling)
 		for _MAINFILE_PATH in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
 		    export _MAINFILE_PATH
@@ -167,6 +186,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 			export _SET_FILES="$_XML_FILES $_MAIN_NOPROF"
 		    else
 			export _NOPROFILE=0
+			export _SET_FILES="$_XML_FILES $_MAIN"
 		    fi
 		    eval "$_TEST"
 		done

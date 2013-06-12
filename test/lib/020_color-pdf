@@ -7,7 +7,7 @@
 #
 # TODO: Checks for sources that do not get profiled
 #
-# Testing DAPS: color-pdf
+# Testing DAPS: PDF
 #
 # In a PDF it's impossible to find out whether e.g. a certain XSLTPARAM
 # option or the draft mode is working without actually opening the PDF
@@ -17,7 +17,7 @@
 # was called with correct options. 
 #
 # * Does the PDF-file correctly build?
-# * Does the name retrieved with color-pdf-name match the actual result?
+# * Does the name retrieved with *-name match the actual result?
 # * Is the .fo still present after the PDF has been built?  
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
@@ -28,17 +28,21 @@
 
 source lib/common_functions
 
-header "Color PDFs"
+header "$_PDFCMD with $_FOPROC"
 
 function oneTimeSetUp() {
     # Clean up the build directory
     clean_build
     # get the profiling directory
-    _PDFPATH=$(eval "$_DAPSEXEC -d $_DCFILE color-pdf-name 2>/dev/null")
+    _PDFPATH=$(eval "$_DAPSEXEC -d $_DCFILE ${_PDFCMD}-name 2>/dev/null")
     if [ $? -ne 0 ]; then
-	echo " └─ The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
-	exit 1
+	exit_on_error " The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
     fi
+    _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_${_PDFCMD}.log
 }
 
 # Post
@@ -55,32 +59,36 @@ function oneTimeTearDown() {
 
 #--------------------------------
 # * Does the PDF-file correctly build?
-# * Does the name retrieved with color-pdf-name match the actual result?
+# * Does the name retrieved with *-name match the actual result?
 #
-function test_colorpdf () {
+function test_pdf () {
     local _PDFNAME _PDFRESULT
-    _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE color-pdf --formatter=fop 2>/dev/null")
+    _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --formatter=$_FOPROC 2>/dev/null")
     assertTrue \
-        ' └─ The color-pdf command itself failed' \
+        ' └─ The $_PDFCMD command itself failed' \
         "$?"
     assertTrue \
 	" └─ The resulting filename (${_PDFNAME}) does not exist" \
 	"[ -f $_PDFNAME ]"
     assertEquals \
-	' └─ The resulting filename does not match the one retrieved with --color-pdf-name' \
+	' └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name' \
 	"$_PDFPATH" "$_PDFNAME"
 }
 #--------------------------------
 # * Is the .fo still present after the PDF has been built?
 #
-function test_colorpdfFO () {
+function test_pdfFO () {
     local _FONAME _TMPDIR
     _TMPDIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TMP_DIR 2>/dev/null")
    assertTrue \
        ' └─ Getting the value of the TMP_DIR variable failed' \
        "$?"    
     _FONAME=$(basename ${_PDFPATH} 2>/dev/null)
-    _FONAME=${_TMPDIR}/${_FONAME%_en.pdf}-fop_en.fo
+    if [[ "pdf" == $_PDFCMD ]]; then
+	_FONAME=${_TMPDIR}/${_FONAME%-print_en.pdf}-${_FOPROC}-print_en.fo
+    else
+	_FONAME=${_TMPDIR}/${_FONAME%_en.pdf}-${_FOPROC}_en.fo
+    fi
     assertTrue \
 	" └─ The FO file (${_FONAME}) does not exist anymore after having built the PDF" \
 	"[ -f $_FONAME ]"
@@ -91,25 +99,25 @@ function test_colorpdfFO () {
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
 #
-function test_colorpdfRemarksDraftMeta () {
-    local _LOG_DIR _LOGFILE _PDFNAME _PDFNAME_BUILD _REMARK_COUNT_ACTUAL _REMARK_COUNT_EXPECTED
+function test_pdfRemarksDraftMeta () {
+    local _PDFNAME _PDFNAME_BUILD _REMARK_COUNT_ACTUAL _REMARK_COUNT_EXPECTED
 
     declare -a _XMLFILES
-   _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
-   _LOGFILE=${_LOG_DIR}/make_color-pdf.log
+
    _REMARK_COUNT_ACTUAL=0
    _REMARK_COUNT_EXPECTED=0
    _XML_FILES=( $_SET_FILES )
 
     clean_build
 
-   _PDFNAME_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE --debug color-pdf --draft --remarks --meta | tail -n 1")
-   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE color-pdf-name --draft --remarks --meta 2>/dev/null")
+   _PDFNAME_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1")
+#   echo "-----> $_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC"
+   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null")
    assertTrue \
        ' └─ Building the PDF with --draft --remarks --meta failed' \
        "$?"
    assertEquals \
-       ' └─ The resulting filename does not match the one retrieved with --color-pdf-name: ' \
+       " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
        "$_PDFNAME" "$_PDFNAME_BUILD"
 
    # checking DRAFT mode
@@ -154,29 +162,29 @@ function test_colorpdfRemarksDraftMeta () {
 #--------------------------------
 # * Is the --name option correctly implemented?
 #
-function test_colorpdfNAME () {
-    local _BUILD_SUBDIR_NAME _NAME _PDFNAME _PDFNAME_BUILD
+function test_pdfNAME () {
+    local _BUILD_SUBDIR_NAME _NAME _PDFPATH _PDFPATH_BUILD
     _NAME="testsuite"
 
     clean_build
 
-    _PDFNAME_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE color-pdf --name $_NAME 2>/dev/null")
+    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --name $_NAME --formatter=$_FOPROC 2>/dev/null")
     assertTrue \
-	' └─ Building a color-pdf with --name failed ' \
+	' └─ Building a $_PDFCMD with --name failed ' \
        "$?"
-   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE color-pdf-name --name $_NAME 2>/dev/null")
+   _PDFPATH=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --name $_NAME 2>/dev/null")
    assertTrue \
-	' └─  Getting the filename for the color-pdf with --name failed ' \
+	' └─  Getting the filename for $_PDFCMD with --name failed ' \
        "$?"
 
-   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_PDFNAME_BUILD"))
+   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_PDFPATH_BUILD"))
 
    assertEquals \
-       ' └─ The resulting filename does not match the one retrieved with --color-pdf-name: ' \
-       "$_PDFNAME" "$_PDFNAME_BUILD"
+       " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
+       "$_PDFPATH" "$_PDFPATH_BUILD"
 
    # expr match does not work with Variables as search term, needs regexp
-   echo "$(basename $_PDFNAME_BUILD)" | grep -q $_NAME
+   echo "$(basename $_PDFPATH_BUILD)" | grep -q $_NAME
    assertTrue \
        " └─ String passed with --name ($_NAME) does not appear in the PDF filename" \
        "$?"   
@@ -185,9 +193,56 @@ function test_colorpdfNAME () {
        "$_NAME" "$_BUILD_SUBDIR_NAME"
 }
 
-# * Does the --rootid option correctly work?
-# * Are parameters pass with --xsltparam correctly processed?
 
+#--------------------------------
+# * Does the --rootid option correctly work?
+#
+function test_pdfRootidXsltparam () {
+    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFINFO _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
+
+    _ROOTID=appendix
+    _PAGECOUNT_EXPECTED=2
+    _PDFINFO=pdfinfo
+
+    if [[ "pdf" == $_PDFCMD ]]; then
+	_PDFNAME=${_ROOTID}-print_en.pdf
+    else
+	_PDFNAME=${_ROOTID}_en.pdf
+    fi
+    _XSLTPARAM="--param \\\"hyphenate.verbatim=0\\\""
+
+    clean_build
+
+    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
+    assertTrue \
+	' └─ Building a $_PDFCMD with --rootid failed ' \
+       "$?"
+    _PDFNAME_BUILD=$(basename $_PDFPATH_BUILD)
+    assertEquals \
+	' └─ The resulting PDF filename does not match the ROOTID:' \
+	"$_PDFNAME" "$_PDFNAME_BUILD"
+    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
+	"$?"
+    # check PDF page count - should be two pages
+    # skip if $_PDFINFO is not found
+    which --skip-alias --skip-functions $_PDFINFO >/dev/null 2>&1
+    if [ 0 -ne $? ]; then
+	echo "Did not find $_PDFINFO, skipping page count test"
+	startSkipping
+    fi
+    _PAGECOUNT=$(eval "$_PDFINFO $_PDFPATH_BUILD | grep \"Pages:\" | sed 's/.*:  *//' 2>/dev/null")
+    assertEquals \
+	' └─ PDF has wrong page count:' \
+	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
+    endSkipping
+    # check xsltparam
+    egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null
+    assertTrue \
+	' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
+	"$?"
+}
 
 # source shUnit2 test
 eval "source $_SHUNIT2SRC"
