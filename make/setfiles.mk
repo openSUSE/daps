@@ -111,3 +111,8 @@ ifdef ROOTSTRING
 else
   DOCFILES  := $(SRCFILES)
 endif
+
+# Entity files
+#
+ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
+	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))

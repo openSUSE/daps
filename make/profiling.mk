@@ -44,6 +44,12 @@ ifdef PROFILE_URN
   endif
 endif
 
+# Also needs a prerequisite on the entity files, since entities are resolved
+# during profiling, so profiling needs to be redone whenever the entities
+# change
+#
+$(PROFILES): $(ENTITIES_DOC)
+
 .PHONY: profile
 profile: $(PROFILES)
   ifeq ($(MAKECMDGOALS),profile)

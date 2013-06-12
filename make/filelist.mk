@@ -12,9 +12,6 @@
 # include $(DAPSROOT)/make/setfiles.mk
 # include $(DAPSROOT)/make/images.mk
 
-ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
-	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))
-
 USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
 
 # Using tar is the easiest way to search for files excluding versioning system
