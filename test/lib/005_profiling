@@ -17,6 +17,7 @@
 # * Does the profiled XML validate?
 # * Is a file that has changed since last profiling updated?
 #   - Have files that not have been modified been updated?
+# * Are all files updated when entity-decl.ent has changed?
 # * In case the XML sources contain a profiling urn:
 #   - Does the XML contain the correct content?
 
@@ -121,7 +122,7 @@ function test_profilingValidate() {
 # Is a file that has changed since last profiling updated?
 # Have files that not have been modified been updated?
 #
-function test_profilingUpdate() {
+function test_profilingUpdateXML() {
     local _FILE _OLDDATE_FILES _OLDDATE_MAIN _NEWDATE_FILES _NEWDATE_MAIN
     # get date for $MAIN from profiling dir (unix timestamp)
     _OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $_MAINFILE_PATH) 2>/dev/null)
@@ -136,7 +137,7 @@ function test_profilingUpdate() {
     _NEWDATE_FILES=0
     for _FILE in $_SET_FILES; do
         if [[ $_FILE == $(basename $_MAINFILE_PATH) ]]; then continue; fi
-        _OLDDATE_FILES=$(expr $_OLDDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE) 2>/dev/null)
+        _OLDDATE_FILES=$(expr $_OLDDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
     # rerun profiling
     eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
@@ -150,13 +151,35 @@ function test_profilingUpdate() {
         "$_OLDDATE_MAIN" "$_NEWDATE_MAIN"
     for _FILE in $_SET_FILES; do
         if [[ $_FILE == $(basename $_MAINFILE_PATH) ]]; then continue; fi
-        _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$FILE) 2>/dev/null)
+        _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
     assertEquals \
         ' └─  Files have been updated although they did not change' \
         "$_OLDDATE_FILES" "$_NEWDATE_FILES"
 }
-    
+
+#--------------------------------
+# Are all files updated when entity-decl.ent has changed?
+#
+function test_profilingUpdateEntities() {
+    local _FILE
+    declare -A _OLD_FILEDATES _NEW_FILEDATES
+    for _FILE in $_SET_FILES; do
+	_OLD_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
+    done
+    sleep 1
+    # update Entity declaration files
+    touch ${_DOC_DIR}/xml/*.ent
+    # rerun profiling
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
+    for _FILE in $_SET_FILES; do
+	_NEW_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
+	assertNotEquals \
+	    " └─  File $_FILE has not been updated although the entities changed:" \
+        "${_OLD_FILEDATES[$_FILE]}" "${_NEW_FILEDATES[$_FILE]}"
+    done    
+}
+
 #--------------------------------
 # Is the content correctly profiled?
 #
