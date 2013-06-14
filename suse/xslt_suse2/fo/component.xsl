@@ -77,41 +77,41 @@
       <xsl:when test="$level=2">
         <fo:block xsl:use-attribute-sets="section.title.level2.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=3">
         <fo:block xsl:use-attribute-sets="section.title.level3.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=4">
         <fo:block xsl:use-attribute-sets="section.title.level4.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=5">
         <fo:block xsl:use-attribute-sets="section.title.level5.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=6">
         <fo:block xsl:use-attribute-sets="section.title.level6.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="title.split">
-          <xsl:with-param name="node" select="."/>
+          <xsl:with-param name="node" select="$node"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -123,14 +123,18 @@
   <xsl:param name="node" select="."/>
 
   <xsl:variable name="title">
-      <xsl:apply-templates select="$node" mode="title.markup"/>
+    <xsl:choose>
+      <xsl:when test="refmeta/refentrytitle">
+        <xsl:apply-templates select="refentry/refmetatitle"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="$node" mode="title.markup"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <xsl:variable name="number">
-      <xsl:apply-templates select="($node/parent::*|$node/parent::*[contains(local-name(), 'info')]/parent::*)[last()]" mode="label.markup"/>
-        <!-- I have absolutely no idea why this works that way – [1] should work
-             the other way around, and [last()] should do what I want. Maybe
-             this is a libxml/xsltproc bug. -->
+    <xsl:apply-templates select="$node" mode="label.markup"/>
   </xsl:variable>
 
   <xsl:if test="$number != ''">

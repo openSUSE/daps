@@ -102,11 +102,13 @@
       <xsl:with-param name="level" select="$level"/>
       <xsl:with-param name="marker" select="$marker"/>
       <xsl:with-param name="marker.title" select="$marker.title"/>
+      <xsl:with-param name="section" select="$section"/>
     </xsl:call-template>
   </fo:block>
 </xsl:template>
 
 <xsl:template name="section.heading">
+  <xsl:param name="section" select="."/>
   <xsl:param name="level" select="1"/>
   <xsl:param name="marker" select="1"/>
   <xsl:param name="marker.title"/>
@@ -122,42 +124,42 @@
       <xsl:when test="$level=1">
         <fo:block xsl:use-attribute-sets="section.title.level1.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=2">
         <fo:block xsl:use-attribute-sets="section.title.level2.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=3">
         <fo:block xsl:use-attribute-sets="section.title.level3.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=4">
         <fo:block xsl:use-attribute-sets="section.title.level4.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level=5">
         <fo:block xsl:use-attribute-sets="section.title.level5.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>>
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
         <fo:block xsl:use-attribute-sets="section.title.level6.properties">
           <xsl:call-template name="title.split">
-            <xsl:with-param name="node" select="."/>
+            <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
         </fo:block>
       </xsl:otherwise>
@@ -259,9 +261,10 @@
             white-space-collapse='false'
             white-space-treatment='preserve'
             linefeed-treatment='preserve'>
-            <!-- I seriously hope no one is going to beat me up over this font
-                 size – but the screens in the GPL really do look better this
-                 way. -->
+            <!-- I hope no one is going to beat me up over this font size – but
+                 the screens in the GPL really do look better this way, as we
+                 can now fit 80 characters on a line even on two-column pages. 
+                 -->
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
