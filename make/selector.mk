@@ -239,7 +239,7 @@ endif
 #---------------
 # Result names
 #
-NAMETARGETS := color-pdf-name dist-html-name dist-jsp-name dist-webhelp-name epub-name html-dir-name jsp-dir-name man-dir-name mobi-name package-dir-name package-src-name pdf-name single-html-name text-name webhelp-dir-name
+NAMETARGETS := color-pdf-name dist-html-name dist-jsp-name dist-webhelp-name epub-name html-dir-name jsp-dir-name man-dir-name mobi-name package-dir-name package-src-name pdf-name single-html-dir-name text-name webhelp-dir-name
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(NAMETARGETS)))
   include $(DAPSROOT)/make/print_results.mk

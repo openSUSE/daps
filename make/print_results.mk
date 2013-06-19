@@ -26,9 +26,9 @@ mobi-name:
 html-dir-name:
 	@ccecho "result" "$(HTML_DIR)"
 
-.PHONY: single-html-name
-single-html-name:
-	@ccecho "result" "$(HTML_DIR)/$(DOCNAME).html"
+.PHONY: single-html-dir-name
+single-html-dir-name:
+	@ccecho "result" "$(HTML_DIR)"
 
 .PHONY: dist-html-name
 dist-html-name:
