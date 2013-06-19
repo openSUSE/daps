@@ -1,0 +1,99 @@
+#!/bin/bash
+#
+# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# TODO: Checks for sources that do not get profiled
+#
+# Testing DAPS: HTML
+#
+# In a PDF it's impossible to find out whether e.g. a certain XSLTPARAM
+# option or the draft mode is working without actually opening the PDF
+# in a viewer and looking at it.
+# For testing we will therefore run DAPS in debug mode and grep for parameters
+# in the log file. Thus we will at least know whether the xslt processor
+# was called with correct options. 
+#
+# * Does the HTML correctly build?
+# * Is an index.hml generated?
+# * Does the name retrieved with *-dir-name match the actual result?
+
+
+
+
+
+
+
+# * Is the .fo still present after the PDF has been built?  
+# * Is the draft watermark image included when using the --draft option?
+# * Are remarks displayed when using the --remarks option?
+# * Is the meta information displayed when using the --meta option?
+# * Is the --name option correctly implemented?
+# * Does the --rootid option correctly work?
+# * Are parameters pass with --xsltparam correctly processed?
+
+source lib/common_functions
+
+header "$_HTMLCMD"
+
+function oneTimeSetUp() {
+    # Clean up the build directory
+    clean_build
+    # get the profiling directory
+    _HTMLDIR_PATH=$(eval "$_DAPSEXEC -d $_DCFILE ${_HTMLCMD}-dir-name 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting HTML directory failed. Skipping tests"
+    fi
+    _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_${_HTMLCMD}.log
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does the HTML correctly build?
+# * Is an index.hml generated?
+# * Does the name retrieved with *-dir-name match the actual result?
+#
+function test_html () {
+    local _HTMLDIR_NAME _HTMLFILE_NAME
+    _HTMLFILE_NAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD 2>/dev/null")
+    assertTrue \
+        ' └─ The $_HTMLCMD command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The resulting file/link (${_HTMLFILE_NAME}) does not exist." \
+	"[ -f -o -L $_HTMLDIR_NAME ]"
+    if [ ! -L $_HTMLFILE_NAME ]; then
+	startSkipping
+    else
+	readlink -e $_HTMLFILE_NAME >/dev/null
+    fi
+    assertTrue \
+	" └─ The resulting link (${_HTMLFILE_NAME}) does not point to an existing file" \
+	"$?"
+    endSkipping
+    _HTMLDIR_NAME=$(dirname $_HTMLFILE_NAME)
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --${_HTMLCMD}-dir-name" \
+	"$_HTMLDIR_PATH" "$_HTMLDIR_NAME"
+}
+
+
+# source shUnit2 test
+eval "source $_SHUNIT2SRC"

@@ -73,18 +73,27 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 # MAIN                                  #
 #########################################
 
-_ARGS=$(getopt -o h -l all,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,html,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
+
+# Exit when getopt returns errors
+#
+GETOPT_RETURN_CODE=$?
+[[ 0 != $GETOPT_RETURN_CODE ]] && exit_on_error "Getopt returned the following error: $GETOPT_RETURN_CODE"
 
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/020_pdf" )
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/020_pdf" "lib/022_html")
 	    shift
 	    ;;
 	-h)
 	    usage
 	    exit 0
+	    ;;
+	--html)
+	    _TESTS=( "${_TESTS[@]}" "lib/022_html" )
+	    shift
 	    ;;
 	--pdf)
 	    _TESTS=( "${_TESTS[@]}" "lib/020_pdf" )
@@ -163,6 +172,12 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		if [ $? -ne 0 ]; then
 		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
 		fi
+		;;
+	    *_html)
+		for _HTMLCMD in "html" "jsp" "single-html"; do
+		    export _HTMLCMD
+		    eval "$_TEST"
+		done
 		;;
 	    *_pdf)
 		for _FOPROC in "${_FO_PROCS[@]}"; do
