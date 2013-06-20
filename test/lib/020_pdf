@@ -108,34 +108,36 @@ function test_pdfRemarksDraftMeta () {
 
     clean_build
 
-   _PDFNAME_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1")
-#   echo "-----> $_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC"
-   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null")
+   _PDFNAME_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1")
    assertTrue \
        ' └─ Building the PDF with --draft --remarks --meta failed' \
        "$?"
+   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null")
+   assertTrue \
+       ' └─ Getting the PDF-name with --draft --remarks --meta failed' \
+       "$?"   
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
        "$_PDFNAME" "$_PDFNAME_BUILD"
 
    # checking DRAFT mode
    #
-   egrep -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE >/dev/null
+   egrep -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE >/dev/null 2>&1
    assertTrue \
        ' └─ Stringparam for DRAFT mode is not correctly specified when generating the FO-file' \
        "$?"
-   expr "$_PDFNAME_BUILD" : '.*\(_draft\)' >/dev/null
+   expr "$_PDFNAME_BUILD" : '.*\(_draft\)' >/dev/null 2>&1
    assertTrue \
        ' └─ String "_draft" does not appear in the PDF filename' \
        "$?"
 
    # checking META
    #
-   egrep -- "--param\s+\"use\.meta=1\"" $_LOGFILE >/dev/null
+   egrep -- "--param\s+\"use\.meta=1\"" $_LOGFILE >/dev/null 2>&1
    assertTrue \
        ' └─ Param for META is not correctly specified when generating the FO-file' \
        "$?"
-   expr "$_PDFNAME_BUILD" : '.*\(_meta\)' >/dev/null
+   expr "$_PDFNAME_BUILD" : '.*\(_meta\)' >/dev/null 2>&1
    assertTrue \
        ' └─ String "_meta" does not appear in the PDF filename' \
        "$?"
@@ -199,7 +201,7 @@ function test_pdfRootidXsltparam () {
     local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFINFO _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
 
     _ROOTID=appendix
-    _PAGECOUNT_EXPECTED=2
+    _PAGECOUNT_EXPECTED=1
     _PDFINFO=pdfinfo
 
     if [[ "pdf" == $_PDFCMD ]]; then
@@ -211,7 +213,7 @@ function test_pdfRootidXsltparam () {
 
     clean_build
 
-    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
+    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
     assertTrue \
 	' └─ Building a $_PDFCMD with --rootid failed ' \
        "$?"
