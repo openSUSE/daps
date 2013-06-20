@@ -64,15 +64,6 @@
 # provide-images and provide-*-images
 
 #------------------------------------------------------------------------
-# We want to keep the following files
-#
-
-.PRECIOUS: $(IMG_GENDIR)/gen/png/%.png
-.PRECIOUS: $(IMG_GENDIR)/gen/pdf/%.pdf
-.PRECIOUS: $(IMG_GENDIR)/gen/svg/%.svg
-.PRECIOUS: $(IMG_GENDIR)/gen/jpg/%.jpg
-
-#------------------------------------------------------------------------
 # Check for optipng
 #
 HAVE_OPTIPNG := $(shell which --skip-alias --skip-functions optipng 2>/dev/null)
@@ -210,8 +201,13 @@ ONLINE_IMAGES   := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
 PRINT_IMAGES    := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
 FOR_HTML_IMAGES := $(JPGONLINE) $(PNGONLINE)
 
-$(ONLINE_IMAGES): | $(IMG_DIRECTORIES)
-$(PRINT_IMAGES): | $(IMG_DIRECTORIES)
+GEN_IMAGES      := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $(IMG_GENDIR)/gen/png/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/svg/,$(GEN_SVG))
+
+#------------------------------------------------------------------------
+# We want to keep the generated files
+#
+.PRECIOUS: $(ONLINE_IMAGES) $(PRINT_IMAGES) $(GEN_IMAGES)
+.PRECIOUS: $(addprefix $(IMG_GENDIR)/gen/svg/,$(notdir $(USED_SVG)))
 
 #---------------
 # Optimize (size-wise) PNGs
@@ -320,7 +316,7 @@ list-images-multisrc warn-images:
 # TODO: remove static exiftool dependency
 #
 
-$(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
+$(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png | $(IMG_DIRECTORIES)
   ifdef HAVE_OPTIPNG
 	@exiftool -Comment $< | grep optipng > /dev/null || \
 	  ccecho "warn" " $< not optimized." >&2
@@ -328,21 +324,21 @@ $(IMG_GENDIR)/online/%.png: $(IMG_SRCDIR)/png/%.png
 	ln -sf $< $@
 
 # generated PNGs
-$(IMG_GENDIR)/online/%.png: $(IMG_GENDIR)/gen/png/%.png
+$(IMG_GENDIR)/online/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_DIRECTORIES)
 	ln -sf $< $@
 
 #---------------
 # Create grayscale PNGs used in the manuals
 #
 # from existing color PNGs
-$(IMG_GENDIR)/print/%.png: $(IMG_SRCDIR)/png/%.png
+$(IMG_GENDIR)/print/%.png: $(IMG_SRCDIR)/png/%.png | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 # from generated color PNGs
-$(IMG_GENDIR)/print/%.png: $(IMG_GENDIR)/gen/png/%.png
+$(IMG_GENDIR)/print/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
@@ -373,6 +369,7 @@ endif
 
 # SVG -> PNG
 # create color PNGs from SVGs
+$(IMG_GENDIR)/gen/png/%.png: | $(IMG_DIRECTORIES)
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PNG"
@@ -384,7 +381,7 @@ endif
 
 # EPS -> PNG
 # create color PNGs from EPS
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/eps/%.eps
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/eps/%.eps | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -394,7 +391,7 @@ endif
 
 # PDF -> PNG
 # create color PNGs from EPS
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -402,7 +399,7 @@ endif
 	convert $< $@ $(DEVNULL)
 	$(run_optipng)
 
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PNG"
 endif
@@ -421,7 +418,7 @@ endif
 # SVGs are never used directly from source, since they are all generated
 # Color SVGs are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
-$(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg
+$(IMG_GENDIR)/online/%.svg: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Fixing $(notdir $<)"
 endif
@@ -437,7 +434,7 @@ endif
 # done in 1.x), generate and use the online version - it will probably be
 # needed anyway
 #
-$(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/online/%.svg
+$(IMG_GENDIR)/print/%.svg: $(IMG_GENDIR)/online/%.svg | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
@@ -449,7 +446,7 @@ endif
 
 # DIA -> SVG
 #
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/dia/%.dia
+$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/dia/%.dia | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to SVG"
 endif
@@ -457,7 +454,7 @@ endif
 
 # FIG -> SVG
 #
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig
+$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to SVG"
 endif
@@ -467,7 +464,7 @@ endif
 #
 # source SVGs are linked to gen/svg and are processed from there into
 # online/ and print/
-$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/svg/%.svg
+$(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/svg/%.svg | $(IMG_DIRECTORIES)
 	ln -sf $< $@
 
 
@@ -479,18 +476,18 @@ $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/svg/%.svg
 # Link images that are used in the manuals
 #
 # existing color PDFs
-$(IMG_GENDIR)/online/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
+$(IMG_GENDIR)/online/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
 	ln -sf $< $@
 
 # created PDFs
-$(IMG_GENDIR)/online/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
+$(IMG_GENDIR)/online/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
 	ln -sf $< $@
 
 #---------------
 # Create grayscale PDFs used in the manuals
 #
 # from existing color PDFs
-$(IMG_GENDIR)/print/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf
+$(IMG_GENDIR)/print/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
@@ -499,7 +496,7 @@ endif
 	  -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH $< $(DEVNULL)
 
 # from generated color PDFs
-$(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf
+$(IMG_GENDIR)/print/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
@@ -511,7 +508,7 @@ endif
 # Create color PDFs from other formats
 
 # EPS -> PDF
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps
+$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PDF"
 endif
@@ -521,7 +518,7 @@ endif
 # SVG -> PDF
 # Color SVGs from are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
-$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg
+$(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to PDF"
 endif
@@ -542,13 +539,13 @@ endif
 # Link JPGs
 #
 
-$(IMG_GENDIR)/online/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg
+$(IMG_GENDIR)/online/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg | $(IMG_DIRECTORIES)
 	ln -sf $< $@
 
 #---------------
 # Create grayscale JPGs
 #
-$(IMG_GENDIR)/print/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg
+$(IMG_GENDIR)/print/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg | $(IMG_DIRECTORIES)
 ifeq ($(VERBOSITY),2)
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
