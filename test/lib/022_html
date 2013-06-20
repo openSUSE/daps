@@ -96,7 +96,7 @@ function test_html () {
     if [ ! -L $_HTMLFILE_NAME ]; then
 	startSkipping
     else
-	readlink -e $_HTMLFILE_NAME >/dev/null
+	readlink -e $_HTMLFILE_NAME >/dev/null 2>&1
     fi
     assertTrue \
 	" └─ The resulting link (${_HTMLFILE_NAME}) does not point to an existing file" \
