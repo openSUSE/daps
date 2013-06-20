@@ -64,7 +64,7 @@ EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 #--stringparam "admon.graphics.path=admons/"
 
 ifndef EPUB_CSS
-  EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)))
+  EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)) 2>/dev/null )
   EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
 endif
 

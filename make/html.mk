@@ -90,7 +90,7 @@ else
   IS_STATIC := $(notdir $(STYLEIMG))
   ifndef HTML_CSS
     ifneq ($(IS_STATIC),static)
-      HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEHTML))*.css)))
+      HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEHTML))*.css)) 2>/dev/null )
       ifeq ($(VERBOSITY),1)
 	HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
       endif
