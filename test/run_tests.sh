@@ -24,7 +24,7 @@ declare -a _XSLT_PROCESSORS
 
 # XML sources
 export _DOC_DIR="documents"
-export _DCFILE="${_DOC_DIR}/DC-booktest"
+export _DCFILE="${_DOC_DIR}/DC-booktest_docbook"
 export _MAIN="book.xml"
 export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
 export _MAIN_NOPROF="book_noprofile.xml"
@@ -174,7 +174,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		fi
 		;;
 	    *_html)
-		for _HTMLCMD in "html" "jsp" "single-html"; do
+		for _HTMLCMD in "html" "single-html"; do
 		    export _HTMLCMD
 		    eval "$_TEST"
 		done
