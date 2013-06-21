@@ -10,7 +10,7 @@
 # Testing DAPS: HTML
 #
 # NOTE on jsp:
-# jsp needs to be tested separately, since the original DocBoojk stylesheets,
+# jsp needs to be tested separately, since the original DocBook stylesheets,
 # which are used for testing, do nate support jsp
 #
 #
@@ -109,13 +109,96 @@ function test_html () {
 	"$_HTMLDIR_PATH" "$_HTMLDIR_NAME"
 }
 
+
+#--------------------------------
+# * Test whether all images are linked correctly
+
+function test_htmlImages () {
+    local _oldIFS _J _IMAGE _IMGS _IMGS_DAPS _IMG_DIFF _IMG_REFS _MISSING
+    declare -a _IMGS_BUILD
+    declare -a _IMGS_EXPECTED
+
+    clean_build
+
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD >/dev/null 2>&1"
+    assertTrue \
+        ' └─ The $_HTMLCMD command itself failed' \
+        "$?"
+
+    #
+    # Check if image links in the HTML point to existing files
+    #
+    _IMG_REFS=$(grep -il '\<img ' ${_HTMLDIR_PATH}/*.html)
+
+    # The following awk code was taken from
+    # http://www.tc.umn.edu/~hause011/code/find_reference.html
+
+    # TODO: awk does not work when more than one img tag in one line
+    # Alternative:
+    # lynx -dump -listonly -image-links /local/svns/daps/trunk/daps/test/documents/build/booktest_docbook/single-html/booktest_docbook/booktest_docbook.html | grep "/localhost/local/svns/daps/trunk/daps/test/documents/build/booktest_docbook/single-html/booktest_docbook/images/" | sed 's/^\s*[0-9]*\.\s*file:\///g' | sort -u
+
+
+    _IMGS=$(awk ' 
+     /\<\!\-\-/, /\-\-\>/    {next;} 
+     /\<[Ii][Mm][Gg] /, /\>/ { 
+                              sub(/^.*[Ss][Rr][Cc]=/,"");
+                              $0=$1;
+                              gsub(/"/,"");
+                              print;}' $_IMG_REFS | sort -u)
+    for _IMAGE in $_IMGS; do
+	readlink -e ${_HTMLDIR_PATH}/$_IMAGE >/dev/null 2>&1
+	[ $? != 0 ] && _MISSING="$_MISSING ${_HTMLDIR_PATH}/$_IMAGE"
+    done
+    assertNull \
+	" └─ Image links in the HTML are dead: $_MISSING" \
+	"$_MISSING"
+    _IMGS_DAPS=$(eval "$_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --nodc --noent --noxml")
+    assertTrue \
+	" └─ The command 'list-srcfiles --nodc --noent --noxml' failed" \
+	"$?"
+    assertNotNull \
+	" └─ The command 'list-srcfiles --nodc --noent --noxml' returned an empty string" \
+	"_IMGS_DAPS"
+    #
+    # Check if list of images retrieved from DAPS matches the ones
+    # retrieved from the HTML (see above)
+    J=0
+    for _IMAGE in $_IMGS_DAPS; do
+	_IMGS_EXPECTED[$J]="images/$(basename $_IMAGE)"
+	# skip JPEGs 
+	if [[ ${_IMGS_EXPECTED[$J]##*.} != jpg ]]; then
+	    _IMGS_EXPECTED[$J]="${_IMGS_EXPECTED[$J]%.*}.png"
+	fi
+	let J++
+    done
+    _IMGS_BUILD=( $_IMGS )
+
+    echo "build: ${_IMGS_BUILD[@]}"
+    echo "daps: ${_IMGS_EXPECTED[@]}" 
+
+    # Now we have two lists - "expected images" and "build images". The latter
+    # may contain additional images (e.g. for callouts), but the "expected
+    # images" all need to appear in "build images". We can check this by using 
+    # comm: comm -1 -3 <BUILT> <EXPECTED> will show images unique to
+    # <EXPECTED> - there should be none. Since comm compares columns, we also
+    # need to operate with a modified IFS
+    #
+    _oldIFS=$IFS IFS=$'\n\t'
+    _IMG_DIFF=$(comm -1 -3 <(echo "${_IMGS_BUILD[*]}" | sort -u) <(echo "${_IMGS_EXPECTED[*]}" | sort -u))
+    IFS=$_oldIFS
+    assertNull \
+	" └─ The list of images from DAPS does not match the ones from the HTML" \
+	"$_IMG_DIFF"
+
+}
+
 #--------------------------------
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
 #
 
-function test_pdfRemarksDraftMeta () {
+function test_htmlRemarksDraftMeta () {
     local _HTMLDIR_NAME _HTMLFILE_NAME_BUILD
 
     clean_build
@@ -166,6 +249,9 @@ function test_pdfRemarksDraftMeta () {
        ' └─ String "_meta" does not appear in the HTML-dir-name' \
        "$?"
 }
+
+
+
 
 
 # source shUnit2 test
