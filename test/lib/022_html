@@ -237,8 +237,44 @@ function test_htmlRemarksDraftMeta () {
        "$?"
 }
 
+#--------------------------------
+# * Is the draft watermark image included when using the --draft option?
+# * Are remarks displayed when using the --remarks option?
+# * Is the meta information displayed when using the --meta option?
+#
 
+function test_htmlCSS_HTML5 () {
+    local _CSS_FILE _CSS_PATH
 
+    _CSS_FILE="test.css"
+    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_BUILD="${_HTMLDIR_PATH}/static/css/${_CSS_FILE}"
+
+    clean_build
+
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --css=${_CSS_PATH} --html5 >/dev/null 2>&1"
+    assertTrue \
+        ' └─ The $_HTMLCMD command with --css and --html5 failed' \
+        "$?"
+    assertTrue \
+	" └─ The result directory does not contain index.$_SUFFIX" \
+	"[ -f $_HTMLDIR_PATH/index.$_SUFFIX -o -L $_HTMLDIR_PATH/index.$_SUFFIX ]"
+    # Test for HTML5
+    #
+    grep "<\!DOCTYPE html>" ${_HTMLDIR_PATH}/index.$_SUFFIX >/dev/null 2>&1
+    assertTrue \
+        ' └─ The resulting HTML does not have a valid XHTML5 Doctype declaration.' \
+        "$?"
+    # Test CSS
+    #
+    assertTrue \
+	" └─ The result directory does not contain ${_CSS_BUILD}" \
+	"[ -f ${_CSS_BUILD} -o -L ${_CSS_BUILD} ]"
+    grep "static/css/${_CSS_FILE}" ${_HTMLDIR_PATH}/index.$_SUFFIX >/dev/null 2>&1
+    assertTrue \
+        ' └─ The resulting HTML does not include a link to static/css/${_CSS_FILE}.' \
+        "$?"    
+}
 
 
 # source shUnit2 test
