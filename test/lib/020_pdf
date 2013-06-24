@@ -21,7 +21,7 @@
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
 # * Is the --name option correctly implemented?
-# * Does the --rootid option correctly work?
+# * Does the --rootid option work correctly?
 # * Are parameters pass with --xsltparam correctly processed?
 
 source lib/common_functions
@@ -47,6 +47,7 @@ function oneTimeSetUp() {
 # this function is run _after_ the tests are executed
 #
 function oneTimeTearDown() {
+    stats
     # Clean up the build directory
     clean_build
 }
@@ -195,7 +196,8 @@ function test_pdfNAME () {
 
 
 #--------------------------------
-# * Does the --rootid option correctly work?
+# * Does the --rootid option work correctly?
+# * Are parameters pass with --xsltparam correctly processed?
 #
 function test_pdfRootidXsltparam () {
     local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFINFO _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
@@ -215,30 +217,24 @@ function test_pdfRootidXsltparam () {
 
     _PDFPATH_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
     assertTrue \
-	' └─ Building a $_PDFCMD with --rootid failed ' \
+	' └─ Building a $_PDFCMD with --rootid and --xsltparam failed ' \
        "$?"
+    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
+	"$?"
     _PDFNAME_BUILD=$(basename $_PDFPATH_BUILD)
     assertEquals \
 	' └─ The resulting PDF filename does not match the ROOTID:' \
 	"$_PDFNAME" "$_PDFNAME_BUILD"
-    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null
-    assertTrue \
-	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
-	"$?"
-    # check PDF page count - should be two pages
-    # skip if $_PDFINFO is not found
-    which --skip-alias --skip-functions $_PDFINFO >/dev/null 2>&1
-    if [ 0 -ne $? ]; then
-	echo "Did not find $_PDFINFO, skipping page count test"
-	startSkipping
-    fi
+
+    # check PDF page count
     _PAGECOUNT=$(eval "$_PDFINFO $_PDFPATH_BUILD | grep \"Pages:\" | sed 's/.*:  *//' 2>/dev/null")
     assertEquals \
 	' └─ PDF has wrong page count:' \
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
-    endSkipping
     # check xsltparam
-    egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null
+    egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null 2>&1
     assertTrue \
 	' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
 	"$?"
