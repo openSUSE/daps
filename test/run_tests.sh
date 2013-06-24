@@ -41,6 +41,12 @@ declare -a _TESTS=( "lib/000_source-validation" )
 # shUnit2
 export _SHUNIT2SRC="/usr/share/shunit2/src/shunit2"
 
+# Statistics
+_TOTAL=0
+_FAILED=0
+_SKIPPED=0
+export _TEMPDIR=$(mktemp -d /tmp/daps-testing-stats_XXXXXX)
+
 #----------
 # local
 
@@ -60,7 +66,7 @@ declare -a _FO_PROCS=( "fop" "xep" )
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
-    rm -rf "${_DOC_DIR}/build"
+    rm -rf "${_DOC_DIR}/build $_TEMPDIR"
     exit 1;
 }
 
@@ -75,7 +81,7 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 #
 
 declare -a _REQUIREMENTS
-_REQUIREMENTS=( "lynx" "readlink" "xmllint" )
+_REQUIREMENTS=( "lynx" "pdfinfo" "xmllint" )
 
 for _REQ in "${_REQUIREMENTS[@]}"; do
     which --skip-alias --skip-functions $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
@@ -85,6 +91,14 @@ done
 #########################################
 # MAIN                                  #
 #########################################
+
+# I don't know a better approach than to store the stats in files
+# because exporting variable in bash only works top down, not
+# bottom up
+for _STATFILE in failed skipped total; do
+    eval "echo 0 > ${_TEMPDIR}/$_STATFILE"
+done
+
 
 _ARGS=$(getopt -o h -l all,html,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
@@ -227,3 +241,27 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
     done
     echo
 done
+
+_FAILED=$(cat ${_TEMPDIR}/failed)
+_SKIPPED=$(cat ${_TEMPDIR}/skipped)
+_TOTAL=$(cat ${_TEMPDIR}/total)
+
+_PASSED=$((_TOTAL - $((_FAILED + _SKIPPED)) ))
+
+echo "--------------------------------------------------"
+echo "Overall Statistics"
+echo
+echo "Tests Total:   $_TOTAL"
+echo "Tests Passed:  $_PASSED"
+echo "Tests Skipped: $_SKIPPED"
+if [ 0 -ne $_FAILED ]; then
+    ccecho "error" "Tests Failed:  $_FAILED"
+else
+    echo "Tests Failed:  $_FAILED"
+fi
+
+
+rm -rf "${_DOC_DIR}/build $_TEMPDIR"
+
+
+

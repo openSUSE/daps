@@ -38,3 +38,16 @@ function header () {
     echo "Test: $1"
     echo "=================================================="
 }
+
+# --------
+# Collect overall stats
+#
+function stats () {
+    _FAILED=$(cat ${_TEMPDIR}/failed)
+    _SKIPPED=$(cat ${_TEMPDIR}/skipped)
+    _TOTAL=$(cat ${_TEMPDIR}/total)
+
+    echo "$(( _FAILED + __shunit_assertsFailed ))" > ${_TEMPDIR}/failed
+    echo "$(( _SKIPPED + __shunit_assertsSkipped ))" > ${_TEMPDIR}/skipped
+    echo "$(( _TOTAL + __shunit_testsTotal ))" > ${_TEMPDIR}/total
+}
