@@ -95,8 +95,8 @@ function parse_args () {
                 P_HELP=1
                 shift
                 ;;
-            --html4)
-                P_HTML4=1
+            --html5)
+                P_HTML5=1
                 shift
                 ;;
             --lang)
@@ -555,7 +555,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html4,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -567,7 +567,7 @@ function build_html_jsp () {
         help_css
         help_draft
         help_help
-        help_html4
+        help_html5
         help_meta
         help_name
         help_remarks
@@ -585,7 +585,7 @@ function build_html_jsp () {
     # usemeta implies draft mode
     [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
     [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
-    [[ 1 = $P_HTML4 ]]    && export HTML4="yes"
+    [[ 1 = $P_HTML5 ]]    && export HTML5="yes"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -1594,9 +1594,9 @@ function help_formatter () {
 function help_help () {
     echo "    --help, -h                Print this help text"
 }
-function help_html4 () {
-    echo "    --html4                   HTML builds are generated as XHTML files.
-                              Force HTML4 with this switch.
+function help_html5 () {
+    echo "    --html5                   HTML builds are generated as XHTML files.
+                              Force HTML5 with this switch.
                               Default: unset"
 }
 function help_lang () {

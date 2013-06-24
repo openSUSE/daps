@@ -27,8 +27,8 @@
 #----------
 # Stylesheets
 #
-ifeq ("$(HTML4)", "yes")
-  H_DIR := /html
+ifeq ("$(HTML5)", "yes")
+  H_DIR := /xhtml5
 else
   H_DIR := /xhtml
 endif
@@ -103,6 +103,11 @@ HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
 		--stringparam "base.dir=$(HTML_DIR)/" \
 		--stringparam "draft.mode=$(DRAFT)" \
                 --stringparam "img.src.path=images/"
+
+# DocBook uses .xhtml for XHTML5 by default
+ifeq ("$(HTML5)", "yes")
+  HTMLSTRINGS  += --stringparam "html.ext=.html"
+endif
 
 # test if DocBook layout
 ifneq ($(IS_STATIC),static)
