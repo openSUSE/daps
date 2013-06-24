@@ -130,24 +130,14 @@ function test_htmlImages () {
     #
     _IMG_REFS=$(grep -il '\<img ' ${_HTMLDIR_PATH}/*.html)
 
-    # The following awk code was taken from
-    # http://www.tc.umn.edu/~hause011/code/find_reference.html
 
-    # TODO: awk does not work when more than one img tag in one line
-    # Alternative:
-    # lynx -dump -listonly -image-links /local/svns/daps/trunk/daps/test/documents/build/booktest_docbook/single-html/booktest_docbook/booktest_docbook.html | grep "/localhost/local/svns/daps/trunk/daps/test/documents/build/booktest_docbook/single-html/booktest_docbook/images/" | sed 's/^\s*[0-9]*\.\s*file:\///g' | sort -u
+    # get list of images using lynx
+    #
+    _IMGS=$(lynx -dump -listonly -image-links $_IMG_REFS | grep "${_HTMLDIR_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
 
-
-    _IMGS=$(awk ' 
-     /\<\!\-\-/, /\-\-\>/    {next;} 
-     /\<[Ii][Mm][Gg] /, /\>/ { 
-                              sub(/^.*[Ss][Rr][Cc]=/,"");
-                              $0=$1;
-                              gsub(/"/,"");
-                              print;}' $_IMG_REFS | sort -u)
     for _IMAGE in $_IMGS; do
-	readlink -e ${_HTMLDIR_PATH}/$_IMAGE >/dev/null 2>&1
-	[ $? != 0 ] && _MISSING="$_MISSING ${_HTMLDIR_PATH}/$_IMAGE"
+	readlink -e $_IMAGE >/dev/null 2>&1
+	[ $? != 0 ] && _MISSING="$_MISSING $_IMAGE"
     done
     assertNull \
 	" └─ Image links in the HTML are dead: $_MISSING" \
@@ -164,7 +154,7 @@ function test_htmlImages () {
     # retrieved from the HTML (see above)
     J=0
     for _IMAGE in $_IMGS_DAPS; do
-	_IMGS_EXPECTED[$J]="images/$(basename $_IMAGE)"
+	_IMGS_EXPECTED[$J]="${_HTMLDIR_PATH}/images/$(basename $_IMAGE)"
 	# skip JPEGs 
 	if [[ ${_IMGS_EXPECTED[$J]##*.} != jpg ]]; then
 	    _IMGS_EXPECTED[$J]="${_IMGS_EXPECTED[$J]%.*}.png"
@@ -172,9 +162,6 @@ function test_htmlImages () {
 	let J++
     done
     _IMGS_BUILD=( $_IMGS )
-
-    echo "build: ${_IMGS_BUILD[@]}"
-    echo "daps: ${_IMGS_EXPECTED[@]}" 
 
     # Now we have two lists - "expected images" and "build images". The latter
     # may contain additional images (e.g. for callouts), but the "expected
