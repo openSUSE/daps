@@ -69,6 +69,19 @@ function exit_on_error () {
 #
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
+
+#########################################
+# Checking requirements
+#
+
+declare -a _REQUIREMENTS
+_REQUIREMENTS=( "lynx" "readlink" "xmllint" )
+
+for _REQ in "${_REQUIREMENTS[@]}"; do
+    which --skip-alias --skip-functions $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
+done
+
+
 #########################################
 # MAIN                                  #
 #########################################
