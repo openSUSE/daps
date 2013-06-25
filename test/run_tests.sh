@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -96,7 +96,7 @@ done
 # because exporting variable in bash only works top down, not
 # bottom up
 for _STATFILE in failed skipped total; do
-    eval "echo 0 > ${_TEMPDIR}/$_STATFILE"
+    echo 0 > ${_TEMPDIR}/$_STATFILE
 done
 
 

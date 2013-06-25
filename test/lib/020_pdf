@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -200,11 +200,10 @@ function test_pdfNAME () {
 # * Are parameters pass with --xsltparam correctly processed?
 #
 function test_pdfRootidXsltparam () {
-    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFINFO _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
+    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
 
     _ROOTID=appendix
     _PAGECOUNT_EXPECTED=1
-    _PDFINFO=pdfinfo
 
     if [[ "pdf" == $_PDFCMD ]]; then
 	_PDFNAME=${_ROOTID}-print_en.pdf
@@ -229,7 +228,7 @@ function test_pdfRootidXsltparam () {
 	"$_PDFNAME" "$_PDFNAME_BUILD"
 
     # check PDF page count
-    _PAGECOUNT=$(eval "$_PDFINFO $_PDFPATH_BUILD | grep \"Pages:\" | sed 's/.*:  *//' 2>/dev/null")
+    _PAGECOUNT=$(pdfinfo $_PDFPATH_BUILD | grep \"Pages:\" | sed 's/.*:  *//' 2>/dev/null)
     assertEquals \
 	' └─ PDF has wrong page count:' \
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
@@ -241,5 +240,5 @@ function test_pdfRootidXsltparam () {
 }
 
 # source shUnit2 test
-eval "source $_SHUNIT2SRC"
+source $_SHUNIT2SRC
 
