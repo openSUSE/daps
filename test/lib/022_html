@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -23,14 +23,19 @@
 # * Does the --css switch work?
 # * Does the --html5 switch produce XHTML5 ?
 # * Does the --clean switch work correctly?
+# * Does the --static option work correctly?
+# * Can a --static and a regular build be used in turns? 
 # * Is the --name option correctly implemented?
-# * Does the --rootid option correctly work?
-# * Are parameters pass with --xsltparam correctly processed?
+# * Does the --rootid option work correctly?
+# * Are parameters passed with --xsltparam correctly processed?
+# * Do the --styleroot and --fb_styleroot options work?
+# * Does the automatic fallback to the DoBook stylesheets work?
+# * Standard DocBook layout for ressources (CSS):
+#   - Is the first CSS file automatically used?
+# * Static directory:
+#   - Is the static directory copied/linked?
+# * Is the --statdir option correctly implemented?
 
-
-# TODO: STYLEROOT, --statdir, --static
-#
-#
 
 source lib/common_functions
 
@@ -103,24 +108,26 @@ function test_html () {
 	"$_HTMLDIR_PATH" "$_HTMLDIR_NAME"
 }
 
-
 #--------------------------------
 # * Are all images linked correctly?
 
 function test_htmlImages () {
-    local _oldIFS _J _IMAGE _IMGS _IMGS_DAPS _IMG_DIFF _IMG_REFS _MISSING
+    local _oldIFS _J _IMAGE _IMGS _IMGS_DAPS _IMG_DIFF _IMG_REFS _LINKCHECK
+    local _MISSING
     declare -a _IMGS_BUILD
     declare -a _IMGS_EXPECTED
 
+    # images/ and static/ directories should only contain links
+    #
+    _LINKCHECK=$(find ${_HTMLDIR_PATH}/images/ ${_HTMLDIR_PATH}/static/ -type f)
+    assertNull \
+	' └─ image/ and static/ directories contain regular files' \
+	"$_LINKCHECK"
     #
     # Check if image links in the HTML point to existing files
-    #
-    _IMG_REFS=$(grep -il '\<img ' ${_HTMLDIR_PATH}/*.html)
-
-
     # get list of images using lynx
     #
-    _IMGS=$(lynx -dump -listonly -image-links $_IMG_REFS | grep "${_HTMLDIR_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
+    _IMGS=$(lynx -dump -listonly -image-links ${_HTMLDIR_PATH}/*.html | grep "${_HTMLDIR_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
 
     for _IMAGE in $_IMGS; do
 	readlink -e $_IMAGE >/dev/null 2>&1
@@ -129,6 +136,10 @@ function test_htmlImages () {
     assertNull \
 	" └─ Image links in the HTML are dead: $_MISSING" \
 	"$_MISSING"
+    #
+    # Check if list of images retrieved from DAPS matches the ones
+    # retrieved from the HTML (see above)
+    #
     _IMGS_DAPS=$(eval "$_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --nodc --noent --noxml")
     assertTrue \
 	" └─ The command 'list-srcfiles --nodc --noent --noxml' failed" \
@@ -136,9 +147,6 @@ function test_htmlImages () {
     assertNotNull \
 	" └─ The command 'list-srcfiles --nodc --noent --noxml' returned an empty string" \
 	"_IMGS_DAPS"
-    #
-    # Check if list of images retrieved from DAPS matches the ones
-    # retrieved from the HTML (see above)
     J=0
     for _IMAGE in $_IMGS_DAPS; do
 	_IMGS_EXPECTED[$J]="${_HTMLDIR_PATH}/images/$(basename $_IMAGE)"
@@ -274,6 +282,76 @@ function test_htmlCSS_HTML5_Clean () {
 }
 
 #--------------------------------
+# * Does the --static option work correctly?
+# * Can a --static and a regular build be used in turns? 
+#
+function test_htmlStatic () {
+    local _CSS_BUILD _CSS_FILE _CSS_PATH _IMGS _LINKCHECK _MISSING _STYLEIMG
+
+    _CSS_FILE="test.css"
+    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_BUILD="${_HTMLDIR_PATH}/static/css/${_CSS_FILE}"
+
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --static --css $_CSS_PATH >/dev/null 2>&1"
+    assertTrue \
+        ' └─ The $_HTMLCMD command itself failed' \
+        "$?"
+    # images/ and static/ directories should only contain regular files
+    #
+    _LINKCHECK=$(find ${_HTMLDIR_PATH}/images/ ${_HTMLDIR_PATH}/static/ -type l)
+    assertNull \
+	' └─ image/ and static/ directories contain regular files' \
+	"$_LINKCHECK"
+        #
+    # Check if image links in the HTML point to existing files
+    # get list of images using lynx
+    #
+    _IMGS=$(lynx -dump -listonly -image-links ${_HTMLDIR_PATH}/*.html | grep "${_HTMLDIR_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
+
+    for _IMAGE in $_IMGS; do
+	readlink -e $_IMAGE >/dev/null 2>&1
+	[ $? != 0 ] && _MISSING="$_MISSING $_IMAGE"
+    done
+    assertNull \
+	" └─ Image links in the HTML are dead: $_MISSING" \
+	"$_MISSING"
+    #
+    # Check if static/images and $_STYLEIMG contain the same files
+    #
+    _STYLEIMG=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=STYLEIMG 2>/dev/null")
+    diff -qr ${_HTMLDIR_PATH}/static/images $_STYLEIMG >/dev/null 2>&1
+    assertTrue \
+	" └─ The build static directory differs from the one provided by the stylesheets." \
+	"$?"
+    #
+    # Check if the css files match
+    #
+    diff -q $_CSS_PATH $_CSS_BUILD >/dev/null 2>&1
+    assertTrue \
+	" └─ The build CSS file differs from the one provided with --css." \
+	"$?"
+
+    # Are the static files correctly overwritten by a regular build?
+    #
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --css $_CSS_PATH >/dev/null 2>&1"
+
+    _LINKCHECK=$(find ${_HTMLDIR_PATH}/images/ ${_HTMLDIR_PATH}/static/ -type f)
+    assertNull \
+	' └─ image/ and static/ directories are not correctly verwritten after a --static run' \
+	"$_LINKCHECK"
+
+    # Are the linked files correctly overwritten by a --static build?
+    #
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --static --css $_CSS_PATH >/dev/null 2>&1"
+
+    _LINKCHECK=$(find ${_HTMLDIR_PATH}/images/ ${_HTMLDIR_PATH}/static/ -type l)
+    assertNull \
+	' └─ image/ and static/ directories are not correctly verwritten after a regular run' \
+	"$_LINKCHECK"   
+    
+}
+
+#--------------------------------
 # * Is the --name option correctly implemented?
 #
 function test_htmlNAME () {
@@ -303,7 +381,7 @@ function test_htmlNAME () {
 
 #--------------------------------
 # * Does the --rootid option work correctly?
-# * Are parameters pass with --xsltparam correctly processed?
+# * Are parameters passed with --xsltparam correctly processed?
 #
 function test_htmlRootidXsltparam () {
     local _FILECOUNT _FILECOUNT_EXPECTED _HTMLDIR_PATH_BUILD
@@ -348,6 +426,91 @@ function test_htmlRootidXsltparam () {
 	"$?"
 }
 
+#--------------------------------
+# * Do the --styleroot and --fb_styleroot options work?
+# * Does the automatic fallback to the DoBook stylesheets work?
+# * Standard DocBook layout for ressources (CSS):
+#   - Is the first CSS file automatically used?
+#     -> images from the resources directory have already been tested in
+#        htmlImages and htmlStatic
+# * Static directory:
+#   - Is the static directory copied/linked?
+# * Is the --statdir option correctly implemented?
+#
+
+function test_htmlStatdir () {
+    local _ALT_STATIC_DIR _CSS_FILE _DB_STYLES _STANDARD_CSS _STANDARD_STYLES
+    local _STATIC_DIR _STATIC_STYLES
+    
+    _CSS_FILE="style.css"
+    _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
+    _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
+    _STANDARD_CSS="${_STANDARD_STYLES}/xhtml/$_CSS_FILE"
+    _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
+    _STATIC_DIR="${_STATIC_STYLES}/static"
+    _ALT_STATIC_DIR="${_STATIC_STYLES}/alt_static"
+
+    clean_build
+
+    # Testing Fallback Styleroot by specifying a wrong Styleroot dir
+    # 
+
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1"
+    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The Fallback Styleroot specified on the command line was not used." \
+	"$?"
+
+    clean_build
+
+    # Testing automatic Fallback to _DB_STYLES by specifying a wrong
+    # Styleroot dir with no Fallback
+    #
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_HTMLCMD >/dev/null 2>&1"
+    grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The automatic DocBook Fallback Styleroot was not used." \
+	"$?"    
+    
+    clean_build
+
+    # Testing Styleroot specified with --styleroot
+    #
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1"
+    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The Styleroot specified on the command line was not used." \
+	"$?"
+
+    # Standard DocBook layout: Is the first CSS file automatically used?
+    #
+    diff -q $_STANDARD_CSS ${_HTMLDIR_PATH}/static/css/$_CSS_FILE >/dev/null 2>&1 
+     assertTrue \
+	" └─ $_STANDARD_CSS was not correctly copied to the build directory." \
+	"$?"   
+
+    clean_build
+
+    # Is the statdir correctly copied?
+    #
+    eval "$_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD >/dev/null 2>&1"
+
+    diff -qr ${_HTMLDIR_PATH}/static ${_STATIC_DIR} >/dev/null 2>&1
+    assertTrue \
+	" └─ The build static directory differs from the one provided by the stylesheets." \
+	"$?"
+
+    clean_build
+
+    # Is the --statdir option correctly implemented?
+    #
+    eval "$_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD --statdir=$_ALT_STATIC_DIR >/dev/null 2>&1"
+
+    diff -qr ${_HTMLDIR_PATH}/static ${_ALT_STATIC_DIR} >/dev/null 2>&1
+    assertTrue \
+	" └─ The build static directory differs from the one provided with --statdir." \
+	"$?"    
+}
 
 # source shUnit2 test
-eval "source $_SHUNIT2SRC"
+source $_SHUNIT2SRC
