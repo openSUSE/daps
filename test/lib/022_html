@@ -13,14 +13,6 @@
 # jsp needs to be tested separately, since the original DocBook stylesheets,
 # which are used for testing, do not support jsp
 #
-#
-# In a PDF it's impossible to find out whether e.g. a certain XSLTPARAM
-# option or the draft mode is working without actually opening the PDF
-# in a viewer and looking at it.
-# For testing we will therefore run DAPS in debug mode and grep for parameters
-# in the log file. Thus we will at least know whether the xslt processor
-# was called with correct options. 
-#
 # * Does the HTML correctly build?
 # * Is an index.hml generated?
 # * Does the name retrieved with *-dir-name match the actual result?
@@ -30,14 +22,15 @@
 # * Is the meta information displayed when using the --meta option?
 # * Does the --css switch work?
 # * Does the --html5 switch produce XHTML5 ?
+# * Does the --clean switch work correctly?
 # * Is the --name option correctly implemented?
 # * Does the --rootid option correctly work?
 # * Are parameters pass with --xsltparam correctly processed?
 
-# TODO: STYLEROOT, --clean, --statdir, --static
-#
-#
 
+# TODO: STYLEROOT, --statdir, --static
+#
+#
 
 source lib/common_functions
 
@@ -118,13 +111,6 @@ function test_htmlImages () {
     local _oldIFS _J _IMAGE _IMGS _IMGS_DAPS _IMG_DIFF _IMG_REFS _MISSING
     declare -a _IMGS_BUILD
     declare -a _IMGS_EXPECTED
-
-    clean_build
-
-    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD >/dev/null 2>&1"
-    assertTrue \
-        ' └─ The $_HTMLCMD command itself failed' \
-        "$?"
 
     #
     # Check if image links in the HTML point to existing files
@@ -243,22 +229,33 @@ function test_htmlRemarksDraftMeta () {
 # * Does the --html5 switch produce XHTML5 ?
 #
 
-function test_htmlCSS_HTML5 () {
-    local _CSS_BUILD _CSS_FILE _CSS_PATH
+function test_htmlCSS_HTML5_Clean () {
+    local _CSS_BUILD _CSS_FILE _CSS_PATH _TO_CLEAN
 
     _CSS_FILE="test.css"
     _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_PATH}/static/css/${_CSS_FILE}"
+    _TO_CLEAN="${_HTMLDIR_PATH}/.cleantest"
 
     clean_build
 
-    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --css=${_CSS_PATH} --html5 >/dev/null 2>&1"
+    # Testing --clean by ceating a file in the result dir. It should
+    # be deleted when running DAPS  with --clean
+    #
+    mkdir -p ${_HTMLDIR_PATH}
+    touch $_TO_CLEAN >/dev/null 2>&1
+
+    eval "$_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --css=${_CSS_PATH} --html5 --clean >/dev/null 2>&1"
     assertTrue \
         ' └─ The $_HTMLCMD command with --css and --html5 failed' \
         "$?"
     assertTrue \
 	" └─ The result directory does not contain index.html" \
 	"[ -f $_HTMLDIR_PATH/index.html -o -L $_HTMLDIR_PATH/index.html ]"
+    # Test --clean
+    assertFalse \
+	" └─ The --clean option did not work--the testfile has not been deleted" \
+	"[ -f $_TO_CLEAN ]"
     # Test for HTML5
     #
     grep "<\!DOCTYPE html>" ${_HTMLDIR_PATH}/index.html >/dev/null 2>&1
