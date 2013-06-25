@@ -58,7 +58,7 @@ endif
 # Two scenarios:
 # We either have the DocBook standard layout:
 #  <STYLESHEETDIR>/images
-#  <STYLESHEETDIR>/<FOO>.css
+#  <STYLESHEETDIR>/xhtml/<FOO>.css
 #
 # or
 #
@@ -69,12 +69,12 @@ endif
 #
 # If <STYLESHEETDIR>/static exists, we use it by default. We also assume that
 # parameters for [admon|callout|navig].graphics.path are correctly set in
-# the stylesheets. Alternatively, a customstatic directory can be specified
+# the stylesheets. Alternatively, a custom static directory can be specified
 # with the --statdir parameter.
 # 
 # In case we have the standard docbook layout, we need to set
 # [admon|callout|navig].graphics.path. IS_STATIC is used to determine
-# whether we have a static die (IS_STATIC=static) or not.
+# whether we have a static dir (IS_STATIC=static) or not.
 #
 # Set the styleimage directory. If no custom directory is set with --statdir,
 # it can either be <STYLEROOT>/static or <STYLEROOT>/images. If both exist,
