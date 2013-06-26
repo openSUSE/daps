@@ -228,7 +228,7 @@ function test_pdfRootidXsltparam () {
 	"$_PDFNAME" "$_PDFNAME_BUILD"
 
     # check PDF page count
-    _PAGECOUNT=$(pdfinfo $_PDFPATH_BUILD | grep \"Pages:\" | sed 's/.*:  *//' 2>/dev/null)
+    _PAGECOUNT=$(pdfinfo $_PDFPATH_BUILD | grep "Pages:" | sed 's/.*:  *//' 2>/dev/null)
     assertEquals \
 	' └─ PDF has wrong page count:' \
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
