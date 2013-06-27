@@ -48,7 +48,7 @@
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100px" width="{$width}">
       <svg:rect height="100" rx="50" ry="50" x="0" y="0"
         fill="{$color}" stroke="none" width="{$width}"/>
-      <svg:text y="{$instream-font-size - 1}" fill="&white;" font-family="&sans;, sans-serif"
+      <svg:text y="{$instream-font-size - 1}" fill="&white;" font-family="{$sans-stack}"
         font-size="{$instream-font-size}" font-weight="600"
         text-anchor="middle">
         <xsl:attribute name="x">

@@ -92,7 +92,7 @@
 
 <xsl:attribute-set name="orderedlist.label.properties"
   use-attribute-sets="lists.label.properties">
-  <xsl:attribute name="font-family">&sans;</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of select="$sans-stack"/></xsl:attribute>
   <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="1 div &serif-factor;"/>em</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="1.5 div &serif-factor;"/>em</xsl:attribute>

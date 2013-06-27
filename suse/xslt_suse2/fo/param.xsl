@@ -137,10 +137,64 @@ task before
 
 
 <!-- 20. Font Families ========================================== -->
-<xsl:param name="body.font.family">&serif;, serif</xsl:param>
-<xsl:param name="dingbat.font.family">'FreeSerif', serif</xsl:param>
-<xsl:param name="sans.font.family">&sans;, sans-serif</xsl:param>
-<xsl:param name="title.font.family">&sans;, sans-serif</xsl:param>
+
+<xsl:param name="document.language">
+  <xsl:call-template name="l10n.language">
+    <xsl:with-param name="target"
+      select="(/* | key('id', $rootid))[last()]"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="sans-stack">
+  <xsl:choose>
+    <xsl:when test="$document.language = 'ar'">
+      &arabic;
+    </xsl:when>
+    <xsl:when test="$document.language = 'zh_cn'">
+      &chinese-sim;
+    </xsl:when>
+    <xsl:when test="$document.language = 'zh_tw'">
+      &chinese-trad;
+    </xsl:when>
+    <xsl:when test="$document.language = 'ja'">
+      &japanese-sans;
+    </xsl:when>
+    <xsl:when test="$document.language = 'ko'">
+      &korean-sans;
+    </xsl:when>
+    <xsl:otherwise>
+      &western-sans;
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+
+<xsl:param name="serif-stack">
+  <xsl:choose>
+    <xsl:when test="$document.language = 'ar'">
+      &arabic;
+    </xsl:when>
+    <xsl:when test="$document.language = 'zh_cn'">
+      &chinese-sim;
+    </xsl:when>
+    <xsl:when test="$document.language = 'zh_tw'">
+      &chinese-trad;
+    </xsl:when>
+    <xsl:when test="$document.language = 'ja'">
+      &japanese-serif;
+    </xsl:when>
+    <xsl:when test="$document.language = 'ko'">
+      &korean-serif;
+    </xsl:when>
+    <xsl:otherwise>
+      &western-serif;
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+
+<xsl:param name="body.font.family"><xsl:value-of select="$serif-stack"/></xsl:param>
+<xsl:param name="dingbat.font.family">&symbol;</xsl:param>
+<xsl:param name="sans.font.family"><xsl:value-of select="$sans-stack"/></xsl:param>
+<xsl:param name="title.font.family"><xsl:value-of select="$sans-stack"/></xsl:param>
 <xsl:param name="monospace.font.family">&mono;, monospace</xsl:param>
 <xsl:param name="symbol.font.family">&symbol;</xsl:param>
 
@@ -171,6 +225,5 @@ task before
 <!-- Saxon will fail if these parameters aren't declared. -->
 <xsl:param name="format.print" select="0"/>
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
-
 
 </xsl:stylesheet>
