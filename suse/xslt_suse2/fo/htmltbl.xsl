@@ -23,7 +23,6 @@
 <xsl:template match="thead" mode="htmlTable">
   <fo:table-header start-indent="0pt" end-indent="0pt"
     background-color="&light-gray-old;">
-    <xsl:message>Go!</xsl:message>
     <xsl:apply-templates mode="htmlTable"/>
   </fo:table-header>
 </xsl:template>
