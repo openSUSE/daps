@@ -62,13 +62,13 @@ ifeq ($(TARGET),pdf)
   PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)-print$(LANGSTRING).pdf
   FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)-print$(LANGSTRING).fo
   FOSTRINGS  += --param "format.print=1" \
-	       --stringparam "img.src.path=$(IMG_GENDIR)/print/"
+	       --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
 else
   PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf
   FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)$(LANGSTRING).fo
   FOSTRINGS  += --param "use.xep.cropmarks=0" \
                --param "format.print=0" \
-	       --stringparam "img.src.path=$(IMG_GENDIR)/online/"
+	       --stringparam "img.src.path=$(IMG_GENDIR)/color/"
 endif
 
 # Formatter dependent stuff
@@ -136,9 +136,9 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 #
 $(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
 ifeq ($(TARGET),pdf)
-  $(PDF_RESULT): $(PRINT_IMAGES)
+  $(PDF_RESULT): $(GRAYSCALE_IMAGES)
 else
-  $(PDF_RESULT): $(ONLINE_IMAGES)
+  $(PDF_RESULT): $(COLOR_IMAGES)
 endif
 $(PDF_RESULT): $(FOFILE)
   ifeq ($(VERBOSITY),2)

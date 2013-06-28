@@ -121,7 +121,9 @@ endif
 # Images
 #
 
-ifeq ($(MAKECMDGOALS),optipng)
+IMGTARGETS := optipng images
+
+ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(IMGTARGETS)))
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/images.mk

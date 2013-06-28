@@ -47,6 +47,10 @@ function parse_args () {
                 P_CLEAN=1
                 shift
                 ;;
+            --color)
+                P_IMAGES_COLOR=1
+                shift
+                ;;
             --compact)
                 P_COMPACT=1
                 shift
@@ -91,6 +95,14 @@ function parse_args () {
                 P_FORMATTER="$2"
 		shift 2
 		;;
+            --gen)
+                P_IMAGES_GEN=1
+                shift
+                ;;
+            --grayscale)
+                P_IMAGES_GRAYSCALE=1
+                shift
+                ;;
             -h|--help)
                 P_HELP=1
                 shift
@@ -153,6 +165,10 @@ function parse_args () {
                 ;;
             --noxml)
                 P_LIST_NOXML=1
+                shift
+                ;;
+            --online)
+                P_IMAGES_ONLINE=1
                 shift
                 ;;
             --pagefiles)
@@ -1459,6 +1475,49 @@ function debugging () {
     call_make "$SUB_CMD" "$@"
 }
 
+###########################################################################
+#
+#  IMAGES
+#
+#  Generate images. For debugging and testing purposes
+#
+###########################################################################  
+
+function build_images () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="color,gen,grayscale,online"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_color
+        help_gen
+        help_grayscale
+        help_help
+	help_online
+        echo
+        exit 0
+    fi
+
+    if [[ -z "$P_IMAGES_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_IMAGES_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
+	export IMAGES_ALL=1
+    else
+	[[ -n "$P_IMAGES_COLOR" ]]     && export IMAGES_COLOR=1 
+	[[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
+	[[ -n "$P_IMAGES_GRAYSCALE" ]] && export IMAGES_GRAYSCALE=1
+	[[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}
+
 
 ###########################################################################
 #
@@ -1534,11 +1593,6 @@ $2
 [[ 0 != $3 ]] && echo -e "  Command options:"
 }
 
-function help_compact () {
-    echo "    --compact                 Print the filelist on a single line.
-                              Ignored when -s|--show is set.
-                              Default: off"  
-}
 function help_check () {
     echo "    --check                   Validate the resulting ePUB document.
                               Useful when developing stylesheets. Implies a verbosity
@@ -1549,6 +1603,15 @@ function help_clean () {
     echo "    --clean                   Clean up the result directory (delete all files and
                               subdirectories) before building the document.
                               Default: unset"
+}
+function help_color () {
+    echo "    --color                   Only generate color images.
+                              Default: off"  
+}
+function help_compact () {
+    echo "    --compact                 Print the filelist on a single line.
+                              Ignored when -s|--show is set.
+                              Default: off"  
 }
 function help_css () {
     echo "    --css=filename, --css     Specify a path to a css file.
@@ -1590,6 +1653,16 @@ function help_formatter () {
     echo "    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
                               'xep' or 'fop' are supported.
                               Default: 'fop'"
+}
+function help_gen () {
+    echo "    --gen                     Do all image conversions (images/gen) but
+                              do not generate or link the images to
+                              images/color or images/grayscale.
+                              Default: unset"
+}
+function help_grayscale () {
+    echo "    --grayscale               Only generate grayscale images.
+                              Default: off"  
 }
 function help_help () {
     echo "    --help, -h                Print this help text"
@@ -1677,6 +1750,10 @@ function help_noset () {
 function help_noxml () {
     echo "    --noxml                   Exclude XML files from list.
                               Default: unset"
+}
+function help_online () {
+    echo "    --online                  Only generate images used for HTML builds.
+                              Default: off"  
 }
 function help_pagefiles () {
     echo "    --pagefiles               Generate .page files.

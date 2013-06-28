@@ -280,7 +280,7 @@ $(OD_GRAPHICS): $(FOR_HTML_IMAGES)
     endif
 	BZIP2=--best \
 	tar cjhf $@ --exclude-vcs --ignore-failed-read \
-	  --absolute-names --transform=s%$(IMG_GENDIR)/online%images/src/png% \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/png% \
 	  $(sort $(FOR_HTML_IMAGES))
   else
 	@ccecho "info" "Selected set or book contains no graphics"

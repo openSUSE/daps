@@ -161,7 +161,7 @@ IMG_DIRECTORIES := $(IMG_SRCDIR)/dia $(IMG_SRCDIR)/eps $(IMG_SRCDIR)/fig \
                    $(IMG_SRCDIR)/pdf $(IMG_SRCDIR)/png $(IMG_SRCDIR)/svg \
                    $(IMG_GENDIR)/gen/png $(IMG_GENDIR)/gen/pdf \
                    $(IMG_GENDIR)/gen/svg \
-                   $(IMG_GENDIR)/online $(IMG_GENDIR)/print
+                   $(IMG_GENDIR)/color $(IMG_GENDIR)/grayscale
 
 #-------
 # List of all required directories
