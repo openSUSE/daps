@@ -3,49 +3,29 @@
    language="ar" 
    english-language-name="Arabic">
 
-   <l:gentext key="LocalisedLanguageName" text="العربية"/>
-   <l:gentext key="SeeAlso"         text="See also"/>
-   <l:gentext key="Authors"         text="Authors"/>
-   <l:gentext key="TableofContents" text="Contents"/>
-   <l:gentext key="ListofAuthors"   text="List of Authors"/>
-   <l:gentext key="Contributor"     text="Contributor"/>
-   <l:gentext key="Contributors"    text="Contributors"/>
+   <l:gentext key="SeeAlso"         text="طالع أيضًا"/>
+   <l:gentext key="Authors"         text="الكتاب"/>
+   <l:gentext key="TableofContents" text="المحتويات"/>
+   <l:gentext key="ListofAuthors"   text="قائمة المؤلفين"/>
+   <l:gentext key="Contributors"    text="المساهمون"/>
 
-   <l:gentext key="FlyerQuickstart" text="NOVELL&#x00AE; QUICK START CARD"/>
+   <l:gentext key="FlyerQuickstart" text="NOVELL&#x00AE; بطاقة التشغيل السريع"/>
    <!-- FlyerCopyright: Moved to copyright_quick.xml -->
-   <l:gentext key="FlyerMadeby"  text="Created by SUSE&#x00AE; with XSL-FO"/>
-
+   <l:gentext key="FlyerMadeby"  text="تم الإنشاء بواسطة  SUSE&#x00AE; باستخدام لغة XSL-FO"/>
+   
    <l:gentext key="admonseparator"  text=": "/>
-
-   <l:gentext key="selectlanguage" text="Select Language"/>
-   <l:gentext key="selectformat" text="Select Format"/>
-   <l:gentext key="formathtml" text="Web Pages"/>
-   <l:gentext key="formatsinglehtml" text="Single Web Page"/>
-   <l:gentext key="formatpdf" text="PDF"/>
-   <l:gentext key="formatepub" text="E-Book (EPUB)"/>
-   <l:gentext key="contentsoverview" text="Contents"/>
-   <l:gentext key="showcontentsoverview" text="Show Contents"/>
-   <l:gentext key="find" text="Find"/>
-   <l:gentext key="navigation" text="Navigation"/>
-   <l:gentext key="sharethispage" text="Share this page: "/>
-   <l:gentext key="shareviafacebook" text="Facebook"/>
-   <l:gentext key="shareviagoogleplus" text="Google+"/>
-   <l:gentext key="shareviatwitter" text="Twitter"/>
-   <l:gentext key="shareviaemail" text="E-Mail"/>
-   <l:gentext key="printthispage" text="Print this page"/>
-   <l:gentext key="susecareers" text="Careers"/>
-   <l:gentext key="suselegal" text="Legal"/>
-   <l:gentext key="suseabout" text="About"/>
-   <l:gentext key="susecontact" text="Contact Us"/>
-   <l:gentext key="version.info" text="Applies to "/>
-   <l:gentext key="totopofpage" text="Top"/>
-
+ 
+   <l:gentext key="Question" text="السؤال:"/>
+   <l:gentext key="question" text="السؤال:"/>
+ 
 
    <!-- In most cases, this has to be empty -->
    <l:dingbat key="guimenustartquote" text=""/>
    <l:dingbat key="guimenuendquote" text=""/>
 
-
+<!-- fs 2013-05-29:
+###################### No translation Start ###########################
+-->
    <!-- WARNING: 
      Change the following lines only, if you know what you are do!
    -->
@@ -54,7 +34,7 @@
    <l:gentext key="fop1.sans.font.family"
      text="FreeSans"/><!-- ,DejaVuSans,suse.sans -->
    <l:gentext key="fop1.monospace.font.family" text="FreeMono"/><!--,DejaVuSansMono,suse.mono-->
-   <l:gentext key="fop1.symbol.font.family" text="FreeSans"/><!--,Symbol,ZapfDingbats-->
+  <l:gentext key="fop1.symbol.font.family" text="FreeSans"/><!--,Symbol,ZapfDingbats-->
    <l:gentext key="fop1.callout.unicode.font" text="Dingbats"/>
    <!-- Pocket layout: -->
    <l:gentext key="fop1.pocket.body.font.family" text="LiberationSans,sansserif"/>
@@ -80,59 +60,61 @@
    <!-- /WARNING -->
 
    <!--  -->
+<!-- fs 2013-05-29:
+###################### No translation End ###########################
+-->   
    <l:context name="styles">
-      <l:template name="person-name" text="first-last"/>
+      <l:template name="person-name" text="الأول-الأخير"/>
 
-      <l:template name="example-label" text="Example&#160;%n:"/>
+      <l:template name="example-label" text="المثال&#160;%n:"/>
       <l:template name="example-title" text="%t"/>
-      <l:template name="figure-label" text="Figure&#160;%n:"/>
+      <l:template name="figure-label" text="الرسم التوضيحي&#160;%n:"/>
       <l:template name="figure-title" text="%t"/>
-      <l:template name="procedure-label" text="Procedure&#160;%n:"/>
+      <l:template name="procedure-label" text="الإجراء&#160;%n:"/>
       <l:template name="procedure-title" text="%t"/>
-      <l:template name="table-label" text="Table&#160;%n:"/>
+      <l:template name="table-label" text="الجدول&#160;%n:"/>
       <l:template name="table-title" text="%t"/>
       <l:template name="variablelist-label" text=""/>
       <l:template name="variablelist-title" text="%t"/>
-      <l:template name="itemizedlist-label" text=""/>
-      <l:template name="itemizedlist-title" text="%t"/>
-      <l:template name="orderedlist-label" text=""/>
-      <l:template name="orderedlist-title" text="%t"/>
    </l:context>
 
    <l:context name="xref">
-      <l:template name="sect1" text="Section &#8220;%t&#8221;"/>
-      <l:template name="sect2" text="Section &#8220;%t&#8221;"/>
-      <l:template name="sect3" text="Section &#8220;%t&#8221;"/>
-      <l:template name="sect4" text="Section &#8220;%t&#8221;"/>
-      <l:template name="sect5" text="Section &#8220;%t&#8221;"/>
-      <l:template name="page.citation" text=" (page&#160;%p)"/>
+      <l:template name="sect1" text="القسم &#8220;%t&#8221;"/>
+      <l:template name="sect2" text="القسم &#8220;%t&#8221;"/>
+      <l:template name="sect3" text="القسم &#8220;%t&#8221;"/>
+      <l:template name="sect4" text="القسم &#8220;%t&#8221;"/>
+      <l:template name="sect5" text="القسم &#8220;%t&#8221;"/>
+      <l:template name="page.citation" text=" (الصفحة&#160;%p)"/>
    </l:context>
 
    <l:context name="xref-number-and-title">
-      <l:template name="appendix" style="nonumber"  text="Appendix&#160;%t"/>
-      <l:template name="bridgehead" text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="chapter" style="nonumber"  text="Chapter&#160;%t"/>
-      <l:template name="equation" style="nonumber"  text="Equation&#160;&#8220;%t&#8221;"/>
-      <l:template name="example" style="nonumber"  text="Example&#160;&#8220;%t&#8221;"/>
-      <l:template name="figure" style="nonumber"  text="Figure&#160;&#8220;%t&#8221;"/>
-      <l:template name="part" style="nonumber"  text="Part&#160;&#8220;%t&#8221;"/>
-      <l:template name="procedure" style="nonumber"  text="Procedure&#160;&#8220;%t&#8221;"/>
-      <l:template name="productionset" style="nonumber"  text="Production&#160;&#8220;%t&#8221;"/>
-      <l:template name="qandadiv" style="nonumber"  text="Q &amp; A&#160;&#8220;%t&#8221;"/>
-      <l:template name="refsect1" style="nonumber"  text="the section called &#8220;%t&#8221;"/>
-      <l:template name="refsect2" style="nonumber"  text="the section called &#8220;%t&#8221;"/>
-      <l:template name="refsect3" style="nonumber"  text="the section called &#8220;%t&#8221;"/>
-      <l:template name="refsection" style="nonumber"  text="the section called &#8220;%t&#8221;"/>
-      <l:template name="sect1" style="nonumber" text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="sect2" style="nonumber"  text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="sect3" style="nonumber"  text="Section&#160;&#8220;%t&#8221;"/>
+      <l:template name="appendix" style="nonumber"  text="الملحق&#160;%t"/>
+      <l:template name="bridgehead" text="القسم&#160;&#8220;%t&#8221;"/>
+      <l:template name="chapter" style="nonumber"  text="الفصل&#160;%t"/>
+      <l:template name="equation" style="nonumber"  text="المعادلة&#160;&#8220;%t&#8221;"/>
+      <l:template name="example" style="nonumber"  text="المثال&#160;&#8220;%t&#8221;"/>
+      <l:template name="figure" style="nonumber"  text="الرسم التوضيحي&#160;&#8220;%t&#8221;"/>
+      <l:template name="part" style="nonumber"  text="الجزء&#160;&#8220;%t&#8221;"/>
+      <l:template name="procedure" style="nonumber"  text="الإجراء&#160;&#8220;%t&#8221;"/>
+      <l:template name="productionset" style="nonumber"  text="الإنتاج&#160;&#8220;%t&#8221;"/>
+      <l:template name="qandadiv" style="nonumber"  text="السؤال &amp; A&#160;&#8220;%t&#8221;"/>
+      <l:template name="refsect1" style="nonumber"  text="اسم القسم &#8220;%t&#8221;"/>
+      <l:template name="refsect2" style="nonumber"  text="اسم القسم &#8220;%t&#8221;"/>
+      <l:template name="refsect3" style="nonumber"  text="اسم القسم &#8220;%t&#8221;"/>
+      <l:template name="refsection" style="nonumber"  text="اسم القسم &#8220;%t&#8221;"/>
+      <l:template name="sect1" style="nonumber" text="القسم&#160;&#8220;%t&#8221;"/>
+      <l:template name="sect2" style="nonumber"  text="القسم&#160;&#8220;%t&#8221;"/>
+      <l:template name="sect3" style="nonumber"  text="القسم&#160;&#8220;%t&#8221;"/>
       <l:template name="sect4" style="nonumber"  text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="sect5" style="nonumber"  text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="section" style="nonumber"  text="Section&#160;&#8220;%t&#8221;"/>
-      <l:template name="simplesect" style="nonumber"  text="the section called &#8220;%t&#8221;"/>
-      <l:template name="table" style="nonumber"  text="Table&#160;&#8220;%t&#8221;"/>
+      <l:template name="sect5" style="nonumber"  text="القسم&#160;&#8220;%t&#8221;"/>
+      <l:template name="section" style="nonumber"  text="القسم&#160;&#8220;%t&#8221;"/>
+      <l:template name="simplesect" style="nonumber"  text="اسم القسم &#8220;%t&#8221;"/>
+      <l:template name="table" style="nonumber"  text="الجدول&#160;&#8220;%t&#8221;"/>
    </l:context>
 
+<!-- fs 2013-05-29:
+###################### No translation Start ###########################
+--> 
    <l:context name="xep-bookmark-title">
       <l:template name="article" text="%t"/>
       <l:template name="appendix" text="%n. %t"/>
@@ -160,9 +142,13 @@
       <l:template name="simplesect" text="%t"/>
       <l:template name="toc" text="%t"/>
    </l:context>
+   
+<!-- fs 2013-05-29:
+###################### No translation End ###########################
+-->
 
    <l:context name="title">
-      <l:template name="part" text="Part&#160;%n&#160;%t"/>
+      <l:template name="part" text="الجزء&#160;%n&#160;%t"/>
    </l:context>
    
   <!-- 
@@ -186,8 +172,8 @@
       <l:template name="meta" text="Meta"/>
 <!--       <l:template name="option" text="???"/> -->
       <l:template name="other" text="???"/>
-      <l:template name="pagedown" text="Page &#x02193;"/>
-      <l:template name="pageup" text="Page &#x02191;"/>
+      <l:template name="pagedown" text="الصفحة &#x02193;"/>
+      <l:template name="pageup" text="الصفحة &#x02191;"/>
       <l:template name="right" text="&#x02192;"/><!-- rarr -->
       <l:template name="shift" text="Shift"/>
       <l:template name="space" text="Space"/>
@@ -205,3 +191,4 @@
    </l:context>
   
 </l:l10n>
+
