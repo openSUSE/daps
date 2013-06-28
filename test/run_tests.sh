@@ -100,7 +100,7 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,html,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,html,images,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -111,7 +111,7 @@ GETOPT_RETURN_CODE=$?
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/020_pdf" "lib/022_html")
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/020_pdf" "lib/022_html")
 	    shift
 	    ;;
 	-h)
@@ -120,6 +120,10 @@ while true ; do
 	    ;;
 	--html)
 	    _TESTS=( "${_TESTS[@]}" "lib/022_html" )
+	    shift
+	    ;;
+	--images)
+	    _TESTS=( "${_TESTS[@]}" "lib/007_images" )
 	    shift
 	    ;;
 	--pdf)

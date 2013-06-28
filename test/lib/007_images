@@ -1,0 +1,268 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: Images
+#
+# * Are the images correctly converted:
+#   -DIA: -> PDF, PNG, SVG
+#   -EPS: -> PDF, PNG
+#   -FIG: -> PDF, PNG, SVG
+#   -JPG: -> JPG (copy)
+#   -PNG: -> PNG (copy)
+#   -PDF: -> PNG, PDF (copy)
+#   -SVG: -> PDF, PNG, SVG (differs)
+
+source lib/common_functions
+
+header "Image Generation"
+
+function oneTimeSetUp () {
+    # Clean up the build directory
+    clean_build
+    _IMGDIR=$(eval "$_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_GENDIR 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting image directory failed. Skipping tests"
+    fi
+    _IMGDIR_SRC=${_DOC_DIR}/images/src
+    _IMGDIR_COLOR=${_IMGDIR}/color
+    _IMGDIR_GEN=${_IMGDIR}/gen
+    _IMGDIR_GRAYSCALE=${_IMGDIR}/grayscale
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown () {
+    stats
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Is the image build run successful?
+#
+function test_images () {
+    eval "$_DAPSEXEC -v0 -d $_DCFILE images >/dev/null 2>&1"
+    assertTrue \
+        ' └─ The \"images\" command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The result directory $_IMGDIR_COLOR does not exist." \
+	"[ -d $_IMGDIR_COLOR ]"
+    assertTrue \
+	" └─ The result directory $_IMGDIR_GEN does not exist." \
+	"[ -d $_IMGDIR_GEN ]"
+    assertTrue \
+	" └─ The result directory $_IMGDIR_GRAYSCALE does not exist." \
+	"[ -d $_IMGDIR_GRAYSCALE ]"
+}
+
+#--------------------------------
+# * Are the DIA images correctly converted to PDF, PNG and SVG? 
+#
+function test_imagesDIA () {
+    local _DIA_IMG 
+    
+    _DIA_IMG=$(basename -s .dia $(find ${_IMGDIR_SRC}/dia -type f | head -1))
+    
+    assertTrue \
+	" └─ DIA to PDF generation failed" \
+	"[ -f ${_IMGDIR_GEN}/pdf/${_DIA_IMG}.pdf ]"
+    assertTrue \
+	" └─ DIA to PNG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/png/${_DIA_IMG}.png ]"
+    assertTrue \
+	" └─ DIA to SVG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/svg/${_DIA_IMG}.svg ]"        
+    assertTrue \
+	" └─ Color PDF link for $_DIA_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_DIA_IMG}.pdf ]"
+    assertTrue \
+	" └─ Color PNG link for $_DIA_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_DIA_IMG}.png ]"
+    assertTrue \
+	" └─ Color SVG for $_DIA_IMG is missing" \
+	"[ -f ${_IMGDIR_COLOR}/${_DIA_IMG}.svg ]"        
+    assertTrue \
+	" └─ Grayscale PDF for $_DIA_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_DIA_IMG}.pdf ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_DIA_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_DIA_IMG}.png ]"
+    assertTrue \
+	" └─ Grayscale SVG for $_DIA_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_DIA_IMG}.svg ]"        
+
+}
+
+#--------------------------------
+# * Are the EPS images correctly converted to PDF and PNG? 
+#
+function test_imagesEPS () {
+    local _EPS_IMG 
+
+    _EPS_IMG=$(basename -s .eps $(find ${_IMGDIR_SRC}/eps -type f | head -1))
+    
+    assertTrue \
+	" └─ EPS to PDF generation failed" \
+	"[ -f ${_IMGDIR_GEN}/pdf/${_EPS_IMG}.pdf ]"
+    assertTrue \
+	" └─ EPS to PNG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/png/${_EPS_IMG}.png ]"
+    assertTrue \
+	" └─ Color PDF for $_EPS_IMG is missing" \
+	"[ -f ${_IMGDIR_COLOR}/${_EPS_IMG}.pdf ]"
+    assertTrue \
+	" └─ Color PNG for $_EPS_IMG is missing" \
+	"[ -f ${_IMGDIR_COLOR}/${_EPS_IMG}.png ]"
+    assertTrue \
+	" └─ Grayscale PDF for $_EPS_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_EPS_IMG}.pdf ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_EPS_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_EPS_IMG}.png ]"
+}
+
+#--------------------------------
+# * Are the FIG images correctly converted to PDF, PNG and SVG? 
+#
+function test_imagesFIG () {
+    local _FIG_IMG 
+    
+    _FIG_IMG=$(basename -s .fig $(find ${_IMGDIR_SRC}/fig -type f | head -1))
+    
+    assertTrue \
+	" └─ FIG to PDF generation failed" \
+	"[ -f ${_IMGDIR_GEN}/pdf/${_FIG_IMG}.pdf ]"
+    assertTrue \
+	" └─ FIG to PNG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/png/${_FIG_IMG}.png ]"
+    assertTrue \
+	" └─ FIG to SVG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/svg/${_FIG_IMG}.svg ]"        
+    assertTrue \
+	" └─ Color PDF link for $_FIG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_FIG_IMG}.pdf ]"
+    assertTrue \
+	" └─ Color PNG link for $_FIG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_FIG_IMG}.png ]"
+    assertTrue \
+	" └─ Color SVG for $_FIG_IMG is missing" \
+	"[ -f ${_IMGDIR_COLOR}/${_FIG_IMG}.svg ]"        
+    assertTrue \
+	" └─ Grayscale PDF for $_FIG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.pdf ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_FIG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.png ]"
+    assertTrue \
+	" └─ Grayscale SVG for $_FIG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_FIG_IMG}.svg ]"        
+
+}
+
+#--------------------------------
+# * Are the JPG images correctly linked and converted? 
+#
+function test_imagesJPG () {
+    local _JPG_IMG 
+
+    _JPG_IMG=$(basename $(find ${_IMGDIR_SRC}/jpg -type f | head -1))
+
+    assertTrue \
+	" └─ Link for color $_JPG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_JPG_IMG} ]"
+    assertTrue \
+	" └─ Grayscale JPG for $_JPG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_JPG_IMG} ]"
+}
+
+#--------------------------------
+# * Are the PNG images correctly linked and converted? 
+#
+function test_imagesPNG () {
+    local _PNG_IMG 
+
+    _PNG_IMG=$(basename $(find ${_IMGDIR_SRC}/png -type f | head -1))
+
+    assertTrue \
+	" └─ Link for color $_PNG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_PNG_IMG} ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_PNG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_PNG_IMG} ]"
+}
+
+#--------------------------------
+# * Are the PDF images correctly linked and converted to PNG? 
+#
+function test_imagesPDF () {
+    local _PDF_IMG 
+
+    _PDF_IMG=$(basename -s .pdf $(find ${_IMGDIR_SRC}/pdf -type f | head -1))
+
+    assertTrue \
+	" └─ PDF to PNG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/png/${_PDF_IMG}.png ]"
+    assertTrue \
+	" └─ Link for color $_PDF_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_PDF_IMG}.pdf ]"
+    assertTrue \
+	" └─ Color PNG link for $_PDF_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_PDF_IMG}.png ]"
+    assertTrue \
+	" └─ Grayscale PDF for $_PDF_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_PDF_IMG}.pdf ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_PDF_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_PDF_IMG}.png ]"
+}
+
+#--------------------------------
+# * Are the SVG images correctly converted to PDF, PNG and SVG? 
+#
+function test_imagesSVG () {
+    local _SVG_IMG 
+    
+    _SVG_IMG=$(basename -s .svg $(find ${_IMGDIR_SRC}/svg -type f | head -1))
+    
+    assertTrue \
+	" └─ SVG to PDF generation failed" \
+	"[ -f ${_IMGDIR_GEN}/pdf/${_SVG_IMG}.pdf ]"
+    assertTrue \
+	" └─ SVG to PNG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/png/${_SVG_IMG}.png ]"
+    assertTrue \
+	" └─ SVG to SVG generation failed" \
+	"[ -f ${_IMGDIR_GEN}/svg/${_SVG_IMG}.svg ]"        
+    assertTrue \
+	" └─ Color PDF link for $_SVG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_SVG_IMG}.pdf ]"
+    assertTrue \
+	" └─ Color PNG link for $_SVG_IMG is missing" \
+	"[ -L ${_IMGDIR_COLOR}/${_SVG_IMG}.png ]"
+    assertTrue \
+	" └─ Color SVG for $_SVG_IMG is missing" \
+	"[ -f ${_IMGDIR_COLOR}/${_SVG_IMG}.svg ]"        
+    assertTrue \
+	" └─ Grayscale PDF for $_SVG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_SVG_IMG}.pdf ]"
+    assertTrue \
+	" └─ Grayscale PNG for $_SVG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_SVG_IMG}.png ]"
+    assertTrue \
+	" └─ Grayscale SVG for $_SVG_IMG is missing" \
+	"[ -f ${_IMGDIR_GRAYSCALE}/${_SVG_IMG}.svg ]"        
+
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC
