@@ -15,6 +15,8 @@
 #   -PNG: -> PNG (copy)
 #   -PDF: -> PNG, PDF (copy)
 #   -SVG: -> PDF, PNG, SVG (differs)
+# * Is an image not included in the XML ignored?
+# * Is the correct number of images generated when a ROOTID is specified? 
 
 source lib/common_functions
 
@@ -191,7 +193,7 @@ function test_imagesJPG () {
 function test_imagesPNG () {
     local _PNG_IMG 
 
-    _PNG_IMG=$(basename $(find ${_IMGDIR_SRC}/png -type f | head -1))
+    _PNG_IMG=$(basename $(find ${_IMGDIR_SRC}/png -type f | sort | head -1))
 
     assertTrue \
 	" └─ Link for color $_PNG_IMG is missing" \
@@ -262,6 +264,53 @@ function test_imagesSVG () {
 	" └─ Grayscale SVG for $_SVG_IMG is missing" \
 	"[ -f ${_IMGDIR_GRAYSCALE}/${_SVG_IMG}.svg ]"        
 
+}
+
+#--------------------------------
+# * Is an image not included in the XML ignored?
+#
+
+function test_imagesIGNORE () {
+    local _COUNT _IMAGE_IGNORE
+
+    _IMAGE_IGNORE=z_not_included.png
+
+    _COUNT=$(find $_IMGDIR_COLOR $_IMGDIR_GRAYSCALE -name "$__IMAGE_IGNORE" | wc -l)
+    # expected: 0
+
+    assertTrue \
+	" └─ Image $_IMAGE_IGNORE was processed although it is not included in the XML" \
+	"$_COUNT"
+}
+
+#--------------------------------
+# * Is the correct number of images generated when a ROOTID is specified? 
+#
+
+function test_imagesROOTID () {
+    local _ROOTID _IMAGE_BUILD _IMAGE_EXPECTED
+
+    # appendix has only one image (screenshot.png)
+    #
+    _ROOTID=appendix
+    _IMAGE_EXPECTED=screenshot.png
+
+    clean_build
+    
+    eval "$_DAPSEXEC -v0 -d $_DCFILE images --rootid $_ROOTID >/dev/null 2>&1"
+    assertTrue \
+        ' └─ The \"images\" command with --rootid failed' \
+        "$?"
+
+    _IMAGE_BUILD=$(basename $(find $_IMGDIR_COLOR -type l 2>/dev/null) 2>/dev/null)
+    assertEquals \
+	' └─ color/ does not include the expected file:' \
+	"$_IMAGE_EXPECTED" "$_IMAGE_BUILD"
+
+    _IMAGE_BUILD=$(basename $(find $_IMGDIR_GRAYSCALE -type f 2>/dev/null) 2>/dev/null)
+    assertEquals \
+	' └─ color/ does not include the expected file:' \
+	"$_IMAGE_EXPECTED" "$_IMAGE_BUILD"
 }
 
 # source shUnit2 test
