@@ -19,7 +19,7 @@ showvariable:
     ifeq ("$($(VARIABLE))", "")
 	@ccecho "result" "undef";
     else	
-	@ccecho "result" "$($(VARIABLE))"
+	@ccecho -- "result" "$($(VARIABLE))"
     endif
   endif
 
