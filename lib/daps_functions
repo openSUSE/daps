@@ -1489,7 +1489,7 @@ function build_images () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="color,gen,grayscale,online"
+    LONG_OPTS="color,gen,grayscale,online,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1502,6 +1502,7 @@ function build_images () {
         help_grayscale
         help_help
 	help_online
+	help_rootid
         echo
         exit 0
     fi
@@ -1514,6 +1515,8 @@ function build_images () {
 	[[ -n "$P_IMAGES_GRAYSCALE" ]] && export IMAGES_GRAYSCALE=1
 	[[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
     fi
+
+    [[ -n "$P_ROOTID" ]]           && export ROOTID="$P_ROOTID"
 
     call_make "$SUB_CMD" "$@"
 }
