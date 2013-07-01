@@ -74,6 +74,7 @@
 <xsl:param name="preferred.mediaobject.role">html</xsl:param>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
 <xsl:param name="use.pi4date" select="0"/>
+<xsl:param name="stylesheet.result.type" select="'xhtml'"/>
 
 <xsl:template match="@spacing">
     <xsl:choose>
