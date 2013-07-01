@@ -32,6 +32,7 @@
      non-chunking version to format an element.  -->
 
   <xsl:include href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk-code.xsl"/>
+  <xsl:include href="../xhtml/metadata.xsl"/>
   <xsl:include href="../xhtml/navig.header.footer.xsl"/>
   
 </xsl:stylesheet>
