@@ -214,6 +214,34 @@ task before
 <!-- 23. Localization =========================================== -->
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
+<!-- For some languages, enabling the bold/italic features that exist for
+     Western text is rather undesirable, as fonts may not exist or become
+     unreadable. -->
+<xsl:param name="enable.bold">
+<xsl:choose>
+  <xsl:when test="$document.language = 'zh_cn' or
+                  $document.language = 'zh_tw'
+                  $document.language = 'ja'">0</xsl:when>
+  <xsl:otherwise>1</xsl:otherwise>
+</xsl:choose>
+</xsl:param>
+
+<xsl:param name="enable.italic">
+<xsl:choose>
+  <xsl:when test="$document.language = 'zh_cn' or $document.language = 'zh_tw' or
+                  $document.language = 'ja' or $document.language = 'ko' or
+                  $document.language = 'ar'">0</xsl:when>
+  <xsl:otherwise>1</xsl:otherwise>
+</xsl:choose>
+</xsl:param>
+
+<xsl:param name="writing.mode">
+<xsl:choose>
+  <xsl:when test="$document.language = 'ar'">rl</xsl:when>
+  <xsl:otherwise>lr</xsl:otherwise>
+</xsl:choose>
+</xsl:param>
+
 
 <!-- 24. EBNF =================================================== -->
 
