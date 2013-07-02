@@ -104,6 +104,8 @@ task before
 </xsl:param>
 <xsl:param name="menuchoice.separator" select ="' › '"/>
 <xsl:param name="menuchoice.menu.separator" select ="' › '"/>
+<xsl:param name="menuchoice.separator.rl" select ="' ‹ '"/>
+<xsl:param name="menuchoice.menu.separator.rl" select ="' ‹ '"/>
 <xsl:param name="shade.verbatim" select="1"/>
 
 
@@ -220,7 +222,7 @@ task before
 <xsl:param name="enable.bold">
 <xsl:choose>
   <xsl:when test="$document.language = 'zh_cn' or
-                  $document.language = 'zh_tw'
+                  $document.language = 'zh_tw' or
                   $document.language = 'ja'">0</xsl:when>
   <xsl:otherwise>1</xsl:otherwise>
 </xsl:choose>
