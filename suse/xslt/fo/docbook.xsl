@@ -32,7 +32,7 @@
 <xsl:include href="footer.xsl"/>
 <xsl:include href="header.xsl"/>
 <xsl:include href="hyphenate-url.xsl"/>
-<xsl:include href="index.xsl"/>
+<!--<xsl:include href="index.xsl"/>-->
 <xsl:include href="toc.xsl"/>
 <xsl:include href="refentry.xsl"/>
 <xsl:include href="admon.xsl"/>
