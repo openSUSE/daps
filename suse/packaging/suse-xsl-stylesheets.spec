@@ -66,15 +66,61 @@ Requires:       libxslt
 Recommends:     daps
 Recommends:     docbook5
 Recommends:     docbook5-xsl-stylesheets
-Recommends:     google-opensans-fonts
-Recommends:     sil-charis-fonts
-Recommends:     dejavu-fonts
+
+
+#------
+# Fonts
+#------
+%if 0%{?suse_version} >= 1220
+Requires:       dejavu-fonts
+Requires:       gnu-free-fonts
+Requires:       liberation-fonts
+Recommends:     agfa-fonts
+# Japanese:
+Recommends:     sazanami-fonts
+# Korean:
+Recommends:     un-fonts
+%else
+Requires:       dejavu
+Requires:       freefont
+Requires:       liberation-fonts
+Recommends:     agfa-fonts
+# Japanese:
+Recommends:     sazanami-fonts
+# Korean:
+Recommends:     unfonts
+%endif
+# Chinese -- only available from M17N:fonts in Code 11:
+Recommends:     wqy-microhei-fonts
 
 %if 0%{?sles_version}
 Recommends:     ttf-founder-simplified
-%else
-Recommends:    wqy-microhei-fonts
 %endif
+
+# FONTS USED IN suse_beta STYLESHEETS
+# A rather simplistic solution which roughly means that you need M17N:fonts to
+# build the new stylesheets on older OS's.
+%if 0%{?suse_version} >= 1220
+Requires:       google-opensans-fonts
+Requires:       sil-charis-fonts
+%else
+Recommends:     google-opensans-fonts
+Recommends:     sil-charis-fonts
+%endif
+# Monospace -- dejavu-fonts, already required
+# Western fonts fallback -- gnu-free-fonts, already required
+
+# Chinese simplified -- wqy-microhei-fonts, already recommended
+# Chinese traditional:
+Recommends:   arphic-uming-fonts
+# Japanese:
+Recommends:   ipa-pgothic-fonts
+Recommends:   ipa-pmincho-fonts
+# Korean:
+Recommends:   nanum-fonts
+# Arabic:
+Recommends:     arabic-amiri-fonts
+
 
 Obsoletes:      susedoc <= 4.3.33
 Provides:       susedoc = 4.3.34

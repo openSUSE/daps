@@ -153,43 +153,6 @@ Recommends:     xep
 Recommends:     xmlformat
 Recommends:     xmlstarlet
 
-#------
-# Fonts
-#------
-%if 0%{?suse_version} > 1220
-Requires:       dejavu-fonts
-Requires:       gnu-free-fonts
-Requires:       liberation-fonts
-Requires:       mplus-fonts
-Recommends:     agfa-fonts
-Recommends:     fifth-leg-font
-Recommends:     linux-libertine-fonts
-# Chinese Fonts
-Recommends:     arphic-fonts
-# Japanese Fonts:
-Recommends:     sazanami-fonts
-# Korean Fonts:
-Recommends:     un-fonts
-# Arabic Fonts
-Recommends:     arabic-fonts
-%else
-Requires:       dejavu
-Requires:       freefont
-Requires:       liberation-fonts
-Requires:       mplus-fonts
-Recommends:     agfa-fonts
-Recommends:     fifth-leg-font
-Recommends:     LinuxLibertine
-# Chinese Fonts
-Recommends:     ttf-arphic
-# Japanese Fonts:
-Recommends:     sazanami-fonts
-# Korean Fonts:
-Recommends:     unfonts
-# Arabic Fonts:
-Recommends:     fonts-arabic
-%endif
-
 Obsoletes:      susedoc < 4.3.32
 Provides:       susedoc = 4.3.32
 
