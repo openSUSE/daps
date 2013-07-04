@@ -83,19 +83,8 @@ BuildRequires:  xmlgraphics-fop >= 0.94
 BuildRequires:  fop >= 0.94
 %endif
 #---
-# Fontstuff
-#
+# Font stuff
 BuildRequires:  fontpackages-devel
-BuildRequires:  liberation-fonts
-BuildRequires:  mplus-fonts
-
-%if 0%{?suse_version} > 1220
-BuildRequires:  dejavu-fonts
-BuildRequires:  gnu-free-fonts
-%else
-BuildRequires:  dejavu
-BuildRequires:  freefont
-%endif
 
 
 #
