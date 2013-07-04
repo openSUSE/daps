@@ -60,7 +60,7 @@
       <!-- Don't use the hyphenation algorithm at all, if
            ulink.hyphenate is empty
       -->
-      <xsl:when test="$ulink.hyphenate = ''">
+      <xsl:when test="$ulink.hyphenate = '' or $fop1.extensions != 0">
         <xsl:value-of select="$normalurl"/>
       </xsl:when>
 

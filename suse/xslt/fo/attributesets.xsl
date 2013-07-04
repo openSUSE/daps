@@ -342,7 +342,28 @@
   <xsl:attribute name="font-family">
     <xsl:value-of select="$monospace.font.family"/>
   </xsl:attribute>
-  <xsl:attribute name="hyphenate">false</xsl:attribute>
+  <!--
+    Hyphenation for URLs or filenames works only reliable for XEP.
+    We need to check, if FOP is used. If yes, we set 
+       hyphenate=true, hyphenation-character=&#x200b;
+    It looks ugly and is not really a solution, but it "works". 
+    
+    See also Ticket#33 for background information.
+  -->
+  <xsl:attribute name="hyphenate">
+    <xsl:choose>
+      <xsl:when test="$fop1.extensions != 0">true</xsl:when>
+      <xsl:when test="$xep.extensions != 0">false</xsl:when>
+      <xsl:otherwise>true</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="hyphenation-character">
+    <xsl:choose>
+      <xsl:when test="$fop1.extensions != 0">&#x200b;</xsl:when>
+      <xsl:when test="$xep.extensions != 0">-</xsl:when>
+      <xsl:otherwise>-</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
   <xsl:attribute name="color">
     <xsl:choose>
       <xsl:when test="$format.print='1'">
