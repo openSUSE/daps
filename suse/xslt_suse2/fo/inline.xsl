@@ -75,7 +75,7 @@
     </xsl:call-template>
   </xsl:param>
 
-  <fo:inline font-weight="bold" xsl:use-attribute-sets="monospace.properties">
+  <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold">
     <xsl:if test="parent::para|parent::title">
       <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
@@ -112,8 +112,8 @@
     </xsl:call-template>
   </xsl:param>
 
-  <fo:inline font-style="italic" xsl:use-attribute-sets="monospace.properties"
-     font-weight="normal">
+  <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
+    font-weight="normal">
     <xsl:if test="parent::para|parent::title">
       <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
@@ -137,6 +137,51 @@
     <xsl:if test="parent::para|parent::title">
        <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template name="inline.boldseq">
+  <xsl:param name="content">
+    <xsl:call-template name="simple.xlink">
+      <xsl:with-param name="content">
+        <xsl:apply-templates/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:param>
+
+  <fo:inline xsl:use-attribute-sets="bold.serif">
+    <xsl:if test="@dir">
+      <xsl:attribute name="direction">
+        <xsl:choose>
+          <xsl:when test="@dir = 'ltr' or @dir = 'lro'">ltr</xsl:when>
+          <xsl:otherwise>rtl</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:copy-of select="$content"/>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template name="inline.italicseq">
+  <xsl:param name="content">
+    <xsl:call-template name="simple.xlink">
+      <xsl:with-param name="content">
+        <xsl:apply-templates/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:param>
+
+  <fo:inline xsl:use-attribute-sets="italicized">
+    <xsl:call-template name="anchor"/>
+    <xsl:if test="@dir">
+      <xsl:attribute name="direction">
+        <xsl:choose>
+          <xsl:when test="@dir = 'ltr' or @dir = 'lro'">ltr</xsl:when>
+          <xsl:otherwise>rtl</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:copy-of select="$content"/>
   </fo:inline>
 </xsl:template>
 

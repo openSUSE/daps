@@ -254,6 +254,13 @@ task before
   </xsl:call-template>
 </xsl:param>
 
+<xsl:param name="enable-italic">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-italic'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
 <xsl:param name="base-lineheight">
   <xsl:call-template name="get.list.property">
     <xsl:with-param name="property" select="'base-lineheight'"/>

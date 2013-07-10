@@ -240,16 +240,6 @@
   <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="root.properties">
-  <xsl:attribute name="background-color">#FFF</xsl:attribute>
-</xsl:attribute-set>
-
-<xsl:attribute-set name="component.titlepage.properties"
-  use-attribute-set="root.properties"/>
-
-<xsl:attribute-set name="table.properties"
-  use-attribute-set="root.properties"/>
-
 
 <!-- 22. Profiling ============================================== -->
 
@@ -274,7 +264,7 @@
   <xsl:attribute name="background-color">
     <xsl:choose>
       <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
-      <xsl:otherwise>inherit</xsl:otherwise>
+      <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
@@ -291,19 +281,13 @@
       <xsl:otherwise>inherit</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
-  <xsl:attribute name="background-color">
-    <xsl:choose>
-      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
-      <xsl:otherwise>inherit</xsl:otherwise>
-    </xsl:choose>
-  </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="sans.bold" use-attribute-sets="sans.bold.noreplacement">
   <xsl:attribute name="background-color">
     <xsl:choose>
       <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
-      <xsl:otherwise>inherit</xsl:otherwise>
+      <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
@@ -326,7 +310,25 @@
   <xsl:attribute name="background-color">
     <xsl:choose>
       <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
-      <xsl:otherwise>inherit</xsl:otherwise>
+      <xsl:otherwise>transparent</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="italicized.noreplacement">
+  <xsl:attribute name="font-weight">
+    <xsl:choose>
+      <xsl:when test="$enable-italic != 1">italic</xsl:when>
+      <xsl:otherwise>normal</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="italicized" use-attribute-sets="italicized.noreplacement">
+  <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-italic != 1">&light-gray-old;</xsl:when>
+      <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
