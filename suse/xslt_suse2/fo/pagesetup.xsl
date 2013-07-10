@@ -188,7 +188,7 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell text-align="end" display-align="after"
-            xsl:use-attribute-sets="sans.bold">
+            xsl:use-attribute-sets="sans.bold.noreplacement">
             <xsl:if test="$fop.extensions = 0">
               <xsl:attribute name="relative-align">baseline</xsl:attribute>
             </xsl:if>
