@@ -139,7 +139,7 @@
           </fo:basic-link>
         </fo:inline>
         <fo:inline keep-together.within-line="always" font-size="&large;pt"
-        font-family="{$serif}" xsl:use-attribute-sets="dark-green">
+        font-family="{$serif-stack}" xsl:use-attribute-sets="dark-green">
           <fo:basic-link internal-destination="{$id}">
             <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"/>
             <fo:page-number-citation ref-id="{$id}"/>

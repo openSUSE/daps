@@ -6,7 +6,7 @@
     The page layout is based upon a grid of eight columns (the leftmost and
     rightmost column function as margins), each 22.5 mm wide, and five gutters,
     each 6 mm wide:
-    |  C1  |  C2  |G1|  C3  |G2|  C4  |G3|  C5  |G4|  C6  |G5|  C7  |  C8  |
+    |   C1  |  C2  |G1|  C3  |G2|  C4  |G3|  C5  |G4|  C6  |G5|  C7  |  C8  |
 
   Parameters:
     Too many to list here, see:
@@ -50,6 +50,7 @@
 
   <xsl:include href="attributesets.xsl"/>
   <xsl:include href="lists.xsl"/>
+  <xsl:include href="l10n.properties.xsl"/>
   <xsl:include href="../common/titles.xsl"/>
 
 </xsl:stylesheet>

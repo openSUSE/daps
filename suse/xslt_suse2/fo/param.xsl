@@ -147,57 +147,32 @@ task before
   </xsl:call-template>
 </xsl:param>
 
-<xsl:param name="sans-stack">
-  <xsl:choose>
-    <xsl:when test="$document.language = 'ar'">
-      &arabic;
-    </xsl:when>
-    <xsl:when test="$document.language = 'zh_cn'">
-      &chinese-sim;
-    </xsl:when>
-    <xsl:when test="$document.language = 'zh_tw'">
-      &chinese-trad;
-    </xsl:when>
-    <xsl:when test="$document.language = 'ja'">
-      &japanese-sans;
-    </xsl:when>
-    <xsl:when test="$document.language = 'ko'">
-      &korean-sans;
-    </xsl:when>
-    <xsl:otherwise>
-      &western-sans;
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:param>
-
 <xsl:param name="serif-stack">
-  <xsl:choose>
-    <xsl:when test="$document.language = 'ar'">
-      &arabic;
-    </xsl:when>
-    <xsl:when test="$document.language = 'zh_cn'">
-      &chinese-sim;
-    </xsl:when>
-    <xsl:when test="$document.language = 'zh_tw'">
-      &chinese-trad;
-    </xsl:when>
-    <xsl:when test="$document.language = 'ja'">
-      &japanese-serif;
-    </xsl:when>
-    <xsl:when test="$document.language = 'ko'">
-      &korean-serif;
-    </xsl:when>
-    <xsl:otherwise>
-      &western-serif;
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'serif'"/>
+    <xsl:with-param name="property.type" select="'font'"/>
+  </xsl:call-template>
 </xsl:param>
 
-<xsl:param name="body.font.family"><xsl:value-of select="$serif-stack"/></xsl:param>
+<xsl:param name="sans-stack">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans'"/>
+    <xsl:with-param name="property.type" select="'font'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="mono-stack">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'mono'"/>
+    <xsl:with-param name="property.type" select="'font'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="body.font.family" select="$serif-stack"/>
 <xsl:param name="dingbat.font.family">&symbol;</xsl:param>
-<xsl:param name="sans.font.family"><xsl:value-of select="$sans-stack"/></xsl:param>
-<xsl:param name="title.font.family"><xsl:value-of select="$sans-stack"/></xsl:param>
-<xsl:param name="monospace.font.family">&mono;, monospace</xsl:param>
+<xsl:param name="sans.font.family" select="$sans-stack"/>
+<xsl:param name="title.font.family" select="$sans-stack"/>
+<xsl:param name="monospace.font.family" select="$mono-stack"/>
 <xsl:param name="symbol.font.family">&symbol;</xsl:param>
 
 <xsl:param name="body.font.master" select="'&normal;'"/>
@@ -227,6 +202,18 @@ task before
   <xsl:otherwise>1</xsl:otherwise>
 </xsl:choose>
 </xsl:param>
+
+<xsl:param name="enable.semi-bold.sans">
+<xsl:choose>
+  <xsl:when test="$document.language = 'zh_cn' or $document.language = 'zh_tw' or
+                  $document.language = 'zh_tw' or $document.language = 'ko' or
+                  $document.language = 'ja'">0</xsl:when>
+  <xsl:otherwise>1</xsl:otherwise>
+</xsl:choose>
+</xsl:param>
+
+<xsl:param name="enable.semi-bold.serif">0</xsl:param>
+<xsl:param name="enable.semi-bold.mono">0</xsl:param>
 
 <xsl:param name="enable.italic">
 <xsl:choose>
