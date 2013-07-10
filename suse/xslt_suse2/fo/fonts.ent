@@ -8,34 +8,6 @@
 
 -->
 
-<!-- The normal font name is on the left, the second one is needed only for
-     XEP which does not understand spaces in font names. It would be great to be
-     able to use the same Latin character set in all languages, unfortunately,
-     that would mean, we would also have the same (Latin) interpunction
-     everywhere. -->
-<!ENTITY western-sans         "'Open Sans', OpenSans, sans-serif">
-<!ENTITY western-serif        "'Charis SIL', CharisSIL, serif">
-
-<!ENTITY arabic               "Amiri, serif">
-  <!-- No need for a sans-serif equivalent, Kufic fonts are regarded as rather
-       unreadable, so only use a Naskh font. -->
-
-<!ENTITY chinese-sim          "'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif">
-  <!-- Simplified Chinese is most often printed as sans-serif, so use that. -->
-
-<!ENTITY chinese-trad         "'AR PL UMing TW', ARPLUMingTW, serif">
-  <!-- Traditional Chinese apparently is almost never printed as sans-serif
-       (the exception being on-screen), so use serif font. -->
-
-<!ENTITY japanese-sans        "IPAPGothic, sans-serif">
-<!ENTITY japanese-serif       "IPAPMincho, serif">
-
-<!ENTITY korean-sans          "NanumGothic, sans-serif">
-<!ENTITY korean-serif         "NanumMyeongjo, serif">
-
-<!ENTITY mono                 "'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, Amiri, monospace">
-  <!-- Hm, not too sure if there are open-source Arabic monospace fonts… -->
-
 <!ENTITY symbol               "'FreeSerif', serif">
 
 
@@ -56,6 +28,7 @@
 <!-- Factor used to adjust the x-height of &serif; to that of &sans; and,
      more importantly, &mono;. (Specific to Charis SIL.)-->
 <!ENTITY serif-factor         "1.1">
+<!ENTITY western-mono-serif-factor         "1.1">
 
 <!-- The width-to-height ratio of &mono;. Used for the generation of inline
      SVG's for keycaps. (Specific to DejaVu Sans Mono.) -->

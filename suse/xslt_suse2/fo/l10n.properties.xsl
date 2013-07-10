@@ -45,6 +45,9 @@
   + you may reference other properties by using either of the two lines below:
         lang.property *use other-property; # from the same language
         lang.property *use other_lang.other-property; # from another language
+  + XEP does not like spaces in font names, thus all fonts containing any must
+    be listed twice: normal (for FOP), with the name set up in the XEP
+    configuration file (for XEP)
 
 
     Valid property names (unprefixed):
@@ -95,8 +98,10 @@ western.base-lineheight = 1.5;
 western.sans-lineheight-adjust = 1.31;
 western.mono-lineheight-adjust = 1.64;
 
+# Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font.
 ar.serif = Amiri, serif;
 ar.sans *use serif;
+# There don't seem to be any Arabic monospace fonts.
 ar.mono = 'DejaVu Sans Mono', DejaVuSansMono, Amiri, monospace;
 ar.enable-bold = 1;
 ar.enable-serif-semibold = 0;
@@ -141,6 +146,7 @@ ko.base-lineheight = 1.5;
 ko.sans-lineheight-adjust = 1;
 ko.mono-lineheight-adjust = 1.44;
 
+# Simplified Chinese is most often printed as sans-serif, so use that.
 zh_cn.serif *use sans;
 zh_cn.sans = 'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif;
 zh_cn.mono = 'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace;
@@ -156,6 +162,7 @@ zh_cn.base-lineheight = 1.6;
 zh_cn.sans-lineheight-adjust = 1;
 zh_cn.mono-lineheight-adjust = 1.04;
 
+# Traditional Chinese apparently is almost always printed as serif (the exception being on-screen).
 zh_tw.serif = 'AR PL UMing TW', ARPLUMingTW, serif;
 zh_tw.sans *use serif;
 zh_tw.mono = 'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace;

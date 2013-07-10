@@ -198,9 +198,9 @@
         width="{$width+55}">
       </svg:rect>
       <svg:rect height="85" rx="7.5" ry="7.5" x="5" y="5"
-        fill="&light-gray-old;" fill-opacity="1" stroke="none" width="{$width+40}">
+        fill="&light-gray-old;" fill-opacity="1" stroke="none" width="{$width + 40}">
       </svg:rect>
-      <svg:text font-family="&mono;" text-anchor="middle" x="{$width div 2 + 23}"
+      <svg:text font-family="{$mono-stack}" text-anchor="middle" x="{($width div 2) + 23}"
         y="{$instream-font-size}" color="&dark-gray;"
         font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>

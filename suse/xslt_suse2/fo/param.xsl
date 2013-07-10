@@ -140,13 +140,6 @@ task before
 
 <!-- 20. Font Families ========================================== -->
 
-<xsl:param name="document.language">
-  <xsl:call-template name="l10n.language">
-    <xsl:with-param name="target"
-      select="(/* | key('id', $rootid))[last()]"/>
-  </xsl:call-template>
-</xsl:param>
-
 <xsl:param name="serif-stack">
   <xsl:call-template name="get.list.property">
     <xsl:with-param name="property" select="'serif'"/>
@@ -168,6 +161,27 @@ task before
   </xsl:call-template>
 </xsl:param>
 
+<xsl:param name="mono-xheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'mono-xheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="sans-xheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans-xheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="fontsize-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'fontsize-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
 <xsl:param name="body.font.family" select="$serif-stack"/>
 <xsl:param name="dingbat.font.family">&symbol;</xsl:param>
 <xsl:param name="sans.font.family" select="$sans-stack"/>
@@ -177,7 +191,7 @@ task before
 
 <xsl:param name="body.font.master" select="'&normal;'"/>
 <xsl:param name="body.font.size">
-  <xsl:value-of select="$body.font.master"/><xsl:text>*&serif-factor;pt</xsl:text>
+  <xsl:value-of select="($body.font.master * $fontsize-adjust) div $mono-xheight-adjust"/>pt
 </xsl:param>
 <xsl:param name="footnote.font.size" select="'&small;'"/>
 
@@ -191,37 +205,11 @@ task before
 <!-- 23. Localization =========================================== -->
 <xsl:param name="local.l10n.xml" select="document('../common/l10n/l10n.xml')"/>
 
-<!-- For some languages, enabling the bold/italic features that exist for
-     Western text is rather undesirable, as fonts may not exist or become
-     unreadable. -->
-<xsl:param name="enable.bold">
-<xsl:choose>
-  <xsl:when test="$document.language = 'zh_cn' or
-                  $document.language = 'zh_tw' or
-                  $document.language = 'ja'">0</xsl:when>
-  <xsl:otherwise>1</xsl:otherwise>
-</xsl:choose>
-</xsl:param>
-
-<xsl:param name="enable.semi-bold.sans">
-<xsl:choose>
-  <xsl:when test="$document.language = 'zh_cn' or $document.language = 'zh_tw' or
-                  $document.language = 'zh_tw' or $document.language = 'ko' or
-                  $document.language = 'ja'">0</xsl:when>
-  <xsl:otherwise>1</xsl:otherwise>
-</xsl:choose>
-</xsl:param>
-
-<xsl:param name="enable.semi-bold.serif">0</xsl:param>
-<xsl:param name="enable.semi-bold.mono">0</xsl:param>
-
-<xsl:param name="enable.italic">
-<xsl:choose>
-  <xsl:when test="$document.language = 'zh_cn' or $document.language = 'zh_tw' or
-                  $document.language = 'ja' or $document.language = 'ko' or
-                  $document.language = 'ar'">0</xsl:when>
-  <xsl:otherwise>1</xsl:otherwise>
-</xsl:choose>
+<xsl:param name="document.language">
+  <xsl:call-template name="l10n.language">
+    <xsl:with-param name="target"
+      select="(/* | key('id', $rootid))[last()]"/>
+  </xsl:call-template>
 </xsl:param>
 
 <xsl:param name="writing.mode">
@@ -231,6 +219,28 @@ task before
 </xsl:choose>
 </xsl:param>
 
+<xsl:param name="base-lineheight">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'base-lineheight'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+
+<xsl:param name="mono-lineheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans-lineheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+
+<xsl:param name="sans-lineheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans-lineheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
 
 <!-- 24. EBNF =================================================== -->
 
