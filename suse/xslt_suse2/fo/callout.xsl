@@ -49,8 +49,8 @@
       <svg:rect height="100" rx="50" ry="50" x="0" y="0"
         fill="{$color}" stroke="none" width="{$width}"/>
       <svg:text y="{$instream-font-size - 1}" fill="&white;" font-family="{$sans-stack}"
-        font-size="{$instream-font-size}" font-weight="600"
-        text-anchor="middle">
+        font-size="{$instream-font-size}" text-anchor="middle"
+        xsl:use-attribute-sets="sans.bold.noreplacement">
         <xsl:attribute name="x">
           <xsl:choose>
             <xsl:when test="substring($conum,1,1) = 1">

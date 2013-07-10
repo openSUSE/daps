@@ -29,10 +29,10 @@
 
 <!-- 1. Admonitions  ============================================ -->
 
-<xsl:attribute-set name="admonition.title.properties">
+<xsl:attribute-set name="admonition.title.properties"
+  use-attribute-sets="sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$title.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
-  <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
 </xsl:attribute-set>
@@ -81,8 +81,8 @@
 
 <!-- 13. Lists ================================================== -->
 
-<xsl:attribute-set name="variablelist.term.properties">
-  <xsl:attribute name="font-weight">600</xsl:attribute>
+<xsl:attribute-set name="variablelist.term.properties"
+  use-attribute-sets="sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
@@ -91,9 +91,8 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="orderedlist.label.properties"
-  use-attribute-sets="lists.label.properties">
+  use-attribute-sets="lists.label.properties sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans-stack"/></xsl:attribute>
-  <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="1 * $fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-lineheight-adjust"/>em</xsl:attribute>
 </xsl:attribute-set>
@@ -115,8 +114,8 @@
 
 <!-- 16. Glossary =============================================== -->
 
-<xsl:attribute-set name="glossterm.block.properties">
-  <xsl:attribute name="font-weight">600</xsl:attribute>
+<xsl:attribute-set name="glossterm.block.properties"
+  use-attribute-sets="sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
 </xsl:attribute-set>
 
@@ -150,7 +149,7 @@
 
 <xsl:attribute-set name="footer.content.properties">
   <xsl:attribute name="font-family">
-    <xsl:value-of select="$sans.font.family"/>, <xsl:value-of select="$symbol.font.family"/>
+    <xsl:value-of select="$sans.font.family"/>
   </xsl:attribute>
   <xsl:attribute name="font-size">
     <xsl:text>&small;pt</xsl:text>
@@ -218,22 +217,21 @@
 <xsl:attribute-set name="section.title.level3.properties">
   <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
 </xsl:attribute-set>
-<xsl:attribute-set name="section.title.level4.properties">
+<xsl:attribute-set name="section.title.level4.properties"
+  use-attribute-sets="sans.bold">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
-  <xsl:attribute name="font-weight">700</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level5.properties">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
 </xsl:attribute-set>
-<xsl:attribute-set name="section.title.level6.properties">
+<xsl:attribute-set name="section.title.level6.properties"
+  use-attribute-sets="sans.bold">
   <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
-  <xsl:attribute name="font-weight">700</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="formal.title.properties"
-  use-attribute-sets="normal.para.spacing dark-green">
+  use-attribute-sets="normal.para.spacing dark-green sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
-  <xsl:attribute name="font-weight">600</xsl:attribute>
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
@@ -242,12 +240,96 @@
   <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="root.properties">
+  <xsl:attribute name="background-color">#FFF</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="component.titlepage.properties"
+  use-attribute-set="root.properties"/>
+
+<xsl:attribute-set name="table.properties"
+  use-attribute-set="root.properties"/>
+
 
 <!-- 22. Profiling ============================================== -->
 
 
 <!-- 23. Localization =========================================== -->
 
+<xsl:attribute-set name="serif.bold.noreplacement">
+  <xsl:attribute name="font-weight">
+    <xsl:choose>
+      <xsl:when test="$enable-bold = 1">
+        <xsl:choose>
+          <xsl:when test="$enable-serif-semibold = 1">600</xsl:when>
+          <xsl:otherwise>700</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="serif.bold"  use-attribute-sets="serif.bold.noreplacement">
+  <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="sans.bold.noreplacement">
+  <xsl:attribute name="font-weight">
+    <xsl:choose>
+      <xsl:when test="$enable-bold = 1">
+        <xsl:choose>
+          <xsl:when test="$enable-sans-semibold = 1">600</xsl:when>
+          <xsl:otherwise>700</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="sans.bold" use-attribute-sets="sans.bold.noreplacement">
+  <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="mono.bold.noreplacement">
+  <xsl:attribute name="font-weight">
+    <xsl:choose>
+      <xsl:when test="$enable-bold = 1">
+        <xsl:choose>
+          <xsl:when test="$enable-mono-semibold = 1">600</xsl:when>
+          <xsl:otherwise>700</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="mono.bold" use-attribute-sets="mono.bold.noreplacement">
+  <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 24. EBNF =================================================== -->
 
@@ -270,9 +352,10 @@
 </xsl:attribute-set>
 
 <xsl:template name="dark-green">
-  <!-- This solution is somewhat pathetic – but unfortunately, while we need
-       the green color as a text color most of the time, sometimes we need it
-       for other attributes as well… -->
+  <!-- This naming solution is somewhat pathetic – but unfortunately, while we
+       need the green color as a text color most of the time, sometimes we use
+       it for other attributes as well… maybe this could be separated by
+       function in the future. -->
   <xsl:choose>
     <xsl:when test="$format.print = 1">&darker-gray;</xsl:when>
     <xsl:otherwise>&dark-green;</xsl:otherwise>

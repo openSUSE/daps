@@ -154,7 +154,8 @@
           <xsl:attribute name="block-progression-dimension.minimum">
             <xsl:value-of select="$footer.table.height"/>
           </xsl:attribute>
-          <fo:table-cell text-align="start" font-weight="600" display-align="after">
+          <fo:table-cell text-align="start" display-align="after"
+            xsl:use-attribute-sets="sans.bold.noreplacement">
             <xsl:if test="$fop.extensions = 0">
               <xsl:attribute name="relative-align">baseline</xsl:attribute>
             </xsl:if>
@@ -186,7 +187,8 @@
               </xsl:call-template>
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell text-align="end" font-weight="600" display-align="after">
+          <fo:table-cell text-align="end" display-align="after"
+            xsl:use-attribute-sets="sans.bold">
             <xsl:if test="$fop.extensions = 0">
               <xsl:attribute name="relative-align">baseline</xsl:attribute>
             </xsl:if>

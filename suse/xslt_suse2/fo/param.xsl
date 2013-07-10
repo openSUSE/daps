@@ -219,6 +219,41 @@ task before
 </xsl:choose>
 </xsl:param>
 
+<xsl:param name="enable-bold">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-bold'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-serif-semibold">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-serif-semibold'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-sans-semibold">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-serif-semibold'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-sans-semibold">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-sans-semibold'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-mono-semibold">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'enable-mono-semibold'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
 <xsl:param name="base-lineheight">
   <xsl:call-template name="get.list.property">
     <xsl:with-param name="property" select="'base-lineheight'"/>
@@ -226,14 +261,12 @@ task before
   </xsl:call-template>
 </xsl:param>
 
-
 <xsl:param name="mono-lineheight-adjust">
   <xsl:call-template name="get.list.property">
     <xsl:with-param name="property" select="'sans-lineheight-adjust'"/>
     <xsl:with-param name="property.type" select="'number'"/>
   </xsl:call-template>
 </xsl:param>
-
 
 <xsl:param name="sans-lineheight-adjust">
   <xsl:call-template name="get.list.property">
