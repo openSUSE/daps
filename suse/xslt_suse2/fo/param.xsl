@@ -235,13 +235,6 @@ task before
 
 <xsl:param name="enable-sans-semibold">
   <xsl:call-template name="get.list.property">
-    <xsl:with-param name="property" select="'enable-serif-semibold'"/>
-    <xsl:with-param name="property.type" select="'number'"/>
-  </xsl:call-template>
-</xsl:param>
-
-<xsl:param name="enable-sans-semibold">
-  <xsl:call-template name="get.list.property">
     <xsl:with-param name="property" select="'enable-sans-semibold'"/>
     <xsl:with-param name="property.type" select="'number'"/>
   </xsl:call-template>
