@@ -149,7 +149,7 @@
     </xsl:call-template>
   </xsl:param>
 
-  <fo:inline xsl:use-attribute-sets="bold.serif">
+  <fo:inline xsl:use-attribute-sets="serif.bold">
     <xsl:if test="@dir">
       <xsl:attribute name="direction">
         <xsl:choose>
