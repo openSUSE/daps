@@ -168,7 +168,7 @@
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
-    <xsl:attribute name="line-height">1.5em</xsl:attribute>
+    <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/>em</xsl:attribute>
 </xsl:attribute-set>
 
 
@@ -235,7 +235,7 @@
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
-  <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
+  <xsl:attribute name="space-after.optimum">0.4em</xsl:attribute>
   <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
   <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
 </xsl:attribute-set>
