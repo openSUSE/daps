@@ -158,7 +158,7 @@ zh_cn.enable-italic = 0;
 zh_cn.fontsize-adjust = 1;
 zh_cn.sans-xheight-adjust = 1;
 zh_cn.mono-xheight-adjust = 1;
-zh_cn.base-lineheight = 1.6;
+zh_cn.base-lineheight = 10.75;
 zh_cn.sans-lineheight-adjust = 1;
 zh_cn.mono-lineheight-adjust = 1.04;
 

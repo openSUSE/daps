@@ -176,9 +176,8 @@
 
   <fo:block id="{$id}"
             xsl:use-attribute-sets="section.level1.properties">
-    <fo:block font-size="&small;pt" font-weight="bold"
-              space-before="1.12em" space-after="0.75em"
-       keep-with-next="always">
+    <fo:block font-size="&small;pt" space-before="1.12em" space-after="0.75em"
+       keep-with-next="always" xsl:use-attribute-sets="sans.bold">
       <xsl:value-of select="title" />
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
