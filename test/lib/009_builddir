@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: --builddir-option
+#
+
+source lib/common_functions
+
+header "Build Directory"
+
+function oneTimeSetUp () {
+    # Clean up the build directory
+    clean_build
+    _BUILD_DIR=$(mktemp -d -q -t daps_testsuite_XXXXXXX)
+    if [ $? -ne 0 ]; then
+	exit_on_error " Cannot create temporary directory $_BUILD_DIR. Skipping builddir tests"
+    fi
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown () {
+    stats
+    # Clean up the build directory
+    clean_build
+    [[ -d $_BUILD_DIR ]] && rm -rf $_BUILD_DIR
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Is the make variable for BUILD_DIR correctly set?
+#
+function test_builddirVariable () {
+    local _BD_VAR
+#    echo "$_DAPSEXEC -v0 --main $_MAINFILE_PATH --builddir $_BUILD_DIR showvariable VARIABLE=BUILD_DIR 2>/dev/null"
+    _BD_VAR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR showvariable VARIABLE=BUILD_DIR 2>/dev/null")
+    assertTrue \
+        ' └─ The showvariable for BUILD_DIR failed' \
+        "$?"
+    assertEquals \
+	" └─ The value for BUILD_DIR does not match the specified build directory:" \
+	"$_BUILD_DIR" "$_BD_VAR"
+}
+
+#--------------------------------
+# * Is the specified build directory realy used?
+#
+function test_builddirResult () {
+    local _BD_DIR
+    
+    eval "$_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR profile >/dev/null 2>&1"
+    readlink -e "${_BUILD_DIR}/.profiled/*/$_MAIN" >/dev/null 2>&1
+    assertTrue \
+        ' └─ The build directory is not used.' \
+        "$?"    
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC

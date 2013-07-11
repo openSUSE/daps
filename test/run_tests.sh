@@ -100,7 +100,7 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,html,images,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,html,images,pdf,profiling,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -111,7 +111,11 @@ GETOPT_RETURN_CODE=$?
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/020_pdf" "lib/022_html")
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html")
+	    shift
+	    ;;
+	--builddir)
+	    _TESTS=( "${_TESTS[@]}" "lib/009_builddir" )
 	    shift
 	    ;;
 	-h)
@@ -198,12 +202,6 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         # does not make sense to run the majority of other tests
         #
 	case "$_TEST" in
-	    *_source-validation)
-		eval "$_TEST"
-		if [ $? -ne 0 ]; then
-		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
-		fi
-		;;
 	    *_html)
 		for _HTMLCMD in "html" "single-html"; do
 		    export _HTMLCMD
@@ -236,6 +234,12 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		    fi
 		    eval "$_TEST"
 		done
+		;;
+	    *_source-validation)
+		eval "$_TEST"
+		if [ $? -ne 0 ]; then
+		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
+		fi
 		;;
 	    *)
 		eval "$_TEST"
