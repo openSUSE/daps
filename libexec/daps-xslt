@@ -153,20 +153,21 @@ run-saxon() {
     fi
     
     # Add the DocBook extensions to the CLASSPATH
-    CLASSPATH="CatalogManager.properties:${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+#    CLASSPATH="CatalogManager.properties:${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+    CLASSPATH="${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
 
-    # Additional JAR files (mostly due to XInclude resolution)
-    ADDITIONAL_JARS="xml-commons-resolver12.jar xerces-j2.jar xerces-j2-xml-apis.jar"
+    # Additional JAR files
+    ADDITIONAL_JARS="xml-commons-resolver12.jar"
 
-    # Use special options to switch XML parser to Xerces:
-    ADDITIONAL_FLAGS="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
--Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"
     # Add catalogs, if specified
     [[ -n "$CATALOGS" ]] && ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS -Dxml.catalog.files=$CATALOGS"
 
-    # enable XIncludes if requested
+    # enable XIncludes (by adding Xersces) if requested
     if [[ -n "$XINCLUDE" ]]; then
+	ADDITIONAL_JARS="$ADDITIONAL_JARS xerces-j2.jar xerces-j2-xml-apis.jar"
         ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS \
+-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
+-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl \
 -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
     fi
        
