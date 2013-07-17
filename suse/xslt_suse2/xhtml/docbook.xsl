@@ -28,7 +28,7 @@
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns="http://www.w3.org/1999/xhtml"
-    exclude-result-prefixes="exsl">
+    exclude-result-prefixes="exsl date">
 
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
 
