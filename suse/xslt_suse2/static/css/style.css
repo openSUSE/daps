@@ -244,7 +244,7 @@ html, body {
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, .overview-icon,
-#_find-button, .ulink:after, .single-contents-icon,
+#_find-button, .ulink:after, .bubble-corner:before, .single-contents-icon,
 #_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
 #_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
     background-image: url(../images/icons.png);
@@ -605,7 +605,6 @@ html, body {
 }
 
 .bubble-corner {
-    background-position: -324px -72px;
     width: 0;
     height: 0;
     border-width: 0 15px 15px;
@@ -615,6 +614,14 @@ html, body {
     z-index: 7;
     left: 50%;
     margin: 0 0 0 -15px;
+}
+
+.bubble-corner:before {
+    background-position: -324px -72px;
+    width: 36px;
+    height: 15px;
+    border: none;
+    margin: 0 0 0 -3px;
 }
 
 .bubble {
