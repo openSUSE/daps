@@ -16,7 +16,9 @@
 #
 # * Does the PDF-file correctly build?
 # * Does the name retrieved with *-name match the actual result?
-# * Is the .fo still present after the PDF has been built?  
+# * Is the .fo still present after the PDF has been built? 
+# * Do the --styleroot and --fb_styleroot options work?
+# * Does the automatic fallback to the DoBook stylesheets work? 
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
@@ -92,6 +94,49 @@ function test_pdfFO () {
 	" └─ The FO file (${_FONAME}) does not exist anymore after having built the PDF" \
 	"[ -f $_FONAME ]"
 }
+
+#--------------------------------
+# * Do the --styleroot and --fb_styleroot options work?
+# * Does the automatic fallback to the DoBook stylesheets work? 
+#
+function test_pdfStyleroot () {
+
+    _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
+    _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
+
+    clean_build
+
+    # Testing Fallback Styleroot by specifying a wrong Styleroot dir
+    # 
+
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1"
+    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The Fallback Styleroot specified on the command line was not used." \
+	"$?"
+
+    clean_build
+
+    # Testing automatic Fallback to _DB_STYLES by specifying a wrong
+    # Styleroot dir with no Fallback
+    #
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_PDFCMD >/dev/null 2>&1"
+    grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The automatic DocBook Fallback Styleroot was not used." \
+	"$?"    
+
+    clean_build
+
+    # Testing Styleroot specified with --styleroot
+    #
+    eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1"
+    egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
+    assertTrue \
+	" └─ The Styleroot specified on the command line was not used." \
+	"$?"
+}
+
 
 #--------------------------------
 # * Is the draft watermark image included when using the --draft option?
