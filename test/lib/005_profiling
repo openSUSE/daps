@@ -38,7 +38,7 @@ function oneTimeSetUp() {
     # Clean up the build directory
     clean_build
     # get the profiling directory
-    _PROFILEDIR=$(eval "$_DAPSEXEC --main $_MAINPATH showvariable VARIABLE=PROFILEDIR 2>/dev/null")
+    _PROFILEDIR=$(eval "$_DAPSEXEC --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR 2>/dev/null")
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the profiling directory failed. Skipping profiling tests"
     fi
@@ -61,7 +61,7 @@ function oneTimeTearDown() {
 # Is the profiling command successfully executed?
 #
 function test_profiling () {
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile >/dev/null"
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
     assertTrue \
         ' └─ The profiling command itself failed' \
         "$?"
@@ -83,7 +83,7 @@ function test_profilingPROFILEDIR () {
 function test_profilingFilelist () {
     local _FILE _MISSING
     for _FILE in $_SET_FILES; do
-        [ -f ${_PROFILEDIR}/$_FILE ] || _MISSING="$_MISSING $_FILE"
+        [[ -f "${_PROFILEDIR}/$_FILE" ]] || _MISSING="$_MISSING $_FILE"
     done
     assertNull \
         " └─ File(s) '$_MISSING' are missing $_PROFILEDIR" \
@@ -110,7 +110,7 @@ function test_profilingEntities () {
 #
 function test_profilingValidate() {
     xmllint --noent --postvalid --noout --nowarning --xinclude \
-        ${_PROFILEDIR}/$(basename $_MAINPATH) >/dev/null 2>&1
+        ${_PROFILEDIR}/$(basename $_MAINFILE_PATH) >/dev/null 2>&1
     assertTrue \
         ' └─ Profiled XML does not validate' \
         "$?"
@@ -123,10 +123,10 @@ function test_profilingValidate() {
 function test_profilingUpdateXML() {
     local _FILE _OLDDATE_FILES _OLDDATE_MAIN _NEWDATE_FILES _NEWDATE_MAIN
     # get date for $MAIN from profiling dir (unix timestamp)
-    _OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $_MAINPATH) 2>/dev/null)
+    _OLDDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $_MAINFILE_PATH) 2>/dev/null)
     # "update" $MAIN
     sleep 1
-    touch $_MAINPATH
+    touch $_MAINFILE_PATH
     # the timestamps of the other files should not have changed
     # because they haven't been updated and therefor do not need to be
     # profiled again. In order to keep the test as simple as possible, we
@@ -134,21 +134,21 @@ function test_profilingUpdateXML() {
     _OLDDATE_FILES=0
     _NEWDATE_FILES=0
     for _FILE in $_SET_FILES; do
-        if [[ $_FILE == $(basename $_MAINPATH) ]]; then continue; fi
+        if [[ $_FILE == $(basename $_MAINFILE_PATH) ]]; then continue; fi
         _OLDDATE_FILES=$(expr $_OLDDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
     # rerun profiling
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile >/dev/null"
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
     assertTrue \
-        " └─ Re-running profiling after touching $_MAINPATH failed" \
+        " └─ Re-running profiling after touching $_MAINFILE_PATH failed" \
         "$?"
     # get new date
-    _NEWDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $_MAINPATH) 2>/dev/null)
+    _NEWDATE_MAIN=$(stat -c %Y ${_PROFILEDIR}/$(basename $_MAINFILE_PATH) 2>/dev/null)
     assertNotEquals \
         ' └─ $MAIN has not been updated by profiling although it had changed' \
         "$_OLDDATE_MAIN" "$_NEWDATE_MAIN"
     for _FILE in $_SET_FILES; do
-        if [[ $_FILE == $(basename $_MAINPATH) ]]; then continue; fi
+        if [[ $_FILE == $(basename $_MAINFILE_PATH) ]]; then continue; fi
         _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
     assertEquals \
@@ -169,7 +169,7 @@ function test_profilingUpdateEntities() {
     # update Entity declaration files
     touch ${_DOC_DIR}/xml/*.ent
     # rerun profiling
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile >/dev/null"
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
     for _FILE in $_SET_FILES; do
 	_NEW_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
 	assertNotEquals \
@@ -190,8 +190,8 @@ function test_profilingContent () {
     # First test: no profiled paras should appear in the profiled XML
     #             because no profiling attributes are set
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile >/dev/null"
     _COUNT=$(egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
         ${_PROFILEDIR}/*.xml 2>/dev/null | wc -l)
     assertEquals \
@@ -202,8 +202,8 @@ function test_profilingContent () {
     #              because profiling parameters have been set to a value that
     #              has no match in the XML
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo >/dev/null"
     egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
         ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
@@ -213,8 +213,8 @@ function test_profilingContent () {
     # Third test: arch2 should be filtered out
     #
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR PROFARCH=arch1")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile PROFARCH=arch1 >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR PROFARCH=arch1")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile PROFARCH=arch1 >/dev/null"
     grep "arch=arch2" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Profiled XML contains arch2 content that should have been filtered' \
@@ -223,8 +223,8 @@ function test_profilingContent () {
     # Fourth test: condition1 should be filtered out
     #
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR PROFCONDITION=condition2")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile PROFCONDITION=condition2 >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR PROFCONDITION=condition2")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile PROFCONDITION=condition2 >/dev/null"
     grep "condition=condition1" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Profiled XML contains condition1 content that should have been filtered' \
@@ -233,8 +233,8 @@ function test_profilingContent () {
     # Fifth test: os2 should be filtered out
     #
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR PROFOS=os1")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile PROFOS=os1 >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR PROFOS=os1")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile PROFOS=os1 >/dev/null"
     grep "os=os2" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Profiled XML contains os2 content that should have been filtered' \
@@ -243,8 +243,8 @@ function test_profilingContent () {
     # Sixth test: vendor1 should be filtered out
     #
     clean_build
-    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH showvariable VARIABLE=PROFILEDIR PROFVENDOR=vendor2")
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH profile PROFVENDOR=vendor2 >/dev/null"
+    _PROFILEDIR=$(eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH showvariable VARIABLE=PROFILEDIR PROFVENDOR=vendor2")
+    eval "$_DAPSEXEC -v0 --main $_MAINFILE_PATH profile PROFVENDOR=vendor2 >/dev/null"
     grep "vendor=vendor1" ${_PROFILEDIR}/*.xml >/dev/null 2>&1
     assertFalse \
         ' └─ Profiled XML contains vendor1 content that should have been filtered' \
