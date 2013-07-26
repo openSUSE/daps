@@ -1,0 +1,126 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: TEXT
+#
+# * Does TXT correctly build?
+# * Does the name retrieved with text-name match the actual result?
+# * Does the --rootid option work correctly?
+
+source lib/common_functions
+
+header "Text"
+
+function oneTimeSetUp() {
+    # Clean up the build directory
+    clean_build
+    # get the profiling directory
+    _TXT_PATH=$(eval "$_DAPSEXEC -d $_DCFILE text-name 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting TEXT file failed. Skipping tests"
+    fi
+    _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_text.log
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does TXT correctly build?
+# * Does the name retrieved with text-name match the actual result?
+#
+function test_text () {
+    local _TXT_NAME
+    _TXT_NAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE text 2>/dev/null")
+    assertTrue \
+        ' └─ The text command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The resulting file (${_TXT_NAME}) does not exist." \
+	"[ -f $_TXT_NAME ]"
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --text-name" \
+	"$_TXT_PATH" "$_TXT_NAME"
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+function test_textName () {
+    local _BUILD_SUBDIR_NAME _NAME _TXTPATH _TXTPATH_BUILD
+    _NAME="testsuite"
+
+    clean_build
+
+    _TXTPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE text --name $_NAME 2>/dev/null")
+    assertTrue \
+	' └─ Building a text file with --name failed ' \
+       "$?"
+   _TXTPATH=$(eval "$_DAPSEXEC -v0 -d $_DCFILE text-name --name $_NAME 2>/dev/null")
+   assertTrue \
+	' └─  Getting the filename for the text command with --name failed ' \
+       "$?"
+
+   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_TXTPATH_BUILD"))
+
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with --text-name: " \
+       "$_TXTPATH" "$_TXTPATH_BUILD"
+
+   # expr match does not work with Variables as search term, needs regexp
+   echo "$(basename $_TXTPATH_BUILD)" | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the text filename" \
+       "$?"   
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$_NAME" "$_BUILD_SUBDIR_NAME"
+}
+
+#--------------------------------
+# * Does the --rootid option work correctly?
+#
+function test_textRootid () {
+    local _ROOTID _TXTNAME_BUILD _TXTPATH_BUILD _TXTNAME_ROOTID 
+
+    _ROOTID=appendix
+    _TXTNAME_ROOTID=${_ROOTID}.txt
+
+    clean_build
+
+    _TXTPATH_BUILD="$(eval "$_DAPSEXEC -d $_DCFILE text --rootid $_ROOTID 2>/dev/null")"
+    assertTrue \
+	' └─ Building a text document with --rootid failed ' \
+       "$?"
+
+    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating the text file' \
+	"$?"
+    _TXTNAME_BUILD=$(basename $_TXTPATH_BUILD)
+    assertEquals \
+	' └─ The resulting text file name does not match the ROOTID:' \
+	"$_TXTNAME_ROOTID" "_TXTNAME_BUILD"
+}
+
+
+# source shUnit2 test
+source $_SHUNIT2SRC
