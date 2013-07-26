@@ -119,10 +119,6 @@ function parse_args () {
                 P_LIST=1
                 shift
                 ;;
-            --manifest)
-                P_MANIFEST=1
-                shift
-                ;;
             --meta)
                 P_META=1
                 shift
@@ -787,7 +783,7 @@ function build_generic () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,manifest,name:,rootid:"
+    LONG_OPTS="help,name:,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -796,15 +792,12 @@ function build_generic () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
-        [[ dist-html=$SUB_CMD ]] && help_manifest
-
         help_name
         help_rootid
         echo
         exit 0
     fi
 
-    [[ 1 = $P_MANIFEST ]] && INCLUDE_MANIFEST=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     
@@ -1685,12 +1678,6 @@ function help_list () {
                               standard output instead of starting the
                               interactive spellchecker.
                               Default: en_US"
-}
-function help_manifest () {
-    echo "    --manifest                If set, adds a manifest file containing a list
-                              of all HTML files in the correct order to the
-                              tarball.
-                              Default: off"
 }
 function help_meta () {
     echo "    --meta                    If set, prints additional status information
