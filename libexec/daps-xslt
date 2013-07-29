@@ -70,7 +70,7 @@ Mandatory parameters:
 
 
 Optional parameters:
- --catalogs                   Define a space-seperated list of XML catalogs
+ --catalogs                   Define a space-separated list of XML catalogs
                               for resolving identifiers. to be used in addition
                               to the system wide default catalog.
 
@@ -114,7 +114,7 @@ Optional parameters:
                               specification.
 
 
-XSLT-processor:
+XSLT processor:
   Define the XSLT processor, xsltproc or saxon6 (mandatory) and
   processor-specific options (optional, see the respective man pages
   for details)."
@@ -162,7 +162,7 @@ run-saxon() {
     # Add catalogs, if specified
     [[ -n "$CATALOGS" ]] && ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS -Dxml.catalog.files=$CATALOGS"
 
-    # enable XIncludes (by adding Xersces) if requested
+    # enable XIncludes (by adding Xerces) if requested
     if [[ -n "$XINCLUDE" ]]; then
 	ADDITIONAL_JARS="$ADDITIONAL_JARS xerces-j2.jar xerces-j2-xml-apis.jar"
         ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS \
@@ -218,7 +218,7 @@ process_params () {
         SEEN=0
         STR_PAR=${PARAMLIST[$I]}
         # get rid of the double quotes of stringparams
-        # (${STR_PAR:1:-1} removes first and last charater of $STR_PAR)
+        # (${STR_PAR:1:-1} removes first and last character of $STR_PAR)
         #
         STR_PAR=${STR_PAR:1:-1}
         # split into KEY/VALUE at first "="
@@ -331,7 +331,7 @@ if [[ $1 =~ xsltproc || $1 =~ saxon ]]; then
     PROCESSOR=$1
     shift;
 else
-    exit_on_error "invalid xsltprocessor must be either xsltproc or saxon"
+    exit_on_error "Invalid XSLT processor: must be either xsltproc or saxon"
     exit 1;
 fi
 PROCESSOR_ARGS="$@"
