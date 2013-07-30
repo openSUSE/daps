@@ -94,7 +94,7 @@
   use-attribute-sets="lists.label.properties sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans-stack"/></xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="1 * $fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
-  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-lineheight-adjust"/>em</xsl:attribute>
+  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-xheight-adjust"/>em</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="itemizedlist.label.properties"
   use-attribute-sets="lists.label.properties">
