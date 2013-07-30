@@ -109,7 +109,7 @@
 <xsl:template name="toc.part.line">
   <xsl:param name="toc-context" select="NOTANODE"/>
 
-  <xsl:variable name="line-height" select="'1.25em'"/>
+  <xsl:variable name="line-height" select="'{$base-lineheight}em'"/>
 
   <xsl:variable name="id">
     <xsl:call-template name="object.id"/>
