@@ -24,37 +24,15 @@
 
 <xsl:template match="ulink" name="ulink">
   <xsl:param name="url" select="@url"/>
-
-  <xsl:variable name ="ulink.url">
-    <xsl:call-template name="fo-external-image">
-      <xsl:with-param name="filename" select="$url"/>
-    </xsl:call-template>
+  <xsl:variable name="contents">
+    <xsl:apply-imports/>
   </xsl:variable>
-
-  <fo:basic-link xsl:use-attribute-sets="xref.properties"
-                 external-destination="{$ulink.url}">
-    <xsl:choose>
-      <xsl:when test="count(child::node())=0 or (string(.) = $url)">
-        <fo:inline hyphenate="false" xsl:use-attribute-sets="dark-green">
-          <xsl:call-template name="hyphenate-url">
-            <xsl:with-param name="url" select="$url"/>
-          </xsl:call-template>
-          <fo:leader leader-pattern="space" leader-length="0.2em"/>
-          <xsl:call-template name="image-after-link"/>
-        </fo:inline>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </fo:basic-link>
-  <!-- * Call the template for determining whether the URL for this -->
-  <!-- * hyperlink is displayed, and how to display it (either inline or -->
-  <!-- * as a numbered footnote). -->
-  <xsl:call-template name="hyperlink.url.display">
-    <xsl:with-param name="url" select="$url"/>
-    <xsl:with-param name="ulink.url" select="$ulink.url"/>
-  </xsl:call-template>
+  
+    <fo:inline hyphenate="false" xsl:use-attribute-sets="dark-green">
+      <xsl:copy-of select="$contents"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <xsl:call-template name="image-after-link"/>
+    </fo:inline>
 </xsl:template>
 
 
