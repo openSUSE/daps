@@ -702,7 +702,7 @@ make: *** [validate] Error 3</screen>
 </example>'>  
 
 <!ENTITY daps-cmd-basic-syntax
-'<screen>$ daps [--global-options] subcommand [--command-options] [arguments]</screen>'>
+'<screen>$ &dapscmd; [--global-options] subcommand [--command-options] [arguments]</screen>'>
 
 <!ENTITY daps-help-basics
 '<para>
@@ -710,20 +710,20 @@ make: *** [validate] Error 3</screen>
    global options and the available subcommands, use the command:
   </para>
 
-  <screen>$ <command>daps --help</command>&nbsp;</screen>
+  <screen>$ &dapscmd; --help&nbsp;</screen>
 
   <para>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-  <screen>$ <command>daps --help  <replaceable>subcommand</replaceable>&nbsp;</command>&nbsp;</screen>
+  <screen>$ &dapscmd; --help  <replaceable>subcommand</replaceable>&nbsp;</screen>
 
   <para>
    For example, if you want more information about generating HTML output,
    run:
   </para>
 
-  <screen>$ <command>daps --help html</command>&nbsp;</screen>'>
+  <screen>$ &dapscmd; --help html&nbsp;</screen>'>
   
 <!ENTITY daps-dc-file-tip  
 '<tip>
@@ -744,7 +744,7 @@ make: *** [validate] Error 3</screen>
     <listitem>
      <para>Specify a &dc; file on the command line with the global option 
      <option>-d</option>. For example:</para>
-     <screen>daps -d <replaceable>PATH_TO_DC_FILE</replaceable> color-pdf</screen>
+     <screen>$ &dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> color-pdf</screen>
     </listitem>
    </itemizedlist>
   </tip>'>
@@ -763,11 +763,11 @@ make: *** [validate] Error 3</screen>
     Independent of the individual output format you want to create, you need
     to specify the &dc; file to use:
    </para>
-  <screen>$ daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
+  <screen>$ &dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
   <para>
     For example:
    </para>
-  <screen>$ <command>daps -d &dc;-daps-example color-pdf</command></screen>
+  <screen>$ &dapscmd; -d &dc;-daps-example color-pdf</screen>
   <para>
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.
