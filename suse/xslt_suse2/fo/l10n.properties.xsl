@@ -113,7 +113,7 @@ ar.sans-xheight-adjust = 1;
 ar.mono-xheight-adjust = 0.755;
 ar.base-lineheight = 0.9;
 # dummy values...
-ar.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+ar.sans-lineheight-adjust = 1;
 ar.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 
 ja.serif = IPAPMincho, serif;
@@ -146,7 +146,7 @@ ko.sans-xheight-adjust = 1;
 ko.mono-xheight-adjust = 0.83;
 ko.base-lineheight = 1.5;
 # dummy values...
-ko.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+ko.sans-lineheight-adjust = 1;
 ko.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 
 # Simplified Chinese is most often printed as sans-serif, so use that.
