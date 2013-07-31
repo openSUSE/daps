@@ -292,4 +292,10 @@ task before
 -->
 <xsl:param name="navig.showtitles" select="0"/>
 
+<!--  Output a warning, if chapter/@lang is different from book/@lang ?
+      0=no, 1=yes
+-->
+<xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
+
+
 </xsl:stylesheet>
