@@ -17,9 +17,13 @@
       Returns boolean, if the previous, next, up and home link is inside
       the descendants of $rootid node
     
+    * is.xref.in.samebook(target=NODE)
+      Returns boolean, if the <xref/>'s target node is inside the
+      current book (returns 1) or not (returns 0)
 
-   Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Author:    Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>              
+   Copyright: 2012, 2013 Thomas Schraitle
 
 -->
 
@@ -46,6 +50,7 @@
     <xsl:value-of select="generate-id($this.book) = generate-id($next.book)"/>
   </xsl:template>
   
+  <!-- ===================================================== -->
   <xsl:template name="is.prev.node.in.navig">
     <xsl:param name="prev"/>
     
@@ -60,6 +65,7 @@
     <xsl:value-of select="generate-id($this.book) = generate-id($prev.book)"/>
   </xsl:template>
   
+  <!-- ===================================================== -->
   <xsl:template name="is.node.in.navig">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -99,6 +105,19 @@
     <xsl:value-of select="((count($prev) &gt; 0 and $isprev) or
                            (count($next) &gt; 0 and $isnext)) and
                           $navig.showtitles != 0"/>
+  </xsl:template>
+  
+  <!-- ===================================================== -->
+  <xsl:template name="is.xref.in.samebook">
+    <xsl:param name="target" select="NOT_A_NODE"/>
+    
+    <xsl:variable name="target.book" select="($target/ancestor-or-self::article|$target/ancestor-or-self::book)[1]"/>
+    <xsl:variable name="this.book" select="(ancestor-or-self::article|ancestor-or-self::book)[1]"/>
+    
+    <xsl:choose>
+      <xsl:when test="(generate-id($target.book) = generate-id($this.book)) or
+                     not(/set) or /article">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
   </xsl:template>
   
 </xsl:stylesheet>
