@@ -25,19 +25,6 @@
   exclude-result-prefixes="xlink">
 
 
-<xsl:template match="ulink" name="ulink">
-  <xsl:param name="url" select="@url"/>
-  <xsl:variable name="contents">
-    <xsl:apply-imports/>
-  </xsl:variable>
-  
-    <fo:inline hyphenate="false" xsl:use-attribute-sets="dark-green">
-      <xsl:copy-of select="$contents"/>
-      <fo:leader leader-pattern="space" leader-length="0.2em"/>
-      <xsl:call-template name="image-after-link"/>
-    </fo:inline>
-</xsl:template>
-
 
 <xsl:template name="hyperlink.url.display">
   <!-- * This template is called for all external hyperlinks (ulinks and -->
@@ -50,8 +37,9 @@
       <xsl:with-param name="filename" select="$url"/>
     </xsl:call-template>
   </xsl:param>
-
-  <xsl:if test="count(child::node()) != 0
+  
+  <fo:basic-link external-destination="{$ulink.url}" xsl:use-attribute-sets="dark-green">
+    <xsl:if test="count(child::node()) != 0
                 and string(.) != $url
                 and $ulink.show != 0">
     <!-- * Display the URL for this hyperlink only if it is non-empty, -->
@@ -59,18 +47,19 @@
     <!-- * URL it links to, and if ulink.show is non-zero. -->
         <fo:inline hyphenate="false">
           <xsl:text> (</xsl:text>
-          <fo:inline xsl:use-attribute-sets="dark-green">
-            <fo:basic-link external-destination="{$ulink.url}">
+          <fo:inline>
               <xsl:call-template name="hyphenate-url">
                 <xsl:with-param name="url" select="$url"/>
               </xsl:call-template>
-              <fo:leader leader-pattern="space" leader-length="0.2em"/>
-              <xsl:call-template name="image-after-link"/>
-            </fo:basic-link>
           </fo:inline>
           <xsl:text>)</xsl:text>
         </fo:inline>
-  </xsl:if>
+    </xsl:if>
+  
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+    <xsl:call-template name="image-after-link"/>
+    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+  </fo:basic-link>
 </xsl:template>
 
 
