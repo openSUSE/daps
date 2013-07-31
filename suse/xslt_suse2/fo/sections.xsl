@@ -226,10 +226,9 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
 
-  <fo:block id="{$id}"
-            xsl:use-attribute-sets="section.level3.properties">
-    <fo:block font-size="&x-small;pt" font-style="italic"
-      space-before="1.12em" space-after="0.5em" >
+  <fo:block id="{$id}" xsl:use-attribute-sets="section.level3.properties">
+    <fo:block font-size="&x-small;pt" space-before="1.12em" space-after="0.5em"
+      xsl:use-attribute-sets="italicized">
       <xsl:value-of select="title"/>
     </fo:block>
     <fo:block font-size="&xxx-small;pt">
