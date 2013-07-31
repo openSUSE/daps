@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
   Always add the type of an admonition to the title, not just if there wouldn't
   be a title otherwise.
-  
+
   Author(s):    Stefan Knorr <sknorr@suse.de>
-  Copyright:    2012, Stefan Knorr
-  
+  Copyright:    2012, 2013, Stefan Knorr
+
 -->
+
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
-  xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="exsl">
-  
+
 <xsl:template match="caution|tip|warning|important|note" mode="title.markup">
   <xsl:param name="allow-anchors" select="0"/>
   <xsl:variable name="title" select="(title|info/title)[1]"/>
