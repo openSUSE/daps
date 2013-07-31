@@ -78,7 +78,15 @@
 
 <!-- 12. Cross References ======================================= -->
 <xsl:attribute-set name="xref.properties" 
-                   use-attribute-sets="italicized dark-green"/>
+                   use-attribute-sets="dark-green">
+  <xsl:attribute name="font-style">
+    <xsl:choose>
+      <xsl:when test="self::xref and $enable-italic = 1">italic</xsl:when>
+      <!-- Use normal for ulinks -->
+      <xsl:otherwise>normal</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
   
 
 <!-- 13. Lists ================================================== -->
