@@ -229,7 +229,7 @@
   <fo:instream-foreign-object content-height="1em" alignment-baseline="alphabetic"
     alignment-adjust="-0.2em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" height="100"
-      width="{$width + 55}">
+      width="{$width + 60}">
       <svg:defs>
         <svg:linearGradient id="svg-gr-recessed" x1="0.05" y1="0.05" x2=".95" y2=".95">
           <svg:stop stop-color="&light-gray;" stop-opacity="1" offset="0" />
@@ -238,15 +238,12 @@
           <svg:stop stop-color="&mid-gray;" stop-opacity="1" offset="1" />
         </svg:linearGradient>
       </svg:defs>
-      <svg:rect height="100" rx="10" ry="10" x="0" y="0"
-        fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"
-        width="{$width+55}">
-      </svg:rect>
-      <svg:rect height="85" rx="7.5" ry="7.5" x="5" y="5"
-        fill="&light-gray-old;" fill-opacity="1" stroke="none" width="{$width + 40}">
-      </svg:rect>
-      <svg:text font-family="{$mono-stack}" text-anchor="middle" x="{($width div 2) + 23}"
-        y="{$instream-font-size}" color="&dark-gray;"
+      <svg:rect height="100" width="{$width + 60}" rx="10" ry="10" x="0" y="0"
+        fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"/>
+      <svg:rect height="85" width="{$width + 45}" rx="7.5" ry="7.5" x="5" y="5"
+        fill="&light-gray-old;" fill-opacity="1" stroke="none"/>
+      <svg:text font-family="{$mono-stack}" text-anchor="middle" 
+        x="{($width div 2) + 25}" y="{$instream-font-size}" color="&dark-gray;"
         font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>
   </fo:instream-foreign-object>
