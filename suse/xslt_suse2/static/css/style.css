@@ -77,13 +77,13 @@ html, body {
 .page-bottom {
     margin: 0 auto;
     min-width: 150px;
-    max-width: 998px;
+    max-width: 978px;
 }
 
 #_header {
     margin: 0 auto;
     min-width: 150px;
-    max-width: 1018px;
+    max-width: 998px;
 }
 
 .single div.part, .single div.chapter, .single div.preface,
@@ -105,7 +105,7 @@ html, body {
 #_toolbar {
     margin: 0 auto;
     min-width: 170px;
-    max-width: 1018px;
+    max-width: 998px;
     padding: 0;
 }
 
@@ -118,6 +118,10 @@ html, body {
     position: relative; 
 }
 
+#_white-bg, #_toolbar, #_fixed-header {
+    padding: 0 10px;
+}
+
 #_content {
     background: url(../images/dots-gray.png) repeat-x scroll 0px 0px;
     min-height: 139px;
@@ -128,7 +132,6 @@ html, body {
 
 #_white-bg {
     background-color: #FFF;
-    width: 100%;
     z-index: 5;
     min-width: 190px;
 }
@@ -496,8 +499,12 @@ html, body {
 }
 
 
-#_toc-area, #_nav-area, #_find-area {
-    width: 33.3%;
+#_nav-area {
+    width: 40%;
+}
+
+#_toc-area, #_find-area {
+    width: 30%;
 }
 
 
@@ -657,7 +664,7 @@ html, body {
 
 #_toc-bubble-wrap .bubble {
     min-width: 150px;
-    max-width: 1024px;
+    max-width: 1004px;
     padding: 10px;
     margin: 0 auto;
 }
@@ -880,10 +887,9 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 }
 
 #_fixed-header {
-    max-width: 1018px;
+    max-width: 998px;
     min-width: 130px;
     display: block;
-    width: 100%;
     font-size: 12px;
     margin: 0 auto;
 }
@@ -951,7 +957,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 .page-bottom {
     margin-top: 30px;
     margin-bottom: 80px;
-    padding: 10px 10px 0;
+    padding: 10px 20px 0;
 }
 
 #_bottom-navigation {
@@ -1142,7 +1148,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     min-width: 130px;
     max-width: 988px;
     margin: 0 auto;
-    padding: 0 10px;
+    padding: 0 20px;
 }
 
 #_footer ul {
@@ -1177,7 +1183,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 #_content > .chapter, #_content > .preface, #_content > .appendix,
 #_content > .glossary, #_content > .reference, #_content > .refentry,
 #_content > .bibliography, #_content > .index {
-    padding: 0 10px;
+    padding: 0 20px;
 }
 
 
@@ -2357,6 +2363,17 @@ body.draft {
 
 /* Mobile layout */
 @media only screen and (max-width: 480px) {
+    #_white-bg, #_toolbar, #_fixed-header {
+        padding: 0;
+    }
+
+    #_footer, #_content > .set, #_content > .book, #_content > .article, #_content > .part,
+    #_content > .chapter, #_content > .preface, #_content > .appendix,
+    #_content > .glossary, #_content > .reference, #_content > .refentry,
+    #_content > .bibliography, #_content > .index {
+        padding: 0 10px;
+    }
+
     #_toc-area, #_nav-area {
         width: 100%;
     }
@@ -2618,7 +2635,8 @@ body.draft {
         border-radius: 0;
         width: 40%;
         width: -moz-calc(50% - 22px);
-        width: -moz-calc(50% - 22px);
+        width: -webkit-calc(50% - 22px);
+        width: calc(50% - 22px);
     }
 
     #_share-fb, #_share-tw {
