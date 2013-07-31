@@ -22,7 +22,7 @@
       current book (returns 1) or not (returns 0)
 
    Author:    Stefan Knorr <sknorr@suse.de>,
-              Thomas Schraitle <toms@opensuse.org>              
+              Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, 2013 Thomas Schraitle
 
 -->
@@ -118,6 +118,7 @@
       <xsl:when test="(generate-id($target.book) = generate-id($this.book)) or
                      not(/set) or /article">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
 </xsl:stylesheet>
