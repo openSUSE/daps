@@ -52,5 +52,6 @@
   <xsl:include href="lists.xsl"/>
   <xsl:include href="l10n.properties.xsl"/>
   <xsl:include href="../common/titles.xsl"/>
+  <xsl:include href="../common/navigation.xsl"/>
 
 </xsl:stylesheet>

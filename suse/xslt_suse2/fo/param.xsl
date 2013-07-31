@@ -287,4 +287,9 @@ task before
 <xsl:param name="format.print" select="0"/>
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
+<!-- Should navigation titles be displayed? 0=no, 1=yes
+     For FO we don't need that, so setting it to 0
+-->
+<xsl:param name="navig.showtitles" select="0"/>
+
 </xsl:stylesheet>
