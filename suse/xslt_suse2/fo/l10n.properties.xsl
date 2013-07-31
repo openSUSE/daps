@@ -74,6 +74,10 @@
     to be displayed at 90 % of its original size to make the size of lower-case
     Latin/Cyrillic characters match those of the serif
   + base-lineheight: set the basic line height for running text
+  + sans-lineheight-adjust: to adjust the line height of the sans-serif font to
+    match the serif font's line height
+  + mono-lineheight-adjust: to adjust the line height of the monospace font to
+    match the serif font's line height
 
 -->
 
@@ -91,6 +95,8 @@ western.fontsize-adjust = 1;
 western.sans-xheight-adjust = 0.916;
 western.mono-xheight-adjust = 0.895;
 western.base-lineheight = 1.6;
+western.sans-lineheight-adjust = 1.15;
+western.mono-lineheight-adjust = 1.15;
 
 # Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font.
 ar.serif = Amiri, serif;
@@ -106,6 +112,9 @@ ar.fontsize-adjust = 1;
 ar.sans-xheight-adjust = 1;
 ar.mono-xheight-adjust = 0.755;
 ar.base-lineheight = 0.9;
+# dummy values...
+ar.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+ar.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 
 ja.serif = IPAPMincho, serif;
 ja.sans = IPAPGothic, sans-serif;
@@ -119,6 +128,9 @@ ja.fontsize-adjust = 1;
 ja.sans-xheight-adjust = 0.99;
 ja.mono-xheight-adjust = 0.89;
 ja.base-lineheight = 1.5;
+# dummy values...
+ja.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+ja.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 
 ko.serif = NanumMyeongjo, serif;
 # Despite its name, NanumGothic doesn't really match Myeongjo in many ways, thus always use the serif font
@@ -133,6 +145,9 @@ ko.fontsize-adjust = 1;
 ko.sans-xheight-adjust = 1;
 ko.mono-xheight-adjust = 0.83;
 ko.base-lineheight = 1.5;
+# dummy values...
+ko.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+ko.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 
 # Simplified Chinese is most often printed as sans-serif, so use that.
 zh_cn.serif *use sans;
@@ -146,7 +161,9 @@ zh_cn.enable-italic = 0;
 zh_cn.fontsize-adjust = 1;
 zh_cn.sans-xheight-adjust = 1;
 zh_cn.mono-xheight-adjust = 1;
-zh_cn.base-lineheight = 10.75;
+zh_cn.base-lineheight = 1.75;
+zh_cn.sans-lineheight-adjust = 1;
+zh_cn.mono-lineheight-adjust = 1;
 
 # Traditional Chinese apparently is almost always printed as serif (the exception being on-screen).
 zh_tw.serif = 'AR PL UMing TW', ARPLUMingTW, serif;
@@ -161,6 +178,9 @@ zh_tw.fontsize-adjust = 1.25;
 zh_tw.sans-xheight-adjust = 1;
 zh_tw.mono-xheight-adjust = 0.781;
 zh_tw.base-lineheight = 1.5;
+# dummy values
+zh_tw.sans-lineheight-adjust *use western.sans-lineheight-adjust;
+zh_tw.mono-lineheight-adjust *use western.mono-lineheight-adjust;
 </xsl:param>
 
 

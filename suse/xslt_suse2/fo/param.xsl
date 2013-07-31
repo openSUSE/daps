@@ -136,7 +136,7 @@ task before
 <xsl:param name="body.start.indent" select="'0'"/>
 
 <xsl:param name="draft.watermark.image"><xsl:value-of select="$styleroot"/>images/draft.svg</xsl:param>
-
+<xsl:param name="line-height" select="concat($base-lineheight, 'em')"/>
 
 <!-- 20. Font Families ========================================== -->
 
@@ -260,6 +260,21 @@ task before
     <xsl:with-param name="property.type" select="'number'"/>
   </xsl:call-template>
 </xsl:param>
+
+<xsl:param name="mono-lineheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans-lineheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="sans-lineheight-adjust">
+  <xsl:call-template name="get.list.property">
+    <xsl:with-param name="property" select="'sans-lineheight-adjust'"/>
+    <xsl:with-param name="property.type" select="'number'"/>
+  </xsl:call-template>
+</xsl:param>
+
 
 <!-- 24. EBNF =================================================== -->
 
