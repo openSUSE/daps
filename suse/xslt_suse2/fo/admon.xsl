@@ -104,7 +104,7 @@
                     provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:block text-align="end" padding-before="3mm" padding-after="3mm">
+            <fo:block text-align="end" padding-before="2mm" padding-after="2mm">
               <fo:instream-foreign-object content-width="{$graphic.width}mm">
                 <xsl:call-template name="admon.symbol">
                   <xsl:with-param name="color" select="$color"/>
