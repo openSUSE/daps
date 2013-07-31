@@ -77,7 +77,9 @@
 
 
 <!-- 12. Cross References ======================================= -->
-
+<xsl:attribute-set name="xref.properties" 
+                   use-attribute-sets="italicized dark-green"/>
+  
 
 <!-- 13. Lists ================================================== -->
 
@@ -316,9 +318,9 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="italicized.noreplacement">
-  <xsl:attribute name="font-weight">
+  <xsl:attribute name="font-style">
     <xsl:choose>
-      <xsl:when test="$enable-italic != 1">italic</xsl:when>
+      <xsl:when test="$enable-italic = 1">italic</xsl:when>
       <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -363,5 +365,6 @@
     <xsl:otherwise>&dark-green;</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
 
 </xsl:stylesheet>
