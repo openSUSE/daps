@@ -260,5 +260,31 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="title.xref">
+  <xsl:param name="target" select="."/>
+  <xsl:choose>
+    <xsl:when test="local-name($target) = 'figure'
+                    or local-name($target) = 'example'
+                    or local-name($target) = 'equation'
+                    or local-name($target) = 'table'
+                    or local-name($target) = 'dedication'
+                    or local-name($target) = 'acknowledgements'
+                    or local-name($target) = 'preface'
+                    or local-name($target) = 'bibliography'
+                    or local-name($target) = 'glossary'
+                    or local-name($target) = 'index'
+                    or local-name($target) = 'setindex'
+                    or local-name($target) = 'colophon'">
+      <xsl:call-template name="gentext.startquote"/>
+      <xsl:apply-templates select="$target" mode="title.markup"/>
+      <xsl:call-template name="gentext.endquote"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <fo:inline> <!-- Don't italicize here. -->
+        <xsl:apply-templates select="$target" mode="title.markup"/>
+      </fo:inline>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>
