@@ -188,8 +188,7 @@
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <xsl:template match="command">
-  <xsl:call-template name="inline.boldmonoseq">
-  </xsl:call-template>
+  <xsl:call-template name="inline.boldmonoseq"/>
 </xsl:template>
 
 <xsl:template match="keycap">
