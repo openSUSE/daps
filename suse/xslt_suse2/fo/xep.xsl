@@ -28,8 +28,6 @@
         </rx:bookmark>
       </xsl:if>
     
-      <xsl:message>################### xep</xsl:message>
-    
       <xsl:if test="contains($toc.params, 'toc')
                     and set|book|part|reference|section|sect1|refentry
                         |article|topic|bibliography|glossary|chapter
@@ -44,6 +42,5 @@
       </xsl:if>
       <xsl:apply-templates select="*" mode="xep.outline"/>
   </xsl:template>
-  
   
 </xsl:stylesheet>
