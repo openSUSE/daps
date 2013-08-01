@@ -92,6 +92,7 @@
 <xsl:param name="glossary.as.blocks" select="1"/>
 
 <!-- 17. Miscellaneous ========================================== -->
+<xsl:param name="bookmarks.collapse" select="0"/>
 <xsl:param name="hyphenate.verbatim" select="'1'"/>
 <xsl:param name="variablelist.as.blocks" select="1"/>
 <xsl:param name="formal.title.placement">
