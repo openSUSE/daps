@@ -39,28 +39,10 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="corpauthor" mode="chapter.titlepage.recto.auto.mode">
+<xsl:template match="author|corpauthor|authorgroup" mode="chapter.titlepage.recto.auto.mode">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
     space-after="0.5em" font-size="&small;pt" font-family="{$title.fontset}">
-    <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
-  </fo:block>
-</xsl:template>
-
-<xsl:template match="authorgroup" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xsl:use-attribute-sets="chapter.titlepage.recto.style"
-    space-before="0.5em" space-after="0.5em" font-size="&small;pt"
-    font-family="{$title.fontset}">
-    <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
-  </fo:block>
-</xsl:template>
-
-<xsl:template match="author" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xsl:use-attribute-sets="chapter.titlepage.recto.style"
-    space-before="0.5em" space-after="0.5em" font-size="&small;pt"
-    font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
@@ -72,7 +54,6 @@
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
-
 
 <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
@@ -254,6 +235,100 @@
   <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="bibliographyinfo/itermset"/>
   <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="docinfo/itermset"/>
   <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="info/itermset"/>
+</xsl:template>
+
+<xsl:template match="title" mode="article.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="article.titlepage.recto.style"
+    keep-with-next.within-column="always">
+    <xsl:call-template name="component.title">
+      <xsl:with-param name="node" select="ancestor-or-self::article[1]"/>
+    </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="author|corpauthor|authorgroup"
+  mode="article.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xsl:use-attribute-sets="article.titlepage.recto.style" space-before="0.5em"
+  font-size="&x-large;pt">
+    <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="title" mode="set.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="set.titlepage.recto.style" font-size="&ultra-large;pt"
+    space-before="&columnfragment;mm" font-weight="bold"
+    font-family="{$title.fontset}">
+    <xsl:call-template name="division.title">
+      <xsl:with-param name="node" select="ancestor-or-self::set[1]"/>
+    </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="title" mode="book.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&ultra-large;pt" space-before="&columnfragment;mm"
+    font-family="{$title.fontset}">
+    <xsl:call-template name="division.title">
+      <xsl:with-param name="node" select="ancestor-or-self::book[1]"/>
+    </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="subtitle" mode="book.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.recto.style"
+    font-size="&super-large;pt"
+    space-before="&gutterfragment;mm" font-family="{$title.fontset}">
+    <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="author|corpauthor|authorgroup" mode="book.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&large;pt"
+    keep-with-next.within-column="always" space-before="&columnfragment;mm"
+    font-weight="normal">
+    <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="title" mode="book.titlepage.verso.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
+    font-size="&x-large;" font-family="{$title.fontset}">
+  <xsl:call-template name="book.verso.title"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="legalnotice" mode="book.titlepage.verso.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.verso.style" font-size="&small;pt">
+    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="title" mode="part.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&super-large;pt" space-before="&columnfragment;mm"
+    font-family="{$title.fontset}">
+    <xsl:call-template name="division.title">
+      <xsl:with-param name="node" select="ancestor-or-self::part[1]"/>
+    </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="subtitle" mode="part.titlepage.recto.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement
+    italicized.noreplacement" font-size="&xxx-large;pt"
+    space-before="&gutter;mm" font-family="{$title.fontset}">
+    <xsl:apply-templates select="." mode="part.titlepage.recto.mode"/>
+  </fo:block>
 </xsl:template>
 
 </xsl:stylesheet>
