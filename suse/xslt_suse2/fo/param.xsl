@@ -103,10 +103,10 @@ table before
 procedure before
 task before
 </xsl:param>
-<xsl:param name="menuchoice.separator" select ="' › '"/>
-<xsl:param name="menuchoice.menu.separator" select ="' › '"/>
-<xsl:param name="menuchoice.separator.rl" select ="' ‹ '"/>
-<xsl:param name="menuchoice.menu.separator.rl" select ="' ‹ '"/>
+<xsl:param name="menuchoice.separator" select ="' &#9658; '"/>
+<xsl:param name="menuchoice.menu.separator" select ="' &#9658; '"/>
+<xsl:param name="menuchoice.separator.rl" select ="' &#9668; '"/>
+<xsl:param name="menuchoice.menu.separator.rl" select ="' &#9668; '"/>
 <xsl:param name="shade.verbatim" select="1"/>
 
 
