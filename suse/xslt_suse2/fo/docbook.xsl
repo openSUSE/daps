@@ -55,6 +55,6 @@
   <xsl:include href="../common/navigation.xsl"/>
 
   <xsl:include href="fop1.xsl"/>
-
+  <xsl:include href="xep.xsl"/>
 
 </xsl:stylesheet>
