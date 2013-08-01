@@ -54,4 +54,7 @@
   <xsl:include href="../common/titles.xsl"/>
   <xsl:include href="../common/navigation.xsl"/>
 
+  <xsl:include href="fop1.xsl"/>
+
+
 </xsl:stylesheet>
