@@ -75,4 +75,136 @@
     <xsl:apply-templates select="."/>
   </xsl:template>
 
+<!-- ================ -->
+
+  <xsl:template name="create.linkto.other.book">
+    <xsl:param name="target"/>
+    <xsl:variable name="refelem" select="local-name($target)"/>
+    <xsl:variable name="target.article"
+      select="$target/ancestor-or-self::article"/>
+    <xsl:variable name="target.book"
+      select="$target/ancestor-or-self::book"/>
+
+    <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
+
+    <!--<xsl:message>create.linkto.other.book:
+    linkend: <xsl:value-of select="@linkend"/>
+    refelem: <xsl:value-of select="$refelem"/>
+    target:  <xsl:value-of select="concat(count($target), ':',
+      name($target))"/>
+    target/@id:  <xsl:value-of select="$target/@id"/>
+    target.article: <xsl:value-of select="count($target.article)"/>
+    target.book: <xsl:value-of select="count($target.book)"/>
+  </xsl:message>-->
+
+    <span>
+      <xsl:apply-templates select="$target" mode="xref-to">
+        <xsl:with-param name="referrer" select="."/>
+        <xsl:with-param name="xrefstyle">
+          <xsl:choose>
+            <xsl:when test="$refelem = 'chapter' or 
+                            $refelem = 'appendix'"
+                          >number</xsl:when>
+            <xsl:otherwise>nonumber</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:apply-templates>
+
+      <xsl:text>, </xsl:text>
+      <xsl:if test="$target/self::sect1 or
+                    $target/self::sect2 or
+                    $target/self::sect3 or
+                    $target/self::sect4">
+        <xsl:variable name="hierarchy.node"
+          select="($target/ancestor-or-self::chapter |
+                   $target/ancestor-or-self::appendix |
+                   $target/ancestor-or-self::preface)[1]"/>
+        <xsl:if test="$hierarchy.node">
+          <xsl:apply-templates select="$hierarchy.node" mode="xref-to">
+            <xsl:with-param name="referrer" select="."/>
+            <!--<xsl:with-param name="xrefstyle">select: labelnumber title</xsl:with-param>-->
+          </xsl:apply-templates>
+          <xsl:text>, </xsl:text>
+        </xsl:if>
+      </xsl:if>
+
+      <em>
+        <xsl:choose>
+          <xsl:when test="$target.article">
+            <xsl:apply-templates
+              select="$target.article/title|$target.article/articleinfo/title"
+              mode="xref-to"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="$target.book" mode="xref-to"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </em>
+    </span>
+  </xsl:template>
+
+<xsl:template match="xref" name="xref">
+  <xsl:variable name="targets" select="key('id',@linkend)"/>
+  <xsl:variable name="target" select="$targets[1]"/>
+  <xsl:variable name="refelem" select="local-name($target)"/>
+  <xsl:variable name="target.book" select="($target/ancestor-or-self::article|$target/ancestor-or-self::book)[1]"/>
+  <xsl:variable name="this.book" select="(ancestor-or-self::article|ancestor-or-self::book)[1]"/>
+  <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
+  <xsl:variable name="xref.in.samebook">
+    <xsl:call-template name="is.xref.in.samebook">
+      <xsl:with-param name="target" select="$target"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!--<xsl:if test="$this.book/@id != $target.book/@id">-->
+  <!--<xsl:message>-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ xref.in.samebook: <xsl:value-of select="$xref.in.samebook"/>
+ linkend:        <xsl:value-of select="@linkend"/>
+ count(targets): <xsl:value-of select="count($targets)"/>
+ target:         <xsl:value-of select="name($target)"/>
+ <!-\-refelem:        <xsl:value-of select="$refelem"/>-\->
+ article         <xsl:value-of select="count($target/ancestor-or-self::article)"/>
+ article-title   <xsl:value-of
+   select="$target/ancestor-or-self::article/title"/>
+ $this.book/@id: <xsl:value-of select="$this.book/@id"/>
+ $target.book/@id: <xsl:value-of select="$target.book/@id"/>
+ $target/xml:base  <xsl:value-of select="$target/ancestor-or-self::*[1]/@xml:base"/>
+ $target.book/title          "<xsl:value-of select="$target.book/title"/>"
+ $target.book/bookinfo/title "<xsl:value-of select="$target.book/bookinfo/title"/>"
+</xsl:message>-->
+ <!--</xsl:if>-->
+
+  <xsl:call-template name="check.id.unique">
+    <xsl:with-param name="linkend" select="@linkend"/>
+  </xsl:call-template>
+
+  <xsl:choose>
+    <xsl:when test="$xref.in.samebook != 0 or 
+                    /set/@id=$rootid or
+                    /article/@id=$rootid">
+       <!-- An xref that stays inside the current book or when $rootid
+         pointing to the root element, then use the defaults -->
+       <xsl:apply-imports/>
+    </xsl:when>
+    <xsl:otherwise>
+          <!-- A reference into another book -->
+          <xsl:variable name="target.chapandapp" 
+                        select="$target/ancestor-or-self::chapter[@lang!='']
+                                | $target/ancestor-or-self::appendix[@lang!='']"/>
+          
+          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and 
+                        $target.chapandapp/@lang != $this.book/@lang">
+            <xsl:message>WARNING: The xref '<xsl:value-of 
+            select="@linkend"/>' points to a chapter (id='<xsl:value-of 
+              select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
+          </xsl:if>
+          
+          <xsl:call-template name="create.linkto.other.book">
+            <xsl:with-param name="target" select="$target"/>
+          </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 </xsl:stylesheet>

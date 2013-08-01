@@ -16,6 +16,9 @@
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:saxon="http://icl.com/saxon"
+  extension-element-prefixes="saxon"
+  exclude-result-prefixes="saxon"
   xmlns="http://www.w3.org/1999/xhtml">
 
 <!-- 0. Parameters for External Manipulation =================== -->
@@ -50,6 +53,14 @@
   <!-- Specifies the CSS style attribute that should be added to admonitions -->
   <xsl:param name="admon.style" select="''"/>
 
+
+ <xsl:param name="chunker.output.method"><!--  select="'saxon:xhtml'" -->
+   <xsl:choose>
+     <xsl:when test="contains(system-property('xsl:vendor'), 'SAXON')">saxon:xhtml</xsl:when>
+     <xsl:otherwise>html</xsl:otherwise>
+   </xsl:choose>
+   
+ </xsl:param>
 
 <!-- 2. Callouts ================================================ -->
   <xsl:param name="callout.graphics.path">static/images/</xsl:param>
@@ -234,5 +245,11 @@ task before
   <!-- Show arrows before and after a paragraph that applies only to a certain
        architecture? -->
   <xsl:param name="para.use.arch" select="1"/>
+
+  <!-- Output a warning, if chapter/@lang is different from book/@lang ?
+       0=no, 1=yes
+  -->
+<xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
+  
 
 </xsl:stylesheet>
