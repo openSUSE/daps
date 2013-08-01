@@ -279,4 +279,15 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template
+  match="guibutton|guiicon|guilabel|guimenu|guisubmenu|hardware|interface|
+         interfacedefinition|keysym|keycode|mousebutton|property|returnvalue|
+         structname|symbol|token|type">
+  <xsl:call-template name="inline.italicseq"/>
+</xsl:template>
+
+<xsl:template match="package">
+  <xsl:call-template name="inline.monoseq"/>
+</xsl:template>
+
 </xsl:stylesheet>
