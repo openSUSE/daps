@@ -159,29 +159,36 @@
               attribute set.-->
 
 <xsl:template match="appendix[@role='legal']">
-  <xsl:variable name="tree-fragment">
+  <xsl:variable name="rtf">
     <xsl:apply-imports/>
   </xsl:variable>
 
-  <xsl:variable name="converted-fragment" select="exsl:node-set($tree-fragment)/*"/>
-  <xsl:apply-templates select="$converted-fragment" mode="minor.adjustments"/>
+  <xsl:choose>
+    <xsl:when test="function-available('exsl:node-set')">
+      <xsl:variable name="converted-fragment" select="exsl:node-set($rtf)/*"/>
+      <xsl:apply-templates select="$converted-fragment" mode="span-in-block"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="$rtf"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
-<xsl:template match="node() | @*" mode="minor.adjustments">
+<xsl:template match="node() | @*" mode="span-in-block">
   <xsl:copy>
-    <xsl:apply-templates select="@* | node()" mode="minor.adjustments"/>
+    <xsl:apply-templates select="@* | node()" mode="span-in-block"/>
   </xsl:copy>
 </xsl:template>
 
 
-<xsl:template match="fo:flow/fo:block[1]" mode="minor.adjustments">
+<xsl:template match="fo:flow/fo:block[1]" mode="span-in-block">
   <!-- This template lets us add another block element around the appendix
        template, so we can set the span="all" attribute at the appropriate
        level. -->
 
     <fo:block span="all">
-      <xsl:apply-templates select="*" mode="minor.adjustments"/>
+      <xsl:apply-templates select="*" mode="span-in-block"/>
     </fo:block>
 </xsl:template>
 
