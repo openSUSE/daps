@@ -30,10 +30,11 @@
   exclude-result-prefixes="exsl">
 
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
-
-
+  
   <xsl:include href="param.xsl"/>
-
+  <xsl:include href="../common/titles.xsl"/>
+  <xsl:include href="../common/navigation.xsl"/>
+  
   <xsl:include href="autotoc.xsl"/>
   <xsl:include href="callout.xsl"/>
   <xsl:include href="xref.xsl"/>
@@ -51,8 +52,6 @@
   <xsl:include href="attributesets.xsl"/>
   <xsl:include href="lists.xsl"/>
   <xsl:include href="l10n.properties.xsl"/>
-  <xsl:include href="../common/titles.xsl"/>
-  <xsl:include href="../common/navigation.xsl"/>
 
   <xsl:include href="fop1.xsl"/>
   <xsl:include href="xep.xsl"/>
