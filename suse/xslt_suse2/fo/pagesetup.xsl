@@ -24,9 +24,6 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   exclude-result-prefixes="exsl">
 
-<xsl:param name="print.product" select="1"/>
-<xsl:param name="debug.fo" select="0"/>
-
 
 <xsl:template name="product">
   <xsl:variable name="productnumber"

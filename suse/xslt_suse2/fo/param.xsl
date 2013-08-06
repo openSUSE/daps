@@ -284,8 +284,16 @@ task before
 
 
 <!-- 26. Custom ================================================= -->
+
+<!-- Creates borders or other things to debug FO code-->
+<xsl:param name="debug.fo" select="0"/>
+  
 <!-- Saxon will fail if these parameters aren't declared. -->
 <xsl:param name="format.print" select="0"/>
+
+<!-- Include product information in footer -->
+<xsl:param name="print.product" select="1"/>
+
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
 <!-- Should navigation titles be displayed? 0=no, 1=yes
