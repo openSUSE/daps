@@ -115,7 +115,7 @@ task before
 
 <!-- 19. Pagination and General Styles ========================== -->
 <xsl:param name="paper.type" select="'A4'"/>
-<xsl:param name="double.sided" select="1"/>
+<xsl:param name="double.sided" select="0"/>
 <xsl:param name="force.blank.pages" select="0"/>
 
 <xsl:param name="page.margin.top" select="'19mm'"/>
