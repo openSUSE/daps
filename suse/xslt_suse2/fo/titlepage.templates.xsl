@@ -299,7 +299,7 @@
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
   <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
-    font-size="&x-large;" font-family="{$title.fontset}">
+    font-size="&x-large;pt" font-family="{$title.fontset}">
   <xsl:call-template name="book.verso.title"/>
   </fo:block>
 </xsl:template>
