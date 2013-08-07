@@ -267,10 +267,50 @@
   </fo:block>
 </xsl:template>
 
+
+  <xsl:template name="book.titlepage.recto">
+    <xsl:variable name="height">
+      <xsl:call-template name="get.value.from.unit">
+        <xsl:with-param name="string" select="$page.height"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="unit">
+      <xsl:call-template name="get.unit.from.unit">
+        <xsl:with-param name="string" select="$page.height"/>
+      </xsl:call-template>
+    </xsl:variable>
+  
+  <fo:block margin-top="{$height div $phi}{$unit}">
+    <xsl:choose>
+      <xsl:when test="bookinfo/title">
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+          select="bookinfo/title"/>
+      </xsl:when>
+      <xsl:when test="info/title">
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+          select="info/title"/>
+      </xsl:when>
+      <xsl:when test="title">
+        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+          select="title"/>
+      </xsl:when>
+    </xsl:choose>
+   </fo:block>
+    
+   <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+      select="(bookinfo/authorgroup|info/authorgroup)[1]"/>
+   <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+      select="(bookinfo/author|info/author)[1]"/>
+  
+    
+    
+  </xsl:template>
+  
+
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block text-align="left"
     xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
-    font-size="&ultra-large;pt" space-before="&columnfragment;mm"
+    font-size="&ultra-large;pt" 
     font-family="{$title.fontset}">
     <xsl:call-template name="division.title">
       <xsl:with-param name="node" select="ancestor-or-self::book[1]"/>
@@ -288,8 +328,8 @@
 </xsl:template>
 
 <xsl:template match="author|corpauthor|authorgroup" mode="book.titlepage.recto.auto.mode">
-  <fo:block 
-    xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&large;pt"
+  <fo:block text-align="left"
+    xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&xx-large;pt"
     keep-with-next.within-column="always" space-before="&columnfragment;mm"
     font-weight="normal">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
