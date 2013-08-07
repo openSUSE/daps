@@ -21,12 +21,6 @@
       </xsl:call-template>
     </xsl:variable>
     
-    <xsl:message>######## <xsl:value-of select="local-name()"
-    />
-      toc.params: <xsl:value-of select="$toc.params"/>
-    </xsl:message>
-    
-    
     <fo:bookmark internal-destination="{$id}">
       <xsl:attribute name="starting-state">
         <xsl:value-of select="$bookmarks.state"/>
