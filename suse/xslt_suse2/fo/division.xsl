@@ -30,7 +30,13 @@
   </xsl:variable>
 
   <fo:block keep-with-next.within-column="always"
-            hyphenate="false" start-indent="{&column; + &gutter;}mm">
+            hyphenate="false">
+    <xsl:if test="$node/ancestor::part">
+      <xsl:attribute name="start-indent">
+        <xsl:value-of select="&column; + &gutter;"/>
+        <xsl:text>mm</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:call-template name="title.part.split">
       <xsl:with-param name="node" select="."/>
     </xsl:call-template>
