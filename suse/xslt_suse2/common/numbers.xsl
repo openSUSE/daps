@@ -23,12 +23,15 @@
     <xsl:variable name="lasttwo" 
                   select="substring($string, string-length($string)-1, 2)"/>
     
-    <!--<xsl:message>get.numbers.from.unit:
+    <!--
+    <xsl:message>get.numbers.from.unit:
     string="<xsl:value-of select="$string"/>"
     lasttwo="<xsl:value-of select="$lasttwo"/>"
-    </xsl:message>-->
+    </xsl:message>
+    -->
     
     <xsl:choose>
+      <!-- These are the possible XSL-FO units -->
       <xsl:when test="$lasttwo = 'cm' or 
                       $lasttwo = 'em' or
                       $lasttwo = 'in' or
