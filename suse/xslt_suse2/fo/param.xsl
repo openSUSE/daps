@@ -186,7 +186,7 @@ task before
 <xsl:param name="body.font.family" select="$serif-stack"/>
 <!-- It is not helpful to set dingbat font family, as the symbol font is always
      included anyway -->
-<xsl:param name="dingbat.font.family" select="''">
+<xsl:param name="dingbat.font.family" select="''"/>
 <xsl:param name="sans.font.family" select="$sans-stack"/>
 <xsl:param name="title.font.family" select="$sans-stack"/>
 <xsl:param name="monospace.font.family" select="$mono-stack"/>
