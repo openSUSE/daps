@@ -21,16 +21,21 @@
   <xsl:template name="get.numbers.from.unit">
     <xsl:param name="string"/>
     <xsl:variable name="lasttwo" 
-                  select="substring($string, string-length($string)-2, 2)"/>
+                  select="substring($string, string-length($string)-1, 2)"/>
+    
+    <!--<xsl:message>get.numbers.from.unit:
+    string="<xsl:value-of select="$string"/>"
+    lasttwo="<xsl:value-of select="$lasttwo"/>"
+    </xsl:message>-->
     
     <xsl:choose>
       <xsl:when test="$lasttwo = 'cm' or 
+                      $lasttwo = 'em' or
                       $lasttwo = 'in' or
                       $lasttwo = 'mm' or
                       $lasttwo = 'pc' or
                       $lasttwo = 'pt' or
-                      $lasttwo = 'px' or
-                      $lasttwo = 'em'">
+                      $lasttwo = 'px'">
         <xsl:value-of select="substring-before($string, $lasttwo)"/>
       </xsl:when>
       <xsl:when test="contains($string, '%')">
