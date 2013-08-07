@@ -311,4 +311,6 @@ task before
 <!-- Golden ratio -->
 <xsl:variable name="phi" select="1.618"/>
 
+<xsl:param name="booktitlepage.bw.logo"    select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
+<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>  
 </xsl:stylesheet>
