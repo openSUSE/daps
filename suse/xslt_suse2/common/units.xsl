@@ -4,7 +4,7 @@
      Different templates dealing with numbers and units
    
    Named Templates:
-    * get.numbers.from.unit(string)
+    * get.value.from.unit(string)
       Returns the number of a string without the unit; for example,
       string would have 40mm, using this template will return 40.
 
@@ -18,7 +18,7 @@
   xmlns:exsl="http://exslt.org/common"
   exclude-result-prefixes="exsl">
   
-  <xsl:template name="get.numbers.from.unit">
+  <xsl:template name="get.value.from.unit">
     <xsl:param name="string"/>
     <xsl:variable name="lasttwo" 
                   select="substring($string, string-length($string)-1, 2)"/>
