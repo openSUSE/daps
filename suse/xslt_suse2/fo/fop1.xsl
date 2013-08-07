@@ -35,7 +35,6 @@
       |glossary|bibliography|index|setindex
       |refentry
       |sect1|sect2|sect3|sect4|sect5|section)">
-      <xsl:message>yes!!!</xsl:message>
       <fo:bookmark internal-destination="toc...{$id}">
         <fo:bookmark-title>
           <xsl:call-template name="gentext">
