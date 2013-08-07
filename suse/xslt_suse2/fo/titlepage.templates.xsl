@@ -279,6 +279,24 @@
         <xsl:with-param name="string" select="$page.height"/>
       </xsl:call-template>
     </xsl:variable>
+    <xsl:variable name="logo">
+      <xsl:call-template name="fo-external-image">
+        <xsl:with-param name="filename">
+          <xsl:choose>
+            <xsl:when test="$format.print != 0">
+              <xsl:value-of select="$booktitlepage.bw.logo"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$booktitlepage.color.logo"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+  
+  <!--<fo:block-container z-index="0" top="0em" line-height="0">
+    <fo:block>xxxxxxxxxxxxxxx</fo:block>
+  </fo:block-container>-->
   
   <fo:block margin-top="{$height div $phi}{$unit}">
     <xsl:choose>
@@ -302,8 +320,15 @@
    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
       select="(bookinfo/author|info/author)[1]"/>
   
-    
-    
+  <fo:block-container top="{$page.height} -94.5pt -5pt" 
+     left="{$page.margin.outer}"
+    absolute-position="fixed">
+    <fo:block>
+      <fo:external-graphic content-width="94.5pt" width="94.5pt"
+        src="{$logo}"/>
+    </fo:block> 
+  </fo:block-container>
+   
   </xsl:template>
   
 
