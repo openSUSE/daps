@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-   Purpose:
+<!--
+    Purpose:
      Different templates dealing with numbers and units
-   
-   Named Templates:
+
+    Named Templates:
     * get.value.from.unit(string)
       Returns the number of a string without the unit; for example,
       if a string contains "40mm", using this template will return 40.
@@ -12,9 +12,9 @@
       Returns the unit of the string; for example, if a string contains
       "40mm", using this template will return "mm".
 
-   Author:    Stefan Knorr <sknorr@suse.de>,
-              Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2013
+    Author:     Thomas Schraitle <toms@opensuse.org>,
+                Stefan Knorr <sknorr@suse.de>
+    Copyright:  2013
 
 -->
 <xsl:stylesheet version="1.0"
@@ -26,14 +26,14 @@
     <xsl:param name="string"/>
     <xsl:variable name="lasttwo" 
                   select="substring($string, string-length($string)-1, 2)"/>
-    
+
     <!--
     <xsl:message>get.numbers.from.unit:
     string="<xsl:value-of select="$string"/>"
     lasttwo="<xsl:value-of select="$lasttwo"/>"
     </xsl:message>
     -->
-    
+
     <xsl:choose>
       <!-- These are the possible XSL-FO units -->
       <xsl:when test="$lasttwo = 'cm' or 
@@ -74,5 +74,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
 </xsl:stylesheet>
