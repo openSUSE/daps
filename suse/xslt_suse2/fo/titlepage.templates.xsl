@@ -22,7 +22,7 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 <xsl:template match="title" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
     font-size="&super-large;pt">
     <xsl:call-template name="component.title">
@@ -32,7 +32,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="chapter.titlepage.recto.style italicized"
     font-size="&large;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -40,7 +40,7 @@
 </xsl:template>
 
 <xsl:template match="author|corpauthor|authorgroup" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
     space-after="0.5em" font-size="&small;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -48,7 +48,7 @@
 </xsl:template>
 
 <xsl:template match="othercredit" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="chapter.titlepage.recto.style" font-size="&small;pt"
     font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -56,7 +56,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -67,7 +67,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
       font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -75,7 +75,7 @@
 </xsl:template>
 
 <xsl:template match="corpauthor" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -83,7 +83,7 @@
 </xsl:template>
 
 <xsl:template match="authorgroup" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -91,7 +91,7 @@
 </xsl:template>
 
 <xsl:template match="author" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -99,7 +99,7 @@
 </xsl:template>
 
 <xsl:template match="othercredit" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -107,7 +107,7 @@
 </xsl:template>
 
 <xsl:template name="glossary.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="glossary.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -136,7 +136,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="glossdiv.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="glossdiv.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&xxx-large;pt"
     font-family="{$title.fontset}">
@@ -147,7 +147,7 @@
 </xsl:template>
 
 <xsl:template name="preface.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="preface.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -209,7 +209,7 @@
 </xsl:template>
 
 <xsl:template name="bibliography.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="bibliography.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -238,7 +238,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="article.titlepage.recto.style"
     keep-with-next.within-column="always">
     <xsl:call-template name="component.title">
@@ -249,7 +249,7 @@
 
 <xsl:template match="author|corpauthor|authorgroup"
   mode="article.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
   xsl:use-attribute-sets="article.titlepage.recto.style" space-before="0.5em"
   font-size="&x-large;pt">
     <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
@@ -257,7 +257,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="set.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="set.titlepage.recto.style" font-size="&ultra-large;pt"
     space-before="&columnfragment;mm" font-weight="bold"
     font-family="{$title.fontset}">
@@ -268,7 +268,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
     font-size="&ultra-large;pt" space-before="&columnfragment;mm"
     font-family="{$title.fontset}">
@@ -279,7 +279,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="book.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="book.titlepage.recto.style"
     font-size="&super-large;pt"
     space-before="&gutterfragment;mm" font-family="{$title.fontset}">
@@ -288,7 +288,7 @@
 </xsl:template>
 
 <xsl:template match="author|corpauthor|authorgroup" mode="book.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&large;pt"
     keep-with-next.within-column="always" space-before="&columnfragment;mm"
     font-weight="normal">
@@ -297,7 +297,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
     font-size="&x-large;pt" font-family="{$title.fontset}">
   <xsl:call-template name="book.verso.title"/>
@@ -305,14 +305,14 @@
 </xsl:template>
 
 <xsl:template match="legalnotice" mode="book.titlepage.verso.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="book.titlepage.verso.style" font-size="&small;pt">
     <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
   </fo:block>
 </xsl:template>
 
 <xsl:template match="title" mode="part.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
     font-size="&super-large;pt" space-before="&columnfragment;mm"
     font-family="{$title.fontset}">
@@ -323,7 +323,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="part.titlepage.recto.auto.mode">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  <fo:block 
     xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement
     italicized.noreplacement" font-size="&xxx-large;pt"
     space-before="&gutter;mm" font-family="{$title.fontset}">
