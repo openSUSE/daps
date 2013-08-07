@@ -308,5 +308,7 @@ task before
 -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
+<!-- Golden ratio -->
+<xsl:variable name="phi" select="1.618"/>
 
 </xsl:stylesheet>
