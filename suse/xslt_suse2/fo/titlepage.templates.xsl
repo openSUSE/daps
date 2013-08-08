@@ -293,10 +293,33 @@
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
+    <xsl:variable name="tail">
+      <xsl:call-template name="fo-external-image">
+        <xsl:with-param name="filename">
+          <xsl:choose>
+            <xsl:when test="$format.print != 0">
+              <xsl:value-of select="concat($styleroot,
+                'images/logos/suse-logo-tail.svg')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($styleroot,
+                'images/logos/suse-logo-tail.svg')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
   
-  <!--<fo:block-container z-index="0" top="0em" line-height="0">
-    <fo:block>xxxxxxxxxxxxxxx</fo:block>
-  </fo:block-container>-->
+    <fo:block-container text-align="right"
+      top="0pt"
+     left="0pt"
+     absolute-position="fixed">
+    <fo:block>
+      <fo:external-graphic content-width="300pt" width="300pt"
+        src="{$tail}"/>
+    </fo:block> 
+  </fo:block-container>
+    
   
   <fo:block margin-top="{$height div $phi}{$unit}">
     <xsl:choose>
