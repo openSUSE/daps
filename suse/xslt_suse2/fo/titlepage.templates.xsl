@@ -373,7 +373,7 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="author|corpauthor|authorgroup" mode="book.titlepage.recto.auto.mode">
+<xsl:template match="author|corpauthor" mode="book.titlepage.recto.auto.mode">
   <fo:block text-align="left"
     xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&xx-large;pt"
     keep-with-next.within-column="always" space-before="&columnfragment;mm"
@@ -381,6 +381,28 @@
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
+
+<xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
+  <xsl:param name="authors" select="author|editor|othercredit"/>
+  
+  <fo:block text-align="left"
+    xsl:use-attribute-sets="book.titlepage.recto.style" 
+    font-size="&xx-large;pt"
+    keep-with-next.within-column="always" 
+    space-before="&columnfragment;mm"
+    font-weight="normal">
+  <xsl:for-each select="$authors">
+    <xsl:call-template name="person.name">
+      <xsl:with-param name="node" select="current()"/>
+    </xsl:call-template>
+    <xsl:if test="position() &lt; last()">
+      <xsl:text> &#x2022; </xsl:text>
+    </xsl:if>
+  </xsl:for-each>
+  </fo:block>
+</xsl:template>
+
+
 
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
   <fo:block 
