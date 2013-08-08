@@ -411,11 +411,12 @@
 
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
   <xsl:message>##############</xsl:message>
-  <fo:block text-align="left"
-    space-after="1.25pt"
-    background-color="&dark-green;" color="white"
+  <fo:block text-align="left" border-top="1pt solid &dark-green;"
+    padding-top="10pt"
+    font-weight="normal" color="&dark-green;"
+    space-after="&xxx-large;pt"
     xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
-    font-size="&xxx-large;pt" >
+    font-size="&ultra-large;pt" >
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
