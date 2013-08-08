@@ -416,7 +416,7 @@
     font-weight="normal" color="&dark-green;"
     space-after="&xxx-large;pt"
     xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
-    font-size="&ultra-large;pt" >
+    font-size="&super-large;pt" >
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
