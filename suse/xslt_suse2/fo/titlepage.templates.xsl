@@ -385,16 +385,19 @@
 <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
   <xsl:param name="authors" select="author|editor|othercredit"/>
   
-  <fo:block text-align="left"
+  <fo:block text-align="left" hyphenate="false"
     xsl:use-attribute-sets="book.titlepage.recto.style" 
     font-size="&xx-large;pt"
     keep-with-next.within-column="always" 
     space-before="&columnfragment;mm"
     font-weight="normal">
   <xsl:for-each select="$authors">
-    <xsl:call-template name="person.name">
-      <xsl:with-param name="node" select="current()"/>
-    </xsl:call-template>
+    <xsl:variable name="author">
+      <xsl:call-template name="person.name">
+       <xsl:with-param name="node" select="current()"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate($author, ' ', '&#xa0;')"/>
     <xsl:if test="position() &lt; last()">
       <xsl:text> &#x2022; </xsl:text>
     </xsl:if>
