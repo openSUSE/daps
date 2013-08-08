@@ -318,9 +318,20 @@
         width="{(6 * &column;)+(4 * &gutter;)}mm" src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
+  
+  <fo:block-container absolute-position="fixed"
+     top="2cm" left="{$page.margin.outer}">
+    <fo:block>
+    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+      select="(bookinfo/author|info/author)[1]"/>
+    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+      select="(bookinfo/authorgroup|info/authorgroup)[1]"/>
+    </fo:block>
+  </fo:block-container>
+    
 
 
-  <fo:block margin-top="{$height div $phi}{$unit}">
+  <fo:block margin-top="{$height div $phi}{$unit} - &ultra-large;pt">
     <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
       select="bookinfo/productname[1]"/>
     
@@ -340,10 +351,6 @@
     </xsl:choose>
    </fo:block>
      
-   <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-      select="(bookinfo/authorgroup|info/authorgroup)[1]"/>
-   <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-      select="(bookinfo/author|info/author)[1]"/>
   
   <fo:block-container top="{$page.height} -94.5pt -5pt" 
      left="{$page.margin.outer}"
@@ -358,9 +365,12 @@
   
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="left" role="tomstitle"
+  <fo:block 
+    text-align="left" role="tomstitle" line-height="1.2"
+     hyphenate="false"
     xsl:use-attribute-sets="book.titlepage.recto.style
     sans.bold.noreplacement title.name.color"
+    font-weight="normal"
     font-size="{(&ultra-large; + &super-large;) div 2}pt" 
     font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
