@@ -319,7 +319,11 @@
     </fo:block>
   </fo:block-container>
 
+
   <fo:block margin-top="{$height div $phi}{$unit}">
+    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+      select="bookinfo/productname[1]"/>
+    
     <xsl:choose>
       <xsl:when test="bookinfo/title">
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
@@ -335,7 +339,7 @@
       </xsl:when>
     </xsl:choose>
    </fo:block>
-    
+     
    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
       select="(bookinfo/authorgroup|info/authorgroup)[1]"/>
    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
@@ -405,7 +409,16 @@
   </fo:block>
 </xsl:template>
 
-
+<xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
+  <xsl:message>##############</xsl:message>
+  <fo:block text-align="left"
+    space-after="1.25pt"
+    background-color="&dark-green;" color="white"
+    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&xxx-large;pt" >
+    <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+  </fo:block>
+</xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
   <fo:block 
