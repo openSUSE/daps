@@ -257,9 +257,8 @@
 </xsl:template>
 
 <xsl:template match="title" mode="set.titlepage.recto.auto.mode">
-  <fo:block 
-    xsl:use-attribute-sets="set.titlepage.recto.style" font-size="&ultra-large;pt"
-    space-before="&columnfragment;mm" font-weight="bold"
+  <fo:block xsl:use-attribute-sets="set.titlepage.recto.style"
+    font-size="&ultra-large;pt" space-before="&columnfragment;mm"
     font-family="{$title.fontset}">
     <xsl:call-template name="division.title">
       <xsl:with-param name="node" select="ancestor-or-self::set[1]"/>
@@ -314,8 +313,10 @@
     <fo:block-container top="-2mm" left="0" text-align="right"
       absolute-position="fixed">
     <fo:block>
-      <fo:external-graphic content-width="{(6 * &column;)+(4 * &gutter;)}mm"
-        width="{(6 * &column;)+(4 * &gutter;)}mm" src="{$cover-image}"/>
+      <!-- Almost golden ratio... -->
+      <fo:external-graphic content-width="{(&column; * 5) + (&gutter; * 4)}mm"
+        width="{(&column; * 5) + (&gutter; * 4)}mm"
+        src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
   
@@ -422,8 +423,8 @@
 </xsl:template>
 
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
-  
-  <fo:block text-align="left" border-top="1pt solid &dark-green;"
+
+  <fo:block text-align="left"
     padding-top="10pt"
     font-weight="normal" color="&dark-green;"
     space-after="&xxx-large;pt"
