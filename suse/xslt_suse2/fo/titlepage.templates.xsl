@@ -293,13 +293,13 @@
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="tail">
+    <xsl:variable name="cover-image">
       <xsl:call-template name="fo-external-image">
         <xsl:with-param name="filename">
           <xsl:choose>
             <xsl:when test="$format.print != 0">
               <xsl:value-of select="concat($styleroot,
-                'images/logos/suse-logo-tail.svg')"/>
+                'images/logos/suse-logo-tail-bw.svg')"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="concat($styleroot,
@@ -309,18 +309,16 @@
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
-  
-    <fo:block-container text-align="right"
-      top="0pt"
-     left="0pt"
-     absolute-position="fixed">
+
+    <!-- top=-2mm, because 0 is apparently not enough for FOP. -->
+    <fo:block-container top="-2mm" left="0" text-align="right"
+      absolute-position="fixed">
     <fo:block>
-      <fo:external-graphic content-width="300pt" width="300pt"
-        src="{$tail}"/>
-    </fo:block> 
+      <fo:external-graphic content-width="{(6 * &column;)+(4 * &gutter;)}mm"
+        width="{(6 * &column;)+(4 * &gutter;)}mm" src="{$cover-image}"/>
+    </fo:block>
   </fo:block-container>
-    
-  
+
   <fo:block margin-top="{$height div $phi}{$unit}">
     <xsl:choose>
       <xsl:when test="bookinfo/title">
