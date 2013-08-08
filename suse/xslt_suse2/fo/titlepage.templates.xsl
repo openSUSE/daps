@@ -332,7 +332,7 @@
     
 
 
-  <fo:block margin-top="{$height div $phi}{$unit} - &ultra-large;pt">
+  <fo:block margin-top="{$height div $phi}{$unit}">
     <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
       select="bookinfo/productname[1]"/>
     
@@ -425,12 +425,15 @@
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
 
   <fo:block text-align="left"
+    hyphenate="false" line-height="1.15"
     padding-top="10pt"
     font-weight="normal" color="&dark-green;"
     space-after="&xxx-large;pt"
     xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
     font-size="&super-large;pt" >
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="../productnumber" mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
 
