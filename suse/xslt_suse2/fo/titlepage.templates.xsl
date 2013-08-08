@@ -383,7 +383,7 @@
 </xsl:template>
 
 <xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
-  <xsl:param name="authors" select="author|editor|othercredit"/>
+  <xsl:param name="authors" select="author"/>
   
   <fo:block text-align="left" hyphenate="false"
     xsl:use-attribute-sets="book.titlepage.recto.style" 
