@@ -358,13 +358,15 @@
   
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="left"
-    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
+  <fo:block text-align="left" role="tomstitle"
+    xsl:use-attribute-sets="book.titlepage.recto.style
+    sans.bold.noreplacement title.name.color"
     font-size="&ultra-large;pt" 
     font-family="{$title.fontset}">
-    <xsl:call-template name="division.title">
+    <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+    <!--<xsl:call-template name="division.title">
       <xsl:with-param name="node" select="ancestor-or-self::book[1]"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
   </fo:block>
 </xsl:template>
 
@@ -410,7 +412,7 @@
 </xsl:template>
 
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
-  <xsl:message>##############</xsl:message>
+  
   <fo:block text-align="left" border-top="1pt solid &dark-green;"
     padding-top="10pt"
     font-weight="normal" color="&dark-green;"
