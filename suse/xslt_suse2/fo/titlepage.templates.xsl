@@ -361,7 +361,7 @@
   <fo:block text-align="left" role="tomstitle"
     xsl:use-attribute-sets="book.titlepage.recto.style
     sans.bold.noreplacement title.name.color"
-    font-size="&ultra-large;pt" 
+    font-size="{(&ultra-large; + &super-large;) div 2}pt" 
     font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
     <!--<xsl:call-template name="division.title">
