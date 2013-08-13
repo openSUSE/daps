@@ -43,6 +43,7 @@
   <xsl:include href="table.xsl"/>
   <xsl:include href="htmltbl.xsl"/>
   <xsl:include href="inline.xsl"/>
+  <xsl:include href="fo.xsl"/>
   <xsl:include href="division.xsl"/>
   <xsl:include href="admon.xsl"/>
   <xsl:include href="component.xsl"/>
