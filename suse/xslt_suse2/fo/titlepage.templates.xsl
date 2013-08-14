@@ -267,117 +267,125 @@
 </xsl:template>
 
 
-  <xsl:template name="book.titlepage.recto">
-    <xsl:variable name="height">
-      <xsl:call-template name="get.value.from.unit">
-        <xsl:with-param name="string" select="$page.height"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="unit">
-      <xsl:call-template name="get.unit.from.unit">
-        <xsl:with-param name="string" select="$page.height"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="logo">
-      <xsl:call-template name="fo-external-image">
-        <xsl:with-param name="filename">
-          <xsl:choose>
-            <xsl:when test="$format.print != 0">
-              <xsl:value-of select="$booktitlepage.bw.logo"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="$booktitlepage.color.logo"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="cover-image">
-      <xsl:call-template name="fo-external-image">
-        <xsl:with-param name="filename">
-          <xsl:choose>
-            <xsl:when test="$format.print != 0">
-              <xsl:value-of select="concat($styleroot,
-                'images/logos/suse-logo-tail-bw.svg')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="concat($styleroot,
-                'images/logos/suse-logo-tail.svg')"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:variable>
+<xsl:template name="book.titlepage.recto">
+  <xsl:variable name="height">
+    <xsl:call-template name="get.value.from.unit">
+      <xsl:with-param name="string" select="$page.height"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="logo.width" select="&column;"/>
+  <xsl:variable name="margin.start">
+    <xsl:call-template name="get.value.from.unit">
+      <xsl:with-param name="string" select="$page.margin.outer"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="unit">
+    <xsl:call-template name="get.unit.from.unit">
+      <xsl:with-param name="string" select="$page.height"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="logo">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename">
+        <xsl:choose>
+          <xsl:when test="$format.print != 0">
+            <xsl:value-of select="$booktitlepage.bw.logo"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$booktitlepage.color.logo"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="cover-image">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename">
+        <xsl:choose>
+          <xsl:when test="$format.print != 0">
+            <xsl:value-of select="concat($styleroot,
+              'images/logos/suse-logo-tail-bw.svg')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($styleroot,
+              'images/logos/suse-logo-tail.svg')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
 
-    <!-- top=-2mm, because 0 is apparently not enough for FOP. -->
-    <fo:block-container top="-2mm" left="0" text-align="right"
-      absolute-position="fixed">
+  <fo:block-container top="{(2 - &goldenratio;) * $height}{$unit}" left="0"
+    text-align="right"
+    absolute-position="fixed">
     <fo:block>
-      <!-- Almost golden ratio... -->
+    <!-- Almost golden ratio... -->
       <fo:external-graphic content-width="{(&column; * 5) + (&gutter; * 4)}mm"
         width="{(&column; * 5) + (&gutter; * 4)}mm"
         src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
-  
-  <fo:block-container absolute-position="fixed"
-     top="2cm" left="{$page.margin.outer}">
+
+  <fo:block-container top="{$page.margin.top}"
+    left="{$margin.start - ((400 div 3395) * $logo.width)}mm" absolute-position="fixed">
+    <!-- The above calculation is not complete voodoo - the SUSE logo SVG is
+         3395px wide, the first "S" of SUSE starts at 602px and the output width
+         of the logo is $logo.width mm. Effectively, the Geeko tail ends up on
+         the page border. -->
     <fo:block>
-    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-      select="(bookinfo/author|info/author)[1]"/>
-    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-      select="(bookinfo/authorgroup|info/authorgroup)[1]"/>
+      <fo:external-graphic content-width="{$logo.width}mm" width="{$logo.width}mm"
+        src="{$logo}"/>
     </fo:block>
   </fo:block-container>
-    
 
-
-  <fo:block margin-top="{$height div $phi}{$unit}">
-    <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-      select="bookinfo/productname[1]"/>
-    
-    <xsl:choose>
-      <xsl:when test="bookinfo/title">
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-          select="bookinfo/title"/>
-      </xsl:when>
-      <xsl:when test="info/title">
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-          select="info/title"/>
-      </xsl:when>
-      <xsl:when test="title">
-        <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-          select="title"/>
-      </xsl:when>
-    </xsl:choose>
-   </fo:block>
-     
-  
-  <fo:block-container top="{$page.height} -94.5pt -5pt" 
-     left="{$page.margin.outer}"
+  <fo:block-container bottom="{$height div &goldenratio;}{$unit}" left="0"
     absolute-position="fixed">
-    <fo:block>
-      <fo:external-graphic content-width="94.5pt" width="94.5pt"
-        src="{$logo}"/>
-    </fo:block> 
+    <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed">
+      <fo:table-column column-number="1" column-width="100%"/>
+
+      <fo:table-body>
+        <fo:table-row>
+          <fo:table-cell display-align="after"
+            height="{$height * (2 - &goldenratio;)}{$unit}" >
+            <fo:block padding-start="&column;mm">
+              <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
+              <fo:block width="{(&column; * 6) + (&gutter; * 5)}mm"
+                padding-before="&columnfragment;mm"
+                padding-after="&columnfragment;mm">
+            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+              select="bookinfo/productname[1]" vertical-align="bottom"/>
+            <xsl:choose>
+              <xsl:when test="bookinfo/title">
+                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                  select="bookinfo/title"/>
+              </xsl:when>
+              <xsl:when test="info/title">
+                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                  select="info/title"/>
+              </xsl:when>
+              <xsl:when test="title">
+                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                  select="title"/>
+              </xsl:when>
+            </xsl:choose>
+              </fo:block>
+            </fo:block>
+          </fo:table-cell>
+        </fo:table-row>
+      </fo:table-body>
+    </fo:table>
   </fo:block-container>
-   
-  </xsl:template>
-  
+
+</xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block 
-    text-align="left" role="tomstitle" line-height="1.2"
-     hyphenate="false"
+  <fo:block text-align="left" line-height="1.2" hyphenate="false"
     xsl:use-attribute-sets="book.titlepage.recto.style
     sans.bold.noreplacement title.name.color"
     font-weight="normal"
     font-size="{(&ultra-large; + &super-large;) div 2}pt" 
     font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
-    <!--<xsl:call-template name="division.title">
-      <xsl:with-param name="node" select="ancestor-or-self::book[1]"/>
-    </xsl:call-template>-->
   </fo:block>
 </xsl:template>
 
@@ -390,47 +398,11 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="author|corpauthor" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="left"
-    xsl:use-attribute-sets="book.titlepage.recto.style" font-size="&xx-large;pt"
-    keep-with-next.within-column="always" space-before="&columnfragment;mm"
-    font-weight="normal">
-    <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
-  </fo:block>
-</xsl:template>
-
-<xsl:template match="authorgroup" mode="book.titlepage.recto.auto.mode">
-  <xsl:param name="authors" select="author"/>
-  
-  <fo:block text-align="left" hyphenate="false"
-    xsl:use-attribute-sets="book.titlepage.recto.style" 
-    font-size="&xx-large;pt"
-    keep-with-next.within-column="always" 
-    space-before="&columnfragment;mm"
-    font-weight="normal">
-  <xsl:for-each select="$authors">
-    <xsl:variable name="author">
-      <xsl:call-template name="person.name">
-       <xsl:with-param name="node" select="current()"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:value-of select="translate($author, ' ', '&#xa0;')"/>
-    <xsl:if test="position() &lt; last()">
-      <xsl:text> &#x2022; </xsl:text>
-    </xsl:if>
-  </xsl:for-each>
-  </fo:block>
-</xsl:template>
-
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
-
-  <fo:block text-align="left"
-    hyphenate="false" line-height="1.15"
-    padding-top="10pt"
-    font-weight="normal" color="&dark-green;"
-    space-after="&xxx-large;pt"
-    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement"
-    font-size="&super-large;pt" >
+  <fo:block text-align="left" hyphenate="false"
+    line-height="{$base-lineheight * $sans-lineheight-adjust}em"
+    font-weight="normal" font-size="&super-large;pt"
+    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement mid-green">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="../productnumber" mode="book.titlepage.recto.mode"/>
@@ -438,7 +410,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
     font-size="&x-large;pt" font-family="{$title.fontset}">
   <xsl:call-template name="book.verso.title"/>
@@ -453,7 +425,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="part.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
     font-size="&super-large;pt" space-before="&columnfragment;mm"
     font-family="{$title.fontset}">
@@ -464,7 +436,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="part.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement
     italicized.noreplacement" font-size="&xxx-large;pt"
     space-before="&gutter;mm" font-family="{$title.fontset}">
