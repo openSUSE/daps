@@ -363,6 +363,12 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="mid-green">
+  <xsl:attribute name="color">
+    <xsl:call-template name="mid-green"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:template name="dark-green">
   <!-- This naming solution is somewhat pathetic – but unfortunately, while we
        need the green color as a text color most of the time, sometimes we use
@@ -374,5 +380,12 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="mid-green">
+  <!-- See above... -->
+  <xsl:choose>
+    <xsl:when test="$format.print = 1">&mid-gray;</xsl:when>
+    <xsl:otherwise>&mid-green;</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 </xsl:stylesheet>
