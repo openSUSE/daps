@@ -347,29 +347,41 @@
         <fo:table-row>
           <fo:table-cell display-align="after"
             height="{$height * (2 - &goldenratio;)}{$unit}" >
-            <fo:block padding-start="&column;mm">
-              <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
-              <fo:block width="{(&column; * 6) + (&gutter; * 5)}mm"
-                padding-before="&columnfragment;mm"
-                padding-after="&columnfragment;mm">
-            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-              select="bookinfo/productname[1]" vertical-align="bottom"/>
-            <xsl:choose>
-              <xsl:when test="bookinfo/title">
-                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                  select="bookinfo/title"/>
-              </xsl:when>
-              <xsl:when test="info/title">
-                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                  select="info/title"/>
-              </xsl:when>
-              <xsl:when test="title">
-                <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                  select="title"/>
-              </xsl:when>
-            </xsl:choose>
-              </fo:block>
-            </fo:block>
+            <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed">
+              <fo:table-column column-number="1" column-width="{&column;}mm"/>
+              <fo:table-column column-number="2" column-width="{(&column; * 6) + (&gutter; * 5)}mm"/>
+              <fo:table-body>
+                <fo:table-row>
+                  <fo:table-cell>
+                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
+                    <fo:block> </fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell>
+                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
+                    <fo:block width="{(&column; * 6) + (&gutter; * 5)}mm"
+                      padding-before="&columnfragment;mm"
+                      padding-after="&columnfragment;mm">
+                      <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                        select="bookinfo/productname[1]" vertical-align="bottom"/>
+                        <xsl:choose>
+                          <xsl:when test="bookinfo/title">
+                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                              select="bookinfo/title"/>
+                          </xsl:when>
+                          <xsl:when test="info/title">
+                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                              select="info/title"/>
+                          </xsl:when>
+                          <xsl:when test="title">
+                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                              select="title"/>
+                          </xsl:when>
+                        </xsl:choose>
+                      </fo:block>
+                    </fo:table-cell>
+                </fo:table-row>
+              </fo:table-body>
+            </fo:table>
           </fo:table-cell>
         </fo:table-row>
       </fo:table-body>
