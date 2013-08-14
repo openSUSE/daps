@@ -175,7 +175,7 @@
               retrieve-position="first-including-carryover"
               retrieve-boundary="page-sequence"/>
             <fo:inline color="&mid-gray;">
-              <fo:leader leader-length="&columnfragment;"
+              <fo:leader leader-length="&columnfragment;mm"
                 leader-pattern="space"/>
               <xsl:call-template name="product"/>
             </fo:inline>
