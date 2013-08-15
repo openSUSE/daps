@@ -362,7 +362,7 @@
                     <fo:block padding-before="&columnfragment;mm"
                       padding-after="&columnfragment;mm">
                       <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                        select="bookinfo/productname[1]" vertical-align="bottom"/>
+                        select="bookinfo/productname[1]"/>
                         <xsl:choose>
                           <xsl:when test="bookinfo/title">
                             <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
