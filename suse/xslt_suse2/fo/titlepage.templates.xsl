@@ -338,8 +338,9 @@
     </fo:block>
   </fo:block-container>
 
-  <fo:block-container bottom="{$height div &goldenratio;}{$unit}" left="0"
-    absolute-position="fixed">
+  <fo:block-container top="0" left="0" absolute-position="fixed"
+    height="{$height * (2 - &goldenratio;)}{$unit}">
+    <fo:block>
     <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed">
       <fo:table-column column-number="1" column-width="100%"/>
 
@@ -358,8 +359,7 @@
                   </fo:table-cell>
                   <fo:table-cell>
                     <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
-                    <fo:block width="{(&column; * 6) + (&gutter; * 5)}mm"
-                      padding-before="&columnfragment;mm"
+                    <fo:block padding-before="&columnfragment;mm"
                       padding-after="&columnfragment;mm">
                       <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
                         select="bookinfo/productname[1]" vertical-align="bottom"/>
@@ -386,8 +386,12 @@
         </fo:table-row>
       </fo:table-body>
     </fo:table>
+    </fo:block>
   </fo:block-container>
 
+  <!-- XEP needs at least one block following the normal flow, else it won't
+       create a page break. This is not elegant, but works. -->
+  <fo:block>&#160;</fo:block>
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
