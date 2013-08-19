@@ -95,8 +95,8 @@ western.fontsize-adjust = 1;
 western.sans-xheight-adjust = 0.916;
 western.mono-xheight-adjust = 0.895;
 western.base-lineheight = 1.6;
-western.sans-lineheight-adjust = 1.15;
-western.mono-lineheight-adjust = 1.15;
+western.sans-lineheight-adjust = 1.125;
+western.mono-lineheight-adjust = 1.125;
 
 # Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font.
 ar.serif = Amiri, serif;
