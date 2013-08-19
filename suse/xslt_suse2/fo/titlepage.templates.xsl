@@ -3,9 +3,10 @@
   Purpose:
     Restyle titles of chapters, etc.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr
+  Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -396,29 +397,27 @@
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
   <fo:block text-align="left" line-height="1.2" hyphenate="false"
-    xsl:use-attribute-sets="book.titlepage.recto.style
-    sans.bold.noreplacement title.name.color"
+    xsl:use-attribute-sets="title.font sans.bold.noreplacement title.name.color"
     font-weight="normal"
-    font-size="{(&ultra-large; + &super-large;) div 2}pt" 
-    font-family="{$title.fontset}">
+    font-size="{&ultra-large;}pt">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
 
 <xsl:template match="subtitle" mode="book.titlepage.recto.auto.mode">
   <fo:block 
-    xsl:use-attribute-sets="book.titlepage.recto.style"
-    font-size="&super-large;pt"
-    space-before="&gutterfragment;mm" font-family="{$title.fontset}">
+    xsl:use-attribute-sets="title.font" font-size="&super-large;pt"
+    space-before="&gutterfragment;mm">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
   </fo:block>
 </xsl:template>
 
 <xsl:template match="productname" mode="book.titlepage.recto.auto.mode">
   <fo:block text-align="left" hyphenate="false"
-    line-height="{$base-lineheight * $sans-lineheight-adjust}em"
+    line-height="{$base-lineheight * 0.8}em"
     font-weight="normal" font-size="&super-large;pt"
-    xsl:use-attribute-sets="book.titlepage.recto.style sans.bold.noreplacement mid-green">
+    space-after="&gutterfragment;mm"
+    xsl:use-attribute-sets="title.font sans.bold.noreplacement mid-green">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="../productnumber" mode="book.titlepage.recto.mode"/>
