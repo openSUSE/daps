@@ -1186,7 +1186,102 @@ Index: suse/xslt_suse2/static/css/style.css
  /* .CHAPTER/... AREA */
  
  #_content > .set, #_content > .book, #_content > .article, #_content > .part,
-@@ -2177,63 +1014,7 @@
+@@ -1230,38 +67,6 @@
+     display: none;
+ }
+ 
+-div.version-info {
+-    color: #439239;
+-    font-weight: normal;
+-    background-color: rgba(255,255,255,0.7);
+-    padding: 3px 5px;
+-    line-height: 120%;
+-    float: right;
+-    margin: 5px 0 10px;
+-    font-size: 13px;
+-    border-radius: 3px;
+-}
+-
+-.single div.version-info {
+-    position: relative;
+-    top: 70px;
+-}
+-
+-h6.version-info {
+-    margin: 75px 0 0;
+-    padding: 5px 7px;
+-    font-size: 24px;
+-    color: #FFF;
+-    background-color: #76AD2D;
+-    float: left;
+-    line-height: 100%;
+-}
+-
+-.book h6.version-info + div h1.title, .article h6.version-info + div h1.title,
+-.set h6.version-info + div h1.title {
+-    padding-top: 0;
+-}
+-
+ .book .title, .set .title, .article .title {
+     font-size: 48px;
+     font-weight: 600;
+@@ -1297,14 +102,7 @@
+     clear: both;
+ }
+ 
+-.single .title, .single .chapter .title,
+-.single .preface .title, .single .appendix .title,
+-.single .bibliography .title, .single .reference .title,
+-.single .part .title, .single .article .title {
+-    padding-top: 100px;
+-}
+ 
+-
+ .sect1 .subtitle, .chapter .subtitle {
+     font-size: 16px;
+     font-weight: normal;
+@@ -1315,8 +113,7 @@
+     clear: both;
+ }
+ 
+-.sect1 .title, .single .sect1 .title,
+-.section .title, .single .section .title,
++.sect1 .title, .section .title,
+ .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+ .bibliography .qandaset .title, .reference .qandaset .title,
+ .part .qandaset .title, .glossary .qandaset .title {
+@@ -1326,25 +123,23 @@
+     text-align: left;
+ }
+ 
+-.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+-.section .section .title, .single .section .section .title {
++.sect2 .title, .sect1 .qandaset .title,
++.section .section .title {
+     font-size: 22px;
+     padding: 40px 0 0;
+     text-align: left;
+ }
+ 
+-.sect3 .title, .single .sect3 .title,
++.sect3 .title,
+ .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+-.section .section .section .title, .single .section .section .section .title  {
++.section .section .section .title {
+     font-size: 20px;
+     font-weight: normal;
+     padding: 33px 0 0;
+     text-align: left;
+ }
+ 
+-.sect4 .title, .single .sect4 .title,
+-.sect5 .title, .single .sect5 .title,
+-.section .section .section .title, .single .section .section .section .title  {
++.section .section .section .title {
+     font-size: 16px;
+     padding: 53px 0 0;
+     margin: 0 0 -33px;
+@@ -2177,63 +972,7 @@
  }
  
  
@@ -1250,7 +1345,7 @@ Index: suse/xslt_suse2/static/css/style.css
  @media print {
      #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
          display: none;
-@@ -2262,531 +1043,6 @@
+@@ -2262,531 +1001,6 @@
      }
  }
  
