@@ -56,7 +56,7 @@
 
   <xsl:if test="$number != ''">
     <fo:block xsl:use-attribute-sets="title.number.color" font-family="{$serif-stack}"
-      font-size="&ultra-large;pt" font-weight="normal" text-align="start">
+      font-size="&hyper-large;pt" font-weight="normal" text-align="start">
       <xsl:copy-of select="$number"/>
       <xsl:text> </xsl:text>
     </fo:block>
