@@ -475,4 +475,91 @@
   </fo:block>
 </xsl:template>
 
+<!-- ============================================================ 
+      Imprint page
+     ============================================================
+-->
+<xsl:template name="book.titlepage.verso">
+  <xsl:apply-templates select="(bookinfo/title | info/title | title)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  <xsl:apply-templates select="(bookinfo/productname | info/productname)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  
+  <xsl:apply-templates select="(bookinfo/corpauthor | info/corpauthor)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  <xsl:apply-templates select="(bookinfo/authorgroup | info/authorgroup)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  <xsl:apply-templates select="(bookinfo/author | info/author)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  <xsl:apply-templates select="(bookinfo/othercredit | info/othercredit)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  
+  <xsl:apply-templates select="(bookinfo/date | info/date)[1]"
+    mode="book.titlepage.verso.auto.mode"/> 
+  
+  <xsl:apply-templates select="(bookinfo/abstract | info/abstract)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  
+  
+  <xsl:apply-templates select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  
+  <xsl:call-template name="suse.imprint"/>
+  
+  <xsl:apply-templates select="(bookinfo/copyright | info/copyright)[1]"
+    mode="book.titlepage.verso.auto.mode"/>  
+  <xsl:apply-templates select="(bookinfo/legalnotice | info/legalnotice)[1]"
+    mode="book.titlepage.verso.auto.mode"/>
+  
+</xsl:template>
+  
+<xsl:template name="suse.imprint">
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
+    space-before="1em">
+    <fo:block line-height="1.225" 
+      white-space-treatment="preserve" 
+      wrap-option="no-wrap"
+      linefeed-treatment="preserve"
+      white-space-collapse="false">SUSE Linux Products GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+GERMANY
+Tel: +49 (0)911-740 53-0
+Fax: +49 (0)911-741 77-55</fo:block>
+     <fo:block><fo:basic-link external-destination="url(http://www.suse.com/documentataion)" 
+       xsl:use-attribute-sets="dark-green">http://www.suse.com/documentataion</fo:basic-link>
+     </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="title" mode="book.titlepage.verso.auto.mode">
+    <fo:block xsl:use-attribute-sets="book.titlepage.verso.style dark-green"
+      font-size="&x-large;pt" font-weight="bold" font-family="{$title.fontset}">
+      <xsl:call-template name="book.verso.title"/>
+    </fo:block>
+</xsl:template>
+
+<xsl:template match="productname" mode="book.titlepage.verso.auto.mode">
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style
+    mid-green" font-size="&large;pt" font-family="{$title.fontset}">
+    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+    <xsl:text> </xsl:text>
+    <xsl:if test="../productnumber">
+      <xsl:apply-templates select="../productnumber" mode="book.titlepage.verso.mode"/>
+    </xsl:if>
+  </fo:block>
+</xsl:template>
+
+
+<xsl:template match="date" mode="book.titlepage.verso.auto.mode">
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
+    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+  </fo:block>
+</xsl:template>
+  
+<xsl:template match="date/processing-instruction('dbtimestamp')" mode="book.titlepage.verso.mode">
+  <xsl:call-template name="pi.dbtimestamp"/>
+</xsl:template>
+
+
 </xsl:stylesheet>
