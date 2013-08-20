@@ -362,29 +362,37 @@
               <fo:table-body>
                 <fo:table-row>
                   <fo:table-cell>
-                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
                     <fo:block> </fo:block>
                   </fo:table-cell>
                   <fo:table-cell>
-                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="mid-green"/></xsl:attribute>
-                    <fo:block padding-before="&columnfragment;mm"
-                      padding-after="&columnfragment;mm">
+                    <fo:block padding-after="&gutterfragment;mm">
+                      <xsl:choose>
+                        <xsl:when test="bookinfo/title">
+                          <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                            select="bookinfo/title"/>
+                        </xsl:when>
+                        <xsl:when test="info/title">
+                          <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                            select="info/title"/>
+                        </xsl:when>
+                        <xsl:when test="title">
+                          <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
+                            select="title"/>
+                        </xsl:when>
+                      </xsl:choose>
+                      </fo:block>
+                    </fo:table-cell>
+                </fo:table-row>
+                <fo:table-row>
+                  <fo:table-cell>
+                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
+                    <fo:block> </fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell>
+                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
+                    <fo:block padding-before="&columnfragment;mm">
                       <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
                         select="bookinfo/productname[1]"/>
-                        <xsl:choose>
-                          <xsl:when test="bookinfo/title">
-                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                              select="bookinfo/title"/>
-                          </xsl:when>
-                          <xsl:when test="info/title">
-                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                              select="info/title"/>
-                          </xsl:when>
-                          <xsl:when test="title">
-                            <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
-                              select="title"/>
-                          </xsl:when>
-                        </xsl:choose>
                       </fo:block>
                     </fo:table-cell>
                 </fo:table-row>
