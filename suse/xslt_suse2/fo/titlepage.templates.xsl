@@ -22,6 +22,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
+
+<!-- Chapter ==================================================== -->
 <xsl:template match="title" mode="chapter.titlepage.recto.auto.mode">
   <fo:block 
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
@@ -56,6 +58,7 @@
   </fo:block>
 </xsl:template>
 
+<!--  Appendix ================================================== -->
 <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
   <fo:block 
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -107,6 +110,7 @@
   </fo:block>
 </xsl:template>
 
+<!-- Glossary =================================================== -->
 <xsl:template name="glossary.titlepage.recto">
   <fo:block 
     xsl:use-attribute-sets="glossary.titlepage.recto.style"
@@ -147,6 +151,7 @@
   </fo:block>
 </xsl:template>
 
+<!-- Preface ==================================================== -->
 <xsl:template name="preface.titlepage.recto">
   <fo:block 
     xsl:use-attribute-sets="preface.titlepage.recto.style"
@@ -209,6 +214,7 @@
   <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="info/itermset"/>
 </xsl:template>
 
+<!-- Bibliography =============================================== -->
 <xsl:template name="bibliography.titlepage.recto">
   <fo:block 
     xsl:use-attribute-sets="bibliography.titlepage.recto.style"
@@ -238,6 +244,7 @@
   <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="info/itermset"/>
 </xsl:template>
 
+<!-- Article ==================================================== -->
 <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
   <fo:block 
     xsl:use-attribute-sets="article.titlepage.recto.style"
@@ -267,7 +274,7 @@
   </fo:block>
 </xsl:template>
 
-
+<!--  Book ====================================================== -->
 <xsl:template name="book.titlepage.recto">
   <xsl:variable name="height">
     <xsl:call-template name="get.value.from.unit">
@@ -439,6 +446,7 @@
   </fo:block>
 </xsl:template>
 
+<!-- Part ======================================================== -->
 <xsl:template match="title" mode="part.titlepage.recto.auto.mode">
   <fo:block
     xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
