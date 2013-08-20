@@ -184,6 +184,10 @@
 
 <!-- 20. Font Families ========================================== -->
 
+<xsl:attribute-set name="title.font">
+  <xsl:attribute name="font-family"><xsl:value-of select="$title.font.family"/></xsl:attribute>
+</xsl:attribute-set>
+
 
 <!-- 21. Property Sets ========================================== -->
 
