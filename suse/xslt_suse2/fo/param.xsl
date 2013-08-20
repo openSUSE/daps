@@ -296,6 +296,9 @@ task before
 <!-- Include product information in footer -->
 <xsl:param name="print.product" select="1"/>
 
+<!-- Where to link for SUSE documentation -->
+<xsl:param name="suse.doc.url">http://www.suse.com/documentation</xsl:param>
+  
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
 <!-- Should navigation titles be displayed? 0=no, 1=yes
@@ -309,5 +312,6 @@ task before
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
 <xsl:param name="booktitlepage.bw.logo"    select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
-<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>  
+<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
+  
 </xsl:stylesheet>

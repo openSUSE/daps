@@ -514,6 +514,11 @@
 </xsl:template>
   
 <xsl:template name="suse.imprint">
+  <xsl:variable name="ulink.url">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename" select="$suse.doc.url"/>
+    </xsl:call-template>
+  </xsl:variable>
   <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
     space-before="1em">
     <fo:block line-height="1.225" 
@@ -523,11 +528,11 @@
       white-space-collapse="false">SUSE Linux Products GmbH
 Maxfeldstr. 5
 90409 Nürnberg
-GERMANY
-Tel: +49 (0)911-740 53-0
-Fax: +49 (0)911-741 77-55</fo:block>
-     <fo:block><fo:basic-link external-destination="url(http://www.suse.com/documentataion)" 
-       xsl:use-attribute-sets="dark-green">http://www.suse.com/documentataion</fo:basic-link>
+GERMANY</fo:block>
+     <fo:block><fo:basic-link external-destination="{$ulink.url}" 
+       xsl:use-attribute-sets="dark-green">
+       <xsl:value-of select="$suse.doc.url"/>
+     </fo:basic-link>
      </fo:block>
   </fo:block>
 </xsl:template>
