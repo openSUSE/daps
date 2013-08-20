@@ -249,10 +249,19 @@
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
-  <xsl:attribute name="space-after.optimum">0.4em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">0.8em</xsl:attribute>
+  <xsl:attribute name="space-before.optimum">1em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">1.2em</xsl:attribute>
+  <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
   <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
   <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:attribute-set name="abstract.title.properties"
+  use-attribute-sets="formal.title.properties">
+  <xsl:attribute name="text-align">start</xsl:attribute>
+</xsl:attribute-set>
+
 
 
 <!-- 22. Profiling ============================================== -->
