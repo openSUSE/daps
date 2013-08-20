@@ -281,7 +281,7 @@
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="logo.width" select="&column;"/>
+  <xsl:variable name="logo.width" select="(1 + (602 div 3395)) * &column;"/>
   <xsl:variable name="margin.start">
     <xsl:call-template name="get.value.from.unit">
       <xsl:with-param name="string" select="$page.margin.outer"/>
@@ -335,7 +335,7 @@
   </fo:block-container>
 
   <fo:block-container top="{$page.margin.top}"
-    left="{$margin.start - ((500 div 3395) * $logo.width)}mm" absolute-position="fixed">
+    left="{$margin.start - ((602 div 3395) * &column;)}mm" absolute-position="fixed">
     <!-- The above calculation is not complete voodoo - the SUSE logo SVG is
          3395px wide, the first "S" of SUSE starts at 602px and the output width
          of the logo is $logo.width mm. Effectively, the Geeko tail ends up on
