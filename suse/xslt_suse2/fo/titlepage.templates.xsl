@@ -485,32 +485,40 @@
   <xsl:apply-templates select="(bookinfo/productname | info/productname)[1]"
     mode="book.titlepage.verso.auto.mode"/>
   
-  <xsl:apply-templates select="(bookinfo/corpauthor | info/corpauthor)[1]"
-    mode="book.titlepage.verso.auto.mode"/>
+  
   <xsl:apply-templates select="(bookinfo/authorgroup | info/authorgroup)[1]"
     mode="book.titlepage.verso.auto.mode"/>
   <xsl:apply-templates select="(bookinfo/author | info/author)[1]"
     mode="book.titlepage.verso.auto.mode"/>
-  <xsl:apply-templates select="(bookinfo/othercredit | info/othercredit)[1]"
-    mode="book.titlepage.verso.auto.mode"/>
   
-  <xsl:apply-templates select="(bookinfo/date | info/date)[1]"
-    mode="book.titlepage.verso.auto.mode"/> 
-  
+    
   <xsl:apply-templates select="(bookinfo/abstract | info/abstract)[1]"
     mode="book.titlepage.verso.auto.mode"/>
   
-  
-  <xsl:apply-templates select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
-    mode="book.titlepage.verso.auto.mode"/>
-  
-  <xsl:call-template name="suse.imprint"/>
-  
-  <xsl:apply-templates select="(bookinfo/copyright | info/copyright)[1]"
-    mode="book.titlepage.verso.auto.mode"/>  
-  <xsl:apply-templates select="(bookinfo/legalnotice | info/legalnotice)[1]"
-    mode="book.titlepage.verso.auto.mode"/>
-  
+    <fo:block>
+      <fo:footnote>
+        <fo:inline>&#xa0;</fo:inline>
+        <fo:footnote-body>
+          <xsl:call-template name="suse.imprint"/>
+          
+          <xsl:apply-templates select="(bookinfo/corpauthor | info/corpauthor)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates select="(bookinfo/othercredit | info/othercredit)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          
+          <xsl:apply-templates select="(bookinfo/date | info/date)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/copyright | info/copyright)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/legalnotice | info/legalnotice)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+        </fo:footnote-body>
+      </fo:footnote>
+    </fo:block>
 </xsl:template>
   
 <xsl:template name="suse.imprint">
@@ -545,8 +553,8 @@ GERMANY</fo:block>
 </xsl:template>
 
 <xsl:template match="productname" mode="book.titlepage.verso.auto.mode">
-  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style
-    mid-green" font-size="&large;pt" font-family="{$title.fontset}">
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style" 
+    font-size="&large;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
     <xsl:text> </xsl:text>
     <xsl:if test="../productnumber">
@@ -558,6 +566,10 @@ GERMANY</fo:block>
 
 <xsl:template match="date" mode="book.titlepage.verso.auto.mode">
   <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key">pubdate</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>: </xsl:text>
     <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
   </fo:block>
 </xsl:template>
