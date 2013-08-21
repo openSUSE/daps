@@ -349,16 +349,19 @@
   <fo:block-container top="0" left="0" absolute-position="fixed"
     height="{$height * (2 - &goldenratio;)}{$unit}">
     <fo:block>
-    <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed">
+    <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed"
+      block-progression-dimension="auto">
       <fo:table-column column-number="1" column-width="100%"/>
 
       <fo:table-body>
         <fo:table-row>
           <fo:table-cell display-align="after"
             height="{$height * (2 - &goldenratio;)}{$unit}" >
-            <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm" table-layout="fixed">
+            <fo:table width="{(&column; * 7) + (&gutter; * 5)}mm"
+              table-layout="fixed" block-progression-dimension="auto">
               <fo:table-column column-number="1" column-width="{&column;}mm"/>
-              <fo:table-column column-number="2" column-width="{(&column; * 6) + (&gutter; * 5)}mm"/>
+              <fo:table-column column-number="2"
+                column-width="{(&column; * 6) + (&gutter; * 5)}mm"/>
               <fo:table-body>
                 <fo:table-row>
                   <fo:table-cell>
@@ -475,7 +478,7 @@
   </fo:block>
 </xsl:template>
 
-<!-- ============================================================ 
+<!-- ============================================================
       Imprint page
      ============================================================
 -->
@@ -485,86 +488,92 @@
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="margin.start">
+  <xsl:variable name="page-height">
     <xsl:call-template name="get.value.from.unit">
-      <xsl:with-param name="string" select="$page.margin.outer"/>
+      <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
+  <xsl:variable name="margin-top">
+    <xsl:call-template name="get.value.from.unit">
+      <xsl:with-param name="string" select="$page.margin.top"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="margin-bottom">
+    <xsl:call-template name="get.value.from.unit">
+      <xsl:with-param name="string" select="$page.margin.bottom"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="margin-bottom-body">
+    <xsl:call-template name="get.value.from.unit">
+      <xsl:with-param name="string" select="$body.margin.bottom"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="table.height"
+    select="$page-height - ($margin-top + $margin-bottom + $margin-bottom-body)"/>
   <xsl:variable name="unit">
     <xsl:call-template name="get.unit.from.unit">
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
-  
-    <fo:block-container position="fixed" 
-      top="0" bottom="0"
-      left="{$page.margin.outer}"
-      right="{$page.margin.inner}"
-      height="{$page.height}">
-      <fo:block>
-        <fo:table table-layout="fixed" 
-          margin-top="{$page.margin.top}"
-          margin-bottom="{$page.margin.bottom}">
-          <fo:table-column column-number="1" column-width="100%"/>
-          <fo:table-body>
-            <fo:table-row>
-              <fo:table-cell height="55%">
-                <xsl:apply-templates
-                  select="(bookinfo/title | info/title | title)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/productname | info/productname)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
 
+  <fo:table table-layout="fixed" block-progression-dimension="auto"
+    height="{$table.height}{$unit}"
+    width="{(6 * &column;) + (5 * &gutter;)}mm">
+    <fo:table-column column-number="1" column-width="100%"/>
+    <fo:table-body>
+      <fo:table-row>
+        <fo:table-cell height="{0.4 * $table.height}{$unit}">
+          <xsl:apply-templates
+            select="(bookinfo/title | info/title | title)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/productname | info/productname)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
 
-                <xsl:apply-templates
-                  select="(bookinfo/authorgroup | info/authorgroup)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/author | info/author)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/authorgroup | info/authorgroup)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/author | info/author)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
 
-                <xsl:apply-templates
-                  select="(bookinfo/abstract | info/abstract)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <fo:block text-align-last="justify"><fo:leader/></fo:block>
-              </fo:table-cell>
-            </fo:table-row>
+          <xsl:apply-templates
+            select="(bookinfo/abstract | info/abstract)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+        </fo:table-cell>
+      </fo:table-row>
 
-            <!-- Everything else which is shifted downwards -->
-            <fo:table-row>
-              <fo:table-cell display-align="after">
+      <!-- Everything else is in a second block of text at the bottom -->
+      <fo:table-row>
+        <fo:table-cell display-align="after" height="{0.6 * $table.height}{$unit}">
 
-                <xsl:call-template name="suse.imprint"/>
+          <xsl:call-template name="suse.imprint"/>
 
-                <xsl:apply-templates
-                  select="(bookinfo/corpauthor | info/corpauthor)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/othercredit | info/othercredit)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/corpauthor | info/corpauthor)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/othercredit | info/othercredit)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
 
-                <xsl:apply-templates
-                  select="(bookinfo/date | info/date)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/copyright | info/copyright)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-                <xsl:apply-templates
-                  select="(bookinfo/legalnotice | info/legalnotice)[1]"
-                  mode="book.titlepage.verso.auto.mode"/>
-
-              </fo:table-cell>
-            </fo:table-row>
-          </fo:table-body>
-        </fo:table>
-      </fo:block>
-    </fo:block-container>
+          <xsl:apply-templates
+            select="(bookinfo/date | info/date)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/copyright | info/copyright)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/legalnotice | info/legalnotice)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
+        </fo:table-cell>
+      </fo:table-row>
+    </fo:table-body>
+  </fo:table>
 </xsl:template>
-  
+
 <xsl:template name="suse.imprint">
   <xsl:variable name="ulink.url">
     <xsl:call-template name="fo-external-image">
@@ -572,9 +581,9 @@
     </xsl:call-template>
   </xsl:variable>
   <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
-    space-before="1em">
-    <fo:block line-height="1.225" 
-      white-space-treatment="preserve" 
+    space-after="1.2em">
+    <fo:block line-height="{$line-height}"
+      white-space-treatment="preserve"
       wrap-option="no-wrap"
       linefeed-treatment="preserve"
       white-space-collapse="false">SUSE Linux Products GmbH
@@ -584,6 +593,7 @@ GERMANY</fo:block>
      <fo:block><fo:basic-link external-destination="{$ulink.url}" 
        xsl:use-attribute-sets="dark-green">
        <xsl:value-of select="$suse.doc.url"/>
+       <xsl:call-template name="image-after-link"/>
      </fo:basic-link>
      </fo:block>
   </fo:block>
