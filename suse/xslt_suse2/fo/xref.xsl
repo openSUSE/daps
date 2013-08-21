@@ -55,10 +55,8 @@
           <xsl:text>)</xsl:text>
         </fo:inline>
     </xsl:if>
-  
-    <fo:leader leader-pattern="space" leader-length="0.2em"/>
+
     <xsl:call-template name="image-after-link"/>
-    <fo:leader leader-pattern="space" leader-length="0.2em"/>
   </fo:basic-link>
 </xsl:template>
 
@@ -68,6 +66,7 @@
     <xsl:call-template name="dark-green"/>
   </xsl:variable>
 
+  <fo:leader leader-pattern="space" leader-length="0.2em"/>
   <fo:instream-foreign-object content-height="0.65em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="100"
       height="100">
@@ -78,6 +77,7 @@
         fill="{$fill}"/>
     </svg:svg>
   </fo:instream-foreign-object>
+  <fo:leader leader-pattern="space" leader-length="0.2em"/>
 </xsl:template>
 
 <xsl:template match="chapter|appendix" mode="insert.title.markup">
