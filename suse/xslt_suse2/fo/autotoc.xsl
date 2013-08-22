@@ -224,9 +224,11 @@
        provisional-distance-between-starts="{&column; + &gutter;}mm">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:basic-link internal-destination="{$id}" text-align="end">
-              <xsl:value-of select="$label"/>
-            </fo:basic-link>
+            <fo:block>
+              <fo:basic-link internal-destination="{$id}" text-align="end">
+                <xsl:value-of select="$label"/>
+              </fo:basic-link>
+            </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
             <xsl:copy-of select="$title"/>
