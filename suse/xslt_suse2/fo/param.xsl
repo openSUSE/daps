@@ -35,7 +35,13 @@
 
 <!-- 3. ToC/LoT/Index Generation ================================ -->
 <xsl:param name="autotoc.label.separator" select="' '"/>
-
+<xsl:param name="generate.toc">
+/article  toc,title
+book      toc,title
+part      toc,title
+reference toc,title
+set       toc,title
+</xsl:param>
 
 <!-- 4. Processor Extensions ==================================== -->
 
