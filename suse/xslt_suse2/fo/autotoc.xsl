@@ -176,12 +176,14 @@
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
       </xsl:if>
-      <fo:basic-link internal-destination="{$id}" hyphenate="false">
-        <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
-      </fo:basic-link>
-       <fo:leader leader-pattern="space" leader-length="2em" keep-with-next.within-line="always"/>
-      <fo:basic-link internal-destination="{$id}" xsl:use-attribute-sets="toc.pagenumber.properties">
-        <fo:page-number-citation ref-id="{$id}"/>
+      <fo:basic-link internal-destination="{$id}">
+        <fo:inline hyphenate="false">
+          <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
+        </fo:inline>
+        <fo:leader leader-pattern="space" leader-length="2em" keep-with-next.within-line="always"/>
+        <fo:inline xsl:use-attribute-sets="toc.pagenumber.properties">
+          <fo:page-number-citation ref-id="{$id}"/>
+        </fo:inline>
       </fo:basic-link>
     </fo:block>
 </xsl:template>
@@ -221,8 +223,10 @@
     <fo:list-block xsl:use-attribute-sets="toc.level1.properties"
        provisional-distance-between-starts="{&column; + &gutter;}mm">
         <fo:list-item>
-          <fo:list-item-label end-indent="label-end()" text-align="end">
-            <xsl:copy-of select="$label"/>
+          <fo:list-item-label end-indent="label-end()">
+            <fo:basic-link internal-destination="{$id}" text-align="end">
+              <xsl:value-of select="$label"/>
+            </fo:basic-link>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
             <xsl:copy-of select="$title"/>
@@ -263,7 +267,9 @@
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="mid-green">
           <fo:block text-align-last="right">
-            <xsl:value-of select="$label"/>
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:value-of select="$label"/>
+            </fo:basic-link>
           </fo:block>
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()" font-size="&xx-large;">
@@ -273,12 +279,19 @@
     </fo:list-block>
 </xsl:template>
 
-<xsl:template match="preface/sect1" mode="susetoc">  
+<xsl:template match="preface/sect1" mode="susetoc">
+  <xsl:variable name="id">
+      <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  
   <fo:block xsl:use-attribute-sets="toc.level3.properties"
      margin-left="{&column; + &gutter;}mm"
      role="TOC.{local-name()}" >
+    <fo:basic-link internal-destination="{$id}">
       <xsl:call-template name="toc.title"/>
+    </fo:basic-link>
   </fo:block>
+  
 </xsl:template>
   
 
@@ -301,7 +314,9 @@
             <fo:block text-align-last="end">
             <xsl:choose>
               <xsl:when test="self::sect1">
-                <xsl:value-of select="$label"/>
+                <fo:basic-link internal-destination="{$id}">
+                  <xsl:value-of select="$label"/>
+                </fo:basic-link>
               </xsl:when>
               <xsl:otherwise>
                 <!-- We need an empty block -->
