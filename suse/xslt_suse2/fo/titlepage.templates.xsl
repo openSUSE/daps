@@ -600,8 +600,8 @@ GERMANY</fo:block>
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
-    <fo:block xsl:use-attribute-sets="book.titlepage.verso.style dark-green"
-      font-size="&x-large;pt" font-weight="bold" font-family="{$title.fontset}">
+    <fo:block font-size="&x-large;pt"
+      xsl:use-attribute-sets="book.titlepage.verso.style dark-green sans.bold.noreplacement title.font">
       <xsl:call-template name="book.verso.title"/>
     </fo:block>
 </xsl:template>
