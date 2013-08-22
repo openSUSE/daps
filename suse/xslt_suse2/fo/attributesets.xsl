@@ -77,6 +77,7 @@
 <!-- preface, chapter, appendix, glossary -->
 <xsl:attribute-set name="toc.level2.properties"
   use-attribute-sets="toc.line.properties sans.bold">
+  <xsl:attribute name="line-height">1.3</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
   <xsl:attribute name="space-before">&xxx-large;pt</xsl:attribute>
   <xsl:attribute name="space-after">0.5em</xsl:attribute>
