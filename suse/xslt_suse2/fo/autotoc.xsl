@@ -249,33 +249,6 @@
     </fo:block>
 </xsl:template>
 
-<xsl:template match="chapter|appendix" mode="susetoc.table">
-  <xsl:variable name="id">
-      <xsl:call-template name="object.id"/>
-  </xsl:variable>
-  <xsl:variable name="label">
-      <xsl:call-template name="toc.label"/>
-  </xsl:variable>
-  <xsl:variable name="title">
-      <xsl:call-template name="toc.title"/>
-  </xsl:variable>
-  
-  <fo:table table-layout="fixed" xsl:use-attribute-sets="toc.level2.properties dark-green">
-    <fo:table-column column-number="1" column-width="{&column; + &gutter;}mm"/>
-    <fo:table-column column-number="2" />
-    <fo:table-body>
-      <fo:table-row>
-        <fo:table-cell xsl:use-attribute-sets="mid-green">
-          <xsl:copy-of select="$label"/>
-        </fo:table-cell>
-        <fo:table-cell font-size="&xx-large;">
-          <xsl:copy-of select="$title"/>
-        </fo:table-cell>
-      </fo:table-row>
-    </fo:table-body>
-  </fo:table>
-</xsl:template>
-  
 <xsl:template match="chapter|appendix" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
@@ -310,36 +283,6 @@
   </fo:block>
 </xsl:template>
   
-<xsl:template match="sect1" mode="susetoc.table">
-    <xsl:variable name="id">
-      <xsl:call-template name="object.id"/>
-    </xsl:variable>
-    <xsl:variable name="label">
-      <xsl:call-template name="toc.label"/>
-    </xsl:variable>
-    <xsl:variable name="title">
-      <xsl:call-template name="toc.title"/>
-    </xsl:variable>
-    
-   <fo:table role="Toc.sect1" width="100%"
-     table-layout="fixed" xsl:use-attribute-sets="toc.level3.properties">
-     <fo:table-column column-number="1" column-width="{&column; + &gutter;}mm"/>
-     <fo:table-column column-number="2"
-       padding="0"
-       margin="0"/>
-     <fo:table-body>
-        <fo:table-row padding-left="0" margin-left="0">
-          <fo:table-cell text-align="left" margin-left="0pt">
-            <xsl:copy-of select="$label"/>
-          </fo:table-cell>
-          <fo:table-cell text-align="left">
-            <xsl:copy-of select="$title"/>
-          </fo:table-cell>
-        </fo:table-row>
-     </fo:table-body>
-   </fo:table>
-</xsl:template>
-
 <xsl:template match="sect1" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
