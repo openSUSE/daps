@@ -42,6 +42,8 @@ part      toc,title
 reference toc,title
 set       toc,title
 </xsl:param>
+<xsl:param name="toc.indent.width">0</xsl:param>
+
 
 <!-- 4. Processor Extensions ==================================== -->
 
