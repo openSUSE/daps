@@ -284,6 +284,7 @@
 </xsl:template>
 
 <xsl:template match="preface/sect1" mode="susetoc">
+<!--
   <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
   </xsl:variable>
@@ -295,7 +296,7 @@
       <xsl:call-template name="toc.title"/>
     </fo:basic-link>
   </fo:block>
-  
+  -->
 </xsl:template>
 
 
