@@ -3,9 +3,10 @@
   Purpose:
     Rework the structure of Tables of Contents in Parts.
 
-  Author(s):  Stefan Knorr <sknorr@suse.de>
+  Author(s):  Thomas Schraitle <toms@opensuse.org>,
+              Stefan Knorr <sknorr@suse.de>
 
-  Copyright:  2013, Stefan Knorr
+  Copyright:  2013, Thomas Schraitle, Stefan Knorr
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -121,7 +122,7 @@
 
   <fo:list-item>
     <fo:list-item-label end-indent="label-end()">
-      <fo:block text-align="end" font-family="{$title.fontset}"
+      <fo:block text-align="end" width="&column;mm" background-color="#F0F" font-family="{$title.fontset}"
         font-size="&large;pt" color="&mid-gray;" line-height="{$line-height}">
         <fo:basic-link internal-destination="{$id}">
           <xsl:if test="$label != ''">
@@ -141,7 +142,8 @@
         <fo:inline keep-together.within-line="always" font-size="&large;pt"
         font-family="{$serif-stack}" xsl:use-attribute-sets="dark-green">
           <fo:basic-link internal-destination="{$id}">
-            <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"/>
+            <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"
+              keep-with-next.within-line="always"/>
             <fo:page-number-citation ref-id="{$id}"/>
           </fo:basic-link>
         </fo:inline>
@@ -153,10 +155,10 @@
 
 <!-- =================================================================== -->
 <xsl:param name="page.debug" select="0"/>
-  
+
 <xsl:template name="toc.label">
     <xsl:param name="node" select="."/>
-    
+
     <fo:block text-align="start">
         <xsl:if test="$page.debug != 0">
           <xsl:attribute name="border">0.25pt solid green</xsl:attribute>
@@ -164,14 +166,13 @@
         <xsl:apply-templates select="$node" mode="label.markup"/>
       </fo:block>
 </xsl:template>
-  
+
 <xsl:template name="toc.title">
     <xsl:param name="node" select="."/>
-    <xsl:param name="leader" select="' '"/>
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
-    
+
     <fo:block>
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
@@ -206,7 +207,7 @@
       </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
-  
+
 <xsl:template match="part" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
@@ -261,7 +262,7 @@
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
-    
+
     <fo:list-block role="TOC.{local-name()}"
       xsl:use-attribute-sets="toc.level2.properties dark-green sans.bold.noreplacement"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
@@ -295,7 +296,7 @@
   </fo:block>
   
 </xsl:template>
-  
+
 
 <xsl:template match="sect1|refentry" mode="susetoc">
     <xsl:variable name="id">
@@ -312,7 +313,7 @@
        provisional-label-separation="{&gutter;}mm">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()"
-            text-align="start">
+            text-align="end">
             <fo:block text-align-last="end">
             <xsl:choose>
               <xsl:when test="self::sect1">
