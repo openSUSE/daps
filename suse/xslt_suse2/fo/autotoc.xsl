@@ -222,11 +222,12 @@
     </xsl:variable>
     
     <fo:list-block xsl:use-attribute-sets="toc.level1.properties"
-       provisional-distance-between-starts="{&column; + &gutter;}mm">
+       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-label-separation="{&gutter;}mm">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:block>
-              <fo:basic-link internal-destination="{$id}" text-align="end">
+            <fo:block  text-align-last="end">
+              <fo:basic-link internal-destination="{$id}">
                 <xsl:value-of select="$label"/>
               </fo:basic-link>
             </fo:block>
