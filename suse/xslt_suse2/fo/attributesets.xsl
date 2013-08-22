@@ -50,6 +50,48 @@
 
 
 <!-- 3. ToC/LoT/Index Generation ================================ -->
+<xsl:attribute-set name="toc.line.properties">
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$sans.font.family"/>
+    </xsl:attribute>
+    <xsl:attribute name="font-size">
+      <xsl:value-of select="$body.font.size"/>
+    </xsl:attribute>
+    <xsl:attribute name="text-align-last">start</xsl:attribute>
+  </xsl:attribute-set>
+  
+  <xsl:attribute-set name="toc.pagenumber.properties">
+    <!-- *Not* derived from toc.line.properties! -->
+    <xsl:attribute name="text-align">right</xsl:attribute>
+    <xsl:attribute name="font-weight">normal</xsl:attribute>
+    <xsl:attribute name="font-size">
+      <xsl:value-of select="$body.font.size"/>
+    </xsl:attribute>
+    <xsl:attribute name="color">black</xsl:attribute>
+    <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
+  </xsl:attribute-set>
+  
+  <!-- part -->
+  <xsl:attribute-set name="toc.level1.properties" use-attribute-sets="toc.line.properties">
+    <xsl:attribute name="font-weight">normal</xsl:attribute>
+    <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
+    <xsl:attribute name="space-before">&xx-large;pt</xsl:attribute>
+    <xsl:attribute name="text-transform">uppercase</xsl:attribute>
+  </xsl:attribute-set>
+  <!-- preface, chapter, appendix, glossary -->
+  <xsl:attribute-set name="toc.level2.properties" use-attribute-sets="toc.line.properties">
+    <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+    <xsl:attribute name="space-before">&xxx-large;pt</xsl:attribute>
+    <xsl:attribute name="space-after">0.5em</xsl:attribute>
+  </xsl:attribute-set>
+  <!-- sect1 -->
+  <xsl:attribute-set name="toc.level3.properties" use-attribute-sets="toc.line.properties">
+    <xsl:attribute name="font-size">&large;pt</xsl:attribute>
+    <xsl:attribute name="font-weight">normal</xsl:attribute>
+    <!--<xsl:attribute name="space-before">&x-large;pt</xsl:attribute>-->
+    <xsl:attribute name="space-after">0.5em</xsl:attribute>
+  </xsl:attribute-set>
 
 
 <!-- 4. Processor Extensions ==================================== -->
