@@ -188,9 +188,6 @@
 
 <xsl:template name="toc.line">
     <xsl:param name="toc-context" select="NOTANODE"/>
-    <xsl:for-each select="$toc-context">
-      <xsl:message>TOC: => <xsl:value-of select="local-name()"/></xsl:message>
-    </xsl:for-each>
     <xsl:apply-templates select="." mode="susetoc"/>
 </xsl:template>
 
