@@ -152,7 +152,7 @@
 
 
 <!-- =================================================================== -->
-<xsl:param name="page.debug" select="1"/>
+<xsl:param name="page.debug" select="0"/>
   
 <xsl:template name="toc.label">
     <xsl:param name="node" select="."/>
@@ -176,7 +176,7 @@
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
       </xsl:if>
-      <fo:basic-link internal-destination="{$id}">
+      <fo:basic-link internal-destination="{$id}" hyphenate="false">
         <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
       </fo:basic-link>
        <fo:leader leader-pattern="space" leader-length="2em" keep-with-next.within-line="always"/>
@@ -188,6 +188,9 @@
 
 <xsl:template name="toc.line">
     <xsl:param name="toc-context" select="NOTANODE"/>
+    <xsl:for-each select="$toc-context">
+      <xsl:message>TOC: => <xsl:value-of select="local-name()"/></xsl:message>
+    </xsl:for-each>
     <xsl:apply-templates select="." mode="susetoc"/>
 </xsl:template>
 
@@ -240,12 +243,39 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     
-    <fo:block start-indent="&gutter;mm"
+    <fo:block start-indent="{&column; + &gutter;}mm"
       xsl:use-attribute-sets="toc.level2.properties dark-green">
         <xsl:copy-of select="$title"/>
     </fo:block>
 </xsl:template>
 
+<xsl:template match="chapter|appendix" mode="susetoc.table">
+  <xsl:variable name="id">
+      <xsl:call-template name="object.id"/>
+  </xsl:variable>
+  <xsl:variable name="label">
+      <xsl:call-template name="toc.label"/>
+  </xsl:variable>
+  <xsl:variable name="title">
+      <xsl:call-template name="toc.title"/>
+  </xsl:variable>
+  
+  <fo:table table-layout="fixed" xsl:use-attribute-sets="toc.level2.properties dark-green">
+    <fo:table-column column-number="1" column-width="{&column; + &gutter;}mm"/>
+    <fo:table-column column-number="2" />
+    <fo:table-body>
+      <fo:table-row>
+        <fo:table-cell xsl:use-attribute-sets="mid-green">
+          <xsl:copy-of select="$label"/>
+        </fo:table-cell>
+        <fo:table-cell font-size="&xx-large;">
+          <xsl:copy-of select="$title"/>
+        </fo:table-cell>
+      </fo:table-row>
+    </fo:table-body>
+  </fo:table>
+</xsl:template>
+  
 <xsl:template match="chapter|appendix" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
@@ -258,14 +288,13 @@
     </xsl:variable>
     
     <fo:list-block role="TOC.{local-name()}" xsl:use-attribute-sets="toc.level2.properties dark-green"
-      font-size="&xx-large;"
-       provisional-distance-between-starts="&gutter;mm"
-       provisional-label-separation="&gutterfragment;mm">
+       font-size="&xx-large;"
+       provisional-distance-between-starts="{&column; + &gutter;}mm">
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" text-align="end" xsl:use-attribute-sets="mid-green">
           <xsl:copy-of select="$label"/>
         </fo:list-item-label>
-        <fo:list-item-body start-indent="&gutter;mm" font-size="&xx-large;"
+        <fo:list-item-body start-indent="body-start()" font-size="&xx-large;"
           text-align="start">
           <xsl:copy-of select="$title"/>
         </fo:list-item-body>
@@ -275,11 +304,41 @@
 
 <xsl:template match="preface/sect1" mode="susetoc">  
   <fo:block xsl:use-attribute-sets="toc.level3.properties"
-     margin-left="0mm" role="TOC.{local-name()}" >
+     margin-left="{&column; + &gutter;}mm"
+     role="TOC.{local-name()}" >
       <xsl:call-template name="toc.title"/>
   </fo:block>
 </xsl:template>
   
+<xsl:template match="sect1" mode="susetoc.table">
+    <xsl:variable name="id">
+      <xsl:call-template name="object.id"/>
+    </xsl:variable>
+    <xsl:variable name="label">
+      <xsl:call-template name="toc.label"/>
+    </xsl:variable>
+    <xsl:variable name="title">
+      <xsl:call-template name="toc.title"/>
+    </xsl:variable>
+    
+   <fo:table role="Toc.sect1" width="100%"
+     table-layout="fixed" xsl:use-attribute-sets="toc.level3.properties">
+     <fo:table-column column-number="1" column-width="{&column; + &gutter;}mm"/>
+     <fo:table-column column-number="2"
+       padding="0"
+       margin="0"/>
+     <fo:table-body>
+        <fo:table-row padding-left="0" margin-left="0">
+          <fo:table-cell text-align="left" margin-left="0pt">
+            <xsl:copy-of select="$label"/>
+          </fo:table-cell>
+          <fo:table-cell text-align="left">
+            <xsl:copy-of select="$title"/>
+          </fo:table-cell>
+        </fo:table-row>
+     </fo:table-body>
+   </fo:table>
+</xsl:template>
 
 <xsl:template match="sect1" mode="susetoc">
     <xsl:variable name="id">
@@ -291,7 +350,8 @@
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
-    <fo:list-block margin-left="-{&gutter; + &gutterfragment;}mm" role="TOC.{local-name()}" xsl:use-attribute-sets="toc.level3.properties">
+    <fo:list-block  role="TOC.{local-name()}"  xsl:use-attribute-sets="toc.level3.properties"
+       provisional-distance-between-starts="{&column; + &gutter;}mm">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()"
             text-align="start">
