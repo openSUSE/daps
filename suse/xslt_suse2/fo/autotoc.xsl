@@ -173,7 +173,7 @@
       <xsl:call-template name="object.id"/>
     </xsl:variable>
 
-    <fo:block>
+    <fo:block hyphenate="false">
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
       </xsl:if>
