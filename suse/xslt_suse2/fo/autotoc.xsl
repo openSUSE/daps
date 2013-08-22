@@ -221,7 +221,7 @@
     <fo:list-block xsl:use-attribute-sets="toc.level1.properties"
        provisional-distance-between-starts="{&column; + &gutter;}mm">
         <fo:list-item>
-          <fo:list-item-label end-indent="label-end()">
+          <fo:list-item-label end-indent="label-end()" text-align="end">
             <xsl:copy-of select="$label"/>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
@@ -256,14 +256,17 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     
-    <fo:list-block role="TOC.{local-name()}" xsl:use-attribute-sets="toc.level2.properties dark-green"
-       provisional-distance-between-starts="{&column; + &gutter;}mm">
+    <fo:list-block role="TOC.{local-name()}"
+      xsl:use-attribute-sets="toc.level2.properties dark-green sans.bold.noreplacement"
+       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-label-separation="{&gutter;}mm">
       <fo:list-item>
-        <fo:list-item-label end-indent="label-end()" text-align="end" xsl:use-attribute-sets="mid-green">
-          <xsl:copy-of select="$label"/>
+        <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="mid-green">
+          <fo:block text-align-last="right">
+            <xsl:value-of select="$label"/>
+          </fo:block>
         </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()" font-size="&xx-large;"
-          text-align="start">
+        <fo:list-item-body start-indent="body-start()" font-size="&xx-large;">
           <xsl:copy-of select="$title"/>
         </fo:list-item-body>
       </fo:list-item>
@@ -283,23 +286,29 @@
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
+    <xsl:variable name="label">
+      <xsl:call-template name="toc.label"/>
+    </xsl:variable>
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     <fo:list-block  role="TOC.{local-name()}"  xsl:use-attribute-sets="toc.level3.properties"
-       provisional-distance-between-starts="{&column; + &gutter;}mm">
+       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-label-separation="{&gutter;}mm">
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()"
             text-align="start">
+            <fo:block text-align-last="end">
             <xsl:choose>
               <xsl:when test="self::sect1">
-                <xsl:call-template name="toc.label"/>
+                <xsl:value-of select="$label"/>
               </xsl:when>
               <xsl:otherwise>
                 <!-- We need an empty block -->
-                <fo:block/>
+                <fo:leader/>
               </xsl:otherwise>
             </xsl:choose>
+            </fo:block>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()" text-align="start">
             <xsl:copy-of select="$title"/>

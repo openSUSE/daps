@@ -70,7 +70,7 @@
 <xsl:attribute-set name="toc.level1.properties"
   use-attribute-sets="toc.line.properties title.name.color">
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <xsl:attribute name="font-size">&xxx-large;pt</xsl:attribute>
+  <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
   <xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
 </xsl:attribute-set>
