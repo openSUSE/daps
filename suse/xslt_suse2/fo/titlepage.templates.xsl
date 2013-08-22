@@ -633,4 +633,23 @@ GERMANY</fo:block>
 </xsl:template>
 
 
+<!-- ============================================================
+      TOC page
+     ============================================================
+-->
+<xsl:template name="table.of.contents.titlepage.recto">
+    <fo:block
+      xsl:use-attribute-sets="table.of.contents.titlepage.recto.style dark-green"
+      space-before.minimum="1em" space-before.optimum="1.5em"
+      space-before.maximum="2em" 
+      space-after="3em" 
+      start-indent="&gutter;mm"
+      font-size="&super-large;" font-weight="normal"
+      font-family="{$title.fontset}">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'TableofContents'"/>
+      </xsl:call-template>
+    </fo:block>
+</xsl:template>
+
 </xsl:stylesheet>
