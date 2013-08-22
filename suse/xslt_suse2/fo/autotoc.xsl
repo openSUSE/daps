@@ -257,7 +257,6 @@
     </xsl:variable>
     
     <fo:list-block role="TOC.{local-name()}" xsl:use-attribute-sets="toc.level2.properties dark-green"
-       font-size="&xx-large;"
        provisional-distance-between-starts="{&column; + &gutter;}mm">
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" text-align="end" xsl:use-attribute-sets="mid-green">
@@ -279,12 +278,10 @@
   </fo:block>
 </xsl:template>
   
-<xsl:template match="sect1" mode="susetoc">
+
+<xsl:template match="sect1|refentry" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
-    </xsl:variable>
-    <xsl:variable name="label">
-      <xsl:call-template name="toc.label"/>
     </xsl:variable>
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
@@ -294,7 +291,15 @@
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()"
             text-align="start">
-            <xsl:copy-of select="$label"/>
+            <xsl:choose>
+              <xsl:when test="self::sect1">
+                <xsl:call-template name="toc.label"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- We need an empty block -->
+                <fo:block/>
+              </xsl:otherwise>
+            </xsl:choose>
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()" text-align="start">
             <xsl:copy-of select="$title"/>
