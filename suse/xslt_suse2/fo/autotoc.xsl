@@ -218,14 +218,13 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     
-    <fo:list-block xsl:use-attribute-sets="toc.level1.properties">
+    <fo:list-block xsl:use-attribute-sets="toc.level1.properties"
+       provisional-distance-between-starts="{&column; + &gutter;}mm">
         <fo:list-item>
-          <fo:list-item-label end-indent="label-end()"
-            text-align="start">
+          <fo:list-item-label end-indent="label-end()">
             <xsl:copy-of select="$label"/>
           </fo:list-item-label>
-          <fo:list-item-body start-indent="body-start()"
-            text-align="start">
+          <fo:list-item-body start-indent="body-start()">
             <xsl:copy-of select="$title"/>
           </fo:list-item-body>
         </fo:list-item>
