@@ -61,7 +61,6 @@
 <xsl:attribute-set name="toc.pagenumber.properties"
   use-attribute-sets="title.number.color">
   <!-- *Not* derived from toc.line.properties! -->
-  <xsl:attribute name="text-align">right</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
 </xsl:attribute-set>
