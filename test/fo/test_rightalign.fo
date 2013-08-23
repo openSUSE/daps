@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" language="en">
+    <fo:layout-master-set>
+        <fo:simple-page-master master-name="page" 
+          page-width="12cm"
+          page-height="20cm">
+            <fo:region-body region-name="body" margin="15mm"/>
+        </fo:simple-page-master>
+    </fo:layout-master-set>
+    <fo:page-sequence master-reference="page">
+        <fo:flow flow-name="body">
+          <fo:block>The quick browm fox jumps over the lazy dog. The quick browm fox jumps over the lazy dog.</fo:block>
+          <fo:table table-layout="fixed" width="100%"
+            space-before="1.5em" space-after="1.5em">
+            <fo:table-column column-number="1" text-align="end"
+              column-width="40mm"/>
+            <fo:table-column column-number="2"/>
+            <fo:table-body>
+              <fo:table-row>
+                <fo:table-cell>
+                  <fo:block>Hallo</fo:block>
+                </fo:table-cell>
+                <fo:table-cell>
+                  <fo:block>Configuring</fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </fo:table-body>
+          </fo:table>
+          
+          <fo:block>The quick browm fox jumps over the lazy dog. The quick browm fox jumps over the lazy dog.</fo:block>
+          <fo:list-block font-size="16pt" 
+            border-top="1pt solid blue" 
+            border-bottom="1pt solid blue" 
+            provisional-distance-between-starts="20mm"
+            provisional-label-separation="4mm"
+            space-after="1.5em"
+            space-before="1.5em">
+            <fo:list-item>
+              <fo:list-item-label end-indent="label-end()">
+                <fo:block text-align="end"  border="1pt solid red">10</fo:block>
+              </fo:list-item-label>
+              <fo:list-item-body start-indent="body-start()">
+                <fo:block border="1pt solid orange">Configuration and Administration Basics</fo:block>
+              </fo:list-item-body>
+            </fo:list-item>
+          </fo:list-block>
+          
+        </fo:flow>
+    </fo:page-sequence>
+</fo:root>
