@@ -31,12 +31,9 @@
 
   <fo:block keep-with-next.within-column="always"
             hyphenate="false">
-    <xsl:if test="$node/ancestor::part">
       <xsl:attribute name="start-indent">
-        <xsl:value-of select="&column; + &gutter;"/>
-        <xsl:text>mm</xsl:text>
+        <xsl:value-of select="&column; + &gutter;"/>mm
       </xsl:attribute>
-    </xsl:if>
     <xsl:call-template name="title.part.split">
       <xsl:with-param name="node" select="."/>
     </xsl:call-template>
@@ -56,13 +53,14 @@
 
   <xsl:if test="$number != ''">
     <fo:block xsl:use-attribute-sets="title.number.color" font-family="{$serif-stack}"
-      font-size="&hyper-large;pt" font-weight="normal" text-align="start">
+      font-size="&hyper-large;pt" font-weight="normal" text-align="start"
+      line-height="{$base-lineheight * 0.6}em">
       <xsl:copy-of select="$number"/>
-      <xsl:text> </xsl:text>
     </fo:block>
   </xsl:if>
   <fo:block xsl:use-attribute-sets="title.name.color" font-family="{$title.fontset}"
-      font-size="&super-large;pt" font-weight="normal" text-align="start">
+      font-size="&super-large;pt" font-weight="normal" text-align="start"
+      line-height="{$line-height}">
     <xsl:copy-of select="$title"/>
   </fo:block>
 </xsl:template>
