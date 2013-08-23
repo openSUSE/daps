@@ -410,7 +410,7 @@
 
   <!-- XEP needs at least one block following the normal flow, else it won't
        create a page break. This is not elegant, but works. -->
-  <fo:block>&#160;</fo:block>
+  <fo:block><fo:leader/></fo:block>
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
