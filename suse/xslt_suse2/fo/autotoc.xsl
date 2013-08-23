@@ -181,7 +181,8 @@
         <fo:inline hyphenate="false">
           <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
         </fo:inline>
-        <fo:leader leader-pattern="space" leader-length="2em" keep-with-next.within-line="always"/>
+        <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"
+          keep-with-next.within-line="always"/>
         <fo:inline xsl:use-attribute-sets="toc.pagenumber.properties">
           <fo:page-number-citation ref-id="{$id}"/>
         </fo:inline>
