@@ -123,7 +123,7 @@
   <fo:list-item>
     <fo:list-item-label end-indent="label-end()">
       <fo:block text-align="end" width="&column;mm" font-family="{$title.fontset}"
-        font-size="&large;pt" color="&mid-gray;" line-height="{$line-height}">
+        font-size="&large;pt" line-height="{$line-height}">
         <fo:basic-link internal-destination="{$id}">
           <xsl:if test="$label != ''">
             <xsl:copy-of select="$label"/>
@@ -133,20 +133,18 @@
     </fo:list-item-label>
     <fo:list-item-body start-indent="body-start()">
       <fo:block line-height="{$line-height}" padding-after="{&gutter; div 2}mm">
-        <fo:inline keep-with-next.within-line="always"
-        font-family="{$title.fontset}" font-size="&large;pt">
-          <fo:basic-link internal-destination="{$id}">
+        <fo:basic-link internal-destination="{$id}">
+          <fo:inline keep-with-next.within-line="always"
+            font-family="{$title.fontset}" font-size="&large;pt">
             <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-          </fo:basic-link>
-        </fo:inline>
-        <fo:inline keep-together.within-line="always" font-size="&large;pt"
-        font-family="{$serif-stack}" xsl:use-attribute-sets="dark-green">
-          <fo:basic-link internal-destination="{$id}">
-            <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"
-              keep-with-next.within-line="always"/>
+          </fo:inline>
+          <fo:leader leader-pattern="space" leader-length="&gutterfragment;mm"
+            keep-with-next.within-line="always"/>
+          <fo:inline keep-together.within-line="always" font-size="&large;pt"
+            xsl:use-attribute-sets="toc.pagenumber.properties">
             <fo:page-number-citation ref-id="{$id}"/>
-          </fo:basic-link>
-        </fo:inline>
+          </fo:inline>
+        </fo:basic-link>
       </fo:block>
     </fo:list-item-body>
   </fo:list-item>
@@ -270,7 +268,7 @@
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
       <fo:list-item>
-        <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="mid-green">
+        <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="dark-green">
           <fo:block text-align-last="right">
             <fo:basic-link internal-destination="{$id}">
               <xsl:value-of select="$label"/>
