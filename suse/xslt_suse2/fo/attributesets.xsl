@@ -59,10 +59,20 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="toc.pagenumber.properties"
-  use-attribute-sets="title.number.color">
+  use-attribute-sets="serif.bold">
   <!-- *Not* derived from toc.line.properties! -->
-  <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
+  <xsl:attribute name="font-size"><xsl:value-of select="1 div $sans-xheight-adjust * 0.8"/>em</xsl:attribute>
+  <xsl:attribute name="color">
+    <xsl:choose>
+      <xsl:when test="self::sect1|self::sect2|self::sect3|self::sect4|self::sect">
+        &mid-gray;
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="chamaeleon-green"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
 </xsl:attribute-set>
 
 <!-- part -->
@@ -78,14 +88,13 @@
   use-attribute-sets="toc.line.properties sans.bold">
   <xsl:attribute name="line-height">1.3</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
-  <xsl:attribute name="space-before">&xxx-large;pt</xsl:attribute>
-  <xsl:attribute name="space-after">0.5em</xsl:attribute>
+  <xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
+  <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>
 </xsl:attribute-set>
 <!-- sect1 -->
 <xsl:attribute-set name="toc.level3.properties" use-attribute-sets="toc.line.properties">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <!--<xsl:attribute name="space-before">&x-large;pt</xsl:attribute>-->
   <xsl:attribute name="space-after">0.5em</xsl:attribute>
 </xsl:attribute-set>
 
@@ -420,6 +429,12 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="chamaeleon-green">
+  <xsl:attribute name="color">
+    <xsl:call-template name="mid-green"/>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:template name="dark-green">
   <!-- This naming solution is somewhat pathetic – but unfortunately, while we
        need the green color as a text color most of the time, sometimes we use
@@ -436,6 +451,14 @@
   <xsl:choose>
     <xsl:when test="$format.print = 1">&mid-gray;</xsl:when>
     <xsl:otherwise>&mid-green;</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="chamaeleon-green">
+  <!-- See above... -->
+  <xsl:choose>
+    <xsl:when test="$format.print = 1">&mid-gray;</xsl:when>
+    <xsl:otherwise>&chamaeleon-green;</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
