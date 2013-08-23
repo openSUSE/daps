@@ -122,7 +122,7 @@
 
   <fo:list-item>
     <fo:list-item-label end-indent="label-end()">
-      <fo:block text-align="end" width="&column;mm" background-color="#F0F" font-family="{$title.fontset}"
+      <fo:block text-align="end" width="&column;mm" font-family="{$title.fontset}"
         font-size="&large;pt" color="&mid-gray;" line-height="{$line-height}">
         <fo:basic-link internal-destination="{$id}">
           <xsl:if test="$label != ''">
