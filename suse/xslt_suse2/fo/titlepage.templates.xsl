@@ -328,8 +328,8 @@
     absolute-position="fixed">
     <fo:block>
     <!-- Almost golden ratio... -->
-      <fo:external-graphic content-width="{(&column; * 5) + (&gutter; * 4)}mm"
-        width="{(&column; * 5) + (&gutter; * 4)}mm"
+      <fo:external-graphic content-width="{(&column; * 5) + (&gutter; * 3)}mm"
+        width="{(&column; * 5) + (&gutter; * 3)}mm"
         src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
