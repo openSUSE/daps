@@ -547,7 +547,8 @@
       <fo:table-row>
         <fo:table-cell display-align="after" height="{0.6 * $table.height}{$unit}">
 
-          <xsl:call-template name="suse.imprint"/>
+
+          <xsl:call-template name="date.and.revision"/>
 
           <xsl:apply-templates
             select="(bookinfo/corpauthor | info/corpauthor)[1]"
@@ -556,15 +557,12 @@
             select="(bookinfo/othercredit | info/othercredit)[1]"
             mode="book.titlepage.verso.auto.mode"/>
 
-          <xsl:apply-templates
-            select="(bookinfo/date | info/date)[1]"
-            mode="book.titlepage.verso.auto.mode"/>
-          <xsl:apply-templates
-            select="(bookinfo/releaseinfo | info/releaseinfo)[1]"
-            mode="book.titlepage.verso.auto.mode"/>
+          <xsl:call-template name="suse.imprint"/>
+
           <xsl:apply-templates
             select="(bookinfo/copyright | info/copyright)[1]"
             mode="book.titlepage.verso.auto.mode"/>
+
           <xsl:apply-templates
             select="(bookinfo/legalnotice | info/legalnotice)[1]"
             mode="book.titlepage.verso.auto.mode"/>
@@ -581,7 +579,7 @@
     </xsl:call-template>
   </xsl:variable>
   <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
-    space-after="1.2em">
+    space-after="1.2em" space-before="1.2em">
     <fo:block line-height="{$line-height}"
       white-space-treatment="preserve"
       wrap-option="no-wrap"
@@ -618,16 +616,36 @@ GERMANY</fo:block>
 </xsl:template>
 
 
-<xsl:template match="date" mode="book.titlepage.verso.auto.mode">
-  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
-    <xsl:call-template name="gentext">
-      <xsl:with-param name="key">pubdate</xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>: </xsl:text>
-    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+<xsl:template name="date.and.revision">
+  <xsl:variable name="date">
+    <xsl:apply-templates select="(bookinfo/date | info/date)[1]"/>
+  </xsl:variable>
+  <xsl:variable name="revision" select="substring-before(substring-after((bookinfo/releaseinfo | info/releaseinfo)[1], '$'), ' $')"/>
+  <xsl:if test="$date != '' or $revision != ''">
+    <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
+      <xsl:if test="$date != ''">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key" select="'pubdate'"/>
+        </xsl:call-template>
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key" select="'admonseparator'"/>
+        </xsl:call-template>
+        <xsl:value-of select="$date"/>
+        <xsl:if test="$revision != ''">
+          <!-- Misappropriated but hopefully still correct everywhere. -->
+          <xsl:call-template name="gentext.template">
+            <xsl:with-param name="context" select="'iso690'"/>
+            <xsl:with-param name="name" select="'spec.pubinfo.sep'"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:if>
+    <xsl:if test="$revision != ''">
+      <xsl:value-of select="$revision"/>
+    </xsl:if>
   </fo:block>
+  </xsl:if>
 </xsl:template>
-  
+
 <xsl:template match="date/processing-instruction('dbtimestamp')" mode="book.titlepage.verso.mode">
   <xsl:call-template name="pi.dbtimestamp"/>
 </xsl:template>
