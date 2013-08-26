@@ -451,9 +451,15 @@
 </xsl:template>
 
 <xsl:template match="legalnotice" mode="book.titlepage.verso.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="book.titlepage.verso.style" font-size="&small;pt">
-    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+    <xsl:apply-templates select="*" mode="book.titlepage.verso.mode"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="legalnotice/para" mode="book.titlepage.verso.mode">
+  <fo:block space-after="0.25em" space-before="0em">
+    <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
 
