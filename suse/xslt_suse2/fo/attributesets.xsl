@@ -79,7 +79,7 @@
   use-attribute-sets="toc.common.properties title.name.color">
   <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
-  <xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>toc.line.properties
+  <xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
 </xsl:attribute-set>
 <!-- preface, chapter, appendix, glossary -->
