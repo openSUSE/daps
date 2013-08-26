@@ -171,7 +171,7 @@
       <xsl:call-template name="object.id"/>
     </xsl:variable>
 
-    <fo:block hyphenate="false">
+    <fo:block>
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
       </xsl:if>
@@ -220,7 +220,7 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     
-    <fo:list-block xsl:use-attribute-sets="toc.level1.properties"
+    <fo:list-block xsl:use-attribute-sets="toc.level1.properties" relative-align="baseline"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
         <fo:list-item>
@@ -231,7 +231,8 @@
               </fo:basic-link>
             </fo:block>
           </fo:list-item-label>
-          <fo:list-item-body start-indent="body-start()">
+          <fo:list-item-body start-indent="body-start()"
+            hyphenate="false">
             <xsl:copy-of select="$title"/>
           </fo:list-item-body>
         </fo:list-item>
@@ -263,20 +264,23 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
 
-    <fo:list-block role="TOC.{local-name()}"
-      xsl:use-attribute-sets="toc.level2.properties dark-green sans.bold.noreplacement"
+    <fo:list-block role="TOC.{local-name()}" relative-align="baseline"
+      font-size="&xx-large;pt"
+       xsl:use-attribute-sets="toc.level2.properties dark-green sans.bold.noreplacement"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="dark-green">
-          <fo:block text-align-last="right">
+          <fo:block text-align="right">
             <fo:basic-link internal-destination="{$id}">
               <xsl:value-of select="$label"/>
             </fo:basic-link>
           </fo:block>
         </fo:list-item-label>
-        <fo:list-item-body start-indent="body-start()" font-size="&xx-large;">
-          <xsl:copy-of select="$title"/>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block>
+            <xsl:copy-of select="$title"/>
+          </fo:block>
         </fo:list-item-body>
       </fo:list-item>
     </fo:list-block>
@@ -310,6 +314,7 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     <fo:list-block  role="TOC.{local-name()}"  xsl:use-attribute-sets="toc.level3.properties"
+       relative-align="baseline"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
         <fo:list-item>
