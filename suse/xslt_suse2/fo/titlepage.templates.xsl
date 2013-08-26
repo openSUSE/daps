@@ -662,7 +662,7 @@ GERMANY</fo:block>
       space-before.maximum="2em" 
       space-after="3em" 
       start-indent="{&column; + &gutter;}mm"
-      font-size="&super-large;" font-weight="normal"
+      font-size="&super-large;pt" font-weight="normal"
       font-family="{$title.fontset}">
       <xsl:call-template name="gentext">
         <xsl:with-param name="key" select="'TableofContents'"/>
