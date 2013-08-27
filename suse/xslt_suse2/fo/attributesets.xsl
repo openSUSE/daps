@@ -79,23 +79,23 @@
   use-attribute-sets="toc.common.properties title.name.color">
   <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
-  <xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
+  <!--<xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- preface, chapter, appendix, glossary -->
 <xsl:attribute-set name="toc.level2.properties"
   use-attribute-sets="toc.common.properties sans.bold">
   <xsl:attribute name="line-height">1.3</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
-  <xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
-  <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>
+  <!--<xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
+  <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- sect1 -->
 <xsl:attribute-set name="toc.level3.properties"
   use-attribute-sets="toc.common.properties">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <xsl:attribute name="space-after">0.75em</xsl:attribute>
+  <!--<xsl:attribute name="space-after">0.75em</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- sect2 -->
 <xsl:attribute-set name="toc.level4.properties"

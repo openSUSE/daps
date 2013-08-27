@@ -223,6 +223,8 @@
     
     
     <fo:list-block xsl:use-attribute-sets="toc.level1.properties" relative-align="baseline"
+       space-before="&columnfragment;mm"
+       space-after="&gutterfragment;mm"
        keep-with-next.within-column="always"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
@@ -251,6 +253,8 @@
     </xsl:variable>
     
     <fo:block start-indent="{&column; + &gutter;}mm"
+      
+      space-before="&columnfragment;mm"
       xsl:use-attribute-sets="toc.level2.properties dark-green">
         <xsl:copy-of select="$title"/>
     </fo:block>
@@ -268,11 +272,16 @@
     </xsl:variable>
 
     <fo:list-block role="TOC.{local-name()}" relative-align="baseline"
-      font-size="&xx-large;pt"
+       font-size="&xx-large;pt"
        keep-with-next.within-column="always"
        xsl:use-attribute-sets="toc.level2.properties dark-green sans.bold.noreplacement"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
+      <xsl:if test="preceding-sibling::chapter or
+                    preceding-sibling::appendix">
+        <xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
+        <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>
+      </xsl:if>
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="dark-green">
           <fo:block text-align="right">
@@ -320,9 +329,15 @@
        relative-align="baseline"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
-      <xsl:if test="child::sect2">
-        <xsl:attribute name="space-after">0.1em</xsl:attribute>
-      </xsl:if>
+      
+      <xsl:choose>
+        <xsl:when test="child::sect2">
+          <xsl:attribute name="space-after">0.1em</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="space-after">0.75em</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
         <fo:list-item>
           <fo:list-item-label end-indent="label-end()"
             text-align="end">
