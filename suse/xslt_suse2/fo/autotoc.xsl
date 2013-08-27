@@ -253,9 +253,11 @@
     </xsl:variable>
     
     <fo:block start-indent="{&column; + &gutter;}mm"
-      
       space-before="&columnfragment;mm"
       xsl:use-attribute-sets="toc.level2.properties dark-green">
+      <xsl:if test="not(following-sibling::part)">
+        <xsl:attribute name="space-after">0.75em</xsl:attribute>
+      </xsl:if>
         <xsl:copy-of select="$title"/>
     </fo:block>
 </xsl:template>
@@ -279,7 +281,7 @@
        provisional-label-separation="{&gutter;}mm">
       <xsl:if test="preceding-sibling::chapter or
                     preceding-sibling::appendix">
-        <xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
+        <xsl:attribute name="space-before">2* &gutterfragment;mm</xsl:attribute>
         <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>
       </xsl:if>
       <fo:list-item>
