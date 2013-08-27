@@ -251,7 +251,7 @@
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
-    
+
     <fo:block start-indent="{&column; + &gutter;}mm"
       space-before="&columnfragment;mm"
       xsl:use-attribute-sets="toc.level2.properties dark-green">
@@ -301,21 +301,8 @@
     </fo:list-block>
 </xsl:template>
 
-<xsl:template match="preface/sect1" mode="susetoc">
-<!--
-  <xsl:variable name="id">
-      <xsl:call-template name="object.id"/>
-  </xsl:variable>
-  
-  <fo:block xsl:use-attribute-sets="toc.level3.properties"
-     margin-left="{&column; + &gutter;}mm"
-     role="TOC.{local-name()}" >
-    <fo:basic-link internal-destination="{$id}">
-      <xsl:call-template name="toc.title"/>
-    </fo:basic-link>
-  </fo:block>
-  -->
-</xsl:template>
+<xsl:template match="preface/sect1|preface/sect
+                    |appendix[@role='legal']/sect1|appendix[@role='legal']/sect" mode="susetoc"/>
 
 <xsl:template match="sect1|refentry" mode="susetoc">
     <xsl:variable name="id">
@@ -393,51 +380,6 @@
     </xsl:if>
     </fo:basic-link>
   </fo:inline>
-</xsl:template>
-
-<xsl:template match="sect2" mode="susetoc">
-<!--    <xsl:param name="sect2.style" select="'inline'"/>
-    <xsl:variable name="id">
-      <xsl:call-template name="object.id"/>
-    </xsl:variable>
-    <xsl:variable name="label">
-      <xsl:call-template name="toc.label"/>
-    </xsl:variable>
-    <xsl:variable name="title">
-      <xsl:call-template name="toc.title"/>
-    </xsl:variable>
-    
-    
-    <xsl:choose>
-      <xsl:when test="$sect2.style = 'block'">
-          <fo:list-block  role="TOC.{local-name()}" 
-      xsl:use-attribute-sets="toc.level4.properties"
-       relative-align="baseline"
-       provisional-distance-between-starts="{&column; + &gutter;}mm"
-       provisional-label-separation="{&gutter;}mm">
-        <fo:list-item>
-          <fo:list-item-label end-indent="label-end()"
-            text-align="end">
-            <fo:block text-align-last="end">
-                <fo:basic-link internal-destination="{$id}">
-                  <xsl:value-of select="$label"/>
-                </fo:basic-link>
-            </fo:block>
-          </fo:list-item-label>
-          <fo:list-item-body start-indent="body-start()" text-align="start">
-            <xsl:copy-of select="$title"/>
-          </fo:list-item-body>
-        </fo:list-item>
-      </fo:list-block>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-\-<fo:inline><xsl:copy-of select="$title"/>
-          <xsl:if test="../following-sibling::sect2">
-            <xsl:text> * </xsl:text>
-          </xsl:if>
-        </fo:inline>-\->
-      </xsl:otherwise>
-    </xsl:choose>-->
 </xsl:template>
 
 </xsl:stylesheet>
