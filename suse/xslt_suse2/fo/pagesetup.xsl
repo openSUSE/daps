@@ -27,10 +27,22 @@
 
 
 <xsl:template name="product">
+  <!-- 
+     This XPath is needed to select an abbreviated version for the
+     footer. For this reason, authors can add two productnames: one
+     with a @role attribute, another without. The one with
+     @role="abbrev" is used as an abbreviated productname.
+     
+     If there is no productnumber or productname with @role
+     available, it falls back to the element without the @role.
+     
+  -->
   <xsl:variable name="productnumber"
-    select="ancestor-or-self::book/bookinfo/productnumber[1]"/>
+    select="(ancestor-or-self::book/bookinfo/productnumber[@role] |
+             ancestor-or-self::book/bookinfo/productnumber[not(@role)])[last()]"/>
   <xsl:variable name="productname"
-    select="ancestor-or-self::book/bookinfo/productname[1]"/>
+    select="(ancestor-or-self::book/bookinfo/productname[@role] |
+             ancestor-or-self::book/bookinfo/productname[not(@role)])[last()]"/>
 
   <xsl:apply-templates select="$productname"/>
   <xsl:text> </xsl:text>
