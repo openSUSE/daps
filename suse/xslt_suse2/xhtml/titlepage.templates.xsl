@@ -17,11 +17,27 @@
   xmlns="http://www.w3.org/1999/xhtml">
 
   <xsl:template name="product.name">
-    <xsl:apply-templates select="(ancestor-or-self::*/*/productname)[last()]"/>
+    <xsl:choose>
+      <xsl:when test="ancestor-or-self::*/*/productname[not(@role)]">
+        <!-- One can use role="abbrev" to additionally store a short version
+             of the productname. Dito for the productnumber below. -->
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productname[not(@role)])[last()]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productname)[last()]"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="product.number">
-    <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber)[last()]"/>
+    <xsl:choose>
+      <xsl:when test="ancestor-or-self::*/*/productnumber[not(@role)]">
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber[not(@role)])[last()]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber)[last()]"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="version.info">
@@ -53,7 +69,7 @@
         <xsl:with-param name="prefaced" select="1"/>
       </xsl:call-template>
     </xsl:variable>
-  
+
     <xsl:if test="$generate.version.info != 0 and $info-text != '' and
                   ($is.chunk = 1 or
                   (local-name(.) = 'article' or local-name(.) = 'book'))">
@@ -68,7 +84,7 @@
         <xsl:with-param name="prefaced" select="0"/>
       </xsl:call-template>
     </xsl:variable>
-  
+
     <xsl:if test="$generate.version.info != 0 and $info-text != ''">
       <h6 class="version-info"><xsl:copy-of select="$info-text"/></h6>
     </xsl:if>
@@ -141,7 +157,7 @@
   <xsl:template name="bibliography.titlepage.before.recto">
     <xsl:call-template name="version.info.page-top"/>
   </xsl:template>
-  
+
 
   <!-- ===================================================== -->
   <!-- article titlepage templates -->
@@ -184,7 +200,7 @@
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="title"/>
             </xsl:when>
         </xsl:choose>
-        
+
         <xsl:choose>
             <xsl:when test="articleinfo/subtitle">
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/subtitle"/>
@@ -199,7 +215,7 @@
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="subtitle"/>
             </xsl:when>
         </xsl:choose>
-        
+
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/othercredit"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/othercredit"/>
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/othercredit"/>
@@ -264,7 +280,7 @@
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="title"/>
             </xsl:when>
         </xsl:choose>
-        
+
         <xsl:choose>
             <xsl:when test="bookinfo/subtitle">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/subtitle"/>
@@ -276,24 +292,24 @@
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="subtitle"/>
             </xsl:when>
         </xsl:choose>
-        
+
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/releaseinfo"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/releaseinfo"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/copyright"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/copyright"/>
-    
+
         <!-- Legal notice removed from here, now positioned at the bottom of the page, see: division.xsl -->
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/pubdate"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/pubdate"/>
-    
+
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revision"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revision"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/revhistory"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/revhistory"/>
-    
+
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/abstract"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/abstract"/>
-    
+
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="info/corpauthor"/>
         <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="bookinfo/authorgroup"/>
@@ -322,5 +338,5 @@
 
   <xsl:template match="abstract" mode="book.titlepage.recto.auto.mode">
     <xsl:apply-templates select="."/>
-  </xsl:template>  
+  </xsl:template>
 </xsl:stylesheet>
