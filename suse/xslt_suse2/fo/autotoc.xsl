@@ -346,7 +346,7 @@
         </fo:list-item>
       </fo:list-block>
     <xsl:if test="child::sect2">
-      <fo:block role="sect2" xsl:use-attribute-sets="toc.level4.properties" 
+      <fo:block keep-with-previous.within-column="always" role="sect2" xsl:use-attribute-sets="toc.level4.properties" 
         text-align="start"
         space-after="0.75em"
         start-indent="{&column; + &gutter;}mm">
