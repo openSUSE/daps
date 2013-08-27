@@ -95,9 +95,15 @@
   use-attribute-sets="toc.common.properties">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <xsl:attribute name="space-after">0.5em</xsl:attribute>
+  <xsl:attribute name="space-after">0.75em</xsl:attribute>
 </xsl:attribute-set>
-
+<!-- sect2 -->
+<xsl:attribute-set name="toc.level4.properties"
+  use-attribute-sets="toc.common.properties">
+  <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
+  <xsl:attribute name="font-weight">normal</xsl:attribute>
+  <!--<xsl:attribute name="space-after">0.25em</xsl:attribute>-->
+</xsl:attribute-set>
 
 <!-- 4. Processor Extensions ==================================== -->
 
