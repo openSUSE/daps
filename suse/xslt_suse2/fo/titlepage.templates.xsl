@@ -25,7 +25,7 @@
 
 <!-- Chapter ==================================================== -->
 <xsl:template match="title" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
     font-size="&super-large;pt">
     <xsl:call-template name="component.title">
@@ -43,7 +43,7 @@
 </xsl:template>
 
 <xsl:template match="author|corpauthor|authorgroup" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="chapter.titlepage.recto.style"
     space-after="0.5em" font-size="&small;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -51,7 +51,7 @@
 </xsl:template>
 
 <xsl:template match="othercredit" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="chapter.titlepage.recto.style" font-size="&small;pt"
     font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -60,7 +60,7 @@
 
 <!--  Appendix ================================================== -->
 <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -71,7 +71,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
       font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -79,7 +79,7 @@
 </xsl:template>
 
 <xsl:template match="corpauthor" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -87,7 +87,7 @@
 </xsl:template>
 
 <xsl:template match="authorgroup" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -95,7 +95,7 @@
 </xsl:template>
 
 <xsl:template match="author" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -103,7 +103,7 @@
 </xsl:template>
 
 <xsl:template match="othercredit" mode="appendix.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="appendix.titlepage.recto.style"
     font-family="{$title.fontset}" font-size="&small;pt">
     <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
@@ -112,7 +112,7 @@
 
 <!-- Glossary =================================================== -->
 <xsl:template name="glossary.titlepage.recto">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="glossary.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -141,7 +141,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="glossdiv.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="glossdiv.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&xxx-large;pt"
     font-family="{$title.fontset}">
@@ -153,7 +153,7 @@
 
 <!-- Preface ==================================================== -->
 <xsl:template name="preface.titlepage.recto">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="preface.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -554,7 +554,6 @@
       <fo:table-row>
         <fo:table-cell display-align="after" height="{0.6 * $table.height}{$unit}">
 
-
           <xsl:call-template name="date.and.revision"/>
 
           <xsl:apply-templates
@@ -578,6 +577,7 @@
     </fo:table-body>
   </fo:table>
 </xsl:template>
+
 
 <xsl:template name="suse.imprint">
   <xsl:variable name="ulink.url">
@@ -627,6 +627,12 @@ GERMANY</fo:block>
   </fo:block>
 </xsl:template>
 
+
+<xsl:template match="authorgroup|author" mode="book.titlepage.verso.auto.mode">
+  <fo:block xsl:use-attribute-sets="title.font">
+    <xsl:apply-imports/>
+  </fo:block>
+</xsl:template>
 
 <xsl:template name="date.and.revision">
   <xsl:variable name="date">
