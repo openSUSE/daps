@@ -1555,7 +1555,7 @@ em .guimenu, i .guimenu, .question em {
     font-style: normal; /* Don't use italics within italics... */
 }
 
-strong, b, .authorgroup-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
+strong, b, .imprint-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
     font-weight: 600;
 }
 
@@ -1623,11 +1623,16 @@ p, .simplelist td {
     margin-top: 0;
 }
 
-.abstract + .authorgroup, .highlights + .authorgroup {
-    margin: 10px 0;
+.abstract + .authorgroup, .highlights + .authorgroup,
+.abstract + .author, .highlights + .author,
+.abstract + .corpauthor, .highlights + .corpauthor,
+.abstract + .othercredit, .highlights + .othercredit,
+.abstract + .editor, .highlights + .editor,
+.abstract + .date, .highlights + .date {
+    margin: 10px 0 0;
 }
 
-.authorgroup {
+.authorgroup, .othercredit, .editor, .date {
     color: #333;
 }
 
