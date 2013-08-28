@@ -197,10 +197,8 @@
 <xsl:template match="*" mode="susetoc">
     <xsl:call-template name="log.message">
       <xsl:with-param name="level">WARNING</xsl:with-param>
-      <!--<xsl:with-param name="source">select.user.pagemaster</xsl:with-param>-->
       <xsl:with-param name="context-desc">toc</xsl:with-param>
       <xsl:with-param name="context-desc-field-length" select="4"/>
-      <!--<xsl:with-param name="message-field-length" select="50"/>-->
       <xsl:with-param name="message">
         <xsl:text>Unknown TOC element </xsl:text>
         <xsl:value-of select="local-name()"/>
@@ -349,17 +347,19 @@
           </fo:list-item-body>
         </fo:list-item>
       </fo:list-block>
-    <xsl:if test="child::sect2">
-      <fo:block keep-with-previous.within-column="always" role="sect2" xsl:use-attribute-sets="toc.level4.properties" 
-        text-align="start"
-        space-after="0.75em"
-        start-indent="{&column; + &gutter;}mm">
-        <xsl:apply-templates select="sect2" mode="sect2.susetoc"/>
-      </fo:block>
-    </xsl:if>
 </xsl:template>
 
-<xsl:template match="sect2" mode="sect2.susetoc">
+<xsl:template match="sect2[1]" mode="susetoc">
+  <fo:block keep-with-previous.within-column="always" role="sect2"
+    xsl:use-attribute-sets="toc.level4.properties" text-align="start"
+    space-after="0.75em" start-indent="{&column; + &gutter;}mm">
+    <xsl:apply-templates select="../sect2" mode="inline.susetoc"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="sect2" mode="susetoc"/>
+
+<xsl:template match="sect2" mode="inline.susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -381,11 +381,5 @@
     </fo:basic-link>
   </fo:inline>
 </xsl:template>
-
-<!--
-     Empty, as sect2's are handled by the sect1 template
--->
-<xsl:template match="sect2" mode="susetoc"/>
-
 
 </xsl:stylesheet>
