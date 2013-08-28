@@ -18,9 +18,15 @@
 
   <xsl:template name="product.name">
     <xsl:choose>
-      <xsl:when test="ancestor-or-self::*/*/productname[not(@role)]">
+      <xsl:when test="*/productname[not(@role)]">
         <!-- One can use role="abbrev" to additionally store a short version
              of the productname. Dito for the productnumber below. -->
+        <xsl:apply-templates select="(*/productname[not(@role)])[last()]"/>
+      </xsl:when>
+      <xsl:when test="*/productname">
+        <xsl:apply-templates select="(*/productname)[last()]"/>
+      </xsl:when>
+      <xsl:when test="ancestor-or-self::*/*/productname[not(@role)]">
         <xsl:apply-templates select="(ancestor-or-self::*/*/productname[not(@role)])[last()]"/>
       </xsl:when>
       <xsl:otherwise>
@@ -31,6 +37,14 @@
 
   <xsl:template name="product.number">
     <xsl:choose>
+      <xsl:when test="*/productnumber[not(@role)]">
+        <!-- One can use role="abbrev" to additionally store a short version
+             of the productname. Dito for the productnumber below. -->
+        <xsl:apply-templates select="(*/productnumber[not(@role)])[last()]"/>
+      </xsl:when>
+      <xsl:when test="*/productnumber">
+        <xsl:apply-templates select="(*/productnumber)[last()]"/>
+      </xsl:when>
       <xsl:when test="ancestor-or-self::*/*/productnumber[not(@role)]">
         <xsl:apply-templates select="(ancestor-or-self::*/*/productnumber[not(@role)])[last()]"/>
       </xsl:when>
