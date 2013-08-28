@@ -382,4 +382,10 @@
   </fo:inline>
 </xsl:template>
 
+<!--
+     Empty, as sect2's are handled by the sect1 template
+-->
+<xsl:template match="sect2" mode="susetoc"/>
+
+
 </xsl:stylesheet>
