@@ -562,6 +562,9 @@
           <xsl:apply-templates
             select="(bookinfo/othercredit | info/othercredit)[1]"
             mode="book.titlepage.verso.auto.mode"/>
+          <xsl:apply-templates
+            select="(bookinfo/editor | info/editor)[1]"
+            mode="book.titlepage.verso.auto.mode"/>
 
           <xsl:call-template name="suse.imprint"/>
 
@@ -627,6 +630,11 @@ GERMANY</fo:block>
   </fo:block>
 </xsl:template>
 
+<xsl:template match="editor" mode="book.titlepage.verso.auto.mode">
+  <fo:block font-size="&normal;pt">
+    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+  </fo:block>
+</xsl:template>
 
 <xsl:template match="authorgroup|author" mode="book.titlepage.verso.auto.mode">
   <fo:block xsl:use-attribute-sets="title.font">
