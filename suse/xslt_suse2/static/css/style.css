@@ -14,7 +14,7 @@ html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
 a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
 sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
 fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup,
 menu, nav, output, section, summary, audio, video {
     margin: 0;
     padding: 0;
@@ -70,7 +70,7 @@ html, body {
 }
 
 #_toolbar-bottom,
-#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
+#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book,
 #_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 #_content > .appendix, #_content > .glossary, #_content > .reference,
 #_content > .refentry, #_content > .bibliography, #_content > .index,
@@ -115,7 +115,7 @@ html, body {
 
 /* to be able to position various elements and be able to use z-index*/
 #_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
-    position: relative; 
+    position: relative;
 }
 
 #_white-bg, #_toolbar, #_fixed-header {
@@ -1126,7 +1126,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     width: 100%;
     overflow: hidden;
     background-color: #EFEFF0;
-    
+
 }
 
 #_outer-wrap {
@@ -1591,6 +1591,15 @@ strong, b, .imprint-label, .version-info .productname, .version-info .productnum
     width: 25px;
 }
 
+p, td {
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+.ulink {
+    -moz-hyphens: none;
+    hyphens: none;
+}
 
 p, .simplelist td {
     color: #000;
@@ -1647,7 +1656,7 @@ p, .simplelist td {
 .figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
 .itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
 .title .link, .subtitle .link, .table-title .link, .example-title .link,
-.figure-title .link, .procedure-title .link, .orderedlist-title .link, 
+.figure-title .link, .procedure-title .link, .orderedlist-title .link,
 .itemizedlist-title .link, .variablelist-title .link, .qandadiv-title .link,
 .title .ulink, .subtitle .ulink, .table-title .ulink, .example-title .ulink,
 .figure-title .ulink, .procedure-title .ulink, .orderedlist-title .ulink,
@@ -1741,7 +1750,7 @@ code {
     margin: 5px 0;
     border: 1px solid #999;
 }
-    
+
 .example .screen-wrap {
     margin: 10px 0 24px;
 }
@@ -1750,7 +1759,7 @@ code {
     font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     color: #333;
     line-height: 125%;
-    display: block;  
+    display: block;
     overflow: auto;
     background-color: #EFEFF0;
     text-align: left;
@@ -1828,7 +1837,7 @@ code {
 
 .toc dt {
     margin-bottom: 5px;
-} 
+}
 
 .indexdiv h3 {
     font-weight: 600;
@@ -1954,7 +1963,7 @@ a:hover code, a:focus code, a:active code {
 
 /* We put an ndash character between keycaps that are part of an accelerator */
 .key-connector {
-    margin: 0 -1px; 
+    margin: 0 -1px;
     color: #666;
 }
 
@@ -2301,7 +2310,7 @@ body.draft {
     #_toc-area, #_nav-area {
         width: 49.98%;
     }
-    
+
     #_find-area {
         height: 42px;
         background-color: #439239;
