@@ -35,7 +35,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="chapter.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="chapter.titlepage.recto.style italicized"
     font-size="&large;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
@@ -216,7 +216,7 @@
 
 <!-- Bibliography =============================================== -->
 <xsl:template name="bibliography.titlepage.recto">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="bibliography.titlepage.recto.style"
     margin-left="{$title.margin.left}" font-size="&super-large;pt"
     font-family="{$title.fontset}">
@@ -246,7 +246,7 @@
 
 <!-- Article ==================================================== -->
 <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="article.titlepage.recto.style"
     keep-with-next.within-column="always">
     <xsl:call-template name="component.title">
@@ -257,7 +257,7 @@
 
 <xsl:template match="author|corpauthor|authorgroup"
   mode="article.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
   xsl:use-attribute-sets="article.titlepage.recto.style" space-before="0.5em"
   font-size="&x-large;pt">
     <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
@@ -424,7 +424,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="book.titlepage.recto.auto.mode">
-  <fo:block 
+  <fo:block
     xsl:use-attribute-sets="title.font" font-size="&super-large;pt"
     space-before="&gutterfragment;mm">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
@@ -598,7 +598,7 @@
 Maxfeldstr. 5
 90409 Nürnberg
 GERMANY</fo:block>
-     <fo:block><fo:basic-link external-destination="{$ulink.url}" 
+     <fo:block><fo:basic-link external-destination="{$ulink.url}"
        xsl:use-attribute-sets="dark-green">
        <xsl:value-of select="$suse.doc.url"/>
        <xsl:call-template name="image-after-link"/>
@@ -615,7 +615,7 @@ GERMANY</fo:block>
 </xsl:template>
 
 <xsl:template match="productname[not(@role)]" mode="book.titlepage.verso.auto.mode">
-  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style" 
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
     font-size="&large;pt" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
     <xsl:text> </xsl:text>
@@ -624,8 +624,8 @@ GERMANY</fo:block>
         productnumber with role
       -->
       <xsl:apply-templates mode="book.titlepage.verso.mode"
-        select="(../productname[@role] |
-                 ../productname[not(@role)])[last()]" />
+        select="(../productnumber[@role] |
+                 ../productnumber[not(@role)])[last()]" />
     </xsl:if>
   </fo:block>
 </xsl:template>
@@ -685,8 +685,8 @@ GERMANY</fo:block>
     <fo:block
       xsl:use-attribute-sets="table.of.contents.titlepage.recto.style dark-green"
       space-before.minimum="1em" space-before.optimum="1.5em"
-      space-before.maximum="2em" 
-      space-after="3em" 
+      space-before.maximum="2em"
+      space-after="3em"
       start-indent="{&column; + &gutter;}mm"
       font-size="&super-large;pt" font-weight="normal"
       font-family="{$title.fontset}">
