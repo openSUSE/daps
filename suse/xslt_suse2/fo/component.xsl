@@ -123,14 +123,7 @@
   <xsl:param name="node" select="."/>
 
   <xsl:variable name="title">
-    <xsl:choose>
-      <xsl:when test="refmeta/refentrytitle">
-        <xsl:apply-templates select="refentry/refmetatitle"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="$node" mode="title.markup"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$node" mode="title.markup"/>
   </xsl:variable>
 
   <xsl:variable name="number">
