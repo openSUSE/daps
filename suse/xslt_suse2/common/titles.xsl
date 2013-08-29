@@ -40,7 +40,7 @@
 
 <xsl:template match="refnamediv" mode="title.markup">
   <!-- Delegate it to the refname template -->
-  <xsl:apply-templates select="refname"/>
+  <xsl:apply-templates select="refname" mode="title.markup"/>
 </xsl:template>
 
 </xsl:stylesheet>
