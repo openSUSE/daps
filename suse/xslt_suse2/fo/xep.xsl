@@ -6,6 +6,102 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   exclude-result-prefixes="exsl">
   
+  <xsl:template name="xep-document-information">
+  <rx:meta-info>
+    <xsl:variable name="authors" 
+                  select="(//author|//editor|//corpauthor|//authorgroup)[1]"/>
+    <xsl:if test="$authors">
+      <xsl:variable name="author">
+        <xsl:choose>
+          <xsl:when test="$authors[self::authorgroup]">
+            <xsl:call-template name="person.name.list">
+              <xsl:with-param name="person.list" 
+                        select="$authors/*[self::author|self::corpauthor|
+                               self::othercredit|self::editor]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="$authors[self::corpauthor]">
+            <xsl:value-of select="$authors"/>
+          </xsl:when>
+          <xsl:when test="$authors[orgname]">
+            <xsl:value-of select="$authors/orgname"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="person.name">
+              <xsl:with-param name="node" select="$authors"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:element name="rx:meta-field">
+        <xsl:attribute name="name">author</xsl:attribute>
+        <xsl:attribute name="value">
+          <xsl:value-of select="normalize-space($author)"/>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:if>
+    <xsl:variable name="node" 
+      select="(/* | key('id', $rootid))[last()]"/>
+    
+    <xsl:variable name="title">
+      <xsl:apply-templates select="$node[1]" mode="label.markup"/>
+      <xsl:apply-templates select="$node[1]" mode="title.markup"/>
+      <xsl:variable name="productname">
+         <xsl:apply-templates select="$node[1]/*/productname"/>
+      </xsl:variable>
+      <xsl:if test="$productname != ''">
+         <xsl:text> - </xsl:text>
+         <xsl:value-of select="$productname"/>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:element name="rx:meta-field">
+      <xsl:attribute name="name">creator</xsl:attribute>
+      <xsl:attribute name="value">
+        <xsl:text>DocBook </xsl:text>
+        <xsl:value-of select="$DistroTitle"/>
+        <xsl:text> V</xsl:text>
+        <xsl:value-of select="$VERSION"/>
+      </xsl:attribute>
+    </xsl:element>
+
+    <xsl:element name="rx:meta-field">
+      <xsl:attribute name="name">title</xsl:attribute>
+      <xsl:attribute name="value">
+        <xsl:value-of select="normalize-space($title)"/>
+      </xsl:attribute>
+    </xsl:element>
+
+    <xsl:if test="//keyword">
+      <xsl:element name="rx:meta-field">
+        <xsl:attribute name="name">keywords</xsl:attribute>
+        <xsl:attribute name="value">
+          <xsl:for-each select="//keyword">
+            <xsl:value-of select="normalize-space(.)"/>
+            <xsl:if test="position() != last()">
+              <xsl:text>, </xsl:text>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:if>
+
+    <xsl:if test="//subjectterm">
+      <xsl:element name="rx:meta-field">
+        <xsl:attribute name="name">subject</xsl:attribute>
+        <xsl:attribute name="value">
+          <xsl:for-each select="//subjectterm">
+            <xsl:value-of select="normalize-space(.)"/>
+            <xsl:if test="position() != last()">
+              <xsl:text>, </xsl:text>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:attribute>
+      </xsl:element>
+    </xsl:if>
+  </rx:meta-info>
+</xsl:template>
+  
   <xsl:template match="set|book|article" mode="xep.outline">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
