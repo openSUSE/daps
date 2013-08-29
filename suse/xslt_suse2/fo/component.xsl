@@ -181,7 +181,7 @@
        level. -->
 
     <fo:block span="all">
-      <xsl:apply-templates select="*" mode="span-in-block"/>
+      <xsl:apply-templates select="@* | node()" mode="span-in-block"/>
     </fo:block>
 </xsl:template>
 
