@@ -4,7 +4,7 @@
   xmlns:exsl="http://exslt.org/common"
   exclude-result-prefixes="exsl">
   
-  <xsl:template match="refsect1/title" mode="label.markup"/>
+  <xsl:template match="refsect1/title|refnamediv" mode="label.markup"/>
   
   
 </xsl:stylesheet>
