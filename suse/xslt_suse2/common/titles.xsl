@@ -38,4 +38,9 @@
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="refnamediv" mode="title.markup">
+  <!-- Delegate it to the refname template -->
+  <xsl:apply-templates select="refname"/>
+</xsl:template>
+
 </xsl:stylesheet>
