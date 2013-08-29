@@ -63,7 +63,8 @@ set       toc,title
 
 
 <!-- 9. Reference Pages ========================================= -->
-
+<xsl:param name="refentry.generate.name" select="1"/>
+<xsl:param name="refentry.generate.title" select="0"/>
 
 <!-- 10. Tables ================================================= -->
 <xsl:param name="default.table.width">100%</xsl:param>
