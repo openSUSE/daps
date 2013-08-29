@@ -80,29 +80,24 @@
   <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
-  <!--<xsl:attribute name="space-before">&ultra-large;pt</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- preface, chapter, appendix, glossary -->
 <xsl:attribute-set name="toc.level2.properties"
   use-attribute-sets="toc.common.properties sans.bold">
   <xsl:attribute name="line-height">1.3</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
-  <!--<xsl:attribute name="space-before">&columnfragment;mm</xsl:attribute>
-  <xsl:attribute name="space-after">&gutterfragment;mm</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- sect1 -->
 <xsl:attribute-set name="toc.level3.properties"
   use-attribute-sets="toc.common.properties">
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <!--<xsl:attribute name="space-after">0.75em</xsl:attribute>-->
 </xsl:attribute-set>
 <!-- sect2 -->
 <xsl:attribute-set name="toc.level4.properties"
   use-attribute-sets="toc.common.properties">
   <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <!--<xsl:attribute name="space-after">0.25em</xsl:attribute>-->
 </xsl:attribute-set>
 
 <!-- 4. Processor Extensions ==================================== -->
@@ -130,7 +125,7 @@
 
 
 <!-- 12. Cross References ======================================= -->
-<xsl:attribute-set name="xref.properties" 
+<xsl:attribute-set name="xref.properties"
                    use-attribute-sets="dark-green">
   <xsl:attribute name="font-style">
     <xsl:choose>
@@ -140,7 +135,7 @@
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
-  
+
 
 <!-- 13. Lists ================================================== -->
 
@@ -201,7 +196,7 @@
   <xsl:attribute name="end-indent">
     <xsl:value-of select="$verbatim-start-end-indent"/>
   </xsl:attribute>
-  
+
 </xsl:attribute-set>
 
 
@@ -315,7 +310,11 @@
   <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
-
+<xsl:attribute-set name="abstract.properties">
+  <xsl:attribute name="font-size"><xsl:value-of select="(&normal; * $fontsize-adjust) div $mono-xheight-adjust"/>pt</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
+  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/></xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 22. Profiling ============================================== -->
 
