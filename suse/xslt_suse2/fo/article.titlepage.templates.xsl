@@ -158,11 +158,11 @@
   </xsl:template>
   
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
-    <fo:block start-indent="{&column; + &gutter;}mm">
+    <fo:block>
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+    
   <xsl:template match="article/abstract"/>
  
 </xsl:stylesheet>
