@@ -147,25 +147,6 @@
     </fo:inline>
   </xsl:template>
   
-  <xsl:template name="article.titlepage.verso">
-    <xsl:variable name="toc.params">
-      <xsl:call-template name="find.path.params">
-        <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:if test="contains($toc.params, 'toc')">
-      <xsl:call-template name="component.toc">
-        <xsl:with-param name="toc.title.p" select="contains($toc.params, 'title')"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  
   <xsl:template match="article/abstract"/>
-  
-  <xsl:template name="make.component.tocs">
-    <xsl:if test="not(self::article)">
-      <xsl:apply-imports/>
-    </xsl:if>
-  </xsl:template>
-
+ 
 </xsl:stylesheet>
