@@ -318,7 +318,7 @@
        provisional-label-separation="{&gutter;}mm">
       
       <xsl:choose>
-        <xsl:when test="child::sect2">
+        <xsl:when test="child::sect2 and not(ancestor::article)">
           <xsl:attribute name="space-after">0.1em</xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
@@ -350,11 +350,14 @@
 </xsl:template>
 
 <xsl:template match="sect2[1]" mode="susetoc">
-  <fo:block keep-with-previous.within-column="always" role="sect2"
-    xsl:use-attribute-sets="toc.level4.properties" text-align="start"
-    space-after="0.75em" start-indent="{&column; + &gutter;}mm">
-    <xsl:apply-templates select="../sect2" mode="inline.susetoc"/>
-  </fo:block>
+    <xsl:if test="not(ancestor::article)">
+      <fo:block keep-with-previous.within-column="always" role="sect2"
+        xsl:use-attribute-sets="toc.level4.properties"
+        text-align="start" space-after="0.75em"
+        start-indent="{&column; + &gutter;}mm">
+        <xsl:apply-templates select="../sect2" mode="inline.susetoc"/>
+      </fo:block>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="sect2" mode="susetoc"/>
