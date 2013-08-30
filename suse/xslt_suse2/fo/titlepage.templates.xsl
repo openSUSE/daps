@@ -49,10 +49,20 @@
       xsl:use-attribute-sets="table.of.contents.titlepage.recto.style dark-green"
       space-before.minimum="1em" space-before.optimum="1.5em"
       space-before.maximum="2em"
-      space-after="3em"
       start-indent="{&column; + &gutter;}mm"
-      font-size="&super-large;pt" font-weight="normal"
+      font-weight="normal"
       font-family="{$title.fontset}">
+      <xsl:choose>
+        <xsl:when test="ancestor-or-self::article">
+          <xsl:attribute name="space-after">.5em</xsl:attribute>
+          <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="ancestor-or-self::book">
+          <xsl:attribute name="space-after">3em</xsl:attribute>
+          <xsl:attribute name="font-size">&super-large;pt</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
       <xsl:call-template name="gentext">
         <xsl:with-param name="key" select="'TableofContents'"/>
       </xsl:call-template>
