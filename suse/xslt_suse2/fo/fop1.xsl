@@ -102,8 +102,10 @@
             <!-- XMP properties go here -->
 
             <!-- Creator Tool -->
-            <xmp:CreatorTool>DocBook XSL Stylesheets with Apache
-              FOP</xmp:CreatorTool>
+            <xmp:CreatorTool>
+              <xsl:text>DocBook XSL Stylesheets v</xsl:text>
+              <xsl:value-of select="$VERSION"/>
+              <xsl:text> with Apache FOP</xsl:text></xmp:CreatorTool>
           </rdf:Description>
 
         </rdf:RDF>
