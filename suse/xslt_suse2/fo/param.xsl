@@ -37,6 +37,7 @@
 <xsl:param name="autotoc.label.separator" select="' '"/>
 <xsl:param name="generate.toc">
 /article  toc,title
+article   toc,title
 book      toc,title
 part      toc,title
 reference toc,title
