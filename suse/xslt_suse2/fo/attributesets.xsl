@@ -319,6 +319,8 @@
   <xsl:attribute name="font-size"><xsl:value-of select="(&normal; * $fontsize-adjust) div $mono-xheight-adjust"/>pt</xsl:attribute>
   <xsl:attribute name="text-align">start</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/></xsl:attribute>
+  <xsl:attribute name="start-indent">inherit</xsl:attribute>
+  <xsl:attribute name="end-indent">inherit</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- 22. Profiling ============================================== -->
