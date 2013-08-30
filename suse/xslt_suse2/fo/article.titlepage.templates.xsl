@@ -62,26 +62,31 @@
           width="{$logo.width}mm" src="{$logo}"/>
     </fo:block>
     
-    <fo:block space-after=".75em">
-      <xsl:choose>
-        <xsl:when test="articleinfo/title">
-          <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
-            select="articleinfo/title"/>
-        </xsl:when>
-        <xsl:when test="artheader/title">
-          <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
-            select="artheader/title"/>
-        </xsl:when>
-        <xsl:when test="info/title">
-          <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
-            select="info/title"/>
-        </xsl:when>
-        <xsl:when test="title">
-          <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
-            select="title"/>
-        </xsl:when>
-      </xsl:choose>
-    </fo:block>
+    <fo:block start-indent="{&column; + &gutter;}mm"
+      role="article.titlepage.recto">
+      <fo:block space-after=".75em">
+        <xsl:choose>
+          <xsl:when test="articleinfo/title">
+            <xsl:apply-templates
+              mode="article.titlepage.recto.auto.mode"
+              select="articleinfo/title"/>
+          </xsl:when>
+          <xsl:when test="artheader/title">
+            <xsl:apply-templates
+              mode="article.titlepage.recto.auto.mode"
+              select="artheader/title"/>
+          </xsl:when>
+          <xsl:when test="info/title">
+            <xsl:apply-templates
+              mode="article.titlepage.recto.auto.mode"
+              select="info/title"/>
+          </xsl:when>
+          <xsl:when test="title">
+            <xsl:apply-templates
+              mode="article.titlepage.recto.auto.mode" select="title"/>
+          </xsl:when>
+        </xsl:choose>
+      </fo:block>
    
     <fo:block padding-before="1em">
       <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
@@ -99,6 +104,7 @@
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/author"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
     
+    
     <xsl:choose>
       <xsl:when test="articleinfo/abstract or info/abstract">
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/abstract"/>
@@ -108,15 +114,19 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="abstract"/>
       </xsl:when>
     </xsl:choose>
+      
+    </fo:block>
   </xsl:template>
   
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
     <fo:block font-size="&super-large;pt" line-height="1.25"
-      xsl:use-attribute-sets="article.titlepage.recto.style"
+      xsl:use-attribute-sets="article.titlepage.recto.style dark-green"
       keep-with-next.within-column="always">
-      <xsl:call-template name="component.title">
+      <xsl:apply-templates select="ancestor-or-self::article[1]"
+        mode="title.markup"/>
+      <!--<xsl:call-template name="component.title">
         <xsl:with-param name="node" select="ancestor-or-self::article[1]"/>
-      </xsl:call-template>
+      </xsl:call-template>-->
     </fo:block>
   </xsl:template>
   
@@ -145,6 +155,12 @@
       font-size="&large;pt">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:inline>
+  </xsl:template>
+  
+  <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
+    <fo:block start-indent="{&column; + &gutter;}mm">
+      <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
+    </fo:block>
   </xsl:template>
   
   <xsl:template match="article/abstract"/>
