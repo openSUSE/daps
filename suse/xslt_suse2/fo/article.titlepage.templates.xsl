@@ -57,7 +57,7 @@
     </xsl:variable>
 
     
-    <fo:block margin-left="-5mm" space-after="2em" text-align="left">
+    <fo:block margin-left="-4.25mm" space-after="2em" text-align="left">
         <fo:external-graphic content-width="{$logo.width}mm"
           width="{$logo.width}mm" src="{$logo}"/>
     </fo:block>
