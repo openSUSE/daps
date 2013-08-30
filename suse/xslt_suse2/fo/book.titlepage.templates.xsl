@@ -392,9 +392,12 @@ GERMANY</fo:block>
 
 <xsl:template name="date.and.revision">
   <xsl:variable name="date">
-    <xsl:apply-templates select="(bookinfo/date | info/date)[1]"/>
+    <xsl:apply-templates select="(bookinfo/date | info/date |
+      articleinfo/date)[1]"/>
   </xsl:variable>
-  <xsl:variable name="revision" select="substring-before(substring-after((bookinfo/releaseinfo | info/releaseinfo)[1], '$'), ' $')"/>
+  <xsl:variable name="revision"
+    select="substring-before(substring-after((bookinfo/releaseinfo |
+    info/releaseinfo | articleinfo/releaseinfo)[1], '$'), ' $')"/>
   <xsl:if test="$date != '' or $revision != ''">
     <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
       <xsl:if test="$date != ''">
