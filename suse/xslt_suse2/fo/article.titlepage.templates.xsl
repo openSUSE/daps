@@ -62,7 +62,7 @@
           width="{$logo.width}mm" src="{$logo}"/>
     </fo:block>
     
-    <fo:block start-indent="{&column; + &gutter;}mm"
+    <fo:block start-indent="{&column; + &gutter;}mm" text-align="start"
       role="article.titlepage.recto">
       <fo:block space-after=".75em">
         <xsl:choose>
@@ -95,15 +95,11 @@
     </fo:block>
     
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/corpauthor"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/corpauthor"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/corpauthor"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/authorgroup"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/authorgroup"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/authorgroup"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/author"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/author"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
-    
     
     <xsl:choose>
       <xsl:when test="articleinfo/abstract or info/abstract">
@@ -114,7 +110,22 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="abstract"/>
       </xsl:when>
     </xsl:choose>
+    
+    <fo:block>
+    <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="articleinfo/othercredit"/>
+    <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="info/othercredit"/>
+    </fo:block>
       
+    <fo:block>
+    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/editor"/>
+    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/editor"/>
+    </fo:block>
+      
+    <fo:block>
+      <xsl:call-template name="date.and.revision"/>
+    </fo:block>
+   
+
     </fo:block>
   </xsl:template>
   
@@ -149,16 +160,16 @@
     </fo:block>
   </xsl:template>
   
-  <xsl:template match="author|corpauthor|editor"
+  <xsl:template match="author|corpauthor|editor|othercredit"
     mode="article.titlepage.recto.auto.mode">
-    <fo:inline  space-before="0.5em"
+    <fo:inline space-before="0.5em"
       font-size="&large;pt">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:inline>
   </xsl:template>
   
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
-    <fo:block>
+    <fo:block space-after="1.5em">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
