@@ -240,7 +240,6 @@
 <!-- 21. Property Sets ========================================== -->
 
 <xsl:attribute-set name="article.titlepage.recto.style">
-  <xsl:attribute name="font-size">&xxx-large;pt</xsl:attribute>
   <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
