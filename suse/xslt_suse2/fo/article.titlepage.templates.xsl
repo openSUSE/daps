@@ -105,7 +105,7 @@
   </xsl:template>
   
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
-    <fo:block
+    <fo:block font-size="&super-large;pt" line-height="1.25"
       xsl:use-attribute-sets="article.titlepage.recto.style"
       keep-with-next.within-column="always">
       <xsl:call-template name="component.title">
