@@ -239,6 +239,12 @@
 
 <!-- 21. Property Sets ========================================== -->
 
+<xsl:attribute-set name="article.titlepage.recto.style">
+  <xsl:attribute name="font-size">&xxx-large;pt</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
+</xsl:attribute-set>
+
+
 <xsl:variable name="hook">
   <xsl:choose>
     <xsl:when test="$fop1.extensions != 0">&#160;</xsl:when>
