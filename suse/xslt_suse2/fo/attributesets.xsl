@@ -322,6 +322,10 @@
   <xsl:attribute name="start-indent">inherit</xsl:attribute>
   <xsl:attribute name="end-indent">inherit</xsl:attribute>
 </xsl:attribute-set>
+<xsl:attribute-set name="abstract.title.properties">
+   <xsl:attribute name="text-align">start</xsl:attribute>
+</xsl:attribute-set>
+ 
 
 <!-- 22. Profiling ============================================== -->
 
