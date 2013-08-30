@@ -99,9 +99,15 @@
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/author"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
     
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/abstract"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
-    
+    <xsl:choose>
+      <xsl:when test="articleinfo/abstract or info/abstract">
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/abstract"/>
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/abstract"/>
+      </xsl:when>
+      <xsl:when test="abstract">
+        <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="abstract"/>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
@@ -153,6 +159,8 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+  
+  <xsl:template match="article/abstract"/>
   
   <xsl:template name="make.component.tocs">
     <xsl:if test="not(self::article)">
