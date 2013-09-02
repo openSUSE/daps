@@ -316,6 +316,7 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="abstract.properties">
+  <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="(&normal; * $fontsize-adjust) div $mono-xheight-adjust"/>pt</xsl:attribute>
   <xsl:attribute name="text-align">start</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/></xsl:attribute>
@@ -325,7 +326,6 @@
 <xsl:attribute-set name="abstract.title.properties">
    <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
-
 
 <!-- 22. Profiling ============================================== -->
 
