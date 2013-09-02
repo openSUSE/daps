@@ -171,7 +171,7 @@
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
-  
+
     <xsl:element name="{$wrapper.name}">
       <xsl:if test="$page.debug != 0">
         <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
@@ -214,12 +214,12 @@
     <xsl:variable name="label">
       <xsl:call-template name="toc.label"/>
     </xsl:variable>
-    
+
     <xsl:variable name="title">
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
-    
-    
+
+
     <fo:list-block xsl:use-attribute-sets="toc.level1.properties" relative-align="baseline"
        space-before="&columnfragment;mm"
        space-after="&gutterfragment;mm"
@@ -240,7 +240,7 @@
           </fo:list-item-body>
         </fo:list-item>
       </fo:list-block>
-</xsl:template> 
+</xsl:template>
 
 <xsl:template match="preface|glossary|index" mode="susetoc">
     <xsl:variable name="id">
@@ -299,8 +299,8 @@
     </fo:list-block>
 </xsl:template>
 
-<xsl:template match="preface/sect1|preface/sect
-                    |appendix[@role='legal']/sect1|appendix[@role='legal']/sect" mode="susetoc"/>
+<xsl:template match="preface/sect1|appendix[@role='legal']/sect1|sect2"
+  mode="susetoc"/>
 
 <xsl:template match="sect1|refentry" mode="susetoc">
     <xsl:variable name="id">
@@ -316,9 +316,10 @@
        relative-align="baseline"
        provisional-distance-between-starts="{&column; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm">
-      
+
       <xsl:choose>
-        <xsl:when test="child::sect2 and not(ancestor::article)">
+        <xsl:when test="child::sect2 and not(ancestor::article)
+                                     and not(ancestor::*[@role='legal'])">
           <xsl:attribute name="space-after">0.1em</xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
@@ -350,7 +351,7 @@
 </xsl:template>
 
 <xsl:template match="sect2[1]" mode="susetoc">
-    <xsl:if test="not(ancestor::article)">
+    <xsl:if test="not(ancestor::article)and not(ancestor::*[@role='legal'])">
       <fo:block keep-with-previous.within-column="always" role="sect2"
         xsl:use-attribute-sets="toc.level4.properties"
         text-align="start" space-after="0.75em"
@@ -359,8 +360,6 @@
       </fo:block>
     </xsl:if>
 </xsl:template>
-
-<xsl:template match="sect2" mode="susetoc"/>
 
 <xsl:template match="sect2" mode="inline.susetoc">
     <xsl:variable name="id">
@@ -371,7 +370,7 @@
        <xsl:with-param name="wrapper.name">fo:inline</xsl:with-param>
      </xsl:call-template>
   </xsl:variable>
-  
+
   <fo:inline>
     <fo:basic-link internal-destination="{$id}">
     <xsl:copy-of select="$title"/>
