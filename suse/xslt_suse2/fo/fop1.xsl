@@ -4,23 +4,29 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   exclude-result-prefixes="exsl">
-  
-  
+
+
   <xsl:template name="fop1-document-information">
     <xsl:variable name="authors"
       select="(//author|//editor|//corpauthor|//authorgroup)[1]"/>
-    <xsl:variable name="node" 
+    <xsl:variable name="node"
       select="(/* | key('id', $rootid))[last()]"/>
-    
+
     <xsl:variable name="title">
       <xsl:apply-templates select="$node[1]" mode="label.markup"/>
       <xsl:apply-templates select="$node[1]" mode="title.markup"/>
       <xsl:variable name="productname">
          <xsl:value-of select="$node[1]/*/productname[1]"/>
       </xsl:variable>
+      <xsl:variable name="productnumber">
+         <xsl:value-of select="$node[1]/*/productnumber[1]"/>
+      </xsl:variable>
       <xsl:if test="$productname != ''">
-         <xsl:text> - </xsl:text>
-         <xsl:value-of select="$productname"/>
+        <!-- Checking for productname only is not an oversight - if there is
+             no name, we likely don't want to display the version either. -->
+        <xsl:text> - </xsl:text>
+        <xsl:value-of select="$productname"/>
+        <xsl:value-of select="$productnumber"/>
       </xsl:if>
     </xsl:variable>
 
@@ -112,10 +118,10 @@
       </x:xmpmeta>
     </fo:declarations>
   </xsl:template>
-  
+
   <xsl:template match="set|book|article" mode="fop1.outline"
     priority="2">
-    
+
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -128,7 +134,7 @@
           select="normalize-space($generate.toc)"/>
       </xsl:call-template>
     </xsl:variable>
-    
+
     <fo:bookmark internal-destination="{$id}">
       <xsl:attribute name="starting-state">
         <xsl:value-of select="$bookmarks.state"/>
@@ -137,7 +143,7 @@
         <xsl:value-of select="normalize-space($bookmark-label)"/>
       </fo:bookmark-title>
     </fo:bookmark>
-    
+
     <xsl:if  test="contains($toc.params, 'toc')
       and (book|part|reference|preface|chapter|appendix|article|topic
       |glossary|bibliography|index|setindex
@@ -153,6 +159,6 @@
     </xsl:if>
     <xsl:apply-templates select="*" mode="fop1.outline"/>
   </xsl:template>
-  
-  
+
+
 </xsl:stylesheet>
