@@ -78,7 +78,7 @@
 <xsl:attribute-set name="toc.level1.properties"
   use-attribute-sets="toc.common.properties title.name.color">
   <xsl:attribute name="font-weight">normal</xsl:attribute>
-  <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
+  <xsl:attribute name="font-size">&large;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
 </xsl:attribute-set>
 <!-- preface, chapter, appendix, glossary -->
@@ -325,7 +325,7 @@
 <xsl:attribute-set name="abstract.title.properties">
    <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
- 
+
 
 <!-- 22. Profiling ============================================== -->
 
