@@ -18,10 +18,10 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  
+
   <!--  Book ====================================================== -->
 <xsl:template name="book.titlepage.recto">
   <xsl:variable name="height">
@@ -328,33 +328,6 @@
     </fo:table-body>
   </fo:table>
 </xsl:template>
-
-
-<xsl:template name="suse.imprint">
-  <xsl:variable name="ulink.url">
-    <xsl:call-template name="fo-external-image">
-      <xsl:with-param name="filename" select="$suse.doc.url"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
-    space-after="1.2em" space-before="1.2em">
-    <fo:block line-height="{$line-height}"
-      white-space-treatment="preserve"
-      wrap-option="no-wrap"
-      linefeed-treatment="preserve"
-      white-space-collapse="false">SUSE Linux Products GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-GERMANY</fo:block>
-     <fo:block><fo:basic-link external-destination="{$ulink.url}"
-       xsl:use-attribute-sets="dark-green">
-       <xsl:value-of select="$suse.doc.url"/>
-       <xsl:call-template name="image-after-link"/>
-     </fo:basic-link>
-     </fo:block>
-  </fo:block>
-</xsl:template>
-
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
     <fo:block font-size="&x-large;pt"
       xsl:use-attribute-sets="book.titlepage.verso.style dark-green sans.bold.noreplacement title.font">
@@ -378,15 +351,49 @@ GERMANY</fo:block>
   </fo:block>
 </xsl:template>
 
+<xsl:template match="authorgroup" mode="book.titlepage.verso.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.verso.style title.font">
+    <xsl:call-template name="verso.authorgroup"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="author" mode="book.titlepage.verso.auto.mode">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xsl:use-attribute-sets="book.titlepage.verso.style title.font">
+    <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
+  </fo:block>
+</xsl:template>
+
 <xsl:template match="editor" mode="book.titlepage.verso.auto.mode">
   <fo:block font-size="&normal;pt">
     <xsl:apply-templates select="." mode="book.titlepage.verso.mode"/>
   </fo:block>
 </xsl:template>
 
-<xsl:template match="authorgroup|author" mode="book.titlepage.verso.auto.mode">
-  <fo:block xsl:use-attribute-sets="title.font">
-    <xsl:apply-imports/>
+<xsl:template name="suse.imprint">
+  <xsl:variable name="ulink.url">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename" select="$suse.doc.url"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="book.titlepage.verso.style"
+    space-after="1.2em" space-before="1.2em">
+    <fo:block line-height="{$line-height}"
+      white-space-treatment="preserve"
+      wrap-option="no-wrap"
+      linefeed-treatment="preserve"
+      white-space-collapse="false">SUSE Linux Products GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+GERMANY</fo:block>
+    <fo:block>
+      <fo:basic-link external-destination="{$ulink.url}"
+        xsl:use-attribute-sets="dark-green">
+        <xsl:value-of select="$suse.doc.url"/>
+        <xsl:call-template name="image-after-link"/>
+      </fo:basic-link>
+    </fo:block>
   </fo:block>
 </xsl:template>
 
