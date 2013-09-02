@@ -132,9 +132,10 @@ task before
 <xsl:param name="body.margin.top" select="'0mm'"/>
 <xsl:param name="page.margin.bottom" select="'18.9mm'"/>
 <xsl:param name="body.margin.bottom" select="'30.5mm'"/>
-<xsl:param name="page.margin.inner" select="'&column;mm'"/>
+<xsl:param name="page.margin.start" select="&column;"/>
+<xsl:param name="page.margin.inner" select="concat($page.margin.start, 'mm')"/>
 <xsl:param name="body.margin.inner" select="'0mm'"/>
-<xsl:param name="page.margin.outer" select="'&column;mm'"/>
+<xsl:param name="page.margin.outer" select="concat($page.margin.start, 'mm')"/>
 <xsl:param name="body.margin.outer" select="'0mm'"/>
 
 <xsl:param name="header.rule" select="0"/>
@@ -299,7 +300,7 @@ task before
 
 <!-- Creates borders or other things to debug FO code-->
 <xsl:param name="debug.fo" select="0"/>
-  
+
 <!-- Saxon will fail if these parameters aren't declared. -->
 <xsl:param name="format.print" select="0"/>
 
@@ -308,7 +309,7 @@ task before
 
 <!-- Where to link for SUSE documentation -->
 <xsl:param name="suse.doc.url">http://www.suse.com/documentation</xsl:param>
-  
+
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
 <!-- Should navigation titles be displayed? 0=no, 1=yes
@@ -321,7 +322,31 @@ task before
 -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
-<xsl:param name="booktitlepage.bw.logo"    select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
-<xsl:param name="booktitlepage.color.logo" select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
-  
+
+<!-- SUSE logo on book & article title page: file names, display width and how
+     much of the logo should overhang the page border -->
+
+<xsl:param name="titlepage.bw.logo"
+  select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
+<xsl:param name="titlepage.color.logo"
+  select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
+
+<xsl:param name="titlepage.logo.width"
+  ><xsl:value-of select="(1 + (602 div 3395)) * &column;"/>mm</xsl:param>
+<xsl:param name="titlepage.logo.overhang" select="(602 div 3395) * &column;"/>
+  <!-- These above calculations are not complete voodoo - the SUSE logo SVG is
+       3395px wide, the first "S" of SUSE starts at 602px and the output width
+       of the logo is $titlepage.logo.width. Effectively, the Geeko tail ends
+       up on the page border. -->
+
+
+<!-- Background image for Book title page -->
+
+<xsl:param name="titlepage.bw.background"
+  select="concat($styleroot,'images/logos/suse-logo-tail-bw.svg')"/>
+<xsl:param name="titlepage.color.background"
+  select="concat($styleroot,'images/logos/suse-logo-tail.svg')"/>
+<xsl:param name="titlepage.background.width"
+  ><xsl:value-of select="(&column; * 5) + (&gutter; * 3)"/>mm</xsl:param>
+
 </xsl:stylesheet>

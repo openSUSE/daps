@@ -29,13 +29,6 @@
         <xsl:with-param name="string" select="$page.height"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="logo.width"
-      select="(1 + (602 div 3395)) * &column;"/>
-    <xsl:variable name="margin.start">
-      <xsl:call-template name="get.value.from.unit">
-        <xsl:with-param name="string" select="$page.margin.outer"/>
-      </xsl:call-template>
-    </xsl:variable>
     <xsl:variable name="unit">
       <xsl:call-template name="get.unit.from.unit">
         <xsl:with-param name="string" select="$page.height"/>
@@ -46,24 +39,25 @@
         <xsl:with-param name="filename">
           <xsl:choose>
             <xsl:when test="$format.print != 0">
-              <xsl:value-of select="$booktitlepage.bw.logo"/>
+              <xsl:value-of select="$titlepage.bw.logo"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="$booktitlepage.color.logo"/>
+              <xsl:value-of select="$titlepage.color.logo"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
 
-    <fo:block margin-left="-4.25mm" space-after="2em" text-align="left">
-        <fo:external-graphic content-width="{$logo.width}mm"
-          width="{$logo.width}mm" src="{$logo}"/>
+    <fo:block margin-left="-{$titlepage.logo.overhang}mm" space-after="&gutter;mm"
+      text-align="left">
+      <fo:external-graphic content-width="{$titlepage.logo.width}"
+        width="{$titlepage.logo.width}" src="{$logo}"/>
     </fo:block>
 
     <fo:block start-indent="{&column; + &gutter;}mm" text-align="start"
       role="article.titlepage.recto">
-      <fo:block space-after=".75em">
+      <fo:block space-after="{&gutterfragment;}mm">
         <xsl:choose>
           <xsl:when test="articleinfo/title">
             <xsl:apply-templates
@@ -87,7 +81,7 @@
         </xsl:choose>
       </fo:block>
 
-    <fo:block padding-before="1em">
+    <fo:block padding-before="{2 * &gutterfragment;}mm" padding-start="{(2 * &column;) + &gutter;}mm">
       <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
             select="articleinfo/productname[not(@role)]"/>
@@ -137,12 +131,12 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="productname" mode="article.titlepage.recto.auto.mode">
+  <xsl:template match="productname[1]" mode="article.titlepage.recto.auto.mode">
     <fo:block text-align="start" font-size="&xx-large;pt">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
       <xsl:if test="../productnumber">
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="../productnumber" mode="article.titlepage.recto.mode"/>
+        <xsl:apply-templates select="../productnumber[1]" mode="article.titlepage.recto.mode"/>
       </xsl:if>
     </fo:block>
   </xsl:template>

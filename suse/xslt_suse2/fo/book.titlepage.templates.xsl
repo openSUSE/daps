@@ -29,12 +29,6 @@
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="logo.width" select="(1 + (602 div 3395)) * &column;"/>
-  <xsl:variable name="margin.start">
-    <xsl:call-template name="get.value.from.unit">
-      <xsl:with-param name="string" select="$page.margin.outer"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:variable name="unit">
     <xsl:call-template name="get.unit.from.unit">
       <xsl:with-param name="string" select="$page.height"/>
@@ -45,10 +39,10 @@
       <xsl:with-param name="filename">
         <xsl:choose>
           <xsl:when test="$format.print != 0">
-            <xsl:value-of select="$booktitlepage.bw.logo"/>
+            <xsl:value-of select="$titlepage.bw.logo"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="$booktitlepage.color.logo"/>
+            <xsl:value-of select="$titlepage.color.logo"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>
@@ -59,41 +53,38 @@
       <xsl:with-param name="filename">
         <xsl:choose>
           <xsl:when test="$format.print != 0">
-            <xsl:value-of select="concat($styleroot,
-              'images/logos/suse-logo-tail-bw.svg')"/>
+            <xsl:value-of select="$titlepage.bw.background"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="concat($styleroot,
-              'images/logos/suse-logo-tail.svg')"/>
+            <xsl:value-of select="$titlepage.color.background"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
 
+  <!--  Geeko tail cover image -->
   <fo:block-container top="{(2 - &goldenratio;) * $height}{$unit}" left="0"
     text-align="right"
     absolute-position="fixed">
     <fo:block>
     <!-- Almost golden ratio... -->
-      <fo:external-graphic content-width="{(&column; * 5) + (&gutter; * 3)}mm"
-        width="{(&column; * 5) + (&gutter; * 3)}mm"
+      <fo:external-graphic content-width="{$titlepage.background.width}"
+        width="{$titlepage.background.width}"
         src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
 
-  <fo:block-container top="{$page.margin.top}"
-    left="{$margin.start - ((602 div 3395) * &column;)}mm" absolute-position="fixed">
-    <!-- The above calculation is not complete voodoo - the SUSE logo SVG is
-         3395px wide, the first "S" of SUSE starts at 602px and the output width
-         of the logo is $logo.width mm. Effectively, the Geeko tail ends up on
-         the page border. -->
+  <!-- Logo -->
+  <fo:block-container top="{$page.margin.top}" absolute-position="fixed"
+    left="{$page.margin.start - $titlepage.logo.overhang}mm">
     <fo:block>
-      <fo:external-graphic content-width="{$logo.width}mm" width="{$logo.width}mm"
-        src="{$logo}"/>
+      <fo:external-graphic content-width="{$titlepage.logo.width}"
+        width="{$titlepage.logo.width}" src="{$logo}"/>
     </fo:block>
   </fo:block-container>
 
+  <!-- Title and product -->
   <fo:block-container top="0" left="0" absolute-position="fixed"
     height="{$height * (2 - &goldenratio;)}{$unit}">
     <fo:block>
