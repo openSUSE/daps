@@ -26,6 +26,7 @@
              no name, we likely don't want to display the version either. -->
         <xsl:text> - </xsl:text>
         <xsl:value-of select="$productname"/>
+        <xsl:text> </xsl:text>
         <xsl:value-of select="$productnumber"/>
       </xsl:if>
     </xsl:variable>
