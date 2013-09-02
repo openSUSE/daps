@@ -18,10 +18,10 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  
+
   <!-- Article ==================================================== -->
   <xsl:template name="article.titlepage.recto">
     <xsl:variable name="height">
@@ -56,12 +56,12 @@
       </xsl:call-template>
     </xsl:variable>
 
-    
+
     <fo:block margin-left="-4.25mm" space-after="2em" text-align="left">
         <fo:external-graphic content-width="{$logo.width}mm"
           width="{$logo.width}mm" src="{$logo}"/>
     </fo:block>
-    
+
     <fo:block start-indent="{&column; + &gutter;}mm" text-align="start"
       role="article.titlepage.recto">
       <fo:block space-after=".75em">
@@ -87,20 +87,20 @@
           </xsl:when>
         </xsl:choose>
       </fo:block>
-   
+
     <fo:block padding-before="1em">
       <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
             select="articleinfo/productname[not(@role)]"/>
     </fo:block>
-    
+
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/corpauthor"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/corpauthor"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/authorgroup"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/authorgroup"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/author"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/author"/>
-    
+
     <xsl:choose>
       <xsl:when test="articleinfo/abstract or info/abstract">
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/abstract"/>
@@ -110,25 +110,25 @@
         <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="abstract"/>
       </xsl:when>
     </xsl:choose>
-    
+
     <fo:block>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="articleinfo/othercredit"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="info/othercredit"/>
     </fo:block>
-      
+
     <fo:block>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/editor"/>
     <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/editor"/>
     </fo:block>
-      
+
     <fo:block>
       <xsl:call-template name="date.and.revision"/>
     </fo:block>
-   
+
 
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
     <fo:block font-size="&super-large;pt" line-height="1.25"
       xsl:use-attribute-sets="article.titlepage.recto.style dark-green"
@@ -140,7 +140,7 @@
       </xsl:call-template>-->
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="productname" mode="article.titlepage.recto.auto.mode">
     <fo:block text-align="start" font-size="&xx-large;pt">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
@@ -150,16 +150,16 @@
       </xsl:if>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="authorgroup"  mode="article.titlepage.recto.auto.mode">
-    <fo:block font-size="&large;pt" space-before="1em" 
+    <fo:block font-size="&large;pt" space-before="1em"
       text-align="start">
       <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="author|corpauthor"/>
       </xsl:call-template>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="author|corpauthor|editor|othercredit"
     mode="article.titlepage.recto.auto.mode">
     <fo:inline space-before="0.5em"
@@ -167,13 +167,13 @@
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:inline>
   </xsl:template>
-  
+
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
     <fo:block space-after="1.5em">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-    
+
   <xsl:template match="article/abstract"/>
- 
+
 </xsl:stylesheet>
