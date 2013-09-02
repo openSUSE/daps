@@ -56,7 +56,6 @@
       </xsl:call-template>
     </xsl:variable>
 
-
     <fo:block margin-left="-4.25mm" space-after="2em" text-align="left">
         <fo:external-graphic content-width="{$logo.width}mm"
           width="{$logo.width}mm" src="{$logo}"/>
@@ -112,22 +111,22 @@
     </xsl:choose>
 
     <fo:block>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="articleinfo/othercredit"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="info/othercredit"/>
+      <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="articleinfo/othercredit"/>
+      <xsl:apply-templates mode="article.titlepage.recto.auto.mode"  select="info/othercredit"/>
     </fo:block>
 
     <fo:block>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/editor"/>
-    <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/editor"/>
+      <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/editor"/>
+      <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/editor"/>
     </fo:block>
 
     <fo:block>
       <xsl:call-template name="date.and.revision"/>
     </fo:block>
 
-
     </fo:block>
   </xsl:template>
+
 
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
     <fo:block font-size="&super-large;pt" line-height="1.25"
@@ -135,9 +134,6 @@
       keep-with-next.within-column="always">
       <xsl:apply-templates select="ancestor-or-self::article[1]"
         mode="title.markup"/>
-      <!--<xsl:call-template name="component.title">
-        <xsl:with-param name="node" select="ancestor-or-self::article[1]"/>
-      </xsl:call-template>-->
     </fo:block>
   </xsl:template>
 
@@ -151,7 +147,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="authorgroup"  mode="article.titlepage.recto.auto.mode">
+  <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
     <fo:block font-size="&large;pt" space-before="1em"
       text-align="start">
       <xsl:call-template name="person.name.list">
@@ -160,13 +156,39 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="author|corpauthor|editor|othercredit"
+  <xsl:template match="author|corpauthor"
     mode="article.titlepage.recto.auto.mode">
-    <fo:inline space-before="0.5em"
-      font-size="&large;pt">
+    <fo:inline space-before="0.5em" font-size="&large;pt">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:inline>
   </xsl:template>
+
+  <xsl:template match="editor|othercredit"
+    mode="article.titlepage.recto.auto.mode">
+    <xsl:if test=". = ((../othercredit)|(../editor))[1]">
+      <xsl:call-template name="add.othercredit"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="add.othercredit">
+    <fo:block font-size="&normal;pt">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key">
+          <xsl:choose>
+            <xsl:when test="count((../othercredit)|(../editor)) > 1"
+              >Contributors</xsl:when>
+            <xsl:otherwise>Contributor</xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>: </xsl:text>
+      <xsl:call-template name="person.name.list">
+        <xsl:with-param name="person.list"
+          select="(../othercredit)|(../editor)"/>
+      </xsl:call-template>
+    </fo:block>
+  </xsl:template>
+
 
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
     <fo:block space-after="1.5em">
