@@ -16,7 +16,7 @@
       <xsl:apply-templates select="$node[1]" mode="label.markup"/>
       <xsl:apply-templates select="$node[1]" mode="title.markup"/>
       <xsl:variable name="productname">
-         <xsl:value-of select="$node[1]/*/productname[1]/text()"/>
+         <xsl:value-of select="$node[1]/*/productname[1]"/>
       </xsl:variable>
       <xsl:if test="$productname != ''">
          <xsl:text> - </xsl:text>
