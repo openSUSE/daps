@@ -44,9 +44,14 @@
     select="(ancestor-or-self::book/bookinfo/productname[@role] |
              ancestor-or-self::book/bookinfo/productname[not(@role)])[last()]"/>
 
-  <xsl:apply-templates select="$productname"/>
+  <xsl:apply-templates select="$productname" mode="footer"/>
   <xsl:text> </xsl:text>
-  <xsl:apply-templates select="$productnumber" />
+  <xsl:apply-templates select="$productnumber" mode="footer"/>
+</xsl:template>
+
+<xsl:template match="productname|productnumber" mode="footer">
+  <xsl:call-template name="inline.charseq"/>
+  <!-- Without adding @class -->
 </xsl:template>
 
 <xsl:template name="header.content">
