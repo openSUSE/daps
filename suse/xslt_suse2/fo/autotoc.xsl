@@ -155,14 +155,11 @@
 <xsl:param name="page.debug" select="0"/>
 
 <xsl:template name="toc.label">
-    <xsl:param name="node" select="."/>
+  <xsl:param name="node" select="."/>
 
-    <fo:block text-align="start">
-        <xsl:if test="$page.debug != 0">
-          <xsl:attribute name="border">0.25pt solid green</xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="$node" mode="label.markup"/>
-      </fo:block>
+  <fo:block text-align="start">
+      <xsl:apply-templates select="$node" mode="label.markup"/>
+  </fo:block>
 </xsl:template>
 
 <xsl:template name="toc.title">
@@ -173,9 +170,6 @@
     </xsl:variable>
 
     <xsl:element name="{$wrapper.name}">
-      <xsl:if test="$page.debug != 0">
-        <xsl:attribute name="border">0.25pt solid blue</xsl:attribute>
-      </xsl:if>
       <fo:basic-link internal-destination="{$id}">
         <fo:inline hyphenate="false">
           <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>

@@ -27,15 +27,15 @@
 
 
 <xsl:template name="product">
-  <!-- 
+  <!--
      This XPath is needed to select an abbreviated version for the
      footer. For this reason, authors can add two productnames: one
      with a @role attribute, another without. The one with
      @role="abbrev" is used as an abbreviated productname.
-     
+
      If there is no productnumber or productname with @role
      available, it falls back to the element without the @role.
-     
+
   -->
   <xsl:variable name="productnumber"
     select="(ancestor-or-self::book/bookinfo/productnumber[@role] |
@@ -257,7 +257,8 @@
   </xsl:variable>
 
   <xsl:variable name="candidate">
-    <fo:table xsl:use-attribute-sets="footer.table.properties">
+    <fo:table xsl:use-attribute-sets="footer.table.properties"
+       block-progression-dimension="auto">
       <xsl:call-template name="foot.sep.rule">
         <xsl:with-param name="pageclass" select="$pageclass"/>
         <xsl:with-param name="sequence" select="$sequence"/>
@@ -380,15 +381,13 @@
   <xsl:param name="sequence" select="''"/>
   <xsl:param name="gentext-key" select="''"/>
 
-  <fo:table xsl:use-attribute-sets="footer.table.properties">
-    <xsl:if test="$debug.fo != 0">
-      <xsl:attribute name="border">.75pt solid blue</xsl:attribute>
-    </xsl:if>
+  <fo:table xsl:use-attribute-sets="footer.table.properties"
+    block-progression-dimension="auto">
     <!-- Page number -->
-    <fo:table-column column-number="1" 
+    <fo:table-column column-number="1"
         column-width="{&column; + &gutter;}mm"/>
     <!-- Some titles -->
-    <fo:table-column column-number="2" 
+    <fo:table-column column-number="2"
         column-width="{(&column; * 5) + (&gutter; *4)}mm"/>
 
       <fo:table-body>
@@ -398,9 +397,6 @@
           </xsl:attribute>
           <fo:table-cell text-align="start" display-align="after"
             xsl:use-attribute-sets="sans.bold.noreplacement">
-            <xsl:if test="$debug.fo != 0">
-              <xsl:attribute name="border">.75pt solid red</xsl:attribute>
-            </xsl:if>
             <xsl:if test="$fop.extensions = 0">
               <xsl:attribute name="relative-align">baseline</xsl:attribute>
             </xsl:if>
@@ -414,9 +410,6 @@
             </fo:block>
           </fo:table-cell>
           <fo:table-cell display-align="after" text-align="end">
-            <xsl:if test="$debug.fo != 0">
-              <xsl:attribute name="border">.75pt solid green</xsl:attribute>
-            </xsl:if>
             <xsl:if test="$fop.extensions = 0">
               <xsl:attribute name="relative-align">baseline</xsl:attribute>
             </xsl:if>
@@ -480,9 +473,6 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
-
-
 
 <xsl:template name="user.pagemasters">
   <!-- New page-master for License pages -->
@@ -756,7 +746,7 @@
           page-position="first"/>
         <fo:conditional-page-master-reference master-reference="legal-odd"
           odd-or-even="odd"/>
-        <fo:conditional-page-master-reference 
+        <fo:conditional-page-master-reference
           odd-or-even="even">
           <xsl:attribute name="master-reference">
             <xsl:choose>
@@ -777,7 +767,7 @@
             page-position="first"/>
           <fo:conditional-page-master-reference master-reference="legal-odd-draft"
             odd-or-even="odd"/>
-          <fo:conditional-page-master-reference 
+          <fo:conditional-page-master-reference
             odd-or-even="even">
             <xsl:attribute name="master-reference">
               <xsl:choose>
