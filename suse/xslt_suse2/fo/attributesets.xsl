@@ -429,8 +429,7 @@
 
 
 <!-- 26. Custom ================================================= -->
-<xsl:attribute-set name="title.name.color" use-attribute-sets="dark-green">
-</xsl:attribute-set>
+<xsl:attribute-set name="title.name.color" use-attribute-sets="dark-green"/>
 
 <xsl:attribute-set name="title.number.color">
   <xsl:attribute name="color">&mid-gray;</xsl:attribute>
