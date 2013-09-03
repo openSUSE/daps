@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -30,19 +30,13 @@
   <date><?dbtimestamp?></date>
  </articleinfo>
  <abstract>
-  <para>
-   &daps-description-long;
-  </para>
-  <!-- FIXME: Should we additionally include this fragment?-->
-  <para>
-     &daps-quickstart-abstract;
-  </para>
-
+  <para>&daps-description-short;</para>
+  <para>&daps-quickstart-abstract;</para>
  </abstract>
  <sect1 id="sec.daps.quick.audience">
   <title>Target Audience</title>
   <para>
-   &audience; 
+   &audience;
   </para>
  </sect1>
  <sect1 id="sec.daps.quick.dbversions">
@@ -113,7 +107,7 @@
     administrator). For FOP, you usually only need to install the respective
     FOP package. However, not all FOP packages contain hyphenation pattern
     files.
-    <remark>taroth 2012-03-26: todo - mention download from 
+    <remark>taroth 2012-03-26: todo - mention download from
    offo.sourceforeg.net in troubleshooting section and add xref</remark>
    </para>
   </sect2>
@@ -139,9 +133,9 @@
 
   <sect2 id="sec.daps.quick.basics.dirstruct">
    <title>Directory Structure</title>
-<!--taroth 2012-04-26: cave, same contents in DAPS User Guide 
+<!--taroth 2012-04-26: cave, same contents in DAPS User Guide
   (daps_user_concept.xml, id=sec.daps.user.basics.dirstruct)-->
-<!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and 
+<!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and
   include it multiple times (callout IDs!)-->
    <para>
     For &dapsacr; to work out of the box, your XML files and images must be
@@ -164,7 +158,7 @@
      |      |--pdf/
      |      |--png/
      |      |--svg/
-     |--xml/<co id="co.quick.docdir.xml"/> 
+     |--xml/<co id="co.quick.docdir.xml"/>
          |--MAIN*.xml<co id="co.quick.docdir.main"/>
     </screen>
    </example>
@@ -293,15 +287,15 @@
  <sect1 id="sec.daps.quick.validate">
   <title>Validation</title>
   &daps-validation-basics;
-  
-  &daps-example-validation-error; 
+
+  &daps-example-validation-error;
    </sect1>
  <sect1 id="sec.daps.quick.imgs">
   <title>Image Handling</title>
   &daps-images-intro;
-  
+
   <sect2 id="sec.daps.quick.imgs.types">
-   <title>Supported Image Types</title> 
+   <title>Supported Image Types</title>
   &daps-img-formats;
   </sect2>
 
@@ -344,10 +338,10 @@
    and the &dclong; file for creating the output.
   </para>
 
-  <!--taroth 2013-01-15: cave, same contents in DAPS User Guide 
+  <!--taroth 2013-01-15: cave, same contents in DAPS User Guide
   (daps_user_concept.xml, see id=sec.daps.user.syntax)-->
 
-  <!--taroth 2013-01-15: impossible to source out to phrases-decl.ent and 
+  <!--taroth 2013-01-15: impossible to source out to phrases-decl.ent and
   include it multiple times (callout IDs!)-->
 
  <example id="ex.daps.syntax">
@@ -388,11 +382,11 @@
    </callout>
   </calloutlist>
  </example>
- 
+
  &daps-dc-file-tip;
-  
+
  &daps-help-basics;
- 
+
  <para>
    The following section introduces the key <command>daps</command> commands
    needed to create output formats from XML files. All examples are based on
@@ -418,7 +412,7 @@
  <sect2 id="sec.daps.quick.output.syntax">
   <title>Basic Syntax for Generating Output</title>
    <para>&dapsacr; supports a number of different output formats, including also
-   <quote>exotic</quote> formats like man pages or simple text. 
+   <quote>exotic</quote> formats like man pages or simple text.
    <xref linkend="table.daps.quick.output.overview" xrefstyle="select:label"/>
    gives an overview.</para>
  &daps-output-cmd-basics;
@@ -433,7 +427,7 @@
  <sect2 id="sec.daps.quick.output.formats">
   <title>Generating Different Output Formats</title>
   <para>The following table lists the main output formats and their
- characteristics, and the &dapsacr; subcommands to generate them. Refer to 
+ characteristics, and the &dapsacr; subcommands to generate them. Refer to
  <xref linkend="sec.daps.quick.output.syntax" xrefstyle="select:label"/>
  for the commands' basic syntax.</para>
   <table id="table.daps.quick.output.overview">
@@ -491,12 +485,12 @@
     </para>
    <screen>$ <command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
       &daps-output-remarks;
-   <para>If metadata to a file has been set<remark>taroth 2013-01-08: which 
+   <para>If metadata to a file has been set<remark>taroth 2013-01-08: which
      metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
      &dapsacr; can also include the metadata for each file in the output
      format:</para>
       <screen>$ daps -d &dc;-daps-example color-pdf --meta</screen>
-   
+
    &daps-note-output-adv;
   </sect3>
  </sect2>
@@ -533,7 +527,7 @@
  <remark>taroth 2012-04-19: enable links to glossary and troubleshooting chapter
   as soon as they contain useful content</remark>
 
-<!-- <para>For an overview of the key terms used in the context of &dapsacr; and 
+<!-- <para>For an overview of the key terms used in the context of &dapsacr; and
   DocBook, refer to <xref linkend="daps.glossary"/>.</para>-->
 
  <para>
