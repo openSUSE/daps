@@ -46,7 +46,9 @@
       <xsl:apply-templates select="$object" mode="object.label.template"/>
     </xsl:variable>
 
-    <fo:block xsl:use-attribute-sets="formal.title.properties">
+    <fo:block xsl:use-attribute-sets="formal.title.properties"
+      space-before="{&gutter;}mm" space-after="0em"
+      line-height="{$base-lineheight * 0.85}em">
       <xsl:choose>
         <xsl:when test="$placement = 'before'">
           <xsl:attribute
@@ -62,7 +64,7 @@
           <xsl:call-template name="substitute-markup">
             <xsl:with-param name="template" select="$label.template"/>
           </xsl:call-template>
-          <xsl:text> </xsl:text>
+          <xsl:text>&#xA0;</xsl:text>
         </fo:inline>
       </xsl:if>
       <fo:inline xsl:use-attribute-sets="title.name.color">
