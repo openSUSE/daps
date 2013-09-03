@@ -29,7 +29,7 @@
   <xsl:include href="chapter.titlepage.templates.xsl"/>
   <xsl:include href="glossary.titlepage.templates.xsl"/>
   <xsl:include href="preface.titlepage.templates.xsl"/>
-  
+
 
 <!-- Set ==================================================== -->
 <xsl:template match="title" mode="set.titlepage.recto.auto.mode">
@@ -47,18 +47,17 @@
 <xsl:template name="table.of.contents.titlepage.recto">
     <fo:block
       xsl:use-attribute-sets="table.of.contents.titlepage.recto.style dark-green"
-      space-before.minimum="1em" space-before.optimum="1.5em"
-      space-before.maximum="2em"
+      space-before="{&columnfragment;}mm"
       start-indent="{&column; + &gutter;}mm"
       font-weight="normal"
       font-family="{$title.fontset}">
       <xsl:choose>
         <xsl:when test="ancestor-or-self::article">
-          <xsl:attribute name="space-after">.5em</xsl:attribute>
-          <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
+          <xsl:attribute name="space-after">&gutter;mm</xsl:attribute>
+          <xsl:attribute name="font-size">&xxx-large;pt</xsl:attribute>
         </xsl:when>
         <xsl:when test="ancestor-or-self::book">
-          <xsl:attribute name="space-after">3em</xsl:attribute>
+          <xsl:attribute name="space-after">&column;mm</xsl:attribute>
           <xsl:attribute name="font-size">&super-large;pt</xsl:attribute>
         </xsl:when>
         <xsl:otherwise/>

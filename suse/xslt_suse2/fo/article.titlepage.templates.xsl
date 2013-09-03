@@ -123,16 +123,17 @@
 
 
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
-    <fo:block font-size="&super-large;pt" line-height="1.25"
+    <fo:block font-size="&super-large;pt" line-height="{$base-lineheight * 0.8}em"
       xsl:use-attribute-sets="article.titlepage.recto.style dark-green"
-      keep-with-next.within-column="always">
+      keep-with-next.within-column="always" space-after="{&gutterfragment;}mm">
       <xsl:apply-templates select="ancestor-or-self::article[1]"
         mode="title.markup"/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="productname[1]" mode="article.titlepage.recto.auto.mode">
-    <fo:block text-align="start" font-size="&xx-large;pt">
+    <fo:block text-align="start" font-size="&xx-large;pt"
+      xsl:use-attribute-sets="mid-green">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
       <xsl:if test="../productnumber">
         <xsl:text> </xsl:text>
@@ -160,29 +161,24 @@
   <xsl:template match="editor|othercredit"
     mode="article.titlepage.recto.auto.mode">
     <xsl:if test=". = ((../othercredit)|(../editor))[1]">
-      <xsl:call-template name="add.othercredit"/>
+      <fo:block font-size="&normal;pt">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key">
+            <xsl:choose>
+              <xsl:when test="count((../othercredit)|(../editor)) > 1"
+                >Contributors</xsl:when>
+              <xsl:otherwise>Contributor</xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:text>: </xsl:text>
+        <xsl:call-template name="person.name.list">
+          <xsl:with-param name="person.list"
+            select="(../othercredit)|(../editor)"/>
+        </xsl:call-template>
+      </fo:block>
     </xsl:if>
   </xsl:template>
-
-  <xsl:template name="add.othercredit">
-    <fo:block font-size="&normal;pt">
-      <xsl:call-template name="gentext">
-        <xsl:with-param name="key">
-          <xsl:choose>
-            <xsl:when test="count((../othercredit)|(../editor)) > 1"
-              >Contributors</xsl:when>
-            <xsl:otherwise>Contributor</xsl:otherwise>
-          </xsl:choose>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:text>: </xsl:text>
-      <xsl:call-template name="person.name.list">
-        <xsl:with-param name="person.list"
-          select="(../othercredit)|(../editor)"/>
-      </xsl:call-template>
-    </fo:block>
-  </xsl:template>
-
 
   <xsl:template match="abstract" mode="article.titlepage.recto.auto.mode">
     <fo:block space-after="1.5em">
