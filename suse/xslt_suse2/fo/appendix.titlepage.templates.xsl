@@ -18,15 +18,15 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  
-  
+
+
   <!--  Appendix ================================================== -->
   <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
-      xsl:use-attribute-sets="appendix.titlepage.recto.style"
+      xsl:use-attribute-sets="appendix.titlepage.recto.style component.title.style"
       margin-left="{$title.margin.left}" font-size="&super-large;pt"
       font-family="{$title.fontset}">
       <xsl:call-template name="component.title">
@@ -34,7 +34,7 @@
       </xsl:call-template>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="subtitle" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -42,7 +42,7 @@
       <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="corpauthor" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -50,7 +50,7 @@
       <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="authorgroup" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -58,7 +58,7 @@
       <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="author" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -66,7 +66,7 @@
       <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+
   <xsl:template match="othercredit" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style"
@@ -74,5 +74,5 @@
       <xsl:apply-templates select="." mode="appendix.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
-  
+
 </xsl:stylesheet>

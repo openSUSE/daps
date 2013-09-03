@@ -18,14 +18,14 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  
+
   <!-- Preface ==================================================== -->
   <xsl:template name="preface.titlepage.recto">
     <fo:block
-      xsl:use-attribute-sets="preface.titlepage.recto.style"
+      xsl:use-attribute-sets="preface.titlepage.recto.style component.title.style"
       margin-left="{$title.margin.left}" font-size="&super-large;pt"
       font-family="{$title.fontset}">
       <xsl:call-template name="component.title">
@@ -46,7 +46,7 @@
         <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="subtitle"/>
       </xsl:when>
     </xsl:choose>
-    
+
     <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="prefaceinfo/corpauthor"/>
     <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="docinfo/corpauthor"/>
     <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="info/corpauthor"/>

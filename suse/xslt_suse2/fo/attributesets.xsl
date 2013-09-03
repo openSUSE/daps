@@ -84,7 +84,7 @@
 <!-- preface, chapter, appendix, glossary -->
 <xsl:attribute-set name="toc.level2.properties"
   use-attribute-sets="toc.common.properties sans.bold">
-  <xsl:attribute name="line-height">1.3</xsl:attribute>
+  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * 0.85"/>em</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
 </xsl:attribute-set>
 <!-- sect1 -->
@@ -196,9 +196,12 @@
   <xsl:attribute name="end-indent">
     <xsl:value-of select="$verbatim-start-end-indent"/>
   </xsl:attribute>
-
 </xsl:attribute-set>
 
+<xsl:attribute-set name="component.title.style">
+  <xsl:attribute name="line-height"
+    ><xsl:value-of select="$base-lineheight * 0.9"/>em</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 18. Graphics =============================================== -->
 
