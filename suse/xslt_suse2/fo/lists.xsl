@@ -24,9 +24,6 @@
   exclude-result-prefixes="exsl">
 
 <xsl:template name="itemizedlist.label.markup">
-  <xsl:variable name="color">
-    <xsl:call-template name="dark-green"/>
-  </xsl:variable>
   <!-- We want nice large bullets like we get in the browser. None of the
        fonts we are currently using seem to provide anything fitting. (You can
        get close by using a larger font – this gives you a problem with line
@@ -34,7 +31,7 @@
   <fo:instream-foreign-object content-height="0.4em"
     alignment-baseline="alphabetic" alignment-adjust="0.175em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="100" height="100">
-      <svg:circle cx="50" cy="50" r="50" stroke="none" fill="{$color}"/>
+      <svg:circle cx="50" cy="50" r="50" stroke="none" fill="{$dark-green}"/>
     </svg:svg>
   </fo:instream-foreign-object>
 </xsl:template>
@@ -72,7 +69,7 @@
   </xsl:if>
 
   <!-- Preserve order of PIs and comments -->
-  <xsl:apply-templates 
+  <xsl:apply-templates
       select="*[not(self::listitem
                 or self::title
                 or self::titleabbrev)]
@@ -80,7 +77,7 @@
               |processing-instruction()[not(preceding-sibling::listitem)]"/>
 
   <xsl:variable name="content">
-    <xsl:apply-templates 
+    <xsl:apply-templates
           select="listitem
                  |comment()[preceding-sibling::listitem]
                  |processing-instruction()[preceding-sibling::listitem]"/>
@@ -99,7 +96,7 @@
       </fo:list-block>
     </xsl:when>
     <xsl:otherwise>
-      <fo:list-block id="{$id}" 
+      <fo:list-block id="{$id}"
         xsl:use-attribute-sets="list.block.spacing list.block.properties">
         <xsl:if test="$keep.together != ''">
           <xsl:attribute name="keep-together.within-column">
@@ -135,7 +132,7 @@
               |processing-instruction()[not(preceding-sibling::listitem)]"/>
 
   <xsl:variable name="content">
-    <xsl:apply-templates 
+    <xsl:apply-templates
           select="listitem
                   |comment()[preceding-sibling::listitem]
                   |processing-instruction()[preceding-sibling::listitem]"/>
@@ -196,7 +193,7 @@
                 |comment()[not(preceding-sibling::step)]
                 |processing-instruction()[not(preceding-sibling::step)]"/>
 
-  <xsl:variable name="steps" 
+  <xsl:variable name="steps"
                 select="step
                         |comment()[preceding-sibling::step]
                         |processing-instruction()[preceding-sibling::step]"/>
@@ -208,12 +205,24 @@
       <xsl:call-template name="formal.object.heading"/>
     </xsl:if>
 
-    <xsl:apply-templates select="$preamble"/>
+    <fo:block>
+      <xsl:if test="not(ancestor::procedure)">
+        <xsl:attribute name="border-left"
+          ><xsl:value-of select="concat(&thickline;,'mm solid &dark-green;')"/></xsl:attribute>
+        <xsl:attribute name="margin-left"><xsl:value-of select="&thickline; div 2"/>mm</xsl:attribute>
+          <!-- This is seemingly illogical... but looks better with both FOP and
+               XEP. -->
+      </xsl:if>
 
-    <fo:list-block
-      xsl:use-attribute-sets="list.block.spacing list.block.properties">
-      <xsl:apply-templates select="$steps"/>
-    </fo:list-block>
+      <fo:block margin-left="{&columnfragment; + &gutterfragment;}mm">
+        <xsl:apply-templates select="$preamble"/>
+      </fo:block>
+
+      <fo:list-block
+        xsl:use-attribute-sets="list.block.spacing list.block.properties">
+        <xsl:apply-templates select="$steps"/>
+      </fo:list-block>
+    </fo:block>
 
     <xsl:if test="./title and $placement != 'before'">
       <!-- n.b. gentext code tests for $formal.procedures and may make an "informal" -->
