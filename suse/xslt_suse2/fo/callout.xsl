@@ -37,9 +37,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="color">
-    <xsl:call-template name="dark-green"/>
-  </xsl:variable>
+  <xsl:variable name="color" select="$dark-green"/>
 
   <fo:leader leader-pattern="space" leader-length="0.2em"/>
 

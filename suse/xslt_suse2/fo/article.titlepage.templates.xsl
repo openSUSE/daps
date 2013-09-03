@@ -82,7 +82,7 @@
       </fo:block>
 
     <fo:block padding-before="{2 * &gutterfragment;}mm" padding-start="{(2 * &column;) + &gutter;}mm">
-      <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
+      <xsl:attribute name="border-top">0.5mm solid <xsl:value-of select="$dark-green"/></xsl:attribute>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
             select="articleinfo/productname[not(@role)]"/>
     </fo:block>
@@ -123,7 +123,7 @@
 
 
   <xsl:template match="title" mode="article.titlepage.recto.auto.mode">
-    <fo:block font-size="&super-large;pt" line-height="{$base-lineheight * 0.8}em"
+    <fo:block font-size="&super-large;pt" line-height="{$base-lineheight * 0.85}em"
       xsl:use-attribute-sets="article.titlepage.recto.style dark-green"
       keep-with-next.within-column="always" space-after="{&gutterfragment;}mm">
       <xsl:apply-templates select="ancestor-or-self::article[1]"

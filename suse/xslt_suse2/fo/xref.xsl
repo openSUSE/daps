@@ -25,7 +25,6 @@
   exclude-result-prefixes="xlink">
 
 
-
 <xsl:template name="hyperlink.url.display">
   <!-- * This template is called for all external hyperlinks (ulinks and -->
   <!-- * for all simple xlinks); it determines whether the URL for the -->
@@ -37,7 +36,7 @@
       <xsl:with-param name="filename" select="$url"/>
     </xsl:call-template>
   </xsl:param>
-  
+
   <fo:basic-link external-destination="{$ulink.url}" xsl:use-attribute-sets="dark-green">
     <xsl:if test="count(child::node()) != 0
                 and string(.) != $url
@@ -62,9 +61,7 @@
 
 
 <xsl:template name="image-after-link">
-  <xsl:variable name="fill">
-    <xsl:call-template name="dark-green"/>
-  </xsl:variable>
+  <xsl:variable name="fill" select="$dark-green"/>
 
   <fo:leader leader-pattern="space" leader-length="0.2em"/>
   <fo:instream-foreign-object content-height="0.65em">
@@ -99,7 +96,7 @@
 
 <xsl:template match="*" mode="insert.olink.docname.markup">
   <xsl:param name="docname" select="''"/>
-  
+
   <fo:inline xsl:use-attribute-sets="italicized">
     <xsl:value-of select="$docname"/>
   </fo:inline>
@@ -140,11 +137,11 @@
   <xsl:variable name="refelem" select="local-name($target)"/>
   <xsl:variable name="target.article"
     select="$target/ancestor-or-self::article"/>
-  <xsl:variable name="target.book" 
+  <xsl:variable name="target.book"
     select="$target/ancestor-or-self::book"/>
-  
+
   <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
-  
+
   <!--<xsl:message>create.linkto.other.book:
     linkend: <xsl:value-of select="@linkend"/>
     refelem: <xsl:value-of select="$refelem"/>
@@ -154,7 +151,7 @@
     target.article: <xsl:value-of select="count($target.article)"/>
     target.book: <xsl:value-of select="count($target.book)"/>
   </xsl:message>-->
-  
+
     <xsl:apply-templates select="$target" mode="xref-to">
       <xsl:with-param name="referrer" select="."/>
       <xsl:with-param name="xrefstyle">
@@ -164,13 +161,13 @@
         </xsl:choose>
       </xsl:with-param>
     </xsl:apply-templates>
-  
+
   <xsl:text>, </xsl:text>
   <xsl:if test="$target/self::sect1 or
     $target/self::sect2 or
     $target/self::sect3 or
     $target/self::sect4">
-    <xsl:variable name="hierarchy.node" 
+    <xsl:variable name="hierarchy.node"
       select="(
       $target/ancestor-or-self::chapter |
       $target/ancestor-or-self::appendix |
@@ -184,8 +181,8 @@
       <xsl:text>, </xsl:text>
     </xsl:if>
   </xsl:if>
-  
-  <fo:inline xsl:use-attribute-sets="italicized"> 
+
+  <fo:inline xsl:use-attribute-sets="italicized">
   <xsl:choose>
     <xsl:when test="$target.article">
       <xsl:apply-templates select="$target.article/title|$target.article/articleinfo/title" mode="xref-to"/>
@@ -233,7 +230,7 @@
   </xsl:call-template>
 
   <xsl:choose>
-    <xsl:when test="$xref.in.samebook != 0 or 
+    <xsl:when test="$xref.in.samebook != 0 or
                     /set/@id=$rootid or
                     /article/@id=$rootid">
        <!-- An xref that stays inside the current book or when $rootid
@@ -242,20 +239,20 @@
     </xsl:when>
     <xsl:otherwise>
           <!-- A reference into another book -->
-          <xsl:variable name="target.chapandapp" 
+          <xsl:variable name="target.chapandapp"
                         select="$target/ancestor-or-self::chapter[@lang!='']
                                 | $target/ancestor-or-self::appendix[@lang!='']"/>
-          
-          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and 
+
+          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
                         $target.chapandapp/@lang != $this.book/@lang">
-            <xsl:message>WARNING: The xref '<xsl:value-of 
-            select="@linkend"/>' points to a chapter (id='<xsl:value-of 
+            <xsl:message>WARNING: The xref '<xsl:value-of
+            select="@linkend"/>' points to a chapter (id='<xsl:value-of
               select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
           </xsl:if>
-          
+
           <xsl:call-template name="create.linkto.other.book">
             <xsl:with-param name="target" select="$target"/>
-          </xsl:call-template>          
+          </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

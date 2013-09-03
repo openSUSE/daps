@@ -61,14 +61,14 @@
   use-attribute-sets="serif.bold">
   <!-- *Not* derived from toc.line.properties! -->
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
-  <xsl:attribute name="font-size"><xsl:value-of select="1 div $sans-xheight-adjust * 0.8"/>em</xsl:attribute>
+  <xsl:attribute name="font-size"><xsl:value-of select="1 div $sans-xheight-adjust * 0.85"/>em</xsl:attribute>
   <xsl:attribute name="color">
     <xsl:choose>
       <xsl:when test="self::sect1|self::sect2|self::sect3|self::sect4|self::sect">
         &mid-gray;
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="chamaeleon-green"/>
+        <xsl:value-of select="$chamaeleon-green"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -160,7 +160,7 @@
 
 <xsl:attribute-set name="list.block.properties">
   <xsl:attribute name="provisional-label-separation">&gutterfragment;mm</xsl:attribute>
-  <xsl:attribute name="provisional-distance-between-starts">&columnfragment;mm</xsl:attribute>
+  <xsl:attribute name="provisional-distance-between-starts"><xsl:value-of select="&columnfragment; + &gutterfragment;"/>mm</xsl:attribute>
 </xsl:attribute-set>
 
 
@@ -437,23 +437,23 @@
 
 <xsl:attribute-set name="dark-green">
   <xsl:attribute name="color">
-    <xsl:call-template name="dark-green"/>
+    <xsl:value-of select="$dark-green"/>
   </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="mid-green">
   <xsl:attribute name="color">
-    <xsl:call-template name="mid-green"/>
+    <xsl:value-of select="$mid-green"/>
   </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="chamaeleon-green">
   <xsl:attribute name="color">
-    <xsl:call-template name="mid-green"/>
+    <xsl:value-of select="$chamaeleon-green"/>
   </xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:template name="dark-green">
+<xsl:param name="dark-green">
   <!-- This naming solution is somewhat pathetic – but unfortunately, while we
        need the green color as a text color most of the time, sometimes we use
        it for other attributes as well… maybe this could be separated by
@@ -462,22 +462,22 @@
     <xsl:when test="$format.print = 1">&darker-gray;</xsl:when>
     <xsl:otherwise>&dark-green;</xsl:otherwise>
   </xsl:choose>
-</xsl:template>
+</xsl:param>
 
-<xsl:template name="mid-green">
+<xsl:param name="mid-green">
   <!-- See above... -->
   <xsl:choose>
     <xsl:when test="$format.print = 1">&mid-gray;</xsl:when>
     <xsl:otherwise>&mid-green;</xsl:otherwise>
   </xsl:choose>
-</xsl:template>
+</xsl:param>
 
-<xsl:template name="chamaeleon-green">
+<xsl:param name="chamaeleon-green">
   <!-- See above... -->
   <xsl:choose>
     <xsl:when test="$format.print = 1">&mid-gray;</xsl:when>
     <xsl:otherwise>&chamaeleon-green;</xsl:otherwise>
   </xsl:choose>
-</xsl:template>
+</xsl:param>
 
 </xsl:stylesheet>

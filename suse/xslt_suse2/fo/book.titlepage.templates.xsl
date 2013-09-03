@@ -127,11 +127,11 @@
                 </fo:table-row>
                 <fo:table-row>
                   <fo:table-cell>
-                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
+                    <xsl:attribute name="border-top"><xsl:value-of select="concat(&thickline;,'mm solid ',$mid-green)"/></xsl:attribute>
                     <fo:block> </fo:block>
                   </fo:table-cell>
                   <fo:table-cell>
-                    <xsl:attribute name="border-top">0.5mm solid <xsl:call-template name="dark-green"/></xsl:attribute>
+                    <xsl:attribute name="border-top"><xsl:value-of select="concat(&thickline;,'mm solid',$mid-green)"/></xsl:attribute>
                     <fo:block padding-before="&columnfragment;mm">
                       <!-- We use the full productname here: -->
                       <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
@@ -172,7 +172,7 @@
 
 <xsl:template match="productname[not(@role)]" mode="book.titlepage.recto.auto.mode">
   <fo:block text-align="left" hyphenate="false"
-    line-height="{$base-lineheight * 0.8}em"
+    line-height="{$base-lineheight * 0.85}em"
     font-weight="normal" font-size="&super-large;pt"
     space-after="&gutterfragment;mm"
     xsl:use-attribute-sets="title.font sans.bold.noreplacement mid-green">
