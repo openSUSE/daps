@@ -176,7 +176,6 @@
       <xsl:apply-templates select="$hierarchy.node"
       mode="xref-to">
       <xsl:with-param name="referrer" select="."/>
-      <!--<xsl:with-param name="xrefstyle">select: labelnumber title</xsl:with-param>-->
       </xsl:apply-templates>
       <xsl:text>, </xsl:text>
     </xsl:if>
@@ -257,13 +256,13 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- 
-    Used mode "no.anchor.mode" for xref to allow finer customization
--->
-<xsl:template match="command" mode="no.anchor.mode">
-   <fo:inline font-size="&normal;pt">
-      <xsl:call-template name="inline.boldmonoseq"/>
-   </fo:inline>
+<!-- Use mode="no.anchor.mode" (which is only called when working with xref) to
+     allow for better customization -->
+<xsl:template match="*[not(xref) and not(ulink) and not(olink)]"
+  mode="no.anchor.mode">
+  <xsl:apply-templates select=".">
+    <xsl:with-param name="purpose" select="'xref'"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 

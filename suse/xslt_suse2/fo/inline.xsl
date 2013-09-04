@@ -37,17 +37,28 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="purpose" select="'none'"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal">
     <xsl:if test="parent::para|parent::title">
-      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
-    <xsl:if test="not(ancestor::title or ancestor::term)">
-      <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="not(ancestor::title or ancestor::term)
+                   or $purpose='xref'">
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+      <xsl:attribute name="font-size"
+        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <xsl:attribute name="font-size"
+        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -60,7 +71,7 @@
     </xsl:if>
     <xsl:copy-of select="$content"/>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
 </xsl:template>
@@ -74,17 +85,26 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="purpose" select="'none'"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold">
     <xsl:if test="parent::para|parent::title">
-      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
-    <xsl:if test="not(ancestor::title or ancestor::term)">
-      <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="not(ancestor::title or ancestor::term)
+                   or $purpose='xref'">
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+      <xsl:attribute name="font-size"
+        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -97,7 +117,7 @@
     </xsl:if>
     <xsl:copy-of select="$content"/>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
 </xsl:template>
@@ -111,18 +131,27 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="purpose" select="'none'"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
     font-weight="normal">
     <xsl:if test="parent::para|parent::title">
-      <xsl:attribute name="border-bottom">0.25mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
-    <xsl:if test="not(ancestor::title or ancestor::term)">
-      <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="not(ancestor::title or ancestor::term)
+                   or $purpose='xref'">
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+      <xsl:attribute name="font-size"
+        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
@@ -135,7 +164,7 @@
     </xsl:if>
     <xsl:copy-of select="$content"/>
     <xsl:if test="parent::para|parent::title">
-       <fo:leader leader-pattern="space" leader-length="0.2em"/>
+      <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
 </xsl:template>
@@ -187,9 +216,50 @@
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-<xsl:template match="command">
-  <xsl:call-template name="inline.boldmonoseq"/>
+<xsl:template match="title" mode="xref-to">
+  <xsl:apply-templates>
+    <xsl:with-param name="purpose" select="xref"/>
+  </xsl:apply-templates>
 </xsl:template>
+
+
+<xsl:template match="command|userinput">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.boldmonoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="classname|exceptionname|interfacename|methodname
+                    |computeroutput|constant|envar|filename|function|literal
+                    |code|option|parameter|prompt|replaceable|structfield
+                    |systemitem|varname|sgmltag|tag|email|uri
+                    |cmdsynopsis/command|function">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.monoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="literal|package">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.boldmonoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+  </xsl:call-template>
+</xsl:template>
+
+
+<xsl:template match="parameter|replaceable|parameter|structfield">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.italicmonoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+  </xsl:call-template>
+</xsl:template>
+
 
 <xsl:template match="keycap">
   <xsl:variable name="cap">
@@ -241,7 +311,7 @@
         fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"/>
       <svg:rect height="85" width="{$width + 45}" rx="7.5" ry="7.5" x="5" y="5"
         fill="&light-gray-old;" fill-opacity="1" stroke="none"/>
-      <svg:text font-family="{$mono-stack}" text-anchor="middle" 
+      <svg:text font-family="{$mono-stack}" text-anchor="middle"
         x="{($width div 2) + 25}" y="{$instream-font-size}" color="&dark-gray;"
         font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>
