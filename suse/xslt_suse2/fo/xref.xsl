@@ -258,11 +258,25 @@
 
 <!-- Use mode="no.anchor.mode" (which is only called when working with xref) to
      allow for better customization -->
-<xsl:template match="*[not(xref) and not(ulink) and not(olink)]"
-  mode="no.anchor.mode">
-  <xsl:apply-templates select=".">
-    <xsl:with-param name="purpose" select="'xref'"/>
-  </xsl:apply-templates>
+<xsl:template match="*" mode="no.anchor.mode">
+  <xsl:choose>
+    <xsl:when test="descendant-or-self::footnote or
+                    descendant-or-self::anchor or
+                    descendant-or-self::ulink or
+                    descendant-or-self::link or
+                    descendant-or-self::olink or
+                    descendant-or-self::xref or
+                    descendant-or-self::indexterm or
+        (ancestor::title and (@id or @xml:id))">
+
+      <xsl:apply-templates mode="no.anchor.mode"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select=".">
+        <xsl:with-param name="purpose" select="'xref'"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
