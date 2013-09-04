@@ -255,6 +255,13 @@
   </xsl:choose>
 </xsl:variable>
 
+<xsl:attribute-set name="monospace.properties">
+  <xsl:attribute name="font-family">
+    <xsl:value-of select="$monospace.font.family"/>
+  </xsl:attribute>
+  <xsl:attribute name="text-transform">none</xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:attribute-set name="monospace.verbatim.properties" use-attribute-sets="verbatim.properties monospace.properties">
   <xsl:attribute name="text-align">start</xsl:attribute>
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
