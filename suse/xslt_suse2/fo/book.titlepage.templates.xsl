@@ -131,7 +131,7 @@
                     <fo:block> </fo:block>
                   </fo:table-cell>
                   <fo:table-cell>
-                    <xsl:attribute name="border-top"><xsl:value-of select="concat(&thickline;,'mm solid',$mid-green)"/></xsl:attribute>
+                    <xsl:attribute name="border-top"><xsl:value-of select="concat(&thickline;,'mm solid ',$mid-green)"/></xsl:attribute>
                     <fo:block padding-before="&columnfragment;mm">
                       <!-- We use the full productname here: -->
                       <xsl:apply-templates mode="book.titlepage.recto.auto.mode"
