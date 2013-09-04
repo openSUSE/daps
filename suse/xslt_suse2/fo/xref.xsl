@@ -257,4 +257,14 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- 
+    Used mode "no.anchor.mode" for xref to allow finer customization
+-->
+<xsl:template match="command" mode="no.anchor.mode">
+   <fo:inline font-size="&normal;pt">
+      <xsl:call-template name="inline.boldmonoseq"/>
+   </fo:inline>
+</xsl:template>
+
+
 </xsl:stylesheet>
