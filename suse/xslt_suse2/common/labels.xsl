@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Purpose:
-    ?
+    Returns the number only of an element, if it has one. Normally, this
+    is done by the original stylesheets, however, some has to be
+    explicitly added.
 
   Author(s):    Thomas Schraitle <toms@opensuse.org>
 
