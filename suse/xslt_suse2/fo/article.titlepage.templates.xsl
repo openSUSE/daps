@@ -82,7 +82,7 @@
       </fo:block>
 
     <fo:block padding-before="{2 * &gutterfragment;}mm" padding-start="{(2 * &column;) + &gutter;}mm">
-      <xsl:attribute name="border-top"><xsl:value-of select="concat(&thickline;,'mm solid ',$dark-green)"/></xsl:attribute>
+      <xsl:attribute name="border-top"><xsl:value-of select="concat(&mediumline;,'mm solid ',$dark-green)"/></xsl:attribute>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
             select="articleinfo/productname[not(@role)]"/>
     </fo:block>

@@ -114,7 +114,7 @@
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
             <fo:block padding-start="{(&gutter; - 0.75) div 2}mm"
-              border-start-width="0.75mm" border-start-style="solid"
+              border-start-width="&mediumline;mm" border-start-style="solid"
               border-start-color="{$color}" padding-before="3mm"
               padding-after="3mm">
               <xsl:if test="$admon.textlabel != 0 or title or info/title">
