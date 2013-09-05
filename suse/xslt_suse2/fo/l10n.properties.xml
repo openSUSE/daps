@@ -3,131 +3,131 @@
      a namespace in the root element, maybe something like:
 
     xmlns:p="urn:x-suse:xmlns:properties"
-    
+
     Do we need a DTD or a RELAX NG schema?
 -->
-<p:properties>
-  <p:prop-types>
-    <p:prop-type name="serif"></p:prop-type>
-    <p:prop-type name="sans">font</p:prop-type>
-    <p:prop-type name="mono">font</p:prop-type>
-    <p:prop-type name="enable-bold">bool</p:prop-type>
-    <p:prop-type name="enable-serif-semibold">bool</p:prop-type>
-    <p:prop-type name="enable-sans-semibold">bool</p:prop-type>
-    <p:prop-type name="enable-mono-semibold">bool</p:prop-type>
-    <p:prop-type name="enable-italic">bool</p:prop-type>
-    <p:prop-type name="fontsize-adjust">float</p:prop-type>
-    <p:prop-type name="sans-xheight-adjust">float</p:prop-type>
-    <p:prop-type name="mono-xheight-adjust">float</p:prop-type>
-    <p:prop-type name="base-lineheight">float</p:prop-type>
-    <p:prop-type name="sans-lineheight-adjust">float</p:prop-type>
-    <p:prop-type name="mono-lineheight-adjust">float</p:prop-type>
-  </p:prop-types>
+<properties>
+  <prop-types>
+    <prop-type name="serif">font</prop-type>
+    <prop-type name="sans">font</prop-type>
+    <prop-type name="mono">font</prop-type>
+    <prop-type name="enable-bold">bool</prop-type>
+    <prop-type name="enable-serif-semibold">bool</prop-type>
+    <prop-type name="enable-sans-semibold">bool</prop-type>
+    <prop-type name="enable-mono-semibold">bool</prop-type>
+    <prop-type name="enable-italic">bool</prop-type>
+    <prop-type name="fontsize-adjust">float</prop-type>
+    <prop-type name="sans-xheight-adjust">float</prop-type>
+    <prop-type name="mono-xheight-adjust">float</prop-type>
+    <prop-type name="base-lineheight">float</prop-type>
+    <prop-type name="sans-lineheight-adjust">float</prop-type>
+    <prop-type name="mono-lineheight-adjust">float</prop-type>
+  </prop-types>
 
-  <p:lang code="default">
-    <p:prop name="serif">'Charis SIL', CharisSIL, serif;</p:prop>
-    <p:prop name="sans">'Open Sans', OpenSans, sans-serif;</p:prop>
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, monospace;</p:prop>
-    <p:prop name="enable-bold">true</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">true</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">true</p:prop>
-    <p:prop name="enable-italic">1</p:prop>
-    <p:prop name="fontsize-adjust">1</p:prop>
-    <p:prop name="sans-xheight-adjust">0.916</p:prop>
-    <p:prop name="mono-xheight-adjust">0.895</p:prop>
-    <p:prop name="base-lineheight">1.6</p:prop>
-    <p:prop name="sans-lineheight-adjust">1.125</p:prop>
-    <p:prop name="mono-lineheight-adjust">1.125</p:prop>
-  </p:lang>
-  <p:lang code="ar">
+  <lang code="default">
+    <prop name="serif">'Charis SIL', CharisSIL, serif;</prop>
+    <prop name="sans">'Open Sans', OpenSans, sans-serif;</prop>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, monospace;</prop>
+    <prop name="enable-bold">true</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">true</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">true</prop>
+    <prop name="enable-italic">1</prop>
+    <prop name="fontsize-adjust">1</prop>
+    <prop name="sans-xheight-adjust">0.916</prop>
+    <prop name="mono-xheight-adjust">0.895</prop>
+    <prop name="base-lineheight">1.6</prop>
+    <prop name="sans-lineheight-adjust">1.125</prop>
+    <prop name="mono-lineheight-adjust">1.125</prop>
+  </lang>
+  <lang code="ar">
     <!-- Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font. -->
-    <p:prop name="serif">Amiri, serif</p:prop>
-    <p:prop name="sans" ref="serif"/>
+    <prop name="serif">Amiri, serif</prop>
+    <prop name="sans" ref-name="serif"/>
     <!-- There don't seem to be any Arabic monospace fonts. -->
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, Amiri, monospace</p:prop>
-    <p:prop name="enable-bold">true</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">false</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">false</p:prop>
-    <p:prop name="fontsize-adjust">1</p:prop>
-    <p:prop name="sans-xheight-adjust">1</p:prop>
-    <p:prop name="mono-xheight-adjust">0.755</p:prop>
-    <p:prop name="base-lineheight">0.9</p:prop>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, Amiri, monospace</prop>
+    <prop name="enable-bold">true</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">false</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">false</prop>
+    <prop name="fontsize-adjust">1</prop>
+    <prop name="sans-xheight-adjust">1</prop>
+    <prop name="mono-xheight-adjust">0.755</prop>
+    <prop name="base-lineheight">0.9</prop>
     <!-- dummy values... -->
-    <p:prop name="sans-lineheight-adjust">1</p:prop>
-    <p:prop name="mono-lineheight-adjust" ref-lang="default" ref="mono-lineheight-adjust"/>
-  </p:lang>
-  <p:lang code="ja">
-    <p:prop name="serif">IPAPMincho, serif</p:prop>
-    <p:prop name="sans">IPAPGothic, sans-serif</p:prop>
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</p:prop>
-    <p:prop name="enable-bold">false</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">false</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">false</p:prop>
-    <p:prop name="fontsize-adjust">1</p:prop>
-    <p:prop name="sans-xheight-adjust">0.99</p:prop>
-    <p:prop name="mono-xheight-adjust">0.89</p:prop>
-    <p:prop name="base-lineheight">1.5</p:prop>
+    <prop name="sans-lineheight-adjust">1</prop>
+    <prop name="mono-lineheight-adjust" ref-lang="default"/>
+  </lang>
+  <lang code="ja">
+    <prop name="serif">IPAPMincho, serif</prop>
+    <prop name="sans">IPAPGothic, sans-serif</prop>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <prop name="enable-bold">false</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">false</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">false</prop>
+    <prop name="fontsize-adjust">1</prop>
+    <prop name="sans-xheight-adjust">0.99</prop>
+    <prop name="mono-xheight-adjust">0.89</prop>
+    <prop name="base-lineheight">1.5</prop>
     <!--dummy values... -->
-    <p:prop name="sans-lineheight-adjust" ref-lang="default" ref="sans-lineheight-adjust"/>
-    <p:prop name="mono-lineheight-adjust" ref-lang="default" ref="mono-lineheight-adjust"/>
-  </p:lang>
-  <p:lang code="ko">
-    <p:prop name="serif">NanumMyeongjo, serif</p:prop>
+    <prop name="sans-lineheight-adjust" ref-lang="default"/>
+    <prop name="mono-lineheight-adjust" ref-lang="default"/>
+  </lang>
+  <lang code="ko">
+    <prop name="serif">NanumMyeongjo, serif</prop>
     <!-- Despite its name, NanumGothic doesn't really match Myeongjo in many ways, thus always use the serif font -->
-    <p:prop name="sans" ref="serif"/>
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</p:prop>
-    <p:prop name="enable-bold">true</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">false</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">false</p:prop>
-    <p:prop name="fontsize-adjust">1</p:prop>
-    <p:prop name="sans-xheight-adjust">1</p:prop>
-    <p:prop name="mono-xheight-adjust">0.83</p:prop>
-    <p:prop name="base-lineheight">1.5</p:prop>
+    <prop name="sans" ref-name="serif"/>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <prop name="enable-bold">true</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">false</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">false</prop>
+    <prop name="fontsize-adjust">1</prop>
+    <prop name="sans-xheight-adjust">1</prop>
+    <prop name="mono-xheight-adjust">0.83</prop>
+    <prop name="base-lineheight">1.5</prop>
     <!-- dummy values... -->
-    <p:prop name="sans-lineheight-adjust">1</p:prop>
-    <p:prop name="mono-lineheight-adjust" ref-lang="default" ref="mono-lineheight-adjust"/>
-  </p:lang>
-  <p:lang code="zh_cn">
+    <prop name="sans-lineheight-adjust">1</prop>
+    <prop name="mono-lineheight-adjust" ref-lang="default"/>
+  </lang>
+  <lang code="zh_cn">
     <!-- Simplified Chinese is most often printed as sans-serif, so use that. -->
-    <p:prop name="serif" ref="sans"/>
-    <p:prop name="sans">'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif</p:prop>
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</p:prop>
-    <p:prop name="enable-bold">false</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">false</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">false</p:prop>
-    <p:prop name="fontsize-adjust">1</p:prop>
-    <p:prop name="sans-xheight-adjust">1</p:prop>
-    <p:prop name="mono-xheight-adjust">1</p:prop>
-    <p:prop name="base-lineheight">1.75</p:prop>
-    <p:prop name="sans-lineheight-adjust">1</p:prop>
-    <p:prop name="mono-lineheight-adjust">1</p:prop>
-  </p:lang>
-  <p:lang code="zh_tw">
+    <prop name="serif" ref-name="sans"/>
+    <prop name="sans">'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif</prop>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <prop name="enable-bold">false</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">false</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">false</prop>
+    <prop name="fontsize-adjust">1</prop>
+    <prop name="sans-xheight-adjust">1</prop>
+    <prop name="mono-xheight-adjust">1</prop>
+    <prop name="base-lineheight">1.75</prop>
+    <prop name="sans-lineheight-adjust">1</prop>
+    <prop name="mono-lineheight-adjust">1</prop>
+  </lang>
+  <lang code="zh_tw">
     <!-- Traditional Chinese apparently is almost always printed as serif (the exception being on-screen). -->
-    <p:prop name="serif">'AR PL UMing TW', ARPLUMingTW, serif</p:prop>
-    <p:prop name="sans" ref="serif"/>
-    <p:prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</p:prop>
-    <p:prop name="enable-bold">false</p:prop>
-    <p:prop name="enable-serif-semibold">false</p:prop>
-    <p:prop name="enable-sans-semibold">false</p:prop>
-    <p:prop name="enable-mono-semibold">false</p:prop>
-    <p:prop name="enable-italic">false</p:prop>
-    <p:prop name="fontsize-adjust">1.25</p:prop>
-    <p:prop name="sans-xheight-adjust">1</p:prop>
-    <p:prop name="mono-xheight-adjust">0.781</p:prop>
-    <p:prop name="base-lineheight">1.5</p:prop>
+    <prop name="serif">'AR PL UMing TW', ARPLUMingTW, serif</prop>
+    <prop name="sans" ref-name="serif"/>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <prop name="enable-bold">false</prop>
+    <prop name="enable-serif-semibold">false</prop>
+    <prop name="enable-sans-semibold">false</prop>
+    <prop name="enable-mono-semibold">false</prop>
+    <prop name="enable-italic">false</prop>
+    <prop name="fontsize-adjust">1.25</prop>
+    <prop name="sans-xheight-adjust">1</prop>
+    <prop name="mono-xheight-adjust">0.781</prop>
+    <prop name="base-lineheight">1.5</prop>
     <!-- dummy values -->
-    <p:prop name="sans-lineheight-adjust" ref-lang="default" ref="sans-lineheight-adjust"/>
-    <p:prop name="mono-lineheight-adjust" ref-lang="default" ref="mono-lineheight-adjust"/>
-  </p:lang>
-</p:properties>
+    <prop name="sans-lineheight-adjust" ref-lang="default"/>
+    <prop name="mono-lineheight-adjust" ref-lang="default"/>
+  </lang>
+</properties>

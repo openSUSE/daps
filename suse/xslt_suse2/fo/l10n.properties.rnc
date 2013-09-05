@@ -4,32 +4,35 @@
 # Author: Thomas Schraitle <toms@opensuse.org>
 # Copyright:  2013, Stefan Knorr, Thomas Schraitle
 
-namespace p = "urn:x-suse:xmlns:properties"
 
 # Types
 p.language.type =
   xsd:language | "default"
 
 div {
+  p.properties.version.attrib =
+    ## Schema version
+    attribute version{"0.5"}
+
   p.properties.attributes =
-    empty
+    p.properties.version.attrib?
 
   p.properties =
-    ## 
-    element p:prop-types {
+    ## Root element
+    element properties {
       p.properties.attributes,
-      p.prop-types, 
+      p.prop-types,
       p.lang+
     }
 }
 
 div {
   p.prop-types.attributes =
-    empty    
-    
+    empty
+
   p.prop-types =
-    ## Collection of all types
-    element p:prop-types {
+    ## Collection of allowed properties and their types
+    element prop-types {
       p.prop-types.attributes,
       p.prop-type+
     }
@@ -37,31 +40,31 @@ div {
 
 div {
   p.prop-type.name.attrib =
-    ## Name of the property collection
+    ## Name of property
     attribute name { xsd:NCName }
 
   p.prop-type.attributes =
     p.prop-type.name.attrib
 
-  p.prop-type = 
-    ##
-    element p:prop-type {
+  p.prop-type =
+    ## Type of property
+    element prop-type {
       p.prop-type.attributes,
-      text
+      ("bool"|"font"|"float")
     }
 }
 
 div {
   p.lang.code.attrib =
-    ##
+    ## Language code of property collection
     attribute code { p.language.type }
-    
+
   p.lang.attributes =
     p.lang.code.attrib
 
   p.lang =
-    ##
-    element p:lang {
+    ## Collection of properties for a given language
+    element lang {
       p.lang.attributes,
       p.prop+
     }
@@ -69,25 +72,25 @@ div {
 
 div {
   p.prop.name.attrib =
-    ##
+    ## Name of property. Must match the name of a property defined in prop-types.
     attribute name { xsd:NCName }
-  
+
   p.prop.ref.attrib =
-    ##
-    attribute ref { xsd:NCName }
-    
+    ## Reference value of another property. If not used together with ref-lang, property is assumed to be from the same language.
+    attribute ref-name { xsd:NCName }
+
   p.prop.ref-lang.attrib =
-    ##
+    ## Reference value of a property from another language. If not used together with ref-name, property is assumed to have the same name.
     attribute ref-lang { p.language.type }
 
-  p.prop.attributes = 
+  p.prop.attributes =
     p.prop.name.attrib &
     p.prop.ref.attrib? &
     p.prop.ref-lang.attrib?
-    
-  p.prop = 
-    ##
-    element p:prop {
+
+  p.prop =
+    ## Value of property. Must adhere to defined prop-type (bool: "true" or "false"; float: any number; font: any string)
+    element prop {
       p.prop.attributes,
       (text | empty)
     }
