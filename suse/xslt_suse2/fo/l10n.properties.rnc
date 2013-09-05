@@ -1,0 +1,98 @@
+#
+# RELAX NG Schema for L10N Properties
+#
+# Author: Thomas Schraitle <toms@opensuse.org>
+# Copyright:  2013, Stefan Knorr, Thomas Schraitle
+
+namespace p = "urn:x-suse:xmlns:properties"
+
+# Types
+p.language.type =
+  xsd:language | "default"
+
+div {
+  p.properties.attributes =
+    empty
+
+  p.properties =
+    ## 
+    element p:prop-types {
+      p.properties.attributes,
+      p.prop-types, 
+      p.lang+
+    }
+}
+
+div {
+  p.prop-types.attributes =
+    empty    
+    
+  p.prop-types =
+    ## Collection of all types
+    element p:prop-types {
+      p.prop-types.attributes,
+      p.prop-type+
+    }
+}
+
+div {
+  p.prop-type.name.attrib =
+    ## Name of the property collection
+    attribute name { xsd:NCName }
+
+  p.prop-type.attributes =
+    p.prop-type.name.attrib
+
+  p.prop-type = 
+    ##
+    element p:prop-type {
+      p.prop-type.attributes,
+      text
+    }
+}
+
+div {
+  p.lang.code.attrib =
+    ##
+    attribute code { p.language.type }
+    
+  p.lang.attributes =
+    p.lang.code.attrib
+
+  p.lang =
+    ##
+    element p:lang {
+      p.lang.attributes,
+      p.prop+
+    }
+}
+
+div {
+  p.prop.name.attrib =
+    ##
+    attribute name { xsd:NCName }
+  
+  p.prop.ref.attrib =
+    ##
+    attribute ref { xsd:NCName }
+    
+  p.prop.ref-lang.attrib =
+    ##
+    attribute ref-lang { p.language.type }
+
+  p.prop.attributes = 
+    p.prop.name.attrib &
+    p.prop.ref.attrib? &
+    p.prop.ref-lang.attrib?
+    
+  p.prop = 
+    ##
+    element p:prop {
+      p.prop.attributes,
+      (text | empty)
+    }
+}
+
+start = p.properties
+
+# EOF
