@@ -52,7 +52,7 @@
       </xsl:when>
       <xsl:otherwise>
       <xsl:attribute name="font-size"
-        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+        ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="parent::para|parent::title">
@@ -250,7 +250,6 @@
     <xsl:with-param name="purpose" select="$purpose"/>
   </xsl:call-template>
 </xsl:template>
-
 
 <xsl:template match="parameter|replaceable|parameter|structfield">
   <xsl:param name="purpose" select="'none'"/>
