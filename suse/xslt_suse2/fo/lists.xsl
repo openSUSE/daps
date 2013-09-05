@@ -214,7 +214,7 @@
                XEP. -->
       </xsl:if>
 
-      <fo:block margin-left="{&columnfragment; + &gutterfragment;}mm">
+      <fo:block margin-left="{&columnfragment;}mm">
         <xsl:apply-templates select="$preamble"/>
       </fo:block>
 

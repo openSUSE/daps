@@ -160,7 +160,7 @@
 
 <xsl:attribute-set name="list.block.properties">
   <xsl:attribute name="provisional-label-separation">&gutterfragment;mm</xsl:attribute>
-  <xsl:attribute name="provisional-distance-between-starts"><xsl:value-of select="&columnfragment; + &gutterfragment;"/>mm</xsl:attribute>
+  <xsl:attribute name="provisional-distance-between-starts">&columnfragment;mm</xsl:attribute>
 </xsl:attribute-set>
 
 
