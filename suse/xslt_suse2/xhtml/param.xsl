@@ -57,7 +57,7 @@
  <xsl:param name="chunker.output.method">
    <xsl:choose>
      <xsl:when test="contains(system-property('xsl:vendor'), 'SAXON')">saxon:xhtml</xsl:when>
-     <xsl:otherwise>html</xsl:otherwise>
+     <xsl:otherwise>xml</xsl:otherwise>
    </xsl:choose>
  </xsl:param>
 
