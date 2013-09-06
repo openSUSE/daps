@@ -54,12 +54,11 @@
   <xsl:param name="admon.style" select="''"/>
 
 
- <xsl:param name="chunker.output.method"><!--  select="'saxon:xhtml'" -->
+ <xsl:param name="chunker.output.method">
    <xsl:choose>
      <xsl:when test="contains(system-property('xsl:vendor'), 'SAXON')">saxon:xhtml</xsl:when>
      <xsl:otherwise>html</xsl:otherwise>
    </xsl:choose>
-   
  </xsl:param>
 
 <!-- 2. Callouts ================================================ -->
