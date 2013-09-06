@@ -278,6 +278,24 @@
   </fo:list-item>
 </xsl:template>
 
+<xsl:template match="listitem/*[1][local-name()='para' or
+                                   local-name()='simpara' or
+                                   local-name()='formalpara']
+                     |glossdef/*[1][local-name()='para' or
+                                   local-name()='simpara' or
+                                   local-name()='formalpara']
+                     |step/*[1][local-name()='para' or
+                                   local-name()='simpara' or
+                                   local-name()='formalpara']
+                     |callout/*[1][local-name()='para' or
+                                   local-name()='simpara' or
+                                   local-name()='formalpara']"
+              priority="2">
+  <fo:block xsl:use-attribute-sets="para.properties">
+    <xsl:call-template name="anchor"/>
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
 
 <xsl:template match="varlistentry/term" mode="xref-to">
   <fo:inline>
@@ -302,4 +320,5 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
 </xsl:stylesheet>

@@ -230,6 +230,8 @@
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/>em</xsl:attribute>
+    <xsl:attribute name="widows">3</xsl:attribute>
+    <xsl:attribute name="orphans">3</xsl:attribute>
 </xsl:attribute-set>
 
 
