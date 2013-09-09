@@ -30,12 +30,7 @@
   </xsl:variable>
 
   <fo:block keep-with-next.within-column="always"
-            hyphenate="false">
-    <xsl:if test="ancestor::part">
-      <xsl:attribute name="start-indent">
-        <xsl:value-of select="&column; + &gutter;"/>mm
-      </xsl:attribute>
-    </xsl:if>
+    hyphenate="false">
     <xsl:call-template name="title.part.split">
       <xsl:with-param name="node" select="."/>
     </xsl:call-template>
@@ -53,18 +48,31 @@
       <xsl:apply-templates select="($node/parent::part|$node/parent::partinfo/parent::part)[last()]" mode="label.markup"/>
   </xsl:variable>
 
-  <xsl:if test="$number != ''">
-    <fo:block xsl:use-attribute-sets="title.number.color" font-family="{$serif-stack}"
-      font-size="&hyper-large;pt" font-weight="normal" text-align="start"
-      line-height="{$base-lineheight * 0.6}em">
-      <xsl:copy-of select="$number"/>
-    </fo:block>
-  </xsl:if>
-  <fo:block xsl:use-attribute-sets="title.name.color" font-family="{$title.fontset}"
-      font-size="&super-large;pt" font-weight="normal" text-align="start"
-      line-height="{$line-height}">
-    <xsl:copy-of select="$title"/>
-  </fo:block>
+  <fo:list-block relative-align="baseline"
+       space-before="&columnfragment;mm"
+       space-after="&gutterfragment;mm"
+       keep-with-next.within-column="always"
+       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-label-separation="{&gutter;}mm">
+    <fo:list-item>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block text-align="end" line-height="{$line-height}"
+          width="&column;mm" font-weight="normal"
+          xsl:use-attribute-sets="title.number.color title.font">
+          <xsl:if test="$number != ''">
+            <xsl:copy-of select="$number"/>
+          </xsl:if>
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block text-align="start" line-height="{$line-height}"
+          start-indent="{&column; + &gutter;}mm" font-weight="normal"
+          xsl:use-attribute-sets="title.name.color title.font">
+          <xsl:copy-of select="$title"/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </fo:list-block>
 </xsl:template>
 
 <xsl:template name="generate.part.toc">
@@ -121,21 +129,21 @@
     </xsl:attribute>
     <xsl:attribute name="format">
       <xsl:call-template name="page.number.format">
-        <xsl:with-param name="master-reference" 
+        <xsl:with-param name="master-reference"
                         select="$titlepage-master-reference"/>
       </xsl:call-template>
     </xsl:attribute>
 
     <xsl:attribute name="initial-page-number">
       <xsl:call-template name="initial.page.number">
-        <xsl:with-param name="master-reference" 
+        <xsl:with-param name="master-reference"
                         select="$titlepage-master-reference"/>
       </xsl:call-template>
     </xsl:attribute>
 
     <xsl:attribute name="force-page-count">
       <xsl:call-template name="force.page.count">
-        <xsl:with-param name="master-reference" 
+        <xsl:with-param name="master-reference"
                         select="$titlepage-master-reference"/>
       </xsl:call-template>
     </xsl:attribute>
@@ -167,7 +175,7 @@
     <fo:flow flow-name="xsl-region-body">
       <xsl:call-template name="set.flow.properties">
         <xsl:with-param name="element" select="local-name(.)"/>
-        <xsl:with-param name="master-reference" 
+        <xsl:with-param name="master-reference"
                         select="$titlepage-master-reference"/>
       </xsl:call-template>
 

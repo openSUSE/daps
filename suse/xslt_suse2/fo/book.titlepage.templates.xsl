@@ -217,8 +217,8 @@
 
 <xsl:template match="subtitle" mode="part.titlepage.recto.auto.mode">
   <fo:block
-    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement
-    italicized.noreplacement" font-size="&xxx-large;pt"
+    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&xxx-large;pt" font-style="normal"
     space-before="&gutter;mm" font-family="{$title.fontset}">
     <xsl:apply-templates select="." mode="part.titlepage.recto.mode"/>
   </fo:block>
