@@ -300,6 +300,7 @@
     </fo:table-body>
   </fo:table>
 </xsl:template>
+
 <xsl:template match="title" mode="book.titlepage.verso.auto.mode">
     <fo:block font-size="&x-large;pt"
       xsl:use-attribute-sets="book.titlepage.verso.style dark-green sans.bold.noreplacement title.font">
@@ -355,10 +356,9 @@
       white-space-treatment="preserve"
       wrap-option="no-wrap"
       linefeed-treatment="preserve"
-      white-space-collapse="false">SUSE Linux Products GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-GERMANY</fo:block>
+      white-space-collapse="false">
+      <xsl:copy-of select="$company.address"/>
+    </fo:block>
     <fo:block>
       <fo:basic-link external-destination="{$ulink.url}"
         xsl:use-attribute-sets="dark-green">

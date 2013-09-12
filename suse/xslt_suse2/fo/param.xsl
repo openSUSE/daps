@@ -310,6 +310,12 @@ task before
 <!-- Where to link for SUSE documentation -->
 <xsl:param name="suse.doc.url">http://www.suse.com/documentation</xsl:param>
 
+<!-- SUSE  -->
+<xsl:param name="company.address">SUSE Linux Products GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+GERMANY</xsl:param>
+
 <xsl:param name="styleroot" select="'WARNING: styleroot unset!'"/>
 
 <!-- Should navigation titles be displayed? 0=no, 1=yes
