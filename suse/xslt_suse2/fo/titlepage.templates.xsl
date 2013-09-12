@@ -43,6 +43,28 @@
 </xsl:template>
 
 
+<!-- Part ======================================================== -->
+<xsl:template match="title" mode="part.titlepage.recto.auto.mode">
+  <fo:block
+    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&super-large;pt" space-before="&columnfragment;mm"
+    font-family="{$title.fontset}">
+    <xsl:call-template name="division.title">
+      <xsl:with-param name="node" select="ancestor-or-self::part[1]"/>
+    </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="subtitle" mode="part.titlepage.recto.auto.mode">
+  <fo:block
+    xsl:use-attribute-sets="part.titlepage.recto.style sans.bold.noreplacement"
+    font-size="&xxx-large;pt" font-style="normal"
+    space-before="&gutter;mm" font-family="{$title.fontset}">
+    <xsl:apply-templates select="." mode="part.titlepage.recto.mode"/>
+  </fo:block>
+</xsl:template>
+
+
 <!--  TOC ==================================================== -->
 <xsl:template name="table.of.contents.titlepage.recto">
     <fo:block
