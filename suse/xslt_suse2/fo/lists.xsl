@@ -278,6 +278,7 @@
   </fo:list-item>
 </xsl:template>
 
+<!-- Remove this template after 1.78.2/1.79.0 comes out – DB#1311 -->
 <xsl:template match="listitem/*[1][local-name()='para' or
                                    local-name()='simpara' or
                                    local-name()='formalpara']
@@ -296,6 +297,7 @@
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
+<!-- End template to remove -->
 
 <xsl:template match="varlistentry/term" mode="xref-to">
   <fo:inline>
