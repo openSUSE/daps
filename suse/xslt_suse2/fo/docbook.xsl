@@ -31,6 +31,7 @@
 
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
+  <xsl:include href="../VERSION.xsl"/>
   <xsl:include href="param.xsl"/>
   <xsl:include href="attributesets.xsl"/>
   <xsl:include href="../common/units.xsl"/>
