@@ -110,7 +110,9 @@
 
             <!-- Creator Tool -->
             <xmp:CreatorTool>
-              <xsl:text>DocBook XSL Stylesheets v</xsl:text>
+              <xsl:text>DAPS V</xsl:text>
+              <xsl:value-of select="$DAPS.VERSION"/>
+              <xsl:text> (http://daps.sf.net) with DocBook XSL Stylesheets v</xsl:text>
               <xsl:value-of select="$VERSION"/>
               <xsl:text> with Apache FOP</xsl:text></xmp:CreatorTool>
           </rdf:Description>

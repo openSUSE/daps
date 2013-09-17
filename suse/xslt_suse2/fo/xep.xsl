@@ -65,7 +65,9 @@
     <xsl:element name="rx:meta-field">
       <xsl:attribute name="name">creator</xsl:attribute>
       <xsl:attribute name="value">
-        <xsl:text>DocBook </xsl:text>
+        <xsl:text>DAPS V</xsl:text>
+        <xsl:value-of select="$DAPS.VERSION"/>
+        <xsl:text> (http://daps.sf.net) with DocBook </xsl:text>
         <xsl:value-of select="$DistroTitle"/>
         <xsl:text> V</xsl:text>
         <xsl:value-of select="$VERSION"/>
