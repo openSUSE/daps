@@ -151,10 +151,10 @@
   >"<title>" (skeleton-read "Title: ") "</title>"\n
   >"<mediaobject>"\n
   >"<imageobject role=\"fo\">"\n
-  >"<imagedata fileref=\"" (setq v1 (skeleton-read "Filename: ")) "\" width=\"75%\" format=\"PNG\"/>"\n
+  >"<imagedata fileref=\"" (setq v1 (skeleton-read "Filename: ")) "\" width=\"75%\" format=\"png\"/>"\n
   -1"</imageobject>"\n
   >"<imageobject role=\"html\">"\n
-  >"<imagedata fileref=\""v1"\" width=\"75%\" format=\"PNG\"/>"\n
+  >"<imagedata fileref=\""v1"\" width=\"75%\" format=\"png\"/>"\n
   -1"</imageobject>"\n
   -1"</mediaobject>"\n
   -1"</figure>"\n
