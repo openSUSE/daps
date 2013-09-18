@@ -114,7 +114,7 @@
               <xsl:value-of select="$DAPS.VERSION"/>
               <xsl:text> (http://daps.sf.net) with DocBook XSL Stylesheets v</xsl:text>
               <xsl:value-of select="$VERSION"/>
-              <xsl:text> with Apache FOP</xsl:text></xmp:CreatorTool>
+            </xmp:CreatorTool>
           </rdf:Description>
 
         </rdf:RDF>
