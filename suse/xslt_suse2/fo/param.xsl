@@ -207,7 +207,7 @@ task before
 <xsl:param name="body.font.size">
   <xsl:value-of select="($body.font.master * $fontsize-adjust) div $mono-xheight-adjust"/>pt
 </xsl:param>
-<xsl:param name="footnote.font.size" select="'&small;'"/>
+<xsl:param name="footnote.font.size" select="'&small;'pt"/>
 
 
 <!-- 21. Property Sets ========================================== -->
