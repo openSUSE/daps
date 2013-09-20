@@ -37,6 +37,7 @@
   <xsl:include href="../common/units.xsl"/>
   <xsl:include href="../common/titles.xsl"/>
   <xsl:include href="../common/labels.xsl"/>
+  <xsl:include href="../common/dates-revisions.xsl"/>
   <xsl:include href="../common/navigation.xsl"/>
 
   <xsl:include href="autotoc.xsl"/>

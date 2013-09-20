@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
    Purpose:
      Transform DocBook document into single XHTML file
-     
+
    Parameters:
      Too many to list here, see:
      http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
-       
+
    Input:
      DocBook 4/5 document
-     
+
    Output:
      Single XHTML file
-     
+
    See Also:
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
@@ -33,6 +33,8 @@
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
 
  <xsl:include href="../VERSION.xsl"/>
+ <xsl:include href="../common/dates-revisions.xsl"/>
+ <xsl:include href="../common/labels.xsl"/>
  <xsl:include href="../common/titles.xsl"/>
  <xsl:include href="../common/navigation.xsl"/>
 
@@ -40,7 +42,7 @@
  <xsl:include href="create-permalink.xsl"/>
 
  <xsl:include href="autotoc.xsl"/>
- <xsl:include href="autobubbletoc.xsl"/> 
+ <xsl:include href="autobubbletoc.xsl"/>
  <xsl:include href="lists.xsl"/>
  <xsl:include href="callout.xsl"/>
  <xsl:include href="verbatim.xsl"/>
@@ -61,7 +63,7 @@
 
  <xsl:include href="../common/string-replace.xsl"/>
  <xsl:include href="metadata.xsl"/>
- 
+
 
 <!-- Actual templates start here -->
 
@@ -71,10 +73,10 @@
       <xsl:attribute name="class">clearme</xsl:attribute>
     </xsl:element>
   </xsl:template>
- 
+
  <!-- Adapt head.contents to...
  + generate more useful page titles ("Chapter x. Chapter Name" -> "Chapter Name | Book Name")
- + remove the inline styles for draft mode, so they can be substituted by styles 
+ + remove the inline styles for draft mode, so they can be substituted by styles
    in the real stylesheet
  -->
  <xsl:template name="head.content">
@@ -361,7 +363,7 @@
       </xsl:choose>
     </div>
   </xsl:template>
-  
+
     <xsl:template name="create.header.buttons">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -391,7 +393,7 @@
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
     <xsl:param name="nav.context"/>
-    
+
     <div id="_fixed-header-wrap" class="inactive">
       <div id="_fixed-header">
         <xsl:call-template name="breadcrumbs.navigation">
@@ -420,7 +422,7 @@
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
     <xsl:param name="nav.context"/>
-    
+
     <div id="_share-print">
       <xsl:if test="$generate.sharelinks != 0">
         <div class="online-contents share">
@@ -609,7 +611,7 @@
         </li>
       </ul>
     </div>
-    
+
   </xsl:template>
 
 </xsl:stylesheet>

@@ -123,7 +123,7 @@
           <xsl:text>: </xsl:text>
         </span>
         <xsl:call-template name="person.name.list">
-          <xsl:with-param name="person.list" 
+          <xsl:with-param name="person.list"
             select="author|corpauthor"/>
         </xsl:call-template>
       </div>
@@ -276,7 +276,7 @@
   </xsl:template>
 
   <!-- ===================================================== -->
-  <!-- book titlepage templates --> 
+  <!-- book titlepage templates -->
   <xsl:template name="set.titlepage.separator"/>
 
   <xsl:template name="set.titlepage.before.recto">
@@ -361,36 +361,28 @@
   </xsl:template>
 
 <xsl:template name="date.and.revision">
-  <xsl:variable name="date">
-    <xsl:apply-templates select="(bookinfo/date | info/date)[1]"/>
+  <xsl:variable name="create-block">
+    <xsl:call-template name="date.and.revision.check"/>
   </xsl:variable>
-  <xsl:variable name="revision"
-    select="substring-before(substring-after((bookinfo/releaseinfo | info/releaseinfo)[1], '$'), ' $')"/>
-  <xsl:if test="$date != '' or $revision != ''">
+
+  <xsl:if test="$create-block = 1">
     <div class="date">
-      <xsl:if test="$date != ''">
-        <span class="imprint-label">
-          <xsl:call-template name="gentext">
-            <xsl:with-param name="key" select="'pubdate'"/>
-          </xsl:call-template>
-          <xsl:call-template name="gentext">
-            <xsl:with-param name="key" select="'admonseparator'"/>
-          </xsl:call-template>
-        </span>
-        <xsl:value-of select="$date"/>
-        <xsl:if test="$revision != ''">
-          <!-- Misappropriated but hopefully still correct everywhere. -->
-          <xsl:call-template name="gentext.template">
-            <xsl:with-param name="context" select="'iso690'"/>
-            <xsl:with-param name="name" select="'spec.pubinfo.sep'"/>
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:if>
-      <xsl:if test="$revision != ''">
-        <xsl:value-of select="$revision"/>
-      </xsl:if>
+      <xsl:call-template name="date.and.revision.inner"/>
     </div>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="imprint.label">
+  <xsl:param name="label" select="'pubdate'"/>
+
+  <span class="imprint-label">
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="$label"/>
+    </xsl:call-template>
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'admonseparator'"/>
+    </xsl:call-template>
+  </span>
 </xsl:template>
 
 </xsl:stylesheet>

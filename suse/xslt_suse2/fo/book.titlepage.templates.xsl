@@ -370,36 +370,28 @@
 </xsl:template>
 
 <xsl:template name="date.and.revision">
-  <xsl:variable name="date">
-    <xsl:apply-templates select="(bookinfo/date | info/date |
-      articleinfo/date)[1]"/>
+  <xsl:variable name="create-block">
+    <xsl:call-template name="date.and.revision.check"/>
   </xsl:variable>
-  <xsl:variable name="revision"
-    select="substring-before(substring-after((bookinfo/releaseinfo |
-    info/releaseinfo | articleinfo/releaseinfo)[1], '$'), ' $')"/>
-  <xsl:if test="$date != '' or $revision != ''">
+
+  <xsl:if test="$create-block = 1">
     <fo:block xsl:use-attribute-sets="book.titlepage.verso.style">
-      <xsl:if test="$date != ''">
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key" select="'pubdate'"/>
-        </xsl:call-template>
-        <xsl:call-template name="gentext">
-          <xsl:with-param name="key" select="'admonseparator'"/>
-        </xsl:call-template>
-        <xsl:value-of select="$date"/>
-        <xsl:if test="$revision != ''">
-          <!-- Misappropriated but hopefully still correct everywhere. -->
-          <xsl:call-template name="gentext.template">
-            <xsl:with-param name="context" select="'iso690'"/>
-            <xsl:with-param name="name" select="'spec.pubinfo.sep'"/>
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:if>
-    <xsl:if test="$revision != ''">
-      <xsl:value-of select="$revision"/>
-    </xsl:if>
-  </fo:block>
+      <xsl:call-template name="date.and.revision.inner"/>
+    </fo:block>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="imprint.label">
+  <xsl:param name="label" select="'pubdate'"/>
+
+  <fo:inline>
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="$label"/>
+    </xsl:call-template>
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'admonseparator'"/>
+    </xsl:call-template>
+  </fo:inline>
 </xsl:template>
 
 <xsl:template match="date/processing-instruction('dbtimestamp')" mode="book.titlepage.verso.mode">
