@@ -264,6 +264,11 @@
   <xsl:attribute name="text-transform">none</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="verbatim.properties">
+  <xsl:attribute name="orphans">2</xsl:attribute>
+  <xsl:attribute name="widwos">2</xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:attribute-set name="monospace.verbatim.properties" use-attribute-sets="verbatim.properties monospace.properties">
   <xsl:attribute name="text-align">start</xsl:attribute>
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
