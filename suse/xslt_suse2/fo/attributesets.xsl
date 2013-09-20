@@ -266,7 +266,7 @@
 
 <xsl:attribute-set name="verbatim.properties">
   <xsl:attribute name="orphans">2</xsl:attribute>
-  <xsl:attribute name="widwos">2</xsl:attribute>
+  <xsl:attribute name="widows">2</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="monospace.verbatim.properties" use-attribute-sets="verbatim.properties monospace.properties">
