@@ -3,7 +3,7 @@
 ;;
 ;; see http://en.opensuse.org/openSUSE:Documentation_Emacs_Docbook_Macros
 ;; for the latest version
-;; 
+;;
 ;; A macro package to insert the most often used DocBook snippets. The goal
 ;; was to find the most efficient shortcut for often used tag combinations.
 ;; All the code inserted to your documents will be indented correctly and
@@ -14,7 +14,7 @@
 ;; listing all the macros and the corresponding keyboard shortcuts. Of course
 ;; you can load the macros with M-x <function-name> as well. The function names
 ;; all start with "docbook-" followed by an element string: docbook-remark,
-;; docbook-table, docbook-step, etc. 
+;; docbook-table, docbook-step, etc.
 ;;
 ;; Load in your emacs customization file (e.g. ~/.emacs) with the following
 ;; command
@@ -138,7 +138,7 @@
   "Insert a docbook comment template."
   nil
   \n
-  "<!-- " user-login-name (format-time-string " %Y-%m-%d") ": 
+  "<!-- " user-login-name (format-time-string " %Y-%m-%d") ":
      " _ "
 -->
 ")
@@ -182,7 +182,7 @@
 	       (insert "<tertiary>" v2 "</tertiary>")))))
   \n
   -1"</indexterm>"\n
-  \n	   
+  \n
 )
 
 ;; KEYCOMBO
@@ -223,6 +223,25 @@
   "<guimenu></guimenu> "
   "</menuchoice> ")
 
+;; QANDAENTRY
+(define-skeleton docbook-qandaentry
+  "Insert a docbook <pandaentry> template."
+  nil
+  \n
+  >"<qandaentry>"\n
+  >"<question>"\n
+  >"<para>"\n
+  > _ \n
+  -1"</para>"\n
+  -1"</question>"\n
+  >"<answer>"\n
+  >"<para>"\n
+  > \n
+  -1"</para>"\n
+  -1"</answer>"\n
+  -1"</qandaentry>"\n
+)
+
 ;; REMARK
 (define-skeleton docbook-remark
   "Insert a docbook <remark>."
@@ -255,7 +274,7 @@
   -1"</para>"\n
   -1"</sect" v1 ">"\n
   \n
-)  
+)
 
 ;; STEP
 (define-skeleton docbook-step
@@ -286,7 +305,7 @@
   '(if (= (length docbook-table-cols) 0)
       (setq docbook-table-cols "2"))
   >"<tgroup cols=\"" docbook-table-cols "\">"\n
-  '(setq 
+  '(setq
        docbook-table-cols (string-to-number docbook-table-cols)
        docbook-table-colwidth (/ 100  docbook-table-cols)
        docbook-table-count 1)
@@ -351,6 +370,7 @@
   (local-set-key (kbd "C-c C-c l") 'docbook-listitem)
   (local-set-key (kbd "C-c C-c m") 'docbook-menuchoice)
   (local-set-key (kbd "C-c C-c n") 'docbook-novdoc)
+  (local-set-key (kbd "C-c C-c q") 'docbook-qandaentry)
   (local-set-key (kbd "C-c C-c r") 'docbook-remark)
   (local-set-key (kbd "C-c C-c s") 'docbook-sect)
   (local-set-key (kbd "C-c C-c p") 'docbook-step)
@@ -373,6 +393,7 @@
        ["Insert keycombo" docbook-keycombo t]
        ["Insert listitem" docbook-listitem t]
        ["Insert menuchoice" docbook-menuchoice t]
+       ["Insert qandaentry" docbook-qandaentry t]
        ["Insert remark" docbook-remark t]
        ["Insert sect" docbook-sect t]
        ["Insert step" docbook-step t]
@@ -382,7 +403,7 @@
   )
   (easy-menu-add docbook-macros modemapname)
 )
-  
+
 
 ;;Add key-bindings and menu for psgml mode
 (add-hook 'sgml-mode-hook
