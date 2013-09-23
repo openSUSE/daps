@@ -10,7 +10,7 @@
 
 ###########################################################################
 #
-# ARGUMENT PARSER FOR ALL SUBCOMANDS 
+# ARGUMENT PARSER FOR ALL SUBCOMANDS
 #
 # Generic parser for the subcommand's command line switches. If a function
 # introduces a new switch, it needs to be added here
@@ -36,7 +36,7 @@ function parse_args () {
     fi
 
     eval set -- "$C_ARGS"
-    
+
     while true ; do
         case "$1" in
             --check)
@@ -139,8 +139,16 @@ function parse_args () {
                 P_LIST_NOENT=1
                 shift
                 ;;
+	    --noepub)
+		P_NOEPUB=1
+                shift
+                ;;
             --nogzip)
                 P_NOGZIP=1
+                shift
+                ;;
+	    --nohtml)
+		P_NOHTML=1
                 shift
                 ;;
             --noimg)
@@ -235,26 +243,26 @@ function parse_args () {
 
 ###########################################################################
 #
-# INITIALIZE ENVIRONMENT 
+# INITIALIZE ENVIRONMENT
 #
 # Create needed directories and links
-# Finally export some variables 
+# Finally export some variables
 #
 ###########################################################################
 function init_env {
     # Create the log directory and a link to the DC-file in R_DIR
-    # (R_DIR and LOG_DIR are set in bin/daps) 
-    
+    # (R_DIR and LOG_DIR are set in bin/daps)
+
     local DC_COUNT TEST_ROOTID_RESULT
-    
+
     # create directories
-    
+
     mkdir -p $R_DIR
     if [[ 1 = $WRITE_LOG ]]; then
         mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
     fi
 
-    
+
     if [[ -n $"$DOCCONF" && ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
         ln -sf $DOCCONF ${R_DIR}/$(basename "$DOCCONF")
         if [[ 0 != $? && 0 != $VERBOSITY ]]; then
@@ -280,10 +288,10 @@ function init_env {
             ccecho "warn" "Warning: Wasn't able to determine if ROOTID exist."
         fi
     fi
-    
+
     #
     # The DocBook stylesheets require a 0|1 for REMARKS, but
-    # yes|no for DRAFT 
+    # yes|no for DRAFT
     # In order not to add to that confusion we will accept 0|1|yes|no for
     # all of them and export the correct value here. Since META falls
     # into a similar category, we also handle it the same way.
@@ -299,7 +307,7 @@ function init_env {
         *)
             exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\"" ;;
     esac
-    
+
     # REMARKS must be set to 1|0
     # if enabled (set to 1) implies DRAFT mode
     case "$REMARKS" in
@@ -311,7 +319,7 @@ function init_env {
             exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
             ;;
         esac
-    
+
     # META must be set to 1|0
     # if enabled (set to 1) implies DRAFT mode
     case "$META" in
@@ -348,8 +356,8 @@ function init_env {
     [[ "no" = $DRAFT ]] && unset DRAFT_STR
     [[ 0 -eq $META ]] && unset META_STR
     [[ 0 -eq $REMARKS ]] && unset REMARK_STR
-    
-}   
+
+}
 
 ###########################################################################
 #
@@ -394,13 +402,13 @@ function call_make () {
         # highest verbosity level - use -j1 for a better readability
         MAKE_OPTIONS="$MAKE_OPTIONS -j1"
     fi
-    
+
     # Is --force set to force a rebuild?
     [[ 1 = $FORCE_REBUILD ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
-    
+
     MAKE_CMD="$MAKE_BIN $MAKE_OPTIONS $SUB_CMD $@"
 
-    
+
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY ]]; then
         echo -e "---------------
@@ -417,10 +425,10 @@ function call_make () {
             if [[ -n "$STYLEROOT" ]]; then
                 echo "         STYLEROOT: $STYLEROOT"
             else
-                echo "         STYLEROOT: $DOCBOOK_STYLES"   
+                echo "         STYLEROOT: $DOCBOOK_STYLES"
             fi
         fi
-        
+
         echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
@@ -482,7 +490,7 @@ function call_make () {
 #    SUB_CMD=$1
 #    shift
 
-    # SHORT_OPTS: Value for the getopt -o option 
+    # SHORT_OPTS: Value for the getopt -o option
     # LONG_OPTS:  VALUE for the getopt -l option
 #    SHORT_OPTS="h"
 #    LONG_OPTS="draft,formatter:,help,name:,remarks,rootid:"
@@ -503,7 +511,7 @@ function call_make () {
 
 ###########################################################################
 #
-# BUILD PDFS 
+# BUILD PDFS
 #
 # Subcommands: pdf,color-pdf
 #
@@ -518,7 +526,7 @@ function build_pdfs () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -533,7 +541,7 @@ function build_pdfs () {
         echo
         exit 0
     fi
-    
+
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode
@@ -541,7 +549,7 @@ function build_pdfs () {
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
-    
+
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
@@ -549,16 +557,16 @@ function build_pdfs () {
 	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
 
 ###########################################################################
 #
-# BUILD HTML and JSP 
+# BUILD HTML and JSP
 #
-# Subcommands: html, htmlsingle, jsp 
+# Subcommands: html, htmlsingle, jsp
 #
 ###########################################################################
 function build_html_jsp () {
@@ -571,7 +579,7 @@ function build_html_jsp () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -637,7 +645,7 @@ function webhelp () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -654,14 +662,14 @@ function webhelp () {
         echo
         exit 0
     fi
-    
+
     if [[ ! -f $DOCBOOK_STYLES/extensions/webhelpindexer.jar && \
         ! -f $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar && \
         ! -f $DOCBOOK_STYLES/extensions/lucene-core-*.jar  && \
         ! -f $DOCBOOK_STYLES/extensions/tagsoup-*.jar ]]; then
         exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
     fi
-    
+
     [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
@@ -678,13 +686,13 @@ function webhelp () {
             exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
         fi
     fi
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
 ###########################################################################
 #
-# BUILD ePUB 
+# BUILD ePUB
 #
 # Subcommands: epub only
 #
@@ -699,7 +707,7 @@ function build_epub () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -711,7 +719,7 @@ function build_epub () {
         echo
         exit 0
     fi
-    
+
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
@@ -721,21 +729,21 @@ function build_epub () {
         [[ 0 = $VERBOSITY ]] && export VERBOSITY=1
         export EPUBCHECK="yes"
     fi
-    
+
     if [[ -n "$P_CSS" ]]; then
         if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
             export EPUB_CSS="$P_CSS"
         else
             exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
         fi
-    fi        
-        
+    fi
+
     call_make "$SUB_CMD" "$@"
 }
 
 ###########################################################################
 #
-# BUILD man pages 
+# BUILD man pages
 #
 # Subcommands: man only
 #
@@ -750,7 +758,7 @@ function build_man () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -765,7 +773,7 @@ function build_man () {
     [[ -n "$P_NOGZIP" ]]    && export GZIP_MAN="no"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_SUBDIRS" ]]   && export MAN_SUBDIRS="yes"
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -787,7 +795,7 @@ function build_generic () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -800,7 +808,7 @@ function build_generic () {
 
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -821,7 +829,7 @@ function build_locdrop () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -834,7 +842,7 @@ function build_locdrop () {
         echo
         exit 0
     fi
-    
+
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_NOPDF" ]]     && export export NOPDF=1
     [[ -n "$P_ROOTID2" ]]    && export ROOTID="$P_ROOTID"
@@ -847,7 +855,7 @@ function build_locdrop () {
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -864,11 +872,11 @@ function online-docs () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="export-dir:,formatter:,help,name:,noset,rootid:"
+    LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -879,10 +887,13 @@ function online-docs () {
         help_noset
         help_rootid
         echo
-        exit 0       
+        exit 0
     fi
-    
+
     [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOEPUB" ]]     && export export NOEPUB=1
+    [[ -n "$P_NOHTML" ]]     && export export NOHTML=1
+    [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
     [[ -n "$P_NOSET" ]]      && export export NOSET=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     if [[ -n "$P_EXPORT_DIR" ]]; then
@@ -899,7 +910,7 @@ function online-docs () {
 	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -921,7 +932,7 @@ function packaging () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -944,7 +955,7 @@ function packaging () {
         help_rootid
         help_set-date
         echo
-        exit 0       
+        exit 0
     fi
 
     [[ -n "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
@@ -978,7 +989,7 @@ function packaging () {
         SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
         export SETDATE
     fi
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -1002,7 +1013,7 @@ function profile_first () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1013,14 +1024,14 @@ function profile_first () {
         echo
 	exit 0
     fi
-    
+
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    
+
     # we do not want to write a logfile this time
-    WRITE_LOG=0   
+    WRITE_LOG=0
     call_make "profile" "$@" || exit_on_error "Profiling failed"
     call_make "$SUB_CMD" "$@"
 }
@@ -1043,7 +1054,7 @@ function comments_remarks () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1051,13 +1062,13 @@ function comments_remarks () {
         echo
 	exit 0
     fi
-    
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1   
+
+    [[ 1 = $P_REMARKS ]]  && REMARKS=1
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
     call_make "$SUB_CMD" "$@"
-    
+
 }
 
 ###########################################################################
@@ -1067,7 +1078,7 @@ function comments_remarks () {
 #  Subcommands: missinggraphics, project(files|graphics),
 #               remaining(files|graphics)
 #
-###########################################################################   
+###########################################################################
 function filelists () {
     local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
@@ -1078,7 +1089,7 @@ function filelists () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1115,7 +1126,7 @@ function filelists () {
 #  function for all targets showing a filename or a directory
 #  (pdf-name, htmlsingle-name, etc.)
 #
-###########################################################################  
+###########################################################################
 
 function show_names () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
@@ -1127,7 +1138,7 @@ function show_names () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
                 help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1140,7 +1151,7 @@ function show_names () {
                 echo
                 exit 0
     fi
-    
+
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode
@@ -1159,11 +1170,11 @@ function show_names () {
 #
 #  checks http links in file or from rootid
 #
-###########################################################################  
+###########################################################################
 
 function checklink () {
     local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
-    
+
     SUB_CMD=$1
     shift
 
@@ -1172,7 +1183,7 @@ function checklink () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1190,12 +1201,12 @@ function checklink () {
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
-                
+
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE" 
+            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1217,7 +1228,7 @@ function checklink () {
 #  the additional option (--modified) will also print the image file's
 #  mtime in long lists (this option is ignored with --compact)
 #
-###########################################################################  
+###########################################################################
 function getimages () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     local COMPACT DEBUG_SAV FILE IMAGEDIR MOD P_FILE
@@ -1226,20 +1237,20 @@ function getimages () {
 
     SUB_CMD=$1
     shift
-    
+
     IMAGEDIR="$DOC_DIR/images/src/"
 
     # any kind of verbosity is unwanted in this case
     WRITE_LOG=0
     DEBUG=0
     VERBOSITY=0
-    
+
     SHORT_OPTS="h"
     LONG_OPTS="compact,file:,help,modified,rootid:,show,viewer:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1266,7 +1277,7 @@ function getimages () {
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
     fi
-                
+
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     if [[ -n $P_FILE ]]; then
@@ -1329,21 +1340,21 @@ function getimages () {
 #  Spellchecks a file specified with -f or --file or
 #  the document specified by rootid.
 #
-###########################################################################  
+###########################################################################
 function spellcheck () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
-    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD 
+    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
-    
+
     SUB_CMD=$1
     shift
-    
+
     SHORT_OPTS="h"
     LONG_OPTS="extra-dict:,file:,help,lang:,list,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1369,7 +1380,7 @@ function spellcheck () {
             exit_on_error "Path to extra dictionary \"$P_ASPELL_EXTRA_DICT\" is not valid"
         fi
     fi
-    
+
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
         if [[ 0 != $VERBOSITY ]]; then
@@ -1378,7 +1389,7 @@ function spellcheck () {
     elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
         exit_on_error "Options --file and --rootid exclude one another.\nPlease specify only one of these options"
     fi
-                
+
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
     if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
@@ -1400,7 +1411,7 @@ function spellcheck () {
             exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
         fi
     fi
-        
+
     #------------------
     # create spellchecking command to eval
     #
@@ -1416,7 +1427,7 @@ function spellcheck () {
     if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
-    
+
     # do spellchecking on the list of files
     for FILE in ${FILELIST[@]}; do
         test -f $FILE || ccecho "warn" "File $FILE does not exist"
@@ -1449,7 +1460,7 @@ function debugging () {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
@@ -1464,7 +1475,7 @@ function debugging () {
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_TARGET" ]]    && export TARGET="$P_TARGET"
-    
+
     call_make "$SUB_CMD" "$@"
 }
 
@@ -1474,7 +1485,7 @@ function debugging () {
 #
 #  Generate images. For debugging and testing purposes
 #
-###########################################################################  
+###########################################################################
 
 function build_images () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
@@ -1503,7 +1514,7 @@ function build_images () {
     if [[ -z "$P_IMAGES_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_IMAGES_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
 	export IMAGES_ALL=1
     else
-	[[ -n "$P_IMAGES_COLOR" ]]     && export IMAGES_COLOR=1 
+	[[ -n "$P_IMAGES_COLOR" ]]     && export IMAGES_COLOR=1
 	[[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
 	[[ -n "$P_IMAGES_GRAYSCALE" ]] && export IMAGES_GRAYSCALE=1
 	[[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
@@ -1521,7 +1532,7 @@ function build_images () {
 #
 #  various functions
 #
-###########################################################################  
+###########################################################################
 
 # call make directly
 # for functions with no command line options
@@ -1536,13 +1547,13 @@ function no_opts {
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
-    
+
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD" "0"
         exit 0
     fi
-    
+
     WRITE_LOG=0
     call_make "$SUB_CMD" "$@"
 }
@@ -1602,23 +1613,23 @@ function help_clean () {
 }
 function help_color () {
     echo "    --color                   Only generate color images.
-                              Default: off"  
+                              Default: off"
 }
 function help_compact () {
     echo "    --compact                 Print the filelist on a single line.
                               Ignored when -s|--show is set.
-                              Default: off"  
+                              Default: off"
 }
 function help_css () {
     echo "    --css=filename, --css     Specify a path to a css file.
                               The special string \"none\" make DAPS to use
-                              no css, even when configured elsewhere 
+                              no css, even when configured elsewhere
                               (in  config file).
                               Default: unset"
 }
 function help_draft () {
     echo "    --draft                   Add a 'DRAFT' watermark to all pages of the book
-                              Default: off" 
+                              Default: off"
 }
 function help_def-file () {
     echo "    --def-file=FILE           Specify a DEF-* file containing build
@@ -1635,7 +1646,7 @@ function help_documentfiles () {
 function help_export-dir () {
     echo "    --export-dir=DIRECTORY    Specify a directory where to copy the results
                               of the $TARGET command. The directory will be
-                              created if it does not exist. 
+                              created if it does not exist.
                               Default: <BUILD_DIRECTORY>/online-docs"
 }
 function help_extra-dict () {
@@ -1658,7 +1669,7 @@ function help_gen () {
 }
 function help_grayscale () {
     echo "    --grayscale               Only generate grayscale images.
-                              Default: off"  
+                              Default: off"
 }
 function help_help () {
     echo "    --help, -h                Print this help text"
@@ -1743,7 +1754,7 @@ function help_noxml () {
 }
 function help_online () {
     echo "    --online                  Only generate images used for HTML builds.
-                              Default: off"  
+                              Default: off"
 }
 function help_pagefiles () {
     echo "    --pagefiles               Generate .page files.
@@ -1755,7 +1766,7 @@ function help_pretty () {
 function help_remarks () {
     echo "    --remarks                 Include remarks (<remark>...</remark>) in book
                               Implies draft mode.
-                              Default: off"  
+                              Default: off"
 }
 function help_rootid () {
     echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
@@ -1775,19 +1786,19 @@ function help_show () {
                               Default: off"
 }
 function help_statdir () {
-    echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files 
+    echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
                               (css, images,and, optionally, javascript).
                               DEFAULT: \$STYLEROOT/static"
 }
 function help_static () {
-    echo "    --static                  Normally images and css files in HTML builds  
+    echo "    --static                  Normally images and css files in HTML builds
                               are linked from elsewhere in the file system.
                               Use this option to copy these files in order
                               to create a distributable HTML build"
 }
 function help_subdirs () {
     echo "    --subdirs                 Man pages are created in a man/ directory.
-                              To also enable the subdirectories man1/, man2/, 
+                              To also enable the subdirectories man1/, man2/,
                               etc., specify this parameter.
                               Default: off"
 }

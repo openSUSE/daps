@@ -214,11 +214,11 @@ else
 endif
 
 ifeq ($(NOSET),1)
-  OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)/$(DOCNAME)$(LANGSTRING).xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(BOOK)/$(BOOK)$(LANGSTRING)-png-graphics.tar.bz2
+  OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING).xml
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-png-graphics.tar.bz2
 else
   OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(BOOK)$(LANGSTRING)-png-graphics.tar.bz2
+  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-png-graphics.tar.bz2
 endif
 
 # fs 2012-10-12:
@@ -237,12 +237,19 @@ online-docs:
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk color-pdf 
+    ifneq ($(NOPDF),1)
+	$(MAKE) -f $(DAPSROOT)/make/selector.mk color-pdf
+	cp $(PDF_RESULT) $(OD_EXPORT_BOOKDIR)
+    endif
+    ifneq ($(NOEPUB),1)
 	$(MAKE) -f $(DAPSROOT)/make/selector.mk epub
+	cp $(EPUB_RESULT) $(OD_EXPORT_BOOKDIR)
+    endif
+    ifneq ($(NOHTML),1)
 	$(MAKE) -f $(DAPSROOT)/make/selector.mk dist-single-html
-	cp $(PDF_RESULT) $(EPUB_RESULT) \
-	  $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-singlehtml.tar.bz2 \
+	cp $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-singlehtml.tar.bz2 \
 	  $(OD_EXPORT_BOOKDIR)
+    endif
 	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
   endif
 
@@ -255,6 +262,7 @@ $(OD_EXPORT_BOOKDIR):
 #----
 # creates a bigfile either for a book (with --noset) or for the complete set
 #
+$(OD_BIGFILE): | $(OD_EXPORT_BOOKDIR)
 $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
   ifeq ($(NOSET),1)
     ifeq ($(VERBOSITY),2)
@@ -273,15 +281,16 @@ $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 #----
 # creates an archive with all generated graphics for HTML/EPUB
 #
-$(OD_GRAPHICS): $(FOR_HTML_IMAGES)
-  ifdef FOR_HTML_IMAGES
+$(OD_GRAPHICS): | $(OD_EXPORT_BOOKDIR)
+$(OD_GRAPHICS): $(ONLINE_IMAGES)
+  ifdef ONLINE_IMAGES
     ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating online-docs graphics tarball..."
     endif
 	BZIP2=--best \
 	tar cjhf $@ --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/png% \
-	  $(sort $(FOR_HTML_IMAGES))
+	  $(sort $(ONLINE_IMAGES))
   else
 	@ccecho "info" "Selected set or book contains no graphics"
   endif
