@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
      Splitting section-wise titles into number and title
 
@@ -64,6 +64,107 @@
 </xsl:template>
 
 
+<xsl:template match="bridgehead">
+  <xsl:param name="allow-anchors" select="1"/>
+  <xsl:variable name="container">
+    <xsl:if test="not(@renderas)">
+      <xsl:value-of select="(ancestor::appendix|ancestor::article|ancestor::bibliography|
+                             ancestor::chapter|ancestor::glossary|ancestor::glossdiv|
+                             ancestor::index|ancestor::partintro|ancestor::preface|
+                             ancestor::refsect1|ancestor::refsect2|ancestor::refsect3|
+                             ancestor::sect1|ancestor::sect2|ancestor::sect3|ancestor::sect4|
+                             ancestor::sect5|ancestor::section|ancestor::setindex|
+                             ancestor::simplesect)[last()]"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="clevel">
+    <xsl:if test="$container != ''">
+      <xsl:choose>
+        <xsl:when test="local-name($container) = 'appendix' or
+                      local-name($container) = 'chapter' or
+                      local-name($container) = 'article' or
+                      local-name($container) = 'bibliography' or
+                      local-name($container) = 'glossary' or
+                      local-name($container) = 'index' or
+                      local-name($container) = 'partintro' or
+                      local-name($container) = 'preface' or
+                      local-name($container) = 'setindex'">1</xsl:when>
+        <xsl:when test="local-name($container) = 'glossdiv'">
+          <xsl:value-of select="count(ancestor::glossdiv)+1"/>
+        </xsl:when>
+        <xsl:when test="local-name($container) = 'sect1' or
+                      local-name($container) = 'sect2' or
+                      local-name($container) = 'sect3' or
+                      local-name($container) = 'sect4' or
+                      local-name($container) = 'sect5' or
+                      local-name($container) = 'refsect1' or
+                      local-name($container) = 'refsect2' or
+                      local-name($container) = 'refsect3' or
+                      local-name($container) = 'section' or
+                      local-name($container) = 'simplesect'">
+          <xsl:variable name="slevel">
+            <xsl:call-template name="section.level">
+              <xsl:with-param name="node" select="$container"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:value-of select="$slevel + 1"/>
+        </xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="level-final">
+    <xsl:choose>
+      <xsl:when test="@renderas = 'sect1'">1</xsl:when>
+      <xsl:when test="@renderas = 'sect2'">2</xsl:when>
+      <xsl:when test="@renderas = 'sect3'">3</xsl:when>
+      <xsl:when test="@renderas = 'sect4'">4</xsl:when>
+      <xsl:when test="@renderas">5</xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$clevel"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="hlevel">
+    <xsl:choose>
+      <xsl:when test="$level-final &gt;= 5">6</xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$level-final + 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="legal">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[@role='legal']">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="class">title<xsl:if test="$legal = 1"> legal</xsl:if></xsl:variable>
+
+  <div>
+    <xsl:attribute name="class">sect<xsl:value-of select="$hlevel"/> bridgehead</xsl:attribute>
+    <xsl:element name="h{$hlevel}" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
+      <xsl:if test="$allow-anchors != 0">
+        <xsl:call-template name="id.attribute">
+          <xsl:with-param name="node" select="."/>
+          <xsl:with-param name="force" select="1"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <span class="name">
+        <xsl:apply-templates/>
+      </span>
+
+      <xsl:call-template name="create.permalink">
+         <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
+    </xsl:element>
+  </div>
+</xsl:template>
+
+
 <xsl:template name="section.heading">
   <xsl:param name="section" select="."/>
   <xsl:param name="level" select="1"/>
@@ -104,7 +205,7 @@
     <xsl:choose>
       <!-- highest valid HTML H level is H6; so anything nested deeper
            than 5 levels down just becomes H6 -->
-      <xsl:when test="$level &gt; 5">6</xsl:when>
+      <xsl:when test="$level &gt;= 5">6</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$level + 1"/>
       </xsl:otherwise>
@@ -134,18 +235,18 @@
 
 <xsl:template name="debug.filename-id">
   <xsl:param name="node" select="."/>
-  <xsl:variable name="xmlbase" 
-    select="ancestor-or-self::*[self::chapter or 
+  <xsl:variable name="xmlbase"
+    select="ancestor-or-self::*[self::chapter or
                                 self::appendix or
                                 self::part or
-                                self::reference or 
+                                self::reference or
                                 self::preface or
                                 self::glossary or
-                                self::sect1 or 
+                                self::sect1 or
                                 self::sect2 or
                                 self::sect3 or
                                 self::sect4]/@xml:base"/>
-  
+
   <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
     <div class="doc-status">
       <ul>
