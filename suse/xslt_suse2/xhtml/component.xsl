@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
      Splitting chapter-wise titles into number and title
 
    Author(s):    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+                 Stefan Knorr <sknorr@suse.de>
+   Copyright: 2012, 2013, Thomas Schraitle, Stefan Knorr
 
 -->
 <xsl:stylesheet  version="1.0"
@@ -16,8 +17,8 @@
 
   <xsl:template name="component.title">
    <xsl:param name="node" select="."/>
-   <xsl:param name="wrapper"/> 
-    
+   <xsl:param name="wrapper"/>
+
   <!-- This handles the case where a component (bibliography, for example)
        occurs inside a section; will we need parameters for this? -->
 
@@ -40,7 +41,7 @@
   <xsl:variable name="wrapperplus">
     <xsl:choose>
       <xsl:when test="$wrapper = ''">
-        <xsl:value-of select="concat('h', $level+1)"/>
+        <xsl:value-of select="concat('h', $level)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$wrapper"/>
@@ -69,7 +70,7 @@
 
   <xsl:template match="article">
     <xsl:call-template name="id.warning"/>
-    
+
     <xsl:element name="{$div.element}" namespace="http://www.w3.org/1999/xhtml">
       <xsl:call-template name="common.html.attributes">
         <xsl:with-param name="inherit" select="1"/>
@@ -78,7 +79,7 @@
         <xsl:with-param name="conditional" select="0"/>
         <xsl:with-param name="force" select="1"/>
       </xsl:call-template>
-      
+
       <xsl:call-template name="article.titlepage"/>
 
       <div class="line">
@@ -87,7 +88,7 @@
           <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
         </xsl:call-template>
       </xsl:variable>
-      
+
       <xsl:call-template name="make.lots">
         <xsl:with-param name="toc.params" select="$toc.params"/>
         <xsl:with-param name="toc">
@@ -100,11 +101,11 @@
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="articleinfo/legalnotice"/>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="artheader/legalnotice"/>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="info/legalnotice"/>
-      
+
       <xsl:apply-templates/>
       <xsl:call-template name="process.footnotes"/>
     </xsl:element>
-  </xsl:template>  
+  </xsl:template>
 
   <xsl:template match="chapter|preface|appendix" name="chapter-preface-appendix">
     <!-- Need to be able to call this template via name, too, so we can avoid
@@ -119,7 +120,7 @@
       <xsl:call-template name="id.attribute">
         <xsl:with-param name="force" select="1"/>
       </xsl:call-template>
-      
+
       <xsl:call-template name="component.separator"/>
       <xsl:choose>
         <xsl:when test="self::appendix">
@@ -135,8 +136,8 @@
           <xsl:message>Don't know how to call titlepage for <xsl:value-of select="local-name()"/></xsl:message>
         </xsl:otherwise>
       </xsl:choose>
-      
-      
+
+
       <xsl:variable name="toc.params">
         <xsl:call-template name="find.path.params">
           <xsl:with-param name="table" select="normalize-space($generate.toc)"/>
@@ -155,13 +156,13 @@
       <xsl:call-template name="process.footnotes"/>
     </xsl:element>
   </xsl:template>
-  
+
   <xsl:template match="chapter/title|chapter/chapterinfo/title|chapter/info/title" mode="titlepage.mode" priority="2">
     <xsl:call-template name="component.title">
       <xsl:with-param name="node" select="ancestor::chapter[1]"/>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template match="chapter/subtitle|chapter/chapterinfo/subtitle|chapter/info/subtitle|chapter/docinfo/subtitle" mode="titlepage.mode" priority="2">
     <xsl:call-template name="component.subtitle">
       <xsl:with-param name="node" select="ancestor::chapter[1]"/>
