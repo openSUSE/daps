@@ -41,7 +41,7 @@
   <xsl:variable name="wrapperplus">
     <xsl:choose>
       <xsl:when test="$wrapper = ''">
-        <xsl:value-of select="concat('h', $level)"/>
+        <xsl:value-of select="concat('h', $level+1)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$wrapper"/>
