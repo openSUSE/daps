@@ -436,13 +436,15 @@ sub build {
         # move results into sync subdir
         if ( $format eq "src" ) {
 	  $syncsubdir = catdir($syncdir, $format);
-	} elsif ( $format eq "online-docs" ) {
-	  $syncsubdir = catdir($syncdir, $book);
-        } else {
-            my $book = basename($dcpath);
-            $book =~ s/^DC-//;
+	} else {
+	  my $book = basename($dcpath);
+	  $book =~ s/^DC-//;
+	  if ( $format eq "online-docs" ) {
+	    $syncsubdir = catdir($syncdir, $book);
+	  } else {
             $syncsubdir = catdir($syncdir, $book, $format);
-        }
+	  }
+	}
         # If a build was successful, we want to remove the contents of a subdir
         # in sync/ - easiest way is to remove it and create it again
         if ( -d $syncsubdir ) {
