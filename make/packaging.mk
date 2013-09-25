@@ -230,7 +230,10 @@ endif
 
 .PHONY: online-docs
 online-docs: | $(OD_EXPORT_BOOKDIR)
-online-docs: $(OD_BIGFILE) $(OD_GRAPHICS) warn-cap
+online-docs: $(OD_BIGFILE) $(OD_GRAPHICS)
+ifdef HTMLROOT
+online-docs: warn-cap
+endif
 online-docs:
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
@@ -283,7 +286,7 @@ $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 #
 $(OD_GRAPHICS): | $(OD_EXPORT_BOOKDIR)
 $(OD_GRAPHICS): $(ONLINE_IMAGES)
-  ifdef ONLINE_IMAGES
+  ifneq "$(strip $(ONLINE_IMAGES))" ""
     ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating online-docs graphics tarball..."
     endif
