@@ -1708,7 +1708,7 @@ p a:visited {
     color: #5C3566;
 }
 
-code, .command, .keycap {
+code, .command, .keycap, .replaceable {
     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     font-weight: normal;
     padding: 0 4px;
@@ -1719,8 +1719,12 @@ code, .command, .keycap {
     line-height: 120%;
 }
 
+code, .command, .keycap {
+    font-style: normal;
+}
 
-code code, code .command, .command code {
+code code, code .command, .command code, code .replaceable,
+.command .replaceable, .replaceable code, .replaceable .command {
     padding: 0;
     border: none;
 }
@@ -1765,7 +1769,7 @@ code {
     text-align: left;
 }
 
-.screen code, .screen .command {
+.screen code, .screen .command, .screen .replaceable {
     border-radius: 0;
     background-color: transparent;
     font-size: 100%;
