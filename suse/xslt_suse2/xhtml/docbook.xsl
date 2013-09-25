@@ -352,7 +352,7 @@
   <xsl:template name="create.header.logo">
     <div id="_logo">
       <xsl:choose>
-        <xsl:when test="$homepage != 0">
+        <xsl:when test="$homepage != ''">
           <a href="{$homepage}">
             <img src="{$daps.header.logo}" alt="{$daps.header.logo.alt}"/>
           </a>
