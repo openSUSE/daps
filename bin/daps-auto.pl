@@ -448,7 +448,7 @@ sub build {
         }
         make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
         # HTML/HTMLsingle do not return single files, but files and directories
-        if ( $format =~ /^(single-)?html/ ) {
+        if ( $format =~ /^(single-)?html/ or $format =~ /^online-docs/ ) {
             my $resultdir = dirname($dapsresult);
             print "Moving $resultdir to $syncsubdir\n" if $verbose;
             dirmove($resultdir, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
