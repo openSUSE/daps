@@ -2801,38 +2801,73 @@ body.draft {
     }
 }
 
-/* Optimize images for various screen heights. Some (1080 and 1024, 800 and 768
-   etc.) are bucketed. We assume 110px for added browser chrome (subtracted from
-   the @media max-height), and 170px for giving the image some context
-   (subtracted from the image max-height). */
-
-@media only screen and (max-height: 970px) {
-    .informalfigure img, .figure img {
-        max-height: 744px;
-    }
-}
-
-@media only screen and (max-height: 790px) {
-    .informalfigure img, .figure img {
-        max-height: 620px;
-    }
-}
-
-@media only screen and (max-height: 690px) {
-    .informalfigure img, .figure img {
-        max-height: 520px;
-    }
-}
-
-@media only screen and (max-height: 490px) {
-    /* Make an exception here, so we don't get stamp-sized screenshots. */
-    .informalfigure img, .figure img {
-        max-height: 400px;
-    }
-}
 
 @media only screen and (max-height: 490px) and (min-width: 451px) {
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
+    }
+}
+
+/* Optimize images for various screen heights.
+
+   + Some sizes are bucketed.
+
+   + We assume 110px of browser chrome:
+     @media (max-height: $largest-screen-size-in-bucket – 110px)
+
+   + We assume 190px are needed for context around the image:
+     img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
+     (With some exceptions for small screen sizes.)
+
+*/
+
+/* Everything above */
+@media only screen {
+    .informalfigure img, .figure img {
+        max-height: 1500px;
+    }
+}
+
+/* 1600px & 1440px */
+@media only screen and (max-height: 1490px) {
+    .informalfigure img, .figure img {
+        max-height: 1140px;
+    }
+}
+
+/* 1200px */
+@media only screen and (max-height: 1090px) {
+    .informalfigure img, .figure img {
+        max-height: 900px;
+    }
+}
+
+/* 1080px & 1024px */
+@media only screen and (max-height: 970px) {
+    .informalfigure img, .figure img {
+        max-height: 724px;
+    }
+}
+
+/* 900px */
+@media only screen and (max-height: 790px) {
+    .informalfigure img, .figure img {
+        max-height: 600px;
+    }
+}
+
+/* 800px & 768px */
+@media only screen and (max-height: 690px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .informalfigure img, .figure img {
+        max-height: 518px;
+    }
+}
+
+/* 640px and below*/
+@media only screen and (max-height: 530px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .informalfigure img, .figure img {
+        max-height: 420px;
     }
 }
