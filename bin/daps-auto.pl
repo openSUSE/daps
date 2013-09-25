@@ -24,7 +24,8 @@ my $builddir      = "";
 my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
 my $to_rsync      = "";
-my @vformats      = qw(color-pdf epub html pdf single-html text); # valid formats
+# valid formats
+my @vformats      = qw(color-pdf epub html online-docs pdf single-html text);
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -108,10 +109,10 @@ if ( ! $nocolor ) {
 
 @sets = $cfg->Sections;
 if ( @sections ) {
-    # sections were specified onm the command line
+    # sections were specified on the command line
     foreach my $sect ( @sections ) {
         if ( ! grep { $_ eq $sect } @sets ) {
-           die "${bcol}Invalid section specified on the command line.${ecol}\n" 
+           die "${bcol}Invalid section specified on the command line.${ecol}\n"
        }
     }
     @sets = @sections;
@@ -133,7 +134,7 @@ if ( $cfg->val('general', 'dapsroot') ne "" ) {
             die "${bcol}dapsroot \"$dapsroot\" from section [general] does not contain bin/daps.${ecol}\n"
         }
     } else {
-       die "${bcol}Invalid dapsroot \"$dapsroot\" in section [general].${ecol}\n" 
+       die "${bcol}Invalid dapsroot \"$dapsroot\" in section [general].${ecol}\n"
     }
 }
 
@@ -161,12 +162,12 @@ foreach my $set (@sets) {
     # daps does not like spaces
     my $needs_update = 1; # rebuild docs by default
     my $syncdir  = catdir($builddir, "sync", $set);
-    
+
     next if "$set" eq "general"; # skip general section
     print "$set:\n";
 
     $to_rsync = 0;
-    
+
     if ( $set =~ /.*\s.*/ ) {
         warn "${bcol}Set names must not include whitespace.\n${ecol}Skipping set [$set].\n";
         next
@@ -188,7 +189,7 @@ foreach my $set (@sets) {
     unless ( "$fb_styleroot" ne "" && -d $fb_styleroot ) {
         warn "${bcol}Invalid styleroot directory \"$fb_styleroot\"in config for section [$set].\n->Skipping set [$set].${ecol}\n";
         next;
-    }    
+    }
     unless ( $nosvnup) {
         print "  Doing an svn up on\n  $workdir\n  " if $verbose;
         system("/usr/bin/svn up $workdir$devnull") == 0
@@ -224,7 +225,7 @@ foreach my $set (@sets) {
                     if ( "$styleroot" ne "" ) {
                         ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format", "$styleroot", "$fb_styleroot");
                     } else {
-                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");                        
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
                     }
                     my $buildresult = build("$set", "$syncdir", "$format", "$dcpath", "$dapscmd", "$dapslog");
                     # if build was not successful, $buildresult == 0
@@ -279,7 +280,7 @@ sub check_svn_changes {
     my $svnup_error = '';
     my $section = "Revisions";
     my $key     = "$set" . "_" . "$workdir";
-        
+
     # Do an svn up first, otherwise svn info might not return a correct value
     #
     system("/usr/bin/svn up $workdir$devnull") == 0 or $svnup_error = 1;
@@ -369,17 +370,19 @@ sub set_daps_cmd_and_log {
     $dapscmd .= " --dapsroot=\"$dapsroot\"" if $dapsroot;
     $dapscmd .= " --styleroot=\"$styleroot\"" if $styleroot;
     $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot;
-    $dapscmd .= " --debug" if $debug; 
+    $dapscmd .= " --debug" if $debug;
     $dapscmd .= " $format";
     if ( $format =~ /^(single-)?html/ or $format =~ /.*pdf$/ ) {
-        $dapscmd .= " --remarks" if $cfg->val("$set", 'remarks');
-        $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
-        $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
-        if ( $format =~ /^(single-)?html/ ) {
-            $dapscmd .= " --static";
-        }
+      $dapscmd .= " --remarks" if $cfg->val("$set", 'remarks');
+      $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
+      $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
+      if ( $format =~ /^(single-)?html/ ) {
+	$dapscmd .= " --static";
+      }
+    } elsif ( $format =~ /^online-docs$/ ) {
+      $dapscmd .= " --noset --noepub --nopdf --nohtml";
     }
-    $dapscmd .= " 2>&1" if $debug; 
+    $dapscmd .= " 2>&1" if $debug;
     #-------------------
     # logfile
     #
@@ -392,7 +395,7 @@ sub set_daps_cmd_and_log {
 sub build {
     # Arguments (all mandatory):
     #   set    : Section name from config
-    #   syncdir: absolute path to sync/ directory 
+    #   syncdir: absolute path to sync/ directory
     #   format : sync/ subdirectory name
     #   dcpath : absolute path to DC-file
     #   dapscmd: dapscommand tp be executed
@@ -404,7 +407,7 @@ sub build {
     #
     my ($set, $syncdir, $format, $dcpath, $dapscmd, $dapslog) = @_;
     my $dapserror  = '';
-    my $dapsresult = '';    
+    my $dapsresult = '';
     # ----
     # clean up previous build results
     my ($dapsclean, undef) = set_daps_cmd_and_log("$set", "$dcpath", "clean-results");
@@ -417,7 +420,7 @@ sub build {
     print "\n    Command: $dapscmd\n    Logfile: $dapslog\n" if $verbose;
     $dapsresult = `$dapscmd`;
     $dapserror = $?; # error occurred if != 0
-    chomp($dapsresult);                    
+    chomp($dapsresult);
     if ( $dapserror) {
         warn "${bcol}Failed to execute\n$dapscmd\nSee $dapslog for details.${ecol}\n";
         return 0;
@@ -469,7 +472,7 @@ sub sources {
     my $dcpath  = "";
     my $defpath = "";
 
-    print "  * Creating Source tarball ... ";    
+    print "  * Creating Source tarball ... ";
 
     $dcpath = catfile("$workdir", "$dcfile");
     unless ( -f $dcpath ) {
@@ -478,8 +481,8 @@ sub sources {
     }
 
     my ($dapscmd, $dapslog) = set_daps_cmd_and_log($set, $dcpath, "package-src");
-    
-    
+
+
     if ( $cfg->exists("$set", 'source-def') ) {
         $deffile = $cfg->val("$set", 'source-def');
         $defpath = catfile("$workdir", "$deffile");
@@ -508,8 +511,8 @@ sub rsync {
     # return values:
     #   0 failure
     #   1 success
-    #    
-    
+    #
+
     #my $rsync = File::Rsync->new( {
     #    archive      => 1,
     #    compress     => 1,
@@ -517,14 +520,14 @@ sub rsync {
     #    exclude      => [ "log/", "DC-*" ],
     #    chmod        => [ "Dg+s" ,"ug+w", "o-w", "o+r", "F-X" ],
     #} );
-    
+
     my ($set, $rsync_target,$rsync_flags) = @_;
     my %rsync_opts = eval $rsync_flags;
     my $rsync = File::Rsync->new( \%rsync_opts );
     my $rsync_src = catdir("$builddir", "sync", "$set");
 
     print "  Rsyncing $rsync_src to $rsync_target\n" if $verbose;
-    
+
     # run rsync
     $rsync->exec( {
         src => "$rsync_src",
@@ -532,7 +535,7 @@ sub rsync {
     } );
 
     print scalar($rsync->lastcmd) if $verbose;
-    
+
     # check return code
     my $rsync_status = $rsync->status;
     # error handling
@@ -577,10 +580,10 @@ Usage: $me --config|-c FILE [OPTIONS]
                               --sections SECT1,SECT2
                               or
                               --sections SECT1 --sections SECT2
-       --verbose|-v         : be verbose (DEBUG mode)  
+       --verbose|-v         : be verbose (DEBUG mode)
 EOF
     exit 0;
-    
+
 }
 
 
@@ -600,7 +603,7 @@ __END__
 #
 #=head1 DESCRIPTION
 #
-#Stub documentation for daps-auto.pl, 
+#Stub documentation for daps-auto.pl,
 #
 #=head1 AUTHOR
 #
