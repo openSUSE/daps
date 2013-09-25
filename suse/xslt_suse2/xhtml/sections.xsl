@@ -143,7 +143,7 @@
   <xsl:variable name="class">title<xsl:if test="$legal = 1"> legal</xsl:if></xsl:variable>
 
   <div>
-    <xsl:attribute name="class">sect<xsl:value-of select="$hlevel"/> bridgehead</xsl:attribute>
+    <xsl:attribute name="class">sect<xsl:value-of select="$level-final"/> bridgehead</xsl:attribute>
     <xsl:element name="h{$hlevel}" namespace="http://www.w3.org/1999/xhtml">
       <xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
       <xsl:if test="$allow-anchors != 0">
