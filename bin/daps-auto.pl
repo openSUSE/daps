@@ -13,7 +13,7 @@ use strict;
 use Getopt::Long;
 use Config::IniFiles;
 use File::Basename;
-use File::Copy::Recursive qw(fmove dirmove);
+use File::Copy::Recursive qw(rmove fmove dirmove);
 use File::Path qw(make_path remove_tree);;
 use File::Rsync;
 use File::Spec::Functions;
@@ -439,11 +439,7 @@ sub build {
 	} else {
 	  my $book = basename($dcpath);
 	  $book =~ s/^DC-//;
-	  if ( $format eq "online-docs" ) {
-	    $syncsubdir = catdir($syncdir, $book);
-	  } else {
-            $syncsubdir = catdir($syncdir, $book, $format);
-	  }
+	  $syncsubdir = catdir($syncdir, $book, $format);
 	}
         # If a build was successful, we want to remove the contents of a subdir
         # in sync/ - easiest way is to remove it and create it again
@@ -452,13 +448,13 @@ sub build {
         }
         make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
         # HTML/HTMLsingle do not return single files, but files and directories
-        if ( $format =~ /^(single-)?html/ or $format eq "online-docs" ) {
+        if ( $format =~ /^(single-)?html/ ) {
 	  my $resultdir = dirname($dapsresult);
 	  print "Moving $resultdir to $syncsubdir\n" if $verbose;
 	  dirmove($resultdir, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
 	} else {
 	  print "Moving $dapsresult to $syncsubdir\n" if $verbose;
-	  fmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
+	  rmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
         }
       }
     return 1;
