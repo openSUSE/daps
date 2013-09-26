@@ -1,8 +1,8 @@
 Index: suse/xslt_suse2/static/css/style.css
 ===================================================================
---- suse/xslt_suse2/static/css/style.css	(revision 3443)
+--- suse/xslt_suse2/static/css/style.css	(revision 3653)
 +++ suse/xslt_suse2/static/css/style.css	(working copy)
-@@ -1,1182 +1,19 @@
+@@ -1,1195 +1,13 @@
 -/*
 -Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
 -For additional support for Vietnamese, add "vietnamese," after "&subset=".
@@ -19,7 +19,7 @@ Index: suse/xslt_suse2/static/css/style.css
 -a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
 -sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
 -fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
--article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+-article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup,
 -menu, nav, output, section, summary, audio, video {
 -    margin: 0;
 -    padding: 0;
@@ -46,12 +46,12 @@ Index: suse/xslt_suse2/static/css/style.css
 -
 -/* Common */
 -
- .clearme {
-     clear: both;
-     width: 100%;
-     height: 0;
- }
- 
+-.clearme {
+-    clear: both;
+-    width: 100%;
+-    height: 0;
+-}
+-
 -::selection { /* Green Selections */
 -    background-color: #439239;
 -    color: #FFF;
@@ -62,20 +62,20 @@ Index: suse/xslt_suse2/static/css/style.css
 -    color: #FFF;
 -}
 -
- body {
+-body {
 -    background-color: #FFF;
 -    font-family: 'Open Sans', 'DejaVu Sans', 'Verdana', sans-serif;
-     line-height: 140%;
+-    line-height: 140%;
 -}
 -
 -html, body {
 -    height: 100%;
 -    min-width: 200px;
-     font-size: 16px;
- }
- 
+-    font-size: 16px;
+-}
+-
 -#_toolbar-bottom,
--#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book, 
+-#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book,
 -#_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
 -#_content > .appendix, #_content > .glossary, #_content > .reference,
 -#_content > .refentry, #_content > .bibliography, #_content > .index,
@@ -118,12 +118,11 @@ Index: suse/xslt_suse2/static/css/style.css
 -    outline: 0;
 -}
 -
- /* to be able to position various elements and be able to use z-index*/
+-/* to be able to position various elements and be able to use z-index*/
 -#_header, #_content, #_white-bg, #_inward, #_footer, #_toolbar, .figure {
-+.figure {
-     position: relative; 
- }
- 
+-    position: relative;
+-}
+-
 -#_white-bg, #_toolbar, #_fixed-header {
 -    padding: 0 10px;
 -}
@@ -253,12 +252,13 @@ Index: suse/xslt_suse2/static/css/style.css
 -}
 -
 -.toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, .overview-icon,
--#_find-button, .ulink:after, .bubble-corner:before, .single-contents-icon,
--#_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
--#_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
--    background-image: url(../images/icons.png);
--    background-repeat: no-repeat;
--}
+-.back-icon, #_find-button, .bubble-corner:before, .bubble-closer,
+-.single-contents-icon, #_print-button:before, #_share-fb:before,
+-#_share-gp:before, #_share-tw:before, #_share-mail:before,
+ .arch-arrow-start, .arch-arrow-end, .ulink:after {
+     background-image: url(../images/icons.png);
+     background-repeat: no-repeat;
+ }
 -
 -/* A somewhat ugly trick to make the documents look okay even without stylesheet. */
 -.toc-icon, .overview-icon, .find-icon, .book-icon, .prev-icon, .next-icon,
@@ -1132,7 +1132,7 @@ Index: suse/xslt_suse2/static/css/style.css
 -    width: 100%;
 -    overflow: hidden;
 -    background-color: #EFEFF0;
--    
+-
 -}
 -
 -#_outer-wrap {
@@ -1183,110 +1183,943 @@ Index: suse/xslt_suse2/static/css/style.css
 -    color: #333;
 -}
 -
- /* .CHAPTER/... AREA */
- 
+-/* .CHAPTER/... AREA */
+-
  #_content > .set, #_content > .book, #_content > .article, #_content > .part,
-@@ -1230,38 +67,6 @@
+ #_content > .chapter, #_content > .preface, #_content > .appendix,
+ #_content > .glossary, #_content > .reference, #_content > .refentry,
+ #_content > .bibliography, #_content > .index {
+     padding: 0 20px;
+ }
+-
+-
+-/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
+-/* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
+ #_content a[id] {
+     position: relative;
+     top: -33px;
+@@ -1197,17 +15,13 @@
+     width: 0;
+     height: 0;
+ }
+-
+ #_content [id]:target > span, #_content .admonition[id]:target > h6 {
+     background-color: rgba(255,255,0,0.3);
+     transition: background-color 0.2s ease-out 0.3s;
+-    /* Clean the below up in Q3 2013 or so... */
+     -moz-transition: background-color 0.2s ease-out 0.3s;
+     -webkit-transition: background-color 0.2s ease-out 0.3s;
+     -o-transition: background-color 0.2s ease-out 0.3s;
+ }
+-
+-
+ .ulink:after {
+     content: "\0020\2197";
+     color: transparent;
+@@ -1220,17 +34,14 @@
+     position: relative;
+     top: 2px;
+ }
+-
+ .legalnotice .ulink:after {
+     background-position: -216px -101px;
+     width: 18px;
+     height: 10px;
+ }
+-
+ #_content .screen a[id] {
      display: none;
  }
- 
--div.version-info {
--    color: #439239;
--    font-weight: normal;
--    background-color: rgba(255,255,255,0.7);
--    padding: 3px 5px;
--    line-height: 120%;
--    float: right;
--    margin: 5px 0 10px;
--    font-size: 13px;
--    border-radius: 3px;
--}
 -
--.single div.version-info {
--    position: relative;
--    top: 70px;
--}
+ div.version-info {
+     color: #439239;
+     font-weight: normal;
+@@ -1242,12 +53,10 @@
+     font-size: 13px;
+     border-radius: 3px;
+ }
 -
--h6.version-info {
--    margin: 75px 0 0;
--    padding: 5px 7px;
--    font-size: 24px;
--    color: #FFF;
--    background-color: #76AD2D;
--    float: left;
--    line-height: 100%;
--}
+ .single div.version-info {
+     position: relative;
+     top: 70px;
+ }
 -
--.book h6.version-info + div h1.title, .article h6.version-info + div h1.title,
--.set h6.version-info + div h1.title {
--    padding-top: 0;
--}
+ h6.version-info {
+     margin: 75px 0 0;
+     padding: 5px 7px;
+@@ -1257,12 +66,10 @@
+     float: left;
+     line-height: 100%;
+ }
+-
+ .book h6.version-info + div h1.title, .article h6.version-info + div h1.title,
+ .set h6.version-info + div h1.title {
+     padding-top: 0;
+ }
 -
  .book .title, .set .title, .article .title {
      font-size: 48px;
      font-weight: 600;
-@@ -1297,14 +102,7 @@
+@@ -1272,12 +79,10 @@
+     color: #439239;
+     padding: 70px 0 50px;
+ }
+-
+ .book .title .citetitle, .set .title .citetitle,
+ .article .title .citetitle {
+     font-style: normal;
+ }
+-
+ .set .subtitle, .book .subtitle, .article .subtitle {
+     font-size: 28px;
+     font-weight: normal;
+@@ -1286,7 +91,6 @@
+     width: 100%;
      clear: both;
  }
- 
--.single .title, .single .chapter .title,
--.single .preface .title, .single .appendix .title,
--.single .bibliography .title, .single .reference .title,
--.single .part .title, .single .article .title {
--    padding-top: 100px;
--}
- 
+-
+ .title, .chapter .title, .preface .title,
+ .appendix .title, .bibliography .title,
+ .reference .title, .part .title, .glossary .title {
+@@ -1297,15 +101,12 @@
+     width: 100%;
+     clear: both;
+ }
+-
+ .single .title, .single .chapter .title,
+ .single .preface .title, .single .appendix .title,
+ .single .bibliography .title, .single .reference .title,
+ .single .part .title, .single .article .title {
+     padding-top: 100px;
+ }
+-
 -
  .sect1 .subtitle, .chapter .subtitle {
      font-size: 16px;
      font-weight: normal;
-@@ -1315,8 +113,7 @@
+@@ -1315,7 +116,6 @@
+     width: 100%;
      clear: both;
  }
- 
--.sect1 .title, .single .sect1 .title,
--.section .title, .single .section .title,
-+.sect1 .title, .section .title,
+-
+ .sect1 .title, .single .sect1 .title,
+ .section .title, .single .section .title,
  .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
- .bibliography .qandaset .title, .reference .qandaset .title,
- .part .qandaset .title, .glossary .qandaset .title {
-@@ -1326,25 +123,23 @@
+@@ -1326,14 +126,12 @@
+     padding: 50px 0 5px;
      text-align: left;
  }
- 
--.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
--.section .section .title, .single .section .section .title {
-+.sect2 .title, .sect1 .qandaset .title,
-+.section .section .title {
+-
+ .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+ .section .section .title, .single .section .section .title {
      font-size: 22px;
      padding: 40px 0 0;
      text-align: left;
  }
- 
--.sect3 .title, .single .sect3 .title,
-+.sect3 .title,
+-
+ .sect3 .title, .single .sect3 .title,
  .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
--.section .section .section .title, .single .section .section .section .title  {
-+.section .section .section .title {
-     font-size: 20px;
-     font-weight: normal;
+ .section .section .section .title, .single .section .section .section .title  {
+@@ -1342,7 +140,6 @@
      padding: 33px 0 0;
      text-align: left;
  }
- 
--.sect4 .title, .single .sect4 .title,
--.sect5 .title, .single .sect5 .title,
--.section .section .section .title, .single .section .section .section .title  {
-+.section .section .section .title {
+-
+ .sect4 .title, .single .sect4 .title,
+ .sect5 .title, .single .sect5 .title,
+ .section .section .section .title, .single .section .section .section .title  {
+@@ -1354,70 +151,55 @@
+     z-index: 1;
+     text-align: left;
+ }
+-
+ .sect4 .title, .section .section .section .section .title {
+     font-weight: 600;
+ }
+-
+ .sect5 .title, .section .section .section .section .section .title {
+     font-weight: normal;
+ }
+-
+ .legal-section p {
+     color: #333 !important;
+     font-size: 12px !important;
+ }
+-
+ .legal-section .screen {
+     color: #666 !important;
+     font-size: 11px !important;
+ }
+-
+ .legal-section .sect2 .title {
      font-size: 16px;
-     padding: 53px 0 0;
-     margin: 0 0 -33px;
-@@ -2177,63 +972,7 @@
+ }
+-
+ .legal-section .sect3 .title {
+     font-size: 12px;
+ }
+-
+ .name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
+ .qandaset .title {
+     color: #439239;
+ }
+-
+ a:hover .name, a:focus .name, a:active .name,
+ .bubble a.leads-to-page:hover .name, a.leads-to-page:focus .name,
+ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
+ .refentrytitle a:active {
+     text-decoration: underline;
+ }
+-
+ .bubble a:hover .name, .bubble a:focus .name, .bubble a:active .name {
+     text-decoration: none;
+ }
+-
+ .number, .subtitle {
+     color: #666;
+ }
+-
+ .title em, .subtitle em {
+     font-style: normal;
+ }
+-
+ .page-bottom a:hover .number, .page-bottom a:focus .number,
+ .page-bottom a:active .number {
+     color: #68C05E;
+ }
+-
+ #_bubble-toc .number {
+     color: #CCC;
+ }
+-
+ #_bubble-toc .name {
+     color: #FFF;
+ }
+-
+ .permalink {
+     opacity: 0;
+     font-size: 75%;
+@@ -1426,50 +208,38 @@
+     font-weight: normal;
+     line-height: 100%;
+     transition: opacity 0.2s ease-in-out 0.1s;
+-    /* Clean the below up in Q3 2013 or so... */
+     -moz-transition: opacity 0.2s ease-in-out 0.1s;
+     -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+     -o-transition: opacity 0.2s ease-in-out 0.1s;
+ }
+-
+ .permalink:hover, .permalink:focus, .permalink:active {
+     color: #439239;
+     text-decoration: none !important;
+ }
+-
+ *:hover > .permalink {
+     opacity: 1;
+ }
+-
+ .line .toc {
+     padding: 0 30px 24px;
+ }
+-
+ .line {
+     margin: 17px 0 36px 0;
+     border-bottom: 1px solid #439239;
+     width: 100%;
+ }
+-
+ .toc a {
+     text-decoration: none;
+ }
+-
+ .legalnotice {
+     margin: 40px 0 0;
+     padding: 10px 0 0;
+ }
+-
+ .legalnotice p, .legalnotice td {
+     font-size: 12px;
+     color: #666;
+     line-height: 140%;
+     margin: 5px 0 0 0;
+ }
+-
+-
+-/* Thou shalt not ... */
+-
+ .admonition {
+     border-width: 1px;
+     border-radius: 3px;
+@@ -1477,58 +247,46 @@
+     padding: 10px;
+     margin: 17px 0 24px;
+ }
+-
+ .tip {
+     border-color: #439239;
+     background: #FFF url(../images/dots-green.png) repeat-x scroll top;
+ }
+-
+ .note {
+     border-color: #666;
+     background: #FFF url(../images/dots-darkgray.png) repeat-x scroll top;
+ }
+-
+ .note ul, .note .orderedlist, .warning ul, .warning .orderedlist {
+     color: #666;
+ }
+-
+ .important {
+     border-color: #BB7B03;
+     background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
+ }
+-
+ .important ul, .important .orderedlist {
+     color: #BB7B03;
+ }
+-
+ .warning, .caution {
+     border-color: #8C0000;
+     background: #FFF url(../images/dots-red.png) repeat-x scroll top;
+ }
+-
+ .admonition > h6 {
+     font-weight: 600;
+     vertical-align: middle;
+     display: table-cell;
+     height: 36px;
+ }
+-
+ .tip > h6 {
+     color: #439239;
+ }
+-
+ .note > h6 {
+     color: #333;
+ }
+-
+ .important > h6 {
+     color: #BB7B03;
+ }
+-
+ .warning > h6, .caution > h6 {
+     color: #8C0000;
+ }
+-
+ .symbol {
+     width: 36px;
+     height: 36px;
+@@ -1537,30 +295,22 @@
+     float: left;
+     overflow: hidden;
+ }
+-
+ .admonition p {
+     margin: 10px 0 0 !important;
+ }
+-
+-/* Text styles */
+-
+ #_content span, #_content a, #_content p, #_content em, #_content strong {
+     position: relative;
+     z-index: 2;
+ }
+-
+ em, i, .guimenu {
+     font-style: italic;
+ }
+-
+ em .guimenu, i .guimenu, .question em {
+-    font-style: normal; /* Don't use italics within italics... */
++    font-style: normal;
+ }
+-
+ strong, b, .imprint-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
+     font-weight: 600;
+ }
+-
+ .arch {
+     background-color: #7DC24D;
+     border: 1px solid #439239;
+@@ -1574,66 +324,53 @@
+     text-transform: uppercase;
+     line-height: 20px;
+ }
+-
+ .arch-arrow-start, .arch-arrow-end {
+     display: inline-block;
+     height: 22px;
+     vertical-align:bottom;
+ }
+-
+ .arch-arrow-start {
+     background-position: -24px -88px;
+     width: 13px;
+     margin-left: -3px;
+ }
+-
+ .arch-arrow-end {
+     background-position: -47px -88px;
+     width: 25px;
+ }
+-
+ p, td {
+     -moz-hyphens: auto;
+     hyphens: auto;
+ }
+-
+ .ulink, .email {
+     -moz-hyphens: none;
+     hyphens: none;
+ }
+-
+ p, .simplelist td {
+     color: #000;
+     text-align: left;
+     margin: 10px 0 0;
+ }
+-
+ .abstract, .highlights {
+     margin: 24px 0 0;
+     font-size: 18px;
+     line-height: 140%;
+ }
+-
+ .abstract p, .highlights p, .toc-title {
+     color: #333;
+ }
+-
+ .abstract p:first-child, .highlights p:first-child {
+     margin-top: 0;
+ }
+-
+ .abstract .titlepage, .highlights .titlepage {
+     display: none;
+ }
+-
+ .abstract .titlepage + p, .highlights .titlepage + p {
+     margin-top: 0;
+ }
+-
+ .abstract li:first-child p:first-child, .highlights li:first-child p:first-child {
+     margin-top: 0;
+ }
+-
+ .abstract + .authorgroup, .highlights + .authorgroup,
+ .abstract + .author, .highlights + .author,
+ .abstract + .corpauthor, .highlights + .corpauthor,
+@@ -1642,17 +379,14 @@
+ .abstract + .date, .highlights + .date {
+     margin: 10px 0 0;
+ }
+-
+ .authorgroup, .othercredit, .editor, .date {
+     color: #333;
+ }
+-
+ .ulink, .link, .xref, .email, .glosssee,
+ .glossseealso, .indexterm, .qanda-toc a {
+     color: #439239;
+     text-decoration: none;
+ }
+-
+ .title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
+ .figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
+ .itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
+@@ -1664,7 +398,6 @@
+ .itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
+     text-decoration: underline;
+ }
+-
+ .xref:hover, .xref:focus, .xref:active,
+ .xref:visited:hover, .xref:visited:focus, .xref:visited:active,
+ .link:hover, .link:focus, .link:active,
+@@ -1684,13 +417,11 @@
+     color: #439239;
+     text-decoration: underline;
+ }
+-
+ .xref:visited, .ulink:visited, .link:visited, .email:visited,
+ .glosssee:visited, .glossseealso:visited,
+ .indexterm:visited {
+     color: #5C3566;
+ }
+-
+ .title .xref:hover, .title .xref:focus,.title .xref:active,
+ .subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
+ .table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
+@@ -1704,11 +435,9 @@
+     color: #439239;
+     text-decoration: none;
+ }
+-
+ p a:visited {
+     color: #5C3566;
+ }
+-
+ code, .command, .keycap, .replaceable {
+     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+     font-weight: normal;
+@@ -1719,47 +448,38 @@
+     display: inline-block;
+     line-height: 120%;
+ }
+-
+ code, .command, .keycap {
+     font-style: normal;
+ }
+-
+ code code, code .command, .command code, code .replaceable,
+ .command .replaceable, .replaceable code, .replaceable .command {
+     padding: 0;
+     border: none;
+ }
+ 
+-
+ .name code, .name .command, a .command, a code,
+ .admonition h6 .command, .admonition h6 code {
+     color: inherit;
+ }
+-
+ .admonition h6 .command, .admonition h6 code {
+     border-color: #D1D1D3;
+ }
+-
+ code {
+     font-weight: normal;
+ }
+-
+ .command {
+     font-weight: 600;
+ }
+-
+-.screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
++.screen-wrap {
+     padding: 10px;
+     background-color: #EFEFF0;
+     border-radius: 5px;
+     margin: 5px 0;
+     border: 1px solid #999;
+ }
+-
+ .example .screen-wrap {
+     margin: 10px 0 24px;
+ }
+-
+ .screen {
+     font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+     color: #333;
+@@ -1769,7 +489,6 @@
+     background-color: #EFEFF0;
+     text-align: left;
+ }
+-
+ .screen code, .screen .command, .screen .replaceable {
+     border-radius: 0;
+     background-color: transparent;
+@@ -1777,32 +496,25 @@
+     border: none;
+     padding: 0;
+ }
+-
+ .screen code {
+     color: #333;
+ }
+ 
+-
+ .screen .command {
+     color: #306928;
+ }
+-
+ .calloutlist {
+     margin: 10px 0 24px;
+ }
+-
+ .calloutlist td[width="5%"] {
+     width: 45px;
+ }
+-
+ .example + .calloutlist {
+     margin: -14px 0 24px;
+ }
+-
+ .calloutlist table {
+     width: 100%;
+ }
+-
+ .callout {
+     display: inline-block;
+     padding: 1px 6px 1.5px 5px;
+@@ -1815,21 +527,17 @@
+     line-height: 13px;
+     font-weight: 600;
+ }
+-
+ .calloutlist .callout {
+     position: relative;
+     top: 2px;
+     float: right;
+ }
+-
+ .variablelist, .toc {
+     margin: 24px 0;
+ }
+-
+ .line .toc {
+     margin: 0;
+ }
+-
+ .variablelist dt, .glossary dt {
+     font-weight: 600;
+     color: #000;
+@@ -1839,35 +547,29 @@
+     top: -33px;
+     z-index: 1;
+ }
+-
+ .toc dt {
+     margin-bottom: 5px;
+ }
+-
+ .indexdiv h3 {
+     font-weight: 600;
+     padding-bottom: 10px;
+ }
+ 
+-
+ .variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
+ .indexdiv dd, .answer {
+     margin: 0 0 17px 0;
+     padding: 0 0 0 30px;
+ }
+-
+ .list-of-figures dl, .list-of-tables dl,
+ .list-of-examples dl, .list-of-procedures dl,
+ .list-of-equations dl {
+     margin: 5px 0 17px 0;
+     padding: 0 0 0 30px;
+ }
+-
+ .variablelist dd > p, .glossary dd > p,
+ .toc dd > p {
+     margin: 0;
+ }
+-
+ div.figure {
+     max-width: 100%;
+     min-height: 60px;
+@@ -1879,7 +581,6 @@
+     padding-top: 33px;
+     top: -33px;
+ }
+-
+ div.figure .mediaobject {
+     max-width: 100%;
+     min-height: 60px;
+@@ -1892,59 +593,50 @@
+     border-left: 1px solid #202020;
+     border-right: 1px solid #202020;
+ }
+-
+ .figure img {
+     padding: 0;
+     background-color: #FFF;
+     width: auto;
+     margin: 0 auto;
+-    /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+     max-width: 100%;
+     max-width: calc(100% - 2px);
+     max-width: -moz-calc(100% - 2px);
+     max-width: -webkit-calc(100% - 2px);
+-    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
++    display: block;
  }
  
  
--/* Review features */
+-
+ .figure-title {
+     padding: 10px;
+     margin: 0;
+     width: auto;
+ }
+-
+ div.figure .figure-title-wrap {
+     background-color: #202020;
+     width: 100%;
+     overflow: hidden;
+ }
+-
+ div.figure a {
+     height: 0;
+     width: 0;
+ }
+-
+ div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
+     color: #76AD2D;
+     text-decoration: none;
+     font-weight: normal;
+ }
+-
+ div.figure .name, div.figure .permalink {
+     color: #FFF;
+ }
+-
+ .informalfigure img {
+     max-width: 100%;
+-    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
++    display: block;
+     color: #999;
+     margin: 17px 0 24px;
+     padding: 1px;
+     border: 1px solid #202020;
+     width: auto;
+ }
+-
+ .keycap {
+     color: #333;
+     font-size: 0.75em;
+@@ -1958,20 +650,15 @@
+     white-space: nowrap;
+     vertical-align: 0.2em;
+ }
+-
+ a:hover .keycap, a:focus .keycap, a:active .keycap,
+ a:hover .command, a:focus .command, a:active .command,
+ a:hover code, a:focus code, a:active code {
+     border-color: #439239;
+ }
+-
+-
+-/* We put an ndash character between keycaps that are part of an accelerator */
+ .key-connector {
+     margin: 0 -1px;
+     color: #666;
+ }
+-
+ .procedure-title, .table-title, .example-title,
+ .figure-title, .orderedlist-title, .variablelist-title,
+ .itemizedlist-title, .qandadiv-title {
+@@ -1981,7 +668,6 @@
+     text-align: left;
+     line-height: 120%;
+ }
+-
+ .table-title, .example-title, .procedure-title,
+ .variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
+     position: relative;
+@@ -1989,35 +675,27 @@
+     padding-top: 33px;
+     z-index: 1;
+ }
+-
+ .example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
+     margin: 24px 0 -33px;
+ }
+-
+ .itemizedlist-title {
+     margin: 24px 0 -41px;
+ }
+-
+ .table-title {
+     margin: 24px 0 -23px;
+ }
+-
+ .variablelist-title {
+     margin: 24px 0 -50px;
+ }
+-
+ .qandaentry {
+     margin: -33px 0 22px;
+ }
+-
+ .qanda-toc + .qandaentry {
+     padding-top: 53px;
+ }
+-
+ .qandaentry:last-child {
+     margin: -33px 0 -23px;
+ }
+-
+ .procedure-title code, .procedure-title .command, .procedure-title .keycap,
+ .table-title code, .table-title .command, .table-title .keycap,
+ .example-title code, .example-title .command, .example-title .keycap,
+@@ -2027,117 +705,91 @@
+  .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
+     text-transform: none;
+ }
+-
+ .procedure-contents {
+     border-left: 3px solid #9CC897;
+     font-weight: normal;
+     margin: 17px 0 17px;
+-    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+-    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
+     padding: 3px 5px 6px 2px;
+     background-color: #F7FAF6;
+     display: block;
+ }
+-
+ .procedure-title-wrap + .procedure-contents {
+     margin: 10px 0 24px;
+ }
+-
+ .procedure-contents > p:first-child,
+ .procedure-contents > ol:first-child > li:first-child > p:first-child {
+     margin-top: 0;
+ }
+-
+ .procedure-contents > .admonition {
+     margin-top: 4px;
+ }
+-
+ .procedure-contents > p, .procedure-contents > .informalfigure,
+ .procedure-contents > .admonition {
+     margin-left: 12px;
+     margin-right: 17px;
+ }
+-
+ ol.procedure, ol.substeps, ol.orderedlist {
+     display: block;
+     color: #439239;
+     font-weight: 600;
+ }
+-
+ ol.procedure {
+     padding: 0 0 0 30px;
+     margin: 0 10px;
+ }
+-
+ ol.substeps, ol.orderedlist {
+     padding: 0 0 0 35px;
+     margin: 0 0 0 10px;
+ }
+-
+ .orderedlist-title-wrap + ol.orderedlist {
+     margin-top: 40px;
+ }
+-
+ ol.procedure, ol.orderedlist {
+     list-style-type: decimal;
+ }
+-
+ ol.substeps {
+     list-style-type: lower-latin;
+ }
+-
+ .table-contents, .informaltable {
+-    /* Yup, let's make this scroll... While ugly, there seems to be no better
+-    way to avoid the table running off the page border...(?) */
+     overflow: auto;
+ }
+-
+ .table-contents {
+     margin: 0 0 24px 0;
+-}
+-.informaltable {
++}.informaltable {
+     margin: 10px 0 24px 0;
+ }
  
+-
+ .table table, .informaltable table {
+     border: 1px solid #999;
+     max-width: 100%;
+     border-spacing: 0;
+     table-layout: fixed;
+ }
+-
+ table p, .informaltable table p {
+     margin: 0;
+ }
+-
+ .table th, .informaltable th {
+     font-weight: 600;
+     background-color: #D1D1D3;
+ }
+-
+ .table td, .table th, .informaltable td, .informaltable th {
+     margin: 0;
+     padding: 3px 5px;
+     overflow: hidden;
+     vertical-align: middle;
+ }
+-
+ .table th, .informaltable th,
+ .table td[colspan], .informaltable td[colspan],
+ .table td[rowspan], .informaltable td[rowspan] {
+     vertical-align: middle;
+     border: 1px solid #999;
+ }
+-
+ .table td, .informaltable td{
+     vertical-align: middle;
+     border-right: 1px solid #999;
+-}
+-.table tr:nth-child(even), .informaltable tr:nth-child(even) {
++}.table tr:nth-child(even), .informaltable tr:nth-child(even) {
+     background-color: #EFEFF0;
+ }
+-
+ ul {
+     padding: 5px 0 0 35px;
+     margin: 0 10px;
+@@ -2145,134 +797,58 @@
+     color: #439239;
+     list-style-type: disc;
+ }
+-
+ .qanda-toc {
+     margin-bottom: 45px;
+ }
+-
+ .qandadiv {
+     margin: 0 0 40px 0;
+     border-bottom: 1px solid #efeff0;
+ }
+-
+ .qandadiv:last-child {
+     border-bottom: none;
+ }
+-
+ .answer .table-title, .answer .screen-wrap, .answer .variablelist {
+     margin-top: 10px;
+ }
+-
+ li p {
+     font-weight: normal;
+ }
+-
+ .procedure > p {
+     margin: 0 10px 5px;
+ }
+-
+ div.itemizedlist {
+     margin: 0 0 24px;
+ }
+-
+ .question p {
+     font-size: 20px;
+     font-style: italic;
+     color: #666;
+ }
+-
+ .question p + p {
+     margin-top: 2px;
+ }
+ 
+-
+ .blockquote p {
+     font-style: italic;
+     color: #333;
+ }
+-
+ div.blockquote {
+     margin: 17px 35px;
+ }
+-
+-
+-/* Review features */
+-
 -.remark, .doc-status {
 -    background-color: #E6E0E8;
 -    color: #000;
@@ -1345,10 +2178,31 @@ Index: suse/xslt_suse2/static/css/style.css
  @media print {
      #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
          display: none;
-@@ -2262,531 +1001,6 @@
+     }
+-
+     #_share-print {
+         visibility: hidden;
+     }
+-
+     .figure, .informalfigure, .admonition, p, table {
+-        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open
+-           since 2002. Webkit is cool, though. */
+         page-break-inside: avoid;
+     }
+-
+     .title {
+         page-break-after: avoid;
+         break-after: avoid;
+     }
+-
+     .ulink:after {
+         color: inherit;
+         background-image: none;
+@@ -2280,480 +856,41 @@
+         height: auto;
      }
  }
- 
+-
 -@media only screen and (max-width: 800px) {
 -    .share {
 -        float: right;
@@ -1383,7 +2237,7 @@ Index: suse/xslt_suse2/static/css/style.css
 -    #_toc-area, #_nav-area {
 -        width: 49.98%;
 -    }
--    
+-
 -    #_find-area {
 -        height: 42px;
 -        background-color: #439239;
@@ -1455,17 +2309,17 @@ Index: suse/xslt_suse2/static/css/style.css
 -
 -
 -/* Mobile layout */
--@media only screen and (max-width: 480px) {
+ @media only screen and (max-width: 480px) {
 -    #_white-bg, #_toolbar, #_fixed-header {
 -        padding: 0;
 -    }
 -
--    #_footer, #_content > .set, #_content > .book, #_content > .article, #_content > .part,
--    #_content > .chapter, #_content > .preface, #_content > .appendix,
--    #_content > .glossary, #_content > .reference, #_content > .refentry,
--    #_content > .bibliography, #_content > .index {
--        padding: 0 10px;
--    }
+     #_footer, #_content > .set, #_content > .book, #_content > .article, #_content > .part,
+     #_content > .chapter, #_content > .preface, #_content > .appendix,
+     #_content > .glossary, #_content > .reference, #_content > .refentry,
+     #_content > .bibliography, #_content > .index {
+         padding: 0 10px;
+     }
 -
 -    #_toc-area, #_nav-area {
 -        width: 100%;
@@ -1616,7 +2470,6 @@ Index: suse/xslt_suse2/static/css/style.css
 -    .bubble-closer {
 -        width: 24px;
 -        height: 24px;
--        background-image: url(../images/icons.png);
 -        background-position: -72px -87px;
 -        display: block;
 -        float: right;
@@ -1665,7 +2518,6 @@ Index: suse/xslt_suse2/static/css/style.css
 -    .back-icon {
 -        width: 24px;
 -        height: 24px;
--        background-image: url(../images/icons.png);
 -        background-position: -120px -87px;
 -        display: block;
 -    }
@@ -1750,17 +2602,17 @@ Index: suse/xslt_suse2/static/css/style.css
 -        border: none;
 -    }
 -
--    .line .toc {
--        padding-left: 0;
--        padding-right: 0;
--    }
+     .line .toc {
+         padding-left: 0;
+         padding-right: 0;
+     }
 -
 -    /* To avoid ugly word-wrap issues (as long as the page is wide enough,
 -       though, inline-block'ing these elements helps us to avoid wrapping at
 -       all.) */
--    code, .command {
--        display: inline;
--    }
+     code, .command {
+         display: inline;
+     }
 -
 -    #_footer {
 -        height: auto;
@@ -1798,82 +2650,145 @@ Index: suse/xslt_suse2/static/css/style.css
 -        margin: 0 auto;
 -    }
 -
--    #_content ul, #_content ol {
--        padding-left: 10px;
--    }
+     #_content ul, #_content ol {
+         padding-left: 10px;
+     }
 -
--    .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
--    .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
--    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
--        padding-left: 10px;
--    }
+     .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
+     .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
+     .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+         padding-left: 10px;
+     }
 -
--    .admonition .symbol {
--        float: none;
+     .admonition .symbol {
+         float: none;
 -        /* Remove proprietary attributes later on */
--        padding-left: calc(50% - 18px);
--        padding-left: -moz-calc(50% - 18px);
--        padding-left: -webkit-calc(50% - 18px);
--        padding-bottom: 10px;
--    }
+         padding-left: calc(50% - 18px);
+         padding-left: -moz-calc(50% - 18px);
+         padding-left: -webkit-calc(50% - 18px);
+         padding-bottom: 10px;
+     }
 -
--    .screen-wrap {
--        border-left: none;
--        border-right: none;
--        border-radius: 0;
--        margin-right: -10px;
--    }
+     .screen-wrap {
+         border-left: none;
+         border-right: none;
+         border-radius: 0;
+         margin-right: -10px;
+     }
 -
--    .example-contents > .screen-wrap, .admonition > .screen-wrap,
--    .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
--    .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
--    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap,
--    .procedure-contents, .procedure-title-wrap + .procedure-contents, div.figure {
--        margin-left: -10px;
--        margin-right: -10px;
--    }
+     .example-contents > .screen-wrap, .admonition > .screen-wrap,
+     .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
+     .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
+@@ -2762,9 +899,7 @@
+         margin-left: -10px;
+         margin-right: -10px;
+     }
 -
--    div.figure {
+     div.figure {
 -        /* Remove proprietary attributes later on */
--        max-width: -moz-calc(100% + 20px);
--        max-width: -webkit-calc(100% + 20px);
--        max-width: calc(100% + 20px);
--    }
--    #_content ol.procedure {
--        padding-left: 20px;
--    }
+         max-width: -moz-calc(100% + 20px);
+         max-width: -webkit-calc(100% + 20px);
+         max-width: calc(100% + 20px);
+@@ -2772,17 +907,14 @@
+     #_content ol.procedure {
+         padding-left: 20px;
+     }
 -
--    .book .title, .set .title, .article .title {
--        font-size: 36px;
--    }
+     .book .title, .set .title, .article .title {
+         font-size: 36px;
+     }
 -
--    .title, .chapter .title, .preface .title,
--    .appendix .title, .bibliography .title,
--    .reference .title, .part .title, .glossary .title {
--        font-size: 30px;
--    }
+     .title, .chapter .title, .preface .title,
+     .appendix .title, .bibliography .title,
+     .reference .title, .part .title, .glossary .title {
+         font-size: 30px;
+     }
 -
--    .sect1 .title, .single .sect1 .title,
--    .section .title, .single .section .title,
--    .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
--    .bibliography .qandaset .title, .reference .qandaset .title,
--    .part .qandaset .title, .glossary .qandaset .title, .set .subtitle,
--    .book .subtitle, .article .subtitle {
--        font-size: 22px;
--    }
+     .sect1 .title, .single .sect1 .title,
+     .section .title, .single .section .title,
+     .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+@@ -2791,84 +923,47 @@
+     .book .subtitle, .article .subtitle {
+         font-size: 22px;
+     }
 -
--    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
--    .section .section .title, .single .section .section .title {
--        font-size: 20px;
--    }
+     .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+     .section .section .title, .single .section .section .title {
+         font-size: 20px;
+     }
 -
--    .sect3 .title, .single .sect3 .title,
--    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
--    .section .section .section .title, .single .section .section .section .title  {
--        font-size: 18px;
+     .sect3 .title, .single .sect3 .title,
+     .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+     .section .section .section .title, .single .section .section .section .title  {
+         font-size: 18px;
+     }
+ }
+-
+-
+-@media only screen and (max-height: 490px) and (min-width: 451px) {
+-    #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
+-        max-height: 300px;
 -    }
 -}
 -
- /* Optimize images for various screen heights. Some (1080 and 1024, 800 and 768
-    etc.) are bucketed. We assume 110px for added browser chrome (subtracted from
-    the @media max-height), and 170px for giving the image some context
+-/*  Optimize images for various screen heights.
+-
+-    + Some sizes are bucketed.
+-
+-    + We assume 110px of browser chrome:
+-      @media (max-height: $largest-screen-size-in-bucket – 110px)
+-
+-    + We assume 190px are needed for context around the image:
+-      img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
+-      (With some exceptions for small screen sizes.)
+-*/
+-
+-/* Everything above */
+ @media only screen {
+     .informalfigure img, .figure img {
+         max-height: 70%;
+     }
+ }
+-
+-/* 1600px & 1440px */
+ @media only screen and (max-height: 1490px) {
+     .informalfigure img, .figure img {
+         max-height: 1140px;
+     }
+ }
+-
+-/* 1200px */
+ @media only screen and (max-height: 1090px) {
+     .informalfigure img, .figure img {
+         max-height: 900px;
+     }
+ }
+-
+-/* 1080px & 1024px */
+ @media only screen and (max-height: 970px) {
+     .informalfigure img, .figure img {
+         max-height: 724px;
+     }
+ }
+-
+-/* 900px */
+ @media only screen and (max-height: 790px) {
+     .informalfigure img, .figure img {
+         max-height: 600px;
+     }
+ }
+-
+-/* 800px & 768px */
+ @media only screen and (max-height: 690px) {
+-    /* Make an exception here, so we don't get stamp-sized screenshots. */
+     .informalfigure img, .figure img {
+         max-height: 518px;
+     }
+ }
+-
+-/* 600px and below*/
+ @media only screen and (max-height: 490px) {
+-    /* Make an exception here, so we don't get stamp-sized screenshots. */
+     .informalfigure img, .figure img {
+         max-height: 390px;
+     }
