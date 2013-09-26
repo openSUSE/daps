@@ -2,7 +2,7 @@ Index: suse/xslt_suse2/static/css/style.css
 ===================================================================
 --- suse/xslt_suse2/static/css/style.css	(revision 3653)
 +++ suse/xslt_suse2/static/css/style.css	(working copy)
-@@ -1,1195 +1,13 @@
+@@ -1,1195 +1,7 @@
 -/*
 -Use fonts from Google (for now): http://www.google.com/webfonts#UsePlace:use/Collection:Open+Sans
 -For additional support for Vietnamese, add "vietnamese," after "&subset=".
@@ -1185,12 +1185,12 @@ Index: suse/xslt_suse2/static/css/style.css
 -
 -/* .CHAPTER/... AREA */
 -
- #_content > .set, #_content > .book, #_content > .article, #_content > .part,
- #_content > .chapter, #_content > .preface, #_content > .appendix,
- #_content > .glossary, #_content > .reference, #_content > .refentry,
- #_content > .bibliography, #_content > .index {
-     padding: 0 20px;
- }
+-#_content > .set, #_content > .book, #_content > .article, #_content > .part,
+-#_content > .chapter, #_content > .preface, #_content > .appendix,
+-#_content > .glossary, #_content > .reference, #_content > .refentry,
+-#_content > .bibliography, #_content > .index {
+-    padding: 0 20px;
+-}
 -
 -
 -/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
@@ -1198,7 +1198,7 @@ Index: suse/xslt_suse2/static/css/style.css
  #_content a[id] {
      position: relative;
      top: -33px;
-@@ -1197,17 +15,13 @@
+@@ -1197,17 +9,13 @@
      width: 0;
      height: 0;
  }
@@ -1216,7 +1216,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .ulink:after {
      content: "\0020\2197";
      color: transparent;
-@@ -1220,17 +34,14 @@
+@@ -1220,17 +28,14 @@
      position: relative;
      top: 2px;
  }
@@ -1234,7 +1234,7 @@ Index: suse/xslt_suse2/static/css/style.css
  div.version-info {
      color: #439239;
      font-weight: normal;
-@@ -1242,12 +53,10 @@
+@@ -1242,12 +47,10 @@
      font-size: 13px;
      border-radius: 3px;
  }
@@ -1247,7 +1247,7 @@ Index: suse/xslt_suse2/static/css/style.css
  h6.version-info {
      margin: 75px 0 0;
      padding: 5px 7px;
-@@ -1257,12 +66,10 @@
+@@ -1257,12 +60,10 @@
      float: left;
      line-height: 100%;
  }
@@ -1260,7 +1260,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .book .title, .set .title, .article .title {
      font-size: 48px;
      font-weight: 600;
-@@ -1272,12 +79,10 @@
+@@ -1272,12 +73,10 @@
      color: #439239;
      padding: 70px 0 50px;
  }
@@ -1273,7 +1273,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .set .subtitle, .book .subtitle, .article .subtitle {
      font-size: 28px;
      font-weight: normal;
-@@ -1286,7 +91,6 @@
+@@ -1286,7 +85,6 @@
      width: 100%;
      clear: both;
  }
@@ -1281,7 +1281,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .title, .chapter .title, .preface .title,
  .appendix .title, .bibliography .title,
  .reference .title, .part .title, .glossary .title {
-@@ -1297,15 +101,12 @@
+@@ -1297,15 +95,12 @@
      width: 100%;
      clear: both;
  }
@@ -1297,7 +1297,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .sect1 .subtitle, .chapter .subtitle {
      font-size: 16px;
      font-weight: normal;
-@@ -1315,7 +116,6 @@
+@@ -1315,7 +110,6 @@
      width: 100%;
      clear: both;
  }
@@ -1305,7 +1305,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .sect1 .title, .single .sect1 .title,
  .section .title, .single .section .title,
  .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
-@@ -1326,14 +126,12 @@
+@@ -1326,14 +120,12 @@
      padding: 50px 0 5px;
      text-align: left;
  }
@@ -1320,7 +1320,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .sect3 .title, .single .sect3 .title,
  .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
  .section .section .section .title, .single .section .section .section .title  {
-@@ -1342,7 +140,6 @@
+@@ -1342,7 +134,6 @@
      padding: 33px 0 0;
      text-align: left;
  }
@@ -1328,7 +1328,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .sect4 .title, .single .sect4 .title,
  .sect5 .title, .single .sect5 .title,
  .section .section .section .title, .single .section .section .section .title  {
-@@ -1354,70 +151,55 @@
+@@ -1354,70 +145,55 @@
      z-index: 1;
      text-align: left;
  }
@@ -1399,7 +1399,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .permalink {
      opacity: 0;
      font-size: 75%;
-@@ -1426,50 +208,38 @@
+@@ -1426,50 +202,38 @@
      font-weight: normal;
      line-height: 100%;
      transition: opacity 0.2s ease-in-out 0.1s;
@@ -1450,7 +1450,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .admonition {
      border-width: 1px;
      border-radius: 3px;
-@@ -1477,58 +247,46 @@
+@@ -1477,58 +241,46 @@
      padding: 10px;
      margin: 17px 0 24px;
  }
@@ -1509,7 +1509,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .symbol {
      width: 36px;
      height: 36px;
-@@ -1537,30 +295,22 @@
+@@ -1537,30 +289,22 @@
      float: left;
      overflow: hidden;
  }
@@ -1541,7 +1541,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .arch {
      background-color: #7DC24D;
      border: 1px solid #439239;
-@@ -1574,66 +324,53 @@
+@@ -1574,66 +318,53 @@
      text-transform: uppercase;
      line-height: 20px;
  }
@@ -1608,7 +1608,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .abstract + .authorgroup, .highlights + .authorgroup,
  .abstract + .author, .highlights + .author,
  .abstract + .corpauthor, .highlights + .corpauthor,
-@@ -1642,17 +379,14 @@
+@@ -1642,17 +373,14 @@
  .abstract + .date, .highlights + .date {
      margin: 10px 0 0;
  }
@@ -1626,7 +1626,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
  .figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
  .itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
-@@ -1664,7 +398,6 @@
+@@ -1664,7 +392,6 @@
  .itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
      text-decoration: underline;
  }
@@ -1634,7 +1634,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .xref:hover, .xref:focus, .xref:active,
  .xref:visited:hover, .xref:visited:focus, .xref:visited:active,
  .link:hover, .link:focus, .link:active,
-@@ -1684,13 +417,11 @@
+@@ -1684,13 +411,11 @@
      color: #439239;
      text-decoration: underline;
  }
@@ -1648,7 +1648,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .title .xref:hover, .title .xref:focus,.title .xref:active,
  .subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
  .table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
-@@ -1704,11 +435,9 @@
+@@ -1704,11 +429,9 @@
      color: #439239;
      text-decoration: none;
  }
@@ -1660,7 +1660,7 @@ Index: suse/xslt_suse2/static/css/style.css
  code, .command, .keycap, .replaceable {
      font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
      font-weight: normal;
-@@ -1719,47 +448,38 @@
+@@ -1719,47 +442,38 @@
      display: inline-block;
      line-height: 120%;
  }
@@ -1709,7 +1709,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .screen {
      font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
      color: #333;
-@@ -1769,7 +489,6 @@
+@@ -1769,7 +483,6 @@
      background-color: #EFEFF0;
      text-align: left;
  }
@@ -1717,7 +1717,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .screen code, .screen .command, .screen .replaceable {
      border-radius: 0;
      background-color: transparent;
-@@ -1777,32 +496,25 @@
+@@ -1777,32 +490,25 @@
      border: none;
      padding: 0;
  }
@@ -1750,7 +1750,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .callout {
      display: inline-block;
      padding: 1px 6px 1.5px 5px;
-@@ -1815,21 +527,17 @@
+@@ -1815,21 +521,17 @@
      line-height: 13px;
      font-weight: 600;
  }
@@ -1772,7 +1772,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .variablelist dt, .glossary dt {
      font-weight: 600;
      color: #000;
-@@ -1839,35 +547,29 @@
+@@ -1839,35 +541,29 @@
      top: -33px;
      z-index: 1;
  }
@@ -1808,7 +1808,7 @@ Index: suse/xslt_suse2/static/css/style.css
  div.figure {
      max-width: 100%;
      min-height: 60px;
-@@ -1879,7 +581,6 @@
+@@ -1879,7 +575,6 @@
      padding-top: 33px;
      top: -33px;
  }
@@ -1816,7 +1816,7 @@ Index: suse/xslt_suse2/static/css/style.css
  div.figure .mediaobject {
      max-width: 100%;
      min-height: 60px;
-@@ -1892,59 +593,50 @@
+@@ -1892,59 +587,50 @@
      border-left: 1px solid #202020;
      border-right: 1px solid #202020;
  }
@@ -1878,7 +1878,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .keycap {
      color: #333;
      font-size: 0.75em;
-@@ -1958,20 +650,15 @@
+@@ -1958,20 +644,15 @@
      white-space: nowrap;
      vertical-align: 0.2em;
  }
@@ -1899,7 +1899,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .procedure-title, .table-title, .example-title,
  .figure-title, .orderedlist-title, .variablelist-title,
  .itemizedlist-title, .qandadiv-title {
-@@ -1981,7 +668,6 @@
+@@ -1981,7 +662,6 @@
      text-align: left;
      line-height: 120%;
  }
@@ -1907,7 +1907,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .table-title, .example-title, .procedure-title,
  .variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
      position: relative;
-@@ -1989,35 +675,27 @@
+@@ -1989,35 +669,27 @@
      padding-top: 33px;
      z-index: 1;
  }
@@ -1943,7 +1943,7 @@ Index: suse/xslt_suse2/static/css/style.css
  .procedure-title code, .procedure-title .command, .procedure-title .keycap,
  .table-title code, .table-title .command, .table-title .keycap,
  .example-title code, .example-title .command, .example-title .keycap,
-@@ -2027,117 +705,91 @@
+@@ -2027,117 +699,91 @@
   .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
      text-transform: none;
  }
@@ -2063,7 +2063,7 @@ Index: suse/xslt_suse2/static/css/style.css
  ul {
      padding: 5px 0 0 35px;
      margin: 0 10px;
-@@ -2145,134 +797,58 @@
+@@ -2145,134 +791,58 @@
      color: #439239;
      list-style-type: disc;
  }
@@ -2198,7 +2198,7 @@ Index: suse/xslt_suse2/static/css/style.css
      .ulink:after {
          color: inherit;
          background-image: none;
-@@ -2280,480 +856,41 @@
+@@ -2280,480 +850,41 @@
          height: auto;
      }
  }
@@ -2679,7 +2679,7 @@ Index: suse/xslt_suse2/static/css/style.css
      .example-contents > .screen-wrap, .admonition > .screen-wrap,
      .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
      .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
-@@ -2762,9 +899,7 @@
+@@ -2762,9 +893,7 @@
          margin-left: -10px;
          margin-right: -10px;
      }
@@ -2689,7 +2689,7 @@ Index: suse/xslt_suse2/static/css/style.css
          max-width: -moz-calc(100% + 20px);
          max-width: -webkit-calc(100% + 20px);
          max-width: calc(100% + 20px);
-@@ -2772,17 +907,14 @@
+@@ -2772,17 +901,14 @@
      #_content ol.procedure {
          padding-left: 20px;
      }
@@ -2707,7 +2707,7 @@ Index: suse/xslt_suse2/static/css/style.css
      .sect1 .title, .single .sect1 .title,
      .section .title, .single .section .title,
      .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
-@@ -2791,84 +923,47 @@
+@@ -2791,84 +917,47 @@
      .book .subtitle, .article .subtitle {
          font-size: 22px;
      }
