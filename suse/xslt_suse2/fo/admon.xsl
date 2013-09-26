@@ -55,7 +55,7 @@
     <xsl:otherwise>
       <!-- It's a note. (Or something undefined.) -->
       <svg:svg width="36" height="36">
-        <svg:path d="M 18,0 C 8.06,0 0,8.06 0,18 0,27.94 8.06,36 18,36 27.94,36 36,27.94 36,18 36,8.06 27.94,0 18,0 z m -6.13,6.25 c 0.32,0 0.63,0.13 0.88,0.38 L 26,19.88 27.06,27.5 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 C 26.81,27.94 26.69,28 26.56,28 L 18.94,26.94 5.156,13.16 c -0.195,-0.195 -0.195,-0.49 0,-0.69 0.2,-0.2 0.49,-0.2 0.69,0 L 19.47,26.06 26,26.94 25.13,20.41 12.22,7.5 C 12.02,7.3 11.7,7.3 11.5,7.5 l -3.53,3.53 c -0.2,0.2 -0.2,0.52 0,0.72 l 11.5,11.5 3.34,0.53 -0.53,-3.38 L 11.5,9.63 c -0.2,-0.2 -0.2,-0.52 0,-0.72 0.2,-0.2 0.52,-0.2 0.72,0 L 23.19,19.88 23.88,24.31 c 3.39e-4,0.13 -0.06,0.25 -0.16,0.34 -0.1,0.1 -0.22,0.16 -0.34,0.16 L 18.94,24.13 7.09,12.28 c -0.49,-0.49 -0.49,-1.29 0,-1.78 l 3.88,-3.88 C 11.2,6.38 11.56,6.25 11.88,6.25 z"
+        <svg:path d="M 18,0 C 8.061,0 0,8.058 0,18 0,27.94 8.061,36 18,36 27.942,36 36,27.94 36,18 36,8.058 27.942,0 18,0 z m -3.5,5.125 c 0.266,1.75e-4 0.512,0.0745 0.688,0.25 l 12,12 0.7188,8.625 c -6e-5,0.511 -0.172,1.047 -0.563,1.438 -0.39,0.39 -0.928,0.605 -1.438,0.563 l -8.625,-0.719 -12,-12 c -0.391,-0.391 -0.391,-1.016 0,-1.406 0.383,-0.383 1.03,-0.408 1.438,0 L 18.125,25.313 25.906,26 25.188,18.219 14.5,7.5 l -4.25,4.25 8.813,8.813 1.906,0.5 -0.531,-1.938 -7.375,-7.375 1.438,-1.406 7.75,7.75 0.844,3.063 c 8.9e-5,0.511 -0.204,1.047 -0.594,1.438 -0.39,0.39 -0.895,0.532 -1.406,0.531 L 18,22.344 8.125,12.469 c -0.39,-0.39 -0.39,-1.047 0,-1.438 L 13.781,5.375 C 13.958,5.199 14.234,5.125 14.5,5.125 z"
           fill="{$color}"/>
       </svg:svg>
     </xsl:otherwise>
@@ -97,14 +97,14 @@
   <xsl:variable name="color">
     <xsl:call-template name="admon.symbol.color"/>
   </xsl:variable>
-  <xsl:variable name="graphic.width" select="10"/>
+  <xsl:variable name="graphic.width" select="6.1"/>
 
   <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
     <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
                     provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
-            <fo:block text-align="end" padding-before="2mm" padding-after="2mm">
+            <fo:block text-align="end" padding-before="1.2mm" padding-after="1.2mm">
               <fo:instream-foreign-object content-width="{$graphic.width}mm">
                 <xsl:call-template name="admon.symbol">
                   <xsl:with-param name="color" select="$color"/>
