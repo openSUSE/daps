@@ -699,58 +699,90 @@ a:hover code, a:focus code, a:active code {
  .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
     text-transform: none;
 }
+
 .procedure-contents {
     border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
+    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
     padding: 3px 5px 6px 2px;
     background-color: #F7FAF6;
     display: block;
 }
+
 .procedure-title-wrap + .procedure-contents {
     margin: 10px 0 24px;
 }
+
 .procedure-contents > p:first-child,
 .procedure-contents > ol:first-child > li:first-child > p:first-child {
     margin-top: 0;
 }
+
 .procedure-contents > .admonition {
     margin-top: 4px;
 }
+
 .procedure-contents > p, .procedure-contents > .informalfigure,
 .procedure-contents > .admonition {
     margin-left: 12px;
     margin-right: 17px;
 }
+
 ol.procedure, ol.substeps, ol.orderedlist {
     display: block;
     color: #439239;
     font-weight: 600;
 }
+
 ol.procedure {
     padding: 0 0 0 30px;
     margin: 0 10px;
 }
+
 ol.substeps, ol.orderedlist {
     padding: 0 0 0 35px;
     margin: 0 0 0 10px;
 }
+
 .orderedlist-title-wrap + ol.orderedlist {
     margin-top: 40px;
 }
+
 ol.procedure, ol.orderedlist {
     list-style-type: decimal;
 }
+
 ol.substeps {
     list-style-type: lower-latin;
 }
+
 .table-contents, .informaltable {
+    /* Yup, let's make this scroll... While ugly, there seems to be no better
+    way to avoid the table running off the page border...(?) */
     overflow: auto;
 }
+
 .table-contents {
     margin: 0 0 24px 0;
-}.informaltable {
+}
+.informaltable {
     margin: 10px 0 24px 0;
+}
+
+.informaltable {
+    margin: 10px 0 24px 0;
+}
+
+.example-contents > .informaltable {
+    margin: 0px 0 0 0;
+    padding: 0;
+}
+
+.example-contents > .informaltable > table {
+    margin: 10px 0 0 0;
+    padding: 0;
 }
 
 .table table, .informaltable table {
@@ -759,31 +791,38 @@ ol.substeps {
     border-spacing: 0;
     table-layout: fixed;
 }
+
 table p, .informaltable table p {
     margin: 0;
 }
+
 .table th, .informaltable th {
     font-weight: 600;
     background-color: #D1D1D3;
 }
+
 .table td, .table th, .informaltable td, .informaltable th {
     margin: 0;
     padding: 3px 5px;
     overflow: hidden;
     vertical-align: middle;
 }
+
 .table th, .informaltable th,
 .table td[colspan], .informaltable td[colspan],
 .table td[rowspan], .informaltable td[rowspan] {
     vertical-align: middle;
     border: 1px solid #999;
 }
+
 .table td, .informaltable td{
     vertical-align: middle;
     border-right: 1px solid #999;
-}.table tr:nth-child(even), .informaltable tr:nth-child(even) {
+}
+.table tr:nth-child(even), .informaltable tr:nth-child(even) {
     background-color: #EFEFF0;
 }
+
 ul {
     padding: 5px 0 0 35px;
     margin: 0 10px;
