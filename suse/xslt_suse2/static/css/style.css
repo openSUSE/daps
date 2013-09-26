@@ -247,9 +247,10 @@ html, body {
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, .overview-icon,
-#_find-button, .ulink:after, .bubble-corner:before, .single-contents-icon,
-#_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
-#_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
+.back-icon, #_find-button, .bubble-corner:before, .bubble-closer,
+.single-contents-icon, #_print-button:before, #_share-fb:before,
+#_share-gp:before, #_share-tw:before, #_share-mail:before,
+.arch-arrow-start, .arch-arrow-end, .ulink:after {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
@@ -2547,7 +2548,6 @@ body.draft {
     .bubble-closer {
         width: 24px;
         height: 24px;
-        background-image: url(../images/icons.png);
         background-position: -72px -87px;
         display: block;
         float: right;
@@ -2596,7 +2596,6 @@ body.draft {
     .back-icon {
         width: 24px;
         height: 24px;
-        background-image: url(../images/icons.png);
         background-position: -120px -87px;
         display: block;
     }
@@ -2812,23 +2811,22 @@ body.draft {
     }
 }
 
-/* Optimize images for various screen heights.
+/*  Optimize images for various screen heights.
 
-   + Some sizes are bucketed.
+    + Some sizes are bucketed.
 
-   + We assume 110px of browser chrome:
-     @media (max-height: $largest-screen-size-in-bucket – 110px)
+    + We assume 110px of browser chrome:
+      @media (max-height: $largest-screen-size-in-bucket – 110px)
 
-   + We assume 190px are needed for context around the image:
-     img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
-     (With some exceptions for small screen sizes.)
-
+    + We assume 190px are needed for context around the image:
+      img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
+      (With some exceptions for small screen sizes.)
 */
 
 /* Everything above */
 @media only screen {
     .informalfigure img, .figure img {
-        max-height: 1500px;
+        max-height: 70%;
     }
 }
 
