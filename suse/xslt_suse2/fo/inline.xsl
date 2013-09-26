@@ -27,7 +27,8 @@
 ]>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:svg="http://www.w3.org/2000/svg">
 
 <xsl:template name="inline.monoseq">
   <xsl:param name="content">
@@ -355,6 +356,58 @@
 
 <xsl:template match="package">
   <xsl:call-template name="inline.monoseq"/>
+</xsl:template>
+
+<xsl:template name="process.menuchoice">
+  <xsl:param name="nodelist" select="guibutton|guiicon|guilabel|guimenu|guimenuitem|guisubmenu|interface"/><!-- not(shortcut) -->
+  <xsl:param name="count" select="1"/>
+  <xsl:param name="color">
+    <xsl:choose>
+      <xsl:when test="ancestor::title">&dark-green;</xsl:when>
+      <xsl:otherwise>&black;</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="height">
+    <xsl:choose>
+      <xsl:when test="ancestor::title or ancestor::term">0.55</xsl:when>
+      <xsl:otherwise>0.47</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:choose>
+    <xsl:when test="$count>count($nodelist)"></xsl:when>
+    <xsl:when test="$count=1">
+      <xsl:apply-templates select="$nodelist[$count=position()]"/>
+      <xsl:call-template name="process.menuchoice">
+        <xsl:with-param name="nodelist" select="$nodelist"/>
+        <xsl:with-param name="count" select="$count+1"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:variable name="node" select="$nodelist[$count=position()]"/>
+      <fo:leader leader-pattern="space" leader-length="0.3em"/>
+      <fo:instream-foreign-object content-height="{$height}em">
+        <svg:svg width="7" height="11">
+          <xsl:choose>
+            <xsl:when test="$writing.mode = 'rl'">
+              <svg:path d="M 5.562,0 7,1.406 2.844,5.5 7,9.594 5.562,11 0,5.5 5.5625,0 z"
+                fill="{$color}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <svg:path d="M 1.438,0 0,1.406 4.156,5.5 0,9.594 1.438,11 7,5.5 1.4375,0 z"
+                fill="{$color}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </svg:svg>
+      </fo:instream-foreign-object>
+      <fo:leader leader-pattern="space" leader-length="0.3em"/>
+      <xsl:apply-templates select="$node"/>
+      <xsl:call-template name="process.menuchoice">
+        <xsl:with-param name="nodelist" select="$nodelist"/>
+        <xsl:with-param name="count" select="$count+1"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

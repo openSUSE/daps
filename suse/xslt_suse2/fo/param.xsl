@@ -113,10 +113,6 @@ table before
 procedure before
 task before
 </xsl:param>
-<xsl:param name="menuchoice.separator" select ="' &#9658; '"/>
-<xsl:param name="menuchoice.menu.separator" select ="' &#9658; '"/>
-<xsl:param name="menuchoice.separator.rl" select ="' &#9668; '"/>
-<xsl:param name="menuchoice.menu.separator.rl" select ="' &#9668; '"/>
 <xsl:param name="shade.verbatim" select="1"/>
 
 
@@ -228,7 +224,8 @@ task before
 
 <xsl:param name="writing.mode">
 <xsl:choose>
-  <xsl:when test="$document.language = 'ar'">rl</xsl:when>
+  <xsl:when test="$document.language = 'ar' or
+                  $document.language = 'he'">rl</xsl:when>
   <xsl:otherwise>lr</xsl:otherwise>
 </xsl:choose>
 </xsl:param>
