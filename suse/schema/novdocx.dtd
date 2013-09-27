@@ -85,10 +85,10 @@
    "xml:base  CDATA     #IMPLIED">
 
 
-<!ELEMENT set       (title,subtitle?,titleabbrev?),
- setinfo?, toc?,
- (book  %xi_include.def;)+,
- setindex?)>
+<!ELEMENT set       (title,subtitle?,titleabbrev?,
+                    setinfo?, toc?,
+                    (book  %xi_include.def;)+,
+                    setindex?)>
 
 <!ELEMENT setinfo (productname* , productnumber*, 
                    date?, 
