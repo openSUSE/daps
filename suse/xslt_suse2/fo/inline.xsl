@@ -198,8 +198,24 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
+  <xsl:param name="purpose" select="'none'"/>
 
   <fo:inline xsl:use-attribute-sets="italicized">
+    <xsl:choose>
+      <xsl:when test="(ancestor::title/parent::set or
+                       ancestor::title/parent::setinfo/parent::set or
+                       ancestor::title/parent::info/parent::set or
+                       ancestor::title/parent::book or
+                       ancestor::title/parent::bookinfo/parent::book or
+                       ancestor::title/parent::info/parent::book or
+                       ancestor::title/parent::article or
+                       ancestor::title/parent::articleinfo/parent::article or
+                       ancestor::title/parent::info/parent::article) and
+                      not($purpose='xref')">
+        <xsl:attribute name="font-style">normal</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
     <xsl:call-template name="anchor"/>
     <xsl:if test="@dir">
       <xsl:attribute name="direction">
