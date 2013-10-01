@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<!-- 
+<!--
   Purpose:
      Contains all parameters for (X)HTML
      (Sorted against the list in "Part 1. HTML Parameter Reference" in
       the DocBook XSL Stylesheets User Reference, see link below)
-     
+
    See Also:
      * http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
 
@@ -77,7 +77,7 @@ book      toc,title,figure,table,example,equation
 chapter   toc,title
 part      toc,title
 preface   toc,title
-qandaset  toc
+qandaset  nop
 reference toc,title
 sect1     toc
 sect2     toc
@@ -87,8 +87,7 @@ sect5     toc
 section   toc
 set       toc,title
 </xsl:param>
-  
-  
+
 <!-- 5. Stylesheet Extensions =================================== -->
 
 <!-- 6. Automatic labeling ====================================== -->
@@ -99,7 +98,7 @@ set       toc,title
   <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="docbook.css.link" select="0"/>
   <xsl:param name="docbook.css.source"/>
-    <!-- Intentionally left empty – we already have a stylesheet, with this, we 
+    <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
   <xsl:param name="html.stylesheet">static/css/style.css</xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
@@ -111,7 +110,7 @@ set       toc,title
 
 <!-- 9. Meta/*Info and Titlepages =============================== -->
   <xsl:param name="generate.legalnotice.link" select="0"/>
-  
+
 <!-- 10. Reference Pages ======================================== -->
 
 <!-- 11. Tables ================================================= -->
@@ -140,26 +139,26 @@ table before
 procedure before
 task before
   </xsl:param>
-  
+
   <!-- From the DocBook XHMTL stylesheet's "formal.xsl" -->
   <xsl:param name="formal.object.break.after">0</xsl:param>
-  
+
 <!-- 19. Annotations ============================================ -->
 
 <!-- 20. Graphics =============================================== -->
   <xsl:param name="img.src.path">images/</xsl:param><!-- DB XSL Version >=1.67.1 -->
   <xsl:param name="make.graphic.viewport" select="0"/> <!-- Do not create tables around graphics. -->
-  
+
 <!-- 21. Chunking =============================================== -->
   <!-- The base directory of chunks -->
   <xsl:param name="base.dir">./html/</xsl:param>
-  
+
   <xsl:param name="chunk.fast" select="1"/>
   <!-- Depth to which sections should be chunked -->
   <xsl:param name="chunk.section.depth" select="0"/>
   <!-- Use ID value of chunk elements as the filename? -->
   <xsl:param name="use.id.as.filename" select="1"/>
-  
+
   <!-- Use graphics in navigational headers and footers? -->
   <xsl:param name="navig.graphics" select="1"/>
   <!-- Path to navigational graphics -->
@@ -202,7 +201,7 @@ task before
       </xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-  
+
   <xsl:param name="bubbletoc.section.depth">2</xsl:param>
   <xsl:param name="bubbletoc.max.depth">2</xsl:param>
 
@@ -249,6 +248,6 @@ task before
        0=no, 1=yes
   -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
-  
+
 
 </xsl:stylesheet>

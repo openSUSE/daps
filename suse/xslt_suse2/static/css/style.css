@@ -1855,7 +1855,7 @@ code {
 
 
 .variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
-.indexdiv dd, .answer {
+.indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
@@ -1985,15 +1985,19 @@ a:hover code, a:focus code, a:active code {
 }
 
 .table-title, .example-title, .procedure-title,
-.variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
+.variablelist-title, .itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-.example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
+.example-title, .procedure-title, .orderedlist-title {
     margin: 24px 0 -33px;
+}
+
+.qandadiv-title {
+    margin: 33px 0 0;
 }
 
 .itemizedlist-title {
@@ -2009,15 +2013,9 @@ a:hover code, a:focus code, a:active code {
 }
 
 .qandaentry {
-    margin: -33px 0 22px;
-}
-
-.qanda-toc + .qandaentry {
-    padding-top: 53px;
-}
-
-.qandaentry:last-child {
-    margin: -33px 0 -23px;
+    margin: 15px 0 0;
+    position: relative;
+    z-index: 0;
 }
 
 .procedure-title code, .procedure-title .command, .procedure-title .keycap,
@@ -2166,12 +2164,7 @@ ul {
 }
 
 .qandadiv {
-    margin: 0 0 40px 0;
-    border-bottom: 1px solid #efeff0;
-}
-
-.qandadiv:last-child {
-    border-bottom: none;
+    margin: 0 0 40px 0;#
 }
 
 .answer .table-title, .answer .screen-wrap, .answer .variablelist {
@@ -2190,16 +2183,67 @@ div.itemizedlist {
     margin: 0 0 24px;
 }
 
-.question p {
-    font-size: 20px;
-    font-style: italic;
+.question p, .question code, .question .literal {
     color: #666;
+}
+
+.question p {
+    font-style: italic;
+}
+
+.js-on .question {
+    cursor: pointer;
+}
+
+.js-on .question:hover p, .js-on .question:focus p, .js-on .active .question p {
+    color: #000;
+}
+
+.js-on .question:hover code, .js-on .question:focus code,
+.js-on .active .question code, .js-on .question:hover .literal,
+.js-on .question:focus .literal, .js-on .active .question .literal {
+    color: #333;
+}
+
+.question {
+    position: relative;
 }
 
 .question p + p {
     margin-top: 2px;
 }
 
+.answer {
+    padding: 0 0 15px;
+}
+
+.js-on .question:before {
+    content: '';
+    display: block;
+    margin: 4px 0 0;
+    width: 17px;
+    height: 15px;
+    float: left;
+    background-image: url(../images/arrow.png);
+    background-position: -98px 0;
+    background-repeat: no-repeat;
+}
+
+.js-on .question.hover:before, .js-on .question.focus:before {
+    background-position: -8px 0;
+}
+
+.js-on .active .question:before {
+    background-position: -70px 0;
+}
+
+.js-on .answer {
+    display: none;
+}
+
+.js-on .qandaentry.active .answer {
+    display: block;
+}
 
 .blockquote p {
     font-style: italic;
@@ -2749,7 +2793,7 @@ body.draft {
 
     .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
     .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
-    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+    .toc dd, .qanda-toc dd, .indexdiv dd {
         padding-left: 10px;
     }
 

@@ -28,6 +28,8 @@ var deactivatePosition = -1;
 
 $(function() {
 
+    $('body').addClass('js-on');
+
     /* http://css-tricks.com/snippets/jquery/smooth-scrolling/ */
 
     function filterPath(string) {
@@ -72,14 +74,14 @@ $(function() {
     if( window.addEventListener ) {
         window.addEventListener('scroll', scrollDeactivator, false);
     }
-    
+
     $('#_share-print').show();
-    
+
     if (location.protocol.match(/^(http|spdy)/)) {
         $('body').removeClass('offline');
     }
     labelInputFind();
-    
+
     $('#_toc-area-button').click(function(){activate('_toc-area'); return false;});
     $('#_fixed-header .single-crumb').unbind('click');
     $('#_fixed-header .single-crumb').click(function(){activate('_fixed-header-wrap'); return false;});
@@ -92,7 +94,7 @@ $(function() {
     $('#_find-input').focus(function(){unlabelInputFind();});
     $('#_find-input').blur(function(){labelInputFind();});
     $('#_find-input-label').click(function(){$('#_find-input').focus();});
-    
+
     $('#_share-fb').click(function(){share('fb');});
     $('#_share-gp').click(function(){share('gp');});
     $('#_share-tw').click(function(){share('tw');});
@@ -123,6 +125,7 @@ $(function() {
     $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
     $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
     $('.bubble-closer').click(function(){deactivate(); return false;});
+    $('.question p').click(function(){ $(this).parent('dt').parent('dl').toggleClass('active'); });
 
     if ( !( $('#_nav-area div').length ) ) {
         $('#_toolbar').addClass('only-toc');
