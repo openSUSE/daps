@@ -92,10 +92,12 @@
 
 
 <xsl:template match="qandaentry">
-  <dl class="qandaentry">
+  <div class="free-id">
     <xsl:call-template name="id.attribute">
       <xsl:with-param name="force" select="1"/>
     </xsl:call-template>
+  </div>
+  <dl class="qandaentry">
 
     <xsl:apply-templates/>
   </dl>
