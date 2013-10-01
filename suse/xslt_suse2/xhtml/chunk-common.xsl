@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
    Purpose:
      Create structure of chunked contents
 
@@ -35,8 +35,20 @@
     <xsl:param name="class">crumb</xsl:param>
     <xsl:param name="context">header</xsl:param>
 
-    <xsl:variable name="title">
+    <xsl:variable name="title.candidate">
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+    </xsl:variable>
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="$title.candidate != ''">
+          <xsl:value-of select="$title.candidate"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="local-name(.)"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">
@@ -86,7 +98,7 @@
       </xsl:choose>
     </xsl:element>
   </xsl:template>
-  
+
   <xsl:template name="breadcrumbs.navigation">
     <xsl:param name="prev"/>
     <xsl:param name="next"/>
@@ -224,7 +236,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- ===================================================== -->
   <xsl:template name="toolbar-wrap">
     <xsl:param name="prev"/>
@@ -235,6 +247,23 @@
       <xsl:call-template name="gentext">
         <xsl:with-param name="key">contentsoverview</xsl:with-param>
       </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="title.candidate">
+      <xsl:apply-templates mode="title.markup"
+        select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
+    </xsl:variable>
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="$title.candidate != ''">
+          <xsl:value-of select="$title.candidate"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key"
+              select="local-name((ancestor-or-self::book | ancestor-or-self::article)[last()])"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:if test="$rootelementname != 'article'">
@@ -270,8 +299,7 @@
                 <div class="active-contents bubble">
                   <div class="bubble-container">
                     <h6>
-                      <xsl:apply-templates mode="title.markup"
-                        select="((ancestor-or-self::book | ancestor-or-self::article)|key('id', $rootid))[last()]"/>
+                      <xsl:value-of select="$title"/>
                     </h6>
                     <div id="_bubble-toc">
                       <xsl:call-template name="bubble-toc"/>
@@ -320,7 +348,7 @@
       </div>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- ===================================================== -->
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>
@@ -343,26 +371,26 @@
         <xsl:with-param name="prev" select="$prev"/>
       </xsl:call-template>
     </xsl:variable>
-  
+
   <!--
      We use two node sets and calculate the set difference
      with the following, general XPath expression:
-     
+
       setdiff = $node-set1[count(.|$node-set2) != count($node-set2)]
-     
+
      $node-set1 contains the ancestors of all nodes, starting with the
      current node (but the current node is NOT included in the set)
-     
-     $node-set2 contains the ancestors of all nodes starting from the 
+
+     $node-set2 contains the ancestors of all nodes starting from the
      node which points to the $rootid parameter
-     
+
      For example:
      node-set1: {/, set, book, chapter}
-     node-set2: {/, set, } 
+     node-set2: {/, set, }
      setdiff:   {        book, chapter}
   -->
   <xsl:variable name="ancestorrootnode" select="key('id', $rootid)/ancestor::*"/>
-  <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode) 
+  <xsl:variable name="setdiff" select="ancestor::*[count(. | $ancestorrootnode)
                                 != count($ancestorrootnode)]"/>
   <xsl:if test="$needs.navig">
        <xsl:choose>
@@ -433,7 +461,7 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <!-- 
+    <!--
      We use two node sets and calculate the set difference
      with the following, general XPath expression:
 
@@ -442,18 +470,18 @@
      $node-set1 contains the ancestors of all nodes, starting with the
      current node (but the current node is NOT included in the set)
 
-     $node-set2 contains the ancestors of all nodes starting from the 
+     $node-set2 contains the ancestors of all nodes starting from the
      node which points to the $rootid parameter
 
      For example:
      node-set1: {/, set, book, chapter}
-     node-set2: {/, set, } 
+     node-set2: {/, set, }
      setdiff:   {        book, chapter}
   -->
     <xsl:variable name="ancestorrootnode"
       select="key('id', $rootid)/ancestor::*"/>
     <xsl:variable name="setdiff"
-      select="ancestor::*[count(. | $ancestorrootnode) 
+      select="ancestor::*[count(. | $ancestorrootnode)
                                 != count($ancestorrootnode)]"/>
     <xsl:if test="$needs.navig = 'true' and not(self::set)">
       <div id="_bottom-navigation">

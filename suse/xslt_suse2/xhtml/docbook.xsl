@@ -90,7 +90,7 @@
   <xsl:param name="product">
     <xsl:call-template name="version.info"/>
   </xsl:param>
-  <xsl:param name="structure.title">
+  <xsl:param name="structure.title.candidate">
     <xsl:choose>
       <xsl:when test="self::book or self::article or self::set">
         <xsl:apply-templates select="title|(bookinfo | articleinfo | setinfo)/title[last()]" mode="title.markup.textonly"/>
@@ -102,7 +102,33 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:param>
-    <xsl:param name="substructure.title.short">
+  <xsl:param name="structure.title">
+    <xsl:choose>
+      <xsl:when test="$structure.title.candidate != ''">
+        <xsl:value-of select="$structure.title.candidate"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="self::book or self::article or self::set">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key" select="local-name(.)"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="ancestor::article">
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key" select="'article'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="gentext">
+              <xsl:with-param name="key" select="'book'"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="substructure.title.short">
     <xsl:if test="not(self::book or self::article or self::set)">
       <xsl:choose>
         <xsl:when test="title | refmeta/refentrytitle">
@@ -210,8 +236,20 @@
     <xsl:param name="class">crumb</xsl:param>
     <xsl:param name="context">header</xsl:param>
 
-    <xsl:variable name="title">
+    <xsl:variable name="title.candidate">
       <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+    </xsl:variable>
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="$title.candidate != ''">
+          <xsl:value-of select="$title.candidate"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="gentext">
+            <xsl:with-param name="key" select="local-name(.)"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:element name="a" namespace="http://www.w3.org/1999/xhtml">

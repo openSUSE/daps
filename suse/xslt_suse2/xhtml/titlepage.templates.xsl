@@ -227,6 +227,9 @@
             <xsl:when test="title">
                 <xsl:apply-templates mode="article.titlepage.recto.auto.mode" select="title"/>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="fallback.title"/>
+            </xsl:otherwise>
         </xsl:choose>
 
         <xsl:choose>
@@ -276,12 +279,67 @@
   </xsl:template>
 
   <!-- ===================================================== -->
-  <!-- book titlepage templates -->
+  <!-- set titlepage templates -->
+
   <xsl:template name="set.titlepage.separator"/>
 
   <xsl:template name="set.titlepage.before.recto">
     <xsl:call-template name="version.info.headline"/>
   </xsl:template>
+
+<xsl:template name="set.titlepage.recto">
+  <xsl:choose>
+    <xsl:when test="setinfo/title">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/title"/>
+    </xsl:when>
+    <xsl:when test="info/title">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/title"/>
+    </xsl:when>
+    <xsl:when test="title">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="title"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="fallback.title"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
+    <xsl:when test="setinfo/subtitle">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/subtitle"/>
+    </xsl:when>
+    <xsl:when test="info/subtitle">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/subtitle"/>
+    </xsl:when>
+    <xsl:when test="subtitle">
+      <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="subtitle"/>
+    </xsl:when>
+  </xsl:choose>
+
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/corpauthor"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/corpauthor"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/authorgroup"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/authorgroup"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/author"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/author"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/othercredit"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/othercredit"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/releaseinfo"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/releaseinfo"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/copyright"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/copyright"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/legalnotice"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/legalnotice"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/pubdate"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/pubdate"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/revision"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/revision"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/revhistory"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/revhistory"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="setinfo/abstract"/>
+  <xsl:apply-templates mode="set.titlepage.recto.auto.mode" select="info/abstract"/>
+</xsl:template>
+  <!-- ===================================================== -->
+  <!-- book titlepage templates -->
 
   <xsl:template name="book.titlepage.separator"/>
 
@@ -300,6 +358,9 @@
             <xsl:when test="title">
                 <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="title"/>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="fallback.title"/>
+            </xsl:otherwise>
         </xsl:choose>
 
         <xsl:choose>
@@ -383,6 +444,18 @@
       <xsl:with-param name="key" select="'admonseparator'"/>
     </xsl:call-template>
   </span>
+</xsl:template>
+
+<xsl:template name="fallback.title">
+  <div>
+    <h1 class="title">
+      <span class="name">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key" select="local-name(.)"/>
+        </xsl:call-template>
+      </span>
+    </h1>
+  </div>
 </xsl:template>
 
 </xsl:stylesheet>
