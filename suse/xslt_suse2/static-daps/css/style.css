@@ -247,9 +247,10 @@ html, body {
 }
 
 .toc-icon, .find-icon, .book-icon, .prev-icon, .next-icon, .overview-icon,
-#_find-button, .ulink:after, .bubble-corner:before, .single-contents-icon,
-#_print-button:before, #_share-fb:before, #_share-gp:before, #_share-tw:before,
-#_share-mail:before, .arch-arrow-start, .arch-arrow-end  {
+.back-icon, #_find-button, .bubble-corner:before, .bubble-closer,
+.single-contents-icon, #_print-button:before, #_share-fb:before,
+#_share-gp:before, #_share-tw:before, #_share-mail:before,
+.arch-arrow-start, .arch-arrow-end, .ulink:after {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
@@ -438,6 +439,10 @@ html, body {
 #_pickers .bubble .selected:active {
     text-decoration: underline;
     background-color: #76AD2D;
+}
+
+.bubble-closer, .back-button {
+    display: none;
 }
 
 
@@ -1646,7 +1651,7 @@ p, .simplelist td {
 }
 
 .ulink, .link, .xref, .email, .glosssee,
-.glossseealso, .indexterm, .qanda-toc a {
+.glossseealso, .indexterm {
     color: #3465A4;
     text-decoration: none;
 }
@@ -1676,9 +1681,7 @@ p, .simplelist td {
 .glossseealso:hover, .glossseealso:focus, .glossseealso:active,
 .glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
 .indexterm:hover, .indexterm:focus, .indexterm:active,
-.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active,
-.qanda-toc a:hover, .qanda-toc a:focus, .qanda-toc a:active,
-.qanda-toc a:visited:hover, .qanda-toc a:visited:focus, .qanda-toc a:visited:active {
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active {
     color: #3465A4;
     text-decoration: underline;
 }
@@ -1707,7 +1710,7 @@ p a:visited {
     color: #5C3566;
 }
 
-code, .command, .keycap {
+code, .command, .keycap, .replaceable {
     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     font-weight: normal;
     padding: 0 4px;
@@ -1718,8 +1721,12 @@ code, .command, .keycap {
     line-height: 120%;
 }
 
+code, .command, .keycap {
+    font-style: normal;
+}
 
-code code, code .command, .command code {
+code code, code .command, .command code, code .replaceable,
+.command .replaceable, .replaceable code, .replaceable .command {
     padding: 0;
     border: none;
 }
@@ -1764,7 +1771,7 @@ code {
     text-align: left;
 }
 
-.screen code, .screen .command {
+.screen code, .screen .command, .screen .replaceable {
     border-radius: 0;
     background-color: transparent;
     font-size: 100%;
@@ -1844,8 +1851,7 @@ code {
 }
 
 
-.variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
-.indexdiv dd, .answer {
+.variablelist dd, .glossary dd, .toc dd, .indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
@@ -1899,8 +1905,6 @@ div.figure .mediaobject {
     max-width: -webkit-calc(100% - 2px);
     display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
 }
-
-
 
 .figure-title {
     padding: 10px;
@@ -1977,15 +1981,19 @@ a:hover code, a:focus code, a:active code {
 }
 
 .table-title, .example-title, .procedure-title,
-.variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
+.variablelist-title, .itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
 
-.example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
+.example-title, .procedure-title, .orderedlist-title {
     margin: 24px 0 -33px;
+}
+
+.qandadiv-title {
+    margin: 33px 0 0;
 }
 
 .itemizedlist-title {
@@ -2001,15 +2009,17 @@ a:hover code, a:focus code, a:active code {
 }
 
 .qandaentry {
-    margin: -33px 0 22px;
+    margin: 15px 0 0;
+    position: relative;
+    z-index: 0;
 }
 
-.qanda-toc + .qandaentry {
-    padding-top: 53px;
-}
-
-.qandaentry:last-child {
-    margin: -33px 0 -23px;
+.free-id {
+    position: relative;
+    top: -33px;
+    left: -1px;
+    width: 0.01px;
+    height: 0.01px;
 }
 
 .procedure-title code, .procedure-title .command, .procedure-title .keycap,
@@ -2093,6 +2103,19 @@ ol.substeps {
     margin: 10px 0 24px 0;
 }
 
+.informaltable {
+    margin: 10px 0 24px 0;
+}
+
+.example-contents > .informaltable {
+    margin: 0px 0 0 0;
+    padding: 0;
+}
+
+.example-contents > .informaltable > table {
+    margin: 10px 0 0 0;
+    padding: 0;
+}
 
 .table table, .informaltable table {
     border: 1px solid #999;
@@ -2140,17 +2163,8 @@ ul {
     list-style-type: disc;
 }
 
-.qanda-toc {
-    margin-bottom: 45px;
-}
-
 .qandadiv {
-    margin: 0 0 40px 0;
-    border-bottom: 1px solid #efeff0;
-}
-
-.qandadiv:last-child {
-    border-bottom: none;
+    margin: 0 0 40px 0;#
 }
 
 .answer .table-title, .answer .screen-wrap, .answer .variablelist {
@@ -2169,16 +2183,67 @@ div.itemizedlist {
     margin: 0 0 24px;
 }
 
-.question p {
-    font-size: 20px;
-    font-style: italic;
+.question p, .question code, .question .literal {
     color: #666;
+}
+
+.question p {
+    font-style: italic;
+}
+
+.js-on .question {
+    cursor: pointer;
+}
+
+.js-on .question:hover p, .js-on .question:focus p, .js-on .active .question p {
+    color: #000;
+}
+
+.js-on .question:hover code, .js-on .question:focus code,
+.js-on .active .question code, .js-on .question:hover .literal,
+.js-on .question:focus .literal, .js-on .active .question .literal {
+    color: #333;
+}
+
+.question {
+    position: relative;
 }
 
 .question p + p {
     margin-top: 2px;
 }
 
+.answer {
+    padding: 0 0 17px;
+}
+
+.js-on .question:before {
+    content: '';
+    display: block;
+    margin: 4px 0 0;
+    width: 17px;
+    height: 15px;
+    float: left;
+    background-image: url(../images/arrow.png);
+    background-position: -98px 0;
+    background-repeat: no-repeat;
+}
+
+.js-on .question:hover:before, .js-on .question:focus:before {
+    background-position: -8px 0;
+}
+
+.js-on .active .question:before {
+    background-position: -70px 0;
+}
+
+.js-on .answer {
+    display: none;
+}
+
+.js-on .qandaentry.active .answer {
+    display: block;
+}
 
 .blockquote p {
     font-style: italic;
@@ -2542,7 +2607,6 @@ body.draft {
     .bubble-closer {
         width: 24px;
         height: 24px;
-        background-image: url(../images/icons.png);
         background-position: -72px -87px;
         display: block;
         float: right;
@@ -2591,7 +2655,6 @@ body.draft {
     .back-icon {
         width: 24px;
         height: 24px;
-        background-image: url(../images/icons.png);
         background-position: -120px -87px;
         display: block;
     }
@@ -2730,7 +2793,7 @@ body.draft {
 
     .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
     .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
-    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+    .toc dd, .indexdiv dd {
         padding-left: 10px;
     }
 
@@ -2800,38 +2863,72 @@ body.draft {
     }
 }
 
-/* Optimize images for various screen heights. Some (1080 and 1024, 800 and 768
-   etc.) are bucketed. We assume 110px for added browser chrome (subtracted from
-   the @media max-height), and 170px for giving the image some context
-   (subtracted from the image max-height). */
-
-@media only screen and (max-height: 970px) {
-    .informalfigure img, .figure img {
-        max-height: 744px;
-    }
-}
-
-@media only screen and (max-height: 790px) {
-    .informalfigure img, .figure img {
-        max-height: 620px;
-    }
-}
-
-@media only screen and (max-height: 690px) {
-    .informalfigure img, .figure img {
-        max-height: 520px;
-    }
-}
-
-@media only screen and (max-height: 490px) {
-    /* Make an exception here, so we don't get stamp-sized screenshots. */
-    .informalfigure img, .figure img {
-        max-height: 400px;
-    }
-}
 
 @media only screen and (max-height: 490px) and (min-width: 451px) {
     #_bubble-toc, #_toc-bubble-wrap .bubble, #_fixed-header-wrap .bubble {
         max-height: 300px;
+    }
+}
+
+/*  Optimize images for various screen heights.
+
+    + Some sizes are bucketed.
+
+    + We assume 110px of browser chrome:
+      @media (max-height: $largest-screen-size-in-bucket – 110px)
+
+    + We assume 190px are needed for context around the image:
+      img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
+      (With some exceptions for small screen sizes.)
+*/
+
+/* Everything above */
+@media only screen {
+    .informalfigure img, .figure img {
+        max-height: 70%;
+    }
+}
+
+/* 1600px & 1440px */
+@media only screen and (max-height: 1490px) {
+    .informalfigure img, .figure img {
+        max-height: 1140px;
+    }
+}
+
+/* 1200px */
+@media only screen and (max-height: 1090px) {
+    .informalfigure img, .figure img {
+        max-height: 900px;
+    }
+}
+
+/* 1080px & 1024px */
+@media only screen and (max-height: 970px) {
+    .informalfigure img, .figure img {
+        max-height: 724px;
+    }
+}
+
+/* 900px */
+@media only screen and (max-height: 790px) {
+    .informalfigure img, .figure img {
+        max-height: 600px;
+    }
+}
+
+/* 800px & 768px */
+@media only screen and (max-height: 690px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .informalfigure img, .figure img {
+        max-height: 518px;
+    }
+}
+
+/* 600px and below*/
+@media only screen and (max-height: 490px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .informalfigure img, .figure img {
+        max-height: 390px;
     }
 }
