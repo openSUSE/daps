@@ -36,6 +36,8 @@ $(function() {
   if( window.addEventListener ) {
     window.addEventListener('scroll', scrollDeactivator, false);
   }
+
+  hashActivator();
   window.onhashchange = hashActivator;
 
   $('#_share-print').show();
