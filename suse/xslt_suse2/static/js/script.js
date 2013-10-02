@@ -36,6 +36,7 @@ $(function() {
   if( window.addEventListener ) {
     window.addEventListener('scroll', scrollDeactivator, false);
   }
+  window.onhashchange = hashActivator;
 
   $('#_share-print').show();
 
@@ -96,6 +97,7 @@ $(function() {
   else if ( !( $('#_toc-area div').length && $('#_nav-area div').length ) ) {
     $('#_toolbar').addClass('only-nav');
   }
+
 });
 
 
@@ -153,8 +155,6 @@ function moveToc ( direction ) {
     $('#_header .single-crumb').unbind('click');
     $('#_header .single-crumb').click(function(){ moveToc('up'); return false;});
   }
-  else
-    alert('I can\'t move to the' + direction + '.');
 }
 
 function scrollDeactivator() {
@@ -164,6 +164,18 @@ function scrollDeactivator() {
       deactivate();
     }
   }
+}
+
+function hashActivator() {
+  if ( location.hash.length ) {
+    var locationhash = location.hash.replace( /(:|\.|\[|\])/g, "\\$1" );
+    if ( $( locationhash ).is(".free-id") ) {
+      $( locationhash ).next(".qandaentry").addClass('active');
+    };
+    if ( $( locationhash ).is(".question") ) {
+      location.hash = $( locationhash ).parent(".qandaentry").prev('.free-id').attr('id');
+    };
+  };
 }
 
 function deactivate() {
@@ -208,9 +220,6 @@ function share( service ) {
     else if ( service == 'mail' ) {
     shareURL = 'https://www.suse.com/company/contact/sendemail.php?url=' + u;
     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=535,height=650');
-  }
-    else {
-    alert('I can\'t share via '+ service +'.');
   }
 }
 

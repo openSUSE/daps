@@ -1652,7 +1652,7 @@ p, .simplelist td {
 }
 
 .ulink, .link, .xref, .email, .glosssee,
-.glossseealso, .indexterm, .qanda-toc a {
+.glossseealso, .indexterm {
     color: #439239;
     text-decoration: none;
 }
@@ -1682,9 +1682,7 @@ p, .simplelist td {
 .glossseealso:hover, .glossseealso:focus, .glossseealso:active,
 .glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
 .indexterm:hover, .indexterm:focus, .indexterm:active,
-.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active,
-.qanda-toc a:hover, .qanda-toc a:focus, .qanda-toc a:active,
-.qanda-toc a:visited:hover, .qanda-toc a:visited:focus, .qanda-toc a:visited:active {
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active {
     color: #439239;
     text-decoration: underline;
 }
@@ -1854,8 +1852,7 @@ code {
 }
 
 
-.variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
-.indexdiv dd {
+.variablelist dd, .glossary dd, .toc dd, .indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
@@ -2167,10 +2164,6 @@ ul {
     list-style-type: disc;
 }
 
-.qanda-toc {
-    margin-bottom: 45px;
-}
-
 .qandadiv {
     margin: 0 0 40px 0;#
 }
@@ -2222,7 +2215,7 @@ div.itemizedlist {
 }
 
 .answer {
-    padding: 0 0 15px;
+    padding: 0 0 17px;
 }
 
 .js-on .question:before {
@@ -2801,7 +2794,7 @@ body.draft {
 
     .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
     .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
-    .toc dd, .qanda-toc dd, .indexdiv dd {
+    .toc dd, .indexdiv dd {
         padding-left: 10px;
     }
 
