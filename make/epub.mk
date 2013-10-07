@@ -45,7 +45,7 @@ EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_CALLOUTDIR)
 
 # Images
 #
-EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/color,$(EPUB_IMGDIR),$(FOR_HTML_IMAGES))
+EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/color,$(EPUB_IMGDIR),$(ONLINE_IMAGES))
 #EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
 EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
 #EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
@@ -146,6 +146,9 @@ $(EPUB_INLINE_IMGS): | $(EPUB_IMGDIR)
 
 $(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/color/%.png
 	ln -sf $< $@
+
+#$(EPUB_IMGDIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
+#	ln -sf $< $@
 
 $(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
 	ln -sf $< $@
