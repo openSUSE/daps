@@ -65,7 +65,11 @@ EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 
 ifndef EPUB_CSS
   EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)) 2>/dev/null )
-  EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
+  ifneq "$(strip $(EPUB_CSS))" ""
+    EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
+  else
+    EPUB_CSS_INFO := No CSS file specified and no fallback found. Not using a CSS file.
+  endif
 endif
 
 ifneq ($(EPUB_CSS),none)
@@ -147,8 +151,8 @@ $(EPUB_INLINE_IMGS): | $(EPUB_IMGDIR)
 $(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/color/%.png
 	ln -sf $< $@
 
-#$(EPUB_IMGDIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
-#	ln -sf $< $@
+$(EPUB_IMGDIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
+	ln -sf $< $@
 
 $(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
 	ln -sf $< $@
