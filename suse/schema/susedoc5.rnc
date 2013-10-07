@@ -1,0 +1,442 @@
+#
+# Novdoc5/SUSEDoc5 Schema
+#
+# See http://docbook.org/docs/howto
+#
+# This schema 
+#
+# Author: Thomas Schraitle, 2013 
+#
+default namespace db = "http://docbook.org/ns/docbook"
+
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace html = "http://www.w3.org/1999/xhtml"
+namespace mml = "http://www.w3.org/1998/Math/MathML"
+namespace svg = "http://www.w3.org/2000/svg"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
+
+include "docbook.rnc"
+{
+  # Redefine element pattern as notAllowed here:
+  #
+  # List created with:
+  # egrep "\s+db\.[a-z]+\s*=\s*" /usr/share/xml/docbook/schema/rng/5.0/docbook.rnc  | sort > db5-elements.txt
+  # cat db5-elements.txt | sed 's,=,= notAllowed,g' > db5-elements-notallowed.txt
+  #
+  
+  db.abbrev = notAllowed
+  # db.abstract = notAllowed
+  db.accel = notAllowed
+  db.acknowledgements = notAllowed
+  db.acronym = notAllowed
+  db.address = notAllowed
+  db.affiliation = notAllowed
+  # db.alt = notAllowed
+  db.anchor = notAllowed
+  # db.annotation = notAllowed
+  db.answer = notAllowed
+  # db.appendix = notAllowed
+  db.application = notAllowed
+  db.arc = notAllowed
+  db.area = notAllowed
+  db.areaset = notAllowed
+  db.areaspec = notAllowed
+  db.arg = notAllowed
+  # db.article = notAllowed
+  db.artpagenums = notAllowed
+  db.attribution = notAllowed
+  db.audiodata = notAllowed
+  db.audioobject = notAllowed
+  # db.author = notAllowed
+  # db.authorgroup = notAllowed
+  db.authorinitials = notAllowed
+  db.bibliocoverage = notAllowed
+  db.bibliodiv = notAllowed
+  db.biblioentry = notAllowed
+  db.bibliography = notAllowed
+  db.biblioid = notAllowed
+  db.bibliolist = notAllowed
+  db.bibliomisc = notAllowed
+  db.bibliomixed = notAllowed
+  db.bibliomset = notAllowed
+  db.biblioref = notAllowed
+  db.bibliorelation = notAllowed
+  db.biblioset = notAllowed
+  db.bibliosource = notAllowed
+  # db.blockquote = notAllowed
+  # db.book = notAllowed
+  # db.bridgehead = notAllowed
+  # db.callout = notAllowed
+  # db.calloutlist = notAllowed
+  db.caption = notAllowed
+  # db.caution = notAllowed
+  # db.chapter = notAllowed
+  db.citation = notAllowed
+  db.citebiblioid = notAllowed
+  db.citerefentry = notAllowed
+  # db.citetitle = notAllowed
+  db.city = notAllowed
+  db.classname = notAllowed
+  db.classsynopsis = notAllowed
+  db.classsynopsisinfo = notAllowed
+  db.cmdsynopsis = notAllowed
+  # db.co = notAllowed
+  # db.code = notAllowed
+  db.collab = notAllowed
+  db.colophon = notAllowed
+  db.colspec = notAllowed
+  # db.command = notAllowed
+  db.computeroutput = notAllowed
+  db.confdates = notAllowed
+  db.confgroup = notAllowed
+  db.confnum = notAllowed
+  db.confsponsor = notAllowed
+  db.conftitle = notAllowed
+  db.constant = notAllowed
+  db.constraint = notAllowed
+  db.constraintdef = notAllowed
+  db.constructorsynopsis = notAllowed
+  db.contractnum = notAllowed
+  db.contractsponsor = notAllowed
+  # db.contrib = notAllowed
+  # db.copyright = notAllowed
+  db.coref = notAllowed
+  db.country = notAllowed
+  # db.cover = notAllowed
+  db.database = notAllowed
+  # db.date = notAllowed
+  db.dedication = notAllowed
+  db.destructorsynopsis = notAllowed
+  # db.edition = notAllowed
+  # db.editor = notAllowed
+  # db.email = notAllowed
+  # db.emphasis = notAllowed
+  # db.entry = notAllowed
+  db.entrytbl = notAllowed
+  # db.envar = notAllowed
+  db.epigraph = notAllowed
+  db.equation = notAllowed
+  db.errorcode = notAllowed
+  db.errorname = notAllowed
+  db.errortext = notAllowed
+  db.errortype = notAllowed
+  # db.example = notAllowed
+  db.exceptionname = notAllowed
+  db.extendedlink = notAllowed
+  db.fax = notAllowed
+  db.fieldsynopsis = notAllowed
+  # db.figure = notAllowed
+  # db.filename = notAllowed
+  # db.firstname = notAllowed
+  db.firstterm = notAllowed
+  db.footnote = notAllowed
+  db.footnoteref = notAllowed
+  db.foreignphrase = notAllowed
+  # db.formalpara = notAllowed
+  db.funcdef = notAllowed
+  db.funcparams = notAllowed
+  db.funcprototype = notAllowed
+  db.funcsynopsis = notAllowed
+  db.funcsynopsisinfo = notAllowed
+  # db.function = notAllowed
+  # db.glossary = notAllowed
+  # db.glossdef = notAllowed
+  # db.glossdiv = notAllowed
+  # db.glossentry = notAllowed
+  # db.glosslist = notAllowed
+  # db.glosssee = notAllowed
+  # db.glossseealso = notAllowed
+  # db.glossterm = notAllowed
+  db.group = notAllowed
+  db.guibutton = notAllowed
+  db.guiicon = notAllowed
+  db.guilabel = notAllowed
+  # db.guimenu = notAllowed
+  db.guimenuitem = notAllowed
+  db.guisubmenu = notAllowed
+  db.hardware = notAllowed
+  db.holder = notAllowed
+  db.honorific = notAllowed
+  # db.imagedata = notAllowed
+  # db.imageobject = notAllowed
+  db.imageobjectco = notAllowed
+  # db.important = notAllowed
+  # db.index = notAllowed
+  # db.indexdiv = notAllowed
+  # db.indexentry = notAllowed
+  # db.indexterm = notAllowed
+  # db.info = notAllowed
+  db.informalequation = notAllowed
+  # db.informalexample = notAllowed
+  # db.informalfigure = notAllowed
+  db.initializer = notAllowed
+  db.inlineequation = notAllowed
+  # db.inlinemediaobject = notAllowed
+  db.interfacename = notAllowed
+  db.issuenum = notAllowed
+  # db.itemizedlist = notAllowed
+  db.itermset = notAllowed
+  db.jobtitle = notAllowed
+  # db.keycap = notAllowed
+  db.keycode = notAllowed
+  # db.keycombo = notAllowed
+  db.keysym = notAllowed
+  # db.keyword = notAllowed
+  # db.keywordset = notAllowed
+  db.label = notAllowed
+  # db.legalnotice = notAllowed
+  db.lhs = notAllowed
+  db.lineage = notAllowed
+  db.lineannotation = notAllowed
+  # db.link = notAllowed
+  # db.listitem = notAllowed
+  # db.literal = notAllowed
+  db.literallayout = notAllowed
+  db.locator = notAllowed
+  db.manvolnum = notAllowed
+  db.markup = notAllowed
+  db.mathphrase = notAllowed
+  # db.mediaobject = notAllowed
+  # db.member = notAllowed
+  # db.menuchoice = notAllowed
+  db.methodname = notAllowed
+  db.methodparam = notAllowed
+  db.methodsynopsis = notAllowed
+  db.modifier = notAllowed
+  db.mousebutton = notAllowed
+  db.msg = notAllowed
+  db.msgaud = notAllowed
+  db.msgentry = notAllowed
+  # db.msgexplan = notAllowed
+  db.msginfo = notAllowed
+  db.msglevel = notAllowed
+  db.msgmain = notAllowed
+  db.msgorig = notAllowed
+  db.msgrel = notAllowed
+  # db.msgset = notAllowed
+  db.msgsub = notAllowed
+  # db.msgtext = notAllowed
+  db.nonterminal = notAllowed
+  # db.note = notAllowed
+  db.olink = notAllowed
+  db.ooclass = notAllowed
+  db.ooexception = notAllowed
+  db.oointerface = notAllowed
+  # db.option = notAllowed
+  db.optional = notAllowed
+  # db.orderedlist = notAllowed
+  db.org = notAllowed
+  db.orgdiv = notAllowed
+  db.orgname = notAllowed
+  db.otheraddr = notAllowed
+  # db.othercredit = notAllowed
+  db.othername = notAllowed
+  # db.package = notAllowed
+  db.pagenums = notAllowed
+  # db.para = notAllowed
+  db.paramdef = notAllowed
+  # db.parameter = notAllowed
+  # db.part = notAllowed
+  # db.partintro = notAllowed
+  # db.person = notAllowed
+  # db.personblurb = notAllowed
+  # db.personname = notAllowed
+  db.phone = notAllowed
+  # db.phrase = notAllowed
+  db.pob = notAllowed
+  db.postcode = notAllowed
+  # db.preface = notAllowed
+  # db.primary = notAllowed
+  db.primaryie = notAllowed
+  db.printhistory = notAllowed
+  # db.procedure = notAllowed
+  db.production = notAllowed
+  db.productionrecap = notAllowed
+  db.productionset = notAllowed
+  # db.productname = notAllowed
+  # db.productnumber = notAllowed
+  # db.programlisting = notAllowed
+  db.programlistingco = notAllowed
+  db.prompt = notAllowed
+  # db.property = notAllowed
+  # db.pubdate = notAllowed
+  db.publisher = notAllowed
+  db.publishername = notAllowed
+  # db.qandadiv = notAllowed
+  # db.qandaentry = notAllowed
+  # db.qandaset = notAllowed
+  # db.question = notAllowed
+  # db.quote = notAllowed
+  db.refclass = notAllowed
+  db.refdescriptor = notAllowed
+  # db.refentry = notAllowed
+  # db.refentrytitle = notAllowed
+  # db.reference = notAllowed
+  # db.refmeta = notAllowed
+  # db.refmiscinfo = notAllowed
+  # db.refname = notAllowed
+  # db.refnamediv = notAllowed
+  # db.refpurpose = notAllowed
+  # db.refsection = notAllowed
+  # db.refsynopsisdiv = notAllowed
+  # db.releaseinfo = notAllowed
+  # db.remark = notAllowed
+  # db.replaceable = notAllowed
+  db.returnvalue = notAllowed
+  # db.revdescription = notAllowed
+  # db.revhistory = notAllowed
+  # db.revision = notAllowed
+  # db.revnumber = notAllowed
+  # db.revremark = notAllowed
+  db.rhs = notAllowed
+  db.row = notAllowed
+  db.sbr = notAllowed
+  # db.screen = notAllowed
+  db.screenco = notAllowed
+  db.screenshot = notAllowed
+  # db.secondary = notAllowed
+  db.secondaryie = notAllowed
+  db.section = notAllowed
+  db.see = notAllowed
+  db.seealso = notAllowed
+  db.seealsoie = notAllowed
+  db.seeie = notAllowed
+  db.seg = notAllowed
+  db.seglistitem = notAllowed
+  db.segmentedlist = notAllowed
+  db.segtitle = notAllowed
+  db.seriesvolnums = notAllowed
+  # db.set = notAllowed
+  db.setindex = notAllowed
+  db.shortaffil = notAllowed
+  db.shortcut = notAllowed
+  db.sidebar = notAllowed
+  db.simpara = notAllowed
+  # db.simplelist = notAllowed
+  # db.simplemsgentry = notAllowed
+  db.simplesect = notAllowed
+  db.spanspec = notAllowed
+  db.state = notAllowed
+  # db.step = notAllowed
+  # db.stepalternatives = notAllowed
+  db.street = notAllowed
+  db.subject = notAllowed
+  db.subjectset = notAllowed
+  db.subjectterm = notAllowed
+  # db.subscript = notAllowed
+  # db.substeps = notAllowed
+  db.subtitle = notAllowed
+  # db.superscript = notAllowed
+  # db.surname = notAllowed
+  db.symbol = notAllowed
+  db.synopfragment = notAllowed
+  db.synopfragmentref = notAllowed
+  db.synopsis = notAllowed
+  # db.systemitem = notAllowed
+  # db.tag = notAllowed
+  # db.task = notAllowed
+  # db.taskprerequisites = notAllowed
+  # db.taskrelated = notAllowed
+  # db.tasksummary = notAllowed
+  # db.term = notAllowed
+  db.termdef = notAllowed
+  # db.tertiary = notAllowed
+  db.tertiaryie = notAllowed
+  db.textdata = notAllowed
+  db.textobject = notAllowed
+  # db.tgroup = notAllowed
+  # db.tip = notAllowed
+  # db.title = notAllowed
+  # db.titleabbrev = notAllowed
+  db.toc = notAllowed
+  db.tocdiv = notAllowed
+  db.tocentry = notAllowed
+  db.token = notAllowed
+  # db.trademark = notAllowed
+  db.type = notAllowed
+  # db.uri = notAllowed
+  db.userinput = notAllowed
+  db.varargs = notAllowed
+  # db.variablelist = notAllowed
+  # db.varlistentry = notAllowed
+  # db.varname = notAllowed
+  db.videodata = notAllowed
+  db.videoobject = notAllowed
+  db.void = notAllowed
+  db.volumenum = notAllowed
+  # db.warning = notAllowed
+  db.wordasword = notAllowed
+  # db.xref = notAllowed
+  # db.year = notAllowed
+  
+  
+  div {
+    db.para =
+    ## A paragraph (without block elements)
+    [
+      s:pattern [
+        name = "Root must have version"
+        "\x{a}" ~
+        "          "
+        s:rule [
+          context = "/db:para"
+          "\x{a}" ~
+          "            "
+          s:assert [
+            test = "@version"
+            "The root element must have a version attribute."
+            ]
+          "\x{a}" ~
+          "          "
+        ]
+        "\x{a}" ~
+        "        "
+      ]
+    ]
+    element para {
+      db.para.attlist,
+      # We don't want block elements inside paras
+      # db.para.info,
+      (db.all.inlines )*
+    }
+  }
+
+  div {
+    db.personname =
+    ## The personal name of an individual
+    element personname {
+      db.personname.attlist,
+      (db.honorific
+      | db.firstname
+      | db.surname
+      | db.lineage
+      | db.othername)+
+    }
+  }
+  
+  div {
+    db.qandaentry =
+      ## A question/answer set within a QandASet
+      element qandaentry {
+        db.qandaentry.attlist, db.qandaentry.info, 
+        db.question, db.answer }
+        
+    db.question =
+      ## A question in a QandASet
+      # No label, but question has to start with a para
+      element question { db.question.attlist, db.para, db.all.blocks+ }
+  }
+  
+} # end of include
+
+
+# Redefine content modell here:
+
+
+
+# --- EOF ---

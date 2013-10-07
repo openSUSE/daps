@@ -1,0 +1,72 @@
+# 
+# Novdoc5/SUSEDoc5 Schema
+# 
+# See http://docbook.org/docs/howto
+# 
+# This schema is (or should be) an implementation of Novdoc4 in
+# DocBook 5.
+# 
+# Author: Thomas Schraitle, 2013 
+#
+
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace ctrl = "http://nwalsh.com/xmlns/schema-control/"
+namespace db = "http://docbook.org/ns/docbook"
+namespace html = "http://www.w3.org/1999/xhtml"
+namespace mml = "http://www.w3.org/1998/Math/MathML"
+namespace svg = "http://www.w3.org/2000/svg"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+include "susedoc5.rnc" inherit = db 
+{
+  # Redefine element pattern as notAllowed here:
+  db.anchor = notAllowed
+  db.annotation = notAllowed
+  db.bibliolist = notAllowed
+  db.biblioref = notAllowed
+  db.blockquote = notAllowed
+  db.epigraph = notAllowed
+  db.extendedlink = notAllowed
+  db.glosslist = notAllowed
+  db.informalexample = notAllowed
+  db.informalequation = notAllowed
+  db.literallayout = notAllowed
+  db.locator = notAllowed
+  db.olink = notAllowed
+  db.programlistingco = notAllowed
+  db.qandaset = notAllowed
+  db.tag = notAllowed
+  db.task = notAllowed
+  db.taskprerequisites = notAllowed
+  db.taskrelated = notAllowed
+  db.tasksummary = notAllowed
+  # db.topic = notAllowed
+  db.sidebar = notAllowed
+  db.segmentedlist = notAllowed
+  db.synopsis = notAllowed
+  
+  # Attributes
+  db.href.attributes = empty
+  
+  # Other content models:
+  db.table.choice = db.cals.table
+  
+  db.informaltable.choice = db.cals.informaltable
+  
+  # db.admonition.blocks = db.important | db.note | db.tip | db.warning
+  # db.informal.blocks = db.informalfigure | db.informaltable
+  
+  db.graphic.blocks = db.mediaobject
+  
+  # db.link.inlines = (db.xref | db.link ) 
+  # db.list.blocks = db.itemizedlist | db.orderedlist | db.procedure | db.simplelist| db.variablelist | db.calloutlist
+    
+  # db.publishing.blocks = notAllowed
+  # db.verbatim.blocks = db.screen | db.programlisting
+  
+  db.technical.blocks =
+    db.procedure | db.msgset
+}
+# Redefine content modell here:
+
+# --- EOF ---
