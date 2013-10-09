@@ -9,10 +9,8 @@
 ]>
 <appendix id="app.daps.user.docupdates">
  <title>Documentation Updates</title>
- <para>
-  This chapter lists the most important content changes for this document since the release of
-  &dapsacr; 1.0.
- </para>
+ <para> This chapter lists the most important content changes for this document
+  since the release of &dapsacr; 1.0. </para>
  <para>The manual was updated on the following dates:</para>
  <!--list of xrefs, latest date sorted upmost-->
  <itemizedlist>
@@ -31,7 +29,74 @@
     <xref linkend="sec.user.docupdates.maint1" xrefstyle="SectTitleOnPage"/>
    </para>
   </listitem>
-  </itemizedlist>
+ </itemizedlist>
+
+ <sect1 id="sec.user.docupdates.20">
+  <title>Next (&dapsacr; 2.0)</title>
+  <variablelist>
+   <varlistentry>
+    <term>Make Files</term>
+    <listitem>
+     <para>
+      <remark>taroth 2013-10-09: not sure if to mention this here, rather
+       something for the developer guide ;)</remark>The make files have now been split into several smaller make files,
+      that are specific for the respective output like PDF, or HTML.</para></listitem>
+   </varlistentry>   
+   <varlistentry>
+    <term>Verbosity</term>
+    <listitem>
+     <para>The number of verbosity levels has changed, as have the defaults used
+      on the command line and in scripts:
+     </para>
+     <itemizedlist>
+      <listitem>
+       <para>Command Line: Default verbosity level is now <literal>v1</literal>,
+        which shows all result messages and warnings.</para>
+      </listitem>
+      <listitem>
+       <para>Scripts: Default verbosity level is now <literal>v0</literal>,
+        which shows the file names. </para></listitem>
+     </itemizedlist>
+     <para>The verbosity levels <literal>v0</literal>, <literal>v1</literal>,
+       <literal>v2</literal>, and <literal>debug</literal> are unchanged, but a
+      a new verbosity level has been added: <literal>v3</literal>. It shows the
+      output of <command>make -j1</command>, where all commands are executed
+      successively (no parallel processing). This makes the output easier to
+      read than that of the <literal>debug</literal> verbosity level, where
+      messages from parallel processes are shown in the order they
+      arrive.</para>     
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Bash Compatibility</term>
+    <listitem>
+     <para>
+      <remark>taroth 2013-09-10: not sure if to mention this (probably no doc
+       impact)...</remark>Whereas &dapsacr; 1.x required Bash 4, &dapsacr; 2.0 is
+      compatible with Bash 3.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Output Targets</term>
+    <!--WIP-->
+    <listitem>
+     <itemizedlist>
+      <listitem>
+       <para>command name changes (deprecated targets)</para>
+      </listitem>
+      <listitem>
+       <para>epub: now provides valid output (checked with epub-check)</para>
+      </listitem>
+      <listitem>
+       <para>new target: mobi (for Amazon Kindle e-books, requires calibre: epub
+        is generated and transformed to mobi format with calibre)</para></listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+   
+  </variablelist>
+ </sect1>
+
 
  <sect1 id="sec.user.docupdates.maint2">
   <title>2013-10-09 (Maintenance Release)</title>
@@ -55,7 +120,7 @@
     </listitem>
    </varlistentry>
   </variablelist>
-  </sect1>
+ </sect1>
 
  <sect1 id="sec.user.docupdates.maint1">
   <title>2013-03-07 (Maintenance Release)</title>
