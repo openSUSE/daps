@@ -66,6 +66,28 @@ include "susedoc5.rnc" inherit = db
   
   db.technical.blocks =
     db.procedure | db.msgset
+    
+  div {
+    # http://lists.xml.org/archives/xml-dev/200710/msg00067.html
+    # Needed to omit some attributes in attribute wildcard
+    # Error message would be:
+    # conflicting ID-types for attribute "id" from namespace "http://www.w3.org/XML/1998/namespace" of element X
+    db._any.attribute = 
+        ## Any attribute including in any attribute in any namespace.
+        attribute * - ( xml:id | linkend) { text }
+  }
+  
+  div {
+    # Removed any block elements inside glossdiv
+    db.glossdiv =
+      ## A division in a Glossary
+      element glossdiv {
+        db.glossdiv.attlist,
+        # db.glossdiv.info,
+        # db.all.blocks*,
+        db.glossentry+
+        }
+  }
 }
 # Redefine content modell here:
 
