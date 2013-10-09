@@ -438,12 +438,23 @@ include "docbook.rnc"
   }
   
   div {
-    # 
+    # Removed label
     db.answer =    
-    ## An answer to a question posed in a QandASet
-    element answer { db.answer.attlist, db.all.blocks+ }
+      ## An answer to a question posed in a QandASet
+      element answer { db.answer.attlist, db.all.blocks+ }
   }
   
+  div {
+    # Removed any block elements inside glossdiv
+    db.glossdiv =
+      ## A division in a Glossary
+      element glossdiv {
+        db.glossdiv.attlist,
+        # db.glossdiv.info,
+        # db.all.blocks*,
+        db.glossentry+
+  }
+  }
 } # end of include
 
 
