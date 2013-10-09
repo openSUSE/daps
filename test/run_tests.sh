@@ -17,7 +17,7 @@
 
 # DAPS
 export _DAPSROOT=".."
-_DAPSCMD="${_DAPSROOT}/bin/daps --dapsroot=\"${_DAPSROOT}\""
+_DAPSCMD="${_DAPSROOT}/bin/daps --dapsroot=${_DAPSROOT}"
 
 # XSLT Processors
 declare -a _XSLT_PROCESSORS
