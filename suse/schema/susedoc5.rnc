@@ -377,7 +377,7 @@ include "docbook.rnc"
   
   # Add other customizations:
   div {
-    # We don't want block elements inside para, only inlines are allowed
+    # We don't want block elements inside paras, only inlines are allowed
     db.para =
     ## A paragraph (without block elements)
     [
@@ -408,7 +408,7 @@ include "docbook.rnc"
   }
 
   div {
-    # 
+    # Removed text
     db.personname =
     ## The personal name of an individual
     element personname {
@@ -431,7 +431,7 @@ include "docbook.rnc"
   }
   
   div {
-    # No label, but question has to start with a para
+    # Removed label and question has to start with a para
     db.question =
       ## A question in a QandASet
       element question { db.question.attlist, db.para, db.all.blocks+ }
@@ -444,17 +444,6 @@ include "docbook.rnc"
       element answer { db.answer.attlist, db.all.blocks+ }
   }
   
-  div {
-    # Removed any block elements inside glossdiv
-    db.glossdiv =
-      ## A division in a Glossary
-      element glossdiv {
-        db.glossdiv.attlist,
-        # db.glossdiv.info,
-        # db.all.blocks*,
-        db.glossentry+
-  }
-  }
 } # end of include
 
 
