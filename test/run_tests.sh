@@ -81,7 +81,7 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 #
 
 declare -a _REQUIREMENTS
-_REQUIREMENTS=( "lynx" "pdfinfo" "xmllint" )
+_REQUIREMENTS=( "epubcheck" "lynx" "pdfinfo" "xmllint" )
 
 for _REQ in "${_REQUIREMENTS[@]}"; do
     which --skip-alias --skip-functions $_REQ >/dev/null 2>&1 || exit_on_error "Requirement $_REQ is not installed, exiting"
@@ -100,7 +100,7 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,builddir,html,images,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,epub,html,images,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -116,6 +116,10 @@ while true ; do
 	    ;;
 	--builddir)
 	    _TESTS=( "${_TESTS[@]}" "lib/009_builddir" )
+	    shift
+	    ;;
+	--epub)
+	    _TESTS=( "${_TESTS[@]}" "lib/025_epub" )
 	    shift
 	    ;;
 	-h)

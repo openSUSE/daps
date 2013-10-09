@@ -1,0 +1,183 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: EPUB
+#
+#
+# * Does EPUB correctly build?
+# * Does the name retrieved with *-dir-name match the actual result?
+# * Does the EPUB file validate with epubcheck?
+# * Does the --css switch work?
+# * Does the --check switch validate the epub file?
+# * Is the --name option correctly implemented?
+# * Does the --rootid option work correctly?
+# * Are parameters passed with --xsltparam correctly processed?
+# * Do the --styleroot and --fb_styleroot options work?
+# * Does the fallback to a CSS file from the stylesheet directory work?
+
+source lib/common_functions
+
+header "ePUB"
+
+function oneTimeSetUp() {
+    # Clean up the build directory
+    clean_build
+    # get the profiling directory
+    _EPUB_PATH=$(eval "$_DAPSEXEC -d $_DCFILE epub-name 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting ePUB failed. Skipping tests"
+    fi
+    _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_epub.log
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does EPUB correctly build?
+# * Does the name retrieved with *-dir-name match the actual result?
+#
+function test_epub () {
+    local _EPUB_NAME
+    _EPUB_NAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE epub 2>/dev/null")
+    assertTrue \
+        ' └─ The epub command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The resulting file (${_EPUBFILE_NAME}) does not exist." \
+	"[ -f $_EPUB_NAME ]"
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --epub-name" \
+	"$_EPUB_PATH" "$_EPUB_NAME"
+}
+
+#--------------------------------
+# * Does the EPUB file validate with epubcheck?
+
+function test_epubValidate () {
+    local CHECK_MESSAGE
+    CHECK_MESSAGE=$(epubcheck $_EPUB_PATH)
+    assertTrue \
+        " └─ The generated ePUB file does not validate:\n;;;;;;;;;;\n${CHECK_MESSAGE}\n;;;;;;;;;;" \
+        "$?"    
+}
+
+#--------------------------------
+# * Does the --css switch work?
+# * Does the --check switch validate the epub file?
+#
+
+function test_epubCSS_Check () {
+    local _CSS_BUILD _CSS_FILE _CSS_PATH
+
+    _CSS_FILE="test.css"
+    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_BUILD=""
+
+    clean_build
+
+    _CSS_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE epub --css=${_CSS_PATH} --check 2>/dev/null | tail -n 1")
+    assertTrue \
+        ' └─ The epub command with --css and --check failed' \
+        "$?"
+
+    echo "##################### $_CSS_BUILD"
+
+    # Test for CSS
+    #
+    unzip -l $_CSS_BUILD 2>/dev/null | grep "$_CSS_FILE" >/dev/null 2>&1
+    assertTrue \
+        " └─ The resulting ePUB does not include $_CSS_FILE." \
+        "$?"
+
+    # Test for epubcheck
+    #
+    grep -i "epubcheck" $_LOGFILE >/dev/null 2>&1
+    assertTrue \
+        " └─ The ePUB was not checked with epubcheck" \
+        "$?"
+}
+
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+function test_epubNAME () {
+    local _BUILD_SUBDIR_NAME _EPUBPATH _EPUBPATH_BUILD
+    _NAME="testsuite"
+
+    clean_build
+
+    _EPUBPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE epub --name $_NAME 2>/dev/null")
+    assertTrue \
+	" └─ Building an EPUB document with --name failed " \
+       "$?"
+
+    _EPUBPATH=$(eval "$_DAPSEXEC -v0 -d $_DCFILE epub-name --name $_NAME 2>/dev/null")
+   assertTrue \
+	' └─  Getting the filename for EPUB with --name failed ' \
+       "$?"
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with --epub-name: " \
+       "$_EPUBPATH" "$_EPUBPATH_BUILD"
+
+   # expr match does not work with Variables as search term, needs regexp
+
+   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_EPUBPATH_BUILD"))
+   echo "$(basename $_EPUBPATH_BUILD)" | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the EPUB filename" \
+       "$?"   
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$_NAME" "$_BUILD_SUBDIR_NAME"
+
+
+}
+
+#--------------------------------
+# * Does the --rootid option work correctly?
+#
+function test_pdfRootidXsltparam () {
+    local _EPUBNAME _EPUBNAME_BUILD _EPUBPATH_BUILD _ROOTID _XSLTPARAM
+
+    _ROOTID=appendix
+    _EPUBNAME=${_ROOTID}_en.epub
+    _XSLTPARAM="--param \\\"hyphenate.verbatim=0\\\""
+
+    clean_build
+
+    _EPUBPATH_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug epub --rootid $_ROOTID 2>/dev/null | tail -n 1")
+    assertTrue \
+	' └─ Building an EPUB with --rootid failed ' \
+       "$?"
+    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
+	"$?"
+    _EPUBNAME_BUILD=$(basename $_EPUBPATH_BUILD)
+    assertEquals \
+	' └─ The resulting EPUB filename does not match the ROOTID:' \
+	"$_EPUBNAME" "$_EPUBNAME_BUILD"
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC
