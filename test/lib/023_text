@@ -18,7 +18,7 @@ header "Text"
 function oneTimeSetUp() {
     # Clean up the build directory
     clean_build
-    # get the profiling directory
+    # get the resulting filename
     _TXT_PATH=$(eval "$_DAPSEXEC -d $_DCFILE text-name 2>/dev/null")
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the path to the resulting TEXT file failed. Skipping tests"
