@@ -39,7 +39,7 @@ include "docbook.rnc"
   # db.alt = notAllowed
   db.anchor = notAllowed
   # db.annotation = notAllowed
-  db.answer = notAllowed
+  # db.answer = notAllowed
   # db.appendix = notAllowed
   db.application = notAllowed
   db.arc = notAllowed
@@ -435,6 +435,13 @@ include "docbook.rnc"
     db.question =
       ## A question in a QandASet
       element question { db.question.attlist, db.para, db.all.blocks+ }
+  }
+  
+  div {
+    # 
+    db.answer =    
+    ## An answer to a question posed in a QandASet
+    element answer { db.answer.attlist, db.all.blocks+ }
   }
   
 } # end of include
