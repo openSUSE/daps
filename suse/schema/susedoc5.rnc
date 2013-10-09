@@ -3,7 +3,7 @@
 #
 # See http://docbook.org/docs/howto
 #
-# This schema 
+# This schema is a customization of DocBook for SUSE documents
 #
 # Author: Thomas Schraitle, 2013 
 #
@@ -22,7 +22,7 @@ datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
 include "docbook.rnc"
 {
-  # Redefine element pattern as notAllowed here:
+  # Redefine element pattern as notAllowed here as they are not needed:
   #
   # List created with:
   # egrep "\s+db\.[a-z]+\s*=\s*" /usr/share/xml/docbook/schema/rng/5.0/docbook.rnc  | sort > db5-elements.txt
@@ -375,7 +375,9 @@ include "docbook.rnc"
   # db.year = notAllowed
   
   
+  # Add other customizations:
   div {
+    # We don't want block elements inside para, only inlines are allowed
     db.para =
     ## A paragraph (without block elements)
     [
@@ -400,13 +402,13 @@ include "docbook.rnc"
     ]
     element para {
       db.para.attlist,
-      # We don't want block elements inside paras
       # db.para.info,
-      (db.all.inlines )*
+      (db.all.inlines)*
     }
   }
 
   div {
+    # 
     db.personname =
     ## The personal name of an individual
     element personname {
@@ -420,15 +422,18 @@ include "docbook.rnc"
   }
   
   div {
+    # We need one question and one answer
     db.qandaentry =
       ## A question/answer set within a QandASet
       element qandaentry {
         db.qandaentry.attlist, db.qandaentry.info, 
         db.question, db.answer }
-        
+  }
+  
+  div {
+    # No label, but question has to start with a para
     db.question =
       ## A question in a QandASet
-      # No label, but question has to start with a para
       element question { db.question.attlist, db.para, db.all.blocks+ }
   }
   
