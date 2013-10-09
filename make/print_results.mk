@@ -13,11 +13,11 @@
 #
 .PHONY: epub-name
 epub-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME).epub"
+	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).epub"
 
 .PHONY: mobi-name
 mobi-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME).mobi"
+	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi"
 
 #---------------
 # HTML
