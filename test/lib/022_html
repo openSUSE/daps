@@ -437,14 +437,10 @@ function test_htmlRootidXsltparam () {
 #
 
 function test_htmlStatdir () {
-    local _ALT_STATIC_DIR _CSS_FILE _DB_STYLES _STANDARD_CSS _STANDARD_STYLES
-    local _STATIC_DIR _STATIC_STYLES
+    local _ALT_STATIC_DIR _CSS_FILE _STANDARD_CSS _STATIC_DIR
     
     _CSS_FILE="style.css"
-    _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
-    _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
     _STANDARD_CSS="${_STANDARD_STYLES}/xhtml/$_CSS_FILE"
-    _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
     _STATIC_DIR="${_STATIC_STYLES}/static"
     _ALT_STATIC_DIR="${_STATIC_STYLES}/alt_static"
 

@@ -30,6 +30,11 @@ export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
 export _MAIN_NOPROF="book_noprofile.xml"
 export _MAINPATH_NOPROF="${_DOC_DIR}/xml/$_MAIN_NOPROF"
 
+# Stylesheet directories
+export _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
+export _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
+export _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
+
 # arrays cannot be exported in bash (yet) ;-((
 export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.xml"
 export _SET_FILES="$_XML_FILES $_MAIN"

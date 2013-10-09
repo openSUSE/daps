@@ -101,10 +101,7 @@ function test_pdfFO () {
 #
 function test_pdfStyleroot () {
 
-    _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
-    _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
-
-    clean_build
+     clean_build
 
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     # 
