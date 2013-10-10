@@ -56,7 +56,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+#    clean_build
 }
 
 #---------------------------------------------------------------
@@ -74,11 +74,11 @@ function test_pdf () {
         ' └─ The $_PDFCMD command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting filename (${_PDFNAME}) does not exist" \
+	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
 	"[ -f $_PDFNAME ]"
     assertEquals \
 	' └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name' \
-	"$_PDF_NAME_PATH" "$_PDFNAME"
+	"$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 }
 #--------------------------------
 # * Is the .fo still present after the PDF has been built?
@@ -249,7 +249,9 @@ function test_pdfName () {
 # * Are parameters pass with --xsltparam correctly processed?
 #
 function test_pdfRootidXsltparam () {
-    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDF_FILENAME_EXPECTED _PDF_FILENAME_BUILD _PDF_BUILD_PATH _ROOTID _XSLTPARAM
+    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDF_FILENAME_EXPECTED
+    local _PDF_FILENAME_BUILD _PDF_BUILD_PATH _ROOTID _XSLTPARAM
+
 
     _ROOTID=appendix
     _PAGECOUNT_EXPECTED=1
@@ -263,11 +265,11 @@ function test_pdfRootidXsltparam () {
 
     clean_build
 
-    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a $_PDFCMD with --rootid and --xsltparam failed ' \
        "$?"
-    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
 	"$?"
@@ -282,6 +284,7 @@ function test_pdfRootidXsltparam () {
     assertEquals \
 	' └─ PDF has wrong page count:' \
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
+
     # check xsltparam
     egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null 2>&1
     assertTrue \
