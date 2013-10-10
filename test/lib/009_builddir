@@ -8,6 +8,8 @@
 # Testing DAPS: --builddir-option
 #
 
+_BUILD_DIR=""
+
 source lib/common_functions
 
 header "Build Directory"
@@ -40,10 +42,10 @@ function oneTimeTearDown () {
 #
 function test_builddirVariable () {
     local _BD_VAR
-#    echo "$_DAPSEXEC -v0 --main $_MAINFILE_PATH --builddir $_BUILD_DIR showvariable VARIABLE=BUILD_DIR 2>/dev/null"
-    _BD_VAR=$(eval "$_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR showvariable VARIABLE=BUILD_DIR 2>/dev/null")
+
+    _BD_VAR=$($_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR showvariable VARIABLE=BUILD_DIR 2>/dev/null)
     assertTrue \
-        ' └─ The showvariable for BUILD_DIR failed' \
+        ' └─ The showvariable command for BUILD_DIR failed' \
         "$?"
     assertEquals \
 	" └─ The value for BUILD_DIR does not match the specified build directory:" \
@@ -54,13 +56,12 @@ function test_builddirVariable () {
 # * Is the specified build directory realy used?
 #
 function test_builddirResult () {
-    local _BD_DIR
-    
-    eval "$_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR profile >/dev/null 2>&1"
-    readlink -e "${_BUILD_DIR}/.profiled/*/$_MAIN" >/dev/null 2>&1
+
+    $_DAPSEXEC -v0 --main $_MAINPATH --builddir $_BUILD_DIR profile >/dev/null 2>&1
+    readlink -e ${_BUILD_DIR}/.profiled/*/$_MAIN >/dev/null 2>&1
     assertTrue \
         ' └─ The build directory is not used.' \
-        "$?"    
+        "$?"
 }
 
 # source shUnit2 test
