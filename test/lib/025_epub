@@ -129,11 +129,11 @@ function test_epubStyleroot () {
 #
 
 function test_epubCSS_Check () {
-    local _CSS_CMD_NAME _CSS_CMD_PATH _CSS_DC_NAME _CSS_STYLE_NAME
+    local _CSS_CMDL_NAME _CSS_CMDL_PATH _CSS_DC_NAME _CSS_STYLE_NAME
     local _EPUB_BUILD_PATH
 
-    _CSS_CMD_NAME="test.css"
-    _CSS_CMD_PATH="${_DOC_DIR}/xml/${_CSS_CMD_NAME}"
+    _CSS_CMDL_NAME="test.css"
+    _CSS_CMDL_PATH="${_DOC_DIR}/xml/${_CSS_CMDL_NAME}"
     _CSS_DC_NAME="reference.css" # from $_DCFILE
     _CSS_STYLE_NAME="style.css"
 
@@ -165,11 +165,11 @@ function test_epubCSS_Check () {
 
     clean_build
 
-    _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub --css=${_CSS_CMD_PATH} 2>/dev/null)
+    _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub --css=${_CSS_CMDL_PATH} 2>/dev/null)
 
-    unzip -l $_EPUB_BUILD_PATH 2>/dev/null | grep "$_CSS_CMD_NAME" >/dev/null 2>&1
+    unzip -l $_EPUB_BUILD_PATH 2>/dev/null | grep "$_CSS_CMDL_NAME" >/dev/null 2>&1
     assertTrue \
-        " └─ The resulting ePUB does not include the CSS file specified on the command line ($_CSS_CMD_NAME)." \
+        " └─ The resulting ePUB does not include the CSS file specified on the command line ($_CSS_CMDL_NAME)." \
         "$?"
 
     # Does the EPUB contain no css file with --css=none?
@@ -210,7 +210,7 @@ function test_epubCheck () {
 # * Is the --name option correctly implemented?
 #
 function test_epubNAME () {
-    local _BUILD_SUBDIR_NAME _EPUB_LOCAL_NAME_PATH _EPUB_BUILD_PATH _NAME
+    local _BUILD_SUBDIR_NAME _EPUB_BUILD_PATH _EPUB_NAME_PATH _NAME
     _NAME="testsuite"
 
     clean_build
@@ -220,13 +220,13 @@ function test_epubNAME () {
 	" └─ Building an EPUB document with --name failed " \
        "$?"
 
-    _EPUB_LOCAL_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE epub-name --name $_NAME 2>/dev/null)
+    _EPUB_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE epub-name --name $_NAME 2>/dev/null)
    assertTrue \
 	' └─  Getting the filename for EPUB with --name failed ' \
        "$?"
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --epub-name: " \
-       "$_EPUB_LOCAL_NAME_PATH" "$_EPUB_BUILD_PATH"
+       "$_EPUB_NAME_PATH" "$_EPUB_BUILD_PATH"
 
    # expr match does not work with Variables as search term, needs regexp
 
