@@ -26,8 +26,9 @@
   </listitem>
  </itemizedlist>
 
- <!--<sect1 id="sec.user.docupdates.20">
+ <sect1 id="sec.user.docupdates.20">
   <title>Next (&dapsacr; 2.0)</title>
+  <para>&wip;</para>
   <variablelist>
    <varlistentry>
     <term>Make Files</term>
@@ -73,7 +74,7 @@
    </varlistentry>
    <varlistentry>
     <term>Output Targets</term>
-    <!-\-WIP-\->
+    <!--WIP-->
     <listitem>
      <itemizedlist>
       <listitem>
@@ -84,13 +85,83 @@
       </listitem>
       <listitem>
        <para>new target: mobi (for Amazon Kindle e-books, requires calibre: epub
-        is generated and transformed to mobi format with calibre)</para></listitem>
+       is generated and transformed to mobi format with calibre)</para>
+      </listitem>
+      <listitem>
+       <para>html: html4 is no longer supported, per default,
+         <option>--html</option> now generates xhtml 1.1, with the
+         <option>--html5</option> switch you can enforce HTML5 output</para>
+      </listitem>
+      <listitem>
+       <para>File list targets: renamed (now: <option>list-*</option>), some
+       deprecated</para>
+      </listitem>
+      <listitem>
+       <para>list-srcfiles: now options available which files to exclude from
+        list</para>
+      </listitem>
+      <listitem>
+       <para>new packaging target: package-src (creates tarball + profiled XML +
+        resolved entities + images), new option <option>--set-date</option> to
+        include publication date</para>
+      </listitem>
+      <listitem>
+       <para>new target for distributable archives: locdrop</para>
+      </listitem>
+      <listitem>
+       <para>bigfile target has changed: bigfile-reduced is deprecated, bigfile
+        now does what was formerly done by bigfile-reduced</para>
+      </listitem>
+      <listitem>
+       <para>page, desktop, or document files: targets package-html and
+        package-pdf now have switches which files to generate:
+         <option>--documentfiles</option>, <option>--desktopfiles</option>,
+         <option>--pagefiles</option>
+       </para>
+      </listitem>
+      <listitem><para>new target: clean-package</para></listitem>
      </itemizedlist>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>Debugging</term>
+    <listitem>
+     <para>new subcommand: dapsenv (prints a list of the most important make
+      variables and their value)</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Entities</term>
+    <listitem>
+     <para>are now always resolved in the profiles XML sources</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Well-formed</term>
+    <listitem>
+     <para>if XML is not well-formed, &dapsacr; aborts and shows a
+      meaningful error-message</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Overview of All Commands</term>
+    <listitem><para>daps --commands</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Image Formats</term>
+    <listitem><para>jpeg now supported</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>CSS</term>
+    <listitem><para>&wip;</para></listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>XSLT Processors</term>
+    <listitem><para>&wip;</para></listitem>
+   </varlistentry>
+   
+   
+   
    
   </variablelist>
- </sect1>-->
+ </sect1>
 
 
  <sect1 id="sec.user.docupdates.maint1">
