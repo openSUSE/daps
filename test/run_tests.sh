@@ -11,7 +11,7 @@
 #--------------------------------
 # Global Variable Definitions
 #
-# Use _VARNAME for variables that also might be used in DAPS itself to 
+# Use _VARNAME for variables that also might be used in DAPS itself to
 # avoid potential clashes. Just to be on the safe side.
 #
 
@@ -155,11 +155,11 @@ while true ; do
 	    _XSLTPROCS=( $2 )
 	    shift 2
 	    ;;
-        --) 
+        --)
 	    shift
 	    break
 	    ;;
-        *) 
+        *)
 	    exit_on_error "Internal error!"
 	    ;;
     esac
@@ -169,7 +169,7 @@ done
 #
 if [[ -n "${_XSLTPROCS[@]}" ]]; then
     for _PROC in "${_XSLTPROCS[@]}"; do
-	which --skip-alias --skip-functions $_PROC >/dev/null 2>&1 
+	which --skip-alias --skip-functions $_PROC >/dev/null 2>&1
 	if [ $? -eq 0 ]; then
 	    _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "$_PROC" )
 	else
@@ -181,7 +181,7 @@ else
     which --skip-alias --skip-functions /usr/bin/saxon6 >/dev/null 2>&1
     if [ $? -eq 0 ]; then
 	_XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
-    fi    
+    fi
 fi
 
 if [[ -z "${_XSLT_PROCESSORS[@]}" ]]; then
@@ -211,7 +211,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
     for _TEST in "${_TESTS_SORTED[@]}"; do
 
         # TODO:
-        # Check return state of tests and act - if e.g. profiling fails it 
+        # Check return state of tests and act - if e.g. profiling fails it
         # does not make sense to run the majority of other tests
         #
 	case "$_TEST" in
@@ -234,9 +234,9 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		done
 		;;
 	    *_profiling)
-		for _MAINFILE_PATH in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
-		    export _MAINFILE_PATH
-		    if [[ "$_MAINFILE_PATH" =~ _noprofile ]]; then
+		for _MAIN_PROFILING in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
+		    export _MAIN_PROFILING
+		    if [[ "$_MAIN_PROFILING" =~ _noprofile ]]; then
 			export _NOPROFILE=1
                         # when running the noprofile tests, MAIN is replaced
                         # by MAIN_NOPROF
@@ -283,6 +283,3 @@ fi
 
 
 rm -rf "${_DOC_DIR}/build $_TEMPDIR"
-
-
-
