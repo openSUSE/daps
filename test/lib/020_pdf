@@ -12,13 +12,13 @@
 # in a viewer and looking at it.
 # For testing we will therefore run DAPS in debug mode and grep for parameters
 # in the log file. Thus we will at least know whether the xslt processor
-# was called with correct options. 
+# was called with correct options.
 #
 # * Does the PDF-file correctly build?
 # * Does the name retrieved with *-name match the actual result?
-# * Is the .fo still present after the PDF has been built? 
+# * Is the .fo still present after the PDF has been built?
 # * Do the --styleroot and --fb_styleroot options work?
-# * Does the automatic fallback to the DoBook stylesheets work? 
+# * Does the automatic fallback to the DoBook stylesheets work?
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
@@ -26,19 +26,24 @@
 # * Does the --rootid option work correctly?
 # * Are parameters pass with --xsltparam correctly processed?
 
+_PDF_NAME_PATH=""
+_LOGFILE=""
+
 source lib/common_functions
 
 header "$_PDFCMD with $_FOPROC"
 
 function oneTimeSetUp() {
+    local _LOG_DIR
+
     # Clean up the build directory
     clean_build
     # get the profiling directory
-    _PDFPATH=$(eval "$_DAPSEXEC -d $_DCFILE ${_PDFCMD}-name 2>/dev/null")
+    _PDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE ${_PDFCMD}-name 2>/dev/null)
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
     fi
-    _LOG_DIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null")
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
@@ -63,8 +68,8 @@ function oneTimeTearDown() {
 # * Does the name retrieved with *-name match the actual result?
 #
 function test_pdf () {
-    local _PDFNAME _PDFRESULT
-    _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --formatter=$_FOPROC 2>/dev/null")
+    local _PDF_BUILD_PATH
+    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
         ' └─ The $_PDFCMD command itself failed' \
         "$?"
@@ -73,40 +78,40 @@ function test_pdf () {
 	"[ -f $_PDFNAME ]"
     assertEquals \
 	' └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name' \
-	"$_PDFPATH" "$_PDFNAME"
+	"$_PDF_NAME_PATH" "$_PDFNAME"
 }
 #--------------------------------
 # * Is the .fo still present after the PDF has been built?
 #
 function test_pdfFO () {
-    local _FONAME _TMPDIR
-    _TMPDIR=$(eval "$_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TMP_DIR 2>/dev/null")
+    local _FO_FILENAME _FO_TMPDIR
+    _FO_TMPDIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TMP_DIR 2>/dev/null)
    assertTrue \
        ' └─ Getting the value of the TMP_DIR variable failed' \
-       "$?"    
-    _FONAME=$(basename ${_PDFPATH} 2>/dev/null)
+       "$?"
+    _FO_FILENAME=$(basename ${_PDF_NAME_PATH} 2>/dev/null)
     if [[ "pdf" == $_PDFCMD ]]; then
-	_FONAME=${_TMPDIR}/${_FONAME%-print_en.pdf}-${_FOPROC}-print_en.fo
+	_FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%-print_en.pdf}-${_FOPROC}-print_en.fo
     else
-	_FONAME=${_TMPDIR}/${_FONAME%_en.pdf}-${_FOPROC}_en.fo
+	_FO_FILENAME=${_FO_TMPDIR}/${_FO_FILENAME%_en.pdf}-${_FOPROC}_en.fo
     fi
     assertTrue \
-	" └─ The FO file (${_FONAME}) does not exist anymore after having built the PDF" \
+	" └─ The FO file (${_FO_FILENAME}) does not exist anymore after having built the PDF" \
 	"[ -f $_FONAME ]"
 }
 
 #--------------------------------
 # * Do the --styleroot and --fb_styleroot options work?
-# * Does the automatic fallback to the DoBook stylesheets work? 
+# * Does the automatic fallback to the DoBook stylesheets work?
 #
 function test_pdfStyleroot () {
 
      clean_build
 
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
-    # 
+    #
 
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Fallback Styleroot specified on the command line was not used." \
@@ -117,17 +122,17 @@ function test_pdfStyleroot () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_PDFCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_PDFCMD >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
-	"$?"    
+	"$?"
 
     clean_build
 
     # Testing Styleroot specified with --styleroot
     #
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Styleroot specified on the command line was not used." \
@@ -141,8 +146,8 @@ function test_pdfStyleroot () {
 # * Is the meta information displayed when using the --meta option?
 #
 function test_pdfRemarksDraftMeta () {
-    local _PDFNAME _PDFNAME_BUILD _REMARK_COUNT_ACTUAL _REMARK_COUNT_EXPECTED
-
+    local _PDF_BUILD_PATH _PDF_NAME_PATH _REMARK_COUNT_ACTUAL
+    local  _REMARK_COUNT_EXPECTED
     declare -a _XMLFILES
 
    _REMARK_COUNT_ACTUAL=0
@@ -151,17 +156,18 @@ function test_pdfRemarksDraftMeta () {
 
     clean_build
 
-   _PDFNAME_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1")
+   _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1)
    assertTrue \
        ' └─ Building the PDF with --draft --remarks --meta failed' \
        "$?"
-   _PDFNAME=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null")
+
+   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null)
    assertTrue \
        ' └─ Getting the PDF-name with --draft --remarks --meta failed' \
-       "$?"   
+       "$?"
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
-       "$_PDFNAME" "$_PDFNAME_BUILD"
+       "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 
    # checking DRAFT mode
    #
@@ -169,7 +175,7 @@ function test_pdfRemarksDraftMeta () {
    assertTrue \
        ' └─ Stringparam for DRAFT mode is not correctly specified when generating the FO-file' \
        "$?"
-   expr "$_PDFNAME_BUILD" : '.*\(_draft\)' >/dev/null 2>&1
+   expr "$_PDF_BUILD_PATH" : '.*\(_draft\)' >/dev/null 2>&1
    assertTrue \
        ' └─ String "_draft" does not appear in the PDF filename' \
        "$?"
@@ -180,7 +186,7 @@ function test_pdfRemarksDraftMeta () {
    assertTrue \
        ' └─ Param for META is not correctly specified when generating the FO-file' \
        "$?"
-   expr "$_PDFNAME_BUILD" : '.*\(_meta\)' >/dev/null 2>&1
+   expr "$_PDF_BUILD_PATH" : '.*\(_meta\)' >/dev/null 2>&1
    assertTrue \
        ' └─ String "_meta" does not appear in the PDF filename' \
        "$?"
@@ -196,41 +202,42 @@ function test_pdfRemarksDraftMeta () {
        " └─ --param \"show.comments=1\" appears less often in the log file than expected" \
        "$_REMARK_COUNT_EXPECTED" "$_REMARK_COUNT_ACTUAL"
 
-   expr "$_PDFNAME_BUILD" : '.*\(_remarks\)' >/dev/null
+   expr "$_PDF_BUILD_PATH" : '.*\(_remarks\)' >/dev/null
    assertTrue \
        ' └─ String "_remarks" does not appear in the PDF filename' \
-       "$?"   
+       "$?"
 }
 
 #--------------------------------
 # * Is the --name option correctly implemented?
 #
 function test_pdfName () {
-    local _BUILD_SUBDIR_NAME _NAME _PDFPATH _PDFPATH_BUILD
+    local _BUILD_SUBDIR_NAME _NAME _PDF_BUILD_PATH _PDF_NAME_PATH
     _NAME="testsuite"
 
     clean_build
 
-    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --name $_NAME --formatter=$_FOPROC 2>/dev/null")
+    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --name $_NAME --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
 	' └─ Building a $_PDFCMD with --name failed ' \
        "$?"
-   _PDFPATH=$(eval "$_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --name $_NAME 2>/dev/null")
+
+   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --name $_NAME 2>/dev/null)
    assertTrue \
 	' └─  Getting the filename for $_PDFCMD with --name failed ' \
        "$?"
 
-   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_PDFPATH_BUILD"))
-
    assertEquals \
        " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
-       "$_PDFPATH" "$_PDFPATH_BUILD"
+       "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 
    # expr match does not work with Variables as search term, needs regexp
-   echo "$(basename $_PDFPATH_BUILD)" | grep -q $_NAME
+
+   _BUILD_SUBDIR_NAME=$(basename $(dirname "$_PDF_BUILD_PATH"))
+   echo "$(basename $_PDF_BUILD_PATH)" | grep -q $_NAME
    assertTrue \
        " └─ String passed with --name ($_NAME) does not appear in the PDF filename" \
-       "$?"   
+       "$?"
    assertEquals \
        " └─ The build subdirectory does not have the name supplied with --name: " \
        "$_NAME" "$_BUILD_SUBDIR_NAME"
@@ -242,21 +249,21 @@ function test_pdfName () {
 # * Are parameters pass with --xsltparam correctly processed?
 #
 function test_pdfRootidXsltparam () {
-    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDFNAME _PDFNAME_BUILD _PDFPATH_BUILD _ROOTID _XSLTPARAM
+    local _PAGECOUNT _PAGECOUNT_EXPECTED _PDF_FILENAME_EXPECTED _PDF_FILENAME_BUILD _PDF_BUILD_PATH _ROOTID _XSLTPARAM
 
     _ROOTID=appendix
     _PAGECOUNT_EXPECTED=1
 
     if [[ "pdf" == $_PDFCMD ]]; then
-	_PDFNAME=${_ROOTID}-print_en.pdf
+	_PDF_FILENAME_EXPECTED=${_ROOTID}-print_en.pdf
     else
-	_PDFNAME=${_ROOTID}_en.pdf
+	_PDF_FILENAME_EXPECTED=${_ROOTID}_en.pdf
     fi
     _XSLTPARAM="--param \\\"hyphenate.verbatim=0\\\""
 
     clean_build
 
-    _PDFPATH_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a $_PDFCMD with --rootid and --xsltparam failed ' \
        "$?"
@@ -264,13 +271,14 @@ function test_pdfRootidXsltparam () {
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
 	"$?"
-    _PDFNAME_BUILD=$(basename $_PDFPATH_BUILD)
+
+    _PDF_FILENAME_BUILD=$(basename $_PDF_BUILD_PATH)
     assertEquals \
 	' └─ The resulting PDF filename does not match the ROOTID:' \
-	"$_PDFNAME" "$_PDFNAME_BUILD"
+	"$_PDF_FILENAME_EXPECTED" "$_PDF_FILENAME_BUILD"
 
     # check PDF page count
-    _PAGECOUNT=$(pdfinfo $_PDFPATH_BUILD | grep "Pages:" | sed 's/.*:  *//' 2>/dev/null)
+    _PAGECOUNT=$(pdfinfo $_PDF_BUILD_PATH | grep "Pages:" | sed 's/.*:  *//' 2>/dev/null)
     assertEquals \
 	' └─ PDF has wrong page count:' \
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
@@ -283,4 +291,3 @@ function test_pdfRootidXsltparam () {
 
 # source shUnit2 test
 source $_SHUNIT2SRC
-
