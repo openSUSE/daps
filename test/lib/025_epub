@@ -9,7 +9,7 @@
 #
 #
 # * Does EPUB correctly build?
-# * Does the name retrieved with *-dir-name match the actual result?
+# * Does the name retrieved with epub-name match the actual result?
 # * Does the EPUB file validate with epubcheck?
 # * Does the --css switch work?
 # * Does the fallback to a CSS file from the stylesheet directory work?
@@ -57,7 +57,7 @@ function oneTimeTearDown() {
 
 #--------------------------------
 # * Does EPUB correctly build?
-# * Does the name retrieved with *-dir-name match the actual result?
+# * Does the name retrieved with epub-name match the actual result?
 #
 function test_epub () {
     local _EPUB_BUILD_PATH
@@ -245,7 +245,7 @@ function test_epubNAME () {
 #--------------------------------
 # * Does the --rootid option work correctly?
 #
-function test_pdfRootidXsltparam () {
+function test_pdfRootid () {
     local _EPUB_BUILD_PATH _EPUB_FILENAME_BUILD _EPUB_FILENAME_EXPECTED
     local _ROOTID
 
