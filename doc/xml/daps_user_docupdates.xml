@@ -168,9 +168,285 @@
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable></screen>
      <para>now use:</para>
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable><emphasis role="strong">=</emphasis><replaceable>VALUE</replaceable></screen>
-     <para></para>
-    </listitem>
+     </listitem>
    </varlistentry>
+   <varlistentry>
+   <term>Deprecated/Changed Commands</term>
+    <listitem>
+     <para>The following commands are deprecated. </para>
+     <itemizedlist>
+      <listitem>
+       <para>
+        <command>&dapscmd; all</command>. Use
+        <command>&dapscmd;&nbsp;color-pdf</command> instead.</para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; bigfile-reduced</command>. Use
+        <command>&dapscmd;&nbsp;bigfile</command> instead.</para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; check</command>. Use
+        <command>&dapscmd;dapsenv</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; chklink</command> . Use
+        <command>&dapscmd; checklink</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; db2novdoc</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; desktop-files</command>. Use
+        <command>&dapscmd;&nbsp;package-src&nbsp;--desktopfiles</command>
+        instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; desktop-files-dir-name</command>. This command is
+        no longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-all</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-book</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-book</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-desktop-files</command>. This command
+        is no longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-document-files</command>. This command
+        is no longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-document-files-pdf</command>. This
+        command is no longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-graphics</command>. Use
+        <command>&dapscmd;&nbsp;package-src</command> instead.</para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-graphics-png</command>. This command is
+        no longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-html-single</command>. Use
+        <command>&dapscmd;&nbsp;dist-single-html</command> instead.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; disthtml-single</command>. Use
+        <command>&dapscmd;&nbsp;dist-single-html</command> instead.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-xml</command>. Use
+        <command>&dapscmd;&nbsp;package-src</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; document-files-dir-name</command>. This command is no longer
+        supported.  </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; document-files-html</command>. Use
+        <command>&dapscmd;&nbsp;package-html&nbsp;--documentfiles</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; document-files-pdf</command>. Use
+        <command>&dapscmd;&nbsp;package-pdf&nbsp;--documentfiles</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; force</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; htmlsingle</command>. Use 
+        <command>&dapscmd; single-html</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; htmlsingle-name</command>. Use
+        <command>&dapscmd;&nbsp;single-html-dir-name</command> instead.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; html-single</command>. Use 
+        <command>&dapscmd;&nbsp;single-html</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; html-single-name</command>. Use
+        <command>&dapscmd;&nbsp;single-html-dir-name</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; jana</command>. Use 
+        <command>&dapscmd; checklink</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; link-entity-dist</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; missinggraphics</command>. Use
+        <command>&dapscmd;&nbsp;list-images-missing</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; online-localized</command>. Use
+        <command>&dapscmd;&nbsp;online-docs&nbsp;--noset</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; offspring</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; pdf-color</command>. Use 
+        <command>&dapscmd; color-pdf</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; pdf-color-name</command>. Use 
+        <command>&dapscmd; color-pdf-name</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; penguin</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; prof</command>. Use 
+        <command>&dapscmd; profile</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; profiledir</command>. Use
+        <command>&dapscmd;&nbsp;showvariable&nbsp;VARIABLE=PROFILEDIR</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; projectfiles</command>. Use
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--noimg</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; projectgraphics</command>. Use
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noxml</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; provide-images</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; provide-color-images</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; provide-epub-images</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; remainingfiles</command>. Use
+        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noimg</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; remaininggraphics</command>. Use
+        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noxml</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; txt</command>. Use
+        <command>&dapscmd; text</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; txt-name</command>. Use
+        <command>&dapscmd; text-name</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; warn-images</command>. Use 
+        <command>&dapscmd; list-images-multisrc</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; wiki</command>. This command is no longer supported.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; wiki-name</command>. This command is no longer supported.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; xmlfiles</command>. Use
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noimg</command> instead. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; xml-graphics-bw</command>. This command is no
+        longer supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; xmlgraphics</command>. This command is no longer
+        supported.</para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+  </varlistentry>
    
    
    
