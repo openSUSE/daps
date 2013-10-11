@@ -2,7 +2,7 @@
 #
 # Author: Frank Sundermeyer
 #
-# Stuff for DAPS that did not fit anywhere else
+# Packaging targets for DAPS
 #
 # Please submit feedback or patches to
 # <fsundermeyer at opensuse dot org>

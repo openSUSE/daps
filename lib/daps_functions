@@ -914,12 +914,61 @@ function online-docs () {
     call_make "$SUB_CMD" "$@"
 }
 
+###########################################################################
+#
+#  PACKAGING package-src
+#
+#  Subcommands: package-src only
+#
+###########################################################################
+function package-src () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="def-file:,help,name:,set-date:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_def-file
+        help_help
+        help_name
+        help_set-date
+        echo
+        exit 0
+    fi
+
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+
+    if [[ -n "$P_DEF_FILE" ]]; then
+        if [[ -f $P_DEF_FILE ]]; then
+            export DEF_FILE="$P_DEF_FILE"
+        else
+            exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
+        fi
+    else
+       [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
+    fi
+
+    if [[ -n "$P_SETDATE" ]]; then
+        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
+        export SETDATE
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}
+
 
 ###########################################################################
 #
 #  Generic PACKAGING
 #
-#  Subcommands: all packaging targets except locdrop
+#  Subcommands: remaining packaging targets
 #
 ###########################################################################
 function packaging () {
@@ -928,7 +977,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,desktopfiles,documentfiles,formatter:,help,name:,nopdf,pagefiles,rootid:,set-date:,xsltparam:"
+    LONG_OPTS="desktopfiles,documentfiles,formatter:,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -936,24 +985,19 @@ function packaging () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        if [[ "package-pdf" = $SUB_CMD ]]; then
-            help_formatter
-            help_documentfiles
-            help_desktopfiles
-            help_pagefiles
-            help_xsltparam "creates the .fo file from the profiled sources"
-        elif [[ "package-html" = $SUB_CMD ]]; then
-            help_documentfiles
-            help_desktopfiles
-            help_pagefiles
-            help_xsltparam "creates the .html files from the profiled sources"
-        elif [[ "package-src" = $SUB_CMD ]]; then
-            help_def-file
-        fi
+        help_desktopfiles
+        help_documentfiles
+        [[ "package-pdf" = $SUB_CMD ]] && help_formatter
         help_help
         help_name
+        help_pagefiles
         help_rootid
         help_set-date
+        if [[ "package-pdf" = $SUB_CMD ]]; then
+            help_xsltparam "creates the .fo file from the profiled sources"
+        elif [[ "package-html" = $SUB_CMD ]]; then
+            help_xsltparam "creates the .html files from the profiled sources"
+	fi
         echo
         exit 0
     fi
@@ -965,17 +1009,6 @@ function packaging () {
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
-    if [[ -n "$P_DEF_FILE" ]]; then
-        if [[ -f $P_DEF_FILE ]]; then
-            export DEF_FILE="$P_DEF_FILE"
-        else
-            exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
-        fi
-    else
-       if [[ $SUB_CMD = package-src && 0 != $VERBOSITY ]]; then
-           ccecho "warn" "Warning: No DEF file was specified"
-       fi
-    fi
 
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
