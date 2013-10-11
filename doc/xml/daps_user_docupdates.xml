@@ -154,7 +154,22 @@
    </varlistentry>
    <varlistentry>
     <term>XSLT Processors</term>
-    <listitem><para>&wip;</para></listitem>
+    <listitem>
+     <para>&dapsacr; now also supports the Saxon XSLT processor. Use the
+      option <option>--xsltprocessor</option> to define which processor to use.
+      Per default, <literal>xsltproc</literal> is used. </para></listitem>
+   </varlistentry>
+   <varlistentry id="vle.docupd.syntax">
+    <term>XSLT Parameters: Syntax Change</term>
+    <listitem>
+     <para>When passing XSLT parameters (either on the command line, in scripts,
+      or in &dc; files by using <literal>XSLTPARAM</literal>), you need to
+      adjust the syntax when switching to &daps; 2.0. Instead of </para>
+     <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable></screen>
+     <para>now use:</para>
+     <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable><emphasis role="strong">=</emphasis><replaceable>VALUE</replaceable></screen>
+     <para></para>
+    </listitem>
    </varlistentry>
    
    
