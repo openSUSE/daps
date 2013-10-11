@@ -71,7 +71,7 @@ declare -a _FO_PROCS=( "fop" "xep" )
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
-    rm -rf "${_DOC_DIR}/build $_TEMPDIR"
+    rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
     exit 1;
 }
 
@@ -129,6 +129,7 @@ while true ; do
 	    ;;
 	-h)
 	    usage
+	    rm -rf "$_TEMPDIR"
 	    exit 0
 	    ;;
 	--html)
@@ -282,4 +283,4 @@ else
 fi
 
 
-rm -rf "${_DOC_DIR}/build $_TEMPDIR"
+rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
