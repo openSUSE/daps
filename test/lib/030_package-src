@@ -1,0 +1,196 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: package-src
+#
+#
+# * Does package-src correctly build?
+# * Does the name retrieved with package-src-name match the actual result?
+# * Does the tarball have all the necessary files?
+# * Are the files retrieved from a DEF file added to the tarball?
+# * Is the --name option correctly implemented?
+# * Does the --set-date option work correctly?
+
+_SRC_NAME_PATH=""
+_SRC_TEMPDIR=""
+_LOGFILE=""
+
+source lib/common_functions
+
+header "package-src"
+
+function oneTimeSetUp() {
+    local _LOG_DIR
+
+    # Clean up the build directory
+    clean_build
+    # get the profiling directory
+    _SRC_NAME_PATH=$($_DAPSEXEC -d $_DCFILE package-src-name 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting source package failed. Skipping tests"
+    fi
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_package-src.log
+
+    _SRC_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/srcfile_list_XXXXXX)
+
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does package-src correctly build?
+# * Does the name retrieved with package-src-name match the actual result?
+#
+function test_packagesrc () {
+    local _SRC_BUILD_PATH
+    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src 2>/dev/null)
+    assertTrue \
+        ' └─ The package-src command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The resulting file (${_SRC_BUILD_PATH}) does not exist." \
+	"[ -f $_SRC_BUILD_PATH ]"
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --package-src-name" \
+	"$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
+}
+
+#--------------------------------
+# * Does the tarball have all the necessary files?
+# * Are the files retrieved from a DEF file added to the tarball?
+#
+
+function test_packagesrcFilelist () {
+    local _ADDED_DC _FILE _IMG _MISSING _SRC_BUILD_PATH
+
+    _ADDED_DC=DC-booktest_DEF
+
+    # unpack tarball into temp dir
+    #
+    _SRC_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/srcfile_list_XXXXXX)
+    (cd $_SRC_TEMPDIR && tar xfj $_SRC_NAME_PATH)
+
+    # XML files
+    #
+    for _FILE in $_SET_FILES; do
+        [[ -f "${_SRC_TEMPDIR}/xml/$_FILE" ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the source archive" \
+        "$_MISSING"
+
+    # Images
+    #
+    _MISSING=""
+    for _IMG in $_SET_IMAGES; do
+	[[ -f "${_SRC_TEMPDIR}/images/src/$_IMG" ]] || _MISSING="$_MISSING $_IMG"
+    done
+    assertNull \
+        " └─ Image(s) '$_MISSING' is/are missing in the source archive" \
+        "$_MISSING"
+
+    # DC file
+    #
+    assertTrue \
+	" └─ $_DCFILE is missing in the source archive" \
+        "[[ -f ${_SRC_TEMPDIR}/$(basename $_DCFILE) ]]"
+
+    clean_build
+
+    # DC file via DEF file
+    #
+    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --def-file=${_DOC_DIR}/DEF-booktest 2>/dev/null)
+
+    # clean tmp and unpack new archive
+    rm -rf ${_SRC_TEMPDIR}/*
+    (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH)
+
+    assertTrue \
+	" └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
+        "[[ -f ${_SRC_TEMPDIR}/$_ADDED_DC ]]"
+
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+function test_packagesrcNAME () {
+
+    local _SRC_BUILD_PATH _SRC_NAME_PATH _NAME
+    _NAME="testsuite"
+
+    clean_build
+
+    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --name $_NAME 2>/dev/null)
+    assertTrue \
+	" └─ Building a package-src archive with --name failed " \
+       "$?"
+
+    _SRC_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src-name --name $_NAME 2>/dev/null)
+   assertTrue \
+	' └─  Getting the filename for package-src with --name failed ' \
+       "$?"
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
+       "$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
+
+   # expr match does not work with Variables as search term, needs regexp
+   echo "$(basename $_SRC_BUILD_PATH)" | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the package filename" \
+       "$?"
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$(basename $_SRC_NAME_PATH)" "$(basename $_SRC_BUILD_PATH)"
+
+
+}
+
+#--------------------------------
+# * Does the --set-date option work correctly?
+#
+function test_packagesrcSetDate () {
+
+    local _DATE _SRC_BUILD_PATH
+
+    _DATE="Jun 01 2013"
+
+    clean_build
+
+    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date=\"$_DATE\" 2>/dev/null)
+    assertTrue \
+	" └─ Building a package-src archive with --name failed " \
+	"$?"
+
+    # clean tmp and unpack new archive
+    rm -rf ${_SRC_TEMPDIR}/*
+    (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH xml/$_MAIN)
+
+    grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null
+
+    assertTrue \
+	" └─ The date set with --set-date does not appear in $_MAIN." \
+	"$?"
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC
