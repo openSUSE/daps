@@ -171,7 +171,7 @@ function test_pdfRemarksDraftMeta () {
 
    # checking DRAFT mode
    #
-   egrep -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE >/dev/null 2>&1
+   egrep -q -- "--stringparam\s+\"draft\.mode=yes\"" $_LOGFILE 2>/dev/null
    assertTrue \
        ' └─ Stringparam for DRAFT mode is not correctly specified when generating the FO-file' \
        "$?"
@@ -182,7 +182,7 @@ function test_pdfRemarksDraftMeta () {
 
    # checking META
    #
-   egrep -- "--param\s+\"use\.meta=1\"" $_LOGFILE >/dev/null 2>&1
+   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
    assertTrue \
        ' └─ Param for META is not correctly specified when generating the FO-file' \
        "$?"
@@ -286,7 +286,7 @@ function test_pdfRootidXsltparam () {
 	"$_PAGECOUNT_EXPECTED" "$_PAGECOUNT"
 
     # check xsltparam
-    egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null 2>&1
+    egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Param for XSLTPARAM is not correctly specified when generating the FO-file' \
 	"$?"
