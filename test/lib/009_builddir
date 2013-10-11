@@ -17,7 +17,7 @@ header "Build Directory"
 function oneTimeSetUp () {
     # Clean up the build directory
     clean_build
-    _BUILD_DIR=$(mktemp -d -q -t daps_testsuite_XXXXXXX)
+    _BUILD_DIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/daps_testsuite_XXXXXXX)
     if [ $? -ne 0 ]; then
 	exit_on_error " Cannot create temporary directory $_BUILD_DIR. Skipping builddir tests"
     fi
@@ -30,7 +30,6 @@ function oneTimeTearDown () {
     stats
     # Clean up the build directory
     clean_build
-    [[ -d $_BUILD_DIR ]] && rm -rf $_BUILD_DIR
 }
 
 #---------------------------------------------------------------
