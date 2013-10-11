@@ -131,7 +131,7 @@ function test_htmlImages () {
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html | grep "${_HTMLDIR_NAME_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
 	readlink -e $_IMG >/dev/null 2>&1
@@ -170,7 +170,7 @@ function test_htmlImages () {
     # need to operate with a modified IFS
     #
     _oldIFS=$IFS IFS=$'\n\t'
-    _IMAGES_DIFF=$(comm -1 -3 <(echo "${_IMAGES_BUILD[*]}" | sort -u) <(echo "${_IMAGES_EXPECTED[*]}" | sort -u))
+    _IMAGES_DIFF=$(comm -1 -3 <(echo "${_IMAGES_BUILD[*]}" | sort -u) <(echo "${_IMAGES_EXPECTED[*]}" 2>/dev/null | sort -u))
     IFS=$_oldIFS
     assertNull \
 	" └─ The list of images from DAPS does not match the ones from the HTML" \
@@ -218,7 +218,7 @@ function test_htmlRemarksDraftMeta () {
    #
    # need to check all HTML files, since index .html does not contain remarks
    #
-   grep -q -- "class=\"remark\"" ${_HTMLDIR_NAME_PATH}/*.html >/dev/null 2>&1
+   grep -q -- "class=\"remark\"" ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null
    assertTrue \
        ' └─ Generated HTML does not seem to show remarks' \
        "$?"
@@ -229,7 +229,7 @@ function test_htmlRemarksDraftMeta () {
 
    # checking META
    #
-   egrep -- "--param\s+\"use\.meta=1\"" $_LOGFILE >/dev/null 2>&1
+   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
    assertTrue \
        ' └─ Param for META is not correctly specified.' \
        "$?"
@@ -273,7 +273,7 @@ function test_htmlCSS_HTML5_Clean () {
 	"[ -f $_TO_CLEAN ]"
     # Test for HTML5
     #
-    grep "<\!DOCTYPE html>" ${_HTMLDIR_NAME_PATH}/index.html >/dev/null 2>&1
+    grep -q "<\!DOCTYPE html>" ${_HTMLDIR_NAME_PATH}/index.html 2>/dev/null
     assertTrue \
         ' └─ The resulting HTML does not have a valid XHTML5 Doctype declaration.' \
         "$?"
@@ -282,7 +282,7 @@ function test_htmlCSS_HTML5_Clean () {
     assertTrue \
 	" └─ The result directory does not contain ${_CSS_BUILD}" \
 	"[ -f ${_CSS_BUILD} -o -L ${_CSS_BUILD} ]"
-    grep "static/css/${_CSS_FILE}" ${_HTMLDIR_NAME_PATH}/index.html >/dev/null 2>&1
+    grep -q "static/css/${_CSS_FILE}" ${_HTMLDIR_NAME_PATH}/index.html 2>/dev/null
     assertTrue \
         ' └─ The resulting HTML does not include a link to static/css/${_CSS_FILE}.' \
         "$?"
@@ -314,7 +314,7 @@ function test_htmlStatic () {
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html | grep "${_HTMLDIR_NAME_PATH}/images/" | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
 	readlink -e $_IMG >/dev/null 2>&1
@@ -394,34 +394,35 @@ function test_htmlNAME () {
 # * Are parameters passed with --xsltparam correctly processed?
 #
 function test_htmlRootidXsltparam () {
-    local _FILECOUNT _FILECOUNT_EXPECTED _HTMLDIR_PATH_BUILD
-    local _HTMLDIR_PATH_ROOTID _ROOTID _XSLTPARAM
+    local _BUILD_SUBDIR_NAME _BUILD_SUBDIR_ROOTID _FILECOUNT _FILECOUNT_EXPECTED _HTML_BUILD_PATH
+    local  _ROOTID _XSLTPARAM
 
     _ROOTID=appendix
     _FILECOUNT_EXPECTED=1
-    _HTMLDIR_PATH_ROOTID="$(dirname $(dirname $_HTMLDIR_NAME_PATH))/$_HTMLCMD/$_ROOTID"
+    _BUILD_SUBDIR_ROOTID="$(dirname $(dirname $_HTMLDIR_NAME_PATH))/$_HTMLCMD/$_ROOTID"
     # will generate HTML files with .xhtml extension
     _XSLTPARAM="--param \\\"spacing.paras=1\\\""
 
     clean_build
 
-    _HTMLFILE_BUILD=$(eval "$_DAPSEXEC -d $_DCFILE --debug $_HTMLCMD --rootid $_ROOTID --xsltparam=\"'$_XSLTPARAM'\" 2>/dev/null | tail -n 1")
+    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_HTMLCMD --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a $_HTMLCMD document with --rootid and --xsltparam failed ' \
        "$?"
-    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
 	"$?"
-    _HTMLDIR_PATH_BUILD=$(dirname $_HTMLFILE_BUILD)
+    _BUILD_SUBDIR_NAME=$(dirname $_HTML_BUILD_PATH)
     assertEquals \
 	' └─ The resulting HTML dirname does not match the ROOTID:' \
-	"$_HTMLDIR_PATH_ROOTID" "$_HTMLDIR_PATH_BUILD"
+	"$_BUILD_SUBDIR_NAME" "$_BUILD_SUBDIR_ROOTID"
+
     # check HTML file count - should be one real file
     # (only make sense for HTML, since single-html is only one file anyway)
     #
     if [[ $_HTMLCMD == html ]]; then
-	_FILECOUNT=$(find $_HTMLDIR_PATH_BUILD -type f -name "*.html" | wc -l)
+	_FILECOUNT=$(find $_BUILD_SUBDIR_NAME -type f -name "*.html" | wc -l)
     else
 	startSkipping
     fi
@@ -429,8 +430,9 @@ function test_htmlRootidXsltparam () {
 	' └─ Wrong HTML file count:' \
 	"$_FILECOUNT_EXPECTED" "$_FILECOUNT"
     endSkipping
+
     # check xsltparam
-    egrep -- "$_XSLTPARAM" $_LOGFILE >/dev/null 2>&1
+    egrep -q -- "$_XSLTPARAM" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Param for XSLTPARAM is not correctly specified when generating HTML' \
 	"$?"
@@ -461,7 +463,7 @@ function test_htmlStatdir () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Fallback Styleroot specified on the command line was not used." \
@@ -472,7 +474,7 @@ function test_htmlStatdir () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_HTMLCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_HTMLCMD >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
@@ -482,7 +484,7 @@ function test_htmlStatdir () {
 
     # Testing Styleroot specified with --styleroot
     #
-    eval "$_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1"
+    $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_HTMLCMD >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Styleroot specified on the command line was not used." \
@@ -499,7 +501,7 @@ function test_htmlStatdir () {
 
     # Is the statdir correctly copied?
     #
-    eval "$_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD >/dev/null 2>&1"
+    $_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD >/dev/null 2>&1
 
     diff -qr ${_HTMLDIR_NAME_PATH}/static ${_STATIC_DIR} >/dev/null 2>&1
     assertTrue \
@@ -510,7 +512,7 @@ function test_htmlStatdir () {
 
     # Is the --statdir option correctly implemented?
     #
-    eval "$_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD --statdir=$_ALT_STATIC_DIR >/dev/null 2>&1"
+    $_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} $_HTMLCMD --statdir=$_ALT_STATIC_DIR >/dev/null 2>&1
 
     diff -qr ${_HTMLDIR_NAME_PATH}/static ${_ALT_STATIC_DIR} >/dev/null 2>&1
     assertTrue \
