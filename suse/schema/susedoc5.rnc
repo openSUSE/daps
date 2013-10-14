@@ -374,8 +374,15 @@ include "docbook.rnc"
   # db.xref = notAllowed
   # db.year = notAllowed
   
+  # Attributes
+  
   
   # Add other customizations:
+  
+  db.admonition.blocks =
+    # No caution
+    db.important | db.note | db.tip | db.warning
+  
   div {
     # We don't want block elements inside paras, only inlines are allowed
     db.para =
