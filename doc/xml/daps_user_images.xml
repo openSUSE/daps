@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -26,7 +26,7 @@
     </listitem>
     <listitem>
      <para>
-      the filename requirements for source images,
+      the file name requirements for source images,
      </para>
     </listitem>
     <listitem>
@@ -47,14 +47,14 @@
   <title>Supported Image Types</title>
   &daps-images-intro;
   &daps-img-formats;
-  <para>Image formats can be categorized into pixel-based image formats 
-  (also called bitmap formats) and vector-based image formats. 
-  In pixel-based image formats the data describes the characteristics of each 
-  individual pixel. In contrast to that, vector-based image formats contain a 
+  <para>Image formats can be categorized into pixel-based image formats
+  (also called bitmap formats) and vector-based image formats.
+  In pixel-based image formats the data describes the characteristics of each
+  individual pixel. In contrast to that, vector-based image formats contain a
   geometric description that can be rendered smoothly. Vector-based images are
-  resolution-independent&mdash;they can be displayed or printed as large 
+  resolution-independent&mdash;they can be displayed or printed as large
   or small as you wish without showing pixel artifacts.</para>
-  <para>From the supported image types listed above, only PNG is a pixel-based 
+  <para>From the supported image types listed above, only PNG is a pixel-based
   image format.</para>
   <important>
    <title>Limited PDF and EPS Image Support</title>
@@ -176,15 +176,15 @@
     </para>
    </important>
    <para>
-    A good open-source <acronym>SVG</acronym> editor is
+    A good open source <acronym>SVG</acronym> editor is
     <ulink url="http://inkscape.org/">Inkscape</ulink>, which is available
     for most operating systems. You can also create <acronym>SVG</acronym>
     files from many Adobe products, for instance, from Illustrator*. SVG is
     the preferred vector image format for &dapsacr;.
    </para>
    <remark role="idea">toms 2013-01-18: It would be nice -- although a
-     bit difficult -- to add a conversion matrix as an addition sect2. 
-     That would allow the reader what can he expect when he wants to 
+     bit difficult -- to add a conversion matrix as an addition sect2.
+     That would allow the reader what can he expect when he wants to
      convert from format X to format Y. (Maybe something for Nadja?) ;)
    </remark>
   </sect2>
@@ -226,7 +226,7 @@
   </para>
  </sect1>
  <sect1 id="sec.daps.user.imgs.req">
-  <title>Filename Requirements</title>
+  <title>File name Requirements</title>
    &daps-img-names-req;
   </sect1>
  <sect1 id="sec.daps.user.imgs.refer">
@@ -243,8 +243,8 @@
   <para>
    &dapsacr; offers a number of subcommands for managing images in a
    documentation project. By default, the output of the subcommands is a
-   list of image filenames (including the absolute path), all printed in one
-   line with the filenames separated by blanks, see
+   list of image file names (including the absolute path), all printed in one
+   line with the file names separated by blanks, see
    <xref linkend="ex.daps.graphics.output.default" xrefstyle="select:label"/>.
    This default output format is useful for piping (or copying and pasting)
    the output for use with another command.
@@ -258,7 +258,7 @@
   <para>
    For better on-screen reading (or for copying the output to an e-mail, for
    example), use the <parameter>--pretty</parameter> parameter. It adds a
-   line break after each filename, so that only one filename is shown per
+   line break after each file name, so that only one file name is shown per
    line&mdash;see
    <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>.
   </para>
@@ -266,11 +266,11 @@
   <example id="ex.daps.graphics.output.pretty">
    <title>Pretty-printed Output of an Image-related &dapsacr; Command</title>
    <screen>$ <command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty</command>
-<replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia 
-<replaceable>PATH</replaceable>/images/src/png/example_png1.png 
-<replaceable>PATH</replaceable>/images/src/png/example_png2.png 
-<replaceable>PATH</replaceable>/images/src/png/example_png3.png 
-<replaceable>PATH</replaceable>/images/src/svg/example_svg.svg 
+<replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia
+<replaceable>PATH</replaceable>/images/src/png/example_png1.png
+<replaceable>PATH</replaceable>/images/src/png/example_png2.png
+<replaceable>PATH</replaceable>/images/src/png/example_png3.png
+<replaceable>PATH</replaceable>/images/src/svg/example_svg.svg
 <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
   </example>
 
@@ -356,7 +356,7 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>Checking for Non-Unique Graphic Filenames</term>
+     <term>Checking for Non-Unique Graphic File Names</term>
      <listitem>
 <screen>$ daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;warn-images</screen>
       <para>
@@ -393,7 +393,7 @@
      <listitem>
 <screen>$ daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;xmlgraphics</screen>
       <para>
-       Lists all color images of the specified documentation project that have 
+       Lists all color images of the specified documentation project that have
        been generated by &dapsacr;.
       </para>
      </listitem>
@@ -403,7 +403,7 @@
      <listitem>
 <screen>$ daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;xmlgraphics-bw</screen>
       <para>
-        Lists all grayscale images of the specified documentation project that have 
+        Lists all grayscale images of the specified documentation project that have
        been generated by &dapsacr;.
       </para>
      </listitem>

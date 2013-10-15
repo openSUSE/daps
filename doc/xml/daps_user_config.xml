@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -95,7 +95,7 @@
 # The environment is set up using the following hierachy
 # (1 == always wins)
 #
-# 1. Command line 
+# 1. Command line
 #    - either as a real option
 #    - or as variable declaration (FOO=bar)
 #
@@ -104,7 +104,7 @@
 # 4. $DAPSROOT/etc/system-profile
 
 ## Key:         ASPELL_EXTRA_DICT
-## ----------------------             
+## ----------------------
 ## Description: Additional dictionary for spell checker
 ## Type:        Absolute path to distionary
 ## Default:     ""
@@ -113,7 +113,7 @@
 ASPELL_EXTRA_DICT=""
 
 ## Key:         ASPELL_LANG
-## ----------------------             
+## ----------------------
 ## Description: Language for spell checker
 ## Type:        String
 ## Default:     en_US
@@ -127,7 +127,7 @@ ASPELL_EXTRA_DICT=""
 ASPELL_LANG=en_US
 
 ## Key:         ASPELL_SKIP_TAGS
-## ----------------------             
+## ----------------------
 ## Description: list of DOcBook XML tags which content should _not_ be
 ##              spell-checked
 ## Type:        List
@@ -138,16 +138,16 @@ ASPELL_LANG=en_US
 # NOTE: Spece separated list of tags, needs to be enclosed in brackets
 #
 ASPELL_SKIP_TAGS=(
-    author 
+    author
     command
-    email                 
+    email
     envar
-    filename                
+    filename
     firstname
     guimenu
     keycap
-    literal                
-    option                
+    literal
+    option
     remark
     screen
     surname
@@ -158,7 +158,7 @@ ASPELL_SKIP_TAGS=(
 )
 
 ## Key:         BUILD_DIR
-## ----------------------             
+## ----------------------
 ## Description: Build directory where all daps generated files will go
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
@@ -168,12 +168,12 @@ ASPELL_SKIP_TAGS=(
 BUILD_DIR=""
 
 ## Key:         CB_OPTIONS
-## ------------------------             
+## ------------------------
 ## Description: Command line options for /usr/bin/checkbot
 ## Type:        String
 ## Default:     "--dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
 #
-# 
+#
 # Also see 'man 1 checkbot'. Do not change unless you really know what you do.
 #
 CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
@@ -216,7 +216,7 @@ COLOR="yes"
 COMMENT_STR="_comments"
 
 ## Key:         CONF_PREFIX
-## ------------------------             
+## ------------------------
 ## Description: Common prefix for all doc config files
 ## Type:        String
 ## Default:     "DC-"
@@ -258,7 +258,7 @@ DOCCONF_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
-## Key: DOCBOOK4_STYLE_URI        
+## Key: DOCBOOK4_STYLE_URI
 ## ------------------
 ## Description: URI to DocBook 4 stlysheets
 ## Type:        URI
@@ -271,7 +271,7 @@ DIA_OPTIONS="-t cairo-svg"
 #
 DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 
-## Key: DOCBOOK5_STYLE_URI        
+## Key: DOCBOOK5_STYLE_URI
 ## ------------------
 ## Description: URI to DocBook 5 stlysheets
 ## Type:        URI
@@ -284,7 +284,7 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 #
 DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
 
-## Key: DOCBOOK5_RNG_URI        
+## Key: DOCBOOK5_RNG_URI
 ## ------------------
 ## Description: URI to DocBook 5 Relax NG schema
 ## Type:        URI
@@ -303,7 +303,7 @@ DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbook.rng"
 #
 # Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
 # Is ignored for any other output format and has no effect on profiling.
-# This value can be set to "yes" using the -d switch on the command line 
+# This value can be set to "yes" using the -d switch on the command line
 # Also see COMMENTS and REMARKS
 #
 DRAFT="no"
@@ -324,7 +324,7 @@ DRAFT_STR="_draft"
 ## Type:        yesno
 ## Default:     "no"
 #
-# Useful to find errors within an epub file when devolping stylesheets  
+# Useful to find errors within an epub file when devolping stylesheets
 #
 EPUBCHECK="no"
 
@@ -344,9 +344,9 @@ EPUB_CSS=""
 #
 # When having specified custom stylesheets with STYLEROOT, the fallback
 # for styles not specified in the custom STYLEROOT are the DocBook stylesheets
-# Specify an alternative fallback with this option. Useful if you have a 
+# Specify an alternative fallback with this option. Useful if you have a
 # fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
-# for directory that only has fo styles, html versions of that document would 
+# for directory that only has fo styles, html versions of that document would
 # be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
 # directory containing your original custom stylesheets (which also have
 # html stylesheets) will create html versions with your custom styles. The
@@ -484,8 +484,8 @@ JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xer
 
 ## Key:         MAIN
 ## -----------------
-## Description: Filename of the set/book defining XML file
-## Type:        filename (filename only, no absolute path)
+## Description: File name of the set/book defining XML file
+## Type:        file name (file name only, no absolute path)
 ## Default:     ""
 #
 # Name of the MAIN XML file. Mandatory.
@@ -570,7 +570,7 @@ PROFVENDOR=""
 #
 # By default remarks are ignored when generating books. Set this parameter to
 # "yes" to include remarks. Useful for proofreading.
-# This value can be set to "yes" using the -r switch on the command line 
+# This value can be set to "yes" using the -r switch on the command line
 # Also see COMMENTS and DRAFT
 #
 REMARKS="no"
@@ -617,7 +617,7 @@ ROOTID=""
 #
 STYLEDEVEL=""
 
-## Key:      STYLEROOT     
+## Key:      STYLEROOT
 ## -------------------
 ## Description: Custom Stylesheet directory.
 ## Type:        Path to directory (without a trailing slash)
@@ -641,12 +641,12 @@ STYLEROOT=""
 #
 # If your XML sources are hosted on an SVN server, adds the following status
 # information for each file to HTML and PDF builds if set to "yes":
-#  * filename
+#  * file name
 #  * maintainer (content of SVN property doc:maintainer)
 #  * status (content of SVN property doc:status)
 # Useful for proofreading.
 # Implies that remarks are turned on.
-# This value can be set to "yes" using the -m switch on the command line 
+# This value can be set to "yes" using the -m switch on the command line
 # Also see REMARKS
 #
 USEMETA="no"
@@ -719,7 +719,7 @@ XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
 #
 XML_MAIN_CATALOG="/etc/xml/catalog"
 
-## Key: XSLTPARAM        
+## Key: XSLTPARAM
 ## --------------------
 ## Description: String passed to xsltproc for HTML and PDF builds
 ## Type:        number
