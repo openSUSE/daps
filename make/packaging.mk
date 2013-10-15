@@ -313,36 +313,44 @@ ifndef LOCDROP_EXPORT_DIR
 else
   LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
 endif
+
 ifdef USESVN
   TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR)))
   TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
+
 ifdef TO_TRANS_FILES
   NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
-  NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
+  ifneq "$(strip $(NO_TRANS_FILES))" ""
+    NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
+  endif
 endif
 
-TO_TRANS_IMGS := $(USED_ALL)
-TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
+ifneq "$(strip $(USED_ALL))" ""
+  TO_TRANS_IMGS := $(USED_ALL)
+  TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
+endif
 
 # get all images in the current set in case set and current book differ
 ifdef ROOTID
   USED_SET := $(shell $(XSLTPROC) --stringparam "xml.or.img=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
 
-  # USED_SET contains just the images names as mentioned in the XML sources
-  # (foo.png). The addprefix/addsuffix calls transform it into
-  # /bar/images/src/*/foo.*, wildcard resolves that string into existing files
-  # and sort removes the duplicates
-  #
-  USED_SET_ALL := $(sort $(wildcard \
+  ifneq "$(strip $(USED_SET))" ""
+    # USED_SET contains just the images names as mentioned in the XML sources
+    # (foo.png). The addprefix/addsuffix calls transform it into
+    # /bar/images/src/*/foo.*, wildcard resolves that string into existing files
+    # and sort removes the duplicates
+    #
+    USED_SET_ALL := $(sort $(wildcard \
        $(addprefix $(IMG_SRCDIR)/*/,$(addsuffix .*,$(basename $(USED_SET)) ))))
 
-  ifdef TO_TRANS_IMGS
-    NO_TRANS_IMGS := $(filter-out $(TO_TRANS_IMGS),$(USED_SET_ALL))
-  else
-    NO_TRANS_IMGS := $(USED_SET_ALL)
+    ifdef TO_TRANS_IMGS
+      NO_TRANS_IMGS := $(filter-out $(TO_TRANS_IMGS),$(USED_SET_ALL))
+    else
+      NO_TRANS_IMGS := $(USED_SET_ALL)
+    endif
+    NO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-setfiles-$(DOCNAME)$(LANGSTRING).tar.bz2
   endif
-  NO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-setfiles-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
 
 .PHONY: locdrop
@@ -354,7 +362,7 @@ locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
   ifndef USESVN
 	$(error $(shell ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"))
   endif
-  ifndef TO_TRANS_FILES
+  ifeq "$(strip $(TO_TRANS_FILES))" ""
 	$(error $(shell ccecho "error" "Fatal error: This book does not contain any files for translation"))
   endif
   ifndef DOCCONF
