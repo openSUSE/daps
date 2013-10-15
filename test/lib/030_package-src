@@ -68,7 +68,7 @@ function test_packagesrc () {
         "$?"
     assertTrue \
 	" └─ The resulting file (${_SRC_BUILD_PATH}) does not exist." \
-	"[ -f $_SRC_BUILD_PATH ]"
+	"[ -s $_SRC_BUILD_PATH ]"
     assertEquals \
 	" └─ The resulting filename does not match the one retrieved with --package-src-name" \
 	"$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"

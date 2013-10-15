@@ -75,7 +75,7 @@ function test_pdf () {
         "$?"
     assertTrue \
 	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
-	"[ -f $_PDFNAME ]"
+	"[ -s $_PDFNAME ]"
     assertEquals \
 	' └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name' \
 	"$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
@@ -97,7 +97,7 @@ function test_pdfFO () {
     fi
     assertTrue \
 	" └─ The FO file (${_FO_FILENAME}) does not exist anymore after having built the PDF" \
-	"[ -f $_FONAME ]"
+	"[ -s $_FONAME ]"
 }
 
 #--------------------------------

@@ -67,7 +67,7 @@ function test_epub () {
         "$?"
     assertTrue \
 	" └─ The resulting file (${_EPUB_BUILD_PATH}) does not exist." \
-	"[ -f $_EPUB_BUILD_PATH ]"
+	"[ -s $_EPUB_BUILD_PATH ]"
     assertEquals \
 	" └─ The resulting filename does not match the one retrieved with --epub-name" \
 	"$_EPUB_NAME_PATH" "$_EPUB_BUILD_PATH"

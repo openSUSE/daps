@@ -62,7 +62,7 @@ function test_text () {
         "$?"
     assertTrue \
 	" └─ The resulting file (${_TXT_BUILD_PATH}) does not exist." \
-	"[ -f $_TXT_BUILD_PATH ]"
+	"[ -s $_TXT_BUILD_PATH ]"
     assertEquals \
 	" └─ The resulting filename does not match the one retrieved with --text-name" \
 	"$_TXT_NAME_PATH" "$_TXT_BUILD_PATH"
