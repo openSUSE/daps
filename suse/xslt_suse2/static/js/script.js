@@ -208,11 +208,11 @@ function share( service ) {
   u = encodeURIComponent( document.URL );
   t = encodeURIComponent( document.title );
   if ( service == 'fb' ) {
-    shareURL = 'http://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
+    shareURL = 'https://www.facebook.com/sharer.php?u=' + u + '&amp;t=' + t;
     window.open(shareURL,'sharer','toolbar=0,status=0,width=626,height=436');
   }
     else if ( service == 'tw' ) {
-    shareURL = 'http://twitter.com/share?text=' + t + '&amp;url=' + u;
+    shareURL = 'https://twitter.com/share?text=' + t + '&amp;url=' + u;
     window.open(shareURL, 'sharer', 'toolbar=0,status=0,width=340,height=360');
   }
     else if ( service == 'gp' ) {
