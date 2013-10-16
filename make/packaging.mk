@@ -354,7 +354,7 @@ ifdef ROOTID
 endif
 
 .PHONY: locdrop
-ifdef DEF_FILE
+ifneq "$(strip $(DEF_FILE))" ""
   locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
