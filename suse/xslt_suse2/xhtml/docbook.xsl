@@ -508,14 +508,19 @@
     </div>
   </xsl:template>
 
-  <xsl:template name="body.class.attribute">
+  <xsl:template name="outerelement.class.attribute">
+    <!-- To accommodate ActiveDoc's needs, we add this to both body and
+         #_content.-->
+    <xsl:param name="node" select="'body'"/>
+
     <xsl:attribute name="class">
       <xsl:if test="($draft.mode = 'yes' or
                     ($draft.mode = 'maybe' and
                     ancestor-or-self::*[@status][1]/@status = 'draft'))
                     and $draft.watermark.image != ''"
-        >draft </xsl:if><xsl:if test="$is.chunk = 0">single </xsl:if><xsl:if test="$add.suse.footer = 0"
-        >nofooter </xsl:if>offline</xsl:attribute>
+        >draft </xsl:if><xsl:if test="$node = 'body'"><xsl:if test="$is.chunk = 0"
+        >single </xsl:if><xsl:if test="$add.suse.footer = 0">nofooter </xsl:if
+        >offline</xsl:if></xsl:attribute>
   </xsl:template>
 
 <xsl:template match="*" mode="process.root">
@@ -547,7 +552,7 @@
     </head>
     <body>
       <xsl:call-template name="body.attributes"/>
-      <xsl:call-template name="body.class.attribute"/>
+      <xsl:call-template name="outerelement.class.attribute"/>
       <div id="_outer-wrap">
         <div id="_white-bg">
           <div id="_header">
@@ -569,6 +574,9 @@
         <xsl:call-template name="user.header.content"/>
         <div id="_toc-bubble-wrap"></div>
         <div id="_content">
+          <xsl:call-template name="outerelement.class.attribute">
+            <xsl:with-param name="node" select="'id-content'"/>
+          </xsl:call-template>
           <xsl:call-template name="metadata"/>
 
           <xsl:apply-templates select="."/>

@@ -577,7 +577,7 @@
 
       <body>
         <xsl:call-template name="body.attributes"/>
-        <xsl:call-template name="body.class.attribute"/>
+        <xsl:call-template name="outerelement.class.attribute"/>
         <div id="_outer-wrap">
           <div id="_white-bg">
             <div id="_header">
@@ -610,6 +610,9 @@
 
           <xsl:call-template name="user.header.content"/>
           <div id="_content">
+            <xsl:call-template name="outerelement.class.attribute">
+              <xsl:with-param name="node" select="'id-content'"/>
+            </xsl:call-template>
             <xsl:call-template name="metadata"/>
 
             <xsl:copy-of select="$content"/>
