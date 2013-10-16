@@ -37,13 +37,22 @@
          (don't copy from here, for technical reasons I can't use hyphens and
          must use dashes). -->
 
-  <!-- Toggle the SUSE footer and SUSE e-mail button -->
+  <!-- Toggle the SUSE footer and SUSE e-mail button. Set to 0 if the
+       documentation won't be available at a suse.com address.-->
   <xsl:param name="suse.content" select="1"/>
     <!-- Ovverride with:
             ––xsltparam="'––param suse.content=0'"
          (don't copy from here, for technical reasons I can't use hyphens and
          must use dashes). -->
 
+  <!-- Toggle inclusion of @font-face CSS. Set to 1 if you want to host
+       the HTML on the internet or 0 if you are building for a locally
+       installed package. -->
+  <xsl:param name="build.for.web" select="1"/>
+    <!-- Override with:
+            ––xsltparam="'––param build.for.web=0'"
+         (don't copy from here, for technical reasons I can't use hyphens and
+         must use dashes). -->
 
 <!-- 1. Admonitions  ============================================ -->
   <!-- Use graphics in admonitions?  0=no, 1=yes -->
@@ -100,7 +109,10 @@ set       toc,title
   <xsl:param name="docbook.css.source"/>
     <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
-  <xsl:param name="html.stylesheet">static/css/style.css</xsl:param>
+  <xsl:param name="html.stylesheet">
+<xsl:if test="$build.for.web = 1">//static.opensuse.org/fonts/fonts.css</xsl:if>
+static/css/style.css
+</xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
   <xsl:param name="make.valid.html" select="1"/>
 
