@@ -46,13 +46,10 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
              --param "generate.permalink=0"  \
 	     --param "ulink.show=1" \
 	     --stringparam "draft.mode=$(DRAFT)" \
-             --stringparam "styleroot=$(dir $(STYLEIMG))"
+             --stringparam "styleroot=$(dir $(STYLEIMG))" \
+	     --stringparam "callout.graphics.path=$(STYLEIMG)/callouts/"
 
-#    --stringparam "draft.watermark.image=$(dir $(STYLEIMG))images/draft.png" \
-#    --stringparam "callout.graphics.path=$(STYLEIMG)/callouts/" \
-
-
-
+#	     --stringparam "draft.watermark.image=$(STYLEIMG)/draft.png"
 
 #----------
 # Settings depending on pdf or color-pdf
