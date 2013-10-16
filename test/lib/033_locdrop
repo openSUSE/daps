@@ -1,0 +1,219 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: locdrop
+#
+#
+# * Does locdrop correctly build?
+# * Are all files generated?
+# * Do the tarballs have the all files?
+# * Do the tarballs have the correct files?
+# * Is the reference PDF generated?
+# * Are the files retrieved from a DEF file added to the tarball?
+# * Is the --name option correctly implemented?
+# * Does the --nopdf option work correctly?
+# * Does the --export-dir function work correctly?
+
+_LOCDROP_NAME_DIR=""
+_LOCDROP_TEMPDIR=""
+_LOGFILE=""
+
+source lib/common_functions
+
+header "locdrop"
+
+function oneTimeSetUp() {
+    local _LOG_DIR
+
+    # Clean up the build directory
+    clean_build
+
+    _LOCDROP_NAME_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOCDROP_EXPORT_BOOKDIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting locdrop directory failed. Skipping tests"
+    fi
+
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_package-src.log
+
+    _LOCDROP_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/locdrop_XXXXXX)
+
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does locdrop correctly build?
+#
+function test_locdrop () {
+    local _BUILD_SUBDIR_NAME _LOCDROP_BUILD_PATH _PDF
+    local _TAR IMAGES_TAR_NOTRANS _TAR_TRANS
+
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE locdrop 2>/dev/null)
+    assertTrue \
+        ' └─ The locdrop command itself failed' \
+        "$?"
+    assertTrue \
+	" └─ The resulting file (${_LOCDROP_BUILD_PATH}) does not exist." \
+	"[ -s $_LOCDROP_BUILD_PATH ]"
+
+}
+
+#--------------------------------
+# * Are all files generated?
+# * Do the tarballs have the correct files?
+# * Is the reference PDF generated?
+# * Are the files retrieved from a DEF file added to the tarball?
+#
+function test_locdropFiles () {
+    local _ADDED_DC _FILE _MISSING _PDF _TAR_IMAGES _TAR_NOTRANS _TAR_TRANS
+
+    _ADDED_DC=DC-booktest_DEF
+
+    declare -a _ALL_FILES=( $_SET_FILES )
+    declare -a _TRANS_FILES=( "book.xml" "part_blocks.xml" "part_inlines.xml" )
+    declare -a _NOTRANS_FILES
+
+    # ------
+    # Tarball with XML files for translation
+    #
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TO_TRANS_TAR 2>/dev/null)
+    assertTrue \
+        ' └─ The command to determine the name of the translation tarball failed' \
+        "$?"
+    assertTrue \
+        " └─ The translation tarball ($_TAR_TRANS) does not exist or has size 0" \
+        "[[ -s $_TAR_TRANS ]]"
+
+    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_TRANS)
+    for _FILE in ${_TRANS_FILES[*]}; do
+	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the translation tarball" \
+        "$_MISSING"
+
+    # ------
+    # Tarball with XML files not translated
+    #
+    _TAR_NOTRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=NO_TRANS_TAR 2>/dev/null).bz2
+    assertTrue \
+        ' └─ The command to determine the name of the not-for-translation tarball failed' \
+        "$?"
+    assertTrue \
+        " └─ The not-for-translation tarball ($_TAR_NOTRANS) does not exist or has size 0" \
+        "[[ -s $_TAR_NOTRANS ]]"
+
+    # Get list of non-translated files by "subtracting" _TRANS_FILES from
+    # _SET_FILES (declared in run_tests.sh) 
+    #
+    # http://stackoverflow.com/questions/2312762/compare-difference-of-two-arrays-in-bash
+    oldIFS=$IFS IFS=$'\n\t'
+    _NOTRANS_FILES=$(comm -1 -3 <(echo "${_TRANS_FILES[*]}" | sort -u) <(echo "${_ALL_FILES[*]}" | sort -u))
+    IFS=$oldIFS
+	
+    # clean tmp and unpack new archive
+    rm -rf ${_LOCDROP_TEMPDIR}/*
+    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS)
+    for _FILE in ${_NOTRANS_FILES[*]}; do
+	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the not-for-translation tarball" \
+        "$_MISSING"
+
+    # ------
+    # Tarball with images "to translate"
+    #
+    _TAR_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TO_TRANS_IMG_TAR 2>/dev/null)
+    assertTrue \
+        ' └─ The command to determine the name of the image tarball failed' \
+        "$?"
+    assertTrue \
+        " └─ The image tarball ($_TAR_IMAGES) does not exist or has size 0" \
+        "[[ -s $_TAR_IMAGES ]]"
+
+    # clean tmp and unpack new archive
+    rm -rf ${_LOCDROP_TEMPDIR}/*
+    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
+    for _FILE in $_SET_IMAGES; do
+	[[ -f ${_LOCDROP_TEMPDIR}/images/src/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the images tarball" \
+        "$_MISSING"
+
+    # ------
+    # Tarball with images _not_ "to translate"
+    #
+    _TAR_NOTRANS_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=NO_TRANS_IMG_TAR 2>/dev/null)
+    assertTrue \
+        ' └─ The command to determine the name of the "not-for-translation" image tarball failed' \
+        "$?"
+    assertTrue \
+        " └─ The \"not-for-translation\" image tarball ($_TAR_IMAGES) does not exist or has size 0" \
+        "[[ -s $_TAR_IMAGES ]]"
+
+    # clean tmp and unpack new archive
+    rm -rf ${_LOCDROP_TEMPDIR}/*
+    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
+    for _FILE in $_SET_IMAGES; do
+	[[ -f ${_LOCDROP_TEMPDIR}/images/src/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the \"not-for-translation\" images tarball" \
+        "$_MISSING"
+
+    # ------
+    # PDF file
+    #
+    _PDF=$(basename $($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null))
+    assertTrue \
+        " └─ The refernce PDF (${_LOCDROP_NAME_DIR}/$_PDF) does not exist or has size 0" \
+        "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF ]]"
+
+    
+    # ------
+    # Added DC file
+    #
+    clean_build
+
+    $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
+
+    # clean tmp and unpack new archive
+    rm -rf ${_LOCDROP_TEMPDIR}/*
+    (cd $_LOCDROP_TEMPDIR && tar xfj $_TAR_NOTRANS)
+
+    assertTrue \
+	" └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
+        "[[ -f ${_LOCDROP_TEMPDIR}/$_ADDED_DC ]]"
+
+
+}
+
+
+
+
+
+
+
+# source shUnit2 test
+source $_SHUNIT2SRC
