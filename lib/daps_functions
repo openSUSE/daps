@@ -850,8 +850,8 @@ function build_locdrop () {
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
-    elif [[ -z "$P_DEF_FILE" && 0 != $VERBOSITY ]]; then
-        ccecho "warn" "Warning: No DEF file was specified"
+    elif [[ -z "$P_DEF_FILE" ]]; then 
+	[[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
