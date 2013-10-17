@@ -43,6 +43,9 @@ export _NO_SET_FILE="not_in_set.xml"
 export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps fig/fig_example.fig jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
 
+export _SET_ID="dblayouttest"
+
+
 # Tests
 declare -a _TESTS=( "lib/000_source-validation" )
 
