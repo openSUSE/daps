@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+                 type="text/xml" title="Profiling step"?>
+<!DOCTYPE article PUBLIC
+ "-//OASIS//DTD DocBook XML V4.5//EN"
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY tdg "DocBook: The Definitive Guide">
+
+]>
+
+
+
+<article lang="en" id="art.template">
+ <title>Daps-Tutorial: Basic knowledge</title>
+ <subtitle>Daps guide for beginners</subtitle>
+ 
+ <articleinfo>
+  <releaseinfo>
+   Build Date: <?dbtimestamp format="B d, Y"?>
+  </releaseinfo>
+  <author>
+   <firstname>Vanessa</firstname>
+   <surname>Wallfahrer</surname>
+  </author>
+ </articleinfo>
+
+
+ <sect1>
+  <title>How to begin</title>
+  <para> 
+   The following daps tutorial helps beginners to write and convert XML-files,
+   for example into PDF- or HTML-files. It is no previous xml-knowledge necessary.
+  </para>
+  <para>
+   First of all you need a XML compatible editor, for example emacs. Your
+   filename should always end with ".xml" to have a better overview. Advisable
+   especially for beginners is the daps-init file which creates a template for
+   daps with different examples. If you want to work without daps-init, you
+   have to paste this header (see <xref linkend="ex.header"/>):
+  </para>
+  <example id="ex.header">
+   <title>Header of a DocBook file</title>
+   <programlisting>&lt;?xml version="1.0" encoding="utf-8"?> <co id="co.header.xml"/>
+&lt;!DOCTYPE article PUBLIC <co id="co.header2.xml"/>
+"-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+&lt;!ENTITY tdg "DocBook: The Definitive Guide">
+
+]>
+  </programlisting>
+  <calloutlist>
+   <callout arearefs="co.header.xml">
+    <para>
+     Fix me
+    </para>
+   </callout>
+   <callout arearefs="co.header2.xml">
+    <para>
+     The general syntax for a document type declaration
+    </para>
+   </callout>
+  </calloutlist>
+  </example>
+  <para>
+   Don't be afraid if you don't understand the header. Just copy and paste it
+   in your file. 
+  </para>
+  <para>
+   First and foremost the most important thing you have to know about XML is that you always need a
+   starttag and a endtag. The content depends on which element you want to
+   create. The first decision you have to  make is whether you want to write a book or
+   an article. These two types of text can be created with xml. 
+   If you want to write an article you have to paste an article start- and
+   endtag. Between these two tags you can write your text.   
+  </para>
+  <programlisting>&lt;article lang="en" id="art.template">
+"Text"
+&lt;/article>   
+  </programlisting>
+  <para>
+   Otherwise you have to write "book" instead of article. In the following
+   tutorial i only describe how to write an article because the book-option is
+   almost equal. 
+  </para>
+  <sect2>
+   <title>Article info</title>
+   <para>
+    The next point to considered is the heading. To get a good and
+    professional look i recommend the following article info (see <xref linkend="ex.articleinfo"/>):  
+   </para>
+   <example id="ex.articleinfo">
+    <title>Article info header</title>
+   <programlisting>&lt;articleinfo>
+&lt;releaseinfo>Version 0.1&lt;/releaseinfo>
+&lt;releaseinfo>Revision: 0&lt;/releaseinfo>
+&lt;releaseinfo>
+Build Date: &lt;?dbtimestamp format="B d, Y"?>
+&lt;/releaseinfo>
+&lt;author>
+&lt;firstname>Vanessa<co id="co.author.xml"/>&lt;/firstname>
+&lt;surname>Wallfahrer<co id="co.author2.xml"/>&lt;/surname>
+&lt;/author>
+&lt;/articleinfo>
+   </programlisting>
+   <calloutlist>
+    <callout  arearefs="co.author.xml">
+     <para>
+     paste the firstname of the author 
+     </para>
+    </callout>
+    <callout arearefs="co.author2.xml">
+      <para>
+       paste the surname of the author
+     </para>
+    </callout>
+   </calloutlist>
+   </example>
+  </sect2>
+ </sect1>
+
+
+
+ <sect1>
+  <title>Basic Knowledge: text production</title>
+  <subtitle>structure of a text</subtitle>
+
+   <para>
+     
+   </para>
+
+   <sect2>
+    <title></title>
+   <para>
+    Subtitles
+   </para>
+   <para>
+    Paragraphs 
+   </para>
+   <para>
+    Steps
+   </para>
+   <para>
+    Substeps  
+   </para>
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>Basic knowledge: Pasting elements</title>
+   <para>
+    URL-links
+   </para>
+   <para>
+    Images 
+   </para>
+  </sect1>
+ 
+
+ <sect1>
+  <title>How to convert xml files into</title>
+  <para>
+   html
+  </para>
+  <para>
+   PDF 
+  </para>
+  <para>
+   Manpage 
+  </para>
+  <para>
+   text
+  </para>
+  <para>
+   EPUB 
+  </para>
+ </sect1>
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+</article>
