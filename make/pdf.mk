@@ -46,10 +46,7 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
              --param "generate.permalink=0"  \
 	     --param "ulink.show=1" \
 	     --stringparam "draft.mode=$(DRAFT)" \
-             --stringparam "styleroot=$(dir $(STYLEIMG))" \
-	     --stringparam "callout.graphics.path=$(STYLEIMG)/callouts/"
-
-#	     --stringparam "draft.watermark.image=$(STYLEIMG)/draft.png"
+             --stringparam "styleroot=$(dir $(STYLEIMG))"
 
 #----------
 # Settings depending on pdf or color-pdf
@@ -105,7 +102,10 @@ color-pdf: $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf
 #--------------
 # Generate fo
 #
-
+# the link to $(STYLEIMG) is needed in case the paths to callouts,
+# admonition and draft graphics are specified relatively in the
+# stylesheets (which is the case in the DocBook stylesheets)
+#
 $(FOFILE): | $(TMP_DIR)
 ifdef METASTRING
   $(FOFILE): $(PROFILEDIR)/METAFILE
@@ -127,6 +127,7 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Successfully created fo file $(FOFILE)"
   endif
+	(cd $(TMP_DIR); ln -sf $(STYLEIMG))
 
 #--------------
 # Generate PDF
