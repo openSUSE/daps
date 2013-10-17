@@ -41,7 +41,7 @@ function oneTimeSetUp() {
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
-    _LOGFILE=${_LOG_DIR}/make_package-src.log
+    _LOGFILE=${_LOG_DIR}/make_locdrop.log
 
     _LOCDROP_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/locdrop_XXXXXX)
 
@@ -64,8 +64,7 @@ function oneTimeTearDown() {
 # * Does locdrop correctly build?
 #
 function test_locdrop () {
-    local _BUILD_SUBDIR_NAME _LOCDROP_BUILD_PATH _PDF
-    local _TAR IMAGES_TAR_NOTRANS _TAR_TRANS
+    local _LOCDROP_BUILD_PATH
 
     _LOCDROP_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE locdrop 2>/dev/null)
     assertTrue \
@@ -85,15 +84,17 @@ function test_locdrop () {
 #
 function test_locdropFiles () {
     local _ADDED_DC _FILE _MISSING _PDF _TAR_IMAGES _TAR_NOTRANS _TAR_TRANS
+    local _TRANS_FILE _TRANS_IMAGE
 
     _ADDED_DC=DC-booktest_DEF
+    _TRANS_FILE="appendix.xml"
+    _TRANS_IMAGE="png/png_example2.png"
 
     declare -a _ALL_FILES=( $_SET_FILES )
-    declare -a _TRANS_FILES=( "book.xml" "part_blocks.xml" "part_inlines.xml" )
     declare -a _NOTRANS_FILES
 
     # ------
-    # Tarball with XML files for translation
+    # Tarball with XML file for translation
     #
     _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=TO_TRANS_TAR 2>/dev/null)
     assertTrue \
@@ -104,12 +105,9 @@ function test_locdropFiles () {
         "[[ -s $_TAR_TRANS ]]"
 
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_TRANS)
-    for _FILE in ${_TRANS_FILES[*]}; do
-	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
-    done
-    assertNull \
-        " └─ File(s) '$_MISSING' is/are missing in the translation tarball" \
-        "$_MISSING"
+    assertTrue \
+        " └─ File '$_TRANS_FILE' is missing in the translation tarball" \
+        "[ -f ${_LOCDROP_TEMPDIR}/xml/$_TRANS_FILE ]"
 
     # ------
     # Tarball with XML files not translated
@@ -123,13 +121,13 @@ function test_locdropFiles () {
         "[[ -s $_TAR_NOTRANS ]]"
 
     # Get list of non-translated files by "subtracting" _TRANS_FILES from
-    # _SET_FILES (declared in run_tests.sh) 
+    # _SET_FILES (declared in run_tests.sh)
     #
     # http://stackoverflow.com/questions/2312762/compare-difference-of-two-arrays-in-bash
     oldIFS=$IFS IFS=$'\n\t'
-    _NOTRANS_FILES=$(comm -1 -3 <(echo "${_TRANS_FILES[*]}" | sort -u) <(echo "${_ALL_FILES[*]}" | sort -u))
+    _NOTRANS_FILES=$(comm -1 -3 <(echo "$_TRANS_FILE" | sort -u) <(echo "${_ALL_FILES[*]}" | sort -u))
     IFS=$oldIFS
-	
+
     # clean tmp and unpack new archive
     rm -rf ${_LOCDROP_TEMPDIR}/*
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS)
@@ -154,33 +152,9 @@ function test_locdropFiles () {
     # clean tmp and unpack new archive
     rm -rf ${_LOCDROP_TEMPDIR}/*
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
-    for _FILE in $_SET_IMAGES; do
-	[[ -f ${_LOCDROP_TEMPDIR}/images/src/$_FILE ]] || _MISSING="$_MISSING $_FILE"
-    done
-    assertNull \
-        " └─ File(s) '$_MISSING' is/are missing in the images tarball" \
-        "$_MISSING"
-
-    # ------
-    # Tarball with images _not_ "to translate"
-    #
-    _TAR_NOTRANS_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=NO_TRANS_IMG_TAR 2>/dev/null)
     assertTrue \
-        ' └─ The command to determine the name of the "not-for-translation" image tarball failed' \
-        "$?"
-    assertTrue \
-        " └─ The \"not-for-translation\" image tarball ($_TAR_IMAGES) does not exist or has size 0" \
-        "[[ -s $_TAR_IMAGES ]]"
-
-    # clean tmp and unpack new archive
-    rm -rf ${_LOCDROP_TEMPDIR}/*
-    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
-    for _FILE in $_SET_IMAGES; do
-	[[ -f ${_LOCDROP_TEMPDIR}/images/src/$_FILE ]] || _MISSING="$_MISSING $_FILE"
-    done
-    assertNull \
-        " └─ File(s) '$_MISSING' is/are missing in the \"not-for-translation\" images tarball" \
-        "$_MISSING"
+        " └─ File '$_TRANS_IMAGE' is missing in the images tarball" \
+        "[ -f ${_LOCDROP_TEMPDIR}/images/src/$_TRANS_IMAGE ]"
 
     # ------
     # PDF file
@@ -190,7 +164,7 @@ function test_locdropFiles () {
         " └─ The refernce PDF (${_LOCDROP_NAME_DIR}/$_PDF) does not exist or has size 0" \
         "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF ]]"
 
-    
+
     # ------
     # Added DC file
     #
@@ -209,9 +183,50 @@ function test_locdropFiles () {
 
 }
 
+#--------------------------------
+# * Does locdrop correctly build?
+#
+function test_locdropRootid () {
+    local _LOCDROP_BUILD_PATH _LOCDROP_BUILD_PATH_EXPEXTED _ROOTID
+    local _TAR_NOTRANS_IMAGES
 
+    _ROOTID="appendix"
+    declare -a _NOTRANS_IMAGES=( $_SET_IMAGES )
 
+    clean_build
 
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug locdrop --rootid $_ROOTID 2>/dev/null | tail -n 1)
+    assertTrue \
+        ' └─ Building a locdrop with --rootid failed' \
+        "$?"
+    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating the locdrop' \
+	"$?"
+
+    # ------
+    # Tarball with images _not_ "to translate"
+    # (will only be generated if ROOTID is set)
+    #
+    _TAR_NOTRANS_IMAGES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --rootid $_ROOTID VARIABLE=NO_TRANS_IMG_TAR 2>/dev/null)
+    assertTrue \
+        ' └─ The command to determine the name of the "not-for-translation" image tarball failed' \
+        "$?"
+    assertTrue \
+        " └─ The \"not-for-translation\" image tarball ($_TAR_NOTRANS_IMAGES) does not exist or has size 0" \
+        "[[ -s $_TAR_NOTRANS_IMAGES ]]"
+
+    # clean tmp and unpack new archive
+    rm -rf ${_LOCDROP_TEMPDIR}/*
+    (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS_IMAGES)
+    for _FILE in ${_NOTRANS_FILES[*]}; do
+	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
+    done
+    assertNull \
+        " └─ File(s) '$_MISSING' is/are missing in the not-for-translation tarball" \
+        "$_MISSING"
+
+}
 
 
 
