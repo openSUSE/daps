@@ -258,14 +258,14 @@ function test_pdfRootid () {
     assertTrue \
 	' └─ Building an EPUB with --rootid failed ' \
        "$?"
-    egrep -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE >/dev/null 2>&1
+    egrep q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
 	"$?"
     _EPUB_FILENAME_BUILD=$(basename $_EPUB_BUILD_PATH)
     assertEquals \
 	' └─ The resulting EPUB filename does not match the ROOTID:' \
-	"$_EPUBNAME" "$_EPUBNAME_BUILD"
+	"$_EPUB_FILENAME_EXPECTED" "$_EPUB_FILENAME_BUILD"
 }
 
 # source shUnit2 test
