@@ -19,6 +19,7 @@
 <xsl:include href="component.xsl"/>
 <xsl:include href="synop.xsl"/>
 <xsl:include href="../common/l10n.xsl"/>
+<xsl:include href="../common/titles.xsl"/>
 <xsl:include href="html.xsl"/>
 <xsl:include href="admon.xsl"/>
 <!-- Overwrite with our own implementation -->

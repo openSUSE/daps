@@ -15,7 +15,7 @@
 <xsl:include href="fonts.xsl"/>
 <xsl:include href="../common/copy-nodes.xsl"/>
 <xsl:include href="../common/common.xsl"/>
-<!--<xsl:include href="../common/titles.xsl"/>-->
+<xsl:include href="../common/titles.xsl"/>
 <xsl:include href="../common/l10n.xsl"/>
 
 

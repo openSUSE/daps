@@ -17,5 +17,22 @@
   <xsl:call-template name="xref"/>
 </xsl:template>
   
+<!--
+   Temporary fix for version 1.78.1:
+   See upstream revision 9820. Remove this snippet, if there is a newer 
+   version available.
+
+-->
+<xsl:template match="ulink" mode="no.anchor.mode">
+  <xsl:param name="url" select="@url"/>
+  <xsl:choose>
+    <xsl:when test="count(child::node())=0">
+      <xsl:value-of select="$url"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 </xsl:stylesheet>
 
