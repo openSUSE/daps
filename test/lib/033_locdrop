@@ -14,6 +14,7 @@
 # * Do the tarballs have the correct files?
 # * Is the reference PDF generated?
 # * Are the files retrieved from a DEF file added to the tarball?
+# * Does the --rootid option work correctly?
 # * Is the --name option correctly implemented?
 # * Does the --nopdf option work correctly?
 # * Does the --export-dir function work correctly?
@@ -83,8 +84,8 @@ function test_locdrop () {
 # * Are the files retrieved from a DEF file added to the tarball?
 #
 function test_locdropFiles () {
-    local _ADDED_DC _FILE _MISSING _PDF _TAR_IMAGES _TAR_NOTRANS _TAR_TRANS
-    local _TRANS_FILE _TRANS_IMAGE
+    local _ADDED_DC _FILE _MISSING _PDF_NAME_PATH _TAR_IMAGES _TAR_NOTRANS
+    local  _TAR_TRANS _TRANS_FILE _TRANS_IMAGE
 
     _ADDED_DC=DC-booktest_DEF
     _TRANS_FILE="appendix.xml"
@@ -159,10 +160,10 @@ function test_locdropFiles () {
     # ------
     # PDF file
     #
-    _PDF=$(basename $($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null))
+    _PDF_NAME_PATH=$(basename $($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null))
     assertTrue \
-        " └─ The refernce PDF (${_LOCDROP_NAME_DIR}/$_PDF) does not exist or has size 0" \
-        "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF ]]"
+        " └─ The reference PDF (${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH) does not exist or has size 0" \
+        "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH ]]"
 
 
     # ------
@@ -180,11 +181,12 @@ function test_locdropFiles () {
 	" └─ $_ADDED_DC (added via DEF file) is missing in the source archive" \
         "[[ -f ${_LOCDROP_TEMPDIR}/$_ADDED_DC ]]"
 
-
 }
 
 #--------------------------------
-# * Does locdrop correctly build?
+# * Does the --rootid option work correctly?
+# * Does the "not-for-translation tarball" (only generated when a ROOTID is
+#   specified) have all files?
 #
 function test_locdropRootid () {
     local _LOCDROP_BUILD_PATH _LOCDROP_BUILD_PATH_EXPEXTED _ROOTID
@@ -203,6 +205,14 @@ function test_locdropRootid () {
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the locdrop' \
 	"$?"
+
+    # filename of the trans tarball
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --rootid $_ROOTID VARIABLE=TO_TRANS_TAR 2>/dev/null)
+
+    echo $_TAR_TRANS | grep -q $_ROOTID
+    assertTrue \
+       " └─ The resulting translation tarball name does not match the ROOTID" \
+       "$?"
 
     # ------
     # Tarball with images _not_ "to translate"
@@ -228,7 +238,85 @@ function test_locdropRootid () {
 
 }
 
+#--------------------------------
+# * Does the --nopdf option work correctly?
+#
 
+function test_locdropNopdf () {
+    local _LOCDROP_BUILD_PATH _PDF_NAME_PATH
 
+    clean_build
+
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --nopdf 2>/dev/null)
+    assertTrue \
+        ' └─ Building a locdrop with --nopdf failed' \
+        "$?"
+
+    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null)
+    assertFalse \
+        ' └─ A PDF was build despite having specified --nopdf' \
+        "[ -f ${_LOCDROP_NAME_DIR}/_PDF_NAME_PATH ]"
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+
+function test_locdropName () {
+    local _BUILD_SUBDIR_NAME _LOCDROP_BUILD_PATH _NAME _PDF_NAME_PATH
+    local _TAR_TRANS
+
+    _NAME="testsuite"
+
+    clean_build
+
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --name $_NAME 2>/dev/null)
+    assertTrue \
+        ' └─ Building a locdrop with --name failed' \
+        "$?"
+
+    # filename of the trans tarball
+    _TAR_TRANS=$($_DAPSEXEC -v0 -d $_DCFILE showvariable --name $_NAME VARIABLE=TO_TRANS_TAR 2>/dev/null)
+
+    _BUILD_SUBDIR_NAME=$(basename $(dirname "$_LOCDROP_BUILD_PATH"))
+    echo $_TAR_TRANS | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the transltation tarball filename" \
+       "$?"
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$_NAME" "$_BUILD_SUBDIR_NAME"
+}
+
+#--------------------------------
+# * Does the --export-dir function work correctly?
+#
+
+function test_locdropExportdir () {
+    local _EXPORT_DIR _FILE_NO_BUILD _FILE_NO_EXPECTED _LOCDROP_BUILD_PATH
+    local _DOCNAME
+
+    _FILE_NO_EXPECTED=4
+    _EXPORT_DIR=$_LOCDROP_TEMPDIR
+    rm -rf $_EXPORT_DIR/*
+
+    clean_build
+
+    _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --export-dir $_EXPORT_DIR 2>/dev/null)
+    assertTrue \
+        ' └─ Building a locdrop with --export-dir failed' \
+        "$?"
+
+    # We know that locdrop basically works (from the tests above), so it is
+    # sufficient to test whether an appropriate number of files is present
+    # in the export directory
+    #
+    _DOCNAME=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=DOCNAME 2>/dev/null)
+    _FILE_NO_BUILD=$(find $_LOCDROP_BUILD_PATH -name "*${_DOCNAME}*" -type f 2>/dev/null | wc -l)
+    assertEquals \
+        ' └─ The number of files in the export directory does not equal the expected value:' \
+        "$_FILE_NO_EXPECTED" "$_FILE_NO_BUILD"
+
+}
 # source shUnit2 test
 source $_SHUNIT2SRC
