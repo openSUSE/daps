@@ -21,7 +21,7 @@
                info/releaseinfo)[1]"/>
     <xsl:choose>
       <xsl:when test="$date.revision != ''">1</xsl:when>
-      <xsl:otherwise test="$date.revision != ''">0</xsl:otherwise>
+      <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
