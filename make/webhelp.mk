@@ -95,7 +95,7 @@ $(WEBHELP_DIR) $(WEBHELP_DIR)/images $(WEBHELP_DIR)/search/stemmers $(WEBHELP_DI
 #
 .PHONY: clean_webhelp
 clean_webhelp: | $(WEBHELP_DIR)
-	rm -rf $(WEBHELP_DIR)/.[^.]* $(WEBHELP_DIR)/*
+	rm -rf $(WEBHELP_DIR)
 
 #---------------
 # Webhelpgraphics

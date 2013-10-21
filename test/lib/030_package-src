@@ -39,7 +39,11 @@ function oneTimeSetUp() {
     fi
     _LOGFILE=${_LOG_DIR}/make_package-src.log
 
-    _SRC_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/srcfile_list_XXXXXX)
+    # create temp dir
+    #
+    make_tempdir "_SRC_TEMPDIR"
+    _SRC_TEMPDIR="${_SRC_TEMPDIR}/packagesrc"
+    mkdir -p "$_SRC_TEMPDIR" || exit_on_error " Creating a temporary directory failed. Skipping tests"
 
 }
 
@@ -121,7 +125,7 @@ function test_packagesrcFilelist () {
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --def-file=${_DOC_DIR}/DEF-booktest 2>/dev/null)
 
     # clean tmp and unpack new archive
-    rm -rf ${_SRC_TEMPDIR}/*
+    rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
     (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH)
 
     assertTrue \
@@ -182,7 +186,7 @@ function test_packagesrcSetDate () {
 	"$?"
 
     # clean tmp and unpack new archive
-    rm -rf ${_SRC_TEMPDIR}/*
+    rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
     (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH xml/$_MAIN)
 
     grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null

@@ -188,7 +188,7 @@ $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 # This target is only needed when CLEAN_DIR=1
 .PHONY: clean_html
 clean_html: | $(HTML_DIR)
-	rm -rf $(HTML_DIR)/.[^.]* $(HTML_DIR)/*
+	rm -rf $(HTML_DIR)
 
 #---------------
 # Copy static and inline images

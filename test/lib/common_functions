@@ -7,12 +7,6 @@
 #
 # Testing DAPS: Common functions
 #
-# ---------
-# Remove the build directory
-#
-function clean_build() {
-    rm -rf "${_DOC_DIR}/build"
-}
 
 # ---------
 # Usage
@@ -22,11 +16,18 @@ function usage () {
 }
 
 # ---------
+# Remove the build directory
+#
+function clean_build() {
+    rm -rf "${_DOC_DIR}/build"
+}
+
+# ---------
 # Verbose error handling
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
-    clean_daps
+    clean_build
     exit 1;
 }
 
@@ -37,6 +38,22 @@ function header () {
     echo
     echo "Test: $1"
     echo "=================================================="
+}
+
+# ---------
+# Create tempdir
+# 
+
+function make_tempdir () {
+    # Expects variable name and sets it to the path of the generated temp dir
+    local _TMPDIR
+    [[ -z $1 ]] && exit_on_error "${FUNCNAME[0]} was called with a empty parameter"
+    _TMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/XXXXXXXXXX)
+    if [ $? -eq 0 ]; then
+	eval "$1='$_TMPDIR'"
+    else
+	exit_on_error " Creating a temporary directory failed. Skipping tests"
+    fi
 }
 
 # --------

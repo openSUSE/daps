@@ -28,7 +28,7 @@ source lib/common_functions
 header "locdrop"
 
 function oneTimeSetUp() {
-    local _LOG_DIR
+    local _LOG_DIR _TMPDIR
 
     # Clean up the build directory
     clean_build
@@ -44,8 +44,11 @@ function oneTimeSetUp() {
     fi
     _LOGFILE=${_LOG_DIR}/make_locdrop.log
 
-    _LOCDROP_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/locdrop_XXXXXX)
-
+    # create temp dir
+    #
+    make_tempdir "_LOCDROP_TEMPDIR"
+    _LOCDROP_TEMPDIR="${_LOCDROP_TEMPDIR}/locdrop"
+    mkdir -p "$_LOCDROP_TEMPDIR" || exit_on_error " Creating a temporary directory failed. Skipping tests"
 }
 
 # Post
@@ -130,7 +133,7 @@ function test_locdropFiles () {
     IFS=$oldIFS
 
     # clean tmp and unpack new archive
-    rm -rf ${_LOCDROP_TEMPDIR}/*
+    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS)
     for _FILE in ${_NOTRANS_FILES[*]}; do
 	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
@@ -151,7 +154,7 @@ function test_locdropFiles () {
         "[[ -s $_TAR_IMAGES ]]"
 
     # clean tmp and unpack new archive
-    rm -rf ${_LOCDROP_TEMPDIR}/*
+    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
     assertTrue \
         " └─ File '$_TRANS_IMAGE' is missing in the images tarball" \
@@ -174,7 +177,7 @@ function test_locdropFiles () {
     $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
 
     # clean tmp and unpack new archive
-    rm -rf ${_LOCDROP_TEMPDIR}/*
+    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR && tar xfj $_TAR_NOTRANS)
 
     assertTrue \
@@ -227,7 +230,7 @@ function test_locdropRootid () {
         "[[ -s $_TAR_NOTRANS_IMAGES ]]"
 
     # clean tmp and unpack new archive
-    rm -rf ${_LOCDROP_TEMPDIR}/*
+    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS_IMAGES)
     for _FILE in ${_NOTRANS_FILES[*]}; do
 	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
@@ -297,8 +300,8 @@ function test_locdropExportdir () {
     local _DOCNAME
 
     _FILE_NO_EXPECTED=4
-    _EXPORT_DIR=$_LOCDROP_TEMPDIR
-    rm -rf $_EXPORT_DIR/*
+    _EXPORT_DIR="$_LOCDROP_TEMPDIR"
+    rm -rf "$_EXPORT_DIR" && mkdir -p "$_EXPORT_DIR"
 
     clean_build
 

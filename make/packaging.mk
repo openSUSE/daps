@@ -456,4 +456,4 @@ $(DESKTOPFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	  $(XSLTPROCESSOR)
 	BZIP2="--best" tar cjf $@ --absolute-names \
 	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
-	rm -rf $(DESKTOP_FILES_DIR)/*
+	rm -rf $(DESKTOP_FILES_DIR)

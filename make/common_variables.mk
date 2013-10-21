@@ -22,6 +22,9 @@ SHELL := /bin/bash
 # Some variables need to be preset from the wrapper script
 # Double-check whther they are set
 #
+ifndef BOOK
+  $(error $(shell ccecho "error" "Fatal error: BOOK is not set"))
+endif
 ifndef BUILD_DIR
   $(error $(shell ccecho "error" "Fatal error: No path to build directory set"))
 endif

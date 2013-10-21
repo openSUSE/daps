@@ -9,8 +9,8 @@
 #
 .PHONY: clean
 clean:
-	rm -rf $(PROFILE_PARENT_DIR)/*
-	rm -rf $(TMP_DIR)/*
+	rm -rf $(PROFILE_PARENT_DIR)
+	rm -rf $(TMP_DIR)
 	@ccecho "info" "Successfully removed all profiled and temporary files."
 
 .PHONY: clean-images
@@ -20,15 +20,15 @@ clean-images:
 
 .PHONY: clean-package
 clean-package:
-	rm -rf $(PACK_DIR)/*
+	rm -rf $(PACK_DIR)
 	@ccecho "info" "Successfully removed all generated package data for $(DOCCONF)"
 
 .PHONY: clean-results
 clean-results:
-	rm -rf $(RESULT_DIR)/*
+	rm -rf $(RESULT_DIR)
 	@ccecho "info" "Successfully removed all generated books for $(DOCCONF)"
 
 .PHONY: clean-all real-clean
 clean-all real-clean:
-	rm -rf $(BUILD_DIR)/.[^.]* $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR)
 	@ccecho "info" "Successfully removed all generated content"
