@@ -144,10 +144,14 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 # HTML
 #
 .PHONY: html
-html: list-images-multisrc list-images-missing copy_static_images
+ifeq ($(CLEAN_DIR), 1)
+  html: clean_html
+endif
+html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
   html: $(ONLINE_IMAGES) copy_inline_images
 endif
+html: copy_static_images
 html: $(HTML_RESULT) 
 	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
@@ -155,10 +159,11 @@ html: $(HTML_RESULT)
 # HTML-SINGLE
 #
 .PHONY: single-html
-single-html: list-images-multisrc list-images-missing copy_static_images
+single-html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
   single-html: $(ONLINE_IMAGES) copy_inline_images
 endif
+single-html: copy_static_images
 single-html: $(HTMLSINGLE_RESULT)
 	@ccecho "result" "SINGLE-HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
@@ -170,6 +175,7 @@ jsp: list-images-multisrc list-images-missing copy_static_images
 ifdef ONLINE_IMAGES
   jsp: $(ONLINE_IMAGES) copy_inline_images
 endif
+jsp: copy_static_images
 jsp: $(HTML_RESULT) 
 	@ccecho "result" "Find the JSP book at:\n$<"
 
@@ -187,7 +193,7 @@ $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 # before creating the files
 # This target is only needed when CLEAN_DIR=1
 .PHONY: clean_html
-clean_html: | $(HTML_DIR)
+clean_html:
 	rm -rf $(HTML_DIR)
 
 #---------------
@@ -199,9 +205,9 @@ clean_html: | $(HTML_DIR)
 .PHONY: copy_static_images
 ifneq ($(IS_STATIC),static)
   copy_static_images: | $(HTML_DIR)/static
-    ifdef HTML_CSS
-      copy_static_images: | $(HTML_DIR)/static/css
-    endif
+  ifdef HTML_CSS
+    copy_static_images: | $(HTML_DIR)/static/css
+  endif
   copy_static_images: $(STYLEIMG)
     ifeq ($(STATIC_HTML), 1)
 	tar cph --exclude-vcs -C $(dir $<) images | \
@@ -211,6 +217,9 @@ ifneq ($(IS_STATIC),static)
     endif
 else
   copy_static_images: | $(HTML_DIR)/static
+  ifdef HTML_CSS
+    copy_static_images: | $(HTML_DIR)/static/css
+  endif
   copy_static_images: $(STYLEIMG)
     ifeq ($(STATIC_HTML), 1)
 	tar cph --exclude-vcs -C $(dir $<) static | \
@@ -245,9 +254,6 @@ copy_inline_images: $(ONLINE_IMAGES)
 # temporarily overwrite styleseet settings such as margins
 #
 
-ifeq ($(CLEAN_DIR), 1)
-  $(HTML_RESULT): clean_html
-endif
 ifdef METASTRING
   $(HTML_DIR)/index.html: $(PROFILEDIR)/METAFILE
 endif
