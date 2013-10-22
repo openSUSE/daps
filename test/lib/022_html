@@ -240,29 +240,25 @@ function test_htmlRemarksDraftMeta () {
 }
 
 #--------------------------------
-# * Does the --css switch work?
-# * Does the --html5 switch produce XHTML5 ?
+# * Does the --clean switch work correctly?
 #
 
-function test_htmlCSS_HTML5_Clean () {
-    local _CSS_BUILD _CSS_FILE _CSS_PATH _TO_CLEAN
+function test_htmlClean () {
+    local _TO_CLEAN
 
-    _CSS_FILE="test.css"
-    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
-    _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
     _TO_CLEAN="${_HTMLDIR_NAME_PATH}/.cleantest"
 
-    clean_build
-
-    # Testing --clean by ceating a file in the result dir. It should
+    # Testing --clean by creating a file in the result dir. It should
     # be deleted when running DAPS  with --clean
     #
     mkdir -p ${_HTMLDIR_NAME_PATH}
     touch $_TO_CLEAN >/dev/null 2>&1
 
-    $_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --css=${_CSS_PATH} --html5 --clean >/dev/null 2>&1
+    clean_build
+
+    $_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --clean >/dev/null 2>&1
     assertTrue \
-       "' └─ The $_HTMLCMD command with --css and --html5 failed" \
+       "' └─ The $_HTMLCMD command with --clean failed" \
         "$?"
     assertTrue \
 	" └─ The result directory does not contain index.html" \
@@ -271,6 +267,35 @@ function test_htmlCSS_HTML5_Clean () {
     assertFalse \
 	" └─ The --clean option did not work--the testfile has not been deleted" \
 	"[ -f $_TO_CLEAN ]"
+
+    # Test for errors when running two --clean after another
+    #
+    $_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --clean >/dev/null 2>&1
+    assertTrue \
+       "' └─ A second run of $_HTMLCMD --clean failed" \
+        "$?"
+}    
+
+#--------------------------------
+# * Does the --css switch work?
+# * Does the --html5 switch produce XHTML5 ?
+#
+
+function test_htmlCSS_HTML5 () {
+    local _CSS_BUILD _CSS_FILE _CSS_PATH
+
+    _CSS_FILE="test.css"
+    _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
+    _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
+
+    clean_build
+
+    $_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --html5 --css $_CSS_PATH >/dev/null 2>&1
+
+    assertTrue \
+       "' └─ The $_HTMLCMD command with --html5 and --css failed" \
+        "$?"
+
     # Test for HTML5
     #
     grep -q "<\!DOCTYPE html>" ${_HTMLDIR_NAME_PATH}/index.html 2>/dev/null
@@ -299,6 +324,8 @@ function test_htmlStatic () {
     _CSS_FILE="test.css"
     _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
+
+    clean_build
 
     $_DAPSEXEC -v0 -d $_DCFILE $_HTMLCMD --static --css $_CSS_PATH >/dev/null 2>&1
     assertTrue \

@@ -145,7 +145,7 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 #
 .PHONY: html
 ifeq ($(CLEAN_DIR), 1)
-  html: clean_html
+  html: $(shell rm -rf $(HTML_DIR))
 endif
 html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
@@ -159,6 +159,9 @@ html: $(HTML_RESULT)
 # HTML-SINGLE
 #
 .PHONY: single-html
+ifeq ($(CLEAN_DIR), 1)
+  single-html: $(shell rm -rf $(HTML_DIR))
+endif
 single-html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
   single-html: $(ONLINE_IMAGES) copy_inline_images
@@ -171,7 +174,10 @@ single-html: $(HTMLSINGLE_RESULT)
 # JSP
 #
 .PHONY: jsp
-jsp: list-images-multisrc list-images-missing copy_static_images
+ifeq ($(CLEAN_DIR), 1)
+  jsp: $(shell rm -rf $(HTML_DIR))
+endif
+jsp: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
   jsp: $(ONLINE_IMAGES) copy_inline_images
 endif
@@ -188,13 +194,6 @@ jsp: $(HTML_RESULT)
 #
 $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 	mkdir -p $@
-
-# option --clean removes the contents of the HTML result directory
-# before creating the files
-# This target is only needed when CLEAN_DIR=1
-.PHONY: clean_html
-clean_html:
-	rm -rf $(HTML_DIR)
 
 #---------------
 # Copy static and inline images
@@ -276,9 +275,6 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 #---------------
 # Generate HTML SINGLE from profiled xml
 #
-ifeq ($(CLEAN_DIR), 1)
-  $(HTMLSINGLE_RESULT): clean_html
-endif
 ifdef METASTRING
   $(HTMLSINGLE_RESULT): $(PROFILEDIR)/METAFILE
 endif
