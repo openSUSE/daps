@@ -110,7 +110,7 @@ set       toc,title
     <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
   <xsl:param name="html.stylesheet">
-<xsl:if test="$build.for.web = 1">static/css/fonts.css</xsl:if>
+<xsl:if test="$build.for.web = 1">//static.opensuse.org/fonts/fonts.css</xsl:if>
 static/css/style.css
 </xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
@@ -160,6 +160,8 @@ task before
 <!-- 20. Graphics =============================================== -->
   <xsl:param name="img.src.path">images/</xsl:param><!-- DB XSL Version >=1.67.1 -->
   <xsl:param name="make.graphic.viewport" select="0"/> <!-- Do not create tables around graphics. -->
+  <xsl:param name="link.to.self.for.mediaobject" select="1"/> <!-- Create links to the image itself around images. -->
+
 
 <!-- 21. Chunking =============================================== -->
   <!-- The base directory of chunks -->
