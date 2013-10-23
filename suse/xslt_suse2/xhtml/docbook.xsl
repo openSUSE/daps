@@ -615,11 +615,6 @@
         <xsl:with-param name="script.filename" select="$daps.header.js.custom"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="$daps.header.js.draft != ''">
-      <xsl:call-template name="make.script.link">
-        <xsl:with-param name="script.filename" select="$daps.header.js.draft"/>
-      </xsl:call-template>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="user.footer.content">

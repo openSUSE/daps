@@ -110,7 +110,7 @@ set       toc,title
     <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
   <xsl:param name="html.stylesheet">
-<xsl:if test="$build.for.web = 1">//static.opensuse.org/fonts/fonts.css</xsl:if>
+<xsl:if test="$build.for.web = 1">static/css/fonts.css</xsl:if>
 static/css/style.css
 </xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
@@ -194,11 +194,6 @@ task before
   <xsl:param name="daps.header.logo.alt">Logo</xsl:param>
   <xsl:param name="daps.header.js.library">static/js/jquery-1.10.2.min.js</xsl:param>
   <xsl:param name="daps.header.js.custom">static/js/script.js</xsl:param>
-  <xsl:param name="daps.header.js.draft">
-    <xsl:if test="$draft.mode = 'yes' or
-                  ($draft.mode = 'maybe' and
-                   ancestor-or-self::*[@status][1]/@status = 'draft')"
-                  >static/js/draft.js</xsl:if></xsl:param>
 
   <xsl:param name="add.suse.footer" select="$suse.content"/>
 
