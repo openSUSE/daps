@@ -33,7 +33,13 @@
    examples and at the end, how to convert your file. 
   </para>
  </abstract>
-
+<sect1>
+<title>For whom is this tutorial?</title>
+<para>
+ This tutorial is for DAPS-beginners and everybody who already worked a
+ little bit with DAPS. 
+</para>
+</sect1>
  <sect1>
   <title>What is DAPS?</title>
   <para>
@@ -67,6 +73,11 @@
    <step>
     <para>
      Enter your root password. 
+    </para>
+   </step>
+   <step>
+    <para>
+     Install Emacs with zypper:
     </para>
     <screen># zypper in emacs</screen>
    </step>
@@ -140,7 +151,7 @@
     <para>
      For working without <command>daps-init</command>, create a folder with
      your project name and two subfolders, called <filename>xml</filename> and
-     <filename>images</filename>. Open your terminal:
+     <filename>images</filename>. Open your terminal.
     </para>
     <screen>$ HOME/tutorial: mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      </step>
@@ -199,6 +210,10 @@
     directory structure.
    </para>
   </important>
+  <para>
+   We have built up the indispensable directory structure and have made
+   all preparations. Now it is your turn to write your text!    
+  </para>
  </sect1>
 
 
@@ -209,10 +224,10 @@
    <title>Identifying Start and End tags</title>
    <para>
     First and foremost the most important thing you have to know about XML is that you always need a
-    starttag and an endtag. The content depends on which element you want to
+    start tag and an end tag. The content depends on which element you want to
     create. Decide what you want to write: a book or
-    an article. If you want to write an article you have to paste an article start- and
-    endtag. In the last section, you have already created the basic
+    an article. If you want to write an article, paste an article start- and
+    end tag. In the last section, you have already created the basic
     structure. Between these two tags,
     write your text as shown (see <xref linkend="ex.tags"/>):   
    </para>
@@ -394,7 +409,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
     <title>HTML Page with an Itemized List</title>
     <mediaobject>
      <imageobject>
-      <imagedata fileref="procedurechilirezept.png"/>
+      <imagedata fileref="procedurechilirezept.png" width="70%"/>
       </imageobject>
      </mediaobject>
    </figure>
@@ -517,6 +532,9 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  <title>Integrating Remote Links and Cross References</title>
  <sect3>
   <title>Remote Links</title>
+  <para>
+   Integrate an internet link in your tutorial to refer to a HTML page. 
+  </para>
  <example>
   <title>Integrating Remote Link</title>
   <programlisting>&lt;para>
@@ -526,38 +544,57 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  </example>
  
 <figure>
- <title></title>
+ <title>Example for a Remote Link</title>
  <mediaobject>
   <imageobject>
-   <imagedata fileref="linkchilirezept.png"/>
+   <imagedata fileref="linkchilirezept.png" width="70%"/>
   </imageobject>
  </mediaobject>
 </figure>
  </sect3>
  <sect3>
   <title>Cross References</title>
+  <para>
+   Link with cross references to paragraphs or examples. 
+  </para>
   <example>
    <title>Integrating Cross References</title>
    <programlisting>&lt;para>
- How to prepare see &lt;xref linkend="ex.preparation"/>
+ How to prepare see &lt;xref linkend="ex.preparation"/><co id="co.references.xml"/>
 &lt;/para>
 
 ...
 
 
-&lt;title id="ex.preparation">Preparation&lt;/title>
+&lt;title id="ex.preparation">Preparation&lt;/title><co id="co.references2.xml"/>
     
    </programlisting>
+   <calloutlist>
+    <callout arearefs="co.references.xml">
+     <para>
+      With <command>&lt;xref linkend="ex.preparation"/></command> do you set a link to the
+      following <quote>Preparation</quote> title. 
+     </para>
+    </callout>
+    <callout arearefs="co.references2.xml">
+     <para>
+      Set <command>id=ex.preparation</command> at the paragraph, you want to refer to. 
+     </para>
+    </callout>
+   </calloutlist>
   </example>
 
 <figure>
- <title></title>
+ <title>Cross Reference Example</title>
 <mediaobject>
  <imageobject>
-  <imagedata fileref="referencechilirezept.png"/>
+  <imagedata fileref="referencechilirezept.png" width="70%"/>
  </imageobject>
 </mediaobject>
 </figure>
+<para>
+ As you can see in the picture, the underlined part is a link to the title <quote>Preparation</quote>. 
+</para>
  </sect3>
 </sect2>
 </sect1>
@@ -570,7 +607,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
   <title>Convert your XML Files</title>
   <para>
    Convert your XML-file whenever you want to, no matter if it is finished or
-   you want to see the temporary result. Convert it as often as you like. 
+   you want to see the temporary result. Convert as often as you like. 
   </para>
   <sect2>
    <title>Convert your XML file into PDF</title>
