@@ -606,6 +606,14 @@
 
   <xsl:template name="user.head.content">
     <xsl:param name="node" select="."/>
+    <!-- Quirk script mostly for Chrome 30 on Nexus 7/Android 4.3. It shouldn't
+         hurt on other Android platforms, either.
+         Embedding it like this is ugly but should save some loading time.-->
+    <script type="text/javascript">
+      if ( navigator.userAgent.toLowerCase().indexOf('android') != -1 ) {
+        document.write('<link rel="stylesheet" type="text/css" href="//static.opensuse.org/fonts/fonts-nolocal.css"></link>');
+      }
+    </script>
     <xsl:if test="$daps.header.js.library != ''">
       <xsl:call-template name="make.script.link">
         <xsl:with-param name="script.filename" select="$daps.header.js.library"/>
