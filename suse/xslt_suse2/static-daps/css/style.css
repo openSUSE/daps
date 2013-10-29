@@ -206,7 +206,7 @@ html, body {
     margin: 0 0 0 10px;
     height: 36px;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
     background-color: #EFEFF0;
     border-radius: 18px;
 }
@@ -228,7 +228,7 @@ html, body {
     margin: -4px 5px 0 0;
     padding: 0;
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 
 .book-icon, .overview-icon, .toc-icon, .find-icon, .tools-icon {
@@ -1410,13 +1410,10 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
     color: #FFF;
 }
 
-.permalink {
-    opacity: 0;
-    font-size: 75%;
-    text-decoration: none;
-    color: #999;
+.permalink, .report-bug {
+    opacity: 0.3;
     font-weight: normal;
-    line-height: 100%;
+    text-decoration: none;
     transition: opacity 0.2s ease-in-out 0.1s;
     /* Clean the below up in Q3 2013 or so... */
     -moz-transition: opacity 0.2s ease-in-out 0.1s;
@@ -1424,13 +1421,40 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
     -o-transition: opacity 0.2s ease-in-out 0.1s;
 }
 
-.permalink:hover, .permalink:focus, .permalink:active {
+.permalink {
+    font-size: 75%;
+    color: #999;
+    line-height: 100%;
+}
+
+.report-bug {
+    color: #333;
+    font-size: 10px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    padding: 0 3px;
+    border-bottom: 1px solid #FFF;
+    background-color: #EEE;
+    text-transform: uppercase;
+    display: inline-block;
+    float: right;
+}
+
+.permalink:hover, .permalink:focus, .permalink:active,
+.report-bug:hover, .report-bug:focus, .report-bug:active {
     color: #3465A4;
     text-decoration: none !important;
 }
 
-*:hover > .permalink {
+*:hover > .permalink, *:hover > .report-bug {
     opacity: 1;
+}
+
+.report-bug:hover, .report-bug:focus, .report-bug:active {
+    color: #000;
+    border-color: #333;
+    background-color: #DDD;
 }
 
 .line .toc {
@@ -1589,7 +1613,7 @@ p, td {
     hyphens: auto;
 }
 
-.ulink, .email {
+.ulink, .email, .phrase {
     -moz-hyphens: none;
     hyphens: none;
 }
