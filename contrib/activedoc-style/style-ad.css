@@ -1,7 +1,55 @@
+.clearme {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+::selection { /* Green Selections */
+    background-color: #439239;
+    color: #FFF;
+}
+
+::-moz-selection {
+    background-color: #439239;
+    color: #FFF;
+}
+
+body {
+    background-color: #FFF;
+    font-family: 'Open Sans', 'DejaVu Sans', 'Verdana', sans-serif;
+    line-height: 140%;
+}
+
+html, body {
+    height: 100%;
+    min-width: 200px;
+    font-size: 16px;
+}
+
+#_content > .set, #_content > .book,
+#_content > .article, #_content > .part, #_content > .chapter,
+#_content > .preface, #_content > .appendix, #_content > .glossary,
+#_content > .reference, #_content > .refentry, #_content > .bibliography,
+#_content > .index {
+    overflow: hidden;
+}
+
+#_content, .figure {
+    position: relative;
+}
+
+#_content {
+    min-height: 139px;
+    clear: both;
+    min-width: 150px;
+    z-index: 0;
+}
+
 .arch-arrow-start, .arch-arrow-end, .ulink:after {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
+
 #_content a[id] {
     position: relative;
     top: -33px;
@@ -9,13 +57,16 @@
     width: 0;
     height: 0;
 }
+
 #_content [id]:target > span, #_content .admonition[id]:target > h6 {
     background-color: rgba(255,255,0,0.3);
     transition: background-color 0.2s ease-out 0.3s;
+    /* Clean the below up in Q3 2013 or so... */
     -moz-transition: background-color 0.2s ease-out 0.3s;
     -webkit-transition: background-color 0.2s ease-out 0.3s;
     -o-transition: background-color 0.2s ease-out 0.3s;
 }
+
 .ulink:after {
     content: "\0020\2197";
     color: transparent;
@@ -28,42 +79,17 @@
     position: relative;
     top: 2px;
 }
+
 .legalnotice .ulink:after {
     background-position: -216px -101px;
     width: 18px;
     height: 10px;
 }
+
 #_content .screen a[id] {
     display: none;
 }
-div.version-info {
-    color: #439239;
-    font-weight: normal;
-    background-color: rgba(255,255,255,0.7);
-    padding: 3px 5px;
-    line-height: 120%;
-    float: right;
-    margin: 5px 0 10px;
-    font-size: 13px;
-    border-radius: 3px;
-}
-.single div.version-info {
-    position: relative;
-    top: 70px;
-}
-h6.version-info {
-    margin: 75px 0 0;
-    padding: 5px 7px;
-    font-size: 24px;
-    color: #FFF;
-    background-color: #76AD2D;
-    float: left;
-    line-height: 100%;
-}
-.book h6.version-info + div h1.title, .article h6.version-info + div h1.title,
-.set h6.version-info + div h1.title {
-    padding-top: 0;
-}
+
 .book .title, .set .title, .article .title {
     font-size: 48px;
     font-weight: 600;
@@ -73,10 +99,12 @@ h6.version-info {
     color: #439239;
     padding: 70px 0 50px;
 }
+
 .book .title .citetitle, .set .title .citetitle,
 .article .title .citetitle {
     font-style: normal;
 }
+
 .set .subtitle, .book .subtitle, .article .subtitle {
     font-size: 28px;
     font-weight: normal;
@@ -85,6 +113,7 @@ h6.version-info {
     width: 100%;
     clear: both;
 }
+
 .title, .chapter .title, .preface .title,
 .appendix .title, .bibliography .title,
 .reference .title, .part .title, .glossary .title {
@@ -95,12 +124,14 @@ h6.version-info {
     width: 100%;
     clear: both;
 }
+
 .single .title, .single .chapter .title,
 .single .preface .title, .single .appendix .title,
 .single .bibliography .title, .single .reference .title,
 .single .part .title, .single .article .title {
     padding-top: 100px;
 }
+
 .sect1 .subtitle, .chapter .subtitle {
     font-size: 16px;
     font-weight: normal;
@@ -110,6 +141,7 @@ h6.version-info {
     width: 100%;
     clear: both;
 }
+
 .sect1 .title, .single .sect1 .title,
 .section .title, .single .section .title,
 .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
@@ -120,12 +152,14 @@ h6.version-info {
     padding: 50px 0 5px;
     text-align: left;
 }
+
 .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
 .section .section .title, .single .section .section .title {
     font-size: 22px;
     padding: 40px 0 0;
     text-align: left;
 }
+
 .sect3 .title, .single .sect3 .title,
 .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
 .section .section .section .title, .single .section .section .section .title  {
@@ -134,6 +168,7 @@ h6.version-info {
     padding: 33px 0 0;
     text-align: left;
 }
+
 .sect4 .title, .single .sect4 .title,
 .sect5 .title, .single .sect5 .title,
 .section .section .section .title, .single .section .section .section .title  {
@@ -145,95 +180,129 @@ h6.version-info {
     z-index: 1;
     text-align: left;
 }
+
 .sect4 .title, .section .section .section .section .title {
     font-weight: 600;
 }
+
 .sect5 .title, .section .section .section .section .section .title {
     font-weight: normal;
 }
+
 .legal-section p {
     color: #333 !important;
     font-size: 12px !important;
 }
+
 .legal-section .screen {
     color: #666 !important;
     font-size: 11px !important;
 }
+
 .legal-section .sect2 .title {
     font-size: 16px;
 }
+
 .legal-section .sect3 .title {
     font-size: 12px;
 }
+
 .name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
 .qandaset .title {
     color: #439239;
 }
+
 a:hover .name, a:focus .name, a:active .name,
-.bubble a.leads-to-page:hover .name, a.leads-to-page:focus .name,
-a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
-.refentrytitle a:active {
+.refentrytitle a:hover, .refentrytitle a:focus, .refentrytitle a:active {
     text-decoration: underline;
 }
-.bubble a:hover .name, .bubble a:focus .name, .bubble a:active .name {
-    text-decoration: none;
-}
+
 .number, .subtitle {
     color: #666;
 }
+
 .title em, .subtitle em {
     font-style: normal;
 }
+
 .page-bottom a:hover .number, .page-bottom a:focus .number,
 .page-bottom a:active .number {
     color: #68C05E;
 }
-#_bubble-toc .number {
-    color: #CCC;
-}
-#_bubble-toc .name {
-    color: #FFF;
-}
-.permalink {
-    opacity: 0;
-    font-size: 75%;
-    text-decoration: none;
-    color: #999;
+
+.permalink, .report-bug {
+    opacity: 0.3;
     font-weight: normal;
-    line-height: 100%;
+    text-decoration: none;
     transition: opacity 0.2s ease-in-out 0.1s;
+    /* Clean the below up in Q3 2013 or so... */
     -moz-transition: opacity 0.2s ease-in-out 0.1s;
     -webkit-transition: opacity 0.2s ease-in-out 0.1s;
     -o-transition: opacity 0.2s ease-in-out 0.1s;
 }
-.permalink:hover, .permalink:focus, .permalink:active {
+
+.permalink {
+    font-size: 75%;
+    color: #999;
+    line-height: 100%;
+}
+
+.report-bug {
+    color: #333;
+    font-size: 10px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    padding: 0 3px;
+    border-bottom: 1px solid #FFF;
+    background-color: #EEE;
+    text-transform: uppercase;
+    display: inline-block;
+    float: right;
+}
+
+.permalink:hover, .permalink:focus, .permalink:active,
+.report-bug:hover, .report-bug:focus, .report-bug:active {
     color: #439239;
     text-decoration: none !important;
 }
-*:hover > .permalink {
+
+*:hover > .permalink, *:hover > .report-bug {
     opacity: 1;
 }
+
+.report-bug:hover, .report-bug:focus, .report-bug:active {
+    color: #000;
+    border-color: #333;
+    background-color: #DDD;
+}
+
 .line .toc {
     padding: 0 30px 24px;
 }
+
 .line {
     margin: 17px 0 36px 0;
     border-bottom: 1px solid #439239;
     width: 100%;
 }
+
 .toc a {
     text-decoration: none;
 }
+
 .legalnotice {
     margin: 40px 0 0;
     padding: 10px 0 0;
 }
+
 .legalnotice p, .legalnotice td {
     font-size: 12px;
     color: #666;
     line-height: 140%;
     margin: 5px 0 0 0;
 }
+
 .admonition {
     border-width: 1px;
     border-radius: 3px;
@@ -241,46 +310,58 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
     padding: 10px;
     margin: 17px 0 24px;
 }
+
 .tip {
     border-color: #439239;
     background: #FFF url(../images/dots-green.png) repeat-x scroll top;
 }
+
 .note {
     border-color: #666;
     background: #FFF url(../images/dots-darkgray.png) repeat-x scroll top;
 }
+
 .note ul, .note .orderedlist, .warning ul, .warning .orderedlist {
     color: #666;
 }
+
 .important {
     border-color: #BB7B03;
     background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
 }
+
 .important ul, .important .orderedlist {
     color: #BB7B03;
 }
+
 .warning, .caution {
     border-color: #8C0000;
     background: #FFF url(../images/dots-red.png) repeat-x scroll top;
 }
+
 .admonition > h6 {
     font-weight: 600;
     vertical-align: middle;
     display: table-cell;
     height: 36px;
 }
+
 .tip > h6 {
     color: #439239;
 }
+
 .note > h6 {
     color: #333;
 }
+
 .important > h6 {
     color: #BB7B03;
 }
+
 .warning > h6, .caution > h6 {
     color: #8C0000;
 }
+
 .symbol {
     width: 36px;
     height: 36px;
@@ -289,22 +370,30 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
     float: left;
     overflow: hidden;
 }
+
 .admonition p {
     margin: 10px 0 0 !important;
 }
+
+/* Text styles */
+
 #_content span, #_content a, #_content p, #_content em, #_content strong {
     position: relative;
     z-index: 2;
 }
+
 em, i, .guimenu {
     font-style: italic;
 }
+
 em .guimenu, i .guimenu, .question em {
     font-style: normal;
 }
+
 strong, b, .imprint-label, .version-info .productname, .version-info .productnumber, .toc-title, .formalpara-title {
     font-weight: 600;
 }
+
 .arch {
     background-color: #7DC24D;
     border: 1px solid #439239;
@@ -318,53 +407,66 @@ strong, b, .imprint-label, .version-info .productname, .version-info .productnum
     text-transform: uppercase;
     line-height: 20px;
 }
+
 .arch-arrow-start, .arch-arrow-end {
     display: inline-block;
     height: 22px;
     vertical-align:bottom;
 }
+
 .arch-arrow-start {
     background-position: -24px -88px;
     width: 13px;
     margin-left: -3px;
 }
+
 .arch-arrow-end {
     background-position: -47px -88px;
     width: 25px;
 }
+
 p, td {
     -moz-hyphens: auto;
     hyphens: auto;
 }
-.ulink, .email {
+
+.ulink, .email, .phrase {
     -moz-hyphens: none;
     hyphens: none;
 }
+
 p, .simplelist td {
     color: #000;
     text-align: left;
     margin: 10px 0 0;
 }
+
 .abstract, .highlights {
     margin: 24px 0 0;
     font-size: 18px;
     line-height: 140%;
 }
+
 .abstract p, .highlights p, .toc-title {
     color: #333;
 }
+
 .abstract p:first-child, .highlights p:first-child {
     margin-top: 0;
 }
+
 .abstract .titlepage, .highlights .titlepage {
     display: none;
 }
+
 .abstract .titlepage + p, .highlights .titlepage + p {
     margin-top: 0;
 }
+
 .abstract li:first-child p:first-child, .highlights li:first-child p:first-child {
     margin-top: 0;
 }
+
 .abstract + .authorgroup, .highlights + .authorgroup,
 .abstract + .author, .highlights + .author,
 .abstract + .corpauthor, .highlights + .corpauthor,
@@ -373,14 +475,17 @@ p, .simplelist td {
 .abstract + .date, .highlights + .date {
     margin: 10px 0 0;
 }
+
 .authorgroup, .othercredit, .editor, .date {
     color: #333;
 }
+
 .ulink, .link, .xref, .email, .glosssee,
-.glossseealso, .indexterm, .qanda-toc a {
+.glossseealso, .indexterm {
     color: #439239;
     text-decoration: none;
 }
+
 .title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
 .figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
 .itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
@@ -392,6 +497,7 @@ p, .simplelist td {
 .itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
     text-decoration: underline;
 }
+
 .xref:hover, .xref:focus, .xref:active,
 .xref:visited:hover, .xref:visited:focus, .xref:visited:active,
 .link:hover, .link:focus, .link:active,
@@ -405,17 +511,17 @@ p, .simplelist td {
 .glossseealso:hover, .glossseealso:focus, .glossseealso:active,
 .glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
 .indexterm:hover, .indexterm:focus, .indexterm:active,
-.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active,
-.qanda-toc a:hover, .qanda-toc a:focus, .qanda-toc a:active,
-.qanda-toc a:visited:hover, .qanda-toc a:visited:focus, .qanda-toc a:visited:active {
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active {
     color: #439239;
     text-decoration: underline;
 }
+
 .xref:visited, .ulink:visited, .link:visited, .email:visited,
 .glosssee:visited, .glossseealso:visited,
 .indexterm:visited {
     color: #5C3566;
 }
+
 .title .xref:hover, .title .xref:focus,.title .xref:active,
 .subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
 .table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
@@ -429,9 +535,11 @@ p, .simplelist td {
     color: #439239;
     text-decoration: none;
 }
+
 p a:visited {
     color: #5C3566;
 }
+
 code, .command, .keycap, .replaceable {
     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     font-weight: normal;
@@ -442,28 +550,35 @@ code, .command, .keycap, .replaceable {
     display: inline-block;
     line-height: 120%;
 }
+
 code, .command, .keycap {
     font-style: normal;
 }
+
 code code, code .command, .command code, code .replaceable,
 .command .replaceable, .replaceable code, .replaceable .command {
     padding: 0;
     border: none;
 }
 
+
 .name code, .name .command, a .command, a code,
 .admonition h6 .command, .admonition h6 code {
     color: inherit;
 }
+
 .admonition h6 .command, .admonition h6 code {
     border-color: #D1D1D3;
 }
+
 code {
     font-weight: normal;
 }
+
 .command {
     font-weight: 600;
 }
+
 .screen-wrap {
     padding: 10px;
     background-color: #EFEFF0;
@@ -471,9 +586,11 @@ code {
     margin: 5px 0;
     border: 1px solid #999;
 }
+
 .example .screen-wrap {
     margin: 10px 0 24px;
 }
+
 .screen {
     font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     color: #333;
@@ -483,6 +600,7 @@ code {
     background-color: #EFEFF0;
     text-align: left;
 }
+
 .screen code, .screen .command, .screen .replaceable {
     border-radius: 0;
     background-color: transparent;
@@ -490,25 +608,32 @@ code {
     border: none;
     padding: 0;
 }
+
 .screen code {
     color: #333;
 }
 
+
 .screen .command {
     color: #306928;
 }
+
 .calloutlist {
     margin: 10px 0 24px;
 }
+
 .calloutlist td[width="5%"] {
     width: 45px;
 }
+
 .example + .calloutlist {
     margin: -14px 0 24px;
 }
+
 .calloutlist table {
     width: 100%;
 }
+
 .callout {
     display: inline-block;
     padding: 1px 6px 1.5px 5px;
@@ -516,22 +641,26 @@ code {
     border-radius: 10px;
     background-color: #439239;
     color: #FFF;
-    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    font-family: 'Open Sans', DejaVu Sans, Verdana, sans-serif;
     font-size: 13px;
     line-height: 13px;
     font-weight: 600;
 }
+
 .calloutlist .callout {
     position: relative;
     top: 2px;
     float: right;
 }
+
 .variablelist, .toc {
     margin: 24px 0;
 }
+
 .line .toc {
     margin: 0;
 }
+
 .variablelist dt, .glossary dt {
     font-weight: 600;
     color: #000;
@@ -541,29 +670,34 @@ code {
     top: -33px;
     z-index: 1;
 }
+
 .toc dt {
     margin-bottom: 5px;
 }
+
 .indexdiv h3 {
     font-weight: 600;
     padding-bottom: 10px;
 }
 
-.variablelist dd, .glossary dd, .toc dd, .qanda-toc dd,
-.indexdiv dd, .answer {
+
+.variablelist dd, .glossary dd, .toc dd, .indexdiv dd {
     margin: 0 0 17px 0;
     padding: 0 0 0 30px;
 }
+
 .list-of-figures dl, .list-of-tables dl,
 .list-of-examples dl, .list-of-procedures dl,
 .list-of-equations dl {
     margin: 5px 0 17px 0;
     padding: 0 0 0 30px;
 }
+
 .variablelist dd > p, .glossary dd > p,
 .toc dd > p {
     margin: 0;
 }
+
 div.figure {
     max-width: 100%;
     min-height: 60px;
@@ -575,6 +709,7 @@ div.figure {
     padding-top: 33px;
     top: -33px;
 }
+
 div.figure .mediaobject {
     max-width: 100%;
     min-height: 60px;
@@ -587,6 +722,7 @@ div.figure .mediaobject {
     border-left: 1px solid #202020;
     border-right: 1px solid #202020;
 }
+
 .figure img {
     padding: 0;
     background-color: #FFF;
@@ -599,29 +735,33 @@ div.figure .mediaobject {
     display: block;
 }
 
-
 .figure-title {
     padding: 10px;
     margin: 0;
     width: auto;
 }
+
 div.figure .figure-title-wrap {
     background-color: #202020;
     width: 100%;
     overflow: hidden;
 }
+
 div.figure a {
     height: 0;
     width: 0;
 }
+
 div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
     color: #76AD2D;
     text-decoration: none;
     font-weight: normal;
 }
+
 div.figure .name, div.figure .permalink {
     color: #FFF;
 }
+
 .informalfigure img {
     max-width: 100%;
     display: block;
@@ -631,6 +771,7 @@ div.figure .name, div.figure .permalink {
     border: 1px solid #202020;
     width: auto;
 }
+
 .keycap {
     color: #333;
     font-size: 0.75em;
@@ -644,15 +785,18 @@ div.figure .name, div.figure .permalink {
     white-space: nowrap;
     vertical-align: 0.2em;
 }
+
 a:hover .keycap, a:focus .keycap, a:active .keycap,
 a:hover .command, a:focus .command, a:active .command,
 a:hover code, a:focus code, a:active code {
     border-color: #439239;
 }
+
 .key-connector {
     margin: 0 -1px;
     color: #666;
 }
+
 .procedure-title, .table-title, .example-title,
 .figure-title, .orderedlist-title, .variablelist-title,
 .itemizedlist-title, .qandadiv-title {
@@ -662,34 +806,49 @@ a:hover code, a:focus code, a:active code {
     text-align: left;
     line-height: 120%;
 }
+
 .table-title, .example-title, .procedure-title,
-.variablelist-title, .itemizedlist-title, .qandadiv-title, .qandaentry {
+.variablelist-title, .itemizedlist-title {
     position: relative;
     top: -33px;
     padding-top: 33px;
     z-index: 1;
 }
-.example-title, .procedure-title, .orderedlist-title, .qandadiv-title {
+
+.example-title, .procedure-title, .orderedlist-title {
     margin: 24px 0 -33px;
 }
+
+.qandadiv-title {
+    margin: 33px 0 0;
+}
+
 .itemizedlist-title {
     margin: 24px 0 -41px;
 }
+
 .table-title {
     margin: 24px 0 -23px;
 }
+
 .variablelist-title {
     margin: 24px 0 -50px;
 }
+
 .qandaentry {
-    margin: -33px 0 22px;
+    margin: 15px 0 0;
+    position: relative;
+    z-index: 0;
 }
-.qanda-toc + .qandaentry {
-    padding-top: 53px;
+
+.free-id {
+    position: relative;
+    top: -33px;
+    left: -1px;
+    width: 0.01px;
+    height: 0.01px;
 }
-.qandaentry:last-child {
-    margin: -33px 0 -23px;
-}
+
 .procedure-title code, .procedure-title .command, .procedure-title .keycap,
 .table-title code, .table-title .command, .table-title .keycap,
 .example-title code, .example-title .command, .example-title .keycap,
@@ -704,8 +863,6 @@ a:hover code, a:focus code, a:active code {
     border-left: 3px solid #9CC897;
     font-weight: normal;
     margin: 17px 0 17px;
-    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
-    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
     padding: 3px 5px 6px 2px;
     background-color: #F7FAF6;
     display: block;
@@ -759,8 +916,6 @@ ol.substeps {
 }
 
 .table-contents, .informaltable {
-    /* Yup, let's make this scroll... While ugly, there seems to be no better
-    way to avoid the table running off the page border...(?) */
     overflow: auto;
 }
 
@@ -830,58 +985,158 @@ ul {
     color: #439239;
     list-style-type: disc;
 }
-.qanda-toc {
-    margin-bottom: 45px;
-}
+
 .qandadiv {
-    margin: 0 0 40px 0;
-    border-bottom: 1px solid #efeff0;
+    margin: 0 0 40px 0;#
 }
-.qandadiv:last-child {
-    border-bottom: none;
-}
+
 .answer .table-title, .answer .screen-wrap, .answer .variablelist {
     margin-top: 10px;
 }
+
 li p {
     font-weight: normal;
 }
+
 .procedure > p {
     margin: 0 10px 5px;
 }
+
 div.itemizedlist {
     margin: 0 0 24px;
 }
-.question p {
-    font-size: 20px;
-    font-style: italic;
+
+.question p, .question code, .question .literal {
     color: #666;
 }
+
+.question p {
+    font-style: italic;
+}
+
+.js-on .question {
+    cursor: pointer;
+}
+
+.js-on .question:hover p, .js-on .question:focus p, .js-on .active .question p {
+    color: #000;
+}
+
+.js-on .question:hover code, .js-on .question:focus code,
+.js-on .active .question code, .js-on .question:hover .literal,
+.js-on .question:focus .literal, .js-on .active .question .literal {
+    color: #333;
+}
+
+.question {
+    position: relative;
+}
+
 .question p + p {
     margin-top: 2px;
+}
+
+.answer {
+    padding: 0 0 17px;
+}
+
+.js-on .question:before {
+    content: '';
+    display: block;
+    margin: 4px 0 0;
+    width: 17px;
+    height: 15px;
+    float: left;
+    background-image: url(../images/arrow.png);
+    background-position: -98px 0;
+    background-repeat: no-repeat;
+}
+
+.js-on .question:hover:before, .js-on .question:focus:before {
+    background-position: -8px 0;
+}
+
+.js-on .active .question:before {
+    background-position: -70px 0;
+}
+
+.js-on .answer {
+    display: none;
+}
+
+.js-on .qandaentry.active .answer {
+    display: block;
 }
 
 .blockquote p {
     font-style: italic;
     color: #333;
 }
+
 div.blockquote {
     margin: 17px 35px;
 }
+
+.remark, .doc-status {
+    background-color: #E6E0E8;
+    color: #000;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.remark {
+    padding: 1px 5px;
+    border-left: 3px solid #5C3566;
+}
+
+.remark .remark {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.doc-status {
+    padding: 10px;
+}
+
+#_content > .doc-status {
+    margin: 0 auto;
+    min-width: 380px;
+    max-width: 978px;
+}
+
+.doc-status li {
+    color: #000;
+}
+
+.ds-message {
+    font-style: italic;
+}
+
+p.ds-message {
+    margin: 0 !important;
+}
+
+.ds-label {
+    font-weight: 600;
+}
+
+.ds-head {
+    font-style: normal;
+    font-size: 22px;
+}
+
 @media print {
-    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
-        display: none;
-    }
-    #_share-print {
-        visibility: hidden;
-    }
+
     .figure, .informalfigure, .admonition, p, table {
         page-break-inside: avoid;
     }
+
     .title {
         page-break-after: avoid;
         break-after: avoid;
     }
+
     .ulink:after {
         color: inherit;
         background-image: none;
@@ -889,28 +1144,28 @@ div.blockquote {
         height: auto;
     }
 }
+
 @media only screen and (max-width: 480px) {
-    #_footer, #_content > .set, #_content > .book, #_content > .article, #_content > .part,
-    #_content > .chapter, #_content > .preface, #_content > .appendix,
-    #_content > .glossary, #_content > .reference, #_content > .refentry,
-    #_content > .bibliography, #_content > .index {
-        padding: 0 10px;
-    }
+
     .line .toc {
         padding-left: 0;
         padding-right: 0;
     }
+
     code, .command {
         display: inline;
     }
+
     #_content ul, #_content ol {
         padding-left: 10px;
     }
+
     .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
     .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
-    .toc dd, .qanda-toc dd, .indexdiv dd, .answer {
+    .toc dd, .indexdiv dd {
         padding-left: 10px;
     }
+
     .admonition .symbol {
         float: none;
         padding-left: calc(50% - 18px);
@@ -918,12 +1173,14 @@ div.blockquote {
         padding-left: -webkit-calc(50% - 18px);
         padding-bottom: 10px;
     }
+
     .screen-wrap {
         border-left: none;
         border-right: none;
         border-radius: 0;
         margin-right: -10px;
     }
+
     .example-contents > .screen-wrap, .admonition > .screen-wrap,
     .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
     .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
@@ -932,6 +1189,7 @@ div.blockquote {
         margin-left: -10px;
         margin-right: -10px;
     }
+
     div.figure {
         max-width: -moz-calc(100% + 20px);
         max-width: -webkit-calc(100% + 20px);
@@ -940,14 +1198,17 @@ div.blockquote {
     #_content ol.procedure {
         padding-left: 20px;
     }
+
     .book .title, .set .title, .article .title {
         font-size: 36px;
     }
+
     .title, .chapter .title, .preface .title,
     .appendix .title, .bibliography .title,
     .reference .title, .part .title, .glossary .title {
         font-size: 30px;
     }
+
     .sect1 .title, .single .sect1 .title,
     .section .title, .single .section .title,
     .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
@@ -956,46 +1217,55 @@ div.blockquote {
     .book .subtitle, .article .subtitle {
         font-size: 22px;
     }
+
     .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
     .section .section .title, .single .section .section .title {
         font-size: 20px;
     }
+
     .sect3 .title, .single .sect3 .title,
     .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
     .section .section .section .title, .single .section .section .section .title  {
         font-size: 18px;
     }
 }
+
 @media only screen {
     .informalfigure img, .figure img {
         max-height: 70%;
     }
 }
+
 @media only screen and (max-height: 1490px) {
     .informalfigure img, .figure img {
         max-height: 1140px;
     }
 }
+
 @media only screen and (max-height: 1090px) {
     .informalfigure img, .figure img {
         max-height: 900px;
     }
 }
+
 @media only screen and (max-height: 970px) {
     .informalfigure img, .figure img {
         max-height: 724px;
     }
 }
+
 @media only screen and (max-height: 790px) {
     .informalfigure img, .figure img {
         max-height: 600px;
     }
 }
+
 @media only screen and (max-height: 690px) {
     .informalfigure img, .figure img {
         max-height: 518px;
     }
 }
+
 @media only screen and (max-height: 490px) {
     .informalfigure img, .figure img {
         max-height: 390px;
