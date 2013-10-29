@@ -53,7 +53,7 @@ if [[ -f $USER_CONFIG ]]; then
     source $USER_CONFIG
 fi
 
-ARGS=$(getopt -o d:hr: -l dapsroot:,docconfig:,help,rootelement: -n $ME -- "$@")
+ARGS=$(getopt -o d:hr: -l dapsroot:,docdir:,help,rootelement:,title:,date: -n $ME -- "$@")
 
 eval set -- "$ARGS"
 
@@ -83,10 +83,13 @@ while true ; do
             fi
 	    shift 2
 	    ;;
+
         --) shift ; break ;;
         *) exit_on_error "Wrong parameter: $1" ;;
     esac
 done
+
+
 
 [[ -z "$DOC_DIR" ]] && exit_on_error "You must specify a directory with -d. See \"$ME -h for details"
 # default ROOTELEMENT is book
