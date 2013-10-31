@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
@@ -53,7 +53,7 @@ if [[ -f $USER_CONFIG ]]; then
     source $USER_CONFIG
 fi
 
-ARGS=$(getopt -o d:hr: -l dapsroot:,docdir:,help,rootelement:,title:,date: -n $ME -- "$@")
+ARGS=$(getopt -o d:hr: -l dapsroot:,docdir:,help,rootelement:,title:,date:,productname:,productnumber: -n $ME -- "$@")
 
 eval set -- "$ARGS"
 
@@ -83,7 +83,40 @@ while true ; do
             fi
 	    shift 2
 	    ;;
-
+	--title)
+	    if [[ -z $2 ]]; then
+		exit_on_error "Title must be set"
+	    else
+		TITLE=$2
+	    fi
+	    shift 2
+	    ;;
+	--date)
+	    if [[ -z $2 ]]; then 
+		exit_on_error "Date must be set"
+	    else
+		DATE=$2
+		date -d $DATE >> /dev/null 2>&1 || echo "Wrong date format. Use YYYY-MM-DD"
+	    fi
+	    shift 2 
+	    ;;
+	--productname)
+	    if [[ -z $2 ]]; then
+		exit_on_error "Productname must be set"
+	    else
+		PRODUCTNAME=$2
+	
+	    fi
+	    shift 2
+	    ;;
+	--productnumber)
+	    if [[ -z $2 ]]; then
+		exit_on_error "Productnumber must be set"
+	    else 
+		PRODUCTNUMBER=$2
+	    fi
+	    shift 2
+	    ;;
         --) shift ; break ;;
         *) exit_on_error "Wrong parameter: $1" ;;
     esac
@@ -122,7 +155,45 @@ BOOK="${DC_FILE#${CONF_PREFIX}*}"
 cp ${DAPSROOT}/init_templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
         sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${DOC_DIR}/$DC_FILE
 # MAIN XML file
-cp ${DAPSROOT}/init_templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+cp ${DAPSROOT}/init_templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml &&
+       
+	
+
+if [[ -z $TITLE ]]; then
+    sed -i 's/§§TITLE§§/Book Template/g' ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+else 
+    sed -i s/§§TITLE§§/$TITLE/g ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+fi
+
+if [[ -z $DATE ]]; then 
+    sed -i 's/§§DATE§§/<?dbtimestamp format="B d, Y"?>/g' ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+else 
+    sed -i s/§§DATE§§/$DATE/g ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+fi
+
+if [[ -n $PRODUCTNAME ]]; then
+    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
+    if [[ $? -eq 0 ]]; then
+	xml ed -a /book/bookinfo/title -t elem -n productname -v $PRODUCTNAME ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
+	mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+    else 
+	ccecho "warn" "Productname could not be created"
+    fi
+fi
+
+
+if [[ -n $PRODUCTNUMBER ]]; then
+    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
+    if [[ $? -eq 0 ]]; then
+	xml ed -a /book/bookinfo/title -t elem -n productnumber -v $PRODUCTNUMBER ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
+	mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+    else 
+	ccecho "warn" "Productnumber could not be created"
+    fi
+fi
+
+
+    
 
 # graphics
 cp ${DAPSROOT}/init_templates/example{1,2}.png ${DOC_DIR}/images/src/png/
