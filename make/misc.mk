@@ -67,10 +67,11 @@ STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
 .PHONY: stylecheck
 stylecheck: $(BIGFILE)
   ifeq ($(SHOW),1)
-    ifndef BROWSER
-	$(warning $(shell ccecho "warn" "\$$BROWSER is not set, not showing result"))
-    else
+    ifdef BROWSER
 	@docstylecheck.py --show $(BIGFILE) $(STYLECHECK_OUTFILE)
+    else
+	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
+	xdg-open $(STYLECHECK_OUTFILE)
     endif
   else
 	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
