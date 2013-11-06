@@ -13,6 +13,13 @@ var bugzillaComponent = 'Documentation';
 // product name in Bugzilla, and find out what the component for documentation
 // is called, that is your bugzillaComponent (default is "Documentation")
 
+
+//  case 'SUSE Linux Enterprise High Availability Extension 12':
+//    bugzillaProduct = '';
+//    break;//  case 'SUSE Linux Enterprise High Availability Extension 12':
+//    bugzillaProduct = '';
+//    break;
+
 switch ( XmlProduct ) {
   case 'SUSE Cloud 2.0':
     bugzillaProduct = 'SUSE Cloud 2.0';
@@ -24,11 +31,17 @@ switch ( XmlProduct ) {
   case 'SUSE Lifecycle Management Server 1.3':
     bugzillaProduct = 'SUSE Lifecycle Management Server';
     break;
+  case 'SUSE Linux Enterprise Desktop 12':
+    bugzillaProduct = 'SUSE Linux Enterprise Desktop 12';
+    break;
   case 'SUSE Linux Enterprise Desktop 11 SP3':
     bugzillaProduct = 'SUSE Linux Enterprise Desktop 11 SP3';
     break;
   case 'SUSE Linux Enterprise Point of Service 11 SP2':
     bugzillaProduct = 'SUSE Linux Enterprise Point of Service 11 SP2 (SLEPOS 11 SP2)';
+    break;
+  case 'SUSE Linux Enterprise Server 12':
+    bugzillaProduct = 'SUSE Linux Enterprise Server 12 (SLES 12)';
     break;
   case 'SUSE Linux Enterprise Server 11 SP3':
     bugzillaProduct = 'SUSE Linux Enterprise Server 11 SP3 (SLES 11 SP3)';
@@ -36,6 +49,9 @@ switch ( XmlProduct ) {
   case 'SUSE Linux Enterprise Server for SAP Applications 11 SP3':
     bugzillaProduct = 'SUSE Linux Enterprise for SAP Applications 11 SP3';
     bugzillaComponent = 'General';
+    break;
+  case 'SUSE Linux Enterprise High Availability Extension 11 SP3':
+    bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 11 SP3';
     break;
   case 'SUSE Manager 1.7':
     bugzillaProduct = 'SUSE Manager 1.7 Server';
