@@ -109,10 +109,11 @@ VARLIST=(
     PROFVENDOR
     REMARKS
     REMARK_STR
+    ROOTID
     SETDATE
+    SHOW
     STATIC_DIR
     STATIC_HTML
-    ROOTID
     STYLEDEVEL
     STYLEROOT
     TARGET
@@ -397,6 +398,9 @@ HELP_SUBCOMMAND+=("single-html-dir-name=Print the directory name that would resu
 
 SUBCOMMANDS+=("spellcheck=spellcheck")
 HELP_SUBCOMMAND+=("spellcheck=Spellchecks the file specified with --file or the document specified by rootid.")
+
+SUBCOMMANDS+=("stylecheck=stylecheck")
+HELP_SUBCOMMAND+=("stylecheck=Performs a style check on the given DC-file or rootid.")
 
 SUBCOMMANDS+=("text=build_generic")
 HELP_SUBCOMMAND+=("text=Build an ASCII text document the from the XML sources.")
@@ -715,6 +719,8 @@ Subcommands:
     profile                   Profile XML sources
     spellcheck                Spellchecks the file specified with --file or the
                               document specified by rootid.
+    stylecheck                Performs a style check on the given DC-file or
+                              rootid
     validate                  Validate profiled sources. Automatically profiles
                               the XML sources if needed
 

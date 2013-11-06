@@ -59,6 +59,25 @@ checklink:
 
 
 #--------------
+# Style checker
+#
+
+STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
+
+.PHONY: stylecheck
+stylecheck: $(BIGFILE)
+  ifeq ($(SHOW),1)
+    ifndef BROWSER
+	$(warning $(shell ccecho "warn" "\$$BROWSER is not set, not showing result"))
+    else
+	@docstylecheck.py --show $(BIGFILE) $(STYLECHECK_OUTFILE)
+    endif
+  else
+	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
+	@ccecho "result" "Find the link check report at:\n$(STYLECHECK_OUTFILE)"
+  endif
+
+#--------------
 # Productname/Productversion
 #
 
