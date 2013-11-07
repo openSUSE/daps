@@ -280,7 +280,7 @@ function init_env {
     # test if ROOTID exist
     #
     if [[ -n "$ROOTID" ]]; then
-        EXISTS_ROOTID=$(eval "$XSLTPROC --stringparam \"rootid=$ROOTID\" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
+        EXISTS_ROOTID=$($XSLTPROC --stringparam "rootid=$ROOTID" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
         TEST_ROOTID_RESULT=$?
         if [[ 0 == $TEST_ROOTID_RESULT  && "yes" != $EXISTS_ROOTID ]]; then
             exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
@@ -457,12 +457,12 @@ function call_make () {
 
     if [[ 0 != $VERBOSITY ]]; then
 #        echo ""
-        eval "$MAKE_CMD 2>&1" | tee -a $LOGFILE
+        $MAKE_CMD 2>&1 | tee -a $LOGFILE
         # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
         [[ 0 = ${PIPESTATUS[0]} ]] || exit 1
     else
         if [[ 1 = $WRITE_LOG ]]; then
-            eval "$MAKE_CMD >> $LOGFILE 2>&1"
+            $MAKE_CMD >> $LOGFILE 2>&1
             if [[ 0 = $? ]]; then
 	        # make command successful, only show last line (aka result)
 	        tail -n 1 $LOGFILE
@@ -474,7 +474,7 @@ function call_make () {
                 exit 1
             fi
         else
-           eval "$MAKE_CMD"
+           $MAKE_CMD
         fi
     fi
 }
@@ -1239,7 +1239,7 @@ function checklink () {
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR) || exit_on_error "Cannot get a rootid from file $FILE"
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1315,7 +1315,7 @@ function getimages () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$(eval "$XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR) || exit_on_error "Cannot get a rootid from file $FILE"
         else
            exit_on_error "File $P_FILE does not exist"
         fi
@@ -1359,7 +1359,7 @@ function getimages () {
                 fi
             done  | column -t
             if [[ $SHOW ]]; then
-                eval "$IMG_VIEWER ${IMGLIST[@]} &"
+                $IMG_VIEWER ${IMGLIST[@]} &
             fi
         fi
     fi
@@ -1437,7 +1437,7 @@ function spellcheck () {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-        ASPELL_LANG=$(eval "$XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null")
+        ASPELL_LANG=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
         if [[ -n "$ASPELL_LANG" ]]; then
             ccecho "info" "Using language $ASPELL_LANG."
         else
@@ -1446,7 +1446,7 @@ function spellcheck () {
     fi
 
     #------------------
-    # create spellchecking command to eval
+    # create spellchecking command
     #
     # first, create skiplist
     #
@@ -1465,12 +1465,12 @@ function spellcheck () {
     for FILE in ${FILELIST[@]}; do
         test -f $FILE || ccecho "warn" "File $FILE does not exist"
         if [[ 1 = $LISTMODE ]]; then
-            LISTOUTPUT=$(eval "$SPELLCMD list < $FILE | sort -u")
+            LISTOUTPUT=$($SPELLCMD list < $FILE | sort -u)
             [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""
         else
             echo "Checking $FILE..."
-            eval "$SPELLCMD -c $FILE"
+            $SPELLCMD -c $FILE
         fi
     done
     exit
@@ -1890,10 +1890,12 @@ function help_viewer () {
                               Default: IMG_VIEWER setting from config file"
 }
 function help_xsltparam () {
-    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in the form of
-                              \"'--stringparam KEY=VALUE' --param KEY=VALUE\". The
-                              given string will be passed unmodified to the
-                              xslt processor call that $1.
+    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in 
+                              the form of
+                              \"'--stringparam KEY=VALUE' --param KEY=VALUE\".
+                              The given string will be passed unmodified to the
+                              xslt processor call that
+                              $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
                               Note: You MUST quote the string with double and

@@ -111,7 +111,7 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,builddir,epub,html,images,locdrop,package-src,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,epub,html,images,locdrop,online-docs,package-src,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -122,7 +122,7 @@ GETOPT_RETURN_CODE=$?
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" )
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" )
 	    shift
 	    ;;
 	--builddir)
@@ -148,6 +148,10 @@ while true ; do
 	    ;;
 	--locdrop)
 	    _TESTS=( "${_TESTS[@]}" "lib/033_locdrop" )
+	    shift
+	    ;;
+	--online-docs)
+	    _TESTS=( "${_TESTS[@]}" "lib/035_online-docs" )
 	    shift
 	    ;;
 	--package-src)
