@@ -49,21 +49,31 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
              --stringparam "styleroot=$(dir $(STYLEIMG))"
 
 #----------
-# Settings depending on pdf or color-pdf
+# Settings depending on --grayscale and --cropmarks
 #
+# PDF_RESULT is set in filenames.mk
 
-ifeq ($(TARGET),pdf)
-  PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)-print$(LANGSTRING).pdf
-  FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)-print$(LANGSTRING).fo
+FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)
+
+ifeq ($(GRAYSCALE),1)
   FOSTRINGS  += --param "format.print=1" \
-	       --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
+	        --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
+  FOFILE     := $(FOFILE)_gray
 else
-  PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf
-  FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)$(LANGSTRING).fo
-  FOSTRINGS  += --param "use.xep.cropmarks=0" \
-               --param "format.print=0" \
-	       --stringparam "img.src.path=$(IMG_GENDIR)/color/"
+  FOSTRINGS  += --param "format.print=0" \
+	        --stringparam "img.src.path=$(IMG_GENDIR)/color/"
+  FOFILE     := $(FOFILE)_color
 endif
+
+# cropmarks are currently only supported by XEP
+ifeq ($(CROPMARKS),1)
+  FOSTRINGS  += --param "use.xep.cropmarks=1"
+  FOFILE     := $(FOFILE)_crop
+else
+  FOSTRINGS  += --param "use.xep.cropmarks=0"
+endif
+
+FOFILE := $(FOFILE)$(LANGSTRING).fo
 
 # Formatter dependent stuff
 #
@@ -87,17 +97,8 @@ endif
 #
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
-pdf: $(RESULT_DIR)/$(DOCNAME)-print$(LANGSTRING).pdf
+pdf: $(PDF_RESULT)
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
-
-
-#--------------
-# COLOR-PDF
-#
-.PHONY: color-pdf
-color-pdf: list-images-multisrc list-images-missing
-color-pdf: $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf
-	@ccecho "result" "COLOR-PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
 #--------------
 # Generate fo
@@ -133,7 +134,7 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 # Generate PDF
 #
 $(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
-ifeq ($(TARGET),pdf)
+ifeq ($(GRAYSCALE),1)
   $(PDF_RESULT): $(GRAYSCALE_IMAGES)
 else
   $(PDF_RESULT): $(COLOR_IMAGES)

@@ -48,13 +48,17 @@ function parse_args () {
                 shift
                 ;;
             --color)
-                P_IMAGES_COLOR=1
+                P_COLOR=1
                 shift
                 ;;
             --compact)
                 P_COMPACT=1
                 shift
                 ;;
+	    --cropmarks)
+		P_CROPMARKS=1
+		shift
+		;;
             --css)
                 if [[ $2 != "none" ]]; then
                     sanitize_path "$2" "P_CSS"
@@ -100,7 +104,7 @@ function parse_args () {
                 shift
                 ;;
             --grayscale)
-                P_IMAGES_GRAYSCALE=1
+                P_GRAYSCALE=1
                 shift
                 ;;
             -h|--help)
@@ -516,7 +520,7 @@ function call_make () {
 #
 # BUILD PDFS
 #
-# Subcommands: pdf,color-pdf
+# Subcommand: pdf
 #
 ###########################################################################
 function build_pdfs () {
@@ -525,7 +529,7 @@ function build_pdfs () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="draft,formatter:,help,meta,name:,remarks,rootid:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -533,8 +537,10 @@ function build_pdfs () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+	help_cropmarks
         help_draft
         help_formatter
+	help_grayscale_pdf
         help_help
         help_meta
         help_name
@@ -545,10 +551,12 @@ function build_pdfs () {
         exit 0
     fi
 
-    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]    && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
+    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
+    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS=1
+    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -1170,7 +1178,7 @@ function show_names () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="draft,help,meta,name:,remarks,rootid:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1178,7 +1186,10 @@ function show_names () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
                 help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+		[[ "pdf-name" = $SUB_CMD ]] && help_cropmarks
                 help_draft
+		[[ "pdf-name" = $SUB_CMD ]] && help_formatter
+		[[ "pdf-name" = $SUB_CMD ]] && help_grayscale_pdf
                 help_help
 		help_meta
                 help_name
@@ -1192,8 +1203,18 @@ function show_names () {
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
     # usemeta implies draft mode
     [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
+    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS="1"
+    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE="1"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+
+    if [[ -n "$P_FORMATTER" ]]; then
+        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+            export FORMATTER="$P_FORMATTER"
+        else
+	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        fi
+    fi
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -1578,7 +1599,7 @@ function build_images () {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_color
         help_gen
-        help_grayscale
+        help_grayscale_images
         help_help
 	help_online
 	help_rootid
@@ -1586,12 +1607,12 @@ function build_images () {
         exit 0
     fi
 
-    if [[ -z "$P_IMAGES_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_IMAGES_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
+    if [[ -z "$P_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
 	export IMAGES_ALL=1
     else
-	[[ -n "$P_IMAGES_COLOR" ]]     && export IMAGES_COLOR=1
+	[[ -n "$P_COLOR" ]]            && export IMAGES_COLOR=1
 	[[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
-	[[ -n "$P_IMAGES_GRAYSCALE" ]] && export IMAGES_GRAYSCALE=1
+	[[ -n "$P_GRAYSCALE" ]]        && export IMAGES_GRAYSCALE=1
 	[[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
     fi
 
@@ -1695,6 +1716,13 @@ function help_compact () {
                               Ignored when -s|--show is set.
                               Default: off"
 }
+function help_cropmarks () {
+    echo "    --cropmarks               Add cropmarks to the PDF. Only available for
+                              the XEP formatter, FOP currently does not support
+                              cropmarks.
+                              Ignored when FOP is used.
+                              Default: off"
+}
 function help_css () {
     echo "    --css=filename, --css     Specify a path to a css file.
                               The special string \"none\" make DAPS to use
@@ -1742,8 +1770,12 @@ function help_gen () {
                               images/color or images/grayscale.
                               Default: unset"
 }
-function help_grayscale () {
+function help_grayscale_images () {
     echo "    --grayscale               Only generate grayscale images.
+                              Default: off"
+}
+function help_grayscale_pdf () {
+    echo "    --grayscale               Generate a grayscale PDF for printing.
                               Default: off"
 }
 function help_help () {

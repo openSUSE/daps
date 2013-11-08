@@ -54,6 +54,7 @@ VARLIST=(
     CONF_PREFIX
     CONVERT_OPTS_JPG
     CONVERT_OPTS_PNG
+    CROPMARKS
     DEBUG
     DOC_DIR
     DAPSROOT
@@ -78,10 +79,13 @@ VARLIST=(
     FOP_WRAPPER
     FORCE_REBUILD
     FORMATTER
+    GRAYSCALE
     GZIP_MAN
     HTML5
     HTML_CSS
     HTMLROOT
+    IMAGES_COLOR
+    IMAGES_GRAYSCALE
     IMG_VIEWER
     INCLUDE_MANIFEST
     INK_OPTIONS
@@ -734,6 +738,8 @@ Subcommands:
   Debugging:
     dapsenv                   Print a list of the most important make variables
                               and their value
+    images                    Generates all images for the given DC-file or
+                              rootid
     showvariable              Print value of a given make variable:
                               $ME showvariable VARIABLE=<MAKE_VARIABLE>
 

@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.0alpha1 
+Version:        2.0 beta 1 
 Release:        0
 
 ###############################################################
@@ -27,7 +27,7 @@ Release:        0
 #
 #  Your changes will be lost on the next update
 #  If you do not have access to the SVN repository, notify
-#  <fsundermeyer@opensuse.org> and <toms@opensuse.org>
+#  <fsundermeyer@opensuse.org> or <toms@opensuse.org>
 #  or send a patch
 #
 ################################################################
