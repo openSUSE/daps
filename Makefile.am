@@ -1,7 +1,7 @@
 # Makefile.am for DocBook Authoring and Publishing Suite (daps)
 # Generate catalogs and install daps
 #
-# Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -106,7 +106,8 @@ dist_catalog_DATA   = $(DAPS_CATALOG)
 endif
 
 # CONFIG files
-dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf
+dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf \
+			etc/CatalogManager.properties
 nodist_dapsconf_DATA  = etc/config.in etc/catalog.xml
 dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
