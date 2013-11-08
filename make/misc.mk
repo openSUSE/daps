@@ -55,8 +55,14 @@ checklink:
 	  --stylesheet $(STYLELINKS) --file $(PROFILED_MAIN) $(XSLTPROCESSOR)
 	checkbot --url file://localhost$(TESTPAGE) $(CB_VERBOSITY) \
 	  $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html $(DEVNULL)
-	@ccecho "result" "Find the link check report at:\nfile://$(TMP_DIR)/$(BOOK)-checkbot-localhost.html"
-
+  ifeq ($(SHOW),1)
+    ifdef BROWSER
+	$$BROWSER $(TMP_DIR)/$(BOOK)-checkbot-localhost.html &
+    else
+	xdg-open $(TMP_DIR)/$(BOOK)-checkbot-localhost.html &
+    endif
+  endif
+	@ccecho "result" "Find the linkcheck report at:\n$(TMP_DIR)/$(BOOK)-checkbot-localhost.html"
 
 #--------------
 # Style checker
@@ -71,12 +77,12 @@ stylecheck: $(BIGFILE)
 	@docstylecheck.py --show $(BIGFILE) $(STYLECHECK_OUTFILE)
     else
 	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
-	xdg-open $(STYLECHECK_OUTFILE)
+	xdg-open $(STYLECHECK_OUTFILE) &
     endif
   else
 	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
-	@ccecho "result" "Find the link check report at:\n$(STYLECHECK_OUTFILE)"
   endif
+	@ccecho "result" "Find the stylecheck report at:\n$(STYLECHECK_OUTFILE)"
 
 #--------------
 # Productname/Productversion

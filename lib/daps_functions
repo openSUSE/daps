@@ -368,7 +368,8 @@ function init_env {
 #
 ###########################################################################
 function call_make () {
-    local CORE_NO LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS MAKE_CMD SUB_CMD
+    local CORE_NO DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS 
+    local MAKE_CMD SUB_CMD
 
     # first argument passed to the function is the subcommand
     # in some cases, additional arguments are passed to this
@@ -411,6 +412,8 @@ function call_make () {
 
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY ]]; then
+	# get stylesheet version (ticket #151)
+#	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl
         echo -e "---------------
            DOC_DIR: $DOC_DIR
          BUILD_DIR: $BUILD_DIR
@@ -1212,7 +1215,7 @@ function checklink () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="file:,help,rootid:"
+    LONG_OPTS="file:,help,rootid:,show"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1223,6 +1226,7 @@ function checklink () {
         help_file
         help_help
         help_rootid
+	help_show_check
         echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
 	exit 0
     fi
@@ -1236,6 +1240,7 @@ function checklink () {
     fi
 
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_SHOW" ]]      && export SHOW=1
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
@@ -1500,7 +1505,7 @@ function stylecheck    () {
         help_help
         help_name
         help_rootid
-	help_show_stylecheck
+	help_show_check
         echo
         exit 0
     fi
@@ -1855,8 +1860,8 @@ function help_show_images () {
                               IMG_VIEWER in the config file
                               Default: off"
 }
-function help_show_stylecheck () {
-    echo "    --show                    Show the result of the stylecheck command   
+function help_show_check () {
+    echo "    --show                    Show the result of the check command   
                               in a browser. Uses \$BROWSER if defined,
                               otherwise xdg-open.
                               Default: off"
