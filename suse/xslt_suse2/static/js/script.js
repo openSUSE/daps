@@ -14,12 +14,6 @@ var bugzillaComponent = 'Documentation';
 // is called, that is your bugzillaComponent (default is "Documentation")
 
 
-//  case 'SUSE Linux Enterprise High Availability Extension 12':
-//    bugzillaProduct = '';
-//    break;//  case 'SUSE Linux Enterprise High Availability Extension 12':
-//    bugzillaProduct = '';
-//    break;
-
 switch ( XmlProduct ) {
   case 'SUSE Cloud 2.0':
     bugzillaProduct = 'SUSE Cloud 2.0';
@@ -52,6 +46,9 @@ switch ( XmlProduct ) {
     break;
   case 'SUSE Linux Enterprise High Availability Extension 11 SP3':
     bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 11 SP3';
+    break;
+  case 'SUSE Linux Enterprise High Availability Extension 12':
+    bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 12';
     break;
   case 'SUSE Manager 1.7':
     bugzillaProduct = 'SUSE Manager 1.7 Server';
