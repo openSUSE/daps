@@ -28,6 +28,7 @@ endif
 # DEFAULT INCLUDE
 # common_variables.mk is _always_ needed
 include $(DAPSROOT)/make/common_variables.mk
+include $(DAPSROOT)/make/filenames.mk
 
 # On directory creation see:
 # http://www.cmcrossroads.com/ask-mr-make/6936-making-directories-in-gnu-make

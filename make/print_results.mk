@@ -74,12 +74,7 @@ package-dir-name:
 #
 .PHONY: pdf-name
 pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(DRAFT_STR)$(META_STR)-print$(LANGSTRING).pdf"
-
-.PHONY: color-pdf-name
-color-pdf-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(DRAFT_STR)$(META_STR)$(LANGSTRING).pdf"
-
+	@ccecho "result" "$(PDF_RESULT)"
 
 #---------------
 # TEXT
