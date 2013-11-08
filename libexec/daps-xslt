@@ -141,20 +141,23 @@ run-saxon() {
     # replace [:space:] with ";" but retain spaces in filenames
     CATALOGS=$(echo $XML_CATALOG_FILES | sed 's/\([^\\]\) /\1;/g')
 
-    if [[ -n "$DEBUG" ]]; then
-        SAXON_ARGS=""
-    else
+    if [[ -z "$DEBUG" ]]; then
         # Recover silently from recoverable errors
-        SAXON_ARGS="-w0"
-        if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
-            # if the stylesheet location is a link, saxon needs -u
-            SAXON_ARGS="$SAXON_ARGS -u"
-        fi
+        SAXON_ARGS="-w0 $SAXON_ARGS"
     fi
-    
-    # Add the DocBook extensions to the CLASSPATH
-#    CLASSPATH="CatalogManager.properties:${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+
+    # if the stylesheet location is a link, saxon needs -u    
+    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
+        SAXON_ARGS="$SAXON_ARGS -u"
+    fi 
+
+   # Add the DocBook extensions to the CLASSPATH
+
     CLASSPATH="${DBXSLT}/extensions/saxon65.jar:$CLASSPATH"
+
+    # A local CatalogManager.properties file is stored in
+    # ${DAPSROOT}/etc/
+    [[ -n $DAPSROOT ]] && CLASSPATH="${DAPSROOT}/etc/:$CLASSPATH"
 
     # Additional JAR files
     ADDITIONAL_JARS="xml-commons-resolver12.jar"
@@ -175,7 +178,13 @@ run-saxon() {
 
     if [[ -n "$DEBUG" ]]; then
         echo "---------------------------------------------------------"
-        echo -e "Running the following command:\nCLASSPATH=\"$CLASSPATH\" \ \nADDITIONAL_JARS=\"$ADDITIONAL_JARS\" \ \nADDITIONAL_FLAGS=\"$ADDITIONAL_FLAGS\" \ \n$SAXON $SAXON_ARGS $@"
+	echo "Running $ME with the following parameters:
+  CLASSPATH="$CLASSPATH"
+  XML_CATALOG_FILES="$XML_CATALOG_FILES"
+  CATALOGS="$CATALOGS"
+  ADDITIONAL_JARS="$ADDITIONAL_JARS"
+  ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS"
+  $SAXON $SAXON_ARGS $@"
         echo "---------------------------------------------------------"
     fi
     eval "$SAXON $SAXON_ARGS $@"
@@ -269,7 +278,7 @@ eval set -- "$ARGS"
 
 while true; do
     case "$1" in
-	--catalog)
+	--catalogs)
             XML_CATALOG_FILES="$2 $XML_CATALOG_FILES";
 	    export XML_CATALOG_FILES
 	    shift 2;;
