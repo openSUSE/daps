@@ -225,8 +225,8 @@ fi
 # use VALUE=$(arrayGet "ARRAYNAME" "KEY") to get the value
 # arrayGet returns 1 if KEY was not found
 #
-## The subcommands can be executed using eval:
-##   eval "${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}"
+## The subcommands can be executed using:
+##   ${SUBCOMMANDS[$SUBCMD]} $SUBCMD ${SCMD_ARGS[@]}
 ## Using such an array rather than a function to call the subcommands has got
 ## the advantage that we can very easily check whether a subcommand is valid
 ## or not by just testing if ${SUBCOMMANDS[$SUBCMD]} is set
@@ -1304,14 +1304,14 @@ recover_cmdl_values
 # run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
-    eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+    $FUNCTION $SUBCMD ${SCMD_ARGS[@]}
 fi
 
 # Sample call for early commands
 #
 #case "$SUBCMD" in
 #    foo)
-#      eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+#      $FUNCTION $SUBCMD ${SCMD_ARGS[@]}
 #      exit
 #      ;;
 #esac
@@ -1480,7 +1480,7 @@ export XML_CATALOG_FILES
 #
 # get DocBook version first ...
 
-DOCBOOK_VERSION=$(eval "$XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
+DOCBOOK_VERSION=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR) || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
 
 #    || { DOCBOOK_VERSION=4; \
 #      "Could not get DocBook version, assuming DocBook 4"; } 
@@ -1544,7 +1544,7 @@ export SETFILES_TMP
 # subcommand function
 #
 WRITE_LOG=1
-eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+$FUNCTION $SUBCMD ${SCMD_ARGS[@]}
 
 # remove the tmp SETFILE
 # done via trap, see above
