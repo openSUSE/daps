@@ -132,6 +132,7 @@ static/css/style.css
 <xsl:param name="qandadiv.autolabel" select="0"></xsl:param>
 
 <!-- 13. Linking ================================================ -->
+<xsl:param name="ulink.target">_blank</xsl:param>
 
 <!-- 14. Cross References ======================================= -->
 
