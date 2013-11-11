@@ -19,6 +19,8 @@
 # * Is the .fo still present after the PDF has been built?
 # * Do the --styleroot and --fb_styleroot options work?
 # * Does the automatic fallback to the DoBook stylesheets work?
+# * Is the --grayscale option corrctly supported?
+# * Is the --cropmarks option corrctly supported (XEP only)?
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
 # * Is the meta information displayed when using the --meta option?
@@ -31,7 +33,7 @@ _LOGFILE=""
 
 source lib/common_functions
 
-header "$_PDFCMD with $_FOPROC"
+header "pdf with $_FOPROC"
 
 function oneTimeSetUp() {
     local _LOG_DIR
@@ -39,7 +41,7 @@ function oneTimeSetUp() {
     # Clean up the build directory
     clean_build
     # get the profiling directory
-    _PDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE ${_PDFCMD}-name 2>/dev/null)
+    _PDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE pdf-name 2>/dev/null)
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the path to the resulting PDF failed. Skipping tests"
     fi
@@ -47,7 +49,7 @@ function oneTimeSetUp() {
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
-    _LOGFILE=${_LOG_DIR}/make_${_PDFCMD}.log
+    _LOGFILE=${_LOG_DIR}/make_pdf.log
 }
 
 # Post
@@ -69,15 +71,15 @@ function oneTimeTearDown() {
 #
 function test_pdf () {
     local _PDF_BUILD_PATH
-    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --formatter=$_FOPROC 2>/dev/null)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
-        ' └─ The $_PDFCMD command itself failed' \
+        ' └─ The pdf command itself failed' \
         "$?"
     assertTrue \
 	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
-	"[ -s $_PDFNAME ]"
+	"[ -s $_PDF_BUILD_PATH ]"
     assertEquals \
-	' └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name' \
+	' └─ The resulting filename does not match the one retrieved with pdf-name' \
 	"$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 }
 #--------------------------------
@@ -111,7 +113,7 @@ function test_pdfStyleroot () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Fallback Styleroot specified on the command line was not used." \
@@ -122,7 +124,7 @@ function test_pdfStyleroot () {
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
     #
-    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug $_PDFCMD >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --debug pdf >/dev/null 2>&1
     grep -q -- "--stylesheet ${_DB_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
@@ -132,14 +134,75 @@ function test_pdfStyleroot () {
 
     # Testing Styleroot specified with --styleroot
     #
-    $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug $_PDFCMD >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE --styleroot ${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Styleroot specified on the command line was not used." \
 	"$?"
 }
 
+#--------------------------------
+# * Is the --grayscale option corrctly supported?
+# * Is the --cropmarks option corrctly supported (XEP only)?
 
+function test_pdfGrayscaleCropmarks () {
+    # There is no (easy) way to tell whether a PDF has grayscale images, so
+    # we just check whether it correctly builds and whether grayscale images
+    # have been created
+    local _IMGDIR _PDF_NAME_PATH _PAGE_SIZE_BUILD _PAGE_SIZE_EXPECTED
+
+    clean_build
+
+    # If built with cropmarks, the pagesite in the PDF is larger (than A4) 
+    _PAGE_SIZE_EXPECTED="643.276x889.89"
+
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --grayscale --cropmarks --formatter=$_FOPROC 2>/dev/null | tail -n 1)
+   assertTrue \
+       ' └─ Building the PDF with --grayscale --cropmarks failed' \
+       "$?"
+    assertTrue \
+	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
+	"[ -s $_PDF_BUILD_PATH ]"
+
+   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --grayscale --cropmarks --formatter=$_FOPROC 2>/dev/null)
+   assertTrue \
+       ' └─ Getting the PDF-name with --grayscale --cropmarks failed' \
+       "$?"
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with pdf-name: " \
+       "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
+
+   # Check for the format.print parameter
+   egrep -q -- "--param\s+\"format\.print=1\"" $_LOGFILE 2>/dev/null
+   assertTrue \
+       ' └─ Param format.print=1 is not specified when generating the FO-file' \
+       "$?"
+
+    # Check for grayscale images (just check whether files have been created)
+   _IMGDIR=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_GENDIR 2>/dev/null)
+    assertTrue \
+	' └─ Getting the image directory name failed' \
+	"$?"
+    assertTrue \
+	" └─ No grayscale images have been generated in ${_IMGDIR}/grayscale" \
+	"[ -n \"$(ls -A ${_IMGDIR}/grayscale 2>/dev/null)\" ]"
+
+    # Check cropmarks (for XEP only)
+    [[ fop == $_FOPROC ]] && startSkipping
+
+    egrep -q -- "--param\s+\"crop\.marks=1\"" $_LOGFILE 2>/dev/null
+    assertTrue \
+       ' └─ Param crop.marks=1 is not specified when generating the FO-file' \
+       "$?"   
+
+    _PAGE_SIZE_BUILD=$(pdfinfo $_PDF_BUILD_PATH 2>/dev/null | awk '/^Page size:/ {print $3 $4 $5}')
+    assertEquals \
+	' └─ PDF seems to be build without cropmarks' \
+	"$_PDF_SIZE_EXPECTED" "$_PDF_SIZE_BUILD"
+
+    endSkipping
+
+}
 #--------------------------------
 # * Is the draft watermark image included when using the --draft option?
 # * Are remarks displayed when using the --remarks option?
@@ -156,17 +219,17 @@ function test_pdfRemarksDraftMeta () {
 
     clean_build
 
-   _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1)
+   _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1)
    assertTrue \
        ' └─ Building the PDF with --draft --remarks --meta failed' \
        "$?"
 
-   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --draft --remarks --meta 2>/dev/null)
+   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --draft --remarks --meta 2>/dev/null)
    assertTrue \
        ' └─ Getting the PDF-name with --draft --remarks --meta failed' \
        "$?"
    assertEquals \
-       " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
+       " └─ The resulting filename does not match the one retrieved with pdf-name: " \
        "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 
    # checking DRAFT mode
@@ -217,18 +280,18 @@ function test_pdfName () {
 
     clean_build
 
-    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE $_PDFCMD --name $_NAME --formatter=$_FOPROC 2>/dev/null)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf --name $_NAME --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
-	' └─ Building a $_PDFCMD with --name failed ' \
+	' └─ Building a pdf with --name failed ' \
        "$?"
 
-   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE ${_PDFCMD}-name --name $_NAME 2>/dev/null)
+   _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --name $_NAME 2>/dev/null)
    assertTrue \
-	' └─  Getting the filename for $_PDFCMD with --name failed ' \
+	' └─  Getting the filename for pdf with --name failed ' \
        "$?"
 
    assertEquals \
-       " └─ The resulting filename does not match the one retrieved with --${_PDFCMD}-name: " \
+       " └─ The resulting filename does not match the one retrieved with pdf-name: " \
        "$_PDF_NAME_PATH" "$_PDF_BUILD_PATH"
 
    # expr match does not work with Variables as search term, needs regexp
@@ -256,18 +319,15 @@ function test_pdfRootidXsltparam () {
     _ROOTID=appendix
     _PAGECOUNT_EXPECTED=1
 
-    if [[ "pdf" == $_PDFCMD ]]; then
-	_PDF_FILENAME_EXPECTED=${_ROOTID}-print_en.pdf
-    else
-	_PDF_FILENAME_EXPECTED=${_ROOTID}_en.pdf
-    fi
-    _XSLTPARAM="--param \\\"hyphenate.verbatim=0\\\""
+    _PDF_FILENAME_EXPECTED=${_ROOTID}_color_en.pdf
+
+    _XSLTPARAM="--param 'hyphenate.verbatim=0'"
 
     clean_build
 
-    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug $_PDFCMD --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
     assertTrue \
-	' └─ Building a $_PDFCMD with --rootid and --xsltparam failed ' \
+	' └─ Building a pdf with --rootid and --xsltparam failed ' \
        "$?"
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \

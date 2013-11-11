@@ -246,10 +246,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 		    # skip if XSL-FO processor does not exist
 		    [ $? -ne 0 ] && continue
 		    export _FOPROC
-		    for _PDFCMD in "pdf" "color-pdf"; do
-			export _PDFCMD
-			eval "$_TEST"
-		    done
+		    eval "$_TEST"
 		done
 		;;
 	    *_profiling)
