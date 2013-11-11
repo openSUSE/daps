@@ -2,6 +2,7 @@
 <!--
    Purpose:
      Prints all used referenced images or XML files
+     With rootid parameter, the nearest <div> with a href attribute is processed.
      
    Parameters:
      * xml.or.img (default: 'xml')
@@ -35,13 +36,23 @@
   
   <xsl:template match="/">
     <xsl:call-template name="process.rootid.node"/>
+    <xsl:text>&#10;</xsl:text>
   </xsl:template>
   
+  <xsl:template name="rootid.process">
+    <xsl:variable name="node" select="key('id',$rootid)"/>
+    <xsl:variable name="anc.href" select="$node/ancestor-or-self::*[@href]"/>
+    <!--<xsl:message>#### <xsl:value-of select="$anc.href[last()]/@href"/></xsl:message>-->
+    <!-- Use only the first div element in reversed order which is our nearest div -->
+    <xsl:apply-templates select="$anc.href[last()]"/>
+  </xsl:template>
   
-  <xsl:template match="file">
+  <xsl:template match="div">
     <xsl:if test="$xml.or.img = 'xml'">
-      <xsl:value-of select="@href"/>
-      <xsl:value-of select="$separator"/>
+      <xsl:if test="@href">
+        <xsl:value-of select="@href"/>
+        <xsl:value-of select="$separator"/>
+      </xsl:if>
     </xsl:if>
     <xsl:apply-templates />
   </xsl:template>

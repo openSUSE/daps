@@ -6,32 +6,40 @@
    and output the file list found in xi:include/@href and
    its descendant
    
+   DO NOT USE THE -xinclude OPTION! THE RESOLUTION WILL BE DONE
+   BY THIS STYLESHEET!
+   
   The stylesheet contains two passes:
   1. Search for every xi:include element, memorize the href
      attribute and resolve it. Memorize the attributes from
      the root element (mainly id). Create an internal
      intermediate structure which looks like this:
      <files>
-       <file href="foo.xml">
-         <file href="bar.xml" id="bar"/>
-         <file href="xyz.xml">
-            <image fileref="foo.png"/>
-         </file>
-       </file>
+       <div href="MAIN.daps.xml" remap="set" lang="en">         
+         <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+          <div id="cha.daps.user.inst" remap="chapter"/>
+        </div>
+         <div href="daps_user_edit.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+          <div id="cha.daps.user.edit" remap="chapter">
+            <image fileref="daps_chklink_report.png"/>
+            <image fileref="daps_chklink_report.png"/>
+          </div>
+        </div>
+       </div>
      </files>
      
-     Which reads: foo.xml includes bar.xml and bar.xml's root
-     element contains the id attribute "bar".
      
   2. Parse the intermediate XML structure and apply the /files
-     template. If rootid is set, search for an file element which
-     contains the correct id attribute and process all of its
-     children.
-     Otherwise just apply the file template.
-     
+     template. If rootid is set, search for a div element which
+     contains the correct id and href attributes and process all of its
+     children.     
    
    Used in combination with extract-files-and-images.xsl
       
+   
+  Author:  Thomas Schraitle <toms@opensuse.org>
+  Copyright: 2012, 2013
+
 -->
 <xsl:stylesheet version="1.0"
   xmlns:exsl="http://exslt.org/common"
@@ -101,10 +109,10 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <file href="{concat($xml.src.path, $mainfile)}">
+    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
-    </file>
+    </div>
   </xsl:template>
   
   <xsl:template match="*">
@@ -115,6 +123,19 @@
       <xsl:apply-templates/>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template match="*[@id]">
+    <xsl:param name="xi" select="0"/>
+    <xsl:variable name="prof">
+      <xsl:call-template name="check.profiling"/>
+    </xsl:variable>
+    <xsl:if test="$prof != 0">
+      <div id="{@id}" remap="{local-name()}">
+        <xsl:apply-templates/>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
 
   <xsl:template match="mediaobject|db:mediaobject">
     <xsl:variable name="prof">
@@ -148,10 +169,12 @@
     </xsl:variable>
     <xsl:if test="$prof != 0">
       <xsl:variable name="rootnode" select="document(@href)/*"/>
-      <file href="{concat($xml.src.path, @href)}">
-        <xsl:copy-of select="$rootnode/@*"/>
-        <xsl:apply-templates select="$rootnode"/>
-      </file>
+      <div href="{concat($xml.src.path, @href)}" remap="{local-name()}">
+        <xsl:copy-of select="$rootnode/@*[not(local-name() = 'id')]"/>
+        <xsl:apply-templates select="$rootnode">
+          <xsl:with-param name="xi" select="1"/>
+        </xsl:apply-templates>
+      </div>
     </xsl:if>
   </xsl:template>
 
@@ -173,6 +196,4 @@
     </xsl:if>
   </xsl:template>
 
-  
-  
 </xsl:stylesheet>
