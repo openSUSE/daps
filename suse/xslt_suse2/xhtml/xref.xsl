@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<!-- 
+<!--
   Purpose:
      Make the anchor template dysfunctional.
-     
+
    See Also:
      * http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
 
@@ -18,16 +18,15 @@
 
   <xsl:template name="anchor">
     <xsl:param name="node" select="."/>
-      <xsl:param name="conditional" select="1"/>
-      <xsl:if test="local-name($node) = 'figure'">
-        <xsl:attribute name="id">
-          <xsl:call-template name="object.id">
-            <xsl:with-param name="object" select="$node"/>
-          </xsl:call-template>
-        </xsl:attribute>
-      </xsl:if>
+    <xsl:param name="conditional" select="1"/>
 
-    <!-- Elif: Sorry! -->
+    <xsl:if test="local-name($node) = 'figure'">
+      <xsl:attribute name="id">
+        <xsl:call-template name="object.id">
+          <xsl:with-param name="object" select="$node"/>
+        </xsl:call-template>
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="question" mode="xref-to">
@@ -102,7 +101,7 @@
         <xsl:with-param name="referrer" select="."/>
         <xsl:with-param name="xrefstyle">
           <xsl:choose>
-            <xsl:when test="$refelem = 'chapter' or 
+            <xsl:when test="$refelem = 'chapter' or
                             $refelem = 'appendix'"
                           >number</xsl:when>
             <xsl:otherwise>nonumber</xsl:otherwise>
@@ -179,7 +178,7 @@
   </xsl:call-template>
 
   <xsl:choose>
-    <xsl:when test="$xref.in.samebook != 0 or 
+    <xsl:when test="$xref.in.samebook != 0 or
                     /set/@id=$rootid or
                     /article/@id=$rootid">
        <!-- An xref that stays inside the current book or when $rootid
@@ -188,17 +187,17 @@
     </xsl:when>
     <xsl:otherwise>
           <!-- A reference into another book -->
-          <xsl:variable name="target.chapandapp" 
+          <xsl:variable name="target.chapandapp"
                         select="$target/ancestor-or-self::chapter[@lang!='']
                                 | $target/ancestor-or-self::appendix[@lang!='']"/>
-          
-          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and 
+
+          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
                         $target.chapandapp/@lang != $this.book/@lang">
-            <xsl:message>WARNING: The xref '<xsl:value-of 
-            select="@linkend"/>' points to a chapter (id='<xsl:value-of 
+            <xsl:message>WARNING: The xref '<xsl:value-of
+            select="@linkend"/>' points to a chapter (id='<xsl:value-of
               select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
           </xsl:if>
-          
+
           <xsl:call-template name="create.linkto.other.book">
             <xsl:with-param name="target" select="$target"/>
           </xsl:call-template>
