@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
      Process inline elements
 
@@ -13,8 +13,8 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns="http://www.w3.org/1999/xhtml"
   exclude-result-prefixes="exsl">
-  
-  
+
+
   <xsl:template name="inline.sansseq">
     <xsl:param name="content">
       <xsl:call-template name="anchor"/>
@@ -35,8 +35,20 @@
       <xsl:call-template name="apply-annotations"/>
     </span>
   </xsl:template>
-  
-  
+
+  <xsl:template match="prompt" mode="common.html.attributes">
+    <xsl:variable name="class">
+      <xsl:choose>
+        <xsl:when test="@role"><xsl:value-of select="@role"/></xsl:when>
+        <xsl:otherwise>userprompt</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:apply-templates select="." mode="class.attribute">
+      <xsl:with-param name="class" select="$class"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
   <xsl:template match="email">
     <!--<span>-->
     <xsl:if test="not($email.delimiters.enabled = 0)">
@@ -56,7 +68,7 @@
     </xsl:if>
     <!--</span>-->
   </xsl:template>
-  
+
   <xsl:template match="keycap">
     <!-- See also Ticket#84 -->
     <xsl:choose>
@@ -75,7 +87,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
   <xsl:template match="keycombo">
     <xsl:variable name="action" select="@action"/>
     <xsl:for-each select="*">
@@ -85,33 +97,33 @@
       <xsl:apply-templates select="."/>
     </xsl:for-each>
   </xsl:template>
-  
+
   <xsl:template match="function/parameter" priority="2">
     <xsl:call-template name="inline.italicseq"/>
     <xsl:if test="following-sibling::*">
       <xsl:text>, </xsl:text>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="parameter">
     <xsl:call-template name="inline.italicseq"/>
   </xsl:template>
-  
+
   <xsl:template match="function/replaceable" priority="2">
     <xsl:call-template name="inline.italicseq"/>
     <xsl:if test="following-sibling::*">
       <xsl:text>, </xsl:text>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="replaceable" priority="1">
     <xsl:call-template name="inline.italicseq"/>
   </xsl:template>
-  
+
   <xsl:template match="command">
     <xsl:call-template name="inline.monoseq"/>
   </xsl:template>
-  
+
   <xsl:template match="productname">
     <xsl:call-template name="inline.charseq"/>
     <!-- We don't want to process @class attribute here -->

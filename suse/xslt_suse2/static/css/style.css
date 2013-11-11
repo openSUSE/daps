@@ -1767,6 +1767,22 @@ code {
     font-weight: 600;
 }
 
+.screen code.userprompt,.screen code.rootprompt {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.screen code.userprompt {
+    color: #666;
+}
+
+.screen code.rootprompt {
+    color: #900;
+}
+
 .screen-wrap { /* Else the scrollbar overlays the rounded corners and the padding isn't always consistent if there's a scrollbar */
     padding: 10px;
     background-color: #EFEFF0;
