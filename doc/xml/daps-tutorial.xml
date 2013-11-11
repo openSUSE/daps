@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+<?xml-stylesheet href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
                  type="text/xml" title="Profiling step"?>
 <!DOCTYPE article PUBLIC
  "-//OASIS//DTD DocBook XML V4.5//EN"
@@ -14,7 +14,7 @@
 <article lang="en" id="art.template">
  <title>How to write a Tutorial with DAPS</title>
  <subtitle>DAPS Tutorial for Beginners</subtitle>
- 
+
  <articleinfo>
   <releaseinfo>
    Build Date: <?dbtimestamp format="B d, Y"?>
@@ -30,14 +30,14 @@
    This DAPS tutorial helps beginners to write and convert XML-files,
    for example into PDF- or HTML-files. No previous XML-knowledge is
    necessary! In the following chapters, I explain a few important tags with
-   examples and at the end, how to convert your file. 
+   examples and at the end, how to convert your file.
   </para>
  </abstract>
 <sect1>
 <title>For whom is this tutorial?</title>
 <para>
  This tutorial is for DAPS-beginners and everybody who already worked a
- little bit with DAPS. 
+ little bit with DAPS.
 </para>
 </sect1>
  <sect1>
@@ -48,7 +48,7 @@
    But why should I use DAPS? In DAPS, it is all about the text. You can
    create different output files, for example HTML, PDF or EPUB, without
    changing anything in the file itself. The design will be created
-   automatically.  
+   automatically.
   </para>
  </sect1>
 
@@ -57,35 +57,35 @@
   <title>What you need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
-   writing use a XML compatible editor. Personally I recommend emacs. 
+   writing use a XML compatible editor. Personally I recommend emacs.
    Do the following:
   </para>
   <procedure>
    <step>
     <para>
-     Open your terminal and log in as root by entering 
+     Open your terminal and log in as root by entering
     </para>
-    <screen>$ su -</screen>
+    <screen>&prompt1;su -</screen>
     <para>
-     The $ stands for your prompt. 
+     &prompt1;stands for your prompt.
     </para>
    </step>
    <step>
     <para>
-     Enter your root password. 
+     Enter your root password.
     </para>
    </step>
    <step>
     <para>
      Install Emacs with zypper:
     </para>
-    <screen># zypper in emacs</screen>
+    <screen>&rootprompt;zypper in emacs</screen>
    </step>
    <step>
     <para>
-     Install DAPS with zypper: 
+     Install DAPS with zypper:
     </para>
-    <screen># zypper in daps</screen>
+    <screen>&rootprompt;zypper in daps</screen>
    </step>
   </procedure>
  </sect1>
@@ -97,7 +97,7 @@
    files. You can use <command> daps-init</command> or do it manually. Advisable
    especially for beginners is the <command>daps-init</command> command,
    because it creates an example and the necessary structure. Filenames always
-   end with <filename>.xml</filename>. 
+   end with <filename>.xml</filename>.
   </para>
   <procedure>
    <para>
@@ -108,14 +108,14 @@
     <title>Working with <command>daps-init</command></title>
     <para>
      This method is especially for beginners or if you don't have any
-     experience with DAPS. 
+     experience with DAPS.
     </para>
     <substeps>
      <step>
     <para>
-     Open your terminal and enter the <command>daps-init</command> command: 
+     Open your terminal and enter the <command>daps-init</command> command:
     </para>
-    <screen>$ HOME/tutorial:  daps-init -d <filename>DC-tutorial</filename></screen>
+    <screen>&prompt1;HOME/tutorial:  daps-init -d <filename>DC-tutorial</filename></screen>
      </step>
      <step>
     <para>
@@ -124,16 +124,16 @@
      <filename>filename</filename>. In this folder are a DC-file, a
      <filename>xml</filename> subfolder and a <filename>image</filename>
      subfolder. The <filename>image</filename> folder (see <xref
-     linkend="ex.image"/>) will be relevant later. 
+     linkend="ex.image"/>) will be relevant later.
     </para>
      </step>
      <step>
       <para>
        Now it is your turn: write your text! To understand the tags better, read the
        following chapters. If you need help, open the
-       <filename>daps-init</filename> manpage in your terminal: 
+       <filename>daps-init</filename> manpage in your terminal:
       </para>
-      <screen>$ daps-init --help</screen>
+      <screen>&prompt1;daps-init --help</screen>
      </step>
     </substeps>
    </step>
@@ -144,7 +144,7 @@
    <step>
     <title>Working without <command>daps-init</command></title>
     <para>
-     This method is for the more experienced writer. 
+     This method is for the more experienced writer.
     </para>
     <substeps>
      <step>
@@ -153,13 +153,13 @@
      your project name and two subfolders, called <filename>xml</filename> and
      <filename>images</filename>. Open your terminal.
     </para>
-    <screen>$ HOME/tutorial: mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
+    <screen>&prompt1;HOME/tutorial: mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      </step>
      <step>
       <para>
        Create a DC-file, which is a configuration file for your project.
        Open a new file and paste the following lines with the XML
-       filename instead of "MAIN-daps-example.xml".  
+       filename instead of "MAIN-daps-example.xml".
       </para>
       <screen>MAIN="MAIN-daps-example.xml"
 #export DOCCONF_NAME=$BASH_SOURCE
@@ -197,7 +197,7 @@
     </example>
     <para>
      Don't be afraid if you don't understand the header. Just insert it by
-     copy and paste into your file.  
+     copy and paste into your file.
     </para>
      </step>
     </substeps>
@@ -212,7 +212,7 @@
   </important>
   <para>
    We have built up the indispensable directory structure and have made
-   all preparations. Now it is your turn to write your text!    
+   all preparations. Now it is your turn to write your text!
   </para>
  </sect1>
 
@@ -229,18 +229,18 @@
     an article. If you want to write an article, paste an article start- and
     end tag. In the last section, you have already created the basic
     structure. Between these two tags,
-    write your text as shown (see <xref linkend="ex.tags"/>):   
+    write your text as shown (see <xref linkend="ex.tags"/>):
    </para>
    <example id="ex.tags">
     <title>Start- and Endtag of an Article</title>
     <programlisting>&lt;article lang="en" id="art.template">
 Tags and text
-&lt;/article>   
+&lt;/article>
     </programlisting>
    </example>
    <para>
     In the this tutorial I only describe how to write an article because a book is
-    almost equal. 
+    almost equal.
    </para>
   </sect2>
   <sect2>
@@ -249,7 +249,7 @@ Tags and text
     Each article contains lot of information about its author, publication
     date, release information, copyright or other <quote>metadata</quote>. To include
     such metadata I recommend an article info (see <xref linkend="ex.articleinfo"/>),
-    for adding the author and the title.   
+    for adding the author and the title.
    </para>
    <example id="ex.articleinfo">
     <title>Article info header</title>
@@ -285,7 +285,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
    <title>Structuring your Document with Sections</title>
    <para>
     Each article consists of sections and subsections. Example 4 contains a
-    section and a subsection (see <xref linkend="ex.sections"/>). 
+    section and a subsection (see <xref linkend="ex.sections"/>).
    </para>
    <example id="ex.sections">
     <title>Example: Structure with Sections</title>
@@ -321,7 +321,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      &lt;itemizedlist>
       &lt;listitem>
        &lt;para>
-        Hand blender 
+        Hand blender
        &lt;/para>
       &lt;/listitem>
       &lt;listitem>
@@ -338,27 +338,27 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
       <para>
        Section level one start tag. Section1 is the parent element of every
        element that comes below. Always need a title. Recommended is a para
-       tag in every section.    
+       tag in every section.
       </para>
      </callout>
      <callout arearefs="co.section2.xml">
       <para>
-       Start tag section level two.    
+       Start tag section level two.
       </para>
      </callout>
      <callout arearefs="co.section3.xml">
       <para>
-       End tag of section level two.   
+       End tag of section level two.
       </para>
      </callout>
      <callout arearefs="co.section4.xml">
       <para>
-       End tag of the section level one parent element. 
+       End tag of the section level one parent element.
       </para>
      </callout>
     </calloutlist>
    </example>
-   
+
    <figure>
     <title>Finished HTML output file with Sections</title>
     <mediaobject>
@@ -371,10 +371,10 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
     The image above shows the given XML file example as a  HTML
     page. As you can see in the picture, the section level two is a child
     element of section level one. It is possible to nest up to section
-    level five. 
+    level five.
    </para>
   </sect2>
-  
+
 
   <sect2>
    <title>Creating Itemized Lists</title>
@@ -413,7 +413,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
       </imageobject>
      </mediaobject>
    </figure>
-  
+
 
   </sect2>
 
@@ -424,7 +424,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
    <para>
     For writing an instruction for example, I recommend to do it step-by-step, as you can
     see in the following example(see <xref linkend="ex.listing"/>). It is
-    easier to understand for the reader. 
+    easier to understand for the reader.
    </para>
    <example id="ex.listing">
     <title>Example for Step-by-Step Instructions </title>
@@ -436,17 +436,17 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  &lt;/step>
  &lt;step>
   &lt;para>
-   Fry kidney beans with some oil. 
+   Fry kidney beans with some oil.
   &lt;/para>
  &lt;/step>
  &lt;step>
   &lt;para>
-   Puree all ingredients. 
+   Puree all ingredients.
   &lt;/para>
  &lt;/step>
  &lt;step>
   &lt;para>
-   Cook about 5 minutes. 
+   Cook about 5 minutes.
   &lt;/para>
  &lt;/step>
 &lt;/procedure>
@@ -461,12 +461,12 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
       <para>
        If you use <command>&lt;step></command> you can create numeric listed paragraphs. Every
        further <command> &lt;step></command> you add, it automatically counts
-       up. The table of contents will be created automatically. 
+       up. The table of contents will be created automatically.
       </para>
      </callout>
      <callout arearefs="co.textstructure3.xml">
       <para>
-       In <command>&lt;para></command> you can write down your text to build paragraphs.  
+       In <command>&lt;para></command> you can write down your text to build paragraphs.
       </para>
      </callout>
     </calloutlist>
@@ -475,7 +475,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
    <para>
     You can also use substeps. They must be placed under step. Always needs a
-    paragraph tag to write down your text. 
+    paragraph tag to write down your text.
    </para>
 
    <figure>
@@ -491,15 +491,15 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
 
-  
-  
+
+
   <sect2>
    <title>Integrating Images</title>
    <para id="ex.image">
     To integrate an image in your file, save the image in the
     <filename>image</filename> folder with a <filename>.png</filename>
     file extension. That is very important because otherwise, it will not
-    work. 
+    work.
    </para>
    <example>
     <title>Integrating Images</title>
@@ -517,7 +517,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
     <callout arearefs="co.image.xml">
      <para>
       Give your image a title, which you see in the output file above your
-      image. 
+      image.
      </para>
     </callout>
     <callout arearefs="co.image2.xml">
@@ -533,7 +533,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  <sect3>
   <title>Remote Links</title>
   <para>
-   Integrate an internet link in your tutorial to refer to a HTML page. 
+   Integrate an internet link in your tutorial to refer to a HTML page.
   </para>
  <example>
   <title>Integrating Remote Link</title>
@@ -542,7 +542,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 &lt;/para>
   </programlisting>
  </example>
- 
+
 <figure>
  <title>Example for a Remote Link</title>
  <mediaobject>
@@ -555,7 +555,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  <sect3>
   <title>Cross References</title>
   <para>
-   Link with cross references to paragraphs or examples. 
+   Link with cross references to paragraphs or examples.
   </para>
   <example>
    <title>Integrating Cross References</title>
@@ -567,18 +567,18 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
 &lt;title id="ex.preparation">Preparation&lt;/title><co id="co.references2.xml"/>
-    
+
    </programlisting>
    <calloutlist>
     <callout arearefs="co.references.xml">
      <para>
       With <command>&lt;xref linkend="ex.preparation"/></command> do you set a link to the
-      following <quote>Preparation</quote> title. 
+      following <quote>Preparation</quote> title.
      </para>
     </callout>
     <callout arearefs="co.references2.xml">
      <para>
-      Set <command>id=ex.preparation</command> at the paragraph, you want to refer to. 
+      Set <command>id=ex.preparation</command> at the paragraph, you want to refer to.
      </para>
     </callout>
    </calloutlist>
@@ -593,7 +593,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 </mediaobject>
 </figure>
 <para>
- As you can see in the picture, the underlined part is a link to the title <quote>Preparation</quote>. 
+ As you can see in the picture, the underlined part is a link to the title <quote>Preparation</quote>.
 </para>
  </sect3>
 </sect2>
@@ -602,12 +602,12 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
 
- 
+
  <sect1>
   <title>Convert your XML Files</title>
   <para>
    Convert your XML-file whenever you want to, no matter if it is finished or
-   you want to see the temporary result. Convert as often as you like. 
+   you want to see the temporary result. Convert as often as you like.
   </para>
   <sect2>
    <title>Convert your XML file into PDF</title>
@@ -616,12 +616,12 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      <para>
       Open your terminal and enter the following command:
      </para>
-     <screen> $ HOME/tutorial: daps -d <filename>DC-tutorial</filename> color-pdf</screen>
+     <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> color-pdf</screen>
    </step>
    <step>
      <para>
       Now has a folder called <filename>build</filename> created
-      automatically. There you find your finished PDF file. 
+      automatically. There you find your finished PDF file.
      </para>
    </step>
   </procedure>
@@ -633,12 +633,12 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      <para>
       To get a HTML-page, open your terminal and enter the following command:
      </para>
-     <screen>$ HOME/tutorial: daps -d <filename>DC-tutorial</filename> htmlsingle</screen>
+     <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> htmlsingle</screen>
      </step>
      <step>
      <para>
       You get a green colored link, which you can open in a browser, for
-      example Firefox. 
+      example Firefox.
      </para>
      </step>
     </procedure>
@@ -649,7 +649,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
     If you still have questions or want to have additional information, I
     recommend the DAPS manpage. Open it in your terminal:
    </para>
-   <screen>$ daps --help</screen>
+   <screen>&prompt1;daps --help</screen>
   </sect2>
   <sect2>
    <title>Further Information</title>
@@ -676,8 +676,8 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
 
- 
- 
+
+
 
 
 

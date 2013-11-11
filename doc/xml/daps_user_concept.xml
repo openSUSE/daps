@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet
- href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl"
  type="text/xml"
  title="Profiling step"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.docbook.org/xml/4.5/docbookx.dtd"
@@ -62,7 +62,7 @@
       output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;,
       text, and man pages. For details, refer to
       <xref linkend="cha.daps.user.output"/>.
-      <remark>taroth 2012-04-24: decide 
+      <remark>taroth 2012-04-24: decide
        where to point to: book chapter or QS?</remark>
      </para>
     </listitem>
@@ -74,8 +74,8 @@
       By default, &dapsacr; uses the DocBook stylesheets to generate the
       output formats. But &dapsacr; also supports custom layouts for your
       documentation projects (or for individual books within your set).
-<!--You do not need to define custom stylesheets for <emphasis>all</emphasis> 
-     output formats&mdash;in case a custom layout cannot be found, &dapsacr; 
+<!--You do not need to define custom stylesheets for <emphasis>all</emphasis>
+     output formats&mdash;in case a custom layout cannot be found, &dapsacr;
      will automatically fall back to the DocBook stylesheets.-->
      </para>
      <para>
@@ -197,11 +197,11 @@
       meta-information in the generated output. For handing over your files
       to review or translation, &dapsacr; can create TAR archives of the XML
       sources and graphics.
-<!--Alternatively, transform all files 
+<!--Alternatively, transform all files
      included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into an
      XML bigfile. If you have a huge documentation project of which only individual
      books or files are to be translated, you can mark them for translation
-     with &dm;. The command <command>daps locdrop</command> will automatically 
+     with &dm;. The command <command>daps locdrop</command> will automatically
      sort and pack those files into s separate tarball.-->
       For details, refer to <xref linkend="cha.daps.user.review"/>.
      </para>
@@ -322,7 +322,7 @@
  &lt;abstract&gt;
   &lt;para&gt;
    You may use this file as a template. For a complete DocBook reference
-   see &lt;citetitle&gt;&tdg;&lt;/citetitle&gt;, available at 
+   see &lt;citetitle&gt;&tdg;&lt;/citetitle&gt;, available at
    &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
   &lt;/para&gt;
  &lt;/abstract&gt;
@@ -343,7 +343,7 @@
    </example>
    <para>
     Let us assume, the XML file shown in
-    <xref linkend="ex.daps.main.art" 
+    <xref linkend="ex.daps.main.art"
     xrefstyle="select:label"/> is
     named <filename>MAIN-DAPS-example-article.xml</filename> and you want to
     publish it using the default DocBook layout. To generate output, you
@@ -362,7 +362,7 @@
 
 ## Mandatory Parameter
 <emphasis role="strong">MAIN="MAIN-DAPS-example-article.xml" </emphasis></screen>
-    &daps-co-main; 
+    &daps-co-main;
    </example>
    <para>
     The example above is a bit artificial, though: If you do not want to
@@ -400,7 +400,7 @@
   &lt;abstract&gt;
    &lt;para&gt;
     You may use this file as a template. For a complete reference on DocBook
-    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt;, available at 
+    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt;, available at
     &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
    &lt;/para&gt;
   &lt;/abstract&gt;
@@ -440,7 +440,7 @@
    </para>
    <example id="ex.daps.dc.book">
     <title>&dc; File For a Book with Custom Layout</title>
-<screen>## Doc config file for the DAPS example book 
+<screen>## Doc config file for the DAPS example book
 ## See /etc/daps/config for documentation of the settings below
 
 ## Mandatory Parameter
@@ -457,10 +457,10 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
    <calloutlist>
     <callout arearefs="co.daps.dc.book.main"> &daps-co-main; </callout>
     <callout arearefs="co.daps.dc.book.styleroot"> &daps-co-styleroot;
-     <!--The custom stylesheet directory must have the same structure as the 
-     original DocBook stylesheet root directory, but it but does not need to 
-     contain stylesheets for all output formats. If &dapsacr; cannot find a 
-     custom stylesheet for a specific output format, it uses the 
+     <!--The custom stylesheet directory must have the same structure as the
+     original DocBook stylesheet root directory, but it but does not need to
+     contain stylesheets for all output formats. If &dapsacr; cannot find a
+     custom stylesheet for a specific output format, it uses the
      default DocBook layout instead.-->
     </callout>
    </calloutlist>
@@ -481,7 +481,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     also use XIncludes for splitting up books, articles or chapters into
     separate files. For more information, refer to
     <xref linkend="sec.daps.user.modular.xi"/> and
-    <ulink 
+    <ulink
     url="http://www.docbook.org/tdg51/en/html/ch02.html"><citetitle>Physical
     Divisions: Breaking a Document into Separate Files</citetitle></ulink>.
    </para>
@@ -492,12 +492,12 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
 
 <emphasis role="strong">&lt;set lang="en"&gt;</emphasis>
  &lt;title&gt;&dapsacr; Documentation&lt;/title&gt;
- &lt;xi:include href="book_daps_user.xml" 
+ &lt;xi:include href="book_daps_user.xml"
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- &lt;xi:include href="book_daps_quickstarts.xml" 
+ &lt;xi:include href="book_daps_quickstarts.xml"
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;
- &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml" 
-             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;             
+ &lt;!&#45;&#45;&lt;xi:include href="book_daps_developer.xml"
+             xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;
 <emphasis role="strong">&lt;/set&gt;</emphasis></screen>
    </example>
    <para>
@@ -602,7 +602,7 @@ FORMATTER="xep" <co id="co.daps.dc.user.formatter"/>
 ##Draft Mode
 # Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
 # Is ignored for any other output format and has no effect on profiling.
-# This value can be set to "yes" using the -d switch on the command line 
+# This value can be set to "yes" using the -d switch on the command line
 # Also see COMMENTS and REMARKS
 #
 DRAFT="yes" <co id="co.daps.dc.user.draft"/>
@@ -715,10 +715,10 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
  <sect1 id="sec.daps.user.basics.dirstruct">
   <title>Directory Structure</title>
 
-<!--taroth 2012-04-26: cave, same contents in DAPS Quick 
+<!--taroth 2012-04-26: cave, same contents in DAPS Quick
   (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
 
-<!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and 
+<!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and
   include it multiple times (callout IDs!)-->
 
   <para>
@@ -743,7 +743,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
      |   |  |--pdf/
      |   |  |--png/
      |   |  |--svg/
-     |--xml/<co id="co.docdir.xml"/> 
+     |--xml/<co id="co.docdir.xml"/>
      |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
   </example>
 
@@ -810,10 +810,10 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    <example id="ex.daps.user.build">
     <title>Build Directory</title>
 <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
-  <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/> 
-     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>    
-     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>    
-     |--.images/ <co id="co.builddir.img"/>    
+  <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
+     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
+     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>
+     |--.images/ <co id="co.builddir.img"/>
      |--.profiled/ <co id="co.builddir.profiled"/>
      |--.tmp/ <co id="co.builddir.tmp"/></screen>
    </example>
@@ -874,15 +874,15 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    verbosity, and the &dclong; file for creating the output.
   </para>
 
-<!--taroth 2013-01-15: cave, same contents in DAPS Quick 
+<!--taroth 2013-01-15: cave, same contents in DAPS Quick
   (art_daps_quick.xml, see id=sec.daps.quick.syntax)-->
 
-<!--taroth 2013-01-15: impossible to source out to phrases-decl.ent and 
+<!--taroth 2013-01-15: impossible to source out to phrases-decl.ent and
   include it multiple times (callout IDs!)-->
 
   <example id="ex.daps.user.syntax">
    <title>&dapsacr; Syntax</title>
-<screen>$ &dapscmd;<co id="co.daps.user.syntax.main"/> --debug<co id="co.daps.user.syntax.debug"/> -d<co id="co.daps.user.syntax.dc"/> &dc;-daps-example html<co id="co.daps.user.syntax.output"/> --static<co id="co.daps.user.syntax.static"/></screen>
+<screen>&prompt1;&dapscmd;<co id="co.daps.user.syntax.main"/> --debug<co id="co.daps.user.syntax.debug"/> -d<co id="co.daps.user.syntax.dc"/> &dc;-daps-example html<co id="co.daps.user.syntax.output"/> --static<co id="co.daps.user.syntax.static"/></screen>
    <calloutlist>
     <callout arearefs="co.daps.user.syntax.main">
      <para>
@@ -918,7 +918,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
     </callout>
    </calloutlist>
   </example>
-  
+
   &daps-dc-file-tip;
 
   &daps-help-basics;
