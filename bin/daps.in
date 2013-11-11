@@ -1550,7 +1550,11 @@ export SETFILES_TMP
 # subcommand function
 #
 WRITE_LOG=1
-$FUNCTION $SUBCMD ${SCMD_ARGS[@]}
+
+# eval is needed here, otherwise the --xsltparam option does not
+# work 
+#
+eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
 
 # remove the tmp SETFILE
 # done via trap, see above
