@@ -74,6 +74,43 @@
     <xsl:apply-templates select="."/>
   </xsl:template>
 
+  <xsl:template match="ulink" name="ulink">
+    <xsl:param name="url" select="@url"/>
+
+    <a>
+      <xsl:apply-templates select="." mode="common.html.attributes"/>
+      <xsl:if test="@id or @xml:id">
+        <xsl:choose>
+          <xsl:when test="$generate.id.attributes = 0">
+            <xsl:attribute name="name">
+              <xsl:value-of select="(@id|@xml:id)[1]"/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="id">
+              <xsl:value-of select="(@id|@xml:id)[1]"/>
+            </xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:attribute name="href"><xsl:value-of select="$url"/></xsl:attribute>
+      <xsl:if test="$ulink.target != ''">
+        <xsl:attribute name="target">
+          <xsl:value-of select="$ulink.target"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="count(child::node())=0">
+          <xsl:value-of select="$url"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="no.anchor.mode"/>
+          <span class="ulink-url"> (<xsl:value-of select="$url"/>)</span>
+        </xsl:otherwise>
+      </xsl:choose>
+    </a>
+  </xsl:template>
+
 <!-- ================ -->
 
   <xsl:template name="create.linkto.other.book">

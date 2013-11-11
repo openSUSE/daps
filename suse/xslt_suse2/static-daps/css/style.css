@@ -1219,6 +1219,10 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 10px;
 }
 
+.ulink-url {
+    display: none;
+}
+
 #_content .screen a[id] {
     display: none;
 }
@@ -2327,7 +2331,12 @@ body.draft {
 
 
 @media print {
-    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap, #_bottom-navigation, #_share-print {
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap,
+    #_bottom-navigation, #_share-print {
+        display: none;
+    }
+
+    .permalink, .report-bug {
         display: none;
     }
 
@@ -2351,6 +2360,10 @@ body.draft {
         background-image: none;
         width: auto;
         height: auto;
+    }
+
+    .ulink-url {
+        display: inline;
     }
 }
 
