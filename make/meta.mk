@@ -7,7 +7,7 @@
 # Please submit feedback or patches to
 # <fsundermeyer at opensuse dot org>
 #
-# for targets html, pdf, color-pdf
+# for targets html and pdf
 #
 STYLEMETA := $(DAPSROOT)/daps-xslt/common/svn2docproperties.xsl
 

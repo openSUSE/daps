@@ -192,7 +192,7 @@ dist-webhelp: webhelp
 #   |-$DOCNAME_graphics_png.tar.bz2
 #   |-$DOCNAME
 #   |   |-book.epub
-#   |   |-book.color-pfd
+#   |   |-book.pfd
 #   |   |-book.dist-single-html
 #
 # When called with --noset, or without --export-dir all files are copied
@@ -241,7 +241,7 @@ online-docs:
 	exit 1
   else
     ifneq ($(NOPDF),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk color-pdf
+	$(MAKE) -f $(DAPSROOT)/make/selector.mk pdf
 	cp $(PDF_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
     ifneq ($(NOEPUB),1)
@@ -400,7 +400,7 @@ locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
     endif
     ifneq ($(NOPDF),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk color-pdf DOCNAME=$(DOCNAME)
+	$(MAKE) -f $(DAPSROOT)/make/selector.mk pdf DOCNAME=$(DOCNAME)
 	cp $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf $(LOCDROP_EXPORT_BOOKDIR)
     endif
 	@ccecho "result" "Find the locdrop results at:\n$(LOCDROP_EXPORT_BOOKDIR)"

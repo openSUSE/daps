@@ -259,12 +259,6 @@ HELP_SUBCOMMAND+=("clean-package=Removes all generated package data for a given 
 SUBCOMMANDS+=("clean-results=no_opts")
 HELP_SUBCOMMAND+=("clean-results=Removes all generated documents and logfiles for a given DC- or MAIN-file.\nImage conversion results and profiled XML sources will not be deleted.")
 
-SUBCOMMANDS+=("color-pdf=build_pdfs")
-HELP_SUBCOMMAND+=("color-pdf=Build a color PDF document from the XML sources.")
-
-SUBCOMMANDS+=("color-pdf-name=show_names")
-HELP_SUBCOMMAND+=("color-pdf-name=Print the file name that would result when building a color PDF.")
-
 SUBCOMMANDS+=("dapsenv=debugging")
 HELP_SUBCOMMAND+=("dapsenv=DEBUGGING: Shows a list of internal variables and their values.")
 
@@ -436,6 +430,12 @@ HELP_SUBCOMMAND+=("check=This command is deprecated, use \"dapsenv\" instead.")
 
 SUBCOMMANDS+=("chklink=deprecated")
 HELP_SUBCOMMAND+=("chklink=This command is deprecated, use \"checklink\" instead.")
+
+SUBCOMMANDS+=("color-pdf=deprecated")
+HELP_SUBCOMMAND+=("color-pdf=This command is deprecated, use \"pdf\" instead.")
+
+SUBCOMMANDS+=("color-pdf-name=deprecated")
+HELP_SUBCOMMAND+=("color-pdf-name=This command is deprecated, use \"pdf-name\" instead.")
 
 SUBCOMMANDS+=("db2novdoc=deprecated")
 HELP_SUBCOMMAND+=("db2novdoc=This command is no longer supported.")

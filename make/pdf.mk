@@ -67,10 +67,8 @@ endif
 
 # cropmarks are currently only supported by XEP
 ifeq ($(CROPMARKS),1)
-  FOSTRINGS  += --param "use.xep.cropmarks=1"
+  FOSTRINGS  += --param "use.xep.cropmarks=1" --param "crop.marks=1" 
   FOFILE     := $(FOFILE)_crop
-else
-  FOSTRINGS  += --param "use.xep.cropmarks=0"
 endif
 
 FOFILE := $(FOFILE)$(LANGSTRING).fo

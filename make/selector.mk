@@ -220,9 +220,8 @@ endif
 #---------------
 # PDF
 #
-PDFTARGETS := color-pdf pdf
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PDFTARGETS)))
+ifeq ($(MAKECMDGOALS),pdf)
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -242,7 +241,7 @@ endif
 #---------------
 # Result names
 #
-NAMETARGETS := color-pdf-name dist-html-name dist-jsp-name dist-webhelp-name epub-name html-dir-name jsp-dir-name man-dir-name mobi-name package-dir-name package-src-name pdf-name single-html-dir-name text-name webhelp-dir-name
+NAMETARGETS := dist-html-name dist-jsp-name dist-webhelp-name epub-name html-dir-name jsp-dir-name man-dir-name mobi-name package-dir-name package-src-name pdf-name single-html-dir-name text-name webhelp-dir-name
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(NAMETARGETS)))
   include $(DAPSROOT)/make/print_results.mk
