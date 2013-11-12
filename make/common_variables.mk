@@ -312,24 +312,4 @@ else
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
 endif
 
-#----------
-# HTML-Directories
-#
-# we want to have different output directories for jsp, html and single-html
-# Needed for html.mk and print_results.mk
-#
-# Using bash to determine the dir is __much__ easier as to do it in native make
-#
-define get-html-dirname
-$(shell \
-    if [[ $(TARGET) =~ jsp ]]; then \
-      echo -n "jsp"; \
-    elif [[ $(TARGET) =~ single ]]; then \
-      echo -n "single-html"; \
-    else \
-      echo -n "html"; \
-    fi)
-endef
-
-HTML_DIR := $(RESULT_DIR)/$(call get-html-dirname)/$(DOCNAME)$(DRAFT_STR)$(META_STR)
 

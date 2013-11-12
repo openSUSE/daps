@@ -207,6 +207,10 @@ function parse_args () {
                 P_SETDATE="$2"
                 shift 2
                 ;;
+	    --single)
+		P_HTMLSINGLE=1
+		shift
+		;;
             --statdir)
                 sanitize_path "$2" "P_STAT_DIR"
                 shift 2
@@ -577,7 +581,7 @@ function build_pdfs () {
 #
 # BUILD HTML and JSP
 #
-# Subcommands: html, htmlsingle, jsp
+# Subcommands: html, jsp
 #
 ###########################################################################
 function build_html_jsp () {
@@ -586,7 +590,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,name:,meta,remarks,rootid:,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,name:,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -603,6 +607,7 @@ function build_html_jsp () {
         help_name
         help_remarks
         help_rootid
+	help_single
         help_statdir
         help_static
         help_xsltparam "creates $SUB_CMD from the profiled sources"
@@ -610,13 +615,14 @@ function build_html_jsp () {
         exit 0
     fi
 
-    [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
-    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_CLEAN ]]      && export CLEAN_DIR=1
+    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]    && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
-    [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
-    [[ 1 = $P_HTML5 ]]    && export HTML5="yes"
+    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
+    [[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
+    [[ 1 = $P_STATIC ]]     && export STATIC_HTML=1
+    [[ 1 = $P_HTML5 ]]      && export HTML5="yes"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -1178,7 +1184,7 @@ function show_names () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:,single"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1195,6 +1201,7 @@ function show_names () {
                 help_name
                 help_remarks
                 help_rootid
+		[[ "html-dir-name" = $SUB_CMD ]] && help_single
                 echo
                 exit 0
     fi
@@ -1205,6 +1212,7 @@ function show_names () {
     [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
     [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS="1"
     [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE="1"
+    [[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE="1"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
 
@@ -1898,7 +1906,12 @@ function help_show_check () {
                               otherwise xdg-open.
                               Default: off"
 }
-
+function help_single () {
+    echo "    --single                  Creates a single file HTML output (opposed to 
+                              the default, which generates chunked HTML,
+                              consisting of several HTML pages.
+                              Default: off"
+}
 function help_statdir () {
     echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
                               (css, images,and, optionally, javascript).

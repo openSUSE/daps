@@ -9,6 +9,24 @@
 #
 
 #---------------
+# HTML
+#
+
+HTML_DIR := $(RESULT_DIR)/
+ifeq ($(TARGET),jsp)
+  HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
+  HTML_RESULT := $(HTML_DIR)/index.jsp
+else
+  ifeq ($(HTMLSINGLE),1)
+    HTML_DIR    := $(HTML_DIR)/single-html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
+    HTML_RESULT := $(HTML_DIR)/$(DOCNAME)$(DRAFT_STR)$(META_STR).html
+  else
+    HTML_DIR    := $(HTML_DIR)/html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
+    HTML_RESULT := $(HTML_DIR)/index.html
+  endif
+endif
+
+#---------------
 # PDF
 #
 PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)

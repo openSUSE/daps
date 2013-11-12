@@ -84,6 +84,7 @@ VARLIST=(
     HTML5
     HTML_CSS
     HTMLROOT
+    HTMLSINGLE
     IMAGES_COLOR
     IMAGES_GRAYSCALE
     IMG_VIEWER
@@ -388,12 +389,6 @@ HELP_SUBCOMMAND+=("showenv=DEBUGGING: Target reserved for daps-docmanager")
 SUBCOMMANDS+=("showvariable=debugging")
 HELP_SUBCOMMAND+=("showvariable=DEBUGGING: Show the value of a given variable.\nUsage: showvariable VARIABLE=<VARNAME>")
 
-SUBCOMMANDS+=("single-html=build_html_jsp")
-HELP_SUBCOMMAND+=("single-html=Build a single file HTML document from the XML sources.")
-
-SUBCOMMANDS+=("single-html-dir-name=show_names")
-HELP_SUBCOMMAND+=("single-html-dir-name=Print the directory name that would result when building a single file HTML document.")
-
 SUBCOMMANDS+=("spellcheck=spellcheck")
 HELP_SUBCOMMAND+=("spellcheck=Spellchecks the file specified with --file or the document specified by rootid.")
 
@@ -495,16 +490,16 @@ SUBCOMMANDS+=("force=deprecated")
 HELP_SUBCOMMAND+=("force=This command is no longer supported.")
 
 SUBCOMMANDS+=("htmlsingle=deprecated")
-HELP_SUBCOMMAND+=("htmlsingle=This command is deprecated, use \"single-html\" instead.")
+HELP_SUBCOMMAND+=("htmlsingle=This command is deprecated, use \"html --single\" instead.")
 
 SUBCOMMANDS+=("htmlsingle-name=deprecated")
-HELP_SUBCOMMAND+=("htmlsingle-name=This command is deprecated, use \"single-html-dir-name\" instead.")
+HELP_SUBCOMMAND+=("htmlsingle-name=This command is deprecated, use \"html-dir-name --single\" instead.")
 
 SUBCOMMANDS+=("html-single=deprecated")
-HELP_SUBCOMMAND+=("html-single=This command is deprecated, use \"single-html\" instead.")
+HELP_SUBCOMMAND+=("html-single=This command is deprecated, use \"html --single\" instead.")
 
 SUBCOMMANDS+=("html-single-name=deprecated")
-HELP_SUBCOMMAND+=("html-single-name=This command is deprecated, use \"single-html-dir-name\" instead.")
+HELP_SUBCOMMAND+=("html-single-name=This command is deprecated, use \"html-dir-name --single\" instead.")
 
 SUBCOMMANDS+=("jana=deprecated")
 HELP_SUBCOMMAND+=("jana=This command is deprecated, use \"checklink\" instead.")
@@ -543,10 +538,10 @@ SUBCOMMANDS+=("projectgraphics=deprecated")
 HELP_SUBCOMMAND+=("projectgraphics=This command is deprecated, use \"list-srcfiles --nodc --noent --noxml\" instead.")
 
 SUBCOMMANDS+=("provide-images=deprecated")
-HELP_SUBCOMMAND+=("provide-images=This command is no longer supported.")
+HELP_SUBCOMMAND+=("provide-images=This command is deprecated, use \"images\" instead.")
 
 SUBCOMMANDS+=("provide-color-images=deprecated")
-HELP_SUBCOMMAND+=("provide-color-images=This command is no longer supported.")
+HELP_SUBCOMMAND+=("provide-color-images=This command is deprecated, use \"images --color\" instead.")
 
 SUBCOMMANDS+=("provide-epub-images=deprecated")
 HELP_SUBCOMMAND+=("provide-epub-images=This command is no longer supported.")
@@ -556,6 +551,12 @@ HELP_SUBCOMMAND+=("remainingfiles=This command is deprecated, use \"list-srcfile
 
 SUBCOMMANDS+=("remaininggraphics=deprecated")
 HELP_SUBCOMMAND+=("remaininggraphics=This command is deprecated, use \"list-srcfiles-unused --noxml\" instead.")
+
+SUBCOMMANDS+=("single-html=deprecated")
+HELP_SUBCOMMAND+=("single-html=This command is deprecated, use \"html --single\" instead.")
+
+SUBCOMMANDS+=("single-html-dir-name=deprecated")
+HELP_SUBCOMMAND+=("single-html-dir-name=This command is deprecated, use \"html-dir-name --single\" instead.")
 
 SUBCOMMANDS+=("txt=deprecated")
 HELP_SUBCOMMAND+=("txt=This command is deprecated, use \"text\" instead.")
@@ -658,17 +659,14 @@ Subcommands:
    help                       Print this help
 
   Generate Books:
-    color-pdf                 Color pdf book
     epub                      ePUB book
-    html                      HTML book
+    html                      HTML book (chunked or single file HTML)
     jsp                       JSP book
     man                       man pages
     mobi                      Amazon Kindle eBook
-    pdf                       grayscale pdf (with cropmarks when using XEP)
-    single-html               Single file HTML book
+    pdf                       PDF book (color, grayscale, printable) 
     text                      ASCII book
     webhelp                   HTML book with collapsable TOC and search
-    wiki                      Single file MediaWiki book
 
 
   Create Distributable Archives:

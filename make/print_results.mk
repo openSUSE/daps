@@ -26,9 +26,9 @@ mobi-name:
 html-dir-name:
 	@ccecho "result" "$(HTML_DIR)"
 
-.PHONY: single-html-dir-name
-single-html-dir-name:
-	@ccecho "result" "$(HTML_DIR)"
+#.PHONY: single-html-dir-name
+#single-html-dir-name:
+#	@ccecho "result" "$(HTML_DIR)"
 
 .PHONY: dist-html-name
 dist-html-name:
@@ -41,7 +41,7 @@ dist-single-html-name:
 #---------------
 # JSP
 #
-# jsp also uses HTML_DIR, see common_variables.mk
+# jsp also uses HTML_DIR, see filenames.mk
 #
 .PHONY: jsp-dir-name
 jsp-dir-name:

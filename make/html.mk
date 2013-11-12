@@ -40,18 +40,21 @@ ifeq ($(TARGET),jsp)
   STYLEHTML       := $(firstword $(wildcard \
 			$(addsuffix /jsp/chunk.xsl,$(STYLE_ROOTDIRS))))
   HTML_SUFFIX     := jsp
-  HTML_RESULT     := $(HTML_DIR)/index.jsp
 else
   #
   # HTML / HTMLSINGLE
   #
-  STYLEHTML       := $(firstword $(wildcard \
-			$(addsuffix $(H_DIR)/chunk.xsl,$(STYLE_ROOTDIRS))))
-  STYLEHTMLSINGLE := $(firstword $(wildcard \
-			$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
   HTML_SUFFIX     := html
-  HTML_RESULT     := $(HTML_DIR)/index.html
-  HTMLSINGLE_RESULT := $(HTML_DIR)/$(DOCNAME)$(DRAFT_STR)$(META_STR).html
+
+  ifeq ($(HTMLSINGLE),1)
+    # Single HTML
+    STYLEHTML := $(firstword $(wildcard \
+			$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
+  else
+    # Chunked HTML
+    STYLEHTML   := $(firstword $(wildcard \
+			$(addsuffix $(H_DIR)/chunk.xsl,$(STYLE_ROOTDIRS))))
+  endif
 endif
 
 
@@ -144,7 +147,7 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 # HTML
 #
 .PHONY: html
-ifeq ($(CLEAN_DIR), 1)
+ifeq ($(CLEAN_DIR),1)
   html: $(shell rm -rf $(HTML_DIR))
 endif
 html: list-images-multisrc list-images-missing
@@ -154,21 +157,6 @@ endif
 html: copy_static_images
 html: $(HTML_RESULT) 
 	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
-
-#--------------
-# HTML-SINGLE
-#
-.PHONY: single-html
-ifeq ($(CLEAN_DIR), 1)
-  single-html: $(shell rm -rf $(HTML_DIR))
-endif
-single-html: list-images-multisrc list-images-missing
-ifdef ONLINE_IMAGES
-  single-html: $(ONLINE_IMAGES) copy_inline_images
-endif
-single-html: copy_static_images
-single-html: $(HTMLSINGLE_RESULT)
-	@ccecho "result" "SINGLE-HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
 #--------------
 # JSP
@@ -236,7 +224,7 @@ endif
 # inline images
 # needs to be PHONY, because we either create links (of no --static) or
 # copies of the images (with --static). Using a PHONY target ensures that
-# links can be overwriotten with copies and vice versa
+# links can be overwritten with copies and vice versa
 # Thus we also need the ugly for loop instead of creating images by 
 # $(HTML_DIR)/images/% rule
 #
@@ -254,7 +242,7 @@ copy_inline_images: $(ONLINE_IMAGES)
 #
 
 ifdef METASTRING
-  $(HTML_DIR)/index.html: $(PROFILEDIR)/METAFILE
+  $(HTML_RESULT): $(PROFILEDIR)/METAFILE
 endif
 $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
   ifeq ($(VERBOSITY),2)
@@ -263,30 +251,18 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 	@ccecho "info" "$(HTML_CSS_INFO)"
     endif
   endif
-	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(MANIFEST) \
-	  $(XSLTPARAM) --xinclude --stylesheet $(STYLEHTML) \
+  ifeq ($(HTMLSINGLE),1)
+	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
+	  --output $@ --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-  ifdef ROOTID
+	(cd $(HTML_DIR) && ln -sf $(notdir $@) index.html)
+  else
+	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
+          --xinclude --stylesheet $(STYLEHTML) \
+	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
+    ifdef ROOTID
 	if [ ! -e $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).$(HTML_SUFFIX) $@) \
 	fi
-  endif
-
-#---------------
-# Generate HTML SINGLE from profiled xml
-#
-ifdef METASTRING
-  $(HTMLSINGLE_RESULT): $(PROFILEDIR)/METAFILE
-endif
-$(HTMLSINGLE_RESULT): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
-  ifeq ($(VERBOSITY),2)
-	@ccecho "info" "   Creating single HTML page"
-    ifdef HTML_CSS_INFO
-	@ccecho "info" "$(HTML_CSS_INFO)"
     endif
   endif
-	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  --output $@ --xinclude --stylesheet $(STYLEHTMLSINGLE) \
-	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-	(cd $(HTML_DIR) && ln -sf $(notdir $@) index.html)
-
