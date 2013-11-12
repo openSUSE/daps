@@ -13,7 +13,7 @@
 #
 
 HTML_DIR := $(RESULT_DIR)/
-ifeq ($(TARGET),jsp)
+ifeq ($(JSP),jsp)
   HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
   HTML_RESULT := $(HTML_DIR)/index.jsp
 else

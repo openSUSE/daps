@@ -85,6 +85,7 @@ VARLIST=(
     HTML_CSS
     HTMLROOT
     HTMLSINGLE
+    JSP
     IMAGES_COLOR
     IMAGES_GRAYSCALE
     IMG_VIEWER
@@ -308,12 +309,6 @@ HELP_SUBCOMMAND+=("html-dir-name=Print the directory name that would result when
 SUBCOMMANDS+=("images=build_images")
 HELP_SUBCOMMAND+=("images=Generate images for the given document.")
 
-SUBCOMMANDS+=("jsp=build_html_jsp")
-HELP_SUBCOMMAND+=("jsp=Build a JSP document from the XML sources.")
-
-SUBCOMMANDS+=("jsp-dir-name=show_names")
-HELP_SUBCOMMAND+=("jsp-dir-name=Print the directory name that would result when building a JSP book.")
-
 SUBCOMMANDS+=("list-images-missing=filelists")
 HELP_SUBCOMMAND+=("list-images-missing=Prints a list of images that are referenced in the XML sources but are missing\nin the images' source directory.")
 
@@ -504,6 +499,12 @@ HELP_SUBCOMMAND+=("html-single-name=This command is deprecated, use \"html-dir-n
 SUBCOMMANDS+=("jana=deprecated")
 HELP_SUBCOMMAND+=("jana=This command is deprecated, use \"checklink\" instead.")
 
+SUBCOMMANDS+=("jsp=deprecated")
+HELP_SUBCOMMAND+=("jsp=This command is deprecated, use \"html --jsp\" instead.")
+
+SUBCOMMANDS+=("jsp-dir-name=deprecated")
+HELP_SUBCOMMAND+=("jsp-dir-name=This command is deprecated, use \"html --jsp\" instead.")
+
 SUBCOMMANDS+=("link-entity-dist=deprecated")
 HELP_SUBCOMMAND+=("link-entity-dist=This command is no longer supported.")
 
@@ -660,8 +661,7 @@ Subcommands:
 
   Generate Books:
     epub                      ePUB book
-    html                      HTML book (chunked or single file HTML)
-    jsp                       JSP book
+    html                      HTML book (chunked or single file HTML, jsp)
     man                       man pages
     mobi                      Amazon Kindle eBook
     pdf                       PDF book (color, grayscale, printable) 
@@ -731,7 +731,7 @@ Subcommands:
                               may be one of color-pdf, epub, html-single,
                               pdf, txt
     <target>-dir-name         Print resulting directory name for <target>.
-                              <target> may be html, jsp, man, or webhelp
+                              <target> may be html, man or webhelp
 
   Debugging:
     dapsenv                   Print a list of the most important make variables

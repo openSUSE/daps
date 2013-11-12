@@ -33,27 +33,25 @@ else
   H_DIR := /xhtml
 endif
 
-ifeq ($(TARGET),jsp)
-  #
+ifeq ($(JSP),jsp)
   # JSP
-  #
   STYLEHTML       := $(firstword $(wildcard \
 			$(addsuffix /jsp/chunk.xsl,$(STYLE_ROOTDIRS))))
   HTML_SUFFIX     := jsp
+  RESULT_NAME     := JSP
 else
-  #
   # HTML / HTMLSINGLE
-  #
   HTML_SUFFIX     := html
-
   ifeq ($(HTMLSINGLE),1)
     # Single HTML
-    STYLEHTML := $(firstword $(wildcard \
+    STYLEHTML   := $(firstword $(wildcard \
 			$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
+    RESULT_NAME := Single HTML
   else
     # Chunked HTML
     STYLEHTML   := $(firstword $(wildcard \
 			$(addsuffix $(H_DIR)/chunk.xsl,$(STYLE_ROOTDIRS))))
+    RESULT_NAME := HTML
   endif
 endif
 
@@ -157,21 +155,6 @@ endif
 html: copy_static_images
 html: $(HTML_RESULT) 
 	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
-
-#--------------
-# JSP
-#
-.PHONY: jsp
-ifeq ($(CLEAN_DIR), 1)
-  jsp: $(shell rm -rf $(HTML_DIR))
-endif
-jsp: list-images-multisrc list-images-missing
-ifdef ONLINE_IMAGES
-  jsp: $(ONLINE_IMAGES) copy_inline_images
-endif
-jsp: copy_static_images
-jsp: $(HTML_RESULT) 
-	@ccecho "result" "Find the JSP book at:\n$<"
 
 #------------------------------------------------------------------------
 #

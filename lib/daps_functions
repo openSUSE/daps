@@ -115,6 +115,10 @@ function parse_args () {
                 P_HTML5=1
                 shift
                 ;;
+	    --jsp)
+		P_JSP=1
+		shift
+		;;
             --lang)
                 P_LANG="$2"
                 shift 2
@@ -581,7 +585,7 @@ function build_pdfs () {
 #
 # BUILD HTML and JSP
 #
-# Subcommands: html, jsp
+# Subcommands: html
 #
 ###########################################################################
 function build_html_jsp () {
@@ -590,7 +594,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,name:,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -603,6 +607,7 @@ function build_html_jsp () {
         help_draft
         help_help
         help_html5
+	help_jsp
         help_meta
         help_name
         help_remarks
@@ -620,12 +625,18 @@ function build_html_jsp () {
     [[ 1 = $P_REMARKS ]]    && REMARKS=1
     # usemeta implies draft mode
     [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
-    [[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
     [[ 1 = $P_STATIC ]]     && export STATIC_HTML=1
-    [[ 1 = $P_HTML5 ]]      && export HTML5="yes"
+    [[ 1 = $P_HTML5 ]]      && export HTML5=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
+
+    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
+	exit_on_error "--single and --jsp are mutually exclusive"
+    else
+	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
+	[[ 1 = $P_JSP ]]        && export JSP=1
+    fi
 
     if [[ -n "$P_CSS" ]]; then
         if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
@@ -1184,7 +1195,7 @@ function show_names () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:,single"
+    LONG_OPTS="cropmarks,draft,formatter:,grayscale,help,jsp,meta,name:,remarks,rootid:,single"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1197,6 +1208,7 @@ function show_names () {
 		[[ "pdf-name" = $SUB_CMD ]] && help_formatter
 		[[ "pdf-name" = $SUB_CMD ]] && help_grayscale_pdf
                 help_help
+		[[ "jsp-dir-name" =  $SUB_CMD ]] && help_jsp
 		help_meta
                 help_name
                 help_remarks
@@ -1206,15 +1218,21 @@ function show_names () {
                 exit 0
     fi
 
-    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]    && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]     && META=1 DRAFT="yes"
-    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS="1"
-    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE="1"
-    [[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE="1"
+    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
+    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS=1
+    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+
+    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
+	exit_on_error "--single and --jsp are mutually exclusive"
+    else
+	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
+	[[ 1 = $P_JSP ]]        && export JSP=1
+    fi
 
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
@@ -1793,6 +1811,12 @@ function help_html5 () {
     echo "    --html5                   HTML builds are generated as XHTML files.
                               Force HTML5 with this switch.
                               Default: unset"
+}
+function help_jsp () {
+    echo "    --jsp                     Creates JSP output. Requires custom stylesheets
+                              (not available with the standard DocBook
+                              stylesheets).
+                              Default: off"
 }
 function help_lang () {
     echo "    --lang                    Specify a language to use for spellchecking.

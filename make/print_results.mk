@@ -26,10 +26,6 @@ mobi-name:
 html-dir-name:
 	@ccecho "result" "$(HTML_DIR)"
 
-#.PHONY: single-html-dir-name
-#single-html-dir-name:
-#	@ccecho "result" "$(HTML_DIR)"
-
 .PHONY: dist-html-name
 dist-html-name:
 	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2"
@@ -37,19 +33,6 @@ dist-html-name:
 .PHONY: dist-single-html-name
 dist-single-html-name:
 	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING)-htmlsingle.tar.bz2"
-
-#---------------
-# JSP
-#
-# jsp also uses HTML_DIR, see filenames.mk
-#
-.PHONY: jsp-dir-name
-jsp-dir-name:
-	@ccecho "result" "$(HTML_DIR)"
-
-.PHONY: dist-jsp-name
-dist-jsp-name:
-	@ccecho "result" "$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2"
 
 #---------------
 # MAN
