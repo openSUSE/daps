@@ -44,6 +44,10 @@ switch ( XmlProduct ) {
     bugzillaProduct = 'SUSE Linux Enterprise for SAP Applications 11 SP3';
     bugzillaComponent = 'General';
     break;
+//for NFS Quick Start, productnumber is 11 instead on 11 SP3 (PM's wish)
+  case 'SUSE Linux Enterprise High Availability Extension 11':
+    bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 11 SP3';
+    break;
   case 'SUSE Linux Enterprise High Availability Extension 11 SP3':
     bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 11 SP3';
     break;
