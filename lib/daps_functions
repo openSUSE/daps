@@ -1005,7 +1005,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="desktopfiles,documentfiles,formatter:,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1013,9 +1013,11 @@ function packaging () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        [[ "package-pdf" = $SUB_CMD ]] && help_cropmarks
         help_desktopfiles
         help_documentfiles
         [[ "package-pdf" = $SUB_CMD ]] && help_formatter
+        [[ "package-pdf" = $SUB_CMD ]] && help_grayscale_pdf
         help_help
         help_name
         help_pagefiles
@@ -1030,12 +1032,14 @@ function packaging () {
         exit 0
     fi
 
-    [[ -n "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
-    [[ -n "$P_DOCUMENTFILES" ]] && export export DOCUMENTFILES=1
-    [[ -n "$P_PAGEFILES" ]]     && export export PAGEFILES=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ 1 = $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
+    [[ 1 = $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
+    [[ 1 = $P_PAGEFILES ]]     && export export PAGEFILES=1
+    [[ 1 = $P_CROPMARKS ]]     && export CROPMARKS=1
+    [[ 1 = $P_GRAYSCALE ]]     && export GRAYSCALE=1
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
 
 
     if [[ -n "$P_FORMATTER" ]]; then
