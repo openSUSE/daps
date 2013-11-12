@@ -374,6 +374,19 @@
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
+<xsl:template match="prompt">
+  <xsl:variable name="color">
+    <xsl:choose>
+      <xsl:when test="@role = 'rootprompt' and format.print = 0">&dark-blood;</xsl:when>
+      <xsl:otherwise>&mid-gray;</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <fo:inline color="{$color}">
+    <xsl:call-template name="inline.monoseq"/>
+  </fo:inline>
+</xsl:template>
+
 <xsl:template name="process.menuchoice">
   <xsl:param name="nodelist" select="guibutton|guiicon|guilabel|guimenu|guimenuitem|guisubmenu|interface"/><!-- not(shortcut) -->
   <xsl:param name="count" select="1"/>
