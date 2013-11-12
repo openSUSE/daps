@@ -27,7 +27,7 @@
 #----------
 # Stylesheets
 #
-ifeq ("$(HTML5)", "yes")
+ifeq ($(HTML5),1)
   H_DIR := /xhtml5
 else
   H_DIR := /xhtml
@@ -106,7 +106,7 @@ HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
                 --stringparam "img.src.path=images/"
 
 # DocBook uses .xhtml for XHTML5 by default
-ifeq ("$(HTML5)", "yes")
+ifeq ($(HTML5),1)
   HTMLSTRINGS  += --stringparam "html.ext=.html"
 endif
 
@@ -154,11 +154,11 @@ ifdef ONLINE_IMAGES
 endif
 html: copy_static_images
 html: $(HTML_RESULT) 
-	@ccecho "result" "HTML book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
+	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
 
 #------------------------------------------------------------------------
 #
-# "Helper" targets for HTML and HTML-SINGLE
+# "Helper" targets
 #
 
 # create HTMLDIR and HTMLSIR/static:
