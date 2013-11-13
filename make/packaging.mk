@@ -151,10 +151,9 @@ dist-webhelp: webhelp
 # locations outside the specified ROOTID converted to text
 # (same as the bigfile target)
 #
-# NOTE:
-# Generting a graphics tarball containing images for the complete
-# set is not possible, therefore we are generating tarballs for each
-# book
+# Note: HTMLSINGLE is always set to "1" for this target
+# (via lib/daps_functions)
+
 
 ifndef OD_EXPORT_DIR
   OD_EXPORT_DIR     := $(RESULT_DIR)/online-docs
