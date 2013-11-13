@@ -925,6 +925,13 @@ function online-docs () {
     [[ 1 = $P_NOSET ]]   && export NOSET=1
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
+    if [[ 1 = $P_NOHTML ]]; then
+	export NOHTML=1
+    else
+	# online-docs always builds a single HTML file
+	export HTMLSINGLE=1
+    fi
+
     if [[ -n "$P_EXPORT_DIR" ]]; then
         if [[ -d $P_EXPORT_DIR ]]; then
             export OD_EXPORT_DIR="$P_EXPORT_DIR"

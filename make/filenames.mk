@@ -39,7 +39,7 @@ ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name))
   DOCUMENTFILES_RESULT := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
-ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name))
+ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name online-docs))
   PACKAGE_HTML_DIR     := $(PACK_DIR)/html
   DESKTOPFILES_RESULT  := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
   DOCUMENTFILES_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).document

@@ -85,7 +85,7 @@ package-pdf: $(PDF_RESULT)
 # (via lib/daps_functions)
 
 .PHONY: package-html
-package-html: | $(PACK_HTML_DIR)
+package-html: | $(PACKAGE_HTML_DIR)
 ifeq ($(JSP),1)
   package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
 else
@@ -182,7 +182,16 @@ endif
 online-docs: | $(OD_EXPORT_BOOKDIR)
 online-docs: $(OD_BIGFILE) $(OD_GRAPHICS)
 ifdef HTMLROOT
-online-docs: warn-cap
+  online-docs: warn-cap
+endif
+ifneq ($(NOPDF),1)
+  online-docs: pdf
+endif
+ifneq ($(NOEPUB),1)
+  online-docs: epub
+endif
+ifneq ($(NOHTML),1)
+  online-docs: package-html
 endif
 online-docs:
   ifdef MISSING
@@ -191,16 +200,13 @@ online-docs:
 	exit 1
   else
     ifneq ($(NOPDF),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk pdf
 	cp $(PDF_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
     ifneq ($(NOEPUB),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk epub
 	cp $(EPUB_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
     ifneq ($(NOHTML),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk dist-single-html
-	cp $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-singlehtml.tar.bz2 \
+	cp $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2 \
 	  $(OD_EXPORT_BOOKDIR)
     endif
 	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
