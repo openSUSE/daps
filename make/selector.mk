@@ -107,7 +107,7 @@ endif
 #---------------
 # HTML/HTMLSINGLE
 #
-HTMLTARGETS := html single-html
+HTMLTARGETS := html
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(HTMLTARGETS)))
   include $(DAPSROOT)/make/setfiles.mk
@@ -128,18 +128,6 @@ ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(IMGTARGETS)))
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/images.mk
-endif
-
-#---------------
-# JSP
-#
-ifeq ($(MAKECMDGOALS),jsp)
-  include $(DAPSROOT)/make/setfiles.mk
-  include $(DAPSROOT)/make/profiling.mk
-  include $(DAPSROOT)/make/validate.mk
-  include $(DAPSROOT)/make/images.mk
-  include $(DAPSROOT)/make/meta.mk
-  include $(DAPSROOT)/make/html.mk
 endif
 
 #---------------
@@ -168,7 +156,7 @@ endif
 #---------------
 # Packaging
 #
-PACKAGETARGETS_HTML := dist-html dist-jsp dist-single-html package-html package-jsp
+PACKAGETARGETS_HTML := package-html
 PACKAGETARGETS_PDF  := locdrop package-pdf
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_HTML)))
@@ -195,8 +183,6 @@ ifeq ($(MAKECMDGOALS),dist-webhelp)
   include $(DAPSROOT)/make/webhelp.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-
-
 ifeq ($(MAKECMDGOALS),online-docs)
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
@@ -207,7 +193,6 @@ ifeq ($(MAKECMDGOALS),online-docs)
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/epub.mk
 endif
-
 ifeq ($(MAKECMDGOALS),package-src)
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
@@ -241,7 +226,7 @@ endif
 #---------------
 # Result names
 #
-NAMETARGETS := dist-html-name dist-jsp-name dist-webhelp-name epub-name html-dir-name jsp-dir-name man-dir-name mobi-name package-dir-name package-src-name pdf-name single-html-dir-name text-name webhelp-dir-name
+NAMETARGETS := dist-webhelp-name epub-name html-dir-name man-dir-name mobi-name package-html-dir-name package-pdf-dir-name package-src-name pdf-name text-name webhelp-dir-name
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(NAMETARGETS)))
   include $(DAPSROOT)/make/print_results.mk

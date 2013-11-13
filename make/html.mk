@@ -33,7 +33,7 @@ else
   H_DIR := /xhtml
 endif
 
-ifeq ($(JSP),jsp)
+ifeq ($(JSP),1)
   # JSP
   STYLEHTML       := $(firstword $(wildcard \
 			$(addsuffix /jsp/chunk.xsl,$(STYLE_ROOTDIRS))))
@@ -153,8 +153,10 @@ ifdef ONLINE_IMAGES
   html: $(ONLINE_IMAGES) copy_inline_images
 endif
 html: copy_static_images
-html: $(HTML_RESULT) 
+html: $(HTML_RESULT)
+  ifeq ($(TARGET),html)
 	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
+  endif
 
 #------------------------------------------------------------------------
 #
@@ -243,9 +245,11 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
           --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-    ifdef ROOTID
+    ifneq ($(JSP),1)
+      ifdef ROOTID
 	if [ ! -e $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).$(HTML_SUFFIX) $@) \
 	fi
+      endif
     endif
   endif

@@ -267,24 +267,6 @@ HELP_SUBCOMMAND+=("dapsenv=DEBUGGING: Shows a list of internal variables and the
 SUBCOMMANDS+=("debug=debugging")
 HELP_SUBCOMMAND+=("debug=DEBUGGING: for developing purposes only.")
 
-SUBCOMMANDS+=("dist-html=build_generic")
-HELP_SUBCOMMAND+=("dist-html=Creates a distributable tar archive of an HTML document (including images).")
-
-SUBCOMMANDS+=("dist-html-name=show_names")
-HELP_SUBCOMMAND+=("dist-html-name=Print the file name that would result when building a distributable tar archive\nof an HTML document.")
-
-SUBCOMMANDS+=("dist-jsp=build_generic")
-HELP_SUBCOMMAND+=("dist-jsp=Creates a distributable tar archive of a JSP document (including images and css).")
-
-SUBCOMMANDS+=("dist-jsp-name=show_names")
-HELP_SUBCOMMAND+=("dist-jsp-name=Print the file name that would result when building a distributable tar archive\nof a JSP document.")
-
-SUBCOMMANDS+=("dist-single-html=build_generic")
-HELP_SUBCOMMAND+=("dist-single-html=Creates a distributable tar archive of a single file HTML document\n(including images and css).")
-
-SUBCOMMANDS+=("dist-single-html-name=show_names")
-HELP_SUBCOMMAND+=("dist-single-html-name=Print the file name that would result when building a distributable tar archive\nof a single HTML document.")
-
 SUBCOMMANDS+=("dist-webhelp=build_generic")
 HELP_SUBCOMMAND+=("dist-webhelp=Creates a distributable tar archive of a webhelp document\n(including images and css).")
 
@@ -345,17 +327,17 @@ HELP_SUBCOMMAND+=("online-docs=Creates a bigfile for the complete set, a tarball
 SUBCOMMANDS+=("optipng=build_generic")
 HELP_SUBCOMMAND+=("optipng=Reduce the size of the source PNG images using 'optipng'.\nNOTE: This command will directly alter your source images!")
 
-SUBCOMMANDS+=("package-dir-name=show_names")
-HELP_SUBCOMMAND+=("package-dir-name=Print the directory name that would result when building\na html, jsp, pdf package.")
-
 SUBCOMMANDS+=("package-html=packaging")
 HELP_SUBCOMMAND+=("package-html=Create all archives and files needed for packaging an HTML document.")
 
-SUBCOMMANDS+=("package-jsp=packaging")
-HELP_SUBCOMMAND+=("package-jsp=Create all archives and files needed for packaging a JSP document.")
+SUBCOMMANDS+=("package-html-dir-name=show_names")
+HELP_SUBCOMMAND+=("package-html-dir-name=Print the directory name that would result when building\nan html package.")
 
 SUBCOMMANDS+=("package-pdf=packaging")
 HELP_SUBCOMMAND+=("package-pdf=Create all archives and files needed for packaging a color PDF document.")
+
+SUBCOMMANDS+=("package-pdf-dir-name=show_names")
+HELP_SUBCOMMAND+=("package-pdf-dir-name=Print the directory name that would result when building\na pdf package.")
 
 SUBCOMMANDS+=("package-src=package-src")
 HELP_SUBCOMMAND+=("package-src=Creates a distributable source archive containg the profiled sources of the complete set\nincluding the original source images.")
@@ -460,11 +442,29 @@ HELP_SUBCOMMAND+=("dist-graphics=This command is deprecated, use \"package-src\"
 SUBCOMMANDS+=("dist-graphics-png=deprecated")
 HELP_SUBCOMMAND+=("dist-graphics-png=This command is no longer supported.")
 
+SUBCOMMANDS+=("dist-html=deprecated")
+HELP_SUBCOMMAND+=("dist-html=This command is deprecated, use \"package-html\" instead.")
+
+SUBCOMMANDS+=("dist-html-name=deprecated")
+HELP_SUBCOMMAND+=("dist-html-name=This command is deprecated, use \"package-html-dir-name\" instead.")
+
 SUBCOMMANDS+=("dist-html-single=deprecated")
-HELP_SUBCOMMAND+=("dist-html-single=This command is deprecated, use \"dist-single-html\" instead.")
+HELP_SUBCOMMAND+=("dist-html-single=This command is deprecated, use \"package-html --single\" instead.")
 
 SUBCOMMANDS+=("dist-htmlsingle=deprecated")
-HELP_SUBCOMMAND+=("dist-htmlsingle=This command is deprecated, use \"dist-single-html\" instead.")
+HELP_SUBCOMMAND+=("dist-htmlsingle=This command is deprecated, use \"package-html --single\" instead.")
+
+SUBCOMMANDS+=("dist-jsp=deprecated")
+HELP_SUBCOMMAND+=("dist-jsp==This command is deprecated, use \"package-html --jsp\" instead.")
+
+SUBCOMMANDS+=("dist-jsp-name=deprecated")
+HELP_SUBCOMMAND+=("dist-jsp-name=This command is deprecated, use \"package-html-dir-name --jsp\" instead.")
+
+SUBCOMMANDS+=("dist-single-html=deprecated")
+HELP_SUBCOMMAND+=("dist-single-html=This command is deprecated, use \"package-html --single\" instead.")
+
+SUBCOMMANDS+=("dist-single-html-name=deprecated")
+HELP_SUBCOMMAND+=("dist-single-html-name=This command is deprecated, use \"package-html-dir-name --single\" instead.")
 
 SUBCOMMANDS+=("dist-xml=deprecated")
 HELP_SUBCOMMAND+=("dist-xml=This command is deprecated, use \"package-src\" instead.")

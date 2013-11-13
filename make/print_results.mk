@@ -26,14 +26,6 @@ mobi-name:
 html-dir-name:
 	@ccecho "result" "$(HTML_DIR)"
 
-.PHONY: dist-html-name
-dist-html-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2"
-
-.PHONY: dist-single-html-name
-dist-single-html-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING)-htmlsingle.tar.bz2"
-
 #---------------
 # MAN
 #
@@ -48,9 +40,13 @@ man-dir-name:
 package-src-name:
 	@ccecho "result" "$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)_src_set.tar.bz2"
 
-.PHONY: package-dir-name
-package-dir-name:
-	@ccecho "result" "$(PACK_DIR)/"
+.PHONY: package-html-dir-name
+package-html-dir-name:
+	@ccecho "result" "$(PACKAGE_HTML_DIR)/"
+
+.PHONY: package-pdf-dir-name
+package-pdf-dir-name:
+	@ccecho "result" "$(PACKAGE_PDF_DIR)/"
 
 #---------------
 # PDF

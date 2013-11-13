@@ -13,20 +13,7 @@
 
 DESKTOP_FILES_DIR := $(TMP_DIR)/desktop
 
-# Help file format
-#
-ifeq ($(MAKECMDGOALS),package-pdf)
-  HF_FORMAT := pdf
-endif
-ifeq ($(MAKECMDGOALS),package-html)
-  HF_FORMAT := html
-endif
-
-DESKTOPFILES_RESULT  := $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
-DOCUMENTFILES_RESULT := $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-$(HF_FORMAT).document
-PAGEFILES_RESULT     := $(PACK_DIR)/$(DOCNAME).page
-
-$(PACK_DIR) $(DESKTOP_FILES_DIR):
+$(DESKTOP_FILES_DIR) $(PACK_DIR) $(PACKAGE_HTML_DIR) $(PACKAGE_PDF_DIR):
 	mkdir -p $@
 
 
@@ -71,7 +58,7 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 # package-pdf
 #
 .PHONY: package-pdf
-package-pdf: | $(PACK_DIR)
+package-pdf: | $(PACKAGE_PDF_DIR)
 ifeq ($(DESKTOPFILES),1)
   package-pdf: $(DESKTOPFILES_RESULT)
 endif
@@ -87,15 +74,27 @@ package-pdf: $(PDF_RESULT)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	(cd $(PACK_DIR); ln -sf $(PDF_RESULT) $(DOCNAME)$(LANGSTRING).pdf)
-	@ccecho "result" "Find the package-pdf results at:\n$(PACK_DIR)"
+	cp $(PDF_RESULT) $(DOCNAME)$(LANGSTRING).pdf
+	@ccecho "result" "Find the package-pdf results at:\n$(PACKAGE_PDF_DIR)"
   endif
 
 #--------------
 # package-html
 #
+# Note: CLEAN_DIR is always set to "1" for this target
+# (via lib/daps_functions)
+
 .PHONY: package-html
-package-html: | $(PACK_DIR)
+package-html: | $(PACK_HTML_DIR)
+ifeq ($(JSP),1)
+  package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
+else
+  ifeq ($(HTMLSINGLE),1)
+    package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2
+  else
+    package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2
+  endif
+endif
 ifeq ($(DESKTOPFILES),1)
   package-html: $(DESKTOPFILES_RESULT)
 endif
@@ -105,63 +104,14 @@ endif
 ifeq ($(PAGEFILES),1)
   package-html: $(PAGEFILES_RESULT)
 endif
-package-html: dist-html
+package-html: html
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	@ccecho "result" "Find the package-html results at:\n$(PACK_DIR)"
-  endif
-
-#--------------
-# dist-html
-#
-.PHONY: dist-html
-dist-html: | $(PACK_DIR)
-dist-html: TARBALL := $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2
-dist-html: html
-  ifdef MISSING
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-	exit 1
-  else
-	BZIP2="--best" tar cfhj $(TARBALL) -C $(RESULT_DIR)/html $(DOCNAME)
-	@ccecho "result" "Find the HTML archive at:\n$(TARBALL)"
-  endif
-
-#--------------
-# dist-single-html
-#
-.PHONY: dist-single-html
-dist-single-html: | $(PACK_DIR)
-dist-single-html: TARBALL :=\
-			$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-singlehtml.tar.bz2
-dist-single-html: single-html
-  ifdef MISSING
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-	exit 1
-  else
-	BZIP2="--best" tar cfhj $(TARBALL) -C $(RESULT_DIR)/single-html \
-	  $(DOCNAME)
-	@ccecho "result" "Find the single-HTML archive at:\n$(TARBALL)"
-  endif
-#--------------
-# package-jsp dist-jsp
-#
-.PHONY: package-jsp dist-jsp
-package-jsp dist-jsp: | $(PACK_DIR)
-package-jsp dist-jsp: TARBALL :=\
-			$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
-package-jsp dist-jsp: jsp
-  ifdef MISSING
-	@ccecho "error" "Fatal error: The following images are missing:"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-	exit 1
-  else
-	BZIP2="--best" tar cfhj $(TARBALL) -C $(RESULT_DIR)/jsp $(DOCNAME)
-	@ccecho "result" "Find the JSP archive at:\n$(TARBALL)"
+	BZIP2="--best" tar cfhj $(TARBALL) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
+	@ccecho "result" "Find the package-html results at:\n$(PACKAGE_HTML_DIR)"
   endif
 
 #--------------
@@ -421,7 +371,7 @@ $(PAGEFILES_RESULT): | $(PACK_DIR)
 $(PAGEFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	$(XSLTPROC) --output $@ --xinclude \
 	  --stringparam "packagename=$(DOCNAME)" --stylesheet $(STYLE_MALLARD) \
-	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR)
+	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL)
 
 #--------------
 # Document file
@@ -435,7 +385,7 @@ $(DOCUMENTFILES_RESULT): | $(PACK_DIR)
 $(DOCUMENTFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	$(XSLTPROC) $(YELPSTRINGS) $(ROOTSTRING) \
 	  --output $@ --xinclude --stylesheet $(STYLE_YELP) \
-	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR)
+	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL)
 
 #--------------
 # Desktop files tarball
@@ -453,7 +403,7 @@ $(DESKTOPFILES_RESULT): | $(DESKTOP_FILES_DIR)
 $(DESKTOPFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 	$(XSLTPROC) $(DESKTOP_FILES_STRINGS) $(ROOTSTRING) --xinclude \
 	  --stylesheet $(STYLE_DESKTOP_FILES) --file $(PROFILED_MAIN) \
-	  $(XSLTPROCESSOR)
+	  $(XSLTPROCESSOR) $(ERR_DEVNULL)
 	BZIP2="--best" tar cjf $@ --absolute-names \
 	  --transform=s%$(DESKTOP_FILES_DIR)%desktop/% $(DESKTOP_FILES_DIR)
 	rm -rf $(DESKTOP_FILES_DIR)

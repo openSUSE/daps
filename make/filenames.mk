@@ -12,10 +12,11 @@
 # HTML
 #
 
-HTML_DIR := $(RESULT_DIR)/
-ifeq ($(JSP),jsp)
+HTML_DIR := $(RESULT_DIR)
+ifeq ($(JSP),1)
   HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
-  HTML_RESULT := $(HTML_DIR)/index.jsp
+  JSP_SUBDIR  := $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/jsp/get.dbjsp.xsl --stringparam "rootid=$(ROOTID)" --file $(PROFILED_MAIN) $(XSLTPROCESSOR) 2>/dev/null)
+  HTML_RESULT := $(HTML_DIR)/$(JSP_SUBDIR)/index.jsp
 else
   ifeq ($(HTMLSINGLE),1)
     HTML_DIR    := $(HTML_DIR)/single-html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
@@ -24,6 +25,25 @@ else
     HTML_DIR    := $(HTML_DIR)/html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
     HTML_RESULT := $(HTML_DIR)/index.html
   endif
+endif
+
+#---------------
+# Package-pdf, Package-html
+#
+# Help file format
+#
+
+ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name))
+  PACKAGE_PDF_DIR      := $(PACK_DIR)/pdf
+  DESKTOPFILES_RESULT  := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
+  DOCUMENTFILES_RESULT := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).document
+  PAGEFILES_RESULT     := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).page
+endif
+ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name))
+  PACKAGE_HTML_DIR     := $(PACK_DIR)/html
+  DESKTOPFILES_RESULT  := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
+  DOCUMENTFILES_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).document
+  PAGEFILES_RESULT     := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
 
 #---------------
@@ -44,3 +64,4 @@ ifeq ($(CROPMARKS),1)
 endif
 
 PDF_RESULT := $(PDF_RESULT)$(DRAFT_STR)$(META_STR)$(LANGSTRING).pdf
+

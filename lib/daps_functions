@@ -918,12 +918,13 @@ function online-docs () {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_NOEPUB" ]]     && export export NOEPUB=1
-    [[ -n "$P_NOHTML" ]]     && export export NOHTML=1
-    [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
-    [[ -n "$P_NOSET" ]]      && export export NOSET=1
-    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = $P_NOEPUB ]]  && export NOEPUB=1
+    [[ 1 = $P_NOHTML ]]  && export NOHTML=1
+    [[ 1 = $P_NOPDF ]]   && export NOPDF=1
+    [[ 1 = $P_NOSET ]]   && export NOSET=1
+    [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
+
     if [[ -n "$P_EXPORT_DIR" ]]; then
         if [[ -d $P_EXPORT_DIR ]]; then
             export OD_EXPORT_DIR="$P_EXPORT_DIR"
@@ -1005,7 +1006,7 @@ function packaging () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,jsp,name:,pagefiles,rootid:,set-date:,single,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1019,10 +1020,12 @@ function packaging () {
         [[ "package-pdf" = $SUB_CMD ]] && help_formatter
         [[ "package-pdf" = $SUB_CMD ]] && help_grayscale_pdf
         help_help
+	[[ "package-html" = $SUB_CMD ]] && help_jsp
         help_name
         help_pagefiles
         help_rootid
         help_set-date
+	[[ "package-html" = $SUB_CMD ]] && help_single
         if [[ "package-pdf" = $SUB_CMD ]]; then
             help_xsltparam "creates the .fo file from the profiled sources"
         elif [[ "package-html" = $SUB_CMD ]]; then
@@ -1041,6 +1044,10 @@ function packaging () {
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
 
+    # We always want to start with a clean HTML result directory for
+    # package-html
+    #
+    [[ "package-html" = $SUB_CMD ]] && export CLEAN_DIR=1
 
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
@@ -1150,7 +1157,7 @@ function filelists () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nodc,noent,noimg,noxml,pretty"
+    LONG_OPTS="help,nodc,noent,noimg,noxml,pretty,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1164,6 +1171,7 @@ function filelists () {
         help_noimg
         help_noxml
         help_pretty
+	help_rootid
         echo
         exit 0
     fi
@@ -1171,6 +1179,7 @@ function filelists () {
     [[ 1 = $P_LIST_NOENT ]] && export LIST_NOENT=1
     [[ 1 = $P_LIST_NOIMG ]] && export LIST_NOIMG=1
     [[ 1 = $P_LIST_NOXML ]] && export LIST_NOXML=1
+    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     if [[ 1 = $P_PRETTY ]]; then
 #        if [[ 0 != $VERBOSITY ]]; then
 #            ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
