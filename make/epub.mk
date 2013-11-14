@@ -86,9 +86,6 @@ endif
 #
 EPUBBIGFILE := $(TMP_DIR)/epub_$(DOCNAME).xml
 
-EPUB_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).epub
-MOBI_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi
-
 #--------------
 # EPUB
 #

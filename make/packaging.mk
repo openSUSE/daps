@@ -32,7 +32,6 @@ $(DESKTOP_FILES_DIR) $(PACK_DIR) $(PACKAGE_HTML_DIR) $(PACKAGE_PDF_DIR):
 #
 .PHONY: package-src
 package-src: | $(PACK_DIR)
-package-src: TARBALL := $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)_src_set.tar
 ifdef DEF_FILE
   package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
@@ -42,16 +41,16 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	tar chf $(TARBALL) --absolute-names \
+	tar chf $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(PROFILEDIR)%xml% $(PROFILES)
-	tar rfh $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
-	  $(USED_ALL) $(DOCCONF)
+	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(USED_ALL) $(DOCCONF)
     ifdef DEF_FILE
-	tar rfh $(TARBALL) --absolute-names --transform=s%$(DOC_DIR)/%% \
-	  $(DC_FILES)
+	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(DC_FILES)
     endif
-	bzip2 -9f $(TARBALL)
-	@ccecho "result" "Find the sources at:\n$(TARBALL).bz2"
+	bzip2 -9f $(PACKAGE_SRC_TARBALL)
+	@ccecho "result" "Find the sources at:\n$(PACKAGE_SRC_RESULT)"
   endif
 
 #--------------

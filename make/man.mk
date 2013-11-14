@@ -18,8 +18,6 @@
 STYLEMAN      := $(firstword $(wildcard $(addsuffix \
 			/manpages/docbook.xsl, $(STYLE_ROOTDIRS))))
 
-MAN_DIR := $(RESULT_DIR)/man
-
 MANSTRINGS := --stringparam "man.output.base.dir=$(MAN_DIR)/" \
 	      --param "refentry.meta.get.quietly=1" \
 	      --param "man.output.in.separate.dir=1"

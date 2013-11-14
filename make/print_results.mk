@@ -13,11 +13,11 @@
 #
 .PHONY: epub-name
 epub-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).epub"
+	@ccecho "result" "$(EPUB_RESULT)"
 
 .PHONY: mobi-name
 mobi-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi"
+	@ccecho "result" "$(MOBI_RESULT)"
 
 #---------------
 # HTML
@@ -31,14 +31,14 @@ html-dir-name:
 #
 .PHONY: man-dir-name
 man-dir-name:
-	@ccecho "result" "$(RESULT_DIR)/man"
+	@ccecho "result" "$(MAN_DIR)"
 
 #---------------
 # Packaging
 #
 .PHONY: package-src-name
 package-src-name:
-	@ccecho "result" "$(PACK_DIR)/$(DOCNAME)$(LANGSTRING)_src_set.tar.bz2"
+	@ccecho "result" "$(PACKAGE_SRC_RESULT)"
 
 .PHONY: package-html-dir-name
 package-html-dir-name:
@@ -60,7 +60,7 @@ pdf-name:
 #
 .PHONY: text-name
 text-name:
-	@ccecho "result" "$(RESULT_DIR)/$(DOCNAME).txt"
+	@ccecho "result" "$(TXT_RESULT)"
 
 #---------------
 # WEBHELP

@@ -8,10 +8,15 @@
 # <fsundermeyer at opensuse dot org>
 #
 
+#--------------
+# EPUB
+#
+EPUB_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).epub
+MOBI_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi
+
 #---------------
 # HTML
 #
-
 HTML_DIR := $(RESULT_DIR)
 ifeq ($(JSP),1)
   HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
@@ -28,11 +33,13 @@ else
 endif
 
 #---------------
+# MAN
+#
+MAN_DIR := $(RESULT_DIR)/man
+
+#---------------
 # Package-pdf, Package-html
 #
-# Help file format
-#
-
 ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name))
   PACKAGE_PDF_DIR      := $(PACK_DIR)/pdf
   DESKTOPFILES_RESULT  := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
@@ -45,6 +52,12 @@ ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name online-doc
   DOCUMENTFILES_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
+
+#---------------
+# Package-src
+#
+PACKAGE_SRC_TARBALL :=  $(PACK_DIR)/$(DOCNAME)$(LANGSTRING)_src_set.tar
+PACKAGE_SRC_RESULT  :=  $(PACKAGE_SRC_TARBALL).bz2
 
 #---------------
 # PDF
@@ -65,3 +78,8 @@ endif
 
 PDF_RESULT := $(PDF_RESULT)$(DRAFT_STR)$(META_STR)$(LANGSTRING).pdf
 
+
+#---------------
+# TXT
+#
+TXT_RESULT := $(RESULT_DIR)/$(DOCNAME).txt
