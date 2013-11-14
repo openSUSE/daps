@@ -24,14 +24,14 @@ mobi-name:
 #
 .PHONY: html-dir-name
 html-dir-name:
-	@ccecho "result" "$(HTML_DIR)"
+	@ccecho "result" "$(HTML_DIR)/"
 
 #---------------
 # MAN
 #
 .PHONY: man-dir-name
 man-dir-name:
-	@ccecho "result" "$(MAN_DIR)"
+	@ccecho "result" "$(MAN_DIR)/"
 
 #---------------
 # Packaging
@@ -67,7 +67,7 @@ text-name:
 #
 .PHONY: webhelp-dir-name
  webhelp-dir-name:
-	@ccecho "result" "$(WEBHELP_DIR)"
+	@ccecho "result" "$(WEBHELP_DIR)/"
 
 .PHONY: dist-webhelp-name
 dist-webhelp-name:

@@ -155,7 +155,7 @@ endif
 html: copy_static_images
 html: $(HTML_RESULT)
   ifeq ($(TARGET),html)
-	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
+	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$(HTML_DIR)/"
   endif
 
 #------------------------------------------------------------------------

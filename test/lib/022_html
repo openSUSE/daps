@@ -85,16 +85,13 @@ function test_html () {
         ' └─ The html command itself failed' \
         "$?"
     assertTrue \
-	" └─ The resulting file/link (${_HTML_BUILD_PATH}) does not exist." \
-	"[ -s $_HTML_BUILD_PATH -o -L $_HTML_BUILD_PATH ]"
+	" └─ The resulting file/link (${_HTML_BUILD_PATH}/index.html) does not exist." \
+	"[ -s $_HTML_BUILD_PATH/index.html -o -L $_HTML_BUILD_PATH/index.html ]"
 
-    _BUILD_DIR_NAME=$(dirname $_HTML_BUILD_PATH)
+    _BUILD_DIR_NAME=$_HTML_BUILD_PATH
     assertEquals \
 	" └─ The resulting filename does not match the one retrieved with --html-dir-name" \
 	"$_HTMLDIR_NAME_PATH" "$_BUILD_DIR_NAME"
-    assertTrue \
-	" └─ The result directory does not contain index.html" \
-	"[ -s $_HTMLDIR_NAME_PATH/index.html -o -L $_HTMLDIR_NAME_PATH/index.html ]"
 }
 
 #--------------------------------
@@ -179,7 +176,7 @@ function test_htmlRemarksDraftMeta () {
        ' └─ Building HTML with --draft --remarks --meta failed' \
        "$?"
 
-   _BUILD_DIR_NAME=$(dirname $_HTML_BUILD_PATH)
+   _BUILD_DIR_NAME=$_HTML_BUILD_PATH
    _HTMLDIR_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE html-dir-name --draft --remarks --meta 2>/dev/null)
    assertTrue \
        ' └─ Getting the HTML-dir-name with --draft --remarks --meta failed' \
@@ -190,7 +187,7 @@ function test_htmlRemarksDraftMeta () {
 
    # checking DRAFT mode
    #
-   egrep -q -- "background-image.*draft.png" ${_HTML_BUILD_PATH} 2>/dev/null
+   egrep -q -- "background-image.*draft.png" ${_HTML_BUILD_PATH}/index.html 2>/dev/null
    assertTrue \
        ' └─ Generated HTML does not seem to have a DRAFT bg-image' \
        "$?"
@@ -385,7 +382,7 @@ function test_htmlNAME () {
 	" └─ Building a html document with --name failed " \
        "$?"
 
-    _BUILD_SUBDIR_NAME=$(basename $(dirname $_HTML_BUILD_PATH))
+    _BUILD_SUBDIR_NAME=$(basename $_HTML_BUILD_PATH)
     assertEquals \
 	' └─ The subdirectory name of the build result does not match the string given with --name:' \
 	"$_NAME" "$_BUILD_SUBDIR_NAME"
@@ -394,11 +391,6 @@ function test_htmlNAME () {
     assertTrue \
 	' └─ Getting the HTML-dir-name with --name failed' \
 	"$?"
-
-    _BUILD_SUBDIR_NAME=$(basename $_HTMLDIR_NAME_PATH)
-    assertEquals \
-	" └─ The subdirectory name retrieved with html-dir-name does not match the string given with --name:" \
-	"$_NAME" "$_BUILD_SUBDIR_NAME"
 }
 
 #--------------------------------
@@ -411,7 +403,6 @@ function test_htmlRootidXsltparam () {
 
     _ROOTID=appendix
     _FILECOUNT_EXPECTED=1
-#    _BUILD_SUBDIR_ROOTID="$(dirname $(dirname $_HTMLDIR_NAME_PATH))/$_HTMLCMD/$_ROOTID"
     # will generate HTML files with .xhtml extension
     _XSLTPARAM="--param \\\"spacing.paras=1\\\""
 
@@ -421,11 +412,12 @@ function test_htmlRootidXsltparam () {
     assertTrue \
 	' └─ Building a html document with --rootid and --xsltparam failed ' \
        "$?"
+
     egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the FO-file' \
 	"$?"
-    _BUILD_SUBDIR_NAME=$(basename $(dirname $_HTML_BUILD_PATH))
+    _BUILD_SUBDIR_NAME=$(basename $_HTML_BUILD_PATH)
     assertEquals \
 	' └─ The resulting HTML dirname does not match the ROOTID:' \
 	"$_ROOTID" "$_BUILD_SUBDIR_NAME"
@@ -433,7 +425,7 @@ function test_htmlRootidXsltparam () {
     # check HTML file count - should be one real file
     # (only make sense for HTML, since single-html is only one file anyway)
     #
-    _FILECOUNT=$(find $(dirname $_HTML_BUILD_PATH) -type f -name "*.html" | wc -l)
+    _FILECOUNT=$(find $_HTML_BUILD_PATH -type f -name "*.html" | wc -l)
     assertEquals \
 	' └─ Wrong HTML file count:' \
 	"$_FILECOUNT_EXPECTED" "$_FILECOUNT"
@@ -442,7 +434,7 @@ function test_htmlRootidXsltparam () {
     # In this case we manually generate one in the makefile
     # Here we test if a link points to a real file
     #
-    [[ -L $_HTML_BUILD_PATH ]] && readlink -e $_HTML_BUILD_PATH >/dev/null 2>&1
+    [[ -L $_HTML_BUILD_PATH/index.html ]] && readlink -e $_HTML_BUILD_PATH/index.html >/dev/null 2>&1
     assertTrue \
 	" └─ The resulting link (${_HTML_BUILD_PATH}) does not point to an existing file" \
 	"$?"
@@ -562,7 +554,7 @@ function test_htmlSingle () {
        "$?"
    assertEquals \
        " └─ The resulting directory name does not match the one retrieved with html-dir-name: " \
-       "$_HTML_NAME_PATH" "$(dirname $_HTML_BUILD_PATH)"
+       "$_HTML_NAME_PATH" "$_HTML_BUILD_PATH"
 
    _FILE_COUNT_BUILD=$(find $_HTML_NAME_PATH -name "*.html" 2>/dev/null | wc -l)
    assertEquals \
