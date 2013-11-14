@@ -240,8 +240,6 @@ ifeq ($(MAKECMDGOALS),text)
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
-  include $(DAPSROOT)/make/images.mk
-  include $(DAPSROOT)/make/html.mk
   include $(DAPSROOT)/make/text.mk
 endif
 
