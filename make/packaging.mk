@@ -313,6 +313,9 @@ ifneq "$(strip $(DEF_FILE))" ""
   locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
+ifneq ($(NOPDF),1)
+  locdrop: pdf
+endif
 locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
   ifndef USESVN
 	$(error $(shell ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"))
@@ -355,8 +358,7 @@ locdrop: $(SRCFILES) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
     endif
     ifneq ($(NOPDF),1)
-	$(MAKE) -f $(DAPSROOT)/make/selector.mk pdf DOCNAME=$(DOCNAME)
-	cp $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).pdf $(LOCDROP_EXPORT_BOOKDIR)
+	cp $(PDF_RESULT) $(LOCDROP_EXPORT_BOOKDIR)
     endif
 	@ccecho "result" "Find the locdrop results at:\n$(LOCDROP_EXPORT_BOOKDIR)"
   endif
