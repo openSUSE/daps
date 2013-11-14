@@ -96,7 +96,9 @@ endif
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
 pdf: $(PDF_RESULT)
+  ifeq ($(TARGET),pdf)
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
+  endif
 
 #--------------
 # Generate fo

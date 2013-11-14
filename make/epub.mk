@@ -98,7 +98,9 @@ ifeq ("$(EPUBCHECK)", "yes")
   epub: epub-check
 endif
 epub: $(EPUB_RESULT)
+  ifeq ($(TARGET),epub)
 	@ccecho "result" "Find the EPUB book at:\n$<"
+  endif
 
 
 .PHONY: mobi
