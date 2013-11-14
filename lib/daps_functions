@@ -295,9 +295,9 @@ function init_env {
         EXISTS_ROOTID=$($XSLTPROC --stringparam "rootid=$ROOTID" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
         TEST_ROOTID_RESULT=$?
         if [[ 0 == $TEST_ROOTID_RESULT  && "yes" != $EXISTS_ROOTID ]]; then
-            exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist"
+            exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist."
         elif [[ 0 != $TEST_ROOTID_RESULT && 0 != $VERBOSITY ]]; then
-            ccecho "warn" "Warning: Wasn't able to determine if ROOTID exist."
+            ccecho "warn" "Warning: Was not able to determine if ROOTID exists."
         fi
     fi
 
@@ -328,7 +328,7 @@ function init_env {
         0|no|"")
             export REMARKS=0 ;;
         *)
-            exit_on_error "Wrong value for REMARKS. Must be \"yes\" or \"no\""
+            exit_on_error "Invalid value for REMARKS. Must be \"yes\" or \"no\""
             ;;
         esac
 
@@ -340,7 +340,7 @@ function init_env {
           0|no|"")
             export META=0 ;;
         *)
-            exit_on_error "Wrong value for META. Must be \"yes\" or \"no\""
+            exit_on_error "Invalid value for META. Must be \"yes\" or \"no\""
             ;;
     esac
 
@@ -355,7 +355,7 @@ function init_env {
             "0" | "no" | "")
                 COLOR=0 ;;
             *)
-                exit_on_error "Wrong value for COLOR. Must be \"yes\" or \"no\""
+                exit_on_error "Invalid value for COLOR. Must be \"yes\" or \"no\""
                 ;;
         esac
     else
