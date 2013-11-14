@@ -104,7 +104,7 @@ done
 #########################################
 
 # I don't know a better approach than to store the stats in files
-# because exporting variable in bash only works top down, not
+# because exporting a variable in bash only works top down, not
 # bottom up
 for _STATFILE in failed skipped total; do
     echo 0 > ${_TEMPDIR}/$_STATFILE
@@ -122,7 +122,7 @@ GETOPT_RETURN_CODE=$?
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" )
+	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" )
 	    shift
 	    ;;
 	--builddir)
@@ -234,12 +234,6 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         # does not make sense to run the majority of other tests
         #
 	case "$_TEST" in
-	    *_html)
-		for _HTMLCMD in "html" "single-html"; do
-		    export _HTMLCMD
-		    eval "$_TEST"
-		done
-		;;
 	    *_pdf)
 		for _FOPROC in "${_FO_PROCS[@]}"; do
 		    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1

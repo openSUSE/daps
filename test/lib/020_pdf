@@ -161,7 +161,7 @@ function test_pdfGrayscaleCropmarks () {
        ' └─ Building the PDF with --grayscale --cropmarks failed' \
        "$?"
     assertTrue \
-	" └─ The resulting filename (${_PDF_BUILD_PATH}) does not exist" \
+	" └─ The resulting file (${_PDF_BUILD_PATH}) does not exist" \
 	"[ -s $_PDF_BUILD_PATH ]"
 
    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name --grayscale --cropmarks --formatter=$_FOPROC 2>/dev/null)
