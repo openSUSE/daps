@@ -290,6 +290,7 @@
   <xsl:attribute name="font-family">
     <xsl:value-of select="$title.fontset"></xsl:value-of>
   </xsl:attribute>
+  <xsl:attribute name="line-height">0.9 * <xsl:value-of select="$base-lineheight"/></xsl:attribute>
   <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
   <xsl:attribute name="space-before.minimum">2.8em</xsl:attribute>
@@ -346,7 +347,7 @@
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="(&normal; * $fontsize-adjust) div $mono-xheight-adjust"/>pt</xsl:attribute>
   <xsl:attribute name="text-align">start</xsl:attribute>
-  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/></xsl:attribute>
+  <xsl:attribute name="line-height">4em</xsl:attribute>
   <xsl:attribute name="start-indent">inherit</xsl:attribute>
   <xsl:attribute name="end-indent">inherit</xsl:attribute>
 </xsl:attribute-set>
