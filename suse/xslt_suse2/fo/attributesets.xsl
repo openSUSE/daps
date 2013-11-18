@@ -232,8 +232,18 @@
     <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight"/>em</xsl:attribute>
     <xsl:attribute name="widows">3</xsl:attribute>
     <xsl:attribute name="orphans">3</xsl:attribute>
+    <xsl:attribute name="margin-top">
+      <xsl:choose>
+        <xsl:when test="parent::callout|parent::listitem|
+                        parent::step|parent::substep">0</xsl:when>
+        <xsl:otherwise>0.3em</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="callout.properties">
+    <xsl:attribute name="space-after">0.3em</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- 20. Font Families ========================================== -->
 
