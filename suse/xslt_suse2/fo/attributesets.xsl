@@ -122,7 +122,7 @@
 
 <xsl:attribute-set name="table.properties" use-attribute-sets="formal.object.properties">
   <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
-  <xsl:attribute name="text-align">left</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
 
