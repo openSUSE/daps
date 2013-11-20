@@ -6,12 +6,13 @@
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 
   <!ENTITY tdg "DocBook: The Definitive Guide">
-
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
 ]>
 
 
 
-<article lang="en" id="art.template">
+<article lang="en" id="art.tutorial">
  <title>How to write a Tutorial with DAPS</title>
  <subtitle>DAPS Tutorial for Beginners</subtitle>
 
@@ -19,10 +20,12 @@
   <releaseinfo>
    Build Date: <?dbtimestamp format="B d, Y"?>
   </releaseinfo>
-  <author>
-   <firstname>Vanessa</firstname>
-   <surname>Wallfahrer</surname>
-  </author>
+  <authorgroup>
+    <author>
+      <firstname>Vanessa</firstname>
+      <surname>Wallfahrer</surname>
+    </author>
+  </authorgroup>
  </articleinfo>
 
  <abstract>
