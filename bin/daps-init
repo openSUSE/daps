@@ -15,7 +15,12 @@ function exit_on_error () {
     ccecho "error" "ERROR: ${1}" >&2
     exit 1;
 }
-
+function tempfile () {
+    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
+}
+function moving_file () {
+    mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml   
+}
 function usage () {
     echo "
 $ME -d <PATH TO DIRECTORY> [-r (article|book)] 
@@ -172,10 +177,10 @@ else
 fi
 
 if [[ -n $PRODUCTNAME ]]; then
-    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
+    tempfile
     if [[ $? -eq 0 ]]; then
 	xml ed -a /book/bookinfo/title -t elem -n productname -v $PRODUCTNAME ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
-	mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+	moving_file
     else 
 	ccecho "warn" "Productname could not be created"
     fi
@@ -183,10 +188,10 @@ fi
 
 
 if [[ -n $PRODUCTNUMBER ]]; then
-    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
+    tempfile
     if [[ $? -eq 0 ]]; then
 	xml ed -a /book/bookinfo/title -t elem -n productnumber -v $PRODUCTNUMBER ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
-	mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml
+        moving_file
     else 
 	ccecho "warn" "Productnumber could not be created"
     fi

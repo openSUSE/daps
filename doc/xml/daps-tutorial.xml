@@ -5,7 +5,7 @@
  "-//OASIS//DTD DocBook XML V4.5//EN"
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 
-  <!ENTITY tdg "DocBook: The Definitive Guide">
+ 
   <!ENTITY % entities SYSTEM "entity-decl.ent">
   %entities;
 ]>
@@ -13,8 +13,8 @@
 
 
 <article lang="en" id="art.tutorial">
- <title>How to write a Tutorial with DAPS</title>
- <subtitle>DAPS Tutorial for Beginners</subtitle>
+ <title>How to write an Article with DocBook and DAPS</title>
+
 
  <articleinfo>
   <releaseinfo>
@@ -30,22 +30,21 @@
 
  <abstract>
   <para>
-   This DAPS tutorial helps beginners to write and convert XML-files,
-   for example into PDF- or HTML-files. No previous XML-knowledge is
-   necessary! In the following chapters, I explain a few important tags with
-   examples and at the end, how to convert your file.
+   Why should I use DAPS? DAPS (DocBook Authoring and Publishing Suite) is a
+   program to transform XML into output formats such as HTML or PDF,
+   for example. In DAPS, it is all about the content. You can
+   create different output files, without changing anything in
+   the XML files themselves. Layout and contents are
+   strictly separated - the layout will be added automatically, but you have
+   full control which style sheet is used.    
   </para>
- </abstract>
-<sect1>
-<title>For whom is this tutorial?</title>
-<para>
- This tutorial is for DAPS-beginners and everybody who already worked a
- little bit with DAPS.
-</para>
-</sect1>
- <sect1>
-  <title>What is DAPS?</title>
   <para>
+   This tutorial is for DAPS beginners and everybody who already worked a
+   little bit with DAPS. 
+   It helps you to write and convert XML files
+   into PDF or HTML files for example. No previous XML knowledge is
+   necessary. 
+
    DAPS is a program to transform XML into output formats such as HTML or PDF
    for example.
    But why should I use DAPS? In DAPS, it is all about the text. You can
@@ -53,15 +52,40 @@
    changing anything in the file itself. The design will be created
    automatically.
   </para>
- </sect1>
+  <para>
+   This tutorial only describes how to write an article. Writing a
+   book is similar, but has more required elements. See the <quote>Style
+   Guide</quote> as example. 
+  </para>
+
+
+  <para>
+  Using the example of a recipe for a chili sauce, it explains step-by-step
+  how to set up your document, which basic XML tags to use for writing it, and
+  in the end, how to convert the document into HTML output. The following
+  screenshot shows the finished HTML file which we will create in the following. 
+  </para>
+  
+ </abstract>
+<figure>
+ <title>The finished HTML file, which is the Target of this Tutorial</title>
+<mediaobject>
+ <imageobject>
+  <imagedata fileref="Butcht7.11.png" width="80%"/>
+ </imageobject>
+</mediaobject>
+</figure>
+
+
 
 
  <sect1>
-  <title>What you need</title>
+  <title>What You Need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
-   writing use a XML compatible editor. Personally I recommend emacs.
-   Do the following:
+   writing use an editor with XML support. Recommended is Emacs and the DAPS
+   Version 2.0 or higher. 
+   Do the following to install Emacs and DAPS: 
   </para>
   <procedure>
    <step>
@@ -94,32 +118,31 @@
  </sect1>
 
  <sect1>
-  <title>How to start</title>
+  <title>How to Start</title>
   <para>
-   You need to create the necessary structure and
-   files. You can use <command> daps-init</command> or do it manually. Advisable
-   especially for beginners is the <command>daps-init</command> command,
-   because it creates an example and the necessary structure. Filenames always
+   In order to be able to process the XML files, DAPS requires a certain
+   directory structure. Either use <command>daps-init</command> or set it up
+   manually. The <command>daps-init</command> command is especially advisable
+   for beginners,
+   because it creates an example and the necessary structure. File names always
    end with <filename>.xml</filename>.
   </para>
-  <procedure>
-   <para>
-    Decide which method you are prefer:
-   </para>
-
-   <step>
+  <sect2>
     <title>Working with <command>daps-init</command></title>
     <para>
-     This method is especially for beginners or if you don't have any
+     This method is especially for beginners who don't have any
      experience with DAPS.
     </para>
-    <substeps>
-     <step>
     <para>
-     Open your terminal and enter the <command>daps-init</command> command:
+      The <command>daps-init</command> command creates a working environment
+      for DAPS. In this tutorial's example, it creates a directory called 
+     <filename>tutorial</filename>. It contains a DAPS configuration file for
+     your tutorial (<filename>DC-tutorial</filename>), the DocBook XML file
+     located in the XML subdirectory and a subdirectory containing image files
+     (<filename>images</filename>). The <filename>image</filename> folder will
+     be relevant later (see <xref linkend="ex.image"/>). 
     </para>
-    <screen>&prompt1;HOME/tutorial:  daps-init -d <filename>DC-tutorial</filename></screen>
-     </step>
+    <procedure>
      <step>
     <para>
       The <command>daps-init</command> command creates a working environment
@@ -129,6 +152,7 @@
      subfolder. The <filename>image</filename> folder (see <xref
      linkend="ex.image"/>) will be relevant later.
     </para>
+    <screen> daps-init --docdir recipe -r article</screen>
      </step>
      <step>
       <para>
@@ -138,14 +162,36 @@
       </para>
       <screen>&prompt1;daps-init --help</screen>
      </step>
-    </substeps>
-   </step>
+     <step>
+      <para>
+       Open the XML file (<filename>recipe/xml/MAIN-daps-example.xml</filename>) in
+       your editor and use it as a reference.
+      </para>
+     </step>
+     <step>
+      <para>
+       Open the Documentation Configuration file (<filename>recipe/DC-daps-example</filename>)
+       in an editor and use it as reference.
+      </para>
+     </step>
+     <step>
+      <para>
+       Proceed with <xref linkend="sec.howto"/>, where we will create another XML file and
+       another DC file from scratch (in parallel to the files created by
+       daps-init) and use them to write the recipe.
+      </para>
+     </step>
+   </procedure>
+  </sect2>
+  
+  
 
 
 
-
-   <step>
+<sect2>
     <title>Working without <command>daps-init</command></title>
+   <procedure>
+   
     <para>
      This method is for the more experienced writer.
     </para>
@@ -154,25 +200,54 @@
     <para>
      For working without <command>daps-init</command>, create a folder with
      your project name and two subfolders, called <filename>xml</filename> and
-     <filename>images</filename>. Open your terminal.
+     <filename>images</filename>. Open a terminal.
     </para>
+    <step>
+    <screen>mkdir recipe</screen>
+    </step>
+    <step>
+     <screen>cd recipe</screen>
+    </step>
+    <step>
     <screen>&prompt1;HOME/tutorial: mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      </step>
      <step>
       <para>
+       Now you have created the required directory structure that is
+       needed by DAPS.
+
        Create a DC-file, which is a configuration file for your project.
        Open a new file and paste the following lines with the XML
        filename instead of "MAIN-daps-example.xml".
       </para>
-      <screen>MAIN="MAIN-daps-example.xml"
-#export DOCCONF_NAME=$BASH_SOURCE
-      </screen>
      </step>
-     <step>
-    <para>
-     Let us start with your XML file: Open a new file, paste the following
-     header (see <xref linkend="ex.header"/>) and save it as: <filename>tutorial.xml</filename>.
-    </para>
+   </procedure>
+</sect2>
+<sect2>
+ <title>Creating an XML File and a Documentation Configuration
+ File</title>
+ <para>
+  Now we will create an XML file (that we will use in the following to
+  write the recipe) and a Documentation Configuration (DC) file (that we
+  will use later on to convert the XML file into HTML output).
+ </para>
+<procedure>
+ <step>
+  <para>
+   To create the XML file:
+  </para>
+  <substeps>
+  <step>
+   <para>
+    In a terminal, switch to the XML subfolder.
+   </para>
+   <screen>cd xml</screen>
+  </step>
+  <step>
+     <para>
+      Open a new file, and paste the following header into it (see <xref
+      linkend="ex.header"/>), or copy this from <filename>MAIN-daps-example.xml</filename>.
+     </para>
 
     <example id="ex.header">
      <title>Header of a DocBook File</title>
@@ -180,8 +255,6 @@
      &lt;!DOCTYPE article PUBLIC <co id="co.header2.xml"/>
      "-//OASIS//DTD DocBook XML V4.5//EN"
      "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
-
-     &lt;!ENTITY tdg "DocBook: The Definitive Guide">
 
      ]>
      </programlisting>
@@ -202,156 +275,180 @@
      Don't be afraid if you don't understand the header. Just insert it by
      copy and paste into your file.
     </para>
-     </step>
-    </substeps>
-   </step>
-  </procedure>
-  <important>
-   <title>Attention</title>
+  </step>
+  <step>
    <para>
-    Regardless of which method you use, you end up with the same files and
-    directory structure.
+    Save the file as <filename>recipe.xml</filename>.
    </para>
-  </important>
+  </step>
+  </substeps>
+ </step>
+ <step>
+  <title>To create the DC file:</title>
+  <substeps>
+   <step>
+    <para>
+     Switch to the folder above (that should be your <filename>recipe</filename>
+     folder):
+     <screen>cd ..</screen>
+    </para>
+   </step>
+   <step>
+    <para>
+     Open a new file and paste the following line into it:
+     MAIN=<quote>recipe.xml</quote>
+    </para>
+   </step>
+   <step>
+    <para>
+     Save the file, for example as <filename>DC-recipe</filename>.
+    </para>
+   </step>
+  </substeps>
+ </step>
+</procedure>
+</sect2>
+</sect1>
+
+
+
+ <sect1 id="sec.howto">
+  <title>How to Write</title>
   <para>
-   We have built up the indispensable directory structure and have made
-   all preparations. Now it is your turn to write your text!
+   XXX 
   </para>
- </sect1>
-
-
-
- <sect1>
-  <title>How to write</title>
   <sect2>
-   <title>Identifying Start and End tags</title>
+   <title>Identifying Start and End Tags</title>
    <para>
-    First and foremost the most important thing you have to know about XML is that you always need a
-    start tag and an end tag. The content depends on which element you want to
-    create. Decide what you want to write: a book or
-    an article. If you want to write an article, paste an article start- and
-    end tag. In the last section, you have already created the basic
-    structure. Between these two tags,
-    write your text as shown (see <xref linkend="ex.tags"/>):
+<<<<<<< .mine
+    The most important thing you need to know about XML is,
+    that you have to close the tags. Either with an end tag or with a
+    backslash at the end of the tag (for example:
+    <command>&lt;para/></command>). The content between the
+    tags depends on which element you want to
+    create. Open the XML file <filename>recipe.xml</filename> that you just
+    created, and place the cursor below the header. To write an article, paste
+    an <command>article</command> start and end tag into the XML file. Between these two tags, write your text as shown in <xref
+    linkend="ex.tags"/>.   
    </para>
    <example id="ex.tags">
     <title>Start- and Endtag of an Article</title>
-    <programlisting>&lt;article lang="en" id="art.template">
+    <programlisting>&lt;article>
 Tags and text
 &lt;/article>
     </programlisting>
    </example>
-   <para>
-    In the this tutorial I only describe how to write an article because a book is
-    almost equal.
-   </para>
   </sect2>
   <sect2>
-   <title>Adding the Author</title>
+   <title>Adding Metadata</title>
    <para>
-    Each article contains lot of information about its author, publication
+    Each article may contain information about its author, publication
     date, release information, copyright or other <quote>metadata</quote>. To include
-    such metadata I recommend an article info (see <xref linkend="ex.articleinfo"/>),
-    for adding the author and the title.
+    such metadata use an article info element and enter the following data (see <xref linkend="ex.articleinfo"/>):  
    </para>
    <example id="ex.articleinfo">
-    <title>Article info header</title>
-    <programlisting>&lt;articleinfo>
-&lt;releaseinfo>Version 0.1&lt;/releaseinfo>
-&lt;releaseinfo>Revision: 0&lt;/releaseinfo>
+    <title>Article Info Header</title>
+    <programlisting>&lt;article lang="en" id="art.template"><co id="co.article.xml"/>
+&lt;title>Little G's Ceylon Bang&lt;/title><co id="co.article2.xml"/>
+&lt;articleinfo>
 &lt;releaseinfo>
-Build Date: &lt;?dbtimestamp format="B d, Y"?>
+Build Date: 2013-10-21<co id="co.article3.xml"/>
 &lt;/releaseinfo>
- &lt;author>
-  &lt;firstname>Tux&lt;/firstname><co id="co.author.xml"/>
-  &lt;surname>Penguin&lt;/surname><co id="co.author2.xml"/>
+ &lt;author><co id="co.author.xml"/>
+  &lt;firstname>Tux&lt;/firstname>
+  &lt;surname>Penguin&lt;/surname>
  &lt;/author>
 &lt;/articleinfo>
+&lt;abstract><co id="co.article5.xml"/>
+Recipe for a chili sauce.
+&lt;/abstract>
+&lt;/article><co id="co.article4.xml"/>
     </programlisting>
     <calloutlist>
-     <callout  arearefs="co.author.xml">
+     <callout arearefs="co.article.xml">
       <para>
-       Enter the firstname of the author.
+       Article start tag.
       </para>
      </callout>
-     <callout arearefs="co.author2.xml">
+     <callout arearefs="co.article2.xml">
       <para>
-       Enter the surname of the author.
+       Title for the article.
+      </para>
+     </callout>
+     <callout arearefs="co.article3.xml">
+      <para>
+       Build date. 
+      </para>
+     </callout>
+     <callout  arearefs="co.author.xml">
+      <para>
+       The author's name.
+      </para>
+     </callout>
+     <callout arearefs="co.article5.xml">
+      <para>
+       An abstract. What is the subject of your article?
+      </para>
+     </callout>
+     <callout arearefs="co.article4.xml">
+      <para>
+       Article end tag. It always has to be at the end of the whole article. 
       </para>
      </callout>
     </calloutlist>
    </example>
+   <figure>
+    <title>HTML Output (Article Title and Article Info)</title>
+    <mediaobject>
+     <imageobject>
+      <imagedata fileref="articleinfo2.png" width="70%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
   </sect2>
 
 
   <sect2>
-   <title>Structuring your Document with Sections</title>
+   <title>Structuring Your Document With Sections</title>
    <para>
-    Each article consists of sections and subsections. Example 4 contains a
-    section and a subsection (see <xref linkend="ex.sections"/>).
+<<<<<<< .mine
+    Each article consists of sections and subsections. <xref xreflabel="Example
+    4" linkend="ex.sections"/> contains a
+    section and a subsection. 
    </para>
    <example id="ex.sections">
-    <title>Example: Structure with Sections</title>
+    <title>Example: Structure With Sections</title>
     <programlisting>&lt;sect1><co id="co.section.xml"/>
  &lt;title>What do you need?&lt;/title>
   &lt;sect2><co id="co.section2.xml"/>
    &lt;title>Ingredients&lt;/title>
-    &lt;itemizedlist>
-     &lt;listitem>
-      &lt;para>
-       60g Habanero
-      &lt;/para>
-     &lt;/listitem>
-     &lt;listitem>
-      &lt;para>
-       30g Cayenne Chilis
-      &lt;/para>
-     &lt;/listitem>
-     &lt;listitem>
-      &lt;para>
-       1,5 Butch T
-      &lt;/para>
-     &lt;/listitem>
-     &lt;listitem>
-      &lt;para>
-       75g Kidney Beans
-      &lt;/para>
-     &lt;/listitem>
-    &lt;/itemizedlist>
+    &lt;para/>
    &lt;/sect2><co id="co.section3.xml"/>
    &lt;sect2>
     &lt;title>Equipment&lt;/title>
-     &lt;itemizedlist>
-      &lt;listitem>
-       &lt;para>
-        Hand blender
-       &lt;/para>
-      &lt;/listitem>
-      &lt;listitem>
-       &lt;para>
-        Pot
-       &lt;/para>
-      &lt;/listitem>
-     &lt;/itemizedlist>
+     &lt;para/>
   &lt;/sect2>
  &lt;/sect1><co id="co.section4.xml"/>
+&lt;sect1 id="sec.preparation">
+ &lt;title>Preparation&lt;/title>
+&lt;/sect1>
     </programlisting>
     <calloutlist>
      <callout arearefs="co.section.xml">
       <para>
-       Section level one start tag. Section1 is the parent element of every
-       element that comes below. Always need a title. Recommended is a para
+       Start tag of section level one. Section1 is the parent element of every
+       element that comes below. Always needs a title. Recommended is a para
        tag in every section.
       </para>
      </callout>
      <callout arearefs="co.section2.xml">
       <para>
-       Start tag section level two.
+       Start tag section of level two. 
       </para>
      </callout>
      <callout arearefs="co.section3.xml">
       <para>
-       End tag of section level two.
+       End tag section of level two.   
       </para>
      </callout>
      <callout arearefs="co.section4.xml">
@@ -361,32 +458,39 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      </callout>
     </calloutlist>
    </example>
-
+   <para>
+    Place the cursor behind the abstract end tag and in front of the article
+    end tag and paste the content of <quote>Example 4</quote>  into your XML file.
+   </para>
+ 
    <figure>
-    <title>Finished HTML output file with Sections</title>
+    <title>HTML Output (Article With Sections)</title>
     <mediaobject>
      <imageobject>
-      <imagedata fileref="sectionchilirezept.png" width="70%"/>
+      <imagedata fileref="ohnealles.png" width="70%"/>
      </imageobject>
     </mediaobject>
    </figure>
    <para>
     The image above shows the given XML file example as a  HTML
     page. As you can see in the picture, the section level two is a child
-    element of section level one. It is possible to nest up to section
-    level five.
+    element of section level one. It is possible to nest sections.
    </para>
   </sect2>
 
 
   <sect2>
    <title>Creating Itemized Lists</title>
+   <para>
+    To create a listing, use the <command>&lt;itemizedlist> </command> tag. 
+   </para>
+    
    <example>
-    <title>Itemized List Example</title>
+    <title>Itemized List</title>
     <programlisting>&lt;itemizedlist>
  &lt;listitem>
   &lt;para>
-   60g Habanero
+   60g Habanero Chilis
   &lt;/para>
   &lt;/listitem>
  &lt;listitem>
@@ -396,7 +500,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  &lt;/listitem>
  &lt;listitem>
   &lt;para>
-   1,5 Butch T
+   1,5 Butch T Chilis
   &lt;/para>
  &lt;/listitem>
  &lt;listitem>
@@ -407,12 +511,17 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 &lt;/itemizedlist>
     </programlisting>
    </example>
+   <para>
+    Place the cursor behind the following line:
+    <screen>&lt;title>Preparation&lt;/title></screen>
+    and paste the contents of <quote>Example 5</quote> into your XML file.
+   </para>
 
    <figure>
-    <title>HTML Page with an Itemized List</title>
+    <title>HTML Output (Article With an Itemized List)</title>
     <mediaobject>
      <imageobject>
-      <imagedata fileref="procedurechilirezept.png" width="70%"/>
+      <imagedata fileref="ohnestep.png" width="70%"/>
       </imageobject>
      </mediaobject>
    </figure>
@@ -425,16 +534,17 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
   <sect2>
    <title>Giving Step-by-Step Instructions</title>
    <para>
-    For writing an instruction for example, I recommend to do it step-by-step, as you can
-    see in the following example(see <xref linkend="ex.listing"/>). It is
-    easier to understand for the reader.
+    For writing instructions, it is recommended to do it step-by-step, as you can
+    see in the following <xref xreflabel="example"
+    linkend="ex.listing"/>. That way, instructions are easier to understand
+    and browse for the reader.
    </para>
    <example id="ex.listing">
     <title>Example for Step-by-Step Instructions </title>
     <programlisting>&lt;procedure><co id="co.textstructure.xml"/>
  &lt;step><co id="co.textstructure2.xml"/>
   &lt;para><co id="co.textstructure3.xml"/>
-   Drain kidney beans, rinse and drain for about 10 minutes
+   Rinse, than drain the kidney beans for about 10 minutes.
   &lt;/para>
  &lt;/step>
  &lt;step>
@@ -449,7 +559,7 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
  &lt;/step>
  &lt;step>
   &lt;para>
-   Cook about 5 minutes.
+   Cook for about 5 minutes. 
   &lt;/para>
  &lt;/step>
 &lt;/procedure>
@@ -462,30 +572,25 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      </callout>
      <callout arearefs="co.textstructure2.xml">
       <para>
-       If you use <command>&lt;step></command> you can create numeric listed paragraphs. Every
-       further <command> &lt;step></command> you add, it automatically counts
-       up. The table of contents will be created automatically.
+       If you use <command>&lt;step></command> elements you can create numeric listed paragraphs. Every
+       further <command> &lt;step></command> you add automatically counts
+       up. 
       </para>
      </callout>
      <callout arearefs="co.textstructure3.xml">
       <para>
-       In <command>&lt;para></command> you can write down your text to build paragraphs.
+       Within <command>&lt;para>&lt;/para></command> you can write down your text.  
       </para>
      </callout>
     </calloutlist>
    </example>
 
 
-   <para>
-    You can also use substeps. They must be placed under step. Always needs a
-    paragraph tag to write down your text.
-   </para>
-
    <figure>
-    <title>Step-by-Step Introduction as HTML output file</title>
+    <title>HTML Output (Article with Step-by-Step-Instructions)</title>
     <mediaobject>
      <imageobject>
-      <imagedata fileref="procedurechilirezept.png" width="70%"/>
+      <imagedata fileref="ohnelink.png" width="80%"/>
      </imageobject>
     </mediaobject>
    </figure>
@@ -496,21 +601,115 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
 
+<sect2>
+ <title>Integrating Remote Links and Cross References</title>
+ <sect3>
+  <title>Remote Links</title>
+  <para>
+  To refer to an external HTML page, integrate an internet link in your tutorial.  
+  </para>
+ <example>
+  <title>Integrating Remote Link</title>
+  <programlisting>&lt;para>
+ Before you start to cook:
+ &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/>
+&lt;/para>
+  </programlisting>
+ </example>
+ <para>
+  To get the output shown in Figure 6, place the cursor behind the
+  <command>&lt;/para></command> end tag within the
+  <command>&lt;abstract></command> element and paste the content of
+  <quote>Example 7</quote> into your XML file. 
+ </para>
+ 
+<figure>
+ <title>HTML Output (Article with Remote Link)</title>
+ <mediaobject>
+  <imageobject>
+   <imagedata fileref="chilirezeptlink3.png" width="100%"/>
+  </imageobject>
+ </mediaobject>
+</figure>
+ </sect3>
+ <sect3>
+  <title>Cross References</title>
+  <para>
+   With cross references (xref elements) you link to paragraphs or examples within your document. 
+  </para>
+  <example>
+   <title>Integrating Cross References</title>
+   <programlisting>&lt;para>
+ How to prepare see &lt;xref linkend="sec.preparation"/><co id="co.references.xml"/>
+&lt;/para>
+
+...
+
+
+&lt;sect1 id="sec.preparation"><co id="co.references2.xml"/>
+
+   </programlisting>
+   <calloutlist>
+    <callout arearefs="co.references.xml">
+     <para>
+      With <command>&lt;xref linkend="ex.preparation"/></command> you set a link to the
+      following <quote>Preparation</quote> title.
+     </para>
+    </callout>
+    <callout arearefs="co.references2.xml">
+     <para>
+      Set <command>id=sec.preparation</command> at the section, that you want to refer to. 
+      Set <command>id=ex.preparation</command> at the paragraph, you want to refer to.
+     </para>
+    </callout>
+   </calloutlist>
+  </example>
+<para>
+ To get the output shown in <quote> Figure 7</quote>, place the cursor below the
+ <command>&lt;title>Preparation&lt;/title></command> element and paste the
+ contents of <quote>Example 8</quote> into your XML file. 
+</para>
+
+<figure>
+ <title>HTML Output (Article with Cross-Reference)</title>
+<mediaobject>
+ <imageobject>
+  <imagedata fileref="ohnebild.png" width="100%"/>
+ </imageobject>
+</mediaobject>
+</figure>
+<para>
+ As you can see in the screenshot, the underlined part is a link to the section<quote>Preparation</quote>. 
+</para>
+ </sect3>
+</sect2>
+  
+  
   <sect2>
    <title>Integrating Images</title>
-   <para id="ex.image">
-    To integrate an image in your file, save the image in the
-    <filename>image</filename> folder with a <filename>.png</filename>
-    file extension. That is very important because otherwise, it will not
-    work.
-   </para>
+
+   <procedure>
+    <step>
+     <para id="ex.image">
+      To integrate an image in your file, save an image (for example, <filename>butcht.png</filename>) in the
+      <filename>image/png</filename> folder.
+      That is very important because otherwise, it will not
+      work. 
+     </para>
+    </step>
+    <step>
+     <para>
+      Add an image reference into your XML file. 
+     </para>
+    </step>
+   </procedure>
    <example>
     <title>Integrating Images</title>
     <programlisting>&lt;figure>
-    &lt;title>Image name&lt;/title><co id="co.image.xml"/>
+    &lt;title>Butch T Chili&lt;/title><co id="co.image.xml"/>
     &lt;mediaobject>
     &lt;imageobject>
-    &lt;imagedata fileref="imagefilename.png"/><co id="co.image2.xml"/>
+    &lt;imagedata fileref="butcht.png"/><co id="co.image2.xml"/>
     &lt;/imageobject>
     &lt;/mediaobject>
     &lt;/figure>
@@ -519,87 +718,25 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
    <calloutlist>
     <callout arearefs="co.image.xml">
      <para>
-      Give your image a title, which you see in the output file above your
-      image.
+      Image title. In the output formats, the title will appear
+      together with the image. 
      </para>
     </callout>
     <callout arearefs="co.image2.xml">
      <para>
-      Enter the filename of your image.
+      The image reference.
      </para>
     </callout>
    </calloutlist>
+   <figure>
+    <title>HTML Output (Article with Integrated Image)</title>
+    <mediaobject>
+     <imageobject>
+      <imagedata fileref="butcht7.11.png" width="80%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
   </sect2>
-
-<sect2>
- <title>Integrating Remote Links and Cross References</title>
- <sect3>
-  <title>Remote Links</title>
-  <para>
-   Integrate an internet link in your tutorial to refer to a HTML page.
-  </para>
- <example>
-  <title>Integrating Remote Link</title>
-  <programlisting>&lt;para>
- &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/>
-&lt;/para>
-  </programlisting>
- </example>
-
-<figure>
- <title>Example for a Remote Link</title>
- <mediaobject>
-  <imageobject>
-   <imagedata fileref="linkchilirezept.png" width="70%"/>
-  </imageobject>
- </mediaobject>
-</figure>
- </sect3>
- <sect3>
-  <title>Cross References</title>
-  <para>
-   Link with cross references to paragraphs or examples.
-  </para>
-  <example>
-   <title>Integrating Cross References</title>
-   <programlisting>&lt;para>
- How to prepare see &lt;xref linkend="ex.preparation"/><co id="co.references.xml"/>
-&lt;/para>
-
-...
-
-
-&lt;title id="ex.preparation">Preparation&lt;/title><co id="co.references2.xml"/>
-
-   </programlisting>
-   <calloutlist>
-    <callout arearefs="co.references.xml">
-     <para>
-      With <command>&lt;xref linkend="ex.preparation"/></command> do you set a link to the
-      following <quote>Preparation</quote> title.
-     </para>
-    </callout>
-    <callout arearefs="co.references2.xml">
-     <para>
-      Set <command>id=ex.preparation</command> at the paragraph, you want to refer to.
-     </para>
-    </callout>
-   </calloutlist>
-  </example>
-
-<figure>
- <title>Cross Reference Example</title>
-<mediaobject>
- <imageobject>
-  <imagedata fileref="referencechilirezept.png" width="70%"/>
- </imageobject>
-</mediaobject>
-</figure>
-<para>
- As you can see in the picture, the underlined part is a link to the title <quote>Preparation</quote>.
-</para>
- </sect3>
-</sect2>
 </sect1>
 
 
@@ -607,34 +744,40 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
 
 
  <sect1>
-  <title>Convert your XML Files</title>
+  <title>Convert Your XML Files</title>
   <para>
-   Convert your XML-file whenever you want to, no matter if it is finished or
-   you want to see the temporary result. Convert as often as you like.
+   Convert your XML file whenever you want to, no matter if it is finished or
+   you only want to see the temporary result. Convert as often as you like.
+   <important>
+    <para>
+     The XML file must be valid, otherwise it will not work! Check if it is valid:
+     <screen>daps -d DC-tutorial validate</screen>
+    </para>
+   </important>
   </para>
   <sect2>
-   <title>Convert your XML file into PDF</title>
+   <title>Convert Your XML File Into PDF</title>
   <procedure>
    <step>
      <para>
-      Open your terminal and enter the following command:
+      Open a terminal and enter the following command:
      </para>
      <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> color-pdf</screen>
    </step>
    <step>
      <para>
-      Now has a folder called <filename>build</filename> created
-      automatically. There you find your finished PDF file.
+     DAPS automatically creates a directory called
+     <filename>build</filename>. You can find your finished PDF file there. 
      </para>
    </step>
   </procedure>
   </sect2>
    <sect2>
-    <title>Convert your XML file into HTML</title>
+    <title>Convert Your XML File Into HTML</title>
     <procedure>
      <step>
      <para>
-      To get a HTML-page, open your terminal and enter the following command:
+      To get an HTML page, open a terminal and enter the following command:
      </para>
      <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> htmlsingle</screen>
      </step>
@@ -646,32 +789,29 @@ Build Date: &lt;?dbtimestamp format="B d, Y"?>
      </step>
     </procedure>
   </sect2>
-  <sect2>
-   <title>Good to know</title>
-   <para>
-    If you still have questions or want to have additional information, I
-    recommend the DAPS manpage. Open it in your terminal:
-   </para>
-   <screen>&prompt1;daps --help</screen>
-  </sect2>
-  <sect2>
+ </sect1>
+  <sect1>
    <title>Further Information</title>
    <para>
-    To get further information, visit the following links:
+    If you still have questions or want to have additional information, read
+    the DAPS man page. Open it in a terminal:
+   </para>
+   <screen>&prompt1;daps --help</screen>
+   <para>
+    Or visit the following links:
    </para>
    <itemizedlist>
     <listitem>
      <para>
-     <ulink url="http://www.docbook.org"/>
+     <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>
      </para>
     </listitem>
    <listitem>
      <para>
-     <ulink url="http://daps.sf.net"/>
+     <ulink url="http://www.sourceforge.net/p/daps/home/Documentation/"/>
      </para>
     </listitem>
    </itemizedlist>
-  </sect2>
  </sect1>
 
 
