@@ -91,7 +91,7 @@ $(function() {
   $('#_pickers a.selected').append('<span class="tick">&nbsp;</span>');
   $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
   $('.bubble-closer').click(function(){deactivate(); return false;});
-  $('.question p').click(function(){ $(this).parent('dt').parent('dl').toggleClass('active'); });
+  $('.question').click(function(){ $(this).parent('dl').toggleClass('active'); });
 
   if ( !( $('#_nav-area div').length ) ) {
     $('#_toolbar').addClass('only-toc');

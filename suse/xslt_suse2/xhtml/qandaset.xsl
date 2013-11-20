@@ -52,6 +52,13 @@
   <xsl:apply-templates select="qandaentry|qandadiv"/>
 </xsl:template>
 
+<xsl:template match="question/para[1]" priority="4">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="question/para">
+  <br/><xsl:apply-templates/>
+</xsl:template>
 
 <xsl:template match="qandadiv">
   <xsl:variable name="preamble" select="*[local-name(.) != 'title'
@@ -118,7 +125,7 @@
     <xsl:call-template name="id.attribute">
       <xsl:with-param name="force" select="1"/>
     </xsl:call-template>
-    <xsl:apply-templates select="*[local-name(.) != 'label'         and local-name(.) != 'qandaentry']"/>
+    <xsl:apply-templates select="*[local-name(.) != 'label' and local-name(.) != 'qandaentry']"/>
   </dd>
 </xsl:template>
 
@@ -209,7 +216,7 @@
   <xsl:variable name="deflabel">
     <xsl:choose>
       <xsl:when test="ancestor-or-self::*[@defaultlabel]">
-        <xsl:value-of select="(ancestor-or-self::*[@defaultlabel])[last()]                               /@defaultlabel"/>
+        <xsl:value-of select="(ancestor-or-self::*[@defaultlabel])[last()]/@defaultlabel"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$qanda.defaultlabel"/>

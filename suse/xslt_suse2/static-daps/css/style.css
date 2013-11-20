@@ -2217,11 +2217,11 @@ div.itemizedlist {
     margin: 0 0 24px;
 }
 
-.question p, .question code, .question .literal {
+.question, .question code, .question .literal {
     color: #666;
 }
 
-.question p {
+.question {
     font-style: italic;
 }
 
@@ -2229,7 +2229,7 @@ div.itemizedlist {
     cursor: pointer;
 }
 
-.js-on .question:hover p, .js-on .question:focus p, .js-on .active .question p {
+.js-on .question:hover, .js-on .question:focus, .js-on .active .question {
     color: #000;
 }
 
@@ -2243,7 +2243,7 @@ div.itemizedlist {
     position: relative;
 }
 
-.question p + p {
+.question br {
     margin-top: 2px;
 }
 
@@ -2253,11 +2253,10 @@ div.itemizedlist {
 
 .js-on .question:before {
     content: '';
-    display: block;
+    display: inline-block;
     margin: 4px 0 0;
     width: 17px;
     height: 15px;
-    float: left;
     background-image: url(../images/arrow.png);
     background-position: -98px 0;
     background-repeat: no-repeat;
