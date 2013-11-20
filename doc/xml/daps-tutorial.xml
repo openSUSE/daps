@@ -5,16 +5,13 @@
  "-//OASIS//DTD DocBook XML V4.5//EN"
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 
- 
+
   <!ENTITY % entities SYSTEM "entity-decl.ent">
   %entities;
 ]>
 
-
-
 <article lang="en" id="art.tutorial">
  <title>How to write an Article with DocBook and DAPS</title>
-
 
  <articleinfo>
   <releaseinfo>
@@ -36,14 +33,14 @@
    create different output files, without changing anything in
    the XML files themselves. Layout and contents are
    strictly separated - the layout will be added automatically, but you have
-   full control which style sheet is used.    
+   full control which style sheet is used.
   </para>
   <para>
    This tutorial is for DAPS beginners and everybody who already worked a
-   little bit with DAPS. 
+   little bit with DAPS.
    It helps you to write and convert XML files
    into PDF or HTML files for example. No previous XML knowledge is
-   necessary. 
+   necessary.
 
    DAPS is a program to transform XML into output formats such as HTML or PDF
    for example.
@@ -55,17 +52,16 @@
   <para>
    This tutorial only describes how to write an article. Writing a
    book is similar, but has more required elements. See the <quote>Style
-   Guide</quote> as example. 
+   Guide</quote> as example.
   </para>
-
 
   <para>
   Using the example of a recipe for a chili sauce, it explains step-by-step
   how to set up your document, which basic XML tags to use for writing it, and
   in the end, how to convert the document into HTML output. The following
-  screenshot shows the finished HTML file which we will create in the following. 
+  screenshot shows the finished HTML file which we will create in the following.
   </para>
-  
+
  </abstract>
 <figure>
  <title>The finished HTML file, which is the Target of this Tutorial</title>
@@ -76,16 +72,13 @@
 </mediaobject>
 </figure>
 
-
-
-
  <sect1>
   <title>What You Need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
    writing use an editor with XML support. Recommended is Emacs and the DAPS
-   Version 2.0 or higher. 
-   Do the following to install Emacs and DAPS: 
+   Version 2.0 or higher.
+   Do the following to install Emacs and DAPS:
   </para>
   <procedure>
    <step>
@@ -135,12 +128,12 @@
     </para>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for DAPS. In this tutorial's example, it creates a directory called 
+      for DAPS. In this tutorial's example, it creates a directory called
      <filename>tutorial</filename>. It contains a DAPS configuration file for
      your tutorial (<filename>DC-tutorial</filename>), the DocBook XML file
      located in the XML subdirectory and a subdirectory containing image files
      (<filename>images</filename>). The <filename>image</filename> folder will
-     be relevant later (see <xref linkend="ex.image"/>). 
+     be relevant later (see <xref linkend="ex.image"/>).
     </para>
     <procedure>
      <step>
@@ -183,25 +176,21 @@
      </step>
    </procedure>
   </sect2>
-  
-  
-
-
 
 <sect2>
     <title>Working without <command>daps-init</command></title>
    <procedure>
-   
+
     <para>
      This method is for the more experienced writer.
     </para>
-    <substeps>
-     <step>
+    <step>
     <para>
      For working without <command>daps-init</command>, create a folder with
      your project name and two subfolders, called <filename>xml</filename> and
      <filename>images</filename>. Open a terminal.
     </para>
+     </step>
     <step>
     <screen>mkdir recipe</screen>
     </step>
@@ -233,9 +222,9 @@
  </para>
 <procedure>
  <step>
-  <para>
-   To create the XML file:
-  </para>
+  <title>
+    To create the XML file:
+  </title>
   <substeps>
   <step>
    <para>
@@ -315,12 +304,11 @@
  <sect1 id="sec.howto">
   <title>How to Write</title>
   <para>
-   XXX 
+   XXX
   </para>
   <sect2>
    <title>Identifying Start and End Tags</title>
    <para>
-<<<<<<< .mine
     The most important thing you need to know about XML is,
     that you have to close the tags. Either with an end tag or with a
     backslash at the end of the tag (for example:
@@ -329,7 +317,7 @@
     create. Open the XML file <filename>recipe.xml</filename> that you just
     created, and place the cursor below the header. To write an article, paste
     an <command>article</command> start and end tag into the XML file. Between these two tags, write your text as shown in <xref
-    linkend="ex.tags"/>.   
+    linkend="ex.tags"/>.
    </para>
    <example id="ex.tags">
     <title>Start- and Endtag of an Article</title>
@@ -344,7 +332,7 @@ Tags and text
    <para>
     Each article may contain information about its author, publication
     date, release information, copyright or other <quote>metadata</quote>. To include
-    such metadata use an article info element and enter the following data (see <xref linkend="ex.articleinfo"/>):  
+    such metadata use an article info element and enter the following data (see <xref linkend="ex.articleinfo"/>):
    </para>
    <example id="ex.articleinfo">
     <title>Article Info Header</title>
@@ -377,7 +365,7 @@ Recipe for a chili sauce.
      </callout>
      <callout arearefs="co.article3.xml">
       <para>
-       Build date. 
+       Build date.
       </para>
      </callout>
      <callout  arearefs="co.author.xml">
@@ -392,7 +380,7 @@ Recipe for a chili sauce.
      </callout>
      <callout arearefs="co.article4.xml">
       <para>
-       Article end tag. It always has to be at the end of the whole article. 
+       Article end tag. It always has to be at the end of the whole article.
       </para>
      </callout>
     </calloutlist>
@@ -411,10 +399,9 @@ Recipe for a chili sauce.
   <sect2>
    <title>Structuring Your Document With Sections</title>
    <para>
-<<<<<<< .mine
     Each article consists of sections and subsections. <xref xreflabel="Example
     4" linkend="ex.sections"/> contains a
-    section and a subsection. 
+    section and a subsection.
    </para>
    <example id="ex.sections">
     <title>Example: Structure With Sections</title>
@@ -443,12 +430,12 @@ Recipe for a chili sauce.
      </callout>
      <callout arearefs="co.section2.xml">
       <para>
-       Start tag section of level two. 
+       Start tag section of level two.
       </para>
      </callout>
      <callout arearefs="co.section3.xml">
       <para>
-       End tag section of level two.   
+       End tag section of level two.
       </para>
      </callout>
      <callout arearefs="co.section4.xml">
@@ -462,7 +449,7 @@ Recipe for a chili sauce.
     Place the cursor behind the abstract end tag and in front of the article
     end tag and paste the content of <quote>Example 4</quote>  into your XML file.
    </para>
- 
+
    <figure>
     <title>HTML Output (Article With Sections)</title>
     <mediaobject>
@@ -482,9 +469,9 @@ Recipe for a chili sauce.
   <sect2>
    <title>Creating Itemized Lists</title>
    <para>
-    To create a listing, use the <command>&lt;itemizedlist> </command> tag. 
+    To create a listing, use the <command>&lt;itemizedlist> </command> tag.
    </para>
-    
+
    <example>
     <title>Itemized List</title>
     <programlisting>&lt;itemizedlist>
@@ -559,7 +546,7 @@ Recipe for a chili sauce.
  &lt;/step>
  &lt;step>
   &lt;para>
-   Cook for about 5 minutes. 
+   Cook for about 5 minutes.
   &lt;/para>
  &lt;/step>
 &lt;/procedure>
@@ -574,12 +561,12 @@ Recipe for a chili sauce.
       <para>
        If you use <command>&lt;step></command> elements you can create numeric listed paragraphs. Every
        further <command> &lt;step></command> you add automatically counts
-       up. 
+       up.
       </para>
      </callout>
      <callout arearefs="co.textstructure3.xml">
       <para>
-       Within <command>&lt;para>&lt;/para></command> you can write down your text.  
+       Within <command>&lt;para>&lt;/para></command> you can write down your text.
       </para>
      </callout>
     </calloutlist>
@@ -606,7 +593,7 @@ Recipe for a chili sauce.
  <sect3>
   <title>Remote Links</title>
   <para>
-  To refer to an external HTML page, integrate an internet link in your tutorial.  
+  To refer to an external HTML page, integrate an internet link in your tutorial.
   </para>
  <example>
   <title>Integrating Remote Link</title>
@@ -620,9 +607,9 @@ Recipe for a chili sauce.
   To get the output shown in Figure 6, place the cursor behind the
   <command>&lt;/para></command> end tag within the
   <command>&lt;abstract></command> element and paste the content of
-  <quote>Example 7</quote> into your XML file. 
+  <quote>Example 7</quote> into your XML file.
  </para>
- 
+
 <figure>
  <title>HTML Output (Article with Remote Link)</title>
  <mediaobject>
@@ -635,7 +622,7 @@ Recipe for a chili sauce.
  <sect3>
   <title>Cross References</title>
   <para>
-   With cross references (xref elements) you link to paragraphs or examples within your document. 
+   With cross references (xref elements) you link to paragraphs or examples within your document.
   </para>
   <example>
    <title>Integrating Cross References</title>
@@ -658,7 +645,7 @@ Recipe for a chili sauce.
     </callout>
     <callout arearefs="co.references2.xml">
      <para>
-      Set <command>id=sec.preparation</command> at the section, that you want to refer to. 
+      Set <command>id=sec.preparation</command> at the section, that you want to refer to.
       Set <command>id=ex.preparation</command> at the paragraph, you want to refer to.
      </para>
     </callout>
@@ -667,7 +654,7 @@ Recipe for a chili sauce.
 <para>
  To get the output shown in <quote> Figure 7</quote>, place the cursor below the
  <command>&lt;title>Preparation&lt;/title></command> element and paste the
- contents of <quote>Example 8</quote> into your XML file. 
+ contents of <quote>Example 8</quote> into your XML file.
 </para>
 
 <figure>
@@ -679,12 +666,12 @@ Recipe for a chili sauce.
 </mediaobject>
 </figure>
 <para>
- As you can see in the screenshot, the underlined part is a link to the section<quote>Preparation</quote>. 
+ As you can see in the screenshot, the underlined part is a link to the section<quote>Preparation</quote>.
 </para>
  </sect3>
 </sect2>
-  
-  
+
+
   <sect2>
    <title>Integrating Images</title>
 
@@ -694,12 +681,12 @@ Recipe for a chili sauce.
       To integrate an image in your file, save an image (for example, <filename>butcht.png</filename>) in the
       <filename>image/png</filename> folder.
       That is very important because otherwise, it will not
-      work. 
+      work.
      </para>
     </step>
     <step>
      <para>
-      Add an image reference into your XML file. 
+      Add an image reference into your XML file.
      </para>
     </step>
    </procedure>
@@ -719,7 +706,7 @@ Recipe for a chili sauce.
     <callout arearefs="co.image.xml">
      <para>
       Image title. In the output formats, the title will appear
-      together with the image. 
+      together with the image.
      </para>
     </callout>
     <callout arearefs="co.image2.xml">
@@ -767,7 +754,7 @@ Recipe for a chili sauce.
    <step>
      <para>
      DAPS automatically creates a directory called
-     <filename>build</filename>. You can find your finished PDF file there. 
+     <filename>build</filename>. You can find your finished PDF file there.
      </para>
    </step>
   </procedure>
@@ -813,18 +800,5 @@ Recipe for a chili sauce.
     </listitem>
    </itemizedlist>
  </sect1>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </article>
