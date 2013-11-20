@@ -1,0 +1,32 @@
+## ----------------------------
+## Doc Config File for DAPS
+## DAPS User Guide
+## ----------------------------
+##
+## Basics
+MAIN="MAIN.DAPS.xml"
+ROOTID="art.tutorial"
+
+## Profiling
+# "[no]quick" is not an actual OS -- it determines whether or not the links into
+# the Quick Start Guide should be added
+PROFOS="osuse;noquick"
+
+PROFARCH="x86;amd64;em64t"
+
+## stylesheet location
+STYLEROOT="../suse/xslt_suse2"
+
+## enable sourcing
+export DOCCONF=$BASH_SOURCE
+
+## show acronyms in the glossary, so as not to confuse the user
+XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
+
+## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## homepage at the top of the page
+## set a homepage for HTML builds
+XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
+XSLTPARAM="$XSLTPARAM --param suse.content=0"
+
+
