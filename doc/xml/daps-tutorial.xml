@@ -11,7 +11,7 @@
 ]>
 
 <article lang="en" id="art.tutorial">
- <title>How to write an Article with DocBook and DAPS</title>
+ <title>How to Write an Article with DocBook and DAPS</title>
 
  <articleinfo>
   <releaseinfo>
@@ -27,39 +27,31 @@
 
  <abstract>
   <para>
-   Why should I use DAPS? DAPS (DocBook Authoring and Publishing Suite) is a
-   program to transform XML into output formats such as HTML or PDF,
-   for example. In DAPS, it is all about the content. You can
-   create different output files, without changing anything in
-   the XML files themselves. Layout and contents are
-   strictly separated - the layout will be added automatically, but you have
-   full control which style sheet is used.
+   Why should I use DAPS? 
   </para>
   <para>
-   This tutorial is for DAPS beginners and everybody who already worked a
-   little bit with DAPS.
-   It helps you to write and convert XML files
-   into PDF or HTML files for example. No previous XML knowledge is
-   necessary.
-
-   DAPS is a program to transform XML into output formats such as HTML or PDF
-   for example.
-   But why should I use DAPS? In DAPS, it is all about the text. You can
-   create different output files, for example HTML, PDF or EPUB, without
-   changing anything in the file itself. The design will be created
-   automatically.
+   DAPS (DocBook Authoring and Publishing Suite) is a program to transform XML
+   into output formats such as HTML or PDF, for example. In DAPS, it is all
+   about the content. You can create different output formats, without changing
+   anything in the XML files themselves. Layout and contents are strictly
+   separated - the layout will be added automatically, but you can control
+   which style sheet is used.
   </para>
   <para>
-   This tutorial only describes how to write an article. Writing a
-   book is similar, but has more required elements. See the <quote>Style
-   Guide</quote> as example.
+   This tutorial is for DAPS beginners and anybody who already worked a
+   little bit with DAPS.  It helps you to write and convert XML files into PDF
+   or HTML files for example. No previous XML knowledge is necessary.
   </para>
 
   <para>
   Using the example of a recipe for a chili sauce, it explains step-by-step
   how to set up your document, which basic XML tags to use for writing it, and
-  in the end, how to convert the document into HTML output. The following
-  screenshot shows the finished HTML file which we will create in the following.
+  in the end, how to convert the document into HTML output. The example is 
+  structured as an article. Writing a book is similar, but has more required elements.
+  See the XML source of the <quote>Style Guide</quote> as an example for a book.
+  </para>
+  <para>
+  The following screenshot shows the finished HTML file which we will create in the following.
   </para>
 
  </abstract>
@@ -76,8 +68,8 @@
   <title>What You Need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
-   writing use an editor with XML support. Recommended is Emacs and the DAPS
-   Version 2.0 or higher.
+   writing use an editor with XML support. Recommended is Emacs and DAPS
+   version 2.0 or higher.
    Do the following to install Emacs and DAPS:
   </para>
   <procedure>
@@ -87,7 +79,8 @@
     </para>
     <screen>&prompt1;su -</screen>
     <para>
-     &prompt1;stands for your prompt.
+     Note that &prompt1; or (&rootprompt; below) stands for your prompt. 
+     Do not type that part.
     </para>
    </step>
    <step>
@@ -123,10 +116,6 @@
   <sect2>
     <title>Working with <command>daps-init</command></title>
     <para>
-     This method is especially for beginners who don't have any
-     experience with DAPS.
-    </para>
-    <para>
       The <command>daps-init</command> command creates a working environment
       for DAPS. In this tutorial's example, it creates a directory called
      <filename>tutorial</filename>. It contains a DAPS configuration file for
@@ -149,8 +138,8 @@
      </step>
      <step>
       <para>
-       Now it is your turn: write your text! To understand the tags better, read the
-       following chapters. If you need help, open the
+       Now it is your turn: write your text! To learn about the needed XML tags, read the
+       following chapters. If you need help with DAPS, open the
        <filename>daps-init</filename> manpage in your terminal:
       </para>
       <screen>&prompt1;daps-init --help</screen>
@@ -192,13 +181,13 @@
     </para>
      </step>
     <step>
-    <screen>mkdir recipe</screen>
+    <screen>&prompt1;mkdir recipe</screen>
     </step>
     <step>
-     <screen>cd recipe</screen>
+     <screen>&prompt1;cd recipe</screen>
     </step>
     <step>
-    <screen>&prompt1;HOME/tutorial: mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
+    <screen>HOME/recipe: &prompt1;mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      </step>
      <step>
       <para>
@@ -206,9 +195,8 @@
        needed by DAPS.
 
        Create a DC-file, which is a configuration file for your project.
-       Open a new file and paste the following lines with the XML
-       filename instead of "MAIN-daps-example.xml".
-      </para>
+       Open a new file and paste the following lines with your XML
+       filename instead of "MAIN-daps-example.xml". See below.
      </step>
    </procedure>
 </sect2>
@@ -230,7 +218,7 @@
    <para>
     In a terminal, switch to the XML subfolder.
    </para>
-   <screen>cd xml</screen>
+   <screen>&prompt1;cd xml</screen>
   </step>
   <step>
      <para>
@@ -279,7 +267,7 @@
     <para>
      Switch to the folder above (that should be your <filename>recipe</filename>
      folder):
-     <screen>cd ..</screen>
+     <screen>&prompt1;cd ..</screen>
     </para>
    </step>
    <step>
