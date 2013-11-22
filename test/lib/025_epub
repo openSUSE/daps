@@ -245,7 +245,7 @@ function test_epubNAME () {
 #--------------------------------
 # * Does the --rootid option work correctly?
 #
-function test_pdfRootid () {
+function test_epubRootid () {
     local _EPUB_BUILD_PATH _EPUB_FILENAME_BUILD _EPUB_FILENAME_EXPECTED
     local _ROOTID
 
@@ -258,7 +258,7 @@ function test_pdfRootid () {
     assertTrue \
 	' └─ Building an EPUB with --rootid failed ' \
        "$?"
-    egrep q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    egrep -q -- "--stringparam\s+\"rootid=${_ROOTID}\"" $_LOGFILE 2>/dev/null
     assertTrue \
 	' └─ Stringparam for ROOTID is not correctly specified when generating the EPUB-file' \
 	"$?"

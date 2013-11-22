@@ -107,14 +107,13 @@ function test_textName () {
 # * Does the --rootid option work correctly?
 #
 function test_textRootid () {
-    local _ROOTID _BUILD_SUBDIR_NAME _TXT_BUILD_PATH _ROOTID
+    local _ROOTID _BUILD_SUBDIR_NAME _TXT_BUILD_PATH
 
     _ROOTID=appendix
-    _ROOTID=${_ROOTID}.txt
 
     clean_build
 
-    _TXT_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE text --rootid $_ROOTID 2>/dev/null)
+    _TXT_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug text --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a text document with --rootid failed ' \
        "$?"
@@ -127,7 +126,7 @@ function test_textRootid () {
     _BUILD_SUBDIR_NAME=$(basename $_TXT_BUILD_PATH)
     assertEquals \
 	' └─ The resulting text file name does not match the ROOTID:' \
-	"$_ROOTID" "_BUILD_SUBDIR_NAME"
+	"${_ROOTID}.txt" "$_BUILD_SUBDIR_NAME"
 }
 
 

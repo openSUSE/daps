@@ -250,10 +250,10 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
 			export _NOPROFILE=1
                         # when running the noprofile tests, MAIN is replaced
                         # by MAIN_NOPROF
-			export _SET_FILES="$_XML_FILES $_MAIN_NOPROF"
+			export _PROF_SET_FILES="$_XML_FILES $_MAIN_NOPROF"
 		    else
 			export _NOPROFILE=0
-			export _SET_FILES="$_XML_FILES $_MAIN"
+			export _PROF_SET_FILES="$_XML_FILES $_MAIN"
 		    fi
 		    eval "$_TEST"
 		done

@@ -299,7 +299,7 @@ function test_imagesROOTID () {
     # appendix has only one image (screenshot.png)
     #
     _ROOTID=appendix
-    _IMAGE_EXPECTED=png_example.png
+    _IMAGE_EXPECTED=png_example2.png
 
     clean_build
 
@@ -315,7 +315,7 @@ function test_imagesROOTID () {
 
     _IMAGE_BUILD=$(basename $(find $_IMGDIR_GRAYSCALE -type f 2>/dev/null) 2>/dev/null)
     assertEquals \
-	' └─ color/ does not include the expected file:' \
+	' └─ grayscale/ does not include the expected file:' \
 	"$_IMAGE_EXPECTED" "$_IMAGE_BUILD"
 }
 

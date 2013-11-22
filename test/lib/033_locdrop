@@ -163,7 +163,7 @@ function test_locdropFiles () {
     # ------
     # PDF file
     #
-    _PDF_NAME_PATH=$(basename $($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null))
+    _PDF_NAME_PATH=$(basename $($_DAPSEXEC -v0 -d $_DCFILE pdf-name 2>/dev/null))
     assertTrue \
         " └─ The reference PDF (${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH) does not exist or has size 0" \
         "[[ -s ${_LOCDROP_NAME_DIR}/$_PDF_NAME_PATH ]]"
@@ -255,7 +255,7 @@ function test_locdropNopdf () {
         ' └─ Building a locdrop with --nopdf failed' \
         "$?"
 
-    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE color-pdf-name 2>/dev/null)
+    _PDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf-name 2>/dev/null)
     assertFalse \
         ' └─ A PDF was build despite having specified --nopdf' \
         "[ -f ${_LOCDROP_NAME_DIR}/_PDF_NAME_PATH ]"

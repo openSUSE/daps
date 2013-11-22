@@ -133,6 +133,7 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 #--------------
 # Generate PDF
 #
+
 $(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
 ifeq ($(GRAYSCALE),1)
   $(PDF_RESULT): $(GRAYSCALE_IMAGES)

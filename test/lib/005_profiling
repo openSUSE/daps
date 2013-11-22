@@ -84,7 +84,7 @@ function test_profilingPROFILEDIR () {
 #
 function test_profilingFilelist () {
     local _FILE _MISSING
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_PROF_SET_FILES; do
         [[ -f "${_PROFILEDIR}/$_FILE" ]] || _MISSING="$_MISSING $_FILE"
     done
     assertNull \
@@ -135,7 +135,7 @@ function test_profilingUpdateXML() {
     # add the timestamps of all other files
     _OLDDATE_FILES=0
     _NEWDATE_FILES=0
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_PROF_SET_FILES; do
         if [[ $_FILE == $(basename $_MAIN_PROFILING) ]]; then continue; fi
         _OLDDATE_FILES=$(expr $_OLDDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
@@ -149,7 +149,7 @@ function test_profilingUpdateXML() {
     assertNotEquals \
         ' └─ $MAIN has not been updated by profiling although it had changed' \
         "$_OLDDATE_MAIN" "$_NEWDATE_MAIN"
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_PROF_SET_FILES; do
         if [[ $_FILE == $(basename $_MAIN_PROFILING) ]]; then continue; fi
         _NEWDATE_FILES=$(expr $_NEWDATE_FILES + $(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null))
     done
@@ -164,7 +164,7 @@ function test_profilingUpdateXML() {
 function test_profilingUpdateEntities() {
     local _FILE
     declare -A _OLD_FILEDATES _NEW_FILEDATES
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_PROF_SET_FILES; do
 	_OLD_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
     done
     sleep 1
@@ -172,7 +172,7 @@ function test_profilingUpdateEntities() {
     touch ${_DOC_DIR}/xml/*.ent
     # rerun profiling
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile >/dev/null
-    for _FILE in $_SET_FILES; do
+    for _FILE in $_PROF_SET_FILES; do
 	_NEW_FILEDATES[$_FILE]=$(stat -c %Y ${_PROFILEDIR}/$_FILE 2>/dev/null)
 	assertNotEquals \
 	    " └─  File $_FILE has not been updated although the entities changed:" \

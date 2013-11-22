@@ -23,6 +23,7 @@ STYLETXT := $(firstword $(wildcard \
 text: $(TXT_RESULT)
 	@ccecho "result" "Find the TEXT book at:\n$(TXT_RESULT)"
 
+$(TXT_RESULT): | $(TMP_DIR) $(RESULT_DIR)
 $(TXT_RESULT): $(TMP_DIR)/$(DOCNAME).html 
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating ASCII file"
