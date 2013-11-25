@@ -110,7 +110,9 @@ package-html: html
 	exit 1
   else
 	BZIP2="--best" tar cfhj $(TARBALL) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
+    ifeq ($(TARGET),package-html)
 	@ccecho "result" "Find the package-html results at:\n$(PACKAGE_HTML_DIR)"
+    endif
   endif
 
 #--------------
@@ -163,18 +165,11 @@ endif
 
 ifeq ($(NOSET),1)
   OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING).xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-png-graphics.tar.bz2
 else
   OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
-  OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-png-graphics.tar.bz2
 endif
-
-# fs 2012-10-12:
-# I am aware that calling make from within make is an ugly hack.
-# But since HTML_DIR and the PDF stuff depends on MAKECMDGOALS
-# I have not found a way to correctly build pdf, and html-flavours
-# when they are dependencies of other targets
-# Suggestions for improvements are welcome
+OD_GRAPHICS_TMP := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar
+OD_GRAPHICS := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING)-online-graphics.tar.bz2
 
 .PHONY: online-docs
 online-docs: | $(OD_EXPORT_BOOKDIR)
@@ -238,16 +233,25 @@ $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 #----
 # creates an archive with all generated graphics for HTML/EPUB
 #
+# fs 2013-11-24: Creating the tarball manually (rather than by just
+# adding $(ONLINE_IMAGES), because otherwise jpg would end up in
+# the png subdirectory as well. If other "online" images will be supported
+# in the future (SVG ??), a line for eaxh format has to be added.
+#
+
 $(OD_GRAPHICS): | $(OD_EXPORT_BOOKDIR)
 $(OD_GRAPHICS): $(ONLINE_IMAGES)
   ifneq "$(strip $(ONLINE_IMAGES))" ""
     ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating online-docs graphics tarball..."
     endif
-	BZIP2=--best \
-	tar cjhf $@ --exclude-vcs --ignore-failed-read \
+	tar chf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/png% \
-	  $(sort $(ONLINE_IMAGES))
+	 $(IMG_GENDIR)/color/*.png
+	tar rhf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
+	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/jpg% \
+	 $(IMG_GENDIR)/color/*.jpg
+	bzip2 -9f $(OD_GRAPHICS_TMP)
   else
 	@ccecho "info" "Selected set or book contains no graphics"
   endif
