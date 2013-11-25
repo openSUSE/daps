@@ -39,7 +39,7 @@ function oneTimeSetUp() {
     local _LOG_DIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the profiling directory
     _PDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE pdf-name 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -58,7 +58,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-#    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -108,18 +108,23 @@ function test_pdfFO () {
 #
 function test_pdfStyleroot () {
 
-     clean_build
+     clean_build_dir fo
 
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
+#     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#     echo "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1"
+#     echo "    egrep -q -- \"--stylesheet /.*/${_STANDARD_STYLES}\" $_LOGFILE 2>/dev/null"
+     
+     
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
 	" └─ The Fallback Styleroot specified on the command line was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir fo
 
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
@@ -130,7 +135,7 @@ function test_pdfStyleroot () {
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir fo
 
     # Testing Styleroot specified with --styleroot
     #
@@ -151,7 +156,7 @@ function test_pdfGrayscaleCropmarks () {
     # have been created
     local _IMGDIR _PDF_NAME_PATH _PAGE_SIZE_BUILD _PAGE_SIZE_EXPECTED
 
-    clean_build
+    clean_build_dir fo
 
     # If built with cropmarks, the pagesite in the PDF is larger (than A4) 
     _PAGE_SIZE_EXPECTED="643.276x889.89"
@@ -217,7 +222,7 @@ function test_pdfRemarksDraftMeta () {
    _REMARK_COUNT_EXPECTED=0
    _XML_FILES=( $_SET_FILES )
 
-    clean_build
+    clean_build_dir fo
 
    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --draft --remarks --meta --formatter=$_FOPROC 2>/dev/null | tail -n 1)
    assertTrue \
@@ -278,7 +283,7 @@ function test_pdfName () {
     local _BUILD_SUBDIR_NAME _NAME _PDF_BUILD_PATH _PDF_NAME_PATH
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir fo
 
     _PDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE pdf --name $_NAME --formatter=$_FOPROC 2>/dev/null)
     assertTrue \
@@ -323,7 +328,7 @@ function test_pdfRootidXsltparam () {
 
     _XSLTPARAM="--param 'hyphenate.verbatim=0'"
 
-    clean_build
+    clean_build_dir fo
 
     _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
     assertTrue \

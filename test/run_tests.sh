@@ -29,6 +29,8 @@ export _MAIN="book.xml"
 export _MAINPATH="${_DOC_DIR}/xml/$_MAIN"
 export _MAIN_NOPROF="book_noprofile.xml"
 export _MAINPATH_NOPROF="${_DOC_DIR}/xml/$_MAIN_NOPROF"
+export _BOOKNAME=$(basename $_DCFILE)
+export _BOOKNAME="${_BOOKNAME#DC-*}"
 
 # Stylesheet directories
 export _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")

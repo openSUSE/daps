@@ -16,13 +16,6 @@ function usage () {
 }
 
 # ---------
-# Remove the build directory
-#
-function clean_build() {
-    rm -rf "${_DOC_DIR}/build"
-}
-
-# ---------
 # Verbose error handling
 #
 function exit_on_error () {
@@ -30,6 +23,45 @@ function exit_on_error () {
     clean_build
     exit 1;
 }
+
+# --------
+# Clean up the build directory
+# Arguments:
+#  all:      completely removes the build directory (${_DOC_DIR}/build)
+#  fo:       remove FO files (${_DOC_DIR}/build/.tmp/*.fo)
+#  images:   remove the images directory (${_DOC_DIR}/build/.images)
+#  profiles: remove profiling directories (${_DOC_DIR}/build/.profiled)
+#  results:  remove build results (${_DOC_DIR}/build/$_BOOKNAME)
+#  tmp:      remove temp directory (${_DOC_DIR}/build/.tmp)
+#
+function clean_build_dir () {
+    [[ -d "${_DOC_DIR}" ]] || exit_on_error "Attempting to delete an empty directory"
+    [[ -z $1 ]] && exit_on_error "You must specify a parameter for the clean buildir function"
+    case $1 in
+        all)
+            rm -rf "${_DOC_DIR}/build"
+            ;;
+        fo)
+            rm -f "${_DOC_DIR}/build/.tmp/"*.fo
+            ;;
+        images)
+            rm -rf "${_DOC_DIR}/build/.images"
+            ;;
+        profiles)
+            rm -rf "${_DOC_DIR}/build/.profiled"
+            ;;
+        results)
+            rm -rf "${_DOC_DIR}/build/$_BOOKNAME"
+            ;;
+        tmp)
+            rm -rf "${_DOC_DIR}/build/.tmp"
+            ;;
+        *)
+            exit_on_error "Wrong parameter for function cleandir"
+            ;;
+    esac
+}
+
 
 # ---------
 # Print Test Header

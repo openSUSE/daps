@@ -46,7 +46,7 @@ function oneTimeSetUp() {
     local _LOG_DIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the profiling directory
     _HTMLDIR_NAME_PATH=$($_DAPSEXEC -d $_DCFILE html-dir-name 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -65,7 +65,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -151,6 +151,7 @@ function test_htmlImages () {
     # <EXPECTED> - there should be none. Since comm compares columns, we also
     # need to operate with a modified IFS
     #
+
     _oldIFS=$IFS IFS=$'\n\t'
     _IMAGES_DIFF=$(comm -1 -3 <(echo "${_IMAGES_BUILD[*]}" | sort -u) <(echo "${_IMAGES_EXPECTED[*]}" 2>/dev/null | sort -u))
     IFS=$_oldIFS
@@ -169,7 +170,7 @@ function test_htmlImages () {
 function test_htmlRemarksDraftMeta () {
     local _BUILD_DIR_NAME _HTML_BUILD_PATH _HTMLDIR_NAME_PATH
 
-    clean_build
+    clean_build_dir results
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --draft --remarks --meta 2>/dev/null | tail -n 1)
    assertTrue \
@@ -236,7 +237,7 @@ function test_htmlClean () {
     mkdir -p ${_HTMLDIR_NAME_PATH}
     touch $_TO_CLEAN >/dev/null 2>&1
 
-    clean_build
+    # do not run clean_build_dir here!!
 
     $_DAPSEXEC -v0 -d $_DCFILE html --clean >/dev/null 2>&1
     assertTrue \
@@ -270,7 +271,8 @@ function test_htmlCSS_HTML5 () {
     _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
 
-    clean_build
+    clean_build_dir profiles
+    clean_build_dir results
 
     $_DAPSEXEC -v0 -d $_DCFILE html --html5 --css $_CSS_PATH >/dev/null 2>&1
 
@@ -307,7 +309,7 @@ function test_htmlStatic () {
     _CSS_PATH="${_DOC_DIR}/xml/${_CSS_FILE}"
     _CSS_BUILD="${_HTMLDIR_NAME_PATH}/static/css/${_CSS_FILE}"
 
-    clean_build
+    clean_build_dir results
 
     $_DAPSEXEC -v0 -d $_DCFILE html --static --css $_CSS_PATH >/dev/null 2>&1
     assertTrue \
@@ -375,7 +377,7 @@ function test_htmlNAME () {
     local _BUILD_SUBDIR_NAME _HTML_BUILD_PATH _HTMLDIR_NAME_PATH _NAME
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir results
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE html --name $_NAME 2>/dev/null)
     assertTrue \
@@ -406,7 +408,7 @@ function test_htmlRootidXsltparam () {
     # will generate HTML files with .xhtml extension
     _XSLTPARAM="--param \\\"spacing.paras=1\\\""
 
-    clean_build
+    clean_build_dir results
 
     _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
     assertTrue \
@@ -458,7 +460,7 @@ function test_htmlRootidXsltparam () {
 # * Is the --statdir option correctly implemented?
 #
 
-function test_htmlStatdir () {
+function test_htmlStylerootStatdir () {
     local _ALT_STATIC_DIR _CSS_FILE _STANDARD_CSS _STATIC_DIR
 
     _CSS_FILE="style.css"
@@ -466,7 +468,7 @@ function test_htmlStatdir () {
     _STATIC_DIR="${_STATIC_STYLES}/static"
     _ALT_STATIC_DIR="${_STATIC_STYLES}/alt_static"
 
-    clean_build
+    clean_build_dir results
 
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
@@ -477,7 +479,7 @@ function test_htmlStatdir () {
 	" └─ The Fallback Styleroot specified on the command line was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir results
 
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
@@ -488,7 +490,7 @@ function test_htmlStatdir () {
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir results
 
     # Testing Styleroot specified with --styleroot
     #
@@ -505,7 +507,7 @@ function test_htmlStatdir () {
 	" └─ $_STANDARD_CSS was not correctly copied to the build directory." \
 	"$?"
 
-    clean_build
+    clean_build_dir results
 
     # Is the statdir correctly copied?
     #
@@ -516,7 +518,7 @@ function test_htmlStatdir () {
 	" └─ The build static directory differs from the one provided by the stylesheets." \
 	"$?"
 
-    clean_build
+    clean_build_dir results
 
     # Is the --statdir option correctly implemented?
     #
@@ -535,7 +537,7 @@ function test_htmlStatdir () {
 function test_htmlSingle () {
     local _FILE_COUNT_BUILD _FILE_COUNT_EXPECTED _HTML_BUILD_PATH _HTML_NAME_PATH
 
-    clean_build
+    clean_build_dir results
 
     # single html creates one HTML file plus the index.html link
     _FILE_COUNT_EXPECTED=2

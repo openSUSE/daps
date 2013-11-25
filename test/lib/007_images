@@ -30,7 +30,7 @@ header "Image Generation"
 
 function oneTimeSetUp () {
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     _IMGDIR=$($_DAPSEXEC -d $_DCFILE showvariable VARIABLE=IMG_GENDIR 2>/dev/null)
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the path to the resulting image directory failed. Skipping tests"
@@ -47,7 +47,7 @@ function oneTimeSetUp () {
 function oneTimeTearDown () {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -301,7 +301,7 @@ function test_imagesROOTID () {
     _ROOTID=appendix
     _IMAGE_EXPECTED=png_example2.png
 
-    clean_build
+    clean_build_dir images
 
     $_DAPSEXEC -v0 -d $_DCFILE images --rootid $_ROOTID >/dev/null 2>&1
     assertTrue \

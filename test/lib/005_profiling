@@ -38,7 +38,7 @@ fi
 #
 function oneTimeSetUp() {
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the profiling directory
     _PROFILEDIR=$($_DAPSEXEC --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -52,7 +52,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -191,7 +191,7 @@ function test_profilingContent () {
 
     # First test: no profiled paras should appear in the profiled XML
     #             because no profiling attributes are set
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile >/dev/null 2>&1
     _COUNT=$(egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
@@ -203,7 +203,7 @@ function test_profilingContent () {
     # Second test: no profiled paras should appear in the profiled XML
     #              because profiling parameters have been set to a value that
     #              has no match in the XML
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFARCH=foo PROFCONDITION=foo PROFOS=foo PROFVENDOR=foo >/dev/null 2>&1
     egrep "(arch|condition|os|vendor)=(arch|condition|os|vendor)[12]" \
@@ -214,7 +214,7 @@ function test_profilingContent () {
 
     # Third test: arch2 should be filtered out
     #
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFARCH=arch1)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFARCH=arch1 >/dev/null
     grep -q "arch=arch2" ${_PROFILEDIR}/*.xml 2>/dev/null
@@ -224,7 +224,7 @@ function test_profilingContent () {
 
     # Fourth test: condition1 should be filtered out
     #
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFCONDITION=condition2)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFCONDITION=condition2 >/dev/null
     grep -q "condition=condition1" ${_PROFILEDIR}/*.xml 2>/dev/null
@@ -234,7 +234,7 @@ function test_profilingContent () {
 
     # Fifth test: os2 should be filtered out
     #
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFOS=os1)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFOS=os1 >/dev/null
     grep -q "os=os2" ${_PROFILEDIR}/*.xml 2>/dev/null
@@ -244,7 +244,7 @@ function test_profilingContent () {
 
     # Sixth test: vendor1 should be filtered out
     #
-    clean_build
+    clean_build_dir profiles
     _PROFILEDIR=$($_DAPSEXEC -v0 --main $_MAIN_PROFILING showvariable VARIABLE=PROFILEDIR PROFVENDOR=vendor2)
     $_DAPSEXEC -v0 --main $_MAIN_PROFILING profile PROFVENDOR=vendor2 >/dev/null
     grep -q "vendor=vendor1" ${_PROFILEDIR}/*.xml 2>/dev/null

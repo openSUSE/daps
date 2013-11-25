@@ -29,7 +29,7 @@ function oneTimeSetUp() {
     local _LOG_DIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the profiling directory
     _EPUB_NAME_PATH=$($_DAPSEXEC -d $_DCFILE epub-name 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -48,7 +48,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -85,12 +85,30 @@ function test_epubValidate () {
 }
 
 #--------------------------------
+# * Does the --check switch validate the epub file?
+#
+
+function test_epubCheck () {
+
+    $_DAPSEXEC -d $_DCFILE epub --check >/dev/null 2>&1
+    assertTrue \
+        ' └─ The epub command with --check failed' \
+        "$?"
+    # Test for epubcheck
+    #
+    grep -iq "epubcheck" $_LOGFILE 2>/dev/null
+    assertTrue \
+        " └─ The ePUB was not checked with epubcheck" \
+        "$?"
+}
+
+#--------------------------------
 # * Do the --styleroot and --fb_styleroot options work?
 # * Does the automatic fallback to the DoBook stylesheets work?
 #
 function test_epubStyleroot () {
 
-    clean_build
+    clean_build_dir tmp
 
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
@@ -101,7 +119,7 @@ function test_epubStyleroot () {
 	" └─ The Fallback Styleroot specified on the command line was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir tmp
 
     # Testing automatic Fallback to _DB_STYLES by specifying a wrong
     # Styleroot dir with no Fallback
@@ -112,7 +130,7 @@ function test_epubStyleroot () {
 	" └─ The automatic DocBook Fallback Styleroot was not used." \
 	"$?"
 
-    clean_build
+    clean_build_dir tmp
 
     # Testing Styleroot specified with --styleroot
     #
@@ -140,7 +158,7 @@ function test_epubCSS_Check () {
     # Does the EPUB contain the css file specified in the DC file?
     #
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub 2>/dev/null)
 
@@ -152,7 +170,7 @@ function test_epubCSS_Check () {
     # Does the EPUB contain the default CSS file from the stylesheet
     # directory when no other CSS file is specified?
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC --main $_MAINPATH --styleroot ${_STANDARD_STYLES} epub 2>/dev/null)
     unzip -l $_EPUB_BUILD_PATH 2>/dev/null | grep "$_CSS_STYLE_NAME" >/dev/null 2>&1
@@ -163,7 +181,7 @@ function test_epubCSS_Check () {
     # Does the EPUB contain the css file specified on the command line?
     #
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub --css=${_CSS_CMDL_PATH} 2>/dev/null)
 
@@ -175,7 +193,7 @@ function test_epubCSS_Check () {
     # Does the EPUB contain no css file with --css=none?
     #
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE epub --css=none 2>/dev/null)
 
@@ -187,33 +205,13 @@ function test_epubCSS_Check () {
 
 
 #--------------------------------
-# * Does the --check switch validate the epub file?
-#
-
-function test_epubCheck () {
-
-    clean_build
-
-    $_DAPSEXEC -d $_DCFILE epub --check >/dev/null 2>&1
-    assertTrue \
-        ' └─ The epub command with --check failed' \
-        "$?"
-    # Test for epubcheck
-    #
-    grep -iq "epubcheck" $_LOGFILE 2>/dev/null
-    assertTrue \
-        " └─ The ePUB was not checked with epubcheck" \
-        "$?"
-}
-
-#--------------------------------
 # * Is the --name option correctly implemented?
 #
 function test_epubNAME () {
     local _BUILD_SUBDIR_NAME _EPUB_BUILD_PATH _EPUB_NAME_PATH _NAME
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE epub --name $_NAME 2>/dev/null)
     assertTrue \
@@ -252,7 +250,7 @@ function test_epubRootid () {
     _ROOTID=appendix
     _EPUB_FILENAME_EXPECTED=${_ROOTID}_en.epub
 
-    clean_build
+    clean_build_dir tmp
 
     _EPUB_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug epub --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \

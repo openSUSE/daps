@@ -27,7 +27,7 @@ function oneTimeSetUp() {
     local _LOG_DIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the profiling directory
     _SRC_NAME_PATH=$($_DAPSEXEC -d $_DCFILE package-src-name 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -53,7 +53,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -118,7 +118,7 @@ function test_packagesrcFilelist () {
 	" └─ $_DCFILE is missing in the source archive" \
         "[[ -f ${_SRC_TEMPDIR}/$(basename $_DCFILE) ]]"
 
-    clean_build
+    clean_build_dir results
 
     # DC file via DEF file
     #
@@ -142,7 +142,7 @@ function test_packagesrcNAME () {
     local _SRC_BUILD_PATH _SRC_NAME_PATH _NAME
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir results
 
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --name $_NAME 2>/dev/null)
     assertTrue \
@@ -178,7 +178,7 @@ function test_packagesrcSetDate () {
 
     _DATE="Jun 01 2013"
 
-    clean_build
+    clean_build_dir results
 
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date=\"$_DATE\" 2>/dev/null)
     assertTrue \
@@ -186,7 +186,7 @@ function test_packagesrcSetDate () {
 	"$?"
 
     # clean tmp and unpack new archive
-    rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
+    [[ -d ${_SRC_TEMPDIR} ]] && rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
     (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH xml/$_MAIN)
 
     grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null

@@ -23,7 +23,7 @@ function oneTimeSetUp() {
     local _LOG_DIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
     # get the resulting filename
     _TXT_NAME_PATH=$($_DAPSEXEC -d $_DCFILE text-name 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -42,7 +42,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -76,7 +76,7 @@ function test_textName () {
 
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir results
 
     _TXT_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE text --name $_NAME 2>/dev/null)
     assertTrue \
@@ -111,7 +111,7 @@ function test_textRootid () {
 
     _ROOTID=appendix
 
-    clean_build
+    clean_build_dir results
 
     _TXT_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug text --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \

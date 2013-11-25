@@ -31,7 +31,7 @@ function oneTimeSetUp() {
     local _LOG_DIR _TMPDIR
 
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 
     _LOCDROP_NAME_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOCDROP_EXPORT_BOOKDIR 2>/dev/null)
     if [ $? -ne 0 ]; then
@@ -57,7 +57,7 @@ function oneTimeSetUp() {
 function oneTimeTearDown() {
     stats
     # Clean up the build directory
-    clean_build
+    clean_build_dir all
 }
 
 #---------------------------------------------------------------
@@ -133,7 +133,7 @@ function test_locdropFiles () {
     IFS=$oldIFS
 
     # clean tmp and unpack new archive
-    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
+    [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS)
     for _FILE in ${_NOTRANS_FILES[*]}; do
 	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
@@ -154,7 +154,7 @@ function test_locdropFiles () {
         "[[ -s $_TAR_IMAGES ]]"
 
     # clean tmp and unpack new archive
-    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
+    [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_IMAGES)
     assertTrue \
         " └─ File '$_TRANS_IMAGE' is missing in the images tarball" \
@@ -172,12 +172,12 @@ function test_locdropFiles () {
     # ------
     # Added DC file
     #
-    clean_build
+    clean_build_dir results
 
     $_DAPSEXEC -v0 -d $_DCFILE locdrop --def-file=${_DOC_DIR}/DEF-booktest >/dev/null 2>&1
 
     # clean tmp and unpack new archive
-    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
+    [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR && tar xfj $_TAR_NOTRANS)
 
     assertTrue \
@@ -198,7 +198,7 @@ function test_locdropRootid () {
     _ROOTID="appendix"
     declare -a _NOTRANS_IMAGES=( $_SET_IMAGES )
 
-    clean_build
+    clean_build_dir results
 
     _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug locdrop --rootid $_ROOTID 2>/dev/null | tail -n 1)
     assertTrue \
@@ -230,7 +230,7 @@ function test_locdropRootid () {
         "[[ -s $_TAR_NOTRANS_IMAGES ]]"
 
     # clean tmp and unpack new archive
-    rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
+    [[ -d "${_LOCDROP_TEMPDIR}" ]] && rm -rf "${_LOCDROP_TEMPDIR}" && mkdir -p "${_LOCDROP_TEMPDIR}"
     (cd $_LOCDROP_TEMPDIR; tar xfj $_TAR_NOTRANS_IMAGES)
     for _FILE in ${_NOTRANS_FILES[*]}; do
 	[[ -f ${_LOCDROP_TEMPDIR}/xml/$_FILE ]] || _MISSING="$_MISSING $_FILE"
@@ -248,7 +248,7 @@ function test_locdropRootid () {
 function test_locdropNopdf () {
     local _LOCDROP_BUILD_PATH _PDF_NAME_PATH
 
-    clean_build
+    clean_build_dir results
 
     _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --nopdf 2>/dev/null)
     assertTrue \
@@ -271,7 +271,7 @@ function test_locdropName () {
 
     _NAME="testsuite"
 
-    clean_build
+    clean_build_dir results
 
     _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --name $_NAME 2>/dev/null)
     assertTrue \
@@ -303,7 +303,7 @@ function test_locdropExportdir () {
     _EXPORT_DIR="$_LOCDROP_TEMPDIR"
     rm -rf "$_EXPORT_DIR" && mkdir -p "$_EXPORT_DIR"
 
-    clean_build
+    clean_build_dir results
 
     _LOCDROP_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE locdrop --export-dir $_EXPORT_DIR 2>/dev/null)
     assertTrue \
