@@ -577,6 +577,25 @@ RESDIR=""
 #
 ROOTID=""
 
+## Key:      STATIC_DIR
+## -------------------
+## Description: Custom static/ directory containing CSS and JS files
+##              as well as images referenced from the CSS file and
+##              the stylesheets
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+#
+# If present, DAPS uses a directory <STYLEROOT>/static hosting CSS and JS
+# files as well as images reference from the stylesheets and copies it to
+# the resulting HTML directory. This variable allows to permanently set a
+# custom directory.
+# To be set in the DC file or via command line with --statdir.
+#
+# See also STYLEROOT, FALLBACK_STYLEROOT
+#
+STATIC_DIR=""
+
 ## Key:      STYLEDEVEL
 ## -------------------
 ## Description: Custom Stylesheet directory for development purposes.
