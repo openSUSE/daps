@@ -12,7 +12,7 @@
  <title>Quick Start Guide</title>
  <articleinfo>
   <productname>&dapsacr;</productname>
-  <productnumber>1.0</productnumber>
+  <productnumber>2.0</productnumber>
   <authorgroup>
    <author>
     <firstname>Tanja</firstname>
@@ -229,13 +229,13 @@
      Create the default directory structure for &dapsacr; (containing an
      example <sgmltag>book</sgmltag>):
     </para>
-    <screen>&prompt1;<command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;</command></screen>
+    <screen>&prompt1;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;</command></screen>
     <para>
      With the <option>-r</option> option, you can also set another root
      element, such as <sgmltag>article</sgmltag>, for example. To create the
      default directory structure with an <sgmltag>article</sgmltag> example:
     </para>
-    <screen>&prompt1;<command>daps-init -d <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
+    <screen>&prompt1;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
    </step>
    <step>
     <para>
@@ -252,7 +252,7 @@
      (<filename>&dc;-daps-example</filename>) to use and the output format
      (color PDF) to create:
     </para>
-    <screen>&prompt1;<command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example color-pdf</command></screen>
+    <screen>&prompt1;<command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example pdf</command></screen>
     <para>
      For creation of the PDF, &dapsacr; uses FOP by default (if no other
      formatter is specified) and applies the default DocBook stylesheets (if
