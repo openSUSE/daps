@@ -402,9 +402,8 @@
  <para>
    By default, the DocBook stylesheets are used for generating output
    formats. But &dapsacr; also allows you to customize your output formats
-   in a very flexible way.
-   <remark>taroth 2012-03-19: add xref to advanced
-    chapter</remark>
+   in a very flexible way. For more details, refer to <xref
+    linkend="cha.daps.user.layout"/>.
  </para>
 
 
@@ -421,7 +420,7 @@
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>
-  <screen>&prompt1;<command>daps -d /svn/daps/example/&dc;-daps-example color-pdf</command></screen>
+  <screen>&prompt1;<command>daps -d /svn/daps/example/&dc;-daps-example pdf</command></screen>
  </sect2>
 
  <sect2 id="sec.daps.quick.output.formats">
@@ -466,7 +465,7 @@
      use the following command to build the first chapter of the book
      (without the book's title page, table of contents etc.):
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</command></screen>
+   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --rootid=cha.template.examples</command></screen>
   </sect3>
   <sect3 id="sec.daps.quick.output.adv.review">
    <title>Output with Remarks or Draft Watermark</title>
@@ -477,19 +476,19 @@
      the following command to build a color PDF that has a
      <literal>DRAFT</literal> watermark printed on each page:
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example color-pdf --draft</command></screen>
+   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --draft</command></screen>
    <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
      editorial remarks or questions to the proofreader), include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example color-pdf --remarks</command></screen>
+   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
       &daps-output-remarks;
    <para>If metadata to a file has been set<remark>taroth 2013-01-08: which
      metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
      &dapsacr; can also include the metadata for each file in the output
      format:</para>
-      <screen>&prompt1;daps -d &dc;-daps-example color-pdf --meta</screen>
+      <screen>&prompt1;daps -d &dc;-daps-example pdf --meta</screen>
 
    &daps-note-output-adv;
   </sect3>
@@ -503,10 +502,7 @@
   <xref linkend="app.daps.user.migrate"/>.
   </para>
 </sect1>
- <!--<sect1 id="sec.daps.quick.config">
-  <title>&dapsacr; Configuration</title>
- &daps-config;
- </sect1>-->
+
 <sect1 id="sec.daps.quick.more">
  <title>For More Information</title>
 
@@ -524,11 +520,8 @@
   </ulink>.
   </para>
 
- <remark>taroth 2012-04-19: enable links to glossary and troubleshooting chapter
-  as soon as they contain useful content</remark>
-
-<!-- <para>For an overview of the key terms used in the context of &dapsacr; and
-  DocBook, refer to <xref linkend="daps.glossary"/>.</para>-->
+ <para>For an overview of the key terms used in the context of &dapsacr; and
+  DocBook, refer to <xref linkend="daps.glossary"/>.</para>
 
  <para>
    If you encounter problems with &dapsacr;, check
