@@ -78,75 +78,94 @@
     <listitem>
      <itemizedlist>
       <listitem>
-       <para>command name changes (deprecated targets)</para>
+       <para>For a list of command name changes and deprecated commands, refer
+        to <xref linkend="vle.docupd.deprec"/>.</para>
       </listitem>
       <listitem>
-       <para>epub: now provides valid output (checked with epub-check)</para>
+       <para>The &epub; output is now checked with EpubCheck, <ulink
+        url="https://github.com/IDPF/epubcheck"/>.</para>
       </listitem>
       <listitem>
-       <para>new target: mobi (for Amazon Kindle e-books, requires calibre: epub
-       is generated and transformed to mobi format with calibre)</para>
+       <para>A new output format has been added:  <command>daps mobi </command>
+        generates <filename>*.mobi</filename> files for Amazon Kindle e-books.</para>
       </listitem>
       <listitem>
-       <para>html: html4 is no longer supported, per default,
-         <option>--html</option> now generates xhtml 1.1, with the
-         <option>--html5</option> switch you can enforce HTML5 output</para>
+       <para>HTML 4 is no longer supported. Per default,
+        <command>daps html</command> now generates XHTML 1.1. HTML 5 output can
+        be enforced by using the <option>--html5</option> option.</para>
       </listitem>
       <listitem>
-       <para>File list targets: renamed (now: <option>list-*</option>), some
-       deprecated</para>
+       <para>Some commands for generating file lists (such as <command>daps
+        remaininggraphics</command>) have been renamed, some are
+        deprecated. For details, refer to <xref linkend="vle.docupd.deprec"/>.
+       </para>
+       <!-- (now: <option>list-*</option>)-->
       </listitem>
       <listitem>
-       <para>list-srcfiles: now options available which files to exclude from
-        list</para>
+       <para>For the <command>daps list-srcfiles</command> command, options are
+        now available with which to exclude files from the list. For more
+        details, run <command>daps help list-srcfiles</command>.</para>
       </listitem>
       <listitem>
-       <para>new packaging target: package-src (creates tarball + profiled XML +
-        resolved entities + images), new option <option>--set-date</option> to
-        include publication date</para>
+       <para>A new packaging command is available: <command>daps
+       package-src</command>. It creates a TAR archive with profiled XML
+        sources, resolved entities, and images.  Use the <option>--set-date</option> to
+        include the publication date.</para>
       </listitem>
       <listitem>
-       <para>new target for distributable archives: locdrop</para>
+       <para><remark>taroth 2013-11-28: really include this? is mostly used for
+        our own purposes...</remark>A new target for distributable archives has been added:
+        <command>daps locdrop</command>.</para>
       </listitem>
       <listitem>
-       <para>bigfile target has changed: bigfile-reduced is deprecated, bigfile
-        now does what was formerly done by bigfile-reduced</para>
+       <para>The <command>daps bigfile</command> command has changed: The
+        <command>daps bigfile-reduced</command> is deprecated, use <command>daps
+        bigfile</command> instead.</para>
+       <!-- now does what was formerly done by bigfile-reduced-->
       </listitem>
       <listitem>
-       <para>page, desktop, or document files: targets package-html and
-        package-pdf now have switches which files to generate:
-         <option>--documentfiles</option>, <option>--desktopfiles</option>,
-         <option>--pagefiles</option>
+       <para>Generating page, desktop, or document files: The commands
+        <command>daps package-html</command> and 
+        <command>daps package-pdf</command> now have options to define which files to generate:
+         <option>--documentfiles</option>, <option>--desktopfiles</option>, and
+         <option>--pagefiles</option>.
        </para>
       </listitem>
-      <listitem><para>new target: clean-package</para></listitem>
+      <listitem>
+       <para>A new command has been added:
+        <command>daps clean-package</command>. It removes all generated package
+        data for a given &dc; or &main; file.</para>
+      </listitem>
      </itemizedlist>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Debugging</term>
     <listitem>
-     <para>new subcommand: dapsenv (prints a list of the most important make
-      variables and their value)</para></listitem>
+     <para>A new subcommand has been added: <command>daps dapsenv</command>. It
+      prints a list of the most important make variables and their value.</para></listitem>
    </varlistentry>
    <varlistentry>
     <term>Entities</term>
     <listitem>
-     <para>are now always resolved in the profiles XML sources</para></listitem>
+     <para>In the profiled XML sources entities are now always resolved and
+      replaced by their value.</para></listitem>
    </varlistentry>
    <varlistentry>
-    <term>Well-formed</term>
+    <term>Well-formed XML</term>
     <listitem>
-     <para>if XML is not well-formed, &dapsacr; aborts and shows a
-      meaningful error-message</para></listitem>
+     <para>If the XML is not well-formed, &dapsacr; quits and shows a
+      meaningful error message.</para></listitem>
    </varlistentry>
    <varlistentry>
     <term>Overview of All Commands</term>
-    <listitem><para>daps --commands</para></listitem>
+    <listitem>
+     <para>With <command>daps --commands</command>, you can list all available
+      commands.</para></listitem>
    </varlistentry>
    <varlistentry>
     <term>Image Formats</term>
-    <listitem><para>jpeg now supported</para></listitem>
+    <listitem><para>&dapsacr; now also supports JPEG as image format.</para></listitem>
    </varlistentry>
    <varlistentry>
     <term>CSS</term>
@@ -164,21 +183,21 @@
     <listitem>
      <para>When passing XSLT parameters (either on the command line, in scripts,
       or in &dc; files by using <literal>XSLTPARAM</literal>), you need to
-      adjust the syntax when switching to &daps; 2.0. Instead of </para>
+      adjust the syntax when switching to &dapsacr; 2.0. Instead of </para>
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable></screen>
      <para>now use:</para>
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable><emphasis role="strong">=</emphasis><replaceable>VALUE</replaceable></screen>
      </listitem>
    </varlistentry>
-   <varlistentry>
-   <term>Deprecated/Changed Commands</term>
+   <varlistentry id="vle.docupd.deprec">
+   <term>Deprecated Commands</term>
     <listitem>
-     <para>The following commands are deprecated. </para>
+     <para>The following commands are deprecated: </para>
      <itemizedlist>
       <listitem>
        <para>
         <command>&dapscmd; all</command>. Use
-        <command>&dapscmd;&nbsp;color-pdf</command> instead.</para>
+        <command>&dapscmd;&nbsp;pdf</command> instead.</para>
       </listitem>
       <listitem>
        <para>
@@ -301,23 +320,23 @@
       <listitem>
        <para>
         <command>&dapscmd; htmlsingle</command>. Use 
-        <command>&dapscmd; single-html</command> instead. </para>
+        <command>&dapscmd; html --single</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; htmlsingle-name</command>. Use
-        <command>&dapscmd;&nbsp;single-html-dir-name</command> instead.
+        <command>&dapscmd;&nbsp;</command> instead.
        </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; html-single</command>. Use 
-        <command>&dapscmd;&nbsp;single-html</command> instead. </para>
+        <command>&dapscmd;&nbsp;html --single</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; html-single-name</command>. Use
-        <command>&dapscmd;&nbsp;single-html-dir-name</command> instead. </para>
+        <command>&dapscmd;&nbsp;html-dir-name --single</command> instead. </para>
       </listitem>
       <listitem>
        <para>
@@ -347,12 +366,12 @@
       <listitem>
        <para>
         <command>&dapscmd; pdf-color</command>. Use 
-        <command>&dapscmd; color-pdf</command> instead. </para>
+        <command>&dapscmd; pdf</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; pdf-color-name</command>. Use 
-        <command>&dapscmd; color-pdf-name</command> instead. </para>
+        <command>&dapscmd; pdf-name</command> instead. </para>
       </listitem>
       <listitem>
        <para>
