@@ -18,6 +18,9 @@ switch ( XmlProduct ) {
   case 'SUSE Cloud 2.0':
     bugzillaProduct = 'SUSE Cloud 2.0';
     break;
+  case 'SUSE Cloud 3':
+    bugzillaProduct = 'SUSE Cloud 3';
+    break;
   case 'Subscription Management Tool 11.3':
     bugzillaProduct = 'Subscription Management Tool 11 SP3 (SMT 11 SP3)';
     bugzillaComponent = 'SMT';
