@@ -9,6 +9,8 @@
        xml or image? img=images files, xml=XML files
      * separator (default: ' ')
        Separator between each filename
+     * show.first (default: 0)
+       If set to 1, only the first filename will be printed 
        
    Input:
      Output from get-all-used-files.xsl
@@ -26,6 +28,7 @@
   <xsl:import href="rootid.xsl"/>  
   <xsl:output method="text" indent="no"/>  
 
+  <xsl:param name="show.first" select="0"/>
   <xsl:param name="xml.or.img" select="'xml'"/>
   <xsl:param name="separator">
     <xsl:text> </xsl:text>
@@ -54,7 +57,9 @@
         <xsl:value-of select="$separator"/>
       </xsl:if>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:if test="$show.first = 0">
+      <xsl:apply-templates />
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="image">
