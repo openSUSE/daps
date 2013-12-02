@@ -32,7 +32,20 @@
      * use.pi4date
        Should the PI <?dbtimestamp format="..."?> created instead of
        the current date? 0=no, 1=yes
-       
+     
+   Original DocBook XSL Parameters:
+     * stylesheet.result.type (default: 'xhtml')
+     
+     * use.svg (default: 1)
+       Allow SVG in the result tree?
+     
+     * graphic.default.extension (default: '')
+       Default extension for graphic filenames
+   
+   Dependencies:
+       To common/rootid.xsl and common/copy.xsl, but not to the 
+       original DocBook XSL stylesheets.
+   
    Keys:
      * id (applys to: @id|@xml:id)
        Creates an index for all elements with IDs (derived from
@@ -58,10 +71,6 @@
   xmlns:date="http://exslt.org/dates-and-times"
   exclude-result-prefixes="db xlink date">
 
-  <xsl:import href="&db;/html/param.xsl"/>
-  <xsl:import href="&db;/common/common.xsl"/>
-  <!--<xsl:import href="&db;/common/pi.xsl"/>
-  <xsl:import href="&db;/lib/lib.xsl"/>-->
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:import href="../common/copy.xsl"/>
 
@@ -74,7 +83,368 @@
 <xsl:param name="preferred.mediaobject.role">html</xsl:param>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
 <xsl:param name="use.pi4date" select="0"/>
+<xsl:param name="use.svg" select="1"/>
+<xsl:param name="graphic.default.extension"/>
 <xsl:param name="stylesheet.result.type" select="'xhtml'"/>
+
+
+<!-- =============================================================== -->
+<!-- Helper templates, copied from common/common.xsl and xhtml-1_1/graphics.xsl -->
+<xsl:template name="is.graphic.format">
+  <xsl:param name="format"/>
+  <xsl:if test="$format = 'SVG' or 
+                $format = 'PNG' or
+                $format = 'JPG' or 
+                $format = 'JPEG' or 
+                $format = 'linespecific' or 
+                $format = 'GIF' or 
+                $format = 'GIF87a' or 
+                $format = 'GIF89a' or 
+                $format = 'BMP'">1</xsl:if>
+</xsl:template>
+ 
+<xsl:template name="is.graphic.extension">
+  <xsl:param name="ext"/>
+  <xsl:variable name="lcext" select="translate($ext, 
+                              'ABCDEFGHIJKLMNOPQRSTUVWXYZ',                                        
+                              'abcdefghijklmnopqrstuvwxyz')"/>
+  <xsl:if test="$lcext = 'svg' or 
+                $lcext = 'png' or 
+                $lcext = 'jpeg' or 
+                $lcext = 'jpg' or 
+                $lcext = 'avi' or 
+                $lcext = 'mpg' or 
+                $lcext = 'mp4' or 
+                $lcext = 'mpeg' or 
+                $lcext = 'qt'  or 
+                $lcext = 'gif' or 
+                $lcext = 'acc' or 
+                $lcext = 'mp1' or 
+                $lcext = 'mp2' or 
+                $lcext = 'mp3' or 
+                $lcext = 'mp4' or 
+                $lcext = 'm4v' or 
+                $lcext = 'm4a' or 
+                $lcext = 'wav' or 
+                $lcext = 'ogv' or 
+                $lcext = 'ogg' or 
+                $lcext = 'webm' or 
+                $lcext = 'bmp'">1</xsl:if>
+</xsl:template>
+
+<xsl:template name="filename-basename">
+  <!-- We assume all filenames are really URIs and use "/" -->
+  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="recurse" select="false()"/>
+
+  <xsl:choose>
+    <xsl:when test="substring-after($filename, '/') != ''">
+      <xsl:call-template name="filename-basename">
+        <xsl:with-param name="filename"
+                        select="substring-after($filename, '/')"/>
+        <xsl:with-param name="recurse" select="true()"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$filename"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+  
+<xsl:template name="filename-extension">
+  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="recurse" select="false()"/>
+
+  <!-- Make sure we only look at the base name... -->
+  <xsl:variable name="basefn">
+    <xsl:choose>
+      <xsl:when test="$recurse">
+        <xsl:value-of select="$filename"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="filename-basename">
+          <xsl:with-param name="filename" select="$filename"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="substring-after($basefn, '.') != ''">
+      <xsl:call-template name="filename-extension">
+        <xsl:with-param name="filename"
+                        select="substring-after($basefn, '.')"/>
+        <xsl:with-param name="recurse" select="true()"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$recurse">
+      <xsl:value-of select="$basefn"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="mediaobject.filename">
+  <xsl:param name="object"></xsl:param>
+
+  <xsl:variable name="data" select="$object/videodata
+                                    |$object/imagedata
+                                    |$object/audiodata
+                                    |$object"/>
+
+  <xsl:variable name="filename">
+    <xsl:choose>
+      <xsl:when test="$data[@fileref]">
+        <xsl:apply-templates select="$data/@fileref"/>
+      </xsl:when>
+      <xsl:when test="$data[@entityref]">
+        <xsl:value-of select="unparsed-entity-uri($data/@entityref)"/>
+      </xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="real.ext">
+    <xsl:call-template name="filename-extension">
+      <xsl:with-param name="filename" select="$filename"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="ext">
+    <xsl:choose>
+      <xsl:when test="$real.ext != ''">
+        <xsl:value-of select="$real.ext"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$graphic.default.extension"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="graphic.ext">
+    <xsl:call-template name="is.graphic.extension">
+      <xsl:with-param name="ext" select="$ext"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$real.ext = ''">
+      <xsl:choose>
+        <xsl:when test="$ext != ''">
+          <xsl:value-of select="$filename"/>
+          <xsl:text>.</xsl:text>
+          <xsl:value-of select="$ext"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$filename"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="not($graphic.ext)">
+      <xsl:choose>
+        <xsl:when test="$graphic.default.extension != ''">
+          <xsl:value-of select="$filename"/>
+          <xsl:text>.</xsl:text>
+          <xsl:value-of select="$graphic.default.extension"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$filename"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$filename"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="is.acceptable.mediaobject">
+  <xsl:param name="object"></xsl:param>
+
+  <xsl:variable name="filename">
+    <xsl:call-template name="mediaobject.filename">
+      <xsl:with-param name="object" select="$object"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:variable name="ext">
+    <xsl:call-template name="filename-extension">
+      <xsl:with-param name="filename" select="$filename"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- there will only be one -->
+  <xsl:variable name="data" select="$object/videodata
+                                    |$object/imagedata
+                                    |$object/audiodata"/>
+
+  <xsl:variable name="format" select="$data/@format"/>
+
+  <xsl:variable name="graphic.format">
+    <xsl:if test="$format">
+      <xsl:call-template name="is.graphic.format">
+        <xsl:with-param name="format" select="$format"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="graphic.ext">
+    <xsl:if test="$ext">
+      <xsl:call-template name="is.graphic.extension">
+        <xsl:with-param name="ext" select="$ext"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$use.svg = 0 and $format = 'SVG'">0</xsl:when>
+    <xsl:when xmlns:svg="http://www.w3.org/2000/svg"
+              test="$use.svg != 0 and $object/svg:*">1</xsl:when>
+    <xsl:when test="$graphic.format = '1'">1</xsl:when>
+    <xsl:when test="$graphic.ext = '1'">1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="select.mediaobject.index">
+  <xsl:param name="olist"
+             select="imageobject|imageobjectco
+                     |videoobject|audioobject|textobject"/>
+  <xsl:param name="count">1</xsl:param>
+
+  <xsl:choose>
+    <!-- Test for objects preferred by role -->
+    <xsl:when test="$use.role.for.mediaobject != 0 
+               and $preferred.mediaobject.role != ''
+               and $olist[@role = $preferred.mediaobject.role]"> 
+      
+      <!-- Get the first hit's position index -->
+      <xsl:for-each select="$olist">
+        <xsl:if test="@role = $preferred.mediaobject.role and
+             not(preceding-sibling::*[@role = $preferred.mediaobject.role])"> 
+          <xsl:value-of select="position()"/> 
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+
+    <xsl:when test="$use.role.for.mediaobject != 0 
+               and $olist[@role = $stylesheet.result.type]">
+      <!-- Get the first hit's position index -->
+      <xsl:for-each select="$olist">
+        <xsl:if test="@role = $stylesheet.result.type and 
+              not(preceding-sibling::*[@role = $stylesheet.result.type])"> 
+          <xsl:value-of select="position()"/> 
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <!-- Accept 'html' for $stylesheet.result.type = 'xhtml' -->
+    <xsl:when test="$use.role.for.mediaobject != 0 
+               and $stylesheet.result.type = 'xhtml'
+               and $olist[@role = 'html']">
+      <!-- Get the first hit's position index -->
+      <xsl:for-each select="$olist">
+        <xsl:if test="@role = 'html' and 
+              not(preceding-sibling::*[@role = 'html'])"> 
+          <xsl:value-of select="position()"/> 
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+
+    <!-- If no selection by role, and there is only one object, use it -->
+    <xsl:when test="count($olist) = 1 and $count = 1">
+      <xsl:value-of select="$count"/> 
+    </xsl:when>
+
+    <xsl:otherwise>
+      <!-- Otherwise select first acceptable object -->
+      <xsl:if test="$count &lt;= count($olist)">
+        <xsl:variable name="object" select="$olist[position()=$count]"/>
+    
+        <xsl:variable name="useobject">
+          <xsl:choose>
+            <!-- select videoobject or audioobject before textobject -->
+            <xsl:when test="local-name($object) = 'videoobject'">
+              <xsl:text>1</xsl:text> 
+            </xsl:when>
+            <xsl:when test="local-name($object) = 'audioobject'">
+              <xsl:text>1</xsl:text> 
+            </xsl:when>
+            <!-- skip textobject if also video, audio, or image out of order -->
+            <xsl:when test="local-name($object) = 'textobject' and
+                            ../imageobject or
+                            ../audioobject or
+                            ../videoobject">
+              <xsl:text>0</xsl:text> 
+            </xsl:when>
+            <!-- The phrase is used only when contains TeX Math and output is FO -->
+            <xsl:when test="local-name($object)='textobject' and $object/phrase
+                            and $object/@role='tex' and $stylesheet.result.type = 'fo'
+                            ">
+              <xsl:text>1</xsl:text> 
+            </xsl:when>
+            <!-- The phrase is never used -->
+            <xsl:when test="local-name($object)='textobject' and $object/phrase">
+              <xsl:text>0</xsl:text>
+            </xsl:when>
+            <xsl:when test="local-name($object)='textobject'
+                            and $object/ancestor::equation ">
+            <!-- The first textobject is not a reasonable fallback
+                 for equation image -->
+              <xsl:text>0</xsl:text>
+            </xsl:when>
+            <!-- The first textobject is a reasonable fallback -->
+            <xsl:when test="local-name($object)='textobject'
+                            and $object[not(@role) or @role!='tex']">
+              <xsl:text>1</xsl:text>
+            </xsl:when>
+            <!-- don't use graphic when output is FO, TeX Math is used 
+                 and there is math in alt element -->
+            <xsl:when test="$object/ancestor::equation and 
+                            $object/ancestor::equation/alt[@role='tex']
+                            and $stylesheet.result.type = 'fo'">
+              <xsl:text>0</xsl:text>
+            </xsl:when>
+            <!-- If there's only one object, use it -->
+            <xsl:when test="$count = 1 and count($olist) = 1">
+               <xsl:text>1</xsl:text>
+            </xsl:when>
+            <!-- Otherwise, see if this one is a useable graphic -->
+            <xsl:otherwise>
+              <xsl:choose>
+                <!-- peek inside imageobjectco to simplify the test -->
+                <xsl:when test="local-name($object) = 'imageobjectco'">
+                  <xsl:call-template name="is.acceptable.mediaobject">
+                    <xsl:with-param name="object" select="$object/imageobject"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="is.acceptable.mediaobject">
+                    <xsl:with-param name="object" select="$object"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+    
+        <xsl:choose>
+          <xsl:when test="$useobject='1'">
+            <xsl:value-of select="$count"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="select.mediaobject.index">
+              <xsl:with-param name="olist" select="$olist"/>
+              <xsl:with-param name="count" select="$count + 1"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+  
+
+<!-- =============================================================== -->
 
 <xsl:template match="@spacing">
     <xsl:choose>
