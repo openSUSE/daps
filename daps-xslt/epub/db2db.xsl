@@ -75,7 +75,8 @@
   <xsl:import href="../common/copy.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-  <xsl:strip-space elements="date"/>
+  <xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="screen"/>
 
 <!-- Parameters                                                 -->
 <!-- ALWAYS use a trailing slash! -->
