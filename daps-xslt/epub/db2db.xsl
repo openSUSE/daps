@@ -58,7 +58,7 @@
   xmlns:date="http://exslt.org/dates-and-times"
   exclude-result-prefixes="db xlink date">
 
-
+  <xsl:import href="&db;/html/param.xsl"/>
   <xsl:import href="&db;/common/common.xsl"/>
   <!--<xsl:import href="&db;/common/pi.xsl"/>
   <xsl:import href="&db;/lib/lib.xsl"/>-->
