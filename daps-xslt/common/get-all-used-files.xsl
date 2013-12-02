@@ -100,7 +100,7 @@
   <xsl:template match="/">
     <xsl:comment>
       This is an intermediate XML file from
-      get-included-files.xsl which was created in-memory
+      get-all-used-files.xsl which was created in-memory
     </xsl:comment>
     <files>
         <xsl:apply-templates mode="root"/>
