@@ -115,9 +115,8 @@ task before
 <xsl:param name="shade.verbatim" select="1"/>
 
 <!-- Don't do this - this leads to stray "-" characters with FOP 1.1. Ugh!
-     Check if this still happens with screens that contain e.g. an option
-     that starts with "-": Is the output of "<screen>ls -l</screen>"
-     "ls --l"? Then this bug still exists. -->
+     To check if this still happens: Look at the output of
+     "<screen>ls -l</screen>" "ls --l"? -->
 <!-- <xsl:param name="hyphenate.verbatim" select="'1'"/> -->
 
 
