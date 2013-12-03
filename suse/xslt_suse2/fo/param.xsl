@@ -103,7 +103,6 @@ set       toc,title
 
 <!-- 17. Miscellaneous ========================================== -->
 <xsl:param name="bookmarks.collapse" select="0"/>
-<xsl:param name="hyphenate.verbatim" select="'1'"/>
 <xsl:param name="variablelist.as.blocks" select="1"/>
 <xsl:param name="formal.title.placement">
 figure after
@@ -114,6 +113,12 @@ procedure before
 task before
 </xsl:param>
 <xsl:param name="shade.verbatim" select="1"/>
+
+<!-- Don't do this - this leads to stray "-" characters with FOP 1.1. Ugh!
+     Check if this still happens with screens that contain e.g. an option
+     that starts with "-": Is the output of "<screen>ls -l</screen>"
+     "ls --l"? Then this bug still exists. -->
+<!-- <xsl:param name="hyphenate.verbatim" select="'1'"/> -->
 
 
 <!-- 18. Graphics =============================================== -->
