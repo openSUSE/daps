@@ -250,18 +250,10 @@
                     |computeroutput|constant|envar|filename|function|literal
                     |code|option|parameter|prompt|replaceable|structfield
                     |systemitem|varname|sgmltag|tag|email|uri
-                    |cmdsynopsis/command|function">
+                    |cmdsynopsis/command|function|literal|package">
   <xsl:param name="purpose" select="'none'"/>
 
   <xsl:call-template name="inline.monoseq">
-    <xsl:with-param name="purpose" select="$purpose"/>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template match="literal|package">
-  <xsl:param name="purpose" select="'none'"/>
-
-  <xsl:call-template name="inline.boldmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
   </xsl:call-template>
 </xsl:template>
