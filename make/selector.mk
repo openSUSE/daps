@@ -96,7 +96,7 @@ endif
 #---------------
 # File Listings
 #
-LISTTARGETS := list-images-missing list-images-multisrc list-srcfiles list-srcfiles-unused
+LISTTARGETS := list-file list-images-missing list-images-multisrc list-srcfiles list-srcfiles-unused
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(LISTTARGETS)))
   include $(DAPSROOT)/make/setfiles.mk

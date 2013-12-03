@@ -291,6 +291,9 @@ HELP_SUBCOMMAND+=("html-dir-name=Print the directory name that would result when
 SUBCOMMANDS+=("images=build_images")
 HELP_SUBCOMMAND+=("images=Generate images for the given document.")
 
+SUBCOMMANDS+=("list-file=filelists")
+HELP_SUBCOMMAND+=("list-file=Lists the filename that contains the ID specified with --rootid.")
+
 SUBCOMMANDS+=("list-images-missing=filelists")
 HELP_SUBCOMMAND+=("list-images-missing=Prints a list of images that are referenced in the XML sources but are missing\nin the images' source directory.")
 
@@ -669,15 +672,9 @@ Subcommands:
     webhelp                   HTML book with collapsable TOC and search
 
 
-  Create Distributable Archives:
-    dist-html                 HTML, css, and graphics
-    dist-htmlsingle           Single-file HTML. css, and graphics
-    dist-jsp                  JSP, css, and graphics
-    dist-webhelp              Webhelp css, js, and graphics
-    locdrop                   Provide everything that is needed to translate a
-                              set
-
   File lists:
+    list-file                 Lists the filename that contains the ID specified
+                              with the mandatory paramater --rootid.
     list-srcfiles             List source files (XML sources, images, entity
                               declarations, DC-file) used by the document
                               reference by the DC-file
@@ -709,6 +706,8 @@ Subcommands:
     package-src               Provide profiled XML sources and graphics
 
   Deploying:
+    locdrop                   Provide everything that is needed to translate a
+                              set
     online-docs               Provide a profiled XML bigfile, a graphics
                               tarball (PNG only), color-pdf, epub, and
                               a single-html archive.

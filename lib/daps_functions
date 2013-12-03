@@ -1083,7 +1083,7 @@ function packaging () {
 #
 ###########################################################################
 function profile_first () {
-    local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
     shift
 
@@ -1124,7 +1124,7 @@ function profile_first () {
 #
 ###########################################################################
 function comments_remarks () {
-    local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
     shift
 
@@ -1154,12 +1154,11 @@ function comments_remarks () {
 #
 #  FILELISTS
 #
-#  Subcommands: missinggraphics, project(files|graphics),
-#               remaining(files|graphics)
+#  Subcommands: list-files, list-srcfiles*, list-images-*
 #
 ###########################################################################
 function filelists () {
-    local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
     shift
 
@@ -1173,26 +1172,26 @@ function filelists () {
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
-        help_nodc
-        help_noent
-        help_noimg
-        help_noxml
-        help_pretty
+	if [[ $SUB_CMD =~ list-srcfiles ]]; then
+            help_nodc
+            help_noent
+            help_noimg
+            help_noxml
+	fi
+	[[ $SUB_CMD != list-file ]] && help_pretty
 	help_rootid
         echo
         exit 0
     fi
-    [[ 1 = $P_LIST_NODC ]] && export LIST_NODC=1
+    [[ 1 = $P_LIST_NODC ]]  && export LIST_NODC=1
     [[ 1 = $P_LIST_NOENT ]] && export LIST_NOENT=1
     [[ 1 = $P_LIST_NOIMG ]] && export LIST_NOIMG=1
     [[ 1 = $P_LIST_NOXML ]] && export LIST_NOXML=1
+    [[ 1 = $P_PRETTY ]]     && export PRETTY_FILELIST=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    if [[ 1 = $P_PRETTY ]]; then
-#        if [[ 0 != $VERBOSITY ]]; then
-#            ccecho "warn" "Pretty printing is automatically disabled in verbose/debug mode"
-#        else
-            export PRETTY_FILELIST=1
-#        fi
+
+    if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then
+	exit_on_error "You need to specify an ID with --rootid with the list-file command." 
     fi
 
     # we do not want to write a logfile this time
@@ -1276,7 +1275,7 @@ function show_names () {
 ###########################################################################
 
 function checklink () {
-    local HELPTXT SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
 
     SUB_CMD=$1
     shift

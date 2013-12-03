@@ -39,6 +39,15 @@ ifeq ($(LIST_NOXML),1)
   UNUSED_FILES := $(filter-out $(UNUSED_XML),$(UNUSED_FILES))
 endif
 
+# List filename for given ROOTID
+#
+.PHONY: list-file
+list-file: FILE4ID := $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+	      --param "show.first=1" $(ROOTSTRING) --file $(SETFILES_TMP) \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) )
+list-file:
+	@ccecho "result" "The ID \"$(ROOTID)\" appears in:\n$(FILE4ID)"
+
 # List files from xml and images/src referenced by $DOCFILE or $MAIN
 #
 .PHONY: list-srcfiles
