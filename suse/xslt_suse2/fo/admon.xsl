@@ -100,8 +100,9 @@
   <xsl:variable name="graphic.width" select="6.1"/>
 
   <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
-    <fo:list-block provisional-distance-between-starts="{&column; + &gutter;}mm"
-                    provisional-label-separation="&gutter;mm">
+    <fo:list-block
+      provisional-distance-between-starts="{&columnfragment; + &gutterfragment;}mm"
+      provisional-label-separation="&gutter;mm">
       <fo:list-item>
           <fo:list-item-label end-indent="label-end()">
             <fo:block text-align="end" padding-before="1.2mm" padding-after="1.2mm">
