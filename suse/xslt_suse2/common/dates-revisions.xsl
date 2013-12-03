@@ -51,13 +51,16 @@
         <xsl:otherwise/>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="version"
+      select="(bookinfo/releaseinfo | articleinfo/releaseinfo |
+               info/releaseinfo)[1]"/>
 
     <xsl:if test="$date != ''">
       <xsl:call-template name="imprint.label">
         <xsl:with-param name="label" select="'pubdate'"/>
       </xsl:call-template>
       <xsl:value-of select="$date"/>
-      <xsl:if test="$revision != ''">
+      <xsl:if test="$version != ''">
         <!-- Misappropriated but hopefully still correct everywhere. -->
         <xsl:call-template name="gentext.template">
           <xsl:with-param name="context" select="'iso690'"/>
@@ -65,11 +68,21 @@
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
-    <xsl:if test="$revision != ''">
-      <xsl:call-template name="imprint.label">
-        <xsl:with-param name="label" select="'revision'"/>
-      </xsl:call-template>
-      <xsl:value-of select="$revision"/>
+    <xsl:if test="$version != ''">
+      <xsl:choose>
+        <xsl:when test="$revision != ''">
+          <xsl:call-template name="imprint.label">
+            <xsl:with-param name="label" select="'revision'"/>
+          </xsl:call-template>
+          <xsl:value-of select="$revision"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="imprint.label">
+            <xsl:with-param name="label" select="'version'"/>
+          </xsl:call-template>
+          <xsl:value-of select="$version"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:template>
 
