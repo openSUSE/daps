@@ -116,7 +116,7 @@ task before
 
 <!-- Don't do this - this leads to stray "-" characters with FOP 1.1. Ugh!
      To check if this still happens: Look at the output of
-     "<screen>ls -l</screen>" "ls --l"? -->
+     "<screen>ls -l</screen>" "ls - -l"? -->
 <!-- <xsl:param name="hyphenate.verbatim" select="'1'"/> -->
 
 
