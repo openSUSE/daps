@@ -16,7 +16,7 @@
 
 
 Name:           suse-xsl-stylesheets
-Version:        1.9.22
+Version:        1.9.23
 
 ###############################################################
 # 
@@ -213,7 +213,7 @@ exit 0
 
 # Directories
 %dir %{_datadir}/xml/docbook/stylesheet/suse
-%dir %{_datadir}/xml/docbook/stylesheet/suse_beta
+%dir %{_datadir}/xml/docbook/stylesheet/suse2013
 
 %dir %{_datadir}/xml/%{dtdname}
 %dir %{_datadir}/xml/%{dtdname}/schema
@@ -224,7 +224,7 @@ exit 0
 
 # stylesheets
 %{_datadir}/xml/docbook/stylesheet/suse/*
-%{_datadir}/xml/docbook/stylesheet/suse_beta
+%{_datadir}/xml/docbook/stylesheet/suse2013/*
 
 # NovDoc Schemas
 %{_datadir}/xml/%{dtdname}/schema/dtd/%{dtdversion}/*
