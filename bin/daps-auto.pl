@@ -26,7 +26,17 @@ my $dapsroot      = "";
 my $to_rsync      = "";
 # valid formats
 #my @vformats      = qw(color-pdf epub html online-docs pdf single-html text);
-my @vformats      = qw(epub grayscale-pdf html online-docs pdf single-html text);
+
+my %vformats = (
+    epub            => "epub",
+    "grayscale-pdf" => "pdf",
+    html            => "html",
+    "online-docs"   => "online-docs",
+    pdf             => "pdf",
+    "single-html"   => "html",
+    text            => "text",
+    );
+
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -208,10 +218,11 @@ foreach my $set (@sets) {
 
     # formats
     foreach my $format ( @formats ) {
-        if ( not grep { $_ eq $format } @vformats ) {
+        if ( not grep { $_ eq $format } keys %vformats ) {
             warn "${bcol}Invalid format \"$format\" in config for section [$set].\n-> Skipping ${format}.${ecol}\n";
             next;
         } else {
+	    my $exec_format = $vformats{$format};
             foreach my $dcfile ( @dcfiles ) {
                 print "  * $dcfile: \U$format...";
                 my $dcpath  = catfile("$workdir", "$dcfile");
@@ -224,11 +235,11 @@ foreach my $set (@sets) {
                 } else {
                     # set dapsbin and log file location
                     if ( "$styleroot" ne "" ) {
-                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format", "$styleroot", "$fb_styleroot");
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$exec_format", "$styleroot", "$fb_styleroot");
                     } else {
-                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$exec_format");
                     }
-                    my $buildresult = build("$set", "$syncdir", "$format", "$dcpath", "$dapscmd", "$dapslog");
+                    my $buildresult = build("$set", "$syncdir", "$exec_format", "$dcpath", "$dapscmd", "$dapslog");
                     # if build was not successful, $buildresult == 0
                     next unless $buildresult;
                 }
