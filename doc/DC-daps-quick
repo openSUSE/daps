@@ -16,8 +16,8 @@ PROFOS="osuse;quick"
 PROFARCH="x86;amd64;em64t"
 
 ## stylesheet location
-STYLEROOT="../suse/xslt/flyer"
-FALLBACK_STYLEROOT="../suse/xslt"
+STYLEROOT="../suse2005/xslt/flyer"
+FALLBACK_STYLEROOT="../suse/xslt2005"
 #HTML_CSS="./daps.css"
 #EPUB_CSS="./daps.css"
 
@@ -27,7 +27,7 @@ export DOCCONF=$BASH_SOURCE
 ##do not show remarks directly in the (PDF) text
 XSLTPARAM="$XSLTPARAM --param use.xep.annotate.pdf=0"
 
-## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## when using the suse2013 stylesheets, set a link to the DAPS
 ## homepage at the top of the page
 XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
 XSLTPARAM="$XSLTPARAM --param suse.content=0"

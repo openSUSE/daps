@@ -15,7 +15,7 @@ PROFOS="osuse;noquick"
 PROFARCH="x86;amd64;em64t"
 
 ## stylesheet location
-STYLEROOT="../suse/xslt_suse2"
+STYLEROOT="../suse/xslt2013"
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
@@ -23,7 +23,7 @@ export DOCCONF=$BASH_SOURCE
 ## show acronyms in the glossary, so as not to confuse the user
 XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
 
-## when using the suse_beta aka xslt_suse2 stylesheets, set a link to the DAPS
+## when using the suse2013 stylesheets, set a link to the DAPS
 ## homepage at the top of the page
 ## set a homepage for HTML builds
 XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
