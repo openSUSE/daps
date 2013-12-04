@@ -137,7 +137,7 @@ the DocBook 4 DTD.
 %setup -q -n %{name}
 #
 # Patch the VERSION.xsl file to hold the current version
-sed -i "s%<fm:Version>.*</fm:Version>%<fm:Version>%{version}</fm:Version>%" xslt_suse2/VERSION.xsl
+sed -i "s%<fm:Version>.*</fm:Version>%<fm:Version>%{version}</fm:Version>%" xslt2013/VERSION.xsl
 
 
 
