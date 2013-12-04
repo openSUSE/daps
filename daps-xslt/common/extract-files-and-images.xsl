@@ -55,7 +55,7 @@
       <xsl:if test="@href">
         <xsl:value-of select="@href"/>
         <!-- We only need the separator, when we are interested in all files -->
-        <xsl:if test="$show.first != 0">
+        <xsl:if test="$show.first = 0">
           <xsl:value-of select="$separator"/>
         </xsl:if>
       </xsl:if>
