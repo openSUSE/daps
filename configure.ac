@@ -2,7 +2,7 @@ dnl                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script
 dnl or use autogen.sh (recommended)
 dnl
-dnl Copyright (C) 2011,2012:
+dnl Copyright (C) 2011-2013:
 dnl   Thomas Schraitle  <toms@opensuse.org>
 dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
 dnl
@@ -19,7 +19,7 @@ m4_define(daps_version_minor, 9)
 m4_define(daps_version_micro, 9dev)
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [1.1.4], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [2.0~beta1], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_MSG_NOTICE([
