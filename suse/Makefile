@@ -76,7 +76,7 @@ xhtml2html: $(HTMLSTYLESHEETS)
 
 #-----------------------------
 # Auto-generate HTML stylesheets from XHTML:
-xslt/html/%.xsl: xslt/xhtml/%.xsl
+xslt/html/%.xsl: xslt2005/xhtml/%.xsl
 	xsltproc --output $@  ${XHTML2HTML} $<
 
 
