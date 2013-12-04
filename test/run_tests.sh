@@ -42,7 +42,7 @@ export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.
 export _SET_FILES="$_XML_FILES $_MAIN"
 export _NO_SET_FILE="not_in_set.xml"
 
-export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps fig/fig_example.fig jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png svg/svg_example.svg"
+export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps fig/fig_example.fig jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png png/png_example2.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
 
 export _SET_ID="dblayouttest"
@@ -113,7 +113,7 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,builddir,epub,html,images,locdrop,online-docs,package-src,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-src,pdf,profiling,text,xsltprocessors: -n "$_ME" -- "$@")
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -135,7 +135,11 @@ while true ; do
 	    _TESTS=( "${_TESTS[@]}" "lib/025_epub" )
 	    shift
 	    ;;
-	-h)
+	--filelists)
+	    _TESTS=( "${_TESTS[@]}" "lib/010_filelists" )
+	    shift
+	    ;;	
+	-h,--help)
 	    usage
 	    rm -rf "$_TEMPDIR"
 	    exit 0

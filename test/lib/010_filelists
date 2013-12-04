@@ -1,0 +1,114 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: File lists (list-* subcommands)
+#
+# * Does the list-file command show the correct file?
+# * Does the list-srcfiles command show the correct files?
+#
+#  TODO:
+# * Do the command line options that exclude files for list-srcfiles work?
+# * Does the --pretty option work?
+# * Does the list-srcfiles-unused command show the correct files?
+# * Does the list-images-missing command show the correct files?
+# * Does the list-images-multisrc command show the correct files?
+
+
+_DAPSROOT_ABS=""
+_DOC_DIR_ABS=""
+
+source lib/common_functions
+
+header "File Lists"
+
+function oneTimeSetUp () {
+    # Clean up the build directory
+    clean_build_dir all
+    _DAPSROOT_ABS=$(readlink -e $_DAPSROOT 2>/dev/null)
+    _DOC_DIR_ABS="${_DAPSROOT_ABS}/test/${_DOC_DIR}"
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown () {
+    stats
+    # Clean up the build directory
+    clean_build_dir all
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does the list-file command show the correct file?
+#
+
+function test_filelistsListfile () {
+    local _FILE_NAME_BUILD _FILE_NAME_EXPECTED _FILES_DIFF _ROOTID
+
+    _ROOTID="appendix"
+    _FILE_NAME_EXPECTED="${_DOC_DIR_ABS}/xml/appendix.xml"
+
+    _FILE_NAME_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-file --rootid $_ROOTID 2>/dev/null)
+    assertTrue \
+        ' └─ The list-file command itself failed.' \
+        "$?"
+    # Remove trailing space
+    # To be fixed in stylesheet (extract-files-and-images.xsl)
+    _FILE_NAME_BUILD=${_FILE_NAME_BUILD%[[:space:]]}
+    assertEquals \
+	" └─ The list-file value does not match the one expected:" \
+	"$_FILE_NAME_EXPECTED" "$_FILE_NAME_BUILD"
+}
+
+#--------------------------------
+# * Does the list-srcfiles command show the correct files?
+#
+function test_filelistsListSRCfiles () {
+    local _ENTITY_FILE _FILE _DC
+    declare -a _FILE_NAMES_BUILD
+    declare -a _FILE_NAMES_EXPECTED
+
+    for _FILE in $_SET_FILES; do
+	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_FILE" )
+    done
+    for _FILE in $_SET_IMAGES; do
+	_FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/images/src/$_FILE" )
+    done
+    _DC=$(basename "$_DCFILE")
+    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/$_DC" )
+    _ENTITY_FILE="entity-decl.ent"
+    _FILE_NAMES_EXPECTED=( ${_FILE_NAMES_EXPECTED[@]} "${_DOC_DIR_ABS}/xml/$_ENTITY_FILE" )
+    _FILE_NAMES_BUILD=( $($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles) )
+    assertTrue \
+        ' └─ The list-srcfiles command itself failed.' \
+        "$?"
+
+    # Now we have two lists - "expected files" and "build files". Both lists
+    # should be identical. We can check this by using comm:
+    # comm -3 <BUILT> <EXPECTED>. This prints lines unique to column 1 and 2
+    # (should be empty if both lists are the same). Since comm compares columns,
+    # we need to operate with a modified IFS
+
+    _oldIFS=$IFS IFS=$'\n\t'
+    _FILES_DIFF=$(comm -3 <(echo "${_FILE_NAMES_BUILD[*]}" | sort -u) <(echo "${_FILE_NAMES_EXPECTED[*]}" | sort -u))
+    IFS=$_oldIFS
+    assertNull \
+	" └─ The list of file from the list-srcfiles command does not match the real list of files ($_FILES_DIFF)." \
+	"$_FILES_DIFF"
+
+
+    # Now test the command line options that exclude stuff from 
+    # the list
+    #
+
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC
