@@ -50,8 +50,8 @@ install: create-install-dirs
 	    $(DESTDIR)$(PREFIX)/sgml/
 	install -m644 catalogs/*.xml $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
-	tar c --mode=u+w,go+r-w,a-s -C xslt . | (cd  $(STYLEDIR2005); tar xpv)
-	tar c --mode=u+w,go+r-w,a-s -C xslt_suse2 . | (cd  $(STYLEDIR2013); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C xslt2005 . | (cd  $(STYLEDIR2005); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C xslt2013 . | (cd  $(STYLEDIR2013); tar xpv)
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR2005)
@@ -66,7 +66,7 @@ create-install-dirs:
 .PHONY: clean
 clean:
 	rm -rf catalogs/ schema/novdocx-core.rnc schema/novdocx-core.rng \
-		schema/novdocx.rng schema/novdocxi.rng xslt/html/
+		schema/novdocx.rng schema/novdocxi.rng xslt2005/html/
 
 # auto-generate the html stylesheets for STYLEDIR2005
 #
