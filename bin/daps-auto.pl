@@ -25,7 +25,8 @@ my $dapsbin       = "/usr/bin/daps";
 my $dapsroot      = "";
 my $to_rsync      = "";
 # valid formats
-my @vformats      = qw(color-pdf epub html online-docs pdf single-html text);
+#my @vformats      = qw(color-pdf epub html online-docs pdf single-html text);
+my @vformats      = qw(epub grayscale-pdf html online-docs pdf single-html text);
 
 $ENV{SHELL}="/bin/bash";
 $ENV{PATH}= ".:/usr/bin:/bin";
@@ -378,6 +379,12 @@ sub set_daps_cmd_and_log {
       $dapscmd .= " --meta"    if $cfg->val("$set", 'meta');
       if ( $format =~ /^(single-)?html/ ) {
 	$dapscmd .= " --static";
+      }
+      if ( $format =~ /^single-html/ ) {
+	$dapscmd .= " --single";
+      }
+      if ( $format =~ /^grayscale-pdf/ ) {
+	$dapscmd .= " --grayscale";
       }
     } elsif ( $format =~ /^online-docs$/ ) {
       $dapscmd .= " --noset --noepub --nopdf --nohtml";
