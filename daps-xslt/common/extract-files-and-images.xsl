@@ -54,7 +54,10 @@
     <xsl:if test="$xml.or.img = 'xml'">
       <xsl:if test="@href">
         <xsl:value-of select="@href"/>
-        <xsl:value-of select="$separator"/>
+        <!-- We only need the separator, when we are interested in all files -->
+        <xsl:if test="$show.first != 0">
+          <xsl:value-of select="$separator"/>
+        </xsl:if>
       </xsl:if>
     </xsl:if>
     <xsl:if test="$show.first = 0">
