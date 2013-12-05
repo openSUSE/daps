@@ -34,12 +34,12 @@ endif
 #
 ifdef PROFILE_URN
   ifeq ($(shell expr substr $(PROFILE_URN) 1 4),urn:)
-    PROFILE_STYLESHEET := $(shell xmlcatalog $(XML_MAIN_CATALOG) $(PROFILE_URN) 2>/dev/null)
+    PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null )
   else
     PROFILE_STYLESHEET := $(PROFILE_URN)
   endif
   PROFILE_STYLESHEET := $(subst file://,,$(PROFILE_STYLESHEET))
-  ifndef PROFILE_STYLESHEET
+  ifeq "$(strip $(PROFILE_STYLESHEET))" ""
     $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
   endif
 endif

@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+# Wrapper script to mend the shortcomings of xsltproc:
+# * checks all catalogs from XML_CATALOG_FILES
+#   aborts on first successful result
+# * only returns a string if URI could be resolved
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org> 
+#
+
+_XMLCATALOG=/usr/bin/xmlcatalog
+_ME=$(basename $0)
+_URI=""
+_CAT_PATH=""
+
+function exit_on_error () {
+    echo -e "ERROR: ${1}" >&2
+    clean_daps
+    exit 1;
+}
+
+# Check if parameter (URI) is passed to the script
+#
+if [[ -z $1 ]]; then
+    exit_on_error "No paramter passed to $_ME"
+else
+    _URI="$1"
+fi
+
+# check if XML_CATALOG_FILES is set
+#
+[[ -z $XML_CATALOG_FILES ]] && exit_on_error "XML_CATALOG_FILES is not set"
+
+# Try to resolv URI with all catalogs from XML_CATALOG_FILES
+# exit on the first successful result
+#
+for _CAT in $XML_CATALOG_FILES; do
+    _CAT_PATH=$($_XMLCATALOG $_CAT $_URI)
+    if [[ 0 -eq $? ]]; then
+	break
+    else
+	_CAT_PATH=""
+    fi
+done
+
+if [[ -n $_CAT_PATH ]]; then
+    echo "$_CAT_PATH"
+    exit 0
+else
+    exit 1
+fi
+	
