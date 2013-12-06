@@ -243,13 +243,13 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
 
 $(USERGUIDE): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_USERGUIDE) html-single --static \
+	    --docconfig=$(DC_USERGUIDE) html --single --static \
             --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_QUICKSTART) html-single --static \
+	    --docconfig=$(DC_QUICKSTART) html --single --static \
 	    --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
