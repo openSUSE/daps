@@ -357,8 +357,8 @@ DC_USERGUIDE = $(srcdir)/doc/DC-daps-user
 DC_QUICKSTART = $(srcdir)/doc/DC-daps-quick
 USERGUIDE_NAME = daps-user
 QUICKSTART_NAME = daps-quick
-USERGUIDE = $(srcdir)/doc/build/$(USERGUIDE_NAME)/htmlsingle/$(USERGUIDE_NAME)/$(USERGUIDE_NAME).html
-QUICKSTART = $(srcdir)/doc/build/$(QUICKSTART_NAME)/htmlsingle/$(QUICKSTART_NAME)/$(QUICKSTART_NAME).html
+USERGUIDE = $(srcdir)/doc/build/$(USERGUIDE_NAME)/single-html/$(USERGUIDE_NAME)/$(USERGUIDE_NAME).html
+QUICKSTART = $(srcdir)/doc/build/$(QUICKSTART_NAME)/single-html/$(QUICKSTART_NAME)/$(QUICKSTART_NAME).html
 MANUALS = $(dir $(USERGUIDE)) $(dir $(QUICKSTART)) 
 
 #------------------------
@@ -1642,12 +1642,12 @@ $(DAPS_CATALOG):
 	touch $@
 
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: .firstbuild
+bin/daps: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
-etc/config: .firstbuild
+etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 
@@ -1656,20 +1656,20 @@ etc/config: .firstbuild
 $(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
 	ln -sf $(notdir $<) $@
 
-$(USERGUIDE): bin/daps etc/config
+$(USERGUIDE):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_USERGUIDE) html-single --static \
+	    --docconfig=$(DC_USERGUIDE) html --single --static \
             --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-$(QUICKSTART): bin/daps etc/config
+$(QUICKSTART):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
-	    --docconfig=$(DC_QUICKSTART) html-single --static \
+	    --docconfig=$(DC_QUICKSTART) html --single --static \
 	    --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
-$(dist_man1_MANS): bin/daps etc/config
+$(dist_man1_MANS):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
