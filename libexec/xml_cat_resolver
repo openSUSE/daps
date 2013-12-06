@@ -22,12 +22,31 @@ function exit_on_error () {
     exit 1;
 }
 
-# Check if parameter (URI) is passed to the script
+function usage () {
+    echo -e "Usage: $_ME <URI>
+
+$_ME is a wrapper for xmlcatalog. It tries to resolve <URI>
+via the catalogs defined in the variable XML_CATALOG_FILES. The catalogs
+are used in the order they appear in XML_CATALOG_FILES. Once the URI
+is resoved, remaining catalogs are ignored.
+Returs 0 and the path to the catalog upon success,
+returns 1 if the <URI> could not be resolved."
+}
+
+# Check if parameter (URI) is passed to the script; 
 #
 if [[ -z $1 ]]; then
     exit_on_error "No paramter passed to $_ME"
 else
-    _URI="$1"
+    case "$1" in
+	--help|-h|?)
+	    usage
+	    exit 0
+	    ;;
+	*)
+	    _URI="$1"
+	    ;;
+    esac
 fi
 
 # check if XML_CATALOG_FILES is set
