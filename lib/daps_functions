@@ -83,6 +83,10 @@ function parse_args () {
                 P_DOCUMENTFILES=1
                 shift
                 ;;
+	    --epub3)
+		P_EPUB3=1
+		shift
+		;;
             --export-dir)
                 sanitize_path "$2" "P_EXPORT_DIR"
                 shift 2
@@ -731,7 +735,7 @@ function build_epub () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="check,css:,help,name:,remarks,rootid:"
+    LONG_OPTS="check,css:,epub3,help,name:,remarks,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -741,6 +745,7 @@ function build_epub () {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_check
         help_css
+	help_epub3
         help_help
         help_name
         help_rootid
@@ -749,6 +754,7 @@ function build_epub () {
     fi
 
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = $P_EPUB3 ]]  && EPUB3=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
@@ -1790,6 +1796,10 @@ function help_desktopfiles () {
 function help_documentfiles () {
     echo "    --documentfiles           Generate .document files.
                               Default: off"
+}
+function help_epub3 () {
+    echo "    --epub3                   Generate ePUB version 3 eBooks.
+                              Default: ePUB version 2"
 }
 function help_export-dir () {
     echo "    --export-dir=DIRECTORY    Specify a directory where to copy the results

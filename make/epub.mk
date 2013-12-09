@@ -17,8 +17,14 @@
 
 # Stylesheets
 #
-STYLEEPUB   := $(firstword $(wildcard $(addsuffix \
+ifeq ($(EPUB3),1)
+  STYLEEPUB   := $(firstword $(wildcard $(addsuffix \
+			/epub3/chunk.xsl, $(STYLE_ROOTDIRS))))
+else
+  STYLEEPUB   := $(firstword $(wildcard $(addsuffix \
 			/epub/docbook.xsl, $(STYLE_ROOTDIRS))))
+endif
+
 STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 
 # Directories
