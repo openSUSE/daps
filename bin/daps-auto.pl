@@ -469,7 +469,7 @@ sub build {
         if ( $format =~ /^(single-)?html/ ) {
 	  #my $resultdir = dirname($dapsresult);
 	  print "Moving $dapsresult to $syncsubdir\n" if $verbose;
-	  dirmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
+	  dirmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
 	} else {
 	  print "Moving $dapsresult to $syncsubdir\n" if $verbose;
 	  rmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
