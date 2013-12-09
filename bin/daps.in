@@ -180,22 +180,17 @@ unset "${UNSETLIST[@]}"
 #
 declare -a PATHLIST
 PATHLIST=(
-    ASPELL_EXTRA_DICT
     BUILD_DIR
     DAPSROOT
     DOCCONF_DEFAULT
     EPUB_CSS
-    FALLBACK_STYLEROOT
     FOP_CONFIG_FILE
     FOP_WRAPPER
     HTML_CSS
-    STATIC_DIR
     STYLEDEVEL
     STYLEROOT
     XEP_CONFIG_FILE
     XEP_WRAPPER
-    XML_MAIN_CATALOG
-    XSLTPROCESSOR
 )
 
 # ----------------------------------------------------------------------------
@@ -1151,7 +1146,6 @@ if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     fi
 fi 
 
-
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
 #-----------------------------------
@@ -1542,7 +1536,6 @@ export "${VARLIST[@]}"
 #
 SETFILES_TMP=$(mktemp -q --tmpdir daps_setfiles.XXXXXXXX 2>/dev/null) || exit_on_error "Could not write temporary SETFILES file."
 export SETFILES_TMP
-
 
 #-------------------------------------------------------------------
 # Finally, run the Subcommands
