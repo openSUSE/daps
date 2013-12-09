@@ -460,16 +460,16 @@ sub build {
 	  $syncsubdir = catdir($syncdir, $book, $format);
 	}
         # If a build was successful, we want to remove the contents of a subdir
-        # in sync/ - easiest way is to remove it and create it again
+        # in sync/ - easiest way is to remove ihttp://www.ikk-classic.de/t and create it again
         if ( -d $syncsubdir ) {
             remove_tree("$syncsubdir") or warn "${bcol}Failed to remove sync dir \"$syncsubdir\".\n${ecol}";
         }
         make_path("$syncsubdir", { mode => 0755, }) or warn "${bcol}Failed to create $syncsubdir.${ecol}\n";
         # HTML/HTMLsingle do not return single files, but files and directories
         if ( $format =~ /^(single-)?html/ ) {
-	  my $resultdir = dirname($dapsresult);
-	  print "Moving $resultdir to $syncsubdir\n" if $verbose;
-	  dirmove($resultdir, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
+	  #my $resultdir = dirname($dapsresult);
+	  print "Moving $dapsresult to $syncsubdir\n" if $verbose;
+	  dirmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $resultdir to $syncsubdir.${ecol}\n";
 	} else {
 	  print "Moving $dapsresult to $syncsubdir\n" if $verbose;
 	  rmove($dapsresult, $syncsubdir) or warn "${bcol}Failed to move $dapsresult to $syncsubdir.${ecol}\n";
