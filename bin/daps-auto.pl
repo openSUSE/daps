@@ -27,7 +27,13 @@ my $to_rsync      = "";
 # valid formats
 #my @vformats      = qw(color-pdf epub html online-docs pdf single-html text);
 
+
+# vformats also needs to contain entries for clean*, since they are
+# used explicitly further down
+#
 my %vformats = (
+    clean           => "clean",
+    "clean-results" => "clean-results",
     epub            => "epub",
     "grayscale-pdf" => "pdf",
     html            => "html",
@@ -222,7 +228,6 @@ foreach my $set (@sets) {
             warn "${bcol}Invalid format \"$format\" in config for section [$set].\n-> Skipping ${format}.${ecol}\n";
             next;
         } else {
-	    my $exec_format = $vformats{$format};
             foreach my $dcfile ( @dcfiles ) {
                 print "  * $dcfile: \U$format...";
                 my $dcpath  = catfile("$workdir", "$dcfile");
@@ -235,11 +240,11 @@ foreach my $set (@sets) {
                 } else {
                     # set dapsbin and log file location
                     if ( "$styleroot" ne "" ) {
-                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$exec_format", "$styleroot", "$fb_styleroot");
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format", "$styleroot", "$fb_styleroot");
                     } else {
-                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$exec_format");
+                        ($dapscmd, $dapslog) = set_daps_cmd_and_log("$set", "$dcpath", "$format");
                     }
-                    my $buildresult = build("$set", "$syncdir", "$exec_format", "$dcpath", "$dapscmd", "$dapslog");
+                    my $buildresult = build("$set", "$syncdir", "$format", "$dcpath", "$dapscmd", "$dapslog");
                     # if build was not successful, $buildresult == 0
                     next unless $buildresult;
                 }
@@ -362,6 +367,8 @@ sub set_daps_cmd_and_log {
     my $bookname = "";;
     my $dapscmd = "";
     my $dapslog = "";
+    my $exec_format = $vformats{$format};
+ 
     my $set_builddir = catdir($builddir, "$set");
 
     # set daps binary to ${dapsroot}/bin/daps if dapsroot is set
@@ -383,7 +390,7 @@ sub set_daps_cmd_and_log {
     $dapscmd .= " --styleroot=\"$styleroot\"" if $styleroot;
     $dapscmd .= " --fb_styleroot=\"$fb_styleroot\"" if $fb_styleroot;
     $dapscmd .= " --debug" if $debug;
-    $dapscmd .= " $format";
+    $dapscmd .= " $exec_format";
     if ( $format =~ /^(single-)?html/ or $format =~ /.*pdf$/ ) {
       $dapscmd .= " --remarks" if $cfg->val("$set", 'remarks');
       $dapscmd .= " --draft"   if $cfg->val("$set", 'draft');
