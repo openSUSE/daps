@@ -66,7 +66,7 @@
 <!ENTITY % xrefinlines	"xref | link | ulink | uri">
 
 
-<!ENTITY % coreinlines   "command | envar | literal | emphasis |
+<!ENTITY % coreinlines   "command | envar | literal | emphasis | varname |
     option | replaceable | remark | filename | citetitle | quote |
     phrase | entity | systemitem | guimenu | subscript | superscript | trademark">
 
@@ -103,13 +103,13 @@
 
 <!ELEMENT article (title, subtitle?, titleabbrev?,
                    articleinfo?,
-                  (abstract | highlights)?,
+                   (abstract | highlights )?,
                   (((calloutlist|itemizedlist|orderedlist|
                      variablelist|simplelist|important|note|
                      tip|warning|screen|literallayout|formalpara|para|
                      informaltable|table|example|
                      informalfigure|figure|procedure|qandaset|
-                     bridgehead|remark|abstract|
+                     bridgehead|remark|
                      indexterm %xi_include.def;)+,
                    (sect1*|(refentry
                    %xi_include.def;)*))|(sect1+|(refentry %xi_include.def;)+)),
@@ -123,8 +123,8 @@
 <!ELEMENT part      (title , partintro? , (((chapter %xi_include.def;)+ , appendix*) | appendix+) ) >
 
 <!-- CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1 -->
-<!ELEMENT appendix  (title , (abstract | highlights)?, (%all; | procedure | qandaset)+ , (sect1* | refentry* | msgset?) ) >
-<!ELEMENT chapter   (title , subtitle?, (abstract | highlights)?, (%all; | procedure | qandaset)+ , (sect1* |refentry* | msgset? %xi_include.opt;) ) >
+<!ELEMENT appendix  (title , (abstract | highlights? | %all; | procedure | qandaset)+ , (sect1* | refentry* | msgset?) ) >
+<!ELEMENT chapter   (title , subtitle?,  (abstract | highlights? | %all; | procedure | qandaset)+ , (sect1* |refentry* | msgset? %xi_include.opt;) ) >
 <!ELEMENT abstract  (title?, para+) >
 <!ELEMENT index     EMPTY>
 <!ELEMENT setindex  EMPTY>
