@@ -34,11 +34,12 @@
   <xsl:param name="content">
     <xsl:call-template name="simple.xlink">
       <xsl:with-param name="content">
-        <xsl:apply-templates/>
+        <xsl:apply-templates mode="mono-ancestor"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mono-ancestor" select="0"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal">
     <xsl:if test="parent::para|parent::title">
@@ -46,8 +47,9 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
+      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose='xref'">
+                   or $purpose = 'xref'">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -56,6 +58,7 @@
         ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
+
     <xsl:if test="parent::para|parent::title">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
@@ -80,11 +83,12 @@
   <xsl:param name="content">
     <xsl:call-template name="simple.xlink">
       <xsl:with-param name="content">
-        <xsl:apply-templates/>
+        <xsl:apply-templates mode="mono-ancestor"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mono-ancestor" select="0"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold">
     <xsl:if test="parent::para|parent::title">
@@ -92,8 +96,9 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
+      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose='xref'">
+                   or $purpose = 'xref'">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -102,6 +107,7 @@
         ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
+
     <xsl:if test="parent::para|parent::title">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
@@ -126,11 +132,12 @@
   <xsl:param name="content">
     <xsl:call-template name="simple.xlink">
       <xsl:with-param name="content">
-        <xsl:apply-templates/>
+        <xsl:apply-templates mode="mono-ancestor"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mono-ancestor" select="0"/>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
     font-weight="normal">
@@ -139,8 +146,9 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
+      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose='xref'">
+                   or $purpose = 'xref'">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -149,6 +157,7 @@
         ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
+
     <xsl:if test="parent::para|parent::title">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
@@ -263,6 +272,39 @@
 
   <xsl:call-template name="inline.italicmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="command|userinput" mode="mono-ancestor">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.boldmonoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mono-ancestor" select="1"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="classname|exceptionname|interfacename|methodname
+                    |computeroutput|constant|envar|filename|function|literal
+                    |code|option|parameter|prompt|replaceable|structfield
+                    |systemitem|varname|sgmltag|tag|email|uri
+                    |cmdsynopsis/command|function|literal|package"
+  mode="mono-ancestor">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.monoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mono-ancestor" select="1"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="parameter|replaceable|parameter|structfield"
+  mode="mono-ancestor">
+  <xsl:param name="purpose" select="'none'"/>
+
+  <xsl:call-template name="inline.italicmonoseq">
+    <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mono-ancestor" select="1"/>
   </xsl:call-template>
 </xsl:template>
 
