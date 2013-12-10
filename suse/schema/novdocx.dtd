@@ -59,21 +59,20 @@
 <!ENTITY % tables  "table | informaltable">
 <!ENTITY % figures "figure | informalfigure">
 <!-- CHANGE_SEP_28 added bridgehead to common group and removed the other specific instances -->
-<!ENTITY % common	 "bridgehead | example | screen | remark | para | formalpara | indexterm">
+<!ENTITY % common	 "blockquote | bridgehead | example | screen | literallayout | remark | para | formalpara | indexterm">
 <!ENTITY % all     "%admonitions; | %lists; | %figures; | %tables; |
 %common; %xi_include.def;">
 
-<!ENTITY % xrefinlines	"xref | link | ulink">
+<!ENTITY % xrefinlines	"xref | link | ulink | uri">
 
 
 <!ENTITY % coreinlines   "command | envar | literal | emphasis |
     option | replaceable | remark | filename | citetitle | quote |
-    phrase | systemitem | guimenu | subscript | superscript | trademark | varname">
+    phrase | entity | systemitem | guimenu | subscript | superscript | trademark">
 
-<!ENTITY % basicinlines "%coreinlines; | indexterm">
-
+<!ENTITY % basicinlines "%coreinlines; | indexterm | inlinemediaobject">
 <!ENTITY % guiinlines	"keycombo | keycap | menuchoice">
-<!ENTITY % allinlines	"%xrefinlines; | %basicinlines; | %guiinlines; | inlinemediaobject">
+<!ENTITY % allinlines	"%xrefinlines; | %basicinlines; | %guiinlines;">
 
 
 <!-- Profiling information (attributes) -->
@@ -102,13 +101,14 @@
 <!ELEMENT bookinfo  (title, productname+ , productnumber? , date? , titleabbrev? , 
                      (legalnotice %xi_include.def;)+, authorgroup*, abstract*) >
 
-<!ELEMENT article (title, subtitle?,
+<!ELEMENT article (title, subtitle?, titleabbrev?,
                    articleinfo?,
+                  (abstract | highlights)?,
                   (((calloutlist|itemizedlist|orderedlist|
-                     variablelist|important|note|
-                     tip|warning|screen|formalpara|para|
-                     mediaobject|informaltable|example|
-                     figure|table|procedure|qandaset|
+                     variablelist|simplelist|important|note|
+                     tip|warning|screen|literallayout|formalpara|para|
+                     informaltable|table|example|
+                     informalfigure|figure|procedure|qandaset|
                      bridgehead|remark|abstract|
                      indexterm %xi_include.def;)+,
                    (sect1*|(refentry
@@ -119,65 +119,61 @@
                         productnumber|legalnotice|indexterm|abstract
                         %xi_include.def;)+)>
 
-<!ELEMENT preface   (title , (((%all; | procedure| qandaset)+ , sect1*) | sect1+)) >
+<!ELEMENT preface   (title , (abstract | highlights)?, (((%all; | procedure| qandaset)+ , sect1*) | sect1+)) >
 <!ELEMENT part      (title , partintro? , (((chapter %xi_include.def;)+ , appendix*) | appendix+) ) >
 
 <!-- CHANGE_SEP_28 added msgset to Appendix, Chapter and Sect1 -->
-<!ELEMENT appendix  (title , (%all; | procedure | qandaset)+ , (sect1* | refentry* | msgset?) ) >
-<!ELEMENT chapter   (title , (abstract | %all; | procedure | qandaset)+ , (sect1* |refentry* | msgset? %xi_include.opt;) ) >
+<!ELEMENT appendix  (title , (abstract | highlights)?, (%all; | procedure | qandaset)+ , (sect1* | refentry* | msgset?) ) >
+<!ELEMENT chapter   (title , subtitle?, (abstract | highlights)?, (%all; | procedure | qandaset)+ , (sect1* |refentry* | msgset? %xi_include.opt;) ) >
 <!ELEMENT abstract  (title?, para+) >
 <!ELEMENT index     EMPTY>
 <!ELEMENT setindex  EMPTY>
 <!ELEMENT toc       EMPTY>
 
 <!-- sections -->
-<!ELEMENT sect1      (title , (%all; | procedure| qandaset)+, (sect2* | refentry* | msgset?)) >
+<!ELEMENT sect1      (title , (abstract | highlights)?, (%all; | procedure| qandaset)+, (sect2* | refentry* | msgset?)) >
 <!ELEMENT sect2      (title , (%all; | procedure| qandaset)+, (sect3*)) >
 <!ELEMENT sect3      (title , (%all; | procedure| qandaset)+, (sect4*)) >
 <!ELEMENT sect4      (title , (%all; | procedure| qandaset)+) >
 
+<!ELEMENT blockquote  (%all; | procedure+)* >
+
 <!ELEMENT partintro  ((%all;)+ , sect1*) >
 
+<!ELEMENT highlights  ((itemizedlist|orderedlist|simplelist|para|indexterm)+)>
 
 <!-- inlines -->
 <!ELEMENT application     (#PCDATA | phrase | remark)* >
-<!ELEMENT command         (#PCDATA | option | replaceable | remark)* >
-<!ELEMENT envar           (#PCDATA) >
-<!ELEMENT literal         (#PCDATA | replaceable | remark)* >
-<!ELEMENT emphasis        (#PCDATA | %xrefinlines; | %basicinlines; | %guiinlines;)* >
-
 <!ELEMENT citetitle       (#PCDATA | phrase | remark | %xrefinlines;)* >
-
-<!ELEMENT option          (#PCDATA | replaceable | remark)* >
-<!ELEMENT replaceable     (#PCDATA | remark)* >
-<!ELEMENT filename        (#PCDATA | replaceable | remark)* >
-
-<!-- CHANGE quote can contain other inlines -->
-<!ELEMENT quote           (#PCDATA | %allinlines;)* >
-<!ELEMENT phrase          (#PCDATA | %allinlines;)* >
+<!ELEMENT co              EMPTY  >
+<!ELEMENT command         (#PCDATA | phrase | option | replaceable | remark)* >
+<!ELEMENT emphasis        (#PCDATA | %xrefinlines; | %basicinlines; | %guiinlines;)* >
+<!ELEMENT envar           (#PCDATA | phrase)* >
+<!ELEMENT filename        (#PCDATA | phrase | replaceable | remark)* >
+<!ELEMENT guimenu         (#PCDATA | phrase)* >
+<!ELEMENT keycombo        (keycap)+ >
+<!ELEMENT keycap          (#PCDATA | phrase | remark)* >
+<!ELEMENT link            (#PCDATA | %basicinlines;)* >
+<!ELEMENT literal         (#PCDATA | phrase | replaceable | remark)* >
+<!ELEMENT menuchoice      (shortcut?, guimenu+) ><!-- toms -->
+<!ELEMENT option          (#PCDATA | phrase | replaceable | remark)* >
 <!ELEMENT productname     (#PCDATA | phrase | remark | superscript)* >
 <!ELEMENT productnumber   (#PCDATA | phrase | remark | superscript)* >
-<!ELEMENT systemitem      (#PCDATA | remark)* >
-<!ELEMENT varname         (#PCDATA) >
-
-<!-- Curtis, do we need that according to legal issues? -->
-<!ELEMENT trademark       (#PCDATA)>
-
-<!ELEMENT co              EMPTY  >
-<!ELEMENT xref            EMPTY  >
-<!ELEMENT link            (#PCDATA | %basicinlines;)* >
-<!ELEMENT ulink           (#PCDATA | %basicinlines;)* >
-
-<!ELEMENT keycombo        (keycap)+ >
-<!ELEMENT keycap          (#PCDATA | remark)* >
-<!ELEMENT menuchoice      (shortcut?, guimenu+) ><!-- toms -->
+<!ELEMENT quote           (#PCDATA | %allinlines;)* >
+<!ELEMENT replaceable     (#PCDATA | phrase | remark)* >
+<!ELEMENT phrase          (#PCDATA | %allinlines;)* >
+<!ELEMENT prompt          (#PCDATA | phrase)*>
 <!ELEMENT shortcut        (keycombo | keycap+) >
-<!ELEMENT guimenu         (#PCDATA) >
+<!ELEMENT subscript       (#PCDATA | phrase | remark)* >
+<!ELEMENT superscript     (#PCDATA | phrase | remark)* >
+<!ELEMENT systemitem      (#PCDATA | phrase | remark)* >
+<!ELEMENT trademark       (#PCDATA | phrase)*>
+<!ELEMENT ulink           (#PCDATA | %basicinlines;)* >
+<!ELEMENT uri             (#PCDATA ) >
+<!ELEMENT varname         (#PCDATA | phrase)* >
+<!ELEMENT xref            EMPTY  >
 
-<!ELEMENT prompt          (#PCDATA|phrase)*>
 
-<!ELEMENT subscript       (#PCDATA | remark)* >
-<!ELEMENT superscript     (#PCDATA | remark)* >
 
 <!-- common -->
 <!ELEMENT bridgehead  (#PCDATA | %coreinlines;)*>
@@ -192,11 +188,13 @@
 <!-- change add replaceable, command, emphasis, option  and xrefinlines to screen -->
 <!ELEMENT screen      (#PCDATA | co | emphasis | replaceable | command | prompt |
                        option | phrase |%xrefinlines;)* >
+<!ELEMENT literallayout (#PCDATA | co  | emphasis | remark | replaceable | command |
+                       option | phrase |%xrefinlines;)* >
 <!ELEMENT remark      (#PCDATA | %allinlines;)* >
 
 <!-- admonitions -->
 <!ENTITY % admonition.module
-  "(title? , (para | remark | screen |
+  "(title? , (para | remark | screen | literallayout |
     simplelist | itemizedlist | variablelist | orderedlist )+)" >
 <!ELEMENT tip         (%admonition.module;)>
 <!ELEMENT important   (%admonition.module;)>
@@ -240,7 +238,7 @@
        novdoc entry included tblhead and tsubhead for which no docbook
        counterpart exists. May need to find alternatives?
 -->
-<!ELEMENT entry           ((%admonitions; | mediaobject | para | screen |
+<!ELEMENT entry           ((%admonitions; | mediaobject | para | screen | literallayout |
     formalpara | itemizedlist | orderedlist | simplelist | remark)*) >
 
 <!-- figures -->
@@ -256,7 +254,7 @@
 <!ELEMENT mediaobject        (textobject*, imageobject+) >
 <!ELEMENT imageobject        (imagedata) >
 <!ELEMENT imagedata          EMPTY >
-<!ELEMENT textobject         (phrase) >
+<!ELEMENT textobject         (#PCDATA | phrase)* >
 
 <!-- QandASet -->
 <!ELEMENT qandaset           ((remark|indexterm)*, (qandadiv+|qandaentry+)) >
@@ -326,12 +324,13 @@
 
 <!-- refentry -->
 <!ELEMENT refentry        (refmeta?, remark*, refnamediv, refsect1+) >
-<!ELEMENT refmeta         (refentrytitle,manvolnum?) >
+<!ELEMENT refmeta         (refentrytitle,manvolnum?,refmiscinfo*) >
 <!ELEMENT refentrytitle   (#PCDATA | command | envar | literal | replaceable |
                            filename | %guiinlines;)* >
+<!ELEMENT refmiscinfo     (#PCDATA) >
 <!ELEMENT manvolnum       (#PCDATA) >
 
-<!ELEMENT refnamediv      (refname+,refpurpose,refclass*,(link | ulink | remark)*) >
+<!ELEMENT refnamediv      (refname+,refpurpose,refclass*,(link | ulink | uri | remark)*) >
 
 <!ELEMENT refname         (#PCDATA | command | envar | literal | replaceable |
                            filename | %guiinlines;)* >
@@ -350,8 +349,11 @@
                %xmlbase;>
 
 <!ATTLIST appendix
-               id             ID        #IMPLIED
                role           CDATA     #IMPLIED
+               conformance    CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               remap       CDATA     #IMPLIED
+               revision       CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase; >
 
@@ -360,14 +362,16 @@
                %xmlbase;>
 
 <!ATTLIST article
-               id             ID        #IMPLIED
                role           CDATA     #IMPLIED
+               conformance    CDATA     #IMPLIED
+               id             ID        #IMPLIED
+               revision       CDATA     #IMPLIED
                lang           CDATA     #IMPLIED
                class          (faq|journalarticle|productsheet|specification|
                                techreport|whitepaper)        #IMPLIED
-               %xmlbase; 
-               %profiling.attributes; >
-
+               %profiling.attributes;
+               %xmlbase;  >
+               
 <!ATTLIST articleinfo
                role           CDATA     #IMPLIED
                %xmlbase; 
@@ -385,18 +389,25 @@
 <!ATTLIST book
                revision       CDATA     #IMPLIED
                role           CDATA     #IMPLIED
+               %profiling.attributes;
                conformance    CDATA     #IMPLIED
                lang           CDATA     #IMPLIED
                id             ID        #IMPLIED
-               %profiling.attributes; 
                %xmlbase; >
 
 <!ATTLIST bookinfo
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
+<!ATTLIST blockquote
+               id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
+               %profiling.attributes; >
+               
 <!ATTLIST bridgehead
                %profiling.attributes;
                %xmlbase;
@@ -412,15 +423,16 @@
                role           CDATA     #IMPLIED
                conformance    CDATA     #IMPLIED
                id             ID        #IMPLIED
-               revision       CDATA     #IMPLIED
                lang           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
+               revision       CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
 <!ATTLIST citetitle
                %profiling.attributes;
                %xmlbase;
-               pubwork (article|bbs|book|cdrom|chapter|dvd|emailmessage|gopher|
+	        pubwork (article|bbs|book|cdrom|chapter|dvd|emailmessage|gopher|
                          journal|manuscript|newsposting|part|refentry|section|
                          series|set|webpage|wiki) #IMPLIED >
 
@@ -438,6 +450,7 @@
                %profiling.attributes; >
 
 <!ATTLIST command
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -451,6 +464,7 @@
                %xmlbase;>
 
 <!ATTLIST entry
+               role           CDATA     #IMPLIED
                align          (center|justify|left|right)  #IMPLIED
                colname        CDATA     #IMPLIED
                namest         CDATA     #IMPLIED
@@ -461,11 +475,13 @@
                %xmlbase;>
 
 <!ATTLIST envar
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST example
                id             ID        #IMPLIED
+               remap       CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -473,10 +489,12 @@
 <!ATTLIST figure
                pgwide         CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST filename
+               remap       CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -486,6 +504,7 @@
 
 <!ATTLIST formalpara
                id             ID        #IMPLIED
+               remap       CDATA     #IMPLIED
                role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
@@ -515,6 +534,8 @@
                %xmlbase;>
 
 <!ATTLIST guimenu
+               role        CDATA     #IMPLIED
+               remap       CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -524,6 +545,7 @@
                %xmlbase;>
 
 <!ATTLIST informalfigure
+               role           CDATA     #IMPLIED
                pgwide         CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
@@ -537,18 +559,25 @@
                fileref        CDATA     #IMPLIED
                width          CDATA     #IMPLIED
                format         CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST important
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST informaltable
-               frame    (topbot|none)   #IMPLIED
-               rowsep   CDATA           #IMPLIED
-               pgwide   CDATA           #IMPLIED
+               id          ID          #IMPLIED
+               remap       CDATA       #IMPLIED
+               role        CDATA       #IMPLIED
+               frame    (topbot|none)  #IMPLIED
+               colsep      CDATA       #IMPLIED
+               rowsep      CDATA       #IMPLIED
+               pgwide      CDATA       #IMPLIED
+               width       CDATA       #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -559,6 +588,7 @@
 <!-- change added role and spacing -->
 <!ATTLIST itemizedlist
                id             ID        #IMPLIED
+               remap       CDATA     #IMPLIED
                mark           (bullet|dash|box|check) "bullet"
                role           CDATA     #IMPLIED
                spacing        (compact|normal) "normal"
@@ -588,24 +618,35 @@
                         space|
                         tab|
                         up) #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST keycombo
                action     (press | seq) #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST legalnotice
-                id            ID        #IMPLIED
+                id             ID        #IMPLIED
+	              role           CDATA     #IMPLIED
                 %profiling.attributes;
                 %xmlbase;>
 
 <!ATTLIST listitem
+               remap           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST literal
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST literallayout 
+               remap            CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
+               linenumbering  (numbered | unnumbered) #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -618,15 +659,19 @@
                %xmlbase;>
 
 <!ATTLIST menuchoice
+               remap         CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST note
-               id             ID        #IMPLIED
+               id            ID        #IMPLIED
+               remap         CDATA     #IMPLIED
+               role          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST option
+               remap         CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -644,6 +689,7 @@
 
 <!ATTLIST para
                role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -664,9 +710,13 @@
                %profiling.attributes;
                %xmlbase;>
 
+<!ATTLIST entity
+               name       CDATA     #IMPLIED
+               source     CDATA     #IMPLIED>
+
 <!ATTLIST preface
-               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase; >
 
@@ -677,6 +727,7 @@
 
 <!ATTLIST procedure
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -702,10 +753,14 @@
 <!ATTLIST refclass
                %profiling.attributes;
                %xmlbase;>
+               
+<!ATTLIST refmiscinfo
+							class (source|version|manual|other) #IMPLIED >
 
 <!ATTLIST remark
                role           CDATA     #IMPLIED
-               id             ID        #IMPLIED
+               revision     CDATA     #IMPLIED
+               vendor      CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -724,30 +779,36 @@
 <!ATTLIST refentry
                role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes; 
                %xmlbase; >
-
+               
 <!ATTLIST refentrytitle
                role           CDATA     #IMPLIED
                %xmlbase;>
 
 <!ATTLIST refsect1
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST refsect2
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST refsect3
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
-
+               
 <!ATTLIST simplemsgentry
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
+               %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST replaceable
@@ -755,38 +816,45 @@
                %xmlbase;>
 
 <!ATTLIST row
-               rowsep         CDATA     #IMPLIED
                id             ID        #IMPLIED
+               rowsep         CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
                valign         (bottom |middle|top)   #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST screen
                %profiling.attributes;
+               remap          CDATA     #IMPLIED
+               role           CDATA     #IMPLIED
                linenumbering   (numbered | unnumbered)    #IMPLIED
                %xmlbase;>
 
 <!ATTLIST sect1
-               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
 <!ATTLIST sect2
-               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
 <!ATTLIST sect3
-               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
 <!ATTLIST sect4
-               role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;  >
 
@@ -824,11 +892,14 @@
                %xmlbase;>
 
 <!ATTLIST simplelist
+               role           CDATA     #IMPLIED
+               remap          CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST step
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                performance    (optional|required) "required"
                %profiling.attributes;
                %xmlbase;>
@@ -840,6 +911,7 @@
 <!-- id on substeps was probably a mistake -->
 <!ATTLIST substeps
                id             ID        #IMPLIED
+               remap          CDATA     #IMPLIED
                performance    (optional|required) "required"
                %profiling.attributes;
                %xmlbase;>
@@ -863,9 +935,13 @@
 
 <!ATTLIST table
                id         ID              #IMPLIED
+               remap      CDATA           #IMPLIED
+               role       CDATA           #IMPLIED
                frame      (topbot|none)   #IMPLIED
+               colsep     CDATA           #IMPLIED
                rowsep     CDATA           #IMPLIED
                pgwide     CDATA           #IMPLIED
+               with       CDATA           #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -902,6 +978,7 @@
 
 <!ATTLIST tip
                id         ID              #IMPLIED
+               remap      CDATA           #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -914,7 +991,8 @@
                %xmlbase;>
 
 <!ATTLIST trademark
-               class (service | trade | registered | copyright) #IMPLIED
+               remap      CDATA           #IMPLIED
+               class (service | trade | registered | copyright) #IMPLIED               
                %profiling.attributes;
                %xmlbase;>
 
@@ -923,6 +1001,7 @@
                url            CDATA     #REQUIRED
                role           CDATA     #IMPLIED
                type           CDATA     #IMPLIED
+               xrefstyle      CDATA     #IMPLIED
                %profiling.attributes;
                %xmlbase;>
 
@@ -940,7 +1019,6 @@
                id         ID              #IMPLIED
                %profiling.attributes;
                %xmlbase;>
-
 
 <!--
    This parameter entity "deactivates" all IDREF(S).
