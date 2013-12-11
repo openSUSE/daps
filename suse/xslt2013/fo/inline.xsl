@@ -282,7 +282,7 @@
 <xsl:template match="classname|exceptionname|interfacename|methodname
                     |computeroutput|constant|envar|filename|function|literal
                     |code|option|parameter|prompt|replaceable|structfield
-                    |systemitem|varname|sgmltag|tag|email|uri
+                    |systemitem|varname|email|uri
                     |cmdsynopsis/command|function|literal|package">
   <xsl:param name="purpose" select="'none'"/>
 
@@ -291,8 +291,9 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="sgmltag|tag">
+<xsl:template match="sgmltag|tag" name="sgmltag">
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mono-ancestor" select="0"/>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="@class">
@@ -328,6 +329,7 @@
 
   <xsl:call-template name="inline.monoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mono-ancestor" select="$mono-ancestor"/>
     <xsl:with-param name="before" select="$before"/>
     <xsl:with-param name="after" select="$after"/>
   </xsl:call-template>
@@ -366,44 +368,10 @@
 
 <xsl:template match="sgmltag|tag" mode="mono-ancestor">
   <xsl:param name="purpose" select="'none'"/>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="@class">
-        <xsl:value-of select="@class"/>
-      </xsl:when>
-      <xsl:otherwise>element</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="before">
-    <xsl:choose>
-      <xsl:when test="$class='endtag'">&lt;/</xsl:when>
-      <xsl:when test="$class='genentity'">&amp;</xsl:when>
-      <xsl:when test="$class='numcharref'">&amp;#</xsl:when>
-      <xsl:when test="$class='paramentity'">%</xsl:when>
-      <xsl:when test="$class='pi' or $class='xmlpi'">&lt;?</xsl:when>
-      <xsl:when test="$class='starttag' or $class='emptytag'">&lt;</xsl:when>
-      <xsl:when test="$class='sgmlcomment' or $class='comment'">&lt;!--</xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="after">
-    <xsl:choose>
-      <xsl:when test="$class='endtag' or $class='starttag' or
-                      $class='pi'">&gt;</xsl:when>
-      <xsl:when test="$class='genentity' or $class='numcharref' or
-                      $class='paramentity'">;</xsl:when>
-      <xsl:when test="$class='xmlpi'">?&gt;</xsl:when>
-      <xsl:when test="$class='emptytag'">/&gt;</xsl:when>
-      <xsl:when test="$class='sgmlcomment' or $class='comment'">--&gt;</xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:variable>
 
-  <xsl:call-template name="inline.monoseq">
+  <xsl:call-template name="sgmltag">
     <xsl:with-param name="purpose" select="$purpose"/>
     <xsl:with-param name="mono-ancestor" select="1"/>
-    <xsl:with-param name="before" select="$before"/>
-    <xsl:with-param name="after" select="$after"/>
   </xsl:call-template>
 </xsl:template>
 
