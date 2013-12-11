@@ -42,9 +42,13 @@
   <xsl:param name="mono-ancestor" select="0"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
+  <xsl:variable name="mono-verbatim-ancestor">
+    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+                  ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal">
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
@@ -61,7 +65,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -80,7 +84,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
@@ -99,9 +103,13 @@
   <xsl:param name="mono-ancestor" select="0"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
+  <xsl:variable name="mono-verbatim-ancestor">
+    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+                  ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold">
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
@@ -118,7 +126,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -137,7 +145,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
@@ -156,10 +164,14 @@
   <xsl:param name="mono-ancestor" select="0"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
+  <xsl:variable name="mono-verbatim-ancestor">
+    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+                  ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
     font-weight="normal">
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
@@ -176,7 +188,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -195,7 +207,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="parent::para|parent::title">
+    <xsl:if test="$mono-verbatim-ancestor != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
@@ -295,12 +307,9 @@
   <xsl:param name="purpose" select="'none'"/>
   <xsl:param name="mono-ancestor" select="0"/>
   <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="@class">
-        <xsl:value-of select="@class"/>
-      </xsl:when>
-      <xsl:otherwise>element</xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="@class">
+      <xsl:value-of select="@class"/>
+    </xsl:if>
   </xsl:variable>
   <xsl:variable name="before">
     <xsl:choose>
