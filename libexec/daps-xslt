@@ -229,8 +229,8 @@ process_params () {
         # get rid of the double quotes of stringparams
         # ${STR_PAR:1:-1} does not work with bash 3.2
         #
-        STR_PAR=${STR_PAR:#\"}
-        STR_PAR=${STR_PAR:%\"}
+        STR_PAR=${STR_PAR#\"}
+        STR_PAR=${STR_PAR%\"}
         # split into KEY/VALUE at first "="
         KEY=${STR_PAR%%=*} # delete "=VALUE" part
         if [[ stringparam = $PREFIX ]];then
