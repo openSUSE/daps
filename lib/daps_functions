@@ -220,7 +220,7 @@ function parse_args () {
 		shift
 		;;
             --statdir)
-                sanitize_path "$2" "P_STAT_DIR"
+                sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
             --static)
@@ -624,37 +624,24 @@ function build_html_jsp () {
         exit 0
     fi
 
-    [[ 1 = $P_CLEAN ]]      && export CLEAN_DIR=1
-    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]    && REMARKS=1
+    [[ 1 = $P_CLEAN ]]       && export CLEAN_DIR=1
+    [[ -n "$P_CSS" ]]        && export HTML_CSS="$P_CSS"
+    [[ 1 = $P_DRAFT ]]       && DRAFT="yes"
+    [[ 1 = $P_REMARKS ]]     && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
-    [[ 1 = $P_STATIC ]]     && export STATIC_HTML=1
-    [[ 1 = $P_HTML5 ]]      && export HTML5=1
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ 1 = $P_META ]]        && META=1 DRAFT="yes"
+    [[ 1 = $P_STATIC ]]      && export STATIC_HTML=1
+    [[ 1 = $P_HTML5 ]]       && export HTML5=1
+    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_XSLTPARAM" ]]  && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
 	exit_on_error "--single and --jsp are mutually exclusive"
     else
 	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
 	[[ 1 = $P_JSP ]]        && export JSP=1
-    fi
-
-    if [[ -n "$P_CSS" ]]; then
-        if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
-            export HTML_CSS="$P_CSS"
-        else
-            exit_on_error "Cannot find CSS file $P_CSS (have you specified a correct path?)."
-        fi
-    fi
-    if [[ -n "$P_STAT_DIR" ]]; then
-        if [[ -d $P_STAT_DIR ]]; then
-            export STATIC_DIR="$P_STAT_DIR"
-         else
-            exit_on_error "\"Static\" directory \"P_STAT_DIR\"\ndoes not exist."
-        fi
     fi
 
     call_make "$SUB_CMD" "$@"

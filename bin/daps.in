@@ -144,11 +144,7 @@ unset "${VARLIST[@]}"
 [[ -n "$DOCCONF_SAVE" ]] && DOCCONF=$DOCCONF_SAVE
 
 
-# VARLIST contains all variables that can be set via config or command line.
-#
 # The following UNSETLIST contains variables local to this script
-# unfortunately  
-
 # To be on the safe side, we also want to unset a few variables before we start
 # because they are used/defined in make or may cause other harm if accidentally
 # set
@@ -188,6 +184,7 @@ PATHLIST=(
     FOP_CONFIG_FILE
     FOP_WRAPPER
     HTML_CSS
+    STATIC_DIR
     STYLEDEVEL
     STYLEROOT
     XEP_CONFIG_FILE
