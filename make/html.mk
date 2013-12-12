@@ -27,11 +27,6 @@
 #----------
 # Stylesheets
 #
-ifeq ($(HTML5),1)
-  H_DIR := /xhtml5
-else
-  H_DIR := /xhtml
-endif
 
 ifeq ($(JSP),1)
   # JSP
@@ -42,6 +37,11 @@ ifeq ($(JSP),1)
 else
   # HTML / HTMLSINGLE
   HTML_SUFFIX     := html
+  ifeq ($(HTML5),1)
+    H_DIR := /xhtml5
+  else
+    H_DIR := /xhtml
+  endif
   ifeq ($(HTMLSINGLE),1)
     # Single HTML
     STYLEHTML   := $(firstword $(wildcard \

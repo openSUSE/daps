@@ -992,21 +992,20 @@ function package-src () {
     call_make "$SUB_CMD" "$@"
 }
 
-
 ###########################################################################
 #
-#  Generic PACKAGING
+#  PACKAGE PDF
 #
-#  Subcommands: remaining packaging targets
+#  Subcommand: package-pdf
 #
 ###########################################################################
-function packaging () {
+function package-pdf () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,jsp,name:,pagefiles,rootid:,set-date:,single,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1014,23 +1013,17 @@ function packaging () {
     #------ Computing the values returned from the parser -----
     if [[ 1 = $P_HELP ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        [[ "package-pdf" = $SUB_CMD ]] && help_cropmarks
+        help_cropmarks
         help_desktopfiles
         help_documentfiles
-        [[ "package-pdf" = $SUB_CMD ]] && help_formatter
-        [[ "package-pdf" = $SUB_CMD ]] && help_grayscale_pdf
+        help_formatter
+        help_grayscale_pdf
         help_help
-	[[ "package-html" = $SUB_CMD ]] && help_jsp
         help_name
         help_pagefiles
         help_rootid
         help_set-date
-	[[ "package-html" = $SUB_CMD ]] && help_single
-        if [[ "package-pdf" = $SUB_CMD ]]; then
-            help_xsltparam "creates the .fo file from the profiled sources"
-        elif [[ "package-html" = $SUB_CMD ]]; then
-            help_xsltparam "creates the .html files from the profiled sources"
-	fi
+        help_xsltparam "creates the .fo file from the profiled sources"
         echo
         exit 0
     fi
@@ -1044,6 +1037,73 @@ function packaging () {
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
 
+    if [[ -n "$P_FORMATTER" ]]; then
+        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+            export FORMATTER="$P_FORMATTER"
+        else
+	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        fi
+    fi
+
+    if [[ -n "$P_SETDATE" ]]; then
+        SETDATE=$(date -d "$P_SETDATE" +"%b %d %Y" 2>/dev/null) || exit_on_error "Wrong value for set-date: must be in a \"date\" compatible format,\ne.g. \"YYYY-MM-DD\"!"
+        export SETDATE
+    fi
+
+    call_make "$SUB_CMD" "$@"
+}
+
+
+
+###########################################################################
+#
+#  Package HTML
+#
+#  Subcommand: package-html
+#
+###########################################################################
+function package-html () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,rootid:,set-date:,single,statdir:,xsltparam:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_css
+        help_desktopfiles
+        help_documentfiles
+        help_help
+        help_html5
+	help_jsp
+        help_name
+        help_pagefiles
+        help_rootid
+        help_set-date
+	help_single
+        help_statdir
+        help_xsltparam "creates the .html files from the profiled sources"
+	echo
+        exit 0
+    fi
+
+
+    [[ 1 = $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
+    [[ 1 = $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
+    [[ 1 = $P_PAGEFILES ]]     && export export PAGEFILES=1
+    [[ 1 = $P_HTML5 ]]         && export HTML5=1
+    [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
+
     # We always want to start with a clean HTML result directory for
     # package-html
     #
@@ -1054,14 +1114,6 @@ function packaging () {
     else
 	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
 	[[ 1 = $P_JSP ]]        && export JSP=1
-    fi
-
-    if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
-            export FORMATTER="$P_FORMATTER"
-        else
-	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
-        fi
     fi
 
     if [[ -n "$P_SETDATE" ]]; then
@@ -1769,10 +1821,10 @@ function help_cropmarks () {
                               Default: off"
 }
 function help_css () {
-    echo "    --css=filename, --css     Specify a path to a css file.
-                              The special string \"none\" make DAPS to use
+    echo "    --css=filename,           Specify a path to a css file.
+              --css=none      The special string \"none\" forces DAPS to use
                               no css, even when configured elsewhere
-                              (in  config file).
+                              (e.g. in a config file).
                               Default: unset"
 }
 function help_draft () {
