@@ -1049,6 +1049,13 @@ function packaging () {
     #
     [[ "package-html" = $SUB_CMD ]] && export CLEAN_DIR=1
 
+    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
+	exit_on_error "--single and --jsp are mutually exclusive"
+    else
+	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
+	[[ 1 = $P_JSP ]]        && export JSP=1
+    fi
+
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
             export FORMATTER="$P_FORMATTER"
