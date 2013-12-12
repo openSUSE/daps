@@ -66,7 +66,7 @@
 <!ENTITY % xrefinlines	"xref | link | ulink | uri">
 
 
-<!ENTITY % coreinlines   "command | envar | literal | emphasis | varname |
+<!ENTITY % coreinlines   "command | envar | email | literal | emphasis | varname |
     option | replaceable | remark | filename | citetitle | quote |
     phrase | entity | systemitem | guimenu | subscript | superscript | trademark">
 
@@ -147,8 +147,9 @@
 <!ELEMENT citetitle       (#PCDATA | phrase | remark | %xrefinlines;)* >
 <!ELEMENT co              EMPTY  >
 <!ELEMENT command         (#PCDATA | phrase | option | replaceable | remark)* >
+<!ELEMENT email           (#PCDATA | phrase)* >
 <!ELEMENT emphasis        (#PCDATA | %xrefinlines; | %basicinlines; | %guiinlines;)* >
-<!ELEMENT envar           (#PCDATA | phrase)* >
+<!ELEMENT envar           (#PCDATA | phrase | remark)* >
 <!ELEMENT filename        (#PCDATA | phrase | replaceable | remark)* >
 <!ELEMENT guimenu         (#PCDATA | phrase)* >
 <!ELEMENT keycombo        (keycap)+ >
