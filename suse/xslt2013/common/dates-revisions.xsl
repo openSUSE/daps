@@ -18,10 +18,12 @@
     <xsl:variable name="date.revision"
       select="(bookinfo/date | info/date | articleinfo/date |
                bookinfo/releaseinfo | articleinfo/releaseinfo |
-               info/releaseinfo | ancestor::bookinfo/date |
-               ancestor::setinfo/date | ancestor::info/date |
-               ancestor::bookinfo/releaseinfo | ancestor::setinfo/releaseinfo |
-               ancestor::info/releaseinfo)[1]"/>
+               info/releaseinfo | ancestor::book/bookinfo/date |
+               ancestor::set/setinfo/date | ancestor::book/info/date |
+               ancestor::set/info/date | ancestor::book/bookinfo/releaseinfo |
+               ancestor::set/setinfo/releaseinfo |
+               ancestor::book/info/releaseinfo |
+               ancestor::set/info/releaseinfo)[1]"/>
     <xsl:choose>
       <xsl:when test="$date.revision != ''">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
@@ -32,15 +34,19 @@
   <xsl:template name="date.and.revision.inner">
     <xsl:variable name="date">
       <xsl:apply-templates select="(bookinfo/date | info/date |
-        articleinfo/date | ancestor::bookinfo/date | ancestor::setinfo/date |
-        ancestor::info/date)[1]"/>
+        articleinfo/date | ancestor::book/bookinfo/date |
+        ancestor::set/setinfo/date | ancestor::book/info/date |
+        ancestor::set/info/date)[1]"/>
     </xsl:variable>
+    
+    <xsl:variable name="version"
+      select="(bookinfo/releaseinfo | articleinfo/releaseinfo |
+               info/releaseinfo | ancestor::book/bookinfo/releaseinfo |
+               ancestor::set/setinfo/releaseinfo |
+               ancestor::book/info/releaseinfo |
+               ancestor::set/info/releaseinfo)[1]"/>
     <xsl:variable name="revision-candidate"
-      select="substring-before((bookinfo/releaseinfo | articleinfo/releaseinfo |
-                               info/releaseinfo |
-                               ancestor::bookinfo/releaseinfo |
-                               ancestor::setinfo/releaseinfo |
-                               ancestor::info/releaseinfo)[1],' $')"/>
+      select="substring-before(($version)[1],' $')"/>
     <xsl:variable name="revision">
       <xsl:choose>
         <xsl:when test="starts-with($revision-candidate, '$Rev: ')">
@@ -58,10 +64,6 @@
         <xsl:otherwise/>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="version"
-      select="(bookinfo/releaseinfo | articleinfo/releaseinfo |
-               info/releaseinfo | ancestor::bookinfo/releaseinfo |
-               ancestor::setinfo/releaseinfo | ancestor::info/releaseinfo)[1]"/>
 
     <xsl:if test="$date != ''">
       <xsl:call-template name="imprint.label">
