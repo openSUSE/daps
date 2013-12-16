@@ -163,15 +163,15 @@
 <!ELEMENT quote           (#PCDATA | %allinlines;)* >
 <!ELEMENT replaceable     (#PCDATA | phrase | remark)* >
 <!ELEMENT phrase          (#PCDATA | %allinlines;)* >
-<!ELEMENT prompt          (#PCDATA | phrase)*>
+<!ELEMENT prompt          (#PCDATA | phrase | replaceable)*>
 <!ELEMENT shortcut        (keycombo | keycap+) >
 <!ELEMENT subscript       (#PCDATA | phrase | remark)* >
 <!ELEMENT superscript     (#PCDATA | phrase | remark)* >
-<!ELEMENT systemitem      (#PCDATA | phrase | remark)* >
+<!ELEMENT systemitem      (#PCDATA | phrase | replaceable | remark)* >
 <!ELEMENT trademark       (#PCDATA | phrase)*>
 <!ELEMENT ulink           (#PCDATA | %basicinlines;)* >
 <!ELEMENT uri             (#PCDATA ) >
-<!ELEMENT varname         (#PCDATA | phrase)* >
+<!ELEMENT varname         (#PCDATA | phrase | replaceable)* >
 <!ELEMENT xref            EMPTY  >
 
 
