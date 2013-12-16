@@ -422,15 +422,9 @@
   </xsl:template>
 
 <xsl:template name="date.and.revision">
-  <xsl:variable name="create-block">
-    <xsl:call-template name="date.and.revision.check"/>
-  </xsl:variable>
-
-  <xsl:if test="$create-block = 1">
     <div class="date">
       <xsl:call-template name="date.and.revision.inner"/>
     </div>
-  </xsl:if>
 </xsl:template>
 
 <xsl:template name="imprint.label">

@@ -11,24 +11,10 @@
 
 -->
 <xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-
-  <xsl:template name="date.and.revision.check">
-    <xsl:variable name="date.revision"
-      select="(bookinfo/date | info/date | articleinfo/date |
-               bookinfo/releaseinfo | articleinfo/releaseinfo |
-               info/releaseinfo | ancestor::book/bookinfo/date |
-               ancestor::set/setinfo/date | ancestor::book/info/date |
-               ancestor::set/info/date | ancestor::book/bookinfo/releaseinfo |
-               ancestor::set/setinfo/releaseinfo |
-               ancestor::book/info/releaseinfo |
-               ancestor::set/info/releaseinfo)[1]"/>
-    <xsl:choose>
-      <xsl:when test="$date.revision != ''">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common"
+  xmlns:date="http://exslt.org/dates-and-times"
+  exclude-result-prefixes="exsl date">
 
 
   <xsl:template name="date.and.revision.inner">
@@ -65,18 +51,48 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:if test="$date != ''">
-      <xsl:call-template name="imprint.label">
-        <xsl:with-param name="label" select="'pubdate'"/>
-      </xsl:call-template>
-      <xsl:value-of select="$date"/>
-      <xsl:if test="$version != ''">
-        <!-- Misappropriated but hopefully still correct everywhere. -->
-        <xsl:call-template name="gentext.template">
-          <xsl:with-param name="context" select="'iso690'"/>
-          <xsl:with-param name="name" select="'spec.pubinfo.sep'"/>
+    <xsl:call-template name="imprint.label">
+      <xsl:with-param name="label" select="'pubdate'"/>
+    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="$date != ''">
+        <xsl:value-of select="$date"/>
+      </xsl:when>
+      <xsl:when test="function-available('date:date-time') or
+                      function-available('date:dateTime')">
+        <xsl:variable name="format">
+          <xsl:call-template name="gentext.template">
+            <xsl:with-param name="context" select="'datetime'"/>
+            <xsl:with-param name="name" select="'format'"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="date-exslt">
+          <xsl:choose>
+            <xsl:when test="function-available('date:date-time')">
+              <xsl:value-of select="date:date-time()"/>
+            </xsl:when>
+            <xsl:when test="function-available('date:dateTime')">
+              <!-- Xalan quirk -->
+              <xsl:value-of select="date:dateTime()"/>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:variable>
+
+        <xsl:call-template name="datetime.format">
+          <xsl:with-param name="date" select="$date-exslt"/>
+          <xsl:with-param name="format" select="$format"/>
+          <xsl:with-param name="padding" select="1"/>
         </xsl:call-template>
-      </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>??<xsl:message>Need EXSLT date support.</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="$version != ''">
+      <!-- Misappropriated but hopefully still correct everywhere. -->
+      <xsl:call-template name="gentext.template">
+        <xsl:with-param name="context" select="'iso690'"/>
+        <xsl:with-param name="name" select="'spec.pubinfo.sep'"/>
+      </xsl:call-template>
     </xsl:if>
     <xsl:if test="$version != ''">
       <xsl:choose>
