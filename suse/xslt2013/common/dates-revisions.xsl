@@ -29,11 +29,15 @@
   <xsl:template name="date.and.revision.inner">
     <xsl:variable name="date">
       <xsl:apply-templates select="(bookinfo/date | info/date |
-        articleinfo/date)[1]"/>
+        articleinfo/date | ancestor::bookinfo/date | ancestor::setinfo/date |
+        ancestor::info/date)[1]"/>
     </xsl:variable>
     <xsl:variable name="revision-candidate"
       select="substring-before((bookinfo/releaseinfo | articleinfo/releaseinfo |
-                               info/releaseinfo)[1],' $')"/>
+                               info/releaseinfo |
+                               ancestor::bookinfo/releaseinfo |
+                               ancestor::setinfo/releaseinfo |
+                               ancestor::info/releaseinfo)[1],' $')"/>
     <xsl:variable name="revision">
       <xsl:choose>
         <xsl:when test="starts-with($revision-candidate, '$Rev: ')">
@@ -53,7 +57,8 @@
     </xsl:variable>
     <xsl:variable name="version"
       select="(bookinfo/releaseinfo | articleinfo/releaseinfo |
-               info/releaseinfo)[1]"/>
+               info/releaseinfo | ancestor::bookinfo/releaseinfo |
+               ancestor::setinfo/releaseinfo | ancestor::info/releaseinfo)[1]"/>
 
     <xsl:if test="$date != ''">
       <xsl:call-template name="imprint.label">
