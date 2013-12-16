@@ -60,8 +60,8 @@
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
-      <xsl:attribute name="font-size"
-        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
 
@@ -121,8 +121,8 @@
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
-      <xsl:attribute name="font-size"
-        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
 
@@ -183,8 +183,8 @@
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
-      <xsl:attribute name="font-size"
-        ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
+        <xsl:attribute name="font-size"
+          ><xsl:value-of select="$mono-xheight-adjust div $sans-xheight-adjust"/>em</xsl:attribute>
       </xsl:otherwise>
     </xsl:choose>
 
