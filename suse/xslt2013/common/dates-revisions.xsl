@@ -18,7 +18,10 @@
     <xsl:variable name="date.revision"
       select="(bookinfo/date | info/date | articleinfo/date |
                bookinfo/releaseinfo | articleinfo/releaseinfo |
-               info/releaseinfo)[1]"/>
+               info/releaseinfo | ancestor::bookinfo/date |
+               ancestor::setinfo/date | ancestor::info/date |
+               ancestor::bookinfo/releaseinfo | ancestor::setinfo/releaseinfo |
+               ancestor::info/releaseinfo)[1]"/>
     <xsl:choose>
       <xsl:when test="$date.revision != ''">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
