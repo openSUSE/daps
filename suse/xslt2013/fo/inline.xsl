@@ -47,7 +47,8 @@
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
 
-  <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal">
+  <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal"
+    font-style="normal">
     <xsl:if test="$mono-verbatim-ancestor != 1">
       <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
@@ -108,7 +109,8 @@
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
 
-  <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold">
+  <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold"
+    font-style="normal">
     <xsl:if test="$mono-verbatim-ancestor != 1">
       <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
