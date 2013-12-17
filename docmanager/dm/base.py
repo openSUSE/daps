@@ -153,12 +153,12 @@ def runsvn(filename, svncmd, svnopt, exceptmsg, exception=dmexcept.DocManagerExc
 def getenvfile(env=None):
   """Returns BASEDIR and ENVFILE from daps showenv"""
   cmd = "daps %s --verbosity=0 showenv"
-  
+
   if env:
     cmd = cmd % "-e %s" % env
   else:
     cmd = cmd % ""
- 
+
   res=commands.getstatusoutput( cmd )
   if res[0] != 0:
     raise dmexcept.DocManagerEnvironment(res[1])
@@ -166,7 +166,7 @@ def getenvfile(env=None):
   # BASEDIR, ENVFILE
   return tuple( i.split("=")[1] for i in res[1].split(";") )
 
-    
+
 ############################################
 class SVNFile(object):
    """Base class for all files in a repository"""
@@ -221,9 +221,9 @@ class SVNFile(object):
       self._branchpath=self.branchpath()
       if self.basedir and self.basedir[-1] != '/':
         self.basedir += "/"
-      
+
       # print "*****", self.basedir, self.filename
-     
+
    def getbranchpath(self):
       return self._branchpath
 
@@ -235,11 +235,11 @@ class SVNFile(object):
 
    def getfilenamewithdir(self):
       return os.path.join(self.dir, self.filename)
-      
+
    @property
    def filenamewithdir(self):
       return os.path.join(self.dir, self.filename)
-   
+
    @property
    def relfilename(self):
      """Returns the relative filename in regards to basedir"""
@@ -315,11 +315,11 @@ class SVNFile(object):
                                            self.getfilenamewithdir() )
       if prop[0] != 0:
          raise IOError("SVN proplist: %s" % prop[1])
-       
+
       # print( prop[1] )
       XP=et.fromstring( prop[1].strip() )
       props = XP.xpath( "//property")
-            
+
       x = ""
       for i in props:
         # x[i.attrib.get("name")] = i.text
@@ -328,7 +328,7 @@ class SVNFile(object):
 
    def __getprops(self):
       status="svn:status : %s." % self.getstatus()[:3]# The dot after %s is essential!
-      
+
       # Checks if a file is versioned or not. An unversioned file contains a '?'
       # in the status variable. In that case, we create "dummy" entries
       if "?" in status:
@@ -357,11 +357,11 @@ class SVNFile(object):
 
    def setsinglerevprop(self, propname, propvalue):
      """Set a revision property.
-     
+
      If you get the following error, proceed with NOTE:
        svn: Repository has not been enabled to accept revision propchanges;
        ask the administrator to create a pre-revprop-change hook
-     
+
      NOTE: The SVN repository needs the following prerequisists:
      * There must be a pre-revprop-change script
      * It must be executable (chmod 755 pre-revprop-change)
@@ -399,7 +399,7 @@ class SVNFile(object):
       for k in args.iterkeys():
         print >> sys.stdout, "INFO: Setting %s" % k
         self.setsingleprop(k, args[k])
-      
+
       # self.commit(message)
       # After the normal properties, set the revision property
       #if args.get("doc:status") in ("proofed", "locdrop"):
@@ -449,30 +449,30 @@ class SVNRepository(object):
       self.envfile = self.args.get("envfile")
       # Avoids None in self.basedir:
       # self.basedir=self.basedir or ""
-            
+
       # Set basedir and envfile after using daps
       self.basedir, self.envfile = getenvfile(self.envfile)
-      
+
       # FIXME: Check if we are in the correct directory
       # Old:
       #if not self.svnentrylist:
       #    self.initsvnentrylist()
       if not os.path.exists(os.path.join(self.basedir, "xml/")):
           raise dmexcept.DocManagerEnvironment(dmexcept.DIR_XML_NOT_FOUND)
-      # Don't check for .svn directory, because in newer versions of SVN 
+      # Don't check for .svn directory, because in newer versions of SVN
       # the dir is located in the "root" directory.
       #if not os.path.exists(os.path.join(self.basedir, "xml/.svn")):
       #    raise dmexcept.DocManagerEnvironment(dmexcept.DIR_SVN_NOT_FOUND)
-      
+
       # Just in case, there is no force attribute set...
       self.args["force"] = self.args.get("force", False)
 
-      
+
       # print " SVNRepository: filenames=%s" % len(filenames)
       # If file list is empty, use "make projectfiles"
       if not len(filenames):
         filenames=self.makeprojectfiles()
-      
+
       # print "<%s>: " % (self.__class__.__name__,), self.args
 
       # Allow only those files that fit certain criterias
@@ -525,10 +525,10 @@ class SVNRepository(object):
 
    def makeprojectfiles(self):
       """Call daps and create a list of projectfiles"""
-      
+
       # First we want to check for commandline option
       env=self.envfile
-      
+
       if not env:
         # Use ENV name from envirionment variable, otherwise
         # use glob ENV-*
@@ -540,15 +540,15 @@ class SVNRepository(object):
             env=env[0]
           else:
             raise dmexcept.DocManagerEnvironment(dmexcept.TOO_MANY_ENV_FILES)
-          
+
       self.checkenvfile(env)
-        
+
 
       if self.args.get("header"):
          print "Collecting filenames...",
 
       cmd="LANG=C daps -e %s --color=0 projectfiles" % (env,)
-      
+
       res=noerr_getstatusoutput(cmd)
       if res[0] != 0:
          print failed()
@@ -559,16 +559,16 @@ class SVNRepository(object):
 
       if self.args.get("header"):
           print done()
-      
+
       filelist = res[1].split()
       if self.args.get("header"):
         print "Checking if files are available in SVN... ",
-      
+
       for f in filelist:
          if not self.issvnfile(f):
            #raise dmexcept.SVNException(dmexcept.NOT_IN_SVN_ERROR % f)
            print red(dmexcept.NOT_IN_SVN_ERROR % f)
-      
+
       if self.args.get("header"):
           print done()
 
@@ -579,12 +579,12 @@ class SVNRepository(object):
         # Old code used xml/.svn/entries to collect filenames, but
         # that doesn't work anymore. ;-(
         pass
-        
+
 
    def issvnfile(self, filename):
       """issvnfile(filename) -> BOOL
          Checks if a file is under version control"""
-      # We have to convert our filename to Unicode, because entries 
+      # We have to convert our filename to Unicode, because entries
       # in svnentrylist are in Unicode too.
       #if unicode(os.path.basename(filename)) in self.svnentrylist
       # Old code:
@@ -601,7 +601,7 @@ class SVNRepository(object):
 
    def iterfileobj(self):
       return iter(self._fileobjects)
-   
+
    def isinbranches(self):
       """Checks if the current path belongs into a branch directory"""
       return len(os.getcwd().split("/branches/")) == 2
@@ -624,7 +624,7 @@ class SVNRepository(object):
 
    def header(self):
      """header() -> String.  Print the header"""
-     
+
      if not self.args.get("header", True):
         return ''
 
@@ -660,7 +660,7 @@ class SVNRepository(object):
         self.args["***filecount***"] += 1
         # f = self.splitfrombasedir(f)
         svnq = SVNQuery(f, self.args.get("includequery"), self.args.get("excludequery"))
-        
+
         if svnq.process():
             # print >> sys.stderr, f, svnq.PropsDict()
             print >> output, "%s" % self.formatter(**self.args), # Don't remove the comma here!
@@ -685,7 +685,7 @@ class SVNRepository(object):
         print >> stream, " %s%s" % ( k.ljust(_swidth), str(self.args['***%s***' % k]).rjust(4) )
       print >> stream, " %s%s" % ( "trans".ljust(_swidth), str(self.args["***TRANS***"]).rjust(4) )
       #print >> stream, " No maintainer".ljust(_swidth), str(self.args['***MAINTAINER***']).rjust(4)
-     
+
 
    def collectstatistics(self, queryobj, fileobj):
       """Count all properties"""
@@ -703,14 +703,14 @@ class SVNRepository(object):
 
    def setProperties(self, **properties):
      """Set properties from a dictionary"""
-     # 
+     #
      # print "**** Inside setProperties", properties
-     def nothing(f, debug, **properties): 
+     def nothing(f, debug, **properties):
         print "  nothing:() properties:", properties
         pass
      def xx(f, debug, **properties):
        if debug: print "Props:", properties; dryrun(properties)
-        
+
        #if properties.has_key('doc:status') and properties["doc:status"] == 'edi':
        # and properties.has_key('doc:maintainer'):
        # Need to set the owner of the XML file?
@@ -765,7 +765,7 @@ Your friendly "DocManager Reminder". :-) Have you:
          except dmexcept.DocManagerFileError, e:
            print red(e)
            sys.exit(30)
-       
+
        #
        # Set the properties
        #
@@ -779,17 +779,17 @@ Your friendly "DocManager Reminder". :-) Have you:
                 f.setsinglerevprop("doc:status", properties["doc:status"])
               if properties.get("incgraphics", False):
                 res = func(f, debug=False, **properties)
-                
+
             else:
                 res = func(f, debug=True, **properties)
-            
+
             print "    %s.\n" % green("Successful")
-    
+
        except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
-    
+
        except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
@@ -817,16 +817,16 @@ Your friendly "DocManager Reminder". :-) Have you:
       raise dmexcept.DocManagerFileError("ERROR: %s" % res[1])
     else:
       return False
-      
+
     return True
 
 
    def _setProps(self, fileobjects, ask=False, func=None, **properties):
       """Set properties on a fileobject from a dictionary (obsolete)"""
-      def nothing(f, debug, **properties): 
+      def nothing(f, debug, **properties):
         print "  nothing:() properties:", properties
         pass
-      
+
       assert isinstance(properties, dict), dmexcept.EXPECTED_DIRECTORY_ERROR
       # print self, self.args, self.args["dryrun"] #properties
       # Creates a string with format:
@@ -857,14 +857,14 @@ Your friendly "DocManager Reminder". :-) Have you:
                       res = func(f, debug=False, **properties)
                 else:
                     res = func(f, debug=True, **properties)
-    
+
             print "    %s.\n" % green("Successful")
-    
+
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
             sys.exit(30)
-      
+
       # Not in trunk, but in branches
       elif self.isinbranches() == True:
         try:
@@ -878,9 +878,9 @@ Your friendly "DocManager Reminder". :-) Have you:
                 else:
                     #dryrun(propstr)
                     pass
-    
+
             print "    %s.\n" % green("Successful")
-    
+
         except (dmexcept.DocManagerPropertyException,
                 dmexcept.DocManagerCommitException), e:
             print red(e)
@@ -898,11 +898,11 @@ Your friendly "DocManager Reminder". :-) Have you:
      # 2. Iterate through all files
      #  2a. Check, if the file is available in SVN
      #  2b. If not, iterate through all the available formats
-     #  2c.  
+     #  2c.
      # 3. Return the list
-     
+
      fn = fileobj.getorigfilename()
-     
+
      GFX_STYLESHEET=os.path.join(PROCDIR, "get-graphics.xsl")
      # Empty parameter preferred.mediaobject.role is needed here to return
      # *all* graphic files:
@@ -911,7 +911,7 @@ Your friendly "DocManager Reminder". :-) Have you:
      if res[0] != 0:
        print >> sys.stderr, "ERROR: Something is not correct with the XML file '%s'\n"\
              "       Reason: %s" % (fn, res[1])
-     
+
      gfx = set(res[1].strip().split()) # needed to remove any duplicate entries
      return self.getgraphformat(gfx)
 
@@ -924,18 +924,18 @@ Your friendly "DocManager Reminder". :-) Have you:
      if ".svn" in dirs:
         dirs.remove(".svn")
      resstr=[]
-     
-       
+
+
      for d in dirs:
        dd = os.path.join(GRAPHPATH, d)
-       
+
        if not os.path.isdir(dd):
          continue
-       
+
        for g in gfx:
          basefile = "%s.%s" % (os.path.splitext(g)[0], d)
          gg = os.path.join(dd, basefile )
-         
+
          cmd = "LANG=C svn ls %s"
          res=commands.getstatusoutput(cmd % gg )
          # print "%s " % gg,
@@ -943,7 +943,7 @@ Your friendly "DocManager Reminder". :-) Have you:
            continue
          else:
            resstr.append(gg)
-       
+
      resstr = set(resstr) # Remove any duplicates
      # print "Graphics:", resstr
      return resstr
@@ -955,14 +955,14 @@ Your friendly "DocManager Reminder". :-) Have you:
          return 0
 
       ask=self.args["force"]
-      assert type(gfx) == type(set()), "branchgraphics: Type for gfx ist not a set"
-      assert type(props)  == types.DictType, "branchgraphics: Type for props is not a dict"
-      
-      if len(gfx): 
+      assert type(gfx) == type(set()), "branchgraphics: Type for gfx is not a set"
+      assert type(props)  == types.DictType, "branchgraphics: Type of props is not a dict"
+
+      if len(gfx):
         print "Found graphics:", ", ".join(gfx)
         if ask:
           userinput("Should I set the property for these graphics: %s?" % ", ".join(gfx) )
-      else:  
+      else:
         print >> sys.stderr, "-- No graphics found for this XML file."
         return 0
 
@@ -978,32 +978,32 @@ Your friendly "DocManager Reminder". :-) Have you:
           # In case of a problem occurs, skip it
           print >> sys.stderr, e
           continue
-        
+
         # Set the doc:maintainer
         assert props.has_key('doc:maintainer'), \
            "branchgraphics: No doc:maintainer found. This should not happen!"
-        
+
         #d={}
         #d['doc:maintainer']=props.get('doc:maintainer')
         #self._setProps([svn], ask=False, **d)
-        
+
         ## FIXME: Maybe test here the status of the respective graphic file?
-        
+
         cmd="LANG=C svn ps doc:maintainer '%s' %s" % (props.get('doc:maintainer'),trunkpath)
         res=commands.getstatusoutput(cmd)
         print "Setting maintainer for '%s'" % trunkpath
-        
+
         if res[0] != 0:
           raise dmexcept.DocManagerCommitException("ERROR: Problem with setting doc:maintainer property\n%s" % res[1])
-        
+
         if os.path.exists(branchpath):
           print "Copying over existing file..."
           res = shutil.copy(trunkpath, branchpath)
-          
+
           cmd="LANG=C svn ci -m'%s' %s %s" % (
-             "docmanager2: Copying graphic into branch.", 
+             "docmanager2: Copying graphic into branch.",
              trunkpath, branchpath)
-          
+
         else:
           print "Copying..."
           cmd="LANG=C svn copy %s %s && "\
@@ -1017,11 +1017,11 @@ Your friendly "DocManager Reminder". :-) Have you:
         else:
           res=commands.getstatusoutput(cmd)
           if res[1] !='': print res[1]
-        
+
         if res[0] != 0:
           print failed()
           raise dmexcept.DocManagerCommitException("ERROR: Something went wrong with the graphics:\n%s" % res[1] )
-        
+
 
 
 
@@ -1034,7 +1034,7 @@ Your friendly "DocManager Reminder". :-) Have you:
       cmd="LANG=C svn copy %s %s && "\
           "LANG=C svn ci -m'%s' %s" % \
             (fileobj.abspath(), branchdir,
-             "docmanager2: Copying into branch.", 
+             "docmanager2: Copying into branch.",
              branchdir)
       if not self.args["dryrun"]:
         print "Copying to branch '%s'..." % branchdir,
@@ -1105,10 +1105,10 @@ Your friendly "DocManager Reminder". :-) Have you:
      allowed_release_prefixes = (
         "SLE",  # SUSE Linux Enterprise (Server and NLD)
         "SL",   # SUSE Linux Box
-        "OS"    # openSUSE 
+        "OS"    # openSUSE
         )
      tagname = self.args['tag']
-      
+
      c=r"(%s)_\d{3}" % "|".join(allowed_tags)
      if re.match(c, tagname)==None:
           raise dmexcept.DocManagerException("Tag name is not valid. "\
@@ -1124,14 +1124,14 @@ Your friendly "DocManager Reminder". :-) Have you:
 
      # Now we are in the correct dir
      tagsrootdir = os.path.abspath("../../../tags/")
-     
+
      if not os.path.exists(tagsrootdir):
-       # Hmn, can we switch to server side tagging here? 
+       # Hmn, can we switch to server side tagging here?
        raise DocManagerEnvironment("You do not have a tags directory. "\
                                    "I expected it at '%s'" % tagsrootdir )
-     
+
      itemroot=os.path.join(tagsrootdir, dirname)
-     
+
      # (1) Check, if tags exists on server
      #  -> no:  raise exception
      # (2) Check if tags/$dirname exists on server
@@ -1143,7 +1143,7 @@ Your friendly "DocManager Reminder". :-) Have you:
      # (4) Tag the branch
      #   Copy $SVNROOT/branches/$release/$dirname/$lang to
      #        $SVNROOT/tags/$dirname/$lang
-     # 
+     #
      # Need to be implemented...
 
      print "Tagging ..."

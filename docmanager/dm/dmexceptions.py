@@ -74,7 +74,7 @@ NO_DIR_ERROR="ERROR: Directory »%s« not exists.\n" \
 EXPECTED_DICTIONARY_ERROR="ERROR setProperties: Expected a dictionary."
 WRONG_DIRECTORY_ERROR="You are in the wrong directory.\n"\
                 "Change your directory to something with trunk or branches."
-EMPTY_FILELIST="File list ist empty, but I expected at least one entry."
+EMPTY_FILELIST="File list is empty, but I expected at least one entry."
 MODIFIED_FILE="The content of the file '%s' is already modified.\n"\
                "Please commit your changes first."
 MODIFIED_PROPS="Properties of the file '%s' are already modified.\n"\
@@ -89,9 +89,9 @@ ERROR_BRANCH_DIRECTORY_NOT_EXISTS="ERROR: Directory »%s« not exists.\n" \
                "  2. svn up -N branches\n"\
                "  3. svn co branches/<PROJECTNAME>\n"
 TOO_MANY_ENV_FILES="No ENV file found/used.\n"\
-              "Solution: Use either --envfile or set the environment variable DAPS_ENV_NAME."           
+              "Solution: Use either --envfile or set the environment variable DAPS_ENV_NAME."
 OLDSTYLE_ENV_FILE="The ENV file is 'old style'.\n" \
               "Solution: Migrate to new style. See /usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x"
-               
+
 if __name__ == "__main__":
    pass
