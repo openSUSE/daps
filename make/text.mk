@@ -16,8 +16,12 @@
 # include $(DAPSROOT)/make/html.mk
 # include $(DAPSROOT)/make/text.mk
 
-STYLETXT := $(firstword $(wildcard \
+ifeq ($(TXT_USE_DBSTYLES),yes)
+  STYLETXT := $(DOCBOOK_STYLES)/xhtml/docbook.xsl
+else
+  STYLETXT := $(firstword $(wildcard \
 		$(addsuffix /xhtml/docbook.xsl,$(STYLE_ROOTDIRS))))
+endif
 
 .PHONY: text
 text: $(TXT_RESULT)
