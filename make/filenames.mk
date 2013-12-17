@@ -20,8 +20,19 @@ MOBI_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi
 HTML_DIR := $(RESULT_DIR)
 ifeq ($(JSP),1)
   HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
-  JSP_SUBDIR  := $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/jsp/get.dbjsp.xsl --stringparam "rootid=$(ROOTID)" --file $(PROFILED_MAIN) $(XSLTPROCESSOR) 2>/dev/null)
-  HTML_RESULT := $(HTML_DIR)/$(JSP_SUBDIR)/index.jsp
+
+  # We have a hen and egg problem when setting JSP_SUBDIR in case
+  # PROFILED_MAIN does not exist.
+  # The following hack uses the unprofiled $MAIN in case the profiled
+  # variant does not exist (firstword function). The problem with
+  # this solution is, that, if the source has more than one PI to set the
+  # JSP_SUBDIR (separated by profiling), the first one will win when using
+  # the unprofiled MAIN
+  # The ideal solution would be to quickly profile the MAIN here, but the
+  # variables needed for profiling are set later in profiling.mk
+  #
+  JSP_SUBDIR  = $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/jsp/get.dbjsp.xsl --stringparam "rootid=$(ROOTID)" --file $(firstword $(wildcard $(PROFILED_MAIN) $(MAIN))) $(XSLTPROCESSOR) 2>/dev/null)
+  HTML_RESULT = $(HTML_DIR)/$(JSP_SUBDIR)/index.jsp
 else
   ifeq ($(HTMLSINGLE),1)
     HTML_DIR    := $(HTML_DIR)/single-html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
