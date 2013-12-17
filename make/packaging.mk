@@ -73,7 +73,7 @@ package-pdf: $(PDF_RESULT)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	cp $(PDF_RESULT) $(DOCNAME)$(LANGSTRING).pdf
+	cp $(PDF_RESULT) $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).pdf
 	@ccecho "result" "Find the package-pdf results at:\n$(PACKAGE_PDF_DIR)"
   endif
 
