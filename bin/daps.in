@@ -1414,8 +1414,9 @@ elif [[ -n $MAIN_CMDL ]]; then
 else
     exit_on_error "Fatal: Neither a DC nor a MAIN file is set"
 fi
-check_pathlist "$MY_BASEDIR"
 recover_cmdl_values
+check_pathlist "$MY_BASEDIR"
+
 
 # If MAIN was not specified on the command line, set MAIN to an absolute
 # path
