@@ -54,7 +54,7 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
+      <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
                    or $purpose = 'xref'">
         <xsl:attribute name="font-size"
@@ -116,7 +116,7 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
+      <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
                    or $purpose = 'xref'">
         <xsl:attribute name="font-size"
@@ -178,7 +178,7 @@
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test="$mono-ancestor = 1"/> <!-- do nothing -->
+      <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
       <xsl:when test="not(ancestor::title or ancestor::term)
                    or $purpose = 'xref'">
         <xsl:attribute name="font-size"
