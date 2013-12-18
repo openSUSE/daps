@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
      Splitting formal-wise titles into number and title
 
@@ -14,6 +14,26 @@
   exclude-result-prefixes="exsl">
 
 
+  <xsl:template match="example">
+    <xsl:choose>
+      <xsl:when test="calloutlist|glosslist|bibliolist|itemizedlist|orderedlist|
+                      segmentedlist|simplelist|variablelist|programlistingco|
+                      screenco|screenshot|cmdsynopsis|funcsynopsis|
+                      classsynopsis|fieldsynopsis|constructorsynopsis|
+                      destructorsynopsis|methodsynopsis|formalpara|para|
+                      simpara|address|blockquote|graphicco|mediaobjectco|
+                      indexterm|beginpage">
+        <div class="complex-example">
+          <xsl:apply-imports/>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-imports/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
   <xsl:template
     match="procedure|example|table|figure|variablelist|itemizedlist|orderedlist"
     mode="object.label.template">
@@ -22,7 +42,7 @@
       <xsl:with-param name="name" select="concat( local-name(),'-label')"/>
     </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template match="procedure|example|table|figure|variablelist|itemizedlist|orderedlist"
     mode="object.title.template">
     <xsl:call-template name="gentext.template">
@@ -30,14 +50,14 @@
       <xsl:with-param name="name" select="concat( local-name(),'-title')"/>
     </xsl:call-template>
   </xsl:template>
-  
+
 
   <xsl:template name="create.formal.title">
     <xsl:param name="node" select="."/>
     <xsl:variable name="label.template">
       <xsl:apply-templates select="$node" mode="object.label.template"/>
     </xsl:variable>
-    
+
     <xsl:if test="$label.template != ''">
       <span class="number">
         <xsl:call-template name="substitute-markup">
@@ -53,7 +73,7 @@
       <xsl:text> </xsl:text>
     </span>
   </xsl:template>
-  
+
   <!-- ===================================================== -->
   <xsl:template name="formal.object.heading">
   <xsl:param name="object" select="."/>
@@ -62,7 +82,7 @@
       <xsl:with-param name="node" select="$object"/>
     </xsl:call-template>
   </xsl:param>
-    
+
     <div class="{concat(local-name(),'-title-wrap')}">
       <h6 class="{concat(local-name(), '-title')}">
         <xsl:call-template name="id.attribute">
