@@ -618,7 +618,6 @@ code {
     display: block;
     overflow: auto;
     overflow-y: hidden;
-    background-color: #EFEFF0;
     text-align: left;
 }
 
@@ -637,6 +636,13 @@ code {
 
 .screen .command {
     color: #306928;
+}
+
+.complex-example .example-contents {
+    margin: 5px 0;
+    padding: 3px 15px 6px 12px;
+    border-left: 3px solid #999;
+    background-color: #F9F9F9;
 }
 
 .calloutlist {
@@ -766,11 +772,6 @@ div.figure .figure-title-wrap {
     background-color: #202020;
     width: 100%;
     overflow: hidden;
-}
-
-div.figure a {
-    height: 0;
-    width: 0;
 }
 
 div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
@@ -1146,10 +1147,21 @@ p.ds-message {
     font-size: 22px;
 }
 
+@page {
+    size: 100%;
+    margin: 20mm 22.5mm 22.5mm 22.5mm;
+}
+
 @media print {
-    .permalink, .report-bug {
+    .permalink {
         display: none;
     }
+
+    .callout {
+        border: 1px solid #439239;
+        color: #439239;
+    }
+
     .figure, .informalfigure, .admonition, p, table {
         page-break-inside: avoid;
     }
@@ -1168,6 +1180,19 @@ p.ds-message {
 
     .ulink-url {
         display: inline;
+        -moz-hyphens: none;
+        hyphens: none;
+    }
+
+    .figure-title-wrap {
+        border: 1px solid #202020 !important;
+        width: -moz-calc(100% - 2px) !important;
+        width: -webkit-calc(100% - 2px) !important;
+        width: calc(100% - 2px) !important;
+    }
+
+    .figure-contents .mediaobject, .figure-title-wrap {
+        background-color: transparent !important;
     }
 }
 
@@ -1211,9 +1236,14 @@ p.ds-message {
     .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
     .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
     .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap,
-    .procedure-contents, .procedure-title-wrap + .procedure-contents, div.figure {
+    .procedure-contents, .procedure-title-wrap + .procedure-contents,
+    div.figure, .complex-example .example-contents {
         margin-left: -10px;
         margin-right: -10px;
+    }
+
+    .complex-example .example-contents {
+        padding: 3px 15px 6px 12px;
     }
 
     div.figure {
