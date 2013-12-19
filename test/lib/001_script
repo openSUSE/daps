@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: tests for bin/daps
+#
+# * If a correct styleroot/fs_styleroot path was provided on the command line,
+#   DASP should not abort, even when a wrong path was specified in one
+#   of the config files.
+
+source lib/common_functions
+
+header "Script (bin/daps)"
+
+function oneTimeTearDown() {
+    stats
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+test_scriptStyleroots () {
+    local _DCFILE _VALID_FB_STROOT _VALID_STROOT
+    
+    _DCFILE=${_DOC_DIR}/DC-booktest_wrong_st_paths
+    _VALID_FB_STROOT="$_DB_STYLES"
+    _VALID_STROOT="$_STANDARD_STYLES"
+
+    $_DAPSEXEC -d $_DCFILE nothing >/dev/null 2>&1
+    assertFalse \
+	" └─ Script did not fail although the DCFILE contains wrong stylesheet paths" \
+	"$?"
+
+    $_DAPSEXEC -d $_DCFILE --styleroot="${_VALID_STROOT}" --fb_styleroot="${_VALID_FB_STROOT}" nothing >/dev/null 2>&1
+    assertTrue \
+	" └─ Script failed although the wrong stylesheet paths from the DCFILE were overwritten at the command line" \
+	"$?"
+
+}
+
+# source shUnit2 test
+source $_SHUNIT2SRC
