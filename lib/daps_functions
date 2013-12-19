@@ -385,7 +385,7 @@ function init_env {
 ###########################################################################
 function call_make () {
     local CORE_NO DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS 
-    local MAKE_CMD SUB_CMD
+    local MAKE_CMD STRING SUB_CMD
 
     # first argument passed to the function is the subcommand
     # in some cases, additional arguments are passed to this
@@ -394,12 +394,21 @@ function call_make () {
     SUB_CMD=$1
     shift
 
+    # Check the remaining $@ - if it contains variable definitions (FOO=BAR
+    # or FOO="BAR") it's OK, if it contains barewords, exit with an error
+    #
+    if [[ -n "$@" ]]; then
+	for STRING in "$@"; do
+	    [[ $STRING =~ ^[a-zA-Z][a-zA-Z0-9_]*=..* ]] || exit_on_error "Unknown parameter \"$STRING\"."
+	done
+    fi
+
     # set up the final environment
     init_env
 
     #------
     # the make command
-        #
+    #
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
     MAKE_BIN="/usr/bin/make"
