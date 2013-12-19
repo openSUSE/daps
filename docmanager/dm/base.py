@@ -547,8 +547,7 @@ class SVNRepository(object):
       if self.args.get("header"):
          print "Collecting filenames...",
 
-      cmd="LANG=C daps -e %s --color=0 projectfiles" % (env,)
-
+      cmd="LANG=C daps -e %s --color=0 list-srcfiles --noimg" % (env,)
       res=noerr_getstatusoutput(cmd)
       if res[0] != 0:
          print failed()
