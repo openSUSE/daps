@@ -49,7 +49,9 @@
    See upstream revision 9820. Remove this snippet, if there is a newer 
    version available.
 
+   TODO: Find recursion
 -->
+<!--
 <xsl:template match="ulink" mode="no.anchor.mode">
   <xsl:param name="url" select="@url"/>
   <xsl:choose>
@@ -61,5 +63,6 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+-->
 
 </xsl:stylesheet>
