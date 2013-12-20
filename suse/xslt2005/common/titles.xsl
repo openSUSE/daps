@@ -22,8 +22,12 @@
    See upstream revision 9820. Remove this snippet, if there is a newer 
    version available.
 
+   TODO: Currently, with this template xsltproc detects a recursion. 
+         I disabled the template for the time being, but we need to 
+         investigate it further.
 -->
-<xsl:template match="ulink" mode="no.anchor.mode">
+  
+<<!--xsl:template match="ulink" mode="no.anchor.mode">
   <xsl:param name="url" select="@url"/>
   <xsl:choose>
     <xsl:when test="count(child::node())=0">
@@ -33,6 +37,7 @@
       <xsl:apply-templates/>
     </xsl:otherwise>
   </xsl:choose>
-</xsl:template>
+</xsl:template>-->
+  
 </xsl:stylesheet>
 
