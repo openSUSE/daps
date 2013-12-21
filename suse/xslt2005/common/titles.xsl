@@ -27,7 +27,7 @@
          investigate it further.
 -->
   
-<<!--xsl:template match="ulink" mode="no.anchor.mode">
+<!--<xsl:template match="ulink" mode="no.anchor.mode">
   <xsl:param name="url" select="@url"/>
   <xsl:choose>
     <xsl:when test="count(child::node())=0">
