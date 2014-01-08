@@ -85,9 +85,21 @@ ifdef STATIC_DIR
   STYLEIMG  := $(STATIC_DIR)
   IS_STATIC := static
 else
+  #
+  # Make sure to use the STYLEIMG directory that comes alongside the
+  # STYLEROOT that is actually used. This is needed to ensure that the
+  # correct STYLEIMG is used, even when the current STYLEROOT is a
+  # fallback directory
+  #
+  # dir (patsubst %/,%,(dir STYLEEPUB)):
+  #  - remove filename
+  #  - remove trailing slash (dir function only works when last character
+  #    is no "/") -> patsubst is greedy
+  #  - remove dirname
+  #
   STYLEIMG := $(firstword $(wildcard \
-		$(addsuffix /static,$(STYLE_ROOTDIRS)) \
-		$(addsuffix /images,$(STYLE_ROOTDIRS))))
+		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))\
+		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))))
   IS_STATIC := $(notdir $(STYLEIMG))
   ifndef HTML_CSS
     ifneq ($(IS_STATIC),static)

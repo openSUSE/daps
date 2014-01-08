@@ -25,7 +25,22 @@ else
 			/epub/docbook.xsl, $(STYLE_ROOTDIRS))))
 endif
 
+#
+# Make sure to use the STYLEIMG directory that comes alongside the
+# STYLEROOT that is actually used. This is needed to ensure that the
+# correct STYLEIMG is used, even when the current STYLEROOT is a
+# fallback directory
+#
+# dir (patsubst %/,%,(dir STYLEEPUB)):
+#  - remove filename
+#  - remove trailing slash (dir function only works when last character
+#    is no "/") -> patsubst is greedy
+#  - remove dirname
+#
+STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEEPUB)))))
+
 STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
+
 
 # Directories
 #
@@ -55,7 +70,12 @@ EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/color,$(EPUB_IMGDIR),$(ONLINE_IMAGES)
 #EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
 EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
 #EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
-EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_CALLOUT_IMGS)
+
+ifneq "$(strip $(EPUB_CALLOUT_IMGS))" ""
+  EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_CALLOUT_IMGS)
+else
+  EPUB_IMAGES  := $(EPUB_INLINE_IMGS)
+endif
 
 # Stringparams
 # TODO

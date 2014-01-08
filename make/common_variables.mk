@@ -250,13 +250,10 @@ endif
 #
 STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 		  $(STYLE_CUSTOM_FALLBACK) $(DOCBOOK_STYLES) )
-#
-# the STYLE* variables that define the path to the target specific stylesheets
-# (e.g. STYLEH for HTML) are defined in the respective makefiles (e.g. html.mk)
-# We only define STYLEIMG here, since it is used by multiple targets
-#
-STYLEIMG := $(firstword $(wildcard $(addsuffix /images, $(STYLE_ROOTDIRS))))
 
+#
+# STYLEIMG needs to be defined in epub.mk, html.mk, pdf.mk, ... to make sure
+# it is correctly set in case a fallback STYLEROOT is used
 
 #--------------------------------------------------
 # MISC

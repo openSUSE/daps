@@ -31,6 +31,20 @@ STYLEFO    := $(firstword $(wildcard $(addsuffix \
 STYLE_GENINDEX := $(DAPSROOT)/daps-xslt/index/xml2idx.xsl
 STYLE_ISINDEX  := $(DAPSROOT)/daps-xslt/common/search4index.xsl
 
+#
+# Make sure to use the STYLEIMG directory that comes alongside the
+# STYLEROOT that is actually used. This is needed to ensure that the
+# correct STYLEIMG is used, even when the current STYLEROOT is a
+# fallback directory
+#
+# dir (patsubst %/,%,(dir STYLEEPUB)):
+#  - remove filename
+#  - remove trailing slash (dir function only works when last character
+#    is no "/") -> patsubst is greedy
+#  - remove dirname
+#
+STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))
+
 DOCNAME := $(DOCNAME)$(DRAFT_STR)$(META_STR)
 INDEX   := $(shell $(XSLTPROC) --xinclude $(ROOTSTRING) --stylesheet $(STYLE_ISINDEX) --file $(MAIN) $(XSLTPROCESSOR) 2>/dev/null)
 
