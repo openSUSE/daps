@@ -16,7 +16,7 @@
 
   <xsl:template match="example">
     <xsl:choose>
-      <xsl:when test="calloutlist|glosslist|bibliolist|itemizedlist|orderedlist|
+      <xsl:when test="glosslist|bibliolist|itemizedlist|orderedlist|
                       segmentedlist|simplelist|variablelist|programlistingco|
                       screenco|screenshot|cmdsynopsis|funcsynopsis|
                       classsynopsis|fieldsynopsis|constructorsynopsis|
