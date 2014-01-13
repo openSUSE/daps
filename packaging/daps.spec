@@ -44,7 +44,7 @@ Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 Url:            http://sourceforge.net/p/daps
-Source0:        http://downloads.sourceforge.net/project/daps/%{name}-%{version}.tar.bz2
+Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -55,7 +55,6 @@ BuildRequires:  bash >= 3.1
 BuildRequires:  dia
 BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.77
-BuildRequires:  fam
 BuildRequires:  fdupes
 BuildRequires:  ghostscript-library
 BuildRequires:  ImageMagick
@@ -100,7 +99,6 @@ Requires:       bash >= 3.1
 Requires:       dia
 Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.77
-Requires:       fam
 Requires:       ghostscript-library
 Requires:       ImageMagick
 Requires:       inkscape
