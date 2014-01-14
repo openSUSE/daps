@@ -295,8 +295,7 @@
 
 <xsl:template match="classname|exceptionname|interfacename|methodname
                     |computeroutput|constant|envar|filename|function|literal
-                    |code|option|parameter|prompt|replaceable|structfield
-                    |systemitem|varname|email|uri
+                    |code|option|parameter|prompt|systemitem|varname|email|uri
                     |cmdsynopsis/command|function|literal|package">
   <xsl:param name="purpose" select="'none'"/>
 
@@ -346,7 +345,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="parameter|replaceable|parameter|structfield">
+<xsl:template match="replaceable|structfield">
   <xsl:param name="purpose" select="'none'"/>
 
   <xsl:call-template name="inline.italicmonoseq">
@@ -365,8 +364,7 @@
 
 <xsl:template match="classname|exceptionname|interfacename|methodname
                     |computeroutput|constant|envar|filename|function|literal
-                    |code|option|parameter|prompt|replaceable|structfield
-                    |systemitem|varname|email|uri
+                    |code|option|parameter|prompt|systemitem|varname|email|uri
                     |cmdsynopsis/command|function|literal|package"
   mode="mono-ancestor">
   <xsl:param name="purpose" select="'none'"/>
@@ -386,7 +384,7 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="parameter|replaceable|parameter|structfield"
+<xsl:template match="replaceable|structfield"
   mode="mono-ancestor">
   <xsl:param name="purpose" select="'none'"/>
 
