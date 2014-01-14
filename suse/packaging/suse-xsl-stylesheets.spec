@@ -43,7 +43,7 @@ Summary:        SUSE-branded Docbook stylesheets for XSLT 1.0
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 URL:            http://sourceforge.net/p/daps/suse-xslt
-Source0:        http://downloads.sourceforge.net/project/daps/suse-xsl-stylesheets/%{name}-%{version}.tar.bz2
+Source0:        %{name}-%{version}.tar.bz2
 Source1:        susexsl-fetch-source
 Source2:        %{name}.rpmlintrc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
