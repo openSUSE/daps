@@ -1485,7 +1485,7 @@ export XML_CATALOG_FILES
 #
 # get DocBook version first ...
 
-DOCBOOK_VERSION=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR) || exit_on_error "Could not get DocBook version. Seems $MAIN is not well-formed"
+DOCBOOK_VERSION=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR) || exit_on_error "Could not get DocBook version. Seems $MAIN is either not well-formed."
 
 #    || { DOCBOOK_VERSION=4; \
 #      "Could not get DocBook version, assuming DocBook 4"; } 
@@ -1504,7 +1504,7 @@ elif [[ 4 = $DOCBOOK_VERSION ]]; then
         $DOCBOOK4_STYLE_URI 2>/dev/null) || \
         exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
 else
-    exit_on_error "Fatal: Could not determine the DocBook version from $MAIN" 
+    exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document." 
 fi
 
 # remove the file:// string from the styles
