@@ -46,9 +46,10 @@ endif
 
 # Also needs a prerequisite on the entity files, since entities are resolved
 # during profiling, so profiling needs to be redone whenever the entities
-# change
+# change. 
+# The like is also true for the DC file.
 #
-$(PROFILES): $(ENTITIES_DOC)
+$(PROFILES): $(ENTITIES_DOC) $(DOCCONF)
 
 .PHONY: profile
 profile: $(PROFILES)
