@@ -164,8 +164,31 @@ class TestArticle():
       assert div is not None
 
       tp = div.xpath("h:div[@class='titlepage']", namespaces=self.ns)[0]
+
       assert tp is not None
 
 
+
+
+class TestArticleToc():
+   """
+   """
+   @classmethod
+   def setup_class(cls):
+      """ setup class (only once) and transform XML file
+      """
+      cls.xf = conf.XMLFile( os.path.join(DIR, "article.xml") )
+      cls.xf.parse( conf.STYLESHEETS["xhtml-single"] )
+      cls.result = cls.xf.transform()
+      cls.ns = conf.namespaces()
+
+   def test_div_class_toc(self):
+      """
+      Checks if /html/body/div/div[@class="toc"]
+      """
+      toc = self.result.xpath("/h:html/h:body/h:div/h:div[@class='toc']",
+                              namespaces=self.ns)[0]
+
+      assert toc is not None
 
 # EOF
