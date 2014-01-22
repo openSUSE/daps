@@ -215,7 +215,13 @@ class TestArticleToc():
                                namespaces=self.ns)[0]
       assert span is not None
 
-
+   def test_a_href_mysect(self):
+      """
+      Checks if /html/div/div/dl/dt/span/a[@href="#mysect"]
+      """
+      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#mysect']",
+                            namespaces=self.ns)[0]
+      assert a is not None
 
 
 # EOF
