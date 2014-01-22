@@ -191,4 +191,16 @@ class TestArticleToc():
 
       assert toc is not None
 
+   def test_strong(self):
+      """
+      Checks if /html/body/div/div/p/strong
+      """
+      strong = self.result.xpath("/h:html/h:body/h:div/h:div/h:p/h:strong",
+                                 namespaces=self.ns)[0]
+      assert strong is not None
+
+
+
+
+
 # EOF
