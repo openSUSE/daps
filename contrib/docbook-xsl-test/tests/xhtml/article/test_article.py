@@ -199,6 +199,13 @@ class TestArticleToc():
                                  namespaces=self.ns)[0]
       assert strong is not None
 
+   def test_dl_class_toc(self):
+      """
+      Checks if /html/body/div/div/dl[@class="toc"]
+      """
+      toc = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl[@class='toc']",
+                              namespaces=self.ns)[0]
+      assert toc is not None
 
 
 
