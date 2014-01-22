@@ -231,7 +231,14 @@ class TestArticleToc():
       span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span[@class='sect2']",
                                namespaces=self.ns)[0]
       assert span is not None
-
+   
+   def test_a_href_sect2(self):
+      """
+      Checks if /html/body/div/div/dl/dd/dl/dt/span/a[@href="#mysect2"]
+      """
+      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span/h:a[@href='#mysect2']",
+                            namespaces=self.ns)[0]
+      assert a is not None
 
 
 # EOF
