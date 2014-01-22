@@ -155,6 +155,17 @@ class TestArticle():
       # print("attrib:", child.attrib)
       assert child.attrib.get('class') == 'titlepage'
    
-   
+   def test_div_class_article(self):
+      """
+      Checks if /html/body/div[@class="article"]
+      """
+      div = self.result.xpath("/h:html/h:body/h:div[@class='article']", 
+                              namespaces=self.ns)[0]
+      assert div is not None
+
+      tp = div.xpath("h:div[@class='titlepage']", namespaces=self.ns)[0]
+      assert tp is not None
+
+
 
 # EOF
