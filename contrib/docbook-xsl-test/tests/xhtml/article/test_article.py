@@ -223,5 +223,15 @@ class TestArticleToc():
                             namespaces=self.ns)[0]
       assert a is not None
 
+   def test_span_class_sect2(self):
+      """
+      Checks if /html/body/div/div/dl/dd/dl/dt/span[@class="sect2"]
+      """
+
+      span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span[@class='sect2']",
+                               namespaces=self.ns)[0]
+      assert span is not None
+
+
 
 # EOF
