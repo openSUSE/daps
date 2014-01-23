@@ -9,6 +9,22 @@ Prerequisites
 * DocBook XSL stylesheet >= 1.77
 * DocBook 4.5
 
+How to Convert the XML File into HTML
+=====================================
+
+$ DB=/usr/share/xml/docbook/stylesheet/nwalsh/current/
+$ xsltproc --output foo.html $DB/xhtml/docbook.xsl foo.xml
+
+
+
+How to Format the HTML File
+===========================
+
+
+$ xmllint -format foo.html > foo-format.html
+
+
+
 
 How to Run the Test Suite
 =========================
