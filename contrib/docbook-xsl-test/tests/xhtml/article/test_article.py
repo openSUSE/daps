@@ -243,10 +243,10 @@ class TestArticleToc():
                             namespaces=self.ns)[0]
       assert a is not None
 
-   def test_all_sect1_title(self):
+   def test_all_sect_title(self):
       """
       Checks if all sect titles are available:
-      /html/body/div[@class='article']/div[@class='sect1']//*[class='title']
+      /html/body/div[@class='article']/div[@class='sect1']//*[@class='title']
       """
       
       restitles = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='sect1']//h:*[@class='title']",
@@ -260,7 +260,21 @@ class TestArticleToc():
       restitles = [i.getchildren()[0].tail for i in restitles]
       dbtitles=[i.text for i in dbtitles]
       assert restitles == dbtitles
+      
+   def test_all_ids(self):
+      """
+      Checks, if all ids are available
+      /html/body/div[@class='article']/div[@class='sect1']//*[@id]
+      """
+      resid = self.result.xpath("/h:html/h:body/h:div[@class='sect1']//h:*[@id]",
+                                namespaces=self.ns)
+      dbid = self.xf.xml.xpath("/article/sect1//id")
+      assert len(dbid) == len(resid)
+      
+      resid = [i.getchildren()[0].tail for i in resid]
+      dbid = [i.text for i in dbid]
 
+      assert dbid == resid 
 
 
 #   def test_div_class_sect1(self):
