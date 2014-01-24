@@ -130,7 +130,7 @@ class TestArticle():
       assert "DocBook XSL Stylesheets" in resmeta
 
    def test_div_article(self):
-      """Checks if /html/body/div[1]/@class='article'
+      """Checks if /html/body/div[1]/@class='article' is available 
       """
       res = self.result.xpath("/h:html/h:body/h:div[1]", 
                               namespaces=self.ns)[0].attrib.get("class")
@@ -157,7 +157,7 @@ class TestArticle():
    
    def test_div_class_article(self):
       """
-      Checks if /html/body/div[@class="article"]
+      Checks if /html/body/div[@class="article"] is available
       """
       div = self.result.xpath("/h:html/h:body/h:div[@class='article']", 
                               namespaces=self.ns)[0]
@@ -184,7 +184,7 @@ class TestArticleToc():
 
    def test_div_class_toc(self):
       """
-      Checks if /html/body/div/div[@class="toc"]
+      Checks if /html/body/div/div[@class="toc"] is available
       """
       toc = self.result.xpath("/h:html/h:body/h:div/h:div[@class='toc']",
                               namespaces=self.ns)[0]
@@ -193,7 +193,7 @@ class TestArticleToc():
 
    def test_strong(self):
       """
-      Checks if /html/body/div/div/p/strong
+      Checks if /html/body/div/div/p/strong is available
       """
       strong = self.result.xpath("/h:html/h:body/h:div/h:div/h:p/h:strong",
                                  namespaces=self.ns)[0]
@@ -201,7 +201,7 @@ class TestArticleToc():
 
    def test_dl_class_toc(self):
       """
-      Checks if /html/body/div/div/dl[@class="toc"]
+      Checks if /html/body/div/div/dl[@class="toc"] is available
       """
       toc = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl[@class='toc']",
                               namespaces=self.ns)[0]
@@ -209,7 +209,7 @@ class TestArticleToc():
 
    def test_span_class_sect1(self):
       """
-      Checks if /html/div/div/dl/dt/span[@class="sect1"]
+      Checks if /html/div/div/dl/dt/span[@class="sect1"] is available
       """
       span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span[@class='sect1']",
                                namespaces=self.ns)[0]
@@ -217,28 +217,58 @@ class TestArticleToc():
 
    def test_a_href_mysect(self):
       """
-      Checks if /html/div/div/dl/dt/span/a[@href="#mysect"]
+      Checks if /html/div/div/dl/dt/span/a[@href="#mysect"] is available
       """
-      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#mysect']",
+      sect1id = self.xf.xml.xpath("/article/sect1/@id")
+
+      assert sect1id 
+      xpath = sect1id[0]
+      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#{0}']".format(xpath),
                             namespaces=self.ns)[0]
       assert a is not None
 
    def test_span_class_sect2(self):
       """
-      Checks if /html/body/div/div/dl/dd/dl/dt/span[@class="sect2"]
+      Checks if /html/body/div/div/dl/dd/dl/dt/span[@class="sect2"] is available
       """
-
       span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span[@class='sect2']",
                                namespaces=self.ns)[0]
       assert span is not None
    
    def test_a_href_sect2(self):
       """
-      Checks if /html/body/div/div/dl/dd/dl/dt/span/a[@href="#mysect2"]
+      Checks if /html/body/div/div/dl/dd/dl/dt/span/a[@href="#mysect2"] is available
       """
       a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span/h:a[@href='#mysect2']",
                             namespaces=self.ns)[0]
       assert a is not None
 
+   def test_all_sect1_title(self):
+      """
+      Checks if all sect titles are available:
+      /html/body/div[@class='article']/div[@class='sect1']//*[class='title']
+      """
+      
+      restitles = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='sect1']//h:*[@class='title']",
+                                    namespaces=self.ns)
+      dbtitles = self.xf.xml.xpath("/article/sect1//title")
+
+      #Checks, if length of both lists are the same
+      assert len(dbtitles) == len(restitles)
+
+      #Checks, if all the text nodes are the same
+      restitles = [i.getchildren()[0].tail for i in restitles]
+      dbtitles=[i.text for i in dbtitles]
+      assert restitles == dbtitles
+
+
+
+#   def test_div_class_sect1(self):
+#      """
+#      Check if /html/body/div/div[@class="sect1"]
+#      """
+#     div = self.result.xpath("/h:html/h:body/h:div/h:div",
+#                            namespaces=self.ns)[0]
+#
 
 # EOF
