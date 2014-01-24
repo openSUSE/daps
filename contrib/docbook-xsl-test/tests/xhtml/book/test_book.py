@@ -57,13 +57,15 @@ class TestBookSections():
       Checks if all sect titles are available:
       /html/body/div[@class='book']/div[@class='chapter']/div[@class='sect1']//*[@class='title']
       """
-#/h:html/h:body/h:div[@class='book']/h:div[@class='chapter']/h:div[@class='sect1']
-      restitles = self.result.xpath("//h:*[@class='title']",
+      restitles = self.result.xpath("/h:html/h:body/h:div[@class='book']/h:div[@class='chapter']/h:div[@class='sect1']//h:*[@class='title']",
                                 namespaces=self.ns)
-      print(">>>",restitles)
-
       dbtitles = self.xf.xml.xpath("/book/chapter/sect1//title")
 
-      restitles=[ i.text  for i in restitles ]
-      dbtitles=[ i.text for i in dbtitles ]
+      # Checks, if length of both lists are the same
+      assert len(dbtitles) == len(restitles)
+
+      # Checks, if all text nodes are the same
+      restitles=[ i.getchildren()[0].tail  for i in restitles ]
+      dbtitles =[ i.text for i in dbtitles ]
       assert restitles == dbtitles
+
