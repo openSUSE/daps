@@ -25,7 +25,7 @@ class TestBook():
 
    def test_div_class(self):
         """
-        Checks if  /html/body/div[@class="book"]
+        Checks if /html/body/div[@class="book"] is available
         """
         res = self.result.xpath("/h:html/h:body/h:div[@class='book']",
                                 namespaces=self.ns)[0]
@@ -33,10 +33,10 @@ class TestBook():
 
    def test_div_titlepage(self):
        """
-       Checks if /html/body/div/div[@class="titlepage"]
+       Checks if /html/body/div[@class='book']/div[@class='titlepage'] is available
        """
         
-       tp = self.result.xpath("/h:html/h:body/h:div/h:div[@class='titlepage']",
+       tp = self.result.xpath("/h:html/h:body/h:div[@class='book']/h:div[@class='titlepage']",
                               namespaces=self.ns)[0]
        assert tp is not None
 
