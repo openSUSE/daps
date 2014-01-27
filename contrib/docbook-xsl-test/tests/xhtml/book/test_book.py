@@ -138,7 +138,8 @@ class TestBookTOC():
 
       
    def test_div_toc_dl(self):
-      """Checks if TOC contains dl 
+      """
+      Checks if TOC contains dl 
       """
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl", 
                               namespaces=self.ns)[0].attrib.get("class")
@@ -149,6 +150,28 @@ class TestBookTOC():
 
 
 
+   def test_div_toc_sect1(self):
+      """
+      Checks if sect1 is available in toc, both @id and text
+      """
+      res = self.result.xpath("/h:html/h:body/h:div[1]/h:div[@class='toc']//h:span[@class='sect1']",
+                              namespaces=self.ns)[0]
+      assert "sect1" == res.attrib.get("class")
+      
+      dbid = self.xf.xml.xpath("/*/chapter/sect1[1]/@id", 
+                               namespaces=self.ns)[0]
+
+      htmlid = res.xpath("substring-after(h:a/@href, '#')", 
+                         namespaces=self.ns)
+      assert dbid == htmlid
+      
+      dbtitle = self.xf.xml.xpath("/*/chapter/sect1[1]/title", 
+                                  namespaces=self.ns)[0]
+      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect1']/h:a", 
+                            namespaces=self.ns)[0]
+      
+      assert dbtitle.text == htmltitle.text
+   
 
 
 
