@@ -136,6 +136,16 @@ class TestBookTOC():
 
       assert href is not None
 
+      
+   def test_div_toc_dl(self):
+      """Checks if TOC contains dl 
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl", 
+                              namespaces=self.ns)[0].attrib.get("class")
+      assert "toc" == res
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']/h:dl/h:dt", 
+                              namespaces=self.ns)[0]
+      assert "{{{0}}}dt".format(self.ns["h"]) == res.tag
 
 
 
@@ -148,30 +158,4 @@ class TestBookTOC():
 
 
 
-#   def test_title_toc(self):
-#      """
-#      Toc gleicher Inhalt wie Titel der sects
-#      """
-#      toctitles = self.result.xpath("/h:html/h:body/h:div[@class='book']/h:div[@cla#ss='toc#']//h:*[@href]",
-#                                    namespaces=self.ns)
-#      secttitles = self.xf.xml.xpath("/book/chapter/@id")
-#
-#      assert len(toctitles) == len(secttitles)
-
-
-
-
-
- 
-#   def test_href(self):
-#     """Verlinkungen checken 
-#     """
-#     sect1id = self.xf.xml.xpath("/book/chapter/@id")
-#
-#     assert sect1id 
-#     xpath = sect1id[0]
-#     
-#    href = self.result.xpath("/h:html/h:body/h:div[@class='book']/h:div[@class='toc#']//h:a[@href=''#{0}']".format(xpath),
-#                              namespaces=self.ns)[0]
-#     assert href is not None
      
