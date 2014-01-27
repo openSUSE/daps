@@ -171,6 +171,26 @@ class TestBookTOC():
                             namespaces=self.ns)[0]
       
       assert dbtitle.text == htmltitle.text
+
+
+
+   def test_div_toc_sect2(self):
+      """Checks if sect2 is available in toc, both @id and text
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']", 
+                              namespaces=self.ns)[0]
+      assert "sect2" == res.attrib.get("class")
+      
+      dbid = self.xf.xml.xpath("/*/chapter/sect1[1]/sect2[1]/@id", 
+                               namespaces=self.ns)[0]
+      htmlid = res.xpath("substring-after(h:a/@href, '#')", 
+                         namespaces=self.ns)
+      assert dbid == htmlid
+      
+      dbtitle = self.xf.xml.xpath("/*/chapter/sect1[1]/sect2[1]/title", 
+                                  namespaces=self.ns)[0]
+      htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']/h:a", 
+                            namespaces=self.ns)[0]
    
 
 
