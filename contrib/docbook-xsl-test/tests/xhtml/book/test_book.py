@@ -49,6 +49,16 @@ class TestBook():
                                  namespaces=self.ns)
       assert btitle is not None
 
+   
+   def test_head_generator(self):
+      """
+      Checks if meta[@name='generator'] contains DocBook string
+      """
+      resmeta = self.result.xpath("/h:html/h:head/h:meta[@name='generator']", 
+                                  namespaces=self.ns)[0].attrib.get("content")
+
+      assert "DocBook XSL Stylesheets" in resmeta
+
 
 
 class TestBookSections():
