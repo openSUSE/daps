@@ -175,7 +175,8 @@ class TestBookTOC():
 
 
    def test_div_toc_sect2(self):
-      """Checks if sect2 is available in toc, both @id and text
+      """
+      Checks if sect2 is available in toc, both @id and text
       """
       res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']", 
                               namespaces=self.ns)[0]
@@ -191,6 +192,16 @@ class TestBookTOC():
                                   namespaces=self.ns)[0]
       htmltitle = res.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect2']/h:a", 
                             namespaces=self.ns)[0]
+
+   
+
+   def test_div_toc_sect6(self):
+      """
+      Checks if sect6 is NOT available
+      """
+      res = self.result.xpath("/h:html/h:body//h:div[@class='toc']//h:span[@class='sect6']",
+                              namespaces=self.ns)
+      assert len(res) == 0
    
 
 
