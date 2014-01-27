@@ -39,8 +39,18 @@ class TestBook():
        tp = self.result.xpath("/h:html/h:body/h:div[@class='book']/h:div[@class='titlepage']",
                               namespaces=self.ns)[0]
        assert tp is not None
-
    
+
+   def test_booktitle(self):
+      """
+      Checks, if book title is available 
+      """
+      btitle = self.result.xpath("/h:html/h:head/h:title",
+                                 namespaces=self.ns)
+      assert btitle is not None
+
+
+
 class TestBookSections():
    """Tests Sections """
    @classmethod
