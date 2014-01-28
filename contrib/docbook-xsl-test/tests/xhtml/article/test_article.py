@@ -157,7 +157,7 @@ class TestArticle():
    
    def test_div_class_article(self):
       """
-      Checks if /html/body/div[@class="article"] is available
+      Checks, if /html/body/div[@class="article"] is available
       """
       div = self.result.xpath("/h:html/h:body/h:div[@class='article']", 
                               namespaces=self.ns)[0]
@@ -222,8 +222,8 @@ class TestArticleToc():
       sect1id = self.xf.xml.xpath("/article/sect1/@id")
 
       assert sect1id 
-      xpath = sect1id[0]
-      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#{0}']".format(xpath),
+      content = sect1id[0]
+      a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#{0}']".format(content),
                             namespaces=self.ns)[0]
       assert a is not None
 
@@ -275,6 +275,22 @@ class TestArticleToc():
       dbid = [i.text for i in dbid]
 
       assert dbid == resid 
+
+   def test_all_href(self):
+      """
+      Checks, if the hrefs are available
+      """
+      sectid = self.xf.xml.xpath("/article/sect1//@id")
+
+      assert sectid
+      content = sectid[0]
+      
+      href = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='toc']/h:dl[@class='toc']/h:dt/h:span/h:a[@href='#{0}']".format(content),
+                               namespaces=self.ns)
+      
+
+      assert href is not None
+   
 
 
 #   def test_div_class_sect1(self):
