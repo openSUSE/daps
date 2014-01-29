@@ -22,6 +22,112 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
+  <!-- Hopefully, a future version of the DocBook stylesheets will feature a
+       more
+       stomachable version of this template, in which case we can simply move our
+       modification to not use example.properties except when ...[FIXME] -->
+  <xsl:template name="formal.object">
+    <xsl:param name="placement" select="'before'"/>
+
+    <xsl:variable name="id">
+      <xsl:call-template name="object.id"/>
+    </xsl:variable>
+
+    <xsl:variable name="content">
+      <xsl:if test="$placement = 'before'">
+        <xsl:call-template name="formal.object.heading">
+          <xsl:with-param name="placement" select="$placement"/>
+        </xsl:call-template>
+      </xsl:if>
+      <fo:block>
+        <!-- The equivalent of div.complex-example in HTML-->
+        <xsl:if test="self::example">
+          <xsl:if test="glosslist|bibliolist|itemizedlist|orderedlist|
+                        segmentedlist|simplelist|variablelist|programlistingco|
+                        screenco|screenshot|cmdsynopsis|funcsynopsis|
+                        classsynopsis|fieldsynopsis|constructorsynopsis|
+                        destructorsynopsis|methodsynopsis|formalpara|para|
+                        simpara|address|blockquote|graphicco|mediaobjectco|
+                        indexterm|beginpage">
+            <xsl:attribute name="border-left"
+              ><xsl:value-of select="&mediumline;"/>mm solid &light-gray;</xsl:attribute>
+            <xsl:attribute name="margin-left"
+              ><xsl:value-of select="&mediumline; div 2"/>mm</xsl:attribute>
+              <!-- This is seemingly illogical... but looks better with both FOP and
+               XEP. -->
+            <xsl:attribute name="padding-left"
+              ><xsl:value-of select="&columnfragment;"/>mm</xsl:attribute>
+          </xsl:if>
+        </xsl:if>
+        <xsl:apply-templates/>
+      </fo:block>
+      <xsl:if test="$placement != 'before'">
+        <xsl:call-template name="formal.object.heading">
+          <xsl:with-param name="placement" select="$placement"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:variable name="keep.together">
+      <xsl:call-template name="pi.dbfo_keep-together"/>
+    </xsl:variable>
+
+    <xsl:choose>
+      <!-- tables have their own templates and
+           are not handled by formal.object -->
+      <xsl:when test="self::figure">
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="figure.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                            select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:when>
+      <xsl:when test="self::example">
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="example.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                            select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:when>
+      <xsl:when test="self::equation">
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="equation.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                            select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:when>
+      <xsl:when test="self::procedure">
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="procedure.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                            select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:when>
+      <xsl:otherwise>
+        <fo:block id="{$id}"
+                  xsl:use-attribute-sets="formal.object.properties">
+          <xsl:if test="$keep.together != ''">
+            <xsl:attribute name="keep-together.within-column"><xsl:value-of
+                            select="$keep.together"/></xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </fo:block>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template
     match="procedure|example|table|figure|variablelist|itemizedlist|orderedlist"
     mode="object.label.template">
