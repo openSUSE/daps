@@ -147,10 +147,10 @@ class TestArticle():
       """Checks if a div[@class='sect1'] element is available
       """
       res = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='sect1']", 
-                              namespaces=self.ns)[0]
-      assert res
+                              namespaces=self.ns)
+      assert len(res)
+      res=res[0]
       
-      # print(">>>", res, dir(res), res.getchildren() )
       child = res.getchildren()[0]
       # print("attrib:", child.attrib)
       assert child.attrib.get('class') == 'titlepage'
@@ -160,12 +160,12 @@ class TestArticle():
       Checks, if /html/body/div[@class="article"] is available
       """
       div = self.result.xpath("/h:html/h:body/h:div[@class='article']", 
-                              namespaces=self.ns)[0]
-      assert div 
+                              namespaces=self.ns)
+      assert len(div) 
+      div=div[0]
+      tp = div.xpath("h:div[@class='titlepage']", namespaces=self.ns)
 
-      tp = div.xpath("h:div[@class='titlepage']", namespaces=self.ns)[0]
-
-      assert tp 
+      assert len(tp) 
    
 
 
@@ -192,7 +192,7 @@ class TestArticleToc():
       toc = self.result.xpath("/h:html/h:body/h:div/h:div[@class='toc']",
                               namespaces=self.ns)[0]
 
-      assert toc 
+      assert len(toc) 
 
    def test_strong(self):
       """
@@ -200,23 +200,23 @@ class TestArticleToc():
       """
       strong = self.result.xpath("/h:html/h:body/h:div/h:div/h:p/h:strong",
                                  namespaces=self.ns)
-      assert strong 
+      assert len(strong) 
 
    def test_dl_class_toc(self):
       """
       Checks if /html/body/div/div/dl[@class="toc"] is available
       """
       toc = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl[@class='toc']",
-                              namespaces=self.ns)[0]
-      assert toc
+                              namespaces=self.ns)
+      assert len(toc)
 
    def test_span_class_sect1(self):
       """
       Checks if /html/div/div/dl/dt/span[@class="sect1"] is available
       """
       span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span[@class='sect1']",
-                               namespaces=self.ns)[0]
-      assert span 
+                               namespaces=self.ns)
+      assert len(span) 
 
    def test_a_href_mysect(self):
       """
@@ -228,7 +228,7 @@ class TestArticleToc():
       content = sect1id[0]
       a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dt/h:span/h:a[@href='#{0}']".format(content),
                             namespaces=self.ns)
-      assert a 
+      assert len(a) 
 
    def test_span_class_sect2(self):
       """
@@ -236,7 +236,7 @@ class TestArticleToc():
       """
       span = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span[@class='sect2']",
                                namespaces=self.ns)[0]
-      assert span 
+      assert len(span) 
    
    def test_a_href_sect2(self):
       """
@@ -245,7 +245,7 @@ class TestArticleToc():
       a = self.result.xpath("/h:html/h:body/h:div/h:div/h:dl/h:dd/h:dl/h:dt/h:span/h:a[@href='#mysect2']",
                             namespaces=self.ns)
       
-      assert a 
+      assert len(a) 
 
    def test_all_sect_title(self):
       """
@@ -293,13 +293,15 @@ class TestArticleToc():
                                namespaces=self.ns)
       
 
-      assert href 
+      assert len(href) 
 
    def test_abstract(self):
       """
       Checks, if the abstract is available
       """
-      
+      abstract = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='abstract']",
+                                   namespaces=self.ns)
+      assert len(abstract)
    
 
 
