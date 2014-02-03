@@ -303,6 +303,27 @@ class TestArticleToc():
                                    namespaces=self.ns)
       assert len(abstract)
    
+   def test_h2_class(self):
+      """
+      Checks, if h2 is available
+      """
+      h2 = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='titlepage']/h:div/h:div/h:h2[@class='title']/h:a",
+                             namespaces=self.ns)
+      assert len(h2)
+
+   def test_h2_title(self):
+      """
+      """
+      h2 = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div[@class='sect1']/h:div[@class='titlepage']/h:div/h:div/h:h2[@class='title']/h:a",
+                              namespaces=self.ns)
+      assert len(h2)
+   
+   def test_h6(self):
+      """
+      """
+      h6 = self.result.xpath("/h:html/h:body/h:div[@class='article']/h:div/h:div/h:div/h:div/h:div/h:div/h:div/h:div/h:h6",
+                             namespaces=self.ns)
+      assert len(h6)
 
 
 #   def test_div_class_sect1(self):
