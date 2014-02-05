@@ -30,6 +30,7 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:svg="http://www.w3.org/2000/svg">
 
+
 <xsl:template name="inline.monoseq">
   <xsl:param name="content">
     <xsl:call-template name="simple.xlink">
@@ -39,18 +40,29 @@
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
-  <xsl:param name="mono-ancestor" select="0"/>
+  <xsl:param name="mode" select="'normal'"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
   <xsl:variable name="mono-verbatim-ancestor">
-    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+    <xsl:if test="$mode = 'mono-ancestor' or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
+  <xsl:variable name="underline-color">
+    <xsl:choose>
+      <xsl:when test="(ancestor::title and
+                      not(ancestor::note or ancestor::tip or ancestor::important or
+                          ancestor::warning or ancestor::caution)) or
+                      $purpose = 'xref'">
+        <xsl:value-of select="$dark-green"/>
+      </xsl:when>
+      <xsl:otherwise>&mid-gray;</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal"
     font-style="normal">
     <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -101,18 +113,29 @@
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
-  <xsl:param name="mono-ancestor" select="0"/>
+  <xsl:param name="mode" select="'normal'"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
   <xsl:variable name="mono-verbatim-ancestor">
-    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+    <xsl:if test="$mode = 'mono-ancestor'  or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
+    <xsl:variable name="underline-color">
+    <xsl:choose>
+      <xsl:when test="(ancestor::title and
+                      not(ancestor::note or ancestor::tip or ancestor::important or
+                          ancestor::warning or ancestor::caution)) or
+                      $purpose = 'xref'">
+        <xsl:value-of select="$dark-green"/>
+      </xsl:when>
+      <xsl:otherwise>&mid-gray;</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold"
     font-style="normal">
     <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -163,18 +186,29 @@
     </xsl:call-template>
   </xsl:param>
   <xsl:param name="purpose" select="'none'"/>
-  <xsl:param name="mono-ancestor" select="0"/>
+  <xsl:param name="mode" select="'normal'"/>
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
   <xsl:variable name="mono-verbatim-ancestor">
-    <xsl:if test="$mono-ancestor = 1 or ancestor::screen or
+    <xsl:if test="$mode = 'mono-ancestor' or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
+  </xsl:variable>
+  <xsl:variable name="underline-color">
+    <xsl:choose>
+      <xsl:when test="(ancestor::title and
+                      not(ancestor::note or ancestor::tip or ancestor::important or
+                          ancestor::warning or ancestor::caution)) or
+                      $purpose = 'xref'">
+        <xsl:value-of select="$dark-green"/>
+      </xsl:when>
+      <xsl:otherwise>&mid-gray;</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
     font-weight="normal">
     <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
+      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -284,12 +318,14 @@
   </xsl:apply-templates>
 </xsl:template>
 
-
+<!-- No mode -->
 <xsl:template match="command|userinput">
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mode" select="'normal'"/>
 
   <xsl:call-template name="inline.boldmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mode" select="$mode"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -298,15 +334,17 @@
                     |code|option|parameter|prompt|systemitem|varname|email|uri
                     |cmdsynopsis/command|function|literal|package">
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mode" select="'normal'"/>
 
   <xsl:call-template name="inline.monoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mode" select="$mode"/>
   </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="sgmltag|tag" name="sgmltag">
   <xsl:param name="purpose" select="'none'"/>
-  <xsl:param name="mono-ancestor" select="0"/>
+  <xsl:param name="mode" select="'normal'"/>
   <xsl:variable name="class">
     <xsl:if test="@class">
       <xsl:value-of select="@class"/>
@@ -339,7 +377,7 @@
 
   <xsl:call-template name="inline.monoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
-    <xsl:with-param name="mono-ancestor" select="$mono-ancestor"/>
+    <xsl:with-param name="mode" select="$mode"/>
     <xsl:with-param name="before" select="$before"/>
     <xsl:with-param name="after" select="$after"/>
   </xsl:call-template>
@@ -347,18 +385,22 @@
 
 <xsl:template match="replaceable|structfield">
   <xsl:param name="purpose" select="'none'"/>
+  <xsl:param name="mode" select="'normal'"/>
 
   <xsl:call-template name="inline.italicmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
+    <xsl:with-param name="mode" select="$mode"/>
   </xsl:call-template>
 </xsl:template>
 
+
+<!-- Mode: mono-ancestor -->
 <xsl:template match="command|userinput" mode="mono-ancestor">
   <xsl:param name="purpose" select="'none'"/>
 
   <xsl:call-template name="inline.boldmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
-    <xsl:with-param name="mono-ancestor" select="1"/>
+    <xsl:with-param name="mode" select="'mono-ancestor'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -371,7 +413,7 @@
 
   <xsl:call-template name="inline.monoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
-    <xsl:with-param name="mono-ancestor" select="1"/>
+    <xsl:with-param name="mode" select="'mono-ancestor'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -380,7 +422,7 @@
 
   <xsl:call-template name="sgmltag">
     <xsl:with-param name="purpose" select="$purpose"/>
-    <xsl:with-param name="mono-ancestor" select="1"/>
+    <xsl:with-param name="mode" select="'mono-ancestor'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -390,7 +432,7 @@
 
   <xsl:call-template name="inline.italicmonoseq">
     <xsl:with-param name="purpose" select="$purpose"/>
-    <xsl:with-param name="mono-ancestor" select="1"/>
+    <xsl:with-param name="mode" select="'mono-ancestor'"/>
   </xsl:call-template>
 </xsl:template>
 
