@@ -332,7 +332,7 @@
 <xsl:template match="classname|exceptionname|interfacename|methodname
                     |computeroutput|constant|envar|filename|function|literal
                     |code|option|parameter|prompt|systemitem|varname|email|uri
-                    |cmdsynopsis/command|function|package">
+                    |cmdsynopsis/command|package">
   <xsl:param name="purpose" select="'none'"/>
   <xsl:param name="mode" select="'normal'"/>
 
@@ -407,7 +407,7 @@
 <xsl:template match="classname|exceptionname|interfacename|methodname
                     |computeroutput|constant|envar|filename|function|literal
                     |code|option|parameter|prompt|systemitem|varname|email|uri
-                    |cmdsynopsis/command|function|package"
+                    |cmdsynopsis/command|package"
   mode="mono-ancestor">
   <xsl:param name="purpose" select="'none'"/>
 
