@@ -109,7 +109,7 @@ Requires:       python-xml
 Requires:       python-lxml
 #Requires:       sgml-skel
 Requires:       suse-xsl-stylesheets
-Requires:       svg-dtd
+Requires:       svg-schema
 Requires:       transfig
 Requires:       xml-commons-jaxp-1.3-apis
 %if 0%{?suse_version} >= 1140
