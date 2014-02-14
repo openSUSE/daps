@@ -117,6 +117,7 @@ Requires:       xmlgraphics-fop >= 0.94
 %else
 Requires:       fop >= 0.94
 %endif
+Requires:       xmlstarlet
 
 Recommends:     aspell aspell-en
 %if 0%{?suse_version} < 1210
@@ -137,7 +138,6 @@ Recommends:     remake
 # Internal XEP package:
 Recommends:     xep
 Recommends:     xmlformat
-Recommends:     xmlstarlet
 
 Obsoletes:      susedoc < 4.3.32
 Provides:       susedoc = 4.3.32
