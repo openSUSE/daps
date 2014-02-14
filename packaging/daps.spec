@@ -124,7 +124,6 @@ Recommends:     aspell-en-huge
 %endif
 Recommends:     daps-docmanager
 Recommends:     docbook_5
-Recommends:     emacs psgml
 Recommends:     epubcheck
 Recommends:     exiftool
 Recommends:     jing
