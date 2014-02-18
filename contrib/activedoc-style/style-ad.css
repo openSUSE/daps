@@ -544,7 +544,8 @@ p a:visited {
     color: #5C3566;
 }
 
-code, .command, .keycap, .replaceable {
+code, .command, .keycap, .replaceable, .code, .envar, .filename, .function,
+.literal, .package {
     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     font-weight: normal;
     padding: 0 4px;
@@ -555,27 +556,33 @@ code, .command, .keycap, .replaceable {
     line-height: 120%;
 }
 
-code, .command, .keycap {
+code, .command, .keycap, .code, .envar, .filename, .function,
+.literal, .package  {
     font-style: normal;
 }
 
-code code, code .command, .command code, code .replaceable,
-.command .replaceable, .replaceable code, .replaceable .command {
+code code, code .command, .command code, .command span, code .replaceable,
+.command .replaceable, .replaceable code, .replaceable .command, .code span,
+.envar span, .filename span, .function span, .literal span, .package span,
+.code .command, .envar .command, .filename .command, .function .command,
+.literal .command, .package .command, .code .replaceable, .envar .replaceable,
+.filename .replaceable, .function .replaceable, .literal .replaceable,
+.package .replaceable {
     padding: 0;
     border: none;
 }
 
 
-.name code, .name .command, a .command, a code,
-.admonition h6 .command, .admonition h6 code {
+.name code, .name .command, .name span, a .command, a code, .name span,
+.admonition h6 .command, .admonition h6 code, .admonition h6 span {
     color: inherit;
 }
 
-.admonition h6 .command, .admonition h6 code {
+.admonition h6 .command, .admonition h6 code, .admonition h6 span {
     border-color: #D1D1D3;
 }
 
-code {
+code, .code, .envar, .filename, .function, .literal, .package {
     font-weight: normal;
 }
 
@@ -583,7 +590,7 @@ code {
     font-weight: 600;
 }
 
-.screen code.userprompt,.screen code.rootprompt {
+.screen .userprompt,.screen .rootprompt {
     -moz-user-select: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -591,11 +598,11 @@ code {
     user-select: none;
 }
 
-.screen code.userprompt {
+.screen .userprompt {
     color: #666;
 }
 
-.screen code.rootprompt {
+.screen .rootprompt {
     color: #900;
 }
 
@@ -621,7 +628,9 @@ code {
     text-align: left;
 }
 
-.screen code, .screen .command, .screen .replaceable {
+.screen code, .screen .command, .screen .replaceable, .screen .code,
+.screen .envar, .screen .filename, .screen .function, .screen .literal,
+.screen .package {
     border-radius: 0;
     background-color: transparent;
     font-size: 100%;
@@ -629,7 +638,7 @@ code {
     padding: 0;
 }
 
-.screen code {
+.screen code, .screen span {
     color: #333;
 }
 
@@ -755,6 +764,7 @@ div.figure .mediaobject {
     background-color: #FFF;
     width: auto;
     margin: 0 auto;
+    min-width: 50px;
     max-width: 100%;
     max-width: calc(100% - 2px);
     max-width: -moz-calc(100% - 2px);
@@ -785,6 +795,7 @@ div.figure .name, div.figure .permalink {
 }
 
 .informalfigure img {
+    min-width: 50px;
     max-width: 100%;
     display: block;
     color: #999;
@@ -810,7 +821,8 @@ div.figure .name, div.figure .permalink {
 
 a:hover .keycap, a:focus .keycap, a:active .keycap,
 a:hover .command, a:focus .command, a:active .command,
-a:hover code, a:focus code, a:active code {
+a:hover code, a:focus code, a:active code,
+a:hover span, a:focus span, a:active span {
     border-color: #439239;
 }
 
@@ -872,12 +884,19 @@ a:hover code, a:focus code, a:active code {
 }
 
 .procedure-title code, .procedure-title .command, .procedure-title .keycap,
+.procedure-title span,
 .table-title code, .table-title .command, .table-title .keycap,
+.table-title span,
 .example-title code, .example-title .command, .example-title .keycap,
+.example-title span,
 .figure-title code, .figure-title .command, .figure-title .keycap,
-.orderedlist-title code, .orderedlist-title .command, .orderedlist-title .keycap,
-.variablelist-title code, .variablelist-title .command, .variablelist-title .keycap,
- .itemizedlist-title code, .itemizedlist-title .command, .itemizedlist-title .keycap {
+.figure-title span,
+.orderedlist-title code, .orderedlist-title .command,
+.orderedlist-title .keycap, .orderedlist-title span,
+.variablelist-title code, .variablelist-title .command,
+.variablelist-title .keycap, .variablelist-title span,
+ .itemizedlist-title code, .itemizedlist-title .command,
+ .itemizedlist-title .keycap, .itemizedlist-title span {
     text-transform: none;
 }
 
@@ -1028,7 +1047,7 @@ div.itemizedlist {
     margin: 0 0 24px;
 }
 
-.question, .question code, .question .literal {
+.question, .question code, .question span, .question .literal {
     color: #666;
 }
 
@@ -1045,8 +1064,10 @@ div.itemizedlist {
 }
 
 .js-on .question:hover code, .js-on .question:focus code,
-.js-on .active .question code, .js-on .question:hover .literal,
-.js-on .question:focus .literal, .js-on .active .question .literal {
+.js-on .active .question code, .js-on .question:hover span,
+.js-on .question:focus span, .js-on .active .question span,
+.js-on .question:hover .literal, .js-on .question:focus .literal,
+.js-on .active .question .literal {
     color: #333;
 }
 
