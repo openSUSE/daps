@@ -356,4 +356,14 @@ GERMANY</xsl:param>
 <xsl:param name="titlepage.background.width"
   ><xsl:value-of select="(&column; * 5) + (&gutter; * 3)"/>mm</xsl:param>
 
+
+<!-- Characters for the hyphenation algorithm: 
+          Contains characters hyhenated before or after other text 
+-->
+<xsl:param name="ulink.hyphenate.before.chars"
+   >.,%?&amp;#\~+{_-</xsl:param>
+<xsl:param name="ulink.hyphenate.after.chars"
+   >/:@=};</xsl:param>
+
+
 </xsl:stylesheet>
