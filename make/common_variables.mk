@@ -125,32 +125,59 @@ endif
 # supported profiling attributes arch, condition, os, and vendor.
 # That setup allows to not have to redo profiling every time.
 #
-# Profiling attributes can be entered as a semicolon separated list, we
-# need to replace the ";" with "_"
-#
-PROFILEDIR := $(PROFILE_PARENT_DIR)
 ifdef PROFILE_URN
-  # add a /p in case none of the profiling variables is set - otherwise we
-  # would not have a directory name
-  PROFILEDIR := $(PROFILEDIR)/p
   ifdef PROFARCH
-    PROFILEDIR := $(PROFILEDIR)_$(subst ;,_,$(PROFARCH))
+    PROFILEDIR := $(PROFILEDIR)_$(PROFARCH)
   endif
   ifdef PROFCONDITION
-    PROFILEDIR := $(PROFILEDIR)_$(subst ;,_,$(PROFCONDITION))
+    PROFILEDIR := $(PROFILEDIR)_$(PROFCONDITION)
   endif
   ifdef PROFOS
-    PROFILEDIR := $(PROFILEDIR)_$(subst ;,_,$(PROFOS))
+    PROFILEDIR := $(PROFILEDIR)_$(PROFOS)
   endif
   ifdef PROFVENDOR
-    PROFILEDIR := $(PROFILEDIR)_$(subst ;,_,$(PROFVENDOR))
+    PROFILEDIR := $(PROFILEDIR)_$(PROFVENDOR)
   endif
+  #
+  # cleanup
+  #
+  # remove leading "_"
+  PROFILEDIR := $(shell echo "$(PROFILEDIR)" | cut -c2-)
+
+  # Profiling attributes can be entered as a semicolon separated list, we
+  # need to replace the ";" with "_"
+  # In case the attributes contain spaces, we need to replace them with "_"
+  # as well, since make cannot cope with spaces in directory and filenames
+  PROFILEDIR := $(subst ;,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst $(SPACE),_,$(PROFILEDIR))
+  # replace illegal and unwanted characters with "_"
+  PROFILEDIR := $(subst /,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst \,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst %,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst |,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst *,_,$(PROFILEDIR))
+  PROFILEDIR := $(subst ?,_,$(PROFILEDIR))
 else
+  # no PROFILE_URN specified
   PROFILEDIR := $(PROFILEDIR)/noprofile
 endif
+
+#
+# Also set to noprofile in case none of the profiling variables is set
+# in order to avoid an empty PROFILEDIR variable
+ifeq "$(strip $(PROFILEDIR))" ""
+  PROFILEDIR := $(PROFILEDIR)/noprofile
+endif
+
 #
 # if remarks is turned on, add corresponding strings
 PROFILEDIR := $(PROFILEDIR)$(REMARK_STR)
+
+#
+# FINALLY, prefix PROFILEDIR with PROFILE_PARENT_DIR
+PROFILEDIR := $(PROFILE_PARENT_DIR)/$(PROFILEDIR)
+
+
 #
 # profiled MAIN
 PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
