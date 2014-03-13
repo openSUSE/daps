@@ -59,11 +59,7 @@ html, body {
 }
 
 #_toolbar-bottom,
-#_fixed-header-wrap #_bubble-toc, #_content > .set, #_content > .book,
-#_content > .article, #_content > .part, #_content > .chapter, #_content > .preface,
-#_content > .appendix, #_content > .glossary, #_content > .reference,
-#_content > .refentry, #_content > .bibliography, #_content > .index,
-.page-bottom {
+#_fixed-header-wrap #_bubble-toc, .documentation, .page-bottom {
     margin: 0 auto;
     min-width: 150px;
     max-width: 978px;
@@ -83,11 +79,7 @@ html, body {
     padding-top: 40px;
 }
 
-#_footer, #_toolbar-bottom, #_content > .set, #_content > .book,
-#_content > .article, #_content > .part, #_content > .chapter,
-#_content > .preface, #_content > .appendix, #_content > .glossary,
-#_content > .reference, #_content > .refentry, #_content > .bibliography,
-#_content > .index, #_content > .page-bottom {
+#_footer, #_toolbar-bottom, .documentation, .page-bottom {
     overflow: hidden;
 }
 
@@ -1173,17 +1165,14 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 /* .CHAPTER/... AREA */
 
-#_content > .set, #_content > .book, #_content > .article, #_content > .part,
-#_content > .chapter, #_content > .preface, #_content > .appendix,
-#_content > .glossary, #_content > .reference, #_content > .refentry,
-#_content > .bibliography, #_content > .index {
+.documentation {
     padding: 0 20px;
 }
 
 
 /* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
 /* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
-#_content a[id] {
+.documentation a[id] {
     position: relative;
     top: -33px;
     display: block;
@@ -1191,7 +1180,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     height: 0;
 }
 
-#_content [id]:target > span, #_content .admonition[id]:target > h6 {
+.documentation [id]:target > span, .documentation .admonition[id]:target > h6 {
     background-color: rgba(255,255,0,0.3);
     transition: background-color 0.2s ease-out 0.3s;
     /* Clean the below up in Q3 2013 or so... */
@@ -1224,7 +1213,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     display: none;
 }
 
-#_content .screen a[id] {
+.documentation .screen a[id] {
     display: none;
 }
 
@@ -1565,7 +1554,7 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
 
 /* Text styles */
 
-#_content span, #_content a, #_content p, #_content em, #_content strong {
+.documentation span, .documentation a, .documentation p, .documentation em, .documentation strong {
     position: relative;
     z-index: 2;
 }
@@ -2316,7 +2305,7 @@ div.blockquote {
     padding: 10px;
 }
 
-#_content > .doc-status {
+.documentation > .doc-status {
     margin: 0 auto;
     min-width: 380px;
     max-width: 978px;
@@ -2365,10 +2354,7 @@ body.draft {
         color: #202020;
     }
 
-    #_content > .set, #_content > .book, #_content > .article,
-    #_content > .part, #_content > .chapter, #_content > .preface,
-    #_content > .appendix, #_content > .glossary, #_content > .reference,
-    #_content > .refentry, #_content > .bibliography, #_content > .index {
+    .documentation {
         padding: 0;
     }
 
@@ -2537,10 +2523,7 @@ body.draft {
         padding: 0;
     }
 
-    #_footer, #_content > .set, #_content > .book, #_content > .article, #_content > .part,
-    #_content > .chapter, #_content > .preface, #_content > .appendix,
-    #_content > .glossary, #_content > .reference, #_content > .refentry,
-    #_content > .bibliography, #_content > .index {
+    #_footer, .documentation {
         padding: 0 10px;
     }
 
@@ -2873,7 +2856,7 @@ body.draft {
         margin: 0 auto;
     }
 
-    #_content ul, #_content ol {
+    .documentation ul, .documentation  ol {
         padding-left: 10px;
     }
 
@@ -2919,7 +2902,7 @@ body.draft {
         max-width: -webkit-calc(100% + 20px);
         max-width: calc(100% + 20px);
     }
-    #_content ol.procedure {
+    .documentation  ol.procedure {
         padding-left: 20px;
     }
 

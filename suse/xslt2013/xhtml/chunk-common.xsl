@@ -614,9 +614,11 @@
               <xsl:with-param name="node" select="'id-content'"/>
             </xsl:call-template>
             <xsl:call-template name="metadata"/>
+            <div class="documentation">
 
             <xsl:copy-of select="$content"/>
 
+            </div>
             <div class="page-bottom">
               <xsl:call-template name="bottom.navigation">
                 <xsl:with-param name="prev" select="$prev"/>

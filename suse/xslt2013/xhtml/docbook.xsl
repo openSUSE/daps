@@ -510,7 +510,7 @@
   </xsl:template>
 
   <xsl:template name="outerelement.class.attribute">
-    <!-- To accommodate ActiveDoc's needs, we add this to both body and
+    <!-- To accommodate for ActiveDoc's needs, add this to both body and
          #_content.-->
     <xsl:param name="node" select="'body'"/>
 
@@ -579,9 +579,11 @@
             <xsl:with-param name="node" select="'id-content'"/>
           </xsl:call-template>
           <xsl:call-template name="metadata"/>
+          <div class="documentation">
 
           <xsl:apply-templates select="."/>
 
+          </div>
           <div class="page-bottom">
             <xsl:call-template name="share.and.print">
               <xsl:with-param name="prev" select="$prev"/>
