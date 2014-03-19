@@ -21,12 +21,12 @@ clean-images:
 .PHONY: clean-package
 clean-package:
 	rm -rf $(PACK_DIR)
-	@ccecho "info" "Successfully removed all generated package data for $(DOCCONF)"
+	@ccecho "info" "Successfully removed all generated package data for $(notdir $(DOCCONF))"
 
 .PHONY: clean-results
 clean-results:
 	rm -rf $(RESULT_DIR)
-	@ccecho "info" "Successfully removed all generated books for $(DOCCONF)"
+	@ccecho "info" "Successfully removed all generated books for $(notdir $(DOCCONF))"
 
 .PHONY: clean-all real-clean
 clean-all real-clean:
