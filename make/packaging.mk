@@ -73,8 +73,8 @@ package-pdf: $(PDF_RESULT)
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	cp $(PDF_RESULT) $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).pdf
-	@ccecho "result" "Find the package-pdf results at:\n$(PACKAGE_PDF_DIR)"
+	cp $(PDF_RESULT) $(PACKAGE_PDF_RESULT)
+	@ccecho "result" "Find the package-pdf results at:\n$(PACKAGE_PDF_DIR)/"
   endif
 
 #--------------
@@ -85,15 +85,6 @@ package-pdf: $(PDF_RESULT)
 
 .PHONY: package-html
 package-html: | $(PACKAGE_HTML_DIR)
-ifeq ($(JSP),1)
-  package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
-else
-  ifeq ($(HTMLSINGLE),1)
-    package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2
-  else
-    package-html: TARBALL := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2
-  endif
-endif
 ifeq ($(DESKTOPFILES),1)
   package-html: $(DESKTOPFILES_RESULT)
 endif
@@ -109,9 +100,9 @@ package-html: html
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-	BZIP2="--best" tar cfhj $(TARBALL) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
+	BZIP2="--best" tar cfhj $(PACKAGE_HTML_RESULT) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
     ifeq ($(TARGET),package-html)
-	@ccecho "result" "Find the package-html results at:\n$(PACKAGE_HTML_DIR)"
+	@ccecho "result" "Find the package-html results at:\n$(PACKAGE_HTML_DIR)/"
     endif
   endif
 

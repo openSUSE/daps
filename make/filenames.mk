@@ -1,4 +1,4 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2014 SUSE Linux Products GmbH
 #
 # Author: Frank Sundermeyer
 #
@@ -51,14 +51,25 @@ MAN_DIR := $(RESULT_DIR)/man
 #---------------
 # Package-pdf, Package-html
 #
-ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name))
+ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name showvariable))
   PACKAGE_PDF_DIR      := $(PACK_DIR)/pdf
+  PACKAGE_PDF_RESULT   := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).pdf
   DESKTOPFILES_RESULT  := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
   DOCUMENTFILES_RESULT := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
-ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name online-docs))
-  PACKAGE_HTML_DIR     := $(PACK_DIR)/html
+ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name online-docs showvariable))
+  ifeq ($(JSP),1)
+    PACKAGE_HTML_DIR     := $(PACK_DIR)/jsp
+    PACKAGE_HTML_RESULT  := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
+  else
+    PACKAGE_HTML_DIR     := $(PACK_DIR)/html
+    ifeq ($(HTMLSINGLE),1)
+      PACKAGE_HTML_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2
+    else
+      PACKAGE_HTML_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2
+    endif
+  endif
   DESKTOPFILES_RESULT  := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
   DOCUMENTFILES_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING).page
