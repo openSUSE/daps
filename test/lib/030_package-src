@@ -37,7 +37,7 @@ function oneTimeSetUp() {
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
-    _LOGFILE=${_LOG_DIR}/make_package-src.log
+    _LOGFILE=${_LOG_DIR}/make_package-src.log 
 
     # create temp dir
     #
@@ -90,7 +90,6 @@ function test_packagesrcFilelist () {
 
     # unpack tarball into temp dir
     #
-    _SRC_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/srcfile_list_XXXXXX)
     (cd $_SRC_TEMPDIR && tar xfj $_SRC_NAME_PATH)
 
     # XML files
