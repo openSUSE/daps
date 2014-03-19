@@ -1,0 +1,181 @@
+#!/bin/bash
+#
+# Copyright (C) 2013, 2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: package-html
+#
+# This test should always be run together with 022_html. run_tests.sh will
+# take care of this automatically
+#
+# * Does package-html correctly build?
+# * Does the name retrieved with package-html-dir-name match the actual result?
+# * Does the tarball have all the necessary files?
+
+# To be done:
+#
+# * Is the HTML result directory cleaned before "tar"ing it's content?
+# * Are the desktopfiles generated ?
+# * Is the document file generated?
+# * Is the page file generated?
+
+# * Is the --name option correctly implemented?
+# * Is the --set-date option work correctly?
+
+_PHTML_NAME_PATH=""
+_PHTML_BUILD_RESULT=""
+_PHTML_TEMPDIR=""
+_LOGFILE=""
+
+source lib/common_functions
+
+header "package-html"
+
+function oneTimeSetUp() {
+    local _LOG_DIR
+
+    # Clean up the build directory
+    clean_build_dir all
+    # get the result directory
+    _PHTML_NAME_PATH=$($_DAPSEXEC -d $_DCFILE package-html-dir-name 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting directory package failed. Skipping tests"
+    fi
+    _PHTML_BUILD_RESULT=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=PACKAGE_HTML_RESULT 2>/dev/null)
+    if [ $? -ne 0 ]; then
+       exit_on_error "The command to determine the tarball name failed. Skipping tests"
+    fi
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_package-html.log
+    # create temp dir
+    #
+    make_tempdir "_PHTML_TEMPDIR"
+    _PHTML_TEMPDIR="${_PHTML_TEMPDIR}/packagehtml"
+    mkdir -p "$_PHTML_TEMPDIR" || exit_on_error " Creating a temporary directory failed. Skipping tests"
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build_dir all
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does package-html correctly build?
+# * Does the name retrieved with package-html-dir-name match the actual result?
+#
+function test_packagehtml () {
+    local _PHTML_BUILD_PATH
+    _PHTML_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-html 2>/dev/null)
+    assertTrue \
+        ' └─ The package-html command itself failed' \
+        "$?"
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --package-src-name" \
+	"$_PHTML_NAME_PATH" "$_PHTML_BUILD_PATH"
+    assertTrue \
+	" └─ The resulting file (${_PHTML_BUILD_RESULT}) does not exist." \
+	"[ -s $_PHTML_BUILD_RESULT ]"
+}
+
+#--------------------------------
+# * Does the tarball have all the necessary files?
+#
+
+function test_packagehtmlFilelist () {
+    local _HTML_DIR_NAME _TEMPDIR 
+
+    _HTML_DIR_NAME=$($_DAPSEXEC -v0 -d $_DCFILE html-dir-name 2>/dev/null)
+    assertTrue \
+        ' └─ The command to determine the HTML build directory failed' \
+        "$?"
+
+    # unpack tarball into temp dir
+    #
+    (cd $_PHTML_TEMPDIR && tar xfj $_PHTML_BUILD_RESULT --strip-components 1)
+
+    # diff the HTML result dir and the extracted tarball - both should
+    # not differ
+
+    diff -r $_HTML_DIR_NAME $_PHTML_TEMPDIR
+    assertTrue \
+        " └─ The tar archive does not contain all files from $_HTML_DIR_NAME" \
+        "$?"    
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+#function test_packagesrcNAME () {
+#
+#    local _SRC_BUILD_PATH _SRC_NAME_PATH _NAME
+#    _NAME="testsuite"
+#
+#    clean_build_dir results
+#
+#    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --name $_NAME 2>/dev/null)
+#    assertTrue \
+#	" └─ Building a package-src archive with --name failed " \
+#       "$?"
+#
+#    _SRC_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src-name --name $_NAME 2>/dev/null)
+#   assertTrue \
+#	' └─  Getting the filename for package-src with --name failed ' \
+#       "$?"
+#   assertEquals \
+#       " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
+#       "$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
+#
+#   # expr match does not work with Variables as search term, needs regexp
+#   echo "$(basename $_SRC_BUILD_PATH)" | grep -q $_NAME
+#   assertTrue \
+#       " └─ String passed with --name ($_NAME) does not appear in the package filename" \
+#       "$?"
+#   assertEquals \
+#       " └─ The build subdirectory does not have the name supplied with --name: " \
+#       "$(basename $_SRC_NAME_PATH)" "$(basename $_SRC_BUILD_PATH)"
+#
+#
+#}
+#
+##--------------------------------
+## * Does the --set-date option work correctly?
+##
+#function test_packagesrcSetDate () {
+#
+#    local _DATE _SRC_BUILD_PATH
+#
+#    _DATE="Jun 01 2013"
+#
+#    clean_build_dir results
+#
+#    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date=\"$_DATE\" 2>/dev/null)
+#    assertTrue \
+#	" └─ Building a package-src archive with --name failed " \
+#	"$?"
+#
+#    # clean tmp and unpack new archive
+#    [[ -d ${_SRC_TEMPDIR} ]] && rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
+#    (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH xml/$_MAIN)
+#
+#    grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null
+#
+#    assertTrue \
+#	" └─ The date set with --set-date does not appear in $_MAIN." \
+#	"$?"
+#}
+#
+# source shUnit2 test
+source $_SHUNIT2SRC

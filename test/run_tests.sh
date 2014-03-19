@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2013, 2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -113,7 +113,10 @@ for _STATFILE in failed skipped total; do
 done
 
 
-_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+
+[[ 0 -ne $? ]] && exit_on_error "Argument parser error"
+
 eval set -- "$_ARGS"
 
 # Exit when getopt returns errors
@@ -158,6 +161,15 @@ while true ; do
 	    ;;
 	--online-docs)
 	    _TESTS=( "${_TESTS[@]}" "lib/035_online-docs" )
+	    shift
+	    ;;
+	--package-html)
+#	    _TESTS=( "${_TESTS[@]}" "lib/022_html" "lib/036_package-html" )
+            _TESTS=( "${_TESTS[@]}" "lib/036_package-html" )
+	    shift
+	    ;;
+	--package-pdf)
+	    _TESTS=( "${_TESTS[@]}" "lib/020_pdf" "lib/037_package-pdf" )
 	    shift
 	    ;;
 	--package-src)
@@ -228,8 +240,11 @@ fi
 
 # Sort tests since it makes sense to execute them in a given order
 # http://stackoverflow.com/questions/7442417/how-to-sort-an-array-in-bash
+# sort -u also removes double entries that may have been introduced
+# by package-html or package-pdf (both also pull in the regular html/pdf
+# tests
 #
-declare -a _TESTS_SORTED=( $(printf '%s\0' "${_TESTS[@]}" | sort -z | xargs -0) )
+declare -a _TESTS_SORTED=( $(printf '%s\0' "${_TESTS[@]}" | sort -zu | xargs -0) )
 
 for _PROC in "${_XSLT_PROCESSORS[@]}"; do
     echo
@@ -244,7 +259,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         # does not make sense to run the majority of other tests
         #
 	case "$_TEST" in
-	    *_pdf)
+	    *[_-}pdf)
 		for _FOPROC in "${_FO_PROCS[@]}"; do
 		    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
 		    # skip if XSL-FO processor does not exist
