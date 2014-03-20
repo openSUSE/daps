@@ -13,16 +13,12 @@
 # * Does package-html correctly build?
 # * Does the name retrieved with package-html-dir-name match the actual result?
 # * Does the tarball have all the necessary files?
-
-# To be done:
-#
 # * Is the HTML result directory cleaned before "tar"ing it's content?
 # * Are the desktopfiles generated ?
 # * Is the document file generated?
 # * Is the page file generated?
-
 # * Is the --name option correctly implemented?
-# * Is the --set-date option work correctly?
+# * Does the --set-date option work correctly?
 
 _PHTML_NAME_PATH=""
 _PHTML_BUILD_RESULT=""
@@ -114,68 +110,114 @@ function test_packagehtmlFilelist () {
         " └─ The tar archive does not contain all files from $_HTML_DIR_NAME" \
         "$?"    
 }
+#--------------------------------
+# * Is the HTML result directory cleaned before "tar"ing it's content?
+# * Are the desktopfiles generated ?
+# * Is the document file generated?
+# * Is the page file generated?
+#
+function test_packagehtmlClean_and_Helpfiles () {
+    local _DUMMYFILE _PHTML_DESKTOPFILES _PHTML_DOCUMENTFILE _PHTML_PAGEFILE
+
+    _DUMMYFILE=dummy.file
+    touch ${_PHTML_NAME_PATH}/$_DUMMYFILE 
+    
+    $_DAPSEXEC -v0 -d $_DCFILE package-html --desktopfiles --documentfiles \
+        --pagefiles >/dev/null
+    assertTrue \
+        ' └─ The package-html command with --[desktop|document|page]files failed' \
+        "$?"
+    # test if dummy file has been deleted
+    #
+    assertFalse \
+        " └─ The HTML build directory was not cleaned before the build (\$CLEAN_DIR)" \
+        "[[ -s $_PHTML_NAME_PATH/$_DUMMYFILE ]]"
+    _PHTML_DESKTOPFILES=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=DESKTOPFILES_RESULT)
+    assertTrue \
+        ' └─ The command to determine the desktopfiles path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The desktopfiles tarball does not exist.' \
+        "[[ -s $_PHTML_DESKTOPFILES ]]"
+    _PHTML_DOCUMENTFILE=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=DOCUMENTFILES_RESULT)
+    assertTrue \
+        ' └─ The command to determine the documentfile path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The documentfile does not exist.' \
+        "[[ -s $_PHTML_DOCUMENTFILE ]]"
+    _PHTML_PAGEFILE=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=PAGEFILES_RESULT)
+    assertTrue \
+        ' └─ The command to determine the pagesfiles path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The pagefile does not exist.' \
+        "[[ -s $_PHTML_PAGEFILE ]]"
+
+}
+
+#--------------------------------
+# * Does the --set-date option work correctly?
+#
+function test_packagehtmlSetDate () {
+
+    local _DATE _PHTML_BUILD_PATH _STYLEROOT
+
+    _DATE="Jun 01 2013"
+    # the DocBook stylesheets do not print a publication date, therefore
+    # using the SUSE stylesheets
+    ##
+    _STYLEROOT="../suse/xslt2013"
+
+    clean_build_dir results
+
+    $_DAPSEXEC -v0 -d $_DCFILE --styleroot "$_STYLEROOT" package-html --set-date=\"$_DATE\" >/dev/null
+    assertTrue \
+	" └─ Building package-html with --set-date failed " \
+	"$?"
+
+    # clean tmp and unpack new archive
+    [[ -d ${_PHTML_TEMPDIR} ]] && rm -rf "${PHTML_TEMPDIR}" && mkdir -p "${_PHTML_TEMPDIR}"
+    (cd $_PHTML_TEMPDIR && tar xfj $_PHTML_BUILD_RESULT --strip-components 1)
+
+    grep -q "$_DATE" ${_PHTML_TEMPDIR}/index.html 2>/dev/null
+
+    assertTrue \
+	" └─ The date set with --set-date does not appear in index.html." \
+	"$?"
+}
 
 #--------------------------------
 # * Is the --name option correctly implemented?
 #
-#function test_packagesrcNAME () {
-#
-#    local _SRC_BUILD_PATH _SRC_NAME_PATH _NAME
-#    _NAME="testsuite"
-#
-#    clean_build_dir results
-#
-#    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --name $_NAME 2>/dev/null)
-#    assertTrue \
-#	" └─ Building a package-src archive with --name failed " \
-#       "$?"
-#
-#    _SRC_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src-name --name $_NAME 2>/dev/null)
-#   assertTrue \
-#	' └─  Getting the filename for package-src with --name failed ' \
-#       "$?"
-#   assertEquals \
-#       " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
-#       "$_SRC_NAME_PATH" "$_SRC_BUILD_PATH"
-#
-#   # expr match does not work with Variables as search term, needs regexp
-#   echo "$(basename $_SRC_BUILD_PATH)" | grep -q $_NAME
-#   assertTrue \
-#       " └─ String passed with --name ($_NAME) does not appear in the package filename" \
-#       "$?"
-#   assertEquals \
-#       " └─ The build subdirectory does not have the name supplied with --name: " \
-#       "$(basename $_SRC_NAME_PATH)" "$(basename $_SRC_BUILD_PATH)"
-#
-#
-#}
-#
-##--------------------------------
-## * Does the --set-date option work correctly?
-##
-#function test_packagesrcSetDate () {
-#
-#    local _DATE _SRC_BUILD_PATH
-#
-#    _DATE="Jun 01 2013"
-#
-#    clean_build_dir results
-#
-#    _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date=\"$_DATE\" 2>/dev/null)
-#    assertTrue \
-#	" └─ Building a package-src archive with --name failed " \
-#	"$?"
-#
-#    # clean tmp and unpack new archive
-#    [[ -d ${_SRC_TEMPDIR} ]] && rm -rf "${_SRC_TEMPDIR}" && mkdir -p "${_SRC_TEMPDIR}"
-#    (cd $_SRC_TEMPDIR && tar xfj $_SRC_BUILD_PATH xml/$_MAIN)
-#
-#    grep -q "$_DATE" ${_SRC_TEMPDIR}/xml/$_MAIN 2>/dev/null
-#
-#    assertTrue \
-#	" └─ The date set with --set-date does not appear in $_MAIN." \
-#	"$?"
-#}
-#
-# source shUnit2 test
+function test_packagehtmlNAME () {
+
+    local _PHTML_BUILD_PATH _PHTML_NAME_PATH _NAME
+    _NAME="$RANDOM"
+
+    clean_build_dir results
+
+    _PHTML_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-html --name $_NAME 2>/dev/null)
+    assertTrue \
+	" └─ Building package-html with --name failed " \
+       "$?"
+
+    _PHTML_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-html-dir-name --name $_NAME 2>/dev/null)
+   assertTrue \
+	' └─  Getting the filename for package-html with --name failed ' \
+       "$?"
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
+       "$_PHTML_NAME_PATH" "$_PHTML_BUILD_PATH"
+
+   # expr match does not work with Variables as search term, needs regexp
+   echo "$_PHTML_BUILD_PATH" | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the package filename" \
+       "$?"
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$(basename $_PHTML_NAME_PATH)" "$(basename $_PHTML_BUILD_PATH)"
+}
+
 source $_SHUNIT2SRC
