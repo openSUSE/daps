@@ -253,7 +253,7 @@
                                 self::sect1 or
                                 self::sect2 or
                                 self::sect3 or
-                                self::sect4]/@xml:base"/>
+                                self::sect4][1]/@xml:base"/>
 
   <xsl:if test="$draft.mode = 'yes' and $xmlbase != ''">
     <div class="doc-status">
