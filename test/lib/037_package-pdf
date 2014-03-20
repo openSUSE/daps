@@ -1,0 +1,163 @@
+#!/bin/bash
+#
+# Copyright (C) 2013, 2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer@opensuse.org>
+#
+# Testing DAPS: package-pdf
+#
+# This test should always be run together with 020_pdf. run_tests.sh will
+# take care of this automatically
+#
+# * Does package-pdf correctly build?
+# * Does the name retrieved with package-pdf-name match the actual result?
+# * Are the desktopfiles generated ?
+# * Is the document file generated?
+# * Is the page file generated?
+# * Is the --name option correctly implemented?
+
+# Not sure how to test this...
+# * Does the --set-date option work correctly?
+
+_PPDF_NAME_PATH=""
+_PPDF_BUILD_RESULT=""
+_LOGFILE=""
+
+source lib/common_functions
+
+header "package-pdf"
+
+function oneTimeSetUp() {
+    local _LOG_DIR
+
+    # Clean up the build directory
+    clean_build_dir all
+    # get the result directory
+    _PPDF_NAME_PATH=$($_DAPSEXEC -d $_DCFILE package-pdf-dir-name 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting file failed. Skipping tests"
+    fi
+    _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
+    fi
+    _LOGFILE=${_LOG_DIR}/make_package-pdf.log
+}
+
+# Post
+# this function is run _after_ the tests are executed
+#
+function oneTimeTearDown() {
+    stats
+    # Clean up the build directory
+    clean_build_dir all
+}
+
+#---------------------------------------------------------------
+# TESTS
+#---------------------------------------------------------------
+
+#--------------------------------
+# * Does package-pdf correctly build?
+# * Does the name retrieved with package-pdf-dir-name match the actual result?
+#
+function test_packagepdf () {
+    local _PPDF_BUILD_PATH
+    _PPDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-pdf 2>/dev/null)
+    assertTrue \
+        ' └─ The package-pdf command itself failed' \
+        "$?"
+    assertEquals \
+	" └─ The resulting filename does not match the one retrieved with --package-src-name" \
+	"$_PPDF_NAME_PATH" "$_PPDF_BUILD_PATH"
+    assertTrue \
+	" └─ The resulting file (${_PPDF_BUILD_RESULT}) does not exist." \
+	"[ -s $_PPDF_BUILD_RESULT ]"
+    # ugly hack but it works since readlink would exit with an error
+    # in case more than one PDF is foud
+    _PPDF_BUILD_RESULT=$(readlink -e ${_PPDF_BUILD_PATH}/*.pdf)
+    if [ $? -ne 0 ]; then
+	exit_on_error " Determining the resulting PDF filename in $_PPDF_BUILD_PATH failed. Skipping tests"
+    fi
+}
+
+#--------------------------------
+# * Are the desktopfiles generated ?
+# * Is the document file generated?
+# * Is the page file generated?
+#
+function test_packagepdfHelpfiles () {
+    local _PPDF_DESKTOPFILES _PPDF_DOCUMENTFILE _PPDF_PAGEFILE
+    
+    $_DAPSEXEC -v0 -d $_DCFILE package-pdf --desktopfiles --documentfiles \
+        --pagefiles >/dev/null
+    assertTrue \
+        ' └─ The package-pdf command with --[desktop|document|page]files failed' \
+        "$?"
+    # showvariable for DESKTOPFILE_RESULTS does not work since it depends
+    # on the target
+    _PPDF_DESKTOPFILES=$(readlink -e ${_PPDF_NAME_PATH}/*-desktop.tar.bz2)
+    assertTrue \
+        ' └─ The command to determine the desktopfiles path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The desktopfiles tarball does not exist.' \
+        "[[ -s $_PPDF_DESKTOPFILES ]]"
+
+    # showvariable for DOCUMENTFILE_RESULTS does not work since it depends
+    # on the target
+    _PPDF_DOCUMENTFILE=$(readlink -e ${_PPDF_NAME_PATH}/*.document)
+    assertTrue \
+        ' └─ The command to determine the documentfile path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The documentfile does not exist.' \
+        "[[ -s $_PPDF_DOCUMENTFILE ]]"
+
+
+    # showvariable for PAGEFILE_RESULTS does not work since it depends
+    # on the target
+    _PPDF_PAGEFILE=$(readlink -e ${_PPDF_NAME_PATH}/*.page)
+    assertTrue \
+        ' └─ The command to determine the pagesfiles path failed' \
+        "$?"
+    assertTrue \
+        ' └─ The pagefile does not exist.' \
+        "[[ -s $_PPDF_PAGEFILE ]]"
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+#
+function test_packagepdfNAME () {
+
+    local _PPDF_BUILD_PATH _PPDF_NAME_PATH _NAME
+    _NAME="$RANDOM"
+
+    clean_build_dir results
+
+    _PPDF_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-pdf --name $_NAME 2>/dev/null)
+    assertTrue \
+	" └─ Building package-pdf with --name failed " \
+       "$?"
+
+    _PPDF_NAME_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-pdf-dir-name --name $_NAME 2>/dev/null)
+   assertTrue \
+	' └─  Getting the filename for package-pdf with --name failed ' \
+       "$?"
+   assertEquals \
+       " └─ The resulting filename does not match the one retrieved with --package-src-name: " \
+       "$_PPDF_NAME_PATH" "$_PPDF_BUILD_PATH"
+
+   # expr match does not work with Variables as search term, needs regexp
+   echo "$_PPDF_BUILD_PATH" | grep -q $_NAME
+   assertTrue \
+       " └─ String passed with --name ($_NAME) does not appear in the package filename" \
+       "$?"
+   assertEquals \
+       " └─ The build subdirectory does not have the name supplied with --name: " \
+       "$(basename $_PPDF_NAME_PATH)" "$(basename $_PPDF_BUILD_PATH)"
+}
+
+source $_SHUNIT2SRC
