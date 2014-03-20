@@ -181,7 +181,7 @@ function test_packagesrcSetDate () {
 
     _SRC_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE package-src --set-date=\"$_DATE\" 2>/dev/null)
     assertTrue \
-	" └─ Building a package-src archive with --name failed " \
+	" └─ Building a package-src archive with --set-date failed " \
 	"$?"
 
     # clean tmp and unpack new archive
