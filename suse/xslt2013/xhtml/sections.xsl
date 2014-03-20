@@ -229,8 +229,16 @@
     <xsl:call-template name="create.permalink">
        <xsl:with-param name="object" select="$section"/>
     </xsl:call-template>
+    <xsl:call-template name="create.header.line">
+       <xsl:with-param name="object" select="$section"/>
+    </xsl:call-template>
   </xsl:element>
   <xsl:call-template name="debug.filename-id"/>
+</xsl:template>
+
+<!-- Hook for additional customizations -->
+<xsl:template name="create.header.line">
+  <xsl:param name="object" select="."/>
 </xsl:template>
 
 <xsl:template name="debug.filename-id">
