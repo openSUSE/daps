@@ -2330,6 +2330,36 @@ p.ds-message {
     font-size: 22px;
 }
 
+.hidden {
+    background-color: #DCB2B2;
+    position: static;
+    margin-top: 20px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.hidden:before {
+    content: 'Hidden';
+    display: block;
+    float: left;
+    background-color: #8C0000;
+    color: #FFF;
+    padding: 3px 5px;
+    margin-top: 10px;
+}
+
+.hidden .hidden {
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+.hidden .hidden:before {
+    content: none;
+}
+
 body.draft {
     background: url(../images/draft.png) no-repeat fixed left 50%;
 }
