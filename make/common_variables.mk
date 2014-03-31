@@ -336,4 +336,8 @@ else
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
 endif
 
-
+#-----
+# Valid ROOT Elements
+# A --rootid must belong to one of the following elements:
+#
+VALID_ROOTELEMENTS := appendix article bibliography book chapter colophon dedication glossary index part preface qandaset refentry reference sect1 section set setindex
