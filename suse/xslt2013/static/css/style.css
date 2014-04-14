@@ -1902,7 +1902,6 @@ div.figure {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
-    color: #999;
     margin: 24px 0 -9px;
     overflow: hidden;
     position: relative;
@@ -1916,16 +1915,13 @@ div.figure .mediaobject {
     text-align: center;
     color: #999;
     padding: 12px 10px;
-    background-color: #333;
+    background-color: #FFF;
     overflow: hidden;
-    border-top: 1px solid #202020;
-    border-left: 1px solid #202020;
-    border-right: 1px solid #202020;
+    border: 1px solid #EFEFF0;
 }
 
 .figure img {
     padding: 0;
-    background-color: #FFF;
     width: auto;
     margin: 0 auto;
     /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
@@ -1934,7 +1930,7 @@ div.figure .mediaobject {
     max-width: calc(100% - 2px);
     max-width: -moz-calc(100% - 2px);
     max-width: -webkit-calc(100% - 2px);
-    display: block; /* inline images weirdly have some whitespace below them, thus block'ing */
+    display: block; /* inline images weirdly have some whitespace below them, thus blocking */
 }
 
 .figure-title {
@@ -1944,19 +1940,9 @@ div.figure .mediaobject {
 }
 
 div.figure .figure-title-wrap {
-    background-color: #202020;
+    background-color: #EFEFF0;
     width: 100%;
     overflow: hidden;
-}
-
-div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
-    color: #76AD2D;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-div.figure .name, div.figure .permalink {
-    color: #FFF;
 }
 
 .informalfigure img {
@@ -1966,7 +1952,7 @@ div.figure .name, div.figure .permalink {
     color: #999;
     margin: 17px 0 24px;
     padding: 1px;
-    border: 1px solid #202020;
+    border: 1px solid #EFEFF0;
     width: auto;
 }
 
