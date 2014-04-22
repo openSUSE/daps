@@ -236,12 +236,16 @@ $(OD_GRAPHICS): $(ONLINE_IMAGES)
     ifeq ($(VERBOSITY),2)
 	@ccecho "info" "Creating online-docs graphics tarball..."
     endif
+      ifneq "$(strip $(PNGONLINE))" ""
 	tar chf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/png% \
 	 $(IMG_GENDIR)/color/*.png
+      endif
+      ifneq "$(strip $(JPGONLINE))" ""
 	tar rhf $(OD_GRAPHICS_TMP) --exclude-vcs --ignore-failed-read \
 	  --absolute-names --transform=s%$(IMG_GENDIR)/color%images/src/jpg% \
 	 $(IMG_GENDIR)/color/*.jpg
+      endif
 	bzip2 -9f $(OD_GRAPHICS_TMP)
   else
 	@ccecho "info" "Selected set or book contains no graphics"
