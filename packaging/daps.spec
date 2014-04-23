@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.0~beta4
+Version:        2.0~beta5
 Release:        0
 
 ###############################################################
@@ -135,6 +135,7 @@ Recommends:     perl-checkbot
 Recommends:     checkbot
 %endif
 Recommends:     remake
+Recommends;     suse-doc-style-checker
 # Internal XEP package:
 Recommends:     xep
 Recommends:     xmlformat

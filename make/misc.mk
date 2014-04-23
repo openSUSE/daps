@@ -74,13 +74,13 @@ STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
 stylecheck: $(BIGFILE)
   ifeq ($(SHOW),1)
     ifdef BROWSER
-	@docstylecheck.py --show $(BIGFILE) $(STYLECHECK_OUTFILE)
+	@sdsc --show $(BIGFILE) $(STYLECHECK_OUTFILE)
     else
-	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
+	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
 	xdg-open $(STYLECHECK_OUTFILE) &
     endif
   else
-	@docstylecheck.py $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
+	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
   endif
 	@ccecho "result" "Find the stylecheck report at:\n$(STYLECHECK_OUTFILE)"
 
