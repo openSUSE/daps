@@ -258,7 +258,7 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         # does not make sense to run the majority of other tests
         #
 	case "$_TEST" in
-	    *[_-}pdf)
+	    *[_-]pdf)
 		for _FOPROC in "${_FO_PROCS[@]}"; do
 		    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
 		    # skip if XSL-FO processor does not exist

@@ -15,15 +15,6 @@ function usage () {
     echo "Something useful"
 }
 
-# ---------
-# Verbose error handling
-#
-function exit_on_error () {
-    echo -e "ERROR: ${1}" >&2
-    clean_build
-    exit 1;
-}
-
 # --------
 # Clean up the build directory
 # Arguments:
@@ -35,8 +26,8 @@ function exit_on_error () {
 #  tmp:      remove temp directory (${_DOC_DIR}/build/.tmp)
 #
 function clean_build_dir () {
-    [[ -d "${_DOC_DIR}" ]] || exit_on_error "Attempting to delete an empty directory"
-    [[ -z $1 ]] && exit_on_error "You must specify a parameter for the clean buildir function"
+    [[ -d "${_DOC_DIR}" ]] || (echo "Attempting to delete an empty directory" && exit 1)
+    [[ -z $1 ]] && (echo "You must specify a parameter for the clean buildir function" && exit 1)
     case $1 in
         all)
             rm -rf "${_DOC_DIR}/build"
@@ -62,6 +53,14 @@ function clean_build_dir () {
     esac
 }
 
+# ---------
+# Verbose error handling
+#
+function exit_on_error () {
+    echo -e "ERROR: ${1}" >&2
+    clean_build_dir all
+    exit 1;
+}
 
 # ---------
 # Print Test Header
