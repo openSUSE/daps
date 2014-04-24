@@ -946,13 +946,8 @@ function set_mainfile () {
             fi
         else
             if [[ -n "$DOC_DIR" ]]; then
-                if [[ -e "${DOC_DIR}/xml/$MAINFILE" ]]; then
-                    MAIN_CMDL="${DOC_DIR}/xml/$MAINFILE"
-#                elif [[ -e "${DOC_DIR}/$MAINFILE" ]]; then
-#                    MAIN_CMDL="${DOC_DIR}/$MAINFILE"
-                else
-                    exit_on_error "Fatal error: ${DOC_DIR}/xml/$MAINFILE does not exist. XML files must reside in an \"xml/\" directory"
-                fi
+		MAIN_CMDL="${DOC_DIR}/xml/$(basename $MAINFILE)"
+		[[ -e $MAIN_CMDL ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
             else
                exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
             fi
