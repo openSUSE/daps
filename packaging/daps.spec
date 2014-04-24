@@ -135,7 +135,7 @@ Recommends:     perl-checkbot
 Recommends:     checkbot
 %endif
 Recommends:     remake
-Recommends;     suse-doc-style-checker
+Recommends:     suse-doc-style-checker
 # Internal XEP package:
 Recommends:     xep
 Recommends:     xmlformat
