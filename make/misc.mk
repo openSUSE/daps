@@ -73,12 +73,7 @@ STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
 .PHONY: stylecheck
 stylecheck: $(BIGFILE)
   ifeq ($(SHOW),1)
-    ifdef BROWSER
 	@sdsc --show $(BIGFILE) $(STYLECHECK_OUTFILE)
-    else
-	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
-	xdg-open $(STYLECHECK_OUTFILE) &
-    endif
   else
 	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null
   endif
