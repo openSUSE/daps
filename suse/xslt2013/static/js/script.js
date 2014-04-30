@@ -63,6 +63,9 @@ switch ( XmlProduct ) {
   case 'SUSE Manager 1.7':
     bugzillaProduct = 'SUSE Manager 1.7 Server';
     break;
+  case 'SUSE Manager 2.1':
+    bugzillaProduct = 'SUSE Manager 2.1 Server';
+    break;
   case 'SUSE Studio Onsite 1.3':
     bugzillaProduct = 'SUSE Studio Onsite';
     break;
