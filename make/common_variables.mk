@@ -340,4 +340,4 @@ endif
 # Valid ROOT Elements
 # A --rootid must belong to one of the following elements:
 #
-VALID_ROOTELEMENTS := appendix article bibliography book chapter colophon dedication glossary index part preface qandaset refentry reference sect1 section set setindex
+VALID_ROOTELEMENTS := appendix article bibliography book chapter colophon dedication glossary index part preface refentry reference set setindex
