@@ -39,8 +39,8 @@
   <xsl:template match="prompt" mode="common.html.attributes">
     <xsl:variable name="class">
       <xsl:choose>
-        <xsl:when test="@role"><xsl:value-of select="@role"/></xsl:when>
-        <xsl:otherwise>userprompt</xsl:otherwise>
+        <xsl:when test="@role">prompt <xsl:value-of select="@role"/></xsl:when>
+        <xsl:otherwise>prompt user</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
