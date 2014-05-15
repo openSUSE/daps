@@ -631,6 +631,26 @@ STYLEROOT=""
 #
 TXT_USE_DBSTYLES="yes"
 
+## Key:         VALID_ROOTELEMENTS
+## --------------------
+## Description: Top level root elements allowed when specifying --rootid
+## Type:        String (list of space separated tags)
+## Default:     appendix article bibliography book chapter colophon \
+##              dedication glossary index part preface refentry reference \
+##              set setindex
+#
+# Stylesheets for PDF/HTML/EPUB etc usually expect certain top level elements
+# when transforming XNML files. I makes little sense to process a document with
+# <envar> as an root element. Specify the list of top-level elements your scripts
+# support, here. In case a document with a root element not specified here is
+# parsed, DAPS will exit with an error. This is also true when specifying the
+# --rootid parameter: If the specified rootid belongs to an element not listed
+# here, DAPS throws an error.
+# Set to an empty value to allow all elements (e.g. when you prefer to do the
+# error handling from within the scripts).
+#
+VALID_ROOTELEMENTS="appendix article bibliography book chapter colophon dedication glossary index part preface refentry reference set setindex"
+
 ## Key:         WH_SEARCH
 ## --------------------
 ## Description: Enable/Disbale webhelp search feature
