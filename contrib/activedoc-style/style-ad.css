@@ -258,7 +258,7 @@ a:hover .name, a:focus .name, a:active .name,
     line-height: 15px;
     overflow: hidden;
     padding: 0 3px;
-    border-bottom: 1px solid #FFF;
+    border-bottom: 1px solid transparent;
     background-color: #EEE;
     text-transform: uppercase;
     display: inline-block;
@@ -590,7 +590,7 @@ code, .code, .envar, .filename, .function, .literal, .package {
     font-weight: 600;
 }
 
-.screen .userprompt,.screen .rootprompt {
+.prompt {
     -moz-user-select: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -598,11 +598,11 @@ code, .code, .envar, .filename, .function, .literal, .package {
     user-select: none;
 }
 
-.screen .userprompt {
+.prompt.user, .prompt.custom {
     color: #666;
 }
 
-.screen .rootprompt {
+.prompt.root {
     color: #900;
 }
 
@@ -738,7 +738,6 @@ div.figure {
     max-width: 100%;
     min-height: 60px;
     text-align: center;
-    color: #999;
     margin: 24px 0 -9px;
     overflow: hidden;
     position: relative;
@@ -752,16 +751,13 @@ div.figure .mediaobject {
     text-align: center;
     color: #999;
     padding: 12px 10px;
-    background-color: #333;
+    background-color: #FFF;
     overflow: hidden;
-    border-top: 1px solid #202020;
-    border-left: 1px solid #202020;
-    border-right: 1px solid #202020;
+    border: 1px solid #EFEFF0;
 }
 
 .figure img {
     padding: 0;
-    background-color: #FFF;
     width: auto;
     margin: 0 auto;
     min-width: 50px;
@@ -779,19 +775,9 @@ div.figure .mediaobject {
 }
 
 div.figure .figure-title-wrap {
-    background-color: #202020;
+    background-color: #EFEFF0;
     width: 100%;
     overflow: hidden;
-}
-
-div.figure .number, div.figure .permalink:hover, div.figure .permalink:focus, div.figure .permalink:active {
-    color: #76AD2D;
-    text-decoration: none;
-    font-weight: normal;
-}
-
-div.figure .name, div.figure .permalink {
-    color: #FFF;
 }
 
 .informalfigure img {
@@ -801,7 +787,7 @@ div.figure .name, div.figure .permalink {
     color: #999;
     margin: 17px 0 24px;
     padding: 1px;
-    border: 1px solid #202020;
+    border: 1px solid #EFEFF0;
     width: auto;
 }
 
@@ -1120,15 +1106,14 @@ div.blockquote {
 }
 
 .remark, .doc-status {
-    background-color: #E6E0E8;
-    color: #000;
     font-style: normal;
     font-weight: normal;
 }
 
 .remark {
     padding: 1px 5px;
-    border-left: 3px solid #5C3566;
+    background-color: #8D7294;
+    color: #FFF;
 }
 
 .remark .remark {
@@ -1139,6 +1124,8 @@ div.blockquote {
 
 .doc-status {
     padding: 10px;
+    background-color: #E6E0E8;
+    color: #000;
 }
 
 #_content > .doc-status {
@@ -1166,6 +1153,36 @@ p.ds-message {
 .ds-head {
     font-style: normal;
     font-size: 22px;
+}
+
+.hidden {
+    background-color: #E3C1C1;
+    position: static;
+    margin-top: 20px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.hidden:before {
+    content: 'Hidden';
+    display: block;
+    float: left;
+    background-color: #8C0000;
+    color: #FFF;
+    padding: 3px 5px;
+    margin-top: 10px;
+}
+
+.hidden .hidden {
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+.hidden .hidden:before {
+    content: none;
 }
 
 @page {

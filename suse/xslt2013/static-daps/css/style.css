@@ -1755,7 +1755,7 @@ code {
     font-weight: 600;
 }
 
-.screen code.userprompt,.screen code.rootprompt {
+.prompt {
     -moz-user-select: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -1763,11 +1763,11 @@ code {
     user-select: none;
 }
 
-.screen code.userprompt {
+.prompt.user, .prompt.custom {
     color: #666;
 }
 
-.screen code.rootprompt {
+.prompt.root {
     color: #900;
 }
 
@@ -2267,15 +2267,14 @@ div.blockquote {
 /* Review features */
 
 .remark, .doc-status {
-    background-color: #E6E0E8;
-    color: #000;
     font-style: normal;
     font-weight: normal;
 }
 
 .remark {
     padding: 1px 5px;
-    border-left: 3px solid #5C3566;
+    background-color: #8D7294;
+    color: #FFF;
 }
 
 .remark .remark {
@@ -2286,6 +2285,8 @@ div.blockquote {
 
 .doc-status {
     padding: 10px;
+    background-color: #E6E0E8;
+    color: #000;
 }
 
 .documentation > .doc-status {
