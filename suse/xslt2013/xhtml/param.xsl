@@ -110,7 +110,10 @@ set       toc,title
     <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
   <xsl:param name="html.stylesheet">
-<xsl:if test="$build.for.web = 1">//static.opensuse.org/fonts/fonts.css</xsl:if>
+<xsl:choose>
+  <xsl:when test="$build.for.web = 1">//static.opensuse.org/fonts/fonts.css</xsl:when>
+  <xsl:otherwise>static/css/fonts-onlylocal.css</xsl:otherwise>
+</xsl:choose>
 static/css/style.css
 </xsl:param>
   <xsl:param name="make.clean.html" select="1"/>

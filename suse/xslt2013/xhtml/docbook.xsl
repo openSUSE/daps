@@ -608,13 +608,26 @@
 
   <xsl:template name="user.head.content">
     <xsl:param name="node" select="."/>
-    <!-- Quirk script mostly for Chrome 30 on Nexus 7/Android 4.3. It shouldn't
-         hurt on other Android platforms, either.
-         Embedding it like this is ugly but should save some loading time.-->
+    <!-- Quirk script:
+      if{For Chrome 30 on Nexus 7/Android 4.3. Shouldn't hurt on other Android
+         platforms, either. Embedding it like this is ugly but should save some
+         loading time. We only choose between http: and https:, as file: et al.
+         would just lead to an error.}
+    elif{For Chrome 34 on desktop Linux. Chrome does not recognize semi-bold
+         Open Sans as being semi-bold, embedding it via @font-face fixes that.
+         We only add the relevant CSS file in case build.for.web is active,
+         as build.for.web!=1 already hardcodes the same CSS file.}
+         -->
     <script type="text/javascript">
       if ( navigator.userAgent.toLowerCase().indexOf('android') != -1 ) {
-        document.write('<link rel="stylesheet" type="text/css" href="//static.opensuse.org/fonts/fonts-nolocal.css"></link>');
+        protocol = (window.location.protocol == 'https:') ? 'https' : 'http';
+        document.write('<link rel="stylesheet" type="text/css" href="' + protocol + '://static.opensuse.org/fonts/fonts-nolocal.css"></link>');
       }
+      <xsl:if test="$build.for.web = 1">
+        else if ( window.location.protocol == 'file:' ) {
+          document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+        }
+      </xsl:if>
     </script>
     <xsl:if test="$daps.header.js.library != ''">
       <xsl:call-template name="make.script.link">
