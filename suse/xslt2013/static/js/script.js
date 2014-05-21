@@ -169,6 +169,8 @@ $(function() {
   $('.bubble h6').append('<span class="bubble-closer">&nbsp;</span>');
   $('.bubble-closer').click(function(){deactivate(); return false;});
   $('.question').click(function(){ $(this).parent('dl').toggleClass('active'); });
+  $('.table tr').has('td[rowspan]').addClass('contains-rowspan');
+  $('.informaltable tr').has('td[rowspan]').addClass('contains-rowspan');
 
   if ( !( $('#_nav-area div').length ) ) {
     $('#_toolbar').addClass('only-toc');
