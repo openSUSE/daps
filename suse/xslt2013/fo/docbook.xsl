@@ -66,4 +66,90 @@
   <xsl:include href="fop1.xsl"/>
   <xsl:include href="xep.xsl"/>
 
+  <!-- 
+    This fragment is used to build a sect1 by using rootid parameter 
+  -->
+  <xsl:template match="sect1|section" mode="process.root">
+      <xsl:variable name="document.element" select="self::*"/>
+
+  <xsl:call-template name="root.messages"/>
+
+  <xsl:variable name="title">
+    <xsl:choose>
+      <xsl:when test="$document.element/title[1]">
+        <xsl:value-of select="$document.element/title[1]"/>
+      </xsl:when>
+      <xsl:otherwise>[could not find document title]</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <!-- Include all id values in XEP output -->
+  <xsl:if test="$xep.extensions != 0">
+    <xsl:processing-instruction 
+     name="xep-pdf-drop-unused-destinations">false</xsl:processing-instruction>
+  </xsl:if>
+
+  <fo:root xsl:use-attribute-sets="root.properties">
+    <xsl:attribute name="language">
+      <xsl:call-template name="l10n.language">
+        <xsl:with-param name="target" select="/*[1]"/>
+      </xsl:call-template>
+    </xsl:attribute>
+
+    <xsl:if test="$xep.extensions != 0">
+      <xsl:call-template name="xep-pis"/>
+      <xsl:call-template name="xep-document-information"/>
+    </xsl:if>
+    <xsl:if test="$axf.extensions != 0">
+      <xsl:call-template name="axf-document-information"/>
+    </xsl:if>
+
+    <xsl:call-template name="setup.pagemasters"/>
+
+    <xsl:if test="$fop.extensions != 0">
+      <xsl:apply-templates select="$document.element" mode="fop.outline"/>
+    </xsl:if>
+
+    <xsl:if test="$fop1.extensions != 0">
+      <xsl:call-template name="fop1-document-information"/>
+      <xsl:variable name="bookmarks">
+        <xsl:apply-templates select="$document.element" 
+                             mode="fop1.outline"/>
+      </xsl:variable>
+      <xsl:if test="string($bookmarks) != ''">
+        <fo:bookmark-tree>
+          <xsl:copy-of select="$bookmarks"/>
+        </fo:bookmark-tree>
+      </xsl:if>
+      <xsl:apply-templates select="$document.element" 
+                           mode="fop1.foxdest"/>
+    </xsl:if>
+
+    <xsl:if test="$xep.extensions != 0">
+      <xsl:variable name="bookmarks">
+        <xsl:apply-templates select="$document.element" mode="xep.outline"/>
+      </xsl:variable>
+      <xsl:if test="string($bookmarks) != ''">
+        <rx:outline xmlns:rx="http://www.renderx.com/XSL/Extensions">
+          <xsl:copy-of select="$bookmarks"/>
+        </rx:outline>
+      </xsl:if>
+    </xsl:if>
+
+    <xsl:if test="$arbortext.extensions != 0 and $ati.xsl11.bookmarks != 0">
+      <xsl:variable name="bookmarks">
+        <xsl:apply-templates select="$document.element"
+                             mode="ati.xsl11.bookmarks"/>
+      </xsl:variable>
+      <xsl:if test="string($bookmarks) != ''">
+        <fo:bookmark-tree>
+          <xsl:copy-of select="$bookmarks"/>
+        </fo:bookmark-tree>
+      </xsl:if>
+    </xsl:if>
+
+    <xsl:call-template name="section.page.sequence"/>
+  </fo:root>
+  </xsl:template>
+
 </xsl:stylesheet>
