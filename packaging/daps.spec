@@ -51,6 +51,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
+BuildRequires:  automake
 BuildRequires:  bash >= 3.1
 BuildRequires:  dia
 BuildRequires:  docbook_4
