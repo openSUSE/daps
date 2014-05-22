@@ -22,6 +22,9 @@ AC_PREREQ([2.68])
 AC_INIT([DAPS], [2.0~beta6], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
 AC_CONFIG_MACRO_DIR([m4])
 
+dnl https://stackoverflow.com/questions/18769770/user-of-autotools-generated-tarball-gets-error-message-aclocal-1-13-command-no
+AM_MAINTAINER_MODE([disable])
+
 AC_MSG_NOTICE([
 
  Configuring DAPS, the DocBook Authoring and Publishing Suite...
