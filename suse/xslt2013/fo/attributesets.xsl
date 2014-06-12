@@ -74,6 +74,10 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="toc.margin.properties">
+  <xsl:attribute name="page-break-after">always</xsl:attribute>
+</xsl:attribute-set>
+
 <!-- part -->
 <xsl:attribute-set name="toc.level1.properties"
   use-attribute-sets="toc.common.properties title.name.color">
