@@ -53,6 +53,7 @@
   <xsl:include href="fo.xsl"/>
   <xsl:include href="refentry.xsl"/>
   <xsl:include href="division.xsl"/>
+  <xsl:include href="index.xsl"/>
   <xsl:include href="admon.xsl"/>
   <xsl:include href="component.xsl"/>
   <xsl:include href="block.xsl"/>
