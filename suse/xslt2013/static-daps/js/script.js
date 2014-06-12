@@ -27,6 +27,7 @@ $(function() {
   });
 
 
+  $('body').removeClass('js-off');
   $('body').addClass('js-on');
 
   $(document).keyup(function(e) {

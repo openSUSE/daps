@@ -683,6 +683,24 @@ a:active > .find-icon {
     padding: 10px;
 }
 
+/* Fallback for TOC bubble when Javascript is off. */
+.js-off .inactive:hover .active-contents,
+.js-off .inactive:focus .active-contents {
+    display: block !important;
+}
+
+/* We only need this to make sure the bubble does not close when the user is
+   hovering over the TOC button and then mouses over the gap between the button
+   and the bubble. */
+.js-off .bubble:before {
+    content: '';
+    background-color: transparent;
+    position: absolute;
+    top: -15px;
+    height: 15px;
+    width: 100%;
+}
+
 #_bubble-toc {
     overflow: hidden;
     height: 400px;
