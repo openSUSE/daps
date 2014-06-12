@@ -716,12 +716,6 @@ a:active > .find-icon {
     line-height: 22px;
 }
 
-.bubble a:hover .keycap, .bubble a:focus .keycap, .bubble a:active .keycap,
-.bubble a:hover .replaceable, .bubble a:focus .replaceable, .bubble a:active .replaceable,
-.bubble a:hover code, .bubble a:focus code, .bubble a:active code {
-    border-color: #FFF;
-}
-
 #_bubble-toc .active ol {
     display: block;
     position: absolute;
@@ -1889,6 +1883,14 @@ code {
 
 .toc dt {
     margin-bottom: 5px;
+}
+
+.toc dt *, #_bubble-toc li * {
+    font-weight: normal;
+    font-style: normal;
+    border-bottom: none;
+    display: inline;
+    padding: 0;
 }
 
 .indexdiv h3 {
