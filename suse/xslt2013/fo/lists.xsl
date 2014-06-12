@@ -278,7 +278,9 @@
   </fo:list-item>
 </xsl:template>
 
-<!-- Remove this template after 1.78.2/1.79.0 comes out – DB#1311 -->
+<!-- This template could be removed after 1.78.2/1.79.0 comes out (DB#1311),
+     however, it now also special handling for arch attributes, which will
+     never go upstream. Thus, don't remove it. -->
 <xsl:template match="listitem/*[1][local-name()='para' or
                                    local-name()='simpara' or
                                    local-name()='formalpara']
@@ -294,7 +296,17 @@
               priority="2">
   <fo:block xsl:use-attribute-sets="para.properties">
     <xsl:call-template name="anchor"/>
+    <xsl:if test="@arch != ''">
+      <xsl:call-template name="arch-arrows">
+        <xsl:with-param name="arch-value" select="@arch"/>
+      </xsl:call-template>
+    </xsl:if>
+
     <xsl:apply-templates/>
+
+    <xsl:if test="@arch != ''">
+      <xsl:call-template name="arch-arrows"/>
+    </xsl:if>
   </fo:block>
 </xsl:template>
 <!-- End template to remove -->

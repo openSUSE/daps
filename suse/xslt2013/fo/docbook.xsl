@@ -39,6 +39,8 @@
   <xsl:include href="../common/labels.xsl"/>
   <xsl:include href="../common/dates-revisions.xsl"/>
   <xsl:include href="../common/navigation.xsl"/>
+  <xsl:include href="../common/string-replace.xsl"/>
+  <xsl:include href="../common/arch-string.xsl"/>
 
   <xsl:include href="autotoc.xsl"/>
   <xsl:include href="callout.xsl"/>
@@ -66,8 +68,8 @@
   <xsl:include href="fop1.xsl"/>
   <xsl:include href="xep.xsl"/>
 
-  <!-- 
-    This fragment is used to build a sect1 by using rootid parameter 
+  <!--
+    This fragment is used to build a sect1 by using rootid parameter
   -->
   <xsl:template match="sect1|section" mode="process.root">
       <xsl:variable name="document.element" select="self::*"/>
@@ -82,10 +84,10 @@
       <xsl:otherwise>[could not find document title]</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+
   <!-- Include all id values in XEP output -->
   <xsl:if test="$xep.extensions != 0">
-    <xsl:processing-instruction 
+    <xsl:processing-instruction
      name="xep-pdf-drop-unused-destinations">false</xsl:processing-instruction>
   </xsl:if>
 
@@ -113,7 +115,7 @@
     <xsl:if test="$fop1.extensions != 0">
       <xsl:call-template name="fop1-document-information"/>
       <xsl:variable name="bookmarks">
-        <xsl:apply-templates select="$document.element" 
+        <xsl:apply-templates select="$document.element"
                              mode="fop1.outline"/>
       </xsl:variable>
       <xsl:if test="string($bookmarks) != ''">
@@ -121,7 +123,7 @@
           <xsl:copy-of select="$bookmarks"/>
         </fo:bookmark-tree>
       </xsl:if>
-      <xsl:apply-templates select="$document.element" 
+      <xsl:apply-templates select="$document.element"
                            mode="fop1.foxdest"/>
     </xsl:if>
 

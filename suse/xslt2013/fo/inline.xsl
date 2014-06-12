@@ -488,7 +488,7 @@
       <svg:rect height="85" width="{$width + 45}" rx="7.5" ry="7.5" x="5" y="5"
         fill="&light-gray-old;" fill-opacity="1" stroke="none"/>
       <svg:text font-family="{$mono-stack}" text-anchor="middle"
-        x="{($width div 2) + 25}" y="{$instream-font-size}" color="&dark-gray;"
+        x="{($width div 2) + 25}" y="{$instream-font-size}" fill="&dark-gray;"
         font-size="{$instream-font-size}"><xsl:value-of select="$cap"/></svg:text>
     </svg:svg>
   </fo:instream-foreign-object>

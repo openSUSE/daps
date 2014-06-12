@@ -16,7 +16,7 @@
     xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
     exclude-result-prefixes="exsl l t">
-  
+
   <xsl:template match="abstract">
     <div class="myownabstract">
       <xsl:call-template name="common.html.attributes"/>
@@ -27,22 +27,6 @@
       <!--<xsl:call-template name="sidebar.titlepage"/>-->
       <xsl:apply-templates select="*[not(self::title)]"/>
     </div>
-  </xsl:template>
-
-  <xsl:template name="readable.arch.string">
-    <xsl:param name="input"/>
-    <xsl:param name="zseries-replaced">
-      <xsl:call-template name="string-replace">
-        <xsl:with-param name="input" select="$input"/>
-        <xsl:with-param name="search-string">zseries</xsl:with-param>
-        <xsl:with-param name="replace-string">System z</xsl:with-param>
-      </xsl:call-template>
-    </xsl:param>
-    <xsl:call-template name="string-replace">
-      <xsl:with-param name="input" select="$zseries-replaced"/>
-      <xsl:with-param name="search-string">;</xsl:with-param>
-      <xsl:with-param name="replace-string">, </xsl:with-param>
-    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="para[@arch]">
@@ -98,18 +82,16 @@
         </xsl:choose>
 
         <xsl:if test="$arch != ''">
-          <strong class="arch">
+          <strong class="arch-arrow-start">
             <xsl:value-of select="$arch"/>
           </strong>
-          <span class="arch-arrow-start">
-          </span>
         </xsl:if>
 
         <xsl:copy-of select="$content"/>
 
         <xsl:if test="$arch != ''">
-          <span class="arch-arrow-end">
-          </span>
+          <strong class="arch-arrow-end">
+          </strong>
         </xsl:if>
 
       </p>

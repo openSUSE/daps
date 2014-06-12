@@ -37,6 +37,8 @@
  <xsl:include href="../common/labels.xsl"/>
  <xsl:include href="../common/titles.xsl"/>
  <xsl:include href="../common/navigation.xsl"/>
+ <xsl:include href="../common/string-replace.xsl"/>
+ <xsl:include href="../common/arch-string.xsl"/>
 
  <xsl:include href="param.xsl"/>
  <xsl:include href="create-permalink.xsl"/>
@@ -61,8 +63,6 @@
  <xsl:include href="titlepage.xsl"/>
  <xsl:include href="titlepage.templates.xsl"/>
 
-
- <xsl:include href="../common/string-replace.xsl"/>
  <xsl:include href="metadata.xsl"/>
 
 
