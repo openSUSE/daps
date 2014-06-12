@@ -1210,7 +1210,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
 
 .legalnotice .ulink:after {
     background-position: -216px -101px;
-    width: 18px;
+    width: 15px;
     height: 10px;
 }
 
@@ -1473,7 +1473,7 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
     padding: 10px 0 0;
 }
 
-.legalnotice p, .legalnotice td {
+.legalnotice p, .legalnotice td, .legalnotice .simplelist td {
     font-size: 12px;
     color: #666;
     line-height: 140%;
@@ -1553,6 +1553,7 @@ a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
 
 .admonition p {
     margin: 10px 0 0 !important;
+    font-weight: normal;
 }
 
 /* Text styles */
@@ -1970,9 +1971,9 @@ div.figure {
 
 .inlinemediaobject img {
     display: inline-block;
-    vertical-align: middle;
-    max-height: 24px;
-    padding: 0 5px;
+    vertical-align: -15%;
+    max-height: 20px;
+    padding: 0 3px;
 }
 
 .keycap {
@@ -2162,6 +2163,9 @@ table p, .informaltable table p {
 
 .table th, .informaltable th {
     font-weight: 600;
+}
+
+.table th, .informaltable th {
     background-color: #D1D1D3;
 }
 
@@ -2172,11 +2176,15 @@ table p, .informaltable table p {
     vertical-align: middle;
 }
 
+.table td[colspan], .informaltable td[colspan],
+.table td[rowspan], .informaltable td[rowspan] {
+    background-color: #FFF;
+}
+
 .table th, .informaltable th,
 .table td[colspan], .informaltable td[colspan],
 .table td[rowspan], .informaltable td[rowspan] {
     border: 1px solid #999;
-    background-color: #FFF;
 }
 
 .contains-rowspan {
