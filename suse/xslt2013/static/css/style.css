@@ -229,7 +229,7 @@ html, body {
 .back-icon, #_find-button, .bubble-corner:before, .bubble-closer,
 .single-contents-icon, #_print-button:before, #_share-fb:before,
 #_share-gp:before, #_share-tw:before, #_share-mail:before,
-.arch-arrow-start, .arch-arrow-end, .ulink:after {
+.arch-arrow-start:after, .arch-arrow-end, .ulink:after {
     background-image: url(../images/icons.png);
     background-repeat: no-repeat;
 }
@@ -1578,30 +1578,34 @@ strong, b, .imprint-label, .version-info .productname,
     font-weight: 600;
 }
 
-.arch {
+.arch-arrow-start {
     background-color: #7DC24D;
     border: 1px solid #439239;
     border-radius: 3px;
-    padding: 0 4px 0 2px;
+    padding: 0 2px 0 4px;
     display: inline-block;
     font-size: 14px;
     height: 20px;
     vertical-align:bottom;
     color: #FFF;
-    text-transform: uppercase;
     line-height: 20px;
+    position: relative;
+    margin-right: 12px;
 }
 
-.arch-arrow-start, .arch-arrow-end {
+.arch-arrow-start:after, .arch-arrow-end {
     display: inline-block;
     height: 22px;
     vertical-align:bottom;
 }
 
-.arch-arrow-start {
+.arch-arrow-start:after {
+    content: '';
     background-position: -24px -88px;
     width: 13px;
-    margin-left: -3px;
+    position: absolute;
+    right: -12px;
+    top: -1px;
 }
 
 .arch-arrow-end {
