@@ -384,7 +384,7 @@ function init_env {
 #
 ###########################################################################
 function call_make () {
-    local CORE_NO DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS 
+    local CORE_NO DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS
     local MAKE_CMD STRING SUB_CMD
 
     # first argument passed to the function is the subcommand
@@ -880,7 +880,7 @@ function build_locdrop () {
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
-    elif [[ -z "$P_DEF_FILE" ]]; then 
+    elif [[ -z "$P_DEF_FILE" ]]; then
 	[[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
@@ -1252,7 +1252,7 @@ function filelists () {
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then
-	exit_on_error "You need to specify an ID with --rootid with the list-file command." 
+	exit_on_error "You need to specify an ID with --rootid with the list-file command."
     fi
 
     # we do not want to write a logfile this time
@@ -2026,20 +2026,20 @@ function help_show_images () {
                               Default: off"
 }
 function help_show_check () {
-    echo "    --show                    Show the result of the check command   
+    echo "    --show                    Show the result of the check command
                               in a browser. Uses \$BROWSER if defined,
                               otherwise xdg-open.
                               Default: off"
 }
 function help_single () {
-    echo "    --single                  Creates a single file HTML output (opposed to 
+    echo "    --single                  Creates a single file HTML output (opposed to
                               the default, which generates chunked HTML,
                               consisting of several HTML pages.
                               Default: off"
 }
 function help_statdir () {
     echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
-                              (css, images,and, optionally, javascript).
+                              (CSS, images, Javascript etc.).
                               DEFAULT: \$STYLEROOT/static"
 }
 function help_static () {
@@ -2065,7 +2065,7 @@ function help_viewer () {
                               Default: IMG_VIEWER setting from config file"
 }
 function help_xsltparam () {
-    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in 
+    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in
                               the form of
                               \"'--stringparam KEY=VALUE' --param KEY=VALUE\".
                               The given string will be passed unmodified to the
