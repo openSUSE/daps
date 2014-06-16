@@ -521,7 +521,7 @@
                     and $draft.watermark.image != ''"
         >draft </xsl:if><xsl:if test="$node = 'body'"><xsl:if test="$is.chunk = 0"
         >single </xsl:if><xsl:if test="$add.suse.footer = 0">nofooter </xsl:if
-        >offline</xsl:if></xsl:attribute>
+        >offline js-off</xsl:if></xsl:attribute>
   </xsl:template>
 
 <xsl:template match="*" mode="process.root">
@@ -608,27 +608,40 @@
 
   <xsl:template name="user.head.content">
     <xsl:param name="node" select="."/>
-    <!-- Quirk script:
-      if{For Chrome 30 on Nexus 7/Android 4.3. Shouldn't hurt on other Android
-         platforms, either. Embedding it like this is ugly but should save some
-         loading time. We only choose between http: and https:, as file: et al.
-         would just lead to an error.}
-    elif{For Chrome 34 on desktop Linux. Chrome does not recognize semi-bold
-         Open Sans as being semi-bold, embedding it via @font-face fixes that.
-         We only add the relevant CSS file in case build.for.web is active,
-         as build.for.web!=1 already hardcodes the same CSS file.}
-         -->
-    <script type="text/javascript">
-      if ( navigator.userAgent.toLowerCase().indexOf('android') != -1 ) {
-        protocol = (window.location.protocol == 'https:') ? 'https' : 'http';
-        document.write('<link rel="stylesheet" type="text/css" href="' + protocol + '://static.opensuse.org/fonts/fonts-nolocal.css"></link>');
-      }
-      <xsl:if test="$build.for.web = 1">
-        else if ( window.location.protocol == 'file:' ) {
-          document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
-        }
-      </xsl:if>
-    </script>
+
+    <xsl:if test="$build.for.web = 1">
+      <!-- Load fonts from the web:
+        if (we are online) {
+          if (Chrome/Android) {
+            Use a CSS file without local() fonts, as
+            Chrome/Chromium on Android do not understand local(). }
+          else {
+            Download the normal CSS that contains references to the web
+            fonts. }
+           -->
+      <script type="text/javascript">
+<xsl:text disable-output-escaping="yes">
+<![CDATA[
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
+      file = 'fonts-nolocal.css';
+  }
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+}
+]]>
+</xsl:text>
+      </script>
+      <noscript>
+        <link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css"></link>
+      </noscript>
+    </xsl:if>
     <xsl:if test="$daps.header.js.library != ''">
       <xsl:call-template name="make.script.link">
         <xsl:with-param name="script.filename" select="$daps.header.js.library"/>
