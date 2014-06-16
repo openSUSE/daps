@@ -97,7 +97,8 @@
   <xsl:variable name="color">
     <xsl:call-template name="admon.symbol.color"/>
   </xsl:variable>
-  <xsl:variable name="graphic.width" select="6.1"/>
+  <!-- <xsl:variable name="graphic.width" select="6.1"/> -->
+  <xsl:variable name="graphic.width" select="8"/>
 
   <fo:block id="{$id}" xsl:use-attribute-sets="graphical.admonition.properties">
     <fo:list-block
@@ -115,9 +116,7 @@
           </fo:list-item-label>
           <fo:list-item-body start-indent="body-start()">
             <fo:block padding-start="{(&gutter; - 0.75) div 2}mm"
-              border-start-width="&mediumline;mm" border-start-style="solid"
-              border-start-color="{$color}" padding-before="3mm"
-              padding-after="3mm">
+              padding-before="3mm" padding-after="3mm">
               <xsl:if test="$admon.textlabel != 0 or title or info/title">
                 <fo:block xsl:use-attribute-sets="admonition.title.properties"
                   color="{$color}">
