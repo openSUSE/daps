@@ -236,7 +236,7 @@
       </fo:list-block>
 </xsl:template>
 
-<xsl:template match="preface|glossary|index" mode="susetoc">
+<xsl:template match="preface|book/glossary|book/index" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -254,7 +254,7 @@
     </fo:block>
 </xsl:template>
 
-<xsl:template match="chapter|appendix" mode="susetoc">
+<xsl:template match="chapter|book/appendix" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -293,10 +293,46 @@
     </fo:list-block>
 </xsl:template>
 
+<xsl:template match="article/appendix|article/glossary|article/index" mode="susetoc">
+    <xsl:variable name="id">
+      <xsl:call-template name="object.id"/>
+    </xsl:variable>
+    <xsl:variable name="label">
+      <xsl:call-template name="toc.label"/>
+    </xsl:variable>
+    <xsl:variable name="title">
+      <xsl:call-template name="toc.title"/>
+    </xsl:variable>
+
+    <fo:list-block role="TOC.{local-name()}" relative-align="baseline"
+       keep-with-next.within-column="always"
+       xsl:use-attribute-sets="toc.level3.properties"
+       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-label-separation="{&gutter;}mm"
+       space-after="0.75em">
+      <fo:list-item>
+        <fo:list-item-label end-indent="label-end()">
+          <fo:block text-align="right">
+            <fo:basic-link internal-destination="{$id}">
+              <xsl:value-of select="$label"/>
+            </fo:basic-link>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()">
+          <fo:block>
+            <xsl:copy-of select="$title"/>
+          </fo:block>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
+</xsl:template>
+
 <xsl:template match="preface/sect1|appendix[@role='legal']/sect1|sect2"
   mode="susetoc"/>
 
 <xsl:template match="sect1|refentry" mode="susetoc">
+  <!-- Exclude sect1's in appendixes etc. of articles. -->
+  <xsl:if test="ancestor::book or parent::article">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -320,32 +356,33 @@
           <xsl:attribute name="space-after">0.75em</xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
-        <fo:list-item>
-          <fo:list-item-label end-indent="label-end()"
-            text-align="end">
-            <fo:block text-align-last="end">
-            <xsl:choose>
-              <xsl:when test="self::sect1">
-                <fo:basic-link internal-destination="{$id}">
-                  <xsl:value-of select="$label"/>
-                </fo:basic-link>
-              </xsl:when>
-              <xsl:otherwise>
-                <!-- We need an empty block -->
-                <fo:leader/>
-              </xsl:otherwise>
-            </xsl:choose>
-            </fo:block>
-          </fo:list-item-label>
-          <fo:list-item-body start-indent="body-start()" text-align="start">
-            <xsl:copy-of select="$title"/>
-          </fo:list-item-body>
-        </fo:list-item>
-      </fo:list-block>
+      <fo:list-item>
+        <fo:list-item-label end-indent="label-end()"
+          text-align="end">
+          <fo:block text-align-last="end">
+          <xsl:choose>
+            <xsl:when test="self::sect1">
+              <fo:basic-link internal-destination="{$id}">
+                <xsl:value-of select="$label"/>
+              </fo:basic-link>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- We need an empty block -->
+              <fo:leader/>
+            </xsl:otherwise>
+          </xsl:choose>
+          </fo:block>
+        </fo:list-item-label>
+        <fo:list-item-body start-indent="body-start()" text-align="start">
+          <xsl:copy-of select="$title"/>
+        </fo:list-item-body>
+      </fo:list-item>
+    </fo:list-block>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="sect2[1]" mode="susetoc">
-    <xsl:if test="not(ancestor::article)and not(ancestor::*[@role='legal'])">
+    <xsl:if test="not(ancestor::article) and not(ancestor::*[@role='legal'])">
       <fo:block keep-with-previous.within-column="always" role="sect2"
         xsl:use-attribute-sets="toc.level4.properties"
         text-align="start" space-after="0.75em"

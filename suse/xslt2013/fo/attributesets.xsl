@@ -64,7 +64,8 @@
   <xsl:attribute name="font-size"><xsl:value-of select="1 div $sans-xheight-adjust * 0.85"/>em</xsl:attribute>
   <xsl:attribute name="color">
     <xsl:choose>
-      <xsl:when test="self::sect1|self::sect2|self::sect3|self::sect4|self::sect">
+      <xsl:when test="self::sect1|self::sect2|self::sect3|self::sect4|
+                      self::sect5|self::section|ancestor::article">
         &mid-gray;
       </xsl:when>
       <xsl:otherwise>
