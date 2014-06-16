@@ -8,29 +8,29 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns="http://www.w3.org/1999/xhtml">
 
-<xsl:param name="html.stylesheet">susebooks.css</xsl:param>
+<xsl:param name="html.stylesheet">static/css/susebooks.css</xsl:param>
 
 <xsl:param name="chunk.fast" select="1"/>
 <xsl:param name="chunk.section.depth" select="0"/>
  
 <!-- Navigational graphics -->
 <xsl:param name="navig.graphics" select="1"/>
-<xsl:param name="navig.graphics.path">navig/</xsl:param>
+<xsl:param name="navig.graphics.path">static/images/</xsl:param>
 <xsl:param name="navig.graphics.extension" select="'.png'"/>
 
 <xsl:param name="admon.graphics" select="1"/>
-<xsl:param name="admon.graphics.path">admon/</xsl:param>
+<xsl:param name="admon.graphics.path">static/images/</xsl:param>
 <xsl:param name="admon.graphic.width" select="32"/>
 <!-- The width of admonition graphics -->
 <!--<xsl:param name="admon.graphic.width">25</xsl:param>-->
 <xsl:param name="admon.style" select="''"/>
 
-<xsl:param name="callout.graphics.path">callouts/</xsl:param>
+<xsl:param name="callout.graphics.path">static/images/</xsl:param>
 
 <!-- Prefix path for every filename, has to end with "/" -->
 <xsl:param name="graphics.path">images/</xsl:param>
 
-<xsl:param name="draft.watermark.image">style_images/draft_html.png</xsl:param>
+<xsl:param name="draft.watermark.image">static/images/draft_html.png</xsl:param>
 
 <!--
 
