@@ -1231,7 +1231,7 @@ button:focus::-moz-focus-inner, button::-moz-focus-inner {
     display: none;
 }
 
-.screen a[id] {
+.verbatim-wrap a[id] {
     display: none;
 }
 
@@ -1799,7 +1799,7 @@ code {
 
  /* This elements exists solely to avoid the scrollbar overlaying the rounded
     corners and the padding becoming inconsistent. */
-.screen-wrap {
+.verbatim-wrap {
     padding: 10px;
     background-color: #EFEFF0;
     border-radius: 5px;
@@ -1807,21 +1807,24 @@ code {
     border: 1px solid #999;
 }
 
-.example .screen-wrap {
+.example .verbatim-wrap {
     margin: 10px 0 24px;
 }
 
-.screen {
+.screen, .programlisting, .computeroutput, .userinput, .synopsis {
     font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     color: #333;
     line-height: 125%;
+}
+
+.verbatim-wrap > div {
     display: block;
     overflow: auto;
     overflow-y: hidden;
     text-align: left;
 }
 
-.screen code, .screen .replaceable {
+.verbatim-wrap code, .verbatim-wrap .replaceable {
     border-radius: 0;
     background-color: transparent;
     font-size: 100%;
@@ -1829,12 +1832,12 @@ code {
     padding: 0;
 }
 
-.screen code {
+.verbatim-wrap code {
     color: #333;
 }
 
 
-.screen .command {
+.verbatim-wrap .command {
     color: #306928;
 }
 
@@ -2134,6 +2137,13 @@ ol.procedure {
     margin: 0 10px;
 }
 
+ol.procedure .title {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    padding: 0;
+}
+
 ol.substeps, ol.orderedlist {
     padding: 0 0 0 35px;
     margin: 0 0 0 10px;
@@ -2253,7 +2263,7 @@ ul {
     margin: 0 0 40px 0;#
 }
 
-.answer .table-title, .answer .screen-wrap, .answer .variablelist {
+.answer .table-title, .answer .verbatim-wrap, .answer .variablelist {
     margin-top: 10px;
 }
 
@@ -2967,17 +2977,17 @@ p.ds-message {
         padding-bottom: 10px;
     }
 
-    .screen-wrap {
+    .verbatim-wrap {
         border-left: none;
         border-right: none;
         border-radius: 0;
         margin-right: -10px;
     }
 
-    .example-contents > .screen-wrap, .admonition > .screen-wrap,
-    .sect1 > .screen-wrap, .sect2 > .screen-wrap, .sect3 > .screen-wrap,
-    .sect4 > .screen-wrap, .sect5 > .screen-wrap, .sect6 > .screen-wrap,
-    .sect > .screen-wrap, .chapter > .screen-wrap, .article > .screen-wrap,
+    .example-contents > .verbatim-wrap, .admonition > .verbatim-wrap,
+    .sect1 > .verbatim-wrap, .sect2 > .verbatim-wrap, .sect3 > .verbatim-wrap,
+    .sect4 > .verbatim-wrap, .sect5 > .verbatim-wrap, .sect6 > .verbatim-wrap,
+    .sect > .verbatim-wrap, .chapter > .verbatim-wrap, .article > .verbatim-wrap,
     .procedure-contents, .procedure-title-wrap + .procedure-contents,
     div.figure, .complex-example .example-contents {
         margin-left: -10px;
