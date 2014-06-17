@@ -50,7 +50,6 @@
   </xsl:template>
 
   <xsl:template match="email">
-    <!--<span>-->
     <xsl:if test="not($email.delimiters.enabled = 0)">
       <xsl:text>&lt;</xsl:text>
     </xsl:if>
@@ -66,7 +65,6 @@
     <xsl:if test="not($email.delimiters.enabled = 0)">
       <xsl:text>&gt;</xsl:text>
     </xsl:if>
-    <!--</span>-->
   </xsl:template>
 
   <xsl:template match="keycap">
