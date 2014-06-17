@@ -144,8 +144,7 @@
   </xsl:template>
 
   <xsl:template match="authorgroup" mode="article.titlepage.recto.auto.mode">
-    <fo:block font-size="&large;pt" space-before="1em"
-      text-align="start">
+    <fo:block font-size="&large;pt" space-before="1em" text-align="start">
       <xsl:call-template name="person.name.list">
         <xsl:with-param name="person.list" select="author|corpauthor"/>
       </xsl:call-template>
@@ -154,9 +153,9 @@
 
   <xsl:template match="author|corpauthor"
     mode="article.titlepage.recto.auto.mode">
-    <fo:inline space-before="0.5em" font-size="&large;pt">
+    <fo:block space-before="1em" font-size="&large;pt" text-align="start">
       <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
-    </fo:inline>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="editor|othercredit"
