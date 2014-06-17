@@ -44,6 +44,7 @@
   <xsl:attribute name="space-after.optimum">1.5em</xsl:attribute>
   <xsl:attribute name="space-after.minimum">1.2em</xsl:attribute>
   <xsl:attribute name="space-after.maximum">1.7em</xsl:attribute>
+  <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
 </xsl:attribute-set>
 
 <!-- 2. Callouts ================================================ -->
