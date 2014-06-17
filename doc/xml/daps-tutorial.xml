@@ -55,10 +55,10 @@
 
  </abstract>
 <figure>
- <title>The finished HTML file, which is the Target of this Tutorial</title>
+ <title>The finished HTML file which is the Target of this Tutorial</title>
 <mediaobject>
  <imageobject>
-  <imagedata fileref="Butcht7.11.png" width="80%"/>
+  <imagedata fileref="butcht7.11.png" width="80%"/>
  </imageobject>
 </mediaobject>
 </figure>
@@ -186,7 +186,7 @@
      <screen>&prompt1;cd recipe</screen>
     </step>
     <step>
-    <screen>HOME/recipe: &prompt1;mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
+    <screen>&prompt1;mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      <para>
       Now you have created the required directory structure that is
       needed by &dapsacr;.</para>
@@ -227,12 +227,12 @@
 
     <example id="ex.header">
      <title>Header of a DocBook File</title>
-     <programlisting>&lt;?xml version="1.0" encoding="utf-8"?> <co id="co.header.xml"/>
+     <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt; <co id="co.header.xml"/>
      &lt;!DOCTYPE article PUBLIC <co id="co.header2.xml"/>
      "-//OASIS//DTD DocBook XML V4.5//EN"
      "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 
-     ]>
+     ]&gt;
      </programlisting>
      <calloutlist>
       <callout arearefs="co.header.xml">
@@ -299,7 +299,7 @@
     The most important thing you need to know about XML is,
     that you have to close the tags. Either with an end tag or with a
     backslash at the end of the tag (for example:
-    <command>&lt;para/></command>). The content between the
+    <command>&lt;para/&gt;</command>). The content between the
     tags depends on which element you want to
     create. Open the XML file <filename>recipe.xml</filename> that you just
     created, and place the cursor below the header. To write an article, paste
@@ -308,9 +308,9 @@
    </para>
    <example id="ex.tags">
     <title>Start- and Endtag of an Article</title>
-    <programlisting>&lt;article>
+    <programlisting>&lt;article&gt;
 Tags and text
-&lt;/article>
+&lt;/article&gt;
     </programlisting>
    </example>
   </sect2>
@@ -323,18 +323,18 @@ Tags and text
    </para>
    <example id="ex.articleinfo">
     <title>Article Info Header</title>
-    <programlisting>&lt;article lang="en" id="art.template"><co id="co.article.xml"/>
-&lt;title>Little G's Ceylon Bang&lt;/title><co id="co.article2.xml"/>
-&lt;articleinfo>
-&lt;releaseinfo>
-Build Date: 2013-10-21<co id="co.article3.xml"/>
-&lt;/releaseinfo>
- &lt;author><co id="co.author.xml"/>
-  &lt;firstname>Tux&lt;/firstname>
-  &lt;surname>Penguin&lt;/surname>
- &lt;/author>
-&lt;/articleinfo>
-&lt;abstract><co id="co.article5.xml"/>
+    <programlisting>&lt;article lang="en" id="art.template"&gt;<co id="co.article.xml"/>
+&lt;title>Little G's Ceylon Bang&lt;/title&gt;<co id="co.article2.xml"/>
+&lt;articleinfo&gt;
+&lt;releaseinfo&gt;
+  2013-10-21<co id="co.article3.xml"/>
+&lt;/releaseinfo&gt;
+ &lt;author&gt;<co id="co.author.xml"/>
+  &lt;firstname&gt;Tux&lt;/firstname&gt;
+  &lt;surname&gt;Penguin&lt;/surname&gt;
+ &lt;/author&gt;
+&lt;/articleinfo&gt;
+&lt;abstract&gt;<co id="co.article5.xml"/>
 Recipe for a chili sauce.
 &lt;/abstract>
 &lt;/article><co id="co.article4.xml"/>
@@ -392,20 +392,20 @@ Recipe for a chili sauce.
    </para>
    <example id="ex.sections">
     <title>Example: Structure With Sections</title>
-    <programlisting>&lt;sect1><co id="co.section.xml"/>
- &lt;title>What do you need?&lt;/title>
-  &lt;sect2><co id="co.section2.xml"/>
-   &lt;title>Ingredients&lt;/title>
-    &lt;para/>
-   &lt;/sect2><co id="co.section3.xml"/>
-   &lt;sect2>
-    &lt;title>Equipment&lt;/title>
-     &lt;para/>
-  &lt;/sect2>
- &lt;/sect1><co id="co.section4.xml"/>
-&lt;sect1 id="sec.preparation">
- &lt;title>Preparation&lt;/title>
-&lt;/sect1>
+    <programlisting>&lt;sect1&gt;<co id="co.section.xml"/>
+ &lt;title&gt;What do you need?&lt;/title&gt;
+  &lt;sect2&gt;<co id="co.section2.xml"/>
+   &lt;title&gt;Ingredients&lt;/title&gt;
+    &lt;para/&gt;
+   &lt;/sect2&gt;<co id="co.section3.xml"/>
+   &lt;sect2&gt;
+    &lt;title&gt;Equipment&lt;/title&gt;
+     &lt;para/&gt;
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;<co id="co.section4.xml"/>
+&lt;sect1 id="sec.preparation"&gt;
+ &lt;title&gt;Preparation&lt;/title&gt;
+&lt;/sect1&gt;
     </programlisting>
     <calloutlist>
      <callout arearefs="co.section.xml">
@@ -461,28 +461,28 @@ Recipe for a chili sauce.
 
    <example>
     <title>Itemized List</title>
-    <programlisting>&lt;itemizedlist>
- &lt;listitem>
-  &lt;para>
+    <programlisting>&lt;itemizedlist&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
    60g Habanero Chilis
-  &lt;/para>
-  &lt;/listitem>
- &lt;listitem>
-  &lt;para>
+  &lt;/para&gt;
+  &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
    30g Cayenne Chilis
-  &lt;/para>
- &lt;/listitem>
- &lt;listitem>
-  &lt;para>
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
    1,5 Butch T Chilis
-  &lt;/para>
- &lt;/listitem>
- &lt;listitem>
-  &lt;para>
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
    75g Kidney Beans
-  &lt;/para>
- &lt;/listitem>
-&lt;/itemizedlist>
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+&lt;/itemizedlist&gt;
     </programlisting>
    </example>
    <para>
@@ -500,10 +500,7 @@ Recipe for a chili sauce.
      </mediaobject>
    </figure>
 
-
   </sect2>
-
-
 
   <sect2>
    <title>Giving Step-by-Step Instructions</title>
@@ -516,27 +513,27 @@ Recipe for a chili sauce.
    <example id="ex.listing">
     <title>Example for Step-by-Step Instructions </title>
     <programlisting>&lt;procedure><co id="co.textstructure.xml"/>
- &lt;step><co id="co.textstructure2.xml"/>
-  &lt;para><co id="co.textstructure3.xml"/>
+ &lt;step&gt;<co id="co.textstructure2.xml"/>
+  &lt;para&gt;<co id="co.textstructure3.xml"/>
    Rinse, than drain the kidney beans for about 10 minutes.
-  &lt;/para>
- &lt;/step>
- &lt;step>
-  &lt;para>
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
    Fry kidney beans with some oil.
-  &lt;/para>
- &lt;/step>
- &lt;step>
-  &lt;para>
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
    Puree all ingredients.
-  &lt;/para>
- &lt;/step>
- &lt;step>
-  &lt;para>
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
    Cook for about 5 minutes.
-  &lt;/para>
- &lt;/step>
-&lt;/procedure>
+  &lt;/para&gt;
+ &lt;/step&gt;
+&lt;/procedure&gt;
     </programlisting>
     <calloutlist>
      <callout arearefs="co.textstructure.xml">
@@ -559,7 +556,6 @@ Recipe for a chili sauce.
     </calloutlist>
    </example>
 
-
    <figure>
     <title>HTML Output (Article with Step-by-Step-Instructions)</title>
     <mediaobject>
@@ -571,10 +567,6 @@ Recipe for a chili sauce.
   </sect2>
 
 
-
-
-
-
 <sect2>
  <title>Integrating Remote Links and Cross References</title>
  <sect3>
@@ -584,10 +576,10 @@ Recipe for a chili sauce.
   </para>
  <example>
   <title>Integrating Remote Link</title>
-  <programlisting>&lt;para>
+  <programlisting>&lt;para&gt;
  Before you start to cook:
- &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/>
-&lt;/para>
+ &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/&gt;
+&lt;/para&gt;
   </programlisting>
  </example>
  <para>
@@ -614,19 +606,19 @@ Recipe for a chili sauce.
   <example>
    <title>Integrating Cross References</title>
    <programlisting>&lt;para>
- How to prepare see &lt;xref linkend="sec.preparation"/><co id="co.references.xml"/>
-&lt;/para>
+ How to prepare see &lt;xref linkend="sec.preparation"/&gt;<co id="co.references.xml"/>
+&lt;/para&gt;
 
 ...
 
 
-&lt;sect1 id="sec.preparation"><co id="co.references2.xml"/>
+&lt;sect1 id="sec.preparation"&gt;<co id="co.references2.xml"/>
 
    </programlisting>
    <calloutlist>
     <callout arearefs="co.references.xml">
      <para>
-      With <command>&lt;xref linkend="ex.preparation"/></command> you set a link to the
+      With <command>&lt;xref linkend="ex.preparation"/&gt;</command> you set a link to the
       following <quote>Preparation</quote> title.
      </para>
     </callout>
@@ -639,7 +631,7 @@ Recipe for a chili sauce.
    </calloutlist>
   </example>
 <para>
- To get the output shown in <quote> Figure 7</quote>, place the cursor below the
+ To get the output shown in <quote>Figure 7</quote>, place the cursor below the
  <command>&lt;title>Preparation&lt;/title></command> element and paste the
  contents of <quote>Example 8</quote> into your XML file.
 </para>
@@ -679,14 +671,14 @@ Recipe for a chili sauce.
    </procedure>
    <example>
     <title>Integrating Images</title>
-    <programlisting>&lt;figure>
-    &lt;title>Butch T Chili&lt;/title><co id="co.image.xml"/>
-    &lt;mediaobject>
-    &lt;imageobject>
-    &lt;imagedata fileref="butcht.png"/><co id="co.image2.xml"/>
-    &lt;/imageobject>
-    &lt;/mediaobject>
-    &lt;/figure>
+    <programlisting>&lt;figure&gt;
+    &lt;title&gt;Butch T Chili&lt;/title&gt;<co id="co.image.xml"/>
+    &lt;mediaobject&gt;
+    &lt;imageobject&gt;
+    &lt;imagedata fileref="butcht.png"/&gt;<co id="co.image2.xml"/>
+    &lt;/imageobject&gt;
+    &lt;/mediaobject&gt;
+    &lt;/figure&gt;
     </programlisting>
    </example>
    <calloutlist>
@@ -714,9 +706,6 @@ Recipe for a chili sauce.
 </sect1>
 
 
-
-
-
  <sect1>
   <title>Convert Your XML Files</title>
   <para>
@@ -736,7 +725,7 @@ Recipe for a chili sauce.
      <para>
       Open a terminal and enter the following command:
      </para>
-     <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> color-pdf</screen>
+     <screen>&prompt1;daps -d <filename>DC-tutorial</filename> pdf</screen>
    </step>
    <step>
      <para>
@@ -753,7 +742,7 @@ Recipe for a chili sauce.
      <para>
       To build an HTML page, open a terminal and enter the following command:
      </para>
-     <screen>&prompt1;HOME/tutorial: daps -d <filename>DC-tutorial</filename> htmlsingle</screen>
+     <screen>&prompt1;daps -d <filename>DC-tutorial</filename> html --single</screen>
      </step>
      <step>
      <para>
