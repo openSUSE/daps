@@ -70,9 +70,20 @@
     <fo:block
       xsl:use-attribute-sets="table.of.contents.titlepage.recto.style dark-green"
       space-before="{&columnfragment;}mm"
-      start-indent="{&column; + &gutter;}mm"
       font-weight="normal"
       font-family="{$title.fontset}">
+      <xsl:choose>
+        <xsl:when test="self::article">
+          <xsl:attribute name="start-indent">
+            <xsl:value-of select="concat(&columnfragment; + &gutter;, 'mm')"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="start-indent">
+            <xsl:value-of select="concat(&column; + &gutter;, 'mm')"/>
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="ancestor-or-self::article">
           <xsl:attribute name="space-after">&gutter;mm</xsl:attribute>

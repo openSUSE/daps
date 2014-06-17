@@ -49,13 +49,13 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <fo:block margin-left="-{$titlepage.logo.overhang}mm" space-after="&gutter;mm"
+    <fo:block margin-left="{&columnfragment; + &gutter; - $titlepage.logo.overhang}mm" space-after="&gutter;mm"
       text-align="left">
       <fo:external-graphic content-width="{$titlepage.logo.width}"
         width="{$titlepage.logo.width}" src="{$logo}"/>
     </fo:block>
 
-    <fo:block start-indent="{&column; + &gutter;}mm" text-align="start"
+    <fo:block start-indent="{&columnfragment; + &gutter;}mm" text-align="start"
       role="article.titlepage.recto">
       <fo:block space-after="{&gutterfragment;}mm">
         <xsl:choose>
@@ -81,7 +81,8 @@
         </xsl:choose>
       </fo:block>
 
-    <fo:block padding-before="{2 * &gutterfragment;}mm" padding-start="{(2 * &column;) + &gutter;}mm">
+    <fo:block padding-before="{2 * &gutterfragment;}mm"
+      padding-start="{&column; + &columnfragment; + &gutter;}mm">
       <xsl:attribute name="border-top"><xsl:value-of select="concat(&mediumline;,'mm solid ',$dark-green)"/></xsl:attribute>
       <xsl:apply-templates mode="article.titlepage.recto.auto.mode"
             select="articleinfo/productname[not(@role)]"/>

@@ -307,7 +307,7 @@
     <fo:list-block role="TOC.{local-name()}" relative-align="baseline"
        keep-with-next.within-column="always"
        xsl:use-attribute-sets="toc.level3.properties"
-       provisional-distance-between-starts="{&column; + &gutter;}mm"
+       provisional-distance-between-starts="{&columnfragment; + &gutter;}mm"
        provisional-label-separation="{&gutter;}mm"
        space-after="0.75em">
       <fo:list-item>
@@ -331,7 +331,9 @@
   mode="susetoc"/>
 
 <xsl:template match="sect1|refentry" mode="susetoc">
-  <!-- Exclude sect1's in appendixes etc. of articles. -->
+  <!-- Excludes sect1s when it appears in the appendixes etc. of articles,
+       as we only want a one-level ToC in articles, and sect1 there would
+       already be a second level. -->
   <xsl:if test="ancestor::book or parent::article">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
@@ -343,10 +345,25 @@
       <xsl:call-template name="toc.title"/>
     </xsl:variable>
     <fo:list-block  role="TOC.{local-name()}"  xsl:use-attribute-sets="toc.level3.properties"
-       relative-align="baseline"
-       provisional-distance-between-starts="{&column; + &gutter;}mm"
-       provisional-label-separation="{&gutter;}mm">
-
+       relative-align="baseline">
+     <xsl:choose>
+        <xsl:when test="parent::article">
+          <xsl:attribute name="provisional-distance-between-starts">
+            <xsl:value-of select="concat(&columnfragment; + &gutter;, 'mm')"/>
+          </xsl:attribute>
+          <xsl:attribute name="provisional-label-separation">
+            <xsl:value-of select="concat(&gutter;, 'mm')"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="provisional-distance-between-starts">
+            <xsl:value-of select="concat(&column; + &gutter;, 'mm')"/>
+          </xsl:attribute>
+          <xsl:attribute name="provisional-label-separation">
+            <xsl:value-of select="concat(&gutter;, 'mm')"/>
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="child::sect2 and not(ancestor::article)
                                      and not(ancestor::*[@role='legal'])">
