@@ -132,6 +132,8 @@
 
 <!-- ================ -->
 
+<!-- FIXME: We have (almost) the same template in xhtml/xref.xsl. This is
+     (almost) needless duplication. -->
 <xsl:template name="create.linkto.other.book">
   <xsl:param name="target"/>
   <xsl:variable name="refelem" select="local-name($target)"/>
@@ -152,6 +154,7 @@
     target.book: <xsl:value-of select="count($target.book)"/>
   </xsl:message>-->
 
+  <xsl:if test="not($target/self::book or $target/self::article)">
     <xsl:apply-templates select="$target" mode="xref-to">
       <xsl:with-param name="referrer" select="."/>
       <xsl:with-param name="xrefstyle">
@@ -161,12 +164,15 @@
         </xsl:choose>
       </xsl:with-param>
     </xsl:apply-templates>
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 
-  <xsl:text>, </xsl:text>
   <xsl:if test="$target/self::sect1 or
     $target/self::sect2 or
     $target/self::sect3 or
-    $target/self::sect4">
+    $target/self::sect4 or
+    $target/self::sect5 or
+    $target/self::section">
     <xsl:variable name="hierarchy.node"
       select="(
       $target/ancestor-or-self::chapter |
