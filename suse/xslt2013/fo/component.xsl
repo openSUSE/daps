@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
   Purpose:
     Restyle titles of chapters, etc.
 
@@ -52,7 +52,7 @@
     </xsl:choose>
   </xsl:variable>
 
-  <fo:block xsl:use-attribute-sets="component.title.properties">
+  <fo:block xsl:use-attribute-sets="section.title.properties">
     <xsl:if test="$pagewide != 0">
       <!-- Doesn't work to use 'all' here since not a child of fo:flow -->
       <xsl:attribute name="span">inherit</xsl:attribute>
@@ -110,9 +110,11 @@
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="title.split">
-          <xsl:with-param name="node" select="$node"/>
-        </xsl:call-template>
+        <fo:block xsl:use-attribute-sets="section.title.level1.properties">
+          <xsl:call-template name="title.split">
+            <xsl:with-param name="node" select="$node"/>
+          </xsl:call-template>
+        </fo:block>
       </xsl:otherwise>
     </xsl:choose>
   </fo:block>
@@ -139,6 +141,45 @@
   <fo:inline xsl:use-attribute-sets="title.name.color">
     <xsl:copy-of select="$title"/>
   </fo:inline>
+</xsl:template>
+
+<!-- FIXME: priority attribute is necessary to overwrite the template
+     below, so we get the correct headline style. Ideally, however,
+     we would use the template below, though, and still get nice-looking
+     headlines. -->
+<xsl:template match="article/appendix|article/appendix[@role='legal']"
+  priority="1">
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:variable name="title">
+    <xsl:apply-templates select="." mode="object.title.markup"/>
+  </xsl:variable>
+
+  <xsl:variable name="titleabbrev">
+    <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+  </xsl:variable>
+
+  <fo:block id='{$id}'>
+    <fo:block>
+      <fo:marker marker-class-name="section.head.marker">
+        <xsl:choose>
+          <xsl:when test="$titleabbrev = ''">
+            <xsl:value-of select="$title"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$titleabbrev"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </fo:marker>
+      <xsl:call-template name="component.title"/>
+    </fo:block>
+
+    <xsl:call-template name="make.component.tocs"/>
+
+    <xsl:apply-templates/>
+  </fo:block>
 </xsl:template>
 
 

@@ -45,7 +45,7 @@
               mode="titlepage.mode"
               priority="2">
 
-  <xsl:variable name="section" 
+  <xsl:variable name="section"
                 select="(ancestor::section |
                         ancestor::simplesect |
                         ancestor::sect1 |
@@ -71,8 +71,8 @@
         <xsl:otherwise><xsl:value-of select="''"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-  
-    <xsl:variable name="level">
+
+    <xsl:variable name="level-candidate">
       <xsl:choose>
         <xsl:when test="$renderas != ''">
           <xsl:value-of select="$renderas"/>
@@ -81,6 +81,17 @@
           <xsl:call-template name="section.level">
             <xsl:with-param name="node" select="$section"/>
           </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="level">
+      <xsl:choose>
+        <xsl:when test="ancestor::article and ancestor::appendix">
+          <xsl:value-of select="$level-candidate + 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$level-candidate"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -197,7 +208,7 @@
       keep-with-next="always"
       space-before="1.12em" space-after="0.5em"
       space-after.precedence="2">
-      <xsl:apply-templates/> 
+      <xsl:apply-templates/>
     </fo:block>
   </fo:block>
 </xsl:template>
@@ -261,7 +272,7 @@
             linefeed-treatment='preserve'>
             <!-- I hope no one is going to beat me up over this font size – but
                  the screens in the GPL really do look better this way, as we
-                 can now fit 80 characters on a line even on two-column pages. 
+                 can now fit 80 characters on a line even on two-column pages.
                  -->
     <xsl:apply-templates/>
   </fo:block>
