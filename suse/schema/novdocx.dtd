@@ -90,7 +90,7 @@
                     setindex?)>
 
 <!ELEMENT setinfo (productname* , productnumber*, 
-                   date?, 
+                   date?, releaseinfo?,
                    legalnotice*,
                    authorgroup*, abstract*) >
 
@@ -98,8 +98,9 @@
                     (part | chapter | article %xi_include.def;)+,
                     (appendix | glossary %xi_include.def;)*, index?) >
 <!-- change require title in bookinfo  this will be full book title used for links to bookinfo but not displayed -->
-<!ELEMENT bookinfo  (title, productname+ , productnumber? , date? , titleabbrev? , 
-                     (legalnotice %xi_include.def;)+, authorgroup*, abstract*) >
+<!ELEMENT bookinfo  (title, productname+, productnumber?, date?, releaseinfo?,
+                     titleabbrev?, (legalnotice %xi_include.def;)+,
+                     authorgroup*, abstract*) >
 
 <!ELEMENT article (title, subtitle?, titleabbrev?,
                    articleinfo?,
@@ -115,7 +116,7 @@
                    %xi_include.def;)*))|(sect1+|(refentry %xi_include.def;)+)),
                   (index|glossary|appendix %xi_include.def;)*)>
                
-<!ELEMENT articleinfo ((author|authorgroup|date|productname|
+<!ELEMENT articleinfo ((author|authorgroup|date|releaseinfo|productname|
                         productnumber|legalnotice|indexterm|abstract
                         %xi_include.def;)+)>
 
@@ -322,6 +323,7 @@
 <!-- misc -->
 <!ELEMENT legalnotice     (title?, (simplelist | para | formalpara )+) >
 <!ELEMENT date              (#PCDATA | phrase | superscript)* >
+<!ELEMENT releaseinfo       (#PCDATA | phrase)* >
 
 <!-- refentry -->
 <!ELEMENT refentry        (refmeta?, remark*, refnamediv, refsect1+) >
