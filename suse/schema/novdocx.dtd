@@ -29,7 +29,7 @@
 -->
 
 <!ELEMENT xi:include (xi:fallback)?>
-<!ATTLIST xi:include 
+<!ATTLIST xi:include
    xmlns:xi   CDATA       #FIXED    "http://www.w3.org/2001/XInclude"
    href       CDATA       #IMPLIED
    parse      (xml|text)  "xml"
@@ -458,6 +458,10 @@
                %xmlbase;>
 
 <!ATTLIST date
+               %profiling.attributes;
+               %xmlbase;>
+
+<!ATTLIST releaseinfo
                %profiling.attributes;
                %xmlbase;>
 

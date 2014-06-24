@@ -99,6 +99,7 @@ setinfo =
     productname*,
     productnumber*,
     date?,
+    releaseinfo?,
     legalnotice*,
     authorgroup*,
     abstract*
@@ -120,6 +121,7 @@ bookinfo =
     productname+,
     productnumber?,
     date?,
+    releaseinfo?,
     titleabbrev?,
     (legalnotice | xi_include.def)+,
     authorgroup*,
@@ -164,6 +166,7 @@ articleinfo =
     (author
      | authorgroup
      | date
+     | releaseinfo
      | productname
      | productnumber
      | legalnotice
@@ -538,6 +541,7 @@ legalnotice =
     attlist_legalnotice, title?, (simplelist | para | formalpara)+
   }
 date = element date { attlist_date, (text | phrase | superscript)* }
+releaseinfo = element releaseinfo { attlist_releaseinfo, (text | phrase)* }
 # refentry
 refentry =
   element refentry {
@@ -693,6 +697,7 @@ attlist_colspec &=
   profiling.attributes
 attlist_command &= profiling.attributes, xmlbase
 attlist_date &= profiling.attributes, xmlbase
+attlist_releaseinfo &= profiling.attributes, xmlbase
 attlist_emphasis &=
   attribute role { text }?,
   profiling.attributes,
