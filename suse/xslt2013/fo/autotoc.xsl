@@ -327,10 +327,12 @@
     </fo:list-block>
 </xsl:template>
 
-<xsl:template match="preface/sect1|appendix[@role='legal']/sect1|sect2"
+<xsl:template match="preface/sect1|appendix[@role='legal']/sect1/
+                     preface/section|appendix[@role='legal']/section|sect2|
+                     section/section"
   mode="susetoc"/>
 
-<xsl:template match="sect1|refentry" mode="susetoc">
+<xsl:template match="sect1|refentry|section" mode="susetoc">
   <!-- Excludes sect1s when it appears in the appendixes etc. of articles,
        as we only want a one-level ToC in articles, and sect1 there would
        already be a second level. -->
@@ -365,8 +367,8 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
-        <xsl:when test="child::sect2 and not(ancestor::article)
-                                     and not(ancestor::*[@role='legal'])">
+        <xsl:when test="(child::sect2 or child::section)
+                        and not(ancestor::article or ancestor::*[@role='legal'])">
           <xsl:attribute name="space-after">0.1em</xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
@@ -378,7 +380,7 @@
           text-align="end">
           <fo:block text-align-last="end">
           <xsl:choose>
-            <xsl:when test="self::sect1">
+            <xsl:when test="self::sect1 or self::section">
               <fo:basic-link internal-destination="{$id}">
                 <xsl:value-of select="$label"/>
               </fo:basic-link>
@@ -398,18 +400,18 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="sect2[1]" mode="susetoc">
+<xsl:template match="sect2[1]|section[not(ancestor::section)]/section[1]" mode="susetoc">
     <xsl:if test="not(ancestor::article) and not(ancestor::*[@role='legal'])">
       <fo:block keep-with-previous.within-column="always" role="sect2"
         xsl:use-attribute-sets="toc.level4.properties"
         text-align="start" space-after="0.75em"
         start-indent="{&column; + &gutter;}mm">
-        <xsl:apply-templates select="../sect2" mode="inline.susetoc"/>
+        <xsl:apply-templates select="../sect2|../section" mode="inline.susetoc"/>
       </fo:block>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="sect2" mode="inline.susetoc">
+<xsl:template match="sect2|section" mode="inline.susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
@@ -422,7 +424,7 @@
   <fo:inline>
     <fo:basic-link internal-destination="{$id}">
     <xsl:copy-of select="$title"/>
-    <xsl:if test="following-sibling::sect2">
+    <xsl:if test="following-sibling::sect2|following-sibling::section">
       <fo:leader keep-together.within-line="always"
         leader-pattern="space" leader-length="1.2 * &gutterfragment;mm"/>
       <fo:inline><xsl:text>&#x2022;</xsl:text></fo:inline>
