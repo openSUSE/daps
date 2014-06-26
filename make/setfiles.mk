@@ -62,9 +62,9 @@ endif
 # _are_ well-formed. And DAPS only works on profiled sources...
 #
 ifdef PROFILE_URN
-  CHECK_WELLFORMED := $(shell xmllint --noent --nonet --noout --nowarning --xinclude $(MAIN) 2>&1 | grep -v "XInclude error")
+  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1 | grep -v "XInclude error")
 else
-  CHECK_WELLFORMED := $(shell xmllint --noent --nonet --noout --nowarning --xinclude $(MAIN) 2>&1)
+  CHECK_WELLFORMED := $(shell xmllint --nonet --noout --nowarning --xinclude --loaddtd $(MAIN) 2>&1)
 endif
 ifdef CHECK_WELLFORMED
   $(error Fatal error:$(\n)$(CHECK_WELLFORMED))
