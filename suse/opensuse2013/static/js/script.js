@@ -1,1 +1,1 @@
-/home/frootzowrath/gits/daps/trunk/daps/suse/suse2013/static/js/script.js
+../../../suse2013/static/js/script.js
