@@ -137,7 +137,7 @@ the DocBook 4 DTD.
 %setup -q -n %{name}
 #
 # Patch the VERSION.xsl file to hold the current version
-sed -i "s%<fm:Version>.*</fm:Version>%<fm:Version>%{version}</fm:Version>%" xslt2013/VERSION.xsl
+sed -i "s%<fm:Version>.*</fm:Version>%<fm:Version>%{version}</fm:Version>%" suse2013/VERSION.xsl
 
 
 
@@ -214,6 +214,8 @@ exit 0
 # Directories
 %dir %{_datadir}/xml/docbook/stylesheet/suse
 %dir %{_datadir}/xml/docbook/stylesheet/suse2013
+%dir %{_datadir}/xml/docbook/stylesheet/daps2013
+%dir %{_datadir}/xml/docbook/stylesheet/opensuse2013
 
 %dir %{_datadir}/xml/%{dtdname}
 %dir %{_datadir}/xml/%{dtdname}/schema
@@ -225,6 +227,8 @@ exit 0
 # stylesheets
 %{_datadir}/xml/docbook/stylesheet/suse/*
 %{_datadir}/xml/docbook/stylesheet/suse2013/*
+%{_datadir}/xml/docbook/stylesheet/daps2013/*
+%{_datadir}/xml/docbook/stylesheet/opensuse2013/*
 
 # NovDoc Schemas
 %{_datadir}/xml/%{dtdname}/schema/dtd/%{dtdversion}/*
