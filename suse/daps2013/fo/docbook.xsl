@@ -33,6 +33,6 @@
        caveat of doing that would of course be possible dependency issues,
        since we generally want matching stylesheets not any and all that are
        installed on the system. -->
-  <xsl:import href="../suse2013/fo/docbook.xsl"/>
+  <xsl:import href="../../suse2013/fo/docbook.xsl"/>
 
 </xsl:stylesheet>
