@@ -443,6 +443,38 @@ html, body {
     z-index: 4;
 }
 
+#_toolbar-wrap.detached:after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    background-color: #FFF;
+    width: 100%;
+    height: 56px;
+    opacity: 0.15;
+}
+
+#_toolbar-wrap.detached {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /*
+    background-image: none;
+    background-color: #FFF;
+    border-bottom-color: #439539;*/
+}
+
+
+#_toolbar-wrap.detached:hover:after {
+    content: none;
+}
+
+/*
+#_toolbar-wrap.detached .tool-label {
+    color: #439539;
+}*/
+
 #_toolbar {
     height: 56px;
     min-width: 150px;

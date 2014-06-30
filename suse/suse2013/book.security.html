@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+Security Guide | SUSE Linux Enterprise Server 12</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="static/css/restyle.css" />
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1" />
+<meta name="product-name" content="SUSE Linux Enterprise Server" />
+<meta name="product-number" content="12" />
+<meta name="book-title" content="Security Guide" />
+<meta name="description" content="Introduces basic concepts of system security, covering both local and network security aspects. Shows how to make use of the product inherent security software like AppArmor or the auditing system that reliably collects information about any security-relevant events." />
+<link rel="home" href="index.html" title="SUSE Linux Enterprise Server Documentation" />
+<link rel="up" href="index.html" title="SUSE Linux Enterprise Server Documentation" />
+<link rel="prev" href="appendix.linuxrc.html" title="Appendix B. Advanced Linuxrc Options" />
+<link rel="next" href="preface.security.html" title="About This Guide" />
+<script type="text/javascript">
+
+
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
+      file = 'fonts-nolocal.css';
+  }
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'">
+    </link>
+  ');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css">
+    </link>
+   ');
+}
+
+</script>
+<noscript>
+<link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" />
+</noscript>
+<script src="static/js/jquery-1.10.2.min.js" type="text/javascript">
+</script>
+<script src="static/js/script.js" type="text/javascript">
+</script>
+</head>
+<body class="offline js-off">
+<div id="_outer-wrap">
+<div id="_white-bg">
+
+<!-- <div class="crumbs">
+<a class="book-link" href="index.html" title="Security Guide">
+<span class="book-icon">
+Security Guide</span>
+</a>
+</div> -->
+</div>
+<div id="_toolbar-wrap">
+<div id="_toolbar">
+<div id="_logo">
+<img src="static/images/logo.png" alt="Logo" />
+</div>
+
+<div id="_nav-area" class="inactive">
+<div class="tool">
+<span class="nav-inner">
+<span class="tool-label">
+Navigation</span>
+<span class="tool-spacer">
+<span class="prev-icon">
+←</span>
+</span>
+<a accesskey="n" class="tool-spacer" title="About This Guide" href="preface.security.html">
+<span class="next-icon">
+→</span>
+</a>
+</span>
+</div>
+</div>
+
+<div id="_toc-area" class="inactive">
+<a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html">
+<span class="tool-spacer">
+<span class="toc-icon">
+Contents</span>
+<span class="clearme">
+</span>
+</span>
+<span class="tool-label">
+Contents</span>
+</a>
+<div class="active-contents bubble-corner">
+</div>
+<div class="active-contents bubble">
+<div class="bubble-container">
+<h6>
+Security Guide</h6>
+<div id="_bubble-toc">
+<ol>
+<li class="inactive">
+<a href="preface.security.html">
+<span class="number">
+ </span>
+ <span class="name">
+About This Guide</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.html">
+<span class="number">
+1 </span>
+<span class="name">
+Security and Confidentiality</span>
+</a>
+</li>
+<li class="inactive">
+<a href="part.auth.html">
+<span class="number">
+I </span>
+<span class="name">
+Authentication</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.pam.html">
+<span class="number">
+2 </span>
+<span class="name">
+Authentication with PAM</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.nis.html">
+<span class="number">
+3 </span>
+<span class="name">
+Using NIS</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.ldap.html">
+<span class="number">
+4 </span>
+<span class="name">
+LDAP—A Directory Service</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.ad.html">
+<span class="number">
+5 </span>
+<span class="name">
+Active Directory Support</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.kerberos.html">
+<span class="number">
+6 </span>
+<span class="name">
+Network Authentication with Kerberos</span>
+</a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="part.local_security.html">
+<span class="number">
+II </span>
+<span class="name">
+Local Security</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.security.yast_security.html">
+<span class="number">
+7 </span>
+<span class="name">
+Configuring Security Settings with YaST</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.policykit.html">
+<span class="number">
+8 </span>
+<span class="name">
+Authorization with PolKit</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.acls.html">
+<span class="number">
+9 </span>
+<span class="name">
+Access Control Lists in Linux</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.cryptofs.html">
+<span class="number">
+10 </span>
+<span class="name">
+Encrypting Partitions and Files</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.certstore.html">
+<span class="number">
+11 </span>
+<span class="name">
+Certificate Store</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.aide.html">
+<span class="number">
+12 </span>
+<span class="name">
+Intrusion Detection with AIDE</span>
+</a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="part.network_security.html">
+<span class="number">
+III </span>
+<span class="name">
+Network Security</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.ssh.html">
+<span class="number">
+13 </span>
+<span class="name">
+SSH: Secure Network Operations</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.firewall.html">
+<span class="number">
+14 </span>
+<span class="name">
+Masquerading and Firewalls</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.vpnserver.html">
+<span class="number">
+15 </span>
+<span class="name">
+Configuring VPN Server</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.security.yast_ca.html">
+<span class="number">
+16 </span>
+<span class="name">
+Managing X.509 Certification</span>
+</a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="part.apparmor.html">
+<span class="number">
+IV </span>
+<span class="name">
+Confining Privileges with <span class="phrase">
+AppArmor</span>
+</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.apparmor.intro.html">
+<span class="number">
+17 </span>
+<span class="name">
+Introducing <span class="phrase">
+AppArmor</span>
+</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.start.html">
+<span class="number">
+18 </span>
+<span class="name">
+Getting Started</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.concept.html">
+<span class="number">
+19 </span>
+<span class="name">
+Immunizing Programs</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.profiles.html">
+<span class="number">
+20 </span>
+<span class="name">
+Profile Components and Syntax</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.repos.html">
+<span class="number">
+21 </span>
+<span class="name">
+<span class="phrase">
+AppArmor</span>
+ Profile Repositories</span>
+ </a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.yast.html">
+<span class="number">
+22 </span>
+<span class="name">
+Building and Managing Profiles with YaST</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.commandline.html">
+<span class="number">
+23 </span>
+<span class="name">
+Building Profiles from the Command Line</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.hat.html">
+<span class="number">
+24 </span>
+<span class="name">
+Profiling Your Web Applications Using ChangeHat</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.pam.html">
+<span class="number">
+25 </span>
+<span class="name">
+Confining Users with <code class="systemitem">
+pam_apparmor</code>
+</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.managing.html">
+<span class="number">
+26 </span>
+<span class="name">
+Managing Profiled Applications</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.support.html">
+<span class="number">
+27 </span>
+<span class="name">
+Support</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.apparmor.glossary.html">
+<span class="number">
+28 </span>
+<span class="name">
+<span class="phrase">
+AppArmor</span>
+ Glossary</span>
+ </a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="bk05pt05.html">
+<span class="number">
+V </span>
+<span class="name">
+SELinux</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.selinux.html">
+<span class="number">
+29 </span>
+<span class="name">
+Configuring SELinux on SUSE Linux Enterprise 11 SP2</span>
+</a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="part.audit.html">
+<span class="number">
+VI </span>
+<span class="name">
+<span class="emphasis">
+<em>
+The Linux Audit Framework</em>
+</span>
+</span>
+</a>
+<ol>
+<li class="inactive">
+<a href="cha.audit.comp.html">
+<span class="number">
+30 </span>
+<span class="name">
+Understanding Linux Audit</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.audit.setup.html">
+<span class="number">
+31 </span>
+<span class="name">
+Setting Up the Linux Audit Framework</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.audit.scenarios.html">
+<span class="number">
+32 </span>
+<span class="name">
+Introducing an Audit Rule Set</span>
+</a>
+</li>
+<li class="inactive">
+<a href="cha.audit.moreinfo.html">
+<span class="number">
+33 </span>
+<span class="name">
+Useful Resources</span>
+</a>
+</li>
+</ol>
+</li>
+<li class="inactive">
+<a href="app.security.pcidss.html">
+<span class="number">
+A </span>
+<span class="name">
+Achieving PCI-DSS Compliance</span>
+</a>
+</li>
+<li class="inactive">
+<a href="app.security.docupdates.html">
+<span class="number">
+B </span>
+<span class="name">
+Documentation Updates</span>
+</a>
+</li>
+<li class="inactive">
+<a href="bk05apc.html">
+<span class="number">
+C </span>
+<span class="name">
+GNU Licenses</span>
+</a>
+</li>
+</ol>
+</div>
+<div class="clearme">
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div id="_content" class="">
+<div class="documentation">
+<div xml:lang="en" class="book" lang="en">
+<div class="titlepage">
+<div>
+<h6 class="version-info">
+<span class="productname">
+<span class="productname">
+<span class="phrase">
+SUSE Linux Enterprise Server</span>
+</span>
+</span>
+ <span class="productnumber">
+ <span class="productname">
+<span class="phrase">
+12</span>
+</span>
+</span>
+</h6>
+<div>
+<h1 class="title">
+<a id="book.security">
+</a>
+<span class="emphasis">
+<em>
+Security Guide</em>
+</span>
+</h1>
+</div>
+<div class="abstract ">
+<p>
+
+    Introduces basic concepts of system security,
+     covering both local and network security aspects. Shows how to make use
+     of the product inherent security software like <span class="phrase">
+     AppArmor</span>
+      or the auditing system
+     that reliably collects information about any
+     security-relevant events.
+   </p>
+   </div>
+   <div class="date">
+   <span class="imprint-label">
+   Publication date: </span>
+
+  June 24, 2014</div>
+  </div>
+  </div>
+  <div class="toc">
+  <dl>
+  <dt>
+  <span class="preface">
+  <a href="preface.security.html">
+  <span class="name">
+  About This Guide</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="preface.security.html#idm140463578398224">
+  <span class="name">
+  Available Documentation</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="preface.security.html#idm140463579206288">
+  <span class="name">
+  Feedback</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="preface.security.html#idm140463605497744">
+  <span class="name">
+  Documentation Conventions</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.html">
+  <span class="number">
+  1 </span>
+  <span class="name">
+  Security and Confidentiality</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.html#sec.security.general.overview">
+  <span class="number">
+  1.1 </span>
+  <span class="name">
+  Local Security and Network Security</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.html#sec.security.general.tips">
+  <span class="number">
+  1.2 </span>
+  <span class="name">
+  Some General Security Tips and Tricks</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.html#sec.security.general.report">
+  <span class="number">
+  1.3 </span>
+  <span class="name">
+  Using the Central Security Reporting Address</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="part">
+  <a href="part.auth.html">
+  <span class="number">
+  I </span>
+  <span class="name">
+  Authentication</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="chapter">
+  <a href="cha.pam.html">
+  <span class="number">
+  2 </span>
+  <span class="name">
+  Authentication with PAM</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.security.pam.whatis">
+  <span class="number">
+  2.1 </span>
+  <span class="name">
+  What is PAM?</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.struc.files">
+  <span class="number">
+  2.2 </span>
+  <span class="name">
+  Structure of a PAM Configuration File</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.struc.format">
+  <span class="number">
+  2.3 </span>
+  <span class="name">
+  The PAM Configuration of sshd</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.struc.conf">
+  <span class="number">
+  2.4 </span>
+  <span class="name">
+  Configuration of PAM Modules</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.pam-config">
+  <span class="number">
+  2.5 </span>
+  <span class="name">
+  Configuring PAM Using pam-config</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.manual-config">
+  <span class="number">
+  2.6 </span>
+  <span class="name">
+  Manually Configuring PAM</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.pam.html#sec.pam.info">
+  <span class="number">
+  2.7 </span>
+  <span class="name">
+  For More Information</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.nis.html">
+  <span class="number">
+  3 </span>
+  <span class="name">
+  Using NIS</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.nis.html#sec.nis.server">
+  <span class="number">
+  3.1 </span>
+  <span class="name">
+  Configuring NIS Servers</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.nis.html#sec.nis.client">
+  <span class="number">
+  3.2 </span>
+  <span class="name">
+  Configuring NIS Clients</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.ldap.html">
+  <span class="number">
+  4 </span>
+  <span class="name">
+  LDAP—A Directory Service</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.vs_nis">
+  <span class="number">
+  4.1 </span>
+  <span class="name">
+  LDAP versus NIS</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.tree">
+  <span class="number">
+  4.2 </span>
+  <span class="name">
+  Structure of an LDAP Directory Tree</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.yast">
+  <span class="number">
+  4.3 </span>
+  <span class="name">
+  Configuring an LDAP Server with YaST</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.yast.client">
+  <span class="number">
+  4.4 </span>
+  <span class="name">
+  Configuring an LDAP Client with YaST</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.yast.usergr">
+  <span class="number">
+  4.5 </span>
+  <span class="name">
+  Configuring LDAP Users and Groups in YaST</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.browse">
+  <span class="number">
+  4.6 </span>
+  <span class="name">
+  Browsing the LDAP Directory Tree</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.slapd">
+  <span class="number">
+  4.7 </span>
+  <span class="name">
+  Manually Configuring an LDAP Server</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.data">
+  <span class="number">
+  4.8 </span>
+  <span class="name">
+  Manually Administering LDAP Data</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ldap.html#sec.security.ldap.info">
+  <span class="number">
+  4.9 </span>
+  <span class="name">
+  For More Information</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.ad.html">
+  <span class="number">
+  5 </span>
+  <span class="name">
+  Active Directory Support</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ad.html#sec.security.ad.integrate">
+  <span class="number">
+  5.1 </span>
+  <span class="name">
+  Integrating Linux and AD Environments</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ad.html#sec.security.ad.background">
+  <span class="number">
+  5.2 </span>
+  <span class="name">
+  Background Information for Linux AD Support</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ad.html#sec.security.ad.config">
+  <span class="number">
+  5.3 </span>
+  <span class="name">
+  Configuring a Linux Client for Active Directory</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ad.html#sec.security.ad.login">
+  <span class="number">
+  5.4 </span>
+  <span class="name">
+  Logging In to an AD Domain</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.ad.html#sec.security.ad.passwd">
+  <span class="number">
+  5.5 </span>
+  <span class="name">
+  Changing Passwords</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.kerberos.html">
+  <span class="number">
+  6 </span>
+  <span class="name">
+  Network Authentication with Kerberos</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.kerberos.html#sec.security.kerberos.terms">
+  <span class="number">
+  6.1 </span>
+  <span class="name">
+  Kerberos Terminology</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.kerberos.html#sec.security.kerberos.how">
+  <span class="number">
+  6.2 </span>
+  <span class="name">
+  How Kerberos Works</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.kerberos.html#sec.security.kerberos.users">
+  <span class="number">
+  6.3 </span>
+  <span class="name">
+  Users' View of Kerberos</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.kerberos.html#sec.security.kerberos.admin">
+  <span class="number">
+  6.4 </span>
+  <span class="name">
+  Installing and Administering Kerberos</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.kerberos.html#sec.security.kerberos.info">
+  <span class="number">
+  6.5 </span>
+  <span class="name">
+  For More Information</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  </dl>
+  </dd>
+  <dt>
+  <span class="part">
+  <a href="part.local_security.html">
+  <span class="number">
+  II </span>
+  <span class="name">
+  Local Security</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.yast_security.html">
+  <span class="number">
+  7 </span>
+  <span class="name">
+  Configuring Security Settings with YaST</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.overview">
+  <span class="number">
+  7.1 </span>
+  <span class="name">
+  <span class="guimenu">
+  Security Overview</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.predefined_configs">
+  <span class="number">
+  7.2 </span>
+  <span class="name">
+  <span class="guimenu">
+  Predefined Security Configurations</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.password">
+  <span class="number">
+  7.3 </span>
+  <span class="name">
+  <span class="guimenu">
+  Password Settings</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.boot">
+  <span class="number">
+  7.4 </span>
+  <span class="name">
+  <span class="guimenu">
+  Boot Settings</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.login">
+  <span class="number">
+  7.5 </span>
+  <span class="name">
+  <span class="guimenu">
+  Login Settings</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.user">
+  <span class="number">
+  7.6 </span>
+  <span class="name">
+  <span class="guimenu">
+  User Addition</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.yast_security.html#sec.security.yast_security.misc">
+  <span class="number">
+  7.7 </span>
+  <span class="name">
+  <span class="guimenu">
+  Miscellaneous Settings</span>
+  </span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.policykit.html">
+  <span class="number">
+  8 </span>
+  <span class="name">
+  Authorization with PolKit</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.policykit.html#sec.security.policykit.oview">
+  <span class="number">
+  8.1 </span>
+  <span class="name">
+  Conceptual Overview</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.policykit.html#sec.security.security.policykit.change">
+  <span class="number">
+  8.2 </span>
+  <span class="name">
+  Modifying and Setting Privileges</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.acls.html">
+  <span class="number">
+  9 </span>
+  <span class="name">
+  Access Control Lists in Linux</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.traditional">
+  <span class="number">
+  9.1 </span>
+  <span class="name">
+  Traditional File Permissions</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.intro">
+  <span class="number">
+  9.2 </span>
+  <span class="name">
+  Advantages of ACLs</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.defs">
+  <span class="number">
+  9.3 </span>
+  <span class="name">
+  Definitions</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.handle">
+  <span class="number">
+  9.4 </span>
+  <span class="name">
+  Handling ACLs</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.future">
+  <span class="number">
+  9.5 </span>
+  <span class="name">
+  ACL Support in Applications</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.acls.html#sec.security.acls.info">
+  <span class="number">
+  9.6 </span>
+  <span class="name">
+  For More Information</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.security.cryptofs.html">
+  <span class="number">
+  10 </span>
+  <span class="name">
+  Encrypting Partitions and Files</span>
+  </a>
+  </span>
+  </dt>
+  <dd>
+  <dl>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.cryptofs.html#sec.security.cryptofs.y2">
+  <span class="number">
+  10.1 </span>
+  <span class="name">
+  Setting Up an Encrypted File System with YaST</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.cryptofs.html#sec.security.cryptofs.y2.homes">
+  <span class="number">
+  10.2 </span>
+  <span class="name">
+  Using Encrypted Home Directories</span>
+  </a>
+  </span>
+  </dt>
+  <dt>
+  <span class="sect1">
+  <a href="cha.security.cryptofs.html#sec.security.cryptofs.vi">
+  <span class="number">
+  10.3 </span>
+  <span class="name">
+  Using vi to Encrypt Single ASCII Text Files</span>
+  </a>
+  </span>
+  </dt>
+  </dl>
+  </dd>
+  <dt>
+  <span class="chapter">
+  <a href="cha.certstore.html">
+  <span class="number">11 </span><span class="name">Certificate Store</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.certstore.html#sec.certstore.activate"><span class="number">11.1 </span><span class="name">Activating Certificate Store</span></a></span></dt><dt><span class="sect1"><a href="cha.certstore.html#sec.certstore.import"><span class="number">11.2 </span><span class="name">Importing Certificates</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.aide.html"><span class="number">12 </span><span class="name">Intrusion Detection with AIDE</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.aide.html#sec.aide.why"><span class="number">12.1 </span><span class="name">Why Using AIDE?</span></a></span></dt><dt><span class="sect1"><a href="cha.aide.html#sec.aide.setup"><span class="number">12.2 </span><span class="name">Setting Up an AIDE Database</span></a></span></dt><dt><span class="sect1"><a href="cha.aide.html#sec.aide.check"><span class="number">12.3 </span><span class="name">Local AIDE Checks</span></a></span></dt><dt><span class="sect1"><a href="cha.aide.html#sec.aide.independent"><span class="number">12.4 </span><span class="name">System Independent Checking</span></a></span></dt><dt><span class="sect1"><a href="cha.aide.html#sec.aide.more"><span class="number">12.5 </span><span class="name">For More Information</span></a></span></dt></dl></dd></dl></dd><dt><span class="part"><a href="part.network_security.html"><span class="number">III </span><span class="name">Network Security</span></a></span></dt><dd><dl><dt><span class="chapter"><a href="cha.ssh.html"><span class="number">13 </span><span class="name">SSH: Secure Network Operations</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.programm"><span class="number">13.1 </span><span class="name"><code class="command">ssh</code>—Secure Shell</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.copy"><span class="number">13.2 </span><span class="name"><code class="command">scp</code>—Secure Copy</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.sftp"><span class="number">13.3 </span><span class="name"><code class="command">sftp</code>—Secure File Transfer</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.sshdserver"><span class="number">13.4 </span><span class="name">The SSH Daemon (<code class="systemitem">sshd</code>)</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.authentic"><span class="number">13.5 </span><span class="name">SSH Authentication Mechanisms</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.port-forwarding"><span class="number">13.6 </span><span class="name">Port Forwarding</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.ssh.yast"><span class="number">13.7 </span><span class="name">Configuring An SSH Daemon with YaST</span></a></span></dt><dt><span class="sect1"><a href="cha.ssh.html#sec.security.ssh.moreinfo"><span class="number">13.8 </span><span class="name">For More Information</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.security.firewall.html"><span class="number">14 </span><span class="name">Masquerading and Firewalls</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.security.firewall.html#sec.security.firewall.iptables"><span class="number">14.1 </span><span class="name">Packet Filtering with iptables</span></a></span></dt><dt><span class="sect1"><a href="cha.security.firewall.html#sec.security.firewall.masq"><span class="number">14.2 </span><span class="name">Masquerading Basics</span></a></span></dt><dt><span class="sect1"><a href="cha.security.firewall.html#sec.security.firewall.fw"><span class="number">14.3 </span><span class="name">Firewalling Basics</span></a></span></dt><dt><span class="sect1"><a href="cha.security.firewall.html#sec.security.firewall.SuSE"><span class="number">14.4 </span><span class="name">SuSEFirewall2</span></a></span></dt><dt><span class="sect1"><a href="cha.security.firewall.html#sec.security.firewall.info"><span class="number">14.5 </span><span class="name">For More Information</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.security.vpnserver.html"><span class="number">15 </span><span class="name">Configuring VPN Server</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.overview"><span class="number">15.1 </span><span class="name">Conceptual Overview</span></a></span></dt><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.simplest"><span class="number">15.2 </span><span class="name">Creating the Simplest VPN Example</span></a></span></dt><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.ca"><span class="number">15.3 </span><span class="name">Setting Up Your VPN Server Using Certificate Authority</span></a></span></dt><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.nameserver"><span class="number">15.4 </span><span class="name">Changing Nameservers in VPN</span></a></span></dt><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.tools-client"><span class="number">15.5 </span><span class="name">The GNOME Applet</span></a></span></dt><dt><span class="sect1"><a href="cha.security.vpnserver.html#sec.security.vpn.moreinfo"><span class="number">15.6 </span><span class="name">For More Information</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.security.yast_ca.html"><span class="number">16 </span><span class="name">Managing X.509 Certification</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.security.yast_ca.html#sec.security.yast_ca.intro"><span class="number">16.1 </span><span class="name">The Principles of Digital Certification</span></a></span></dt><dt><span class="sect1"><a href="cha.security.yast_ca.html#sec.security.yast_ca.module"><span class="number">16.2 </span><span class="name">YaST Modules for CA Management</span></a></span></dt><dt><span class="sect1"><a href="cha.security.yast_ca.html#sec.security.yast_ca.module.moreinfo"><span class="number">16.3 </span><span class="name">For More Information</span></a></span></dt></dl></dd></dl></dd><dt><span class="part"><a href="part.apparmor.html"><span class="number">IV </span><span class="name">Confining Privileges with <span class="phrase">AppArmor</span></span></a></span></dt><dd><dl><dt><span class="chapter"><a href="cha.apparmor.intro.html"><span class="number">17 </span><span class="name">Introducing <span class="phrase">AppArmor</span></span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.intro.html#sec.apparmor.intro.background"><span class="number">17.1 </span><span class="name">Background Information on <span class="phrase">AppArmor</span> Profiling</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.start.html"><span class="number">18 </span><span class="name">Getting Started</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.start.html#sec.apparmor.start.install"><span class="number">18.1 </span><span class="name">Installing <span class="phrase">AppArmor</span></span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.start.html#sec.apparmor.start.enable"><span class="number">18.2 </span><span class="name">Enabling and Disabling <span class="phrase">AppArmor</span></span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.start.html#sec.apparmor.start.choose"><span class="number">18.3 </span><span class="name">Choosing the Applications to Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.start.html#sec.apparmor.start.build"><span class="number">18.4 </span><span class="name">Building and Modifying Profiles</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.start.html#sec.apparmor.start.update"><span class="number">18.5 </span><span class="name">Updating Your Profiles</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.concept.html"><span class="number">19 </span><span class="name">Immunizing Programs</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.concept.html#sec.apparmor.concept.tools"><span class="number">19.1 </span><span class="name">Introducing the <span class="phrase">AppArmor</span> Framework</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.concept.html#sec.apparmor.concept.determine"><span class="number">19.2 </span><span class="name">Determining Programs to Immunize</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.concept.html#sec.apparmor.concept.cron"><span class="number">19.3 </span><span class="name">Immunizing cron Jobs</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.concept.html#sec.apparmor.concept.network"><span class="number">19.4 </span><span class="name">Immunizing Network Applications</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.profiles.html"><span class="number">20 </span><span class="name">Profile Components and Syntax</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.parts"><span class="number">20.1 </span><span class="name">Breaking an <span class="phrase">AppArmor</span> Profile into its Parts</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.types"><span class="number">20.2 </span><span class="name">Profile Types</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.includes"><span class="number">20.3 </span><span class="name">Include Statements</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.capabilities"><span class="number">20.4 </span><span class="name">Capability Entries (POSIX.1e)</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.nac"><span class="number">20.5 </span><span class="name">Network Access Control</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.glob"><span class="number">20.6 </span><span class="name">Profile Names, Flags, Paths, and Globbing</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.perm"><span class="number">20.7 </span><span class="name">File Permission Access Modes</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.exec"><span class="number">20.8 </span><span class="name">Execute Modes</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.rlimit"><span class="number">20.9 </span><span class="name">Resource Limit Control</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.profiles.html#sec.apparmor.profiles.audit"><span class="number">20.10 </span><span class="name">Auditing Rules</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.repos.html"><span class="number">21 </span><span class="name"><span class="phrase">AppArmor</span> Profile Repositories</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.repos.html#sec.apparmor.repos.local"><span class="number">21.1 </span><span class="name">Using the Local Repository</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.yast.html"><span class="number">22 </span><span class="name">Building and Managing Profiles with YaST</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.yast.html#sec.apparmor.yast.add"><span class="number">22.1 </span><span class="name">Manually Adding a Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.yast.html#sec.apparmor.yast.edit"><span class="number">22.2 </span><span class="name">Editing Profiles</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.yast.html#sec.apparmor.yast.del"><span class="number">22.3 </span><span class="name">Deleting a Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.yast.html#sec.apparmor.yast.manage"><span class="number">22.4 </span><span class="name">Managing <span class="phrase">AppArmor</span></span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.commandline.html"><span class="number">23 </span><span class="name">Building Profiles from the Command Line</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.status"><span class="number">23.1 </span><span class="name">Checking the <span class="phrase">AppArmor</span> Status</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.build"><span class="number">23.2 </span><span class="name">Building <span class="phrase">AppArmor</span> Profiles</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.add"><span class="number">23.3 </span><span class="name">Adding or Creating an <span class="phrase">AppArmor</span> Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.edit"><span class="number">23.4 </span><span class="name">Editing an <span class="phrase">AppArmor</span> Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.del"><span class="number">23.5 </span><span class="name">Deleting an <span class="phrase">AppArmor</span> Profile</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.profiling"><span class="number">23.6 </span><span class="name">Two Methods of Profiling</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.commandline.html#sec.apparmor.commandline.filenames"><span class="number">23.7 </span><span class="name">Important Filenames and Directories</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.hat.html"><span class="number">24 </span><span class="name">Profiling Your Web Applications Using ChangeHat</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.hat.html#sec.apparmor.hat.config"><span class="number">24.1 </span><span class="name">Configuring Apache for <code class="systemitem">mod_apparmor</code></span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.hat.html#sec.apparmor.hat.apache.managing"><span class="number">24.2 </span><span class="name">Managing ChangeHat-Aware Applications</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.pam.html"><span class="number">25 </span><span class="name">Confining Users with <code class="systemitem">pam_apparmor</code></span></a></span></dt><dt><span class="chapter"><a href="cha.apparmor.managing.html"><span class="number">26 </span><span class="name">Managing Profiled Applications</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.managing.html#sec.apparmor.managing.react"><span class="number">26.1 </span><span class="name">Reacting to Security Event Rejections</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.managing.html#sec.apparmor.managing.maintain"><span class="number">26.2 </span><span class="name">Maintaining Your Security Profiles</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.support.html"><span class="number">27 </span><span class="name">Support</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.apparmor.support.html#sec.apparmor.support.updating"><span class="number">27.1 </span><span class="name">Updating <span class="phrase">AppArmor</span> Online</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.support.html#sec.apparmor.support.man"><span class="number">27.2 </span><span class="name">Using the Man Pages</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.support.html#sec.apparmor.support.info"><span class="number">27.3 </span><span class="name">For More Information</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.support.html#sec.apparmor.support.trouble"><span class="number">27.4 </span><span class="name">Troubleshooting</span></a></span></dt><dt><span class="sect1"><a href="cha.apparmor.support.html#sec.apparmor.support.bugs"><span class="number">27.5 </span><span class="name">Reporting Bugs for <span class="phrase">AppArmor</span></span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.apparmor.glossary.html"><span class="number">28 </span><span class="name"><span class="phrase">AppArmor</span> Glossary</span></a></span></dt></dl></dd><dt><span class="part"><a href="bk05pt05.html"><span class="number">V </span><span class="name">SELinux</span></a></span></dt><dd><dl><dt><span class="chapter"><a href="cha.selinux.html"><span class="number">29 </span><span class="name">Configuring SELinux on SUSE Linux Enterprise 11 SP2</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.selinux.html#idm140463573420768"><span class="number">29.1 </span><span class="name">SELinux backgrounds</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573394768"><span class="number">29.2 </span><span class="name">The Policy</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573384256"><span class="number">29.3 </span><span class="name">Installing SELinux on SUSE Linux Enterprise 11 SP2</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573378976"><span class="number">29.4 </span><span class="name">Installing SELinux Packages and modifying GRUB 2</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573347424"><span class="number">29.5 </span><span class="name">Compiling the Policy</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573306896"><span class="number">29.6 </span><span class="name">Configuring SELinux</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573291936"><span class="number">29.7 </span><span class="name">Managing SELinux</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573184864"><span class="number">29.8 </span><span class="name">Troubleshooting SELinux</span></a></span></dt><dt><span class="sect1"><a href="cha.selinux.html#idm140463573136016"><span class="number">29.9 </span><span class="name">Switching to Enforcing Mode</span></a></span></dt></dl></dd></dl></dd><dt><span class="part"><a href="part.audit.html"><span class="number">VI </span><span class="name"><span class="emphasis"><em>The Linux Audit Framework</em></span></span></a></span></dt><dd><dl><dt><span class="chapter"><a href="cha.audit.comp.html"><span class="number">30 </span><span class="name">Understanding Linux Audit</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.bigpicture"><span class="number">30.1 </span><span class="name">Introducing the Components of Linux Audit</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.auditd"><span class="number">30.2 </span><span class="name">Configuring the Audit Daemon</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.auditctl"><span class="number">30.3 </span><span class="name">Controlling the Audit System Using auditctl</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.rules"><span class="number">30.4 </span><span class="name">Passing Parameters to the Audit System</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.aureport"><span class="number">30.5 </span><span class="name">Understanding the Audit Logs and Generating Reports</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.ausearch"><span class="number">30.6 </span><span class="name">Querying the Audit Daemon Logs with ausearch</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.autrace"><span class="number">30.7 </span><span class="name">Analyzing Processes with autrace</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.auviz"><span class="number">30.8 </span><span class="name">Visualizing Audit Data</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.comp.html#sec.audit.audisp"><span class="number">30.9 </span><span class="name">Relaying Audit Event Notifications</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.audit.setup.html"><span class="number">31 </span><span class="name">Setting Up the Linux Audit Framework</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.choose"><span class="number">31.1 </span><span class="name">Determining the Components to Audit</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.config"><span class="number">31.2 </span><span class="name">Configuring the Audit Daemon</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.syscall"><span class="number">31.3 </span><span class="name">Enabling Audit for System Calls</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.aurules"><span class="number">31.4 </span><span class="name">Setting Up Audit Rules</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.aurepo"><span class="number">31.5 </span><span class="name">Configuring Audit Reports</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.setup.html#sec.audit.viz"><span class="number">31.6 </span><span class="name">Configuring Log Visualization</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.audit.scenarios.html"><span class="number">32 </span><span class="name">Introducing an Audit Rule Set</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenbasic"><span class="number">32.1 </span><span class="name">Adding Basic Audit Configuration Parameters</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenauconf"><span class="number">32.2 </span><span class="name">Adding Watches on Audit Log Files and Configuration Files</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenfs"><span class="number">32.3 </span><span class="name">Monitoring File System Objects</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scensecurity"><span class="number">32.4 </span><span class="name">Monitoring Security Configuration Files and Databases</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenmisc"><span class="number">32.5 </span><span class="name">Monitoring Miscellaneous System Calls</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenipc"><span class="number">32.6 </span><span class="name">Filtering System Call Arguments</span></a></span></dt><dt><span class="sect1"><a href="cha.audit.scenarios.html#sec.audit.scenkeys"><span class="number">32.7 </span><span class="name">Managing Audit Event Records Using Keys</span></a></span></dt></dl></dd><dt><span class="chapter"><a href="cha.audit.moreinfo.html"><span class="number">33 </span><span class="name">Useful Resources</span></a></span></dt></dl></dd><dt><span class="appendix"><a href="app.security.pcidss.html"><span class="number">A </span><span class="name">Achieving PCI-DSS Compliance</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="app.security.pcidss.html#sec.security.securenetwork"><span class="number">A.1 </span><span class="name">Securing Networks and Systems</span></a></span></dt><dt><span class="sect1"><a href="app.security.pcidss.html#sec.security.cardholder"><span class="number">A.2 </span><span class="name">Cardholder Data</span></a></span></dt></dl></dd><dt><span class="appendix"><a href="app.security.docupdates.html"><span class="number">B </span><span class="name">Documentation Updates</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="app.security.docupdates.html#sec.security.docupdates.sle12_ga"><span class="number">B.1 </span><span class="name">September XX, 2014 (Initial Release of <span class="productname"><span class="phrase">SUSE Linux Enterprise Server</span></span> 12)</span></a></span></dt></dl></dd><dt><span class="appendix"><a href="bk05apc.html"><span class="number">C </span><span class="name">GNU Licenses</span></a></span></dt><dd><dl><dt><span class="sect1"><a href="bk05apc.html#idm140463571932432"><span class="number">C.1 </span><span class="name">GNU Free Documentation License</span></a></span></dt></dl></dd></dl></div><div class="list-of-figures"><div class="toc-title">List of Figures</div><dl><dt><span class="figure"><a href="cha.nis.html#fig.inst.nisserver1"><span class="number">3.1 </span><span class="name">NIS Server Setup</span></a></span></dt><dt><span class="figure"><a href="cha.nis.html#fig.yast.nis.master"><span class="number">3.2 </span><span class="name">Master Server Setup</span></a></span></dt><dt><span class="figure"><a href="cha.nis.html#fig.inst.nisserver2"><span class="number">3.3 </span><span class="name">Changing the Directory and Synchronizing Files for a NIS Server</span></a></span></dt><dt><span class="figure"><a href="cha.nis.html#fig.yast.nis.maps"><span class="number">3.4 </span><span class="name">NIS Server Maps Setup</span></a></span></dt><dt><span class="figure"><a href="cha.nis.html#fig.inst.nisserver3"><span class="number">3.5 </span><span class="name">Setting Request Permissions for a NIS Server</span></a></span></dt><dt><span class="figure"><a href="cha.nis.html#fig.inst.nisclient"><span class="number">3.6 </span><span class="name">Setting Domain and Address of a NIS Server</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.tree"><span class="number">4.1 </span><span class="name">Structure of an LDAP Directory</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.wizard.general.settings"><span class="number">4.2 </span><span class="name">YaST LDAP Server Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.wizard.db.settings"><span class="number">4.3 </span><span class="name">YaST LDAP Server—New Database</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.server.cfg"><span class="number">4.4 </span><span class="name">YaST LDAP Server Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.server.db.cfg"><span class="number">4.5 </span><span class="name">YaST LDAP Server Database Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.clconf"><span class="number">4.6 </span><span class="name">YaST: LDAP Client Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.adconf"><span class="number">4.7 </span><span class="name">YaST: Advanced Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.modconf1"><span class="number">4.8 </span><span class="name">YaST: Module Configuration</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.objtemp"><span class="number">4.9 </span><span class="name">YaST: Configuration of an Object Template</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.y2.adset"><span class="number">4.10 </span><span class="name">YaST: Additional LDAP Settings</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.browsetree"><span class="number">4.11 </span><span class="name">Browsing the LDAP Directory Tree</span></a></span></dt><dt><span class="figure"><a href="cha.security.ldap.html#fig.ldap.browsedata"><span class="number">4.12 </span><span class="name">Browsing the Entry Data</span></a></span></dt><dt><span class="figure"><a href="cha.security.ad.html#fig.ad.schema"><span class="number">5.1 </span><span class="name">Active Directory Authentication Schema</span></a></span></dt><dt><span class="figure"><a href="cha.security.ad.html#fig.ad.smbclient"><span class="number">5.2 </span><span class="name">Determining Windows Domain Membership</span></a></span></dt><dt><span class="figure"><a href="cha.security.ad.html#fig.ad.join1"><span class="number">5.3 </span><span class="name">Providing Administrator Credentials</span></a></span></dt><dt><span class="figure"><a href="cha.security.kerberos.html#fig.netw.kerb"><span class="number">6.1 </span><span class="name">Kerberos Network Topology</span></a></span></dt><dt><span class="figure"><a href="cha.security.kerberos.html#fig.yast.kerb.client.basic"><span class="number">6.2 </span><span class="name">YaST: Basic Configuration of a Kerberos Client</span></a></span></dt><dt><span class="figure"><a href="cha.security.kerberos.html#fig.yast.kerb.client.advanced"><span class="number">6.3 </span><span class="name">YaST: Advanced Configuration of a Kerberos Client</span></a></span></dt><dt><span class="figure"><a href="cha.security.yast_security.html#fig.yast_security.overview"><span class="number">7.1 </span><span class="name">YaST Security Center and Hardening - Security Overview</span></a></span></dt><dt><span class="figure"><a href="cha.security.acls.html#fig.acls.map.mini"><span class="number">9.1 </span><span class="name">Minimum ACL: ACL Entries Compared to Permission Bits</span></a></span></dt><dt><span class="figure"><a href="cha.security.acls.html#fig.acls.map.ext"><span class="number">9.2 </span><span class="name">Extended ACL: ACL Entries Compared to Permission Bits</span></a></span></dt><dt><span class="figure"><a href="cha.security.firewall.html#fig.fire.table"><span class="number">14.1 </span><span class="name">iptables: A Packet's Possible Paths</span></a></span></dt><dt><span class="figure"><a href="cha.security.vpnserver.html#fig.vpn.scenario-routed-1"><span class="number">15.1 </span><span class="name">Routed VPN</span></a></span></dt><dt><span class="figure"><a href="cha.security.vpnserver.html#fig.vpn.scenario-briged-1"><span class="number">15.2 </span><span class="name">Bridged VPN - Scenario 1</span></a></span></dt><dt><span class="figure"><a href="cha.security.vpnserver.html#fig.vpn.scenario-briged-2"><span class="number">15.3 </span><span class="name">Bridged VPN - Scenario 2</span></a></span></dt><dt><span class="figure"><a href="cha.security.vpnserver.html#fig.vpn.scenario-briged-3"><span class="number">15.4 </span><span class="name">Bridged VPN - Scenario 3</span></a></span></dt><dt><span class="figure"><a href="cha.security.yast_ca.html#fig.yast.ca.ca_basic"><span class="number">16.1 </span><span class="name">YaST CA Module—Basic Data for a Root CA</span></a></span></dt><dt><span class="figure"><a href="cha.security.yast_ca.html#fig.yast.ca.usage"><span class="number">16.2 </span><span class="name">YaST CA Module—Using a CA</span></a></span></dt><dt><span class="figure"><a href="cha.security.yast_ca.html#fig.yast.ca.cert"><span class="number">16.3 </span><span class="name">Certificates of a CA</span></a></span></dt><dt><span class="figure"><a href="cha.security.yast_ca.html#fig.yast.ca.extensions"><span class="number">16.4 </span><span class="name">YaST CA Module—Extended Settings</span></a></span></dt><dt><span class="figure"><a href="cha.apparmor.commandline.html#idm140463573905136"><span class="number">23.1 </span><span class="name"><code class="command">aa-notify Message in GNOME</code></span></a></span></dt><dt><span class="figure"><a href="cha.apparmor.hat.html#idm140463573779248"><span class="number">24.1 </span><span class="name">Adminer login page</span></a></span></dt><dt><span class="figure"><a href="cha.selinux.html#fig.packages.yast"><span class="number">29.1 </span><span class="name">Selecting all SELinux Packages in YaST2</span></a></span></dt><dt><span class="figure"><a href="cha.selinux.html#fig.policy.package"><span class="number">29.2 </span><span class="name">Get an open source policy package from http://software.opensuse.org</span></a></span></dt><dt><span class="figure"><a href="cha.audit.comp.html#fig.audit.components"><span class="number">30.1 </span><span class="name">Introducing the Components of Linux Audit</span></a></span></dt><dt><span class="figure"><a href="cha.audit.comp.html#fig.audit.mkgraph"><span class="number">30.2 </span><span class="name">Flow Graph—Program versus System Call Relationship</span></a></span></dt><dt><span class="figure"><a href="cha.audit.comp.html#fig.audit.mkbar"><span class="number">30.3 </span><span class="name">Bar Chart—Common Event Types</span></a></span></dt></dl></div><div class="list-of-tables"><div class="toc-title">List of Tables</div><dl><dt><span class="table"><a href="cha.security.ldap.html#tab.ldap.schema"><span class="number">4.1 </span><span class="name">Commonly Used Object Classes and Attributes</span></a></span></dt><dt><span class="table"><a href="cha.security.acls.html#tab.entrytype"><span class="number">9.1 </span><span class="name">ACL Entry Types</span></a></span></dt><dt><span class="table"><a href="cha.security.acls.html#tab.mask"><span class="number">9.2 </span><span class="name">Masking Access Permissions</span></a></span></dt><dt><span class="table"><a href="cha.aide.html#tab.aide.options"><span class="number">12.1 </span><span class="name">Important AIDE Checking Options</span></a></span></dt><dt><span class="table"><a href="cha.security.yast_ca.html#tab.yast.ca.intro.x509"><span class="number">16.1 </span><span class="name">X.509v3 Certificate</span></a></span></dt><dt><span class="table"><a href="cha.security.yast_ca.html#tab.yast.ca.intro.crl"><span class="number">16.2 </span><span class="name">X.509 Certificate Revocation List (CRL)</span></a></span></dt><dt><span class="table"><a href="cha.security.yast_ca.html#tab.yast.ca.ldap.password"><span class="number">16.3 </span><span class="name">Passwords during LDAP Export</span></a></span></dt><dt><span class="table"><a href="cha.apparmor.support.html#idm140463573640496"><span class="number">27.1 </span><span class="name">Man Pages: Sections and Categories</span></a></span></dt><dt><span class="table"><a href="cha.audit.comp.html#tab.audit.auditctl"><span class="number">30.1 </span><span class="name">Audit Status Flags</span></a></span></dt></dl></div><div class="list-of-examples"><div class="toc-title">List of Examples</div><dl><dt><span class="example"><a href="cha.pam.html#dat.pam.sshd"><span class="number">2.1 </span><span class="name">PAM Configuration for sshd (<code class="filename">/etc/pam.d/sshd</code>)</span></a></span></dt><dt><span class="example"><a href="cha.pam.html#dat.pam.common-auth"><span class="number">2.2 </span><span class="name">Default Configuration for the <code class="literal">auth</code> Section (<code class="filename">common-auth</code>)</span></a></span></dt><dt><span class="example"><a href="cha.pam.html#dat.pam.common-account"><span class="number">2.3 </span><span class="name">Default Configuration for the <code class="literal">account</code> Section (<code class="filename">common-account</code>)</span></a></span></dt><dt><span class="example"><a href="cha.pam.html#dat.pam.common-password"><span class="number">2.4 </span><span class="name">Default Configuration for the <code class="literal">password</code> Section (<code class="filename">common-password</code>)</span></a></span></dt><dt><span class="example"><a href="cha.pam.html#dat.pam.common-session"><span class="number">2.5 </span><span class="name">Default Configuration for the <code class="literal">session</code> Section (<code class="filename">common-session</code>)</span></a></span></dt><dt><span class="example"><a href="cha.pam.html#dat.pam.pamenv"><span class="number">2.6 </span><span class="name">pam_env.conf</span></a></span></dt><dt><span class="example"><a href="cha.security.ldap.html#aus.ldap.schema.help"><span class="number">4.1 </span><span class="name">Excerpt from schema.core</span></a></span></dt><dt><span class="example"><a href="cha.security.ldap.html#dat.ldap.ldif"><span class="number">4.2 </span><span class="name">An LDIF File</span></a></span></dt><dt><span class="example"><a href="cha.security.ldap.html#aus.ldap.addentry"><span class="number">4.3 </span><span class="name">ldapadd with example.ldif</span></a></span></dt><dt><span class="example"><a href="cha.security.ldap.html#aus.ldap.addtux"><span class="number">4.4 </span><span class="name">LDIF Data for Tux</span></a></span></dt><dt><span class="example"><a href="cha.security.ldap.html#aus.ldap.ldif.tux"><span class="number">4.5 </span><span class="name">Modified LDIF File tux.ldif</span></a></span></dt><dt><span class="example"><a href="cha.security.policykit.html#ex.policykit.change.modify_config.explicit"><span class="number">8.1 </span><span class="name">An example <code class="filename">/etc/PolicyKit/PolicyKit.conf</code> file</span></a></span></dt><dt><span class="example"><a href="cha.security.vpnserver.html#ex.vpn.serv-config"><span class="number">15.1 </span><span class="name">VPN Server Configuration File</span></a></span></dt><dt><span class="example"><a href="cha.security.vpnserver.html#idm140463575847824"><span class="number">15.2 </span><span class="name">VPN Client Configuration File</span></a></span></dt><dt><span class="example"><a href="cha.apparmor.start.html#ex.unconfined"><span class="number">18.1 </span><span class="name">Output of <code class="command">aa-unconfined</code></span></a></span></dt><dt><span class="example"><a href="cha.apparmor.commandline.html#ex.apparmor.commandline.profiling.summary.genprof.learn"><span class="number">23.1 </span><span class="name">Learning Mode Exception: Controlling Access to Specific Resources</span></a></span></dt><dt><span class="example"><a href="cha.apparmor.commandline.html#ex.apparmor.commandline.profiling.summary.genprof.perms"><span class="number">23.2 </span><span class="name">Learning Mode Exception: Defining Permissions for an Entry</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.con.set"><span class="number">29.1 </span><span class="name">Showing security context settings using ls -Z</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.sestatus"><span class="number">29.2 </span><span class="name">After labeling the file system you can verify that SELinux is functional using <code class="command">sestatus -v</code></span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.ls.bool"><span class="number">29.3 </span><span class="name">Use <code class="command">semanage boolean -l</code> to get a list of Booleans and verify policy access</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.fcon"><span class="number">29.4 </span><span class="name">Use <code class="command">semanage fcontext -l</code> to get file context information</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.def.con."><span class="number">29.5 </span><span class="name">The default context for directories in the root directory</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.set.proc"><span class="number">29.6 </span><span class="name">Showing SELinux settings for processes</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.semanage"><span class="number">29.7 </span><span class="name">Showing Displaying default file contexts with <code class="command">semanage fcontext -l</code></span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.li.apachefc"><span class="number">29.8 </span><span class="name">The first 20 lines from the <code class="filename">apache.fc</code> file</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#ex.selnx.li.auditlog"><span class="number">29.9 </span><span class="name">Example lines from <code class="filename">/etc/audit/audit.log</code></span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#idm140463573150096"><span class="number">29.10 </span><span class="name">Analyzing audit messages using audit2allow</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#idm140463573143312"><span class="number">29.11 </span><span class="name">Using audit2allow to see which lines have denied access</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#idm140463573139664"><span class="number">29.12 </span><span class="name">Use audit2allow to create a policy module that will allow the action that was previously denied</span></a></span></dt><dt><span class="example"><a href="cha.selinux.html#idm140463573133984"><span class="number">29.13 </span><span class="name">The messages that you'll see, just before the system stops, look as follows:</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.auditctl.status"><span class="number">30.1 </span><span class="name">Example output of <code class="command">auditctl <code class="option">-s</code></code></span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.rules.sysparam"><span class="number">30.2 </span><span class="name">Example Audit Rules—Audit System Parameters</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.rules.fs"><span class="number">30.3 </span><span class="name">Example Audit Rules—File System Auditing</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.rules.syscall"><span class="number">30.4 </span><span class="name">Example Audit Rules—System Call Auditing</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.ruledel"><span class="number">30.5 </span><span class="name">Deleting Audit Rules and Events</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#idm140463572815296"><span class="number">30.6 </span><span class="name">Listing Rules with <code class="command">auditctl <code class="option">-l</code></code></span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.aureport.logtrail"><span class="number">30.7 </span><span class="name">A Simple Audit Event—Viewing the Audit Log</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#ex.audit.aureport.sshd"><span class="number">30.8 </span><span class="name">An Advanced Audit Event—Login via SSH</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#idm140463572482096"><span class="number">30.9 </span><span class="name">Example /etc/audisp/audispd.conf</span></a></span></dt><dt><span class="example"><a href="cha.audit.comp.html#idm140463572458480"><span class="number">30.10 </span><span class="name">Example /etc/audisp/plugins.d/syslog.conf</span></a></span></dt></dl></div><div><div class="legalnotice"><p>
+  Copyright © 2006–2014
+
+  SUSE LLC and contributors. All rights reserved.
+ </p><p>
+  Permission is granted to copy, distribute and/or modify this document
+  under the terms of the GNU Free Documentation License, Version 1.2 or (at
+  your option) version 1.3; with the Invariant Section being this copyright
+  notice and license. A copy of the license version 1.2 is included in the
+  section entitled <span class="quote">“<span class="quote">GNU Free Documentation License</span>”</span>.
+ </p><p>
+  For SUSE and Novell trademarks, see the Novell Trademark and Service
+  Mark list
+  <a class="ulink" href="http://www.novell.com/company/legal/trademarks/tmlist.html" target="_blank">http://www.novell.com/company/legal/trademarks/tmlist.html</a>.
+  All other third party trademarks are the property of their respective
+  owners. A trademark symbol (®, ™ etc.) denotes a SUSE or
+  Novell trademark; an asterisk (*) denotes a third party trademark.
+ </p><p>
+  All information found in this book has been compiled with utmost attention
+  to detail. However, this does not guarantee complete accuracy. Neither
+  SUSE LLC, its affiliates, the authors nor the translators shall be held
+  liable for possible errors or the consequences thereof.
+ </p></div></div></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="preface.security.html"><span class="next-icon">→</span><span class="nav-label">About This Guide</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span><span class="spacer"> • </span><span id="_share-mail" class="bottom-button">E-Mail</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div><div id="_inward"></div></div><div id="_footer-wrap"><div id="_footer"><p>©
+        2014
+        SUSE</p><ul><li><a href="http://www.suse.com/company/careers/" target="_top">Careers</a></li><li><a href="http://www.suse.com/company/legal/" target="_top">Legal</a></li><li><a href="http://www.suse.com/company/" target="_top">About</a></li><li><a href="http://www.suse.com/ContactsOffices/contacts_offices.jsp" target="_top">Contact Us</a></li></ul></div></div></body></html>

@@ -12,6 +12,8 @@ DTDVERSION := 1.0
 DBSTYLES   := /usr/share/xml/docbook/stylesheet/nwalsh/current
 SUSESTYLES2005 := /usr/share/xml/docbook/stylesheet/suse
 SUSESTYLES2013 := /usr/share/xml/docbook/stylesheet/suse2013
+DAPSSTYLES2013 := /usr/share/xml/docbook/stylesheet/daps2013
+OPENSUSESTYLES2013 := /usr/share/xml/docbook/stylesheet/opensuse2013
 
 SUSEXSL_FOR-CATALOG    := for-catalog-$(PACKAGE).xml
 NOVDOC_FOR-CATALOG     := for-catalog-$(DTDNAME)-$(DTDVERSION).xml
@@ -29,7 +31,9 @@ HTMLSTYLESHEETS=$(subst /xhtml/,/html/,$(wildcard xslt2005/xhtml/*.xsl))
 # Directories for installation
 PREFIX    ?= /usr/share
 STYLEDIR2005 := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse
-STYLEDIR2013 := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse2013
+SUSESTYLEDIR2013 := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/suse2013
+DAPSSTYLEDIR2013 := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/daps2013
+OPENSUSESTYLEDIR2013 := $(DESTDIR)$(PREFIX)/xml/docbook/stylesheet/opensuse2013
 DOCDIR   := $(DESTDIR)$(PREFIX)/doc/packages/suse-xsl-stylesheets
 
 all: schema/novdocx-core.rnc schema/novdocx-core.rng schema/novdocx.rng
@@ -51,7 +55,9 @@ install: create-install-dirs
 	install -m644 catalogs/*.xml $(DESTDIR)/etc/xml
 	install -m644 COPYING* $(DOCDIR)
 	tar c --mode=u+w,go+r-w,a-s -C xslt2005 . | (cd  $(STYLEDIR2005); tar xpv)
-	tar c --mode=u+w,go+r-w,a-s -C xslt2013 . | (cd  $(STYLEDIR2013); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C suse2013 . | (cd  $(SUSESTYLEDIR2013); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C daps2013 . | (cd  $(DAPSSTYLEDIR2013); tar xpv)
+	tar c --mode=u+w,go+r-w,a-s -C opensuse2013 . | (cd  $(OPENSUSESTYLEDIR2013); tar xpv)
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR2005)
@@ -135,14 +141,23 @@ catalogs/$(NOVDOC_FOR-CATALOG):
 	sed -i '/<\/catalog/i\ </group>' $@
 
 catalogs/$(SUSEXSL_FOR-CATALOG): | $(DIRECTORIES)
+
+# FIXME: Neither of the below URLs exist. Would be good if they would at least
+#     redirect into the SVN or so.
 catalogs/$(SUSEXSL_FOR-CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse-xsl/current" \
 	  "file://$(SUSESTYLES2005)" $@
 	xmlcatalog --noout --add "rewriteSystem" \
-	  "http://daps.sourceforge.net/release/suse2-xsl/current" \
+	  "http://daps.sourceforge.net/release/suse2013-xsl/current" \
           "file://$(SUSESTYLES2013)" $@
+	xmlcatalog --noout --add "rewriteSystem" \
+	  "http://daps.sourceforge.net/release/daps2013-xsl/current" \
+          "file://$(DAPSSTYLES2013)" $@
+	xmlcatalog --noout --add "rewriteSystem" \
+	  "http://daps.sourceforge.net/release/opensuse2013-xsl/current" \
+          "file://$(OPENSUSESTYLES2013)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
