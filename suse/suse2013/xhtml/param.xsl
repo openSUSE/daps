@@ -106,12 +106,16 @@ set       toc,title
 <!-- 7. HTML ==================================================== -->
   <xsl:param name="css.decoration" select="0"/>
   <xsl:param name="docbook.css.link" select="0"/>
+
+  <!-- To add e.g. brand specific additional stylesheets -->
+  <xsl:param name="extra.css" select="''"/>
   <xsl:param name="docbook.css.source"/>
     <!-- Intentionally left empty – we already have a stylesheet, with this, we
          only override DocBook's default. -->
   <xsl:param name="html.stylesheet">
 <xsl:if test="$build.for.web != 1">static/css/fonts-onlylocal.css</xsl:if>
 static/css/style.css
+<xsl:value-of select="$extra.css"/>
 </xsl:param>
   <xsl:param name="make.clean.html" select="1"/>
   <xsl:param name="make.valid.html" select="1"/>
