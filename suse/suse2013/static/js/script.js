@@ -197,20 +197,6 @@ $(function() {
     });
   }
 
-  var stickyPanelOptions = {
-      topPadding: 0,
-      afterDetachCSSClass: "detached",
-      savePanelSpace: true,
-      // onDetached: function (detachedPanel, spacerPanel) {
-      //     spacerPanel.css("background-image", "none");
-      // },
-      // onReAttached: function (detachedPanel) {
-      //     spacerPanel.css("background-image", "none");
-      // },
-      parentSelector: null
-  };
-
-  $("#_toolbar-wrap").stickyPanel(stickyPanelOptions);
 });
 
 
