@@ -19,7 +19,7 @@
 
    Authors:    Thomas Schraitle <toms@opensuse.org>,
                Stefan Knorr <sknorr@suse.de>
-   Copyright:  2012, 2013, Thomas Schraitle, Stefan Knorr
+   Copyright:  2012, 2013, 2014, Thomas Schraitle, Stefan Knorr
 
 -->
 
@@ -35,5 +35,7 @@
        since we generally want matching stylesheets not any and all that are
        installed on the system. -->
   <xsl:import href="../../suse2013/xhtml/docbook.xsl"/>
+
+  <xsl:param name="suse.content" select="0"/>
 
 </xsl:stylesheet>

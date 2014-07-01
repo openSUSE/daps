@@ -18,8 +18,9 @@
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
 
    Authors:    Thomas Schraitle <toms@opensuse.org>,
-               Stefan Knorr <sknorr@suse.de>
-   Copyright:  2012, 2013, Thomas Schraitle, Stefan Knorr
+               Stefan Knorr <sknorr@suse.de>,
+               Rick Salevsky <rsalevsky@suse.de>
+   Copyright:  2012, 2013, 2014, Thomas Schraitle, Stefan Knorr, Rick Salevsky
 
 -->
 
@@ -46,5 +47,8 @@
         SUSE</p>
     </div>
   </xsl:template>
+
+  <xsl:param name="allow.email.sharelink" select="0"/>
+  <xsl:param name="extra.css" select="'static/css/brand.css'"/>
 
 </xsl:stylesheet>
