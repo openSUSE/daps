@@ -20,7 +20,7 @@
 
   Authors:    Thomas Schraitle <toms@opensuse.org>,
               Stefan Knorr <sknorr@suse.de>
-  Copyright:  2014, Thomas Schraitle, Stefan Knorr
+  Copyright:  2012, 2013, 2014, Thomas Schraitle, Stefan Knorr
 
 -->
 <xsl:stylesheet version="1.0"
