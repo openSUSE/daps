@@ -17,8 +17,9 @@
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
 
-   Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Authors:   Thomas Schraitle <toms@opensuse.org>,
+              Stefan Knorr <sknorr@suse.de>
+   Copyright: 2012, 2013, 2014, Thomas Schraitle, Stefan Knorr
 
 -->
 
@@ -36,22 +37,14 @@
     exclude-result-prefixes="exsl l t date">
 
   <xsl:import href="docbook.xsl"/>
-
   <!-- FIXME: Better use a full URL for catalog-based resolution here? The
        caveat of doing that would of course be possible dependency issues,
        since we generally want matching stylesheets not any and all that are
        installed on the system. -->
-  <xsl:import href="../../suse2013/xhtml/chunk.xsl"/>
+  <xsl:import href="../../suse2013/xhtml/chunk-common.xsl"/>
+  <xsl:include href="&www;/manifest.xsl"/>
+  <xsl:include href="&www;/chunk-code.xsl"/>
 
-  <xsl:template name="user.footer.content">
-    <div id="_footer">
-      <p>©
-        <xsl:if test="function-available('date:year')">
-          <xsl:value-of select="date:year()"/>
-          <xsl:text> </xsl:text>
-        </xsl:if>
-        SUSE</p>
-    </div>
-  </xsl:template>
+  <xsl:param name="is.chunk" select="1"/>
 
 </xsl:stylesheet>
