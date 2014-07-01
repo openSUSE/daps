@@ -61,7 +61,9 @@ install: create-install-dirs
 
 create-install-dirs:
 	mkdir -p $(STYLEDIR2005)
-	mkdir -p $(STYLEDIR2013)
+	mkdir -p $(SUSESTYLEDIR2013)
+	mkdir -p $(DAPSSTYLEDIR2013)
+	mkdir -p $(OPENSUSESTYLEDIR2013)
 	mkdir -p $(DOCDIR)
 	mkdir -p $(DESTDIR)$(PREFIX)/xml/$(DTDNAME)/schema/{dtd,rng}/$(DTDVERSION)
 	mkdir -p $(DESTDIR)/var/lib/sgml
@@ -126,7 +128,7 @@ schema/novdocx.dtd.tmp: $(DIRECTORIES)
 #
 
 # since xmlcatalog cannot create groups (<group>) we need to use sed
-# to fix this; while we are at it, we also remove the DOCTYPE line since 
+# to fix this; while we are at it, we also remove the DOCTYPE line since
 # it may cause problems with some XML parsers (hen/egg problem)
 #
 catalogs/$(NOVDOC_FOR-CATALOG): | $(DIRECTORIES)
@@ -142,22 +144,22 @@ catalogs/$(NOVDOC_FOR-CATALOG):
 
 catalogs/$(SUSEXSL_FOR-CATALOG): | $(DIRECTORIES)
 
-# FIXME: Neither of the below URLs exist. Would be good if they would at least
-#     redirect into the SVN or so.
+# FIXME: None of the below URLs exist. Would be good if they would at least
+#        redirect into the SVN instead of 404ing.
 catalogs/$(SUSEXSL_FOR-CATALOG):
 	xmlcatalog --noout --create $@
 	xmlcatalog --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/suse-xsl/current" \
 	  "file://$(SUSESTYLES2005)" $@
 	xmlcatalog --noout --add "rewriteSystem" \
-	  "http://daps.sourceforge.net/release/suse2013-xsl/current" \
-          "file://$(SUSESTYLES2013)" $@
+	  "http://daps.sourceforge.net/release/suse2-xsl/current" \
+      "file://$(SUSESTYLES2013)" $@
 	xmlcatalog --noout --add "rewriteSystem" \
-	  "http://daps.sourceforge.net/release/daps2013-xsl/current" \
-          "file://$(DAPSSTYLES2013)" $@
+	  "http://daps.sourceforge.net/release/daps2-xsl/current" \
+      "file://$(SUSESTYLES2013)" $@
 	xmlcatalog --noout --add "rewriteSystem" \
-	  "http://daps.sourceforge.net/release/opensuse2013-xsl/current" \
-          "file://$(OPENSUSESTYLES2013)" $@
+	  "http://daps.sourceforge.net/release/opensuse2-xsl/current" \
+      "file://$(SUSESTYLES2013)" $@
 	sed -i '/^<!DOCTYPE .*>$$/d' $@
 	sed -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	sed -i '/<\/catalog/i\ </group>' $@
