@@ -29,10 +29,11 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:date="http://exslt.org/dates-and-times"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
-    exclude-result-prefixes="exsl l t">
+    exclude-result-prefixes="exsl l t date">
 
   <xsl:import href="docbook.xsl"/>
 
@@ -41,5 +42,16 @@
        since we generally want matching stylesheets not any and all that are
        installed on the system. -->
   <xsl:import href="../../suse2013/xhtml/chunk.xsl"/>
+
+  <xsl:template name="user.footer.content">
+    <div id="_footer">
+      <p>©
+        <xsl:if test="function-available('date:year')">
+          <xsl:value-of select="date:year()"/>
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        SUSE</p>
+    </div>
+  </xsl:template>
 
 </xsl:stylesheet>

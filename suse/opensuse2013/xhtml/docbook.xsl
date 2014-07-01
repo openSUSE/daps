@@ -36,4 +36,15 @@
        installed on the system. -->
   <xsl:import href="../../suse2013/xhtml/docbook.xsl"/>
 
+  <xsl:template name="user.footer.content">
+    <div id="_footer">
+      <p>©
+        <xsl:if test="function-available('date:year')">
+          <xsl:value-of select="date:year()"/>
+          <xsl:text> </xsl:text>
+        </xsl:if>
+        SUSE</p>
+    </div>
+  </xsl:template>
+
 </xsl:stylesheet>
