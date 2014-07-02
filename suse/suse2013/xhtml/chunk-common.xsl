@@ -130,6 +130,9 @@
               <xsl:with-param name="class">single-crumb</xsl:with-param>
               <xsl:with-param name="context" select="$context"/>
             </xsl:apply-templates>
+            <xsl:if test="$context = 'header'">
+              <div class="bubble-corner active-contents"> </div>
+            </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -609,6 +612,9 @@
           </xsl:call-template>
 
           <xsl:call-template name="user.header.content"/>
+          <xsl:if test="$rootelementname = 'article'">
+            <div id="_toc-bubble-wrap"></div>
+          </xsl:if>
           <div id="_content">
             <xsl:call-template name="outerelement.class.attribute">
               <xsl:with-param name="node" select="'id-content'"/>
