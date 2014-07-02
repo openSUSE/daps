@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
    Purpose:
      Transform DocBook document into chunked XHTML files
-     
+
    Parameters:
      Too many to list here, see here:
      http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
-       
+
    Input:
      DocBook 4/5 document
-     
+
    Output:
      Chunked XHTML files
-     
+
    See Also:
      * http://doccookbook.sf.net/html/en/dbc.common.dbcustomize.html
      * http://sagehill.net/docbookxsl/CustomMethods.html#WriteCustomization
@@ -34,7 +34,7 @@
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
     exclude-result-prefixes="exsl l t">
 
-  <xsl:import href="docbook.xsl"/> 
+  <xsl:import href="docbook.xsl"/>
   <xsl:import href="chunk-common.xsl"/>
   <xsl:include href="&www;/manifest.xsl"/>
   <xsl:include href="&www;/chunk-code.xsl"/>
