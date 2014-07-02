@@ -370,4 +370,17 @@ GERMANY</xsl:param>
 <xsl:param name="para.use.arch" select="1"/>
 
 
+<!-- Creator string for PDF -->
+<xsl:param name="pdf-creator">
+  <!-- FIXME: add DAPS version -->
+  <xsl:text>DAPS (http://daps.sf.net) using the </xsl:text>
+  <xsl:value-of select="$STYLE.NAME"/>
+  <xsl:text> v</xsl:text>
+  <xsl:value-of select="$STYLE.VERSION"/>
+  <xsl:text> (based on DocBook XSL</xsl:text>
+  <xsl:text> </xsl:text>
+  <xsl:value-of select="$VERSION"/>
+  <xsl:text>)</xsl:text>
+</xsl:param>
+
 </xsl:stylesheet>

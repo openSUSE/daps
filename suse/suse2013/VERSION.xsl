@@ -3,14 +3,16 @@
   xmlns:fm="http://freshmeat.net/projects/freshmeat-submit/"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="fm">
-  
+
   <xsl:strip-space elements="fm:*"/>
-  
-  <xsl:param name="DAPS.VERSION" select="string(document('')//fm:Version[1])"/>
+
+  <xsl:param name="STYLE.NAME" select="string(document('')//fm:Project[1])"/>
+  <xsl:param name="STYLE.VERSION" select="string(document('')//fm:Version[1])"/>
 
   <fm:project>
-    <fm:Project>DAPS</fm:Project>
-    <fm:Version>1.1.7</fm:Version>
+    <fm:Project>SUSE XSL Stylesheets</fm:Project>
+    <!-- The version number is updated automatically when packaging -->
+    <fm:Version>2.0</fm:Version>
   </fm:project>
 
 </xsl:stylesheet>

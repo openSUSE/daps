@@ -110,10 +110,7 @@
 
             <!-- Creator Tool -->
             <xmp:CreatorTool>
-              <xsl:text>DAPS V</xsl:text>
-              <xsl:value-of select="$DAPS.VERSION"/>
-              <xsl:text> (http://daps.sf.net) with DocBook XSL Stylesheets v</xsl:text>
-              <xsl:value-of select="$VERSION"/>
+              <xsl:value-of select="$pdf-creator"/>
             </xmp:CreatorTool>
           </rdf:Description>
 
