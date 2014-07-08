@@ -6,7 +6,7 @@
   Author(s):  Stefan Knorr <sknorr@suse.de>,
               Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr, Thomas Schraitle
+  Copyright:  2013, 2014, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -23,6 +23,21 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:svg="http://www.w3.org/2000/svg">
 
+
+<!-- Some people would like to hard code page breaks into their PDFs,
+     this gives them a tool to do that. -->
+<xsl:template match="processing-instruction('pdfpagebreak')">
+  <xsl:choose>
+    <xsl:when test=". = '' or . = 'suse2013'">
+      <xsl:message>Creating a manual page break.</xsl:message>
+      <xsl:if test=". = ''">
+        <xsl:message>(!) Add suse2013 to the processing instruction to limit this page break to this version of the SUSE stylesheets.</xsl:message>
+      </xsl:if>
+      <fo:block page-break-after="always"/>
+    </xsl:when>
+    <xsl:otherwise/>
+  </xsl:choose>
+</xsl:template>
 
 <xsl:template match="formalpara/title|formalpara/info/title">
   <xsl:variable name="titleStr">
