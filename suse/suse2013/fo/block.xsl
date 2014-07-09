@@ -23,20 +23,60 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:svg="http://www.w3.org/2000/svg">
 
-
 <!-- Some people would like to hard code page breaks into their PDFs,
      this gives them a tool to do that. -->
 <xsl:template match="processing-instruction('pdfpagebreak')">
-  <xsl:choose>
-    <xsl:when test=". = '' or . = 'suse2013'">
+  <xsl:param name="arguments" select="."/>
+  <xsl:param name="selected-stylesheets">
+    <xsl:choose>
+      <xsl:when test="contains($arguments, 'style=&quot;')">
+        <xsl:value-of select="normalize-space(substring-before(substring-after($arguments, 'style=&quot;'), '&quot;'))"/>
+      </xsl:when>
+      <xsl:otherwise>any</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="selected-formatter">
+    <xsl:choose>
+      <xsl:when test="contains($arguments, 'formatter=&quot;')">
+        <xsl:value-of select="normalize-space(substring-before(substring-after($arguments, 'formatter=&quot;'), '&quot;'))"/>
+      </xsl:when>
+      <xsl:otherwise>any</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="these-stylesheets">
+    <xsl:choose>
+      <xsl:when test="$selected-stylesheets = 'any' or
+                      $selected-stylesheets = $name-stylesheets">
+        <xsl:text>1</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="this-formatter">
+    <xsl:choose>
+      <xsl:when test="$selected-formatter = 'any' or
+                      ($selected-formatter = 'fop' and $fop1.extensions = 1) or
+                      ($selected-formatter = 'xep' and $xep.extensions = 1)">
+        <xsl:text>1</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:if test="$this-formatter = 1 and $these-stylesheets = 1">
       <xsl:message>Creating a manual page break.</xsl:message>
-      <xsl:if test=". = ''">
-        <xsl:message>(!) Add suse2013 to the processing instruction to limit this page break to this version of the SUSE stylesheets.</xsl:message>
+      <xsl:if test="$selected-stylesheets = 'any'">
+        <xsl:message>(!) Use style="<xsl:value-of select="$STYLE.ID"/>" to limit this page break to these stylesheets.</xsl:message>
+      </xsl:if>
+      <xsl:if test="$selected-formatter = 'any'">
+        <xsl:message>(!) Use formatter="<xsl:choose>
+            <xsl:when test="$fop1.extensions = 1">fop</xsl:when>
+            <xsl:when test="$xep.extensions = 1">xep</xsl:when>
+            <xsl:otherwise>???</xsl:otherwise>
+          </xsl:choose>" to limit this page break to this formatter.</xsl:message>
       </xsl:if>
       <fo:block page-break-after="always"/>
-    </xsl:when>
-    <xsl:otherwise/>
-  </xsl:choose>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="formalpara/title|formalpara/info/title">
