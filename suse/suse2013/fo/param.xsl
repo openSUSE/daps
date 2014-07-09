@@ -375,7 +375,7 @@ GERMANY</xsl:param>
   <!-- FIXME: add DAPS version -->
   <xsl:text>DAPS (http://daps.sf.net) using the </xsl:text>
   <xsl:value-of select="$STYLE.NAME"/>
-  <xsl:text> v</xsl:text>
+  <xsl:text> </xsl:text>
   <xsl:value-of select="$STYLE.VERSION"/>
   <xsl:text> (based on DocBook XSL</xsl:text>
   <xsl:text> </xsl:text>
