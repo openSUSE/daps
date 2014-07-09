@@ -137,7 +137,14 @@ the DocBook 4 DTD.
 %setup -q -n %{name}
 #
 # Patch the VERSION.xsl file to hold the current version
-sed -i "s%<fm:Version>.*</fm:Version>%<fm:Version>%{version}</fm:Version>%" suse2013/VERSION.xsl
+# FIXME: this is not the right place for these sed lines -- if anyone ever
+#        creates e.g. a Debian package, these would lines would have to be
+#        duplicated in the DEB equivalent of a spec file. This should be in
+#        ../Makefile instead.
+sed -i "s/@@#version@@/%{version}/" xslt2005/version.xsl
+sed -i "s/@@#version@@/%{version}/" suse2013/version.xsl
+sed -i "s/@@#version@@/%{version}/" daps2013/version.xsl
+sed -i "s/@@#version@@/%{version}/" opensuse2013/version.xsl
 
 
 
