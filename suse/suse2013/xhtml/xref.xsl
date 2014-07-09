@@ -108,7 +108,7 @@
       <xsl:choose>
         <!-- Don't just test for the existence of child nodes: The author may
              have added a space between start and end tag and it would throw us
-             of. -->
+             off. -->
         <xsl:when test="normalize-space($flat-link-text) = ''">
           <xsl:value-of select="$url"/>
         </xsl:when>
