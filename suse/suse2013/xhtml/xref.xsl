@@ -76,6 +76,12 @@
 
   <xsl:template match="ulink" name="ulink">
     <xsl:param name="url" select="@url"/>
+    <xsl:variable name="link-text">
+      <xsl:apply-templates mode="no.anchor.mode"/>
+    </xsl:variable>
+    <xsl:variable name="flat-link-text">
+      <xsl:value-of select="$link-text"/>
+    </xsl:variable>
 
     <a>
       <xsl:apply-templates select="." mode="common.html.attributes"/>
@@ -100,11 +106,14 @@
         </xsl:attribute>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="count(child::node())=0">
+        <!-- Don't just test for the existence of child nodes: The author may
+             have added a space between start and end tag and it would throw us
+             of. -->
+        <xsl:when test="normalize-space($flat-link-text) = ''">
           <xsl:value-of select="$url"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates mode="no.anchor.mode"/>
+          <xsl:copy-of select="$link-text"/>
           <span class="ulink-url"> (<xsl:value-of select="$url"/>)</span>
         </xsl:otherwise>
       </xsl:choose>
