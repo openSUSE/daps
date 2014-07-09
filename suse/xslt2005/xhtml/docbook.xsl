@@ -9,6 +9,8 @@
 
 <xsl:output method="xml"/>
 
+<xsl:include href="../version.xsl"/>
+
 <xsl:include href="lists.xsl"/>
 <xsl:include href="callout.xsl"/>
 <xsl:include href="xref.xsl" />

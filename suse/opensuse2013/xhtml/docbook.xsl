@@ -37,6 +37,8 @@
        installed on the system. -->
   <xsl:import href="../../suse2013/xhtml/docbook.xsl"/>
 
+  <xsl:include href="../version.xsl"/>
+
   <xsl:template name="user.footer.content">
     <div id="_footer">
       <p>©

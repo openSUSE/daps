@@ -30,40 +30,41 @@
     xmlns="http://www.w3.org/1999/xhtml"
     exclude-result-prefixes="exsl date">
 
- <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl"/>
 
- <xsl:include href="../VERSION.xsl"/>
- <xsl:include href="../common/dates-revisions.xsl"/>
- <xsl:include href="../common/labels.xsl"/>
- <xsl:include href="../common/titles.xsl"/>
- <xsl:include href="../common/navigation.xsl"/>
- <xsl:include href="../common/string-replace.xsl"/>
- <xsl:include href="../common/arch-string.xsl"/>
+  <xsl:include href="../version.xsl"/>
 
- <xsl:include href="param.xsl"/>
- <xsl:include href="create-permalink.xsl"/>
+  <xsl:include href="../common/dates-revisions.xsl"/>
+  <xsl:include href="../common/labels.xsl"/>
+  <xsl:include href="../common/titles.xsl"/>
+  <xsl:include href="../common/navigation.xsl"/>
+  <xsl:include href="../common/string-replace.xsl"/>
+  <xsl:include href="../common/arch-string.xsl"/>
 
- <xsl:include href="autotoc.xsl"/>
- <xsl:include href="autobubbletoc.xsl"/>
- <xsl:include href="lists.xsl"/>
- <xsl:include href="callout.xsl"/>
- <xsl:include href="verbatim.xsl"/>
- <xsl:include href="component.xsl"/>
- <xsl:include href="glossary.xsl"/>
- <xsl:include href="formal.xsl"/>
- <xsl:include href="sections.xsl"/>
- <xsl:include href="division.xsl"/>
- <xsl:include href="inline.xsl"/>
- <xsl:include href="xref.xsl"/>
- <xsl:include href="html.xsl"/>
- <xsl:include href="admon.xsl"/>
- <xsl:include href="graphics.xsl"/>
- <xsl:include href="block.xsl"/>
- <xsl:include href="qandaset.xsl"/>
- <xsl:include href="titlepage.xsl"/>
- <xsl:include href="titlepage.templates.xsl"/>
+  <xsl:include href="param.xsl"/>
+  <xsl:include href="create-permalink.xsl"/>
 
- <xsl:include href="metadata.xsl"/>
+  <xsl:include href="autotoc.xsl"/>
+  <xsl:include href="autobubbletoc.xsl"/>
+  <xsl:include href="lists.xsl"/>
+  <xsl:include href="callout.xsl"/>
+  <xsl:include href="verbatim.xsl"/>
+  <xsl:include href="component.xsl"/>
+  <xsl:include href="glossary.xsl"/>
+  <xsl:include href="formal.xsl"/>
+  <xsl:include href="sections.xsl"/>
+  <xsl:include href="division.xsl"/>
+  <xsl:include href="inline.xsl"/>
+  <xsl:include href="xref.xsl"/>
+  <xsl:include href="html.xsl"/>
+  <xsl:include href="admon.xsl"/>
+  <xsl:include href="graphics.xsl"/>
+  <xsl:include href="block.xsl"/>
+  <xsl:include href="qandaset.xsl"/>
+  <xsl:include href="titlepage.xsl"/>
+  <xsl:include href="titlepage.templates.xsl"/>
+
+  <xsl:include href="metadata.xsl"/>
 
 
 <!-- Actual templates start here -->

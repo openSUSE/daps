@@ -36,6 +36,8 @@
        installed on the system. -->
   <xsl:import href="../../suse2013/xhtml/docbook.xsl"/>
 
+  <xsl:include href="../version.xsl"/>
+
   <xsl:param name="suse.content" select="0"/>
 
 </xsl:stylesheet>
