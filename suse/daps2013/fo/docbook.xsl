@@ -35,4 +35,6 @@
        installed on the system. -->
   <xsl:import href="../../suse2013/fo/docbook.xsl"/>
 
+  <xsl:include href="../version.xsl"/>
+
 </xsl:stylesheet>

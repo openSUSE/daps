@@ -11,6 +11,7 @@
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
+<xsl:include href="../version.xsl"/>
 <xsl:include href="attributesets.xsl"/>
 <xsl:include href="fonts.xsl"/>
 <xsl:include href="../common/copy-nodes.xsl"/>
@@ -73,7 +74,7 @@
     file</xsl:text>
      </xsl:message>
    </xsl:if>
-  
+
   <!--<xsl:message>
     styleroot = <xsl:value-of select="$styleroot"/>
   </xsl:message>-->
@@ -116,28 +117,28 @@
 
 
 <xsl:template name="root.messages">
-  
+
   <xsl:if test="$debug.fonts != 0">
     <xsl:message>DEBUG: Information about fonts:
     detected language = "<xsl:call-template name="l10n.language">
           <xsl:with-param name="target"
             select="(/* | key('id', $rootid))[last()]"/>
         </xsl:call-template>"
-    
+
     Used Extension = "<xsl:choose>
       <xsl:when test="$xep.extensions != 0">XEP</xsl:when>
       <xsl:when test="$fop1.extensions != 0">FOP > 0.9x</xsl:when>
       <xsl:when test="$fop.extensions != 0">FOP 0.2</xsl:when>
       <xsl:otherwise>Unknown</xsl:otherwise>
     </xsl:choose>"
-    
+
     Used Fonts for this Language:
     body.font.family = "<xsl:value-of select="$body.font.family"/>"
     sans.font.family = "<xsl:value-of select="$sans.font.family"/>"
     monospace.font.family = "<xsl:value-of select="$monospace.font.family"/>"
     </xsl:message>
   </xsl:if>
-  
+
   <!-- Explicitly insert the original message, xsl:apply-imports don't
     work here
   -->
@@ -151,7 +152,7 @@
     <xsl:text>x</xsl:text>
     <xsl:value-of select="$page.height"/>
     <xsl:text>)</xsl:text>
-  </xsl:message>  
+  </xsl:message>
 </xsl:template>
 
 </xsl:stylesheet>
