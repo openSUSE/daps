@@ -47,22 +47,15 @@
     <xsl:if test="$mode = 'mono-ancestor' or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
-  <xsl:variable name="underline-color">
-    <xsl:choose>
-      <xsl:when test="(ancestor::title and
-                      not(ancestor::note or ancestor::tip or ancestor::important or
-                          ancestor::warning or ancestor::caution)) or
-                      $purpose = 'xref'">
-        <xsl:value-of select="$dark-green"/>
-      </xsl:when>
-      <xsl:otherwise>&mid-gray;</xsl:otherwise>
-    </xsl:choose>
+  <xsl:variable name="lighter-formatting">
+    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
+                  $purpose = 'xref'">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal"
     font-style="normal">
-    <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
+    <xsl:if test="$lighter-formatting != 1">
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -78,7 +71,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -97,7 +90,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
@@ -117,25 +110,18 @@
   <xsl:param name="before" select="''"/>
   <xsl:param name="after" select="''"/>
   <xsl:variable name="mono-verbatim-ancestor">
-    <xsl:if test="$mode = 'mono-ancestor'  or ancestor::screen or
+    <xsl:if test="$mode = 'mono-ancestor' or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
-    <xsl:variable name="underline-color">
-    <xsl:choose>
-      <xsl:when test="(ancestor::title and
-                      not(ancestor::note or ancestor::tip or ancestor::important or
-                          ancestor::warning or ancestor::caution)) or
-                      $purpose = 'xref'">
-        <xsl:value-of select="$dark-green"/>
-      </xsl:when>
-      <xsl:otherwise>&mid-gray;</xsl:otherwise>
-    </xsl:choose>
+  <xsl:variable name="lighter-formatting">
+    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
+                  $purpose = 'xref'">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold"
     font-style="normal">
-    <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
+    <xsl:if test="$lighter-formatting != 1">
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -151,7 +137,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -170,7 +156,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
@@ -193,22 +179,15 @@
     <xsl:if test="$mode = 'mono-ancestor' or ancestor::screen or
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
-  <xsl:variable name="underline-color">
-    <xsl:choose>
-      <xsl:when test="(ancestor::title and
-                      not(ancestor::note or ancestor::tip or ancestor::important or
-                          ancestor::warning or ancestor::caution)) or
-                      $purpose = 'xref'">
-        <xsl:value-of select="$dark-green"/>
-      </xsl:when>
-      <xsl:otherwise>&mid-gray;</xsl:otherwise>
-    </xsl:choose>
+  <xsl:variable name="lighter-formatting">
+    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
+                  $purpose = 'xref'">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
     font-weight="normal">
-    <xsl:if test="$mono-verbatim-ancestor != 1">
-      <xsl:attribute name="border-bottom">&thinline;mm solid <xsl:value-of select="$underline-color"/></xsl:attribute>
+    <xsl:if test="$lighter-formatting != 1">
+      <xsl:attribute name="border-bottom">&thinline;mm solid &mid-gray;</xsl:attribute>
       <xsl:attribute name="padding-bottom">0.1em</xsl:attribute>
     </xsl:if>
     <xsl:choose>
@@ -224,7 +203,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
     <xsl:call-template name="anchor"/>
@@ -243,7 +222,7 @@
     <xsl:if test="$after != ''">
       <xsl:value-of select="$after"/>
     </xsl:if>
-    <xsl:if test="$mono-verbatim-ancestor != 1">
+    <xsl:if test="$lighter-formatting != 1">
       <fo:leader leader-pattern="space" leader-length="0.2em"/>
     </xsl:if>
   </fo:inline>
