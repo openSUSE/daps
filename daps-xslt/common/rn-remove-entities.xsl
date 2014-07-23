@@ -28,16 +28,16 @@
 
 
   <xsl:template match="/">
-    <xsl:processing-instruction name="xml-stylesheet">href="urn:x-suse:xslt:profiling:novdoc-profile.xsl" 
- type="text/xml"
- title="Profiling step"</xsl:processing-instruction>
-    <xsl:text disable-output-escaping="yes">&#10;&lt;!DOCTYPE </xsl:text>
-
-   <xsl:value-of select="local-name(/*[1])"/>
-<xsl:text disable-output-escaping="yes"> PUBLIC </xsl:text><xsl:value-of select="$target-xml-language"/><xsl:text disable-output-escaping="yes">
+    <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
+    <xsl:value-of select="local-name(/*[1])"/>
+    <xsl:text disable-output-escaping="yes"> PUBLIC </xsl:text>
+    <xsl:value-of select="$target-xml-language"/>
+    <xsl:text disable-output-escaping="yes">
 [
   &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
-  &lt;!ENTITY % entities SYSTEM "</xsl:text><xsl:value-of select="$entity-file"/><xsl:text disable-output-escaping="yes">">
+  &lt;!ENTITY % entities SYSTEM "</xsl:text>
+     <xsl:value-of select="$entity-file"/>
+     <xsl:text disable-output-escaping="yes">">
   %entities;
 ]>
 </xsl:text>
