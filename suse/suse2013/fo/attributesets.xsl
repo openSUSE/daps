@@ -35,6 +35,7 @@
   <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="graphical.admonition.properties">
@@ -154,6 +155,8 @@
 <xsl:attribute-set name="variablelist.term.properties"
   use-attribute-sets="sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
+  <xsl:attribute name="font-size"><xsl:value-of select="$fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
+  <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-lineheight-adjust"/>em</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="lists.label.properties" use-attribute-sets="dark-green">
@@ -163,7 +166,7 @@
 <xsl:attribute-set name="orderedlist.label.properties"
   use-attribute-sets="lists.label.properties sans.bold">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans-stack"/></xsl:attribute>
-  <xsl:attribute name="font-size"><xsl:value-of select="1 * $fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
+  <xsl:attribute name="font-size"><xsl:value-of select="$fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-lineheight-adjust"/>em</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="itemizedlist.label.properties"
@@ -348,12 +351,11 @@
   <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
   <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
   <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="abstract.title.properties"
-  use-attribute-sets="formal.title.properties">
-  <xsl:attribute name="text-align">start</xsl:attribute>
-</xsl:attribute-set>
+  use-attribute-sets="formal.title.properties"/>
 
 <xsl:attribute-set name="abstract.properties">
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
