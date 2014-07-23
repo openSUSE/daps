@@ -91,6 +91,7 @@ xsltindexdir     = $(xsltdir)/index
 xsltmallarddir   = $(xsltdir)/mallard
 xsltmandir       = $(xsltdir)/man
 xsltprofilingdir = $(xsltdir)/profiling
+xsltrelnotesdir  = $(xsltdir)/relnotes
 xsltyelpdir      = $(xsltdir)/yelp
 
 #------------------------
