@@ -130,6 +130,7 @@ dist_xsltindex_DATA     = $(wildcard daps-xslt/index/*.xsl)
 dist_xsltmallard_DATA   = $(wildcard daps-xslt/mallard/*.xsl)
 dist_xsltman_DATA       = $(wildcard daps-xslt/man/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
+dist_xsltrelnotes_DATA = $(wildcard daps-xslt/relnotes/*.xsl)
 dist_xsltyelp_DATA      = $(wildcard daps-xslt/yelp/*.xsl)
 
 # DOCUMENTATION
