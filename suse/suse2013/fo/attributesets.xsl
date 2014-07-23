@@ -56,6 +56,7 @@
   <xsl:attribute name="font-size">
     <xsl:value-of select="$body.font.size"/>
   </xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="toc.pagenumber.properties"
