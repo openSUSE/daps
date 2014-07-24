@@ -161,12 +161,33 @@
   <xsl:variable name="keep.together">
     <xsl:call-template name="pi.dbfo_keep-together"/>
   </xsl:variable>
+  <xsl:variable name="content-candidate">
+    <xsl:value-of select="."/>
+  </xsl:variable>
+  <xsl:variable name="content" select="normalize-space($content-candidate)"/>
+  <!-- We need only three, respectively one final character, but there may be
+       something in the way, like a space that wasn't removed or so. -->
+  <xsl:variable name="final-four-characters"
+    select="substring($content, string-length($content) - 4, string-length($content))"/>
+  <xsl:variable name="final-two-characters"
+    select="substring($content, string-length($content) - 2, string-length($content))"/>
 
   <fo:block xsl:use-attribute-sets="para.properties">
     <xsl:if test="$keep.together != ''">
       <xsl:attribute name="keep-together.within-column"><xsl:value-of
                       select="$keep.together"/></xsl:attribute>
     </xsl:if>
+
+    <!-- If the last sentence ends in : or …, there is probably a list or
+         an example that needs to be kept close to the paragraph. What if
+         there is no final punctuation? Not handling that case now. -->
+    <xsl:if test="(contains($final-four-characters, '...') or
+                  contains($final-two-characters, '…') or
+                  contains($final-two-characters, ':')) and
+                  following-sibling::*">
+      <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
+    </xsl:if>
+
     <xsl:call-template name="anchor"/>
 
     <xsl:if test="@arch != ''">
