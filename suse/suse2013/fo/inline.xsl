@@ -48,8 +48,8 @@
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
   <xsl:variable name="lighter-formatting">
-    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
-                  $purpose = 'xref'">1</xsl:if>
+    <xsl:if test="$mono-verbatim-ancestor = 1 or
+                  ancestor::title[not(parent::formalpara)]">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties" font-weight="normal"
@@ -60,8 +60,8 @@
     </xsl:if>
     <xsl:choose>
       <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
-      <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose = 'xref'">
+      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
+                          ancestor::term)">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -114,8 +114,8 @@
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
   <xsl:variable name="lighter-formatting">
-    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
-                  $purpose = 'xref'">1</xsl:if>
+    <xsl:if test="$mono-verbatim-ancestor = 1 or
+                  ancestor::title[not(parent::formalpara)]">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties mono.bold"
@@ -126,8 +126,8 @@
     </xsl:if>
     <xsl:choose>
       <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
-      <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose = 'xref'">
+      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
+                          ancestor::term)">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -180,8 +180,8 @@
                   ancestor::programlisting or ancestor::synopsis">1</xsl:if>
   </xsl:variable>
   <xsl:variable name="lighter-formatting">
-    <xsl:if test="$mono-verbatim-ancestor = 1 or ancestor::title or
-                  $purpose = 'xref'">1</xsl:if>
+    <xsl:if test="$mono-verbatim-ancestor = 1 or
+                  ancestor::title[not(parent::formalpara)]">1</xsl:if>
   </xsl:variable>
 
   <fo:inline xsl:use-attribute-sets="monospace.properties italicized"
@@ -192,8 +192,8 @@
     </xsl:if>
     <xsl:choose>
       <xsl:when test="$mono-verbatim-ancestor = 1"/> <!-- do nothing -->
-      <xsl:when test="not(ancestor::title or ancestor::term)
-                   or $purpose = 'xref'">
+      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
+                          ancestor::term)">
         <xsl:attribute name="font-size"
           ><xsl:value-of select="$mono-xheight-adjust"/>em</xsl:attribute>
       </xsl:when>
@@ -290,12 +290,6 @@
 </xsl:template>
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-<xsl:template match="title" mode="xref-to">
-  <xsl:apply-templates>
-    <xsl:with-param name="purpose" select="xref"/>
-  </xsl:apply-templates>
-</xsl:template>
 
 <!-- No mode -->
 <xsl:template match="command|userinput">

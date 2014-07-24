@@ -234,56 +234,56 @@
     <xsl:with-param name="linkend" select="@linkend"/>
   </xsl:call-template>
 
-  <xsl:choose>
-    <xsl:when test="$xref.in.samebook != 0 or
-                    /set/@id=$rootid or
-                    /article/@id=$rootid">
-       <!-- An xref that stays inside the current book or when $rootid
-         pointing to the root element, then use the defaults -->
-       <xsl:apply-imports/>
-    </xsl:when>
-    <xsl:otherwise>
-          <!-- A reference into another book -->
-          <xsl:variable name="target.chapandapp"
-                        select="$target/ancestor-or-self::chapter[@lang!='']
-                                | $target/ancestor-or-self::appendix[@lang!='']"/>
 
-          <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
-                        $target.chapandapp/@lang != $this.book/@lang">
-            <xsl:message>WARNING: The xref '<xsl:value-of
-            select="@linkend"/>' points to a chapter (id='<xsl:value-of
-              select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
-          </xsl:if>
+  <!-- We add this fo:inline, so xrefs are always displayed in sans...
+       This is a workaround for inline mono styles expecting titles to be
+       in the sans font, thus being able to use xheight scaling adapted
+       to work inside sans text. Welp. -->
+  <fo:inline xsl:use-attribute-sets="title.font">
+    <xsl:choose>
+      <!-- Someone might be crazy enough to put an xref inside a verbatim
+           element. -->
+      <xsl:then test="ancestor::screen or ancestor::computeroutput or
+                  ancestor::userinput or ancestor::programlisting or
+                  ancestor::synopsis">
+        <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust div $mono-xheight-adjust"/>em</xsl:attribute>
+      </xsl:then>
+      <!-- term and most titles are already sans'd, thus there is no need to
+           adapt font size further. -->
+      <xsl:then test="not(ancestor::title[not(parent::formalpara)] or
+                      ancestor::term)">
+        <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust"/>em</xsl:attribute>
+      </xsl:then>
+      <xsl:otherwise/>
+    </xsl:choose>
 
-          <xsl:call-template name="create.linkto.other.book">
-            <xsl:with-param name="target" select="$target"/>
-          </xsl:call-template>
-    </xsl:otherwise>
-  </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$xref.in.samebook != 0 or
+                      /set/@id=$rootid or
+                      /article/@id=$rootid">
+         <!-- An xref that stays inside the current book or when $rootid
+           pointing to the root element, then use the defaults -->
+         <xsl:apply-imports/>
+      </xsl:when>
+      <xsl:otherwise>
+            <!-- A reference into another book -->
+            <xsl:variable name="target.chapandapp"
+                          select="$target/ancestor-or-self::chapter[@lang!='']
+                                  | $target/ancestor-or-self::appendix[@lang!='']"/>
+
+            <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
+                          $target.chapandapp/@lang != $this.book/@lang">
+              <xsl:message>WARNING: The xref '<xsl:value-of
+              select="@linkend"/>' points to a chapter (id='<xsl:value-of
+                select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
+            </xsl:if>
+
+            <xsl:call-template name="create.linkto.other.book">
+              <xsl:with-param name="target" select="$target"/>
+            </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </fo:inline>
 </xsl:template>
-
-<!-- Use mode="no.anchor.mode" (which is only called when working with xref) to
-     allow for better customization -->
-<xsl:template match="*" mode="no.anchor.mode">
-  <xsl:choose>
-    <xsl:when test="descendant-or-self::footnote or
-                    descendant-or-self::anchor or
-                    descendant-or-self::ulink or
-                    descendant-or-self::link or
-                    descendant-or-self::olink or
-                    descendant-or-self::xref or
-                    descendant-or-self::indexterm or
-        (ancestor::title and (@id or @xml:id))">
-
-      <xsl:apply-templates mode="no.anchor.mode"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select=".">
-        <xsl:with-param name="purpose" select="'xref'"/>
-      </xsl:apply-templates>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
 
 </xsl:stylesheet>
