@@ -243,17 +243,17 @@
     <xsl:choose>
       <!-- Someone might be crazy enough to put an xref inside a verbatim
            element. -->
-      <xsl:then test="ancestor::screen or ancestor::computeroutput or
+      <xsl:when test="ancestor::screen or ancestor::computeroutput or
                   ancestor::userinput or ancestor::programlisting or
                   ancestor::synopsis">
         <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust div $mono-xheight-adjust"/>em</xsl:attribute>
-      </xsl:then>
+      </xsl:when>
       <!-- term and most titles are already sans'd, thus there is no need to
            adapt font size further. -->
-      <xsl:then test="not(ancestor::title[not(parent::formalpara)] or
+      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
                       ancestor::term)">
         <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust"/>em</xsl:attribute>
-      </xsl:then>
+      </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
 
