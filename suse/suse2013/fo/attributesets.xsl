@@ -178,6 +178,38 @@
   <xsl:attribute name="provisional-distance-between-starts">&columnfragment;mm</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="list-orphans-widows">
+  <!-- Make sure there are always at least two listitems together at the
+     start of a list... (preceding-sibling helps if a title or other
+     element is used before the list)-->
+  <xsl:attribute name="keep-with-next.within-column">
+    <xsl:choose>
+      <xsl:when test="self::listitem[not(preceding-sibling::*)][not(parent::varlistentry)]">always</xsl:when>
+      <xsl:otherwise>auto</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <!-- Make sure there are always at least two listitems together at the
+     end of the list... -->
+  <xsl:attribute name="keep-with-previous.within-column">
+    <xsl:choose>
+      <!-- FIXME: surely, there is something wrong here... why do I
+           have to use not(f-s::*) instead of last()? -->
+      <xsl:when test="self::listitem[not(following-sibling::*)][preceding-sibling::*][not(parent::varlistentry)]">always</xsl:when>
+      <xsl:otherwise>auto</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="list.item.spacing"
+  use-attribute-sets="list-orphans-widows">
+  <xsl:attribute name="space-before.optimum">0.8em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">0.6em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">1.0em</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="compact.list.item.spacing"
+  use-attribute-sets="list-orphans-widows"/>
+
 
 <!-- 14. QAndASet =============================================== -->
 
