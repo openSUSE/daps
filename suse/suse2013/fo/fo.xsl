@@ -7,7 +7,7 @@
     from the original stylesheets (which is essentially the same template).
     Xsltproc does not seem to exhibit this bug. Hurray.
 
-    To check for the bug: build e.g. the DAPS(TM) User Guide. Notice, how in the
+    To check for the bug: build e.g. the DAPS(TM) User Guide. Note, how in the
     footer, the TM-mark appears to be in the wrong (a serifed) font.
 
   Authors:    Thomas Schraitle <toms@opensuse.org>,
