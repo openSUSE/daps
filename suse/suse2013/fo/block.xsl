@@ -46,7 +46,7 @@
   <xsl:param name="these-stylesheets">
     <xsl:choose>
       <xsl:when test="$selected-stylesheets = 'any' or
-                      $selected-stylesheets = $name-stylesheets">
+                      $selected-stylesheets = $STYLE.ID">
         <xsl:text>1</xsl:text>
       </xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
@@ -156,7 +156,7 @@
 </xsl:template>
 
 
-<!-- Add special handling for arch attribute. -->
+<!-- Add special handling for arch attribute + colon as the final character. -->
 <xsl:template match="para">
   <xsl:variable name="keep.together">
     <xsl:call-template name="pi.dbfo_keep-together"/>
@@ -165,11 +165,9 @@
     <xsl:value-of select="."/>
   </xsl:variable>
   <xsl:variable name="content" select="normalize-space($content-candidate)"/>
-  <!-- We need only three, respectively one final character, but there may be
+  <!-- We need only one final character, but there may be
        something in the way, like a space that wasn't removed or so. -->
-  <xsl:variable name="final-four-characters"
-    select="substring($content, string-length($content) - 4, string-length($content))"/>
-  <xsl:variable name="final-two-characters"
+  <xsl:variable name="final-characters"
     select="substring($content, string-length($content) - 2, string-length($content))"/>
 
   <fo:block xsl:use-attribute-sets="para.properties">
@@ -181,9 +179,7 @@
     <!-- If the last sentence ends in : or …, there is probably a list or
          an example that needs to be kept close to the paragraph. What if
          there is no final punctuation? Not handling that case now. -->
-    <xsl:if test="(contains($final-four-characters, '...') or
-                  contains($final-two-characters, '…') or
-                  contains($final-two-characters, ':')) and
+    <xsl:if test="contains($final-characters, ':') and
                   following-sibling::*">
       <xsl:attribute name="keep-with-next.within-page">always</xsl:attribute>
     </xsl:if>
