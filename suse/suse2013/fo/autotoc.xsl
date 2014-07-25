@@ -254,7 +254,7 @@
     </fo:block>
 </xsl:template>
 
-<xsl:template match="chapter|book/appendix" mode="susetoc">
+<xsl:template match="chapter|appendix[ancestor::book]" mode="susetoc">
     <xsl:variable name="id">
       <xsl:call-template name="object.id"/>
     </xsl:variable>
