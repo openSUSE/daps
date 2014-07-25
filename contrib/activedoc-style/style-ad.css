@@ -869,20 +869,20 @@ a:hover span, a:focus span, a:active span {
     height: 0.01px;
 }
 
-.procedure-title code, .procedure-title .command, .procedure-title .keycap,
-.procedure-title span,
-.table-title code, .table-title .command, .table-title .keycap,
-.table-title span,
-.example-title code, .example-title .command, .example-title .keycap,
-.example-title span,
-.figure-title code, .figure-title .command, .figure-title .keycap,
-.figure-title span,
-.orderedlist-title code, .orderedlist-title .command,
-.orderedlist-title .keycap, .orderedlist-title span,
-.variablelist-title code, .variablelist-title .command,
-.variablelist-title .keycap, .variablelist-title span,
- .itemizedlist-title code, .itemizedlist-title .command,
- .itemizedlist-title .keycap, .itemizedlist-title span {
+.procedure-title code,
+.procedure-title span:not(.name):not(.number),
+.table-title code,
+.table-title span:not(.name):not(.number),
+.example-title code,
+.example-title span:not(.name):not(.number),
+.figure-title code,
+.figure-title span:not(.name):not(.number),
+.orderedlist-title code,
+.orderedlist-title span:not(.name):not(.number),
+.variablelist-title code,
+.variablelist-title span:not(.name):not(.number),
+.itemizedlist-title code,
+.itemizedlist-title span:not(.name):not(.number) {
     text-transform: none;
 }
 
