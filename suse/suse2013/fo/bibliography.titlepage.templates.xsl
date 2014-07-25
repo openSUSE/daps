@@ -18,7 +18,7 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
@@ -46,10 +46,10 @@
         <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="subtitle"/>
       </xsl:when>
     </xsl:choose>
-    
+
     <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="bibliographyinfo/itermset"/>
     <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="docinfo/itermset"/>
     <xsl:apply-templates mode="bibliography.titlepage.recto.auto.mode" select="info/itermset"/>
   </xsl:template>
-  
+
 </xsl:stylesheet>

@@ -18,11 +18,11 @@
   %colors;
   %metrics;
 ]>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  
-  
+
+
   <!-- Glossary =================================================== -->
   <xsl:template name="glossary.titlepage.recto">
     <fo:block
@@ -47,12 +47,12 @@
         <xsl:apply-templates mode="glossary.titlepage.recto.auto.mode" select="subtitle"/>
       </xsl:when>
     </xsl:choose>
-    
+
     <xsl:apply-templates mode="glossary.titlepage.recto.auto.mode" select="glossaryinfo/itermset"/>
     <xsl:apply-templates mode="glossary.titlepage.recto.auto.mode" select="docinfo/itermset"/>
     <xsl:apply-templates mode="glossary.titlepage.recto.auto.mode" select="info/itermset"/>
   </xsl:template>
-  
+
   <xsl:template match="title" mode="glossdiv.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="glossdiv.titlepage.recto.style"
@@ -63,5 +63,5 @@
       </xsl:call-template>
     </fo:block>
   </xsl:template>
-  
+
 </xsl:stylesheet>
