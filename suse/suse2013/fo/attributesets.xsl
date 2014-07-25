@@ -181,7 +181,7 @@
 <xsl:attribute-set name="list-orphans-widows">
   <!-- Make sure there are always at least two listitems together at the
      start of a list... (preceding-sibling helps if a title or other
-     element is used before the list)-->
+     element is used before the list) -->
   <xsl:attribute name="keep-with-next.within-column">
     <xsl:choose>
       <xsl:when test="self::listitem[not(preceding-sibling::*)][not(parent::varlistentry)]">always</xsl:when>
