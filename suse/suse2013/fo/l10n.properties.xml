@@ -1,39 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- toms: XML names with colons are ambiguous; better add
-     a namespace in the root element, maybe something like:
-
-    xmlns:p="urn:x-suse:xmlns:properties"
-
-    Do we need a DTD or a RELAX NG schema?
--->
 <properties>
   <prop-types>
+    <!-- serif: serif font stack, used for text -->
     <prop-type name="serif">font</prop-type>
+
+    <!-- sans: sans-serif font stack, used for headlines, etc. -->
     <prop-type name="sans">font</prop-type>
+
+    <!-- mono: monospace font stack used for command line output, etc. -->
     <prop-type name="mono">font</prop-type>
+
+    <!-- enable-bold: some non-Latin writing systems don't support
+         emboldening text particularly well – e.g. in Chinese, some
+         characters may become unreadable, set to "false" in such a case -->
     <prop-type name="enable-bold">bool</prop-type>
+
+    <!-- enable-serif-semibold/enable-sans-semibold/enable-mono-semibold:
+         set to "1", if the chosen font has a semi-bold (600) weight and
+         you want to use it instead of the bold version (700) -->
     <prop-type name="enable-serif-semibold">bool</prop-type>
     <prop-type name="enable-sans-semibold">bool</prop-type>
     <prop-type name="enable-mono-semibold">bool</prop-type>
+
+    <!-- enable-italic: many non-Latin writing systems don't support
+         italicising text, set to "0" in such a case -->
     <prop-type name="enable-italic">bool</prop-type>
+
+    <!-- fontsize-adjust: uniformly scale the defined standard font
+         sizes, to adjust e.g. for greater character complexity in some
+         languages, by setting this to a value like "1.3" -->
     <prop-type name="fontsize-adjust">float</prop-type>
+
+    <!-- sans-xheight-adjust: to adjust the font size of the sans-serif
+         font relative to the serif font, e.g. set this to the value
+         "0.9", if the sans-serif needs to be displayed at 90 % of its
+         original size to make the size of lower-case Latin/Cyrillic
+         characters match those of the serif -->
     <prop-type name="sans-xheight-adjust">float</prop-type>
+
+    <!-- mono-xheight-adjust: to adjust the font size of the monospace
+         font relative to the serif font, e.g. set this to the value
+         "0.9", if the monospace needs to be displayed at 90 % of its
+         original size to make the size of lower-case Latin/Cyrillic
+         characters match those of the serif -->
     <prop-type name="mono-xheight-adjust">float</prop-type>
+
+    <!-- base-lineheight: set the basic line height for running text -->
     <prop-type name="base-lineheight">float</prop-type>
+
+    <!-- sans-lineheight-adjust: to adjust the line height of the
+         sans-serif font to match the serif font's line height -->
     <prop-type name="sans-lineheight-adjust">float</prop-type>
+
+    <!-- mono-lineheight-adjust: to adjust the line height of the
+         monospace font to match the serif font's line height -->
     <prop-type name="mono-lineheight-adjust">float</prop-type>
   </prop-types>
 
   <lang code="default">
-    <prop name="serif">'Charis SIL', CharisSIL, serif;</prop>
-    <prop name="sans">'Open Sans', OpenSans, sans-serif;</prop>
-    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, monospace;</prop>
+    <prop name="serif">'Charis SIL', CharisSIL, serif</prop>
+    <prop name="sans">'Open Sans', OpenSans, sans-serif</prop>
+    <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, monospace</prop>
     <prop name="enable-bold">true</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">true</prop>
     <prop name="enable-mono-semibold">false</prop>
     <prop name="enable-italic">true</prop>
-    <prop name="enable-italic">1</prop>
     <prop name="fontsize-adjust">1</prop>
     <prop name="sans-xheight-adjust">0.916</prop>
     <prop name="mono-xheight-adjust">0.895</prop>
@@ -73,7 +105,7 @@
     <prop name="sans-xheight-adjust">0.99</prop>
     <prop name="mono-xheight-adjust">0.89</prop>
     <prop name="base-lineheight">1.5</prop>
-    <!--dummy values... -->
+    <!-- dummy values... -->
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
   </lang>
