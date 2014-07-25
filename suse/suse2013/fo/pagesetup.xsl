@@ -50,8 +50,23 @@
 </xsl:template>
 
 <xsl:template match="productname|productnumber" mode="footer">
-  <xsl:call-template name="inline.charseq"/>
-  <!-- Without adding @class -->
+  <xsl:variable name="content-candidate">
+    <xsl:value-of select="."/>
+  </xsl:variable>
+  <xsl:variable name="content" select="normalize-space($content-candidate)"/>
+  <!-- Hopefully, we will never need to cut off productnumbers.
+       That could be ugly. -->
+  <xsl:variable name="cutoff" select="20"/>
+
+  <xsl:choose>
+    <xsl:when test="string-length($content) &gt; $cutoff">
+      <xsl:value-of select="substring($content, 1, ($cutoff - 3))"/>…
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="inline.charseq"/>
+      <!-- No @class added -->
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="header.content">
@@ -188,10 +203,10 @@
         <xsl:choose>
           <xsl:when test="ancestor::book">
             <fo:retrieve-marker
-              retrieve-class-name="section.head.marker"
+              retrieve-class-name="section.head.marker.short"
               retrieve-position="first-including-carryover"
               retrieve-boundary="page-sequence"/>
-            <fo:inline color="&mid-gray;">
+            <fo:inline>
               <fo:leader leader-length="&columnfragment;mm"
                 leader-pattern="space"/>
               <xsl:call-template name="product"/>
@@ -363,10 +378,9 @@
 
   <!-- Really output a footer? -->
   <xsl:choose>
+    <!-- book titlepages have no footers at all -->
     <xsl:when test="$pageclass='titlepage' and $gentext-key='book'
-                    and $sequence='first'">
-      <!-- no, book titlepages have no footers at all -->
-    </xsl:when>
+                    and $sequence='first'"/>
     <xsl:when test="$sequence = 'blank' and $footers.on.blank.pages = 0">
       <!-- no output -->
     </xsl:when>

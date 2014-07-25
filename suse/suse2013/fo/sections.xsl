@@ -6,7 +6,7 @@
   Author(s):  Stefan Knorr <sknorr@suse.de>,
               Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr, Thomas Schraitle
+  Copyright:  2013, 2014, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -128,6 +128,11 @@
     <xsl:if test="$marker != 0">
       <fo:marker marker-class-name="section.head.marker">
         <xsl:copy-of select="$marker.title"/>
+      </fo:marker>
+      <fo:marker marker-class-name="section.head.marker.short">
+        <xsl:call-template name="shorten-section-markers">
+          <xsl:with-param name="title" select="$marker.title"/>
+        </xsl:call-template>
       </fo:marker>
     </xsl:if>
 

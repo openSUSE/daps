@@ -6,7 +6,7 @@
   Author(s):  Stefan Knorr <sknorr@suse.de>,
               Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr, Thomas Schraitle
+  Copyright:  2013, 2014, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -34,10 +34,6 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:variable name="titleabbrev">
-    <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
-  </xsl:variable>
-
   <xsl:variable name="level">
     <xsl:choose>
       <xsl:when test="ancestor::section">
@@ -51,6 +47,31 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+
+  <xsl:variable name="title">
+    <xsl:apply-templates select="$node" mode="title.markup"/>
+  </xsl:variable>
+
+  <xsl:variable name="titleabbrev">
+    <xsl:apply-templates select="$node" mode="titleabbrev.markup"/>
+  </xsl:variable>
+
+  <!-- Need to do that to have chapter/... names in the footer, too... -->
+  <fo:marker marker-class-name="section.head.marker.short">
+    <xsl:choose>
+      <xsl:when test="titleabbrev = ''">
+        <xsl:call-template name="shorten-section-markers">
+          <xsl:with-param name="title" select="$title"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="shorten-section-markers">
+          <xsl:with-param name="title" select="$titleabbrev"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </fo:marker>
+
 
   <fo:block xsl:use-attribute-sets="section.title.properties">
     <xsl:if test="$pagewide != 0">
@@ -173,6 +194,22 @@
           </xsl:otherwise>
         </xsl:choose>
       </fo:marker>
+
+      <fo:marker marker-class-name="section.head.marker.short">
+        <xsl:choose>
+          <xsl:when test="$titleabbrev = ''">
+            <xsl:call-template name="shorten-section-markers">
+              <xsl:with-param name="title" select="$title"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="shorten-section-markers">
+              <xsl:with-param name="title" select="$titleabbrev"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </fo:marker>
+
       <xsl:call-template name="component.title"/>
     </fo:block>
 
@@ -181,6 +218,25 @@
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
+
+<xsl:template name="shorten-section-markers">
+  <xsl:param name="title" select="''"/>
+  <xsl:param name="cutoff" select="65"/>
+  <xsl:variable name="realtitle" select="normalize-space($title)"/>
+
+  <xsl:choose>
+    <xsl:when test="string-length($realtitle) &gt; $cutoff">
+      <xsl:value-of select="substring($realtitle, 1, $cutoff - 3)"/>…
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$title"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="$realtitle=''">
+    <xsl:message>Did not receive a title to create a section marker with.</xsl:message>
+  </xsl:if>
+</xsl:template>
+
 
 
 <!-- Below, there are three templates (#1, #2, #3) that roughly do the following:
