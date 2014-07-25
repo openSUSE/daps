@@ -142,7 +142,7 @@
                    use-attribute-sets="dark-green">
   <xsl:attribute name="font-style">
     <xsl:choose>
-      <xsl:when test="self::xref and $enable-italic = 1">italic</xsl:when>
+      <xsl:when test="self::xref and $enable-italic = 'true'">italic</xsl:when>
       <!-- Use normal for ulinks -->
       <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
@@ -409,9 +409,9 @@
 <xsl:attribute-set name="serif.bold.noreplacement">
   <xsl:attribute name="font-weight">
     <xsl:choose>
-      <xsl:when test="$enable-bold = 1">
+      <xsl:when test="$enable-bold = 'true'">
         <xsl:choose>
-          <xsl:when test="$enable-serif-semibold = 1">600</xsl:when>
+          <xsl:when test="$enable-serif-semibold = 'true'">600</xsl:when>
           <xsl:otherwise>700</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -423,7 +423,7 @@
 <xsl:attribute-set name="serif.bold"  use-attribute-sets="serif.bold.noreplacement">
   <xsl:attribute name="background-color">
     <xsl:choose>
-      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
       <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -432,9 +432,9 @@
 <xsl:attribute-set name="sans.bold.noreplacement">
   <xsl:attribute name="font-weight">
     <xsl:choose>
-      <xsl:when test="$enable-bold = 1">
+      <xsl:when test="$enable-bold = 'true'">
         <xsl:choose>
-          <xsl:when test="$enable-sans-semibold = 1">600</xsl:when>
+          <xsl:when test="$enable-sans-semibold = 'true'">600</xsl:when>
           <xsl:otherwise>700</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -446,7 +446,7 @@
 <xsl:attribute-set name="sans.bold" use-attribute-sets="sans.bold.noreplacement">
   <xsl:attribute name="background-color">
     <xsl:choose>
-      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
       <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -455,9 +455,9 @@
 <xsl:attribute-set name="mono.bold.noreplacement">
   <xsl:attribute name="font-weight">
     <xsl:choose>
-      <xsl:when test="$enable-bold = 1">
+      <xsl:when test="$enable-bold = 'true'">
         <xsl:choose>
-          <xsl:when test="$enable-mono-semibold = 1">600</xsl:when>
+          <xsl:when test="$enable-mono-semibold = 'true'">600</xsl:when>
           <xsl:otherwise>700</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -469,7 +469,7 @@
 <xsl:attribute-set name="mono.bold" use-attribute-sets="mono.bold.noreplacement">
   <xsl:attribute name="background-color">
     <xsl:choose>
-      <xsl:when test="$enable-bold != 1">&light-gray-old;</xsl:when>
+      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
       <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -478,7 +478,7 @@
 <xsl:attribute-set name="italicized.noreplacement">
   <xsl:attribute name="font-style">
     <xsl:choose>
-      <xsl:when test="$enable-italic = 1">italic</xsl:when>
+      <xsl:when test="$enable-italic = 'true'">italic</xsl:when>
       <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -487,7 +487,7 @@
 <xsl:attribute-set name="italicized" use-attribute-sets="italicized.noreplacement">
   <xsl:attribute name="background-color">
     <xsl:choose>
-      <xsl:when test="$enable-italic != 1">&light-gray-old;</xsl:when>
+      <xsl:when test="$enable-italic != 'true'">&light-gray-old;</xsl:when>
       <xsl:otherwise>transparent</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
