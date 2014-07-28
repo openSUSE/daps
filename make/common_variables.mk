@@ -301,11 +301,16 @@ endif
 #-----
 # Language
 #
-# get language string from $MAIN and transform it the same way the Docbook
-# Stylesheets do (all lowercase, "-" to "_")
+# get language string from $MAIN and transform "-" to "_"
+# For use in filenames we keep the capitalization as is (LANGSTRING), for
+# use in stylessheets we convert it to all lowercase (the same way the Docbook
+# Stylesheets do)
 #
-LL ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr '[:upper:]'- '[:lower:]'_ )
-ifdef LL
+
+LANGSTRING ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+
+ifneq "$(strip $(LANGSTRING))" ""
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGSTRING))
   LANGSTRING   := _$(LL)
 endif
 
