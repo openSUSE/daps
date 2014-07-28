@@ -311,7 +311,7 @@ LANGSTRING ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSL
 
 ifneq "$(strip $(LANGSTRING))" ""
   LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGSTRING))
-  LANGSTRING   := _$(LL)
+  LANGSTRING   := _$(LANGSTRING)
 endif
 
 #-----
