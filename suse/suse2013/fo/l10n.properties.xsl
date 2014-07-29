@@ -37,13 +37,9 @@
       <xsl:choose>
         <xsl:when test="$properties/prop-types/prop-type/@name = $property">
           <xsl:value-of select="$properties/prop-types/prop-type[@name = $property]"/>
-      <xsl:message>Blab: <xsl:value-of select="$properties/prop-types/prop-type[@name = $property]"/></xsl:message>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message terminate="yes">The requested property
-            <xsl:value-of select="$property"/>
-            should not exist.
-          </xsl:message>
+          <xsl:message terminate="yes">(!!) The requested property <xsl:value-of select="$property"/> has no registered property type.</xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -51,9 +47,8 @@
       <xsl:choose>
         <xsl:when test="$properties/lang/@code = $property.language">
           <xsl:value-of select="$property.language"/>
-          <xsl:message>Blub: <xsl:value-of select="$property.language"/></xsl:message>
         </xsl:when>
-        <xsl:otherwise>default<xsl:message>Blub: deflaut!</xsl:message></xsl:otherwise>
+        <xsl:otherwise>default</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
@@ -61,8 +56,6 @@
       <xsl:when test="$properties/lang[@code = $property-language-to-use]/prop[@name = $property]">
         <xsl:variable name="xml-property"
           select="$properties/lang[@code = $property-language-to-use]/prop[@name = $property]"/>
-
-        <xsl:message>blaja!</xsl:message>
 
         <xsl:choose>
           <xsl:when test="$xml-property[@ref-name] or $xml-property[@ref-lang]">
@@ -89,15 +82,12 @@
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:otherwise><xsl:value-of select="$xml-property"/><xsl:message>Jo:'<xsl:value-of select="$xml-property"/>'</xsl:message></xsl:otherwise>
+          <xsl:otherwise><xsl:value-of select="$xml-property"/></xsl:otherwise>
         </xsl:choose>
 
       </xsl:when>
       <xsl:when test="$properties/lang[@code = 'default']/prop[@name = $property]">
-        <xsl:message>(!) The requested property
-          <xsl:value-of select="$property"/>
-          does not exist in the target language. Expected a
-          <xsl:value-of select="'property-type'"/>.
+        <xsl:message>(!) The requested property <xsl:value-of select="$property"/> does not exist in the target language. Expected a <xsl:value-of select="'property-type'"/>.
         </xsl:message>
 
         <xsl:call-template name="get.l10n.property">
@@ -106,10 +96,7 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message terminate="yes">(!) The requested property
-          <xsl:value-of select="$property"/>
-          does not exist. Expected a
-          <xsl:value-of select="'property-type'"/>.
+        <xsl:message terminate="yes">(!) The requested property <xsl:value-of select="$property"/> does not exist. Expected a <xsl:value-of select="'property-type'"/>.
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
