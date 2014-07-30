@@ -128,7 +128,7 @@ epub: $(EPUB_RESULT)
 
 .PHONY: mobi
 mobi: list-images-missing
-mobi: $(RESULT_DIR)/$(DOCNAME).mobi
+mobi: $(MOBI_RESULT)
 	@ccecho "result" "Find the Amazon Kindle book (.mobi) at:\n$<"
 
 #--------------
