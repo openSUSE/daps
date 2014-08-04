@@ -81,11 +81,15 @@ endif
 # TODO
 # Check quoting issues with "img.src.path=\"\""
 #
-
-EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
+ifeq ($(EPUB3),1)
+  EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
+	       --stringparam "callout.graphics.path=callouts/"
+else
+  EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
 	       --stringparam "callout.graphics.path=callouts/"
+endif
 
 #--stringparam "admon.graphics.path=admons/"
 
@@ -191,7 +195,6 @@ $(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
 $(EPUB_CSSFILE): | $(EPUB_RESDIR)
 	(cd $(EPUB_RESDIR); ln -sf $(EPUB_CSS))
 
-
 #--------------
 # Generate EPUB-file
 #
@@ -207,14 +210,22 @@ $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
 	@ccecho "info" "$(EPUB_CSS_INFO)"
     endif
   endif
-# Fix needed due to bug? in DocBook ePUB stylesheets
-#
+  ifeq ($(EPUB3),1)
+	(cd $(EPUB_TMPDIR); \
+	  zip -q0X $@.tmp mimetype; \
+	  zip -qXr9D $@.tmp META-INF/ OEBPS/package.opf \
+	    $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_RESDIR)/package.opf)); \
+	  mv $@.tmp $@;)
+  else
+        # Fix needed due to bug? in DocBook ePUB stylesheets (not epub3)
+        #
 	sed -i 's:\(rootfile full-path="\)$(EPUB_TMPDIR)/\(OEBPS/content.opf"\):\1\2:' $(EPUB_TMPDIR)/META-INF/container.xml
 	(cd $(EPUB_TMPDIR); \
 	  zip -q0X $@.tmp mimetype; \
 	  zip -qXr9D $@.tmp META-INF/ OEBPS/content.opf \
 	    $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_RESDIR)/content.opf)); \
 	  mv $@.tmp $@;)
+  endif
 
 
 #--------------
