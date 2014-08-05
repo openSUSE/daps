@@ -59,12 +59,12 @@ BuildRequires:  xerces-j2
 %endif
 BuildRequires:  trang
 
-Requires:       docbook
+Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       libxslt
 
 Recommends:     daps
-Recommends:     docbook5
+Recommends:     docbook_5
 Recommends:     docbook5-xsl-stylesheets
 
 
