@@ -18,9 +18,11 @@
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:saxon="http://icl.com/saxon"
   extension-element-prefixes="saxon"
-  exclude-result-prefixes="saxon" >  
+  exclude-result-prefixes="saxon" >
 
 <!-- 0. Parameters for External Manipulation =================== -->
+  <xsl:param name="suse.content" select="0"/>
+
 
 <!-- 1. Admonitions  ============================================ -->
 
@@ -60,12 +62,13 @@
 
 <!-- 21. Chunking =============================================== -->
 
-  <xsl:param name="base.dir"></xsl:param>
-  
-    
+<!--   <xsl:param name="base.dir"></xsl:param> -->
+
+
 <!-- 27. Localization =========================================== -->
 
 <!-- 28. SUSE specific parameters =============================== -->
 
+  <xsl:param name="generate.permalinks" select="0"/>
 
 </xsl:stylesheet>
