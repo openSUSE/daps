@@ -34,34 +34,6 @@
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="logo">
-    <xsl:call-template name="fo-external-image">
-      <xsl:with-param name="filename">
-        <xsl:choose>
-          <xsl:when test="$format.print != 0">
-            <xsl:value-of select="$titlepage.bw.logo"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$titlepage.color.logo"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="cover-image">
-    <xsl:call-template name="fo-external-image">
-      <xsl:with-param name="filename">
-        <xsl:choose>
-          <xsl:when test="$format.print != 0">
-            <xsl:value-of select="$titlepage.bw.background"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$titlepage.color.background"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:variable>
 
   <!--  Geeko tail cover image -->
   <fo:block-container top="{(2 - &goldenratio;) * $height}{$unit}" left="0"
@@ -69,9 +41,10 @@
     absolute-position="fixed">
     <fo:block>
     <!-- Almost golden ratio... -->
-      <fo:external-graphic content-width="{$titlepage.background.width}"
-        width="{$titlepage.background.width}"
-        src="{$cover-image}"/>
+      <fo:instream-foreign-object content-width="{$titlepage.background.width}"
+        width="{$titlepage.background.width}">
+        <xsl:call-template name="secondary-branding"/>
+      </fo:instream-foreign-object>
     </fo:block>
   </fo:block-container>
 
@@ -79,8 +52,10 @@
   <fo:block-container top="{$page.margin.top}" absolute-position="fixed"
     left="{$page.margin.start - $titlepage.logo.overhang}mm">
     <fo:block>
-      <fo:external-graphic content-width="{$titlepage.logo.width}"
-        width="{$titlepage.logo.width}" src="{$logo}"/>
+      <fo:instream-foreign-object content-width="{$titlepage.logo.width}"
+        width="{$titlepage.logo.width}">
+        <xsl:call-template name="logo-image"/>
+      </fo:instream-foreign-object>
     </fo:block>
   </fo:block-container>
 

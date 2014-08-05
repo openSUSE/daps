@@ -65,6 +65,7 @@
 
   <xsl:include href="lists.xsl"/>
   <xsl:include href="l10n.properties.xsl"/>
+  <xsl:include href="logo.xsl"/>
 
   <xsl:include href="fop1.xsl"/>
   <xsl:include href="xep.xsl"/>
