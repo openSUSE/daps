@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Creates a "page" XML output file which is compatible with
-     project Mallard (see http://projectmallard.org)
+     Creates "page" XML output file which is compatible with
+     project Mallard (see http://projectmallard.org).
 
    Parameters:
      * packagename: Needed for Page format of the package name
        (default: @PACKAGENAME@)
-     * productid: Used to differentiate of several products in
+     * productid: Used to differentiate between several products in
        the new Yelp page (default: /*/*/productname, this XPath
-       matches both for article, book, or set root elements)
+       matches for article, book, or set root elements)
      * generate.xml-model.pi: Creates the PI <?xml-model href="..."
        type="application/relax-ng-compact-syntax"?>.
        This is useful for validation with RELAX NG and oXygen.
@@ -23,7 +23,7 @@
 
    Note:
      If an article or book does NOT contain an @id, it won't be
-     included into the output format. In such a case, the stlyesheet
+     included in the output format. In this case, the stylesheet
      prints a warning.
 
 -->
