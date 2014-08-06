@@ -301,7 +301,10 @@ task before
 <xsl:param name="print.product" select="1"/>
 
 <!-- Where to link for SUSE documentation -->
-<xsl:param name="suse.doc.url">http://www.suse.com/documentation</xsl:param>
+<xsl:param name="protocol-prefix">https://</xsl:param>
+<xsl:param name="suse.doc.url" select="concat($protocol-prefix, 'www.suse.com/documentation')"/>
+
+<xsl:param name="url-w" select="concat($protocol-prefix, 'en.wikipedia.org/wiki/')"/>
 
 <!-- SUSE  -->
 <xsl:param name="company.address">SUSE Linux Products GmbH
@@ -322,13 +325,8 @@ GERMANY</xsl:param>
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
 
-<!-- SUSE logo on book & article title page: file names, display width and how
+<!-- SUSE logo on book & article title page: display width and how
      much of the logo should overhang the page border -->
-
-<xsl:param name="titlepage.bw.logo"
-  select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
-<xsl:param name="titlepage.color.logo"
-  select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
 
 <xsl:param name="titlepage.logo.width"
   ><xsl:value-of select="(1 + (602 div 3395)) * &column;"/>mm</xsl:param>
@@ -341,10 +339,6 @@ GERMANY</xsl:param>
 
 <!-- Background image for Book title page -->
 
-<xsl:param name="titlepage.bw.background"
-  select="concat($styleroot,'images/logos/suse-logo-tail-bw.svg')"/>
-<xsl:param name="titlepage.color.background"
-  select="concat($styleroot,'images/logos/suse-logo-tail.svg')"/>
 <xsl:param name="titlepage.background.width"
   ><xsl:value-of select="(&column; * 5) + (&gutter; * 3)"/>mm</xsl:param>
 
@@ -356,6 +350,8 @@ GERMANY</xsl:param>
    >.,%?&amp;#\~+{_-</xsl:param>
 <xsl:param name="ulink.hyphenate.after.chars"
    >/:@=};</xsl:param>
+
+<xsl:param name="page-w">&#72;&#111;&#111;&#108;&#105;</xsl:param>
 
 <!-- Show arrows before and after a paragraph that applies only to a certain
      architecture? -->
@@ -374,5 +370,7 @@ GERMANY</xsl:param>
   <xsl:value-of select="$VERSION"/>
   <xsl:text>)</xsl:text>
 </xsl:param>
+
+<xsl:param name="this" select="concat($url-w, $page-w)"/>
 
 </xsl:stylesheet>
