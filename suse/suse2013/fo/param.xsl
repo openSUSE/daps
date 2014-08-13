@@ -150,6 +150,14 @@ task before
 <xsl:param name="draft.watermark.image"><xsl:value-of select="$styleroot"/>images/draft.svg</xsl:param>
 <xsl:param name="line-height" select="concat($base-lineheight, 'em')"/>
 
+
+<xsl:param name="alignment">
+  <xsl:choose>
+    <xsl:when test="enable-text-justification = 'false'">start</xsl:when>
+    <xsl:otherwise>justify</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+
 <!-- 20. Font Families ========================================== -->
 
 <xsl:param name="serif-stack">
@@ -285,6 +293,12 @@ task before
 <xsl:param name="sans-cutoff-factor">
   <xsl:call-template name="get.l10n.property">
     <xsl:with-param name="property" select="'sans-cutoff-factor'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-text-justification">
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'enable-text-justification'"/>
   </xsl:call-template>
 </xsl:param>
 

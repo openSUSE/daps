@@ -60,6 +60,12 @@
          part of a chapter title, to avoid the footer from becoming
          multiple lines -->
     <prop-type name="sans-cutoff-factor">float</prop-type>
+
+    <!-- enable-text-justification: CJK languages are generally written
+         without spaces between words, thus when a space occurs (usually
+         in embedded Western text) and text is set to be justified,
+         the small space becomes huge and ugly -->
+    <prop-type name="enable-text-justification">bool</prop-type>
   </prop-types>
 
   <lang code="default">
@@ -78,6 +84,7 @@
     <prop name="sans-lineheight-adjust">1.125</prop>
     <prop name="mono-lineheight-adjust">1.125</prop>
     <prop name="sans-cutoff-factor">1</prop>
+    <prop name="enable-text-justification">true</prop>
   </lang>
   <lang code="ar">
     <!-- Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font. -->
@@ -99,6 +106,7 @@
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
     <!-- cutoff factor untested -->
     <prop name="sans-cutoff-factor">0.8</prop>
+    <prop name="enable-text-justification" ref-lang="default"/>
   </lang>
   <lang code="ja">
     <prop name="serif">IPAPMincho, serif</prop>
@@ -122,6 +130,7 @@
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
     <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
   </lang>
   <lang code="ko">
     <prop name="serif">NanumMyeongjo, serif</prop>
@@ -143,6 +152,7 @@
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
     <!-- cutoff factor untested -->
     <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
   </lang>
   <lang code="zh_cn">
     <!-- Simplified Chinese is most often printed as sans-serif, so use
@@ -167,6 +177,7 @@
     <prop name="mono-lineheight-adjust">1</prop>
     <!-- cutoff factor untested -->
     <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
   </lang>
   <lang code="zh_tw">
     <!-- Traditional Chinese apparently is almost always printed as
@@ -174,7 +185,8 @@
     <prop name="serif">'AR PL UMing TW', ARPLUMingTW, serif</prop>
     <prop name="sans" ref-name="serif"/>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
-    <!-- We will probably never enable this -- that just becomes messy. -->
+    <!-- We will probably never enable this - that text would just
+         become messy blotches of ink. -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
@@ -192,5 +204,6 @@
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
     <!-- cutoff factor untested -->
     <prop name="sans-cutoff-factor">0.6</prop>
+    <prop name="enable-text-justification">false</prop>
   </lang>
 </properties>
