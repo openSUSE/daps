@@ -26,24 +26,24 @@
 
 
 <xsl:template name="hyperlink.url.display">
-  <!-- * This template is called for all external hyperlinks (ulinks and -->
-  <!-- * for all simple xlinks); it determines whether the URL for the -->
-  <!-- * hyperlink is displayed, and how to display it. -->
+  <!-- This template is called for all external hyperlinks (ulinks and
+       for all simple xlinks); it determines whether the URL for the
+       hyperlink is displayed, and how to display it. -->
   <xsl:param name="url"/>
   <xsl:param name="ulink.url">
-    <!-- * ulink.url is just the value of the URL wrapped in 'url(...)' -->
+    <!-- ulink.url is just the value of the URL wrapped in 'url(...)' -->
     <xsl:call-template name="fo-external-image">
       <xsl:with-param name="filename" select="$url"/>
     </xsl:call-template>
   </xsl:param>
 
-  <fo:basic-link external-destination="{$ulink.url}" xsl:use-attribute-sets="dark-green">
+  <fo:basic-link external-destination="{$ulink.url}">
     <xsl:if test="count(child::node()) != 0
                 and string(.) != $url
                 and $ulink.show != 0">
-    <!-- * Display the URL for this hyperlink only if it is non-empty, -->
-    <!-- * and the value of its content is not a URL that is the same as -->
-    <!-- * URL it links to, and if ulink.show is non-zero. -->
+    <!-- Display the URL for this hyperlink only if it is non-empty,
+         and the value of its content is not a URL that is the same as
+         URL it links to, and if ulink.show is non-zero. -->
         <fo:inline hyphenate="false">
           <xsl:text> (</xsl:text>
           <fo:inline>
@@ -234,56 +234,32 @@
     <xsl:with-param name="linkend" select="@linkend"/>
   </xsl:call-template>
 
+  <xsl:choose>
+    <xsl:when test="$xref.in.samebook != 0 or
+                    /set/@id=$rootid or
+                    /article/@id=$rootid">
+       <!-- An xref that stays inside the current book or when $rootid
+         pointing to the root element, then use the defaults -->
+       <xsl:apply-imports/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- A reference into another book -->
+      <xsl:variable name="target.chapandapp"
+                    select="$target/ancestor-or-self::chapter[@lang!='']
+                            | $target/ancestor-or-self::appendix[@lang!='']"/>
 
-  <!-- We add this fo:inline, so xrefs are always displayed in sans...
-       This is a workaround for inline mono styles expecting titles to be
-       in the sans font, thus being able to use xheight scaling adapted
-       to work inside sans text. Welp. -->
-  <fo:inline xsl:use-attribute-sets="title.font">
-    <xsl:choose>
-      <!-- Someone might be crazy enough to put an xref inside a verbatim
-           element. -->
-      <xsl:when test="ancestor::screen or ancestor::computeroutput or
-                  ancestor::userinput or ancestor::programlisting or
-                  ancestor::synopsis">
-        <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust div $mono-xheight-adjust"/>em</xsl:attribute>
-      </xsl:when>
-      <!-- term and most titles are already sans'd, thus there is no need to
-           adapt font size further. -->
-      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
-                      ancestor::term)">
-        <xsl:attribute name="font-size"><xsl:value-of select="$sans-xheight-adjust"/>em</xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
+      <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
+                    $target.chapandapp/@lang != $this.book/@lang">
+        <xsl:message>WARNING: The xref '<xsl:value-of
+        select="@linkend"/>' points to a chapter (id='<xsl:value-of
+          select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
+      </xsl:if>
 
-    <xsl:choose>
-      <xsl:when test="$xref.in.samebook != 0 or
-                      /set/@id=$rootid or
-                      /article/@id=$rootid">
-         <!-- An xref that stays inside the current book or when $rootid
-           pointing to the root element, then use the defaults -->
-         <xsl:apply-imports/>
-      </xsl:when>
-      <xsl:otherwise>
-            <!-- A reference into another book -->
-            <xsl:variable name="target.chapandapp"
-                          select="$target/ancestor-or-self::chapter[@lang!='']
-                                  | $target/ancestor-or-self::appendix[@lang!='']"/>
-
-            <xsl:if test="$warn.xrefs.into.diff.lang != 0 and
-                          $target.chapandapp/@lang != $this.book/@lang">
-              <xsl:message>WARNING: The xref '<xsl:value-of
-              select="@linkend"/>' points to a chapter (id='<xsl:value-of
-                select="$target.chapandapp/@id"/>') with a different language than the main book.</xsl:message>
-            </xsl:if>
-
-            <xsl:call-template name="create.linkto.other.book">
-              <xsl:with-param name="target" select="$target"/>
-            </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </fo:inline>
+      <xsl:call-template name="create.linkto.other.book">
+        <xsl:with-param name="target" select="$target"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

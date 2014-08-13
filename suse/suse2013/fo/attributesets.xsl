@@ -138,13 +138,34 @@
 
 
 <!-- 12. Cross References ======================================= -->
+
+
+<!-- We need xrefs to always be displayed in sans, to avoid x-height
+     scaling issues: inline mono styles expect titles to be in the sans
+     font, thus they use x-height scaling adapted to work inside sans
+     text. Welp.
+     xref.properties are also applied to ulinks, to be consistent. -->
 <xsl:attribute-set name="xref.properties"
-                   use-attribute-sets="dark-green">
+                   use-attribute-sets="dark-green title.font">
   <xsl:attribute name="font-style">
     <xsl:choose>
       <xsl:when test="self::xref and $enable-italic = 'true'">italic</xsl:when>
       <!-- Use normal for ulinks -->
       <xsl:otherwise>normal</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:choose>
+      <!-- Someone might be crazy enough to put an xref inside a verbatim
+           element. -->
+      <xsl:when test="ancestor::screen or ancestor::computeroutput or
+                  ancestor::userinput or ancestor::programlisting or
+                  ancestor::synopsis"><xsl:value-of select="$sans-xheight-adjust div $mono-xheight-adjust"/>em</xsl:when>
+      <!-- term and most titles are already sans'd, thus there is no need to
+           adapt font size further. -->
+      <xsl:when test="not(ancestor::title[not(parent::formalpara)] or
+                      ancestor::term)"><xsl:value-of select="$sans-xheight-adjust"/>em</xsl:when>
+      <xsl:otherwise>1em</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
