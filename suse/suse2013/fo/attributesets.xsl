@@ -388,7 +388,7 @@
   <xsl:attribute name="font-size">&large;pt</xsl:attribute>
 </xsl:attribute-set>
 <xsl:attribute-set name="section.title.level6.properties"
-  use-attribute-sets="sans.bold">
+  use-attribute-sets="sans.bold.noreplacement">
   <xsl:attribute name="font-size">&normal;pt</xsl:attribute>
 </xsl:attribute-set>
 
