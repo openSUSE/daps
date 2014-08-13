@@ -75,7 +75,7 @@ article  toc,title,figure,table,example,equation
 <!-- generate the css file from a source file -->
 <xsl:param name="make.clean.html" select="1"/>
 <!-- specify the default epub3 stylesheet -->
-<xsl:param name="docbook.css.source">docbook-epub.css.xml</xsl:param>
+<xsl:param name="docbook.css.source" select="''">
 <!-- for custom CSS, use the custom.css.source param -->
 <xsl:param name="custom.css.source"></xsl:param>
 
