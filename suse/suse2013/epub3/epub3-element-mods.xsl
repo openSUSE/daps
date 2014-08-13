@@ -59,7 +59,7 @@ article  toc,title,figure,table,example,equation
 <xsl:param name="formal.object.break.after">0</xsl:param>
 
 <xsl:param name="callout.graphics" select="1"/>
-<xsl:param name="callout.graphics.extension">.png</xsl:param>
+<xsl:param name="callout.graphics.extension">.svg</xsl:param>
 <xsl:param name="callout.graphics.number.limit" select="15"/>
 <xsl:param name="callout.graphics.path" select="'images/callouts/'"/>
 <xsl:param name="show.comments" select="0"/>
