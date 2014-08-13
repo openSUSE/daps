@@ -115,8 +115,7 @@
     <fo:block font-size="&super-large;pt" line-height="{$base-lineheight * 0.85}em"
       xsl:use-attribute-sets="article.titlepage.recto.style dark-green"
       keep-with-next.within-column="always" space-after="{&gutterfragment;}mm">
-      <xsl:apply-templates select="ancestor-or-self::article[1]"
-        mode="title.markup"/>
+      <xsl:apply-templates select="." mode="article.titlepage.recto.mode"/>
     </fo:block>
   </xsl:template>
 

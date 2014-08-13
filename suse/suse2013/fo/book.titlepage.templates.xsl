@@ -130,7 +130,7 @@
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
   <fo:block text-align="left" line-height="1.2" hyphenate="false"
-    xsl:use-attribute-sets="title.font sans.bold.noreplacement title.name.color"
+    xsl:use-attribute-sets="title.font title.name.color sans.bold.noreplacement"
     font-weight="normal"
     font-size="{&ultra-large;}pt">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
@@ -161,7 +161,7 @@
   <fo:block
     xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
     font-size="&x-large;pt" font-family="{$title.fontset}">
-  <xsl:call-template name="book.verso.title"/>
+    <xsl:call-template name="book.verso.title"/>
   </fo:block>
 </xsl:template>
 
@@ -178,6 +178,14 @@
   </fo:block>
 </xsl:template>
 
+<!-- For their use in xrefs, many book titles have emphases
+     around them. Now, for formatting reasons in cases where we are
+     actually outside of an xref that pretty much is the wrong thing
+     to do. In languages where italic text is replaced by gray text,
+     this issue is especially glaring. -->
+<xsl:template match="emphasis" mode="titlepage.mode">
+  <xsl:apply-templates/>
+</xsl:template>
 
 
 <!-- ============================================================
@@ -336,7 +344,7 @@
     </fo:block>
     <fo:block>
       <fo:basic-link external-destination="{$ulink.url}"
-        xsl:use-attribute-sets="dark-green">
+        xsl:use-attribute-sets="dark-green title.font">
         <xsl:value-of select="$suse.doc.url"/>
         <xsl:call-template name="image-after-link"/>
       </fo:basic-link>
