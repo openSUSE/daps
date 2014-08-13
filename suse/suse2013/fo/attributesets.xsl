@@ -61,7 +61,7 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="toc.pagenumber.properties"
-  use-attribute-sets="serif.bold">
+  use-attribute-sets="serif.bold.noreplacement">
   <!-- *Not* derived from toc.line.properties! -->
   <xsl:attribute name="font-family"><xsl:value-of select="$body.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="1 div $sans-xheight-adjust * 0.85"/>em</xsl:attribute>
@@ -91,7 +91,7 @@
 </xsl:attribute-set>
 <!-- preface, chapter, appendix, glossary -->
 <xsl:attribute-set name="toc.level2.properties"
-  use-attribute-sets="toc.common.properties sans.bold">
+  use-attribute-sets="toc.common.properties sans.bold.noreplacement">
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * 0.85"/>em</xsl:attribute>
   <xsl:attribute name="font-size">&xx-large;pt</xsl:attribute>
 </xsl:attribute-set>
@@ -153,7 +153,7 @@
 <!-- 13. Lists ================================================== -->
 
 <xsl:attribute-set name="variablelist.term.properties"
-  use-attribute-sets="sans.bold">
+  use-attribute-sets="sans.bold.noreplacement">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size"><xsl:value-of select="$fontsize-adjust * $sans-xheight-adjust"/>em</xsl:attribute>
   <xsl:attribute name="line-height"><xsl:value-of select="$base-lineheight * $sans-lineheight-adjust"/>em</xsl:attribute>
@@ -372,7 +372,7 @@
 </xsl:attribute-set>
 
 <xsl:attribute-set name="formal.title.properties"
-  use-attribute-sets="normal.para.spacing dark-green sans.bold">
+  use-attribute-sets="normal.para.spacing dark-green sans.bold.noreplacement">
   <xsl:attribute name="font-family"><xsl:value-of select="$sans.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size">&small;pt</xsl:attribute>
   <xsl:attribute name="text-transform">uppercase</xsl:attribute>
@@ -406,6 +406,24 @@
 
 <!-- 23. Localization =========================================== -->
 
+<xsl:attribute-set name="bold.replacement.color">
+ <xsl:attribute name="background-color">
+    <xsl:choose>
+      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
+      <xsl:otherwise>transparent</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="italic.replacement.color">
+  <xsl:attribute name="color">
+    <xsl:choose>
+      <xsl:when test="$enable-italic != 'true'">rgb(80,80,80)</xsl:when>
+      <xsl:otherwise>transparent</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:attribute-set name="serif.bold.noreplacement">
   <xsl:attribute name="font-weight">
     <xsl:choose>
@@ -420,14 +438,8 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="serif.bold"  use-attribute-sets="serif.bold.noreplacement">
-  <xsl:attribute name="background-color">
-    <xsl:choose>
-      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
-    </xsl:choose>
-  </xsl:attribute>
-</xsl:attribute-set>
+<xsl:attribute-set name="serif.bold"
+  use-attribute-sets="serif.bold.noreplacement bold.replacement.color"/>
 
 <xsl:attribute-set name="sans.bold.noreplacement">
   <xsl:attribute name="font-weight">
@@ -443,14 +455,8 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="sans.bold" use-attribute-sets="sans.bold.noreplacement">
-  <xsl:attribute name="background-color">
-    <xsl:choose>
-      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
-    </xsl:choose>
-  </xsl:attribute>
-</xsl:attribute-set>
+<xsl:attribute-set name="sans.bold"
+  use-attribute-sets="sans.bold.noreplacement bold.replacement.color"/>
 
 <xsl:attribute-set name="mono.bold.noreplacement">
   <xsl:attribute name="font-weight">
@@ -466,14 +472,8 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="mono.bold" use-attribute-sets="mono.bold.noreplacement">
-  <xsl:attribute name="background-color">
-    <xsl:choose>
-      <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
-    </xsl:choose>
-  </xsl:attribute>
-</xsl:attribute-set>
+<xsl:attribute-set name="mono.bold"
+  use-attribute-sets="mono.bold.noreplacement bold.replacement.color"/>
 
 <xsl:attribute-set name="italicized.noreplacement">
   <xsl:attribute name="font-style">
@@ -484,14 +484,8 @@
   </xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="italicized" use-attribute-sets="italicized.noreplacement">
-  <xsl:attribute name="background-color">
-    <xsl:choose>
-      <xsl:when test="$enable-italic != 'true'">&light-gray-old;</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
-    </xsl:choose>
-  </xsl:attribute>
-</xsl:attribute-set>
+<xsl:attribute-set name="italicized"
+  use-attribute-sets="italicized.noreplacement italic.replacement.color"/>
 
 <!-- 24. EBNF =================================================== -->
 
