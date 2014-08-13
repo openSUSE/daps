@@ -64,6 +64,8 @@ article  toc,title,figure,table,example,equation
 <xsl:param name="callout.graphics.path" select="'images/callouts/'"/>
 <xsl:param name="show.comments" select="0"/>
 
+<xsl:param name="admon.graphics.extension">.svg</xsl:param>
+
 <!-- no navigation in .epub -->
 <xsl:param name="suppress.navigation" select="'1'"/>
 
