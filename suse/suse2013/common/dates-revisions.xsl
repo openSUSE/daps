@@ -12,9 +12,8 @@
 -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:exsl="http://exslt.org/common"
   xmlns:date="http://exslt.org/dates-and-times"
-  exclude-result-prefixes="exsl date">
+  exclude-result-prefixes="date">
 
 
   <xsl:template name="date.and.revision.inner">
@@ -24,13 +23,18 @@
         ancestor::set/setinfo/date | ancestor::book/info/date |
         ancestor::set/info/date)[1]"/>
     </xsl:variable>
-    
+
     <xsl:variable name="version"
       select="(bookinfo/releaseinfo | articleinfo/releaseinfo |
                info/releaseinfo | ancestor::book/bookinfo/releaseinfo |
                ancestor::set/setinfo/releaseinfo |
                ancestor::book/info/releaseinfo |
                ancestor::set/info/releaseinfo)[1]"/>
+
+    <!-- Make SVN revision numbers look a little less cryptic. Git does
+         (by design) not have a feature that randomly changes your
+         commits to update a revision number within a file. This
+         template will thus only ever be of use for SVN-hosted files. -->
     <xsl:variable name="revision-candidate"
       select="substring-before(($version)[1],' $')"/>
     <xsl:variable name="revision">
