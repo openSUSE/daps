@@ -30,7 +30,7 @@
 <!-- 1. Admonitions  ============================================ -->
 
 <xsl:attribute-set name="admonition.title.properties"
-  use-attribute-sets="sans.bold">
+  use-attribute-sets="sans.bold.noreplacement">
   <xsl:attribute name="font-family"><xsl:value-of select="$title.font.family"/></xsl:attribute>
   <xsl:attribute name="font-size">&x-large;pt</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
