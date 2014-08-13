@@ -282,6 +282,13 @@ task before
   </xsl:call-template>
 </xsl:param>
 
+<xsl:param name="sans-cutoff-factor">
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'sans-cutoff-factor'"/>
+  </xsl:call-template>
+</xsl:param>
+
+
 
 <!-- 24. EBNF =================================================== -->
 

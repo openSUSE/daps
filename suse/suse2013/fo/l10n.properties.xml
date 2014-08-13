@@ -55,6 +55,11 @@
     <!-- mono-lineheight-adjust: to adjust the line height of the
          monospace font to match the serif font's line height -->
     <prop-type name="mono-lineheight-adjust">float</prop-type>
+
+    <!-- sans-cutoff-factor: in the footer, we may need to cut of
+         part of a chapter title, to avoid the footer from becoming
+         multiple lines -->
+    <prop-type name="sans-cutoff-factor">float</prop-type>
   </prop-types>
 
   <lang code="default">
@@ -72,6 +77,7 @@
     <prop name="base-lineheight">1.6</prop>
     <prop name="sans-lineheight-adjust">1.125</prop>
     <prop name="mono-lineheight-adjust">1.125</prop>
+    <prop name="sans-cutoff-factor">1</prop>
   </lang>
   <lang code="ar">
     <!-- Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font. -->
@@ -91,11 +97,18 @@
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.8</prop>
   </lang>
   <lang code="ja">
     <prop name="serif">IPAPMincho, serif</prop>
     <prop name="sans">IPAPGothic, sans-serif</prop>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We could theoretically enable this for Japanese, but the
+         existing bold version of IPA P Mincho is a machine-emboldened mess
+         of black ink with bad meta data that leads to it not being
+         recognized as the bold version of its original. IPA P Mincho
+         does not have a bold version (apparently very unusual). -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
@@ -108,10 +121,12 @@
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <prop name="sans-cutoff-factor">0.75</prop>
   </lang>
   <lang code="ko">
     <prop name="serif">NanumMyeongjo, serif</prop>
-    <!-- Despite its name, NanumGothic doesn't really match Myeongjo in many ways, thus always use the serif font -->
+    <!-- Despite its name, NanumGothic doesn't really match Myeongjo in
+         many ways, thus always use the serif font -->
     <prop name="sans" ref-name="serif"/>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
     <prop name="enable-bold">true</prop>
@@ -126,16 +141,23 @@
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.75</prop>
   </lang>
   <lang code="zh_cn">
-    <!-- Simplified Chinese is most often printed as sans-serif, so use that. -->
+    <!-- Simplified Chinese is most often printed as sans-serif, so use
+         that. -->
     <prop name="serif" ref-name="sans"/>
     <prop name="sans">'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif</prop>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We could enable this with some font support. -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
     <prop name="enable-mono-semibold">false</prop>
+    <!-- Italic characters have the connotations of being
+         "ugly" and "originating from a person of low integrity",
+         apparently -->
     <prop name="enable-italic">false</prop>
     <prop name="fontsize-adjust">1</prop>
     <prop name="sans-xheight-adjust">1</prop>
@@ -143,16 +165,23 @@
     <prop name="base-lineheight">1.75</prop>
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust">1</prop>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.75</prop>
   </lang>
   <lang code="zh_tw">
-    <!-- Traditional Chinese apparently is almost always printed as serif (the exception being on-screen). -->
+    <!-- Traditional Chinese apparently is almost always printed as
+         serif (the only exception being on-screen). -->
     <prop name="serif">'AR PL UMing TW', ARPLUMingTW, serif</prop>
     <prop name="sans" ref-name="serif"/>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We will probably never enable this -- that just becomes messy. -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
     <prop name="enable-mono-semibold">false</prop>
+    <!-- Italic characters have the connotations of being
+         "ugly" and "originating from a person of low integrity",
+         apparently. -->
     <prop name="enable-italic">false</prop>
     <prop name="fontsize-adjust">1.25</prop>
     <prop name="sans-xheight-adjust">1</prop>
@@ -161,5 +190,7 @@
     <!-- dummy values -->
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.6</prop>
   </lang>
 </properties>
