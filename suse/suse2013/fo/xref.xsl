@@ -84,7 +84,7 @@
 
   <xsl:choose>
     <xsl:when test="$purpose = 'xref'">
-      <fo:inline xsl:use-attribute-sets="italicized">
+      <fo:inline xsl:use-attribute-sets="italicized.noreplacement">
         <xsl:copy-of select="$title"/>
       </fo:inline>
     </xsl:when>
@@ -97,7 +97,7 @@
 <xsl:template match="*" mode="insert.olink.docname.markup">
   <xsl:param name="docname" select="''"/>
 
-  <fo:inline xsl:use-attribute-sets="italicized">
+  <fo:inline xsl:use-attribute-sets="italicized.noreplacement">
     <xsl:value-of select="$docname"/>
   </fo:inline>
 </xsl:template>
@@ -122,7 +122,7 @@
       <xsl:call-template name="gentext.endquote"/>
     </xsl:when>
     <xsl:otherwise>
-      <fo:inline xsl:use-attribute-sets="italicized">
+      <fo:inline xsl:use-attribute-sets="italicized.noreplacement">
         <xsl:apply-templates select="$target" mode="title.markup"/>
       </fo:inline>
     </xsl:otherwise>
