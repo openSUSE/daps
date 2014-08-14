@@ -35,7 +35,7 @@
 
   <xsl:template match="subtitle" mode="chapter.titlepage.recto.auto.mode">
     <fo:block
-      xsl:use-attribute-sets="chapter.titlepage.recto.style italicized"
+      xsl:use-attribute-sets="chapter.titlepage.recto.style italicized.noreplacement"
       font-size="&large;pt" font-family="{$title.fontset}">
       <xsl:apply-templates select="." mode="chapter.titlepage.recto.mode"/>
     </fo:block>
