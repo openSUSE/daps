@@ -522,6 +522,13 @@
   </fo:inline>
 </xsl:template>
 
+<!-- Avoid formatting overload (e.g. no need for green text that is also
+     italic). This also avoids the ugly look that occurs when italics
+     are replaced with gray text in CJK languages. -->
+<xsl:template match="xref/citetitle">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template name="process.menuchoice">
   <xsl:param name="nodelist" select="guibutton|guiicon|guilabel|guimenu|guimenuitem|guisubmenu|interface"/><!-- not(shortcut) -->
   <xsl:param name="count" select="1"/>
