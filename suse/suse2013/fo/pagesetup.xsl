@@ -38,11 +38,25 @@
 
   -->
   <xsl:variable name="productnumber"
-    select="(ancestor-or-self::book/bookinfo/productnumber[@role] |
-             ancestor-or-self::book/bookinfo/productnumber[not(@role)])[last()]"/>
-  <xsl:variable name="productname"
-    select="(ancestor-or-self::book/bookinfo/productname[@role] |
-             ancestor-or-self::book/bookinfo/productname[not(@role)])[last()]"/>
+    select="(ancestor-or-self::set/setinfo/productnumber|
+             ancestor-or-self::book/bookinfo/productnumber|
+             ancestor-or-self::article/articleinfo/productnumber)[last()]"/>
+
+  <xsl:variable name="productname-long"
+    select="(ancestor-or-self::set/setinfo/productname[not(@role='abbrev')]|
+             ancestor-or-self::book/bookinfo/productname[not(@role='abbrev')]|
+             ancestor-or-self::article/articleinfo/productname[not(@role='abbrev')])[last()]"/>
+
+  <xsl:variable name="productname-abbreviation"
+    select="(ancestor-or-self::set/setinfo/productname[@role='abbrev']|
+             ancestor-or-self::book/bookinfo/productname[@role='abbrev']|
+             ancestor-or-self::article/articleinfo/productname[@role='abbrev'])[last()]"/>
+
+  <!-- FIXME: This seems to suffer from weird ordering bugs when:
+       + the book being built is part of a set
+       + the set contains both long nad short variants
+       + the book only contains a long version -->
+  <xsl:variable name="productname" select="($productname-long|$productname-abbreviation)[last()]"/>
 
   <xsl:apply-templates select="$productname" mode="footer"/>
   <xsl:text> </xsl:text>
