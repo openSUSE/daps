@@ -25,36 +25,47 @@
   exclude-result-prefixes="xlink">
 
 
-<xsl:template name="hyperlink.url.display">
-  <!-- This template is called for all external hyperlinks (ulinks and
-       for all simple xlinks); it determines whether the URL for the
-       hyperlink is displayed, and how to display it. -->
-  <xsl:param name="url"/>
-  <xsl:param name="ulink.url">
-    <!-- ulink.url is just the value of the URL wrapped in 'url(...)' -->
+<xsl:template match="ulink" name="ulink">
+  <xsl:param name="url" select="@url"/>
+
+  <xsl:variable name ="ulink.url">
     <xsl:call-template name="fo-external-image">
       <xsl:with-param name="filename" select="$url"/>
     </xsl:call-template>
-  </xsl:param>
+  </xsl:variable>
 
-  <fo:basic-link external-destination="{$ulink.url}">
-    <xsl:if test="count(child::node()) != 0
-                and string(.) != $url
-                and $ulink.show != 0">
-    <!-- Display the URL for this hyperlink only if it is non-empty,
-         and the value of its content is not a URL that is the same as
-         URL it links to, and if ulink.show is non-zero. -->
+  <xsl:variable name="hyphenated-url">
+    <xsl:call-template name="hyphenate-url">
+      <xsl:with-param name="url" select="$url"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <fo:basic-link xsl:use-attribute-sets="xref.properties"
+                 external-destination="{$ulink.url}">
+    <xsl:choose>
+      <xsl:when test="count(child::node()) = 0 or
+                      (string(.) = $url) or
+                      (count(child::*) = 0 and
+                       normalize-space(string(.)) = '')">
         <fo:inline hyphenate="false">
-          <xsl:text> (</xsl:text>
-          <fo:inline>
-              <xsl:call-template name="hyphenate-url">
-                <xsl:with-param name="url" select="$url"/>
-              </xsl:call-template>
-          </fo:inline>
-          <xsl:text>)</xsl:text>
+          <xsl:value-of select="$hyphenated-url"/>
         </fo:inline>
-    </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
 
+        <xsl:if test="$ulink.show != 0">
+        <!-- Display the URL for this hyperlink only if it is non-empty,
+             and the value of its content is not a URL that is the same as
+             URL it links to, and if ulink.show is non-zero. -->
+          <fo:inline hyphenate="false">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="$hyphenated-url"/>
+            <xsl:text>)</xsl:text>
+          </fo:inline>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:call-template name="image-after-link"/>
   </fo:basic-link>
 </xsl:template>
@@ -69,7 +80,6 @@
       height="100">
       <svg:rect width="54" height="54" x="0" y="46" fill-opacity="0.4"
         fill="{$fill}"/>
-
       <svg:path d="M 27,0 27,16 72.7,16 17,71.75 28.25,83 84,27.3 84,73 l 16,0 0,-73 z"
         fill="{$fill}"/>
     </svg:svg>
