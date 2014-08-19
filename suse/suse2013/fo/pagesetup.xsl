@@ -52,13 +52,14 @@
              ancestor-or-self::book/bookinfo/productname[@role='abbrev']|
              ancestor-or-self::article/articleinfo/productname[@role='abbrev'])[last()]"/>
 
-  <!-- FIXME: This seems to suffer from weird ordering bugs when:
-       + the book being built is part of a set
-       + the set contains both long nad short variants
-       + the book only contains a long version -->
-  <xsl:variable name="productname" select="($productname-long|$productname-abbreviation)[last()]"/>
-
-  <xsl:apply-templates select="$productname" mode="footer"/>
+  <xsl:choose>
+    <xsl:when test="$productname-abbreviation">
+      <xsl:apply-templates select="$productname-abbreviation" mode="footer"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="$productname-long" mode="footer"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:text> </xsl:text>
   <xsl:apply-templates select="$productnumber" mode="footer"/>
 </xsl:template>
