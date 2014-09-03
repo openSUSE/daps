@@ -78,10 +78,15 @@
   <fo:instream-foreign-object content-height="0.65em">
     <svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="100"
       height="100">
-      <svg:rect width="54" height="54" x="0" y="46" fill-opacity="0.4"
-        fill="{$fill}"/>
-      <svg:path d="M 27,0 27,16 72.7,16 17,71.75 28.25,83 84,27.3 84,73 l 16,0 0,-73 z"
-        fill="{$fill}"/>
+      <svg:g>
+        <xsl:if test="$writing.mode = 'rl'">
+          <xsl:attribute name="transform">matrix(-1,0,0,1,100,0)</xsl:attribute>
+        </xsl:if>
+        <svg:rect width="54" height="54" x="0" y="46" fill-opacity="0.4"
+          fill="{$fill}"/>
+        <svg:path d="M 27,0 27,16 72.7,16 17,71.75 28.25,83 84,27.3 84,73 l 16,0 0,-73 z"
+          fill="{$fill}"/>
+      </svg:g>
     </svg:svg>
   </fo:instream-foreign-object>
   <fo:leader leader-pattern="space" leader-length="0.2em"/>

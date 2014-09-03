@@ -124,15 +124,26 @@
         <xsl:variable name="width"
           select="string-length(normalize-space($arch-string)) *
                   $instream-font-size * $font-metrics-ratio"/>
+        <xsl:variable name="text-start">
+          <xsl:choose>
+            <xsl:when test="$writing.mode = 'rl'">16</xsl:when>
+            <xsl:otherwise>7</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
 
         <fo:instream-foreign-object content-height="1em"
           alignment-baseline="alphabetic" alignment-adjust="-0.2em"
           keep-with-next.within-line="always">
           <svg:svg width="{$width + 23}" height="22">
-            <svg:path d="m 2.5,0.5 c -1.108,0 -2,0.851 -2,1.909 l 0,17.181 c 0,1.058 0.892,1.909 2,1.909 l {$width + 8},0 c 0.693,0 1.22,-0.348 1.656,-0.835 l 8.751,-8.322 c 0.784,-0.748 0.784,-1.937 0,-2.685 L {$width + 12.161},1.336 C {$width + 11.747},0.889 {$width + 11.197},0.5 {$width + 10.505},0.5 z"
-               stroke-width="2" stroke="{$dark-green}" fill="&white;"/>
+            <svg:g>
+              <xsl:if test="$writing.mode = 'rl'">
+                <xsl:attribute name="transform">matrix(-1,0,0,1,<xsl:value-of select="$width + 23"/>,0)</xsl:attribute>
+              </xsl:if>
+              <svg:path d="m 2.5,0.5 c -1.108,0 -2,0.851 -2,1.909 l 0,17.181 c 0,1.058 0.892,1.909 2,1.909 l {$width + 8},0 c 0.693,0 1.22,-0.348 1.656,-0.835 l 8.751,-8.322 c 0.784,-0.748 0.784,-1.937 0,-2.685 L {$width + 12.161},1.336 C {$width + 11.747},0.889 {$width + 11.197},0.5 {$width + 10.505},0.5 z"
+                 stroke-width="2" stroke="{$dark-green}" fill="&white;"/>
+            </svg:g>
             <svg:text font-family="{$mono-stack}" text-anchor="start"
-              x="7" y="{$instream-font-size + 1.5}" fill="{$dark-green}" font-weight="bold"
+              x="{$text-start}" y="{$instream-font-size + 1.5}" fill="{$dark-green}" font-weight="bold"
               font-size="{$instream-font-size}"><xsl:value-of select="$arch-string"/></svg:text>
           </svg:svg>
         </fo:instream-foreign-object>
@@ -146,8 +157,13 @@
           alignment-baseline="alphabetic" alignment-adjust="-0.2em"
           keep-with-previous.within-line="always">
           <svg:svg width="25" height="22">
-            <svg:path d="m 21.50025,0.501 c 1.108,0 2,0.851 2,1.909 l 0,17.181 c 0,1.057 -0.892,1.909 -2,1.909 l -10,0 c -0.693,0 -1.22,-0.347 -1.656,-0.835 l -8.751,-8.322 c -0.783,-0.748 -0.783,-1.937 0,-2.685 l 8.751,-8.322 c 0.414,-0.447 0.964,-0.836 1.656,-0.836 z"
-               stroke-width="2" stroke="{$dark-green}" fill="&white;"/>
+            <svg:g>
+              <xsl:if test="$writing.mode = 'rl'">
+                <xsl:attribute name="transform">matrix(-1,0,0,1,25,0)</xsl:attribute>
+              </xsl:if>
+              <svg:path d="m 21.50025,0.501 c 1.108,0 2,0.851 2,1.909 l 0,17.181 c 0,1.057 -0.892,1.909 -2,1.909 l -10,0 c -0.693,0 -1.22,-0.347 -1.656,-0.835 l -8.751,-8.322 c -0.783,-0.748 -0.783,-1.937 0,-2.685 l 8.751,-8.322 c 0.414,-0.447 0.964,-0.836 1.656,-0.836 z"
+                 stroke-width="2" stroke="{$dark-green}" fill="&white;"/>
+            </svg:g>
           </svg:svg>
         </fo:instream-foreign-object>
       </xsl:otherwise>

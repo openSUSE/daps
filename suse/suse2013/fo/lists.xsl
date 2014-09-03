@@ -207,14 +207,15 @@
 
     <fo:block>
       <xsl:if test="not(ancestor::procedure)">
-        <xsl:attribute name="border-left"
+        <xsl:attribute name="border-{$start-border}"
           ><xsl:value-of select="concat(&mediumline;,'mm solid &dark-green;')"/></xsl:attribute>
-        <xsl:attribute name="margin-left"><xsl:value-of select="&mediumline; div 2"/>mm</xsl:attribute>
+        <xsl:attribute name="margin-{$start-border}"><xsl:value-of select="&mediumline; div 2"/>mm</xsl:attribute>
           <!-- This is seemingly illogical... but looks better with both FOP and
                XEP. -->
       </xsl:if>
 
-      <fo:block margin-left="{&columnfragment;}mm">
+      <fo:block>
+        <xsl:attribute name="margin-{$start-border}">&columnfragment;mm</xsl:attribute>
         <xsl:apply-templates select="$preamble"/>
       </fo:block>
 

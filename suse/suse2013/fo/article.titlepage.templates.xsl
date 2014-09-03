@@ -35,8 +35,24 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <fo:block margin-left="{&columnfragment; + &gutter; - $titlepage.logo.overhang}mm" space-after="&gutter;mm"
-      text-align="left">
+    <fo:block space-after="&gutter;mm" text-align="start">
+      <xsl:choose>
+        <!-- Don't let Geeko overhang the right side of the page - it
+             is not mirrored, thus some letters would hang over the side
+             of hte page, instead of the tail. -->
+        <!-- FIXME: This is not the optimal implementation if we ever
+             want to be able to switch out images easily. -->
+        <xsl:when test="$writing.mode ='rl'">
+          <xsl:attribute name="margin-right">
+            <xsl:value-of select="&columnfragment; + &gutter;"/>mm
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="margin-left">
+            <xsl:value-of select="&columnfragment; + &gutter; - $titlepage.logo.overhang"/>mm
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
       <fo:instream-foreign-object content-width="{$titlepage.logo.width}"
         width="{$titlepage.logo.width}">
         <xsl:call-template name="logo-image"/>

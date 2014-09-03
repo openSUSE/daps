@@ -235,11 +235,9 @@ task before
 </xsl:param>
 
 <xsl:param name="writing.mode">
-<xsl:choose>
-  <xsl:when test="$document.language = 'ar' or
-                  $document.language = 'he'">rl</xsl:when>
-  <xsl:otherwise>lr</xsl:otherwise>
-</xsl:choose>
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'writing-mode'"/>
+  </xsl:call-template>
 </xsl:param>
 
 <xsl:param name="enable-bold">
@@ -345,6 +343,13 @@ GERMANY</xsl:param>
 -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
+<!-- This simplifies LTR/RTL layout conversion in a few places -->
+<xsl:param name="start-border">
+  <xsl:choose>
+    <xsl:when test="$writing.mode = 'rl'">right</xsl:when>
+    <xsl:otherwise>left</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
 
 <!-- SUSE logo on book & article title page: display width and how
      much of the logo should overhang the page border -->
@@ -377,7 +382,6 @@ GERMANY</xsl:param>
 <!-- Show arrows before and after a paragraph that applies only to a certain
      architecture? -->
 <xsl:param name="para.use.arch" select="1"/>
-
 
 <!-- Creator string for PDF -->
 <xsl:param name="pdf-creator">

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Purpose:
-    Contains all parameters for XSL-FO.
-    (Sorted against the list in "Part 2. FO Parameter Reference" in
-    the DocBook XSL Stylesheets User Reference, see link below)
-
-    See Also:
-    * http://docbook.sourceforge.net/release/xsl/current/doc/fo/index.html
+    Some parameters need to change from language to language. To
+    organize such properties, we created the l10n.properties.xml file.
+    The get.l10n.property template reads any given property from this
+    file.
 
   Author(s):  Stefan Knorr <sknorr@suse.de>
               Thomas Schraitle <toms@opensuse.org>
 
-  Copyright:  2013, Stefan Knorr, Thomas Schraitle
+  Copyright:  2013, 2014, Stefan Knorr, Thomas Schraitle
 
 -->
 <!DOCTYPE xsl:stylesheet
@@ -29,6 +27,8 @@
 
   <xsl:variable name="properties" select="document('l10n.properties.xml')/properties"/>
 
+  <!-- FIXME: We currently do not check whether the property type
+       matches the type specified in <prop-types/> at all -->
   <xsl:template name="get.l10n.property">
     <xsl:param name="property"/>
     <xsl:param name="property.language" select="$document.language"/>
@@ -87,7 +87,7 @@
 
       </xsl:when>
       <xsl:when test="$properties/lang[@code = 'default']/prop[@name = $property]">
-        <xsl:message>(!) The requested property <xsl:value-of select="$property"/> does not exist in the target language. Expected a <xsl:value-of select="'property-type'"/>.
+        <xsl:message>(!) The requested property <xsl:value-of select="$property"/> does not exist in the target language. Expected a <xsl:value-of select="'property-type'"/>. Using property of the default language.
         </xsl:message>
 
         <xsl:call-template name="get.l10n.property">

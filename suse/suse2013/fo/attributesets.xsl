@@ -283,7 +283,7 @@
   <xsl:attribute name="font-size">
     <xsl:text>&small;pt</xsl:text>
   </xsl:attribute>
-  <xsl:attribute name="margin-left">
+  <xsl:attribute name="margin-{$start-border}">
     <xsl:value-of select="$title.margin.left"/>
   </xsl:attribute>
 </xsl:attribute-set>
@@ -368,7 +368,7 @@
   <xsl:attribute name="space-after.optimum">0.7em</xsl:attribute>
   <xsl:attribute name="space-after.maximum">0.9em</xsl:attribute>
   <xsl:attribute name="text-align">start</xsl:attribute>
-  <xsl:attribute name="start-indent"><xsl:value-of select="$title.margin.left"></xsl:value-of></xsl:attribute>
+  <xsl:attribute name="start-indent"><xsl:value-of select="$title.margin.left"/></xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="section.title.level1.properties">

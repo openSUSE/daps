@@ -456,8 +456,13 @@
           <svg:stop stop-color="&mid-gray;" stop-opacity="1" offset="1" />
         </svg:linearGradient>
       </svg:defs>
-      <svg:rect height="100" width="{$width + 60}" rx="10" ry="10" x="0" y="0"
-        fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"/>
+      <svg:g>
+        <xsl:if test="$writing.mode = 'rl'">
+          <xsl:attribute name="transform">matrix(-1,0,0,1,<xsl:value-of select="$width + 60"/>,0)</xsl:attribute>
+        </xsl:if>
+        <svg:rect height="100" width="{$width + 60}" rx="10" ry="10" x="0" y="0"
+          fill="url(#svg-gr-recessed)" fill-opacity="1" stroke="none"/>
+      </svg:g>
       <svg:rect height="85" width="{$width + 45}" rx="7.5" ry="7.5" x="5" y="5"
         fill="&light-gray-old;" fill-opacity="1" stroke="none"/>
       <svg:text font-family="{$mono-stack}" text-anchor="middle"
@@ -559,16 +564,13 @@
       <fo:leader leader-pattern="space" leader-length="0.3em"/>
       <fo:instream-foreign-object content-height="{$height}em">
         <svg:svg width="7" height="11">
-          <xsl:choose>
-            <xsl:when test="$writing.mode = 'rl'">
-              <svg:path d="M 5.562,0 7,1.406 2.844,5.5 7,9.594 5.562,11 0,5.5 5.5625,0 z"
-                fill="{$color}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <svg:path d="M 1.438,0 0,1.406 4.156,5.5 0,9.594 1.438,11 7,5.5 1.4375,0 z"
-                fill="{$color}"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <svg:g>
+            <xsl:if test="$writing.mode = 'rl'">
+              <xsl:attribute name="transform">matrix(-1,0,0,1,7,0)</xsl:attribute>
+            </xsl:if>
+            <svg:path d="M 1.438,0 0,1.406 4.156,5.5 0,9.594 1.438,11 7,5.5 1.4375,0 z"
+              fill="{$color}"/>
+          </svg:g>
         </svg:svg>
       </fo:instream-foreign-object>
       <fo:leader leader-pattern="space" leader-length="0.3em"/>

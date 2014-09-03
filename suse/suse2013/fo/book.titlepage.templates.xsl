@@ -35,7 +35,8 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <!--  Geeko tail cover image -->
+  <!-- Geeko tail cover image -->
+  <!-- FIXME: Review LTR/RTL situation...  -->
   <fo:block-container top="{(2 - &goldenratio;) * $height}{$unit}" left="0"
     text-align="right"
     absolute-position="fixed">
@@ -51,6 +52,18 @@
   <!-- Logo -->
   <fo:block-container top="{$page.margin.top}" absolute-position="fixed"
     left="{$page.margin.start - $titlepage.logo.overhang}mm">
+    <xsl:choose>
+      <xsl:when test="$writing.mode = 'lr'">
+        <xsl:attribute name="right">
+          <xsl:value-of select="$page.margin.start"/>mm
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="left">
+          <xsl:value-of select="$page.margin.start - $titlepage.logo.overhang"/>mm
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
     <fo:block>
       <fo:instream-foreign-object content-width="{$titlepage.logo.width}"
         width="{$titlepage.logo.width}">
@@ -59,7 +72,7 @@
     </fo:block>
   </fo:block-container>
 
-  <!-- Title and product -->
+ <!-- Title and product -->
   <fo:block-container top="0" left="0" absolute-position="fixed"
     height="{$height * (2 - &goldenratio;)}{$unit}">
     <fo:block>
@@ -129,7 +142,7 @@
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="left" line-height="1.2" hyphenate="false"
+  <fo:block text-align="start" line-height="1.2" hyphenate="false"
     xsl:use-attribute-sets="title.font title.name.color sans.bold.noreplacement"
     font-weight="normal"
     font-size="{&ultra-large;}pt">
@@ -146,7 +159,7 @@
 </xsl:template>
 
 <xsl:template match="productname[not(@role)]" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="left" hyphenate="false"
+  <fo:block text-align="start" hyphenate="false"
     line-height="{$base-lineheight * 0.85}em"
     font-weight="normal" font-size="&super-large;pt"
     space-after="&gutterfragment;mm"
