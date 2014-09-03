@@ -189,7 +189,7 @@
               retrieve-position="first-including-carryover"
               retrieve-boundary="page-sequence"/>
             <!-- FIXME/UNHACKME: This causes some line break problems in
-                 Arabic, so comment this out for the moment. -->
+                 Arabic, so xsl:if this out for the moment. -->
             <xsl:if test="$writing.mode = 'lr'">
               <fo:inline>
                 <fo:leader leader-length="&columnfragment;mm"
