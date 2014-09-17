@@ -62,7 +62,7 @@
   <xsl:include href="titlepage.templates.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 
-
+  <xsl:include href="verbatim.xsl"/>
   <xsl:include href="lists.xsl"/>
   <xsl:include href="l10n.properties.xsl"/>
   <xsl:include href="logo.xsl"/>
