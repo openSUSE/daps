@@ -503,11 +503,16 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template
-  match="guibutton|guiicon|guilabel|guimenu|guisubmenu|hardware|interface|
+<xsl:template match="guibutton|guiicon|guilabel||hardware|interface|
          interfacedefinition|keysym|keycode|mousebutton|property|returnvalue|
          structname|symbol|token|type">
   <xsl:call-template name="inline.italicseq"/>
+</xsl:template>
+  
+<xsl:template match="guimenu|guisubmenu">
+  <xsl:call-template name="gentext.guimenu.startquote"/>
+  <xsl:call-template name="inline.italicseq"/>
+  <xsl:call-template name="gentext.guimenu.endquote"/>
 </xsl:template>
 
 <xsl:template match="package">
