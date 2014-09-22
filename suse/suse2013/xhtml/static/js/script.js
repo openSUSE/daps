@@ -8,7 +8,7 @@ var bugzillaComponent = 'Documentation';
 
 // XmlProduct comes from DocBook: <productname/> [space] <productnumber/>
 // BugzillaProduct comes from Bugzilla, go to
-// https://bugzilla.novell.com/enter_bug.cgi , search for the product,
+// https://bugzilla.suse.com/enter_bug.cgi , search for the product,
 // and write down the exact product name as given there. Click on the
 // product name in Bugzilla, and find out what the component for documentation
 // is called, that is your bugzillaComponent (default is "Documentation")
@@ -75,7 +75,7 @@ switch ( XmlProduct ) {
     break;
 }
 
-var bugzillaURLprefix = 'https://bugzilla.novell.com/enter_bug.cgi?&product=' + encodeURIComponent(bugzillaProduct) + '&component=' + encodeURIComponent(bugzillaComponent);
+var bugzillaURLprefix = 'https://bugzilla.suse.com/enter_bug.cgi?&product=' + encodeURIComponent(bugzillaProduct) + '&component=' + encodeURIComponent(bugzillaComponent);
 
 
 $(function() {
