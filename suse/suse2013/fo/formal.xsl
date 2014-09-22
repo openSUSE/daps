@@ -49,13 +49,13 @@
                         destructorsynopsis|methodsynopsis|formalpara|para|
                         simpara|address|blockquote|graphicco|mediaobjectco|
                         indexterm|beginpage">
-            <xsl:attribute name="border-{$start-border}"
+            <xsl:attribute name="border-left"
               ><xsl:value-of select="&mediumline;"/>mm solid &light-gray;</xsl:attribute>
-            <xsl:attribute name="margin-{$start-border}"
+            <xsl:attribute name="margin-left"
               ><xsl:value-of select="&mediumline; div 2"/>mm</xsl:attribute>
               <!-- This is seemingly illogical... but looks better with both FOP and
                XEP. -->
-            <xsl:attribute name="padding-{$start-border}"
+            <xsl:attribute name="padding-left"
               ><xsl:value-of select="&columnfragment;"/>mm</xsl:attribute>
           </xsl:if>
         </xsl:if>

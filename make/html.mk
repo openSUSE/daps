@@ -55,44 +55,31 @@ else
   endif
 endif
 
-#
-# NOTE: Style image handling needs to go into a function. It is needed by
-#       epub, html and webhelp
-#
-# Three scenarios:
-#
-# <STYLESHEETDIR>/xhtml/static
-#                        |-css
-#                        |-js
-#                        |-images
-#
-# or
-# <STYLESHEETDIR>/static
-#                        |-css
-#                        |-js
-#                        |-images
-#
-#
-# or we have the DocBook standard layout:
+
+# Two scenarios:
+# We either have the DocBook standard layout:
 #  <STYLESHEETDIR>/images
 #  <STYLESHEETDIR>/xhtml/<FOO>.css
 #
-# If <STYLESHEETDIR>/xhtml/static exists, it is used by default. If not,
-# <STYLESHEETDIR>/static is used. We also assume that
+# or
+#
+# <STYLESHEETDIR>/static
+#                  |-css
+#                  |-js
+#                  |-images
+#
+# If <STYLESHEETDIR>/static exists, we use it by default. We also assume that
 # parameters for [admon|callout|navig].graphics.path are correctly set in
 # the stylesheets. Alternatively, a custom static directory can be specified
 # with the --statdir parameter.
 # 
 # In case we have the standard docbook layout, we need to set
-# [admon|callout|navig].graphics.path. 
-#
-# IS_STATIC is used to determine
+# [admon|callout|navig].graphics.path. IS_STATIC is used to determine
 # whether we have a static dir (IS_STATIC=static) or not.
 #
 # Set the styleimage directory. If no custom directory is set with --statdir,
-# it can either be <STYLEROOT>/xhtml/static, <STYLEROOT>/static or
-# <STYLEROOT>/images. If more than one of these directories exist, they will
-# be used in the order listed (firstword function)
+# it can either be <STYLEROOT>/static or <STYLEROOT>/images. If both exist,
+# static will be used (firstword function)
 #
 ifdef STATIC_DIR
   STYLEIMG  := $(STATIC_DIR)
@@ -110,12 +97,9 @@ else
   #    is no "/") -> patsubst is greedy
   #  - remove dirname
   #
-
   STYLEIMG := $(firstword $(wildcard \
-		$(addsuffix static, $(dir $(STYLEHTML)))\
 		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))\
 		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))))
-
   IS_STATIC := $(notdir $(STYLEIMG))
   ifndef HTML_CSS
     ifneq ($(IS_STATIC),static)

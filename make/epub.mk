@@ -39,82 +39,6 @@ endif
 #
 STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEEPUB)))))
 
-#
-# NOTE: Style image handling needs to go into a function. It is needed by
-#       epub, html and webhelp
-#
-# Three scenarios:
-#
-# <STYLESHEETDIR>/epub/static
-#                        |-css
-#                        |-js
-#                        |-images
-#
-# or
-# <STYLESHEETDIR>/static
-#                        |-css
-#                        |-js
-#                        |-images
-#
-#
-# or we have the DocBook standard layout:
-#  <STYLESHEETDIR>/images
-#  <STYLESHEETDIR>/epub/<FOO>.css
-#
-# If <STYLESHEETDIR>/epub/static exists, it is used by default. If not,
-# <STYLESHEETDIR>/static is used. We also assume that
-# parameters for [admon|callout|navig].graphics.path are correctly set in
-# the stylesheets. Alternatively, a custom static directory can be specified
-# with the --statdir parameter.
-# 
-# In case we have the standard docbook layout, we need to set
-# [admon|callout|navig].graphics.path. 
-#
-# IS_STATIC is used to determine
-# whether we have a static dir (IS_STATIC=static) or not.
-#
-# Set the styleimage directory. If no custom directory is set with --statdir,
-# it can either be <STYLEROOT>/epub/static, <STYLEROOT>/static or
-# <STYLEROOT>/images. If more than one of these directories exist, they will
-# be used in the order listed (firstword function)
-#
-ifdef STATIC_DIR
-  STYLEIMG  := $(STATIC_DIR)
-  IS_STATIC := static
-else
-  #
-  # Make sure to use the STYLEIMG directory that comes alongside the
-  # STYLEROOT that is actually used. This is needed to ensure that the
-  # correct STYLEIMG is used, even when the current STYLEROOT is a
-  # fallback directory
-  #
-  # dir (patsubst %/,%,(dir STYLEEPUB)):
-  #  - remove filename
-  #  - remove trailing slash (dir function only works when last character
-  #    is no "/") -> patsubst is greedy
-  #  - remove dirname
-  #
-
-  STYLEIMG := $(firstword $(wildcard \
-		$(addsuffix static, $(dir $(STYLEEPUB)))\
-		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEEPUB)))))))
-
-  IS_STATIC := $(notdir $(STYLEIMG))
-  ifndef EPUB_CSS
-    ifneq ($(IS_STATIC),static)
-      EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)) 2>/dev/null )
-      ifeq ($(VERBOSITY),1)
-        ifneq "$(strip $(EPUB_CSS))" ""
-          EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
-        else
-          EPUB_CSS_INFO := No CSS file specified and no fallback found. Not using a CSS file.
-        endif
-      endif
-    endif
-  endif
-endif
-
-
 STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 
 
@@ -125,55 +49,65 @@ STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 #
 #
 
-# Admonitions do not work for epub (not epub3) due to a bug in the official
-# DocBook Stylesheets:
+# Admonitions do not work due to a bug in the official DocBook Stylesheets:
 # https://sourceforge.net/tracker/?func=detail&aid=2849681&group_id=21935&atid=373747
 #
 
 
-EPUB_TMPDIR := $(TMP_DIR)/epub_$(DOCNAME)
-EPUB_RESDIR := $(EPUB_TMPDIR)/OEBPS
-EPUB_IMGDIR := $(EPUB_RESDIR)
-EPUB_STATIC := $(EPUB_RESDIR)/static
-
-# use sort to filter duplicates
-EPUB_DIRECTORIES := $(sort $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) $(EPUB_STATIC) $(EPUB_STATIC)/css)
+EPUB_TMPDIR      := $(TMP_DIR)/epub_$(DOCNAME)
+EPUB_RESDIR      := $(EPUB_TMPDIR)/OEBPS
+#EPUB_IMGDIR      := $(EPUB_RESDIR)/images
+EPUB_IMGDIR      := $(EPUB_RESDIR)
+#EPUB_ADMONDIR    := $(EPUB_IMGDIR)/admons
+EPUB_CALLOUTDIR  := $(EPUB_IMGDIR)/callouts
+#EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_IMGDIR) \
+#		      $(EPUB_ADMONDIR) $(EPUB_CALLOUTDIR)
+EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_RESDIR) $(EPUB_CALLOUTDIR)
 
 # Images
 #
-EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/color,$(EPUB_IMGDIR),$(COLOR_IMAGES))
+EPUB_INLINE_IMGS  := $(subst $(IMG_GENDIR)/color,$(EPUB_IMGDIR),$(ONLINE_IMAGES))
+#EPUB_ADMON_IMGS   := $(addprefix $(EPUB_ADMONDIR)/, caution.png important.png note.png tip.png warning.png)
+EPUB_CALLOUT_IMGS := $(subst $(STYLEIMG),$(EPUB_IMGDIR),$(wildcard $(STYLEIMG)/callouts/*.png))
+#EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_ADMON_IMGS) $(EPUB_CALLOUT_IMGS)
+
+ifneq "$(strip $(EPUB_CALLOUT_IMGS))" ""
+  EPUB_IMAGES  := $(EPUB_INLINE_IMGS) $(EPUB_CALLOUT_IMGS)
+else
+  EPUB_IMAGES  := $(EPUB_INLINE_IMGS)
+endif
 
 # Stringparams
-#
-# if setting img.src.path to images/, the original DocBook stylesheets generate
-# a correct path in the xhtml, but do not use the images/ prefix in packages.opf
-EPUBSTRINGS := --stringparam "img.src.path=\"\""
-
-# the static/ directories have all images in the images/ subdir
-# the standard DocBook directory has a subdirectory images/callouts 
+# TODO
+# Check quoting issues with "img.src.path=\"\""
 #
 ifeq ($(EPUB3),1)
-  EPUBSTRINGS += --stringparam "base.dir=$(EPUB_RESDIR)/"
-  ifneq ($(IS_STATIC),static)
-    EPUBSTRINGS += --stringparam "callout.graphics.path=static/images/callouts/" \
-                 --stringparam "admon.graphics.path=static/images/"
-  endif
+  EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
+	       --stringparam "callout.graphics.path=callouts/"
 else
-  EPUBSTRINGS += --stringparam "base.dir=$(EPUB_RESDIR)/" \
+  EPUBSTRINGS := --stringparam "base.dir=$(EPUB_RESDIR)/" \
 	       --stringparam "epub.oebps.dir=$(EPUB_RESDIR)/" \
-	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/"
-  ifneq ($(IS_STATIC),static)
-    EPUBSTRINGS += --stringparam "callout.graphics.path=static/images/callouts/"
+	       --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/" \
+	       --stringparam "callout.graphics.path=callouts/"
+endif
+
+#--stringparam "admon.graphics.path=admons/"
+
+ifndef EPUB_CSS
+  EPUB_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEEPUB))*.css)) 2>/dev/null )
+  ifneq "$(strip $(EPUB_CSS))" ""
+    EPUB_CSS_INFO := No CSS file specified. Automatically using\n$(EPUB_CSS)
+  else
+    EPUB_CSS_INFO := No CSS file specified and no fallback found. Not using a CSS file.
   endif
 endif
 
-ifneq "$(strip $(EPUB_CSS))" ""
-  ifneq ($(EPUB_CSS),none)
-    EPUBSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(EPUB_CSS))"
-  else
-    EPUBSTRINGS += --stringparam "html.stylesheet=\"\""
-    EPUB_CSS_INFO := CSS was set to none, using no CSS
-  endif
+ifneq ($(EPUB_CSS),none)
+  EPUBSTRINGS += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
+  EPUB_CSSFILE     := $(EPUB_RESDIR)/$(notdir $(EPUB_CSS))
+else
+  EPUBSTRINGS += --stringparam "html.stylesheet \"\""
+  EPUB_CSS_INFO := CSS was set to none, using no CSS
 endif
 
 # building epub requires to create an intermediate bigfile
@@ -201,49 +135,11 @@ mobi: list-images-missing
 mobi: $(MOBI_RESULT)
 	@ccecho "result" "Find the Amazon Kindle book (.mobi) at:\n$<"
 
-
-#------------------------------------------------------------------------
-#
-# "Helper" targets
-#
-
 #--------------
-# EPUB_TMPDIR and subdirectories
+# EPUB_TMPDIR
 #
 $(EPUB_DIRECTORIES):
 	mkdir -p $@
-
-
-#---------------
-# Copy static and inline images
-#
-# static target needs to be PHONY, since I do not know which files need to
-# be linked, we just link the whole directory
-#
-
-.PHONY: copy_static_images
-ifneq ($(IS_STATIC),static)
-  copy_static_images: | $(EPUB_STATIC)
-  ifdef EPUB_CSS
-    copy_static_images: | $(EPUB_STATIC)/css
-  endif
-  copy_static_images: $(STYLEIMG)
-	cp -rs --remove-destination $< $(EPUB_STATIC)
-else
-  copy_static_images: | $(EPUB_STATIC)
-  ifdef EPUB_CSS
-    copy_static_images: | $(EPUB_STATIC)/css
-  endif
-  copy_static_images: $(STYLEIMG)
-	cp -rs --remove-destination $</* $(EPUB_STATIC)
-endif
-ifdef EPUB_CSS
-  ifneq ($(EPUB_CSS),none)
-	cp -rs --remove-destination $(EPUB_CSS) $(EPUB_STATIC)/css/
-  endif
-endif
-
-
 
 #--------------
 # generate EPUB-bigfile
@@ -277,36 +173,36 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 # Images
 #
 #$(EPUB_ADMON_IMGS): | $(EPUB_ADMONDIR)
-#$(EPUB_CALLOUT_IMGS): | $(EPUB_CALLOUTDIR)
+$(EPUB_CALLOUT_IMGS): | $(EPUB_CALLOUTDIR)
 $(EPUB_INLINE_IMGS): | $(EPUB_IMGDIR)
-$(EPUB_INLINE_IMGS): $(COLOR_IMAGES)
-	ln -sf $(IMG_GENDIR)/color/$(notdir $@) $@
 
 
-#$(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/color/%.png
-#	ln -sf $< $@
+$(EPUB_IMGDIR)/%.png: $(IMG_GENDIR)/color/%.png
+	ln -sf $< $@
 
-#$(EPUB_IMGDIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
+$(EPUB_IMGDIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
+	ln -sf $< $@
+
+$(EPUB_CALLOUTDIR)/%.png: $(STYLEIMG)/callouts/%.png
+	ln -sf $< $@
+
+#$(EPUB_ADMONDIR)/%.png : $(STYLEIMG)/%.png
 #	ln -sf $< $@
 
 #--------------
 # CSS
 #
-#$(EPUB_CSSFILE): | $(EPUB_RESDIR)
-#	(cd $(EPUB_RESDIR); ln -sf $(EPUB_CSS))
+$(EPUB_CSSFILE): | $(EPUB_RESDIR)
+	(cd $(EPUB_RESDIR); ln -sf $(EPUB_CSS))
 
 #--------------
 # Generate EPUB-file
 #
-#ifdef EPUB_CSS
-#  $(EPUB_RESULT): $(EPUB_CSSFILE) 
-#endif
-$(EPUB_RESULT): | $(RESULT_DIR)
-$(EPUB_RESULT): $(EPUB_INLINE_IMGS)
-ifeq ($(EPUB3),1)
- $(EPUB_RESULT): $(EPUB_TMPDIR)/mimetype
+ifdef EPUB_CSS
+  $(EPUB_RESULT): $(EPUB_CSSFILE) 
 endif
-$(EPUB_RESULT): copy_static_images
+$(EPUB_RESULT): | $(RESULT_DIR)
+$(EPUB_RESULT): $(EPUB_IMAGES) $(EPUB_TMPDIR)/mimetype 
 $(EPUB_RESULT): $(EPUB_TMPDIR)/OEBPS/index.html
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating EPUB"

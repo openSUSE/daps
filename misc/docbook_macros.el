@@ -133,51 +133,6 @@
   \n
 )
 
-;; EMPHASIS
-(define-skeleton docbook-emphasis
-  "Insert a docbook <emphasis role=?>."
-  (setq v1
-	(completing-read (format "Role [%s]: " v1)
-			 '("bold" "italic")
-			 nil 't v1))
-  '(setq v1 "bold")
-  \n
-  >"<emphasis role=\"" str "\"\>" _ "</emphasis>"
-  \n
-)
-
-;; ULINK
-(define-skeleton docbook-ulink
-  "Insert a docbook <ulink url=\"?\">name</ulink>."
-  nil
-  \n
-  >"<ulink url=\"" (setq v1 (skeleton-read "Url: ")) "\">"
-  (setq v1 (skeleton-read "Name: ")) "</ulink>"
-  \n
-)
-
-;; PROGRAMLISTING
-(define-skeleton docbook-programlisting
-  "Insert a docbook programlisting template."
-  nil
-  \n
- >"<programlisting><!\\[CDATA\\["\n
- > _ \n
- >"\\]\\]>"\n
- >"</programlisting>"\n
- \n
-)
-
-;; FOOTNOTE
-(define-skeleton docbook-footnote
-  "Insert a docbook footnote."
-  nil
-  >"<footnote>"\n
-  >"<para>" (setq v1 (skeleton-read "Footnote: ")) "</para>"\n
-  >"</footnote>"\n
-  \n
-)
-
 ;; COMMENT
 (define-skeleton docbook-comment
   "Insert a docbook comment template."
@@ -409,21 +364,17 @@
   (local-set-key (kbd "C-c C-c a") 'docbook-annotation)
   (local-set-key (kbd "C-c C-c c") 'docbook-callout)
   (local-set-key (kbd "C-c C-c d") 'docbook-docbook)
-  (local-set-key (kbd "C-c C-c e") 'docbook-emphasis)
   (local-set-key (kbd "C-c C-c f") 'docbook-figure)
-;;  (local-set-key (kbd "C-c C-c f") 'docbook-footnote)
   (local-set-key (kbd "C-c C-c i") 'docbook-indexterm)
   (local-set-key (kbd "C-c C-c k") 'docbook-keycombo)
   (local-set-key (kbd "C-c C-c l") 'docbook-listitem)
   (local-set-key (kbd "C-c C-c m") 'docbook-menuchoice)
   (local-set-key (kbd "C-c C-c n") 'docbook-novdoc)
-  (local-set-key (kbd "C-c C-c p") 'docbook-step)
-;;  (local-set-key (kbd "C-c C-c p") 'docbook-programlisting)
   (local-set-key (kbd "C-c C-c q") 'docbook-qandaentry)
   (local-set-key (kbd "C-c C-c r") 'docbook-remark)
   (local-set-key (kbd "C-c C-c s") 'docbook-sect)
+  (local-set-key (kbd "C-c C-c p") 'docbook-step)
   (local-set-key (kbd "C-c C-c t") 'docbook-table)
-  (local-set-key (kbd "C-c C-c u") 'docbook-ulink)
   (local-set-key (kbd "C-c C-c v") 'docbook-varlistentry)
 )
 ;; menu
@@ -437,20 +388,16 @@
        ["Insert annotation" docbook-annotation t]
        ["Insert callout" docbook-callout t]
        ["Insert comment" docbook-comment t]
-       ["Insert empahsis" docbook-emphasis t]
        ["Insert figure" docbook-figure t]
-       ["Insert footnote" docbook-footnote t]
        ["Insert indexterm" docbook-indexterm t]
        ["Insert keycombo" docbook-keycombo t]
        ["Insert listitem" docbook-listitem t]
        ["Insert menuchoice" docbook-menuchoice t]
-       ["Insert programlisting" docbook-programlisting t]
        ["Insert qandaentry" docbook-qandaentry t]
        ["Insert remark" docbook-remark t]
        ["Insert sect" docbook-sect t]
        ["Insert step" docbook-step t]
        ["Insert table" docbook-table t]
-       ["Insert ulink" docbook-ulink t]
        ["Insert varlistentry" docbook-varlistentry t]
     )
   )

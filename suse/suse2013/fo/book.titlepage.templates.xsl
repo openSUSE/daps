@@ -34,45 +34,57 @@
       <xsl:with-param name="string" select="$page.height"/>
     </xsl:call-template>
   </xsl:variable>
+  <xsl:variable name="logo">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename">
+        <xsl:choose>
+          <xsl:when test="$format.print != 0">
+            <xsl:value-of select="$titlepage.bw.logo"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$titlepage.color.logo"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="cover-image">
+    <xsl:call-template name="fo-external-image">
+      <xsl:with-param name="filename">
+        <xsl:choose>
+          <xsl:when test="$format.print != 0">
+            <xsl:value-of select="$titlepage.bw.background"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$titlepage.color.background"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
 
-  <!-- Geeko tail cover image -->
-  <!-- FIXME: Review LTR/RTL situation...  -->
+  <!--  Geeko tail cover image -->
   <fo:block-container top="{(2 - &goldenratio;) * $height}{$unit}" left="0"
     text-align="right"
     absolute-position="fixed">
     <fo:block>
     <!-- Almost golden ratio... -->
-      <fo:instream-foreign-object content-width="{$titlepage.background.width}"
-        width="{$titlepage.background.width}">
-        <xsl:call-template name="secondary-branding"/>
-      </fo:instream-foreign-object>
+      <fo:external-graphic content-width="{$titlepage.background.width}"
+        width="{$titlepage.background.width}"
+        src="{$cover-image}"/>
     </fo:block>
   </fo:block-container>
 
   <!-- Logo -->
   <fo:block-container top="{$page.margin.top}" absolute-position="fixed"
     left="{$page.margin.start - $titlepage.logo.overhang}mm">
-    <xsl:choose>
-      <xsl:when test="$writing.mode = 'lr'">
-        <xsl:attribute name="right">
-          <xsl:value-of select="$page.margin.start"/>mm
-        </xsl:attribute>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:attribute name="left">
-          <xsl:value-of select="$page.margin.start - $titlepage.logo.overhang"/>mm
-        </xsl:attribute>
-      </xsl:otherwise>
-    </xsl:choose>
     <fo:block>
-      <fo:instream-foreign-object content-width="{$titlepage.logo.width}"
-        width="{$titlepage.logo.width}">
-        <xsl:call-template name="logo-image"/>
-      </fo:instream-foreign-object>
+      <fo:external-graphic content-width="{$titlepage.logo.width}"
+        width="{$titlepage.logo.width}" src="{$logo}"/>
     </fo:block>
   </fo:block-container>
 
- <!-- Title and product -->
+  <!-- Title and product -->
   <fo:block-container top="0" left="0" absolute-position="fixed"
     height="{$height * (2 - &goldenratio;)}{$unit}">
     <fo:block>
@@ -142,8 +154,8 @@
 </xsl:template>
 
 <xsl:template match="title" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="start" line-height="1.2" hyphenate="false"
-    xsl:use-attribute-sets="title.font title.name.color sans.bold.noreplacement"
+  <fo:block text-align="left" line-height="1.2" hyphenate="false"
+    xsl:use-attribute-sets="title.font sans.bold.noreplacement title.name.color"
     font-weight="normal"
     font-size="{&ultra-large;}pt">
     <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
@@ -159,7 +171,7 @@
 </xsl:template>
 
 <xsl:template match="productname[not(@role)]" mode="book.titlepage.recto.auto.mode">
-  <fo:block text-align="start" hyphenate="false"
+  <fo:block text-align="left" hyphenate="false"
     line-height="{$base-lineheight * 0.85}em"
     font-weight="normal" font-size="&super-large;pt"
     space-after="&gutterfragment;mm"
@@ -174,7 +186,7 @@
   <fo:block
     xsl:use-attribute-sets="book.titlepage.verso.style sans.bold"
     font-size="&x-large;pt" font-family="{$title.fontset}">
-    <xsl:call-template name="book.verso.title"/>
+  <xsl:call-template name="book.verso.title"/>
   </fo:block>
 </xsl:template>
 
@@ -191,14 +203,6 @@
   </fo:block>
 </xsl:template>
 
-<!-- For their use in xrefs, many book titles have emphases
-     around them. Now, for formatting reasons in cases where we are
-     actually outside of an xref that pretty much is the wrong thing
-     to do. In languages where italic text is replaced by gray text,
-     this issue is especially glaring. -->
-<xsl:template match="emphasis" mode="titlepage.mode">
-  <xsl:apply-templates/>
-</xsl:template>
 
 
 <!-- ============================================================
@@ -357,11 +361,10 @@
     </fo:block>
     <fo:block>
       <fo:basic-link external-destination="{$ulink.url}"
-        xsl:use-attribute-sets="dark-green title.font">
+        xsl:use-attribute-sets="dark-green">
         <xsl:value-of select="$suse.doc.url"/>
         <xsl:call-template name="image-after-link"/>
       </fo:basic-link>
-      <xsl:call-template name="name"/>
     </fo:block>
   </fo:block>
 </xsl:template>

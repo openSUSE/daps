@@ -25,25 +25,14 @@
 
 
 <!-- 1. Admonitions  ============================================ -->
-  <xsl:param name="admon.graphics.extension">.svg</xsl:param>
 
 <!-- 2. Callouts ================================================ -->
-  <xsl:param name="callout.graphics.path">static/images/</xsl:param>
-  <xsl:param name="callout.graphics.extension">.svg</xsl:param>
-
-  <!-- Support for CSS/HTML varies enough among EPUB readers that
-       using graphics for callouts is safer. -->
-  <xsl:param name="callout.graphics" select="1"/>
 
 <!-- 3. EBNF ==================================================== -->
 
 <!-- 4. ToC/LoT/Index Generation ================================ -->
 
 <!-- 7. HTML ==================================================== -->
-  <xsl:param name="html.stylesheet">
-static/css/fonts.css
-static/css/style.css
-</xsl:param>
 
 <!-- 8. XSLT Processing ========================================= -->
 

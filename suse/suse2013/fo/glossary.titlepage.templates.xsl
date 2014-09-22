@@ -27,10 +27,8 @@
   <xsl:template name="glossary.titlepage.recto">
     <fo:block
       xsl:use-attribute-sets="glossary.titlepage.recto.style"
-      font-size="&super-large;pt" font-family="{$title.fontset}">
-      <xsl:attribute name="margin-{$start-border}">
-        <xsl:value-of select="$title.margin.left"/>
-      </xsl:attribute>
+      margin-left="{$title.margin.left}" font-size="&super-large;pt"
+      font-family="{$title.fontset}">
       <xsl:call-template name="component.title">
         <xsl:with-param name="node" select="ancestor-or-self::glossary[1]"/>
       </xsl:call-template>
@@ -58,10 +56,8 @@
   <xsl:template match="title" mode="glossdiv.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="glossdiv.titlepage.recto.style"
-      font-size="&xxx-large;pt" font-family="{$title.fontset}">
-      <xsl:attribute name="margin-{$start-border}">
-        <xsl:value-of select="$title.margin.left"/>
-      </xsl:attribute>
+      margin-left="{$title.margin.left}" font-size="&xxx-large;pt"
+      font-family="{$title.fontset}">
       <xsl:call-template name="component.title">
         <xsl:with-param name="node" select="ancestor-or-self::glossdiv[1]"/>
       </xsl:call-template>

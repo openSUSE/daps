@@ -14,7 +14,6 @@
 
 <xsl:import href="../xhtml5/docbook.xsl"/>
 
-<xsl:include href="param.xsl"/>
 <xsl:include href="epub3-element-mods.xsl"/>
 
 </xsl:stylesheet>

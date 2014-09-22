@@ -221,11 +221,7 @@
 
 <xsl:template name="shorten-section-markers">
   <xsl:param name="title" select="''"/>
-  <xsl:param name="cutoff" select="substring-before(58 * $sans-cutoff-factor, '.')"/>
-    <!-- FIXME: substring-before gets rid of the decimal places (if any).
-         Now, there wouldn't be a function toint() or so that could
-         do this for us in a better way, right? -->
-
+  <xsl:param name="cutoff" select="58"/>
   <xsl:variable name="realtitle" select="normalize-space($title)"/>
 
   <xsl:choose>

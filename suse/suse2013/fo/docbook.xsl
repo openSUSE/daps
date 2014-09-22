@@ -41,8 +41,7 @@
   <xsl:include href="../common/navigation.xsl"/>
   <xsl:include href="../common/string-replace.xsl"/>
   <xsl:include href="../common/arch-string.xsl"/>
-  <xsl:include href="../common/l10n.xsl"/>
-  
+
   <xsl:include href="autotoc.xsl"/>
   <xsl:include href="callout.xsl"/>
   <xsl:include href="xref.xsl"/>
@@ -63,10 +62,9 @@
   <xsl:include href="titlepage.templates.xsl"/>
   <xsl:include href="pagesetup.xsl"/>
 
-  <xsl:include href="verbatim.xsl"/>
+
   <xsl:include href="lists.xsl"/>
   <xsl:include href="l10n.properties.xsl"/>
-  <xsl:include href="logo.xsl"/>
 
   <xsl:include href="fop1.xsl"/>
   <xsl:include href="xep.xsl"/>

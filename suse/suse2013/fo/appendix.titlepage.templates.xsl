@@ -27,10 +27,8 @@
   <xsl:template match="title" mode="appendix.titlepage.recto.auto.mode">
     <fo:block
       xsl:use-attribute-sets="appendix.titlepage.recto.style component.title.style"
-      font-size="&super-large;pt" font-family="{$title.fontset}">
-      <xsl:attribute name="margin-{$start-border}">
-        <xsl:value-of select="$title.margin.left"/>
-      </xsl:attribute>
+      margin-left="{$title.margin.left}" font-size="&super-large;pt"
+      font-family="{$title.fontset}">
       <xsl:call-template name="component.title">
         <xsl:with-param name="node" select="ancestor-or-self::appendix[1]"/>
       </xsl:call-template>
