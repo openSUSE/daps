@@ -59,10 +59,12 @@ article  toc,title,figure,table,example,equation
 <xsl:param name="formal.object.break.after">0</xsl:param>
 
 <xsl:param name="callout.graphics" select="1"/>
-<xsl:param name="callout.graphics.extension">.png</xsl:param>
+<xsl:param name="callout.graphics.extension">.svg</xsl:param>
 <xsl:param name="callout.graphics.number.limit" select="15"/>
 <xsl:param name="callout.graphics.path" select="'images/callouts/'"/>
 <xsl:param name="show.comments" select="0"/>
+
+<xsl:param name="admon.graphics.extension">.svg</xsl:param>
 
 <!-- no navigation in .epub -->
 <xsl:param name="suppress.navigation" select="'1'"/>
@@ -75,7 +77,7 @@ article  toc,title,figure,table,example,equation
 <!-- generate the css file from a source file -->
 <xsl:param name="make.clean.html" select="1"/>
 <!-- specify the default epub3 stylesheet -->
-<xsl:param name="docbook.css.source">docbook-epub.css.xml</xsl:param>
+<xsl:param name="docbook.css.source" select="''"/>
 <!-- for custom CSS, use the custom.css.source param -->
 <xsl:param name="custom.css.source"></xsl:param>
 

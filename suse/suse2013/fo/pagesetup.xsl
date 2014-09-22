@@ -38,13 +38,28 @@
 
   -->
   <xsl:variable name="productnumber"
-    select="(ancestor-or-self::book/bookinfo/productnumber[@role] |
-             ancestor-or-self::book/bookinfo/productnumber[not(@role)])[last()]"/>
-  <xsl:variable name="productname"
-    select="(ancestor-or-self::book/bookinfo/productname[@role] |
-             ancestor-or-self::book/bookinfo/productname[not(@role)])[last()]"/>
+    select="(ancestor-or-self::set/setinfo/productnumber|
+             ancestor-or-self::book/bookinfo/productnumber|
+             ancestor-or-self::article/articleinfo/productnumber)[last()]"/>
 
-  <xsl:apply-templates select="$productname" mode="footer"/>
+  <xsl:variable name="productname-long"
+    select="(ancestor-or-self::set/setinfo/productname[not(@role='abbrev')]|
+             ancestor-or-self::book/bookinfo/productname[not(@role='abbrev')]|
+             ancestor-or-self::article/articleinfo/productname[not(@role='abbrev')])[last()]"/>
+
+  <xsl:variable name="productname-abbreviation"
+    select="(ancestor-or-self::set/setinfo/productname[@role='abbrev']|
+             ancestor-or-self::book/bookinfo/productname[@role='abbrev']|
+             ancestor-or-self::article/articleinfo/productname[@role='abbrev'])[last()]"/>
+
+  <xsl:choose>
+    <xsl:when test="$productname-abbreviation">
+      <xsl:apply-templates select="$productname-abbreviation" mode="footer"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="$productname-long" mode="footer"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:text> </xsl:text>
   <xsl:apply-templates select="$productnumber" mode="footer"/>
 </xsl:template>
@@ -137,52 +152,19 @@
   </xsl:if>
 </xsl:template>
 
+<!-- We don't really need this... -->
 <xsl:template name="footer.content.doublesided">
   <xsl:param name="pageclass" select="''"/>
   <xsl:param name="sequence" select="''"/>
   <xsl:param name="position" select="''"/>
   <xsl:param name="gentext-key" select="''"/>
-  <!-- pageclass can be front, body, back -->
-  <!-- sequence can be odd, even, first, blank -->
-  <!-- position can be left, center, right -->
 
-  <xsl:choose>
-    <xsl:when test="$pageclass = 'titlepage'"/>
-
-    <xsl:when test="$sequence = 'even' and $position='left'">
-        <fo:page-number/>
-    </xsl:when>
-
-    <xsl:when test="($sequence = 'odd' or $sequence = 'first')
-                      and $position='right'">
-        <fo:page-number/>
-    </xsl:when>
-
-    <xsl:when test="$position='center' and $pageclass != 'titlepage'">
-        <xsl:choose>
-          <xsl:when test="ancestor::book">
-            <fo:retrieve-marker
-              retrieve-class-name="section.head.marker"
-              retrieve-position="first-including-carryover"
-              retrieve-boundary="page-sequence"/>
-            <xsl:if test="$print.product != 0">
-              <xsl:text>—</xsl:text>
-              <xsl:call-template name="product"/>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="." mode="titleabbrev.markup"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-
-      <xsl:when test="$sequence='blank' and $position = 'left'">
-        <fo:page-number/>
-      </xsl:when>
-
-      <xsl:otherwise/>
-  </xsl:choose>
-
+  <xsl:call-template name="footer.content.singlesided">
+    <xsl:with-param name="pageclass" select="''"/>
+    <xsl:with-param name="sequence" select="''"/>
+    <xsl:with-param name="position" select="''"/>
+    <xsl:with-param name="gentext-key" select="''"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="footer.content.singlesided">
@@ -196,27 +178,31 @@
 
   <xsl:choose>
     <xsl:when test="$pageclass = 'titlepage'"/> <!-- Nothing -->
-    <xsl:when test="$position='left'">
+    <xsl:when test="$position = 'left'">
       <fo:page-number/>
     </xsl:when>
-    <xsl:when test="$pageclass != 'titlepage'">
+    <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="ancestor::book">
             <fo:retrieve-marker
               retrieve-class-name="section.head.marker.short"
               retrieve-position="first-including-carryover"
               retrieve-boundary="page-sequence"/>
-            <fo:inline>
-              <fo:leader leader-length="&columnfragment;mm"
-                leader-pattern="space"/>
-              <xsl:call-template name="product"/>
-            </fo:inline>
+            <!-- FIXME/UNHACKME: This causes some line break problems in
+                 Arabic, so xsl:if this out for the moment. -->
+            <xsl:if test="$writing.mode = 'lr'">
+              <fo:inline>
+                <fo:leader leader-length="&columnfragment;mm"
+                  leader-pattern="space"/>
+                <xsl:call-template name="product"/>
+              </fo:inline>
+            </xsl:if>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="." mode="titleabbrev.markup"/>
           </xsl:otherwise>
         </xsl:choose>
-    </xsl:when>
+    </xsl:otherwise>
   </xsl:choose>
 
 </xsl:template>

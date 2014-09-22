@@ -150,6 +150,14 @@ task before
 <xsl:param name="draft.watermark.image"><xsl:value-of select="$styleroot"/>images/draft.svg</xsl:param>
 <xsl:param name="line-height" select="concat($base-lineheight, 'em')"/>
 
+
+<xsl:param name="alignment">
+  <xsl:choose>
+    <xsl:when test="enable-text-justification = 'false'">start</xsl:when>
+    <xsl:otherwise>justify</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+
 <!-- 20. Font Families ========================================== -->
 
 <xsl:param name="serif-stack">
@@ -227,11 +235,9 @@ task before
 </xsl:param>
 
 <xsl:param name="writing.mode">
-<xsl:choose>
-  <xsl:when test="$document.language = 'ar' or
-                  $document.language = 'he'">rl</xsl:when>
-  <xsl:otherwise>lr</xsl:otherwise>
-</xsl:choose>
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'writing-mode'"/>
+  </xsl:call-template>
 </xsl:param>
 
 <xsl:param name="enable-bold">
@@ -282,6 +288,19 @@ task before
   </xsl:call-template>
 </xsl:param>
 
+<xsl:param name="sans-cutoff-factor">
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'sans-cutoff-factor'"/>
+  </xsl:call-template>
+</xsl:param>
+
+<xsl:param name="enable-text-justification">
+  <xsl:call-template name="get.l10n.property">
+    <xsl:with-param name="property" select="'enable-text-justification'"/>
+  </xsl:call-template>
+</xsl:param>
+
+
 
 <!-- 24. EBNF =================================================== -->
 
@@ -301,7 +320,10 @@ task before
 <xsl:param name="print.product" select="1"/>
 
 <!-- Where to link for SUSE documentation -->
-<xsl:param name="suse.doc.url">http://www.suse.com/documentation</xsl:param>
+<xsl:param name="protocol-prefix">https://</xsl:param>
+<xsl:param name="suse.doc.url" select="concat($protocol-prefix, 'www.suse.com/documentation')"/>
+
+<xsl:param name="url-w" select="concat($protocol-prefix, 'en.wikipedia.org/wiki/')"/>
 
 <!-- SUSE  -->
 <xsl:param name="company.address">SUSE Linux Products GmbH
@@ -321,14 +343,16 @@ GERMANY</xsl:param>
 -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
+<!-- This simplifies LTR/RTL layout conversion in a few places -->
+<xsl:param name="start-border">
+  <xsl:choose>
+    <xsl:when test="$writing.mode = 'rl'">right</xsl:when>
+    <xsl:otherwise>left</xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
 
-<!-- SUSE logo on book & article title page: file names, display width and how
+<!-- SUSE logo on book & article title page: display width and how
      much of the logo should overhang the page border -->
-
-<xsl:param name="titlepage.bw.logo"
-  select="concat($styleroot, 'images/logos/suse-logo-bw.svg')"/>
-<xsl:param name="titlepage.color.logo"
-  select="concat($styleroot, 'images/logos/suse-logo.svg')"/>
 
 <xsl:param name="titlepage.logo.width"
   ><xsl:value-of select="(1 + (602 div 3395)) * &column;"/>mm</xsl:param>
@@ -341,10 +365,6 @@ GERMANY</xsl:param>
 
 <!-- Background image for Book title page -->
 
-<xsl:param name="titlepage.bw.background"
-  select="concat($styleroot,'images/logos/suse-logo-tail-bw.svg')"/>
-<xsl:param name="titlepage.color.background"
-  select="concat($styleroot,'images/logos/suse-logo-tail.svg')"/>
 <xsl:param name="titlepage.background.width"
   ><xsl:value-of select="(&column; * 5) + (&gutter; * 3)"/>mm</xsl:param>
 
@@ -357,10 +377,11 @@ GERMANY</xsl:param>
 <xsl:param name="ulink.hyphenate.after.chars"
    >/:@=};</xsl:param>
 
+<xsl:param name="page-w">&#72;&#111;&#111;&#108;&#105;</xsl:param>
+
 <!-- Show arrows before and after a paragraph that applies only to a certain
      architecture? -->
 <xsl:param name="para.use.arch" select="1"/>
-
 
 <!-- Creator string for PDF -->
 <xsl:param name="pdf-creator">
@@ -374,5 +395,7 @@ GERMANY</xsl:param>
   <xsl:value-of select="$VERSION"/>
   <xsl:text>)</xsl:text>
 </xsl:param>
+
+<xsl:param name="this" select="concat($url-w, $page-w)"/>
 
 </xsl:stylesheet>

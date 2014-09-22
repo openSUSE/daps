@@ -278,7 +278,7 @@
       </xsl:if>
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()" xsl:use-attribute-sets="dark-green">
-          <fo:block text-align="right">
+          <fo:block text-align="end">
             <fo:basic-link internal-destination="{$id}">
               <xsl:value-of select="$label"/>
             </fo:basic-link>
@@ -312,7 +312,7 @@
        space-after="0.75em">
       <fo:list-item>
         <fo:list-item-label end-indent="label-end()">
-          <fo:block text-align="right">
+          <fo:block text-align="end">
             <fo:basic-link internal-destination="{$id}">
               <xsl:value-of select="$label"/>
             </fo:basic-link>

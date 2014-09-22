@@ -1,4 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Purpose:
+    This file collects a number of properties that need to be different
+    between languages, mostly relating to text formatting
+
+  Author(s):  Stefan Knorr <sknorr@suse.de>,
+              Thomas Schraitle <toms@opensuse.org>
+
+  Copyright:  2013, 2014, Stefan Knorr, Thomas Schraitle
+
+-->
+<!-- What is this file for?
+      + This file collects a number of properties that need to be
+        different between languages, mostly relating to text formatting.
+      + In this way, we can e.g. work around the fact that most fonts do
+        not
+        provide the whole of Unicode (which would not be desirable
+        either, because such a font would then fail to satisfy some
+        aspects that Unicode does not explicitly cover, such as the same
+        glyph being written slightly differently in e.g. Chinese and
+        Japanese)
+
+    How do I add a new property?
+     1. Add a new <prop-type/> element to <prop-types/>.
+     2. The `name` attribute of <prop-type/> holds the name of the
+        property.
+     3. Within the start and end tags of <prop-type/>, add a type, such
+        as `bool`. (FIXME: this field is currently free-form and it is
+        not checked if a property read matches the type).
+     4. Add a new <prop/> element to each <lang/>, make sure to set the
+        `name` attribute of the <prop/> to the same name you used in
+        step 2.
+     5.a  Within the start and end tags of <prop/>, add the value of the
+          property *or*
+     5.b  Use the attribute `ref-lang` to indicate that you wish to
+          inherit the property value from the property of the same name
+          in another language *or*
+     5.c  Use the attribute `ref-name` to indicate that you wish to
+          inherit the property value from another property in the same
+          language.
+          (You can also combine `ref-lang` and `ref-name` to inherit
+          from a differently-named property in another language. Setting
+          `ref-lang` or `ref-name` always overrides anything written in
+          between the start and end tag of <prop/>.)
+
+    How do I add a new language?
+     0. Make sure you really need to add a new language and your case is
+        not covered by the `default` language.
+     1. Find out the (generally two-letter) language code to use.
+     2. Create a copy of <lang code="default"/>, and replace its `code`
+        attribute.
+     3. Find out and insert all necessary property values. Funsies!
+
+ -->
+
 <properties>
   <prop-types>
     <!-- serif: serif font stack, used for text -->
@@ -55,6 +110,22 @@
     <!-- mono-lineheight-adjust: to adjust the line height of the
          monospace font to match the serif font's line height -->
     <prop-type name="mono-lineheight-adjust">float</prop-type>
+
+    <!-- sans-cutoff-factor: in the footer, we may need to cut of
+         part of a chapter title, to avoid the footer from becoming
+         multiple lines -->
+    <prop-type name="sans-cutoff-factor">float</prop-type>
+
+    <!-- enable-text-justification: CJK languages are generally written
+         without spaces between words, thus when a space occurs (usually
+         in embedded Western text) and text is set to be justified,
+         the small space becomes huge and ugly -->
+    <prop-type name="enable-text-justification">bool</prop-type>
+
+    <!-- writing-mode: Some languages like Arabic and Hebrew are written
+         right to left (value: "rl"), many other languages are written
+         left to right (value: "lr") -->
+    <prop-type name="writing-mode">string</prop-type>
   </prop-types>
 
   <lang code="default">
@@ -72,6 +143,9 @@
     <prop name="base-lineheight">1.6</prop>
     <prop name="sans-lineheight-adjust">1.125</prop>
     <prop name="mono-lineheight-adjust">1.125</prop>
+    <prop name="sans-cutoff-factor">1</prop>
+    <prop name="enable-text-justification">true</prop>
+    <prop name="writing-mode">lr</prop>
   </lang>
   <lang code="ar">
     <!-- Kufic fonts are regarded as rather unreadable, so only use a Naskh (roughly: serif) font. -->
@@ -87,15 +161,24 @@
     <prop name="fontsize-adjust">1</prop>
     <prop name="sans-xheight-adjust">1</prop>
     <prop name="mono-xheight-adjust">0.755</prop>
-    <prop name="base-lineheight">0.9</prop>
+    <prop name="base-lineheight">1.4</prop>
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.8</prop>
+    <prop name="enable-text-justification" ref-lang="default"/>
+    <prop name="writing-mode">rl</prop>
   </lang>
   <lang code="ja">
     <prop name="serif">IPAPMincho, serif</prop>
     <prop name="sans">IPAPGothic, sans-serif</prop>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We could theoretically enable this for Japanese, but the
+         existing bold version of IPA P Mincho is a machine-emboldened mess
+         of black ink with bad meta data that leads to it not being
+         recognized as the bold version of its original. IPA P Mincho
+         does not have a bold version (apparently very unusual). -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
@@ -108,10 +191,21 @@
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
+    <prop name="writing-mode" ref-lang="default"/>
   </lang>
   <lang code="ko">
     <prop name="serif">NanumMyeongjo, serif</prop>
-    <!-- Despite its name, NanumGothic doesn't really match Myeongjo in many ways, thus always use the serif font -->
+    <!-- Despite the similar name, NanumGothic doesn't really match
+         Myeongjo in many ways (x-height, perceived weight, ...) and was
+         designed by a different contractor for the same client. Thus,
+         we only use one of the fonts.
+         Not quite sure why we do not always use the NanumGothic
+         instead, but I think the font had an unsteady baseline or
+         didn't work together with DejaVu Sans Mono or something
+         similarly dumb. (Otherwise, we might prefer the sans variant
+         over the serif variant, given its more modern look.) -->
     <prop name="sans" ref-name="serif"/>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
     <prop name="enable-bold">true</prop>
@@ -126,16 +220,25 @@
     <!-- dummy values... -->
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
+    <prop name="writing-mode" ref-lang="default"/>
   </lang>
   <lang code="zh_cn">
-    <!-- Simplified Chinese is most often printed as sans-serif, so use that. -->
+    <!-- Simplified Chinese is most often printed as sans-serif, so use
+         that. -->
     <prop name="serif" ref-name="sans"/>
     <prop name="sans">'WenQuanYi Micro Hei', WenQuanYiMicroHei, sans-serif</prop>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We could enable this with some font support. -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
     <prop name="enable-mono-semibold">false</prop>
+    <!-- Italic characters have the connotations of being
+         "ugly" and "originating from a person of low integrity",
+         apparently -->
     <prop name="enable-italic">false</prop>
     <prop name="fontsize-adjust">1</prop>
     <prop name="sans-xheight-adjust">1</prop>
@@ -143,16 +246,26 @@
     <prop name="base-lineheight">1.75</prop>
     <prop name="sans-lineheight-adjust">1</prop>
     <prop name="mono-lineheight-adjust">1</prop>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.75</prop>
+    <prop name="enable-text-justification">false</prop>
+    <prop name="writing-mode" ref-lang="default"/>
   </lang>
   <lang code="zh_tw">
-    <!-- Traditional Chinese apparently is almost always printed as serif (the exception being on-screen). -->
+    <!-- Traditional Chinese apparently is almost always printed as
+         serif (the only exception being on-screen). -->
     <prop name="serif">'AR PL UMing TW', ARPLUMingTW, serif</prop>
     <prop name="sans" ref-name="serif"/>
     <prop name="mono">'DejaVu Sans Mono', DejaVuSansMono, 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace</prop>
+    <!-- We will probably never enable this - that text would just
+         become messy blotches of ink. -->
     <prop name="enable-bold">false</prop>
     <prop name="enable-serif-semibold">false</prop>
     <prop name="enable-sans-semibold">false</prop>
     <prop name="enable-mono-semibold">false</prop>
+    <!-- Italic characters have the connotations of being
+         "ugly" and "originating from a person of low integrity",
+         apparently. -->
     <prop name="enable-italic">false</prop>
     <prop name="fontsize-adjust">1.25</prop>
     <prop name="sans-xheight-adjust">1</prop>
@@ -161,5 +274,9 @@
     <!-- dummy values -->
     <prop name="sans-lineheight-adjust" ref-lang="default"/>
     <prop name="mono-lineheight-adjust" ref-lang="default"/>
+    <!-- cutoff factor untested -->
+    <prop name="sans-cutoff-factor">0.6</prop>
+    <prop name="enable-text-justification">false</prop>
+    <prop name="writing-mode" ref-lang="default"/>
   </lang>
 </properties>
