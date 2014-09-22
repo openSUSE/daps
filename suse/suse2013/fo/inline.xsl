@@ -503,7 +503,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="guibutton|guiicon|guilabel||hardware|interface|
+<xsl:template match="guibutton|guiicon|guilabel|hardware|interface|
          interfacedefinition|keysym|keycode|mousebutton|property|returnvalue|
          structname|symbol|token|type">
   <xsl:call-template name="inline.italicseq"/>
