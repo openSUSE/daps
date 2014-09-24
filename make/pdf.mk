@@ -160,8 +160,8 @@ $(PDF_RESULT): $(FOFILE)
   endif
 	$(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL)
   ifeq ($(VERBOSITY),2)
-	@pdffonts $@ | grep -v -e "^name" -e "^---" | cut -c 51-71 | \
-		grep -v -e "yes yes yes" >& /dev/null && \
+	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
+		>& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
   endif
 
