@@ -229,12 +229,12 @@
     <xsl:apply-templates select="$target" mode="intra.title.markup"/>
   </xsl:variable>
 
-  <xsl:message>====== create.linkto.other.book:
+  <!--<xsl:message>====== create.linkto.other.book:
     linkend=<xsl:value-of select="@linkend"/>
      target=<xsl:value-of select="local-name($target)"/>
     refelem=<xsl:value-of select="$refelem"/>
        text=<xsl:value-of select="$text"/>
-  </xsl:message>
+  </xsl:message>-->
   
   <fo:inline xsl:use-attribute-sets="italicized">
     <xsl:copy-of select="$text"/>
@@ -253,24 +253,6 @@
       <xsl:with-param name="target" select="$target"/>
     </xsl:call-template>
   </xsl:variable>
-
-  <!--<xsl:if test="$this.book/@id != $target.book/@id">-->
-  <!--<xsl:message>-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- xref.in.samebook: <xsl:value-of select="$xref.in.samebook"/>
- linkend:        <xsl:value-of select="@linkend"/>
- count(targets): <xsl:value-of select="count($targets)"/>
- target:         <xsl:value-of select="name($target)"/>
- <!-\-refelem:        <xsl:value-of select="$refelem"/>-\->
- article         <xsl:value-of select="count($target/ancestor-or-self::article)"/>
- article-title   <xsl:value-of
-   select="$target/ancestor-or-self::article/title"/>
- $this.book/@id: <xsl:value-of select="$this.book/@id"/>
- $target.book/@id: <xsl:value-of select="$target.book/@id"/>
- $target/xml:base  <xsl:value-of select="$target/ancestor-or-self::*[1]/@xml:base"/>
- $target.book/title          "<xsl:value-of select="$target.book/title"/>"
- $target.book/bookinfo/title "<xsl:value-of select="$target.book/bookinfo/title"/>"
-</xsl:message>-->
- <!--</xsl:if>-->
 
   <xsl:call-template name="check.id.unique">
     <xsl:with-param name="linkend" select="@linkend"/>
