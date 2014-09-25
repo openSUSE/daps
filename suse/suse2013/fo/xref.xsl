@@ -202,6 +202,11 @@
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="part" mode="intra.title.markup">
+  <!-- We don't want parts, so skip them -->
+  <xsl:apply-templates select="parent::*" mode="intra.title.markup"/>
+</xsl:template>
+
 <xsl:template match="article|book" mode="intra.title.markup">
   <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
   <xsl:call-template name="xpath.location"/>
