@@ -59,8 +59,8 @@ BuildRequires:  xerces-j2
 %endif
 BuildRequires:  trang
 
-Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.77
+Requires:       docbook_4
 Requires:       libxslt
 
 Recommends:     daps
@@ -143,8 +143,6 @@ sed -i "s/@@#version@@/%{version}/" xslt2005/version.xsl
 sed -i "s/@@#version@@/%{version}/" suse2013/version.xsl
 sed -i "s/@@#version@@/%{version}/" daps2013/version.xsl
 sed -i "s/@@#version@@/%{version}/" opensuse2013/version.xsl
-
-
 
 #--------------------------------------------------------------------------
 %build
