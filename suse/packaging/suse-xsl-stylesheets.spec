@@ -1,7 +1,7 @@
 #
 # spec file for package suse-xsl-stylesheets
 #
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,6 +17,7 @@
 
 Name:           suse-xsl-stylesheets
 Version:        2.0~rc4
+Release:        1
 
 ###############################################################
 #
@@ -38,11 +39,10 @@ Version:        2.0~rc4
 %define novdoc_catalog  for-catalog-%{dtdname}-%{dtdversion}.xml
 %define susexsl_catalog for-catalog-%{name}.xml
 
-Release:        1
 Summary:        SUSE-branded Docbook stylesheets for XSLT 1.0
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
-URL:            http://sourceforge.net/p/daps/suse-xslt
+Url:            http://sourceforge.net/p/daps/suse-xslt
 Source0:        %{name}-%{version}.tar.bz2
 Source1:        susexsl-fetch-source
 Source2:        %{name}.rpmlintrc
@@ -66,7 +66,6 @@ Requires:       libxslt
 Recommends:     daps
 Recommends:     docbook_5
 Recommends:     docbook5-xsl-stylesheets
-
 
 #------
 # Fonts
@@ -112,15 +111,14 @@ Recommends:     sil-charis-fonts
 
 # Chinese simplified -- wqy-microhei-fonts, already recommended
 # Chinese traditional:
-Recommends:   arphic-uming-fonts
+Recommends:     arphic-uming-fonts
 # Japanese:
-Recommends:   ipa-pgothic-fonts
-Recommends:   ipa-pmincho-fonts
+Recommends:     ipa-pgothic-fonts
+Recommends:     ipa-pmincho-fonts
 # Korean:
-Recommends:   nanum-fonts
+Recommends:     nanum-fonts
 # Arabic:
 Recommends:     arabic-amiri-fonts
-
 
 Obsoletes:      susedoc <= 4.3.33
 Provides:       susedoc = 4.3.34
