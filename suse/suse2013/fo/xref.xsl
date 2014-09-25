@@ -146,71 +146,98 @@
 
 
 <!-- ================ -->
+<xsl:template match="*" mode="intra.title.markup">
+  <xsl:message>Unknown element <xsl:value-of select="local-name(.)"/> for intra xref linking</xsl:message>
+</xsl:template>  
+
+
+<xsl:template match="sect1" mode="intra.title.markup">
+  <!--<xsl:message>sect1 intra.title.markup
+  <xsl:call-template name="xpath.location"/>
+  </xsl:message>-->
+  <xsl:apply-templates select="parent::*" mode="intra.title.markup"/>
+    <xsl:call-template name="substitute-markup">
+      <xsl:with-param name="template">
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'xref'"/>
+          <xsl:with-param name="name"  select="concat('intra-', local-name())"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>  
+</xsl:template>
+
+
+<xsl:template match="sect2|sect3|sect4|sect5" mode="intra.title.markup">
+  <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
+  <xsl:call-template name="xpath.location"/>
+  </xsl:message>-->
+  <xsl:apply-templates 
+    select="ancestor::appendix|ancestor::article|
+            ancestor::chapter|ancestor::glossary|ancestor::preface" 
+    mode="intra.title.markup"/>
+    <xsl:call-template name="substitute-markup">
+      <xsl:with-param name="template">
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'xref'"/>
+          <xsl:with-param name="name"  select="concat('intra-', local-name())"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>  
+</xsl:template>
+
+  
+<xsl:template match="appendix|chapter" mode="intra.title.markup">
+  <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
+  <xsl:call-template name="xpath.location"/>
+  </xsl:message>-->
+  <!-- We don't want parts -->
+  <xsl:apply-templates select="ancestor::book" mode="intra.title.markup"/>
+    <xsl:call-template name="substitute-markup">
+      <xsl:with-param name="template">
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'xref'"/>
+          <xsl:with-param name="name"  select="concat('intra-', local-name())"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="article|book" mode="intra.title.markup">
+  <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
+  <xsl:call-template name="xpath.location"/>
+  </xsl:message>-->
+  <xsl:call-template name="substitute-markup">
+      <xsl:with-param name="template">
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'xref'"/>
+          <xsl:with-param name="name"  select="concat('intra-', local-name())"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 
 <!-- FIXME: We have (almost) the same template in xhtml/xref.xsl. This is
      (almost) needless duplication. -->
 <xsl:template name="create.linkto.other.book">
   <xsl:param name="target"/>
   <xsl:variable name="refelem" select="local-name($target)"/>
-  <xsl:variable name="target.article"
-    select="$target/ancestor-or-self::article"/>
-  <xsl:variable name="target.book"
-    select="$target/ancestor-or-self::book"/>
-
+  <xsl:variable name="target.article" select="$target/ancestor-or-self::article"/>
+  <xsl:variable name="target.book" select="$target/ancestor-or-self::book"/>
   <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
+  <xsl:variable name="text">
+    <xsl:apply-templates select="$target" mode="intra.title.markup"/>
+  </xsl:variable>
 
-  <!--<xsl:message>create.linkto.other.book:
-    linkend: <xsl:value-of select="@linkend"/>
-    refelem: <xsl:value-of select="$refelem"/>
-    target:  <xsl:value-of select="concat(count($target), ':',
-      name($target))"/>
-    target/@id:  <xsl:value-of select="$target/@id"/>
-    target.article: <xsl:value-of select="count($target.article)"/>
-    target.book: <xsl:value-of select="count($target.book)"/>
-  </xsl:message>-->
-
-  <xsl:if test="not($target/self::book or $target/self::article)">
-    <xsl:apply-templates select="$target" mode="xref-to">
-      <xsl:with-param name="referrer" select="."/>
-      <xsl:with-param name="xrefstyle">
-        <xsl:choose>
-          <xsl:when test="$refelem = 'chapter' or $refelem = 'appendix'">number</xsl:when>
-          <xsl:otherwise>nonumber</xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:apply-templates>
-    <xsl:text>, </xsl:text>
-  </xsl:if>
-
-  <xsl:if test="$target/self::sect1 or
-    $target/self::sect2 or
-    $target/self::sect3 or
-    $target/self::sect4 or
-    $target/self::sect5 or
-    $target/self::section">
-    <xsl:variable name="hierarchy.node"
-      select="(
-      $target/ancestor-or-self::chapter |
-      $target/ancestor-or-self::appendix |
-      $target/ancestor-or-self::preface)[1]"/>
-    <xsl:if test="$hierarchy.node">
-      <xsl:apply-templates select="$hierarchy.node"
-      mode="xref-to">
-      <xsl:with-param name="referrer" select="."/>
-      </xsl:apply-templates>
-      <xsl:text>, </xsl:text>
-    </xsl:if>
-  </xsl:if>
-
+  <xsl:message>====== create.linkto.other.book:
+    linkend=<xsl:value-of select="@linkend"/>
+     target=<xsl:value-of select="local-name($target)"/>
+    refelem=<xsl:value-of select="$refelem"/>
+       text=<xsl:value-of select="$text"/>
+  </xsl:message>
+  
   <fo:inline xsl:use-attribute-sets="italicized">
-  <xsl:choose>
-    <xsl:when test="$target.article">
-      <xsl:apply-templates select="$target.article/title|$target.article/articleinfo/title" mode="xref-to"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select="$target.book" mode="xref-to"/>
-    </xsl:otherwise>
-  </xsl:choose>
+    <xsl:copy-of select="$text"/>
   </fo:inline>
 </xsl:template>
 

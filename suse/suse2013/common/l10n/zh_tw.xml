@@ -77,6 +77,8 @@
       <l:template name="itemizedlist-title" text="%t"/>
       <l:template name="orderedlist-label" text=""/>
       <l:template name="orderedlist-title" text="%t"/>
+     
+      
    </l:context>
 
    <l:context name="xep-bookmark-title">
@@ -147,15 +149,24 @@
       <l:template name="December" text="12" lang="zh_tw"/>
    </l:context>
 
-   <l:context name="xref">
-        <l:template name="sect1" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
-	<l:template name="sect2" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
-	<l:template name="sect3" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
-	<l:template name="sect4" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
-	<l:template name="sect5" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
-	
-	<l:template name="page.citation" text=" [%p&#38913;]"/>
-   </l:context>
+  <l:context name="xref">
+    <l:template name="sect1" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
+    <l:template name="sect2" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
+    <l:template name="sect3" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
+    <l:template name="sect4" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
+    <l:template name="sect5" text="&#31456;&#31680;&#x300c;%t&#x300d;"/>
+
+    <l:template name="page.citation" text=" [%p&#38913;]"/>
+
+    <l:template name="intra-article" text="《%t》文章 "/>
+    <l:template name="intra-book" text="《%t》第 "/>
+    <l:template name="intra-chapter" text="%n 章「%t」"/>
+    <!--<l:template name="intra-part" text="%B %t"/>-->
+    <l:template name="intra-sect1" text="%n 節「%t」"/>
+    <l:template name="intra-sect2" text="%n 節「%t」"/>
+    <l:template name="intra-sect3" text="%n 節「%t」"/>
+    <l:template name="intra-sect4" text="%n 節「%t」"/>
+  </l:context>
 
    <l:context name="xref-number">
       <l:template name="part" text="&#31532;%n&#37096;&#20998;"/>
