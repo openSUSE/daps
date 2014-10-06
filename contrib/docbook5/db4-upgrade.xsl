@@ -37,9 +37,11 @@
 
 <xsl:variable name="version" select="'1.1'"/> <!-- version of this transform -->
 
-<xsl:output method="xml" encoding="utf-8" indent="no" omit-xml-declaration="yes"/>
+<xsl:output method="xml" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
 
-<xsl:preserve-space elements="*"/>
+<xsl:preserve-space elements="screen programlisting"/>
+<xsl:strip-space elements="*"/>  
+  
 <xsl:param name="rootid">
   <xsl:choose>
   <xsl:when test="/*/@id">
@@ -1128,6 +1130,17 @@
   <xsl:element name="{local-name(.)}">
     <xsl:call-template name="copy.attributes"/>
     <xsl:apply-templates mode="clean-terms"/>
+  </xsl:element>
+</xsl:template>
+
+
+<xsl:template match="itemizedlist">
+  <xsl:element name="{local-name(.)}">
+    <xsl:call-template name="copy.attributes">
+      <!--<xsl:with-param name="suppress">mark spacing</xsl:with-param>-->
+      <xsl:with-param name="suppress.default">mark=bullet spacing=normal</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates />
   </xsl:element>
 </xsl:template>
 
