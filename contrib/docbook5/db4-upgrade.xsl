@@ -644,12 +644,17 @@
         </xsl:with-param>
       </xsl:call-template>
 
-      <uri xlink:href="{@url}">
+      <link xlink:href="{@url}">
 	<xsl:call-template name="copy.attributes">
 	  <xsl:with-param name="suppress" select="'url'"/>
 	</xsl:call-template>
-	<xsl:value-of select="@url"/>
-      </uri>
+        <xsl:choose>
+          <xsl:when test="count(child::node())=0 or (string(.) = @url)"/>
+          <xsl:otherwise>
+            <xsl:value-of select="@url"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </link>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
