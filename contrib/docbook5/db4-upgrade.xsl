@@ -3,6 +3,7 @@
                 xmlns:exsl="http://exslt.org/common"
 		xmlns:db = "http://docbook.org/ns/docbook"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
+		xmlns:xi="http://www.w3.org/2001/XInclude"
                 exclude-result-prefixes="exsl db"
                 version="1.0">
 
@@ -55,9 +56,21 @@
 
 <xsl:param name="defaultDate" select="''"/>
 
+<xsl:template name="all.namespaces">
+  <xsl:variable name="temp">
+    <xlink:link/>
+    <xi:include/>
+  </xsl:variable>
+
+  <xsl:variable name="nodes" select="exsl:node-set($temp)"/>
+  <xsl:for-each select="$nodes//*/namespace::*">
+    <xsl:copy-of select="."/>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template match="/">
   <xsl:variable name="converted">
-    <xsl:apply-templates/>
+      <xsl:apply-templates/>
   </xsl:variable>
   <xsl:comment>
     <xsl:text> Converted by db4-upgrade version </xsl:text>
@@ -1137,7 +1150,6 @@
 <xsl:template match="itemizedlist">
   <xsl:element name="{local-name(.)}">
     <xsl:call-template name="copy.attributes">
-      <!--<xsl:with-param name="suppress">mark spacing</xsl:with-param>-->
       <xsl:with-param name="suppress.default">mark=bullet spacing=normal</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates />
@@ -1424,29 +1436,49 @@
 
 <!-- ====================================================================== -->
 
+<!-- 
+  Add some default namespaces  
+-->
+<xsl:template match="/*" mode="addNS">
+    <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="not(ancestor::*[namespace-uri(.)=''])">
+        <xsl:attribute name="version">
+          <xsl:value-of select="$db5.version.string"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:copy-of select="@*"/>
+      <xsl:call-template name="all.namespaces"/>  
+      <xsl:apply-templates mode="addNS"/>
+    </xsl:element>
+</xsl:template>
+
+
 <xsl:template match="*" mode="addNS">
-  <xsl:choose>
-    <xsl:when test="namespace-uri(.) = ''">
-      <xsl:element name="{local-name(.)}"
-		   namespace="http://docbook.org/ns/docbook">
-	<xsl:if test="not(ancestor::*[namespace-uri(.)=''])">
-	  <xsl:attribute name="version"><xsl:value-of select="$db5.version.string"/></xsl:attribute>
-	</xsl:if>
-	<xsl:copy-of select="@*"/>
-	<xsl:apply-templates mode="addNS"/>
-      </xsl:element>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:copy>
-      <xsl:if test="namespace-uri(.) = 'http://docbook.org/ns/docbook' and
+    <xsl:choose>
+      <xsl:when test="namespace-uri(.) = ''">
+        <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
+          <xsl:if test="not(ancestor::*[namespace-uri(.)=''])">
+            <xsl:attribute name="version">
+              <xsl:value-of select="$db5.version.string"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates mode="addNS"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy>
+          <xsl:if test="namespace-uri(.) = 'http://docbook.org/ns/docbook' and
 	      not(ancestor::*[namespace-uri(.)='http://docbook.org/ns/docbook'])">
-	  <xsl:attribute name="version"><xsl:value-of select="$db5.version.string"/></xsl:attribute>
-	</xsl:if>
-	<xsl:copy-of select="@*"/>
-	<xsl:apply-templates mode="addNS"/>
-      </xsl:copy>
-    </xsl:otherwise>
-  </xsl:choose>
+            <xsl:attribute name="version">
+              <xsl:value-of select="$db5.version.string"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates mode="addNS"/>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="comment()|processing-instruction()|text()" mode="addNS">
