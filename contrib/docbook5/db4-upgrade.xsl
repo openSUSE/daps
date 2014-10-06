@@ -338,6 +338,15 @@
   </xsl:copy>
 </xsl:template>
 
+<xsl:template match="step" priority="200">
+  <xsl:copy>
+    <xsl:call-template name="copy.attributes">
+      <xsl:with-param name="suppress.default" select="'performance=required'"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+  </xsl:copy>
+</xsl:template>
+
 <xsl:template match="literallayout" priority="200">
   <xsl:copy>
     <xsl:call-template name="copy.attributes">
