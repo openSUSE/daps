@@ -329,10 +329,10 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="orderedlist" priority="200">
+<xsl:template match="orderedlist|itemizedlist" priority="200">
   <xsl:copy>
     <xsl:call-template name="copy.attributes">
-      <xsl:with-param name="suppress.default" select="'inheritnum=ignore continuation=restarts'"/>
+      <xsl:with-param name="suppress.default" select="'inheritnum=ignore continuation=restarts spacing=normal mark=bullet'"/>
     </xsl:call-template>
     <xsl:apply-templates/>
   </xsl:copy>
@@ -1134,14 +1134,6 @@
 </xsl:template>
 
 
-<xsl:template match="itemizedlist">
-  <xsl:element name="{local-name(.)}">
-    <xsl:call-template name="copy.attributes">
-      <xsl:with-param name="suppress.default">mark=bullet spacing=normal</xsl:with-param>
-    </xsl:call-template>
-    <xsl:apply-templates />
-  </xsl:element>
-</xsl:template>
 
 <!-- Any other elements inside term or glossterm which doesn't have a
      template rule are copied 
@@ -1288,6 +1280,7 @@
   <xsl:param name="src" select="."/>
   <xsl:param name="suppress" select="''"/>
   <xsl:param name="suppress.default" select="''"/>
+  <xsl:param name="verbose" select="0"/>
 
   <xsl:for-each select="$src/@*">
     <xsl:variable name="suppressed.value">
@@ -1300,6 +1293,16 @@
 	</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+
+    <xsl:if test="$verbose != 0">
+      <xsl:message>
+        attr:<xsl:value-of select="concat(local-name(current()), '=', .)"/>
+        suppress:<xsl:value-of select="$suppress"/>
+        suppressed.value:<xsl:value-of select="$suppressed.value"/>
+        <!--suppress=local-name():<xsl:value-of select="boolean($suppress = local-name(.))"/>
+        . = $suppressed.value:<xsl:value-of select="boolean(. = $suppressed.value)"/>-->
+      </xsl:message>
+    </xsl:if>
 
     <xsl:choose>
       <xsl:when test="local-name(.) = 'moreinfo'">
