@@ -622,41 +622,23 @@
 </xsl:template>
 
 <xsl:template match="ulink" priority="200">
-  <xsl:choose>
-    <xsl:when test="node()">
-      <xsl:call-template name="emit-message">
-        <xsl:with-param name="message">
-          <xsl:text>Converting ulink to link.</xsl:text>
-        </xsl:with-param>
-      </xsl:call-template>
+  <xsl:call-template name="emit-message">
+    <xsl:with-param name="message">
+      <xsl:text>Converting ulink to link.</xsl:text>
+    </xsl:with-param>
+  </xsl:call-template>
 
-      <link xlink:href="{@url}">
-	<xsl:call-template name="copy.attributes">
-	  <xsl:with-param name="suppress" select="'url'"/>
-	</xsl:call-template>
-	<xsl:apply-templates/>
-      </link>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="emit-message">
-        <xsl:with-param name="message">
-          <xsl:text>Converting ulink to uri.</xsl:text>
-        </xsl:with-param>
-      </xsl:call-template>
-
-      <link xlink:href="{@url}">
-	<xsl:call-template name="copy.attributes">
-	  <xsl:with-param name="suppress" select="'url'"/>
-	</xsl:call-template>
-        <xsl:choose>
-          <xsl:when test="count(child::node())=0 or (string(.) = @url)"/>
-          <xsl:otherwise>
-            <xsl:value-of select="@url"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </link>
-    </xsl:otherwise>
-  </xsl:choose>
+  <link xlink:href="{@url}">
+    <xsl:call-template name="copy.attributes">
+      <xsl:with-param name="suppress" select="'url'"/>
+    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="count(child::node())=0 or (string(.) = @url)"/>
+      <xsl:otherwise>
+        <xsl:value-of select="@url"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </link>
 </xsl:template>
 
 <xsl:template match="olink" priority="200">
