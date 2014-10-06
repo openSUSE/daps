@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exsl="http://exslt.org/common"
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:exsl="http://exslt.org/common"
 		xmlns:db = "http://docbook.org/ns/docbook"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
 		xmlns:xi="http://www.w3.org/2001/XInclude"
-                exclude-result-prefixes="exsl db"
-                version="1.0">
+    exclude-result-prefixes="exsl db xi">
 
 <!--
 # ======================================================================
