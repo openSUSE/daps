@@ -1,0 +1,192 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.apparmor.glossary">
+  <title><phrase>AppArmor</phrase> Glossary</title>
+  <variablelist>
+    <varlistentry>
+      <term>Abstraction</term>
+      <listitem>
+        <para>
+     See <emphasis>profile foundation classes</emphasis> below.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Apache</term>
+      <listitem>
+        <para>
+     Apache is a freely-available Unix-based Web server. It is currently the
+     most commonly used Web server on the Internet. Find more information
+     about Apache at the Apache Web site at
+     <link xlink:href="http://www.apache.org"/>.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>application firewalling</term>
+      <listitem>
+        <para><phrase>AppArmor</phrase> confines applications and limits the actions they are permitted to
+     take. It uses privilege confinement to prevent attackers from using
+     malicious programs on the protected server and even using trusted
+     applications in unintended ways.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>attack signature</term>
+      <listitem>
+        <para>
+     Pattern in system or network activity that alerts of a possible virus
+     or hacker attack. Intrusion detection systems might use attack
+     signatures to distinguish between legitimate and potentially malicious
+     activity.
+    </para>
+        <para>
+     By not relying on attack signatures, <phrase>AppArmor</phrase> provides "proactive" instead
+     of "reactive" defense from attacks. This is better because there is no
+     window of vulnerability where the attack signature must be defined for
+     <phrase>AppArmor</phrase> as it does for products using attack signatures.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>GUI</term>
+      <listitem>
+        <para>
+     Graphical user interface. Refers to a software front-end meant to
+     provide an attractive and easy-to-use interface between a computer user
+     and application. Its elements include windows, icons, buttons, cursors,
+     and scrollbars.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>globbing</term>
+      <listitem>
+        <para>
+     File name substitution. Instead of specifying explicit file name paths,
+     you can use helper characters <literal>*</literal> (substitutes any
+     number of characters except special ones such as <literal>/</literal>
+     or <literal>?</literal>) and <literal>?</literal> (substitutes exactly
+     one character) to address multiple files/directories at once.
+     <literal>**</literal> is a special substitution that matches any file
+     or directory below the current directory.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>HIP</term>
+      <listitem>
+        <para>
+     Host intrusion prevention. Works with the operating system kernel to
+     block abnormal application behavior in the expectation that the
+     abnormal behavior represents an unknown attack. Blocks malicious
+     packets on the host at the network level before they can
+     <quote>hurt</quote> the application they target.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>mandatory access control</term>
+      <listitem>
+        <para>
+     A means of restricting access to objects that is based on fixed
+     security attributes assigned to users, files, and other objects. The
+     controls are mandatory in the sense that they cannot be modified by
+     users or their programs.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>profile</term>
+      <listitem>
+        <para><phrase>AppArmor</phrase> profile completely defines what system resources an individual
+     application can access, and with what privileges.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>profile foundation classes</term>
+      <listitem>
+        <para>
+     Profile building blocks needed for common application activities, such
+     as DNS lookup and user authentication.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>RPM</term>
+      <listitem>
+        <para>
+     The RPM Package Manager. An open packaging system available for anyone
+     to use. It works on Red Hat Linux, <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase>, and other Linux and
+     Unix systems. It is capable of installing, uninstalling, verifying,
+     querying, and updating computer software packages. See
+     <link xlink:href="http://www.rpm.org/"/> for more information.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>SSH</term>
+      <listitem>
+        <para>
+     Secure Shell. A service that allows you to access your server from a
+     remote computer and issue text commands through a secure connection.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>streamlined access control</term>
+      <listitem>
+        <para><phrase>AppArmor</phrase> provides streamlined access control for network services by
+     specifying which files each program is allowed to read, write, and
+     execute. This ensures that each program does what it is supposed to do
+     and nothing else.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>URI</term>
+      <listitem>
+        <para>
+     Universal resource identifier. The generic term for all types of names
+     and addresses that refer to objects on the World Wide Web. A URL is one
+     kind of URI.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>URL</term>
+      <listitem>
+        <para>
+     Uniform Resource Locator. The global address of documents and other
+     resources on the Web.
+    </para>
+        <para>
+     The first part of the address indicates what protocol to use and the
+     second part specifies the IP address or the domain name where the
+     resource is located.
+    </para>
+        <para>
+     For example, when you visit <literal>http://www.suse.com</literal>, you
+     are using the HTTP protocol, as the beginning of the URL indicates.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>vulnerabilities</term>
+      <listitem>
+        <para>
+     An aspect of a system or network that leaves it open to attack.
+     Characteristics of computer systems that allow an individual to keep it
+     from correctly operating or that allows unauthorized users to take
+     control of the system. Design, administrative, or implementation
+     weaknesses or flaws in hardware, firmware, or software. If exploited, a
+     vulnerability could lead to an unacceptable impact in the form of
+     unauthorized access to information or the disruption of critical
+     processing.
+    </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+</chapter>

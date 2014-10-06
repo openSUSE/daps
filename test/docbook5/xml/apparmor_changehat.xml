@@ -1,0 +1,600 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.apparmor.hat">
+  <title>Profiling Your Web Applications Using ChangeHat</title>
+  <para>
+  An <phrase>AppArmor®</phrase> profile represents the security policy for an individual
+  program instance or process. It applies to an executable program, but if a
+  portion of the program needs different access permissions than other
+  portions, the program can <quote>change hats</quote> to use a different
+  security context, distinctive from the access of the main program. This is
+  known as a <emphasis>hat</emphasis> or <emphasis>subprofile</emphasis>.
+ </para>
+  <para>
+  ChangeHat enables programs to change to or from a <emphasis>hat</emphasis>
+  within an <phrase>AppArmor</phrase> profile. It enables you to define security at a finer level
+  than the process. This feature requires that each application be made
+  <quote>ChangeHat-aware</quote>, meaning that it is modified to make a
+  request to the <phrase>AppArmor</phrase> module to switch security domains at specific times
+  during the application execution. One example of a ChangeHat-aware
+  application is the Apache Web server.
+ </para>
+  <para>
+  A profile can have an arbitrary number of subprofiles, but there are only
+  two levels: a subprofile cannot have further child profiles. A subprofile
+  is written as a separate profile. Its name consists of the name of the
+  containing profile followed by the subprofile name, separated by a
+  <literal>^</literal>.
+ </para>
+  <para>
+  Subprofiles are either stored in the same file as the parent profile, or
+  in a separate file. The latter case is recommended on sites with a large
+  number of hats—it allows the policy caching to handle changes at the
+  per hat level. If all the hats are in the same file as the parent profile,
+  then the parent profile and all hats must be recompiled.
+ </para>
+  <para>
+  An external subprofile that is going to be used as a hat, must begin with
+  the word <literal>hat</literal> or the <literal>^</literal> character.
+ </para>
+  <para>
+  The following two subprofiles <emphasis>cannot</emphasis> be used as a
+  hat:
+ </para>
+  <screen>/foo//bar { }</screen>
+  <para>
+  or
+ </para>
+  <screen>profile /foo//bar { }</screen>
+  <para>
+  While the following two are treated as hats:
+ </para>
+  <screen>^/foo//bar { }</screen>
+  <para>
+  or
+ </para>
+  <screen>hat /foo//bar { } # this syntax is not highlighted in vim</screen>
+  <para>
+  Note that the security of hats is considerably weaker than that of full
+  profiles. Using certain types of bugs in a program, an attacker may be
+  able to escape from a hat into the containing profile. This is because the
+  security of hats is determined by a secret key handled by the containing
+  process, and the code running in the hat must not have access to the key.
+  Thus, change_hat is most useful in conjunction with application servers,
+  where a language interpreter (such as PERL, PHP, or Java) is isolating
+  pieces of code such that they do not have direct access to the memory of
+  the containing process.
+ </para>
+  <para>
+  The rest of this chapter describes using change_hat in conjunction with
+  Apache, to contain Web server components run using mod_perl and mod_php.
+  Similar approaches can be used with any application server by providing an
+  application module similar to the mod_apparmor described next in
+  <xref linkend="sec.apparmor.hat.config.directives"/>.
+ </para>
+  <tip>
+    <title>For More Information</title>
+    <para>
+   For more information, see the <command>change_hat</command> man page.
+  </para>
+  </tip>
+  <sect1 xml:id="sec.apparmor.hat.config" role="General">
+    <title>Configuring Apache for <systemitem>mod_apparmor</systemitem></title>
+    <para><phrase>AppArmor</phrase> provides a <literal>mod_apparmor</literal> module (package
+   <systemitem class="resource">apache2-mod-apparmor</systemitem>) for
+   the Apache program (only included in SUSE Linux Enterprise Server). This module makes the Apache
+   Web server ChangeHat aware. Install it along with Apache.
+  </para>
+    <para>
+   When Apache is ChangeHat-aware, it checks for the following customized
+   <phrase>AppArmor</phrase> security profiles in the order given for every URI request that it
+   receives.
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     URI-specific hat. For example,
+     <filename>^www_app_name/templates/classic/images/bar_left.gif</filename></para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>DEFAULT_URI</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>HANDLING_UNTRUSTED_INPUT</literal>
+        </para>
+      </listitem>
+    </itemizedlist>
+    <note>
+      <title>Apache Configuration</title>
+      <para>
+    If you install
+    <systemitem class="resource">apache2-mod-apparmor</systemitem>, make
+    sure the module is enabled, and then restart Apache by executing the
+    following command:
+   </para>
+      <screen>a2enmod apparmor &amp;&amp; sudo systemctl reload apache2.service</screen>
+    </note>
+    <para>
+   Apache is configured by placing directives in plain text configuration
+   files. The main configuration file is usually
+   <filename>/etc/apache2/httpd.conf</filename>. When you compile Apache,
+   you can indicate the location of this file. Directives can be placed in
+   any of these configuration files to alter the way Apache behaves. When
+   you make changes to the main configuration files, you need to reload
+   Apache with <command>sudo systemctl reload apache2.service</command>, so
+   the changes are recognized.
+  </para>
+    <sect2 xml:id="sec.apparmor.hat.config.vhost">
+      <title>Virtual Host Directives</title>
+      <para>
+    &lt;VirtualHost&gt; and &lt;/VirtualHost&gt; directives are used to enclose a
+    group of directives that will apply only to a particular virtual host.
+    For more information on Apache virtual host directives, refer to
+    <link xlink:href="http://httpd.apache.org/docs/2.4/en/mod/core.html#virtualhost"/>.
+   </para>
+      <para>
+    The ChangeHat-specific configuration keyword is
+    <literal>AADefaultHatName</literal>. It is used similarly to
+    <literal>AAHatName</literal>, for example, <literal>AADefaultHatName
+    My_Funky_Default_Hat</literal>.
+   </para>
+      <para>
+    It allows you to specify a default hat to be used for virtual hosts and
+    other Apache server directives, so that you can have different defaults
+    for different virtual hosts. This can be overridden by the
+    <literal>AAHatName</literal> directive and is checked for only if there
+    is not a matching <literal>AAHatName</literal> or hat named by the URI.
+    If the <literal>AADefaultHatName</literal> hat does not exist, it falls
+    back to the <literal>DEFAULT_URI</literal> hat if it exists/
+   </para>
+      <para>
+    If none of those are matched, it goes back to the <quote>parent</quote>
+    Apache hat.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.apparmor.hat.config.directives">
+      <title>Location and Directory Directives</title>
+      <para>
+    Location and directory directives specify hat names in the program
+    configuration file so the Apache calls the hat regarding its security.
+    For Apache, you can find documentation about the location and directory
+    directives at
+    <link xlink:href="http://httpd.apache.org/docs/2.4/en/sections.html"/>.
+   </para>
+      <para>
+    The location directive example below specifies that, for a given
+    location, <literal>mod_apparmor</literal> should use a specific hat:
+   </para>
+      <screen>&lt;Location /foo/&gt;
+  AAHatName MY_HAT_NAME
+&lt;/Location&gt;
+</screen>
+      <para>
+    This tries to use <literal>MY_HAT_NAME</literal> for any URI beginning
+    with <filename>/foo/</filename> (<filename>/foo/</filename>,
+    <filename>/foo/bar</filename>,
+    <filename>/foo/cgi/path/blah_blah/blah</filename>, etc.).
+   </para>
+      <para>
+    The directory directive works similarly to the location directive,
+    except it refers to a path in the file system as in the following
+    example:
+   </para>
+      <screen>
+&lt;Directory "/srv/www/www.example.org/docs"&gt; 
+  # Note lack of trailing slash 
+  AAHatName example.org 
+&lt;/Directory&gt;</screen>
+    </sect2>
+  </sect1>
+  <sect1 xml:id="sec.apparmor.hat.apache.managing">
+    <title>Managing ChangeHat-Aware Applications</title>
+    <para>
+   In the previous section you learned about <literal>mod_apparmor</literal>
+   and the way it helps you to secure a specific Web application. This
+   section walks you through a real-life example of creating a hat for a Web
+   application, and making use of <phrase>AppArmor</phrase>'s change_hat feature to secure it.
+   Note that this chapter focuses on <phrase>AppArmor</phrase>'s command line tools, as YaST's
+   <phrase>AppArmor</phrase> module has limited functionality.
+  </para>
+    <para>
+   For illustration purposes, let us choose the Web application called
+   <emphasis>Adminer</emphasis> (<link xlink:href="http://www.adminer.org/en/"/>).
+   It is a full-featured SQL database management tool written in PHP, yet
+   consisting of a single PHP file. For Adminer to work, you need to set up
+   an Apache Web server, PHP and its Apache module, and one of the database
+   drivers available for PHP—MariaDB in this example. You can install
+   the required packages with
+  </para>
+    <screen>zypper in apache2 apache2-mod_apparmor apache2-mod_php5 php5 php5-mysql
+</screen>
+    <para>
+   To set up the Web environment for running Adminer, follow these steps:
+  </para>
+    <procedure>
+      <title>Setting Up a Web Server Environment</title>
+      <step>
+        <para>
+     Make sure <literal>apparmor</literal> and <literal>php5</literal>
+     modules are enabled for Apache. To enable the modules in any case, use:
+    </para>
+        <screen>a2enmod apparmor php5</screen>
+        <para>
+     and then restart Apache with
+    </para>
+        <screen>sudo systemctl restart apache2.service</screen>
+      </step>
+      <step>
+        <para>
+     Make sure MariaDB is running. If unsure, restart it with
+    </para>
+        <screen>sudo systemctl restart mysql.service</screen>
+        <remark>taroth 2014-02-26: at the moment, there is no mariadb.service, starting
+     mysql seems to be the right way - wrote
+     mail to mhrusecky to ask if this is bound to change anytime soon for SLE
+     12</remark>
+      </step>
+      <step>
+        <para>
+     Download Adminer from <link xlink:href="http://www.adminer.org"/>, copy it to
+     <filename>/srv/www/htdocs/adminer/</filename>, and rename it to
+     <filename>adminer.php</filename>, so that its full path is
+     <filename>/srv/www/htdocs/adminer/adminer.php</filename>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Test Adminer in your Web browser by entering
+     <literal>http://localhost/adminer/adminer.php</literal> in its URI
+     address field. If you installed Adminer to a remote server, replace
+     <literal>localhost</literal> with the real host name of the server.
+    </para>
+        <figure>
+          <title>Adminer login page</title>
+          <mediaobject>
+            <imageobject role="fo">
+              <imagedata format="PNG" fileref="aa_changehat_adminer.png" width="75%"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata fileref="aa_changehat_adminer.png" width="40%" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+        <tip>
+          <para>
+      If you encounter problems viewing the Adminer login page, try to look
+      for help in the Apache error log
+      <filename>/var/log/apache2/error.log</filename>. Another reason why
+      you may not access the Web page may be the fact that your Apache is
+      already under <phrase>AppArmor</phrase> control and its <phrase>AppArmor</phrase> profile is too tight to permit
+      viewing Adminer. Check it with <command>aa-status</command>, and if
+      needed, set Apache temporarily in complain mode with
+     </para>
+          <screen>aa-complain usr.sbin.httpd2-prefork</screen>
+        </tip>
+      </step>
+    </procedure>
+    <para>
+   After the Web environment for Adminer is ready, you need to configure
+   Apache's mod_apparmor, so that <phrase>AppArmor</phrase> can detect accesses to Adminer and
+   change to the specific <quote>hat</quote>.
+  </para>
+    <procedure>
+      <title>Configuring mod_apparmor</title>
+      <step>
+        <para>
+     Apache has several configuration files under
+     <filename>/etc/apache2/</filename> and
+     <filename>/etc/apache2/conf.d/</filename>. Choose your preferred one
+     and open it in a text editor. In this example, the
+     <command>vim</command> editor is used to create a new configuration
+     file <filename>/etc/apache2/conf.d/apparmor.conf</filename>.
+    </para>
+        <screen>vim /etc/apache2/conf.d/apparmor.conf</screen>
+      </step>
+      <step>
+        <para>
+     Copy the following snippet into the edited file.
+    </para>
+        <screen>&lt;Directory /srv/www/htdocs/adminer&gt;
+  AAHatName adminer
+&lt;/Directory&gt;</screen>
+        <para>
+     It tells Apache to let <phrase>AppArmor</phrase> know about a change_hat event when the Web
+     user accesses the directory <filename>/adminer</filename> (and any
+     file/directory inside) in Apache's document root. Remember, we placed
+     the <filename>adminer.php</filename> application there.
+    </para>
+      </step>
+      <step>
+        <para>
+     Save the file, close the editor, and restart Apache with
+    </para>
+        <screen>sudo systemctl restart apache2.service</screen>
+      </step>
+    </procedure>
+    <para>
+   Apache now knows about our Adminer and changing a <quote>hat</quote> for
+   it. It is time to create the related hat for Adminer in the <phrase>AppArmor</phrase>
+   configuration. If you do not have an <phrase>AppArmor</phrase> profile yet, create one before
+   proceeding. Remember that if your Apache's main binary is
+   <filename>/usr/sbin/httpd2-prefork</filename>, then the related profile
+   is named <filename>/etc/apparmor.d/usr.sbin.httpd2-prefork</filename>.
+  </para>
+    <procedure>
+      <title>Creating a Hat for Adminer</title>
+      <step>
+        <para>
+     Open (or create one if it does not exist) the file
+     <filename>/etc/apparmor.d/usr.sbin.httpd2-prefork</filename> in a text
+     editor. Its contents should be similar to the following:
+    </para>
+        <screen>#include &lt;tunables/global&gt;
+
+/usr/sbin/httpd2-prefork {
+  #include &lt;abstractions/apache2-common&gt;
+  #include &lt;abstractions/base&gt;
+  #include &lt;abstractions/php5&gt;
+
+  capability kill,
+  capability setgid,
+  capability setuid,
+
+  /etc/apache2/** r,
+  /run/httpd.pid rw,
+  /usr/lib{,32,64}/apache2*/** mr,
+  /var/log/apache2/** rw,
+
+  ^DEFAULT_URI {
+    #include &lt;abstractions/apache2-common&gt;
+    /var/log/apache2/** rw,
+  }
+
+  ^HANDLING_UNTRUSTED_INPUT {
+    #include &lt;abstractions/apache2-common&gt;
+    /var/log/apache2/** w,
+  }
+}</screen>
+      </step>
+      <step>
+        <para>
+     Before the last closing curly bracket (<literal>}</literal>), insert
+     the following section:
+    </para>
+        <screen>^adminer flags=(complain) {
+}</screen>
+        <para>
+     Note the <literal>(complain)</literal> addition after the hat
+     name—it tells <phrase>AppArmor</phrase> to leave the <systemitem>adminer</systemitem>
+     hat in complain mode. That is because we need to learn the hat profile
+     by accessing Adminer later on.
+     <remark>@cboltz: i did it this way myself and it worked perfectly</remark></para>
+      </step>
+      <step>
+        <para>
+     Save the file, and then restart <phrase>AppArmor</phrase>, then Apache.
+    </para>
+        <screen>systemctl reload apparmor.service apache2.service</screen>
+      </step>
+      <step>
+        <para>
+     Check if the <systemitem>adminer</systemitem> hat really is in complain
+     mode.
+    </para>
+        <screen># aa-status 
+apparmor module is loaded.
+39 profiles are loaded.
+37 profiles are in enforce mode.
+[...]
+   /usr/sbin/httpd2-prefork
+   /usr/sbin/httpd2-prefork//DEFAULT_URI
+   /usr/sbin/httpd2-prefork//HANDLING_UNTRUSTED_INPUT
+[...]
+2 profiles are in complain mode.
+   /usr/bin/getopt
+   /usr/sbin/httpd2-prefork//adminer
+[...]
+</screen>
+        <para>
+     As we can see, the <literal>httpd2-prefork//adminer</literal> is loaded
+     in complain mode.
+    </para>
+      </step>
+    </procedure>
+    <para>
+   Our last task is to find out the right set of rules for the
+   <systemitem>adminer</systemitem> hat. That is why we set the
+   <systemitem>adminer</systemitem> hat into complain mode—the logging
+   facility collects useful information about the access requirements of
+   <filename>adminer.php</filename> as we use it via the Web browser.
+   <command>aa-logprof</command> then helps us with creating the hat's
+   profile.
+  </para>
+    <procedure>
+      <title>Generating Rules for the <systemitem>adminer</systemitem> Hat</title>
+      <step>
+        <para>
+     Open Adminer in the Web browser. If you installed it locally, then the
+     URI is <literal>http://localhost/adminer/adminer.php</literal>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Choose the database engine you want to use (MariaDB in our case), and
+     log in to Adminer using the existing database user name and password.
+     You do not need to specify the database name as you can do so after
+     logging in. Perform any operations with Adminer you like—create a
+     new database, create a new table for it, set user privileges, and so
+     on.
+    </para>
+      </step>
+      <step>
+        <para>
+     After the short testing of Adminer's user interface, switch back to
+     console and examine the log for collected data.
+    </para>
+        <screen># aa-logprof 
+Reading log entries from /var/log/messages.
+Updating AppArmor profiles in /etc/apparmor.d.
+Complain-mode changes:
+
+Profile:  /usr/sbin/httpd2-prefork^adminer
+Path:     /dev/urandom
+Mode:     r
+Severity: 3
+
+  1 - #include &lt;abstractions/apache2-common&gt;
+[...]  
+ [8 - /dev/urandom]
+
+[(A)llow] / (D)eny / (G)lob / Glob w/(E)xt / (N)ew / Abo(r)t / (F)inish / (O)pts</screen>
+        <para>
+     From the <command>aa-logprof</command> message, it is clear that our
+     new <systemitem>adminer</systemitem> hat was correctly detected:
+    </para>
+        <screen>Profile:  /usr/sbin/httpd2-prefork^adminer</screen>
+        <para>
+     The <command>aa-logprof</command> command will ask you to pick the
+     right rule for each discovered <phrase>AppArmor</phrase> event. Specify the one you want to
+     use, and confirm with <guimenu>Allow</guimenu>. For more information on
+     working with the <command>aa-genprof</command> and
+     <command>aa-logprof</command> interface, see
+     <xref linkend="sec.apparmor.commandline.profiling.summary.genprof"/>.
+    </para>
+        <tip>
+          <para><command>aa-logprof</command> usually offers several valid rules for
+      the examined event. Some of them are
+      <emphasis>abstractions</emphasis>—predefined sets of rules
+      affecting a specific common group of targets. Sometimes it is useful
+      to include such an abstraction instead of a direct URI rule:
+     </para>
+          <screen> 1 - #include &lt;abstractions/php5&gt; 
+ [2 - /var/lib/php5/sess_3jdmii9cacj1e3jnahbtopajl7p064ai242]</screen>
+          <para>
+      In the example above, it is recommended hitting <guimenu>1</guimenu>
+      and confirming with <guimenu>A</guimenu> to allow the abstraction.
+     </para>
+        </tip>
+      </step>
+      <step>
+        <para>
+     After the last change, you will be asked to save the changed profile.
+    </para>
+        <screen>The following local profiles were changed. Would you like to save them?
+ [1 - /usr/sbin/httpd2-prefork]
+
+ (S)ave Changes / [(V)iew Changes] / Abo(r)t</screen>
+        <para>
+     Hit <guimenu>S</guimenu> to save the changes.
+    </para>
+      </step>
+      <step>
+        <para>
+     Set the profile to enforce mode with <command>aa-enforce</command></para>
+        <screen>aa-enforce usr.sbin.httpd2-prefork</screen>
+        <para>
+     and check its status with <command>aa-status</command></para>
+        <screen># aa-status
+apparmor module is loaded.
+39 profiles are loaded.
+38 profiles are in enforce mode.
+[...]
+   /usr/sbin/httpd2-prefork
+   /usr/sbin/httpd2-prefork//DEFAULT_URI
+   /usr/sbin/httpd2-prefork//HANDLING_UNTRUSTED_INPUT
+   /usr/sbin/httpd2-prefork//adminer
+[...]</screen>
+        <para>
+     As you can see, the <literal>//adminer</literal> hat jumped from
+     <emphasis>complain</emphasis> to <emphasis>enforce</emphasis> mode.
+    </para>
+      </step>
+      <step>
+        <para>
+     Try to run Adminer in the Web browser, and if you encounter problems
+     running it, switch it to the complain mode, repeat the steps that
+     previously did not work well, and update the profile with
+     <command>aa-logprof</command> until you are satisfied with the
+     application's functionality.
+    </para>
+      </step>
+    </procedure>
+    <note>
+      <title>Hat and Parent Profile Relationship</title>
+      <para>
+    The profile <filename>^adminer</filename> is only available in the
+    context of a process running under the parent profile
+    <filename>usr.sbin.httpd2-prefork</filename>.
+   </para>
+    </note>
+    <sect2 xml:id="sec.apparmor.hat.apache.managing.add">
+      <title>Adding Hats and Entries to Hats in YaST</title>
+      <para>
+    When you use the <guimenu>Edit Profile</guimenu> dialog (for
+    instructions, refer to
+    <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.yast.edit"/>) or
+    when you add a new profile using <guimenu>Manually Add Profile</guimenu>
+    (for instructions, refer to
+    <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.yast.add"/>),
+    you are given the option of adding hats (subprofiles) to your <phrase>AppArmor</phrase>
+    profiles. Add a ChangeHat subprofile from the <guimenu><phrase>AppArmor</phrase> Profile
+    Dialog</guimenu> window as in the following.
+   </para>
+      <informalfigure>
+        <mediaobject>
+          <textobject role="description">
+            <phrase><phrase>AppArmor</phrase> profile dialog</phrase>
+          </textobject>
+          <imageobject role="fo">
+            <imagedata format="PNG" fileref="hats_in_profiles.png" width="75%"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="hats_in_profiles.png" width="75%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+      <procedure>
+        <step>
+          <para>
+      From the <guimenu><phrase>AppArmor</phrase> Profile Dialog</guimenu> window, click
+      <guimenu>Add Entry</guimenu> then select <guimenu>Hat</guimenu>. The
+      <guimenu>Enter Hat Name</guimenu> dialog opens:
+     </para>
+          <informalfigure>
+            <mediaobject>
+              <textobject role="description">
+                <phrase>Enter hat name</phrase>
+              </textobject>
+              <imageobject role="fo">
+                <imagedata format="PNG" fileref="hat_createhat.png" width="50%"/>
+              </imageobject>
+              <imageobject role="html">
+                <imagedata fileref="hat_createhat.png" width="35%" format="PNG"/>
+              </imageobject>
+            </mediaobject>
+          </informalfigure>
+        </step>
+        <step>
+          <para>
+      Enter the name of the hat to add to the <phrase>AppArmor</phrase> profile. The name is the
+      URI that, when accessed, receives the permissions set in the hat.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Create Hat</guimenu>. You are returned to the
+      <guimenu><phrase>AppArmor</phrase> Profile Dialog</guimenu> screen.
+     </para>
+        </step>
+        <step>
+          <para>
+      After adding the new hat, click <guimenu>Done</guimenu>.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+  </sect1>
+</chapter>

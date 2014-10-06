@@ -1,0 +1,579 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<appendix xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="app.admin.docupdates">
+  <title>Documentation Updates</title>
+  <para>
+  This chapter lists content changes for this document since the release of
+  <phrase role="productname"><phrase os="osuse">openSUSE®</phrase><phrase os="sles">SUSE® Linux Enterprise Server</phrase><phrase os="sled">SUSE® Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE® Linux Enterprise Real Time Extension</phrase></phrase> 11 SP3.
+ </para>
+  <para>
+  This manual was updated on the following dates:
+ </para>
+  <!--list of xrefs, latest date sorted upmost-->
+  <itemizedlist>
+    <listitem>
+      <para>
+        <xref linkend="sec.admin.docupdates.sle12_ga" xrefstyle="SectTitleOnPage"/>
+      </para>
+    </listitem>
+  </itemizedlist>
+  <sect1 xml:id="sec.admin.docupdates.sle12_ga">
+    <title>October 2014 (Initial Release of <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> 12)</title>
+    <para/>
+    <variablelist>
+      <!--list of general issues that apply to all books-->
+      <xi:include href="common_docupdates_general_i.xml" parse="xml"/>
+      <varlistentry>
+        <!--1. YaST Online Update-->
+        <term>
+          <xref linkend=" cha.onlineupdate.you"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        YaST provides an option to enable or disable the use of delta RPMs
+        (Fate#314867).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Before installing patches that require a reboot, you are notified by
+        YaST and can choose how to proceed.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 2. Gathering System Information for Support -->
+        <term>
+          <xref linkend="cha.adm.support"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added the section <xref linkend="sec.admsupport.hostinfo"/>
+        (Fate#315869).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added a section about the Supportconfig Analysis (SCA) tool and
+        appliance: <xref linkend="sec.admsupport.sca"/> (Fate#315699).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added the section <xref linkend="sec.admsupport.kernel"/>
+        (<link xlink:href="http://bugzilla.novell.com/show_bug.cgi?id=869159"/>).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Updated and restructured the chapter.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 3. YaST in Text Mode -->
+        <term>
+          <xref linkend="cha.yast.text"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added information on how to filter and select packages in the
+        software installation module.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 4. System Recovery and Snapshot Management with Snapper-->
+        <term>
+          <xref linkend="cha.snapper"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Updated the chapter and added new features (Fate#312751,
+        Fate#316238, Fate#316233, Fate#316232, Fate#316222, Fate#316203,
+        Fate#316222).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added the section <xref linkend="sec.snapper.snapshot-boot"/>
+        (Fate#316231, Fate#316221, Fate#316541, Fate#316522).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 5. Remote Access with VNC -->
+        <term>
+          <xref linkend="cha.vnc"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        The default VNC viewer is now
+        <systemitem class="resource">tigervnc</systemitem>.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added corrections on window manager start-up in persistent VNC
+        sessions.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 6. Managing Software with Command Line Tools -->
+        <term>
+          <xref linkend="cha.sw_cl"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Removed documentation about Zypper's rug compatibility mode
+        (Fate#317708)
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Rewrote <xref linkend="sec.zypper.query"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 9. Booting a Linux System -->
+        <term>
+          <xref linkend="cha.boot"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Significantly shortened the chapter, because System V init has been
+        replaced by systemd. systemd is now described in a separate chapter:
+        <xref linkend="cha.systemd"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 10. The systemd daemon -->
+        <term>
+          <xref linkend="cha.systemd"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added a new chapter on systemd and the YaST Services Manager
+        (Fate#316631, Fate#312568).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        New section on loading kernel modules
+        (<link xlink:href="http://bugzilla.novell.com/show_bug.cgi?id=892349"/>).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <!-- 11. journalctl: Query the systemd Journal -->
+      <varlistentry>
+        <term>
+          <xref linkend="cha.journalctl"/>
+        </term>
+        <listitem>
+          <para>
+      Added a new chapter
+      (<link xlink:href="http://bugzilla.novell.com/show_bug.cgi?id=878352"/>).
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!--12. The Boot Loader GRUB 2 -->
+        <term>
+          <xref linkend="cha.grub2"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Replaced the GRUB Legacy documentation with a new chapter on GRUB 2.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Support for LILO has been dropped.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added new section <xref linkend="sec.grub2.zseries"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 13. UEFI (Unified Extensible Firmware Interface) -->
+        <term>
+          <xref linkend="cha.uefi"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Updated the chapter and added new features (Fate#314510,
+        Fate#316365).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Fixed
+        <link xlink:href="http://doccomments.provo.novell.com/comments/25080"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 15. Printer Operation -->
+        <term>
+          <xref linkend="cha.p"/>
+        </term>
+        <listitem>
+          <para>
+      Updated chapter and section according to new CUPS version and with PDF
+      now being a common printing data format (Fate#314630).
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 17. The X Window System -->
+        <term>
+          <xref linkend="cha.x11"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Updated the chapter to reflect dynamic configuration during each
+        start-up.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Updated <xref linkend="sec.x11.fontsys"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 19. Basic Networking-->
+        <term>
+          <xref linkend="cha.basicnet"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        NetworkManager ist now part of the Workstation Extension:
+        <xref linkend="sec.basicnet.yast.netcard.global"/>
+        (Fate#316888).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added section about new <command>wicked</command> framework for
+        network configuration: <xref linkend="sec.basicnet.manconf"/>
+        (Fate#316649).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Mentioned additional options that can be added to
+        <filename>/etc/resolv.conf</filename>:
+        <xref linkend="sec.basicnet.manconf.files"/> (Fate#316048).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 20. SLP -->
+        <term>
+          <xref linkend="cha.slp"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Re-wrote chapter to provide significantly more information on the
+        <command>slptool</command> command.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 22. The Domain Name System -->
+        <term>
+          <xref linkend="cha.dns"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        The YaST DNS module now supports configuring forwarders
+        (Fate#309036).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 23. DHCP-->
+        <term>
+          <xref linkend="cha.dhcp"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Removed dhcpcd as it is no longer shipped (Fate#316111).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 25. Samba -->
+        <term>
+          <xref linkend="cha.samba"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added section <xref linkend="samba.advanced"/>.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added section <xref linkend="samba.advanced.compress"/>.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added section <xref linkend="samba.advanced.snapshots"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 26. Sharing File Systems with NFS -->
+        <term>
+          <xref linkend="cha.nfs"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Configuring NFSv4 shares is now mostly similar to NFSv3, especially
+        the previously required bind mount setting is now deprecated
+        (Fate#315589).
+       </para>
+            </listitem>
+            <listitem os="sles">
+              <para>
+        Mounting NFS volumes locally on the exporting server is not
+        supported.
+       </para>
+            </listitem>
+            <listitem os="sled">
+              <para>
+        Removed section about NFS server configuration.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 27. On-Demand Mounting with Autofs -->
+        <term>
+          <xref linkend="cha.autofs"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added a chapter on <systemitem>autofs</systemitem> (Fate#316185).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 29. The Apache HTTP Server -->
+        <term>
+          <xref linkend="cha.apache2"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Removed references to mono and mod_mono as it was removed from the
+        distribution.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Updated the chapter to Apache version 2.4 (Fate#316067).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Removed deprecated directive <literal>NameVirtualHost</literal> and
+        updated <xref linkend="sec.apache2.configuration.manually.vhost"/>
+        accordingly.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Updated <literal>Order</literal>, <literal>Allow</literal>, and
+        <literal>Deny</literal> directives with standard
+        <literal>Require</literal>.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Removed virtual "Snake Oil" company from
+        <xref linkend="sec.apache2.ssl"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry os="sles">
+        <!-- 30. Setting up an FTP Server with YaST -->
+        <term>
+          <xref linkend="cha.ftp"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para><systemitem class="resource">pure-ftpd</systemitem> was dropped
+        (Fate #315176, Fate#316308).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 34. Power Management -->
+        <term>
+          <xref linkend="cha.pmanage"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Remove obsolete references to the <systemitem>pm-utils</systemitem>
+        package.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <!-- 36. Common Problems and Their Solutions -->
+        <term>
+          <xref linkend="cha.trouble"/>
+        </term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added new section <xref linkend="sec.trouble.boot.btrfs"/>
+        (Fate#308679, Fate#315126).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Removed section about deprecated YaST Repair module (Fate#308679).
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Wi-Fi Configuration</term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Removed chapter about Wi-Fi configuration with YaST as Wi-Fi
+        configuration can be done with NetworkManager: <xref linkend="cha.nm"/>.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Tablet PCs</term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Removed deprecated chapter about tablet PCs.
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Bugfixes</term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para>
+        Added the section <xref linkend="sec.admsupport.kernel"/>
+        (<link xlink:href="http://bugzilla.novell.com/show_bug.cgi?id=869159"/>).
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        Added a new chapter <xref linkend="cha.journalctl"/>
+        (<link xlink:href="http://bugzilla.novell.com/show_bug.cgi?id=878352"/>)
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect1>
+</appendix>

@@ -1,0 +1,317 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.lxc">
+  <title>Linux Containers</title>
+  <para/>
+  <!-- ========================================================= -->
+  <!-- TODO Completely setting up lxc containers using YaST/virt-manager
+     is not yet possible. -->
+  <sect1 xml:id="sec.lxc.setup.container">
+    <title>Setting Up LXC Distribution Containers</title>
+    <para>
+   A container is a kind of <quote>virtual machine</quote> that can be
+   started, stopped, frozen, or cloned (to name but a few tasks). To set up
+   an LXC container, you first need to create a root file system
+   containing the guest distribution:
+  </para>
+    <procedure xml:id="pro.lxc.create-rootfs">
+      <title>Creating a Root File System</title>
+      <para>
+    There is currently no GUI to create a root file system. You will thus
+    need to open a terminal and use <command>virt-create-rootfs</command> as
+    root to populate the new root file system. In the following steps, the
+    new <systemitem class="username">root</systemitem> file system will be created in
+    <replaceable>/path/to/rootfs</replaceable>.
+   </para>
+      <para>
+    Note that <command>virt-create-rootfs</command> needs a registration
+    code to set up a SLE-12 root file system.
+   </para>
+      <step>
+        <para>
+     Run the <command>virt-create-rootfs</command> command:
+    </para>
+        <screen>virt-create-rootfs --root <replaceable>/path/to/rootfs</replaceable> --distro SLES-12.0 -c <replaceable>registration code</replaceable></screen>
+      </step>
+      <step>
+        <para>
+     Change the root path to the root file system with the
+     <command>chroot</command> command:
+    </para>
+        <screen>chroot <replaceable>/path/to/rootfs</replaceable></screen>
+      </step>
+      <step>
+        <para>
+     Change the password for user <systemitem class="username">root</systemitem> with <command>passwd</command>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Create an <systemitem class="username">operator</systemitem> user
+     without <systemitem class="username">root</systemitem> privileges:
+    </para>
+        <screen>useradd -m operator</screen>
+      </step>
+      <step>
+        <para>
+     Change the operator's password:
+    </para>
+        <screen>passwd operator</screen>
+      </step>
+      <step>
+        <para>
+     Leave the chroot environment with <command>exit</command>.
+    </para>
+      </step>
+    </procedure>
+    <procedure xml:id="pro.lxc.define-gui">
+      <title>Defining the Container Using YaST</title>
+      <step>
+        <para>
+     Open YaST and go to the Virtual Machine Manager module.
+    </para>
+      </step>
+      <step>
+        <para>
+     If not already present, add the LXC connection by clicking on
+     <guimenu>File</guimenu>, <guimenu>Add Connection</guimenu> menu. Select
+     <guimenu>LXC (Linux Containers)</guimenu> as hypervisor and click the
+     <guimenu>Connect</guimenu> button.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select the <guimenu>localhost (LXC)</guimenu> connection and click 
+     <guimenu>File</guimenu><guimenu>New Virtual Machine</guimenu> menu.
+    </para>
+        <para>
+     Select the <guimenu>Operating system container</guimenu> option and
+     click the <guimenu>Forward</guimenu> button.
+    </para>
+      </step>
+      <step>
+        <para>
+     Type the path to the root file system from
+     <xref linkend="pro.lxc.create-rootfs"/> and click the
+     <guimenu>Forward</guimenu> button.
+    </para>
+      </step>
+      <step>
+        <para>
+     Choose the maximum amount of memory and CPUs to allocate to the
+     container. Then click the <guimenu>Forward</guimenu> button.
+    </para>
+      </step>
+      <step>
+        <para>
+     Type in a name for the container. This name will be used for all
+     <command>virsh</command> commands on the container.
+    </para>
+        <para>
+     Click <guimenu>Advanced options</guimenu>. Select the network to
+     connect the container to and click the <guimenu>Finish</guimenu>
+     button: the container will then be created and started. A console will
+     also be automatically opened.
+    </para>
+      </step>
+    </procedure>
+    <warning>
+      <para>
+    To configure the container network, edit the
+    <filename>/etc/sysconfig/network/ifcfg-*</filename> files. Make sure not
+    to change the IPv6 setting: this would lead to errors while starting the
+    network.
+   </para>
+    </warning>
+  </sect1>
+  <sect1 xml:id="sec.lxc.setup.container.app">
+    <title>Setting Up LXC Application Containers</title>
+    <para>
+   Libvirt also allows to run single applications instead of full blown
+   Linux distributions in containers. In this example,
+   <command>bash</command> will be started in its own container.
+  </para>
+    <procedure xml:id="pro.lxc.define-app-gui">
+      <title>Defining an Application Container Using YaST</title>
+      <step>
+        <para>
+     Open YaST and go to the Virtual Machine Manager module.
+    </para>
+      </step>
+      <step>
+        <para>
+     If not already present, add the LXC connection by clicking 
+     <guimenu>File</guimenu>, <guimenu>Add Connection</guimenu> menu. Select
+     <guimenu>LXC (Linux Containers)</guimenu> as hypervisor and click
+     <guimenu>Connect</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select the <guimenu>localhost (LXC)</guimenu> connection and click
+     <menuchoice><guimenu>File</guimenu><guimenu>New Virtual Machine</guimenu></menuchoice>.
+    </para>
+        <para>
+     Select the <guimenu>Application container</guimenu> option and click 
+     <guimenu>Forward</guimenu>.
+    </para>
+        <para>
+     Set the patch to the application to be launched. As an example, the
+     field is filled with <command>/bin/sh</command>, which is fine to
+     create a first container. Click  <guimenu>Forward</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Choose the maximum amount of memory and CPUs to allocate to the
+     container. Click <guimenu>Forward</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Type in a name for the container. This name will be used for all
+     <command>virsh</command> commands on the container.
+    </para>
+        <para>
+     Click <guimenu>Advanced options</guimenu>. Select the network to
+     connect the container to and click <guimenu>Finish</guimenu>. The container will be created and started. A console will
+     be opened automatically.
+    </para>
+        <para>
+     Note that the container will be destroyed after the application has
+     finished running.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.lxc.config.apparmor">
+    <title>Securing a Container Using <phrase>AppArmor</phrase></title>
+    <para>
+   By default, containers are not secured using <phrase>AppArmor</phrase> or SELinux. There is no
+   graphical user interface to change the security model for a libvirt
+   domain, but <command>virsh</command> will help.
+  </para>
+    <procedure xml:id="pro.lxc.setup.apparmor">
+      <step>
+        <para>
+     Edit the container XML configuration using virsh:
+    </para>
+        <screen>virsh -c lxc:/// edit <replaceable>mycontainer</replaceable></screen>
+      </step>
+      <step>
+        <para>
+     Add the following to the XML configuration, save it and exit the
+     editor.
+    </para>
+        <screen>&lt;domain&gt;
+    ...
+    &lt;seclabel type="dynamic" model="apparmor"/&gt;
+    ...
+&lt;/domain&gt;</screen>
+      </step>
+      <step>
+        <para>
+     With this configuration, an <phrase>AppArmor</phrase> profile for the container will be
+     created in the <filename>/etc/apparmor.d/libvirt</filename> folder. The
+     default profile only allows the minimum applications to run in the
+     container. This can be changed by modifying the
+     <filename>libvirt-<replaceable>container-uuid</replaceable></filename>
+     file: this file is not overwritten by libvirt.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="lxc.diff">
+    <title>Differences Between the libvirt LXC Driver and LXC</title>
+    <para>
+   SUSE Linux Enterprise Server 11 SP3 was shipping LXC, while SUSE Linux Enterprise Server 12 comes with the libvirt LXC
+   driver, sometimes named libvirt-lxc to avoid confusion. The
+   containers are not managed or configured in the same way in these tools.
+   Here is a non-exhaustive list of differences.
+  </para>
+    <para>
+   The main difference comes from the fact that domain configuration in
+   libvirt is an XML file, while LXC configuration is a properties file.
+   Most of the LXC properties can be mapped to the domain XML. The
+   properties that cannot be migrated are:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>lxc.network.script.up</emphasis>: this script can be
+     implemented using the <filename>/etc/libvirt/hooks/network</filename>
+     libvirt hook, though the script will need to be adapted.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.network.ipv*</emphasis>: libvirt cannot set the container
+     network configuration from the domain configuration.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.network.name</emphasis>: libvirt cannot set the container
+     network card name.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.devttydir</emphasis>: libvirt does not allow changing the
+     location of the console devices.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.console</emphasis>: there is currently no way to log the
+     output of the console into a file on the host for libvirt LXC
+     containers.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.pivotdir</emphasis>: libvirt does not allow to fine-tune
+     the folder used for the <command>pivot_root</command>.
+     <filename>/.olroot</filename> is used.
+    </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>lxc.rootfs.mount</emphasis>: libvirt does not allow to 
+     fine-tune this.
+    </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+   LXC VLAN networks automatically create the VLAN interface on the
+   host and then move it into the guest namespace. libvirt-lxc configuration
+   can mention a VLAN tag ID only for openvSwitch tap devices or PCI
+   pass-through of SRIOV VF. The conversion tool actually needs the user to
+   manually create the vlan interface on the host side.
+  </para>
+    <para>
+   LXC rootfs can also be an image file, but LXC brute-forces the mount to
+   try to detect the proper file system format. libvirt-lxc can mount image
+   files of several formats, but the 'auto' value for the format parameter
+   is explicitly not supported. This means that the generated configuration
+   will need to be tweaked by the user to get a proper match in that case.
+  </para>
+    <para>
+   LXC can support any cgroup configuration, even future ones, while
+   libvirt domain configuration, needs to map each of them.
+  </para>
+    <para>
+   LXC can mount block devices in the rootfs, but it is not able to mount
+   raw partition files: the file needs to be manually attached to a loop
+   device. On the other hand libvirt-lxc can mount block devices, but also
+   partition files of any format.
+  </para>
+  </sect1>
+  <!-- ========================================================= -->
+  <sect1 xml:id="sec.lxc.moreinfo">
+    <title>For More Information</title>
+    <variablelist>
+      <varlistentry>
+        <term>LXC Container Driver</term>
+        <listitem>
+          <para>
+            <link xlink:href="http://libvirt.org/drvlxc.html"/>
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect1>
+</chapter>

@@ -1,0 +1,120 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<sect1 xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="xen.xen2libvirt">
+  <title>Import Xen Domain Configuration into <systemitem class="library">libvirt</systemitem></title>
+  <para><command>xen2libvirt</command> is a command line tool to import legacy
+  Xen domain configuration into the <systemitem class="library">libvirt</systemitem> virtualization library (see
+  The Virtualization book for more information on <systemitem class="library">libvirt</systemitem>). xen2libvirt
+  provides an easy way to import domains managed by the deprecated
+  <command>xm</command>/xend toolstack into the new <systemitem class="library">libvirt</systemitem>/libxl
+  toolstack. Several domains can be imported at once using its
+  <option>--recursive mode</option></para>
+  <para><command>xen2libvirt</command> is included in the
+  <systemitem>xen-tools</systemitem> package. If needed, install it with
+ </para>
+  <screen>zypper install xen-tools</screen>
+  <para><command>xen2libvirt</command> general syntax is
+ </para>
+  <screen>xen2libvirt &lt;options&gt; <replaceable>/path/to/domain/config</replaceable></screen>
+  <para>
+  where <option>options</option> can be:
+ </para>
+  <variablelist>
+    <varlistentry>
+      <term><option>-h</option>, <option>--help</option></term>
+      <listitem>
+        <para>
+     Prints short information about <command>xen2libvirt</command> usage.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-c</option>, <option>--convert-only</option></term>
+      <listitem>
+        <para>
+     Converts the domain configuration to the <systemitem class="library">libvirt</systemitem> XML format, but does
+     not do the import to <systemitem class="library">libvirt</systemitem>.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-r</option>, <option>--recursive</option></term>
+      <listitem>
+        <para>
+     Converts and/or imports all domains configuration recursively, starting
+     at the specified path.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-f</option>, <option>--format</option></term>
+      <listitem>
+        <para>
+     Specifies the format of the source domain configuration. Can be either
+     <literal>xm</literal>, or <literal>sexpr</literal> (S-expression
+     format).
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-v</option>, <option>--verbose</option></term>
+      <listitem>
+        <para>
+     Prints more detailed information about the import process.
+    </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <example>
+    <title>Converting Xen Domain Configuration to <systemitem class="library">libvirt</systemitem></title>
+    <para>
+   Suppose you have a Xen domain managed with <command>xm</command> with
+   the following configuration saved in
+   <filename>/etc/xen/sle12.xm</filename>:
+  </para>
+    <screen>kernel = "/boot/vmlinuz-2.6-xenU"
+  memory = 128
+  name = "SLE12"      
+  root = "/dev/hda1 ro"
+  disk = [ "file:/var/xen/sle12.img,hda1,w" ]</screen>
+    <para>
+   Convert it to <systemitem class="library">libvirt</systemitem> XML without importing it, and look at its
+   content:
+  </para>
+    <screen># xen2libvirt -f xm -c /etc/xen/sle12.xm &gt; /etc/libvirt/qemu/sles12.xml
+  # cat /etc/libvirt/qemu/sles12.xml
+  &lt;domain type='xen'&gt;
+  &lt;name&gt;SLE12&lt;/name&gt;
+  &lt;uuid&gt;43e1863c-8116-469c-a253-83d8be09aa1d&lt;/uuid&gt;
+  &lt;memory unit='KiB'&gt;131072&lt;/memory&gt;
+  &lt;currentMemory unit='KiB'&gt;131072&lt;/currentMemory&gt;
+  &lt;vcpu placement='static'&gt;1&lt;/vcpu&gt;
+  &lt;os&gt;
+  &lt;type arch='x86_64' machine='xenpv'&gt;linux&lt;/type&gt;
+  &lt;kernel&gt;/boot/vmlinuz-2.6-xenU&lt;/kernel&gt;
+  &lt;/os&gt;
+  &lt;clock offset='utc' adjustment='reset'/&gt;
+  &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;
+  &lt;on_reboot&gt;restart&lt;/on_reboot&gt;
+  &lt;on_crash&gt;restart&lt;/on_crash&gt;
+  &lt;devices&gt;
+  &lt;disk type='file' device='disk'&gt;
+  &lt;driver name='file'/&gt;
+  &lt;source file='/var/xen/sle12.img'/&gt;
+  &lt;target dev='hda1' bus='xen'/&gt;
+  &lt;/disk&gt;
+  &lt;console type='pty'&gt;
+  &lt;target type='xen' port='0'/&gt;
+  &lt;/console&gt;
+  &lt;/devices&gt;
+  &lt;/domain&gt;</screen>
+    <para>
+   To import the domain into <systemitem class="library">libvirt</systemitem>, you can either run the same
+   <command>xen2libvirt</command> command without the <option>-c</option>
+   option, or use the exported file
+   <filename>/etc/libvirt/qemu/sles12.xml</filename> and define a new Xen
+   domain using <command>virsh</command>:
+  </para>
+    <screen># sudo virsh define /etc/libvirt/qemu/sles12.xml</screen>
+  </example>
+</sect1>

@@ -1,0 +1,510 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" role="General" xml:id="cha.apparmor.yast">
+  <title>Building and Managing Profiles with YaST</title>
+  <para>
+  YaST provides a basic way to build profiles and manage <phrase>AppArmor®</phrase> profiles.
+  It provides two interfaces: a graphical one and a text-based one. The
+  text-based interface consumes less resources and bandwidth, making it a
+  better choice for remote administration, or for times when a local
+  graphical environment is inconvenient. Although the interfaces have
+  differing appearances, they offer the same functionality in similar ways.
+  Another alternative is to use <phrase>AppArmor</phrase> commands, which can control <phrase>AppArmor</phrase> from a
+  terminal window or through remote connections. The command line tools are
+  described in <xref linkend="cha.apparmor.commandline"/>.
+ </para>
+  <para>
+  Start YaST from the main menu and enter your <systemitem class="username">root</systemitem> password when
+  prompted for it. Alternatively, start YaST by opening a terminal window,
+  logging in as <systemitem class="username">root</systemitem>, and entering <command>yast2</command> for the
+  graphical mode or <command>yast</command> for the text-based mode.
+ </para>
+  <para>
+  In the <guimenu>Security and Users</guimenu> section, there is an
+  <guimenu><phrase>AppArmor</phrase> Configuration</guimenu> icon. Click it to launch the <phrase>AppArmor</phrase>
+  YaST module.
+ </para>
+  <sect1 xml:id="sec.apparmor.yast.add">
+    <title>Manually Adding a Profile</title>
+    <para><phrase>AppArmor</phrase> enables you to create an <phrase>AppArmor</phrase> profile by manually adding entries
+   into the profile. Select the application for which to create a profile,
+   then add entries.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST, select <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+     <guimenu>Manually Add Profile</guimenu> in the main window.
+    </para>
+      </step>
+      <step>
+        <para>
+     Browse your system to find the application for which to create a
+     profile.
+    </para>
+      </step>
+      <step>
+        <para>
+     When you find the application, select it and click
+     <guimenu>Open</guimenu>. A basic, empty profile appears in the
+     <guimenu><phrase>AppArmor</phrase> Profile Dialog</guimenu> window.
+    </para>
+      </step>
+      <step>
+        <para>
+     In <guimenu><phrase>AppArmor</phrase> Profile Dialog</guimenu>, add, edit, or delete <phrase>AppArmor</phrase>
+     profile entries by clicking the corresponding buttons and referring to
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.add"/>,
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.edit"/>,
+     or
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.del"/>.
+    </para>
+      </step>
+      <step>
+        <para>
+     When finished, click <guimenu>Done</guimenu>.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.apparmor.yast.edit">
+    <title>Editing Profiles</title>
+    <tip>
+      <para>
+    Although YaST offers basic manipulation for <phrase>AppArmor</phrase> profiles, such as
+    creating or editing, the most straightforward way to edit an <phrase>AppArmor</phrase>
+    profile is to open a console as <systemitem class="username">root</systemitem>, and use a text editor (such
+    as <command>vi</command>) to open and edit it:
+   </para>
+      <screen># vi /etc/apparmor.d/usr.sbin.httpd2-prefork</screen>
+    </tip>
+    <tip>
+      <para>
+    The <command>vi</command> editor also includes nice syntax (error)
+    highlighting and syntax error highlighting, which visually warns you
+    when the syntax of the edited <phrase>AppArmor</phrase> profile is wrong.
+   </para>
+    </tip>
+    <para><phrase>AppArmor</phrase> enables you to edit <phrase>AppArmor</phrase> profiles manually by adding, editing, or
+   deleting entries. To edit a profile, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST, select <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+     <guimenu>Manage Existing Profiles</guimenu> in the main window.
+    </para>
+        <informalfigure>
+          <mediaobject>
+            <textobject role="description">
+              <phrase>Choose the profile to edit</phrase>
+            </textobject>
+            <imageobject role="fo">
+              <imagedata format="PNG" fileref="edit_1.png" width="75%"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="edit_1.png"/>
+            </imageobject>
+          </mediaobject>
+        </informalfigure>
+      </step>
+      <step>
+        <para>
+     From the list of profiled applications, select the profile to edit.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Edit</guimenu>. The <guimenu><phrase>AppArmor</phrase> Profile
+     Dialog</guimenu> window displays the profile.
+    </para>
+        <informalfigure>
+          <mediaobject>
+            <textobject role="description">
+              <phrase><phrase>AppArmor</phrase> profile dialog</phrase>
+            </textobject>
+            <imageobject role="fo">
+              <imagedata format="PNG" fileref="edit_2.png" width="75%"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata format="PNG" fileref="edit_2.png"/>
+            </imageobject>
+          </mediaobject>
+        </informalfigure>
+      </step>
+      <step>
+        <para>
+     In the <guimenu><phrase>AppArmor</phrase> Profile Dialog</guimenu> window, add, edit, or
+     delete <phrase>AppArmor</phrase> profile entries by clicking the corresponding buttons and
+     referring to
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.add"/>,
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.edit"/>,
+     or
+     <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.edit.del"/>.
+    </para>
+      </step>
+      <step>
+        <para>
+     When you are finished, click <guimenu>Done</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     In the pop-up that appears, click <guimenu>Yes</guimenu> to confirm
+     your changes to the profile and reload the <phrase>AppArmor</phrase> profile set.
+    </para>
+      </step>
+    </procedure>
+    <tip>
+      <title>Syntax Checking in <phrase>AppArmor</phrase></title>
+      <para><phrase>AppArmor</phrase> contains a syntax check that notifies you of any syntax errors in
+    profiles you are trying to process with the YaST <phrase>AppArmor</phrase> tools. If an
+    error occurs, edit the profile manually as <systemitem class="username">root</systemitem> and reload the
+    profile set with <command>systemctl reload apparmor.service</command>.
+   </para>
+    </tip>
+    <sect2 xml:id="sec.apparmor.yast.edit.add">
+      <title>Adding an Entry</title>
+      <para>
+    The <guimenu>Add Entry</guimenu> button in the <guimenu><phrase>AppArmor</phrase> Profile
+    Window</guimenu> shows a list of types of entries you can add to the
+    <phrase>AppArmor</phrase> profile.
+   </para>
+      <para>
+    From the list, select one of the following:
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>File</term>
+          <listitem>
+            <para>
+       In the pop-up window, specify the absolute path of a file, including
+       the type of access permitted. When finished, click
+       <guimenu>OK</guimenu>.
+      </para>
+            <para>
+       You can use globbing if necessary. For globbing information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.glob"/>.
+       For file access permission information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.perm"/>.
+      </para>
+            <informalfigure>
+              <mediaobject>
+                <textobject role="description">
+                  <phrase>Select a file to add</phrase>
+                </textobject>
+                <imageobject role="fo">
+                  <imagedata format="PNG" fileref="add_2_addentry_file.png" width="60%"/>
+                </imageobject>
+                <imageobject role="html">
+                  <imagedata fileref="add_2_addentry_file.png" width="35%" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </informalfigure>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Directory</term>
+          <listitem>
+            <para>
+       In the pop-up window, specify the absolute path of a directory,
+       including the type of access permitted. You can use globbing if
+       necessary. When finished, click <guimenu>OK</guimenu>.
+      </para>
+            <para>
+       For globbing information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.glob"/>.
+       For file access permission information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.perm"/>.
+      </para>
+            <informalfigure>
+              <mediaobject>
+                <textobject role="description">
+                  <phrase>Select a directory to
+	  add</phrase>
+                </textobject>
+                <imageobject role="fo">
+                  <imagedata format="PNG" fileref="add_2_addentry_file.png" width="60%"/>
+                </imageobject>
+                <imageobject role="html">
+                  <imagedata fileref="add_2_addentry_file.png" width="35%" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </informalfigure>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Network Rule</term>
+          <listitem>
+            <para>
+       In the pop-up window, select the appropriate network family and the
+       socket type. For more information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.nac"/>.
+      </para>
+            <informalfigure>
+              <mediaobject>
+                <textobject role="description">
+                  <phrase>Select capabilities</phrase>
+                </textobject>
+                <imageobject role="fo">
+                  <imagedata format="PNG" fileref="add_2_addentry_network.png" width="50%"/>
+                </imageobject>
+                <imageobject role="html">
+                  <imagedata format="PNG" fileref="add_2_addentry_network.png" width="35%"/>
+                </imageobject>
+              </mediaobject>
+            </informalfigure>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Capability</term>
+          <listitem>
+            <para>
+       In the pop-up window, select the appropriate capabilities. These are
+       statements that enable each of the 32 POSIX.1e capabilities. Refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.capabilities"/>
+       for more information about capabilities. When finished making your
+       selections, click <guimenu>OK</guimenu>.
+      </para>
+            <informalfigure>
+              <mediaobject>
+                <textobject role="description">
+                  <phrase>Select capabilities</phrase>
+                </textobject>
+                <imageobject role="fo">
+                  <imagedata format="PNG" fileref="add_2_addentry_capability.png" width="75%"/>
+                </imageobject>
+                <imageobject role="html">
+                  <imagedata format="PNG" fileref="add_2_addentry_capability.png"/>
+                </imageobject>
+              </mediaobject>
+            </informalfigure>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Include File</term>
+          <listitem>
+            <para>
+       In the pop-up window, browse to the files to use as includes.
+       Includes are directives that pull in components of other <phrase>AppArmor</phrase>
+       profiles to simplify profiles. For more information, refer to
+       <xref xrefstyle="SectTitleOnPage" linkend="sec.apparmor.profiles.includes"/>.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Hat</term>
+          <listitem>
+            <para>
+       In the pop-up window, specify the name of the subprofile
+       (<emphasis>hat</emphasis>) to add to your current profile and click
+       <guimenu>Create Hat</guimenu>. For more information, refer to
+       <xref linkend="cha.apparmor.hat"/>.
+      </para>
+            <informalfigure>
+              <mediaobject>
+                <imageobject role="fo">
+                  <imagedata fileref="add_2_addentry_hat.png" width="50%" format="PNG"/>
+                </imageobject>
+                <imageobject role="html">
+                  <imagedata fileref="add_2_addentry_hat.png" format="PNG" width="60%"/>
+                </imageobject>
+              </mediaobject>
+            </informalfigure>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 xml:id="sec.apparmor.yast.edit.edit">
+      <title>Editing an Entry</title>
+      <para>
+    When you select <guimenu>Edit Entry</guimenu>, a pop-up window opens.
+    From here, edit the selected entry.
+   </para>
+      <para>
+    In the pop-up window, edit the entry you need to modify. You can use
+    globbing if necessary. When finished, click <guimenu>OK</guimenu>.
+   </para>
+      <para>
+    For globbing information, refer to
+    <xref linkend="sec.apparmor.profiles.glob"/>. For access permission
+    information, refer to <xref linkend="sec.apparmor.profiles.perm"/>.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.apparmor.yast.edit.del">
+      <title>Deleting an Entry</title>
+      <para>
+    To delete an entry in a given profile, select <guimenu>Delete
+    Entry</guimenu>. <phrase>AppArmor</phrase> removes the selected profile entry.
+   </para>
+    </sect2>
+  </sect1>
+  <sect1 xml:id="sec.apparmor.yast.del">
+    <title>Deleting a Profile</title>
+    <para><phrase>AppArmor</phrase> enables you to delete an <phrase>AppArmor</phrase> profile manually. Simply select the
+   application for which to delete a profile then delete it as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST, select <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+     <guimenu>Manage Existing Profiles</guimenu> in the main window.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select the profile to delete.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Delete</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     In the pop-up that opens, click <guimenu>Yes</guimenu> to delete the
+     profile and reload the <phrase>AppArmor</phrase> profile set.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.apparmor.yast.manage">
+    <title>Managing <phrase>AppArmor</phrase></title>
+    <para>
+   You can change the status of <phrase>AppArmor</phrase> by enabling or disabling it. Enabling
+   <phrase>AppArmor</phrase> protects your system from potential program exploitation. Disabling
+   <phrase>AppArmor</phrase>, even if your profiles have been set up, removes protection from
+   your system. To change the status of <phrase>AppArmor</phrase>, start YaST, select
+   <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+   <guimenu>Settings</guimenu> in the main window.
+  </para>
+    <informalfigure>
+      <mediaobject>
+        <textobject role="description">
+          <phrase>The <phrase>AppArmor</phrase> control
+	panel</phrase>
+        </textobject>
+        <imageobject role="fo">
+          <imagedata format="PNG" fileref="sd_controlpanel_1.png" width="75%"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata format="PNG" fileref="sd_controlpanel_1.png"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
+    <para>
+   To change the status of <phrase>AppArmor</phrase>, continue as described in
+   <xref xrefstyle="HeadingOnPage" linkend="sec.apparmor.yast.manage.status"/>.
+   To change the mode of individual profiles, continue as described in
+   <xref linkend="sec.apparmor.yast.manage.profmodes"/>.
+  </para>
+    <sect2 xml:id="sec.apparmor.yast.manage.status">
+      <title>Changing <phrase>AppArmor</phrase> Status</title>
+      <para>
+    When you change the status of <phrase>AppArmor</phrase>, set it to enabled or disabled. When
+    <phrase>AppArmor</phrase> is enabled, it is installed, running, and enforcing the <phrase>AppArmor</phrase>
+    security policies.
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Start YaST, select <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+      <guimenu>Settings</guimenu> in the main window.
+     </para>
+        </step>
+        <step>
+          <para>
+      Enable <phrase>AppArmor</phrase> by checking <guimenu>Enable <phrase>AppArmor</phrase></guimenu> or disable <phrase>AppArmor</phrase>
+      by deselecting it.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Done</guimenu> in the <guimenu><phrase>AppArmor</phrase>
+      Configuration</guimenu> window.
+     </para>
+        </step>
+      </procedure>
+      <tip>
+        <para>
+     You always need to restart running programs to apply the profiles to
+     them.
+    </para>
+      </tip>
+    </sect2>
+    <sect2 xml:id="sec.apparmor.yast.manage.profmodes">
+      <title>Changing the Mode of Individual Profiles</title>
+      <para><phrase>AppArmor</phrase> can apply profiles in two different modes. In
+    <emphasis>complain</emphasis> mode, violations of <phrase>AppArmor</phrase> profile rules,
+    such as the profiled program accessing files not permitted by the
+    profile, are detected. The violations are permitted, but also logged.
+    This mode is convenient for developing profiles and is used by the <phrase>AppArmor</phrase>
+    tools for generating profiles. Loading a profile in
+    <emphasis>enforce</emphasis> mode enforces the policy defined in the
+    profile, and reports policy violation attempts to
+    <systemitem class="daemon">rsyslogd</systemitem> (or
+    <systemitem class="daemon">auditd</systemitem> or
+    <systemitem class="daemon">journalctl</systemitem>, depending on system
+    configuration).
+   </para>
+      <para>
+    The <guimenu>Profile Mode Configuration</guimenu> dialog allows you to
+    view and edit the mode of currently loaded <phrase>AppArmor</phrase> profiles. This feature
+    is useful for determining the status of your system during profile
+    development. During the course of systemic profiling (see
+    <xref linkend="sec.apparmor.commandline.profiling.systemic"/>), you can
+    use this tool to adjust and monitor the scope of the profiles for which
+    you are learning behavior.
+   </para>
+      <para>
+    To edit an application's profile mode, proceed as follows:
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Start YaST, select <guimenu><phrase>AppArmor</phrase> Configuration</guimenu>, and click
+      <guimenu>Settings</guimenu> in the main window.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the <guimenu>Configure Profile Modes</guimenu> section, select
+      <guimenu>Configure</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Select the profile for which to change the mode.
+     </para>
+        </step>
+        <step>
+          <para>
+      Select <guimenu>Toggle Mode</guimenu> to set this profile to
+      <emphasis>complain</emphasis> mode or to <emphasis>enforce</emphasis>
+      mode.
+     </para>
+        </step>
+        <step>
+          <para>
+      Apply your settings and leave YaST with <guimenu>Done</guimenu>.
+     </para>
+        </step>
+      </procedure>
+      <para>
+    To change the mode of all profiles, use <guimenu>Set All to
+    Enforce</guimenu> or <guimenu>Set All to Complain</guimenu>.
+   </para>
+      <tip>
+        <title>Listing the Profiles Available</title>
+        <para>
+     By default, only active profiles are listed (any profile that has a
+     matching application installed on your system). To set up a profile
+     before installing the respective application, click <guimenu>Show All
+     Profiles</guimenu> and select the profile to configure from the list
+     that appears.
+    </para>
+      </tip>
+    </sect2>
+  </sect1>
+</chapter>

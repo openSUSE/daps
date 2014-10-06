@@ -1,0 +1,170 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<sect2 xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="sec.update.zypper">
+  <title>Distribution Upgrade with zypper</title>
+  <indexterm>
+    <primary>zypper</primary>
+    <secondary>upgrading</secondary>
+  </indexterm>
+  <indexterm>
+    <primary>upgrading</primary>
+    <secondary>zypper</secondary>
+  </indexterm>
+  <para>
+  With the <command>zypper</command> command line utility you can upgrade to
+  the next version of the distribution. Most importantly, you can initiate
+  the system upgrade process from within the running system.
+ </para>
+  <para>
+  This feature is attractive for advanced users who want to run remote
+  upgrades or upgrades on many similarly configured systems.
+ </para>
+  <sect3>
+    <title>Before Starting the Upgrade with zypper</title>
+    <para>
+   To avoid unexpected errors during the upgrade process using
+   <command>zypper</command>, minimize risky constellations.
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     Close as many applications and unneeded services as possible and log
+     out all regular users.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Disable third party repositories before starting the upgrade, or lower
+     the priority of these repositories to make sure packages from the
+     default system repositories will get preference. Enable them again
+     after the upgrade and edit their version string to match the version
+     number of the distribution of the upgraded now running system.
+    </para>
+      </listitem>
+    </itemizedlist>
+  </sect3>
+  <sect3>
+    <title>The Upgrade Procedure</title>
+    <warning>
+      <title>Check Your System Backup</title>
+      <para>
+    Before actually starting the upgrade procedure, check that your system
+    backup is up-to-date and restorable. This is especially important
+    because you must enter many of the following steps manually.
+   </para>
+    </warning>
+    <para>
+   The program <command>zypper</command> supports long and short command
+   names. For example, you can abbreviate <command>zypper install</command>
+   as <command>zypper in</command>. In the following text, the short
+   variants are used.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Run the online update to make sure the software management stack is
+     up-to-date. For more information, see
+     <xref linkend="cha.onlineupdate.you"/>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Configure the repositories you want to use as an update source. Getting
+     this right is essential. Either use YaST (see
+     <xref linkend="sec.y2.sw.instsource"/>) or <command>zypper</command>
+     (see <xref linkend="sec.zypper"/>).
+<!--    </para>
+    <tip>
+     <title>Repository Names</title>
+     <para> -->
+     The name of the repositories as used in the following steps could vary
+     a little bit depending on your customizations.
+    </para>
+        <!--    </tip> -->
+        <para>
+     Consider to prepare or update your own installation server. For
+     background information, see
+     <xref linkend="sec.deployment.remoteinst.instserver.sles9"/>.
+    </para>
+        <para>
+     To view your current repositories enter:
+    </para>
+        <screen>zypper lr -u</screen>
+        <substeps performance="required">
+          <step>
+            <para>
+       Increase the version number of the system repositories from 11-SP2 to
+       11-SP3; add the new repositories with commands such as:
+      </para>
+            <screen>server=<replaceable>http://download.example.org</replaceable>
+zypper ar $server/distribution/11-SP3/repo/oss/ SLE-11-SP3
+zypper ar $server/update/11-SP3/ SLE-11-SP3-Update</screen>
+            <para>
+       And remove the old repositories:
+      </para>
+            <screen>zypper rr <replaceable>SLE-11-SP2</replaceable>
+zypper rr <replaceable>SLE-11-Update</replaceable></screen>
+          </step>
+          <!-- ======================================================== -->
+          <step>
+            <para>
+       Disable third party repositories or other openSUSE Build Server repositories, because
+       <command>zypper dup</command> is guaranteed to work with the default
+       repositories only (replace <replaceable>repo-alias</replaceable> with
+       the name of the repository you want to disable):
+      </para>
+            <screen>zypper mr -d <replaceable>repo-alias</replaceable></screen>
+            <para>
+       Alternatively, you can lower the priority of these repositories.
+      </para>
+            <note>
+              <title>Handling of Unresolved Dependencies</title>
+              <para><command>zypper dup</command> will remove all packages having
+        unresolved dependencies, but it keeps packages of disabled
+        repositories as long as their dependencies are satisfied.
+       </para>
+            </note>
+            <para><command>zypper dup</command> ensures that all installed packages
+       come from one of the available repositories. It does not consider the
+       version, architecture, or vendor of the installed packages; thus it
+       emulates a fresh installation. Packages that are no longer available
+       in the repositories are considered orphaned. Such packages get
+       uninstalled if their dependencies can not be satisfied. If they can
+       be satisfied, such packages stay installed.
+      </para>
+          </step>
+          <step>
+            <para>
+       Once done, check your repository configuration with:
+      </para>
+            <screen>zypper lr -d</screen>
+          </step>
+        </substeps>
+      </step>
+      <step>
+        <para>
+     Refresh local metadata and repository contents with <command>zypper
+     ref</command>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Pull in Zypper and the package management stack from the 11 SP1
+     repository with <command>zypper up zypper</command>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Run the actual distribution upgrade with <command>zypper dup</command>.
+     You are asked to confirm the license of SUSE Linux Enterprise and of some
+     packages—depending on the set of installed packages.
+    </para>
+      </step>
+      <step>
+        <para>
+     Reboot the system with <command>shutdown -r now</command>.
+    </para>
+      </step>
+    </procedure>
+  </sect3>
+</sect2>

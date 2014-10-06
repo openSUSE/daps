@@ -1,0 +1,142 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="art.auditquick" xml:lang="en">
+  <?suse-quickstart color="suse"?>
+  <title>Live Kernel Patching Using kGraft</title>
+  <subtitle>
+    <phrase role="productname">
+      <phrase os="osuse">openSUSE</phrase>
+      <phrase os="sles">SUSE Linux Enterprise Server</phrase>
+      <phrase os="sled">SUSE Linux Enterprise Desktop</phrase>
+      <phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase>
+    </phrase>
+    <phrase role="productname">
+      <phrase os="osuse">12.2</phrase>
+      <phrase os="sles;sled;slerte">12</phrase>
+    </phrase>
+  </subtitle>
+  <info>
+    <productname>
+      <phrase role="productname">
+        <phrase os="osuse">openSUSE</phrase>
+        <phrase os="sles">SUSE Linux Enterprise Server</phrase>
+        <phrase os="sled">SUSE Linux Enterprise Desktop</phrase>
+        <phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase>
+      </phrase>
+    </productname>
+    <productnumber>
+      <phrase role="productname">
+        <phrase os="osuse">12.2</phrase>
+        <phrase os="sles;sled;slerte">12</phrase>
+      </phrase>
+    </productnumber>
+  </info>
+  <sect1>
+    <title>Advantages of kGraft</title>
+    <para>
+   Live kernel patching using kGraft is especially useful for quick response in
+   emergencies (when serious vulnerabilities are known and should be fixed as
+   soon as possible or when the systems are already actively exploited). It is
+   not used for scheduled updates where time is not critical.
+  </para>
+    <para>
+   The main advantage of kGraft is that it never requires stopping the kernel,
+   not even for a short time period like competing technologies.
+  </para>
+    <para>
+   A kGraft patch is a <filename>.ko</filename> kernel module in a KMP RPM
+   package. It is inserted into the kernel using <command>insmod</command>
+   command when the RPM package is installed or updated. kGraft replaces whole
+   functions in the kernel, even if they are being executed. An updated kGraft
+   module can replace an existing patch if necessary.
+  </para>
+    <para>
+   kGraft has also some technical limitations. It is designed for fixing
+   critical bugs, that means primarily for simple changes. Cahnges in kernel
+   data structure require special care and, if the change is too large,
+   rebooting might be required.
+  </para>
+  </sect1>
+  <sect1>
+    <title>Installing kGraft Patches</title>
+    <para>
+  To aplly a kGraft patch, follow these steps:
+ </para>
+    <procedure>
+      <step>
+        <para>
+    Using <command>zypper</command>, install the kGraft patch from
+    kGraft channel. Choose the appropriate patch for your kernel
+    version (<filename>-default</filename> or <filename>-xen</filename>).
+   </para>
+        <para>
+    When installing the first patch, the <systemitem>kgraft</systemitem>
+    package with the necessary kGraft scripts is also installed.
+   </para>
+        <!--FIXME name of the channel?-->
+      </step>
+      <step>
+        <para>
+    The kernel is patched automatically after the package installation.
+    However, the old kernel functions are not completely removed until
+    all sleeping processes wake up and get out of the way. This can
+    take a considerable amount of time. Sleeping processes using the
+    old kernel functions are not considered a security issue, however,
+    in the current version of kGraft, it is not possible to apply another
+    kGraft patch until the previous patch is completely finished.
+   </para>
+        <para>
+    First, check the global flag in
+    <filename>/sys/kernel/kgraft/in_progress</filename>. The value
+    <literal>1</literal> signifies existing sleeping processes that still need
+    an update, the value <literal>0</literal> signifies that the patch was
+    copletely finished.
+   </para>
+        <para>
+    To get a list of all sleeping processes, check the number in
+    <filename>/proc/<replaceable>process_number</replaceable>/kgr_in_progress</filename>
+    for each process. The value <literal>1</literal> signifies sleeping
+    process that still needs an update.
+   </para>
+      </step>
+      <step>
+        <para>
+    It is up to the system administrator to decide how to deal with
+    the sleeping processes. One possibility is to wait, another
+    possibility is to send a SIGSTOP signal followed by a SIGCONT
+    signal to all the sleeping processes.
+   </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1>
+    <title>Removing a kGraft Patch</title>
+    <para>
+   It is not sufficient to simply remove a kGraft patch with zypper.
+   Rebuilding initrd and rebooting is required:
+  </para>
+    <procedure>
+      <step>
+        <para>
+    First remove the patch itself using zypper:
+   </para>
+        <screen>
+    zypper rm kgraft-patch-default
+   </screen>
+      </step>
+      <step>
+        <para>
+    Rebuild the initrd:
+   </para>
+        <screen>
+    mkinitrd
+   </screen>
+      </step>
+      <step>
+        <para>
+    Reboot the machine.
+   </para>
+      </step>
+    </procedure>
+  </sect1>
+</article>

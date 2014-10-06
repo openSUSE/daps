@@ -1,0 +1,484 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.xen.xenstore">
+  <title>XenStore: Configuration Database Shared between Domains</title>
+  <para>
+  This section introduces basic information about XenStore, its role in
+  the Xen environment, the directory structure of files used by
+  XenStore, and the description of XenStore's commands.
+ </para>
+  <sect1>
+    <title>Introduction</title>
+    <para>
+   XenStore is a database of configuration and status information shared
+   between VM Guests and the management tools running in Dom0. VM Guests
+   and the management tools read and write to XenStore to convey
+   configuration information, status updates, and state changes. The
+   XenStore database is managed by Dom0 and supports simple operations
+   such as reading and writing a key. VM Guests and management tools can be
+   notified of any changes in XenStore by watching entries of interest.
+   Note that the <systemitem>xenstored</systemitem> daemon is managed by the
+   <systemitem>xencommons</systemitem> service.
+  </para>
+    <para>
+   XenStore is located on Dom0 in a single database file
+   <filename>/var/lib/xenstored/tdb</filename> (<literal>tdb</literal>
+   represents <emphasis>tree database</emphasis>).
+  </para>
+  </sect1>
+  <sect1>
+    <title>File System Interface</title>
+    <para>
+   XenStore database content is represented by a virtual file system
+   similar to <filename>/proc</filename> (for more information on
+   <filename>/proc</filename>, see <xref linkend="sec.util.proc"/>). The
+   tree has three main paths: <filename>/vm</filename>,
+   <filename>/local/domain</filename>, and <filename>/tool</filename>.
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para><filename>/vm</filename> - stores information about the VM Guest
+     configuration.
+    </para>
+      </listitem>
+      <listitem>
+        <para><filename>/local/domain</filename> - stores information about VM Guest
+     on the local node.
+    </para>
+      </listitem>
+      <listitem>
+        <para><filename>/tool</filename> - stores general information about various
+     tools.
+    </para>
+      </listitem>
+    </itemizedlist>
+    <tip>
+      <para>
+    Each VM Guest has two different ID numbers. The <emphasis>universal
+    unique identifier</emphasis> (UUID) remains the same even if the
+    VM Guest is migrated to another machine. The <emphasis>domain
+    identifier</emphasis> (DOMID) is an identification number that
+    represents a particular running instance. It typically changes when the
+    VM Guest is migrated to another machine.
+   </para>
+    </tip>
+    <sect2>
+      <title>XenStore Commands</title>
+      <para>
+    The file system structure of the XenStore database can be operated
+    with the following commands:
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <command>xenstore-ls</command>
+          </term>
+          <listitem>
+            <para>
+       Displays the full dump of the XenStore database.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-read <option>path_to_xenstore_entry</option></command>
+          </term>
+          <listitem>
+            <para>
+       Displays the value of the specified XenStore entry.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-exists <option>xenstore_path</option></command>
+          </term>
+          <listitem>
+            <para>
+       Reports whether the specified XenStore path exists.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-list <option>xenstore_path</option></command>
+          </term>
+          <listitem>
+            <para>
+       Displays all the children entries of the specified XenStore path.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-write <option>path_to_xenstore_entry</option></command>
+          </term>
+          <listitem>
+            <para>
+       Updates the value of the specified XenStore entry.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-rm <option>xenstore_path</option></command>
+          </term>
+          <listitem>
+            <para>
+       Removes the specified XenStore entry or directory.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-chmod <option>xenstore_path</option><option>mode</option></command>
+          </term>
+          <listitem>
+            <para>
+       Updates the read/write permission on the specified XenStore path.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <command>xenstore-control</command>
+          </term>
+          <listitem>
+            <para>
+       Sends a command to the <systemitem>xenstored</systemitem> back-end,
+       such as triggering an integrity check.
+      </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2 xml:id="xenstore.vm">
+      <title>
+        <filename>/vm</filename>
+      </title>
+      <para>
+    The <filename>/vm</filename> path is indexed by the UUID of each
+    VM Guest, and stores configuration information such as the number of
+    virtual CPUs and the amount of allocated memory. There is a
+    <filename>/vm/&lt;uuid&gt;</filename> directory for each VM Guest. To list
+    the directory content, use <command>xenstore-list</command>.
+   </para>
+      <screen># xenstore-list /vm
+00000000-0000-0000-0000-000000000000
+9b30841b-43bc-2af9-2ed3-5a649f466d79-1</screen>
+      <para>
+    The first line of the output belongs to Dom0, and the second one to a
+    running VM Guest. The following command lists all the entries related
+    to the VM Guest:
+   </para>
+      <screen># xenstore-list /vm/9b30841b-43bc-2af9-2ed3-5a649f466d79-1
+image
+rtc
+device
+pool_name
+shadow_memory
+uuid
+on_reboot
+start_time
+on_poweroff
+bootloader_args
+on_crash
+vcpus
+vcpu_avail
+bootloader
+name</screen>
+      <para>
+    To read a value of an entry, for example the number of virtual CPUs
+    dedicated to the VM Guest, use <command>xenstore-read</command>:
+   </para>
+      <screen># xenstore-read /vm/9b30841b-43bc-2af9-2ed3-5a649f466d79-1/vcpus
+1</screen>
+      <para>
+    A list of some of the <filename>/vm/&lt;uuid&gt;</filename> entries
+    follows:
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>uuid</literal>
+          </term>
+          <listitem>
+            <para>
+       UUID of the VM Guest. It does not change during the migration
+       process.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>on_reboot</literal>
+          </term>
+          <listitem>
+            <para>
+       Specifies whether to destroy or restart the VM Guest in response to
+       a reboot request.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>on_poweroff</literal>
+          </term>
+          <listitem>
+            <para>
+       Specifies whether to destroy or restart the VM Guest in response to
+       a halt request.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>on_crash</literal>
+          </term>
+          <listitem>
+            <para>
+       Specifies whether to destroy or restart the VM Guest in response to
+       a crash.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>vcpus</literal>
+          </term>
+          <listitem>
+            <para>
+       Number of virtual CPUs allocated to the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>vcpu_avail</literal>
+          </term>
+          <listitem>
+            <para>
+       Bitmask of active virtual CPUs for the VM Guest. The bitmask has a
+       number of bits equal to the value of <literal>vcpus</literal>, with a
+       bit set for each online virtual CPU.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>name</literal>
+          </term>
+          <listitem>
+            <para>
+       The name of the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+    Regular VM Guests (not Dom0) make use of the
+    <filename>/vm/&lt;uuid&gt;/image</filename> path:
+   </para>
+      <screen># xenstore-list /vm/9b30841b-43bc-2af9-2ed3-5a649f466d79-1/image
+ostype
+kernel
+cmdline
+ramdisk
+dmargs
+device-model
+display</screen>
+      <para>
+    An explanation of the used entries follows:
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>ostype</literal>
+          </term>
+          <listitem>
+            <para>
+       The OS type of the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>kernel</literal>
+          </term>
+          <listitem>
+            <para>
+       The path on Dom0 to the kernel for the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>cmdline</literal>
+          </term>
+          <listitem>
+            <para>
+       The kernel command line for the VM Guest used when booting.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>ramdisk</literal>
+          </term>
+          <listitem>
+            <para>
+       The path on Dom0 to the ramdisk for the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>dmargs</literal>
+          </term>
+          <listitem>
+            <para>
+       Shows arguments passed to the QEMU process. If you look at the
+       QEMU process with <command>ps</command>, you should see the same
+       arguments as in <filename>/vm/&lt;uuid&gt;/image/dmargs</filename>.
+      </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+    <sect2>
+      <title>
+        <filename>/local/domain/&lt;domid&gt;</filename>
+      </title>
+      <para>
+    This path is indexed by the running domain (VM Guest) ID, and contains
+    information about the running VM Guest. Remember that the domain ID
+    changes during VM Guest migration. The following entries are available:
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>vm</literal>
+          </term>
+          <listitem>
+            <para>
+       The path of the <filename>/vm</filename> directory for this
+       VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>on_reboot, on_poweroff, on_crash, name</literal>
+          </term>
+          <listitem>
+            <para>
+       See identical options in <xref linkend="xenstore.vm"/></para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>domid</literal>
+          </term>
+          <listitem>
+            <para>
+       Domain identifier for the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>cpu</literal>
+          </term>
+          <listitem>
+            <para>
+       The current CPU to which the VM Guest is pinned.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>cpu_weight</literal>
+          </term>
+          <listitem>
+            <para>
+       The weight assigned to the VM Guest for scheduling purposes. Higher
+       weights use the physical CPUs more often.
+      </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+    Apart from the individual entries described above, there are also
+    several subdirectories under
+    <filename>/local/domain/&lt;domid&gt;</filename>, containing specific
+    entries. To see all entries available, refer to
+    <link xlink:href="http://wiki.xen.org/wiki/XenStore_Reference">http://wiki.xen.org/wiki/XenStore_Reference</link>.
+   </para>
+      <variablelist>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/memory</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains memory information.
+       <literal>/local/domain/&lt;domid&gt;/memory/target</literal> contains
+       target memory size for the VM Guest (in kilobytes).
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/console</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains information about a console used by the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/backend</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains information about all back-end devices used by the
+       VM Guest. The path has subdirectories of its own.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/device</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains information about the front-end devices for the VM Guest.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/device-misc</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains miscellaneous information about devices.
+      </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>
+            <literal>/local/domain/&lt;domid&gt;/store</literal>
+          </term>
+          <listitem>
+            <para>
+       Contains information about the VM Guest's store.
+      </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect2>
+  </sect1>
+</chapter>

@@ -1,0 +1,1022 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.libvirt.config">
+  <title>Configuring Virtual Machines</title>
+  <para/>
+  <!-- fs 2010-11-19: TBD
+ <sect1 id="sec.kvm.configuring.machine">
+  <title>Modifying Existing Virtual Machine Configurations with &vmm;</title>
+  <para></para>
+ </sect1>
+-->
+  <!--
+
+Transition from fully virtualized to paravirtualized
+
+Disk:
+.....
+Change:
+
+<disk type='block' device='disk'>
+...
+<target dev='hda' bus='ide'/>
+<address type='drive' controller='0' bus='0' unit='0'/>
+...
+</disk>
+
+to
+
+<disk type='block' device='disk'>
+...
+<target dev='vda' bus='virtio'/>
+...
+</disk>
+
+only for SLES after having installed the drivers! For win, first create a
+dummy disk to install the drivers, change config only after the drivers have
+been installed, otherwise Windows will not boot!
+
+
+NIC:
+.....
+* use VMM !!
+
+- add virtio NIC device
+and remove old fully virtualized once the virtio one has successfully been activated
+
+-->
+  <figure>
+    <title><guimenu>Details</guimenu> View of a VM Guest</title>
+    <mediaobject>
+      <imageobject role="fo">
+        <imagedata fileref="libvirt_vmm_details.png" width="75%" format="PNG"/>
+      </imageobject>
+      <imageobject role="html">
+        <imagedata fileref="libvirt_vmm_details.png" width="75%" format="PNG"/>
+      </imageobject>
+    </mediaobject>
+  </figure>
+  <sect1 xml:id="sec.libvirt.config.tablet">
+    <title>Enabling Seamless and Synchronized Cursor Movement</title>
+    <para>
+   When you click within a VM Guest's console with the mouse, the cursor is
+   captured by the console window and cannot be used outside the console
+   unless it is explicitly released (by pressing <keycombo><keycap function="alt"/><keycap function="control"/></keycombo> ). To
+   prevent the console from grabbing the key and to enable seamless cursor
+   movement between host and guest instead, add a tablet to the VM Guest.
+  </para>
+    <para>
+   Adding a tablet has the additional advantage of synchronizing the cursor
+   movement between VM Host Server and VM Guest when using a graphical
+   environment on the guest. With no tablet configured on the guest, you
+   will often see two cursor symbols with one dragging behind the other.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Double-click a VM Guest entry in the Virtual Machine Manager to open its console and
+     switch to the <guimenu>Details</guimenu> view with <menuchoice><guimenu>View</guimenu><guimenu>Details</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Add Hardware</guimenu> and choose
+     <guimenu>Input</guimenu> and then <guimenu>EvTouch USB Graphics
+     Tablet</guimenu> in the pop-up window. Proceed with
+     <guimenu>Finish</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     If you try to add the tablet while the guest is still running, you will
+     be asked whether to enable the tablet after the next reboot. Confirm
+     with <guimenu>Yes</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Once you (re)start the VM Guest, the tablet is available in the
+     VM Guest.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.cdrom" condition="kvm4x86">
+    <title>Adding a CD/DVD-ROM Device with Virtual Machine Manager</title>
+    <para>
+   KVM supports CD or DVD-ROMs in VM Guest either by directly accessing a
+   physical drive on the VM Host Server or by accessing ISO images. To create an
+   ISO image from an existing CD or DVD, use <command>dd</command>:
+  </para>
+    <screen>dd if=/dev/<replaceable>cd_dvd_device</replaceable> of=my_distro.iso bs=2048</screen>
+    <para>
+   To add a CD/DVD-ROM device to your VM Guest, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Double-click a VM Guest entry in the Virtual Machine Manager to open its console and
+     switch to the <guimenu>Details</guimenu> view with <menuchoice><guimenu>View</guimenu><guimenu>Details</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Add Hardware</guimenu> and choose
+     <guimenu>Storage</guimenu> in the pop-up window. Proceed with
+     <guimenu>Forward</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Change the <guimenu>Device Type</guimenu> to <guimenu>IDE
+     CDROM</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select <guimenu>Select Managed or Other Existing Storage</guimenu>.
+    </para>
+        <substeps performance="required">
+          <step>
+            <para>
+       To assign the device to a physical medium, enter the path to the
+       VM Host Server's CD/DVD-ROM device (for example,
+       <filename>/dev/cdrom</filename>) next to the
+       <guimenu>Browse</guimenu> button. Alternatively you may use the
+       <guimenu>Browse</guimenu> button to open a file browser and then
+       click <guimenu>Browse Local</guimenu> to select the device. Assigning
+       the device to a physical medium is only possible when the Virtual Machine Manager was
+       started on the VM Host Server.
+      </para>
+          </step>
+          <step>
+            <para>
+       To assign the device to an existing image, click
+       <guimenu>Browse</guimenu> to choose an image from a storage pool. If
+       the Virtual Machine Manager was started on the VM Host Server, you may alternatively choose
+       an image from another location on the file system by clicking
+       <guimenu>Browse Local</guimenu>. Select an image and close the file
+       browser with <guimenu>Choose Volume</guimenu>.
+      </para>
+          </step>
+        </substeps>
+      </step>
+      <step>
+        <para>
+     Proceed with <guimenu>Forward</guimenu> to review the settings. Apply
+     them with <guimenu>Finish</guimenu>, <guimenu>Yes</guimenu>, and
+     <guimenu>Apply</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Reboot the VM Guest to make the new device
+     available.<phrase condition="kvm4x86"> For further information also see
+     <xref linkend="sec.libvirt.config.cdrom.media_change"/>.</phrase></para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.floppy" condition="kvm4x86">
+    <title>Adding a Floppy Device with Virtual Machine Manager</title>
+    <para>
+   Currently KVM only supports the use of floppy disk images—using a
+   physical floppy drive is not supported. Create a floppy disk image from
+   an existing floppy using <command>dd</command>:
+  </para>
+    <screen>dd if=/dev/fd0 of=/var/lib/libvirt/images/floppy.img</screen>
+    <para>
+   To create an empty floppy disk image use one of the following commands:
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term>Raw Image</term>
+        <listitem>
+          <screen>dd if=/dev/zero of=/var/lib/libvirt/images/floppy.img bs=512 count=2880</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>FAT Formatted Image</term>
+        <listitem>
+          <screen>mkfs.msdos -C /var/lib/libvirt/images/floppy.img 1440</screen>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+   To add a floppy device to your VM Guest, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Double-click a VM Guest entry in the Virtual Machine Manager to open its console and
+     switch to the <guimenu>Details</guimenu> view with <menuchoice><guimenu>View</guimenu><guimenu>Details</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Add Hardware</guimenu> and choose
+     <guimenu>Storage</guimenu> in the pop-up window. Proceed with
+     <guimenu>Forward</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Change the <guimenu>Device Type</guimenu> to <guimenu>Floppy
+     Disk</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Choose <guimenu>Select Managed or Other Existing Storage</guimenu> and
+     click <guimenu>Browse</guimenu> to choose an existing image from a
+     storage pool. If Virtual Machine Manager was started on the VM Host Server, you may
+     alternatively choose an image from another location on the file system
+     by clicking <guimenu>Browse Local</guimenu>. Select an image and close
+     the file browser with <guimenu>Choose Volume</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Proceed with <guimenu>Forward</guimenu> to review the settings. Apply
+     them with <guimenu>Finish</guimenu>, <guimenu>Yes</guimenu>, and
+     <guimenu>Apply</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Reboot the VM Guest to make the new device
+     available.<phrase condition="kvm4x86"> For further information also see
+     <xref linkend="sec.libvirt.config.cdrom.media_change"/>.</phrase></para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.cdrom.media_change" condition="kvm4x86">
+    <title>Ejecting and Changing Floppy or CD/DVD-ROM Media with Virtual Machine Manager</title>
+    <para>
+   Regardless of whether you are using the VM Host Server's physical CD/DVD-ROM
+   device or an ISO/floppy image, before you can change the media or image
+   of an existing device in the VM Guest, you first need to
+   <literal>disconnect</literal> the media from the guest.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Double-click a VM Guest entry in the Virtual Machine Manager to open its console and
+     switch to the <guimenu>Details</guimenu> view with <menuchoice><guimenu>View</guimenu><guimenu>Details</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Choose the Floppy or CD/DVD-ROM device and <quote>eject</quote> the
+     media by clicking <guimenu>Disconnect</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     To <quote>insert</quote> a new media, click <guimenu>Connect</guimenu>.
+    </para>
+        <substeps performance="required">
+          <step>
+            <para>
+       If using the VM Host Server's physical CD/DVD-ROM device, first change the
+       media in the device (this may require unmounting it on the VM Host Server
+       before it can be ejected). Then choose <guimenu>CD-ROM or
+       DVD</guimenu> and select the device from the drop-down list.
+      </para>
+          </step>
+          <step>
+            <para>
+       If using an ISO image, choose <guimenu>ISO image Location</guimenu>
+       and select an image by clicking <guimenu>Browse</guimenu>. When
+       connecting from a remote host, you may only choose images from
+       existing storage pools.
+      </para>
+          </step>
+        </substeps>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>OK</guimenu> to finish. The new media can now be
+     accessed in the VM Guest.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.mahcinetype.virsh">
+    <title>Change the Machine Type with <command>virsh</command></title>
+    <para>
+   By default, when installing with <command>virt-install</command> or
+   <command>vm-install</command> tools, the machine type for VM Guest is
+   <emphasis>pc-i440fx</emphasis>. The machine type is stored in the
+   <systemitem class="library">libvirt</systemitem>'s xml configuration file between the &lt;type&gt; tag. You
+   should have something like this in your configuration:
+  </para>
+    <screen>&lt;type arch='x86_64' machine='pc-i440fx-2.0'&gt;hvm&lt;/type&gt;</screen>
+    <para>
+   Let's change this value to the new supported q35 machine type. q35 is an
+   Intel* chipset. It includes <xref linkend="gloss.vt.acronym.pcie"/>. q35
+   supports up to 12 USB ports, and has
+   <xref linkend="gloss.vt.acronym.sata"/> and
+   <xref linkend="gloss.vt.acronym.iommu"/> support. IRQ routing has also
+   been improved.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Check that your VM Guest is inactive:
+    </para>
+        <screen>virsh list --inactive
+ Id    Name                           State
+ ----------------------------------------------------
+ -     sles11                         shut off</screen>
+      </step>
+      <step>
+        <para>
+     Edit the configuration for this VM Guest:
+    </para>
+        <screen>virsh edit sles11</screen>
+      </step>
+      <step>
+        <para>
+     Change the value between the &lt;type&gt; &lt;/type&gt; tag pair:
+    </para>
+        <screen>&lt;type arch='x86_64' machine='pc-q35-2.0'&gt;hvm&lt;/type&gt;</screen>
+      </step>
+      <step>
+        <para>
+     Now you can restart the VM Guest.
+    </para>
+        <screen>virsh start sles11</screen>
+      </step>
+      <step>
+        <para>
+     Now check that the machine type has changed. Log into the VM Guest as
+     root and run the following command:
+    </para>
+        <screen><prompt role="user">root # </prompt>dmidecode | grep Product
+Product Name: Standard PC (Q35 + ICH9, 2009)</screen>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.pci">
+    <title>Adding a PCI Device with Virtual Machine Manager</title>
+    <para>
+   You can add PCI devices to guests using the graphical
+   <command>virt-manager</command> tool. Once the PCI device is assigned to
+   one VM Guest, it cannot be used by another one unless re-assigned. The
+   following procedure adds a USB controller to a virtualized guest.
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Double-click a VM Guest entry in the Virtual Machine Manager to open its console and
+     switch to the <guimenu>Details</guimenu> view with <menuchoice><guimenu>View</guimenu><guimenu>Details</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Add Hardware</guimenu> and choose the <guimenu>PCI Host
+     Device</guimenu> category in the left pane. A list of host PCI devices
+     appears in the right part of the window.
+    </para>
+      </step>
+      <step>
+        <para>
+     From the list of available PCI devices, choose the USB controller to
+     assign to the VM Guest. It may read for example <literal>USB2 Enhanced
+     Host Controller</literal>. Confirm with <guimenu>Finish</guimenu>.
+    </para>
+        <tip>
+          <para>
+      You cannot assign a PCI device live to a running VM Guest. If you are
+      trying to add a PCI device to a running machine, the Virtual Machine Manager will ask if
+      you want to assign the PCI device after the next VM Guest shutdown.
+      Confirm with <guimenu>Yes</guimenu>, and after you reboot the
+      VM Guest, the device assignment will be finished.
+     </para>
+        </tip>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.pci.virsh">
+    <title>Adding a PCI Device with <command>virsh</command></title>
+    <para>
+   To dedicate and assign a PCI device to VM Guest with
+   <command>virsh</command>, follow these steps:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Identify the PCI device.
+    </para>
+        <para>
+     Use the <command>virsh nodedev-list</command> or <command>lspci
+     -n</command> commands to identify the PCI device designated for
+     pass-through to VM Guest.
+    </para>
+        <para>
+     The following command lists available PCI devices only:
+    </para>
+        <screen>virsh nodedev-list | grep pci</screen>
+        <para>
+     Note that PCI devices are identified by a string in the following
+     format (<literal>8086</literal> is a variable that represents Intel
+     architecture, and **** stands for a four-digit hexadecimal code
+     specific to each device):
+    </para>
+        <screen>pci_8086_****</screen>
+        <para>
+     Remember the PCI device number—you will need it in future steps.
+    </para>
+      </step>
+      <step>
+        <para>
+     Gather the information about the domain, bus, and function:
+    </para>
+        <screen><prompt role="user">tux &gt; </prompt> virsh nodedev-dumpxml pci_8086_1d26
+&lt;device&gt;
+  &lt;name&gt;pci_8086_1d26&lt;/name&gt;
+  &lt;parent&gt;computer&lt;/parent&gt;
+  &lt;driver&gt;
+    &lt;name&gt;ehci_hcd&lt;/name&gt;
+  &lt;/driver&gt;
+  &lt;capability type='pci'&gt;
+    &lt;domain&gt;0&lt;/domain&gt;
+    &lt;bus&gt;0&lt;/bus&gt;
+    &lt;slot&gt;29&lt;/slot&gt;
+    &lt;function&gt;0&lt;/function&gt;
+    &lt;product id='0x1d26'&gt;Patsburg USB2 Enhanced Host Controller #1&lt;/product&gt;
+    &lt;vendor id='0x8086'&gt;Intel Corporation&lt;/vendor&gt;
+    &lt;capability type='virt_functions'&gt;
+    &lt;/capability&gt;
+  &lt;/capability&gt;
+&lt;/device&gt;</screen>
+      </step>
+      <step>
+        <para>
+     Detach the device from the host system prior to attaching it to
+     VM Guest.
+    </para>
+        <screen><prompt role="user">tux &gt; </prompt>virsh nodedev-detach pci_8086_1d26 
+  Device pci_8086_1d26 detached</screen>
+      </step>
+      <step>
+        <para>
+     Convert the bus, slot, and function value from decimal to hexadecimal,
+     and prepend '0x' to tell the system that the value is hexadecimal. In
+     our example, bus = 0, slot = 29, and function = 0. Their hexadecimal
+     values are:
+    </para>
+        <screen><prompt role="user">tux &gt; </prompt>printf %x 0
+0
+<prompt role="user">tux &gt; </prompt>printf %x 29
+1d</screen>
+        <para>
+     Bus and function hexadecimal numbers are '0x00', while slot number is
+     '0x1d'.
+    </para>
+      </step>
+      <step>
+        <para>
+     Run <command>virsh edit</command> on your domain, and add the following
+     device entry in the <literal>&lt;devices&gt;</literal> section.
+    </para>
+        <screen>&lt;hostdev mode='subsystem' type='pci' managed='no'&gt;
+  &lt;source&gt;
+    &lt;address domain='0x0000' bus='0x00' slot='0x1d' function='0x00'/&gt;
+  &lt;/source&gt;
+&lt;/hostdev&gt;</screen>
+        <tip xml:id="tip.libvirt.config.pci.virsh.managed">
+          <title>'managed' vs. 'unmanaged'</title>
+          <para><systemitem>libvirt</systemitem> recognizes two modes for handling PCI
+      devices: they can be either 'managed' or 'unmanaged'. In the managed
+      case, <systemitem>libvirt</systemitem> will handle all the details of
+      unbinding the device from the existing driver if needed, resetting the
+      device, binding it to <systemitem>pci-stub</systemitem> before
+      starting the domain, etc. When the domain is terminated or the device
+      is removed from the domain, <systemitem>libvirt</systemitem> will
+      unbind from <systemitem>pci-stub</systemitem> and rebind to the
+      original driver in the case of a managed device. If the device is
+      unmanaged, the user must take care to ensure all of these management
+      aspects of the device are done before assigning it to a domain, and
+      after the device is no longer used by the domain.
+     </para>
+          <para>
+      In our example, the <literal>managed='no'</literal> option means that
+      the device is 'unmanaged', and we need to take care of the related
+      driver with the <command>virsh nodedev-detach</command> and
+      <command>virsh nodedev-attach</command> commands. To switch the device
+      mode to 'managed', replace the snippet with
+      <literal>managed='yes'</literal>, and skip the remaining steps (apart
+      from starting the guest).
+     </para>
+        </tip>
+      </step>
+      <step>
+        <para>
+     Once the VM Guest system is ready to use the PCI device, tell the host
+     to stop using it. First check what driver the host system is using for
+     the PCI device.
+    </para>
+        <screen><prompt role="user">tux &gt; </prompt>readlink /sys/bus/pci/devices/0000\:00\:1d.0/driver
+../../../bus/pci/drivers/pci-stub</screen>
+      </step>
+      <step>
+        <para>
+     In our case, the <literal>pci-stub</literal> driver is loaded, so you
+     can start the virtual machine. It will be able to use the PCI device
+     automatically.
+    </para>
+        <screen>virsh start sles</screen>
+        <tip>
+          <para>
+      When using a multi-function PCI device that does not support FLR
+      (function level reset) or PM (power management) reset, you need to
+      detach all its functions from the VM Host Server. The device must be reset
+      for security reasons, and without FLR or PM reset, you must reset the
+      whole device. <systemitem>libvirt</systemitem> will refuse to do this
+      if a function of the device is still in use by the VM Host Server or another
+      VM Guest.
+     </para>
+          <para>
+      You can safely detach a device function from the VM Guest with the
+      <command>virsh nodedev-detach</command> command.
+     </para>
+        </tip>
+        <tip>
+          <para>
+      If your PCI device is not 'managed', and the driver controlling the
+      PCI device is not <literal>pci-stub</literal>, you have to detach it
+      from the device first:
+     </para>
+          <screen>virsh nodedev-detach pci_8086_1d26</screen>
+        </tip>
+        <tip>
+          <para>
+      If you are running SELinux on your host, you need to disable it for
+      now with
+     </para>
+          <screen>setsebool -P virt_use_sysfs 1</screen>
+          <para>
+      and then start the virtual machine.
+     </para>
+        </tip>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.libvirt.config.io">
+    <title>Adding SR-IOV Devices</title>
+    <para>
+   Single Root I/O Virtualization (<xref linkend="vt.io.sriov"/>) capable
+   <xref linkend="gloss.vt.acronym.pcie"/> devices are able to replicate
+   their resources, so they appear to be multiple devices. Each of these
+   "pseudo-devices" can be assigned to a VM Guest.
+  </para>
+    <para><xref linkend="vt.io.sriov"/> is an industry specification that was
+   created by the Peripheral Component Interconnect Special Interest Group
+   (PCI-SIG) consortium. It introduces physical functions (PF) and virtual
+   functions (VF). PFs are full <xref linkend="gloss.vt.acronym.pcie"/>
+   functions used to manage and configure the device. PFs also have the
+   ability to move data. VFs lack the configuration and management
+   part—they only have the ability to move data and a reduced set of
+   configuration functions. Since VFs do not have all
+   <xref linkend="gloss.vt.acronym.pcie"/> functions, the host operating
+   system or the <xref linkend="gloss.vt.hypervisor"/> must support
+   <xref linkend="vt.io.sriov"/> in order to be able to access and
+   initialize VFs. The theoretical maximum for VFs is 256 per device
+   (consequently the maximum for a dual-port Ethernet card would be 512). In
+   practice this maximum is much lower, since each VF consumes resources.
+  </para>
+    <sect2 xml:id="sec.libvirt.config.io.requirements">
+      <title>Requirements</title>
+      <para>
+    The following requirements must be met in order to be able to use
+    <xref linkend="vt.io.sriov"/>:
+   </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+      An <xref linkend="vt.io.sriov"/>-capable network card (as of
+      <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase><phrase role="productname"><phrase os="osuse">12.2</phrase><phrase os="sles;sled;slerte">12</phrase></phrase>, only network cards support
+      <xref linkend="vt.io.sriov"/>)
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      .n x86_64 host supporting hardware virtualization (AMD-V or Intel
+      VT-x), see <xref linkend="sec.kvm.requires.hardware"/> for more
+      information
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      a chipset that supports device assignment (AMD-Vi or Intel
+      <xref linkend="gloss.vt.acronym.vtd"/>)
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      libvirt-0.9.10 or better
+     </para>
+        </listitem>
+        <listitem>
+          <para><xref linkend="vt.io.sriov"/> drivers must be loaded and configured on
+      the host system
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      iommu enabled in the <xref linkend="gloss.vt.hypervisor"/> (e.g.
+      <literal>intel_iommu=on</literal> on the linux command line of the
+      host)
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      a list of the PCI addresses of the VF(s) that will be assigned to
+      VM Guests
+     </para>
+        </listitem>
+      </itemizedlist>
+      <tip>
+        <title>Checking if a Device is SR-IOV-Capable</title>
+        <para>
+     The information whether a device is SR-IOV-capable can be obtained from
+     its PCI descriptor by running <command>lspci</command>. A device that
+     supports <xref linkend="vt.io.sriov"/> reports a capability similar to
+     the following:
+    </para>
+        <screen>Capabilities: [160 v1] Single Root I/O Virtualization (<xref linkend="vt.io.sriov"/>)</screen>
+      </tip>
+    </sect2>
+    <sect2 xml:id="sec.libvirt.config.io.config">
+      <title>Loading and Configuring the SR-IOV Host Drivers</title>
+      <para>
+    In order to be able to access and initialize VFs, an SR-IOV-capable
+    driver has to be loaded on the host system.
+<!-- See <xref linkend="???"/> for a
+    list of supported cards and theit corresponding drivers. --></para>
+      <procedure>
+        <step>
+          <para>
+      Before loading the driver, make sure the card is properly detected by
+      running <command>lspci</command>. The following example shows the
+      lspci output for the dual-port Intel 82576NS network card:
+     </para>
+          <screen><prompt role="user">tux &gt; </prompt>sudo /sbin/lspci | grep 82576
+01:00.0 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+01:00.1 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+04:00.0 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+04:00.1 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)</screen>
+          <para>
+      In case the card is not detected, it is likely that the hardware
+      virtualization support in the BIOS/EFI has not been enabled.
+     </para>
+        </step>
+        <step>
+          <para>
+      Check whether the <xref linkend="vt.io.sriov"/> driver is already
+      loaded by running <command>lsmod</command>. In the following example a
+      check for the igb driver (for the Intel 82576NS network card) returns
+      a result. That means the driver is already loaded. If the command
+      returns nothing, the driver is not loaded.
+     </para>
+          <screen><prompt role="user">tux &gt; </prompt>sudo /sbin/lsmod | egrep "^igb "
+igb                   185649  0</screen>
+        </step>
+        <step>
+          <para>
+      Skip this step if the driver is already loaded.
+     </para>
+          <para>
+      If the <xref linkend="vt.io.sriov"/> driver is not yet loaded, the
+      non-<xref linkend="vt.io.sriov"/> driver needs to be removed first,
+      before loading the new driver. Use <command>rmmod</command> to unload
+      a driver. The following example unloads the
+      non-<xref linkend="vt.io.sriov"/> driver for the Intel 82576NS
+      network card:
+     </para>
+          <screen>sudo /sbin/rmmod igbvf</screen>
+          <para>
+      Load the <xref linkend="vt.io.sriov"/> driver subsequently using the
+      <command>modprobe</command> command:
+     </para>
+          <screen>sudo /sbin/modprobe igb</screen>
+        </step>
+        <step>
+          <para>
+      Re-run the lspci command from the first step of this procedure. If the
+      <xref linkend="vt.io.sriov"/> driver was loaded successfully you
+      should see additional lines for the VFs:
+     </para>
+          <screen>01:00.0 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+01:00.1 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+01:10.0 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+01:10.1 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+01:10.2 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+[...]
+04:00.0 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+04:00.1 Ethernet controller: Intel Corporation 82576NS Gigabit Network Connection (rev 01)
+04:10.0 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+04:10.1 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+04:10.2 Ethernet controller: Intel Corporation 82576 Virtual Function (rev 01)
+[...]</screen>
+        </step>
+        <step>
+          <para>
+      Configure the driver by adding the number of VFs you would like to
+      make available and—if necessary—by blacklisting the
+      non-<xref linkend="vt.io.sriov"/> driver:
+     </para>
+          <screen>sudo echo -e "options igb max_vfs=8\nblacklist igbvf" &gt;&gt; /etc/modprobe.d/50-igb/</screen>
+          <para>
+      Make sure to replace the example values <literal>igb</literal>,
+      <literal>igbvf</literal> and <literal>50-igb</literal> by values
+      appropriate for your driver.
+     </para>
+        </step>
+        <step>
+          <para>
+      Now make sure the driver is loaded on boot. Create the file
+      <filename>/etc/modules-load.d/igb.conf</filename> with the following
+      content:
+     </para>
+          <screen># Load igb.ko at boot
+igb</screen>
+          <para>
+      Make sure to replace the example value <literal>igb</literal> by a
+      value appropriate for your driver.
+     </para>
+        </step>
+        <step>
+          <para>
+      Reboot the machine and check if the <xref linkend="vt.io.sriov"/>
+      driver is loaded.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.libvirt.config.io.attach">
+      <title>Adding a VF Network Device to an Existing VM Guest</title>
+      <para>
+    Once the <xref linkend="vt.io.sriov"/> hardware is properly set up on
+    the VM Host Server, you can add VFs to VM Guests. In order to do so, you need
+    to collect some data first.
+   </para>
+      <procedure>
+        <para>
+     Note: The following procedure is using example data. Make sure to
+     replace it by appropriate data from your setup.
+    </para>
+        <step>
+          <para>
+      Use the <command>virsh nodedev-list</command> command to get the PCI
+      address of the VF you want to assign and its corresponding PF.
+      Numerical values from the lspci output shown in
+      <xref linkend="sec.libvirt.config.io.config"/> (for example
+      <literal>01:00.0</literal> or <literal>04:00.1</literal>) are
+      transformed by adding the prefix "pci_0000_" and by replacing colons
+      and dots with underscores. So a PCI ID listed as "04:00.0" by lspci is
+      listed as "pci_0000_04_00_0" by virsh. The following example lists the
+      PCI IDs for the second port of the Intel 82576NS network card:
+     </para>
+          <screen><prompt role="user">tux &gt; </prompt>sudo virsh nodedev-list | grep 0000_04_
+pci_0000_04_00_0
+pci_0000_04_00_1
+pci_0000_04_10_0
+pci_0000_04_10_1
+pci_0000_04_10_2
+pci_0000_04_10_3
+pci_0000_04_10_4
+pci_0000_04_10_5
+pci_0000_04_10_6
+pci_0000_04_10_7
+pci_0000_04_11_0
+pci_0000_04_11_1
+pci_0000_04_11_2
+pci_0000_04_11_3
+pci_0000_04_11_4
+pci_0000_04_11_5</screen>
+          <para>
+      The first two entries represent the PFs, whereas the other entries
+      represent the VFs.
+     </para>
+        </step>
+        <step>
+          <para>
+      Get more data that will be needed by running the command
+      <command>virsh nodedev-dumpxml</command> on the PCI ID of the VF you
+      want to add:
+     </para>
+          <screen><prompt role="user">tux &gt; </prompt>sudo virsh nodedev-dumpxml pci_0000_04_10_0
+&lt;device&gt;
+  &lt;name&gt;pci_0000_04_10_0&lt;/name&gt;
+  &lt;parent&gt;pci_0000_00_02_0&lt;/parent&gt;
+  &lt;capability type='pci'&gt;
+    &lt;domain&gt;0&lt;/domain&gt;
+    &lt;bus&gt;4&lt;/bus&gt;
+    &lt;slot&gt;16&lt;/slot&gt;
+    &lt;function&gt;0&lt;/function&gt;
+    &lt;product id='0x10ca'&gt;82576 Virtual Function&lt;/product&gt;
+    &lt;vendor id='0x8086'&gt;Intel Corporation&lt;/vendor&gt;
+    &lt;capability type='phys_function'&gt;
+      &lt;address domain='0x0000' bus='0x04' slot='0x00' function='0x0'/&gt;
+    &lt;/capability&gt;
+  &lt;/capability&gt;
+&lt;/device&gt;</screen>
+          <para>
+      The following data is needed for the next step:
+     </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+        &lt;domain&gt;0&lt;/domain&gt;
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        &lt;bus&gt;4&lt;/bus&gt;
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        &lt;slot&gt;16&lt;/slot&gt;
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        &lt;function&gt;0&lt;/function&gt;
+       </para>
+            </listitem>
+          </itemizedlist>
+        </step>
+        <step>
+          <para>
+      Create a temporary XML file (for example
+      <filename>/tmp/vf-interface.xml</filename> containing the data
+      necessary to add a VF network device to an existing VM Guest. The
+      minimal content of the file needs to look like the following:
+     </para>
+          <screen>&lt;interface type='hostdev'&gt;<co xml:id="sriov.iface"/>
+ &lt;source&gt;
+  &lt;address type='pci' domain='0' bus='11' slot='16' function='0'2/&gt;<co xml:id="sriov.data"/>
+ &lt;/source&gt;
+&lt;/interface&gt;</screen>
+          <calloutlist>
+            <callout arearefs="sriov.iface">
+              <para>
+        VFs do not get a fixed MAC address; it changes every time the host
+        reboots. When adding network devices the <quote>traditional</quote>
+        way with &lt;hostdev&gt;, it would require to reconfigure the
+        VM Guest's network device after each reboot of the host, because of
+        the MAC address change. To avoid this kind of problem, libvirt
+        introduced the <quote>interface type='hostdev'</quote> directive,
+        which sets up network-specific data <emphasis>before</emphasis>
+        assigning the device.
+       </para>
+            </callout>
+            <callout arearefs="sriov.data">
+              <para>
+        Specify the data you acquired in the previous step here.
+       </para>
+            </callout>
+          </calloutlist>
+        </step>
+        <step>
+          <para>
+      Last, add the VF interface to an existing VM Guest:
+     </para>
+          <screen>virsh attach-device <replaceable>GUEST</replaceable> /tmp/vf-interface.xml --<replaceable>OPTION</replaceable></screen>
+          <para><replaceable>GUEST</replaceable> needs to be replaced by the domain
+      name, id or uuid of the VM Guest and
+      --<replaceable>OPTION</replaceable> can be one of the following:
+     </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                <option>--persistent</option>
+              </term>
+              <listitem>
+                <para>
+         This option will always add the device to the domain's persistent
+         XML. In addition, if the domain is running, it will be hotplugged.
+        </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                <option>--config</option>
+              </term>
+              <listitem>
+                <para>
+         This option will only affect the persistent XML, even if the domain
+         is running. The device will only show up in the guest on next boot.
+        </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                <option>--live</option>
+              </term>
+              <listitem>
+                <para>
+         This option will only affect a running domain. If the domain is
+         inactive, the operation will fail. The device is not persisted in
+         the XML and won't be available in the guest on next boot.
+        </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>--current</term>
+              <listitem>
+                <para>
+         This option affects the current state of the domain. If the domain
+         is inactive, the device is added to the persistent XML and will be
+         available on next boot. If the domain is active, the device is
+         hotplugged but not added to the persistent XML.
+        </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+          <para>
+      To detach a VF interface, use the <command>virsh
+      detach-device</command> command, which also takes the options listed
+      above.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="libvirt.config.io.pool">
+      <title>Dynamic Allocation of VFs from a Pool</title>
+      <para>
+    If you define the PCI address of a VF into a guest's configuration
+    statically as described in
+    <xref linkend="sec.libvirt.config.io.attach"/>, it is hard to migrate
+    such guest to another host. The host must have exactly the same hardware
+    in the same location on the PCI bus, or the guest configuration must be
+    modified prior to each start.
+   </para>
+      <para>
+    Another approach is to create a <systemitem class="library">libvirt</systemitem> network with a device pool
+    that contains all the VFs of an <xref linkend="vt.io.sriov"/> device.
+    The guest then references this network, and each time it is started, a
+    single VF is dynamically allocated to it. When the guest is stopped, the
+    VF is returned to the pool, available for another guest.
+   </para>
+      <sect3 xml:id="libvirt.config.io.pool.host">
+        <title>Defining Network with Pool of VFs on VM Host Server</title>
+        <para>
+     The following example of network definition creates a pool of all VFs
+     for the <xref linkend="vt.io.sriov"/> device with its physical function
+     (PF) at the network interface eth0 on the host:
+    </para>
+        <screen>&lt;network&gt;
+  &lt;name&gt;passthrough&lt;/name&gt;
+    &lt;forward mode='hostdev' managed='yes'&gt;
+      &lt;pf dev='eth0'/&gt;
+    &lt;/forward&gt;
+  &lt;/network&gt;</screen>
+        <para>
+     To use this network on the host, save the above code to a file, for
+     example <filename>/tmp/passthrough.xml</filename>, and execute the
+     following commands. Remember to replace eth0 with the real network
+     interface name of your <xref linkend="vt.io.sriov"/> device's PF:
+    </para>
+        <screen>virsh net-define /tmp/passthrough.xml
+virsh net-autostart passthrough
+virsh net-start passthrough</screen>
+      </sect3>
+      <sect3 xml:id="libvirt.config.io.pool.guest">
+        <title>Configuring VM Guest to Use VF from the Pool</title>
+        <para>
+     The following example of guest device interface definition makes use of
+     a VF of the <xref linkend="vt.io.sriov"/> device from the pool created
+     in <xref linkend="libvirt.config.io.pool.host"/>. <systemitem class="library">libvirt</systemitem>
+     automatically derives the list of all VFs associated with that PF the
+     first time the guest is started.
+    </para>
+        <screen>&lt;interface type='network'&gt;
+  &lt;source network='passthrough'&gt;
+&lt;/interface&gt;</screen>
+        <para>
+     To verify the list of associated VFs, run <command>virsh net-dumpxml
+     passthrough</command> on the host after the first guest that uses the
+     network with the pool of VFs starts.
+    </para>
+        <screen>&lt;network connections='1'&gt;
+  &lt;name&gt;passthrough&lt;/name&gt;
+  &lt;uuid&gt;a6a26429-d483-d4ed-3465-4436ac786437&lt;/uuid&gt;
+  &lt;forward mode='hostdev' managed='yes'&gt;
+    &lt;pf dev='eth0'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x10' function='0x1'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x10' function='0x3'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x10' function='0x5'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x10' function='0x7'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x11' function='0x1'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x11' function='0x3'/&gt;
+    &lt;address type='pci' domain='0x0000' bus='0x02' slot='0x11' function='0x5'/&gt;
+  &lt;/forward&gt;
+  &lt;/network&gt;</screen>
+      </sect3>
+    </sect2>
+  </sect1>
+</chapter>

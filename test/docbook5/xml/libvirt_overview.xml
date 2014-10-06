@@ -1,0 +1,176 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.libvirt.overview">
+  <title>Overview</title>
+  <para><systemitem class="library">libvirt</systemitem> is a library that provides a common API for managing popular
+  virtualization solutions, among them KVM, LXC, and Xen. The library
+  provides a normalized management API for these virtualization solutions,
+  allowing a stable, cross-hypervisor interface for higher-level management
+  tools. The library also provides APIs for management of virtual networks
+  and storage on the VM Host Server. The configuration of each VM Guest is stored
+  in an XML file.
+ </para>
+  <para>
+  With <systemitem class="library">libvirt</systemitem> you can also manage your VM Guests remotely. It supports
+  TLS encryption and x509 certificates as well as authentication with SASL.
+ </para>
+  <para>
+  The communication between the virtualization solutions (KVM, Xen,
+  LXC) and the libvirt API is managed by the daemon <systemitem class="daemon">libvirtd</systemitem>, which
+  needs to run on the VM Host Server. libvirt client applications such as
+  virt-manager, possibly running on a remote machine, communicate with
+  <systemitem class="daemon">libvirtd</systemitem> running on the VM Host Server, which services the requestusing native
+  hypervisor APIs. Use the following commands to start and stop <systemitem class="daemon">libvirtd</systemitem>
+  or check its status:
+ </para>
+  <screen># systemctl start libvirtd.service 
+
+# systemctl status libvirtd.service
+libvirtd.service - Virtualization daemon
+Loaded: loaded (/usr/lib/systemd/system/libvirtd.service; enabled)
+Active: active (running) since Mon 2014-05-12 08:49:40 EDT; 2s ago
+[...]
+
+# systemctl stop libvirtd.service
+
+# systemctl status libvirtd.service
+[...]
+Active: inactive (dead) since Mon 2014-05-12 08:51:11 EDT; 4s ago
+[...]</screen>
+  <para>
+  To automatically start <systemitem class="daemon">libvirtd</systemitem> at boot time, either activate it using
+  the YaST <guimenu>Services Manager</guimenu> module or by entering the
+  following command:
+ </para>
+  <screen>systemctl enable libvirtd.service</screen>
+  <para>
+  The following <systemitem class="library">libvirt</systemitem>-based tools are available on <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase>. They
+  do not need to be run on the VM Host Server, allowing management of VM Host Servers
+  and VM Guests via remote connections. This enables managing VM Host Servers
+  centrally from a single workstation, alleviating the need to access each
+  VM Host Server individually.
+ </para>
+  <variablelist>
+    <varlistentry>
+      <term>Virtual Machine Manager (<command>virt-manager</command>)</term>
+      <listitem>
+        <para>
+     The Virtual Machine Manager is a desktop tool for managing VM Guests. It provides the
+     ability to control the life cycle of existing machines (start/shutdown,
+     pause/resume, save/restore) and create new VM Guests. It allows
+     managing various types of storage and virtual networks. It provides
+     access the graphical console of VM Guests with a built-in VNC viewer
+     and can be used to view performance statistics.
+     <command>virt-manager</command> supports connecting to a local
+     <systemitem class="daemon">libvirtd</systemitem>, managing a local VM Host Server, or a remote <systemitem class="daemon">libvirtd</systemitem> managing
+     a remote VM Host Server.
+    </para>
+        <informalfigure>
+          <mediaobject>
+            <imageobject role="fo">
+              <imagedata fileref="virt_virt-manager.png" width="60%" format="PNG"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata fileref="virt_virt-manager.png" width="60%" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </informalfigure>
+        <para>
+     To start the Virtual Machine Manager, enter <command>virt-manager</command> at the
+     command prompt.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <command>virt-viewer</command>
+      </term>
+      <listitem>
+        <para>
+     A viewer for the graphical console of a VM Guest. It uses SPICE (by
+     default) or VNC protocols and supports TLS and x509 certificates.
+     VM Guests can be accessed by name, ID, or UUID. If the guest is not
+     already running, the viewer can be told to wait until the guest starts,
+     before attempting to connect to the console.
+     <command>virt-viewer</command> is not installed by default and is
+     available after installing the package
+     <systemitem class="resource">virt-viewer</systemitem>.
+    </para>
+        <informalfigure>
+          <mediaobject>
+            <imageobject role="fo">
+              <imagedata fileref="virt_virt-viewer.png" width="60%" format="PNG"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata fileref="virt_virt-viewer.png" width="60%" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </informalfigure>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <command>virt-install</command>
+      </term>
+      <listitem>
+        <para>
+     A command line tool for creating new VM Guests using the <systemitem class="library">libvirt</systemitem>
+     library. It supports graphical installations via VNC or
+     <xref linkend="gloss.vt.acronym.spice"/> protocols. Given suitable
+     command line arguments, <command>virt-install</command> can run
+     completely unattended. This allows for easy automation of guest
+     installs. <command>virt-install</command> is the default installation
+     tool used by the Virtual Machine Manager.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <command>vm-install</command>
+      </term>
+      <listitem>
+        <para>
+     A tool to set up a VM Guest, configure its devices and start the
+     operating system installation. Starts a GUI wizard when called from a
+     graphical user interface. When invoked on a terminal, starts the wizard
+     in command-line mode. <command>vm-install</command> can be selected as
+     the installation tool when creating a new virtual machine in the Virtual Machine Manager.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <command>virsh</command>
+      </term>
+      <listitem>
+        <para>
+     A command line tool to manage VM Guests with similar functionality as
+     the Virtual Machine Manager. Allows you to change a VM Guest's status (start, stop,
+     pause, etc.) to set up new guests and devices and to edit existing
+     configurations. <command>virsh</command> is also useful to script
+     VM Guest management operations.
+    </para>
+        <para><command>virsh</command> works like Subversion's <command>svn</command>
+     command or <command>zypper</command>: it takes the first arguments as a
+     command and further arguments as options to this command:
+    </para>
+        <screen>virsh [-c <replaceable>URI</replaceable>] <replaceable>command</replaceable><replaceable>domain-id</replaceable> [OPTIONS]</screen>
+        <para>
+     Just like <command>zypper</command>, <command>virsh</command> can also
+     be called without a command. In this case it starts a shell waiting for
+     your commands. This mode is useful when having to run subsequent
+     commands:
+    </para>
+        <screen>~&gt; virsh -c qemu+ssh://wilber@mercury.example.com/system
+Enter passphrase for key '/home/wilber/.ssh/id_rsa': 
+Welcome to virsh, the virtualization interactive terminal.
+
+Type:  'help' for help with commands
+       'quit' to quit
+
+virsh # hostname
+mercury.example.com</screen>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+</chapter>

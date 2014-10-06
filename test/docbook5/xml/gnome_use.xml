@@ -1,0 +1,1410 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.gnomeuser.use">
+  <title>Working with Your Desktop</title>
+  <para>
+  Now you can start to work with your desktop. In this chapter you will
+  learn how to start applications, manage and search files and burn CDs. You
+  will get familiar with the power management concept of GNOME and find out
+  how to perform regular tasks with your desktop.
+ </para>
+  <sect1 xml:id="sec.gnomeuser.start.nautilus">
+    <title>Managing Directoriess and Files with Nautilus</title>
+    <para>
+   Use the Nautilus file manager to create (or view) directories and
+   documents, run scripts and create CDs of your data. In addition, the file
+   manager provides support for Web and file viewing.
+  </para>
+    <para>
+   You can open the file manager in the following ways:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     Click <menuchoice><guimenu>Applications</guimenu><guimenu>Accessories</guimenu><guimenu>Files</guimenu></menuchoice>.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Double-click your Home directory icon on the desktop.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Put your mouse in the top left corner of the screen to activate the
+     actvities overview and enter <literal>nautilus</literal> into the
+     search bar.
+    </para>
+      </listitem>
+    </itemizedlist>
+    <figure pgwide="1">
+      <title>File Manager</title>
+      <mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="nautilus.png" format="PNG" width="58%"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata fileref="nautilus.png" format="png" width="58%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+   The elements of the Nautilus window include the following:
+  </para>
+    <formalpara>
+      <title>Menu</title>
+      <para>
+    Lets you perform most tasks in the file manager. You can also open a
+    context-sensitive pop-up menu from a file manager window by
+    right-clicking inside it. The items in this menu depend on where you
+    right-click. For example, if you right-click a file or directory, you
+    can select items related to the file or directory. If you right-click
+    the background of a view pane, you can select items related to the
+    display of items in the view pane.
+   </para>
+    </formalpara>
+    <formalpara>
+      <title>Toolbar</title>
+      <para>
+    Lets you quickly navigate among files and directories, and provides
+    access to them. The toolbar contains Back, Forward, Up, Stop, Reload,
+    Home, Computer, and Search buttons.
+   </para>
+    </formalpara>
+    <formalpara>
+      <title>Location Bar</title>
+      <para>
+    The location bar displays the current location in the file system. Each
+    directory is displayed as a button. Navigate to a location by pressing a
+    button.
+   </para>
+    </formalpara>
+    <formalpara>
+      <title>Side Pane</title>
+      <para>
+    Lets you navigate or display information about the selected file or
+    directory. Use the drop-down box to customize what is shown in the pane.
+    The list includes ways to view information about files, perform actions
+    on files, add emblems to files, view a history of recently visited sites
+    and display your files in the Tree system. To display or hide the side
+    pane press <keycap>F9</keycap>.
+   </para>
+    </formalpara>
+    <formalpara>
+      <title>View Pane</title>
+      <para>
+    Displays directories and files. Use the icons in the top right part of
+    the window to switch between list and grid icon view. The menu to the
+    right of these icons can be used to further customize the view.
+   </para>
+    </formalpara>
+    <!--<formalpara>
+   <title>Status Bar</title>
+   <para>
+    Displays the number of items in a directory and gives the available free
+    space. When a file is selected, the statusbar displays the file name and
+    size.
+   </para>
+  </formalpara>-->
+    <sect2 xml:id="sec.gnomeuser.start.nautilus.shortcuts">
+      <title>File Manager Navigation Shortcuts</title>
+      <para>
+    Some simple key combination for navigating in the file manager include
+    the following:
+   </para>
+      <table rowsep="1">
+        <title>File Manager Navigation Key Combinations</title>
+        <tgroup cols="2">
+          <colspec colnum="1" colname="1" colwidth="41*"/>
+          <colspec colnum="2" colname="2" colwidth="59*"/>
+          <thead>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+         Key Combination
+        </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Description
+        </para>
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="alt"/>
+                    <keycap function="up"/>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens the parent directory.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+         Arrow key
+        </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Selects an item.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para><keycombo><keycap function="alt"/><keycap function="down"/></keycombo> or <keycap function="enter"/></para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens an item.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="alt"/>
+                    <keycap function="enter"/>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens an item's <guimenu>Properties</guimenu> dialog.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="shift"/>
+                    <keycap function="alt"/>
+                    <keycap function="down"/>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens an item and closes the current directory.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="shift"/>
+                    <keycap function="alt"/>
+                    <keycap function="up"/>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens the parent directory and closes the current directory.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="shift"/>
+                    <keycap function="control"/>
+                    <keycap>W</keycap>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Closes all parent directories.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="1">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="control"/>
+                    <keycap>L</keycap>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Toggles the location bar view from the button view to the
+         text-based view.
+        </para>
+              </entry>
+            </row>
+            <row rowsep="0">
+              <entry colname="1">
+                <para>
+                  <keycombo>
+                    <keycap function="alt"/>
+                    <keycap function="home"/>
+                  </keycombo>
+                </para>
+              </entry>
+              <entry colname="2">
+                <para>
+         Opens your home directory.
+        </para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </sect2>
+    <!--missing feature-->
+    <!--<sect2 id="sec.gnomeuser.start.nautilus.archiving">
+   <title>Compressing Directories</title>
+   <para>
+    If you have files you would like to archive, you can compress the files
+    into an archive format.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      In the Nautilus view pane, right-click the directory you want to archive,
+      then click <guimenu>Compress</guimenu>.
+     </para>
+     <informalfigure pgwide="0">
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="archive.png" format="PNG" width="50%"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="archive.png" format="png" width="50%"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </step>
+    <step>
+     <para>
+      Accept the default archive filename or provide a new one.
+     </para>
+    </step>
+    <step>
+     <para>
+      Select a file extension from the drop-down list (use
+      <filename>tar.gz</filename> for the most common archive form or
+      <filename>.zip</filename> to ensure compatibility with Windows).
+     </para>
+    </step>
+    <step>
+     <para>
+      Specify a location for the archive file, then click
+      <guimenu>Create</guimenu>.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    To extract an archived file, right-click the file, then select
+    <guimenu>Extract Here</guimenu>.
+   </para>
+  </sect2>-->
+    <sect2 xml:id="sec.gnomeuser.start.nautilus.burn">
+      <!--FIXME not having a CD
+   burner-->
+      <title>Creating a CD/DVD</title>
+      <para>
+    If your system has a CD or DVD read/write drive, you can use the
+    Nautilus file manager to burn CDs and DVDs.
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Computer</guimenu><guimenu>More
+      Applications</guimenu><guimenu>System</guimenu><guimenu>CD/DVD
+      Creator</guimenu></menuchoice>, or insert a blank disc and click
+      <guimenu>Make Data CD/DVD</guimenu> or <guimenu>Make Audio
+      CD/DVD</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Drag and drop the files you want to put on the disc into the Nautilus
+      <guimenu>CD/DVD Creator</guimenu> window.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Write to Disc</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Modify the information in the <guimenu>Write to Disc</guimenu> dialog
+      or accept the defaults, then click <guimenu>Write</guimenu>.
+     </para>
+          <para>
+      The files are burned to the disc. This could take a few minutes,
+      depending on the amount of data being burned and the speed of your
+      burner.
+     </para>
+        </step>
+      </procedure>
+      <para>
+    To burn an iso image, right-click the iso image file in Nautilus and
+    choose <guimenu>Write to Disc</guimenu>. Modify the information in the
+    <guimenu>Write to Disc dialog</guimenu> or accept the defaults, then
+    click <guimenu>Write</guimenu>.
+   </para>
+      <para>
+    You can also use the burning application Brasero to burn CDs or DVDs.
+    See <xref linkend="cha.gnome.burn"/> for more information.
+   </para>
+    </sect2>
+    <!--<sect2 id="sec.gnomeuser.start.nautilus.bookmarks">
+   <title>Using Bookmarks</title>
+   <para>
+    Use the Nautilus Bookmarks feature to mark your favorite directories.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Select the directory or item for which you want to create a bookmark.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <menuchoice> <guimenu>Bookmarks</guimenu> <guimenu>Add
+      Bookmark</guimenu> </menuchoice>. The bookmark is added to the list,
+      with the directory name as the bookmark name. When you bookmark a file,
+      it is the directory that is actually bookmarked.
+     </para>
+    </step>
+    <step>
+     <para>
+      To select an item from your Bookmarks list, click
+      <guimenu>Bookmarks</guimenu>, then click the desired bookmark in the
+      list.
+     </para>
+    </step>
+   </procedure>
+   <para>
+    You can also organize your Bookmarks list by clicking <menuchoice>
+    <guimenu>Bookmarks</guimenu> <guimenu>Edit Bookmarks</guimenu>
+    </menuchoice> and making your selections in the dialog box.
+   </para>
+   <informalfigure pgwide="0">
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="bookmarks_edit.png" format="PNG" width="57%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="bookmarks_edit.png" format="png" width="57%"/>
+     </imageobject>
+    </mediaobject>
+   </informalfigure>
+   <para>
+    To change the order of your bookmarks, click a bookmark and drag it to
+    the desired location.
+   </para>
+  </sect2>-->
+    <sect2 xml:id="sec.gnomeuser.start.nautilus.prefs">
+      <title>File Manager Preferences</title>
+      <para>
+    You can change the file manager preferences by clicking the menu with
+    the wheel icon and selecting <guimenu>Preferences</guimenu>.
+<!--For more information, see
+    <xref linkend="sec.gnome.settings.look.filemanpref"
+     xrefstyle="SectTitleOnPage"/>.--></para>
+    </sect2>
+    <sect2 xml:id="sec.gnomeuser.start.network">
+      <title>Accessing Remote Files</title>
+      <para><remark role="clarity"> fs 2008-12-10: Removed section Accessing Network
+     Resources because it was almost identical to cha.gnome.network. </remark>
+    You can use Nautilus to access files on remote servers. For more
+    information see <xref linkend="cha.gnome.network"/>.
+   </para>
+    </sect2>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.media">
+    <title>Accessing Removable Media</title>
+    <para>
+   To access CDs/DVDs or USB storage devices, insert the medium. An icon for
+   the medium is automatically created on the desktop. For many types of
+   removable media, a file manager window pops up automatically when the
+   media is inserted or attached to the computer. If file manager does not
+   open, double-click the icon for that drive to view the contents.
+  </para>
+    <warning>
+      <title>Unmount to Prevent Data Loss</title>
+      <para>
+    Do not simply remove disks from the drive after using them. Removable
+    media must always be unmounted from the system first. Quit all
+    applications still accessing the medium, then right-click the icon for
+    the medium and select <guimenu>Eject</guimenu> or
+    <guimenu>Unmount</guimenu> from the menu. Then safely remove the medium
+    when the device icon disappears or the tray opens.
+   </para>
+    </warning>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.search.files">
+    <title>Searching for Files</title>
+    <para>
+   To search for files, activate the activities overview by moving the mouse
+   pointer to the top left corner of the screen and enter the search term.
+  </para>
+    <!--  <figure pgwide="1">
+   <title>Search for Files Dialog</title>
+   <mediaobject>
+    <imageobject role="fo">
+     <imagedata fileref="search.png" format="PNG" width="64%"/>
+    </imageobject>
+    <imageobject role="html">
+     <imagedata fileref="search.png" format="png" width="64%"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+
+  <para>
+   <guimenu>Search for Files</guimenu> uses the find, grep and locate UNIX
+   commands. All searches are case insensitive.
+  </para>
+
+  <para>
+   You can also open the <guimenu>Search for Files</guimenu> dialog by
+   entering the following command into the Run Application dialog (started
+   with <keycombo> <keycap function="alt"/> <keycap>F2</keycap>
+   </keycombo>):
+  </para>
+
+  <para>
+   <command>gnome-search-tool</command>
+  </para>
+
+  <sect2 id="sec.gnomeuser.start.search.files.basic">
+   <title>Performing a Basic Search</title>
+   <procedure>
+    <step>
+     <para>
+      Start <guimenu>Search for Files</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Type the search text in the <guimenu>Name contains</guimenu> field.
+     </para>
+     <para>
+      The search text can be a file name or partial file name, with or without
+      wild cards, as shown in the following table:
+     </para>
+     <informaltable frame="topbot" rowsep="1" pgwide="0">
+      <tgroup cols="3">
+       <colspec colnum="1" colname="1" colwidth="35*"/>
+       <colspec colnum="2" colname="2" colwidth="18*"/>
+       <colspec colnum="3" colname="3" colwidth="46*"/>
+       <thead>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           Search Text
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Example
+          </para>
+         </entry>
+         <entry colname="3">
+          <para>
+           Result
+          </para>
+         </entry>
+        </row>
+       </thead>
+       <tbody>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           Full or partial file name
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           myfile.txt
+          </para>
+         </entry>
+         <entry colname="3">
+          <para>
+           Searches for all files that contain “myfile.txt” in the
+           file name.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="0">
+         <entry colname="1">
+          <para>
+           Partial file name combined with wild cards (* [ ])
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           *.[ch]
+          </para>
+         </entry>
+         <entry colname="3">
+          <para>
+           Searches for all files that have a .c or .h extension.
+          </para>
+         </entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </step>
+    <step>
+     <para>
+      In the <guimenu>Look in folder</guimenu> field, choose the directory
+      where you want <guimenu>Search for Files</guimenu> to begin the
+      search.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Find</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>-->
+    <!--  <sect2 id="sec.gnomeuser.start.search.files.options">
+   <title>Adding Search Options</title>
+   <para>
+    Use <guimenu>Select more options</guimenu> to search by file content,
+    dates, owner or file size.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Start <guimenu>Search for Files</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Type the search text in the <guimenu>Name contains</guimenu> field.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the <guimenu>Look in folder</guimenu> field, type the path to the
+      directory where you want Search for Files to begin the search.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Select more options</guimenu>, then click
+      <guimenu>Available options</guimenu>
+     </para>
+    </step>
+    <step>
+     <para>
+      Select a search option that you want to apply, then click
+      <guimenu>Add</guimenu>.
+     </para>
+     <para>
+      The following options are available:
+     </para>
+     <informaltable frame="topbot" rowsep="1" pgwide="0">
+      <tgroup cols="2">
+       <colspec colnum="1" colname="1" colwidth="36*"/>
+       <colspec colnum="2" colname="2" colwidth="64*"/>
+       <thead>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           Option
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Description
+          </para>
+         </entry>
+        </row>
+       </thead>
+       <tbody>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Contains the text</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for a file by file name. Type a full file name or a
+           partial file name with wild cards in the field provided. Use an
+           asterisk (*) to indicate a sequence of characters. Use a question
+           mark (?) to indicate a single character. The search is case
+           sensitive.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Date modified less than</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that were modified within the period specified
+           (in days).
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Date modified more than</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that were modified before the period specified
+           (in days).
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Size at least</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that are equal to or larger than the size
+           specified (in kilobytes).
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Size at most</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that are smaller than or equal to the size
+           specified (in kilobytes).
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>File is empty</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for empty files.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Owned by user</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that are owned by the user specified. Type the
+           name of the user in the text box provided.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Owned by group</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that are owned by the group specified. Type
+           the name of the group in the text box provided.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Owner is unrecognized</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that are owned by a user or group that is
+           unknown to the system.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Name does not contain</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for file names that do <emphasis>not</emphasis> contain
+           the string that you enter. Enter a full file name or a partial
+           file name with wild cards in the field provided. Use an asterisk
+           (*) to indicate a sequence of characters. Use a question mark (?)
+           to indicate a single character. The search is case-sensitive.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Name matches regular expression</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches for files that contain the specified regular expression
+           in their directory path or file name. Type the regular expression
+           in the text box provided.
+          </para>
+          <para>
+           Regular expressions are special text strings used to describe a
+           search pattern. For more information, see
+           <ulink url="http://www.regular-expressions.info"/>.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Show hidden and backup files</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Includes hidden and backup files in the search.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="1">
+         <entry colname="1">
+          <para>
+           <guimenu>Follow symbolic links</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Follows symbolic links when searching for files.
+          </para>
+         </entry>
+        </row>
+        <row rowsep="0">
+         <entry colname="1">
+          <para>
+           <guimenu>Exclude other filesystems</guimenu>
+          </para>
+         </entry>
+         <entry colname="2">
+          <para>
+           Searches only in directories that are on the same file system as
+           the start directory.
+          </para>
+         </entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </step>
+    <step>
+     <para>
+      Specify the required search information for the search option.
+     </para>
+    </step>
+    <step>
+     <para>
+      To remove a search option from the current search, click the
+      <guimenu>Remove</guimenu> button next to the option.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Find</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 id="sec.gnomeuser.start.search.files.result">
+   <title>Using the Search Results List</title>
+   <para>
+    You can use the Search Results list to open or delete a file found
+    during a search, or you can save the search results to a file.
+   </para>
+   <figure pgwide="1">
+    <title>Search Results List</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="search_results.png" format="PNG" width="64%"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="search_results.png" format="png" width="64%"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    To open a file displayed in the Search Results list, right-click the
+    file, then click <guimenu>Open</guimenu> or double-click the file. To
+    open the directory that contains a file displayed in the Search Results
+    list, right-click the file and click <guimenu>Open Folder</guimenu>.
+   </para>
+   <para>
+    To delete a file displayed in the Search Results list, right-click the
+    file and click <guimenu>Move to Trash</guimenu>.
+   </para>
+   <para>
+    To save the results of the last search that <guimenu>Search for
+    Files</guimenu> performed, right-click anywhere in the Search results
+    list and click <guimenu>Save Results As</guimenu>. Type a name for the
+    file that will contain your Search results and click
+    <guimenu>Save</guimenu>.
+   </para>
+  </sect2>
+  -->
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.cutnpaste">
+    <title>Moving Text Between Applications</title>
+    <para>
+   To copy text between applications, select the text, then move the mouse
+   cursor to the position where you want the text to be pasted. Click the
+   center button on the mouse or the scroll wheel to paste the text.
+  </para>
+    <para>
+   When copying information between programs, you must keep the source
+   program open and paste the text before closing it. When a program closes,
+   any content from that application that is on the clipboard is lost.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.connections">
+    <title>Managing Internet Connections</title>
+    <para>
+   To surf the Internet or send and receive e-mail messages, you must have
+   configured an Internet connection with YaST. Depending on your
+   environment, in YaST select whether to use NetworkManager. In GNOME,
+   you can then establish Internet connections with NetworkManager as
+   described in <xref linkend="sec.nm.configure"/>.
+  </para>
+    <para>
+   For a list of criteria to help you decide whether to use NetworkManager,
+   refer to <xref linkend="sec.nm.usecase"/>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.internet">
+    <title>Exploring the Internet</title>
+    <para>
+   The GNOME desktop includes Firefox, a Mozilla*-based Web browser. You can
+   start it by clicking <menuchoice><guimenu>Applications</guimenu><guimenu>Internet</guimenu><guimenu>Firefox</guimenu></menuchoice>.
+  </para>
+    <para>
+   You can type an address into the location bar at the top or click links
+   in a page to move to different pages, like in any other Web browser.
+  </para>
+    <para>
+   For more information, see <xref linkend="cha.firefox"/>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.mail">
+    <title>E-mail and Scheduling</title>
+    <para>
+   For reading and managing your mail and events, <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> offers you
+   Evolution, a groupware program that makes it easy to store, organize and
+   retrieve your personal information.
+  </para>
+    <para>
+   Evolution seamlessly combines e-mail, a calendar, an address book, and a
+   memo and task list in one easy-to-use application. With its extensive
+   support for communications and data interchange standards, Evolution can
+   work with existing corporate networks and applications, including
+   Microsoft* Exchange.
+  </para>
+    <informalfigure pgwide="0">
+      <mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="evolution.png" format="PNG" width="58%"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata fileref="evolution.png" format="png" width="58%"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
+    <para>
+   To start Evolution, click <menuchoice><guimenu>Applications</guimenu><guimenu>Internet</guimenu><guimenu>Evolution</guimenu></menuchoice>.
+  </para>
+    <para>
+   The first time you start Evolution, it prompts you with a few questions
+   as it sets up a mail account and helps you import mail from your old mail
+   client. Then it shows you how many new messages you have and lists
+   upcoming appointments and tasks. The calendar, address book and mail
+   tools are available in the shortcut bar on the left.
+  </para>
+    <para>
+   For more information, see <xref linkend="cha.gnome.evolution"/>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.oo">
+    <title>Opening or Creating Documents with LibreOffice</title>
+    <para>
+   For creating and editing documents, LibreOffice is installed with the GNOME
+   desktop. LibreOffice is a complete set of office tools that can both read and
+   save Microsoft Office file formats. LibreOffice has a word processor, a
+   spreadsheet, a database, a drawing tool and a presentation program.
+  </para>
+    <para>
+   To get started, select a LibreOffice module by clicking <menuchoice><guimenu>Applications</guimenu><guimenu>Office </guimenu></menuchoice>and selecting the module you want to open.
+  </para>
+    <para>
+   A number of sample documents and templates are included with LibreOffice. You
+   can access the templates by clicking <menuchoice><guimenu>File</guimenu><guimenu>New</guimenu><guimenu>Templates and Documents</guimenu></menuchoice> within LibreOffice. In addition, you can use wizards, which guide
+   you through the creation of letters and other typical documents.
+  </para>
+    <para>
+   For more information, view the <guimenu>Help</guimenu> in any LibreOffice
+   program.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.power_mgmt">
+    <title>Controlling Your Desktop’s Power Management</title>
+    <para>
+   To control the state of the computer battery, check the battery icon in
+   the right part of the GNOME panel. Click the icon to open the menu and
+   see the status of the battery in more detail. On certain events, such as
+   a critically low battery state, GNOME will display notifications
+   informing you about the event. Click <menuchoice><guimenu>Battery</guimenu><guimenu>Power Settings</guimenu></menuchoice>
+   to open Power settings. You can also open the power settings vis
+   <menuchoice><guimenu>Applications</guimenu><guimenu>System
+   Tools</guimenu><guimenu>Settings</guimenu><guimenu>Power</guimenu></menuchoice></para>
+    <!-- FIXME
+  <para>
+   For more information, see <xref linkend=""/>.
+  </para>
+-->
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.archives">
+    <title>Creating, Displaying, and Decompressing Archives</title>
+    <para>
+   You can use the Archive Manager application (also known as File Roller)
+   to create, view, modify or unpack an archive. An archive is a file that
+   acts as a container for other files. An archive can contain many files,
+   directories and subdirectories, usually in compressed form. Archive
+   Manager supports common formats such as <filename>zip</filename>,
+   <filename>tar.gz</filename>, <filename>tar.bz2</filename>,
+   <filename>lzh</filename>, and <filename>rar</filename>. You can use
+   Archive Manager to create, open and extract a compressed non-archive
+   file.
+  </para>
+    <para>
+   To start Archive Manager, click <menuchoice><guimenu>Applications</guimenu><guimenu>Utilities</guimenu><guimenu>Archive Manager</guimenu></menuchoice>. If you already have a
+   compressed file, double-click the file name in the Nautilus file manager
+   to view the contents of the archive in Archive Manager.
+  </para>
+    <figure>
+      <title>Archive Manager</title>
+      <mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="file_roller.png" format="PNG" width="68%"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata fileref="file_roller.png" format="png" width="68%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <sect2 xml:id="sec.gnomeuser.start.archives.open">
+      <title>Opening an Archive</title>
+      <procedure>
+        <step>
+          <para>
+      In Archive Manager, click <guimenu>Open</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Select the archive you want to open.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Open</guimenu>.
+     </para>
+          <para>
+      Archive Manager automatically determines the archive type, and
+      displays the following:
+     </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+        The archive name in the window titlebar.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        The archive contents in the display area.
+       </para>
+            </listitem>
+            <listitem>
+              <para>
+        The total number of files in the archive and the size of the archive
+        when uncompressed, in the statusbar.
+       </para>
+            </listitem>
+          </itemizedlist>
+          <para>
+      To open another archive, click <guimenu>Open</guimenu> again. Archive
+      Manager opens each archive in a new window. To open another archive in
+      the same window, you must first choose <guimenu>Close</guimenu> from
+      the menu in the right part of the window to close the current archive,
+      then click <guimenu>Open</guimenu>.
+     </para>
+          <para>
+      If you try to open an archive that was created in a format that
+      Archive Manager does not recognize, the application displays an error
+      message.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.gnomeuser.start.archives.extract">
+      <title>Extracting Files from an Archive</title>
+      <procedure>
+        <step>
+          <para>
+      In Archive Manager, select the files that you want to extract.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Extract</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Specify the directory where Archive Manager will extracts the files.
+     </para>
+        </step>
+        <step>
+          <para>
+      Choose from the following extract options:
+     </para>
+          <informaltable frame="topbot" rowsep="0" pgwide="0">
+            <tgroup cols="2">
+              <colspec colnum="1" colname="1" colwidth="35*"/>
+              <colspec colnum="2" colname="2" colwidth="65*"/>
+              <thead>
+                <row rowsep="1">
+                  <entry colname="1">
+                    <para>
+           Option
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           Description
+          </para>
+                  </entry>
+                </row>
+              </thead>
+              <tbody>
+                <row rowsep="0">
+                  <entry colname="1">
+                    <para>
+           All files
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           Extracts all files from the archive.
+          </para>
+                  </entry>
+                </row>
+                <row rowsep="0">
+                  <entry colname="1">
+                    <para>
+           Selected files
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           Extracts the selected files from the archive.
+          </para>
+                  </entry>
+                </row>
+                <row rowsep="0">
+                  <entry colname="1">
+                    <para>
+           Files
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           Extracts from the archive all files that match the specified
+           pattern.
+          </para>
+                  </entry>
+                </row>
+                <row rowsep="0">
+                  <entry colname="1">
+                    <para>
+           Keep directory structure
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           Reconstructs the directory structure when extracting the
+           specified files.
+          </para>
+                    <para>
+           For example, you specify <filename>/tmp</filename> in the
+           <guimenu>Filename</guimenu> text box and choose to extract all
+           files. The archive contains a subdirectory called
+           <filename>doc</filename>. If you select the <guimenu>Keep
+           directory structure</guimenu> option, Archive Manager extracts
+           the contents of the subdirectory to
+           <filename>/tmp/doc</filename>. If you do not select the
+           <guimenu>Keep directory structure</guimenu> option, Archive
+           Manager does not create any subdirectories. Instead, it extracts
+           all files from the archive, including files from subdirectories,
+           to <filename>/tmp</filename>.
+          </para>
+                  </entry>
+                </row>
+                <row rowsep="0">
+                  <entry colname="1">
+                    <para>
+           Do not overwrite newer files
+          </para>
+                  </entry>
+                  <entry colname="2">
+                    <para>
+           If not active, the Archive Manager overwrites any files in the
+           destination directory that have the same name as the specified
+           files.
+          </para>
+                    <para>
+           If you select this option, Archive Manager does not extract the
+           specified file if an existing file with the same name already
+           exists in the destination directory.
+          </para>
+                  </entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Extract</guimenu>.
+     </para>
+          <!--<para>
+      If all of the files in the archive are protected by a password (and
+      you have not specified the password) Archive Manager displays an error
+      dialog.
+     </para>
+     <para>
+      If some but not all of the files in the archive are protected by a
+      password (and you have not specified the password) Archive Manager
+      does not display an error dialog. However, Archive Manager extracts
+      only the unprotected files to the new archive.
+     </para>-->
+          <para>
+      To extract an archived file in a file manager window without opening
+      Archive Manager, right-click the file and select <guimenu>Extract
+      Here</guimenu>.
+     </para>
+          <para>
+      The Extract operation extracts a copy of the specified files from the
+      archive. The extracted files have the same permissions and
+      modification date as the original files that were added to the
+      archive.
+     </para>
+          <para>
+      The Extract operation does not change the contents of the archive.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.gnomeuser.start.archives.create">
+      <title>Creating Archives</title>
+      <procedure>
+        <step>
+          <para>
+      In Archive Manager, click the white icon in the top left part of the
+      window.
+     </para>
+        </step>
+        <step>
+          <para>
+      Specify the name and location of the new archive.
+     </para>
+        </step>
+        <step>
+          <para>
+      Select an archive type from the drop-down box.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Create</guimenu>.
+     </para>
+          <para>
+      Archive Manager creates an empty archive, but does not yet write the
+      archive to disk. Archive Manager writes a new archive to disk only
+      when the archive contains at least one file. If you create a new
+      archive and quit Archive Manager before you add any files to the
+      archive, the archive will be deleted.
+     </para>
+        </step>
+        <step>
+          <para>
+      Add files and directories to the new archive:
+     </para>
+          <substeps performance="required">
+            <step>
+              <para>
+        Click <guimenu>Add Files</guimenu> and select the files or
+        directories you want to add.
+       </para>
+            </step>
+            <step>
+              <para>
+        Click <guimenu>Add</guimenu>.
+       </para>
+              <para>
+        Archive Manager adds the files to the current directory in the
+        archive.
+       </para>
+            </step>
+          </substeps>
+        </step>
+      </procedure>
+      <!--<para>
+    You can also add files to an archive in a file manager window without
+    opening Archive Manager. See
+    <xref linkend="sec.gnomeuser.start.nautilus.archiving"
+     xrefstyle="SectTitleOnPage"/>
+    for more information.
+   </para>-->
+      <!--does not work-->
+    </sect2>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.screnshots">
+    <title>Taking Screenshots</title>
+    <para>
+   You can take a snapshot of your screen or of an individual application
+   window by using the Take Screenshots utility. Start it by pressing
+   <keycap>Print</keycap> to take a screenshot of the entire desktop or by
+   pressing <keycombo><keycap function="alt"/><keycap>Print</keycap></keycombo> to take a screenshot of the currently active window or
+   dialog.
+  </para>
+    <para>
+   The screenshots are automatically saved to your
+   <filename>~/Pictures</filename> directory.
+  </para>
+    <para>
+   You can also use GIMP to take screenshots. In GIMP, click <menuchoice><guimenu>File</guimenu><guimenu>Create</guimenu><guimenu>Screenshot</guimenu></menuchoice>, select an area, choose a
+   delay and then click <guimenu>Snap</guimenu>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.pdfs">
+    <title>Viewing PDF Files</title>
+    <para>
+   Documents that need to be shared or printed across platforms can be saved
+   as PDF (Portable Document Format) files. <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> ships with the
+   Evince Document Viewer.
+  </para>
+    <figure>
+      <title>Evince Document Viewer</title>
+      <mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="evince.png" format="PNG" width="78%"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata fileref="evince.png" format="png" width="78%"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+   To open Evince, double-click a PDF file in a file manager window (or Web
+   site) or press <keycombo><keycap function="alt"/><keycap>F2</keycap></keycombo>, type <command>evince</command> and press
+   <keycap function="enter"/>.
+  </para>
+    <para>
+   To view a PDF file in Evince, click the wheel icon to open the menu and
+   select <guimenu>Open</guimenu>, locate the desired PDF file and click
+   <guimenu>Open</guimenu>.
+  </para>
+    <para>
+   Use the navigation icons at the top of the window or the thumbnails in
+   the left panel to navigate through the document. If your PDF document
+   provides bookmarks, you can access them in the left panel of the viewer.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.fingerprint">
+    <title>Using the Fingerprint Reader</title>
+    <para>
+   If your system includes a fingerprint reader, users can log in to the
+   system either by swiping a finger on the fingerprint reader or by typing
+   in a password.
+<!--taroth 2014-02-06: file no longer included because of
+    fate#313128. According to #2, this should work out of the box via a GNOME
+    UI now:  For more information, refer to
+   <xref linkend="cha.security.fp"/>.--></para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.updates">
+    <title>Obtaining Software Updates</title>
+    <para>
+   When you connect to the Internet, the updater applet automatically checks
+   whether software updates for your system are available. The updater
+   applet in the system tray of the panel informs you of the availability of
+   updates and lets you easily install them with a few clicks. The applet
+   icon changes color and appearance depending on the availability of
+   updates for your system.
+  </para>
+    <para>
+   For detailed information on how to install software updates with the
+   updater applet and how to configure it, refer to the chapter about
+   installing and removing software in <xref linkend="sec.updater"/>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnomeuser.start.more">
+    <title>For More Information</title>
+    <para>
+   Along with the applications described in this chapter for getting
+   started, GNOME can run many other applications. Find detailed information
+   about these important applications in the other parts of this manual.
+  </para>
+    <para>
+   To learn more about GNOME and GNOME applications, see
+   <link xlink:href="http://www.gnome.org"/> and
+   <link xlink:href="http://gnomefiles.org"/>.
+  </para>
+    <para>
+   To report bugs or add feature requests, go to
+   <link xlink:href="http://bugzilla.gnome.org"/>.
+  </para>
+  </sect1>
+</chapter>

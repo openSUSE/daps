@@ -1,0 +1,104 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.apparmor.intro">
+  <title>Introducing <phrase>AppArmor</phrase></title>
+  <para>
+  Many security vulnerabilities result from bugs in
+  <emphasis>trusted</emphasis> programs. A trusted program runs with
+  privileges that attackers want to possess. The program fails to keep that
+  trust if there is a bug in the program that allows the attacker to acquire
+  said privilege.
+ </para>
+  <para><phrase>AppArmor®</phrase> is an application security solution designed specifically to apply
+  privilege confinement to suspect programs. <phrase>AppArmor</phrase> allows the administrator
+  to specify the domain of activities the program can perform by developing
+  a security <emphasis>profile</emphasis> for that application (a listing of
+  files that the program may access and the operations the program may
+  perform). <phrase>AppArmor</phrase> secures applications by enforcing good application behavior
+  without relying on attack signatures, so it can prevent attacks even if
+  previously unknown vulnerabilities are being exploited.
+ </para>
+  <para><phrase>AppArmor</phrase> consists of:
+ </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+    A library of <phrase>AppArmor</phrase> profiles for common Linux* applications, describing
+    what files the program needs to access.
+   </para>
+    </listitem>
+    <listitem>
+      <para>
+    A library of <phrase>AppArmor</phrase> profile foundation classes (profile building blocks)
+    needed for common application activities, such as DNS lookup and user
+    authentication.
+   </para>
+    </listitem>
+    <listitem>
+      <para>
+    A tool suite for developing and enhancing <phrase>AppArmor</phrase> profiles, so that you can
+    change the existing profiles to suit your needs and create new profiles
+    for your own local and custom applications.
+   </para>
+    </listitem>
+    <listitem>
+      <para>
+    Several specially modified applications that are <phrase>AppArmor</phrase> enabled to provide
+    enhanced security in the form of unique subprocess confinement
+    (including Apache).
+   </para>
+    </listitem>
+    <listitem>
+      <para>
+    The <phrase>AppArmor</phrase>-related kernel code and associated control scripts to enforce
+    <phrase>AppArmor</phrase> policies on your <phrase role="productname"><phrase os="osuse">openSUSE®</phrase><phrase os="sles">SUSE® Linux Enterprise Server</phrase><phrase os="sled">SUSE® Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE® Linux Enterprise Real Time Extension</phrase></phrase> system.
+   </para>
+    </listitem>
+  </itemizedlist>
+  <sect1 xml:id="sec.apparmor.intro.background">
+    <title>Background Information on <phrase>AppArmor</phrase> Profiling</title>
+    <para>
+   For more information about the science and security of <phrase>AppArmor</phrase>, refer to the
+   following papers:
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term><citetitle>SubDomain: Parsimonious Server Security</citetitle> by
+     Crispin Cowan, Steve Beattie, Greg Kroah-Hartman, Calton Pu, Perry Wagle,
+     and Virgil Gligor</term>
+        <listitem>
+          <para>
+      Describes the initial design and implementation of <phrase>AppArmor</phrase>. Published in
+      the proceedings of the USENIX LISA Conference, December 2000, New
+      Orleans, LA. This paper is now out of date, describing syntax and
+      features that are different from the current <phrase>AppArmor</phrase> product. This paper
+      should be used only for background, and not for technical
+      documentation.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><citetitle>Defcon Capture the Flag: Defending Vulnerable Code from Intense Attack</citetitle>
+     by Crispin Cowan, Seth Arnold, Steve Beattie, Chris Wright, and John Viega</term>
+        <listitem>
+          <para>
+      A good guide to strategic and tactical use of <phrase>AppArmor</phrase> to solve severe
+      security problems in a very short period of time. Published in the
+      Proceedings of the DARPA Information Survivability Conference and Expo
+      (DISCEX III), April 2003, Washington, DC.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><citetitle>AppArmor for Geeks</citetitle> by Seth Arnold</term>
+        <listitem>
+          <para>
+      This document tries to convey a better understanding of the technical
+      details of <phrase>AppArmor</phrase>. It is available at
+      <link xlink:href="http://en.opensuse.org/SDB:AppArmor_geeks"/>.
+     </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect1>
+</chapter>

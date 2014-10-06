@@ -1,0 +1,153 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.vt.installation">
+  <title>Installation of Virtualization Components</title>
+  <para>
+  None of the virtualization tools is installed by default.
+ </para>
+  <sect1 xml:id="sec.vt.installation.kvm">
+    <title>Installing KVM</title>
+    <para>
+   To install KVM and KVM tools, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST and choose <menuchoice><guimenu>Virtualization</guimenu><guimenu>Installing Hypervisor and Tools</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select <guimenu>KVM server</guimenu> for a minimal installation of
+     QEMU tools. Select <guimenu>KVM tools</guimenu> if a
+     <systemitem class="library">libvirt</systemitem>-based management stack is also desired. Confirm with
+     <guimenu>Accept</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     In order to enable normal networking for the VM Guest, using a network
+     bridge is recommended. YaST offers to automatically configure a
+     bridge on the VM Host Server. Agree to do so by choosing
+     <guimenu>Yes</guimenu>, otherwise choose <guimenu>No</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     After the setup has been finished, you can start setting up VM Guests.
+     Rebooting the VM Host Server is not required.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.vt.installation.xen">
+    <title>Installing Xen</title>
+    <para>
+   To install Xen and Xen tools, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST and choose <menuchoice><guimenu>Virtualization</guimenu><guimenu>Installing Hypervisor and Tools</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select <guimenu>Xen server</guimenu> for a minimal installation of
+     Xen tools. Select <guimenu>Xen tools</guimenu> if a <systemitem class="library">libvirt</systemitem>-based
+     management stack is also desired. Confirm with
+     <guimenu>Accept</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     In order to enable normal networking for the VM Guest, using a network
+     bridge is recommended. YaST offers to automatically configure a
+     bridge on the VM Host Server. Agree to do so by choosing
+     <guimenu>Yes</guimenu>, otherwise choose <guimenu>No</guimenu>.
+    </para>
+      </step>
+      <step>
+        <para>
+     After the setup has been finished, you need to reboot the machine with
+     the <emphasis>Xen kernel</emphasis>.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.vt.installation.containers">
+    <title>Installing Containers</title>
+    <para>
+   To install containers, proceed as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Start YaST and choose <menuchoice><guimenu>Virtualization</guimenu><guimenu>Installing Hypervisor and Tools</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Select <guimenu>libvirt lxc daemon</guimenu> and confirm with
+     <guimenu>Accept</guimenu>.
+    </para>
+      </step>
+      <!-- ========================================================= -->
+      <!-- TODO Either fix Yast to reload apparmor or describe it here -->
+      <!-- ========================================================= -->
+    </procedure>
+  </sect1>
+  <sect1 xml:id="sec.vt.installation.patterns">
+    <title>Patterns</title>
+    <para>
+   It is possible using zypper and patterns to install virtualization
+   packages. Run the command <command>zypper in -t pattern
+   <replaceable>PATTERN</replaceable></command>. Available patterns are:
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term>KVM</term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para><systemitem class="resource">kvm_server</systemitem>: sets up the
+        KVM VM Host Server with QEMU tools for management
+       </para>
+            </listitem>
+            <listitem>
+              <para><systemitem class="resource">kvm_tools</systemitem>: installs the
+        <systemitem class="library">libvirt</systemitem> tools for managing and monitoring VM Guests
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Xen</term>
+        <listitem>
+          <itemizedlist>
+            <listitem>
+              <para><systemitem class="resource">xen_server</systemitem>: sets up the
+        Xen VM Host Server with Xen tools for management
+       </para>
+            </listitem>
+            <listitem>
+              <para><systemitem class="resource">xen_tools</systemitem>: installs the
+        libvirt tools for managing and monitoring VM Guests
+       </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Containers</term>
+        <listitem>
+          <para>
+      There is no pattern for containers; just install the
+      <emphasis>libvirt-daemon-lxc</emphasis> package.
+     </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect1>
+</chapter>

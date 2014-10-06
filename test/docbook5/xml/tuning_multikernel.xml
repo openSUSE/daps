@@ -1,0 +1,272 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.tuning.multikernel">
+  <title>Installing Multiple Kernel Versions</title>
+  <warning>
+    <!-- cannot think of a better heading... -->
+    <title>Support Entitlement</title>
+    <para>
+   Be aware that you lose your entire support entitlement for the machine
+   when installing a self-compiled or a third-party kernel. Only kernels
+   shipped with <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> and kernels delivered via the official update
+   channels for <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> are supported.
+  </para>
+  </warning>
+  <tip>
+    <title>Check Your Boot Loader Configuration Kernel</title>
+    <para>
+   It is recommended to check your boot loader configuration after having
+   installed another kernel in order to set the default boot entry of your
+   choice. See <xref linkend="sec.grub2.yast2.config"/> for more
+   information.
+  </para>
+  </tip>
+  <sect1 xml:id="cha.tuning.multikernel.enable">
+    <title>Enabling and Configuring Multiversion Support</title>
+    <!-- bnc#891805: on sle 12 enabled by default -->
+    <para>
+   Installing multiple versions of a software package (multiversion support)
+   is enabled by default on SUSE Linux Enterprise 12. To verify this setting, proceed
+   as follows:
+  </para>
+    <procedure>
+      <step>
+        <para>
+     Open <filename>/etc/zypp/zypp.conf</filename> with the editor of your
+     choice as <systemitem class="username">root</systemitem>.
+    </para>
+      </step>
+      <step>
+        <para>
+     Search for the string <literal>multiversion</literal>. If multiversion
+     is enabled for all kernel packages capable of this feature, the
+     following line appears uncommented:
+    </para>
+        <screen>multiversion = provides:multiversion(kernel)</screen>
+      </step>
+      <step>
+        <para>
+     To restrict multiversion support to certain kernel flavors, add the
+     package names as a comma-separated list to the
+     <literal>multiversion</literal> option in
+     <filename>/etc/zypp/zypp.conf</filename>—for example
+    </para>
+        <screen>multiversion = kernel-default,kernel-default-base,kernel-source</screen>
+      </step>
+      <step>
+        <para>
+     Save your changes.
+    </para>
+      </step>
+    </procedure>
+    <warning>
+      <title>Kernel Module Packages (KMP)</title>
+      <para>
+    Make sure that required vendor provided kernel modules (Kernel Module
+    Packages) are also installed for the new updated kernel. The kernel
+    update process will not warn about eventually missing kernel modules
+    because package requirements are still fulfilled by the old kernel that
+    is kept on the system.
+   </para>
+    </warning>
+    <sect2 xml:id="cha.tuning.multikernel.enable.keep">
+      <title>Automatically Deleting Unused Kernels</title>
+      <para>
+    When frequently testing new kernels with multiversion support enabled,
+    the boot menu quickly becomes confusing. Since a
+    <filename>/boot</filename> partition usually has limited space you also
+    might run into trouble with <filename>/boot</filename> overflowing.
+    While you may delete unused kernel versions manually with YaST or
+    Zypper (as described below), you can also configure
+    <systemitem class="library">libzypp</systemitem> to automatically delete
+    kernels no longer used. By default no kernels are deleted.
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Open <filename>/etc/zypp/zypp.conf</filename> with the editor of your
+      choice as <systemitem class="username">root</systemitem>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Search for the string <literal>multiversion.kernels</literal> and
+      activate this option by uncommenting the line. This option takes a
+      comma-separated list of the following values:
+     </para>
+          <formalpara>
+            <title><literal><replaceable>3.12.24-7.1</replaceable></literal>:</title>
+            <para>
+       keep the kernel with the specified version number
+      </para>
+          </formalpara>
+          <formalpara>
+            <title><literal>latest</literal>:</title>
+            <para>
+       keep the kernel with the highest version number
+      </para>
+          </formalpara>
+          <formalpara>
+            <title><literal>latest-N</literal>:</title>
+            <para>
+       keep the kernel with the Nth highest version number
+      </para>
+          </formalpara>
+          <formalpara>
+            <title><literal>running</literal>:</title>
+            <para>
+       keep the running kernel
+      </para>
+          </formalpara>
+          <formalpara>
+            <title><literal>oldest</literal>:</title>
+            <para>
+       keep the kernel with the lowest version number (the one that was
+       originally shipped with <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase>)
+      </para>
+          </formalpara>
+          <formalpara>
+            <title>
+              <literal>oldest+N</literal>
+            </title>
+            <para>
+       keep the kernel with the Nth lowest version number
+      </para>
+          </formalpara>
+          <para>
+      Here are some examples
+     </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                <literal>multiversion.kernels = latest,running</literal>
+              </term>
+              <listitem>
+                <para>
+         Keep the latest kernel and the one currently running. This is
+         similar to not enabling the multiversion feature at all, except
+         that the old kernel is removed <emphasis>after the next
+         reboot</emphasis> and not immediately after the installation.
+        </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                <literal>multiversion.kernels = latest,latest-1,running</literal>
+              </term>
+              <listitem>
+                <para>
+         Keep the last two kernels and the one currently running.
+        </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term>
+                <literal>
+         multiversion.kernels = latest,running,<replaceable>3.12.25.rc7-test</replaceable></literal>
+              </term>
+              <listitem>
+                <para>
+         Keep the latest kernel, the one currently running, and
+         <replaceable>3.12.25.rc7-test</replaceable>.
+        </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+          <tip>
+            <title>Keep the <literal>running</literal> Kernel</title>
+            <para>
+       Unless using special setups, you probably always want to keep the
+       <literal>running</literal> Kernel. If not keeping the running Kernel,
+       it will be deleted in case of a Kernel update. This in turn makes it
+       necessary to immediately reboot the system after the update, since
+       modules for the Kernel that is currently running can no longer be
+       loaded since they have been deleted.
+      </para>
+          </tip>
+        </step>
+      </procedure>
+    </sect2>
+  </sect1>
+  <sect1 xml:id="cha.tuning.multikernel.yast">
+    <title>Installing/Removing Multiple Kernel Versions with YaST</title>
+    <procedure>
+      <step>
+        <para>
+     Start YaST and open the software manager via <menuchoice><guimenu>Software</guimenu><guimenu>Software Management</guimenu></menuchoice>.
+    </para>
+      </step>
+      <step>
+        <para>
+     List all packages capable of providing multiple versions by choosing
+     <menuchoice><guimenu>View</guimenu><guimenu>Package Groups</guimenu><guimenu>Multiversion Packages</guimenu></menuchoice>.
+    </para>
+        <figure>
+          <title>The YaST Software Manager: Multiversion View</title>
+          <mediaobject>
+            <imageobject role="fo">
+              <imagedata fileref="yast2_sw_multiversion.png" width="90%" format="PNG"/>
+            </imageobject>
+            <imageobject role="html">
+              <imagedata fileref="yast2_sw_multiversion.png" width="90%" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </step>
+      <step>
+        <para>
+     Select a package and open its <guimenu>Version</guimenu> tab in the
+     bottom pane on the left.
+    </para>
+      </step>
+      <step>
+        <para>
+     To install a package, click its check box. A green check mark indicates
+     it is selected for installation.
+    </para>
+        <para>
+     To remove an already installed package (marked with a white check
+     mark), click its check box until a red <literal>X</literal> indicates
+     it is selected for removal.
+    </para>
+      </step>
+      <step>
+        <para>
+     Click <guimenu>Accept</guimenu> to start the installation.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+  <sect1 xml:id="cha.tuning.multikernel.zypper">
+    <title>Installing/Removing Multiple Kernel Versions with Zypper</title>
+    <procedure>
+      <step>
+        <para>
+     Use the command <command>zypper se -s 'kernel*'</command> to display a
+     list of all kernel packages available:
+    </para>
+        <screen><?dbsuse-fo font-size="7pt"?>S | Name           | Type       | Version         | Arch   | Repository        
+--+----------------+------------+-----------------+--------+-------------------
+v | kernel-default | package    | 2.6.32.10-0.4.1 | x86_64 | Alternative Kernel
+i | kernel-default | package    | 2.6.32.9-0.5.1  | x86_64 | (System Packages) 
+  | kernel-default | srcpackage | 2.6.32.10-0.4.1 | noarch | Alternative Kernel
+i | kernel-default | package    | 2.6.32.9-0.5.1  | x86_64 | (System Packages)
+...</screen>
+      </step>
+      <step>
+        <para>
+     Specify the exact version when installing:
+    </para>
+        <screen>zypper in kernel-default-2.6.32.10-0.4.1</screen>
+      </step>
+      <step>
+        <para>
+     When uninstalling a kernel, use the commands <command>zypper se -si
+     'kernel*'</command> to list all kernels installed and <command>zypper
+     rm <replaceable>PACKAGENAME-VERSION</replaceable></command> to remove
+     the package.
+    </para>
+      </step>
+    </procedure>
+  </sect1>
+</chapter>

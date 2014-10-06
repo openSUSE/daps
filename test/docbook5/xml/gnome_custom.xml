@@ -1,0 +1,1684 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.gnome.settings">
+  <title>Customizing Your Settings</title>
+  <para>
+  You can change the way the GNOME desktop looks and behaves to suit your
+  own personal tastes and needs. Some of the settings you might want to
+  change include:
+ </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+    Keyboard and mouse configuration, as described in
+    <xref linkend="sec.gnome.settings.hardware.keyboard"/> and
+    <xref linkend="sec.gnome.settings.hardware.mouse"/></para>
+    </listitem>
+    <listitem>
+      <para>
+    Desktop background, as described in
+    <xref linkend="sec.gnome.settings.look.deskback"/></para>
+    </listitem>
+    <listitem>
+      <para>
+    Sounds, as described in
+    <xref linkend="sec.gnome.settings.hardware.audio"/></para>
+    </listitem>
+  </itemizedlist>
+  <para>
+  These settings and others can be changed in the <guimenu>All
+  Settings</guimenu> dialog.
+ </para>
+  <sect1 xml:id="sec.gnome.settings.cc">
+    <title>The <guimenu>All Settings</guimenu> Dialog</title>
+    <para>
+   While YaST is a desktop-independent system-wide tool to configure most
+   aspects of your <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> installation, such as hardware settings,
+   network devices and services, software management or virtualization, the
+   settings dialog is a GNOME configuration tool and focuses more on the
+   look and feel, personal settings and preferences of your GNOME desktop.
+  </para>
+    <para>
+   To access the settings dialog, click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu></menuchoice>. The dialog is divided into the
+   following three categories:
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <guimenu>Hardware</guimenu>
+        </term>
+        <listitem>
+          <para>
+      Allows you to configure hardware components such as graphics cards,
+      monitors, printers or keyboard layout, and to set up your sound device
+      and desktop sound effects. For more information, see
+      <xref linkend="sec.gnome.settings.hardware"/>.
+     </para>
+        </listitem>
+      </varlistentry>
+      <!-- <varlistentry>
+    <term><guimenu>Look and Feel</guimenu>
+    </term>
+    <listitem>
+     <para>
+      Contains settings for the desktop background, the screen saver and the
+      fonts appearing on the desktop. You can modify themes, window behavior
+      and styles of desktop elements such as menus and scroll bars. You can
+      also configure 3D desktop effects (Compiz). For more information see
+      <xref linkend="sec.gnome.settings.look"/>.
+     </para>
+    </listitem>
+   </varlistentry>-->
+      <varlistentry>
+        <term>
+          <guimenu>Personal</guimenu>
+        </term>
+        <listitem>
+          <para>
+      Go here to change your login password or to configure key combinations
+      and keyboard accessibility settings. You can also modify the desktop
+      background and language settings. For more information see
+      <xref linkend="sec.gnome.settings.personal"/>.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <guimenu>System</guimenu>
+        </term>
+        <listitem>
+          <para><!--FIXME-->
+      Lets you configure system settings such as language, network
+      connections, software sources and updates, your preferred
+      applications, or power management. Define how GNOME handles sessions
+      on login or shutdown. For more information see
+      <xref linkend="sec.gnome.settings.system"/>.
+     </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <figure>
+      <title>GNOME Settings Dialog</title>
+      <mediaobject>
+        <imageobject role="fo">
+          <imagedata fileref="controlcenter.png" width="90%" format="PNG"/>
+        </imageobject>
+        <imageobject role="html">
+          <imagedata fileref="controlcenter.png" width="75%" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+   In order to change some system-wide settings, the control center will
+   prompt you for the <systemitem>root</systemitem> password and start
+   YaST. This is mostly the case for administrator settings (including
+   most of the hardware, the graphical user interface, Internet access,
+   security settings, user administration, software installation and system
+   updates and information). Follow the instructions in YaST to configure
+   these settings. <phrase os="sled">For information about using YaST,
+   refer to the integrated YaST help texts or to the
+   <xref linkend="book.sle.deployment"/>.</phrase></para>
+    <para>
+   This chapter focuses on individual settings you can change directly in
+   the GNOME settings dialog (without YaST interaction).
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.gnome.settings.hardware">
+    <title>Hardware</title>
+    <para>
+   In the following sections you will find examples of how to configure some
+   hardware aspects of your GNOME desktop, including keyboard or mouse
+   preferences, handling of removable drives (and other media) or screen
+   resolution.
+  </para>
+    <sect2 xml:id="sec.gnome.settings.hardware.bluetooth">
+      <title>Configuring Bluetooth Settings</title>
+      <para>
+    The Bluetooth module lets you set the visibility of your machine over
+    Bluetooth and to connect to available Bluetooth devices. To configure
+    Bluetooth connectivity, follow these steps:
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+      Tools</guimenu><guimenu>Settings</guimenu><guimenu>Bluetooth</guimenu></menuchoice> to open the Bluetooth
+      settings module.
+     </para>
+        </step>
+        <step>
+          <para>
+      To use Bluetooth, turn the <guimenu>Bluetoth</guimenu> switch on.
+     </para>
+        </step>
+        <step>
+          <para>
+      To make your computer visible over Bluetooth, turn the
+      <guimenu>Visibility</guimenu> switch on. This visibility is only
+      temporary. You do not need this option to be turned on to connect to a
+      Bluetooth device.
+     </para>
+        </step>
+        <step>
+          <para>
+      The <guimenu>Devices</guimenu> list contains all known Bluetooth
+      devices. In the beginning, it may be empty.
+     </para>
+          <para>
+      To add a device to the list, click the plus icon in the lower left
+      corner. On the device to be connected, turn the Bluetooth visibility
+      on. In <guimenu>Device Type</guimenu>, choose the type of the device
+      you want to connect, for example an input device, a phone, a computer
+      or a camera. To see all available devices, set <guimenu>All
+      Types</guimenu>. Select the desired device from the list. In
+      <guimenu>PIN Options</guimenu> select the appropriate option and click
+      <guimenu>Continue</guimenu>. If a PIN was used, confirm the PIN match.
+     </para>
+          <para>
+      To remove a device from the list, select the device and click the
+      minus icon.
+     </para>
+        </step>
+        <step>
+          <para>
+      To connect to a Bluetooth device, select the device in the list and
+      turn the <guimenu>Connection</guimenu> switch on. You can send files
+      to the connected device using the <guimenu>Send Files</guimenu>
+      button. If you are connected to a device such as a mobile phone, you
+      can use it as a network device by activating the appropriate option.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.power">
+      <title>Configuring Power Settings</title>
+      <para/>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+      Tools</guimenu><guimenu>Settings</guimenu><guimenu>Power</guimenu></menuchoice> to open the Power settings module.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the upper part of the dialog, you can see the current state of the
+      battery.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the <guimenu>Power Saving</guimenu> section of the dialog, set the
+      <guimenu>Screen Brightness</guimenu> to conserve power. You can also
+      set, whether to dim the screen after a period of inactivity and set
+      the time interval. You can also set, whether to turn off wireless
+      networking after the period of inactivity.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the <guimenu>Suspend and Power Off</guimenu> section of the dialog,
+      set the <guimenu>Automatic Suspend</guimenu>. When you click it, a
+      separate dialog opens, where you can turn the automatic suspending on
+      and associated time intervals separately for computer running on
+      battery power or plugged in. You can also set the action performed
+      when the battery power is critical (hibernation to the disk or
+      powering off).
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.keyboard">
+      <title>Modifying Keyboard Settings</title>
+      <para>
+    To modify some keyboard settings (such as autorepeat preferences or
+    typing break sessions) click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu><guimenu>Keyboard</guimenu></menuchoice>.
+   </para>
+      <figure xml:id="fig.gnome.settings.hardware.keyboard">
+        <title>Keyboard Settings Dialog</title>
+        <mediaobject>
+          <imageobject role="fo">
+            <imagedata fileref="preferences_keyboard.png" width="50%" format="PNG"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="preferences_keyboard.png" width="55%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+      <procedure>
+        <step>
+          <para>
+      On the <guimenu>Typing</guimenu> tab you can set some general keyboard
+      preferences, such as enabling keyboard repeat with individual delay
+      and speed options or enabling or disabling the blinking of the cursor
+      and defining the speed.
+     </para>
+        </step>
+        <step>
+          <para>
+      On the <guimenu>Shortcuts</guimenu> tab you can set the key
+      combinations. To edit a key combination, click the row and hold down
+      the new keys or press backspace to clear the key combination.
+     </para>
+        </step>
+        <step>
+          <para>
+      If all options are set according to your wishes, close the dialog.
+     </para>
+        </step>
+      </procedure>
+      <para>
+    For configuration of keyboard accessibility options refer to
+    <xref linkend="sec.general.accessibility.mobility"/>.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.mouse">
+      <title>Configuring the Mouse and Touchpad</title>
+      <para>
+    To modify some mouse options click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu><guimenu>Mouse and Touchpad</guimenu></menuchoice>.
+   </para>
+      <figure xml:id="fig.gnome.settings.hardware.mouse">
+        <title>Mouse and Touchpad Settings Dialog</title>
+        <mediaobject>
+          <imageobject role="fo">
+            <imagedata fileref="preferences_mouse.png" width="55%" format="PNG"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="preferences_mouse.png" width="45%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+      <procedure>
+        <step>
+          <para>
+      In the <guimenu>General</guimenu> section of the dialog, set the
+      <guimenu>Primary button</guimenu> orientation (left or right) and the
+      speed of the double-click.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the <guimenu>Mouse</guimenu> section of the dialog, use
+      <guimenu>Pointer Speed</guimenu> to adjust the sensitivity of the
+      mouse pointer.
+     </para>
+        </step>
+        <step>
+          <para>
+      In the <guimenu>Touchpad</guimenu> section of the dialog, turn the
+      touchpad on and off and use <guimenu>Pointer Speed</guimenu> to adjust
+      the sensitivity of the touchpad pointer. You can also disable the
+      touchpad while typing and enable clicks by taping the touchpad.
+     </para>
+        </step>
+        <step>
+          <para>
+      To test your new settings, click <guimenu>Test Your Settings</guimenu>
+      and try the pointing device. If all options are set according to your
+      wishes, close the dialog.
+     </para>
+        </step>
+      </procedure>
+      <para>
+    For configuration of mouse accessibility options refer to the
+    <xref linkend="sec.general.accessibility.mobility"/>.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.printer">
+      <title>Installing and Configuring Printers</title>
+      <para>
+    The <guimenu>Printers</guimenu> module lets you connect to any available
+    local or remote CUPS server and configure printers.
+   </para>
+      <para>
+    To start the Printers module, click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu><guimenu>Printers</guimenu></menuchoice>.
+    For detailed information refer to <xref linkend="cha.gnome.print"/>.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.screen">
+      <title>Configuring Screens</title>
+      <para>
+    To specify the resolution, refresh rate and orientation for your screen
+    or to configure multiple screens, click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu><guimenu>Displays</guimenu></menuchoice>
+    and modify the options.
+   </para>
+      <procedure>
+        <step>
+          <para>
+      To set options for any monitor, click the monitor's icon and set its
+      resolution and orientation (using the arrows).
+     </para>
+        </step>
+        <step>
+          <para>
+      If you use multiple monitors, you can set their respective positions
+      by dragging their icons to the appropriate location.
+     </para>
+        </step>
+      </procedure>
+      <figure xml:id="fig.gnome.settings.hardware.screen">
+        <title>Monitor Resolution Settings Dialog</title>
+        <mediaobject>
+          <imageobject role="fo">
+            <imagedata fileref="preferences_screen.png" width="45%" format="PNG"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="preferences_screen.png" width="45%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.hardware.audio">
+      <title>Configuring Sound Settings</title>
+      <para>
+    The <guimenu>Sound</guimenu> tool lets you manage sound devices and set
+    the sound effects. In the top part of the dialog, you can select the
+    general output volume or turn the sound off completely.
+   </para>
+      <para>
+    Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+    Tools</guimenu><guimenu>Settings</guimenu><guimenu>Sound</guimenu></menuchoice> to open the sound settings.
+   </para>
+      <figure>
+        <title>Configuring Sound Settings</title>
+        <mediaobject>
+          <imageobject role="fo">
+            <imagedata fileref="sound_devices.png" width="65%" format="PNG"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="sound_devices.png" width="65%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+      <sect3 xml:id="sec.gnome.settings.hardware.audio.dev">
+        <title>Configuring Sound Devices</title>
+        <para>
+     Use the <guimenu>Output</guimenu> tab to select the device for sound
+     output. Below the list, choose the sound device setting you prefer, for
+     example balance.
+    </para>
+        <para>
+     Use the <guimenu>Input</guimenu> tab to set the input device volume or
+     to mute the input temporarily. If you have more than one sound device,
+     you can also select a default device for audio input in the
+     <guimenu>Choose a device for sound input</guimenu> list.
+    </para>
+      </sect3>
+      <sect3 xml:id="sec.gnome.settings.hardware.audio.effects">
+        <title>Configuring Sound Effects</title>
+        <para>
+     Use the <guimenu>Sound Effects</guimenu> tab to configure sound event
+     functions.
+    </para>
+        <para>
+     Specify the volume at which the sound effects will be played under
+     <guimenu>Alert volume</guimenu>. You can also turn the effects on and
+     off.
+    </para>
+        <para>
+     Select the <guimenu>Alert Sound</guimenu> to use.
+    </para>
+      </sect3>
+    </sect2>
+  </sect1>
+  <!--<sect1 id="sec.gnome.settings.look">
+  <title>Look and Feel</title>
+
+  <para>
+   In the following sections find examples of how to configure some look and
+   feel aspects of your GNOME desktop, like the desktop background and
+   screens saver, 3D desktop effects, themes, window behavior or menus.
+  </para>
+
+  <sect2 id="sec.gnome.settings.look.ssaver">
+   <title>Configuring the Screen Saver</title>
+   <para>
+    A screen saver is a program that blanks the screen or displays graphics
+    when the computer is not used for a specified amount of time. Screen
+    savers originally protected monitors from having images burned into
+    them. Now they are used primarily for entertainment or security reasons.
+   </para>
+   <para>
+    To configure a screen saver click <menuchoice>
+    <guimenu>Computer</guimenu> <guimenu>Control Center</guimenu>
+    <guimenu>Look and Feel</guimenu> <guimenu>Screensaver</guimenu>
+    </menuchoice>.
+   </para>
+   <figure id="fig.gnome.settings.look.ssaver">
+    <title>Screensaver Preferences Dialog</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="preferences_screensaver.png" width="70%"
+       format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="preferences_screensaver.png" width="40%"
+       format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    From the list on the left select the screen saver theme you like. You
+    can also select <guimenu>Random</guimenu> for a random selection of a
+    screen savers or just a <guimenu>Blank Screen</guimenu>. A preview of
+    the currently selected screen saver appears on the right or, by pressing
+    the <guimenu>Preview</guimenu> button, you can test the selected screen
+    saver in a fullscreen mode.
+   </para>
+   <para>
+    Use the slider to specify the amount of time that the computer is to be
+    idle before the screen saver is activated. If you want the screen saver
+    to be activated after the specified time the <guimenu>Activate
+    screensaver when computer is idle</guimenu> checkbox should be checked.
+    If you also want the screen to lock automatically when the screen saver
+    is activated the <guimenu>Lock screen when screensaver is
+    active</guimenu> checkbox should be checked.
+   </para>
+   <para>
+    You can also access general power management options from here by
+    clicking <guimenu>Power management</guimenu>. See
+    <xref
+     linkend="sec.gnomeuser.start.power_mgmt"/> for details.
+   </para>
+  </sect2>
+  <sect2 id="sec.gnome.settings.look.filemanpref">
+   <title>Configuring File Management Preferences</title>
+   <para>
+    The file management preference include settings for the GNOME file
+    manager Nautilus as well as the settings for handling of removable
+    media. You can access the preferences in the Control Center by clicking
+    <menuchoice> <guimenu>Computer</guimenu> <guimenu>Control
+    Center</guimenu> <guimenu>Look and Feel</guimenu> <guimenu>File
+    Management</guimenu> </menuchoice> or directly from Nautilus by clicking
+    <menuchoice> <guimenu>Edit</guimenu> <guimenu>Preferences</guimenu>
+    </menuchoice>.
+   </para>
+   <figure>
+    <title>File Manager Preferences</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="fm_views.png" width="54%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="fm_views.png" width="54%" format="png"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <procedure>
+    <step>
+     <para>
+      On the <guimenu>Views</guimenu> tab define options for various
+      Nautilus views. For example, select if Nautilus should show hidden
+      files and backup files.
+     </para>
+    </step>
+    <step>
+     <para>
+      On the <guimenu>Behavior</guimenu> tab define several options such as
+      to open files or folders in Nautilus upon single or double
+      mouse-click, or to include a <guimenu>Delete</guimenu> menu item in
+      Nautilus which deletes files or folders directly from your file system
+      instead of moving them to the trash.
+     </para>
+    </step>
+    <step>
+     <para>
+      On the <guimenu>Display</guimenu> tab configure the date format and
+      the way icon captions appear in Nautilus.
+     </para>
+    </step>
+    <step>
+     <para>
+      Switch to the <guimenu>List Columns</guimenu> tab to configure the
+      columns that appear in Nautilus, as well as the order in which they
+      appear.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click the <guimenu>Preview</guimenu> tab to specify for which files to
+      show previews in Nautilus and if folders should show the number of
+      items they contain.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click the <guimenu>Media</guimenu> tab to specify actions that should
+      be performed automatically whenever media such as audio CDs, video
+      DVDs, blank disks, media players, digital cameras and other devices
+      are connected. In general, you do not need to change these settings
+      unless you want to change the behavior of a device when connected. If
+      you attach a device for the first time and it behaves in an unexpected
+      or undesired way, change the settings for the particular device.
+     </para>
+    </step>
+    <step>
+     <para>
+      For more information on the available options click
+      <guimenu>Help</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Click <guimenu>Close</guimenu> when you are ready to apply changes.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+  <sect2 id="sec.gnome.settings.look.lockdown">
+   <title>Locking Desktop Functions</title>
+   <para>
+    &productname; ships with a graphical lockdown editor
+    (<systemitem>pessulus</systemitem> package) that lets you disable
+    (lockdown) certain desktop functions. This is useful if you want to
+    restrict the actions that users can perform on a computer. For example,
+    you might want to prevent command line operations on a computer that is
+    for public use at a trade show.
+   </para>
+   <para>
+    If the <systemitem>pessulus</systemitem> package is already installed,
+    start the Lockdown Editor from the main menu with <menuchoice>
+    <guimenu>Computer</guimenu> <guimenu>Control Center</guimenu>
+    <guimenu>Look and Feel</guimenu> <guimenu>Lockdown Editor</guimenu>
+    </menuchoice> or press <keycombo> <keycap function="alt"/>
+    <keycap>F2</keycap> </keycombo> and enter <command>pessulus</command>.
+   </para>
+   <figure id="fig.gnome.settings.look.lockdown">
+    <title>General Lockdown Editor Settings</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="lockdown_general.png" width="70%" format="PNG"
+      />
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="lockdown_general.png" width="70%" format="png"
+      />
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    When the Lockdown Editor starts, it tries to connect to the GConf
+    mandatory configuration source
+    (<filename>/etc/gconf/gconf.xml.mandatory</filename>). If you run
+    <command>pessulus</command> as &rootuser;, you have access to this
+    configuration source and a lock icon is displayed next to the check box
+    for each setting. Click the lock to specify if the setting is mandatory.
+    If the setting is mandatory, regular users will not be able to change or
+    override the setting. If you do not have access to the mandatory
+    configuration source, the lock icon does not appear. In this case, all
+    disabled settings are stored in the user's default configuration source
+    and can be modified later using other tools such as
+    <command>gconf-editor</command> or <command>gconftool-2</command>. For
+    more information about GConf and mandatory configuration sources see
+    <ulink url="http://library.gnome.org/admin/system-admin-guide/stable/">
+    <quote>Using GConf</quote> </ulink> in the <citetitle>GNOME Desktop
+    System Administration Guide</citetitle>.
+   </para>
+   <para>
+    Click a category on the left to view the settings that can be disabled
+    for this category.
+   </para>
+   <procedure>
+    <step>
+     <para>
+      To disable access to the command line, saving to disk and printing (or
+      prevent the user from modifying print settings) set the relevant
+      options in the <guimenu>General</guimenu> category.
+     </para>
+    </step>
+    <step>
+     <para>
+      Use the options in the <guimenu>Panel</guimenu> category to lock down
+      the panel, disable the panel applets you specify and disable the force
+      quit, lock screen and log out options.
+     </para>
+    </step>
+    <step>
+     <para>
+      Use the options in the <guimenu>GNOME Screensaver</guimenu> category
+      to lock the screen (when the screen saver goes active), enable or
+      disable the logout (after a delay option in the unlock dialog box) and
+      to enable or disable the switch user option in the unlock dialog box.
+     </para>
+    </step>
+    <step>
+     <para>
+      For more information on the available options of each category, click
+      <guimenu>Help</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      If all options are set according to your wishes, click
+      <guimenu>Close</guimenu> to apply the changes.
+     </para>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 id="sec.gnome.settings.look.mainmenu">
+   <title>Customizing the Main Menu</title>
+   <para>
+    Use the <guimenu>Main Menu</guimenu> tool to customize the traditional
+    GNOME main menu. The traditional GNOME menu is not enabled by default,
+    but you can add it to your GNOME panel by right-clicking the panel and
+    choosing <menuchoice> <guimenu>Add to Panel</guimenu>
+    <guimenu>Traditional Main Menu</guimenu> <guimenu>Add</guimenu>
+    <guimenu>Close</guimenu> </menuchoice>. To customize the traditional
+    GNOME main menu, use <menuchoice> <guimenu>Computer</guimenu>
+    <guimenu>Control Center</guimenu> <guimenu>Look and Feel</guimenu>
+    <guimenu>Main Menu</guimenu> </menuchoice>.
+   </para>
+   <figure id="fig.gnome.settings.look.mainmenu">
+    <title>Main Menu Editor</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="main_menu_editor.png" width="78%" 
+       format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="main_menu_editor.png" width="78%" 
+       format="png"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    The current main menu submenus are displayed on the left of the main
+    window, the items belonging to the selected submenu are shown on the
+    right. Groups in a submenu are nested below that submenu. To find an
+    item, click the arrow next to a submenu in the <guimenu>Menus</guimenu>
+    list, select the group containing that item and locate the item in the
+    <guimenu>Items</guimenu> list.
+   </para>
+   <note>
+    <title>Implications of Main Menu Changes</title>
+    <para>
+     Changes you make to the main menu are not overwritten during a
+     subsequent system update. Changes are applied after the latest menu
+     view is generated.
+    </para>
+   </note>
+   <procedure>
+    <title>Editing the Main Menu</title>
+    <para>
+     You can change the order in which items appear in the main menu, rename
+     menu items, show (or hide) menu items, delete items from the menu or
+     add new menu items. For example, you might want to place your
+     frequently used applications at the top of the menu or at the top of
+     their groups to make them easier to find. Adding new items to the main
+     menu is helpful when you install an application, but it is also useful
+     if you have other applications that do not currently appear on the
+     menu. You can also add a directory, a link or another type of item to
+     the menu.
+    </para>
+    <step>
+     <para>
+      To move a menu item click the menu item in the
+      <guimenu>Items</guimenu> list on the right and drag it to a new
+      location in the menu. You can move the item to a new location in the
+      same menu or drop it on an item in the <guimenu>Menus</guimenu> list
+      (to move it to a new menu or group). Alternatively, use the
+      <guimenu>Move Up</guimenu> and <guimenu>Move Down</guimenu> buttons to
+      change an item's location via the menu.
+     </para>
+    </step>
+    <step>
+     <para>
+      To rename an existing menu item right-click the item in the
+      <guimenu>Items</guimenu> list, select <guimenu>Properties</guimenu>
+      and enter a new name.
+     </para>
+    </step>
+    <step>
+     <para>
+      To hide an item (so it does not appear in the menu) deactivate the
+      checkbox next to the item in the <guimenu>Items</guimenu> list. An
+      activated checkbox indicates that the item is currently shown in the
+      menu. When an item is hidden it still remains in the
+      <guimenu>Items</guimenu> list and can be shown at any time you decide
+      you want it to (re)appear in the menu.
+     </para>
+    </step>
+    <step>
+     <para>
+      To delete an item from the <guimenu>Items</guimenu> list right-click
+      the item and click <guimenu>Delete</guimenu>. If you want to show a
+      deleted item in the menu again you must add it like you would a new
+      application.
+     </para>
+    </step>
+    <step>
+     <para>
+      To add a new item, proceed as follows:
+     </para>
+     <substeps>
+      <step>
+       <para>
+        In the <guimenu>Menus</guimenu> list click the arrow next to the
+        menu containing the group where you want to add the application,
+        then select the group. The contents of that group appear in the
+        <guimenu>Items</guimenu> list.
+       </para>
+      </step>
+      <step>
+       <para>
+        Click <guimenu>New Item</guimenu> and select the
+        <guimenu>Type</guimenu> of menu item to add. For example, to add an
+        application select <guimenu>Application</guimenu>.
+       </para>
+      </step>
+      <step>
+       <para>
+        Click <guimenu>Browse</guimenu> and select the item to add.
+       </para>
+      </step>
+      <step>
+       <para>
+        Enter a <guimenu>Name</guimenu> for the new menu item.
+       </para>
+      </step>
+      <step>
+       <para>
+        If you want a short description to appear in the main menu during a
+        hover state enter the description in the <guimenu>Comment</guimenu>
+        field.
+       </para>
+      </step>
+      <step>
+       <para>
+        If you want to assign an icon to the new item, click the image frame
+        on the left, then select an icon for the item. If you do not select
+        an icon, the item appears in the menu without an icon.
+       </para>
+      </step>
+     </substeps>
+    </step>
+    <step>
+     <para>
+      If you want to restore the default menu layout click
+      <guimenu>Revert</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      If all options are set according to your wishes click
+      <guimenu>Close</guimenu> to apply your changes.
+     </para>
+     <note>
+      <para>
+       The first time you use the <guimenu>Main Menu</guimenu> application
+       to edit the menu, changes do not take effect until your next login.
+       Subsequent changes appear immediately.
+      </para>
+     </note>
+    </step>
+   </procedure>
+  </sect2>
+
+  <sect2 id="sec.gnome.settings.look.xgl">
+   <title>Configuring Desktop Effects</title>
+   <para>
+    Compiz is a compositing window manager for the X Window System that uses
+    3D graphics hardware to create fast compositing desktop effects for
+    window management. Effects are implemented as loadable plug-ins. Compiz
+    lets you turn your desktop into a rotating 3D cube, tile windows so they
+    do not overlap and switch tasks while viewing live thumbnails. You can
+    enable translucent or transparent windows, zoom in and out of the
+    desktop screen, and use other window effects such as shadows, fading and
+    transformations. You can also configure windows to snap to other windows
+    and screen edges when they are moved.
+   </para>
+   <para>
+    To enable desktop effects you need a graphics adapter capable of
+    providing 3D support and the graphics driver that Linux uses to operate
+    the graphics adapter. This driver must be able to handle OpenGL (or 3D)
+    requests from the Linux kernel. If your configuration is compatible with
+    desktop effects it will be enabled by default. If your configuration
+    does not support desktop effects you will be warned upon activation.
+   </para>
+   <para>
+    To enable or disable desktop effects follow these steps:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Click <menuchoice> <guimenu>Computer</guimenu> <guimenu>Control
+      Center</guimenu> <guimenu>Look and Feel</guimenu> <guimenu>Desktop
+      Effects</guimenu></menuchoice>.
+     </para>
+     <informalfigure pgwide="0">
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="xgl_enable.png" width="49%" format="PNG"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="xgl_enable.png" width="49%" format="png"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>
+    </step>
+    <step>
+     <para>
+      If your system is configured for desktop effects check <guimenu>Enable
+      Desktop Effects</guimenu>. To keep desktop effects enabled press
+      <guimenu>Yes</guimenu> in the dialog that opens. Otherwise, the
+      desktop effects will be deactivated automatically in ten seconds.
+     </para>
+     <para>
+      To disable desktop effects uncheck the <guimenu>Enable Desktop
+      Effects</guimenu> option.
+     </para>
+    </step>
+    <step>
+     <para>
+      The default set of desktop effects is now enabled. You can change the
+      enabled effects and their settings on the several tabs of the
+      <guimenu>Desktop Effects</guimenu> dialog or just select a
+      <guimenu>Profile</guimenu> from the dropdown list. To activate the
+      selected profile press the green button.
+     </para>
+    </step>
+   </procedure>
+   <sect3 id="sec.gnome.settings.look.xgl.modify">
+    <title>Modifying Desktop Effects</title>
+    <para>
+     To modify the current settings for desktop effects, start <menuchoice>
+     <guimenu>Computer</guimenu> <guimenu>Control
+     Center</guimenu><guimenu>Look and Feel</guimenu> <guimenu>Desktop
+     Effects</guimenu></menuchoice>.
+    </para>
+    <figure id="fig.gnome.settings.look.xgl.modify">
+     <title>Desktop Effects Configuration</title>
+     <mediaobject>
+      <imageobject role="fo">
+       <imagedata fileref="xgl_effects.png" width="49%" format="PNG"/>
+      </imageobject>
+      <imageobject role="html">
+       <imagedata fileref="xgl_effects.png" width="49%" format="png"/>
+      </imageobject>
+     </mediaobject>
+    </figure>
+    <procedure>
+     <step>
+      <para>
+       Use the <guimenu>Info</guimenu> tab to get general information about
+       the current desktop effect settings.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the options on the <guimenu>Animations</guimenu> tab to specify
+       what happens when you open, close, focus or minimize windows.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the options on the <guimenu>Effects</guimenu> tab to specify what
+       type of <guimenu>Switcher</guimenu> to use. This is the desktop
+       effect activated when switching between windows using the <keycombo>
+       <keycap function="alt"/> <keycap function="tab"/></keycombo>
+       combination.
+      </para>
+      <para>
+       Use the configuration options under <guimenu>Cube Effects</guimenu>
+       to configure the behavior when switching virtual desktops via
+       <keycombo> <keycap function="control"/> <keycap function="alt"/>
+       <keycap function="left"/></keycombo> or
+       <keycombo><keycap function="control"/> <keycap function="alt"/>
+       <keycap
+	 function="right"/></keycombo>. These options are only
+       available when <guimenu>Desktop Cube</guimenu> used.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the options on the <guimenu>Desktop</guimenu> tab to configure
+       the representation of virtual desktops you want to use (three
+       dimensional <guimenu>Desktop Cube</guimenu> or planar
+       <guimenu>Desktop Wall</guimenu>) and to set how many virtual desktops
+       you want to use.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the options on the <guimenu>Accessibility</guimenu> tab to
+       configure screen and area zoom.
+      </para>
+     </step>
+     <step>
+      <para>
+       Use the <guimenu>Edges</guimenu> tab to configure functions
+       associated with active screen edges.
+      </para>
+     </step>
+     <step>
+      <para>
+       For more information on the individual options, click
+       <guimenu>Help</guimenu>.
+      </para>
+     </step>
+     <step>
+      <para>
+       If all options are set according to your wishes, click
+       <guimenu>Close</guimenu> to apply the changes.
+      </para>
+     </step>
+    </procedure>
+    <note>
+     <title>Advanced Configuration Tool</title>
+     <para>
+      The advanced configuration tool, CompizConfig Settings Manager, can be
+      started from a terminal emulator with command <command>ccsm</command>.
+      This offers a greater selection of configuration options than the
+      simplified tool in GNOME Control Center.
+     </para>
+    </note>
+    <para>
+     You can also use <command>gconf-editor</command> to change desktop
+     effects settings.
+    </para>
+    <procedure>
+     <step>
+      <para>
+       Click <menuchoice> <guimenu>Computer</guimenu> <guimenu>More
+       Applications</guimenu> <guimenu>System</guimenu> <guimenu>GNOME
+       Configuration Editor</guimenu> </menuchoice> or press <keycombo>
+       <keycap function="alt"/> <keycap>F2</keycap> </keycombo> and enter
+       <command>gconf-editor</command>.
+      </para>
+     </step>
+     <step>
+      <para>
+       Navigate to the <filename>apps/compiz/general</filename> and
+       <filename>apps/compiz/plugins</filename> registry folders and make
+       the desired changes.
+      </para>
+     </step>
+     <step>
+      <para>
+       Click <menuchoice> <guimenu>File</guimenu> <guimenu>Quit</guimenu>
+       </menuchoice> to close the <guimenu>Configuration Editor</guimenu>.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+   <sect3 id="sec.gnome.settings.look.xgl.shortcuts">
+    <title>Desktop Effects Shortcuts</title>
+    <para>
+     The following table contains a list of the default keystrokes and mouse
+     movements you can use to perform desktop effects. You can change any of
+     these shortcuts in the CompizConfig Settings Manger by clicking
+     <menuchoice><guimenu>General</guimenu> <guimenu>General
+     Options</guimenu> <guimenu>Key Bindings</guimenu></menuchoice>. The
+     shortcuts for the zoom function can be configured in the
+     <guimenu>Desktop Effects</guimenu> tool available from GNOME Control
+     Center.
+    </para>
+    <table id="tab.gnome.settings.look.xgl.shortcuts">
+     <title>Desktop Effects Shortcuts</title>
+     <tgroup cols="2">
+      <thead>
+       <row>
+        <entry>
+         <para>
+          Effect
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Shortcut
+         </para>
+        </entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry>
+         <para>
+          Panoramic view of all desktops (if the desktop cube effect is
+          enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          <keycombo> <keycap function="control"/> <keycap function="alt"/>
+          <keycap function="down"/> </keycombo> (use the Left and Right
+          arrows to scroll)
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Rotate desktop cube (if the desktop cube effect is enabled) or
+          switch desktops (if the desktop wall effect is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          <keycombo> <keycap function="control"/> <keycap function="alt"/>
+          <keycap function="left"/></keycombo> or <keycap function="right"/>
+          (<keycap function="up"/> or <keycap function="down"/> keys can be
+          used in case of desktop wall effect with multiple rows)
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Rotate desktop cube manually (if the desktop cube effect is
+          enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          <keycombo> <keycap function="control"/> <keycap function="alt"/>
+          <keycap>left-click</keycap> </keycombo> the desktop and drag the
+          mouse pointer
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Rotate desktop cube (if the desktop cube effect is enabled) or
+          switch desktops (if the desktop wall effect is enabled) while
+          keeping the current active window with you
+         </para>
+        </entry>
+        <entry>
+         <para>
+          <keycombo> <keycap function="control"/> <keycap function="alt"/>
+          <keycap function="shift"/> <keycap function="left"/> </keycombo>
+          or <keycap function="right"/>
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Switch windows (thumbnail view)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          <keycombo> <keycap function="alt"/> <keycap function="tab"/>
+          </keycombo>
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Wobbly window (if the wobbly effect is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Left-click the window and drag
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Zoom in manually (if the screen zoom is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Super key (Windows key) and scroll wheel up
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Zoom out manually (if the screen zoom is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Super key (Windows key) and scroll wheel down
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Zoom in area under mouse pointer (if the area zoom is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Shift, super key (Windows key) and scroll wheel up
+         </para>
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <para>
+          Zoom out area under mouse pointer (if the area zoom is enabled)
+         </para>
+        </entry>
+        <entry>
+         <para>
+          Shift, Super key (Windows key) and scroll wheel down
+         </para>
+        </entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </table>
+   </sect3>
+  </sect2>
+ </sect1>-->
+  <sect1 xml:id="sec.gnome.settings.personal">
+    <title>Personal</title>
+    <para>
+   The following sections introduce examples of how to configure some
+   personal aspects of your GNOME desktop, like your languages used or
+   desktop backgrounds.
+  </para>
+    <sect2 xml:id="sec.gnome.settings.look.deskback">
+      <title>Changing the Desktop Background and Lock Screen Appearance</title>
+      <para>
+    The desktop background is the image or color that is applied to your
+    desktop. You can also customize the image shown when the screen is
+    locked.
+   </para>
+      <!--<itemizedlist>
+    <listitem>
+     <para>
+      Select an image for the desktop background. The image is superimposed
+      on the desktop background color. The desktop background color is
+      visible if you select a transparent image or if the image does not
+      cover the entire desktop.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Select a color for the desktop background. You can select a solid
+      color or create a gradient effect with two colors. A gradient effect
+      is a visual effect where one color blends gradually into another
+      color.
+     </para>
+    </listitem>
+   </itemizedlist>-->
+      <para>
+    To change the desktop background or the lock screen:
+   </para>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+      Tools</guimenu><guimenu>Settings</guimenu><guimenu>Background</guimenu></menuchoice>.
+     </para>
+          <!--<informalfigure>
+      <mediaobject>
+       <imageobject role="fo">
+        <imagedata fileref="preferences_background.png" width="45%"
+         format="PNG"/>
+       </imageobject>
+       <imageobject role="html">
+        <imagedata fileref="preferences_background.png" width="45%"
+         format="PNG"/>
+       </imageobject>
+      </mediaobject>
+     </informalfigure>-->
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Background</guimenu> or <guimenu>Lock Screen</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Wallpapers</guimenu>, <guimenu>Pictures</guimenu>, or
+      <guimenu>Colors</guimenu>. Wallpapers are preconfigured images
+      distributed with your system. Pictures are your own images from your
+      <filename>Pictures</filename> directory
+      (<filename>~/Pictures</filename>). Colors are predefined colors chosen
+      by GNOME developers.
+     </para>
+        </step>
+        <step>
+          <para>
+      Choose an option from the list.
+     </para>
+        </step>
+        <step>
+          <para>
+      When you are satisfied with your choices, click
+      <guimenu>Select</guimenu>.
+     </para>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.lang">
+      <title>Configuring Language Settings</title>
+      <para><phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> can be configured to use any of a number of languages. The
+    language setting determines the language of dialogs and menus and can
+    also determine the keyboard and clock layout.
+   </para>
+      <para>
+    To configure your language settings click <menuchoice><guimenu>Applications</guimenu><guimenu>System Tools</guimenu><guimenu>Settings</guimenu><guimenu>Region and Language</guimenu></menuchoice>. Here you can choose the interface language, number
+    formats and input sources (keyboard layouts).
+   </para>
+    </sect2>
+    <!-- <sect2 id="sec.gnome.settings.personal.password">
+   <title>Changing Your Password</title>
+   <para>
+    For security reasons, it is a good idea to change your login password
+    from time to time. To change your password:
+   </para>
+   <procedure>
+    <step>
+     <para>
+      Click <menuchoice> <guimenu>Computer</guimenu> <guimenu>Control
+      Center</guimenu> <guimenu>Change Password</guimenu></menuchoice>.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the upper right corner, click <guimenu>Change
+      Password...</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>
+      Type your old (current) password.
+     </para>
+    </step>
+    <step>
+     <para>
+      Type your new password.
+     </para>
+    </step>
+    <step>
+     <para>
+      Confirm your new password by typing it again, then click
+      <guimenu>Change Password</guimenu>.
+     </para>
+    </step>
+   </procedure>
+  </sect2>-->
+    <!-- <sect2 id="sec.gnome.settings.personal.shortcut">
+   <title>Customizing Keyboard Shortcuts</title>
+   <para>
+    A keyboard shortcut is a key or combination of keys that provide an
+    alternative to standard ways of performing an action. You can customize
+    the keyboard shortcuts for a number of actions.
+   </para>
+   <para>
+    To open the Keyboard Shortcuts tool click <menuchoice>
+    <guimenu>Computer</guimenu> <guimenu>Control Center</guimenu>
+    <guimenu>Personal</guimenu> <guimenu>Keyboard Shortcuts</guimenu>
+    </menuchoice>.
+   </para>
+   <figure id="fig.gnome.settings.personal.shortcut">
+    <title>Keyboard Shortcuts Dialog</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="keyboard_shortcuts.png" width="60%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="keyboard_shortcuts.png" width="60%" format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    To change the shortcut keys for an action, select the action and then
+    press the keys you want to associate with the action. To disable the
+    shortcut keys for an action, click the shortcut for the action, then
+    press <keycap function="backspace"/>.
+   </para>
+  </sect2>-->
+  </sect1>
+  <sect1 xml:id="sec.gnome.settings.system">
+    <title>System</title>
+    <para>
+   In the following sections you will find examples of how to configure some
+   system aspects of your GNOME desktop, like language settings, power
+   management, preferred applications, session (and session sharing)
+   preferences and audio preferences. For configuration of assistive
+   technologies refer to <xref linkend="cha.gnome.accessibility"/>.
+  </para>
+    <!--
+
+  <sect2 id="sec.gnome.settings.system.proxy">
+   <title>Configuring Network Proxies</title>
+   <para>
+    The Network Proxy Configuration tool lets you configure how your system
+    connects to the Internet. You can configure the desktop to connect to a
+    proxy server and specify the details of the server. A proxy server is a
+    server that intercepts requests to another server and fulfills the
+    request itself, if it can. You can specify the Domain Name Service (DNS)
+    name or the Internet Protocol (IP) address of the proxy server. A DNS
+    name is a unique alphabetic identifier for a computer on a network. An
+    IP address is a unique numeric identifier for a computer on a network.
+   </para>
+   <para>
+    Click <menuchoice> <guimenu>Computer</guimenu> <guimenu>Control
+    Center</guimenu> <guimenu>System</guimenu> <guimenu>Network
+    Proxy</guimenu> </menuchoice>.
+   </para>
+   <figure id="fig.gnome.settings.system.proxy">
+    <title>Network Proxy Configuration Dialog</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="preferences_network.png" width="65%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="preferences_network.png" width="65%" format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    For more information on the individual options, click
+    <guimenu>Help</guimenu>.
+   </para>
+  </sect2>
+
+  <sect2 id="sec.gnome.settings.system.power">
+   <title>Configuring Power Management</title>
+   <para>
+    The Power Management module lets you manage your system's power-saving
+    options. It is especially useful for extending the life of a laptop's
+    battery charge. However, several options also help to save electricity
+    when you are using a computer that is plugged in to an electrical power
+    outlet.
+   </para>
+   <para>
+    Sleep mode shuts down the computer when it is dormant for a specified
+    period of time. Whether you are using battery or AC power, you can
+    specify the period of time that the computer remains dormant before it
+    is put to sleep. You can also put the computer display to sleep without
+    shutting down the computer, saving the power required by the display.
+   </para>
+   <para>
+    Sleep mode is especially important when the computer is operating under
+    battery power. Both the screen and the computer draw power from the
+    battery, so you can save a significant amount of battery power by
+    shutting down one or both. It is common to put the display to sleep
+    after a shorter period of time. Then, if the computer remains dormant
+    for an additional period of time, it is also put to sleep.
+   </para>
+   <para>
+    There are several sleep modes or actions you can set in the Power
+    Management module on mobile computers:
+   </para>
+   <variablelist>
+    <varlistentry>
+     <term><guimenu>Do nothing</guimenu>
+     </term>
+     <listitem>
+      <para>
+       The computer does not shut down or automatically go into any kind of
+       power-saving mode. If you have a laptop, the laptop continues to run
+       normally when the lid is closed.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Blank screen</guimenu>
+     </term>
+     <listitem>
+      <para>
+       The screen is blanked, reducing power consumption.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Suspend</guimenu>
+     </term>
+     <listitem>
+      <para>
+       Suspend mode turns off power-consuming computer components such as
+       the display and the hard drive without saving the contents of RAM.
+       Any unsaved data is lost.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><guimenu>Hibernate</guimenu>
+     </term>
+     <listitem>
+      <para>
+       The computer saves the contents of RAM to the hard disk and shuts
+       down. When you turn the computer on again, the saved data is put back
+       into RAM, restoring your computer to its previous state.
+       <guimenu>Hibernate</guimenu> requires an amount of free hard disk
+       space equal to the amount of RAM installed on the computer.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    To open the Power Management module, click <menuchoice>
+    <guimenu>Computer</guimenu> <guimenu>Control Center</guimenu>
+    <guimenu>System</guimenu> <guimenu>Power Management</guimenu>
+    </menuchoice>.
+   </para>
+   <procedure>
+    <title>Specifying Your Computer's Sleep Settings</title>
+    <step>
+     <para>
+      Click the tab for the type of power you are using: if your computer
+      uses AC power click <guimenu>On AC Power</guimenu>. If your computer
+      runs on battery power click <guimenu>On Battery Power</guimenu>. If
+      your computer operates on both AC and battery power, you can configure
+      the settings on both tabs.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the <guimenu>Action</guimenu> pane, use the slider to set the
+      amount of inactive time that passes before the computer goes into
+      sleep mode. Specify which action should be performed when the lid is
+      closed and when battery power is critically low.
+     </para>
+    </step>
+    <step>
+     <para>
+      In the <guimenu>Display</guimenu> pane, specify the amount of time
+      after which the display will enter the sleep mode. You can set other
+      options for idle mode here as well, like dimming the display or
+      reducing backlight brightness.
+     </para>
+    </step>
+    <step>
+     <para>
+      On the <guimenu>General</guimenu> tab you can set further options, for
+      example the action to take when the power button is pressed or the
+      sleep type to use when the computer is inactive. The options available
+      there depend on the type of computer you use (laptop or other
+      computer).
+     </para>
+    </step>
+    <step>
+     <para>
+      You can also define when and how to display the power icon in the
+      notification area.
+     </para>
+    </step>
+    <step>
+     <para>
+      On the <guimenu>Scheduling</guimenu> tab you can set automatic
+      wake-ups of the computer in specified time on specified days of the
+      week.
+     </para>
+    </step>
+    <step>
+     <para>
+      When all options are set according to your wishes, click
+      <guimenu>Close</guimenu>. The options you selected go into effect
+      immediately.
+     </para>
+    </step>
+   </procedure>
+  </sect2>-->
+    <sect2 xml:id="sec.gnome.settings.prefapps">
+      <title>Setting Preferred Applications</title>
+      <para>
+    The Preferred Applications module allows you to change the default
+    application for various common tasks such as browsing the Internet,
+    sending mails or playing multimedia files.
+   </para>
+      <figure>
+        <title>Preferred Applications</title>
+        <mediaobject>
+          <imageobject role="fo">
+            <imagedata fileref="preferences_preferred_apps.png" width="65%" format="PNG"/>
+          </imageobject>
+          <imageobject role="html">
+            <imagedata fileref="preferences_preferred_apps.png" width="65%" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+      Tools</guimenu><guimenu>Settings</guimenu><guimenu>Details</guimenu></menuchoice>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click <guimenu>Default Applications</guimenu>.
+     </para>
+        </step>
+        <step>
+          <para>
+      Select one of the available applications from the drop-down box. You
+      can choose an application to handle Web, mail, calendar, music, videos
+      or photographs.
+     </para>
+        </step>
+      </procedure>
+      <para>
+    The changes take effect immediately.
+   </para>
+    </sect2>
+    <sect2 xml:id="sec.gnome.settings.share">
+      <title>Setting Session Sharing Preferences</title>
+      <para>
+    The <guimenu>Remote Desktop Preference</guimenu> dialog lets you share a
+    GNOME desktop session between multiple users and set session-sharing
+    preferences.
+   </para>
+      <important>
+        <title>Sharing Desktop Sessions Affects System Security</title>
+        <para>
+     Be aware that sharing desktop sessions can be a security risk. Use the
+     restriction options available. If you need to adjust the options to a
+     lower security level, do not forget to switch back to a higher security
+     level as soon as possible.
+    </para>
+      </important>
+      <procedure>
+        <step>
+          <para>
+      Click <menuchoice><guimenu>Applications</guimenu><guimenu>System
+      Tools</guimenu><guimenu>Settings</guimenu><guimenu>Sharing</guimenu></menuchoice>.
+     </para>
+          <informalfigure>
+            <mediaobject>
+              <textobject role="description">
+                <phrase>Sharing Preferences dialog box</phrase>
+              </textobject>
+              <imageobject role="fo">
+                <imagedata fileref="remote_desktop_a.png" width="48%" format="PNG"/>
+              </imageobject>
+              <imageobject role="html">
+                <imagedata fileref="remote_desktop_a.png" width="48%" format="PNG"/>
+              </imageobject>
+            </mediaobject>
+          </informalfigure>
+        </step>
+        <step>
+          <para>
+      Turn on the switch in the upper part of the dialog.
+     </para>
+        </step>
+        <step>
+          <para>
+      To share your public directory over the network, click
+      <guimenu>Personal File Sharing</guimenu> and turn on <guimenu>Share
+      Public Folder On This Network</guimenu>. You can also set a password.
+     </para>
+        </step>
+        <step>
+          <para>
+      To share your desktop session with other users click <guimenu>Screen
+      Sharing</guimenu> and activate <guimenu>Remote View</guimenu>. To
+      allow other users to control your screen, activate also
+      <guimenu>Remote Control</guimenu>. You can also set a password.
+     </para>
+        </step>
+        <step>
+          <para>
+      Click the address in the selected text to send the system address by
+      e-mail to a remote user.
+     </para>
+        </step>
+        <!--<step>
+     <para>
+      Make use of the security options available. If <guimenu>Ask you for
+      confirmation</guimenu> is activated, remote users require your
+      confirmation before they can connect to your session. To achieve a
+      higher security level, activate <guimenu>Require the user to enter
+      this password</guimenu> (if authentication is used).
+     </para>
+    </step>-->
+      </procedure>
+    </sect2>
+    <!--<sect2 id="sec.gnome.settings.system.beagle">
+   <title>Configuring Search with Beagle Settings</title>
+   <para>
+    Beagle is the search engine used on the GNOME desktop. To configure the
+    directories Beagle will index, to specify the number of results
+    displayed after a search or to change the Beagle privacy settings, click
+    <menuchoice> <guimenu>Computer</guimenu> <guimenu>Control
+    Center</guimenu> <guimenu>System</guimenu> <guimenu>Search
+    Settings</guimenu> </menuchoice>.
+   </para>
+   <figure>
+    <title>Search Preferences</title>
+    <mediaobject>
+     <imageobject role="fo">
+      <imagedata fileref="preferences_beagle.png" width="48%" format="PNG"/>
+     </imageobject>
+     <imageobject role="html">
+      <imagedata fileref="preferences_beagle.png" width="48%" format="PNG"/>
+     </imageobject>
+    </mediaobject>
+   </figure>
+   <para>
+    For more information, see <xref linkend="sec.gnome.beagle.prefs"/> and
+    <xref
+     linkend="sec.gnome.beagle.indexing_exclude"/>.
+   </para>
+  </sect2>-->
+    <!--<sect2 id="sec.gnome.settings.system.updates">
+   <title>Setting Software Updates</title>
+   <para>
+    The <guimenu>Software Updates</guimenu> tool lets you configure the
+    frequency of update checking, automatic updates and update
+    notifications. Click <menuchoice> <guimenu>Computer</guimenu>
+    <guimenu>Control Center</guimenu> <guimenu>System</guimenu>
+    <guimenu>Software Updates</guimenu> </menuchoice> to open the
+    <guimenu>Software Updates Preferences</guimenu> tool. Refer to
+    <xref
+     linkend="sec.updater.gnome.config"/> for more information.
+   </para>
+  </sect2>-->
+    <sect2 xml:id="sec.gnome.settings.admin">
+      <title>Configuring Administrative Settings with YaST</title>
+      <para>
+    For your convenience, YaST is available from the Control Panel as well
+    as the Applications menu. <phrase os="sled">For information about using
+    YaST, refer to <xref linkend="book.sle.deployment"/>.</phrase></para>
+    </sect2>
+  </sect1>
+</chapter>

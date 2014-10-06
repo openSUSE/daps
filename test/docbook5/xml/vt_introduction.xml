@@ -1,0 +1,190 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="chap.virtualization.introduction">
+  <title>Virtualization Technology</title>
+  <para>
+  Virtualization is a technology that provides a way for a machine (Host) to
+  run another operating system (guest virtual machines) on top of the host
+  operating system.
+ </para>
+  <sect1 xml:id="sec.virtualization.introduction.overview">
+    <title>Overview</title>
+    <!-- import from White papers -->
+    <para>
+   Included with SUSE Linux Enterprise are the latest open-source virtualization
+   technologies, Xen and KVM. With these
+   <xref linkend="gloss.vt.hypervisor"/>s SUSE Linux Enterprise can be used to provision,
+   de-provision, install, monitor and manage multiple virtual machines
+   (VM Guests) on a single physical system. Out of the box, SUSE Linux Enterprise can
+   create virtual machines running both modified, highly tuned,
+   paravirtualized operating systems and fully virtualized unmodified
+   operating systems. Full virtualization allows the guest OS to run
+   unmodified and requires the presence of either Intel* Virtualization
+   Technology (Intel VT) or AMD* Virtualization (AMD-V).
+  </para>
+    <para>
+   The primary component of the operating system that enables virtualization
+   is a <xref linkend="gloss.vt.hypervisor"/> (or virtual machine manager),
+   which is a layer of software that runs directly on server hardware. It
+   controls platform resources, sharing them among multiple VM Guests and
+   their operating systems by presenting virtualized hardware interfaces to
+   each VM Guest.
+  </para>
+    <para>
+   SUSE Linux Enterprise is an enterprise-class Linux server operating system that offers
+   two types of <xref linkend="gloss.vt.hypervisor"/>s: Xen and KVM.
+   Both <xref linkend="gloss.vt.hypervisor"/>s support virtualization on
+   64-bit x86-based hardware architectures. Both Xen and KVM support
+   full virtualization mode. In addition, Xen supports paravirtualized
+   mode. SUSE Linux Enterprise with Xen or KVM acts as a virtualization host server
+   (<xref linkend="gloss.vt.vhs"/>) that supports VM Guests with its own
+   guest operating systems. The SUSE VM Guest architecture consists of a
+   <xref linkend="gloss.vt.hypervisor"/> and management components that
+   constitute the <xref linkend="gloss.vt.vhs"/>, which runs many
+   application-hosting VM Guests.
+  </para>
+    <para>
+   In Xen, the management components run in a privileged VM Guest often
+   referred to as <xref linkend="gloss.vt.dom0"/>. In KVM, where the Linux
+   kernel acts as the hypervisor, the management components run directly on
+   the <xref linkend="gloss.vt.vhs"/>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.virtualization.introduction.capabilities">
+    <title>Virtualization Capabilities</title>
+    <para>
+   Virtualization design provides a large number of capabilities to your
+   organization. Virtualization of operating systems is used in many
+   different computing areas. For example, it finds its applications in:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     Server consolidation: Many servers can be replaced by one big physical
+     server, so hardware is consolidated, and Guest Operating Systems are
+     converted to virtual machine. It provides the ability to run older
+     software on new hardware.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Isolation: guest operating system can be fully isolated from the Host
+     running it. So if the virtual machine is corrupted, the Host system is
+     not harmed.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Migration: A process to move a running virtual machine to another
+     physical machine. Live migration is an extended feature that allows
+     this move without disconnection of the client or the application.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Disaster recovery: <xref linkend="gloss.vt.virtualized"/> guests are
+     less dependent on the hardware, and the Host server provides snapshot
+     features to be able to restore a known running system without any
+     corruption.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Dynamic load balancing: A migration feature that brings a simple way to
+     load-balance your service across your infrastructure.
+    </para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 xml:id="sec.virtualization.introduction.benefits">
+    <title>Virtualization Benefits</title>
+    <para>
+   Virtualization brings a lot of advantages while providing the same
+   service as a hardware server.
+  </para>
+    <para>
+   First, it reduces the cost of your infrastructure. Servers are mainly
+   used to provide a service to a customer, and a virtualized operating
+   system can provide the same service, with:
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     Less hardware: You can run several operating system on one host, so all
+     hardware maintenance will be reduced.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Less power/cooling: Less hardware means you don't need to invest more
+     in electric power, backup power, and cooling if you need more service.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Save space: Your data center space will be saved because you don't need
+     more hardware servers (less servers than service running).
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Less management: Using a VM Guest simplifies the administration of
+     your infrastructure.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Agility and productivity: Virtualization provides
+     <emphasis>migration</emphasis> capabilities, <emphasis>live
+     migration</emphasis> and <emphasis>snapshots</emphasis>. These features
+     reduce downtime, and bring an easy way to move your service from one
+     place to another without any service interruption.
+    </para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 xml:id="sec.virtualization.introduction.fvpv">
+    <title>Understanding Virtualization Modes</title>
+    <para>
+   Guest operating systems are hosted on virtual machines in either full
+   virtualization (FV) mode or paravirtual (PV) mode. Each virtualization
+   mode has advantages and disadvantages.
+  </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+     Full virtualization mode lets virtual machines run unmodified operating
+     systems, such as Windows* Server 2003, but requires the computer
+     running as the VM Host Server to support
+     <xref linkend="gloss.vt.hwassisted"/> virtualization technology, such
+     as AMD* Virtualization or Intel* Virtualization Technology.
+    </para>
+        <para>
+     Some guest operating systems hosted in full virtualization mode can be
+     configured to run the Novell* Virtual Machine Drivers instead of
+     drivers originating from the operating system. Running virtual machine
+     drivers improves performance dramatically on guest operating systems,
+     such as Windows Server 2003. For more information, see
+     <xref linkend="app.vmdp.driver" xrefstyle="ChapTitleOnPage"/>.
+    </para>
+      </listitem>
+      <listitem>
+        <para>
+     Paravirtual mode does not require the host computer to support
+     <xref linkend="gloss.vt.hwassisted"/> virtualization technology, but
+     does require the guest operating system to be modified for the
+     virtualization environment. Typically, operating systems running in
+     paravirtual mode enjoy better performance than those requiring full
+     virtualization mode.
+    </para>
+        <para>
+     Operating systems currently modified to run in paravirtual mode are
+     referred to as <emphasis>paravirtualized operating systems</emphasis>
+     and include <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> and NetWare® 6.5 SP8.
+    </para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <!-- I/O virtualization -->
+  <xi:include href="vt_io.xml" parse="xml"/>
+</chapter>

@@ -1,0 +1,266 @@
+<!-- Converted by db4-upgrade version 1.1 -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:id="cha.slp">
+  <title>SLP</title>
+  <indexterm>
+    <primary>networks</primary>
+    <secondary>SLP</secondary>
+  </indexterm>
+  <indexterm>
+    <primary>Service Location Protocol</primary>
+    <see>SLP</see>
+  </indexterm>
+  <indexterm>
+    <primary>SLP</primary>
+  </indexterm>
+  <indexterm>
+    <primary>protocols</primary>
+    <secondary>SLP</secondary>
+  </indexterm>
+  <para><phrase role="productname"><phrase os="osuse">openSUSE®</phrase><phrase os="sles">SUSE® Linux Enterprise Server</phrase><phrase os="sled">SUSE® Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE® Linux Enterprise Real Time Extension</phrase></phrase> supports installation using installation sources provided
+  with SLP and contains many system services with integrated support for
+  SLP. You can use SLP to provide networked clients with central functions,
+  such as an installation server, file server, or print server on your
+  system. Services that offer SLP support include cupsd, login, ntp,
+  openldap2, postfix, rpasswd, rsyncd, saned, sshd (via fish), vnc, and
+  ypserv.
+ </para>
+  <para>
+  All packages necessary to use SLP services on a network client are
+  installed by default. However, if you want to <emphasis>provide</emphasis>
+  services via SLP, check that the <systemitem>openslp-server</systemitem>
+  package is installed.
+ </para>
+  <sect1 xml:id="sec.slp.sl.fend">
+    <title>The SLP Front-End <command>slptool</command></title>
+    <para><command>slptool</command> is a command line tool to query and register
+   SLP services. The query functions are useful for diagnostic purposes. The
+   most important <command>slptool</command> subcommands are listed below.
+   <command>slptool</command> <option>--help</option> lists all
+   available options and functions.
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term>findsrvtypes</term>
+        <listitem>
+          <para>
+      List all service types available on the network.
+     </para>
+          <screen><prompt role="user">tux &gt; </prompt> slptool findsrvtypes
+service:install.suse:nfs
+service:install.suse:ftp
+service:install.suse:http
+service:install.suse:smb
+service:ssh
+service:fish
+service:YaST.installation.suse:vnc
+service:smtp
+service:domain
+service:management-software.IBM:hardware-management-console
+service:rsync
+service:ntp
+service:ypserv</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>findsrvs <replaceable>service type</replaceable></term>
+        <listitem>
+          <para>
+      List all servers providing <replaceable>service type</replaceable></para>
+          <screen><prompt role="user">tux &gt; </prompt> slptool findsrvs service:ntp
+service:ntp://ntp.example.com:123,57810
+service:ntp://ntp2.example.com:123,57810</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+     findattrs <replaceable>service
+     type</replaceable>//<replaceable>host</replaceable></term>
+        <listitem>
+          <para>
+      List attributes for <replaceable>service type</replaceable> on
+      <replaceable>host</replaceable></para>
+          <screen><prompt role="user">tux &gt; </prompt> slptool findattrs service:ntp://ntp.example.com
+(owner=tux),(email=tux@example.com)</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+     register <replaceable>service
+     type</replaceable>//<replaceable>host</replaceable>:<replaceable>port</replaceable>
+     "(<replaceable>attribute=value</replaceable>),(<replaceable>attribute=value</replaceable>)"
+    </term>
+        <listitem>
+          <para>
+      Registers <replaceable>service type</replaceable> on
+      <replaceable>host</replaceable> with an optional list of attributes
+     </para>
+          <screen>slptool register service:ntp://ntp.example.com:57810 \
+"(owner=tux),(email=tux@example.com)"</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+     deregister <replaceable>service
+     type</replaceable>//<replaceable>host</replaceable></term>
+        <listitem>
+          <para>
+      De-registers <replaceable>service type</replaceable> on
+      <replaceable>host</replaceable></para>
+          <screen>slptool deregister service:ntp://ntp.example.com</screen>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+   For more information run <command>slptool --help</command>.
+  </para>
+  </sect1>
+  <sect1 xml:id="sec.slp.sl.reg">
+    <title>Providing Services via SLP</title>
+    <para>
+   To provide SLP services, the SLP daemon
+   (<systemitem class="daemon">slpd</systemitem>) must be running. Like
+   most system services in <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase>,
+   <systemitem class="daemon">slpd</systemitem> is controlled by means of a
+   separate start script. After the installation, the daemon is inactive by
+   default. To activate it for the current session, run <command>sudo
+   systemctl start slpd.service</command>. If
+   <systemitem class="daemon">slpd</systemitem> should be activated on
+   system start-up, run <command>sudo systemctl enable
+   slpd.service</command>.
+  </para>
+    <para>
+   Many applications in <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> have integrated SLP support through
+   the use of the <literal>libslp</literal> library. If a service has not
+   been compiled with SLP support, use one of the following methods to make
+   it available via SLP:
+  </para>
+    <variablelist>
+      <varlistentry>
+        <term>Static Registration with <filename>/etc/slp.reg.d</filename></term>
+        <listitem>
+          <para>
+      Create a separate registration file for each new service. The
+      following example registers a scanner service:
+     </para>
+          <screen>## Register a saned service on this system
+## en means english language
+## 65535 disables the timeout, so the service registration does
+## not need refreshes
+service:scanner.sane://$HOSTNAME:6566,en,65535
+watch-port-tcp=6566
+description=SANE scanner daemon</screen>
+          <para>
+      The most important line in this file is the <emphasis>service
+      URL</emphasis>, which begins with <literal>service:</literal>. This
+      contains the service type (<literal>scanner.sane</literal>) and the
+      address under which the service is available on the server.
+      <replaceable>$HOSTNAME</replaceable> is automatically replaced with
+      the full host name. The name of the TCP port on which the relevant
+      service can be found follows, separated by a colon. Then enter the
+      language in which the service should appear and the duration of
+      registration in seconds. These should be separated from the service
+      URL by commas. Set the value for the duration of registration between
+      <literal>0</literal> and <literal>65535</literal>.
+      <literal>0</literal> prevents registration. <literal>65535</literal>
+      removes all restrictions.
+     </para>
+          <para>
+      The registration file also contains the two variables
+      <systemitem>watch-port-tcp</systemitem> and
+      <systemitem>description</systemitem>.
+      <systemitem>watch-port-tcp</systemitem> links the SLP service
+      announcement to whether the relevant service is active by having
+      <systemitem class="daemon">slpd</systemitem> check the status of the
+      service. The second variable contains a more precise description of
+      the service that is displayed in suitable browsers.
+     </para>
+          <tip>
+            <title>YaST and SLP</title>
+            <para>
+       Some services brokered by YaST, such as an installation server or
+       YOU server, perform this registration automatically when you activate
+       SLP in the module dialogs. YaST then creates registration files for
+       these services.
+      </para>
+          </tip>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Static Registration with <filename>/etc/slp.reg</filename></term>
+        <listitem>
+          <para>
+      The only difference between this method and the procedure with
+      <filename>/etc/slp.reg.d</filename> is that all services are grouped
+      within a central file.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Dynamic Registration with <command>slptool</command></term>
+        <listitem>
+          <para>
+      If a service needs to be registered dynamically without the need of
+      configuration files, use the slptool command line utility. The same
+      utility can also be used to de-register an existing service offering
+      without restarting <systemitem class="daemon">slpd</systemitem>. See
+      <xref linkend="sec.slp.sl.fend"/> for details.
+     </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <sect2 xml:id="sec.slp.sl.reg.install">
+      <title>Setting up an SLP Installation Server</title>
+      <para>
+    Announcing the installation data via SLP within your network makes the
+    network installation much easier, since the installation data such as IP
+    address of the server or the path to the installation media are
+    automatically required via SLP query. Refer to
+    <xref linkend="sec.deployment.remoteinst.instserver"/> for
+    instructions.
+   </para>
+    </sect2>
+  </sect1>
+  <sect1 xml:id="sec.slp.info">
+    <title>For More Information</title>
+    <variablelist>
+      <varlistentry>
+        <term>RFC 2608, 2609, 2610</term>
+        <listitem>
+          <para>
+      RFC 2608 generally deals with the definition of SLP. RFC 2609 deals
+      with the syntax of the service URLs used in greater detail and RFC
+      2610 deals with DHCP via SLP.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <ulink url="http://www.openslp.org"/>
+        </term>
+        <listitem>
+          <para>
+      The home page of the OpenSLP project.
+     </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <filename>/usr/share/doc/packages/openslp</filename>
+        </term>
+        <listitem>
+          <para>
+      This directory contains the documentation for SLP coming with the
+      <systemitem>openslp-server</systemitem> package, including a
+      <filename>README.SuSE</filename> containing the <phrase role="productname"><phrase os="osuse">openSUSE</phrase><phrase os="sles">SUSE Linux Enterprise Server</phrase><phrase os="sled">SUSE Linux Enterprise Desktop</phrase><phrase os="slerte">SUSE Linux Enterprise Real Time Extension</phrase></phrase> details,
+      the RFCs, and two introductory HTML documents. Programmers who want to
+      use the SLP functions will find more information in the
+      <emphasis>Programmers Guide</emphasis> that is included in the
+      <systemitem class="resource">openslp-devel</systemitem> package that
+      is provided with the SUSE Software Development Kit.
+     </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </sect1>
+</chapter>
