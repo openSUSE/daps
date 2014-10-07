@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+sysconfdir=debian/daps/etc
+
+%:
+	dh $@  --with autotools-dev
+
+override_dh_auto_configure:
+	#dh_auto_configure -- --disable-edit-rootcatalog
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-edit-rootcatalog
