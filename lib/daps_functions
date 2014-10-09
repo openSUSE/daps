@@ -1564,17 +1564,19 @@ function spellcheck () {
         fi
     fi
 
-    # Set language - if not specified try to get from $MAIN
+    # Set language - if not specified anywhere try to get from $MAIN
     #
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-        ASPELL_LANG=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
-        if [[ -n "$ASPELL_LANG" ]]; then
-            ccecho "info" "Using language $ASPELL_LANG."
-        else
-            exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
-        fi
+	if [[ -z  "ASPELL_LANG" ]]; then 
+            ASPELL_LANG=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
+            if [[ -n "$ASPELL_LANG" ]]; then
+		ccecho "info" "Using language $ASPELL_LANG."
+            else
+		exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
+            fi
+	fi
     fi
 
     #------------------
