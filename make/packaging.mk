@@ -190,11 +190,15 @@ online-docs:
 	cp $(EPUB_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
     ifneq ($(NOHTML),1)
-	cp $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2 \
-	  $(OD_EXPORT_BOOKDIR)
+	cp $(PACKAGE_HTML_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
 	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
   endif
+
+#	cp $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2 \
+#	  $(OD_EXPORT_BOOKDIR)
+
+
 
 #----
 # also creates $(OD_EXPORT_DIR)
