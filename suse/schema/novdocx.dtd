@@ -83,6 +83,13 @@
 <!ENTITY % xmlbase
    "xml:base  CDATA     #IMPLIED">
 
+<!-- direction attribute -->
+<!ENTITY % dir.attrib
+        "dir    (ltr
+                 |rtl
+                 |lro
+                 |rlo)       #IMPLIED">
+
 
 <!ELEMENT set       (title,subtitle?,titleabbrev?,
                     setinfo?, toc?,
@@ -357,6 +364,7 @@
                id             ID        #IMPLIED
                remap       CDATA     #IMPLIED
                revision       CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase; >
 
@@ -370,6 +378,7 @@
                id             ID        #IMPLIED
                revision       CDATA     #IMPLIED
                lang           CDATA     #IMPLIED
+               %dir.attrib;
                class          (faq|journalarticle|productsheet|specification|
                                techreport|whitepaper)        #IMPLIED
                %profiling.attributes;
@@ -392,6 +401,7 @@
 <!ATTLIST book
                revision       CDATA     #IMPLIED
                role           CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                conformance    CDATA     #IMPLIED
                lang           CDATA     #IMPLIED
@@ -414,6 +424,7 @@
 <!ATTLIST bridgehead
                %profiling.attributes;
                %xmlbase;
+               %dir.attrib;
                renderas				(sect1 | sect2 | sect3 | sect4) #IMPLIED
                id             ID        #IMPLIED>
 
@@ -429,6 +440,7 @@
                lang           CDATA     #IMPLIED
                remap          CDATA     #IMPLIED
                revision       CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -519,6 +531,7 @@
 <!ATTLIST glossary
                role           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -532,11 +545,13 @@
 
 <!ATTLIST glossdiv
                id             ID        #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST glossentry
                id             ID        #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
@@ -548,6 +563,7 @@
 
 <!ATTLIST index
                role           CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
@@ -705,6 +721,7 @@
                role           CDATA     #IMPLIED
                conformance    CDATA     #IMPLIED
                id             ID        #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -724,6 +741,7 @@
 <!ATTLIST preface
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase; >
 
@@ -787,6 +805,7 @@
                role           CDATA     #IMPLIED
                id             ID        #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes; 
                %xmlbase; >
                
@@ -797,18 +816,21 @@
 <!ATTLIST refsect1
                id             ID        #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST refsect2
                id             ID        #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
 <!ATTLIST refsect3
                id             ID        #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
                
@@ -841,6 +863,7 @@
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -848,6 +871,7 @@
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -855,6 +879,7 @@
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -862,6 +887,7 @@
                id             ID        #IMPLIED
                role           CDATA     #IMPLIED
                remap          CDATA     #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;  >
 
@@ -881,6 +907,7 @@
 <!ATTLIST set
                lang           CDATA     #IMPLIED
                id             ID        #IMPLIED
+               %dir.attrib;
                %profiling.attributes;
                %xmlbase;>
 
