@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2013, 2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -14,10 +14,9 @@
 # * Are all output formats created?
 #
 # TODO
-# * Does the --rootid option work correctly?
 # * Is the --name option correctly implemented?
-# * Does the --noset option work correctly?
 # * Does the --export-dir function work correctly?
+# * Does it work when draft mode is set in the DC file?
 
 _OD_NAME_DIR=""
 _OD_TEMPDIR=""
@@ -72,7 +71,7 @@ function test_onlinedocs () {
         "$?"
     assertTrue \
 	" └─ The resulting file (${_OD_BUILD_PATH}) does not exist." \
-	"[ -s $_OD_BUILD_PATH ]"
+	"[ -d $_OD_BUILD_PATH ]"
 
 }
 
@@ -161,6 +160,30 @@ function test_onlinedocsHTML () {
         " └─ The single-html tarball (${_OD_NAME_HTML}) does not exist" \
         "[[ -s ${_OD_NAME_DIR}/${_OD_NAME_HTML} ]]"
   
+}
+
+#--------------------------------
+# * Does the --rootid option work correctly?
+#
+
+function test_onlinedocsRootidNoset () {
+
+    local _OD_BUILD_PATH
+    _ROOTID=appendix
+
+    clean_build_dir results
+
+    $_DAPSEXEC -v0 -d $_DCFILE --debug online-docs --rootid "$_ROOTID" --noset >/dev/null 2>&1
+    assertTrue \
+        ' └─ Building the the online-docs with --rootid failed.' \
+        "$?"
+    egrep -q -- "--stringparam\s+\"rootid=$_ROOTID\"" $_LOGFILE 2>/dev/null
+    assertTrue \
+	' └─ Stringparam for ROOTID is not correctly specified when generating online-docs' \
+	"$?"
+    assertTrue \
+	' └─ The --noset option does not work correctly' \
+	"[[ -s ${_OD_NAME_DIR}/${_ROOTID}_en.xml ]]"
 }
 
 # source shUnit2 test
