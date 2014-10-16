@@ -12,13 +12,15 @@
 # * Is the bigfile generated?
 # * Is the image tarball generated? Does it include all images?
 # * Are all output formats created?
-#
-# TODO
+# * Does the --rootid option work correctly?
+# * DOes the --noset option work correctly?
 # * Is the --name option correctly implemented?
 # * Does the --export-dir function work correctly?
 # * Does it work when draft mode is set in the DC file?
+#
 
 _OD_NAME_DIR=""
+_OD_NAME_BIGFILE=""
 _OD_TEMPDIR=""
 _LOGFILE=""
 
@@ -37,12 +39,22 @@ function oneTimeSetUp() {
 	exit_on_error " The initial DAPS call to determine the path to the resulting locdrop directory failed. Skipping tests"
     fi
 
+    _OD_NAME_BIGFILE=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=OD_BIGFILE 2>/dev/null)
+    if [ $? -ne 0 ]; then
+	exit_on_error " The initial DAPS call to determine the path to the resulting bigfile failed. Skipping tests"
+    fi
+
     _LOG_DIR=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=LOG_DIR 2>/dev/null)
     if [ $? -ne 0 ]; then
 	exit_on_error " The initial DAPS call to determine the LOG file failed. Skipping tests"
     fi
     _LOGFILE=${_LOG_DIR}/make_online-docs.log
-    _OD_TEMPDIR=$(mktemp -d -q ${SHUNIT_TMPDIR}/od_XXXXXX)
+
+    # create temp dir
+    #
+    make_tempdir "_OD_TEMPDIR"
+    _OD_TEMPDIR="${_OD_TEMPDIR}/onlinedocs"
+    mkdir -p "$_OD_TEMPDIR" || exit_on_error " Creating a temporary directory failed. Skipping tests"
 
 }
 
@@ -61,6 +73,7 @@ function oneTimeTearDown() {
 
 #--------------------------------
 # *  * Does online-docs correctly build?
+# * Is the bigfile generated?
 #
 function test_onlinedocs () {
     local _OD_BUILD_PATH
@@ -72,19 +85,6 @@ function test_onlinedocs () {
     assertTrue \
 	" └─ The resulting file (${_OD_BUILD_PATH}) does not exist." \
 	"[ -d $_OD_BUILD_PATH ]"
-
-}
-
-#--------------------------------
-# * Is the bigfile generated?
-#
-function test_onlinedocsFiles () {
-    local _OD_NAME_BIGFILE
-
-    _OD_NAME_BIGFILE=$($_DAPSEXEC -v0 -d $_DCFILE showvariable VARIABLE=OD_BIGFILE 2>/dev/null)
-    assertTrue \
-        ' └─ The command to determine the name of the bigfile failed' \
-        "$?"
     assertTrue \
         " └─ The bigfile ($_OD_NAME_BIGFILE) does not exist or has size 0" \
         "[[ -s $_OD_NAME_BIGFILE ]]"
@@ -164,7 +164,7 @@ function test_onlinedocsHTML () {
 
 #--------------------------------
 # * Does the --rootid option work correctly?
-#
+# * Does the --noset option work correctly?
 
 function test_onlinedocsRootidNoset () {
 
@@ -183,7 +183,66 @@ function test_onlinedocsRootidNoset () {
 	"$?"
     assertTrue \
 	' └─ The --noset option does not work correctly' \
-	"[[ -s ${_OD_NAME_DIR}/${_ROOTID}_en.xml ]]"
+	"[ -s ${_OD_NAME_DIR}/${_ROOTID}_en.xml ]"
+}
+
+#--------------------------------
+# * Is the --name option correctly implemented?
+
+function test_onlinedocsName () {
+
+    local _OD_SUBDIR_NAME _NAME _OD_BUILD_PATH
+
+    _NAME="testsuite"
+
+    clean_build_dir results
+
+    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE online-docs --name $_NAME 2>/dev/null)
+    assertTrue \
+        ' └─ Building online-docs with --name failed' \
+        "$?"
+
+    _OD_SUBDIR_NAME=$(basename $(dirname $_OD_BUILD_PATH))
+    assertEquals \
+	" └─ The resulting directory name does not match the string specified with --name." \
+	"$_NAME" "$_OD_SUBDIR_NAME"
+}
+
+#--------------------------------
+# * Does the --export-dir function work correctly?
+
+function test_onlinedocsExportdir () {
+    local _BIGFILE _EXPORT_DIR _OD_BUILD_PATH
+    local _DOCNAME
+
+    _BIGFILE=$(basename $_OD_NAME_BIGFILE)
+
+    _EXPORT_DIR="$_OD_TEMPDIR"
+    rm -rf "$_EXPORT_DIR" && mkdir -p "$_EXPORT_DIR"
+
+    clean_build_dir results
+
+    _OD_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE online-docs --export-dir $_EXPORT_DIR 2>/dev/null)
+    assertTrue \
+        ' └─ Building the online-docs with --export-dir failed' \
+        "$?"
+    assertTrue \
+        ' └─ The bigfile is not generated in the export directory' \
+        "[ -s ${_OD_BUILD_PATH}/$_BIGFILE ]"
+}
+
+#--------------------------------
+# * Does it work when draft mode is set in the DC file?
+
+function test_onlinedocsDraft () {
+
+    local _DCFILE_DRAFT
+    _DCFILE_DRAFT="${_DOC_DIR}/DC-booktest_draft"
+
+    $_DAPSEXEC -d $_DCFILE_DRAFT online-docs >/dev/null 2>&1
+    assertTrue \
+        ' └─ Building online docs with DRAFT="yes" in the DC-file failed.' \
+        "$?"
 }
 
 # source shUnit2 test
