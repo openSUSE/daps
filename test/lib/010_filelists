@@ -9,14 +9,12 @@
 #
 # * Does the list-file command show the correct file?
 # * Does the list-srcfiles command show the correct files?
-#
-#  TODO:
 # * Do the command line options that exclude files for list-srcfiles work?
 # * Does the --pretty option work?
 # * Does the list-srcfiles-unused command show the correct files?
-# * Does the list-images-missing command show the correct files?
 # * Does the list-images-multisrc command show the correct files?
-
+# * Does the list-images-missing command show the correct files?
+#
 
 _DAPSROOT_ABS=""
 _DOC_DIR_ABS=""
@@ -39,6 +37,8 @@ function oneTimeTearDown () {
     stats
     # Clean up the build directory
     clean_build_dir all
+    # cleam multisrc image if existing
+    [[ -f $_MULTISRC_IMAGE ]] && rm -f $_MULTISRC_IMAGE
 }
 
 #---------------------------------------------------------------
@@ -70,7 +70,7 @@ function test_filelistsListfile () {
 #--------------------------------
 # * Does the list-srcfiles command show the correct files?
 #
-function test_filelistsListSRCfiles () {
+function test_filelistsSRCfiles () {
     local _ENTITY_FILE _FILE _DC
     declare -a _FILE_NAMES_BUILD
     declare -a _FILE_NAMES_EXPECTED
@@ -103,11 +103,170 @@ function test_filelistsListSRCfiles () {
 	" └─ The list of file from the list-srcfiles command does not match the real list of files ($_FILES_DIFF)." \
 	"$_FILES_DIFF"
 
+}
 
-    # Now test the command line options that exclude stuff from 
-    # the list
-    #
+#--------------------------------
+# * Do the command line options that exclude files for list-srcfiles work?
 
+function test_filelistsSRCfiles_Excludes () {
+    local _ENTITY_FILE _DC _FILE_NAMES_BUILD
+
+    _DC=$(basename "$_DCFILE")
+    _ENTITY_FILE="entity-decl.ent"
+
+    # --nodc
+    _FILE_NAMES_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --nodc 2>/dev/null)
+    assertTrue \
+        ' └─ The list-srcfiles command with --nodc failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles command with --nodc produced an empty list.' \
+        "$_FILE_NAMES_BUILD"
+
+    echo "$_FILE_NAMES_BUILD" | grep -q "$_DC" 2>/dev/null
+    assertFalse \
+        ' └─ The DC-file was not removed from the result list when running list-files with --nodc.' \
+        "$?"
+
+    # --noent
+    _FILE_NAMES_BUILD=""
+
+    _FILE_NAMES_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --noent 2>/dev/null)
+    assertTrue \
+        ' └─ The list-srcfiles command with --noent failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles command with --noent produced an empty list.' \
+        "$_FILE_NAMES_BUILD"
+
+    echo "$_FILE_NAMES_BUILD" | grep -q "$_ENTITY_FILE" 2>/dev/null
+    assertFalse \
+        ' └─ The entity file was not removed from the result list when running list-srcfiles with --noent.' \
+        "$?"
+
+    # --noimg
+    _FILE_NAMES_BUILD=""
+
+    _FILE_NAMES_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --noimg 2>/dev/null)
+    assertTrue \
+        ' └─ The list-srcfiles command with --noimg failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles command with --noimg produced an empty list.' \
+        "$_FILE_NAMES_BUILD"
+
+    echo "$_FILE_NAMES_BUILD" | grep -q "images/src" 2>/dev/null
+    assertFalse \
+        ' └─ The images were not removed from the result list when running list-srcfiles with --noimg.' \
+        "$?"
+
+    # --noxml
+    _FILE_NAMES_BUILD=""
+
+    _FILE_NAMES_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --noxml 2>/dev/null)
+    assertTrue \
+        ' └─ The list-srcfiles command with --noxml failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles command with --noxml produced an empty list.' \
+        "$_FILE_NAMES_BUILD"
+
+    echo "$_FILE_NAMES_BUILD" | grep -q "xml/$_MAIN" 2>/dev/null
+    assertFalse \
+        " └─ $_MAIN was not removed from the result list when running list-srcfiles with --noxml." \
+        "$?"
+}
+
+#--------------------------------
+# * Does the --pretty option work?
+
+function test_filelistsSRCfiles_Pretty () {
+    local _LINE_COUNT
+
+    _FILE_NAMES_BUILD=""
+
+    _LINE_COUNT=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles --pretty 2>/dev/null | wc -l)
+    assertTrue \
+        ' └─ The list-srcfiles command with --pretty failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles command with --pretty produced an empty list.' \
+        "$_LINE_COUNT"
+    assertTrue \
+        ' └─ The result does not seem to be OK when running list-srcfiles with --pretty' \
+        "[ $_LINE_COUNT -gt 10 ]"
+
+}
+
+# --------------------------------
+# * Does the list-srcfiles-unused command show the correct files?
+
+function test_filelistsSRCfilesUnused () {
+
+    local _FILE_NAMES_BUILD
+
+    _FILE_NAMES_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-srcfiles-unused 2>/dev/null)
+    assertTrue \
+        ' └─ The list-srcfiles-unused command failed.' \
+        "$?"
+    assertNotNull \
+        ' └─ The list-srcfiles-unused command produced an empty list.' \
+        "$_FILE_NAMES_BUILD"
+
+    echo "$_FILE_NAMES_BUILD" | grep -q "_NO_SET_FILE" 2>/dev/null
+    assertFalse \
+        " └─ $_NO_SET_FILE was not listed when running list-srcfiles-unused." \
+        "$?"
+    echo "$_FILE_NAMES_BUILD" | grep -q "_NO_SET_IMAGE" 2>/dev/null
+    assertFalse \
+        " └─ $_NO_SET_IMAGE was not listed when running list-srcfiles-unused." \
+        "$?"
+    echo "$_FILE_NAMES_BUILD" | grep -q "_MAIN_NOPROF" 2>/dev/null
+    assertFalse \
+        " └─ $_MAIN_NOPROF was not listed when running list-srcfiles-unused." \
+        "$?"
+}
+
+# --------------------------------
+# * Does the list-images-multisrc command show the correct files?
+
+function test_filelistsImagesMultisrc () {
+
+    local _MSRC_IMAGE _MSRC_IMAGE_BUILD
+
+    _MSRC_IMAGE=$(basename $_MULTISRC_IMAGE .svg)
+
+    touch $_MULTISRC_IMAGE
+
+    _MSRC_IMAGE_BUILD=$($_DAPSEXEC -v0 -d $_DCFILE list-images-multisrc 2>/dev/null)
+    assertTrue \
+        ' └─ The list-images-unused command failed.' \
+        "$?"
+    echo $_MSRC_IMAGE_BUILD | grep -q "$_MSRC_IMAGE" 2>/dev/null
+    assertTrue \
+	' └─ The list-images-unused command did not produce the correct result: ' \
+	"$?"
+}
+
+# --------------------------------
+# * Does the list-images-missing command show the correct files?
+
+function test_filelistsImagesMissing () {
+    
+    local _MISSING_IMG _MISSING_IMG_BUILD _MISSING_IMG_MAIN
+
+    _MISSING_IMG="missing_image_file"
+    _MISSING_IMG_MAIN="${_DOC_DIR}/xml/$_NO_SET_FILE"
+
+    _MISSING_IMG_BUILD=$($_DAPSEXEC -v0 --main $_MISSING_IMG_MAIN list-images-missing 2>/dev/null)
+     assertTrue \
+        ' └─ The list-images-missing command failed.' \
+        "$?"   
+
+    echo "$_MISSING_IMG_BUILD" | grep -q "$_MISSING_IMG" 2>/dev/null
+    assertTrue \
+	' └─ The list-images-missing command did not produce the correct result: ' \
+	"$?"    
 }
 
 # source shUnit2 test

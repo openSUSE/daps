@@ -44,6 +44,8 @@ export _NO_SET_FILE="not_in_set.xml"
 
 export _SET_IMAGES="dia/dia_example.dia eps/eps_example.eps fig/fig_example.fig jpg/jpg_example.jpg pdf/pdf_example.pdf png/png_example.png png/png_example2.png svg/svg_example.svg"
 export _NO_SET_IMAGE="png/z_not_included.png"
+export _MULTISRC_IMAGE="${_DOC_DIR}/images/src/svg/png_example.svg"
+
 
 export _SET_ID="dblayouttest"
 
@@ -80,6 +82,7 @@ declare -a _FO_PROCS=( "fop" "xep" )
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
     rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
+    [[ -f $_MULTISRC_IMAGE ]] && rm -f $_MULTISRC_IMAGE
     exit 1;
 }
 
