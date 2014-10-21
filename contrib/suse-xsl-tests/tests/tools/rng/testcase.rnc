@@ -1,0 +1,87 @@
+#
+# Simple test 
+#
+# Author: Thomas Schraitle <toms@opensuse.org>
+# 
+#
+default namespace t = "urn:x-suse:toms:ns:testcases"
+namespace db = "http://docbook.org/ns/docbook"
+namespace fo = "http://www.w3.org/1999/XSL/Format"
+namespace xh = "http://www.w3.org/1999/xhtml"
+
+div {
+  t._any.attribute =
+    ## Any attribute, including any attribute in any namespace.
+    attribute * { text }
+
+  t._any =
+    ## Any element from almost any namespace
+    element * - (t:* | fo:* | xh:* | db:*) {
+      (t._any.attribute | text | t._any)*
+    }
+}
+
+div {
+  t.version.attribute =
+    ## Specifies the version of the testcases element
+    attribute version { "1.0" }
+    
+  t.testcases.attributes =
+    t.version.attribute?
+  
+  t.testcases =
+    ## Root element for all testcases
+    element t:testcases {
+      t.testcases.attributes, 
+      t.scenario 
+    }
+}
+
+div {
+  t.scenario.attributes =
+    empty
+
+  t.scenario =
+    ## Collects one or many test case expressions and context information
+    element t:scenario { 
+      t.scenario.attributes,
+      t.try+,
+      t.context
+    }
+}
+
+div {
+  t.try.xpath.attribute =
+    ## Contains an XPath expression to test to the result of the context
+    attribute xpath { text }
+    
+  t.try.expect.attribute =
+    ## Contains the expected expression
+    attribute expect { text }
+
+  t.try.attributes =
+    t.try.xpath.attribute
+    & t.try.expect.attribute
+    
+  t.try =
+    ## One single test expression
+    element t:try {
+      t.try.attributes,
+      empty
+    }
+}
+
+div {
+  t.context.attributes =
+    empty
+    
+  t.context =
+    ## Context information to test
+    element t:context {
+      t.context.attributes,
+      t._any
+    }
+
+}
+
+start = t.testcases
