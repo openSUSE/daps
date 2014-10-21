@@ -45,8 +45,7 @@
   </para>'>
 
 <!ENTITY daps-db-versions
-"Currently, &dapsacr; supports only DocBook 4.x. Support for DocBook 5.x is
- planned for version 2.0.">
+"&dapsacr; supports DocBook 4.x and DocBook 5.x.">
 
 <!ENTITY daps-sys-req-general
 '  <para>
@@ -219,9 +218,7 @@
 '  <para>
     The &dapslong; can be installed and used on any Linux distribution.
     Currently, &dapsacr; is available as an RPM package for the &osuse;
-    distribution.
-    <remark>taroth 2012-03-20: (and the &sle; products based on
-    &osuse;)???</remark><remark>Not yet ... -- sknorr, 2012-09-20</remark>
+    distribution, and for &sle; products, which are based on &osuse;.
     Eventually, packages for other distributions may become available.
     In the meantime, you can download a TAR archive with the &dapsacr; sources
     and install them on any distribution as described in
@@ -230,45 +227,67 @@
 '>
 
 <!ENTITY daps-install-osuse
-'  <para>
-   There are a few ways to install &dapsacr; on &osuse;. To always stay up-to-date
-   with the latest version of &dapsacr; install the <systemitem class="resource">daps</systemitem>
-   package from the   <systemitem class="service">&suse-dapsrepo;</systemitem> repository as outlined below.
-  </para>
-  <procedure>
-   <title>Installing &dapsacr; via 1-Click Install</title>
-   <step><para>Open your browser and go to
-    <ulink url="http://software.opensuse.org/"/>.</para>
-   </step>
-   <step>
-    <para>Enter <systemitem class="resource">daps</systemitem>.</para>
-   </step>
-   <step>
-    <para>On the resulting page, click <menuchoice><guimenu>daps</guimenu>
-    <guimenu>Show other versions</guimenu>
-    <guimenu>Show unstable packages</guimenu></menuchoice>.</para>
-   </step>
-   <step>
-    <para>Look for the version from the repository
-    <systemitem class="service">&suse-dapsrepo;</systemitem> and click the
-    <guimenu>1-Click Install</guimenu> link next to it. A window called
-    <guimenu>&yast;&ndash;1-Click Install</guimenu> should appear.</para>
-   </step>
-   <step><para>Follow the instructions and click <guimenu>Next</guimenu>,
-   <guimenu>Trust</guimenu>, and finally <guimenu>Finish</guimenu>.</para>
-   </step>
-  </procedure>
-  <para>
-   If you are already well-versed in the usage of &osuse;, you can of course also
-   add the <systemitem class="service">&suse-dapsrepo;</systemitem> repository
-   with either <command>zypper</command> or <guimenu>&yast;</guimenu>.
-  </para>
-  <para>
-   You may also use the <systemitem class="resource">daps</systemitem> package
-   that shipped with your version of &osuse;. However, you then might miss the latest
-   features and bug fixes in &dapsacr;.
-  </para>
-'>
+'   <para>
+    There are a few ways to install &dapsacr; on &osuse;. To always stay up-to-date
+    with the latest version of &dapsacr; install the <systemitem class="resource">daps</systemitem>
+    package from the   <systemitem class="service">&suse-dapsrepo;</systemitem> repository as outlined below.
+   </para>
+   <procedure>
+    <title>Installing &dapsacr; via 1-Click Install</title>
+    <step>
+     <para>Open your browser and go to <ulink
+      url="http://software.opensuse.org/"/>.</para>
+    </step>
+    <step>
+     <para>In the 
+      <guimenu>Search</guimenu> box, 
+      enter <systemitem class="resource">daps</systemitem> and press
+      <keycap>Enter</keycap>. </para>
+    </step>
+    <step>
+     <para>Click the resulting <guimenu>daps</guimenu> entry to switch to the
+       <guimenu>Direct Install</guimenu> page for &dapsacr;. By default, the
+      Web page shows the &dapsacr; version that is available for the latest
+      &osuse; version.</para>
+    </step>
+    <step>
+     <para>To get the latest &dapsacr; version instead,  click <guimenu>Show
+      Other Versions</guimenu> below <guimenu>Direct Install</guimenu>.
+     </para>
+    </step>
+    <step>
+     <para>Click <menuchoice>
+      <guimenu>&osuse; Factory</guimenu>
+      <guimenu>Show Unstable Packages</guimenu>
+     </menuchoice>.</para></step>
+    <step>
+     <para>Look for the <systemitem class="service"
+      >&suse-dapsrepo;</systemitem> repository and click the
+      <guimenu>1-Click Install</guimenu> link next to the repository.</para>
+    </step>
+    <step>
+     <para>Confirm your choice to continue.</para>
+    </step>
+    <step>
+     <para>Follow the instructions in the <guimenu>1-Click Install</guimenu>
+      wizard to complete the installation.</para>
+    </step>
+   </procedure>
+   <para>
+    If you are already well-versed in the usage of &osuse;, you can of course also
+    add the 
+    <systemitem class="service">&suse-dapsrepo;</systemitem> repository
+    with either <command>zypper</command> or <guimenu>&yast;</guimenu>.
+   </para>
+   <para>
+    You may also use the <systemitem class="resource">daps</systemitem> package
+    that shipped with your version of &osuse;. However, you then might miss the latest
+    features and bug fixes in &dapsacr;.
+   </para> '>
+
+<!ENTITY daps-install-sle 
+'<para>
+    <remark>taroth 2014-10-21: WIP</remark></para>'>
 
 <!ENTITY daps-images-intro
 ' <para>
