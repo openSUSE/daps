@@ -86,11 +86,11 @@ stylecheck: $(BIGFILE)
 .PHONY: productinfo
 productinfo: $(BIGFILE) 
   ifdef ROOTID
-	@echo -n "PRODUCTNAME=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productname" $< 2>/dev/null)\" "
-	@echo -n "PRODUCTNUMBER=\"$(shell xml sel -t -v "//*[@id='$(ROOTID)']/*/productnumber" $< 2>/dev/null)\""
+	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel -t -v "//*[@id='$(ROOTID)']/*/productname" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel -t -v "//*[@id='$(ROOTID)']/*/productnumber" $< 2>/dev/null)\""
   else
-	@echo -n "PRODUCTNAME=\"$(shell xml sel -t -v "(/*/*/productname)[1]" $< 2>/dev/null)\" "
-	@echo -n "PRODUCTNUMBER=\"$(shell xml sel -t -v "(/*/*/productnumber)[1]" $< 2>/dev/null)\""
+	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel -t -v "(/*/*/productname)[1]" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel -t -v "(/*/*/productnumber)[1]" $< 2>/dev/null)\""
   endif
 
 
