@@ -177,21 +177,15 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
   endif
 	cp -rs $(STYLEIMG)/* $(EPUB_STATIC)
   ifeq ($(EPUB3),1)
-	(cd $(EPUB_TMPDIR); zip -r -X $@ mimetype META-INF OEBPS)
+	(cd $(EPUB_TMPDIR); zip -r -X $@ mimetype META-INF OEBPS $(DEVNULL))
   else
     ifneq "$(strip $(EPUB_CSS))" ""
 	cp -s $(EPUB_CSS) $(EPUB_OEBPS)
     endif
 	(cd $(EPUB_TMPDIR); \
 	  zip -r -X $@ mimetype META-INF OEBPS/content.opf \
-	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_OEBPS)/content.opf)))
+	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_OEBPS)/content.opf)) $(DEVNULL))
   endif
-
-
-#	(cd $(EPUB_TMPDIR); \
-#	  zip -r -X $@ mimetype META-INF OEBPS/package.opf \
-#	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_OEBPS)/package.opf)))
-
 
 #--------------
 # Check epub file
