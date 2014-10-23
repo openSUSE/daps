@@ -187,6 +187,10 @@ function parse_args () {
                 P_IMAGES_ONLINE=1
                 shift
                 ;;
+	    --optipng)
+		P_OPTIPNG=1
+		shift
+		;;
             --pagefiles)
                 P_PAGEFILES=1
                 shift
@@ -742,7 +746,7 @@ function build_epub () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="check,css:,epub3,help,name:,remarks,rootid:"
+    LONG_OPTS="check,css:,epub3,help,name:,remarks,rootid:,statdir:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -756,6 +760,7 @@ function build_epub () {
         help_help
         help_name
         help_rootid
+        help_statdir
         echo
         exit 0
     fi
@@ -764,6 +769,7 @@ function build_epub () {
     [[ 1 = $P_EPUB3 ]]  && EPUB3=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
 
     # Checking ePUBs requires a minimum verbosity level of 1
     if [[ 1 = $P_CHECK ]]; then
@@ -866,7 +872,7 @@ function build_locdrop () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,rootid:"
+    LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,optipng,rootid:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -880,14 +886,16 @@ function build_locdrop () {
         help_name
         help_nopdf
         help_rootid
+	help_optipng
         echo
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_NOPDF" ]]     && export export NOPDF=1
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
+    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_EXPORT_DIR" ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
+    [[ 1 = $P_OPTIPNG ]]     && export OPTIPNG=1
 
     if [[ -f $P_DEF_FILE ]]; then
         export DEF_FILE="$P_DEF_FILE"
@@ -913,7 +921,7 @@ function online-docs () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:"
+    LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -927,6 +935,7 @@ function online-docs () {
         help_name
         help_noset
         help_rootid
+	help_optipng
         echo
         exit 0
     fi
@@ -937,6 +946,7 @@ function online-docs () {
     [[ 1 = $P_NOPDF ]]   && export NOPDF=1
     [[ 1 = $P_NOSET ]]   && export NOSET=1
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
+    [[ 1 = $P_OPTIPNG ]] && export OPTIPNG=1
 
     if [[ 1 = $P_NOHTML ]]; then
 	export NOHTML=1
@@ -976,7 +986,7 @@ function package-src () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,help,name:,set-date:"
+    LONG_OPTS="def-file:,help,name:,optipng,set-date:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -987,12 +997,14 @@ function package-src () {
         help_def-file
         help_help
         help_name
+	help_optipng
         help_set-date
         echo
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = $P_OPTIPNG ]] && export OPTIPNG=1
 
     if [[ -n "$P_DEF_FILE" ]]; then
         if [[ -f $P_DEF_FILE ]]; then
@@ -2007,6 +2019,13 @@ function help_noxml () {
 }
 function help_online () {
     echo "    --online                  Only generate images used for HTML builds.
+                              Default: off"
+}
+
+function help_optipng () {
+    echo "    --optipng                 Optimize PNG images by reducing the color
+                              palette (using optipng), Modfies the original
+                              sources!
                               Default: off"
 }
 function help_pagefiles () {

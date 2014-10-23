@@ -32,6 +32,9 @@ $(DESKTOP_FILES_DIR) $(PACK_DIR) $(PACKAGE_HTML_DIR) $(PACKAGE_PDF_DIR):
 #
 .PHONY: package-src
 package-src: | $(PACK_DIR)
+ifeq ($(OPTIPNG),1)
+  package-src: optipng
+endif
 ifdef DEF_FILE
   package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
@@ -167,6 +170,9 @@ online-docs: | $(OD_EXPORT_BOOKDIR)
 online-docs: $(OD_BIGFILE) $(OD_GRAPHICS)
 ifdef HTMLROOT
   online-docs: warn-cap
+endif
+ifeq ($(OPTIPNG),1)
+  online-docs: optipng
 endif
 ifneq ($(NOPDF),1)
   online-docs: pdf
@@ -315,6 +321,9 @@ ifneq "$(strip $(DEF_FILE))" ""
   locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR)
+ifeq ($(OPTIPNG),1)
+  locdrop: optipng
+endif
 ifneq ($(NOPDF),1)
   locdrop: pdf
 endif
