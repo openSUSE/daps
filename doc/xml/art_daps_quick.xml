@@ -228,20 +228,20 @@
      Create a directory that you want to use as your documentation
      directory:
     </para>
-    <screen>&prompt1;<command>mkdir <replaceable>DOC_DIR</replaceable>&nbsp;</command></screen>
+    <screen>&prompt.user;<command>mkdir <replaceable>DOC_DIR</replaceable>&nbsp;</command></screen>
    </step>
    <step>
     <para>
      Create the default directory structure for &dapsacr; (containing an
      example <sgmltag>book</sgmltag>):
     </para>
-    <screen>&prompt1;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;</command></screen>
+    <screen>&prompt.user;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;</command></screen>
     <para>
      With the <option>-r</option> option, you can also set another root
      element, such as <sgmltag>article</sgmltag>, for example. To create the
      default directory structure with an <sgmltag>article</sgmltag> example:
     </para>
-    <screen>&prompt1;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
+    <screen>&prompt.user;<command>daps-init --docdir <replaceable>PATH_TO_DOC_DIR</replaceable> -r article</command></screen>
    </step>
    <step>
     <para>
@@ -258,7 +258,7 @@
      (<filename>&dc;-daps-example</filename>) to use and the output format
      (color PDF) to create:
     </para>
-    <screen>&prompt1;<command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example pdf</command></screen>
+    <screen>&prompt.user;<command>daps -d <replaceable>PATH_TO_DOC_DIR</replaceable>/&dc;-daps-example pdf</command></screen>
     <para>
      For creation of the PDF, &dapsacr; uses FOP by default (if no other
      formatter is specified) and applies the default DocBook stylesheets (if
@@ -426,7 +426,7 @@
     &dc; file is located, also specify the (absolute or relative) path to
     the &dc; file. For example:
    </para>
-  <screen>&prompt1;<command>daps -d /svn/daps/example/&dc;-daps-example pdf</command></screen>
+  <screen>&prompt.user;<command>daps -d /svn/daps/example/&dc;-daps-example pdf</command></screen>
  </sect2>
 
  <sect2 id="sec.daps.quick.output.formats">
@@ -471,7 +471,7 @@
      use the following command to build the first chapter of the book
      (without the book's title page, table of contents etc.):
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --rootid=cha.template.examples</command></screen>
+   <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --rootid=cha.template.examples</command></screen>
   </sect3>
   <sect3 id="sec.daps.quick.output.adv.review">
    <title>Output with Remarks or Draft Watermark</title>
@@ -482,19 +482,19 @@
      the following command to build a color PDF that has a
      <literal>DRAFT</literal> watermark printed on each page:
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --draft</command></screen>
+   <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --draft</command></screen>
    <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
      editorial remarks or questions to the proofreader), include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
-   <screen>&prompt1;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
+   <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
       &daps-output-remarks;
    <para>If metadata to a file has been set<remark>taroth 2013-01-08: which
      metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
      &dapsacr; can also include the metadata for each file in the output
      format:</para>
-      <screen>&prompt1;daps -d &dc;-daps-example pdf --meta</screen>
+      <screen>&prompt.user;daps -d &dc;-daps-example pdf --meta</screen>
 
    &daps-note-output-adv;
   </sect3>

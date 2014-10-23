@@ -76,9 +76,9 @@
     <para>
      Open your terminal and log in as root by entering
     </para>
-    <screen>&prompt1;su -</screen>
+    <screen>&prompt.user;su -</screen>
     <para>
-     Note that &prompt1; or (&rootprompt; below) stands for your prompt. 
+     Note that &prompt.user; or (&prompt.root; below) stands for your prompt. 
      Do not type that part.
     </para>
    </step>
@@ -91,13 +91,13 @@
     <para>
      Install Emacs with zypper:
     </para>
-    <screen>&rootprompt;zypper in emacs</screen>
+    <screen>&prompt.root;zypper in emacs</screen>
    </step>
    <step>
     <para>
      Install DAPS with zypper:
     </para>
-    <screen>&rootprompt;zypper in daps</screen>
+    <screen>&prompt.root;zypper in daps</screen>
    </step>
   </procedure>
  </sect1>
@@ -141,7 +141,7 @@
        following chapters. If you need help with DAPS, open the
        <filename>daps-init</filename> manpage in your terminal:
       </para>
-      <screen>&prompt1;daps-init --help</screen>
+      <screen>&prompt.user;daps-init --help</screen>
      </step>
      <step>
       <para>
@@ -180,13 +180,13 @@
     </para>
      </step>
     <step>
-    <screen>&prompt1;mkdir recipe</screen>
+    <screen>&prompt.user;mkdir recipe</screen>
     </step>
     <step>
-     <screen>&prompt1;cd recipe</screen>
+     <screen>&prompt.user;cd recipe</screen>
     </step>
     <step>
-    <screen>&prompt1;mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
+    <screen>&prompt.user;mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</screen>
      <para>
       Now you have created the required directory structure that is
       needed by &dapsacr;.</para>
@@ -217,7 +217,7 @@
    <para>
     In a terminal, switch to the XML subfolder.
    </para>
-   <screen>&prompt1;cd xml</screen>
+   <screen>&prompt.user;cd xml</screen>
   </step>
   <step>
      <para>
@@ -266,7 +266,7 @@
     <para>
      Switch to the folder above (that should be your <filename>recipe</filename>
      folder):
-     <screen>&prompt1;cd ..</screen>
+     <screen>&prompt.user;cd ..</screen>
     </para>
    </step>
    <step>
@@ -725,7 +725,7 @@ Recipe for a chili sauce.
      <para>
       Open a terminal and enter the following command:
      </para>
-     <screen>&prompt1;daps -d <filename>DC-tutorial</filename> pdf</screen>
+     <screen>&prompt.user;daps -d <filename>DC-tutorial</filename> pdf</screen>
    </step>
    <step>
      <para>
@@ -742,7 +742,7 @@ Recipe for a chili sauce.
      <para>
       To build an HTML page, open a terminal and enter the following command:
      </para>
-     <screen>&prompt1;daps -d <filename>DC-tutorial</filename> html --single</screen>
+     <screen>&prompt.user;daps -d <filename>DC-tutorial</filename> html --single</screen>
      </step>
      <step>
      <para>
@@ -759,7 +759,7 @@ Recipe for a chili sauce.
     If you still have questions or want to have additional information, read
     the DAPS man page. Open it in a terminal:
    </para>
-   <screen>&prompt1;daps --help</screen>
+   <screen>&prompt.user;daps --help</screen>
    <para>
     Or visit the following links:
    </para>

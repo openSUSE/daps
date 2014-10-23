@@ -93,14 +93,14 @@
    <varlistentry>
     <term>Including Remarks in the Output</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --remarks</screen>
      &daps-output-remarks;
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Building PDFs with a <literal>DRAFT</literal> Watermark</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --draft</screen>
      <para>
       Generates a PDF that has a <literal>DRAFT</literal> watermark printed
       on each page.
@@ -110,7 +110,7 @@
    <varlistentry>
     <term>Including Metadata in the Output</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> color-pdf --meta</screen>
      <para> If metadata to a file has been set, &dapsacr; includes the
      metadata for each file in the output format. </para>
      <note>
@@ -156,7 +156,7 @@
    <varlistentry>
     <term>Creating an XML Bigfile</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
      <para>
       &dapsacr; resolves all XIncludes (replaces them with the referenced
       content) to create the bigfile. A message is shown where to find the
@@ -167,7 +167,7 @@
    <varlistentry>
     <term>Creating Profiled XML Sources</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
      <para>
       If you use profiling attributes to manage document variants, &dapsacr;
       creates a TAR archive with profiled XML files from your set. For details about
@@ -213,13 +213,13 @@
    <varlistentry>
     <term>Creating a Graphics TAR Archive</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
      <para>
       Creates a TAR archive of all graphics that are referenced in the XML sources
       of the specified documentation project. The graphics will be included in
       their original format.
      </para>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
      <para> Creates a TAR archive of all graphics that are referenced in the XML
       sources of the specified documentation project. All graphics will be
       converted to PNG format.</para>
@@ -228,7 +228,7 @@
    <varlistentry>
     <term>Creating a TAR Archive For Localization</term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
      <para>
       Use this command only if you manage your documentation project with
       &dm; and have set the respective SVN properties to mark any files that
@@ -251,13 +251,13 @@
    <varlistentry>
     <term>Creating TAR Archives with Different Output Formats </term>
     <listitem>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
      <para>
       Generates HTML output of the specified documentation project
       (including HTML files, any graphics, and your CSS file defining the
       HTML layout) and packs the output into a TAR archives.
      </para>
-     <screen>&prompt1;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
      <para>
       Generates a single-file HTML output and packs the HTML file, any
       graphics, and your CSS file) into a TAR archive.

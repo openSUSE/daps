@@ -722,7 +722,7 @@ make: *** [validate] Error 3</screen>
 </example>'>
 
 <!ENTITY daps-cmd-basic-syntax
-'<screen>&prompt1;&dapscmd; [--global-options] subcommand [--command-options] [arguments]</screen>'>
+'<screen>&prompt.user;&dapscmd; [--global-options] subcommand [--command-options] [arguments]</screen>'>
 
 <!ENTITY daps-help-basics
 '<para>
@@ -730,20 +730,20 @@ make: *** [validate] Error 3</screen>
    global options and the available subcommands, use the command:
   </para>
 
-  <screen>&prompt1;&dapscmd; --help&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; --help&nbsp;</screen>
 
   <para>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-  <screen>&prompt1;&dapscmd; --help  <replaceable>subcommand</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; --help  <replaceable>subcommand</replaceable>&nbsp;</screen>
 
   <para>
    For example, if you want more information about generating HTML output,
    run:
   </para>
 
-  <screen>&prompt1;&dapscmd; --help html&nbsp;</screen>'>
+  <screen>&prompt.user;&dapscmd; --help html&nbsp;</screen>'>
 
 <!ENTITY daps-dc-file-tip
 '<tip>
@@ -764,7 +764,7 @@ make: *** [validate] Error 3</screen>
     <listitem>
      <para>Specify a &dc; file on the command line with the global option
      <option>-d</option>. For example:</para>
-     <screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> color-pdf</screen>
+     <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> color-pdf</screen>
     </listitem>
    </itemizedlist>
   </tip>'>
@@ -783,11 +783,11 @@ make: *** [validate] Error 3</screen>
     Independent of the individual output format you want to create, you need
     to specify the &dc; file to use:
    </para>
-  <screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
   <para>
     For example:
    </para>
-  <screen>&prompt1;&dapscmd; -d &dc;-daps-example color-pdf</screen>
+  <screen>&prompt.user;&dapscmd; -d &dc;-daps-example color-pdf</screen>
   <para>
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.

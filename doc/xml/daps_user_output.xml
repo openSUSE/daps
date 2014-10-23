@@ -71,7 +71,7 @@
    <varlistentry>
     <term>Validating All XML Files in Your Book, Article or Set</term>
     <listitem>
-<screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate </screen>
      <para>
       If the XML files are not valid, &dapsacr; will return the parser
       errors. If validation was successful, &dapsacr; returns: <literal>All
@@ -82,13 +82,13 @@
    <varlistentry>
     <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
     <listitem>
-<screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Validating Your Files Including XML Comments (<sgmltag class="sgmlcomment">Comment</sgmltag>)</term>
     <listitem>
-<screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
+<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -115,13 +115,13 @@
    to specify the &dc; file to use:
   </para>
 
-  <screen>&prompt1;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> <replaceable>OUTPUT_FORMAT</replaceable>&nbsp;</screen>
 
   <para>
    For example:
   </para>
 
-  <screen>&prompt1;&dapscmd; -d &dc;-daps-example color-pdf</screen>
+  <screen>&prompt.user;&dapscmd; -d &dc;-daps-example color-pdf</screen>
 
   <para>
    At the end of the transformation process, &dapsacr; shows a message where
@@ -175,7 +175,7 @@
    <varlistentry>
     <term>Building Only Parts of Your Documentation Project</term>
     <listitem>
-<screen>&prompt1;daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
+<screen>&prompt.user;daps -d &dc;-daps-example color-pdf --rootid=cha.template.examples</screen>
      <para>
       Instead of always building your complete documentation project
       (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
@@ -194,7 +194,7 @@
    <varlistentry>
     <term>Specifying the &main; file on the Command Line</term>
     <listitem>
-<screen>&prompt1;&dapscmd; -m <replaceable>PATH_TO_MAIN_FILE</replaceable></screen>
+<screen>&prompt.user;&dapscmd; -m <replaceable>PATH_TO_MAIN_FILE</replaceable></screen>
      <para>
       If you do not need to specify any further parameters than the &main;
       file, you can do completely without a &dc; file. With the
