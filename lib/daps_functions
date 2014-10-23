@@ -384,8 +384,8 @@ function init_env {
 #
 ###########################################################################
 function call_make () {
-    local CORE_NO DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN MAKE_OPTIONS
-    local MAKE_CMD STRING SUB_CMD
+    local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN
+    local MAKE_OPTIONS MAKE_CMD STRING SUB_CMD 
 
     # first argument passed to the function is the subcommand
     # in some cases, additional arguments are passed to this
@@ -438,7 +438,15 @@ function call_make () {
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY ]]; then
 	# get stylesheet version (ticket #151)
-#	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl
+	# saxon6 (at least on openSUSE) does not properly resolve http Urls
+        # (because it does not ask the catalog but rather directly accesses
+        # the URl) we need to resolve it via xmlcatalog first
+        #
+	DBSTYLE_FILE=$(xmlcatalog $XML_MAIN_CATALOG http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
+	DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
+
+	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR)
+
         echo -e "---------------
            DOC_DIR: $DOC_DIR
          BUILD_DIR: $BUILD_DIR
@@ -474,6 +482,9 @@ function call_make () {
            MAKECMD: $MAKE_CMD
      XSLTPROCESSOR: $XSLTPROCESSOR
  XML_CATALOG_FILES: $XML_CATALOG_FILES
+
+      DAPS VERSION: $VERSION 
+DB-STYLESHEET-VERS: $DBSTYLE_VERS
 ---------------
 "
     fi
