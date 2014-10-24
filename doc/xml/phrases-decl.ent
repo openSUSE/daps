@@ -286,8 +286,36 @@
    </para> '>
 
 <!ENTITY daps-install-sle 
-'<para>
-    <remark>taroth 2014-10-21: WIP</remark></para>'>
+'<para>Starting with &sle; 12, &dapsacr; is also available for
+    &sle;. The &dapsacr; package is provided by the &sdk; (SDK), a
+    free extension for &sle;. You need to install it as as add-on (or
+    extension). You can install the SDK (without any physical media) as an
+    extension after the registration of your system at &scc;. If you prefer
+    to install from a physical medium, proceed as follows:</para>
+   
+   <procedure>
+    <step>
+     <para> Download the installation media for the SDK from <ulink
+       url="http://download.suse.com/"/>.</para>
+    </step>
+    <step>
+     <para>Install the SDK as an add-on product to &sle;. </para>
+     <para>For details on how to install add-on products (with or without
+      physical media), see the <citetitle>&sle; 12 &deploy;</citetitle>,
+      available at &suse-onlinedoc;. Refer to chapter <citetitle>Installing
+       Add-On Products</citetitle>, <ulink
+       url="https://www.suse.com/documentation/sles-12/book_sle_deployment/data/cha_add-ons.html"
+      />.</para>
+    </step>
+    <step>
+     <para>Install the <systemitem class="resource">daps</systemitem> package,
+      using either the &yast; <guimenu>Software Management</guimenu> module
+      or the following command:</para>
+     <screen>&prompt.root;zypper in daps</screen>
+     <para>Dependencies on other software packages are automatically resolved
+      during installation.</para>
+    </step>
+   </procedure>'>
 
 <!ENTITY daps-images-intro
 ' <para>
