@@ -8,9 +8,8 @@
   <xsl:import href="../../../../../suse/suse2013/fo/docbook.xsl"/>
   
   <xsl:template match="/">
-    <xsl:variable name="context" select="/t:testcases/t:scenario[1]/t:context[1]/node()[not(self::text())]"/>
-    
-    <xsl:apply-templates select="exsl:node-set($context)"/>
+    <xsl:apply-templates select="/t:testcases/t:scenario[1]/t:context[1]/node()[not(self::text())]" mode="process.root" />
   </xsl:template>
-  
+
+    
 </xsl:stylesheet>
