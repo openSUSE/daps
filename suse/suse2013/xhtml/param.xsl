@@ -268,5 +268,5 @@ task before
   -->
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
-
+<xsl:param name="glossentry.show.acronym">yes</xsl:param> 
 </xsl:stylesheet>
