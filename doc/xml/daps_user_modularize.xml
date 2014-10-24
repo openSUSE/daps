@@ -556,9 +556,7 @@
 <screen>&lt;?xml-stylesheet
   href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
   type="text/xml" ?></screen>
-  <remark>taroth 2013-01-25: toms: anything to say about the individual
-  lines? please advise</remark>
-    <para>
+   <para>
      The &main; file of a documentation project is the one that is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
      processing instruction is missing in the &main; file, any profiling
@@ -1013,84 +1011,4 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    </tgroup>
   </table>
  </sect1>
-<!--<remark condition="clarity">
-  2012-06-15 - fs:
-  
-  I would restructure this chapter a bit.
-  
-  First, this productname/productnumber stuff is not a DAPS feature, nor a
-  different approach to profiling, it just combines the two DocBook features
-  Profiling and Entities and thus adds even more flexibility to Profiling.
-  Therefore I would add a section to the end of this chapter, something like
-  "Combining Entities and Profiling" and then generally explain ho to use
-  Profiling in entity definitions (most commonly via "phrase"). Afterwards
-  present a short example using productname by showing the respective snippet
-  from the entity declaration file and e.g. a single sentence para using the
-  entity.  
-  
-  Second, I would suggest to restructure the chapter:
-  
-  1. General introduction to profiling with a simple example
-  e.g. a simplelist with features for a basic and a professional edition
-  of a software product (no callouts this time). Make sure people understand
-  Profiling is a DocBook, not a DAPS feature
-  
-  simplelist>
-  member>Common Feature 1 /member>
-  member>Common Feature 2 /member>
-  member>Common Feature 3 /member>
-  member condition="basic">BasicFeature 1 /member>
-  member condition="professional>ProFeature 1 /member>
-  member condition="professional>ProFeature 2 /member>
-  /simplelist>
-  
-  Plus the result in a two column table
-  
-  Add an important annotation explaining the need to really activate
-  profiling when used in a document and show how the list would look like
-  when profiling would not be activated at build time
-  
-  BTW: A note on Profiling attribute names
-  They are just names that make it easier to recognize the purpose of the
-  profiling attribute. It does not matter whether you use "os=foo", or
-  "condition=foo" - the outcome is the same. You need several different
-  attributes if you would like to combine them.
-  Combining attributes is something that I would mention here as well:
-  
-  Assuming the professional edition product from the example above is also
-  available as an OEM version for "OEMCompany" with additional features
-  only available in the OEM edition:
-  
-  ...
-  member condition="professional" vendor="oemcompany">
-  OEMFeature 1
-  /member>
-  
-  Note: I would rather _not_ use the attributes os and arch in the
-  examples. Although names do not matter as explained above, these
-  attribute names stand for something that is really special for Operating
-  System vendors. The attribute concept is IMHO easier to understand when
-  using condition and vendor.  
-  
-  
-  2. Using profiling with DAPS
-  
-  Explain the prerequisites needed to use profiling with DAPS:
-  * PI in the header of the MAIN (or, recommended to add a maximum
-  flexibility, in the header of each XML file)
-  * Activating profiling in  the DC file
-  * supported attributes
-  
-  I would shorten the existing sections a bit, if possible, and move all
-  the callout stuff and context to Section 3.
-  
-  3. Putting it both together
-  
-  The big example with the callouts. Since toms does not like your example
-  ;-) you can probably reuse the example from 1. by putting
-  it into a real document.
-  
-  4. Entities and Profiling as explained above
-  
- </remark>-->
 </chapter>
