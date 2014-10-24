@@ -10,115 +10,109 @@
 <chapter id="cha.daps.user.trouble">
  <title>Troubleshooting</title>
  <abstract>
-  <para><remark>taroth 2013-04-12: switch to quandaset in the future</remark>
-   This chapter lists common problems and possible solutions, sorted into
-   categories.
-  </para>
- </abstract>
- <remark>taroth 2012-12-12: todo - for FOP installation, mention download from 
- offo.sourceforeg.net in troubleshooting section and add xref</remark>
- <sect1 id="sec.daps.user.trouble.inst">
-  <title>Installation and First Steps</title>
   <para>
-   <remark>taroth 2012-06-01: FIXME</remark>
-  </para>
- </sect1>
- <sect1 id="sec.daps.user.trouble.output">
+   This chapter lists common problems and possible solutions, sorted into
+   categories. </para>
+ </abstract>
+ <remark>taroth 2012-12-12: todo - for FOP installation, mention download from
+  offo.sourceforeg.net in troubleshooting section and add xref</remark>
+ <!-- <qandaset><title>Installation and First Steps</title>
+  <qandaentry>
+   <question>
+   <para><remark>taroth 2012-06-01: FIXME</remark></para>
+   </question>
+   <answer/>
+  </qandaentry>
+ </qandaset>
+-->
+ <qandaset id="qs.daps.user.trouble.output">
   <title>Generating Output</title>
-  <variablelist>
-   <varlistentry>
-    <term>Profiling Does Not Work as Expected?</term>
-    <listitem>
-     <orderedlist>
-      <listitem>
-       <para>
-        Check the values of your profiling attributes in the XML files: They
-        must use consistent spelling throughout a documentation project. If
-        you assigned multiple values to a profiling attribute, check if the
-        values are separated with a semicolon, for example,
-        <literal>os="linux;unix"</literal>.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Check the &dc; file for your documentation project: Does it contain
-        one or multiple <parameter>PROF*</parameter> parameters? Otherwise
-        &dapsacr; does not know which profiling attributes to interpret. Do
-        the <parameter>PROF*</parameter> parameters match the profiling
-        attributes used in the XML files? Do the values of the
-        <parameter>PROF*</parameter> parameters match the attribute values
-        used in the XML files?
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Check the &main; file of your documentation projects: Does its header
-        contain the following line?
-       </para>
-<screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
-       <para>
-        If not, any profiling parameters in the &dc; file will be ignored
-        during generation of the output.
-       </para>
-      </listitem>
-     </orderedlist>
-     <para>
-      For more details, refer to
-      <xref linkend="sec.daps.user.edit.profile"/> and
-      <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
- </sect1>
- <sect1 id="sec.daps.user.trouble.misc">
+  <qandaentry>
+   <question>
+    <para>Profiling does not work as expected?</para>
+   </question>
+   <answer>
+    <procedure>
+     <step>
+      <para> Check the values of your profiling attributes in the XML files:
+       They must use consistent spelling throughout a documentation project. If
+       you assigned multiple values to a profiling attribute, check if the
+       values are separated with a semicolon, for example,
+        <literal>os="linux;unix"</literal>. </para>
+     </step>
+     <step>
+      <para> Check the &dc; file for your documentation project: Does it
+       contain one or multiple <parameter>PROF*</parameter> parameters?
+       Otherwise &dapsacr; does not know which profiling attributes to
+       interpret. Do the <parameter>PROF*</parameter> parameters match the
+       profiling attributes used in the XML files? Do the values of the
+        <parameter>PROF*</parameter> parameters match the attribute values used
+       in the XML files? </para>
+     </step>
+     <step>
+      <para> Check the &main; file of your documentation projects: Does its
+       header contain the following line? </para>
+      <screen>href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" type="text/xml"</screen>
+      <para> If not, any profiling parameters in the &dc; file will be
+       ignored during generation of the output. </para>
+     </step>
+    </procedure>
+    <para> For more details, refer to <xref linkend="sec.daps.user.edit.profile"
+     /> and <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html"/>.
+    </para>
+   </answer>
+  </qandaentry>
+ </qandaset>
+
+ <qandaset id="qs.daps.user.trouble.misc">
   <title>Miscellaneous</title>
-  <variablelist>
-   <varlistentry>
-    <term>Verbosity Level</term>
-    <listitem>
-     <para>&dapsacr; is less verbose than its predecessor
-       <literal>susedoc</literal>. To get the same level of output as with
-      susedoc 4.x, run <command>daps</command> with the <option>-v</option>
-      option. For more details, use the <option>--debug</option> option. </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
-  <variablelist>
-   <varlistentry>
-    <term>Log Files</term>
-    <listitem>
-     <para> If you should run into problems with &dapsacr; that you cannot
-      classify, check the &dapsacr; log files in
-        <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
-      A complete log file of the latest
-      <command>daps&nbsp;<replaceable>subcommand</replaceable> </command>
-      that was executed is available in <filename>
-       <replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
-     </para>
-     <para> In case of an error the complete log will be shown on the screen
-      (STDOUT). </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Version Incompatibilities</term>
-    <listitem>
-     <para>If, after an update to a higher &dapsacr; version, you experience
-      strange effects that are difficult to debug, check your custom
-      &dapsacr; config file (&dapsconf-user;) against the system-wide
-      configuration file (&dapsconf-sys;) for any parameters that may have
-      changed. As the settings in the custom &dapsacr; configuration file
-      will override the settings in &dapsconf-sys; by default, any parameter
-      incompatibilities between the files may lead to unexpected behavior of
-      &dapsacr;.</para>
-     <para>When switching from &dapsacr; 1.x to &dapsacr; 2.0,
-      especially check the syntax of any XSLT parameters that you are using (on
-      the command line, in scripts or in &dc; files). If you have not
-      adjusted the parameters to the new syntax, this may result in strange
-      error messages. For details, refer to <xref linkend="vle.docupd.syntax"
-      />.</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
- </sect1>
+  <qandaentry>
+   <question>
+    <para>Why doesn't &dapsacr; talk to me?</para>
+   </question>
+   <answer>
+    <para>&dapsacr; is less verbose than its predecessor
+      <literal>susedoc</literal>. To get the same level of output as with
+     susedoc 4.x, run <command>daps</command> with the <option>-v</option>
+     option. For more details, use the <option>--debug</option> option. </para>
+   </answer>
+  </qandaentry>
+  <qandaentry>
+   <question>
+    <para>Where to find the log files?</para>
+   </question>
+   <answer>
+    <para> If you should run into problems with &dapsacr; that you cannot
+     classify, check the &dapsacr; log files in
+       <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
+     A complete log file of the latest
+     <command>daps&nbsp;<replaceable>subcommand</replaceable> </command>
+     that was executed is available in <filename>
+      <replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
+    </para>
+    <para> In case of an error the complete log will be shown on the screen
+     (STDOUT). </para>
+   </answer>
+  </qandaentry>
+  <qandaentry>
+   <question>
+    <para>Are all changes to &dapsacr; backward-compatible?</para>
+   </question>
+   <answer>
+    <para>No. If, after an update to a higher &dapsacr; version, you
+     experience strange effects that are difficult to debug, check your custom
+     &dapsacr; config file (&dapsconf-user;) against the system-wide
+     configuration file (&dapsconf-sys;) for any parameters that may have
+     changed. As the settings in the custom &dapsacr; configuration file
+     will override the settings in &dapsconf-sys; by default, any parameter
+     incompatibilities between the files may lead to unexpected behavior of
+     &dapsacr;.</para>
+    <para>When switching from &dapsacr; 1.x to &dapsacr; 2.0, especially
+     check the syntax of any XSLT parameters that you are using (on the command
+     line, in scripts or in &dc; files). If you have not adjusted the
+     parameters to the new syntax, this may result in strange error messages.
+     For details, refer to <xref linkend="vle.docupd.syntax"/>.</para>
+   </answer>
+  </qandaentry>
+ </qandaset>
 </chapter>
