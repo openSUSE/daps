@@ -277,10 +277,9 @@ fi
 
 dnl -------------------------------------------------------------------------
 dnl Add more distributions if needed
-
-AM_CONDITIONAL([DIST_REDHAT], [test -f /etc/redhat-release])
-AM_CONDITIONAL([DIST_SUSE], [test -f /etc/SuSE-release])
-AM_CONDITIONAL([DIST_OTHER], [test ! -f /etc/redhat-release && test ! -f /etc/SuSE-release])
+AM_CONDITIONAL([DIST_REDHAT], [lsb_release -i | egrep -iq "(fedora|redhat)"])
+AM_CONDITIONAL([DIST_SUSE], [lsb_release -i | grep -iq "suse"])
+AM_CONDITIONAL([DIST_OTHER], [lsb_release -i | egrep -iqv "(fedora|redhat|suse)"])
 # /etc/debian-version Debian, Ubuntu
 # /etc/slackware-version Slackware
 
