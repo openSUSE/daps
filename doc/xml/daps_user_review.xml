@@ -213,16 +213,19 @@
    <varlistentry>
     <term>Creating a Graphics TAR Archive</term>
     <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> package-src</screen>
      <para>
       Creates a TAR archive of all graphics that are referenced in the XML sources
       of the specified documentation project. The graphics will be included in
-      their original format.
+      their original format.<remark>taroth 2014-1024: todo - check, as package-src also provides XML
+       files...</remark>
      </para>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
+     <!--taroth 2014-10-24: this command is no longer supported
+      <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
      <para> Creates a TAR archive of all graphics that are referenced in the XML
       sources of the specified documentation project. All graphics will be
       converted to PNG format.</para>
+     -->
     </listitem>
    </varlistentry>
    <varlistentry>
