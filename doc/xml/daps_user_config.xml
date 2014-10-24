@@ -73,9 +73,9 @@
   </step>
  </procedure>
  <example>
-  <title>Example of &dapsconf-sys; (&dapsacr; 1.0)</title>
-<!--taroth 2013-04-12: copied from DAPS SVN:
-   daps/svn/branches/daps_1.x/etc/conf-->
+  <title>Example of &dapsconf-sys; (&dapsacr; 2.0)</title>
+<!--taroth 2014-10-24: copied from DAPS SVN:
+   daps/svn/trunk/etc/config.in-->
 <screen>###########################
 # DAPS configuration file #
 ###########################
@@ -95,7 +95,7 @@
 # The environment is set up using the following hierachy
 # (1 == always wins)
 #
-# 1. Command line
+# 1. Command line 
 #    - either as a real option
 #    - or as variable declaration (FOO=bar)
 #
@@ -104,7 +104,7 @@
 # 4. $DAPSROOT/etc/system-profile
 
 ## Key:         ASPELL_EXTRA_DICT
-## ----------------------
+## ----------------------             
 ## Description: Additional dictionary for spell checker
 ## Type:        Absolute path to distionary
 ## Default:     ""
@@ -113,21 +113,23 @@
 ASPELL_EXTRA_DICT=""
 
 ## Key:         ASPELL_LANG
-## ----------------------
+## ----------------------             
 ## Description: Language for spell checker
 ## Type:        String
-## Default:     en_US
+## Default:     ""
 #
 # NOTE:  Language to use for spellchecker. It uses the same format as the
 #        LANG environmental variable: It consists of  the two letter ISO 639
 #        language code (e.g. 'en' for English) and an optional two letter
 #        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
 #        English). Make sure the respective dictionary for aspell is installed.
+# By default DAPS tries to get the language from the "lang" attribute of the
+# MAIN file.
 #
-ASPELL_LANG=en_US
+ASPELL_LANG=""
 
 ## Key:         ASPELL_SKIP_TAGS
-## ----------------------
+## ----------------------             
 ## Description: list of DOcBook XML tags which content should _not_ be
 ##              spell-checked
 ## Type:        List
@@ -138,16 +140,16 @@ ASPELL_LANG=en_US
 # NOTE: Spece separated list of tags, needs to be enclosed in brackets
 #
 ASPELL_SKIP_TAGS=(
-    author
+    author 
     command
-    email
+    email                 
     envar
-    filename
+    filename                
     firstname
     guimenu
     keycap
-    literal
-    option
+    literal                
+    option                
     remark
     screen
     surname
@@ -158,7 +160,7 @@ ASPELL_SKIP_TAGS=(
 )
 
 ## Key:         BUILD_DIR
-## ----------------------
+## ----------------------             
 ## Description: Build directory where all daps generated files will go
 ## Type:        Path to directory (without a trailing slash)
 ## Default:     ""
@@ -168,31 +170,15 @@ ASPELL_SKIP_TAGS=(
 BUILD_DIR=""
 
 ## Key:         CB_OPTIONS
-## ------------------------
+## ------------------------             
 ## Description: Command line options for /usr/bin/checkbot
 ## Type:        String
 ## Default:     "--dontwarn \"(301|302|902)\" --sleep 0 --timeout 60"
 #
-#
+# 
 # Also see 'man 1 checkbot'. Do not change unless you really know what you do.
 #
 CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
-
-## Key:         COMMENTS
-## ---------------------
-## Description: Create profiled sources with XML comments?
-## Type:        yesno
-## Default:     "no"
-#
-# By default XML comments ( <!-- --> ) will be stripped when profiling
-# sources, so whenever you create source archives with daps
-# (e.g. via dist-xml or locdrop), the XML files will contain no comments.
-# Change this by setting COMMENTS="yes". Has no effect on book creation
-# (html, pdf, etc). Can also be set to "yes" with the -c switch on teh command
-# line
-# Also see COMMENT_STR, DRAFT and REMARKS
-#
-COMMENTS="no"
 
 ## Key:         COLOR
 ## ------------------
@@ -206,17 +192,8 @@ COMMENTS="no"
 #
 COLOR="yes"
 
-## Key:         COMMENT_STR
-## ------------------------
-## Description: String to be appended to file/directory names when comments
-##              are turned on
-## Type:        String
-## Default:     "_comments"
-#
-COMMENT_STR="_comments"
-
 ## Key:         CONF_PREFIX
-## ------------------------
+## ------------------------             
 ## Description: Common prefix for all doc config files
 ## Type:        String
 ## Default:     "DC-"
@@ -225,7 +202,18 @@ COMMENT_STR="_comments"
 #
 CONF_PREFIX="DC-"
 
-## Key:         CONVERT_OPTS
+## Key:         CONVERT_OPTS_JPG
+## -------------------------
+## Description: Command line options for "convert" to convert color JPGs
+##              to grayscale
+## Type:        String
+## Default:     "-type grayscale"
+#
+# Do not change unless you really know what you do.
+#
+CONVERT_OPTS_JPG="-type grayscale"
+
+## Key:         CONVERT_OPTS_PNG
 ## -------------------------
 ## Description: Command line options for "convert" to convert color PNGs
 ##              to grayscale
@@ -234,7 +222,7 @@ CONF_PREFIX="DC-"
 #
 # Do not change unless you really know what you do.
 #
-CONVERT_OPTS="-type grayscale -colors 256"
+CONVERT_OPTS_PNG="-type grayscale -colors 256"
 
 ## Key:         DOCCONF_DEFAULT
 ## -----------------------------
@@ -258,7 +246,7 @@ DOCCONF_DEFAULT=""
 #
 DIA_OPTIONS="-t cairo-svg"
 
-## Key: DOCBOOK4_STYLE_URI
+## Key: DOCBOOK4_STYLE_URI        
 ## ------------------
 ## Description: URI to DocBook 4 stlysheets
 ## Type:        URI
@@ -271,7 +259,7 @@ DIA_OPTIONS="-t cairo-svg"
 #
 DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 
-## Key: DOCBOOK5_STYLE_URI
+## Key: DOCBOOK5_STYLE_URI        
 ## ------------------
 ## Description: URI to DocBook 5 stlysheets
 ## Type:        URI
@@ -284,7 +272,7 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 #
 DOCBOOK5_STYLE_URI="http://docbook.sourceforge.net/release/xsl-ns/current/"
 
-## Key: DOCBOOK5_RNG_URI
+## Key: DOCBOOK5_RNG_URI        
 ## ------------------
 ## Description: URI to DocBook 5 Relax NG schema
 ## Type:        URI
@@ -303,7 +291,7 @@ DOCBOOK5_RNG_URI="http://docbook.org/xml/5.0/rng/docbook.rng"
 #
 # Turns on DRAFT watermarks in PDF or HTML builds when set to "yes"
 # Is ignored for any other output format and has no effect on profiling.
-# This value can be set to "yes" using the -d switch on the command line
+# This value can be set to "yes" using the -d switch on the command line 
 # Also see COMMENTS and REMARKS
 #
 DRAFT="no"
@@ -324,7 +312,7 @@ DRAFT_STR="_draft"
 ## Type:        yesno
 ## Default:     "no"
 #
-# Useful to find errors within an epub file when devolping stylesheets
+# Useful to find errors within an epub file when devolping stylesheets  
 #
 EPUBCHECK="no"
 
@@ -344,9 +332,9 @@ EPUB_CSS=""
 #
 # When having specified custom stylesheets with STYLEROOT, the fallback
 # for styles not specified in the custom STYLEROOT are the DocBook stylesheets
-# Specify an alternative fallback with this option. Useful if you have a
+# Specify an alternative fallback with this option. Useful if you have a 
 # fork of e.g. your custom fo stylesheets. When setting STYLEROOT to this
-# for directory that only has fo styles, html versions of that document would
+# for directory that only has fo styles, html versions of that document would 
 # be build with the DocBook stylesheets. Setting FALLBACK_STYLEROOT to the
 # directory containing your original custom stylesheets (which also have
 # html stylesheets) will create html versions with your custom styles. The
@@ -361,12 +349,16 @@ FALLBACK_STYLEROOT=""
 ## -----------------------
 ## Description: Config file for the FOP pdf formatter
 ## Type:        Path
-## Default:     "@sysconfdir@/daps/fop/fop-daps.xml"
+## Default:     ""
+
 #
-# Specify a config file for FOP
+# Specify an XML config file for FOP. A template is available in
+# @sysconfdir@/daps/fop/fop-daps.xml 
 # Also see FORMATTER, FOP-*
 #
-FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
+# FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
+FOP_CONFIG_FILE=""
+
 
 ## Key:         FOP_OPTIONS
 ## -----------------------
@@ -378,6 +370,26 @@ FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
 # Also see FORMATTER, FOP-*
 #
 FOP_OPTIONS="-q"
+
+
+## Key:         FOP_STACKSIZE
+## --------------------------
+## Description: Java stack size for the FOP pdf formatter
+## Type:        String
+## Default:     "-Xss2048K"
+#
+# Needs to be specified as -Xss&lt;size&gt;
+# &lt;size&gt; can either be specified in kilobytes (K) or megabytes (m)
+# Example:
+#  -Xss2048K
+#  -Xss2m
+#
+# Increase this value (e.g. to 3 or 4 MB) if you experience strange
+# problems when building PDFs with FOP (especially on 64bit machines)
+#
+# Also see FORMATTER, FOP-*
+#
+FOP_STACKSIZE="-Xss2048K"
 
 ## Key:         FOP_WRAPPER
 ## -----------------------
@@ -484,14 +496,45 @@ JING_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xer
 
 ## Key:         MAIN
 ## -----------------
-## Description: File name of the set/book defining XML file
-## Type:        file name (file name only, no absolute path)
+## Description: Filename of the set/book defining XML file
+## Type:        filename (filename only, no absolute path)
 ## Default:     ""
 #
 # Name of the MAIN XML file. Mandatory.
 # This value is usually set in a book specific DC-file.
 #
 MAIN=""
+
+
+## Key:         META
+## --------------------
+## Description: Print SVN meta information in HTML and PDF builds
+## Type:        yesno
+## Default:     "no"
+#
+# If your XML sources are hosted on an SVN server, adds the following status
+# information for each file to HTML and PDF builds if set to "yes":
+#  * filename
+#  * maintainer (content of SVN property doc:maintainer)
+#  * status (content of SVN property doc:status)
+# Useful for proofreading.
+# Implies that remarks are turned on.
+# This value can be set to "yes" using the -m switch on the command line 
+# Also see REMARKS
+#
+META="no"
+
+
+## Key:         META_STR
+## ----------------------
+## Description: String to be appended to file/directory names when meta
+##              is turned on
+## Type:        String
+## Default:     "_meta"
+#
+#
+META_STR="_meta"
+
 
 ## Key:         PDFNAME
 ## --------------------
@@ -537,7 +580,7 @@ PROFCONDITION=""
 ## Default:     ""
 #
 # In order to use profiling, the urn to a profiling stylesheet _either_ has
-# to be specified in the header of the main file ($MAIN) via&lt;?xml-stylesheet/&gt;
+# to be specified in the header of the main file ($MAIN) via &lt;?xml-stylesheet/&gt;
 # or via this variable. Valid urns can be found in the DAPS installation
 # directory in etc/catalog.xml
 PROFILE_URN=""
@@ -570,7 +613,7 @@ PROFVENDOR=""
 #
 # By default remarks are ignored when generating books. Set this parameter to
 # "yes" to include remarks. Useful for proofreading.
-# This value can be set to "yes" using the -r switch on the command line
+# This value can be set to "yes" using the -r switch on the command line 
 # Also see COMMENTS and DRAFT
 #
 REMARKS="no"
@@ -599,6 +642,25 @@ REMARK_STR="_remarks"
 #
 ROOTID=""
 
+## Key:      STATIC_DIR
+## -------------------
+## Description: Custom static/ directory containing CSS and JS files
+##              as well as images referenced from the CSS file and
+##              the stylesheets
+## Type:        Path to directory (without a trailing slash)
+## Default:     ""
+#
+#
+# If present, DAPS uses a directory &lt;STYLEROOT&gt;/static hosting CSS and JS
+# files as well as images reference from the stylesheets and copies it to
+# the resulting HTML directory. This variable allows to permanently set a
+# custom directory.
+# To be set in the DC file or via command line with --statdir.
+#
+# See also STYLEROOT, FALLBACK_STYLEROOT
+#
+STATIC_DIR=""
+
 ## Key:      STYLEDEVEL
 ## -------------------
 ## Description: Custom Stylesheet directory for development purposes.
@@ -617,7 +679,7 @@ ROOTID=""
 #
 STYLEDEVEL=""
 
-## Key:      STYLEROOT
+## Key:      STYLEROOT     
 ## -------------------
 ## Description: Custom Stylesheet directory.
 ## Type:        Path to directory (without a trailing slash)
@@ -632,36 +694,40 @@ STYLEDEVEL=""
 #
 STYLEROOT=""
 
-
-## Key:         USEMETA
-## --------------------
-## Description: Print SVN meta information in HTML and PDF builds
+## Key:         TXT_USE_DBSTYLES
+## -------------------
+## Description: Always use original DocBook stylesheets for text output?
 ## Type:        yesno
-## Default:     "no"
+## Default:     "yes"
 #
-# If your XML sources are hosted on an SVN server, adds the following status
-# information for each file to HTML and PDF builds if set to "yes":
-#  * file name
-#  * maintainer (content of SVN property doc:maintainer)
-#  * status (content of SVN property doc:status)
-# Useful for proofreading.
-# Implies that remarks are turned on.
-# This value can be set to "yes" using the -m switch on the command line
-# Also see REMARKS
+# Text output is generated by creating a single file HTML page parsing
+# the result with w3m. This ensures that e.g. tables are properly
+# displayed in the .txt file. Default is to use the original DocBook 
+# stylesheets to generate the HTML that is used to create the text files. If
+# you prefer to use your own stylesheets (STYLEROOT/xhtml/docsbook.xsl) set
+# this variable to "no".
 #
-USEMETA="no"
+TXT_USE_DBSTYLES="yes"
 
-## Key:         VERBOSITY
+## Key:         VALID_ROOTELEMENTS
 ## --------------------
-## Description: Verbosity level
-## Type:        number
-## Default:     0
+## Description: Top level root elements allowed when specifying --rootid
+## Type:        String (list of space separated tags)
+## Default:     appendix article bibliography book chapter colophon \
+##              dedication glossary index part preface refentry reference \
+##              set setindex
 #
-# VERBOSITY=0: print only final results message (default)
-# VERBOSITY=1: results of each target that is called
-# VERBOSITY=2: detailed output of each target
+# Stylesheets for PDF/HTML/EPUB etc usually expect certain top level elements
+# when transforming XNML files. I makes little sense to process a document with
+# &lt;envar&gt; as an root element. Specify the list of top-level elements your scripts
+# support, here. In case a document with a root element not specified here is
+# parsed, DAPS will exit with an error. This is also true when specifying the
+# --rootid parameter: If the specified rootid belongs to an element not listed
+# here, DAPS throws an error.
+# Set to an empty value to allow all elements (e.g. when you prefer to do the
+# error handling from within the scripts).
 #
-VERBOSITY=0
+VALID_ROOTELEMENTS="appendix article bibliography book chapter colophon dedication glossary index part preface refentry reference sect1 section set setindex"
 
 ## Key:         WH_SEARCH
 ## --------------------
@@ -715,11 +781,23 @@ XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
 #
 # Path to the main XML catalog used to resolve URIs. /etc/xml/catalog is
 # the standard location used by most (all?) Linux distributions. Only
-# change if the main catalog is located elsewhere on you distribution.
+# change if the main catalog is located elsewhere on you distribution or if
+# you want to use a custom catalog.
 #
 XML_MAIN_CATALOG="/etc/xml/catalog"
 
-## Key: XSLTPARAM
+## Key:         XML_USER_CATALOGS
+## -----------------------
+## Description: User defined catalog files
+## Type:        PATH to file
+## Default:     ""
+#
+# Path to one or more (space-sperated) XML catalogs to be queried before
+# XML_MAIN_CATALOG. 
+#
+XML_USER_CATALOGS=""
+
+## Key: XSLTPARAM        
 ## --------------------
 ## Description: String passed to xsltproc for HTML and PDF builds
 ## Type:        number
@@ -734,6 +812,18 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 #
 # Can also be placed in an DC-file if being a per-book setting
 #
-XSLTPARAM=""</screen>
+XSLTPARAM=""
+
+## Key: XSLTPROCESSOR        
+## --------------------
+## Description: Patzh to XSLT processor. 
+## Type:        Path to executable
+## Default:     "/usr/bin/xsltproc"
+#
+# Define which XSLT processor to use.  Currently supported are "xsltproc" and
+# "saxon". Saxon needs to be saxon6, saxon 8 and 9 are not supported.
+#
+XSLTPROCESSOR="/usr/bin/xsltproc"
+</screen>
  </example>
 </chapter>
