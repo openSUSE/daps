@@ -2,12 +2,15 @@
 # -*- makefile -*-
 
 # Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
-sysconfdir=debian/daps/etc
+#export DH_VERBOSE=1
 
 %:
 	dh $@  --with autotools-dev
 
 override_dh_auto_configure:
-	#dh_auto_configure -- --disable-edit-rootcatalog
+	#dh_auto_configure -- --disable-edit-rootcatalog	
+	if [ -e /usr/bin/xmlstarlet ] ; \
+	then \
+	    dh_link ; \
+	fi;
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-edit-rootcatalog

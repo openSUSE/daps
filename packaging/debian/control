@@ -1,16 +1,107 @@
 Source: daps
 Section: text
 Priority: optional
-Maintainer: Sascha Manns <Sascha.Manns@xcom.de>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, dia, docbook (>= 1.77), ghostscript, imagemagick, inkscape, libxml2-utils, libxslt1.1, poppler-utils, python-libxml2, python-lxml, transfig, libxml-commons-external-java, libxmlgraphics-commons-java, fop, libxml2, sgml-base, xmlstarlet, python
+Maintainer: Sascha Manns <Sascha.Manns@bdvb.de>
+Build-Depends: debhelper (>= 8.0.0),
+               autotools-dev,
+               checkbot,
+               dia,
+               docbook (>= 4.5),
+               docbook-xml (>= 4.5),
+               docbook-xsl (>= 1.7.8),
+               docbook-xsl-ns (>= 1.7.8),
+               docbook5-xml,
+               epubcheck,
+               ghostscript,
+               imagemagick,
+               inkscape,
+               libxml2-utils,
+               libxslt1.1,
+               poppler-utils,
+               python-libxml2,
+               python-lxml,
+               transfig,
+               libxml-commons-external-java,
+               libxmlgraphics-commons-java,
+               libimage-exiftool-perl,
+               fop,
+               libxml2,
+               remake,
+               sgml-base,
+               sgml-data,
+               xmlstarlet,
+               python,
+               w3m,
+               xfig,
+               xsltproc
 Standards-Version: 3.9.5
 Homepage: http://sourceforge.net/projects/daps
-#Vcs-Git: git://git.debian.org/collab-maint/daps.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/daps.git;a=summary
+Vcs-Bzr: lp:daps
+Vcs-Browser: http://bazaar.launchpad.net/~sascha-manns-h/daps/trunk/files
 
 Package: daps
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, dia, docbook, docbook-xsl, ghostscript, imagemagic, inkscape, libxslt1.1, make, poppler-utils, python-libxml2, python-lxml, svg, transfig, libxml-commons-external-java, libxmlgraphics-common-java, fop, xmlstarlet, python
-Recommends: aspell, aspell-en, docbook5-xml, epubcheck, libimage-exiftool-perl, jing, optipng, checkbot, remake, xep, xmlformat-perl
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         checkbot,
+         dia,
+         docbook (>= 4.5),
+         docbook-xml (>= 4.5),
+         docbook-xsl (>= 1.7.8),
+         docbook-xsl-ns (>= 1.7.8),
+         docbook5-xml,
+         epubcheck,
+         ghostscript,
+         imagemagick,
+         inkscape,
+         libxslt1.1,
+         make,
+         poppler-utils,
+         python-libxml2,
+         python-lxml,
+         sgml-base,
+         sgml-data,
+         transfig,
+         libxml2,
+         libxml-commons-external-java,
+         libxmlgraphics-commons-java,
+         libimage-exiftool-perl,
+         fop,
+         remake,
+         xmlstarlet,
+         python,
+         w3m,
+         xfig,
+         xsltproc
+Recommends: aspell,
+         aspell-en,         
+         epubcheck,
+         jing,
+         optipng,
+         checkbot,
+         remake,
+         xep,
+         xmlformat-perl,
+         daps-docmanager
 Description: DocBook Publishing Made Easy with a Single Command
  DocBook is the ideal framework when it comes to publishing large documentation projects in different formats. DocBook provides a "language" (DocBook XML) and a set of stylesheets to translate this language into different output formats such as HTML, PDF, and ePUB.
+ 
+Package: daps-fonts
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         daps
+Conflicts: daps-fonts (<= 1.9.21)
+Replaces: daps-fonts (<= 1.9.21)
+Description: Upstream fonts for daps
+ This package contains fonts and a calloutfont for daps.
+ 
+Package: daps-doc
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         daps
+Conflicts: daps-doc (<= 1.9.21)
+Replaces: daps-doc (<= 1.9.21)
+Description: Upstream docs for daps
+ This package contains the upstream documentation (README and Book) for daps.
