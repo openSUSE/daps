@@ -284,7 +284,7 @@
 
   <example id="ex.daps.graphics.output.pretty">
    <title>Pretty-printed Output of an Image-related &dapsacr; Command</title>
-   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty</command>
+   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
 <replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia
 <replaceable>PATH</replaceable>/images/src/png/example_png1.png
 <replaceable>PATH</replaceable>/images/src/png/example_png2.png
@@ -300,7 +300,7 @@
     combine the <parameter>--pretty</parameter> parameter with the
     <command>wc</command> command:
    </para>
-   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> projectgraphics --pretty | wc -l</screen>
+   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
    <para>
     For
     <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>,
@@ -327,7 +327,7 @@
      <term>Listing All Graphics Referenced in a Documentation Project
      </term>
      <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp; projectgraphics</screen>
+<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
       <para>
        Lists all graphics used by the DocBook files that are referenced in
        the current &dc; file.
@@ -338,7 +338,7 @@
      <term>
       Listing Missing Graphics in a Documentation Project</term>
      <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp; missinggraphics</screen>
+<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
       <para>
        Lists all graphics that are referenced in your DocBook files, but
        could not be found in the file system. In case there are any missing
@@ -349,7 +349,7 @@
     <varlistentry>
      <term>Checking for Superfluous Graphics</term>
      <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;remaininggraphics</screen>
+      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused&nbsp;noxml</screen>
      <para>
        Lists all graphics that are <emphasis>not</emphasis> referenced in
        your DocBook files, but are available in the
@@ -374,7 +374,7 @@
     <varlistentry>
      <term>Checking for Non-Unique Graphic File Names</term>
      <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;warn-images</screen>
+      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
       <para>
        Checks the <filename>images/src</filename> subdirectories for
        non-unique base names. For more information, refer to
@@ -395,6 +395,7 @@
     </varlistentry>
    </variablelist>
   </sect2>
+  <!--taroth 2014-10-27: checked and updated commands until here-->
 
   <sect2 id="sec.daps.user.imgs.manage.gen">
    <title>Working with Generated Images</title>
