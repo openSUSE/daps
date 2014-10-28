@@ -433,7 +433,7 @@
       <xsl:when test="$enable-bold != 'true'">&light-gray-old;</xsl:when>
       <!-- XEP does not understand transparent yet -->
       <xsl:when test="$xep.extensions != 0">&light-gray-old;</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
+      <xsl:otherwise>inherit</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
@@ -444,7 +444,7 @@
       <xsl:when test="$enable-italic != 'true'">rgb(80,80,80)</xsl:when>
       <!-- XEP does not understand transparent yet -->
       <xsl:when test="$xep.extensions != 0">rgb(80,80,80)</xsl:when>
-      <xsl:otherwise>transparent</xsl:otherwise>
+      <xsl:otherwise>inherit</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
 </xsl:attribute-set>
