@@ -259,166 +259,133 @@
  <sect1 id="sec.daps.user.imgs.manage">
   <title>&dapsacr; Commands for Managing Images</title>
 
-  <para>
-   &dapsacr; offers a number of subcommands for managing images in a
-   documentation project. By default, the output of the subcommands is a
-   list of image file names (including the absolute path), all printed in one
-   line with the file names separated by blanks, see
-   <xref linkend="ex.daps.graphics.output.default" xrefstyle="select:label"/>.
-   This default output format is useful for piping (or copying and pasting)
-   the output for use with another command.
-  </para>
+  <para> &dapsacr; offers a number of subcommands for managing images in a
+   documentation project. By default, the output of the subcommands is a list of
+   image file names (including the absolute path), all printed in one line with
+   the file names separated by blanks, see <xref
+    linkend="ex.daps.graphics.output.default" xrefstyle="select:label"/>. This
+   default output format is useful for piping (or copying and pasting) the
+   output for use with another command. If you need a pretty printed output
+   where each image is listed on a seperate line, refer to <xref
+    linkend="vle.daps.graphics.pretty"/>. </para>
 
   <example id="ex.daps.graphics.output.default">
    <title>Default Output of an Image-related &dapsacr; Command</title>
    <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
   </example>
 
-  <para>
-   For better on-screen reading (or for copying the output to an e-mail, for
-   example), use the <parameter>--pretty</parameter> parameter. It adds a
-   line break after each file name, so that only one file name is shown per
-   line&mdash;see
-   <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>.
-  </para>
+  <para> To find out which images are used/not used in a project or referenced
+   in a DocBook file but missing from the file system, &dapsacr; offers
+   subcommands that check your project for such issues. </para>
+  <para> Apart from that, you can check your source images for non-unique names
+   and reduce the size of your PNGs with an optimizer that recompresses the
+   files to a smaller size. </para>
 
-  <example id="ex.daps.graphics.output.pretty">
-   <title>Pretty-printed Output of an Image-related &dapsacr; Command</title>
-   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
-<replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia
-<replaceable>PATH</replaceable>/images/src/png/example_png1.png
-<replaceable>PATH</replaceable>/images/src/png/example_png2.png
-<replaceable>PATH</replaceable>/images/src/png/example_png3.png
-<replaceable>PATH</replaceable>/images/src/svg/example_svg.svg
-<replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
-  </example>
-
-  <tip>
-   <title>Use Pretty-Printed Output for Counting</title>
-   <para>
-    To count the number of images listed in a given output, you can also
-    combine the <parameter>--pretty</parameter> parameter with the
-    <command>wc</command> command:
-   </para>
-   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
-   <para>
-    For
-    <xref linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>,
-    the command above would return the value
-    <computeroutput>5</computeroutput>
-   </para>
-  </tip>
-
-  <sect2 id="sec.daps.user.imgs.manage.src">
-   <title>Working with Source Images</title>
-   <para>
-    To find out which images are used/not used in a project or referenced in
-    a DocBook file but missing from the file system, &dapsacr; offers
-    subcommands that check your project for such issues.
-    </para>
-   <para>
-    Apart from that, you can check your source images for non-unique names
-    and reduce the size of your PNGs with an optimizer that recompresses the
-    files to a smaller size.
-   </para>
-
-   <variablelist>
-    <varlistentry>
-     <term>Listing All Graphics Referenced in a Documentation Project
+  <variablelist>
+   <varlistentry>
+    <term>Listing All Graphics Referenced in a Documentation Project
      </term>
-     <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
-      <para>
-       Lists all graphics used by the DocBook files that are referenced in
-       the current &dc; file.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
+     <para> Lists all graphics used by the DocBook files that are referenced in
+      the current &dc; file. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
       Listing Missing Graphics in a Documentation Project</term>
-     <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
-      <para>
-       Lists all graphics that are referenced in your DocBook files, but
-       could not be found in the file system. In case there are any missing
-       graphics, you will not be able to build your project.
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
+     <para> Lists all graphics that are referenced in your DocBook files, but
+      could not be found in the file system. In case there are any missing
+      graphics, you will not be able to build your project. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Checking for Superfluous Graphics</term>
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused&nbsp;noxml</screen>
+     <para> Lists all graphics that are <emphasis>not</emphasis> referenced in
+      your DocBook files, but are available in the
+       <filename>images/scr</filename> subdirectories. <remark>taroth
+       2013-01-04: fs, is the above correct?</remark> This command is useful if
+      you want to clean up your source images and want to know which images are
+      no longer needed for the documentation project. </para>
+     <important>
+      <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
+       Graphics</title>
+      <para> If you are storing multiple &dc; files in the same project
+       folder, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
+       As it contains all articles and books in the project folder, this makes
+       sure that any graphics found during the check are indeed unnecessary.
       </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Checking for Superfluous Graphics</term>
-     <listitem>
-      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused&nbsp;noxml</screen>
-     <para>
-       Lists all graphics that are <emphasis>not</emphasis> referenced in
-       your DocBook files, but are available in the
-       <filename>images/scr</filename> subdirectories.
-       <remark>taroth 2013-01-04: fs, is the above correct?</remark>
-       This command is useful if you want to clean up your source images and
-       want to know which images are no longer needed for the documentation
-       project.
+     </important>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Checking for Non-Unique Graphic File Names</term>
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
+     <para> Checks the <filename>images/src</filename> subdirectories for
+      non-unique base names. For more information, refer to <xref
+       linkend="sec.daps.user.imgs.req"/>. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Reducing the File Size of PNG Graphics</term>
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;optipng</screen>
+     <para> Recompresses any PNG files in the
+       <filename>images/src/png</filename> directory with the PNG optimizer
+       <literal>optipng</literal> without reducing the image quality. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Deleting All Generated Images for a Documentation Project</term>
+    <listitem>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;clean-images</screen>
+     <para> Deletes all images generated for a certain &dc; file. This is
+      only necessary in rare cases, for example, when a file previously had an
+      incorrect timestamp or when you have changed your global &dapsacr;
+      configuration. In that cases, &dapsacr; might wrongly assume that an
+      already generated file should be inserted into your output format when in
+      reality the file should be re-generated. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry id="vle.daps.graphics.pretty">
+    <term>Generating Pretty-Printed Output</term>
+    <listitem>
+     <para> For better on-screen reading (or for copying the output to an
+      e-mail, for example), use the <parameter>--pretty</parameter> parameter.
+      It adds a line break after each file name, so that only one file name is
+      shown per line&mdash;see <xref
+       linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>. </para>
+
+     <example id="ex.daps.graphics.output.pretty">
+      <title>Pretty-printed Output of an Image-related &dapsacr;
+       Command</title>
+      <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
+       <replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia
+       <replaceable>PATH</replaceable>/images/src/png/example_png1.png
+       <replaceable>PATH</replaceable>/images/src/png/example_png2.png
+       <replaceable>PATH</replaceable>/images/src/png/example_png3.png
+       <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg
+       <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+     </example>
+
+     <tip>
+      <title>Use Pretty-Printed Output for Counting</title>
+      <para> To count the number of images listed in a given output, you can
+       also combine the <parameter>--pretty</parameter> parameter with the
+       <command>wc</command> command: </para>
+      <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
+      <para> For <xref linkend="ex.daps.graphics.output.pretty"
+        xrefstyle="select:label"/>, the command above would return the value
+        <computeroutput>5</computeroutput>
       </para>
-      <important>
-       <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous Graphics</title>
-       <para>
-        If you are storing multiple &dc; files in the same project folder,
-        use the &dc; file of a <sgmltag>set</sgmltag> for this check. As it
-        contains all articles and books in the project folder, this makes
-        sure that any graphics found during the check are indeed
-        unnecessary.
-       </para>
-      </important>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Checking for Non-Unique Graphic File Names</term>
-     <listitem>
-      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
-      <para>
-       Checks the <filename>images/src</filename> subdirectories for
-       non-unique base names. For more information, refer to
-       <xref linkend="sec.daps.user.imgs.req"/>.
-      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Reducing the File Size of PNG Graphics</term>
-     <listitem>
-<screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;optipng</screen>
-      <para>
-       Recompresses any PNG files in the <filename>images/src/png</filename>
-       directory with the PNG optimizer <literal>optipng</literal> without
-       reducing the image quality.
-      </para>
-     </listitem>
-    </varlistentry>
-   </variablelist>
-  </sect2>
-  
-  <sect2 id="sec.daps.user.imgs.manage.gen">
-   <title>Working with Generated Images</title>
-   <para>
-    As with source images, &dapsacr; can create lists of images that have
-    been generated for use with the various output formats. You can also
-    remove all images generated for a certain &dc; file, if needed.
-   </para>
-   <variablelist>
-       <varlistentry>
-     <term>Deleting All Generated Images for a Documentation Project</term>
-     <listitem>
-<screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;clean-images</screen>
-      <para>
-       Deletes all images generated for a certain &dc; file. This is only
-       necessary in rare cases, for example, when a file previously had an
-       incorrect timestamp or when you have changed your global &dapsacr;
-       configuration. In that cases, &dapsacr; might wrongly assume that an
-       already generated file should be inserted into your output format
-       when in reality the file should be re-generated.
-      </para>
-     </listitem>
-    </varlistentry>
-   </variablelist>
-  </sect2>
+     </tip>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </sect1>
 </chapter>
