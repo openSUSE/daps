@@ -21,15 +21,8 @@
     </listitem>
     <listitem>
      <para>
-      by transforming the multiple DocBook files in your project into one
-      big XML file, or
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      by creating distributable archives (XML sources, images, or various
-      output formats)
-     </para>
+      or by transforming the multiple DocBook files in your project into one
+      big XML file.</para>
     </listitem>
    </itemizedlist>
   </para>
@@ -63,7 +56,8 @@
     <listitem>
      <para>
       <option>--meta</option>:
-      Only available in HTML, HTML-single, and PDF.
+      Only available in HTML, and HTML-single. <remark>taroth 2014-10-28:  --meta no longer seems to
+       have an effect on PDsF: no metadata, neither when building with XEP nor FOP...</remark>
      </para>
     </listitem>
     <listitem>
@@ -110,7 +104,7 @@
    <varlistentry>
     <term>Including Metadata in the Output</term>
     <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> pdf --meta</screen>
+     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> html --meta</screen>
      <para> If metadata to a file has been set, &dapsacr; includes the
      metadata for each file in the output format. </para>
      <note>
@@ -130,10 +124,9 @@
       </itemizedlist>
       <para>By default, the HTML and HTML-single outputs then show filename,
        file maintainer and workflow status, and additionally the ID of the
-       chapter, appendix or prefix, if available. The PDF output shows filename
-       and the ID of the chapter, appendix or prefix, if available.
-        <remark>taroth 2013-01-08: watch out, this is probably bound to
-        change...</remark>
+       chapter, appendix or prefix, if available.
+       <remark>taroth 2014-10-28: the following also no longer seems to be true...: The PDF output
+        shows filename and the ID of the chapter, appendix or prefix, if available.</remark>
       </para>
      </note>
      </listitem>
@@ -141,137 +134,52 @@
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.bigfile">
-  <title>Creating XML Bigfiles and Profiled XML Sources</title>
+  <title>Creating XML Bigfiles</title>
 
-  <para>
-   Instead of sending multiple XML files to a proofreader for review, you
-   can also transform all files included in your <sgmltag>book</sgmltag> or
-   <sgmltag>set</sgmltag> into one huge DocBook XML file (bigfile). If you
-   want to hand over profiled XML sources (instead of the original XML
-   sources that may apply to several products), &dapsacr; also allows for
-   this&mdash;see the command overview below.
-  </para>
+  <para> Instead of sending multiple XML files to a proofreader for review, you can transform all
+   files included in your <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> into one huge DocBook
+   XML file (bigfile). Use the following command: </para>
 
-  <variablelist>
-   <varlistentry>
-    <term>Creating an XML Bigfile</term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
-     <para>
-      &dapsacr; resolves all XIncludes (replaces them with the referenced
-      content) to create the bigfile. A message is shown where to find the
-      generated output.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Creating Profiled XML Sources</term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-xml</screen>
-     <para>
-      If you use profiling attributes to manage document variants, &dapsacr;
-      creates a TAR archive with profiled XML files from your set. For details about
-      profiling in DocBook and how to use it with &dapsacr;, refer to
-      <xref linkend="sec.daps.user.modular.profile"/>.
-     </para>
-     <note>
-      <title>Output Limitations</title>
-      <para>The output of <command>dist-xml</command> does not
-      contain any graphics and the XML sources may not validate after being unpacked.
-      To create TAR archives containing graphics and a complete, valid set of
-      XML sources, use the command <command>package-src</command>.
-      For further details, run <command>daps package-src --help</command> or
-      refer to <xref linkend="cha.daps.user.deploy"/>.</para>
-     </note>
-    </listitem>
-   </varlistentry>
-  </variablelist>
+  <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> bigfile</screen>
+  <para> &dapsacr; resolves all XIncludes (replaces them with the referenced content) to create
+   the bigfile. A message is shown where to find the generated output. </para>
+
  </sect1>
- <sect1 id="sec.daps.user.review.tarballs">
-  <title>Creating Distributable Archives</title>
+ <sect1 id="sec.daps.user.review.locdrop">
+  <title>Creating TAR Archives For Localization</title>
+  <para> If you have a huge documentation project of which only individual books or files are to be
+   translated, you can mark the respective files as <literal>to be translated</literal> with
+   &dm;. You can then use the <command>&dapscmd; locdrop</command> command to generate the
+   following archives for distribution to the translators or translation agency: </para>
+  <itemizedlist>
+   <listitem>
+    <para>One TAR archive contains the graphics.</para>
+   </listitem>
+   <listitem>
+    <para>One TAR archive contains all XML files that need to be localized.</para>
+   </listitem>
+   <listitem>
+    <para>One TAR archive contains contains the remaining files of the set. The remaining files are
+     needed for solving any cross-references between translated and untranslated content during
+     generation of output.</para>
+   </listitem>
+  </itemizedlist>
 
-  <para>
-   For handing over your files to review or translation, or for distributing
-   your output formats in a convenient way, &dapsacr; can automatically
-   create TAR archives of the XML sources, various output formats and/or
-   graphics. &dapsacr; uses <literal>bz2</literal> for high compression of
-   the archives and keeps the directory structure when generating the tar
-   files.
-  </para>
 
-  <para>
-   If you have a huge documentation project of which only individual books
-   or files are to be translated, you can mark the respective files as
-   <literal>to be translated</literal> with &dm;.
-  </para>
+  <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
 
-  <para>
-   Find some example commands below.
-  </para>
+  <note>
+   <title>Restrictions of <command>daps locdrop</command></title>
+   <para> Use this command only if you manage your documentation project with &dm; and have set
+    the respective SVN properties to mark any files that are to be localized. Otherwise it will not
+    work correctly.<remark>taroth 2013-01-11: add link to &dm; docs as soon as they are
+     available</remark>
+   </para>
+  </note>
 
-  <variablelist>
-   <varlistentry>
-    <term>Creating a Graphics TAR Archive</term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> package-src</screen>
-     <para>
-      Creates a TAR archive of all graphics that are referenced in the XML sources
-      of the specified documentation project. The graphics will be included in
-      their original format.<remark>taroth 2014-1024: todo - check, as package-src also provides XML
-       files...</remark>
-     </para>
-     <!--taroth 2014-10-24: this command is no longer supported
-      <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-graphics-png</screen>
-     <para> Creates a TAR archive of all graphics that are referenced in the XML
-      sources of the specified documentation project. All graphics will be
-      converted to PNG format.</para>
-     -->
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Creating a TAR Archive For Localization</term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> locdrop</screen>
-     <para>
-      Use this command only if you manage your documentation project with
-      &dm; and have set the respective SVN properties to mark any files that
-      are to be localized.
-      <remark>taroth 2013-01-11: add link to &dm; docs as soon as
-     they are available</remark>
-     </para>
-     <para>
-      The command is especially helpful if not all files in your
-      documentation project need to be translated, but only a subset of them
-      (for example, one of several books in a <sgmltag>set</sgmltag>). It
-      generates 3 TAR archives: one containing the graphics, one containing all
-      XML files that need to be localized, and one containing the remaining
-      files of the set. The remaining files are needed for solving any
-      cross-references between translated and untranslated content during
-      generation of output.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Creating TAR Archives with Different Output Formats </term>
-    <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-html</screen>
-     <para>
-      Generates HTML output of the specified documentation project
-      (including HTML files, any graphics, and your CSS file defining the
-      HTML layout) and packs the output into a TAR archives.
-     </para>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> dist-htmlsingle</screen>
-     <para>
-      Generates a single-file HTML output and packs the HTML file, any
-      graphics, and your CSS file) into a TAR archive.
-     </para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
 
-  <para>
-   For further options related to creating distributable archives with
-   &dapsacr;, run <command>daps --help</command>.
-  </para>
+  <para> For further options related to creating distributable archives with &dapsacr;, run
+   <command>daps --help</command> or see <xref linkend="cha.daps.user.deploy"/> for more
+   information. </para>
  </sect1>
 </chapter>
