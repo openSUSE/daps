@@ -1,0 +1,75 @@
+<!-- 
+   Customization layer for DocBook + Test elements
+   
+   Purpose:
+     Add additional <scenarios> element inside any DocBook's *info
+     element.
+     
+   Example:
+     Added a scenarios element inside articleinfo:
+     
+     <articleinfo>
+       <author>
+         <firstname>Tux</firstname>
+         <surname>Penguin</surname>
+       </author>
+       <scenarios xmlns="urn:x-suse:toms:ns:testcases">
+         <name>Tests root element conditions</name>
+         <try xpath="/fo:root/@language"      expect="'en'"/>
+         <try xpath="/fo:root/@writing-mode"  expect="'lr-tb'"/>
+       </scenarios>
+     </articleinfo>
+     
+   
+   Author: Thomas Schraitle <toms@opensuse.org>
+   Date:   October 2014
+-->
+
+<!--doc:The SUSE test namespace  -->
+<!ENTITY % test.ns "urn:x-suse:toms:ns:testcases">
+
+<!ENTITY % ns    "xmlns CDATA #FIXED '%test.ns;'">
+
+<!--doc:Parent element for all test scenarios -->
+<!ELEMENT scenarios (name, try+)>
+
+<!--doc:Contains an allowed format to which applies all try elements  -->
+<!ENTITY % scenarios.format.attribute  
+     "format (fo|html|xhtml|xhtml5|epub|epub3|man|other) #IMPLIED">
+
+<!-- Role: New role of element in local environment; no default -->
+<!ENTITY % scenarios.role.attribute
+    "role       CDATA       #IMPLIED">
+
+<!ATTLIST scenarios 
+     %ns;
+     %scenarios.role.attribute;
+     %scenarios.format.attribute;>
+
+<!--doc:Description of a scenarios -->
+<!ELEMENT name (#PCDATA)* >
+<!ATTLIST name 
+     %ns;>
+
+<!--doc:Contains a test case -->
+<!ELEMENT try  EMPTY>
+
+<!--doc:XPath expression to evaluate  -->
+<!ENTITY % try.xpath.attribute  "xpath CDATA #REQUIRED">
+
+<!--doc:Expected result  -->
+<!ENTITY % try.expect.attribute "expect CDATA #REQUIRED">
+<!ATTLIST try 
+     %ns;
+     %try.xpath.attribute;
+     %try.expect.attribute;>
+
+
+<!-- Allow at least one scenarios element inside any *info elements: -->
+<!ENTITY % local.info.class "| scenarios+">
+	
+
+<!-- Load the DocBook DTD -->
+<!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                             "http://docbook.org/xml/4.5/docbookx.dtd" >
+%DocBookDTD;
