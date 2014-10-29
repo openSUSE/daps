@@ -1,0 +1,77 @@
+------------------------------------------------
+                README
+------------------------------------------------
+
+Prerequisites
+=============
+
+* py.test
+* DocBook XSL stylesheet >= 1.77
+* DocBook 4.5
+* SUSE XSL stylesheets
+
+
+Conceptual Overview
+=========================
+
+Each format has its own testing directory under "tests/". For example,
+FO/PDF has all its file in tests/fo. At the moment, no other format is
+available (but maybe will in the future).
+
+These are the files and directories in tests/fo:
+
+  tests/fo
+  ├── conftest.py            Configuration for py.test
+  ├── __pycache__            (Can be ignored, is created by Python)
+  ├── res                    Contains the result XML files
+  │   ├── book.001.fo
+  │   └── book.002.fo
+  ├── src                    Contains the source XML files
+  │   ├── book.001.xml
+  │   └── book.002.xml
+  └── test_fo.py             The driver file
+
+In general, these are the steps when executing the test suite:
+
+1. Collect all source XML files in src/.
+2. Collect all result XML files in res/.
+3. Compare, if there is a file missing. Each source XML file must have a
+   corresponding result XML file.
+4. Read the source XML file. Extract all test cases and the DocBook code.
+5. Apply the SUSE XSL stylesheets to the DocBook code from previous step.
+6. Compare the result with the expected result in res/
+7. Report any error.
+
+
+
+How to Run the Test Suite
+=========================
+
+Use the "suse-pytest.py" script. Run it like this:
+
+* To run the complete test suite:
+  $ suse-pytest.py
+
+* To run the tests in a certain directory:
+  $ suse-pytest.py tests/xhtml
+
+* To see all the test names:
+  $ suse-pytest.py -v
+
+* To get also error messages from tests:
+  $ suse-pytest.py -v -s 
+
+* Get further help:
+  $ suse-pytest.py -h
+
+
+How to Configure py.test
+========================
+
+Usually, use a "pytest.ini" configuration file. If you need further 
+configuration, use the "conftest.py" file.
+
+
+Links
+-----
+[1] http://pytest.org/latest/plugins.html#well-specified-hooks
