@@ -22,11 +22,11 @@ These are the files and directories in tests/fo:
 
   tests/fo
   ├── conftest.py            Configuration for py.test
-  ├── __pycache__            (Can be ignored, is created by Python)
-  ├── res                    Contains the result XML files
+  ├── __pycache__            (Can be ignored, is automatically created by Python)
+  ├── res/                   Contains the result XML files
   │   ├── book.001.fo
   │   └── book.002.fo
-  ├── src                    Contains the source XML files
+  ├── src/                   Contains the source XML files
   │   ├── book.001.xml
   │   └── book.002.xml
   └── test_fo.py             The driver file
@@ -39,8 +39,19 @@ In general, these are the steps when executing the test suite:
    corresponding result XML file.
 4. Read the source XML file. Extract all test cases and the DocBook code.
 5. Apply the SUSE XSL stylesheets to the DocBook code from previous step.
-6. Compare the result with the expected result in res/
+6. Evaluate the XPath test expressions from step 4 and compare it with 
+   the expected result in "res/".
 7. Report any error.
+
+The idea is, to collect DocBook code AND test cases inside a XML file.
+This has the benefit that you do not have to switch between DocBook code
+and test cases.
+
+There is a RNG schema in tests/tools/rng/testcase.rnc which can be used
+to create the test case skeleton. However, the t:context element doesn't
+know of any DocBook elements. In theory, it can be anything.
+As a future addition, the mentioned RNG schema could be combined with
+the DocBook 5 RNG schema to allow guided editing.
 
 
 
