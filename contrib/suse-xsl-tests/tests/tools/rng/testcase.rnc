@@ -38,13 +38,46 @@ div {
 }
 
 div {
-  t.scenario.attributes =
+  t.name.attributes =
     empty
+  t.name =
+    ## Description of test scenario
+    element name {
+      t.name.attributes,
+      text
+    }
+}
+
+div {
+  t.scenario.format.enum =
+    ## for EPUB2
+      "epub" |
+    ## for EPUB3
+      "epub3" |
+    ## for FO/PDF
+      "fo" |
+    ## for HTML4 
+      "html" | 
+    ## for XHTML
+      "xhtml" |
+    ## for HTML5
+      "xhtml5" |
+    ## for man pages
+      "man" |
+    ## for something else
+      "other"
+  t.scenario.format.attrib =
+    ## Identifies a scenario for a specific format
+    attribute format { t.scenario.format.enum }
+
+  t.scenario.attributes =
+    t.scenario.format.attrib?
 
   t.scenario =
     ## Collects one or many test case expressions and context information
     element t:scenario { 
       t.scenario.attributes,
+      t.name,
       t.try+,
       t.context
     }
