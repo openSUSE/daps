@@ -803,6 +803,26 @@
 </xsl:template>
 
 
+<xsl:template name="create.region.content">
+  <xsl:param name="pageclass" select="''"/>
+  <xsl:param name="sequence" select="''"/>
+  <xsl:param name="position" select="''"/>
+  <xsl:param name="gentext-key" select="''"/>
+
+  <xsl:variable name="title" select="(ancestor-or-self::set/title |
+    ancestor-or-self::book/bookinfo/title |
+    ancestor-or-self::book/title |
+    ancestor-or-self::article/articleinfo/title |
+    ancestor-or-self::article/title
+    )[last()]"/>
+  
+  <xsl:call-template name="product"/>
+  <xsl:text> * </xsl:text>
+  <xsl:apply-templates select="$title" mode="title.markup"/>
+</xsl:template>
+
+
+  
 <xsl:template name="outer.region.content">
   <xsl:param name="pageclass" select="''"/>
   <xsl:param name="sequence" select="''"/>
@@ -822,29 +842,9 @@
 
   <!-- Customize to add side region content-->
   <fo:block xsl:use-attribute-sets="outer.region.content.properties"
-     margin-top="-3em">
+     margin-top="2em">
     <xsl:if test="$draft.mode = 'yes'">
-      <!--<xsl:message>inner.region.content:
-          title=<xsl:value-of select="string($title)"/>
-   current-node=<xsl:value-of select="local-name()"/>
-      pageclass=<xsl:value-of select="$pageclass"/>
-       sequence=<xsl:value-of select="$sequence"/>
-       position=<xsl:value-of select="$position"/>
-    gentext-key=<xsl:value-of select="$gentext-key"/>
-      </xsl:message>-->
-      <xsl:call-template name="product"/>
-      <xsl:text> * </xsl:text>
-      <xsl:choose>
-        <xsl:when test="$title">
-          <xsl:apply-templates select="$title" mode="title.markup"/>
-        </xsl:when>
-        <xsl:when test="*[contains(local-name(), 'info')]/title">
-          <xsl:apply-templates select="*/title" mode="title.markup"/>
-        </xsl:when>
-        <!--<xsl:when test="*[contains(local-name(), 'info')]/productname">
-          <xsl:apply-templates select="*/productname" mode="title.markup"/>
-        </xsl:when>-->
-      </xsl:choose>
+      <xsl:call-template name="create.region.content"/>
     </xsl:if>
   </fo:block>
 </xsl:template>
