@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
    Purpose:
-     Print content of a 'xml-stylesheet' processing instruction
+     Print content of a 'xml-stylesheet' processing instruction in root node
      
    Parameters:
-     None
+     * terminate.on.error (0=no, 1=yes)
+       Should the stylesheet terminate with error exit code !=0 when the
+       processing instruction cannot be found?
        
    Input:
      DocBook 4/Novdoc document
@@ -14,7 +16,7 @@
      (detects this PI only in the root node!)
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright: 2014, Thomas Schraitle
    
 -->
 
@@ -26,7 +28,24 @@
 
 <xsl:output method="text"/>
 
+<xsl:param name="terminate.on.error" select="0"/>
+
 <xsl:template match="*"/>
+
+<xsl:template match="/">
+  <xsl:variable name="pi">
+    <xsl:apply-templates/>
+  </xsl:variable>
+  
+  <xsl:choose>
+    <xsl:when test="$terminate.on.error != 0 and $pi = ''">
+      <xsl:message terminate="yes">ERROR: Couldn't find PI 'xml-stylesheet'!</xsl:message>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$pi"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 
 <xsl:template match="/processing-instruction('xml-stylesheet')[1]">
