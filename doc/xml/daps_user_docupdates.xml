@@ -31,19 +31,36 @@
   <para><remark>&wip;</remark></para>
   <variablelist>
    <varlistentry>
+    <term>Supported DocBook Versions</term>
+    <listitem>
+     <para>Support for DocBook 5.x has been added. &daps-db-versions;</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Availablity for &sle;</term>
+    <listitem>
+     <para>As of &sle; 12, &dapsacr; is now also available for
+      &sle;. The <systemitem class="resource">daps</systemitem> package and
+      related packages are provided by the &sle; &sdk; (SDK). <xref
+       linkend="sec.daps.user.inst.sle"/> has been added to <xref
+       linkend="cha.daps.user.inst"/>. </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term>Make Files</term>
     <listitem>
      <para>
       <remark>taroth 2013-10-09: not sure if to mention this here, rather
-       something for the developer guide ;)</remark>The make files have now been split into several smaller make files,
-      that are specific for the respective output like PDF, or HTML.</para></listitem>
-   </varlistentry>   
+       something for the developer guide ;)</remark>The make files have now been
+      split into several smaller make files, that are specific for the
+      respective output like PDF, or HTML.</para>
+    </listitem>
+   </varlistentry>
    <varlistentry>
     <term>Verbosity</term>
     <listitem>
      <para>The number of verbosity levels has changed, as have the defaults used
-      on the command line and in scripts:
-     </para>
+      on the command line and in scripts: </para>
      <itemizedlist>
       <listitem>
        <para>Command Line: Default verbosity level is now <literal>v1</literal>,
@@ -51,7 +68,8 @@
       </listitem>
       <listitem>
        <para>Scripts: Default verbosity level is now <literal>v0</literal>,
-        which shows the file names. </para></listitem>
+        which shows the file names. </para>
+      </listitem>
      </itemizedlist>
      <para>The verbosity levels <literal>v0</literal>, <literal>v1</literal>,
        <literal>v2</literal>, and <literal>debug</literal> are unchanged, but a
@@ -60,7 +78,10 @@
       successively (no parallel processing). This makes the output easier to
       read than that of the <literal>debug</literal> verbosity level, where
       messages from parallel processes are shown in the order they
-      arrive.</para>     
+      arrive.</para>
+     <para>For information on how to get the same verbosity level like with
+      &dapsacr;' predecessor susedoc, see <xref
+       linkend="faq.daps.user.trouble.misc.verbosity"/>.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -68,26 +89,29 @@
     <listitem>
      <para>
       <remark>taroth 2013-09-10: not sure if to mention this (probably no doc
-       impact)...</remark>Whereas &dapsacr; 1.x required Bash 4, &dapsacr; 2.0 is
-      compatible with Bash 3.</para>
+       impact)...</remark>Whereas &dapsacr; 1.x required Bash 4,
+      &dapsacr; 2.0 is compatible with Bash 3.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term>Output Targets</term>
     <!--WIP-->
     <listitem>
+     <para>For an overview of commonly used output formats and commands, see
+       <xref linkend="table.daps.user.output.overview"/>. </para>
      <itemizedlist>
       <listitem>
        <para>For a list of command name changes and deprecated commands, refer
-        to <xref linkend="vle.docupd.deprec"/>.</para>
+        to <xref linkend="vle.docupd.deprec"/>. </para>
       </listitem>
       <listitem>
        <para>The &epub; output is now checked with EpubCheck, <ulink
-        url="https://github.com/IDPF/epubcheck"/>.</para>
+         url="https://github.com/IDPF/epubcheck"/>.</para>
       </listitem>
       <listitem>
-       <para>A new output format has been added:  <command>daps mobi </command>
-        generates <filename>*.mobi</filename> files for Amazon Kindle e-books.</para>
+       <para>A new output format has been added: <command>daps mobi</command>
+        generates <filename>*.mobi</filename> files for Amazon Kindle e-books.
+       </para>
       </listitem>
       <listitem>
        <para>HTML 4 is no longer supported. Per default,
@@ -95,41 +119,46 @@
         be enforced by using the <option>--html5</option> option.</para>
       </listitem>
       <listitem>
-       <para>Some commands for generating file lists (such as <command>daps
-        remaininggraphics</command>) have been renamed, some are
+       <para>Some commands for generating file lists (such as
+        <command>daps remaininggraphics</command>) have been renamed, some are
         deprecated. For details, refer to <xref linkend="vle.docupd.deprec"/>.
+         <xref linkend="cha.daps.user.img"/> has been updated accordinly.
        </para>
        <!-- (now: <option>list-*</option>)-->
       </listitem>
       <listitem>
        <para>For the <command>daps list-srcfiles</command> command, options are
         now available with which to exclude files from the list. For more
-        details, run <command>daps help list-srcfiles</command>.</para>
+        details, run <command>daps help list-srcfiles</command>. For some
+        examples, see <xref linkend="vle.daps.user.imgs.manage.cmds"/>.</para>
       </listitem>
       <listitem>
-       <para>A new packaging command is available: <command>daps
-       package-src</command>. It creates a TAR archive with profiled XML
-        sources, resolved entities, and images.  Use the <option>--set-date</option> to
-        include the publication date.</para>
+       <para>A new packaging command is available:
+        <command>daps package-src</command>. It creates a TAR archive
+        with profiled XML sources, resolved entities, and images. Use the
+         <option>--set-date</option> to include the publication date. For
+        some examples of how to deploy and package your documentation, see <xref
+         linkend="cha.daps.user.deploy"/>.</para>
       </listitem>
       <listitem>
        <para><remark>taroth 2013-11-28: really include this? is mostly used for
-        our own purposes...</remark>A new target for distributable archives has been added:
-        <command>daps locdrop</command>.</para>
+         our own purposes...</remark>A new command for distributable archives has
+        been added: <command>daps locdrop</command>. See <xref
+         linkend="sec.daps.user.review.locdrop"/>.</para>
       </listitem>
       <listitem>
        <para>The <command>daps bigfile</command> command has changed: The
-        <command>daps bigfile-reduced</command> is deprecated, use <command>daps
-        bigfile</command> instead.</para>
+        <command>daps bigfile-reduced</command> is deprecated, use
+        <command>daps bigfile</command> instead.</para>
        <!-- now does what was formerly done by bigfile-reduced-->
       </listitem>
       <listitem>
        <para>Generating page, desktop, or document files: The commands
-        <command>daps package-html</command> and 
-        <command>daps package-pdf</command> now have options to define which files to generate:
-         <option>--documentfiles</option>, <option>--desktopfiles</option>, and
-         <option>--pagefiles</option>.
-       </para>
+        <command>daps package-html</command> and
+        <command>daps package-pdf</command> now have options to define which
+        files to generate: <option>--documentfiles</option>,
+         <option>--desktopfiles</option>, and <option>--pagefiles</option>. For
+        details, see <xref linkend="sec.daps.user.deploy.desktops"/>. </para>
       </listitem>
       <listitem>
        <para>A new command has been added:
@@ -143,40 +172,50 @@
     <term>Debugging</term>
     <listitem>
      <para>A new subcommand has been added: <command>daps dapsenv</command>. It
-      prints a list of the most important make variables and their value.</para></listitem>
+      prints a list of the most important make variables and their value.</para>
+    </listitem>
    </varlistentry>
    <varlistentry>
     <term>Entities</term>
     <listitem>
      <para>In the profiled XML sources entities are now always resolved and
-      replaced by their value.</para></listitem>
+      replaced by their value.</para>
+    </listitem>
    </varlistentry>
    <varlistentry>
     <term>Well-formed XML</term>
     <listitem>
      <para>If the XML is not well-formed, &dapsacr; quits and shows a
-      meaningful error message.</para></listitem>
+      meaningful error message.</para>
+    </listitem>
    </varlistentry>
    <varlistentry>
     <term>Overview of All Commands</term>
     <listitem>
      <para>With <command>daps --commands</command>, you can list all available
-      commands.</para></listitem>
+      commands.</para>
+    </listitem>
    </varlistentry>
    <varlistentry>
     <term>Image Formats</term>
-    <listitem><para>&dapsacr; now also supports JPEG as image format.</para></listitem>
+    <listitem>
+     <para>&dapsacr; now also supports JPEG as image format. <xref
+       linkend="cha.daps.user.img"/> has been updated accordinly.</para>
+    </listitem>
    </varlistentry>
-   <varlistentry>
+  <!-- <varlistentry>
     <term>CSS</term>
-    <listitem><para>&wip;</para></listitem>
-   </varlistentry>
+    <listitem>
+     <para>&wip;</para>
+    </listitem>
+   </varlistentry>-->
    <varlistentry>
     <term>XSLT Processors</term>
     <listitem>
      <para>&dapsacr; now also supports the Saxon XSLT processor. Use the
       option <option>--xsltprocessor</option> to define which processor to use.
-      Per default, <literal>xsltproc</literal> is used. </para></listitem>
+      Per default, <literal>xsltproc</literal> is used. </para>
+    </listitem>
    </varlistentry>
    <varlistentry id="vle.docupd.syntax">
     <term>XSLT Parameters: Syntax Change</term>
@@ -187,10 +226,13 @@
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable></screen>
      <para>now use:</para>
      <screen>--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable><emphasis role="strong">=</emphasis><replaceable>VALUE</replaceable></screen>
-     </listitem>
+     <para>All examples in the &dapsacr; documentation have been updated
+      accordingly.</para>
+    </listitem>
+   
    </varlistentry>
    <varlistentry id="vle.docupd.deprec">
-   <term>Deprecated Commands</term>
+    <term>Deprecated Commands</term>
     <listitem>
      <para>The following commands are deprecated: </para>
      <itemizedlist>
@@ -227,9 +269,10 @@
       <listitem>
        <para>
         <command>&dapscmd; desktop-files</command>. Use
-        <command>&dapscmd;&nbsp;package-html&nbsp;--desktopfiles</command> or 
+        <command>&dapscmd;&nbsp;package-html&nbsp;--desktopfiles</command>
+        or
         <command>&dapscmd;&nbsp;package-pdf&nbsp;--desktopfiles</command>
-	instead. </para>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
@@ -248,23 +291,23 @@
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; dist-book</command>. This command is no
+        <command>&dapscmd; dist-book</command>. This command is no longer
+        supported. </para>
+      </listitem>
+      <listitem>
+       <para>
+        <command>&dapscmd; dist-desktop-files</command>. This command is no
         longer supported. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; dist-desktop-files</command>. This command
-        is no longer supported. </para>
+        <command>&dapscmd; dist-document-files</command>. This command is no
+        longer supported. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; dist-document-files</command>. This command
+        <command>&dapscmd; dist-document-files-pdf</command>. This command
         is no longer supported. </para>
-      </listitem>
-      <listitem>
-       <para>
-        <command>&dapscmd; dist-document-files-pdf</command>. This
-        command is no longer supported. </para>
       </listitem>
       <listitem>
        <para>
@@ -273,8 +316,8 @@
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; dist-graphics-png</command>. This command is
-        no longer supported. </para>
+        <command>&dapscmd; dist-graphics-png</command>. This command is no
+        longer supported. </para>
       </listitem>
       <listitem>
        <para>
@@ -295,18 +338,20 @@
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; document-files-dir-name</command>. This command is no longer
-        supported.  </para>
+        <command>&dapscmd; document-files-dir-name</command>. This command
+        is no longer supported. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; document-files-html</command>. Use
-        <command>&dapscmd;&nbsp;package-html&nbsp;--documentfiles</command> instead. </para>
+        <command>&dapscmd;&nbsp;package-html&nbsp;--documentfiles</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; document-files-pdf</command>. Use
-        <command>&dapscmd;&nbsp;package-pdf&nbsp;--documentfiles</command> instead. </para>
+        <command>&dapscmd;&nbsp;package-pdf&nbsp;--documentfiles</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
@@ -315,28 +360,29 @@
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; htmlsingle</command>. Use 
+        <command>&dapscmd; htmlsingle</command>. Use
         <command>&dapscmd; html --single</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; htmlsingle-name</command>. Use
-        <command>&dapscmd;&nbsp;html-dir-name --single</command> instead.
-       </para>
+        <command>&dapscmd;&nbsp;html-dir-name --single</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; html-single</command>. Use 
+        <command>&dapscmd; html-single</command>. Use
         <command>&dapscmd;&nbsp;html --single</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; html-single-name</command>. Use
-        <command>&dapscmd;&nbsp;html-dir-name --single</command> instead. </para>
+        <command>&dapscmd;&nbsp;html-dir-name --single</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; jana</command>. Use 
+        <command>&dapscmd; jana</command>. Use
         <command>&dapscmd; checklink</command> instead. </para>
       </listitem>
       <listitem>
@@ -347,57 +393,63 @@
       <listitem>
        <para>
         <command>&dapscmd; missinggraphics</command>. Use
-        <command>&dapscmd;&nbsp;list-images-missing</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-images-missing</command> instead.
+       </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; online-localized</command>. Use
-        <command>&dapscmd;&nbsp;online-docs&nbsp;--noset</command> instead. </para>
+        <command>&dapscmd;&nbsp;online-docs&nbsp;--noset</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; offspring</command>. This command is no
-        longer supported. </para>
+        <command>&dapscmd; offspring</command>. This command is no longer
+        supported. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; pdf-color</command>. Use 
+        <command>&dapscmd; pdf-color</command>. Use
         <command>&dapscmd; pdf</command> instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; pdf-color-name</command>. Use 
+        <command>&dapscmd; pdf-color-name</command>. Use
         <command>&dapscmd; pdf-name</command> instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; penguin</command>. This command is no
-        longer supported. </para>
+        <command>&dapscmd; penguin</command>. This command is no longer
+        supported. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; prof</command>. Use 
+        <command>&dapscmd; prof</command>. Use
         <command>&dapscmd; profile</command> instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; profiledir</command>. Use
-        <command>&dapscmd;&nbsp;showvariable&nbsp;VARIABLE=PROFILEDIR</command> instead. </para>
+        <command>&dapscmd;&nbsp;showvariable&nbsp;VARIABLE=PROFILEDIR</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; projectfiles</command>. Use
-        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--noimg</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--noimg</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; projectgraphics</command>. Use
-        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noxml</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noxml</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; provide-images</command>. Use
-        <command>&dapscmd;&nbsp;images --grayscale</command> instead.</para>
+        <command>&dapscmd;&nbsp;images --grayscale</command>
+        instead.</para>
       </listitem>
       <listitem>
        <para>
@@ -412,12 +464,14 @@
       <listitem>
        <para>
         <command>&dapscmd; remainingfiles</command>. Use
-        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noimg</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noimg</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; remaininggraphics</command>. Use
-        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noxml</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-srcfiles-unused&nbsp;--noxml</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
@@ -431,23 +485,24 @@
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; warn-images</command>. Use 
+        <command>&dapscmd; warn-images</command>. Use
         <command>&dapscmd; list-images-multisrc</command> instead. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; wiki</command>. This command is no longer supported.
-       </para>
+        <command>&dapscmd; wiki</command>. This command is no longer
+        supported. </para>
       </listitem>
       <listitem>
        <para>
-        <command>&dapscmd; wiki-name</command>. This command is no longer supported.
-       </para>
+        <command>&dapscmd; wiki-name</command>. This command is no longer
+        supported. </para>
       </listitem>
       <listitem>
        <para>
         <command>&dapscmd; xmlfiles</command>. Use
-        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noimg</command> instead. </para>
+        <command>&dapscmd;&nbsp;list-srcfiles&nbsp;--nodc&nbsp;--noent&nbsp;--noimg</command>
+        instead. </para>
       </listitem>
       <listitem>
        <para>
@@ -460,12 +515,10 @@
         supported.</para>
       </listitem>
      </itemizedlist>
+     <para>All examples in the &dapsacr; documentation have been updated
+      accordingly.</para>
     </listitem>
-  </varlistentry>
-   
-   
-   
-   
+   </varlistentry>
   </variablelist>
  </sect1>
 
