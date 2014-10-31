@@ -53,8 +53,8 @@ In general, these are the steps when executing the test suite:
 2. Collect all result XML files in res/.
 3. Compare, if there is a file missing. Each source XML file must have a
    corresponding result XML file.
-4. Read the source XML file. Extract all test cases and the DocBook code.
-5. Apply the SUSE XSL stylesheets to the DocBook code from previous step.
+4. Read the source XML file. Extract all test cases.
+5. Apply the SUSE XSL stylesheets to the DocBook code.
 6. Evaluate the XPath test expressions from step 4 and compare it with 
    the expected result in "res/".
 7. Report any error.
@@ -89,6 +89,70 @@ Use the "suse-pytest.py" script. Run it like this:
 
 * Get further help:
   $ suse-pytest.py -h
+
+
+How to Create a Testcase
+========================
+
+In order to write DocBook code *and* testcases, the DocBook DTD has been
+extended to allow certain elements inside any *info elements.
+
+To create a new test, use the following steps:
+
+1. Create a DocBook file, for example with the root element <book>.
+
+2. Replace any DOCTYPE with the following line:
+
+    <!DOCTYPE book SYSTEM "../../tools/dtd/docbook-with-test.dtd">
+
+   HINT: This should be a platform independend public or system
+         identifier. For the time being, there is no such thing.
+
+3. Insert a <bookinfo> element and add a "test scenario":
+
+    <bookinfo>
+      <scenarios xmlns="urn:x-suse:toms:ns:testcases">
+         <name>Testing fo:root properties</name>
+         <try xpath="local-name(/fo:root)" expect="'root'"/>
+         <try xpath="/fo:root/@language" expect="'en'"/>
+         <try xpath="/fo:root/@writing-mode" expect="'lr-tb'"/>
+      </scenarios>
+      <!-- ... any additional elements ... -->
+    </bookinfo>
+
+4. Save your test file under "tests/FORMAT/foo.001.xml", whereas FORMAT
+   is "fo", "html" etc. Currently, only "fo" exists. The XML file is your
+   source file.
+
+5. Transform your source file into FO and save it to
+   "tests/FORMAT/foo.001.fo". Your basename ("foo.001") must match with
+   the basename of your source file. In other words: both names should
+   be the same without extensions.
+   This transformation should be (preferably) done only once.
+
+Your test is ready.
+
+After you have completed all the steps, execute the test suite with the
+"suse-pytest.py" script.
+
+
+A Note about XPath Expressions
+------------------------------
+
+Inside a DocBook's *info element there can be as much <scenarios>
+elements as needed. This can be useful if you want to group your
+testcases.
+
+Each <scenarios> element can allow one or more <try> elements. A <try>
+element contains an XPath expression (attribute xpath) and what result
+is expected (attribute expect).
+
+The DocBook source is transformed with the current stylesheets and
+the XPath expression is evaluated against the result tree. The result is
+compared to the expect attribute.
+
+Currently, XPath expressions should return string or float values.
+Complete nodes are currently unsupported.
 
 
 How to Configure py.test
