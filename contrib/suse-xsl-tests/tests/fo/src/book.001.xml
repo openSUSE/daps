@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book SYSTEM "../../tools/dtd/docbook-with-test.dtd">
 
-<?xml-model href="../../tools/rng/testcase.rnc" type="application/relax-ng-compact-syntax"?>
-<t:testcases version="1.0" 
-  xmlns:t="urn:x-suse:toms:ns:testcases"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format">
-  <t:scenario>
-    <t:try xpath="local-name(/fo:root)" expect="'root'"/>
-    <t:try xpath="/fo:root/@language" expect="'en'"/>
-    <!--<t:try xpath="/fo:root/" expect="'Test File'"/>-->
-    
-    <t:context xmlns="">
-      <book lang="en">
-        <title>Test File</title>
-        <para/>
-      </book>
-    </t:context>
-  </t:scenario>
-</t:testcases>
+<book lang="en">
+  <title>Test File</title>
+  <bookinfo>
+    <scenarios xmlns="urn:x-suse:toms:ns:testcases">
+      <name>Testing fo:root properties</name>
+      <try xpath="local-name(/fo:root)" expect="'root'"/>
+      <try xpath="/fo:root/@language" expect="'en'"/>
+      <try xpath="/fo:root/@writing-mode" expect="'lr-tb'"/>
+    </scenarios>
+  </bookinfo>
+</book>
