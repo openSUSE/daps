@@ -5,57 +5,106 @@ import sys
 import os, os.path
 import glob
 
-import pytest
+import py, pytest
+from lxml import etree
+
+# Our base directory
+BASEDIR=os.path.dirname(__file__)
+
+# source and result directories:
+SRC="src/"
+RES="res/"
+
+# Our test namespace:
+TESTURN="urn:x-suse:toms:ns:testcases"
+
+# Collect all XML files in a list:
+XML=glob.glob(os.path.join(BASEDIR, SRC, "*.xml"))
+
+# -----------------------------------------------------------------------
+#  Fixtures
+#
+@pytest.fixture(params=XML)
+def xmlsource(request):
+   """Fixture to create an XMLFile object of source XML"""
+   return py.path.local(request.param)
 
 
-def pytest_generate_tests(metafunc):
-   """
-   """
-   idlist = []
-   argvalues = []
-   argnames = []
-
-   # If we have a setup_class method, initalize our class:
-   if hasattr(metafunc.cls, 'setup_class'):
-      metafunc.cls.setup_class()
-
-   # Fill our helper variables
-   for scenario in metafunc.cls.scenarios:
-      idlist.append((scenario[0], scenario[1]))
-      items = scenario[2].items()
-      argnames = [x[0] for x in items]
-      argvalues.append(([x[1] for x in items]))
-
-   metafunc.parametrize(argnames, argvalues, ids=idlist, scope="class")
+@pytest.fixture
+def fosource(request, xmlsource):
+   """Fixture to create an XMLFile object of result FO"""
+   fobase = xmlsource.new(ext=".fo",dirname=os.path.join(BASEDIR, RES))
+   return fobase
 
 
-class TestFO:
-   """Test class for FO output
-   """
-   scenarios = []
-   basedir=None
-   
-   # These are constants:
-   src="src/"
-   res="res/"
+@pytest.fixture
+def xmltestcases(request, xmlsource, defaultxmlparser):
+   """Fixture to select all testcases from a file """
+   # print("xmltestcases:", request, xmlsource, defaultxmlparser)
+   root = etree.parse(str(xmlsource), defaultxmlparser)
+   return root.xpath("//t:scenarios/t:try", namespaces={"t": TESTURN}, )
 
-   @classmethod
-   def setup_class(cls):
-      cls.basedir=os.path.dirname(__file__)
 
-      for f in glob.glob( os.path.join(cls.basedir, cls.src, "*.xml") ):
-         basename = os.path.basename(f)
-         base, _ = os.path.splitext(basename)
-         fobase = base+".fo"
-         fo = os.path.join(cls.basedir, cls.res, fobase)
-         cls.scenarios.append( (basename, fobase,
-                                {'sourcexml': os.path.join(cls.basedir, cls.src, basename),
-                                 'resultxml': os.path.join(cls.basedir, cls.res, fobase)
-                                }
-                                )
-                              )
+@pytest.fixture
+def xmltree(request, xmlsource, defaultxmlparser):
+   """Fixture to create XML tree from XML source"""
+   root = etree.parse(str(xmlsource), defaultxmlparser)
+   #return root.xpath("/t:testcases/t:scenario[1]/t:context[1]/node()[not(self::text())]",
+   #                  namespaces={"t": TESTURN}, )
+   return root
 
-   def test_files_exist(self, sourcexml, resultxml):
-      """checks, if all files exist"""
-      assert os.path.join(self.basedir, self.src, sourcexml)
-      assert os.path.join(self.basedir, self.res, resultxml)
+
+@pytest.fixture
+def fotree(request, fosource, defaultxmlparser):
+   """Fixture to create XML tree from FO result file"""
+   return etree.parse(str(fosource), defaultxmlparser)
+
+
+@pytest.fixture
+def stylesheet(request, defaultxmlparser):
+   """ """
+   styledir="../../../../suse/suse2013"
+   stylepath=py.path.local(BASEDIR).join(styledir)
+   return stylepath
+
+
+# -----------------------------------------------------------------------
+#  Test Functions
+#
+def test_file_exists(xmlsource, fosource):
+   """Checks, if both source and result files are available"""
+   # print("source: {!s}, fo: {!s}".format(xmlsource, fosource))
+   assert xmlsource.exists()
+   assert fosource.exists()
+
+
+def test_testcases_exists(xmlsource, xmltestcases):
+   """Checks, if a testcase exists inside the file"""
+   assert xmltestcases
+
+
+def test_cmp_with_result(xmltree, fotree, xmltestcases, namespaces):
+   """Checks """
+   print()
+   for i, t in enumerate(xmltestcases, 1):
+      xp = t.attrib.get("xpath")
+      exp=t.attrib.get("expect")
+      expect = eval(exp)
+      res = fotree.xpath(xp, namespaces=namespaces)
+      
+      print(" case {}: {} -> {!r} => {!r}".format(i, xp, expect, res))
+      print("   xmltestcases:", xmltestcases)
+      print("   fotree:", fotree, fotree.getroot().tag )
+      print("   xpath:", exp, type(exp) )
+      print("   expect:", expect, type(expect) )
+      
+      if isinstance(res, list):
+         assert res
+         assert str(res[0]) == expect
+      elif isinstance(res, str):
+         assert res == expect
+      elif isinstance(res, float):
+         assert res == float(expect)
+      else:
+         assert False, "Shouldn't happen!"
+# EOF
