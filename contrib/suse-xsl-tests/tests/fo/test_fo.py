@@ -36,10 +36,16 @@ def fosource(request, xmlsource):
    fobase = xmlsource.new(ext=".fo",dirname=os.path.join(BASEDIR, RES))
    return fobase
 
+@pytest.fixture
+def xmlscenarios(request, xmlsource, defaultxmlparser):
+   """Fixture to select all t:scenarios elements from a file
+   """
+   root = etree.parse(str(xmlsource), defaultxmlparser)
+   return root.xpath("//t:scenarios", namespaces={"t": TESTURN}, )
 
 @pytest.fixture
 def xmltestcases(request, xmlsource, defaultxmlparser):
-   """Fixture to select all testcases from a file """
+   """Fixture to select all t:try testcases from a file """
    # print("xmltestcases:", request, xmlsource, defaultxmlparser)
    root = etree.parse(str(xmlsource), defaultxmlparser)
    return root.xpath("//t:scenarios/t:try", namespaces={"t": TESTURN}, )
@@ -83,28 +89,36 @@ def test_testcases_exists(xmlsource, xmltestcases):
    assert xmltestcases
 
 
-def test_cmp_with_result(xmltree, fotree, xmltestcases, namespaces):
-   """Checks """
+def test_cmp_with_result(xmltree, fotree, xmlscenarios, namespaces):
+   """Checks XPath from scenarios/try elements and compares result 
+      with the expected output
+   """
    print()
-   for i, t in enumerate(xmltestcases, 1):
-      xp = t.attrib.get("xpath")
-      exp=t.attrib.get("expect")
-      expect = eval(exp)
-      res = fotree.xpath(xp, namespaces=namespaces)
+   T="{{{}}}try".format(TESTURN)
+   N="{{{}}}name".format(TESTURN)
+   for i, S in enumerate(xmlscenarios, 1):
+      NN = list(S.iter(N))[0]
       
-      print(" case {}: {} -> {!r} => {!r}".format(i, xp, expect, res))
-      print("   xmltestcases:", xmltestcases)
-      print("   fotree:", fotree, fotree.getroot().tag )
-      print("   xpath:", exp, type(exp) )
-      print("   expect:", expect, type(expect) )
-      
-      if isinstance(res, list):
-         assert res
-         assert str(res[0]) == expect
-      elif isinstance(res, str):
-         assert res == expect
-      elif isinstance(res, float):
-         assert res == float(expect)
-      else:
-         assert False, "Shouldn't happen!"
+      print("** Scenario {}: {} **".format(i, NN.text ))
+      for j, t in enumerate(S.iter(T), 1):
+         xp = t.attrib.get("xpath")
+         exp = t.attrib.get("expect")
+         expect = eval(exp)
+         res = fotree.xpath(xp, namespaces=namespaces)
+         
+         print(" *** Test case {}: {} -> {!r} => {!r}".format(j, xp, expect, res))
+         #print("   xmltestcases:", xmltestcases)
+         #print("   fotree:", fotree, fotree.getroot().tag )
+         print("   xpath:", exp )
+         print("   expect:", expect )
+         
+         if isinstance(res, list):
+            assert res
+            assert str(res[0]) == expect
+         elif isinstance(res, str):
+            assert res == expect
+         elif isinstance(res, float):
+            assert res == float(expect)
+         else:
+            assert False, "Shouldn't happen!"
 # EOF
