@@ -11,7 +11,7 @@
 ]>
 
 <article lang="en" id="art.tutorial">
- <title>How to Write an Article with DocBook and DAPS</title>
+ <title>How to Write an Article with DocBook and &dapsacr;</title>
  <subtitle>Tutorial</subtitle>
 
  <articleinfo>
@@ -26,19 +26,19 @@
 
  <abstract>
   <para>
-   Why should I use DAPS? 
+   Why should I use &dapsacr;? 
   </para>
   <para>
-   DAPS (DocBook Authoring and Publishing Suite) is a program to transform XML
-   into output formats such as HTML or PDF, for example. In DAPS, it is all
+   &dapsacr; (DocBook Authoring and Publishing Suite) is a program to transform XML
+   into output formats such as HTML or PDF, for example. In &dapsacr;, it is all
    about the content. You can create different output formats, without changing
    anything in the XML files themselves. Layout and contents are strictly
    separated - the layout will be added automatically, but you can control
    which style sheet is used.
   </para>
   <para>
-   This tutorial is for DAPS beginners and anybody who already worked a
-   little bit with DAPS.  It helps you to write and convert XML files into PDF
+   This tutorial is for &dapsacr; beginners and anybody who already worked a
+   little bit with &dapsacr;.  It helps you to write and convert XML files into PDF
    or HTML files for example. No previous XML knowledge is necessary.
   </para>
 
@@ -67,9 +67,9 @@
   <title>What You Need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
-   writing use an editor with XML support. Recommended is Emacs and DAPS
+   writing use an editor with XML support. Recommended is Emacs and &dapsacr;
    version 2.0 or higher.
-   Do the following to install Emacs and DAPS:
+   Do the following to install Emacs and &dapsacr;:
   </para>
   <procedure>
    <step>
@@ -95,7 +95,7 @@
    </step>
    <step>
     <para>
-     Install DAPS with zypper:
+     Install &dapsacr; with zypper:
     </para>
     <screen>&prompt.root;zypper in daps</screen>
    </step>
@@ -105,7 +105,7 @@
  <sect1>
   <title>How to Start</title>
   <para>
-   To be able to process the XML files, DAPS requires a certain
+   To be able to process the XML files, &dapsacr; requires a certain
    directory structure. Either use <command>daps-init</command> or set it up
    manually. The <command>daps-init</command> command is especially advisable
    for beginners,
@@ -116,8 +116,8 @@
     <title>Working with <command>daps-init</command></title>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for DAPS. In this tutorial's example, it creates a directory called
-     <filename>tutorial</filename>. It contains a DAPS configuration file for
+      for &dapsacr;. In this tutorial's example, it creates a directory called
+     <filename>tutorial</filename>. It contains a &dapsacr; configuration file for
      your tutorial (<filename>DC-tutorial</filename>), the DocBook XML file
      located in the XML subdirectory and a subdirectory containing image files
      (<filename>images</filename>). The <filename>image</filename> folder will
@@ -127,7 +127,7 @@
      <step>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for DAPS. It builds a folder with your entered
+      for &dapsacr;. It builds a folder with your entered
      <filename>filename</filename>. In this folder are a DC-file, a
      <filename>xml</filename> subfolder and a <filename>image</filename>
      subfolder. The <filename>image</filename> folder (see <xref
@@ -138,7 +138,7 @@
      <step>
       <para>
        Now it is your turn: write your text! To learn about the needed XML tags, read the
-       following chapters. If you need help with DAPS, open the
+       following chapters. If you need help with &dapsacr;, open the
        <filename>daps-init</filename> manpage in your terminal:
       </para>
       <screen>&prompt.user;daps-init --help</screen>
@@ -727,7 +727,7 @@ Recipe for a chili sauce.
    </step>
    <step>
      <para>
-     DAPS automatically creates a directory called
+     &dapsacr; automatically creates a directory called
      <filename>build</filename>. You can find your finished PDF file there.
      </para>
    </step>
@@ -755,7 +755,7 @@ Recipe for a chili sauce.
    <title>Further Information</title>
    <para>
     If you still have questions or want to have additional information, read
-    the DAPS man page. Open it in a terminal:
+    the &dapsacr; man page. Open it in a terminal:
    </para>
    <screen>&prompt.user;daps --help</screen>
    <para>
