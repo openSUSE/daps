@@ -29,9 +29,7 @@
     
     <xsl:element name="{$div.element}" namespace="http://www.w3.org/1999/xhtml">
       <xsl:apply-templates select="." mode="common.html.attributes"/>
-      <xsl:call-template name="id.attribute">
-        <xsl:with-param name="force" select="1"/>
-      </xsl:call-template>
+      <!-- Do NOT create an ID with 'id.attribute'; parent element contains already one -->
       
       <xsl:call-template name="glossary.titlepage"/>
       

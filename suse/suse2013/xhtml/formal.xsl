@@ -85,10 +85,7 @@
 
     <div class="{concat(local-name(),'-title-wrap')}">
       <h6 class="{concat(local-name(), '-title')}">
-        <xsl:call-template name="id.attribute">
-          <xsl:with-param name="node" select="$object"/>
-          <xsl:with-param name="force" select="1"/>
-        </xsl:call-template>
+        <!-- Do NOT create an id here; parent contains already one -->
         <xsl:copy-of select="$title"/>
         <xsl:call-template name="create.permalink">
           <xsl:with-param name="object" select="$object"/>

@@ -89,9 +89,17 @@
         </xsl:element>
       </xsl:variable>
 
-      <a href="{$src}">
-        <xsl:copy-of select="$imgcontents"/>
-      </a>
+
+      <xsl:choose>
+        <xsl:when test="$wrap.img.with.a != 0">
+          <a href="{$src}">
+            <xsl:copy-of select="$imgcontents"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy-of select="$imgcontents"/>
+        </xsl:otherwise>
+      </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

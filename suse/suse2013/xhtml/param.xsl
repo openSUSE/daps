@@ -269,4 +269,10 @@ task before
 <xsl:param name="warn.xrefs.into.diff.lang" select="1"/>
 
 <xsl:param name="glossentry.show.acronym">yes</xsl:param> 
+
+  <!-- Wrap an <img/> tag <a>
+       0=no, 1=yes
+  -->
+  <xsl:param name="wrap.img.with.a" select="1"/>
+
 </xsl:stylesheet>

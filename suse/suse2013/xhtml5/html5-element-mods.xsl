@@ -344,15 +344,19 @@
       <xsl:choose>
         <!-- width and height attributes are ok for img element -->
         <xsl:when test="local-name() = 'width' and $element != 'img'">
-          <xsl:text>width: </xsl:text>
-          <xsl:value-of select="."/>
-          <xsl:text>; </xsl:text>
+          <xsl:if test="normalize-space(.) != ''">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>; </xsl:text>
+          </xsl:if>
         </xsl:when>
 
         <xsl:when test="local-name() = 'height' and $element != 'img'">
-          <xsl:text>height </xsl:text>
-          <xsl:value-of select="."/>
-          <xsl:text>; </xsl:text>
+          <xsl:if test="normalize-space(.) != ''">
+            <xsl:text>height </xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>; </xsl:text>
+          </xsl:if>
         </xsl:when>
 
         <xsl:when test="local-name() = 'align'">

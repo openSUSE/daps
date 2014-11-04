@@ -33,128 +33,11 @@
 
 <xsl:import href="titlepage.templates.xsl"/>
 
-<!--
-<xsl:key name="image-filerefs" match="graphic|inlinegraphic|imagedata" use="@fileref"/>
--->
+<!-- ============================================================== -->
+<!-- For parameter settings see param.xsl -->
+<!-- ============================================================== -->
 
-<!--==============================================================-->
-<!--  DocBook XSL Parameter settings                              -->
-<!--==============================================================-->
-<!-- separate file for toc -->
-<xsl:param name="chunk.tocs.and.lots" select="1"/>
-<xsl:param name="toc.section.depth" select="2"/>
-<xsl:param name="generate.toc">
-book  toc,title,figure,table,example,equation
-article  toc,title,figure,table,example,equation
-</xsl:param>
-<xsl:param name="generate.manifest" select="0"/>
-<xsl:param name="manifest.in.base.dir" select="1"/>
-<xsl:param name="base.dir" select="'OEBPS/'"/>
-<xsl:param name="index.links.to.section" select="0"/>
-
-<!-- Epub does not yet support external links -->
-<xsl:param name="activate.external.olinks" select="0"/>
-
-<!-- Turning this on crashes ADE, which is unbelievably awesome -->
-<xsl:param name="formal.object.break.after">0</xsl:param>
-
-<xsl:param name="callout.graphics" select="1"/>
-<xsl:param name="callout.graphics.extension">.svg</xsl:param>
-<xsl:param name="callout.graphics.number.limit" select="15"/>
-<xsl:param name="callout.graphics.path" select="'images/callouts/'"/>
-<xsl:param name="show.comments" select="0"/>
-
-<xsl:param name="admon.graphics.extension">.svg</xsl:param>
-
-<!-- no navigation in .epub -->
-<xsl:param name="suppress.navigation" select="'1'"/>
-
-<!-- EPUB3: use ol lists in table of contents -->
-<xsl:param name="toc.list.type">ol</xsl:param>
-<xsl:param name="autotoc.label.in.hyperlink" select="1"/>
-
-<xsl:param name="css.decoration" select="1"/>
-<!-- generate the css file from a source file -->
-<xsl:param name="make.clean.html" select="1"/>
-<!-- specify the default epub3 stylesheet -->
-<xsl:param name="docbook.css.source" select="''"/>
-<!-- for custom CSS, use the custom.css.source param -->
-<xsl:param name="custom.css.source"></xsl:param>
-
-<!--==============================================================-->
-<!--  New EPUB3 Parameters                                        -->
-<!--==============================================================-->
-<xsl:param name="epub.version">3.0</xsl:param>
-<!-- optional ncx for backwards compatibility -->
-<xsl:param name="epub.include.ncx" select="1"/>
-<xsl:param name="epub.ncx.depth">4</xsl:param> <!-- Not functional until http://code.google.com/p/epubcheck/issues/detail?id=70 is resolved -->
-<!-- currently optional duplicate dcterms properties, may be required in future -->
-<xsl:param name="epub.include.metadata.dcterms" select="1"/>
-<!-- optional guide element for backwards compatibility -->
-<xsl:param name="epub.include.guide" select="1"/>
-<!-- some dc: currently required, to be replaced in future version -->
-<xsl:param name="epub.include.metadata.dc.elements" select="1"/>
-<!-- Some dc: elements will remain optional according to the spec -->
-<xsl:param name="epub.include.optional.metadata.dc.elements" select="1"/>
-<xsl:param name="epub.autolabel" select="0"/>
-<xsl:param
-  name="epub.vocabulary.profile.content">http://www.idpf.org/epub/30/profile/content/</xsl:param>
-<xsl:param
-  name="epub.vocabulary.profile.package">http://www.idpf.org/epub/30/profile/package/</xsl:param>
-<xsl:param name="epub.output.epub.types" select="1"/>
-<xsl:param name="epub.oebps.dir" select="'OEBPS'"/>
-<xsl:param name="epub.metainf.dir" select="'META-INF/'"/>
-<xsl:param name="epub.ncx.filename" select="'toc.ncx'"/>
-<xsl:param name="epub.mimetype.filename" select="'mimetype'"/>
-<xsl:param name="epub.mimetype.value" select="'application/epub+zip'"/>
-<xsl:param name="epub.container.filename" select="'container.xml'"/>
-<xsl:param name="epub.package.filename" select="'package.opf'"/>
-<xsl:param name="epub.cover.filename" select="concat('cover', $html.ext)"/>
-<xsl:param name="epub.cover.linear" select="0" />
-
-<!-- names of id attributes used in package files -->
-<xsl:param name="epub.meta.identifier.id">meta-identifier</xsl:param>
-<xsl:param name="epub.dc.identifier.id">pub-identifier</xsl:param>
-<xsl:param name="epub.meta.title.id">meta-title</xsl:param>
-<xsl:param name="epub.dc.title.id">pub-title</xsl:param>
-<xsl:param name="epub.meta.language.id">meta-language</xsl:param>
-<xsl:param name="epub.dc.language.id">pub-language</xsl:param>
-<xsl:param name="epub.meta.creator.id">meta-creator</xsl:param>
-<xsl:param name="epub.dc.creator.id">pub-creator</xsl:param>
-<xsl:param name="epub.ncx.toc.id">ncxtoc</xsl:param>
-<xsl:param name="epub.ncx.manifest.id">ncx</xsl:param>
-<xsl:param name="epub.ncx.mediatype">application/x-dtbncx+xml</xsl:param>
-<xsl:param name="epub.xhtml.mediatype">application/xhtml+xml</xsl:param>
-<xsl:param name="epub.html.toc.id">htmltoc</xsl:param>
-<xsl:param name="epub.cover.filename.id" select="'cover'"/>
-<xsl:param name="epub.cover.image.id" select="'cover-image'"/>
-
-<xsl:param name="epub.embedded.fonts"></xsl:param>
-<xsl:param name="epub.namespace">http://www.idpf.org/2007/ops</xsl:param>
-<xsl:param name="opf.namespace">http://www.idpf.org/2007/opf</xsl:param>
-<xsl:param name="ncx.namespace">http://www.daisy.org/z3986/2005/ncx/</xsl:param>
-<xsl:param name="dc.namespace">http://purl.org/dc/elements/1.1/</xsl:param>
-<!-- prefix generated ids in package elements so they differ from content ids -->
-<xsl:param name="epub.package.id.prefix">id-</xsl:param>
-<!-- editor is either a creator or contributor -->
-<xsl:param name="editor.property">contributor</xsl:param>
-
-<!-- Generate full output path -->
-<xsl:param name="epub.package.dir" select="concat($chunk.base.dir, '../')"/>
-
-<xsl:param name="epub.ncx.pathname"
-           select="concat($chunk.base.dir, $epub.ncx.filename)"/>
-<xsl:param name="epub.container.pathname"
-           select="concat($epub.package.dir, $epub.metainf.dir,
-           $epub.container.filename)"/>
-<xsl:param name="epub.package.pathname"
-           select="concat($chunk.base.dir, $epub.package.filename)"/>
-<xsl:param name="epub.cover.pathname"
-           select="concat($chunk.base.dir, $epub.cover.filename)"/>
-<xsl:param name="epub.mimetype.pathname"
-           select="concat($epub.package.dir, $epub.mimetype.filename)"/>
-
-<xsl:param name="kindle.extensions" select="0"/>
+<xsl:include href="param.xsl"/>
 
 <!--==============================================================-->
 <!--  Internal variables used for computing certain metadata      -->
@@ -1309,7 +1192,7 @@ article  toc,title,figure,table,example,equation
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:if test="contains($toc.params, 'toc')">
+  <xsl:if test="contains($toc.params, 'toc')">    
     <xsl:element namespace="{$opf.namespace}" name="item">
       <xsl:attribute name="id">
         <xsl:value-of select="$epub.html.toc.id"/>
@@ -1422,7 +1305,7 @@ article  toc,title,figure,table,example,equation
                     select="$this.chunk//mediaobject"/>
       <xsl:variable name="before.next"
                     select="$next.chunk/preceding::mediaobject"/>
-
+      
       <!-- select for an SVG imagedata in the intersection of them -->
       <xsl:variable name="mediaobject.set"
           select="$this.imagedata[count(.|$before.next) = count($before.next)]"/>
@@ -1442,8 +1325,26 @@ article  toc,title,figure,table,example,equation
           </xsl:if>
         </xsl:for-each>
       </xsl:variable>
+      
+      <xsl:variable name="admon.set">
+        <xsl:if test="$admon.graphics.extension = '.svg'">
+          <xsl:variable name="this.admons" 
+                    select="$this.chunk//caution | 
+                            $this.chunk//important |
+                            $this.chunk//note |
+                            $this.chunk//tip |
+                            $this.chunk//warning"/>
+          <xsl:variable name="before.next.admons" 
+                    select="$next.chunk/preceding::caution |
+                             $next.chunk/preceding::important |
+                             $next.chunk/preceding::note |
+                             $next.chunk/preceding::tip |
+                             $next.chunk/preceding::warning"/>
+          <xsl:if test="$this.admons[count(.|$before.next.admons) = count($before.next.admons)]">svg</xsl:if>
+        </xsl:if>
+      </xsl:variable>
 
-      <xsl:if test="contains($svg.imagedata, 'svg')">
+      <xsl:if test="contains($svg.imagedata, 'svg') or ($admon.set = 'svg')">
         <xsl:text>svg</xsl:text>
      </xsl:if>
     </xsl:when>
@@ -1466,8 +1367,17 @@ article  toc,title,figure,table,example,equation
           </xsl:if>
         </xsl:for-each>
       </xsl:variable>
-
-      <xsl:if test="contains($svg.imagedata, 'svg')">
+      <xsl:variable name="admon.set">
+        <xsl:if test="$admon.graphics.extension = '.svg'">
+          <xsl:if test="($this.chunk//caution | 
+                       $this.chunk//important |
+                       $this.chunk//note |
+                       $this.chunk//tip |
+                       $this.chunk//warning)[1]">svg</xsl:if>
+        </xsl:if>
+      </xsl:variable>
+      
+      <xsl:if test="contains($svg.imagedata, 'svg') or ($admon.set = 'svg')">
         <xsl:text>svg</xsl:text>
      </xsl:if>
     </xsl:otherwise>
@@ -2505,4 +2415,143 @@ article  toc,title,figure,table,example,equation
   </xsl:if>
 </xsl:template>
 
+
+<xsl:template name="process.image.attributes">
+  <xsl:param name="alt"/>
+  <xsl:param name="html.width" select="1"/>
+  <xsl:param name="html.depth"/>
+  <xsl:param name="longdesc"/>
+  <xsl:param name="scale"/>
+  <xsl:param name="scalefit"/>
+  <xsl:param name="scaled.contentdepth"/>
+  <xsl:param name="scaled.contentwidth"/>
+  <xsl:param name="viewport"/>
+
+  <!--<xsl:message>process.image.attributes:
+         width=<xsl:value-of select="@width"/>
+    html.width=<xsl:value-of select="$html.depth"/>
+         scale=<xsl:value-of select="number($scale) != 1.0"/>
+  scaled.contentwidth=<xsl:value-of select="$scaled.contentwidth"/>
+      scalefit=<xsl:value-of select="$scalefit != 0"/>
+  </xsl:message>-->
+
+  <xsl:choose>
+    <xsl:when test="@contentwidth or @contentdepth">
+      <!-- ignore @width/@depth, @scale, and @scalefit if specified -->
+      <xsl:if test="@contentwidth and $scaled.contentwidth != ''">
+        <xsl:attribute name="width">
+          <xsl:value-of select="$scaled.contentwidth"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@contentdepth and $scaled.contentdepth != ''">
+        <xsl:attribute name="height">
+          <xsl:value-of select="$scaled.contentdepth"/>
+        </xsl:attribute>
+      </xsl:if>
+    </xsl:when>
+
+    <xsl:when test="number($scale) != 1.0">
+      <!-- scaling is always uniform, so we only have to specify one dimension -->
+      <!-- ignore @scalefit if specified -->
+      <xsl:choose>
+          <xsl:when test="$scaled.contentwidth != ''">
+             <xsl:attribute name="width">
+               <xsl:value-of select="$scaled.contentwidth"/>
+             </xsl:attribute>
+          </xsl:when>
+          <xsl:when test="contains(@width, '%')">
+            <!-- toms: 
+              It seems, we need to remove the width attribute as a better 
+              strategy.
+            
+            See also http://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width
+            -->
+            <!--<xsl:value-of select="number(substring-before(@width, '%')) div 100"/>-->
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- Omit width alltogether -->
+          </xsl:otherwise>
+        </xsl:choose>
+    </xsl:when>
+
+    <xsl:when test="$scalefit != 0">
+      <xsl:choose>
+        <xsl:when test="contains($html.width, '%')">
+          <xsl:message> >>> process.image.attributes=<xsl:value-of select="@width"/></xsl:message>
+          <xsl:choose>
+            <xsl:when test="$viewport != 0">
+              <!-- The *viewport* will be scaled, so use 100% here! -->
+              <xsl:attribute name="width">1</xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="width">
+                <xsl:value-of select="$html.width"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+
+        <xsl:when test="contains($html.depth, '%')">
+          <!-- HTML doesn't deal with this case very well...do nothing -->
+        </xsl:when>
+
+        <xsl:when test="$scaled.contentwidth != '' and $html.width != ''                         and $scaled.contentdepth != '' and $html.depth != ''">
+          <!-- scalefit should not be anamorphic; figure out which direction -->
+          <!-- has the limiting scale factor and scale in that direction -->
+          <xsl:choose>
+            <xsl:when test="$html.width div $scaled.contentwidth &gt;                             $html.depth div $scaled.contentdepth">
+              <xsl:attribute name="height">
+                <xsl:value-of select="$html.depth"/>
+              </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="width">
+                <xsl:value-of select="$html.width"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+
+        <xsl:when test="$scaled.contentwidth != '' and $html.width != ''">
+          <xsl:attribute name="width">
+            <xsl:value-of select="$html.width"/>
+          </xsl:attribute>
+        </xsl:when>
+
+        <xsl:when test="$scaled.contentdepth != '' and $html.depth != ''">
+          <xsl:attribute name="height">
+            <xsl:value-of select="$html.depth"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:when>
+  </xsl:choose>
+
+  <xsl:if test="$alt != ''">
+    <xsl:attribute name="alt">
+      <xsl:value-of select="normalize-space($alt)"/>
+    </xsl:attribute>
+  </xsl:if>
+
+  <!-- Turn off longdesc attribute since not supported by browsers
+  <xsl:if test="$longdesc != ''">
+    <xsl:attribute name="longdesc">
+      <xsl:value-of select="$longdesc"/>
+    </xsl:attribute>
+  </xsl:if>
+  -->
+
+  <xsl:if test="@align and $viewport = 0">
+    <xsl:attribute name="align">
+      <xsl:choose>
+        <xsl:when test="@align = 'center'">middle</xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@align"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:if>
+
+  <xsl:call-template name="extension.process.image.attributes"/>
+</xsl:template>
 </xsl:stylesheet>

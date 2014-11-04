@@ -1,0 +1,1983 @@
+/* Reset, from http://meyerweb.com/eric/tools/css/reset/, v2.0, modified */
+html, body, div, span, iframe, h1, h2, h3, h4, h5, h6, p, pre,
+a, abbr, acronym, big, code, em, img, ins, kbd, q, s, small, strike, strong,
+sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, .footer ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup,
+menu, nav, output, section, summary, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* PAGE BOILERPLATE AND NAVIGATION */
+
+/* Common */
+
+.clearme {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+ /* Selection colour, the unprefixed Webkit version & the -moz-prefixed
+    version must be on separate lines for it to work. */
+::selection {
+    background-color: #439239;
+    color: #FFF;
+}
+
+body {
+    background-color: #FFF;
+    font-family: 'Open Sans', 'DejaVu Sans', 'Verdana', sans-serif;
+    line-height: 140%;
+    margin: 1.5em;
+}
+
+html, body {
+    height: 100%;
+    font-size: 16px;
+}
+
+/* .CHAPTER/... AREA */
+
+.documentation {
+    padding: 0 20px;
+}
+
+
+/* We need to scroll ~30 pixels up, such that the headline won't be hidden by the fixed header. */
+/* [attribute] selector works in IE 7+. Firefox, Opera and Webkit-based browsers had it far earlier. */
+.documentation a[id] {
+    position: relative;
+    top: -33px;
+    display: block;
+    width: 0;
+    height: 0;
+}
+
+[id]:target > span, .admonition[id]:target > h6 {
+    background-color: rgba(255,255,0,0.3);
+    /* Clean the below up in Q3 2013 or so... */
+    -webkit-transition: background-color 0.2s ease-out 0.3s;
+    -moz-transition: background-color 0.2s ease-out 0.3s;
+    transition: background-color 0.2s ease-out 0.3s;
+}
+
+
+.ulink:after {
+    content: "\0020\2197";
+    color: transparent;
+    width: 18px;
+    height: 15px;
+    display: inline-block;
+    text-decoration: none;
+    background-position: -216px -72px;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 2px;
+}
+
+.legalnotice .ulink:after {
+    background-position: -216px -101px;
+    width: 15px;
+    height: 10px;
+}
+
+.ulink-url {
+    display: none;
+}
+
+.verbatim-wrap a[id] {
+    display: none;
+}
+
+div.version-info {
+    color: #439239;
+    font-weight: normal;
+    background-color: rgba(255,255,255,0.7);
+    padding: 3px 5px;
+    line-height: 120%;
+    float: right;
+    margin: 5px 0 10px;
+    font-size: 13px;
+    border-radius: 3px;
+}
+
+.single div.version-info {
+    position: relative;
+    top: 70px;
+}
+
+h6.version-info {
+    margin: 75px 0 0;
+    padding: 5px 7px;
+    font-size: 24px;
+    color: #FFF;
+    background-color: #76AD2D;
+    float: left;
+    line-height: 100%;
+}
+
+.book h6.version-info + div h1.title, .article h6.version-info + div h1.title,
+.set h6.version-info + div h1.title {
+    padding-top: 0;
+}
+
+.book .title, .set .title, .article .title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 120%;
+    width: auto;
+    clear: both;
+    color: #439239;
+    padding: 70px 0 50px;
+}
+
+.title .citetitle {
+    font-style: normal;
+}
+
+.set .subtitle, .book .subtitle, .article .subtitle {
+    font-size: 28px;
+    font-weight: normal;
+    margin: -40px 0 50px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.title, .chapter .title, .preface .title,
+.appendix .title, .bibliography .title,
+.reference .title, .part .title, .glossary .title {
+    font-size: 36px;
+    font-weight: normal;
+    padding: 30px 0 5px;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.single .title, .single .chapter .title,
+.single .preface .title, .single .appendix .title,
+.single .bibliography .title, .single .reference .title,
+.single .part .title, .single .article .title {
+    padding-top: 100px;
+}
+
+
+.sect1 .subtitle, .chapter .subtitle {
+    font-size: 16px;
+    font-weight: normal;
+    padding: 10px 0 20px;
+    margin: 0;
+    line-height: 120%;
+    width: 100%;
+    clear: both;
+}
+
+.sect1 .title, .single .sect1 .title,
+.section .title, .single .section .title,
+.chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+.bibliography .qandaset .title, .reference .qandaset .title,
+.part .qandaset .title, .glossary .qandaset .title {
+    font-size: 28px;
+    font-weight: normal;
+    padding: 50px 0 5px;
+    text-align: left;
+}
+
+.sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+.section .section .title, .single .section .section .title {
+    font-size: 22px;
+    padding: 40px 0 0;
+    text-align: left;
+}
+
+.sect3 .title, .single .sect3 .title,
+.sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+.section .section .section .title, .single .section .section .section .title  {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 33px 0 0;
+    text-align: left;
+}
+
+.sect4 .title, .single .sect4 .title,
+.sect5 .title, .single .sect5 .title,
+.section .section .section .title, .single .section .section .section .title  {
+    font-size: 16px;
+    padding: 53px 0 0;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
+    text-align: left;
+}
+
+.sect4 .title, .section .section .section .section .title {
+    font-weight: 600;
+}
+
+.sect5 .title, .section .section .section .section .section .title {
+    font-weight: normal;
+}
+
+.legal-section p {
+    color: #333 !important;
+    font-size: 12px !important;
+}
+
+.legal-section .screen {
+    color: #666 !important;
+    font-size: 11px !important;
+}
+
+.legal-section .sect2 .title {
+    font-size: 16px;
+}
+
+.legal-section .sect3 .title {
+    font-size: 12px;
+}
+
+.name, .refentry h2, .refentrytitle a, h2, .indexdiv h3, .qandadiv-title,
+.qandaset .title {
+    color: #439239;
+}
+
+a:hover .name, a:focus .name, a:active .name,
+.bubble a.leads-to-page:hover .name, a.leads-to-page:focus .name,
+a.leads-to-page:active .name, .refentrytitle a:hover, .refentrytitle a:focus,
+.refentrytitle a:active {
+    text-decoration: underline;
+}
+
+.bubble a:hover > .name, .bubble a:focus > .name, .bubble a:active > .name {
+    text-decoration: none;
+}
+
+.number, .subtitle {
+    color: #666;
+}
+
+.title em, .subtitle em {
+    font-style: normal;
+}
+
+.nav-link:hover .number, .nav-link:focus .number,
+.nav-link:active .number {
+    color: #68C05E;
+}
+
+#_bubble-toc .number {
+    color: #CCC;
+}
+
+#_bubble-toc .name {
+    color: #FFF;
+}
+
+.permalink, .report-bug {
+    opacity: 0.3;
+    font-weight: normal;
+    text-decoration: none;
+    /* Clean the below up in Q3 2013 or so... */
+    -webkit-transition: opacity 0.2s ease-in-out 0.1s;
+    -moz-transition: opacity 0.2s ease-in-out 0.1s;
+    transition: opacity 0.2s ease-in-out 0.1s;
+}
+
+.permalink {
+    font-size: 75%;
+    color: #999;
+    line-height: 100%;
+}
+
+.report-bug {
+    color: #333;
+    font-size: 10px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    padding: 0 3px;
+    border-bottom: 1px solid transparent;
+    background-color: #EEE;
+    text-transform: uppercase;
+    display: inline-block;
+    float: right;
+}
+
+.permalink:hover, .permalink:focus, .permalink:active,
+.report-bug:hover, .report-bug:focus, .report-bug:active {
+    color: #439239;
+    text-decoration: none !important;
+}
+
+*:hover > .permalink, *:hover > .report-bug {
+    opacity: 1;
+}
+
+.report-bug:hover, .report-bug:focus, .report-bug:active {
+    color: #000;
+    border-color: #333;
+    background-color: #DDD;
+}
+
+.line > .toc {
+    padding: 0 30px 24px;
+}
+
+.line {
+    margin: 17px 0 36px 0;
+    border-bottom: 1px solid #439239;
+    width: 100%;
+}
+
+.toc a {
+    text-decoration: none;
+}
+
+.legalnotice {
+    margin: 40px 0 0;
+    padding: 10px 0 0;
+}
+
+.legalnotice p, .legalnotice td, .legalnotice .simplelist td {
+    font-size: 12px;
+    color: #666;
+    line-height: 140%;
+    margin: 5px 0 0 0;
+}
+
+
+/* Thou shalt not ... */
+
+.admonition {
+    border-width: 1px;
+    border-radius: 3px;
+    border-style: solid;
+    padding: 10px;
+    margin: 17px 0 24px;
+}
+
+.tip {
+    border-color: #439239;
+    background: #FFF url(../images/dots-green.png) repeat-x scroll top;
+}
+
+.note {
+    border-color: #666;
+    background: #FFF url(../images/dots-darkgray.png) repeat-x scroll top;
+}
+
+.note ul, .note .orderedlist, .warning ul, .warning .orderedlist {
+    color: #666;
+}
+
+.important {
+    border-color: #BB7B03;
+    background: #FFF url(../images/dots-orange.png) repeat-x scroll top;
+}
+
+.important ul, .important .orderedlist {
+    color: #BB7B03;
+}
+
+.warning, .caution {
+    border-color: #8C0000;
+    background: #FFF url(../images/dots-red.png) repeat-x scroll top;
+}
+
+.admonition > h6 {
+    font-weight: 600;
+    vertical-align: middle;
+    display: table-cell;
+    height: 36px;
+}
+
+.tip > h6 {
+    color: #439239;
+}
+
+.note > h6 {
+    color: #333;
+}
+
+.important > h6 {
+    color: #BB7B03;
+}
+
+.warning > h6, .caution > h6 {
+    color: #8C0000;
+}
+
+.symbol {
+    width: 36px;
+    height: 36px;
+    margin: 0 10px 0 0;
+    background-repeat: no-repeat;
+    float: left;
+    overflow: hidden;
+}
+
+.admonition p {
+    margin: 10px 0 0 !important;
+}
+
+/* Text styles */
+
+.documentation span, .documentation a, .documentation p, .documentation em,
+.documentation strong {
+    position: relative;
+    z-index: 2;
+}
+
+em, i, .guimenu {
+    font-style: italic;
+}
+
+em .guimenu, i .guimenu, .question em {
+    font-style: normal; /* Don't use italics within italics... */
+}
+
+strong, b, .imprint-label, .version-info .productname,
+.version-info .productnumber, .toc-title, .formalpara-title {
+    font-weight: 600;
+}
+
+.arch-arrow-start {
+    background-color: #7DC24D;
+    border: 1px solid #439239;
+    border-radius: 3px;
+    padding: 0 2px 0 4px;
+    display: inline-block;
+    font-size: 14px;
+    height: 20px;
+    vertical-align:bottom;
+    color: #FFF;
+    line-height: 20px;
+    position: relative;
+    margin-right: 12px;
+}
+
+.arch-arrow-start:after, .arch-arrow-end {
+    display: inline-block;
+    height: 22px;
+    vertical-align:bottom;
+}
+
+.arch-arrow-start:after {
+    content: '';
+    background-position: -24px -88px;
+    width: 13px;
+    /* position: absolute; */
+    right: -12px;
+    top: -1px;
+}
+
+.arch-arrow-end {
+    background-position: -47px -88px;
+    width: 25px;
+}
+
+p, td {
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.ulink, .email, .phrase {
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+p, .simplelist td {
+    color: #000;
+    text-align: left;
+    margin: 10px 0 0;
+}
+
+.abstract, .highlights {
+    margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 140%;
+}
+
+.abstract p, .highlights p, .toc-title {
+    color: #333;
+}
+
+.abstract p:first-child, .highlights p:first-child {
+    margin-top: 0;
+}
+
+.abstract .titlepage, .highlights .titlepage {
+    display: none;
+}
+
+.abstract .titlepage + p, .highlights .titlepage + p {
+    margin-top: 0;
+}
+
+.abstract li:first-child p:first-child,
+.highlights li:first-child p:first-child {
+    margin-top: 0;
+}
+
+.abstract + .authorgroup, .highlights + .authorgroup,
+.abstract + .author, .highlights + .author,
+.abstract + .corpauthor, .highlights + .corpauthor,
+.abstract + .othercredit, .highlights + .othercredit,
+.abstract + .editor, .highlights + .editor,
+.abstract + .date, .highlights + .date {
+    margin: 10px 0 0;
+}
+
+.authorgroup, .othercredit, .editor, .date {
+    color: #333;
+}
+
+.ulink, .link, .xref, .email, .glosssee,
+.glossseealso, .indexterm {
+    color: #439239;
+    text-decoration: none;
+}
+
+.title .xref, .subtitle .xref, .table-title .xref, .example-title .xref,
+.figure-title .xref, .procedure-title .xref, .orderedlist-title .xref,
+.itemizedlist-title .xref, .variablelist-title .xref, .qandadiv-title .xref,
+.title .link, .subtitle .link, .table-title .link, .example-title .link,
+.figure-title .link, .procedure-title .link, .orderedlist-title .link,
+.itemizedlist-title .link, .variablelist-title .link, .qandadiv-title .link,
+.title .ulink, .subtitle .ulink, .table-title .ulink, .example-title .ulink,
+.figure-title .ulink, .procedure-title .ulink, .orderedlist-title .ulink,
+.itemizedlist-title .ulink, .variablelist-title .ulink, .qandadiv-title .ulink {
+    text-decoration: underline;
+}
+
+.xref:hover, .xref:focus, .xref:active,
+.xref:visited:hover, .xref:visited:focus, .xref:visited:active,
+.link:hover, .link:focus, .link:active,
+.link:visited:hover, .link:visited:focus, .link:visited:active,
+.ulink:hover, .ulink:focus, .ulink:active,
+.ulink:visited:hover, .ulink:visited:focus, .ulink:visited:active,
+.email:hover, .email:focus, .email:active,
+.email:visited:hover, .email:visited:focus, .email:visited:active,
+.glosssee:hover, .glosssee:focus, .glosssee:active,
+.glosssee:visited:hover, .glosssee:visited:focus, .glosssee:visited:active,
+.glossseealso:hover, .glossseealso:focus, .glossseealso:active,
+.glossseealso:visited:hover, .glossseealso:visited:focus, .glossseealso:visited:active,
+.indexterm:hover, .indexterm:focus, .indexterm:active,
+.indexterm:visited:hover, .indexterm:visited:focus, .indexterm:visited:active {
+    color: #439239;
+    text-decoration: underline;
+}
+
+.xref:visited, .ulink:visited, .link:visited, .email:visited,
+.glosssee:visited, .glossseealso:visited,
+.indexterm:visited {
+    color: #5C3566;
+}
+
+.title .xref:hover, .title .xref:focus, .title .xref:active,
+.subtitle .xref:hover, .subtitle .xref:focus, .subtitle .xref:active,
+.table-title .xref:hover, .table-title .xref:focus, .table-title .xref:active,
+.figure-title .xref:hover, .figure-title .xref:focus, .figure-title .xref:active,
+.example-title .xref:hover, .example-title .xref:focus, .example-title .xref:active,
+.procedure-title .xref:hover, .procedure-title .xref:focus, .procedure-title .xref:active,
+.orderedlist-title .xref:hover, .orderedlist-title .xref:focus, .orderedlist-title .xref:active,
+.itemizedlist-title .xref:hover, .itemizedlist-title .xref:focus, .itemizedlist-title .xref:active,
+.variablelist-title .xref:hover, .variablelist-title .xref:focus, .variablelist-title .xref:active,
+.qandadiv-title .xref:hover, .qandadiv-title .xref:focus, .qandadiv-title .xref:active {
+    color: #439239;
+    text-decoration: none;
+}
+
+p a:visited {
+    color: #5C3566;
+}
+
+code, .command, .keycap, .replaceable {
+    font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+    font-weight: normal;
+    padding: 0 4px;
+    border-bottom: 1px solid #C1C1C3;
+    color: #333;
+    text-transform: none;
+    display: inline-block;
+    line-height: 120%;
+}
+
+code, .command, .keycap {
+    font-style: normal;
+}
+
+code code, code .replaceable, .replaceable code {
+    padding: 0;
+    border: none;
+}
+
+
+.name code, a code, .admonition h6 code,
+.name .replaceable, a .replaceable, .admonition h6 .replaceable {
+    color: inherit;
+}
+
+.admonition h6 code, .admonition h6 .replaceable {
+    border-color: #D1D1D3;
+}
+
+code {
+    font-weight: normal;
+}
+
+.command {
+    font-weight: 600;
+}
+
+.prompt {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.prompt.user, .prompt.custom {
+    color: #666;
+}
+
+.prompt.root {
+    color: #900;
+}
+
+ /* This elements exists solely to avoid the scrollbar overlaying the rounded
+    corners and the padding becoming inconsistent. */
+.verbatim-wrap {
+    padding: 10px;
+    background-color: #EFEFF0;
+    border-radius: 5px;
+    margin: 5px 0;
+    border: 1px solid #999;
+}
+
+.example .verbatim-wrap {
+    margin: 10px 0 24px;
+}
+
+.screen, .programlisting, .computeroutput, .userinput, .synopsis {
+    font: normal 13px 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
+    color: #333;
+    line-height: 125%;
+}
+
+.verbatim-wrap > div {
+    display: block;
+    overflow: auto;
+    overflow-y: hidden;
+    text-align: left;
+}
+
+.verbatim-wrap code, .verbatim-wrap .replaceable {
+    border-radius: 0;
+    background-color: transparent;
+    font-size: 100%;
+    border: none;
+    padding: 0;
+}
+
+.verbatim-wrap code {
+    color: #333;
+}
+
+
+.verbatim-wrap .command {
+    color: #306928;
+}
+
+.complex-example .example-contents {
+    margin: 5px 0;
+    padding: 3px 15px 6px 12px;
+    border-left: 3px solid #999;
+    background-color: #F9F9F9;
+}
+
+.calloutlist {
+    margin: 10px 0 24px;
+}
+
+.calloutlist td[width="5%"] {
+    width: 45px;
+}
+
+.example + .calloutlist {
+    margin: -14px 0 24px;
+}
+
+.calloutlist table {
+    width: 100%;
+}
+
+.callout {
+    display: inline-block;
+    padding: 1px 6px 1.5px 5px;
+    margin: 0 5px;
+    border-radius: 10px;
+    background-color: #439239;
+    color: #FFF;
+    font-family: 'Open Sans', Helvetica, FreeSans, sans-serif;
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 600;
+}
+
+.calloutlist .callout {
+    position: relative;
+    top: 2px;
+    float: right;
+}
+
+.variablelist, .toc {
+    margin: 24px 0;
+}
+
+.line > .toc {
+    margin: 0;
+}
+
+.variablelist dt, .glossary dt {
+    font-weight: 600;
+    color: #000;
+    padding-top: 33px;
+    margin: 0 0 -33px;
+    position: relative;
+    top: -33px;
+    z-index: 1;
+}
+
+.toc dt {
+    margin-bottom: 5px;
+}
+
+.toc dt *, #_bubble-toc li * {
+    font-weight: normal;
+    font-style: normal;
+    border-bottom: none;
+    display: inline;
+    padding: 0;
+}
+
+.indexdiv h3 {
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+
+.variablelist dd, .glossary dd, .toc dd, .indexdiv dd {
+    margin: 0 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+.list-of-figures dl, .list-of-tables dl,
+.list-of-examples dl, .list-of-procedures dl,
+.list-of-equations dl {
+    margin: 5px 0 17px 0;
+    padding: 0 0 0 30px;
+}
+
+.variablelist dd > p, .glossary dd > p,
+.toc dd > p {
+    margin: 0;
+}
+
+div.figure {
+    max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    margin: 24px 0 -9px;
+    overflow: hidden;
+    position: relative;
+    padding-top: 33px;
+    top: -33px;
+}
+
+.figure-contents > .mediaobject {
+    max-width: 100%;
+    min-height: 60px;
+    text-align: center;
+    color: #999;
+    padding: 12px 10px;
+    background-color: #FFF;
+    overflow: hidden;
+    border: 1px solid #EFEFF0;
+}
+
+.figure-contents img {
+    padding: 0;
+    width: auto;
+    margin: 0 auto;
+    min-width: 50px;
+    /* Clean this up when browser support is solid. */
+    max-width: 100%;
+    max-width: -webkit-calc(100% - 2px);
+    max-width: -moz-calc(100% - 2px);
+    max-width: calc(100% - 2px);
+    /* Inline images have some whitespace below them in Firefox => block */
+    display: block;
+}
+
+.figure-title {
+    padding: 10px;
+    margin: 0;
+    width: auto;
+}
+
+.figure-title-wrap {
+    background-color: #EFEFF0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.informalfigure img {
+    min-width: 50px;
+    max-width: 100%;
+    /* Inline images have some whitespace below them in Firefox => block */
+    display: block;
+    color: #999;
+    margin: 17px 0 24px;
+    padding: 1px;
+    border: 1px solid #EFEFF0;
+    width: auto;
+}
+
+.inlinemediaobject img {
+    display: inline-block;
+    vertical-align: -15%;
+    max-height: 20px;
+    padding: 0 3px;
+}
+
+.keycap {
+    color: #333;
+    font-size: 0.75em;
+    padding: 0px 5px;
+    background-color: #EFEFF0;
+    border-radius: 3px;
+    border-width: 1px 2px 2px 1px;
+    border-color: #999;
+    border-style: solid;
+    font-weight: normal;
+    white-space: nowrap;
+    vertical-align: 0.2em;
+}
+
+a:hover .keycap, a:focus .keycap, a:active .keycap,
+a:hover code, a:focus code, a:active code,
+a:hover .replaceable, a:focus .replaceable, a:active .replaceable {
+    border-color: #439239;
+}
+
+
+/* We put an ndash character between keycaps that are part of an accelerator */
+.key-connector {
+    margin: 0 -1px;
+    color: #666;
+}
+
+.procedure-title, .table-title, .example-title,
+.figure-title, .orderedlist-title, .variablelist-title,
+.itemizedlist-title, .qandadiv-title {
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: uppercase;
+    text-align: left;
+    line-height: 120%;
+}
+
+.table-title, .example-title, .procedure-title,
+.variablelist-title, .itemizedlist-title {
+    position: relative;
+    top: -33px;
+    padding-top: 33px;
+    z-index: 1;
+}
+
+.example-title, .procedure-title, .orderedlist-title {
+    margin: 24px 0 -33px;
+}
+
+.qandadiv-title {
+    margin: 33px 0 0;
+}
+
+.itemizedlist-title {
+    margin: 24px 0 -41px;
+}
+
+.table-title {
+    margin: 24px 0 -23px;
+}
+
+.variablelist-title {
+    margin: 24px 0 -50px;
+}
+
+.qandaentry {
+    margin: 15px 0 0;
+    position: relative;
+    z-index: 0;
+}
+
+.free-id {
+    position: relative;
+    top: -33px;
+    left: -1px;
+    width: 0.01px;
+    height: 0.01px;
+}
+
+.procedure-title code, .procedure-title .replaceable, .procedure-title .keycap,
+.table-title code, .table-title .replaceable, .table-title .keycap,
+.example-title code, .example-title .replaceable, .example-title .keycap,
+.figure-title code, .figure-title .replaceable, .figure-title .keycap,
+.orderedlist-title code, .orderedlist-title .replaceable, .orderedlist-title .keycap,
+.variablelist-title code, .variablelist-title .replaceable, .variablelist-title .keycap,
+ .itemizedlist-title code, .itemizedlist-title .replaceable, .itemizedlist-title .keycap {
+    text-transform: none;
+}
+
+.procedure-contents {
+    border-left: 3px solid #9CC897;
+    font-weight: normal;
+    margin: 17px 0 17px;
+    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
+    padding: 3px 5px 6px 2px;
+    background-color: #F7FAF6;
+    display: block;
+}
+
+.procedure-title-wrap + .procedure-contents {
+    margin: 10px 0 24px;
+}
+
+.procedure-contents > p:first-child,
+.procedure-contents > ol:first-child > li:first-child > p:first-child {
+    margin-top: 0;
+}
+
+.procedure-contents > .admonition {
+    margin-top: 4px;
+}
+
+.procedure-contents > p, .procedure-contents > .informalfigure,
+.procedure-contents > .admonition {
+    margin-left: 12px;
+    margin-right: 17px;
+}
+
+ol.procedure, ol.substeps, ol.orderedlist {
+    display: block;
+    color: #439239;
+    font-weight: 600;
+}
+
+ol.procedure, ol.substeps, ol.orderedlist {
+    font-weight: normal;
+}
+
+ol.procedure {
+    padding: 0 0 0 30px;
+    margin: 0 10px;
+}
+
+ol.procedure .title {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    padding: 0;
+}
+
+ol.substeps, ol.orderedlist {
+    padding: 0 0 0 35px;
+    margin: 0 0 0 10px;
+}
+
+.orderedlist-title-wrap + ol.orderedlist {
+    margin-top: 40px;
+}
+
+ol.procedure, ol.orderedlist {
+    list-style-type: decimal;
+}
+
+ol.substeps {
+    list-style-type: lower-latin;
+}
+
+.table-contents, .informaltable {
+    /* Yup, let's make this scroll... While ugly, there seems to be no better
+    way to avoid the table running off the page border...(?) */
+    overflow: auto;
+}
+
+.table-contents {
+    margin: 0 0 24px 0;
+}
+.informaltable {
+    margin: 10px 0 24px 0;
+}
+
+.informaltable {
+    margin: 10px 0 24px 0;
+}
+
+.example-contents > .informaltable {
+    margin: 0px 0 0 0;
+    padding: 0;
+}
+
+.example-contents > .informaltable > table {
+    margin: 10px 0 0 0;
+    padding: 0;
+}
+
+.table table, .informaltable table {
+    border: 1px solid #999;
+    max-width: 100%;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+table p, .informaltable table p {
+    margin: 0;
+}
+
+.table th, .informaltable th {
+    font-weight: 600;
+}
+
+.table th, .informaltable th {
+    background-color: #D1D1D3;
+}
+
+.table td, .table th, .informaltable td, .informaltable th {
+    margin: 0;
+    padding: 3px 5px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.table td[colspan], .informaltable td[colspan],
+.table td[rowspan], .informaltable td[rowspan] {
+    background-color: #FFF;
+}
+
+.table th, .informaltable th,
+.table td[colspan], .informaltable td[colspan],
+.table td[rowspan], .informaltable td[rowspan] {
+    border: 1px solid #999;
+}
+
+.contains-rowspan {
+    border-top: 1px solid #999;
+}
+
+.table th[valign="top"], .informaltable th[valign="top"],
+.table td[valign="top"], .informaltable td[valign="top"] {
+    vertical-align: top;
+}
+
+.table th[valign="bottom"], .informaltable th[valign="bottom"],
+.table td[valign="bottom"], .informaltable td[valign="bottom"] {
+    vertical-align: bottom;
+}
+
+.table td[rowspan], .informaltable td[rowspan] {
+    background-color: #FFF;
+}
+
+.table td, .informaltable td{
+    vertical-align: middle;
+    border-right: 1px solid #999;
+}
+.table tr:nth-child(even), .informaltable tr:nth-child(even) {
+    background-color: #EFEFF0;
+}
+
+ul {
+    padding: 5px 0 0 35px;
+    margin: 0 10px;
+    display: block;
+    color: #439239;
+    list-style-type: disc;
+}
+
+.qandadiv {
+    margin: 0 0 40px 0;
+}
+
+.answer .table-title, .answer .verbatim-wrap, .answer .variablelist {
+    margin-top: 10px;
+}
+
+li > p {
+    font-weight: normal;
+}
+
+.procedure > p {
+    margin: 0 10px 5px;
+}
+
+div.itemizedlist {
+    margin: 0 0 24px;
+}
+
+.question, .question code, .question .literal {
+    color: #666;
+}
+
+.question {
+    font-style: italic;
+}
+
+.js-on .question {
+    cursor: pointer;
+}
+
+.js-on .question:hover, .js-on .question:focus, .js-on .active .question {
+    color: #000;
+}
+
+.js-on .question:hover code, .js-on .question:focus code,
+.js-on .active .question code, .js-on .question:hover .replaceable,
+.js-on .question:focus .replaceable, .js-on .active .question .replaceable {
+    color: #333;
+}
+
+.question {
+    position: relative;
+}
+
+.question br {
+    margin-top: 2px;
+}
+
+.answer {
+    padding: 0 0 17px;
+}
+
+.js-on .question:before {
+    content: '';
+    display: inline-block;
+    margin: 4px 0 0;
+    width: 17px;
+    height: 15px;
+    background-image: url(../images/arrow.png);
+    background-position: -98px 0;
+    background-repeat: no-repeat;
+}
+
+.js-on .question:hover:before, .js-on .question:focus:before {
+    background-position: -8px 0;
+}
+
+.js-on .active .question:before {
+    background-position: -70px 0;
+}
+
+.js-on .answer {
+    display: none;
+}
+
+.js-on .qandaentry.active .answer {
+    display: block;
+}
+
+.blockquote p {
+    font-style: italic;
+    color: #333;
+}
+
+div.blockquote {
+    margin: 17px 35px;
+}
+
+
+/* Review features */
+
+.remark, .doc-status {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.remark {
+    padding: 1px 5px;
+    background-color: #8D7294;
+    color: #FFF;
+}
+
+.remark .remark {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.doc-status {
+    padding: 10px;
+    background-color: #E6E0E8;
+    color: #000;
+}
+
+#_content > .doc-status {
+    margin: 0 auto;
+    min-width: 380px;
+    max-width: 978px;
+}
+
+.doc-status li {
+    color: #000;
+}
+
+p.ds-message {
+    font-style: italic;
+    margin: 0 !important;
+}
+
+
+.ds-label {
+    font-weight: 600;
+}
+
+.ds-head {
+    font-style: normal;
+    font-size: 22px;
+}
+
+.hidden {
+    background-color: #E3C1C1;
+    position: static;
+    margin-top: 20px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.hidden:before {
+    content: 'Hidden';
+    display: block;
+    float: left;
+    background-color: #8C0000;
+    color: #FFF;
+    padding: 3px 5px;
+    margin-top: 10px;
+}
+
+.hidden .hidden {
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+.hidden .hidden:before {
+    content: none;
+}
+
+.draft {
+    background: url(../images/draft.png) no-repeat fixed left 50%;
+}
+
+@page {
+    size: 100%;
+    margin: 20mm 22.5mm 22.5mm 22.5mm;
+}
+
+
+@media print {
+
+    #_header .book-icon {
+        height: 36px !important;
+        line-height: 34px;
+        padding: 0;
+        width: auto;
+        background-image: none;
+        color: #202020;
+    }
+
+    .documentation {
+        padding: 0;
+    }
+
+    .callout {
+        border: 1px solid #439239;
+        color: #439239;
+    }
+
+    #_fixed-header-wrap, #_toolbar-wrap, #_pickers, #_inward, #_footer-wrap,
+    #_bottom-navigation, #_share-print {
+        display: none;
+    }
+
+    .permalink, .report-bug {
+        display: none;
+    }
+
+    #_share-print {
+        visibility: hidden;
+    }
+
+    .figure, .informalfigure, .admonition, p, table {
+        /* Aumngh! Gecko does not interpret this. bmo#132035, 13 dupes, open
+           since 2002. Webkit is cool, though. */
+        page-break-inside: avoid;
+    }
+
+    .title {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .ulink:after {
+        color: inherit;
+        background-image: none;
+        width: auto;
+        height: auto;
+    }
+
+    .ulink-url {
+        display: inline;
+        -webkit-hyphens: none;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        hyphens: none;
+    }
+
+    .figure-title-wrap {
+        border: 1px solid #202020 !important;
+        width: -webkit-calc(100% - 2px) !important;
+        width: -moz-calc(100% - 2px) !important;
+        width: calc(100% - 2px) !important;
+    }
+
+    .figure-contents > .mediaobject, .figure-title-wrap {
+        background-color: transparent !important;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .share {
+        float: right;
+    }
+
+    .print {
+        clear: both;
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .find-form {
+        margin: 0 0 0 -72.5px;
+        width: 125px;
+    }
+
+    #_find-input {
+       width: 80px;
+    }
+}
+
+
+@media only screen and (max-width: 640px) {
+    /* Turn the following on again, when we have re-enabled the Find area. */
+    /*
+    #_toolbar {
+        height: 98px;
+    }
+    */
+
+    #_toc-area, #_nav-area {
+        width: 49.98%;
+    }
+
+    #_find-area {
+        height: 42px;
+        background-color: #439239;
+        width: 100%;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    #_find-area form {
+        margin: 0 !important;
+    }
+
+    .find-form {
+        padding: 10px;
+        margin: 0;
+        display: block;
+        width: 100%;
+    }
+
+    #_find-input {
+        /* Please clean this mess out in ~2014 -- leave only the line with "calc" in there */
+        width: 91%;
+        width: calc(100% - 44px);
+        width: -moz-calc(100% - 44px);
+        width: -webkit-calc(100% - 44px);
+        height: 20px;
+        margin: 0 auto;
+        padding: 0 20px 0 1px;
+        font-size: 13px;
+        border: 1px solid #CDE8A8;
+        border-radius: 3px;
+    }
+
+    #_find-input:focus {
+        border: 1px solid #FFF;
+    }
+
+    #_find-input:focus + #_find-button {
+        background-position: -108px -72px !important;
+    }
+
+    #_find-input:focus + #_find-button:hover {
+        background-position: -126px -72px !important;
+    }
+
+    #_find-input-label {
+        line-height: 20px;
+        height: 20px;
+        left: 3px;
+        top: -21px;
+        font-size: 13px;
+        clear: both;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #_share-print strong {
+        display: block;
+        float: right;
+        padding: 0 0 5px;
+    }
+
+    .share-buttons {
+        display: block;
+        float: right;
+        clear: both;
+    }
+}
+
+
+/* Mobile layout */
+@media only screen and (max-width: 480px) {
+    #_white-bg, #_toolbar, #_fixed-header {
+        padding: 0;
+    }
+
+    #_footer, .documentation {
+        padding: 0 10px;
+    }
+
+    #_toc-area, #_nav-area {
+        width: 100%;
+    }
+
+    #_toolbar {
+        min-height: 113px;
+    }
+
+    #_toolbar.only-toc, #_toolbar.only-nav {
+        min-height: 56px;
+    }
+
+    .only-toc #_nav-area, .only-nav #_toc-area {
+        display: none;
+    }
+
+
+    #_bubble-toc, #_toc-bubble-wrap > .bubble, #_fixed-header-wrap > .bubble {
+        max-height: 300px;
+    }
+
+    #_nav-area {
+        border-top: 1px solid #7DC24D;
+    }
+
+    /* .nav-inner > .tool-spacer {
+        position: absolute;
+    } */
+
+    .nav-inner > .tool-spacer:nth-child(2) {
+        left: 0;
+    }
+
+    .nav-inner > .tool-spacer:nth-child(3) {
+        right: 0;
+    }
+
+    .nav-inner > .tool-label {
+        padding: 0 10px;
+        margin: 0 56px;
+        float: left;
+    }
+
+    .nav-inner {
+        float: none;
+        width: auto;
+    }
+
+    .crumbs > * + * {
+        display: none !important;
+    }
+
+    #_header .single-crumb {
+        padding-right: 0;
+        width: 36px !important;
+        z-index: 12;
+        position: relative;
+    }
+
+    #_header .active .single-crumb {
+        padding-right: 10px;
+        width: 100% !important;
+        /* position: fixed; */
+        left: -10px;
+        top: 0;
+        min-height: 35px;
+        border-radius: 0;
+        background-color: #333;
+        border-bottom: 1px solid #FFF;
+        color: #FFF;
+        padding: 0 10px;
+    }
+
+    #_header .active .single-contents-icon {
+        background-position: -72px -87px;
+        width: 24px;
+        height: 24px;
+        float: right;
+        margin-top: 5px;
+        margin-right: 20px;
+    }
+
+    #_header > .crumbs {
+        right: 10px;
+        left: auto;
+    }
+
+    #_logo {
+        margin-right: 10px;
+        margin-left: 53px;
+    }
+
+    #_header .single-contents-icon:hover, #_header .single-contents-icon:focus,
+    #_header .single-contents-icon:active {
+        background-position: -36px -36px;
+    }
+
+    #_toolbar .active .bubble-corner {
+        display: none;
+    }
+
+    #_toolbar .bubble {
+        /* position: fixed; */
+        top: 0;
+        height: auto;
+        z-index: 7;
+        height: 100%;
+    }
+
+    #_bubble-toc {
+        height: auto;
+        max-height: 2000%;
+        position: relative;
+        top: 45px;
+        overflow: hidden;
+        padding-bottom: 5px;
+    }
+
+    #_toc-bubble-wrap #_bubble-toc {
+        top: 35px;
+    }
+
+    #_toc-bubble-wrap .bubble {
+        height: 100%;
+        max-height: 100%;
+    }
+
+    #_bubble-toc ol, #_bubble-toc .active ol {
+        width: 100%;
+        border: none;
+        background-color: #333;
+    }
+
+    #_bubble-toc .active ol {
+        z-index: 8;
+        right: -1px;
+    }
+
+    .bubble-container {
+        position: relative;
+        width: auto;
+        height: 100%;
+        overflow-y: auto;
+        z-index: 7;
+    }
+
+    .bubble-closer {
+        width: 24px;
+        height: 24px;
+        background-position: -72px -87px;
+        display: block;
+        float: right;
+        padding: 0;
+        margin: 0;
+        background-color: transparent !important;
+        cursor: pointer;
+    }
+
+    .bubble-closer:hover, .bubble-closer:focus, .bubble-closer:active,
+    #_header .active .single-contents-icon:hover,
+    #_header .active .single-contents-icon:focus,
+    #_header .active .single-contents-icon:active
+     {
+        background-position: -96px -87px;
+    }
+
+    .bubble h6 {
+        min-height: 24px;
+    }
+
+    #_bubble-toc .bubble-back {
+        display: block;
+        margin-top: 45px;
+    }
+
+    #_bubble-toc .bubble-back a {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    #_bubble-toc ol ol li {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #_bubble-toc ol ol li:last-child {
+        margin-bottom: 5px;
+    }
+
+    #_bubble-toc .active ol {
+        /* position: fixed; */
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 8;
+        overflow-y: auto;
+    }
+
+    .back-icon {
+        width: 24px;
+        height: 24px;
+        background-position: -120px -87px;
+        display: block;
+    }
+
+    .bubble-back:hover .back-icon, .bubble-back:focus .back-icon,
+    .bubble-back:active .back-icon {
+        background-position: -144px -87px;
+    }
+
+    #_toc-area .bubble h6 {
+        /* position: fixed; */
+        background-color: #333;
+        z-index: 9;
+        left: 0;
+        top: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: -webkit-calc(100% - 20px);
+        width: -moz-calc(100% - 20px);
+        width: calc(100% - 20px);
+    }
+
+    #_toc-bubble-wrap {
+        /* position: fixed; */
+        top: 0;
+        left: 0;
+        z-index: 6;
+        height: 100%;
+        background-color: #333;
+    }
+
+    #_white-bg {
+        position: static;
+    }
+
+    #_fixed-header-wrap, .print {
+        display: none;
+    }
+
+    #_share-print, .share {
+        float: none;
+    }
+
+    .share > strong {
+        float: left;
+    }
+
+    .share-buttons {
+        float: none;
+    }
+
+    .share-buttons > .spacer {
+        display: none;
+    }
+
+    .bottom-button {
+        padding: 10px;
+        display: block;
+        float: left;
+        border-radius: 0;
+        width: 40%;
+        width: -webkit-calc(50% - 22px);
+        width: -moz-calc(50% - 22px);
+        width: calc(50% - 22px);
+    }
+
+    #_share-fb, #_share-tw {
+        clear: both;
+    }
+
+    #_share-fb:before, #_share-gp:before, #_share-tw:before, #_share-mail:before {
+        border-radius: 2px;
+        border-width: 1px;
+        margin-left: 0;
+    }
+
+    .offline #_share-print {
+        /* Ugly trick -- the JS would otherwise override my display: none */
+        height: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .line > .toc {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* The page probably is not wide anymore for inline-blocks to help
+       avoid wrapping. */
+    code, .replaceable {
+        display: inline;
+    }
+
+    #_footer {
+        height: auto;
+    }
+
+    #_footer > ul > li, #_footer > p {
+        line-height: 250%;
+        float: none;
+        width: 100%;
+        margin: 0;
+    }
+
+    #_footer > p {
+        text-align: right;
+    }
+
+    #_footer > ul {
+        margin: 0;
+    }
+
+    #_footer a {
+      display: block;
+      border-top: 1px solid #FFF;
+    }
+
+    #_inward, #_footer-wrap {
+        height: 155px;
+    }
+
+    #_outer-wrap {
+        margin: 0 auto -155px;
+    }
+
+    .nofooter > #_outer-wrap {
+        margin: 0 auto;
+    }
+
+    .documentation ul, .documentation  ol {
+        padding-left: 10px;
+    }
+
+    .list-of-figures dl, .list-of-tables dl, .list-of-examples dl,
+    .list-of-procedures dl, .list-of-equations dl, .variablelist dd, .glossary dd,
+    .toc dd, .indexdiv dd {
+        padding-left: 10px;
+    }
+
+    .admonition > .symbol {
+        float: none;
+        /* Remove proprietary attributes later on */
+        padding-left: -webkit-calc(50% - 18px);
+        padding-left: -moz-calc(50% - 18px);
+        padding-left: calc(50% - 18px);
+        padding-bottom: 10px;
+    }
+
+    .verbatim-wrap {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        margin-right: -10px;
+    }
+
+    .example-contents > .verbatim-wrap, .admonition > .verbatim-wrap,
+    .sect1 > .verbatim-wrap, .sect2 > .verbatim-wrap, .sect3 > .verbatim-wrap,
+    .sect4 > .verbatim-wrap, .sect5 > .verbatim-wrap, .sect6 > .verbatim-wrap,
+    .sect > .verbatim-wrap, .chapter > .verbatim-wrap, .article > .verbatim-wrap,
+    .procedure-contents, .procedure-title-wrap + .procedure-contents,
+    div.figure, .complex-example .example-contents {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .complex-example .example-contents {
+        padding: 3px 15px 6px 12px;
+    }
+
+    div.figure {
+        /* Remove proprietary attributes later on */
+        max-width: -webkit-calc(100% + 20px);
+        max-width: -moz-calc(100% + 20px);
+        max-width: calc(100% + 20px);
+    }
+    .documentation  ol.procedure {
+        padding-left: 20px;
+    }
+
+    .book .title, .set .title, .article .title {
+        font-size: 36px;
+    }
+
+    .title, .chapter .title, .preface .title,
+    .appendix .title, .bibliography .title,
+    .reference .title, .part .title, .glossary .title {
+        font-size: 30px;
+    }
+
+    .sect1 .title, .single .sect1 .title,
+    .section .title, .single .section .title,
+    .chapter .qandaset .title, .preface .qandaset .title, .appendix .qandaset .title,
+    .bibliography .qandaset .title, .reference .qandaset .title,
+    .part .qandaset .title, .glossary .qandaset .title, .set .subtitle,
+    .book .subtitle, .article .subtitle {
+        font-size: 22px;
+    }
+
+    .sect2 .title, .single .sect2 .title, .sect1 .qandaset .title,
+    .section .section .title, .single .section .section .title {
+        font-size: 20px;
+    }
+
+    .sect3 .title, .single .sect3 .title,
+    .sect2 .qandaset .title, .refentry h2, h2, .indexdiv h3,
+    .section .section .section .title, .single .section .section .section .title  {
+        font-size: 18px;
+    }
+}
+
+
+@media only screen and (max-height: 490px) and (min-width: 451px) {
+    #_bubble-toc, #_toc-bubble-wrap > .bubble, #_fixed-header-wrap > .bubble {
+        max-height: 300px;
+    }
+}
+
+/*  Optimize images for various screen heights.
+
+    + Some sizes are bucketed.
+
+    + We assume 110px of browser chrome:
+      @media (max-height: $largest-screen-size-in-bucket – 110px)
+
+    + We assume 190px are needed for context around the image:
+      img { max-height: $smallest-screen-size-in-bucket – 110px – 190px;}
+      (With some exceptions for small screen sizes.)
+*/
+
+/* Everything over 1600px in height */
+@media only screen {
+    .mediaobject img {
+        max-height: 70%;
+    }
+}
+
+/* 1600px & 1440px */
+@media only screen and (max-height: 1490px) {
+    .mediaobject img {
+        max-height: 1140px;
+    }
+}
+
+/* 1200px */
+@media only screen and (max-height: 1090px) {
+    .mediaobject img {
+        max-height: 900px;
+    }
+}
+
+/* 1080px & 1024px */
+@media only screen and (max-height: 970px) {
+    .mediaobject img {
+        max-height: 724px;
+    }
+}
+
+/* 900px */
+@media only screen and (max-height: 790px) {
+    .mediaobject img {
+        max-height: 600px;
+    }
+}
+
+/* 800px & 768px */
+@media only screen and (max-height: 690px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .mediaobject img {
+        max-height: 518px;
+    }
+}
+
+/* 600px and below*/
+@media only screen and (max-height: 490px) {
+    /* Make an exception here, so we don't get stamp-sized screenshots. */
+    .mediaobject img {
+        max-height: 390px;
+    }
+}
