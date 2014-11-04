@@ -25,15 +25,17 @@
     </listitem>
     <listitem>
      <para>
-      which output formats you can generate with &daps; and which commands
-      to use, and
+      which output formats you can generate with &dapsacr;, 
      </para>
     </listitem>
     <listitem>
      <para>
-      how to do partial builds of your documentation or how to specify the
-      &main; file at the command line (instead of using a &dc; file).
+      how to do partial builds of your documentation, and 
      </para>
+    </listitem>
+    <listitem>
+     <para>how to specify the &main; file at the command line (instead of using a &dc;
+     file).</para>
     </listitem>
    </itemizedlist>
   </para>
@@ -53,7 +55,7 @@
   </para>
 
   <para>
-   &dapsacr; can handle all those cases due to the built-in
+   &dapsacr; can handle all those cases because of the built-in
    <literal>xmllint</literal> validator. By default,
    <sgmltag>remark</sgmltag> elements and XML comments are ignored during
    validation. However, if you intend to create a (draft) output including
@@ -99,14 +101,14 @@
   <para>
    &dapsacr; supports a number of different output formats, including also
    <quote>exotic</quote> formats like man pages or simple text.
-   <xref linkend="table.daps.user.output.overview" xrefstyle="select:label"/>
+   <xref linkend="tab.daps.user.output.overview" xrefstyle="select:label"/>
    gives an overview.
   </para>
 
   <para>
    You can build several output formats (without them interfering with each
    other in the <filename>build</filename> directory), build your complete
-   documentation project (set, book, or article) or only a part of it (for
+   documentation project (set, book, or article), or only a part of it (for
    example, a specific chapter).
   </para>
 
@@ -144,7 +146,7 @@
   why in the end I decided to use the spelling that seemed most reasonable to
   me...</remark>-->
 
-  <table id="table.daps.user.output.overview">
+  <table id="tab.daps.user.output.overview">
    <title>&dapsacr; Output Commands and Formats</title>
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
@@ -180,11 +182,11 @@
       Instead of always building your complete documentation project
       (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
       <sgmltag>article</sgmltag>), &dapsacr; also allows you do partial
-      builds. The <quote>starting point</quote> of your documentation
-      project is usually the root element defined in the &main; file that is
+      builds. By default, the <quote>starting point</quote> of your documentation
+      project is the root element defined in the &main; file that is
       referenced in the respective &dclong;. Alternatively, specify a ROOTID
-      on the command line to build only a part of your documentation project
-      by using the ID of a <sgmltag>book</sgmltag>,
+      on the command line to build only a part of your documentation project. For partial builds,
+      you can use the ID of a <sgmltag>book</sgmltag>,
       <sgmltag>article</sgmltag>, <sgmltag>glossary</sgmltag>,
       <sgmltag>appendix</sgmltag>, <sgmltag>part</sgmltag>, or
       <sgmltag>chapter</sgmltag> element.

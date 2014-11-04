@@ -26,7 +26,7 @@
     <listitem>
      <para>
       how to adapt your documentation to fit multiple similar product
-      versions at once
+      versions at once.
      </para>
     </listitem>
    </itemizedlist>
@@ -38,7 +38,7 @@
   <title>Basic Structural Elements</title>
   &db-structure-elements;
  </sect1>
- <sect1>
+ <sect1 id="sec.daps.user.edit.editor">
   <title>Choice of Editor</title>
  &daps-editor;
  <para>
@@ -186,11 +186,11 @@
   <title>Checking Links to Web Pages</title>
 
   <para>
-   To make sure that all external links (such as http, https and ftp links)
+   To make sure that all external links (such as HTTP, HTTPs and FTP links)
    in your XML sources are valid (and do not give a <literal>404</literal>
-   error or similar), &dapsacr; also includes a link checker (based on
+   error or similar), &dapsacr; also includes a link checker. It is based on
    <literal>checkbot</literal>, see <command>man 1 checkbot</command> for
-   more information). It searches for the
+   more information. The link checker searches for the
    <sgmltag class="attribute">url</sgmltag> attribute in
    <sgmltag>ulink</sgmltag> elements and checks links included there. Use it
    to create a report of all links that caused some kind of warning or
@@ -262,7 +262,7 @@
    <title>Opening the Link Check Report</title>
    <para>
     To directly open the link check report, use the &dapsacr; command output
-    as an argument for a browser, for example the command-line Web browser
+    as an argument for a browser, for example the command line Web browser
     <command>w3m</command>:
    </para>
    <screen>&prompt.user;<command>w3m</command> -dump $(&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> checklink)</screen>

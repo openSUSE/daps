@@ -15,7 +15,7 @@
    <itemizedlist>
     <listitem>
      <para>
-      which types of images are supported by &dapsacr; and how to use them,
+      which types of images are supported by &dapsacr;,
      </para>
     </listitem>
     <listitem>
@@ -36,7 +36,7 @@
     </listitem>
     <listitem>
      <para>
-      and how to  manage source images and generated images with &dapsacr;
+      and how to  manage images with &dapsacr;
       commands.
      </para>
     </listitem>
@@ -53,7 +53,7 @@
   pixel. In contrast to that, vector-based image formats contain a
   geometric description that can be rendered smoothly. Vector-based images are
   resolution-independent&mdash;they can be displayed or printed as large
-  or small as you wish without showing pixel artifacts.</para>
+  or small as you want without showing pixel artifacts.</para>
   <para>From the supported image types listed above, only JPEG and PNG are pixel-based
    image formats.</para>
   <important>
@@ -71,7 +71,7 @@
    <para>
     DIA is a vector image format which means it is resolution-independent.
     Images in this format can be displayed or printed as large or small as
-    you wish without showing pixel artifacts. The format is suited
+    you want without showing pixel artifacts. The format is suited
     especially well to creating diagrams. DIA files are XML files that are
     automatically compressed when saving, thus they are often quite small.
    </para>
@@ -94,11 +94,11 @@
   <sect2 id="sec.daps.user.imgs.usage.eps">
    <title>EPS</title>
    <para>
-    The <emphasis>Encapsulated Postscript</emphasis> (EPS) format is a
+    The <emphasis>Encapsulated PostScript</emphasis> (EPS) format is a
     general purpose vector image format. As a Postscript-based format, it is
     similar to <acronym>PDF</acronym>. There is currently no mainstream
     Linux image editor software that creates <acronym>EPS</acronym> files
-    natively, although a number of applications can export into it.
+    natively, although various applications can export into it.
    </para>
    <para>
     Where feasible, use <acronym>SVG</acronym> files instead of
@@ -125,16 +125,16 @@
      Photographic Experts Group</emphasis> who created this standard
     specifically for storing photographic images. JPEG is the most common image
     format used by digital cameras and widely used for displaying photographs on
-    the Web. Due to its lossy compression algorithm, the resulting file sizes
+    the Web. Because of its lossy compression algorithm, the resulting file sizes
     are rather small compared to lossless graphics format such as TIFF, GIF,
-    PNG, or a raw image format. The compression algorithm is at its best on
-    photographs and paintings with smooth variations of tone
-    and color. However, JPEG is not well suited for textual or iconic graphics,
-    because sharp contrasts between adjacent pixels in such images can cause
-    noticeable artifacts. It is also not advisable to use JPEG for files that
-    will undergo multiple edits, because you will loose image quality each time
-    the file is decompressed and recompressed (particularly if the image is
-    cropped or shifted).</para>
+    PNG, or a raw image format. The compression algorithm works very well for
+    photographs and paintings with smooth variations of tone and color. However,
+    JPEG is not well suited for textual or iconic graphics, because sharp
+    contrasts between adjacent pixels in such images can cause noticeable
+    artifacts. It is also not advisable to use JPEG for files that will undergo
+    multiple edits: you will lose image quality each time the file is
+    decompressed and recompressed. This is especially true if the image is
+    cropped or shifted.</para>
   </sect2>
   
   
@@ -143,10 +143,10 @@
    <para>
     The <emphasis>Portable Document File</emphasis> format is a general
     purpose, page-based fixed-layout document format. <acronym>PDF</acronym>
-    is a Postscript-based format. There is a large number of Linux software
+    is a PostScript-based format. There is a large number of Linux software
     that can export <acronym>PDF</acronym> files natively.
     <acronym>PDF</acronym> files can also be used as an exchange format with
-    contributors that are unable to export to <acronym>SVG</acronym>.
+    contributors that  cannot export to <acronym>SVG</acronym>.
    </para>
   </sect2>
 
@@ -154,11 +154,11 @@
    <title>PNG</title>
    <para>
     The <emphasis>Portable Network Graphics</emphasis> is a pixel-based  format
-    which can be used if you wish to use a raster (point-based) image. A good example for when to
+    which can be used if you want to use a raster (point-based) image. A good example for when to
     use <acronym>PNG</acronym> files are screenshots and photographs.
    </para>
    <para>
-    <acronym>PNG</acronym> files can be created with a number of
+    <acronym>PNG</acronym> files can be created with several
     applications, including the GIMP graphics editor.
    </para>
    <tip>
@@ -198,7 +198,7 @@
     A good open source <acronym>SVG</acronym> editor is
     <ulink url="http://inkscape.org/">Inkscape</ulink>, which is available
     for most operating systems. You can also create <acronym>SVG</acronym>
-    files from many Adobe products, for instance, from Illustrator*. SVG is
+    files from many Adobe products, for example, from Illustrator*. SVG is
     the preferred vector image format for &dapsacr;.
    </para>
    <remark role="idea">toms 2013-01-18: It would be nice -- although a
@@ -259,7 +259,7 @@
  <sect1 id="sec.daps.user.imgs.manage">
   <title>&dapsacr; Commands for Managing Images</title>
 
-  <para> &dapsacr; offers a number of subcommands for managing images in a
+  <para> &dapsacr; offers several subcommands for managing images in a
    documentation project. By default, the output of the subcommands is a list of
    image file names (including the absolute path), all printed in one line with
    the file names separated by blanks, see <xref
@@ -281,7 +281,7 @@
    and reduce the size of your PNGs with an optimizer that recompresses the
    files to a smaller size. </para>
 
-  <variablelist id="vle.daps.user.imgs.manage.cmds">
+  <variablelist id="vl.daps.user.imgs.manage.cmds">
    <varlistentry>
     <term>Listing All Graphics Referenced in a Documentation Project
      </term>
@@ -298,7 +298,7 @@
      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
      <para> Lists all graphics that are referenced in your DocBook files, but
       could not be found in the file system. In case there are any missing
-      graphics, you will not be able to build your project. </para>
+      graphics, you cannot build your project. </para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -315,8 +315,8 @@
       <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
        Graphics</title>
       <para> If you are storing multiple &dc; files in the same project
-       folder, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
-       As it contains all articles and books in the project folder, this makes
+       directory, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
+       As it contains all articles and books in the project directory, this makes
        sure that any graphics found during the check are indeed unnecessary.
       </para>
      </important>

@@ -120,17 +120,17 @@
      <filename>tutorial</filename>. It contains a &dapsacr; configuration file for
      your tutorial (<filename>DC-tutorial</filename>), the DocBook XML file
      located in the XML subdirectory and a subdirectory containing image files
-     (<filename>images</filename>). The <filename>image</filename> folder will
+     (<filename>images</filename>). The <filename>image</filename> directory will
      be relevant later (see <xref linkend="ex.image"/>).
     </para>
     <procedure>
      <step>
     <para>
       The <command>daps-init</command> command creates a working environment
-      for &dapsacr;. It builds a folder with your entered
-     <filename>filename</filename>. In this folder are a DC-file, a
-     <filename>xml</filename> subfolder and a <filename>image</filename>
-     subfolder. The <filename>image</filename> folder (see <xref
+      for &dapsacr;. It builds a directory with your entered
+     <filename>filename</filename>. In this directory are a DC-file, a
+     <filename>xml</filename> subdirectory and a <filename>image</filename>
+     subdirectory. The <filename>image</filename> directory (see <xref
      linkend="ex.image"/>) will be relevant later.
     </para>
     <screen> daps-init --docdir recipe -r article</screen>
@@ -174,8 +174,8 @@
     </para>
     <step>
     <para>
-     For working without <command>daps-init</command>, create a folder with
-     your project name and two subfolders, called <filename>xml</filename> and
+     For working without <command>daps-init</command>, create a directory with
+     your project name and two subdirectories, called <filename>xml</filename> and
      <filename>images</filename>. Open a terminal.
     </para>
      </step>
@@ -215,7 +215,7 @@
   <substeps>
   <step>
    <para>
-    In a terminal, switch to the XML subfolder.
+    In a terminal, switch to the XML subdirectory.
    </para>
    <screen>&prompt.user;cd xml</screen>
   </step>
@@ -264,8 +264,8 @@
   <substeps>
    <step>
     <para>
-     Switch to the folder above (that should be your <filename>recipe</filename>
-     folder):
+     Switch to the directory above (that should be your <filename>recipe</filename>
+     directory):
      <screen>&prompt.user;cd ..</screen>
     </para>
    </step>
@@ -295,7 +295,7 @@
    <title>Identifying Start and End Tags</title>
    <para>
     The most important thing you need to know about XML is,
-    that you have to close the tags. Either with an end tag or with a
+    that you need to close the tags. Either with an end tag or with a
     backslash at the end of the tag (for example:
     <command>&lt;para/&gt;</command>). The content between the
     tags depends on which element you want to
@@ -656,7 +656,7 @@ Recipe for a chili sauce.
     <step>
      <para id="ex.image">
       To integrate an image in your file, save an image (for example, <filename>butcht.png</filename>) in the
-      <filename>image/png</filename> folder.
+      <filename>image/png</filename> directory.
       That is very important because otherwise, it will not
       work.
      </para>

@@ -62,11 +62,12 @@
   <title>Declaring Entities in a Separate File</title>
 
   <para>
-   If you declare entities in the document type declaration of individual
-   XML files, it becomes cumbersome to keep a consistent set of entities
-   when maintaining a large number of documents for a product. For large
+   When maintaining many documents for a product, 
+   it becomes cumbersome to keep a consistent set of entities if you 
+   declare entities in the document type declaration of 
+   <emphasis>individual</emphasis> XML files. For large
    documentation projects, it is therefore useful to put all entity
-   declarations into a separate file and then reference that file in the
+   declarations into a separate file and reference that file in the
    individual XML files.
   </para>
 
@@ -157,7 +158,7 @@
     refer to <xref linkend="sec.daps.user.modular.profile.daps"/>.
    </para>
    <para>
-    Generally, profiling attributes can be used on a large number of
+    Generally, profiling attributes can be used on many
     elements&mdash;from high-level elements like <sgmltag>book</sgmltag> or
     <sgmltag>chapter</sgmltag> down to low-level elements like
     <sgmltag>para</sgmltag>. With the <sgmltag>phrase</sgmltag> element, you
@@ -179,7 +180,7 @@
    <para>
     <xref linkend="ex.daps.profile.one"/> shows how to profile
     product-specific information in a software description. Let us assume we
-    have to write documentation for the fictional software <literal>Frog
+    need to write documentation for the fictional software <literal>Frog
     Sound Recordings</literal>. The software is available in two editions: a
     basic edition for home users and a professional edition for enterprise
     customers. Both editions share common features, but some features are
@@ -593,8 +594,8 @@
      In the following, find a comprehensive example that shows the basic
      &dapsacr; profiling requirements in more detail. It is based on the
      examples in <xref linkend="sec.daps.user.modular.profile.basics"/>
-     about the fictional software <literal>Frog Sound Recordings</literal>
-     which is available in a basic edition, a professional edition and a
+     about the fictional software <literal>Frog Sound Recordings</literal>. The
+     software is available in a basic edition, a professional edition and a
      professional OEM edition, shipped by an OEM vendor. The following
      example shows <emphasis>all</emphasis> files that you need to consider
      (XML files, &main; file, and &dc; file).
@@ -937,8 +938,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    (<xref linkend="co.daps.articleinfo.productname" xrefstyle="select:label nopage"/>,
    <xref linkend="co.daps.articleinfo.productnumber" xrefstyle="select:label nopage"/>,
    <xref linkend="co.daps.main.product.entities" xrefstyle="select:label nopage"/>)
-   will automatically be replaced with different values, depending on the
-   profiling parameters contained in the &dc; file that you use for
+   will automatically be replaced with different values. The actual values
+   depend on the profiling parameters contained in the &dc; file that you use for
    generating the output. For an example, refer to
    <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
    It shows output variants that can be generated from the XML code in

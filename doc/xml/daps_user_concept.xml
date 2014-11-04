@@ -15,7 +15,7 @@
    <itemizedlist>
     <listitem>
      <para>
-      the features that make &dapsacr; stand out: from creating multiple
+      the features that make &dapsacr; stand out, from creating multiple
       output formats to automatically profiling documents,
      </para>
     </listitem>
@@ -50,7 +50,7 @@
   <para>
    &dapsacr; supports technical writers in the editing, translation and
    publishing process of DocBook XML files (in the following, simply
-   referred to as XML files):
+   called as XML files):
   </para>
 
   <variablelist>
@@ -58,7 +58,7 @@
     <term>Output Formats (Single-source Publishing)</term>
     <listitem>
      <para>
-      &dapsacr; lets you publish your XML sources in a number of different
+      &dapsacr; lets you publish your XML sources in several different
       output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;,
       text, and man pages. For details, refer to
       <xref linkend="cha.daps.user.output"/>.
@@ -144,10 +144,9 @@
       &dapsacr; provides sophisticated image handling support. For example,
       it can transform images referenced in your XML files into different
       formats, list all source images referenced in your XML files, list any
-      missing images or list the <emphasis>generated</emphasis> images used
-      for the various output formats. You can also forward those lists to
-      your preferred image viewer to conveniently browse through the images,
-      or check if all image names are unique. For details, refer to
+      missing images or check if all image names are unique. You can also forward those lists to
+      your preferred image viewer to conveniently browse through the images. 
+      For details, refer to
       <xref linkend="cha.daps.user.img"/>.
      </para>
     </listitem>
@@ -183,11 +182,11 @@
     <term>Review and Translation Processes</term>
     <listitem>
      <para>
-      &dapsacr; offers a number of features to simplify review and
-      translation processes. By adding or removing a single parameter, you can
+      &dapsacr; offers several features to simplify review and
+      translation processes. By adding a single parameter, you can
       generate output that contains remarks for writers, reviewers,
-      and translators, as well as the final output version in which remarks
-      are suppressed. You can also generate preview versions of your
+      and translators. By default, remarks are suppressed in the final output
+      version. You can also generate preview versions of your
       documentation with a <literal>DRAFT</literal> watermark appearing on
       the output. If you use &dm; in addition to &dapsacr;, you can
       annotate your XML files with meta information (like
@@ -210,9 +209,9 @@
     <listitem>
      <para>
       For deploying the documentation as RPM packages and integrating it
-      into KDE and GNOME desktop environments as well as into Web user
+      into KDE and GNOME desktop environments and into Web user
       interfaces (via JSP), &dapsacr; offers a number of options to produce
-      the corresponding output: For example, you can create source packages,
+      the corresponding output. For example, you can create source packages,
       HTML TAR archives, color PDFs and desktop and document files with the
       <command>daps package-*</command> commands. For details refer to
       <xref linkend="cha.daps.user.deploy"/>.
@@ -468,9 +467,8 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     <sgmltag>set</sgmltag>, the &main; file is the one that contains the
     <sgmltag>set</sgmltag> element. In the following example, the components
     of the set (individual books) are not part of the &main; file, but have
-    been put into separate document files (
-    <code>book*.xml</code>
-    ), that are then assembled in the &main; file using
+    been put into separate document files (<code>book*.xml</code>). Those 
+    are then assembled in the &main; file using
     <literal>XIncludes</literal>. Note that this is not specific to
     sets&mdash;it is mainly a means of modularizing your documents. You can
     also use XIncludes for splitting up books, articles or chapters into
@@ -726,67 +724,70 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
    outlined below.
   </para>
 
-  <example id="ex.daps.dir.doc">
-   <title>Required Directory Structure</title>
-<screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
-  |--&dc;-* <co id="co.docdir.dc"/>
-     |--images/
-     |   |--src/<co id="co.docdir.img.src"/>
-     |   |  |--dia/
-     |   |  |--eps/
-     |   |  |--fig/
-     |   |  |--pdf/
-     |   |  |--png/
-     |   |  |--svg/
-     |--xml/<co id="co.docdir.xml"/>
-     |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
-  </example>
-
-  <calloutlist>
-   <callout arearefs="co.docdir.base">
-    <para>
-     <quote>Working directory</quote> for the respective documentation
-     project.
-    </para>
-   </callout>
-   <callout arearefs="co.docdir.dc">
-    <para>
-     On the topmost level of your documentation directory, store the &dc;
-     file defining your documentation project. You can store multiple &dc;
-     files here (for multiple books belonging to the same documentation
-     project, or &dc; files for various documentation projects). For more
-     information, refer to <xref linkend="sec.daps.user.basics.files"/>.
-    </para>
-   </callout>
-   <callout arearefs="co.docdir.img.src">
-    <para>
-     Top-level directory for any original images that you want to use in the
-     documentation project. Contains subdirectories for images in various
-     formats. Any images to be referenced in the XML sources must be put in
-     the respective subdirectories. For basic information about referencing
-     images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.
-    </para>
-   </callout>
-   <callout arearefs="co.docdir.xml">
-    <para>
-     Directory holding the XML &main; file and all other XML files for the
-     documentation project. If you declare entities in one or more external
-     files (for example, in <filename>entity-decl.ent</filename>), put the
-     entity declaration files here, too.
-    </para>
-   </callout>
-   <callout arearefs="co.docdir.main">
-    <para>
-     The &main; file of the documentation project. It contains the
-     <quote>starting point</quote> (the highest-level object) of your
-     documentation project. For more information, refer to
-     <xref linkend="sec.daps.user.basics.files"/>.
-    </para>
-   </callout>
-  </calloutlist>
-
+  <sect2 id="sec.daps.user.oview.dir.src">
+ <title>Source Files</title>
+ <example id="ex.daps.dir.doc">
+  <title>Required Directory Structure</title>
+  <screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
+   |--&dc;-* <co id="co.docdir.dc"/>
+   |--images/
+   |   |--src/<co id="co.docdir.img.src"/>
+   |   |  |--dia/
+   |   |  |--eps/
+   |   |  |--fig/
+   |   |  |--pdf/
+   |   |  |--png/
+   |   |  |--svg/
+   |--xml/<co id="co.docdir.xml"/>
+   |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
+ </example>
+ 
+ <calloutlist>
+  <callout arearefs="co.docdir.base">
+   <para>
+    <quote>Working directory</quote> for the respective documentation
+    project.
+   </para>
+  </callout>
+  <callout arearefs="co.docdir.dc">
+   <para>
+    On the topmost level of your documentation directory, store the &dc;
+    file defining your documentation project. You can store multiple &dc;
+    files here (for multiple books belonging to the same documentation
+    project, or &dc; files for various documentation projects). For more
+    information, refer to <xref linkend="sec.daps.user.basics.files"/>.
+   </para>
+  </callout>
+  <callout arearefs="co.docdir.img.src">
+   <para>
+    Top-level directory for any original images that you want to use in the
+    documentation project. Contains subdirectories for images in various
+    formats. Any images to be referenced in the XML sources must be put in
+    the respective subdirectories. For basic information about referencing
+    images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.
+   </para>
+  </callout>
+  <callout arearefs="co.docdir.xml">
+   <para>
+    Directory holding the XML &main; file and all other XML files for the
+    documentation project. If you declare entities in one or more external
+    files (for example, in <filename>entity-decl.ent</filename>), put the
+    entity declaration files here, too.
+   </para>
+  </callout>
+  <callout arearefs="co.docdir.main">
+   <para>
+    The &main; file of the documentation project. It contains the
+    <quote>starting point</quote> (the highest-level object) of your
+    documentation project. For more information, refer to
+    <xref linkend="sec.daps.user.basics.files"/>.
+   </para>
+  </callout>
+ </calloutlist>
+</sect2>
+  
   <sect2 id="sec.daps.user.oview.dir.build">
-   <title>The <filename>build</filename> Directory</title>
+   <title>The <filename>build</filename> Subdirectory</title>
    <para>
     To strictly discriminate between all source content added by users and
     the content generated by &dapsacr;, &dapsacr; uses a
@@ -908,7 +909,7 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
      <para>
       Command option <option>--static</option>: Tells &dapsacr; to copy CSS
       and image files to the same location like the HTML files. For more
-      information, see <xref linkend="table.daps.user.output.overview"/>.
+      information, see <xref linkend="tab.daps.user.output.overview"/>.
      </para>
     </callout>
    </calloutlist>
