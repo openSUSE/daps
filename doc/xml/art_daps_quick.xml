@@ -204,7 +204,7 @@
     <callout arearefs="co.quick.docdir.main">
      <para>
       The &main; file of the documentation project. It contains
-      <quote>references</quote> to other books, chapters, appendices, etc.
+      <quote>references</quote> to other books, chapters, appendixes, etc.
      </para>
     </callout>
    </calloutlist>
@@ -215,7 +215,7 @@
 
   <para>
    Use <command>daps-init</command> to set up a new documentation project
-   from scratch. The initialization script automatically creates the key
+   from scratch. The init script automatically creates the key
    files and directory structure you need to get started with &dapsacr;.
    View the available options with the command <command>daps-init
    --help</command>. By default, the script creates a
@@ -398,7 +398,7 @@
  <para>
    The following section introduces the key <command>daps</command> commands
    needed to create output formats from XML files. All examples are based on
-   the example files that are provided by the &dapsacr; initialization
+   the example files that are provided by the &dapsacr; init
    script. For more information, refer to
    <xref linkend="sec.daps.quick.init"/>.
   </para>
@@ -418,7 +418,7 @@
 
  <sect2 id="sec.daps.quick.output.syntax">
   <title>Basic Syntax for Generating Output</title>
-   <para>&dapsacr; supports a number of different output formats, including also
+   <para>&dapsacr; supports various different output formats, including also
    <quote>exotic</quote> formats like man pages or simple text.
    <xref linkend="tab.daps.quick.output.overview" xrefstyle="select:label"/>
    gives an overview.</para>
@@ -470,11 +470,10 @@
    <para>
      For example, if you have set up your working environment with
      <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
-     use the following command to build the first chapter of the book
-     (without the book's title page, table of contents etc.):
-    </para>
+     use the following command to build the first chapter of the book:
+     </para>
    <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --rootid=cha.template.examples</command></screen>
-  </sect3>
+    </sect3>
   <sect3 id="sec.daps.quick.output.adv.review">
    <title>Output with Remarks or Draft Watermark</title>
    <para>
