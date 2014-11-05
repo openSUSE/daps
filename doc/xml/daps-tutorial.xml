@@ -21,49 +21,72 @@
       <firstname>Vanessa</firstname>
       <surname>Wallfahrer</surname>
     </author>
+   <author>
+    <firstname>Tanja</firstname>
+    <surname>Roth</surname></author>
   </authorgroup>
  </articleinfo>
 
  <abstract>
-  <para>
-   Why should I use &dapsacr;? 
-  </para>
-  <para>
-   &dapsacr; (DocBook Authoring and Publishing Suite) is a program to transform XML
-   into output formats such as HTML or PDF, for example. In &dapsacr;, it is all
-   about the content. You can create different output formats, without changing
-   anything in the XML files themselves. Layout and contents are strictly
-   separated - the layout will be added automatically, but you can control
-   which style sheet is used.
-  </para>
-  <para>
-   This tutorial is for &dapsacr; beginners and anybody who already worked a
-   little bit with &dapsacr;.  It helps you to write and convert XML files into PDF
-   or HTML files for example. No previous XML knowledge is necessary.
-  </para>
+  <para>&dapsacr; is an open source program for transforming DocBook XML into output
+   formats such as HTML or PDF. &dapsacr; is command line based and runs on Linux*.</para>
 
-  <para>
-  Using the example of a recipe for a chili sauce, it explains step-by-step
-  how to set up your document, which basic XML tags to use for writing it, and
-  in the end, how to convert the document into HTML output. The example is 
-  structured as an article. Writing a book is similar, but has more required elements.
-  See the XML source of the <quote>Style Guide</quote> as an example for a book.
-  </para>
-  <para>
-  The following screenshot shows the finished HTML file which we will create in the following.
-  </para>
+  <para>In XML-based publishing, layout and contents are strictly separated:
+   while writing, you only take care of the contents and the XML tags to use.
+   The layout for different output formats is defined in so-called stylesheets and is
+   automatically added when converting the XML into output formats.</para>
+  <para>This tutorial is for DocBook and &dapsacr; beginners. Previous
+   knowledge of XML is not required, but you need basic knowledge of using the
+   Bash Shell. We will write a recipe for a chili sauce in DocBook and convert
+   it into HTML. The tutorial explains step-by-step how to set up your document,
+   which basic XML tags to use for writing it, and how to produce the output you
+   see in <xref linkend="fig.daps.tutorial.goal" xrefstyle="select: label"
+   />.</para>
+</abstract>
 
- </abstract>
-<figure>
- <title>The finished HTML file which is the Target of this Tutorial</title>
+ <figure id="fig.daps.tutorial.goal">
+  <title>The Goal: Publishing a Recipe for a Chili Sauce in HTML
+   Format</title>
 <mediaobject>
  <imageobject>
   <imagedata fileref="butcht7.11.png" width="80%"/>
  </imageobject>
 </mediaobject>
 </figure>
-
+ 
  <sect1>
+  <title>Why Should I Use DocBook and &dapsacr;?</title>
+  <para>DocBook is a markup language for technical documentation. Content is
+   tagged with XML elements according to its meaning. This is similar to sorting
+   objects into drawers according to their function: For example, you place
+   scissors and tongs into a drawer labeled <literal>Tools</literal>, whereas
+   you place teddies and building blocks into a drawer labeled
+    <literal>Toys</literal>. Similarly, when writing documents with DocBook, you
+   would <quote>sort</quote> the author's name into an XML tag called
+    <sgmltag>author</sgmltag>, whereas you would <quote>sort</quote> a reference
+   to another document into an XML element called
+   <sgmltag>xref</sgmltag>.</para>
+  <para>While this might seem cumbersome at first sight, it is a huge advantage
+   when considering the different output formats you can generate from the same
+   XML sources. Imagine you want anything tagged with an <sgmltag>xref</sgmltag>
+   element to appear in <emphasis>blue</emphasis> in HTML output, whereas you
+   want it to appear in <emphasis>green</emphasis> in the PDF output. Or you
+   decide at one point that you want references to other documents
+    (<sgmltag>xref</sgmltag>s) to be displayed in red in all output formats from
+   now on. This can be achieved <emphasis>without</emphasis> changing anything
+   in the XML files themselves. It is only a matter of defining in the
+   stylesheets which color to use for <sgmltag>xref</sgmltag> elements in
+   different output formats.</para>
+  <para>With &dapsacr;, you can convert your XML sources into various output
+   formats with one command. &dapsacr; takes care of converting any images
+   in your documents automatically into the format best suited for the selected
+   output format. &dapsacr; also helps you in comfortably writing and
+   editing your documents by providing additional features like editor macros,
+   spell checking or link checking. With &daps; you can also control which
+   stylesheets to use for generating output.</para>
+ </sect1>
+ 
+  <sect1>
   <title>What You Need</title>
   <para>
    Before you start writing, you need to install a few packages. To ease
