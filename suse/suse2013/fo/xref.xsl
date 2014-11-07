@@ -147,15 +147,21 @@
 
 <!-- ================ -->
 <xsl:template match="*" mode="intra.title.markup">
-  <xsl:message>Unknown element <xsl:value-of select="local-name(.)"/> for intra xref linking</xsl:message>
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
+  <xsl:message>Unknown element <xsl:value-of 
+    select="local-name(.)"/> for intra xref linking</xsl:message>
 </xsl:template>  
 
 
 <xsl:template match="sect1" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
   <!--<xsl:message>sect1 intra.title.markup
   <xsl:call-template name="xpath.location"/>
   </xsl:message>-->
   <xsl:apply-templates select="parent::*" mode="intra.title.markup"/>
+  <xsl:text>, </xsl:text>
     <xsl:call-template name="substitute-markup">
       <xsl:with-param name="template">
         <xsl:call-template name="gentext.template">
@@ -168,6 +174,8 @@
 
 
 <xsl:template match="sect2|sect3|sect4|sect5" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
   <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
   <xsl:call-template name="xpath.location"/>
   </xsl:message>-->
@@ -175,6 +183,7 @@
     select="ancestor::appendix|ancestor::article|
             ancestor::chapter|ancestor::glossary|ancestor::preface" 
     mode="intra.title.markup"/>
+  <xsl:text>, </xsl:text>
     <xsl:call-template name="substitute-markup">
       <xsl:with-param name="template">
         <xsl:call-template name="gentext.template">
@@ -185,13 +194,16 @@
     </xsl:call-template>  
 </xsl:template>
 
-  
+
 <xsl:template match="appendix|chapter" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
   <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
   <xsl:call-template name="xpath.location"/>
   </xsl:message>-->
   <!-- We don't want parts -->
   <xsl:apply-templates select="ancestor::book" mode="intra.title.markup"/>
+  <xsl:text>, </xsl:text>
     <xsl:call-template name="substitute-markup">
       <xsl:with-param name="template">
         <xsl:call-template name="gentext.template">
@@ -202,12 +214,36 @@
     </xsl:call-template>
 </xsl:template>
 
+
+<xsl:template match="preface" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
+  <xsl:apply-templates select="parent::*" mode="intra.title.markup"/>
+  <!--<xsl:apply-templates select="." mode="title.markup"/>-->
+  
+  <xsl:text>, </xsl:text>
+  <xsl:call-template name="substitute-markup">
+      <xsl:with-param name="template">
+        <xsl:call-template name="gentext.template">
+          <xsl:with-param name="context" select="'xref'"/>
+          <xsl:with-param name="name"  select="concat('intra-', local-name())"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+
 <xsl:template match="part" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
   <!-- We don't want parts, so skip them -->
   <xsl:apply-templates select="parent::*" mode="intra.title.markup"/>
 </xsl:template>
 
+
 <xsl:template match="article|book" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
   <!--<xsl:message><xsl:value-of select="local-name(.)"/> intra.title.markup
   <xsl:call-template name="xpath.location"/>
   </xsl:message>-->
@@ -221,7 +257,22 @@
     </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="variablelist" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
+</xsl:template>
 
+<xsl:template match="varlistentry" mode="intra.title.markup">
+  <xsl:param name="linkend"/>
+  <xsl:param name="first" select="0"/>
+  <xsl:apply-templates select="ancestor::appendix|ancestor::article|
+            ancestor::chapter|ancestor::glossary|ancestor::preface" 
+            mode="intra.title.markup"/>
+  <xsl:value-of select="concat(' ', term[1])"/>
+</xsl:template>
+
+
+<!-- ================================================================== -->
 <!-- FIXME: We have (almost) the same template in xhtml/xref.xsl. This is
      (almost) needless duplication. -->
 <xsl:template name="create.linkto.other.book">
@@ -231,7 +282,9 @@
   <xsl:variable name="target.book" select="$target/ancestor-or-self::book"/>
   <xsl:variable name="lang" select="ancestor-or-self::*/@lang"/>
   <xsl:variable name="text">
-    <xsl:apply-templates select="$target" mode="intra.title.markup"/>
+    <xsl:apply-templates select="$target" mode="intra.title.markup">
+      <xsl:with-param name="linkend" select="@linkend"/>
+    </xsl:apply-templates>
   </xsl:variable>
 
   <!--<xsl:message>====== create.linkto.other.book:
