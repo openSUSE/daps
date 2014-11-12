@@ -12,7 +12,8 @@ CONFIG_FILE="/etc/daps/docbook-xmlformat.conf"
 echo "Using config file '$CONFIG_FILE'"
 
 if [ ! -e $CONFIG_FILE ]; then
-  echo -e "Could not find config file '$CONFIG_FILE'\n"
+  echo "Could not find config file '$CONFIG_FILE'"
+  echo
   exit 100
 fi
 
@@ -22,7 +23,8 @@ fi
 
 res=$(which xmlformat.pl 2>/dev/null)
 if [ "$res" = '' ]; then
-  echo -e "The xmlformat.pl script is missing. Please install the package xmlformat!\n"
+  echo "The xmlformat.pl script is missing. Please install the package xmlformat!"
+  echo
   exit 200
 fi
 
