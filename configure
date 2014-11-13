@@ -615,8 +615,7 @@ EXIFTOOL
 DIA
 CONVERT
 JING
-XEP
-FOP
+PDFFORMATTER
 XMLCATALOG
 XSLTPROC
 XMLLINT
@@ -635,6 +634,10 @@ DEBUG
 CATALOG_EDIT_FALSE
 CATALOG_EDIT_TRUE
 ROOT_CATALOG
+AM_BACKSLASH
+AM_DEFAULT_VERBOSITY
+AM_DEFAULT_V
+AM_V
 am__untar
 am__tar
 AMTAR
@@ -703,6 +706,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_maintainer_mode
+enable_silent_rules
 enable_debug
 enable_edit_rootcatalog
 '
@@ -1327,6 +1331,8 @@ Optional Features:
   --enable-maintainer-mode
                           enable make rules and dependencies not useful (and
                           sometimes confusing) to the casual installer
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-debug          Enable debug mode
   --disable-edit-rootcatalog
                           Disable editing the XML root catalog. Use this
@@ -1806,7 +1812,7 @@ $as_echo "$as_me:
 " >&6;}
 
 
-am__api_version='1.12'
+am__api_version='1.13'
 
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
@@ -2019,8 +2025,8 @@ if test x"${MISSING+set}" != xset; then
   esac
 fi
 # Use eval to expand $SHELL
-if eval "$MISSING --run true"; then
-  am_missing_run="$MISSING --run "
+if eval "$MISSING --is-lightweight"; then
+  am_missing_run="$MISSING "
 else
   am_missing_run=
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: 'missing' script is too old or missing" >&5
@@ -2260,6 +2266,45 @@ else
 fi
 rmdir .tst 2>/dev/null
 
+# Check whether --enable-silent-rules was given.
+if test "${enable_silent_rules+set}" = set; then :
+  enableval=$enable_silent_rules;
+fi
+
+case $enable_silent_rules in # (((
+  yes) AM_DEFAULT_VERBOSITY=0;;
+   no) AM_DEFAULT_VERBOSITY=1;;
+    *) AM_DEFAULT_VERBOSITY=1;;
+esac
+am_make=${MAKE-make}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $am_make supports nested variables" >&5
+$as_echo_n "checking whether $am_make supports nested variables... " >&6; }
+if ${am_cv_make_support_nested_variables+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if $as_echo 'TRUE=$(BAR$(V))
+BAR0=false
+BAR1=true
+V=1
+am__doit:
+	@$(TRUE)
+.PHONY: am__doit' | $am_make -f - >/dev/null 2>&1; then
+  am_cv_make_support_nested_variables=yes
+else
+  am_cv_make_support_nested_variables=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_make_support_nested_variables" >&5
+$as_echo "$am_cv_make_support_nested_variables" >&6; }
+if test $am_cv_make_support_nested_variables = yes; then
+    AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+AM_BACKSLASH='\'
+
 if test "`cd $srcdir && pwd`" != "`pwd`"; then
   # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
   # is not polluted with repeated "-I."
@@ -2310,14 +2355,24 @@ AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}
 
 MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 
-mkdir_p="$MKDIR_P"
+# For better backward compatibility.  To be removed once Automake 1.9.x
+# dies out for good.  For more background, see:
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00001.html>
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
+mkdir_p='$(MKDIR_P)'
+
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 # Always define AMTAR for backward compatibility.  Yes, it's still used
 # in the wild :-(  We should find a proper way to deprecate it ...
 AMTAR='$${TAR-tar}'
 
+
+# We'll loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar  pax cpio none'
+
 am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'
+
 
 
 
@@ -2943,16 +2998,18 @@ if test 0 = "$XMLCATALOG"; then
    as_fn_error $? "xmlcatalog not found" "$LINENO" 5
 fi
 
-# Extract the first word of "fop", so it can be a program name with args.
-set dummy fop; ac_word=$2
+for ac_prog in fop xep
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_FOP+:} false; then :
+if ${ac_cv_path_PDFFORMATTER+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  case $FOP in
+  case $PDFFORMATTER in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_FOP="$FOP" # Let the user override the test with a path.
+  ac_cv_path_PDFFORMATTER="$PDFFORMATTER" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -2962,7 +3019,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_FOP="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_PDFFORMATTER="$as_dir/$ac_word$ac_exec_ext"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -2970,61 +3027,22 @@ done
   done
 IFS=$as_save_IFS
 
-  test -z "$ac_cv_path_FOP" && ac_cv_path_FOP="0"
   ;;
 esac
 fi
-FOP=$ac_cv_path_FOP
-if test -n "$FOP"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FOP" >&5
-$as_echo "$FOP" >&6; }
+PDFFORMATTER=$ac_cv_path_PDFFORMATTER
+if test -n "$PDFFORMATTER"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PDFFORMATTER" >&5
+$as_echo "$PDFFORMATTER" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 
 
-
-# Extract the first word of "xep", so it can be a program name with args.
-set dummy xep; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_XEP+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $XEP in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_XEP="$XEP" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_XEP="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
+  test -n "$PDFFORMATTER" && break
 done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_XEP" && ac_cv_path_XEP="0"
-  ;;
-esac
-fi
-XEP=$ac_cv_path_XEP
-if test -n "$XEP"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XEP" >&5
-$as_echo "$XEP" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
+test -n "$PDFFORMATTER" || PDFFORMATTER="0"
 
 
 # Extract the first word of "jing", so it can be a program name with args.
@@ -3502,7 +3520,7 @@ if ${am_cv_pathless_PYTHON+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
-	for am_cv_pathless_PYTHON in python python2 python3 python3.2 python3.1 python3.0 python2.7  python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0 none; do
+	for am_cv_pathless_PYTHON in python python2 python3 python3.3 python3.2 python3.1 python3.0 python2.7  python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0 none; do
 	  test "$am_cv_pathless_PYTHON" = none && break
 	  prog="import sys
 # split strings by '.' and convert to numeric.  Append some zeros
@@ -3609,6 +3627,25 @@ $as_echo "$am_cv_python_platform" >&6; }
   PYTHON_PLATFORM=$am_cv_python_platform
 
 
+  # Just factor out some code duplication.
+  am_python_setup_sysconfig="\
+import sys
+# Prefer sysconfig over distutils.sysconfig, for better compatibility
+# with python 3.x.  See automake bug#10227.
+try:
+    import sysconfig
+except ImportError:
+    can_use_sysconfig = 0
+else:
+    can_use_sysconfig = 1
+# Can't use sysconfig in CPython 2.7, since it's broken in virtualenvs:
+# <https://github.com/pypa/virtualenv/issues/118>
+try:
+    from platform import python_implementation
+    if python_implementation() == 'CPython' and sys.version[:3] == '2.7':
+        can_use_sysconfig = 0
+except ImportError:
+    pass"
 
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON script directory" >&5
@@ -3622,7 +3659,14 @@ else
      else
        am_py_prefix=$prefix
      fi
-     am_cv_python_pythondir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(0,0,prefix='$am_py_prefix'))" 2>/dev/null`
+     am_cv_python_pythondir=`$PYTHON -c "
+$am_python_setup_sysconfig
+if can_use_sysconfig:
+    sitedir = sysconfig.get_path('purelib', vars={'base':'$am_py_prefix'})
+else:
+    from distutils import sysconfig
+    sitedir = sysconfig.get_python_lib(0, 0, prefix='$am_py_prefix')
+sys.stdout.write(sitedir)"`
      case $am_cv_python_pythondir in
      $am_py_prefix*)
        am__strip_prefix=`echo "$am_py_prefix" | sed 's|.|.|g'`
@@ -3659,7 +3703,14 @@ else
      else
        am_py_exec_prefix=$exec_prefix
      fi
-     am_cv_python_pyexecdir=`$PYTHON -c "import sys; from distutils import sysconfig; sys.stdout.write(sysconfig.get_python_lib(1,0,prefix='$am_py_exec_prefix'))" 2>/dev/null`
+     am_cv_python_pyexecdir=`$PYTHON -c "
+$am_python_setup_sysconfig
+if can_use_sysconfig:
+    sitedir = sysconfig.get_path('platlib', vars={'platbase':'$am_py_prefix'})
+else:
+    from distutils import sysconfig
+    sitedir = sysconfig.get_python_lib(1, 0, prefix='$am_py_prefix')
+sys.stdout.write(sitedir)"`
      case $am_cv_python_pyexecdir in
      $am_py_exec_prefix*)
        am__strip_prefix=`echo "$am_py_exec_prefix" | sed 's|.|.|g'`
@@ -3859,8 +3910,7 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
   HAVE_DOCBOOK_5_STYLESHEETS=0
 fi
 
-
- if test -f /etc/redhat-release; then
+ if lsb_release -i | egrep -iq "(fedora|redhat)"; then
   DIST_REDHAT_TRUE=
   DIST_REDHAT_FALSE='#'
 else
@@ -3868,7 +3918,7 @@ else
   DIST_REDHAT_FALSE=
 fi
 
- if test -f /etc/SuSE-release; then
+ if lsb_release -i | grep -iq "suse"; then
   DIST_SUSE_TRUE=
   DIST_SUSE_FALSE='#'
 else
@@ -3876,7 +3926,7 @@ else
   DIST_SUSE_FALSE=
 fi
 
- if test ! -f /etc/redhat-release && test ! -f /etc/SuSE-release; then
+ if lsb_release -i | egrep -iqv "(fedora|redhat|suse)"; then
   DIST_OTHER_TRUE=
   DIST_OTHER_FALSE='#'
 else
@@ -5127,7 +5177,7 @@ else
 $as_echo "Create ASCII txt output          |   yes   |" >&6; }
 fi
 
-if test 0 = "$FOP" -o 0 = "$XEP"; then
+if test 0 = "$PDFFORMATTER"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Create PDF output                |    no   | install a formatter (fop or xep)
 " >&5
 $as_echo "Create PDF output                |    no   | install a formatter (fop or xep)

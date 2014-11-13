@@ -118,9 +118,7 @@ if test 0 = "$XMLCATALOG"; then
    AC_MSG_ERROR([xmlcatalog not found]) 
 fi
 
-AC_PATH_PROG([FOP], [fop], [0])
-
-AC_PATH_PROG([XEP], [xep], [0])
+AC_PATH_PROGS([PDFFORMATTER], [fop xep], [0])
 
 dnl recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing], [0])
@@ -310,7 +308,7 @@ else
 fi
 
 dnl Create PDFs (fop, xep)
-if test 0 = "$FOP" -o 0 = "$XEP"; then
+if test 0 = "$PDFFORMATTER"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
