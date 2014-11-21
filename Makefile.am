@@ -39,7 +39,7 @@ endif
 if DIST_REDHAT
   FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
 endif
-if DIST_OTHER
+if !FOP_CONFIG_SRC
   FOP_CONFIG_SRC :=  etc/fop/fop-daps.generic
 endif
 
