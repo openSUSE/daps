@@ -22,10 +22,24 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:import href="rootid.xsl"/>
+
+<!-- fs 2014-11-21:
+     This always generates a NovDoc Header, which is no good on systems where
+     NovDoc is not installed. The header should be generated in compliance
+     with the original MAIN. This will also be needed for DocBook5.
+
+     As a workaround I will use a standard Docbook 4.5 Header for now - Novdoc
+     will work with it anyway, since it is backwards compatible to DocBook4
   
   <xsl:output method="xml" encoding="UTF-8" 
      doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
      doctype-system="novdocx.dtd"/>
+-->
+
+  <xsl:output method="xml" encoding="UTF-8" 
+     doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
+     doctype-system="http://www.docbook.org/xml/4.5/docbookx.dtd"/>
+
 
   <xsl:template name="rootid.process">
     <xsl:message>
