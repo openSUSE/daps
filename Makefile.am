@@ -9,7 +9,6 @@
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
 
-
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
@@ -171,7 +170,7 @@ endif
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
-uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
+uninstall-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 uninstall-local:
 	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
 	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
@@ -181,7 +180,10 @@ endif
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(srcdir)/.firstbuild \
-	$(dir $(DAPS_CATALOG)) $(FOP_CONFIG) bin/daps etc/config 
+	$(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps $(srcdir)/etc/config \
+	$(srcdir)/etc/fop/fop-daps.xml
+	(cd $(srcdir)/etc && ln -sf config.in config)
+	(cd $(srcdir)/bin && ln -s daps.in daps)
 
 #-----------------------------DAPS--------------------------------------------
 

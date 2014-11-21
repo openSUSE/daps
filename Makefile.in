@@ -1601,7 +1601,7 @@ install-data-local:
 @CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(ROOT_CATALOG)
 
 #---------------------------Local UNINSTALL-----------------------------------
-@CATALOG_EDIT_TRUE@uninstall-local: TMP_CATALOG := $(shell mktemp -q catalog.XXXXX)
+@CATALOG_EDIT_TRUE@uninstall-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 @CATALOG_EDIT_TRUE@uninstall-local:
 @CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
 @CATALOG_EDIT_TRUE@	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
@@ -1610,7 +1610,10 @@ install-data-local:
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(srcdir)/.firstbuild \
-	$(dir $(DAPS_CATALOG)) $(FOP_CONFIG) bin/daps etc/config 
+	$(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps $(srcdir)/etc/config \
+	$(srcdir)/etc/fop/fop-daps.xml
+	(cd $(srcdir)/etc && ln -sf config.in config)
+	(cd $(srcdir)/bin && ln -s daps.in daps)
 
 #-----------------------------DAPS--------------------------------------------
 
