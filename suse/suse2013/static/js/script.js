@@ -21,6 +21,12 @@ switch ( XmlProduct ) {
   case 'SUSE Cloud 3':
     bugzillaProduct = 'SUSE Cloud 3';
     break;
+  case 'SUSE Cloud 4':
+    bugzillaProduct = 'SUSE Cloud 4';
+    break;;
+  case 'SUSE Cloud 5':
+    bugzillaProduct = 'SUSE Cloud 5';
+    break;
   case 'Subscription Management Tool 11.3':
     bugzillaProduct = 'Subscription Management Tool 11 SP3 (SMT 11 SP3)';
     bugzillaComponent = 'SMT';
@@ -57,7 +63,7 @@ switch ( XmlProduct ) {
   case 'SUSE Linux Enterprise High Availability Extension 12':
     bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 12';
     break;
-  case 'GEO Clustering for SUSE Linux Enterprise High Availability Extension 12':
+  case 'Geo Clustering for SUSE Linux Enterprise High Availability Extension 12':
     bugzillaProduct = 'SUSE Linux Enterprise High Availability Extension 12';
     break;
   case 'SUSE Manager 1.7':
