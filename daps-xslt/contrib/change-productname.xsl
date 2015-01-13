@@ -34,7 +34,6 @@
   </xsl:template>
 
   <xsl:template match="article/subtitle/productname|articleinfo/subtitle/productname">
-    <xsl:message>********</xsl:message>
     <xsl:apply-templates/>
   </xsl:template>
 
