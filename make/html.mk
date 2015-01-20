@@ -115,6 +115,11 @@ else
 		$(addsuffix static, $(dir $(STYLEHTML)))\
 		$(addsuffix static,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))\
 		$(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEHTML)))))))
+
+  ifeq "$(strip $(STYLEIMG))" ""
+    $(error $(shell ccecho "error" "Fatal error: Could not find stylesheet images"))
+  endif
+
   IS_STATIC := $(notdir $(STYLEIMG))
   ifndef HTML_CSS
     ifneq ($(IS_STATIC),static)

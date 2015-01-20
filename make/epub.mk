@@ -67,6 +67,11 @@ else
   IS_STATIC := $(notdir $(STYLEIMG))
 endif
 
+ifeq "$(strip $(STYLEIMG))" ""
+  $(error $(shell ccecho "error" "Fatal error: Could not find stylesheet images"))
+endif
+
+
 STYLEEPUB_BIGFILE := $(DAPSROOT)/daps-xslt/epub/db2db.xsl
 
 EPUB_TMPDIR  := $(TMP_DIR)/epub_$(DOCNAME)
@@ -100,6 +105,8 @@ ifeq ($(EPUB3),1)
   EPUB_CONTENT_OPF := $(EPUB_OEBPS)/package.opf
 else
   EPUB_CONTENT_OPF := $(EPUB_OEBPS)/content.opf
+  EPUBSTRINGS      += --stringparam "epub.oebps.dir=$(EPUB_OEBPS)/" \
+	              --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/"
 endif
 
 
@@ -182,6 +189,8 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
     ifneq "$(strip $(EPUB_CSS))" ""
 	cp -s $(EPUB_CSS) $(EPUB_OEBPS)
     endif
+	# Fix needed due to bug? in DocBook ePUB stylesheets (not epub3)
+	sed -i 's:\(rootfile full-path="\)$(EPUB_TMPDIR)/\(OEBPS/content.opf"\):\1\2:' $(EPUB_TMPDIR)/META-INF/container.xml
 	(cd $(EPUB_TMPDIR); \
 	  zip -r -X $@ mimetype META-INF OEBPS/content.opf \
 	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_OEBPS)/content.opf)) $(DEVNULL))
