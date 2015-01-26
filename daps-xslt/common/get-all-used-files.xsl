@@ -124,7 +124,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*[@id]|*[@xml:id]">
+  <xsl:template match="*[@id | @xml:id]">
     <xsl:param name="xi" select="0"/>
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
