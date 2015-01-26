@@ -124,13 +124,13 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*[@id]">
+  <xsl:template match="*[@id]|*[@xml:id]">
     <xsl:param name="xi" select="0"/>
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
     <xsl:if test="$prof != 0">
-      <div id="{@id}" remap="{local-name()}">
+      <div id="{(@id|@xml:id)[1]}" remap="{local-name()}">
         <xsl:apply-templates/>
       </div>
     </xsl:if>
