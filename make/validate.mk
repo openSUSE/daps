@@ -18,7 +18,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq ($(DOCBOOK_VERSION), 4)
 	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
   else
-	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing -c $(DOCBOOK5_RNG) \
+	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing $(DOCBOOK5_RNG) \
 	  $(PROFILED_MAIN)
   endif
 	touch $(PROFILEDIR)/.validate
