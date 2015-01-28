@@ -50,7 +50,10 @@ Optional parameters:
   -v, --verbose  Be verbose
   -l LOGFILE, --log=LOGFILE
                  Write all outputs of xsltproc to LOGFILE 
-                 (default: $XSLTPROCLOG)   
+                 (default: $XSLTPROCLOG)
+  -s XSLT, --stylesheet=XSLT
+                 Use stylesheet for transformation
+                 (default: $MIGRATE_XSLT)
   -h, --help     Print this help
   
 Mandatory arguments:
@@ -64,7 +67,7 @@ Mandatory arguments:
 #
 # TODO: getopts
 export POSIXLY_CORRECT=1
-ARGS=$(getopt -o "hvl:" -l "help,verbose,log:" -n "$ME" -- "$@")
+ARGS=$(getopt -o "hvl:s:" -l "help,verbose,log:,stylesheet:" -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
@@ -76,7 +79,11 @@ while true; do
       shift
       ;;
     -l|--log)
-       XSLTPROCLOG=$2
+       XSLTPROCLOG="$2"
+       shift 2
+       ;;
+    -s|--stylesheet)
+       MIGRATE_XSLT="$2"
        shift 2
        ;;
     -h|--help)
