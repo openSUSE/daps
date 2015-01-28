@@ -1,0 +1,124 @@
+#!/bin/bash
+#
+# Script to change DocBook 4 source to version 5
+#
+# Author: Thomas Schraitle <toms@opensuse.org>
+
+__VERSION__="$Id: $"
+
+# Name of this script:
+ME="$(basename $0)"
+
+# TODO: Make it configurable by ~/.daps/config or ~/.config/daps/daps.conf
+# [[ -s ~/.daps/config ]] && source ~/.daps/config
+# [[ -s ~/.config/daps/daps.conf ]] && source ~/.config/daps/daps.conf
+
+# Contains the stylesheet to migrate DocBook 4 -> 5:
+MIGRATE_XSLT=${MIGRATE_XSLT:-/usr/share/xml/docbook/stylesheet/upgrade/db4-upgrade.xsl}
+
+# File extension
+EXT=${EXT:-.xml}
+
+# Where to write all xsl:message outputs from xsltproc:
+XSLTPROCLOG=${XSLTPROCLOG:-/tmp/daps-migrate.log}
+
+# Verbosity
+# VERBOSE=0
+
+## Functions
+function exit_on_error () {
+    echo -e "ERROR: $1" >&2
+    exit 1;
+}
+
+function dump () {
+  if [[ -n "$VERBOSE" ]]; then
+     echo "$1"
+  fi
+  echo "$1" >> $XSLTPROCLOG 2>&1
+}
+
+# Help function to preserve readability of the while loop
+function usage () {
+	echo "
+Usage: $ME [-v|--verbose] [-l|--log] INPUTDIR OUTPUTDIR  
+
+Wrapper script to convert DocBook4 to DocBook5.
+
+Optional parameters:
+  -v, --verbose  Be verbose
+  -l LOGFILE, --log=LOGFILE
+                 Write all outputs of xsltproc to LOGFILE      
+  -h, --help     Print this help
+  
+Mandatory arguments:
+   INPUTDIR      Searches for all XML file in this directory
+   OUTPUTDIR     Write all XML file into the OUT directory
+"
+}
+
+
+## START
+#
+# TODO: getopts
+export POSIXLY_CORRECT=1
+ARGS=$(getopt -o "hvl:" -l "help,verbose,log:" -n "$ME" -- "$@")
+
+eval set -- "$ARGS"
+
+while true; do
+    case "$1" in
+
+    -v|--verbose)
+      VERBOSE=1
+      shift
+      ;;
+    -l|--log)
+       XSLTPROCLOG=$2
+       shift 2
+       ;;
+    -h|--help)
+       usage
+       exit 1
+       shift
+       ;;
+	--)
+	    shift
+	    break;;
+        *) exit_on_error "Internal error!" ;;
+    esac
+done
+
+unset POSIXLY_CORRECT
+
+## Check for errors
+if [[ $# -eq 0 ]]; then
+  usage
+  exit 1
+fi
+
+[[ $# -lt 2 ]] && exit_on_error "Missing arguments: Need both input and output directory!"
+[[ -d $1 ]] || exit_on_error "First argument '$1' is not a directory"
+if [[ ! -d $2 ]]; then
+  mkdir "$2"
+fi
+
+[[ -e $XSLTPROCLOG ]] && rm "$XSLTPROCLOG"
+
+dump "** Starting DocBook 4 -> DocBook 5 Transformation **"
+
+XMLFILES=$(find $1 -type f -name \*$EXT -printf "%p ")
+
+for xmlin in $XMLFILES; do
+   base=${xmlin##*/}
+   xmlout=$2/$base
+   dump "$xmlin -> $xmlout"    
+   xsltproc --output "$xmlout" "$MIGRATE_XSLT" "$xmlin" 2>> $XSLTPROCLOG
+   ERRCODE=$?
+   dump "--------------------------------------------------"
+done
+
+dump "** Finished **"
+dump ""
+
+# EOF
