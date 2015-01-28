@@ -751,6 +751,17 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="step" priority="200">
+    <xsl:copy>
+      <xsl:call-template name="copy.attributes">
+         <xsl:with-param name="suppress">
+           <xsl:if test="@performance = 'required'">performance</xsl:if>
+         </xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template
     match="biblioentry/firstname
                      |biblioentry/surname
