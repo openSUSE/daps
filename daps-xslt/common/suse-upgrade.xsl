@@ -1519,6 +1519,7 @@
     <xsl:variable name="temp">
       <xi:foo/>
       <xlink:foo/>
+      <foo xmlns="http://docbook.org/ns/docbook"/>
     </xsl:variable>
     
     <xsl:variable name="nodes" select="exsl:node-set($temp)"/>
@@ -1527,7 +1528,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="*" mode="addNS">
+  <xsl:template match="*" mode="addNS" name="addNS">
     <xsl:choose>
       <xsl:when test="namespace-uri(.) = ''">
         <xsl:element name="{local-name(.)}"
@@ -1538,6 +1539,7 @@
             </xsl:attribute>
           </xsl:if>
           <xsl:copy-of select="@*"/>
+          <xsl:call-template name="add.root.namespaces"/>
           <xsl:apply-templates mode="addNS"/>
         </xsl:element>
       </xsl:when>
@@ -1551,6 +1553,7 @@
             </xsl:attribute>
           </xsl:if>
           <xsl:copy-of select="@*"/>
+          <xsl:call-template name="add.root.namespaces"/>
           <xsl:apply-templates mode="addNS"/>
         </xsl:copy>
       </xsl:otherwise>
@@ -1563,13 +1566,16 @@
   </xsl:template>
 
   <!--  -->
-  <xsl:template match="/*" mode="addNS">
-    <xsl:copy>
+  <!--<xsl:template match="/*" mode="addNS">
+    <!-\-<xsl:copy>
       <xsl:call-template name="copy.attributes"/>
       <xsl:call-template name="add.root.namespaces"/>
       <xsl:apply-templates/>
-    </xsl:copy>
-  </xsl:template>
+    </xsl:copy>-\->
+    <xsl:call-template name="addNS">
+      
+    </xsl:call-template>
+  </xsl:template>-->
 
   <!-- ====================================================================== -->
 
