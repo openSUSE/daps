@@ -45,6 +45,7 @@
   <!-- Set to 1 to keep numbered sections, default changes to recursive -->
 
   <xsl:param name="xml-model" select="0"/>
+  <!-- TODO: Add parameter xml-model.href to change href URI -->
 
   <xsl:variable name="version" select="'1.1'"/>
   <!-- version of this transform -->
@@ -693,18 +694,18 @@
         </link>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="emit-message">
+        <!--<xsl:call-template name="emit-message">
           <xsl:with-param name="message">
             <xsl:text>Converting ulink to uri.</xsl:text>
           </xsl:with-param>
-        </xsl:call-template>
+        </xsl:call-template>-->
 
-        <uri xlink:href="{@url}">
+        <link xlink:href="{@url}">
           <xsl:call-template name="copy.attributes">
             <xsl:with-param name="suppress" select="'url'"/>
           </xsl:call-template>
-          <xsl:value-of select="@url"/>
-        </uri>
+          <!--<xsl:value-of select="@url"/>-->
+        </link>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
