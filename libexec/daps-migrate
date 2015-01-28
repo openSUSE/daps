@@ -23,6 +23,10 @@ EXT=${EXT:-.xml}
 # Where to write all xsl:message outputs from xsltproc:
 XSLTPROCLOG=${XSLTPROCLOG:-/tmp/daps-migrate.log}
 
+# Holds XSLT parameters which is passed to the XSLT processor
+declare -A PARAMS
+PARAMS=()
+
 # Verbosity
 # VERBOSE=0
 
@@ -54,6 +58,9 @@ Optional parameters:
   -s XSLT, --stylesheet=XSLT
                  Use stylesheet for transformation
                  (default: $MIGRATE_XSLT)
+  -p, --param=\"XSLPARAM=VALUE\"
+                 Defines parameter-value pair for the XSLT processor;
+                 can be used more than once
   -h, --help     Print this help
   
 Mandatory arguments:
@@ -62,12 +69,22 @@ Mandatory arguments:
 "
 }
 
+function parse_param() {
+  # Syntax: parse_param "PARAMETER_AND_VALUE"
+  # Extract parameter and value, syntax $1="param=value"
+  local _PARAM=$1
+  [[ "$_PARAM" == *"="* ]] || exit_on_error "Option -p muss der Syntax PARAMETER=VALUE folgen"
+  p=${_PARAM%=*}
+  v=${_PARAM#*=}
+  # Define associative array:
+  PARAMS["$p"]="$v"      
+}
 
 ## START
 #
 # TODO: getopts
 export POSIXLY_CORRECT=1
-ARGS=$(getopt -o "hvl:s:" -l "help,verbose,log:,stylesheet:" -n "$ME" -- "$@")
+ARGS=$(getopt -o "hvl:s:p:" -l "help,verbose,log:,stylesheet:,param:" -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
@@ -84,6 +101,10 @@ while true; do
        ;;
     -s|--stylesheet)
        MIGRATE_XSLT="$2"
+       shift 2
+       ;;
+    -p|--param)
+       parse_param "$2"
        shift 2
        ;;
     -h|--help)
@@ -116,14 +137,26 @@ fi
 
 dump "** Starting DocBook 4 -> DocBook 5 Transformation **"
 dump "** Using stylesheet $MIGRATE_XSLT"
+p=""
+for i in ${!PARAMS[@]}; do
+  p="$i=${PARAMS[$i]} $p"
+done
+dump "** Parameters: $p"
 
 XMLFILES=$(find $1 -type f -name \*$EXT -printf "%p ")
+
+p=""
+for i in ${!PARAMS[@]}; do
+  p="--stringparam $i ${PARAMS[$i]} $p"
+done
+
+dump "** Commandline: xsltproc --output FILE ${p} $MIGRATE_XSLT XMLINPUT" 
 
 for xmlin in $XMLFILES; do
    base=${xmlin##*/}
    xmlout=$2/$base
-   dump "$xmlin -> $xmlout"    
-   xsltproc --output "$xmlout" "$MIGRATE_XSLT" "$xmlin" 2>> $XSLTPROCLOG
+   dump "$xmlin -> $xmlout"
+   xsltproc --nonet --output "$xmlout" ${p} "$MIGRATE_XSLT" "$xmlin" 2>> $XSLTPROCLOG
    ERRCODE=$?
    dump "--------------------------------------------------"
 done
