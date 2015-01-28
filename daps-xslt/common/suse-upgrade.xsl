@@ -136,12 +136,14 @@
     </xsl:variable>
     <xsl:variable name="abstract.outside.info">
       <xsl:choose>
-        <xsl:when test="../abstract">
-          <xsl:text>1</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>0</xsl:text>
-        </xsl:otherwise>
+        <xsl:when test="../abstract">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="indexterms.outside.info">
+      <xsl:choose>
+        <xsl:when test="../indexterm">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <info>
@@ -173,6 +175,9 @@
       </xsl:if>
       <xsl:apply-templates/>
     </info>
+    <xsl:if test="$indexterms.outside.info = '1'">
+      <xsl:apply-templates select="../indexterm" mode="copy"/>
+    </xsl:if>
   </xsl:template>
   <!-- This is the template for the elements (all except book, article, set) that
      allow title, subtitle, and titleabbrev after (or in) info, but not before.
@@ -762,6 +767,12 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="command[option]/option">
+      <xsl:apply-templates/>
+  </xsl:template>
+  
+  
+
   <xsl:template
     match="biblioentry/firstname
                      |biblioentry/surname
@@ -1160,9 +1171,9 @@
             <xsl:text> moved abstract to info</xsl:text>
           </xsl:with-param>
         </xsl:call-template>
-        <info>
+        <!--<info>
           <xsl:apply-templates select="." mode="copy"/>
-        </info>
+        </info>-->
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="copy"/>
