@@ -35,6 +35,8 @@
 <xsl:param name="db5.version.string" select="$db5.version"/> <!-- Set this if you want a local version number -->
 <xsl:param name="keep.numbered.sections" select="'0'"/> <!-- Set to 1 to keep numbered sections, default changes to recursive -->
 
+<xsl:param name="xml-model" select="0"/>
+
 <xsl:variable name="version" select="'1.1'"/> <!-- version of this transform -->
 
 <xsl:output method="xml" encoding="utf-8" indent="no" omit-xml-declaration="yes"/>
@@ -57,12 +59,21 @@
   <xsl:variable name="converted">
     <xsl:apply-templates/>
   </xsl:variable>
+  
   <xsl:comment>
-    <xsl:text> Converted by db4-upgrade version </xsl:text>
+    <xsl:text> Converted by suse-upgrade version </xsl:text>
     <xsl:value-of select="$version"/>
     <xsl:text> </xsl:text>
   </xsl:comment>
   <xsl:text>&#10;</xsl:text>
+  
+  <xsl:if test="$xml-model = 1">
+    <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
+    <xsl:text>&#10;&#10;</xsl:text>
+  </xsl:if>
+  
   <xsl:apply-templates select="exsl:node-set($converted)/*" mode="addNS"/>
 </xsl:template>
 
