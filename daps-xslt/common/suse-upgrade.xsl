@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common"
   xmlns:db="http://docbook.org/ns/docbook"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="exsl db" version="1.0">
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  exclude-result-prefixes="exsl db xi">
 
   <!--
 # ======================================================================
@@ -30,6 +33,10 @@
 # ======================================================================
 -->
 
+  <xsl:output method="xml" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
+   <!--<xsl:preserve-space elements="*"/>-->
+  <xsl:preserve-space elements="screen address programlisting"/>
+
   <xsl:param name="db5.version" select="'5.0'"/>
   <!-- DocBook version for the output 5.0 and 5.1 only current values -->
   <xsl:param name="db5.version.string" select="$db5.version"/>
@@ -41,11 +48,7 @@
 
   <xsl:variable name="version" select="'1.1'"/>
   <!-- version of this transform -->
-
-  <xsl:output method="xml" encoding="utf-8" indent="no"
-    omit-xml-declaration="yes"/>
-
-  <xsl:preserve-space elements="*"/>
+  
   <xsl:param name="rootid">
     <xsl:choose>
       <xsl:when test="/*/@id">
@@ -58,6 +61,7 @@
   </xsl:param>
 
   <xsl:param name="defaultDate" select="''"/>
+
 
   <xsl:template match="/">
     <xsl:variable name="converted">
@@ -81,6 +85,7 @@
     <xsl:apply-templates select="exsl:node-set($converted)/*"
       mode="addNS"/>
   </xsl:template>
+
 
   <!-- Convert numbered sections into recursive sections, unless
      $keep.numbered.sections is set to '1'  -->
@@ -128,6 +133,16 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="abstract.outside.info">
+      <xsl:choose>
+        <xsl:when test="../abstract">
+          <xsl:text>1</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <info>
       <xsl:if
         test="$title.inside.info = '1' and $title.outside.info = '1'">
@@ -151,6 +166,9 @@
           <xsl:apply-templates select="preceding-sibling::titleabbrev"
             mode="copy"/>
         </xsl:if>
+      </xsl:if>
+      <xsl:if test="$abstract.outside.info = '1'">
+        <xsl:apply-templates select="../abstract" mode="copy"/>
       </xsl:if>
       <xsl:apply-templates/>
     </info>
@@ -546,10 +564,8 @@
     </biblioid>
   </xsl:template>
 
-  <xsl:template
-    match="biblioid[count(*) = 1
-		              and ulink
-			      and normalize-space(text()) = '']"
+  <xsl:template match="biblioid[count(*) = 1 and ulink
+			                 and normalize-space(text()) = '']"
     priority="200">
     <biblioid xlink:href="{ulink/@url}">
       <xsl:call-template name="copy.attributes"/>
@@ -1129,8 +1145,12 @@
         <xsl:call-template name="emit-message">
           <xsl:with-param name="message">
             <xsl:text>CHECK abstract: removed from output (invalid location in 5.0).</xsl:text>
+            <xsl:text> moved abstract to info</xsl:text>
           </xsl:with-param>
         </xsl:call-template>
+        <info>
+          <xsl:apply-templates select="." mode="copy"/>
+        </info>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="copy"/>
@@ -1494,6 +1514,18 @@
   </xsl:template>
 
   <!-- ====================================================================== -->
+  <xsl:template name="add.root.namespaces">
+    <!-- add namespaces to the top output element -->
+    <xsl:variable name="temp">
+      <xi:foo/>
+      <xlink:foo/>
+    </xsl:variable>
+    
+    <xsl:variable name="nodes" select="exsl:node-set($temp)"/>
+    <xsl:for-each select="$nodes//*[local-name(.) ='foo']/namespace::*">
+      <xsl:copy-of select="."/>
+    </xsl:for-each>
+  </xsl:template>
 
   <xsl:template match="*" mode="addNS">
     <xsl:choose>
@@ -1528,6 +1560,15 @@
   <xsl:template match="comment()|processing-instruction()|text()"
     mode="addNS">
     <xsl:copy/>
+  </xsl:template>
+
+  <!--  -->
+  <xsl:template match="/*" mode="addNS">
+    <xsl:copy>
+      <xsl:call-template name="copy.attributes"/>
+      <xsl:call-template name="add.root.namespaces"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
   </xsl:template>
 
   <!-- ====================================================================== -->
