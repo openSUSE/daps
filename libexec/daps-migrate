@@ -2,6 +2,7 @@
 #
 # Script to change DocBook 4 source to version 5
 #
+#
 # Author: Thomas Schraitle <toms@opensuse.org>
 
 __VERSION__="$Id: $"
@@ -48,7 +49,8 @@ Wrapper script to convert DocBook4 to DocBook5.
 Optional parameters:
   -v, --verbose  Be verbose
   -l LOGFILE, --log=LOGFILE
-                 Write all outputs of xsltproc to LOGFILE      
+                 Write all outputs of xsltproc to LOGFILE 
+                 (default: $XSLTPROCLOG)   
   -h, --help     Print this help
   
 Mandatory arguments:
@@ -106,6 +108,7 @@ fi
 [[ -e $XSLTPROCLOG ]] && rm "$XSLTPROCLOG"
 
 dump "** Starting DocBook 4 -> DocBook 5 Transformation **"
+dump "** Using stylesheet $MIGRATE_XSLT"
 
 XMLFILES=$(find $1 -type f -name \*$EXT -printf "%p ")
 
@@ -118,7 +121,7 @@ for xmlin in $XMLFILES; do
    dump "--------------------------------------------------"
 done
 
-dump "** Finished **"
+dump "** Finished, see $XSLTPROCLOG for more information **"
 dump ""
 
 # EOF
