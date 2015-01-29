@@ -146,6 +146,12 @@
         <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="highlights.outside.info">
+      <xsl:choose>
+        <xsl:when test="../highlights">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <info>
       <xsl:if
         test="$title.inside.info = '1' and $title.outside.info = '1'">
@@ -177,6 +183,11 @@
     </info>
     <xsl:if test="$indexterms.outside.info = '1'">
       <xsl:apply-templates select="../indexterm" mode="copy"/>
+    </xsl:if>
+    <xsl:if test="$highlights.outside.info = '1'">
+      <abstract remap="highlights">
+        <xsl:apply-templates select="../highlights" mode="copy"/>
+      </abstract>
     </xsl:if>
   </xsl:template>
   <!-- This is the template for the elements (all except book, article, set) that
@@ -224,13 +235,17 @@
           <xsl:apply-templates select="following-sibling::subtitle"
             mode="copy"/>
         </xsl:if>
-        <xsl:if
-          test="following-sibling::titleabbrev and not(./titleabbrev)">
+        <xsl:if test="following-sibling::titleabbrev and not(./titleabbrev)">
           <xsl:apply-templates select="following-sibling::titleabbrev"
             mode="copy"/>
         </xsl:if>
         <info>
           <xsl:call-template name="copy.attributes"/>
+          <xsl:if test="../highlights">
+            <abstract remap="highlights">
+              <xsl:apply-templates select="../highlights" mode="copy"/>
+            </abstract>
+          </xsl:if>
           <xsl:apply-templates/>
         </info>
       </xsl:when>
@@ -255,6 +270,11 @@
             test="following-sibling::titleabbrev and not(./titleabbrev)">
             <xsl:apply-templates select="following-sibling::titleabbrev"
               mode="copy"/>
+          </xsl:if>
+          <xsl:if test="../highlights">
+            <abstract remap="highlights">
+              <xsl:apply-templates select="../highlights" mode="copy"/>
+            </abstract>
           </xsl:if>
           <xsl:apply-templates/>
         </info>
@@ -778,9 +798,22 @@
   </xsl:template>
   
   <xsl:template match="highlights" priority="200">
-    <abstract remap="{name()}">
-      <xsl:apply-templates/>
-    </abstract>
+    <info>
+      <abstract remap="{name()}">
+         <xsl:apply-templates/>
+      </abstract>
+    </info>
+  </xsl:template>
+  
+  <xsl:template match="highlights/itemizedlist" priority="200">
+    <para>
+      <xsl:copy>
+        <xsl:call-template name="copy.attributes">
+          <xsl:with-param name="suppress.default">mark spacing</xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+      </xsl:copy>
+    </para>
   </xsl:template>
 
   <xsl:template
