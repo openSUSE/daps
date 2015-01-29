@@ -10,4 +10,10 @@
     doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
     doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"/>
   
+  <xsl:template match="@audience">
+    <xsl:attribute name="condition">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
+  
 </xsl:stylesheet>
