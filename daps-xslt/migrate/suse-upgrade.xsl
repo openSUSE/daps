@@ -805,6 +805,33 @@
     </info>
   </xsl:template>
 
+  <xsl:template match="step[count(substeps) > 1]" priority="200">
+    <xsl:copy>
+      <xsl:call-template name="copy.attributes">
+        <xsl:with-param name="suppress">
+            <xsl:if test="@performance = 'required'">performance</xsl:if>
+        </xsl:with-param>
+      </xsl:call-template>
+      <xsl:apply-templates select="node()[not(self::substeps)]"/>
+      <stepalternatives>
+        <xsl:apply-templates select="substeps"/>
+      </stepalternatives>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="step[count(substeps) > 1]/substeps" priority="200">
+    <step>
+      <xsl:copy>
+        <xsl:call-template name="copy.attributes">
+          <xsl:with-param name="suppress">
+            <xsl:if test="@performance = 'required'">performance</xsl:if>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+      </xsl:copy>
+    </step>
+  </xsl:template>
+
   <xsl:template
     match="biblioentry/firstname
                      |biblioentry/surname
