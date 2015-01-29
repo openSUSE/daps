@@ -130,7 +130,7 @@ fi
 [[ $# -lt 2 ]] && exit_on_error "Missing arguments: Need both input and output directory!"
 [[ -d $1 ]] || exit_on_error "First argument '$1' is not a directory"
 if [[ ! -d $2 ]]; then
-  mkdir "$2"
+  mkdir -p "$2"
 fi
 
 [[ -e $XSLTPROCLOG ]] && rm "$XSLTPROCLOG"
