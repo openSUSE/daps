@@ -767,11 +767,21 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="command[option]/option">
+  <xsl:template match="command[option]/option" priority="200">
       <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="systemitem[@class='constant']" priority="200">
+    <constant>
+      <xsl:apply-templates/>
+    </constant>
+  </xsl:template>
   
+  <xsl:template match="highlights" priority="200">
+    <abstract remap="{name()}">
+      <xsl:apply-templates/>
+    </abstract>
+  </xsl:template>
 
   <xsl:template
     match="biblioentry/firstname
