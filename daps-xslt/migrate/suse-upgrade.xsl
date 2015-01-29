@@ -799,21 +799,10 @@
   
   <xsl:template match="highlights" priority="200">
     <info>
-      <abstract remap="{name()}">
+      <annotation remap="{name()}">
          <xsl:apply-templates/>
-      </abstract>
+      </annotation>
     </info>
-  </xsl:template>
-  
-  <xsl:template match="highlights/itemizedlist" priority="200">
-    <para>
-      <xsl:copy>
-        <xsl:call-template name="copy.attributes">
-          <xsl:with-param name="suppress.default">mark spacing</xsl:with-param>
-        </xsl:call-template>
-        <xsl:apply-templates/>
-      </xsl:copy>
-    </para>
   </xsl:template>
 
   <xsl:template
