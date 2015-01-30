@@ -33,6 +33,55 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template name="section.level">
+    <xsl:param name="node" select="."/>
+    <xsl:choose>
+      <xsl:when test="local-name($node)='sect1'">1</xsl:when>
+      <xsl:when test="local-name($node)='sect2'">2</xsl:when>
+      <xsl:when test="local-name($node)='sect3'">3</xsl:when>
+      <xsl:when test="local-name($node)='sect4'">4</xsl:when>
+      <xsl:when test="local-name($node)='sect5'">5</xsl:when>
+      <xsl:when test="local-name($node)='section'">
+        <xsl:choose>
+          <xsl:when test="$node/../../../../../../section">6</xsl:when>
+          <xsl:when test="$node/../../../../../section">5</xsl:when>
+          <xsl:when test="$node/../../../../section">4</xsl:when>
+          <xsl:when test="$node/../../../section">3</xsl:when>
+          <xsl:when test="$node/../../section">2</xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="local-name($node)='refsect1' or
+        local-name($node)='refsect2' or
+        local-name($node)='refsect3' or
+        local-name($node)='refsection' or
+        local-name($node)='refsynopsisdiv'">
+        <xsl:call-template name="refentry.section.level">
+          <xsl:with-param name="node" select="$node"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="local-name($node)='simplesect'">
+        <xsl:choose>
+          <xsl:when test="$node/../../sect1">2</xsl:when>
+          <xsl:when test="$node/../../sect2">3</xsl:when>
+          <xsl:when test="$node/../../sect3">4</xsl:when>
+          <xsl:when test="$node/../../sect4">5</xsl:when>
+          <xsl:when test="$node/../../sect5">5</xsl:when>
+          <xsl:when test="$node/../../section">
+            <xsl:choose>
+              <xsl:when test="$node/../../../../../section">5</xsl:when>
+              <xsl:when test="$node/../../../../section">4</xsl:when>
+              <xsl:when test="$node/../../../section">3</xsl:when>
+              <xsl:otherwise>2</xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <!-- Taken from https://github.com/stackforge/clouddocs-maven-plugin/blob/a3621dfb4b620f3993d826649f7b944dae4b2407/src/main/resources/cloud/webhelp/profile-webhelp.xsl#L242
        and adapted to DocBook4
   -->
@@ -286,6 +335,7 @@
   <xsl:template match="d:screen/d:computeroutput | d:screen/d:userinput">
     <xsl:apply-templates/>
   </xsl:template>
+  
 
   <!-- Revhistory -->
   <xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']">
