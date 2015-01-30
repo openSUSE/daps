@@ -7,7 +7,7 @@
   <xsl:import href="db5to4-core.xsl"/>
   <xsl:import href="db5to4-info.xsl"/>
 
-  <xsl:output method="xml" indent="yes" standalone="yes"/>
+  <xsl:output method="xml" indent="yes"/>
   
   <xsl:param name="doctype">db4</xsl:param>
 
@@ -43,11 +43,11 @@
       <xsl:when test="local-name($node)='sect5'">5</xsl:when>
       <xsl:when test="local-name($node)='section'">
         <xsl:choose>
-          <xsl:when test="$node/../../../../../../section">6</xsl:when>
-          <xsl:when test="$node/../../../../../section">5</xsl:when>
-          <xsl:when test="$node/../../../../section">4</xsl:when>
-          <xsl:when test="$node/../../../section">3</xsl:when>
-          <xsl:when test="$node/../../section">2</xsl:when>
+          <xsl:when test="$node/../../../../../../d:section">6</xsl:when>
+          <xsl:when test="$node/../../../../../d:section">5</xsl:when>
+          <xsl:when test="$node/../../../../d:section">4</xsl:when>
+          <xsl:when test="$node/../../../d:section">3</xsl:when>
+          <xsl:when test="$node/../../d:section">2</xsl:when>
           <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -62,16 +62,16 @@
       </xsl:when>-->
       <xsl:when test="local-name($node)='simplesect'">
         <xsl:choose>
-          <xsl:when test="$node/../../sect1">2</xsl:when>
-          <xsl:when test="$node/../../sect2">3</xsl:when>
-          <xsl:when test="$node/../../sect3">4</xsl:when>
-          <xsl:when test="$node/../../sect4">5</xsl:when>
-          <xsl:when test="$node/../../sect5">5</xsl:when>
-          <xsl:when test="$node/../../section">
+          <xsl:when test="$node/../../d:sect1">2</xsl:when>
+          <xsl:when test="$node/../../d:sect2">3</xsl:when>
+          <xsl:when test="$node/../../d:sect3">4</xsl:when>
+          <xsl:when test="$node/../../d:sect4">5</xsl:when>
+          <xsl:when test="$node/../../d:sect5">5</xsl:when>
+          <xsl:when test="$node/../../d:section">
             <xsl:choose>
-              <xsl:when test="$node/../../../../../section">5</xsl:when>
-              <xsl:when test="$node/../../../../section">4</xsl:when>
-              <xsl:when test="$node/../../../section">3</xsl:when>
+              <xsl:when test="$node/../../../../../d:section">5</xsl:when>
+              <xsl:when test="$node/../../../../d:section">4</xsl:when>
+              <xsl:when test="$node/../../../d:section">3</xsl:when>
               <xsl:otherwise>2</xsl:otherwise>
             </xsl:choose>
           </xsl:when>
@@ -363,6 +363,16 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="d:section|d:simplesect">
+    <xsl:variable name="depth">
+      <xsl:call-template name="section.level"/>
+    </xsl:variable>
+    
+    <xsl:element name="sect{$depth}">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
 
   <!-- Revhistory -->
   <xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']">
