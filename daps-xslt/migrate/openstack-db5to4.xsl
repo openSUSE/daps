@@ -301,6 +301,12 @@
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
+  
+  <xsl:template match="d:emphasis/d:prompt">
+    <literal>
+      <xsl:apply-templates/>
+    </literal>
+  </xsl:template>
 
   <xsl:template match="d:legalnotice">
     <xsl:element name="{local-name()}">
@@ -332,9 +338,7 @@
   <xsl:template match="d:imagedata/@contentwidth">
     <xsl:choose>
       <xsl:when test="not(@width)">
-        <xsl:attribute name="width">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
+         <xsl:call-template name="width"/>
       </xsl:when>
       <xsl:when test="../@width = ."/>
       <xsl:otherwise>
@@ -345,6 +349,17 @@
     </xsl:choose>
   </xsl:template>
 
+
+  <xsl:template match="d:imagedata/@width" name="width">
+    <xsl:attribute name="width">
+    <xsl:choose>
+      <xsl:when test="contains(., '%')">
+        <xsl:value-of select="."/>
+      </xsl:when>
+      <xsl:otherwise>100%</xsl:otherwise><!-- Overwrite absolute values with 100% -->
+    </xsl:choose>
+    </xsl:attribute>
+  </xsl:template>
 
   <xsl:template match="d:imagedata/@format"/>
 
@@ -374,6 +389,16 @@
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+
+  <xsl:template match="d:revhistory">
+    <xsl:choose>
+      <xsl:when test="$doctype = 'novdoc'"/>
+      <xsl:otherwise>
+        <xsl:apply-imports/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Revhistory -->
