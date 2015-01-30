@@ -110,7 +110,7 @@
             </entry>
             <entry>
               <para>Except where otherwise noted, this document is
-                licensed under <ulink url="{$ccidURL}">                  
+                licensed under                   
                   <emphasis role="bold"> Creative Commons Attribution <xsl:choose>
                     <xsl:when test="$ccid = 'by'"/>
                     <xsl:when test="$ccid = 'by-sa'">
@@ -134,7 +134,6 @@
                       </xsl:message>
                     </xsl:otherwise>
                   </xsl:choose> 3.0 License </emphasis>
-                </ulink> 
               </para>
               <para>
                 <ulink url="{$ccidURL}"/>
