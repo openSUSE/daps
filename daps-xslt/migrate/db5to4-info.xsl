@@ -95,12 +95,13 @@
     <xsl:param name="infoname" select="local-name(..)"/>
     <xsl:variable name="rtf-node">
       <xsl:element name="{$infoname}info">
-        <xsl:apply-templates select="@*|node()"/>
+        <xsl:apply-templates select="node()"/>
       </xsl:element>
     </xsl:variable>
+    <xsl:variable name="node" select="exsl:node-set($rtf-node)"/>
     <xsl:choose>
-      <xsl:when test="count(exsl:node-set($rtf-node)/*/*) > 0">
-        <xsl:copy-of select="$rtf-node"/>
+      <xsl:when test="count($node/*/*) > 0">
+        <xsl:apply-templates select="$node/*"/>
       </xsl:when>
       <xsl:otherwise><!-- Don't copy, it's empty --></xsl:otherwise>
     </xsl:choose>
