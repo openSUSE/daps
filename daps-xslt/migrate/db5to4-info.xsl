@@ -37,10 +37,11 @@
     <!-- Change order of info and title  -->
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="d:title/preceding-sibling::processing-instruction()
-                                   |d:title/preceding-sibling::comment()"/>
+      <!--<xsl:apply-templates select="d:title/preceding-sibling::processing-instruction()
+                                   |d:title/preceding-sibling::comment()"/>-->
+      <!--<xsl:message>********** <xsl:value-of select="(d:title|d:info/d:title)[1]"/></xsl:message>-->
+      <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy"/>
       <xsl:apply-templates select="d:info"/>
-      <xsl:apply-templates select="d:title"/>
       <!-- Process the rest -->
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
@@ -94,8 +95,8 @@
     <xsl:param name="infoname" select="local-name(..)"/>
     <xsl:variable name="rtf-node">
       <xsl:element name="{$infoname}info">
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:element>
+        <xsl:apply-templates select="@*|node()"/>
+      </xsl:element>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="count(exsl:node-set($rtf-node)/*/*) > 0">
@@ -104,4 +105,18 @@
       <xsl:otherwise><!-- Don't copy, it's empty --></xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <xsl:template match="d:info/d:title"/>
+  
+  <xsl:template match="d:info/d:title" mode="copy">
+    <title>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </title>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="copy">
+    <xsl:apply-templates select="."/>
+  </xsl:template>
+  
 </xsl:stylesheet>
