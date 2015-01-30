@@ -80,8 +80,7 @@
               <ulink url="{$ccidURL}">
                   <inlinemediaobject>
                     <imageobject>
-                      <imagedata fileref="{$ccid}.png"
-                        align="center" valign="middle"/>
+                      <imagedata fileref="{$ccid}.png"/>
                     </imageobject>
                   </inlinemediaobject>
               </ulink>
@@ -154,5 +153,24 @@
       <xsl:value-of select="$basename"/>
     </xsl:attribute>
   </xsl:template>
+
+
+  <xsl:template match="d:imagedata/@contentwidth">
+    <xsl:choose>
+      <xsl:when test="not(@width)">
+        <xsl:attribute name="width">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="../@width = ."/>
+      <xsl:otherwise>
+        <xsl:attribute name="contentwidth">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="d:imagedata/@format"/>
 
 </xsl:stylesheet>
