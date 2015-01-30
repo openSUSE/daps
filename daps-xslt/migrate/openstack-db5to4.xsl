@@ -289,6 +289,12 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="d:personname[parent::d:author]">
+    <author>
+      <xsl:apply-templates/>
+    </author>
+  </xsl:template>
+
   <xsl:template match="d:affiliation/d:orgname">
     <!-- We don't need this, so skip it: -->
     <xsl:apply-templates/>
