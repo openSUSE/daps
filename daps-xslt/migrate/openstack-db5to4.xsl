@@ -289,7 +289,6 @@
     </xsl:element>
   </xsl:template>
 
-
   <xsl:template match="d:affiliation/d:orgname">
     <!-- We don't need this, so skip it: -->
     <xsl:apply-templates/>
@@ -305,6 +304,46 @@
     <literal>
       <xsl:apply-templates/>
     </literal>
+  </xsl:template>
+
+  <xsl:template match="d:informaltable|d:table[d:thead]">
+    <xsl:variable name="cols" select="count(d:col)"/>
+    <xsl:element name="{local-name()}">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="d:caption"/>
+      <tgroup cols="{$cols}">
+        <xsl:apply-templates select="d:col"/>
+        <xsl:apply-templates select="d:thead|d:tbody|d:foot"/>
+        <xsl:if test="d:tr">
+          <tbody>
+            <xsl:apply-templates select="d:tr"/>
+          </tbody>
+        </xsl:if>
+      </tgroup>
+    </xsl:element>
+  </xsl:template>
+
+  
+  <xsl:template match="d:caption">
+    <title>
+      <xsl:apply-templates/>
+    </title>
+  </xsl:template>
+
+  <xsl:template match="d:col">
+    <colspec colwidth="{@width}"/>    
+  </xsl:template>
+  
+  <xsl:template match="d:tr">
+    <row>
+      <xsl:apply-templates/>
+    </row>
+  </xsl:template>
+  
+  <xsl:template match="d:td|d:th">
+    <entry>
+      <xsl:apply-templates/>
+    </entry>
   </xsl:template>
 
   <xsl:template match="d:legalnotice">
