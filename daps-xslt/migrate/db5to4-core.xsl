@@ -10,9 +10,10 @@
 
   <xsl:import href="../common/copy.xsl"/>
   
-  <xsl:output method="xml" indent="yes" 
+  <!--<xsl:output method="xml" indent="yes" 
     doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
-    doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"/>
+    doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"/>-->
+  
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space 
     elements="d:screen d:programlisting d:literallayout xi:*"/>
