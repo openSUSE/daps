@@ -218,6 +218,11 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="d:code">
+    <xsl:element name="literal">
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
 
   <xsl:template match="d:legalnotice">
     <xsl:element name="{local-name()}">
@@ -267,6 +272,18 @@
 
   <!-- Skip methodname -->
   <xsl:template match="d:methodname[d:link]">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="d:programlisting">
+    <xsl:element name="screen">
+      <xsl:attribute name="remap">programlisting</xsl:attribute>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:screen/d:computeroutput | d:screen/d:userinput">
     <xsl:apply-templates/>
   </xsl:template>
 
