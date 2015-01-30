@@ -3,13 +3,13 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:d="http://docbook.org/ns/docbook"
   exclude-result-prefixes="d">
-  
+ 
   <xsl:import href="db5to4-core.xsl"/>
   <xsl:import href="db5to4-info.xsl"/>
 
-  <xsl:output method="xml" indent="yes"
-    doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
-    doctype-system="http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"/>
+  <xsl:output method="xml" indent="yes" standalone="yes"/>
+  
+  <xsl:param name="doctype">db4</xsl:param>
 
 
   <!-- ================================================================= -->
@@ -51,7 +51,7 @@
           <xsl:otherwise>1</xsl:otherwise>
         </xsl:choose>
       </xsl:when>
-      <xsl:when test="local-name($node)='refsect1' or
+      <!--<xsl:when test="local-name($node)='refsect1' or
         local-name($node)='refsect2' or
         local-name($node)='refsect3' or
         local-name($node)='refsection' or
@@ -59,7 +59,7 @@
         <xsl:call-template name="refentry.section.level">
           <xsl:with-param name="node" select="$node"/>
         </xsl:call-template>
-      </xsl:when>
+      </xsl:when>-->
       <xsl:when test="local-name($node)='simplesect'">
         <xsl:choose>
           <xsl:when test="$node/../../sect1">2</xsl:when>
@@ -228,11 +228,38 @@
   
   <!-- ================================================================= -->
   <xsl:template match="/">
-    <xsl:processing-instruction name="xml-stylesheet">
+    
+    <xsl:choose>
+      <xsl:when test="$doctype = 'db4'">
+        <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
+        <xsl:value-of select="local-name(*[1])"/>
+        <xsl:text disable-output-escaping="yes"> PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+</xsl:text>
+        <xsl:processing-instruction name="xml-stylesheet">
       href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
       type="text/xml"
       title="Profiling step"</xsl:processing-instruction>
-    <xsl:text>&#10;</xsl:text>
+        <xsl:text>&#10;</xsl:text>       
+      </xsl:when>
+      <xsl:when test="$doctype = 'novdoc'">
+        <xsl:text disable-output-escaping="yes">&#10;&lt;!DOCTYPE </xsl:text>
+        <xsl:value-of select="local-name(*[1])"/>
+        <xsl:text disable-output-escaping="yes"> PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd" [
+  &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "IGNORE">
+  &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]>
+</xsl:text>
+        <xsl:processing-instruction name="xml-stylesheet">
+      href="urn:x-daps:xslt:profiling:novdoc-profile.xsl" 
+      type="text/xml"
+      title="Profiling step"</xsl:processing-instruction>
+        <xsl:text>&#10;&#10;</xsl:text>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+    
+    
     <xsl:apply-templates/>
   </xsl:template>
 
