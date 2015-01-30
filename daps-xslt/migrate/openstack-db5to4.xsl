@@ -16,7 +16,25 @@
     </xsl:attribute>
   </xsl:template>
   
+  <xsl:template match="/">
+    <xsl:processing-instruction name="xml-stylesheet">
+      href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+      type="text/xml"
+      title="Profiling step"</xsl:processing-instruction>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:apply-templates/>
+  </xsl:template>
   
+  <xsl:template match="/*[not(@xml:lang)]">
+    <xsl:element name="{local-name()}">
+      <xsl:attribute name="lang">en</xsl:attribute><!-- Set default value -->
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+  
+  
+
   <xsl:template match="d:author[d:affiliation]">
     <xsl:apply-templates select="*[not(self::d:affiliation)]"/>
     <xsl:element name="corpauthor">
@@ -123,23 +141,6 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="/">
-    <xsl:processing-instruction name="xml-stylesheet">
-      href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
-      type="text/xml"
-      title="Profiling step"</xsl:processing-instruction>
-    <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="/*[not(@xml:lang)]">
-    <xsl:element name="{local-name()}">
-      <xsl:attribute name="lang">en</xsl:attribute><!-- Set default value -->
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:element>
-  </xsl:template>
-  
   
   <xsl:template match="d:imagedata/@fileref">
     <xsl:variable name="basename">
