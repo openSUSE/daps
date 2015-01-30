@@ -125,7 +125,7 @@
 
   <xsl:template match="/">
     <xsl:processing-instruction name="xml-stylesheet">
-      href="urn:x-daps:xslt:profiling:novdoc-profile.xsl" 
+      href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
       type="text/xml"
       title="Profiling step"</xsl:processing-instruction>
     <xsl:text>&#10;</xsl:text>
