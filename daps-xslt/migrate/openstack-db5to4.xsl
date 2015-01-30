@@ -265,15 +265,17 @@
 
   <xsl:template match="d:imagedata/@format"/>
 
+  <!-- Skip methodname -->
+  <xsl:template match="d:methodname[d:link]">
+    <xsl:apply-templates/>
+  </xsl:template>
 
   <!-- Revhistory -->
   <xsl:template match="processing-instruction('rax')[normalize-space(.) = 'revhistory']">
-    <xsl:message>PI rax for revhistory found</xsl:message>
     <xsl:apply-templates select="//d:revhistory[1]" mode="revhistory"/>
   </xsl:template>
   
   <xsl:template match="d:revhistory" mode="revhistory">
-    <xsl:message>revision found!</xsl:message>
     <informaltable rules="all" remap="revhistory">        
       <tgroup cols="2">
         <colspec colwidth="20%"/>
