@@ -94,20 +94,21 @@
         >http://creativecommons.org/licenses/<xsl:value-of
           select="$ccid"/>/3.0/legalcode</xsl:variable>
       <informaltable frame="void">
-        <col width="10%"/>
-        <col width="90%"/>
+        <tgroup cols="2">
+        <colspec colwidth="10%"/>
+        <colspec colwidth="90%"/>
         <tbody>
-          <tr>
-            <td>
-              <ulink url="{$ccidURL}">
+          <row>
+            <entry>
+              <para><ulink url="{$ccidURL}">
                 <inlinemediaobject>
                   <imageobject>
                     <imagedata fileref="{$ccid}.png"/>
                   </imageobject>
                 </inlinemediaobject>
-              </ulink>
-            </td>
-            <td>
+              </ulink></para>
+            </entry>
+            <entry>
               <para>Except where otherwise noted, this document is
                 licensed under <ulink url="{$ccidURL}">                  
                   <emphasis role="bold"> Creative Commons Attribution <xsl:choose>
@@ -138,9 +139,10 @@
               <para>
                 <ulink url="{$ccidURL}"/>
               </para>
-            </td>
-          </tr>
+            </entry>
+          </row>
         </tbody>
+        </tgroup>
       </informaltable>
     </xsl:if>
   </xsl:template>
