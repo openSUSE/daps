@@ -121,7 +121,7 @@
     <xsl:text>&#10;</xsl:text>
   </xsl:template>
   
-  <xsl:template match="book/title"/><!-- Don't copy -->
+  <xsl:template match="book/title|book/titleabbrev"/><!-- Don't copy -->
   <xsl:template match="bookinfo">
     <bookinfo>
       <xsl:copy-of select="(title|../title)[1]"/>
@@ -132,6 +132,7 @@
           <xsl:text>format="B d, Y"</xsl:text>
         </xsl:processing-instruction></date>
       <xsl:copy-of select="legalnotice"/>
+      <xsl:apply-templates select="abstract"/>
     </bookinfo>
   </xsl:template>
     
@@ -231,6 +232,10 @@
     </literal>
   </xsl:template>
   
+  <xsl:template match="glossterm">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
   <xsl:template match="entry[guilabel|guimenu|guibutton]">
     <entry>
       <para>
@@ -239,7 +244,7 @@
     </entry>
   </xsl:template>
   
-  <xsl:template match="entry/text()">
+  <xsl:template match="entry[not(self::*)]/text()">
     <entry>
       <para>
         <xsl:value-of select="."/>
