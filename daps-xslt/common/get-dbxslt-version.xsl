@@ -12,6 +12,9 @@
    Output:
      String of the version number 
    
+   Example:
+     $ xsltproc get-dbxslt-version.xsl http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl
+   
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2013, Thomas Schraitle
 -->
