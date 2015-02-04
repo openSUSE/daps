@@ -13,7 +13,10 @@
      
    Output:
      Text strings
-   
+
+   DocBook 5 compatible:
+     yes
+
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
    
@@ -21,7 +24,9 @@
 
 
 <xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:d="http://docbook.org/ns/docbook"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  exclude-result-prefixes="d">
 
 <xsl:import href="rootid.xsl"/>
 
@@ -39,7 +44,7 @@
 <xsl:template match="text()"/>
 
 
-<xsl:template match="imageobject[@role]">
+<xsl:template match="imageobject[@role] | d:imageobject[@role]">
   <xsl:choose>
     <xsl:when test="$preferred.mediaobject.role = ''">
       <xsl:apply-templates/>
@@ -51,7 +56,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="imagedata">
+<xsl:template match="imagedata|d:imagedata">
 	<xsl:value-of select="concat(@fileref,' ')"/>
 </xsl:template>
 
