@@ -249,6 +249,10 @@
   <xsl:template match="d:book" priority="10">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
+      <xsl:if test="not(@xml:lang)">
+        <xsl:attribute name="lang">en</xsl:attribute><!-- Default -->
+      </xsl:if>
+      
       <xsl:apply-templates/>
             
       <xsl:if test="d:info/d:revhistory">
@@ -258,6 +262,14 @@
       </xsl:if>
     </xsl:element>
   </xsl:template>
+  
+  <xsl:template match="d:book/@xml:lang" priority="10">
+    <xsl:attribute name="lang">
+      <xsl:value-of select="."/>
+    </xsl:attribute>
+  </xsl:template>
+  
+  
   
   <xsl:template name="create.revhistory.appendix">
     <xsl:param name="node"/>
