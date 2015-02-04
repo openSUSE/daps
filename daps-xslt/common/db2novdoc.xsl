@@ -99,9 +99,7 @@
   
   <xsl:template match="/">
     <xsl:message>****</xsl:message>
-    <xsl:processing-instruction name="xml-stylesheet">href="urn:x-suse:xslt:profiling:novdoc-profile.xsl" 
- type="text/xml"
- title="Profiling step"</xsl:processing-instruction>
+    <xsl:apply-templates select="processing-instruction('xml-stylesheet')"/>
     <xsl:text disable-output-escaping="yes">&#10;&lt;!DOCTYPE </xsl:text>
     
    <xsl:call-template name="getrootname"/>
@@ -111,11 +109,18 @@
   &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
   %entities;
 ]>
-</xsl:text>
-    <xsl:apply-templates /> <!--select="node()[not(self::processing-instruction())]" -->
+&#10;</xsl:text>
+    <xsl:apply-templates select="node()[not(self::processing-instruction('xml-stylesheet'))]"/>
     <!--<xsl:call-template name="process.rootid.node"/>-->
   </xsl:template>
-   
+  
+  <xsl:template match="/processing-instruction('xml-stylesheet')">
+    <xsl:processing-instruction name="xml-stylesheet">href="urn:x-suse:xslt:profiling:novdoc-profile.xsl" 
+ type="text/xml"
+ title="Profiling step"</xsl:processing-instruction>
+    <xsl:text>&#10;</xsl:text>
+  </xsl:template>
+  
   <xsl:template match="book/title"/><!-- Don't copy -->
   <xsl:template match="bookinfo">
     <bookinfo>
