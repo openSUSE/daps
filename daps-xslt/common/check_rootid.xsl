@@ -15,6 +15,9 @@
      yes: rootid exists
      no:  rootid does not exist
    
+   DocBook 5 compatible:
+     yes
+   
    Author:    Frank Sundermeyer <fsundermeyer@opensuse.org>
    Copyright: 2012, Frank Sundermeyer
    
