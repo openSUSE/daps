@@ -96,56 +96,36 @@
       <xsl:variable name="ccidURL"
         >http://creativecommons.org/licenses/<xsl:value-of
           select="$ccid"/>/3.0/legalcode</xsl:variable>
-      <informaltable frame="void">
-        <tgroup cols="2">
-        <colspec colwidth="10%"/>
-        <colspec colwidth="90%"/>
-        <tbody>
-          <row>
-            <entry>
-              <para><ulink url="{$ccidURL}">
-                <inlinemediaobject>
-                  <imageobject>
-                    <imagedata fileref="{$ccid}.png"/>
-                  </imageobject>
-                </inlinemediaobject>
-              </ulink></para>
-            </entry>
-            <entry>
-              <para>Except where otherwise noted, this document is
-                licensed under                   
-                  <emphasis role="bold"> Creative Commons Attribution <xsl:choose>
-                    <xsl:when test="$ccid = 'by'"/>
-                    <xsl:when test="$ccid = 'by-sa'">
-                      <xsl:text>ShareAlike</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$ccid = 'by-nd'">
-                      <xsl:text>NoDerivatives</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$ccid = 'by-nc'">
-                      <xsl:text>NonCommercial</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$ccid = 'by-nc-sa'">
-                      <xsl:text>NonCommercial ShareAlike</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$ccid = 'by-nc-nd'">
-                      <xsl:text>NonCommercial NoDerivatives</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:message terminate="yes"> I don't understand
-                        licence <xsl:value-of select="$ccid"/>
-                      </xsl:message>
-                    </xsl:otherwise>
-                  </xsl:choose> 3.0 License </emphasis>
-              </para>
-              <para>
-                <ulink url="{$ccidURL}"/>
-              </para>
-            </entry>
-          </row>
-        </tbody>
-        </tgroup>
-      </informaltable>
+      
+      <para>Except where otherwise noted, this document is
+        licensed under                   
+        <emphasis role="bold">Creative Commons Attribution <xsl:choose>
+          <xsl:when test="$ccid = 'by'"/>
+          <xsl:when test="$ccid = 'by-sa'">
+            <xsl:text>ShareAlike</xsl:text>
+          </xsl:when>
+          <xsl:when test="$ccid = 'by-nd'">
+            <xsl:text>NoDerivatives</xsl:text>
+          </xsl:when>
+          <xsl:when test="$ccid = 'by-nc'">
+            <xsl:text>NonCommercial</xsl:text>
+          </xsl:when>
+          <xsl:when test="$ccid = 'by-nc-sa'">
+            <xsl:text>NonCommercial ShareAlike</xsl:text>
+          </xsl:when>
+          <xsl:when test="$ccid = 'by-nc-nd'">
+            <xsl:text>NonCommercial NoDerivatives</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:message terminate="yes"> I don't understand
+              licence <xsl:value-of select="$ccid"/>
+            </xsl:message>
+          </xsl:otherwise>
+        </xsl:choose> 3.0 License </emphasis>
+      
+        <ulink url="{$ccidURL}"/>
+      </para>
+      
     </xsl:if>
   </xsl:template>
   
@@ -370,9 +350,7 @@
   <xsl:template match="d:legalnotice">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@role"/>
-      <para><!-- We need para here unfortunately -->
-        <xsl:call-template name="CCLegalNotice"/>
-      </para>
+      <xsl:call-template name="CCLegalNotice"/>
     </xsl:element>
   </xsl:template>
 
