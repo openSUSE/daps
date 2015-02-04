@@ -24,13 +24,15 @@
    
 -->
 <xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  xmlns:d="http://docbook.org/ns/docbook"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  exclude-result-prefixes="d">
   
   <xsl:output method="text"/>
   
   <xsl:template match="/">
     <xsl:choose>
-      <xsl:when test="namespace-uri(*) ='http://docbook.org/ns/docbook'">5</xsl:when>
+      <xsl:when test="d:*">5</xsl:when>
       <xsl:when test="appendix or article or 
                       book or bridgehead or 
                       chapter or colophon or
