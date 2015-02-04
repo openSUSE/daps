@@ -75,6 +75,8 @@
   <xsl:template match="orderedlist/@spacing[. ='normal']"/>
   <xsl:template match="step/@performance[. = 'required']"/>
   <xsl:template match="substeps/@performance[. = 'required']"/>
+  <xsl:template match="@rules[. ='all']"/>
+  <xsl:template match="variablelist/@wordsize"/>
   
   <!-- Suppressed elements -->
   <xsl:template match="abstract/title"/>
@@ -208,7 +210,7 @@
     <xsl:apply-templates select="node()[not(self::title)]"/>
   </xsl:template>
   
-  <xsl:template match="application|abbrev|firstterm">
+  <xsl:template match="application|abbrev|firstterm|glossterm">
     <xsl:apply-templates />
   </xsl:template>
   
@@ -226,15 +228,12 @@
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="code|computeroutput|sgmltag|uri|userinput">
+  <xsl:template match="code|computeroutput|prompt|sgmltag|uri|userinput">
     <literal>
       <xsl:apply-templates/>
     </literal>
   </xsl:template>
   
-  <xsl:template match="glossterm">
-    <xsl:apply-templates/>
-  </xsl:template>
   
   <xsl:template match="entry[guilabel|guimenu|guibutton]">
     <entry>
