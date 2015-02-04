@@ -36,7 +36,37 @@
    
    Used in combination with extract-files-and-images.xsl
       
+
+   Parameters:
+     * separator (default: ' ')
+       Separator between each filename
+
+     * output.intermediate.xml (default: 0)
+       Should the in-memory XML tree be saved? (0=no, 1=yes)
+
+     * intermediate.xml.filename (default: 'included-files-output.xml')
+       Filename of the in-memory XML tree, when $output.intermediate.xml=1
+       
+     * rootid (default: '')
+       Only recognize elements with the correct id attribute:
+       
+     * xml.src.path (default: '')
+       Base path of XML files (ALWAYS end a trailing slash!)
+       
+     * img.src.path (default: '')
+       Base path for all graphic files (ALWAYS end a trailing slash!)
+       
+     * mainfile (default: '')
+       Name of the main file
+       
    
+   Input:
+     Output from get-all-used-files.xsl
+     
+   Output:
+     List of filenames separated by $separator
+   
+
   Author:  Thomas Schraitle <toms@opensuse.org>
   Copyright: 2012, 2013
 
