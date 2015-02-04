@@ -275,6 +275,10 @@
     </xsl:if>
   </xsl:template>
   
+  <xsl:template match="d:book/d:info/d:pubdate">
+    <xsl:element name="{local-name()}"><xsl:processing-instruction 
+      name="dbtimestamp">format="B d, Y"</xsl:processing-instruction></xsl:element>
+  </xsl:template>
 
   <xsl:template match="/*[not(@xml:lang)]">
     <xsl:element name="{local-name()}">
