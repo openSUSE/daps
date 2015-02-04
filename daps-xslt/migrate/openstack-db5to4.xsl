@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:d="http://docbook.org/ns/docbook"
-  exclude-result-prefixes="d">
+  xmlns:exsl="http://exslt.org/common"
+  exclude-result-prefixes="d exsl">
  
   <xsl:import href="db5to4-core.xsl"/>
   <xsl:import href="db5to4-info.xsl"/>
@@ -11,6 +12,8 @@
   
   <xsl:param name="doctype">db4</xsl:param>
 
+  <xsl:param name="productname">SUSE Cloud</xsl:param>
+  <xsl:param name="productnumber">5</xsl:param>
 
   <!-- ================================================================= -->
   <!-- Taken from common/common.xsl -->
@@ -229,7 +232,6 @@
   
   <!-- ================================================================= -->
   <xsl:template match="/">
-    
     <xsl:choose>
       <xsl:when test="$doctype = 'db4'">
         <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
@@ -259,11 +261,20 @@
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
-    
-    
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="d:book/d:info/d:productname">
+    <xsl:element name="{local-name()}">
+      <xsl:value-of select="$productname"/>
+    </xsl:element>
+    <xsl:if test="not(../d:productnumber)">
+      <productnumber>
+        <xsl:value-of select="$productnumber"/>
+      </productnumber>
+    </xsl:if>
+  </xsl:template>
+  
 
   <xsl:template match="/*[not(@xml:lang)]">
     <xsl:element name="{local-name()}">
