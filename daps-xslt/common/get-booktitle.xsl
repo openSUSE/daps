@@ -13,6 +13,9 @@
    Output:
      DocBook document with resolved PI
    
+   DocBook 5 compatible:
+     No, not needed   
+   
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
    
