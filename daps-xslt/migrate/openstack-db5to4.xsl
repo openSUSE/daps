@@ -14,6 +14,8 @@
 
   <xsl:param name="productname">SUSE Cloud</xsl:param>
   <xsl:param name="productnumber">5</xsl:param>
+  
+  <xsl:param name="suppress.docupdate.section">doc_change_history</xsl:param>
 
   <!-- ================================================================= -->
   <!-- Taken from common/common.xsl -->
@@ -242,6 +244,28 @@
       <xsl:otherwise/>
     </xsl:choose>
     <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="d:book" priority="10">
+    <xsl:element name="{local-name()}">
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+            
+      <xsl:if test="d:info/d:revhistory">
+        <xsl:call-template name="create.revhistory.appendix">
+          <xsl:with-param name="node" select="d:info/d:revhistory"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+  
+  <xsl:template name="create.revhistory.appendix">
+    <xsl:param name="node"/>
+    <appendix id="app.docupdate">
+      <title>Documentation Updates</title>
+      <xsl:apply-templates select="/d:*/d:preface/d:section[@xml:id=$suppress.docupdate.section]/d:para"/>
+      <xsl:apply-templates select="$node" mode="revhistory"/>
+    </appendix>
   </xsl:template>
 
   <xsl:template match="d:book/d:info/d:productname">
