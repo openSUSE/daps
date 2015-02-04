@@ -18,6 +18,9 @@
    Output:
      List of filenames separated by $separator
    
+   DocBook 5 compatible:
+     yes
+   
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
    
