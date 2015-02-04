@@ -23,7 +23,10 @@
         I#part.kde.desktop#Introduction
         1#cha.kde.start#Getting Started with the KDE Desktop
         2#cha.kde.use#Working with Your Desktop
-   
+
+   DocBook 5 compatible:
+     yes
+
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
    
