@@ -231,10 +231,18 @@
     </literal>
   </xsl:template>
   
-  <xsl:template match="entry[not(para)]">
+  <xsl:template match="entry[guilabel|guimenu|guibutton]">
     <entry>
       <para>
         <xsl:apply-templates/>
+      </para>
+    </entry>
+  </xsl:template>
+  
+  <xsl:template match="entry/text()">
+    <entry>
+      <para>
+        <xsl:value-of select="."/>
       </para>
     </entry>
   </xsl:template>
