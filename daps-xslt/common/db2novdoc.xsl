@@ -15,10 +15,13 @@
        Process only parts of the document
        
    Input:
-     DocBook document
+     DocBook4 document
      
    Output:
      Novdoc document (subset of DocBook)
+   
+   DocBook 5 compatible:
+     No, convert your document to DocBook 4 first
    
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright: 2012, Thomas Schraitle
