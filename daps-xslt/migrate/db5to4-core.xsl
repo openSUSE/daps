@@ -36,7 +36,7 @@
   <!-- Overwrite standard template and create elements without 
        a namespace node
   -->
-  <xsl:template match="d:*">
+  <xsl:template match="d:*" name="copyelementwithoutns">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*|node()"/>
     </xsl:element>
