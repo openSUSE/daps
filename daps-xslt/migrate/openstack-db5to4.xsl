@@ -331,7 +331,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="d:code">
+  <xsl:template match="d:code" name="code">
     <xsl:element name="literal">
       <xsl:apply-templates/>
     </xsl:element>
