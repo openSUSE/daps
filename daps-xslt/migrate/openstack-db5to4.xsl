@@ -7,6 +7,7 @@
  
   <xsl:import href="db5to4-core.xsl"/>
   <xsl:import href="db5to4-info.xsl"/>
+  <xsl:import href="move-blocks-outof-para.xsl"/>
 
   <xsl:output method="xml" indent="yes"/>
   
@@ -270,7 +271,6 @@
   </xsl:template>
   
   
-  
   <xsl:template name="create.revhistory.appendix">
     <xsl:param name="node"/>
     <appendix id="app.docupdate">
@@ -458,10 +458,15 @@
       <xsl:call-template name="section.level"/>
     </xsl:variable>
     
-    <xsl:element name="sect{$depth}">
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates/>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="@xml:id=$suppress.docupdate.section"/><!-- Suppress this section -->
+      <xsl:otherwise>
+        <xsl:element name="sect{$depth}">
+          <xsl:apply-templates select="@*"/>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 
