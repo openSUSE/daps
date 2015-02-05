@@ -44,7 +44,7 @@
     
   <xsl:template match="@xml:id|@xml:lang">
     <xsl:attribute name="{local-name()}">
-      <xsl:apply-templates/>
+      <xsl:value-of select="."/>
     </xsl:attribute>
   </xsl:template>
   
@@ -96,7 +96,7 @@
     </xsl:attribute>
   </xsl:template>
   
-  <xsl:template match="d:link[@xlink:href]">
+  <xsl:template match="d:link[@xlink:href]" name="link">
     <ulink>
       <xsl:apply-templates select="@*|node()"/>
     </ulink>
