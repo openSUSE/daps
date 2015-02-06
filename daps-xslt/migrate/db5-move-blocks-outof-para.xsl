@@ -58,7 +58,7 @@
   </xsl:template>
 
   <xsl:template match="d:para/*|d:para/text()">
-    <xsl:element name="{local-name(..)}">
+    <xsl:element name="{local-name(..)}" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates select="../@*"/>
       <xsl:apply-templates select="." mode="copy"/>
     </xsl:element>
@@ -73,11 +73,7 @@
   </xsl:template>
 
   <xsl:template match="d:para/*" mode="copy">
-    <xsl:message></xsl:message>
-    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
-      <xsl:apply-templates select="@*"/>
-      <xsl:apply-templates select="node()" mode="copy"/>
-    </xsl:element>
+    <xsl:call-template name="copymode"/>
     <xsl:call-template name="nextinlinenodes"/>
   </xsl:template>
   
@@ -87,7 +83,7 @@
   </xsl:template>
 
   <!-- General copy -->
-  <xsl:template match="node() | @*" mode="copy">
+  <xsl:template match="node() | @*" mode="copy" name="copymode">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="copy"/>
     </xsl:copy>
