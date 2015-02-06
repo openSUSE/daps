@@ -34,7 +34,7 @@
   version="1.0"
   exclude-result-prefixes="exslt">
   
-  <xsl:import href="copy.xsl"/>
+  <xsl:import href="../common/copy.xsl"/>
   <!--<xsl:import href="rootid.xsl"/>-->
   
   <xsl:output method="xml" 
