@@ -317,6 +317,12 @@
     </listitem>
   </xsl:template>
   
+  <xsl:template match="step/title">
+    <para><emphasis role="bold">
+      <xsl:apply-templates/>
+    </emphasis></para>
+  </xsl:template>
+  
   <xsl:template match="systemitem[@class='protocol']">
     <systemitem>
       <xsl:apply-templates/>
