@@ -323,6 +323,30 @@
     </xsl:attribute>
   </xsl:template>
   
+  <xsl:template match="entry/variablelist">
+    <itemizedlist>
+      <xsl:apply-templates/>
+    </itemizedlist>
+  </xsl:template>
+  
+  <xsl:template match="entry/variablelist/varlistentry">
+    <listitem>
+      <xsl:apply-templates select="term"/>
+      <xsl:apply-templates select="node()[not(self::term)]"/>  
+    </listitem>
+    
+  </xsl:template>
+  
+  <xsl:template match="entry/variablelist/varlistentry/term">
+    <para>
+      <xsl:apply-templates/>
+    </para>
+  </xsl:template>
+  
+  <xsl:template match="entry/variablelist/varlistentry/listitem">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
   <xsl:template name="process.menuchoice">
   <xsl:param name="nodelist" select="guibutton|guiicon|guilabel|guimenu|guimenuitem|guisubmenu|interface"/><!-- not(shortcut) -->
   <xsl:param name="count" select="1"/>
