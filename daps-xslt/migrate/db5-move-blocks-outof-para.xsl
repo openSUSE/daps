@@ -57,7 +57,7 @@
     <xsl:apply-templates select="following-sibling::node()[1]"/>
   </xsl:template>
 
-  <xsl:template match="d:para/*|d:para/text()">
+  <xsl:template match="d:para/d:*|d:para/text()">
     <xsl:element name="{local-name(..)}" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates select="../@*"/>
       <xsl:apply-templates select="." mode="copy"/>
