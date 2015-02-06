@@ -262,12 +262,6 @@
     <xsl:apply-templates />
   </xsl:template>
   
-  <xsl:template match="classname|methodname|returnvalue">
-    <literal remap="{local-name()}">
-      <xsl:apply-templates/>
-    </literal>
-  </xsl:template>
-  
   <xsl:template match="guilabel|guibutton|guimenuitem|guiicon|guisubmenu">
     <guimenu>
       <xsl:apply-templates/>
@@ -278,10 +272,16 @@
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="code|computeroutput|prompt[not(parent::screen)]|sgmltag|uri|userinput">
+  <xsl:template match="errorcode|classname|code|computeroutput|methodname|prompt[not(parent::screen)]|sgmltag|returnvalue|uri|userinput">
     <literal>
       <xsl:apply-templates/>
     </literal>
+  </xsl:template>
+  
+  <xsl:template match="errortext">
+    <emphasis>
+      <xsl:apply-templates/>
+    </emphasis>
   </xsl:template>
   
   <xsl:template match="literal[ulink]">
