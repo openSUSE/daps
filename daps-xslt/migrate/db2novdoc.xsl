@@ -101,6 +101,7 @@
   <xsl:template match="@rules[. ='all']"/>
   <xsl:template match="variablelist/@wordsize"/>
   <xsl:template match="screen/@language"/>
+  <xsl:template match="filename/@class"/>
   
   <!-- Suppressed elements -->
   <xsl:template match="abstract/title"/>
