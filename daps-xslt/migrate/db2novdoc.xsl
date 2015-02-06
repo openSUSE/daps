@@ -103,6 +103,7 @@
   <xsl:template match="screen/@language"/>
   <xsl:template match="filename/@class"/>
   <xsl:template match="literallayout/@class"/>
+  <xsl:template match="variablelist/@role"/>
   
   <!-- Suppressed elements -->
   <xsl:template match="abstract/title"/>
@@ -322,6 +323,14 @@
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
+  </xsl:template>
+  
+  <xsl:template match="itemizedlist[para|note]">
+    <xsl:apply-templates select="itemizedlist/para|itemizedlist/note"/>
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates select="node()[not(self::para) or not(self::note)]"/>
+    </xsl:copy>
   </xsl:template>
   
   <xsl:template match="member">
