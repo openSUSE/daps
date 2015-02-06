@@ -325,11 +325,11 @@
     </itemizedlist>
   </xsl:template>
   
-  <xsl:template match="itemizedlist[para|note]">
-    <xsl:apply-templates select="itemizedlist/para|itemizedlist/note"/>
+  <xsl:template match="itemizedlist[para or note]">
+    <xsl:apply-templates select="itemizedlist/para | itemizedlist/note"/>
     <xsl:copy>
       <xsl:copy-of select="@*"/>
-      <xsl:apply-templates select="node()[not(self::para) or not(self::note)]"/>
+      <xsl:apply-templates select="node()[not(self::para or self::note)]"/>
     </xsl:copy>
   </xsl:template>
   
