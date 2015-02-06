@@ -99,9 +99,10 @@
   <xsl:template match="step/@performance[. = 'required']"/>
   <xsl:template match="substeps/@performance[. = 'required']"/>
   <xsl:template match="@rules[. ='all']"/>
-  <xsl:template match="variablelist/@wordsize"/>
+  <xsl:template match="@wordsize"/>
   <xsl:template match="screen/@language"/>
   <xsl:template match="filename/@class"/>
+  <xsl:template match="literallayout/@class"/>
   
   <!-- Suppressed elements -->
   <xsl:template match="abstract/title"/>
@@ -171,6 +172,12 @@
   
   <xsl:template match="mediaobject/textobject[screen]">
     <xsl:copy-of select="."/>
+  </xsl:template>
+  
+  <xsl:template match="literallayout">
+    <screen>
+      <xsl:apply-templates/>
+    </screen>
   </xsl:template>
   
   <xsl:template name="test4para">
