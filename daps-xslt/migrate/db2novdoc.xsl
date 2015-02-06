@@ -261,7 +261,7 @@
     <xsl:apply-templates />
   </xsl:template>
   
-  <xsl:template match="classname|methodname">
+  <xsl:template match="classname|methodname|returnvalue">
     <literal remap="{local-name()}">
       <xsl:apply-templates/>
     </literal>
@@ -342,6 +342,10 @@
     <listitem>
       <xsl:apply-templates/>
     </listitem>
+  </xsl:template>
+  
+  <xsl:template match="note/formalpara">
+    <xsl:apply-templates/>
   </xsl:template>
   
   <xsl:template match="step/title">
