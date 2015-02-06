@@ -54,6 +54,7 @@
   <xsl:param name="menuchoice.menu.separator"> > </xsl:param>
   <xsl:param name="menuchoice.separator">+</xsl:param>
   <xsl:param name="rootid"/>
+  <xsl:param name="pi.profile.uri">urn:x-suse:xslt:profiling:novdoc-profile.xsl</xsl:param>
   
   
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
@@ -100,7 +101,6 @@
   </xsl:template>
   
   <xsl:template match="/">
-    <xsl:message>****</xsl:message>
     <xsl:apply-templates select="processing-instruction('xml-stylesheet')"/>
     <xsl:text disable-output-escaping="yes">&#10;&lt;!DOCTYPE </xsl:text>
     
@@ -117,7 +117,7 @@
   </xsl:template>
   
   <xsl:template match="/processing-instruction('xml-stylesheet')">
-    <xsl:processing-instruction name="xml-stylesheet">href="urn:x-suse:xslt:profiling:novdoc-profile.xsl" 
+    <xsl:processing-instruction name="xml-stylesheet">href="<xsl:value-of select="$pi.profile.uri"/>" 
  type="text/xml"
  title="Profiling step"</xsl:processing-instruction>
     <xsl:text>&#10;</xsl:text>
@@ -196,8 +196,7 @@
   </xsl:template>
   
   
-  <xsl:template
-    match="section/section/section/section/section/title|sect5/title">
+  <xsl:template match="section/section/section/section/section/title|sect5/title">
     <xsl:apply-templates />
   </xsl:template>
   
