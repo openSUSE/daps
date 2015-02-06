@@ -7,7 +7,6 @@
  
   <xsl:import href="db5to4-core.xsl"/>
   <xsl:import href="db5to4-info.xsl"/>
-  <xsl:import href="move-blocks-outof-para.xsl"/>
 
   <xsl:output method="xml" indent="yes"/>
   
@@ -331,7 +330,7 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="d:code" name="code">
+  <xsl:template match="d:code">
     <xsl:element name="literal">
       <xsl:apply-templates/>
     </xsl:element>
