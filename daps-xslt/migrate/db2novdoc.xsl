@@ -28,6 +28,28 @@
    
 -->
 
+<!DOCTYPE xsl:stylesheet
+[
+  <!ENTITY dbinline "abbrev|acronym|biblioref|citation|
+ citerefentry|citetitle|citebiblioid|emphasis|firstterm|
+ foreignphrase|glossterm|termdef|footnote|footnoteref|phrase|orgname|quote|
+ trademark|wordasword|personname|link|olink|ulink|action|
+ application|classname|methodname|interfacename|exceptionname|
+ ooclass|oointerface|ooexception|package|command|computeroutput|
+ database|email|envar|errorcode|errorname|errortype|errortext|
+ filename|function|guibutton|guiicon|guilabel|guimenu|guimenuitem|
+ guisubmenu|hardware|interface|keycap|keycode|keycombo|keysym|
+ literal|code|constant|markup|medialabel|menuchoice|mousebutton|
+ option|optional|parameter|prompt|property|replaceable|
+ returnvalue|sgmltag|structfield|structname|symbol|systemitem|uri|
+ token|type|userinput|varname|nonterminal|anchor|author|
+ authorinitials|corpauthor|corpcredit|modespec|othercredit|
+ productname|productnumber|revhistory|remark|subscript|
+ superscript|inlinegraphic|inlinemediaobject|inlineequation|
+ synopsis|cmdsynopsis|funcsynopsis|classsynopsis|fieldsynopsis|
+ constructorsynopsis|destructorsynopsis|methodsynopsis|indexterm|xref">
+]>
+
 <xsl:stylesheet 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exslt="http://exslt.org/common"
@@ -78,6 +100,7 @@
   <xsl:template match="substeps/@performance[. = 'required']"/>
   <xsl:template match="@rules[. ='all']"/>
   <xsl:template match="variablelist/@wordsize"/>
+  <xsl:template match="screen/@language"/>
   
   <!-- Suppressed elements -->
   <xsl:template match="abstract/title"/>
@@ -227,14 +250,14 @@
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="code|computeroutput|prompt|sgmltag|uri|userinput">
+  <xsl:template match="code|computeroutput|prompt[not(parent::screen)]|sgmltag|uri|userinput">
     <literal>
       <xsl:apply-templates/>
     </literal>
   </xsl:template>
   
   
-  <xsl:template match="entry[guilabel|guimenu|guibutton]">
+  <xsl:template match="entry[&dbinline;] | entry[not(*)][normalize-space(text() != '')]">
     <entry>
       <para>
         <xsl:apply-templates/>
@@ -242,14 +265,7 @@
     </entry>
   </xsl:template>
   
-  <xsl:template match="entry[not(self::*)]/text()">
-    <entry>
-      <para>
-        <xsl:value-of select="."/>
-      </para>
-    </entry>
-  </xsl:template>
-  
+   
   <xsl:template match="package">
     <systemitem class="resource">
       <xsl:apply-templates/>
@@ -296,6 +312,15 @@
   
   <xsl:template match="title/menuchoice">
       <xsl:call-template name="process.menuchoice"/>
+  </xsl:template>
+  
+  <xsl:template match="screen/@remap">
+    <xsl:attribute name="remap">
+      <xsl:value-of select="."/>
+    <xsl:if test="../@language">
+      <xsl:value-of select="concat('-', ../@language)"/>
+    </xsl:if>
+    </xsl:attribute>
   </xsl:template>
   
   <xsl:template name="process.menuchoice">
