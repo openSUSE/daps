@@ -172,34 +172,39 @@
     <xsl:copy-of select="."/>
   </xsl:template>
   
+  <xsl:template name="test4para">
+    
+    <xsl:choose>
+      <!-- Test, if the second element is a section. In that case,
+                 insert a para to make it a valid Novdoc source
+                 depending on the $createvalid parameter
+            -->
+      <xsl:when test="*[2][self::sect1 or self::sect2 or self::sect3 or self::sect4 or self::section]">
+        <xsl:apply-templates select="title"/>
+        <xsl:choose>
+          <xsl:when test="$createvalid != 0">
+            <para><remark role="fixme">Add a short description</remark></para>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:comment>FIXME: Add a short description</xsl:comment>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="node()[not(self::title)]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="section">
     <xsl:variable name="depth" select="count(ancestor::section)+1"/>
   
     <xsl:choose>
       <xsl:when test="$depth &lt; 5">
         <xsl:element name="sect{$depth}">
-          <xsl:apply-templates select="@*"/>
-          <xsl:choose>
-            <!-- Test, if the second element is a section. In that case,
-                 insert a para to make it a valid Novdoc source
-                 depending on the $createvalid parameter
-            -->
-            <xsl:when test="*[2][self::section]">
-              <xsl:apply-templates select="title"/>
-              <xsl:choose>
-                <xsl:when test="$createvalid != 0">
-                  <para><remark role="fixme">Add a short description</remark></para>
-                </xsl:when>
-                <xsl:otherwise>
-                   <xsl:comment>FIXME: Add a short description</xsl:comment>
-                </xsl:otherwise>
-              </xsl:choose>
-               <xsl:apply-templates select="node()[not(self::title)]"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:apply-templates select="@*"/> 
+          <xsl:call-template name="test4para"/>
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
@@ -221,6 +226,14 @@
   
   <xsl:template match="section/section/section/section/section/title|sect5/title">
     <xsl:apply-templates />
+  </xsl:template>
+  
+  
+  <xsl:template match="sect1|sect2|sect3|sect4">
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:call-template name="test4para"/>
+    </xsl:copy>
   </xsl:template>
   
   <xsl:template match="sect5">
