@@ -261,6 +261,12 @@
     <xsl:apply-templates />
   </xsl:template>
   
+  <xsl:template match="classname|methodname">
+    <literal remap="{local-name()}">
+      <xsl:apply-templates/>
+    </literal>
+  </xsl:template>
+  
   <xsl:template match="guilabel|guibutton|guimenuitem|guiicon|guisubmenu">
     <guimenu>
       <xsl:apply-templates/>
