@@ -277,6 +277,19 @@
     </literal>
   </xsl:template>
   
+  <xsl:template match="literal[ulink]">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="literal/ulink[normalize-space(.) != '']">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <literal>
+        <xsl:apply-templates/>
+      </literal>
+    </xsl:copy>
+  </xsl:template>
+  
   
   <xsl:template match="entry[&dbinline;] | entry[not(*)][normalize-space(text() != '')]">
     <entry>
