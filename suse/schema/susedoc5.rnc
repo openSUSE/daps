@@ -1,11 +1,11 @@
 #
-# Novdoc5/SUSEDoc5 Schema
+# SUSEDoc5 Schema
 #
 # See http://docbook.org/docs/howto
 #
 # This schema is a customization of DocBook for SUSE documents
 #
-# Author: Thomas Schraitle, 2013 
+# Author: Thomas Schraitle, 2015
 #
 default namespace db = "http://docbook.org/ns/docbook"
 
@@ -19,8 +19,8 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 
 datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
-
-include "docbook.rnc"
+# Use a catalog entry to resolve this:
+include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
 {
   # Redefine element pattern as notAllowed here as they are not needed:
   #
@@ -28,7 +28,8 @@ include "docbook.rnc"
   # egrep "\s+db\.[a-z]+\s*=\s*" /usr/share/xml/docbook/schema/rng/5.0/docbook.rnc  | sort > db5-elements.txt
   # cat db5-elements.txt | sed 's,=,= notAllowed,g' > db5-elements-notallowed.txt
   #
-  
+  div
+  {
   db.abbrev = notAllowed
   # db.abstract = notAllowed
   db.accel = notAllowed
@@ -373,6 +374,7 @@ include "docbook.rnc"
   db.wordasword = notAllowed
   # db.xref = notAllowed
   # db.year = notAllowed
+  }
   
   # Attributes
   
@@ -384,7 +386,14 @@ include "docbook.rnc"
     db.important | db.note | db.tip | db.warning
   
   div {
-    # We don't want block elements inside paras, only inlines are allowed
+    # Disallow xml:id in paras
+    db.para.attlist =
+      db.para.role.attribute?
+      & db.common.base.attributes 
+      & db.annotations.attribute?
+      & db.common.linking.attributes
+    
+    # We don't want block elements inside paras, imitate simpara
     db.para =
     ## A paragraph (without block elements)
     [
