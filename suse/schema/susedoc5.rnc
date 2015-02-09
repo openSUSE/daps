@@ -376,15 +376,23 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   # db.year = notAllowed
   }
   
-  # Attributes
+  #======== Removed Attribute
+  div
+  {
+
+  }
   
   
-  # Add other customizations:
+  #======== Add other customizations:
   
-  db.admonition.blocks =
-    # No caution
-    db.important | db.note | db.tip | db.warning
+  # Admonitions
+  div {
+    db.admonition.blocks =
+      # Removed caution
+      db.important | db.note | db.tip | db.warning
+  }
   
+  # para
   div {
     # Disallow xml:id in paras
     db.para.attlist =
@@ -423,6 +431,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
     }
   }
 
+  # personname
   div {
     # Removed text
     db.personname =
@@ -437,6 +446,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
     }
   }
   
+  # qandaentry
   div {
     # We need one question and one answer
     db.qandaentry =
@@ -446,6 +456,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
         db.question, db.answer }
   }
   
+  # question
   div {
     # Removed label and question has to start with a para
     db.question =
@@ -453,18 +464,10 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
       element question { db.question.attlist, db.para, db.all.blocks+ }
   }
   
-  div {
-    # Removed label
-    db.answer =    
-      ## An answer to a question posed in a QandASet
-      element answer { db.answer.attlist, db.all.blocks+ }
-  }
-  
 } # end of include
 
 
 # Redefine content modell here:
-
 
 
 # --- EOF ---
