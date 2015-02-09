@@ -90,7 +90,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   # db.code = notAllowed
   db.collab = notAllowed
   db.colophon = notAllowed
-  db.colspec = notAllowed
+  # db.colspec = notAllowed
   # db.command = notAllowed
   db.computeroutput = notAllowed
   db.confdates = notAllowed
@@ -321,7 +321,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   # db.simplelist = notAllowed
   # db.simplemsgentry = notAllowed
   db.simplesect = notAllowed
-  db.spanspec = notAllowed
+  # db.spanspec = notAllowed
   db.state = notAllowed
   # db.step = notAllowed
   # db.stepalternatives = notAllowed
@@ -350,6 +350,8 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   db.tertiaryie = notAllowed
   db.textdata = notAllowed
   db.textobject = notAllowed
+  # db.tbody = notAllowed
+  # db.tfoot = notAllowed
   # db.tgroup = notAllowed
   # db.tip = notAllowed
   # db.title = notAllowed
@@ -377,13 +379,12 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   }
   
   #======== Removed Attribute
-  div
-  {
-
-  }
   
   
-  #======== Add other customizations:
+  
+  
+  
+  #======== Changed content model
   
   # Admonitions
   div {
@@ -391,6 +392,18 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
       # Removed caution
       db.important | db.note | db.tip | db.warning
   }
+  
+  # entry
+  #div {
+  #  # Disallow admonitions in table <entry>s
+  #  db.entry = element entry {
+  #    db.entry.attlist,
+  #    (db.all.inlines* | db.some.blocks*)
+  #  }
+  #}
+  
+  db.html.table = notAllowed
+  db.html.informaltable = notAllowed
   
   # para
   div {
@@ -468,6 +481,7 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
 
 
 # Redefine content modell here:
+
 
 
 # --- EOF ---
