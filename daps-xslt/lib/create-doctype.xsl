@@ -57,13 +57,14 @@
   <xsl:value-of select="local-name($rootnode)"/>
   <xsl:text> PUBLIC </xsl:text>
   <xsl:value-of select="concat('&quot;', $public.identifier, '&quot;&#10;')"/>
-  <xsl:value-of select="concat('&quot;', $system.identifier, '&quot;&#10;')"/>
+  <xsl:value-of select="concat('&quot;', $system.identifier, '&quot;')"/>
   <xsl:if test="$internal.subset != ''">
-    <xsl:text>[&#10;</xsl:text>
+    <xsl:text>&#10;[&#10;</xsl:text>
     <xsl:value-of select="$internal.subset"/>
     <xsl:text>&#10;]</xsl:text>
   </xsl:if>
-  <xsl:text>></xsl:text>
+  <xsl:text disable-output-escaping="yes">></xsl:text>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template name="create.db45.doctype">
