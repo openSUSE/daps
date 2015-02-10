@@ -19,9 +19,13 @@
    
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:d="http://docbook.org/ns/docbook"
+  exclude-result-prefixes="d">
   
   <xsl:import href="rootid.xsl"/>
+  <xsl:import href="../lib/create-doctype.xsl"/>
 
 <!-- fs 2014-11-21:
      This always generates a NovDoc Header, which is no good on systems where
@@ -36,10 +40,37 @@
      doctype-system="novdocx.dtd"/>
 -->
 
-  <xsl:output method="xml" encoding="UTF-8" 
-     doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
-     doctype-system="http://www.docbook.org/xml/4.5/docbookx.dtd"/>
+  <!-- No xsl:output here! We create the DOCTYPE header manually *sigh* -->
 
+
+  <xsl:template match="/">
+    <xsl:variable name="pi" select="processing-instruction('xml-stylesheet')"/>
+    <xsl:choose>
+      <xsl:when test="/d:*">
+        <!-- We don't need a DOCTYPE header for DocBook >5, skip it -->
+      </xsl:when>
+      
+      <xsl:when test="contains($pi, 'novdoc-profile')">
+        <xsl:call-template name="create.novdoc.doctype">
+          <xsl:with-param name="rootnode" select="*[1]"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($pi, 'docbook4')">
+        <xsl:call-template name="create.db45.doctype">
+          <xsl:with-param name="rootnode" select="*[1]"/>
+        </xsl:call-template>
+      </xsl:when>
+      
+      <xsl:otherwise>
+        <!-- we can't be sure here: -->
+        <xsl:message>WARNING: No PI xml-stylesheets found! Could be DocBook V4 or V5.</xsl:message>
+        <!--<xsl:call-template name="create.db45.doctype">
+          <xsl:with-param name="rootnode" select="*[1]"/>
+        </xsl:call-template>-->
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="process.rootid.node"/>
+  </xsl:template>
 
   <xsl:template name="rootid.process">
     <xsl:message>
