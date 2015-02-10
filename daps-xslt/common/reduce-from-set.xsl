@@ -38,6 +38,8 @@
   <xsl:output method="xml" encoding="UTF-8" 
      doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
      doctype-system="novdocx.dtd"/>
+     
+     See https://sourceforge.net/p/daps/tickets/249/
 -->
 
   <!-- No xsl:output here! We create the DOCTYPE header manually *sigh* -->
