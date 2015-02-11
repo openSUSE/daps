@@ -65,10 +65,10 @@
       
       <xsl:otherwise>
         <!-- we can't be sure here: -->
-        <xsl:message>WARNING: No PI xml-stylesheets found! Could be DocBook V4 or V5.</xsl:message>
-        <!--<xsl:call-template name="create.db45.doctype">
+        <xsl:message>WARNING: Could not determin DocBook or Novdoc version. No PI xml-stylesheets found! Using DocBook V4 header.</xsl:message>
+        <xsl:call-template name="create.db45.doctype">
           <xsl:with-param name="rootnode" select="*[1]"/>
-        </xsl:call-template>-->
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="process.rootid.node"/>
