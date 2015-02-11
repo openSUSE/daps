@@ -3,14 +3,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-<xsl:import href="novdoc-profile.xsl"/>
-  
-  
-<xsl:output method="xml"
-            indent="yes"
-            doctype-public="-//OASIS//DTD DocBook XML V5.0/EN"
-            doctype-system="http://www.oasis-open.org/docbook/xml/5.0/docbookx.dtd"/>
+<xsl:import href="base-profile.xsl"/>
 
+<xsl:output method="xml"/>
 
 </xsl:stylesheet>
 
