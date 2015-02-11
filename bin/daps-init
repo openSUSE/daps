@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
@@ -25,7 +25,7 @@ function usage () {
     echo "
 $ME -d <PATH TO DIRECTORY> [-r (article|book)] 
 
-Create a working environment for DAPS with an example DocBook 4 document.
+Create a working environment for DAPS with an example DocBook 4 or 5 document.
 Specify the path to your documentation directory with -d. The example 
 document's doc config (DC) file will be located there. 
 (Sub)Directories will be created if they do not exist already.
@@ -34,6 +34,18 @@ Options:
 
 -r, --rootelement  DocBook root element of the example document. Currently
                    supported are \"book\" (default) and \"article\".
+
+--title=TITLE      Set the title of your document
+
+--date=DATE        Set the date in the <date> element in the format YYYY-MM-DD
+
+--productname      Set a product name in the <productname> element
+
+--productnumber    Set a product number in the <productnumber> element
+
+-4, --docbook4     Create DocBook V4
+
+-5, --docbook5     Create DocBook V5
 "
     exit 0
 }
@@ -52,13 +64,16 @@ DAPSROOT="/usr/share/daps" # the default
 # user config file
 USER_CONFIG="$HOME/.daps/config"
 
+# Default DocBook version
+DOCBOOKVERSION=4
+
 # source config file to possibly get a DAPSROOT
 source "/etc/daps/config"
 if [[ -f $USER_CONFIG ]]; then
     source $USER_CONFIG
 fi
 
-ARGS=$(getopt -o d:hr: -l dapsroot:,docdir:,help,rootelement:,title:,date:,productname:,productnumber: -n $ME -- "$@")
+ARGS=$(getopt -o d:hr:45 -l dapsroot:,docdir:,help,rootelement:,title:,date:,productname:,productnumber:,docbook4,docbook5 -n $ME -- "$@")
 
 eval set -- "$ARGS"
 
@@ -80,6 +95,14 @@ while true ; do
         -h|--help)
             usage
 	    ;;
+    --docbook4|-4)
+        DOCBOOKVERSION=4
+        shift
+        ;;
+    --docbook5|-5)
+        DOCBOOKVERSION=5
+        shift
+        ;;
 	-r|--rootelement)
             if [[ article = $2 || book = $2 ]]; then
                 ROOTELEMENT="$2"
@@ -155,12 +178,13 @@ mkdir -p ${DOC_DIR}/images/src/{dia,fig,png,svg,eps,pdf} ${DOC_DIR}/xml || exit_
 # copy the templates
 #
 BOOK="${DC_FILE#${CONF_PREFIX}*}"
+TEMPLATE=MAIN.db${DOCBOOKVERSION}-$ROOTELEMENT.template
 
 # DC-file
 cp ${DAPSROOT}/init_templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
         sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${DOC_DIR}/$DC_FILE
 # MAIN XML file
-cp ${DAPSROOT}/init_templates/MAIN.$ROOTELEMENT.template ${DOC_DIR}/xml/MAIN-${BOOK}.xml &&
+cp ${DAPSROOT}/init_templates/$TEMPLATE ${DOC_DIR}/xml/MAIN-${BOOK}.xml &&
        
 	
 
