@@ -26,11 +26,6 @@
 <xsl:include href="suse-pi.xsl"/>
 
 
-<xsl:output method="xml"
-            encoding="UTF-8"
-            doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
-            doctype-system="novdocx.dtd"/>
-
 <xsl:param name="pubdate"/>
 
  
