@@ -44,9 +44,23 @@
 
   <xsl:strip-space elements="d:para"/>
   <xsl:preserve-space elements="d:screen d:programlisting d:literallayout"/>
+  <xsl:param name="dbns">http://docbook.org/ns/docbook</xsl:param>
   
   <xsl:output indent="yes"/>
 
+  
+  <xsl:template match="d:formalpara[d:para[d:screen]]">
+    <xsl:element name="para" namespace="{$dbns}">
+      <xsl:attribute name="remap">formalpara</xsl:attribute>
+      <xsl:element name="emphasis" namespace="{$dbns}">
+        <xsl:attribute name="role">bold</xsl:attribute>
+        <xsl:apply-templates select="d:title/node()"/>
+      </xsl:element>
+    </xsl:element>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:apply-templates select="d:para"/>
+  </xsl:template>
+  
   <xsl:template match="d:para">
     <xsl:apply-templates select="node()[1]"/>
   </xsl:template>
