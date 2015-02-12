@@ -49,7 +49,7 @@
   <xsl:output indent="yes"/>
 
   
-  <xsl:template match="d:formalpara[d:para[d:screen]]">
+  <xsl:template match="d:formalpara[d:para[&dbblocks;]]">
     <xsl:element name="para" namespace="{$dbns}">
       <xsl:attribute name="remap">formalpara</xsl:attribute>
       <xsl:element name="emphasis" namespace="{$dbns}">
