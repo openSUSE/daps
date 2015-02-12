@@ -20,7 +20,8 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
 # Use a catalog entry to resolve this:
-include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
+# include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
+include "db51cr3/docbook.rnc"
 {
   # Redefine element pattern as notAllowed here as they are not needed:
   #
@@ -380,9 +381,284 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   
   #======== Removed Attribute
   
+  db.rdfalite.attributes = empty
+  # db.xlink.attributes = empty
   
+  # Remove all db.common.linking.attributes from block elements
+
+  db.address.attlist =
+    db.address.role.attribute?
+    & db.common.attributes
+    & db.verbatim.attributes
   
+  db.bibliolist.attlist =
+    db.bibliolist.role.attribute?
+    & db.common.attributes
+    
+  db.blockquote.attlist =
+    db.blockquote.role.attribute?
+    & db.common.attributes
   
+  db.bridgehead.attlist =
+    db.bridgehead.role.attribute?
+    & db.common.attributes
+    & db.bridgehead.renderas.attribute?
+    
+  db.calloutlist.attlist =
+    db.calloutlist.role.attribute?
+    & db.common.attributes
+    
+  db.caution.attlist =
+    db.caution.role.attribute?
+    & db.common.attributes
+    
+  db.classsynopsis.attlist =
+    db.classsynopsis.role.attribute?
+    & db.common.attributes
+    & db.language.attribute?
+    & db.classsynopsis.class.attribute?
+  
+  db.cmdsynopsis.attlist =
+    db.cmdsynopsis.role.attribute?
+    & db.common.attributes
+    & db.cmdsynopsis.sepchar.attribute?
+    & db.cmdsynopsis.cmdlength.attribute?
+    & db.cmdsynopsis.label.attribute?
+  
+  db.constraintdef.attlist =
+    db.constraintdef.role.attribute?
+    & db.common.attributes
+  
+  db.classsynopsisinfo.attlist =
+    db.classsynopsisinfo.role.attribute?
+    & db.common.attributes
+    & db.verbatim.attributes
+    
+  db.destructorsynopsis.attlist =
+    db.destructorsynopsis.role.attribute?
+    & db.common.attributes
+    & db.language.attribute?  
+  
+  db.epigraph.attlist =
+    db.epigraph.role.attribute?
+    & db.common.attributes
+  
+  db.equation.attlist =
+    db.equation.role.attribute?
+    & db.common.attributes
+    & db.equation.label.attribute?
+    & db.pgwide.attribute?
+    & db.floatstyle.attribute?
+    
+  db.example.attlist =
+    db.example.role.attribute?
+    & db.common.attributes
+    & db.example.label.attribute?
+    & db.example.floatstyle.attribute?
+    & (db.example.width.attribute | db.example.pgwide.attribute)?  
+  
+  db.fieldsynopsis.attlist =
+    db.fieldsynopsis.role.attribute?
+    & db.common.attributes
+    & db.language.attribute?
+  
+  db.figure.attlist =
+    db.figure.role.attribute?
+    & db.common.attributes
+    & db.figure.label.attribute?
+    & db.figure.pgwide.attribute?
+    & db.figure.floatstyle.attribute?
+  
+  db.funcsynopsis.attlist =
+    db.funcsynopsis.role.attribute?
+    & db.common.attributes
+    & db.language.attribute?
+  
+  db.glosslist.attlist =
+    db.glosslist.role.attribute?
+    & db.common.attributes
+    
+  db.important.attlist =
+    db.important.role.attribute?
+    & db.common.attributes  
+  
+  db.informalexample.attlist =
+    db.informalexample.role.attribute?
+    & db.common.attributes
+    & db.informalexample.floatstyle.attribute?
+    & (db.informalexample.width.attribute | db.informalexample.pgwide.attribute)?
+  
+  db.informalfigure.attlist =
+    db.informalfigure.role.attribute?
+    & db.common.attributes
+    & db.informalfigure.label.attribute?
+    & db.informalfigure.pgwide.attribute?
+    & db.informalfigure.floatstyle.attribute?
+  
+  db.cals.informaltable.attlist =
+    db.cals.informaltable.role.attribute?
+    & db.common.attributes
+    & db.tabstyle.attribute?
+    & db.floatstyle.attribute?
+    & db.orient.attribute?
+    & db.colsep.attribute?
+    & db.rowsep.attribute?
+    & db.frame.attribute?
+    & db.pgwide.attribute?
+    & db.rowheader.attribute?
+  
+  db.itemizedlist.attlist =
+    db.itemizedlist.role.attribute?
+    & db.common.attributes
+    & db.spacing.attribute?
+    & db.itemizedlist.mark.attribute?  
+  
+  db.literallayout.attlist =
+    db.literallayout.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+    & db.verbatim.attributes
+    & db.literallayout.class.attribute?
+  
+  db.mediaobject.attlist =
+    db.mediaobject.role.attribute?
+    & db.common.attributes
+    
+  db.methodsynopsis.attlist =
+    db.methodsynopsis.role.attribute?
+    & db.common.attributes
+    & db.language.attribute?  
+    
+  db.msgset.attlist =
+    db.msgset.role.attribute?
+    & db.common.attributes
+    
+  db.note.attlist =
+    db.note.role.attribute?
+    & db.common.attributes
+    
+  db.orderedlist.attlist =
+    db.orderedlist.role.attribute?
+    & db.common.attributes
+    & db.spacing.attribute?
+    & (db.orderedlist.continuation.attribute
+       | db.orderedlist.startingnumber.attribute)?
+    & db.orderedlist.inheritnum.attribute?
+    & db.orderedlist.numeration.attribute?
+    
+  db.procedure.attlist =
+    db.procedure.role.attribute?
+    & db.common.attributes
+    
+  db.productionset.attlist =
+    db.productionset.role.attribute?
+    & db.common.attributes
+    
+  db.programlisting.attlist =
+    db.programlisting.role.attribute?
+    & db.common.attributes
+    & db.verbatim.attributes
+    & db.programlisting.width.attribute?
+  
+  db.programlistingco.attlist =
+    db.programlistingco.role.attribute?
+    & db.common.attributes
+
+  db.qandaset.attlist =
+    db.qandaset.role.attribute?
+    & db.common.attributes
+    & db.qandaset.defaultlabel.attribute?
+
+  db.revhistory.attlist =
+    db.revhistory.role.attribute?
+    & db.common.attributes
+    
+  db.screen.attlist =
+    db.screen.role.attribute?
+    & db.common.attributes
+    & db.verbatim.attributes
+    & db.screen.width.attribute? 
+
+  db.screenco.attlist =
+    db.screenco.role.attribute?
+    & db.common.attributes
+
+  db.screenshot.attlist =
+    db.screenshot.role.attribute?
+    & db.common.attributes
+
+  db.segmentedlist.attlist =
+    db.segmentedlist.role.attribute?
+    & db.common.attributes
+
+  db.sidebar.attlist =
+    db.sidebar.role.attribute?
+    & db.sidebar.floatstyle.attribute?
+    & db.common.attributes
+ 
+  db.simplelist.attlist =
+    db.simplelist.role.attribute?
+    & db.common.attributes
+    & db.simplelist.type.attribute?
+    & db.simplelist.columns.attribute?
+
+  db.synopsis.attlist =
+    db.synopsis.role.attribute?
+    & db.common.attributes
+    & db.verbatim.attributes
+    & db.synopsis.label.attribute?
+
+  db.cals.table.attlist =
+    db.cals.table.role.attribute?
+    & db.cals.table.label.attribute?
+    & db.common.attributes
+    & db.tabstyle.attribute?
+    & db.floatstyle.attribute?
+    & db.orient.attribute?
+    & db.colsep.attribute?
+    & db.rowsep.attribute?
+    & db.frame.attribute?
+    & db.pgwide.attribute?
+    & 
+      ## Indicates if the short or long title should be used in a List of Tables
+      attribute shortentry {
+        
+        ## Indicates that the full title should be used.
+        "0"
+        | 
+          ## Indicates that the short short title (titleabbrev) should be used.
+          "1"
+      }?
+    & 
+      ## Indicates if the table should appear in a List of Tables
+      attribute tocentry {
+        
+        ## Indicates that the table should not occur in the List of Tables.
+        "0"
+        | 
+          ## Indicates that the table should appear in the List of Tables.
+          "1"
+      }?
+    & db.rowheader.attribute?
+
+  
+  db.task.attlist =
+    db.task.role.attribute?
+    & db.common.attributes
+    
+  db.tip.attlist =
+    db.tip.role.attribute?
+    & db.common.attributes 
+  
+  db.variablelist.attlist =
+    db.variablelist.role.attribute?
+    & db.common.attributes
+    & db.spacing.attribute?
+    & db.variablelist.termlength.attribute?
+    
+  db.warning.attlist =
+    db.warning.role.attribute?
+    & db.common.attributes  
   
   #======== Changed content model
   
@@ -401,7 +677,11 @@ include "http://docbook.org/xml/5.1CR3/rng/docbook.rnc"
   #    (db.all.inlines* | db.some.blocks*)
   #  }
   #}
-  
+
+  # We only want to support CALS tables
+  db.informaltable.choice = notAllowed | db.cals.informaltable
+  db.table.choice = notAllowed | db.cals.table
+
   db.html.table = notAllowed
   db.html.informaltable = notAllowed
   
