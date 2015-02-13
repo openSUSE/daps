@@ -473,3 +473,38 @@
      (docbook-menu nxml-mode-map)
   )
 )
+
+;;Two custom functions for nxml:
+;; nxml-jump-opening-tag (C-c C-c <up>)  :
+;;   Jump to the openening tag that fits the context at point and put
+;;   the cursor at the beginning of the tag name.
+;;
+;; nxml-jump-closing-tag (C-c C-c <down>):
+;;   Jump to the closing tag that fits the context at point and put
+;;   the cursor at the beginning of the tag name.
+;;
+(add-hook 'nxml-mode-hook      
+  '(lambda ()     
+     (autoload 'sgml-skip-tag-forward "sgml-mode"
+  "Skip to end of tag or matching closing tag if present.
+With prefix argument ARG, repeat this ARG times.
+Return t if after a closing tag." t)
+     ;; Custom functions for nxml
+     ;;
+     (defun nxml-jump-opening-tag nil
+       "Jump to the openening tag that fits the context at point and put the cursor at the beginning of the tag name."
+       (interactive)
+       (nxml-backward-up-element)
+       (forward-char)
+       )
+     (defun nxml-jump-closing-tag nil
+       "Jump to the closing tag that fits the context at point and put the cursor at the beginning of the tag name."
+       (interactive)
+       (nxml-backward-up-element)
+       (sgml-skip-tag-forward 1)
+       (backward-word)
+       )
+     (define-key nxml-mode-map (kbd "C-c C-c <up>") 'nxml-jump-opening-tag)
+     (define-key nxml-mode-map (kbd "C-c C-c <down>") 'nxml-jump-closing-tag)
+  )
+)
