@@ -136,12 +136,15 @@ sub copyDirectories {
   # populate @dirlist
   find(\&dirlist, $src );
 
+  print "--------------------------------------------------\nCreating output directories\n--------------------------------------------------\n";
+
   foreach my $d (@dirlist) {
     $d =~ s/$srcdir/$destdir/;
     print "$d\n";
     mkdir $d;
   }
 
+  print "--------------------------------------------------\n";
 
 }
 
@@ -163,12 +166,16 @@ sub copyPassthru {
   # populate @passthru
   find(\&passthruFiles, $srcdir );
 
+  print "Copying non-xsl files\n--------------------------------------------------\n";
+
   foreach my $f (@passthru) {
     my $dest = $f;
     $dest =~ s/$srcdir/$destdir/;
     print STDOUT "$f\n";
     copy ($f, $dest);
   }
+
+  print "--------------------------------------------------\n";
 
 
 }
@@ -193,26 +200,32 @@ sub copyXsl {
   # populate @xslfiles
   find(\&xslFiles, $srcdir );
 
+  print STDOUT "Copying xsl files\n--------------------------------------------------\n";
+
   foreach my $f (@xslfiles) {
     my $dest = $f;
     $dest =~ s/$srcdir/$destdir/;
-    print STDOUT "$f\n";
+#    print STDOUT "$f\n";
 
     my $basename = basename $f;
     my $dirname = dirname $f;
     $dest =~ m|^$destdir/(.*?)/|;
     my $dir = $1;
     if ( grep /^$basename$/,@PassthruFiles ) {
+	print STDOUT "unmodified $f\n";
       copy($f, $dest);
     }
-    elsif ( grep /^$dir$/, @PassthruDirs ) {
+    elsif ( $dir && grep /^$dir$/, @PassthruDirs ) {
+	print STDOUT "unmodified $f\n";
       copy($f, $dest);
     }
     else {
+      print STDOUT "  modified $f\n";
       nsfilter($f, $dest);
     }
   }
 
+  print STDOUT "--------------------------------------------------\n";
 
 }
 
@@ -389,8 +402,7 @@ sub indexentitydecl {
     my $entityname = $3;
     my $value =  $5;
     my $entityend = $6;
-    my $rest = $';
-
+    my $rest = $'; #'
     $newstring .= $before;
     $newstring .= $entitystart;
 
@@ -488,14 +500,19 @@ sub namespacefilter {
 sub addFiles {
   my $miscdir = dirname $0;
   $miscdir .= '/xslnsfiles';
-  print STDOUT "miscdir is $miscdir" . "\n";
+  print STDOUT "Copying additional files from $miscdir\n--------------------------------------------------\n";
   # copy("$miscdir/manpages.table.xsl", "$destdir/manpages/table.xsl");
   # copy("$miscdir/titlepage.xsl", "$destdir/template/titlepage.xsl");
   # Copy the ns VERSION file, not the copy from non-ns
-  copy("$destdir/VERSION", "$destdir/VERSION.xsl");
-
+  if ( -e "$destdir/VERSION" ) {
+      print STDOUT "$destdir/VERSION\n";
+      copy("$destdir/VERSION", "$destdir/VERSION.xsl");
+  }
   # delete these obsolete files.
 
   # Replace stripns.xsl with addns.xsl in profiling module
-  &nsfilter("$srcdir/profiling/profile.xsl", "$destdir/profiling/profile.xsl");
+  if ( -e "$srcdir/profiling/profile.xsl" ) {
+      print STDOUT "$destdir/profiling/profile.xsl\n";
+      &nsfilter("$srcdir/profiling/profile.xsl", "$destdir/profiling/profile.xsl");
+  }
 }
