@@ -219,17 +219,19 @@ sub copyXsl {
   foreach my $f (@xslfiles) {
     my $dest = $f;
     $dest =~ s/$srcdir/$destdir/;
-#    print STDOUT "$f\n";
 
     my $basename = basename $f;
     my $dirname = dirname $f;
-    $dest =~ m|^$destdir/(.*?)/|;
-    my $dir = $1;
+    $dest =~ m|^$destdir/(.*?)$|;
+    my $file = $1;
+    my $dir = dirname($file);
+    $dir = "" if $dir eq ".";
+
     if ( grep /^$basename$/,@PassthruFiles ) {
 	print STDOUT "unmodified $f\n";
       copy($f, $dest);
     }
-    elsif ( $dir && grep /^$dir$/,@PassthruPath ) {
+    elsif ( $file && grep /^$file$/,@PassthruPath ) {
 	print STDOUT "unmodified $f\n";
       copy($f, $dest);
     }
