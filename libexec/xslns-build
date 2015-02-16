@@ -63,13 +63,23 @@ my @PassthruDirs = (
 
 # Don't add namespace to these particular files
 my @PassthruFiles = (
+'string-replace.xsl',
+'arch-string.xsl',
 'html-rtf.xsl',
 'html2xhtml.xsl',
 'olink.xsl',
 'addns.xsl',
 'stripns.xsl',
 'tbl.xsl',
+'version.xsl',
 'xsl.xsl'
+);
+
+# Don't add namespace to files in these particular locations
+my @PassthruPath = (
+'common/string-replace.xsl',
+'common/arch-string.xsl',
+'version.xsl'
 );
 
 umask 002;
@@ -215,6 +225,10 @@ sub copyXsl {
 	print STDOUT "unmodified $f\n";
       copy($f, $dest);
     }
+    elsif ( $dir && grep /^$dir$/,@PassthruPath ) {
+	print STDOUT "unmodified $f\n";
+      copy($f, $dest);
+    }
     elsif ( $dir && grep /^$dir$/, @PassthruDirs ) {
 	print STDOUT "unmodified $f\n";
       copy($f, $dest);
@@ -306,7 +320,7 @@ sub nsfilter {
     my $prefix =  $4;
     my $attvalue = $6;
     my $post = $7;
-    my $rest = $';
+    my $rest = $'; #'
     
     &filter($notname, $Output);
 
