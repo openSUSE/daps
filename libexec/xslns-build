@@ -79,6 +79,10 @@ my @PassthruFiles = (
 my @PassthruPath = (
 'common/string-replace.xsl',
 'common/arch-string.xsl',
+'fo/colors.ent',
+'fo/fonts.ent',
+'fo/metrics.ent',
+'fo/l10n.properties.xsl',
 'version.xsl',
 );
 
@@ -372,7 +376,7 @@ sub filter {
     my $startstuff = $3;
     my $value =  $4;
     my $endtag = $5;
-    my $rest = $';
+    my $rest = $'; #'
 
     $startstuff =~ /name="(.*?)"/;
     my $pname = $1;
