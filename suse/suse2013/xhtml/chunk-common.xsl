@@ -15,7 +15,6 @@
 
 <!DOCTYPE xsl:stylesheet
 [
-  <!ENTITY www "http://docbook.sourceforge.net/release/xsl/current/xhtml">
   <!ENTITY nbsp "&#xa0;">
 ]>
 <xsl:stylesheet version="1.0"
@@ -26,7 +25,7 @@
     xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
     exclude-result-prefixes="exsl l t">
 
-  <xsl:import href="&www;/chunk-common.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk-common.xsl"/>
 
   <!-- ===================================================== -->
   <xsl:template
