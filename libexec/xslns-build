@@ -273,6 +273,9 @@ sub nsfilter {
     s|(<xsl:stylesheet)|$1 exclude-result-prefixes="d"\n                |s;
   }
 
+  # Change /xsl/ to /xsl-ns/ in import statements
+  s|(xsl:import\s+href="http://docbook.sourceforge.net/release/xsl)/|$1-ns/|sg;
+
   # Convert stripNS to addNS
   s|stripns\.xsl|addns.xsl|sg;
   s|no\.namespace|with.namespace|sg;
