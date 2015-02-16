@@ -22,10 +22,7 @@
 
 -->
 
-<!DOCTYPE xsl:stylesheet
-[
-  <!ENTITY www "http://docbook.sourceforge.net/release/xsl/current/xhtml">
-]>
+<!DOCTYPE xsl:stylesheet>
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
@@ -36,8 +33,8 @@
 
   <xsl:import href="docbook.xsl"/>
   <xsl:import href="chunk-common.xsl"/>
-  <xsl:include href="&www;/manifest.xsl"/>
-  <xsl:include href="&www;/chunk-code.xsl"/>
+  <xsl:include href="http://docbook.sourceforge.net/release/xsl/current/xhtml/manifest.xsl"/>
+  <xsl:include href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk-code.xsl"/>
 
   <xsl:param name="is.chunk" select="1"/>
 
