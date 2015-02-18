@@ -186,10 +186,12 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # remove existing entries first (if existing) - needed for
 # zypper in, since it does not call postun
 #
-# delete ...
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}
-# ... and add it again
+# delete in case of an update, which $1=2
+if [ "2" = "$1" ]; then
+  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name} || true
+fi
+# ... and readd it again
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{daps_catalog}
 
