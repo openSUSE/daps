@@ -169,15 +169,16 @@ fi
 # remove existing entries first - needed for
 # zypper in, since it does not call postun
 # delete ...
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+if [ "2" = "$1" ]; then
+ edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{dtdname}-%{dtdversion}
-# ... and add it again
+ edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
+  --del %{name}
+fi
+
+# ... and (re)add it again
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{novdoc_catalog}
-# delete ...
-edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}
-# ... and add it again
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{susexsl_catalog}
 
@@ -192,10 +193,9 @@ exit 0
 # only run if package is really uninstalled ($1 = 0) and not
 # in case of an update
 #
-if [ 0 = $1 ]; then
+if [ "0" = "$1" ]; then
   if [ ! -f %{_sysconfdir}/xml/%{novdoc_catalog} -a -x /usr/bin/edit-xml-catalog ] ; then
     # SGML: novdoc dtd entry
-        echo "######################## deleting catalog in postun"
     %{regcat} -r %{_datadir}/sgml/CATALOG.%{dtdname}-%{dtdversion} >/dev/null 2>&1 || true
     # XML
     # novdoc dtd entry
