@@ -171,9 +171,9 @@ fi
 # delete ...
 if [ "2" = "$1" ]; then
  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{dtdname}-%{dtdversion}
+  --del %{dtdname}-%{dtdversion} || true
  edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
-  --del %{name}
+  --del %{name} || true
 fi
 
 # ... and (re)add it again
