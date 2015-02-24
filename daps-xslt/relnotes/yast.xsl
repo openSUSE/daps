@@ -4,7 +4,7 @@
 
  <xsl:import href = "http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl" />
  <xsl:output method="html"
-             encoding="ISO-8859-1"
+             encoding="UTF-8"
              indent="no"/>
  <xsl:template name="body.attributes"/>
 </xsl:stylesheet>
