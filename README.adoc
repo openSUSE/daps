@@ -2,42 +2,19 @@ DocBook Authoring and Publishing Suite (DAPS)
 =============================================
 
 :numbered:
-:website: https://github.com/tomschr/daps
+:website: https://github.com/openSUSE/daps
+:ghpages: http://github.io
+:gf:       Git Flow
 
+A complete environment to build HTML, PDF, EPUB and other formats from
+DocBook XML.
 
-This project contains the following parts:
-
-daps::
-  Command to generate various output formats from your XML sources.
-
-docmanager::
-  Command to manage, editing, and publishing workflow for your documents.
-
-DTD::
-  The Novdoc DTD - a subset of the original DocBook4 DTD containing
-  less elements. It is 100% compatible to DocBook4.
-  Using the Novdoc DTD is optional - daps also works with DocBook
-  sources.
-
-XSLT Stylesheets::
-  Customized versions of the DocBook XSLT stylesheets for HTML, FO, and
-  other output formats.
-  At the moment the FO stylesheets are optimized for XEP (RenderX), but
-  also work for fop.
-
-Makefiles::
-  The makefiles provide methods to generate output formats from XML sources.
-  These methods are called from the daps command.
-
-Helper Scripts::
-  Useful stuff to make authoring and managing your XML and image sources
-  easier.
 
 
 Projects
 --------
 
-This project is maintained under GitHub, see https://github.com/openSUSE/daps
+This project is maintained under GitHub, see {website}.
 
 See also the User Guide at XXX.
 
@@ -49,13 +26,20 @@ If you would like to contribute to the project, do the following:
 
 1. Clone the project:
 +
-    $ git clone 
+    $ git clone
 
-1. Install git-flow (either from your package manager or from
-   https://github.com/nvie/gitflow)
+1. Install link:https://build.opensuse.org/project/show/devel:tools:scm[`avh-git-flow`] (either from your package manager or from
+   https://github.com/nvie/gitflow).
 
 1. Initialize your working copy:
 +
    $ git checkout master
    $ git flow init -d
 
+1. Set Git Flow configuration:
++
+   $ git config --local gitflow.prefix.versiontag daps-
+
+1. Update:
++
+   $ git fetch -v
