@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>How to Write an Article with DocBook and DAPS | DAPS 1.1.5</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="product-name" content="DAPS" /><meta name="product-number" content="1.1.5" /><meta name="book-title" content="How to Write an Article with DocBook and DAPS" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, Quick Start" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.quick.html" title="Quick Start Manuals" /><link rel="prev" href="art.daps.quick.html" title="Quick Start Guide" /><link rel="next" href="bk02ar03.html" title="Legal Information" /><script type="text/javascript">
+
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
+      file = 'fonts-nolocal.css';
+  }
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+}
+
+</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script></head><body class="nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="http://daps.sourceforge.net"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs"><a class="book-link" href="index.html" title="DAPS Documentation"><span class="book-icon">DAPS Documentation</span></a><span> › </span><a class="crumb" href="book.daps.quick.html">Quick Start Manuals</a><span> › </span><a class="crumb" href="art.tutorial.html">How to Write an Article with DocBook and DAPS</a></div><div class="clearme"></div></div></div><div id="_toolbar-wrap"><div id="_toolbar"><div id="_toc-area" class="inactive"><a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html"><span class="tool-spacer"><span class="toc-icon">Contents</span><span class="clearme"></span></span><span class="tool-label">Contents</span></a><div class="active-contents bubble-corner"></div><div class="active-contents bubble"><div class="bubble-container"><h6>How to Write an Article with DocBook and DAPS</h6><div id="_bubble-toc"><ol><li class="inactive"><a href="art.tutorial.html#idm139987720892032"><span class="number">1 </span><span class="name">Why Should I Use DocBook and DAPS?</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987721854928"><span class="number">2 </span><span class="name">What You Need</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987717641504"><span class="number">3 </span><span class="name">How to Start</span></a><ol><li class="inactive"><a href="art.tutorial.html#idm139987712440688"><span class="number">3.1 </span><span class="name">Working with <code class="command">daps-init</code></span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987720166864"><span class="number">3.2 </span><span class="name">Working without <code class="command">daps-init</code></span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987720041088"><span class="number">3.3 </span><span class="name">Creating an XML File and a Documentation Configuration
+ File</span></a></li></ol></li><li class="inactive"><a href="art.tutorial.html#sec.howto"><span class="number">4 </span><span class="name">How to Write</span></a><ol><li class="inactive"><a href="art.tutorial.html#idm139987721497968"><span class="number">4.1 </span><span class="name">Identifying Start and End Tags</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987708851296"><span class="number">4.2 </span><span class="name">Adding Metadata</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987722305216"><span class="number">4.3 </span><span class="name">Structuring Your Document With Sections</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987707957408"><span class="number">4.4 </span><span class="name">Creating Itemized Lists</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987709342912"><span class="number">4.5 </span><span class="name">Giving Step-by-Step Instructions</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987707807424"><span class="number">4.6 </span><span class="name">Integrating Remote Links and Cross References</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987720029936"><span class="number">4.7 </span><span class="name">Integrating Images</span></a></li></ol></li><li class="inactive"><a href="art.tutorial.html#idm139987717785904"><span class="number">5 </span><span class="name">Convert Your XML Files</span></a><ol><li class="inactive"><a href="art.tutorial.html#idm139987707961024"><span class="number">5.1 </span><span class="name">Convert Your XML File Into PDF</span></a></li><li class="inactive"><a href="art.tutorial.html#idm139987704886096"><span class="number">5.2 </span><span class="name">Convert Your XML File Into HTML</span></a></li></ol></li><li class="inactive"><a href="art.tutorial.html#idm139987720149696"><span class="number">6 </span><span class="name">Further Information</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_nav-area" class="inactive"></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs"><a class="book-link" href="index.html" title="DAPS Documentation"><span class="book-icon">DAPS Documentation</span></a><span> › </span><a class="crumb" href="book.daps.quick.html">Quick Start Manuals</a><span> › </span><a class="crumb" href="art.tutorial.html">How to Write an Article with DocBook and DAPS</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="clearme"></div></div><div class="clearme"></div></div></div><div id="_content" class=""><div class="documentation"><div xml:lang="en" class="article " id="art.tutorial" lang="en"><div class="titlepage"><div><h6 class="version-info"><span class="productname">DAPS</span> <span class="productnumber">1.1.5</span></h6><div><h1 class="title"><a id="art.tutorial"></a>How to Write an Article with DocBook and DAPS </h1></div><div><h3 class="subtitle"><em>Tutorial</em></h3></div><div class="authorgroup"><div><span class="imprint-label">Authors: </span><span class="firstname">Vanessa</span> <span class="surname">Wallfahrer</span> and <span class="firstname">Tanja</span> <span class="surname">Roth</span></div></div><div class="date"><span class="imprint-label">Publication date: </span>March 06, 2015</div></div></div><div class="line"><div class="toc"><dl><dt><span class="sect1"><a href="art.tutorial.html#idm139987720892032"><span class="number">1 </span><span class="name">Why Should I Use DocBook and DAPS?</span></a></span></dt><dt><span class="sect1"><a href="art.tutorial.html#idm139987721854928"><span class="number">2 </span><span class="name">What You Need</span></a></span></dt><dt><span class="sect1"><a href="art.tutorial.html#idm139987717641504"><span class="number">3 </span><span class="name">How to Start</span></a></span></dt><dt><span class="sect1"><a href="art.tutorial.html#sec.howto"><span class="number">4 </span><span class="name">How to Write</span></a></span></dt><dt><span class="sect1"><a href="art.tutorial.html#idm139987717785904"><span class="number">5 </span><span class="name">Convert Your XML Files</span></a></span></dt><dt><span class="sect1"><a href="art.tutorial.html#idm139987720149696"><span class="number">6 </span><span class="name">Further Information</span></a></span></dt></dl></div></div><div class="abstract "><p>DAPS is an open source program for transforming DocBook XML into output
+   formats such as HTML or PDF. DAPS is command line based and runs on Linux*.</p><p>In XML-based publishing, layout and contents are strictly separated:
+   while writing, you only take care of the contents and the XML tags to use.
+   The layout for different output formats is defined in so-called stylesheets and is
+   automatically added when converting the XML into output formats.</p><p>This tutorial is for DocBook and DAPS beginners. Previous
+   knowledge of XML is not required, but you need basic knowledge of using the
+   Bash Shell. We will write a recipe for a chili sauce in DocBook and convert
+   it into HTML. The tutorial explains step-by-step how to set up your document,
+   which basic XML tags to use for writing it, and how to produce the output you
+   see in <a class="xref" href="art.tutorial.html#fig.daps.tutorial.goal" title="The Goal: Publishing a Recipe for a Chili Sauce in HTML Format">Figure 1</a>.</p></div><div class="figure" id="fig.daps.tutorial.goal"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/butcht7.11.png"><img src="images/butcht7.11.png" width="" alt="The Goal: Publishing a Recipe for a Chili Sauce in HTML Format" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 1: </span><span class="name">The Goal: Publishing a Recipe for a Chili Sauce in HTML
+   Format </span><a title="Permalink" class="permalink" href="art.tutorial.html#fig.daps.tutorial.goal">#</a></h6></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="idm139987720892032"><span class="number">1 </span><span class="name">Why Should I Use DocBook and DAPS?</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987720892032">#</a></h2></div></div></div><p>DocBook is a markup language for technical documentation. Content is
+   tagged with XML elements according to its meaning. This is similar to sorting
+   objects into drawers according to their function: For example, you place
+   scissors and tongs into a drawer labeled <code class="literal">Tools</code>, whereas
+   you place teddies and building blocks into a drawer labeled
+    <code class="literal">Toys</code>. Similarly, when writing documents with DocBook, you
+   would <span class="quote">“<span class="quote">sort</span>”</span> the author's name into an XML tag called
+    <code class="sgmltag-element">author</code>, whereas you would <span class="quote">“<span class="quote">sort</span>”</span> a reference
+   to another document into an XML element called
+   <code class="sgmltag-element">xref</code>.</p><p>While this might seem cumbersome at first sight, it is a huge advantage
+   when considering the different output formats you can generate from the same
+   XML sources. Imagine you want anything tagged with an <code class="sgmltag-element">xref</code>
+   element to appear in <span class="emphasis"><em>blue</em></span> in HTML output, whereas you
+   want it to appear in <span class="emphasis"><em>green</em></span> in the PDF output. Or you
+   decide at one point that you want references to other documents
+    (<code class="sgmltag-element">xref</code>s) to be displayed in red in all output formats from
+   now on. This can be achieved <span class="emphasis"><em>without</em></span> changing anything
+   in the XML files themselves. It is only a matter of defining in the
+   stylesheets which color to use for <code class="sgmltag-element">xref</code> elements in
+   different output formats.</p><p>With DAPS, you can convert your XML sources into various output
+   formats with one command. DAPS takes care of converting any images
+   in your documents automatically into the format best suited for the selected
+   output format. DAPS also helps you in comfortably writing and
+   editing your documents by providing additional features like editor macros,
+   spell checking or link checking. With daps you can also control which
+   stylesheets to use for generating output.</p></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="idm139987721854928"><span class="number">2 </span><span class="name">What You Need</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987721854928">#</a></h2></div></div></div><p>
+   Before you start writing, you need to install a few packages. To ease
+   writing use an editor with XML support. Recommended is Emacs and DAPS
+   version 2.0 or higher.
+   Do the following to install Emacs and DAPS:
+  </p><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+     Open your terminal and log in as root by entering
+    </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>su -</pre></div><p>
+     Note that <code class="prompt user">tux &gt; </code> or (<code class="prompt root">root # </code> below) stands for your prompt. 
+     Do not type that part.
+    </p></li><li class="step "><p>
+     Enter your root password.
+    </p></li><li class="step "><p>
+     Install Emacs with zypper:
+    </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt root">root # </code>zypper in emacs</pre></div></li><li class="step "><p>
+     Install DAPS with zypper:
+    </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt root">root # </code>zypper in daps</pre></div></li></ol></div></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="idm139987717641504"><span class="number">3 </span><span class="name">How to Start</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987717641504">#</a></h2></div></div></div><p>
+   To be able to process the XML files, DAPS requires a certain
+   directory structure. Either use <code class="command">daps-init</code> or set it up
+   manually. The <code class="command">daps-init</code> command is especially advisable
+   for beginners,
+   because it creates an example and the necessary structure. File names always
+   end with <code class="filename">.xml</code>.
+  </p><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987712440688"><span class="number">3.1 </span><span class="name">Working with <code class="command">daps-init</code></span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987712440688">#</a></h3></div></div></div><p>
+      The <code class="command">daps-init</code> command creates a working environment
+      for DAPS. In this tutorial's example, it creates a directory called
+     <code class="filename">tutorial</code>. It contains a DAPS configuration file for
+     your tutorial (<code class="filename">DC-tutorial</code>), the DocBook XML file
+     located in the XML subdirectory and a subdirectory containing image files
+     (<code class="filename">images</code>). The <code class="filename">image</code> directory will
+     be relevant later (see <a class="xref" href="art.tutorial.html#ex.image">Section 4.7, “Integrating Images”</a>).
+    </p><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+      The <code class="command">daps-init</code> command creates a working environment
+      for DAPS. It builds a directory with your entered
+     <code class="filename">filename</code>. In this directory are a DC-file, a
+     <code class="filename">xml</code> subdirectory and a <code class="filename">image</code>
+     subdirectory. The <code class="filename">image</code> directory (see <a class="xref" href="art.tutorial.html#ex.image">Section 4.7, “Integrating Images”</a>) will be relevant later.
+    </p><div class="verbatim-wrap"><pre class="screen"> daps-init --docdir recipe -r article</pre></div></li><li class="step "><p>
+       Now it is your turn: write your text! To learn about the needed XML tags, read the
+       following chapters. If you need help with DAPS, open the
+       <code class="filename">daps-init</code> man page in your terminal:
+      </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps-init --help</pre></div></li><li class="step "><p>
+       Open the XML file (<code class="filename">recipe/xml/MAIN-daps-example.xml</code>) in
+       your editor and use it as a reference.
+      </p></li><li class="step "><p>
+       Open the Documentation Configuration file (<code class="filename">recipe/DC-daps-example</code>)
+       in an editor and use it as reference.
+      </p></li><li class="step "><p>
+       Proceed with <a class="xref" href="art.tutorial.html#sec.howto" title="4. How to Write">Section 4, “How to Write”</a>, where we will create another XML file and
+       another DC file from scratch (in parallel to the files created by
+       daps-init) and use them to write the recipe.
+      </p></li></ol></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987720166864"><span class="number">3.2 </span><span class="name">Working without <code class="command">daps-init</code></span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987720166864">#</a></h3></div></div></div><div class="procedure "><div class="procedure-contents"><p>
+     This method is for the more experienced writer.
+    </p><ol class="procedure" type="1"><li class="step "><p>
+     For working without <code class="command">daps-init</code>, create a directory with
+     your project name and two subdirectories, called <code class="filename">xml</code> and
+     <code class="filename">images</code>. Open a terminal.
+    </p></li><li class="step "><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>mkdir recipe</pre></div></li><li class="step "><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>cd recipe</pre></div></li><li class="step "><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>mkdir -p images/src/{dia,eps,fig,pdf,png,svg} xml</pre></div><p>
+      Now you have created the required directory structure that is
+      needed by DAPS.</p></li><li class="step "><p>Create a DC-file, which is a configuration file for your project.
+       Open a new file and paste the following lines with your XML
+       file name instead of "MAIN-daps-example.xml". See below.
+     </p></li></ol></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987720041088"><span class="number">3.3 </span><span class="name">Creating an XML File and a Documentation Configuration
+ File</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987720041088">#</a></h3></div></div></div><p>
+  Now we will create an XML file (that we will use in the following to
+  write the recipe) and a Documentation Configuration (DC) file (that we
+  will use later on to convert the XML file into HTML output).
+ </p><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p class="title "><strong>
+    To create the XML file:
+  </strong></p><ol type="a" class="substeps "><li class="step "><p>
+    In a terminal, switch to the XML subdirectory.
+   </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>cd xml</pre></div></li><li class="step "><p>
+      Open a new file, and paste the following header into it (see <a class="xref" href="art.tutorial.html#ex.header" title="Header of a DocBook File">Example 1, “Header of a DocBook File”</a>), or copy this from <code class="filename">MAIN-daps-example.xml</code>.
+     </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 1: </span><span class="name">Header of a DocBook File </span><a title="Permalink" class="permalink" href="art.tutorial.html#ex.header">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;?xml version="1.0" encoding="utf-8"?&gt; <span class="callout">1</span>
+     &lt;!DOCTYPE article PUBLIC <span class="callout">2</span>
+     "-//OASIS//DTD DocBook XML V4.5//EN"
+     "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+
+     ]&gt;
+     </pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.header.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+	XML-Declaration for XML V1.0, encoding UTF-8
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.header2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+	The general syntax for a document type declaration
+       </p></td></tr></table></div></div></div><p>
+     Don't be afraid if you don't understand the header. Just insert it by
+     copy and paste into your file.
+    </p></li><li class="step "><p>
+    Save the file as <code class="filename">recipe.xml</code>.
+   </p></li></ol></li><li class="step "><p class="title "><strong>To create the DC file:</strong></p><ol type="a" class="substeps "><li class="step "><p>
+     Switch to the directory above (that should be your <code class="filename">recipe</code>
+     directory):
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>cd ..</pre></div><p>
+    </p></li><li class="step "><p>
+     Open a new file and paste the following line into it:
+     MAIN=<span class="quote">“<span class="quote">recipe.xml</span>”</span>
+    </p></li><li class="step "><p>
+     Save the file, for example as <code class="filename">DC-recipe</code>.
+    </p></li></ol></li></ol></div></div></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.howto"><span class="number">4 </span><span class="name">How to Write</span> <a title="Permalink" class="permalink" href="art.tutorial.html#sec.howto">#</a></h2></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987721497968"><span class="number">4.1 </span><span class="name">Identifying Start and End Tags</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987721497968">#</a></h3></div></div></div><p>
+    The most important thing you need to know about XML is,
+    that you need to close the tags. Either with an end tag or with a
+    backslash at the end of the tag (for example:
+    <code class="command">&lt;para/&gt;</code>). The content between the
+    tags depends on which element you want to
+    create. Open the XML file <code class="filename">recipe.xml</code> that you just
+    created, and place the cursor below the header. To write an article, paste
+    an <code class="command">article</code> start and end tag into the XML file. Between these two tags, write your text as shown in <a class="xref" href="art.tutorial.html#ex.tags" title="Start- and Endtag of an Article">Example 2, “Start- and Endtag of an Article”</a>.
+   </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 2: </span><span class="name">Start- and Endtag of an Article </span><a title="Permalink" class="permalink" href="art.tutorial.html#ex.tags">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;article&gt;
+Tags and text
+&lt;/article&gt;
+    </pre></div></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987708851296"><span class="number">4.2 </span><span class="name">Adding Metadata</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987708851296">#</a></h3></div></div></div><p>
+    Each article may contain information about its author, publication
+    date, release information, copyright or other <span class="quote">“<span class="quote">metadata</span>”</span>. To include
+    such metadata use an article info element and enter the following data (see <a class="xref" href="art.tutorial.html#ex.articleinfo" title="Article Info Header">Example 3, “Article Info Header”</a>):
+   </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 3: </span><span class="name">Article Info Header </span><a title="Permalink" class="permalink" href="art.tutorial.html#ex.articleinfo">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;article lang="en" id="art.template"&gt;<span class="callout">1</span>
+&lt;title&gt;Little G's Ceylon Bang&lt;/title&gt;<span class="callout">2</span>
+&lt;articleinfo&gt;
+&lt;releaseinfo&gt;
+  2013-10-21<span class="callout">3</span>
+&lt;/releaseinfo&gt;
+ &lt;author&gt;<span class="callout">4</span>
+  &lt;firstname&gt;Tux&lt;/firstname&gt;
+  &lt;surname&gt;Penguin&lt;/surname&gt;
+ &lt;/author&gt;
+&lt;/articleinfo&gt;
+&lt;abstract&gt;<span class="callout">5</span>
+Recipe for a chili sauce.
+&lt;/abstract&gt;
+&lt;/article&gt;<span class="callout">6</span>
+    </pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.article.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+       Article start tag.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+       Title for the article.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article3.xml"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+       Build date.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.author.xml"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>
+       The author's name.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article5.xml"><span class="callout">5</span></a> </p></td><td valign="top" align="left"><p>
+       An abstract. What is the subject of your article?
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article4.xml"><span class="callout">6</span></a> </p></td><td valign="top" align="left"><p>
+       Article end tag. It always has to be at the end of the whole article.
+      </p></td></tr></table></div></div></div><div class="figure" id="idm139987706896928"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/articleinfo2.png"><img src="images/articleinfo2.png" width="" alt="HTML Output (Article Title and Article Info)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 2: </span><span class="name">HTML Output (Article Title and Article Info) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987706896928">#</a></h6></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987722305216"><span class="number">4.3 </span><span class="name">Structuring Your Document With Sections</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987722305216">#</a></h3></div></div></div><p>
+    Each article consists of sections and subsections. <a class="xref" href="art.tutorial.html#ex.sections" title="Example: Structure With Sections">Example 4, “Example: Structure With Sections”</a> contains a
+    section and a subsection.
+   </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 4: </span><span class="name">Example: Structure With Sections </span><a title="Permalink" class="permalink" href="art.tutorial.html#ex.sections">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;sect1&gt;<span class="callout">1</span>
+ &lt;title&gt;What do you need?&lt;/title&gt;
+  &lt;sect2&gt;<span class="callout">2</span>
+   &lt;title&gt;Ingredients&lt;/title&gt;
+    &lt;para/&gt;
+   &lt;/sect2&gt;<span class="callout">3</span>
+   &lt;sect2&gt;
+    &lt;title&gt;Equipment&lt;/title&gt;
+     &lt;para/&gt;
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;<span class="callout">4</span>
+&lt;sect1 id="sec.preparation"&gt;
+ &lt;title&gt;Preparation&lt;/title&gt;
+&lt;/sect1&gt;
+    </pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.section.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+       Start tag of section level one. Section1 is the parent element of every
+       element that comes below. Always needs a title. Recommended is a para
+       tag in every section.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+       Start tag section of level two.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section3.xml"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+       End tag section of level two.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section4.xml"><span class="callout">4</span></a> </p></td><td valign="top" align="left"><p>
+       End tag of the section level one parent element.
+      </p></td></tr></table></div></div></div><p>
+    Place the cursor behind the abstract end tag and in front of the article
+    end tag and paste the content of <span class="quote">“<span class="quote">Example 4</span>”</span>  into your XML file.
+   </p><div class="figure" id="idm139987708530960"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/ohnealles.png"><img src="images/ohnealles.png" width="" alt="HTML Output (Article With Sections)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 3: </span><span class="name">HTML Output (Article With Sections) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987708530960">#</a></h6></div></div><p>
+    The image above shows the given XML file example as an HTML
+    page. As you can see in the picture, the section level two is a child
+    element of section level one. It is possible to nest sections.
+   </p></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987707957408"><span class="number">4.4 </span><span class="name">Creating Itemized Lists</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987707957408">#</a></h3></div></div></div><p>
+    To create a listing, use the <code class="command">&lt;itemizedlist&gt; </code> tag.
+   </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 5: </span><span class="name">Itemized List </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987708692960">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;itemizedlist&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   60g Habanero Chilis
+  &lt;/para&gt;
+  &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   30g Cayenne Chilis
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   1,5 Butch T Chilis
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   75g Kidney Beans
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+&lt;/itemizedlist&gt;
+    </pre></div></div></div><p>
+    Place the cursor behind the following line:
+    </p><div class="verbatim-wrap"><pre class="screen">&lt;title&gt;Preparation&lt;/title&gt;</pre></div><p>
+    and paste the contents of <span class="quote">“<span class="quote">Example 5</span>”</span> into your XML file.
+   </p><div class="figure" id="idm139987719490944"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/ohnestep.png"><img src="images/ohnestep.png" width="" alt="HTML Output (Article With an Itemized List)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 4: </span><span class="name">HTML Output (Article With an Itemized List) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987719490944">#</a></h6></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987709342912"><span class="number">4.5 </span><span class="name">Giving Step-by-Step Instructions</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987709342912">#</a></h3></div></div></div><p>
+    For writing instructions, it is recommended to do it step-by-step, as you can
+    see in the following <a class="xref" href="art.tutorial.html#ex.listing" title="Example for Step-by-Step Instructions">Example 6, “Example for Step-by-Step Instructions ”</a>. That way, instructions are easier to understand
+    and browse for the reader.
+   </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 6: </span><span class="name">Example for Step-by-Step Instructions  </span><a title="Permalink" class="permalink" href="art.tutorial.html#ex.listing">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;procedure&gt;<span class="callout">1</span>
+ &lt;step&gt;<span class="callout">2</span>
+  &lt;para&gt;<span class="callout">3</span>
+   Rinse, than drain the kidney beans for about 10 minutes.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Fry kidney beans with some oil.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Puree all ingredients.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Cook for about 5 minutes.
+  &lt;/para&gt;
+ &lt;/step&gt;
+&lt;/procedure&gt;
+    </pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+       Procedure start tag.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+       If you use <code class="command">&lt;step&gt;</code> elements you can create numeric listed paragraphs. Every
+       further <code class="command"> &lt;step&gt;</code> you add automatically counts
+       up.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure3.xml"><span class="callout">3</span></a> </p></td><td valign="top" align="left"><p>
+       Within <code class="command">&lt;para&gt;&lt;/para&gt;</code> you can write down your text.
+      </p></td></tr></table></div></div></div><div class="figure" id="idm139987715630304"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/ohnelink.png"><img src="images/ohnelink.png" width="" alt="HTML Output (Article with Step-by-Step-Instructions)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 5: </span><span class="name">HTML Output (Article with Step-by-Step-Instructions) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987715630304">#</a></h6></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987707807424"><span class="number">4.6 </span><span class="name">Integrating Remote Links and Cross References</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987707807424">#</a></h3></div></div></div><div class="sect3 "><div class="titlepage"><div><div><h4 class="title" id="idm139987707806720"><span class="number">4.6.1 </span><span class="name">Remote Links</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987707806720">#</a></h4></div></div></div><p>
+  To refer to an external HTML page, integrate an internet link in your tutorial.
+  </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 7: </span><span class="name">Integrating Remote Link </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987712473584">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;para&gt;
+ Before you start to cook:
+ &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/&gt;
+&lt;/para&gt;
+  </pre></div></div></div><p>
+  To get the output shown in Figure 6, place the cursor behind the
+  <code class="command">&lt;/para&gt;</code> end tag within the
+  <code class="command">&lt;abstract&gt;</code> element and paste the content of
+  <span class="quote">“<span class="quote">Example 7</span>”</span> into your XML file.
+ </p><div class="figure" id="idm139987722117232"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/chilirezeptlink3.png"><img src="images/chilirezeptlink3.png" width="" alt="HTML Output (Article with Remote Link)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 6: </span><span class="name">HTML Output (Article with Remote Link) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987722117232">#</a></h6></div></div></div><div class="sect3 "><div class="titlepage"><div><div><h4 class="title" id="idm139987706823824"><span class="number">4.6.2 </span><span class="name">Cross References</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987706823824">#</a></h4></div></div></div><p>
+   With cross references (xref elements) you link to paragraphs or examples within your document.
+  </p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 8: </span><span class="name">Integrating Cross References </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987718693136">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;para&gt;
+ How to prepare see &lt;xref linkend="sec.preparation"/&gt;<span class="callout">1</span>
+&lt;/para&gt;
+
+...
+
+
+&lt;sect1 id="sec.preparation"&gt;<span class="callout">2</span>
+
+   </pre></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.references.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+      With <code class="command">&lt;xref linkend="ex.preparation"/&gt;</code> you set a link to the
+      following <span class="quote">“<span class="quote">Preparation</span>”</span> title.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.references2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+      Set <code class="command">id=sec.preparation</code> at the section, that you want to refer to.
+      Set <code class="command">id=ex.preparation</code> at the paragraph, you want to refer to.
+     </p></td></tr></table></div></div></div><p>
+ To get the output shown in <span class="quote">“<span class="quote">Figure 7</span>”</span>, place the cursor below the
+ <code class="command">&lt;title&gt;Preparation&lt;/title&gt;</code> element and paste the
+ contents of <span class="quote">“<span class="quote">Example 8</span>”</span> into your XML file.
+</p><div class="figure" id="idm139987722989280"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/ohnebild.png"><img src="images/ohnebild.png" width="" alt="HTML Output (Article with Cross-Reference)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 7: </span><span class="name">HTML Output (Article with Cross-Reference) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987722989280">#</a></h6></div></div><p>
+ As you can see in the screenshot, the underlined part is a link to the section<span class="quote">“<span class="quote">Preparation</span>”</span>.
+</p></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987720029936"><span class="number">4.7 </span><span class="name">Integrating Images</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987720029936">#</a></h3></div></div></div><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+      To integrate an image in your file, save an image (for example, <code class="filename">butcht.png</code>) in the
+      <code class="filename">image/png</code> directory.
+      That is very important because otherwise, it will not
+      work.
+     </p></li><li class="step "><p>
+      Add an image reference into your XML file.
+     </p></li></ol></div></div><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 9: </span><span class="name">Integrating Images </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987718209136">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="programlisting">&lt;figure&gt;
+    &lt;title&gt;Butch T Chili&lt;/title&gt;<span class="callout">1</span>
+    &lt;mediaobject&gt;
+    &lt;imageobject&gt;
+    &lt;imagedata fileref="butcht.png"/&gt;<span class="callout">2</span>
+    &lt;/imageobject&gt;
+    &lt;/mediaobject&gt;
+    &lt;/figure&gt;
+    </pre></div></div></div><div class="calloutlist "><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.image.xml"><span class="callout">1</span></a> </p></td><td valign="top" align="left"><p>
+      Image title. In the output formats, the title will appear
+      together with the image.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.image2.xml"><span class="callout">2</span></a> </p></td><td valign="top" align="left"><p>
+      The image reference.
+     </p></td></tr></table></div><div class="figure" id="idm139987718152176"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/butcht7.11.png"><img src="images/butcht7.11.png" width="" alt="HTML Output (Article with Integrated Image)" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 8: </span><span class="name">HTML Output (Article with Integrated Image) </span><a title="Permalink" class="permalink" href="art.tutorial.html#idm139987718152176">#</a></h6></div></div></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="idm139987717785904"><span class="number">5 </span><span class="name">Convert Your XML Files</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987717785904">#</a></h2></div></div></div><p>
+   Convert your XML file whenever you want to, no matter if it is finished or
+   you only want to see the temporary result. Convert as often as you like.
+   </p><div id="idm139987717784736" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important</h6><p>
+     The XML file must be valid, otherwise it will not work! Check if it is valid:
+     </p><div class="verbatim-wrap"><pre class="screen">daps -d DC-tutorial validate</pre></div><p>
+    </p></div><p>
+  </p><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987707961024"><span class="number">5.1 </span><span class="name">Convert Your XML File Into PDF</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987707961024">#</a></h3></div></div></div><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+      Open a terminal and enter the following command:
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <code class="filename">DC-tutorial</code> pdf</pre></div></li><li class="step "><p>
+     DAPS automatically creates a directory called
+     <code class="filename">build</code>. You can find your finished PDF file there.
+     </p></li></ol></div></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="idm139987704886096"><span class="number">5.2 </span><span class="name">Convert Your XML File Into HTML</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987704886096">#</a></h3></div></div></div><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+      To build an HTML page, open a terminal and enter the following command:
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <code class="filename">DC-tutorial</code> html --single</pre></div></li><li class="step "><p>
+      You get a green colored link, which you can open in a browser, for
+      example Firefox.
+     </p></li></ol></div></div></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="idm139987720149696"><span class="number">6 </span><span class="name">Further Information</span> <a title="Permalink" class="permalink" href="art.tutorial.html#idm139987720149696">#</a></h2></div></div></div><p>
+    If you still have questions or want to have additional information, read
+    the DAPS man page. Open it in a terminal:
+   </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps --help</pre></div><p>
+    Or visit the following links:
+   </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+     <a class="ulink" href="http://www.docbook.org/tdg/en/html/docbook.html" target="_blank">http://www.docbook.org/tdg/en/html/docbook.html</a>
+     </p></li><li class="listitem "><p>
+     <a class="ulink" href="http://www.sourceforge.net/p/daps/home/Documentation/" target="_blank">http://www.sourceforge.net/p/daps/home/Documentation/</a>
+     </p></li></ul></div></div></div></div><div class="page-bottom"><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>

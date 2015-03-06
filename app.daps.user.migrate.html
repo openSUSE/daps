@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Migration of Existing DocBook Projects | User Guide | DAPS 2.0</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="product-name" content="DAPS" /><meta name="product-number" content="2.0" /><meta name="book-title" content="User Guide" /><meta name="chapter-title" content="Appendix A. Migration of Existing DocBook Projects" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="gl.daps.html" title="Glossary" /><link rel="next" href="app.daps.user.editors.html" title="Appendix B. Editor-specific Information" /><script type="text/javascript">
+
+var protocol = window.location.protocol.toLowerCase();
+if ( protocol != 'file:' ) {
+  var agent = navigator.userAgent.toLowerCase();
+  var wanted = ( protocol == 'https:') ? 'https' : 'http';
+  var file = 'fonts.css';
+  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
+      file = 'fonts-nolocal.css';
+  }
+  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
+}
+else {
+   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
+}
+
+</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script></head><body class="nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="http://daps.sourceforge.net"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs"><a class="book-link" href="index.html" title="DAPS Documentation"><span class="book-icon">DAPS Documentation</span></a><span> › </span><a class="crumb" href="book.daps.user.html">User Guide</a><span> › </span><a class="crumb" href="app.daps.user.migrate.html">Migration of Existing DocBook Projects</a></div><div class="clearme"></div></div></div><div id="_toolbar-wrap"><div id="_toolbar"><div id="_toc-area" class="inactive"><a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html"><span class="tool-spacer"><span class="toc-icon">Contents</span><span class="clearme"></span></span><span class="tool-label">Contents</span></a><div class="active-contents bubble-corner"></div><div class="active-contents bubble"><div class="bubble-container"><h6>User Guide</h6><div id="_bubble-toc"><ol><li class="inactive"><a href="pre.daps.user.html"><span class="number"> </span><span class="name">About This Guide</span></a></li><li class="inactive"><a href="cha.daps.user.inst.html"><span class="number">1 </span><span class="name">System Requirements and Installation</span></a></li><li class="inactive"><a href="cha.daps.user.features.html"><span class="number">2 </span><span class="name">Conceptual Overview</span></a></li><li class="inactive"><a href="cha.daps.user.edit.html"><span class="number">3 </span><span class="name">Editing DocBook XML</span></a></li><li class="inactive"><a href="cha.daps.user.output.html"><span class="number">4 </span><span class="name">Generating Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.img.html"><span class="number">5 </span><span class="name">Image Handling</span></a></li><li class="inactive"><a href="cha.daps.user.modular.html"><span class="number">6 </span><span class="name">Modularizing Documentation Projects</span></a></li><li class="inactive"><a href="cha.daps.user.review.html"><span class="number">7 </span><span class="name">Review and Translation Processes</span></a></li><li class="inactive"><a href="cha.daps.user.deploy.html"><span class="number">8 </span><span class="name">Packaging and Deploying Your Documentation</span></a></li><li class="inactive"><a href="cha.daps.user.layout.html"><span class="number">9 </span><span class="name">Customizing Layout of the Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.config.html"><span class="number">10 </span><span class="name">Configuring DAPS</span></a></li><li class="inactive"><a href="cha.daps.user.trouble.html"><span class="number">11 </span><span class="name">Troubleshooting</span></a></li><li class="inactive"><a href="gl.daps.html"><span class="number"> </span><span class="name">Glossary</span></a></li><li class="inactive"><a href="app.daps.user.migrate.html"><span class="number">A </span><span class="name">Migration of Existing DocBook Projects</span></a></li><li class="inactive"><a href="app.daps.user.editors.html"><span class="number">B </span><span class="name">Editor-specific Information</span></a></li><li class="inactive"><a href="app.daps.user.docupdates.html"><span class="number">C </span><span class="name">What's New?</span></a></li><li class="inactive"><a href="bk01apd.html"><span class="number">D </span><span class="name">GNU Licenses</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_nav-area" class="inactive"><div class="tool"><span class="nav-inner"><span class="tool-label">Navigation</span><a accesskey="p" class="tool-spacer" title="Glossary" href="gl.daps.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Appendix B. Editor-specific Information" href="app.daps.user.editors.html"><span class="next-icon">→</span></a></span></div></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs"><a class="book-link" href="index.html" title="DAPS Documentation"><span class="book-icon">DAPS Documentation</span></a><span> › </span><a class="crumb" href="book.daps.user.html">User Guide</a><span> › </span><a class="crumb" href="app.daps.user.migrate.html">Migration of Existing DocBook Projects</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="button"><a accesskey="p" class="tool-spacer" title="Glossary" href="gl.daps.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Appendix B. Editor-specific Information" href="app.daps.user.editors.html"><span class="next-icon">→</span></a></div><div class="clearme"></div></div><div class="clearme"></div></div></div><div id="_content" class=""><div class="documentation"><div class="appendix " id="app.daps.user.migrate"><div class="titlepage"><div><div class="version-info">Applies to  <span class="productname">DAPS</span> <span class="productnumber">2.0</span></div><div><h1 class="title"><span class="number">A </span><span class="name">Migration of Existing DocBook Projects</span> </h1></div></div></div><div class="line"></div><p>
+  This section provides instructions how to migrate existing DocBook
+  projects so that you can use DAPS for managing and publishing them.
+ </p><div class="procedure "><div class="procedure-title-wrap"><h6 class="procedure-title"><span class="number">Procedure A.1: </span><span class="name">Making DocBook Projects Compatible with DAPS </span><a title="Permalink" class="permalink" href="app.daps.user.migrate.html#pro.daps.user.migrate">#</a></h6></div><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+    If your XML files are distributed across several subdirectories, flatten
+    the hierarchy and put all XML files directly into the
+    <code class="filename">xml</code> subdirectory that is required by DAPS. See
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.dir.doc" title="Required Directory Structure">Required Directory Structure</a>. Hosting
+    multiple documentation projects in the same <code class="filename">xml</code>
+    directory is fine as long as the file names are unique. You can put
+    multiple MAIN files there.
+   </p></li><li class="step "><p>
+    If you have any XIncludes or entity declaration files, also put them
+    into the <code class="filename">xml</code> subdirectory.
+   </p></li><li class="step "><p>
+    Depending on the file type of your source images, add them to the
+    respective subdirectories in
+    <code class="filename"><em class="replaceable ">YOUR_DOC_DIR</em>/images/src</code>.
+    The <code class="filename">image</code> directory and its substructure is
+    required by DAPS. For details, refer to
+    <a class="xref" href="cha.daps.user.features.html#ex.daps.dir.doc" title="Required Directory Structure">Required Directory Structure</a>.
+   </p></li><li class="step "><p>
+    Make sure that the base names of your image files are unique. For
+    details, refer to <a class="xref" href="cha.daps.user.img.html#sec.daps.user.imgs.req" title="5.3. File Name Requirements">Section 5.3, “File Name Requirements”</a>.
+   </p></li><li class="step "><p>
+    Adjust all references of image files, XIncludes, and entity
+    declarations, in the existing XML files to match the structure required
+    by DAPS. The references must not include any absolute or relative
+    path, the plain file name is enough.
+    
+   </p></li><li class="step "><p>
+    For each deliverable (book, article, set) that you want to generate from
+    your XML files, create a Doc Config file. For more information, refer to
+    <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.files" title="2.4.1. Key Files">Section 2.4.1, “Key Files”</a>. Find a template for DC
+    files in your installed system in
+    <code class="filename">/usr/share/daps/init_templates/DC-file.template</code>.
+   </p></li></ol></div></div><p>
+  If you have already used DAPS' predecessor
+  <code class="literal">susedoc</code>, use the
+  <code class="filename">/usr/bin/daps-envconvert</code> script for migrating your
+  ENV files to DC files. For a short overview of the main changes, refer
+  to
+  <code class="filename">/usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x</code>.
+  In contrast to susedoc, DAPS uses the DocBook layout by default. The
+  SUSE stylesheets have been moved to a separate package,
+  <code class="systemitem">suse-xsl-stylesheets</code>. It is
+  available from the Documentation:Tools repository. If you want to continue
+  using the SUSE-layout for your documentation projects, install this
+  package in addition to DAPS. To make DAPS use the SUSE layout,
+  adjust the <em class="parameter ">STYLEROOT</em> parameter in the DC files of
+  your documentation projects.
+
+ </p></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="app.daps.user.editors.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Appendix B </span>Editor-specific Information</span></a><a class="nav-link" href="gl.daps.html"><span class="prev-icon">←</span><span class="nav-label">Glossary</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
