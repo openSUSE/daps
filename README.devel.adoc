@@ -6,14 +6,14 @@ the development version of daps.
 
 In order to run daps from this working copy, remember the following things:
 
-1. Do NOT run ./configure if you intend to run daps from this working copy.
+1. Do NOT run `./configure` if you intend to run daps from this working copy.
 
-2. If you have run the configure script already, run "svn st" to see any
-   modified files and roll them back with "svn revert".
+2. If you have run the configure script already, run `svn st` to see any
+   modified files and roll them back with `svn revert`.
 
-3. If you want to run daps from this working copy, *always* add the --dapsroot
+3. If you want to run daps from this working copy, *always* add the `--dapsroot`
    option. To simplify this, define a ddaps function (or alias) which can
-   look like this (replace the content of the "D" variable with your absolute
+   look like this (replace the content of the `D` variable with your absolute
    path of your working copy):
 +
     ddaps ()
@@ -23,19 +23,19 @@ In order to run daps from this working copy, remember the following things:
         $D/bin/daps --dapsroot "$D" $@
     }
 +
-If you like, you can also add the --styleroot option.
-Add these lines to your ~/.bashrc (or ~/.bashrc.local) Bash config file.
+If you like, you can also add the `--styleroot` option.
+Add these lines to your `~/.bashrc` (or `~/.bashrc.local`) Bash config file.
 
 
 Changing automake files
 -----------------------
 
 - the only automake files that may be edited are
-  * configure.ac
-  * Makefile.am
+  * `configure.ac`
+  * `Makefile.am`
 +
 Do NOT edit any other automake files, since they are generated.
-- Whenever configure.ac or Makefile.am have been changed, you MUST run
+- Whenever `configure.ac` or `Makefile.am` have been changed, you MUST run
   autogen.sh and submit the resulting changes together with your edits
 
 
@@ -44,13 +44,13 @@ Creating New DAPS Version
 
 In order to create a new daps version, do the following:
 
-1. Adapt version number in configure.ac
-2. Run autogen.sh
-3. Adapt version number in packaging/daps.spec
+1. Adapt version number in `configure.ac`
+2. Run `autogen.sh`
+3. Adapt version number in `packaging/daps.spec`
 4. Commit your changes
-5. Change to the OBS working copy from Documentation:Tools
-   and run daps-fetch-source to get the latest changes from SVN.
-6. Run osc vc and add your change log
+5. Change to the OBS working copy from `Documentation:Tools`
+   and run `daps-fetch-source` to get the latest changes from SVN.
+6. Run `osc vc` and add your change log
 7. Rebuild the package, fix any errors, and commit to OBS.
 
 
