@@ -1,6 +1,5 @@
-----------------------------------------------------------------------------
-  DocBook Authoring and Publishing Suite (daps) Developement README.devel
-----------------------------------------------------------------------------
+DocBook Authoring and Publishing Suite (daps) Development
+=========================================================
 
 This file is mainly interesting for developers who want to hack/work with
 the development version of daps.
@@ -16,22 +15,20 @@ In order to run daps from this working copy, remember the following things:
    option. To simplify this, define a ddaps function (or alias) which can
    look like this (replace the content of the "D" variable with your absolute
    path of your working copy):
-
-----------[ ~/.bashrc ]----------
-ddaps () 
-{ 
-    echo "****** DAPS Developer Version ******"
-    D="/local/doc/daps"
-    $D/bin/daps --dapsroot "$D" $@
-}
----------------------------------
-
++
+    ddaps ()
+    {
+        echo "****** DAPS Developer Version ******"
+        D="/local/doc/daps"
+        $D/bin/daps --dapsroot "$D" $@
+    }
++
    If you like, you can also add the --styleroot option.
    Add these lines to your ~/.bashrc (or ~/.bashrc.local) Bash config file.
-   
 
-----------
+
 Changing automake files
+-----------------------
 
 - the only automake files that may be edited are
   * configure.ac
@@ -40,9 +37,9 @@ Changing automake files
 - Whenever configure.ac or Makefile.am have been changed, you MUST run
   autogen.sh and submit the resulting changes together with your edits
 
-   
-----------
+
 Creating New DAPS Version
+-------------------------
 
 In order to create a new daps version, do the following:
 
