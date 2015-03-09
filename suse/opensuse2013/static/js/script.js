@@ -1,1 +1,0 @@
-../../../suse2013/static/js/script.js
