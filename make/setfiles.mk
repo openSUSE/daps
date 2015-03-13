@@ -12,20 +12,10 @@
 #--------------------------------------------------
 # Profiling stringparams
 #
+
+# Stringparams for the profiling attributes are set in common_variables.mk
 ifdef PROFILE_URN
-  PROFSTRINGS   := --param "show.comments=$(REMARKS)"
-  ifdef PROFARCH
-    PROFSTRINGS += --stringparam "profile.arch=$(PROFARCH)"
-  endif
-  ifdef PROFCONDITION
-    PROFSTRINGS += --stringparam "profile.condition=$(PROFCONDITION)"
-  endif
-  ifdef PROFOS
-    PROFSTRINGS += --stringparam "profile.os=$(PROFOS)"
-  endif
-  ifdef PROFVENDOR
-    PROFSTRINGS += --stringparam "profile.vendor=$(PROFVENDOR)"
-  endif
+  PROFSTRINGS   += --param "show.comments=$(REMARKS)"
 endif
 
 #--------------------------------------------------
