@@ -130,6 +130,10 @@ epub: $(EPUB_RESULT)
 	@ccecho "result" "Find the EPUB book at:\n$<"
   endif
 
+.PHONY: mobi
+mobi: list-images-missing
+mobi: $(MOBI_RESULT)
+	@ccecho "result" "Find the Amazon Kindle book (.mobi) at:\n$<"
 #--------------
 # Create Directories
 #
@@ -206,3 +210,63 @@ epub-check: $(EPUB_RESULT)
 	@ccecho "result" "#################### BEGIN epubcheck report ####################"
 	epubcheck $< || true
 	@ccecho "result" "#################### END epubcheck report ####################"
+#--------------
+# mobi (Amazon Kindle)
+#
+# we are using calibre's ebook-convert to convert the epub file to mobi
+# The format generated is MOBI 6, which is compatible to all Amazon devices
+
+$(MOBI_RESULT): $(EPUB_RESULT)
+	ebook-convert $< $@ --mobi-ignore-margins --no-inline-toc \
+	  --pretty-print $(DEVNULL)
+
+#Options to set metadata in the output
+#
+#--author-sort
+#String to be used when sorting by author.
+#
+#--authors
+#Set the authors. Multiple authors should be separated by ampersands.
+#
+#--book-producer
+#Set the book producer.
+#
+#--comments
+#Set the ebook description.
+#
+#--cover
+#Set the cover to the specified file or URL
+#
+#--isbn
+#Set the ISBN of the book.
+#
+#--language
+#Set the language.
+#
+#--pubdate
+#Set the publication date.
+#
+#--publisher
+#Set the ebook publisher.
+#
+#--rating
+#Set the rating. Should be a number between 1 and 5.
+#
+#--series
+#Set the series this ebook belongs to.
+#
+#--series-index
+#Set the index of the book in this series.
+#
+#--tags
+#Set the tags for the book. Should be a comma separated list.
+#
+#--timestamp
+#Set the book timestamp (no longer used anywhere)
+#
+#--title
+#Set the title.
+#
+#--title-sort
+#The version of the title to be used for sorting.
+#
