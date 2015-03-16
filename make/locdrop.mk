@@ -14,9 +14,11 @@
 # * Color PDF
 #
 
-LOCDROP_TMP_DIR  := $(TMP_DIR)/$(BOOK)_locdrop
-MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/manifest_trans.txt
-MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/manifest_en.txt
+# Defined in common_variables:
+#
+#LOCDROP_TMP_DIR
+#MANIFEST_TRANS
+#MANIFEST_NOTRANS
 
 ifndef LOCDROP_EXPORT_DIR
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop

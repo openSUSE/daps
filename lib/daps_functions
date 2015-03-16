@@ -131,6 +131,10 @@ function parse_args () {
                 P_LIST=1
                 shift
                 ;;
+	    --locdrop)
+		P_IS_LOCDROP=1
+		shift
+		;;
             --meta)
                 P_META=1
                 shift
@@ -986,7 +990,7 @@ function package-src () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,help,name:,optipng,set-date:"
+    LONG_OPTS="def-file:,help,locdrop,name:,optipng,set-date:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -996,6 +1000,7 @@ function package-src () {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_help
+	help_locdrop
         help_name
 	help_optipng
         help_set-date
@@ -1003,8 +1008,9 @@ function package-src () {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = $P_OPTIPNG ]] && export OPTIPNG=1
+    [[ 1 = $P_IS_LOCDROP ]] && export IS_LOCDROP=1
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = $P_OPTIPNG ]]    && export OPTIPNG=1
 
     if [[ -n "$P_DEF_FILE" ]]; then
         if [[ -f $P_DEF_FILE ]]; then
@@ -1954,6 +1960,12 @@ function help_list () {
                               standard output instead of starting the
                               interactive spellchecker.
                               Default: en_US"
+}
+function help_locdrop () {
+    echo "    --locdrop                 Use this option to create a source tarball
+                              from a previous locdrop after translation. If set, will
+                              include the files manifest_*.txt in the source tarball.
+                              Default: off"
 }
 function help_meta () {
     echo "    --meta                    If set, prints additional status information

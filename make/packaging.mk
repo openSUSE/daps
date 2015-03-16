@@ -38,6 +38,10 @@ endif
 ifdef DEF_FILE
   package-src: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
+ifdef IS_LOCDROP
+  package-src: MFT_TRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_TRANS))))
+  package-src: MFT_NOTRANS := $(wildcard $(addprefix $(DOC_DIR)/,$(notdir $(MANIFEST_NOTRANS))))
+endif
 package-src: $(PROFILES) $(PROFILEDIR)/.validate
   ifdef MISSING
 	@ccecho "error" "Fatal error: The following images are missing:"
@@ -51,6 +55,10 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
     ifdef DEF_FILE
 	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
 	  --transform=s%$(DOC_DIR)/%% $(DC_FILES)
+    endif
+    ifdef IS_LOCDROP
+	tar rfh $(PACKAGE_SRC_TARBALL) --absolute-names \
+	  --transform=s%$(DOC_DIR)/%% $(MFT_TRANS) $(MFT_NOTRANS)
     endif
 	bzip2 -9f $(PACKAGE_SRC_TARBALL)
 	@ccecho "result" "Find the sources at:\n$(PACKAGE_SRC_RESULT)"
