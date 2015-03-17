@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
 
+<xsl:template name="pre.rootnode">
+  <!-- intentionally empty -->
+</xsl:template>
+
+<xsl:template name="post.rootnode">
+  <!-- intentionally empty -->
+</xsl:template>
+
+
 <xsl:template match="/">
+  <xsl:call-template name="pre.rootnode"/>
 <!--  
    <xsl:variable name="_comment.msg">
      <xsl:text> HINT: Comments are</xsl:text>
@@ -50,6 +62,7 @@ Please see LICENSE.txt for this document's license.
         <xsl:apply-imports/>
       </xsl:otherwise>
     </xsl:choose>
+  <xsl:call-template name="post.rootnode"/>
 </xsl:template>
 
 

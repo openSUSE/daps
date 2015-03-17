@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: novdoc-profile.xsl 40777 2009-04-06 07:11:42Z toms $ -->
+<!--
+   Purpose:
+     Base profiling stylesheets
+
+   Input:
+     DocBook 4/5 document
+
+   Output:
+     Profiled DocBook 4/5 document
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2015, Thomas Schraitle
+
+-->
 <!DOCTYPE xsl:stylesheet
 [
   <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current">
