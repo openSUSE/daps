@@ -22,11 +22,16 @@
   
 
 <xsl:template name="pre.rootnode">
-  <xsl:apply-templates select="/processing-instruction('xml-stylesheet')" mode="profile"/>
-  <xsl:call-template name="create.db45.doctype">
-    <!--<xsl:with-param name="rootnode" select="local-name(/*)"/>-->
-  </xsl:call-template>
+  <xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>
+  <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="create.db45.doctype"/>
 </xsl:template>
+
+
+<xsl:template match="/processing-instruction('xml-stylesheet')"
+              name="xml-stylesheet"
+              mode="profile" />
+
 
 </xsl:stylesheet>
 

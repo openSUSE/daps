@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
 
+
+   Input:
+
+
+   Output:
+
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2015, Thomas Schraitle
+
+-->
 
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
