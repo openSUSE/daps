@@ -15,16 +15,20 @@
   <productnumber>2.0</productnumber>
   <authorgroup>
    <author>
+    <firstname>Stefan</firstname>
+    <surname>Knorr</surname>
+   </author>
+   <author>
     <firstname>Tanja</firstname>
     <surname>Roth</surname>
    </author>
    <author>
-    <firstname>Christopher-Julian</firstname>
-    <surname>Zwickl</surname>
+    <firstname>Manuel</firstname>
+    <surname>Schnitzer</surname>
    </author>
    <author>
-    <firstname>Stefan</firstname>
-    <surname>Knorr</surname>
+    <firstname>Christopher-Julian</firstname>
+    <surname>Zwickl</surname>
    </author>
   </authorgroup>
   <date><?dbtimestamp?></date>
@@ -88,6 +92,8 @@
   <sect2 id="sec.daps.quick.inst.osuse">
    <title>Installing &dapsacr; on &osuse;</title>
    &daps-install-osuse;
+   &daps-install-osuse-zypper;
+   &daps-install-osuse-yast;
   </sect2>
   
   <sect2 id="sec.daps.quick.inst.sle">
@@ -163,6 +169,7 @@
      |      |--dia/
      |      |--eps/
      |      |--fig/
+     |      |--jpg/
      |      |--pdf/
      |      |--png/
      |      |--svg/
@@ -452,8 +459,9 @@
     <sgmltag>article</sgmltag>), &dapsacr; also allows you to build an
     individual <sgmltag>chapter</sgmltag> or <sgmltag>part</sgmltag>. If you
     want the output format to include <sgmltag>remark</sgmltag> elements or
-    to be marked as a <literal>draft</literal> version, you can tell
-    &dapsacr; to do so.
+    to be marked as a <literal>draft</literal> version, you can do that
+    this way:
+    <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
    </para>
   <sect3 id="sec.daps.quick.output.adv.partial">
    <title>Partial Builds</title>
