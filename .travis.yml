@@ -1,5 +1,11 @@
 language: bash
+
+before_install:
+    - sudo apt-get update -qq
+    - sudo apt-get install -y autotools-dev checkbot dia docbook docbook-xml docbook-xslt docbook-xslt-ns docbook5-xml epubcheck ghostscript imagemagick inkscape libxml2-utils libxslt1.1 poppler-utils python-libxml2 python-lxml transfig libxml-commons-external-java libxmlgraphics-commons-java libimage-exiftool-perl fop libxml2 remake sgml-base sgml-data xmlstarlet w3m xfig
+
 install:
     - ./configure && make install
+
 script:
     - make test
