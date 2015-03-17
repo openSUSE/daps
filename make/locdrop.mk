@@ -138,7 +138,7 @@ $(MANIFEST_TRANS): | $(LOCDROP_TMP_DIR)
   endif
   ifdef TO_TRANS_IMGS
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
-	   $(DOC_DIR),xml,$(TO_TRANS_IMGS))))" >> $@
+	   $(DOC_DIR)/,,$(TO_TRANS_IMGS))))" >> $@
   endif
 
 
@@ -152,7 +152,7 @@ $(MANIFEST_NOTRANS): | $(LOCDROP_TMP_DIR)
   endif
   ifdef NO_TRANS_IMGS
 	@echo -e "$(subst $(SPACE),\n,$(sort $(subst \
-	   $(DOC_DIR),xml,$(NO_TRANS_IMGS))))" >> $@
+	   $(DOC_DIR)/,,$(NO_TRANS_IMGS))))" >> $@
   endif
 
 #----
