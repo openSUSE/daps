@@ -1,14 +1,37 @@
 <?xml version="1.0"?>
-<!-- $Id: docbook43-profile.xsl 5961 2006-02-13 13:07:36Z toms $ -->
+<!--
+   Purpose:
+     Creates DOCTYPE header manually
+
+   Input:
+     DocBook 4/5 document
+
+   Output:
+     DocBook 4/5 document with PI *before* DOCTYPE declaration
+     (needed due to a bug in xsltproc)
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright: 2015, Thomas Schraitle
+
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
-<xsl:import href="novdoc-profile.xsl"/>
+<xsl:import href="base-profile.xsl"/>
+<xsl:import href="../lib/create-doctype.xsl"/>
 
-<xsl:output method="xml"
-            indent="yes"
-            doctype-public="-//OASIS//DTD DocBook XML V4.2//EN"
-            doctype-system="http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"/>
+<xsl:template name="pre.rootnode">
+  <xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>
+  <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="create.db45.doctype">
+    <xsl:with-param name="version">4.2</xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+
+<xsl:template match="/processing-instruction('xml-stylesheet')"
+              name="xml-stylesheet"
+              mode="profile" />
 
 </xsl:stylesheet>
 
