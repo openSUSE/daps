@@ -37,7 +37,7 @@ else {
    your XML files with meta-information (like workflow status). DAPS
    offers an option to also display this meta-information in the generated
    output.
-  </p><div id="idm139987720740800" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Availability of Advanced Output Options</h6><p>
+  </p><div id="id3326" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Availability of Advanced Output Options</h6><p>
     Advanced output options are only supported for selected formats:
    </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
       <code class="option">--meta</code>:
@@ -55,18 +55,18 @@ else {
     <code class="filename">daps-example_remarks_draft_en.pdf</code>.
    </p></div><p>
    Find a few example commands below:
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm139987714539728"><span class="term ">Including Remarks in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --remarks</pre></div><p>When generating PDFs with FOP, the contents of the remark elements
+  </p><div class="variablelist "><dl class="variablelist"><dt id="id3345"><span class="term ">Including Remarks in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --remarks</pre></div><p>When generating PDFs with FOP, the contents of the remark elements
      is shown in italics within the text. XEP supports conversion of remark
      elements into PDF annotations. This feature is enabled in DAPS by
      default, but if you want XEP to treat remark elements like FOP does, you
      can change the respective DAPS parameter. In HTML,
      HTML-single and EPUB output, the contents of the remark elements is shown
      in red within the text.
-    </p></dd><dt id="idm139987716240304"><span class="term ">Building PDFs with a <code class="literal">DRAFT</code> Watermark</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --draft</pre></div><p>
+    </p></dd><dt id="id3352"><span class="term ">Building PDFs with a <code class="literal">DRAFT</code> Watermark</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --draft</pre></div><p>
       Generates a PDF that has a <code class="literal">DRAFT</code> watermark printed
       on each page.
-     </p></dd><dt id="idm139987713103520"><span class="term ">Including Metadata in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> html --meta</pre></div><p> If metadata to a file has been set, DAPS includes the
-     metadata for each file in the output format. </p><div id="idm139987716833440" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Restrictions of the <code class="option">--meta</code> Option</h6><p>As the <code class="option">--meta</code> relies on certain mechanisms and SVN
+     </p></dd><dt id="id3361"><span class="term ">Including Metadata in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> html --meta</pre></div><p> If metadata to a file has been set, DAPS includes the
+     metadata for each file in the output format. </p><div id="id3368" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Restrictions of the <code class="option">--meta</code> Option</h6><p>As the <code class="option">--meta</code> relies on certain mechanisms and SVN
        properties, including metadata in the output only works under the
        following conditions:</p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>Profiling is activated in your XML sources. For details, refer to
           <a class="xref" href="cha.daps.user.modular.html#sec.daps.user.modular.profile.daps.pi" title="6.3.2.2. MAIN File: Processing Instruction">Section 6.3.2.2, “MAIN File: Processing Instruction”</a>.</p></li><li class="listitem "><p>You manage your documentation project with Docmanager and have set
@@ -76,13 +76,13 @@ else {
        
       </p></div></dd></dl></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.review.bigfile"><span class="number">7.2 </span><span class="name">Creating XML Bigfiles</span> <a title="Permalink" class="permalink" href="cha.daps.user.review.html#sec.daps.user.review.bigfile">#</a></h2></div></div></div><p> Instead of sending multiple XML files to a proofreader for review, you can transform all
    files included in your <code class="sgmltag-element">book</code> or <code class="sgmltag-element">set</code> into one huge DocBook
-   XML file (bigfile). Use the following command: </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> bigfile</pre></div><p> DAPS resolves all XIncludes (replaces them with the referenced content) to create
+   XML file (bigfile). Use the following command: </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> bigfile</pre></div><p> DAPS resolves all XIncludes (replaces them with the referenced content) to create
    the bigfile. A message is shown where to find the generated output. </p></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.review.locdrop"><span class="number">7.3 </span><span class="name">Creating TAR Archives For Localization</span> <a title="Permalink" class="permalink" href="cha.daps.user.review.html#sec.daps.user.review.locdrop">#</a></h2></div></div></div><p> If you have a huge documentation project of which only individual books or files are to be
    translated, you can mark the respective files as <code class="literal">to be translated</code> with
    Docmanager. You can then use the <code class="command"><code class="command">daps</code> locdrop</code> command to generate the
    following archives for distribution to the translators or translation agency: </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>One TAR archive contains the graphics.</p></li><li class="listitem "><p>One TAR archive contains all XML files that need to be localized.</p></li><li class="listitem "><p>One TAR archive contains the remaining files of the set. The remaining files are
      needed for solving any cross-references between translated and untranslated content during
-     generation of output.</p></li></ul></div><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> locdrop</pre></div><div id="idm139987716530208" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Restrictions of <code class="command">daps locdrop</code></h6><p> Use this command only if you manage your documentation project with Docmanager and have set
+     generation of output.</p></li></ul></div><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> locdrop</pre></div><div id="id3405" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Restrictions of <code class="command">daps locdrop</code></h6><p> Use this command only if you manage your documentation project with Docmanager and have set
     the respective SVN properties to mark any files that are to be localized. Otherwise it will not
     work correctly.
    </p></div><p> For further options related to creating distributable archives with DAPS, run

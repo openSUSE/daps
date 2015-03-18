@@ -34,7 +34,7 @@ else {
     returns the parser errors, including information about the type of
     error, the respective file name and the line number where the error
     occurred. In addition, DAPS shows the path to the profiled XML sources
-    and the total number of errors.</p><div class="example"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 4.1: </span><span class="name">Parser Output For Validation Errors (<code class="sgmltag-element">xref</code> to unknown ID) </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#idm139987716882320">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">daps_user_concept.xml:60: element xref: validity error:
+    and the total number of errors.</p><div class="example"><div class="example-title-wrap"><h6 class="example-title" id="id2403"><span class="number">Example 4.1: </span><span class="name">Parser Output For Validation Errors (<code class="sgmltag-element">xref</code> to unknown ID) </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#id2403">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">daps_user_concept.xml:60: element xref: validity error:
 IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
@@ -57,11 +57,11 @@ make: *** [validate] Error 3</pre></div></div></div><p>
    To validate all files that belong to your documentation project,
    DAPS only needs to know which DC file to use. Use the
    <code class="option">-d</code> option to specify it.
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm139987708144592"><span class="term ">Validating All XML Files in Your Book, Article or Set</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate </pre></div><p>
+  </p><div class="variablelist "><dl class="variablelist"><dt id="id2418"><span class="term ">Validating All XML Files in Your Book, Article or Set</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate </pre></div><p>
       If the XML files are not valid, DAPS will return the parser
       errors. If validation was successful, DAPS returns: <code class="literal">All
       files are valid.</code>
-     </p></dd><dt id="idm139987715952000"><span class="term ">Validating Your Files Including <code class="sgmltag-element">Remark</code> Elements</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate --remarks</pre></div></dd><dt id="idm139987715227712"><span class="term ">Validating Your Files Including XML Comments (<code class="sgmltag-sgmlcomment">&lt;!--Comment--&gt;</code>)</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate --comments</pre></div></dd></dl></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.syntax"><span class="number">4.2 </span><span class="name">Basic Syntax for Generating Output</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.syntax">#</a></h2></div></div></div><p>
+     </p></dd><dt id="id2427"><span class="term ">Validating Your Files Including <code class="sgmltag-element">Remark</code> Elements</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate --remarks</pre></div></dd><dt id="id2435"><span class="term ">Validating Your Files Including XML Comments (<code class="sgmltag-sgmlcomment">&lt;!--Comment--&gt;</code>)</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate --comments</pre></div></dd></dl></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.syntax"><span class="number">4.2 </span><span class="name">Basic Syntax for Generating Output</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.syntax">#</a></h2></div></div></div><p>
    DAPS supports a number of different output formats, including also
    <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or simple text.
    <a class="xref" href="cha.daps.user.output.html#tab.daps.user.output.overview" title="DAPS Output Commands and Formats">Table 4.1</a>
@@ -74,9 +74,9 @@ make: *** [validate] Error 3</pre></div></div></div><p>
   </p><p>
    Independent of the individual output format you want to create, you need
    to specify the DC file to use:
-  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> <em class="replaceable ">OUTPUT_FORMAT</em> </pre></div><p>
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> <em class="replaceable ">OUTPUT_FORMAT</em> </pre></div><p>
    For example:
-  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -d DC-daps-example pdf</pre></div><p>
+  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d DC-daps-example pdf</pre></div><p>
    At the end of the transformation process, DAPS shows a message where
    to find the generated output.
   </p></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.formats"><span class="number">4.3 </span><span class="name">Supported Output Formats</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.formats">#</a></h2></div></div></div><p>
@@ -84,7 +84,7 @@ make: *** [validate] Error 3</pre></div></div></div><p>
    characteristics, and the DAPS subcommands to generate them. Refer to
    <a class="xref" href="cha.daps.user.output.html#sec.daps.user.output.syntax" title="4.2. Basic Syntax for Generating Output">Section 4.2</a>
    for the commands' basic syntax.
-  </p><div class="table"><div class="table-title-wrap"><h6 class="table-title"><span class="number">Table 4.1: </span><span class="name">DAPS Output Commands and Formats </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#tab.daps.user.output.overview">#</a></h6></div><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
+  </p><div class="table"><div class="table-title-wrap"><h6 class="table-title" id="tab.daps.user.output.overview"><span class="number">Table 4.1: </span><span class="name">DAPS Output Commands and Formats </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#tab.daps.user.output.overview">#</a></h6></div><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
        <p>
          Subcommand
         </p>
@@ -201,7 +201,7 @@ make: *** [validate] Error 3</pre></div></div></div><p>
         </p>
       </td></tr><tr><td>
        <p>
-         txt
+         text
         </p>
       </td><td>
        <p>
@@ -251,7 +251,7 @@ make: *** [validate] Error 3</pre></div></div></div><p>
    For further advanced output options like including remarks, metadata or
    draft watermarks in the output, creating one big XML file or creating
    distributable archives, refer to <a class="xref" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes">Chapter 7, <em>Review and Translation Processes</em></a>.
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm139987716715440"><span class="term ">Building Only Parts of Your Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code>daps -d DC-daps-example pdf --rootid=cha.template.examples</pre></div><p>
+  </p><div class="variablelist "><dl class="variablelist"><dt id="id2557"><span class="term ">Building Only Parts of Your Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d DC-daps-example pdf --rootid=cha.template.examples</pre></div><p>
       Instead of always building your complete documentation project
       (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or
       <code class="sgmltag-element">article</code>), DAPS also allows you do partial
@@ -263,7 +263,7 @@ make: *** [validate] Error 3</pre></div></div></div><p>
       <code class="sgmltag-element">article</code>, <code class="sgmltag-element">glossary</code>,
       <code class="sgmltag-element">appendix</code>, <code class="sgmltag-element">part</code>, or
       <code class="sgmltag-element">chapter</code> element.
-     </p></dd><dt id="idm139987715546960"><span class="term ">Specifying the MAIN File on the Command Line</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">daps</code> -m <em class="replaceable ">PATH_TO_MAIN_FILE</em></pre></div><p>
+     </p></dd><dt id="id2573"><span class="term ">Specifying the MAIN File on the Command Line</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -m <em class="replaceable ">PATH_TO_MAIN_FILE</em></pre></div><p>
       If you do not need to specify any further parameters than the MAIN
       file, you can do completely without a DC file. With the
       <code class="option">-m</code> option you can specify the MAIN file defining

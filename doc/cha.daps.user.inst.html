@@ -28,10 +28,10 @@ else {
   DAPS itself is a lean solution that does not require a lot of system
   resources. However, it does use components that may need a stronger processor
   and more RAM, for example, for creating PDF output files.
- </p><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.req.hw"><span class="number">1.1.1 </span><span class="name">Hardware Requirements</span> <a title="Permalink" class="permalink" href="cha.daps.user.inst.html#sec.daps.user.req.hw">#</a></h3></div></div></div><div class="variablelist "><dl class="variablelist"><dt id="idm139987716278000"><span class="term ">RAM</span></dt><dd><p>The required amount of RAM mostly depends on the volume of your
+ </p><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.req.hw"><span class="number">1.1.1 </span><span class="name">Hardware Requirements</span> <a title="Permalink" class="permalink" href="cha.daps.user.inst.html#sec.daps.user.req.hw">#</a></h3></div></div></div><div class="variablelist "><dl class="variablelist"><dt id="id1458"><span class="term ">RAM</span></dt><dd><p>The required amount of RAM mostly depends on the volume of your
        documentation projects. For creation of PDF output, 2 GB of RAM are
-       recommended.</p></dd><dt id="idm139987713826224"><span class="term ">CPU</span></dt><dd><p>If you have multiple or very large documentation projects, a machine
-       with multiple cores is recommended.</p></dd><dt id="idm139987712823200"><span class="term ">Hard Disk Space</span></dt><dd><p>The disk space consumed mostly depends on the amount of your
+       recommended.</p></dd><dt id="id1462"><span class="term ">CPU</span></dt><dd><p>If you have multiple or very large documentation projects, a machine
+       with multiple cores is recommended.</p></dd><dt id="id1466"><span class="term ">Hard Disk Space</span></dt><dd><p>The disk space consumed mostly depends on the amount of your
        documentation sources and the number of output formats you want to generate.</p></dd></dl></div></div><div class="sect2 "><div class="titlepage"><div><div><h3 class="title" id="sec.daps.user.req.sw"><span class="number">1.1.2 </span><span class="name">Software Requirements</span> <a title="Permalink" class="permalink" href="cha.daps.user.inst.html#sec.daps.user.req.sw">#</a></h3></div></div></div><p>DAPS runs on any modern Linux system. It has not been
     attempted to port DAPS to Windows* or Mac OS X* yet.</p><p>When installing DAPS as an RPM package (on any SUSE-based system),
    dependencies on other software packages are automatically resolved during
@@ -83,7 +83,7 @@ else {
     There are a few ways to install DAPS on openSUSE. To always stay up-to-date
     with the latest version of DAPS install the <code class="systemitem">daps</code>
     package from the   <code class="systemitem">Documentation:Tools</code> repository as outlined below.
-   </p><div class="procedure "><div class="procedure-title-wrap"><h6 class="procedure-title"><span class="number">Procedure 1.1: </span><span class="name">Installing DAPS via 1-Click Install </span><a title="Permalink" class="permalink" href="cha.daps.user.inst.html#idm139987707747680">#</a></h6></div><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>Open your browser and go to <a class="ulink" href="http://software.opensuse.org/" target="_blank">http://software.opensuse.org/</a>.</p></li><li class="step "><p>In the 
+   </p><div class="procedure "><div class="procedure-title-wrap"><h6 class="procedure-title" id="id1561"><span class="number">Procedure 1.1: </span><span class="name">Installing DAPS via 1-Click Install </span><a title="Permalink" class="permalink" href="cha.daps.user.inst.html#id1561">#</a></h6></div><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>Open your browser and go to <a class="ulink" href="http://software.opensuse.org/" target="_blank">http://software.opensuse.org/</a>.</p></li><li class="step "><p>In the 
       <span class="guimenu">Search</span> box, 
       enter <code class="systemitem">daps</code> and press
       <span class="keycap">Enter</span>. </p></li><li class="step "><p>Click the resulting <span class="guimenu">daps</span> entry to switch to the
@@ -91,13 +91,14 @@ else {
       Web page shows the DAPS version that is available for the latest
       openSUSE version.</p></li><li class="step "><p>To get the latest DAPS version instead,  click <span class="guimenu">Show
       Other Versions</span> below <span class="guimenu">Direct Install</span>.
-     </p></li><li class="step "><p>Click <span class="guimenu">openSUSE Factory</span> › <span class="guimenu">Show Unstable Packages</span>.</p></li><li class="step "><p>Look for the <code class="systemitem">Documentation:Tools</code> repository and click the
-      <span class="guimenu">1-Click Install</span> link next to the repository.</p></li><li class="step "><p>Confirm your choice to continue.</p></li><li class="step "><p>Follow the instructions in the <span class="guimenu">1-Click Install</span>
-      wizard to complete the installation.</p></li></ol></div></div><p>
+     </p></li><li class="step "><p>Select your current distribution and click on <span class="guimenu">Show Unstable Packages</span>.</p></li><li class="step "><p>Look for the <code class="systemitem">Documentation:Tools</code> repository and click the
+      <span class="guimenu">1-Click</span> link next to the repository.</p></li><li class="step "><p>Confirm your choice to continue.</p></li><li class="step "><p>Follow the instructions in the <span class="guimenu">1-Click Install</span> wizard
+     to complete the installation.</p></li></ol></div></div><p>
     If you are already well-versed in the usage of openSUSE, you can of course also
     add the 
     <code class="systemitem">Documentation:Tools</code> repository
-    with either <code class="command">zypper</code> or <span class="guimenu">YaST</span>.
+    with either <code class="command">zypper</code> or <span class="guimenu">YaST</span>. To do so,
+    proceed with 4.1.1 or 4.1.2.
    </p><p>
     You may also use the <code class="systemitem">daps</code> package
     that shipped with your version of openSUSE. However, you then might miss the latest
@@ -118,24 +119,24 @@ else {
     available as a TAR archive. They can be installed with
     <code class="literal">configure</code>, <code class="literal">make</code>, and <code class="literal">make
     install</code>.
-   </p><div class="procedure "><div class="procedure-title-wrap"><h6 class="procedure-title"><span class="number">Procedure 1.2: </span><span class="name">Installing the DAPS Sources </span><a title="Permalink" class="permalink" href="cha.daps.user.inst.html#pro.daps.user.inst.tarball">#</a></h6></div><div class="procedure-contents"><p>
+   </p><div class="procedure "><div class="procedure-title-wrap"><h6 class="procedure-title" id="pro.daps.user.inst.tarball"><span class="number">Procedure 1.2: </span><span class="name">Installing the DAPS Sources </span><a title="Permalink" class="permalink" href="cha.daps.user.inst.html#pro.daps.user.inst.tarball">#</a></h6></div><div class="procedure-contents"><p>
      Before starting the installation, check the DAPS
      <a class="xref" href="cha.daps.user.inst.html#sec.daps.user.req" title="1.1. System Requirements">System Requirements</a>
      and make sure all required packages and tools are installed.
     </p><ol class="procedure" type="1"><li class="step "><p>
-      Go to <a class="ulink" href="http://sourceforge.net/projects/daps/files/" target="_blank">http://sourceforge.net/projects/daps/files/</a> and
+      Go to <a class="ulink" href="https://github.com/openSUSE/daps/releases" target="_blank">https://github.com/openSUSE/daps/releases</a> and
       download the DAPS source TAR archive,
       <code class="filename">daps-<em class="replaceable ">version_number</em>.tar.bz2</code>.
      </p></li><li class="step "><p>
       Unpack the TAR archive:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">tar -xvf daps-<em class="replaceable ">version_number</em>.tar.bz2</code></pre></div></li><li class="step "><p>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">tar -xvf daps-<em class="replaceable ">version_number</em>.tar.bz2</code></pre></div></li><li class="step "><p>
       Change to the newly created <code class="filename">daps</code> subdirectory and
       start the configure script:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">./configure</code></pre></div><p>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">./configure</code></pre></div><p>
       If you want to adjust the DAPS installation paths:
      </p><ol type="a" class="substeps "><li class="step "><p>
         View the available options with
-       </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">./configure <code class="option">--help</code></code></pre></div></li><li class="step "><p>
+       </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">./configure <code class="option">--help</code></code></pre></div></li><li class="step "><p>
         Run the configure script with the desired option.
        </p></li></ol><p>
       The script checks your system for any software relevant to DAPS
@@ -158,6 +159,6 @@ else {
       summary again.
      </p></li><li class="step "><p>
       If everything is prepared according to your wishes, enter:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">make</code></pre></div></li><li class="step "><p>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">make</code></pre></div></li><li class="step "><p>
       Start the installation process with:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux &gt; </code><code class="command">sudo make install</code></pre></div></li></ol></div></div></div></div></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="cha.daps.user.features.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Chapter 2 </span>Conceptual Overview</span></a><a class="nav-link" href="pre.daps.user.html"><span class="prev-icon">←</span><span class="nav-label">About This Guide</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">sudo make install</code></pre></div></li></ol></div></div></div></div></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="cha.daps.user.features.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Chapter 2 </span>Conceptual Overview</span></a><a class="nav-link" href="pre.daps.user.html"><span class="prev-icon">←</span><span class="nav-label">About This Guide</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
