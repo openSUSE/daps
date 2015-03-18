@@ -183,6 +183,10 @@ function parse_args () {
                 P_NOSET=1
                 shift
                 ;;
+            --notrans-dir)
+                P_NOTRANS_DIR="$2"
+		shift 2
+		;;
             --noxml)
                 P_LIST_NOXML=1
                 shift
@@ -194,6 +198,10 @@ function parse_args () {
 	    --optipng)
 		P_OPTIPNG=1
 		shift
+		;;
+            --output-dir)
+                P_OUTPUT_DIR="$2"
+		shift 2
 		;;
             --pagefiles)
                 P_PAGEFILES=1
@@ -1164,6 +1172,120 @@ function package-html () {
 
 ###########################################################################
 #
+# PACKAGING unpack-locdrop
+#
+# Subcommand: unpack-locdrop only
+#
+# unpack a localization drop packages source.
+# Files listed in manifest_trans.txt will be extracted from the given tarball
+# Files listed in manifest_notrans will be linked/copied from the notrans
+# directory specified with --notrans-dir
+#
+###########################################################################
+function unpack-locdrop () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local ENTITIES FILE MANIFEST_TRANS MANIFEST_NOTRANS NOTRANS_DIR OUTPUT_DIR
+
+    MANIFEST_TRANS=manifest_trans.txt
+    MANIFEST_NOTRANS=manifest_notrans.txt
+
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="file:,help,notrans-dir:,output-dir:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_file
+        help_help
+        help_notrans-dir
+        help_output-dir
+        echo
+        exit 0
+    fi
+
+    if [[ -n "$P_FILE" ]]; then
+	if [[ -f "$P_FILE" ]]; then
+	    FILE="$P_FILE"
+	else
+	   exit_on_error "Fatal: $P_FILE does not exist"
+	fi
+    else
+	exit_on_error "Fatal: Specifying a locdrop tarball with --file is mandatory."
+    fi
+    if [[ -n "$P_NOTRANS_DIR" ]]; then
+	sanitize_path "$P_NOTRANS_DIR" "NOTRANS_DIR"
+    else
+	exit_on_error "Fatal: Specifying a directory with original untranslated\nsources with --notrans-dir is mandatory."
+    fi
+    if [[ -n "$P_OUTPUT_DIR" ]]; then
+	sanitize_path "$P_OUTPUT_DIR" "OUTPUT_DIR"
+    else
+	exit_on_error "Fatal: Specifying an output directory\nwith  --output-dir is mandatory."
+    fi
+
+    cd $OUTPUT_DIR
+
+    #
+    # Extract files from manifest_trans.txt
+    #
+    tar xfj $FILE $MANIFEST_TRANS $MANIFEST_NOTRANS
+    tar xfj $FILE $(cat $MANIFEST_TRANS)
+    
+    #
+    # Extract files from manifest_notrans.txt
+    #
+    # Copy DC-files from manifest_notrans.txt
+    for DC in $(egrep "^DC-" $MANIFEST_NOTRANS); do
+	if [[ -f ${NOTRANS_DIR}/$DC ]]; then
+	    cp ${NOTRANS_DIR}/$DC .
+	else
+	    ccecho "warn" "File does not exist: ${NOTRANS_DIR}/$DC" >&2
+	fi
+    done
+    for DATA in $(egrep --invert-match "^DC-" $MANIFEST_NOTRANS); do
+	if [[ -f ${NOTRANS_DIR}/$DATA ]]; then
+	    DIR=$(dirname $DATA)
+	    if [[ "." == $DIR ]]; then
+		ln -sf ${NOTRANS_DIR}/$DATA
+	    else
+		[[ -d $DIR ]] || mkdir -p $DIR
+		# the realpath statement makes sure a realtive path is used
+                # for the link (also see 
+                # https://stackoverflow.com/questions/2564634)
+		(cd $DIR && ln -sf $(realpath --relative-to="." "${NOTRANS_DIR}/$DATA"))
+	    fi
+	else
+	    ccecho "warn" "File does not exist: ${NOTRANS_DIR}/$DATA" >&2
+	fi
+    done
+
+    #
+    # Get entity files from the notrans sources and link to them
+    #
+    ENTITIES="$(${LIBEXEC_DIR}/getentityname.py $(egrep "xml/.*\.xml" $MANIFEST_NOTRANS | sed s:^:${NOTRANS_DIR}/:g))"
+    for ENT in $(echo $ENTITIES); do
+	if [[ -f ${NOTRANS_DIR}/xml/$ENT ]]; then
+	    (cd xml && ln -sf ${NOTRANS_DIR}/xml/$ENT)
+	else
+	    ccecho "warn" "Cannot find entity file: ${NOTRANS_DIR}/xml/$ENT" >&2
+	fi
+    done
+
+    cd -
+
+    ccecho "result" "Successfully created files in\n$OUTPUT_DIR"
+    exit 0
+}
+
+
+###########################################################################
+#
 #  PROFILE First
 #
 #  Some subcommands (such as projectgraphics and various dist and packaging
@@ -1915,7 +2037,7 @@ function help_extra-dict () {
                               Default: unset"
 }
 function help_file () {
-    echo "    --file=FILE               Specify the filename of an XML file"
+    echo "    --file=FILE               Specify the name of the input file"
 }
 function help_formatter () {
     echo "    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
@@ -2018,6 +2140,13 @@ function help_nosearch () {
                               builds.
                               Default: enabled"
 }
+function help_notrans-dir () {
+    echo "    --notrans-dir             Relative or absolute path to the directory
+                              containing the untranslated sources. Links
+                              pointing to this directory are created for all
+                              files listed in manifest_notrans.txt. Mandatory.
+                              Default: unset"
+}
 function help_noset () {
     echo "    --noset                   Creates a bigfile for the given book (specified
                               by the rootid) rather than the complete set.
@@ -2033,12 +2162,16 @@ function help_online () {
     echo "    --online                  Only generate images used for HTML builds.
                               Default: off"
 }
-
 function help_optipng () {
     echo "    --optipng                 Optimize PNG images by reducing the color
                               palette (using optipng), Modfies the original
                               sources!
                               Default: off"
+}
+function help_output-dir () {
+    echo "    --output-dir              Output directory in which to unpack the files
+                              from the localization drop. Mandatory.
+                              Default: unset"
 }
 function help_pagefiles () {
     echo "    --pagefiles               Generate .page files.
