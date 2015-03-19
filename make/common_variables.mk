@@ -410,5 +410,5 @@ endif
 # locdrop
 #
 LOCDROP_TMP_DIR  := $(TMP_DIR)/$(BOOK)_locdrop
-MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/manifest_trans.txt
-MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/manifest_notrans.txt
+MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_trans.txt
+MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
