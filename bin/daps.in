@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2011-2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2011-2015 Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer@opensuse.org>
@@ -141,7 +141,6 @@ VARLIST=(
     XEP_CONFIG_FILE
     XEP_OPTIONS
     XEP_WRAPPER
-    XML_DEVEL_CATALOG
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
     XSLTPARAM
@@ -1264,7 +1263,7 @@ if [[ -n "$DAPSROOT" ]]; then
         PYTHON_DIR="${DAPSROOT}/python"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
-        XML_DEVEL_CATALOG="$DAPSROOT/etc/catalog.xml"
+        XML_DEVEL_CATALOG="$XML_DEVEL_CATALOG $DAPSROOT/etc/catalog.xml"
 #        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
     fi
 else
@@ -1474,9 +1473,6 @@ if [[ -n "$XML_DEVEL_CATALOG" ]]; then
     XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
 fi
 export XML_CATALOG_FILES
-
-
-
 
 # ----------------------------------------------------------------------------
 # Set paths
