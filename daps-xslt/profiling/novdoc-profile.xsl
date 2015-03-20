@@ -12,11 +12,19 @@
 	exclude-result-prefixes="p exsl">
 
 <xsl:import href="base-profile.xsl"/>
+<xsl:import href="../lib/create-doctype.xsl"/>
+  
 
-<xsl:output method="xml"
-            encoding="UTF-8"
-            doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
-            doctype-system="novdocx.dtd"/>
+<xsl:template name="pre.rootnode">
+  <xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>
+  <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="create.novdoc.doctype"/>
+</xsl:template>
+
+
+<xsl:template match="/processing-instruction('xml-stylesheet')"
+              name="xml-stylesheet"
+              mode="profile" />
 
 
 </xsl:stylesheet>
