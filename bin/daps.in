@@ -390,6 +390,9 @@ HELP_SUBCOMMAND+=("text=Build an ASCII text document the from the XML sources.")
 SUBCOMMANDS+=("text-name=show_names")
 HELP_SUBCOMMAND+=("text-name=Print the file name that would result when building an ASCII text document.")
 
+SUBCOMMANDS+=("unpack-locdrop=unpack-locdrop")
+HELP_SUBCOMMAND+=("unpack-locdrop=Unpack a localization drop packages source.")
+
 SUBCOMMANDS+=("validate=comments_remarks")
 HELP_SUBCOMMAND+=("validate=Validate the profiled XML sources referenced by the DC- or MAIN-file.")
 
@@ -1555,7 +1558,9 @@ WRITE_LOG=1
 # eval is needed here, otherwise the --xsltparam option does not
 # work 
 #
-eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+#eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+
+$FUNCTION "$SUBCMD ${SCMD_ARGS[@]}"
 
 # remove the tmp SETFILE
 # done via trap, see above

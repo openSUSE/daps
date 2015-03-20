@@ -405,3 +405,10 @@ else
   # copy directories recursively, create links on files
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
 endif
+
+#-----
+# locdrop
+#
+LOCDROP_TMP_DIR  := $(TMP_DIR)/$(BOOK)_locdrop
+MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_trans.txt
+MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
