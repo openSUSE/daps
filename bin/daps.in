@@ -1558,9 +1558,10 @@ WRITE_LOG=1
 # eval is needed here, otherwise the --xsltparam option does not
 # work 
 #
-#eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
 
-$FUNCTION "$SUBCMD ${SCMD_ARGS[@]}"
+# Quoting needs to be exactly like this, do not change
+#
+$FUNCTION $SUBCMD "${SCMD_ARGS[@]}"
 
 # remove the tmp SETFILE
 # done via trap, see above
