@@ -164,8 +164,13 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
 #---------------
 # Inline Graphics
 #
-$(EPUB_INLINE_DIR)/%: $(ONLINE_IMAGES) | $(EPUB_OEBPS)
-	ln -sf $< $@
+$(EPUB_INLINE_IMAGES): $(ONLINE_IMAGES) | $(EPUB_OEBPS)
+
+$(EPUB_INLINE_DIR)/%.png: $(IMG_GENDIR)/color/%.png 
+	ln -sf $(shell readlink -e $<) $@
+
+$(EPUB_INLINE_DIR)/%.jpg: $(IMG_GENDIR)/color/%.jpg
+	ln -sf $(shell readlink -e $<) $@
 
 #--------------
 # mimetype file
