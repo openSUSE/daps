@@ -1213,10 +1213,7 @@ function unpack-locdrop () {
         exit 0
     fi
 
-    if [[ -n "$P_TRANS_FILES" ]]; then
-	# replace "§" with " " 
-	TRANS_FILES=${P_TRANS_FILES//;/ }
-    else
+    if [[ -z "$P_TRANS_FILES" ]]; then
 	exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
     fi
     if [[ -z "$P_NOTRANS_DIR" ]]; then
