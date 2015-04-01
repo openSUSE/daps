@@ -3,8 +3,9 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
+  <!ENTITY % entities SYSTEM "../../doc/xml/entity-decl.ent">
+  %entities;
   <!ENTITY daps_command "daps">
-  <!ENTITY daps_version "2.0~rc1">
 ]>
 
 <refentry lang="en" id="daps">
@@ -59,7 +60,7 @@
   <refentrytitle>&daps_command;</refentrytitle>
   <manvolnum>1</manvolnum>
   <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
-  <refmiscinfo class="version">&daps_version;</refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
   <refmiscinfo class="manual">daps</refmiscinfo>
  </refmeta>
  <refnamediv>
