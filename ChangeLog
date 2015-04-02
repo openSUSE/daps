@@ -1,4 +1,270 @@
 -------------------------------------------------------------------
+Thu Aug 14 11:09:36 UTC 2014 - sknorr@suse.de
+
+New release DAPS 2.0~rc2
+
+-  EPUB 3 builds now succeed
+-  Mobipocket builds succeed again
+-  "static" directories are now expected to be located within
+   specific subfolders of the chosen style root
+-  EPUB now supports "static" folders
+
+-------------------------------------------------------------------
+Fri Aug  1 11:56:05 UTC 2014 - fsundermeyer@opensuse.org
+
+-  Changing the version number from "RC1" to "rc1" because the
+   uppercase form is considered to be older than the previous release
+   "beta8". No code change.
+
+-------------------------------------------------------------------
+Wed Jul 30 08:27:09 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~RC1:
+
+- Language string in resulting filenames is no longer transformed to
+  lowercase but taken as specified in MAIN (needed for Release Notes)
+
+-------------------------------------------------------------------
+Wed Jul 23 14:59:13 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta8:
+
+- Added two stylesheets to daps-xslt/relnotes needed to build
+  release-notes
+
+-------------------------------------------------------------------
+Thu Jun 26 15:31:56 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta7:
+
+- Reverted the change that was introduced with beta6, since
+  the libxml2-2 patches have been removed - they broke too many
+  applications
+- apart from a minor change in the automake setup this release is
+  identical to beta5
+
+-------------------------------------------------------------------
+Wed May 21 14:36:57 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta6:
+
+- Fixed fatal error:
+  an update of libxml2 changed the behaviour of xmllint's
+  entity handling which made it necessary to add --noent
+  to the xmllint calls that check whether the sources are
+  well-formed
+
+-------------------------------------------------------------------
+Wed Apr 23 15:31:09 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta5:
+
+- fully supporting the suse-doc-style-checker (target stylecheck)
+- fix for "online-docs": only tar'ing png and jpg if respective
+  images are available
+- fix for ticket #225 (Misleading error message when xml files do
+  not reside in a directory named xml/)
+- fix for ticket #218 (Improve error handling for --rootid
+  parameter)
+- added tests for targets "package-html and "package-pdf"
+- resulting filenames for package-html and package-pdf can now
+  be queried via "showvariable"
+
+-------------------------------------------------------------------
+Fri Mar 14 16:11:06 UTC 2014 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta4:
+
+- replace special characters (such as space or "/") from
+  profiling attributes with "_" when generating the profiling
+    directory path
+- Made profiling depend on the DC file, too, to ensure a rebuild
+  is triggered whenever the DC file changes
+- STYLEIMG was set in a way that it had an incorrect value in case
+  a fallback STYLEROOT directory was used
+- Improved error message when not being able to determine DocBook
+  version
+- spec file:
+  * require xmlstarlet
+  * remove emacs-psgml recommendation
+  * svg-dtd package has been renamed to svg-schema
+
+-------------------------------------------------------------------
+Sat Dec 21 21:30:10 UTC 2013 - fsundermeyer@opensuse.org
+
+New release DAPS 2.0~beta3:
+Features:
+- Use original HTML DocBook Stylesheets for txt output by default:
+  * use custom stylesheets by setting TXT_USE_DBSTYLES to "no"
+Bugfixes:
+ - STYLEROOT and FB_STYLEROOT definitions in the config files were
+   checked even if values were specified on the command line
+   (ticket #211)use custom stylesheets by setting TXT_USE_DBSTYLES
+   to "no"
+ - JSP result directory was incorrect when no profiled MAIN existed
+   (ticket #212)
+ - PDF was not copied to the result dir when running package-pdf
+ - Improved error message when having specified a second bareword
+   after the subcommand (ticket #185)
+
+-------------------------------------------------------------------
+Thu Dec 12 11:48:18 UTC 2013 - fsundermeyer@opensuse.org
+
+Bugfix release DAPS 2.0~beta2:
+ - two fixes for package-html and package-pdf:
+   * ticket #208 package-pdf and package-html should support...
+   * ticket #209 package-html --jsp is broken
+
+-------------------------------------------------------------------
+Fri Dec  6 20:39:09 UTC 2013 - fsundermeyer@opensuse.org
+
+Version DAPS 2.0~beta1:
+- First beta for a new major release
+
+  Output targets:
+  ---------------
+  * the number of subcommands has been significantly reduced, see
+    "daps --commands", "daps help" and "daps help <SUBCOMMAND>" for
+    more information
+    - "html-single" has been replaced by "html --single"
+    - "jsp" has been replaced with "html --jsp"
+    - "color-pdf" has been replaced by "pdf" (now produces color PDFS)
+    - "pdf" has been replaced by "pdf --grayscale --cropmarks"
+    - "projectfiles" and "projectgraphics" have been replaced with
+      "list-srcfiles" (see daps help "list-srcfiles" for more options)
+    - all dist-* commands have been removed
+    - when calling deprecated targets, an error message hinting at a
+      valid alternative (is existing) is shown
+  * subcommand bigfile now generates a bigfile for the given rootid
+    (rather than for the complate set); target bigfile-reduced has been
+    dropped
+  * subbcommands package-pdf and package-html now have switches
+    --dcoumentfiles, --desktopfiles and --pagefiles which generate
+    the resource files for GNOME and KDE
+  * new subcommands
+    - "clean-package" removes all generated package data for the given
+      DC-file. Generated images and profiled sources will _not_ be
+      deleted.
+    - "dapsenv" shows a list of the most important make variables
+      and their values
+    - "images" generates images only for a given rootid. Intended for
+      debugging purposes
+    - "package-src" (creates a tarball with profiled XML sources and
+      images); switch --set-date allows to specify a build date (default
+      date is "now")
+    - "list-file" lists the filename that contains the ID specified
+      with the mandatory paramater --rootid.
+  * ePUB generation has been completely rewritten (pure make solution,
+    no longer uses the ruby script from upstream); generated ePUBs
+    now validate with epubcheck3.
+    - added support for .mobi (Amzon Kindle format). Requires calibre.
+      (ticket #98)
+  * replaced support for HTML4 with support for HTML5 (--html5)
+    xhtml remains the default, html4 is no longer supported
+  * to nullify a CSS-file definition for HTML or EPUB (HTML_CSS or
+    EPUB_CSS) from the DC-file, specify "--css none"
+
+  Miscellaneous:
+  --------------
+  * now supports XSLT processor saxon6 (in addition to xsltproc),
+    specify with --xsltprocessor (default: xsltproc)
+  * improved verbosity handling:
+    - if output is not a terminal (e.g. pipe) only prints the
+      resulting filename (-v0)
+    - default verbosity shows a result message plus filename (-v1)
+    - -v2 shows additional messages
+    - -v3 shows the complete make output from make -j1 (commands are
+      executed successively, not parallel)
+    - --debug shows the complete make output from make -j1+x
+      (commands are executed parallel; this also shows in the debug
+      output)
+  * added support for JPG images (ticket #101)
+  * added support for a "static/" directory in STYLEROOT containing
+    css, js and images taht are reference in the CSS and the
+    stylesheets for HTML
+  * New general switch --commands shows all available subcommands
+  * if the XML sources are not well-formed, a meaningful error
+    message is shown
+  * xsltparameters have to be submitted as --param PARAM=VALUE or
+    --stringparam PARAM=VALUE (the "=" is mandatory, used to be
+    a "space2 with DAPS 1.x)
+  * output formats are only re-generated when the source files
+    (xml, entity files or images) have changed. To force a rebuild
+    run DAPS with --force or run a suitable clean command 
+  * added switches --author and --productname switches to daps-init
+
+  Config file changes:
+  --------------------
+  * New config file variables:
+    COVERT_OPS_JPG:    command-line options for "convert" for converting
+                       jpg images to grayscale
+    FOP_STACKSIZE:     set stacksize for fop (ticket #82)
+    META, META_STR:    permanently run html and PDF builds with
+                       --meta
+    STATIC_DIR:        custom static directory
+    XML_USER_CATALOGS: add custom catalogs to XML_CATALOG_FILES
+                       (ticket #99)
+    XSLTPROCESSOR:     Use the specified XSLT processor
+                       (saxon6 or xsltproc)
+
+  Code changes:
+  -------------
+  * big makefile (common.mk) has been split into several small files
+    - easier to maintain
+    - improved performance by only loading makefiles that are needed
+      for the given subcommand
+  * added a comprehensive test suite to ensure better quality when
+    releasing
+  * no longer requires Bash 4--Bash 3 is sufficient
+
+  Documentation:
+  --------------
+  * Quickstart has been updated to cover DAPS 2.0
+  * Update of User Guide is WIP
+  * new Tutorial "How to Write an Article with DocBook and DAPS" 
+
+  Bugfixes:
+  ---------
+  Numerous bugfixes and improvements, among them:
+
+  * #64 Split Makefiles
+  * #66 daps: DC Files and Platform Dependant Paths
+  * #73 Create PDFs for target locdrop if --def-file is specified
+  * #82 Add config parameter for FOP (XEP?) stacksize
+  * #85 Set a fixed <date/> date with package-src target
+  * #98 Adjust EPUB Stylesheet to Suppot Kindle
+  * #99 Support User Definied Catalogs by Setting XML_CATALOG_FILES...
+  * #101 DAPS should support JPEG as a source file format
+  * #103 Exit target package-source when there are missing images
+  * #105 DAPS's sub-commands are somewhat inconsistent
+  * #106 Enable overwriting xsltproc params
+  * #108 Support FOP 1.1
+  * #115 --css/HTML_CSS parameter is completely ignored if styleroot...
+  * #116 Move font requirements from daps specfile to ...
+  * #126 Add --show switch to checklink
+  * #127 productinfo sometimes fails and is slow
+  * #129 Get rid of native xsltproc calls
+  * #136 daps Ignores Language in Document for Spell Checking
+  * #138 DAPS makes it easier to create black/white PDFs than ...
+  * #139 When trying to create a PDF file with malformed XSLT files...
+  * #142 Saxon seems to have problems with NovDoc documents
+  * #146 EPUB CRITICAL Error: No manual specific tmp dir
+  * #147 EPUB validation error on callouts
+  * #148 --meta only works when profiling
+  * #159 Fatal Error in ePUB stylesheets
+  * #163 JSP Stylesheets fail with saxon6
+  * #165 FOP config file is unnecessary
+  * #166 Reduce Logging Output of Apache's FOP
+  * #171 Remove unnecessary "eval" statements in the DAPS code
+  * #192 Create filenames in a single place
+  * #196 EPUB does not build with saxon
+
+  Known Issues:
+  -------------
+  * the webhelp code hasn't been touched at all; webhelp will most
+    likely not work
+
+-------------------------------------------------------------------
 Wed Feb 14 11:47:26 UTC 2013 - fsundermeyer@opensuse.org
 
 Version 1.1.4:

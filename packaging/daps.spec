@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.0~rc1
+Version:        2.0~rc2
 Release:        0
 
 ###############################################################
@@ -57,18 +57,18 @@ BuildRequires:  dia
 BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.77
 BuildRequires:  fdupes
-BuildRequires:  ghostscript-library
+BuildRequires:  ghostscript
 BuildRequires:  ImageMagick
 BuildRequires:  inkscape
 %if 0%{?suse_version} >= 1220
 BuildRequires:  libxml2-tools
 %endif
-BuildRequires:  libxslt
-#%%if %%sles_version >= 11
+BuildRequires:  libxslt libxslt-tools
+#%if 0%{?suse_version} == 1315
 #BuildRequires:  sles-release
-#%%else
+#%else
 #BuildRequires:  openSUSE-release
-#%%endif
+#%endif
 BuildRequires:  poppler-tools
 BuildRequires:  python-xml
 BuildRequires:  python-lxml
@@ -82,10 +82,6 @@ BuildRequires:  xmlgraphics-fop >= 0.94
 %else
 BuildRequires:  fop >= 0.94
 %endif
-#---
-# Font stuff
-BuildRequires:  fontpackages-devel
-
 
 #
 # In order to keep the requirements list as short as possible, only packages
@@ -137,6 +133,7 @@ Recommends:     checkbot
 %endif
 Recommends:     remake
 Recommends:     suse-doc-style-checker
+Recommends:     w3m
 # Internal XEP package:
 Recommends:     xep
 Recommends:     xmlformat
@@ -195,7 +192,6 @@ fi
 edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --add /etc/xml/%{daps_catalog}
 
-%reconfigure_fonts_post
 exit 0
 
 #----------------------
@@ -211,19 +207,16 @@ if [ -x /usr/bin/edit-xml-catalog ] ; then
   --del %{name}
 fi
 
-%reconfigure_fonts_post
 fi
 exit 0
 
 #----------------------
 %posttrans
-%reconfigure_fonts_posttrans
 
 #----------------------
 %files
 %defattr(-,root,root)
 
-%dir %{_ttfontsdir}
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
@@ -236,8 +229,9 @@ exit 0
 %{_bindir}/*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
 %{docbuilddir}
-%{_ttfontsdir}/*
 %exclude %{_defaultdocdir}/%{name}/INSTALL
+%exclude %{_sysconfdir}/%{name}/config.in
+%exclude %{_sysconfdir}/%{name}/catalog.xml
 
 #----------------------
 

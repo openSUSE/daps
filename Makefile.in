@@ -96,13 +96,14 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
 	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
-	$(dist_ttfonts_DATA) $(dist_xepconf_DATA) \
-	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
-	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
-	$(dist_xsltindex_DATA) $(dist_xsltmallard_DATA) \
-	$(dist_xsltman_DATA) $(dist_xsltprofiling_DATA) \
-	$(dist_xsltrelnotes_DATA) $(dist_xsltyelp_DATA) AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README TODO install-sh missing
+	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
+	$(dist_xsltcontrib_DATA) $(dist_xsltdesktop_DATA) \
+	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
+	$(dist_xsltjsp_DATA) $(dist_xsltlib_DATA) \
+	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
+	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
+	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA) AUTHORS COPYING \
+	ChangeLog NEWS README TODO install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_python_module.m4 \
 	$(top_srcdir)/configure.ac
@@ -146,13 +147,13 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" \
 	"$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" \
 	"$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" \
 	"$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" \
-	"$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" \
-	"$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" \
-	"$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" \
-	"$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmallarddir)" \
-	"$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" \
-	"$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltyelpdir)" \
-	"$(DESTDIR)$(dapsconfdir)"
+	"$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" \
+	"$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" \
+	"$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" \
+	"$(DESTDIR)$(xsltjspdir)" "$(DESTDIR)$(xsltlibdir)" \
+	"$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" \
+	"$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" \
+	"$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"
 SCRIPTS = $(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -188,13 +189,13 @@ am__dist_catalog_DATA_DIST = catalogs/for-catalog-$(PACKAGE).xml
 DATA = $(dist_catalog_DATA) $(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
 	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
 	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
-	$(dist_ttfonts_DATA) $(dist_xepconf_DATA) \
-	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
-	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
-	$(dist_xsltindex_DATA) $(dist_xsltmallard_DATA) \
-	$(dist_xsltman_DATA) $(dist_xsltprofiling_DATA) \
-	$(dist_xsltrelnotes_DATA) $(dist_xsltyelp_DATA) \
-	$(nodist_dapsconf_DATA)
+	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
+	$(dist_xsltcontrib_DATA) $(dist_xsltdesktop_DATA) \
+	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
+	$(dist_xsltjsp_DATA) $(dist_xsltlib_DATA) \
+	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
+	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
+	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -322,7 +323,6 @@ PYTHON_PREFIX = @PYTHON_PREFIX@
 PYTHON_VERSION = @PYTHON_VERSION@
 Q = @Q@
 REMAKE = @REMAKE@
-ROOT_CATALOG = @ROOT_CATALOG@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -344,8 +344,10 @@ am__untar = @am__untar@
 bindir = @bindir@
 build_alias = @build_alias@
 builddir = @builddir@
+daps_xsl = @daps_xsl@
 datadir = @datadir@
 datarootdir = @datarootdir@
+db4_xslt_url = @db4_xslt_url@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
@@ -369,6 +371,7 @@ program_transform_name = @program_transform_name@
 psdir = @psdir@
 pyexecdir = @pyexecdir@
 pythondir = @pythondir@
+root_catalog = @root_catalog@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -400,15 +403,17 @@ DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT := $(abs_top_srcdir)
 
 # fop config
-# I love automake conditionals, they are sooo powerful ;-(
 #
 FOP_CONFIG := etc/fop/fop-daps.xml
-@DIST_OTHER_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.generic
+FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
 @DIST_REDHAT_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
+@DIST_SUSEBS_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.suse
 @DIST_SUSE_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+@DIST_UBUNTU_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.generic
+@HAS_DAPS_XSL_FALSE@STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
 
-# stylesheets with which to build the documentation
-STYLEROOT := $(DAPSROOT)/suse/xslt
+# stylesheets
+@HAS_DAPS_XSL_TRUE@STYLEROOT := $(daps_xsl)
 
 # Man pages
 DC_MANPAGES := DC-daps-manpages
@@ -438,7 +443,6 @@ dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir = $(pkgdatadir)/make
 emacssitedir = @datadir@/emacs/site-lisp
 templatedir = $(pkgdatadir)/init_templates
-ttfontsdir = @datadir@/fonts/truetype
 htmldocdir = @docdir@/html
 xsltdir = $(pkgdatadir)/daps-xslt
 xsltcommondir = $(xsltdir)/common
@@ -446,10 +450,13 @@ xsltcontribdir = $(xsltdir)/contrib
 xsltdesktopdir = $(xsltdir)/desktop
 xsltepubdir = $(xsltdir)/epub
 xsltindexdir = $(xsltdir)/index
+xsltjspdir = $(xsltdir)/jsp
+xsltlibdir = $(xsltdir)/lib
 xsltmallarddir = $(xsltdir)/mallard
-xsltmandir = $(xsltdir)/man
+xsltmigratedir = $(xsltdir)/migrate
 xsltprofilingdir = $(xsltdir)/profiling
 xsltrelnotesdir = $(xsltdir)/relnotes
+xsltxhtmldir = $(xsltdir)/xhtml
 xsltyelpdir = $(xsltdir)/yelp
 
 #------------------------
@@ -466,7 +473,6 @@ dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
 dist_dapsconf_DATA = etc/config etc/docbook-xmlformat.conf \
 			etc/CatalogManager.properties
 
-nodist_dapsconf_DATA = etc/config.in etc/catalog.xml
 dist_fopconf_DATA = etc/fop/fop-daps.xml
 dist_xepconf_DATA = etc/xep/xep-daps.xml
 dist_hyphen_DATA = $(wildcard etc/xep/hyphen/*.tex) \
@@ -478,7 +484,6 @@ dist_dapslib_DATA = $(wildcard lib/*)
 dist_emacssite_DATA = misc/docbook_macros.el
 dist_dapsmake_DATA = $(wildcard make/*.mk)
 dist_template_DATA = $(wildcard init_templates/*)
-dist_ttfonts_DATA = $(wildcard fonts/*.ttf)
 dist_xsltcommon_DATA = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
@@ -487,15 +492,18 @@ dist_xsltcontrib_DATA = $(wildcard daps-xslt/contrib/*.xsl)
 dist_xsltdesktop_DATA = $(wildcard daps-xslt/desktop/*.xsl)
 dist_xsltepub_DATA = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA = $(wildcard daps-xslt/index/*.xsl)
+dist_xsltjsp_DATA = $(wildcard daps-xslt/jsp/*.xsl)
+dist_xsltlib_DATA = $(wildcard daps-xslt/lib/*.xsl)
 dist_xsltmallard_DATA = $(wildcard daps-xslt/mallard/*.xsl)
-dist_xsltman_DATA = $(wildcard daps-xslt/man/*.xsl)
+dist_xsltmigrate_DATA = $(wildcard daps-xslt/migrate/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
-dist_xsltrelnotes_DATA = $(wildcard daps-xslt/relnotes/*.xsl)
+dist_xsltrelnotes_DATA = $(wildcard daps-xslt/xhtml/*.xsl)
+dist_xsltxhtml_DATA = $(wildcard daps-xslt/relnotes/*.xsl)
 dist_xsltyelp_DATA = $(wildcard daps-xslt/yelp/*.xsl)
 
 # DOCUMENTATION
-dist_doc_DATA = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL README \
-			README.quickstart README.upgrade_from_susedoc_4.x
+dist_doc_DATA = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
+			README.adoc README.quickstart.adoc
 
 dist_man1_MANS = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
@@ -838,27 +846,6 @@ uninstall-dist_templateDATA:
 	@list='$(dist_template_DATA)'; test -n "$(templatedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(templatedir)'; $(am__uninstall_files_from_dir)
-install-dist_ttfontsDATA: $(dist_ttfonts_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(dist_ttfonts_DATA)'; test -n "$(ttfontsdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(ttfontsdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(ttfontsdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(ttfontsdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(ttfontsdir)" || exit $$?; \
-	done
-
-uninstall-dist_ttfontsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(dist_ttfonts_DATA)'; test -n "$(ttfontsdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(ttfontsdir)'; $(am__uninstall_files_from_dir)
 install-dist_xepconfDATA: $(dist_xepconf_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xepconf_DATA)'; test -n "$(xepconfdir)" || list=; \
@@ -985,6 +972,48 @@ uninstall-dist_xsltindexDATA:
 	@list='$(dist_xsltindex_DATA)'; test -n "$(xsltindexdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltindexdir)'; $(am__uninstall_files_from_dir)
+install-dist_xsltjspDATA: $(dist_xsltjsp_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_xsltjsp_DATA)'; test -n "$(xsltjspdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltjspdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltjspdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltjspdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltjspdir)" || exit $$?; \
+	done
+
+uninstall-dist_xsltjspDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xsltjsp_DATA)'; test -n "$(xsltjspdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(xsltjspdir)'; $(am__uninstall_files_from_dir)
+install-dist_xsltlibDATA: $(dist_xsltlib_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_xsltlib_DATA)'; test -n "$(xsltlibdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltlibdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltlibdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltlibdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltlibdir)" || exit $$?; \
+	done
+
+uninstall-dist_xsltlibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xsltlib_DATA)'; test -n "$(xsltlibdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(xsltlibdir)'; $(am__uninstall_files_from_dir)
 install-dist_xsltmallardDATA: $(dist_xsltmallard_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xsltmallard_DATA)'; test -n "$(xsltmallarddir)" || list=; \
@@ -1006,27 +1035,27 @@ uninstall-dist_xsltmallardDATA:
 	@list='$(dist_xsltmallard_DATA)'; test -n "$(xsltmallarddir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltmallarddir)'; $(am__uninstall_files_from_dir)
-install-dist_xsltmanDATA: $(dist_xsltman_DATA)
+install-dist_xsltmigrateDATA: $(dist_xsltmigrate_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(dist_xsltman_DATA)'; test -n "$(xsltmandir)" || list=; \
+	@list='$(dist_xsltmigrate_DATA)'; test -n "$(xsltmigratedir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltmandir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(xsltmandir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltmigratedir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltmigratedir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltmandir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltmandir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltmigratedir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltmigratedir)" || exit $$?; \
 	done
 
-uninstall-dist_xsltmanDATA:
+uninstall-dist_xsltmigrateDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_xsltman_DATA)'; test -n "$(xsltmandir)" || list=; \
+	@list='$(dist_xsltmigrate_DATA)'; test -n "$(xsltmigratedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(xsltmandir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(xsltmigratedir)'; $(am__uninstall_files_from_dir)
 install-dist_xsltprofilingDATA: $(dist_xsltprofiling_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xsltprofiling_DATA)'; test -n "$(xsltprofilingdir)" || list=; \
@@ -1069,6 +1098,27 @@ uninstall-dist_xsltrelnotesDATA:
 	@list='$(dist_xsltrelnotes_DATA)'; test -n "$(xsltrelnotesdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltrelnotesdir)'; $(am__uninstall_files_from_dir)
+install-dist_xsltxhtmlDATA: $(dist_xsltxhtml_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(dist_xsltxhtml_DATA)'; test -n "$(xsltxhtmldir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(xsltxhtmldir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(xsltxhtmldir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xsltxhtmldir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xsltxhtmldir)" || exit $$?; \
+	done
+
+uninstall-dist_xsltxhtmlDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xsltxhtml_DATA)'; test -n "$(xsltxhtmldir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(xsltxhtmldir)'; $(am__uninstall_files_from_dir)
 install-dist_xsltyelpDATA: $(dist_xsltyelp_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_xsltyelp_DATA)'; test -n "$(xsltyelpdir)" || list=; \
@@ -1090,27 +1140,6 @@ uninstall-dist_xsltyelpDATA:
 	@list='$(dist_xsltyelp_DATA)'; test -n "$(xsltyelpdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(xsltyelpdir)'; $(am__uninstall_files_from_dir)
-install-nodist_dapsconfDATA: $(nodist_dapsconf_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(nodist_dapsconf_DATA)'; test -n "$(dapsconfdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(dapsconfdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(dapsconfdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(dapsconfdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(dapsconfdir)" || exit $$?; \
-	done
-
-uninstall-nodist_dapsconfDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(nodist_dapsconf_DATA)'; test -n "$(dapsconfdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(dapsconfdir)'; $(am__uninstall_files_from_dir)
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -1403,7 +1432,7 @@ check: check-recursive
 all-am: Makefile $(SCRIPTS) $(MANS) $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(ttfontsdir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmandir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltyelpdir)" "$(DESTDIR)$(dapsconfdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(dapslibexecdir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(catalogdir)" "$(DESTDIR)$(dapsconfdir)" "$(DESTDIR)$(dapslibdir)" "$(DESTDIR)$(dapsmakedir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(emacssitedir)" "$(DESTDIR)$(fopconfdir)" "$(DESTDIR)$(hyphendir)" "$(DESTDIR)$(templatedir)" "$(DESTDIR)$(xepconfdir)" "$(DESTDIR)$(xsltcommondir)" "$(DESTDIR)$(xsltcontribdir)" "$(DESTDIR)$(xsltdesktopdir)" "$(DESTDIR)$(xsltepubdir)" "$(DESTDIR)$(xsltindexdir)" "$(DESTDIR)$(xsltjspdir)" "$(DESTDIR)$(xsltlibdir)" "$(DESTDIR)$(xsltmallarddir)" "$(DESTDIR)$(xsltmigratedir)" "$(DESTDIR)$(xsltprofilingdir)" "$(DESTDIR)$(xsltrelnotesdir)" "$(DESTDIR)$(xsltxhtmldir)" "$(DESTDIR)$(xsltyelpdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -1463,13 +1492,14 @@ install-data-am: install-data-local install-dist_catalogDATA \
 	install-dist_dapsmakeDATA install-dist_docDATA \
 	install-dist_emacssiteDATA install-dist_fopconfDATA \
 	install-dist_hyphenDATA install-dist_templateDATA \
-	install-dist_ttfontsDATA install-dist_xepconfDATA \
-	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
-	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
-	install-dist_xsltindexDATA install-dist_xsltmallardDATA \
-	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltrelnotesDATA install-dist_xsltyelpDATA \
-	install-man install-nodist_dapsconfDATA
+	install-dist_xepconfDATA install-dist_xsltcommonDATA \
+	install-dist_xsltcontribDATA install-dist_xsltdesktopDATA \
+	install-dist_xsltepubDATA install-dist_xsltindexDATA \
+	install-dist_xsltjspDATA install-dist_xsltlibDATA \
+	install-dist_xsltmallardDATA install-dist_xsltmigrateDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
+	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
+	install-man
 
 install-dvi: install-dvi-recursive
 
@@ -1521,14 +1551,15 @@ uninstall-am: uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
 	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
 	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
 	uninstall-dist_fopconfDATA uninstall-dist_hyphenDATA \
-	uninstall-dist_templateDATA uninstall-dist_ttfontsDATA \
-	uninstall-dist_xepconfDATA uninstall-dist_xsltcommonDATA \
-	uninstall-dist_xsltcontribDATA uninstall-dist_xsltdesktopDATA \
-	uninstall-dist_xsltepubDATA uninstall-dist_xsltindexDATA \
-	uninstall-dist_xsltmallardDATA uninstall-dist_xsltmanDATA \
+	uninstall-dist_templateDATA uninstall-dist_xepconfDATA \
+	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
+	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
+	uninstall-dist_xsltindexDATA uninstall-dist_xsltjspDATA \
+	uninstall-dist_xsltlibDATA uninstall-dist_xsltmallardDATA \
+	uninstall-dist_xsltmigrateDATA \
 	uninstall-dist_xsltprofilingDATA \
-	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltyelpDATA \
-	uninstall-local uninstall-man uninstall-nodist_dapsconfDATA
+	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltxhtmlDATA \
+	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man
 
 uninstall-man: uninstall-man1
 
@@ -1547,33 +1578,35 @@ uninstall-man: uninstall-man1
 	install-dist_dapsmakeDATA install-dist_docDATA \
 	install-dist_emacssiteDATA install-dist_fopconfDATA \
 	install-dist_hyphenDATA install-dist_templateDATA \
-	install-dist_ttfontsDATA install-dist_xepconfDATA \
-	install-dist_xsltcommonDATA install-dist_xsltcontribDATA \
-	install-dist_xsltdesktopDATA install-dist_xsltepubDATA \
-	install-dist_xsltindexDATA install-dist_xsltmallardDATA \
-	install-dist_xsltmanDATA install-dist_xsltprofilingDATA \
-	install-dist_xsltrelnotesDATA install-dist_xsltyelpDATA \
+	install-dist_xepconfDATA install-dist_xsltcommonDATA \
+	install-dist_xsltcontribDATA install-dist_xsltdesktopDATA \
+	install-dist_xsltepubDATA install-dist_xsltindexDATA \
+	install-dist_xsltjspDATA install-dist_xsltlibDATA \
+	install-dist_xsltmallardDATA install-dist_xsltmigrateDATA \
+	install-dist_xsltprofilingDATA install-dist_xsltrelnotesDATA \
+	install-dist_xsltxhtmlDATA install-dist_xsltyelpDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
 	install-html install-html-am install-info install-info-am \
-	install-man install-man1 install-nodist_dapsconfDATA \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-am uninstall uninstall-am uninstall-dist_binSCRIPTS \
-	uninstall-dist_catalogDATA uninstall-dist_dapsconfDATA \
-	uninstall-dist_dapslibDATA uninstall-dist_dapslibexecSCRIPTS \
-	uninstall-dist_dapsmakeDATA uninstall-dist_docDATA \
-	uninstall-dist_emacssiteDATA uninstall-dist_fopconfDATA \
-	uninstall-dist_hyphenDATA uninstall-dist_templateDATA \
-	uninstall-dist_ttfontsDATA uninstall-dist_xepconfDATA \
+	install-man install-man1 install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-dist_binSCRIPTS uninstall-dist_catalogDATA \
+	uninstall-dist_dapsconfDATA uninstall-dist_dapslibDATA \
+	uninstall-dist_dapslibexecSCRIPTS uninstall-dist_dapsmakeDATA \
+	uninstall-dist_docDATA uninstall-dist_emacssiteDATA \
+	uninstall-dist_fopconfDATA uninstall-dist_hyphenDATA \
+	uninstall-dist_templateDATA uninstall-dist_xepconfDATA \
 	uninstall-dist_xsltcommonDATA uninstall-dist_xsltcontribDATA \
 	uninstall-dist_xsltdesktopDATA uninstall-dist_xsltepubDATA \
-	uninstall-dist_xsltindexDATA uninstall-dist_xsltmallardDATA \
-	uninstall-dist_xsltmanDATA uninstall-dist_xsltprofilingDATA \
-	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltyelpDATA \
-	uninstall-local uninstall-man uninstall-man1 \
-	uninstall-nodist_dapsconfDATA
+	uninstall-dist_xsltindexDATA uninstall-dist_xsltjspDATA \
+	uninstall-dist_xsltlibDATA uninstall-dist_xsltmallardDATA \
+	uninstall-dist_xsltmigrateDATA \
+	uninstall-dist_xsltprofilingDATA \
+	uninstall-dist_xsltrelnotesDATA uninstall-dist_xsltxhtmlDATA \
+	uninstall-dist_xsltyelpDATA uninstall-local uninstall-man \
+	uninstall-man1
 
 
 #---------------------------Local TARGETS--------------------------------------
@@ -1592,28 +1625,29 @@ install-data-local:
 	done
 # create entry in xml root catalog
 @CATALOG_EDIT_TRUE@	{ \
-@CATALOG_EDIT_TRUE@	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
+@CATALOG_EDIT_TRUE@	  sed '/<\/catalog>/d' $(root_catalog); \
 @CATALOG_EDIT_TRUE@	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
 @CATALOG_EDIT_TRUE@	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
 @CATALOG_EDIT_TRUE@	      END{print "</catalog>"}'; \
 @CATALOG_EDIT_TRUE@	} >$(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+@CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(root_catalog)
 
 #---------------------------Local UNINSTALL-----------------------------------
 @CATALOG_EDIT_TRUE@uninstall-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 @CATALOG_EDIT_TRUE@uninstall-local:
-@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
+@CATALOG_EDIT_TRUE@	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
 @CATALOG_EDIT_TRUE@	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+@CATALOG_EDIT_TRUE@	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+@CATALOG_EDIT_TRUE@	mv $(TMP_CATALOG) $(root_catalog)
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
-	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(srcdir)/.firstbuild \
-	$(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps $(srcdir)/etc/config \
-	$(srcdir)/etc/fop/fop-daps.xml
-	(cd $(srcdir)/etc && ln -sf config.in config)
+	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
+	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
+	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml
+	(cd $(srcdir)/etc && ln -s config.in config)
 	(cd $(srcdir)/bin && ln -s daps.in daps)
+	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -1641,6 +1675,9 @@ $(DAPS_CATALOG):
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
 	$(Q)$(XMLCATALOG) --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/daps-xsl/current/" \
+	  "file://$(pkgdatadir)/daps-xslt/" $@
+	$(Q)$(XMLCATALOG) --noout --add "rewriteSystem" \
+	  "https://opensuse.github.io/daps/release/daps-xsl/current/" \
 	  "file://$(pkgdatadir)/daps-xslt/" $@
 	$(Q)$(SED) -i '/^<!DOCTYPE .*>$$/d' $@
 	$(Q)$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
@@ -1672,17 +1709,21 @@ etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
-$(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
-	ln -sf $(notdir $<) $@
+$(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
+	if test -n "$(FOP_CONFIG_SRC)"; then \
+	  ln -sf $(notdir $(FOP_CONFIG_SRC)) $@; \
+	else \
+	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
+	fi
 
 $(USERGUIDE):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_USERGUIDE) html --single --static \
             --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_QUICKSTART) html --single --static \
 	    --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"

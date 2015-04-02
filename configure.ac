@@ -36,10 +36,13 @@ AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
 dnl Some constants
-ROOT_CATALOG="/etc/xml/catalog"
-AC_SUBST(ROOT_CATALOG)
-DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+root_catalog="/etc/xml/catalog"
+AC_SUBST(root_catalog)
+db4_xslt_url="http://docbook.sourceforge.net/release/xsl/current/"
+AC_SUBST(db4_xslt_url)
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
+daps_xsl="/usr/share/xml/docbook/stylesheet/daps2012"
+AC_SUBST(daps_xsl)
 FONT_DIR="/usr/share/fonts"
 
 dnl -------------------------
@@ -123,9 +126,9 @@ AC_PATH_PROGS([PDFFORMATTER], [fop xep], [0])
 dnl recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing], [0])
 
-AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=$ROOT_CATALOG], [CATALOG=0])
+AC_CHECK_FILE([$root_catalog], [CATALOG=$root_catalog], [CATALOG=0])
 if test 0 = "$CATALOG"; then
-  AC_MSG_ERROR([Catalog $ROOT_CATALOG not found])
+  AC_MSG_ERROR([Catalog $root_catalog not found])
 fi
 
 dnl -------------------------------------------------------------------------
@@ -162,7 +165,7 @@ dnl svg DTD
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
   AC_MSG_CHECKING([for $SVG_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$SVG_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$SVG_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_SVGDTD=1
   else
@@ -196,7 +199,7 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.4//EN" \
                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
   AC_MSG_CHECKING([for $XML_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK=1
   else
@@ -213,7 +216,7 @@ for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
                   "http://docbook.org/xml/5.0/rng/docbook.rng" \
                   "http://docbook.org/xml/5.0/rng/docbook.rnc" ; do
   AC_MSG_CHECKING([for $XML_SCHEMA])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5=1
   else
@@ -228,18 +231,18 @@ dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
 dnl DocBook4
-for XSLT in "${DB4_XSLT_URL}common/common.xsl" \
-            "${DB4_XSLT_URL}epub/docbook.xsl" \
-            "${DB4_XSLT_URL}fo/docbook.xsl" \
-            "${DB4_XSLT_URL}html/chunk.xsl" \
-            "${DB4_XSLT_URL}html/docbook.xsl" \
-            "${DB4_XSLT_URL}lib/lib.xsl" \
-            "${DB4_XSLT_URL}manpages/docbook.xsl" \
-            "${DB4_XSLT_URL}profiling/profile.xsl" \
-            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
-            "${DB4_XSLT_URL}xhtml/docbook.xsl"; do
+for XSLT in "${db4_xslt_url}common/common.xsl" \
+            "${db4_xslt_url}epub/docbook.xsl" \
+            "${db4_xslt_url}fo/docbook.xsl" \
+            "${db4_xslt_url}html/chunk.xsl" \
+            "${db4_xslt_url}html/docbook.xsl" \
+            "${db4_xslt_url}lib/lib.xsl" \
+            "${db4_xslt_url}manpages/docbook.xsl" \
+            "${db4_xslt_url}profiling/profile.xsl" \
+            "${db4_xslt_url}xhtml/chunk.xsl" \
+            "${db4_xslt_url}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_STYLESHEETS=1
   else
@@ -262,9 +265,10 @@ for XSLT in "${DB5_XSLT_URL}common/common.xsl" \
             "${DB5_XSLT_URL}xhtml/chunk.xsl" \
             "${DB5_XSLT_URL}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5_STYLESHEETS=1
+
   else
     AC_MSG_RESULT([no])
   fi
@@ -274,13 +278,18 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
 fi
 
 dnl -------------------------------------------------------------------------
-dnl Add more distributions if needed
-AM_CONDITIONAL([DIST_REDHAT], [lsb_release -i | egrep -iq "(fedora|redhat)"])
-AM_CONDITIONAL([DIST_SUSE], [lsb_release -i | grep -iq "suse"])
-AM_CONDITIONAL([DIST_OTHER], [lsb_release -i | egrep -iqv "(fedora|redhat|suse)"])
-# /etc/debian-version Debian, Ubuntu
-# /etc/slackware-version Slackware
+dnl Check which Stylesheets to use
+AM_CONDITIONAL([HAS_DAPS_XSL], [test -d $daps_xsl])
 
+dnl -------------------------------------------------------------------------
+dnl Add more distributions if needed
+AM_CONDITIONAL([DIST_REDHAT], [egrep -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_SUSE], [egrep -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_UBUNTU], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
+
+dnl No distribution-specific info in the BuildService 
+dnl /var/adm/fillup-templates is SUSE-specific
+AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
 

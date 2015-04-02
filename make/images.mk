@@ -53,9 +53,10 @@
 # provide-images and provide-*-images
 
 #------------------------------------------------------------------------
-# Check for optipng
+# Check for optipng and exiftool
 #
-HAVE_OPTIPNG := $(shell which --skip-alias --skip-functions optipng 2>/dev/null)
+HAVE_OPTIPNG  := $(shell which optipng 2>/dev/null)
+HAVE_EXIFTOOL := $(shell which exiftool 2>/dev/null)
 
 #------------------------------------------------------------------------
 # xslt stylsheets
@@ -334,8 +335,10 @@ list-images-multisrc warn-images:
 
 $(IMG_GENDIR)/color/%.png: $(IMG_SRCDIR)/png/%.png | $(IMG_DIRECTORIES)
   ifdef HAVE_OPTIPNG
+    ifdef HAVE_EXIFTOOL
 	@exiftool -Comment $< | grep optipng > /dev/null || \
 	  ccecho "warn" " $< not optimized." >&2
+    endif
   endif
 	ln -sf $< $@
 

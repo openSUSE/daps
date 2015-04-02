@@ -465,7 +465,7 @@ function call_make () {
 	DBSTYLE_FILE=$(xmlcatalog $XML_MAIN_CATALOG http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
 	DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
 
-	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR)
+	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR 2>/dev/null || echo "Not available")
 
         echo -e "---------------
            DOC_DIR: $DOC_DIR
