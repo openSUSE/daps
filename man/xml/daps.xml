@@ -67,7 +67,7 @@
  <refnamediv>
   <refname>&daps_command;</refname>
   <refpurpose>
-   A complete environment to build HTML, PDF, EPUB and other formats from
+   A complete environment to build HTML, PDF, ePUB and other formats from
    DocBook XML.
   </refpurpose>
  </refnamediv>
@@ -93,7 +93,7 @@
   <title>Description</title>
   <para>
     DAPS contains a set of stylesheets, scripts and makefiles that enable
-    you to create HTML, PDF, EPUB and other formats from DocBook XML with a
+    you to create HTML, PDF, ePUB and other formats from DocBook XML with a
     single command. It also contains tools to generate profiled source
     tarballs for distributing your XML sources for translation or review. 
    </para>
@@ -448,6 +448,24 @@
   </variablelist>
  </refsect1>
  
+ <refsect1 id="daps.examples">
+  <title>Examples</title>
+  <variablelist>
+   <varlistentry>
+    <term>Generating a pdf with your DocBook XML files:</term>
+    <listitem>
+     <para><option>&daps_command; -d <replaceable>[YOUR_DC_FILE]</replaceable> pdf</option></para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Check if your links in your DocBook XML files are still ok (checks if the links are reachable):</term>
+    <listitem>
+     <para><option>&daps_command; -d <replaceable>[YOUR_DC_FILE]</replaceable> checklink</option></para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
  <refsect1 id="daps.files">
   <title>Files</title>
   <variablelist>
