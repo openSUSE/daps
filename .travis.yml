@@ -11,18 +11,58 @@ env:
 before_install:
     - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ precise main universe restricted multiverse"
     - sudo apt-get update 
-    # failed packages: epubcheck 
-    - sudo apt-get install -y automake autoconf autotools-dev libtool shtool checkbot dia ghostscript imagemagick inkscape poppler-utils transfig
-    - sudo apt-get install -y python-libxml2 python-lxml libimage-exiftool-perl optipng
-    - sudo apt-get install -y libxml2-utils libxslt1.1 xsltproc libxml2 xmlstarlet sgml-base sgml-data
-    - sudo apt-get install -y jing docbook docbook-xml docbook5-xml docbook-xsl docbook-xsl-ns docbook-xsl-saxon libxml-commons-external-java libxmlgraphics-commons-java fop remake w3m xfig
+    # failed packages: epubcheck xmlformat-perl
+    #
+    # DO NOT USE TABs in the following section!!
+    #
+    - sudo apt-get install -y autoconf
+                              automake
+                              autotools-dev
+                              checkbot
+                              dia
+                              docbook
+                              docbook-xml
+                              docbook-xsl
+                              docbook-xsl-ns
+                              docbook-xsl-saxon
+                              docbook5-xml
+                              fop
+                              ghostscript
+                              imagemagick
+                              inkscape
+                              jing
+                              libimage-exiftool-perl
+                              libsaxon-java
+                              libtool
+                              libxml-commons-external-java
+                              libxml2
+                              libxml2-utils
+                              libxmlgraphics-commons-java
+                              libxslt1.1
+                              optipng
+                              poppler-utils
+                              python-libxml2
+                              python-lxml
+                              remake
+                              sgml-base
+                              sgml-data
+                              shtool
+                              shunit2
+                              transfig
+                              w3m
+                              xfig
+                              xmlstarlet
+                              xsltproc
+                              zip
     #- sudo apt-cache show docbook-xml
     #- sudo apt-cache show docbook-xsl
     - git clone https://github.com/openSUSE/suse-xsl.git suse
 
 install:
     - ./.travis-debug
-    - ./configure && make install 
+    - ./configure --sysconfdir=/etc
+    - make
+    - sudo make install
 
 script:
     # - make test
