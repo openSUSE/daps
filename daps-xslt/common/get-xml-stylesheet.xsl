@@ -16,7 +16,7 @@
      (detects this PI only in the root node!)
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2014, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

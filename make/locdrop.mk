@@ -1,6 +1,7 @@
 # Copyright (C) 2012-2015 SUSE Linux Products GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # Localization drop target for DAPS
 #

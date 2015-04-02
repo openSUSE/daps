@@ -17,8 +17,8 @@
    Output:
      List of filenames, separated by spaces
    
-   Author:    Frank Sundermeyer <fsundermeyer@opensuse.org>
-   Copyright: 2013, Frank Sundermeyer
+   Author:    Frank Sundermeyer <fsundermeyer at opensuse dot org>
+   Copyright (C) 2012-2015 SUSE Linux GmbH
 -->
 
 <xsl:stylesheet version="1.0"

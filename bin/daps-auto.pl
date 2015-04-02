@@ -1,10 +1,15 @@
 #!/usr/bin/perl -w
+#
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
 # daps-auto.pl ---
 # Create documentation output with DAPS and rsync it to given servers
 # Needs a config file in ini style, see
 # /usr/share/daps/init_templates/daps-auto_sample.ini
 #
-# Author: Frank Sundermeyer <fsundermeyer@opensuse.org>
 # Created: 20 Jun 2012
 # Version: 1.1 (12 Jul 2012)
 

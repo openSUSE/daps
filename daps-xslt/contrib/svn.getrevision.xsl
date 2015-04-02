@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Extracts first revision from svn log --xml output
+     Extracts first revision from svn log \-\-xml output
      
    Parameters:
      None
        
    Input:
-     XML file from "svn log --xml" 
+     XML file from "svn log \-\-xml" 
      
    Output:
      Text, first revision
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

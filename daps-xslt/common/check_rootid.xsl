@@ -18,8 +18,8 @@
    DocBook 5 compatible:
      yes
    
-   Author:    Frank Sundermeyer <fsundermeyer@opensuse.org>
-   Copyright: 2012, Frank Sundermeyer
+   Author:    Frank Sundermeyer <fsundermeyer at opensuse dot org>
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

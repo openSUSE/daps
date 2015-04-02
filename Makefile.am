@@ -1,10 +1,11 @@
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
 # Makefile.am for DocBook Authoring and Publishing Suite (daps)
 # Generate catalogs and install daps
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
-#
-# Author:
-# Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar

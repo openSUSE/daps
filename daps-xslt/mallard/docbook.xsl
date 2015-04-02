@@ -26,6 +26,8 @@
      included in the output format. In this case, the stylesheet
      prints a warning.
 
+     Copyright (C) 2012-2015 SUSE Linux GmbH
+
 -->
 <!DOCTYPE xsl:stylesheet [
   <!ENTITY lowercase "'abcdefghijklmnopqrstuvwxyz'">

@@ -2,13 +2,11 @@ dnl                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script
 dnl or use autogen.sh (recommended)
 dnl
-dnl Copyright (C) 2011-2013:
-dnl   Thomas Schraitle  <toms@opensuse.org>
-dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
+dnl Copyright (C) 2012-2015 SUSE Linux GmbH
 dnl
 dnl Authors:
-dnl   Thomas Schraitle  <toms@opensuse.org>
-dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
+dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
+dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 dnl TODO
 dnl
