@@ -12,20 +12,35 @@ dnl TODO
 dnl
 dnl determine aspell directory
 
-m4_define(daps_version_major, 0)
-m4_define(daps_version_minor, 9)
-m4_define(daps_version_micro, 9dev)
+m4_define(daps_version_major, 2)
+m4_define(daps_version_minor, 0)
+m4_define(daps_version_micro, 0)
+# API version
+m4_define([daps_api_version],[daps_version_major])
+
+m4_define([daps_version], [daps_version_major.daps_version_minor.daps_version_micro])
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [2.0~rc2], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [http://opensuse.github.io/daps])
 AC_CONFIG_MACRO_DIR([m4])
 
+DAPS_VERSION_MAJOR=daps_version_major
+DAPS_VERSION_MINOR=daps_version_minor
+DAPS_VERSION_MICRO=daps_version_micro
+DAPS_VERSION=daps_version
+DAPS_API_VERSION=daps_api_version
+AC_SUBST(DAPS_VERSION)
+AC_SUBST(DAPS_VERSION_MAJOR)
+AC_SUBST(DAPS_VERSION_MINOR)
+AC_SUBST(DAPS_VERSION_MICRO)
+AC_SUBST(PACKAGE_VERSION)
+AC_SUBST([DAPS_API_VERSION],daps_api_version)
 dnl https://stackoverflow.com/questions/18769770/user-of-autotools-generated-tarball-gets-error-message-aclocal-1-13-command-no
 AM_MAINTAINER_MODE([disable])
 
 AC_MSG_NOTICE([
 
- Configuring DAPS, the DocBook Authoring and Publishing Suite...
+ Configuring DAPS $DAPS_VERSION, the DocBook Authoring and Publishing Suite...
 
 ])
 
