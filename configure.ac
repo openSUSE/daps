@@ -92,6 +92,28 @@ AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_INSTALL
 
+dnl bash
+dnl Taken from https://github.com/Schischu/ptxdist_sh/blob/master/configure.ac
+dnl
+dnl unset BASH # bash sets this itself!
+dnl AC_PATH_PROG(BASH, bash)
+
+# BEWARE: There is a distinct possibility that we are currently running under
+# bash in this configure script (/bin/sh being a symlink to /bin/bash). Even
+# though the result /could/ be available to us directly as $BASH_VERSION we
+# don't want to use, or trust it, incase the user is specifying a different
+# bash executable.
+
+AC_MSG_CHECKING([for bash version])
+
+if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
+   AC_MSG_ERROR([DAPS requires at least version 4.0 of bash. 
+                 Install it with your package manager or download a current version from ftp.gnu.org])
+else
+   AC_MSG_RESULT([$BASH_VERSION])
+fi
+
+
 dnl make
 AC_PATH_PROG([MAKE], [make], [0])
 if test 0 = "$MAKE"; then
