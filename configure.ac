@@ -328,6 +328,8 @@ AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
 
+AC_OUTPUT([VERSION])
+
 AC_MSG_RESULT([
 dnl ###########################################################################
 DAPS is configured as follows.  Please verify that this configuration matches
