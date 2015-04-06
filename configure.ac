@@ -214,8 +214,8 @@ fi
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
  dnl python
-dnl We require Python >= 2.6
-AM_PATH_PYTHON([2.6])
+dnl We require Python3
+AM_PATH_PYTHON([3.2])
 
 # Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([xml], [fatal])
