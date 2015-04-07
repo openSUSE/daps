@@ -35,7 +35,6 @@ AC_SUBST(DAPS_VERSION_MINOR)
 AC_SUBST(DAPS_VERSION_MICRO)
 AC_SUBST(PACKAGE_VERSION)
 AC_SUBST([DAPS_API_VERSION],daps_api_version)
-
 dnl https://stackoverflow.com/questions/18769770/user-of-autotools-generated-tarball-gets-error-message-aclocal-1-13-command-no
 AM_MAINTAINER_MODE([disable])
 
@@ -326,13 +325,10 @@ AM_CONDITIONAL([DIST_UBUNTU], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-r
 dnl No distribution-specific info in the BuildService 
 dnl /var/adm/fillup-templates is SUSE-specific
 AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
-
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
-AC_OUTPUT([doc/xml/entity-decl.ent])
-AC_OUTPUT([bin/daps])
-AC_OUTPUT([etc/config])
 
+AC_OUTPUT([VERSION])
 
 AC_MSG_RESULT([
 dnl ###########################################################################

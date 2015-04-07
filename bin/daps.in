@@ -209,10 +209,10 @@ PATHLIST=(
 ME=$(basename $0)
 
 # default config file
-DEFAULT_CONFIG="@sysconfdir@/@PACKAGE@/config"
+DEFAULT_CONFIG="@sysconfdir@/daps/config"
 
 # The default DAPSROOT 
-DAPSROOT_DEFAULT="@datadir@/@PACKAGE@"
+DAPSROOT_DEFAULT="@pkgdatadir@"
 
 # default libdir
 DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
@@ -1229,7 +1229,7 @@ esac
 #    - or as variable declaration (FOO=bar) --> debugging and developing
 # 2. DC-file
 # 3. $USER_CONFIG (user config file)
-# 4. @sysconfig[@]/@PACKAGE[@]/config or $DAPSROOT/etc/config
+# 4. @sysconfig@/daps/config or $DAPSROOT/etc/config
 #
 # In order to make developing easier, there is a hidden feature to set
 # DAPSROOT, allowing to have multiple daps versions installed into
@@ -1403,18 +1403,18 @@ fi
 [[ -n "$DOCCONF_CMDL" ]] && source $DOCCONF_CMDL
 
 # FOP/XEP CONFIG and WRAPPER
-# when using an SVN checkout, @sysconfdir[@]/@PACKAGE[@] and
-# @datadir[@]/@PACKAGE[@] have not been replaced
+# when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
+# replaced
 #
 # ${string/#substring/replacement}
 # If $substring matches front end of $string, substitute
 # $replacement for $substring.
 
-FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir[@]\/@PACKAGE[@]/${DAPSROOT}/etc}
-FOP_WRAPPER=${FOP_WRAPPER/#@datadir[@]\/@PACKAGE[@]/${DAPSROOT}}
+FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
-XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir[@]\/@PACKAGE[@]/${DAPSROOT}/etc}
-XEP_WRAPPER=${XEP_WRAPPER/#@datadir[@]\/@PACKAGE[@]/${DAPSROOT}}
+XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
+XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 # make all paths absolute, remove trailing / and check
 if [[ -n $DOCCONF_CMDL ]]; then

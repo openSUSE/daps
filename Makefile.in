@@ -92,21 +92,20 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(top_srcdir)/doc/xml/entity-decl.ent.in \
-	$(top_srcdir)/bin/daps.in $(top_srcdir)/etc/config.in \
-	$(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS) \
-	$(dist_man1_MANS) $(am__dist_catalog_DATA_DIST) \
-	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
-	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
-	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
-	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
-	$(dist_xsltcontrib_DATA) $(dist_xsltdesktop_DATA) \
-	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
-	$(dist_xsltjsp_DATA) $(dist_xsltlib_DATA) \
-	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
-	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA) AUTHORS COPYING \
-	ChangeLog NEWS README TODO install-sh missing
+	$(srcdir)/VERSION.in $(dist_bin_SCRIPTS) \
+	$(dist_dapslibexec_SCRIPTS) $(dist_man1_MANS) \
+	$(am__dist_catalog_DATA_DIST) $(dist_dapsconf_DATA) \
+	$(dist_dapslib_DATA) $(dist_dapsmake_DATA) $(dist_doc_DATA) \
+	$(dist_emacssite_DATA) $(dist_fopconf_DATA) \
+	$(dist_hyphen_DATA) $(dist_template_DATA) $(dist_xepconf_DATA) \
+	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
+	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
+	$(dist_xsltindex_DATA) $(dist_xsltjsp_DATA) \
+	$(dist_xsltlib_DATA) $(dist_xsltmallard_DATA) \
+	$(dist_xsltmigrate_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltrelnotes_DATA) $(dist_xsltxhtml_DATA) \
+	$(dist_xsltyelp_DATA) AUTHORS COPYING ChangeLog NEWS README \
+	TODO install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_python_module.m4 \
 	$(top_srcdir)/configure.ac
@@ -115,7 +114,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = doc/xml/entity-decl.ent bin/daps etc/config
+CONFIG_CLEAN_FILES = VERSION
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -398,6 +397,15 @@ SUBDIRS =
 
 # additional files to add to the tarball
 EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
+
+#------------------------
+REPL_PATH = sed \
+             -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
+             -e 's|@bindir[@]|$(bindir)|g' \
+             -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+             -e 's|@prefix[@]|$(prefix)|g' \
+             -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
+
 DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT := $(abs_top_srcdir)
 
@@ -545,11 +553,7 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-doc/xml/entity-decl.ent: $(top_builddir)/config.status $(top_srcdir)/doc/xml/entity-decl.ent.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-bin/daps: $(top_builddir)/config.status $(top_srcdir)/bin/daps.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-etc/config: $(top_builddir)/config.status $(top_srcdir)/etc/config.in
+VERSION: $(top_builddir)/config.status $(srcdir)/VERSION.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-dist_binSCRIPTS: $(dist_bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
@@ -1689,7 +1693,7 @@ $(DAPS_CATALOG):
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-# the SVN sources contain links $(FOP_CONFIG)
+# the SVN sources contain links bin/daps, etc/config and $(FOP_CONFIG)
 # These need to be replaced by real files/different links created by
 # the respective targets below.
 # To make sure they are rebuild at least once when make is called for
@@ -1701,6 +1705,16 @@ $(DAPS_CATALOG):
 
 .firstbuild:
 	touch $@
+
+# see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
+bin/daps: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
+	$(REPL_PATH) $@.in > $@
+	chmod +x $@
+
+etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
+	$(REPL_PATH) $@.in > $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
