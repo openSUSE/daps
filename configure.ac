@@ -327,8 +327,7 @@ dnl /var/adm/fillup-templates is SUSE-specific
 AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
-
-AC_OUTPUT([VERSION])
+AC_OUTPUT([doc/xml/entity-decl.ent])
 
 AC_MSG_RESULT([
 dnl ###########################################################################

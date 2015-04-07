@@ -92,7 +92,7 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(srcdir)/VERSION.in $(dist_bin_SCRIPTS) \
+	$(top_srcdir)/doc/xml/entity-decl.ent.in $(dist_bin_SCRIPTS) \
 	$(dist_dapslibexec_SCRIPTS) $(dist_man1_MANS) \
 	$(am__dist_catalog_DATA_DIST) $(dist_dapsconf_DATA) \
 	$(dist_dapslib_DATA) $(dist_dapsmake_DATA) $(dist_doc_DATA) \
@@ -114,7 +114,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = VERSION
+CONFIG_CLEAN_FILES = doc/xml/entity-decl.ent
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -553,7 +553,7 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-VERSION: $(top_builddir)/config.status $(srcdir)/VERSION.in
+doc/xml/entity-decl.ent: $(top_builddir)/config.status $(top_srcdir)/doc/xml/entity-decl.ent.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-dist_binSCRIPTS: $(dist_bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
