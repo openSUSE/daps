@@ -19,14 +19,6 @@ SUBDIRS =
 # additional files to add to the tarball
 EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
 
-#------------------------
-REPL_PATH = sed \
-             -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
-             -e 's|@bindir[@]|$(bindir)|g' \
-             -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
-             -e 's|@prefix[@]|$(prefix)|g' \
-             -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
-
 DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 
@@ -234,7 +226,7 @@ $(DAPS_CATALOG):
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-# the SVN sources contain links bin/daps, etc/config and $(FOP_CONFIG)
+# the SVN sources contain links $(FOP_CONFIG)
 # These need to be replaced by real files/different links created by
 # the respective targets below.
 # To make sure they are rebuild at least once when make is called for
@@ -246,16 +238,6 @@ $(DAPS_CATALOG):
 
 .firstbuild:
 	touch $@
-
-# see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
-	if [ -L $@ ]; then rm -f $@; fi
-	$(REPL_PATH) $@.in > $@
-	chmod +x $@
-
-etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
-	if [ -L $@ ]; then rm -f $@; fi
-	$(REPL_PATH) $@.in > $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)

@@ -279,10 +279,10 @@ FALLBACK_STYLEROOT=""
 
 #
 # Specify an XML config file for FOP. A template is available in
-# @sysconfdir@/daps/fop/fop-daps.xml 
+# @sysconfdir@/@PACKAGE@/fop/fop-daps.xml
 # Also see FORMATTER, FOP-*
 #
-# FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
+# FOP_CONFIG_FILE="@sysconfdir@/@PACKAGE@/fop/fop-daps.xml"
 FOP_CONFIG_FILE=""
 
 
@@ -321,14 +321,14 @@ FOP_STACKSIZE="-Xss2048K"
 ## -----------------------
 ## Description: Wrapper script for the FOP pdf formatter
 ## Type:        PATH to script
-## Default:     "@pkgdatadir@/libexec/daps-fop""
+## Default:     "@datadir@/@PACKAGE@/libexec/daps-fop""
 #
 # Optional wrapper script for calling FOP. The default "fop" will run
 # the first fop executable found in your path (usually this will be
 # /usr/bin/fop)
 # Also see FORMATTER, FOP-*
 #
-FOP_WRAPPER="@pkgdatadir@/libexec/daps-fop"
+FOP_WRAPPER="@datadir@/@PACKAGE@/libexec/daps-fop"
 
 ## Key:         FORMATTER
 ## --------------------
@@ -668,12 +668,12 @@ WH_SEARCH="yes"
 ## -----------------------
 ## Description: Config file for the XEP pdf formatter
 ## Type:        Path
-## Default:     "@sysconfdir@/daps/xep/xep-daps.xml"
+## Default:     "@sysconfdir@/@PACKAGE@/xep/xep-daps.xml"
 #
 # Specify a config file for XEP
 # Also see FORMATTER, XEP-*
 #
-XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
+XEP_CONFIG_FILE="@sysconfdir@/@PACKAGE@/xep/xep-daps.xml"
 
 ## Key:         XEP_OPTIONS
 ## -----------------------
@@ -690,14 +690,14 @@ XEP_OPTIONS="-q"
 ## -----------------------
 ## Description: Wrapper script for the XEP pdf formatter
 ## Type:        PATH to script
-## Default:     "@pkgdatadir@/libexec/daps-xep"
+## Default:     "@datadir@/@PACAKGE@/libexec/daps-xep"
 #
 # Optional wrapper script for calling XEP. The default "xep" will run
 # the first xep binary found in your path (usually this will be
 # /usr/bin/xep)
 # Also see FORMATTER, XEP-*
 #
-XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
+XEP_WRAPPER="@datadir@/@PACKAGE@/libexec/daps-xep"
 
 ## Key:         XML_MAIN_CATALOG
 ## -----------------------
