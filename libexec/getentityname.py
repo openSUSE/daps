@@ -1,13 +1,12 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+# $Id: getentityname.py 33777 2008-08-08 09:20:06Z toms $
 #
 # Copyright (C) 2012-2015 SUSE Linux GmbH
 #
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
-# -*- coding: UTF-8 -*-
-# $Id: getentityname.py 33777 2008-08-08 09:20:06Z toms $
-
 import os.path
 import sys
 import optparse
