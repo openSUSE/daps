@@ -25,29 +25,52 @@ function moving_file () {
 }
 function usage () {
     echo "
-$ME -d <PATH TO DIRECTORY> [-r (article|book)] 
+$ME --docdir <PATH TO DIRECTORY> [OPTIONS] 
 
-Create a working environment for DAPS with an example DocBook 4 or 5 document.
-Specify the path to your documentation directory with -d. The example 
-document's doc config (DC) file will be located there. 
-(Sub)Directories will be created if they do not exist already.
+Create a working environment for DAPS with an example DocBook document.
+Specifying the project directory with --docdir is mandatory, all other
+options are optional.
+Specifying a name for the document with \"--name\" is recommended--it will
+be used in filenames. Setting the title of the document with \"--title\"
+is also recommended.
 
 Options:
 
--r, --rootelement  DocBook root element of the example document. Currently
-                   supported are \"book\" (default) and \"article\".
+  --docdir=<DIR>
+    Path to the project directory under which the DAPS environment will be
+    set up. If the directory does not exists, it will be created. Mandatory.
 
---title=TITLE      Set the title of your document
+  --date=<YYYY-MM-DD>
+    Specify a date in the format YYYY-MM-DD. Will be used to set the
+    publication date of the document. (<date/> in the document's info
+    section)
 
---date=DATE        Set the date in the <date> element in the format YYYY-MM-DD
+  --docbook4
+    Create a document in DocBook 4 format (default)
 
---productname      Set a product name in the <productname> element
+  --docbook5
+    Create a document in DocBook 5 format
 
---productnumber    Set a product number in the <productnumber> element
+  --name=<NAME>
+    String that will be used in filenames (e.g. when generating PDF or HTML
+    output). Only use letters, digits, dashes and underscores [A-Za-z0-9-_].
+    Default: daps-example
 
--4, --docbook4     Create DocBook V4
+  --productname=<PRODUCT>
+    Specify a name for the product the document describes. Will be used in the
+    subtitle of the document (<productname/> in the document's info section)
 
--5, --docbook5     Create DocBook V5
+  --productnumber=<PRODUCT_VERSION>
+    Specify a version for the product the document describes. Will be used in
+    the subtitle of the document (<productname/> in the document's info
+    section)
+
+  --rootelement=<article|book>
+    DocBook root element of the example document. Currently supported
+    are \"book\" and \"article\" (default).
+
+  --title=<TITLE>
+    Title of the document. Default: \"DAPS Example\"
 "
     exit 0
 }
@@ -55,27 +78,18 @@ Options:
 # MAIN
 #
 
-# show help when called with no arguments
-[[ -z "$1" ]] && usage
 
 ME=$(basename $0)
 CONT=
-DC_FILE="DC-daps-example"
-DAPSROOT="/usr/share/daps" # the default
 
-# user config file
-USER_CONFIG="$HOME/.daps/config"
+# show help when called with no arguments
+[[ -z "$1" ]] && usage
 
-# Default DocBook version
-DOCBOOKVERSION=4
 
-# source config file to possibly get a DAPSROOT
-source "/etc/daps/config"
-if [[ -f $USER_CONFIG ]]; then
-    source $USER_CONFIG
-fi
+#----------------
+# Parse the command line arguments
 
-ARGS=$(getopt -o d:hr:45 -l dapsroot:,docdir:,help,rootelement:,title:,date:,productname:,productnumber:,docbook4,docbook5 -n $ME -- "$@")
+ARGS=$(getopt -o 45d:hn:r:t: -l date:,dapsroot:,docbook4,docbook5,docdir:,help,name:,productname:,productnumber:,rootelement:,title: -n $ME -- "$@")
 
 eval set -- "$ARGS"
 
@@ -83,29 +97,69 @@ while true ; do
     case "$1" in
         --dapsroot)
             # undocumented devel feature
-            if [[ -d $2 ]]; then
+            if [[ -d "$2" ]]; then
                 DAPSROOT="$2"
             else
                 exit_on_error "dapsroot \"$2\" is not a valid directory."
             fi
             shift 2
             ;;
-        -d|--docdir)
-            DOC_DIR=$2
+        --docdir|-d)
+	    if [[ -z "$2" ]]; then
+		exit_on_error "Please specify a directory"
+	    else
+		DOC_DIR="$2"
+	    fi
             shift 2
             ;;
-        -h|--help)
+	--date)
+	    if [[ -z "$2" ]]; then 
+		exit_on_error "Date must be set (YYYY-MM-DD)"
+	    else
+		DATE="$2"
+		date -d $DATE > /dev/null 2>&1 || echo "Wrong date format. Use YYYY-MM-DD"
+	    fi
+	    shift 2 
+	    ;;
+	--docbook4|-4)
+            DOCBOOKVERSION=4
+            shift
+            ;;
+	--docbook5|-5)
+            DOCBOOKVERSION=5
+            shift
+            ;;
+        --help|-h)
             usage
 	    ;;
-    --docbook4|-4)
-        DOCBOOKVERSION=4
-        shift
-        ;;
-    --docbook5|-5)
-        DOCBOOKVERSION=5
-        shift
-        ;;
-	-r|--rootelement)
+	--name|-n)
+	    if [[ -z "$2" ]]; then
+		exit_on_error "Please specify a name"
+	    elif [[ ! $2 =~ ^[-_A-Za-z0-9]*$ ]]; then
+		exit_on_error "the name must not contain characters other than [-_A-za-z0-9]"
+	    else
+		NAME="$2"
+	    fi
+	    shift 2
+	    ;;
+	--productname)
+	    if [[ -z "$2" ]]; then
+		exit_on_error "Productname must be set"
+	    else
+		PRODUCTNAME="$2"
+	
+	    fi
+	    shift 2
+	    ;;
+	--productnumber)
+	    if [[ -z "$2" ]]; then
+		exit_on_error "Productnumber must be set"
+	    else 
+		PRODUCTNUMBER="$2"
+	    fi
+	    shift 2
+	    ;;
+	--rootelement|-r)
             if [[ article = $2 || book = $2 ]]; then
                 ROOTELEMENT="$2"
             else
@@ -113,37 +167,11 @@ while true ; do
             fi
 	    shift 2
 	    ;;
-	--title)
-	    if [[ -z $2 ]]; then
+	--title|-t)
+	    if [[ -z "$2" ]]; then
 		exit_on_error "Title must be set"
 	    else
-		TITLE=$2
-	    fi
-	    shift 2
-	    ;;
-	--date)
-	    if [[ -z $2 ]]; then 
-		exit_on_error "Date must be set"
-	    else
-		DATE=$2
-		date -d $DATE >> /dev/null 2>&1 || echo "Wrong date format. Use YYYY-MM-DD"
-	    fi
-	    shift 2 
-	    ;;
-	--productname)
-	    if [[ -z $2 ]]; then
-		exit_on_error "Productname must be set"
-	    else
-		PRODUCTNAME=$2
-	
-	    fi
-	    shift 2
-	    ;;
-	--productnumber)
-	    if [[ -z $2 ]]; then
-		exit_on_error "Productnumber must be set"
-	    else 
-		PRODUCTNUMBER=$2
+		TITLE="$2"
 	    fi
 	    shift 2
 	    ;;
@@ -153,10 +181,27 @@ while true ; do
 done
 
 
+#---------------------
+# Defaults:
 
-[[ -z "$DOC_DIR" ]] && exit_on_error "You must specify a directory with -d. See \"$ME -h for details"
-# default ROOTELEMENT is book
-[[ -z "$ROOTELEMENT" ]] && ROOTELEMENT=book
+[[ -z "$DAPSROOT" ]]       && DAPSROOT="/usr/share/daps"
+[[ -z "$DOCBOOKVERSION" ]] && DOCBOOKVERSION="4"
+[[ -z "SNAME" ]]           && NAME="daps-example"
+[[ -z "$ROOTELEMENT" ]]    && ROOTELEMENT="article"
+[[ -z "STITLE" ]]          && TITLE="DAPS Example"
+
+DC_FILE="DC-${NAME}"
+
+#DAPSROOT="/usr/share/daps" # the default
+
+# user config file
+#USER_CONFIG="$HOME/.daps/config"
+
+# source config file to possibly get a DAPSROOT
+#source "/etc/daps/config"
+#if [[ -f $USER_CONFIG ]]; then
+#    source $USER_CONFIG
+#fi
 
 # ----------
 # Process DOCCONFIG and create directories
