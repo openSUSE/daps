@@ -194,10 +194,12 @@ endif
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
 	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
-	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml
+	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
+	  $(srcdir)/doc/xml/entity-decl.ent
 	(cd $(srcdir)/etc && ln -s config.in config)
 	(cd $(srcdir)/bin && ln -s daps.in daps)
 	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
+	(cd doc/xml && ln -s entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 

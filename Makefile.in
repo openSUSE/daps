@@ -14,13 +14,14 @@
 
 @SET_MAKE@
 
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
 # Makefile.am for DocBook Authoring and Publishing Suite (daps)
 # Generate catalogs and install daps
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
-#
-# Author:
-# Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
@@ -1644,10 +1645,12 @@ install-data-local:
 clean-local:
 	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
 	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
-	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml
+	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
+	  $(srcdir)/doc/xml/entity-decl.ent
 	(cd $(srcdir)/etc && ln -s config.in config)
 	(cd $(srcdir)/bin && ln -s daps.in daps)
 	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
+	(cd doc/xml && ln -s entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 
