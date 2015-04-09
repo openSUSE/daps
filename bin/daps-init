@@ -10,19 +10,15 @@
 # Initialize a working directory to get started with daps
 #
 
-# ---------
+#----------------
 # Verbose error handling
 #
 function exit_on_error () {
     ccecho "error" "ERROR: ${1}" >&2
+    [[ -f $TEMPFILE ]] && rm $TEMPFILE
     exit 1;
 }
-function tempfile () {
-    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null)
-}
-function moving_file () {
-    mv $TEMPFILE  ${DOC_DIR}/xml/MAIN-${BOOK}.xml   
-}
+
 function usage () {
     echo "
 $ME --docdir <PATH TO DIRECTORY> [OPTIONS] 
@@ -40,10 +36,15 @@ Options:
     Path to the project directory under which the DAPS environment will be
     set up. If the directory does not exists, it will be created. Mandatory.
 
+  --dapsroot=<DIR>
+    Specify the path to the directory where daps-init can find the template
+    files (directory init-templates/). This is only necessary if you have
+    installed DAPS in a custom directory. Default: /usr/share/daps
+
   --date=<YYYY-MM-DD>
     Specify a date in the format YYYY-MM-DD. Will be used to set the
     publication date of the document. (<date/> in the document's info
-    section)
+    section). Default: Current date (<?dbtimestamp format=\"B d, Y\"?>)
 
   --docbook4
     Create a document in DocBook 4 format (default)
@@ -62,8 +63,8 @@ Options:
 
   --productnumber=<PRODUCT_VERSION>
     Specify a version for the product the document describes. Will be used in
-    the subtitle of the document (<productname/> in the document's info
-    section)
+    the subtitle of the document (<productnumber/> in the document's info
+    section). Requires --productname.
 
   --rootelement=<article|book>
     DocBook root element of the example document. Currently supported
@@ -74,13 +75,15 @@ Options:
 "
     exit 0
 }
+
 #################################################
 # MAIN
 #
 
-
 ME=$(basename $0)
-CONT=
+TEMPFILE=""
+
+trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
 # show help when called with no arguments
 [[ -z "$1" ]] && usage
@@ -96,20 +99,11 @@ eval set -- "$ARGS"
 while true ; do
     case "$1" in
         --dapsroot)
-            # undocumented devel feature
             if [[ -d "$2" ]]; then
                 DAPSROOT="$2"
             else
                 exit_on_error "dapsroot \"$2\" is not a valid directory."
             fi
-            shift 2
-            ;;
-        --docdir|-d)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Please specify a directory"
-	    else
-		DOC_DIR="$2"
-	    fi
             shift 2
             ;;
 	--date)
@@ -121,6 +115,14 @@ while true ; do
 	    fi
 	    shift 2 
 	    ;;
+        --docdir|-d)
+	    if [[ -z "$2" ]]; then
+		exit_on_error "Please specify a directory"
+	    else
+		DOC_DIR="$2"
+	    fi
+            shift 2
+            ;;
 	--docbook4|-4)
             DOCBOOKVERSION=4
             shift
@@ -136,7 +138,7 @@ while true ; do
 	    if [[ -z "$2" ]]; then
 		exit_on_error "Please specify a name"
 	    elif [[ ! $2 =~ ^[-_A-Za-z0-9]*$ ]]; then
-		exit_on_error "the name must not contain characters other than [-_A-za-z0-9]"
+		exit_on_error "The name must not contain characters other than [-_A-za-z0-9]"
 	    else
 		NAME="$2"
 	    fi
@@ -180,38 +182,41 @@ while true ; do
     esac
 done
 
+if [[ -n $PRODUCTNUMBER && -z $PRODUCTNAME ]]; then
+    exit_on_error "--productnumber also requires --productname to be specified"
+fi
 
 #---------------------
 # Defaults:
 
 [[ -z "$DAPSROOT" ]]       && DAPSROOT="/usr/share/daps"
+[[ -z "$DATE" ]]           && DATE='<?dbtimestamp format="B d, Y"?>'
 [[ -z "$DOCBOOKVERSION" ]] && DOCBOOKVERSION="4"
-[[ -z "SNAME" ]]           && NAME="daps-example"
+[[ -z "$NAME" ]]           && NAME="daps-example"
 [[ -z "$ROOTELEMENT" ]]    && ROOTELEMENT="article"
-[[ -z "STITLE" ]]          && TITLE="DAPS Example"
+[[ -z "$TITLE" ]]          && TITLE="DAPS Example"
 
-DC_FILE="DC-${NAME}"
 
-#DAPSROOT="/usr/share/daps" # the default
+TEMPLATE_DIR="${DAPSROOT}/init_templates"
 
-# user config file
-#USER_CONFIG="$HOME/.daps/config"
+DC_TEMPLATE="${TEMPLATE_DIR}/DC-file.template"
+MAIN_TEMPLATE="${TEMPLATE_DIR}/MAIN.db${DOCBOOKVERSION}-$ROOTELEMENT.template"
+DC_FILE="${DOC_DIR}/DC-${NAME}"
+MAIN="${DOC_DIR}/xml/MAIN-${NAME}.xml"
+IMG_DIR="${DOC_DIR}/images/src"
 
-# source config file to possibly get a DAPSROOT
-#source "/etc/daps/config"
-#if [[ -f $USER_CONFIG ]]; then
-#    source $USER_CONFIG
-#fi
 
-# ----------
-# Process DOCCONFIG and create directories
+#----------------
+# Create the project directory if it does not exist
 #
 
+CONT=""
 if [[ ! -d $DOC_DIR ]]; then
-    while [[ y != $CONT && n != $CONT ]] ; do
-        read -p "$DOC_DIR does not exist. Create it? [y/n] " CONT
+    while [[ ! $CONT =~ ^[NnYy]$ ]] ; do
+        read -e -t20 -p "$DOC_DIR does not exist. Create it? [y/n] " -i "y" CONT
+	[[ $? -gt 128 ]] && CONT="y" # timeout reached
     done
-    if [[ y = $CONT ]]; then
+    if [[ $CONT =~ ^[Yy]$ ]]; then
         mkdir -p $DOC_DIR || exit_on_error "Cannot create $DOC_DIR" 
     else
         exit_on_error "Aborted by user"
@@ -221,63 +226,54 @@ fi
 # Create needed subdirs in DOC_DIR
 mkdir -p ${DOC_DIR}/images/src/{dia,fig,jpg,png,svg,eps,pdf} ${DOC_DIR}/xml || exit_on_error "Cannot create needed subdirectories in $DOC_DIR"
 
-# ----------
+#----------------
 # copy the templates
 #
-BOOK="${DC_FILE#${CONF_PREFIX}*}"
-TEMPLATE=MAIN.db${DOCBOOKVERSION}-$ROOTELEMENT.template
 
 # DC-file
-cp ${DAPSROOT}/init_templates/DC-file.template ${DOC_DIR}/$DC_FILE && \
-        sed -i s/§§MAIN§§/MAIN-$BOOK.xml/g ${DOC_DIR}/$DC_FILE
-# MAIN XML file
-cp ${DAPSROOT}/init_templates/$TEMPLATE ${DOC_DIR}/xml/MAIN-${BOOK}.xml &&
-       
-	
+cp $DC_TEMPLATE $DC_FILE || exit_on_error "Failed to copy $DC_TEMPLATE"
+# MAIN
+cp $MAIN_TEMPLATE $MAIN || exit_on_error "Failed to copy $MAIN_TEMPLATE"
+# graphics
+cp ${DAPSROOT}/init_templates/example{1,2}.png ${IMG_DIR}/png/ || exit_on_error "Failed to copy images from $TEMPLATE_DIR}"
 
-if [[ -z $TITLE ]]; then
-    sed -i 's/§§TITLE§§/Book Template/g' ${DOC_DIR}/xml/MAIN-${BOOK}.xml
-else 
-    sed -i s/§§TITLE§§/$TITLE/g ${DOC_DIR}/xml/MAIN-${BOOK}.xml
-fi
+#----------------
+# Adjust the content in the tempate files
 
-if [[ -z $DATE ]]; then 
-    sed -i 's/§§DATE§§/<?dbtimestamp format="B d, Y"?>/g' ${DOC_DIR}/xml/MAIN-${BOOK}.xml
-else 
-    sed -i s/§§DATE§§/$DATE/g ${DOC_DIR}/xml/MAIN-${BOOK}.xml
-fi
+# replace placeholder in DC-file with $MAIN
+sed -i "s/§§MAIN§§/$(basename $MAIN)/g" $DC_FILE
+
+# replace DATE in MAIN
+sed -i "s/§§DATE§§/$DATE/g" $MAIN
+
+# replace TITLE in MAIN
+sed -i "s/§§TITLE§§/$TITLE/g" $MAIN
+
+# insert <productname> and <productnumber tags
 
 if [[ -n $PRODUCTNAME ]]; then
-    tempfile
-    if [[ $? -eq 0 ]]; then
-	xml ed -a /book/bookinfo/title -t elem -n productname -v $PRODUCTNAME ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
-	moving_file
-    else 
-	ccecho "warn" "Productname could not be created"
+    if [[ $DOCBOOKVERSION -eq 5 ]]; then
+	XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title -t elem"
+    else
+	XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title -t elem"
     fi
+
+    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null) || \
+	exit_on_error "Could not create a temporary file to set productname"
+
+    xml ed $XML_CMD_OPTS -n productname -v $PRODUCTNAME $MAIN > $TEMPFILE
+    if [[ -n $PRODUCTNUMBER ]]; then
+	xml ed --inplace $XML_CMD_OPTS -n productnumber -v $PRODUCTNUMBER $TEMPFILE
+    fi
+    mv $TEMPFILE $MAIN
 fi
 
-
-if [[ -n $PRODUCTNUMBER ]]; then
-    tempfile
-    if [[ $? -eq 0 ]]; then
-	xml ed -a /book/bookinfo/title -t elem -n productnumber -v $PRODUCTNUMBER ${DOC_DIR}/xml/MAIN-${BOOK}.xml > $TEMPFILE && \ 
-        moving_file
-    else 
-	ccecho "warn" "Productnumber could not be created"
-    fi
-fi
-
-
-    
-
-# graphics
-cp ${DAPSROOT}/init_templates/example{1,2}.png ${DOC_DIR}/images/src/png/
-  
-ccecho "result" "Successfully created a working environment at ${DOC_DIR}"
+#----------------
+#  
+ccecho "result" "Successfully created a DAPS Project at ${DOC_DIR}"
 echo "To build a PDF or HTML version of the example document enter
-daps -d ${DOC_DIR}/$DC_FILE pdf
+daps -d $DC_FILE pdf
 or
-daps -d ${DOC_DIR}/$DC_FILE html"
+daps -d $DC_FILE html"
 
 exit 0;
