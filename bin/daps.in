@@ -849,6 +849,18 @@ function sanitize_path () {
     #
     MYPATH=${MYPATH%/} # remove trailing slash
 
+    if [[ $MYPATH =~ ^~.* ]]; then
+	# 2. Replace ~/ with $HOME
+	if [[ $MYPATH =~ ^~/.* ]]; then
+	    MYPATH=${MYPATH/#\~\//$HOME/}
+	else
+	    # 3. Replace ~USER with a real path
+	    # the %q option to printf quotes and escapes dangerous characters
+	    # see http://stackoverflow.com/questions/2069467/have-to-determine-all-users-home-directories-tilde-scripting-problem
+	    eval BAR="$(printf "%q" "$MYPATH")"  
+	fi
+    fi
+
     if [[ "/" != ${MYPATH:0:1} ]]; then
         [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
@@ -1531,12 +1543,9 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 R_DIR="${BUILD_DIR}/${BOOK}"
 LOG_DIR="${R_DIR}/log"
 
-
 #-------------------------------------------------------------------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
-
-
 
 #-------------------------------------------------------------------
 # Create a temporary file for SETFILES (setfiles.mk)
@@ -1554,10 +1563,6 @@ export SETFILES_TMP
 # subcommand function
 #
 WRITE_LOG=1
-
-# eval is needed here, otherwise the --xsltparam option does not
-# work 
-#
 
 # Quoting needs to be exactly like this, do not change
 #
