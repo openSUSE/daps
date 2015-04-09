@@ -3,39 +3,41 @@ DAPS Quickstart
 
 :numbered:
 
-
-To start a new documentation project `my_book` in `~/authoring` proceed as
+To start a new DAPS project `my_article` in `~/authoring` proceed as
 follows:
 
-1. Setting up `~/authoring/my_book`:
+1. Setting up the Project:
 +
-   $ daps --envfile=ENV-my_book --basedir=$HOME/authoring init
+   $ daps-init --docdir ~/authoring --name "my_article"
 +
-This will create a complete working environment for `my_book` in
-`~/authoring/my_book`. The working environment consists of the
-complete directory structure:
+This will create a complete DAPS working environment for the article
+"my_article" in`~/authoring/. The working environment consists of the
+following directory structure:
 +
-   ~/authoring/my_book
-                 |--images/
-                 |    |--src/
-                 |    |   |--dia/
-                 |    |   |--fig/
-                 |    |   |--png/
-                 |    |   |--svg/
-                 |--xml/
+   ~/authoring
+       |--images/
+       |    |--src/
+       |    |   |--dia/
+       |    |   |--fig/
+       |    |   |--jpg/
+       |    |   |--pdf/
+       |    |   |--png/
+       |    |   |--svg/
+       |--xml/
 +
-plus a config file for the book (aka ENVfile) named `ENV-my_book` and
-an example XML document `xml/MAIN.my_book.xml`.
+plus a config file for the article (aka DC-file) named `DC-my_article` and
+an example XML document `xml/MAIN-my_article.xml`.
 
-1. Building the example book:
-+
+2. Building the Example Article:
 * Single HTML-file:
-+
-    $ cd $HOME/authoring/my_book
-    $ daps --envfile=ENV-my_book html
-
+    $ cd ~/authoring
+    $ daps -d DC-my_article html --single
 * PDF:
-+
-    $ cd $HOME/authoring/my_book
-    $ daps --envfile=ENV-my_book color-pdf
+    $ cd ~/authoring
+    $ daps -d DC-my_article pdf
+
+3. For More Information
+* see `daps --help` for an overview of DAPS commands and options
+* the DAPS documentation is available at https://opensuse.github.io/daps/doc/
+* for information about DocBook, refer to http://docbook.org/
 
