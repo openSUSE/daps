@@ -399,12 +399,12 @@ USESVN := $(shell svn info $(MAIN) 2>/dev/null)
 # the directories rather than linking the directories. The latter has the
 # disadvantage tha one cannot write into adirectory that is just linked)
 #
-ifeq ($(STATIC_HTML), 1)
-  # linking instead of copying
-  HTML_GRAPH_COMMAND := cp -rL --remove-destination
-else
+ifeq ($(STATIC_HTML),0)
   # copy directories recursively, create links on files
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
+else
+  # copy and resolve links
+  HTML_GRAPH_COMMAND := cp -rL --remove-destination
 endif
 
 #-----

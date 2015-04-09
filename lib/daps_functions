@@ -185,6 +185,10 @@ function parse_args () {
                 P_NOSET=1
                 shift
                 ;;
+            --nostatic)
+		P_NOSTATIC=1
+		shift
+		;;
             --notrans-dir)
                 sanitize_path "$2" "P_NOTRANS_DIR"
 		shift 2
@@ -237,14 +241,14 @@ function parse_args () {
 		P_HTMLSINGLE=1
 		shift
 		;;
+	    --static)
+		ccecho -- "warn" "--static is deprecated, since it is the default now."
+		shift
+		;;
             --statdir)
                 sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
-            --static)
-		P_STATIC=1
-		shift
-		;;
             --subdirs)
                 P_SUBDIRS=1
                 shift
@@ -640,7 +644,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -656,11 +660,11 @@ function build_html_jsp () {
 	help_jsp
         help_meta
         help_name
+        help_nostatic
         help_remarks
         help_rootid
 	help_single
         help_statdir
-        help_static
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
@@ -672,7 +676,7 @@ function build_html_jsp () {
     [[ 1 = $P_REMARKS ]]     && REMARKS=1
     # usemeta implies draft mode
     [[ 1 = $P_META ]]        && META=1 DRAFT="yes"
-    [[ 1 = $P_STATIC ]]      && export STATIC_HTML=1
+    [[ 1 = $P_NOSTATIC ]]    && export STATIC_HTML=0
     [[ 1 = $P_HTML5 ]]       && export HTML5=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -702,7 +706,7 @@ function webhelp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -716,9 +720,9 @@ function webhelp () {
         help_help
         help_name
         help_nosearch
+        help_nostatic
         help_remarks
         help_rootid
-        help_static
         help_xsltparam "creates Webhelp HTML from the profiled sources"
         echo
         exit 0
@@ -734,7 +738,7 @@ function webhelp () {
     [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
+    [[ 1 = $P_NOSTATIC ]]   && export STATIC_HTML=0
     [[ 1 = $P_NOSEARCH ]] && export WH_SEARCH="no"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -2172,6 +2176,14 @@ function help_noset () {
                               targets, are replaced by text-only pointers.
                               Default: off"
 }
+function help_nostatic () {
+    echo "    --nostatic                Normally images and css files in HTML builds
+                              are copied from elsewhere in the file system.
+                              Use this option to link these files in order
+                              to save disk space. Note that this eventually
+                              produces nested links which may cause errors
+                              with CSS and Javascript."
+}
 function help_notrans-dir () {
     echo "    --notrans-dir=DIRECTORY   Relative or absolute path to the directory
                               containing the untranslated sources. Links
@@ -2245,12 +2257,6 @@ function help_statdir () {
     echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
                               (CSS, images, Javascript etc.).
                               DEFAULT: \$STYLEROOT/static"
-}
-function help_static () {
-    echo "    --static                  Normally images and css files in HTML builds
-                              are linked from elsewhere in the file system.
-                              Use this option to copy these files in order
-                              to create a distributable HTML build"
 }
 function help_subdirs () {
     echo "    --subdirs                 Man pages are created in a man/ directory.
