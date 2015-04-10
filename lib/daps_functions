@@ -1195,6 +1195,7 @@ function package-html () {
 function unpack-locdrop () {
     local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
     local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST XML_FILE_LIST TRANS_FILES
+    local -a ALL_MANIFEST_NOTRANS_FILES ALL_MANIFEST_TRANS_FILES
 
     MFT_TRANS_SUFF=manifest_trans.txt
     MFT_NOTRANS_SUFF=manifest_notrans.txt
@@ -1222,6 +1223,7 @@ function unpack-locdrop () {
     if [[ -z "$P_TRANS_FILES" ]]; then
 	exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
     fi
+
     if [[ -z "$P_NOTRANS_DIR" ]]; then
 	ccecho "warn" "No notrans-dir was specified. Assuming DC-file directory"
 	P_NOTRANS_DIR="$MY_BASEDIR"
@@ -1232,11 +1234,13 @@ function unpack-locdrop () {
     #
     # Extract translated files
     #
-    for TAR in $TRANS_FILES; do
+    for TAR in $P_TRANS_FILES; do
 	if [[ -f $TAR ]]; then
 	    cd $P_OUTPUT_DIR
 	    MANIFEST_TRANS=$(tar tfj $TAR | grep $MFT_TRANS_SUFF)
+	    ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
 	    MANIFEST_NOTRANS=$(tar tfj $TAR | grep $MFT_NOTRANS_SUFF)
+	    ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
 	    tar xfj $TAR $MANIFEST_TRANS $MANIFEST_NOTRANS
 	    tar xfj $TAR $(cat $MANIFEST_TRANS)
 	    cd - >/dev/null
@@ -1250,8 +1254,8 @@ function unpack-locdrop () {
     #
     # Now create a complete list of translated/untranslated files
     #
-    ALL_TRANS_FILES=$(cat *$MFT_TRANS_SUFF | sort -u)
-    ALL_NOTRANS_FILES=$(cat *$MFT_NOTRANS_SUFF | sort -u)
+    ALL_TRANS_FILES=$(cat "${ALL_MANIFEST_TRANS_FILES[@]}" | sort -u)
+    ALL_NOTRANS_FILES=$(cat "${ALL_MANIFEST_NOTRANS_FILES[@]}" | sort -u)
 
     # get all files unique to the notrans lists (the ones that have not
     # been translated)
