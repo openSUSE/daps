@@ -219,7 +219,8 @@ DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
 DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 
 # user config file
-USER_CONFIG="$HOME/.daps/config"
+USER_CONFIG_OLD="$HOME/.daps/config"
+USER_CONFIG="$HOME/.config/daps/dapsrc"
 
 # if run from a terminal, set default verbosity to 1, otherwise (script, pipe)
 # set it to 0
@@ -1255,6 +1256,42 @@ esac
 
 # source the user config for the first time to get DAPSROOT
 #
+
+############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
+#
+# Move/copy an old config file to ~/.config if not already existing 
+#
+MOVE_CONFIG=""
+if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
+    ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
+    while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
+	read -e -t20 -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " -i "n" MOVE_CONFIG
+	[[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
+    done
+    case "$MOVE_CONFIG" in
+	C|c)
+	    mkdir -p $(dirname $USER_CONFIG) && cp $USER_CONFIG_OLD $USER_CONFIG
+	    if [[ 0 -eq $? ]]; then 
+		ccecho "info" "The DAPS config file has been copied to $USER_CONFIG"
+	    else
+		ccecho "warn" "Copying the DAPS config file failed"
+	    fi
+	    ;;
+	M|m)
+	   mkdir -p $(dirname $USER_CONFIG) && mv $USER_CONFIG_OLD $USER_CONFIG
+	    if [[ 0 -eq $? ]]; then 
+		ccecho "info" "The DAPS config file has been moved to $USER_CONFIG\nThe ~/.daps/ directory has not been deleted."
+	    else
+		ccecho "warn" "Moving the DAPS config file failed"
+	    fi
+	   ;;
+	*)
+	    ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
+	    ;;
+    esac
+fi
+
+
 if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
     source "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
