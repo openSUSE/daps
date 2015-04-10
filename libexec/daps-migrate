@@ -13,9 +13,9 @@ __VERSION__="$Id: $"
 # Name of this script:
 ME="$(basename $0)"
 
-# TODO: Make it configurable by ~/.daps/config or ~/.config/daps/daps.conf
-# [[ -s ~/.daps/config ]] && source ~/.daps/config
-# [[ -s ~/.config/daps/daps.conf ]] && source ~/.config/daps/daps.conf
+# TODO: Make it configurable by ~/.daps/config or ~/.config/daps/dapsrc
+# [[ -f ~/.daps/config ]] && source ~/.daps/config
+# [[ -f ~/.config/daps/dapsrc ]] && source ~/.config/daps/dapsrc
 
 # Contains the stylesheet to migrate DocBook 4 -> 5:
 MIGRATE_XSLT=${MIGRATE_XSLT:-/usr/share/xml/docbook/stylesheet/upgrade/db4-upgrade.xsl}
