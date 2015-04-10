@@ -13,10 +13,10 @@
 
 .PHONY: validate
 $(PROFILEDIR)/.validate validate: $(PROFILES)
-  ifeq ($(VERBOSITY), 2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Validating..."
   endif
-  ifeq ($(DOCBOOK_VERSION), 4)
+  ifeq "$(DOCBOOK_VERSION)" "4"
 	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
   else
 	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing $(DOCBOOK5_RNG) \
@@ -26,7 +26,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
 #	@echo "checking for unexpected characters: ... "
 #	egrep -n "[^[:alnum:][:punct:][:blank:]]" $(SRCFILES) && \
 #	    echo "Found non-printable characters" || echo "OK"
-  ifeq ($(TARGET),validate)
+  ifeq "$(TARGET)" "validate"
 	@ccecho "result" "All files are valid.";
   else
     ifeq ($(VERBOSITY),2)

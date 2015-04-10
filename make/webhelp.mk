@@ -64,7 +64,7 @@ WEBHELPSTRINGS := --param "keep.xml.comments=$(COMMENTS)" \
                   --stringparam "webhelp.base.dir=$(WEBHELP_DIR)/" \
                   --stringparam "webhelp.indexer.language=$(LL)"
 
-ifeq ("$(WH_SEARCH)", "no")
+ifeq "$(WH_SEARCH)" "no"
   WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=false"
 endif
 
@@ -124,7 +124,7 @@ wh_copy_inline_images: $(ONLINE_IMAGES)
 # style images
 wh_copy_static_images: | $(WEBHELP_DIR)
 wh_copy_static_images: $(STYLEIMG)
-  ifeq ($(STATIC_HTML),0)
+  ifeq "$(STATIC_HTML)" "0"
 	if [ -d $(WEBHEL$(WEBHELP_DIR)/style_imagesP_DIR)/style_images ]; then rm -rf $(WEBHELP_DIR)/style_images; fi
 	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/style_images
   else
@@ -162,7 +162,7 @@ create_search_index: $(STYLEWEBHELP_BASE)/template/content/search
 # common stuff /(Javascript, CSS,...)
 copy_common: | $(WEBHELP_DIR)
 copy_common: $(STYLEWEBHELP_BASE)/template/common
-  ifeq ($(STATIC_HTML),0)
+  ifeq "$(STATIC_HTML)" "0"
 	if [ -d $@ ]; then rm -rf $(WEBHELP_DIR)/common; fi
 	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/common
   else
@@ -177,7 +177,7 @@ copy_common: $(STYLEWEBHELP_BASE)/template/common
 # XSLTPARAM is a variable that can be set via wrapper script in order to
 # temporarily overwrite styleseet settings such as margins
 #
-ifeq ($(CLEAN_DIR), 1)
+ifeq "$(CLEAN_DIR)" "1"
   $(WEBHELP_DIR)/index.html: clean_webhelp
 endif
 $(WEBHELP_DIR)/index.html: | $(WEBHELP_DIR)
@@ -188,14 +188,14 @@ $(WEBHELP_DIR)/index.html: wh_copy_static_images copy_common
 ifdef FOR_HTML_IMAGES
   $(WEBHELP_DIR)/index.html: wh_copy_inline_images
 endif
-ifneq ("$(WH_SEARCH)", "no")
+ifneq "$(WH_SEARCH)" "no"
   $(WEBHELP_DIR)/index.html: create_search_index
 endif
 ifdef HTML_CSS
   $(WEBHELP_DIR)/index.html: $(WEBHELP_DIR)/$(notdir $(HTML_CSS))
 endif
 $(WEBHELP_DIR)/index.html:
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating webhelp pages"
   endif
 	$(XSLTPROC) $(WEBHELPSTRINGS) $(ROOTSTRING) $(CSSSTRING) \

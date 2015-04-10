@@ -91,7 +91,7 @@ ifdef ROOTSTRING
   # check if ROOTID is a valid root element
   #
   ROOTELEMENT := $(shell $(XMLSTARLET) sel -t -v "//div[@id='$(ROOTID)'][1]/@remap" $(SETFILES_TMP))
-  ifneq ($(ROOTELEMENT),$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS)))
+  ifneq "$(ROOTELEMENT)" "$(filter $(ROOTELEMENT),$(VALID_ROOTELEMENTS))"
     $(error Fatal error: ROOTID belongs to an unsupported root element ($(ROOTELEMENT)). Must be one of $(VALID_ROOTELEMENTS) )
   endif
 

@@ -23,7 +23,7 @@ MANSTRINGS := --stringparam "man.output.base.dir=$(MAN_DIR)/" \
 	      --param "refentry.meta.get.quietly=1" \
 	      --param "man.output.in.separate.dir=1"
 
-ifeq ("$(MAN_SUBDIRS)", "yes")
+ifeq "$(MAN_SUBDIRS)" "yes"
   MANSTRINGS  += --param "man.output.subdirs.enabled=1"
 else
   MANSTRINGS  += --param "man.output.subdirs.enabled=0"
@@ -54,7 +54,7 @@ man: $(BIGFILE)
 	  $(XSLTPROC) $(ROOTSTRING) $(MANSTRINGS) --stylesheet $(STYLEMAN) \
 	    --file $< $(XSLTPROCESSOR) $(ERR_DEVNULL); \
 	fi
-  ifneq ("$(GZIP_MAN)", "no")
+  ifneq "$(GZIP_MAN)" "no"
 	for MANFILE in $$(find $(MAN_DIR) ! -name "*.gz" -type f); do \
 	  gzip -f $$MANFILE; \
 	done

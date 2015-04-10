@@ -43,7 +43,7 @@ $(DIRECTORIES):
 # because $(filter $(foo),<LIST>) returns $foo, if it is part of 
 # <LIST>
 
-ifeq ($(MAKECMDGOALS),debug)
+ifeq "$(MAKECMDGOALS)" "debug"
   include $(DAPSROOT)/make/setfiles.mk
 endif
 
@@ -52,7 +52,7 @@ endif
 #
 CLEANTARGETS := clean clean-images clean-package clean-results clean-all real-clean
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(CLEANTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(CLEANTARGETS))"
 	include $(DAPSROOT)/make/clean.mk
 endif
 
@@ -61,7 +61,7 @@ endif
 #
 DEBUGGINGTARGETS := dapsenv nothing showvariable
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(DEBUGGINGTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(DEBUGGINGTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -85,7 +85,7 @@ endif
 #
 EPUBTARGETS := epub mobi
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(EPUBTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(EPUBTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -99,7 +99,7 @@ endif
 #
 LISTTARGETS := list-file list-images-missing list-images-multisrc list-srcfiles list-srcfiles-unused
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(LISTTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(LISTTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/filelist.mk
@@ -110,7 +110,7 @@ endif
 #
 HTMLTARGETS := html
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(HTMLTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(HTMLTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -125,7 +125,7 @@ endif
 
 IMGTARGETS := optipng images
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(IMGTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(IMGTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/images.mk
@@ -134,7 +134,7 @@ endif
 #---------------
 # MAN pages
 #
-ifeq ($(MAKECMDGOALS),man)
+ifeq "$(MAKECMDGOALS)" "man"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -147,7 +147,7 @@ endif
 #
 MISCTARGETS := bigfile checklink stylecheck productinfo
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(MISCTARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(MISCTARGETS))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -160,7 +160,7 @@ endif
 PACKAGETARGETS_HTML := package-html
 PACKAGETARGETS_PDF  := package-pdf
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_HTML)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_HTML))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -168,7 +168,7 @@ ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_HTML)))
   include $(DAPSROOT)/make/html.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_PDF)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_PDF))"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -176,7 +176,7 @@ ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_PDF)))
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-ifeq ($(MAKECMDGOALS),dist-webhelp)
+ifeq "$(MAKECMDGOALS)" "dist-webhelp"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -184,7 +184,7 @@ ifeq ($(MAKECMDGOALS),dist-webhelp)
   include $(DAPSROOT)/make/webhelp.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-ifeq ($(MAKECMDGOALS),online-docs)
+ifeq "$(MAKECMDGOALS)" "online-docs"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -194,19 +194,19 @@ ifeq ($(MAKECMDGOALS),online-docs)
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/epub.mk
 endif
-ifeq ($(MAKECMDGOALS),package-src)
+ifeq "$(MAKECMDGOALS)" "package-src"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-ifeq ($(MAKECMDGOALS),locdrop)
+ifeq "$(MAKECMDGOALS)" "locdrop"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
   include $(DAPSROOT)/make/images.mk
-  ifneq ($(NOPDF),1)
+  ifneq "$(NOPDF)" "1"
     include $(DAPSROOT)/make/pdf.mk
   endif
   include $(DAPSROOT)/make/locdrop.mk
@@ -216,7 +216,7 @@ endif
 # PDF
 #
 
-ifeq ($(MAKECMDGOALS),pdf)
+ifeq "$(MAKECMDGOALS)" "pdf"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -228,7 +228,7 @@ endif
 #---------------
 # Profiling
 #
-ifeq ($(MAKECMDGOALS),profile)
+ifeq "$(MAKECMDGOALS)" "profile"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
 endif
@@ -238,7 +238,7 @@ endif
 #
 NAMETARGETS := dist-webhelp-name epub-name html-dir-name man-dir-name mobi-name package-html-dir-name package-pdf-dir-name package-src-name pdf-name text-name webhelp-dir-name
 
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(NAMETARGETS)))
+ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(NAMETARGETS))"
   include $(DAPSROOT)/make/print_results.mk
 endif
 
@@ -246,7 +246,7 @@ endif
 # Text
 #
 
-ifeq ($(MAKECMDGOALS),text)
+ifeq "$(MAKECMDGOALS)" "text"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -256,7 +256,7 @@ endif
 #---------------
 # Validating
 #
-ifeq ($(MAKECMDGOALS),validate)
+ifeq "$(MAKECMDGOALS)" "validate"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
@@ -265,7 +265,7 @@ endif
 #---------------
 # Webhelp
 #
-ifeq ($(MAKECMDGOALS),webhelp)
+ifeq "$(MAKECMDGOALS)" "webhelp"
   include $(DAPSROOT)/make/setfiles.mk
   include $(DAPSROOT)/make/profiling.mk
   include $(DAPSROOT)/make/validate.mk
