@@ -92,19 +92,20 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(dist_bin_SCRIPTS) $(dist_dapslibexec_SCRIPTS) \
-	$(dist_man1_MANS) $(am__dist_catalog_DATA_DIST) \
-	$(dist_dapsconf_DATA) $(dist_dapslib_DATA) \
-	$(dist_dapsmake_DATA) $(dist_doc_DATA) $(dist_emacssite_DATA) \
-	$(dist_fopconf_DATA) $(dist_hyphen_DATA) $(dist_template_DATA) \
-	$(dist_xepconf_DATA) $(dist_xsltcommon_DATA) \
-	$(dist_xsltcontrib_DATA) $(dist_xsltdesktop_DATA) \
-	$(dist_xsltepub_DATA) $(dist_xsltindex_DATA) \
-	$(dist_xsltjsp_DATA) $(dist_xsltlib_DATA) \
-	$(dist_xsltmallard_DATA) $(dist_xsltmigrate_DATA) \
-	$(dist_xsltprofiling_DATA) $(dist_xsltrelnotes_DATA) \
-	$(dist_xsltxhtml_DATA) $(dist_xsltyelp_DATA) AUTHORS COPYING \
-	ChangeLog NEWS README TODO install-sh missing
+	$(top_srcdir)/doc/xml/entity-decl.ent.in $(dist_bin_SCRIPTS) \
+	$(dist_dapslibexec_SCRIPTS) $(dist_man1_MANS) \
+	$(am__dist_catalog_DATA_DIST) $(dist_dapsconf_DATA) \
+	$(dist_dapslib_DATA) $(dist_dapsmake_DATA) $(dist_doc_DATA) \
+	$(dist_emacssite_DATA) $(dist_fopconf_DATA) \
+	$(dist_hyphen_DATA) $(dist_template_DATA) $(dist_xepconf_DATA) \
+	$(dist_xsltcommon_DATA) $(dist_xsltcontrib_DATA) \
+	$(dist_xsltdesktop_DATA) $(dist_xsltepub_DATA) \
+	$(dist_xsltindex_DATA) $(dist_xsltjsp_DATA) \
+	$(dist_xsltlib_DATA) $(dist_xsltmallard_DATA) \
+	$(dist_xsltmigrate_DATA) $(dist_xsltprofiling_DATA) \
+	$(dist_xsltrelnotes_DATA) $(dist_xsltxhtml_DATA) \
+	$(dist_xsltyelp_DATA) AUTHORS COPYING ChangeLog NEWS README \
+	TODO install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_python_module.m4 \
 	$(top_srcdir)/configure.ac
@@ -113,7 +114,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = doc/xml/entity-decl.ent
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -279,6 +280,11 @@ BZIP = @BZIP@
 CHECKBOT = @CHECKBOT@
 CONVERT = @CONVERT@
 CYGPATH_W = @CYGPATH_W@
+DAPS_API_VERSION = @DAPS_API_VERSION@
+DAPS_VERSION = @DAPS_VERSION@
+DAPS_VERSION_MAJOR = @DAPS_VERSION_MAJOR@
+DAPS_VERSION_MICRO = @DAPS_VERSION_MICRO@
+DAPS_VERSION_MINOR = @DAPS_VERSION_MINOR@
 DEBUG = @DEBUG@
 DEFS = @DEFS@
 DIA = @DIA@
@@ -547,6 +553,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
+doc/xml/entity-decl.ent: $(top_builddir)/config.status $(top_srcdir)/doc/xml/entity-decl.ent.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-dist_binSCRIPTS: $(dist_bin_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	@list='$(dist_bin_SCRIPTS)'; test -n "$(bindir)" || list=; \

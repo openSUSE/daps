@@ -12,20 +12,35 @@ dnl TODO
 dnl
 dnl determine aspell directory
 
-m4_define(daps_version_major, 0)
-m4_define(daps_version_minor, 9)
-m4_define(daps_version_micro, 9dev)
+m4_define(daps_version_major, 2)
+m4_define(daps_version_minor, 0)
+m4_define(daps_version_micro, 0)
+# API version
+m4_define([daps_api_version],[daps_version_major])
+
+m4_define([daps_version], [daps_version_major.daps_version_minor.daps_version_micro])
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [2.0~rc2], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [http://opensuse.github.io/daps])
 AC_CONFIG_MACRO_DIR([m4])
 
+DAPS_VERSION_MAJOR=daps_version_major
+DAPS_VERSION_MINOR=daps_version_minor
+DAPS_VERSION_MICRO=daps_version_micro
+DAPS_VERSION=daps_version
+DAPS_API_VERSION=daps_api_version
+AC_SUBST(DAPS_VERSION)
+AC_SUBST(DAPS_VERSION_MAJOR)
+AC_SUBST(DAPS_VERSION_MINOR)
+AC_SUBST(DAPS_VERSION_MICRO)
+AC_SUBST(PACKAGE_VERSION)
+AC_SUBST([DAPS_API_VERSION],daps_api_version)
 dnl https://stackoverflow.com/questions/18769770/user-of-autotools-generated-tarball-gets-error-message-aclocal-1-13-command-no
 AM_MAINTAINER_MODE([disable])
 
 AC_MSG_NOTICE([
 
- Configuring DAPS, the DocBook Authoring and Publishing Suite...
+ Configuring DAPS $DAPS_VERSION, the DocBook Authoring and Publishing Suite...
 
 ])
 
@@ -76,6 +91,27 @@ AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_INSTALL
+
+dnl bash
+dnl Taken from https://github.com/Schischu/ptxdist_sh/blob/master/configure.ac
+dnl
+dnl unset BASH # bash sets this itself!
+dnl AC_PATH_PROG(BASH, bash)
+
+dnl BEWARE: There is a distinct possibility that we are currently running under
+dnl bash in this configure script (/bin/sh being a symlink to /bin/bash). Even
+dnl though the result /could/ be available to us directly as $BASH_VERSION we
+dnl don't want to use, or trust it, incase the user is specifying a different
+dnl bash executable.
+
+dnl AC_MSG_CHECKING([for bash version])
+
+dnl if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
+dnl    AC_MSG_ERROR([DAPS requires at least version 4.0 of bash.])
+dnl else
+dnl    AC_MSG_RESULT([$BASH_VERSION])
+dnl fi
+
 
 dnl make
 AC_PATH_PROG([MAKE], [make], [0])
@@ -176,16 +212,18 @@ fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
- dnl python
-dnl We require Python >= 2.6
+
+dnl python
+dnl We require Python3
+dnl AM_PATH_PYTHON([3.2])
 AM_PATH_PYTHON([2.6])
 
-# Variables HAVE_PYMOD_* are filled with "yes" or "no"
+dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([xml], [fatal])
 AC_SUBST(HAVE_PYMOD_XML)
-#
-AC_PYTHON_MODULE([lxml], [fatal])
-AC_SUBST(HAVE_PYMOD_LXML)
+
+dnl AC_PYTHON_MODULE([lxml], [fatal])
+dnl AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
@@ -290,6 +328,7 @@ dnl /var/adm/fillup-templates is SUSE-specific
 AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
 dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
+AC_OUTPUT([doc/xml/entity-decl.ent])
 
 AC_MSG_RESULT([
 dnl ###########################################################################
@@ -298,15 +337,28 @@ your expectations.
 
 Supported features
 ------------------
-* HTML/single HTML output            * MediaWiki output (experimental)
-* JSP output                         * webhelp output (experimental)
-* ePUB output                        * support for .png images
-* man pages output
+* DocBook 4 support                  * man pages output
+* HTML/single HTML output            * webhelp output (experimental)
+* ePUB output                        * png and jpg images
 
 Optional features
 -----------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
+dnl DocBook 5
+test 0 = "$HAVE_DOCBOOK_5" && DB5=0
+test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
+test 0 = "$HAVE_JING" && DB5=0
+
+if test 0 = "$DB5"; then
+  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5 support                |   yes   |])
+fi
+
 dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
@@ -319,8 +371,7 @@ if test 0 = "$PDFFORMATTER"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
-  AC_MSG_RESULT([Create PDF output                |   yes   |
-])
+  AC_MSG_RESULT([Create PDF output                |   yes   |])
 fi
 
 dnl DIA support
@@ -349,8 +400,7 @@ if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
   AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
 ])
 else
-  AC_MSG_RESULT([Size optimization for .png       |   yes   |
-])
+  AC_MSG_RESULT([Size optimization for .png       |   yes   |])
 fi
 
 dnl Linkchecker (checkbot)
@@ -379,8 +429,7 @@ if test 0 = "$PDFFONTS"; then
   AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
 ])
 else
-  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |
-])
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |])
 fi
 
 dnl Enhanced Debugging (remake)
@@ -403,21 +452,6 @@ else
   AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
 fi
 
-dnl DocBook 5
-test 0 = "$HAVE_DOCBOOK_5" && DB5=0
-test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
-test 0 = "$HAVE_JING" && DB5=0
-
-if test 0 = "$DB5"; then
-  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
-                                 |         | DocBook 5 XSL stylesheets,
-                                 |         | and jing
-])
-else
-  AC_MSG_RESULT([DocBook 5 support                |   yes   |
-])
-fi
-
 dnl Evil magic
 
 eval "eval SYSCONFDIR=$sysconfdir/daps"
@@ -425,7 +459,9 @@ eval "eval DATADIR=$datadir/daps"
 eval "eval BINDIR=$bindir"
 eval "eval DOCDIR=$docdir"
 
-AC_MSG_RESULT([DAPS will be installed into the following paths:
+AC_MSG_RESULT([
+
+DAPS will be installed into the following paths:
 ------------------------------------------------
 Executables             : $BINDIR
 System wide config files: $SYSCONFDIR
