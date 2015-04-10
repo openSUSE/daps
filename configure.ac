@@ -98,20 +98,19 @@ dnl
 dnl unset BASH # bash sets this itself!
 dnl AC_PATH_PROG(BASH, bash)
 
-# BEWARE: There is a distinct possibility that we are currently running under
-# bash in this configure script (/bin/sh being a symlink to /bin/bash). Even
-# though the result /could/ be available to us directly as $BASH_VERSION we
-# don't want to use, or trust it, incase the user is specifying a different
-# bash executable.
+dnl BEWARE: There is a distinct possibility that we are currently running under
+dnl bash in this configure script (/bin/sh being a symlink to /bin/bash). Even
+dnl though the result /could/ be available to us directly as $BASH_VERSION we
+dnl don't want to use, or trust it, incase the user is specifying a different
+dnl bash executable.
 
-AC_MSG_CHECKING([for bash version])
+dnl AC_MSG_CHECKING([for bash version])
 
-if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
-   AC_MSG_ERROR([DAPS requires at least version 4.0 of bash. 
-                 Install it with your package manager or download a current version from ftp.gnu.org])
-else
-   AC_MSG_RESULT([$BASH_VERSION])
-fi
+dnl if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
+dnl    AC_MSG_ERROR([DAPS requires at least version 4.0 of bash.])
+dnl else
+dnl    AC_MSG_RESULT([$BASH_VERSION])
+dnl fi
 
 
 dnl make
@@ -213,16 +212,18 @@ fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
- dnl python
-dnl We require Python3
-AM_PATH_PYTHON([3.2])
 
-# Variables HAVE_PYMOD_* are filled with "yes" or "no"
+dnl python
+dnl We require Python3
+dnl AM_PATH_PYTHON([3.2])
+AM_PATH_PYTHON([2.6])
+
+dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([xml], [fatal])
 AC_SUBST(HAVE_PYMOD_XML)
-#
-AC_PYTHON_MODULE([lxml], [fatal])
-AC_SUBST(HAVE_PYMOD_LXML)
+
+dnl AC_PYTHON_MODULE([lxml], [fatal])
+dnl AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
@@ -336,15 +337,28 @@ your expectations.
 
 Supported features
 ------------------
-* HTML/single HTML output            * MediaWiki output (experimental)
-* JSP output                         * webhelp output (experimental)
-* ePUB output                        * support for .png images
-* man pages output
+* DocBook 4 support                  * man pages output
+* HTML/single HTML output            * webhelp output (experimental)
+* ePUB output                        * png and jpg images
 
 Optional features
 -----------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
+dnl DocBook 5
+test 0 = "$HAVE_DOCBOOK_5" && DB5=0
+test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
+test 0 = "$HAVE_JING" && DB5=0
+
+if test 0 = "$DB5"; then
+  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5 support                |   yes   |])
+fi
+
 dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
@@ -357,8 +371,7 @@ if test 0 = "$PDFFORMATTER"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
-  AC_MSG_RESULT([Create PDF output                |   yes   |
-])
+  AC_MSG_RESULT([Create PDF output                |   yes   |])
 fi
 
 dnl DIA support
@@ -387,8 +400,7 @@ if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
   AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
 ])
 else
-  AC_MSG_RESULT([Size optimization for .png       |   yes   |
-])
+  AC_MSG_RESULT([Size optimization for .png       |   yes   |])
 fi
 
 dnl Linkchecker (checkbot)
@@ -417,8 +429,7 @@ if test 0 = "$PDFFONTS"; then
   AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
 ])
 else
-  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |
-])
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |])
 fi
 
 dnl Enhanced Debugging (remake)
@@ -441,21 +452,6 @@ else
   AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
 fi
 
-dnl DocBook 5
-test 0 = "$HAVE_DOCBOOK_5" && DB5=0
-test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
-test 0 = "$HAVE_JING" && DB5=0
-
-if test 0 = "$DB5"; then
-  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
-                                 |         | DocBook 5 XSL stylesheets,
-                                 |         | and jing
-])
-else
-  AC_MSG_RESULT([DocBook 5 support                |   yes   |
-])
-fi
-
 dnl Evil magic
 
 eval "eval SYSCONFDIR=$sysconfdir/daps"
@@ -463,7 +459,9 @@ eval "eval DATADIR=$datadir/daps"
 eval "eval BINDIR=$bindir"
 eval "eval DOCDIR=$docdir"
 
-AC_MSG_RESULT([DAPS will be installed into the following paths:
+AC_MSG_RESULT([
+
+DAPS will be installed into the following paths:
 ------------------------------------------------
 Executables             : $BINDIR
 System wide config files: $SYSCONFDIR
