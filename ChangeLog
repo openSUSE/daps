@@ -1,4 +1,46 @@
 -------------------------------------------------------------------
+Mon Apr 13 11:00:00 UTC 2015 - toms@opensuse.org
+
+New release DAPS 2.0~rc3
+
+- Moved all stylesheet related files to github://openSUSE/suse-xsl
+- Adjusted "devel catalog handling" to separation od daps and 
+  stylesheets repos
+- Established new locdrop workflow
+- Fixed daps-init
+- Definied DAPS version for major, minor, and micro (configure.ac)
+  . Introduced daps_version_{major,minor,micro} substitutions
+  . Corrected URL from SourceForge to GitHub
+  . Used DAPS version in AC_MSG_NOTICE
+- Unified copyright statements
+- Moved DAPS user config file to ~/.config/daps/dapsrc
+- Let configure change the Version in entity-decl.ent
+- Various build fixes to make it work on  Debian Wheezy, Fedora 20/21
+  openSUSE 13.x, SLE 12, and  Ubuntu 14.10
+- Updated DAPS Quick Start
+- Created DOCTYPE and PI node manually for daps-xslt/profiling/
+  stylesheets
+- Fixed path to images in tarball
+- 
+
+Bug fixes:
+- issue#223: Paths starting with ~ are now correctly resolved
+- issue#227: Made --static for HTML builds the default
+- issue#230: Moved DAPS config to ~/.config/daps/
+- issue#249: Added support for all missing profiling attributes supported by DocBook
+- issue#250: building Japanese text format requires external LANG
+  setting
+- issue#260: Removed project-web directory (moved into gh-pages branch)
+
+
+TODOs:
+- test DocBook 5 with the latest DAPS develop version
+- review DAPS documentation
+- check existing test cases, add test cases for DocBook5
+- add tests to Travis integration service
+
+
+-------------------------------------------------------------------
 Thu Aug 14 11:09:36 UTC 2014 - sknorr@suse.de
 
 New release DAPS 2.0~rc2
