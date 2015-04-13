@@ -3,35 +3,63 @@ Mon Apr 13 11:00:00 UTC 2015 - toms@opensuse.org
 
 New release DAPS 2.0~rc3
 
-- Moved all stylesheet related files to github://openSUSE/suse-xsl
-- Adjusted "devel catalog handling" to separation od daps and 
-  stylesheets repos
+- Full support for DocBook 5 now (finally)
+- Moved DAPS user config file to ~/.config/daps/dapsrc (the user will be
+  notified)
+- all of DocBook's profiling attributes are no supported
+- Various build fixes to make it work on  Debian Wheezy, Fedora 20/21
+  openSUSE 13.x, SLE 12, and  Ubuntu 14.10
+- tested DAPS on Debian Wheezy, Fedora 20/21 and  Ubuntu 14.10
+- Added script and stylesheets to migrate DocBook4 projects to
+  DocBook 5 (libexec/daps-migrate)
+- various fixes and improvements for bin/daps-init
+- Added support for local static/ directories
 - Established new locdrop workflow
 - Fixed daps-init
+- strings passed with --xsltparam no longer need to be uoted with double
+  and single quotes--only use double quotes now
 - Definied DAPS version for major, minor, and micro (configure.ac)
   . Introduced daps_version_{major,minor,micro} substitutions
   . Corrected URL from SourceForge to GitHub
   . Used DAPS version in AC_MSG_NOTICE
 - Unified copyright statements
-- Moved DAPS user config file to ~/.config/daps/dapsrc
 - Let configure change the Version in entity-decl.ent
-- Various build fixes to make it work on  Debian Wheezy, Fedora 20/21
-  openSUSE 13.x, SLE 12, and  Ubuntu 14.10
-- Updated DAPS Quick Start
 - Created DOCTYPE and PI node manually for daps-xslt/profiling/
   stylesheets
-- Fixed path to images in tarball
-- 
+- Added more testcases, fixed erfrors in test cases
+- Significant documentation updates for version 2.0
+- version string in  manuals and man pages is now automatically set by
+  configure/make
+- provided useful READMEs in ASCII Doc format
+- Support for both, /usr/bin/xml (SUSE) and /usr/bin/xmlstarlet (Ubuntu)
 
 Bug fixes:
+- issue#151: Detect DocBook XSL Stylesheet Version in daps
+- issue#157: Add option for optimising PNG files for targets locdrop and
+	     package-src
 - issue#223: Paths starting with ~ are now correctly resolved
 - issue#227: Made --static for HTML builds the default
 - issue#230: Moved DAPS config to ~/.config/daps/
-- issue#249: Added support for all missing profiling attributes supported by DocBook
+- issue#249: Added support for all missing profiling attributes supported
+	     by DocBook
 - issue#250: building Japanese text format requires external LANG
-  setting
+             setting
+- issue#253: Implement Migration Stylesheets from DocBook 4 <-> DocBook 5
 - issue#260: Removed project-web directory (moved into gh-pages branch)
+- check for embeeded fonts in PDF now works correctly
+- ASPELL_LANG no longer gets overwritten with value from XML document if
+  set in config or on the command line
+- package-html no longer fails when called with --draft
+- DocBook5 validation now works correctly
+- epub is now correctly generated (STYLEIMG was not always set)
+- existing man page builds were duplicated rather than overwritten
 
+Project:
+- project moved to GitHub
+- Moved all stylesheet related files to github://openSUSE/suse-xsl
+- obsolete docmanager code has been removed from the repository
+- source clean-up
+- source changes are tested with Travis
 
 TODOs:
 - test DocBook 5 with the latest DAPS develop version
@@ -39,6 +67,7 @@ TODOs:
 - check existing test cases, add test cases for DocBook5
 - add tests to Travis integration service
 - Integrate manpage fixes from feature branch
+- Integrate make improvements from feature branch
 
 -------------------------------------------------------------------
 Thu Aug 14 11:09:36 UTC 2014 - sknorr@suse.de
