@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: novdoc-profile.xsl 40777 2009-04-06 07:11:42Z toms $ -->
+<!--
+   Purpose:
+     Base profiling stylesheets
+
+   Input:
+     DocBook 4/5 document
+
+   Output:
+     Profiled DocBook 4/5 document
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright (C) 2012-2015 SUSE Linux GmbH
+
+-->
 <!DOCTYPE xsl:stylesheet
 [
   <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current">
@@ -116,9 +129,15 @@
   <xsl:call-template name="pi.dbtimestamp"/>
 </xsl:template>
 
-<xsl:template
-  match="processing-instruction()|processing-instruction('xml-stylesheet')"
-  mode="profile" priority="2">
+<xsl:template name="xml-stylesheet">
+   <xsl:param name="node" select="."/>
+   <xsl:processing-instruction name="xml-stylesheet">
+      <xsl:value-of select="string($node)"/>
+   </xsl:processing-instruction>
+   <xsl:text>&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template match="processing-instruction()" mode="profile" priority="2">
    <xsl:processing-instruction name="{local-name()}">
       <xsl:value-of select="."/>
    </xsl:processing-instruction>

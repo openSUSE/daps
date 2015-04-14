@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Thomas Schraitle <toms at opensuse dor org>
+#
 # Customized fop executable for DAPS
 
 # Get the first 2 digits from the version number
@@ -12,10 +18,11 @@ FOP_VERSION=${FOP_VERSION:0:2}
 
 #FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
 FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
-FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
+#FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 
 ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACKSIZE" \
 ADDITIONAL_JARS="batik-all excalibur/avalon-framework-impl" \
 ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver -Djava.util.logging.config.file=${DAPSROOT}/etc/fop/fop_logging.properties" \
-fop $OPTS -c $FOP_CONFIG_FILE "$@"
+#fop $OPTS -c $FOP_CONFIG_FILE "$@"
+fop $OPTS "$@"
 

@@ -73,26 +73,24 @@
   </step>
  </procedure>
  <example>
-  <title>Example of &dapsconf-sys; (&dapsacr; 2.0)</title>
+  <title>Example of &dapsconf-sys; (&dapsacr; &dapsversion;)</title>
 <!--taroth 2014-10-24: copied from DAPS SVN:
    daps/svn/trunk/etc/config.in-->
 <screen>###########################
 # DAPS configuration file #
 ###########################
 #
-# Copyright (C) 2011,2012 fsundermeyer@opensuse.org
-# Authors: fsundermeyer@opensuse.org
 #
 
 #------------------------------------------------------------
 # Customizing:
 #
 # Override any setting below in
-# $HOME/.daps/config
-# or on the commandline
+# $HOME/.configuration/daps/dapsrc
+# or on the command line
 #------------------------------------------------------------
 #
-# The environment is set up using the following hierachy
+# The environment is set up using the following hierarchy
 # (1 == always wins)
 #
 # 1. Command line 
@@ -100,13 +98,13 @@
 #    - or as variable declaration (FOO=bar)
 #
 # 2. DC-file
-# 3. $USER_RC (user config file)
+# 3. $HOME/.configuration/daps/dapsrc (user config file)
 # 4. $DAPSROOT/etc/system-profile
 
 ## Key:         ASPELL_EXTRA_DICT
 ## ----------------------             
 ## Description: Additional dictionary for spell checker
-## Type:        Absolute path to distionary
+## Type:        Absolute path to dictionary
 ## Default:     ""
 #
 # Specify an additional (custom) dictionary
@@ -121,7 +119,7 @@ ASPELL_EXTRA_DICT=""
 # NOTE:  Language to use for spellchecker. It uses the same format as the
 #        LANG environmental variable: It consists of  the two letter ISO 639
 #        language code (e.g. 'en' for English) and an optional two letter
-#        ISO 3166 country code after an underscore (e.g. en_GB for Britsh
+#        ISO 3166 country code after an underscore (e.g. en_GB for British
 #        English). Make sure the respective dictionary for aspell is installed.
 # By default DAPS tries to get the language from the "lang" attribute of the
 # MAIN file.
@@ -130,14 +128,14 @@ ASPELL_LANG=""
 
 ## Key:         ASPELL_SKIP_TAGS
 ## ----------------------             
-## Description: list of DOcBook XML tags which content should _not_ be
+## Description: list of DocBook XML tags which content should _not_ be
 ##              spell-checked
 ## Type:        List
 ## Default:     ( author command email envar filename firstname guimenu
 ##                keycap literal option remark screen surname systemitem
 ##                ulink varname xref )
 #
-# NOTE: Spece separated list of tags, needs to be enclosed in brackets
+# NOTE: Space separated list of tags, needs to be enclosed in brackets
 #
 ASPELL_SKIP_TAGS=(
     author 
@@ -187,8 +185,8 @@ CB_OPTIONS="--dontwarn  \"(301|302|902)\" --sleep 0 --timeout 60"
 ## Default:     "yes"
 #
 # By default errors, results, warnings and certain info messages are printed
-# in color using bash olor codes. In cron jobs and scripts you probably want to
-# turn off this behaviour by setting COLOR to "no"
+# in color using bash color codes. In cron jobs and scripts you probably want to
+# turn off this behavior by setting COLOR to "no"
 #
 COLOR="yes"
 
@@ -248,7 +246,7 @@ DIA_OPTIONS="-t cairo-svg"
 
 ## Key: DOCBOOK4_STYLE_URI        
 ## ------------------
-## Description: URI to DocBook 4 stlysheets
+## Description: URI to DocBook 4 stylesheets
 ## Type:        URI
 ## Default:     "http://docbook.sourceforge.net/release/xsl/current/"
 #
@@ -261,7 +259,7 @@ DOCBOOK4_STYLE_URI="http://docbook.sourceforge.net/release/xsl/current/"
 
 ## Key: DOCBOOK5_STYLE_URI        
 ## ------------------
-## Description: URI to DocBook 5 stlysheets
+## Description: URI to DocBook 5 stylesheets
 ## Type:        URI
 ## Default:     "http://docbook.sourceforge.net/release/xsl-ns/current/"
 #
@@ -312,7 +310,7 @@ DRAFT_STR="_draft"
 ## Type:        yesno
 ## Default:     "no"
 #
-# Useful to find errors within an epub file when devolping stylesheets  
+# Useful to find errors within an epub file when developing stylesheets  
 #
 EPUBCHECK="no"
 
@@ -385,7 +383,7 @@ FOP_OPTIONS="-q"
 #  -Xss2m
 #
 # Increase this value (e.g. to 3 or 4 MB) if you experience strange
-# problems when building PDFs with FOP (especially on 64bit machines)
+# problems when building PDFs with FOP (especially on 64-bit machines)
 #
 # Also see FORMATTER, FOP-*
 #
@@ -670,8 +668,9 @@ STATIC_DIR=""
 #
 # By default daps uses the DocBook Stylesheets to create output. If you are
 # developing your own set of stylesheets, you may want to set STYLEDEVEL in
-# ~/.daps/config. If set STYLEDEVEL _always_ takes precedence over STYLEROOT!
-# You may also want to set FALLBACK_STYLEROOT alomngside with STYLEDEVEL
+# ~/.configuration/daps/dapsrc. If set STYLEDEVEL _always_ takes precedence
+# over STYLEROOT!
+# You may also want to set FALLBACK_STYLEROOT alongside with STYLEDEVEL
 #
 # See also STYLEROOT, FALLBACK_STYLEROOT
 #
@@ -718,7 +717,7 @@ TXT_USE_DBSTYLES="yes"
 ##              set setindex
 #
 # Stylesheets for PDF/HTML/EPUB etc usually expect certain top level elements
-# when transforming XNML files. I makes little sense to process a document with
+# when transforming XML files. I makes little sense to process a document with
 # &lt;envar&gt; as an root element. Specify the list of top-level elements your scripts
 # support, here. In case a document with a root element not specified here is
 # parsed, DAPS will exit with an error. This is also true when specifying the
@@ -731,7 +730,7 @@ VALID_ROOTELEMENTS="appendix article bibliography book chapter colophon dedicati
 
 ## Key:         WH_SEARCH
 ## --------------------
-## Description: Enable/Disbale webhelp search feature
+## Description: Enable/Disable webhelp search feature
 ## Type:        yesno
 ## Default:     yes
 #
@@ -792,7 +791,7 @@ XML_MAIN_CATALOG="/etc/xml/catalog"
 ## Type:        PATH to file
 ## Default:     ""
 #
-# Path to one or more (space-sperated) XML catalogs to be queried before
+# Path to one or more (space-separated) XML catalogs to be queried before
 # XML_MAIN_CATALOG. 
 #
 XML_USER_CATALOGS=""
@@ -807,7 +806,7 @@ XML_USER_CATALOGS=""
 # to touch the stylesheet files directly. You may overwrite parameters
 # by specifying "--stringparam &lt;PARAM_NAME&gt; &lt;NEW_VALUE&gt;"
 # Example:
-# Set the pagesize for PDFs to 200x100 mm
+# Set the page size for PDFs to 200x100 mm
 # XSLTPARAM="--stringparam page.height 200mm --stringparam page.width 100mm"
 #
 # Can also be placed in an DC-file if being a per-book setting
@@ -816,7 +815,7 @@ XSLTPARAM=""
 
 ## Key: XSLTPROCESSOR        
 ## --------------------
-## Description: Patzh to XSLT processor. 
+## Description: Path to XSLT processor. 
 ## Type:        Path to executable
 ## Default:     "/usr/bin/xsltproc"
 #

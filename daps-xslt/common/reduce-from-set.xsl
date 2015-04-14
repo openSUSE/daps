@@ -15,7 +15,7 @@
      Reduced XML which contains only a fraction of the original document
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

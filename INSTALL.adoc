@@ -1,0 +1,180 @@
+Installing the DocBook Authoring and Publishing Suite (DAPS)
+============================================================
+
+:numbered:
+
+Tested Distributions
+--------------------
+
+DAPS has been tested on the following Linux distributions. It should also run
+on any other distribution, feedback is welcome.
+
+* Debian Wheezy (7.8.0)
+* Fedora 20 and 21
+* openSUSE 13.*
+* SUSE Linux Enterprise 12
+* Ubuntu 14.10 (Utopic Unicorn) (see note in the Installation section)
+
+Pre-build Packages
+------------------
+
+Pre-build packages are available for openSUSE and Ubuntu from the following
+repositories:
+
+SUSE::
+	http://download.opensuse.org/repositories/Documentation:Tools/ +
+	(browse to this URl and choose you SUSE version to get the complete
+	 repository URl and add it with the `zypper ar` command)
+Ubuntu::
+	https://launchpad.net/~sascha-manns-h/+archive/ubuntu/daps/ +
+	 (follow the instructions on this page for adding the PPA)
+Fedora::
+	Not available, yet. Help is appreciated.
+
+The package is named +daps+. Additional packages needed by DAPS will
+automatically be installed.
+
+
+Install from a GitHub Checkout
+------------------------------
+
+DAPS can be installed from the GitHub checkout by cloning the project
+and calling `configure`, `make` and `make install`. (Alternatively you may
+also use a checkout directly without installing--see <<anchor-2>>).
+
+[[anchor-1]]
+Prerequisites
+~~~~~~~~~~~~~
+
+DAPS requires a few programs to be installed on your system. To use the full
+feature set of DAPS, make sure to also install the optional packages. If
+unsure, which DAPS' features are supported with your current installation,
+just run `./configure` in the DAPS checkout directory. It will output detailed
+information about the support status on your system.
+
+.*Required packages*
+[options="header"]
+|====
+|SUSE                     |Debian/Ubuntu               |Fedora                  
+|automake                 |autotools-dev               |automake
+|dia                      |dia                         |dia
+|docbook_4                |docbook                     |docbook-dtds
+|--                       |docbook-xml                 |--
+|docbook-xsl-stylesheets^*^ |docbook-xsl^*^            |docbook-style-xsl^*^
+|ImageMagick              |imagemagick                 |ImageMagick
+|ghostscript              |ghostscript                 |ghostscript
+|inkscape                 |inkscape                    |inkscape
+|libxml2-tools            |libxml2-utils               |libxml2
+|--                       |libxml-commons-external-java|--
+|--                       |libxmlgraphics-commons-java |--
+|libxslt-tools            |--                          |libxslt
+|make                     |make                        |make
+|poppler-tools            |poppler-utils               |poppler-utils
+|python-xml               |python-libxml2              |libxml2-python
+|python-lxml              |python-lxml                 |python-lxml
+|sgml-skel                |sgml-base                   |sgml-common
+|svg-dtd                  |sgml-data                   |?
+|w3m                      |w3m                         |w3m
+|xml-commons-jaxp-1.3-apis|   --                       |xml-commons-apis
+|xmlgraphics-fop^**^      |fop^**^                     |fop^**^
+|xmlstarlet               |xmlstarlet                  |xmlstarlet
+|--                       |xsltproc                    |--
+|zip                      |zip                         |zip
+|====
+
+ ^*^: _minimum version: 1.7.8_ +
+ ^**^: _minimum version: 0.96, 1.x is recommended_
+
+
+.*Required Packages for DocBook 5 Support*
+[options="header"]
+|====
+|SUSE                    |Debian/Ubuntu           |Fedora                   
+|docbook_5               |docbook5-xml            |docbook5-schemas
+|docbook5-xsl-stylesheets|docbook-xsl-ns          |docbook5-style-xsl
+|jing                    |jing                    |jing
+|====
+
+.*Optional packages*
+[options="header"]
+|====
+|SUSE                    |Debian/Ubuntu           |Fedora                   
+|aspell                  |aspell                  |aspell
+|epubcheck               |epubcheck               |?
+|exiftool                |libimage-exiftool-perl  |perl-Image-ExifTool
+|optipng                 |optipng                 |optipng
+|perl-checkbot           |checkbot                |?
+|remake                  |remake                  |remake
+|saxon6                  |libsaxon-java           |?
+|saxon6-scripts          |--                      |?
+|xmlformat               |xmlformat-perl          |?
+|transfig                |xfig                    |xfig
+|====
+
+
+Installation
+~~~~~~~~~~~~
+
+1. Checkout the DAPS sources from GitHub: +
+   `git clone https://github.com/openSUSE/daps.git` 
+2. Change into the daps checkout directory
+3. Run `./configure --sysconfdir=/etc` +
+   Carefully check the configuration summary. Run `./configure --help` for
+   more information on how to change installation paths. If you need to change
+   something, re-run the configure command again afterwards.
+4. Run `make`
+   Important: Ubuntu users::
+   	      Ubuntu 14.10 ("Utopic Unicorn") ships a buggy xmlcatalog binary
+	      that creates wrong catalog entries for DAPS. To work around this
+   	      issue, copy the file +Ubuntu_catalog_fix+ to
+   	      +catalogs/for-catalog-daps.xml+ after having run `make` +
+   	      In case you have not installed DAPS to the default location
+   	      (e.g. by having ran configure with +--prefix+ or +--datadir+),
+	      you need to adjust the paths in
+	      +catalogs/for-catalog-daps.xml+ +
+   	      It is unknown to us whether this bug also occurrs in previous
+	      Ubuntu versions. Check by inspection
+	      +catalogs/for-catalog-daps.xml+ after having run `make`. In case
+	      it does not contain entries with +urn:x-daps:xslt:profiling+
+	      copy the correct file as explained above.
+5. Run `sudo make install`
+6. Run `daps --help` for a brief introduction in DAPS
+
+.Ubuntu: Workaround for Faulty Catalog Entries
+[NOTE]
+Ubuntu 14.10 ("Utopic Unicorn") ships a buggy xmlcatalog binary that creates
+wrong catalog entries for DAPS. To work around this issue, copy the file
++Ubuntu_catalog_fix+ to +catalogs/for-catalog-daps.xml+ after having run `make'
+
+
+
+[[anchor-2]]
+Running DAPS from a GitHub Checkout
+-----------------------------------
+
+In case you do not want to install DAPS or always would like to use the latest
+development version, you can run DAPS directly from the GitHub checkout.
+
+1. Make sure the prerequisites listed in <<anchor-1>> are fullfilled.
+2. Check out DAPS. Either choose the latest stable version (safe) or the
+   development version (may not work)
+   Checking out the latest release::
+	`git clone https://github.com/openSUSE/daps.git`
+   Checking out the latest development version::
+	 `git clone https://github.com/openSUSE/daps.git -b develop --single-branch`
+3. (Skip this step for SUSE). Go to <path_to_checkout>/etc/fop and enter the
+   following command according to your distribution:
+   Fedora/RedHat::
+	`ln -sf fop-daps.redhat etc/fop/fop-daps.xml`
+   SUSE::
+	_Do nothing_
+   Other (non SUSE/RedHat-based) distributions::
+   	 `ln -sf fop-daps.generic etc/fop/fop-daps.xml`
+4. Test DAPS by building the DAPS user manual: +
+   `cd <path_to_checkout>/daps/doc` +
+   `../bin/daps --dapsroot .. -d DC-daps-user pdf`
+
+To run DAPS from the checkout directory, enter the following command: +
+`<path_to_checkout>/bin/daps --dapsroot=<path_to_checkout>
+[options] <subcommand> [options]`
+

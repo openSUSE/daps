@@ -1,18 +1,21 @@
 #!/bin/bash
 #
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Thomas Schraitle <toms at opensuse dot org>
+#
 # Script to change DocBook 4 source to version 5
 #
-#
-# Author: Thomas Schraitle <toms@opensuse.org>
 
 __VERSION__="$Id: $"
 
 # Name of this script:
 ME="$(basename $0)"
 
-# TODO: Make it configurable by ~/.daps/config or ~/.config/daps/daps.conf
-# [[ -s ~/.daps/config ]] && source ~/.daps/config
-# [[ -s ~/.config/daps/daps.conf ]] && source ~/.config/daps/daps.conf
+# TODO: Make it configurable by ~/.daps/config or ~/.config/daps/dapsrc
+# [[ -f ~/.daps/config ]] && source ~/.daps/config
+# [[ -f ~/.config/daps/dapsrc ]] && source ~/.config/daps/dapsrc
 
 # Contains the stylesheet to migrate DocBook 4 -> 5:
 MIGRATE_XSLT=${MIGRATE_XSLT:-/usr/share/xml/docbook/stylesheet/upgrade/db4-upgrade.xsl}

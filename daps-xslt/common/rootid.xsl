@@ -26,7 +26,7 @@
      is normally imported and the exported templates are overwritten.
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 <xsl:stylesheet version="1.0"

@@ -1,10 +1,11 @@
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
 # Makefile.am for DocBook Authoring and Publishing Suite (daps)
 # Generate catalogs and install daps
 #
-# Copyright (C) 2011-2013 Frank Sundermeyer <fsundermeyer@opensuse.org>
-#
-# Author:
-# Frank Sundermeyer <fsundermeyer@opensuse.org>
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
@@ -30,21 +31,30 @@ DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 
 # fop config
-# I love automake conditionals, they are sooo powerful ;-(
 #
 FOP_CONFIG   := etc/fop/fop-daps.xml
+FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
+
 if DIST_SUSE
+  FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+endif
+if DIST_SUSEBS
   FOP_CONFIG_SRC := etc/fop/fop-daps.suse
 endif
 if DIST_REDHAT
   FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
 endif
-if !FOP_CONFIG_SRC
-  FOP_CONFIG_SRC :=  etc/fop/fop-daps.generic
+if DIST_UBUNTU
+  FOP_CONFIG_SRC := etc/fop/fop-daps.generic
 endif
 
-# stylesheets with which to build the documentation
-STYLEROOT    := $(DAPSROOT)/suse/xslt
+# stylesheets
+if HAS_DAPS_XSL
+  STYLEROOT := $(daps_xsl)
+else
+  STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
+endif
+
 
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
@@ -77,7 +87,6 @@ dapslibexecdir = $(pkgdatadir)/libexec
 dapsmakedir    = $(pkgdatadir)/make
 emacssitedir   = @datadir@/emacs/site-lisp
 templatedir    = $(pkgdatadir)/init_templates
-ttfontsdir     = @datadir@/fonts/truetype
 
 htmldocdir     = @docdir@/html
 
@@ -87,10 +96,13 @@ xsltcontribdir   = $(xsltdir)/contrib
 xsltdesktopdir   = $(xsltdir)/desktop
 xsltepubdir      = $(xsltdir)/epub
 xsltindexdir     = $(xsltdir)/index
+xsltjspdir       = $(xsltdir)/jsp
+xsltlibdir       = $(xsltdir)/lib
 xsltmallarddir   = $(xsltdir)/mallard
-xsltmandir       = $(xsltdir)/man
+xsltmigratedir   = $(xsltdir)/migrate
 xsltprofilingdir = $(xsltdir)/profiling
 xsltrelnotesdir  = $(xsltdir)/relnotes
+xsltxhtmldir     = $(xsltdir)/xhtml
 xsltyelpdir      = $(xsltdir)/yelp
 
 #------------------------
@@ -108,7 +120,6 @@ endif
 # CONFIG files
 dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf \
 			etc/CatalogManager.properties
-nodist_dapsconf_DATA  = etc/config.in etc/catalog.xml
 dist_fopconf_DATA     = etc/fop/fop-daps.xml
 dist_xepconf_DATA     = etc/xep/xep-daps.xml
 dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
@@ -119,7 +130,6 @@ dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
 dist_template_DATA      = $(wildcard init_templates/*)
-dist_ttfonts_DATA       = $(wildcard fonts/*.ttf)
 dist_xsltcommon_DATA    = $(wildcard daps-xslt/common/*.xsl) \
 			   $(wildcard daps-xslt/common/*.xml) \
 			   $(wildcard daps-xslt/common/*.svg)
@@ -127,15 +137,18 @@ dist_xsltcontrib_DATA   = $(wildcard daps-xslt/contrib/*.xsl)
 dist_xsltdesktop_DATA   = $(wildcard daps-xslt/desktop/*.xsl)
 dist_xsltepub_DATA      = $(wildcard daps-xslt/epub/*.xsl)
 dist_xsltindex_DATA     = $(wildcard daps-xslt/index/*.xsl)
+dist_xsltjsp_DATA       = $(wildcard daps-xslt/jsp/*.xsl)
+dist_xsltlib_DATA       = $(wildcard daps-xslt/lib/*.xsl)
 dist_xsltmallard_DATA   = $(wildcard daps-xslt/mallard/*.xsl)
-dist_xsltman_DATA       = $(wildcard daps-xslt/man/*.xsl)
+dist_xsltmigrate_DATA   = $(wildcard daps-xslt/migrate/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
-dist_xsltrelnotes_DATA = $(wildcard daps-xslt/relnotes/*.xsl)
+dist_xsltrelnotes_DATA  = $(wildcard daps-xslt/xhtml/*.xsl)
+dist_xsltxhtml_DATA     = $(wildcard daps-xslt/relnotes/*.xsl)
 dist_xsltyelp_DATA      = $(wildcard daps-xslt/yelp/*.xsl)
 
 # DOCUMENTATION
-dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL README \
-			README.quickstart README.upgrade_from_susedoc_4.x
+dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
+			README.adoc README.quickstart.adoc
 dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local TARGETS--------------------------------------
@@ -159,31 +172,34 @@ install-data-local:
 if CATALOG_EDIT
 # create entry in xml root catalog
 	{ \
-	  sed '/<\/catalog>/d' $(ROOT_CATALOG); \
+	  sed '/<\/catalog>/d' $(root_catalog); \
 	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
 	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
 	      END{print "</catalog>"}'; \
 	} >$(TMP_CATALOG)
-	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(root_catalog)
 endif
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
 uninstall-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 uninstall-local:
-	$(XMLLINT) --nocatalogs --format $(ROOT_CATALOG) | \
+	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
 	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
-	chmod --reference=$(ROOT_CATALOG) $(TMP_CATALOG)
-	mv $(TMP_CATALOG) $(ROOT_CATALOG)
+	chmod --reference=$(root_catalog) $(TMP_CATALOG)
+	mv $(TMP_CATALOG) $(root_catalog)
 endif
 #-----------------------------CLEAN--------------------------------------------
 clean-local:
-	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ $(srcdir)/.firstbuild \
-	$(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps $(srcdir)/etc/config \
-	$(srcdir)/etc/fop/fop-daps.xml
-	(cd $(srcdir)/etc && ln -sf config.in config)
+	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
+	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
+	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
+	  $(srcdir)/doc/xml/entity-decl.ent
+	(cd $(srcdir)/etc && ln -s config.in config)
 	(cd $(srcdir)/bin && ln -s daps.in daps)
+	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
+	(cd doc/xml && ln -s entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -211,6 +227,9 @@ $(DAPS_CATALOG):
 	  "file://$(DAPS_PROFDIR)/novdoc-profile.xsl" $@
 	$(Q)$(XMLCATALOG) --noout --add "rewriteSystem" \
 	  "http://daps.sourceforge.net/release/daps-xsl/current/" \
+	  "file://$(pkgdatadir)/daps-xslt/" $@
+	$(Q)$(XMLCATALOG) --noout --add "rewriteSystem" \
+	  "https://opensuse.github.io/daps/release/daps-xsl/current/" \
 	  "file://$(pkgdatadir)/daps-xslt/" $@
 	$(Q)$(SED) -i '/^<!DOCTYPE .*>$$/d' $@
 	$(Q)$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
@@ -242,17 +261,21 @@ etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
-$(FOP_CONFIG): $(FOP_CONFIG_SRC) .firstbuild
-	ln -sf $(notdir $<) $@
+$(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
+	if test -n "$(FOP_CONFIG_SRC)"; then \
+	  ln -sf $(notdir $(FOP_CONFIG_SRC)) $@; \
+	else \
+	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
+	fi
 
 $(USERGUIDE):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_USERGUIDE) html --single --static \
             --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_QUICKSTART) html --single --static \
 	    --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"

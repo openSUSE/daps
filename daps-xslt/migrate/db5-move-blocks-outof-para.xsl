@@ -25,7 +25,7 @@
      -
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2015, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 <!DOCTYPE xsl:stylesheet

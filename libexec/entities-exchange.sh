@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Berthold Gunreben
+# Frank Sundermeyer <fsundermeyer at opensuse dot org >
+#
 
 if [ -d $DAPSROOT ] ; then
   TMP=$DAPSROOT

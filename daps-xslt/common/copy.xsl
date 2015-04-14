@@ -16,7 +16,7 @@
      Sal Mangano, XSLT Cookbook, p. 201 (XML to XML)
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

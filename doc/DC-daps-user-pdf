@@ -15,6 +15,13 @@ PROFOS="osuse;noquick"
 
 PROFARCH="x86;amd64;em64t"
 
+# Do not specify a styleroot requiring a suse-xsl-stylesheet installation
+# since this will fail with a DAPS ckeckput or build on other distributions
+#
+# If needed, specify the following on the command line:
+# --styleroot="/usr/share/xml/docbook/stylesheet/daps2013"
+
+
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
 

@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # HTML/HTMLSINGLE generation for DAPS
 #
@@ -213,11 +214,11 @@ ifneq ($(IS_STATIC),static)
     copy_static_images: | $(HTML_DIR)/static/css
   endif
   copy_static_images: $(STYLEIMG)
-    ifeq ($(STATIC_HTML), 1)
+    ifeq ($(STATIC_HTML),0)
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(HTML_DIR)/static
+    else
 	tar cph --exclude-vcs -C $(dir $<) images | \
 	  (cd $(HTML_DIR)/static; tar xpv) >/dev/null
-    else
-	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(HTML_DIR)/static
     endif
 else
   copy_static_images: | $(HTML_DIR)/static
@@ -225,11 +226,11 @@ else
     copy_static_images: | $(HTML_DIR)/static/css
   endif
   copy_static_images: $(STYLEIMG)
-    ifeq ($(STATIC_HTML), 1)
+    ifeq ($(STATIC_HTML),0)
+	$(HTML_GRAPH_COMMAND) $</* $(HTML_DIR)/static
+    else
 	tar cph --exclude-vcs -C $(dir $<) static | \
 	  (cd $(HTML_DIR); tar xpv) >/dev/null
-    else
-	$(HTML_GRAPH_COMMAND) $</* $(HTML_DIR)/static
     endif
 endif
 ifdef HTML_CSS

@@ -2,32 +2,45 @@ dnl                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script
 dnl or use autogen.sh (recommended)
 dnl
-dnl Copyright (C) 2011-2013:
-dnl   Thomas Schraitle  <toms@opensuse.org>
-dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
+dnl Copyright (C) 2012-2015 SUSE Linux GmbH
 dnl
 dnl Authors:
-dnl   Thomas Schraitle  <toms@opensuse.org>
-dnl   Frank Sundermeyer <fsundermeyer@opensuse.org>
+dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
+dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
 dnl TODO
 dnl
 dnl determine aspell directory
 
-m4_define(daps_version_major, 0)
-m4_define(daps_version_minor, 9)
-m4_define(daps_version_micro, 9dev)
+m4_define(daps_version_major, 2)
+m4_define(daps_version_minor, 0)
+m4_define(daps_version_micro, [0-rc3])
+# API version
+m4_define([daps_api_version],[daps_version_major])
+
+m4_define([daps_version], [daps_version_major.daps_version_minor.daps_version_micro])
 
 AC_PREREQ([2.68])
-AC_INIT([DAPS], [2.0~rc2], [https://sourceforge.net/p/daps/tickets/], [daps], [http://daps.sf.net])
+AC_INIT([DAPS], [daps_version], [https://github.com/openSUSE/daps], [daps], [http://opensuse.github.io/daps])
 AC_CONFIG_MACRO_DIR([m4])
 
+DAPS_VERSION_MAJOR=daps_version_major
+DAPS_VERSION_MINOR=daps_version_minor
+DAPS_VERSION_MICRO=daps_version_micro
+DAPS_VERSION=daps_version
+DAPS_API_VERSION=daps_api_version
+AC_SUBST(DAPS_VERSION)
+AC_SUBST(DAPS_VERSION_MAJOR)
+AC_SUBST(DAPS_VERSION_MINOR)
+AC_SUBST(DAPS_VERSION_MICRO)
+AC_SUBST(PACKAGE_VERSION)
+AC_SUBST([DAPS_API_VERSION],daps_api_version)
 dnl https://stackoverflow.com/questions/18769770/user-of-autotools-generated-tarball-gets-error-message-aclocal-1-13-command-no
 AM_MAINTAINER_MODE([disable])
 
 AC_MSG_NOTICE([
 
- Configuring DAPS, the DocBook Authoring and Publishing Suite...
+ Configuring DAPS $DAPS_VERSION, the DocBook Authoring and Publishing Suite...
 
 ])
 
@@ -36,10 +49,13 @@ AM_INIT_AUTOMAKE([1.10])
 AC_PREFIX_DEFAULT(/usr)
 
 dnl Some constants
-ROOT_CATALOG="/etc/xml/catalog"
-AC_SUBST(ROOT_CATALOG)
-DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+root_catalog="/etc/xml/catalog"
+AC_SUBST(root_catalog)
+db4_xslt_url="http://docbook.sourceforge.net/release/xsl/current/"
+AC_SUBST(db4_xslt_url)
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
+daps_xsl="/usr/share/xml/docbook/stylesheet/daps2012"
+AC_SUBST(daps_xsl)
 FONT_DIR="/usr/share/fonts"
 
 dnl -------------------------
@@ -75,6 +91,27 @@ AC_PROG_LN_S
 AC_PROG_SED
 AC_PROG_GREP
 AC_PROG_INSTALL
+
+dnl bash
+dnl Taken from https://github.com/Schischu/ptxdist_sh/blob/master/configure.ac
+dnl
+dnl unset BASH # bash sets this itself!
+dnl AC_PATH_PROG(BASH, bash)
+
+dnl BEWARE: There is a distinct possibility that we are currently running under
+dnl bash in this configure script (/bin/sh being a symlink to /bin/bash). Even
+dnl though the result /could/ be available to us directly as $BASH_VERSION we
+dnl don't want to use, or trust it, incase the user is specifying a different
+dnl bash executable.
+
+dnl AC_MSG_CHECKING([for bash version])
+
+dnl if `$BASH -c '[[ "$BASH_VERSION" \< "4.0" ]]'` ; then
+dnl    AC_MSG_ERROR([DAPS requires at least version 4.0 of bash.])
+dnl else
+dnl    AC_MSG_RESULT([$BASH_VERSION])
+dnl fi
+
 
 dnl make
 AC_PATH_PROG([MAKE], [make], [0])
@@ -123,9 +160,9 @@ AC_PATH_PROGS([PDFFORMATTER], [fop xep], [0])
 dnl recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing], [0])
 
-AC_CHECK_FILE([$ROOT_CATALOG], [CATALOG=$ROOT_CATALOG], [CATALOG=0])
+AC_CHECK_FILE([$root_catalog], [CATALOG=$root_catalog], [CATALOG=0])
 if test 0 = "$CATALOG"; then
-  AC_MSG_ERROR([Catalog $ROOT_CATALOG not found])
+  AC_MSG_ERROR([Catalog $root_catalog not found])
 fi
 
 dnl -------------------------------------------------------------------------
@@ -162,7 +199,7 @@ dnl svg DTD
 for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
   AC_MSG_CHECKING([for $SVG_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$SVG_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$SVG_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_SVGDTD=1
   else
@@ -175,16 +212,18 @@ fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
- dnl python
-dnl We require Python >= 2.6
+
+dnl python
+dnl We require Python3
+dnl AM_PATH_PYTHON([3.2])
 AM_PATH_PYTHON([2.6])
 
-# Variables HAVE_PYMOD_* are filled with "yes" or "no"
+dnl Variables HAVE_PYMOD_* are filled with "yes" or "no"
 AC_PYTHON_MODULE([xml], [fatal])
 AC_SUBST(HAVE_PYMOD_XML)
-#
-AC_PYTHON_MODULE([lxml], [fatal])
-AC_SUBST(HAVE_PYMOD_LXML)
+
+dnl AC_PYTHON_MODULE([lxml], [fatal])
+dnl AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
@@ -196,7 +235,7 @@ for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.4//EN" \
                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
   AC_MSG_CHECKING([for $XML_DTD])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK=1
   else
@@ -213,7 +252,7 @@ for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
                   "http://docbook.org/xml/5.0/rng/docbook.rng" \
                   "http://docbook.org/xml/5.0/rng/docbook.rnc" ; do
   AC_MSG_CHECKING([for $XML_SCHEMA])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5=1
   else
@@ -228,18 +267,18 @@ dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
 dnl DocBook4
-for XSLT in "${DB4_XSLT_URL}common/common.xsl" \
-            "${DB4_XSLT_URL}epub/docbook.xsl" \
-            "${DB4_XSLT_URL}fo/docbook.xsl" \
-            "${DB4_XSLT_URL}html/chunk.xsl" \
-            "${DB4_XSLT_URL}html/docbook.xsl" \
-            "${DB4_XSLT_URL}lib/lib.xsl" \
-            "${DB4_XSLT_URL}manpages/docbook.xsl" \
-            "${DB4_XSLT_URL}profiling/profile.xsl" \
-            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
-            "${DB4_XSLT_URL}xhtml/docbook.xsl"; do
+for XSLT in "${db4_xslt_url}common/common.xsl" \
+            "${db4_xslt_url}epub/docbook.xsl" \
+            "${db4_xslt_url}fo/docbook.xsl" \
+            "${db4_xslt_url}html/chunk.xsl" \
+            "${db4_xslt_url}html/docbook.xsl" \
+            "${db4_xslt_url}lib/lib.xsl" \
+            "${db4_xslt_url}manpages/docbook.xsl" \
+            "${db4_xslt_url}profiling/profile.xsl" \
+            "${db4_xslt_url}xhtml/chunk.xsl" \
+            "${db4_xslt_url}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_STYLESHEETS=1
   else
@@ -262,9 +301,10 @@ for XSLT in "${DB5_XSLT_URL}common/common.xsl" \
             "${DB5_XSLT_URL}xhtml/chunk.xsl" \
             "${DB5_XSLT_URL}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$ROOT_CATALOG" "$XSLT" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5_STYLESHEETS=1
+
   else
     AC_MSG_RESULT([no])
   fi
@@ -274,32 +314,51 @@ if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
 fi
 
 dnl -------------------------------------------------------------------------
-dnl Add more distributions if needed
-AM_CONDITIONAL([DIST_REDHAT], [lsb_release -i | egrep -iq "(fedora|redhat)"])
-AM_CONDITIONAL([DIST_SUSE], [lsb_release -i | grep -iq "suse"])
-AM_CONDITIONAL([DIST_OTHER], [lsb_release -i | egrep -iqv "(fedora|redhat|suse)"])
-# /etc/debian-version Debian, Ubuntu
-# /etc/slackware-version Slackware
+dnl Check which Stylesheets to use
+AM_CONDITIONAL([HAS_DAPS_XSL], [test -d $daps_xsl])
 
 dnl -------------------------------------------------------------------------
+dnl Add more distributions if needed
+AM_CONDITIONAL([DIST_REDHAT], [egrep -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_SUSE], [egrep -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_UBUNTU], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
+
+dnl No distribution-specific info in the BuildService 
+dnl /var/adm/fillup-templates is SUSE-specific
+AM_CONDITIONAL([DIST_SUSEBS], [test -d /var/adm/fillup-templates])
+dnl -------------------------------------------------------------------------
 AC_OUTPUT([Makefile])
+AC_OUTPUT([doc/xml/entity-decl.ent])
 
 AC_MSG_RESULT([
 dnl ###########################################################################
-DAPS is configured as follows.  Please verify that this configuration matches
+DAPS $DAPS_VERSION is configured as follows.  Please verify that this configuration matches
 your expectations.
 
 Supported features
 ------------------
-* HTML/single HTML output            * MediaWiki output (experimental)
-* JSP output                         * webhelp output (experimental)
-* ePUB output                        * support for .png images
-* man pages output
+* DocBook 4 support                  * man pages output
+* HTML/single HTML output            * webhelp output (experimental)
+* ePUB output                        * png and jpg images
 
 Optional features
 -----------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
+dnl DocBook 5
+test 0 = "$HAVE_DOCBOOK_5" && DB5=0
+test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
+test 0 = "$HAVE_JING" && DB5=0
+
+if test 0 = "$DB5"; then
+  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5 support                |   yes   |])
+fi
+
 dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
   AC_MSG_RESULT([Create ASCII txt output          |    no   | install w3m])
@@ -312,8 +371,7 @@ if test 0 = "$PDFFORMATTER"; then
   AC_MSG_RESULT([Create PDF output                |    no   | install a formatter (fop or xep)
 ])
 else
-  AC_MSG_RESULT([Create PDF output                |   yes   |
-])
+  AC_MSG_RESULT([Create PDF output                |   yes   |])
 fi
 
 dnl DIA support
@@ -342,8 +400,7 @@ if test 0 = "$OPTIPNG" -o 0 = "$EXIFTOOL"; then
   AC_MSG_RESULT([Size optimization for .png       |    no   | install optipng and/or exiftool
 ])
 else
-  AC_MSG_RESULT([Size optimization for .png       |   yes   |
-])
+  AC_MSG_RESULT([Size optimization for .png       |   yes   |])
 fi
 
 dnl Linkchecker (checkbot)
@@ -372,8 +429,7 @@ if test 0 = "$PDFFONTS"; then
   AC_MSG_RESULT([Show fonts not embedded in PDFs  |    no   | install poppler utilities/tools
 ])
 else
-  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |
-])
+  AC_MSG_RESULT([Show fonts not embedded in PDFs  |   yes   |])
 fi
 
 dnl Enhanced Debugging (remake)
@@ -396,21 +452,6 @@ else
   AC_MSG_RESULT([Support for .pdf and .eps images |   yes   |])
 fi
 
-dnl DocBook 5
-test 0 = "$HAVE_DOCBOOK_5" && DB5=0
-test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
-test 0 = "$HAVE_JING" && DB5=0
-
-if test 0 = "$DB5"; then
-  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
-                                 |         | DocBook 5 XSL stylesheets,
-                                 |         | and jing
-])
-else
-  AC_MSG_RESULT([DocBook 5 support                |   yes   |
-])
-fi
-
 dnl Evil magic
 
 eval "eval SYSCONFDIR=$sysconfdir/daps"
@@ -418,7 +459,9 @@ eval "eval DATADIR=$datadir/daps"
 eval "eval BINDIR=$bindir"
 eval "eval DOCDIR=$docdir"
 
-AC_MSG_RESULT([DAPS will be installed into the following paths:
+AC_MSG_RESULT([
+
+DAPS will be installed into the following paths:
 ------------------------------------------------
 Executables             : $BINDIR
 System wide config files: $SYSCONFDIR

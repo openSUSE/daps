@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # ASCII generation for DAPS
 #
@@ -32,7 +33,7 @@ $(TXT_RESULT): $(TMP_DIR)/$(DOCNAME).html
   ifeq ($(VERBOSITY),2)
 	@ccecho "info" "   Creating ASCII file"
   endif
-	w3m -dump $< > $@
+	LANG=$(LANGUAGE) w3m -dump $< > $@
 
 # The text file is generated via w3m from a single HTML file. We do not need
 # to create images, css files and stuff, therefore we create a temporary

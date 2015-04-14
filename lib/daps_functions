@@ -1,9 +1,11 @@
 #!/bin/bash
 #
-# Functions for ../bin/daps
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Copyright (C) 2011,2012 Frank Sundermeyer <fsundermeyer@opensuse.org>
-# Authors: Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
+# Functions for ../bin/daps
 #
 #
 
@@ -131,6 +133,10 @@ function parse_args () {
                 P_LIST=1
                 shift
                 ;;
+	    --locdrop)
+		P_IS_LOCDROP=1
+		shift
+		;;
             --meta)
                 P_META=1
                 shift
@@ -179,6 +185,14 @@ function parse_args () {
                 P_NOSET=1
                 shift
                 ;;
+            --nostatic)
+		P_NOSTATIC=1
+		shift
+		;;
+            --notrans-dir)
+                sanitize_path "$2" "P_NOTRANS_DIR"
+		shift 2
+		;;
             --noxml)
                 P_LIST_NOXML=1
                 shift
@@ -190,6 +204,10 @@ function parse_args () {
 	    --optipng)
 		P_OPTIPNG=1
 		shift
+		;;
+            --output-dir)
+                sanitize_path "$2" "P_OUTPUT_DIR"
+		shift 2
 		;;
             --pagefiles)
                 P_PAGEFILES=1
@@ -223,20 +241,24 @@ function parse_args () {
 		P_HTMLSINGLE=1
 		shift
 		;;
+	    --static)
+		ccecho -- "warn" "--static is deprecated, since it is the default now."
+		shift
+		;;
             --statdir)
                 sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
-            --static)
-		P_STATIC=1
-		shift
-		;;
             --subdirs)
                 P_SUBDIRS=1
                 shift
                 ;;
             --target)
                 P_TARGET="$2"
+		shift 2
+		;;
+	    --trans-files)
+		P_TRANS_FILES="$2"
 		shift 2
 		;;
 	    --viewer)
@@ -449,7 +471,7 @@ function call_make () {
 	DBSTYLE_FILE=$(xmlcatalog $XML_MAIN_CATALOG http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
 	DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
 
-	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR)
+	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR 2>/dev/null || echo "Not available")
 
         echo -e "---------------
            DOC_DIR: $DOC_DIR
@@ -622,7 +644,7 @@ function build_html_jsp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -638,11 +660,11 @@ function build_html_jsp () {
 	help_jsp
         help_meta
         help_name
+        help_nostatic
         help_remarks
         help_rootid
 	help_single
         help_statdir
-        help_static
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
@@ -654,7 +676,7 @@ function build_html_jsp () {
     [[ 1 = $P_REMARKS ]]     && REMARKS=1
     # usemeta implies draft mode
     [[ 1 = $P_META ]]        && META=1 DRAFT="yes"
-    [[ 1 = $P_STATIC ]]      && export STATIC_HTML=1
+    [[ 1 = $P_NOSTATIC ]]    && export STATIC_HTML=0
     [[ 1 = $P_HTML5 ]]       && export HTML5=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -684,7 +706,7 @@ function webhelp () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,nosearch,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,remarks,rootid:,static,xsltparam:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -698,9 +720,9 @@ function webhelp () {
         help_help
         help_name
         help_nosearch
+        help_nostatic
         help_remarks
         help_rootid
-        help_static
         help_xsltparam "creates Webhelp HTML from the profiled sources"
         echo
         exit 0
@@ -716,7 +738,7 @@ function webhelp () {
     [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
     [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
     [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ 1 = $P_STATIC ]]   && export STATIC_HTML=1
+    [[ 1 = $P_NOSTATIC ]]   && export STATIC_HTML=0
     [[ 1 = $P_NOSEARCH ]] && export WH_SEARCH="no"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -986,7 +1008,7 @@ function package-src () {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="def-file:,help,name:,optipng,set-date:"
+    LONG_OPTS="def-file:,help,locdrop,name:,optipng,set-date:"
 
     parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -996,6 +1018,7 @@ function package-src () {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_help
+	help_locdrop
         help_name
 	help_optipng
         help_set-date
@@ -1003,8 +1026,9 @@ function package-src () {
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = $P_OPTIPNG ]] && export OPTIPNG=1
+    [[ 1 = $P_IS_LOCDROP ]] && export IS_LOCDROP=1
+    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = $P_OPTIPNG ]]    && export OPTIPNG=1
 
     if [[ -n "$P_DEF_FILE" ]]; then
         if [[ -f $P_DEF_FILE ]]; then
@@ -1155,6 +1179,143 @@ function package-html () {
 
     call_make "$SUB_CMD" "$@"
 }
+
+###########################################################################
+#
+# PACKAGING unpack-locdrop
+#
+# Subcommand: unpack-locdrop only
+#
+# unpack a localization drop packages source.
+# Files listed in manifest_trans.txt will be extracted from the given tarball
+# Files listed in manifest_notrans will be linked/copied from the notrans
+# directory specified with --notrans-dir
+#
+###########################################################################
+function unpack-locdrop () {
+    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST XML_FILE_LIST TRANS_FILES
+    local -a ALL_MANIFEST_NOTRANS_FILES ALL_MANIFEST_TRANS_FILES
+
+    MFT_TRANS_SUFF=manifest_trans.txt
+    MFT_NOTRANS_SUFF=manifest_notrans.txt
+
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="trans-files:,help,notrans-dir:,output-dir:"
+
+    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = $P_HELP ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_trans-files
+        help_help
+        help_notrans-dir
+        help_output-dir
+        echo
+        exit 0
+    fi
+
+    if [[ -z "$P_TRANS_FILES" ]]; then
+	exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
+    fi
+
+    if [[ -z "$P_NOTRANS_DIR" ]]; then
+	ccecho "warn" "No notrans-dir was specified. Assuming DC-file directory"
+	P_NOTRANS_DIR="$MY_BASEDIR"
+    fi
+
+    [[ -z "$P_OUTPUT_DIR" ]] && exit_on_error "Fatal: Specifying an output directory\nwith  --output-dir is mandatory."
+
+    #
+    # Extract translated files
+    #
+    for TAR in $P_TRANS_FILES; do
+	if [[ -f $TAR ]]; then
+	    cd $P_OUTPUT_DIR
+	    MANIFEST_TRANS=$(tar tfj $TAR | grep $MFT_TRANS_SUFF)
+	    ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
+	    MANIFEST_NOTRANS=$(tar tfj $TAR | grep $MFT_NOTRANS_SUFF)
+	    ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
+	    tar xfj $TAR $MANIFEST_TRANS $MANIFEST_NOTRANS
+	    tar xfj $TAR $(cat $MANIFEST_TRANS)
+	    cd - >/dev/null
+	else
+	    exit_on_error "Fatal: $TAR does not exist"
+	fi
+    done
+
+    cd $P_OUTPUT_DIR
+
+    #
+    # Now create a complete list of translated/untranslated files
+    #
+    ALL_TRANS_FILES=$(cat "${ALL_MANIFEST_TRANS_FILES[@]}" | sort -u)
+    ALL_NOTRANS_FILES=$(cat "${ALL_MANIFEST_NOTRANS_FILES[@]}" | sort -u)
+
+    # get all files unique to the notrans lists (the ones that have not
+    # been translated)
+    LINK_NOTRANS_FILES=$(comm -1 -3 <(echo -e "$ALL_TRANS_FILES") <(echo -e "$ALL_NOTRANS_FILES"))
+    
+
+    # Process LINK_NOTRANS_FILES to get the file lists we need
+    #  the awk statements matches multiple occurrences on a single line
+    #
+    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo $LINK_NOTRANS_FILES))
+    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo $LINK_NOTRANS_FILES))
+    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo $LINK_NOTRANS_FILES))
+
+    # Copy remaining DC-files
+    #
+    for DC in $DCFILE_LIST; do
+	if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
+	    cp ${P_NOTRANS_DIR}/$DC .
+	else
+	    ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC" >&2
+	fi
+    done
+
+    # Link not translated images and XML files
+    #
+    for DATA in $NO_DCFILE_LIST; do
+	if [[ -f ${P_NOTRANS_DIR}/$DATA ]]; then
+	    DIR=$(dirname $DATA)
+	    if [[ "." == $DIR ]]; then
+		ln -sf ${P_NOTRANS_DIR}/$DATA
+	    else
+		[[ -d $DIR ]] || mkdir -p $DIR
+		# the realpath statement makes sure a realtive path is used
+                # for the link (also see 
+                # https://stackoverflow.com/questions/2564634)
+		(cd $DIR && ln -sf $(realpath --relative-to="." "${P_NOTRANS_DIR}/$DATA"))
+	    fi
+	else
+	    ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA" >&2
+	fi
+    done
+
+
+    # Get entity files from the notrans sources and link to them
+    #
+    ENTITIES="$(${LIBEXEC_DIR}/getentityname.py $XML_FILE_LIST)"
+    for ENT in $ENTITIES; do
+	if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
+	    (cd xml && ln -sf ${P_NOTRANS_DIR}/xml/$ENT)
+	else
+	    ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT" >&2
+	fi
+    done
+
+    cd - >/dev/null
+
+    ccecho "result" "Successfully created files in\n$P_OUTPUT_DIR"
+    exit 0
+}
+
 
 ###########################################################################
 #
@@ -1909,7 +2070,7 @@ function help_extra-dict () {
                               Default: unset"
 }
 function help_file () {
-    echo "    --file=FILE               Specify the filename of an XML file"
+    echo "    --file=FILE               Specify the name of an input file"
 }
 function help_formatter () {
     echo "    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
@@ -1954,6 +2115,12 @@ function help_list () {
                               standard output instead of starting the
                               interactive spellchecker.
                               Default: en_US"
+}
+function help_locdrop () {
+    echo "    --locdrop                 Use this option to create a source tarball
+                              from a previous locdrop after translation. If set, will
+                              include the files manifest_*.txt in the source tarball.
+                              Default: off"
 }
 function help_meta () {
     echo "    --meta                    If set, prints additional status information
@@ -2013,6 +2180,23 @@ function help_noset () {
                               targets, are replaced by text-only pointers.
                               Default: off"
 }
+function help_nostatic () {
+    echo "    --nostatic                Normally images and css files in HTML builds
+                              are copied from elsewhere in the file system.
+                              Use this option to link these files in order
+                              to save disk space. Note that this eventually
+                              produces nested links which may cause errors
+                              with CSS and Javascript."
+}
+function help_notrans-dir () {
+    echo "    --notrans-dir=DIRECTORY   Relative or absolute path to the directory
+                              containing the untranslated sources. Links
+                              pointing to this directory are created for all
+                              files listed in manifest_notrans.txt.
+                              Optional. If not specified, the dirname of the
+                              DC-file is used.
+                              Default: DC-file directory"
+}
 function help_noxml () {
     echo "    --noxml                   Exclude XML files from list.
                               Default: unset"
@@ -2021,12 +2205,16 @@ function help_online () {
     echo "    --online                  Only generate images used for HTML builds.
                               Default: off"
 }
-
 function help_optipng () {
     echo "    --optipng                 Optimize PNG images by reducing the color
                               palette (using optipng), Modfies the original
                               sources!
                               Default: off"
+}
+function help_output-dir () {
+    echo "    --output-dir=DIRECTORY    Output directory in which to unpack the files
+                              from the localization drop. Mandatory.
+                              Default: unset"
 }
 function help_pagefiles () {
     echo "    --pagefiles               Generate .page files.
@@ -2074,12 +2262,6 @@ function help_statdir () {
                               (CSS, images, Javascript etc.).
                               DEFAULT: \$STYLEROOT/static"
 }
-function help_static () {
-    echo "    --static                  Normally images and css files in HTML builds
-                              are linked from elsewhere in the file system.
-                              Use this option to copy these files in order
-                              to create a distributable HTML build"
-}
 function help_subdirs () {
     echo "    --subdirs                 Man pages are created in a man/ directory.
                               To also enable the subdirectories man1/, man2/,
@@ -2092,6 +2274,11 @@ function help_target () {
                               target-specific values.
                               Default: same as daps subcommand"
 }
+function help_trans-files () {
+    echo "    --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
+                              files (semicolon-separeted) for a single language.
+                              Default: unset"
+}
 function help_viewer () {
     echo "    --viewer=VIEWER           Image viewer to be used.
                               Default: IMG_VIEWER setting from config file"
@@ -2099,13 +2286,13 @@ function help_viewer () {
 function help_xsltparam () {
     echo "    --xsltparam=STRING        Add one or more xslt processor parameters in
                               the form of
-                              \"'--stringparam KEY=VALUE' --param KEY=VALUE\".
+                              \"--stringparam KEY=VALUE --param KEY=VALUE\".
                               The given string will be passed unmodified to the
                               xslt processor call that
                               $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
-                              Note: You MUST quote the string with double and
-                              single quotes: --xsltparam=\"'STRING'\"
+                              Note: You MUST quote the string with double
+                              quotes: --xsltparam=\"STRING\"
                               Default: unset"
 }

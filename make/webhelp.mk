@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # webhelp generation for DAPS
 #
@@ -123,13 +124,13 @@ wh_copy_inline_images: $(ONLINE_IMAGES)
 # style images
 wh_copy_static_images: | $(WEBHELP_DIR)
 wh_copy_static_images: $(STYLEIMG)
-  ifeq ($(STATIC_HTML), 1)
+  ifeq ($(STATIC_HTML),0)
+	if [ -d $(WEBHEL$(WEBHELP_DIR)/style_imagesP_DIR)/style_images ]; then rm -rf $(WEBHELP_DIR)/style_images; fi
+	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/style_images
+  else
 	if [ -L $(WEBHELP_DIR)/style_images ]; then rm -f $(WEBHELP_DIR)/style_images; fi
 	tar cph --exclude-vcs --transform=s%images/%style_images/% \
 	  -C $(dir $<) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  else
-	if [ -d $(WEBHEL$(WEBHELP_DIR)/style_imagesP_DIR)/style_images ]; then rm -rf $(WEBHELP_DIR)/style_images; fi
-	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/style_images
   endif
 
 # With the SUSE Stylesheets we use an alternative draft image for HTML
@@ -161,12 +162,12 @@ create_search_index: $(STYLEWEBHELP_BASE)/template/content/search
 # common stuff /(Javascript, CSS,...)
 copy_common: | $(WEBHELP_DIR)
 copy_common: $(STYLEWEBHELP_BASE)/template/common
-  ifeq ($(STATIC_HTML), 1)
-	if [ -L $@ ]; then rm -f $(WEBHELP_DIR)/common; fi
-	tar cph --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  else
+  ifeq ($(STATIC_HTML),0)
 	if [ -d $@ ]; then rm -rf $(WEBHELP_DIR)/common; fi
 	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/common
+  else
+	if [ -L $@ ]; then rm -f $(WEBHELP_DIR)/common; fi
+	tar cph --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
   endif
 
 

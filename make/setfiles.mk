@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # DAPS makefile
 # Determining the list of files belonging to a set
@@ -12,20 +13,10 @@
 #--------------------------------------------------
 # Profiling stringparams
 #
+
+# Stringparams for the profiling attributes are set in common_variables.mk
 ifdef PROFILE_URN
-  PROFSTRINGS   := --param "show.comments=$(REMARKS)"
-  ifdef PROFARCH
-    PROFSTRINGS += --stringparam "profile.arch=$(PROFARCH)"
-  endif
-  ifdef PROFCONDITION
-    PROFSTRINGS += --stringparam "profile.condition=$(PROFCONDITION)"
-  endif
-  ifdef PROFOS
-    PROFSTRINGS += --stringparam "profile.os=$(PROFOS)"
-  endif
-  ifdef PROFVENDOR
-    PROFSTRINGS += --stringparam "profile.vendor=$(PROFVENDOR)"
-  endif
+  PROFSTRINGS   += --param "show.comments=$(REMARKS)"
 endif
 
 #--------------------------------------------------

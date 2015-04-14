@@ -48,7 +48,7 @@
 
 
 <xsl:template name="create.doctype">
-  <xsl:param name="rootnode" select="."/>
+  <xsl:param name="rootnode" select="/*[1]"/>
   <xsl:param name="public.identifier"/>
   <xsl:param name="system.identifier"/>
   <xsl:param name="internal.subset"/>
@@ -68,7 +68,7 @@
 </xsl:template>
 
 <xsl:template name="create.db45.doctype">
-  <xsl:param name="rootnode" select="."/>
+  <xsl:param name="rootnode" select="/*[1]"/>
   <xsl:param name="internal.subset"/>
   <xsl:param name="version">4.5</xsl:param>
   <xsl:call-template name="create.doctype">
@@ -80,7 +80,7 @@
 </xsl:template>
 
 <xsl:template name="create.novdoc.doctype">
-  <xsl:param name="rootnode" select="."/>
+  <xsl:param name="rootnode" select="/*[1]"/>
   <xsl:param name="internal.subset"/>
   <xsl:param name="version">1.0</xsl:param>
   <xsl:call-template name="create.doctype">

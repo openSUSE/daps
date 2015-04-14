@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # Make file selector for DAPS
 #
@@ -157,7 +158,7 @@ endif
 # Packaging
 #
 PACKAGETARGETS_HTML := package-html
-PACKAGETARGETS_PDF  := locdrop package-pdf
+PACKAGETARGETS_PDF  := package-pdf
 
 ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),$(PACKAGETARGETS_HTML)))
   include $(DAPSROOT)/make/setfiles.mk
@@ -200,7 +201,16 @@ ifeq ($(MAKECMDGOALS),package-src)
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/packaging.mk
 endif
-
+ifeq ($(MAKECMDGOALS),locdrop)
+  include $(DAPSROOT)/make/setfiles.mk
+  include $(DAPSROOT)/make/profiling.mk
+  include $(DAPSROOT)/make/validate.mk
+  include $(DAPSROOT)/make/images.mk
+  ifneq ($(NOPDF),1)
+    include $(DAPSROOT)/make/pdf.mk
+  endif
+  include $(DAPSROOT)/make/locdrop.mk
+endif
 
 #---------------
 # PDF

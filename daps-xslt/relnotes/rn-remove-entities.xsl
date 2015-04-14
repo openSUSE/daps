@@ -4,7 +4,7 @@
 
    Authors:   Thomas Schraitle <toms@opensuse.org>,
               Stefan Knorr <sknorr@suse.de>
-   Copyright: 2014, 2012, Thomas Schraitle, Stefan Knorr
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

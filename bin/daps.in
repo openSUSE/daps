@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# Copyright (C) 2011-2014 Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
 # Author:
-# Frank Sundermeyer <fsundermeyer@opensuse.org>
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # DAPS = DocBook Authoring and Publishing Suite
 
@@ -110,10 +110,20 @@ VARLIST=(
     PAGEFILES
     PDFNAME
     PROFARCH
+    PROFAUDIENCE
     PROFCONDITION
+    PROFCONFORMANCE
     PROFILE_URN
+    PROFLANG
     PROFOS
+    PROFREVISION
+    PROFREVISIONFLAG
+    PROFROLE
+    PROFSECURITY
+    PROFSTATUS
+    PROFUSERLEVEL
     PROFVENDOR
+    PROFWORDSIZE
     REMARKS
     REMARK_STR
     ROOTID
@@ -131,7 +141,6 @@ VARLIST=(
     XEP_CONFIG_FILE
     XEP_OPTIONS
     XEP_WRAPPER
-    XML_DEVEL_CATALOG
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
     XSLTPARAM
@@ -210,7 +219,8 @@ DEFAULT_LIB_DIR="${DAPSROOT_DEFAULT}/lib"
 DEFAULT_LIBEXEC_DIR="${DAPSROOT_DEFAULT}/libexec"
 
 # user config file
-USER_CONFIG="$HOME/.daps/config"
+USER_CONFIG_OLD="$HOME/.daps/config"
+USER_CONFIG="$HOME/.config/daps/dapsrc"
 
 # if run from a terminal, set default verbosity to 1, otherwise (script, pipe)
 # set it to 0
@@ -380,6 +390,9 @@ HELP_SUBCOMMAND+=("text=Build an ASCII text document the from the XML sources.")
 
 SUBCOMMANDS+=("text-name=show_names")
 HELP_SUBCOMMAND+=("text-name=Print the file name that would result when building an ASCII text document.")
+
+SUBCOMMANDS+=("unpack-locdrop=unpack-locdrop")
+HELP_SUBCOMMAND+=("unpack-locdrop=Unpack a localization drop packages source.")
 
 SUBCOMMANDS+=("validate=comments_remarks")
 HELP_SUBCOMMAND+=("validate=Validate the profiled XML sources referenced by the DC- or MAIN-file.")
@@ -837,6 +850,18 @@ function sanitize_path () {
     #
     MYPATH=${MYPATH%/} # remove trailing slash
 
+    if [[ $MYPATH =~ ^~.* ]]; then
+	# 2. Replace ~/ with $HOME
+	if [[ $MYPATH =~ ^~/.* ]]; then
+	    MYPATH=${MYPATH/#\~\//$HOME/}
+	else
+	    # 3. Replace ~USER with a real path
+	    # the %q option to printf quotes and escapes dangerous characters
+	    # see http://stackoverflow.com/questions/2069467/have-to-determine-all-users-home-directories-tilde-scripting-problem
+	    eval BAR="$(printf "%q" "$MYPATH")"  
+	fi
+    fi
+
     if [[ "/" != ${MYPATH:0:1} ]]; then
         [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
@@ -1231,6 +1256,46 @@ esac
 
 # source the user config for the first time to get DAPSROOT
 #
+
+############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
+#
+# Move/copy an old DAPS config directory to ~/.config if not already existing 
+#
+MOVE_CONFIG=""
+if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
+    ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
+    NEW_CONFDIR=$(dirname $USER_CONFIG)
+    NEW_CONFFILE=$(basename $USER_CONFIG)
+    OLD_CONFDIR=$(dirname $USER_CONFIG_OLD)
+    OLD_CONFFILE=$(basename $USER_CONFIG_OLD)
+    while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
+	read -e -t20 -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " -i "n" MOVE_CONFIG
+	[[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
+    done
+    case "$MOVE_CONFIG" in
+	C|c)
+	    cp -r $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
+	    if [[ 0 -eq $? ]]; then 
+		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+	    else
+		ccecho "warn" "Copying the DAPS config directory failed"
+	    fi
+	    ;;
+	M|m)
+	    mv $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
+	    if [[ 0 -eq $? ]]; then 
+		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+	    else
+		ccecho "warn" "Moving the DAPS config file failed"
+	    fi
+	   ;;
+	*)
+	    ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
+	    ;;
+    esac
+fi
+
+
 if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
     source "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
@@ -1254,7 +1319,7 @@ if [[ -n "$DAPSROOT" ]]; then
         PYTHON_DIR="${DAPSROOT}/python"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
-        XML_DEVEL_CATALOG="$DAPSROOT/etc/catalog.xml"
+        XML_DEVEL_CATALOG="$XML_DEVEL_CATALOG $DAPSROOT/etc/catalog.xml"
 #        XML_CATALOG_FILES="$XML_DEVEL_CATALOG $XML_CATALOG_FILES"
     fi
 else
@@ -1465,9 +1530,6 @@ if [[ -n "$XML_DEVEL_CATALOG" ]]; then
 fi
 export XML_CATALOG_FILES
 
-
-
-
 # ----------------------------------------------------------------------------
 # Set paths
 #
@@ -1522,12 +1584,9 @@ export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 R_DIR="${BUILD_DIR}/${BOOK}"
 LOG_DIR="${R_DIR}/log"
 
-
 #-------------------------------------------------------------------
 # Now export all variables set by the config file
 export "${VARLIST[@]}"
-
-
 
 #-------------------------------------------------------------------
 # Create a temporary file for SETFILES (setfiles.mk)
@@ -1546,10 +1605,9 @@ export SETFILES_TMP
 #
 WRITE_LOG=1
 
-# eval is needed here, otherwise the --xsltparam option does not
-# work 
+# Quoting needs to be exactly like this, do not change
 #
-eval "$FUNCTION $SUBCMD ${SCMD_ARGS[@]}"
+$FUNCTION $SUBCMD "${SCMD_ARGS[@]}"
 
 # remove the tmp SETFILE
 # done via trap, see above

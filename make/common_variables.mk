@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer  <fsundermeyer at opensuse dot org>
 #
 # Basic variable settings for DAPS
 #
@@ -133,30 +134,81 @@ endif
 
 
 #
-# 2. Set PROFILEDIR
+# 2. Set PROFILEDIR and profiling stringparams
 #
-# The directory name depends on the profiling values for the four
-# supported profiling attributes arch, condition, os, and vendor.
+# The directory name depends on the profiling values of the
+# supported profiling attributes as listed at
+# http://sagehill.net/docbookxsl/Profiling.html
 # That setup allows to not have to redo profiling every time.
 #
+
 ifdef PROFILE_URN
   ifdef PROFARCH
     PROFILEDIR := $(PROFILEDIR)_$(PROFARCH)
+    PROFSTRINGS += --stringparam "profile.arch=$(PROFARCH)"
+  endif
+  ifdef PROFAUDIENCE
+    PROFILEDIR := $(PROFILEDIR)_$(PROFAUDIENCE)
+    PROFSTRINGS += --stringparam "profile.audience=$(PROFAUDIENCE)"
   endif
   ifdef PROFCONDITION
     PROFILEDIR := $(PROFILEDIR)_$(PROFCONDITION)
+    PROFSTRINGS += --stringparam "profile.condition=$(PROFCONDITION)"
+  endif
+  ifdef PROFCONFORMANCE
+    PROFILEDIR := $(PROFILEDIR)_$(PROFCONFORMANCE)
+    PROFSTRINGS += --stringparam "profile.conformance=$(PROFCONFORMANCE)"
+  endif
+  ifdef PROFLANG
+    PROFILEDIR := $(PROFILEDIR)_$(PROFLANG)
+    PROFSTRINGS += --stringparam "profile.lang=$(PROFLANG)"
   endif
   ifdef PROFOS
     PROFILEDIR := $(PROFILEDIR)_$(PROFOS)
+    PROFSTRINGS += --stringparam "profile.os=$(PROFOS)"
+  endif
+  ifdef PROFREVISION
+    PROFILEDIR := $(PROFILEDIR)_$(PROFREVISION)
+    PROFSTRINGS += --stringparam "profile.revision=$(PROFREVISION)"
+  endif
+  ifdef PROFREVISIONFLAG
+    # Revisionflag only allows a fixed set of values
+    ifneq "$(PROFREVISIONFLAG)" "$(filter $(PROFREVISIONFLAG),changed added deleted off)"
+      $(error Invalid value for PROFREVISIONFLAG. Needs to be one of "added, changed, deleted, off")
+    endif
+    PROFILEDIR := $(PROFILEDIR)_$(PROFREVISIONFLAG)
+    PROFSTRINGS += --stringparam "profile.revisionflag=$(PROFREVISIONFLAG)"
+  endif
+  ifdef PROFROLE
+    PROFILEDIR := $(PROFILEDIR)_$(PROFROLE)
+    PROFSTRINGS += --stringparam "profile.role=$(PROFROLE)"
+  endif
+  ifdef PROFSECURITY
+    PROFILEDIR := $(PROFILEDIR)_$(PROFSECURITY)
+    PROFSTRINGS += --stringparam "profile.security=$(PROFSECURITY)"
+  endif
+  ifdef PROFSTATUS
+    PROFILEDIR := $(PROFILEDIR)_$(PROFSTATUS)
+    PROFSTRINGS += --stringparam "profile.status=$(PROFSTATUS)"
+  endif
+  ifdef PROFUSERLEVEL
+    PROFILEDIR := $(PROFILEDIR)_$(PROFUSERLEVEL)
+    PROFSTRINGS += --stringparam "profile.userlevel=$(PROFUSERLEVEL)"
   endif
   ifdef PROFVENDOR
     PROFILEDIR := $(PROFILEDIR)_$(PROFVENDOR)
+    PROFSTRINGS += --stringparam "profile.vendor=$(PROFVENDOR)"
+  endif
+  ifdef PROFWORDSIZE
+    PROFILEDIR := $(PROFILEDIR)_$(PROFWORDSIZE)
+    PROFSTRINGS += --stringparam "profile.wordsize=$(PROFWORDSIZE)"
   endif
   #
   # cleanup
   #
   # remove leading "_"
-  PROFILEDIR := $(shell echo "$(PROFILEDIR)" | cut -c2-)
+#  PROFILEDIR := $(shell echo "$(PROFILEDIR)" | cut -c2-)
+  PROFILEDIR := $(patsubst _%,%,$(PROFILEDIR))
 
   # Profiling attributes can be entered as a semicolon separated list, we
   # need to replace the ";" with "_"
@@ -173,14 +225,14 @@ ifdef PROFILE_URN
   PROFILEDIR := $(subst ?,_,$(PROFILEDIR))
 else
   # no PROFILE_URN specified
-  PROFILEDIR := $(PROFILEDIR)/noprofile
+  PROFILEDIR := noprofile
 endif
 
 #
 # Also set to noprofile in case none of the profiling variables is set
 # in order to avoid an empty PROFILEDIR variable
 ifeq "$(strip $(PROFILEDIR))" ""
-  PROFILEDIR := $(PROFILEDIR)/noprofile
+  PROFILEDIR := noprofile
 endif
 
 #
@@ -321,11 +373,11 @@ endif
 # Stylesheets do)
 #
 
-LANGSTRING ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+LANGUAGE ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
 
-ifneq "$(strip $(LANGSTRING))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGSTRING))
-  LANGSTRING   := _$(LANGSTRING)
+ifneq "$(strip $(LANGUAGE))" ""
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGUAGE))
+  LANGSTRING   := _$(LANGUAGE)
 endif
 
 #-----
@@ -347,10 +399,17 @@ USESVN := $(shell svn info $(MAIN) 2>/dev/null)
 # the directories rather than linking the directories. The latter has the
 # disadvantage tha one cannot write into adirectory that is just linked)
 #
-ifeq ($(STATIC_HTML), 1)
-  # linking instead of copying
-  HTML_GRAPH_COMMAND := cp -rL --remove-destination
-else
+ifeq ($(STATIC_HTML),0)
   # copy directories recursively, create links on files
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
+else
+  # copy and resolve links
+  HTML_GRAPH_COMMAND := cp -rL --remove-destination
 endif
+
+#-----
+# locdrop
+#
+LOCDROP_TMP_DIR  := $(TMP_DIR)/$(BOOK)_locdrop
+MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_trans.txt
+MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt

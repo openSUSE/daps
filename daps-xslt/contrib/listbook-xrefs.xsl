@@ -16,7 +16,7 @@
      Whereas X and Y are placeholders for the respective content
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2012, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
    
 -->
 

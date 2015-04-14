@@ -1,5 +1,10 @@
 #!/bin/bash
 #
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Thomas Schraitle <toms at opensuse dot org>
+#
 # Customized xep executable for daps
 # Use environment variable VERBOSE to get more debugging output
 #
@@ -8,8 +13,11 @@ __VERSION__="$Id: daps-xep 45418 2009-11-09 09:44:56Z ke $"
 #
 # Configuring variables
 #
-if test -s $USER/.daps/xep-config.xml; then
-    ccecho "info" "Using XEP config file from $USER/.daps/xep-config.xml"
-    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$USER/.daps/xep-config.xml"}
+USER_XEP_CONFIG="$HOME/.config/daps/xep-config.xml"
+
+
+if [[ -f $USER_XEP_CONFIG ]]; then
+    ccecho "info" "Using XEP config file from $USER_XEP_CONFIG"
+    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"USER_XEP_CONFIG"}
 fi
 xep "$@"

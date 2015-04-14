@@ -1,8 +1,13 @@
 #!/bin/bash
 #
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
+#
 # Create a branch or a tag from trunk or branch in the doc SVN.
 #
-# 1.0 by Frank Sundermeyer <fs@suse.de>, 2009-06-05
+# Version 1.0 2009-06-05
 #
 #
 

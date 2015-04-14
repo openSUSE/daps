@@ -14,7 +14,7 @@
      or removed entirely (when inside article/subtitle or articleinfo/subtitle
    
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright: 2015, Thomas Schraitle
+   Copyright (C) 2012-2015 SUSE Linux GmbH
 
 
 -->

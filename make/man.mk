@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # ASCII generation for DAPS
 #
@@ -54,7 +55,9 @@ man: $(BIGFILE)
 	    --file $< $(XSLTPROCESSOR) $(ERR_DEVNULL); \
 	fi
   ifneq ("$(GZIP_MAN)", "no")
-	gzip -rf $(MAN_DIR)
+	for MANFILE in $$(find $(MAN_DIR) ! -name "*.gz" -type f); do \
+	  gzip -f $$MANFILE; \
+	done
   endif
 	@ccecho "result" "Find the man page(s) at:\n$(MAN_DIR)"
 

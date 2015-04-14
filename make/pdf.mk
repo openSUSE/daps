@@ -1,6 +1,7 @@
-# Copyright (C) 2012 SUSE Linux Products GmbH
+# Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author: Frank Sundermeyer
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # FO/PDF generation for DAPS
 #
@@ -92,8 +93,8 @@ FOFILE := $(FOFILE)$(LANGSTRING).fo
 ifeq ("$(FORMATTER)","fop")
   FOSTRINGS += --param "fop1.extensions=1" \
                --param "xep.extensions=0"
-  ifdef FOP_CONFIG
-    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS) -c $(FOP_CONFIG)
+  ifdef FOP_CONFIG_FILE
+    FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS) -c $(FOP_CONFIG_FILE)
   else
     FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS)
   endif
