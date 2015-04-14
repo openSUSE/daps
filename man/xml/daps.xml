@@ -3,9 +3,9 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY % entities SYSTEM "../../doc/xml/entity-decl.ent">
-  %entities;
   <!ENTITY daps_command "daps">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
 ]>
 
 <refentry lang="en" id="daps">
@@ -49,12 +49,6 @@
     <firstname>Stefan</firstname>
     <surname>Knorr</surname>
    </author>
-   <author>
-    <contrib>Developer</contrib>
-    <firstname>Manuel</firstname>
-    <surname>Schnitzer</surname>
-    <email>mschnitzer@suse.de</email>
-   </author>
   </authorgroup>
  </refentryinfo>
  <refmeta>
@@ -62,7 +56,7 @@
   <manvolnum>1</manvolnum>
   <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
   <refmiscinfo class="version">&dapsversion;</refmiscinfo>
-  <refmiscinfo class="manual">daps</refmiscinfo>
+  <refmiscinfo class="manual">&dapsacr;</refmiscinfo>
  </refmeta>
  <refnamediv>
   <refname>&daps_command;</refname>
@@ -75,17 +69,19 @@
  <refsynopsisdiv id="daps.synopsis">
   <title>Synopsis</title>
   <cmdsynopsis>
-   <command>&daps_command;</command>
-   <arg choice="opt">
-    <replaceable>GLOBAL OPTIONS</replaceable>
-   </arg>
+   &dapscmd;
+   <arg choice="plain">-d <replaceable>DC-file</replaceable></arg>
+   <arg choice="opt"><replaceable>GLOBAL OPTIONS</replaceable></arg>
    <arg choice="plain">subcommand</arg>
-   <arg choice="opt">
-    <replaceable>COMMAND OPTIONS</replaceable>
-   </arg> 
-   <arg choice="opt">
-    <replaceable>arguments</replaceable>
-   </arg>  
+   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg> 
+  </cmdsynopsis>
+
+  <cmdsynopsis>
+   &dapscmd;
+   <arg choice="plain">--main <replaceable>MAIN-file</replaceable></arg>
+   <arg choice="opt"><replaceable>GLOBAL OPTIONS</replaceable></arg>
+   <arg choice="plain">subcommand</arg>
+   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg> 
   </cmdsynopsis>
  </refsynopsisdiv>
 
@@ -104,8 +100,10 @@
    </para>
    <para>
     Most of DAPS' functionality can be accessed with the command
-   <command>&daps_command;</command>. Run <command>&daps_command; <option>help</option></command> to access the built-in tool documentation.
-   If you want information about a specific command, you can run <command>&daps_command; <replaceable>COMMAND</replaceable> <option>help</option></command>
+    &dapscmd;. Run <command>&daps; <option>help</option></command> to access
+    the built-in tool documentation.  If you want information about a specific
+    command, you can run <command>&daps; <replaceable>subcommand</replaceable>
+    <option>help</option></command>
    </para>
   </refsect1>
  
@@ -115,15 +113,16 @@
    <varlistentry>
     <term><option>--builddir=BUILDDIR</option></term>
     <listitem>
-     <para>Directory where every output daps generates will end up.</para>
+     <para>Directory where every output &dapsacr; generates will end up.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--color=(0|1)</option></term>
     <listitem>
      <para>
-      By default errors, results, warnings and certain info messages are printed in color using bash color
-      codes. Set to '0' to turn off colors. Default: 1 (when the output does not go to a terminal, colored
+      By default errors, results, warnings and certain info messages are
+      printed in color using bash color codes. Set to '0' to turn off
+      colors. Default: 1 (when the output does not go to a terminal, colored
       output will be disabled automatically).
      </para>
     </listitem>
@@ -131,21 +130,25 @@
    <varlistentry>
     <term><option>--commands</option></term>
     <listitem>
-     <para>Show a list of available DAPS sub commands.</para>
+     <para>Show a list of available &dapsacr; sub commands.</para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--debug</option></term>
     <listitem>
-     <para>Print debugging messages. Alternatively see the --verbose options for an output that is better readable.</para>
+     <para>
+      Print debugging messages. Alternatively see the --verbose options for an
+      output that is better readable.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--docconfig=DC-file, -d DC-file</option></term>
     <listitem>
      <para>
-      Path to doc config file to use. Mandatory unless there is only a single DC-file in the current directory or
-      unless you have configured a default value (DOCCONF_DEFAULT) in /home/manuel/.daps/config. Note: Options
+      Path to doc config file to use. Mandatory unless there is only a single
+      DC-file in the current directory or unless you have configured a default
+      value (DOCCONF_DEFAULT) in &dapsconf-user;. Note: Options
       --docconfig and --main exclude each other.
      </para>
     </listitem>
@@ -154,18 +157,23 @@
     <term><option>--fb_styleroot</option></term>
     <listitem>
      <para>
-      Fallback styleroot directories. Can only be used in conjunction with --styleroot. By default, the DocBook
-      stylesheets are used as a fallback if custom styles for an output format are  not present. With this option
-      you can specify a list of alternative fallbacks (space separated absolute paths). The directories will be
-      tested in the order specified, the first one that applies to the requested format, will be used.  The original
-      DocBook stylesheets will be used as a last resort. Useful if you have forks of your custom stylesheets.
+      Fallback styleroot directories. Can only be used in conjunction with
+      --styleroot. By default, the DocBook stylesheets are used as a fallback
+      if custom styles for an output format are not present. With this option
+      you can specify a list of alternative fallbacks (space separated
+      absolute paths). The directories will be tested in the order specified,
+      the first one that applies to the requested format, will be used.  The
+      original DocBook stylesheets will be used as a last resort. Useful if
+      you have forks of your custom stylesheets.
      </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--force</option></term>
     <listitem>
-     <para>Force a rebuild of the document even when an up-to-date version exists.</para>
+     <para>
+      Force a rebuild of the document even when an up-to-date version exists.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -177,16 +185,20 @@
    <varlistentry>
     <term><option>--main, -m</option></term>
     <listitem>
-     <para>Path to the main file defining your document. Note: Options --main and --docconfig exclude each other.</para>
+     <para>
+      Path to the main file defining your document. Note: Options --main and
+      --docconfig exclude each other.
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
     <term><option>--styleroot</option></term>
     <listitem>
      <para>
-      By default, daps uses the DocBook Stylesheets to create output. If you have your own set of stylesheets, specify
-      the absolute path to the stylesheet directory here. The DocBook stylesheets will be used as a fallback in case
-      styles are not defined for all output formats.
+      By default, &dapsacr; uses the DocBook Stylesheets to create output. If
+      you have your own set of stylesheets, specify the absolute path to the
+      stylesheet directory here. The DocBook stylesheets will be used as a
+      fallback in case styles are not defined for all output formats.
      </para>
     </listitem>
    </varlistentry>
@@ -224,8 +236,9 @@
     <term><option>--xsltprocessor=PROCESSOR</option></term>
     <listitem>
      <para>
-      Specify an xslt processor that is used to transorm the XML files. Currently supported are "xsltproc"
-      and "saxon" (version 6). Default: xsltproc
+      Specify an xslt processor that is used to transorm the XML
+      files. Currently supported are "xsltproc" and "saxon" (version
+      6). Default: xsltproc
      </para>
     </listitem>
    </varlistentry>
@@ -241,226 +254,342 @@
      <para>Print this help</para>
     </listitem>
    </varlistentry>
-   <varlistentry>
-    <term><option>epub</option></term>
-    <listitem>
-     <para>Generates an ePUB book</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>html</option></term>
-    <listitem>
-     <para>Generates an HTML book (chunked or single file HTML, jsp)</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>man</option></term>
-    <listitem>
-     <para>Generates a man page</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>mobi</option></term>
-    <listitem>
-     <para>Generates an Amazon Kindle eBook</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>pdf</option></term>
-    <listitem>
-     <para>Generates a PDF book (color, grayscale, printable)</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>text</option></term>
-    <listitem>
-     <para>Generates an ASCII book</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>webhelp</option></term>
-    <listitem>
-     <para>Generates an HTML book with collapsable TOC and search</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>list-file</option></term>
-    <listitem>
-     <para>Lists the filename that contains the ID specified with the mandatory paramater --rootid.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>list-srcfiles</option></term>
-    <listitem>
-     <para>List source files (XML sources, images, entity declarations, DC-file) used by the document reference by the DC-file</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>list-srcfiles-unused</option></term>
-    <listitem>
-     <para>List files from the xml/ and images/src/ directories not used by the document reference by the DC-file</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>list-images-missing</option></term>
-    <listitem>
-     <para>List images referenced in the XML sources but missing in the images' source directory</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>list-images-multisrc</option></term>
-    <listitem>
-     <para>List images for which mutiple sources exist (e.g. foo.svg and foo.png)</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>clean</option></term>
-    <listitem>
-     <para>Remove all profiled sources and temporary files</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>clean-images</option></term>
-    <listitem>
-     <para>Remove all generated images</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>clean-package</option></term>
-    <listitem>
-     <para>Remove all generated package data for the given DC-file. Generated images and profiled sources will _not_ be deleted</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>clean-results</option></term>
-    <listitem>
-     <para>Remove all generated books, archives, and log files for the given DC-file. Generated images and profiled sources will _not_ be deleted</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>clean-all, real-clean</option></term>
-    <listitem>
-     <para>Remove everything generated by daps</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>package-html</option></term>
-    <listitem>
-     <para>Provide an HTML tarball (chunked HTML, single HTML, or JSP), desktop, document, and/or page files (for KDE and GNOME)</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>package-pdf</option></term>
-    <listitem>
-     <para>Provide a PDF, desktop, document, and/or page files (for KDE and GNOME)</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>package-src</option></term>
-    <listitem>
-     <para>Provide profiled XML sources and graphics</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>locdrop</option></term>
-    <listitem>
-     <para>Provide everything that is needed to translate a set</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>online-docs</option></term>
-    <listitem>
-     <para>Provide a profiled XML bigfile, a graphics tarball (PNG only), color-pdf, epub, and a single-html archive</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>checklink</option></term>
-    <listitem>
-     <para>Linkchecker for links from <![CDATA[<ulink>]]> tags</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>getimages</option></term>
-    <listitem>
-     <para>List or display images from a profiled DocBook XML file</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>optipng</option></term>
-    <listitem>
-     <para>Optimize (size) source PNGs</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>profile</option></term>
-    <listitem>
-     <para>Profile XML sources</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>spellcheck</option></term>
-    <listitem>
-     <para>Spellchecks the file specified with --file or the document specified by rootid.</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>stylecheck</option></term>
-    <listitem>
-     <para>Performs a style check on the given DC-file or rootid</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>validate</option></term>
-    <listitem>
-     <para>Validate profiled sources. Automatically profiles the XML sources if needed</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option><![CDATA[<target>-name]]></option></term>
-    <listitem>
-     <para><![CDATA[Print resulting file name for <target>. <target> may be one of color-pdf, epub, html-single, pdf, txt]]></para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option><![CDATA[<target>-dir-name]]></option></term>
-    <listitem>
-     <para><![CDATA[Print resulting directory name for <target>. <target> may be html, man or webhelp]]></para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>dapsenv</option></term>
-    <listitem>
-     <para>Print a list of the most important make variables and their value</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>images</option></term>
-    <listitem>
-     <para>Generates all images for the given DC-file or rootid</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term><option>showvariable</option></term>
-    <listitem>
-     <para><![CDATA[Print value of a given make variable: daps showvariable VARIABLE=<MAKE_VARIABLE>]]></para>
-    </listitem>
-   </varlistentry>
   </variablelist>
+  <refsect2>
+   <title>Generate Documents</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>epub</option></term>
+     <listitem>
+      <para>Generates an ePUB book</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>html</option></term>
+     <listitem>
+      <para>Generates an HTML book (chunked or single file HTML)</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>man</option></term>
+     <listitem>
+      <para>Generates a man page</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>mobi</option></term>
+     <listitem>
+      <para>Generates an Amazon Kindle eBook</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>pdf</option></term>
+     <listitem>
+      <para>Generates a PDF book (color, grayscale, printable)</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>text</option></term>
+     <listitem>
+      <para>Generates an ASCII book</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>webhelp</option></term>
+     <listitem>
+      <para>
+       Generates an HTML book with collapsable TOC and search (experimental)
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>File Lists</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>list-file</option></term>
+     <listitem>
+      <para>
+       Lists the filename that contains the ID specified with the mandatory
+       paramater --rootid.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>list-srcfiles</option></term>
+     <listitem>
+      <para>
+       List source files (XML sources, images, entity declarations, DC-file)
+       used by the document reference by the DC-file
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>list-srcfiles-unused</option></term>
+     <listitem>
+      <para>
+       List files from the xml/ and images/src/ directories not used by the
+       document reference by the DC-file
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>list-images-missing</option></term>
+     <listitem>
+      <para>
+       List images referenced in the XML sources but missing in the images'
+       source directory
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>list-images-multisrc</option></term>
+     <listitem>
+      <para>
+       List images for which mutiple sources exist (e.g. foo.svg and foo.png)
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>Cleaning up</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>clean</option></term>
+     <listitem>
+      <para>Remove all profiled sources and temporary files</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>clean-images</option></term>
+     <listitem>
+      <para>Remove all generated images</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>clean-package</option></term>
+     <listitem>
+      <para>
+       Remove all generated package data for the given DC-file. Generated
+       images and profiled sources will <emphasis>not</emphasis> be deleted
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>clean-results</option></term>
+     <listitem>
+      <para>
+       Remove all generated books, archives, and log files for the given
+       DC-file. Generated images and profiled sources will
+       <emphasis>not</emphasis> be deleted
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>clean-all, real-clean</option></term>
+     <listitem>
+      <para>Remove everything generated by daps</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>Packaging</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>package-html</option></term>
+     <listitem>
+      <para>
+       Provide an HTML tarball (chunked HTML or single HTML), desktop,
+       document, and/or page files (for KDE and GNOME)
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>package-pdf</option></term>
+     <listitem>
+      <para>
+       Provide a PDF, desktop, document, and/or page files (for KDE and GNOME)
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>package-src</option></term>
+     <listitem>
+      <para>Provide profiled XML sources and graphics</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>Deploying</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>locdrop</option></term>
+     <listitem>
+      <para>Provide everything that is needed to translate a set</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>online-docs</option></term>
+     <listitem>
+      <para>
+       Provide a profiled XML bigfile, a graphics tarball (PNG only),
+       color-pdf, epub, and a single-html archive
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>unpack-locdrop</option></term>
+     <listitem>
+      <para>
+       Unpack a localization drop packages source.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>Other Commands</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>checklink</option></term>
+     <listitem>
+      <para>Linkchecker for links from <![CDATA[<ulink>]]> tags</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>getimages</option></term>
+     <listitem>
+      <para>List or display images from a profiled DocBook XML file</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>optipng</option></term>
+     <listitem>
+      <para>Optimize (size) source PNGs</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>profile</option></term>
+     <listitem>
+      <para>Profile XML sources</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>spellcheck</option></term>
+     <listitem>
+      <para>
+       Spellchecks the file specified with --file or the document specified by
+       rootid.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>stylecheck</option></term>
+     <listitem>
+      <para>Performs a style check on the given DC-file or rootid</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>validate</option></term>
+     <listitem>
+      <para>
+       Validate profiled sources. Automatically profiles the XML sources if
+       needed.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>File and Directory Names</title>
+   <variablelist>
+    <varlistentry>
+     <term><option><replaceable>target</replaceable>-name</option></term>
+     <listitem>
+      <para>Print resulting file name for
+      <replaceable>target</replaceable>. <replaceable>target</replaceable> may
+      be one of pdf, epub, pdf, txt
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option><replaceable>target</replaceable>-dir-name</option></term>
+     <listitem>
+      <para>
+       Print resulting directory name for
+       <replaceable>target</replaceable>. <replaceable>target</replaceable> may
+       be html, man or webhelp
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+  <refsect2>
+   <title>Debugging</title>
+   <variablelist>
+    <varlistentry>
+     <term><option>dapsenv</option></term>
+     <listitem>
+      <para>
+       Print a list of the most important make variables and their value
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>images</option></term>
+     <listitem>
+      <para>Generates all images for the given DC-file or rootid</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><option>showvariable</option></term>
+     <listitem>
+      <para>
+       Print value of a given make variable: daps showvariable
+       VARIABLE=<replaceable>MAKE_VARIABLE</replaceable>
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
  </refsect1>
- 
+  
  <refsect1 id="daps.examples">
   <title>Examples</title>
   <variablelist>
    <varlistentry>
-    <term>Generating a pdf with your DocBook XML files:</term>
+    <term>Generate a single HTML page:</term>
     <listitem>
-     <para><option>&daps_command; -d <replaceable>[YOUR_DC_FILE]</replaceable> pdf</option></para>
+     <para>
+      <command>&daps; <option>-d DC-example html --single</option></command>
+     </para>
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term>Check if your links in your DocBook XML files are still ok (checks if the links are reachable):</term>
+    <term>Generate ePUB using custom stylesheets:</term>
     <listitem>
-     <para><option>&daps_command; -d <replaceable>[YOUR_DC_FILE]</replaceable> checklink</option></para>
+     <para>
+      <command>&daps; <option>-d DC-example --styleroot
+      /usr/share/xml/docbook/stylesheets/daps2013 epub</option></command>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Generate PDF for the print shop using the XEP formatter</term>
+    <listitem>
+     <para>
+      <command>&daps; <option>-d DC-example pdf --formmatter=xep --grayscale --cropmarks</option></command>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Check links and show the result in a browser</term>
+    <listitem>
+     <para><command>&daps; <option>-d DC-example checklink --show</option></command></para>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -470,7 +599,7 @@
   <title>Files</title>
   <variablelist>
    <varlistentry>
-    <term><filename>/etc/daps/config</filename></term>
+    <term>&dapsconf-sys;</term>
     <listitem>
      <para>
       The system wide configuration file. See the file's inline documentation
@@ -479,11 +608,11 @@
     </listitem>
    </varlistentry>
    <varlistentry>
-    <term><filename>~/.daps/config</filename></term>
+    <term><filename>&dapsconf-user;</filename></term>
     <listitem>
      <para>
       The per user configuration file. See the inline documentation of
-      <filename>/etc/daps/config</filename> for detailed information.
+      &dapsconf-sys; for detailed information.
      </para>
     </listitem>
    </varlistentry>
@@ -494,7 +623,7 @@
    <title>See Also</title>
    <variablelist>
      <varlistentry>
-       <term><ulink url="http://opensuse.github.io/daps/"/></term>
+       <term>&dapsurl;</term>
        <listitem>
          <para>DAPS project homepage</para>
        </listitem>
