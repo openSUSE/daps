@@ -14,7 +14,7 @@ dnl determine aspell directory
 
 m4_define(daps_version_major, 2)
 m4_define(daps_version_minor, 0)
-m4_define(daps_version_micro, 0)
+m4_define(daps_version_micro, [0-rc3])
 # API version
 m4_define([daps_api_version],[daps_version_major])
 
@@ -332,7 +332,7 @@ AC_OUTPUT([doc/xml/entity-decl.ent])
 
 AC_MSG_RESULT([
 dnl ###########################################################################
-DAPS is configured as follows.  Please verify that this configuration matches
+DAPS $DAPS_VERSION is configured as follows.  Please verify that this configuration matches
 your expectations.
 
 Supported features

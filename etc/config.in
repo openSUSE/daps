@@ -672,6 +672,13 @@ WH_SEARCH="yes"
 # Specify a config file for XEP
 # Also see FORMATTER, XEP-*
 #
+# The xep executable will automatically use the file specified
+# with the XEP_CONFIG_FILE environment variable (if exported). There
+# is no such option as -c or --config for the xep executable.
+#
+# NOTE: If $HOME/.config/daps/xep-config.xml exists, it will be used
+#       instead of the file specified here. 
+#
 XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
 
 ## Key:         XEP_OPTIONS

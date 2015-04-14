@@ -1259,28 +1259,32 @@ esac
 
 ############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
 #
-# Move/copy an old config file to ~/.config if not already existing 
+# Move/copy an old DAPS config directory to ~/.config if not already existing 
 #
 MOVE_CONFIG=""
 if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
     ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
+    NEW_CONFDIR=$(dirname $USER_CONFIG)
+    NEW_CONFFILE=$(basename $USER_CONFIG)
+    OLD_CONFDIR=$(dirname $USER_CONFIG_OLD)
+    OLD_CONFFILE=$(basename $USER_CONFIG_OLD)
     while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
 	read -e -t20 -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " -i "n" MOVE_CONFIG
 	[[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
     done
     case "$MOVE_CONFIG" in
 	C|c)
-	    mkdir -p $(dirname $USER_CONFIG) && cp $USER_CONFIG_OLD $USER_CONFIG
+	    cp -r $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
 	    if [[ 0 -eq $? ]]; then 
-		ccecho "info" "The DAPS config file has been copied to $USER_CONFIG"
+		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
 	    else
-		ccecho "warn" "Copying the DAPS config file failed"
+		ccecho "warn" "Copying the DAPS config directory failed"
 	    fi
 	    ;;
 	M|m)
-	   mkdir -p $(dirname $USER_CONFIG) && mv $USER_CONFIG_OLD $USER_CONFIG
+	    mv $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
 	    if [[ 0 -eq $? ]]; then 
-		ccecho "info" "The DAPS config file has been moved to $USER_CONFIG\nThe ~/.daps/ directory has not been deleted."
+		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
 	    else
 		ccecho "warn" "Moving the DAPS config file failed"
 	    fi
