@@ -82,8 +82,8 @@ information about the support status on your system.
 |zip                      |zip                         |zip
 |====
 
- ^*^: _minimum version: 1.7.8_ +
- ^**^: _minimum version: 0.96, 1.x is recommended_
+ ^*^: minimum version: 1.7.8
+ ^**^: minimum version: 0.96, 1.x is recommended
 
 
 .*Required Packages for DocBook 5 Support*
@@ -116,7 +116,7 @@ Installation
 ~~~~~~~~~~~~
 
 1. Checkout the DAPS sources from GitHub: +
-   `git clone https://github.com/openSUSE/daps.git` 
+   `git clone https://github.com/openSUSE/daps.git -b master --single-branch` 
 2. Change into the daps checkout directory
 3. Run `./configure --sysconfdir=/etc` +
    Carefully check the configuration summary. Run `./configure --help` for
@@ -159,9 +159,9 @@ development version, you can run DAPS directly from the GitHub checkout.
 2. Check out DAPS. Either choose the latest stable version (safe) or the
    development version (may not work)
    Checking out the latest release::
-	`git clone https://github.com/openSUSE/daps.git`
+	`git clone https://github.com/openSUSE/daps.git -b master --single-branch`
    Checking out the latest development version::
-	 `git clone https://github.com/openSUSE/daps.git -b develop --single-branch`
+	 `git clone https://github.com/openSUSE/daps.git`
 3. (Skip this step for SUSE). Go to <path_to_checkout>/etc/fop and enter the
    following command according to your distribution:
    Fedora/RedHat::
