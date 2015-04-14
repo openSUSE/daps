@@ -389,8 +389,7 @@ endif
 
 # SVG -> PNG
 # create color PNGs from SVGs
-$(IMG_GENDIR)/gen/png/%.png: | $(IMG_DIRECTORIES)
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
 ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
