@@ -19,7 +19,7 @@ MOBI_RESULT := $(RESULT_DIR)/$(DOCNAME)$(LANGSTRING).mobi
 # HTML
 #
 HTML_DIR := $(RESULT_DIR)
-ifeq ($(JSP),1)
+ifeq "$(JSP)" "1"
   HTML_DIR    := $(HTML_DIR)/jsp/$(DOCNAME)$(DRAFT_STR)$(META_STR)
 
   # We have a hen and egg problem when setting JSP_SUBDIR in case
@@ -35,7 +35,7 @@ ifeq ($(JSP),1)
   JSP_SUBDIR  = $(shell $(XSLTPROC) --xinclude --stylesheet $(DAPSROOT)/daps-xslt/jsp/get.dbjsp.xsl --stringparam "rootid=$(ROOTID)" --file $(firstword $(wildcard $(PROFILED_MAIN) $(MAIN))) $(XSLTPROCESSOR) 2>/dev/null)
   HTML_RESULT = $(HTML_DIR)/$(JSP_SUBDIR)/index.jsp
 else
-  ifeq ($(HTMLSINGLE),1)
+  ifeq "$(HTMLSINGLE)" "1"
     HTML_DIR    := $(HTML_DIR)/single-html/$(DOCNAME)$(DRAFT_STR)$(META_STR)
     HTML_RESULT := $(HTML_DIR)/$(DOCNAME)$(DRAFT_STR)$(META_STR).html
   else
@@ -52,20 +52,20 @@ MAN_DIR := $(RESULT_DIR)/man
 #---------------
 # Package-pdf, Package-html
 #
-ifeq ($(TARGET),$(filter $(TARGET),package-pdf package-pdf-dir-name showvariable))
+ifeq "$(TARGET)" "$(filter $(TARGET),package-pdf package-pdf-dir-name showvariable)"
   PACKAGE_PDF_DIR      := $(PACK_DIR)/pdf
   PACKAGE_PDF_RESULT   := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).pdf
   DESKTOPFILES_RESULT  := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING)-desktop.tar.bz2
   DOCUMENTFILES_RESULT := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).document
   PAGEFILES_RESULT     := $(PACKAGE_PDF_DIR)/$(DOCNAME)$(LANGSTRING).page
 endif
-ifeq ($(TARGET),$(filter $(TARGET),package-html package-html-dir-name online-docs showvariable))
-  ifeq ($(JSP),1)
+ifeq "$(TARGET)" "$(filter $(TARGET),package-html package-html-dir-name online-docs showvariable)"
+  ifeq "$(JSP)" "1"
     PACKAGE_HTML_DIR     := $(PACK_DIR)/jsp
     PACKAGE_HTML_RESULT  := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-jsp.tar.bz2
   else
     PACKAGE_HTML_DIR     := $(PACK_DIR)/html
-    ifeq ($(HTMLSINGLE),1)
+    ifeq "$(HTMLSINGLE)" "1"
       PACKAGE_HTML_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-single-html.tar.bz2
     else
       PACKAGE_HTML_RESULT := $(PACKAGE_HTML_DIR)/$(DOCNAME)$(LANGSTRING)-html.tar.bz2
@@ -86,15 +86,15 @@ PACKAGE_SRC_RESULT  :=  $(PACKAGE_SRC_TARBALL).bz2
 # PDF
 #
 PDF_RESULT := $(RESULT_DIR)/$(DOCNAME)
-ifeq ($(GRAYSCALE),1)
+ifeq "$(GRAYSCALE)" "1"
   PDF_RESULT := $(PDF_RESULT)_gray
 else
   PDF_RESULT := $(PDF_RESULT)_color
 endif
 
 # cropmarks are currently only supported by XEP
-ifeq ($(CROPMARKS),1)
-  ifeq ($(FORMATTER),xep)
+ifeq "$(CROPMARKS)" "1"
+  ifeq "$(FORMATTER)" "xep"
     PDF_RESULT := $(PDF_RESULT)_crop
   endif
 endif

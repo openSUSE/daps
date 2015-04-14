@@ -18,7 +18,7 @@
 
 # Stylesheets
 #
-ifeq ($(EPUB3),1)
+ifeq "$(EPUB3)" "1"
   STYLEEPUB := $(firstword $(wildcard $(addsuffix \
 		/epub3/chunk.xsl, $(STYLE_ROOTDIRS))))
 else
@@ -93,7 +93,7 @@ EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 EPUBSTRINGS := --stringparam "base.dir=$(EPUB_OEBPS)/" \
                --stringparam "img.src.path=\"\""
 
-ifeq ($(IS_STATIC),static)
+ifeq "$(IS_STATIC)" "static"
   EPUBSTRINGS += --stringparam "callout.graphics.path=static/images/" \
                  --stringparam "admon.graphics.path=static/images/"
 else
@@ -101,7 +101,7 @@ else
                  --stringparam "admon.graphics.path=static/"
 endif
 
-ifeq ($(EPUB3),1)
+ifeq "$(EPUB3)" "1"
   EPUBSTRINGS += --param "admon.graphics=1"
   EPUB_CONTENT_OPF := $(EPUB_OEBPS)/package.opf
 else
@@ -123,11 +123,11 @@ endif
 #
 .PHONY: epub
 epub: list-images-missing
-ifeq ("$(EPUBCHECK)", "yes")
+ifeq "$(EPUBCHECK)" "yes"
   epub: epub-check
 endif
 epub: $(EPUB_RESULT)
-  ifeq ($(TARGET),epub)
+  ifeq "$(TARGET)" "epub"
 	@ccecho "result" "Find the EPUB book at:\n$<"
   endif
 
@@ -145,7 +145,7 @@ $(EPUB_DIRECTORIES):
 # generate EPUB-bigfile
 #
 $(EPUB_BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Generating EPUB-bigfile"
   endif
 	$(XSLTPROC) --xinclude --output $@ $(ROOTSTRING) \
@@ -156,7 +156,7 @@ $(EPUB_BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
 # HTML from EPUB-bigfile
 #
 $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
 	$(XSLTPROC) $(EPUBSTRINGS) --stylesheet $(STYLEEPUB) \
@@ -184,16 +184,16 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #
 $(EPUB_RESULT): | $(EPUB_OEBPS)
 $(EPUB_RESULT): | $(EPUB_STATIC)
-ifneq ($(EPUB3),1)
+ifneq "$(EPUB3)" "1"
   $(EPUB_RESULT): $(EPUB_TMPDIR)/mimetype
 endif
 $(EPUB_RESULT): $(EPUB_CONTENT_OPF) 
 $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating EPUB"
   endif
 	cp -rs $(STYLEIMG)/* $(EPUB_STATIC)
-  ifeq ($(EPUB3),1)
+  ifeq "$(EPUB3)" "1"
 	(cd $(EPUB_TMPDIR); zip -r -X $@ mimetype META-INF OEBPS $(DEVNULL))
   else
     ifneq "$(strip $(EPUB_CSS))" ""

@@ -25,17 +25,17 @@ UNUSED_XML    := $(shell tar cP --exclude-vcs \
 		    $(DOC_DIR)/xml | tar tP | sed '/\/$$/d' | tr '\n' ' ')
 UNUSED_FILES := $(filter-out $(USED_FILES), $(UNUSED_IMAGES) $(UNUSED_XML))
 
-ifeq ($(LIST_NOIMG),1)
+ifeq "$(LIST_NOIMG)" "1"
   USED_FILES   := $(filter-out $(USED_ALL),$(USED_FILES))
   UNUSED_FILES := $(filter-out $(UNUSED_IMAGES),$(UNUSED_FILES))
 endif
-ifeq ($(LIST_NOENT),1)
+ifeq "$(LIST_NOENT)" "1"
   USED_FILES := $(filter-out $(ENTITIES_DOC),$(USED_FILES))
 endif
-ifeq ($(LIST_NODC),1)
+ifeq "$(LIST_NODC)" "1"
   USED_FILES := $(filter-out $(DOCCONF),$(USED_FILES))
 endif
-ifeq ($(LIST_NOXML),1)
+ifeq "$(LIST_NOXML)" "1"
   USED_FILES   := $(filter-out $(DOCFILES),$(USED_FILES))
   UNUSED_FILES := $(filter-out $(UNUSED_XML),$(UNUSED_FILES))
 endif
@@ -48,7 +48,7 @@ list-file: FILE4ID := $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
              $(ROOTSTRING) --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) )
 list-file:
-  ifneq ($(VERBOSITY),0)
+  ifneq "$(VERBOSITY)" "0"
 	@ccecho "result" "The ID \"$(ROOTID)\" appears in:"
   endif
 	@ccecho "result" "$(FILE4ID)"
@@ -57,7 +57,7 @@ list-file:
 #
 .PHONY: list-srcfiles
 list-srcfiles: 
-  ifeq ($(PRETTY_FILELIST), 1)
+  ifeq "$(PRETTY_FILELIST)" "1"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(USED_FILES)))"
   else
 	@echo $(sort $(USED_FILES))
@@ -67,7 +67,7 @@ list-srcfiles:
 #
 .PHONY: list-srcfiles-unused
 list-srcfiles-unused:
-  ifeq ($(PRETTY_FILELIST), 1)
+  ifeq "$(PRETTY_FILELIST)" "1"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(UNUSED_FILES)))"
   else
 	@echo $(sort $(UNUSED_FILES))

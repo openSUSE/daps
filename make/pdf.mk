@@ -49,7 +49,7 @@ STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))
 DOCNAME := $(DOCNAME)$(DRAFT_STR)$(META_STR)
 INDEX   := $(shell $(XSLTPROC) --xinclude $(ROOTSTRING) --stylesheet $(STYLE_ISINDEX) --file $(MAIN) $(XSLTPROCESSOR) 2>/dev/null)
 
-ifeq ($(INDEX),Yes)
+ifeq "$(INDEX)" "Yes"
   INDEXSTRING := --stringparam "indexfile=$(DOCNAME).ind"
 endif
 
@@ -70,18 +70,7 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
 
 FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)
 
-ifeq ($(GRAYSCALE),1)
-  FOSTRINGS  += --param "format.print=1" \
-	        --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
-  FOFILE     := $(FOFILE)_gray
-else
-  FOSTRINGS  += --param "format.print=0" \
-	        --stringparam "img.src.path=$(IMG_GENDIR)/color/"
-  FOFILE     := $(FOFILE)_color
-endif
-
-# cropmarks are currently only supported by XEP
-ifeq ($(CROPMARKS),1)
+ifeq "$(GRAYSCALE)" "1"
   FOSTRINGS  += --param "use.xep.cropmarks=1" --param "crop.marks=1" 
   FOFILE     := $(FOFILE)_crop
 endif
@@ -90,7 +79,7 @@ FOFILE := $(FOFILE)$(LANGSTRING).fo
 
 # Formatter dependent stuff
 #
-ifeq ("$(FORMATTER)","fop")
+ifeq "$(FORMATTER)" "fop"
   FOSTRINGS += --param "fop1.extensions=1" \
                --param "xep.extensions=0"
   ifdef FOP_CONFIG_FILE
@@ -99,7 +88,7 @@ ifeq ("$(FORMATTER)","fop")
     FORMATTER_CMD := $(FOP_WRAPPER) $(FOP_OPTIONS)
   endif
 endif
-ifeq ("$(FORMATTER)","xep")
+ifeq "$(FORMATTER)" "xep"
   FOSTRINGS += --param "fop1.extensions=0" \
                --param "xep.extensions=1"
   FORMATTER_CMD := $(XEP_WRAPPER) $(XEP_OPTIONS)
@@ -111,7 +100,7 @@ endif
 .PHONY: pdf
 pdf: list-images-multisrc list-images-missing
 pdf: $(PDF_RESULT)
-  ifeq ($(TARGET),pdf)
+  ifeq "$(TARGET)" "pdf"
 	@ccecho "result" "PDF book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$<"
   endif
 
@@ -126,21 +115,21 @@ $(FOFILE): | $(TMP_DIR)
 ifdef METASTRING
   $(FOFILE): $(PROFILEDIR)/METAFILE
 endif
-ifeq ($(INDEX),Yes)
+ifeq "$(INDEX)" "Yes"
   $(FOFILE): $(PROFILEDIR)/$(DOCNAME).ind
 endif
-ifeq ($(VERBOSITY),1)
+ifeq "$(VERBOSITY)" "1"
   $(FOFILE): FONTDEBUG := --param "debug.fonts=0"
 endif
 $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "   Creating fo-file..."
   endif
 	$(XSLTPROC) --xinclude $(FOSTRINGS) $(ROOTSTRING) $(METASTRING) \
 	  $(INDEXSTRING) $(FONTDEBUG) $(XSLTPARAM) \
 	  --output $(FOFILE) --stylesheet $(STYLEFO) --file $(PROFILED_MAIN) \
 	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created fo file $(FOFILE)"
   endif
 	(cd $(TMP_DIR); ln -sf $(STYLEIMG))
@@ -150,17 +139,17 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 #
 
 $(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
-ifeq ($(GRAYSCALE),1)
+ifeq "$(GRAYSCALE)" "1"
   $(PDF_RESULT): $(GRAYSCALE_IMAGES)
 else
   $(PDF_RESULT): $(COLOR_IMAGES)
 endif
 $(PDF_RESULT): $(FOFILE)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating PDF from fo-file..."
   endif
 	$(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
 		>& /dev/null && \
 		(ccecho "warn" "Not all fonts are embedded" >&2;) || :
@@ -170,7 +159,7 @@ $(PDF_RESULT): $(FOFILE)
 # Generate Index
 #
 $(PROFILEDIR)/$(DOCNAME).ind:
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	 @ccecho "info" "   Creating Index..."
   endif
 	$(XSLTPROC) $(ROOTSTRING) --xinclude --output $@ \

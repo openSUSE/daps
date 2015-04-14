@@ -34,7 +34,7 @@ endif
 # Resolve profile urn because saxon does not accept urns
 #
 ifdef PROFILE_URN
-  ifeq ($(shell expr substr $(PROFILE_URN) 1 4),urn:)
+  ifeq "$(shell expr substr $(PROFILE_URN) 1 4)" "urn:"
     PROFILE_STYLESHEET := $(shell $(DAPSROOT)/libexec/xml_cat_resolver $(PROFILE_URN) 2>/dev/null )
   else
     PROFILE_STYLESHEET := $(PROFILE_URN)
@@ -54,7 +54,7 @@ $(PROFILES): $(ENTITIES_DOC) $(DOCCONF)
 
 .PHONY: profile
 profile: $(PROFILES)
-  ifeq ($(MAKECMDGOALS),profile)
+  ifeq "$(MAKECMDGOALS)" "profile"
 	@ccecho "result" "Profiled sources can be found at\n$(PROFILEDIR)"
   endif
 
@@ -71,7 +71,7 @@ profile: $(PROFILES)
 #
 
 $(PROFILEDIR)/%: $(DOC_DIR)/xml/% | $(PROFILEDIR)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
   endif
   ifdef PROFILE_URN

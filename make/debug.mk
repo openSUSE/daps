@@ -17,7 +17,7 @@ showvariable:
   ifndef VARIABLE
 	@echo "Usage: daps showvariable VARIABLE=some_variable";
   else
-    ifeq ("$($(VARIABLE))", "")
+    ifeq "$($(VARIABLE))" ""
 	@ccecho "result" "undef";
     else	
 	@ccecho -- "result" "$($(VARIABLE))"

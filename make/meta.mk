@@ -12,13 +12,13 @@
 #
 STYLEMETA := $(DAPSROOT)/daps-xslt/common/svn2docproperties.xsl
 
-ifeq ($(META),1)
+ifeq "$(META)" "1"
   ifdef USESVN
     # meta information (author, last changed, etc)
     METASTRING   := --param "use.meta=1"
 
     $(PROFILEDIR)/METAFILE: $(TMP_DIR)/.$(DOCNAME)_docprops.xml
-      ifeq ($(VERBOSITY),2)
+      ifeq "$(VERBOSITY)" "2"
 	@ccecho "info"  "Generating $@ ..."
       endif
 	$(XSLTPROC) -o $@ --stylesheet $(STYLEMETA) --file $< $(XSLTPROCESSOR)

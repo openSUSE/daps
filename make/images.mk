@@ -198,23 +198,23 @@ GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $
 #
 PHONY: images
 images:
-  ifeq ($(IMAGES_ALL),1)
+  ifeq "$(IMAGES_ALL)" "1"
   images: $(COLOR_IMAGES) $(GRAYSCALE_IMAGES) $(ONLINE_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/color/ and $(IMG_GENDIR)/grayscale/"
   else
-    ifeq ($(IMAGES_ONLINE),1)
+    ifeq "$(IMAGES_ONLINE)" "1"
       images: $(ONLINE_IMAGES)
 	@ccecho "result" "Online images generated in $(IMG_GENDIR)/color/"
     endif
-    ifeq ($(IMAGES_GRAYSCALE),1)
+    ifeq "$(IMAGES_GRAYSCALE)" "1"
       images: $(GRAYSCALE_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/grayscale/"
     endif
-    ifeq ($(IMAGES_GEN),1)
+    ifeq "$(IMAGES_GEN)" "1"
       images: $(GEN_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/gen/"
     endif
-    ifeq ($(IMAGES_COLOR),1)
+    ifeq "$(IMAGES_COLOR)" "1"
       images: $(COLOR_IMAGES)
 	@ccecho "result" "Images generated in $(IMG_GENDIR)/color/"
     endif
@@ -266,7 +266,7 @@ ifdef HTMLROOT
   warn-cap: WRONG_CAP := $(filter-out $(USED_LC), $(USED))
   warn-cap:
     ifdef WRONG_CAP
-      ifneq ($(VERBOSITY),0)
+      ifneq "$(VERBOSITY)" "0"
 	@ccecho "warn" "Not all image file names are lower case. This will make problems when creating online docs:\n$(WRONG_CAP)" >2
       endif
     endif
@@ -278,13 +278,13 @@ endif
 list-images-missing:
   ifdef MISSING
 	@ccecho "warn" "The following images are missing:"
-    ifeq ($(PRETTY_FILELIST), 1)
+    ifeq "$(PRETTY_FILELIST)" "1"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
     else
 	@echo "$(MISSING)"
     endif
   else
-    ifeq ($(MAKECMDGOALS),list-images-missing)
+    ifeq "$(MAKECMDGOALS)" "list-images-missing"
 	@ccecho "info" "All images for document \"$(DOCNAME)\" exist."
     endif
   endif
@@ -295,13 +295,13 @@ list-images-missing:
 list-images-multisrc warn-images:
   ifdef DOUBLEIMG
 	@ccecho "warn" "Image names not unique, multiple sources available for the following images:"
-    ifeq ($(PRETTY_FILELIST), 1)
+    ifeq "$(PRETTY_FILELIST)" "1"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(DOUBLEIMG)))"
     else
 	@echo "$(DOUBLEIMG)"
     endif
   else
-    ifeq ($(MAKECMDGOALS),list-images-multisrc)
+    ifeq "$(MAKECMDGOALS)" "list-images-multisrc"
 	@ccecho "info" "All images for document \"$(DOCNAME)\" have unique names."
     endif
   endif
@@ -352,14 +352,14 @@ $(IMG_GENDIR)/color/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_DIRECTORIES)
 #
 # from existing color PNGs
 $(IMG_GENDIR)/grayscale/%.png: $(IMG_SRCDIR)/png/%.png | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
 
 # from generated color PNGs
 $(IMG_GENDIR)/grayscale/%.png: $(IMG_GENDIR)/gen/png/%.png | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	convert $< $(CONVERT_OPTS_PNG) $@ $(DEVNULL)
@@ -389,9 +389,8 @@ endif
 
 # SVG -> PNG
 # create color PNGs from SVGs
-$(IMG_GENDIR)/gen/png/%.png: | $(IMG_DIRECTORIES)
-$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg
-ifeq ($(VERBOSITY),2)
+$(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
@@ -402,7 +401,7 @@ endif
 # EPS -> PNG
 # create color PNGs from EPS
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/eps/%.eps | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
@@ -412,7 +411,7 @@ endif
 # PDF -> PNG
 # create color PNGs from EPS
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
@@ -420,7 +419,7 @@ endif
 	$(run_optipng)
 
 $(IMG_GENDIR)/gen/png/%.png: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PNG"
 endif
 	$(remove_link)
@@ -439,7 +438,7 @@ endif
 # Color SVGs are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
 $(IMG_GENDIR)/color/%.svg: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Fixing $(notdir $<)"
 endif
 	$(XSLTPROC) --stylesheet $(STYLESVG) --file $< \
@@ -455,7 +454,7 @@ endif
 # needed anyway
 #
 $(IMG_GENDIR)/grayscale/%.svg: $(IMG_GENDIR)/color/%.svg | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	$(XSLTPROC) --stylesheet $(STYLESVG2GRAY) --file $< \
@@ -467,7 +466,7 @@ endif
 # DIA -> SVG
 #
 $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/dia/%.dia | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to SVG"
 endif
 	LANG=C dia $(DIA_OPTIONS) --export=$@ $< $(DEVNULL) $(ERR_DEVNULL)
@@ -475,7 +474,7 @@ endif
 # FIG -> SVG
 #
 $(IMG_GENDIR)/gen/svg/%.svg: $(IMG_SRCDIR)/fig/%.fig | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "($(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to SVG"
 endif
 	fig2dev -L svg $< $@ $(DEVNULL)
@@ -508,7 +507,7 @@ $(IMG_GENDIR)/color/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
 #
 # from existing color PDFs
 $(IMG_GENDIR)/grayscale/%.pdf: $(IMG_SRCDIR)/pdf/%.pdf | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
@@ -517,7 +516,7 @@ endif
 
 # from generated color PDFs
 $(IMG_GENDIR)/grayscale/%.pdf: $(IMG_GENDIR)/gen/pdf/%.pdf | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite \
@@ -529,7 +528,7 @@ endif
 
 # EPS -> PDF
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_SRCDIR)/eps/%.eps | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PDF"
 endif
 	gs -sOutputFile=$@ -sDEVICE=pdfwrite -dEPSCrop \
@@ -539,7 +538,7 @@ endif
 # Color SVGs from are transformed via stylesheet in order to wipe out
 # some tags that cause trouble with xep or fop
 $(IMG_GENDIR)/gen/pdf/%.pdf: $(IMG_GENDIR)/gen/svg/%.svg | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to PDF"
 endif
 	inkscape $(INK_OPTIONS) --export-pdf=$@ -f $< $(DEVNULL) && \
@@ -566,7 +565,7 @@ $(IMG_GENDIR)/color/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg | $(IMG_DIRECTORIES)
 # Create grayscale JPGs
 #
 $(IMG_GENDIR)/grayscale/%.jpg: $(IMG_SRCDIR)/jpg/%.jpg | $(IMG_DIRECTORIES)
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
 	@echo "   Converting $(notdir $<) to grayscale"
 endif
 	convert $< $(CONVERT_OPTS_JPG) $@ $(DEVNULL)

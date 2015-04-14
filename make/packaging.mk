@@ -33,7 +33,7 @@ $(DESKTOP_FILES_DIR) $(PACK_DIR) $(PACKAGE_HTML_DIR) $(PACKAGE_PDF_DIR):
 #
 .PHONY: package-src
 package-src: | $(PACK_DIR)
-ifeq ($(OPTIPNG),1)
+ifeq "$(OPTIPNG)" "1"
   package-src: optipng
 endif
 ifdef DEF_FILE
@@ -70,13 +70,13 @@ package-src: $(PROFILES) $(PROFILEDIR)/.validate
 #
 .PHONY: package-pdf
 package-pdf: | $(PACKAGE_PDF_DIR)
-ifeq ($(DESKTOPFILES),1)
+ifeq "$(DESKTOPFILES)" "1"
   package-pdf: $(DESKTOPFILES_RESULT)
 endif
-ifeq ($(DOCUMENTFILES),1)
+ifeq "$(DOCUMENTFILES)" "1"
   package-pdf: $(DOCUMENTFILES_RESULT)
 endif
-ifeq ($(PAGEFILES),1)
+ifeq "$(PAGEFILES)" "1"
   package-pdf: $(PAGEFILES_RESULT)
 endif
 package-pdf: $(PDF_RESULT)
@@ -97,13 +97,13 @@ package-pdf: $(PDF_RESULT)
 
 .PHONY: package-html
 package-html: | $(PACKAGE_HTML_DIR)
-ifeq ($(DESKTOPFILES),1)
+ifeq "$(DESKTOPFILES)" "1"
   package-html: $(DESKTOPFILES_RESULT)
 endif
-ifeq ($(DOCUMENTFILES),1)
+ifeq "$(DOCUMENTFILES)" "1"
   package-html: $(DOCUMENTFILES_RESULT)
 endif
-ifeq ($(PAGEFILES),1)
+ifeq "$(PAGEFILES)" "1"
   package-html: $(PAGEFILES_RESULT)
 endif
 package-html: html
@@ -113,7 +113,7 @@ package-html: html
 	exit 1
   else
 	BZIP2="--best" tar cfhj $(PACKAGE_HTML_RESULT) -C $(dir $(HTML_DIR)) $(notdir $(HTML_DIR:%/=%))
-    ifeq ($(TARGET),package-html)
+    ifeq "$(TARGET)" "package-html"
 	@ccecho "result" "Find the package-html results at:\n$(PACKAGE_HTML_DIR)/"
     endif
   endif
@@ -166,7 +166,7 @@ else
   OD_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(OD_EXPORT_DIR))
 endif
 
-ifeq ($(NOSET),1)
+ifeq "$(NOSET)" "1"
   OD_BIGFILE  := $(OD_EXPORT_DIR)/$(DOCNAME)$(LANGSTRING).xml
 else
   OD_BIGFILE  := $(OD_EXPORT_DIR)/set$(LANGSTRING)_bigfile.xml
@@ -180,16 +180,16 @@ online-docs: $(OD_BIGFILE) $(OD_GRAPHICS)
 ifdef HTMLROOT
   online-docs: warn-cap
 endif
-ifeq ($(OPTIPNG),1)
+ifeq "$(OPTIPNG)" "1"
   online-docs: optipng
 endif
-ifneq ($(NOPDF),1)
+ifneq "$(NOPDF)" "1"
   online-docs: pdf
 endif
-ifneq ($(NOEPUB),1)
+ifneq "$(NOEPUB)" "1"
   online-docs: epub
 endif
-ifneq ($(NOHTML),1)
+ifneq "$(NOHTML)" "1"
   online-docs: package-html
 endif
 online-docs:
@@ -198,13 +198,13 @@ online-docs:
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	exit 1
   else
-    ifneq ($(NOPDF),1)
+    ifneq "$(NOPDF)" "1"
 	cp $(PDF_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
-    ifneq ($(NOEPUB),1)
+    ifneq "$(NOEPUB)" "1"
 	cp $(EPUB_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
-    ifneq ($(NOHTML),1)
+    ifneq "$(NOHTML)" "1"
 	cp $(PACKAGE_HTML_RESULT) $(OD_EXPORT_BOOKDIR)
     endif
 	@ccecho "result" "Find the online-docs result at:\n$(OD_EXPORT_DIR)"
@@ -226,15 +226,15 @@ $(OD_EXPORT_BOOKDIR):
 #
 $(OD_BIGFILE): | $(OD_EXPORT_BOOKDIR)
 $(OD_BIGFILE): $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
-  ifeq ($(NOSET),1)
-    ifeq ($(VERBOSITY),2)
+  ifeq "$(NOSET)" "1"
+    ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Creating bigfile for book"
     endif
 	$(XSLTPROC) --xinclude --output $@ $(ROOTSTRING) \
 	  --stylesheet $(STYLEBIGFILE) --file $(PROFILED_MAIN) \
 	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
   else
-    ifeq ($(VERBOSITY),2)
+    ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Creating bigfile for complete set"
     endif
 	xmllint --xinclude --output $@ $(PROFILED_MAIN)

@@ -71,10 +71,10 @@ ifneq "$(strip $(DEF_FILE))" ""
   locdrop: DC_FILES := $(addprefix $(DOC_DIR)/,$(shell awk '/^[ \t]*#/ {next};NF {printf "DC-%s ", $$2}' $(DEF_FILE)))
 endif
 locdrop: | $(LOCDROP_EXPORT_BOOKDIR) $(LOCDROP_TMP_DIR)
-ifeq ($(OPTIPNG),1)
+ifeq "$(OPTIPNG)" "1"
   locdrop: optipng
 endif
-ifneq ($(NOPDF),1)
+ifneq "$(NOPDF)" "1"
   locdrop: pdf
 endif
 locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
@@ -121,7 +121,7 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	BZIP2=--best tar cfhj $(NO_TRANS_IMG_TAR) \
 	  --absolute-names --transform=s%$(DOC_DIR)/%% $(NO_TRANS_IMGS)
     endif
-    ifneq ($(NOPDF),1)
+    ifneq "$(NOPDF)" "1"
 	cp $(PDF_RESULT) $(LOCDROP_EXPORT_BOOKDIR)
     endif
 	@if test -f $(NO_TRANS_TAR); then bzip2 -9f $(NO_TRANS_TAR); fi

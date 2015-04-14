@@ -75,7 +75,7 @@ endif
 ifndef VERBOSITY
   VERBOSITY := 0
 endif
-ifneq ($(VERBOSITY),$(filter $(VERBOSITY),2 3))
+ifneq "$(VERBOSITY)" "$(filter $(VERBOSITY),2 3)"
   DEVNULL     := >/dev/null
   ERR_DEVNULL := 2>/dev/null
 endif
@@ -126,7 +126,7 @@ endif
 
 # Issue a warning when specifying --meta without profiling
 #
-ifeq ($(META),1)
+ifeq "$(META)" "1"
   ifndef PROFILE_URN
     $(warning $(shell ccecho "warn" "Did not find a profiling URN. Displaying meta information only works with profiling."))
   endif
@@ -359,7 +359,7 @@ STYLE_ROOTDIRS := $(wildcard $(STYLEDEVEL) $(STYLE_CUSTOM) \
 # the complete set with that target.
 #
 ifdef ROOTID
-  ifneq ($(MAKECMDGOALS),package-src)
+  ifneq "$(MAKECMDGOALS)" "package-src"
     ROOTSTRING   := --stringparam "rootid=$(ROOTID)"
   endif
 endif
@@ -399,7 +399,7 @@ USESVN := $(shell svn info $(MAIN) 2>/dev/null)
 # the directories rather than linking the directories. The latter has the
 # disadvantage tha one cannot write into adirectory that is just linked)
 #
-ifeq ($(STATIC_HTML),0)
+ifeq "$(STATIC_HTML)" "0"
   # copy directories recursively, create links on files
   HTML_GRAPH_COMMAND := cp -rs --remove-destination
 else

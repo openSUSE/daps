@@ -28,7 +28,7 @@ bigfile: $(BIGFILE)
 #
 $(BIGFILE): | $(TMP_DIR)
 $(BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@echo "   Creating bigfile"
   endif
 	$(XSLTPROC) --xinclude --output $(BIGFILE) $(ROOTSTRING) \
@@ -41,7 +41,7 @@ $(BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
 STYLELINKS := $(DAPSROOT)/daps-xslt/common/get-links.xsl
 TESTPAGE   := $(TMP_DIR)/$(DOCNAME)-links.html
 
-ifeq ($(VERBOSITY),2)
+ifeq "$(VERBOSITY)" "2"
   CB_VERBOSITY := --verbose
 endif
 
@@ -49,14 +49,14 @@ endif
 checklink: | $(TMP_DIR)
 checklink: $(PROFILEDIR)/.validate 
 checklink:
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@echo "   Running linkchecker"
   endif
 	$(XSLTPROC) --xinclude $(ROOTSTRING) -o $(TESTPAGE) \
 	  --stylesheet $(STYLELINKS) --file $(PROFILED_MAIN) $(XSLTPROCESSOR)
 	checkbot --url file://localhost$(TESTPAGE) $(CB_VERBOSITY) \
 	  $(CB_OPTIONS) --file $(TMP_DIR)/$(BOOK)-checkbot.html $(DEVNULL)
-  ifeq ($(SHOW),1)
+  ifeq "$(SHOW)" "1"
     ifdef BROWSER
 	$$BROWSER $(TMP_DIR)/$(BOOK)-checkbot-localhost.html &
     else
@@ -73,7 +73,7 @@ STYLECHECK_OUTFILE := $(TMP_DIR)/$(DOCNAME)-stylecheck.xml
 
 .PHONY: stylecheck
 stylecheck: $(BIGFILE)
-  ifeq ($(SHOW),1)
+  ifeq "$(SHOW)" "1"
 	@sdsc --show $(BIGFILE) $(STYLECHECK_OUTFILE)
   else
 	@sdsc $(BIGFILE) $(STYLECHECK_OUTFILE) >/dev/null

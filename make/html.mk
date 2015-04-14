@@ -29,7 +29,7 @@
 # Stylesheets
 #
 
-ifeq ($(JSP),1)
+ifeq "$(JSP)" "1"
   # JSP
   STYLEHTML       := $(firstword $(wildcard \
 			$(addsuffix /jsp/chunk.xsl,$(STYLE_ROOTDIRS))))
@@ -38,12 +38,12 @@ ifeq ($(JSP),1)
 else
   # HTML / HTMLSINGLE
   HTML_SUFFIX     := html
-  ifeq ($(HTML5),1)
+  ifeq "$(HTML5)" "1"
     H_DIR := /xhtml5
   else
     H_DIR := /xhtml
   endif
-  ifeq ($(HTMLSINGLE),1)
+  ifeq "$(HTMLSINGLE)" "1"
     # Single HTML
     STYLEHTML   := $(firstword $(wildcard \
 			$(addsuffix $(H_DIR)/docbook.xsl,$(STYLE_ROOTDIRS))))
@@ -123,9 +123,9 @@ else
 
   IS_STATIC := $(notdir $(STYLEIMG))
   ifndef HTML_CSS
-    ifneq ($(IS_STATIC),static)
+    ifneq "$(IS_STATIC)" "static"
       HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEHTML))*.css)) 2>/dev/null )
-      ifeq ($(VERBOSITY),1)
+      ifeq "$(VERBOSITY)" "1"
 	HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
       endif
     endif
@@ -139,12 +139,12 @@ HTMLSTRINGS  += --param "show.comments=$(REMARKS)" \
                 --stringparam "img.src.path=images/"
 
 # DocBook uses .xhtml for XHTML5 by default
-ifeq ($(HTML5),1)
+ifeq "$(HTML5)" "1"
   HTMLSTRINGS  += --stringparam "html.ext=.html"
 endif
 
 # test if DocBook layout
-ifneq ($(IS_STATIC),static)
+ifneq "$(IS_STATIC)" "static"
   HTMLSTRINGS  += --stringparam "admon.graphics.path=static/images/" \
 		  --stringparam "callout.graphics.path=static/images/callouts/" \
 		  --stringparam "navig.graphics.path=static/images/"
@@ -162,7 +162,7 @@ ifneq ($(IS_STATIC),static)
 endif
 
 ifdef HTML_CSS
-  ifneq ($(HTML_CSS),none)
+  ifneq "$(HTML_CSS)" "none"
     HTMLSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(HTML_CSS))"
   else
     HTML_CSS_INFO := CSS was set to none, using no CSS
@@ -178,7 +178,7 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 # HTML
 #
 .PHONY: html
-ifeq ($(CLEAN_DIR),1)
+ifeq "$(CLEAN_DIR)" "1"
   html: $(shell rm -rf $(HTML_DIR))
 endif
 html: list-images-multisrc list-images-missing
@@ -187,7 +187,7 @@ ifdef ONLINE_IMAGES
 endif
 html: copy_static_images
 html: $(HTML_RESULT)
-  ifeq ($(TARGET),html)
+  ifeq "$(TARGET)" "html"
 	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$(HTML_DIR)/"
   endif
 
@@ -208,25 +208,13 @@ $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 # be copied/linked, we just copy/link the whole directory
 #
 .PHONY: copy_static_images
-ifneq ($(IS_STATIC),static)
+ifneq "$(IS_STATIC)" "static"
   copy_static_images: | $(HTML_DIR)/static
   ifdef HTML_CSS
     copy_static_images: | $(HTML_DIR)/static/css
   endif
   copy_static_images: $(STYLEIMG)
-    ifeq ($(STATIC_HTML),0)
-	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(HTML_DIR)/static
-    else
-	tar cph --exclude-vcs -C $(dir $<) images | \
-	  (cd $(HTML_DIR)/static; tar xpv) >/dev/null
-    endif
-else
-  copy_static_images: | $(HTML_DIR)/static
-  ifdef HTML_CSS
-    copy_static_images: | $(HTML_DIR)/static/css
-  endif
-  copy_static_images: $(STYLEIMG)
-    ifeq ($(STATIC_HTML),0)
+    ifeq "$(STATIC_HTML)" "0"
 	$(HTML_GRAPH_COMMAND) $</* $(HTML_DIR)/static
     else
 	tar cph --exclude-vcs -C $(dir $<) static | \
@@ -234,7 +222,7 @@ else
     endif
 endif
 ifdef HTML_CSS
-  ifneq ($(HTML_CSS),none)
+  ifneq "$(HTML_CSS)" "none"
 	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(HTML_DIR)/static/css/
   endif
 endif
@@ -263,13 +251,13 @@ ifdef METASTRING
   $(HTML_RESULT): $(PROFILEDIR)/METAFILE
 endif
 $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
-  ifeq ($(VERBOSITY),2)
+  ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Creating HTML pages"
     ifdef HTML_CSS_INFO
 	@ccecho "info" "$(HTML_CSS_INFO)"
     endif
   endif
-  ifeq ($(HTMLSINGLE),1)
+  ifeq "$(HTMLSINGLE)" "1"
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
 	  --output $@ --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
@@ -278,7 +266,7 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
           --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-    ifneq ($(JSP),1)
+    ifneq "$(JSP)" "1"
       ifdef ROOTID
 	if [ ! -e $@ ]; then \
 	  (cd $(HTML_DIR) && ln -sf $(ROOTID).$(HTML_SUFFIX) $@) \
