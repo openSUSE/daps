@@ -1,149 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE refentry PUBLIC 
-   "-//OASIS//DTD DocBook XML V4.5//EN"
-   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+"-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-<!ENTITY daps_command "daps">
-<!ENTITY daps_version "2.0~beta8">
-<!ENTITY daps_envconvert "daps-envconvert">
+  <!ENTITY daps_envconvert "daps-envconvert">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
 ]>
 <refentry lang="en" id="daps_envconvert">
-    <refentryinfo>
-        <productname>&daps_envconvert;</productname>
-        <authorgroup>
-            <author>
-                <contrib>Developer</contrib>
-                <firstname>Frank</firstname>
-                <surname>Sundermeyer</surname>
-                <email>fs@suse.de</email>
-            </author>
-        </authorgroup>
-    </refentryinfo>
-    <refmeta>
-        <refentrytitle>&daps_envconvert;</refentrytitle>
-        <manvolnum>1</manvolnum>
-        <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
-        <refmiscinfo class="version">&daps_version;</refmiscinfo>
-        <refmiscinfo class="manual">daps</refmiscinfo>
-    </refmeta>
-    <refnamediv>
-        <refname>&daps_envconvert;</refname>
-        <refpurpose>A command to convert ENV-files into the Doc config format (DC-)</refpurpose>
-    </refnamediv>
-    <refsynopsisdiv>
-        <title>Synopsis</title>
-        <cmdsynopsis>
-            <command>&daps_envconvert;</command>
-            <arg choice="req">--envfile <replaceable>ENVfile</replaceable></arg>
-            <arg choice="opt">--options</arg>
-        </cmdsynopsis>
-    </refsynopsisdiv>
-    <refsect1>
-        <title>Description</title>
-        <para>&daps_envconvert; allows you to convert ENV-files into the DC config format (DC-).
-            You can set the output directory of the file as well as use custom stylsheets</para>
-    </refsect1>
-    <refsect1>
-        <title>Options</title>
-        <para>List of options and their usage:</para>
-        <variablelist>
-            <varlistentry>
-                <term>DAPS installation directory. Default: <filename>/usr/share/daps</filename></term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-d, --dapsroot <replaceable>DAPSROOT</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Define the input ENV-file</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="req">-e,
-                            --envfile <replaceable>PATH_TO_ENVFILE</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Set the output directory. Default: current directory</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-o,
-                                --outputdir <replaceable>PATH_TO_OUTPUTDIR</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Define the product name in the output file´s header. Default: unset</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-p, --product <replaceable>PRODUCTNAME</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Set the root directory for custom stylsheets. If not spezified no custom
-                    stylesheets and css will be set. Default: unset</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-s,
-                            --styleroot <replaceable>STYLESHEETDIR</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Set the title of the manual. Default: automatic title determination</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-t, --title <replaceable>TITLE</replaceable></arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Display the help of the command</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_envconvert;</command>
-                        <arg choice="opt">-h, --help</arg>
-                    </cmdsynopsis>
-                </listitem>
-            </varlistentry>
-        </variablelist>
-    </refsect1>
-    <refsect1>
-        <title>Examples</title>
-        <screen><command>&daps_envconvert;</command> -e exampleENVfile -o /home/exampledir -t<!--
-               --> exampletitle</screen>
-        <para>This example converts the file
-          <filename>exampleENVfile</filename>, puts the title <filename>exampletitle</filename> in the
-            config files header and writes the DC-output file to <filename>/home/exampledir</filename>.</para>
+ <refentryinfo>
+  <productname>&daps_envconvert;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&daps_envconvert;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
+  <refmiscinfo class="manual">&dapsacr;</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&daps_envconvert;</refname>
+  <refpurpose>
+   A command to convert ENV-files into the Doc config format (DC-)
+  </refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&daps_envconvert;</command>
+   <arg choice="req">--envfile <replaceable>ENVfile</replaceable></arg>
+   <arg choice="opt">--options</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+ <refsect1>
+  <title>Description</title>
+  <para>
+   &daps_envconvert; allows you to convert ENV-files into the DC config format
+   (DC-).  You can set the output directory of the file as well as use custom
+   stylsheets.
+  </para>
+ </refsect1>
+ <refsect1>
+  <title>Options</title>
+  <para>List of options and their usage:</para>
+  <variablelist>
+   <varlistentry>
+    <term>DAPS installation directory. Default: <filename>/usr/share/daps</filename></term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-d, --dapsroot <replaceable>DAPSROOT</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Define the input ENV-file</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="req">-e,
+      --envfile <replaceable>PATH_TO_ENVFILE</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Set the output directory. Default: current directory</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-o,
+      --outputdir <replaceable>PATH_TO_OUTPUTDIR</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Define the product name in the output file´s header. Default: unset</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-p, --product <replaceable>PRODUCTNAME</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Set the root directory for custom stylsheets. If not spezified no custom
+    stylesheets and css will be set. Default: unset</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-s,
+      --styleroot <replaceable>STYLESHEETDIR</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Set the title of the manual. Default: automatic title determination</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-t, --title <replaceable>TITLE</replaceable></arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Display the help of the command</term>
+    <listitem>
+     <cmdsynopsis>
+      <command>&daps_envconvert;</command>
+      <arg choice="opt">-h, --help</arg>
+     </cmdsynopsis>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+ <refsect1>
+  <title>Examples</title>
+  <screen><command>&daps_envconvert;</command> -e exampleENVfile -o /home/exampledir -t<!--
+  --> exampletitle</screen>
+  <para>This example converts the file
+  <filename>exampleENVfile</filename>, puts the title <filename>exampletitle</filename> in the
+  config files header and writes the DC-output file to <filename>/home/exampledir</filename>.</para>
 
-        <screen><command>&daps_envconvert;</command> -e exampleENVfile -p testProductname -s<!--
-               --> /usr/share/customstylesheets</screen>
-        <para>In this example the file
-          <filename>exampleENVfile</filename> is converted, the productname
-            <productname>testProductname</productname> is put in the config files header and custom stylesheets rooted in
-            <filename>/usr/share/customstylesheets</filename> are used.</para>
-    </refsect1>
-    <refsect1 id="daps_envconvert.moreinfo">
-        <title>See Also</title>
-        <variablelist>
-            <varlistentry>
-                <term>
-                    <ulink url="http://daps.sf.net"/>
-                </term>
-                <listitem>
-                    <para>DAPS project homepage</para>
-                </listitem>
-            </varlistentry>
-        </variablelist>
-    </refsect1>
+  <screen><command>&daps_envconvert;</command> -e exampleENVfile -p testProductname -s<!--
+  --> /usr/share/customstylesheets</screen>
+  <para>In this example the file
+  <filename>exampleENVfile</filename> is converted, the productname
+  <productname>testProductname</productname> is put in the config files header and custom stylesheets rooted in
+  <filename>/usr/share/customstylesheets</filename> are used.</para>
+ </refsect1>
+ <refsect1 id="daps_envconvert.moreinfo">
+  <title>See Also</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     &dapsurl;
+    </term>
+    <listitem>
+     <para>DAPS project homepage</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
 
 
 </refentry>

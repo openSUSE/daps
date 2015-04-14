@@ -4,6 +4,8 @@
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
   <!ENTITY daps-susespell-command "daps-susespell">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
 ]>
 
 
@@ -46,7 +48,7 @@
  <refsect1 id="daps-susespell.description">
   <title>Description</title>
   <para>
-   An aspell wrapper for DAPS to check DocBook XML files. Calls aspell in
+   An aspell wrapper for &dapsacr; to check DocBook XML files. Calls aspell in
    <literal>sgml-mode</literal>, so XML elements are not checked. &daps-susespell-command;
    also does not check the content of certain elements such as
    <sgmltag>&lt;command&gt;</sgmltag> or <sgmltag>&lt;screen&gt;</sgmltag>.

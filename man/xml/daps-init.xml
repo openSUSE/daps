@@ -3,122 +3,167 @@
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-<!ENTITY daps_command "daps">
-<!ENTITY daps_version "2.0~rc1">
-<!ENTITY daps_init "daps_init">
+  <!ENTITY daps_init "daps_init">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
 ]>
 <refentry lang="en" id="daps_init">
-    <refentryinfo>
-        <productname>&daps_command;</productname>
-        <authorgroup>
-            <author>
-                <contrib>Developer</contrib>
-                <firstname>Frank</firstname>
-                <surname>Sundermeyer</surname>
-                <email>fs@suse.de</email>
-            </author>
-        </authorgroup>
-    </refentryinfo>
-    <refmeta>
-        <refentrytitle>&daps_command;</refentrytitle>
-        <manvolnum>1</manvolnum>
-        <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
-        <refmiscinfo class="version">&daps_version;</refmiscinfo>
-        <refmiscinfo class="manual">daps</refmiscinfo>
-    </refmeta>
-    <refnamediv>
-        <refname>&daps_init;</refname>
-        <refpurpose>A command to set up a daps documentation directory</refpurpose>
-    </refnamediv>
-    <refsynopsisdiv id="daps_init.synopsis">
-        <title>Synopsis</title>
-        <cmdsynopsis>
-            <command>&daps_init;</command>
-            <arg choice="req">-d <replaceable>PATH_TO_DOC_DIR</replaceable></arg>
-            <arg choice="opt">-r <replaceable>ROOT ELEMENT</replaceable></arg>
-        </cmdsynopsis>
-    </refsynopsisdiv>
-    <refsect1>
-        <title>Description</title>
-        <para>&daps_init; is used in daps to create a new documentation project from scratch. It
-            automatically sets up the key files and directory structure needed and creates an
-            example document which can be used to explore daps´ functionality</para>
-    </refsect1>
-    <refsect1>
-        <title>Options</title>
-        <para>View the available Options with <command>&daps_init;</command></para>
-        <para> Set the root element of your example dokument. Currently supported are "book"
-            (default) and "article"</para>
-        <cmdsynopsis>
-            <command>&daps_init;</command>
-            <arg choice="req">-r (article|book)</arg>
-        </cmdsynopsis>
-    </refsect1>
-    <refsect1>
-        <title>Examples</title>
-        <variablelist>
-            <varlistentry>
-                <term>Option usage example</term>
-                <listitem>
-                    <cmdsynopsis>
-                        <command>&daps_init; -d /home/exampledir -r article</command>
-                    </cmdsynopsis>
-                    <para>This command creates a documentation poject in /home/exampledir with an
-                        article as example document</para>
-                </listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Directory structure Example</term>
-                <listitem>
-                    <para>A directory created by &daps_init; normally looks like this</para>
-                    <screen>EXAMPLE_DOC_DIR/ <co id="co.daps-init.root"/>
-  |--DC* <co id="co.daps-init.DC"/>
-  |--images/
-  |   |--src/ <co id="co.daps-init.imagesrc"/>
-  |   |--dia/
-  |   |--eps/
-  |   |--fig/
-  |   |--pdf/
-  |   |--png/
-  |   |--svg/
-  |--xml/ <co id="co.daps-init.xml"/>
-      |--MAIN*.xml <co id="co.daps-init.MAIN"/></screen>
-                    <calloutlist>
-                        <callout arearefs="co.daps-init.root">
-                            <para>"Working directory" for the respective documentation
-                                project</para>
-                        </callout>
-                        <callout arearefs="co.daps-init.DC">
-                            <para>DC-file defining the documentation project</para>
-                        </callout>
-                        <callout arearefs="co.daps-init.imagesrc">
-                            <para>Top-level Directory for images used in the documentation. Contains
-                                sub-directories for images in different formats</para>
-                        </callout>
-                        <callout arearefs="co.daps-init.xml">
-                            <para>XML-file directory. Also holds entity declaration files</para>
-                        </callout>
-                        <callout arearefs="co.daps-init.MAIN">
-                            <para>Main file of the documentation project. It contains references to
-                                other books, chapters etc.</para>
-                        </callout>
-                    </calloutlist>
-                </listitem>
-            </varlistentry>
-
-        </variablelist>
-    </refsect1>
-    <refsect1 id="daps_init.moreinfo">
-        <title>See Also</title>
-        <variablelist>
-            <varlistentry>
-                <term>
-                    <ulink url="http://daps.sf.net"/>
-                </term>
-                <listitem>
-                    <para>DAPS project homepage</para>
-                </listitem>
-            </varlistentry>
-        </variablelist>
-    </refsect1>
+ <refentryinfo>
+  <productname>&dapsacr;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&dapsacr;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
+  <refmiscinfo class="manual">&daps;</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&daps_init;</refname>
+  <refpurpose>
+   A command to set up a &dapsacr; documentation directory.
+  </refpurpose>
+ </refnamediv>
+ <refsynopsisdiv id="daps_init.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&daps_init;</command>
+   <arg choice="req">--docdir <replaceable>PATH_TO_DOC_DIR</replaceable></arg>
+   <arg choice="opt"><replaceable>OPTIONS</replaceable></arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+ <refsect1>
+  <title>Description</title>
+  <para>
+   &daps_init; is used to create a &dapsacr; documentation project from
+   scratch. It automatically sets up the key files and directory structure
+   needed and creates an example DocBook 4 or 5 document which can be used to
+   explore &dapsacr;' functionality.
+  </para>
+  <para>
+   Specifying the project directory with --docdir is mandatory, all other
+   options are optional.  Specifying a name for the document with --name
+   is recommended&mdash;it will be used in filenames. Setting the title of the
+   document with --title is also recommended.
+  </para>
+ </refsect1>
+ <refsect1>
+  <title>Options</title>
+  <variablelist>
+   <varlistentry>
+    <term>--docdir <replaceable>DIR</replaceable></term>
+    <listitem>
+     <para>
+      Path to the project directory under which the DAPS environment will be
+      set up. If the directory does not exists, it will be created. Mandatory.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--dapsroot <replaceable>DIR</replaceable></term>
+    <listitem>
+     <para>
+      Specify the path to the directory where &daps_init; can find the
+      template files (directory <filename>init-templates/</filename>). This is
+      only necessary if you have installed DAPS in a custom
+      directory. Default: <filename>/usr/share/daps</filename>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--date <replaceable>YYYY-MM-DD</replaceable></term>
+    <listitem>
+     <para>
+      Specify a date in the format YYYY-MM-DD. Will be used to set the
+      publication date of the document. (&lt;date/&gt; in the document's info
+      section). Default: Current date (&lt;?dbtimestamp format=\"B d, Y\"?&gt;)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--docbook4</term>
+    <listitem>
+     <para>
+      Create a document in DocBook 4 format (default).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--docbook5</term>
+    <listitem>
+     <para>
+      Create a document in DocBook 5 format.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--name <replaceable>NAME</replaceable></term>
+    <listitem>
+     <para>
+      String that will be used in filenames (e.g. when generating PDF or HTML
+      output). Only use letters, digits, dashes and underscores [A-Za-z0-9-_].
+      Default: daps-example
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--productname "<replaceable>PRODUCT</replaceable>"</term>
+    <listitem>
+     <para>
+      Specify a name for the product the document describes. Will be used in
+      the subtitle of the document (&lt;productname/&gt; in the document's
+      info section).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--productnumber "<replaceable>PRODUCT_VERSION</replaceable>"</term>
+    <listitem>
+     <para>
+       Specify a version for the product the document describes. Will be used
+       in the subtitle of the document (&lt;productnumber/&gt; in the
+       document's info section). Requires --productname.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--rootelement article|book</term>
+    <listitem>
+     <para>
+      DocBook root element of the example document. Currently supported are
+      "book" and "article" (default).
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--title "<replaceable>TITLE</replaceable>"</term>
+    <listitem>
+     <para>
+      Title of the document. Default: "DAPS Example"
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+ <refsect1 id="daps_init.moreinfo">
+  <title>See Also</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     &dapsurl;
+    </term>
+    <listitem>
+     <para>DAPS project homepage</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
 </refentry>
