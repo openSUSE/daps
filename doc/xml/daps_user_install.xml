@@ -42,8 +42,7 @@
   <sect2 id="sec.daps.user.req.sw">
    <title>Software Requirements</title>
    &daps-sys-req-sw;
-   &daps-sys-req-sw-continued;
-  </sect2>
+ </sect2>
 
   <sect2 id="sec.daps.user.addon.sw">
    <title>Additional Software</title>
@@ -57,6 +56,7 @@
   <sect2 id="sec.daps.user.inst.osuse">
    <title>Installing &dapsacr; on &osuse;</title>
       &daps-install-osuse;
+      &daps-install-osuse-zypper;
   </sect2>
   
   <sect2 id="sec.daps.user.inst.sle">
@@ -67,106 +67,9 @@
 
   <sect2 id="sec.daps.user.inst.tarball">
    <title>Installing &dapsacr; on Other Linux Distributions</title>
-   <para>
-    For installation on other Linux distributions, the &dapsacr; sources are
-    available as a TAR archive. They can be installed with
-    <literal>configure</literal>, <literal>make</literal>, and <literal>make
-    install</literal>.
+   <para>For the latest status update and installation instructions, refer to    
+    <ulink url="https://github.com/openSUSE/daps/blob/master/INSTALL.adoc"/>.
    </para>
-   <procedure id="pro.daps.user.inst.tarball">
-    <title>Installing the &dapsacr; Sources</title>
-    <para>
-     Before starting the installation, check the &dapsacr;
-     <xref
-        linkend="sec.daps.user.req" xrefstyle="select:title"/>
-     and make sure all required packages and tools are installed.
-    </para>
-    <step>
-     <para>
-      Go to <ulink url="https://github.com/openSUSE/daps/releases"/> and
-      download the &dapsacr; source TAR archive,
-      <filename>daps-<replaceable>version_number</replaceable>.tar.bz2</filename>.
-     </para>
-    </step>
-    <step>
-     <para>
-      Unpack the TAR archive:
-     </para>
-<screen>&prompt.user;<command>tar -xvf daps-<replaceable>version_number</replaceable>.tar.bz2</command></screen>
-    </step>
-    <step id="st.daps.quick.inst.configure">
-     <para>
-      Change to the newly created <filename>daps</filename> subdirectory and
-      start the configure script:
-     </para>
-<screen>&prompt.user;<command>./configure</command></screen>
-     <para>
-      If you want to adjust the &dapsacr; installation paths:
-     </para>
-     <substeps>
-      <step>
-       <para>
-        View the available options with
-       </para>
-<screen>&prompt.user;<command>./configure <option>--help</option></command></screen>
-      </step>
-      <step>
-       <para>
-        Run the configure script with the desired option.
-       </para>
-      </step>
-     </substeps>
-     <para>
-      The script checks your system for any software relevant to &dapsacr;
-      and the &dapsacr; installation process. It also creates a makefile
-      that will be used during installation. Based on the analysis, the
-      script shows a summary that includes the following information:
-     </para>
-     <itemizedlist>
-      <listitem>
-       <para>
-        the &dapsacr; installation paths,
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        an overview of &dapsacr; features that will be available on your
-        system if you install &dapsacr; now, and
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        which software is still missing to enable the remaining &dapsacr;
-        features.
-       </para>
-      </listitem>
-     </itemizedlist>
-    </step>
-    <step>
-     <para>
-      Check the summary carefully.
-     </para>
-    </step>
-    <step>
-     <para>
-      Install missing packages, if necessary. After installing new packages,
-      repeat <xref linkend="st.daps.quick.inst.configure"/> and check the
-      summary again.
-     </para>
-    </step>
-    <step>
-     <para>
-      If everything is prepared according to your wishes, enter:
-     </para>
-<screen>&prompt.user;<command>make</command></screen>
-    </step>
-    <step>
-     <para>
-      Start the installation process with:
-     </para>
-<screen>&prompt.user;<command>sudo make install</command></screen>
-    </step>
-   </procedure>
   </sect2>
  </sect1>
 </chapter>
