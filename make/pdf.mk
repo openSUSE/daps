@@ -12,14 +12,6 @@
 # fs 2012-10-10
 # TODO: --meta stuff not working in PDFs (Stlyesheet Issue??)
 
-
-# includes are set in selector.mk
-# include $(DAPSROOT)/make/setfiles.mk
-# include $(DAPSROOT)/make/profiling.mk
-# include $(DAPSROOT)/make/validate.mk
-# include $(DAPSROOT)/make/images.mk
-# include $(DAPSROOT)/make/meta.mk
-
 # Draft mode can be enabled for HTML, so we need to add the
 # corresponding strings to the resulting filename
 #
@@ -46,7 +38,11 @@ STYLE_ISINDEX  := $(DAPSROOT)/daps-xslt/common/search4index.xsl
 #
 STYLEIMG := $(addsuffix images,$(dir $(patsubst %/,%,$(dir $(STYLEFO)))))
 
+# Draft mode can be enabled for PDFs, so we need to add the
+# corresponding strings to the resulting filename
+#
 DOCNAME := $(DOCNAME)$(DRAFT_STR)$(META_STR)
+
 INDEX   := $(shell $(XSLTPROC) --xinclude $(ROOTSTRING) --stylesheet $(STYLE_ISINDEX) --file $(MAIN) $(XSLTPROCESSOR) 2>/dev/null)
 
 ifeq "$(INDEX)" "Yes"
@@ -107,9 +103,9 @@ pdf: $(PDF_RESULT)
 #--------------
 # Generate fo
 #
-# the link to $(STYLEIMG) is needed in case the paths to callouts,
-# admonition and draft graphics are specified relatively in the
-# stylesheets (which is the case in the DocBook stylesheets)
+# the link to $(STYLEIMG) at the end of this rule is needed in case the
+# paths to callouts, admonition and draft graphics are specified relatively
+# in the stylesheets (which is the case in the DocBook stylesheets)
 #
 $(FOFILE): | $(TMP_DIR)
 ifdef METASTRING
@@ -138,6 +134,12 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 # Generate PDF
 #
 
+#
+# If the FO file contains relative links (as is the case when using the
+# original DocBook stylesheets) the formatter (well, at least FOP) must be
+# run from the directory where the .do file is located. Therefore we do a 
+# cd $(dir $(FOFILE)) before running the formatter.
+
 $(PDF_RESULT): | $(BUILD_DIR) $(RESULT_DIR)
 ifeq "$(GRAYSCALE)" "1"
   $(PDF_RESULT): $(GRAYSCALE_IMAGES)
@@ -148,7 +150,7 @@ $(PDF_RESULT): $(FOFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating PDF from fo-file..."
   endif
-	$(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL)
+	(cd $(dir $(FOFILE)) && $(FORMATTER_CMD) $< $@ $(DEVNULL) $(ERR_DEVNULL))
   ifeq "$(VERBOSITY)" "2"
 	@pdffonts $@ | tail -n +3 | awk '{print $5}' | grep -v "yes" \
 		>& /dev/null && \
