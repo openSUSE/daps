@@ -787,8 +787,15 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="command[option]/option" priority="200">
-      <xsl:apply-templates/>
+  <!--
+    Move command/option and command/replaceable outside of command
+  -->
+  <xsl:template match="command[*]" priority="200">
+    <command>
+      <xsl:value-of select="normalize-space(text()[1])"/>
+    </command>
+    <xsl:text> </xsl:text>
+    <xsl:copy-of select="node()[position() > 1]"/>
   </xsl:template>
   
   <xsl:template match="systemitem[@class='constant']" priority="200">
