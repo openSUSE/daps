@@ -59,6 +59,13 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
 	     --stringparam "draft.mode=$(DRAFT)" \
              --stringparam "styleroot=$(dir $(STYLEIMG))"
 
+ifeq "$(GRAYSCALE)" "1"
+  FOSTRINGS  += --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
+else
+  FOSTRINGS  += --stringparam "img.src.path=$(IMG_GENDIR)/color/"
+endif
+
+
 #----------
 # Settings depending on --grayscale and --cropmarks
 #
