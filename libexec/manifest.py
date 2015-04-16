@@ -70,23 +70,34 @@ def cliparse():
         )
     parser.add_argument("--admon-path", "-A",
         default='',
+        metavar="PATH",
         help="Path to admonitions graphics",
         )
     parser.add_argument("--admon-ext", # "",
         default='.png',
+        metavar="EXT",
         help="Extension for admonition graphics (default %(default)s)",
         )
     parser.add_argument("--callout-path", "-C",
         default='',
+        metavar="PATH",
         help="Path to callout graphics",
         )
     parser.add_argument("--callout-ext", # "",
         default='.png',
+        metavar="EXT",
         help="Extension for callout graphics (default %(default)s)",
         )
     parser.add_argument("--img-src-path", "-I",
         default='',
+        metavar="PATH",
         help="Path to ordinary graphics",
+        )
+
+    parser.add_argument("--preferred-mediaobject-role", "-R",
+        default='html',
+        metavar="ROLE",
+        help="Select which mediaobject to use based on this value of an object's role attribute  (default %(default)s)",
         )
     #parser.add_argument("-p", "--param",
         ## nargs='*',
@@ -155,13 +166,13 @@ def admonitions(xmltree, cli, manifest):
                for i in admons }
     manifest.extend(admonset)
 
-def selectmediaobjectindex(mediaobject, cli):
+def selectmediaobjectindex_xslt(mediaobject, cli):
     """Select corect imageobjects from mediaobject
 
     :param mediaobject: list of mediaobject elements
     :param cli: parsed result from CLI ArgumentParser
 
-    :return: integer number of good
+    :return: integer number of 'good' imagedata
     """
     # Taken from common/common.xsl
     use_role_for_mediaobject=True
@@ -208,21 +219,20 @@ def selectmediaobjectindex(mediaobject, cli):
 
     #
     for count, obj in enumerate(olist):
-        if use_role_for_mediaobject and \
-            preferred_mediaobject_role != '' and \
+        log.debug("  count={}, obj={}".format(count, obj))
+
+        if preferred_mediaobject_role != '' and \
             mediaobject.xpath("*[{}]".format(role)):
             for i, olist in enumerate(mediaobject.iterchildren()):
                 if olist.attrib.get("role") == preferred_mediaobject_role and \
                     olist.xpath("not(preceding-sibling::*[{}])".format(role)):
                         return i
-        elif use_role_for_mediaobject and \
-            mediaobject.xpath("*[@role='{}']".format(stylesheet_result_type)):
+        elif mediaobject.xpath("*[@role='{}']".format(stylesheet_result_type)):
             for i, olist in enumerate(mediaobject.iterchildren()):
                 if olist.attrib.get("role") == stylesheet_result_type and \
                 olist.xpath("not(preceding-sibling::*[@role='{}'])".format(stylesheet_result_type)):
                     return i
-        elif use_role_for_mediaobject and \
-            stylesheet.result.type == 'xhtml' and \
+        elif stylesheet_result_type == 'xhtml' and \
             mediaobject.xpath("*[@role='html']"):
                 if olist.attrib.get("role") == 'html' and \
                     olist.xpath("not(preceding-sibling::*[@role='html']"):
@@ -235,6 +245,44 @@ def selectmediaobjectindex(mediaobject, cli):
                     return count
                 else:
                     continue
+    return 0 # this shouldn't happen...
+
+
+def selectmediaobjectindex(mediaobject, cli):
+    """Select corect imageobjects from mediaobject
+
+    :param mediaobject: list of mediaobject elements
+    :param cli: parsed result from CLI ArgumentParser
+
+    :return: integer number of 'good' imagedata
+    """
+    preferred_mediaobject_role=cli.preferred_mediaobject_role
+    role="@role='{}'".format(preferred_mediaobject_role)
+
+    mchildren = mediaobject.getchildren()
+
+    ns = "{{{}}}".format(nsmap['d'])
+    nsl = len(ns)
+    # This is the default value:
+    index = 0
+
+    # Make it also compatible with DocBook5
+    olist = "imageobject|imageobjectco|videoobject|audioobject|textobject"
+    olist=olist.split("|")
+    olist.extend([ "d:"+i for i in olist ])
+    olist = "|".join(olist)
+
+    for count, obj in enumerate(mchildren):
+        tag=obj.tag[nsl:]
+        role=obj.attrib.get("role")
+        log.debug("  count={}, obj={} in {}".format(count, obj, obj.sourceline))
+        log.debug("  tag={!r}".format(tag))
+        log.debug("  role={!r}".format(role))
+        if preferred_mediaobject_role == role:
+            index = count
+            break
+
+    return index
 
 def imagedata(xmltree, cli, manifest):
     """Appends list of filenames for ordinary graphics
@@ -251,11 +299,15 @@ def imagedata(xmltree, cli, manifest):
                          namespaces=nsmap)
 
     for media in mediaobjects:
-        # idx = selectmediaobjectindex(mediaobj, cli)
-        # img = mediaobj.xpath("*[position() = {}]".format(idx))
-        for img in media.xpath("*/imagedata|*/d:imagedata", namespaces=nsmap):
-            print("{}{}".format(img_src_path,
-                                img.attrib.get("fileref")))
+        idx = selectmediaobjectindex(media, cli)
+        img = media.xpath("*[position() = {}]/*".format(idx))[0]
+        log.debug("=> got index={}".format(idx))
+        log.debug("=> got obj={}".format(img))
+        print("{}{}".format(img_src_path,
+                            img.attrib.get("fileref")))
+        #for img in media.xpath("*/imagedata|*/d:imagedata", namespaces=nsmap):
+        #    print("{}{}".format(img_src_path,
+        #                        img.attrib.get("fileref")))
 
 
 def main():
@@ -278,10 +330,11 @@ def main():
             continue
 
     # manifest=list(set(manifest))
+    log.debug("** Start creating manifest...")
     for i in sorted(manifest):
         print(i)
 
-    log.debug("Finished!")
+    log.debug("** End creating manifest.")
 
 if __name__ == "__main__":
     main()
