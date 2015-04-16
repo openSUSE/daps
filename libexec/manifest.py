@@ -151,6 +151,17 @@ def admonitions(xmltree, cli, manifest):
                for i in admons }
     manifest.extend(admonset)
 
+def imagedata(xmltree, cli, manifest):
+    """Appends list of filenames for ordinary graphics
+
+    :param xmltree: `etree.parse` instance
+    :param cli:      instance of CLI argument parsing
+    :param manifest: result list to append
+
+    :return: None, but append everything to `manifest`
+    """
+    log.info("imagedata")
+
 def main():
     cli = cliparse()
     xmlparser = defaultxmlparser()
@@ -161,8 +172,10 @@ def main():
         try:
             xmltree = etree.parse(xmlfile, xmlparser)
             xmltree.xinclude()
-            callouts(xmltree, cli, manifest)
-            admonitions(xmltree, cli, manifest)
+
+            # Iterate through all interesting dependencies
+            for func in (callouts, admonitions, imagedata):
+                func(xmltree, cli, manifest)
 
         except etree.XMLSyntaxError as err:
             log.error(err)
