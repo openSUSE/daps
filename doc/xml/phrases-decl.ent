@@ -650,7 +650,16 @@ IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
 make: *** [validate] Error 3</screen>
-</example>'>
+</example>
+<note><title>Validating is Done in Build Directory</title>
+<para>Validation is always done in the <filename>build</filename>
+directory and in the profiled sources, as can be seen by
+ the path above
+ <filename>/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml </filename>.
+ (For information about profiling, refer to the &dapsuser;).
+ However,  you need to fix the validation error in the sources located in your
+ <filename>xml</filename> directory. </para>
+</note>'>
 
 <!ENTITY daps-cmd-basic-syntax
 '<screen>&prompt.user;&dapscmd; [--global-options] subcommand [--command-options] [arguments]</screen>'>
