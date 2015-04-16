@@ -33,7 +33,7 @@ export _BOOKNAME=$(basename $_DCFILE)
 export _BOOKNAME="${_BOOKNAME#DC-*}"
 
 # Stylesheet directories
-export _DB_STYLES=$(readlink -e "/usr/share/xml/docbook/stylesheet/nwalsh/current")
+export _DB_STYLES="/usr/share/xml/docbook/stylesheet/nwalsh/current"
 export _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
 export _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
 
