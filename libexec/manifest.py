@@ -6,7 +6,6 @@ __license__="GPL 2 or GPL 3"
 __doc__="""Creates a list of dependent files
 """
 
-
 import sys
 import logging
 
@@ -25,6 +24,7 @@ ch.setFormatter(frmt)
 log.setLevel(logging.DEBUG)
 log.addHandler(ch)
 
+# Our default mappings of namespace prefixes to namespaces
 nsmap={ 'd': 'http://docbook.org/ns/docbook',
        'xl': 'http://www.w3.org/1999/xlink',
        'xi': 'http://www.w3.org/2001/XInclude',
@@ -33,6 +33,9 @@ nsmap={ 'd': 'http://docbook.org/ns/docbook',
 def defaultxmlparser(**kwargs):
     """Return a default parser
     (encoding='UTF-8', resolve_entities=True, load_dtd=True)
+
+    :param kwargs: dictionary of values for `etree.XMLParser`
+    :return: instance of `etree.XMLParser` objecst
     """
 
     # Set default values, otherwise entity resolution doesn't work:
@@ -57,6 +60,7 @@ def defaultxmlparser(**kwargs):
     return etree.XMLParser(**kwargs)
 
 def cliparse():
+    """Return result of ArgumentParser"""
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
 
@@ -101,6 +105,14 @@ def cliparse():
 
 
 def callouts(xmltree, cli, manifest):
+    """Appends list of filenames for callout graphics
+
+    :param xmltree: `etree.parse` instance
+    :param cli:      instance of CLI argument parsing
+    :param manifest: result list to append
+
+    :return: None, but append everything to `manifest`
+    """
     log.info("callouts")
     callout_graphics_path=cli.callout_path
     callout_graphics_extension=cli.callout_ext
@@ -113,6 +125,14 @@ def callouts(xmltree, cli, manifest):
                                         callout_graphics_extension))
 
 def admonitions(xmltree, cli, manifest):
+    """Appends list of filenames for admonition graphics
+
+    :param xmltree: `etree.parse` instance
+    :param cli:      instance of CLI argument parsing
+    :param manifest: result list to append
+
+    :return: None, but append everything to `manifest`
+    """
     log.info("admonitions")
     admon_graphics_path=cli.admon_path
     admon_graphics_extension=cli.admon_ext
