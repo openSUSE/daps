@@ -80,7 +80,6 @@ EPUB_OEBPS   := $(EPUB_TMPDIR)/OEBPS
 EPUB_STATIC  := $(EPUB_OEBPS)/static
 EPUB_BIGFILE := $(TMP_DIR)/epub_$(DOCNAME).xml
 
-
 # inline images
 #
 EPUB_INLINE_DIR := $(EPUB_OEBPS)
@@ -90,7 +89,9 @@ EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(ONLINE_IM
 #
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 
-EPUBSTRINGS := --stringparam "img.src.path=\"\""
+EPUBSTRINGS := --stringparam "img.src.path=\"\"" \
+		--stringparam "epub.oebps.dir=OEBPS/" \
+		--stringparam "epub.metainf.dir=META-INF/"
 
 ifeq "$(IS_STATIC)" "static"
   EPUBSTRINGS += --stringparam "callout.graphics.path=static/images/" \
@@ -101,16 +102,14 @@ else
 endif
 
 ifeq "$(EPUB3)" "1"
-  EPUBSTRINGS += --stringparam "base.dir=$(EPUB_TMPDIR)/" \
-		 --param "admon.graphics=1"
-  EPUB_CONTENT_OPF := $(EPUB_OEBPS)/package.opf
+  EPUB_CONTENT_FILE := OEBPS/package.opf
+  EPUBSTRINGS       += --stringparam "base.dir=\"\""
 else
-  EPUB_CONTENT_OPF := $(EPUB_OEBPS)/content.opf
-  EPUBSTRINGS      += --stringparam "base.dir=$(EPUB_OEBPS)/" \
-		      --stringparam "epub.oebps.dir=$(EPUB_OEBPS)/" \
-	              --stringparam "epub.metainf.dir=$(EPUB_TMPDIR)/META-INF/"
+  EPUB_CONTENT_FILE := OEBPS/content.opf
+  EPUBSTRINGS       += --stringparam "base.dir=OEBPS/"
 endif
 
+EPUB_CONTENT_OPF := $(EPUB_TMPDIR)/$(EPUB_CONTENT_FILE)
 
 ifneq "$(strip $(EPUB_CSS))" ""
   EPUBSTRINGS  += --stringparam "html.stylesheet=$(notdir $(EPUB_CSS))"
@@ -160,8 +159,8 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
-	$(XSLTPROC) $(EPUBSTRINGS) --stylesheet $(STYLEEPUB) \
-	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL) 
+	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) --stylesheet $(STYLEEPUB) \
+	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
 
 #---------------
 # Inline Graphics
@@ -193,18 +192,16 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating EPUB"
   endif
-	cp -rs $(STYLEIMG)/* $(EPUB_STATIC)
-  ifeq "$(EPUB3)" "1"
+	cp -rs $(STYLEIMG)/* --remove-destination $(EPUB_STATIC)
+  ifneq "$(strip $(EPUB_CSS))" ""
+	cp -s --remove-destination $(EPUB_CSS) $(EPUB_OEBPS)
+  endif
+  ifeq "$(IS_STATIC)" "static"
 	(cd $(EPUB_TMPDIR); zip -r -X $@ mimetype META-INF OEBPS $(DEVNULL))
   else
-    ifneq "$(strip $(EPUB_CSS))" ""
-	cp -s $(EPUB_CSS) $(EPUB_OEBPS)
-    endif
-	# Fix needed due to bug? in DocBook ePUB stylesheets (not epub3)
-	sed -i 's:\(rootfile full-path="\)$(EPUB_TMPDIR)/\(OEBPS/content.opf"\):\1\2:' $(EPUB_TMPDIR)/META-INF/container.xml
 	(cd $(EPUB_TMPDIR); \
-	  zip -r -X $@ mimetype META-INF OEBPS/content.opf \
-	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_OEBPS)/content.opf)) $(DEVNULL))
+	  zip -r -X $@ mimetype META-INF $(EPUB_CONTENT_FILE) \
+	   $(addprefix OEBPS/,$(shell xsltproc $(DAPSROOT)/daps-xslt/epub/get_manifest.xsl $(EPUB_CONTENT_OPF))) $(DEVNULL))
   endif
 
 #--------------
@@ -215,7 +212,7 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
 .PHONY: epub-check
 epub-check: $(EPUB_RESULT)
 	@ccecho "result" "#################### BEGIN epubcheck report ####################"
-	epubcheck $< || true
+	epubcheck $< 2>&1 || true
 	@ccecho "result" "#################### END epubcheck report ####################"
 #--------------
 # mobi (Amazon Kindle)
