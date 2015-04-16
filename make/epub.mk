@@ -116,12 +116,16 @@ ifneq "$(strip $(EPUB_CSS))" ""
   EPUB_CSSFILE := $(EPUB_OEBPS)/$(notdir $(EPUB_CSS))
 endif
 
-
-
 #--------------
 # EPUB
 #
+# In order not to pack files that do not belong to the current ePUB build,
+# we need to clear $(EPUB_TMPDIR) first. In order to avoid unwanted results
+# with an unset $(EPUB_TMPDIR), we are adding a security check before
+# deleting
+#
 .PHONY: epub
+epub: $(shell if [[ $$(expr match "$(EPUB_TMPDIR)" "$(TMP_DIR)/epub_") -gt 0 && -d "$(EPUB_TMPDIR)" ]]; then rm -r "$(EPUB_TMPDIR)"; fi 2>&1 >/dev/null)
 epub: list-images-missing
 ifeq "$(EPUBCHECK)" "yes"
   epub: epub-check
