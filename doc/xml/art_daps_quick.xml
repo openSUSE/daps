@@ -129,16 +129,11 @@
    use the &dapsacr; initialization script <command>daps-init</command>. For
    instructions how to do so, refer to <xref linkend="pro.daps.init"/>. The
    script automatically creates the
-   <xref linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/>
-   and
    <xref linkend="sec.daps.quick.basics.dirstruct" xrefstyle="select:title"/>
+   and
+   <xref linkend="sec.daps.quick.basics.files" xrefstyle="select:title"/>
    that you need to get started with &dapsacr;.
   </para>
-
-  <sect2 id="sec.daps.quick.basics.files">
-   <title>Key Files</title>
-   &daps-key-files;
-  </sect2>
 
   <sect2 id="sec.daps.quick.basics.dirstruct">
    <title>Directory Structure</title>
@@ -147,7 +142,7 @@
 <!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and
   include it multiple times (callout IDs!)-->
    <para>
-    For &dapsacr; to work out of the box, your XML files and images must be
+   &dapsacr; requires your XML files and images to be
     organized in a specific structure within your documentation directory.
     <xref linkend="ex.daps.quick.dir.doc"/> shows the required structure
     including the key files for a &dapsacr; documentation project. You can
@@ -176,12 +171,13 @@
     <callout arearefs="co.quick.docdir.base">
      <para>
       <quote>Working directory</quote> for the respective documentation
-      project.
+      project (in the following also called <literal>project
+       directory</literal>).
      </para>
     </callout>
     <callout arearefs="co.quick.docdir.dc">
      <para>
-      &dc; file defining the documentation project.
+      &dc; file or files defining the documentation project (books, articles).
 <!--For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
     </callout>
@@ -211,6 +207,12 @@
     </callout>
    </calloutlist>
   </sect2>
+  
+  <sect2 id="sec.daps.quick.basics.files">
+   <title>Key Files</title>
+   &daps-key-files;
+  </sect2>
+  
  </sect1>
  <sect1 id="sec.daps.quick.init">
   <title>A Documentation Project From Scratch</title>
