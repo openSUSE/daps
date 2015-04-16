@@ -155,6 +155,87 @@ def admonitions(xmltree, cli, manifest):
                for i in admons }
     manifest.extend(admonset)
 
+def selectmediaobjectindex(mediaobject, cli):
+    """Select corect imageobjects from mediaobject
+
+    :param mediaobject: list of mediaobject elements
+    :param cli: parsed result from CLI ArgumentParser
+
+    :return: integer number of good
+    """
+    # Taken from common/common.xsl
+    use_role_for_mediaobject=True
+    preferred_mediaobject_role='html'
+    stylesheet_result_type='html'
+    role="@role='{}'".format(preferred_mediaobject_role)
+    olist = mediaobject.getchildren()
+    ns = "{{{}}}".format(nsmap['d'])
+    nsl = len(ns)
+
+    def is_acceptable_mediaobject(obj):
+        return True # TODO
+
+    def useobject(obj):
+        parent=obj.getparent()
+        tag = obj.tag[nsl:]
+        parenttag = parent.tag[nsl:]
+        if tag == 'videobject':
+            return True
+        elif tag == 'audioobject':
+            return True
+        elif tag == 'textobject' and (
+              parenttag == 'imageobject' or
+              parenttag == 'audioobject' or
+              parenttag == 'videooobject'):
+            return False
+        elif tag == 'textobject' and \
+            obj.xpath("phrase|d:phrase", namespaces=nsmap):
+            return False
+        elif tag == 'textobject' and \
+            obj.xpath("ancestor::equation|ancestor::d:equation",
+                      namespaces=nsmap):
+            return False
+        elif obj.getprevious() is None and obj.getnext() is None:
+            # Use this object if we are the only one
+            return True
+        else:
+            #
+            if tag == 'imageobjectco':
+                return is_acceptable_mediaobject(obj.xpath("imageobject|d:imageobject",
+                                                           namespaces=nsmap))
+            else:
+                return is_acceptable_mediaobject(obj)
+
+    #
+    for count, obj in enumerate(olist):
+        if use_role_for_mediaobject and \
+            preferred_mediaobject_role != '' and \
+            mediaobject.xpath("*[{}]".format(role)):
+            for i, olist in enumerate(mediaobject.iterchildren()):
+                if olist.attrib.get("role") == preferred_mediaobject_role and \
+                    olist.xpath("not(preceding-sibling::*[{}])".format(role)):
+                        return i
+        elif use_role_for_mediaobject and \
+            mediaobject.xpath("*[@role='{}']".format(stylesheet_result_type)):
+            for i, olist in enumerate(mediaobject.iterchildren()):
+                if olist.attrib.get("role") == stylesheet_result_type and \
+                olist.xpath("not(preceding-sibling::*[@role='{}'])".format(stylesheet_result_type)):
+                    return i
+        elif use_role_for_mediaobject and \
+            stylesheet.result.type == 'xhtml' and \
+            mediaobject.xpath("*[@role='html']"):
+                if olist.attrib.get("role") == 'html' and \
+                    olist.xpath("not(preceding-sibling::*[@role='html']"):
+                    return i
+        elif len(olist) == 1 and count == 0:
+            return count
+        else:
+            if count >= len(olist):
+                if useobject(obj):
+                    return count
+                else:
+                    continue
+
 def imagedata(xmltree, cli, manifest):
     """Appends list of filenames for ordinary graphics
 
@@ -165,6 +246,17 @@ def imagedata(xmltree, cli, manifest):
     :return: None, but append everything to `manifest`
     """
     log.info("imagedata")
+    img_src_path=cli.img_src_path
+    mediaobjects = xmltree.xpath("""//d:mediaobject|//mediaobject""",
+                         namespaces=nsmap)
+
+    for media in mediaobjects:
+        # idx = selectmediaobjectindex(mediaobj, cli)
+        # img = mediaobj.xpath("*[position() = {}]".format(idx))
+        for img in media.xpath("*/imagedata|*/d:imagedata", namespaces=nsmap):
+            print("{}{}".format(img_src_path,
+                                img.attrib.get("fileref")))
+
 
 def main():
     cli = cliparse()
