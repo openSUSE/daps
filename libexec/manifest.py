@@ -84,6 +84,10 @@ def cliparse():
         default='.png',
         help="Extension for callout graphics (default %(default)s)",
         )
+    parser.add_argument("--img-src-path", "-I",
+        default='',
+        help="Path to ordinary graphics",
+        )
     #parser.add_argument("-p", "--param",
         ## nargs='*',
         #action="append",
