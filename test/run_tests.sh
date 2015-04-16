@@ -36,6 +36,7 @@ export _BOOKNAME="${_BOOKNAME#DC-*}"
 export _DB_STYLES="/usr/share/xml/docbook/stylesheet/nwalsh/current"
 export _STANDARD_STYLES="${_DOC_DIR}/styles/standard"
 export _STATIC_STYLES="${_DOC_DIR}/styles/statdir"
+export _ALT_STATIC_STYLES="${_DOC_DIR}/styles/alt_statdir/"
 
 # arrays cannot be exported in bash (yet) ;-((
 export _XML_FILES="appendix.xml part_blocks.xml part_inlines.xml part_profiling.xml"
