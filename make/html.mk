@@ -177,9 +177,12 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 #--------------
 # HTML
 #
+# In order to avoid unwanted results when deleting $(HTML_DIR), we are adding
+# a security check before deleting 
+#
 .PHONY: html
 ifeq "$(CLEAN_DIR)" "1"
-  html: $(shell rm -rf $(HTML_DIR))
+  html: $(shell if [[ $$(expr match "$(HTML_DIR)" "$(RESULT_DIR)") -gt 0 && -d "$(HTML_DIR)" ]]; then rm -r "$(HTML_DIR)"; fi 2>&1 >/dev/null)
 endif
 html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
