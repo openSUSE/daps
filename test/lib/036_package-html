@@ -159,33 +159,37 @@ function test_packagehtmlClean_and_Helpfiles () {
 #--------------------------------
 # * Does the --set-date option work correctly?
 #
-function test_packagehtmlSetDate () {
-
-    local _DATE _PHTML_BUILD_PATH _STYLEROOT
-
-    _DATE="Jun 01 2013"
-    # the DocBook stylesheets do not print a publication date, therefore
-    # using the SUSE stylesheets
-    ##
-    _STYLEROOT="../suse/xslt2013"
-
-    clean_build_dir results
-
-    $_DAPSEXEC -v0 -d $_DCFILE --styleroot "$_STYLEROOT" package-html --set-date=\"$_DATE\" >/dev/null
-    assertTrue \
-	" └─ Building package-html with --set-date failed " \
-	"$?"
-
-    # clean tmp and unpack new archive
-    [[ -d ${_PHTML_TEMPDIR} ]] && rm -rf "${PHTML_TEMPDIR}" && mkdir -p "${_PHTML_TEMPDIR}"
-    (cd $_PHTML_TEMPDIR && tar xfj $_PHTML_BUILD_RESULT --strip-components 1)
-
-    grep -q "$_DATE" ${_PHTML_TEMPDIR}/index.html 2>/dev/null
-
-    assertTrue \
-	" └─ The date set with --set-date does not appear in index.html." \
-	"$?"
-}
+# The original DocBook stylesheets ignore the date in HTML outputs, so there is
+# currently no way to properly test, since the SUSE stylesheets are no longer
+# part of the repo
+#
+#function test_packagehtmlSetDate () {
+#
+#    local _DATE _PHTML_BUILD_PATH _STYLEROOT
+#
+#    _DATE="Jun 01 2013"
+#    # the DocBook stylesheets do not print a publication date, therefore
+#    # using the SUSE stylesheets
+#    ##
+#    _STYLEROOT="../suse/xslt2013"
+#    clean_build_dir results
+#
+#    $_DAPSEXEC -v0 -d $_DCFILE --styleroot "$_STYLEROOT" package-html --set-date=\"$_DATE\" >/dev/null
+#    assertTrue \
+#	" └─ Building package-html with --set-date failed " \
+#	"$?"
+#
+#    # clean tmp and unpack new archive
+#    [[ -d ${_PHTML_TEMPDIR} ]] && rm -rf "${PHTML_TEMPDIR}" && mkdir -p "${_PHTML_TEMPDIR}"
+#    (cd $_PHTML_TEMPDIR && tar xfj $_PHTML_BUILD_RESULT --strip-components 1)
+#
+#    grep -q "$_DATE" ${_PHTML_TEMPDIR}/index.html 2>/dev/null
+#
+#    assertTrue \
+#	" └─ The date set with --set-date does not appear in index.html." \
+#	"$?"
+#}
+#
 
 #--------------------------------
 # * Is the --name option correctly implemented?

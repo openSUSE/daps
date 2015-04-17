@@ -21,8 +21,8 @@
 # * Does the --css switch work?
 # * Does the --html5 switch produce XHTML5 ?
 # * Does the --clean switch work correctly?
-# * Does the --static option work correctly?
-# * Can a --static and a regular build be used in turns?
+# * Does the --nostatic option work correctly?
+# * Can a --nostatic and a regular build be used in turns?
 # * Is the --name option correctly implemented?
 # * Does the --rootid option work correctly?
 # * Are parameters passed with --xsltparam correctly processed?
@@ -103,21 +103,21 @@ function test_htmlImages () {
     declare -a _IMAGES_BUILD
     declare -a _IMAGES_EXPECTED
 
-    # images/ and static/ directories should only contain links
+    # images/ and static/ directories should not contain links
     #
-    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
+    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type l)
     assertNull \
-	' └─ image/ and static/ directories contain regular files' \
+	' └─ image/ and static/ directories contain links (should only be regular files)' \
 	"$_LINKCHECK"
 
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' 2>/dev/null | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://%%g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
 	readlink -e $_IMG >/dev/null 2>&1
-	[ $? != 0 ] && _MISSING="$_MISSING $_IMG"
+	[[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
     done
     assertNull \
 	" └─ Image links in the HTML are dead: $_MISSING" \
@@ -212,14 +212,18 @@ function test_htmlRemarksDraftMeta () {
 
    # checking META
    #
-   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
-   assertTrue \
-       ' └─ Param for META is not correctly specified.' \
-       "$?"
-   expr "$_HTMLDIR_NAME_PATH" : '.*\(_meta\)' >/dev/null 2>&1
-   assertTrue \
-       ' └─ String "_meta" does not appear in the HTML-dir-name' \
-       "$?"
+   #
+   # fs 2015-04-16: Commenting since this is SVN dependent and we no longer
+   # use SVN
+
+#   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
+#   assertTrue \
+#       ' └─ Param for META is not correctly specified.' \
+#       "$?"
+#   expr "$_HTMLDIR_NAME_PATH" : '.*\(_meta\)' >/dev/null 2>&1
+#   assertTrue \
+#       ' └─ String "_meta" does not appear in the HTML-dir-name' \
+#       "$?"
 }
 
 #--------------------------------
@@ -298,8 +302,8 @@ function test_htmlCSS_HTML5 () {
 }
 
 #--------------------------------
-# * Does the --static option work correctly?
-# * Can a --static and a regular build be used in turns?
+# * Does the --nostatic option work correctly?
+# * Can a --nostatic and a regular build be used in turns?
 #
 function test_htmlStatic () {
     local _CSS_BUILD _CSS_FILE _CSS_PATH _IMG _IMAGES_HTML _LINKCHECK
@@ -311,25 +315,25 @@ function test_htmlStatic () {
 
     clean_build_dir results
 
-    $_DAPSEXEC -v0 -d $_DCFILE html --static --css $_CSS_PATH >/dev/null 2>&1
+    $_DAPSEXEC -v0 -d $_DCFILE html --nostatic --css $_CSS_PATH >/dev/null 2>&1
     assertTrue \
         ' └─ The html command itself failed' \
         "$?"
     # images/ and static/ directories should only contain regular files
     #
-    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type l)
+    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
     assertNull \
-	' └─ image/ and static/ directories contain regular files' \
+	' └─ image/ and static/ directories contain regular files (should only contain links)' \
 	"$_LINKCHECK"
         #
     # Check if image links in the HTML point to existing files
     # get list of images using lynx
     #
-    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's/^\s*[0-9]*\.\s*file:\/\/localhost//g' 2>/dev/null | sort -u)
+    _IMAGES_HTML=$(lynx -dump -listonly -image-links ${_HTMLDIR_NAME_PATH}/*.html 2>/dev/null | grep "${_HTMLDIR_NAME_PATH}/images/" 2>/dev/null | sed 's%^\s*[0-9]*\.\s*file://%%g' 2>/dev/null | sort -u)
 
     for _IMG in $_IMAGES_HTML; do
 	readlink -e $_IMG >/dev/null 2>&1
-	[ $? != 0 ] && _MISSING="$_MISSING $_IMG"
+	[[ $? = 0 ]] || _MISSING="$_MISSING $_IMG"
     done
     assertNull \
 	" └─ Image links in the HTML are dead: $_MISSING" \
@@ -350,22 +354,22 @@ function test_htmlStatic () {
 	" └─ The build CSS file differs from the one provided with --css." \
 	"$?"
 
-    # Are the static files correctly overwritten by a regular build?
+    # Are the nostatic files correctly overwritten by a regular build?
     #
     $_DAPSEXEC -v0 -d $_DCFILE html --css $_CSS_PATH >/dev/null 2>&1
 
-    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
-    assertNull \
-	' └─ image/ and static/ directories are not correctly verwritten after a --static run' \
-	"$_LINKCHECK"
-
-    # Are the linked files correctly overwritten by a --static build?
-    #
-    $_DAPSEXEC -v0 -d $_DCFILE html --static --css $_CSS_PATH >/dev/null 2>&1
-
     _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type l)
     assertNull \
-	' └─ image/ and static/ directories are not correctly verwritten after a regular run' \
+	' └─ image/ and static/ directories still contain links after a regular run' \
+	"$_LINKCHECK"
+
+    # Are the linked files correctly overwritten by a --nostatic build?
+    #
+    $_DAPSEXEC -v0 -d $_DCFILE html --nostatic --css $_CSS_PATH >/dev/null 2>&1
+
+    _LINKCHECK=$(find ${_HTMLDIR_NAME_PATH}/images/ ${_HTMLDIR_NAME_PATH}/static/ -type f)
+    assertNull \
+	' └─ image/ and static/ directories still contain regular files after a --nostatic run' \
 	"$_LINKCHECK"
 
 }
@@ -406,11 +410,11 @@ function test_htmlRootidXsltparam () {
     _ROOTID=appendix
     _FILECOUNT_EXPECTED=1
     # will generate HTML files with .xhtml extension
-    _XSLTPARAM="--param \\\"spacing.paras=1\\\""
+    _XSLTPARAM="'--param spacing.paras=1'"
 
     clean_build_dir results
 
-    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
+    _HTML_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug html --rootid $_ROOTID --xsltparam="$_XSLTPARAM" 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a html document with --rootid and --xsltparam failed ' \
        "$?"
@@ -466,7 +470,7 @@ function test_htmlStylerootStatdir () {
     _CSS_FILE="style.css"
     _STANDARD_CSS="${_STANDARD_STYLES}/xhtml/$_CSS_FILE"
     _STATIC_DIR="${_STATIC_STYLES}/static"
-    _ALT_STATIC_DIR="${_STATIC_STYLES}/alt_static"
+    _ALT_STATIC_DIR="${_ALT_STATIC_STYLES}/static"
 
     clean_build_dir results
 
@@ -524,7 +528,7 @@ function test_htmlStylerootStatdir () {
     #
     $_DAPSEXEC -v0 -d $_DCFILE --styleroot ${_STATIC_STYLES} html --statdir=$_ALT_STATIC_DIR >/dev/null 2>&1
 
-    diff -qr ${_HTMLDIR_NAME_PATH}/static ${_ALT_STATIC_DIR} >/dev/null 2>&1
+    diff -qr ${_HTMLDIR_NAME_PATH}static ${_ALT_STATIC_DIR} >/dev/null 2>&1
     assertTrue \
 	" └─ The build static directory differs from the one provided with --statdir." \
 	"$?"
