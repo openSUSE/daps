@@ -583,7 +583,7 @@
           <xsl:value-of select="$date.string"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$string"/>
+          <xsl:value-of select="$date"/>
         </xsl:otherwise>
       </xsl:choose>
     </date>
