@@ -85,7 +85,7 @@
 <xsl:param name="img.src.path"/>
 <xsl:param name="preferred.mediaobject.role">html</xsl:param>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
-<xsl:param name="use.pi4date" select="0"/>
+<xsl:param name="use.pi4date" select="1"/>
 <xsl:param name="use.svg" select="1"/>
 <xsl:param name="graphic.default.extension"/>
 <xsl:param name="stylesheet.result.type" select="'xhtml'"/>
@@ -458,8 +458,7 @@
     </xsl:choose>
 </xsl:template>
   
-
-<xsl:template match="bookinfo">
+<xsl:template match="articleinfo|bookinfo|setinfo">
   <xsl:copy>
     <xsl:choose>
       <xsl:when test="not(date)">
