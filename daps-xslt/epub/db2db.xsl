@@ -505,6 +505,14 @@
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:message>*** date:
+        normalized='<xsl:value-of select="$normalized"/>'
+           date.ok='<xsl:value-of select="$date.ok"/>'
+            string='<xsl:value-of select="$string"/>'
+    date:date-time='<xsl:value-of select="function-available('date:date-time')"/>'
+     date:dateTime='<xsl:value-of select="function-available('date:dateTime')"/>'
+  </xsl:message>
+
     <date>
       <xsl:choose>
         <xsl:when test="$date.ok = 0">
