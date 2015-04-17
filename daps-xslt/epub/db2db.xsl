@@ -73,6 +73,7 @@
 
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:import href="../common/copy.xsl"/>
+  <xsl:import href="../common/xpath.location.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
   <xsl:strip-space elements="*"/>
@@ -506,6 +507,8 @@
   </xsl:variable>
 
   <xsl:message>*** date:
+              node='<xsl:value-of select="local-name()"/>'
+             xpath='<xsl:call-template name="xpath.location"/>'
         normalized='<xsl:value-of select="$normalized"/>'
            date.ok='<xsl:value-of select="$date.ok"/>'
             string='<xsl:value-of select="$string"/>'
