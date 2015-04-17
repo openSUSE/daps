@@ -488,7 +488,6 @@
 <xsl:template name="date">
   <xsl:param name="node" select="."/>
   <xsl:param name="recreate" select="0"/>
-  <xsl:param name="string" select="''"/>
   <xsl:variable name="contents" select="normalize-space(.)"/>
   <xsl:variable name="pi.format">
     <xsl:call-template name="pi-attribute">
@@ -539,7 +538,7 @@
   <xsl:message>*** date:
               node='<xsl:value-of select="local-name($node)"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
-            string='<xsl:value-of select="$string"/>'
+            string='<xsl:value-of select="$node"/>'
          pi.format='<xsl:value-of select="$pi.format"/>'
       pi.format.ok='<xsl:value-of select="$pi.format.ok"/>'
                 pi=<xsl:value-of select="count($node/processing-instruction())"/>
@@ -583,7 +582,7 @@
           <xsl:value-of select="$date.string"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="$date"/>
+          <xsl:value-of select="$node"/>
         </xsl:otherwise>
       </xsl:choose>
     </date>
