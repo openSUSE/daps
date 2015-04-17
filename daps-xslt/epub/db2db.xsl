@@ -531,7 +531,7 @@
       </xsl:when>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="date-string"
+  <xsl:variable name="date.string"
     select="concat(date:year($date), '-',
                    date:month-in-year($date), '-',
                    date:day-in-month($date))"/>
@@ -546,7 +546,7 @@
      string-length=<xsl:value-of select="string-length($normalized) = 10"/>
        use.pi4date='<xsl:value-of select="$use.pi4date"/>'
           recreate='<xsl:value-of select="$recreate"/>'
-      current date='<xsl:value-of select="$date-string"/>'
+      current date='<xsl:value-of select="$date.string"/>'
         normalized='<xsl:value-of select="$normalized"/>'
            date.ok='<xsl:value-of select="$date.ok"/>'
     date:date-time='<xsl:value-of select="function-available('date:date-time')"/>'
@@ -568,7 +568,7 @@
               </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="$date-string"/>
+              <xsl:value-of select="$date.string"/>
             </xsl:otherwise>
           </xsl:choose>
           
@@ -580,7 +580,7 @@
             <xsl:text>YYYY, YYYY-MM, or YYYY-MM-DD.</xsl:text>
             <xsl:text> Using current date.</xsl:text>
           </xsl:message>
-          <xsl:value-of select="$date-string"/>
+          <xsl:value-of select="$date.string"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$string"/>
