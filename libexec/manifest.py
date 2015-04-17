@@ -6,6 +6,7 @@ __license__="GPL 2 or GPL 3"
 __doc__="""Creates a list of dependent files
 """
 
+import re
 import sys
 import logging
 
@@ -118,6 +119,28 @@ def cliparse():
     log.setLevel(loglevel.get(args.verbose, logging.DEBUG))
     return args
 
+#
+def localname(element):
+    """Returns the local name part of an lxml element node or string
+       The element name is taken from the `.tag` property
+       Works with or without a namespace
+
+    >>> localname('{http://docbook.org/ns/docbook}imageobject')
+    'imageobject'
+    >>> localname('foo')
+    'foo'
+
+    :param element: instance of lxml.etree._Element
+    :return:  string of local name
+    """
+
+    if isinstance(element, etree._Element):
+        tag = element.tag
+    else:
+        tag = element
+    d=re.match("(\{(?P<ns>.*)\})?(?P<localname>\w+)", tag)
+    assert d, "Expected a successful match"
+    return d["localname"]
 
 def callouts(xmltree, cli, manifest):
     """Appends list of filenames for callout graphics
@@ -157,11 +180,9 @@ def admonitions(xmltree, cli, manifest):
                             //d:tip|//tip|
                             //d:warning|//warning""",
                            namespaces=nsmap)
-    ns = "{{{}}}".format(nsmap['d'])
-    nsl = len(ns)
 
     admonset={ "{}{}{}".format(admon_graphics_path,
-                               i.tag[nsl:],
+                               localname(i.tag),
                                admon_graphics_extension)
                for i in admons }
     manifest.extend(admonset)
@@ -180,16 +201,15 @@ def selectmediaobjectindex_xslt(mediaobject, cli):
     stylesheet_result_type='html'
     role="@role='{}'".format(preferred_mediaobject_role)
     olist = mediaobject.getchildren()
-    ns = "{{{}}}".format(nsmap['d'])
-    nsl = len(ns)
+
 
     def is_acceptable_mediaobject(obj):
         return True # TODO
 
     def useobject(obj):
         parent=obj.getparent()
-        tag = obj.tag[nsl:]
-        parenttag = parent.tag[nsl:]
+        tag = localname(obj.tag)
+        parenttag = localname(parent.tag)
         if tag == 'videobject':
             return True
         elif tag == 'audioobject':
@@ -273,7 +293,7 @@ def selectmediaobjectindex(mediaobject, cli):
     olist = "|".join(olist)
 
     for count, obj in enumerate(mchildren):
-        tag=obj.tag[nsl:]
+        tag=localname(obj.tag)
         role=obj.attrib.get("role")
         log.debug("  count={}, obj={} in {}".format(count, obj, obj.sourceline))
         log.debug("  tag={!r}".format(tag))
