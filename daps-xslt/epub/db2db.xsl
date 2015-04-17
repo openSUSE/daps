@@ -541,6 +541,7 @@
              xpath='<xsl:call-template name="xpath.location"/>'
             string='<xsl:value-of select="$string"/>'
          pi.format='<xsl:value-of select="$pi.format"/>'
+      pi.format.ok='<xsl:value-of select="$pi.format.ok"/>'
                 pi=<xsl:value-of select="count($node/processing-instruction())"/>
      string-length=<xsl:value-of select="string-length($normalized) = 10"/>
        use.pi4date='<xsl:value-of select="$use.pi4date"/>'
