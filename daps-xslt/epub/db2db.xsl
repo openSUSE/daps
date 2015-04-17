@@ -74,6 +74,7 @@
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:import href="../common/copy.xsl"/>
   <xsl:import href="../common/xpath.location.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
   <xsl:strip-space elements="*"/>
@@ -489,6 +490,12 @@
   <xsl:param name="recreate" select="0"/>
   <xsl:param name="string" select="''"/>
   <xsl:variable name="contents" select="normalize-space(.)"/>
+  <xsl:variable name="pi.format">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="$node/processing-instruction('dbtimestamp')"/>
+      <xsl:with-param name="attribute">format</xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
 
   <!-- Partly taken from epub3/epub3-element-mods.xsl -->
   <xsl:variable name="normalized" 
@@ -504,6 +511,15 @@
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="pi.format.ok">
+    <xsl:choose>
+      <xsl:when test="$pi.format = 'Y'">1</xsl:when>
+      <xsl:when test="$pi.format = 'Y-m'">1</xsl:when>
+      <xsl:when test="$pi.format = 'Y-m-d'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
   <xsl:variable name="date">
     <xsl:choose>
       <xsl:when test="function-available('date:date-time')">
@@ -521,16 +537,17 @@
                    date:day-in-month($date))"/>
 
   <xsl:message>*** date:
-              node='<xsl:value-of select="local-name()"/>'
+              node='<xsl:value-of select="local-name($node)"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
             string='<xsl:value-of select="$string"/>'
+         pi.format='<xsl:value-of select="$pi.format"/>'
+                pi=<xsl:value-of select="count($node/processing-instruction())"/>
      string-length=<xsl:value-of select="string-length($normalized) = 10"/>
        use.pi4date='<xsl:value-of select="$use.pi4date"/>'
           recreate='<xsl:value-of select="$recreate"/>'
       current date='<xsl:value-of select="$date-string"/>'
         normalized='<xsl:value-of select="$normalized"/>'
            date.ok='<xsl:value-of select="$date.ok"/>'
-            string='<xsl:value-of select="$string"/>'
     date:date-time='<xsl:value-of select="function-available('date:date-time')"/>'
      date:dateTime='<xsl:value-of select="function-available('date:dateTime')"/>'
   </xsl:message>
@@ -540,8 +557,14 @@
         <xsl:when test="$recreate = 1 and $date.ok = 0">
           <xsl:choose>
             <xsl:when test="$use.pi4date != 0">
-              <xsl:message>Hier</xsl:message>
-              <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+              <xsl:choose>
+                <xsl:when test="$pi.format.ok != 0">
+                  <xsl:copy-of select="$node/processing-instruction('dbtimestamp')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$date-string"/>
