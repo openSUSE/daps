@@ -33,7 +33,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:exsl="http://exslt.org/common" 
   xmlns:suse="urn:x-suse:namespace:1.0"
-  extension-element-prefixes="exsl suse" >
+  extension-element-prefixes="exsl suse"
+  exclude-result-prefixes="d">
 
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:output method="text" encoding="UTF-8" />

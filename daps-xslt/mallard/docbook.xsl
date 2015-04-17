@@ -36,7 +36,8 @@
 <xsl:stylesheet version="1.0"
   xmlns="http://projectmallard.org/1.0/"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:d="http://docbook.org/ns/docbook">
+  xmlns:d="http://docbook.org/ns/docbook"
+  exclude-result-prefixes="d">
 
   <xsl:output method="xml" indent="yes"/>
   <xsl:strip-space elements="*"/>
