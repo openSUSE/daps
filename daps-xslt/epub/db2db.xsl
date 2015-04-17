@@ -533,7 +533,7 @@
     select="concat(date:year($date), '-',
                    date:month-in-year($date), '-',
                    date:day-in-month($date))"/>
-
+<!--
   <xsl:message>*** date:
               node='<xsl:value-of select="local-name($node)"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
@@ -550,7 +550,7 @@
     date:date-time='<xsl:value-of select="function-available('date:date-time')"/>'
      date:dateTime='<xsl:value-of select="function-available('date:dateTime')"/>'
   </xsl:message>
-
+-->
     <date>
       <xsl:choose>
         <xsl:when test="$recreate = 1 and $date.ok = 0">
