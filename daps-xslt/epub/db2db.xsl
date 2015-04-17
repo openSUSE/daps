@@ -505,10 +505,27 @@
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="date">
+    <xsl:choose>
+      <xsl:when test="function-available('date:date-time')">
+        <xsl:value-of select="date:date-time()"/>
+      </xsl:when>
+      <xsl:when test="function-available('date:dateTime')">
+        <!-- Xalan quirk -->
+        <xsl:value-of select="date:dateTime()"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="date-string"
+    select="concat(date:year($date), '-',
+                   date:month-in-year($date), '-',
+                   date:day-in-month($date))"/>
 
   <xsl:message>*** date:
               node='<xsl:value-of select="local-name()"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
+          recreate='<xsl:value-of select="$recreate"/>'
+      current date='<xsl:value-of select="$date-string"/>'
         normalized='<xsl:value-of select="$normalized"/>'
            date.ok='<xsl:value-of select="$date.ok"/>'
             string='<xsl:value-of select="$string"/>'
@@ -518,37 +535,25 @@
 
     <date>
       <xsl:choose>
-        <xsl:when test="$date.ok = 0">
+        <xsl:when test="$recreate = 1 and $date.ok = 0">
+          <xsl:choose>
+            <xsl:when test="$use.pi4date != 0">
+              <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$date-string"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          
+        </xsl:when>
+        <xsl:when test="$recreate = 0 and $date.ok = 0">
           <xsl:message>
             <xsl:text>WARNING: wrong metadata date format. </xsl:text>
             <xsl:text>It must be in one of these forms: </xsl:text>
             <xsl:text>YYYY, YYYY-MM, or YYYY-MM-DD.</xsl:text>
             <xsl:text> Using current date.</xsl:text>
           </xsl:message>
-          <xsl:choose>
-            <xsl:when test="$use.pi4date != 0">
-              <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:variable name="date">
-                <xsl:choose>
-                    <xsl:when test="function-available('date:date-time')">
-                      <xsl:value-of select="date:date-time()"/>
-                    </xsl:when>
-                    <xsl:when test="function-available('date:dateTime')">
-                      <!-- Xalan quirk -->
-                      <xsl:value-of select="date:dateTime()"/>
-                    </xsl:when>
-                  </xsl:choose>
-              </xsl:variable>
-              <xsl:value-of select="date:year($date)"/>
-              <xsl:text>-</xsl:text>
-              <xsl:value-of select="date:month-in-year($date)"/>
-              <xsl:text>-</xsl:text>
-              <xsl:value-of select="date:day-in-month($date)"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          
+          <xsl:value-of select="$date-string"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$string"/>
