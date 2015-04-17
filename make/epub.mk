@@ -159,6 +159,7 @@ $(EPUB_BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
 #--------------
 # HTML from EPUB-bigfile
 #
+$(EPUB_CONTENT_OPF): | $(EPUB_TMPDIR)
 $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating HTML files for EPUB"
@@ -186,7 +187,7 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #--------------
 # Generate EPUB-file
 #
-$(EPUB_RESULT): | $(BUILD_DIR) $(RESULT_DIR) $(EPUB_OEBPS) $(EPUB_STATIC)
+$(EPUB_RESULT): | $(EPUB_OEBPS) $(EPUB_STATIC)
 ifneq "$(EPUB3)" "1"
   $(EPUB_RESULT): $(EPUB_TMPDIR)/mimetype
 endif
