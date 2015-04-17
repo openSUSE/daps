@@ -186,8 +186,7 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #--------------
 # Generate EPUB-file
 #
-$(EPUB_RESULT): | $(EPUB_OEBPS)
-$(EPUB_RESULT): | $(EPUB_STATIC)
+$(EPUB_RESULT): | $(BUILD_DIR) $(RESULT_DIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 ifneq "$(EPUB3)" "1"
   $(EPUB_RESULT): $(EPUB_TMPDIR)/mimetype
 endif
@@ -196,7 +195,7 @@ $(EPUB_RESULT): $(EPUB_INLINE_IMAGES)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating EPUB"
   endif
-	cp -rs $(STYLEIMG)/* --remove-destination $(EPUB_STATIC)
+	cp -rs --remove-destination $(STYLEIMG)/* $(EPUB_STATIC)
   ifneq "$(strip $(EPUB_CSS))" ""
 	cp -s --remove-destination $(EPUB_CSS) $(EPUB_OEBPS)
   endif
