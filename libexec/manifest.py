@@ -140,7 +140,7 @@ def localname(element):
         tag = element
     d=re.match("(\{(?P<ns>.*)\})?(?P<localname>\w+)", tag)
     assert d, "Expected a successful match"
-    return d["localname"]
+    return d.groupdict()["localname"]
 
 def callouts(xmltree, cli, manifest):
     """Appends list of filenames for callout graphics
