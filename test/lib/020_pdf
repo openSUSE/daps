@@ -113,11 +113,6 @@ function test_pdfStyleroot () {
     # Testing Fallback Styleroot by specifying a wrong Styleroot dir
     #
 
-#     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-#     echo "$_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1"
-#     echo "    egrep -q -- \"--stylesheet /.*/${_STANDARD_STYLES}\" $_LOGFILE 2>/dev/null"
-     
-     
     $_DAPSEXEC -d $_DCFILE --styleroot=${_DOC_DIR} --fb_styleroot=${_STANDARD_STYLES} --debug pdf >/dev/null 2>&1
     egrep -q -- "--stylesheet /.*/${_STANDARD_STYLES}" $_LOGFILE 2>/dev/null
     assertTrue \
@@ -250,14 +245,18 @@ function test_pdfRemarksDraftMeta () {
 
    # checking META
    #
-   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
-   assertTrue \
-       ' └─ Param for META is not correctly specified when generating the FO-file' \
-       "$?"
-   expr "$_PDF_BUILD_PATH" : '.*\(_meta\)' >/dev/null 2>&1
-   assertTrue \
-       ' └─ String "_meta" does not appear in the PDF filename' \
-       "$?"
+   # fs 2015-04-16: Commenting since this is SVN dependent and we no longer
+   # use SVN
+
+
+#   egrep -q -- "--param\s+\"use\.meta=1\"" $_LOGFILE 2>/dev/null
+#   assertTrue \
+#       ' └─ Param for META is not correctly specified when generating the FO-file' \
+#       "$?"
+#   expr "$_PDF_BUILD_PATH" : '.*\(_meta\)' >/dev/null 2>&1
+#   assertTrue \
+#       ' └─ String "_meta" does not appear in the PDF filename' \
+#       "$?"
 
 
    # checking REMARKS
@@ -326,11 +325,11 @@ function test_pdfRootidXsltparam () {
 
     _PDF_FILENAME_EXPECTED=${_ROOTID}_color_en.pdf
 
-    _XSLTPARAM="--param 'hyphenate.verbatim=0'"
+    _XSLTPARAM="'--param hyphenate.verbatim=0'"
 
     clean_build_dir fo
 
-    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --xsltparam=\"$_XSLTPARAM\" 2>/dev/null | tail -n 1)
+    _PDF_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE --debug pdf --formatter=$_FOPROC --rootid $_ROOTID --xsltparam="$_XSLTPARAM" 2>/dev/null | tail -n 1)
     assertTrue \
 	' └─ Building a pdf with --rootid and --xsltparam failed ' \
        "$?"

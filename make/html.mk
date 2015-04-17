@@ -177,9 +177,12 @@ HTML_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(HTML_DIR)/images/,$(ONLINE_
 #--------------
 # HTML
 #
+# In order to avoid unwanted results when deleting $(HTML_DIR), we are adding
+# a security check before deleting 
+#
 .PHONY: html
 ifeq "$(CLEAN_DIR)" "1"
-  html: $(shell rm -rf $(HTML_DIR))
+  html: $(shell if [[ $$(expr match "$(HTML_DIR)" "$(RESULT_DIR)") -gt 0 && -d "$(HTML_DIR)" ]]; then rm -r "$(HTML_DIR)"; fi 2>&1 >/dev/null)
 endif
 html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
@@ -209,6 +212,18 @@ $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 #
 .PHONY: copy_static_images
 ifneq "$(IS_STATIC)" "static"
+  copy_static_images: | $(HTML_DIR)/static
+  ifdef HTML_CSS
+    copy_static_images: | $(HTML_DIR)/static/css
+  endif
+  copy_static_images: $(STYLEIMG)
+    ifeq "$(STATIC_HTML)" "0"
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(HTML_DIR)/static
+    else
+	tar cph --exclude-vcs -C $(dir $<) images | \
+          (cd $(HTML_DIR)/static; tar xpv) >/dev/null
+    endif
+else
   copy_static_images: | $(HTML_DIR)/static
   ifdef HTML_CSS
     copy_static_images: | $(HTML_DIR)/static/css

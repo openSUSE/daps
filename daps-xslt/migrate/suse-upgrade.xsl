@@ -69,19 +69,19 @@
       <xsl:apply-templates/>
     </xsl:variable>
 
-    <xsl:comment>
-    <xsl:text> Converted by suse-upgrade version </xsl:text>
-    <xsl:value-of select="$version"/>
-    <xsl:text> </xsl:text>
-  </xsl:comment>
-    <xsl:text>&#10;</xsl:text>
-
     <xsl:if test="$xml-model = 1">
       <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
       <xsl:text>&#10;</xsl:text>
       <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
+
+    <xsl:comment>
+      <xsl:text> Converted by suse-upgrade version </xsl:text>
+      <xsl:value-of select="$version"/>
+      <xsl:text> </xsl:text>
+    </xsl:comment>
+    <xsl:text>&#10;</xsl:text>
 
     <xsl:apply-templates select="exsl:node-set($converted)/*"
       mode="addNS"/>
@@ -787,8 +787,15 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="command[option]/option" priority="200">
-      <xsl:apply-templates/>
+  <!--
+    Move command/option and command/replaceable outside of command
+  -->
+  <xsl:template match="command[*]" priority="200">
+    <command>
+      <xsl:value-of select="normalize-space(text()[1])"/>
+    </command>
+    <xsl:text> </xsl:text>
+    <xsl:copy-of select="node()[position() > 1]"/>
   </xsl:template>
   
   <xsl:template match="systemitem[@class='constant']" priority="200">
