@@ -116,8 +116,12 @@ for _STATFILE in failed skipped total; do
     echo 0 > ${_TEMPDIR}/$_STATFILE
 done
 
+# fs 2015-04-17:
+# Commenting locdrop in the following: Does currently not work because of
+# SVN dependencies
 
-_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+#_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
 
 [[ 0 -ne $? ]] && exit_on_error "Argument parser error"
 
@@ -131,7 +135,8 @@ GETOPT_RETURN_CODE=$?
 while true ; do
     case "$1" in
 	--all)
-	    _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
+#	    _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
+	    _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
 	    shift
 	    ;;
 	--builddir)
