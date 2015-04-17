@@ -469,12 +469,15 @@
       </xsl:when>
       <xsl:when test="date[processing-instruction()]">
         <xsl:call-template name="date">
+          <xsl:with-param name="node" select="date"/>
           <xsl:with-param name="recreate" select="1"/>
         </xsl:call-template>
         <xsl:apply-templates select="node()[not(self::date)]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="date"/>
+        <xsl:call-template name="date">
+          <xsl:with-param name="node" select="date"/>
+        </xsl:call-template>
         <xsl:apply-templates select="node()[not(self::date)]"/>
       </xsl:otherwise>
     </xsl:choose>
@@ -494,14 +497,10 @@
   <xsl:variable name="date.ok">
     <xsl:choose>
       <xsl:when test="$normalized = ''">0</xsl:when>
-      <xsl:when test="string-length($string) = 4 and
-                      $normalized = '####'">1</xsl:when>
-      <xsl:when test="string-length($string) = 7 and
-                      $normalized = '####-##'">1</xsl:when>
-      <xsl:when test="string-length($string) = 10 and
-                      $normalized = '####-##-##'">1</xsl:when>
-      <xsl:when test="string-length($string) = 10 and
-                      $normalized = '####-##-##'">1</xsl:when>
+      <xsl:when test="$normalized = '####'">1</xsl:when>
+      <xsl:when test="$normalized = '####-##'">1</xsl:when>
+      <xsl:when test="$normalized = '####-##-##'">1</xsl:when>
+      <xsl:when test="$normalized = '####-##-##'">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -524,6 +523,9 @@
   <xsl:message>*** date:
               node='<xsl:value-of select="local-name()"/>'
              xpath='<xsl:call-template name="xpath.location"/>'
+            string='<xsl:value-of select="$string"/>'
+     string-length=<xsl:value-of select="string-length($normalized) = 10"/>
+       use.pi4date='<xsl:value-of select="$use.pi4date"/>'
           recreate='<xsl:value-of select="$recreate"/>'
       current date='<xsl:value-of select="$date-string"/>'
         normalized='<xsl:value-of select="$normalized"/>'
@@ -538,6 +540,7 @@
         <xsl:when test="$recreate = 1 and $date.ok = 0">
           <xsl:choose>
             <xsl:when test="$use.pi4date != 0">
+              <xsl:message>Hier</xsl:message>
               <xsl:processing-instruction name="dbtimestamp">format="%Y-%m-%d"</xsl:processing-instruction>
             </xsl:when>
             <xsl:otherwise>
