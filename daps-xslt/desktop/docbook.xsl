@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:exsl="http://exslt.org/common" xmlns:suse="urn:x-suse:namespace:1.0"
-  extension-element-prefixes="exsl suse" version="1.0">
+<!-- 
+   Purpose:
+     Creates .desktop files for inclusion into KDE and GNOME desktop
+
+   Parameters:
+     * base.dir (default: 'desktop/')
+       Sets the output directory for each desktop file
+     * desktop.ext  (default: '.desktop')
+       Each filename contains this suffix
+     * directory.filename (default: '.directory')
+       The filename for desktop files for directories 
+     * docpath
+       Inserts string in desktop files DocPath
+     * html.ext (default: '.html')
+       suffix for HTML files
+     * use.id.as.filename (default: 1 (yes))
+       Use id attribute as filename instead of consequitive numbering scheme
+
+   Input:
+     DocBook 4, DocBook 5, or Novdoc document
+
+   Output:
+     .desktop file
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright (C) 2012-2015 SUSE Linux GmbH
+
+-->
+
+<xsl:stylesheet version="1.0"
+  xmlns:d="http://docbook.org/ns/docbook"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:exsl="http://exslt.org/common" 
+  xmlns:suse="urn:x-suse:namespace:1.0"
+  extension-element-prefixes="exsl suse"
+  exclude-result-prefixes="d">
 
   <xsl:import href="../common/rootid.xsl"/>
   <xsl:output method="text" encoding="UTF-8" />
@@ -59,19 +92,23 @@
   </xsl:template>
 
   
-  <xsl:template match="set">
+  <xsl:template match="set|d:set">
     <xsl:call-template name="create.directory"/>
     <xsl:apply-templates />
   </xsl:template>
 
-  <xsl:template match="book">
+  <xsl:template match="book|d:book">
     <xsl:param name="dir" select="''" />
     <xsl:variable name="directory">
       <xsl:apply-templates select="." mode="recursive-chunk-filename" />
     </xsl:variable>
+    <xsl:variable name="infonode"
+      select="(bookinfo/title|title|
+               d:info/title|d:title
+              )[last()]"/>
 
     <xsl:message>*** Book <xsl:value-of
-      select="normalize-space((bookinfo/title|title)[last()])"/></xsl:message>
+      select="normalize-space($infonode)"/></xsl:message>
 
     <xsl:call-template name="create.directory">
       <xsl:with-param name="dir" select="concat($directory, '/')" />
@@ -82,7 +119,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="article">
+  <xsl:template match="article|d:article">
     <xsl:param name="dir" select="''" />
     <xsl:variable name="directory">
       <xsl:apply-templates select="." mode="recursive-chunk-filename" />
@@ -97,11 +134,15 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="part">
+  <xsl:template match="part|d:part">
     <xsl:param name="dir" select="''" />
+    <xsl:variable name="infonode"
+      select="(bookinfo/title|title|
+               d:info/title|d:title
+              )[last()]"/>
     
     <xsl:message>** Part <xsl:value-of
-      select="normalize-space((bookinfo/title|title)[last()])"/></xsl:message>
+      select="normalize-space($infonode)"/></xsl:message>
     
     
     <xsl:variable name="directory">
@@ -120,7 +161,7 @@
 
   </xsl:template>
 
-  <xsl:template match="chapter|appendix">
+  <xsl:template match="chapter|appendix|d:chapter|d:appendix">
     <xsl:param name="dir" select="''" />
     
     <xsl:call-template name="create.directory">
@@ -133,7 +174,7 @@
   </xsl:template>
 
 
-  <xsl:template match="article/sect1">
+  <xsl:template match="article/sect1|d:article/d:sect1">
     <xsl:param name="dir" select="''" />
     
     <xsl:call-template name="create.directory">
@@ -151,7 +192,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="title" mode="title">
+  <xsl:template match="title|d:title" mode="title">
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
  
@@ -190,7 +231,7 @@
     <xsl:variable name="localdocpath">
       <xsl:value-of select="$docpath" />
       <xsl:choose>
-        <xsl:when test="self::set">
+        <xsl:when test="self::set | self::d:set">
           <xsl:value-of select="concat('index', $html.ext)" />
         </xsl:when>
         <xsl:when test="$use.id.as.filename and @id != ''">
@@ -206,21 +247,24 @@
 
     <xsl:variable name="title">
       <xsl:choose>
-        <xsl:when test="$node/title">
-          <xsl:apply-templates select="$node/title" mode="title" />
+        <xsl:when test="$node/title | $node/d:title">
+          <xsl:apply-templates select="$node/title|$node/d:title" mode="title" />
         </xsl:when>
-        <xsl:when test="title">
-          <xsl:apply-templates select="title"  mode="title"/>
+        <xsl:when test="title|d:title">
+          <xsl:apply-templates select="title|d:title"  mode="title"/>
         </xsl:when>
-        <xsl:when test="bookinfo/title">
-          <xsl:apply-templates select="bookinfo/title" mode="title" />
+        <xsl:when test="bookinfo/title|d:info/d:title">
+          <xsl:apply-templates select="bookinfo/title|d:info/d:title" mode="title" />
         </xsl:when>
         <xsl:otherwise>???</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
     <xsl:variable name="create.directory" 
-      select="self::set or self::part or self::book or self::article"/>
+      select="self::set or self::d:set or 
+              self::part or self::d:part or
+              self::book or self::d:book or
+              self::article or self::d:article"/>
     
    <!-- <xsl:message>create.directory:
     element: <xsl:value-of select="local-name($node)"/> || <xsl:value-of 
@@ -281,7 +325,7 @@
         </xsl:call-template>
 
         <xsl:choose>
-          <xsl:when test="self::set">
+          <xsl:when test="self::set | self::d:set">
             <xsl:text># DocPath=&#10;</xsl:text>
             <xsl:text># Icon=document2&#10;</xsl:text>
           </xsl:when>
@@ -352,10 +396,12 @@
     <xsl:if test="$printlang=1">
       <xsl:text>[</xsl:text>
       <xsl:value-of
-        select="(@lang|
+        select="(@lang|@xml:lang |
                  ancestor-or-self::article/@lang |
+                 ancestor-or-self::d:article/@xml:lang |
                  ancestor-or-self::book/@lang |
-                 ancestor-or-self::set/@lang)[1]"
+                 ancestor-or-self::d:book/@xml:lang |
+                 ancestor-or-self::set/@lang|ancestor-or-self::d:set/@xml:lang)[1]"
       />
       <xsl:text>]</xsl:text>
     </xsl:if>
@@ -369,7 +415,10 @@
   <xsl:template name="suse:calcposition">
     <xsl:param name="value">    
         <xsl:number
-          count="book|article|part|preface|chapter|appendix|index|glossary|bibliography|sect1"
+          count="book|d:book|article|d:article|part|d:part|
+                 preface|d:preface|chapter|d:chapter|appendix|d:appendix|
+                 index|d:index|glossary|d:glossary|bibliography|d:bibliography|
+                 sect1|d:sect1"
          level="any"/>
     </xsl:param>
     
