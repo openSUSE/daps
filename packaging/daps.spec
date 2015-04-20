@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.0~rc2
+Version:        2.0~rc5
 Release:        0
 
 ###############################################################
@@ -44,7 +44,7 @@ Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 Url:            http://sourceforge.net/p/daps
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        https://github.com/openSUSE/daps/archive/%{name}-%{version}.tar.gz
 Source1:        %{name}.rpmlintrc
 Source2:        %{name}-fetch-source
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -202,12 +202,10 @@ exit 0
 # in case of an update
 #
 if [ 0 = $1 ]; then 
-if [ -x /usr/bin/edit-xml-catalog ] ; then
   edit-xml-catalog --group --catalog /etc/xml/suse-catalog.xml \
   --del %{name}
 fi
 
-fi
 exit 0
 
 #----------------------
