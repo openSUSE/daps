@@ -1,7 +1,7 @@
 #
 # spec file for package daps
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -44,34 +44,36 @@ Summary:        DocBook Authoring and Publishing Suite
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Publishing/XML
 Url:            http://sourceforge.net/p/daps
-Source0:        https://github.com/openSUSE/daps/archive/%{name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.bz2
 Source1:        %{name}.rpmlintrc
-Source2:        %{name}-fetch-source
+Source2:        %{name}-fetch-source-svn
+Source3:        %{name}-fetch-source-git
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 
+BuildRequires:  ImageMagick
 BuildRequires:  automake
 BuildRequires:  bash >= 3.1
 BuildRequires:  dia
-BuildRequires:  docbook_4
 BuildRequires:  docbook-xsl-stylesheets >= 1.77
+BuildRequires:  docbook_4
 BuildRequires:  fdupes
 BuildRequires:  ghostscript
-BuildRequires:  ImageMagick
 BuildRequires:  inkscape
 %if 0%{?suse_version} >= 1220
 BuildRequires:  libxml2-tools
 %endif
-BuildRequires:  libxslt libxslt-tools
-#%if 0%{?suse_version} == 1315
+BuildRequires:  libxslt
+BuildRequires:  libxslt-tools
+#%%if 0%%{?suse_version} == 1315
 #BuildRequires:  sles-release
-#%else
+#%%else
 #BuildRequires:  openSUSE-release
-#%endif
+#%%endif
 BuildRequires:  poppler-tools
-BuildRequires:  python-xml
 BuildRequires:  python-lxml
+BuildRequires:  python-xml
 #BuildRequires:  sgml-skel
 BuildRequires:  suse-xsl-stylesheets
 BuildRequires:  svg-dtd
@@ -82,6 +84,7 @@ BuildRequires:  xmlgraphics-fop >= 0.94
 %else
 BuildRequires:  fop >= 0.94
 %endif
+BuildRequires:  xmlstarlet
 
 #
 # In order to keep the requirements list as short as possible, only packages
@@ -92,18 +95,18 @@ BuildRequires:  fop >= 0.94
 PreReq:         libxml2
 PreReq:         sgml-skel
 
+Requires:       ImageMagick
 Requires:       bash >= 3.1
 Requires:       dia
-Requires:       docbook_4
 Requires:       docbook-xsl-stylesheets >= 1.77
+Requires:       docbook_4
 Requires:       ghostscript-library
-Requires:       ImageMagick
 Requires:       inkscape
 Requires:       libxslt
 Requires:       make
 Requires:       poppler-tools
-Requires:       python-xml
 Requires:       python-lxml
+Requires:       python-xml
 #Requires:       sgml-skel
 Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
