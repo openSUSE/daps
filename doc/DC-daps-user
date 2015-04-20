@@ -22,6 +22,8 @@ PROFARCH="x86;amd64;em64t"
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE
 
+#--------------------- XSLT Parameters------------------------
+#
 ## show acronyms in the glossary, so as not to confuse the user
 XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
 
@@ -29,5 +31,39 @@ XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
 ## homepage at the top of the page
 ## set a homepage for HTML builds
 XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
+
+# ToC/LoT/Index Generation
+XSLTPARAM="$XSLTPARAM --stringparam autotoc.label.separator=' ' \
+  --param toc.indent.width=0"
+
+# Automatic Labeling
+XSLTPARAM="$XSLTPARAM --param section.autolabel=1 \
+  --param section.label.includes.component.label=1"
+
+# Reference Pages
+XSLTPARAM="$XSLTPARAM --param refentry.generate.name=1 \
+  --param refentry.generate.title=0"
+
+# Lists
+XSLTPARAM="$XSLTPARAM --param variablelist.term.break.after=1 \
+   --stringparam variablelist.term.separator='' \
+   --param variablelist.as.blocks=1 \
+   --param glossary.as.blocks=1"
+
+# Pagination and General Styles
+XSLTPARAM="$XSLTPARAM --param body.start.indent=0 \
+   --param double.sided=0 \
+   --param header.rule=0 \
+   --param footer.rule=0 \
+   --stringparam paper.type=A4"
+
+# Font Families
+XSLTPARAM="$XSLTPARAM --stringparam body.font.family=\"'Charis SIL', CharisSIL, serif\"" \
+   --stringparam sans.font.family=\"'Open Sans', OpenSans, sans-serif\" \
+   --stringparam monospace.font.family=\"'DejaVu Sans Mono', DejaVuSansMono, monospace\" \
+   --stringparam symbol.font.family=\"'DejaVu Sans Mono', DejaVuSansMono, KoreanSans, UnBatang, 'Un Batang', 'WenQuanYi Micro Hei Mono', WenQuanYiMicroHeiMono, monospace\""
+
+
+
 
 
