@@ -166,6 +166,7 @@
      |      |--svg/
      |--xml/<co id="co.quick.docdir.xml"/>
          |--MAIN*.xml<co id="co.quick.docdir.main"/>
+         |--*.xml
     </screen>
    </example>
    <calloutlist>
@@ -206,13 +207,27 @@
      </para>
     </callout>
    </calloutlist>
+   <important>
+    <title>Structure of the <filename>xml</filename> and
+     <filename>image/src/*</filename> Directories</title>
+    <para>Avoid subdirectories within the <filename>xml</filename> and
+      <filename>image/src/*</filename> directories. Referencing or including
+     files from subdirectories within those directories can lead
+     to unpredictable results with &dapsacr;.</para>
+   </important>
   </sect2>
   
   <sect2 id="sec.daps.quick.basics.files">
    <title>Key Files</title>
    &daps-key-files;
   </sect2>
-
+  
+  <sect2 id="sec.daps.quick.basics.namereq">
+   <title>File Name Requirements</title>
+   &daps-file-names-req;
+  </sect2>
+  
+  
  </sect1>
  <sect1 id="sec.daps.quick.init">
   <title>A Documentation Project From Scratch</title>
@@ -303,8 +318,10 @@
   </sect2>
 
   <sect2 id="sec.daps.quick.imgs.req">
-   <title>File Name Requirements</title>
-   &daps-img-names-req;
+   <title>Image File Name Requirements</title>
+   <para>For details, see <xref linkend="sec.daps.quick.basics.namereq"
+   />.
+   </para>
   </sect2>
 
  <sect2 id="sec.daps.quick.imgs.refer">

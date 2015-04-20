@@ -221,7 +221,7 @@
    formats. For example, SVG images are converted to PNG for HTML builds, or
    color images to grayscale for black-and-white PDFs. You only need to decide
    which file format to use as source format. Of course, this decision depends on
-   the purpose of the image.
+   the purpose of the image. For more details, see the &dapsuser;.
   </para>'>
 
 <!ENTITY daps-images-dir
@@ -239,7 +239,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     DIA
+     DIA (input format only)
     </para>
    </listitem>
    <listitem>
@@ -249,7 +249,7 @@
    </listitem>
    <listitem>
     <para>
-     FIG
+     FIG (input format only)
     </para>
    </listitem>
    <listitem>
@@ -259,7 +259,7 @@
    </listitem>
    <listitem>
     <para>
-     PDF (experimental)
+     PDF (experimental - only works for PDF format and with XEP formatter)
     </para>
    </listitem>
    <listitem>
@@ -274,8 +274,22 @@
    </listitem>
   </itemizedlist>">
 
-<!ENTITY daps-img-names-req
+<!ENTITY daps-file-names-req
 ' <variablelist>
+   <varlistentry>
+     <term>No Spaces and Colons In File and Directory Names</term>
+     <listitem>
+      <para>Avoid spaces and colons in file and directory names. 
+      The <command>make</command> command
+       in &dapsacr; has trouble understanding them. Use underscores
+       (<filename>_</filename>) or hyphens (<filename>-</filename>) instead.
+       </para>
+       <para>It is good practice to only use the following characters for
+       file or directory names: alphabetic characters [a-z] or [A-Z], numerical
+       characters [0-9], hyphens (<literal>-</literal>), or underscores
+       (<literal>_</literal>).</para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>Unique Image Names</term>
      <listitem>
@@ -295,42 +309,24 @@
       To specifically check for image name clashes upfront, use the
       <command>daps list-images-multisrc</command> subcommand.
      </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>No Spaces In File Names</term>
-     <listitem>
-      <para>Avoid spaces in file names. The <command>make</command> command
-       in &dapsacr; has trouble understanding them. Use underscores
-       (<filename>_</filename>) or hyphens (<filename>-</filename>) instead.
-       </para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>Treatment of Upper/Lowercase-Spelling</term>
-     <listitem>
-      <para>
-       Avoid camel-cased file names (<filename>aCamelCasedFileName</filename>) or
-       file names only differing in upper- or lowercase spelling. In case multiple file systems 
-       (for example, Ext3 and NTFS) are used somewhere in the process chain between 
-       generating and publishing hte output formats, this can lead to problems.</para>
+     <para>
+      It is a good idea to find a consistent file naming scheme. For example, when
+      documenting software, it might prove helpful to include the name of the
+      application at the beginning of the file name. You can also use prefixes like
+     <filename>screenshot_</filename> and <filename>diagram_</filename>
+      to separate between different types of images.
+    </para>
      </listitem>
     </varlistentry>
    </variablelist>
-   <para>
-     It is a good idea to find a consistent file naming scheme. For example, when
-     documenting software, it might prove helpful to include the name of the
-     application at the beginning of the file name. You can also use prefixes like
-     <filename>screenshot_</filename> and <filename>diagram_</filename>
-     to separate between different types of images.
-    </para>'>
+  '>
 
 <!ENTITY daps-img-ref
 ' <para>
-    Provided your images are located in the required default directory,
+    As your images need to be located in a defined directory structure,
     &dapsacr; automatically finds the path to your images. Therefore,
-    referencing images in your XML sources is very straightforward: you do
-    not need to include any path in the
+    referencing images in your XML sources is very straightforward: 
+    you must not include any path in the
     <sgmltag class="attribute">fileref</sgmltag> attribute&mdash;the
     file name is enough.
    </para>
@@ -666,45 +662,46 @@ directory and in the profiled sources, as can be seen by
 
 <!ENTITY daps-help-basics
 '<para>
-   Generally, &dapsacr; can be executed with or without options. To view the
-   global options and the available subcommands, use the command:
+   To view the global options and the available subcommands for &dapsacr;, use the command:
   </para>
 
-  <screen>&prompt.user;&dapscmd; --help&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; help</screen>
 
   <para>
    For a short help text on a specific <emphasis>subcommand</emphasis>, use:
   </para>
 
-  <screen>&prompt.user;&dapscmd; --help  <replaceable>subcommand</replaceable>&nbsp;</screen>
+  <screen>&prompt.user;&dapscmd; help  <replaceable>subcommand</replaceable>&nbsp;</screen>
 
   <para>
    For example, if you want more information about generating HTML output,
    run:
   </para>
 
-  <screen>&prompt.user;&dapscmd; --help html&nbsp;</screen>'>
+  <screen>&prompt.user;&dapscmd; help html</screen>'>
 
 <!ENTITY daps-dc-file-tip
 '<tip>
    <title>Specifying the &dc; File</title>
    <para>For execution of most commands, &dapsacr; needs to know which &dc; file
-   to use. There are several ways to let &dapsacr; know about this:</para>
+      to use. Usually, you do so by specifying a &dc; file with the global option
+     <option>-d</option>. For example:</para>
+     <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> pdf</screen>
+     <para>Only in the following cases you may omit the <option>-d</option>
+     option:</para>
    <itemizedlist>
-    <listitem>
-     <para>Your documentation directory contains only one &dc; file. In that case,
+     <listitem>
+     <para>If your documentation directory contains only one &dc; file. In that case,
      &dapsacr; automatically uses the corresponding file.</para>
     </listitem>
     <listitem>
-     <para>You have specified a default &dc; file to use in &dapsconf-user;
+     <para>If you have specified a default &dc; file to use in &dapsconf-user;
     (as a value for <parameter>DOCCONF_DEFAULT</parameter>). In that case,
      &dapsacr; automatically uses the corresponding file, unless you specify a
      different one on the command line.</para>
     </listitem>
-    <listitem>
-     <para>Specify a &dc; file on the command line with the global option
-     <option>-d</option>. For example:</para>
-     <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> pdf</screen>
+     <listitem>
+     <para>If you want to call the help function.</para>
     </listitem>
    </itemizedlist>
   </tip>'>
