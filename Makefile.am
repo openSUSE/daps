@@ -59,7 +59,7 @@ endif
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1
+MAN_PAGES      := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -270,14 +270,12 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
 
 $(USERGUIDE):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
-	    --docconfig=$(DC_USERGUIDE) html --single --static \
-            --name=$(USERGUIDE_NAME)
+	    --docconfig=$(DC_USERGUIDE) html --single --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
-	    --docconfig=$(DC_QUICKSTART) html --single --static \
-	    --name=$(QUICKSTART_NAME)
+	    --docconfig=$(DC_QUICKSTART) html --single --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
