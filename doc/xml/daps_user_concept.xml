@@ -59,7 +59,7 @@
     <listitem>
      <para>
       &dapsacr; lets you publish your XML sources in several different
-      output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;,
+      output formats, for example: HTML, HTML-single, PDF, &epub;,
       text, and man pages. For details, refer to
       <xref linkend="cha.daps.user.output"/>.
       </para>
@@ -72,6 +72,8 @@
       By default, &dapsacr; uses the DocBook stylesheets to generate the
       output formats. But &dapsacr; also supports custom layouts for your
       documentation projects (or for individual books within your set).
+      Thus your XML documents can be published in different layouts without
+      having to change the sources or the configuration.
 <!--You do not need to define custom stylesheets for <emphasis>all</emphasis>
      output formats&mdash;in case a custom layout cannot be found, &dapsacr;
      will automatically fall back to the DocBook stylesheets.-->
@@ -97,6 +99,8 @@
       details, refer to
       <xref linkend="sec.daps.user.editors.emacs.macros"/>.
      </para>
+     <para><remark>taroth 2015-04-21: check with tbazant on his hack project
+      about vi DB support</remark></para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -142,7 +146,7 @@
     <listitem>
      <para>
       &dapsacr; provides sophisticated image handling support. For example,
-      it can transform images referenced in your XML files into different
+      it automatically transforms images referenced in your XML files into different
       formats, list all source images referenced in your XML files, list any
       missing images or check if all image names are unique. You can also forward those lists to
       your preferred image viewer to conveniently browse through the images. 
