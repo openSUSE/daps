@@ -608,23 +608,23 @@
    <title>Availability of Advanced Output Options</title>
    <para>Advanced output options are only supported for selected formats:</para>
    <itemizedlist>
-    <listitem>
+    <!--<listitem>
      <para>
-      <option>--meta</option>: <remark>taroth 2013-01-08:fs, toms: is the
+      <option>-/-meta</option>: <remark>taroth 2013-01-08:fs, toms: is the
       following correct?</remark>Only available in HTML, HTML-single, and PDF.</para>
-    </listitem>
+    </listitem>-->
     <listitem>
      <para>
       <option>--draft</option> and <option>--remarks</option>:
      Only available in HTML, HTML-single, PDF, and &epub; output. </para>
     </listitem>
    </itemizedlist>
-   <para>Using the <option>--remarks</option> and <option>--meta</option> options
+   <para>Using the <option>--remarks</option> option<!--and <option>-/-meta</option> options-->
       automatically turns draft mode on.</para>
    <para>By default, &dapsacr; adds a string to the base name of the output file
      to flag output formats generated with special options.
-     Example file names are <filename>daps-example_draft_en.pdf</filename> or
-     <filename>daps-example_remarks_draft_en.pdf</filename>.</para>
+     Example file names are <filename>*_draft_en.pdf</filename> or
+     <filename>*_remarks_*_draft_en.pdf</filename>.</para>
   </note>'>
 
 <!ENTITY daps-validation-basics
@@ -710,7 +710,7 @@ directory and in the profiled sources, as can be seen by
 '<para>
    The number of output formats may be extended in the future, depending on
    the output formats that are supported by DocBook stylesheets. For an
-   overview of all output formats, run <command>daps&nbsp;--help</command>.
+   overview of all output formats, run <command>daps&nbsp;help</command>.
    The available output formats are listed below <menuchoice><guimenu>Subcommands</guimenu>
    <guimenu>Generate Books</guimenu> </menuchoice>.
   </para>'>

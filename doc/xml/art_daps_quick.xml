@@ -239,19 +239,15 @@
    modify parameters (such as changing the root element to
     <sgmltag>book</sgmltag> or specifying the DocBook version in which you want
    the example to be generated). View the available options with
-   <command>daps-init -h</command>. Specifying the project directory with 
-   <option>--docdir</option> is mandatory
-   Specifying a name for the document with "--name" is recommended--it will
-   be used in filenames. Setting the title of the document with "--title"
-   is also recommended.
+   <command>daps-init -h</command>. 
   </para>
 
   <procedure id="pro.daps.init">
    <title>Using <command>daps-init</command>
    </title>
     <step>
-    <para> Use the following command to create a working environment for
-     &dapsacr; , including an example document. </para>
+    <para>To create a working environment for
+     &dapsacr; , including an example document, enter the following: </para>
     <screen>&prompt.user;<command>daps-init --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable></command></screen>
     <para>Specifying the project directory with <option>--docdir</option> is
      mandatory. If the directory does not exist, &dapsacr; will ask you and
@@ -263,7 +259,12 @@
      <screen>&prompt.user;<command>daps-init
       --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;--name&nbsp;"my_document"&nbsp;--title&nbsp;"Example
       Documentation"</command></screen>
-   </step>
+    </step>
+   <step>
+    <para>If you want to create an example book file in addition to the article,
+     enter the following:</para>
+    <screen>&prompt.user;<command>daps-init
+     --docdir&nbsp;<replaceable>PATH_TO_DOC_DIR</replaceable>&nbsp;--rootelement book</command></screen></step>
    <step>
     <para>
      To see what the output of the XML example file looks like, follow the
@@ -446,65 +447,56 @@
    <xi:include href="daps_table_output_formats_i.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   </table>
   &daps-output-all;
+   <para>&dapsacr; allows you to fine-tune the output in many ways. For
+    example, you can include remarks or a <literal>DRAFT</literal> watermark in
+    your output, or you can build parts of your documentation project only. Find
+    some examples in the sections below.</para>
  </sect2>
 
- <sect2 id="sec.daps.quick.output.adv">
-  <title>Advanced Output Options</title>
-  <para>
-    Instead of always building your complete documentation project
-    (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
-    <sgmltag>article</sgmltag>), &dapsacr; also allows you to build an
-    individual <sgmltag>chapter</sgmltag> or <sgmltag>part</sgmltag>. If you
-    want the output format to include <sgmltag>remark</sgmltag> elements or
-    to be marked as a <literal>draft</literal> version, you can do that
-    this way:
-    <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
-   </para>
-  <sect3 id="sec.daps.quick.output.adv.partial">
+ 
+  <sect2 id="sec.daps.quick.output.partial">
    <title>Partial Builds</title>
-   <para>
-     The <quote>starting point</quote> of your documentation project is
-     usually the root element defined in the &main; file that is referenced in
-     the respective &dclong;. Alternatively, specify a ROOTID on the command
-     line by using the <option>--rootid</option> option. This also allows
-     you to build only a part of your documentation project by using the ID
-     of a <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
+   <para>Instead of always building your complete documentation project
+     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+     <sgmltag>article</sgmltag>), &dapsacr; also allows you to build only
+    individual parts. The <quote>starting point</quote> of your documentation
+    project is usually defined by the root element of the &main; file that
+    is referenced in the respective &dclong;. To build only a part of your
+    documentation project, use the <option>--rootid</option> option to specify
+    the ID of an individual <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
      <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
-     <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag> element.
-    </para>
-   <para>
-     For example, if you have set up your working environment with
-     <command>daps-init</command> and an example <sgmltag>book</sgmltag>,
-     use the following command to build the first chapter of the book:
-     </para>
-   <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --rootid=cha.template.examples</command></screen>
-    </sect3>
-  <sect3 id="sec.daps.quick.output.adv.review">
+     <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag>.</para>
+   <para> For example, if you have set up your working environment with
+    <command>daps-init</command> and an example book, use the following command
+    to build the first chapter of the book: </para>
+   <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf&nbsp;--rootid=cha.template.examples</command></screen>
+    </sect2>
+  <sect2 id="sec.daps.quick.output.review">
    <title>Output with Remarks or Draft Watermark</title>
    <para>
      For publishing a pre-release version of a document that you can
      send to a proofreader for review, use the <option>--draft</option>
-     command option to mark the document as draft version. For example, use
-     the following command to build a color PDF that has a
-     <literal>DRAFT</literal> watermark printed on each page:
+     option to mark the document accordingly. For example:
     </para>
    <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --draft</command></screen>
+   <para>This command creates a color PDF that has a <literal>DRAFT</literal>
+    watermark printed on each page.</para>
    <para>
      If you used <sgmltag>remark</sgmltag> elements in your XML files (for
-     editorial remarks or questions to the proofreader), include the remarks
+     editorial remarks or questions to the proofreader), you can include the remarks
      in the output with the <option>--remarks</option> option:
     </para>
    <screen>&prompt.user;<command>daps -d &dc;-daps-example pdf --remarks</command></screen>
       &daps-output-remarks;
-   <para>If metadata to a file has been set<remark>taroth 2013-01-08: which
+  <!-- <para>If metadata to a file has been set<remark>taroth 2013-01-08: which
      metadata exactly? does it need to be: doc:status, doc:maintainer?</remark>,
      &dapsacr; can also include the metadata for each file in the output
      format:</para>
-      <screen>&prompt.user;daps -d &dc;-daps-example pdf --meta</screen>
-
+      <screen>&prompt.user;daps -d &dc;-daps-example pdf -/-meta</screen>
+-->
    &daps-note-output-adv;
-  </sect3>
- </sect2>
+  </sect2>
+ 
 </sect1>
 <sect1 id="sec.daps.quick.migrate">
  <title>Migration of Existing DocBook Projects</title>
