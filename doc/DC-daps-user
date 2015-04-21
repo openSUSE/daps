@@ -32,18 +32,6 @@ XSLTPARAM="$XSLTPARAM --stringparam glossentry.show.acronym=primary"
 ## set a homepage for HTML builds
 XSLTPARAM="$XSLTPARAM --stringparam homepage=http://daps.sourceforge.net"
 
-# ToC/LoT/Index Generation
-XSLTPARAM="$XSLTPARAM --stringparam autotoc.label.separator=' ' \
-  --param toc.indent.width=0"
-
-# Automatic Labeling
-XSLTPARAM="$XSLTPARAM --param section.autolabel=1 \
-  --param section.label.includes.component.label=1"
-
-# Reference Pages
-XSLTPARAM="$XSLTPARAM --param refentry.generate.name=1 \
-  --param refentry.generate.title=0"
-
 # Lists
 XSLTPARAM="$XSLTPARAM --param variablelist.term.break.after=1 \
    --stringparam variablelist.term.separator='' \
