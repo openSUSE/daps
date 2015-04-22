@@ -166,19 +166,19 @@
      |      |--svg/
      |--xml/<co id="co.quick.docdir.xml"/>
          |--MAIN*.xml<co id="co.quick.docdir.main"/>
-         |--*.xml
-    </screen>
+         |--*.xml</screen>
    </example>
    <calloutlist>
     <callout arearefs="co.quick.docdir.base">
      <para>
       <quote>Working directory</quote> for the respective documentation
-      project (in the following also called <literal>project  directory</literal>).
+      project (in the following also called <literal>project 
+       directory</literal> or <literal>documentation directory</literal>).
      </para>
     </callout>
     <callout arearefs="co.quick.docdir.dc">
      <para>
-       &dc; file (or files) defining the documentation project (books, articles).
+       &dclong; file (or files) defining the documentation project (books, articles).
 <!--For more information,
       refer to <xref linkend="sec.daps.user.oview.docproject"/>.--></para>
     </callout>
@@ -194,27 +194,23 @@
     </callout>
     <callout arearefs="co.quick.docdir.xml">
      <para>
-      Directory holding the XML files for the documentation project. If you
-      declare entities in an external file (for example, in
-      <filename>entity-decl.ent</filename>), put the entity declaration file
-      here, too.
+      Directory holding the XML &main; file and all other XML files for the
+      documentation project. If you declare entities in one or more external
+      files (for example, in <filename>entity-decl.ent</filename>), put the
+      entity declaration files here, too.
      </para>
     </callout>
     <callout arearefs="co.quick.docdir.main">
      <para>
-      The &main; file of the documentation project. It contains
-      <quote>references</quote> to other books, chapters, appendixes, etc.
+      The &main; file of the documentation project.  It contains the
+      <quote>starting point</quote> (the highest-level object) of your
+      documentation project and includes
+      <quote>references</quote> to other books, chapters, appendixes, etc. For more
+      information, refer to <xref linkend="sec.daps.quick.basics.files"/>.
      </para>
     </callout>
    </calloutlist>
-   <important>
-    <title>Structure of the <filename>xml</filename> and
-     <filename>image/src/*</filename> Directories</title>
-    <para>Avoid subdirectories within the <filename>xml</filename> and
-      <filename>image/src/*</filename> directories. Referencing or including
-     files from subdirectories within those directories can lead
-     to unpredictable results with &dapsacr;.</para>
-   </important>
+  &daps-note-subdirs;
   </sect2>
   
   <sect2 id="sec.daps.quick.basics.files">
