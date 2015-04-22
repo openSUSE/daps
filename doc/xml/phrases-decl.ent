@@ -414,7 +414,9 @@
        <sgmltag>book</sgmltag> or <sgmltag>article</sgmltag>). For larger
        documentation projects, it is good practice to name the file
     <filename>MAIN-<replaceable>PROJECTNAME</replaceable>.xml</filename>,
-       but you can use any other file name as well.
+       but you can use any other file name as well. Other XML files may be
+       included into the &main; file via <sgmltag>&lt;xi:include/&gt;</sgmltag>
+       statements.
       </para>
      </listitem>
     </varlistentry>
@@ -736,3 +738,13 @@ directory and in the profiled sources, as can be seen by
     At the end of the transformation process, &dapsacr; shows a message
     where to find the generated output.
    </para>'>
+   
+ <!ENTITY daps-note-subdirs
+ ' <important>
+    <title>Structure of the <filename>xml</filename> and
+     <filename>image/src/*</filename> Directories</title>
+    <para>Avoid subdirectories within the <filename>xml</filename> and
+      <filename>image/src/*</filename> directories. Referencing or including
+     files from subdirectories within those directories can lead
+     to unpredictable results with &dapsacr;.</para>
+   </important>'>
