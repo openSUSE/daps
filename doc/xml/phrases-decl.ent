@@ -748,3 +748,25 @@ directory and in the profiled sources, as can be seen by
      files from subdirectories within those directories can lead
      to unpredictable results with &dapsacr;.</para>
    </important>'>
+  
+<!ENTITY daps-note-filelists
+' <note>
+   <title>Output of File Listings</title>
+   <para>By default, the output of the listing commands is a list of file names
+    (including the absolute path), all printed in one line with the file names
+    separated by blanks. This default output format is useful for piping (or
+    copying and pasting) the output for use with another command. </para>
+   <para>If you need a pretty printed output where each file name is listed on a
+    separate line, use the <option>--pretty</option> option. </para>
+  </note>'>
+  
+<!ENTITY daps-note-superfluous-files
+  ' <important>
+      <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
+       Files</title>
+      <para> If you are storing multiple &dc; files in the same project
+       directory, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
+       As it contains all articles and books in the project directory, this makes
+       sure that any files found during the check are indeed unnecessary.
+      </para>
+    </important>'>
