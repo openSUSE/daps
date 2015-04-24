@@ -266,7 +266,7 @@
    </listitem>
    <listitem>
     <para>
-     PDF (experimental - only works for PDF format and with XEP formatter)
+     PDF (experimental - only works for PDF output and with XEP formatter)
     </para>
    </listitem>
    <listitem>
@@ -348,14 +348,18 @@
     </para>'>
 
 <!ENTITY ex-daps-img-ref
-'<screen>&lt;figure&gt;
+ '<para>Let us assume you have a source image file named <filename>graphic.dia</filename>. To make
+    &dapsacr; use an SVG version of your image for PDF output (<literal>role="fo"</literal>) and
+    a PNG version for HTML output (<literal>role="html"</literal>), reference the images as follows:
+   </para>
+<screen>&lt;figure&gt;
   &lt;title&gt;Main Window&lt;/title&gt;
   &lt;mediaobject&gt;
     &lt;imageobject role="fo"&gt;
-      &lt;imagedata fileref="screenshot.png" width="70&#37;"/&gt;
+      &lt;imagedata fileref="graphic.svg" width="70&#37;"/&gt;
     &lt;/imageobject&gt;
     &lt;imageobject role="html"&gt;
-      &lt;imagedata fileref="screenshot.png" width="75&#37;"/&gt;
+      &lt;imagedata fileref="graphic.png" width="75&#37;"/&gt;
     &lt;/imageobject&gt;
   &lt;/mediaobject&gt;
 &lt;/figure&gt;</screen>'>
@@ -784,3 +788,12 @@ directory and in the profiled sources, as indicated by
      <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
      <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag>.
      </para>'>
+
+<!ENTITY daps-img-format-support
+'<important>
+    <title>Limited Support with &dapsacr;</title>
+    <para>
+     This image format is only supported in combination with the XEP formatter. Using this format
+     might also lead to longer document creation times.
+    </para>
+   </important>'>
