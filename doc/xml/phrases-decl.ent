@@ -658,12 +658,13 @@ make: *** [validate] Error 3</screen>
 </example>
 <note><title>Validating is Done in Build Directory</title>
 <para>Validation is always done in the <filename>build</filename>
-directory and in the profiled sources, as can be seen by
- the path above
- <filename>/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml </filename>.
- (For information about profiling, refer to the &dapsuser;).
- However,  you need to fix the validation error in the sources located in your
- <filename>xml</filename> directory. </para>
+directory and in the profiled sources, as indicated by
+ the path above (<filename>/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml
+ </filename>). However,  you need to fix the validation error in the sources located in your
+ <filename>xml</filename> directory, otherwise the fixes will not take effect. 
+ Profiling is similar to conditional text. For details, refer to the chapter
+ about modularizing document projects in the &dapsuser;.
+ </para>
 </note>'>
 
 <!ENTITY daps-cmd-basic-syntax
@@ -770,3 +771,16 @@ directory and in the profiled sources, as can be seen by
        sure that any files found during the check are indeed unnecessary.
       </para>
     </important>'>
+    
+<!ENTITY daps-partial-builds
+'<para>Instead of always building your complete documentation project
+     (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+     <sgmltag>article</sgmltag>), &dapsacr; also allows you to build only
+    individual parts. The <quote>starting point</quote> of your documentation
+    project is usually defined by the root element of the &main; file that
+    is referenced in the respective &dclong;. To build only a part of your
+    documentation project, use the <option>--rootid</option> option to specify
+    the ID of an individual <sgmltag>book</sgmltag>, <sgmltag>article</sgmltag>,
+     <sgmltag>glossary</sgmltag>, <sgmltag>appendix</sgmltag>,
+     <sgmltag>part</sgmltag>, or <sgmltag>chapter</sgmltag>.
+     </para>'>
