@@ -56,18 +56,11 @@
   or small as you want without showing pixel artifacts.</para>
   <para>From the supported image types listed above, only JPEG and PNG are pixel-based
    image formats.</para>
-  <important>
-   <title>Limited PDF and EPS Image Support</title>
-   <para>
-    Support for <acronym>PDF</acronym> and <acronym>EPS</acronym> image
-    formats in &dapsacr; is limited. Currently, both formats are only
-    supported in combination with the XEP formatter. Using either format
-    might also lead to longer document creation times.
-   </para>
-  </important>
+  
 
   <sect2 id="sec.daps.user.imgs.usage.dia">
    <title>DIA</title>
+   <para>Can only be used as input format for &dapsacr;.</para>
    <para>
     DIA is a vector image format which means it is resolution-independent.
     Images in this format can be displayed or printed as large or small as
@@ -88,8 +81,7 @@
     drawing shapes itself. Complex or effect-laden vector illustrations and
     information graphics are hard to create with Dia.
    </para>
-   <para></para>
-  </sect2>
+ </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.eps">
    <title>EPS</title>
@@ -102,14 +94,18 @@
    </para>
    <para>
     Where feasible, use <acronym>SVG</acronym> files instead of
-    <acronym>EPS</acronym> files. <acronym>EPS</acronym> might occasionally
+    <acronym>EPS</acronym> files (also because EPS images only work 
+     with XEP formatter at the moment).
+    <acronym>EPS</acronym> might occasionally
     serve as an exchange format with contributors that use Adobe* graphics
     software.
    </para>
+   &daps-img-format-support;
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.fig">
    <title>FIG</title>
+   <para>Can only be used as input format for &dapsacr;.</para>
    <para>
     <acronym>FIG</acronym> is a vector image format that can be created with
     the software <ulink url="http://www.xfig.org">Xfig</ulink>. The support
@@ -148,6 +144,7 @@
     <acronym>PDF</acronym> files can also be used as an exchange format with
     contributors that  cannot export to <acronym>SVG</acronym>.
    </para>
+   &daps-img-format-support;
   </sect2>
 
   <sect2 id="sec.daps.user.imgs.usage.png">
@@ -164,11 +161,9 @@
    <tip>
     <title>Make PNG Files Smaller with <command>daps optipng</command>
     </title>
-    <para>
-     To decrease the file size of PNG images without altering their look,
-     use <command>daps optipng</command>. It removes unused colors and alpha
-     channels.
-    </para>
+    <para> To decrease the file size of PNG images without altering their look, use
+     <command>daps optipng</command>. It removes unused colors and alpha channels form your source
+     PNG files. Note that it is the only &dapsacr; command that alters any sources.</para>
     <para>
      To run <command>optipng</command> over an entire book's PNG images:
     </para>
@@ -193,6 +188,7 @@
      version. Custom SVG formats might not be compatible with the components
      used by &dapsacr; for processing SVG files.
     </para>
+    <para>XEP and FOP formatter only support SVG 1.0.</para>
    </important>
    <para>
     A good open source <acronym>SVG</acronym> editor is
@@ -248,28 +244,14 @@
   &daps-img-ref;
   <example id="ex.daps.user.xml.img.ref">
    <title>Image Reference in an XML File</title>
-   &ex-daps-img-ref;
+     &ex-daps-img-ref;
   </example>
  </sect1>
  <sect1 id="sec.daps.user.imgs.manage">
   <title>&dapsacr; Commands for Managing Images</title>
 
   <para> &dapsacr; offers several subcommands for managing images in a
-   documentation project. By default, the output of the subcommands is a list of
-   image file names (including the absolute path), all printed in one line with
-   the file names separated by blanks, see <xref
-    linkend="ex.daps.graphics.output.default" xrefstyle="select:label"/>. This
-   default output format is useful for piping (or copying and pasting) the
-   output for use with another command. If you need a pretty printed output
-   where each image is listed on a separate line, refer to <xref
-    linkend="vle.daps.graphics.pretty"/>. </para>
-
-  <example id="ex.daps.graphics.output.default">
-   <title>Default Output of an Image-related &dapsacr; Command</title>
-   <screen><?dbsuse-fo font-size="0.70em"?><replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia <replaceable>PATH</replaceable>/images/src/png/example_png1.png <replaceable>PATH</replaceable>/images/src/png/example_png2.png <replaceable>PATH</replaceable>/images/src/png/example_png3.png <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
-  </example>
-
-  <para> To find out which images are used/not used in a project or referenced
+   documentation project. To find out which images are used/not used in a project or referenced
    in a DocBook file but missing from the file system, &dapsacr; offers
    subcommands that check your project for such issues. </para>
   <para> Apart from that, you can check your source images for non-unique names
@@ -283,8 +265,8 @@
      </term>
     <listitem>
      <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
-     <para> Lists all graphics used by the DocBook files that are referenced in
-      the current &dc; file. </para>
+     <para> Lists all graphics used by the DocBook files that are referenced in the document
+      specified by the current &dc; file. </para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -307,15 +289,7 @@
        2013-01-04: fs, is the above correct?</remark> This command is useful if
       you want to clean up your source images and want to know which images are
       no longer needed for the documentation project. </para>
-     <important>
-      <title>Use a <sgmltag>set</sgmltag> to Check for Superfluous
-       Graphics</title>
-      <para> If you are storing multiple &dc; files in the same project
-       directory, use the &dc; file of a <sgmltag>set</sgmltag> for this check.
-       As it contains all articles and books in the project directory, this makes
-       sure that any graphics found during the check are indeed unnecessary.
-      </para>
-     </important>
+    &daps-note-superfluous-files;
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -348,40 +322,42 @@
       reality the file should be re-generated. </para>
     </listitem>
    </varlistentry>
-   <varlistentry id="vle.daps.graphics.pretty">
-    <term>Generating Pretty-Printed Output</term>
-    <listitem>
-     <para> For better on-screen reading (or for copying the output to an
-      e-mail, for example), use the <parameter>--pretty</parameter> parameter.
-      It adds a line break after each file name, so that only one file name is
-      shown per line&mdash;see <xref
-       linkend="ex.daps.graphics.output.pretty" xrefstyle="select:label"/>. </para>
-
-     <example id="ex.daps.graphics.output.pretty">
-      <title>Pretty-printed Output of an Image-related &dapsacr;
-       Command</title>
-      <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
-       <replaceable>PATH</replaceable>/images/src/dia/example_dia1.dia
-       <replaceable>PATH</replaceable>/images/src/png/example_png1.png
-       <replaceable>PATH</replaceable>/images/src/png/example_png2.png
-       <replaceable>PATH</replaceable>/images/src/png/example_png3.png
-       <replaceable>PATH</replaceable>/images/src/svg/example_svg.svg
-       <replaceable>PATH</replaceable>/images/src/fig/example_fig1.fig ...</screen>
-     </example>
-
-     <tip>
-      <title>Use Pretty-Printed Output for Counting</title>
-      <para> To count the number of images listed in a given output, you can
-       also combine the <parameter>--pretty</parameter> parameter with the
-       <command>wc</command> command: </para>
-      <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
-      <para> For <xref linkend="ex.daps.graphics.output.pretty"
-        xrefstyle="select:label"/>, the command above would return the value
-        <computeroutput>5</computeroutput>
-      </para>
-     </tip>
-    </listitem>
-   </varlistentry>
   </variablelist>
+  
+  <!--taroth 2015-04-24: keep in sync with similar content in daps_user_edit.xml-->
+  &daps-note-filelists; 
+  
+  <para> See 
+   <xref linkend="ex.daps.graphics.output.default"/> and 
+   <xref linkend="ex.daps.graphics.output.pretty"/> for a comparison of both outputs.</para>
+  
+  <example id="ex.daps.graphics.output.default">
+   <title>Default Output of an Image-related &dapsacr; Command</title>
+   <screen><?dbsuse-fo font-size="0.70em"?><replaceable>YOUR_DOC_DIR</replaceable>/images/src/dia/example_dia1.dia <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png3.png <replaceable>YOUR_DOC_DIR</replaceable>/images/src/svg/example_svg.svg <replaceable>YOUR_DOC_DIR</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+  </example>
+  
+  <example id="ex.daps.graphics.output.pretty">
+   <title>Pretty-printed Output of an Image-related &dapsacr;
+    Command</title>
+   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/dia/example_dia1.dia
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png3.png
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/svg/example_svg.svg
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+  </example>
+  
+  <tip>
+   <title>Use Pretty-Printed Output for Counting</title>
+   <para> To count the number of images listed in a given output, you can
+    also combine the <parameter>--pretty</parameter> parameter with the
+    <command>wc</command> command: </para>
+   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
+   <para> For <xref linkend="ex.daps.graphics.output.pretty"
+    xrefstyle="select:label"/>, the command above would return the value
+    <computeroutput>5</computeroutput>
+   </para>
+  </tip>
  </sect1>
 </chapter>
