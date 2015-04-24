@@ -26,7 +26,12 @@
     <listitem>
      <para>
       how to adapt your documentation to fit multiple similar product
-      versions at once.
+      versions at once,
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      how to get and keep track of your files included a documentation project.
      </para>
     </listitem>
    </itemizedlist>
@@ -123,7 +128,8 @@
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --file <replaceable>PATH_TO_XML_FILE</replaceable>&nbsp;</screen>
      <para>
-      Checks the specified file with the default dictionary. Suggests
+      Checks the specified file (plus all files included with
+      XIncludes on this level) using the default dictionary. Suggests
       alternative spellings for each misspelled word and waits for user
       interaction.
      </para>
@@ -201,7 +207,7 @@
    <title><command>checklink</command> follows XIncludes</title>
    <para>
     The <command>checklink</command> command always follows
-    <sgmltag>xi:includes</sgmltag>, even when using the
+    <sgmltag>xi:include</sgmltag> statements, even when using the
     <option>--file</option> option.
    </para>
   </note>
@@ -216,7 +222,8 @@
       Checks the <sgmltag>ulink</sgmltag> elements in all files belonging to
       the documentation project. The resulting HTML report
       <filename>*checkbot-localhost.html</filename> can be opened in a
-      browser, see <xref linkend="fig.daps.user.edit.chklink"/>.
+      browser, see <xref linkend="fig.daps.user.edit.chklink"/>. For opening the
+      results directly in the browser, add the <option>--show</option> option.
      </para>
      <para>
       If your &dc; file references a documentation <sgmltag>set</sgmltag>,
@@ -276,6 +283,88 @@
    For details, refer to <xref linkend="sec.daps.user.modular.profile"/>.
   </para>
  </sect1>
+ <sect1 id="sec.daps.user.edit.manage">
+  <title>Keeping Track of Your Documentation Project</title>
+  <para>To help you keep track of the files and images included in your
+  documentation project, &dapsacr; provides some useful commands.</para>
+  
+  <variablelist>
+   <varlistentry>
+    <term>Listing All Files in a Documentation Project</term>
+    <listitem>
+     <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles</screen>
+     <para>Lists all source files (XML sources, images, entity declarations, and
+      the &dc; file) used by the document specified with the &dc; file.
+       </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Checking for Superfluous Files</term>
+    <listitem>
+     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused</screen>
+     <para> Lists all files that are <emphasis>not</emphasis> referenced in the
+      document specified by the &dc; file, but are available in the
+      <filename>xml</filename> and <filename>images/src</filename> subdirectories. 
+      This command is useful if
+      you want to clean up your source files and want to know which files are
+      no longer needed for the documentation project. </para>
+    &daps-note-superfluous-files;
+    </listitem>
+   </varlistentry>
+  <varlistentry>
+   <term>Checking Where a ID or File is Included</term>
+   <listitem>
+    <screen>&prompt.user;&dapscmd;
+     -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
+     <replaceable>ID</replaceable></screen>
+     <para> Lists the file that contains the ID specified with the mandatory
+      parameter <option>--rootid</option>. For example:</para>
+    <screen>&prompt.user;&dapscmd;-d DC-daps-example list-file --rootid sec.template.examples.images
+The ID "sec.template.examples.images" appears in:
+/DOC_DIR_PATH/xml/MAIN-daps-example.xml</screen>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+  
+  <para>For the image-related commands, see<xref
+  linkend="sec.daps.user.imgs.manage"/>.</para>
+  
+ &daps-note-filelists; 
+ 
+ <para> See 
+   <xref linkend="ex.daps.output.default"/> and 
+   <xref linkend="ex.daps.output.pretty"/> for a comparison of both outputs.</para>
+  
+  <example id="ex.daps.output.default">
+   <title>Default Output of a File Listing &dapsacr; Command</title>
+   <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
+    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>images/src/png/example1.png&nbsp;<replaceable
+     >YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+  </example>
+  
+  <example id="ex.daps.output.pretty">
+   <title>Pretty-printed Output of a File Listing &dapsacr; Command</title>
+   <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
+    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
+    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
+    <replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+  </example>
+  
+  <tip>
+   <title>Using Pretty-Printed Output for Counting</title>
+   <para> To count the number of files listed in a given output, you can
+    also combine the <parameter>--pretty</parameter> parameter with the
+    <command>wc</command> command: </para>
+   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
+   <para> For <xref linkend="ex.daps.output.pretty"
+    xrefstyle="select:label"/>, the command above would return the value
+    <computeroutput>4</computeroutput>.
+   </para>
+  </tip>
+ 
+ </sect1>
+ 
  <sect1 id="sec.daps.user.edit.more">
   <title>For More Information</title>
 
