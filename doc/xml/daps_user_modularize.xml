@@ -154,8 +154,9 @@
     DocBook offers profiling attributes for various purposes as illustrated
     in <ulink url="http://www.sagehill.net/docbookxsl/Profiling.html">
     <citetitle>Table 26.1. Profiling attributes</citetitle> </ulink>.
-    Currently, not all of them are supported by &dapsacr;. For details,
-    refer to <xref linkend="sec.daps.user.modular.profile.daps"/>.
+    All of them are supported by &dapsacr;.
+    <!--Currently, not all of them are supported by &dapsacr;. For details,
+    refer to <xref linkend="sec.daps.user.modular.profile.daps"/>.-->
    </para>
    <para>
     Generally, profiling attributes can be used on many
@@ -454,14 +455,16 @@
    <sect3 id="sec.daps.user.modular.profile.daps.pa">
     <title>XML Files: Profiling Attributes</title>
     <para>
-     In your DocBook XM files, only use profiling attributes that are
-     supported by &dapsacr;&mdash;refer to
-     <xref linkend="tab.daps.profiling"/>. In &dapsacr;, each profiling
-     attribute has a corresponding profiling parameter to be used in the
-     &dc; file. The profiling parameters define which profiling attributes
+     In &dapsacr;, each profiling attribute has a corresponding profiling parameter to be used in the
+     &dc; file, see <xref linkend="sec.daps.user.modular.profile.daps.pp"/>. 
+     The profiling parameters define which profiling attributes
      and values to interpret during generation of output.
     </para>
-    <table id="tab.daps.profiling" rowsep="1">
+    <para>The names of the profiling parameters are derived from the profiling
+     attributes, but written in uppercase letters and preceded by the prefix
+     <literal>PROF</literal>. 
+    </para>
+     <table id="tab.daps.profiling" rowsep="1">
      <title>Profiling Attributes (DocBook) and Profiling Parameters (&dapsacr;)</title>
      <tgroup cols="3">
       <colspec colnum="1" colname="1" colwidth="20*"/>
@@ -504,6 +507,20 @@
        <row>
         <entry colname="1">
          <para>
+          <sgmltag class="attribute">audience</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Intended audience of the content, such as <literal>instructor</literal>. Added in DocBook version 5.0.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFAUDIENCE</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
           <sgmltag class="attribute">condition</sgmltag>
          </para>
         </entry>
@@ -513,6 +530,34 @@
          </para>
         </entry>
         <entry colname="3"><parameter>PROFCONDITION</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">conformance</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Conformance to standards, as for example <literal>lsb</literal> (Linux Standards Base).
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFCONFORMANCE</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">lang</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Language code, such as <literal>de_DE</literal>.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFLANG</parameter>
         </entry>
        </row>
        <row>
@@ -532,6 +577,92 @@
        <row>
         <entry colname="1">
          <para>
+          <sgmltag class="attribute">revision</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Editorial revision, such as <literal>v2.1</literal>.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFREVISION</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">revisionflag</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Revision status of the element, such as <literal>changed</literal>. This attribute has a fixed set of values to choose from.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFREVISIONFLAG</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">role </sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para> General purpose attribute, with no preassigned semantics. As the
+          role attribute is not solely <quote>reserved</quote> for profiling but
+          can be used for other purposes in a document, we would recommend
+          to not use this for profiling. For further details, see <ulink
+           url="http://sagehill.net/docbookxsl/ProfilingWithRole.html"/>.</para>
+        </entry>
+        <entry colname="3"><parameter>PROFROLE</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">security</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Security level, such as <literal>high</literal>.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFSECURITY</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">status</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Editorial or publication status, such as <literal>InDevelopment</literal> or <literal>draft</literal>.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFSTATUS</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">userlevel</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Level of user experience, such as <literal>beginner</literal>.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFUSERLEVEL</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
           <sgmltag class="attribute">vendor</sgmltag>
          </para>
         </entry>
@@ -541,6 +672,20 @@
          </para>
         </entry>
         <entry colname="3"><parameter>PROFVENDOR</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
+          <sgmltag class="attribute">wordsize</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Word size (width in bits) of the computer architecture, such as <literal>64bit</literal>. Added in DocBook version 4.4.
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFWORDSIZE</parameter>
         </entry>
        </row>
       </tbody>
@@ -567,9 +712,11 @@
     <tip>
      <title>Include PI in All XML Files</title>
      <para>
-      For any documentation projects that need profiling, we advise to
-      include the PI in all XML files. Otherwise you might forget to move
-      the PI in case of restructuring the XML sources. Having the PI in all
+      Although &dapsacr; only checks for the profiling PI in the &main; file, it
+      is a good idea to  include the PI in all XML files for any projects that
+      need profiling. Otherwise you might forget to move
+      the PI to the respective &main; file in case of restructuring the XML 
+      sources. Having the PI in all
       XML files does not hurt: Generation of profiled output is only
       triggered if your &dc; files contain profiling parameters.
      </para>
@@ -804,8 +951,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 
   <example id="ex.daps.ent.decl.profiling">
    <title>Separate Entity File with Profiling Attributes</title>
-<screen><?dbsuse-fo font-size="0.65em"?>
-&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
+<screen><?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
  <emphasis role="strong">'&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
