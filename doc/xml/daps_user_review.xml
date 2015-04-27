@@ -16,23 +16,23 @@
    <itemizedlist>
     <listitem>
      <para>
-      by including remarks, metadata or draft watermarks in the output,
+      by including remarks,<!-- metadata -->or draft watermarks in the output,
      </para>
     </listitem>
     <listitem>
      <para>
-      by transforming the multiple DocBook files in your project into one
-      big XML file,</para>
+      or by transforming the multiple DocBook files in your project into one
+      big XML file.</para>
     </listitem>
-    <listitem>
+   <!-- <listitem>
      <para>or by creating different TAR archives which to hand over to
      your localization team or agency.</para>
-    </listitem>
+    </listitem>-->
    </itemizedlist>
   </para>
  </abstract>
  <sect1 id="sec.daps.user.review.output.special">
-  <title>Including Remarks, Metadata or Draft Watermarks in the Output</title>
+  <title>Including Remarks,<!-- Metadata -->or Draft Watermarks in the Output</title>
 
   <para>
    &dapsacr; offers several features to simplify review and translation
@@ -53,38 +53,8 @@
    output.
   </para>-->
 
-  <note>
-   <title>Availability of Advanced Output Options</title>
-   <para>
-    Advanced output options are only supported for selected formats:
-   </para>
-   <itemizedlist>
-    <listitem>
-     <para>
-      <option>--meta</option>:
-      Only available in HTML, and HTML-single. <remark>taroth 2014-10-28:  --meta no longer seems to
-       have an effect on PDsF: no metadata, neither when building with XEP nor FOP...</remark>
-     </para>
-    </listitem>
-    <listitem>
-     <para>
-      <option>--draft</option> and <option>--remarks</option>: Only
-      available in HTML, HTML-single, PDF, and &epub; output.
-     </para>
-    </listitem>
-   </itemizedlist>
-   <para>
-    Using the <option>--remarks</option> and <option>--meta</option> options
-    automatically turns draft mode on.
-   </para>
-   <para>
-    By default, &dapsacr; adds a string to the base name of the output file
-    to flag output formats generated with special options. Example file
-    names are <filename>daps-example_draft_en.pdf</filename> or
-    <filename>daps-example_remarks_draft_en.pdf</filename>.
-   </para>
-  </note>
-
+&daps-note-output-adv;
+ 
   <para>
    Find a few example commands below:
   </para>
@@ -107,15 +77,16 @@
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <!--<varlistentry>
     <term>Including Metadata in the Output</term>
     <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> html --meta</screen>
+     <screen>&prompt.user;daps
+     -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> html -/-meta</screen>
      <para> If metadata to a file has been set, &dapsacr; includes the
      metadata for each file in the output format. </para>
      <note>
-      <title>Restrictions of the <option>--meta</option> Option</title>
-      <para>As the <option>--meta</option> relies on certain mechanisms and SVN
+      <title>Restrictions of the <option>-/-meta</option> Option</title>
+      <para>As the <option>-/-meta</option> relies on certain mechanisms and SVN
        properties, including metadata in the output only works under the
        following conditions:</para>
       <itemizedlist>
@@ -136,7 +107,7 @@
       </para>
      </note>
      </listitem>
-   </varlistentry>
+   </varlistentry>-->
   </variablelist>
  </sect1>
  <sect1 id="sec.daps.user.review.bigfile">
@@ -151,7 +122,7 @@
    the big file. A message is shown where to find the generated output. </para>
 
  </sect1>
- <sect1 id="sec.daps.user.review.locdrop">
+ <!--<sect1 id="sec.daps.user.review.locdrop">
   <title>Creating TAR Archives For Localization</title>
   <para> If you have a huge documentation project of which only individual books or files are to be
    translated, you can mark the respective files as <literal>to be translated</literal> with
@@ -185,7 +156,7 @@
 
 
   <para> For further options related to creating distributable archives with &dapsacr;, run
-   <command>daps --help</command> or see <xref linkend="cha.daps.user.deploy"/> for more
+   <command>daps -/-help</command> or see <xref linkend="cha.daps.user.deploy"/> for more
    information. </para>
- </sect1>
+ </sect1>-->
 </chapter>
