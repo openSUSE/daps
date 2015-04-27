@@ -119,10 +119,6 @@ Requires:       fop >= 0.94
 %endif
 Requires:       xmlstarlet
 
-Recommends:     aspell aspell-en
-%if 0%{?suse_version} < 1210
-Recommends:     aspell-en-huge
-%endif
 Recommends:     daps-docmanager
 Recommends:     docbook_5
 Recommends:     epubcheck

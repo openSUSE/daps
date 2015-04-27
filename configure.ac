@@ -8,13 +8,10 @@ dnl Authors:
 dnl Frank Sundermeyer <fsundermeyer at opensuse dot org>
 dnl Thomas Schraitle  <toms at opensuse dot org>
 dnl
-dnl TODO
-dnl
-dnl determine aspell directory
 
 m4_define(daps_version_major, 2)
 m4_define(daps_version_minor, 0)
-m4_define(daps_version_micro, [0-rc5])
+m4_define(daps_version_micro, [0-rc6])
 # API version
 m4_define([daps_api_version],[daps_version_major])
 
