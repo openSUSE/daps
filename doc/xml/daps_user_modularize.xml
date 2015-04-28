@@ -83,8 +83,7 @@
   <example id="ex.daps.ent.decl.reference">
    <title>Referencing A Separate Entity File</title>
 <screen>&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-                "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+&lt;!DOCTYPE chapter PUBLIC [...] 
 [
   &lt;!ENTITY % entities SYSTEM "entity-decl.ent"> <co id="co.daps.main.reference.ent"/>
   %entities; <co id="co.daps.main.reference.load"/>
@@ -697,11 +696,28 @@
     <para>
      To activate generation of profiled output in &dapsacr;, the following
      processing instruction (PI) must be included in the header of the &main;
-     file, before the root element:
+     file, before the root element. 
     </para>
-<screen>&lt;?xml-stylesheet
+    <note>
+     <title>Adjusting the DocBook Version in the PI</title>
+     <para>As the profiling PI includes the DocBook version number, it needs to
+      be adjusted according to the DocBook version you use. See <xref
+       linkend="ex.daps.user.modular.pi.db4"/> and <xref
+       linkend="ex.daps.user.modular.pi.db5"/>.</para>
+   </note>
+    <example id="ex.daps.user.modular.pi.db4">
+     <title>Profiling PI in a DocBook 4.5 File</title>
+        <screen>&lt;?xml-stylesheet
   href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
   type="text/xml" ?></screen>
+    </example>
+    
+    <example id="ex.daps.user.modular.pi.db5">
+     <title>Profiling PI in a DocBook 5.0 File</title>
+     <screen>&lt;?xml-stylesheet
+      href="urn:x-daps:xslt:profiling:docbook50-profile.xsl" 
+      type="text/xml" ?></screen>
+    </example>
    <para>
      The &main; file of a documentation project is the one that is referenced
      by the <parameter>MAIN</parameter> parameter in the &dc; file. If the
@@ -806,8 +822,8 @@
      </calloutlist>
     </example>
      
-    <example id="ex.daps.main.pi">
-     <title>&main; file With PI for Profiling</title>
+    <example id="ex.daps.main.pi.db4">
+     <title>&main; file With PI for Profiling (DocBook 4.5)</title>
 <screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 <emphasis role="strong">&lt;?xml-stylesheet  
  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
@@ -831,6 +847,32 @@
         missing, any profiling parameters in the &dc; file will be ignored.
        </para>
      </example>
+
+<example id="ex.daps.main.pi.db5">
+     <title>&main; file With PI for Profiling (DocBook 5.0)</title>
+<screen>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<emphasis role="strong">&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?&gt;</emphasis>
+&lt;!DOCTYPE article 
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]&gt;
+
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt;
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+ [...]
+&lt;/article&gt;</screen>
+        <para>
+         If the processing instruction (PI)  is
+        missing, any profiling parameters in the &dc; file will be ignored.
+       </para>
+     </example>
+
     <example id="ex.daps.dc.pa.home">
      <title>&dc; File with Profiling for Home Edition</title>
 <screen>## Doc Config File for Frog Sound Recordings
@@ -846,7 +888,8 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
       <callout arearefs="co.dc.pa.main1">
        <para>
         <parameter>MAIN</parameter> parameter referencing the &main; file. See
-        <xref linkend="ex.daps.main.pi"/>.
+        <xref linkend="ex.daps.main.pi.db4"/> or <xref
+         linkend="ex.daps.main.pi.db5"/>.
        </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.basic">
@@ -875,7 +918,8 @@ PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
       <callout arearefs="co.dc.pa.main2">
        <para>
         <parameter>MAIN</parameter> parameter referencing the &main; file. See
-        <xref linkend="ex.daps.main.pi"/>.
+        <xref linkend="ex.daps.main.pi.db4"/> or <xref
+         linkend="ex.daps.main.pi.db5"/>.
        </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof1">
@@ -905,7 +949,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
       <callout arearefs="co.dc.pa.main3">
        <para>
         <parameter>MAIN</parameter> parameter referencing the &main; file. See
-        <xref linkend="ex.daps.main.pi"/>.
+        <xref linkend="ex.daps.main.pi.db4"/> or <xref
+         linkend="ex.daps.main.pi.db5"/> .
        </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof2">
@@ -973,7 +1018,8 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> you
    can use them throughout your documents. For &dapsacr; to process them
    correctly, you only need to <quote>introduce</quote> the entities once as
-   shown in <xref linkend="ex.daps.art.prof.ent"/>.
+   shown in <xref linkend="ex.daps.art.prof.ent.db4"/> or <xref
+    linkend="ex.daps.art.prof.ent.db5"/> .
   </para>
 
   <procedure>
@@ -1007,8 +1053,9 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    Then use them in the text wherever you need them.
   </para>
 
-  <example id="ex.daps.art.prof.ent">
-   <title>XML File with <literal>&amp;productname;</literal> and <literal>&amp;productnumber;</literal> Entities</title>
+  <example id="ex.daps.art.prof.ent.db4">
+   <title>XML File with <literal>&amp;productname;</literal> and
+    <literal>&amp;productnumber;</literal> Entities (DocBook 4.5)</title>
 <screen><?dbsuse-fo font-size="0.65em"?>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 
@@ -1079,6 +1126,82 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    </calloutlist>
   </example>
 
+ <example id="ex.daps.art.prof.ent.db5">
+   <title>XML File with <literal>&amp;productname;</literal> and
+    <literal>&amp;productnumber;</literal> Entities (DocBook 5.0)</title>
+<screen><?dbsuse-fo font-size="0.65em"?>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+
+<emphasis role="strong">&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?&gt;</emphasis> <xref
+  linkend="co.daps.main.pi.profiling2" xrefstyle="select:nopage"/>
+
+<emphasis role="strong">&lt;!DOCTYPE article 
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
+%entities;
+]&gt;</emphasis> <xref linkend="co.daps.main.reference.ent2"
+ xrefstyle="select:nopage"/>
+
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt;
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+  &lt;info&gt; <co id="co.daps.info"/>
+   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <xref 
+    linkend="co.daps.articleinfo.productname" xrefstyle="select:nopage"/>
+   &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <xref
+    linkend="co.daps.articleinfo.productnumber" xrefstyle="select:nopage"/>
+ &lt;/info&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    &amp;productname; &amp;productnumber; is a software for recording, editing,
+ <xref linkend="co.daps.main.product.entities" xrefstyle="select:nopage"/>
+    and mixing audio data.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+ [...]
+&lt;/article&gt;</screen>
+ <calloutlist>
+    <callout arearefs="co.daps.main.pi.profiling2">
+     <para>
+      Processing instruction (PI) in the header of the &main; file. If it is
+      missing, any profiling parameters in the &dc; file will be ignored.
+     </para>
+    </callout>
+    <callout arearefs="co.daps.main.reference.ent2">
+     <para>
+      Reference to the separate entity declaration file (with a parameter
+      entity).
+     </para>
+    </callout>
+    <callout arearefs="co.daps.articleinfo">
+     <para>
+      Element <sgmltag>info</sgmltag>.
+     </para>
+    </callout>
+    <callout arearefs="co.daps.articleinfo.productname">
+     <para>
+      Element <sgmltag>productname</sgmltag> and entity
+      <literal>&amp;productname;</literal>.
+     </para>
+    </callout>
+    <callout arearefs="co.daps.articleinfo.productnumber">
+     <para>
+      Element <sgmltag>productnumber</sgmltag> and entity
+      <literal>&amp;productnumber;</literal>.
+     </para>
+    </callout>
+    <callout arearefs="co.daps.main.product.entities">
+     <para>
+      Paragraph containing the entities <literal>&amp;productname;</literal>
+      and <literal>&amp;productnumber;</literal>.
+     </para>
+    </callout>
+   </calloutlist>
+  </example>
   <para>
    In any output format, the entities
    (<xref linkend="co.daps.articleinfo.productname" xrefstyle="select:label nopage"/>,
@@ -1089,14 +1212,17 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    generating the output. For an example, refer to
    <xref linkend="tab.daps.profile.output.four" xrefstyle="select:label"/>.
    It shows output variants that can be generated from the XML code in
-   <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/> plus the
+   <xref linkend="ex.daps.art.prof.ent.db4" xrefstyle="select:label"/> or <xref
+    linkend="ex.daps.art.prof.ent.db5" xrefstyle="select:label"/> plus the
    entity declaration in
    <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> by
    using different &dc; files.
   </para>
 
   <table id="tab.daps.profile.output.four" rowsep="1">
-   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent" xrefstyle="select:label"/></title>
+   <title>Output Variants of <xref linkend="ex.daps.art.prof.ent.db4"
+    xrefstyle="select:label"/> or <xref linkend="ex.daps.art.prof.ent.db5"
+     xrefstyle="select:label"/> </title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
     <colspec colnum="2" colname="2" colwidth="50*"/>
