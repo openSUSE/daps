@@ -44,15 +44,10 @@
   <title>Validating Your XML Sources</title>
   &daps-validation-basics;
   &daps-example-validation-error;
-  <para>
-   Validation within your XML editor is bound to fail, as soon you use
-   profiling in your DocBook sources. Profiling is similar to conditional
-   text, for details, refer to
-   <xref linkend="sec.daps.user.modular.profile"/>. Furthermore, validating
-   XML files within a <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag>
-   often exceeds validation of the current XML file, as links
-   (<sgmltag>xref</sgmltag> elements) or XIncludes need to be resolved, too.
-  </para>
+  <para> As soon you use profiling in your DocBook sources, validation within your XML editor is not
+   reliable. Furthermore, validating XML files within a
+    <sgmltag>book</sgmltag> or <sgmltag>set</sgmltag> often exceeds validation of the current XML
+   file, as links (<sgmltag>xref</sgmltag> elements) or XIncludes need to be resolved, too. </para>
 
   <para>
    &dapsacr; can handle all those cases because of the built-in
@@ -85,12 +80,6 @@
     <term>Validating Your Files Including <sgmltag>Remark</sgmltag> Elements</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --remarks</screen>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>Validating Your Files Including XML Comments (<sgmltag class="sgmlcomment">Comment</sgmltag>)</term>
-    <listitem>
-<screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> validate --comments</screen>
     </listitem>
    </varlistentry>
   </variablelist>
@@ -168,7 +157,7 @@
   </para>
 
   <para>
-   For further advanced output options like including remarks, metadata or
+   For more advanced output options like including remarks or
    draft watermarks in the output, creating one big XML file or creating
    distributable archives, refer to <xref linkend="cha.daps.user.review"/>.
   </para>
@@ -178,19 +167,7 @@
     <term>Building Only Parts of Your Documentation Project</term>
     <listitem>
 <screen>&prompt.user;daps -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
-     <para>
-      Instead of always building your complete documentation project
-      (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
-      <sgmltag>article</sgmltag>), &dapsacr; also allows you do partial
-      builds. By default, the <quote>starting point</quote> of your documentation
-      project is the root element defined in the &main; file that is
-      referenced in the respective &dclong;. Alternatively, specify a ROOTID
-      on the command line to build only a part of your documentation project. For partial builds,
-      you can use the ID of a <sgmltag>book</sgmltag>,
-      <sgmltag>article</sgmltag>, <sgmltag>glossary</sgmltag>,
-      <sgmltag>appendix</sgmltag>, <sgmltag>part</sgmltag>, or
-      <sgmltag>chapter</sgmltag> element.
-     </para>
+     &daps-partial-builds;
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -206,6 +183,29 @@
      </para>
     </listitem>
    </varlistentry>
+   <varlistentry>
+    <term>Opening the Output Directly in Your PDF Viewer</term>
+    <listitem>
+     <screen>&prompt.user;evince $(daps -d &dc;-daps-example pdf) &amp;</screen>
+     <para>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
+      Evince).</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>Getting More Information about the Building Process</term>
+    <listitem>
+     <para>&dapsacr; is less verbose than its predecessor <literal>susedoc</literal>. Several
+      verbosity levels are available. Use the global options <option>-v*</option> to specify the level
+      of information you want. It ranges from <option>-v0</option> (print one line of results) to
+      <option>-v3</option> (print all commands, very verbose). For example, the following command
+      will print all files created during the build process:
+     </para>
+     <screen>&prompt.user;daps -v2 -d &dc;-daps-example pdf</screen>
+     <para>For a debug output, use the following:</para>
+     <screen>&prompt.user;daps --debug2 -d &dc;-daps-example pdf</screen>
+    </listitem>
+   </varlistentry>
+   
   </variablelist>
  </sect1>
 </chapter>

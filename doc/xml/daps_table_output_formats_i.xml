@@ -33,7 +33,7 @@
       </entry>
       <entry>
        <para>
-         Creates a color PDF (without any crop marks). Open the result in a
+         Creates a color PDF. Open the result in a
          PDF viewer.
         </para>
        <para>
@@ -53,13 +53,13 @@
       </entry>
       <entry>
        <para>
-         Creates a black-and-white PDF, suitable for hand-off to a printing shop. 
+         Creates a black-and-white PDF. 
          Open the result in a PDF viewer.
        </para>
-       <para>
+      <para>
         Requires an FO formatter. All color images are automatically
-        converted to grayscale images. To also include crop marks, add the 
-       <option>--cropmarks</option> option. Creation of crop marks is currently only
+        converted to grayscale images. If you need a PDF for a printing shop, add the 
+        <option>--cropmarks</option> option. Creation of crop marks is currently only
         supported by the XEP FO formatter. 
        </para>
       </entry>
@@ -117,9 +117,10 @@
       </entry>
       <entry>
        <para>
-         Creates an &epub; document. Open the result in a portable e-book
+         Creates an &epub; 2 document. Open the result in a portable e-book
          reader (or with a software like Calibre).
-        </para>
+       </para>
+       <para>If you need an &epub; 3 document, add the <option>--epub3</option> option.</para>
        <para>
         <remark>taroth 2012-03-23: check with fs/toms: only books? what about
         conversion of articles to epub?</remark>

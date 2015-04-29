@@ -78,25 +78,26 @@
   </itemizedlist>
 
   <example>
-   <title>Adjusting the Layout of Variable lists</title>
+   <title>Adjusting the Layout of Variable Lists</title>
    <para>
     By default, the DocBook stylesheets display the contents of a
     <sgmltag>variablelist</sgmltag> as a table. To change this temporarily,
     set the parameter <parameter>variablelist.as.table</parameter> to the
     value <literal>0</literal> by executing the following command:
    </para>
-<screen>daps html --xsltparam<co id="co.xsltparam"/> "'<co id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co id="co.param"/>&nbsp;0<co id="co.value"/>'"<xref linkend="co.quote" xrefstyle="select:label nopage"/></screen>
+   <screen>daps -d &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html --xsltparam<co id="co.xsltparam"/> "<co
+ id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co id="co.param"/>=0<co id="co.value"/>"<xref linkend="co.quote" xrefstyle="select:label nopage"/></screen>
    <calloutlist>
     <callout arearefs="co.xsltparam">
      <para>
       As value of <option>--xsltparam</option>, add one or more
       <literal>xsltproc</literal> parameters in the form of
-      <option>"'--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>&nbsp;<replaceable>VALUE</replaceable>'"</option>.
+      <option>"--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</option>.
      </para>
     </callout>
     <callout arearefs="co.quote">
      <para>
-      You must quote the string with double and single quotes.
+      You must quote the string with double quotes.
      </para>
     </callout>
     <callout arearefs="co.param">
@@ -113,6 +114,9 @@
      </para>
     </callout>
    </calloutlist>
+   <para>Alternatively, you can add the <varname>XSLTPARAM</varname> parameter to the &dc; file of
+   your project and specify the value there:</para>
+   <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
   </example>
  </sect1>
  <sect1 id="sec.daps.user.layout.styleheets">
