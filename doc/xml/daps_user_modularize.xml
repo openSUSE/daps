@@ -888,8 +888,9 @@ PROFCONDITION="basic" <co id="co.dc.pa.profcond.basic"/>
       <callout arearefs="co.dc.pa.main1">
        <para>
         <parameter>MAIN</parameter> parameter referencing the &main; file. See
-        <xref linkend="ex.daps.main.pi.db4"/> or <xref
-         linkend="ex.daps.main.pi.db5"/>.
+        <xref linkend="ex.daps.main.pi.db4" xrefstyle="select:label"/>
+        (DocBook&nbsp;4) or <xref
+         linkend="ex.daps.main.pi.db5" xrefstyle="select:label"/> (DocBook&nbsp;5).
        </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.basic">
@@ -918,8 +919,9 @@ PROFCONDITION="prof" <co id="co.dc.pa.profcond.prof1"/>
       <callout arearefs="co.dc.pa.main2">
        <para>
         <parameter>MAIN</parameter> parameter referencing the &main; file. See
-        <xref linkend="ex.daps.main.pi.db4"/> or <xref
-         linkend="ex.daps.main.pi.db5"/>.
+        <xref linkend="ex.daps.main.pi.db4" xrefstyle="select:label"/>
+        (DocBook&nbsp;4) or <xref
+         linkend="ex.daps.main.pi.db5" xrefstyle="select:label"/> (DocBook&nbsp;5).
        </para>
       </callout>
       <callout arearefs="co.dc.pa.profcond.prof1">
@@ -985,18 +987,18 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
    profiling. As you already learned in
    <xref linkend="sec.daps.user.modular.ent.separate"/>, it is useful for
    modularization purposes to declare entities in a separate file and to
-   re-use it in multiple documentation projects. For multiple use of
-   entities like <literal>&amp;productname;</literal> or
+   re-use it in multiple documentation projects. </para>
+  <para>For multiple use of entities like <literal>&amp;productname;</literal> or
    <literal>&amp;productnumber;</literal>, declare them in a separate file
    and add profiling within the entities as shown in
-   <xref linkend="ex.daps.ent.decl.profiling"/>. During generation of
+   <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/>. During generation of
    output, &dapsacr; then automatically replaces the entities with different
    values during output, depending on the context.
   </para>
 
   <example id="ex.daps.ent.decl.profiling">
    <title>Separate Entity File with Profiling Attributes</title>
-<screen><?dbsuse-fo font-size="0.65em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
+<screen><?dbsuse-fo font-size="0.60em"?>&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
 
 &lt;!ENTITY productname  
  <emphasis role="strong">'&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
@@ -1013,45 +1015,58 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
     need productname/productnumber in setinfo/bookinfo/articleinfo - toms' answer:
     https://github.com/openSUSE/daps/issues/48</remark>
 
-  <para>
-   After declaring the entities as shown in
-   <xref linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> you
-   can use them throughout your documents. For &dapsacr; to process them
-   correctly, you only need to <quote>introduce</quote> the entities once as
-   shown in <xref linkend="ex.daps.art.prof.ent.db4"/> or <xref
-    linkend="ex.daps.art.prof.ent.db5"/> .
-  </para>
-
-  <procedure>
+ 
+   <procedure id="pro.daps.modular.productentities">
+   <title>Using Product Entities with Profiling in XML Files</title>
+   <para> After declaring the entities as shown in <xref
+     linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/> you can use
+    them throughout your documents. For &dapsacr; to process them correctly,
+    you only need to <quote>introduce</quote> the entities once within the
+     <sgmltag>*info</sgmltag> element of each document as described below. For
+    examples showing the result, see <xref linkend="ex.daps.main.pi.db4"
+     xrefstyle="select:label"/> (DocBook&nbsp;4) or <xref
+     linkend="ex.daps.main.pi.db5" xrefstyle="select:label"/>
+    (DocBook&nbsp;5).</para>
+    
    <step>
-    <para>
-     Insert one of the respective elements <sgmltag>setinfo</sgmltag>,
-     <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> in your
-     set, book, or article.
+    <para>Open the XML file that contains the root element for your respective
+     document (<sgmltag>set</sgmltag>, <sgmltag>book</sgmltag>, or
+     <sgmltag>article</sgmltag>).
      <remark>taroth 2012-12-07: toms, fs: if I have a set, do the product* 
-    entities need to be in all *info elements (setinfo, bookinfo, articleinfo)?</remark>
+    entities need to be in all *info elements (setinfo, bookinfo, articleinfo)?
+    - taroth 2015-04-29: according to toms: yes</remark>
+    </para>
+   </step>
+   <step>
+    <para>If you use DocBook 4, insert a <sgmltag>setinfo</sgmltag>,
+      <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag> element,
+     (respectively) within the root element.</para>
+    <para>If you use DocBook 5, insert the generic <sgmltag>info</sgmltag>
+     element within the root element of your documentation. (DocBook 5 does no
+     longer distinguish between <sgmltag>setinfo</sgmltag>,
+      <sgmltag>bookinfo</sgmltag>, or <sgmltag>articleinfo</sgmltag>).</para>
+   </step>
+   <step>
+    <para>
+     Within <emphasis>all</emphasis> of the <sgmltag>*info</sgmltag> elements in your documentation,
+     add the following elements: <sgmltag>productname</sgmltag> and
+     <sgmltag>productnumber</sgmltag>.
     </para>
    </step>
    <step>
     <para>
-     Within <sgmltag>setinfo</sgmltag>, <sgmltag>bookinfo</sgmltag>, or
-     <sgmltag>articleinfo</sgmltag>, add both a
-     <sgmltag>productname</sgmltag> and <sgmltag>productnumber</sgmltag>
-     element.
+     Within the <sgmltag>productname</sgmltag> elements, add the
+     <literal>&amp;productname;</literal> entity. 
     </para>
    </step>
-   <step>
-    <para>
-     Use the <literal>&amp;productname;</literal> and
-     <literal>&amp;productnumber;</literal> entity within the respective
-     elements.
-    </para>
-   </step>
+    <step>
+    <para>Within the <sgmltag>productnumber</sgmltag> elements, add the
+      <literal>&amp;productnumber;</literal> entity. </para>
+    </step>
   </procedure>
 
-  <para>
-   Then use them in the text wherever you need them.
-  </para>
+  <para>Now that you have <quote>introduced</quote> the entities for each
+   document, use the entities in the text wherever you need them. </para>
 
   <example id="ex.daps.art.prof.ent.db4">
    <title>XML File with <literal>&amp;productname;</literal> and
@@ -1135,14 +1150,12 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 <emphasis role="strong">&lt;?xml-stylesheet
  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
  type="text/xml"
- title="Profiling step"?&gt;</emphasis> <xref
-  linkend="co.daps.main.pi.profiling2" xrefstyle="select:nopage"/>
+ title="Profiling step"?&gt;</emphasis> <co id="co.daps.main.pi.profiling3"/>
 
 <emphasis role="strong">&lt;!DOCTYPE article 
 [&lt;!ENTITY % entities SYSTEM "entity-decl.ent">
 %entities;
-]&gt;</emphasis> <xref linkend="co.daps.main.reference.ent2"
- xrefstyle="select:nopage"/>
+]&gt;</emphasis> <co id="co.daps.main.reference.ent3"/>
 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
@@ -1157,21 +1170,21 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  &lt;/info&gt;
   &lt;abstract&gt;
    &lt;para&gt;
-    &amp;productname; &amp;productnumber; is a software for recording, editing,
- <xref linkend="co.daps.main.product.entities" xrefstyle="select:nopage"/>
+    &amp;productname; &amp;productnumber; is a software for recording, editing, <xref linkend="co.daps.main.product.entities" 
+     xrefstyle="select:nopage"/>
     and mixing audio data.
    &lt;/para&gt;
   &lt;/abstract&gt;
  [...]
 &lt;/article&gt;</screen>
  <calloutlist>
-    <callout arearefs="co.daps.main.pi.profiling2">
+    <callout arearefs="co.daps.main.pi.profiling3">
      <para>
       Processing instruction (PI) in the header of the &main; file. If it is
       missing, any profiling parameters in the &dc; file will be ignored.
      </para>
     </callout>
-    <callout arearefs="co.daps.main.reference.ent2">
+    <callout arearefs="co.daps.main.reference.ent3">
      <para>
       Reference to the separate entity declaration file (with a parameter
       entity).
@@ -1221,8 +1234,9 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
 
   <table id="tab.daps.profile.output.four" rowsep="1">
    <title>Output Variants of <xref linkend="ex.daps.art.prof.ent.db4"
-    xrefstyle="select:label"/> or <xref linkend="ex.daps.art.prof.ent.db5"
-     xrefstyle="select:label"/> </title>
+    xrefstyle="select:label"/> / <xref linkend="ex.daps.art.prof.ent.db5"
+    xrefstyle="select:label"/> Combined With <xref
+     linkend="ex.daps.ent.decl.profiling" xrefstyle="select:label"/></title>
    <tgroup cols="2">
     <colspec colnum="1" colname="1" colwidth="50*"/>
     <colspec colnum="2" colname="2" colwidth="50*"/>
