@@ -8,7 +8,6 @@
 # Please submit feedback or patches to
 # <fsundermeyer at opensuse dot org>
 #
-
 # fs 2012-10-10
 # TODO: --meta stuff not working in PDFs (Stlyesheet Issue??)
 
@@ -67,6 +66,17 @@ FOSTRINGS := --param "show.comments=$(REMARKS)" \
 FOFILE     := $(TMP_DIR)/$(DOCNAME)-$(FORMATTER)
 
 ifeq "$(GRAYSCALE)" "1"
+  FOSTRINGS  += --param "format.print=1" \
+	        --stringparam "img.src.path=$(IMG_GENDIR)/grayscale/"
+  FOFILE     := $(FOFILE)_gray
+else
+  FOSTRINGS  += --param "format.print=0" \
+	        --stringparam "img.src.path=$(IMG_GENDIR)/color/"
+  FOFILE     := $(FOFILE)_color
+endif
+
+# cropmarks are currently only supported by XEP
+ifeq "$(CROPMARKS)" "1"
   FOSTRINGS  += --param "use.xep.cropmarks=1" --param "crop.marks=1" 
   FOFILE     := $(FOFILE)_crop
 endif
