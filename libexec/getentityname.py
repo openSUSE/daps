@@ -70,7 +70,7 @@ class  MyEntityResolver(handler.EntityResolver):
             self.ents.append(systemId)
         return os.path.abspath(os.path.join( dirname, systemId))
         
-      elif publicId.startswith("-//OASIS//DTD DocBook") or \
+      elif publicId.startswith("-//OASIS//") or \
            publicId.startswith("-//Novell//DTD"):
         # Return a temporary filename without meaningful content
         return self.tmpfile.name 
