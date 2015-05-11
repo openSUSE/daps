@@ -121,6 +121,7 @@ Requires:       xmlstarlet
 
 Recommends:     daps-docmanager
 Recommends:     docbook_5
+Recommends:     docbook5-xsl-stylesheets >= 1.77
 Recommends:     epubcheck
 Recommends:     exiftool
 Recommends:     jing
