@@ -5,8 +5,8 @@
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
-function print_help () {
-    echo "
+function print_help {
+    echo <<EOF_helptext
 $ME [options] FILELIST
 
 Spell checks DocBook XML files with aspell. By default uses the standard
@@ -37,7 +37,7 @@ Options:
   --list                          dumps a sorted list of misspelled words to
                                   standard output instead of starting the
                                   interactive spellchecker
-"
+EOF_helptext
 }
 
 #----------------------------------------------------------------------
@@ -59,16 +59,16 @@ EXTRA_DICT="$LIBDIR/aspell-0.60/suse_aspell.rws"
 
 # ignore text within these tags
 declare -a SKIPTAGS=(
-    --add-sgml-skip=author 
+    --add-sgml-skip=author
     --add-sgml-skip=command
-    --add-sgml-skip=email                 
+    --add-sgml-skip=email
     --add-sgml-skip=envar
-    --add-sgml-skip=filename                
+    --add-sgml-skip=filename
     --add-sgml-skip=firstname
     --add-sgml-skip=guimenu
     --add-sgml-skip=keycap
-    --add-sgml-skip=literal                
-    --add-sgml-skip=option                
+    --add-sgml-skip=literal
+    --add-sgml-skip=option
     --add-sgml-skip=remark
     --add-sgml-skip=screen
     --add-sgml-skip=surname
