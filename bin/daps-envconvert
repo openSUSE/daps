@@ -15,7 +15,7 @@
 # Variables
 DAPSROOT_DEFAULT="/usr/share/daps"
 GET_TITLE_SS="daps-xslt/common/get-booktitle.xsl"
-ME=$(basename $0) # this script's name
+ME=$(basename "$0") # this script's name
 
 unset CONT TITLE DAPSROOT STYLEROOT
 
@@ -31,13 +31,13 @@ unset MAIN ROOTID PROFOS PROFARCH HTMLROOT STYLEROOT HTML_CSS EPUB_CSS \
 # ---------
 # Verbose error handling
 #
-function exit_on_error () {
+function exit_on_error {
     ccecho "error" "ERROR: ${1}" >&2
     exit 1;
 }
 
-function usage () {
-        echo "
+function usage {
+        cat <<EOF_helptext
 Usage:
   $ME --envfile [ENV-file] [--options]
 
@@ -72,7 +72,7 @@ Options:
                          \"0\" to disable title altogether. A title will be
                          mentioned in the config file's header. Optional 
                          Default: automatic title determination.
-"
+EOF_helptext
 exit 0
 }
 
@@ -80,7 +80,7 @@ exit 0
 # ---------
 # Parse command line arguments
 #
-ARGS=$(getopt -o d:e:ho:p:s:t: -l envfile:,help,outputdir:,product:,styleroot:,title: -n $ME -- "$@")
+ARGS=$(getopt -o d:e:ho:p:s:t: -l envfile:,help,outputdir:,product:,styleroot:,title: -n "$ME" -- "$@")
 eval set -- "$ARGS"
 
 while true ; do
@@ -125,8 +125,8 @@ while true ; do
 done
 
 # Set output file
-ENV_FILENAME=$(basename $ENV)
-ENV_DIRNAME=$(dirname $ENV)
+ENV_FILENAME=$(basename "$ENV")
+ENV_DIRNAME=$(dirname "$ENV")
 DC_FILENAME="DC-${ENV_FILENAME#ENV-*}"
 
 if [[ -n "$OUTDIR" ]]; then
@@ -151,7 +151,7 @@ if [[ -z "$DAPSROOT" && -z "$TITLE" ]]; then
 fi
 
 # ask user whether to overwrite an existing DC file
-if [[ -e $DC ]]; then
+if [[ -e "$DC" ]]; then
     while [[ y != $CONT && n != $CONT ]] ; do
         read -p "$DC already exists. Overwrite? [y/n] " -t 20 CONT
         [[ $? -gt 128 ]] && CONT="n" # timeout reached
@@ -179,7 +179,7 @@ if [[ -z "$TITLE" ]]; then
     # therefore using eval
     #
     CMD="xsltproc --xinclude $ROOTSTRING ${DAPSROOT}/daps-xslt/common/get-booktitle.xsl ${PWD}/xml/$MAIN 2>/dev/null"
-    BOOKTITLE=$(eval $CMD)
+    BOOKTITLE=$(eval "$CMD")
 elif [[ 0 != $TITLE ]]; then
         BOOKTITLE="$TITLE"
 else
@@ -194,76 +194,76 @@ fi
 #    else
 #        BOOKTITLE="$TITLE"
 #    fi
-    
+
 # write header and basic section
-echo -n "## ---------------------------- 
-## Doc Config File" > $DC
+echo -n "## ----------------------------
+## Doc Config File" > "$DC"
 
 if [[ -n "$PRODUCT" ]]; then
-    echo " for $PRODUCT" >> $DC
+    echo " for $PRODUCT" >> "$DC"
 else
-    echo >> $DC
+    echo >> "$DC"
 fi
 
 # write book title
-[[ -n "$BOOKTITLE" ]] && echo "## $BOOKTITLE" >> $DC
+[[ -n "$BOOKTITLE" ]] && echo "## $BOOKTITLE" >> "$DC"
 
 echo "## ----------------------------
 ##
-## Basics" >> $DC
+## Basics" >> "$DC"
 if [[ -n "$MAIN" ]]; then
-    echo "MAIN=\"$MAIN\"" >> $DC
+    echo "MAIN=\"$MAIN\"" >> "$DC"
 fi
-[[ -n "$ROOTID" ]] && echo "ROOTID=\"$ROOTID\"" >> $DC
-[[ -n "$PDFNAME" ]] && echo "PDFNAME=\"$PDFNAME\"" >> $DC
+[[ -n "$ROOTID" ]] && echo "ROOTID=\"$ROOTID\"" >> "$DC"
+[[ -n "$PDFNAME" ]] && echo "PDFNAME=\"$PDFNAME\"" >> "$DC"
 
 # write Layout section
 if [[ -n "$COMMENTS" || -n "$DRAFT" || -n "$REMARKS" || -n "$XSLTPARAM" ]]; then
-    echo -e "\n## Layout" >> $DC
-    [[ -n "$COMMENTS" ]] && echo "COMMENTS=\"$COMMENTS\"" >> $DC
-    [[ -n "$DRAFT" ]] && echo "DRAFT=\"$DRAFT\"" >> $DC
-    [[ -n "$REMARKS" ]] && echo "REMARKS=\"$REMARKS\"" >> $DC
-    [[ -n "$XSLTPARAM" ]] && echo "XSLTPARAM=\"$XSLTPARAM\"" >> $DC
+    echo -e "\n## Layout" >> "$DC"
+    [[ -n "$COMMENTS" ]] && echo "COMMENTS=\"$COMMENTS\"" >> "$DC"
+    [[ -n "$DRAFT" ]] && echo "DRAFT=\"$DRAFT\"" >> "$DC"
+    [[ -n "$REMARKS" ]] && echo "REMARKS=\"$REMARKS\"" >> "$DC"
+    [[ -n "$XSLTPARAM" ]] && echo "XSLTPARAM=\"$XSLTPARAM\"" >> "$DC"
 fi
 
 # write profiling section
 if [[ -n "$PROFOS" || -n $PROFARCH ]]; then
-    echo -e "\n## Profiling" >> $DC
-    [[ -n "$PROFOS" ]] && echo "PROFOS=\"$PROFOS\"" >> $DC
-    [[ -n "$PROFARCH" ]] && echo "PROFARCH=\"$PROFARCH\"" >> $DC
+    echo -e "\n## Profiling" >> "$DC"
+    [[ -n "$PROFOS" ]] && echo "PROFOS=\"$PROFOS\"" >> "$DC"
+    [[ -n "$PROFARCH" ]] && echo "PROFARCH=\"$PROFARCH\"" >> "$DC"
 fi
 
 # write Provo section
 if [[ -n "$HTMLROOT" ]]; then
     echo -e "\n## Provo
-HTMLROOT=\"$HTMLROOT\"" >> $DC
+HTMLROOT=\"$HTMLROOT\"" >> "$DC"
 fi
 
 if [[ -n "$STYLEROOT" ]]; then
     # write stylesheet section
-    echo -e "\n## stylesheet location" >> $DC
+    echo -e "\n## stylesheet location" >> "$DC"
     if [[ -n "$LAYOUT" ]]; then
         echo "STYLEROOT=\"${STYLEROOT}/$LAYOUT\"
-FALLBACK_STYLEROOT=\"$STYLEROOT\"" >> $DC
+FALLBACK_STYLEROOT=\"$STYLEROOT\"" >> "$DC"
     else
-        echo "STYLEROOT=\"$STYLEROOT\"" >> $DC
+        echo "STYLEROOT=\"$STYLEROOT\"" >> "$DC"
     fi
     echo "HTML_CSS=\"${STYLEROOT}/html/susebooks.css\"
-EPUB_CSS=\"${STYLEROOT}/epub/susebooks.css\"" >> $DC
+EPUB_CSS=\"${STYLEROOT}/epub/susebooks.css\"" >> "$DC"
 fi
-    
+
 # write obsolete section
 if [[ -n "$DISTVER" || -n "$PRODCTNAME" || -n "$PRODUCTNAMEREG" || -n "$PKGNAME" ]]; then
-    echo -e "\n## obsolete" >> $DC
-    [[ -n "$DISTVER" ]] && echo "DISTVER=\"$DISTVER\"" >> $DC
-    [[ -n "$PRODUCTNAME" ]] && echo "PRODUCTNAME=\"$PRODUCTNAME\"" >> $DC
-    [[ -n "$PRODUCTNAMEREG" ]] && echo "PRODUCTNAMEREG=\"$PRODUCTNAMEREG\"" >> $DC
-    [[ -n "$PKGNAME" ]] && echo "PKGNAME=\"$PKGNAME\"" >> $DC
+    echo -e "\n## obsolete" >> "$DC"
+    [[ -n "$DISTVER" ]] && echo "DISTVER=\"$DISTVER\"" >> "$DC"
+    [[ -n "$PRODUCTNAME" ]] && echo "PRODUCTNAME=\"$PRODUCTNAME\"" >> "$DC"
+    [[ -n "$PRODUCTNAMEREG" ]] && echo "PRODUCTNAMEREG=\"$PRODUCTNAMEREG\"" >> "$DC"
+    [[ -n "$PKGNAME" ]] && echo "PKGNAME=\"$PKGNAME\"" >> "$DC"
 fi
 
 # write sourcing section
 echo -e "\n## enable sourcing
-export DOCCONF=\$BASH_SOURCE" >> $DC
+export DOCCONF=\$BASH_SOURCE" >> "$DC"
 
 echo "Successfully wrote $DC"
 
