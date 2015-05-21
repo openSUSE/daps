@@ -18,7 +18,7 @@
 # introduces a new switch, it needs to be added here
 #
 ###########################################################################
-function parse_args () {
+function parse_args {
     #
     # help is always handled within the function directly
     # everything else is parsed here
@@ -32,8 +32,8 @@ function parse_args () {
     SUB_CMD=$3
     shift 3
 
-    C_ARGS=$(getopt -s bash -o $SHORT_OPTS -l $LONG_OPTS -n $0 -- "$@")
-    if [[ 1 = $? ]]; then
+    C_ARGS=$(getopt -s bash -o "$SHORT_OPTS" -l "$LONG_OPTS" -n "$0" -- "$@")
+    if [[ 1 = "$?" ]]; then
         wrong_parameter "$SUB_CMD"
     fi
 
@@ -57,10 +57,10 @@ function parse_args () {
                 P_COMPACT=1
                 shift
                 ;;
-	    --cropmarks)
-		P_CROPMARKS=1
-		shift
-		;;
+            --cropmarks)
+                P_CROPMARKS=1
+                shift
+                ;;
             --css)
                 if [[ $2 != "none" ]]; then
                     sanitize_path "$2" "P_CSS"
@@ -70,10 +70,11 @@ function parse_args () {
                 shift 2
                 ;;
             --draft)
-		P_DRAFT=1
-		shift
-		;;
+                P_DRAFT=1
+                shift
+                ;;
             --def-file)
+                P_DEF_FILE=""
                 sanitize_path "$2" "P_DEF_FILE"
                 shift 2
                 ;;
@@ -85,15 +86,17 @@ function parse_args () {
                 P_DOCUMENTFILES=1
                 shift
                 ;;
-	    --epub3)
-		P_EPUB3=1
-		shift
-		;;
+            --epub3)
+                P_EPUB3=1
+                shift
+                ;;
             --export-dir)
+                P_EXPORT_DIR=""
                 sanitize_path "$2" "P_EXPORT_DIR"
                 shift 2
                 ;;
             --extra-dict)
+                P_ASPELL_EXTRA_DICT=""
                 sanitize_path "$2" "P_ASPELL_EXTRA_DICT"
                 shift 2
                 ;;
@@ -103,8 +106,8 @@ function parse_args () {
                 ;;
             --formatter)
                 P_FORMATTER="$2"
-		shift 2
-		;;
+                shift 2
+                ;;
             --gen)
                 P_IMAGES_GEN=1
                 shift
@@ -121,10 +124,10 @@ function parse_args () {
                 P_HTML5=1
                 shift
                 ;;
-	    --jsp)
-		P_JSP=1
-		shift
-		;;
+            --jsp)
+                P_JSP=1
+                shift
+                ;;
             --lang)
                 P_LANG="$2"
                 shift 2
@@ -133,10 +136,10 @@ function parse_args () {
                 P_LIST=1
                 shift
                 ;;
-	    --locdrop)
-		P_IS_LOCDROP=1
-		shift
-		;;
+            --locdrop)
+                P_IS_LOCDROP=1
+                shift
+                ;;
             --meta)
                 P_META=1
                 shift
@@ -157,16 +160,16 @@ function parse_args () {
                 P_LIST_NOENT=1
                 shift
                 ;;
-	    --noepub)
-		P_NOEPUB=1
+            --noepub)
+                P_NOEPUB=1
                 shift
                 ;;
             --nogzip)
                 P_NOGZIP=1
                 shift
                 ;;
-	    --nohtml)
-		P_NOHTML=1
+            --nohtml)
+                P_NOHTML=1
                 shift
                 ;;
             --noimg)
@@ -186,13 +189,14 @@ function parse_args () {
                 shift
                 ;;
             --nostatic)
-		P_NOSTATIC=1
-		shift
-		;;
+                P_NOSTATIC=1
+                shift
+                ;;
             --notrans-dir)
+                P_NOTRANS_DIR=""
                 sanitize_path "$2" "P_NOTRANS_DIR"
-		shift 2
-		;;
+                shift 2
+                ;;
             --noxml)
                 P_LIST_NOXML=1
                 shift
@@ -201,14 +205,15 @@ function parse_args () {
                 P_IMAGES_ONLINE=1
                 shift
                 ;;
-	    --optipng)
-		P_OPTIPNG=1
-		shift
-		;;
+            --optipng)
+                P_OPTIPNG=1
+                shift
+                ;;
             --output-dir)
+                P_OUTPUT_DIR=""
                 sanitize_path "$2" "P_OUTPUT_DIR"
-		shift 2
-		;;
+                shift 2
+                ;;
             --pagefiles)
                 P_PAGEFILES=1
                 shift
@@ -218,17 +223,13 @@ function parse_args () {
                 shift
                 ;;
             --remarks)
-		P_REMARKS=1
-		shift
-		;;
-            --rootelement)
-                ROOTELEMENT="$2"
-		shift 2
-		;;
+                P_REMARKS=1
+                shift
+                ;;
             --rootid)
-		P_ROOTID="$2"
-		shift 2
-		;;
+                P_ROOTID="$2"
+                shift 2
+                ;;
             --show)
                 P_SHOW=1
                 shift
@@ -237,15 +238,16 @@ function parse_args () {
                 P_SETDATE="$2"
                 shift 2
                 ;;
-	    --single)
-		P_HTMLSINGLE=1
-		shift
-		;;
-	    --static)
-		ccecho -- "warn" "--static is deprecated, since it is the default now."
-		shift
-		;;
+            --single)
+                P_HTMLSINGLE=1
+                shift
+                ;;
+            --static)
+                ccecho -- "warn" "--static is deprecated, since it is the default now."
+                shift
+                ;;
             --statdir)
+                P_STATIC_DIR=""
                 sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
@@ -255,20 +257,20 @@ function parse_args () {
                 ;;
             --target)
                 P_TARGET="$2"
-		shift 2
-		;;
-	    --trans-files)
-		P_TRANS_FILES="$2"
-		shift 2
-		;;
-	    --viewer)
+                shift 2
+                ;;
+            --trans-files)
+                P_TRANS_FILES="$2"
+                shift 2
+                ;;
+            --viewer)
                 P_VIEWER="$2"
-		shift 2
-		;;
+                shift 2
+                ;;
             --xsltparam)
                 P_XSLTPARAM="$2"
-		shift 2
-		;;
+                shift 2
+                ;;
             --)
                 shift
                 break
@@ -279,7 +281,7 @@ function parse_args () {
         esac
     done
 
-    P_REMAIN_ARGS="$@"
+    P_REMAIN_ARGS="$*"
 
 }
 
@@ -299,32 +301,32 @@ function init_env {
 
     # create directories
 
-    mkdir -p $R_DIR
-    if [[ 1 = $WRITE_LOG ]]; then
-        mkdir -p $LOG_DIR || exit_on_error "Cannot create $LOG_DIR"
+    mkdir -p "$R_DIR"
+    if [[ 1 = "$WRITE_LOG" ]]; then
+        mkdir -p "$LOG_DIR" || exit_on_error "Cannot create $LOG_DIR"
     fi
 
 
     if [[ -n $"$DOCCONF" && ! -f ${R_DIR}/$(basename "$DOCCONF") ]]; then
-        ln -sf $DOCCONF ${R_DIR}/$(basename "$DOCCONF")
-        if [[ 0 != $? && 0 != $VERBOSITY ]]; then
+        ln -sf "$DOCCONF" "${R_DIR}/$(basename "$DOCCONF")"
+        if [[ 0 != "$?" && 0 != "$VERBOSITY" ]]; then
             ccecho "warn" "Warning: Cannot create link to $DOCCONF in $R_DIR"
         fi
     fi
 
     # There should only be one DC-file in $R_DIR
     #
-    DC_COUNT=$(find -L $R_DIR -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
-    if [[ $DC_COUNT -gt 1 && 0 != $VERBOSITY ]]; then
+    DC_COUNT=$(find -L "$R_DIR" -maxdepth 1 -name "${CONF_PREFIX}*" -type f | wc -l)
+    if [[ $DC_COUNT -gt 1 && 0 != "$VERBOSITY" ]]; then
         ccecho "warn" "$R_DIR contains more than one DC-file"
     fi
 
     # test if ROOTID exist
     #
     if [[ -n "$ROOTID" ]]; then
-        EXISTS_ROOTID=$($XSLTPROC --stringparam "rootid=$ROOTID" --xinclude --stylesheet ${DAPSROOT}/daps-xslt/common/check_rootid.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
+        EXISTS_ROOTID=$($XSLTPROC --stringparam "rootid=$ROOTID" --xinclude --stylesheet "${DAPSROOT}/daps-xslt/common/check_rootid.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
         TEST_ROOTID_RESULT=$?
-        if [[ 0 == $TEST_ROOTID_RESULT  && "yes" != $EXISTS_ROOTID ]]; then
+        if [[ 0 == "$TEST_ROOTID_RESULT"  && "yes" != "$EXISTS_ROOTID" ]]; then
             exit_on_error "Fatal: ROOTID \"$ROOTID\" does not exist."
         elif [[ 0 != $TEST_ROOTID_RESULT && 0 != $VERBOSITY ]]; then
             ccecho "warn" "Warning: Was not able to determine if ROOTID exists."
@@ -344,7 +346,7 @@ function init_env {
     case "$DRAFT" in
         1|yes)
             export DRAFT="yes" ;;
-         0|no|"")
+        0|no|"")
             export DRAFT="no" ;;
         *)
             exit_on_error "Wrong value for DRAFT. Must be \"yes\" or \"no\"" ;;
@@ -367,7 +369,7 @@ function init_env {
     case "$META" in
         1|yes)
             export META=1 DRAFT="yes" ;;
-          0|no|"")
+        0|no|"")
             export META=0 ;;
         *)
             exit_on_error "Invalid value for META. Must be \"yes\" or \"no\""
@@ -395,7 +397,7 @@ function init_env {
 
     # Unset the strings last, because values for DRAFT or REMARKS
     # may have been altered in-between
-    [[ "no" = $DRAFT ]] && unset DRAFT_STR
+    [[ "no" = "$DRAFT" ]] && unset DRAFT_STR
     [[ 0 -eq $META ]] && unset META_STR
     [[ 0 -eq $REMARKS ]] && unset REMARK_STR
 
@@ -409,9 +411,9 @@ function init_env {
 # and call make
 #
 ###########################################################################
-function call_make () {
-    local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOG_PIPE LOGFILE MAKE_BIN
-    local MAKE_OPTIONS MAKE_CMD STRING SUB_CMD 
+function call_make {
+    local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOGFILE MAKE_BIN
+    local MAKE_OPTIONS MAKE_CMD STRING SUB_CMD
 
     # first argument passed to the function is the subcommand
     # in some cases, additional arguments are passed to this
@@ -424,9 +426,9 @@ function call_make () {
     # or FOO="BAR") it's OK, if it contains barewords, exit with an error
     #
     if [[ -n "$@" ]]; then
-	for STRING in "$@"; do
-	    [[ $STRING =~ ^[a-zA-Z][a-zA-Z0-9_]*=..* ]] || exit_on_error "Unknown parameter \"$STRING\"."
-	done
+    for STRING in "$@"; do
+        [[ $STRING =~ ^[a-zA-Z][a-zA-Z0-9_]*=..* ]] || exit_on_error "Unknown parameter \"$STRING\"."
+    done
     fi
 
     # set up the final environment
@@ -438,13 +440,13 @@ function call_make () {
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
     MAKE_BIN="/usr/bin/make"
-    if [[ 1 = $DEBUG || 3 = $VERBOSITY ]]; then
+    if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
         # use remake if installed when in debug or highest verbosity mode
         IS_REMAKE=$(which remake 2>/dev/null)
         [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
         MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
     fi
-    if [[ 0 = $VERBOSITY || 1 = $VERBOSITY || 2 = $VERBOSITY ]]; then
+    if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
         # calculate Number of CPUs (cores) for -j option, set to "1" if empty
         CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
         [[ -z "$CORE_NO" ]] && CORE_NO=1
@@ -456,31 +458,32 @@ function call_make () {
     fi
 
     # Is --force set to force a rebuild?
-    [[ 1 = $FORCE_REBUILD ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
+    [[ 1 = "$FORCE_REBUILD" ]] &&  MAKE_OPTIONS="$MAKE_OPTIONS --always-make"
 
-    MAKE_CMD="$MAKE_BIN $MAKE_OPTIONS $SUB_CMD $@"
+    MAKE_CMD="$MAKE_BIN $MAKE_OPTIONS $SUB_CMD $*"
 
 
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY ]]; then
-	# get stylesheet version (ticket #151)
-	# saxon6 (at least on openSUSE) does not properly resolve http Urls
+        # get stylesheet version (ticket #151)
+        # saxon6 (at least on openSUSE) does not properly resolve http Urls
         # (because it does not ask the catalog but rather directly accesses
         # the URl) we need to resolve it via xmlcatalog first
         #
-	DBSTYLE_FILE=$(xmlcatalog $XML_MAIN_CATALOG http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
-	DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
+        DBSTYLE_FILE=$(xmlcatalog "$XML_MAIN_CATALOG" http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
+        DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
+        DBSTYLE_VERS=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl" --file "$DBSTYLE_FILE" "$XSLTPROCESSOR" 2>/dev/null || echo "Not available")
 
-	DBSTYLE_VERS=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl --file $DBSTYLE_FILE $XSLTPROCESSOR 2>/dev/null || echo "Not available")
-
-        echo -e "---------------
+        cat <<EOF
+---------------
            DOC_DIR: $DOC_DIR
          BUILD_DIR: $BUILD_DIR
           DAPSROOT: $DAPSROOT
            DOCCONF: $DOCCONF
               BOOK: $BOOK
 
-"
+EOF
+
         if [[ -n "$STYLEDEVEL" ]]; then
             echo "         STYLEROOT: $STYLEDEVEL"
         else
@@ -491,55 +494,62 @@ function call_make () {
             fi
         fi
 
-        echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
+        cat <<EOF
+FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
 
-     PDF FORMATTER: $FORMATTER"
-        if [[ "fop" = $FORMATTER ]]; then
-            echo " FORMATTER WRAPPER: $FOP_WRAPPER
-  FORMATTER CONFIG: $FOP_CONFIG_FILE"
+     PDF FORMATTER: $FORMATTER
+EOF
 
-        elif [[ "xep" = $FORMATTER ]]; then
-            echo "  FORMATTER WRAPPER: $XEP_WRAPPER
-  FORMATTER CONFIG: $XEP_CONFIG_FILE"
+        if [[ "fop" = "$FORMATTER" ]]; then
+            cat <<EOF
+ FORMATTER WRAPPER: $FOP_WRAPPER
+  FORMATTER CONFIG: $FOP_CONFIG_FILE"
+EOF
+        elif [[ "xep" = "$FORMATTER" ]]; then
+            cat <<EOF
+  FORMATTER WRAPPER: $XEP_WRAPPER
+  FORMATTER CONFIG: $XEP_CONFIG_FILE
+EOF
         fi
-        echo "
+
+        cat <<EOF
            MAKECMD: $MAKE_CMD
      XSLTPROCESSOR: $XSLTPROCESSOR
  XML_CATALOG_FILES: $XML_CATALOG_FILES
 
-      DAPS VERSION: $VERSION 
+      DAPS VERSION: $VERSION
 DB-STYLESHEET-VERS: $DBSTYLE_VERS
 ---------------
-"
+EOF
     fi
 
-    if [[ 1 = $WRITE_LOG ]]; then
+    if [[ 1 = "$WRITE_LOG" ]]; then
         LOGFILE="${LOG_DIR}/make_${SUB_CMD}.log"
-        date &> $LOGFILE
+        date &> "$LOGFILE"
     fi
 
-    if [[ 0 != $VERBOSITY ]]; then
+    if [[ 0 != "$VERBOSITY" ]]; then
 #        echo ""
-        $MAKE_CMD 2>&1 | tee -a $LOGFILE
+        $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
         # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
-        [[ 0 = ${PIPESTATUS[0]} ]] || exit 1
+        [[ 0 = "${PIPESTATUS[0]}" ]] || exit 1
     else
-        if [[ 1 = $WRITE_LOG ]]; then
-            $MAKE_CMD >> $LOGFILE 2>&1
-            if [[ 0 = $? ]]; then
-	        # make command successful, only show last line (aka result)
-	        tail -n 1 $LOGFILE
+        if [[ 1 = "$WRITE_LOG" ]]; then
+            $MAKE_CMD >> "$LOGFILE" 2>&1
+            if [[ 0 = "$?" ]]; then
+            # make command successful, only show last line (aka result)
+            tail -n 1 "$LOGFILE"
             else
                 # an error occured in make
                 # show complete logfile except the first line containing the
                 # date
-	        tail -n +2 $LOGFILE
+            tail -n +2 "$LOGFILE"
                 exit 1
             fi
         else
-           $MAKE_CMD
+            $MAKE_CMD
         fi
     fi
 }
@@ -549,7 +559,7 @@ DB-STYLESHEET-VERS: $DBSTYLE_VERS
 # FUNCTION TEMPLATE
 #
 ##########################################################
-#    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+#    local SHORT_OPTS LONG_OPTS SUB_CMD
 
     # The subcommand value is passed when calling this function
 #    SUB_CMD=$1
@@ -581,24 +591,24 @@ DB-STYLESHEET-VERS: $DBSTYLE_VERS
 # Subcommand: pdf
 #
 ###########################################################################
-function build_pdfs () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_pdfs {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:,xsltparam:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-	help_cropmarks
+    help_cropmarks
         help_draft
         help_formatter
-	help_grayscale_pdf
+    help_grayscale_pdf
         help_help
         help_meta
         help_name
@@ -609,21 +619,21 @@ function build_pdfs () {
         exit 0
     fi
 
-    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]    && REMARKS=1
+    [[ 1 = "$P_DRAFT" ]]      && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]    && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
-    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS=1
-    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE=1
+    [[ 1 = "$P_META" ]]       && META=1 DRAFT="yes"
+    [[ 1 = "$P_CROPMARKS" ]]  && export CROPMARKS=1
+    [[ 1 = "$P_GRAYSCALE" ]]  && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
             export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
 
@@ -638,56 +648,56 @@ function build_pdfs () {
 # Subcommands: html
 #
 ###########################################################################
-function build_html_jsp () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_html_jsp {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
         help_css
         help_draft
         help_help
         help_html5
-	help_jsp
+    help_jsp
         help_meta
         help_name
         help_nostatic
         help_remarks
         help_rootid
-	help_single
+    help_single
         help_statdir
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
     fi
 
-    [[ 1 = $P_CLEAN ]]       && export CLEAN_DIR=1
-    [[ -n "$P_CSS" ]]        && export HTML_CSS="$P_CSS"
-    [[ 1 = $P_DRAFT ]]       && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]     && REMARKS=1
+    [[ 1 = "$P_CLEAN" ]]       && export CLEAN_DIR=1
+    [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]        && META=1 DRAFT="yes"
-    [[ 1 = $P_NOSTATIC ]]    && export STATIC_HTML=0
-    [[ 1 = $P_HTML5 ]]       && export HTML5=1
-    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]       && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
-    [[ -n "$P_XSLTPARAM" ]]  && export XSLTPARAM="$P_XSLTPARAM"
+    [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
+    [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_HTML5" ]]       && export HTML5=1
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
 
-    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
-	exit_on_error "--single and --jsp are mutually exclusive"
+    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
+    exit_on_error "--single and --jsp are mutually exclusive"
     else
-	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
-	[[ 1 = $P_JSP ]]        && export JSP=1
+    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
+    [[ 1 = "$P_JSP" ]]        && export JSP=1
     fi
 
     call_make "$SUB_CMD" "$@"
@@ -700,19 +710,19 @@ function build_html_jsp () {
 # Subcommands: webhelp
 #
 ###########################################################################
-function webhelp () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function webhelp {
+    local EXTENSION SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,remarks,rootid:,static,xsltparam:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_clean
         help_css
@@ -728,18 +738,20 @@ function webhelp () {
         exit 0
     fi
 
-    if [[ ! -f $DOCBOOK_STYLES/extensions/webhelpindexer.jar && \
-        ! -f $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar && \
-        ! -f $DOCBOOK_STYLES/extensions/lucene-core-*.jar  && \
-        ! -f $DOCBOOK_STYLES/extensions/tagsoup-*.jar ]]; then
-        exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
+    for EXTENSION in $DOCBOOK_STYLES/extensions/webhelpindexer.jar \
+    $DOCBOOK_STYLES/extensions/lucene-analyzers-*.jar \
+    $DOCBOOK_STYLES/extensions/lucene-core-*.jar \
+    $DOCBOOK_STYLES/extensions/tagsoup-*.jar; do
+    if [[ ! -f $EXTENSION ]]; then
+            exit_on_error "\nwebhelp only works when a recent snapshot of the DocBook stylesheets is\ninstalled. Your version of the DocBook styles at\n$DOCBOOK_STYLES\nis not webhelp capable."
     fi
+    done
 
-    [[ 1 = $P_CLEAN ]]    && export CLEAN_DIR=1
-    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ 1 = $P_NOSTATIC ]]   && export STATIC_HTML=0
-    [[ 1 = $P_NOSEARCH ]] && export WH_SEARCH="no"
+    [[ 1 = "$P_CLEAN" ]]    && export CLEAN_DIR=1
+    [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
+    [[ 1 = "$P_NOSTATIC" ]]   && export STATIC_HTML=0
+    [[ 1 = "$P_NOSEARCH" ]] && export WH_SEARCH="no"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
@@ -762,23 +774,23 @@ function webhelp () {
 # Subcommands: epub only
 #
 ###########################################################################
-function build_epub () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_epub {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="check,css:,epub3,help,name:,remarks,rootid:,statdir:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_check
         help_css
-	help_epub3
+    help_epub3
         help_help
         help_name
         help_rootid
@@ -787,15 +799,15 @@ function build_epub () {
         exit 0
     fi
 
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
-    [[ 1 = $P_EPUB3 ]]  && EPUB3=1
+    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
+    [[ 1 = "$P_EPUB3" ]]  && export EPUB3=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
 
     # Checking ePUBs requires a minimum verbosity level of 1
-    if [[ 1 = $P_CHECK ]]; then
-        [[ 0 = $VERBOSITY ]] && export VERBOSITY=1
+    if [[ 1 = "$P_CHECK" ]]; then
+        [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
         export EPUBCHECK="yes"
     fi
 
@@ -817,19 +829,19 @@ function build_epub () {
 # Subcommands: man only
 #
 ###########################################################################
-function build_man () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_man {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help,nogzip,rootid:,subdirs"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
@@ -854,19 +866,19 @@ function build_man () {
 # Subcommands: every commands that does not fit elsewhere
 #
 ###########################################################################
-function build_generic () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_generic {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help,name:,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
@@ -888,19 +900,19 @@ function build_generic () {
 # Subcommand: locdrop only
 #
 ###########################################################################
-function build_locdrop () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_locdrop {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="def-file:,export-dir:,help,name:,nopdf,optipng,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_export-dir
@@ -908,7 +920,7 @@ function build_locdrop () {
         help_name
         help_nopdf
         help_rootid
-	help_optipng
+    help_optipng
         echo
         exit 0
     fi
@@ -917,12 +929,12 @@ function build_locdrop () {
     [[ -n "$P_NOPDF" ]]      && export export NOPDF=1
     [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
     [[ -n "$P_EXPORT_DIR" ]] && export LOCDROP_EXPORT_DIR="$P_EXPORT_DIR"
-    [[ 1 = $P_OPTIPNG ]]     && export OPTIPNG=1
+    [[ 1 = "$P_OPTIPNG" ]]     && export OPTIPNG=1
 
-    if [[ -f $P_DEF_FILE ]]; then
+    if [[ -f "$P_DEF_FILE" ]]; then
         export DEF_FILE="$P_DEF_FILE"
     elif [[ -z "$P_DEF_FILE" ]]; then
-	[[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
+    [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
@@ -937,19 +949,19 @@ function build_locdrop () {
 #  Subcommands: online-docs online-localized
 #
 ###########################################################################
-function online-docs () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function online-docs {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_export-dir
         help_formatter
@@ -957,24 +969,24 @@ function online-docs () {
         help_name
         help_noset
         help_rootid
-	help_optipng
+    help_optipng
         echo
         exit 0
     fi
 
     [[ -n "$P_NAME" ]]   && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = $P_NOEPUB ]]  && export NOEPUB=1
-    [[ 1 = $P_NOHTML ]]  && export NOHTML=1
-    [[ 1 = $P_NOPDF ]]   && export NOPDF=1
-    [[ 1 = $P_NOSET ]]   && export NOSET=1
+    [[ 1 = "$P_NOEPUB" ]]  && export NOEPUB=1
+    [[ 1 = "$P_NOHTML" ]]  && export NOHTML=1
+    [[ 1 = "$P_NOPDF" ]]   && export NOPDF=1
+    [[ 1 = "$P_NOSET" ]]   && export NOSET=1
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
-    [[ 1 = $P_OPTIPNG ]] && export OPTIPNG=1
+    [[ 1 = "$P_OPTIPNG" ]] && export OPTIPNG=1
 
-    if [[ 1 = $P_NOHTML ]]; then
-	export NOHTML=1
+    if [[ 1 = "$P_NOHTML" ]]; then
+    export NOHTML=1
     else
-	# online-docs always builds a single HTML file
-	export HTMLSINGLE=1
+    # online-docs always builds a single HTML file
+    export HTMLSINGLE=1
     fi
 
     if [[ -n "$P_EXPORT_DIR" ]]; then
@@ -985,10 +997,10 @@ function online-docs () {
         fi
     fi
     if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
             export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
 
@@ -1002,33 +1014,33 @@ function online-docs () {
 #  Subcommands: package-src only
 #
 ###########################################################################
-function package-src () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function package-src {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="def-file:,help,locdrop,name:,optipng,set-date:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_help
-	help_locdrop
+    help_locdrop
         help_name
-	help_optipng
+    help_optipng
         help_set-date
         echo
         exit 0
     fi
 
-    [[ 1 = $P_IS_LOCDROP ]] && export IS_LOCDROP=1
+    [[ 1 = "$P_IS_LOCDROP" ]] && export IS_LOCDROP=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ 1 = $P_OPTIPNG ]]    && export OPTIPNG=1
+    [[ 1 = "$P_OPTIPNG" ]]    && export OPTIPNG=1
 
     if [[ -n "$P_DEF_FILE" ]]; then
         if [[ -f $P_DEF_FILE ]]; then
@@ -1037,7 +1049,7 @@ function package-src () {
             exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
         fi
     else
-       [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
+        [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
     fi
 
     if [[ -n "$P_SETDATE" ]]; then
@@ -1055,19 +1067,19 @@ function package-src () {
 #  Subcommand: package-pdf
 #
 ###########################################################################
-function package-pdf () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function package-pdf {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_cropmarks
         help_desktopfiles
@@ -1084,20 +1096,20 @@ function package-pdf () {
         exit 0
     fi
 
-    [[ 1 = $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
-    [[ 1 = $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
-    [[ 1 = $P_PAGEFILES ]]     && export export PAGEFILES=1
-    [[ 1 = $P_CROPMARKS ]]     && export CROPMARKS=1
-    [[ 1 = $P_GRAYSCALE ]]     && export GRAYSCALE=1
+    [[ 1 = "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
+    [[ 1 = "$P_DOCUMENTFILES" ]] && export export DOCUMENTFILES=1
+    [[ 1 = "$P_PAGEFILES" ]]     && export export PAGEFILES=1
+    [[ 1 = "$P_CROPMARKS" ]]     && export CROPMARKS=1
+    [[ 1 = "$P_GRAYSCALE" ]]     && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
             export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
 
@@ -1118,42 +1130,42 @@ function package-pdf () {
 #  Subcommand: package-html
 #
 ###########################################################################
-function package-html () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function package-html {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,rootid:,set-date:,single,statdir:,xsltparam:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_css
         help_desktopfiles
         help_documentfiles
         help_help
         help_html5
-	help_jsp
+    help_jsp
         help_name
         help_pagefiles
         help_rootid
         help_set-date
-	help_single
+    help_single
         help_statdir
         help_xsltparam "creates the .html files from the profiled sources"
-	echo
+    echo
         exit 0
     fi
 
 
-    [[ 1 = $P_DESKTOPFILES ]]  && export export DESKTOPFILES=1
-    [[ 1 = $P_DOCUMENTFILES ]] && export export DOCUMENTFILES=1
-    [[ 1 = $P_PAGEFILES ]]     && export export PAGEFILES=1
-    [[ 1 = $P_HTML5 ]]         && export HTML5=1
+    [[ 1 = "$P_DESKTOPFILES" ]]  && export export DESKTOPFILES=1
+    [[ 1 = "$P_DOCUMENTFILES" ]] && export export DOCUMENTFILES=1
+    [[ 1 = "$P_PAGEFILES" ]]     && export export PAGEFILES=1
+    [[ 1 = "$P_HTML5" ]]         && export HTML5=1
     [[ -n "$P_CSS" ]]          && export HTML_CSS="$P_CSS"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
@@ -1163,13 +1175,13 @@ function package-html () {
     # We always want to start with a clean HTML result directory for
     # package-html
     #
-    [[ "package-html" = $SUB_CMD ]] && export CLEAN_DIR=1
+    [[ "package-html" = "$SUB_CMD" ]] && export CLEAN_DIR=1
 
-    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
-	exit_on_error "--single and --jsp are mutually exclusive"
+    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
+    exit_on_error "--single and --jsp are mutually exclusive"
     else
-	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
-	[[ 1 = $P_JSP ]]        && export JSP=1
+    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
+    [[ 1 = "$P_JSP" ]]        && export JSP=1
     fi
 
     if [[ -n "$P_SETDATE" ]]; then
@@ -1192,9 +1204,9 @@ function package-html () {
 # directory specified with --notrans-dir
 #
 ###########################################################################
-function unpack-locdrop () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
-    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST XML_FILE_LIST TRANS_FILES
+function unpack-locdrop {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST XML_FILE_LIST
     local -a ALL_MANIFEST_NOTRANS_FILES ALL_MANIFEST_TRANS_FILES
 
     MFT_TRANS_SUFF=manifest_trans.txt
@@ -1206,11 +1218,11 @@ function unpack-locdrop () {
     SHORT_OPTS="h"
     LONG_OPTS="trans-files:,help,notrans-dir:,output-dir:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_trans-files
         help_help
@@ -1221,12 +1233,12 @@ function unpack-locdrop () {
     fi
 
     if [[ -z "$P_TRANS_FILES" ]]; then
-	exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
+    exit_on_error "Fatal: Specifying one or more locdrop tarballs with --trans-files is mandatory."
     fi
 
     if [[ -z "$P_NOTRANS_DIR" ]]; then
-	ccecho "warn" "No notrans-dir was specified. Assuming DC-file directory"
-	P_NOTRANS_DIR="$MY_BASEDIR"
+    ccecho "warn" "No notrans-dir was specified. Assuming DC-file directory"
+    P_NOTRANS_DIR="$MY_BASEDIR"
     fi
 
     [[ -z "$P_OUTPUT_DIR" ]] && exit_on_error "Fatal: Specifying an output directory\nwith  --output-dir is mandatory."
@@ -1235,21 +1247,21 @@ function unpack-locdrop () {
     # Extract translated files
     #
     for TAR in $P_TRANS_FILES; do
-	if [[ -f $TAR ]]; then
-	    cd $P_OUTPUT_DIR
-	    MANIFEST_TRANS=$(tar tfj $TAR | grep $MFT_TRANS_SUFF)
-	    ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
-	    MANIFEST_NOTRANS=$(tar tfj $TAR | grep $MFT_NOTRANS_SUFF)
-	    ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
-	    tar xfj $TAR $MANIFEST_TRANS $MANIFEST_NOTRANS
-	    tar xfj $TAR $(cat $MANIFEST_TRANS)
-	    cd - >/dev/null
-	else
-	    exit_on_error "Fatal: $TAR does not exist"
-	fi
+    if [[ -f $TAR ]]; then
+        pushd "$P_OUTPUT_DIR" > /dev/null
+        MANIFEST_TRANS=$(tar tfj "$TAR" | grep "$MFT_TRANS_SUFF")
+        ALL_MANIFEST_TRANS_FILES=( "${ALL_MANIFEST_TRANS_FILES[@]}" "$MANIFEST_TRANS" )
+        MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF")
+        ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
+        tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS"
+        tar xfj "$TAR" "$(cat "$MANIFEST_TRANS")"
+        popd >/dev/null
+    else
+        exit_on_error "Fatal: $TAR does not exist"
+    fi
     done
 
-    cd $P_OUTPUT_DIR
+    pushd "$P_OUTPUT_DIR" > /dev/null
 
     #
     # Now create a complete list of translated/untranslated files
@@ -1260,57 +1272,56 @@ function unpack-locdrop () {
     # get all files unique to the notrans lists (the ones that have not
     # been translated)
     LINK_NOTRANS_FILES=$(comm -1 -3 <(echo -e "$ALL_TRANS_FILES") <(echo -e "$ALL_NOTRANS_FILES"))
-    
 
     # Process LINK_NOTRANS_FILES to get the file lists we need
     #  the awk statements matches multiple occurrences on a single line
     #
-    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo $LINK_NOTRANS_FILES))
-    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo $LINK_NOTRANS_FILES))
-    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo $LINK_NOTRANS_FILES))
+    DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i~/DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES"))
+    NO_DCFILE_LIST=$(awk '{for(i=1;i<=NF;++i)if($i !~ /DC-[^ ]*/)print $i}' <(echo "$LINK_NOTRANS_FILES"))
+    XML_FILE_LIST=$(awk -v path="${P_NOTRANS_DIR}/" '{for(i=1;i<=NF;++i)if($i~/xml\/.*\.xml/)print path $i}' <(echo "$LINK_NOTRANS_FILES"))
 
     # Copy remaining DC-files
     #
     for DC in $DCFILE_LIST; do
-	if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
-	    cp ${P_NOTRANS_DIR}/$DC .
-	else
-	    ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC" >&2
-	fi
+    if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
+        cp "${P_NOTRANS_DIR}/$DC" .
+    else
+        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC" >&2
+    fi
     done
 
     # Link not translated images and XML files
     #
     for DATA in $NO_DCFILE_LIST; do
-	if [[ -f ${P_NOTRANS_DIR}/$DATA ]]; then
-	    DIR=$(dirname $DATA)
-	    if [[ "." == $DIR ]]; then
-		ln -sf ${P_NOTRANS_DIR}/$DATA
-	    else
-		[[ -d $DIR ]] || mkdir -p $DIR
-		# the realpath statement makes sure a realtive path is used
-                # for the link (also see 
+    if [[ -f ${P_NOTRANS_DIR}/$DATA ]]; then
+        DIR="$(dirname "$DATA")"
+        if [[ "." == "$DIR" ]]; then
+        ln -sf "${P_NOTRANS_DIR}/$DATA"
+        else
+        [[ -d "$DIR" ]] || mkdir -p "$DIR"
+        # the realpath statement makes sure a realtive path is used
+                # for the link (also see
                 # https://stackoverflow.com/questions/2564634)
-		(cd $DIR && ln -sf $(realpath --relative-to="." "${P_NOTRANS_DIR}/$DATA"))
-	    fi
-	else
-	    ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA" >&2
-	fi
+        (cd "$DIR" && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/$DATA")")
+        fi
+    else
+        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA" >&2
+    fi
     done
 
 
     # Get entity files from the notrans sources and link to them
     #
-    ENTITIES="$(${LIBEXEC_DIR}/getentityname.py $XML_FILE_LIST)"
+    ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" "$XML_FILE_LIST")"
     for ENT in $ENTITIES; do
-	if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
-	    (cd xml && ln -sf ${P_NOTRANS_DIR}/xml/$ENT)
-	else
-	    ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT" >&2
-	fi
+    if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
+        (cd xml && ln -sf "${P_NOTRANS_DIR}/xml/$ENT")
+    else
+        ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT" >&2
+    fi
     done
 
-    cd - >/dev/null
+    popd - >/dev/null
 
     ccecho "result" "Successfully created files in\n$P_OUTPUT_DIR"
     exit 0
@@ -1327,30 +1338,30 @@ function unpack-locdrop () {
 #  with the real target
 #
 ###########################################################################
-function profile_first () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function profile_first {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="draft,help,name:,remarks,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_draft
         help_name
         help_remarks
         help_rootid
         echo
-	exit 0
+    exit 0
     fi
 
-    [[ 1 = $P_DRAFT ]]    && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
@@ -1368,26 +1379,26 @@ function profile_first () {
 #  comments or remarks are enabled
 #
 ###########################################################################
-function comments_remarks () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function comments_remarks {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help,remarks"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_remarks
         echo
-	exit 0
+    exit 0
     fi
 
-    [[ 1 = $P_REMARKS ]]  && REMARKS=1
+    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -1402,41 +1413,41 @@ function comments_remarks () {
 #  Subcommands: list-files, list-srcfiles*, list-images-*
 #
 ###########################################################################
-function filelists () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function filelists {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help,nodc,noent,noimg,noxml,pretty,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
-	if [[ $SUB_CMD =~ list-srcfiles ]]; then
+    if [[ $SUB_CMD =~ list-srcfiles ]]; then
             help_nodc
             help_noent
             help_noimg
             help_noxml
-	fi
-	[[ $SUB_CMD != list-file ]] && help_pretty
-	help_rootid
+    fi
+    [[ $SUB_CMD != list-file ]] && help_pretty
+    help_rootid
         echo
         exit 0
     fi
-    [[ 1 = $P_LIST_NODC ]]  && export LIST_NODC=1
-    [[ 1 = $P_LIST_NOENT ]] && export LIST_NOENT=1
-    [[ 1 = $P_LIST_NOIMG ]] && export LIST_NOIMG=1
-    [[ 1 = $P_LIST_NOXML ]] && export LIST_NOXML=1
-    [[ 1 = $P_PRETTY ]]     && export PRETTY_FILELIST=1
+    [[ 1 = "$P_LIST_NODC" ]]  && export LIST_NODC=1
+    [[ 1 = "$P_LIST_NOENT" ]] && export LIST_NOENT=1
+    [[ 1 = "$P_LIST_NOIMG" ]] && export LIST_NOIMG=1
+    [[ 1 = "$P_LIST_NOXML" ]] && export LIST_NOXML=1
+    [[ 1 = "$P_PRETTY" ]]     && export PRETTY_FILELIST=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
 
     if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then
-	exit_on_error "You need to specify an ID with --rootid with the list-file command."
+    exit_on_error "You need to specify an ID with --rootid with the list-file command."
     fi
 
     # we do not want to write a logfile this time
@@ -1453,56 +1464,56 @@ function filelists () {
 #
 ###########################################################################
 
-function show_names () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function show_names {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="cropmarks,draft,formatter:,grayscale,help,jsp,meta,name:,remarks,rootid:,single"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
                 help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-		[[ "pdf-name" = $SUB_CMD ]] && help_cropmarks
+        [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
                 help_draft
-		[[ "pdf-name" = $SUB_CMD ]] && help_formatter
-		[[ "pdf-name" = $SUB_CMD ]] && help_grayscale_pdf
+        [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
+        [[ "pdf-name" = "$SUB_CMD" ]] && help_grayscale_pdf
                 help_help
-		[[ "jsp-dir-name" =  $SUB_CMD ]] && help_jsp
-		help_meta
+        [[ "jsp-dir-name" =  "$SUB_CMD" ]] && help_jsp
+        help_meta
                 help_name
                 help_remarks
                 help_rootid
-		[[ "html-dir-name" = $SUB_CMD ]] && help_single
+        [[ "html-dir-name" = "$SUB_CMD" ]] && help_single
                 echo
                 exit 0
     fi
 
-    [[ 1 = $P_DRAFT ]]      && DRAFT="yes"
-    [[ 1 = $P_REMARKS ]]    && REMARKS=1
+    [[ 1 = "$P_DRAFT" ]]      && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]    && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = $P_META ]]       && META=1 DRAFT="yes"
-    [[ 1 = $P_CROPMARKS ]]  && export CROPMARKS=1
-    [[ 1 = $P_GRAYSCALE ]]  && export GRAYSCALE=1
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ 1 = "$P_META" ]]       && META=1 DRAFT="yes"
+    [[ 1 = "$P_CROPMARKS" ]]  && export CROPMARKS=1
+    [[ 1 = "$P_GRAYSCALE" ]]  && export GRAYSCALE=1
+    [[ -n "$P_ROOTID" ]]      && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]        && export PDFNAME="$P_NAME" BOOK="$P_NAME"
 
-    if [[ 1 = $P_HTMLSINGLE && 1 = $P_JSP ]]; then
-	exit_on_error "--single and --jsp are mutually exclusive"
+    if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
+    exit_on_error "--single and --jsp are mutually exclusive"
     else
-	[[ 1 = $P_HTMLSINGLE ]] && export HTMLSINGLE=1
-	[[ 1 = $P_JSP ]]        && export JSP=1
+    [[ 1 = "$P_HTMLSINGLE" ]] && export HTMLSINGLE=1
+    [[ 1 = "$P_JSP" ]]        && export JSP=1
     fi
 
     if [[ -n "$P_FORMATTER" ]]; then
-        if [[ xep = $P_FORMATTER || fop = $P_FORMATTER ]]; then
+        if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
             export FORMATTER="$P_FORMATTER"
         else
-	    exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
+        exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
 
@@ -1519,8 +1530,8 @@ function show_names () {
 #
 ###########################################################################
 
-function checklink () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function checklink {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
 
     SUB_CMD=$1
     shift
@@ -1528,18 +1539,23 @@ function checklink () {
     SHORT_OPTS="h"
     LONG_OPTS="file:,help,rootid:,show"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_file
         help_help
         help_rootid
-	help_show_check
-        echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
-	exit 0
+        help_show_check
+        cat <<EOF
+   NOTES: * Options --file (-f) and --rootid exclude one another.
+           * If neither file nor rootid is specified, the rootid
+             from the DC-file is used
+           * $SUB_CMD follows xi:includes
+EOF
+    exit 0
     fi
 
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -1555,9 +1571,10 @@ function checklink () {
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR) || exit_on_error "Cannot get a rootid from file $FILE"
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID
         else
-           exit_on_error "File $P_FILE does not exist"
+            exit_on_error "File $P_FILE does not exist"
         fi
     fi
 
@@ -1578,16 +1595,13 @@ function checklink () {
 #  mtime in long lists (this option is ignored with --compact)
 #
 ###########################################################################
-function getimages () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
-    local COMPACT DEBUG_SAV FILE IMAGEDIR MOD P_FILE
-    local PROFDIR SHOW VERBOSITY_SAV
+function getimages {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local COMPACT FILE MOD P_FILE SHOW
     local -a IMGLIST
 
     SUB_CMD=$1
     shift
-
-    IMAGEDIR="$DOC_DIR/images/src/"
 
     # any kind of verbosity is unwanted in this case
     WRITE_LOG=0
@@ -1597,11 +1611,11 @@ function getimages () {
     SHORT_OPTS="h"
     LONG_OPTS="compact,file:,help,modified,rootid:,show,viewer:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_compact
         help_file
@@ -1610,13 +1624,13 @@ function getimages () {
         help_show_images
         help_viewer
         echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
-	exit 0
+    exit 0
     fi
 
-    [[ 1 = $P_COMPACT ]]  && COMPACT=1
-    [[ 1 = $P_MODIFIED ]] && MOD=1
-    [[ 1 = $P_SHOW ]]     && SHOW=1
-    [[ -n "$P_VIEWER" ]] && IMG_VIEWER="$P_VIEWER"
+    [[ 1 = "$P_COMPACT" ]]  && COMPACT=1
+    [[ 1 = "$P_MODIFIED" ]] && MOD=1
+    [[ 1 = "$P_SHOW" ]]     && SHOW=1
+    [[ -n "$P_VIEWER" ]]    && IMG_VIEWER="$P_VIEWER"
 
     # set ROOTID - either directly or via $FILE
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -1631,9 +1645,10 @@ function getimages () {
 
     if [[ -n $P_FILE ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR) || exit_on_error "Cannot get a rootid from file $FILE"
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+            export ROOTID
         else
-           exit_on_error "File $P_FILE does not exist"
+            exit_on_error "File $P_FILE does not exist"
         fi
     fi
 
@@ -1642,8 +1657,8 @@ function getimages () {
         if [[ -z "$IMG_VIEWER" ]]; then
             exit_on_error "Please specify an image viewer via command-line (--viewer) or via config file"
         else
-            IMG_VIEWER=$(which $IMG_VIEWER 2>/dev/null)
-            if [[ 0 < $? ]]; then # which command failed
+            IMG_VIEWER=$(which "$IMG_VIEWER" 2>/dev/null)
+            if [[ 0 -lt $? ]]; then # which command failed
                 # Viewer was specified on command-line
                 if [[ $P_VIEWER ]]; then
                     exit_on_error "Cannot find VIEWER $CMD_IMG_VIEWER"
@@ -1662,20 +1677,20 @@ function getimages () {
         exit_on_error "Failed to get list of images"
     fi
 
-    if [[ 0 < ${#IMGLIST[@]} ]]; then
+    if [[ 0 -lt ${#IMGLIST[@]} ]]; then
         if [[ $COMPACT ]]; then
-            echo -e "${IMGLIST[@]}\n"
+            echo -e "${IMGLIST[*]}\n"
         else
-            for IMAGE in ${IMGLIST[@]}; do
+            for IMAGE in "${IMGLIST[@]}"; do
                 if [[ $MOD ]]; then
-	            MODIFIED=$(stat -c %y ${IMAGE} | cut -d '.' -f1)
-	            echo "${IMAGE} (${MODIFIED})"
+                MODIFIED=$(stat -c %y "$IMAGE" | cut -d '.' -f1)
+                echo "${IMAGE} (${MODIFIED})"
                 else
-	            echo "${IMAGE}"
+                echo "${IMAGE}"
                 fi
             done  | column -t
             if [[ $SHOW ]]; then
-                $IMG_VIEWER ${IMGLIST[@]} &
+                $IMG_VIEWER "${IMGLIST[@]}" &
             fi
         fi
     fi
@@ -1690,9 +1705,9 @@ function getimages () {
 #  the document specified by rootid.
 #
 ###########################################################################
-function spellcheck () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
-    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+function spellcheck {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local ASPELL_EXTRA_DICT COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
@@ -1701,11 +1716,11 @@ function spellcheck () {
     SHORT_OPTS="h"
     LONG_OPTS="extra-dict:,file:,help,lang:,list,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_extra-dict
         help_file
@@ -1714,11 +1729,11 @@ function spellcheck () {
         help_list
         help_rootid
         echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
-	exit 0
+    exit 0
     fi
 
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
-    [[ 1 = $P_LIST ]] && LISTMODE=1
+    [[ 1 = "$P_LIST" ]] && LISTMODE=1
 
     # extra dictionary
     # check and absolutize path
@@ -1753,14 +1768,14 @@ function spellcheck () {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-	if [[ -z  "ASPELL_LANG" ]]; then 
-            ASPELL_LANG=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-language.xsl --file $MAIN $XSLTPROCESSOR 2>/dev/null)
+    if [[ -z  "ASPELL_LANG" ]]; then
+            ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$ASPELL_LANG" ]]; then
-		ccecho "info" "Using language $ASPELL_LANG."
+        ccecho "info" "Using language $ASPELL_LANG."
             else
-		exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
+        exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
             fi
-	fi
+    fi
     fi
 
     #------------------
@@ -1769,26 +1784,26 @@ function spellcheck () {
     # first, create skiplist
     #
     COUNT=0
-    for SKIP in ${ASPELL_SKIP_TAGS[@]}; do
+    for SKIP in "${ASPELL_SKIP_TAGS[@]}"; do
         SKIPLIST[$COUNT]="--add-sgml-skip=$SKIP"
         let COUNT++
     done
     # now create the command
-    SPELLCMD="/usr/bin/aspell --mode=sgml ${SKIPLIST[@]} --encoding=utf-8 --lang=$ASPELL_LANG"
+    SPELLCMD="/usr/bin/aspell --mode=sgml ${SKIPLIST[*]} --encoding=utf-8 --lang=$ASPELL_LANG"
     if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
 
     # do spellchecking on the list of files
-    for FILE in ${FILELIST[@]}; do
-        test -f $FILE || ccecho "warn" "File $FILE does not exist"
-        if [[ 1 = $LISTMODE ]]; then
-            LISTOUTPUT=$($SPELLCMD list < $FILE | sort -u)
+    for FILE in "${FILELIST[@]}"; do
+        test -f "$FILE" || ccecho "warn" "File $FILE does not exist"
+        if [[ 1 = "$LISTMODE" ]]; then
+            LISTOUTPUT=$($SPELLCMD list < "$FILE" | sort -u)
             [[ -n "$LISTOUTPUT" ]] && echo -e "$FILE\n------------------------------\n$LISTOUTPUT\n"
             LISTOUTPUT=""
         else
             echo "Checking $FILE..."
-            $SPELLCMD -c $FILE
+            $SPELLCMD -c "$FILE"
         fi
     done
     exit
@@ -1801,25 +1816,25 @@ function spellcheck () {
 # Performs a stylecheck on rootid
 #
 ###########################################################################
-function stylecheck    () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function stylecheck {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="file:,help,name:,rootid:,show"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-	help_file
+    help_file
         help_help
         help_name
         help_rootid
-	help_show_check
+    help_show_check
         echo -e "    NOTES: * Options --file (-f) and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n"
         exit 0
     fi
@@ -1838,9 +1853,10 @@ function stylecheck    () {
 
     if [[ -n "$P_FILE" ]]; then
         if [[ -f $P_FILE ]]; then
-            export ROOTID=$($XSLTPROC --stylesheet $DAPSROOT/daps-xslt/common/get-rootelement-id.xsl --file $P_FILE $XSLTPROCESSOR) || exit_on_error "Cannot get a rootid from file $FILE"
+            ROOTID=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-rootelement-id.xsl" --file "$P_FILE" "$XSLTPROCESSOR") || exit_on_error "Cannot get a rootid from file $FILE"
+        export ROOTID
         else
-           exit_on_error "File $P_FILE does not exist"
+            exit_on_error "File $P_FILE does not exist"
         fi
     fi
 
@@ -1855,19 +1871,19 @@ function stylecheck    () {
 # Subcommands: dapsenv, nothing, showvariable
 #
 ###########################################################################
-function debugging () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function debugging {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help,name:,rootid:,target:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
@@ -1892,37 +1908,37 @@ function debugging () {
 #
 ###########################################################################
 
-function build_images () {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+function build_images {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="color,gen,grayscale,online,rootid:"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_color
         help_gen
         help_grayscale_images
         help_help
-	help_online
-	help_rootid
+    help_online
+    help_rootid
         echo
         exit 0
     fi
 
     if [[ -z "$P_COLOR" && -z "$P_IMAGES_GEN" && -z "$P_GRAYSCALE" && -z "$P_IMAGES_ONLINE" ]]; then
-	export IMAGES_ALL=1
+    export IMAGES_ALL=1
     else
-	[[ -n "$P_COLOR" ]]            && export IMAGES_COLOR=1
-	[[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
-	[[ -n "$P_GRAYSCALE" ]]        && export IMAGES_GRAYSCALE=1
-	[[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
+    [[ -n "$P_COLOR" ]]            && export IMAGES_COLOR=1
+    [[ -n "$P_IMAGES_GEN" ]]       && export IMAGES_GEN=1
+    [[ -n "$P_GRAYSCALE" ]]        && export IMAGES_GRAYSCALE=1
+    [[ -n "$P_IMAGES_ONLINE" ]]    && export IMAGES_ONLINE=1
     fi
 
     [[ -n "$P_ROOTID" ]]           && export ROOTID="$P_ROOTID"
@@ -1943,18 +1959,18 @@ function build_images () {
 # for functions with no command line options
 # do not write a log
 function no_opts {
-    local SHORT_OPTS LONG_OPTS SUB_CMD REMAIN_ARGS
+    local SHORT_OPTS LONG_OPTS SUB_CMD
     local SUB_CMD=$1
     shift
 
     SHORT_OPTS="h"
     LONG_OPTS="help"
 
-    parse_args $SHORT_OPTS $LONG_OPTS $SUB_CMD "$@"
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
 
     #------ Computing the values returned from the parser -----
-    if [[ 1 = $P_HELP ]]; then
+    if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD" "0"
         exit 0
     fi
@@ -1972,7 +1988,7 @@ function deprecated {
 
 
 # error message when specifying an invalid subcommand
-function wrong_parameter () {
+function wrong_parameter {
     local SUB_CMD=$1
     echo "Type '$ME $SUB_CMD help' to get a list of valid parameters"
     exit 1;
@@ -1996,295 +2012,403 @@ function showenv {
 
 # first line of help
 #
-function help_scmd_head () {
-    echo -e "
+function help_scmd_head {
+    cat <<EOF
 $ME [--global-options] $1 [options]
 
 $2
-"
+EOF
+
 [[ 0 != $3 ]] && echo -e "  Command options:"
 }
 
-function help_check () {
-    echo "    --check                   Validate the resulting ePUB document.
+function help_check {
+    cat <<EOF
+    --check                   Validate the resulting ePUB document.
                               Useful when developing stylesheets. Implies a verbosity
                               level of at least 1.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_clean () {
-    echo "    --clean                   Clean up the result directory (delete all files and
+function help_clean {
+    cat <<EOF
+    --clean                   Clean up the result directory (delete all files and
                               subdirectories) before building the document.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_color () {
-    echo "    --color                   Only generate color images.
-                              Default: off"
+function help_color {
+    cat <<EOF
+    --color                   Only generate color images.
+                              Default: off
+EOF
 }
-function help_compact () {
-    echo "    --compact                 Print the filelist on a single line.
+function help_compact {
+    cat <<EOF
+    --compact                 Print the filelist on a single line.
                               Ignored when -s|--show is set.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_cropmarks () {
-    echo "    --cropmarks               Add cropmarks to the PDF. Only available for
+function help_cropmarks {
+    cat <<EOF
+    --cropmarks               Add cropmarks to the PDF. Only available for
                               the XEP formatter, FOP currently does not support
                               cropmarks.
                               Ignored when FOP is used.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_css () {
-    echo "    --css=filename,           Specify a path to a css file.
+function help_css {
+    cat <<EOF
+    --css=filename,           Specify a path to a css file.
               --css=none      The special string \"none\" forces DAPS to use
                               no css, even when configured elsewhere
                               (e.g. in a config file).
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_draft () {
-    echo "    --draft                   Add a 'DRAFT' watermark to all pages of the book
-                              Default: off"
+function help_draft {
+    cat <<EOF
+    --draft                   Add a 'DRAFT' watermark to all pages of the book
+                              Default: off
+EOF
 }
-function help_def-file () {
-    echo "    --def-file=FILE           Specify a DEF-* file containing build
-                              information"
+function help_def-file {
+    cat <<EOF
+    --def-file=FILE           Specify a DEF-* file containing build
+                              information
+EOF
 }
-function help_desktopfiles () {
-    echo "    --desktopfiles            Generate .desktop files.
-                              Default: off"
+function help_desktopfiles {
+    cat <<EOF
+    --desktopfiles            Generate .desktop files.
+                              Default: off
+EOF
 }
-function help_documentfiles () {
-    echo "    --documentfiles           Generate .document files.
-                              Default: off"
+function help_documentfiles {
+    cat <<EOF
+    --documentfiles           Generate .document files.
+                              Default: off
+EOF
 }
-function help_epub3 () {
-    echo "    --epub3                   Generate ePUB version 3 eBooks.
-                              Default: ePUB version 2"
+function help_epub3 {
+    cat <<EOF
+    --epub3                   Generate ePUB version 3 eBooks.
+                              Default: ePUB version 2
+EOF
 }
-function help_export-dir () {
-    echo "    --export-dir=DIRECTORY    Specify a directory where to copy the results
+function help_export-dir {
+    cat <<EOF
+    --export-dir=DIRECTORY    Specify a directory where to copy the results
                               of the $TARGET command. The directory will be
                               created if it does not exist.
-                              Default: <BUILD_DIRECTORY>/online-docs"
+                              Default: <BUILD_DIRECTORY>/online-docs
+EOF
 }
-function help_extra-dict () {
-    echo "    --extra-dict=filename     Specify a path to an additional custom dictionary.
-                              Default: unset"
+function help_extra-dict {
+    cat <<EOF
+    --extra-dict=filename     Specify a path to an additional custom dictionary.
+                              Default: unset
+EOF
 }
-function help_file () {
-    echo "    --file=FILE               Specify the name of an input file"
+function help_file {
+    cat <<EOF
+    --file=FILE               Specify the name of an input file
+EOF
 }
-function help_formatter () {
-    echo "    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
+function help_formatter {
+    cat <<EOF
+    --formatter=FORMATTER     Specify the PDF formatter to be used. Currently
                               'xep' or 'fop' are supported.
-                              Default: 'fop'"
+                              Default: 'fop'
+EOF
 }
-function help_gen () {
-    echo "    --gen                     Do all image conversions (images/gen) but
+function help_gen {
+    cat <<EOF
+    --gen                     Do all image conversions (images/gen) but
                               do not generate or link the images to
                               images/color or images/grayscale.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_grayscale_images () {
-    echo "    --grayscale               Only generate grayscale images.
-                              Default: off"
+function help_grayscale_images {
+    cat <<EOF
+    --grayscale               Only generate grayscale images.
+                              Default: off
+EOF
 }
-function help_grayscale_pdf () {
-    echo "    --grayscale               Generate a grayscale PDF for printing.
-                              Default: off"
+function help_grayscale_pdf {
+    cat <<EOF
+    --grayscale               Generate a grayscale PDF for printing.
+                              Default: off
+EOF
 }
-function help_help () {
-    echo "    --help, -h                Print this help text"
+function help_help {
+    cat <<EOF
+    --help, -h                Print this help text
+EOF
 }
-function help_html5 () {
-    echo "    --html5                   HTML builds are generated as XHTML files.
+function help_html5 {
+    cat <<EOF
+    --html5                   HTML builds are generated as XHTML files.
                               Force HTML5 with this switch.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_jsp () {
-    echo "    --jsp                     Creates JSP output. Requires custom stylesheets
+function help_jsp {
+    cat <<EOF
+    --jsp                     Creates JSP output. Requires custom stylesheets
                               (not available with the standard DocBook
                               stylesheets).
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_lang () {
-    echo "    --lang                    Specify a language to use for spellchecking.
+function help_lang {
+    cat <<EOF
+    --lang                    Specify a language to use for spellchecking.
                               See \"man aspell \" for details.
-                              Default: en_US"
+                              Default: en_US
+EOF
 }
-function help_list () {
-    echo "    --list                    Dumps a sorted list of misspelled words to
+function help_list {
+    cat <<EOF
+    --list                    Dumps a sorted list of misspelled words to
                               standard output instead of starting the
                               interactive spellchecker.
-                              Default: en_US"
+EOF
 }
-function help_locdrop () {
-    echo "    --locdrop                 Use this option to create a source tarball
+function help_locdrop {
+    cat <<EOF
+    --locdrop                 Use this option to create a source tarball
                               from a previous locdrop after translation. If set, will
                               include the files manifest_*.txt in the source tarball.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_meta () {
-    echo "    --meta                    If set, prints additional status information
+function help_meta {
+    cat <<EOF
+    --meta                    If set, prints additional status information
                               (filename, maintainer and status) for each file.
                               Implies draft mode.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_modified () {
-    echo "    --modified                Print the image's modification time.
+function help_modified {
+    cat <<EOF
+    --modified                Print the image modification time.
                               Ignored when --compact is set.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_name () {
-    echo "    --name=BOOKNAME           File- and directory names for generated content
+function help_name {
+    cat <<EOF
+    --name=BOOKNAME           File- and directory names for generated content
                               are derived from BOOKNAME.
                               Default: generated by stripping 'DC-' from the
-                              doc config filename"
+                              doc config filename
+EOF
 }
-function help_nodc () {
-    echo "    --nodc                    Exclude DC-file from list.
-                              Default: unset"
+function help_nodc {
+    cat <<EOF
+    --nodc                    Exclude DC-file from list.
+                              Default: unset
+EOF
 }
-function help_noent () {
-    echo "    --noent                   Exclude Entity files from list.
-                              Default: unset"
+function help_noent {
+    cat <<EOF
+    --noent                   Exclude Entity files from list.
+                              Default: unset
+EOF
 }
-function help_nogzip () {
-    echo "    --nogzip                  If specified, man pages will not be compressed
+function help_nogzip {
+    cat <<EOF
+    --nogzip                  If specified, man pages will not be compressed
                               with gzip.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_noimg () {
-    echo "    --noimg                   Exclude images from list.
-                              Default: unset"
+function help_noimg {
+    cat <<EOF
+    --noimg                   Exclude images from list.
+                              Default: unset
+EOF
 }
-function help_nohelp () {
-    echo "
+function help_nohelp {
+    cat <<EOF
+
 No further help for subcommand \"$1\" available.
-"
+EOF
 }
-function help_nopdf () {
-    echo "    --nopdf                   Deactivates creating the color-pdf. Useful when
+function help_nopdf {
+    cat <<EOF
+    --nopdf                   Deactivates creating the color-pdf. Useful when
                               \"locdropping\" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_nosearch () {
-    echo "    --nosearch                Deactivates creating the search tab in webhtml
+function help_nosearch {
+    cat <<EOF
+    --nosearch                Deactivates creating the search tab in webhtml
                               builds.
-                              Default: enabled"
+                              Default: enabled
+EOF
 }
-function help_noset () {
-    echo "    --noset                   Creates a bigfile for the given book (specified
+function help_noset {
+    cat <<EOF
+    --noset                   Creates a bigfile for the given book (specified
                               by the rootid) rather than the complete set.
                               Links in the bigfile that point to external
                               targets, are replaced by text-only pointers.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_nostatic () {
-    echo "    --nostatic                Normally images and css files in HTML builds
+function help_nostatic {
+    cat <<EOF
+    --nostatic                Normally images and css files in HTML builds
                               are copied from elsewhere in the file system.
                               Use this option to link these files in order
                               to save disk space. Note that this eventually
                               produces nested links which may cause errors
-                              with CSS and Javascript."
+                              with CSS and Javascript.
+EOF
 }
-function help_notrans-dir () {
-    echo "    --notrans-dir=DIRECTORY   Relative or absolute path to the directory
+function help_notrans-dir {
+    cat <<EOF
+    --notrans-dir=DIRECTORY   Relative or absolute path to the directory
                               containing the untranslated sources. Links
                               pointing to this directory are created for all
                               files listed in manifest_notrans.txt.
                               Optional. If not specified, the dirname of the
                               DC-file is used.
-                              Default: DC-file directory"
+                              Default: DC-file directory
+EOF
 }
-function help_noxml () {
-    echo "    --noxml                   Exclude XML files from list.
-                              Default: unset"
+function help_noxml {
+    cat <<EOF
+    --noxml                   Exclude XML files from list.
+                              Default: unset
+EOF
 }
-function help_online () {
-    echo "    --online                  Only generate images used for HTML builds.
-                              Default: off"
+function help_online {
+    cat <<EOF
+    --online                  Only generate images used for HTML builds.
+                              Default: off
+EOF
 }
-function help_optipng () {
-    echo "    --optipng                 Optimize PNG images by reducing the color
+function help_optipng {
+    cat <<EOF
+    --optipng                 Optimize PNG images by reducing the color
                               palette (using optipng), Modfies the original
                               sources!
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_output-dir () {
-    echo "    --output-dir=DIRECTORY    Output directory in which to unpack the files
+function help_output-dir {
+    cat <<EOF
+    --output-dir=DIRECTORY    Output directory in which to unpack the files
                               from the localization drop. Mandatory.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_pagefiles () {
-    echo "    --pagefiles               Generate .page files.
-                              Default: off"
+function help_pagefiles {
+    cat <<EOF
+    --pagefiles               Generate .page files.
+                              Default: off
+EOF
 }
-function help_pretty () {
-    echo "    --pretty                  Pretty print file lists (one filename per line)"
+function help_pretty {
+    cat <<EOF
+    --pretty                  Pretty print file lists (one filename per line)
+EOF
 }
-function help_remarks () {
-    echo "    --remarks                 Include remarks (<remark>...</remark>) in book
+function help_remarks {
+    cat <<EOF
+    --remarks                 Include remarks (<remark>...</remark>) in book
                               Implies draft mode.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_rootid () {
-    echo "    --rootid=ID               Specify a ROOTID to build only parts of a book
+function help_rootid {
+    cat <<EOF
+    --rootid=ID               Specify a ROOTID to build only parts of a book
                               (parts or chapters). Default: Usually set
                               in the DC-file; if not set the complete set
-                              defined in \$MAIN will be built"
+                              defined in \$MAIN will be built
+EOF
 }
-function help_set-date () {
-    echo "    --set-date=YYYY/MM/DD     Set a publication date. If not set, the current
+function help_set-date {
+    cat <<EOF
+    --set-date=YYYY/MM/DD     Set a publication date. If not set, the current
                               date will automatically be chosen.
-                              Default: current date"
+                              Default: current date
+EOF
 }
-function help_show_images () {
-    echo "    --show                    Show images with an image viewer that either
+function help_show_images {
+    cat <<EOF
+    --show                    Show images with an image viewer that either
                               has been specified with --viewer or by setting
                               IMG_VIEWER in the config file
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_show_check () {
-    echo "    --show                    Show the result of the check command
+function help_show_check {
+    cat <<EOF
+    --show                    Show the result of the check command
                               in a browser. Uses \$BROWSER if defined,
                               otherwise xdg-open.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_single () {
-    echo "    --single                  Creates a single file HTML output (opposed to
+function help_single {
+    cat <<EOF
+    --single                  Creates a single file HTML output (opposed to
                               the default, which generates chunked HTML,
                               consisting of several HTML pages.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_statdir () {
-    echo "    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
+function help_statdir {
+    cat <<EOF
+    --statdir=DIRECTORY       Specify a DIRECTORY containing resource files
                               (CSS, images, Javascript etc.).
-                              DEFAULT: \$STYLEROOT/static"
+                              DEFAULT: \$STYLEROOT/static
+EOF
 }
-function help_subdirs () {
-    echo "    --subdirs                 Man pages are created in a man/ directory.
+function help_subdirs {
+    cat <<EOF
+    --subdirs                 Man pages are created in a man/ directory.
                               To also enable the subdirectories man1/, man2/,
                               etc., specify this parameter.
-                              Default: off"
+                              Default: off
+EOF
 }
-function help_target () {
-    echo "    --target=TARGET           Specify a potential target (such as jsp or
+function help_target {
+    cat <<EOF
+    --target=TARGET           Specify a potential target (such as jsp or
                               color-pdf) in order to retrieve correct values for
                               target-specific values.
-                              Default: same as daps subcommand"
+                              Default: same as daps subcommand
+EOF
 }
-function help_trans-files () {
-    echo "    --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
+function help_trans-files {
+    cat <<EOF
+    --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
                               files (semicolon-separeted) for a single language.
-                              Default: unset"
+                              Default: unset
+EOF
 }
-function help_viewer () {
-    echo "    --viewer=VIEWER           Image viewer to be used.
-                              Default: IMG_VIEWER setting from config file"
+function help_viewer {
+    cat <<EOF
+    --viewer=VIEWER           Image viewer to be used.
+                              Default: IMG_VIEWER setting from config file
+EOF
 }
-function help_xsltparam () {
-    echo "    --xsltparam=STRING        Add one or more xslt processor parameters in
+function help_xsltparam {
+    cat <<EOF
+    --xsltparam=STRING        Add one or more xslt processor parameters in
                               the form of
                               \"--stringparam KEY=VALUE --param KEY=VALUE\".
                               The given string will be passed unmodified to the
@@ -2294,5 +2418,6 @@ function help_xsltparam () {
                               parameters such as margins.
                               Note: You MUST quote the string with double
                               quotes: --xsltparam=\"STRING\"
-                              Default: unset"
+                              Default: unset
+EOF
 }
