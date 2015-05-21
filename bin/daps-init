@@ -13,21 +13,21 @@
 #----------------
 # Verbose error handling
 #
-function exit_on_error () {
+function exit_on_error {
     ccecho "error" "ERROR: ${1}" >&2
-    [[ -f $TEMPFILE ]] && rm $TEMPFILE
+    [[ -f $TEMPFILE ]] && rm "$TEMPFILE"
     exit 1;
 }
 
-function usage () {
-    echo "
-$ME --docdir <PATH TO DIRECTORY> [OPTIONS] 
+function usage {
+    cat <<EOF_helptext
+$ME --docdir <PATH TO DIRECTORY> [OPTIONS]
 
 Create a working environment for DAPS with an example DocBook document.
 Specifying the project directory with --docdir is mandatory, all other
 options are optional.
-Specifying a name for the document with \"--name\" is recommended--it will
-be used in filenames. Setting the title of the document with \"--title\"
+Specifying a name for the document with "--name" is recommended--it will
+be used in filenames. Setting the title of the document with "--title"
 is also recommended.
 
 Options:
@@ -71,8 +71,8 @@ Options:
     are \"book\" and \"article\" (default).
 
   --title=<TITLE>
-    Title of the document. Default: \"DAPS Example\"
-"
+    Title of the document. Default: "DAPS Example"
+EOF_helptext
     exit 0
 }
 
@@ -80,7 +80,7 @@ Options:
 # MAIN
 #
 
-ME=$(basename $0)
+ME=$(basename "$0")
 TEMPFILE=""
 
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
@@ -92,7 +92,7 @@ trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 #----------------
 # Parse the command line arguments
 
-ARGS=$(getopt -o 45d:hn:r:t: -l date:,dapsroot:,docbook4,docbook5,docdir:,help,name:,productname:,productnumber:,rootelement:,title: -n $ME -- "$@")
+ARGS=$(getopt -o 45d:hn:r:t: -l date:,dapsroot:,docbook4,docbook5,docdir:,help,name:,productname:,productnumber:,rootelement:,title: -n "$ME" -- "$@")
 
 eval set -- "$ARGS"
 
@@ -106,77 +106,77 @@ while true ; do
             fi
             shift 2
             ;;
-	--date)
-	    if [[ -z "$2" ]]; then 
-		exit_on_error "Date must be set (YYYY-MM-DD)"
-	    else
-		DATE="$2"
-		date -d $DATE > /dev/null 2>&1 || echo "Wrong date format. Use YYYY-MM-DD"
-	    fi
-	    shift 2 
-	    ;;
-        --docdir|-d)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Please specify a directory"
-	    else
-		DOC_DIR="$2"
-	    fi
+        --date)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Date must be set (YYYY-MM-DD)"
+            else
+                DATE="$2"
+                date -d "$DATE" > /dev/null 2>&1 || echo "Wrong date format. Use YYYY-MM-DD"
+            fi
             shift 2
             ;;
-	--docbook4|-4)
+        --docdir|-d)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Please specify a directory"
+            else
+                DOC_DIR="$2"
+            fi
+            shift 2
+            ;;
+        --docbook4|-4)
             DOCBOOKVERSION=4
             shift
             ;;
-	--docbook5|-5)
+        --docbook5|-5)
             DOCBOOKVERSION=5
             shift
             ;;
         --help|-h)
             usage
-	    ;;
-	--name|-n)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Please specify a name"
-	    elif [[ ! $2 =~ ^[-_A-Za-z0-9]*$ ]]; then
-		exit_on_error "The name must not contain characters other than [-_A-za-z0-9]"
-	    else
-		NAME="$2"
-	    fi
-	    shift 2
-	    ;;
-	--productname)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Productname must be set"
-	    else
-		PRODUCTNAME="$2"
-	
-	    fi
-	    shift 2
-	    ;;
-	--productnumber)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Productnumber must be set"
-	    else 
-		PRODUCTNUMBER="$2"
-	    fi
-	    shift 2
-	    ;;
-	--rootelement|-r)
-            if [[ article = $2 || book = $2 ]]; then
+            ;;
+        --name|-n)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Please specify a name"
+            elif [[ ! $2 =~ ^[-_A-Za-z0-9]*$ ]]; then
+                exit_on_error "The name must not contain characters other than [-_A-za-z0-9]"
+            else
+                NAME="$2"
+            fi
+            shift 2
+            ;;
+        --productname)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Productname must be set"
+            else
+                PRODUCTNAME="$2"
+
+            fi
+            shift 2
+            ;;
+        --productnumber)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Productnumber must be set"
+            else
+                PRODUCTNUMBER="$2"
+            fi
+            shift 2
+            ;;
+        --rootelement|-r)
+            if [[ article = "$2" || book = "$2" ]]; then
                 ROOTELEMENT="$2"
             else
                 exit_on_error "Rootelement must be either \"article\" or \"book\""
             fi
-	    shift 2
-	    ;;
-	--title|-t)
-	    if [[ -z "$2" ]]; then
-		exit_on_error "Title must be set"
-	    else
-		TITLE="$2"
-	    fi
-	    shift 2
-	    ;;
+            shift 2
+            ;;
+        --title|-t)
+            if [[ -z "$2" ]]; then
+                exit_on_error "Title must be set"
+            else
+                TITLE="$2"
+            fi
+            shift 2
+            ;;
         --) shift ; break ;;
         *) exit_on_error "Wrong parameter: $1" ;;
     esac
@@ -213,63 +213,63 @@ IMG_DIR="${DOC_DIR}/images/src"
 CONT=""
 if [[ ! -d $DOC_DIR ]]; then
     while [[ ! $CONT =~ ^[NnYy]$ ]] ; do
-        read -e -t20 -p "$DOC_DIR does not exist. Create it? [y/n] " -i "y" CONT
-	[[ $? -gt 128 ]] && CONT="y" # timeout reached
+        read -e -t 20 -i y -p "$DOC_DIR does not exist. Create it? [y/n] " CONT
+        [[ $? -gt 128 ]] && CONT="y" # timeout reached
     done
     if [[ $CONT =~ ^[Yy]$ ]]; then
-        mkdir -p $DOC_DIR || exit_on_error "Cannot create $DOC_DIR" 
+        mkdir -p "$DOC_DIR" || exit_on_error "Cannot create $DOC_DIR"
     else
         exit_on_error "Aborted by user"
     fi
 fi
 
 # Create needed subdirs in DOC_DIR
-mkdir -p ${DOC_DIR}/images/src/{dia,fig,jpg,png,svg,eps,pdf} ${DOC_DIR}/xml || exit_on_error "Cannot create needed subdirectories in $DOC_DIR"
+mkdir -p "${DOC_DIR}"/images/src/{dia,fig,jpg,png,svg,eps,pdf} "${DOC_DIR}/xml" || exit_on_error "Cannot create needed subdirectories in $DOC_DIR"
 
 #----------------
 # copy the templates
 #
 
 # DC-file
-cp $DC_TEMPLATE $DC_FILE || exit_on_error "Failed to copy $DC_TEMPLATE"
+cp "$DC_TEMPLATE" "$DC_FILE" || exit_on_error "Failed to copy $DC_TEMPLATE"
 # MAIN
-cp $MAIN_TEMPLATE $MAIN || exit_on_error "Failed to copy $MAIN_TEMPLATE"
+cp "$MAIN_TEMPLATE" "$MAIN" || exit_on_error "Failed to copy $MAIN_TEMPLATE"
 # graphics
-cp ${DAPSROOT}/init_templates/example{1,2}.png ${IMG_DIR}/png/ || exit_on_error "Failed to copy images from $TEMPLATE_DIR}"
+cp "${DAPSROOT}"/init_templates/example{1,2}.png "${IMG_DIR}/png/" || exit_on_error "Failed to copy images from $TEMPLATE_DIR}"
 
 #----------------
 # Adjust the content in the tempate files
 
 # replace placeholder in DC-file with $MAIN
-sed -i "s/§§MAIN§§/$(basename $MAIN)/g" $DC_FILE
+sed -i "s/§§MAIN§§/$(basename "$MAIN")/g" "$DC_FILE"
 
 # replace DATE in MAIN
-sed -i "s/§§DATE§§/$DATE/g" $MAIN
+sed -i "s/§§DATE§§/$DATE/g" "$MAIN"
 
 # replace TITLE in MAIN
-sed -i "s/§§TITLE§§/$TITLE/g" $MAIN
+sed -i "s/§§TITLE§§/$TITLE/g" "$MAIN"
 
 # insert <productname> and <productnumber tags
 
 if [[ -n $PRODUCTNAME ]]; then
     if [[ $DOCBOOKVERSION -eq 5 ]]; then
-	XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title -t elem"
+        XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title -t elem"
     else
-	XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title -t elem"
+        XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title -t elem"
     fi
 
     TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null) || \
-	exit_on_error "Could not create a temporary file to set productname"
+        exit_on_error "Could not create a temporary file to set productname"
 
-    xml ed $XML_CMD_OPTS -n productname -v $PRODUCTNAME $MAIN > $TEMPFILE
+    xml ed "$XML_CMD_OPTS" -n productname -v "$PRODUCTNAME" "$MAIN" > "$TEMPFILE"
     if [[ -n $PRODUCTNUMBER ]]; then
-	xml ed --inplace $XML_CMD_OPTS -n productnumber -v $PRODUCTNUMBER $TEMPFILE
+        xml ed --inplace "$XML_CMD_OPTS" -n productnumber -v "$PRODUCTNUMBER" "$TEMPFILE"
     fi
-    mv $TEMPFILE $MAIN
+    mv "$TEMPFILE" "$MAIN"
 fi
 
 #----------------
-#  
+#
 ccecho "result" "Successfully created a DAPS Project at ${DOC_DIR}"
 echo "To build a PDF or HTML version of the example document enter
 daps -d $DC_FILE pdf

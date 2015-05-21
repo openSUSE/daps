@@ -22,7 +22,5 @@ FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
 
 ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACKSIZE" \
 ADDITIONAL_JARS="batik-all excalibur/avalon-framework-impl" \
-ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver -Djava.util.logging.config.file=${DAPSROOT}/etc/fop/fop_logging.properties" \
+ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver -Djava.util.logging.config.file=${DAPSROOT}/etc/fop/fop_logging.properties" fop $OPTS "$@"
 #fop $OPTS -c $FOP_CONFIG_FILE "$@"
-fop $OPTS "$@"
-

@@ -5,8 +5,8 @@
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
-function print_help () {
-    echo "
+function print_help {
+    cat <<EOF_helptext
 $ME [options] FILELIST
 
 Spell checks DocBook XML files with aspell. By default uses the standard
@@ -37,7 +37,7 @@ Options:
   --list                          dumps a sorted list of misspelled words to
                                   standard output instead of starting the
                                   interactive spellchecker
-"
+EOF_helptext
 }
 
 #----------------------------------------------------------------------
@@ -50,7 +50,7 @@ unset LIST
 # default values
 LANGUAGE=en_US
 ARCH=$(getconf LONG_BIT)
-if [[ 64 = $ARCH ]]; then
+if [[ 64 = "$ARCH" ]]; then
     LIBDIR=/usr/lib64
 else
     LIBDIR=/usr/lib
@@ -59,16 +59,16 @@ EXTRA_DICT="$LIBDIR/aspell-0.60/suse_aspell.rws"
 
 # ignore text within these tags
 declare -a SKIPTAGS=(
-    --add-sgml-skip=author 
+    --add-sgml-skip=author
     --add-sgml-skip=command
-    --add-sgml-skip=email                 
+    --add-sgml-skip=email
     --add-sgml-skip=envar
-    --add-sgml-skip=filename                
+    --add-sgml-skip=filename
     --add-sgml-skip=firstname
     --add-sgml-skip=guimenu
     --add-sgml-skip=keycap
-    --add-sgml-skip=literal                
-    --add-sgml-skip=option                
+    --add-sgml-skip=literal
+    --add-sgml-skip=option
     --add-sgml-skip=remark
     --add-sgml-skip=screen
     --add-sgml-skip=surname
@@ -81,9 +81,9 @@ declare -a SKIPTAGS=(
 #----------------------------------------------------------------------
 # printing help / catching errors
 #
-ME=$(basename $0)
+ME=$(basename "$0")
 
-ARGS=$(getopt -o hl: -l dict:,help,lang:,list -n $ME -- "$@")
+ARGS=$(getopt -o hl: -l dict:,help,lang:,list -n "$ME" -- "$@")
 eval set -- "$ARGS"
 while true ; do
     case "$1" in
@@ -123,13 +123,13 @@ if [[ -z $1 ]]; then
 fi
 
 for FILE in "$@"; do
-    test -f $FILE || ccecho "warn" "File $FILE does not exist"
+    test -f "$FILE" || ccecho "warn" "File $FILE does not exist"
     if [[ ! $LIST ]]; then
         echo "Checking $FILE..."
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=$LANGUAGE --extra-dicts="$EXTRA_DICT" -c $FILE
+            --lang="$LANGUAGE" --extra-dicts="$EXTRA_DICT" -c "$FILE"
     else
         /usr/bin/aspell --mode=sgml "${SKIPTAGS[@]}" --encoding=utf-8 \
-            --lang=$LANGUAGE --extra-dicts="$EXTRA_DICT" list < $FILE | sort -u
+            --lang="$LANGUAGE" --extra-dicts="$EXTRA_DICT" list < $"FILE" | sort -u
     fi
 done
