@@ -9,10 +9,8 @@
 # Script to change DocBook 4 source to version 5
 #
 
-__VERSION__="$Id: $"
-
 # Name of this script:
-ME="$(basename $0)"
+ME="$(basename "$0")"
 
 # TODO: Make it configurable by ~/.daps/config or ~/.config/daps/dapsrc
 # [[ -f ~/.daps/config ]] && source ~/.daps/config
@@ -38,19 +36,19 @@ PARAMS=()
 ROOTREPLACE=@RE@
 
 ## Functions
-function exit_on_error () {
+function exit_on_error {
     echo -e "ERROR: $1" >&2
     exit 1;
 }
 
-function dump () {
-  if [[ -n "$VERBOSE" ]]; then
-     echo "$1"
-  fi
-  echo "$1" >> $XSLTPROCLOG 2>&1
+function dump {
+    if [[ -n "$VERBOSE" ]]; then
+        echo "$1"
+    fi
+    echo "$1" >> "$XSLTPROCLOG" 2>&1
 }
 
-function get_rootelement () {
+function get_rootelement {
     #
     # input: XML file name
     # output: root element
@@ -58,56 +56,56 @@ function get_rootelement () {
     local FILE
     FILE=$1
     if [[ -x /usr/bin/xmlstarlet ]]; then
-	XMLSTARLET=/usr/bin/xmlstarlet
+        XMLSTARLET=/usr/bin/xmlstarlet
     elif [[ -x /usr/bin/xml ]]; then
-	XMLSTARLET=/usr/bin/xml
+        XMLSTARLET=/usr/bin/xml
     else
-	exit_on_error "Cannot find xmlstarlet"
+        exit_on_error "Cannot find xmlstarlet"
     fi
 
-    ROOTELEMENT=$($XMLSTARLET sel -t -v "local-name(/*)" $FILE) || exit_on_error "Cannot get root element from $FILE"
-    
+    ROOTELEMENT=$($XMLSTARLET sel -t -v "local-name(/*)" "$FILE") || exit_on_error "Cannot get root element from $FILE"
+
 }
 
 # Help function to preserve readability of the while loop
-function usage () {
-	echo "
-Usage: $ME [OPTIONS] INPUTDIR OUTPUTDIR  
+function usage {
+    cat <<EOF_helptext
+Usage: $ME [OPTIONS] INPUTDIR OUTPUTDIR
 
 Wrapper script to convert a set of DocBook documents
 
 Options:
   --header       Path to a file containing a DocBook header. If specified,
                  this header will be written to each file that is generated.
-                 The header needs to contain the placeholder \"$ROOTREPLACE\" in
+                 The header needs to contain the placeholder "$ROOTREPLACE" in
                  place of the root element
   -l LOGFILE, --log=LOGFILE
-                 Write all outputs of xsltproc to LOGFILE 
+                 Write all outputs of xsltproc to LOGFILE
                  (default: $XSLTPROCLOG)
-  -p, --param=\"XSLPARAM=VALUE\"
+  -p, --param="XSLPARAM=VALUE"
                  Defines parameter-value pair for the XSLT processor;
                  can be used more than once
   -s XSLT, --stylesheet=XSLT
                  Use stylesheet for transformation
                  (default: $MIGRATE_XSLT)
   -h, --help     Print this help
-  -v, --verbose  Be verbose  
+  -v, --verbose  Be verbose
 
 Mandatory arguments:
    INPUTDIR      Searches for all XML file in this directory
    OUTPUTDIR     Write all XML file into the OUT directory
-"
+EOF_helptext
 }
 
-function parse_param() {
-  # Syntax: parse_param "PARAMETER_AND_VALUE"
-  # Extract parameter and value, syntax $1="param=value"
-  local _PARAM=$1
-  [[ "$_PARAM" == *"="* ]] || exit_on_error "Option -p muss der Syntax PARAMETER=VALUE folgen"
-  p=${_PARAM%=*}
-  v=${_PARAM#*=}
-  # Define associative array:
-  PARAMS["$p"]="$v"      
+function parse_param {
+    # Syntax: parse_param "PARAMETER_AND_VALUE"
+    # Extract parameter and value, syntax $1="param=value"
+    local _PARAM=$1
+    [[ "$_PARAM" == *"="* ]] || exit_on_error "Option -p muss der Syntax PARAMETER=VALUE folgen"
+    p=${_PARAM%=*}
+    v=${_PARAM#*=}
+    # Define associative array:
+    PARAMS["$p"]="$v"
 }
 
 ## START
@@ -120,42 +118,42 @@ eval set -- "$ARGS"
 
 while true; do
     case "$1" in
-	--header)
-	    if [[ -f $2 ]]; then
-		if grep -q "$ROOTREPLACE" $2 >/dev/null 2>&1; then
-		    HEADERFILE="$2"
-		else
-		    exit_on_error "Header file does not contain the replacement string $ROOTREPLACE for the root element"
-		fi
-	    else
-		exit_on_error "$2 is not a regular file"
-	    fi
-	    shift 2
-	    ;;
-	-h|--help)
-	    usage
-	    exit 1
-	    shift
-	    ;;
-	-l|--log)
-	    XSLTPROCLOG="$2"
-	    shift 2
-	    ;;
-	-p|--param)
-	    parse_param "$2"
-	    shift 2
-	    ;;
-	-s|--stylesheet)
-	    MIGRATE_XSLT="$2"
-	    shift 2
-	    ;;
-	-v|--verbose)
-	    VERBOSE=1
-	    shift
-	    ;;
-	--)
-	    shift
-	    break;;
+        --header)
+            if [[ -f $2 ]]; then
+                if grep -q "$ROOTREPLACE" "$2" >/dev/null 2>&1; then
+                    HEADERFILE="$2"
+                else
+                    exit_on_error "Header file does not contain the replacement string $ROOTREPLACE for the root element"
+                fi
+            else
+                exit_on_error "$2 is not a regular file"
+            fi
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 1
+            shift
+            ;;
+        -l|--log)
+            XSLTPROCLOG="$2"
+            shift 2
+            ;;
+        -p|--param)
+            parse_param "$2"
+            shift 2
+            ;;
+        -s|--stylesheet)
+            MIGRATE_XSLT="$2"
+            shift 2
+            ;;
+        -v|--verbose)
+            VERBOSE=1
+            shift
+            ;;
+        --)
+            shift
+            break;;
         *) exit_on_error "Internal error!" ;;
     esac
 done
@@ -164,8 +162,8 @@ unset POSIXLY_CORRECT
 
 ## Check for errors
 if [[ $# -eq 0 ]]; then
-  usage
-  exit 1
+    usage
+    exit 1
 fi
 
 INPUTDIR=$1
@@ -174,7 +172,7 @@ OUTPUTDIR=$2
 [[ $# -lt 2 ]] && exit_on_error "Missing arguments: Need both input and output directory!"
 [[ -d $INPUTDIR ]] || exit_on_error "First argument '$1' is not a directory"
 if [[ ! -d $OUTPUTDIR ]]; then
-  mkdir -p "$OUTPUTDIR"
+    mkdir -p "$OUTPUTDIR"
 fi
 
 [[ -e $XSLTPROCLOG ]] && rm "$XSLTPROCLOG"
@@ -182,31 +180,31 @@ fi
 dump "** Starting DocBook Transformation **"
 dump "** Using stylesheet $MIGRATE_XSLT"
 p=""
-for i in ${!PARAMS[@]}; do
-  p="$i=${PARAMS[$i]} $p"
+for i in "${!PARAMS[@]}"; do
+    p="$i=${PARAMS[$i]} $p"
 done
 dump "** Parameters: $p"
 
 p=""
-for i in ${!PARAMS[@]}; do
-  p="--stringparam $i ${PARAMS[$i]} $p"
+for i in "${!PARAMS[@]}"; do
+    p="--stringparam $i ${PARAMS[$i]} $p"
 done
 
-dump "** Commandline: xsltproc --output FILE ${p} $MIGRATE_XSLT XMLINPUT" 
+dump "** Commandline: xsltproc --output FILE ${p} $MIGRATE_XSLT XMLINPUT"
 
 for xmlin in ${INPUTDIR}/*$EXT; do
-   xmlout=$OUTPUTDIR/$(basename $xmlin)
-   dump "$xmlin -> $xmlout"
-   if [[ -n $HEADERFILE ]]; then
-       cp "$HEADERFILE" "$xmlout"
-       get_rootelement "$xmlin"
-       sed -i "s/$ROOTREPLACE/$ROOTELEMENT/" "$xmlout"
-       xsltproc --nonet ${p} "$MIGRATE_XSLT" "$xmlin" >> "$xmlout" 2>> $XSLTPROCLOG
-   else
-       xsltproc --nonet --output "$xmlout" ${p} "$MIGRATE_XSLT" "$xmlin" 2>> $XSLTPROCLOG
-   fi
-   ERRCODE=$?
-   dump "--------------------------------------------------"
+    xmlout="$OUTPUTDIR/$(basename "$xmlin")"
+    dump "$xmlin -> $xmlout"
+    if [[ -n $HEADERFILE ]]; then
+        cp "$HEADERFILE" "$xmlout"
+        get_rootelement "$xmlin"
+        sed -i "s/$ROOTREPLACE/$ROOTELEMENT/" "$xmlout"
+        xsltproc --nonet "${p}" "$MIGRATE_XSLT" "$xmlin" >> "$xmlout" 2>> "$XSLTPROCLOG"
+    else
+        xsltproc --nonet --output "$xmlout" "${p}" "$MIGRATE_XSLT" "$xmlin" 2>> "$XSLTPROCLOG"
+    fi
+    #   ERRCODE=$?
+    dump "--------------------------------------------------"
 done
 
 dump "** Finished, see $XSLTPROCLOG for more information **"
