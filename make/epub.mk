@@ -187,7 +187,7 @@ $(EPUB_TMPDIR)/mimetype: | $(EPUB_TMPDIR)
 #--------------
 # Generate EPUB-file
 #
-$(EPUB_RESULT): | $(EPUB_OEBPS) $(EPUB_STATIC)
+$(EPUB_RESULT): | $(EPUB_OEBPS) $(EPUB_STATIC) $(RESULT_DIR)
 ifneq "$(EPUB3)" "1"
   $(EPUB_RESULT): $(EPUB_TMPDIR)/mimetype
 endif
