@@ -1,0 +1,129 @@
+# RELAX NG Schema for the
+# DAPS Autobuild Feature
+#
+# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
+# Author: Frank Sundermeyer fs@suse.de
+#
+
+default namespace = ""
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+start = da.daps-autobuild
+
+da.anyuri.type =
+  ## Any URI
+  xsd:anyURI { pattern = "/(.*)" }
+
+
+da.daps-autobuild =
+  ## root element
+  element daps-autobuild {
+    da.general+,
+    da.set+
+}
+
+# --------------------------
+
+da.general =
+  ## general data section
+  element general {
+    da.general.builddir+,
+    da.general.dapsroot+,
+    da.general.rsync?
+}
+
+da.set =
+  ## set section defining the manuals and build parameters
+  element set {
+    attribute id { xsd:ID },
+    attribute draft   { xsd:boolean }?,
+    attribute meta    { xsd:boolean }?,
+    attribute remarks { xsd:boolean }?,
+    da.set.dcfiles,
+    da.set.formats,
+    da.set.styleroot?,
+    da.set.fb-styleroot?,
+    da.set.vcs
+}
+
+# -----------------------------------
+
+da.general.builddir =
+  ## Absolute path to BUILD_DIR
+  element builddir {
+    da.anyuri.type
+}
+
+da.general.dapsroot =
+  ## Absolute path to DAPSROOT
+  element dapsroot {
+    da.anyuri.type
+}
+
+da.general.rsync =
+  ## Parameters for rsync
+  element rsync {
+    da.general.rsync.target,
+    da.general.rsync.flags?
+}
+
+da.general.rsync.target =
+  ## rsync target string
+  element target {
+    text
+}
+
+da.general.rsync.flags =
+  ## rsync command line options
+  element flags {
+    text
+}
+
+# ------------------------------
+
+da.set.dcfiles =
+  ## List of DC-files
+  element dcfiles {
+    list { token+ }
+}
+
+da.set.formats =
+  ## List of build formats
+  element formats {
+    list { token+ }
+}
+
+da.set.styleroot =
+  ## Absolute path to STYLEROOT
+  element styleroot {
+    da.anyuri.type
+}
+
+da.set.fb-styleroot =
+  ## Absolute path to STYLEROOT
+  element fb-styleroot {
+    da.anyuri.type
+}
+
+da.set.vcs =
+  ## VCS section defining git/svn parameters
+  element vcs {
+    attribute type { "git" | "svn" },
+    attribute branch { text }?,
+    da.set.vcs.checkout,
+    da.set.vcs.lastrev?
+}
+
+# ------------------------------
+
+da.set.vcs.checkout =
+  ## Absolute path to checkout/clone directory
+  element checkout {
+    da.anyuri.type
+}
+
+da.set.vcs.lastrev =
+  ## last revision that was built
+  element lastrev {
+    text
+}

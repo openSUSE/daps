@@ -1,0 +1,193 @@
+#/bin/bash
+#
+#
+
+XMLSTARLET="/usr/bin/xml"
+CONFIG="daps_autobuild.xml"
+SCHEMA="daps_autobuild.rnc"
+VERBOSE="1"
+
+
+_BUILDDIR=""
+_DAPSROOT=""
+RSYNC_TARGET=""
+RSYNC_FLAGS=""
+
+declare -a ALL_SETIDS
+
+RUNDAPS=""
+
+function exit_on_error {
+    echo -e "ERROR: ${1}" >&2
+    exit 1;
+}
+
+function showinfo {
+    [[ 1 = "$VERBOSE" ]] && echo -e "\e[32m${1}\e[0m"
+}
+
+function read_general {
+    # Read values from the general section of the config file
+    local START_XPATH
+    START_XPATH="/daps-autobuild/general"
+
+    _BUILDDIR="$("$XMLSTARLET" sel -t -m "${START_XPATH}" -v "normalize-space(builddir)" "$CONFIG")"
+    _DAPSROOT="$("$XMLSTARLET" sel -t -m "${START_XPATH}" -v "normalize-space(dapsroot)" "$CONFIG")"
+    RSYNC_TARGET="$("$XMLSTARLET" sel -t -m "${START_XPATH}/rsync" -v "normalize-space(target)" "$CONFIG")"
+    RSYNC_FLAGS="$("$XMLSTARLET" sel -t -m "${START_XPATH}/rsync" -v "normalize-space(flags)" "$CONFIG")"
+
+    if [[ -n $_BUILDDIR ]]; then
+        [[ -d $_BUILDDIR ]] || exit_on_error "BUILDDIR directory does not exist"
+    fi
+    if [[ -n $_DAPSROOT ]]; then
+        [[ -d $_DAPSROOT ]] || exit_on_error "DAPSROOT directory does not exist"
+    fi
+
+}
+
+function read_set {
+    # Excepts the set ID as an argument
+    # Reads values from the given section
+    local SET_ID START_XPATH
+    SET_ID="$1"
+    [[ -z $SET_ID ]] && exit_on_error "Function read_set must be called with a set-ID"
+    START_XPATH="/daps-autobuild/set[@id='${SET_ID}']"
+
+    VCS=""
+    _DRAFT=""
+    _META=""
+    _REMARKS=""
+
+    _DCFILES=""
+    FORMATS=""
+    CHECKOUT=""
+    _STYLEROOT=""
+    _FB_STYLEROOT=""
+
+    _DRAFT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@draft)" "$CONFIG")" || true
+    _META="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@meta)" "$CONFIG")" || true
+    _REMARKS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@remarks)" "$CONFIG")" || true
+    VCS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@vcs)" "$CONFIG")"
+
+    _DCFILES="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(dcfiles)" "$CONFIG")"
+    FORMATS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(formats)" "$CONFIG")"
+    CHECKOUT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(checkout)" "$CONFIG")"
+    _STYLEROOT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(styleroot)" "$CONFIG")" || true
+    _FB_STYLEROOT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(fb-styleroot)" "$CONFIG")" || true
+
+    [[ -d $CHECKOUT ]] || exit_on_error "Checkout directory for $SET_ID does not exist"
+    if [[ -n $_STYLEROOT ]]; then
+        [[ -d $_STYLEROOT ]] || exit_on_error "STYLEROOT directory for $SET_ID does not exist"
+    fi
+     if [[ -n $_FB_STYLEROOT ]]; then
+        [[ -d $_FB_STYLEROOT ]] || exit_on_error "FB_STYLEROOT directory for $SET_ID does not exist"
+    fi
+}
+
+
+function run_daps {
+    local __BUILDDIR __DCFILE __DEBUG __DRAFT __FB_STYLEROOT _FORMAT __META _NAME __REMARKS RESULT _SET __STYLEROOT _SUBCMD
+    #
+    # Create the DAPS command and run DAPS
+    # Expects 4 Arguments:
+    #  1. Format
+    #  2. DC-file
+    #  3. Set ID
+    #  4. Builddir
+
+    _FORMAT="$1"
+    [[ -z $:FORMAT ]] && exit_on_error "Function run_daps must be called with a sub-command"
+
+    if [[ single-html = "$_FORMAT" ]]; then
+        _SUBCMD="html --single"
+    else
+        _SUBCMD="$_FORMAT"
+    fi
+
+    __DCFILE="$2"
+    [[ -z $__DCFILE ]] && exit_on_error "Function run_daps must be called with a DC-FILE"
+    _NAME=${__DCFILE//DC-/}
+
+    _SET="$3"
+    [[ -z $_SET ]] && exit_on_error "Function run_daps must be called with a set ID"
+    __BUILDDIR="$4"
+    [[ -z $_SET ]] && exit_on_error "Function run_daps must be called with a set ID"
+
+    [[ -n $_DEBUG ]]        && __DEBUG="--debug"
+    [[ -n $_DRAFT ]]        && __DRAFT="--draft"
+    [[ -n $_META ]]         && __META="--meta"
+    [[ -n $_REMARKS ]]      && __REMARKS="--remarks"
+    [[ -n $_STYLEROOT ]]    && __STYLEROOT="--styleroot=$_STYLEROOT"
+    [[ -n $_FB_STYLEROOT ]] && __FB_STYLEROOT="--fb_styleroot=$_FB_STYLEROOT"
+
+    RUNDAPS="${_DAPSROOT}/bin/daps $__DEBUG --dapsroot $_DAPSROOT --builddir $__BUILDDIR $__STYLEROOT $__FB_STYLEROOT -d $__DCFILE $_SUBCMD $__DRAFT $__REMARKS --name $_NAME"
+
+    [[ $_SUBCMD = "html" || $_SUBCMD = "pdf" ]] && RUNDAPS="$RUNDAPS $__META"
+
+    echo -n "  * Building $_SUBCMD version of $__DCFILE ... "
+    RESULT="$($RUNDAPS)"
+    if [[ 0 -eq $? ]]; then
+        echo -e "\e[32msucceeded!\e[0m"
+        SYNCDIR_DC="${SYNCDIR}/$_NAME"
+        mkdir -p "$SYNCDIR_DC"
+        if [[ "pdf" = "$_SUBCMD" ]]; then
+            mkdir -p "${SYNCDIR_DC}/pdf"
+            mv "$RESULT" "${SYNCDIR_DC}/pdf"
+        else
+            mv "$RESULT" "${SYNCDIR_DC}/$_FORMAT"
+        fi
+    else
+        echo -e "\e[1;31mfailed!\e[0m"
+    fi
+}
+
+################
+
+# Validate the config file
+
+jing -c $SCHEMA $CONFIG
+[[ 0 -ne $? ]] && exit_on_error "$CONFIG does not validate"
+
+ALL_SETIDS=( $(xml sel -t -v "/daps-autobuild/set/@id" "$CONFIG") )
+
+[[ 0 -eq ${#ALL_SETIDS[*]} ]] && exit_on_error "Could not find any SET IDs in the config file"
+
+read_general
+
+for SET in "${ALL_SETIDS[@]}"; do
+
+    SYNCDIR="${_BUILDDIR}/$SET/sync"
+    rm -rf "$SYNCDIR" && mkdir -p "$SYNCDIR"
+
+    #--------------------
+    # read the given set and store the data
+    read_set "$SET"
+
+    echo -e "$SET\n-------------------------"
+
+    pushd "$CHECKOUT" >/dev/null
+
+    #--------------------
+    # update the checkout
+    if [[ $VCS = "git" ]]; then
+        git pull -q || exit_on_error "git pull in $CHECKOUT failed"
+        echo "  * Updated git repo"
+    elif [[ $VCS = "svn" ]]; then
+        svn up -q >/dev/null || exit_on_error "svn up in $CHECKOUT failed"
+        echo "  * Updated svn repo"
+    fi
+
+    #--------------------
+    # build the manuals
+
+    for _FORMAT in $FORMATS; do
+        for DC in $_DCFILES; do
+            run_daps "$_FORMAT" "$DC" "$SET" "${_BUILDDIR}/$SET"
+        done
+    done
+
+    echo
+    popd >/dev/null
+done
+
+exit
