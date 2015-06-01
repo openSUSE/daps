@@ -14,6 +14,15 @@ da.anyuri.type =
   ## Any URI
   xsd:anyURI { pattern = "/(.*)" }
 
+da.email.type =
+  # http://www.dpawson.co.uk/relaxng/schema/datatypes/datatypes.html#d1034e184
+  # Works for both normal addresses and forms like
+  # "David Tolpin"@[Obscure Place]
+  # The expression above is slightly more allowing than required,
+  # but should be appropriate for the majority of cases.
+  xsd:token {
+    pattern="""([a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+(\.[a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+)*|"[^"\\]*")@([a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+(\.[a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+)*|\[[^\[\]\\]*\])"""
+  }
 
 da.daps-autobuild =
   ## root element
@@ -43,6 +52,7 @@ da.set =
     da.set.formats,
     da.set.styleroot?,
     da.set.fb-styleroot?,
+    da.set.maintainer?,
     da.set.vcs
 }
 
@@ -77,7 +87,7 @@ da.general.rsync.flags =
   ## rsync command line options
   element flags {
     text
-}
+}?
 
 # ------------------------------
 
@@ -105,13 +115,19 @@ da.set.fb-styleroot =
     da.anyuri.type
 }
 
+da.set.maintainer =
+  # e-mail address of maintainer
+  element maintainer {
+    da.email.type
+}?
+
 da.set.vcs =
   ## VCS section defining git/svn parameters
   element vcs {
     attribute type { "git" | "svn" },
     attribute branch { text }?,
     da.set.vcs.checkout,
-    da.set.vcs.lastrev?
+    da.set.vcs.lastrev
 }
 
 # ------------------------------
