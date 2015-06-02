@@ -1,193 +1,614 @@
-#/bin/bash
+#!/bin/bash
 #
 #
 
+# TODO: Allow regular DAPS
+
+ME=$(basename "$0")
+
+
+SCHEMA="/usr/share/xml/daps/schema/daps-autobuild.rnc"
+#CONFIG="$(readlink -e "daps_autobuild.xml")"
+#SCHEMA="$(readlink -e "daps_autobuild.rnc")"
+
+#VERBOSE=1
+CHECK_VCS=1
+DO_RSYNC=1
+RSYNC_DELETE=""
+SECTIONS=""
+SEND_REPORTS=0
+
+RSYNC="/usr/bin/rsync"
+CCECHO="/usr/bin/ccecho"
 XMLSTARLET="/usr/bin/xml"
-CONFIG="daps_autobuild.xml"
-SCHEMA="daps_autobuild.rnc"
-VERBOSE="1"
 
+FAILURES=0
+#declare -A FAILED_BOOKS
 
 _BUILDDIR=""
 _DAPSROOT=""
-RSYNC_TARGET=""
-RSYNC_FLAGS=""
+_RSYNC_TARGET=""
+_RSYNC_FLAGS=""
 
 declare -a ALL_SETIDS
 
 RUNDAPS=""
 
+function usage {
+    cat <<EOFhelptext
+Usage:
+  $ME --config <PATH TO CONFIG FILE> [OPTIONS]
+
+Automatically build books defing in a config file and sync them to a server.
+The config file is an XML The config file is an XML file, see $ME --helpconfig forfile, see $ME --helpconfig for more information.
+
+Specifying config file with --config is mandatory, all other options are
+optional. 
+
+Options:
+
+  --config=<file>
+    Path to config file. Can be specified relative or absolute.
+    Default: unset
+
+  --force
+    Manuals will only be rebuild when the git/svn repository has changed
+    since the last build. Use this option to force a rebuild even when the
+    repository has not changed.
+    Default: disabled (rebuild on changes only)
+
+  --help
+    This help messegae
+
+  --helpconfig
+    Show help on the config file.
+
+  --nosync
+    Do not rsync the manuals.
+    Default: disabled (rsync will be done)
+
+  --notify
+    In case of build failures send a notification to the e-mail address
+    specified with <maintainer/> in the config file. Will be ignored if
+    <maintainer/> is not set.
+    Default: disabled (No notification e-mails)
+
+  --schema=<file>
+    Path to the schema used to validate the config file.
+    Default: /usr/share/xml/daps/schema/daps-autobuild.rnc
+
+  --sections="sect1 sect2"
+    Space-separated list of sets that should be build. The sets need to be
+    configured in the config file.
+    Default: not set (all sets from the config file will be build)
+
+EOFhelptext
+}
+
+function helpconfig {
+    cat <<EOFhelptext
+The config file for $ME needs to look like the foillowing example. The general
+section can only be occur once, while the set section can occur multiple times.
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE daps-autobuild>
+<daps-autobuild>
+ <!-- ;;;;;;;;;;;;;;;;;;;; The General Section ;;;;;;;;;;;;;;;;;;; -->
+ <general>
+  <builddir>Path to builddir. Mandatory.</builddir>
+  <dapsroot>Path to DAPS directory. Mandatory.</dapsroot>
+  <rsync>
+   <target>Rsync target. Mandatory unless using --nosync.</target>
+   <flags>Rsync flags (do not use --delete here). Optional.</flags>
+  </rsync>
+ </general>
+
+ <!;;;;;;;;;;;;;;;;;;;; A Set Section ;;;;;;;;;;;;;;;;;;; -->
+ <set id="Unique ID" meta="0|1 (optional, default 0)"
+      remarks="0|1 (optional, default 0)"
+      draft="0|1 (optional, default 0)">
+  <dcfiles>Space-separated list of DC files. Mandatory.</dcfiles>
+  <formats>
+   Space-seprated list of formats to build (html single-html pdf). Mandatory.
+  </formats>
+  <styleroot>Path to stylesheet directory. Optional.</styleroot>
+  <fb_styleroot>Path to fallback stylesheet directory. Optional.</fb_styleroot>
+  <maintainer>E-Mail address for notifications. Optional.</maintainer>
+  <vcs type="git|svn (mandatory)">
+   <checkout>Checkout directory. Mandatory.</checkout>
+   <lastrev><!-- Leave empty, will be filled by script. Mandatory.--></latsrev> 
+  </vcs>
+ </set>
+EOFhelptext
+} 
+
 function exit_on_error {
+    # Print error message and exit with return code 1
+    #
+    # Expects 1 argument:
+    #  * error message
+    #
     echo -e "ERROR: ${1}" >&2
     exit 1;
 }
 
-function showinfo {
-    [[ 1 = "$VERBOSE" ]] && echo -e "\e[32m${1}\e[0m"
+function check_element {
+    # checks if array contains an element
+    #
+    # Expects two arguments:
+    #  1. Element to check
+    #  2. list (${array[@]})
+    #
+    local ELEMENT
+ 
+    [[ -z $1 ]] && exit_on_error "Function check_element must be called with an item to check for"
+    [[ -z $2 ]] && exit_on_error "Function check_element must be called with an array"
+
+    for ELEMENT in "${@:2}"; do 
+	[[ "$ELEMENT" == "$1" ]] && return 0
+    done
+    return 1
+}
+
+function read_config_value {
+    # reading element/attribute values from $CONFIG
+    #
+    # Expects 2 argument:
+    #   1 xpath
+    #   2 element name ("element") or attribute name ("@attribute")
+    #
+    local QUERY_OBJECT VALUE _XPATH
+
+    [[ -z $1 ]] && exit_on_error "Function run_daps must be called with an xpath"
+    [[ -z $2 ]] && exit_on_error "Function run_daps must be called with an element"
+
+    _XPATH="$1"
+    QUERY_OBJECT="$2"
+
+    VALUE="$("$XMLSTARLET" sel -t -m "$_XPATH" -v "normalize-space($QUERY_OBJECT)" "$CONFIG")"
+    echo "$VALUE"
+    return 0
 }
 
 function read_general {
     # Read values from the general section of the config file
-    local START_XPATH
-    START_XPATH="/daps-autobuild/general"
+    #
+    local _START_XPATH
+    _START_XPATH="/daps-autobuild/general"
 
-    _BUILDDIR="$("$XMLSTARLET" sel -t -m "${START_XPATH}" -v "normalize-space(builddir)" "$CONFIG")"
-    _DAPSROOT="$("$XMLSTARLET" sel -t -m "${START_XPATH}" -v "normalize-space(dapsroot)" "$CONFIG")"
-    RSYNC_TARGET="$("$XMLSTARLET" sel -t -m "${START_XPATH}/rsync" -v "normalize-space(target)" "$CONFIG")"
-    RSYNC_FLAGS="$("$XMLSTARLET" sel -t -m "${START_XPATH}/rsync" -v "normalize-space(flags)" "$CONFIG")"
-
+    _BUILDDIR="$(read_config_value "$_START_XPATH" "builddir")"
     if [[ -n $_BUILDDIR ]]; then
-        [[ -d $_BUILDDIR ]] || exit_on_error "BUILDDIR directory does not exist"
+        [[ -d $_BUILDDIR ]] || exit_on_error "BUILDDIR directory $_BUILDDIR does not exist"
     fi
+
+    _DAPSROOT="$(read_config_value "$_START_XPATH" "dapsroot")"
     if [[ -n $_DAPSROOT ]]; then
-        [[ -d $_DAPSROOT ]] || exit_on_error "DAPSROOT directory does not exist"
+        [[ -d $_DAPSROOT ]] || exit_on_error "DAPSROOT directory $_DAPSROOT does not exist"
+	CCECHO="$_DAPSROOT/bin/ccecho"
     fi
 
-}
-
-function read_set {
-    # Excepts the set ID as an argument
-    # Reads values from the given section
-    local SET_ID START_XPATH
-    SET_ID="$1"
-    [[ -z $SET_ID ]] && exit_on_error "Function read_set must be called with a set-ID"
-    START_XPATH="/daps-autobuild/set[@id='${SET_ID}']"
-
-    VCS=""
-    _DRAFT=""
-    _META=""
-    _REMARKS=""
-
-    _DCFILES=""
-    FORMATS=""
-    CHECKOUT=""
-    _STYLEROOT=""
-    _FB_STYLEROOT=""
-
-    _DRAFT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@draft)" "$CONFIG")" || true
-    _META="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@meta)" "$CONFIG")" || true
-    _REMARKS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@remarks)" "$CONFIG")" || true
-    VCS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(@vcs)" "$CONFIG")"
-
-    _DCFILES="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(dcfiles)" "$CONFIG")"
-    FORMATS="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(formats)" "$CONFIG")"
-    CHECKOUT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(checkout)" "$CONFIG")"
-    _STYLEROOT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(styleroot)" "$CONFIG")" || true
-    _FB_STYLEROOT="$("$XMLSTARLET" sel -t -m "$START_XPATH" -v "normalize-space(fb-styleroot)" "$CONFIG")" || true
-
-    [[ -d $CHECKOUT ]] || exit_on_error "Checkout directory for $SET_ID does not exist"
-    if [[ -n $_STYLEROOT ]]; then
-        [[ -d $_STYLEROOT ]] || exit_on_error "STYLEROOT directory for $SET_ID does not exist"
-    fi
-     if [[ -n $_FB_STYLEROOT ]]; then
-        [[ -d $_FB_STYLEROOT ]] || exit_on_error "FB_STYLEROOT directory for $SET_ID does not exist"
+    if [[ 1 -eq $DO_RSYNC ]]; then 
+	_RSYNC_TARGET="$(read_config_value "${_START_XPATH}/rsync" "target")"
+	_RSYNC_FLAGS="$(read_config_value "${_START_XPATH}/rsync" "flags")"
+	[[ "$_RSYNC_FLAGS" =~ --delete ]] && $CCECHO "warn" "rsync flags contain --delete, manuals which fail to build will be deleted from server"
     fi
 }
+
+
+function process_git {
+    # Update a GIT repo and determine whether a rebuild is needed
+    #
+    # Return values:
+    #
+    # 0: Success
+    # 1: git pull failed
+    # 2: Getting latest revision number failed
+    # 3. Checking out branch failed
+    #
+    local GITBRANCH
+    # get branch
+    GITBRANCH="$(read_config_value "/daps-autobuild/set[@id='$SET']/vcs" "@branch")"
+    git checkout -q "$GITBRANCH" >/dev/null || return 3
+    git pull -q || return 1
+    echo "  * Updated git branch $GITBRANCH"
+    if [[ 1 -eq $CHECK_VCS ]]; then
+	NEWREV="$(git git rev-parse HEAD)" || return 2
+	[[ "$NEWREV" != "$_LASTREV" ]] && REBUILD="1"
+    fi
+    return 0
+}
+
+function process_svn {
+    # Update an SVN repo and determine whether a rebuild is needed
+    #
+    # Return values:
+    #
+    # 0: Success
+    # 1: SVN up failed
+    # 2: Getting latest revision number failed
+    #
+    svn up -q >/dev/null || return 1
+    echo "  * Updated svn working copy"
+    if [[ 1 -eq $CHECK_VCS ]]; then
+	NEWREV="$(svnversion -c "$_CHECKOUT" . | sed -e 's/[MS]//g' -e 's/^[[:digit:]]*://')" || return 2
+	[[ "$NEWREV" != "$_LASTREV" ]] && REBUILD="1"
+    fi
+    return 0
+}	
 
 
 function run_daps {
-    local __BUILDDIR __DCFILE __DEBUG __DRAFT __FB_STYLEROOT _FORMAT __META _NAME __REMARKS RESULT _SET __STYLEROOT _SUBCMD
+    local BUILDDIR DCFILE NAME RESULT _SET SUBCMD
     #
     # Create the DAPS command and run DAPS
     # Expects 4 Arguments:
     #  1. Format
     #  2. DC-file
     #  3. Set ID
-    #  4. Builddir
+    #
+    # Return values:
+    #  0: Success
+    #  1: Failure (running DAPS failed)
 
-    _FORMAT="$1"
-    [[ -z $:FORMAT ]] && exit_on_error "Function run_daps must be called with a sub-command"
+    [[ -z $1 ]] && exit_on_error "Function run_daps must be called with a sub-command"
+    [[ -z $2 ]] && exit_on_error "Function run_daps must be called with a DC-FILE"
+    [[ -z $3 ]] && exit_on_error "Function run_daps must be called with a set ID"
 
-    if [[ single-html = "$_FORMAT" ]]; then
-        _SUBCMD="html --single"
-    else
-        _SUBCMD="$_FORMAT"
+    SUBCMD="$1"
+    DCFILE="$2"
+    _SET="$3"
+
+    if [[ single-html = "$SUBCMD" ]]; then
+        SUBCMD="html --single"
+    fi
+  
+    NAME=${DCFILE//DC-/}
+    BUILDDIR="${_BUILDDIR}/$_SET"
+
+    # build the DAPS command
+    #
+    RUNDAPS="${_DAPSROOT}/bin/daps --dapsroot $_DAPSROOT --builddir $BUILDDIR -d $DCFILE"
+    [[ -n $_STYLEROOT ]]    && RUNDAPS="$RUNDAPS --styleroot=$_STYLEROOT"
+    [[ -n $_FB_STYLEROOT ]] && RUNDAPS="$RUNDAPS --fb_styleroot=$_FB_STYLEROOT"
+    RUNDAPS="$RUNDAPS $SUBCMD --name $NAME"
+    [[ -n $_DRAFT ]]        && RUNDAPS="$RUNDAPS --draft" 
+    [[ -n $_REMARKS ]]      && RUNDAPS="$RUNDAPS --remarks"
+    if [[ -n $_META ]]; then
+	[[ $SUBCMD = "html" || $SUBCMD = "pdf" ]] &&  RUNDAPS="$RUNDAPS --meta"
     fi
 
-    __DCFILE="$2"
-    [[ -z $__DCFILE ]] && exit_on_error "Function run_daps must be called with a DC-FILE"
-    _NAME=${__DCFILE//DC-/}
-
-    _SET="$3"
-    [[ -z $_SET ]] && exit_on_error "Function run_daps must be called with a set ID"
-    __BUILDDIR="$4"
-    [[ -z $_SET ]] && exit_on_error "Function run_daps must be called with a set ID"
-
-    [[ -n $_DEBUG ]]        && __DEBUG="--debug"
-    [[ -n $_DRAFT ]]        && __DRAFT="--draft"
-    [[ -n $_META ]]         && __META="--meta"
-    [[ -n $_REMARKS ]]      && __REMARKS="--remarks"
-    [[ -n $_STYLEROOT ]]    && __STYLEROOT="--styleroot=$_STYLEROOT"
-    [[ -n $_FB_STYLEROOT ]] && __FB_STYLEROOT="--fb_styleroot=$_FB_STYLEROOT"
-
-    RUNDAPS="${_DAPSROOT}/bin/daps $__DEBUG --dapsroot $_DAPSROOT --builddir $__BUILDDIR $__STYLEROOT $__FB_STYLEROOT -d $__DCFILE $_SUBCMD $__DRAFT $__REMARKS --name $_NAME"
-
-    [[ $_SUBCMD = "html" || $_SUBCMD = "pdf" ]] && RUNDAPS="$RUNDAPS $__META"
-
-    echo -n "  * Building $_SUBCMD version of $__DCFILE ... "
+    echo -n "  * Building $SUBCMD version of $DCFILE ... "
     RESULT="$($RUNDAPS)"
     if [[ 0 -eq $? ]]; then
-        echo -e "\e[32msucceeded!\e[0m"
-        SYNCDIR_DC="${SYNCDIR}/$_NAME"
+        SYNCDIR_DC="${SYNCDIR}/$NAME"
         mkdir -p "$SYNCDIR_DC"
-        if [[ "pdf" = "$_SUBCMD" ]]; then
+        if [[ "pdf" = "$SUBCMD" ]]; then
             mkdir -p "${SYNCDIR_DC}/pdf"
             mv "$RESULT" "${SYNCDIR_DC}/pdf"
         else
             mv "$RESULT" "${SYNCDIR_DC}/$_FORMAT"
         fi
+	return 0
     else
-        echo -e "\e[1;31mfailed!\e[0m"
+	return 1
     fi
 }
 
-################
+function failure_notification {
 
+    # Sends a failure report by mail
+    #
+    # Expects 2 arguments:
+    # 1. SET name
+    # 2. Reason for notification: daps|svn|git
+    #
+    # Return values:
+    #  0: Success
+    #  1: Failure because Postfix is not running
+    #  2: Failure of mail command
+    #
+    local EMAIL KEY REASON _SET SUBJECT TEXT
+
+    # exit with return code 1 of postfix is not running
+    systemctl -q is-active postfix || return 1
+
+    [[ -z $1 ]] && exit_on_error "Function failure_notification must be called with a set name"
+    [[ -z $2 ]] && exit_on_error "Function failure_notification must be called with a reason"
+
+    _SET="$1"
+    REASON="$2"
+    
+    EMAIL="$(read_config_value "/daps-autobuild/set[@id='$SET']" "maintainer")"
+
+    if [[ -n $EMAIL ]]; then
+
+	SUBJECT="[DAPS Auto]: Error report on $_SET ($REASON)"
+
+	case $REASON in
+	    daps)
+		TEXT="While building manuals for set $_SET on ${FAILED_BOOKS["date"]}\nerrors occured on the following DC-files\n\n"
+		for KEY in "${!FAILED_BOOKS[@]}"; do
+		    [[ "date" == "$KEY" ]] && continue
+		    TEXT="$TEXT * $KEY:\t${FAILED_BOOKS["$KEY"]}\n"
+		done
+		;;
+	    git)
+		TEXT="Updating the git checkout for $_SET failed on ${FAILED_BOOKS["date"]}\n"
+		;;
+	    svn)
+		TEXT="Updating the SVN working copy for $_SET failed on ${FAILED_BOOKS["date"]}\n"
+		;;
+	esac
+	
+	TEXT="$TEXT\n-- \nYours friendly\n\tDAPS Auto reminder"
+	
+	echo -e "$TEXT" | mail -s "$SUBJECT" "$EMAIL" || return 2
+    fi
+
+    return 0
+}
+    
+
+################ MAIN ################
+
+#--------------------
+# Read command line options
+
+ARGS=$(getopt -o h -l config:,force,help,helpconfig,nosync,notify,rsync,schema:,sections: -n "$ME" -- "$@")
+
+# Exit when getopt returns errors
+#
+[[ 0 -ne $? ]] && exit_on_error "Wrong command line argument"
+
+eval set -- "$ARGS"
+
+while true ; do
+    case "$1" in
+	--config)
+	    [[ -f $2 ]] || exit_on_error "Not a valid path for --config"
+	    CONFIG="$(readlink -e "$2")"
+	    shift 2
+	    ;;
+	--force)
+	    CHECK_VCS=0
+	    shift
+	    ;;
+	-h|--help)
+	    usage
+	    exit 0
+	    ;;
+	--helpconfig)
+	    helpconfig
+	    exit 0
+	    ;;
+	--nosync)
+	    DO_RSYNC=0
+	    shift
+	    ;;
+	--notify)
+	    SEND_REPORTS=1
+	    shift
+	    ;;
+	--schema)
+	    SCHEMA="$2"
+	    shift 2
+	    ;;
+	--sections)
+	    SECTIONS="$2"
+	    shift 2
+	    ;;
+        --) shift ; break ;;
+        *) exit_on_error "Internal error while parsing the command line arguments!" ;;
+    esac
+done	
+
+# Check config/schema
+[[ -z $CONFIG ]] && exit_on_error "You must specify a config file with --config"
+if [[ -f $SCHEMA ]]; then
+    SCHEMA="$(readlink -e "$SCHEMA")"
+else
+    exit_on_error "Not a valid path for --schema"
+fi
+
+#--------------------
 # Validate the config file
 
-jing -c $SCHEMA $CONFIG
+jing -c "$SCHEMA" "$CONFIG"
 [[ 0 -ne $? ]] && exit_on_error "$CONFIG does not validate"
 
-ALL_SETIDS=( $(xml sel -t -v "/daps-autobuild/set/@id" "$CONFIG") )
+#--------------------
+# Get the set IDs
 
+ALL_SETIDS=( $(xml sel -t -v "/daps-autobuild/set/@id" "$CONFIG") )
 [[ 0 -eq ${#ALL_SETIDS[*]} ]] && exit_on_error "Could not find any SET IDs in the config file"
+
+[[ -z $SECTIONS ]] && SECTIONS="${ALL_SETIDS[*]}"
+
+
+#--------------------
+# read the general data
 
 read_general
 
-for SET in "${ALL_SETIDS[@]}"; do
+for SET in $SECTIONS; do
+    
+    # check if SET is a valid section in the config file
+    check_element "$SET" "${ALL_SETIDS[@]}"
+    if [[ 1 -eq $? ]]; then
+	$CCECHO "warn" "$SET not configured in config file, skipping!"
+	continue
+    fi
 
+    _CHECKOUT=""
+    _DCFILES=""
+    _DRAFT=""
+    _FB_STYLEROOT=""
+    _FORMATS=""
+    _LASTREV=""
+    _META=""
+    _REMARKS=""
+    _STYLEROOT=""
+    _VCS=""
+
+    NEWREV=""
+    START_XPATH="/daps-autobuild/set[@id='${SET}']"
+    FAILURES="0"
+    declare -A FAILED_BOOKS
+
+    FAILED_BOOKS["date"]="$(date)"
+
+    # set rebuild to "1" if we do not check for revisions
+    if [[ 1 -eq $CHECK_VCS ]]; then
+	REBUILD="0"
+    else
+	REBUILD="1"
+    fi
+
+    # set up the sync directory
     SYNCDIR="${_BUILDDIR}/$SET/sync"
     rm -rf "$SYNCDIR" && mkdir -p "$SYNCDIR"
 
-    #--------------------
-    # read the given set and store the data
-    read_set "$SET"
-
     echo -e "$SET\n-------------------------"
 
-    pushd "$CHECKOUT" >/dev/null
+    #--------------------
+    # read the given set and store the data
+    #
+    _CHECKOUT="$(read_config_value "${START_XPATH}/vcs" "checkout")"
+    _DCFILES="$(read_config_value "$START_XPATH" "dcfiles")"
+    _DRAFT="$(read_config_value "$START_XPATH" "@draft")"
+    _FB_STYLEROOT="$(read_config_value "$START_XPATH" "fb-styleroot")"
+    _FORMATS="$(read_config_value "$START_XPATH" "formats")"
+    _LASTREV="$(read_config_value "${START_XPATH}/vcs" "lastrev")"
+    _META="$(read_config_value "$START_XPATH" "@meta")"
+    _REMARKS="$(read_config_value "$START_XPATH" "@remarks")"
+    _STYLEROOT="$(read_config_value "$START_XPATH" "styleroot")"
+    _VCS="$(read_config_value "${START_XPATH}/vcs" "@type")"
+    
+    # validity checks
+    if [[ -n $_FB_STYLEROOT ]]; then
+        if [[ ! -d $_STYLEROOT ]]; then
+	    $CCECHO "warn" "  FB_STYLEROOT directory '$_FB_STYLEROOT' does not exist,\n  using default"
+	   _FB_STYLEROOT="" 
+	fi
+    fi
+
+    if [[ -n $_STYLEROOT ]]; then
+        if [[ ! -d $_STYLEROOT ]]; then
+	    $CCECHO "warn" "  STYLEROOT directory '$_STYLEROOT' does not exist,\n  using default"
+	   _STYLEROOT="" 
+	fi
+    fi
+
+    if [[ ! -d $_CHECKOUT ]]; then
+	$CCECHO "warn" "  Checkout directory '$_CHECKOUT' does not exist!\n  Skipping $SET"
+	continue
+    fi
+
+    pushd "$_CHECKOUT" >/dev/null
 
     #--------------------
-    # update the checkout
-    if [[ $VCS = "git" ]]; then
-        git pull -q || exit_on_error "git pull in $CHECKOUT failed"
-        echo "  * Updated git repo"
-    elif [[ $VCS = "svn" ]]; then
-        svn up -q >/dev/null || exit_on_error "svn up in $CHECKOUT failed"
-        echo "  * Updated svn repo"
+    # update the checkout and check revisions
+    if [[ $_VCS = "git" ]]; then
+	process_git
+	case $? in
+	    1)
+		$CCECHO "warn" "  Running 'git pull' in $_CHECKOUT failed!\n  Skipping $SET"
+		failure_notification "$SET" "git"
+		continue
+		;;
+	    2)
+		$CCECHO "warn" "  Wasn't able to get the current revision number from git"
+		;;
+	    3)
+		$CCECHO "warn" "  Running 'git co <branch>' in $_CHECKOUT failed!\n  Skipping $SET"
+		failure_notification "$SET" "git"
+		continue
+		;;
+	esac
+    elif [[ $_VCS = "svn" ]]; then
+	process_svn
+	case $? in
+	    1)
+		$CCECHO "warn" "  Running 'svn up' in $_CHECKOUT failed!\n  Skipping $SET"
+		failure_notification "$SET" "svn"
+		continue
+		;;
+	    2)
+		$CCECHO "warn" "  Wasn't able to get the current revision number from SVN"
+		;;
+	esac
     fi
+
 
     #--------------------
     # build the manuals
 
-    for _FORMAT in $FORMATS; do
-        for DC in $_DCFILES; do
-            run_daps "$_FORMAT" "$DC" "$SET" "${_BUILDDIR}/$SET"
-        done
-    done
+    if [[ 1 -eq $REBUILD ]]; then
+	for _FORMAT in $_FORMATS; do
+            for DC in $_DCFILES; do
+		# Build!
+		run_daps "$_FORMAT" "$DC" "$SET"
+		# Check build result
+		if [[ 0 -eq $? ]]; then
+		    $CCECHO "result" "Succeeded"
+		else
+		    $CCECHO "warn" "Failed"
+		    FAILURES=$((FAILURES + 1))
+		    FAILED_BOOKS["$DC"]="${FAILED_BOOKS["$DC"]} $_FORMAT"
+		fi
+            done
+	done
+    else
+	echo "  ==> Previous build still up-to-date, no rebuild needed"
+    fi     
+
+    popd >/dev/null
+
+
+    #--------------------
+    # check for build failures
+
+    if [[ 0 -ne $FAILURES ]]; then
+	$CCECHO "warn" "  ==> Counted $FAILURES build failure(s)"
+	# if there are build failures, do not run rsync with --delete
+	RSYNC_DELETE=""
+	# send an error report
+	if [[ 1 -eq $SEND_REPORTS ]]; then
+	    failure_notification "$SET" "daps"
+	    case $? in
+		1)
+		    $CCECHO "warn" "Could not send error report (Postfix not running)"
+		    ;;
+		2)
+		    $CCECHO "warn" "Could not send error report (mail command failed)"
+		    ;;
+	    esac
+	fi
+    else
+	# No build failures; set new revision to config
+	xml ed -P -L -u "/daps-autobuild/set[@id='$SET']/vcs/lastrev" -v "$NEWREV" "$CONFIG"
+	RSYNC_DELETE="--delete"
+    fi
+
+    #--------------------
+    # rsync
+
+    if [[ 1 -eq $DO_RSYNC ]]; then
+	$RSYNC $_RSYNC_FLAGS $RSYNC_DELETE "$SYNCDIR/" "$_RSYNC_TARGET"
+	if [[ 0 -eq $? ]]; then
+	    $CCECHO "result" "  Rsync successful"
+	else
+	    $CCECHO "warn" "  Rsync failed"
+	fi
+    else
+	$CCECHO "info" "  Skipping rsync"
+    fi
 
     echo
-    popd >/dev/null
+
+# unset the array containing the failures
+unset -v FAILED_BOOKS
+
 done
 
-exit
+exit 0
