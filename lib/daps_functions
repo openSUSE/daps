@@ -531,10 +531,13 @@ EOF
     fi
 
     if [[ 0 != "$VERBOSITY" ]]; then
-#        echo ""
-        $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
-        # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
-        [[ 0 = "${PIPESTATUS[0]}" ]] || exit 1
+	if [[ 1 = "$WRITE_LOG" ]]; then
+            $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
+            # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
+            [[ 0 = "${PIPESTATUS[0]}" ]] || exit 1
+	else
+	    $MAKE_CMD 2>&1
+	fi
     else
         if [[ 1 = "$WRITE_LOG" ]]; then
             $MAKE_CMD >> "$LOGFILE" 2>&1
@@ -1254,7 +1257,7 @@ function unpack-locdrop {
         MANIFEST_NOTRANS=$(tar tfj "$TAR" | grep "$MFT_NOTRANS_SUFF")
         ALL_MANIFEST_NOTRANS_FILES=( "${ALL_MANIFEST_NOTRANS_FILES[@]}" "$MANIFEST_NOTRANS" )
         tar xfj "$TAR" "$MANIFEST_TRANS" "$MANIFEST_NOTRANS"
-        tar xfj "$TAR" "$(cat "$MANIFEST_TRANS")"
+        tar xfj "$TAR" $(cat "$MANIFEST_TRANS")
         popd >/dev/null
     else
         exit_on_error "Fatal: $TAR does not exist"
@@ -1312,16 +1315,16 @@ function unpack-locdrop {
 
     # Get entity files from the notrans sources and link to them
     #
-    ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" "$XML_FILE_LIST")"
+    ENTITIES="$("${LIBEXEC_DIR}/getentityname.py" $XML_FILE_LIST)"
     for ENT in $ENTITIES; do
     if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
-        (cd xml && ln -sf "${P_NOTRANS_DIR}/xml/$ENT")
+        (cd xml && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/xml/$ENT")")
     else
         ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT" >&2
     fi
     done
 
-    popd - >/dev/null
+    popd >/dev/null
 
     ccecho "result" "Successfully created files in\n$P_OUTPUT_DIR"
     exit 0
