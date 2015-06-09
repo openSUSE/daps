@@ -89,8 +89,7 @@ EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(ONLINE_IM
 #
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 
-EPUBSTRINGS := --stringparam "img.src.path=\"\"" \
-		--stringparam "epub.oebps.dir=OEBPS/" \
+EPUBSTRINGS := --stringparam "epub.oebps.dir=OEBPS/" \
 		--stringparam "epub.metainf.dir=META-INF/"
 
 ifeq "$(IS_STATIC)" "static"
@@ -103,7 +102,6 @@ endif
 
 ifeq "$(EPUB3)" "1"
   EPUB_CONTENT_FILE := OEBPS/package.opf
-  EPUBSTRINGS       += --stringparam "base.dir=\"\""
 else
   EPUB_CONTENT_FILE := OEBPS/content.opf
   EPUBSTRINGS       += --stringparam "base.dir=OEBPS/"
