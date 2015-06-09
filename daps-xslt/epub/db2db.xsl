@@ -76,6 +76,7 @@
   <xsl:import href="../common/copy.xsl"/>
   <xsl:import href="../common/xpath.location.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/l10n.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/pi.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
@@ -100,6 +101,10 @@
    </xsl:choose>
  </xsl:param>
   
+<xsl:param name="l10n.gentext.default.language">en</xsl:param>
+<xsl:param name="l10n.gentext.language"/>
+<xsl:param name="l10n.gentext.use.xref.language" select="0"/>
+<xsl:param name="l10n.lang.value.rfc.compliant" select="1"/>
   
 <!-- =============================================================== -->
 <!-- Helper templates, copied from common/common.xsl and xhtml-1_1/graphics.xsl -->
