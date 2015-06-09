@@ -138,7 +138,7 @@ function run-saxon {
     #  the additional jars
 
     # replace [:space:] with ";" but retain spaces in filenames
-    CATALOGS="${$XML_CATALOG_FILES// \//;/}"
+    CATALOGS="${XML_CATALOG_FILES// \//;/}"
 
     if [[ -z "$DEBUG" ]]; then
         # Recover silently from recoverable errors
