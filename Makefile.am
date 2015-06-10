@@ -60,7 +60,7 @@ endif
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1
+MAN_PAGES      := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1 daps_autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -153,8 +153,16 @@ dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
 dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local TARGETS--------------------------------------
-all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG) \
-	   bin/daps etc/config autobuild/daps_autobuild $(FOP_CONFIG)
+
+#
+# These targets need to be build _after_ the guides have been build, to make sure
+# the local config, as provided by the repo, is used. Otherwise we have a mixture
+# of system and repo setup and that will not work
+
+bin/daps etc/config $(FOP_CONFIG): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
+
+all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
+
 
 #---------------------------Local INSTALLATION--------------------------------
 
@@ -165,7 +173,7 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
 
-install-data-local: $(INSTALLDIRS)
+install-data-local: $(INSTALLDIRS) autobuild/daps_autobuild
 install-data-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
@@ -280,18 +288,18 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
 	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
 	fi
 
-$(USERGUIDE): bin/daps etc/config
+$(USERGUIDE):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_USERGUIDE) html --single --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-$(QUICKSTART): bin/daps etc/config
+$(QUICKSTART):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_QUICKSTART) html --single --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
-$(dist_man1_MANS): bin/daps etc/config
+$(dist_man1_MANS):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
