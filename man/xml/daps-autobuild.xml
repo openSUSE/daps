@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC 
+   "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[
+  <!ENTITY daps_ab "daps_autobuild">
+  <!ENTITY % entities SYSTEM "entity-decl.ent">
+  %entities;
+]>
+<refentry lang="en" id="daps_autobuild">
+ <refentryinfo>
+  <productname>&dapsacr;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Frank</firstname>
+    <surname>Sundermeyer</surname>
+    <email>fsundermeyer@opensuse.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&dapsacr;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+  <refmiscinfo class="version">&dapsversion;</refmiscinfo>
+  <refmiscinfo class="manual">&daps;</refmiscinfo>
+ </refmeta>
+ <refnamediv>
+  <refname>&daps_ab;</refname>
+  <refpurpose>
+   Automatically build books from several &dapsacr; projects hosted on
+   subversion or git.
+  </refpurpose>
+ </refnamediv>
+ <refsynopsisdiv id="daps_init.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>&daps_ab;</command>
+   <arg choice="req">--config <replaceable>PATH_TO_CONFIG-FILE</replaceable></arg>
+   <arg choice="opt"><replaceable>OPTIONS</replaceable></arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+ <refsect1>
+  <title>Description</title>
+  <para>
+   &daps_ab; is designed to automatically build/rebuild documents from several
+   DAPS projects hosted on subversion or git. The build results (HTML, single
+   HTML, and/or PDF) can be copied to a remote server (using rsync). If run
+   regularly (e.g. via cron), rebuilds will only be triggered if changes in
+   the project repository have occurred.
+  </para>
+  <para>
+   &daps_ab; needs an XML configuration file providing all the data needed to
+   build the books (see FIXME for details). Specifying this file with
+   <option>--config</option> is mandatory. The script automatically validates
+   the configuration file with each run. To manually validate the
+   configuration file, use <option>--validate</option>.
+  </para>
+ </refsect1>
+ <refsect1>
+  <title>Options</title>
+  <variablelist>
+   <varlistentry>
+    <term>--config <replaceable>PATH_TO_CONFIG-FILE</replaceable></term>
+    <listitem>
+     <para>
+      Path to config file. Can be specified relative or absolute.
+      Default: unset
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--force</term>
+    <listitem>
+     <para>
+      Documents will only be rebuild when the git/svn repository has changed
+      since the last build. Use this option to force a rebuild even when the
+      repository has not changed.
+      Default: disabled (rebuilds on changes only)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--help</term>
+    <listitem>
+     <para>
+      Display the script's help message.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--helpconfig</term>
+    <listitem>
+     <para>
+      Show help on the config file.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--nosync</term>
+    <listitem>
+     <para>
+      Do not rsync the manuals.
+      Default: disabled (rsync will be done)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--notify</term>
+    <listitem>
+     <para>
+      In case of build failures send a notification to the e-mail address
+      specified with <maintainer/> in the config file. Will be ignored if
+      <maintainer/> is not set.
+      Default: disabled (No notification e-mails)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--schema<replaceable>PATH_TO_SCHEMA-FILE</replaceable></term>
+    <listitem>
+     <para>
+       Path to the schema used to validate the config file.
+       Default: /usr/share/xml/daps/schema/daps-autobuild.rnc
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--sections <replaceable>SECT1 SECT2 ...</replaceable></term>
+    <listitem> 
+     <para>
+      Space-separated list of sets that should be build. The sets need to be
+      configured in the config file.
+      Default: not set (all sets from the config file will be build)
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>--validate</term>
+    <listitem>
+     <para>
+      Validate the config file specified with --config. Other options except
+      --schema will be ignored. 
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+ <refsect1 id="daps_init.moreinfo">
+  <title>See Also</title>
+  <variablelist>
+   <varlistentry>
+    <term>
+     &dapsurl;
+    </term>
+    <listitem>
+     <para>DAPS project homepage</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+</refentry>

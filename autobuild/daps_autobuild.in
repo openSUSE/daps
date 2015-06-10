@@ -7,7 +7,7 @@
 ME=$(basename "$0")
 
 
-SCHEMA="/usr/share/xml/daps/schema/daps-autobuild.rnc"
+SCHEMA="@datadir@/xml/daps/schema/daps-autobuild.rnc"
 #CONFIG="$(readlink -e "daps_autobuild.xml")"
 #SCHEMA="$(readlink -e "daps_autobuild.rnc")"
 
@@ -20,7 +20,13 @@ SEND_REPORTS=0
 
 RSYNC="/usr/bin/rsync"
 CCECHO="/usr/bin/ccecho"
-XMLSTARLET="/usr/bin/xml"
+if [[ -x /usr/bin/xml ]]; then
+    XMLSTARLET="/usr/bin/xml"
+elif [[ -x /usr/bin/xmlstarlet ]]; then
+    XMLSTARLET="/usr/bin/xmlstarlet"
+else
+    exit_on_error "Cannot find an xmlstarlet binary in /usr/bin/"
+fi
 
 FAILURES=0
 #declare -A FAILED_BOOKS
@@ -39,7 +45,7 @@ function usage {
 Usage:
   $ME --config <PATH TO CONFIG FILE> [OPTIONS]
 
-Automatically build books defing in a config file and sync them to a server.
+Automatically build books defined in a config file and sync them to a server.
 The config file is an XML The config file is an XML file, see $ME --helpconfig forfile, see $ME --helpconfig for more information.
 
 Specifying config file with --config is mandatory, all other options are
@@ -75,12 +81,16 @@ Options:
 
   --schema=<file>
     Path to the schema used to validate the config file.
-    Default: /usr/share/xml/daps/schema/daps-autobuild.rnc
+    Default: @datadir@/xml/daps/schema/daps-autobuild.rnc
 
   --sections="sect1 sect2"
     Space-separated list of sets that should be build. The sets need to be
     configured in the config file.
     Default: not set (all sets from the config file will be build)
+
+  --validate
+    Validate the config file specified with --config. Other options except
+    --schema will be ignored. 
 
 EOFhelptext
 }
@@ -130,6 +140,11 @@ function exit_on_error {
     #
     echo -e "ERROR: ${1}" >&2
     exit 1;
+}
+
+function validate {
+    jing -c "$SCHEMA" "$CONFIG" && return 0
+    return 1
 }
 
 function check_element {
@@ -354,7 +369,7 @@ function failure_notification {
 #--------------------
 # Read command line options
 
-ARGS=$(getopt -o h -l config:,force,help,helpconfig,nosync,notify,rsync,schema:,sections: -n "$ME" -- "$@")
+ARGS=$(getopt -o h -l config:,force,help,helpconfig,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -396,6 +411,15 @@ while true ; do
 	--sections)
 	    SECTIONS="$2"
 	    shift 2
+	    ;;
+	--validate)
+	    validate
+	    if [[ 0 -ne $? ]]; then
+		exit_on_error "$CONFIG does not validate"
+	    else
+		echo "$CONFIG validates"
+		exit 0
+	    fi
 	    ;;
         --) shift ; break ;;
         *) exit_on_error "Internal error while parsing the command line arguments!" ;;
