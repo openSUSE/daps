@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Tue Jun 10 13:50:00 UTC 2015 - fs@opensuse.org
+
+New release DAPS 2.0~rc7
+
+- replaced daps-auto.pl with daps_autobuild
+  * uses an XML file as a config file (can be validated with
+    schema that is also provided)
+  * supports git _and_ svn repos
+- DB5 fix for target productinfo
+- locdrop target can now read information about translated files
+  from in-file tag provided by docmanager
+- fixed two issues in the unpack-locdrop target
+- fixed stylesheet issues when using saxon as a parser
+- Added missing dependency on $(RESULT_DIR) for epub
+- bash code cleanup
+- Changed default DB5 schema fom docbook.rng to docbookxi.rng
+  (supports xi:includes)
+- Documentation: now covers all 2.0 changes
+
+-------------------------------------------------------------------
 Tue Apr 27 16:26:00 UTC 2015 - fs@opensuse.org
 
 New release DAPS 2.0~rc6
