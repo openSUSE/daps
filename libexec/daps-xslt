@@ -14,7 +14,7 @@
 # Setting the catalog for the resolver
 #
 # xsltproc and saxon have different ways to determine which catalogs to use
-# for resolving Identifiers, URI, etc 
+# for resolving Identifiers, URI, etc
 # * xsltproc: reads $XML_CATALOG_FILES
 # * saxon: uses a JAVA resolver class which uses the catalogs= setting in the
 #          system wide CatalogManager.properties file
@@ -35,10 +35,10 @@
 # Saxon9 support (see ticket #94)
 #
 
-ME="$(basename $0)"
+ME="$(basename "$0")"
 XSLTPROC="/usr/bin/xsltproc"
 SAXON="/usr/bin/saxon"
-# TODO: we may need to change this path with configure 
+# TODO: we may need to change this path with configure
 DBXSLT=/usr/share/xml/docbook/stylesheet/nwalsh/current
 
 unset DEBUG ERR_CODE OUTPUT PARAMETERS PARMS SAXON6_ARGS STRPARMS STYLESHEET
@@ -52,8 +52,8 @@ declare -a PARMS
 declare -a PARAMETERS
 
 # Help function to preserve readability of the while loop
-usage () {
-	echo "
+function usage {
+    cat <<EOF_helptext
 Usage: daps-xslt -o <OUTPUTFILE> -s <STYLESHEET> -f <XMLDOCUMENT> [OPTIONS] <XSLTPROCESSOR>
 Wrapper script for DAPS to use either xsltproc or saxon as an XSLT processor.
 
@@ -62,7 +62,7 @@ Mandatory parameters:
 
  --file=XMLDOCUMENT,          XML document to which the stylesheet will be
  -f XMLDOCUMENT               applied. Mandatory.
-		
+
  --output=OUTPUTFILE,         Specify a file for output. If not used, output
  - o OUTPUTFILE               goes to STDOUT. Optional.
 
@@ -82,27 +82,27 @@ Optional parameters:
                               string values. You may pass up to 32 key/value
                               pairs by using this parameter multiple times. If
                               the same key/value pair is passed more than once,
-                              the last one \"wins\".
+                              the last one "wins".
                               Optional.
 
- --saxon6_args=\"LIST\"       saxon6 specific options (see saxon6 --help).
-                              \"LIST\" is a list of options specified in the
+ --saxon6_args="LIST"         saxon6 specific options (see saxon6 --help).
+                              "LIST" is a list of options specified in the
                               same way as when calling saxon6 directly.
                               If double-quotes need to be passed on, LIST needs
                               to be put in single quotes.
                               This parameter is ignored when using xsltproc.
 
- --stringparam='\"KEY=VALUE\"'  Pass a parameter KEY with the string value VALUE
+ --stringparam='"KEY=VALUE"'  Pass a parameter KEY with the string value VALUE
                               to the stylesheet. The key-value pair must be
-                              written as '\"KEY=VALUE\"' (mind the quoting!).
+                              written as '"KEY=VALUE"' (mind the quoting!).
                               Use --param to pass numeric values.
                               You may pass multiple key/value pairs up to a
                               maximum of 32. If the same key/value pair is
-                              passed more than once, the last one \"wins\".
+                              passed more than once, the last one "wins".
                               Optional.
 
- --xsltproc_args=\"LIST\"     xsltproc specific options (see man xsltptroc).
-                              \"LIST\" is a list of options specified in the same
+ --xsltproc_args="LIST"       xsltproc specific options (see man xsltptroc).
+                              "LIST" is a list of options specified in the same
                               way as when calling xsltproc directly.
                               If double-quotes need to be passed on, LIST needs
                               to be put in single quotes.
@@ -115,21 +115,22 @@ Optional parameters:
 XSLT processor:
   Define the XSLT processor, xsltproc or saxon6 (mandatory) and
   processor-specific options (optional, see the respective man pages
-  for details)."
-        exit;
+  for details).
+EOF_helptext
+    exit
 }
 
-function cleanup () {
-    [[ -f $XML_TMP_FILE ]] && rm -f $XML_TMP_FILE
+function cleanup {
+    [[ -f $XML_TMP_FILE ]] && rm -f "$XML_TMP_FILE"
 }
 
-function exit_on_error () {
+function exit_on_error {
     echo -e "ERROR: $1" >&2
     cleanup
     exit 1;
 }
 
-run-saxon() {
+function run-saxon {
     local CATALOGS SAXON_ARGS
     # TODO fs 2012-11-24
     # check whether this works with other distributions
@@ -137,17 +138,17 @@ run-saxon() {
     #  the additional jars
 
     # replace [:space:] with ";" but retain spaces in filenames
-    CATALOGS=$(echo $XML_CATALOG_FILES | sed 's/\([^\\]\) /\1;/g')
+    CATALOGS="${XML_CATALOG_FILES// \//;/}"
 
     if [[ -z "$DEBUG" ]]; then
         # Recover silently from recoverable errors
         SAXON_ARGS="-w0 $SAXON_ARGS"
     fi
 
-    # if the stylesheet location is a link, saxon needs -u    
-    if [[ urn: = ${STYLESHEET:0:4} || http: = ${STYLESHEET:0:5} || file: = ${STYLESHEET:0:5} ]]; then
+    # if the stylesheet location is a link, saxon needs -u
+    if [[ urn: = "${STYLESHEET:0:4}" || http: = "${STYLESHEET:0:5}" || file: = "${STYLESHEET:0:5}" ]]; then
         SAXON_ARGS="$SAXON_ARGS -u"
-    fi 
+    fi
 
    # Add the DocBook extensions to the CLASSPATH
 
@@ -165,27 +166,29 @@ run-saxon() {
 
     # enable XIncludes (by adding Xerces) if requested
     if [[ -n "$XINCLUDE" ]]; then
-	ADDITIONAL_JARS="$ADDITIONAL_JARS xerces-j2.jar xerces-j2-xml-apis.jar"
+        ADDITIONAL_JARS="$ADDITIONAL_JARS xerces-j2.jar xerces-j2-xml-apis.jar"
         ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS \
 -Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl \
 -Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl \
 -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
     fi
-       
+
     export ADDITIONAL_FLAGS ADDITIONAL_JARS CLASSPATH
 
     if [[ -n "$DEBUG" ]]; then
-        echo "---------------------------------------------------------"
-	echo "Running $ME with the following parameters:
+        cat <<EOF
+---------------------------------------------------------"
+Running $ME with the following parameters:
   CLASSPATH="$CLASSPATH"
   XML_CATALOG_FILES="$XML_CATALOG_FILES"
   CATALOGS="$CATALOGS"
   ADDITIONAL_JARS="$ADDITIONAL_JARS"
   ADDITIONAL_FLAGS="$ADDITIONAL_FLAGS"
   $SAXON $SAXON_ARGS $@"
-        echo "---------------------------------------------------------"
+---------------------------------------------------------
+EOF
     fi
-    eval "$SAXON $SAXON_ARGS $@"
+    eval "$SAXON $SAXON_ARGS $*"
 }
 
 process_params () {
@@ -208,12 +211,12 @@ process_params () {
     local ELEM I KEY PREFIX RESULT SEEN STR_PAR VALUE
     local -a KEYLIST
     local -a PARAMLIST
-    
-  
+
+
     PREFIX=$1
     shift
     PARAMLIST=( "$@" )
-    
+
     if [[ param != $PREFIX && stringparam != $PREFIX ]]; then
         exit_on_error "Error:\nFirst parameter when calling process_params must be \"param\" or \"stringparam\"!"
     fi
@@ -231,7 +234,7 @@ process_params () {
         STR_PAR=${STR_PAR%\"}
         # split into KEY/VALUE at first "="
         KEY=${STR_PAR%%=*} # delete "=VALUE" part
-        if [[ stringparam = $PREFIX ]];then
+        if [[ stringparam = "$PREFIX" ]];then
             VALUE="\"${STR_PAR#*=}\"" # delete "KEY=" part
         else
             VALUE=${STR_PAR#*=}
@@ -241,12 +244,12 @@ process_params () {
         # associative arrays, but rather using a list
 
         for ELEM in "${KEYLIST[@]}"; do
-            if [[ $KEY = $ELEM ]]; then
+            if [[ $KEY = "$ELEM" ]]; then
                 SEEN=1
                 break
             fi
         done
-        if [[ 0 = $SEEN ]]; then
+        if [[ 0 = "$SEEN" ]]; then
             KEYLIST+=("$KEY")
             RESULT="$RESULT --$PREFIX $KEY $VALUE"
         fi
@@ -256,8 +259,8 @@ process_params () {
 
 piped_input () {
     XML_TMP_FILE=$(mktemp -q daps_xslt_input.XXXXXXXX) || exit_on_error "Could not save piped input into a temporary file"
-    cat > $XML_TMP_FILE
-    XMLFILE=$XML_TMP_FILE
+    cat > "$XML_TMP_FILE"
+    XMLFILE="$XML_TMP_FILE"
     [[ -s $XMLFILE ]] || exit_on_error "Did not get XML data via pipe"
 }
 
@@ -266,7 +269,7 @@ piped_input () {
 
 # enable interruption/abortion via Ctrl-Z/Ctrl-C
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
-trap "cleanup" ERR EXIT 
+trap "cleanup" ERR EXIT
 
 [[ -z "$1" ]] && usage
 
@@ -277,55 +280,55 @@ eval set -- "$ARGS"
 
 while true; do
     case "$1" in
-	--catalogs)
+        --catalogs)
             XML_CATALOG_FILES="$2 $XML_CATALOG_FILES";
-	    export XML_CATALOG_FILES
-	    shift 2;;
-	--debug)
-	    DEBUG=1
+            export XML_CATALOG_FILES
+            shift 2;;
+        --debug)
+            DEBUG=1
             export VERBOSE=1
-	    shift;;
-	-f|--file)
-	    XMLFILE="$2"
-	    shift 2;;
-	-h|--help)
-	    usage
-	    exit 0;;
-	-o|--output)
-	    OUTPUT="-o $2"
-	    shift 2;;
-	--param)
+            shift;;
+        -f|--file)
+            XMLFILE="$2"
+            shift 2;;
+        -h|--help)
+            usage
+            exit 0;;
+        -o|--output)
+            OUTPUT="-o $2"
+            shift 2;;
+        --param)
             # Test for equal sign
-	    if [[ $2 =~ \= ]]; then
+            if [[ $2 =~ = ]]; then
                 PARMS+=("\"$2\"")
-	    else
-		exit_on_error "--param requires \"KEY=VALUE\" as parameter"
-	    fi
-	    shift 2;;
-	-s|--stylesheet)
-	    STYLESHEET="$2"
-	    shift 2
-	    ;;
+            else
+                exit_on_error "--param requires \"KEY=VALUE\" as parameter"
+            fi
+            shift 2;;
+        -s|--stylesheet)
+            STYLESHEET="$2"
+            shift 2
+            ;;
         --saxon6_args)
             SAXON6_ARGS="$2"
             shift 2
             ;;
-	--stringparam)
+        --stringparam)
             # check for equal sign
-            if [[ $2 =~ \= ]]; then
+            if [[ $2 =~ = ]]; then
                 STRPARMS+=("\"$2\"")
             fi
-	    shift 2;;
-	-x|--xinclude)
-	    XINCLUDE="--xinclude"
-	    shift;;
+            shift 2;;
+        -x|--xinclude)
+            XINCLUDE="--xinclude"
+            shift;;
         --xsltproc_args)
             XSLTPROC_ARGS="$2"
             shift 2
             ;;
-	--)
-	    shift
-	    break;;
+        --)
+            shift
+            break;;
         *) exit_on_error "Internal error!" ;;
     esac
 done
@@ -335,14 +338,16 @@ unset POSIXLY_CORRECT
 #-----
 # Getting the xsltprocessor
 #
-if [[ $1 =~ xsltproc || $1 =~ saxon ]]; then 
+if [[ $1 =~ xsltproc || $1 =~ saxon ]]; then
     PROCESSOR=$1
     shift;
 else
     exit_on_error "Invalid XSLT processor: must be either xsltproc or saxon"
     exit 1;
 fi
-PROCESSOR_ARGS="$@"
+
+# ???
+#PROCESSOR_ARGS="$*"
 
 #-----
 # Check if stylesheet has been specified
@@ -355,8 +360,8 @@ PROCESSOR_ARGS="$@"
 # Not needed ATM since we always use --file in DAPS
 # commenting the code in case it is needed in the future
 # BEWARE:
-# This code covers the following cases: 
-# * cat foo | daps_xslt 
+# This code covers the following cases:
+# * cat foo | daps_xslt
 # * daps_xslt --file
 # * daps_xslt < foo
 # Input coming from a pseudo-Terminal (ok, this is a rare cornercase) is
@@ -385,9 +390,9 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
     if [[ -n "${PARMS[@]}" ]]; then
         PARAMETERS+=("$(process_params "param" "${PARMS[@]}")") || exit_on_error "wrong parameter  for function process_params, must be either \"param\" or \"stringparam\""
     fi
-    
-    COMMAND="$XSLTPROC $XSLTPROC_ARGS $XINCLUDE ${PARAMETERS[@]} $OUTPUT $STYLESHEET $XMLFILE"
-    
+
+    COMMAND="$XSLTPROC $XSLTPROC_ARGS $XINCLUDE ${PARAMETERS[*]} $OUTPUT $STYLESHEET $XMLFILE"
+
     if [[ -n "$DEBUG" ]]; then
         echo "---------------------------------------------------------"
         echo "Running the following command:"
@@ -398,9 +403,9 @@ if [[ $PROCESSOR =~ xsltproc ]]; then
     # capture xsltproc return value
     ERR_CODE=$?
 else
-         run-saxon "$SAXON6_ARGS $OUTPUT $XMLFILE $STYLESHEET ${PARMS[@]} ${STRPARMS[@]}"
-         # capture saxon6 return value
-         ERR_CODE=$?
+    run-saxon "$SAXON6_ARGS $OUTPUT $XMLFILE $STYLESHEET" "${PARMS[@]}" "${STRPARMS[@]}"
+    # capture saxon6 return value
+    ERR_CODE=$?
 fi
 
 
@@ -409,5 +414,3 @@ fi
 # done via trap, see above
 
 exit $ERR_CODE;
-
-

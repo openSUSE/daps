@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE daps-autobuild>
+<daps-autobuild>
+ <!-- ;;;;;;;;;;;;;;;;;;;; The General Section ;;;;;;;;;;;;;;;;;;; -->
+ <general>
+  <builddir>/data/git/daps/autobuild/build</builddir>
+  <dapsroot>/data/git/daps</dapsroot>
+  <rsync>
+   <target>foo@bar.example.com::synctest</target>
+   <flags>
+    --archive --exclude="log/" --exclude="DC-*" --exclude=".*" 
+   </flags>
+  </rsync>
+ </general>
+
+ <!-- ;;;;;;;;;;;;;;;;;;;; FOO ;;;;;;;;;;;;;;;;;;; -->
+ <set id="Foo" meta="1" remarks="1" draft="1">
+  <dcfiles>
+   DC-foo-deployment DC-foo-admin DC-foo-user
+  </dcfiles>
+  <formats>
+   html single-html pdf
+  </formats>
+  <styleroot>/data/git/suse-xsl/suse</styleroot>
+  <maintainer>foobar@example.com</maintainer>
+  <vcs type="svn">
+   <checkout>/data/svn/doc/Foo</checkout>
+   <lastrev/>
+  </vcs>
+ </set>
+ <!-- ;;;;;;;;;;;;;;;;;;;; BAR ;;;;;;;;;;;;;;;;;;; -->
+ <set id="Bar" meta="1" remarks="1" draft="1">
+  <dcfiles>
+   DC-bar-deployment DC-bar-admin DC-bar-user
+  </dcfiles>
+  <formats>
+   html single-html pdf
+  </formats>
+  <styleroot>/data/git/suse-xsl/suse2013</styleroot>
+  <fb-styleroot>/data/git/suse-xsl/suse</fb-styleroot>
+  <maintainer>foobar@example.com</maintainer>
+  <vcs type="git" branch="feature/db5_migration">
+   <checkout>/data/git/doc-bar</checkout>
+   <lastrev/>
+  </vcs>
+ </set>
+</daps-autobuild>

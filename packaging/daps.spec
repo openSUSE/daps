@@ -17,7 +17,7 @@
 
 
 Name:           daps
-Version:        2.0~rc5
+Version:        2.0~rc7
 Release:        0
 
 ###############################################################
@@ -121,6 +121,7 @@ Requires:       xmlstarlet
 
 Recommends:     daps-docmanager
 Recommends:     docbook_5
+Recommends:     docbook5-xsl-stylesheets >= 1.77
 Recommends:     epubcheck
 Recommends:     exiftool
 Recommends:     jing
@@ -217,6 +218,9 @@ exit 0
 %dir %{_sysconfdir}/%{name}
 %dir %{_defaultdocdir}/%{name}
 
+%dir %{_datadir}/xml/daps
+%dir %{_datadir}/xml/daps/schema
+
 %config %{_sysconfdir}/xml/*.xml
 %config %{_sysconfdir}/%{name}/*
 
@@ -225,6 +229,7 @@ exit 0
 
 %{_bindir}/*
 %{_datadir}/emacs/site-lisp/docbook_macros.el
+%{_datadir}/xml/daps/schema/*
 %{docbuilddir}
 %exclude %{_defaultdocdir}/%{name}/INSTALL
 %exclude %{_sysconfdir}/%{name}/config.in

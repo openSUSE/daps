@@ -285,6 +285,13 @@ $(PAGEFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 #--------------
 # Document file
 #
+ifeq ($(MAKECMDGOALS),package-pdf)
+  HF_FORMAT := pdf
+endif		 endif
+ifeq ($(MAKECMDGOALS),package-html)
+  HF_FORMAT := html
+endif
+
 STYLE_YELP  := $(DAPSROOT)/daps-xslt/yelp/docbook.xsl
 YELPSTRINGS := --stringparam "docpath=@PATH@/" \
 	       --stringparam "outformat=$(HF_FORMAT)" \

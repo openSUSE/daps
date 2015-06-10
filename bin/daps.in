@@ -169,12 +169,14 @@ UNSETLIST=(
     CONFIG
     DC_PATH_EXISTS
     DOCCONF_CMDL
+    DOCCONF_NAME
     DAPSROOT_CMDL
     FALLBACK_STYLEROOT_CMDL
+    HELP_SUBCMD
     MAIN_CMDL
     R_DIR
     STYLEROOT_CMDL
-    VERBOSITY_CMDL 
+    VERBOSITY_CMDL
 )
 unset "${UNSETLIST[@]}"
 
@@ -206,7 +208,7 @@ PATHLIST=(
 # We need to set some basic defaults outside of $DEFAULT_CONFIG
 
 # this script's name
-ME=$(basename $0)
+ME=$(basename "$0")
 
 # default config file
 DEFAULT_CONFIG="@sysconfdir@/daps/config"
@@ -612,8 +614,8 @@ HELP_SUBCOMMAND+=("xmlgraphics=This command is no longer supported.")
 # Help
 #
 
-function daps_help () {
-    echo "
+function daps_help {
+    cat <<EOF_helptext
 Usage:
   1. $ME -d DC-file [--options] <subcommand> [--subcommand-options]
   2. $ME -m MAIN file [--options] <subcommand> [--subcommand-options]
@@ -758,17 +760,17 @@ Subcommands:
                               $ME showvariable VARIABLE=<MAKE_VARIABLE>
 
 Type '$ME <subcommand> -h' for help on a specific subcommand.
-"
+EOF_helptext
 }
 
-function daps_commands () {
+function daps_commands {
     # show a list of available subcommands from the SUBCOMMANDS array
     # ignore the commands set to deprecated
     local VAL
-    
+
     for VAL in "${SUBCOMMANDS[@]}"; do
         if [[ -n "${VAL##*=deprecated}" ]]; then
-            echo ${VAL%%=*}
+            echo "${VAL%%=*}"
         fi
     done | sort
 }
@@ -777,14 +779,14 @@ function daps_commands () {
 # ---------
 # Clean up
 #
-function clean_daps () {
-    [[ -f $SETFILES_TMP ]] && rm -f $SETFILES_TMP
+function clean_daps {
+    [[ -f $SETFILES_TMP ]] && rm -f "$SETFILES_TMP"
 }
 
 # ---------
 # Verbose error handling
 #
-function exit_on_error () {
+function exit_on_error {
     echo -e "ERROR: ${1}" >&2
     clean_daps
     exit 1;
@@ -806,12 +808,12 @@ function exit_on_error () {
 #
 function arrayGet {
     local ARRAYNAME COMPARE KEY VALUE
-    ARRAYNAME=$1[@]
+    ARRAYNAME="$1[@]"
     KEY=$2
     for VALUE in "${!ARRAYNAME}"; do
         COMPARE=${VALUE%%=*}
-        if [[ $COMPARE = $KEY ]]; then
-            echo ${VALUE#*=}
+        if [[ $COMPARE = "$KEY" ]]; then
+            echo "${VALUE#*=}"
             return 0
         fi
     done
@@ -822,7 +824,7 @@ function arrayGet {
 # ---------
 # Get absolute path, remove trailing / and test if path is valid
 #
-function sanitize_path () {
+function sanitize_path {
     # Takes values
     # $1 = path
     # $2 = variable name holding $1
@@ -835,14 +837,14 @@ function sanitize_path () {
     # _WRAPPER, else returns 1
     #
     local ABSPATH BASEDIR MYPATH VARNAME
-    
+
     MYPATH=$1
     VARNAME=$2
     [[ -n "$3" ]] && BASEDIR=$3
 
     # Do nothing if $1 is an empty value
     [[ -z "$MYPATH" ]] && return
-    
+
     # ignore values that need to be set by configure
     # (makes it possible to directly use a SVN checkout)
     [[ $MYPATH =~ @[a-zA-Z]*@ ]] && return
@@ -853,20 +855,20 @@ function sanitize_path () {
 
     if [[ $MYPATH =~ ^~.* ]]; then
 	# 2. Replace ~/ with $HOME
-	if [[ $MYPATH =~ ^~/.* ]]; then
-	    MYPATH=${MYPATH/#\~\//$HOME/}
-	else
-	    # 3. Replace ~USER with a real path
-	    # the %q option to printf quotes and escapes dangerous characters
-	    # see http://stackoverflow.com/questions/2069467/have-to-determine-all-users-home-directories-tilde-scripting-problem
-	    eval BAR="$(printf "%q" "$MYPATH")"  
-	fi
+        if [[ $MYPATH =~ ^~/.* ]]; then
+            MYPATH=${MYPATH/#\~\//$HOME/}
+        else
+            # 3. Replace ~USER with a real path
+            # the %q option to printf quotes and escapes dangerous characters
+            # see http://stackoverflow.com/questions/2069467/have-to-determine-all-users-home-directories-tilde-scripting-problem
+            eval BAR="$(printf "%q" "$MYPATH")"
+        fi
     fi
 
     if [[ "/" != ${MYPATH:0:1} ]]; then
         [[ -n "$BASEDIR" ]] && MYPATH="${BASEDIR}/${MYPATH}"
         ABSPATH=$(readlink -en "$MYPATH")
-        if [[ 0 = $? ]]; then
+        if [[ 0 = "$?" ]]; then
             eval "$VARNAME=$ABSPATH"
         else
             exit_on_error "$VARNAME=$MYPATH: Path does not exist"
@@ -885,12 +887,12 @@ function sanitize_path () {
 # ----------------------
 # Check all paths in $PATHLIST with sanitize_path
 #
-function check_pathlist () {
+function check_pathlist {
     local BASEDIR DIR VAL
 
     BASEDIR=$1
 
-    for DIR in ${PATHLIST[@]}; do
+    for DIR in "${PATHLIST[@]}"; do
         eval "VAL=\$$DIR"
         if [[ -n "$VAL" ]]; then
             sanitize_path "$VAL" "$DIR" "$BASEDIR"
@@ -901,14 +903,14 @@ function check_pathlist () {
 # ---------
 # Try to automatically get the DOCCONF
 #
-function autoset_docconf () {
+function autoset_docconf {
     # if there is only one DOCCONF file in the current directory, use it
     # and also set DOC_DIR
     #
     local DC_FILENAME DC_PARENT DC_REAL_PATH DC_REAL_DIR
     declare -a DC_COUNT
     DC_COUNT=( $(find -L . -maxdepth 1 -name "${CONF_PREFIX}*" -type f) )
-    if [[ 1 = ${#DC_COUNT[@]} ]]; then
+    if [[ 1 = "${#DC_COUNT[@]}" ]]; then
         # There is only one DOCCONF file
         #
         # two possibilites:
@@ -950,7 +952,7 @@ function autoset_docconf () {
 # Set MAIN to an absolute path
 #
 
-function set_mainfile () {
+function set_mainfile {
     local MAINFILE
     MAINFILE="$1"
     if [[ -e "$MAINFILE" ]]; then
@@ -960,7 +962,7 @@ function set_mainfile () {
             DOC_DIR=$(dirname "$MAIN_CMDL")
             DOC_DIR=${DOC_DIR%/xml*} #remove xml directory
         fi
-	[[ -e ${DOC_DIR}/xml/$(basename $MAIN_CMDL) ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+        [[ -e ${DOC_DIR}/xml/$(basename "$MAIN_CMDL") ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
     else
         if [[ -e "xml/$MAINFILE" ]]; then
             # MAIN is not a valid file, but ./xml/$MAIN exists
@@ -973,10 +975,10 @@ function set_mainfile () {
             fi
         else
             if [[ -n "$DOC_DIR" ]]; then
-		MAIN_CMDL="${DOC_DIR}/xml/$(basename $MAINFILE)"
-		[[ -e $MAIN_CMDL ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
+                MAIN_CMDL="${DOC_DIR}/xml/$(basename "$MAINFILE")"
+                [[ -e $MAIN_CMDL ]] || exit_on_error "XML files must reside in an \"xml/\" directory. \"$MAIN_CMDL\" is not a valid location."
             else
-               exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
+                exit_on_error "Fatal error: ${PWD}/$MAINFILE does not exist."
             fi
         fi
     fi
@@ -986,7 +988,7 @@ function set_mainfile () {
 # ---------
 # Recover command-line values
 #
-function recover_cmdl_values () {
+function recover_cmdl_values {
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
     test -n "$DOCCONF_CMDL"   && DOCCONF="$DOCCONF_CMDL"
@@ -1000,7 +1002,7 @@ function recover_cmdl_values () {
 
 
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
-trap "clean_daps" ERR EXIT 
+trap "clean_daps" ERR EXIT
 
 # ----------------------------------------------------------------------------
 # Parsing the command line arguments with GNU getopt
@@ -1029,7 +1031,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n $ME -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1040,7 +1042,7 @@ eval set -- "$ARGS"
 
 while true ; do
     case "$1" in
-         --builddir)
+        --builddir)
             [[ -d $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not a valid directory"
             [[ -w $2 ]] || exit_on_error "BUILD_DIR \"$2\" is not writeable"
             # make path absolute and strip trailing slash
@@ -1071,7 +1073,7 @@ while true ; do
             # make path absolute and strip trailing slash
             sanitize_path "$2" "DAPSROOT_CMDL"
             DAPSROOT="$DAPSROOT_CMDL"
-            DEVEL=1
+#           DEVEL=1
             shift 2
             ;;
         --debug)
@@ -1100,7 +1102,7 @@ while true ; do
             # if "-h/--help" is followed by a subcommand, then set a marker
             # to call the subcommand's help
             shift;
-            if [[ "" = $2 ]]; then
+            if [[ "" = "$2" ]]; then
                 daps_help
                 exit 0;
             else
@@ -1109,9 +1111,9 @@ while true ; do
             ;;
         -m|--main)
             # make path absolute and strip trailing slash
-	    sanitize_path "$2" "MAIN_CMDL"
-	    MAIN="$MAIN_CMDL"
-	    shift 2
+            sanitize_path "$2" "MAIN_CMDL"
+            MAIN="$MAIN_CMDL"
+            shift 2
             ;;
         --styleroot)
             # make path absolute and strip trailing slash
@@ -1119,34 +1121,34 @@ while true ; do
             STYLEROOT="$STYLEROOT_CMDL"
             shift 2
             ;;
-	-v|--verbosity)
+        -v|--verbosity)
             # $VERBOSITY will be parsed in the makefiles
             # VERBOSITY=0: print only final results message (default)
             # VERBOSITY=1: results of each target that is called
             # VERBOSITY=2: detailed output of each target
             #
-            if [[ 1 = $DEBUG ]]; then
+            if [[ 1 = "$DEBUG" ]]; then
                 VERBOSITY_CMDL=2
             else
-                if [[ 0 = $2 ]]; then
+                if [[ 0 = "$2" ]]; then
                     VERBOSITY_CMDL=0
-                elif [[ 1 = $2 || "" = $2 ]]; then
+                elif [[ 1 = "$2" || "" = "$2" ]]; then
                     VERBOSITY_CMDL=1
-                elif [[ 2 = $2 || "v" = $2 ]]; then
+                elif [[ 2 = "$2" || "v" = "$2" ]]; then
                     VERBOSITY_CMDL=2
                 else
                     VERBOSITY_CMDL=3
                 fi
             fi
             VERBOSITY="$VERBOSITY_CMDL"
-	    shift 2
-	    ;;
+            shift 2
+            ;;
         --version)
             echo "$ME $VERSION"
             exit 0
             ;;
         --xsltprocessor)
-            which $2 >/dev/null 2>&1 || exit_on_error "Cannot find the XSLT processor \"$2\"."
+            which "$2" >/dev/null 2>&1 || exit_on_error "Cannot find the XSLT processor \"$2\"."
             XSLTPROCESSOR_CMDL="$2"
             XSLTPROCESSOR="$XSLTPROCESSOR_CMDL"
             shift 2
@@ -1154,7 +1156,6 @@ while true ; do
         --) shift ; break ;;
         *) exit_on_error "Internal error!" ;;
     esac
-    
 done
 
 # You can only specify DOCCONF or MAIN, not both
@@ -1169,7 +1170,7 @@ if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     if [[ 0 != $VERBOSITY ]]; then
         echo "Warning: --styleroot is not specified, ignoring --fb_styleroot"
     fi
-fi 
+fi
 
 unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 
@@ -1181,24 +1182,24 @@ unset POSIXLY_CORRECT # we want the regular getopts behaviour on the second run
 # SUBCOMMAND help or help SUBCOMMAND, rewrite the command so the subcommand help
 # is displayed.
 
-if [[ -z "$1" ]] || [[ help = $1 && -z "$2" ]]; then
+if [[ -z "$1" ]] || [[ help = "$1" && -z "$2" ]]; then
     # Call: "$ME" or "$ME help"
     #
     daps_help
     exit 0
-elif [[ help = $2 ]]; then
+elif [[ help = "$2" ]]; then
     # Call: "$ME foo help ..."
     # Rewrite to "$ME foo -h"
     #
     SUBCMD=$1
     declare -a SCMD_ARGS=( "-h" )
-elif [[ help = $1 && -n "$2" ]]; then
+elif [[ help = "$1" && -n "$2" ]]; then
     # Call: "$ME help foo"
     # Rewrite to "$ME foo -h"
     #
     SUBCMD=$2
     declare -a SCMD_ARGS=( "-h" )
-elif [[ 1 = $CALL_SCMDHELP ]]; then
+elif [[ 1 = "$CALL_SCMDHELP" ]]; then
     SUBCMD=$1
     declare -a SCMD_ARGS=( "-h" )
 else
@@ -1213,7 +1214,7 @@ fi
 # - get the function from lib/daps_functions that needs to be called for $SUBCMD
 # - get it's help text
 FUNCTION=$(arrayGet "SUBCOMMANDS" "$SUBCMD")
-if [[ 1 = $? ]]; then
+if [[ 1 = "$?" ]]; then
     exit_on_error "Error: Unknown subcommand \"$SUBCMD\"\nType '$ME help' to get a list of global parameters and subcommands"
 fi
 HELP_SUBCMD=$(arrayGet "HELP_SUBCOMMAND" "$SUBCMD")
@@ -1265,34 +1266,34 @@ esac
 MOVE_CONFIG=""
 if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
     ccecho "warn" "The DAPS user configuration file has moved from\n~/.daps/config to ~/.config/daps/dapsrc"
-    NEW_CONFDIR=$(dirname $USER_CONFIG)
-    NEW_CONFFILE=$(basename $USER_CONFIG)
-    OLD_CONFDIR=$(dirname $USER_CONFIG_OLD)
-    OLD_CONFFILE=$(basename $USER_CONFIG_OLD)
+    NEW_CONFDIR=$(dirname "$USER_CONFIG")
+    NEW_CONFFILE=$(basename "$USER_CONFIG")
+    OLD_CONFDIR=$(dirname "$USER_CONFIG_OLD")
+    OLD_CONFFILE=$(basename "$USER_CONFIG_OLD")
     while [[ ! $MOVE_CONFIG =~ ^[CcMmNn]$ ]] ; do
-	read -e -t20 -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " -i "n" MOVE_CONFIG
-	[[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
+        read -e -t 20 -i n -p "Do you want me to [c]opy it/[m]ove it/do [n]othing? " MOVE_CONFIG
+        [[ $? -gt 128 ]] && MOVE_CONFIG="n" # timeout reached
     done
     case "$MOVE_CONFIG" in
-	C|c)
-	    cp -r $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
-	    if [[ 0 -eq $? ]]; then 
-		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-	    else
-		ccecho "warn" "Copying the DAPS config directory failed"
-	    fi
-	    ;;
-	M|m)
-	    mv $OLD_CONFDIR $NEW_CONFDIR && mv ${NEW_CONFDIR}/$OLD_CONFFILE ${NEW_CONFDIR}/$NEW_CONFFILE
-	    if [[ 0 -eq $? ]]; then 
-		ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
-	    else
-		ccecho "warn" "Moving the DAPS config file failed"
-	    fi
-	   ;;
-	*)
-	    ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
-	    ;;
+        C|c)
+            cp -r "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
+            if [[ 0 -eq $? ]]; then
+                ccecho "info" "The DAPS config directory $OLD_CONFDIR has been copied to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+            else
+                ccecho "warn" "Copying the DAPS config directory failed"
+            fi
+            ;;
+        M|m)
+            mv "$OLD_CONFDIR" "$NEW_CONFDIR" && mv "${NEW_CONFDIR}/$OLD_CONFFILE" "${NEW_CONFDIR}/$NEW_CONFFILE"
+            if [[ 0 -eq $? ]]; then
+                ccecho "info" "The DAPS config directory $OLD_CONFDIR has been moved to $NEW_CONFDIR.\nThe DAPS config file has been renamed to $NEW_CONFFILE."
+            else
+                ccecho "warn" "Moving the DAPS config file failed"
+            fi
+            ;;
+        *)
+            ccecho "info" "\nThe DAPS config has not been touched and will not be used in this DAPS run"
+            ;;
     esac
 fi
 
@@ -1301,7 +1302,7 @@ if [[ -f $USER_CONFIG && -z "$DAPSROOT_CMDL" ]]; then
     source "$USER_CONFIG"
     # make DAPSROOT path absolute and remove trailing /
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        $(readlink -en $(dirname $USER_CONFIG))
+        "$(readlink -en "$(dirname "$USER_CONFIG")")"
     recover_cmdl_values
 fi
 
@@ -1317,7 +1318,6 @@ if [[ -n "$DAPSROOT" ]]; then
         BIN_DIR="${DAPSROOT}/bin"
         export PATH=$BIN_DIR:$PATH
         LIB_DIR="${DAPSROOT}/lib"
-        PYTHON_DIR="${DAPSROOT}/python"
         LIBEXEC_DIR="${DAPSROOT}/libexec"
         CONFIG="${DAPSROOT}/etc/config"
         XML_DEVEL_CATALOG="$XML_DEVEL_CATALOG $DAPSROOT/etc/catalog.xml"
@@ -1360,7 +1360,7 @@ if [[ -f $USER_CONFIG ]]; then
 #    check_pathlist "$MY_BASEDIR"
     # make DAPSROOT path absolute and remove trailing /
     [[ -n "$DAPSROOT" ]] && sanitize_path "$DAPSROOT" "DAPSROOT" \
-        $(readlink -en $(dirname $USER_CONFIG))
+        "$(readlink -en "$(dirname "$USER_CONFIG")")"
 fi
 recover_cmdl_values
 
@@ -1371,7 +1371,7 @@ recover_cmdl_values
 # run help if requested
 #
 if [[ "${SCMD_ARGS[@]}" = "-h" ]]; then
-    $FUNCTION $SUBCMD ${SCMD_ARGS[@]}
+    "$FUNCTION" "$SUBCMD" "${SCMD_ARGS[@]}"
 fi
 
 # Sample call for early commands
@@ -1400,7 +1400,7 @@ fi
 # The real values will be set when calling recover_cmdl_values
 
 # set DOCCONF_CMDL if DC-file was sourced
-[[ -n "$DOCCONF" && -z "$DOCCONF_CMDL" ]] && DOCCONF_CMDL=$DOCCONF 
+[[ -n "$DOCCONF" && -z "$DOCCONF_CMDL" ]] && DOCCONF_CMDL=$DOCCONF
 
 if [[ -z "$DOCCONF_CMDL" && -z "$MAIN_CMDL" ]]; then
 # DOCCONF and MAIN were not set on the command line, check other possibilities
@@ -1454,7 +1454,7 @@ fi
 
 # FINALLY! Source the DOCCONF file, recover the command line values
 
-[[ -n "$DOCCONF_CMDL" ]] && source $DOCCONF_CMDL
+[[ -n "$DOCCONF_CMDL" ]] && source "$DOCCONF_CMDL"
 
 # FOP/XEP CONFIG and WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
@@ -1472,9 +1472,9 @@ XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 # make all paths absolute, remove trailing / and check
 if [[ -n $DOCCONF_CMDL ]]; then
-    MY_BASEDIR=$(readlink -en $(dirname $DOCCONF_CMDL))
+    MY_BASEDIR=$(readlink -en "$(dirname "$DOCCONF_CMDL")")
 elif [[ -n $MAIN_CMDL ]]; then
-    MY_BASEDIR=$(readlink -en $(dirname $MAIN_CMDL))
+    MY_BASEDIR=$(readlink -en "$(dirname "$MAIN_CMDL")")
 else
     exit_on_error "Fatal: Neither a DC nor a MAIN file is set"
 fi
@@ -1499,11 +1499,12 @@ if [[ -n "$PDFNAME" ]]; then
     export BOOK="$PDFNAME"
 else
     if [[ -n "$DOCCONF" ]]; then
-        DC_FILE=$(basename $DOCCONF)
+        DC_FILE=$(basename "$DOCCONF")
         export BOOK="${DC_FILE#${CONF_PREFIX}*}"
     elif [[ -n "$MAIN_CMDL" ]]; then
         # --main was specified, BOOK is set to basenme of MAIN
-        export BOOK=$(basename $MAIN .xml)
+        BOOK="$(basename "$MAIN" .xml)"
+        export BOOK
     fi
 fi
 
@@ -1545,26 +1546,26 @@ export XML_CATALOG_FILES
 #
 # get DocBook version first ...
 
-DOCBOOK_VERSION=$($XSLTPROC --stylesheet ${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl --file $MAIN $XSLTPROCESSOR) || exit_on_error "Could not get DocBook version. Seems $MAIN is either not well-formed."
+DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Seems $MAIN is either not well-formed."
 
 #    || { DOCBOOK_VERSION=4; \
 #      "Could not get DocBook version, assuming DocBook 4"; } 
 
 # ... now resolve the style URI via catalogs
-if [[ 5 = $DOCBOOK_VERSION ]]; then
-    DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
-        $DOCBOOK5_STYLE_URI 2>/dev/null) || \
+if [[ 5 = "$DOCBOOK_VERSION" ]]; then
+    DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
+        "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
         exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
     # also get the RNG scheme location
-    DOCBOOK5_RNG=$(xmlcatalog $XML_MAIN_CATALOG \
-        $DOCBOOK5_RNG_URI 2>/dev/null) || \
+    DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
+        "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
         exit_on_error "Could not determine the DocBook 5 schema location by\nresolving $DOCBOOK5_RNG_URI\n via xmlcatalog"
-elif [[ 4 = $DOCBOOK_VERSION ]]; then
-    DOCBOOK_STYLES=$(xmlcatalog $XML_MAIN_CATALOG \
-        $DOCBOOK4_STYLE_URI 2>/dev/null) || \
+elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
+    DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
+        "$DOCBOOK4_STYLE_URI" 2>/dev/null) || \
         exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
 else
-    exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document." 
+    exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document."
 fi
 
 # remove the file:// string from the styles
@@ -1608,7 +1609,7 @@ WRITE_LOG=1
 
 # Quoting needs to be exactly like this, do not change
 #
-$FUNCTION $SUBCMD "${SCMD_ARGS[@]}"
+$FUNCTION "$SUBCMD" "${SCMD_ARGS[@]}"
 
 # remove the tmp SETFILE
 # done via trap, see above

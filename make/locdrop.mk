@@ -15,11 +15,19 @@
 # * Color PDF
 #
 
+#
+# Get translation info from a docmanager header
+# xml sel -N ns0="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/ns0:docmanager" -v "normalize-space(ns0:translation)" xml/depl_nodes.xml
+#
+# returns: true|fals|<error>
+
+
 # Defined in common_variables:
 #
 #LOCDROP_TMP_DIR
 #MANIFEST_TRANS
 #MANIFEST_NOTRANS
+
 
 ifndef LOCDROP_EXPORT_DIR
   LOCDROP_EXPORT_BOOKDIR := $(RESULT_DIR)/locdrop
@@ -27,16 +35,31 @@ else
   LOCDROP_EXPORT_BOOKDIR := $(addsuffix /$(DOCNAME),$(LOCDROP_EXPORT_DIR))
 endif
 
+#------------------
+# Determine which files will be translated:
+#
+
+define db5_get_trans
+  for F in $(DOCFILES); do \
+    R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "false"`; \
+    if [ "true" = "$$R" ]; then echo -n "$$F "; fi \
+  done
+endef
+
+
 ifdef USESVN
   TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell svn pl -v --xml $(DOCFILES) | $(XSLTPROC) --stylesheet $(DAPSROOT)/daps-xslt/common/get-svn-props.xsl $(XSLTPROCESSOR)))
-  TO_TRANS_TAR    := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar
+else
+  TO_TRANS_FILES := $(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(shell $(db5_get_trans)))
 endif
 
-ifdef TO_TRANS_FILES
-  NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
-  ifneq "$(strip $(NO_TRANS_FILES))" ""
-    NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
-  endif
+TO_TRANS_TAR := $(LOCDROP_EXPORT_BOOKDIR)/translation-$(DOCNAME)$(LANGSTRING).tar
+
+# Files that do not get translated
+#
+NO_TRANS_FILES := $(filter-out $(TO_TRANS_FILES),$(subst $(DOC_DIR)/xml,$(PROFILEDIR),$(SRCFILES)))
+ifneq "$(strip $(NO_TRANS_FILES))" ""
+  NO_TRANS_TAR   := $(LOCDROP_EXPORT_BOOKDIR)/setfiles-$(DOCNAME)$(LANGSTRING).tar
 endif
 
 ifneq "$(strip $(USED_ALL))" ""
@@ -78,11 +101,8 @@ ifneq "$(NOPDF)" "1"
   locdrop: pdf
 endif
 locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILES) $(PROFILEDIR)/.validate
-  ifndef USESVN
-	$(error $(shell ccecho "error" "Fatal error: Cannot get list of translated files because\n$(MAIN) is not SVN controlled"))
-  endif
   ifeq "$(strip $(TO_TRANS_FILES))" ""
-	$(error $(shell ccecho "error" "Fatal error: This book does not contain any files for translation"))
+	$(error $(shell ccecho "error" "Fatal error: Could not find any files to translate"))
   endif
   ifndef DOCCONF
 	$(error $(shell ccecho "error" "Fatal error: locdrop is only supported when using a DC-file"))

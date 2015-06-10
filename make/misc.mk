@@ -85,13 +85,18 @@ stylecheck: $(BIGFILE)
 #
 
 .PHONY: productinfo
-productinfo: $(BIGFILE) 
+ifeq "$(DOCBOOK_VERSION)" "5"
+  productinfo: NAMESPACE := -N db5="http://docbook.org/ns/docbook"
+  productinfo: ELEM_PREFIX := db5:
+  productinfo: ATTR_PREFIX := xml:
+endif
+productinfo: $(BIGFILE)
   ifdef ROOTID
-	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel -t -v "//*[@id='$(ROOTID)']/*/productname" $< 2>/dev/null)\" "
-	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel -t -v "//*[@id='$(ROOTID)']/*/productnumber" $< 2>/dev/null)\""
+	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "//*[@$(ATTR_PREFIX)id='$(ROOTID)']/*/$(ELEM_PREFIX)productname" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "//*[@$(ATTR_PREFIX)id='$(ROOTID)']/*/$(ELEM_PREFIX)productnumber" $< 2>/dev/null)\""
   else
-	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel -t -v "(/*/*/productname)[1]" $< 2>/dev/null)\" "
-	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel -t -v "(/*/*/productnumber)[1]" $< 2>/dev/null)\""
+	@echo -n "PRODUCTNAME=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "(/*/*/$(ELEM_PREFIX)productname)[1]" $< 2>/dev/null)\" "
+	@echo -n "PRODUCTNUMBER=\"$(shell $(XMLSTARLET) sel $(NAMESPACE) -t -v "(/*/*/$(ELEM_PREFIX)productnumber)[1]" $< 2>/dev/null)\""
   endif
 
 

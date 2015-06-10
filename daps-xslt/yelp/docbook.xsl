@@ -22,6 +22,8 @@
   
   <xsl:key name="id" match="*" use="@id|@xml:id" />
 
+  <xsl:param name="resolve.suse-pi" select="0"/>
+
   <!-- use.id.as.filename: Use id attribute as filename instead of
                          "standard" numbering schema            -->
   <xsl:param name="use.id.as.filename" select="1" />

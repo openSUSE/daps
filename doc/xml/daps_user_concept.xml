@@ -59,7 +59,7 @@
     <listitem>
      <para>
       &dapsacr; lets you publish your XML sources in several different
-      output formats, for example: HTML, HTML-single, PDF, &epub;, &webh;,
+      output formats, for example: HTML, HTML-single, PDF, &epub;,
       text, and man pages. For details, refer to
       <xref linkend="cha.daps.user.output"/>.
       </para>
@@ -72,6 +72,8 @@
       By default, &dapsacr; uses the DocBook stylesheets to generate the
       output formats. But &dapsacr; also supports custom layouts for your
       documentation projects (or for individual books within your set).
+      Thus your XML documents can be published in different layouts without
+      having to change the sources or the configuration.
 <!--You do not need to define custom stylesheets for <emphasis>all</emphasis>
      output formats&mdash;in case a custom layout cannot be found, &dapsacr;
      will automatically fall back to the DocBook stylesheets.-->
@@ -97,6 +99,8 @@
       details, refer to
       <xref linkend="sec.daps.user.editors.emacs.macros"/>.
      </para>
+     <para><remark>taroth 2015-04-21: check with tbazant on his hack project
+      about vi DB support</remark></para>
     </listitem>
    </varlistentry>
    <varlistentry>
@@ -142,7 +146,7 @@
     <listitem>
      <para>
       &dapsacr; provides sophisticated image handling support. For example,
-      it can transform images referenced in your XML files into different
+      it automatically transforms images referenced in your XML files into different
       formats, list all source images referenced in your XML files, list any
       missing images or check if all image names are unique. You can also forward those lists to
       your preferred image viewer to conveniently browse through the images. 
@@ -188,10 +192,11 @@
       and translators. By default, remarks are suppressed in the final output
       version. You can also generate preview versions of your
       documentation with a <literal>DRAFT</literal> watermark appearing on
-      the output. If you use &dm; in addition to &dapsacr;, you can
+      the output. <!--taroth 2015-04-15: commenting for now, can hopefully be re-enabled after
+       the dm relaunch: If you use &dm; in addition to &dapsacr;, you can
       annotate your XML files with meta information (like
       workflow status). &dapsacr; offers an option to also display this
-      meta-information in the generated output. For handing over your files
+      meta-information in the generated output.--> For handing over your files
       to review or translation, &dapsacr; can create TAR archives of the XML
       sources and graphics.
 <!--Alternatively, transform all files
@@ -242,9 +247,169 @@
    them with &dapsacr;, follow the step-by-step instructions in
    <xref linkend="app.daps.user.migrate"/>.
   </para>
+ </sect1>
+ 
+ <sect1 id="sec.daps.user.basics.dirstruct">
+  <title>Directory Structure</title>
+  
+  <!--taroth 2012-04-26: cave, same contents in DAPS Quick
+   (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
+  
+  <!--taroth 2012-04-26: impossible to outsource to phrases-decl.ent and
+   include it multiple times (callout IDs!)-->
+  
+  <para>
+   For &dapsacr; to work out of the box, your XML files and images must be
+   organized in a specific structure within your documentation directory.
+   <xref linkend="ex.daps.dir.doc" xrefstyle="select:label"/> shows the
+   required structure including the key files for a &dapsacr; documentation
+   project. You can also create multiple documentation directories for
+   individual documentation projects, but they all need the substructure
+   outlined below.
+  </para>
+  
+  <sect2 id="sec.daps.user.oview.dir.src">
+   <title>Source Files</title>
+   <example id="ex.daps.dir.doc">
+    <title>Required Directory Structure</title>
+    <screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
+     |--&dc;-* <co id="co.docdir.dc"/>
+     |--images/
+     |   |--src/<co id="co.docdir.img.src"/>
+     |   |  |--dia/
+     |   |  |--eps/
+     |   |  |--fig/
+     |   |  |--jpg
+     |   |  |--pdf/
+     |   |  |--png/
+     |   |  |--svg/
+     |--xml/<co id="co.docdir.xml"/>
+     |   |--MAIN*.xml<co id="co.docdir.main"/>
+         |--*.xml</screen>
+   </example>
+   
+   <calloutlist>
+    <callout arearefs="co.docdir.base">
+     <para>
+      <quote>Working directory</quote> for the respective documentation
+      project (in the following also called <literal>project directory</literal> 
+      or <literal>documentation directory</literal>).
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.dc">
+     <para>
+      On the topmost level of your project directory, store the &dclong;
+      (&dc;) file defining your documentation project. You can store multiple &dc;
+      files here (for multiple books belonging to the same documentation
+      project, or &dc; files for various documentation projects). For more
+      information, refer to <xref linkend="sec.daps.user.basics.files"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.img.src">
+     <para>
+      Top-level directory for any original images that you want to use in the
+      documentation project. Contains subdirectories for images in various
+      formats. Any images to be referenced in the XML sources must be put in
+      the respective subdirectories. For basic information about referencing
+      images, refer to <xref linkend="sec.daps.user.imgs.refer"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.xml">
+     <para>
+      Directory holding the XML &main; file and all other XML files for the
+      documentation project. If you declare entities in one or more external
+      files (for example, in <filename>entity-decl.ent</filename>), put the
+      entity declaration files here, too.
+     </para>
+    </callout>
+    <callout arearefs="co.docdir.main">
+     <para>
+       The &main; file of the documentation project.  It contains the
+       <quote>starting point</quote> (the highest-level object) of your
+       documentation project and includes
+       <quote>references</quote> to other books, chapters, appendixes, etc. 
+       For more information, refer to
+      <xref linkend="sec.daps.user.basics.files"/>.
+     </para>
+    </callout>
+   </calloutlist>
+   &daps-note-subdirs;
+  </sect2>
+  
+  <sect2 id="sec.daps.user.oview.dir.build">
+   <title>The <filename>build</filename> Subdirectory</title>
+   <para>
+    To strictly discriminate between all source content added by users and
+    the content generated by &dapsacr;, &dapsacr; uses a
+    <filename>build</filename> directory. When generating output from your
+    documentation project for the first time, &dapsacr; adds a
+    <filename>build</filename> directory to your documentation directory. It
+    is located parallel to the <filename>xml</filename> and
+    <filename>images</filename> subdirectories. (If desired, the name and
+    path of the <filename>build</filename> directory can be changed with the
+    parameter <parameter>BUILD_DIR</parameter> in &dapsconf-sys; or
+    &dapsconf-user;.)
+   </para>
+   <para>
+    The <filename>build</filename> directory is structured as follows:
+   </para>
+   <example id="ex.daps.user.build">
+    <title>Build Directory</title>
+    <screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
+     <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
+     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
+     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>
+     |--.images/ <co id="co.builddir.img"/>
+     |--.profiled/ <co id="co.builddir.profiled"/>
+     |--.tmp/ <co id="co.builddir.tmp"/></screen>
+   </example>
+   <calloutlist>
+    <callout arearefs="co.docdir">
+     <para>
+      <quote>Working directory</quote> for the respective documentation
+      project.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir">
+     <para>
+      Directory that holds all contents build by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.dc">
+     <para> For each of your documentation deliverables, &dapsacr; creates a
+      subdirectory. It is named after the respective &dc; from which you
+      build the book, article or set. For example, the output for
+        <filename>&dc;-<replaceable>NAME</replaceable></filename> is written
+      to
+        <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>NAME</replaceable></filename>.
+      All formats that have been generated from the &dc; (PDF, HTML, TXT,
+      &epub; etc.) can be found there. A <filename>log</filename>
+      subdirectory stores log files for each output format that has been
+      generated by &dapsacr;. </para>
+    </callout>
+    <callout arearefs="co.builddir.img">
+     <para>
+      Directory holding the images created by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.profiled">
+     <para>
+      Directory holding the profiled XML sources created by &dapsacr;.
+     </para>
+    </callout>
+    <callout arearefs="co.builddir.tmp">
+     <para>
+      Directory holding temporary files created by &dapsacr; (for example,
+      the FO files).
+     </para>
+    </callout>
+   </calloutlist>
+  </sect2>
+ </sect1>
 
-  <sect2 id="sec.daps.user.basics.files">
-   <title>Key Files</title> &daps-key-files; <para>
+  <sect1 id="sec.daps.user.basics.files">
+   <title>Key Files</title> 
+   &daps-key-files; <para>
     In the following sections, find examples for &main; and &dc; files,
     together with background information on some key parameters that can be
     used in &dc; files. The examples are sorted according to use cases:
@@ -263,7 +428,16 @@
      </para>
     </listitem>
    </itemizedlist>
-  </sect2>
+
+<note>
+   <title>Differences DocBook 4 versus DocBook 5</title>
+   <para>The examples below differ slightly with regards to the respective
+    DocBook version. One of the main differences is the header of the XML files.
+    Apart from that, the <sgmltag>articleinfo</sgmltag> and
+     <sgmltag>bookinfo</sgmltag> elements no longer exist in DocBook 5. They
+    have been replaced by the generic <sgmltag>info</sgmltag> element.
+   </para>
+</note>
 
   <sect2 id="sec.daps.user.basics.single">
    <title>Single Deliverables (Article or Book)</title>
@@ -289,10 +463,11 @@
     </para>
    </tip>
    <para>
-    Find a simple example in
-    <xref linkend="ex.daps.main.art" xrefstyle="select:label"/>.
+    Find simple examples for DocBook 4 and DocBook 5 in
+    <xref linkend="ex.daps.main.art.db4" xrefstyle="select:label"/> and <xref
+     linkend="ex.daps.main.art.db5" xrefstyle="select:label"/>, respectively.
    </para>
-   <example id="ex.daps.main.art">
+   <example id="ex.daps.main.art.db4">
     <title>&main; file of an Article (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
@@ -335,10 +510,57 @@
  &lt;/sect1&gt;
 <emphasis role="strong">&lt;/article&gt;</emphasis></screen>
    </example>
+
+  <example id="ex.daps.main.art.db5">
+    <title>&main; file of an Article (DocBook 5.x)</title>
+<screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<emphasis role="strong">&lt;article lang="en" id="art.template"&gt;</emphasis>
+ &lt;title&gt;Article Template&lt;/title&gt;
+ &lt;subtitle&gt;generated by DAPS&lt;/subtitle&gt;
+ &lt;info&gt;
+  &lt;releaseinfo&gt;Version 0.1&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;Revision: 0&lt;/releaseinfo&gt;
+  &lt;releaseinfo&gt;
+   Build Date: &lt;?dbtimestamp format="B d, Y"?&gt;
+  &lt;/releaseinfo&gt;
+  &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/info&gt;
+ &lt;abstract&gt;
+  &lt;para&gt;
+   You may use this file as a template. For a complete DocBook reference
+   see &lt;citetitle&gt;&tdg;&lt;/citetitle&gt;, available at
+   &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+  &lt;/para&gt;
+ &lt;/abstract&gt;
+ &lt;sect1 id="sec.template.examples"&gt;
+  &lt;title&gt;Examples: The most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;para&gt;
+   I am a paragraph in a section 1.
+  &lt;/para&gt;
+  &lt;sect2 id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This section 2 showcases 3 types of lists.
+   &lt;/para&gt;
+   [...]
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;
+<emphasis role="strong">&lt;/article&gt;</emphasis></screen>
+   </example>
+   
+   
    <para>
     Let us assume, the XML file shown in
-    <xref linkend="ex.daps.main.art"
-    xrefstyle="select:label"/> is
+    <xref linkend="ex.daps.main.art.db4"
+     xrefstyle="select:label"/> or <xref linkend="ex.daps.main.art.db5"
+      xrefstyle="select:label"/> is 
     named <filename>MAIN-DAPS-example-article.xml</filename> and you want to
     publish it using the default DocBook layout. To generate output, you
     usually create a &dc; file per article or book, specifying a number of
@@ -346,11 +568,12 @@
     multiple parameters that can be set in the &dc; file, the only one
     required is <parameter>MAIN</parameter>, pointing to the XML file that
     you want to process. Therefore, a very basic &dc; file for the article
-    in <xref linkend="ex.daps.main.art"/> could look as follows:
+    in <xref linkend="ex.daps.main.art.db4" xrefstyle="select:label"/> or <xref
+     linkend="ex.daps.main.art.db5" xrefstyle="select:label"/> could look as follows:
    </para>
    <example id="ex.daps.user.dc.art.simple">
     <title>Basic &dc; File for an Article</title>
-<screen>## Doc config file for the DAPS example article
+<screen>## Doc config file for the DAPS example document
 ## See /etc/daps/config for documentation of the settings below
 ##
 
@@ -361,7 +584,7 @@
    <para>
     The example above is a bit artificial, though: If you do not want to
     specify any further parameters (apart from the &main; file), you can
-    also set the <parameter>MAIN</parameter> parameter as a command line
+    also set the <option>--main</option> parameter as a command line
     option when generating the output format. In that case, you can do
     completely without a &dc; file. For details, refer to
     <xref linkend="cha.daps.user.output"/>.
@@ -372,7 +595,7 @@
     an article (as assumed before), the basic setup of &main; file and &dc;
     file is similar:
    </para>
-   <example id="ex.daps.main.book">
+   <example id="ex.daps.main.book.db4">
     <title>&main; file of a Book (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 [...]
@@ -411,13 +634,55 @@
 <emphasis role="strong">&lt;/book&gt;</emphasis>
 </screen>
    </example>
+
+ <example id="ex.daps.main.book.db5">
+    <title>&main; file of a Book (DocBook 4.x)</title>
+<screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+[...]
+
+<emphasis role="strong">&lt;book id="book.template" lang="en"&gt;</emphasis>
+ &lt;info&gt;
+  &lt;title&gt;Book Template&lt;/title&gt;
+  &lt;subtitle&gt;generated by daps&lt;/subtitle&gt;
+  &lt;productname&gt;Book Template&lt;/productname&gt;
+   &lt;legalnotice&gt;
+   &lt;para&gt;
+    &lt;ulink url="http://www.gnu.org/licenses/fdl-1.3-standalone.html"&gt;
+    GNU Free Documentation License&lt;/ulink&gt;
+   &lt;/para&gt;
+  &lt;/legalnotice&gt;
+ &lt;/info&gt;
+ &lt;chapter id="cha.template.examples"&gt;
+  &lt;title&gt;Examples: the most commonly used DocBook XML constructs&lt;/title&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    You may use this file as a template. For a complete reference on DocBook
+    see &lt;citetitle&gt;&amp;tdg;&lt;/citetitle&gt;, available at
+    &lt;ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/&gt;.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+  &lt;para&gt;
+   I am a paragraph in a chapter.
+  &lt;/para&gt;
+  &lt;sect1 id="sec.template.examples.lists"&gt;
+   &lt;title&gt;Lists&lt;/title&gt;
+   &lt;para&gt;
+    This is a section 1.
+   &lt;/para&gt;
+  &lt;/sect1&gt;
+ &lt;/chapter&gt;
+<emphasis role="strong">&lt;/book&gt;</emphasis>
+</screen>
+   </example>
+
    <para>
     In the above example, the book's contents are also contained in a single
     XML file, however, this time with <sgmltag>book</sgmltag> as the root
     element. In contrast to an article, books can contain more structural
     levels: they are usually divided into <sgmltag>chapter</sgmltag>
     elements (that may contain sections and subsections) as outlined in
-    <xref linkend="ex.daps.main.book" xrefstyle="select:label"/>. In
+    <xref linkend="ex.daps.main.book.db4" xrefstyle="select:label"/> or
+    <xref linkend="ex.daps.main.book.db5" xrefstyle="select:label"/> . In
     addition to chapters, books may also contain other structural elements
     such as <sgmltag>preface</sgmltag>, <sgmltag>glossary</sgmltag>, and
     <sgmltag>appendix</sgmltag>. A further additional structural level is
@@ -426,7 +691,9 @@
     <ulink url="http://www.docbook.org/tdg/en/html/docbook.html"/>.
    </para>
    <para>
-    Let us assume the XML file shown in <xref linkend="ex.daps.main.book"/>
+    Let us assume the XML file shown in 
+    <xref linkend="ex.daps.main.book.db4" xrefstyle="select:label"/> or
+    <xref linkend="ex.daps.main.book.db5" xrefstyle="select:label"/>
     is named <filename>MAIN-DAPS-example-book.xml</filename> and you want to
     publish it in a custom layout. To generate output, you would create a
     &dc; file pointing to the &main; file of the book, and additionally
@@ -472,12 +739,14 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     <literal>XIncludes</literal>. Note that this is not specific to
     sets&mdash;it is mainly a means of modularizing your documents. You can
     also use XIncludes for splitting up books, articles or chapters into
+
     separate files. For more information, refer to
     <xref linkend="sec.daps.user.modular.xi"/> and
     <ulink
     url="http://www.docbook.org/tdg51/en/html/ch02.html"><citetitle>Physical
     Divisions: Breaking a Document into Separate Files</citetitle></ulink>.
    </para>
+  
    <example id="ex.daps.main.set">
     <title>&main; file of a Set (DocBook 4.x)</title>
 <screen>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -493,7 +762,8 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
              xmlns:xi="http://www.w3.org/2001/XInclude"/&gt;&#45;&#45;&gt;
 <emphasis role="strong">&lt;/set&gt;</emphasis></screen>
    </example>
-   <para>
+   
+    <para>
     For a documentation <sgmltag>set</sgmltag> (a collection of books),
     multiple &dc; files can be defined. This allows you to set different
     parameters and values for individual books in the set. By specifying a
@@ -507,6 +777,7 @@ STYLEROOT="/usr/share/xml/docbook/stylesheet/custom/xslt" <co id="co.daps.dc.boo
     &dapsuser;&mdash; both guides belong to the same documentation set, but
     use different layouts.
    </para>
+   
    <example id="ex.daps.dc.quick">
     <title>&dc; File For a Book in a Set</title>
 <screen>## Doc config file for &dapsquick;
@@ -530,9 +801,7 @@ ROOTID="art.daps.quick" <co id="co.daps.dc.quick.rootid"/>
 ## (if not defined the DocBook stylesheets will be used)
 
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/flyer" <co id="co.daps.dc.quick.styleroot"/>
-#FALLBACK_STYLEROOT="" <co id="co.daps.dc.quick.fbstyleroot"/>
-HTML_CSS="./daps.css" <co id="co.daps.dc.quick.css"/>
-EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:label nopage"/></screen>
+#FALLBACK_STYLEROOT="" <co id="co.daps.dc.quick.fbstyleroot"/></screen>
     <calloutlist>
      <callout arearefs="co.daps.dc.quick.main"> &daps-co-main; </callout>
      <callout arearefs="co.daps.dc.quick.rootid"> &daps-co-rootid; <para>
@@ -551,11 +820,6 @@ EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.quick.css" xrefstyle="select:lab
        <para>
        In this example, no fallback is specified and the parameter is
        disabled.
-      </para>
-     </callout>
-     <callout arearefs="co.daps.dc.quick.css"> &daps-co-css; <para>
-       In this example, custom CSS files are specified for both HTML and
-       &epub; output.
       </para>
      </callout>
     </calloutlist>
@@ -584,8 +848,6 @@ ROOTID="book.daps.user" <co id="co.daps.dc.user.rootid"/>
 
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/" <co id="co.daps.dc.user.styleroot"/>
 #FALLBACK_STYLEROOT="" <co id="co.daps.dc.user.fbstyleroot"/>
-HTML_CSS="./daps.css" <co id="co.daps.dc.user.css"/>
-EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.user.css" xrefstyle="select:label nopage"/>
 
 ## Formatter
 # Specify which PDF formatter to use. Currently only fop or xep are supported
@@ -617,11 +879,6 @@ DRAFT="yes" <co id="co.daps.dc.user.draft"/>
        <para>
        In this example, no fallback is specified and the parameter is
        disabled.
-      </para>
-     </callout>
-     <callout arearefs="co.daps.dc.user.css"> &daps-co-css; <para>
-       In this example, custom CSS files are specified for both HTML and
-       &epub; output.
       </para>
      </callout>
      <callout arearefs="co.daps.dc.user.formatter"> &daps-co-formatter;
@@ -667,8 +924,6 @@ MAIN="MAIN.DAPS.xml" <co id="co.daps.dc.set.main"/>
 
 STYLEROOT="/usr/share/xml/docbook/stylesheet/suse/xslt/" <co id="co.daps.dc.set.styleroot"/>
 #FALLBACK_STYLEROOT="" <co id="co.daps.dc.set.fbstyleroot"/>
-HTML_CSS="./daps.css" <co id="co.daps.dc.set.css"/>
-EPUB_CSS="./daps.css" <xref linkend="co.daps.dc.set.css" xrefstyle="select:label nopage"/>
 
 ## enable sourcing
 export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
@@ -692,168 +947,14 @@ export DOCCONF=$BASH_SOURCE <co id="co.daps.dc.set.source"/></screen>
        disabled.
       </para>
      </callout>
-     <callout arearefs="co.daps.dc.set.css"> &daps-co-css; <para>
-       In this example, custom CSS files are specified for both HTML and
-       &epub; output.
-      </para>
-     </callout>
-     <callout arearefs="co.daps.dc.set.source"> &daps-co-draft; </callout>
-     <callout arearefs="co.daps.dc.set.source"> &daps-co-source; </callout>
+      <callout arearefs="co.daps.dc.set.source"> &daps-co-source; </callout>
     </calloutlist>
    </example>
   </sect2>
  </sect1>
 <!--taroth 2012-05-08: updated until here, todo: add directory stuff created by
      DAPS-->
- <sect1 id="sec.daps.user.basics.dirstruct">
-  <title>Directory Structure</title>
-
-<!--taroth 2012-04-26: cave, same contents in DAPS Quick
-  (art_daps_quick.xml, see id=sec.daps.quick.basics.dirstruct)-->
-
-<!--taroth 2012-04-26: impossible to source out to phrases-decl.ent and
-  include it multiple times (callout IDs!)-->
-
-  <para>
-   For &dapsacr; to work out of the box, your XML files and images must be
-   organized in a specific structure within your documentation directory.
-   <xref linkend="ex.daps.dir.doc" xrefstyle="select:label"/> shows the
-   required structure including the key files for a &dapsacr; documentation
-   project. You can also create multiple documentation directories for
-   individual documentation projects, but they all need the substructure
-   outlined below.
-  </para>
-
-  <sect2 id="sec.daps.user.oview.dir.src">
- <title>Source Files</title>
- <example id="ex.daps.dir.doc">
-  <title>Required Directory Structure</title>
-  <screen><replaceable>YOUR_DOC_DIR/</replaceable> <co id="co.docdir.base"/>
-   |--&dc;-* <co id="co.docdir.dc"/>
-   |--images/
-   |   |--src/<co id="co.docdir.img.src"/>
-   |   |  |--dia/
-   |   |  |--eps/
-   |   |  |--fig/
-   |   |  |--pdf/
-   |   |  |--png/
-   |   |  |--svg/
-   |--xml/<co id="co.docdir.xml"/>
-   |   |--MAIN*.xml<co id="co.docdir.main"/></screen>
- </example>
  
- <calloutlist>
-  <callout arearefs="co.docdir.base">
-   <para>
-    <quote>Working directory</quote> for the respective documentation
-    project.
-   </para>
-  </callout>
-  <callout arearefs="co.docdir.dc">
-   <para>
-    On the topmost level of your documentation directory, store the &dc;
-    file defining your documentation project. You can store multiple &dc;
-    files here (for multiple books belonging to the same documentation
-    project, or &dc; files for various documentation projects). For more
-    information, refer to <xref linkend="sec.daps.user.basics.files"/>.
-   </para>
-  </callout>
-  <callout arearefs="co.docdir.img.src">
-   <para>
-    Top-level directory for any original images that you want to use in the
-    documentation project. Contains subdirectories for images in various
-    formats. Any images to be referenced in the XML sources must be put in
-    the respective subdirectories. For basic information about referencing
-    images, refer to <xref linkend="sec.daps.quick.imgs.refer"/>.
-   </para>
-  </callout>
-  <callout arearefs="co.docdir.xml">
-   <para>
-    Directory holding the XML &main; file and all other XML files for the
-    documentation project. If you declare entities in one or more external
-    files (for example, in <filename>entity-decl.ent</filename>), put the
-    entity declaration files here, too.
-   </para>
-  </callout>
-  <callout arearefs="co.docdir.main">
-   <para>
-    The &main; file of the documentation project. It contains the
-    <quote>starting point</quote> (the highest-level object) of your
-    documentation project. For more information, refer to
-    <xref linkend="sec.daps.user.basics.files"/>.
-   </para>
-  </callout>
- </calloutlist>
-</sect2>
-  
-  <sect2 id="sec.daps.user.oview.dir.build">
-   <title>The <filename>build</filename> Subdirectory</title>
-   <para>
-    To strictly discriminate between all source content added by users and
-    the content generated by &dapsacr;, &dapsacr; uses a
-    <filename>build</filename> directory. When generating output from your
-    documentation project for the first time, &dapsacr; adds a
-    <filename>build</filename> directory to your documentation directory. It
-    is located parallel to the <filename>xml</filename> and
-    <filename>images</filename> subdirectories. (If desired, the name and
-    path of the <filename>build</filename> directory can be changed with the
-    parameter <parameter>BUILD_DIR</parameter> in &dapsconf-sys; or
-    &dapsconf-user;.)
-   </para>
-   <para>
-    The <filename>build</filename> directory is structured as follows:
-   </para>
-   <example id="ex.daps.user.build">
-    <title>Build Directory</title>
-<screen><replaceable>YOUR_DOC_DIR</replaceable> <co id="co.docdir"/>
-  <emphasis role="strong">|--build/</emphasis> <co id="co.builddir"/>
-     |--<replaceable>NAME_OF_&dc;1</replaceable>/ <co id="co.builddir.dc"/>
-     |--<replaceable>NAME_OF_&dc;2</replaceable>/ <xref linkend="co.builddir.dc"/>
-     |--.images/ <co id="co.builddir.img"/>
-     |--.profiled/ <co id="co.builddir.profiled"/>
-     |--.tmp/ <co id="co.builddir.tmp"/></screen>
-   </example>
-   <calloutlist>
-    <callout arearefs="co.docdir">
-     <para>
-      <quote>Working directory</quote> for the respective documentation
-      project.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir">
-     <para>
-      Directory that holds all contents build by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.dc">
-     <para>
-      For each of your documentation deliverables, &dapsacr; creates a
-      subdirectory, named after the respective &dc; from which you build the
-      book, article or set. All formats that have been generated from the
-      &dc; (PDF, HTML, TXT, &epub; etc.) can be found there. A
-      <filename>log</filename> subdirectory stores log files for each output
-      format that has been generated by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.img">
-     <para>
-      Directory holding the images created by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.profiled">
-     <para>
-      Directory holding the profiled XML sources created by &dapsacr;.
-     </para>
-    </callout>
-    <callout arearefs="co.builddir.tmp">
-     <para>
-      Directory holding temporary files created by &dapsacr; (for example,
-      the FO files).
-     </para>
-    </callout>
-   </calloutlist>
-  </sect2>
- </sect1>
  <sect1 id="sec.daps.user.syntax">
   <title>Basic &dapsacr; Syntax</title>
 
