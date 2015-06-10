@@ -24,6 +24,7 @@ REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+             -e 's|@datadir[@]|$(datadir)|g' \
              -e 's|@prefix[@]|$(prefix)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
@@ -152,12 +153,14 @@ dist_doc_DATA      = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
 dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local TARGETS--------------------------------------
-all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
-	   bin/daps etc/config $(FOP_CONFIG)
+all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG) \
+	   bin/daps etc/config autobuild/daps_autobuild $(FOP_CONFIG)
 
 #---------------------------Local INSTALLATION--------------------------------
 
-INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir)
+INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
+	$(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/ \
+	$(DESTDIR)$(templatedir)
 
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
@@ -169,6 +172,9 @@ install-data-local:
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
 		(cd $(DESTDIR)$(docdir)/html; tar xp); \
 	done
+	install -m755 autobuild/daps_autobuild $(DESTDIR)$(bindir)
+	install -m644 autobuild/daps_autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
+	install -m644 autobuild/daps_autobuild.xml $(DESTDIR)$(templatedir)
 if CATALOG_EDIT
 # create entry in xml root catalog
 	{ \
@@ -196,10 +202,11 @@ clean-local:
 	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
 	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
 	  $(srcdir)/doc/xml/entity-decl.ent
-	(cd $(srcdir)/etc && ln -s config.in config)
-	(cd $(srcdir)/bin && ln -s daps.in daps)
-	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
-	(cd doc/xml && ln -s entity-decl.ent.in entity-decl.ent)
+	(cd $(srcdir)/etc && ln -sf config.in config)
+	(cd $(srcdir)/bin && ln -sf daps.in daps)
+	(cd $(srcdir)/autobuild && ln -sf daps_autobuild.in daps_autobuild)
+	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse fop-daps.xml)
+	(cd doc/xml && ln -sf entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -250,14 +257,19 @@ $(DAPS_CATALOG):
 	touch $@
 
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+bin/daps: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
-etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+etc/config: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
+
+autobuild/daps_autobuild: .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
+	$(REPL_PATH) $@.in > $@
+	chmod +x $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
@@ -268,18 +280,18 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
 	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
 	fi
 
-$(USERGUIDE):
+$(USERGUIDE): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_USERGUIDE) html --single --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
-$(QUICKSTART):
+$(QUICKSTART): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
 	    --docconfig=$(DC_QUICKSTART) html --single --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
-$(dist_man1_MANS):
+$(dist_man1_MANS): bin/daps etc/config
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
