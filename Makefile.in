@@ -402,6 +402,7 @@ REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
              -e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+             -e 's|@datadir[@]|$(datadir)|g' \
              -e 's|@prefix[@]|$(prefix)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
@@ -424,7 +425,7 @@ FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
 # Man pages
 DC_MANPAGES := DC-daps-manpages
 MAN_PAGE_DIR := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1
+MAN_PAGES := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1 daps_autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -514,7 +515,10 @@ dist_doc_DATA = BUGS COPYING COPYING-2.0 COPYING-3.0 INSTALL.adoc \
 dist_man1_MANS = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 
 #---------------------------Local INSTALLATION--------------------------------
-INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir)
+INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
+	$(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/ \
+	$(DESTDIR)$(templatedir)
+
 all: all-recursive
 
 .SUFFIXES:
@@ -1618,19 +1622,29 @@ uninstall-man: uninstall-man1
 
 
 #---------------------------Local TARGETS--------------------------------------
-all-local: $(USERGUIDE) $(QUICKSTART) $(man_MANS) $(DAPS_CATALOG) \
-	   bin/daps etc/config $(FOP_CONFIG)
+
+#
+# These targets need to be build _after_ the guides have been build, to make sure
+# the local config, as provided by the repo, is used. Otherwise we have a mixture
+# of system and repo setup and that will not work
+
+bin/daps etc/config $(FOP_CONFIG): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
+
+all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
 
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
 
-install-data-local: $(INSTALLDIRS)
+install-data-local: $(INSTALLDIRS) autobuild/daps_autobuild
 install-data-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
 		(cd $(DESTDIR)$(docdir)/html; tar xp); \
 	done
+	install -m755 autobuild/daps_autobuild $(DESTDIR)$(bindir)
+	install -m644 autobuild/daps_autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
+	install -m644 autobuild/daps_autobuild.xml $(DESTDIR)$(templatedir)
 # create entry in xml root catalog
 @CATALOG_EDIT_TRUE@	{ \
 @CATALOG_EDIT_TRUE@	  sed '/<\/catalog>/d' $(root_catalog); \
@@ -1654,10 +1668,11 @@ clean-local:
 	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
 	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
 	  $(srcdir)/doc/xml/entity-decl.ent
-	(cd $(srcdir)/etc && ln -s config.in config)
-	(cd $(srcdir)/bin && ln -s daps.in daps)
-	(cd $(srcdir)/etc/fop && ln -s fop-daps.suse fop-daps.xml)
-	(cd doc/xml && ln -s entity-decl.ent.in entity-decl.ent)
+	(cd $(srcdir)/etc && ln -sf config.in config)
+	(cd $(srcdir)/bin && ln -sf daps.in daps)
+	(cd $(srcdir)/autobuild && ln -sf daps_autobuild.in daps_autobuild)
+	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse fop-daps.xml)
+	(cd doc/xml && ln -sf entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 
@@ -1708,14 +1723,19 @@ $(DAPS_CATALOG):
 	touch $@
 
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+bin/daps: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
-etc/config: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) .firstbuild
+etc/config: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
+
+autobuild/daps_autobuild: .firstbuild
+	if [ -L $@ ]; then rm -f $@; fi
+	$(REPL_PATH) $@.in > $@
+	chmod +x $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
