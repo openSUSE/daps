@@ -13,6 +13,7 @@ SCHEMA="@datadir@/xml/daps/schema/daps-autobuild.rnc"
 
 #VERBOSE=1
 CHECK_VCS=1
+DEBUG=0
 DO_RSYNC=1
 RSYNC_DELETE=""
 SECTIONS=""
@@ -56,6 +57,10 @@ Options:
   --config=<file>
     Path to config file. Can be specified relative or absolute.
     Default: unset
+
+  --debug
+    In case of a build failure, show a verbose DAPS log.
+    Default: disabled
 
   --force
     Manuals will only be rebuild when the git/svn repository has changed
@@ -227,7 +232,7 @@ function process_git {
     git pull -q || return 1
     echo "  * Updated git branch $GITBRANCH"
     if [[ 1 -eq $CHECK_VCS ]]; then
-	NEWREV="$(git git rev-parse HEAD)" || return 2
+	NEWREV="$(git rev-parse HEAD)" || return 2
 	[[ "$NEWREV" != "$_LASTREV" ]] && REBUILD="1"
     fi
     return 0
@@ -253,7 +258,7 @@ function process_svn {
 
 
 function run_daps {
-    local BUILDDIR DCFILE NAME RESULT _SET SUBCMD
+    local BUILDDIR DAPS_BASE_CMD DCFILE _FORMAT NAME NAME_CMD_ARGS ORIG_IFS RESULT RUNDAPS _SET SUBCMD
     #
     # Create the DAPS command and run DAPS
     # Expects 4 Arguments:
@@ -269,12 +274,14 @@ function run_daps {
     [[ -z $2 ]] && exit_on_error "Function run_daps must be called with a DC-FILE"
     [[ -z $3 ]] && exit_on_error "Function run_daps must be called with a set ID"
 
-    SUBCMD="$1"
+    _FORMAT="$1"
     DCFILE="$2"
     _SET="$3"
 
-    if [[ single-html = "$SUBCMD" ]]; then
+    if [[ single-html = "$_FORMAT" ]]; then
         SUBCMD="html --single"
+    else
+        SUBCMD="$_FORMAT"
     fi
   
     NAME=${DCFILE//DC-/}
@@ -282,9 +289,11 @@ function run_daps {
 
     # build the DAPS command
     #
-    RUNDAPS="${_DAPSROOT}/bin/daps --dapsroot $_DAPSROOT --builddir $BUILDDIR -d $DCFILE"
-    [[ -n $_STYLEROOT ]]    && RUNDAPS="$RUNDAPS --styleroot=$_STYLEROOT"
-    [[ -n $_FB_STYLEROOT ]] && RUNDAPS="$RUNDAPS --fb_styleroot=$_FB_STYLEROOT"
+    DAPS_BASE_CMD="${_DAPSROOT}/bin/daps --dapsroot $_DAPSROOT --builddir $BUILDDIR -d $DCFILE"
+    [[ -n $_STYLEROOT ]]    && DAPS_BASE_CMD="$DAPS_BASE_CMD --styleroot=$_STYLEROOT"
+    [[ -n $_FB_STYLEROOT ]] && DAPS_BASE_CMD="$DAPS_BASE_CMD --fb_styleroot=$_FB_STYLEROOT"
+    RUNDAPS="$DAPS_BASE_CMD"
+    [[ 1 -eq $DEBUG ]] && RUNDAPS="$RUNDAPS --debug"
     RUNDAPS="$RUNDAPS $SUBCMD --name $NAME"
     [[ -n $_DRAFT ]]        && RUNDAPS="$RUNDAPS --draft" 
     [[ -n $_REMARKS ]]      && RUNDAPS="$RUNDAPS --remarks"
@@ -292,19 +301,41 @@ function run_daps {
 	[[ $SUBCMD = "html" || $SUBCMD = "pdf" ]] &&  RUNDAPS="$RUNDAPS --meta"
     fi
 
-    echo -n "  * Building $SUBCMD version of $DCFILE ... "
+    echo -n "  * Building $_FORMAT version of $DCFILE ... "
     RESULT="$($RUNDAPS)"
     if [[ 0 -eq $? ]]; then
+        $CCECHO "result" "Succeeded"
         SYNCDIR_DC="${SYNCDIR}/$NAME"
+	NAME_CMD_ARGS="--name $NAME"
         mkdir -p "$SYNCDIR_DC"
-        if [[ "pdf" = "$SUBCMD" ]]; then
-            mkdir -p "${SYNCDIR_DC}/pdf"
-            mv "$RESULT" "${SYNCDIR_DC}/pdf"
-        else
-            mv "$RESULT" "${SYNCDIR_DC}/$_FORMAT"
+        [[ -n $_DRAFT ]]        && NAME_CMD_ARGS="$NAME_CMD_ARGS --draft" 
+        [[ -n $_REMARKS ]]      && NAME_CMD_ARGS="$NAME_CMD_ARGS --remarks"
+        if [[ -n $_META ]]; then
+	    [[ $SUBCMD = "html" || $SUBCMD = "pdf" ]] &&  NAME_CMD_ARGS="$NAME_CMD_ARGS --meta"
         fi
+	NAME_CMD_ARGS="$NAME_CMD_ARGS 2>/dev/null"
+        if [[ "pdf" = "$_FORMAT" ]]; then
+	    RESULT="$($DAPS_BASE_CMD pdf-name $NAME_CMD_ARGS)"
+            mkdir -p "${SYNCDIR_DC}/$_FORMAT"
+        elif [[ "html" = "$_FORMAT" ]]; then
+	    RESULT="$($DAPS_BASE_CMD html-dir-name $NAME_CMD_ARGS)"
+	elif [[ "single-html" = "$_FORMAT" ]]; then
+	    RESULT="$($DAPS_BASE_CMD html-dir-name --single $NAME_CMD_ARGS)"
+        fi
+            mv "$RESULT" "${SYNCDIR_DC}/$_FORMAT"
 	return 0
     else
+        $CCECHO "warn" "Failed"
+	FAILURES=$((FAILURES + 1))
+	FAILED_BOOKS["$DC"]="${FAILED_BOOKS["$DC"]} $_FORMAT"
+    	ORIG_IFS="$IFS"
+	IFS=$'\n'
+	echo -e "\e[33m"
+    	for LINE in $RESULT; do
+	    echo -e "\t$LINE"
+	done
+	echo -e "\e[0m"
+	IFS="$ORIG_IFS"
 	return 1
     fi
 }
@@ -369,7 +400,7 @@ function failure_notification {
 #--------------------
 # Read command line options
 
-ARGS=$(getopt -o h -l config:,force,help,helpconfig,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
+ARGS=$(getopt -o h -l config:,debug,force,help,helpconfig,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -383,6 +414,10 @@ while true ; do
 	    [[ -f $2 ]] || exit_on_error "Not a valid path for --config"
 	    CONFIG="$(readlink -e "$2")"
 	    shift 2
+	    ;;
+        --debug)
+	    DEBUG=1
+	    shift
 	    ;;
 	--force)
 	    CHECK_VCS=0
@@ -489,7 +524,7 @@ for SET in $SECTIONS; do
     fi
 
     # set up the sync directory
-    SYNCDIR="${_BUILDDIR}/$SET/sync"
+    SYNCDIR="${_BUILDDIR}/$SET/sync/$SET"
     rm -rf "$SYNCDIR" && mkdir -p "$SYNCDIR"
 
     echo -e "$SET\n-------------------------"
@@ -572,14 +607,6 @@ for SET in $SECTIONS; do
             for DC in $_DCFILES; do
 		# Build!
 		run_daps "$_FORMAT" "$DC" "$SET"
-		# Check build result
-		if [[ 0 -eq $? ]]; then
-		    $CCECHO "result" "Succeeded"
-		else
-		    $CCECHO "warn" "Failed"
-		    FAILURES=$((FAILURES + 1))
-		    FAILED_BOOKS["$DC"]="${FAILED_BOOKS["$DC"]} $_FORMAT"
-		fi
             done
 	done
     else
@@ -618,7 +645,7 @@ for SET in $SECTIONS; do
     # rsync
 
     if [[ 1 -eq $DO_RSYNC ]]; then
-	$RSYNC $_RSYNC_FLAGS $RSYNC_DELETE "$SYNCDIR/" "$_RSYNC_TARGET"
+	$RSYNC $_RSYNC_FLAGS $RSYNC_DELETE $SYNCDIR $_RSYNC_TARGET
 	if [[ 0 -eq $? ]]; then
 	    $CCECHO "result" "  Rsync successful"
 	else
