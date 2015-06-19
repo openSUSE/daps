@@ -1,10 +1,8 @@
-Installing the DocBook Authoring and Publishing Suite (DAPS)
-============================================================
+= Installing the DocBook Authoring and Publishing Suite (DAPS)
 
 :numbered:
 
-Tested Distributions
---------------------
+== Tested Distributions
 
 DAPS has been tested on the following Linux distributions. It should also run
 on any other distribution, feedback is welcome.
@@ -15,8 +13,7 @@ on any other distribution, feedback is welcome.
 * SUSE Linux Enterprise 12
 * Ubuntu 14.10 (Utopic Unicorn) (see note in the Installation section)
 
-Pre-build Packages
-------------------
+== Pre-build Packages
 
 Pre-build packages are available for openSUSE and Ubuntu from the following
 repositories:
@@ -25,27 +22,30 @@ SUSE::
 	http://download.opensuse.org/repositories/Documentation:Tools/ +
 	(browse to this URl and choose you SUSE version to get the complete
 	 repository URl and add it with the `zypper ar` command)
+////	 
 Ubuntu::
 	https://launchpad.net/~sascha-manns-h/+archive/ubuntu/daps/ +
 	 (follow the instructions on this page for adding the PPA)
-Fedora::
+////
+Fedora, Ubuntu::
 	Not available, yet. Help is appreciated.
 
 The package is named +daps+. Additional packages needed by DAPS will
 automatically be installed.
 
 
-Install from a GitHub Checkout
-------------------------------
+== Installing DAPS
 
-DAPS can be installed from the GitHub checkout by cloning the project
-and calling `configure`, `make` and `make install`. (Alternatively you may
-also use a checkout directly without installing--see <<anchor-2>>).
+
+DAPS can be installed either from a downloaded release or from the GitHub
+checkout. (Alternatively you may use the latest development version
+by using a repository clone directly without installing--see
+<<anchor-2>>. However, this is not recommended for production use).
 
 [[anchor-1]]
-Prerequisites
-~~~~~~~~~~~~~
+=== Prerequisites
 
+DAPS only runs on Linux and is not compatible with other operating systems.
 DAPS requires a few programs to be installed on your system. To use the full
 feature set of DAPS, make sure to also install the optional packages. If
 unsure, which DAPS' features are supported with your current installation,
@@ -112,12 +112,13 @@ information about the support status on your system.
 |====
 
 
-Installation
-~~~~~~~~~~~~
+=== Installation
 
-1. Checkout the DAPS sources from GitHub: +
+
+1. Download the https://github.com/openSUSE/daps/archive/2.0.tar.gz[DAPS 2.0]
+archive and unpack it _or_, alternatively clone the master branch from GitHub: +
    `git clone https://github.com/openSUSE/daps.git -b master --single-branch` 
-2. Change into the daps checkout directory
+2. Change into the daps directory
 3. Run `./configure --sysconfdir=/etc` +
    Carefully check the configuration summary. Run `./configure --help` for
    more information on how to change installation paths. If you need to change
@@ -149,8 +150,7 @@ wrong catalog entries for DAPS. To work around this issue, copy the file
 
 
 [[anchor-2]]
-Running DAPS from a GitHub Checkout
------------------------------------
+== Running DAPS from a GitHub Checkout
 
 In case you do not want to install DAPS or always would like to use the latest
 development version, you can run DAPS directly from the GitHub checkout.
