@@ -13,6 +13,10 @@
 STYLEMETA := $(DAPSROOT)/daps-xslt/common/svn2docproperties.xsl
 
 ifeq "$(META)" "1"
+  # Issue a warning when specifying --meta without profiling
+  ifndef PROFILE_URN
+    $(warning $(shell ccecho "warn" "Did not find a profiling URN. Displaying meta information only works with profiling."))
+  endif
   ifdef USESVN
     # meta information (author, last changed, etc)
     METASTRING   := --param "use.meta=1"

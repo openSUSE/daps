@@ -15,13 +15,6 @@
 # * Color PDF
 #
 
-#
-# Get translation info from a docmanager header
-# xml sel -N ns0="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/ns0:docmanager" -v "normalize-space(ns0:translation)" xml/depl_nodes.xml
-#
-# returns: true|fals|<error>
-
-
 # Defined in common_variables:
 #
 #LOCDROP_TMP_DIR
@@ -41,8 +34,8 @@ endif
 
 define db5_get_trans
   for F in $(DOCFILES); do \
-    R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "false"`; \
-    if [ "true" = "$$R" ]; then echo -n "$$F "; fi \
+    R=`$(XMLSTARLET) sel -N dm="urn:x-suse:ns:docmanager" -N db5="http://docbook.org/ns/docbook" -t -m "/*/db5:info/dm:docmanager" -v "normalize-space(dm:translation)" $$F 2>/dev/null || echo "no"`; \
+    if [ "yes" = "$$R" ]; then echo -n "$$F "; fi \
   done
 endef
 

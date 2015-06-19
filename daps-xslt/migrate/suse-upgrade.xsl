@@ -1314,6 +1314,13 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="varlistentry/term">
+    <xsl:element name="{local-name(.)}">
+      <xsl:call-template name="copy.attributes"/>
+      <xsl:apply-templates />
+    </xsl:element>
+  </xsl:template>
+
   <!-- The synopsis elements have child elements that don't work inside phrase, plus
      they have attributes that shouldn't be lost. So, leave as is, but warn. -->
   <xsl:template

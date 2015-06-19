@@ -199,9 +199,9 @@ for xmlin in ${INPUTDIR}/*$EXT; do
         cp "$HEADERFILE" "$xmlout"
         get_rootelement "$xmlin"
         sed -i "s/$ROOTREPLACE/$ROOTELEMENT/" "$xmlout"
-        xsltproc --nonet "${p}" "$MIGRATE_XSLT" "$xmlin" >> "$xmlout" 2>> "$XSLTPROCLOG"
+        xsltproc --nonet ${p} "$MIGRATE_XSLT" "$xmlin" >> "$xmlout" 2>> "$XSLTPROCLOG"
     else
-        xsltproc --nonet --output "$xmlout" "${p}" "$MIGRATE_XSLT" "$xmlin" 2>> "$XSLTPROCLOG"
+        xsltproc --nonet --output "$xmlout" ${p} "$MIGRATE_XSLT" "$xmlin" 2>> "$XSLTPROCLOG"
     fi
     #   ERRCODE=$?
     dump "--------------------------------------------------"

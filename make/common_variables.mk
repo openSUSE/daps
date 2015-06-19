@@ -124,16 +124,6 @@ ifndef PROFILE_URN
 	--file $(MAIN) $(XSLTPROCESSOR))
 endif
 
-# Issue a warning when specifying --meta without profiling
-#
-ifeq "$(META)" "1"
-  ifndef PROFILE_URN
-    $(warning $(shell ccecho "warn" "Did not find a profiling URN. Displaying meta information only works with profiling."))
-  endif
-endif
-
-
-#
 # 2. Set PROFILEDIR and profiling stringparams
 #
 # The directory name depends on the profiling values of the
