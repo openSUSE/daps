@@ -33,9 +33,15 @@
 # ======================================================================
 -->
 
-  <xsl:output method="xml" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
+  <xsl:output 
+    method="xml"
+    encoding="utf-8"
+    indent="yes"
+    omit-xml-declaration="yes"
+    cdata-section-elements="screen"/>
    <!--<xsl:preserve-space elements="*"/>-->
   <xsl:preserve-space elements="screen address programlisting"/>
+
 
   <xsl:param name="db5.version" select="'5.0'"/>
   <!-- DocBook version for the output 5.0 and 5.1 only current values -->
@@ -87,6 +93,70 @@
       mode="addNS"/>
   </xsl:template>
 
+  <xsl:template match="appendix|chapter|bibliography|glossary|part|preface|reference">
+    <xsl:variable name="info" select="*[contains(local-name(), 'info')]"/>
+    <xsl:variable name="title.outside.info">
+      <xsl:choose>
+        <xsl:when test="title or subtitle or titleabbrev">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="title.inside.info">
+      <xsl:choose>
+        <xsl:when
+          test="$info/title or $info/subtitle or $info/titleabbrev">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="abstract.outside.info">
+      <xsl:choose>
+        <xsl:when test="abstract">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="indexterms.outside.info">
+      <xsl:choose>
+        <xsl:when test="indexterm">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="highlights.outside.info">
+      <xsl:choose>
+        <xsl:when test="highlights">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+       
+    <chapter>
+      <xsl:call-template name="copy.attributes"/>
+      <xsl:if test="$title.inside.info = '1' and $title.outside.info = '1'">
+        <xsl:call-template name="emit-message">
+          <xsl:with-param name="message">
+            <xsl:text>Found title|subtitle|titleabbrev both inside and outside of </xsl:text>
+            <xsl:value-of select="local-name($info)"/>
+            <xsl:text>. Selecting title|subtitle|titleabbrev.</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:apply-templates select="title|subtitle|titleabbrev" mode="copy"/>
+      
+      <info>
+        <xsl:apply-templates select="$info/*[not(self::title or self::subtitle or self::titleabbrev)]"/>
+        <xsl:apply-templates select="abstract" mode="copy"/>
+      </info>
+      
+      <xsl:apply-templates mode="structure"/>
+    </chapter>
+  </xsl:template>
+
+
+  <xsl:template match="*|comment()|processing-instruction()" mode="structure">
+    <xsl:apply-templates select="."/>
+  </xsl:template>
+
+  <!-- Suppress -->
+  <xsl:template match="abstract|title|subtitle|titleabbrev" mode="structure"/>
+  <xsl:template match="appendixinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo" mode="structure"/>
 
   <!-- Convert numbered sections into recursive sections, unless
      $keep.numbered.sections is set to '1'  -->
@@ -107,6 +177,8 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+
   <!-- This is the template for the elements (book, article, set) that allow
      title, subtitle, and titleabbrev before (or in) info, but not after.
      If title, subtitle, or titleabbrev exist both inside and outside the
@@ -153,8 +225,7 @@
       </xsl:choose>
     </xsl:variable>
     <info>
-      <xsl:if
-        test="$title.inside.info = '1' and $title.outside.info = '1'">
+      <xsl:if test="$title.inside.info = '1' and $title.outside.info = '1'">
         <xsl:call-template name="emit-message">
           <xsl:with-param name="message">
             <xsl:text>Found title|subtitle|titleabbrev both inside and outside </xsl:text>
@@ -197,13 +268,11 @@
      However, if a duplicate element exists inside the info element, that element
      is kept, and the one outside is dropped.-->
   <xsl:template
-    match="appendixinfo|blockinfo|bibliographyinfo|glossaryinfo
-                     |indexinfo|setindexinfo|chapterinfo
-                     |sect1info|sect2info|sect3info|sect4info|sect5info|sectioninfo
-                     |refsect1info|refsect2info|refsect3info|refsectioninfo
-                     |referenceinfo|partinfo
-                     |objectinfo|prefaceinfo|refsynopsisdivinfo
-                     |screeninfo|sidebarinfo"
+    match="blockinfo|indexinfo|
+           sect1info|sect2info|sect3info|sect4info|sect5info|sectioninfo
+           |refsect1info|refsect2info|refsect3info|refsectioninfo
+           |referenceinfo|objectinfo|refsynopsisdivinfo|screeninfo|sidebarinfo"
+    mode="old"
     priority="200">
     <xsl:variable name="title.inside.info">
       <xsl:choose>
