@@ -41,6 +41,7 @@
     cdata-section-elements="screen"/>
    <!--<xsl:preserve-space elements="*"/>-->
   <xsl:preserve-space elements="screen address programlisting"/>
+  <!--<xsl:strip-space elements="*"/>-->
 
 
   <xsl:param name="db5.version" select="'5.0'"/>
@@ -93,7 +94,7 @@
       mode="addNS"/>
   </xsl:template>
 
-  <xsl:template match="appendix|article|chapter|bibliography|glossary|part|preface|reference">
+  <xsl:template match="appendix|article|book|chapter|bibliography|glossary|part|preface|reference|set">
     <xsl:variable name="info" select="*[contains(local-name(), 'info')]"/>
     <xsl:variable name="title.outside.info">
       <xsl:choose>
@@ -156,7 +157,7 @@
 
   <!-- Suppress -->
   <xsl:template match="abstract|title|subtitle|titleabbrev" mode="structure"/>
-  <xsl:template match="appendixinfo|articleinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo" mode="structure"/>
+  <xsl:template match="appendixinfo|articleinfo|bookinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo|setinfo" mode="structure"/>
 
   <!-- Convert numbered sections into recursive sections, unless
      $keep.numbered.sections is set to '1'  -->
@@ -183,7 +184,7 @@
      title, subtitle, and titleabbrev before (or in) info, but not after.
      If title, subtitle, or titleabbrev exist both inside and outside the
      info block, everything is moved inside. Otherwise things are left as is. -->
-  <xsl:template match="bookinfo|setinfo" priority="200">
+  <xsl:template match="bookinfo|setinfo" priority="200" mode="old">
     <xsl:variable name="title.inside.info">
       <xsl:choose>
         <xsl:when test="./title or ./subtitle or ./titleabbrev">
@@ -1197,7 +1198,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="title|subtitle|titleabbrev" priority="300">
+  <xsl:template match="title|subtitle|titleabbrev" priority="300" mode="old">
     <xsl:variable name="local.name" select="local-name(.)"/>
     <xsl:variable name="parent.name" select="local-name(..)"/>
 
