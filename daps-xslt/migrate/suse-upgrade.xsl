@@ -93,7 +93,7 @@
       mode="addNS"/>
   </xsl:template>
 
-  <xsl:template match="appendix|chapter|bibliography|glossary|part|preface|reference">
+  <xsl:template match="appendix|article|chapter|bibliography|glossary|part|preface|reference">
     <xsl:variable name="info" select="*[contains(local-name(), 'info')]"/>
     <xsl:variable name="title.outside.info">
       <xsl:choose>
@@ -127,7 +127,7 @@
       </xsl:choose>
     </xsl:variable>
        
-    <chapter>
+    <xsl:element name="{local-name()}">
       <xsl:call-template name="copy.attributes"/>
       <xsl:if test="$title.inside.info = '1' and $title.outside.info = '1'">
         <xsl:call-template name="emit-message">
@@ -146,7 +146,7 @@
       </info>
       
       <xsl:apply-templates mode="structure"/>
-    </chapter>
+    </xsl:element>
   </xsl:template>
 
 
@@ -156,7 +156,7 @@
 
   <!-- Suppress -->
   <xsl:template match="abstract|title|subtitle|titleabbrev" mode="structure"/>
-  <xsl:template match="appendixinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo" mode="structure"/>
+  <xsl:template match="appendixinfo|articleinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo" mode="structure"/>
 
   <!-- Convert numbered sections into recursive sections, unless
      $keep.numbered.sections is set to '1'  -->
@@ -183,8 +183,7 @@
      title, subtitle, and titleabbrev before (or in) info, but not after.
      If title, subtitle, or titleabbrev exist both inside and outside the
      info block, everything is moved inside. Otherwise things are left as is. -->
-  <xsl:template match="bookinfo|articleinfo|artheader|setinfo"
-    priority="200">
+  <xsl:template match="bookinfo|setinfo" priority="200">
     <xsl:variable name="title.inside.info">
       <xsl:choose>
         <xsl:when test="./title or ./subtitle or ./titleabbrev">
