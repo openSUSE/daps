@@ -90,7 +90,7 @@
     </xsl:comment>
     <xsl:text>&#10;</xsl:text>
 
-    <xsl:apply-templates select="exsl:node-set($converted)/*"
+    <xsl:apply-templates select="exsl:node-set($converted)/node()"
       mode="addNS"/>
   </xsl:template>
 
@@ -139,6 +139,7 @@
           </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
+      <xsl:apply-templates select="processing-instruction()|comment()" mode="copy"/>
       <xsl:apply-templates select="title|subtitle|titleabbrev" mode="copy"/>
       
       <info>
@@ -1511,6 +1512,10 @@
       <xsl:call-template name="copy.attributes"/>
       <xsl:apply-templates/>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="processing-instruction()|comment()" mode="copy">
+    <xsl:copy-of select="."/>
   </xsl:template>
 
   <!--
