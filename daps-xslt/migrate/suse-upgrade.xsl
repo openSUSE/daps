@@ -95,7 +95,7 @@
   </xsl:template>
 
   <xsl:template match="appendix|article|book|chapter|bibliography|glossary|part|preface|reference|set">
-    <xsl:variable name="info" select="*[contains(local-name(), 'info')]"/>
+    <xsl:variable name="info" select="*[current() = concat(local-name(.), 'info')]"/>
     <xsl:variable name="title.outside.info">
       <xsl:choose>
         <xsl:when test="title or subtitle or titleabbrev">1</xsl:when>
