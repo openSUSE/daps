@@ -119,7 +119,9 @@ else
     ifneq "$(IS_STATIC)" "static"
       HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEWEBHELP))*.css)) 2>/dev/null )
       ifeq "$(VERBOSITY)" "1"
-	HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
+        ifneq "$(HTML_CSS)" ""
+	  HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
+        endif
       endif
     endif
   endif
@@ -133,32 +135,20 @@ WEBHELPSTRINGS := --param "show.comments=$(REMARKS)" \
                   --param "use.id.as.filename=1" \
 	          --stringparam "draft.mode=$(DRAFT)" \
 		  --stringparam "base.dir=$(WEBHELP_DIR)/" \
-                  --stringparam "img.src.path=images/"
-
-#                  --param "admon.graphics=1" \
-#                  --param "navig.graphics=0" \
-#                  --param "webhelp.gen.index=0" \
-#                  --stringparam "admon.graphics.path=style_images/" \
-#                  --stringparam "admon.graphics.extension=.png" \
-#                  --stringparam "navig.graphics.path=style_images/" \
-#                  --stringparam "navig.graphics.extension=.png" \
-#                  --stringparam "callout.graphics.path=style_images/callouts/"
-#                  --stringparam "callout.graphics.extension=.png" \
-#                  --stringparam "img.src.path=images/" \
-#                  --stringparam "webhelp.common.dir=common/" \
-#                  --stringparam "webhelp.start.filename=index.html" \
-#                  --stringparam "webhelp.base.dir=$(WEBHELP_DIR)/" \
-#                  --stringparam "webhelp.indexer.language=$(LL)"
+                  --stringparam "img.src.path=images/" \
+                  --stringparam "webhelp.indexer.language=$(LL)"
 
 #------------
 # Whether the search tab is generated or not is configurable
 ifeq "$(WH_SEARCH)" "no"
   WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=false"
+else
+  WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=true"
 endif
 
 # Remove these once we have decent custom stylesheets
-WEBHELPSTRINGS += --param "chunk.fast=1" \
-                  --param "chunk.section.depth=0"
+#WEBHELPSTRINGS += --param "chunk.fast=1" \
+#                  --param "chunk.section.depth=0"
 #                  --param "suppress.footer.navigation=1"
 
 # test if DocBook layout
@@ -310,7 +300,8 @@ $(WEBHELP_RESULT):
 	  -DindexerExcludedFiles=$(WH_EXCLUDE_INDEX) \
 	  -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
 	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
-	  -classpath $(WH_CLASSPATH) com.nexwave.nquindexer.IndexerMain
+	  -classpath $(WH_CLASSPATH) com.nexwave.nquindexer.IndexerMain \
+	  $(DEVNULL) $(ERR_DEVNULL)
 	rm -f $(WEBHELP_DIR)/search/*.props
 
 
