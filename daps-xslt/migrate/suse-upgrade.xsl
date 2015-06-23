@@ -77,9 +77,9 @@
     </xsl:variable>
 
     <xsl:if test="$xml-model = 1">
-      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
+      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/<xsl:value-of select="$db5.version"/>/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
       <xsl:text>&#10;</xsl:text>
-      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
+      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/<xsl:value-of select="$db5.version"/>/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
 
