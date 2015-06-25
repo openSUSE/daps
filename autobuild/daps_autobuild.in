@@ -603,9 +603,9 @@ for SET in $SECTIONS; do
     # build the manuals
 
     if [[ 1 -eq $REBUILD ]]; then
-        for _FORMAT in $_FORMATS; do
-            for DC in $_DCFILES; do
-                # Build!
+        for DC in $_DCFILES; do
+            for _FORMAT in $_FORMATS; do
+                 # Build!
                 run_daps "$_FORMAT" "$DC" "$SET"
             done
         done
