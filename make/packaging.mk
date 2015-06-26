@@ -287,7 +287,7 @@ $(PAGEFILES_RESULT): $(PROFILES) $(PROFILEDIR)/.validate
 #
 ifeq ($(MAKECMDGOALS),package-pdf)
   HF_FORMAT := pdf
-endif		 endif
+endif
 ifeq ($(MAKECMDGOALS),package-html)
   HF_FORMAT := html
 endif
