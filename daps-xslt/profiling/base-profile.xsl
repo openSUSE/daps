@@ -22,11 +22,13 @@
 	xmlns:p="urn:x-suse:xmlns:docproperties"
 	xmlns:exsl="http://exslt.org/common"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	exclude-result-prefixes="p exsl">
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	exclude-result-prefixes="p exsl xi">
 
 
 <xsl:import href="&db;/profiling/profile.xsl"/>
 <xsl:import href="&db;/common/l10n.xsl"/>
+<!--<xsl:import href="&db;/common/common.xsl"/>-->
 <xsl:import href="&db;/common/pi.xsl"/>
 <xsl:import href="&db;/lib/lib.xsl"/>
   
@@ -41,7 +43,30 @@
 
 <xsl:param name="pubdate"/>
 
- 
+<!-- ================================================================= -->
+
+<!-- Taken from common/common.xsl -->
+<xsl:template name="filename-basename">
+  <!-- We assume all filenames are really URIs and use "/" -->
+  <xsl:param name="filename"/>
+  <xsl:param name="recurse" select="false()"/>
+
+  <xsl:choose>
+    <xsl:when test="substring-after($filename, '/') != ''">
+      <xsl:call-template name="filename-basename">
+          <xsl:with-param name="filename"
+            select="substring-after($filename, '/')"/>
+          <xsl:with-param name="recurse" select="true()"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$filename"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<!-- ================================================================= -->
 
 <!--
   Template for adding a missing xml:base attribute
@@ -203,4 +228,18 @@
   </xsl:choose>
 </xsl:template>
   
+  <!-- Rewrite only xi:include elements which contains parse='text' attribute.
+       DAPS handles that and copies all relevant files
+  -->
+  <xsl:template match="xi:include[@parse='text']" mode="profile">
+    <xsl:copy>
+      <xsl:copy-of select="@*[local-name() != 'href']"/>
+      <xsl:attribute name="href">
+        <xsl:call-template name="filename-basename">
+          <xsl:with-param name="filename" select="@href"/>
+        </xsl:call-template>
+      </xsl:attribute>
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

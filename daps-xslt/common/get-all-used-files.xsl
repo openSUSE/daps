@@ -200,12 +200,21 @@
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
     <xsl:if test="$prof != 0">
-      <xsl:variable name="rootnode" select="document(@href)/*"/>
       <div href="{concat($xml.src.path, @href)}" remap="{local-name()}">
-        <xsl:copy-of select="$rootnode/@*[not(local-name() = 'id')]"/>
-        <xsl:apply-templates select="$rootnode">
-          <xsl:with-param name="xi" select="1"/>
-        </xsl:apply-templates>
+        <xsl:choose>
+          <xsl:when test="@parse='text'">
+            <!-- Do nothing, but include parse='text' -->
+            <xsl:attribute name="text">true</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="rootnode" select="document(@href)/*"/>
+            <xsl:copy-of select="$rootnode/@*[not(local-name() = 'id')]"/>
+            <xsl:attribute name="text">false</xsl:attribute>
+            <xsl:apply-templates select="$rootnode">
+              <xsl:with-param name="xi" select="1"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:if>
   </xsl:template>
@@ -227,5 +236,7 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+
+  <!-- dfasdfasdfsd -->
 
 </xsl:stylesheet>
