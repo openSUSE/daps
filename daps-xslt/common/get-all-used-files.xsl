@@ -15,11 +15,11 @@
      the root element (mainly id). Create an internal
      intermediate structure which looks like this:
      <files>
-       <div href="MAIN.daps.xml" remap="set" lang="en">         
-         <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+       <div href="MAIN.daps.xml" remap="set" lang="en" text="false">         
+         <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude" text="false">
           <div id="cha.daps.user.inst" remap="chapter"/>
         </div>
-         <div href="daps_user_edit.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+         <div href="daps_user_edit.xml" remap="include" ns="http://www.w3.org/2001/XInclude" text="false">
           <div id="cha.daps.user.edit" remap="chapter">
             <image fileref="daps_chklink_report.png"/>
             <image fileref="daps_chklink_report.png"/>
@@ -141,7 +141,7 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}">
+    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
     </div>
