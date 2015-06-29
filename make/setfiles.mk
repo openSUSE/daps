@@ -76,7 +76,7 @@ endif
 
 # XML source files for the whole set
 #
-SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
@@ -96,7 +96,7 @@ ifdef ROOTSTRING
   endif
 
 
-  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      $(ROOTSTRING) --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
