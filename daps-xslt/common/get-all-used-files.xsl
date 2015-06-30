@@ -56,6 +56,9 @@
      * img.src.path (default: '')
        Base path for all graphic files (ALWAYS end a trailing slash!)
        
+     * text.src.path (default: '')
+       Base path for all text files (ALWAYS end a trailing slash!)
+
      * mainfile (default: '')
        Name of the main file
        
@@ -105,6 +108,9 @@
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
   
+  <!-- Base path for all text files (ALWAYS end a trailing slash!): -->
+  <xsl:param name="text.src.path"/>
+
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
   
@@ -199,8 +205,20 @@
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
+
+    <xsl:variable name="path">
+      <xsl:choose>
+        <xsl:when test="@parse = 'text'">
+          <xsl:value-of select="$text.src.path"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$xml.src.path"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:if test="$prof != 0">
-      <div href="{concat($xml.src.path, @href)}" remap="{local-name()}">
+      <div href="{concat($path, @href)}" remap="{local-name()}">
         <xsl:choose>
           <xsl:when test="@parse='text'">
             <!-- Do nothing, but include parse='text' -->
