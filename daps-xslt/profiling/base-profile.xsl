@@ -17,8 +17,7 @@
 [
   <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current">
 ]>
-<xsl:stylesheet
-	version="1.0"
+<xsl:stylesheet version="1.0"
 	xmlns:p="urn:x-suse:xmlns:docproperties"
 	xmlns:exsl="http://exslt.org/common"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -207,5 +206,14 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+  <xsl:template match="xi:include" mode="profile">
+    <xsl:copy>
+      <!-- Remove any common profiling attributes  -->
+      <xsl:copy-of select="@href|@xpointer|@accept|@accept-language|@parse|@encoding"/>
+      <xsl:apply-templates select="*|text()|comment()|processing-instruction()"/>
+    </xsl:copy>
+  </xsl:template>
+
 
 </xsl:stylesheet>

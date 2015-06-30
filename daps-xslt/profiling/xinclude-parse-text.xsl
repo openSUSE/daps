@@ -44,20 +44,7 @@
       <!-- Remove any common profiling attributes;
            recreate href attribute
       -->
-      <xsl:copy-of select="@*[local-name() != 'href' or
-                              local-name() != 'arch' or
-                              local-name() != 'audience' or
-                              local-name() != 'condition' or
-                              local-name() != 'dir' or
-                              local-name() != 'os' or
-                              local-name() != 'remap' or
-                              local-name() != 'revision' or
-                              local-name() != 'revisionflag' or
-                              local-name() != 'role' or
-                              local-name() != 'security' or
-                              local-name() != 'userlevel' or
-                              local-name() != 'vendor' or
-                              local-name() != 'wordsize']"/>
+      <xsl:copy-of select="@xpointer|@accept|@accept-language|@parse|@encoding"/>
       <xsl:attribute name="href">
         <xsl:call-template name="filename-basename">
           <xsl:with-param name="filename" select="@href"/>
