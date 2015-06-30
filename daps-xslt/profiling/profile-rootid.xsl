@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-
-
-   Input:
-
-
-   Output:
-
+      Create structure to process rootid
 
    Author:    Thomas Schraitle <toms@opensuse.org>
    Copyright (C) 2012-2015 SUSE Linux GmbH
@@ -43,19 +37,7 @@
 
    <xsl:message><xsl:value-of select="$_comment.msg"/></xsl:message>
 -->
-  <xsl:comment>
-<!--
-*********************************
-This document is licenced under the GNU Free Documentation License
-
-See LICENSE.txt for more details
-*********************************
--->
-*********************************
-Please see LICENSE.txt for this document's license.
-*********************************
-</xsl:comment>
-
+  
   <xsl:choose>
       <xsl:when test="$rootid != ''">
         <xsl:choose>
