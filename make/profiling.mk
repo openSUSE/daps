@@ -12,7 +12,14 @@
 # includes are set in selector.mk
 # include $(DAPSROOT)/make/setfiles.mk
 
-PROFILES      := $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES))
+# Files included with xi:include parse="text" $(TEXTFILES) are linked into
+# the profile directory. the profiling stylesheets rewrites all paths to
+# these files with just the filename (href="../foo/bar.txt" -> href="bar.txt")
+# Since these text files can come from arbitrary locations, it is not possible
+# to write a pattern rule for creating the links. We use the
+# PHONY link_txt_files to generate them.
+
+PROFILES      := $(sort $(subst $(DOC_DIR)/xml/,$(PROFILEDIR)/,$(SRCFILES)))
 
 # Will be used on profiling only
 #
@@ -43,6 +50,12 @@ ifdef PROFILE_URN
   ifeq "$(strip $(PROFILE_STYLESHEET))" ""
     $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
   endif
+else
+  ifeq "$(DOCBOOK_VERSION)" "5"
+    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile5.xsl
+  else
+    PROFILE_STYLESHEET := $(DAPSROOT)/daps-xslt/profiling/noprofile4.xsl
+  endif
 endif
 
 # Also needs a prerequisite on the entity files, since entities are resolved
@@ -51,6 +64,9 @@ endif
 # The like is also true for the DC file.
 #
 $(PROFILES): $(ENTITIES_DOC) $(DOCCONF)
+ifdef TEXTFILES
+  $(PROFILES): link_txt_files
+endif
 
 .PHONY: profile
 profile: $(PROFILES)
@@ -70,29 +86,29 @@ profile: $(PROFILES)
 # entities are already resolved
 #
 
-$(PROFILEDIR)/%: $(DOC_DIR)/xml/% | $(PROFILEDIR)
+$(PROFILEDIR)/%.xml: $(DOC_DIR)/xml/%.xml | $(PROFILEDIR)
   ifeq "$(VERBOSITY)" "2"
 	@(tput el1; echo -en "\r   Profiling $<")
   endif
-  ifdef PROFILE_URN
 	$(XSLTPROC) --output $@ $(PROFSTRINGS) $(HROOTSTRING) \
-	  --stringparam "filename=$(notdir $<)" --stylesheet $(PROFILE_STYLESHEET) \
-	  --file $< $(XSLTPROCESSOR)
-  else
-        # The xmllint command works nicely with one exception:
-        # The entity declarations are always written literally
-        # into the Header
-        # This is absolutely useless and therefore I do not like it at all
-        # Working around this is cumbersome because there is no easy way
-        # to retrieve the header of an existing DocBook document
-        # If it would be possible to extract the header, this could be passed as
-        # a stringparam to xsltproc and then be used to write the document
-        #
-        # Get root element:
-        # xml sel -t -v "local-name(/*)" XML_FILE
-        # Get public identifier:
-        # ??
-        # Get system identifier:
-        # ??
-	xmllint --output $@ --nonet --noent --loaddtd $<
-  endif
+	  --stringparam "filename=$(notdir $<)" \
+	  --stylesheet $(PROFILE_STYLESHEET) --file $< $(XSLTPROCESSOR)
+
+
+# Files listed in TEXTFILES are relative to the XML directory
+#
+# "Clean" paths and file:// entries are supported, other protocols not
+#
+ifdef TEXTFILES
+  .PHONY: link_txt_files
+  link_txt_files: | $(PROFILEDIR)
+	for TF in $(TEXTFILES); do \
+	  TF=$${TF#file://*}; \
+	  if [[ "$${TF:0:1}" != "/" ]]; then \
+	    TF="$(DOC_DIR)/xml/$$TF"; \
+	    (cd $(PROFILEDIR) && ln -sf $$(realpath --relative-to="$(PROFILEDIR)" $$TF)); \
+	  else \
+	    (cd $(PROFILEDIR) && ln -sf $$TF); \
+	  fi; \
+	done
+endif
