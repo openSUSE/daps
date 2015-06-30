@@ -22,7 +22,7 @@
   
 
 <xsl:template name="pre.rootnode">
-  <xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>
+  <!--<xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>-->
   <xsl:text>&#10;</xsl:text>
   <xsl:call-template name="create.db45.doctype"/>
 </xsl:template>
