@@ -33,8 +33,12 @@ endif
 # run it multiple times (SRCFILES, USED, projectfiles).
 
 
-# Check whether the documents are well-formed - if not, exit and display the
-# xmllint error message
+# Check whether the documents are _well-formed_ (not if valid) - if not,
+# exit and display the xmllint error message
+#
+# Works for both, DocBook4 and DocBook5 since we are only checking for
+# well-formdness and not for validity (a DocBook5 validity check would
+# require jing)
 #
 # If there is a PROFILE URN defined, we do not check for xinclude errors for
 # the following reason
