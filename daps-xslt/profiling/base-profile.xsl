@@ -17,18 +17,20 @@
 [
   <!ENTITY db "http://docbook.sourceforge.net/release/xsl/current">
 ]>
-<xsl:stylesheet
-	version="1.0"
+<xsl:stylesheet version="1.0"
 	xmlns:p="urn:x-suse:xmlns:docproperties"
 	xmlns:exsl="http://exslt.org/common"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	exclude-result-prefixes="p exsl">
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	exclude-result-prefixes="p exsl xi">
 
 
 <xsl:import href="&db;/profiling/profile.xsl"/>
 <xsl:import href="&db;/common/l10n.xsl"/>
+<!--<xsl:import href="&db;/common/common.xsl"/>-->
 <xsl:import href="&db;/common/pi.xsl"/>
 <xsl:import href="&db;/lib/lib.xsl"/>
+<xsl:import href="xinclude-parse-text.xsl"/>
   
 <xsl:include href="profile-rootid.xsl"/>
   
@@ -41,7 +43,9 @@
 
 <xsl:param name="pubdate"/>
 
- 
+
+
+<!-- ================================================================= -->
 
 <!--
   Template for adding a missing xml:base attribute
@@ -202,5 +206,14 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-  
+
+  <xsl:template match="xi:include" mode="profile">
+    <xsl:copy>
+      <!-- Remove any common profiling attributes  -->
+      <xsl:copy-of select="@href|@xpointer|@accept|@accept-language|@parse|@encoding"/>
+      <xsl:apply-templates select="*|text()|comment()|processing-instruction()"/>
+    </xsl:copy>
+  </xsl:template>
+
+
 </xsl:stylesheet>

@@ -23,22 +23,22 @@ endif
 # SETFILES is set to an XML file with a list of all xml and image files
 # and their corresponding ids for the whole set taking profiling into account.
 # Generating this list is very time consuming and is the main time factor
-# when parsing the Makefile.
+# when parsing the Makefile.  Therefor we absolutely want to make sure it is
+# only called once! We achieve this by writing thresult to a
+# temporary file that is deleted when exiting DAPS.
 #
-# Therefor we absolutely want to make sure it is only called once!
-# We achieve this by writing this XML "file" to a variable that can be used
-# as an input source for the actual file list generating stylesheet
-# (extract-files-and-images.xsl).
+# This file can be used as an input source for the actual file list generating
+# stylesheet (extract-files-and-images.xsl).
 # That stylesheet only takes a few miliseconds to execute, so we can afford to
 # run it multiple times (SRCFILES, USED, projectfiles).
+
+
+# Check whether the documents are _well-formed_ (not if valid) - if not,
+# exit and display the xmllint error message
 #
-# In order to be able to pipe SETFILES via echo to extract-files-and-images.xsl
-# we need to replace double quotes by single quotes (cannot be done with
-# xsltproc)
-
-
-# Check whether the documents are well-formed - if not, exit and display the
-# xmllint error message
+# Works for both, DocBook4 and DocBook5 since we are only checking for
+# well-formdness and not for validity (a DocBook5 validity check would
+# require jing)
 #
 # If there is a PROFILE URN defined, we do not check for xinclude errors for
 # the following reason
@@ -76,7 +76,7 @@ endif
 
 # XML source files for the whole set
 #
-SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+SRCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
@@ -96,7 +96,7 @@ ifdef ROOTSTRING
   endif
 
 
-  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=xml" \
+  DOCFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=xml" \
 	      $(ROOTSTRING) --file $(SETFILES_TMP) \
 	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 
@@ -115,3 +115,18 @@ endif
 #
 ENTITIES_DOC := $(addprefix $(DOC_DIR)/xml/,\
 	      $(shell $(LIBEXEC_DIR)/getentityname.py $(DOCFILES)))
+
+
+# files xi:included with parse="text"
+#
+# SRCFILES and DOCFILES only include regular XML files. To also support
+# xi:includes of text files via parse="text", extract-files-and-images.xsl
+# also returns a list of files included that way. The paths returned are
+# relative to the xml/ directory
+#
+# These files need to be copied to the profiling directory
+# (see profiling.mk
+#
+TEXTFILES := $(sort $(shell $(XSLTPROC) --stringparam "filetype=text" \
+	      --file $(SETFILES_TMP) \
+	      --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))

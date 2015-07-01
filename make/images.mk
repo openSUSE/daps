@@ -87,7 +87,7 @@ IMGFORMATS := dia eps fig jpg pdf png svg
 # get all images used in the current Document
 #
 
-USED := $(sort $(shell $(XSLTPROC) --stringparam "xml.or.img=img" \
+USED := $(sort $(shell $(XSLTPROC) --stringparam "filetype=img" \
 	 $(ROOTSTRING) --file $(SETFILES_TMP) \
          --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR) ))
 

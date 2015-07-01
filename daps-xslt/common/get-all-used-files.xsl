@@ -15,11 +15,11 @@
      the root element (mainly id). Create an internal
      intermediate structure which looks like this:
      <files>
-       <div href="MAIN.daps.xml" remap="set" lang="en">         
-         <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+       <div href="MAIN.daps.xml" remap="set" lang="en" text="false">         
+         <div href="daps_user_install.xml" remap="include" ns="http://www.w3.org/2001/XInclude" text="false">
           <div id="cha.daps.user.inst" remap="chapter"/>
         </div>
-         <div href="daps_user_edit.xml" remap="include" ns="http://www.w3.org/2001/XInclude">
+         <div href="daps_user_edit.xml" remap="include" ns="http://www.w3.org/2001/XInclude" text="false">
           <div id="cha.daps.user.edit" remap="chapter">
             <image fileref="daps_chklink_report.png"/>
             <image fileref="daps_chklink_report.png"/>
@@ -56,6 +56,9 @@
      * img.src.path (default: '')
        Base path for all graphic files (ALWAYS end a trailing slash!)
        
+     * text.src.path (default: '')
+       Base path for all text files (ALWAYS end a trailing slash!)
+
      * mainfile (default: '')
        Name of the main file
        
@@ -105,6 +108,9 @@
   <!-- Base path for all graphic files (ALWAYS end a trailing slash!): -->
   <xsl:param name="img.src.path"/>
   
+  <!-- Base path for all text files (ALWAYS end a trailing slash!): -->
+  <xsl:param name="text.src.path"/>
+
   <!-- Name of the main file: -->
   <xsl:param name="mainfile"/>
   
@@ -141,7 +147,7 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}">
+    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
     </div>
@@ -199,13 +205,34 @@
     <xsl:variable name="prof">
       <xsl:call-template name="check.profiling"/>
     </xsl:variable>
+
+    <xsl:variable name="path">
+      <xsl:choose>
+        <xsl:when test="@parse = 'text'">
+          <xsl:value-of select="$text.src.path"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$xml.src.path"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:if test="$prof != 0">
-      <xsl:variable name="rootnode" select="document(@href)/*"/>
-      <div href="{concat($xml.src.path, @href)}" remap="{local-name()}">
-        <xsl:copy-of select="$rootnode/@*[not(local-name() = 'id')]"/>
-        <xsl:apply-templates select="$rootnode">
-          <xsl:with-param name="xi" select="1"/>
-        </xsl:apply-templates>
+      <div href="{concat($path, @href)}" remap="{local-name()}">
+        <xsl:choose>
+          <xsl:when test="@parse='text'">
+            <!-- Do nothing, but include parse='text' -->
+            <xsl:attribute name="text">true</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="rootnode" select="document(@href)/*"/>
+            <xsl:copy-of select="$rootnode/@*[not(local-name() = 'id')]"/>
+            <xsl:attribute name="text">false</xsl:attribute>
+            <xsl:apply-templates select="$rootnode">
+              <xsl:with-param name="xi" select="1"/>
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:if>
   </xsl:template>
@@ -227,5 +254,7 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+
+  <!-- dfasdfasdfsd -->
 
 </xsl:stylesheet>

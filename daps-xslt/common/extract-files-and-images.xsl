@@ -5,8 +5,8 @@
      With rootid parameter, the nearest <div> with a href attribute is processed.
      
    Parameters:
-     * xml.or.img (default: 'xml')
-       xml or image? img=images files, xml=XML files
+     * filetype (default: 'xml')
+       xml, text or image? img=images files, xml=XML files, text=text files
      * separator (default: ' ')
        Separator between each filename
      * show.first (default: 0)
@@ -32,7 +32,7 @@
   <xsl:output method="text" indent="no"/>  
 
   <xsl:param name="show.first" select="0"/>
-  <xsl:param name="xml.or.img" select="'xml'"/>
+  <xsl:param name="filetype" select="'xml'"/>
   <xsl:param name="separator">
     <xsl:text> </xsl:text>
   </xsl:param>
@@ -53,23 +53,35 @@
     <xsl:apply-templates select="$anc.href[last()]"/>
   </xsl:template>
   
-  <xsl:template match="div">
-    <xsl:if test="$xml.or.img = 'xml'">
-      <xsl:if test="@href">
-        <xsl:value-of select="@href"/>
-        <!-- We only need the separator, when we are interested in all files -->
-        <xsl:if test="$show.first = 0">
-          <xsl:value-of select="$separator"/>
+  <xsl:template match="div[@text='false']">
+      <xsl:if test="$filetype = 'xml'">
+        <xsl:if test="@href">
+          <xsl:value-of select="@href"/>
+          <!-- We only need the separator, when we are interested in all files -->
+          <xsl:if test="$show.first = 0">
+            <xsl:value-of select="$separator"/>
+          </xsl:if>
         </xsl:if>
       </xsl:if>
-    </xsl:if>
     <xsl:if test="$show.first = 0">
       <xsl:apply-templates />
     </xsl:if>
   </xsl:template>
-  
+
+
+  <xsl:template match="div[@text='true']">
+    <xsl:if test="$filetype = 'text'">
+      <xsl:value-of select="@href"/>
+      <!-- We only need the separator, when we are interested in all files -->
+      <xsl:if test="$show.first = 0">
+         <xsl:value-of select="$separator"/>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+
   <xsl:template match="image">
-    <xsl:if test="$xml.or.img = 'img'">
+    <xsl:if test="$filetype = 'img'">
       <xsl:value-of select="@fileref"/>
       <xsl:value-of select="$separator"/>
     </xsl:if>
