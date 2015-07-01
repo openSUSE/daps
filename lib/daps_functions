@@ -218,6 +218,10 @@ function parse_args {
                 P_PAGEFILES=1
                 shift
                 ;;
+	    --param)
+		P_PARAMS="$P_PARAMS --param $2"
+		shift 2
+		;;
             --pretty)
                 P_PRETTY=1
                 shift
@@ -251,6 +255,10 @@ function parse_args {
                 sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
+	    --stringparam)
+		P_STRINGPARAMS="$P_STRINGPARAMS --stringparam $2"
+		shift 2
+		;;
             --subdirs)
                 P_SUBDIRS=1
                 shift
@@ -268,6 +276,7 @@ function parse_args {
                 shift 2
                 ;;
             --xsltparam)
+		ccecho -- "info" "--xsltparam is deprecated, please use --param/--stringparam."
                 P_XSLTPARAM="$2"
                 shift 2
                 ;;
@@ -548,7 +557,7 @@ EOF
                 # an error occured in make
                 # show complete logfile except the first line containing the
                 # date
-            tail -n +2 "$LOGFILE"
+		tail -n +2 "$LOGFILE"
                 exit 1
             fi
         else
@@ -600,7 +609,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,remarks,rootid:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -608,29 +617,33 @@ function build_pdfs {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-    help_cropmarks
+	help_cropmarks
         help_draft
         help_formatter
-    help_grayscale_pdf
+	help_grayscale_pdf
         help_help
         help_meta
         help_name
+	help_param
         help_remarks
         help_rootid
+	help_stringparam
         help_xsltparam "creates the .fo file from the profiled sources"
         echo
         exit 0
     fi
 
-    [[ 1 = "$P_DRAFT" ]]      && DRAFT="yes"
-    [[ 1 = "$P_REMARKS" ]]    && REMARKS=1
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
     # usemeta implies draft mode
-    [[ 1 = "$P_META" ]]       && META=1 DRAFT="yes"
-    [[ 1 = "$P_CROPMARKS" ]]  && export CROPMARKS=1
-    [[ 1 = "$P_GRAYSCALE" ]]  && export GRAYSCALE=1
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
+    [[ 1 = "$P_CROPMARKS" ]]   && export CROPMARKS=1
+    [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
@@ -657,7 +670,7 @@ function build_html_jsp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,remarks,rootid:,single,statdir:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -670,14 +683,16 @@ function build_html_jsp {
         help_draft
         help_help
         help_html5
-    help_jsp
+	help_jsp
         help_meta
         help_name
         help_nostatic
+	help_param
         help_remarks
         help_rootid
-    help_single
+	help_single
         help_statdir
+	help_stringparam
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
@@ -694,7 +709,9 @@ function build_html_jsp {
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ 1 = "$P_HTMLSINGLE" && 1 = "$P_JSP" ]]; then
     exit_on_error "--single and --jsp are mutually exclusive"
@@ -719,7 +736,7 @@ function webhelp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,remarks,rootid:,static,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -734,8 +751,10 @@ function webhelp {
         help_name
         help_nosearch
         help_nostatic
+	help_param
         help_remarks
         help_rootid
+	help_stringparam
         help_xsltparam "creates Webhelp HTML from the profiled sources"
         echo
         exit 0
@@ -750,14 +769,16 @@ function webhelp {
     fi
     done
 
-    [[ 1 = "$P_CLEAN" ]]    && export CLEAN_DIR=1
-    [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
-    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
-    [[ 1 = "$P_NOSTATIC" ]]   && export STATIC_HTML=0
-    [[ 1 = "$P_NOSEARCH" ]] && export WH_SEARCH="no"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_XSLTPARAM" ]] && export XSLTPARAM="$P_XSLTPARAM"
+    [[ 1 = "$P_CLEAN" ]]       && export CLEAN_DIR=1
+    [[ 1 = "$P_DRAFT" ]]       && DRAFT="yes"
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_NOSEARCH" ]]    && export WH_SEARCH="no"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ -n "$P_CSS" ]]; then
         if [[ $P_CSS = "none" || -f "$P_CSS" ]]; then
@@ -783,7 +804,7 @@ function build_epub {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="check,css:,epub3,help,name:,remarks,rootid:,statdir:"
+    LONG_OPTS="check,css:,epub3,help,name:,param:,remarks,rootid:,statdir:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -793,11 +814,13 @@ function build_epub {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_check
         help_css
-    help_epub3
+	help_epub3
         help_help
         help_name
+	help_param
         help_rootid
         help_statdir
+	help_stringparam
         echo
         exit 0
     fi
@@ -838,7 +861,7 @@ function build_man {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nogzip,rootid:,subdirs"
+    LONG_OPTS="help,nogzip,param,rootid:,stringparam:,subdirs"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -848,7 +871,9 @@ function build_man {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
+	help_param
         help_rootid
+	help_stringparam
         help_subdirs
         echo
         exit 0
@@ -875,7 +900,7 @@ function build_generic {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,name:,rootid:"
+    LONG_OPTS="help,name:,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -885,13 +910,17 @@ function build_generic {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
+	help_param
         help_rootid
+	help_stringparam
         echo
         exit 0
     fi
 
-    [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1106,7 +1135,7 @@ function package-pdf {
     [[ 1 = "$P_GRAYSCALE" ]]     && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
         if [[ xep = "$P_FORMATTER" || fop = "$P_FORMATTER" ]]; then
@@ -1173,7 +1202,7 @@ function package-html {
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
-    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$P_XSLTPARAM"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     # We always want to start with a clean HTML result directory for
     # package-html
@@ -2065,7 +2094,7 @@ EOF
 function help_css {
     cat <<EOF
     --css=filename,           Specify a path to a css file.
-              --css=none      The special string \"none\" forces DAPS to use
+    --css=none                The special string \"none\" forces DAPS to use
                               no css, even when configured elsewhere
                               (e.g. in a config file).
                               Default: unset
@@ -2322,6 +2351,15 @@ function help_pagefiles {
                               Default: off
 EOF
 }
+function help_param {
+    cat <<EOF
+    --param="KEY=VALUE"       Add an xslt processor parameter.
+                              Useful to temporarily overwrite/set style sheet
+                              parameters such as margins.
+                              This parameter can be specified multiple times.
+                              Default: unset
+EOF
+}
 function help_pretty {
     cat <<EOF
     --pretty                  Pretty print file lists (one filename per line)
@@ -2388,6 +2426,15 @@ function help_subdirs {
                               Default: off
 EOF
 }
+function help_stringparam {
+    cat <<EOF
+    --stringparam="KEY=VALUE" Add an xslt processor parameter.
+                              Useful to temporarily overwrite/set style sheet
+                              parameters such as margins.
+                              This parameter can be specified multiple times.
+                              Default: unset
+EOF
+}
 function help_target {
     cat <<EOF
     --target=TARGET           Specify a potential target (such as jsp or
@@ -2411,7 +2458,10 @@ EOF
 }
 function help_xsltparam {
     cat <<EOF
-    --xsltparam=STRING        Add one or more xslt processor parameters in
+    --xsltparam=STRING        ** Deprecated **
+                              Use --param and/or --stringparam instead.
+                                            
+                              Add one or more xslt processor parameters in
                               the form of
                               \"--stringparam KEY=VALUE --param KEY=VALUE\".
                               The given string will be passed unmodified to the
