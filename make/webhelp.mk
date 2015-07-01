@@ -287,7 +287,8 @@ $(WEBHELP_RESULT):
 	@ccecho "info" "$(HTML_CSS_INFO)"
   endif
 	$(XSLTPROC) $(WEBHELPSTRINGS) $(ROOTSTRING) $(CSSSTRING) \
-	  $(XSLTPARAM) --xinclude --stylesheet $(STYLEWEBHELP) \
+	  $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
+	  --xinclude --stylesheet $(STYLEWEBHELP) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
 	if [ ! -f $@ ]; then \
 	  (cd $(WEBHELP_DIR) && ln -sf $(ROOTID).html $@); \

@@ -32,10 +32,11 @@
 
   <para>
    If you use the default DocBook layout and want to adjust individual
-   parameters, you can use the <option>--xsltparam</option> option. It will
-   pass on values for an XSLT parameter directly to the XSLT processor,
-   which is useful to temporarily overwrite style sheet parameters such as
-   margins, for example.
+   parameters, you can use the <option>--param "KEY=VALUE"</option> or
+   <option>--stringparam "KEY=VALUE"</option> option. Both options can be
+   specified multiple times. It will pass on values for XSLT parameters
+   directly to the XSLT processor, which is useful to temporarily overwrite
+   style sheet parameters such as margins, for example.
   </para>
 
   <para>
@@ -85,19 +86,20 @@
     set the parameter <parameter>variablelist.as.table</parameter> to the
     value <literal>0</literal> by executing the following command:
    </para>
-   <screen>daps -d &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html --xsltparam<co id="co.xsltparam"/> "<co
- id="co.quote"/>--stringparam&nbsp;variablelist.as.table<co id="co.param"/>=0<co id="co.value"/>"<xref linkend="co.quote" xrefstyle="select:label nopage"/></screen>
+   <screen>daps -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
+--param<co id="co.xsltparam"/>&nbsp;"variablelist.as.table<co id="co.param"/>=0"<co id="co.value"/> \
+--param&nbsp;"variablelist.term.break.after=1" \
+--stringparam<xref linkend="co.xsltparam"/>&nbsp;"paper.type=A4"</screen>
    <calloutlist>
     <callout arearefs="co.xsltparam">
      <para>
-      As value of <option>--xsltparam</option>, add one or more
-      <literal>xsltproc</literal> parameters in the form of
-      <option>"--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</option>.
+      As value of <option>--param</option> or <option>--stringparam</option>, add an
+      <literal>xsltproc</literal> parameter in the form of
+      <replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>".
      </para>
-    </callout>
-    <callout arearefs="co.quote">
      <para>
-      You must quote the string with double quotes.
+      <replaceable>VALUE</replaceable> can be an integer or XPATH expression
+      for <option>--param</option> and a string for <option>--stringparam</option>.
      </para>
     </callout>
     <callout arearefs="co.param">
@@ -114,9 +116,20 @@
      </para>
     </callout>
    </calloutlist>
-   <para>Alternatively, you can add the <varname>XSLTPARAM</varname> parameter to the &dc; file of
-   your project and specify the value there:</para>
-   <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
+   <para>
+    Alternatively, you can add the <varname>XSLTPARAM</varname> parameter to the &dc; file of
+    your project and specify the parameters there. If doing so, also add
+    <literal>--stringparam</literal> or <literal>--param</literal>.
+   </para>
+   <para>
+    Either specify all parameters in a single line:
+   </para>
+   <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable> --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
+   <para>
+    or in multiple lines:
+   </para>
+   <screen>XSLTPARAM="--stringparam&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"
+XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
   </example>
  </sect1>
  <sect1 id="sec.daps.user.layout.styleheets">
