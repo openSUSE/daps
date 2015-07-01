@@ -207,13 +207,18 @@
   </xsl:choose>
 </xsl:template>
 
-  <xsl:template match="xi:include" mode="profile">
-    <xsl:copy>
-      <!-- Remove any common profiling attributes  -->
-      <xsl:copy-of select="@href|@xpointer|@accept|@accept-language|@parse|@encoding"/>
-      <xsl:apply-templates select="*|text()|comment()|processing-instruction()"/>
-    </xsl:copy>
-  </xsl:template>
+<xsl:template match="xi:include/@href|
+                       xi:include/@xpointer|
+                       xi:include/@accept|
+                       xi:include/@accept-language|
+                       xi:include/@parse|
+                       xi:include/@encoding" mode="profile">
+   <xsl:attribute name="{local-name()}">
+     <xsl:value-of select="."/>
+   </xsl:attribute>
+</xsl:template>
 
+<!-- Remove any non-XInclude attributes -->
+<xsl:template match="xi:include/@*" mode="profile" />
 
 </xsl:stylesheet>
