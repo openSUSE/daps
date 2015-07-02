@@ -29,7 +29,8 @@ else
   MANSTRINGS  += --param "man.output.subdirs.enabled=0"
 endif
 
-MAN_RESULTS = $(shell $(XSLTPROC) $(MANSTRINGS) \
+MAN_RESULTS = $(shell $(XSLTPROC) $(MANSTRINGS) $(PARAMS) $(STRINGPARAMS) \
+		 $(XSLTPARAM) \
 	         --stylesheet $(DAPSROOT)/daps-xslt/common/get-manpage-filename.xsl \
 		 --file $(BIGFILE) $(XSLTPROCESSOR))
 

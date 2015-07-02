@@ -33,9 +33,16 @@
 # ======================================================================
 -->
 
-  <xsl:output method="xml" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
+  <xsl:output 
+    method="xml"
+    encoding="utf-8"
+    indent="yes"
+    omit-xml-declaration="yes"
+    cdata-section-elements="screen"/>
    <!--<xsl:preserve-space elements="*"/>-->
   <xsl:preserve-space elements="screen address programlisting"/>
+  <!--<xsl:strip-space elements="*"/>-->
+
 
   <xsl:param name="db5.version" select="'5.0'"/>
   <!-- DocBook version for the output 5.0 and 5.1 only current values -->
@@ -70,9 +77,9 @@
     </xsl:variable>
 
     <xsl:if test="$xml-model = 1">
-      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
+      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/<xsl:value-of select="$db5.version"/>/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
       <xsl:text>&#10;</xsl:text>
-      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/5.0/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
+      <xsl:processing-instruction name="xml-model">href="http://docbook.org/xml/<xsl:value-of select="$db5.version"/>/rng/docbook.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
       <xsl:text>&#10;&#10;</xsl:text>
     </xsl:if>
 
@@ -83,10 +90,75 @@
     </xsl:comment>
     <xsl:text>&#10;</xsl:text>
 
-    <xsl:apply-templates select="exsl:node-set($converted)/*"
+    <xsl:apply-templates select="exsl:node-set($converted)/node()"
       mode="addNS"/>
   </xsl:template>
 
+  <xsl:template match="appendix|article|book|chapter|bibliography|glossary|part|preface|reference|set">
+    <xsl:variable name="info" select="*[current() = concat(local-name(.), 'info')]"/>
+    <xsl:variable name="title.outside.info">
+      <xsl:choose>
+        <xsl:when test="title or subtitle or titleabbrev">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="title.inside.info">
+      <xsl:choose>
+        <xsl:when
+          test="$info/title or $info/subtitle or $info/titleabbrev">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="abstract.outside.info">
+      <xsl:choose>
+        <xsl:when test="abstract">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="indexterms.outside.info">
+      <xsl:choose>
+        <xsl:when test="indexterm">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="highlights.outside.info">
+      <xsl:choose>
+        <xsl:when test="highlights">1</xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+       
+    <xsl:element name="{local-name()}">
+      <xsl:call-template name="copy.attributes"/>
+      <xsl:if test="$title.inside.info = '1' and $title.outside.info = '1'">
+        <xsl:call-template name="emit-message">
+          <xsl:with-param name="message">
+            <xsl:text>Found title|subtitle|titleabbrev both inside and outside of </xsl:text>
+            <xsl:value-of select="local-name($info)"/>
+            <xsl:text>. Selecting title|subtitle|titleabbrev.</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:if>
+      <xsl:apply-templates select="processing-instruction()|comment()" mode="copy"/>
+      <xsl:apply-templates select="title|subtitle|titleabbrev" mode="copy"/>
+      
+      <info>
+        <xsl:apply-templates select="$info/*[not(self::title or self::subtitle or self::titleabbrev)]"/>
+        <xsl:apply-templates select="abstract" mode="copy"/>
+      </info>
+      
+      <xsl:apply-templates mode="structure"/>
+    </xsl:element>
+  </xsl:template>
+
+
+  <xsl:template match="*|comment()|processing-instruction()" mode="structure">
+    <xsl:apply-templates select="."/>
+  </xsl:template>
+
+  <!-- Suppress -->
+  <xsl:template match="abstract|title|subtitle|titleabbrev" mode="structure"/>
+  <xsl:template match="appendixinfo|articleinfo|bookinfo|chapterinfo|bibliographyinfo|glossaryinfo|partinfo|prefaceinfo|referenceinfo|setinfo" mode="structure"/>
 
   <!-- Convert numbered sections into recursive sections, unless
      $keep.numbered.sections is set to '1'  -->
@@ -107,12 +179,13 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+
   <!-- This is the template for the elements (book, article, set) that allow
      title, subtitle, and titleabbrev before (or in) info, but not after.
      If title, subtitle, or titleabbrev exist both inside and outside the
      info block, everything is moved inside. Otherwise things are left as is. -->
-  <xsl:template match="bookinfo|articleinfo|artheader|setinfo"
-    priority="200">
+  <xsl:template match="bookinfo|setinfo" priority="200" mode="old">
     <xsl:variable name="title.inside.info">
       <xsl:choose>
         <xsl:when test="./title or ./subtitle or ./titleabbrev">
@@ -153,8 +226,7 @@
       </xsl:choose>
     </xsl:variable>
     <info>
-      <xsl:if
-        test="$title.inside.info = '1' and $title.outside.info = '1'">
+      <xsl:if test="$title.inside.info = '1' and $title.outside.info = '1'">
         <xsl:call-template name="emit-message">
           <xsl:with-param name="message">
             <xsl:text>Found title|subtitle|titleabbrev both inside and outside </xsl:text>
@@ -197,13 +269,11 @@
      However, if a duplicate element exists inside the info element, that element
      is kept, and the one outside is dropped.-->
   <xsl:template
-    match="appendixinfo|blockinfo|bibliographyinfo|glossaryinfo
-                     |indexinfo|setindexinfo|chapterinfo
-                     |sect1info|sect2info|sect3info|sect4info|sect5info|sectioninfo
-                     |refsect1info|refsect2info|refsect3info|refsectioninfo
-                     |referenceinfo|partinfo
-                     |objectinfo|prefaceinfo|refsynopsisdivinfo
-                     |screeninfo|sidebarinfo"
+    match="blockinfo|indexinfo|
+           sect1info|sect2info|sect3info|sect4info|sect5info|sectioninfo
+           |refsect1info|refsect2info|refsect3info|refsectioninfo
+           |referenceinfo|objectinfo|refsynopsisdivinfo|screeninfo|sidebarinfo"
+    mode="old"
     priority="200">
     <xsl:variable name="title.inside.info">
       <xsl:choose>
@@ -1129,7 +1199,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="title|subtitle|titleabbrev" priority="300">
+  <xsl:template match="title|subtitle|titleabbrev" priority="300" mode="old">
     <xsl:variable name="local.name" select="local-name(.)"/>
     <xsl:variable name="parent.name" select="local-name(..)"/>
 
@@ -1442,6 +1512,10 @@
       <xsl:call-template name="copy.attributes"/>
       <xsl:apply-templates/>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="processing-instruction()|comment()" mode="copy">
+    <xsl:copy-of select="."/>
   </xsl:template>
 
   <!--

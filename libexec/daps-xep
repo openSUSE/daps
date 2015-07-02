@@ -17,6 +17,6 @@ USER_XEP_CONFIG="$HOME/.config/daps/xep-config.xml"
 
 if [[ -f $USER_XEP_CONFIG ]]; then
     ccecho "info" "Using XEP config file from $USER_XEP_CONFIG"
-    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"USER_XEP_CONFIG"}
+    export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$USER_XEP_CONFIG"}
 fi
 xep "$@"

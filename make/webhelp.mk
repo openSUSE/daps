@@ -23,192 +23,286 @@ ifndef LL
 endif
 
 
-# Draft mode can be enabled for webhelp, so we need to add the
-# corresponding strings to the resulting filename
+#----------
+# webhelp is special, because it also needs the extensions from
+# STYLEROOT/extensions and other resources
 #
-DOCNAME := $(DOCNAME)$(DRAFT_STR)
+STYLEWEBHELP_BASEDIR := $(firstword $(wildcard $(addsuffix \
+			/webhelp, $(STYLE_ROOTDIRS))))
 
-WEBHELP_DIR := $(RESULT_DIR)/webhelp/$(DOCNAME)
+STYLEWEBHELP  := $(STYLEWEBHELP_BASEDIR)/xsl/webhelp.xsl
+WH_COMMON_DIR := $(STYLEWEBHELP_BASEDIR)/template/common
+WH_SEARCH_DIR := $(STYLEWEBHELP_BASEDIR)/template/search
+
+EXTENSIONS_BASEDIR := $(firstword $(wildcard $(addsuffix \
+			/extensions, $(STYLE_ROOTDIRS))))
+
+WH_INDEXER        := $(EXTENSIONS_BASEDIR)/webhelpindexer.jar
+WH_TAGSOUP        := $(wildcard $(firstword $(EXTENSIONS_BASEDIR)/tagsoup-1.*.jar))
+WH_LUCENE_ANALYZE := $(wildcard $(firstword $(EXTENSIONS_BASEDIR)/lucene-analyzers-3.*.jar))
+WH_LUCENE_CORE    := $(wildcard $(firstword $(EXTENSIONS_BASEDIR)/lucene-core-3.0.0.jar))
+
+WH_CLASSPATH := $(WH_INDEXER):$(WH_TAGSOUP):$(WH_LUCENE_ANALYZE):$(WH_LUCENE_CORE)
+
+# FILES excluded from indexing:
+WH_EXCLUDE_INDEX := ix01.html
 
 #----------
-# Stylesheets
+# Style images
 #
-STYLEWEBHELP  := $(firstword $(wildcard $(addsuffix \
-			/webhelp/xsl/webhelp.xsl, $(STYLE_ROOTDIRS))))
+# NOTE: Style image handling needs to go into a function. It is needed by
+#       epub, html and webhelp
+#
+# Three scenarios:
+#
+# <STYLESHEETDIR>/webhelp/static
+#                        |-css
+#                        |-js
+#                        |-images
+#
+# or
+#
+# <STYLESHEETDIR>/static
+#                  |-css
+#                  |-js
+#                  |-images
+#
+#
+# or we have the DocBook standard layout:
+#  <STYLESHEETDIR>/images
+#  <STYLESHEETDIR>/xhtml/<FOO>.css
+#
+# If <STYLESHEETDIR>/xhtml/static exists, it is used by default. If not,
+# <STYLESHEETDIR>/static is used. We also assume that
+# parameters for [admon|callout|navig].graphics.path are correctly set in
+# the stylesheets. Alternatively, a custom static directory can be specified
+# with the --statdir parameter.
+# 
+# In case we have the standard docbook layout, we need to set
+# [admon|callout|navig].graphics.path. 
+#
+# IS_STATIC is used to determine
+# whether we have a static dir (IS_STATIC=static) or not.
+#
+# Set the styleimage directory. If no custom directory is set with --statdir,
+# it can either be <STYLEROOT>/xhtml/static, <STYLEROOT>/static or
+# <STYLEROOT>/images. If more than one of these directories exist, they will
+# be used in the order listed (firstword function)
+#
+ifdef STATIC_DIR
+  STYLEIMG  := $(STATIC_DIR)
+  IS_STATIC := static
+else
+  #
+  # Make sure to use the STYLEIMG directory that comes alongside the
+  # STYLEROOT that is actually used. This is needed to ensure that the
+  # correct STYLEIMG is used, even when the current STYLEROOT is a
+  # fallback directory
+  #
+  # dir (patsubst %/,%,(dir STYLEEPUB)):
+  #  - remove filename
+  #  - remove trailing slash (dir function only works when last character
+  #    is no "/") -> patsubst is greedy
+  #  - remove dirname
+  #
+  STYLEIMG := $(firstword $(wildcard \
+	$(addsuffix static, $(dir $(STYLEWEBHELP_BASEDIR))) \
+	$(addsuffix static,$(dir $(patsubst %/,%,$(STYLEWEBHELP_BASEDIR)))) \
+	$(addsuffix images,$(dir $(patsubst %/,%,$(STYLEWEBHELP_BASEDIR))))))
 
-# webhelp is special, because it also contains subdirectorieys we need
-STYLEWEBHELP_BASE  := $(firstword $(wildcard $(addsuffix \
-			/webhelp, $(STYLE_ROOTDIRS))))
-STYLWEBHELP        := $(addsuffix /xsl/webhelp.xsl, $(STYLEWEBHELP_BASE))
+  ifeq "$(strip $(STYLEIMG))" ""
+    $(warning $(shell ccecho "error" "Fatal error: Could not find stylesheet images"))
+  endif
+
+  IS_STATIC := $(notdir $(STYLEIMG))
+  ifndef HTML_CSS
+    ifneq "$(IS_STATIC)" "static"
+      HTML_CSS := $(shell readlink -e $(firstword $(wildcard $(dir $(STYLEWEBHELP))*.css)) 2>/dev/null )
+      ifeq "$(VERBOSITY)" "1"
+        ifneq "$(HTML_CSS)" ""
+	  HTML_CSS_INFO := No CSS file specified. Automatically using\n$(HTML_CSS)
+        endif
+      endif
+    endif
+  endif
+endif
+
 
 #----------
 # Stringparams
 #  
-WEBHELPSTRINGS := --param "keep.xml.comments=$(COMMENTS)" \
-	          --param "show.comments=$(REMARKS)" \
+WEBHELPSTRINGS := --param "show.comments=$(REMARKS)" \
                   --param "use.id.as.filename=1" \
-                  --param "admon.graphics=1" \
-                  --param "navig.graphics=0" \
-                  --param w"ebhelp.gen.index=0" \
-		  --stringparam "base.dir=$(WEBHELP_DIR)/" \
 	          --stringparam "draft.mode=$(DRAFT)" \
-                  --stringparam "admon.graphics.path=style_images/" \
-                  --stringparam "admon.graphics.extension=.png" \
-                  --stringparam "navig.graphics.path=style_images/" \
-                  --stringparam "navig.graphics.extension=.png" \
-                  --stringparam "callout.graphics.path=style_images/callouts/" \
-                  --stringparam "callout.graphics.extension=.png" \
+		  --stringparam "base.dir=$(WEBHELP_DIR)/" \
                   --stringparam "img.src.path=images/" \
-                  --stringparam "webhelp.common.dir=common/" \
-                  --stringparam "webhelp.start.filename=index.html" \
-                  --stringparam "webhelp.base.dir=$(WEBHELP_DIR)/" \
                   --stringparam "webhelp.indexer.language=$(LL)"
 
+#------------
+# Whether the search tab is generated or not is configurable
 ifeq "$(WH_SEARCH)" "no"
   WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=false"
+else
+  WEBHELPSTRINGS += --stringparam "webhelp.include.search.tab=true"
+endif
+
+# Remove these once we have decent custom stylesheets
+#WEBHELPSTRINGS += --param "chunk.fast=1" \
+#                  --param "chunk.section.depth=0"
+#                  --param "suppress.footer.navigation=1"
+
+# test if DocBook layout
+ifneq "$(IS_STATIC)" "static"
+  WEBHELPSTRINGS  += --stringparam "admon.graphics.path=static/images/" \
+		  --stringparam "callout.graphics.path=static/images/callouts/" \
+		  --stringparam "navig.graphics.path=static/images/"
+
+# With the SUSE Stylesheets we use an alternative draft image for HTML
+# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
+# _both_ HML and FO
+
+  HTML_DRAFT_IMG = $(subst $(STYLEIMG)/,static/images/,$(firstword \
+		     $(wildcard $(STYLEIMG)/draft_html.png \
+		     $(STYLEIMG)/draft.png)))
+
+  ifdef HTML_DRAFT_IMG
+    WEBHELPSTRINGS += --stringparam "draft.watermark.image=$(HTML_DRAFT_IMG)" 
+  endif
 endif
 
 ifdef HTML_CSS
-  WEBHELPSTRINGS += --stringparam "html.stylesheet=$(notdir $(HTML_CSS))"
+  ifneq "$(HTML_CSS)" "none"
+    WEBHELPSTRINGS += --stringparam "html.stylesheet=static/css/$(notdir $(HTML_CSS))"
+  else
+    HTML_CSS_INFO := CSS was set to none, using no CSS
+    WEBHELPSTRINGS += --stringparam "html.stylesheet=\"\""
+  endif
 endif
-# Remove these once we have decent custom stylesheets
-WEBHELPSTRINGS += --param "chunk.fast=1" \
-                  --param "chunk.section.depth=0" \
-                  --param "suppress.footer.navigation=1"
+
+# inline Images
+#
+WEBHELP_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color/,$(WEBHELP_DIR)/images/,$(ONLINE_IMAGES))
+
 
 #--------------
 # WEBHELP
 #
+# In order to avoid unwanted results when deleting $(HTML_DIR), we are adding
+# a security check before deleting 
+#
 .PHONY: webhelp
-webhelp: $(WEBHELP_DIR)/index.html
-	@ccecho "result" "Webhelp book built REMARKS=$(REMARKS) and DRAFT=$(DRAFT):\n$<"
+ifeq "$(CLEAN_DIR)" "1"
+  webhelp: $(shell if [[ $$(expr match "$(WEBHELP_DIR)" "$(RESULT_DIR)") -gt 0 && -d "$(WEBHELP_DIR)" ]]; then rm -r "$(WEBHELP_DIR)"; fi 2>&1 >/dev/null)
+endif
+webhelp: list-images-multisrc list-images-missing
+ifdef ONLINE_IMAGES
+  webhelp: $(ONLINE_IMAGES) copy_inline_images
+endif
+webhelp: copy_static_images
+webhelp: $(WEBHELP_RESULT)
+  ifeq "$(TARGET)" "webhelp"
+	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT):\n$(WEBHELP_DIR)/"
+  endif
 
 #------------------------------------------------------------------------
 #
 # "Helper" targets for HTML and HTML-SINGLE
 #
 
-$(WEBHELP_DIR) $(WEBHELP_DIR)/images $(WEBHELP_DIR)/search/stemmers $(WEBHELP_DIR)/style_images:
+$(WEBHELP_DIR) $(WEBHELP_DIR)/images $(WEBHELP_DIR)/search $(WEBHELP_DIR)/static $(WEBHELP_DIR)/static/css:
 	mkdir -p $@
 
-# option --clean removes the contents of the HTML result directory
-# before creating the files
+#---------------
+# Copy static and inline images
 #
-.PHONY: clean_webhelp
-clean_webhelp: | $(WEBHELP_DIR)
-	rm -rf $(WEBHELP_DIR)
+# static target needs to be PHONY, since I do not know which files need to
+# be copied/linked, we just copy/link the whole directory
+#
+.PHONY: copy_static_images
+ifneq "$(IS_STATIC)" "static"
+  copy_static_images: | $(WEBHELP_DIR)/static
+  ifdef HTML_CSS
+    copy_static_images: | $(WEBHELP_DIR)/static/css
+  endif
+  copy_static_images: $(STYLEIMG)
+    ifeq "$(STATIC_HTML)" "0"
+	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(WEBHELP_DIR)/static
+    else
+	tar cph --exclude-vcs -C $(dir $<) images | \
+          (cd $(WEBHELP_DIR)/static; tar xpv) >/dev/null
+    endif
+else
+  copy_static_images: | $(WEBHELP_DIR)/static
+  ifdef HTML_CSS
+    copy_static_images: | $(WEBHELP_DIR)/static/css
+  endif
+  copy_static_images: $(STYLEIMG)
+    ifeq "$(STATIC_HTML)" "0"
+	$(HTML_GRAPH_COMMAND) $</* $(WEBHELP_DIR)/static
+    else
+	tar cph --exclude-vcs -C $(dir $<) static | \
+	  (cd $(WEBHELP_DIR); tar xpv) >/dev/null
+    endif
+endif
+ifdef HTML_CSS
+  ifneq "$(HTML_CSS)" "none"
+	$(HTML_GRAPH_COMMAND) $(HTML_CSS) $(WEBHELP_DIR)/static/css/
+  endif
+endif
+
+# inline images
+# needs to be PHONY, because we either create links (of no --static) or
+# copies of the images (with --static). Using a PHONY target ensures that
+# links can be overwritten with copies and vice versa
+# Thus we also need the ugly for loop instead of creating images by 
+# $(WEBHELP_DIR)/images/% rule
+#
+.PHONY: copy_inline_images
+copy_inline_images: | $(WEBHELP_DIR)/images
+copy_inline_images: $(ONLINE_IMAGES)
+	for IMG in $(ONLINE_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; done
+
 
 #---------------
-# Webhelpgraphics
-#
-
-$(WEBHELP_DIR)/$(notdir $(HTML_CSS)): | $(WEBHELP_DIR) 
-$(WEBHELP_DIR)/$(notdir $(HTML_CSS)): $(HTML_CSS)
-	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/
-
-# images
-wh_copy_inline_images: | $(WEBHELP_DIR)/images
-wh_copy_inline_images: $(ONLINE_IMAGES)
-  ifdef FOR_HTML_IMAGES
-	for IMG in $(FOR_HTML_IMAGES); do \
-	  $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; \
-	done
-  endif
-
-# STYLEIMG contains admon and navig images as well as
-# callout images in callouts/
-# STYLEIMG may contain .svn directories which we do not want to copy
-# therefore we use tar with the --exclude-vcs option to copy
-# the files
-#
-# style images
-wh_copy_static_images: | $(WEBHELP_DIR)
-wh_copy_static_images: $(STYLEIMG)
-  ifeq "$(STATIC_HTML)" "0"
-	if [ -d $(WEBHEL$(WEBHELP_DIR)/style_imagesP_DIR)/style_images ]; then rm -rf $(WEBHELP_DIR)/style_images; fi
-	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/style_images
-  else
-	if [ -L $(WEBHELP_DIR)/style_images ]; then rm -f $(WEBHELP_DIR)/style_images; fi
-	tar cph --exclude-vcs --transform=s%images/%style_images/% \
-	  -C $(dir $<) images/ | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  endif
-
-# With the SUSE Stylesheets we use an alternative draft image for HTML
-# builds (draft_html.png). The original DocBook Stylesheets use draft.png for
-# both HML and FO
-# The following is a HACK to allow draft_html.png Upstream should have
-# draft.svg and draft.png, that would make things easier...
-
-# WEBHELP_DRAFT_IMG = $(subst $(STYLEIMG)/,style_images/, \
-#		   $(firstword $(wildcard \
-#		   $(STYLEIMG)/draft_html.png \
-#		   $(STYLEIMG)/draft.png)))
-# ifdef WEBHELP_DRAFT_IMG
-#  WEBHELPSTRINGS += --stringparam "draft.watermark.image=$(WEBHELP_DRAFT_IMG)" 
-# endif
-
-# search stuff
-create_search_index: | $(WEBHELP_DIR)/search/stemmers
-create_search_index: $(STYLEWEBHELP_BASE)/template/content/search 
-	$(HTML_GRAPH_COMMAND) $</default.props $(WEBHELP_DIR)/search
-	$(HTML_GRAPH_COMMAND) $</punctuation.props $(WEBHELP_DIR)/search
-	$(HTML_GRAPH_COMMAND) $</nwSearchFnt.js $(WEBHELP_DIR)/search
-	$(HTML_GRAPH_COMMAND) "$</stemmers/$(LL)_stemmer.js" \
-	  $(WEBHELP_DIR)/search/stemmers/stemmers
-	for LPROPS in "$</$(LL)*.props $</*.js"; do \
-	  $(HTML_GRAPH_COMMAND) $$LPROPS $(WEBHELP_DIR)/search; \
-	done
-
-# common stuff /(Javascript, CSS,...)
-copy_common: | $(WEBHELP_DIR)
-copy_common: $(STYLEWEBHELP_BASE)/template/common
-  ifeq "$(STATIC_HTML)" "0"
-	if [ -d $@ ]; then rm -rf $(WEBHELP_DIR)/common; fi
-	$(HTML_GRAPH_COMMAND) $< $(WEBHELP_DIR)/common
-  else
-	if [ -L $@ ]; then rm -f $(WEBHELP_DIR)/common; fi
-	tar cph --exclude-vcs -C $< | (cd $(WEBHELP_DIR); tar xpv) >/dev/null
-  endif
-
+# Copy common files
+# 
+copy_common: | $(WEBHELP_DIR) $(WEBHELP_DIR)/search
+copy_common: 
+	cp -r $(WH_COMMON_DIR) $(WEBHELP_DIR)
+	cp -r $(WH_SEARCH_DIR)/* $(WEBHELP_DIR)/search
 
 #---------------
 # Generate WEBHELP from profiled xml
 #
-# XSLTPARAM is a variable that can be set via wrapper script in order to
-# temporarily overwrite styleseet settings such as margins
-#
-ifeq "$(CLEAN_DIR)" "1"
-  $(WEBHELP_DIR)/index.html: clean_webhelp
-endif
-$(WEBHELP_DIR)/index.html: | $(WEBHELP_DIR)
-$(WEBHELP_DIR)/index.html: $(DOCFILES) $(DOCBOOK_STYLES)/extensions
-$(WEBHELP_DIR)/index.html: $(PROFILES) $(PROFILEDIR)/.validate
-$(WEBHELP_DIR)/index.html: list-images-multisrc list-images-missing
-$(WEBHELP_DIR)/index.html: wh_copy_static_images copy_common
-ifdef FOR_HTML_IMAGES
-  $(WEBHELP_DIR)/index.html: wh_copy_inline_images
-endif
+$(WEBHELP_RESULT): | $(WEBHELP_DIR)
+$(WEBHELP_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
 ifneq "$(WH_SEARCH)" "no"
-  $(WEBHELP_DIR)/index.html: create_search_index
+  $(WEBHELP_RESULT): copy_common
 endif
-ifdef HTML_CSS
-  $(WEBHELP_DIR)/index.html: $(WEBHELP_DIR)/$(notdir $(HTML_CSS))
-endif
-$(WEBHELP_DIR)/index.html:
+$(WEBHELP_RESULT):
   ifeq "$(VERBOSITY)" "2"
-	@ccecho "info" "   Creating webhelp pages"
+	@ccecho "info" "Creating webhelp pages"
+  endif
+  ifdef HTML_CSS_INFO
+	@ccecho "info" "$(HTML_CSS_INFO)"
   endif
 	$(XSLTPROC) $(WEBHELPSTRINGS) $(ROOTSTRING) $(CSSSTRING) \
-	  $(XSLTPARAM) --xinclude --stylesheet $(STYLEWEBHELP) \
+	  $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
+	  --xinclude --stylesheet $(STYLEWEBHELP) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-	if [ ! -f  $@ ]; then \
+	if [ ! -f $@ ]; then \
 	  (cd $(WEBHELP_DIR) && ln -sf $(ROOTID).html $@); \
 	fi
-	java -DhtmlDir=$(WEBHELP_DIR)/ -DindexerLanguage=$LL \
-	  -DfillTheRest=true \
+	java \
+	  -DhtmlDir=$(WEBHELP_DIR) \
+	  -DindexerLanguage=$(LL) \
+	  -DhtmlExtension=html \
+	  -DdoStem=true \
+	  -DindexerExcludedFiles=$(WH_EXCLUDE_INDEX) \
 	  -Dorg.xml.sax.driver=org.ccil.cowan.tagsoup.Parser \
 	  -Djavax.xml.parsers.SAXParserFactory=org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl \
-	  -classpath $(DOCBOOK_STYLES)/extensions/webhelpindexer.jar:$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/lucene-analyzers-3.*.jar)):$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/tagsoup-1.*.jar)):$(wildcard $(firstword $(DOCBOOK_STYLES)/extensions/lucene-core-3.*.jar)) \
-	  com.nexwave.nquindexer.IndexerMain $(DEVNULL)
+	  -classpath $(WH_CLASSPATH) com.nexwave.nquindexer.IndexerMain \
+	  $(DEVNULL) $(ERR_DEVNULL)
 	rm -f $(WEBHELP_DIR)/search/*.props
+
 

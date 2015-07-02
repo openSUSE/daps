@@ -1,4 +1,35 @@
 -------------------------------------------------------------------
+Fri Jul 02 14:38:11 UTC 2015 - fsundermeyer@opensuse.org
+
+Stable release DAPS 2.1:
+- added support for webhelp
+  Please note the following when using the DocBook webhelp
+  stylsheets:
+  * building with ROOTID should be avoided (does not generate
+    sidebar)
+  * building webhelp is slow, speed up by adjusting the chunk size,
+    recommended parameters are
+    "chunk.fast 1" and "chunk.section.depth 0"
+- added support for <xi:include ... parse="text"> (issue #71)
+- handling of passing XSLT parameters on the command line has been
+  improved (issue #263), use
+  * --param "KEY=VALUE" and --stringparam "KEY=VALUE"
+  * use of --xsltparam still supported for compatibility reasons, but
+    should be avoided; support will be removed in future versions
+  * each parameter can be specified multiple times
+  * bopth parameters are supported for the following subcommands:
+    epub, html, man, pdf, text, webhelp
+  * changes only apply to the command-line - settings in the DC-file
+    still need to be done with XSLTPARAM as before
+- improved handling of doxcuments that do not need to be profiled
+- daps_autobuild: changed the order of builds to increase performance
+- Bugfix package-src: removed extraneous text
+- Bugfix daps_autobuild: in case no rebuild was necessary, rsync
+                         deleted the previous results
+- Bugfix DB4 -> DB5 migration: Fixed various issues in the migration
+                               stylesheet
+
+-------------------------------------------------------------------
 Fri Jun 19 09:21:31 UTC 2015 - fsundermeyer@opensuse.org
 
 Stable release DAPS 2.0:
@@ -10,7 +41,7 @@ Stable release DAPS 2.0:
 - fixed a quoting issue in daps-migrate and daps_functions
 - fixed an error in the DB4->DB5 migration stylesheet (formatting
   was lost on <term> tags)
-	
+
 -------------------------------------------------------------------
 Tue Jun 10 13:50:00 UTC 2015 - fs@opensuse.org
 

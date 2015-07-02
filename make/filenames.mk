@@ -101,6 +101,12 @@ endif
 
 PDF_RESULT := $(PDF_RESULT)$(DRAFT_STR)$(META_STR)$(LANGSTRING).pdf
 
+#---------------
+# Webhelp
+#
+WEBHELP_DIR    := $(RESULT_DIR)/webhelp/$(DOCNAME)$(DRAFT_STR)
+WEBHELP_RESULT := $(WEBHELP_DIR)/index.html
+
 
 #---------------
 # TXT
