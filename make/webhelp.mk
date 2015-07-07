@@ -198,7 +198,7 @@ webhelp: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
   webhelp: $(ONLINE_IMAGES) copy_inline_images
 endif
-webhelp: copy_static_images
+webhelp: copy_static_images_wh
 webhelp: $(WEBHELP_RESULT)
   ifeq "$(TARGET)" "webhelp"
 	@ccecho "result" "Webhelp book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT):\n$(WEBHELP_DIR)/"
@@ -218,13 +218,13 @@ $(WEBHELP_DIR) $(WEBHELP_DIR)/images $(WEBHELP_DIR)/search $(WEBHELP_DIR)/static
 # static target needs to be PHONY, since I do not know which files need to
 # be copied/linked, we just copy/link the whole directory
 #
-.PHONY: copy_static_images
+.PHONY: copy_static_images_wh
 ifneq "$(IS_STATIC)" "static"
-  copy_static_images: | $(WEBHELP_DIR)/static
+  copy_static_images_wh: | $(WEBHELP_DIR)/static
   ifdef HTML_CSS
-    copy_static_images: | $(WEBHELP_DIR)/static/css
+    copy_static_images_wh: | $(WEBHELP_DIR)/static/css
   endif
-  copy_static_images: $(STYLEIMG)
+  copy_static_images_wh: $(STYLEIMG)
     ifeq "$(STATIC_HTML)" "0"
 	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(WEBHELP_DIR)/static
     else
@@ -232,11 +232,11 @@ ifneq "$(IS_STATIC)" "static"
           (cd $(WEBHELP_DIR)/static; tar xpv) >/dev/null
     endif
 else
-  copy_static_images: | $(WEBHELP_DIR)/static
+  copy_static_images_wh: | $(WEBHELP_DIR)/static
   ifdef HTML_CSS
-    copy_static_images: | $(WEBHELP_DIR)/static/css
+    copy_static_images_wh: | $(WEBHELP_DIR)/static/css
   endif
-  copy_static_images: $(STYLEIMG)
+  copy_static_images_wh: $(STYLEIMG)
     ifeq "$(STATIC_HTML)" "0"
 	$(HTML_GRAPH_COMMAND) $</* $(WEBHELP_DIR)/static
     else
@@ -257,9 +257,9 @@ endif
 # Thus we also need the ugly for loop instead of creating images by 
 # $(WEBHELP_DIR)/images/% rule
 #
-.PHONY: copy_inline_images
-copy_inline_images: | $(WEBHELP_DIR)/images
-copy_inline_images: $(ONLINE_IMAGES)
+.PHONY: copy_inline_images_wh
+copy_inline_images_wh: | $(WEBHELP_DIR)/images
+copy_inline_images_wh: $(ONLINE_IMAGES)
 	for IMG in $(ONLINE_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(WEBHELP_DIR)/images; done
 
 

@@ -186,9 +186,9 @@ ifeq "$(CLEAN_DIR)" "1"
 endif
 html: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
-  html: $(ONLINE_IMAGES) copy_inline_images
+  html: $(ONLINE_IMAGES) copy_inline_images_html
 endif
-html: copy_static_images
+html: copy_static_images_html
 html: $(HTML_RESULT)
   ifeq "$(TARGET)" "html"
 	@ccecho "result" "$(RESULT_NAME) book built with REMARKS=$(REMARKS), DRAFT=$(DRAFT) and META=$(META):\n$(HTML_DIR)/"
@@ -210,13 +210,13 @@ $(HTML_DIR) $(HTML_DIR)/images $(HTML_DIR)/static $(HTML_DIR)/static/css:
 # static target needs to be PHONY, since I do not know which files need to
 # be copied/linked, we just copy/link the whole directory
 #
-.PHONY: copy_static_images
+.PHONY: copy_static_images_html
 ifneq "$(IS_STATIC)" "static"
-  copy_static_images: | $(HTML_DIR)/static
+  copy_static_images_html: | $(HTML_DIR)/static
   ifdef HTML_CSS
-    copy_static_images: | $(HTML_DIR)/static/css
+    copy_static_images_html: | $(HTML_DIR)/static/css
   endif
-  copy_static_images: $(STYLEIMG)
+  copy_static_images_html: $(STYLEIMG)
     ifeq "$(STATIC_HTML)" "0"
 	$(HTML_GRAPH_COMMAND) $(STYLEIMG) $(HTML_DIR)/static
     else
@@ -224,11 +224,11 @@ ifneq "$(IS_STATIC)" "static"
           (cd $(HTML_DIR)/static; tar xpv) >/dev/null
     endif
 else
-  copy_static_images: | $(HTML_DIR)/static
+  copy_static_images_html: | $(HTML_DIR)/static
   ifdef HTML_CSS
-    copy_static_images: | $(HTML_DIR)/static/css
+    copy_static_images_html: | $(HTML_DIR)/static/css
   endif
-  copy_static_images: $(STYLEIMG)
+  copy_static_images_html: $(STYLEIMG)
     ifeq "$(STATIC_HTML)" "0"
 	$(HTML_GRAPH_COMMAND) $</* $(HTML_DIR)/static
     else
@@ -249,9 +249,9 @@ endif
 # Thus we also need the ugly for loop instead of creating images by 
 # $(HTML_DIR)/images/% rule
 #
-.PHONY: copy_inline_images
-copy_inline_images: | $(HTML_DIR)/images
-copy_inline_images: $(ONLINE_IMAGES)
+.PHONY: copy_inline_images_html
+copy_inline_images_html: | $(HTML_DIR)/images
+copy_inline_images_html: $(ONLINE_IMAGES)
 	for IMG in $(ONLINE_IMAGES); do $(HTML_GRAPH_COMMAND) $$IMG $(HTML_DIR)/images; done
 
 
