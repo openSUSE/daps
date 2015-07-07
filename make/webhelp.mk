@@ -18,10 +18,11 @@
 # if no language is set in the XML file, we need to exit, because the
 # indexer would not work
 #
-ifndef LL
-  $(error "The language needs to be set via xml:lang attribute in\n$(MAIN)\notherwise the indexer will not work correctly")
+ifeq "$(MAKECMDGOALS)" "webhelp"
+  ifndef LL
+    $(error "The language needs to be set via xml:lang attribute in\n$(MAIN)\notherwise the indexer will not work correctly")
+  endif
 endif
-
 
 #----------
 # webhelp is special, because it also needs the extensions from
