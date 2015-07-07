@@ -363,11 +363,11 @@ endif
 # Stylesheets do)
 #
 
-LANGUAGE ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
 
-ifneq "$(strip $(LANGUAGE))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGUAGE))
-  LANGSTRING   := _$(LANGUAGE)
+ifneq "$(strip $(XMLLANG))" ""
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG))
+  LANGSTRING   := _$(XMLLANG)
 endif
 
 #-----
