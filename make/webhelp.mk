@@ -197,7 +197,7 @@ ifeq "$(CLEAN_DIR)" "1"
 endif
 webhelp: list-images-multisrc list-images-missing
 ifdef ONLINE_IMAGES
-  webhelp: $(ONLINE_IMAGES) copy_inline_images
+  webhelp: $(ONLINE_IMAGES) copy_inline_images_wh
 endif
 webhelp: copy_static_images_wh
 webhelp: $(WEBHELP_RESULT)
