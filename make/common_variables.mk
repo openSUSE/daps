@@ -157,6 +157,10 @@ ifdef PROFILE_URN
     PROFILEDIR := $(PROFILEDIR)_$(PROFOS)
     PROFSTRINGS += --stringparam "profile.os=$(PROFOS)"
   endif
+  ifdef PROFOUTPUTFORMAT
+    PROFILEDIR := $(PROFILEDIR)_$(PROFOUTPUTFORMAT)
+    PROFSTRINGS += --stringparam "profile.os=$(PROFOUTPUTFORMAT)"
+  endif
   ifdef PROFREVISION
     PROFILEDIR := $(PROFILEDIR)_$(PROFREVISION)
     PROFSTRINGS += --stringparam "profile.revision=$(PROFREVISION)"
