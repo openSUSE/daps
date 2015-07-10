@@ -269,8 +269,8 @@ copy_inline_images_wh: $(ONLINE_IMAGES)
 # 
 copy_common: | $(WEBHELP_DIR) $(WEBHELP_DIR)/search
 copy_common: 
-	cp -r $(WH_COMMON_DIR) $(WEBHELP_DIR)
-	cp -r $(WH_SEARCH_DIR)/* $(WEBHELP_DIR)/search
+	$(HTML_GRAPH_COMMAND) $(WH_COMMON_DIR) $(WEBHELP_DIR)
+	$(HTML_GRAPH_COMMAND) $(WH_SEARCH_DIR)/* $(WEBHELP_DIR)/search
 
 #---------------
 # Generate WEBHELP from profiled xml
