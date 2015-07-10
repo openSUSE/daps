@@ -157,6 +157,10 @@ ifdef PROFILE_URN
     PROFILEDIR := $(PROFILEDIR)_$(PROFOS)
     PROFSTRINGS += --stringparam "profile.os=$(PROFOS)"
   endif
+  ifdef PROFOUTPUTFORMAT
+    PROFILEDIR := $(PROFILEDIR)_$(PROFOUTPUTFORMAT)
+    PROFSTRINGS += --stringparam "profile.os=$(PROFOUTPUTFORMAT)"
+  endif
   ifdef PROFREVISION
     PROFILEDIR := $(PROFILEDIR)_$(PROFREVISION)
     PROFSTRINGS += --stringparam "profile.revision=$(PROFREVISION)"
@@ -363,11 +367,11 @@ endif
 # Stylesheets do)
 #
 
-LANGUAGE ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
+XMLLANG ?= $(shell $(XSLTPROC) --stylesheet $(STYLELANG) --file $(MAIN) $(XSLTPROCESSOR) | tr - _ )
 
-ifneq "$(strip $(LANGUAGE))" ""
-  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(LANGUAGE))
-  LANGSTRING   := _$(LANGUAGE)
+ifneq "$(strip $(XMLLANG))" ""
+  LL ?= $(shell tr '[:upper:]' '[:lower:]' <<< $(XMLLANG))
+  LANGSTRING   := _$(XMLLANG)
 endif
 
 #-----

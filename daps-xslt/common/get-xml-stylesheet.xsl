@@ -20,8 +20,7 @@
    
 -->
 
-<xsl:stylesheet
-    version="1.0"
+<xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl"/>
@@ -34,7 +33,7 @@
 
 <xsl:template match="/">
   <xsl:variable name="pi">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="processing-instruction('xml-stylesheet')"/>
   </xsl:variable>
   
   <xsl:choose>
@@ -46,7 +45,6 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
 
 <xsl:template match="/processing-instruction('xml-stylesheet')[1]">
    <!--<xsl:message> PI: xml-stylesheet <xsl:value-of select="."/>

@@ -170,7 +170,7 @@ $(PDF_RESULT): $(FOFILE)
 #--------------
 # Generate Index
 #
-$(PROFILEDIR)/$(DOCNAME).ind:
+$(PROFILEDIR)/$(DOCNAME).ind: $(PROFILES)
   ifeq "$(VERBOSITY)" "2"
 	 @ccecho "info" "   Creating Index..."
   endif

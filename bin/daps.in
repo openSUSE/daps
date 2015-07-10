@@ -116,6 +116,7 @@ VARLIST=(
     PROFILE_URN
     PROFLANG
     PROFOS
+    PROFOUTPUTFORMAT
     PROFREVISION
     PROFREVISIONFLAG
     PROFROLE
@@ -181,7 +182,7 @@ UNSETLIST=(
 )
 unset "${UNSETLIST[@]}"
 
-# PATHLIST contains all variables holding a path. Relative paths need to be 
+# PATHLIST contains all variables holding a path. Relative paths need to be
 # made absolute and we need this list in order to know which variables hold
 # path information
 #
@@ -214,7 +215,7 @@ ME=$(basename "$0")
 # default config file
 DEFAULT_CONFIG="@sysconfdir@/daps/config"
 
-# The default DAPSROOT 
+# The default DAPSROOT
 DAPSROOT_DEFAULT="@pkgdatadir@"
 
 # default libdir
@@ -240,7 +241,7 @@ fi
 # Fake Associative Array (for bash 3 compatibility)
 #  Key   = subcommand
 #  Value = function call (from lib/daps_functions)
-# 
+#
 # use VALUE=$(arrayGet "ARRAYNAME" "KEY") to get the value
 # arrayGet returns 1 if KEY was not found
 #
@@ -635,7 +636,7 @@ Global Options:
   --commands                Show a list of available DAPS sub commands
   --debug                   Print debugging messages. Alternatively see the
                             --verbose options for an output that is better
-                            readable. 
+                            readable.
   --docconfig=DC-file,
   -d DC-file                Path to doc config file to use. Mandatory
                             unless there is only a single DC-file in the current
@@ -677,7 +678,7 @@ Global Options:
                             the XML files. Currently supported are \"xsltproc\"
                             and \"saxon\" (version 6).
                             Default: xsltproc
-  
+
 Subcommands:
    help                       Print this help
 
@@ -686,7 +687,7 @@ Subcommands:
     html                      HTML book (chunked or single file HTML, jsp)
     man                       man pages
     mobi                      Amazon Kindle eBook
-    pdf                       PDF book (color, grayscale, printable) 
+    pdf                       PDF book (color, grayscale, printable)
     text                      ASCII book
     webhelp                   HTML book with collapsable TOC and search
 
@@ -832,7 +833,7 @@ function sanitize_path {
     # $3 = additional base dir for $1 (optional)
     #
     # sets absolute path without trailing / for $1, links are being followed
-    # also tests if paths are valid 
+    # also tests if paths are valid
     #
     # in case of a non-existing path, returns 2 if variablename matches
     # _WRAPPER, else returns 1
@@ -855,7 +856,7 @@ function sanitize_path {
     MYPATH=${MYPATH%/} # remove trailing slash
 
     if [[ $MYPATH =~ ^~.* ]]; then
-	# 2. Replace ~/ with $HOME
+        # 2. Replace ~/ with $HOME
         if [[ $MYPATH =~ ^~/.* ]]; then
             MYPATH=${MYPATH/#\~\//$HOME/}
         else
@@ -1016,7 +1017,7 @@ trap "clean_daps" ERR EXIT
 
 export POSIXLY_CORRECT=1
 
-# So, the first getopt go will parse all parameters listed directly after the 
+# So, the first getopt go will parse all parameters listed directly after the
 # daps command, leaving an array ($@) with the subcommand and it's
 # parameters, which can be parsed in a second getopt go.
 
@@ -1026,7 +1027,7 @@ export POSIXLY_CORRECT=1
 # If variables such as $BUILD_DIR, $DOCCONF, and $DAPSROOT are set via command
 # line switch, we do not want to overwrite them by any other file we source
 # at a later stage (command line always wins).
-# Declaring the variables as readonly is unfortunately not an option, since 
+# Declaring the variables as readonly is unfortunately not an option, since
 # every attempt to (un)set a read-only variable throws an error - something
 # we do not want when sourcing a config-file.
 # Therefore we need to save each variable twice in order to recover the
@@ -1240,7 +1241,7 @@ esac
 # The environment is set up using the following hierachy
 # (1 == always wins)
 #
-# 1. Command line 
+# 1. Command line
 #    - either as a real option
 #    - or as variable declaration (FOO=bar) --> debugging and developing
 # 2. DC-file
@@ -1251,7 +1252,7 @@ esac
 # DAPSROOT, allowing to have multiple daps versions installed into
 # different directories. You can switch between them by setting DAPSROOT
 # accordingly. Either by command line switch --dtdroot or in  your user
-# config file (DAPSROOT="<path>") 
+# config file (DAPSROOT="<path>")
 #
 # Since commandline values take precedence we need to recover them every
 # time we source a file
@@ -1262,7 +1263,7 @@ esac
 
 ############# INTERLUDE: Copy/Move USER_CONFIG_OLD #####################
 #
-# Move/copy an old DAPS config directory to ~/.config if not already existing 
+# Move/copy an old DAPS config directory to ~/.config if not already existing
 #
 MOVE_CONFIG=""
 if [[ -f $USER_CONFIG_OLD && ! -f $USER_CONFIG ]]; then
@@ -1550,7 +1551,7 @@ export XML_CATALOG_FILES
 DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Seems $MAIN is either not well-formed."
 
 #    || { DOCBOOK_VERSION=4; \
-#      "Could not get DocBook version, assuming DocBook 4"; } 
+#      "Could not get DocBook version, assuming DocBook 4"; }
 
 # ... now resolve the style URI via catalogs
 if [[ 5 = "$DOCBOOK_VERSION" ]]; then
