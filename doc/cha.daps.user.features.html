@@ -33,12 +33,12 @@ else {
    DAPS supports technical writers in the editing, translation and
    publishing process of DocBook XML files (in the following, simply
    called as XML files):
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140306603308304"><span class="term ">Output Formats (Single-source Publishing)</span></dt><dd><p>
+  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140174604432480"><span class="term ">Output Formats (Single-source Publishing)</span></dt><dd><p>
       DAPS lets you publish your XML sources in several different
       output formats, for example: HTML, HTML-single, PDF, EPUB,
       text, and man pages. For details, refer to
       <a class="xref" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats">Chapter 4, <em>Generating Output Formats</em></a>.
-      </p></dd><dt id="idm140306601919712"><span class="term ">Custom Layouts</span></dt><dd><p>
+      </p></dd><dt id="idm140174605156192"><span class="term ">Custom Layouts</span></dt><dd><p>
       By default, DAPS uses the DocBook stylesheets to generate the
       output formats. But DAPS also supports custom layouts for your
       documentation projects (or for individual books within your set).
@@ -50,7 +50,7 @@ else {
       parameters by passing string parameters to <code class="command">xsltproc</code>
       for HTML or PDF builds —without even touching the stylesheets.
       For details about custom layouts, refer to <a class="xref" href="cha.daps.user.layout.html" title="Chapter 9. Customizing Layout of the Output Formats">Chapter 9, <em>Customizing Layout of the Output Formats</em></a>.
-     </p></dd><dt id="idm140306602381664"><span class="term ">Editor Macros</span></dt><dd><p>
+     </p></dd><dt id="idm140174604212720"><span class="term ">Editor Macros</span></dt><dd><p>
       For Emacs, DAPS includes a set of macros for easy insertion of
       complex DocBook elements like <code class="sgmltag-element">variablelist</code>,
       <code class="sgmltag-element">figure</code>, <code class="sgmltag-element">table</code> or
@@ -59,27 +59,27 @@ else {
       required child elements and is ready to be filled with contents. For
       details, refer to
       <a class="xref" href="app.daps.user.editors.html#sec.daps.user.editors.emacs.macros" title="B.1. Emacs—Macros for Inserting DocBook Elements">Section B.1, “Emacs—Macros for Inserting DocBook Elements”</a>.
-     </p><p></p></dd><dt id="idm140306603076416"><span class="term ">Validating</span></dt><dd><p>
+     </p><p></p></dd><dt id="idm140174605957232"><span class="term ">Validating</span></dt><dd><p>
       Validating XML files within in a book or set exceeds validation of the
       current XML file, as links (<code class="sgmltag-element">xref</code> elements) or
       XIncludes need to be resolved, too. With DAPS, you can check
       validity of all files that belong to a documentation project with a
       single command. For details, refer to
       <a class="xref" href="cha.daps.user.output.html#sec.daps.user.output.validate" title="4.1. Validating Your XML Sources">Section 4.1, “Validating Your XML Sources”</a>.
-     </p></dd><dt id="idm140306603735216"><span class="term ">Spell Check</span></dt><dd><p>
+     </p></dd><dt id="idm140174600017200"><span class="term ">Spell Check</span></dt><dd><p>
       DAPS supports spell checking of your XML sources with aspell
       from the command line. Depending on the XML editor you use, you can
       also integrate a custom aspell dictionary into your editor. For
       details, refer to <a class="xref" href="cha.daps.user.edit.html#sec.daps.user.edit.spell" title="3.3. Spell Checking">Section 3.3, “Spell Checking”</a> and
       <a class="xref" href="app.daps.user.editors.html#sec.daps.user.editors.jedit.spellcheck" title="B.3. jEdit—Spell Check on the Fly">Section B.3, “jEdit—Spell Check on the Fly”</a>.
-     </p></dd><dt id="idm140306602322592"><span class="term ">Link Checker</span></dt><dd><p>
+     </p></dd><dt id="idm140174606914224"><span class="term ">Link Checker</span></dt><dd><p>
       To make sure that all external links in your XML sources are still
       available (and do not give a <code class="literal">404</code> error or similar),
       DAPS also includes a link checker (based on
       <code class="literal">checkbot</code>). Use it to create a report of all links
       that caused some kind of warning or error. For details, refer to
       <a class="xref" href="cha.daps.user.edit.html#sec.daps.user.edit.chklink" title="3.4. Checking Links to Web Pages">Section 3.4, “Checking Links to Web Pages”</a>.
-     </p></dd><dt id="idm140306606581328"><span class="term ">Image Handling</span></dt><dd><p>
+     </p></dd><dt id="idm140174611360000"><span class="term ">Image Handling</span></dt><dd><p>
       DAPS provides sophisticated image handling support. For example,
       it automatically transforms images referenced in your XML files into different
       formats, list all source images referenced in your XML files, list any
@@ -87,7 +87,7 @@ else {
       your preferred image viewer to conveniently browse through the images. 
       For details, refer to
       <a class="xref" href="cha.daps.user.img.html" title="Chapter 5. Image Handling">Chapter 5, <em>Image Handling</em></a>.
-     </p></dd><dt id="idm140306602363936"><span class="term ">Profiling (Conditional Text)</span></dt><dd><p>
+     </p></dd><dt id="idm140174602482720"><span class="term ">Profiling (Conditional Text)</span></dt><dd><p>
       If you have similar products to document and want to generate multiple
       documentation variants from your XML files, you can do so with the
       help of conditional text (or <code class="literal">profiling</code>, as it is
@@ -97,7 +97,7 @@ else {
       <code class="literal">PROF*</code> keys defined in <code class="filename">/etc/daps/config</code> to define
       which information should be included in the output. For details, refer
       to <a class="xref" href="cha.daps.user.modular.html" title="Chapter 6. Modularizing Documentation Projects">Chapter 6, <em>Modularizing Documentation Projects</em></a>.
-     </p></dd><dt id="idm140306604844608"><span class="term ">Review and Translation Processes</span></dt><dd><p>
+     </p></dd><dt id="idm140174604384656"><span class="term ">Review and Translation Processes</span></dt><dd><p>
       DAPS offers several features to simplify review and
       translation processes. By adding a single parameter, you can
       generate output that contains remarks for writers, reviewers,
@@ -109,7 +109,7 @@ else {
       sources and graphics.
 
       For details, refer to <a class="xref" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes">Chapter 7, <em>Review and Translation Processes</em></a>.
-     </p></dd><dt id="idm140306605119472"><span class="term ">Packaging and Deployment</span></dt><dd><p>
+     </p></dd><dt id="idm140174607603664"><span class="term ">Packaging and Deployment</span></dt><dd><p>
       For deploying the documentation as RPM packages and integrating it
       into KDE and GNOME desktop environments and into Web user
       interfaces (via JSP), DAPS offers a number of options to produce
@@ -199,7 +199,7 @@ else {
        <span class="quote">“<span class="quote">references</span>”</span> to other books, chapters, appendixes, etc. 
        For more information, refer to
       <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.files" title="2.6. Key Files">Section 2.6, “Key Files”</a>.
-     </p></td></tr></table></div><div id="idm140306602216928" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Structure of the <code class="filename">xml</code> and
+     </p></td></tr></table></div><div id="idm140174618870624" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Structure of the <code class="filename">xml</code> and
      <code class="filename">image/src/*</code> Directories</h6><p>Avoid subdirectories within the <code class="filename">xml</code> and
       <code class="filename">image/src/*</code> directories. Referencing or including
      files from subdirectories within those directories can lead
@@ -246,7 +246,7 @@ else {
      </p></td></tr></table></div></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.basics.files"><span class="number">2.6 </span><span class="name">Key Files</span> <a title="Permalink" class="permalink" href="cha.daps.user.features.html#sec.daps.user.basics.files">#</a></h2></div></div></div><p>
     The following key files define a documentation project so that
     it can be processed by DAPS:
-   </p><div class="variablelist "><dl class="variablelist"><dt id="idm140306602879360"><span class="term ">MAIN File</span></dt><dd><p>
+   </p><div class="variablelist "><dl class="variablelist"><dt id="idm140174605648304"><span class="term ">MAIN File</span></dt><dd><p>
      A DocBook XML file in the <code class="filename">xml</code> directory. It contains the <span class="quote">“<span class="quote">starting point</span>”</span> (the
      highest-level object) of your documentation project (for example,
        <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). For larger
@@ -255,7 +255,7 @@ else {
        but you can use any other file name as well. Other XML files may be
        included into the MAIN file via <code class="sgmltag-element">&lt;xi:include/&gt;</code>
        statements.
-      </p></dd><dt id="idm140306606389488"><span class="term ">Doc Config (DC) File</span></dt><dd><p>
+      </p></dd><dt id="idm140174604114304"><span class="term ">Doc Config (DC) File</span></dt><dd><p>
       A configuration file in the project directory. It defines several parameters for your
       documentation deliverable (for example, the MAIN file, layout variants, or
       which profiling information to use). Of the multiple parameters that
@@ -275,7 +275,7 @@ else {
      </p></li><li class="listitem "><p>
       Larger documentation projects, consisting of
       <a class="xref" href="cha.daps.user.features.html#sec.daps.user.basics.multiple" title="2.6.2. Multiple Deliverables: Articles or Books in a Set">Multiple Deliverables: Articles or Books in a Set</a>
-     </p></li></ul></div><div id="idm140306610076544" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Differences DocBook 4 versus DocBook 5</h6><p>The examples below differ slightly with regards to the respective
+     </p></li></ul></div><div id="idm140174605311344" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Differences DocBook 4 versus DocBook 5</h6><p>The examples below differ slightly with regards to the respective
     DocBook version. One of the main differences is the header of the XML files.
     Apart from that, the <code class="sgmltag-element">articleinfo</code> and
      <code class="sgmltag-element">bookinfo</code> elements no longer exist in DocBook 5. They
@@ -291,7 +291,7 @@ else {
     information, author data etc. An article may be structured into sections
     (by use of <code class="sgmltag-element">section</code> elements or
     <code class="sgmltag-element">sect1</code>, <code class="sgmltag-element">sect2</code> etc.).
-   </p><div id="idm140306604974896" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Creating an Example Document</h6><p> The command <code class="command">daps-init</code> allows you to automatically
+   </p><div id="idm140174603369104" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Creating an Example Document</h6><p> The command <code class="command">daps-init</code> allows you to automatically
      set up an example article or book, together with a DC file, as
      described in <span>Procedure “Using <code class="command">daps-init</code>
    ”, <em>Quick Start</em></span>. The examples below are based
@@ -760,7 +760,7 @@ export DOCCONF=$BASH_SOURCE <span class="callout">5</span></pre></div><div class
       Command option <code class="option">--static</code>: Tells DAPS to copy CSS
       and image files to the same location like the HTML files. For more
       information, see <a class="xref" href="cha.daps.user.output.html#tab.daps.user.output.overview" title="DAPS Output Commands and Formats">Table 4.1, “DAPS Output Commands and Formats”</a>.
-     </p></td></tr></table></div></div></div><div id="idm140306605520304" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Specifying the DC File</h6><p>For execution of most commands, DAPS needs to know which DC file
+     </p></td></tr></table></div></div></div><div id="idm140174604434640" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Specifying the DC File</h6><p>For execution of most commands, DAPS needs to know which DC file
       to use. Usually, you do so by specifying a DC file with the global option
      <code class="option">-d</code>. For example:</p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf</pre></div><p>Only in the following cases you may omit the <code class="option">-d</code>
      option:</p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>If your documentation directory contains only one DC file. In that case,

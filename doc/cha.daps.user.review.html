@@ -31,7 +31,7 @@ else {
    suppresses these remarks. You can also generate preview versions of your
    documentation with a <code class="literal">DRAFT</code> watermark appearing on the
    HTML or PDF output.
-  </p><div id="idm140306603527568" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Availability of Advanced Output Options</h6><p>Advanced output options are only supported for selected formats:</p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+  </p><div id="idm140174604244144" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Availability of Advanced Output Options</h6><p>Advanced output options are only supported for selected formats:</p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
       <code class="option">--draft</code> and <code class="option">--remarks</code>:
      Only available in HTML, HTML-single, PDF, and EPUB output. </p></li></ul></div><p>Using the <code class="option">--remarks</code> option
       automatically turns draft mode on.</p><p>By default, DAPS adds a string to the base name of the output file
@@ -39,14 +39,14 @@ else {
      Example file names are <code class="filename">*_draft_en.pdf</code> or
      <code class="filename">*_remarks_*_draft_en.pdf</code>.</p></div><p>
    Find a few example commands below:
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140306605401008"><span class="term ">Including Remarks in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --remarks</pre></div><p>When generating PDFs with FOP, the contents of the remark elements
+  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140174605285664"><span class="term ">Including Remarks in the Output</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --remarks</pre></div><p>When generating PDFs with FOP, the contents of the remark elements
      is shown in italics within the text. XEP supports conversion of remark
      elements into PDF annotations. This feature is enabled in DAPS by
      default, but if you want XEP to treat remark elements like FOP does, you
      can change the respective DAPS parameter. In HTML,
      HTML-single and EPUB output, the contents of the remark elements is shown
      in red within the text.
-    </p></dd><dt id="idm140306606065568"><span class="term ">Building PDFs with a <code class="literal">DRAFT</code> Watermark</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --draft</pre></div><p>
+    </p></dd><dt id="idm140174602492384"><span class="term ">Building PDFs with a <code class="literal">DRAFT</code> Watermark</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> pdf --draft</pre></div><p>
       Generates a PDF that has a <code class="literal">DRAFT</code> watermark printed
       on each page.
      </p></dd></dl></div></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.review.bigfile"><span class="number">7.2 </span><span class="name">Creating XML Big Files</span> <a title="Permalink" class="permalink" href="cha.daps.user.review.html#sec.daps.user.review.bigfile">#</a></h2></div></div></div><p> Instead of sending multiple XML files to a proofreader for review, you can transform all

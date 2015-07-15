@@ -85,7 +85,7 @@ else {
    DAPS. All options discussed below can be combined with each other,
    except for <code class="option">--file</code> and <code class="option">--rootid</code> which
    exclude each other.
-  </p><div id="idm140306603466576" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: <code class="command">spellcheck</code> Options and XIncludes</h6><p>
+  </p><div id="idm140174607515040" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: <code class="command">spellcheck</code> Options and XIncludes</h6><p>
     All options discussed below can be combined with each other, except for
     <code class="option">--file</code> and <code class="option">--rootid</code> which exclude each
     other.
@@ -93,7 +93,7 @@ else {
     The <code class="command">spellcheck</code> command always follows
     <code class="sgmltag-element">xi:includes</code>, even when using the
     <code class="option">--file</code> option.
-   </p></div><div class="variablelist "><dl class="variablelist"><dt id="idm140306602930240"><span class="term ">Spell Checking Files in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck</pre></div><p>
+   </p></div><div class="variablelist "><dl class="variablelist"><dt id="idm140174606165280"><span class="term ">Spell Checking Files in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck</pre></div><p>
       Spell checks all files in the documentation project with the default
       dictionary (<code class="literal">en_US</code>). One by one, the files are
       opened in interactive mode and checked with aspell. To abort spell
@@ -107,12 +107,12 @@ else {
       <code class="sgmltag-element">part</code>, or <code class="sgmltag-element">chapter</code> element. To do
       so, specify the ID of the respective element with the
       <code class="option">--rootid</code> option:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --rootid=<em class="replaceable ">ID</em> </pre></div></dd><dt id="idm140306604395184"><span class="term ">Spell Checking a Single XML File</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --file <em class="replaceable ">PATH_TO_XML_FILE</em> </pre></div><p>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --rootid=<em class="replaceable ">ID</em> </pre></div></dd><dt id="idm140174603405792"><span class="term ">Spell Checking a Single XML File</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --file <em class="replaceable ">PATH_TO_XML_FILE</em> </pre></div><p>
       Checks the specified file (plus all files included with
       XIncludes on this level) using the default dictionary. Suggests
       alternative spellings for each misspelled word and waits for user
       interaction.
-     </p></dd><dt id="idm140306606147408"><span class="term ">Spell Checking XML Files in Languages Other than English</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --lang=<em class="replaceable ">LANG</em> \
+     </p></dd><dt id="idm140174603300144"><span class="term ">Spell Checking XML Files in Languages Other than English</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --lang=<em class="replaceable ">LANG</em> \
            [--file <em class="replaceable ">PATH_TO_XML_FILE</em>]</pre></div><p>
       Checks the specified documentation project or file with the dictionary
       for <em class="replaceable ">LANG</em> (make sure the specified aspell
@@ -121,14 +121,14 @@ else {
       for the <code class="option">--lang</code> option is the same that is used for
       the <code class="envar">LANG</code> environment variable and matches the directory
       names in <code class="filename">/usr/share/locale</code>.
-     </p></dd><dt id="idm140306603601280"><span class="term ">Spell Checking XML Files in Batch Mode</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --list \
+     </p></dd><dt id="idm140174604857840"><span class="term ">Spell Checking XML Files in Batch Mode</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --list \
            [--file <em class="replaceable ">PATH_TO_XML_FILE</em>]</pre></div><p>
       Checks the specified documentation project or file. Returns a list of
       misspelled words to standard output. You can use the
       <code class="option">--list</code> option to easily collect a list of words that
       are unknown to aspell and use this output as basis for a custom
       aspell word list or dictionary.
-     </p></dd><dt id="idm140306610098224"><span class="term ">Spell Checking XML Files with an Additional Custom Dictionary</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --extra-dict=<em class="replaceable ">PATH_TO_CUSTOM_DICT</em> \
+     </p></dd><dt id="idm140174604645728"><span class="term ">Spell Checking XML Files with an Additional Custom Dictionary</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> spellcheck --extra-dict=<em class="replaceable ">PATH_TO_CUSTOM_DICT</em> \
            [--file <em class="replaceable ">PATH_TO_XML_FILE</em>]</pre></div><p>
       Checks the specified documentation project or file with
       the default dictionary plus the additional custom dictionary specified
@@ -150,11 +150,11 @@ else {
    <code class="sgmltag-element">ulink</code> elements and checks links included there. Use it
    to create a report of all links that caused some kind of warning or
    error.
-  </p><div id="idm140306605083472" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: <code class="command">checklink</code> follows XIncludes</h6><p>
+  </p><div id="idm140174605209024" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: <code class="command">checklink</code> follows XIncludes</h6><p>
     The <code class="command">checklink</code> command always follows
     <code class="sgmltag-element">xi:include</code> statements, even when using the
     <code class="option">--file</code> option.
-   </p></div><div class="variablelist "><dl class="variablelist"><dt id="idm140306605553984"><span class="term ">Checking Links in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink</pre></div><p>
+   </p></div><div class="variablelist "><dl class="variablelist"><dt id="idm140174606260960"><span class="term ">Checking Links in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink</pre></div><p>
       Uses the ROOTID defined in the specified DC file as starting point.
       Checks the <code class="sgmltag-element">ulink</code> elements in all files belonging to
       the documentation project. The resulting HTML report
@@ -170,13 +170,13 @@ else {
       <code class="sgmltag-element">part</code>, or <code class="sgmltag-element">chapter</code> element. To do
       so, specify the ID of the respective element with the
       <code class="option">--rootid</code> option:
-     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink --rootid=<em class="replaceable ">ID</em> </pre></div></dd><dt id="idm140306603868032"><span class="term ">Checking Links in a Single XML File</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink --file=<em class="replaceable ">PATH_TO_XML_FILE</em> </pre></div><p>
+     </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink --rootid=<em class="replaceable ">ID</em> </pre></div></dd><dt id="idm140174605445616"><span class="term ">Checking Links in a Single XML File</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> checklink --file=<em class="replaceable ">PATH_TO_XML_FILE</em> </pre></div><p>
       Checks the <code class="sgmltag-element">ulink</code> elements in the specified file. At
       the end of the check, DAPS returns an HTML file with a list of
       all links which caused some kind of warning or error. Open the
       resulting <code class="filename">checkbot-localhost.html</code> file in a
       browser.
-     </p></dd></dl></div><div class="figure" id="fig.daps.user.edit.chklink"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/daps_chklink_report.png"><img src="images/daps_chklink_report.png" width="" alt="Example Output of daps checklink" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 3.1: </span><span class="name">Example Output of <code class="command">daps checklink</code> </span><a title="Permalink" class="permalink" href="cha.daps.user.edit.html#fig.daps.user.edit.chklink">#</a></h6></div></div><div id="idm140306609995488" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Opening the Link Check Report</h6><p>
+     </p></dd></dl></div><div class="figure" id="fig.daps.user.edit.chklink"><div class="figure-contents"><div class="mediaobject"><a xmlns="" href="images/daps_chklink_report.png"><img src="images/daps_chklink_report.png" width="" alt="Example Output of daps checklink" /></a></div></div><div class="figure-title-wrap"><h6 class="figure-title"><span class="number">Figure 3.1: </span><span class="name">Example Output of <code class="command">daps checklink</code> </span><a title="Permalink" class="permalink" href="cha.daps.user.edit.html#fig.daps.user.edit.chklink">#</a></h6></div></div><div id="idm140174603269584" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Opening the Link Check Report</h6><p>
     To directly open the link check report, use the DAPS command output
     as an argument for a browser, for example the command line Web browser
     <code class="command">w3m</code>:
@@ -195,24 +195,24 @@ else {
       to include in the output. </p><p>
    For details, refer to <a class="xref" href="cha.daps.user.modular.html#sec.daps.user.modular.profile" title="6.3. Profiling—Support for Document Variants">Section 6.3, “Profiling—Support for Document Variants”</a>.
   </p></div><div class="sect1 "><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.edit.manage"><span class="number">3.6 </span><span class="name">Keeping Track of Your Documentation Project</span> <a title="Permalink" class="permalink" href="cha.daps.user.edit.html#sec.daps.user.edit.manage">#</a></h2></div></div></div><p>To help you keep track of the files and images included in your
-  documentation project, DAPS provides some useful commands.</p><div class="variablelist "><dl class="variablelist"><dt id="idm140306606730032"><span class="term ">Listing All Files in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> list-srcfiles</pre></div><p>Lists all source files (XML sources, images, entity declarations, and
+  documentation project, DAPS provides some useful commands.</p><div class="variablelist "><dl class="variablelist"><dt id="idm140174601856400"><span class="term ">Listing All Files in a Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> list-srcfiles</pre></div><p>Lists all source files (XML sources, images, entity declarations, and
       the DC file) used by the document specified with the DC file.
-       </p></dd><dt id="idm140306603595664"><span class="term ">Checking for Superfluous Files</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps <em class="parameter ">-d</em> <em class="replaceable ">PATH_TO_DC_FILE</em> list-scrfiles-unused</pre></div><p> Lists all files that are <span class="emphasis"><em>not</em></span> referenced in the
+       </p></dd><dt id="idm140174606710192"><span class="term ">Checking for Superfluous Files</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps <em class="parameter ">-d</em> <em class="replaceable ">PATH_TO_DC_FILE</em> list-scrfiles-unused</pre></div><p> Lists all files that are <span class="emphasis"><em>not</em></span> referenced in the
       document specified by the DC file, but are available in the
       <code class="filename">xml</code> and <code class="filename">images/src</code> subdirectories. 
       This command is useful if
       you want to clean up your source files and want to know which files are
-      no longer needed for the documentation project. </p><div id="idm140306603667056" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Use a <code class="sgmltag-element">set</code> to Check for Superfluous
+      no longer needed for the documentation project. </p><div id="idm140174604118592" class="admonition important"><img class="symbol" alt="Important" title="Important" src="static/images/icon-important.png" /><h6>Important: Use a <code class="sgmltag-element">set</code> to Check for Superfluous
        Files</h6><p> If you are storing multiple DC files in the same project
        directory, use the DC file of a <code class="sgmltag-element">set</code> for this check.
        As it contains all articles and books in the project directory, this makes
        sure that any files found during the check are indeed unnecessary.
-      </p></div></dd><dt id="idm140306605032032"><span class="term ">Checking Where a ID or File is Included</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code>
+      </p></div></dd><dt id="idm140174605988448"><span class="term ">Checking Where a ID or File is Included</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code>
      -d <em class="replaceable ">PATH_TO_DC_FILE</em> list-file --rootid
      <em class="replaceable ">ID</em></pre></div><p> Lists the file that contains the ID specified with the mandatory
       parameter <code class="option">--rootid</code>. For example:</p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code>-d DC-daps-example list-file --rootid sec.template.examples.images
 The ID "sec.template.examples.images" appears in:
-/DOC_DIR_PATH/xml/MAIN-daps-example.xml</pre></div></dd></dl></div><p>For the image-related commands, see<a class="xref" href="cha.daps.user.img.html#sec.daps.user.imgs.manage" title="5.5. DAPS Commands for Managing Images">Section 5.5, “DAPS Commands for Managing Images”</a>.</p><div id="idm140306610052416" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Output of File Listings</h6><p>By default, the output of the listing commands is a list of file names
+/DOC_DIR_PATH/xml/MAIN-daps-example.xml</pre></div></dd></dl></div><p>For the image-related commands, see<a class="xref" href="cha.daps.user.img.html#sec.daps.user.imgs.manage" title="5.5. DAPS Commands for Managing Images">Section 5.5, “DAPS Commands for Managing Images”</a>.</p><div id="idm140174607431472" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Output of File Listings</h6><p>By default, the output of the listing commands is a list of file names
     (including the absolute path), all printed in one line with the file names
     separated by blanks. This default output format is useful for piping (or
     copying and pasting) the output for use with another command. </p><p>If you need a pretty printed output where each file name is listed on a
@@ -224,7 +224,7 @@ The ID "sec.template.examples.images" appears in:
     <em class="replaceable ">YOUR_DOC_DIR</em>/DC-daps-example
     <em class="replaceable ">YOUR_DOC_DIR</em>/images/src/png/example_png1.png
     <em class="replaceable ">YOUR_DOC_DIR</em>/images/src/png/example_png2.png
-    <em class="replaceable ">YOUR_DOC_DIR</em>/xml/MAIN-daps-example.xml</pre></div></div></div><div id="idm140306604477568" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Using Pretty-Printed Output for Counting</h6><p> To count the number of files listed in a given output, you can
+    <em class="replaceable ">YOUR_DOC_DIR</em>/xml/MAIN-daps-example.xml</pre></div></div></div><div id="idm140174611392448" class="admonition tip"><img class="symbol" alt="Tip" title="Tip" src="static/images/icon-tip.png" /><h6>Tip: Using Pretty-Printed Output for Counting</h6><p> To count the number of files listed in a given output, you can
     also combine the <em class="parameter ">--pretty</em> parameter with the
     <code class="command">wc</code> command: </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d <em class="replaceable ">PATH_TO_DC_FILE</em> list-srcfiles --pretty | wc -l</pre></div><p> For <a class="xref" href="cha.daps.user.edit.html#ex.daps.output.pretty" title="Pretty-printed Output of a File Listing DAPS Command">Example 3.2</a>, the command above would return the value
     </p><div class="verbatim-wrap"><code class="computeroutput">4</code></div><p>.
