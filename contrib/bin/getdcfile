@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+#
+# Purpose:
+#   For a given XML file it returns all DC files which are in this set
+#
+# Author: Thomas Schraitle <toms@opensuse.org>
+#
+
+__version__ = "0.1"
+
+import argparse
+import glob
+import subprocess
+import shlex
+import sys
+import os
+from os.path import basename
+
+def debug(msg, flag, *, sep=' ', end='\n', flush=False):
+    """Outputs debug messages depending on a flag
+
+    :param int flag: verbosity flag
+    :param str sep: string inserted between values, default a space
+    :param str end: string appended after the last value, default a newline
+    :param bool flush: whether to forcibly flush the stream
+    """
+    if flag:
+        print(msg, file=sys.stderr, sep=sep, end=end, flush=flush)
+
+def parse():
+    """Parse command line arguments
+
+    :return: parsed arguments
+    :rtype: argparse.Namespace
+    """
+    parser = argparse.ArgumentParser(
+        prog=basename(__file__),
+        description="Reverse search: for a given XML/Entity file "
+                    "find the corresponding DC file")
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s ' + __version__
+                        )
+    parser.add_argument('-v', '--verbose',
+                        action='count',
+                        help="Increase verbosity level"
+                        )
+    parser.add_argument("filename",
+                        help="The filename to search for"
+                        )
+
+    ## -----
+    args = parser.parse_args()
+    debug(args, args.verbose)
+    return args
+
+def main(args):
+    """Find all DC files to a corresponding filename
+
+    :param argparse.Namespace args: Result from ArgumentParser
+    :return: a list of all DC files where args.filename is found
+    :rtype: list
+    """
+    # Find all DC files in the current directory, but exclude one
+    # DC file which ends with "-all"
+    dcfiles = ( x for x in glob.glob("DC-*") if not x.endswith("-all") )
+
+    debug("Search for DC files with filenames: {}".format(args.filename),
+          args.verbose)
+    found_dc_files = []
+
+    for dc in dcfiles:
+        cmd = "daps -d {} list-srcfiles".format(dc)
+        debug("Try {}...".format(dc), args.verbose)
+        daps = subprocess.Popen(shlex.split(cmd),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        result, daps_error = daps.communicate()
+        if daps_error:
+            print("DAPS Error: {}".format(daps_error), file=sys.stderr)
+            continue
+        # First decode it into a Unicode string, then split it
+        result = result.decode("UTF-8").split()
+        # Remove absolute paths
+        result = [ basename(x) for x in result ]
+        if basename(args.filename) in result:
+            found_dc_files.append(dc)
+
+    return found_dc_files
+
+
+if __name__ == "__main__":
+    args = parse()
+    found_dc_files = main(args)
+
+    if found_dc_files:
+        debug("--- Result ---", args.verbose)
+        print(" ".join(found_dc_files))
+        sys.exit(0)
+    else:
+        print("\nSorry, no corresponding DC file for {} found.".format(args.filename))
+        sys.exit(1)
