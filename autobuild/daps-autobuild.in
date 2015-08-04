@@ -8,8 +8,8 @@ ME=$(basename "$0")
 
 
 SCHEMA="@datadir@/xml/daps/schema/daps-autobuild.rnc"
-#CONFIG="$(readlink -e "daps_autobuild.xml")"
-#SCHEMA="$(readlink -e "daps_autobuild.rnc")"
+#CONFIG="$(readlink -e "daps-autobuild.xml")"
+#SCHEMA="$(readlink -e "daps-autobuild.rnc")"
 
 #VERBOSE=1
 CHECK_VCS=1
@@ -73,6 +73,9 @@ Options:
 
   --helpconfig
     Show help on the config file.
+
+  --list-sections
+    Show all sections defined in the given config file
 
   --nosync
     Do not rsync the manuals.
@@ -400,7 +403,7 @@ function failure_notification {
 #--------------------
 # Read command line options
 
-ARGS=$(getopt -o h -l config:,debug,force,help,helpconfig,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
+ARGS=$(getopt -o h -l config:,debug,force,help,helpconfig,list-sections,nosync,notify,rsync,schema:,sections:,validate -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -430,6 +433,10 @@ while true ; do
         --helpconfig)
             helpconfig
             exit 0
+            ;;
+        --list-sections)
+            LIST_SECTIONS=1
+            shift
             ;;
         --nosync)
             DO_RSYNC=0
@@ -480,6 +487,18 @@ jing -c "$SCHEMA" "$CONFIG"
 
 ALL_SETIDS=( $(xml sel -t -v "/daps-autobuild/set/@id" "$CONFIG") )
 [[ 0 -eq ${#ALL_SETIDS[*]} ]] && exit_on_error "Could not find any SET IDs in the config file"
+
+#----------
+# If --list-sections was specified, print a list and exit
+
+if [[ 1 -eq $LIST_SECTIONS ]]; then
+    for ID in ${ALL_SETIDS[@]}; do
+        echo "$ID"
+    done
+    exit 0
+fi
+#--
+
 
 [[ -z $SECTIONS ]] && SECTIONS="${ALL_SETIDS[*]}"
 

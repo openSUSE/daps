@@ -6,10 +6,13 @@ the development version of daps.
 
 In order to run daps from this working copy, remember the following things:
 
-1. Do NOT run `./configure` if you intend to run daps from this working copy.
+1. Do NOT run `./configure` if you intend to run `daps` from this working copy.
 
-2. If you have run the configure script already, run `svn st` to see any
-   modified files and roll them back with `svn revert`.
+2. If you have run the configure script already, run `git status` to see any
+   modified files and roll them back:
++
+   git ls-files -m | xargs git checkout --
+   git clean -d -f
 
 3. If you want to run daps from this working copy, *always* add the `--dapsroot`
    option. To simplify this, define a ddaps function (or alias) which can
@@ -24,7 +27,7 @@ In order to run daps from this working copy, remember the following things:
     }
 +
 If you like, you can also add the `--styleroot` option.
-Add these lines to your `~/.bashrc` (or `~/.bashrc.local`) Bash config file.
+Add the above lines to your `~/.bashrc` (or `~/.bashrc.local`) Bash config file.
 
 
 Changing automake files
@@ -49,8 +52,8 @@ In order to create a new daps version, do the following:
 3. Adapt version number in `packaging/daps.spec`
 4. Commit your changes
 5. Change to the OBS working copy from `Documentation:Tools`
-   and run `daps-fetch-source` to get the latest changes from SVN.
-6. Run `osc vc` and add your change log
+   and run `daps-fetch-source-git` to get the latest changes from GitHub.
+6. Run `osc vc` and add your changelog
 7. Rebuild the package, fix any errors, and commit to OBS.
 
 

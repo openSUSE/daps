@@ -7,6 +7,7 @@ cache: apt
 env:
     global:
         - PATH=".:$PATH"
+        - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so  
 
 before_install:
     - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ precise main universe restricted multiverse"

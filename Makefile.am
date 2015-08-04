@@ -60,7 +60,7 @@ endif
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1 daps_init.1 daps-susespell.1 daps-envconvert.1 daps_autobuild.1
+MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-envconvert.1 daps-autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -173,16 +173,16 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 $(INSTALLDIRS):
 	test -z "$@" || $(MKDIR_P) $@
 
-install-data-local: $(INSTALLDIRS) autobuild/daps_autobuild
+install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
 install-data-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
 		(cd $(DESTDIR)$(docdir)/html; tar xp); \
 	done
-	install -m755 autobuild/daps_autobuild $(DESTDIR)$(bindir)
-	install -m644 autobuild/daps_autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
-	install -m644 autobuild/daps_autobuild.xml $(DESTDIR)$(templatedir)
+	install -m755 autobuild/daps-autobuild $(DESTDIR)$(bindir)
+	install -m644 autobuild/daps-autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
+	install -m644 autobuild/daps-autobuild.xml $(DESTDIR)$(templatedir)
 if CATALOG_EDIT
 # create entry in xml root catalog
 	{ \
@@ -212,7 +212,7 @@ clean-local:
 	  $(srcdir)/doc/xml/entity-decl.ent
 	(cd $(srcdir)/etc && ln -sf config.in config)
 	(cd $(srcdir)/bin && ln -sf daps.in daps)
-	(cd $(srcdir)/autobuild && ln -sf daps_autobuild.in daps_autobuild)
+	(cd $(srcdir)/autobuild && ln -sf daps-autobuild.in daps-autobuild)
 	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse fop-daps.xml)
 	(cd doc/xml && ln -sf entity-decl.ent.in entity-decl.ent)
 
@@ -274,7 +274,7 @@ etc/config: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 
-autobuild/daps_autobuild: .firstbuild
+autobuild/daps-autobuild: .firstbuild
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
