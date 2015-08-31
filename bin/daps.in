@@ -1167,7 +1167,7 @@ fi
 #
 if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     if [[ 0 != $VERBOSITY ]]; then
-        echo "Warning: --styleroot is not specified, ignoring --fb_styleroot"
+        echo "Warning: --styleroot is not specified, ignoring --fb_styleroot" >&2
     fi
 fi
 
