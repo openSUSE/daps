@@ -1105,7 +1105,7 @@ function package-pdf {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,param:,rootid:,set-date:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1120,9 +1120,11 @@ function package-pdf {
         help_grayscale_pdf
         help_help
         help_name
+        help_param
         help_pagefiles
         help_rootid
         help_set-date
+        help_stringparam
         help_xsltparam "creates the .fo file from the profiled sources"
         echo
         exit 0
@@ -1135,6 +1137,8 @@ function package-pdf {
     [[ 1 = "$P_GRAYSCALE" ]]     && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
@@ -1168,7 +1172,7 @@ function package-html {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,rootid:,set-date:,single,statdir:,xsltparam:"
+    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,param:,rootid:,set-date:,single,statdir:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1184,10 +1188,12 @@ function package-html {
         help_jsp
         help_name
         help_pagefiles
+        help_param
         help_rootid
         help_set-date
         help_single
         help_statdir
+        help_stringparam
         help_xsltparam "creates the .html files from the profiled sources"
         echo
         exit 0
@@ -1202,6 +1208,8 @@ function package-html {
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     # We always want to start with a clean HTML result directory for
