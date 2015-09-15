@@ -422,14 +422,24 @@ function init_env {
 ###########################################################################
 function call_make {
     local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOGFILE MAKE_BIN
-    local MAKE_OPTIONS MAKE_CMD STRING SUB_CMD
+    local MAKE_OPTIONS MAKE_CMD STRING SILENT SUB_CMD
 
     # first argument passed to the function is the subcommand
-    # in some cases, additional arguments are passed to this
+
+    # Second and optional argument is "silent" - if set all debug and
+    # verbosity settings are ignored. This allows to run call_make to set
+    # variables (e.g. FILELIST=$(call_make "list-srcfiles")
+
+    # In some cases, additional arguments are passed to this
     # function - they remain in $@ and will be passed "as is" to make
     #
     SUB_CMD=$1
     shift
+
+    if [[ "silent" = "$1" ]]; then
+        SILENT="1"
+        shift
+    fi
 
     # Check the remaining $@ - if it contains variable definitions (FOO=BAR
     # or FOO="BAR") it's OK, if it contains barewords, exit with an error
@@ -449,18 +459,20 @@ function call_make {
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
     MAKE_BIN="/usr/bin/make"
-    if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
-        # use remake if installed when in debug or highest verbosity mode
-        IS_REMAKE=$(which remake 2>/dev/null)
-        [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
-        MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
+    if [[ 1 != "$SILENT" ]]; then
+        if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
+            # use remake if installed when in debug or highest verbosity mode
+            IS_REMAKE=$(which remake 2>/dev/null)
+            [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
+            MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
+        fi
     fi
     if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
         # calculate Number of CPUs (cores) for -j option, set to "1" if empty
         CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
         [[ -z "$CORE_NO" ]] && CORE_NO=1
         MAKE_OPTIONS="$MAKE_OPTIONS -j${CORE_NO}"
-        [[ 1 != $DEBUG ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
+        [[ 1 != "$DEBUG" || 1 = "$SILENT" ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
         # highest verbosity level - use -j1 for a better readability
         MAKE_OPTIONS="$MAKE_OPTIONS -j1"
@@ -473,7 +485,7 @@ function call_make {
 
 
     # Variable settings summary printed on debug and high verbosity mode
-    if [[ 2 -le $VERBOSITY ]]; then
+    if [[ 2 -le $VERBOSITY && 1 != "$SILENT" ]]; then
         # get stylesheet version (ticket #151)
         # saxon6 (at least on openSUSE) does not properly resolve http Urls
         # (because it does not ask the catalog but rather directly accesses
@@ -551,8 +563,8 @@ EOF
         if [[ 1 = "$WRITE_LOG" ]]; then
             $MAKE_CMD >> "$LOGFILE" 2>&1
             if [[ 0 = "$?" ]]; then
-            # make command successful, only show last line (aka result)
-            tail -n 1 "$LOGFILE"
+                # make command successful, only show last line (aka result)
+                tail -n 1 "$LOGFILE"
             else
                 # an error occured in make
                 # show complete logfile except the first line containing the
@@ -1712,7 +1724,7 @@ function getimages {
 
     # get the image list
     # we can use projectgraphics, since it returns images for a given rootid
-    IMGLIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1) )
+    IMGLIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1) )
     if [[ 0 != $? ]]; then
         exit_on_error "Failed to get list of images"
     fi
@@ -1797,7 +1809,7 @@ function spellcheck {
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
     if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
-        FILELIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
+        FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
         if [[ 0 != $? ]]; then
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
         fi
