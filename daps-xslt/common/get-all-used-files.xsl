@@ -147,10 +147,31 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false">
-        <xsl:copy-of select="@*"/>
-        <xsl:apply-templates/>
-    </div>
+    <xsl:choose>
+      <xsl:when test="$mainfile != ''">
+        <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false">
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates/>
+        </div>
+      </xsl:when>
+      <xsl:when test="/*/@xml:base">
+        <div href="{concat($xml.src.path, @xml:base)}" remap="{local-name()}" text="false">
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates/>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>
+          <xsl:text>WARNING: Cannot determine MAIN filename! </xsl:text>
+          <xsl:text>Neither parameter mainfile set nor @xml:base attribute available!&#10;</xsl:text>
+          <xsl:text>Continuing without MAIN filename...</xsl:text>
+        </xsl:message>
+        <div remap="{local-name()}" text="false">
+          <xsl:copy-of select="@*"/>
+          <xsl:apply-templates/>
+        </div>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="*">
