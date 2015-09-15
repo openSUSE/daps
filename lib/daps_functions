@@ -1808,7 +1808,7 @@ function spellcheck {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-    if [[ -z  "ASPELL_LANG" ]]; then
+    if [[ -z "$ASPELL_LANG" ]]; then
             ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$ASPELL_LANG" ]]; then
         ccecho "info" "Using language $ASPELL_LANG."
