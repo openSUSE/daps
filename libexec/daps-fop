@@ -2,25 +2,66 @@
 #
 # Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author:
+# Authors:
+# Frank Sundermeyer <fsundermeyer at opensuse dor org>
 # Thomas Schraitle <toms at opensuse dor org>
+#
 #
 # Customized fop executable for DAPS
 
+
+# Command line switches for FOP
+#------------------------------
+#
+# enable quite mode unless --debug is used
+[[ 1 -ne $DEBUG ]] && FOP_DEFAULT_CMD_OPTIONS="-q"
+
+# Set the nocs option for FOP >=1.1
+#
 # Get the first 2 digits from the version number
 # 1.0 -> 10, 1.0.1 -> 10
+#
+# Other fop command-line options can be set with FOP_OPTIONS in the
+# daps config
 FOP_VERSION=$(fop -version 2>/dev/null | cut -d " " -f 3 | tr -d ".")
 FOP_VERSION=${FOP_VERSION:0:2}
-# set the nocs parameter for FOP >= 1.1
-# (other command line options are defined in the DAPS config file
-# as FOP_OPTIONS)
-[[ $FOP_VERSION -ge 11 ]] && OPTS="-nocs"
-
-#FOP_MEMORY=${FOP_MEMORY:-"-Xmx500m"}
-FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
+[[ $FOP_VERSION -ge 11 ]] && FOP_DEFAULT_CMD_OPTIONS="$FOP_DEFAULT_CMD_OPTIONS -nocs"
 #FOP_CONFIG_FILE=${FOP_CONFIG_FILE:-"/etc/daps/fop/fop-daps.xml"}
 
-ADDITIONAL_FLAGS="$FOP_MEMORY $FOP_STACKSIZE" \
-ADDITIONAL_JARS="batik-all excalibur/avalon-framework-impl" \
-ADDITIONAL_OPTIONS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver -Djava.util.logging.config.file=${DAPSROOT}/etc/fop/fop_logging.properties" fop $OPTS "$@"
-#fop $OPTS -c $FOP_CONFIG_FILE "$@"
+if [[ -n $FOP_CONFIG_FILE ]]; then
+    FOP_CMD_SWITCHES="$FOP_DEFAULT_CMD_OPTIONS -c $FOP_CONFIG_FILE $FOP_CMD_OPTIONS"
+else
+    FOP_CMD_SWITCHES="$FOP_DEFAULT_CMD_OPTIONS $FOP_CMD_OPTIONS"
+fi
+
+# set initial/maximum java heap size
+#
+#FOP_MEMORY=${FOP_MEMORY:-"-Xms400 -Xmx500m"}
+# set java thread stack size
+#
+FOP_STACKSIZE=${FOP_STACKSIZE:-"-Xss2048K"}
+
+# Default JAVA/FOP setup for FOP needed by DAPS
+# ----------------------------------------------
+# do not change
+# To add additional flags/jars/options use
+#
+# FOP_FLAGS
+# FOP_JARS
+# FOP_OPTIONS
+#
+# in the config. These values will be used in addition to the default values
+# specified below
+#
+
+FOP_DEFAULT_JAVA_FLAGS="-Djavax.xml.transform.URIResolver=org.apache.xml.resolver.tools.CatalogResolver -Djava.util.logging.config.file=${DAPSROOT}/etc/fop/fop_logging.properties"
+FOP_DEFAULT_JAVA_JARS="batik-all excalibur/avalon-framework-impl"
+FOP_DEFAULT_JAVA_OPTIONS="$FOP_MEMORY $FOP_STACKSIZE"
+
+
+# Call /usr/bin/fop
+#
+ADDITIONAL_FLAGS="$FOP_DEFAULT_JAVA_FLAGS $FOP_JAVA_FLAGS" \
+  ADDITIONAL_JARS="$FOP_DEFAULT_JAVA_JARS $FOP_JAVA_JARS" \
+  ADDITIONAL_OPTIONS="$FOP_DEFAULT_JAVA_OPTIONS $FOP_JAVA_OPTIONS" \
+  fop $FOP_CMD_SWITCHES "$@"
