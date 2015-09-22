@@ -73,8 +73,10 @@ VARLIST=(
     EXPORT_DIR
     FALLBACK_STYLEROOT
     FOP_CONFIG_FILE
-    FOP_OPTIONS
-    FOP_STACKSIZE
+    FOP_CMD_OPTIONS
+    FOP_JAVA_FLAGS
+    FOP_JAVA_JARS
+    FOP_JAVA_OPTIONS
     FOP_WRAPPER
     FORCE_REBUILD
     FORMATTER
@@ -84,13 +86,16 @@ VARLIST=(
     HTML_CSS
     HTMLROOT
     HTMLSINGLE
-    JSP
     IMAGES_COLOR
     IMAGES_GRAYSCALE
     IMG_VIEWER
     INCLUDE_MANIFEST
     INK_OPTIONS
-    JING_FLAGS
+    JING_JAVA_FLAGS
+    JING_JAVA_JARS
+    JING_JAVA_OPTIONS
+    JING_WRAPPER
+    JSP
     LIB_DIR
     LIBEXEC_DIR
     LOG_DIR
@@ -141,7 +146,10 @@ VARLIST=(
     VALID_ROOTELEMENTS
     VERBOSITY
     XEP_CONFIG_FILE
-    XEP_OPTIONS
+    XEP_CMD_OPTIONS
+    XEP_JAVA_FLAGS
+    XEP_JAVA_JARS
+    XEP_JAVA_OPTIONS
     XEP_WRAPPER
     XML_MAIN_CATALOG
     XML_USER_CATALOGS
@@ -199,6 +207,7 @@ PATHLIST=(
     FOP_CONFIG_FILE
     FOP_WRAPPER
     HTML_CSS
+    JING_WRAPPER
     STATIC_DIR
     STYLEDEVEL
     STYLEROOT
@@ -277,9 +286,6 @@ HELP_SUBCOMMAND+=("clean-results=Removes all generated documents and logfiles fo
 
 SUBCOMMANDS+=("dapsenv=debugging")
 HELP_SUBCOMMAND+=("dapsenv=DEBUGGING: Shows a list of internal variables and their values.")
-
-SUBCOMMANDS+=("debug=debugging")
-HELP_SUBCOMMAND+=("debug=DEBUGGING: for developing purposes only.")
 
 SUBCOMMANDS+=("dist-webhelp=build_generic")
 HELP_SUBCOMMAND+=("dist-webhelp=Creates a distributable tar archive of a webhelp document\n(including images and css).")
@@ -1083,6 +1089,8 @@ while true ; do
             DEBUG=1
             VERBOSITY_CMDL=2
             VERBOSITY=$VERBOSITY_CMDL
+            # enable JAVA debug messages (fop, xep, jing)
+            export VERBOSE=1
             shift
             ;;
         --fb_styleroot)
@@ -1170,7 +1178,7 @@ fi
 #
 if [[ -n "$FALLBACK_STYLEROOT" && -z "$STYLEROOT" ]]; then
     if [[ 0 != $VERBOSITY ]]; then
-        echo "Warning: --styleroot is not specified, ignoring --fb_styleroot"
+        echo "Warning: --styleroot is not specified, ignoring --fb_styleroot" >&2
     fi
 fi
 
@@ -1458,7 +1466,7 @@ fi
 
 [[ -n "$DOCCONF_CMDL" ]] && source "$DOCCONF_CMDL"
 
-# FOP/XEP CONFIG and WRAPPER
+# FOP/XEP CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
 # replaced
 #
@@ -1468,6 +1476,8 @@ fi
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+JING_WRAPPER=${JING_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}

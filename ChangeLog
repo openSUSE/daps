@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Tue Sep 22 11:28:03 UTC 2015 - fsundermeyer@opensuse.org
+
+Stable release DAPS 2.1.3:
+
+* Bugfixes:
+  - Fix for issue #284 (spellcheck / getimages use wrong filelist
+    when called with --debug
+  - "--param" and "--stringparam" were missing for the subcommands
+    package-pdf and package-html
+  - all warning messages now go to STDERR, making it possible to
+    always catch the output of a DAPS command with FOO="$(daps...)
+
+* Misc:
+  - added a wrapper for jing allwing to customize java flags,
+    jars, and options
+  - standardized customising options for all java programs (fop,
+    jing, xep)
+
+-------------------------------------------------------------------
 Tue Aug  4 09:28:03 UTC 2015 - fsundermeyer@opensuse.org
 
 Stable release DAPS 2.1.2:
