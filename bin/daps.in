@@ -84,13 +84,16 @@ VARLIST=(
     HTML_CSS
     HTMLROOT
     HTMLSINGLE
-    JSP
     IMAGES_COLOR
     IMAGES_GRAYSCALE
     IMG_VIEWER
     INCLUDE_MANIFEST
     INK_OPTIONS
-    JING_FLAGS
+    JING_JAVA_FLAGS
+    JING_JAVA_JARS
+    JING_JAVA_OPTIONS
+    JING_WRAPPER
+    JSP
     LIB_DIR
     LIBEXEC_DIR
     LOG_DIR
@@ -199,6 +202,7 @@ PATHLIST=(
     FOP_CONFIG_FILE
     FOP_WRAPPER
     HTML_CSS
+    JING_WRAPPER
     STATIC_DIR
     STYLEDEVEL
     STYLEROOT
@@ -1455,7 +1459,7 @@ fi
 
 [[ -n "$DOCCONF_CMDL" ]] && source "$DOCCONF_CMDL"
 
-# FOP/XEP CONFIG and WRAPPER
+# FOP/XEP CONFIG and WRAPPER / JING WRAPPER
 # when using an SVN checkout, @sysconfdir@ and @pkgdatadir have not been
 # replaced
 #
@@ -1465,6 +1469,8 @@ fi
 
 FOP_CONFIG_FILE=${FOP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 FOP_WRAPPER=${FOP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
+
+JING_WRAPPER=${JING_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}
 
 XEP_CONFIG_FILE=${XEP_CONFIG_FILE/#@sysconfdir\@\/daps/${DAPSROOT}/etc}
 XEP_WRAPPER=${XEP_WRAPPER/#@pkgdatadir\@/${DAPSROOT}}

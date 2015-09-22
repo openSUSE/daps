@@ -348,6 +348,49 @@ FORMATTER="fop"
 #
 GZIP_MAN="yes"
 
+
+## Key:         JING_JAVA_FLAGS
+## ----------------------------
+## Description: Additional java properties for running jing
+## Type:        String (-D<prop>)
+## Default:     ""
+#
+JING_JAVA_FLAGS=""
+
+## Key:         JING_JAVA_JARS
+## ---------------------------
+## Description: Additional Jars for running jing
+## Type:        String
+## Default:     ""
+#
+JING_JAVA_JARS=""
+
+## Key:         JING_JAVA_OPTIONS
+## ------------------------------
+## Description: Additional java options for running jing
+## Type:        String (-X<option>), see java -X for help
+## Default:     ""
+#
+JING_JAVA_OPTIONS=""
+
+## Key:         JING_WRAPPER
+## -------------------------
+## Description: Wrapper script for Jing
+## Type:        PATH to script
+## Default:     "@pkgdatadir@/libexec/daps-jing"
+#
+# Optional wrapper script for calling jing. If set to "jing", it will run
+# the first jing executable found in your path (usually this will be
+# /usr/bin/jing)
+#
+# The default will probably not work on Debian/Ubuntu, since they
+# use a different way to set Java options. Setting up a custom wrapper
+# script for Ubuntu/Debian might be needed (not tested)
+#
+# Also see FORMATTER, FOP-*
+#
+JING_WRAPPER="@pkgdatadir@/libexec/daps-jing"
+
 ## Key:         HTML5
 ## ------------------------
 ## Description: Use XHTML5 instead of XHTML1 for HTML output
