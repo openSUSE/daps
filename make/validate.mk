@@ -23,8 +23,7 @@ $(PROFILEDIR)/.validate validate: $(PROFILES)
   ifeq "$(DOCBOOK_VERSION)" "4"
 	xmllint --noent --postvalid --noout --xinclude $(PROFILED_MAIN)
   else
-	ADDITIONAL_FLAGS="$(JING_FLAGS)" jing $(JING_RNC) $(DOCBOOK5_RNG) \
-	  $(PROFILED_MAIN)
+	$(JING_WRAPPER) $(JING_RNC) $(DOCBOOK5_RNG) $(PROFILED_MAIN)
   endif
 	touch $(PROFILEDIR)/.validate
 #	@echo "checking for unexpected characters: ... "

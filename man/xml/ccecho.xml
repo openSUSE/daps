@@ -30,7 +30,7 @@
  <refnamediv>
   <refname>&ccecho-command;</refname>
   <refpurpose>
-   ccecho (conditional color echo) let's you use colored output for STDOUT
+   ccecho (conditional color echo) lets you use colored output for STDOUT
    while using regular output for log files, pipes and scripts
   </refpurpose>
  </refnamediv>
@@ -46,9 +46,10 @@
  <refsect1 id="ccecho.description">
   <title>Description</title>
   <para>
-   Prints a colored message string to STDOUT using bash color codes. The color
-   depends on one of the LEVEL keyword. When the SHELL environment variable
-   COLOR is set to either "0" or "no" no color output is generated.
+   Prints a colored message string to STDOUT or STDERR using bash color
+   codes. The color and the output channel depend on the LEVEL keyword. When
+   the SHELL environment variable COLOR is set to either "0" or "no" no color
+   output is generated.
   </para>   
   <para>
    The main purpose of this script is to provide an easy method to generate
@@ -66,11 +67,11 @@
     Determines which color is used. Must be used as the first parameter. Is
     ignored, when the ebvironment variable COLOR is set to "0" or "no".
    </para>
-   <screen>error   ->  bold red
-info    ->  purple
-normal  ->  no color
-result  ->  green
-warn    ->  red</screen>
+   <screen>error   ->  bold red, STDERR
+info    ->  purple, STDOUT
+normal  ->  no color, STDOUT
+result  ->  green, STDOUT
+warn    ->  red, STDERR</screen>
   </refsect2>
   <refsect2 id="ccecho.parameters.message">
    <title>MESSAGE</title>

@@ -218,10 +218,10 @@ function parse_args {
                 P_PAGEFILES=1
                 shift
                 ;;
-	    --param)
-		P_PARAMS="$P_PARAMS --param $2"
-		shift 2
-		;;
+            --param)
+                P_PARAMS="$P_PARAMS --param $2"
+                shift 2
+                ;;
             --pretty)
                 P_PRETTY=1
                 shift
@@ -255,10 +255,10 @@ function parse_args {
                 sanitize_path "$2" "P_STATIC_DIR"
                 shift 2
                 ;;
-	    --stringparam)
-		P_STRINGPARAMS="$P_STRINGPARAMS --stringparam $2"
-		shift 2
-		;;
+            --stringparam)
+                P_STRINGPARAMS="$P_STRINGPARAMS --stringparam $2"
+                shift 2
+                ;;
             --subdirs)
                 P_SUBDIRS=1
                 shift
@@ -276,7 +276,7 @@ function parse_args {
                 shift 2
                 ;;
             --xsltparam)
-		ccecho -- "info" "--xsltparam is deprecated, please use --param/--stringparam."
+                ccecho -- "warn" "--xsltparam is deprecated, please use --param/--stringparam instead."
                 P_XSLTPARAM="$2"
                 shift 2
                 ;;
@@ -422,14 +422,24 @@ function init_env {
 ###########################################################################
 function call_make {
     local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOGFILE MAKE_BIN
-    local MAKE_OPTIONS MAKE_CMD STRING SUB_CMD
+    local MAKE_OPTIONS MAKE_CMD STRING SILENT SUB_CMD
 
     # first argument passed to the function is the subcommand
-    # in some cases, additional arguments are passed to this
+
+    # Second and optional argument is "silent" - if set all debug and
+    # verbosity settings are ignored. This allows to run call_make to set
+    # variables (e.g. FILELIST=$(call_make "list-srcfiles")
+
+    # In some cases, additional arguments are passed to this
     # function - they remain in $@ and will be passed "as is" to make
     #
     SUB_CMD=$1
     shift
+
+    if [[ "silent" = "$1" ]]; then
+        SILENT="1"
+        shift
+    fi
 
     # Check the remaining $@ - if it contains variable definitions (FOO=BAR
     # or FOO="BAR") it's OK, if it contains barewords, exit with an error
@@ -449,18 +459,20 @@ function call_make {
 
     MAKE_OPTIONS="-f $DAPSROOT/make/selector.mk"
     MAKE_BIN="/usr/bin/make"
-    if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
-        # use remake if installed when in debug or highest verbosity mode
-        IS_REMAKE=$(which remake 2>/dev/null)
-        [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
-        MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
+    if [[ 1 != "$SILENT" ]]; then
+        if [[ 1 = "$DEBUG" || 3 = "$VERBOSITY" ]]; then
+            # use remake if installed when in debug or highest verbosity mode
+            IS_REMAKE=$(which remake 2>/dev/null)
+            [[ -n "$IS_REMAKE" ]] && MAKE_BIN="/usr/bin/remake"
+            MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
+        fi
     fi
     if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
         # calculate Number of CPUs (cores) for -j option, set to "1" if empty
         CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
         [[ -z "$CORE_NO" ]] && CORE_NO=1
         MAKE_OPTIONS="$MAKE_OPTIONS -j${CORE_NO}"
-        [[ 1 != $DEBUG ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
+        [[ 1 != "$DEBUG" || 1 = "$SILENT" ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
         # highest verbosity level - use -j1 for a better readability
         MAKE_OPTIONS="$MAKE_OPTIONS -j1"
@@ -473,7 +485,7 @@ function call_make {
 
 
     # Variable settings summary printed on debug and high verbosity mode
-    if [[ 2 -le $VERBOSITY ]]; then
+    if [[ 2 -le $VERBOSITY && 1 != "$SILENT" ]]; then
         # get stylesheet version (ticket #151)
         # saxon6 (at least on openSUSE) does not properly resolve http Urls
         # (because it does not ask the catalog but rather directly accesses
@@ -540,24 +552,24 @@ EOF
     fi
 
     if [[ 0 != "$VERBOSITY" ]]; then
-	if [[ 1 = "$WRITE_LOG" ]]; then
+        if [[ 1 = "$WRITE_LOG" ]]; then
             $MAKE_CMD 2>&1 | tee -a "$LOGFILE"
             # see http://www.unix.com/shell-programming-scripting/92163-command-does-not-return-exit-status-due-tee.html
             [[ 0 = "${PIPESTATUS[0]}" ]] || exit 1
-	else
-	    $MAKE_CMD 2>&1
-	fi
+        else
+            $MAKE_CMD 2>&1
+        fi
     else
         if [[ 1 = "$WRITE_LOG" ]]; then
             $MAKE_CMD >> "$LOGFILE" 2>&1
             if [[ 0 = "$?" ]]; then
-            # make command successful, only show last line (aka result)
-            tail -n 1 "$LOGFILE"
+                # make command successful, only show last line (aka result)
+                tail -n 1 "$LOGFILE"
             else
                 # an error occured in make
                 # show complete logfile except the first line containing the
                 # date
-		tail -n +2 "$LOGFILE"
+                tail -n +2 "$LOGFILE"
                 exit 1
             fi
         else
@@ -617,17 +629,17 @@ function build_pdfs {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-	help_cropmarks
+        help_cropmarks
         help_draft
         help_formatter
-	help_grayscale_pdf
+        help_grayscale_pdf
         help_help
         help_meta
         help_name
-	help_param
+        help_param
         help_remarks
         help_rootid
-	help_stringparam
+        help_stringparam
         help_xsltparam "creates the .fo file from the profiled sources"
         echo
         exit 0
@@ -683,16 +695,16 @@ function build_html_jsp {
         help_draft
         help_help
         help_html5
-	help_jsp
+        help_jsp
         help_meta
         help_name
         help_nostatic
-	help_param
+        help_param
         help_remarks
         help_rootid
-	help_single
+        help_single
         help_statdir
-	help_stringparam
+        help_stringparam
         help_xsltparam "creates $SUB_CMD from the profiled sources"
         echo
         exit 0
@@ -751,10 +763,10 @@ function webhelp {
         help_name
         help_nosearch
         help_nostatic
-	help_param
+        help_param
         help_remarks
         help_rootid
-	help_stringparam
+        help_stringparam
         help_xsltparam "creates Webhelp HTML from the profiled sources"
         echo
         exit 0
@@ -814,13 +826,13 @@ function build_epub {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_check
         help_css
-	help_epub3
+        help_epub3
         help_help
         help_name
-	help_param
+        help_param
         help_rootid
         help_statdir
-	help_stringparam
+        help_stringparam
         echo
         exit 0
     fi
@@ -871,9 +883,9 @@ function build_man {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
-	help_param
+        help_param
         help_rootid
-	help_stringparam
+        help_stringparam
         help_subdirs
         echo
         exit 0
@@ -910,9 +922,9 @@ function build_generic {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
-	help_param
+        help_param
         help_rootid
-	help_stringparam
+        help_stringparam
         echo
         exit 0
     fi
@@ -1001,7 +1013,7 @@ function online-docs {
         help_name
         help_noset
         help_rootid
-    help_optipng
+        help_optipng
         echo
         exit 0
     fi
@@ -1062,9 +1074,9 @@ function package-src {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_def-file
         help_help
-    help_locdrop
+        help_locdrop
         help_name
-    help_optipng
+        help_optipng
         help_set-date
         echo
         exit 0
@@ -1105,7 +1117,7 @@ function package-pdf {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,rootid:,set-date:,xsltparam:"
+    LONG_OPTS="cropmarks,desktopfiles,documentfiles,formatter:,grayscale,help,name:,pagefiles,param:,rootid:,set-date:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1120,9 +1132,11 @@ function package-pdf {
         help_grayscale_pdf
         help_help
         help_name
+        help_param
         help_pagefiles
         help_rootid
         help_set-date
+        help_stringparam
         help_xsltparam "creates the .fo file from the profiled sources"
         echo
         exit 0
@@ -1135,6 +1149,8 @@ function package-pdf {
     [[ 1 = "$P_GRAYSCALE" ]]     && export GRAYSCALE=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     if [[ -n "$P_FORMATTER" ]]; then
@@ -1168,7 +1184,7 @@ function package-html {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,rootid:,set-date:,single,statdir:,xsltparam:"
+    LONG_OPTS="css:,desktopfiles,documentfiles,help,html5,jsp,name:,pagefiles,param:,rootid:,set-date:,single,statdir:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1181,15 +1197,17 @@ function package-html {
         help_documentfiles
         help_help
         help_html5
-    help_jsp
+        help_jsp
         help_name
         help_pagefiles
+        help_param
         help_rootid
         help_set-date
-    help_single
+        help_single
         help_statdir
+        help_stringparam
         help_xsltparam "creates the .html files from the profiled sources"
-    echo
+        echo
         exit 0
     fi
 
@@ -1202,6 +1220,8 @@ function package-html {
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]]   && export STATIC_DIR="$P_STATIC_DIR"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     # We always want to start with a clean HTML result directory for
@@ -1318,7 +1338,7 @@ function unpack-locdrop {
     if [[ -f ${P_NOTRANS_DIR}/$DC ]]; then
         cp "${P_NOTRANS_DIR}/$DC" .
     else
-        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC" >&2
+        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DC"
     fi
     done
 
@@ -1337,7 +1357,7 @@ function unpack-locdrop {
         (cd "$DIR" && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/$DATA")")
         fi
     else
-        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA" >&2
+        ccecho "warn" "File does not exist: ${P_NOTRANS_DIR}/$DATA"
     fi
     done
 
@@ -1349,7 +1369,7 @@ function unpack-locdrop {
     if [[ -f ${P_NOTRANS_DIR}/xml/$ENT ]]; then
         (cd xml && ln -sf "$(realpath --relative-to="." "${P_NOTRANS_DIR}/xml/$ENT")")
     else
-        ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT" >&2
+        ccecho "warn" "Cannot find entity file: ${P_NOTRANS_DIR}/xml/$ENT"
     fi
     done
 
@@ -1389,7 +1409,7 @@ function profile_first {
         help_remarks
         help_rootid
         echo
-    exit 0
+        exit 0
     fi
 
     [[ 1 = "$P_DRAFT" ]]    && DRAFT="yes"
@@ -1427,7 +1447,7 @@ function comments_remarks {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_remarks
         echo
-    exit 0
+        exit 0
     fi
 
     [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
@@ -1510,17 +1530,17 @@ function show_names {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
                 help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
-        [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
+                [[ "pdf-name" = "$SUB_CMD" ]] && help_cropmarks
                 help_draft
-        [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
-        [[ "pdf-name" = "$SUB_CMD" ]] && help_grayscale_pdf
+                [[ "pdf-name" = "$SUB_CMD" ]] && help_formatter
+                [[ "pdf-name" = "$SUB_CMD" ]] && help_grayscale_pdf
                 help_help
-        [[ "jsp-dir-name" =  "$SUB_CMD" ]] && help_jsp
-        help_meta
+                [[ "jsp-dir-name" =  "$SUB_CMD" ]] && help_jsp
+                help_meta
                 help_name
                 help_remarks
                 help_rootid
-        [[ "html-dir-name" = "$SUB_CMD" ]] && help_single
+                [[ "html-dir-name" = "$SUB_CMD" ]] && help_single
                 echo
                 exit 0
     fi
@@ -1704,7 +1724,7 @@ function getimages {
 
     # get the image list
     # we can use projectgraphics, since it returns images for a given rootid
-    IMGLIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1) )
+    IMGLIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1) )
     if [[ 0 != $? ]]; then
         exit_on_error "Failed to get list of images"
     fi
@@ -1789,7 +1809,7 @@ function spellcheck {
     [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
 
     if [[ -z "${FILELIST[0]}" ]]; then ## --file was not specified
-        FILELIST=( $(call_make list-srcfiles LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
+        FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
         if [[ 0 != $? ]]; then
             exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
         fi
@@ -1800,7 +1820,7 @@ function spellcheck {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-    if [[ -z  "ASPELL_LANG" ]]; then
+    if [[ -z "$ASPELL_LANG" ]]; then
             ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$ASPELL_LANG" ]]; then
         ccecho "info" "Using language $ASPELL_LANG."
@@ -1958,8 +1978,8 @@ function build_images {
         help_gen
         help_grayscale_images
         help_help
-    help_online
-    help_rootid
+        help_online
+        help_rootid
         echo
         exit 0
     fi
@@ -2460,7 +2480,7 @@ function help_xsltparam {
     cat <<EOF
     --xsltparam=STRING        ** Deprecated **
                               Use --param and/or --stringparam instead.
-                                            
+
                               Add one or more xslt processor parameters in
                               the form of
                               \"--stringparam KEY=VALUE --param KEY=VALUE\".

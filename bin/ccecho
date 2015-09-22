@@ -10,11 +10,11 @@ function print_help {
     cat <<EOF_helptext
 Conditional Color echo
 
-Usage: ccecho LEVEL "MESSAGE"
+Usage: ccecho "LEVEL" "MESSAGE"
 
-Prints a colored message string to STDOUT using bash color codes. The
-color depends on one of the LEVEL keyword. When the SHELL environment
-variable COLOR is set to either "0" or "no" no color output is
+Prints a colored message string to STDOUT or STDERR using bash color codes. The
+color and the output channel depend on the LEVEL keyword. When the SHELL
+environment variable COLOR is set to either "0" or "no" no color output is
 generated.
 
 The main purpose of this script is to provide an easy method to generate
@@ -24,11 +24,11 @@ scripts (by exporting COLOR=0)
 
 
 LEVEL keywords
-  normal -> no color
-  error  -> bold red
-  info   -> purple
-  result -> green
-  warn   -> red
+  normal -> no color, STDOUT
+  error  -> bold red, STDERR
+  info   -> purple, STDOUT
+  result -> green, STDOUT
+  warn   -> red, STDERR
 
 MESSAGE
   The message to be printed. Needs to be quoted using double quotes.
@@ -96,4 +96,8 @@ if [[  0 != "$COLOR" && no != "$COLOR" ]]; then
     MESSAGE=${MESSAGE//\\n/${END_COLOR}\\n${START_COLOR}}
 fi
 
-echo -e "${START_COLOR}${MESSAGE}${END_COLOR}"
+if [[ error = "$LEVEL" || warn = "$LEVEL" ]]; then
+    echo -e "${START_COLOR}${MESSAGE}${END_COLOR}" >&2
+else
+    echo -e "${START_COLOR}${MESSAGE}${END_COLOR}"
+fi
