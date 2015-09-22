@@ -2,15 +2,15 @@
 #
 # Copyright (C) 2012-2015 SUSE Linux GmbH
 #
-# Author:
+# Authors:
+# Frank Sundermeyer <fsundermeyer at opensuse dor org>
 # Thomas Schraitle <toms at opensuse dot org>
 #
 # Customized xep executable for daps
-# Use environment variable VERBOSE to get more debugging output
 #
 
 #
-# Configuring variables
+# User config file
 #
 USER_XEP_CONFIG="$HOME/.config/daps/xep-config.xml"
 
@@ -19,4 +19,30 @@ if [[ -f $USER_XEP_CONFIG ]]; then
     ccecho "info" "Using XEP config file from $USER_XEP_CONFIG"
     export XEP_CONFIG_FILE=${XEP_CONFIG_FILE:-"$USER_XEP_CONFIG"}
 fi
-xep "$@"
+
+# Command line switches for FOP
+#------------------------------
+#
+# enable quite mode unless --debug is used
+[[ 1 -ne $DEBUG ]] && XEP_DEFAULT_CMD_OPTIONS="-q"
+
+XEP_CMD_SWITCHES="$XEP_DEFAULT_CMD_OPTIONS $XEP_CMD_OPTIONS"
+
+# set initial/maximum java heap size
+#
+#XEP_MEMORY=${XEP_MEMORY:-"-Xms400 -Xmx500m"}
+# set java thread stack size
+#
+#XEP_STACKSIZE=${XEP_STACKSIZE:-"-Xss2048K"}
+
+XEP_DEFAULT_JAVA_FLAGS=""
+XEP_DEFAULT_JAVA_JARS=""
+XEP_DEFAULT_JAVA_OPTIONS="$XEP_MEMORY $XEP_STACKSIZE"
+
+
+# Call /usr/bin/xep
+#
+ADDITIONAL_FLAGS="$XEP_DEFAULT_JAVA_FLAGS $XEP_JAVA_FLAGS" \
+  ADDITIONAL_JARS="$XEP_DEFAULT_JAVA_JARS $XEP_JAVA_JARS" \
+  ADDITIONAL_OPTIONS="$XEP_DEFAULT_JAVA_OPTIONS $XEP_JAVA_OPTIONS" \
+  xep "$@"

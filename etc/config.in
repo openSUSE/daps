@@ -742,12 +742,36 @@ XEP_CONFIG_FILE="@sysconfdir@/daps/xep/xep-daps.xml"
 ## -----------------------
 ## Description: Command line options for the XEP pdf formatter
 ## Type:        String
-## Default:     "-q" (turn on quiet mode)
+## Default:     ""
 #
 # Specify command line options for the XEP formatter.
 # Also see FORMATTER, XEP-*
 #
-XEP_OPTIONS="-q"
+XEP_CMD_OPTIONS=""
+
+## Key:         XEP_JAVA_FLAGS
+## ----------------------------
+## Description: Additional java properties for running xep
+## Type:        String (-D<prop>)
+## Default:     ""
+#
+XEP_JAVA_FLAGS=""
+
+## Key:         XEP_JAVA_JARS
+## ---------------------------
+## Description: Additional Jars for running xep
+## Type:        String
+## Default:     ""
+#
+XEP_JAVA_JARS=""
+
+## Key:         XEP_JAVA_OPTIONS
+## ------------------------------
+## Description: Additional java options for running xep
+## Type:        String (-X<option>), see java -X for help
+## Default:     ""
+#
+XEP_JAVA_OPTIONS=""
 
 ## Key:         XEP_WRAPPER
 ## -----------------------
@@ -755,10 +779,13 @@ XEP_OPTIONS="-q"
 ## Type:        PATH to script
 ## Default:     "@pkgdatadir@/libexec/daps-xep"
 #
-# Optional wrapper script for calling XEP. The default "xep" will run
-# the first xep binary found in your path (usually this will be
+# Optional wrapper script for calling xep. If set to "xep", it will run
+# the first xep executable found in your path (usually this will be
 # /usr/bin/xep)
-# Also see FORMATTER, XEP-*
+#
+# The default will probably not work on Debian/Ubuntu, since they
+# use a different way to set Java options. Setting up a custom wrapper
+# script for Ubuntu/Debian might be needed (not tested)
 #
 XEP_WRAPPER="@pkgdatadir@/libexec/daps-xep"
 
