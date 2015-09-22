@@ -281,37 +281,40 @@ FALLBACK_STYLEROOT=""
 # FOP_CONFIG_FILE="@sysconfdir@/daps/fop/fop-daps.xml"
 FOP_CONFIG_FILE=""
 
-
 ## Key:         FOP_OPTIONS
 ## -----------------------
 ## Description: Command line options for the FOP pdf formatter
 ## Type:        String
-## Default:     "-q" (turn on quiet mode)
+## Default:     ""
 #
 # Specify command line options for the FOP formatter.
 # Also see FORMATTER, FOP-*
 #
-FOP_OPTIONS="-q"
+FOP_CMD_OPTIONS=""
 
+## Key:         FOP_JAVA_FLAGS
+## ----------------------------
+## Description: Additional java properties for running fop
+## Type:        String (-D<prop>)
+## Default:     ""
+#
+FOP_JAVA_FLAGS=""
 
-## Key:         FOP_STACKSIZE
-## --------------------------
-## Description: Java stack size for the FOP pdf formatter
+## Key:         FOP_JAVA_JARS
+## ---------------------------
+## Description: Additional Jars for running fop
 ## Type:        String
-## Default:     "-Xss2048K"
+## Default:     ""
 #
-# Needs to be specified as -Xss<size>
-# <size> can either be specified in kilobytes (K) or megabytes (m)
-# Example:
-#  -Xss2048K
-#  -Xss2m
+FOP_JAVA_JARS=""
+
+## Key:         FOP_JAVA_OPTIONS
+## ------------------------------
+## Description: Additional java options for running fop
+## Type:        String (-X<option>), see java -X for help
+## Default:     ""
 #
-# Increase this value (e.g. to 3 or 4 MB) if you experience strange
-# problems when building PDFs with FOP (especially on 64bit machines)
-#
-# Also see FORMATTER, FOP-*
-#
-FOP_STACKSIZE="-Xss2048K"
+FOP_JAVA_OPTIONS=""
 
 ## Key:         FOP_WRAPPER
 ## -----------------------
@@ -319,10 +322,13 @@ FOP_STACKSIZE="-Xss2048K"
 ## Type:        PATH to script
 ## Default:     "@pkgdatadir@/libexec/daps-fop""
 #
-# Optional wrapper script for calling FOP. The default "fop" will run
+# Optional wrapper script for calling fop. If set to "fop", it will run
 # the first fop executable found in your path (usually this will be
 # /usr/bin/fop)
-# Also see FORMATTER, FOP-*
+#
+# The default will probably not work on Debian/Ubuntu, since they
+# use a different way to set Java options. Setting up a custom wrapper
+# script for Ubuntu/Debian might be needed (not tested)
 #
 FOP_WRAPPER="@pkgdatadir@/libexec/daps-fop"
 
@@ -387,7 +393,7 @@ JING_JAVA_OPTIONS=""
 # use a different way to set Java options. Setting up a custom wrapper
 # script for Ubuntu/Debian might be needed (not tested)
 #
-# Also see FORMATTER, FOP-*
+# Also see JING_*
 #
 JING_WRAPPER="@pkgdatadir@/libexec/daps-jing"
 
