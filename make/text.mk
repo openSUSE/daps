@@ -48,4 +48,5 @@ $(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
 	$(XSLTPROC) $(ROOTSTRING) $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
 	  --output $(TMP_DIR)/$(DOCNAME).html --xinclude \
 	  --stylesheet $(STYLETXT) --file $(PROFILED_MAIN) \
+	  --param "show.comments=0" \
 	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
