@@ -62,7 +62,7 @@ endif
 
 # get all images in the current set in case set and current book differ
 ifdef ROOTID
-  USED_SET := $(shell $(XSLTPROC) --stringparam "xml.or.img=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
+  USED_SET := $(shell $(XSLTPROC) --stringparam "filetype=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
 
   ifneq "$(strip $(USED_SET))" ""
     # USED_SET contains just the images names as mentioned in the XML sources
