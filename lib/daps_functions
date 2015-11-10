@@ -1760,7 +1760,7 @@ function getimages {
 ###########################################################################
 function spellcheck {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local ASPELL_EXTRA_DICT COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
@@ -1785,18 +1785,9 @@ function spellcheck {
     exit 0
     fi
 
+    [[ -n "$P_ASPELL_EXTRA_DICT" ]] && ASPELL_EXTRA_DICT="$P_ASPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = "$P_LIST" ]] && LISTMODE=1
-
-    # extra dictionary
-    # check and absolutize path
-    if [[ -n "$P_ASPELL_EXTRA_DICT" ]]; then
-        if [[ -e $P_ASPELL_EXTRA_DICT ]]; then
-            sanitize_path "$P_ASPELL_EXTRA_DICT" "ASPELL_EXTRA_DICT"
-        else
-            exit_on_error "Path to extra dictionary \"$P_ASPELL_EXTRA_DICT\" is not valid"
-        fi
-    fi
 
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -1846,6 +1837,9 @@ function spellcheck {
     if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
+
+    # show spellchecker command with --debug
+    [[ 1 = "$DEBUG" ]] && echo "DEBUG: $SPELLCMD"
 
     # do spellchecking on the list of files
     for FILE in "${FILELIST[@]}"; do
