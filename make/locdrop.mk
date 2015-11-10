@@ -60,8 +60,23 @@ ifneq "$(strip $(USED_ALL))" ""
   TO_TRANS_IMG_TAR :=$(LOCDROP_EXPORT_BOOKDIR)/graphics-translation-$(DOCNAME)$(LANGSTRING).tar.bz2
 endif
 
-# get all images in the current set in case set and current book differ
 ifdef ROOTID
+
+  #
+  # Normally, if ROOTID is set, a complete manual is included in the locdrop
+  # Normally, a manual is completely translated
+  # Create a list of files that are paret of the manual, but are not marked
+  # for translation. If this list is not empty, a warning will be issued
+  # during locdrop processing
+  #
+  NO_TRANS_BOOK := $(filter-out $(subst $(PROFILEDIR)/,,$(TO_TRANS_FILES)),$(subst $(DOC_DIR)/xml/,,$(DOCFILES)))
+  ifneq "$(strip $(NO_TRANS_BOOK))" ""
+    NO_TRANS_BOOK := $(subst $(SPACE),\n,$(NO_TRANS_BOOK))
+  endif
+
+ #
+ # get all images in the current set in case set and current book differ
+ #
   USED_SET := $(shell $(XSLTPROC) --stringparam "filetype=img" --file $(SETFILES_TMP) --stylesheet $(DAPSROOT)/daps-xslt/common/extract-files-and-images.xsl $(XSLTPROCESSOR))
 
   ifneq "$(strip $(USED_SET))" ""
@@ -104,6 +119,11 @@ locdrop: $(SRCFILES) $(MANIFEST_TRANS) $(MANIFEST_NOTRANS) $(USED_ALL) $(PROFILE
 	@ccecho "error" "Fatal error: The following images are missing:"
 	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
 	$(error )
+  endif
+  ifdef ROOTID
+    ifneq "$(strip $(NO_TRANS_BOOK))" ""
+	ccecho "warn" "Warning: The following files are not marked for translation:\n$(NO_TRANS_BOOK)" >&2
+    endif
   endif
         # tarball with files for translation
 	tar chf $(TO_TRANS_TAR) --absolute-names \
