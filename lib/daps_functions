@@ -82,6 +82,18 @@ function parse_args {
                 P_DESKTOPFILES=1
                 shift
                 ;;
+            --db5todb4)
+                P_DB5TODB4=1
+                shift
+                ;;
+            --db5todb4nh)
+                P_DB5TODB4NH=1
+                shift
+                ;;
+            --dbtonovdoc)
+                P_DBTONOVDOC=1
+                shift
+                ;;
             --documentfiles)
                 P_DOCUMENTFILES=1
                 shift
@@ -293,7 +305,7 @@ function parse_args {
                 break
                 ;;
             *)
-                wrong_parameter "SUB_CMD"
+                wrong_parameter "$SUB_CMD"
                 ;;
         esac
     done
@@ -1012,12 +1024,14 @@ function build_locdrop {
 #
 ###########################################################################
 function online-docs {
-    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local CONV_COUNT SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
+    CONV_COUNT=0
+
     SHORT_OPTS="h"
-    LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
+    LONG_OPTS="db5todb4,db5todb4nh,dbtonovdoc,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1025,10 +1039,16 @@ function online-docs {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_db5todb4
+        help_db5todb4nh
+        help_dbtonovdoc
         help_export-dir
         help_formatter
         help_help
         help_name
+        help_noepub
+        help_nohtml
+        help_nopdf
         help_noset
         help_rootid
         help_optipng
@@ -1045,10 +1065,10 @@ function online-docs {
     [[ 1 = "$P_OPTIPNG" ]] && export OPTIPNG=1
 
     if [[ 1 = "$P_NOHTML" ]]; then
-    export NOHTML=1
+        export NOHTML=1
     else
     # online-docs always builds a single HTML file
-    export HTMLSINGLE=1
+        export HTMLSINGLE=1
     fi
 
     if [[ -n "$P_EXPORT_DIR" ]]; then
@@ -1065,6 +1085,33 @@ function online-docs {
         exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
+
+    case 1 in
+        $P_DB5TODB4)
+            let CONV_COUNT++
+            ;;
+        $P_DB5TODB4NH)
+            let CONV_COUNT++
+            ;;
+        $P_DBTONOVDOC)
+            let CONV_COUNT++
+            ;;
+    esac
+
+    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4, --db5todb4nh and --dbtonovdoc exclude each other"
+
+    if [[ 4 = "$DOCBOOK_VERSION" ]]; then
+       [[ 1 = "$P_DB5TODB4" || 1 = "$P_DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
+    fi
+
+    # Since make does not support and/or in if, it is hard to determine
+    # whether a conversion is needed or not. We have this information
+    # at hand here, so lets set DBNOCONV=1 if no conversion parameter is set
+    [[ 0 = "$CONV_COUNT" ]]    && export DBNOCONV=1
+    [[ 1 = "$P_DB5TODB4" ]]    && export DB5TODB4=1
+    [[ 1 = "$P_DB5TODB4NH" ]]  && export DB5TODB4NH=1
+    [[ 1 = "$P_DBTONOVDOC" ]]  && export DBTONOVDOC=1
+
 
     call_make "$SUB_CMD" "$@"
 }
@@ -2170,10 +2217,28 @@ function help_css {
                               Default: unset
 EOF
 }
-function help_draft {
+function help_db5todb4 {
     cat <<EOF
-    --draft                   Add a 'DRAFT' watermark to all pages of the book
-                              Default: off
+    --db5todb4                Create XML bigfile in DoBook 4 format. This
+                              option only applies if the sources are in
+                              DocBook5 format.
+                              Default: Same as source
+EOF
+}
+function help_db5todb4nh {
+    cat <<EOF
+    --db5todb4nh              Create XML bigfile in DocBook 4 format without
+                              a DOCTYPE header. This option only applies if
+                              the sources are in DocBook5 format.
+                              Default: Same as source
+EOF
+}
+function help_dbtonovdoc {
+    cat <<EOF
+    --db5tonovdoc             Create XML bigfile in NovDoc-format. This
+                              option only applies if the sources are in
+                              DocBook5 or DocBook 4 format.
+                              Default: Same as XML source
 EOF
 }
 function help_def-file {
@@ -2194,6 +2259,12 @@ function help_documentfiles {
                               Default: off
 EOF
 }
+function help_draft {
+    cat <<EOF
+    --draft                   Add a 'DRAFT' watermark to all pages of the book
+                              Default: off
+EOF
+}
 function help_epub3 {
     cat <<EOF
     --epub3                   Generate ePUB version 3 eBooks.
@@ -2210,7 +2281,8 @@ EOF
 }
 function help_extra-dict {
     cat <<EOF
-    --extra-dict=filename     Specify a path to an additional custom dictionary.
+    --extra-dict=filename     Specify a path to an additional custom
+                              dictionary.
                               Default: unset
 EOF
 }
@@ -2289,8 +2361,9 @@ EOF
 function help_locdrop {
     cat <<EOF
     --locdrop                 Use this option to create a source tarball
-                              from a previous locdrop after translation. If set, will
-                              include the files manifest_*.txt in the source tarball.
+                              from a previous locdrop after translation.
+                              If set, will include the files manifest_*.txt
+                              in the source tarball.
                               Default: off
 EOF
 }
@@ -2329,11 +2402,23 @@ function help_noent {
                               Default: unset
 EOF
 }
+function help_noepub {
+    cat <<EOF
+    --noepub                  Deactivates creating the ePUB output
+                              Default: ePUB output is created.
+EOF
+}
 function help_nogzip {
     cat <<EOF
     --nogzip                  If specified, man pages will not be compressed
                               with gzip.
                               Default: unset
+EOF
+}
+function help_nohtml {
+    cat <<EOF
+    --nohtml                  Deactivates creating the package-html tarball.
+                              Default: Package-html tarball iscreated.
 EOF
 }
 function help_noimg {
@@ -2354,7 +2439,7 @@ function help_nopdf {
                               \"locdropping\" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
-                              Default: off
+                              Default: PDF is created
 EOF
 }
 function help_nosearch {
@@ -2514,15 +2599,16 @@ EOF
 function help_target {
     cat <<EOF
     --target=TARGET           Specify a potential target (such as jsp or
-                              color-pdf) in order to retrieve correct values for
-                              target-specific values.
+                              color-pdf) in order to retrieve correct values
+                              for target-specific values.
                               Default: same as daps subcommand
 EOF
 }
 function help_trans-files {
     cat <<EOF
     --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
-                              files (semicolon-separeted) for a single language.
+                              files (semicolon-separeted) for a single
+                              language.
                               Default: unset
 EOF
 }
@@ -2546,8 +2632,8 @@ function help_xsltparam {
                               Add one or more xslt processor parameters in
                               the form of
                               \"--stringparam KEY=VALUE --param KEY=VALUE\".
-                              The given string will be passed unmodified to the
-                              xslt processor call that
+                              The given string will be passed unmodified to
+                              the xslt processor call that
                               $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.
