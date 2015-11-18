@@ -124,6 +124,10 @@ function parse_args {
                 P_HTML5=1
                 shift
                 ;;
+            --imgonly)
+                P_LIST_IMG_ONLY=1
+                shift
+                ;;
             --jsp)
                 P_JSP=1
                 shift
@@ -274,6 +278,10 @@ function parse_args {
             --viewer)
                 P_VIEWER="$2"
                 shift 2
+                ;;
+            --xmlonly)
+                P_LIST_XML_ONLY=1
+                shift
                 ;;
             --xsltparam)
                 ccecho -- "warn" "--xsltparam is deprecated, please use --param/--stringparam instead."
@@ -1500,7 +1508,7 @@ function filelists {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nodc,noent,noimg,noxml,pretty,rootid:"
+    LONG_OPTS="help,imgonly,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1509,14 +1517,16 @@ function filelists {
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
-    if [[ $SUB_CMD =~ list-srcfiles ]]; then
+        if [[ $SUB_CMD =~ list-srcfiles ]]; then
+            help_imgonly
             help_nodc
             help_noent
             help_noimg
             help_noxml
-    fi
-    [[ $SUB_CMD != list-file ]] && help_pretty
-    help_rootid
+            help_xmlonly
+        fi
+        [[ $SUB_CMD != list-file ]] && help_pretty
+        help_rootid
         echo
         exit 0
     fi
@@ -1526,6 +1536,14 @@ function filelists {
     [[ 1 = "$P_LIST_NOXML" ]] && export LIST_NOXML=1
     [[ 1 = "$P_PRETTY" ]]     && export PRETTY_FILELIST=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+
+    # --imgonly and --xmlonly are shortcuts
+    #
+    if [[ 1 = "$P_LIST_IMG_ONLY" ]]; then
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1
+    elif [[ 1 = "$P_LIST_XML_ONLY" ]]; then
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1
+    fi
 
     if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then
     exit_on_error "You need to specify an ID with --rootid with the list-file command."
@@ -2231,6 +2249,12 @@ function help_html5 {
                               Default: unset
 EOF
 }
+function help_imgonly {
+    cat <<EOF
+    --imgonly                 Only list images files.
+                              Shortcut for --nodc --noent --noxml.
+EOF
+}
 function help_jsp {
     cat <<EOF
     --jsp                     Creates JSP output. Requires custom stylesheets
@@ -2497,6 +2521,12 @@ function help_viewer {
     cat <<EOF
     --viewer=VIEWER           Image viewer to be used.
                               Default: IMG_VIEWER setting from config file
+EOF
+}
+function help_xmlonly {
+    cat <<EOF
+    --xmlonly                 Only list XML files.
+                              Shortcut for --nodc --noent --noimg.
 EOF
 }
 function help_xsltparam {
