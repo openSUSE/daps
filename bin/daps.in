@@ -1565,17 +1565,29 @@ DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbo
 
 # ... now resolve the style URI via catalogs
 if [[ 5 = "$DOCBOOK_VERSION" ]]; then
-    DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
-        "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
-        exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
+    if [[ ${DOCBOOK5_STYLE_URI:0:7} = file:// ]]; then
+        DOCBOOK_STYLES="${DOCBOOK5_STYLE_URI##*file://}"
+    else
+        DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
+          "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
+            exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
+    fi
     # also get the RNG scheme location
-    DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
-        "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
-        exit_on_error "Could not determine the DocBook 5 schema location by\nresolving $DOCBOOK5_RNG_URI\n via xmlcatalog"
+    if [[ ${DOCBOOK5_RNG_URI:0:7} = file:// ]]; then
+        DOCBOOK5_RNG="${DOCBOOK5_RNG_URI##*file://}"
+    else
+        DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
+          "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
+            exit_on_error "Could not determine the DocBook 5 schema location by\nresolving $DOCBOOK5_RNG_URI\n via xmlcatalog"
+    fi
 elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
-    DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
-        "$DOCBOOK4_STYLE_URI" 2>/dev/null) || \
-        exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
+    if [[ ${DOCBOOK4_STYLE_URI:0:7} = file:// ]]; then
+        DOCBOOK_STYLES="${DOCBOOK4_STYLE_URI##*file://}"
+    else
+        DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
+          "$DOCBOOK4_STYLE_URI" 2>/dev/null) || \
+            exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
+    fi
 else
     exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document."
 fi
