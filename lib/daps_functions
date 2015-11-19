@@ -511,6 +511,8 @@ function call_make {
            DOCCONF: $DOCCONF
               BOOK: $BOOK
 
+   DOCBOOK_VERSION: $DOCBOOK_VERSION
+      DOCBOOK5_RNG: $DOCBOOK5_RNG
 EOF
 
         if [[ -n "$STYLEDEVEL" ]]; then
@@ -522,9 +524,16 @@ EOF
                 echo "         STYLEROOT: $DOCBOOK_STYLES"
             fi
         fi
+        if [[ -n "$FALLBACK_STYLEROOT" ]]; then
+            echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
+        else
+            # no fallback if STYLEROOT is not set
+            if [[ -n "$STYLEROOT" ]]; then
+                echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+            fi
+        fi
 
         cat <<EOF
-FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
 

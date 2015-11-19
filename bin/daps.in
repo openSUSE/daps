@@ -1555,6 +1555,8 @@ export XML_CATALOG_FILES
 
 #----------------------------------
 # DocBook Stylesheet locations
+# These stylesheets are used as a fallback and/or when no STYLEROOT is
+# specified on the command line or the DC file
 #
 # get DocBook version first ...
 
@@ -1566,7 +1568,7 @@ DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbo
 # ... now resolve the style URI via catalogs
 if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     if [[ ${DOCBOOK5_STYLE_URI:0:7} = file:// ]]; then
-        DOCBOOK_STYLES="${DOCBOOK5_STYLE_URI##*file://}"
+        DOCBOOK_STYLES="$DOCBOOK5_STYLE_URI"
     else
         DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
@@ -1574,7 +1576,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     fi
     # also get the RNG scheme location
     if [[ ${DOCBOOK5_RNG_URI:0:7} = file:// ]]; then
-        DOCBOOK5_RNG="${DOCBOOK5_RNG_URI##*file://}"
+        DOCBOOK5_RNG="$DOCBOOK5_RNG_URI"
     else
         DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
@@ -1582,7 +1584,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     fi
 elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
     if [[ ${DOCBOOK4_STYLE_URI:0:7} = file:// ]]; then
-        DOCBOOK_STYLES="${DOCBOOK4_STYLE_URI##*file://}"
+        DOCBOOK_STYLES="$DOCBOOK4_STYLE_URI"
     else
         DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK4_STYLE_URI" 2>/dev/null) || \
