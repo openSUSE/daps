@@ -172,12 +172,13 @@ unset "${VARLIST[@]}"
 #
 declare -a UNSETLIST
 UNSETLIST=(
-    DOC_DIR_CMDL
     BIN_DIR
     BUILD_DIR_CMDL
     COLOR_CMDL
     CONFIG
     DC_PATH_EXISTS
+    DOC_DIR_CMDL
+    DOCBOOK5_RNG_URI_CMDL
     DOCCONF_CMDL
     DOCCONF_NAME
     DAPSROOT_CMDL
@@ -667,6 +668,12 @@ Global Options:
   --main, -m                Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
                                   each other.
+  --schema                  URN to a DocBook 5 schema that is to be used for
+                            validation. Will be ignored when validating
+                            DocBook 4 documents.
+                            Note: To validate with a local schema, specify an
+                                  absolute path with a "file://" prefix
+                                  (e.g. "file:///foo/schema.rnc").
   --styleroot               By default, daps uses the DocBook Stylesheets to
                             create output. If you have your own set of
                             stylesheets, specify the absolute path to the
@@ -999,6 +1006,7 @@ function set_mainfile {
 function recover_cmdl_values {
     test -n "$BUILD_DIR_CMDL" && BUILD_DIR="$BUILD_DIR_CMDL"
     test -n "$COLOR_CMDL"     && COLOR="$COLOR_CMDL"
+    test -n "$DOCBOOK5_RNG_URI_CMDL" && DOCBOOK5_RNG_URI="$DOCBOOK5_RNG_URI_CMDL"
     test -n "$DOCCONF_CMDL"   && DOCCONF="$DOCCONF_CMDL"
     test -n "$DAPSROOT_CMDL"  && DAPSROOT="$DAPSROOT_CMDL"
     test -n "$FALLBACK_STYLEROOT_CMDL" && FALLBACK_STYLEROOT="$FALLBACK_STYLEROOT_CMDL"
@@ -1039,7 +1047,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1123,6 +1131,11 @@ while true ; do
             # make path absolute and strip trailing slash
             sanitize_path "$2" "MAIN_CMDL"
             MAIN="$MAIN_CMDL"
+            shift 2
+            ;;
+        --schema)
+            DOCBOOK5_RNG_URI="$2"
+            DOCBOOK5_RNG_URI_CMDL="$DOCBOOK5_RNG_URI"
             shift 2
             ;;
         --styleroot)
@@ -1572,7 +1585,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     else
         DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK5_STYLE_URI" 2>/dev/null) || \
-            exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK5_STYLE_URI\n via xmlcatalog"
+            exit_on_error "Could not determine the DocBook stylesheet location by resolving \"$DOCBOOK5_STYLE_URI\" via xmlcatalog"
     fi
     # also get the RNG scheme location
     if [[ ${DOCBOOK5_RNG_URI:0:7} = file:// ]]; then
@@ -1580,7 +1593,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     else
         DOCBOOK5_RNG=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
-            exit_on_error "Could not determine the DocBook 5 schema location by\nresolving $DOCBOOK5_RNG_URI\n via xmlcatalog"
+            exit_on_error "Could not determine the DocBook 5 schema location by resolving \"$DOCBOOK5_RNG_URI\" via xmlcatalog"
     fi
 elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
     if [[ ${DOCBOOK4_STYLE_URI:0:7} = file:// ]]; then
@@ -1588,7 +1601,7 @@ elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
     else
         DOCBOOK_STYLES=$(xmlcatalog "$XML_MAIN_CATALOG" \
           "$DOCBOOK4_STYLE_URI" 2>/dev/null) || \
-            exit_on_error "Could not determine the DocBook stylesheet location by\nresolving $DOCBOOK4_STYLE_URI\n via xmlcatalog"
+            exit_on_error "Could not determine the DocBook stylesheet location by resolving \"$DOCBOOK4_STYLE_URI\" via xmlcatalog"
     fi
 else
     exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document."
@@ -1602,6 +1615,18 @@ fi
 DOCBOOK_STYLES=${DOCBOOK_STYLES##*file://}
 DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 DOCBOOK5_RNG=${DOCBOOK5_RNG##*file://}
+
+# Check paths
+#
+[[ -d "$DOCBOOK_STYLES" ]] || exit_on_error "DOCBOOK4_STYLE_URI or DOCBOOK5_STYLE_URI points to a non-existing directory \"$DOCBOOK_STYLES\"."
+
+if [[ ! -s "$DOCBOOK5_RNG" ]]; then
+    if [[ -n "$DOCBOOK5_RNG_URI_CMDL" ]]; then
+        exit_on_error "The URN specified with --schema points to a non-existing file \"$DOCBOOK5_RNG\""
+    else
+        exit_on_error "The URN specified with DOCBOOK5_RNG_URI points to a non-existing file \"$DOCBOOK5_RNG\""
+    fi
+fi
 
 # ...and export
 export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
