@@ -722,15 +722,16 @@ TXT_IGNORE_STYLEROOT="no"
 # displayed in the .txt file. This configuration option can be used to set
 # custom XSL parameters - the HTML stylesheets are not necessarily
 # configured in a way that is suitable for text output.
-# The default value for TXT_PARAMS turns on labelling, makes sure
-# permalinks are nor generated and admonitions have a text label.
+# The default value for TXT_PARAMS turns on labelling and makes sure
+# admonitions have a text label. Other parameters turn off stuff that is
+# of no use in text output.
 # For a reference of all HTML parameters refer to
 # http://docbook.sourceforge.net/release/xsl/current/doc/html/index.html
 #
 # NOTE: Make sure to use single quotes to quote the complete string, since it
 #       contains double quotes
 #
-TXT_PARAMS='--param="admon.textlabel=1" --param="generate.permalinks=0" --param="section.autolabel=1" --param="section.label.includes.component.label=2"'
+TXT_PARAMS='--param="admon.textlabel=1" --param="generate.permalinks=0" --param="section.autolabel=1" --param="section.label.includes.component.label=2" --param="generate.breadcrumbs=0" --param="suse.content=0" --param="use.tracker.meta=0" --param="generate.sharelinks=0"'
 
 ## Key:         VALID_ROOTELEMENTS
 ## --------------------
