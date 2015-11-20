@@ -1567,19 +1567,19 @@ export XML_CATALOG_FILES
 [[ -z "$BUILD_DIR" ]] && BUILD_DIR=${DOC_DIR}/build
 
 #----------------------------------
-# DocBook Stylesheet locations
+# DocBook Stylesheet and Schema locations (from system or user config file)
 # These stylesheets are used as a fallback and/or when no STYLEROOT is
 # specified on the command line or the DC file
 #
 # get DocBook version first ...
 
-DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Seems $MAIN is either not well-formed."
+DOCBOOK_VERSION=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-docbook-version.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
 
-#    || { DOCBOOK_VERSION=4; \
-#      "Could not get DocBook version, assuming DocBook 4"; }
-
-# ... now resolve the style URI via catalogs
+# DocBook 5
+#
 if [[ 5 = "$DOCBOOK_VERSION" ]]; then
+    # resolve stylesheet URN
+    #
     if [[ ${DOCBOOK5_STYLE_URI:0:7} = file:// ]]; then
         DOCBOOK_STYLES="$DOCBOOK5_STYLE_URI"
     else
@@ -1588,6 +1588,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
             exit_on_error "Could not determine the DocBook stylesheet location by resolving \"$DOCBOOK5_STYLE_URI\" via xmlcatalog"
     fi
     # also get the RNG scheme location
+    #
     if [[ ${DOCBOOK5_RNG_URI:0:7} = file:// ]]; then
         DOCBOOK5_RNG="$DOCBOOK5_RNG_URI"
     else
@@ -1595,7 +1596,25 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
           "$DOCBOOK5_RNG_URI" 2>/dev/null) || \
             exit_on_error "Could not determine the DocBook 5 schema location by resolving \"$DOCBOOK5_RNG_URI\" via xmlcatalog"
     fi
+    # remove file:// prefix
+    #
+    DOCBOOK5_RNG=${DOCBOOK5_RNG##*file://}
+    #
+    # check if resulting path is valid
+    #
+    if [[ ! -s "$DOCBOOK5_RNG" ]]; then
+        if [[ -n "$DOCBOOK5_RNG_URI_CMDL" ]]; then
+            exit_on_error "The URN specified with --schema points to a non-existing file \"$DOCBOOK5_RNG\""
+        else
+            exit_on_error "The URN specified with DOCBOOK5_RNG_URI points to a non-existing file \"$DOCBOOK5_RNG\""
+        fi
+    fi
+
+# DocBook 4
+#
 elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
+    # resolve stylesheet URN
+    #
     if [[ ${DOCBOOK4_STYLE_URI:0:7} = file:// ]]; then
         DOCBOOK_STYLES="$DOCBOOK4_STYLE_URI"
     else
@@ -1606,7 +1625,7 @@ elif [[ 4 = "$DOCBOOK_VERSION" ]]; then
 else
     exit_on_error "Fatal: Could not determine the DocBook version from $MAIN. Looks like $MAIN is not a DocBook 4/5 document."
 fi
-
+#
 # remove the file:// string from the styles
 # use ##*file:// rather than #file:// because sometimes xmlcatalog also outputs
 # warnings to stdout which we would like to ignore. Fortunately the file:// url
@@ -1614,20 +1633,10 @@ fi
 #
 DOCBOOK_STYLES=${DOCBOOK_STYLES##*file://}
 DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
-DOCBOOK5_RNG=${DOCBOOK5_RNG##*file://}
-
-# Check paths
+#
+# Check resulting path
 #
 [[ -d "$DOCBOOK_STYLES" ]] || exit_on_error "DOCBOOK4_STYLE_URI or DOCBOOK5_STYLE_URI points to a non-existing directory \"$DOCBOOK_STYLES\"."
-
-if [[ ! -s "$DOCBOOK5_RNG" ]]; then
-    if [[ -n "$DOCBOOK5_RNG_URI_CMDL" ]]; then
-        exit_on_error "The URN specified with --schema points to a non-existing file \"$DOCBOOK5_RNG\""
-    else
-        exit_on_error "The URN specified with DOCBOOK5_RNG_URI points to a non-existing file \"$DOCBOOK5_RNG\""
-    fi
-fi
-
 # ...and export
 export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
 
