@@ -17,7 +17,7 @@
 # include $(DAPSROOT)/make/html.mk
 # include $(DAPSROOT)/make/text.mk
 
-ifeq "$(TXT_USE_DBSTYLES)" "yes"
+ifeq "$(TXT_IGNORE_STYLEROOT)" "yes"
   STYLETXT := $(DOCBOOK_STYLES)/xhtml/docbook.xsl
 else
   STYLETXT := $(firstword $(wildcard \
@@ -45,8 +45,8 @@ $(TMP_DIR)/$(DOCNAME).html: $(DOCFILES) $(PROFILES) $(PROFILEDIR)/.validate
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating temporary single HTML page"
   endif
-	$(XSLTPROC) $(ROOTSTRING) $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
-	  --output $(TMP_DIR)/$(DOCNAME).html --xinclude \
+	$(XSLTPROC) $(ROOTSTRING) $(XSLTPARAM) $(TXT_PARAMS) $(PARAMS) \
+	  $(STRINGPARAMS) --output $(TMP_DIR)/$(DOCNAME).html --xinclude \
 	  --stylesheet $(STYLETXT) --file $(PROFILED_MAIN) \
 	  --param "show.comments=0" \
 	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
