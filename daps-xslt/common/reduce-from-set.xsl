@@ -148,10 +148,10 @@
           </xsl:apply-templates>
         </xsl:variable>
 
-          <xsl:message>target/title:
+          <!--<xsl:message>target/title:
    new-title=<xsl:value-of select="$title"/>
    target=<xsl:value-of select="local-name($target)"/>
-        </xsl:message>
+        </xsl:message>-->
 
         <xsl:element name="phrase" namespace="{namespace-uri(/*)}">
           <xsl:attribute name="role">
