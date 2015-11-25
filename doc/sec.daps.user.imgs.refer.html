@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Referencing Images</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.0" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="cha.daps.user.img.html" title="Chapter 5. Image Handling" /><link rel="prev" href="sec.daps.user.imgs.req.html" title="File Name Requirements" /><link rel="next" href="sec.daps.user.imgs.manage.html" title="DAPS Commands for Managing Images" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Referencing Images</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.imgs.req.html">Prev</a> </td><th width="60%" align="center">Chapter 5. Image Handling</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.imgs.manage.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.imgs.refer"></a>Referencing Images</h2></div></div></div><p>
+    As your images need to be located in a defined directory structure,
+    DAPS automatically finds the path to your images. Therefore,
+    referencing images in your XML sources is very straightforward: 
+    you must not include any path in the
+    <code class="sgmltag-attribute">fileref</code> attribute—the
+    file name is enough.
+   </p><p>
+    Furthermore, DocBook allows you to reference more than one image to
+    distinguish between different output formats. For example, you can add
+    two references pointing to the same file, but using different images
+    widths for PDF and HTML output. Use the
+    <code class="sgmltag-attribute">role</code> attribute to specify the
+    output format, for example <code class="sgmltag-attvalue">fo</code> or
+    <code class="sgmltag-attvalue">html</code>.
+    </p><div class="example"><a id="ex.daps.user.xml.img.ref"></a><p class="title"><strong>Example 5.1. Image Reference in an XML File</strong></p><div class="example-contents"><p>Let us assume you have a source image file named <code class="filename">graphic.dia</code>. To make
+    DAPS use an SVG version of your image for PDF output (<code class="literal">role="fo"</code>) and
+    a PNG version for HTML output (<code class="literal">role="html"</code>), reference the images as follows:
+   </p><pre class="screen">&lt;figure&gt;
+  &lt;title&gt;Main Window&lt;/title&gt;
+  &lt;mediaobject&gt;
+    &lt;imageobject role="fo"&gt;
+      &lt;imagedata fileref="graphic.svg" width="70%"/&gt;
+    &lt;/imageobject&gt;
+    &lt;imageobject role="html"&gt;
+      &lt;imagedata fileref="graphic.png" width="75%"/&gt;
+    &lt;/imageobject&gt;
+  &lt;/mediaobject&gt;
+&lt;/figure&gt;</pre></div></div><br class="example-break" /></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.imgs.req.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="cha.daps.user.img.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.imgs.manage.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">File Name Requirements </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DAPS Commands for Managing Images</td></tr></table></div></body></html>

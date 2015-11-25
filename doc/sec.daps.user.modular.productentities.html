@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Combining Entities and Profiling</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.0" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="cha.daps.user.modular.html" title="Chapter 6. Modularizing Documentation Projects" /><link rel="prev" href="sec.daps.user.modular.profile.html" title="Profiling—Support for Document Variants" /><link rel="next" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Combining Entities and Profiling</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.modular.profile.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Modularizing Documentation Projects</th><td width="20%" align="right"> <a accesskey="n" href="cha.daps.user.review.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.modular.productentities"></a>Combining Entities and Profiling</h2></div></div></div><p>
+   For maximum flexibility in generating documentation variants from the
+   same source, DAPS also supports the combination of entities and
+   profiling. As you already learned in
+   <a class="xref" href="sec.daps.user.modular.ent.separate.html" title="Declaring Entities in a Separate File">the section called “Declaring Entities in a Separate File”</a>, it is useful for
+   modularization purposes to declare entities in a separate file and to
+   re-use it in multiple documentation projects. </p><p>For multiple use of entities like <code class="literal">&amp;productname;</code> or
+   <code class="literal">&amp;productnumber;</code>, declare them in a separate file
+   and add profiling within the entities as shown in
+   <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.ent.decl.profiling" title="Example 6.14. Separate Entity File with Profiling Attributes">Example 6.14</a>. During generation of
+   output, DAPS then automatically replaces the entities with different
+   values during output, depending on the context.
+  </p><div class="example"><a id="ex.daps.ent.decl.profiling"></a><p class="title"><strong>Example 6.14. Separate Entity File with Profiling Attributes</strong></p><div class="example-contents"><pre class="screen">
+&lt;!--the following declarations are contained in the file entity-decl.ent --&gt;
+
+&lt;!ENTITY productname  
+ <span class="strong"><strong>'&lt;phrase cond="basic"&gt;Frog Sound Recordings (Basic)&lt;/phrase&gt;
+  &lt;phrase cond="prof"&gt;Frog Sound Recordings (Professional)&lt;/phrase&gt;
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;Gecko Sound Recordings (Professional)&lt;/phrase&gt;'&gt;</strong></span>
+
+&lt;!ENTITY productnumber  
+ <span class="strong"><strong>'&lt;phrase cond="basic"&gt;1.0&lt;/phrase&gt;
+  &lt;phrase cond="prof"&gt;4.2&lt;/phrase&gt;
+  &lt;phrase cond="prof" vendor="oemcompany"&gt;4.21&lt;/phrase&gt;'&gt;</strong></span></pre></div></div><br class="example-break" /><div class="procedure"><a id="pro.daps.modular.productentities"></a><p class="title"><strong>Procedure 6.1. Using Product Entities with Profiling in XML Files</strong></p><p> After declaring the entities as shown in <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.ent.decl.profiling" title="Example 6.14. Separate Entity File with Profiling Attributes">Example 6.14</a> you can use
+    them throughout your documents. For DAPS to process them correctly,
+    you only need to <span class="quote">“<span class="quote">introduce</span>”</span> the entities once within the
+     <code class="sgmltag-element">*info</code> element of each document as described below. For
+    examples showing the result, see <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db4" title="Example 6.9. MAIN file With PI for Profiling (DocBook 4.5)">Example 6.9</a> (DocBook 4) or <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db5" title="Example 6.10. MAIN file With PI for Profiling (DocBook 5.0)">Example 6.10</a>
+    (DocBook 5).</p><ol class="procedure" type="1"><li class="step"><p>Open the XML file that contains the root element for your respective
+     document (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or
+     <code class="sgmltag-element">article</code>).
+     
+    </p></li><li class="step"><p>If you use DocBook 4, insert a <code class="sgmltag-element">setinfo</code>,
+      <code class="sgmltag-element">bookinfo</code>, or <code class="sgmltag-element">articleinfo</code> element,
+     (respectively) within the root element.</p><p>If you use DocBook 5, insert the generic <code class="sgmltag-element">info</code>
+     element within the root element of your documentation. (DocBook 5 does no
+     longer distinguish between <code class="sgmltag-element">setinfo</code>,
+      <code class="sgmltag-element">bookinfo</code>, or <code class="sgmltag-element">articleinfo</code>).</p></li><li class="step"><p>
+     Within <span class="emphasis"><em>all</em></span> of the <code class="sgmltag-element">*info</code> elements in your documentation,
+     add the following elements: <code class="sgmltag-element">productname</code> and
+     <code class="sgmltag-element">productnumber</code>.
+    </p></li><li class="step"><p>
+     Within the <code class="sgmltag-element">productname</code> elements, add the
+     <code class="literal">&amp;productname;</code> entity. 
+    </p></li><li class="step"><p>Within the <code class="sgmltag-element">productnumber</code> elements, add the
+      <code class="literal">&amp;productnumber;</code> entity. </p></li></ol></div><p>Now that you have <span class="quote">“<span class="quote">introduced</span>”</span> the entities for each
+   document, use the entities in the text wherever you need them. </p><div class="example"><a id="ex.daps.art.prof.ent.db4"></a><p class="title"><strong>Example 6.15. XML File with <code class="literal">&amp;productname;</code> and
+    <code class="literal">&amp;productnumber;</code> Entities (DocBook 4.5)</strong></p><div class="example-contents"><pre class="screen">
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+
+<span class="strong"><strong>&lt;?xml-stylesheet 
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml" 
+ title="Profiling step"?&gt;</strong></span> <a id="co.daps.main.pi.profiling2"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+
+<span class="strong"><strong>&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+                         "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt; 
+%entities; 
+ ]&gt;</strong></span> <a id="co.daps.main.reference.ent2"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+ 
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt; 
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+  &lt;articleinfo&gt; <a id="co.daps.articleinfo"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <a id="co.daps.articleinfo.productname"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span>
+   &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <a id="co.daps.articleinfo.productnumber"></a><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span>
+ &lt;/articleinfo&gt;
+  &lt;abstract&gt;
+   &lt;para&gt; 
+    &amp;productname; &amp;productnumber; is a software for recording, editing, <a id="co.daps.main.product.entities"></a><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span>
+    and mixing audio data.
+   &lt;/para&gt; 
+  &lt;/abstract&gt;
+ [...]
+&lt;/article&gt;</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.pi.profiling2"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Processing instruction (PI) in the header of the MAIN file. If it is
+      missing, any profiling parameters in the DC file will be ignored.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.reference.ent2"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Reference to the separate entity declaration file (with a parameter
+      entity).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">articleinfo</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo.productname"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">productname</code> and entity
+      <code class="literal">&amp;productname;</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo.productnumber"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">productnumber</code> and entity
+      <code class="literal">&amp;productnumber;</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.product.entities"><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Paragraph containing the entities <code class="literal">&amp;productname;</code>
+      and <code class="literal">&amp;productnumber;</code>.
+     </p></td></tr></table></div></div></div><br class="example-break" /><div class="example"><a id="ex.daps.art.prof.ent.db5"></a><p class="title"><strong>Example 6.16. XML File with <code class="literal">&amp;productname;</code> and
+    <code class="literal">&amp;productnumber;</code> Entities (DocBook 5.0)</strong></p><div class="example-contents"><pre class="screen">
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+
+<span class="strong"><strong>&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?&gt;</strong></span> <a id="co.daps.main.pi.profiling3"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+
+<span class="strong"><strong>&lt;!DOCTYPE article 
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
+%entities;
+]&gt;</strong></span> <a id="co.daps.main.reference.ent3"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt;
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+  &lt;info&gt; <a id="co.daps.info"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+   &lt;productname&gt;&amp;productname;&lt;/productname&gt; <a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.articleinfo.productname"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a>
+   &lt;productnumber&gt;&amp;productnumber;&lt;/productnumber&gt; <a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.articleinfo.productnumber"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a>
+ &lt;/info&gt;
+  &lt;abstract&gt;
+   &lt;para&gt;
+    &amp;productname; &amp;productnumber; is a software for recording, editing, <a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.main.product.entities"><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span></a>
+    and mixing audio data.
+   &lt;/para&gt;
+  &lt;/abstract&gt;
+ [...]
+&lt;/article&gt;</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.pi.profiling3"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Processing instruction (PI) in the header of the MAIN file. If it is
+      missing, any profiling parameters in the DC file will be ignored.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.reference.ent3"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Reference to the separate entity declaration file (with a parameter
+      entity).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">info</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo.productname"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">productname</code> and entity
+      <code class="literal">&amp;productname;</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.articleinfo.productnumber"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Element <code class="sgmltag-element">productnumber</code> and entity
+      <code class="literal">&amp;productnumber;</code>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.main.product.entities"><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Paragraph containing the entities <code class="literal">&amp;productname;</code>
+      and <code class="literal">&amp;productnumber;</code>.
+     </p></td></tr></table></div></div></div><br class="example-break" /><p>
+   In any output format, the entities
+   (<a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.articleinfo.productname"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a>,
+   <a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.articleinfo.productnumber"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a>,
+   <a class="xref" href="sec.daps.user.modular.productentities.html#co.daps.main.product.entities"><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span></a>)
+   will automatically be replaced with different values. The actual values
+   depend on the profiling parameters contained in the DC file that you use for
+   generating the output. For an example, refer to
+   <a class="xref" href="sec.daps.user.modular.productentities.html#tab.daps.profile.output.four" title="Table 6.5. Output Variants of Example 6.15 / Example 6.16 Combined With Example 6.14">Table 6.5</a>.
+   It shows output variants that can be generated from the XML code in
+   <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.art.prof.ent.db4" title="Example 6.15. XML File with &amp;productname; and &amp;productnumber; Entities (DocBook 4.5)">Example 6.15</a> or <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.art.prof.ent.db5" title="Example 6.16. XML File with &amp;productname; and &amp;productnumber; Entities (DocBook 5.0)">Example 6.16</a> plus the
+   entity declaration in
+   <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.ent.decl.profiling" title="Example 6.14. Separate Entity File with Profiling Attributes">Example 6.14</a> by
+   using different DC files.
+  </p><div class="table"><a id="tab.daps.profile.output.four"></a><p class="title"><strong>Table 6.5. Output Variants of <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.art.prof.ent.db4" title="Example 6.15. XML File with &amp;productname; and &amp;productnumber; Entities (DocBook 4.5)">Example 6.15</a> / <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.art.prof.ent.db5" title="Example 6.16. XML File with &amp;productname; and &amp;productnumber; Entities (DocBook 5.0)">Example 6.16</a> Combined With <a class="xref" href="sec.daps.user.modular.productentities.html#ex.daps.ent.decl.profiling" title="Example 6.14. Separate Entity File with Profiling Attributes">Example 6.14</a></strong></p><div class="table-contents"><table class="table" summary="Output Variants of  /  Combined With " border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
+       <p>
+        DC File
+       </p>
+      </th><th>
+       <p>
+        Output
+       </p>
+      </th></tr></thead><tbody><tr><td>
+       <p>
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.dc.pa.home" title="Example 6.11. DC File with Profiling for Home Edition">DC File with Profiling for Home Edition</a>
+       </p>
+      </td><td>
+       <p>
+        Frog Sound Recordings (Basic) 1.0 is a software for recording,
+        editing, and mixing audio data.
+       </p>
+      </td></tr><tr><td>
+       <p>
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.dc.pa.prof" title="Example 6.12. DC File with Profiling for Professional Edition">DC File with Profiling for Professional Edition</a>
+       </p>
+      </td><td>
+       <p>
+        Frog Sound Recordings (Professional) 4.2 is a software for
+        recording, editing, and mixing audio data.
+       </p>
+      </td></tr><tr><td>
+       <p>
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.dc.pa.prof.oem" title="Example 6.13. DC File with Profiling for Professional Edition (OEM Version)">DC File with Profiling for Professional Edition (OEM Version)</a>
+       </p>
+      </td><td>
+       <p>
+        Gecko Sound Recordings (Professional) 4.21 is a software for
+        recording, editing, and mixing audio data.
+       </p>
+      </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.modular.profile.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="cha.daps.user.modular.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="cha.daps.user.review.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Profiling—Support for Document Variants </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. Review and Translation Processes</td></tr></table></div></body></html>

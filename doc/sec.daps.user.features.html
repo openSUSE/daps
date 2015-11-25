@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Key Features</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.0" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="cha.daps.user.features.html" title="Chapter 2. Conceptual Overview" /><link rel="prev" href="cha.daps.user.features.html" title="Chapter 2. Conceptual Overview" /><link rel="next" href="sec.daps.user.config.html" title="DAPS Configuration" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Key Features</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="cha.daps.user.features.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Conceptual Overview</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.config.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.features"></a>Key Features</h2></div></div></div><p>
+   DAPS supports technical writers in the editing, translation and
+   publishing process of DocBook XML files (in the following, simply
+   called as XML files):
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Output Formats (Single-source Publishing)</span></dt><dd><p>
+      DAPS lets you publish your XML sources in several different
+      output formats, for example: HTML, HTML-single, PDF, EPUB,
+      text, and man pages. For details, refer to
+      <a class="xref" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats">Chapter 4, <em>Generating Output Formats</em></a>.
+      </p></dd><dt><span class="term">Custom Layouts</span></dt><dd><p>
+      By default, DAPS uses the DocBook stylesheets to generate the
+      output formats. But DAPS also supports custom layouts for your
+      documentation projects (or for individual books within your set).
+      Thus your XML documents can be published in different layouts without
+      having to change the sources or the configuration.
+
+     </p><p>
+      Apart from that, DAPS allows you to change individual layout
+      parameters by passing string parameters to <span class="command"><strong>xsltproc</strong></span>
+      for HTML or PDF builds —without even touching the stylesheets.
+      For details about custom layouts, refer to <a class="xref" href="cha.daps.user.layout.html" title="Chapter 9. Customizing Layout of the Output Formats">Chapter 9, <em>Customizing Layout of the Output Formats</em></a>.
+     </p></dd><dt><span class="term">Editor Macros</span></dt><dd><p>
+      For Emacs, DAPS includes a set of macros for easy insertion of
+      complex DocBook elements like <code class="sgmltag-element">variablelist</code>,
+      <code class="sgmltag-element">figure</code>, <code class="sgmltag-element">table</code> or
+      <code class="sgmltag-element">indexterm</code>. Instead of inserting the child elements
+      successively, you will get a <span class="quote">“<span class="quote">skeleton</span>”</span> that includes all
+      required child elements and is ready to be filled with contents. For
+      details, refer to
+      <a class="xref" href="app.daps.user.editors.html#sec.daps.user.editors.emacs.macros" title="Emacs—Macros for Inserting DocBook Elements">the section called “Emacs—Macros for Inserting DocBook Elements”</a>.
+     </p><p></p></dd><dt><span class="term">Validating</span></dt><dd><p>
+      Validating XML files within in a book or set exceeds validation of the
+      current XML file, as links (<code class="sgmltag-element">xref</code> elements) or
+      XIncludes need to be resolved, too. With DAPS, you can check
+      validity of all files that belong to a documentation project with a
+      single command. For details, refer to
+      <a class="xref" href="cha.daps.user.output.html#sec.daps.user.output.validate" title="Validating Your XML Sources">the section called “Validating Your XML Sources”</a>.
+     </p></dd><dt><span class="term">Spell Check</span></dt><dd><p>
+      DAPS supports spell checking of your XML sources with aspell
+      from the command line. Depending on the XML editor you use, you can
+      also integrate a custom aspell dictionary into your editor. For
+      details, refer to <a class="xref" href="sec.daps.user.edit.spell.html" title="Spell Checking">the section called “Spell Checking”</a> and
+      <a class="xref" href="sec.daps.user.editors.jedit.spellcheck.html" title="jEdit—Spell Check on the Fly">the section called “jEdit—Spell Check on the Fly”</a>.
+     </p></dd><dt><span class="term">Link Checker</span></dt><dd><p>
+      To make sure that all external links in your XML sources are still
+      available (and do not give a <code class="literal">404</code> error or similar),
+      DAPS also includes a link checker (based on
+      <code class="literal">checkbot</code>). Use it to create a report of all links
+      that caused some kind of warning or error. For details, refer to
+      <a class="xref" href="sec.daps.user.edit.chklink.html" title="Checking Links to Web Pages">the section called “Checking Links to Web Pages”</a>.
+     </p></dd><dt><span class="term">Image Handling</span></dt><dd><p>
+      DAPS provides sophisticated image handling support. For example,
+      it automatically transforms images referenced in your XML files into different
+      formats, list all source images referenced in your XML files, list any
+      missing images or check if all image names are unique. You can also forward those lists to
+      your preferred image viewer to conveniently browse through the images. 
+      For details, refer to
+      <a class="xref" href="cha.daps.user.img.html" title="Chapter 5. Image Handling">Chapter 5, <em>Image Handling</em></a>.
+     </p></dd><dt><span class="term">Profiling (Conditional Text)</span></dt><dd><p>
+      If you have similar products to document and want to generate multiple
+      documentation variants from your XML files, you can do so with the
+      help of conditional text (or <code class="literal">profiling</code>, as it is
+      called in DocBook). For example, you can profile certain parts of your
+      XML texts for different (processor) architectures, operating systems,
+      vendors or target groups. DAPS supports profiling. Use the
+      <code class="literal">PROF*</code> keys defined in <code class="filename">/etc/daps/config</code> to define
+      which information should be included in the output. For details, refer
+      to <a class="xref" href="cha.daps.user.modular.html" title="Chapter 6. Modularizing Documentation Projects">Chapter 6, <em>Modularizing Documentation Projects</em></a>.
+     </p></dd><dt><span class="term">Review and Translation Processes</span></dt><dd><p>
+      DAPS offers several features to simplify review and
+      translation processes. By adding a single parameter, you can
+      generate output that contains remarks for writers, reviewers,
+      and translators. By default, remarks are suppressed in the final output
+      version. You can also generate preview versions of your
+      documentation with a <code class="literal">DRAFT</code> watermark appearing on
+      the output.  For handing over your files
+      to review or translation, DAPS can create TAR archives of the XML
+      sources and graphics.
+
+      For details, refer to <a class="xref" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes">Chapter 7, <em>Review and Translation Processes</em></a>.
+     </p></dd><dt><span class="term">Packaging and Deployment</span></dt><dd><p>
+      For deploying the documentation as RPM packages and integrating it
+      into KDE and GNOME desktop environments and into Web user
+      interfaces (via JSP), DAPS offers a number of options to produce
+      the corresponding output. For example, you can create source packages,
+      HTML TAR archives, color PDFs and desktop and document files with the
+      <span class="command"><strong>daps package-*</strong></span> commands. For details refer to
+      <a class="xref" href="cha.daps.user.deploy.html" title="Chapter 8. Packaging and Deploying Your Documentation">Chapter 8, <em>Packaging and Deploying Your Documentation</em></a>.
+     </p></dd></dl></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cha.daps.user.features.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="cha.daps.user.features.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.config.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. Conceptual Overview </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DAPS Configuration</td></tr></table></div></body></html>

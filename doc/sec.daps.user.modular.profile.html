@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Profiling—Support for Document Variants</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.0" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="cha.daps.user.modular.html" title="Chapter 6. Modularizing Documentation Projects" /><link rel="prev" href="sec.daps.user.modular.ent.separate.html" title="Declaring Entities in a Separate File" /><link rel="next" href="sec.daps.user.modular.productentities.html" title="Combining Entities and Profiling" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Profiling—Support for Document Variants</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.modular.ent.separate.html">Prev</a> </td><th width="60%" align="center">Chapter 6. Modularizing Documentation Projects</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.modular.productentities.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.modular.profile"></a>Profiling—Support for Document Variants</h2></div></div></div><p>
+   Similar products often share a considerable amount of features and differ
+   in details only. It is therefore convenient to apply the same approach to
+   the documentation of similar products or product families: Share most of
+   the XML source code and only differentiate text snippets where necessary.
+   DocBook allows you to create documentation variants from the same pool of XML
+   sources by means of <span class="emphasis"><em>profiling</em></span>. </p><p>
+      In DocBook XML files you can mark some elements as conditional by using
+      profiling attributes. When processing the files to generate output, specify
+      which conditions apply to the output. The stylesheets will then include or
+      exclude the marked text, according to the conditions.</p><p>Profiling allows you to keep both common and product-specific
+      content in one XML file and select at production time which information
+      to include in the output. </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.user.modular.profile.basics"></a>Introduction to DocBook Profiling</h3></div></div></div><p>
+    DocBook offers profiling attributes for various purposes as illustrated
+    in <a class="ulink" href="http://www.sagehill.net/docbookxsl/Profiling.html" target="_top">
+    <em class="citetitle">Table 26.1. Profiling attributes</em> </a>.
+    All of them are supported by DAPS.
+    
+   </p><p>
+    Generally, profiling attributes can be used on many
+    elements—from high-level elements like <code class="sgmltag-element">book</code> or
+    <code class="sgmltag-element">chapter</code> down to low-level elements like
+    <code class="sgmltag-element">para</code>. With the <code class="sgmltag-element">phrase</code> element, you
+    can even profile inline elements, like one sentence within a paragraph.
+
+   </p><p>
+    Based on the conditions that you want to apply, select one or more
+    profiling attributes and add them to the text snippets that are
+    conditional. The tagged snippets will only be included in the output if
+    the required condition is fulfilled. Any content that is valid for
+    <span class="emphasis"><em>all</em></span> conditions does <span class="emphasis"><em>not</em></span> need
+    any profiling attributes. The respective content will always be included
+    in the output formats generated from the XML sources. You are free in
+    defining the attribute values (<code class="literal">condition="foo"</code>), but
+    they must be used consistently in all files belonging to a documentation
+    project.
+   </p><p>
+    <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.profile.one" title="Example 6.4. Product-specific Profiling (One Attribute)">Example 6.4, “Product-specific Profiling (One Attribute)”</a> shows how to profile
+    product-specific information in a software description. Let us assume we
+    need to write documentation for the fictional software <code class="literal">Frog
+    Sound Recordings</code>. The software is available in two editions: a
+    basic edition for home users and a professional edition for enterprise
+    customers. Both editions share common features, but some features are
+    only available in the basic or the professional edition, respectively.
+   </p><div class="example"><a id="ex.daps.profile.one"></a><p class="title"><strong>Example 6.4. Product-specific Profiling (One Attribute)</strong></p><div class="example-contents"><pre class="screen">&lt;simplelist&gt;
+  &lt;member&gt;Common Feature 1&lt;/member&gt;
+  &lt;member&gt;Common Feature 2&lt;/member&gt;
+  &lt;member&gt;Common Feature 3&lt;/member&gt;
+  <span class="strong"><strong>&lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;</strong></span>
+&lt;/simplelist&gt;</pre></div></div><br class="example-break" /><p>
+    When generated for the basic edition or for the professional edition,
+    respectively, the example source code would result in the following
+    output:
+   </p><div class="table"><a id="tab.daps.profile.output.one"></a><p class="title"><strong>Table 6.1. Output of <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.profile.one" title="Example 6.4. Product-specific Profiling (One Attribute)">Example 6.4</a></strong></p><div class="table-contents"><table class="table" summary="Output of " border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
+        <p>
+         Basic Edition
+        </p>
+       </th><th>
+        <p>
+         Professional Edition
+        </p>
+       </th></tr></thead><tbody><tr><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Basic Feature 1
+        </p>
+       </td><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Professional Feature 1
+        </p>
+        <p>
+         Professional Feature 2
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break" /><p>
+    If the profiling attributes are <span class="emphasis"><em>not</em></span> processed
+    during output, the source code in <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.profile.one" title="Example 6.4. Product-specific Profiling (One Attribute)">Example 6.4, “Product-specific Profiling (One Attribute)”</a>
+    would result in the following (identical) output for both editions:
+   </p><div class="table"><a id="tab.daps.profile.output.one.without"></a><p class="title"><strong>Table 6.2. Output of <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.profile.one" title="Example 6.4. Product-specific Profiling (One Attribute)">Example 6.4</a> (Without Profiling)</strong></p><div class="table-contents"><table class="table" summary="Output of  (Without Profiling)" border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
+        <p>
+         Basic Edition
+        </p>
+       </th><th>
+        <p>
+         Professional Edition
+        </p>
+       </th></tr></thead><tbody><tr><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Basic Feature 1
+        </p>
+        <p>
+         Professional Feature 1
+        </p>
+        <p>
+         Professional Feature 2
+        </p>
+       </td><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Basic Feature 1
+        </p>
+        <p>
+         Professional Feature 1
+        </p>
+        <p>
+         Professional Feature 2
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break" /><p>
+    Let's suppose the professional edition of the software is also available
+    as OEM (original equipment manufacturer) version by the vendor
+    <code class="literal">OEM Company</code>. It contains additional features that are
+    only available in the OEM version:
+   </p><div class="example"><a id="ex.daps.profile.two"></a><p class="title"><strong>Example 6.5. Product-specific Profiling (Multiple Attributes)</strong></p><div class="example-contents"><pre class="screen">&lt;simplelist&gt;
+  &lt;member&gt;Common Feature 1&lt;/member&gt;
+  &lt;member&gt;Common Feature 2&lt;/member&gt;
+  &lt;member&gt;Common Feature 3&lt;/member&gt;
+  &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt;
+  &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt;
+ <span class="strong"><strong> &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt;</strong></span>
+&lt;/simplelist&gt;</pre></div></div><br class="example-break" /><p>
+    When generated for the professional edition or for the professional
+    edition in the OEM version, respectively, the example source code would
+    result in the following output:
+   </p><div class="table"><a id="tab.daps.profile.output.two"></a><p class="title"><strong>Table 6.3. Output of <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.profile.two" title="Example 6.5. Product-specific Profiling (Multiple Attributes)">Example 6.5</a></strong></p><div class="table-contents"><table class="table" summary="Output of " border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
+        <p>
+         Professional Edition
+        </p>
+       </th><th>
+        <p>
+         Professional Edition (OEM Version)
+        </p>
+       </th></tr></thead><tbody><tr><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Professional Feature 1
+        </p>
+        <p>
+         Professional Feature 2
+        </p>
+       </td><td>
+        <p>
+         Common Feature 1
+        </p>
+        <p>
+         Common Feature 2
+        </p>
+        <p>
+         Common Feature 3
+        </p>
+        <p>
+         Professional Feature 1
+        </p>
+        <p>
+         Professional Feature 2
+        </p>
+        <p>
+         OEM Feature 1
+        </p>
+       </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.user.modular.profile.daps"></a>Using Profiling with DAPS</h3></div></div></div><p>
+    To create multiple documentation variants of the same pool of DocBook
+    files with DAPS, the following requirements need to be fulfilled:
+   </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+      <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.daps.pa" title="XML Files: Profiling Attributes">XML Files: Profiling Attributes</a>
+     </p></li><li class="listitem"><p>
+      <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.daps.pi" title="MAIN File: Processing Instruction">MAIN File: Processing Instruction</a>
+     </p></li><li class="listitem"><p>
+      <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.daps.pp" title="DC Files: Profiling Parameters">DC Files: Profiling Parameters</a>
+     </p></li></ol></div><p>
+    For a comprehensive example showing all requirements in detail, refer to
+    <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.daps.ex" title="Profiling Example">the section called “Profiling Example”</a>.
+   </p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.user.modular.profile.daps.pa"></a>XML Files: Profiling Attributes</h4></div></div></div><p>
+     In DAPS, each profiling attribute has a corresponding profiling parameter to be used in the
+     DC file, see <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.daps.pp" title="DC Files: Profiling Parameters">the section called “DC Files: Profiling Parameters”</a>. 
+     The profiling parameters define which profiling attributes
+     and values to interpret during generation of output.
+    </p><p>The names of the profiling parameters are derived from the profiling
+     attributes, but written in uppercase letters and preceded by the prefix
+     <code class="literal">PROF</code>. 
+    </p><div class="table"><a id="tab.daps.profiling"></a><p class="title"><strong>Table 6.4. Profiling Attributes (DocBook) and Profiling Parameters (DAPS)</strong></p><div class="table-contents"><table class="table" summary="Profiling Attributes (DocBook) and Profiling Parameters (DAPS)" border="1"><colgroup><col class="1" /><col class="2" /><col class="3" /></colgroup><thead><tr><th>
+         <p>
+          Attribute Name
+         </p>
+        </th><th>
+         <p>
+          Use
+         </p>
+        </th><th>
+         <p>
+          Profiling Parameter
+         </p>
+        </th></tr></thead><tbody><tr><td>
+         <p>
+          <code class="sgmltag-attribute">arch</code>
+         </p>
+        </td><td>
+         <p>
+          Computer or chip architecture, such as <code class="literal">i386</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFARCH</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">audience</code>
+         </p>
+        </td><td>
+         <p>
+          Intended audience of the content, such as <code class="literal">instructor</code>. Added in DocBook version 5.0.
+         </p>
+        </td><td><em class="parameter"><code>PROFAUDIENCE</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">condition</code>
+         </p>
+        </td><td>
+         <p>
+          No preassigned semantics, general purpose attribute.
+         </p>
+        </td><td><em class="parameter"><code>PROFCONDITION</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">conformance</code>
+         </p>
+        </td><td>
+         <p>
+          Conformance to standards, as for example <code class="literal">lsb</code> (Linux Standards Base).
+         </p>
+        </td><td><em class="parameter"><code>PROFCONFORMANCE</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">lang</code>
+         </p>
+        </td><td>
+         <p>
+          Language code, such as <code class="literal">de_DE</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFLANG</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">os</code>
+         </p>
+        </td><td>
+         <p>
+          Operating system.
+         </p>
+        </td><td><em class="parameter"><code>PROFOS</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">revision</code>
+         </p>
+        </td><td>
+         <p>
+          Editorial revision, such as <code class="literal">v2.1</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFREVISION</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">revisionflag</code>
+         </p>
+        </td><td>
+         <p>
+          Revision status of the element, such as <code class="literal">changed</code>. This attribute has a fixed set of values to choose from.
+         </p>
+        </td><td><em class="parameter"><code>PROFREVISIONFLAG</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">role </code>
+         </p>
+        </td><td>
+         <p> General purpose attribute, with no preassigned semantics. As the
+          role attribute is not solely <span class="quote">“<span class="quote">reserved</span>”</span> for profiling but
+          can be used for other purposes in a document, we would recommend
+          to not use this for profiling. For further details, see <a class="ulink" href="http://sagehill.net/docbookxsl/ProfilingWithRole.html" target="_top">http://sagehill.net/docbookxsl/ProfilingWithRole.html</a>.</p>
+        </td><td><em class="parameter"><code>PROFROLE</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">security</code>
+         </p>
+        </td><td>
+         <p>
+          Security level, such as <code class="literal">high</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFSECURITY</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">status</code>
+         </p>
+        </td><td>
+         <p>
+          Editorial or publication status, such as <code class="literal">InDevelopment</code> or <code class="literal">draft</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFSTATUS</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">userlevel</code>
+         </p>
+        </td><td>
+         <p>
+          Level of user experience, such as <code class="literal">beginner</code>.
+         </p>
+        </td><td><em class="parameter"><code>PROFUSERLEVEL</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">vendor</code>
+         </p>
+        </td><td>
+         <p>
+          Product vendor.
+         </p>
+        </td><td><em class="parameter"><code>PROFVENDOR</code></em>
+        </td></tr><tr><td>
+         <p>
+          <code class="sgmltag-attribute">wordsize</code>
+         </p>
+        </td><td>
+         <p>
+          Word size (width in bits) of the computer architecture, such as <code class="literal">64bit</code>. Added in DocBook version 4.4.
+         </p>
+        </td><td><em class="parameter"><code>PROFWORDSIZE</code></em>
+        </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.user.modular.profile.daps.pi"></a>MAIN File: Processing Instruction</h4></div></div></div><p>
+     To activate generation of profiled output in DAPS, the following
+     processing instruction (PI) must be included in the header of the MAIN
+     file, before the root element. 
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Adjusting the DocBook Version in the PI</h3><p>As the profiling PI includes the DocBook version number, it needs to
+      be adjusted according to the DocBook version you use. See <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.user.modular.pi.db4" title="Example 6.6. Profiling PI in a DocBook 4.5 File">Example 6.6, “Profiling PI in a DocBook 4.5 File”</a> and <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.user.modular.pi.db5" title="Example 6.7. Profiling PI in a DocBook 5.0 File">Example 6.7, “Profiling PI in a DocBook 5.0 File”</a>.</p></div><div class="example"><a id="ex.daps.user.modular.pi.db4"></a><p class="title"><strong>Example 6.6. Profiling PI in a DocBook 4.5 File</strong></p><div class="example-contents"><pre class="screen">&lt;?xml-stylesheet
+  href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+  type="text/xml" ?&gt;</pre></div></div><br class="example-break" /><div class="example"><a id="ex.daps.user.modular.pi.db5"></a><p class="title"><strong>Example 6.7. Profiling PI in a DocBook 5.0 File</strong></p><div class="example-contents"><pre class="screen">&lt;?xml-stylesheet
+      href="urn:x-daps:xslt:profiling:docbook50-profile.xsl" 
+      type="text/xml" ?&gt;</pre></div></div><br class="example-break" /><p>
+     The MAIN file of a documentation project is the one that is referenced
+     by the <em class="parameter"><code>MAIN</code></em> parameter in the DC file. If the
+     processing instruction is missing in the MAIN file, any profiling
+     parameters in the DC file will be ignored during generation of the
+     output.
+    </p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Include PI in All XML Files</h3><p>
+      Although DAPS only checks for the profiling PI in the MAIN file, it
+      is a good idea to  include the PI in all XML files for any projects that
+      need profiling. Otherwise you might forget to move
+      the PI to the respective MAIN file in case of restructuring the XML 
+      sources. Having the PI in all
+      XML files does not hurt: Generation of profiled output is only
+      triggered if your DC files contain profiling parameters.
+     </p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.user.modular.profile.daps.pp"></a>DC Files: Profiling Parameters</h4></div></div></div><p>
+     Depending on the profiling attributes used in your XML files, a DC
+     file may contain multiple profiling parameters, see
+     <a class="xref" href="sec.daps.user.modular.profile.html#tab.daps.profiling" title="Table 6.4. Profiling Attributes (DocBook) and Profiling Parameters (DAPS)">Table 6.4, “Profiling Attributes (DocBook) and Profiling Parameters (DAPS)”</a>. Profiling parameters define which
+     of the profiling attributes should be interpreted by DAPS when
+     generating output. For each profiling parameter, set the respective
+     attribute values for which you want to filter during the profiling
+     process. The spelling of the values must be the same that is used in
+     the XML files.
+    </p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="sec.daps.user.modular.profile.daps.ex"></a>Profiling Example</h4></div></div></div><p>
+     In the following, find a comprehensive example that shows the basic
+     DAPS profiling requirements in more detail. It is based on the
+     examples in <a class="xref" href="sec.daps.user.modular.profile.html#sec.daps.user.modular.profile.basics" title="Introduction to DocBook Profiling">the section called “Introduction to DocBook Profiling”</a>
+     about the fictional software <code class="literal">Frog Sound Recordings</code>. The
+     software is available in a basic edition, a professional edition and a
+     professional OEM edition, shipped by an OEM vendor. The following
+     example shows <span class="emphasis"><em>all</em></span> files that you need to consider
+     (XML files, MAIN file, and DC file).
+    </p><div class="example"><a id="ex.daps.xml.pa"></a><p class="title"><strong>Example 6.8. XML File With Profiling Attributes</strong></p><div class="example-contents"><pre class="screen">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+[...] 
+ 
+&lt;chapter id="frog.features"&gt;
+ [...]
+ &lt;simplelist&gt;
+   &lt;member&gt;Common Feature 1&lt;/member&gt; <a id="co.daps.xml.no.prof.attr"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+   &lt;member&gt;Common Feature 2&lt;/member&gt; <a class="xref" href="sec.daps.user.modular.profile.html#co.daps.xml.no.prof.attr"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a>
+   &lt;member&gt;Common Feature 3&lt;/member&gt; <a class="xref" href="sec.daps.user.modular.profile.html#co.daps.xml.no.prof.attr"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a>
+   &lt;member condition="basic"&gt;Basic Feature 1&lt;/member&gt; <a id="co.daps.xml.profcond.value1"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+   &lt;member condition="prof"&gt;Professional Feature 1&lt;/member&gt; <a id="co.daps.xml.profcond.value2"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+   &lt;member condition="prof"&gt;Professional Feature 2&lt;/member&gt; <a class="xref" href="sec.daps.user.modular.profile.html#co.daps.xml.profcond.value2"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a>
+   &lt;member condition="prof" vendor="oemcompany"&gt;OEM Feature 1&lt;/member&gt; <a id="co.daps.xml.profcond.profvendor"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span>
+ &lt;/simplelist&gt; 
+ [...]
+&lt;/chapter&gt;</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.xml.no.prof.attr"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        Unprofiled list items. The common features 1-3 are available in all
+        software editions or versions.
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.xml.profcond.value1"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        List item profiled with attribute
+        <code class="sgmltag-attribute">condition</code> and attribute value
+        <code class="sgmltag-attvalue">basic</code>.
+        <code class="literal">Basic Feature 1</code> is only available in
+        the basic software edition for home users.
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.xml.profcond.value2"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        List item profiled with attribute
+        <code class="sgmltag-attribute">condition</code> and attribute value
+        <code class="sgmltag-attvalue">prof</code>.
+        <code class="literal">Professional Feature 1</code> and
+        <code class="literal">Professional Feature 2</code> are only
+        available in the professional software edition for enterprise
+        customers.
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.xml.profcond.profvendor"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        List item profiled with two attributes: Attribute
+        <code class="sgmltag-attribute">condition</code> with attribute value
+        <code class="sgmltag-attvalue">prof</code> and attribute
+        <code class="sgmltag-attribute">vendor</code> with attribute value
+        <code class="sgmltag-attvalue">oemcompany</code>.
+        <code class="literal">OEM Feature 1</code> is only available in the
+        professional OEM software edition for enterprise customers.
+       </p></td></tr></table></div></div></div><br class="example-break" /><div class="example"><a id="ex.daps.main.pi.db4"></a><p class="title"><strong>Example 6.9. MAIN file With PI for Profiling (DocBook 4.5)</strong></p><div class="example-contents"><pre class="screen">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<span class="strong"><strong>&lt;?xml-stylesheet  
+ href="urn:x-daps:xslt:profiling:docbook45-profile.xsl" 
+ type="text/xml"
+ title="Profiling step"?&gt;</strong></span> 
+&lt;!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" 
+                         "http://www.docbook.org/xml/4.5/docbookx.dtd"
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
+%entities;
+]&gt;  
+
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt; 
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+ [...]
+&lt;/article&gt;</pre><p>
+         If the processing instruction (PI)  is
+        missing, any profiling parameters in the DC file will be ignored.
+       </p></div></div><br class="example-break" /><div class="example"><a id="ex.daps.main.pi.db5"></a><p class="title"><strong>Example 6.10. MAIN file With PI for Profiling (DocBook 5.0)</strong></p><div class="example-contents"><pre class="screen">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+<span class="strong"><strong>&lt;?xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook50-profile.xsl"
+ type="text/xml"
+ title="Profiling step"?&gt;</strong></span>
+&lt;!DOCTYPE article 
+[&lt;!ENTITY % entities SYSTEM "entity-decl.ent"&gt;
+%entities;
+]&gt;
+
+&lt;!--the following article is contained in the file art_frog.xml--&gt;
+
+&lt;article lang="en" id="art.frog"&gt;
+ &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
+ &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
+ [...]
+&lt;/article&gt;</pre><p>
+         If the processing instruction (PI)  is
+        missing, any profiling parameters in the DC file will be ignored.
+       </p></div></div><br class="example-break" /><div class="example"><a id="ex.daps.dc.pa.home"></a><p class="title"><strong>Example 6.11. DC File with Profiling for Home Edition</strong></p><div class="example-contents"><pre class="screen">## Doc Config File for Frog Sound Recordings
+## (Home Edition)
+
+## Mandatory Parameters
+MAIN="art_frog.xml" <a id="co.dc.pa.main1"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+
+## Profiling
+PROFCONDITION="basic" <a id="co.dc.pa.profcond.basic"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+[...]</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.main1"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        <em class="parameter"><code>MAIN</code></em> parameter referencing the MAIN file. See
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db4" title="Example 6.9. MAIN file With PI for Profiling (DocBook 4.5)">Example 6.9</a>
+        (DocBook 4) or <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db5" title="Example 6.10. MAIN file With PI for Profiling (DocBook 5.0)">Example 6.10</a> (DocBook 5).
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.profcond.basic"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        DAPS profiling parameter for the
+        <code class="sgmltag-attribute">condition</code> profiling attribute.
+        It defines that XML elements tagged with
+        <code class="sgmltag-attribute">condition="basic"</code> are included
+        in the output.
+       </p></td></tr></table></div></div></div><br class="example-break" /><div class="example"><a id="ex.daps.dc.pa.prof"></a><p class="title"><strong>Example 6.12. DC File with Profiling for Professional Edition</strong></p><div class="example-contents"><pre class="screen">## Doc Config File for Frog Sound Recordings
+## (Professional Edition)
+
+## Mandatory Parameters
+MAIN="art_frog.xml" <a id="co.dc.pa.main2"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+
+## Profiling
+PROFCONDITION="prof" <a id="co.dc.pa.profcond.prof1"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+[...]</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.main2"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        <em class="parameter"><code>MAIN</code></em> parameter referencing the MAIN file. See
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db4" title="Example 6.9. MAIN file With PI for Profiling (DocBook 4.5)">Example 6.9</a>
+        (DocBook 4) or <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db5" title="Example 6.10. MAIN file With PI for Profiling (DocBook 5.0)">Example 6.10</a> (DocBook 5).
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.profcond.prof1"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        DAPS profiling parameter for the
+        <code class="sgmltag-attribute">condition</code> profiling attribute.
+        It defines that XML elements tagged with
+        <code class="sgmltag-attribute">condition="prof"</code> are included
+        in the output.
+       </p></td></tr></table></div></div></div><br class="example-break" /><div class="example"><a id="ex.daps.dc.pa.prof.oem"></a><p class="title"><strong>Example 6.13. DC File with Profiling for Professional Edition (OEM Version)</strong></p><div class="example-contents"><pre class="screen">## Doc Config File for Frog Sound Recordings 
+## (Professional Edition, OEM Version)
+
+## Mandatory Parameters
+MAIN="art_frog.xml" <a id="co.dc.pa.main3"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+
+## Profiling
+PROFCONDITION="prof" <a id="co.dc.pa.profcond.prof2"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+PROFVENDOR="oemcompany" <a id="co.dc.pa.profvendor.oem"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+[...]</pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.main3"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        <em class="parameter"><code>MAIN</code></em> parameter referencing the MAIN file. See
+        <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db4" title="Example 6.9. MAIN file With PI for Profiling (DocBook 4.5)">Example 6.9, “MAIN file With PI for Profiling (DocBook 4.5)”</a> or <a class="xref" href="sec.daps.user.modular.profile.html#ex.daps.main.pi.db5" title="Example 6.10. MAIN file With PI for Profiling (DocBook 5.0)">Example 6.10, “MAIN file With PI for Profiling (DocBook 5.0)”</a> .
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.profcond.prof2"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        DAPS profiling parameter for the
+        <code class="sgmltag-attribute">condition</code> profiling attribute.
+        It defines that XML elements tagged with
+        <code class="sgmltag-attribute">condition="prof"</code> are included
+        in the output.
+       </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.dc.pa.profvendor.oem"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+        DAPS profiling parameter for the
+        <code class="sgmltag-attribute">vendor</code> profiling attribute. It
+        defines that XML elements tagged with
+        <code class="sgmltag-attribute">vendor="oemcompany"</code> are
+        included in the output.
+       </p></td></tr></table></div></div></div><br class="example-break" /></div></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.modular.ent.separate.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="cha.daps.user.modular.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.modular.productentities.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Declaring Entities in a Separate File </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Combining Entities and Profiling</td></tr></table></div></body></html>

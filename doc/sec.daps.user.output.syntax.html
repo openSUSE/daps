@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Basic Syntax for Generating Output</title><meta name="generator" content="DocBook XSL Stylesheets V1.79.0" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats" /><link rel="prev" href="cha.daps.user.output.html" title="Chapter 4. Generating Output Formats" /><link rel="next" href="sec.daps.user.output.formats.html" title="Supported Output Formats" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Basic Syntax for Generating Output</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="cha.daps.user.output.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Generating Output Formats</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.output.formats.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.output.syntax"></a>Basic Syntax for Generating Output</h2></div></div></div><p>
+   DAPS supports a number of different output formats, including also
+   <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or simple text.
+   <a class="xref" href="sec.daps.user.output.formats.html#tab.daps.user.output.overview" title="Table 4.1. DAPS Output Commands and Formats">Table 4.1</a>
+   gives an overview.
+  </p><p>
+   You can build several output formats (without them interfering with each
+   other in the <code class="filename">build</code> directory), build your complete
+   documentation project (set, book, or article), or only a part of it (for
+   example, a specific chapter).
+  </p><p>
+   Independent of the individual output format you want to create, you need
+   to specify the DC file to use:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> -d <em class="replaceable"><code>PATH_TO_DC_FILE</code></em> <em class="replaceable"><code>OUTPUT_FORMAT</code></em> </pre><p>
+   For example:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> -d DC-daps-example pdf</pre><p>
+   At the end of the transformation process, DAPS shows a message where
+   to find the generated output.
+  </p></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cha.daps.user.output.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="cha.daps.user.output.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.output.formats.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Generating Output Formats </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Supported Output Formats</td></tr></table></div></body></html>
