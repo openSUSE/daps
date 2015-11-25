@@ -95,13 +95,16 @@
   </xsl:template>
 
   <xsl:template name="rootid.process">
+    <xsl:variable name="title" select="(key('id', $rootid)/d:title |
+                                       key('id', $rootid)/d:info/d:title |
+                                       key('id', $rootid)/bookinfo/title)[1]"/>
     <xsl:message>
       <xsl:text>Reducing book to rootid="</xsl:text>
       <xsl:value-of select="$rootid"/>
       <xsl:text>" </xsl:text>
       <xsl:value-of select="name(key('id', $rootid))"/>
       <xsl:text> title="</xsl:text>
-      <xsl:value-of select="normalize-space(key('id', $rootid)/bookinfo/title)"/>
+      <xsl:value-of select="normalize-space($title)"/>
       <xsl:text>"</xsl:text>
     </xsl:message>
     <xsl:apply-templates select="key('id',$rootid)" mode="process.root"/>
