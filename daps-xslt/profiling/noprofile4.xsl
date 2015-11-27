@@ -50,7 +50,7 @@
         <xsl:value-of select="$filename"/>
       </xsl:attribute>
       <xsl:copy-of select="@*"/>
-      <xsl:apply-templates mode="profile"/>
+      <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
 
