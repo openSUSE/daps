@@ -6,6 +6,10 @@
    Input:
      DocBook 4/Novdoc document
 
+   Parameters:
+     - filename
+       The absolute path of the XML input file
+
    Output:
      DocBook 4 document with DOCTYPE declaration for 4.5
 
@@ -21,6 +25,8 @@
 <xsl:import href="../lib/create-doctype.xsl"/>
 <xsl:import href="xinclude-parse-text.xsl"/>
 
+<xsl:param name="filename"/>
+
 <xsl:template match="/">
   <xsl:copy-of select="/processing-instruction('xml-stylesheet')"/>
   <xsl:text>&#10;</xsl:text>
@@ -33,6 +39,19 @@
   -->
   <xsl:template match="xi:include[@parse='text']">
     <xsl:call-template name="xinclude-text"/>
+  </xsl:template>
+
+  <!-- Add xml:base attribute in the output root element when there is no
+       xml:base attribute in the input XML
+  -->
+  <xsl:template match="/*[not(@xml:base)]">
+    <xsl:copy>
+      <xsl:attribute name="xml:base">
+        <xsl:value-of select="$filename"/>
+      </xsl:attribute>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates mode="profile"/>
+    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>
