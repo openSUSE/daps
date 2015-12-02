@@ -738,8 +738,7 @@
     </remark>
   </xsl:template>
 
-  <xsl:template
-    match="biblioentry/title
+  <xsl:template match="biblioentry/title
                      |bibliomset/title
                      |biblioset/title
                      |bibliomixed/title"
@@ -750,8 +749,7 @@
     </citetitle>
   </xsl:template>
 
-  <xsl:template
-    match="biblioentry/titleabbrev|biblioentry/subtitle
+  <xsl:template match="biblioentry/titleabbrev|biblioentry/subtitle
                      |bibliomset/titleabbrev|bibliomset/subtitle
                      |biblioset/titleabbrev|biblioset/subtitle
                      |bibliomixed/titleabbrev|bibliomixed/subtitle"
@@ -762,8 +760,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template
-    match="biblioentry/contrib
+  <xsl:template match="biblioentry/contrib
                      |bibliomset/contrib
                      |bibliomixed/contrib"
     priority="200">
@@ -926,8 +923,7 @@
     </step>
   </xsl:template>
 
-  <xsl:template
-    match="biblioentry/firstname
+  <xsl:template match="biblioentry/firstname
                      |biblioentry/surname
                      |biblioentry/othername
                      |biblioentry/lineage
@@ -1355,8 +1351,7 @@
     </acknowledgements>
   </xsl:template>
 
-  <xsl:template
-    match="lot|lotentry|tocback|tocchap|tocfront|toclevel1|
+  <xsl:template match="lot|lotentry|tocback|tocchap|tocfront|toclevel1|
 		     toclevel2|toclevel3|toclevel4|toclevel5|tocpart"
     priority="200">
     <tocdiv>
@@ -1410,8 +1405,7 @@
 
   <!-- The synopsis elements have child elements that don't work inside phrase, plus
      they have attributes that shouldn't be lost. So, leave as is, but warn. -->
-  <xsl:template
-    match="classsynopsis|cmdsynopsis|constructorsynopsis
+  <xsl:template match="classsynopsis|cmdsynopsis|constructorsynopsis
                      |destructorsynopsis|fieldsynopsis|methodsynopsis|synopsis"
     mode="clean-terms">
     <xsl:call-template name="emit-message">
@@ -1718,13 +1712,7 @@
   <xsl:template match="*" mode="addNS" name="addNS">
     <xsl:choose>
       <xsl:when test="namespace-uri(.) = ''">
-        <xsl:element name="{local-name(.)}"
-          namespace="http://docbook.org/ns/docbook">
-          <xsl:if test="not(ancestor::*[namespace-uri(.)=''])">
-            <xsl:attribute name="version">
-              <xsl:value-of select="$db5.version.string"/>
-            </xsl:attribute>
-          </xsl:if>
+        <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
           <xsl:copy-of select="@*"/>
           <xsl:call-template name="add.root.namespaces"/>
           <xsl:apply-templates mode="addNS"/>
