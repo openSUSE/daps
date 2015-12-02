@@ -82,6 +82,18 @@ function parse_args {
                 P_DESKTOPFILES=1
                 shift
                 ;;
+            --db5todb4)
+                P_DB5TODB4=1
+                shift
+                ;;
+            --db5todb4nh)
+                P_DB5TODB4NH=1
+                shift
+                ;;
+            --dbtonovdoc)
+                P_DBTONOVDOC=1
+                shift
+                ;;
             --documentfiles)
                 P_DOCUMENTFILES=1
                 shift
@@ -122,6 +134,10 @@ function parse_args {
                 ;;
             --html5)
                 P_HTML5=1
+                shift
+                ;;
+            --imgonly)
+                P_LIST_IMG_ONLY=1
                 shift
                 ;;
             --jsp)
@@ -275,6 +291,10 @@ function parse_args {
                 P_VIEWER="$2"
                 shift 2
                 ;;
+            --xmlonly)
+                P_LIST_XML_ONLY=1
+                shift
+                ;;
             --xsltparam)
                 ccecho -- "warn" "--xsltparam is deprecated, please use --param/--stringparam instead."
                 P_XSLTPARAM="$2"
@@ -285,7 +305,7 @@ function parse_args {
                 break
                 ;;
             *)
-                wrong_parameter "SUB_CMD"
+                wrong_parameter "$SUB_CMD"
                 ;;
         esac
     done
@@ -503,6 +523,8 @@ function call_make {
            DOCCONF: $DOCCONF
               BOOK: $BOOK
 
+   DOCBOOK_VERSION: $DOCBOOK_VERSION
+      DOCBOOK5_RNG: $DOCBOOK5_RNG
 EOF
 
         if [[ -n "$STYLEDEVEL" ]]; then
@@ -514,9 +536,16 @@ EOF
                 echo "         STYLEROOT: $DOCBOOK_STYLES"
             fi
         fi
+        if [[ -n "$FALLBACK_STYLEROOT" ]]; then
+            echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
+        else
+            # no fallback if STYLEROOT is not set
+            if [[ -n "$STYLEROOT" ]]; then
+                echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+            fi
+        fi
 
         cat <<EOF
-FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT
           EPUB_CSS: $EPUB_CSS
           HTML_CSS: $HTML_CSS
 
@@ -932,6 +961,7 @@ function build_generic {
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
 
     call_make "$SUB_CMD" "$@"
@@ -994,12 +1024,14 @@ function build_locdrop {
 #
 ###########################################################################
 function online-docs {
-    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local CONV_COUNT SHORT_OPTS LONG_OPTS SUB_CMD
     SUB_CMD=$1
     shift
 
+    CONV_COUNT=0
+
     SHORT_OPTS="h"
-    LONG_OPTS="export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
+    LONG_OPTS="db5todb4,db5todb4nh,dbtonovdoc,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1007,10 +1039,16 @@ function online-docs {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_db5todb4
+        help_db5todb4nh
+        help_dbtonovdoc
         help_export-dir
         help_formatter
         help_help
         help_name
+        help_noepub
+        help_nohtml
+        help_nopdf
         help_noset
         help_rootid
         help_optipng
@@ -1027,10 +1065,10 @@ function online-docs {
     [[ 1 = "$P_OPTIPNG" ]] && export OPTIPNG=1
 
     if [[ 1 = "$P_NOHTML" ]]; then
-    export NOHTML=1
+        export NOHTML=1
     else
     # online-docs always builds a single HTML file
-    export HTMLSINGLE=1
+        export HTMLSINGLE=1
     fi
 
     if [[ -n "$P_EXPORT_DIR" ]]; then
@@ -1047,6 +1085,33 @@ function online-docs {
         exit_on_error "Wrong parameter for --formatter: must be \"xep\" or \"fop\"!"
         fi
     fi
+
+    case 1 in
+        $P_DB5TODB4)
+            let CONV_COUNT++
+            ;;
+        $P_DB5TODB4NH)
+            let CONV_COUNT++
+            ;;
+        $P_DBTONOVDOC)
+            let CONV_COUNT++
+            ;;
+    esac
+
+    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4, --db5todb4nh and --dbtonovdoc exclude each other"
+
+    if [[ 4 = "$DOCBOOK_VERSION" ]]; then
+       [[ 1 = "$P_DB5TODB4" || 1 = "$P_DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
+    fi
+
+    # Since make does not support and/or in if, it is hard to determine
+    # whether a conversion is needed or not. We have this information
+    # at hand here, so lets set DBNOCONV=1 if no conversion parameter is set
+    [[ 0 = "$CONV_COUNT" ]]    && export DBNOCONV=1
+    [[ 1 = "$P_DB5TODB4" ]]    && export DB5TODB4=1
+    [[ 1 = "$P_DB5TODB4NH" ]]  && export DB5TODB4NH=1
+    [[ 1 = "$P_DBTONOVDOC" ]]  && export DBTONOVDOC=1
+
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1258,7 +1323,7 @@ function package-html {
 ###########################################################################
 function unpack-locdrop {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST XML_FILE_LIST
+    local ALL_TRANS_FILES ALL_NOTRANS_FILES DCFILE_LIST ENTITIES LINK_NOTRANS_FILES MANIFEST_TRANS MANIFEST_NOTRANS MFT_TRANS_SUFF MFT_NOTRANS_SUFF NO_DCFILE_LIST NO_EXIFTOOL NO_OPTIPNG XML_FILE_LIST
     local -a ALL_MANIFEST_NOTRANS_FILES ALL_MANIFEST_TRANS_FILES
 
     MFT_TRANS_SUFF=manifest_trans.txt
@@ -1268,7 +1333,7 @@ function unpack-locdrop {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="trans-files:,help,notrans-dir:,output-dir:"
+    LONG_OPTS="help,notrans-dir:,optipng,output-dir:,trans-files:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1279,6 +1344,7 @@ function unpack-locdrop {
         help_trans-files
         help_help
         help_notrans-dir
+        help_optipng
         help_output-dir
         echo
         exit 0
@@ -1314,6 +1380,33 @@ function unpack-locdrop {
     done
 
     pushd "$P_OUTPUT_DIR" > /dev/null
+
+    #
+    # Run optipng on images/src/png if --optipng was specified
+    #
+    which optipng >/dev/null 2>&1 || NO_OPTIPNG="1"
+    which exiftool >/dev/null 2>&1 || NO_EXIFTOOL="1"
+
+    if [[ -z $NO_OPTIPNG && -z $NO_EXIFTOOL ]]; then
+        if [[ -d images/src/png && 1 -eq $P_OPTIPNG ]]; then
+            local j=0
+            for IMG in images/src/png/*.png; do
+                if [[ -z "$(exiftool -Comment $IMG | grep optipng)" ]]; then
+                    let "j += 1"
+                    optipng -o2 $IMG >/dev/null 2>&1
+                    exiftool -Comment=optipng -overwrite_original -P $IMG >/dev/null
+                fi
+            done
+            if [[ 0 -eq $j ]]; then \
+                ccecho "result" "No PNG images needed optimization"
+            else
+                ccecho "result" "$j PNG images have been optimized."
+            fi
+        fi
+    else
+        [[ -n $NO_OPTIPNG ]] && ccecho "error" "Error: Cannot find optipng!"
+        [[ -n $NO_EXIFTOOL ]] && ccecho "error" "Error: Cannot find exiftool!"
+    fi
 
     #
     # Now create a complete list of translated/untranslated files
@@ -1471,7 +1564,7 @@ function filelists {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nodc,noent,noimg,noxml,pretty,rootid:"
+    LONG_OPTS="help,imgonly,nodc,noent,noimg,noxml,pretty,rootid:,xmlonly"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1480,14 +1573,16 @@ function filelists {
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
-    if [[ $SUB_CMD =~ list-srcfiles ]]; then
+        if [[ $SUB_CMD =~ list-srcfiles ]]; then
+            help_imgonly
             help_nodc
             help_noent
             help_noimg
             help_noxml
-    fi
-    [[ $SUB_CMD != list-file ]] && help_pretty
-    help_rootid
+            help_xmlonly
+        fi
+        [[ $SUB_CMD != list-file ]] && help_pretty
+        help_rootid
         echo
         exit 0
     fi
@@ -1497,6 +1592,14 @@ function filelists {
     [[ 1 = "$P_LIST_NOXML" ]] && export LIST_NOXML=1
     [[ 1 = "$P_PRETTY" ]]     && export PRETTY_FILELIST=1
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
+
+    # --imgonly and --xmlonly are shortcuts
+    #
+    if [[ 1 = "$P_LIST_IMG_ONLY" ]]; then
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOXML=1
+    elif [[ 1 = "$P_LIST_XML_ONLY" ]]; then
+        export LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1
+    fi
 
     if [[ $SUB_CMD = list-file && -z $ROOTID ]]; then
     exit_on_error "You need to specify an ID with --rootid with the list-file command."
@@ -1759,7 +1862,7 @@ function getimages {
 ###########################################################################
 function spellcheck {
     local SHORT_OPTS LONG_OPTS SUB_CMD
-    local ASPELL_EXTRA_DICT COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
+    local COUNT FILE LISTMODE LISTOUTPUT SPELLCMD
     local -a FILELIST SKIPLIST
 
     SUB_CMD=$1
@@ -1784,18 +1887,9 @@ function spellcheck {
     exit 0
     fi
 
+    [[ -n "$P_ASPELL_EXTRA_DICT" ]] && ASPELL_EXTRA_DICT="$P_ASPELL_EXTRA_DICT"
     [[ -n "$P_FILE" ]] && FILELIST[0]="$P_FILE"
     [[ 1 = "$P_LIST" ]] && LISTMODE=1
-
-    # extra dictionary
-    # check and absolutize path
-    if [[ -n "$P_ASPELL_EXTRA_DICT" ]]; then
-        if [[ -e $P_ASPELL_EXTRA_DICT ]]; then
-            sanitize_path "$P_ASPELL_EXTRA_DICT" "ASPELL_EXTRA_DICT"
-        else
-            exit_on_error "Path to extra dictionary \"$P_ASPELL_EXTRA_DICT\" is not valid"
-        fi
-    fi
 
     # set FILELIST if rootid was specified
     if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
@@ -1845,6 +1939,9 @@ function spellcheck {
     if [[ -n "$ASPELL_EXTRA_DICT" ]]; then
         SPELLCMD="$SPELLCMD --extra-dicts=$ASPELL_EXTRA_DICT"
     fi
+
+    # show spellchecker command with --debug
+    [[ 1 = "$DEBUG" ]] && echo "DEBUG: $SPELLCMD"
 
     # do spellchecking on the list of files
     for FILE in "${FILELIST[@]}"; do
@@ -2120,10 +2217,28 @@ function help_css {
                               Default: unset
 EOF
 }
-function help_draft {
+function help_db5todb4 {
     cat <<EOF
-    --draft                   Add a 'DRAFT' watermark to all pages of the book
-                              Default: off
+    --db5todb4                Create XML bigfile in DoBook 4 format. This
+                              option only applies if the sources are in
+                              DocBook5 format.
+                              Default: Same as source
+EOF
+}
+function help_db5todb4nh {
+    cat <<EOF
+    --db5todb4nh              Create XML bigfile in DocBook 4 format without
+                              a DOCTYPE header. This option only applies if
+                              the sources are in DocBook5 format.
+                              Default: Same as source
+EOF
+}
+function help_dbtonovdoc {
+    cat <<EOF
+    --db5tonovdoc             Create XML bigfile in NovDoc-format. This
+                              option only applies if the sources are in
+                              DocBook5 or DocBook 4 format.
+                              Default: Same as XML source
 EOF
 }
 function help_def-file {
@@ -2144,6 +2259,12 @@ function help_documentfiles {
                               Default: off
 EOF
 }
+function help_draft {
+    cat <<EOF
+    --draft                   Add a 'DRAFT' watermark to all pages of the book
+                              Default: off
+EOF
+}
 function help_epub3 {
     cat <<EOF
     --epub3                   Generate ePUB version 3 eBooks.
@@ -2160,7 +2281,8 @@ EOF
 }
 function help_extra-dict {
     cat <<EOF
-    --extra-dict=filename     Specify a path to an additional custom dictionary.
+    --extra-dict=filename     Specify a path to an additional custom
+                              dictionary.
                               Default: unset
 EOF
 }
@@ -2208,6 +2330,12 @@ function help_html5 {
                               Default: unset
 EOF
 }
+function help_imgonly {
+    cat <<EOF
+    --imgonly                 Only list images files.
+                              Shortcut for --nodc --noent --noxml.
+EOF
+}
 function help_jsp {
     cat <<EOF
     --jsp                     Creates JSP output. Requires custom stylesheets
@@ -2233,8 +2361,9 @@ EOF
 function help_locdrop {
     cat <<EOF
     --locdrop                 Use this option to create a source tarball
-                              from a previous locdrop after translation. If set, will
-                              include the files manifest_*.txt in the source tarball.
+                              from a previous locdrop after translation.
+                              If set, will include the files manifest_*.txt
+                              in the source tarball.
                               Default: off
 EOF
 }
@@ -2273,11 +2402,23 @@ function help_noent {
                               Default: unset
 EOF
 }
+function help_noepub {
+    cat <<EOF
+    --noepub                  Deactivates creating the ePUB output
+                              Default: ePUB output is created.
+EOF
+}
 function help_nogzip {
     cat <<EOF
     --nogzip                  If specified, man pages will not be compressed
                               with gzip.
                               Default: unset
+EOF
+}
+function help_nohtml {
+    cat <<EOF
+    --nohtml                  Deactivates creating the package-html tarball.
+                              Default: Package-html tarball iscreated.
 EOF
 }
 function help_noimg {
@@ -2298,7 +2439,7 @@ function help_nopdf {
                               \"locdropping\" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
-                              Default: off
+                              Default: PDF is created
 EOF
 }
 function help_nosearch {
@@ -2458,15 +2599,16 @@ EOF
 function help_target {
     cat <<EOF
     --target=TARGET           Specify a potential target (such as jsp or
-                              color-pdf) in order to retrieve correct values for
-                              target-specific values.
+                              color-pdf) in order to retrieve correct values
+                              for target-specific values.
                               Default: same as daps subcommand
 EOF
 }
 function help_trans-files {
     cat <<EOF
     --trans-files=\"<LIST>\"  Specify one or more tarballs with translated
-                              files (semicolon-separeted) for a single language.
+                              files (semicolon-separeted) for a single
+                              language.
                               Default: unset
 EOF
 }
@@ -2474,6 +2616,12 @@ function help_viewer {
     cat <<EOF
     --viewer=VIEWER           Image viewer to be used.
                               Default: IMG_VIEWER setting from config file
+EOF
+}
+function help_xmlonly {
+    cat <<EOF
+    --xmlonly                 Only list XML files.
+                              Shortcut for --nodc --noent --noimg.
 EOF
 }
 function help_xsltparam {
@@ -2484,8 +2632,8 @@ function help_xsltparam {
                               Add one or more xslt processor parameters in
                               the form of
                               \"--stringparam KEY=VALUE --param KEY=VALUE\".
-                              The given string will be passed unmodified to the
-                              xslt processor call that
+                              The given string will be passed unmodified to
+                              the xslt processor call that
                               $1.
                               Useful to temporarily overwrite style sheet
                               parameters such as margins.

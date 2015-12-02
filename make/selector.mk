@@ -190,6 +190,7 @@ ifeq "$(MAKECMDGOALS)" "online-docs"
   include $(DAPSROOT)/make/validate.mk
   include $(DAPSROOT)/make/images.mk
   include $(DAPSROOT)/make/packaging.mk
+  include $(DAPSROOT)/make/online-docs.mk
   include $(DAPSROOT)/make/html.mk
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/epub.mk
