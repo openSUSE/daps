@@ -1,43 +1,75 @@
 -------------------------------------------------------------------
+Mon Dec 07 14:43:47 UTC 2015 - fsundermeyer@opensuse.org
+
+Stable release DAPS 2.1.5:
+
+* New Features:
+  - parameters for text generation can be set in the config files
+    via TXT_PARAMS or via --param/--stringparam on the command line
+  - a change introduced in 2.0 made using the original DocBook
+    stylesheets for text generation the default. Since this behavior
+    is confusing and unexpected, it is reverted with this change:
+    * the stylesheets configured via STYLEROOT or --styleroot are
+      used by default for text generation
+    * to ignore _any_ STYLEROOT definitions, set
+      TXT_IGNORE_STYLEROOT="yes" in the config files or use
+      --ignore-styleroot on the command line
+      (daps -d <DC> text --ignore-styleroot)
+
+* Bugfixes:
+  - Fix for issue #294: xmlcatalog returns file:<PATH> rather than
+    file://<PATH> on Debian Jessie and openSUSE Tumbleweed and
+    caused DAPS to fail with DB5 sources
+
+* Misc
+  - added basic debugging output to test suite (--debug)
+
+-------------------------------------------------------------------
 Tue Dec 02 13:01:00 UTC 2015 - toms@opensuse.org
 
 Stable release DAPS 2.1.4:
 
-Find issues in our GitHub tracker at https://github.com/openSUSE/daps/issues/NUMBER
+Find issues in our GitHub tracker at
+https://github.com/openSUSE/daps/issues/NUMBER
 
 * Bugfixes:
   - Target text shows remarks (issue #293)
   - DAPS checklink doesn't work (issue #296)
-  - ASPELL_EXTRA_DICT from ~/.config/daps/dapsrc is ignored (issue #297)
+  - ASPELL_EXTRA_DICT from ~/.config/daps/dapsrc is ignored
+    (issue #297)
   - DAPS package includes SUSE wordlist (issue #298)
-  - Parameter passed with --param is ignored with subcommand "text" (issue #299)
-  - Target locdrop does not generate graphics-setfiles-$(DOCNAME)$(LANGSTRING).tar.bz2
-    (issue #302)
+  - Parameter passed with --param is ignored with subcommand "text"
+    (issue #299)
+  - Target locdrop does not generate
+    graphics-setfiles-$(DOCNAME)$(LANGSTRING).tar.bz2 (issue #302)
   - Translation check for locdrop (issue #306)
   - Add --optipng to unpack-locdrop (issue #307)
   - Add --xmlonly / --imgonly switches to list-srcfiles (issue #310)
   - bigfile creates unresolved xrefs for DocBook5 (issue #314)
   - Improve DocBook5 -> DocBook4 -> Novdoc Stylesheets (issue #311)
   - Enhancements in user guide, thanks to Martin Koeditz (issue #315)
-  - FO contains wrong image paths when XML contains no profiling PI (issue #316)
-  - DB-4-to-5 migration: missing book titles/productnames/productnumbers
-    (issue #319)
+  - FO contains wrong image paths when XML contains no profiling PI
+    (issue #316)
+  - DB-4-to-5 migration: missing book
+    titles/productnames/productnumbers (issue #319)
 
 * New Features:
-  - Option --schema lets you specify an URN to a DocBook 5 schema that is to
-    be used for validation. Will be ignored when validating Docbbok4 documents.
-  - DOCBOOK5_STYLE_URI, DOCBOOK5_STYLE_URI, and DOCBOOK4_STYLE_URI may now
-    also point to a local file. If the URN begins with the prefix "file://",
-    it will not be resolved via xmlcatalog, but rather taken as is (minus
-    "file://").
+  - Option --schema lets you specify an URN to a DocBook 5 schema that
+    is to be used for validation. Will be ignored when validating
+    Docbbok4 documents.
+  - DOCBOOK5_STYLE_URI, DOCBOOK5_STYLE_URI, and DOCBOOK4_STYLE_URI
+    may now also point to a local file. If the URN begins with the
+    prefix "file://", it will not be resolved via xmlcatalog, but
+   rather taken as is (minus "file://").
   - Add conversion options to online-docs:
     . --db5todb4: converts DocBook 5 sources to a DocBook 4 bigfile
-    . --db5todb4nh: converts DocBook 5 sources to a DocBook 4 bigfile without
-      a DOCTYPE declaration
+    . --db5todb4nh: converts DocBook 5 sources to a DocBook 4 bigfile
+	without a DOCTYPE declaration
     . --dbtonovdoc: converts DocBook 4/5 to Novdoc
 
 * Misc:
-  - Do not set -nocs, hurts us when building Arabic (related: issue #108)
+  - Do not set -nocs, hurts us when building Arabic
+    (related: issue #108)
   - Avoid adding version attribute on all elements (commit 3a273d5)
 
 
