@@ -1743,7 +1743,7 @@ p a:visited {
     color: #5C3566;
 }
 
-code, .command, .keycap, .replaceable {
+code, .command, .keycap, .replaceable, .package {
     font-family: 'DejaVu Sans Mono', 'DejaVuSansMono', 'Menlo', 'Andale Mono', monospace;
     font-weight: normal;
     padding: 0 4px;
@@ -1754,18 +1754,42 @@ code, .command, .keycap, .replaceable {
     line-height: 120%;
 }
 
-code, .command, .keycap {
+.verbatim-wrap code, .verbatim-wrap .command, .verbatim-wrap .replaceable,
+.verbatim-wrap .literal, .verbatim-wrap .package {
+    /*
+    Avoid transforming this:
+      <screen><prompt>prompt $ </prompt><command>very-long-\
+      command</command></screen>
+
+    to output looking like this (bad!):
+               very-long-\
+      prompt $ command
+
+    instead of this (goood!):
+      prompt $ very-long-\
+      command
+
+    */
+    display: inline;
+}
+
+code, .command, .keycap, .literal, .package {
     font-style: normal;
 }
 
-code code, code .replaceable, .replaceable code {
+/* Not quite sure if that is the best way to make sure no text inside code gets
+paddings/borders... In some rare case, there might e.g. be an image inside a
+code/etc. element and then this might backfire. */
+code *, .keycap *, .replaceable *, .literal *, .package * {
     padding: 0;
     border: none;
 }
 
 
 .name code, a code, .admonition h6 code,
-.name .replaceable, a .replaceable, .admonition h6 .replaceable {
+.name .replaceable, a .replaceable, .admonition h6 .replaceable,
+.name .literal, a .literal, .admonition h6 .literal,
+.name .package, a .package, .admonition h6 .package {
     color: inherit;
 }
 
@@ -1773,7 +1797,7 @@ code code, code .replaceable, .replaceable code {
     border-color: #D1D1D3;
 }
 
-code {
+code, .literal, .replaceable, .package {
     font-weight: normal;
 }
 
@@ -1816,15 +1840,16 @@ code {
     line-height: 125%;
 }
 
-.verbatim-wrap > div {
+.verbatim-wrap > div, .verbatim-wrap pre {
     display: block;
+    width: 100%;
     overflow: auto;
     overflow-y: hidden;
     text-align: left;
 }
 
-.verbatim-wrap code, .verbatim-wrap .replaceable {
-    border-radius: 0;
+.verbatim-wrap code, .verbatim-wrap .replaceable, .verbatim-wrap .literal,
+.verbatim-wrap .package {
     background-color: transparent;
     font-size: 100%;
     border: none;
@@ -1873,6 +1898,13 @@ code {
     font-size: 13px;
     line-height: 13px;
     font-weight: 600;
+}
+
+.verbatim-wrap .callout {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .calloutlist .callout {
@@ -2017,8 +2049,10 @@ div.figure {
 
 a:hover .keycap, a:focus .keycap, a:active .keycap,
 a:hover code, a:focus code, a:active code,
-a:hover .replaceable, a:focus .replaceable, a:active .replaceable {
-    border-color: #3465A4;
+a:hover .replaceable, a:focus .replaceable, a:active .replaceable,
+a:hover .literal, a:focus .literal, a:active .literal,
+a:hover .package, a:focus .package, a:active .package {
+    border-color: #439239;
 }
 
 
@@ -2081,12 +2115,19 @@ a:hover .replaceable, a:focus .replaceable, a:active .replaceable {
 }
 
 .procedure-title code, .procedure-title .replaceable, .procedure-title .keycap,
+.procedure-title .literal, .procedure-title .package,
 .table-title code, .table-title .replaceable, .table-title .keycap,
+.table-title .literal, .table-title .package,
 .example-title code, .example-title .replaceable, .example-title .keycap,
+.example-title .literal, .example-title .package,
 .figure-title code, .figure-title .replaceable, .figure-title .keycap,
+.figure-title .literal, .figure-title .package,
 .orderedlist-title code, .orderedlist-title .replaceable, .orderedlist-title .keycap,
+.orderedlist-title .literal, .orderedlist-title .package,
 .variablelist-title code, .variablelist-title .replaceable, .variablelist-title .keycap,
- .itemizedlist-title code, .itemizedlist-title .replaceable, .itemizedlist-title .keycap {
+.variablelist-title .literal, .variablelist-title .package,
+.itemizedlist-title code, .itemizedlist-title .replaceable, .itemizedlist-title .keycap,
+.itemizedlist-title .literal, .itemizedlist-title .package {
     text-transform: none;
 }
 
@@ -2094,7 +2135,7 @@ a:hover .replaceable, a:focus .replaceable, a:active .replaceable {
     border-left: 3px solid #8CA4C0;
     font-weight: normal;
     margin: 17px 0 17px;
-    /* Up top, 3px pf padding look better than 5 would (with line-height interfering etc.).
+    /* Up top, 3px of padding look better than 5 would (with line-height interfering etc.).
     On the left, we use 5px-3px of border, so it sits right there with any other lists etc. */
     padding: 3px 5px 6px 2px;
     background-color: #F6F8FA;
@@ -2277,7 +2318,7 @@ div.itemizedlist {
     margin: 0 0 24px;
 }
 
-.question, .question code, .question .literal {
+.question, .question code, .question .keycap, .question .literal, .question .package {
     color: #666;
 }
 
@@ -2294,8 +2335,15 @@ div.itemizedlist {
 }
 
 .js-on .question:hover code, .js-on .question:focus code,
-.js-on .active .question code, .js-on .question:hover .replaceable,
-.js-on .question:focus .replaceable, .js-on .active .question .replaceable {
+.js-on .active .question code,
+.js-on .question:hover .keycap, .js-on .question:focus .keycap,
+.js-on .active .question .keycap,
+.js-on .question:hover .replaceable, .js-on .question:focus .replaceable,
+.js-on .active .question .replaceable,
+.js-on .question:hover .literal, .js-on .question:focus .literal,
+.js-on .active .question .literal,
+.js-on .question:hover .package, .js-on .question:focus .package,
+.js-on .active .question .package {
     color: #333;
 }
 
@@ -2914,9 +2962,9 @@ p.ds-message {
         padding-right: 0;
     }
 
-    /* The page probably is not wide anymore for inline-blocks to help
+    /* The page probably is not wide enough anymore for inline-blocks to help
        avoid wrapping. */
-    code, .replaceable {
+    code, .replaceable, .literal, .package {
         display: inline;
     }
 
