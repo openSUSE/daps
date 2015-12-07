@@ -77,6 +77,7 @@ ifeq "$(MAKECMDGOALS)" "$(filter $(MAKECMDGOALS),$(DEBUGGINGTARGETS))"
   include $(DAPSROOT)/make/pdf.mk
   include $(DAPSROOT)/make/epub.mk
   include $(DAPSROOT)/make/print_results.mk
+  include $(DAPSROOT)/make/online-docs.mk
   include $(DAPSROOT)/make/debug.mk
 endif
 
