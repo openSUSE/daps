@@ -136,6 +136,10 @@ function parse_args {
                 P_HTML5=1
                 shift
                 ;;
+            --ignore-styleroot)
+                P_TXT_IGNORE_STYLEROOT=1
+                shift
+                ;;
             --imgonly)
                 P_LIST_IMG_ONLY=1
                 shift
@@ -527,21 +531,25 @@ function call_make {
       DOCBOOK5_RNG: $DOCBOOK5_RNG
 EOF
 
-        if [[ -n "$STYLEDEVEL" ]]; then
-            echo "         STYLEROOT: $STYLEDEVEL"
+        if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$P_TXT_IGNORE_STYLEROOT" ]]; then
+            echo "         STYLEROOT: $DOCBOOK_STYLES"
         else
-            if [[ -n "$STYLEROOT" ]]; then
-                echo "         STYLEROOT: $STYLEROOT"
+            if [[ -n "$STYLEDEVEL" ]]; then
+                echo "         STYLEROOT: $STYLEDEVEL"
             else
-                echo "         STYLEROOT: $DOCBOOK_STYLES"
+                if [[ -n "$STYLEROOT" ]]; then
+                    echo "         STYLEROOT: $STYLEROOT"
+                else
+                    echo "         STYLEROOT: $DOCBOOK_STYLES"
+                fi
             fi
-        fi
-        if [[ -n "$FALLBACK_STYLEROOT" ]]; then
-            echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
-        else
-            # no fallback if STYLEROOT is not set
-            if [[ -n "$STYLEROOT" ]]; then
-                echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+            if [[ -n "$FALLBACK_STYLEROOT" ]]; then
+                echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
+            else
+                # no fallback if STYLEROOT is not set
+                if [[ -n "$STYLEROOT" ]]; then
+                    echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+                fi
             fi
         fi
 
@@ -926,7 +934,46 @@ function build_man {
 
     call_make "$SUB_CMD" "$@"
 }
+###########################################################################
+#
+# BUILD text files
+#
+# Subcommands: text only
+#
+###########################################################################
+function build_text {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
 
+    SHORT_OPTS="h"
+    LONG_OPTS="ignore-styleroot,help,name:,param:,rootid:,stringparam:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_ignore-styleroot
+        help_help
+        help_name
+        help_param
+        help_rootid
+        help_stringparam
+        echo
+        exit 0
+    fi
+
+    [[ 1 = "$P_TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="yes"
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    call_make "$SUB_CMD" "$@"
+}
 
 ###########################################################################
 #
@@ -1008,7 +1055,7 @@ function build_locdrop {
     if [[ -f "$P_DEF_FILE" ]]; then
         export DEF_FILE="$P_DEF_FILE"
     elif [[ -z "$P_DEF_FILE" ]]; then
-    [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
+    [[ 0 != "$VERBOSITY" ]] && ccecho "warn" "Warning: No DEF file was specified"
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
@@ -1158,7 +1205,7 @@ function package-src {
             exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
         fi
     else
-        [[ 0 != $VERBOSITY ]] && ccecho "warn" "Warning: No DEF file was specified"
+        [[ 0 != "$VERBOSITY" ]] && ccecho "warn" "Warning: No DEF file was specified"
     fi
 
     if [[ -n "$P_SETDATE" ]]; then
@@ -2162,11 +2209,9 @@ function showenv {
 # first line of help
 #
 function help_scmd_head {
-    cat <<EOF
-$ME [--global-options] $1 [options]
+    echo -e "$ME [--global-options] $1 [options]
 
-$2
-EOF
+$2\n"
 
 [[ 0 != $3 ]] && echo -e "  Command options:"
 }
@@ -2327,6 +2372,16 @@ function help_html5 {
     cat <<EOF
     --html5                   HTML builds are generated as XHTML files.
                               Force HTML5 with this switch.
+                              Default: unset
+EOF
+}
+function help_ignore-styleroot {
+    cat <<EOF
+    --ignore-styleroot        Ignore all stylesheet assignments (e.g. the
+                              DC-file) and use the original DocBook stylesheets
+                              instead. Use this option if your custom
+                              stylesheets produce text output you are not
+                              satisfied with.
                               Default: unset
 EOF
 }

@@ -46,7 +46,11 @@ ifdef PROFILE_URN
   else
     PROFILE_STYLESHEET := $(PROFILE_URN)
   endif
-  PROFILE_STYLESHEET := $(subst file://,,$(PROFILE_STYLESHEET))
+  #
+  # depending on the distribution, xmlcatalog returns file://... or file:... 
+  # make sure both cases are matched
+  #
+  PROFILE_STYLESHEET := $(subst //,,$(subst file:,,$(PROFILE_STYLESHEET)))
   ifeq "$(strip $(PROFILE_STYLESHEET))" ""
     $(error $(shell ccecho "error" "Could not resolve URN \"$(PROFILE_URN)\" with xmlcatalog via catalog file \"$(XML_MAIN_CATALOG)\""))
   endif
