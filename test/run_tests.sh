@@ -82,7 +82,10 @@ declare -a _FO_PROCS=( "fop" "xep" )
 #
 function exit_on_error () {
     echo -e "ERROR: ${1}" >&2
-    rm -rf "${_DOC_DIR}/build" "$_TEMPDIR"
+    if [[ 1 -ne $_DEBUG ]]; then
+        rm -rf "${_DOC_DIR}/build"
+    fi
+    rm -rf "$_TEMPDIR"
     [[ -f $_MULTISRC_IMAGE ]] && rm -f $_MULTISRC_IMAGE
     exit 1;
 }
@@ -121,7 +124,7 @@ done
 # SVN dependencies
 
 #_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,locdrop,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
-_ARGS=$(getopt -o h -l all,builddir,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
+_ARGS=$(getopt -o h -l all,builddir,debug,epub,filelists,help,html,images,online-docs,package-html,package-pdf,package-src,pdf,profiling,script,text,xsltprocessors: -n "$_ME" -- "$@")
 
 [[ 0 -ne $? ]] && exit_on_error "Argument parser error"
 
@@ -134,83 +137,88 @@ GETOPT_RETURN_CODE=$?
 
 while true ; do
     case "$1" in
-	--all)
-#	    _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
-	    _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
-	    shift
-	    ;;
-	--builddir)
-	    _TESTS=( "${_TESTS[@]}" "lib/009_builddir" )
-	    shift
-	    ;;
-	--epub)
-	    _TESTS=( "${_TESTS[@]}" "lib/025_epub" )
-	    shift
-	    ;;
-	--filelists)
-	    _TESTS=( "${_TESTS[@]}" "lib/010_filelists" )
-	    shift
-	    ;;	
-	-h,--help)
-	    usage
-	    rm -rf "$_TEMPDIR"
-	    exit 0
-	    ;;
-	--html)
-	    _TESTS=( "${_TESTS[@]}" "lib/022_html" )
-	    shift
-	    ;;
-	--images)
-	    _TESTS=( "${_TESTS[@]}" "lib/007_images" )
-	    shift
-	    ;;
-	--locdrop)
-	    _TESTS=( "${_TESTS[@]}" "lib/033_locdrop" )
-	    shift
-	    ;;
-	--online-docs)
-	    _TESTS=( "${_TESTS[@]}" "lib/035_online-docs" )
-	    shift
-	    ;;
-	--package-html)
-	    _TESTS=( "${_TESTS[@]}" "lib/022_html" "lib/036_package-html" )
-	    shift
-	    ;;
-	--package-pdf)
-	    _TESTS=( "${_TESTS[@]}" "lib/020_pdf" "lib/037_package-pdf" )
-	    shift
-	    ;;
-	--package-src)
-	    _TESTS=( "${_TESTS[@]}" "lib/030_package-src" )
-	    shift
-	    ;;
-	--pdf)
-	    _TESTS=( "${_TESTS[@]}" "lib/020_pdf" )
-	    shift
-	    ;;
-	--profiling)
-	    _TESTS=( "${_TESTS[@]}" "lib/005_profiling" )
-	    shift
-	    ;;
-	--script)
-	    _TESTS=( "${_TESTS[@]}" "lib/001_script" )
-	    shift
-	    ;;
-	--text)
-	    _TESTS=( "${_TESTS[@]}" "lib/023_text" )
-	    shift
-	    ;;
-	--xsltprocessors)
-	    _XSLTPROCS=( $2 )
-	    shift 2
-	    ;;
+        --all)
+#           _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/033_locdrop" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
+            _TESTS=( "${_TESTS[@]}" "lib/001_script" "lib/005_profiling" "lib/007_images" "lib/009_builddir" "lib/020_pdf" "lib/022_html" "lib/023_text" "lib/025_epub" "lib/030_package-src" "lib/035_online-docs" "lib/036_package-html" "lib/037_package-pdf" )
+            shift
+            ;;
+        --builddir)
+            _TESTS=( "${_TESTS[@]}" "lib/009_builddir" )
+            shift
+            ;;
+        --debug)
+            _DEBUG=1
+            _DAPSCMD="$_DAPSCMD --debug"
+            shift
+            ;;
+        --epub)
+            _TESTS=( "${_TESTS[@]}" "lib/025_epub" )
+            shift
+            ;;
+        --filelists)
+            _TESTS=( "${_TESTS[@]}" "lib/010_filelists" )
+            shift
+            ;;
+        -h,--help)
+            usage
+            rm -rf "$_TEMPDIR"
+            exit 0
+            ;;
+        --html)
+            _TESTS=( "${_TESTS[@]}" "lib/022_html" )
+            shift
+            ;;
+        --images)
+            _TESTS=( "${_TESTS[@]}" "lib/007_images" )
+            shift
+            ;;
+        --locdrop)
+            _TESTS=( "${_TESTS[@]}" "lib/033_locdrop" )
+            shift
+            ;;
+        --online-docs)
+            _TESTS=( "${_TESTS[@]}" "lib/035_online-docs" )
+            shift
+            ;;
+        --package-html)
+            _TESTS=( "${_TESTS[@]}" "lib/022_html" "lib/036_package-html" )
+            shift
+            ;;
+        --package-pdf)
+            _TESTS=( "${_TESTS[@]}" "lib/020_pdf" "lib/037_package-pdf" )
+            shift
+            ;;
+        --package-src)
+            _TESTS=( "${_TESTS[@]}" "lib/030_package-src" )
+            shift
+            ;;
+        --pdf)
+            _TESTS=( "${_TESTS[@]}" "lib/020_pdf" )
+            shift
+            ;;
+        --profiling)
+            _TESTS=( "${_TESTS[@]}" "lib/005_profiling" )
+            shift
+            ;;
+        --script)
+            _TESTS=( "${_TESTS[@]}" "lib/001_script" )
+            shift
+            ;;
+        --text)
+            _TESTS=( "${_TESTS[@]}" "lib/023_text" )
+            shift
+            ;;
+        --xsltprocessors)
+            _XSLTPROCS=( $2 )
+            shift 2
+            ;;
         --)
-	    shift
-	    break
-	    ;;
+            shift
+            break
+            ;;
         *)
-	    exit_on_error "Internal error!"
-	    ;;
+            exit_on_error "Internal error!"
+            ;;
     esac
 done
 
@@ -218,18 +226,18 @@ done
 #
 if [[ -n "${_XSLTPROCS[@]}" ]]; then
     for _PROC in "${_XSLTPROCS[@]}"; do
-	which --skip-alias --skip-functions $_PROC >/dev/null 2>&1
-	if [ $? -eq 0 ]; then
-	    _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "$_PROC" )
-	else
-	    echo "Warning: Did not found xslt processor $_PROC"
-	fi
+        which --skip-alias --skip-functions $_PROC >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "$_PROC" )
+        else
+            echo "Warning: Did not found xslt processor $_PROC"
+        fi
     done
 else
     _XSLT_PROCESSORS=( "/usr/bin/xsltproc" )
     which --skip-alias --skip-functions /usr/bin/saxon6 >/dev/null 2>&1
     if [ $? -eq 0 ]; then
-	_XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
+        _XSLT_PROCESSORS=( "${_XSLT_PROCESSORS[@]}" "/usr/bin/saxon6" )
     fi
 fi
 
@@ -266,42 +274,42 @@ for _PROC in "${_XSLT_PROCESSORS[@]}"; do
         # Check return state of tests and act - if e.g. profiling fails it
         # does not make sense to run the majority of other tests
         #
-	case "$_TEST" in
-	    *[_-]pdf)
-		for _FOPROC in "${_FO_PROCS[@]}"; do
-		    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
-		    # skip if XSL-FO processor does not exist
-		    [ $? -ne 0 ] && continue
-		    export _FOPROC
-		    eval "$_TEST"
-		done
-		;;
-	    *_profiling)
-		for _MAIN_PROFILING in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
-		    export _MAIN_PROFILING
-		    if [[ "$_MAIN_PROFILING" =~ _noprofile ]]; then
-			export _NOPROFILE=1
+        case "$_TEST" in
+            *[_-]pdf)
+                for _FOPROC in "${_FO_PROCS[@]}"; do
+                    which --skip-alias --skip-functions $_FOPROC >/dev/null 2>&1
+                    # skip if XSL-FO processor does not exist
+                    [ $? -ne 0 ] && continue
+                    export _FOPROC
+                    eval "$_TEST"
+                done
+                ;;
+            *_profiling)
+                for _MAIN_PROFILING in "$_MAINPATH" "$_MAINPATH_NOPROF"; do
+                    export _MAIN_PROFILING
+                    if [[ "$_MAIN_PROFILING" =~ _noprofile ]]; then
+                        export _NOPROFILE=1
                         # when running the noprofile tests, MAIN is replaced
                         # by MAIN_NOPROF
-			export _PROF_SET_FILES="$_XML_FILES $_MAIN_NOPROF"
-		    else
-			export _NOPROFILE=0
-			export _PROF_SET_FILES="$_XML_FILES $_MAIN"
-		    fi
-		    eval "$_TEST"
-		done
-		;;
-	    *_source-validation)
-		eval "$_TEST"
-		if [ $? -ne 0 ]; then
-		    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
-		fi
-		;;
-	    *)
-		eval "$_TEST"
-		;;
-	esac
-	echo "...................."
+                        export _PROF_SET_FILES="$_XML_FILES $_MAIN_NOPROF"
+                    else
+                        export _NOPROFILE=0
+                        export _PROF_SET_FILES="$_XML_FILES $_MAIN"
+                    fi
+                    eval "$_TEST"
+                done
+                ;;
+            *_source-validation)
+                eval "$_TEST"
+                if [ $? -ne 0 ]; then
+                    exit_on_error "Fatal: Test documents do not validate, exiting Tests"
+                fi
+                ;;
+            *)
+                eval "$_TEST"
+                ;;
+        esac
+        echo "...................."
     done
     echo
 done
