@@ -417,8 +417,7 @@ FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
 @DIST_SUSEBS_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.suse
 @DIST_SUSE_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.suse
 @DIST_UBUNTU_TRUE@FOP_CONFIG_SRC := etc/fop/fop-daps.generic
-@HAS_DAPS_XSL_FALSE@STYLEROOT := $(subst file:,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
-@HAS_DAPS_XSL_FALSE@STYLEROOT := $(subst ///,/,${@HAS_DAPS_XSL_FALSE@STYLEROOT})
+@HAS_DAPS_XSL_FALSE@STYLEROOT := $(patsubst //%,%,$(patsubst file:%,%,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url))))
 
 # stylesheets
 @HAS_DAPS_XSL_TRUE@STYLEROOT := $(daps_xsl)
