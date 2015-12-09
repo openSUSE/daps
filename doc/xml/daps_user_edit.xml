@@ -312,14 +312,13 @@
     </listitem>
    </varlistentry>
   <varlistentry>
-   <term>Checking Where a ID or File is Included</term>
+   <term>Checking Where an ID or File is Included</term>
    <listitem>
-    <screen>&prompt.user;&dapscmd;
-     -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
+    <screen>&prompt.user;&dapscmd;-d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
      <replaceable>ID</replaceable></screen>
      <para> Lists the file that contains the ID specified with the mandatory
       parameter <option>--rootid</option>. For example:</para>
-    <screen>&prompt.user;&dapscmd;-d DC-daps-example list-file --rootid sec.template.examples.images
+    <screen>&prompt.user;&dapscmd;&nbsp;-d DC-daps-example list-file&nbsp;--rootid sec.template.examples.images
 The ID "sec.template.examples.images" appears in:
 /DOC_DIR_PATH/xml/MAIN-daps-example.xml</screen>
    </listitem>
@@ -339,17 +338,17 @@ The ID "sec.template.examples.images" appears in:
   <example id="ex.daps.output.default">
    <title>Default Output of a File Listing &dapsacr; Command</title>
    <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
-    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>images/src/png/example1.png&nbsp;<replaceable
+<replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
      >YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
   
   <example id="ex.daps.output.pretty">
    <title>Pretty-printed Output of a File Listing &dapsacr; Command</title>
    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
-    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+<replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
+<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
   
   <tip>
@@ -359,8 +358,8 @@ The ID "sec.template.examples.images" appears in:
     <command>wc</command> command: </para>
    <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
    <para> For <xref linkend="ex.daps.output.pretty"
-    xrefstyle="select:label"/>, the command above would return the value
-    <computeroutput>4</computeroutput>.
+   xrefstyle="select:label"/>, the command above would return
+    <computeroutput>4</computeroutput> as a value.
    </para>
   </tip>
  
