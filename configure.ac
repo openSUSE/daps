@@ -48,9 +48,10 @@ AC_PREFIX_DEFAULT(/usr)
 dnl Some constants
 root_catalog="/etc/xml/catalog"
 AC_SUBST(root_catalog)
-db4_xslt_url="http://docbook.sourceforge.net/release/xsl/current/"
-AC_SUBST(db4_xslt_url)
+DB4_XSLT_URL="http://docbook.sourceforge.net/release/xsl/current/"
+AC_SUBST(DB4_XSLT_URL)
 DB5_XSLT_URL="http://docbook.sourceforge.net/release/xsl-ns/current/"
+AC_SUBST(DB5_XSLT_URL)
 daps_xsl="/usr/share/xml/docbook/stylesheet/daps2012"
 AC_SUBST(daps_xsl)
 FONT_DIR="/usr/share/fonts"
@@ -156,6 +157,8 @@ AC_PATH_PROGS([PDFFORMATTER], [fop xep], [0])
 
 dnl recommendation, only needed for Docbook5
 AC_PATH_PROG([JING], [jing], [0])
+AC_PATH_PROG([TRANG], [trang], [0])
+
 
 AC_CHECK_FILE([$root_catalog], [CATALOG=$root_catalog], [CATALOG=0])
 if test 0 = "$CATALOG"; then
@@ -164,7 +167,7 @@ fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Image conversion tools...])
-                     
+
 dnl convert (ImageMagick)
 AC_PATH_PROG([CONVERT], [convert], [0])
 if test 0 = "$CONVERT"; then
@@ -205,7 +208,7 @@ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
 done
 if test -z "$HAVE_SVGDTD"; then
   HAVE_SVGDTD=0
-fi               
+fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for Python modules...])
@@ -224,7 +227,7 @@ dnl AC_SUBST(HAVE_PYMOD_LXML)
 
 
 dnl --------------------------------------------------------------------------
-AC_MSG_NOTICE([===== Checking for DocBook...])
+AC_MSG_NOTICE([===== Checking for DocBook 4.x...])
 
 for XML_DTD in "-//OASIS//DTD DocBook XML V4.1.2//EN" \
                "-//OASIS//DTD DocBook XML V4.2//EN" \
@@ -243,37 +246,122 @@ if test -z "$HAVE_DOCBOOK"; then
   AC_MSG_ERROR([No DocBook 4 DTD not found])
 fi
 
-dnl Docbook 5
+dnl --------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for additional DocBook 4.5 identifiers (optional)...])
+
+for IDENT in "-//OASIS//ELEMENTS DocBook XML Information Pool V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook XML Character Entities V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook XML Notations V4.5//EN" \
+             "-//OASIS//ENTITIES DocBook XML Additional General Entities V4.5//EN" \
+             "-//OASIS//ELEMENTS DocBook XML Document Hierarchy V4.5//EN" \
+             "-//OASIS//DTD DocBook XML CALS Table Model V4.5//EN" \
+             "-//OASIS//DTD XML Exchange Table Model 19990315//EN" \
+             ; do
+ AC_MSG_CHECKING([for $IDENT])
+ if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$IDENT" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_IDENTIFIER=1
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_IDENTIFIER"; then
+  AC_MSG_WARN([Seems some additional catalog entries for DocBook identifiers are missing])
+fi
+
+dnl --------------------------------------------------------------------------
+AC_MSG_NOTICE([===== Checking for ISO Entities identifiers...])
+
+for ENT in "ISO 8879:1986//ENTITIES Publishing//EN//XML" \
+           "ISO 8879:1986//ENTITIES Greek Letters//EN//XML" \
+           "ISO 8879:1986//ENTITIES Box and Line Drawing//EN//XML" \
+           "ISO 8879:1986//ENTITIES Greek Symbols//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Negated Relations//EN//XML" \
+           "ISO 8879:1986//ENTITIES Numeric and Special Graphic//EN//XML" \
+           "ISO 8879:1986//ENTITIES Alternative Greek Symbols//EN//XML" \
+           "ISO 8879:1986//ENTITIES Diacritical Marks//EN//XML" \
+           "ISO 8879:1986//ENTITIES Monotoniko Greek//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Arrow Relations//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Ordinary//EN//XML" \
+           "ISO 8879:1986//ENTITIES Russian Cyrillic//EN//XML" \
+           "ISO 8879:1986//ENTITIES General Technical//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Delimiters//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Latin 1//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Binary Operators//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Latin 2//EN//XML" \
+           "ISO 8879:1986//ENTITIES Added Math Symbols: Relations//EN//XML" \
+           "ISO 8879:1986//ENTITIES Non-Russian Cyrillic//EN//XML" \
+             ; do
+ AC_MSG_CHECKING([for $ENT])
+ if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$ENT" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_ISO_ENTITIES=1
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_ISO_ENTITIES"; then
+  AC_MSG_WARN([Seems you do not have any catalog entries for ISO entities])
+fi
+
+dnl --------------------------------------------------------------------------
+dnl Docbook 5.0
+AC_MSG_NOTICE([===== Checking for DocBook 5.0...])
+
 for XML_SCHEMA in "http://docbook.org/xml/5.0/rng/docbookxi.rng" \
                   "http://docbook.org/xml/5.0/rng/docbookxi.rnc" \
                   "http://docbook.org/xml/5.0/rng/docbook.rng" \
                   "http://docbook.org/xml/5.0/rng/docbook.rnc" ; do
   AC_MSG_CHECKING([for $XML_SCHEMA])
-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
     AC_MSG_RESULT([yes])
-    HAVE_DOCBOOK_5=1
+    HAVE_DOCBOOK_50=1
   else
     AC_MSG_RESULT([no])
   fi
 done
-if test -z "$HAVE_DOCBOOK_5"; then
-  HAVE_DOCBOOK_5=0
+if test -z "$HAVE_DOCBOOK_50"; then
+  HAVE_DOCBOOK_50=0
+  AC_MSG_WARN([Seems you do not have DocBook 5.0 installed.])
+fi
+
+dnl Docbook 5.1
+AC_MSG_NOTICE([===== Checking for DocBook 5.1...])
+for XML_SCHEMA in "http://docbook.org/xml/5.1/rng/docbookxi.rng" \
+                  "http://docbook.org/xml/5.1/rng/docbookxi.rnc" \
+                  "http://docbook.org/xml/5.1/rng/docbook.rng" \
+                  "http://docbook.org/xml/5.1/rng/docbook.rnc" \
+                  "http://docbook.org/xml/5.1/rng/assembly.rng" \
+                  "http://docbook.org/xml/5.1/rng/assembly.rnc" \
+                  "http://docbook.org/xml/5.1/rng/dbits.rng" \
+                  "http://docbook.org/xml/5.1/rng/dbits.rnc"  ; do
+  AC_MSG_CHECKING([for $XML_SCHEMA])
+  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_SCHEMA" >&2]); then
+    AC_MSG_RESULT([yes])
+    HAVE_DOCBOOK_51=1
+  else
+    AC_MSG_RESULT([no])
+  fi
+done
+if test -z "$HAVE_DOCBOOK_51"; then
+  HAVE_DOCBOOK_51=0
+  AC_MSG_WARN([Seems you do not have DocBook 5.1 installed.])
 fi
 
 dnl -------------------------------------------------------------------------
 AC_MSG_NOTICE([===== Checking for DocBook XSL Stylesheets...])
 
 dnl DocBook4
-for XSLT in "${db4_xslt_url}common/common.xsl" \
-            "${db4_xslt_url}epub/docbook.xsl" \
-            "${db4_xslt_url}fo/docbook.xsl" \
-            "${db4_xslt_url}html/chunk.xsl" \
-            "${db4_xslt_url}html/docbook.xsl" \
-            "${db4_xslt_url}lib/lib.xsl" \
-            "${db4_xslt_url}manpages/docbook.xsl" \
-            "${db4_xslt_url}profiling/profile.xsl" \
-            "${db4_xslt_url}xhtml/chunk.xsl" \
-            "${db4_xslt_url}xhtml/docbook.xsl"; do
+for XSLT in "${DB4_XSLT_URL}common/common.xsl" \
+            "${DB4_XSLT_URL}epub/docbook.xsl" \
+            "${DB4_XSLT_URL}fo/docbook.xsl" \
+            "${DB4_XSLT_URL}html/chunk.xsl" \
+            "${DB4_XSLT_URL}html/docbook.xsl" \
+            "${DB4_XSLT_URL}lib/lib.xsl" \
+            "${DB4_XSLT_URL}manpages/docbook.xsl" \
+            "${DB4_XSLT_URL}profiling/profile.xsl" \
+            "${DB4_XSLT_URL}xhtml/chunk.xsl" \
+            "${DB4_XSLT_URL}xhtml/docbook.xsl"; do
   AC_MSG_CHECKING([for $XSLT])
   if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
@@ -301,13 +389,13 @@ for XSLT in "${DB5_XSLT_URL}common/common.xsl" \
   if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
     AC_MSG_RESULT([yes])
     HAVE_DOCBOOK_5_STYLESHEETS=1
-
   else
     AC_MSG_RESULT([no])
   fi
 done
 if test -z "$HAVE_DOCBOOK_5_STYLESHEETS"; then
   HAVE_DOCBOOK_5_STYLESHEETS=0
+  AC_MSG_WARN([DocBook ns stylesheets not found])
 fi
 
 dnl -------------------------------------------------------------------------
@@ -334,7 +422,7 @@ your expectations.
 
 Supported features
 ------------------
-* DocBook 4 support                  * man pages output
+* DocBook 4/5 support                * man pages output
 * HTML/single HTML output            * webhelp output (experimental)
 * ePUB output                        * png and jpg images
 
@@ -342,19 +430,28 @@ Optional features
 -----------------
 Feature                          | Enabled | Action to enable
 ..............................................................................])
-dnl DocBook 5
-test 0 = "$HAVE_DOCBOOK_5" && DB5=0
 test 0 = "$HAVE_DOCBOOK_5_STYLESHEETS" && DB5=0
 test 0 = "$HAVE_JING" && DB5=0
 
-if test 0 = "$DB5"; then
-  AC_MSG_RESULT([DocBook 5 support                |    no   | install DocBook 5, the
+dnl DocBook 5
+if test 0 = "$HAVE_DOCBOOK_50"; then
+  AC_MSG_RESULT([DocBook 5.0 support              |    no   | install DocBook 5.0, the
                                  |         | DocBook 5 XSL stylesheets,
                                  |         | and jing
 ])
 else
-  AC_MSG_RESULT([DocBook 5 support                |   yes   |])
+  AC_MSG_RESULT([DocBook 5.0 support              |   yes   |])
 fi
+
+if test 0 = "$HAVE_DOCBOOK_51"; then
+  AC_MSG_RESULT([DocBook 5.1 support              |    no   | install DocBook 5.1, the
+                                 |         | DocBook 5 XSL stylesheets,
+                                 |         | and jing
+])
+else
+  AC_MSG_RESULT([DocBook 5.1 support              |   yes   |])
+fi
+
 
 dnl Create ASCII (w3m)
 if test 0 = "$W3M"; then
