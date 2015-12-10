@@ -132,6 +132,20 @@
 XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
   </example>
  </sect1>
+ 
+ <sect1 id="sec.daps.user.layout.txt">
+  <title>Specifying the Layout for ASCII Text Output</title>
+  <para>You can set parameters in &dapsconf-sys; or &dapsconf-user; using the
+    <parameter>TXT_PARAMS</parameter> parameter. Alternatively, set them from command line, using the
+    <option>--param</option>/<option>--stringparam</option> options. By
+   default, the stylesheets specified with the <parameter>STYLEROOT</parameter> parameter or
+    the <option>--styleroot</option> option are used for generating ASCII text output.</para>
+  <para>However, if you want to ignore any STYLEROOT definitions, set
+   <literal>TXT_IGNORE_STYLEROOT="yes"</literal> in &dapsconf-sys; or &dapsconf-user; or use the
+   <option>--ignore-styleroot</option> option on the command line: </para>
+  <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> text --ignore-styleroot</screen>
+ </sect1>
+ 
  <sect1 id="sec.daps.user.layout.styleheets">
   <title>Customizing the DocBook Stylesheets</title>
 
