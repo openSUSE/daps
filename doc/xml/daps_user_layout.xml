@@ -30,15 +30,45 @@
  <sect1 id="sec.daps.user.layout.xsltparams">
   <title>Modifying Individual XSLT Processor Parameters</title>
 
-  <para>
-   If you use the default DocBook layout and want to adjust individual
-   parameters, you can use the <option>--param "KEY=VALUE"</option> or
-   <option>--stringparam "KEY=VALUE"</option> option. Both options can be
-   specified multiple times. It will pass on values for XSLT parameters
-   directly to the XSLT processor, which is useful to temporarily overwrite
-   style sheet parameters such as margins, for example.
+  <para> If you use the default DocBook layout and want to adjust individual parameters, you can use
+   the <option>--param "KEY=VALUE"</option> or the <option>--stringparam "KEY=VALUE"</option>
+   option. Both options can be specified multiple times and are supported for the following
+   subcommands (specifying the output formats): </para>
+  <itemizedlist>
+   <listitem>
+    <para>epub</para>
+   </listitem>
+   <listitem>
+    <para>html</para>
+   </listitem>
+   <listitem>
+    <para>man</para>
+   </listitem>
+   <listitem>
+    <para>pdf</para>
+   </listitem>
+   <listitem>
+    <para>text</para>
+   </listitem>
+   <listitem>
+    <para>webhelp</para>
+   </listitem>
+  </itemizedlist>
+  <para>The options will pass on values for XSLT parameters directly to the XSLT processor, which is
+  useful to temporarily overwrite style sheet parameters such as margins, for example.
   </para>
-
+  
+  <note>
+   <title><parameter>XSLTPARAM</parameter> And <option>--xsltparam</option></title>
+   <para>For compatibility reasons, &dapsacr; still supports the use of
+     <option>--xsltparam</option> on the command line, but this option will be removed in future
+    versions. Use <option>--param "KEY=VALUE"</option> or <option>--stringparam "KEY=VALUE"</option>
+    instead.</para>
+   <para>However, if you want to specify your settings in the &dc; file instead of using the
+    command line options, the respective parameter is still named
+    <parameter>XSLTPARAM</parameter>.</para>
+  </note>
+  
   <para>
    For larger or more complex modifications, such as adjustments of the
    title page layout, for example, it is advisable to develop your own set
