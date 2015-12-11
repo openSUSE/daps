@@ -516,6 +516,17 @@
     </emphasis></para>
   </xsl:template>
 
+  <xsl:template match="step[*[1][not(self::para)]]">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Added para at first position under step</xsl:with-param>
+    </xsl:call-template>
+    <step>
+      <xsl:apply-templates select="@*"/>
+      <para/>
+      <xsl:apply-templates/>
+    </step>
+  </xsl:template>
+
   <xsl:template match="stepalternatives|stepalternatives/step/substeps">
     <itemizedlist>
       <xsl:apply-templates/>
