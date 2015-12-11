@@ -13,6 +13,7 @@
                       |d:colophon[d:info]
                       |d:equation[d:info]
                       |d:glossary[d:info]
+                      |d:glossdiv[d:info]
                       |d:index[d:info]
                       |d:legalnotice[d:info]
                       |d:part[d:info]
