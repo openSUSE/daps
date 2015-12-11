@@ -82,6 +82,11 @@
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
 
   <!-- ################################################################## -->
+  <!-- Suppressed PIs                                                     -->
+  <xsl:template match="processing-instruction('xml-stylesheet')"/>
+
+
+  <!-- ################################################################## -->
   <!-- Suppressed attributes                                              -->
 
   <!-- Suppressed attributes -->
