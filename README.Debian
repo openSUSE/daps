@@ -1,0 +1,81 @@
+How to make daps install and run on Debian 8 - Jessie
+-----------------------------------------------------
+
+I. Installation
+
+Perform the following steps:
+
+1. Install required packages
+
+$ sudo apt-get install autotools-dev dia docbook docbook-xml docbook-xsl imagemagick ghostscript inkscape libxml2-utils \
+  libxml-commons-external-java libxmlgraphics-commons-java make poppler-utils python-libxml2 python-lxml sgml-base \
+  sgml-data w3m fop xmlstarlet xsltproc zip docbook5-xml docbook-xsl-ns jing
+    
+2. Install optionall packages
+
+$ sudo apt-get install aspell epubcheck libimage-exiftool-perl optipng checkbot remake libsaxon-java xmlformat-perl xfig
+
+3. Clone the latest development branch of daps
+
+$ git clone https://github.com/openSUSE/daps.git -b develop --single-branch
+
+4. Change into the daps directory
+
+$ cd daps
+
+5. Configure for building
+
+$ ./configure --sysconfdir=/etc
+
+6. Run 'make'
+
+$ make
+
+7. Install the built files
+
+$ sudo make install
+
+
+II. Troubleshooting
+
+* ERROR: STYLEROOT=/usr/share/xml/docbook/stylesheet/suse2013: Path does not exist
+
+- comment the line beginning with STYLEROOT in the related DC file
+
+* I/O error : Attempt to load network entity http://www.oasis-open.org/docbook/xml/4.5/dbcentx.mod
+
+- add the following line to the /etc/xml/docbook-xml.xml file:
+
+<delegateSystem systemIdStartString="http://www.oasis-open.org/docbook/xml/4.5/dbcentx.mod" catalog="file:///usr/share/xml/docbook/schema/dtd/4.5/catalog.xml"/>
+
+- add the following line to the /usr/share/xml/docbook/schema/dtd/4.5/catalog.xml file:
+
+<system systemId="http://www.oasis-open.org/docbook/xml/4.5/dbcentx.mod"
+            uri="dbcentx.mod"/>
+
+* Could not resolve URN "urn:x-suse:xslt:profiling:docbook50-profile.xsl" with xmlcatalog via catalog file "/etc/xml/catalog"
+- replace the "daps" group in /etc/xml/catalog with the following one:
+
+<group id="daps">
+    <system systemId="urn:x-daps:xslt:profiling:docbook41-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook41-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook41-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook41-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook42-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook42-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook42-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook42-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook43-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook43-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook43-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook43-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook44-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook44-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook44-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook44-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook45-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook45-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook45-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook45-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook50-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook50-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook50-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook50-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:docbook51-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook51-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:docbook51-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/docbook51-profile.xsl"/>
+    <system systemId="urn:x-daps:xslt:profiling:novdoc-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/novdoc-profile.xsl"/>
+    <system systemId="urn:x-suse:xslt:profiling:novdoc-profile.xsl" uri="file:///usr/share/daps/daps-xslt/profiling/novdoc-profile.xsl"/>
+    <rewriteSystem systemIdStartString="http://daps.sourceforge.net/release/daps-xsl/current/" rewritePrefix="file:///usr/share/daps/daps-xslt/"/>
+    <rewriteSystem systemIdStartString="https://opensuse.github.io/daps/release/daps-xsl/current/" rewritePrefix="file:///usr/share/daps/daps-xslt/"/>
+</group>
+
+* element "xi:include" not allowed here
+- it's a jing priblem on Debian, no workaround yet, sorry :-(
