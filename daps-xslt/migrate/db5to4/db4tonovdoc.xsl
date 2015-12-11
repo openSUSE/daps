@@ -368,18 +368,6 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="entry[not(*)][normalize-space(text() != '')]">
-    <!-- entry[&dbinline;]|  -->
-    <xsl:call-template name="info">
-      <xsl:with-param name="text">Added additional para</xsl:with-param>
-    </xsl:call-template>
-    <entry>
-      <para>
-        <xsl:apply-templates/>
-      </para>
-    </entry>
-  </xsl:template>
-
   <xsl:template match="package">
     <systemitem class="resource">
       <xsl:apply-templates/>
@@ -573,6 +561,17 @@
 
   <xsl:template match="entry/variablelist/varlistentry/listitem">
     <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="entry[not(*)][normalize-space(text() != '')]|entry[&dbinline;]">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Added additional para in entry</xsl:with-param>
+    </xsl:call-template>
+    <entry>
+      <para>
+        <xsl:apply-templates/>
+      </para>
+    </entry>
   </xsl:template>
 
 </xsl:stylesheet>
