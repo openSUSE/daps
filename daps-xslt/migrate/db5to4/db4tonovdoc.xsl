@@ -113,7 +113,7 @@
   <xsl:template match="variablelist/@role"/>
 
   <!-- ################################################################## -->
-  <!-- Suppressed Elements                                                -->
+  <!-- Suppressed Elements for Novdoc                                     -->
   <xsl:template match="abstract/title"/>
   <xsl:template match="appendixinfo|chapterinfo|prefaceinfo|partinfo"/>
   <xsl:template match="sect1info|sect2info|sect3info|sect4info|sect5info"/>
@@ -264,6 +264,15 @@
       <xsl:apply-templates select="legalnotice"/>
       <xsl:apply-templates select="abstract"/>
     </bookinfo>
+  </xsl:template>
+
+  <xsl:template match="chapter|abstract">
+    <xsl:element name="{local-name()}">
+      <xsl:apply-templates select="@*"/>
+      <xsl:copy-of select="(title|*/title)[1]"/>
+      <xsl:apply-templates select="*/abstract"/>
+      <xsl:apply-templates select="node()[not(self::title)]"/>
+    </xsl:element>
   </xsl:template>
 
   <!-- ################################################################## -->
