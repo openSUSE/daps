@@ -600,8 +600,14 @@
 
   <xsl:template match="entry">
     <entry>
+      <!--<xsl:call-template name="info">
+        <xsl:with-param name="text">
+          <xsl:text>entry first child: </xsl:text>
+          <xsl:value-of select="local-name(*[1])"/>
+        </xsl:with-param>
+      </xsl:call-template>-->
       <xsl:choose>
-        <xsl:when test="not(*) and normalize-space(text()) != ''">
+        <xsl:when test="not(&dbinline;) and normalize-space(text()) != ''">
           <xsl:variable name="text">
             <xsl:if test="ancestor::table/@id">
               <xsl:text>table id=</xsl:text>
@@ -611,16 +617,17 @@
           <xsl:call-template name="info">
             <xsl:with-param name="text">Added additional para in entry <xsl:value-of select="$text"/></xsl:with-param>
           </xsl:call-template>
+<!--          <xsl:comment>entry:not-dbinlines</xsl:comment>-->
           <para>
             <xsl:apply-templates select="text()"/>
           </para>
         </xsl:when>
         <xsl:when test="&dbinline;">
-          <para>
-            <xsl:apply-templates/>
-          </para>
+<!--          <xsl:comment>entry:para-inlines</xsl:comment>-->
+          <xsl:apply-templates/>
         </xsl:when>
         <xsl:when test="para">
+<!--          <xsl:comment>entry:para</xsl:comment>-->
           <xsl:apply-templates select="para"/>
         </xsl:when>
         <xsl:otherwise>
