@@ -57,6 +57,7 @@
       <!--<xsl:message>********** <xsl:value-of select="(d:title|d:info/d:title)[1]"/></xsl:message>-->
       <xsl:apply-templates select="d:info"/>
       <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy"/>
+      <xsl:apply-templates select="(d:subtitle|d:info/d:subtitle)[1]" mode="copy"/>
       <!-- Process the rest -->
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
@@ -67,6 +68,8 @@
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy"/>
+      <xsl:apply-templates select="(d:subtitle|d:info/d:subtitle)[1]" mode="copy"/>
+      <!--<xsl:apply-templates select="(d:titleabbrev|d:info/d:titleabbrev)[1]" mode="copy"/>-->
       <xsl:apply-templates select="d:info"/>
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
@@ -76,8 +79,13 @@
     <xsl:variable name="text">
       <xsl:apply-templates mode="copy"/>
     </xsl:variable>
-    <xsl:message>#### book/title: <xsl:value-of select="$text"/></xsl:message>
-    <title role="foofoo"><xsl:value-of select="normalize-space($text)"/></title>
+    <title><xsl:value-of select="normalize-space($text)"/></title>
+  </xsl:template>
+  <xsl:template match="d:book/d:subtitle | d:article/d:subtitle" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <subtitle><xsl:value-of select="normalize-space($text)"/></subtitle>
   </xsl:template>
 
   <xsl:template match="d:title" mode="copy">
@@ -88,8 +96,16 @@
       <xsl:value-of select="normalize-space($text)"/>
     </title>
   </xsl:template>
+  <xsl:template match="d:subtitle" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <subtitle>
+      <xsl:value-of select="normalize-space($text)"/>
+    </subtitle>
+  </xsl:template>
 
-  <xsl:template match="d:title/d:citetitle" mode="copy">
+  <xsl:template match="d:title/d:citetitle|d:subtitle/d:citetitle" mode="copy">
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
@@ -169,8 +185,8 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Don't copy title inside info -->
-  <xsl:template match="d:info/d:title"/>
+  <!-- Don't copy title(s) inside info -->
+  <xsl:template match="d:info/d:title | d:info/d:subtitle | d:info/d:titleabbrev"/>
 
   <xsl:template match="d:info/d:title" mode="copy">
     <title>
