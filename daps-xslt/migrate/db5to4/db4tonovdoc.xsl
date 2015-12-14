@@ -598,14 +598,33 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="entry[not(*)][normalize-space(text() != '')]|entry[&dbinline;]">
-    <xsl:call-template name="info">
-      <xsl:with-param name="text">Added additional para in entry</xsl:with-param>
-    </xsl:call-template>
+  <xsl:template match="entry">
     <entry>
-      <para>
-        <xsl:apply-templates/>
-      </para>
+      <xsl:choose>
+        <xsl:when test="not(*) and normalize-space(text()) != ''">
+          <xsl:variable name="text">
+            <xsl:if test="ancestor::table/@id">
+              <xsl:text>table id=</xsl:text>
+              <xsl:value-of select="ancestor::table/@id"/>
+            </xsl:if>
+          </xsl:variable>
+          <xsl:call-template name="info">
+            <xsl:with-param name="text">Added additional para in entry <xsl:value-of select="$text"/></xsl:with-param>
+          </xsl:call-template>
+          <para>
+            <xsl:apply-templates select="text()"/>
+          </para>
+        </xsl:when>
+        <xsl:when test="&dbinline;">
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:when test="para">
+          <xsl:apply-templates select="para"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </entry>
   </xsl:template>
 
