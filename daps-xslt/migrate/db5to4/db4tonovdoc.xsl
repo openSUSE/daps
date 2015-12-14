@@ -599,36 +599,40 @@
   </xsl:template>
 
   <xsl:template match="entry">
+    <xsl:variable name="dbinline" select="count(&dbinline;)"/>
+    <xsl:variable name="all" select="count(*)"/>
+    <xsl:variable name="diff" select="$all - $dbinline"/>
     <entry>
       <!--<xsl:call-template name="info">
         <xsl:with-param name="text">
-          <xsl:text>entry first child: </xsl:text>
+          <xsl:text>>> Table entry first child: </xsl:text>
           <xsl:value-of select="local-name(*[1])"/>
+          <xsl:text>&#10; first text node: "</xsl:text>
+          <xsl:value-of select="normalize-space(text()[1])"/>
+          <xsl:text>"</xsl:text>
+          <xsl:text>&#10; inlines=</xsl:text>
+          <xsl:value-of select="count(&dbinline;)"/>
+          <xsl:text> - </xsl:text>
+          <xsl:value-of select="count(*)"/>
         </xsl:with-param>
       </xsl:call-template>-->
       <xsl:choose>
-        <xsl:when test="not(&dbinline;) and normalize-space(text()) != ''">
-          <xsl:variable name="text">
-            <xsl:if test="ancestor::table/@id">
-              <xsl:text>table id=</xsl:text>
-              <xsl:value-of select="ancestor::table/@id"/>
-            </xsl:if>
-          </xsl:variable>
-          <xsl:call-template name="info">
-            <xsl:with-param name="text">Added additional para in entry <xsl:value-of select="$text"/></xsl:with-param>
-          </xsl:call-template>
-<!--          <xsl:comment>entry:not-dbinlines</xsl:comment>-->
+        <xsl:when test="$diff = 0">
           <para>
-            <xsl:apply-templates select="text()"/>
+             <xsl:apply-templates />
           </para>
         </xsl:when>
-        <xsl:when test="&dbinline;">
-<!--          <xsl:comment>entry:para-inlines</xsl:comment>-->
-          <xsl:apply-templates/>
-        </xsl:when>
-        <xsl:when test="para">
-<!--          <xsl:comment>entry:para</xsl:comment>-->
-          <xsl:apply-templates select="para"/>
+        <xsl:when test="normalize-space(text()[1]) != '' and $diff >0">
+          <xsl:call-template name="warn">
+            <xsl:with-param name="text">
+              <xsl:text>Sorry, can't handle mixed content of inlines and blocks in entry for now. </xsl:text>
+              <xsl:text>Check your XML source and wrap text in paras. </xsl:text>
+              <xsl:if test="ancestor::table/@id">
+                <xsl:text>table id=</xsl:text>
+                <xsl:value-of select="ancestor::table/@id"/>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates/>
