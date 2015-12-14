@@ -65,8 +65,8 @@
     doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
     doctype-system="novdocx.dtd"/>
 
-  <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="screen"/>
+  <!--<xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="screen programlisting"/>-->
 
   <!-- ################################################################## -->
   <!-- Parameters                                                         -->
@@ -266,12 +266,19 @@
     </bookinfo>
   </xsl:template>
 
-  <xsl:template match="chapter|abstract">
+  <xsl:template match="chapter|appendix">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
       <xsl:copy-of select="(title|*/title)[1]"/>
-      <xsl:apply-templates select="*/abstract"/>
-      <xsl:apply-templates select="node()[not(self::title)]"/>
+      <xsl:choose>
+        <xsl:when test="abstract">
+          <xsl:apply-templates select="abstract"/>
+        </xsl:when>
+        <xsl:when test="*/abstract">
+          <xsl:apply-templates select="*/abstract"/>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:apply-templates select="node()[not(self::title or self::abstract)]"/>
     </xsl:element>
   </xsl:template>
 
@@ -417,6 +424,7 @@
     <textobject>
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="role">description</xsl:attribute>
+      <xsl:apply-templates/>
     </textobject>
   </xsl:template>
 
@@ -431,9 +439,27 @@
   </xsl:template>
 
   <xsl:template match="simplelist[@type='vert']">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert'] -> itemizedlist</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
+  </xsl:template>
+
+  <xsl:template match="simplelist[@type='vert']/member">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert']/member -> listitem</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+    <listitem>
+      <para>
+        <xsl:apply-templates/>
+      </para>
+    </listitem>
   </xsl:template>
 
   <xsl:template match="itemizedlist[para or note]">
@@ -572,14 +598,46 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="entry[not(*)][normalize-space(text() != '')]|entry[&dbinline;]">
-    <xsl:call-template name="info">
-      <xsl:with-param name="text">Added additional para in entry</xsl:with-param>
-    </xsl:call-template>
+  <xsl:template match="entry">
+    <xsl:variable name="dbinline" select="count(&dbinline;)"/>
+    <xsl:variable name="all" select="count(*)"/>
+    <xsl:variable name="diff" select="$all - $dbinline"/>
     <entry>
-      <para>
-        <xsl:apply-templates/>
-      </para>
+      <!--<xsl:call-template name="info">
+        <xsl:with-param name="text">
+          <xsl:text>>> Table entry first child: </xsl:text>
+          <xsl:value-of select="local-name(*[1])"/>
+          <xsl:text>&#10; first text node: "</xsl:text>
+          <xsl:value-of select="normalize-space(text()[1])"/>
+          <xsl:text>"</xsl:text>
+          <xsl:text>&#10; inlines=</xsl:text>
+          <xsl:value-of select="count(&dbinline;)"/>
+          <xsl:text> - </xsl:text>
+          <xsl:value-of select="count(*)"/>
+        </xsl:with-param>
+      </xsl:call-template>-->
+      <xsl:choose>
+        <xsl:when test="$diff = 0">
+          <para>
+             <xsl:apply-templates />
+          </para>
+        </xsl:when>
+        <xsl:when test="normalize-space(text()[1]) != '' and $diff >0">
+          <xsl:call-template name="warn">
+            <xsl:with-param name="text">
+              <xsl:text>Sorry, can't handle mixed content of inlines and blocks in entry for now. </xsl:text>
+              <xsl:text>Check your XML source and wrap text in paras. </xsl:text>
+              <xsl:if test="ancestor::table/@id">
+                <xsl:text>table id=</xsl:text>
+                <xsl:value-of select="ancestor::table/@id"/>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </entry>
   </xsl:template>
 

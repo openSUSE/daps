@@ -28,9 +28,6 @@
   xmlns:exsl="http://exslt.org/common"
   exclude-result-prefixes="d xi xlink exsl html">
 
-  <xsl:strip-space elements="*"/>
-  <xsl:preserve-space
-    elements="d:screen d:programlisting d:literallayout xi:*"/>
   <xsl:variable name="inlines">abbrev accel acronym alt anchor
     annotation application author biblioref citation citebiblioid
     citerefentry citetitle classname code command computeroutput

@@ -15,7 +15,6 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="dm">
 
-  <xsl:strip-space elements="*"/>
 
   <xsl:template match="dm:docmanager|dm:docmanager/*">
     <xsl:apply-templates/>
