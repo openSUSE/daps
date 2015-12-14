@@ -134,6 +134,11 @@
           <xsl:value-of select="$type"/>
           <xsl:text>: </xsl:text>
           <xsl:value-of select="$text"/>
+          <xsl:if test="ancestor-or-self::*/@id">
+            <xsl:text>&#10;  (within ID: </xsl:text>
+            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
         </xsl:message>
       </xsl:when>
       <xsl:otherwise>
@@ -141,6 +146,11 @@
           <xsl:value-of select="$type"/>
           <xsl:text>: </xsl:text>
           <xsl:value-of select="$text"/>
+          <xsl:if test="ancestor-or-self::*/@id">
+            <xsl:text>&#10;  (within ID: </xsl:text>
+            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
