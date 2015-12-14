@@ -424,6 +424,7 @@
     <textobject>
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="role">description</xsl:attribute>
+      <xsl:apply-templates/>
     </textobject>
   </xsl:template>
 
