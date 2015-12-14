@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Everything related to the info element
+
+   Parameters:
+     see param.xsl
+
+   Input:
+     Valid DocBook5
+
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright:  2015 SUSE Linux GmbH
+
+
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:d="http://docbook.org/ns/docbook"
@@ -53,6 +70,27 @@
       <xsl:apply-templates select="d:info"/>
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:book/d:title | d:article/d:title" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <xsl:message>#### book/title: <xsl:value-of select="$text"/></xsl:message>
+    <title role="foofoo"><xsl:value-of select="normalize-space($text)"/></title>
+  </xsl:template>
+
+  <xsl:template match="d:title" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <title>
+      <xsl:value-of select="normalize-space($text)"/>
+    </title>
+  </xsl:template>
+
+  <xsl:template match="d:title/d:citetitle" mode="copy">
+    <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
   <!-- Block elements using info -->
