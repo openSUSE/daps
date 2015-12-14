@@ -65,8 +65,8 @@
     doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
     doctype-system="novdocx.dtd"/>
 
-  <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="screen programlisting"/>
+  <!--<xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="screen programlisting"/>-->
 
   <!-- ################################################################## -->
   <!-- Parameters                                                         -->
