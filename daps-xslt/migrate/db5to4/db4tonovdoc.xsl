@@ -266,7 +266,7 @@
     </bookinfo>
   </xsl:template>
 
-  <xsl:template match="chapter|abstract">
+  <xsl:template match="chapter|appendix">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
       <xsl:copy-of select="(title|*/title)[1]"/>
