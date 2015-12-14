@@ -439,9 +439,27 @@
   </xsl:template>
 
   <xsl:template match="simplelist[@type='vert']">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert'] -> itemizedlist</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
+  </xsl:template>
+
+  <xsl:template match="simplelist[@type='vert']/member">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert']/member -> listitem</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+    <listitem>
+      <para>
+        <xsl:apply-templates/>
+      </para>
+    </listitem>
   </xsl:template>
 
   <xsl:template match="itemizedlist[para or note]">
