@@ -21,7 +21,7 @@
   </xsl:template>
 
   <xsl:template match="dm:docmanager/dm:bugtracker">
-    <xsl:processing-instruction name="suse-bugtracker">
+    <xsl:processing-instruction name="dbsuse-bugtracker">
       <xsl:text>&#10;   </xsl:text>
       <xsl:apply-templates/>
     </xsl:processing-instruction>
