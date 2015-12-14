@@ -66,7 +66,7 @@
     doctype-system="novdocx.dtd"/>
 
   <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="screen"/>
+  <xsl:preserve-space elements="screen programlisting"/>
 
   <!-- ################################################################## -->
   <!-- Parameters                                                         -->
@@ -616,7 +616,9 @@
           </para>
         </xsl:when>
         <xsl:when test="&dbinline;">
-          <xsl:apply-templates/>
+          <para>
+            <xsl:apply-templates/>
+          </para>
         </xsl:when>
         <xsl:when test="para">
           <xsl:apply-templates select="para"/>
