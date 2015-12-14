@@ -18,7 +18,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="db5to4.xsl"/>
-  <xsl:output
+  <xsl:output indent="yes"
     doctype-public="-//OASIS//DTD DocBook XML V4.5//EN"
     doctype-system="http://www.docbook.org/xml/4.5/docbookx.dtd"/>
 
