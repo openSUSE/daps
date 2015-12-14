@@ -270,8 +270,15 @@
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
       <xsl:copy-of select="(title|*/title)[1]"/>
-      <xsl:apply-templates select="*/abstract"/>
-      <xsl:apply-templates select="node()[not(self::title)]"/>
+      <xsl:choose>
+        <xsl:when test="abstract">
+          <xsl:apply-templates select="abstract"/>
+        </xsl:when>
+        <xsl:when test="*/abstract">
+          <xsl:apply-templates select="*/abstract"/>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:apply-templates select="node()[not(self::title or self::abstract)]"/>
     </xsl:element>
   </xsl:template>
 
