@@ -28,21 +28,25 @@
   xmlns:exsl="http://exslt.org/common"
   exclude-result-prefixes="d xi xlink exsl html">
 
-  <xsl:variable name="inlines">abbrev accel acronym alt anchor
-    annotation application author biblioref citation citebiblioid
-    citerefentry citetitle classname code command computeroutput
-    constant coref database date editor email emphasis envar errorcode
-    errorname errortext errortype exceptionname filename firstterm
-    footnote footnoteref foreignphrase function glossterm guibutton
-    guiicon guilabel guimenu guimenuitem guisubmenu hardware indexterm
-    initializer inlineequation inlinemediaobject interfacename jobtitle
-    keycap keycode keycombo keysym link literal markup menuchoice
-    methodname modifier mousebutton nonterminal olink ooclass
-    ooexception oointerface option optional org orgname package
-    parameter person personname phrase productname productnumber prompt
-    property quote remark replaceable returnvalue shortcut subscript
-    superscript symbol systemitem tag termdef token trademark type uri
-    userinput varname wordasword xref</xsl:variable>
+  <!-- The pipes make it easier to check whether an element name match is really
+       the entire element name or just part of one. (E.g. "phrase" appears in
+       "foreignphrase" and theoretically those could be classified differently.)
+  -->
+  <xsl:variable name="inlines">|abbrev|accel|acronym|alt|anchor|
+    |annotation|application|author|biblioref|citation|citebiblioid|
+    |citerefentry|citetitle|classname|code|command|computeroutput|
+    |constant|coref|database|date|editor|email|emphasis|envar|errorcode|
+    |errorname|errortext|errortype|exceptionname|filename|firstterm|
+    |footnote|footnoteref|foreignphrase|function|glossterm|guibutton|
+    |guiicon|guilabel|guimenu|guimenuitem|guisubmenu|hardware|indexterm|
+    |initializer|inlineequation|inlinemediaobject|interfacename|jobtitle|
+    |keycap|keycode|keycombo|keysym|link|literal|markup|menuchoice|
+    |methodname|modifier|mousebutton|nonterminal|olink|ooclass|
+    |ooexception|oointerface|option|optional|org|orgname|package|
+    |parameter|person|personname|phrase|productname|productnumber|prompt|
+    |property|quote|remark|replaceable|returnvalue|shortcut|subscript|
+    |superscript|symbol|systemitem|tag|termdef|token|trademark|type|uri|
+    |userinput|varname|wordasword|xref|</xsl:variable>
 
 
   <!-- =================================================================== -->
@@ -66,8 +70,9 @@
   <xsl:template match="@performance[. = 'required']"/>
 
   <xsl:template match="@xlink:href">
+    <xsl:param name="safe-local-name" select="concat('|', local-name(..), '|')"/>
     <xsl:choose>
-      <xsl:when test="contains($inlines, local-name(..))">
+      <xsl:when test="contains($inlines, $safe-local-name)">
         <ulink url="{.}" remap="{local-name(..)}">
           <xsl:value-of select=".."/>
         </ulink>
@@ -94,8 +99,9 @@
 
   <!-- =================================================================== -->
   <xsl:template match="d:*[@xlink:href]">
+    <xsl:param name="safe-local-name" select="concat('|', local-name(), '|')"/>
     <xsl:choose>
-      <xsl:when test="contains($inlines, local-name())">
+      <xsl:when test="contains($inlines, $safe-local-name)">
         <ulink url="{@xlink:href}" remap="{local-name(.)}">
           <xsl:element name="{local-name()}">
             <xsl:apply-templates
