@@ -148,7 +148,7 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- Suppress other info elements who has no direct mapping -->
+  <!-- Suppress other info elements that has no direct mapping -->
   <xsl:template match="d:*[d:info]"/>
 
   <xsl:template match="d:info">
