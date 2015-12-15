@@ -167,20 +167,10 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="d:info/d:productname[d:phrase] | d:info/d:productnumber[d:phrase]">
-    <xsl:choose>
-      <xsl:when test="d:phrase/@*">
-        <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
-          <xsl:copy-of select="descendant-or-self::*//@*"/>
-          <xsl:value-of select=".//text()"/>
-        </xsl:element>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:copy>
-          <xsl:value-of select=".//text()"/>
-        </xsl:copy>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template match="d:info/d:productnumber[d:phrase]">
+    <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
+      <xsl:value-of select=".//text()"/>
+    <xsl:element>
   </xsl:template>
 
   <!-- Don't copy title(s) inside info -->
