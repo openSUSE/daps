@@ -170,7 +170,7 @@
   <xsl:template match="d:info/d:productnumber[d:phrase]">
     <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
       <xsl:value-of select=".//text()"/>
-    <xsl:element>
+    </xsl:element>
   </xsl:template>
 
   <!-- Don't copy title(s) inside info -->
