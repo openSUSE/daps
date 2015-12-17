@@ -1,0 +1,60 @@
+xmlcatalog outputs wrong file URLs, which breaks package compilation.
+Therefore the stripping logic is adjusted to work with file:/ onyl URLs.
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -53,7 +53,7 @@
+ if HAS_DAPS_XSL
+   STYLEROOT := $(daps_xsl)
+ else
+-  STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
++  STYLEROOT := $(subst file:,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
+ endif
+ 
+ 
+--- a/configure.ac
++++ b/configure.ac
+@@ -196,7 +196,7 @@
+ for SVG_DTD in "-//W3C//DTD SVG 1.0//EN" \
+                "-//W3C//DTD SVG 1.1 Basic//EN" ; do
+   AC_MSG_CHECKING([for $SVG_DTD])
+-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$SVG_DTD" >&2]); then
++  if AC_RUN_LOG([$XMLCATALOG "$root_catalog" "$XML_DTD" | sed 's@file:@@' >&2]); then
+     AC_MSG_RESULT([yes])
+     HAVE_SVGDTD=1
+   else
+@@ -232,7 +232,7 @@
+                "-//OASIS//DTD DocBook XML V4.4//EN" \
+                "-//OASIS//DTD DocBook XML V4.5//EN" ; do
+   AC_MSG_CHECKING([for $XML_DTD])
+-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
++  if AC_RUN_LOG([$XMLCATALOG "$root_catalog" "$XML_DTD" | sed 's@file:@@' >&2]); then
+     AC_MSG_RESULT([yes])
+     HAVE_DOCBOOK=1
+   else
+@@ -249,7 +249,7 @@
+                   "http://docbook.org/xml/5.0/rng/docbook.rng" \
+                   "http://docbook.org/xml/5.0/rng/docbook.rnc" ; do
+   AC_MSG_CHECKING([for $XML_SCHEMA])
+-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XML_DTD" >&2]); then
++  if AC_RUN_LOG([$XMLCATALOG "$root_catalog" "$XML_DTD" | sed 's@file:@@' >&2]); then
+     AC_MSG_RESULT([yes])
+     HAVE_DOCBOOK_5=1
+   else
+@@ -275,7 +275,7 @@
+             "${db4_xslt_url}xhtml/chunk.xsl" \
+             "${db4_xslt_url}xhtml/docbook.xsl"; do
+   AC_MSG_CHECKING([for $XSLT])
+-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
++  if AC_RUN_LOG([$XMLCATALOG "$root_catalog" "$XML_DTD" | sed 's@file:@@' >&2]); then
+     AC_MSG_RESULT([yes])
+     HAVE_DOCBOOK_STYLESHEETS=1
+   else
+@@ -298,7 +298,7 @@
+             "${DB5_XSLT_URL}xhtml/chunk.xsl" \
+             "${DB5_XSLT_URL}xhtml/docbook.xsl"; do
+   AC_MSG_CHECKING([for $XSLT])
+-  if AC_RUN_LOG([$XMLCATALOG --noout "$root_catalog" "$XSLT" >&2]); then
++  if AC_RUN_LOG([$XMLCATALOG "$root_catalog" "$XML_DTD" | sed 's@file:@@' >&2]); then
+     AC_MSG_RESULT([yes])
+     HAVE_DOCBOOK_5_STYLESHEETS=1
+ 

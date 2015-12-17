@@ -1,0 +1,56 @@
+Source: daps
+Section: text
+Priority: optional
+Maintainer: Haug Bürger <haug.buerger@zalando.de>
+Build-Depends: debhelper (>=9),
+               dh-autoreconf,
+               xml-core,
+               libxml2-utils,
+               xsltproc,
+               imagemagick,
+               ghostscript,
+               docbook-xml,
+               docbook-xsl (>=1.7.8)
+Standards-Version: 3.9.6
+Homepage: http://opensuse.github.io/daps
+Vcs-Git: https://github.com/openSUSE/daps.git
+Vcs-Browser: https://github.com/openSUSE/daps
+
+Package: daps
+Architecture: all
+Depends: docbook,
+         docbook-xml,
+         docbook-xsl (>=1.7.8),
+         ghostscript,
+         xmlstarlet,
+         python,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Recommends: w3m,
+            fop (>= 0.96),
+            docbook5-xml,
+            docbook-xsl-ns,
+            jing,
+            sgml-data,
+            optipng,
+            poppler-utils,
+            bzip2
+Suggests: epubcheck,
+          dia,
+          inkscape,
+          xfig,
+          checkbot,
+          xmlformat-perl
+Description: DocBook Authoring and Publishing Suite (DAPS)
+ DAPS contains a set of stylesheets, scripts and makefiles that enable
+ you to create HTML, PDF, EPUB and other formats from DocBook XML with a
+ single command. It also contains tools to generate profiled source
+ tarballs for distributing your XML sources for translation or review.
+ .
+ DAPS also includes tools that assist you when writing DocBook XML:
+ linkchecker, validator, spellchecker, editor macros and stylesheets for
+ converting DocBook XML.
+ .
+ DAPS is the successor of susedoc. See
+ /usr/share/doc/packages/daps/README.upgrade_from_susedoc_4.x
+ for upgrade instructions.
