@@ -1,0 +1,6 @@
+#!/usr/bin/make -f
+%:
+	dh $@ --with autoreconf
+
+override_dh_auto_configure:
+	dh_auto_configure -- --sysconfdir=/etc --disable-edit-rootcatalog
