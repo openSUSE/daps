@@ -4,3 +4,9 @@
 
 override_dh_auto_configure:
 	dh_auto_configure -- --sysconfdir=/etc --disable-edit-rootcatalog
+
+override_dh_install:
+	dh_installxmlcatalogs
+
+	# Remove obsolete catalog file
+	rm debian/daps/etc/xml/for-catalog-daps.xml
