@@ -78,4 +78,49 @@ II. Troubleshooting
 </group>
 
 * element "xi:include" not allowed here
-- it's a jing problem on Debian, no workaround yet, sorry :-(
+- it's a jing problem on Debian, no decent workaround yet, sorry :-(
+  you can either create a new /usr/bin/jing file respecting java-wrappers.sh with the following content:
+
+--- cut here ---
+#!/bin/sh
+
+# Include the wrappers utility script
+. /usr/lib/java-wrappers/java-wrappers.sh
+
+# We prefer to use openjdk or Sun's java if available
+find_java_runtime openjdk sun  || find_java_runtime 
+
+# Set dfault (and local) classpath
+JAVA_CLASSPATH="/usr/share/java"
+
+if [ "$1" = "classpath" ]
+then
+  JAVA_CLASSPATH="$2"
+  shift 2
+fi
+
+export CLASSPATH=$JAVA_CLASSPATH
+
+JAVA_ARGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+
+DEBUG_WRAPPER=1
+
+#find_jars jing xerces-j2 xml-commons-apis saxon6 xml-commons-resolver 
+find_jars jing xercesImpl xmlParserAPIs xml-apis saxon xml-resolver avalon-framework batik-all 
+
+run_java com.thaiopensource.relaxng.util.Driver "$@"
+
+--- cut here ---
+
+  or install the jing package from the debian/unstable branch where the bug is supposed to be fixed as yet:
+
+1. add the following line to your /etc/apt/sources.list:
+deb http://ftp.it.debian.org/debian sid main contrib non-free
+
+2. update the repository sources with
+$ apt-get update
+
+3. install the updates package with
+$ apt-get install -t sid jing
+
+4. optionally comment the line we previously added to /etc/apt/sources.list
