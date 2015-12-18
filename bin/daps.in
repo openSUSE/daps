@@ -864,6 +864,11 @@ function sanitize_path {
     # Do nothing if $1 is an empty value
     [[ -z "$MYPATH" ]] && return
 
+    # Remove preceding file:// scheme
+    if [[ ${MYPATH:0:5} = file: ]]; then
+        MYPATH=${MYPATH#file:}
+    fi
+
     # ignore values that need to be set by configure
     # (makes it possible to directly use a SVN checkout)
     [[ $MYPATH =~ @[a-zA-Z]*@ ]] && return
@@ -1603,7 +1608,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     # remove file:// or file: (Debian, Tumbleweed) prefix
     # Is there a better way to do this with shell built-ins?
     #
-    DOCBOOK5_RNG=${DOCBOOK5_RNG##*file:}
+    DOCBOOK5_RNG=${DOCBOOK5_RNG#*file:}
     DOCBOOK5_RNG=${DOCBOOK5_RNG#*//}
     #
     # check if resulting path is valid

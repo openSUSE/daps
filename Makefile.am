@@ -53,7 +53,7 @@ endif
 if HAS_DAPS_XSL
   STYLEROOT := $(daps_xsl)
 else
-  STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
+  STYLEROOT := $(patsubst //%,%,$(patsubst file:%,%,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url))))
 endif
 
 

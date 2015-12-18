@@ -139,7 +139,7 @@
     <term>Spell Checking XML Files in Languages Other than English</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --lang=<replaceable>LANG</replaceable> \
-           [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
+  [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with the dictionary
       for <replaceable>LANG</replaceable> (make sure the specified &aspell;
@@ -155,7 +155,7 @@
     <term>Spell Checking XML Files in Batch Mode</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --list \
-           [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
+  [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file. Returns a list of
       misspelled words to standard output. You can use the
@@ -169,7 +169,7 @@
     <term>Spell Checking XML Files with an Additional Custom Dictionary</term>
     <listitem>
 <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> spellcheck --extra-dict=<replaceable>PATH_TO_CUSTOM_DICT</replaceable> \
-           [--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
+[--file <replaceable>PATH_TO_XML_FILE</replaceable>]</screen>
      <para>
       Checks the specified documentation project or file with
       the default dictionary plus the additional custom dictionary specified
@@ -301,7 +301,7 @@
    <varlistentry>
     <term>Checking for Superfluous Files</term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused</screen>
      <para> Lists all files that are <emphasis>not</emphasis> referenced in the
       document specified by the &dc; file, but are available in the
       <filename>xml</filename> and <filename>images/src</filename> subdirectories. 
@@ -312,14 +312,13 @@
     </listitem>
    </varlistentry>
   <varlistentry>
-   <term>Checking Where a ID or File is Included</term>
+   <term>Checking Where an ID or File is Included</term>
    <listitem>
-    <screen>&prompt.user;&dapscmd;
-     -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
+    <screen>&prompt.user;&dapscmd;-d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable> list-file --rootid
      <replaceable>ID</replaceable></screen>
      <para> Lists the file that contains the ID specified with the mandatory
       parameter <option>--rootid</option>. For example:</para>
-    <screen>&prompt.user;&dapscmd;-d DC-daps-example list-file --rootid sec.template.examples.images
+    <screen>&prompt.user;&dapscmd;&nbsp;-d DC-daps-example list-file&nbsp;--rootid sec.template.examples.images
 The ID "sec.template.examples.images" appears in:
 /DOC_DIR_PATH/xml/MAIN-daps-example.xml</screen>
    </listitem>
@@ -339,17 +338,17 @@ The ID "sec.template.examples.images" appears in:
   <example id="ex.daps.output.default">
    <title>Default Output of a File Listing &dapsacr; Command</title>
    <screen><?dbsuse-fo font-size="0.70em"?>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles</command>
-    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>images/src/png/example1.png&nbsp;<replaceable
-     >YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+<replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example1.png&nbsp;<replaceable
+>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png&nbsp;<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
   
   <example id="ex.daps.output.pretty">
    <title>Pretty-printed Output of a File Listing &dapsacr; Command</title>
    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-srcfiles&nbsp;--pretty</command>
-    <replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
+<replaceable>YOUR_DOC_DIR</replaceable>/DC-daps-example
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
+<replaceable>YOUR_DOC_DIR</replaceable>/xml/MAIN-daps-example.xml</screen>
   </example>
   
   <tip>
@@ -357,10 +356,10 @@ The ID "sec.template.examples.images" appears in:
    <para> To count the number of files listed in a given output, you can
     also combine the <parameter>--pretty</parameter> parameter with the
     <command>wc</command> command: </para>
-   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
+   <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-srcfiles --pretty | wc -l</screen>
    <para> For <xref linkend="ex.daps.output.pretty"
-    xrefstyle="select:label"/>, the command above would return the value
-    <computeroutput>4</computeroutput>.
+   xrefstyle="select:label"/>, the command above would return
+    <computeroutput>4</computeroutput> as a value.
    </para>
   </tip>
  

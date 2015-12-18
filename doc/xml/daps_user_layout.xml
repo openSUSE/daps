@@ -30,15 +30,45 @@
  <sect1 id="sec.daps.user.layout.xsltparams">
   <title>Modifying Individual XSLT Processor Parameters</title>
 
-  <para>
-   If you use the default DocBook layout and want to adjust individual
-   parameters, you can use the <option>--param "KEY=VALUE"</option> or
-   <option>--stringparam "KEY=VALUE"</option> option. Both options can be
-   specified multiple times. It will pass on values for XSLT parameters
-   directly to the XSLT processor, which is useful to temporarily overwrite
-   style sheet parameters such as margins, for example.
+  <para> If you use the default DocBook layout and want to adjust individual parameters, you can use
+   the <option>--param "KEY=VALUE"</option> or the <option>--stringparam "KEY=VALUE"</option>
+   option. Both options can be specified multiple times and are supported for the following
+   subcommands (specifying the output formats): </para>
+  <itemizedlist>
+   <listitem>
+    <para>epub</para>
+   </listitem>
+   <listitem>
+    <para>html</para>
+   </listitem>
+   <listitem>
+    <para>man</para>
+   </listitem>
+   <listitem>
+    <para>pdf</para>
+   </listitem>
+   <listitem>
+    <para>text</para>
+   </listitem>
+   <listitem>
+    <para>webhelp</para>
+   </listitem>
+  </itemizedlist>
+  <para>The options will pass on values for XSLT parameters directly to the XSLT processor, which is
+  useful to temporarily overwrite style sheet parameters such as margins, for example.
   </para>
-
+  
+  <note>
+   <title><parameter>XSLTPARAM</parameter> And <option>--xsltparam</option></title>
+   <para>For compatibility reasons, &dapsacr; still supports the use of
+     <option>--xsltparam</option> on the command line, but this option will be removed in future
+    versions. Use <option>--param "KEY=VALUE"</option> or <option>--stringparam "KEY=VALUE"</option>
+    instead.</para>
+   <para>However, if you want to specify your settings in the &dc; file instead of using the
+    command line options, the respective parameter is still named
+    <parameter>XSLTPARAM</parameter>.</para>
+  </note>
+  
   <para>
    For larger or more complex modifications, such as adjustments of the
    title page layout, for example, it is advisable to develop your own set
@@ -86,7 +116,7 @@
     set the parameter <parameter>variablelist.as.table</parameter> to the
     value <literal>0</literal> by executing the following command:
    </para>
-   <screen>daps -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
+   <screen>&prompt.user;&dapscmd; -d  &nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;html \
 --param<co id="co.xsltparam"/>&nbsp;"variablelist.as.table<co id="co.param"/>=0"<co id="co.value"/> \
 --param&nbsp;"variablelist.term.break.after=1" \
 --stringparam<xref linkend="co.xsltparam"/>&nbsp;"paper.type=A4"</screen>
@@ -132,6 +162,20 @@
 XSLTPARAM="$XSLTPARAM --param&nbsp;<replaceable>PARAM_NAME</replaceable>=<replaceable>VALUE</replaceable>"</screen>
   </example>
  </sect1>
+ 
+ <sect1 id="sec.daps.user.layout.txt">
+  <title>Specifying the Layout for ASCII Text Output</title>
+  <para>You can set parameters in &dapsconf-sys; or &dapsconf-user; using the
+    <parameter>TXT_PARAMS</parameter> parameter. Alternatively, set them from command line, using the
+    <option>--param</option>/<option>--stringparam</option> options. By
+   default, the stylesheets specified with the <parameter>STYLEROOT</parameter> parameter or
+    the <option>--styleroot</option> option are used for generating ASCII text output.</para>
+  <para>However, if you want to ignore any STYLEROOT definitions, set
+   <literal>TXT_IGNORE_STYLEROOT="yes"</literal> in &dapsconf-sys; or &dapsconf-user; or use the
+   <option>--ignore-styleroot</option> option on the command line: </para>
+  <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_DC_FILE</replaceable> text --ignore-styleroot</screen>
+ </sect1>
+ 
  <sect1 id="sec.daps.user.layout.styleheets">
   <title>Customizing the DocBook Stylesheets</title>
 

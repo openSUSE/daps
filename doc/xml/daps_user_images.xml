@@ -167,7 +167,7 @@
     <para>
      To run <command>optipng</command> over an entire book's PNG images:
     </para>
-    <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> optipng</screen>
+    <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> optipng</screen>
    </tip>
   </sect2>
 
@@ -264,7 +264,7 @@
     <term>Listing All Graphics Referenced in a Documentation Project
      </term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles&nbsp;--noent&nbsp;--noxml&nbsp;--nodc</screen>
      <para> Lists all graphics used by the DocBook files that are referenced in the document
       specified by the current &dc; file. </para>
     </listitem>
@@ -273,7 +273,7 @@
     <term>
       Listing Missing Graphics in a Documentation Project</term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-missing</screen>
      <para> Lists all graphics that are referenced in your DocBook files, but
       could not be found in the file system. In case there are any missing
       graphics, you cannot build your project. </para>
@@ -282,7 +282,7 @@
    <varlistentry>
     <term>Checking for Superfluous Graphics</term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused&nbsp;--noxml</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-scrfiles-unused&nbsp;--noxml</screen>
      <para> Lists all graphics that are <emphasis>not</emphasis> referenced in
       your DocBook files, but are available in the
        <filename>images/src</filename> subdirectories. <remark>taroth
@@ -295,7 +295,7 @@
    <varlistentry>
     <term>Checking for Non-Unique Graphic File Names</term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc</screen>
      <para> Checks the <filename>images/src</filename> subdirectories for
       non-unique base names. For more information, refer to <xref
        linkend="sec.daps.user.imgs.req"/>. </para>
@@ -304,7 +304,7 @@
    <varlistentry>
     <term>Reducing the File Size of PNG Graphics</term>
     <listitem>
-     <screen>&prompt.user;daps&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;optipng</screen>
+     <screen>&prompt.user;&dapscmd;&nbsp;<parameter>-d</parameter>&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;optipng</screen>
      <para> Recompresses any PNG files in the
        <filename>images/src/png</filename> directory with the PNG optimizer
        <literal>optipng</literal> without reducing the image quality. </para>
@@ -313,7 +313,7 @@
    <varlistentry>
     <term>Deleting All Generated Images for a Documentation Project</term>
     <listitem>
-     <screen>&prompt.user;daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;clean-images</screen>
+     <screen>&prompt.user;&dapscmd; -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;clean-images</screen>
      <para> Deletes all images generated for a certain &dc; file. This is
       only necessary in rare cases, for example, when a file previously had an
       incorrect time stamp or when you have changed your global &dapsacr;
@@ -324,7 +324,7 @@
    </varlistentry>
    <varlistentry>
     <term>Viewing All Images Referenced in a File or Project</term>
-    <listitem><screen>&prompt.user;daps -d&nbsp;DC-daps-example&nbsp;getimages&nbsp;--show&nbsp;--viewer ristretto</screen>
+    <listitem><screen>&prompt.user;&dapscmd; -d&nbsp;DC-daps-example&nbsp;getimages&nbsp;--show&nbsp;--viewer ristretto</screen>
      <para>Opens and shows all images referenced in the documentation project in the specified image
       viewer, for example, Ristretto. Alternatively, specify your preferred image viewer in the
        <parameter>IMG_VIEWER</parameter> parameter in the &dapsacr; configuration file. To show
@@ -350,12 +350,12 @@
    <title>Pretty-printed Output of an Image-related &dapsacr;
     Command</title>
    <screen>&prompt.user;<command>daps -d&nbsp;<replaceable>PATH_TO_&dc;_FILE</replaceable>&nbsp;list-images-multisrc&nbsp;--pretty</command>
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/dia/example_dia1.dia
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png3.png
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/svg/example_svg.svg
-    <replaceable>YOUR_DOC_DIR</replaceable>/images/src/fig/example_fig1.fig ...</screen>
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/dia/example_dia1.dia
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png1.png
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png2.png
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/png/example_png3.png
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/svg/example_svg.svg
+<replaceable>YOUR_DOC_DIR</replaceable>/images/src/fig/example_fig1.fig ...</screen>
   </example>
   
   <tip>
@@ -363,10 +363,10 @@
    <para> To count the number of images listed in a given output, you can
     also combine the <parameter>--pretty</parameter> parameter with the
     <command>wc</command> command: </para>
-   <screen>&prompt.user;daps -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
+   <screen>&prompt.user;&dapscmd; -d <replaceable>PATH_TO_&dc;_FILE</replaceable> list-images-multisrc --pretty | wc -l</screen>
    <para> For <xref linkend="ex.daps.graphics.output.pretty"
-    xrefstyle="select:label"/>, the command above would return the value
-    <computeroutput>5</computeroutput>
+    xrefstyle="select:label"/>, the command above would return 
+    <computeroutput>5</computeroutput> as value.
    </para>
   </tip>
  </sect1>
