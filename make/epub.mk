@@ -89,7 +89,8 @@ EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(ONLINE_IM
 #
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 
-EPUBSTRINGS := --stringparam "epub.oebps.dir=OEBPS/" \
+EPUBSTRINGS := --param "show.comments=$(REMARKS)" \
+		--stringparam "epub.oebps.dir=OEBPS/" \
 		--stringparam "epub.metainf.dir=META-INF/"
 
 ifeq "$(IS_STATIC)" "static"
@@ -163,7 +164,7 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
 	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) $(PARAMS) \
-	  $(STRINGPARAMS)  $(XSLTPARAM) --stylesheet $(STYLEEPUB) \
+	  $(XSLTPARAM) $(STRINGPARAMS) --stylesheet $(STYLEEPUB) \
 	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
 
 #---------------
