@@ -38,8 +38,7 @@
     method="xml"
     encoding="utf-8"
     indent="yes"
-    omit-xml-declaration="yes"
-    cdata-section-elements="screen"/>
+    omit-xml-declaration="yes"/>
    <xsl:preserve-space elements="*"/>
   <xsl:preserve-space elements="screen address programlisting"/>
   <!--<xsl:strip-space elements="*"/>-->
