@@ -487,6 +487,7 @@
       </xsl:with-param>
     </xsl:call-template>
     <itemizedlist>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </itemizedlist>
   </xsl:template>
@@ -503,6 +504,7 @@
 
   <xsl:template match="note/procedure">
     <orderedlist>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
