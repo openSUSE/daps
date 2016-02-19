@@ -14,10 +14,10 @@ CONFIG_FILE="/etc/daps/docbook-xmlformat.conf"
 #bin="${BASH_SOURCE%/*}"
 #CONFIG_FILE="$bin/$CONFIG_FILE"
 
-echo "Using config file '$CONFIG_FILE'"
+>&2 echo "Using config file '$CONFIG_FILE'"
 
 if [ ! -e $CONFIG_FILE ]; then
-    echo -e "Could not find config file '$CONFIG_FILE'\n"
+    >&2 echo -e "Could not find config file '$CONFIG_FILE'\n"
     exit 100
 fi
 
@@ -34,18 +34,18 @@ fi
 
 res=$(which $xmlformat_cmd 2>/dev/null)
 if [ "$res" = '' ]; then
-    echo -e "The $xmlformat_cmd script is missing. Please install the package xmlformat!\n"
+    >&2 echo -e "The $xmlformat_cmd script is missing. Please install the package xmlformat!\n"
     exit 200
 fi
 
-xmlformat=$res
+#xmlformat=$res
 ## check, if xmlformat supports tag-formatting
-if $xmlformat -t < /dev/null >/dev/null 2>&1; then
-    xmlformat="$xmlformat -t"
-else
-    echo "$xmlformat: tag-formatting not supported."
-    echo "Please install version 1.04.01 or later."
-fi
+#if $xmlformat -t < /dev/null >/dev/null 2>&1; then
+#    xmlformat="$xmlformat -t"
+#else
+#    >&2 echo "$xmlformat: tag-formatting not supported."
+#    >&2 echo "Please install version 1.04.01 or later."
+#fi
 
-$xmlformat --config-file "$CONFIG_FILE" "$@"
+$xmlformat_cmd --config-file "$CONFIG_FILE" "$@"
 exit $?
