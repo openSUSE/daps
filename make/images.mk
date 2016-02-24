@@ -190,7 +190,7 @@ MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
 
 COLOR_IMAGES     := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
 GRAYSCALE_IMAGES := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
-ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE)
+ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE) $(SVGONLINE)
 
 GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $(IMG_GENDIR)/gen/png/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/svg/,$(GEN_SVG))
 
