@@ -253,15 +253,15 @@ sed -i "s/§§TITLE§§/$TITLE/g" "$MAIN"
 
 if [[ -n $PRODUCTNAME ]]; then
     if [[ $DOCBOOKVERSION -eq 5 ]]; then
-        XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title -t elem"
+        XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title"
     else
-        XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title -t elem"
+        XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title"
     fi
 
     TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null) || \
         exit_on_error "Could not create a temporary file to set productname"
 
-    xml ed "$XML_CMD_OPTS" -n productname -v "$PRODUCTNAME" "$MAIN" > "$TEMPFILE"
+    xml ed $XML_CMD_OPTS -t elem -n productname -v "$PRODUCTNAME" "$MAIN" > "$TEMPFILE"
     if [[ -n $PRODUCTNUMBER ]]; then
         xml ed --inplace "$XML_CMD_OPTS" -n productnumber -v "$PRODUCTNUMBER" "$TEMPFILE"
     fi
