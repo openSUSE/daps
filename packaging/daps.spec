@@ -98,8 +98,10 @@ PreReq:         sgml-skel
 Requires:       ImageMagick
 Requires:       bash >= 3.1
 Requires:       dia
-Requires:       docbook-xsl-stylesheets >= 1.77
 Requires:       docbook_4
+Requires:       docbook_5
+Requires:       docbook-xsl-stylesheets >= 1.77
+Requires:       docbook5-xsl-stylesheets >= 1.77
 Requires:       ghostscript-library
 Requires:       inkscape
 Requires:       libxslt
@@ -112,6 +114,7 @@ Requires:       suse-xsl-stylesheets
 Requires:       svg-schema
 Requires:       transfig
 Requires:       xml-commons-jaxp-1.3-apis
+Requires:       jing
 %if 0%{?suse_version} >= 1140
 Requires:       xmlgraphics-fop >= 0.94
 %else
@@ -119,12 +122,9 @@ Requires:       fop >= 0.94
 %endif
 Requires:       xmlstarlet
 
-Recommends:     daps-docmanager
-Recommends:     docbook_5
-Recommends:     docbook5-xsl-stylesheets >= 1.77
+Recommends:     aspell-en
 Recommends:     epubcheck
 Recommends:     exiftool
-Recommends:     jing
 Recommends:     optipng
 %if 0%{?suse_version} >= 1140
 Recommends:     perl-checkbot
