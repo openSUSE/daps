@@ -157,7 +157,7 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 #---------------------------Local TARGETS--------------------------------------
 
 #
-# These targets need to be build _after_ the guides have been build, to make sure
+# These targets need to be built _after_ the guides have been built, to make sure
 # the local config, as provided by the repo, is used. Otherwise we have a mixture
 # of system and repo setup and that will not work
 
