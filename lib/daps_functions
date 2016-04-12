@@ -1961,14 +1961,14 @@ function spellcheck {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-    if [[ -z "$ASPELL_LANG" ]]; then
+        if [[ -z "$ASPELL_LANG" ]]; then
             ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$ASPELL_LANG" ]]; then
         ccecho "info" "Using language $ASPELL_LANG."
             else
         exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
             fi
-    fi
+        fi
     fi
 
     #------------------
@@ -2057,6 +2057,74 @@ function stylecheck {
     fi
 
     call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# XMLformat
+#
+# Prettyfies the XML sources
+#
+###########################################################################
+function xmlformat {
+    local DAPSXMLFORMAT SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    # use daps-xmlformat from DAPSROOT if the latter is set
+    [[ "$DAPSROOT" != "$DAPSROOT_DEFAULT" ]] && DAPSXMLFORMAT="${DAPSROOT}/bin/daps-xmlformat"
+
+    SHORT_OPTS="h"
+    LONG_OPTS="file:,help,rootid:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_file
+        help_help
+        help_rootid
+        echo -e "    NOTES: * Options --file and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n           * MAIN is ignored when --file or when a ROOTID is specified\n           * This command will directly alter your source xml files!"
+        exit 0
+    fi
+
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
+        fi
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
+        exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
+    fi
+
+    # if --file was specified, FILELIST contains just one file
+
+
+    # if --rootid was specified, we need to get the list of files
+
+    if [[ -n "$P_FILE" ]]; then
+        FILELIST[0]="$P_FILE"
+    else
+        [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
+        FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
+        if [[ 0 != $? ]]; then
+            exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
+        fi
+    fi
+
+    # run daps-xmlformat
+    #
+    # ignore $MAIN with --file or --rootid
+    #
+    echo "Prettifying the following files:"
+    for FILE in "${FILELIST[@]}"; do
+        if [[ -n "$P_FILE" || -n "$ROOTID" ]]; then
+            [[ "$FILE" == "$MAIN" ]] && continue
+        fi
+        [[ 0 != "$VERBOSITY" ]] && echo -e "  $FILE"
+        $DAPSXMLFORMAT -i "$FILE" >/dev/null
+    done
 }
 
 

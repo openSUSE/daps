@@ -14,7 +14,7 @@ CONFIG_FILE="/etc/daps/docbook-xmlformat.conf"
 #bin="${BASH_SOURCE%/*}"
 #CONFIG_FILE="$bin/$CONFIG_FILE"
 
->&2 echo "Using config file '$CONFIG_FILE'"
+echo "Using config file '$CONFIG_FILE'"
 
 if [ ! -e $CONFIG_FILE ]; then
     >&2 echo -e "Could not find config file '$CONFIG_FILE'\n"
