@@ -418,6 +418,9 @@ HELP_SUBCOMMAND+=("webhelp=Build an HTML document with a table of contents/searc
 SUBCOMMANDS+=("webhelp-dir-name=show_names")
 HELP_SUBCOMMAND+=("webhelp-dir-name=Print the directory name that would result when building a webhelp document.")
 
+SUBCOMMANDS+=("xmlformat=xmlformat")
+HELP_SUBCOMMAND+=("xmlformat=Prettify your xml-sources using the xmlformat program\nwith a configuration file supplied by daps (/etc/daps/docbook-xmlformat.conf).")
+
 #
 # deprecated targets
 #
@@ -762,6 +765,7 @@ Subcommands:
                               rootid
     validate                  Validate profiled sources. Automatically profiles
                               the XML sources if needed
+    xmlformat                 Prettify the XNL source files using xmlformat
 
   File and Directory Names:
     <target>-name             Print resulting file name for <target>. <target>
