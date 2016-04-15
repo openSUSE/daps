@@ -1059,7 +1059,7 @@ function build_locdrop {
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
-
+    call_make "profile" "$@" || exit_on_error "Profiling failed"
     call_make "$SUB_CMD" "$@"
 }
 
