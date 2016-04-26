@@ -57,22 +57,14 @@ list-file:
 #
 .PHONY: list-srcfiles
 list-srcfiles: 
-  ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(USED_FILES)))"
-  else
-	@echo $(sort $(USED_FILES))
-  endif
+	$(call print_list,$(USED_FILES))
+
 
 # List files from xml and images/src _not_ referenced by $DOCFILE or $MAIN
 #
 .PHONY: list-srcfiles-unused
 list-srcfiles-unused:
-  ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(UNUSED_FILES)))"
-  else
-	@echo $(sort $(UNUSED_FILES))
-  endif
-
+	$(call print_list,$(UNUSED_FILES))
 
 # The targets
 #
