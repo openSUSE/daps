@@ -50,6 +50,7 @@
       <link type="guide" xref="index" group="{$packagename}"/>
       <credit type="author">
         <name>Documentation Team</name>
+        <!-- FIXME: Update to .com address in due time. -->
         <email>doc-team@suse.de</email>
       </credit>
 
