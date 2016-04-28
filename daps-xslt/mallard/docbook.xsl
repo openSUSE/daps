@@ -207,7 +207,6 @@
   </xsl:template>
 
   <xsl:template match="book[article[@id]] | d:book[d:article[@xml:id]]" mode="summary">
-    <xsl:message>Process article...</xsl:message>
     <xsl:apply-templates select="article | d:article"/>
   </xsl:template>
 
