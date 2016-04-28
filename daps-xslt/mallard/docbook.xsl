@@ -81,9 +81,11 @@
             <xsl:text> comes with the following documents:</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>This product comes with the following documents: </xsl:text>
+            <xsl:text>This product comes with the following documents:</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
+        <!-- Force a space. -->
+        <xsl:text> </xsl:text>
         <xsl:apply-templates select="$subnodes"/>
       </desc>
     </info>
