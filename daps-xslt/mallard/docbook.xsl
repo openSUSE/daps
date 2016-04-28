@@ -162,7 +162,15 @@
     <link href="help:{$packagename}/{$id}">
       <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
     </link>
-    <xsl:if test="following-sibling::book | following-sibling::d:book">
+    <!-- Since books are only displayed if they have an ID, we need to make sure
+    that the next one actually has an ID, otherwise we're only placing a
+    dangling comma.
+    Also, books containing articles are not displayed.
+    FIXME: DocBook allows placing both chapters and articles side by side in a
+    book it seems. If that is true, it seems like we need to fix the following
+    and the book[article] template. -->
+    <xsl:if test="$node/following-sibling::book[@id and not(article)]|
+                  $node/following-sibling::d:book[@xml:id and not(d:article)]">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
