@@ -7,9 +7,6 @@
    Parameters:
      * packagename: Needed for Page format of the package name
        (default: @PACKAGENAME@)
-     * productid: Used to differentiate between several products in
-       the new Yelp page (default: /*/*/productname, this XPath
-       matches for article, book, or set root elements)
      * generate.xml-model.pi: Creates the PI <?xml-model href="..."
        type="application/relax-ng-compact-syntax"?>.
        This is useful for validation with RELAX NG and oXygen.
@@ -42,26 +39,8 @@
   <xsl:output method="xml" indent="yes"/>
   <xsl:strip-space elements="*"/>
 
-  <xsl:param name="productid">
-    <xsl:call-template name="discard.space">
-      <xsl:with-param name="string">
-        <xsl:call-template name="string.lower">
-          <xsl:with-param name="string" select="normalize-space(*/*/productname|*/*/d:productname)"/>
-        </xsl:call-template>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:param>
   <xsl:param name="packagename">@PACKAGENAME@</xsl:param>
   <xsl:param name="generate.xml-model.pi" select="1"/>
-
-  <xsl:template name="string.lower">
-    <xsl:param name="string" select="''"/>
-    <xsl:value-of select="translate($string,&uppercase;,&lowercase;)"/>
-  </xsl:template>
-  <xsl:template name="discard.space">
-    <xsl:param name="string" select="''"/>
-    <xsl:value-of select="translate($string, ' ', '')"/>
-  </xsl:template>
 
   <xsl:template name="create-info">
     <xsl:param name="node" select="."/>
