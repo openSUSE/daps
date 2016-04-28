@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -14,6 +14,15 @@ VERSION=@PACKAGE_VERSION@
 # be on the safe side
 
 export prefix=@prefix@
+
+#
+# Do not even attempt to start, if we are in a directory that does not exist
+# (fix for https://bugzilla.suse.com/show_bug.cgi?id=961526)
+
+[[ -d $(pwd 2>/dev/null) ]] || {
+    echo "Cannot operate from a directory that does not exist!"
+    exit 1
+    }
 
 # ----------------------------------------------------------------------------
 # VARIABLES
