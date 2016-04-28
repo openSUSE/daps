@@ -90,8 +90,8 @@
 <xsl:template match="set">
   <xsl:variable name="lang">
     <xsl:choose>
-      <xsl:when test="@lang">
-        <xsl:value-of select="@lang"/>
+      <xsl:when test="@lang|@xml:lang">
+        <xsl:value-of select="(@lang|@xml:lang)[1]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Missing Language in book!&#10;</xsl:message>
@@ -159,7 +159,7 @@
       <xsl:apply-templates select="current()" />
     </xsl:variable>
     <xsl:variable name="filename">
-      <xsl:value-of select="(current()/@id|current()/@xml:id)[last()]"/>
+      <xsl:value-of select="(current()/@id|current()/@xml:id)[1]"/>
       <xsl:value-of select="$file.ext"/>
     </xsl:variable>
 
@@ -181,8 +181,8 @@
 <xsl:template match="book|article">
   <xsl:variable name="lang">
     <xsl:choose>
-      <xsl:when test="@lang">
-        <xsl:value-of select="@lang"/>
+      <xsl:when test="@lang|@xml:lang">
+        <xsl:value-of select="(@lang|@xml:lang)[1]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Missing Language in book!&#10;</xsl:message>
@@ -196,10 +196,10 @@
   <xsl:variable name="name">
     <xsl:choose>
       <xsl:when test="self::book">
-        <xsl:value-of select="normalize-space( (title|bookinfo/title)[1] )"/>
+        <xsl:value-of select="normalize-space( (title|bookinfo/title|info/title)[1] )"/>
       </xsl:when>
       <xsl:when test="self::article">
-        <xsl:value-of select="normalize-space( (title|articleinfo/title)[1] )"/>
+        <xsl:value-of select="normalize-space( (title|articleinfo/title|info/title)[1] )"/>
       </xsl:when>
       <xsl:otherwise>???</xsl:otherwise>
     </xsl:choose>
