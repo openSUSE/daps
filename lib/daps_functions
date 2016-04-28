@@ -2223,7 +2223,7 @@ function build_images {
 # for functions with no command line options
 # do not write a log
 function no_opts {
-    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local CURR_DIR SHORT_OPTS LONG_OPTS SUB_CMD
     local SUB_CMD=$1
     shift
 
@@ -2240,7 +2240,18 @@ function no_opts {
     fi
 
     WRITE_LOG=0
-    call_make "$SUB_CMD" "$@"
+    if [[ $SUB_CMD =~ ^clean.* ]]; then
+        #
+        # Use the cd commands to avoid errors when running DAPS from
+        # one of the directories that get removed
+        #
+        CURR_DIR=$(pwd)
+        cd $DOC_DIR > /dev/null
+        call_make "$SUB_CMD" "$@"
+        [[ -d $CURR_DIR ]] && cd $CURR_DIR
+    else
+        call_make "$SUB_CMD" "$@"
+    fi
 }
 
 # error message for deprecated targets
