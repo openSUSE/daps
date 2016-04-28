@@ -22,7 +22,7 @@
      http://projectmallard.org/1.0/mallard-1.0.rnc
 
    Note:
-     If an article or book does NOT contain an @id, it won't be
+     If an article or book does NOT contain an @id/@xml:id, it won't be
      included in the output format. In this case, the stylesheet
      prints a warning.
 
@@ -91,7 +91,7 @@
 
   <xsl:template name="warning">
     <xsl:message>
-      <xsl:text>Warning: Missing @id in </xsl:text>
+      <xsl:text>Warning: Missing @id/@xml:id in </xsl:text>
       <xsl:value-of select="local-name()"/>
       <xsl:text>, skipped </xsl:text>
       <xsl:value-of select="(*/title|title|*/d:title|d:title)[1]"/>
@@ -156,7 +156,8 @@
 
   <xsl:template match="book|d:book">
     <xsl:param name="node" select="."/>
-    <link href="help:{$packagename}/{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <link href="help:{$packagename}/{$id}">
       <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
     </link>
     <xsl:if test="following-sibling::book | following-sibling::d:book">
@@ -175,7 +176,8 @@
 
   <xsl:template match="book/article | d:book/d:article">
     <xsl:param name="node" select="."/>
-    <link href="help:{$packagename}/{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <link href="help:{$packagename}/{$id}">
       <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
     </link>
     <xsl:text>&#10;</xsl:text>
@@ -186,10 +188,11 @@
 
   <xsl:template match="book[not(article)][@id] | d:book[not(d:article)][@xml:id]" mode="summary">
     <xsl:param name="node" select="."/>
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
 
-    <section id="{@id}">
+    <section id="{$id}">
       <title>
-        <link href="help:{$packagename}/{@id}">
+        <link href="help:{$packagename}/{$id}">
           <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
         </link>
       </title>
@@ -214,9 +217,10 @@
 
   <xsl:template match="book/article[@id] | d:book/d:article[@xml:id]" mode="summary">
     <xsl:param name="node" select="."/>
-    <section id="{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <section id="{$id}">
       <title>
-        <link href="help:{$packagename}/{@id}">
+        <link href="help:{$packagename}/{$id}">
           <xsl:apply-templates select="(*/title|title |*/d:title|d:title)[1]"/>
         </link>
       </title>
