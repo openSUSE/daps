@@ -159,7 +159,7 @@
       <xsl:apply-templates select="current()" />
     </xsl:variable>
     <xsl:variable name="filename">
-      <xsl:value-of select="current()/@id"/>
+      <xsl:value-of select="(current()/@id|current()/@xml:id)[last()]"/>
       <xsl:value-of select="$file.ext"/>
     </xsl:variable>
 
