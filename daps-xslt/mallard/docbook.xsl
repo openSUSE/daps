@@ -196,7 +196,7 @@
           <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
         </link>
       </title>
-      <xsl:if test="*/abstract | */d:article">
+      <xsl:if test="*/abstract | */d:abstract">
         <xsl:apply-templates select="*/abstract | */d:abstract"/>
       </xsl:if>
     </section>
