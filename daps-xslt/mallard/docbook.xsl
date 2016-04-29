@@ -96,7 +96,7 @@
           </xsl:otherwise>
         </xsl:choose>
          </link>
-        consists of the following books and guides:
+        consists of the following:
       </p>
       <xsl:apply-templates select="book[not(article)]|book[article]/article"
         mode="summary"/>
