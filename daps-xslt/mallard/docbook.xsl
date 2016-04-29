@@ -55,17 +55,6 @@
       </credit>
 
       <desc>
-        <xsl:choose>
-          <xsl:when test="*/productname | */d:productname">
-            <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/>
-            <xsl:text> comes with the following documents:</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>This product comes with the following documents:</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
-        <!-- Force a space. -->
-        <xsl:text> </xsl:text>
         <xsl:apply-templates select="$subnodes"/>
       </desc>
     </info>
