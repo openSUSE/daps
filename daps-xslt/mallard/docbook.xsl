@@ -69,54 +69,53 @@
       >href="mallard-1.0.rnc" type="application/relax-ng-compact-syntax"</xsl:processing-instruction>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates/>
+    <page type="guide" id="{$packagename}">
+      <xsl:apply-templates/>
+    </page>
   </xsl:template>
 
-  <xsl:template match="/set | /d:set">
+  <xsl:template match="/set|/d:set">
     <xsl:param name="node" select="."/>
-    <page type="guide" id="{$packagename}">
-      <xsl:call-template name="create-info"/>
-      <title>
-        <xsl:apply-templates select="(*/title|title|*/d:title|d:title)[1]"/>
-      </title>
-      <p>The complete set of <link href="help:{$packagename}">
-        <xsl:choose>
-          <xsl:when test="*/productname|*/d:productname">
-            <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/>
-            <xsl:text> documents</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="/*/title|/*/d:title"/>
-          </xsl:otherwise>
-        </xsl:choose>
-         </link>
-        consists of the following:
-      </p>
-      <xsl:apply-templates select="book[not(article)]|book[article]/article"
-        mode="summary"/>
-      <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
-        mode="summary"/>
-    </page>
+    <xsl:variable name="subnodes" select="book|book/article"/>
   </xsl:template>
 
   <xsl:template match="/book|/d:book">
-    <page type="guide" id="{$packagename}">
-      <xsl:call-template name="create-info">
-        <xsl:with-param name="subnodes"
-          select="article|chapter|preface|appendix|glossary|
-                  d:article|d:chapter|d:preface|d:appendix|d:glossary"/>
-      </xsl:call-template>
-      <title>
-        <xsl:apply-templates select="(bookinfo/title|title|
-                                      d:info/d:title|d:title)[1]"/>
-      </title>
-      <p>
-       <link href="help:{$packagename}">The complete book of
-         <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/> documents</link>
-        consists of the following chapters:
-      </p>
-      <xsl:apply-templates mode="summary"/>
-    </page>
+    <xsl:param name="node" select="."/>
+    <xsl:variable name="subnodes" select="article|chapter|preface|appendix|glossary|d:article|d:chapter|d:preface|d:appendix|d:glossary"/>
+  </xsl:template>
+
+  <xsl:template match="/book|/d:book">
+    <xsl:call-template name="create-info">
+      <xsl:with-param name="subnodes" select="$subnodes"/>
+    </xsl:call-template>
+    <title>
+      <xsl:apply-templates select="(*[contains(local-name('info'))]/title|title|d:info/d:title|d:title)[1]"/>
+    </title>
+    <p>The documentation 
+      <xsl:choose>
+        <xsl:when test="local-name($node) = 'set' and
+                        $node[contains(local-name('info'))]/productname|d:info/d:productname">
+          <xsl:text> for </xsl:text>
+          <link href="help:{$packagename}">
+           <xsl:value-of select="normalize-space(($node[contains(local-name('info'))]/productname|info/d:productname)[1])"/>
+            <xsl:if test="$node[contains(local-name('info'))]/productnumber|d:info/d:productnumber">
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="normalize-space(($node[contains(local-name('info'))]/productnumber|info/d:productnumber)[1])"/>
+            </xsl:if>
+          </link>
+        </xsl:when>
+        <xsl:otherwise>
+          <link href="help:{$packagename}">
+            <xsl:value-of select="($node[contains(local-name('info'))]/title|title|d:info/d:title|d:title)[1]"/>
+          </link>
+        </xsl:otherwise>
+      </xsl:choose>
+      consists of:
+    </p>
+    <xsl:apply-templates select="book[not(article)]|book[article]/article"
+      mode="summary"/>
+    <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
+      mode="summary"/>
   </xsl:template>
 
   <xsl:template match="book|d:book">
