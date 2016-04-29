@@ -7,9 +7,6 @@
    Parameters:
      * packagename: Needed for Page format of the package name
        (default: @PACKAGENAME@)
-     * productid: Used to differentiate between several products in
-       the new Yelp page (default: /*/*/productname, this XPath
-       matches for article, book, or set root elements)
      * generate.xml-model.pi: Creates the PI <?xml-model href="..."
        type="application/relax-ng-compact-syntax"?>.
        This is useful for validation with RELAX NG and oXygen.
@@ -22,7 +19,7 @@
      http://projectmallard.org/1.0/mallard-1.0.rnc
 
    Note:
-     If an article or book does NOT contain an @id, it won't be
+     If an article or book does NOT contain an @id/@xml:id, it won't be
      included in the output format. In this case, the stylesheet
      prints a warning.
 
@@ -42,26 +39,8 @@
   <xsl:output method="xml" indent="yes"/>
   <xsl:strip-space elements="*"/>
 
-  <xsl:param name="productid">
-    <xsl:call-template name="discard.space">
-      <xsl:with-param name="string">
-        <xsl:call-template name="string.lower">
-          <xsl:with-param name="string" select="normalize-space(*/*/productname|*/*/d:productname)"/>
-        </xsl:call-template>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:param>
   <xsl:param name="packagename">@PACKAGENAME@</xsl:param>
   <xsl:param name="generate.xml-model.pi" select="1"/>
-
-  <xsl:template name="string.lower">
-    <xsl:param name="string" select="''"/>
-    <xsl:value-of select="translate($string,&uppercase;,&lowercase;)"/>
-  </xsl:template>
-  <xsl:template name="discard.space">
-    <xsl:param name="string" select="''"/>
-    <xsl:value-of select="translate($string, ' ', '')"/>
-  </xsl:template>
 
   <xsl:template name="create-info">
     <xsl:param name="node" select="."/>
@@ -69,21 +48,7 @@
 
     <info>
       <link type="guide" xref="index" group="{$packagename}"/>
-      <credit type="author">
-        <name>Documentation Team</name>
-        <email>doc-team@suse.de</email>
-      </credit>
-
       <desc>
-        <xsl:choose>
-          <xsl:when test="*/productname | */d:productname">
-            <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/>
-            <xsl:text> comes with the following documents:</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>This product comes with the following documents: </xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
         <xsl:apply-templates select="$subnodes"/>
       </desc>
     </info>
@@ -91,7 +56,7 @@
 
   <xsl:template name="warning">
     <xsl:message>
-      <xsl:text>Warning: Missing @id in </xsl:text>
+      <xsl:text>Warning: Missing @id/@xml:id in </xsl:text>
       <xsl:value-of select="local-name()"/>
       <xsl:text>, skipped </xsl:text>
       <xsl:value-of select="(*/title|title|*/d:title|d:title)[1]"/>
@@ -104,62 +69,70 @@
       >href="mallard-1.0.rnc" type="application/relax-ng-compact-syntax"</xsl:processing-instruction>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates/>
+    <page type="guide" id="{$packagename}">
+      <xsl:apply-templates/>
+    </page>
   </xsl:template>
 
-  <xsl:template match="/set | /d:set">
+  <xsl:template match="/set|/d:set">
     <xsl:param name="node" select="."/>
-    <page type="guide" id="{$packagename}">
-      <xsl:call-template name="create-info"/>
-      <title>
-        <xsl:apply-templates select="(*/title|title|*/d:title|d:title)[1]"/>
-      </title>
-      <p>The complete set of <link href="help:{$packagename}">
-        <xsl:choose>
-          <xsl:when test="*/productname|*/d:productname">
-            <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/>
-            <xsl:text> documents</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="/*/title|/*/d:title"/>
-          </xsl:otherwise>
-        </xsl:choose>
-         </link>
-        consists of the following books and guides:
-      </p>
-      <xsl:apply-templates select="book[not(article)]|book[article]/article"
-        mode="summary"/>
-      <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
-        mode="summary"/>
-    </page>
+    <xsl:variable name="subnodes" select="book|book/article"/>
   </xsl:template>
 
   <xsl:template match="/book|/d:book">
-    <page type="guide" id="{$packagename}">
-      <xsl:call-template name="create-info">
-        <xsl:with-param name="subnodes"
-          select="article|chapter|preface|appendix|glossary|
-                  d:article|d:chapter|d:preface|d:appendix|d:glossary"/>
-      </xsl:call-template>
-      <title>
-        <xsl:apply-templates select="(bookinfo/title|title|
-                                      d:info/d:title|d:title)[1]"/>
-      </title>
-      <p>
-       <link href="help:{$packagename}">The complete book of
-         <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/> documents</link>
-        consists of the following chapters:
-      </p>
-      <xsl:apply-templates mode="summary"/>
-    </page>
+    <xsl:param name="node" select="."/>
+    <xsl:variable name="subnodes" select="article|chapter|preface|appendix|glossary|d:article|d:chapter|d:preface|d:appendix|d:glossary"/>
+  </xsl:template>
+
+  <xsl:template match="/book|/d:book">
+    <xsl:call-template name="create-info">
+      <xsl:with-param name="subnodes" select="$subnodes"/>
+    </xsl:call-template>
+    <title>
+      <xsl:apply-templates select="(*[contains(local-name('info'))]/title|title|d:info/d:title|d:title)[1]"/>
+    </title>
+    <p>The documentation 
+      <xsl:choose>
+        <xsl:when test="local-name($node) = 'set' and
+                        $node[contains(local-name('info'))]/productname|d:info/d:productname">
+          <xsl:text> for </xsl:text>
+          <link href="help:{$packagename}">
+           <xsl:value-of select="normalize-space(($node[contains(local-name('info'))]/productname|info/d:productname)[1])"/>
+            <xsl:if test="$node[contains(local-name('info'))]/productnumber|d:info/d:productnumber">
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="normalize-space(($node[contains(local-name('info'))]/productnumber|info/d:productnumber)[1])"/>
+            </xsl:if>
+          </link>
+        </xsl:when>
+        <xsl:otherwise>
+          <link href="help:{$packagename}">
+            <xsl:value-of select="($node[contains(local-name('info'))]/title|title|d:info/d:title|d:title)[1]"/>
+          </link>
+        </xsl:otherwise>
+      </xsl:choose>
+      consists of:
+    </p>
+    <xsl:apply-templates select="book[not(article)]|book[article]/article"
+      mode="summary"/>
+    <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
+      mode="summary"/>
   </xsl:template>
 
   <xsl:template match="book|d:book">
     <xsl:param name="node" select="."/>
-    <link href="help:{$packagename}/{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <link href="help:{$packagename}/{$id}">
       <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
     </link>
-    <xsl:if test="following-sibling::book | following-sibling::d:book">
+    <!-- Since books are only displayed if they have an ID, we need to make sure
+    that the next one actually has an ID, otherwise we're only placing a
+    dangling comma.
+    Also, books containing articles are not displayed.
+    FIXME: DocBook allows placing both chapters and articles side by side in a
+    book it seems. If that is true, it seems like we need to fix the following
+    and the book[article] template. -->
+    <xsl:if test="$node/following-sibling::book[@id and not(article)]|
+                  $node/following-sibling::d:book[@xml:id and not(d:article)]">
       <xsl:text>, </xsl:text>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
@@ -175,7 +148,8 @@
 
   <xsl:template match="book/article | d:book/d:article">
     <xsl:param name="node" select="."/>
-    <link href="help:{$packagename}/{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <link href="help:{$packagename}/{$id}">
       <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
     </link>
     <xsl:text>&#10;</xsl:text>
@@ -186,14 +160,15 @@
 
   <xsl:template match="book[not(article)][@id] | d:book[not(d:article)][@xml:id]" mode="summary">
     <xsl:param name="node" select="."/>
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
 
-    <section id="{@id}">
+    <section id="{$id}">
       <title>
-        <link href="help:{$packagename}/{@id}">
+        <link href="help:{$packagename}/{$id}">
           <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
         </link>
       </title>
-      <xsl:if test="*/abstract | */d:article">
+      <xsl:if test="*/abstract | */d:abstract">
         <xsl:apply-templates select="*/abstract | */d:abstract"/>
       </xsl:if>
     </section>
@@ -204,7 +179,6 @@
   </xsl:template>
 
   <xsl:template match="book[article[@id]] | d:book[d:article[@xml:id]]" mode="summary">
-    <xsl:message>Process article...</xsl:message>
     <xsl:apply-templates select="article | d:article"/>
   </xsl:template>
 
@@ -214,9 +188,10 @@
 
   <xsl:template match="book/article[@id] | d:book/d:article[@xml:id]" mode="summary">
     <xsl:param name="node" select="."/>
-    <section id="{@id}">
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+    <section id="{$id}">
       <title>
-        <link href="help:{$packagename}/{@id}">
+        <link href="help:{$packagename}/{$id}">
           <xsl:apply-templates select="(*/title|title |*/d:title|d:title)[1]"/>
         </link>
       </title>
