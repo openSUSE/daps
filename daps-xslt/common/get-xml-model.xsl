@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     
+     Retrieve identifier of DocBook 5 schema from xml-model PI
      
    Parameters:
-     * rootid
-       The ID of a component; only child elements which belongs to
-       this component are considered
+     None
        
    Input:
      DocBook 5 document
