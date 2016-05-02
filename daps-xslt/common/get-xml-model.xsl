@@ -77,7 +77,7 @@
  <xsl:template match="text()"/>
 
  <xsl:template match="/">
-  <xsl:apply-templates select="processing-instruction()"/>
+  <xsl:apply-templates select="processing-instruction('xml-model')"/>
  </xsl:template>
 
  <xsl:template match="/processing-instruction('xml-model')">
@@ -107,6 +107,9 @@
    <xsl:when test="$schematypens = 'http://relaxng.org/ns/structure/1.0'">
     <xsl:value-of select="$href"/>
    </xsl:when>
+   <xsl:otherwise>
+    <xsl:message>WARNING: No xml-model PI found.</xsl:message>
+   </xsl:otherwise>
   </xsl:choose>
 
  </xsl:template>
