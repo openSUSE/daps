@@ -39,7 +39,7 @@
  <!-- Taken from the DocBook XSL stylesheets: lib/lib.xsl -->
  <xsl:template name="pi-attribute">
   <xsl:param name="pis" select="processing-instruction('BOGUS_PI')"/>
-  <xsl:param name="attribute">filename</xsl:param>
+  <xsl:param name="attribute">href</xsl:param>
   <xsl:param name="count">1</xsl:param>
 
   <xsl:choose>
@@ -72,8 +72,6 @@
   </xsl:choose>
  </xsl:template>
 
- <xsl:template match="text()"/>
-
  <xsl:template match="/">
   <xsl:apply-templates select="processing-instruction('xml-model')"/>
  </xsl:template>
@@ -94,7 +92,7 @@
   <xsl:variable name="href">
    <xsl:call-template name="pi-attribute">
     <xsl:with-param name="pis" select="."/>
-    <xsl:with-param name="attribute">href</xsl:with-param>
+    <!-- Use href as default -->
    </xsl:call-template>
   </xsl:variable>
 
