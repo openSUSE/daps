@@ -7,6 +7,7 @@
 #
 # DAPS = DocBook Authoring and Publishing Suite
 
+MY_NAME=DAPS
 VERSION=@PACKAGE_VERSION@
 
 # autoconf replaces @foo@ stuff with ${prefix}/.. if @foo@ has not
@@ -1671,6 +1672,13 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 
 # ...and export
 export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
+
+#--------------------------
+# Get PROFILE_URN to determine whether profiling is turned on
+# will get exported via VARLIST
+#
+
+ PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
 
 #----------------------------------
 # Result directory / LOG directory

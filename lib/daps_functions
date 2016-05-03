@@ -438,6 +438,33 @@ function init_env {
 
 ###########################################################################
 #
+# Get Stylesheet Version
+#
+###########################################################################
+
+function get_stylesheet {
+    #
+    # takes an URN to VERSION.xsl as a required parameter
+
+    local STYLE_FILE STYLE_URN STYLE_VERSION
+
+    STYLE_URN=$1
+
+    [[ -z $STYLE_URN ]] && exit_on_error "Function get_stylesheet must be called with an URN"
+
+    # saxon6 (at least on openSUSE) does not properly resolve http Urls
+    # (because it does not ask the catalog but rather directly accesses
+    # the URl) we need to resolve it via xmlcatalog first
+    #
+    STYLE_FILE=$(xmlcatalog "$XML_MAIN_CATALOG" "$STYLE_URN")
+    STYLE_FILE=${STYLE_FILE##*file://}
+    STYLE_VERSION=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl" --file "$STYLE_FILE" "$XSLTPROCESSOR" 2>/dev/null || echo "Not available")
+        echo "$STYLE_VERSION"
+}
+
+
+###########################################################################
+#
 # RUN MAKE
 #
 # Set up log writing and verbosity
@@ -445,8 +472,10 @@ function init_env {
 #
 ###########################################################################
 function call_make {
-    local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOGFILE MAKE_BIN
-    local MAKE_OPTIONS MAKE_CMD STRING SILENT SUB_CMD
+    local COLWIDTH CORE_NO DBSTYLE_FILE DBSTYLE_VERS FB_STYLESHEET_VERS
+    local LOGFILE MAKE_BIN MAKE_OPTIONS MAKE_CMD PROFVAR STRING SILENT
+    local STYLEROOT_VERS SUB_CMD V
+    local -a PROFVARIABLES
 
     # first argument passed to the function is the subcommand
 
@@ -510,77 +539,118 @@ function call_make {
 
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY && 1 != "$SILENT" ]]; then
-        # get stylesheet version (ticket #151)
-        # saxon6 (at least on openSUSE) does not properly resolve http Urls
-        # (because it does not ask the catalog but rather directly accesses
-        # the URl) we need to resolve it via xmlcatalog first
+    # list of profiling variables for the debug output
+    #
+        PROFVARIABLES=(
+            PROFARCH
+            PROFAUDIENCE
+            PROFCONDITION
+            PROFCONFORMANCE
+            PROFLANG
+            PROFOS
+            PROFOUTPUTFORMAT
+            PROFREVISION
+            PROFREVISIONFLAG
+            PROFROLE
+            PROFSECURITY
+            PROFSTATUS
+            PROFUSERLEVEL
+            PROFVENDOR
+            PROFWORDSIZE )
+
+        # column width debug output (for printf)
+        COLWIDTH=20
+
+        # get DocBook stylesheet version
         #
-        DBSTYLE_FILE=$(xmlcatalog "$XML_MAIN_CATALOG" http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
-        DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
-        DBSTYLE_VERS=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl" --file "$DBSTYLE_FILE" "$XSLTPROCESSOR" 2>/dev/null || echo "Not available")
+        DBSTYLE_VERS=$(get_stylesheet "http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl")
 
-        cat <<EOF
----------------
-           DOC_DIR: $DOC_DIR
-         BUILD_DIR: $BUILD_DIR
-          DAPSROOT: $DAPSROOT
-           DOCCONF: $DOCCONF
-              BOOK: $BOOK
+        STYLEROOT_VERS=$(get_stylesheet "file://${STYLEROOT}/VERSION.xsl")
+        FB_STYLEROOT_VERS=$(get_stylesheet "file://${FALLBACK_STYLEROOT}/VERSION.xsl")
 
-   DOCBOOK_VERSION: $DOCBOOK_VERSION
-      DOCBOOK5_RNG: $DOCBOOK5_RNG
-EOF
+        echo -e "---------------\n"
+        # DAPS version
+        printf "%${COLWIDTH}s: %s\n" "$MY_NAME VERSION" "$VERSION"
 
+        echo
+
+        # Directories
+        for V in DOC_DIR BUILD_DIR DAPSROOT DOCCONF BOOK; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+
+        echo
+
+        # Profiling
+        if [[ -z $PROFILE_URN ]]; then
+            printf "%${COLWIDTH}s: %s\n" "PROFILING" "Off"
+        else
+            printf "%${COLWIDTH}s: %s\n" "PROFILING" "On"
+            # show all profiling variables and their values
+            for PROFVAR in ${PROFVARIABLES[*]}; do
+                [[ -n ${!PROFVAR} ]] && printf "%${COLWIDTH}s: %s\n" "$PROFVAR" "${!PROFVAR}"
+            done
+        fi
+
+        echo
+
+        # DocBook
+        for V in DOCBOOK_VERSION DOCBOOK5_RNG DBSTYLE_VERS; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+
+        echo
+
+        # Styleroot / Fallback styleroot
         if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$P_TXT_IGNORE_STYLEROOT" ]]; then
-            echo "         STYLEROOT: $DOCBOOK_STYLES"
+            printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
         else
             if [[ -n "$STYLEDEVEL" ]]; then
-                echo "         STYLEROOT: $STYLEDEVEL"
+                printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$STYLEDEVEL"
             else
                 if [[ -n "$STYLEROOT" ]]; then
-                    echo "         STYLEROOT: $STYLEROOT"
+                    printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$STYLEROOT"
                 else
-                    echo "         STYLEROOT: $DOCBOOK_STYLES"
+                   printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
                 fi
             fi
+
+            printf "%${COLWIDTH}s: %s\n" "STYLEROOT_VERS" "$STYLEROOT_VERS"
+
             if [[ -n "$FALLBACK_STYLEROOT" ]]; then
-                echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
+                printf "%${COLWIDTH}s: %s\n" "FALLBACK_STYLEROOT" "$FALLBACK_STYLEROOT"
             else
                 # no fallback if STYLEROOT is not set
                 if [[ -n "$STYLEROOT" ]]; then
-                    echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+                    printf "%${COLWIDTH}s: %s\n" "FALLBACK_STYLEROOT" "$DOCBOOK_STYLES"
                 fi
             fi
+            printf "%${COLWIDTH}s: %s\n" "FB_STYLEROOT_VERS" "$FB_STYLEROOT_VERS"
         fi
 
-        cat <<EOF
-          EPUB_CSS: $EPUB_CSS
-          HTML_CSS: $HTML_CSS
+        # CSS
+        printf "%${COLWIDTH}s: %s\n" "EPUB_CSS" "$EPUB_CSS"
+        printf "%${COLWIDTH}s: %s\n" "HTML_CSS" "$HTML_CSS"
 
-     PDF FORMATTER: $FORMATTER
-EOF
+        echo
 
+        # PDF
+        printf "%${COLWIDTH}s: %s\n" "PDF FORMATTER" "$FORMATTER"
         if [[ "fop" = "$FORMATTER" ]]; then
-            cat <<EOF
- FORMATTER WRAPPER: $FOP_WRAPPER
-  FORMATTER CONFIG: $FOP_CONFIG_FILE
-EOF
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$FOP_WRAPPER"
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG" "$FOP_CONFIG_FILE"
         elif [[ "xep" = "$FORMATTER" ]]; then
-            cat <<EOF
-  FORMATTER WRAPPER: $XEP_WRAPPER
-  FORMATTER CONFIG: $XEP_CONFIG_FILE
-EOF
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$XEP_WRAPPER"
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG:" "$XEP_CONFIG_FILE"
         fi
 
-        cat <<EOF
-           MAKECMD: $MAKE_CMD
-     XSLTPROCESSOR: $XSLTPROCESSOR
- XML_CATALOG_FILES: $XML_CATALOG_FILES
+        echo
 
-      DAPS VERSION: $VERSION
-DB-STYLESHEET-VERS: $DBSTYLE_VERS
----------------
-EOF
+        # Misc
+        for V in MAKECMD XSLTPROCESSOR XML_CATALOG_FILES; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+        echo -e "\n---------------\n"
     fi
 
     if [[ 1 = "$WRITE_LOG" ]]; then
