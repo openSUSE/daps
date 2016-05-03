@@ -163,9 +163,10 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
-	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) $(PARAMS) \
-	  $(XSLTPARAM) $(STRINGPARAMS) --stylesheet $(STYLEEPUB) \
-	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
+	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) $(DAPSSTRINGS) \
+	  $(PARAMS) $(XSLTPARAM) $(STRINGPARAMS)  \
+	  --stylesheet $(STYLEEPUB) --file $< $(XSLTPROCESSOR) \
+	  $(DEVNULL) $(ERR_DEVNULL))
 
 #---------------
 # Inline Graphics

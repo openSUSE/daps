@@ -240,6 +240,12 @@ PROFILEDIR := $(PROFILE_PARENT_DIR)/$(PROFILEDIR)
 PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 
 
+#-------
+# DAPS version string params
+#
+DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
+	--stringparam "converter.version=$(VERSION)"
+
 
 #-------
 # Image Directories

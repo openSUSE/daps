@@ -273,14 +273,14 @@ $(HTML_RESULT): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES)
     endif
   endif
   ifeq "$(HTMLSINGLE)" "1"
-	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  $(PARAMS) $(STRINGPARAMS) \
+	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(DAPSSTRINGS) \
+	  $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
 	  --output $@ --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
 	(cd $(HTML_DIR) && ln -sf $(notdir $@) index.html)
   else
-	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(XSLTPARAM) \
-	  $(PARAMS) $(STRINGPARAMS) \
+	$(XSLTPROC) $(HTMLSTRINGS) $(ROOTSTRING) $(METASTRING) $(DAPSSTRINGS) \
+	  $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
           --xinclude --stylesheet $(STYLEHTML) \
 	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
     ifneq "$(JSP)" "1"
