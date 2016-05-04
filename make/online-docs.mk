@@ -141,13 +141,11 @@ $(OD_BIGFILE): $(OD_TMP_BIG)
     ifeq "$(DOCBOOK_VERSION)" "5"
       ifeq "$(DB5TODB4)" "1"
 	$(XSLTPROC) --output $@ --stylesheet $(DAPSROOT)/daps-xslt/migrate/db5to4/db5to4-withdoctype.xsl --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-      endif
-      ifeq "$(DB5TODB4NH)" "1"
+      else ifeq "$(DB5TODB4NH)" "1"
 	$(XSLTPROC) --output $@ \
 	  --stylesheet $(DAPSROOT)/daps-xslt/migrate/db5to4/db5to4.xsl \
 	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-      endif
-      ifeq "$(DBTONOVDOC)" "1"
+      else
         # DB5 -> DB4
 	$(XSLTPROC) \
 	  --output $(TMP_DIR)/$(DOCNAME)_for_conversion_db4.xml \
@@ -160,13 +158,19 @@ $(OD_BIGFILE): $(OD_TMP_BIG)
 	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
       endif
     else
-      ifeq "$(DBTONOVDOC)" "1"
+      # Since we have no means to determine whether a document is DB4 or NovDoc
+      # we assume it is always DB4 and process it to NovDoc. In case it already
+      # has been NovDoc the result will be OK, too
 	$(XSLTPROC) --output $@ \
 	  --stylesheet $(DAPSROOT)/daps-xslt/migrate/db5to4/db4tonovdoc.xsl \
 	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
-      endif
     endif
-  endif
+    ifeq "$(VERBOSITY)" "2"
+	@ccecho "info" "Validating online-docs bigfile"
+    endif
+	xmllint --noent --postvalid --noout --xinclude $@
+endif
+
 
 #----
 # creates an archive with all generated graphics for HTML/EPUB
