@@ -20,7 +20,7 @@
      DocBook4 document
 
    Output:
-     Novdoc document (subset of DocBook)
+     Novdoc document (subset of DocBook) without remarks
 
    DocBook 5 compatible:
      No, convert your document to DocBook 4 first
