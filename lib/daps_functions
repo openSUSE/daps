@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -90,8 +90,8 @@ function parse_args {
                 P_DB5TODB4NH=1
                 shift
                 ;;
-            --dbtonovdoc)
-                P_DBTONOVDOC=1
+            --dbnoconv)
+                P_DBNOCONV=1
                 shift
                 ;;
             --documentfiles)
@@ -1148,7 +1148,7 @@ function online-docs {
     CONV_COUNT=0
 
     SHORT_OPTS="h"
-    LONG_OPTS="db5todb4,db5todb4nh,dbtonovdoc,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
+    LONG_OPTS="db5todb4,db5todb4nh,dbnoconv,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1158,7 +1158,7 @@ function online-docs {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_db5todb4
         help_db5todb4nh
-        help_dbtonovdoc
+        help_dbnoconv
         help_export-dir
         help_formatter
         help_help
@@ -1210,24 +1210,17 @@ function online-docs {
         $P_DB5TODB4NH)
             let CONV_COUNT++
             ;;
-        $P_DBTONOVDOC)
-            let CONV_COUNT++
-            ;;
     esac
 
-    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4, --db5todb4nh and --dbtonovdoc exclude each other"
+    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4 and --db5todb4nh exclude each other"
 
     if [[ 4 = "$DOCBOOK_VERSION" ]]; then
        [[ 1 = "$P_DB5TODB4" || 1 = "$P_DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
     fi
 
-    # Since make does not support and/or in if, it is hard to determine
-    # whether a conversion is needed or not. We have this information
-    # at hand here, so lets set DBNOCONV=1 if no conversion parameter is set
-    [[ 0 = "$CONV_COUNT" ]]    && export DBNOCONV=1
+    [[ 1 = "$P_DBNOCONV" ]]    && export DBNOCONV=1
     [[ 1 = "$P_DB5TODB4" ]]    && export DB5TODB4=1
     [[ 1 = "$P_DB5TODB4NH" ]]  && export DB5TODB4NH=1
-    [[ 1 = "$P_DBTONOVDOC" ]]  && export DBTONOVDOC=1
 
 
     call_make "$SUB_CMD" "$@"
@@ -2411,12 +2404,20 @@ function help_css {
                               Default: unset
 EOF
 }
+
+function help_dbnoconv {
+    cat <<EOF
+    --dbnoconv                Do not convert to NovDoc, but rather keep
+                              the source format.
+                              Default: Conversion to NovDoc
+EOF
+}
 function help_db5todb4 {
     cat <<EOF
     --db5todb4                Create XML bigfile in DoBook 4 format. This
                               option only applies if the sources are in
                               DocBook5 format.
-                              Default: Same as source
+                              Default: Conversion to NovDoc
 EOF
 }
 function help_db5todb4nh {
@@ -2424,15 +2425,7 @@ function help_db5todb4nh {
     --db5todb4nh              Create XML bigfile in DocBook 4 format without
                               a DOCTYPE header. This option only applies if
                               the sources are in DocBook5 format.
-                              Default: Same as source
-EOF
-}
-function help_dbtonovdoc {
-    cat <<EOF
-    --dbtonovdoc              Create XML bigfile in NovDoc-format. This
-                              option only applies if the sources are in
-                              DocBook5 or DocBook 4 format.
-                              Default: Same as XML source
+                              Default: Conversion to NovDoc
 EOF
 }
 function help_def-file {
