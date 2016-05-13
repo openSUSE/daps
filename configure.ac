@@ -406,7 +406,7 @@ dnl -------------------------------------------------------------------------
 dnl Add more distributions if needed
 AM_CONDITIONAL([DIST_REDHAT], [egrep -iq "^NAME=\"?(fedora|redhat)\"?" /etc/os-release])
 AM_CONDITIONAL([DIST_SUSE], [egrep -iq "^NAME=\"?(opensuse|sles|sled)\"?" /etc/os-release])
-AM_CONDITIONAL([DIST_UBUNTU], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
+AM_CONDITIONAL([DIST_DEBIAN], [egrep -iq "^NAME=\"?(ubuntu|debian)\"?" /etc/os-release])
 
 dnl No distribution-specific info in the BuildService 
 dnl /var/adm/fillup-templates is SUSE-specific

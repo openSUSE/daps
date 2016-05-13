@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -31,22 +31,28 @@ REPL_PATH = sed \
 DAPS_CATALOG := inst_files/daps_catalog_snippet
 DAPSROOT     := $(abs_top_srcdir)
 
-# fop config
+# fop config / jing wrapper
 #
 FOP_CONFIG   := etc/fop/fop-daps.xml
 FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
+JING_WRAPPER         := libexec/daps-jing
+JING_WRAPPER_DEFAULT := libexec/daps-jing.generic
 
 if DIST_SUSE
-  FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+  FOP_CONFIG_SRC   := etc/fop/fop-daps.suse
+  JING_WRAPPER_SRC := libexec/daps-jing.generic
 endif
 if DIST_SUSEBS
   FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+  JING_WRAPPER_SRC := libexec/daps-jing.generic
 endif
 if DIST_REDHAT
   FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
+  JING_WRAPPER_SRC := libexec/daps-jing.generic
 endif
-if DIST_UBUNTU
+if DIST_DEBIAN
   FOP_CONFIG_SRC := etc/fop/fop-daps.generic
+    JING_WRAPPER_SRC := libexec/daps-jing.debian
 endif
 
 # stylesheets
@@ -152,11 +158,11 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 #---------------------------Local TARGETS--------------------------------------
 
 #
-# These targets need to be built _after_ the guides have been built, to make sure
-# the local config, as provided by the repo, is used. Otherwise we have a mixture
-# of system and repo setup and that will not work
+# These targets need to be built _after_ the guides have been built, to make
+# sure the local config, as provided by the repo, is used. Otherwise we have
+# a mixture of system and repo setup and that will not work
 
-bin/daps etc/config $(FOP_CONFIG): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
+bin/daps etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
 
 all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
 
@@ -209,7 +215,8 @@ clean-local:
 	(cd $(srcdir)/etc && ln -sf config.in config)
 	(cd $(srcdir)/bin && ln -sf daps.in daps)
 	(cd $(srcdir)/autobuild && ln -sf daps-autobuild.in daps-autobuild)
-	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse fop-daps.xml)
+	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse $(notdir $(FOP_CONFIG)))
+	(cd $(srcdir)/libexec && ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $(notdir $(JING_WRAPPER)))
 	(cd doc/xml && ln -sf entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
@@ -286,6 +293,15 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
 	  ln -sf $(notdir $(FOP_CONFIG_SRC)) $@; \
 	else \
 	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
+	fi
+
+# Create the Jing Warpper. Debian and Ubuntu require a special version
+# (see JING_WRAPPER definitions above)
+$(JING_WRAPPER): $(JING_WRAPPER_SRC) $(JING_WRAPPER_DEFAULT) .firstbuild
+	if test -n "$(JING_WRAPPER_SRC)"; then \
+	  ln -sf $(notdir $(JING_WRAPPER_SRC)) $@; \
+	else \
+	  ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $@; \
 	fi
 
 $(USERGUIDE):
