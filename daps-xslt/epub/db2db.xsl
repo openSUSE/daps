@@ -7,7 +7,8 @@
   
      Copies all elements, attributes, comments, processing instruction
      except for the @fileref attribute in imagedata element which is inside
-     an imageobject with @role=$preferred.mediaobject.role.
+     an imageobject with @role=$preferred.mediaobject.role. Resolves xrefs
+     which points to books outside of $rootid.
   
      All imageobject elements which contains everything else than @role =
      $preferred.mediaobject.role will be discarded.
@@ -43,8 +44,9 @@
        Default extension for graphic filenames
    
    Dependencies:
-       To common/rootid.xsl and common/copy.xsl, but not to the 
-       original DocBook XSL stylesheets.
+       - common/rootid.xsl
+       - common/copy.xsl
+       - ../lib/resolve-xrefs.xsl
    
    Keys:
      * id (applys to: @id|@xml:id)
@@ -78,8 +80,10 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/l10n.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/pi.xsl"/>
+  <xsl:import href="../lib/resolve-xrefs.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="screen"/>
 
@@ -752,57 +756,8 @@
   </xsl:template>
  
 
-<xsl:template match="xref" name="xref">
-    <xsl:variable name="targets" select="key('id',@linkend)"/>
-    <xsl:variable name="target" select="$targets[1]"/>
-    <xsl:variable name="refelem" select="local-name($target)"/>
-    <xsl:variable name="target.book" select="$target/ancestor-or-self::book"/>
-    <xsl:variable name="this.book" select="ancestor-or-self::book"/>
-
-    <!--<xsl:message>xref
-     @linkend = <xsl:value-of select="@linkend"/>
-   refelement = <xsl:value-of select="$refelem"/>
-    </xsl:message>-->
-
-    <xsl:choose>
-      <xsl:when test="generate-id($target.book) = generate-id($this.book)">
-        <!-- xref points into the same book -->
-        <xsl:copy-of select="self::xref"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <phrase>
-          <xsl:attribute name="role">
-            <xsl:text>externalbook-</xsl:text>
-            <xsl:value-of select="@linkend"/>
-          </xsl:attribute>
-        <xsl:text>&#8220;</xsl:text>
-          <xsl:choose>
-            <xsl:when test="$target/title">
-              <xsl:value-of select="normalize-space($target/title)"/>
-            </xsl:when>
-            <xsl:when test="$target/bookinfo/title">
-              <xsl:value-of select="normalize-space($target/bookinfo/title)"/>
-            </xsl:when>
-          </xsl:choose>
-          
-          <xsl:text>&#8221; (</xsl:text>
-        <xsl:if
-          test="$target/self::sect1 or
-          $target/self::sect2 or
-          $target/self::sect3 or
-          $target/self::sect4">
-          <xsl:text>Chapter &#8220;</xsl:text>
-          <xsl:value-of select="($target/ancestor-or-self::chapter |
-            $target/ancestor-or-self::appendix |
-            $target/ancestor-or-self::preface)[1]/title"/>
-          <xsl:text>&#8221;, </xsl:text>
-        </xsl:if>
-        <xsl:text>&#x2191;</xsl:text>
-        <xsl:value-of select="normalize-space($target.book/bookinfo/title)"/>
-        <xsl:text>)</xsl:text>
-        </phrase>
-      </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="xref|db:xref" name="xref" priority="10">
+   <xsl:apply-templates select="." mode="process.root"/>
 </xsl:template>
 
 </xsl:stylesheet>
