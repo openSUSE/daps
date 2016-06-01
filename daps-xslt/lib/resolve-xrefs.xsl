@@ -2,10 +2,13 @@
 <!--
 
    Purpose:
-     
+     Resolves <xrefs/> pointing to another book with text to avoid "???"
+     inside your text.
      
    Parameters:
-     
+     * external.link.char (string)
+       character or string which is printed before the linked title of the
+       book or article
        
    Input:
      DocBook 4/5/Novdoc document
@@ -30,8 +33,11 @@
 
  <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/l10n.xsl"/>
 
+ <xsl:param name="external.link.char">↑</xsl:param>
+
  <!-- Default Hooks -->
  <xsl:template name="xref.same.book">
+  <xsl:param name="origin" select="."/>
   <xsl:param name="target"/>
   <xsl:param name="this.book"/>
   <xsl:param name="target.book"/>
@@ -41,9 +47,9 @@
      <xsl:attribute name="role">internalbook</xsl:attribute>
    </xsl:element>
  </xsl:template>
-  
- 
+
  <xsl:template name="xref.different.book">
+  <xsl:param name="origin" select="."/>
   <xsl:param name="target"/>
   <xsl:param name="this.book"/>
   <xsl:param name="target.book"/>
@@ -69,7 +75,14 @@
   </xsl:element>
  </xsl:template>
 
+ <xsl:template name="get.title">
+  <xsl:param name="target" select="."/>
+  <xsl:value-of select="($target/title | $target/*/title
+                         |$target/d:title | $target/d:info/d:title)[1]"/>
+ </xsl:template>
 
+
+ <!-- #################################################################### -->
 
   <xsl:template match="xref | d:xref" name="xref" mode="process.root" priority="2">
     <xsl:variable name="targets" select="key('id',@linkend)"/>
@@ -136,11 +149,13 @@
         <xsl:with-param name="key" select="local-name($target)"/>
       </xsl:call-template>
       <xsl:call-template name="gentext.startquote"/>
-      <xsl:value-of select="($target.ancestor.division/title | $target.ancestor.division/*/title)[1]"/>
+      <xsl:call-template name="get.title">
+       <xsl:with-param name="target" select="$target.ancestor.division"/>
+      </xsl:call-template>
       <xsl:call-template name="gentext.endquote"/>
       <xsl:text>, </xsl:text>
     </xsl:if>
-    <xsl:text>↑</xsl:text>
+   <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
@@ -152,7 +167,7 @@
     <xsl:value-of select="normalize-space($title)"/>
     <xsl:call-template name="gentext.endquote"/>
     <xsl:text> (</xsl:text>
-    <xsl:text>↑</xsl:text>
+   <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
@@ -160,20 +175,19 @@
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
     <xsl:variable name="title" select="(title|bookinfo/title)[1]"/>
-    <xsl:text>↑</xsl:text>
+   <xsl:value-of select="$external.link.char"/>
     <xsl:call-template name="gentext.startquote"/>
     <xsl:value-of select="normalize-space($title)"/>
     <xsl:call-template name="gentext.endquote"/>
   </xsl:template>
 
-  <xsl:template match="varlistentry" mode="xref.target">
+  <xsl:template match="varlistentry | d:varlistentry" mode="xref.target">
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
-    <xsl:variable name="anctitle"
-          select="($target/ancestor-or-self::*[title])[last()]"/>
+    <xsl:variable name="anctitle" select="($target/ancestor-or-self::*[title or d:title])[last()]"/>
 
     <xsl:call-template name="gentext.startquote"/>
-    <xsl:value-of select="normalize-space(term)"/>
+    <xsl:value-of select="normalize-space(term | d:term)"/>
     <xsl:call-template name="gentext.endquote"/>
     <xsl:text> (</xsl:text>
       <xsl:call-template name="gentext">
@@ -181,10 +195,12 @@
       </xsl:call-template>
       <xsl:text> </xsl:text>
       <xsl:call-template name="gentext.startquote"/>
-      <xsl:value-of select="($anctitle/title | $anctitle/*/title)[1]"/>
+      <xsl:call-template name="get.title">
+        <xsl:with-param name="target" select="$anctitle"/>
+      </xsl:call-template>
       <xsl:call-template name="gentext.endquote"/>
       <xsl:text>, </xsl:text>
-    <xsl:text>↑</xsl:text>
+    <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
@@ -214,11 +230,13 @@
       </xsl:call-template>
       <xsl:text> </xsl:text>
       <xsl:call-template name="gentext.startquote"/>
-      <xsl:value-of select="$target.ancestor.division/d:title"/>
+      <xsl:call-template name="get.title">
+       <xsl:with-param name="target" select="$target.ancestor.division"/>
+      </xsl:call-template>
       <xsl:call-template name="gentext.endquote"/>
       <xsl:text>, </xsl:text>
     </xsl:if>
-    <xsl:text>↑</xsl:text>
+   <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
@@ -231,7 +249,7 @@
     <xsl:value-of select="normalize-space($title)"/>
     <xsl:call-template name="gentext.endquote"/>
     <xsl:text> (</xsl:text>
-    <xsl:text>↑</xsl:text>
+    <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
@@ -240,33 +258,37 @@
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
     <xsl:variable name="title" select="(d:title|d:info/d:title)[1]"/>
-    <xsl:text>↑</xsl:text>
+    <xsl:value-of select="$external.link.char"/>
     <xsl:call-template name="gentext.startquote"/>
     <xsl:value-of select="normalize-space($title)"/>
     <xsl:call-template name="gentext.endquote"/>
   </xsl:template>
 
-  <xsl:template match="d:varlistentry" mode="xref.target">
+  <xsl:template match="procedure | d:procedure |
+                       itemizedlist | d:itemizedlist |
+                       orderedlist | d:orderedlist" mode="xref.target">
     <xsl:param name="target" select="."/>
     <xsl:param name="target.book.info"/>
     <xsl:variable name="anctitle" 
-          select="($target/ancestor-or-self::*[d:title])[last()]"/>
-    <xsl:call-template name="gentext.startquote"/>
-    <xsl:value-of select="normalize-space(d:term)"/>
-    <xsl:call-template name="gentext.endquote"/>
-    
-    <xsl:text> (</xsl:text>
-      <xsl:call-template name="gentext">
-        <xsl:with-param name="key" select="local-name($anctitle)"/>
-      </xsl:call-template>
+          select="($target/ancestor-or-self::*[title or d:title])[last()]"/>
+    <xsl:variable name="title">
+     <xsl:call-template name="get.title">
+      <xsl:with-param name="target" select="$anctitle"/>
+     </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:call-template name="gentext">
+       <xsl:with-param name="key" select="local-name($anctitle)"/>
+    </xsl:call-template>
+    <xsl:if test="$title != ''">
       <xsl:text> </xsl:text>
       <xsl:call-template name="gentext.startquote"/>
-      <xsl:value-of select="($anctitle/d:title | $anctitle/d:info/d:title)[1]"/>
+      <xsl:value-of select="$title"/>
       <xsl:call-template name="gentext.endquote"/>
       <xsl:text>, </xsl:text>
-    <xsl:text>↑</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$external.link.char"/>
     <xsl:value-of select="normalize-space($target.book.info)"/>
-    <xsl:text>)</xsl:text>
   </xsl:template>
 
 </xsl:stylesheet>

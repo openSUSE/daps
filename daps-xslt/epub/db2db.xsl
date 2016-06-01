@@ -156,7 +156,7 @@
 
 <xsl:template name="filename-basename">
   <!-- We assume all filenames are really URIs and use "/" -->
-  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="filename"/>
   <xsl:param name="recurse" select="false()"/>
 
   <xsl:choose>
@@ -174,7 +174,7 @@
 </xsl:template>
   
 <xsl:template name="filename-extension">
-  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="filename"/>
   <xsl:param name="recurse" select="false()"/>
 
   <!-- Make sure we only look at the base name... -->
@@ -209,9 +209,9 @@
 <xsl:template name="mediaobject.filename">
   <xsl:param name="object"></xsl:param>
 
-  <xsl:variable name="data" select="$object/videodata
-                                    |$object/imagedata
-                                    |$object/audiodata
+  <xsl:variable name="data" select="$object/videodata  |$object/db:videodata
+                                    |$object/imagedata |$object/db:imagedata
+                                    |$object/audiodata |$object/db:audiodata
                                     |$object"/>
 
   <xsl:variable name="filename">
@@ -296,9 +296,9 @@
   </xsl:variable>
 
   <!-- there will only be one -->
-  <xsl:variable name="data" select="$object/videodata
-                                    |$object/imagedata
-                                    |$object/audiodata"/>
+  <xsl:variable name="data" select="$object/videodata  |$object/db:videodata
+                                    |$object/imagedata |$object/db:imagedata
+                                    |$object/audiodata |$object/db:audiodata"/>
 
   <xsl:variable name="format" select="$data/@format"/>
 
@@ -477,24 +477,26 @@
     </xsl:choose>
 </xsl:template>
   
-<xsl:template match="articleinfo|bookinfo|setinfo">
+<xsl:template match="articleinfo|bookinfo|setinfo|
+                     db:article/db:info | db:book/db:info | db:set/db:info">
   <xsl:copy>
     <xsl:choose>
-      <xsl:when test="not(date)">
+      <xsl:when test="not(date) or not(db:date)">
         <xsl:call-template name="create.date"/>
         <xsl:apply-templates/>
       </xsl:when>
-      <xsl:when test="date[processing-instruction('dbtimestamp')]">
+      <xsl:when test="date[processing-instruction('dbtimestamp')]
+                      |db:date[processing-instruction('dbtimestamp')]">
         <xsl:call-template name="create.date.with.pi">
-          <xsl:with-param name="node" select="date"/>
+          <xsl:with-param name="node" select="date|db:date"/>
         </xsl:call-template>
-        <xsl:apply-templates select="node()[not(self::date)]"/>
+        <xsl:apply-templates select="node()[not(self::date or self::db:date)]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="date">
-          <xsl:with-param name="node" select="date"/>
+          <xsl:with-param name="node" select="date|db:date"/>
         </xsl:call-template>
-        <xsl:apply-templates select="node()[not(self::date)]"/>
+        <xsl:apply-templates select="node()[not(self::date or self::db:date)]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:copy>
@@ -730,8 +732,8 @@
 </xsl:template>
 
 
-<xsl:template match="mediaobject">
-  <xsl:variable name="olist" select="imageobject"/>
+<xsl:template match="mediaobject | db:mediaobject">
+  <xsl:variable name="olist" select="imageobject | db:imageobject"/>
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
       <xsl:with-param name="olist" select="$olist"/>
@@ -746,7 +748,7 @@
   </xsl:copy>
 </xsl:template>
 
-  <xsl:template match="imagedata">
+  <xsl:template match="imagedata | db:imagedata">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:attribute name="fileref">
