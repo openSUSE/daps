@@ -7,7 +7,8 @@
   
      Copies all elements, attributes, comments, processing instruction
      except for the @fileref attribute in imagedata element which is inside
-     an imageobject with @role=$preferred.mediaobject.role.
+     an imageobject with @role=$preferred.mediaobject.role. Resolves xrefs
+     which points to books outside of $rootid.
   
      All imageobject elements which contains everything else than @role =
      $preferred.mediaobject.role will be discarded.
@@ -43,8 +44,9 @@
        Default extension for graphic filenames
    
    Dependencies:
-       To common/rootid.xsl and common/copy.xsl, but not to the 
-       original DocBook XSL stylesheets.
+       - common/rootid.xsl
+       - common/copy.xsl
+       - ../lib/resolve-xrefs.xsl
    
    Keys:
      * id (applys to: @id|@xml:id)
@@ -78,8 +80,10 @@
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/lib/lib.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/l10n.xsl"/>
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/common/pi.xsl"/>
+  <xsl:import href="../lib/resolve-xrefs.xsl"/>
 
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="screen"/>
 
@@ -152,7 +156,7 @@
 
 <xsl:template name="filename-basename">
   <!-- We assume all filenames are really URIs and use "/" -->
-  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="filename"/>
   <xsl:param name="recurse" select="false()"/>
 
   <xsl:choose>
@@ -170,7 +174,7 @@
 </xsl:template>
   
 <xsl:template name="filename-extension">
-  <xsl:param name="filename"></xsl:param>
+  <xsl:param name="filename"/>
   <xsl:param name="recurse" select="false()"/>
 
   <!-- Make sure we only look at the base name... -->
@@ -205,9 +209,9 @@
 <xsl:template name="mediaobject.filename">
   <xsl:param name="object"></xsl:param>
 
-  <xsl:variable name="data" select="$object/videodata
-                                    |$object/imagedata
-                                    |$object/audiodata
+  <xsl:variable name="data" select="$object/videodata  |$object/db:videodata
+                                    |$object/imagedata |$object/db:imagedata
+                                    |$object/audiodata |$object/db:audiodata
                                     |$object"/>
 
   <xsl:variable name="filename">
@@ -292,9 +296,9 @@
   </xsl:variable>
 
   <!-- there will only be one -->
-  <xsl:variable name="data" select="$object/videodata
-                                    |$object/imagedata
-                                    |$object/audiodata"/>
+  <xsl:variable name="data" select="$object/videodata  |$object/db:videodata
+                                    |$object/imagedata |$object/db:imagedata
+                                    |$object/audiodata |$object/db:audiodata"/>
 
   <xsl:variable name="format" select="$data/@format"/>
 
@@ -473,24 +477,26 @@
     </xsl:choose>
 </xsl:template>
   
-<xsl:template match="articleinfo|bookinfo|setinfo">
+<xsl:template match="articleinfo|bookinfo|setinfo|
+                     db:article/db:info | db:book/db:info | db:set/db:info">
   <xsl:copy>
     <xsl:choose>
-      <xsl:when test="not(date)">
+      <xsl:when test="not(date) or not(db:date)">
         <xsl:call-template name="create.date"/>
         <xsl:apply-templates/>
       </xsl:when>
-      <xsl:when test="date[processing-instruction('dbtimestamp')]">
+      <xsl:when test="date[processing-instruction('dbtimestamp')]
+                      |db:date[processing-instruction('dbtimestamp')]">
         <xsl:call-template name="create.date.with.pi">
-          <xsl:with-param name="node" select="date"/>
+          <xsl:with-param name="node" select="date|db:date"/>
         </xsl:call-template>
-        <xsl:apply-templates select="node()[not(self::date)]"/>
+        <xsl:apply-templates select="node()[not(self::date or self::db:date)]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="date">
-          <xsl:with-param name="node" select="date"/>
+          <xsl:with-param name="node" select="date|db:date"/>
         </xsl:call-template>
-        <xsl:apply-templates select="node()[not(self::date)]"/>
+        <xsl:apply-templates select="node()[not(self::date or self::db:date)]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:copy>
@@ -726,8 +732,8 @@
 </xsl:template>
 
 
-<xsl:template match="mediaobject">
-  <xsl:variable name="olist" select="imageobject"/>
+<xsl:template match="mediaobject | db:mediaobject">
+  <xsl:variable name="olist" select="imageobject | db:imageobject"/>
   <xsl:variable name="object.index">
     <xsl:call-template name="select.mediaobject.index">
       <xsl:with-param name="olist" select="$olist"/>
@@ -742,7 +748,7 @@
   </xsl:copy>
 </xsl:template>
 
-  <xsl:template match="imagedata">
+  <xsl:template match="imagedata | db:imagedata">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:attribute name="fileref">
@@ -752,57 +758,8 @@
   </xsl:template>
  
 
-<xsl:template match="xref" name="xref">
-    <xsl:variable name="targets" select="key('id',@linkend)"/>
-    <xsl:variable name="target" select="$targets[1]"/>
-    <xsl:variable name="refelem" select="local-name($target)"/>
-    <xsl:variable name="target.book" select="$target/ancestor-or-self::book"/>
-    <xsl:variable name="this.book" select="ancestor-or-self::book"/>
-
-    <!--<xsl:message>xref
-     @linkend = <xsl:value-of select="@linkend"/>
-   refelement = <xsl:value-of select="$refelem"/>
-    </xsl:message>-->
-
-    <xsl:choose>
-      <xsl:when test="generate-id($target.book) = generate-id($this.book)">
-        <!-- xref points into the same book -->
-        <xsl:copy-of select="self::xref"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <phrase>
-          <xsl:attribute name="role">
-            <xsl:text>externalbook-</xsl:text>
-            <xsl:value-of select="@linkend"/>
-          </xsl:attribute>
-        <xsl:text>&#8220;</xsl:text>
-          <xsl:choose>
-            <xsl:when test="$target/title">
-              <xsl:value-of select="normalize-space($target/title)"/>
-            </xsl:when>
-            <xsl:when test="$target/bookinfo/title">
-              <xsl:value-of select="normalize-space($target/bookinfo/title)"/>
-            </xsl:when>
-          </xsl:choose>
-          
-          <xsl:text>&#8221; (</xsl:text>
-        <xsl:if
-          test="$target/self::sect1 or
-          $target/self::sect2 or
-          $target/self::sect3 or
-          $target/self::sect4">
-          <xsl:text>Chapter &#8220;</xsl:text>
-          <xsl:value-of select="($target/ancestor-or-self::chapter |
-            $target/ancestor-or-self::appendix |
-            $target/ancestor-or-self::preface)[1]/title"/>
-          <xsl:text>&#8221;, </xsl:text>
-        </xsl:if>
-        <xsl:text>&#x2191;</xsl:text>
-        <xsl:value-of select="normalize-space($target.book/bookinfo/title)"/>
-        <xsl:text>)</xsl:text>
-        </phrase>
-      </xsl:otherwise>
-    </xsl:choose>
+<xsl:template match="xref|db:xref" name="xref" priority="10">
+   <xsl:apply-templates select="." mode="process.root"/>
 </xsl:template>
 
 </xsl:stylesheet>
