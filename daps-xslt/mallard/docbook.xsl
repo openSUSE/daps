@@ -101,18 +101,14 @@
         <xsl:when test="local-name(.) = 'set' and
                         *[contains(local-name(),'info')]/productname|d:info/d:productname">
           <xsl:text>The documentation for </xsl:text>
-          <link href="help:{$packagename}">
-            <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productname|d:info/d:productname)[1])"/>
-            <xsl:if test="*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber">
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber)[1])"/>
-            </xsl:if>
-          </link>
+          <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productname|d:info/d:productname)[1])"/>
+          <xsl:if test="*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber)[1])"/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          <link href="help:{$packagename}">
-            <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1])"/>
-          </link>
+          <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1])"/>
         </xsl:otherwise>
       </xsl:choose>
       consists of:
