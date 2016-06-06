@@ -79,130 +79,115 @@
     <xsl:message terminate="yes">ERROR: Mallard page creation: Unknown root element.</xsl:message>
    </xsl:template>
 
-  <xsl:template match="/set | /d:set">
+ <xsl:template match="/set|/d:set|/book|/d:book">
+    <xsl:call-template name="create-info"/>
+    <title>
+      <xsl:apply-templates select="(*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1]"/>
+    </title>
+    <p>
+      <xsl:choose>
+        <xsl:when test="local-name(.) = 'set' and
+                        *[contains(local-name(),'info')]/productname|d:info/d:productname">
+          <xsl:text>The documentation for </xsl:text>
+          <link href="help:{$packagename}">
+            <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productname|d:info/d:productname)[1])"/>
+            <xsl:if test="*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber">
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/productnumber|d:info/d:productnumber)[1])"/>
+            </xsl:if>
+          </link>
+        </xsl:when>
+        <xsl:otherwise>
+          <link href="help:{$packagename}">
+            <xsl:value-of select="normalize-space((*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1])"/>
+          </link>
+        </xsl:otherwise>
+      </xsl:choose>
+      consists of:
+    </p>
+    <xsl:choose>
+      <xsl:when test="local-name(.) = 'set'">
+        <!-- We select:
+        + line 1,2: books without articles (unless there are also chapters
+          or similar elements on the same structural level as the article)
+        + line 3,4: article included in books (same caveat as above)
+        + line 5: articles directly within the set (DocBook 5 only) -->
+        <xsl:apply-templates
+          select="book[not(article) or (article and (chapter|glossary|part|preface|reference))]|
+                  d:book[not(d:article) or (d:article and (d:chapter|d:glossary|d:part|d:preface|d:reference))]|
+                  book[article and not(chapter|glossary|part|preface|reference)]/article|
+                  d:book[d:article and not(d:chapter|d:glossary|d:part|d:preface|d:reference)]/d:article|
+                  d:article"
+          mode="summary"/>
+      </xsl:when>
+      <xsl:when test="local-name(.) = 'book'">
+        <xsl:apply-templates
+          select="appendix|article|chapter|glossary|part|preface|reference|
+                  d:appendix|d:article|d:chapter|d:glossary|d:part|d:preface|
+                  d:reference"
+          mode="summary"/>
+      </xsl:when>
+    </xsl:choose>
+   </xsl:template>
+
+
+  <!-- fill the page with "sections" -->
+  <xsl:template
+    match=" book[@id]|d:book[@xml:id]|
+            article[@id]|d:article[@xml:id]|
+            appendix[@id]|chapter[@id]|glossary[@id]|part[@id]|
+            preface[@id]|reference[@id]|
+            d:appendix[@xml:id]|d:chapter[@xml:id]|d:glossary[@xml:id]|
+            d:part[@xml:id]|d:preface[@xml:id]|d:reference[@xml:id]"
+    mode="summary">
     <xsl:param name="node" select="."/>
-      <xsl:call-template name="create-info"/>
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+
+    <section id="{$id}">
       <title>
-        <xsl:apply-templates select="(*/title|title|*/d:title|d:title)[1]"/>
-      </title>
-      <p>The complete set of <link href="help:{$packagename}">
-        <xsl:choose>
-          <xsl:when test="*/productname|*/d:productname">
-            <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/>
-            <xsl:text> documents</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="/*/title|/*/d:title"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <link href="help:{$packagename}/{$id}">
+          <xsl:apply-templates select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
          </link>
-        consists of the following:
-      </p>
-      <xsl:apply-templates select="book[not(article)]|book[article]/article"
-        mode="summary"/>
-      <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
-        mode="summary"/>
+       </title>
+      <xsl:choose>
+        <xsl:when test="*/abstract|*/highlights|*/*/abstract|*/*/highlights|d:info/d:abstract|*/d:info/d:abstract">
+          <xsl:apply-templates select="(*/abstract|*/highlights|*/*/abstract|*/*/highlights|d:info/d:abstract|*/d:info/d:abstract)[1]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="para">
+            <xsl:apply-templates select="(*/para|*/*/para|*/d:para|*/*/d:para)[1]"/>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="string-length($para) &lt; 250">
+              <xsl:copy-of select="$para"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <p>
+                <!-- 248 characters + the end of the current word + ellipsis -->
+                <xsl:value-of
+                 select="concat(substring($para, 1, 248),
+                         substring-before(substring($para, 249, string-length($para)), ' '))"/>
+               <xsl:text>…</xsl:text>
+             </p>
+           </xsl:otherwise>
+         </xsl:choose>
+       </xsl:otherwise>
+     </xsl:choose>
+    </section>
   </xsl:template>
 
-  <xsl:template match="/book|/d:book">
-      <xsl:call-template name="create-info">
-        <xsl:with-param name="subnodes"
-          select="article|chapter|preface|appendix|glossary|
-                  d:article|d:chapter|d:preface|d:appendix|d:glossary"/>
-      </xsl:call-template>
-      <title>
-        <xsl:apply-templates select="(bookinfo/title|title|
-                                      d:info/d:title|d:title)[1]"/>
-      </title>
-      <p>
-       <link href="help:{$packagename}">The complete book of
-         <xsl:value-of select="normalize-space(*/productname|*/d:productname)"/> documents</link>
-        consists of the following chapters:
-      </p>
-      <xsl:apply-templates mode="summary"/>
-  </xsl:template>
-
-  <xsl:template match="book|d:book">
-    <xsl:param name="node" select="."/>
-    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
-    <link href="help:{$packagename}/{$id}">
-      <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
-    </link>
-    <!-- Since books are only displayed if they have an ID, we need to make sure
-    that the next one actually has an ID, otherwise we're only placing a
-    dangling comma.
-    Also, books containing articles are not displayed.
-    FIXME: DocBook allows placing both chapters and articles side by side in a
-    book it seems. If that is true, it seems like we need to fix the following
-    and the book[article] template. -->
-    <xsl:if test="$node/following-sibling::book[@id and not(article)]|
-                  $node/following-sibling::d:book[@xml:id and not(d:article)]">
-      <xsl:text>, </xsl:text>
-    </xsl:if>
-    <xsl:text>&#10;</xsl:text>
-  </xsl:template>
-
-  <xsl:template match="book[article] | d:book[d:article]">
-    <xsl:apply-templates select="book/article"/>
-  </xsl:template>
-
-  <xsl:template match="book/article[not(@id)] | d:book/d:article[not(@xml:id)]">
-    <xsl:call-template name="warning"/>
-  </xsl:template>
-
-  <xsl:template match="book/article | d:book/d:article">
-    <xsl:param name="node" select="."/>
-    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
-    <link href="help:{$packagename}/{$id}">
-      <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
-    </link>
-    <xsl:text>&#10;</xsl:text>
-  </xsl:template>
-
-  <!-- ***************** -->
   <xsl:template match="*" mode="summary"/>
 
-  <xsl:template match="book[not(article)][@id] | d:book[not(d:article)][@xml:id]" mode="summary">
-    <xsl:param name="node" select="."/>
-    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
-
-    <section id="{$id}">
-      <title>
-        <link href="help:{$packagename}/{$id}">
-          <xsl:apply-templates select="(*/title|title | */d:title|d:title)[1]"/>
-        </link>
-      </title>
-      <xsl:if test="*/abstract | */d:abstract">
-        <xsl:apply-templates select="*/abstract | */d:abstract"/>
-      </xsl:if>
-    </section>
-  </xsl:template>
-
-  <xsl:template match="book[not(article)][not(@id)] | d:book[not(d:article)][not(@xml:id)]" mode="summary">
+  <xsl:template
+    match=" book[not(@id)]|d:book[not(@xml:id)]|
+            article[not(@id)]|d:article[not(@xml:id)]|
+            appendix[not(@id)]|chapter[not(@id)]|glossary[not(@id)]|
+            part[not(@id)]|preface[not(@id)]|reference[not(@id)]|
+            d:appendix[not(@xml:id)]|d:chapter[not(@xml:id)]|
+            d:glossary[not(@xml:id)]|d:part[not(@xml:id)]|
+            d:preface[not(@xml:id)]|d:reference[not(@xml:id)]"
+    mode="summary">
     <xsl:call-template name="warning"/>
-  </xsl:template>
-
-  <xsl:template match="book[article[@id]] | d:book[d:article[@xml:id]]" mode="summary">
-    <xsl:apply-templates select="article | d:article"/>
-  </xsl:template>
-
-  <xsl:template match="book/article[not(@id)] | d:book/d:article[not(@xml:id)]" mode="summary">
-    <xsl:call-template name="warning"/>
-  </xsl:template>
-
-  <xsl:template match="book/article[@id] | d:book/d:article[@xml:id]" mode="summary">
-    <xsl:param name="node" select="."/>
-    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
-    <section id="{$id}">
-      <title>
-        <link href="help:{$packagename}/{$id}">
-          <xsl:apply-templates select="(*/title|title |*/d:title|d:title)[1]"/>
-        </link>
-      </title>
-      <xsl:if test="*/abstract | */d:abstract">
-        <xsl:apply-templates select="*/abstract | */d:abstract"/>
-      </xsl:if>
-    </section>
   </xsl:template>
 
   <!-- ***************** -->
