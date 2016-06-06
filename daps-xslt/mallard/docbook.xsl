@@ -38,7 +38,6 @@
   exclude-result-prefixes="d xl">
 
   <xsl:output method="xml" indent="yes"/>
-  <xsl:strip-space elements="*"/>
 
   <xsl:param name="packagename">@PACKAGENAME@</xsl:param>
   <xsl:param name="generate.xml-model.pi" select="1"/>
