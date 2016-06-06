@@ -877,7 +877,8 @@
 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
-&lt;article lang="en" xml:id="art.frog"&gt;
+&lt;article xml:lang="en" xml:id="art.frog"
+   xmlns="http://docbook.org/ns/docbook"&gt;
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
  [...]
@@ -885,6 +886,11 @@
         <para>
          If the processing instruction (PI)  is
         missing, any profiling parameters in the &dc; file will be ignored.
+       </para>
+       <para>
+        Use the PI <sgmltag class="pi">xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook51-profile.xsl"
+ type="text/xml" title="Profiling step"</sgmltag> for DocBook version 5.1.
        </para>
      </example>
 
