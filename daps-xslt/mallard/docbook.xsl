@@ -69,12 +69,18 @@
       >href="mallard-1.0.rnc" type="application/relax-ng-compact-syntax"</xsl:processing-instruction>
     </xsl:if>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates/>
+    <page type="guide" id="{$packagename}">
+      <xsl:apply-templates/>
+    </page>
   </xsl:template>
+
+  <xsl:template match="/*">
+    <!-- FIXME? This template currently matches "article" too. -->
+    <xsl:message terminate="yes">ERROR: Mallard page creation: Unknown root element.</xsl:message>
+   </xsl:template>
 
   <xsl:template match="/set | /d:set">
     <xsl:param name="node" select="."/>
-    <page type="guide" id="{$packagename}">
       <xsl:call-template name="create-info"/>
       <title>
         <xsl:apply-templates select="(*/title|title|*/d:title|d:title)[1]"/>
@@ -96,11 +102,9 @@
         mode="summary"/>
       <xsl:apply-templates select="d:book[not(d:article)]|d:book[d:article]/d:article"
         mode="summary"/>
-    </page>
   </xsl:template>
 
   <xsl:template match="/book|/d:book">
-    <page type="guide" id="{$packagename}">
       <xsl:call-template name="create-info">
         <xsl:with-param name="subnodes"
           select="article|chapter|preface|appendix|glossary|
@@ -116,7 +120,6 @@
         consists of the following chapters:
       </p>
       <xsl:apply-templates mode="summary"/>
-    </page>
   </xsl:template>
 
   <xsl:template match="book|d:book">
