@@ -332,7 +332,11 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="para">
-            <xsl:apply-templates select="(*/para|*/*/para|*/d:para|*/*/d:para)[1]"/>
+            <xsl:apply-templates
+              select="(*/para[not(ancestor::legalnotice)]|
+                      */*/para[not(ancestor::legalnotice)]|
+                      */d:para[not(ancestor::d:legalnotice)]|
+                      */*/d:para[not(ancestor::d:legalnotice)])[1]"/>
           </xsl:variable>
           <xsl:choose>
             <xsl:when test="string-length($para) &lt; 250">
