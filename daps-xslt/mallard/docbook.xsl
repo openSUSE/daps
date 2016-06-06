@@ -34,7 +34,8 @@
   xmlns="http://projectmallard.org/1.0/"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:d="http://docbook.org/ns/docbook"
-  exclude-result-prefixes="d">
+  xmlns:xl="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="d xl">
 
   <xsl:output method="xml" indent="yes"/>
   <xsl:strip-space elements="*"/>
@@ -443,6 +444,31 @@
     <item>
       <xsl:apply-templates/>
     </item>
+  </xsl:template>
+
+  <xsl:template match="ulink|d:link">
+    <xsl:variable name="url" select="normalize-space((@url|@xl:href)[1])"/>
+    <link href="{$url}">
+      <xsl:choose>
+        <xsl:when test="normalize-space(.) = ''">
+          <xsl:value-of select="$url"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </link>
+  </xsl:template>
+
+  <xsl:template match="xref|d:xref">
+    <xsl:choose>
+      <xsl:when test="normalize-space(.) = ''">
+        <xsl:value-of select="normalize-space(@linkend)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*|d:*">
