@@ -138,8 +138,9 @@
     </xsl:choose>
    </xsl:template>
 
-  <!-- Create a "desc:" a short link list to be displayed below on the global
-  overview page of the system help (i.e. not on this page itself). -->
+  <!-- Create a "desc:" a short link list to be displayed below a link to our
+  page on the global overview page of the system help (i.e. not on this page
+  itself). -->
 
   <xsl:template match="book|article|d:book|d:article" mode="setdesc">
     <xsl:param name="count" select="0"/>
@@ -216,8 +217,9 @@
   </xsl:template>
 
   <xsl:template
-    match=" appendix|article|chapter|preface|glossary|reference|
-            d:appendix|d:article|d:chapter|d:preface|d:glossary|d:reference"
+    match=" appendix|article|chapter|part|preface|glossary|reference|
+            d:appendix|d:article|d:chapter|d:part|d:preface|d:glossary|
+            d:reference"
     mode="bookdesc">
     <xsl:param name="count" select="0"/>
 
@@ -312,10 +314,8 @@
   <xsl:template
     match=" book[@id]|d:book[@xml:id]|
             article[@id]|d:article[@xml:id]|
-            appendix[@id]|chapter[@id]|glossary[@id]|part[@id]|
-            preface[@id]|reference[@id]|
-            d:appendix[@xml:id]|d:chapter[@xml:id]|d:glossary[@xml:id]|
-            d:part[@xml:id]|d:preface[@xml:id]|d:reference[@xml:id]"
+            chapter[@id]|part[@id]|
+            d:chapter[@xml:id]|d:part[@xml:id]"
     mode="summary">
     <xsl:param name="node" select="."/>
     <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
@@ -354,6 +354,23 @@
          </xsl:choose>
        </xsl:otherwise>
      </xsl:choose>
+    </section>
+  </xsl:template>
+
+  <xsl:template
+    match=" appendix[@id]|glossary[@id]|preface[@id]|reference[@id]|
+            d:appendix[@xml:id]|d:glossary[@xml:id]|d:preface[@xml:id]|
+            d:reference[@xml:id]"
+    mode="summary">
+    <xsl:param name="node" select="."/>
+    <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
+
+    <section id="{$id}">
+      <title>
+        <link href="help:{$packagename}/{$id}">
+          <xsl:apply-templates select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
+         </link>
+      </title>
     </section>
   </xsl:template>
 
