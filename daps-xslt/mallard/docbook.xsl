@@ -61,6 +61,12 @@
                       d:reference)[1]"
               mode="bookdesc"/>
           </xsl:when>
+          <xsl:when test="$node = 'article'">
+            <!-- Articles are usually single pages anyway. -->
+            <xsl:apply-templates
+              select="."
+              mode="artdesc"/>
+          </xsl:when>
         </xsl:choose>
       </desc>
     </info>
@@ -91,7 +97,7 @@
     <xsl:message terminate="yes">ERROR: Mallard page creation: Unknown root element.</xsl:message>
    </xsl:template>
 
- <xsl:template match="/set|/d:set|/book|/d:book">
+ <xsl:template match="/set|/d:set|/book|/d:book|/article|/d:article">
     <xsl:call-template name="create-info"/>
     <title>
       <xsl:apply-templates select="(*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1]"/>
@@ -133,6 +139,11 @@
           select="appendix|article|chapter|glossary|part|preface|reference|
                   d:appendix|d:article|d:chapter|d:glossary|d:part|d:preface|
                   d:reference"
+          mode="summary"/>
+      </xsl:when>
+      <xsl:when test="local-name(.) = 'article'">
+        <xsl:apply-templates
+          select="."
           mode="summary"/>
       </xsl:when>
     </xsl:choose>
@@ -307,6 +318,23 @@
     </xsl:apply-templates>
   </xsl:template>
 
+  <xsl:template match="article|d:article" mode="artdesc">
+    <xsl:variable name="id" select="(./@id|./@xml:id)[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="not(@id|@xml:id)">
+        <xsl:call-template name="warning"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#10;</xsl:text>
+        <link href="help:{$packagename}/{$id}">
+          <xsl:apply-templates
+            select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
+        </link>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+ 
   <xsl:template match="*|d:*" mode="setdesc"/>
   <xsl:template match="*|d:*" mode="bookdesc"/>
 
@@ -315,11 +343,12 @@
     match=" book[@id]|d:book[@xml:id]|
             article[@id]|d:article[@xml:id]|
             chapter[@id]|part[@id]|
-            d:chapter[@xml:id]|d:part[@xml:id]"
+            d:chapter[@xml:id]|d:part[@xml:id]|
+            sect1[@id]|section[@id]|simplesect[@id]|
+            d:sect1[@xml:id]|d:section[@xml:id]|d:simplesect[@xml:id]"
     mode="summary">
     <xsl:param name="node" select="."/>
     <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
-
     <section id="{$id}">
       <title>
         <link href="help:{$packagename}/{$id}">
@@ -360,7 +389,8 @@
   <xsl:template
     match=" appendix[@id]|glossary[@id]|preface[@id]|reference[@id]|
             d:appendix[@xml:id]|d:glossary[@xml:id]|d:preface[@xml:id]|
-            d:reference[@xml:id]"
+            d:reference[@xml:id]|
+            refentry[@id]|d:refentry[@xml:id]"
     mode="summary">
     <xsl:param name="node" select="."/>
     <xsl:variable name="id" select="($node/@id|$node/@xml:id)[1]"/>
@@ -381,7 +411,11 @@
             part[not(@id)]|preface[not(@id)]|reference[not(@id)]|
             d:appendix[not(@xml:id)]|d:chapter[not(@xml:id)]|
             d:glossary[not(@xml:id)]|d:part[not(@xml:id)]|
-            d:preface[not(@xml:id)]|d:reference[not(@xml:id)]"
+            d:preface[not(@xml:id)]|d:reference[not(@xml:id)]|
+            refentry[not(@id)]|sect1[not(@id)]|
+            section[not(@id)]|simplesect[not(@id)]|
+            d:refentry[not(@xml:id)]|d:sect1[not(@xml:id)]|
+            d:section[not(@xml:id)]|d:simplesect[not(@xml:id)]"
     mode="summary">
     <xsl:call-template name="warning"/>
   </xsl:template>
