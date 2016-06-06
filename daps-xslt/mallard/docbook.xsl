@@ -431,6 +431,26 @@
     <file><xsl:apply-templates/></file>
   </xsl:template>
 
+  <xsl:template match="menuchoice|d:menuchoice">
+    <guiseq><xsl:apply-templates/></guiseq>
+  </xsl:template>
+
+  <xsl:template
+    match=" guimenu|accel|guibutton|guiicon|guilabel|guimenuitem|guisubmenu|
+            d:guimenu|d:guibutton|d:guiicon|d:guilabel|d:guimenuitem|d:guisubmenu">
+    <gui><xsl:apply-templates/></gui>
+  </xsl:template>
+
+  <xsl:template match="keycombo|d:keycombo">
+    <keyseq><xsl:apply-templates/></keyseq>
+  </xsl:template>
+
+  <xsl:template
+    match=" keycap|keycode|keycombo|keysym|menuchoice|mousebutton|
+            d:accel|d:keycap|d:keycode|d:keycombo|d:keysym|d:mousebutton">
+    <key><xsl:apply-templates/></key>
+  </xsl:template>
+
   <xsl:template match="orderedlist|itemizedlist|d:orderedlist|d:itemizedlist">
     <list>
       <xsl:if test="self::orderedlist|self::d:orderedlist">
