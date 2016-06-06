@@ -59,7 +59,7 @@
       <xsl:text>Warning: Missing @id/@xml:id in </xsl:text>
       <xsl:value-of select="local-name()"/>
       <xsl:text>, skipped </xsl:text>
-      <xsl:value-of select="(*/title|title|*/d:title|d:title)[1]"/>
+      <xsl:value-of select="(*[contains(local-name(),'info')]/title|title|d:info/d:title|d:title)[1]"/>
     </xsl:message>
   </xsl:template>
 
