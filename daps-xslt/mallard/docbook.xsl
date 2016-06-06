@@ -325,7 +325,7 @@
         <link href="help:{$packagename}/{$id}">
           <xsl:apply-templates select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
          </link>
-       </title>
+      </title>
       <xsl:choose>
         <xsl:when test="*/abstract|*/highlights|*/*/abstract|*/*/highlights|d:info/d:abstract|*/d:info/d:abstract">
           <xsl:apply-templates select="(*/abstract|*/highlights|*/*/abstract|*/*/highlights|d:info/d:abstract|*/d:info/d:abstract)[1]"/>
