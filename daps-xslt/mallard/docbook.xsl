@@ -369,30 +369,34 @@
     <xsl:call-template name="warning"/>
   </xsl:template>
 
-  <!-- ***************** -->
-  <xsl:template match="abstract/para | d:abstract/d:para">
+  <!-- Random text styles for the summaries -->
+  <xsl:template match="title|d:title">
+    <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="abstract|highlights|d:abstract">
+    <xsl:apply-templates/>
+   </xsl:template>
+
+  <xsl:template match="para|d:para">
     <p>
       <xsl:apply-templates/>
     </p>
   </xsl:template>
 
-  <xsl:template match="abstract/para/emphasis | d:abstract/d:para/d:emphasis">
+  <xsl:template match="emphasis|d:emphasis">
     <em>
       <xsl:apply-templates/>
     </em>
   </xsl:template>
 
-  <xsl:template match="para/quote | d:para/d:quote">
-    <xsl:text>"</xsl:text>
+  <xsl:template match="quote|d:quote">
+    <xsl:text>“</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>"</xsl:text>
+    <xsl:text>”</xsl:text>
   </xsl:template>
 
-  <xsl:template match="para/systemitem | d:para/d:systemitem">
-    <xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="para/phrase | d:para/d:phrase">
+  <xsl:template match="phrase|d:phrase">
     <!-- Generally, we want phrases to be unhyphenated, but there does
          not seem to be a [style hint](https://wiki.gnome.org/Apps/Yelp/Mallard/Styles)
          for that yet and Yelp does not seem to hyphenate ever, so ...
@@ -402,13 +406,47 @@
     </span>
   </xsl:template>
 
-  <xsl:template match="abstract/*|para/* | d:abstract/*|d:para/*">
-    <xsl:message>Unknown element <xsl:value-of
-      select="local-name()"/> in <xsl:value-of select="local-name(..)"/>
-    </xsl:message>
-    <xsl:apply-templates/>
+  <xsl:template match="citetitle|d:citetitle">
+    <!-- citetitle is often used around our title entities, we just want to
+    ignore it here (but not the contained text) -->
+     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="*|d:*"/>
+  <xsl:template match="systemitem|package|literal|uri|sgmltag|
+                       d:systemitem|d:package|d:literal|d:uri|d:tag">
+    <sys><xsl:apply-templates/></sys>
+  </xsl:template>
+
+  <xsl:template match="varname|envar|option|replaceable|
+                       d:varname|d:envar|d:option|d:replaceable">
+    <var><xsl:apply-templates/></var>
+  </xsl:template>
+
+  <xsl:template match="command|d:command|systemitem|d:systemitem">
+    <cmd><xsl:apply-templates/></cmd>
+  </xsl:template>
+
+  <xsl:template match="filename|d:filename">
+    <file><xsl:apply-templates/></file>
+  </xsl:template>
+
+  <xsl:template match="orderedlist|itemizedlist|d:orderedlist|d:itemizedlist">
+    <list>
+      <xsl:if test="self::orderedlist|self::d:orderedlist">
+        <xsl:attribute name="type">numbered</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </list>
+  </xsl:template>
+
+  <xsl:template match="listitem">
+    <item>
+      <xsl:apply-templates/>
+    </item>
+  </xsl:template>
+
+  <xsl:template match="*|d:*">
+    <xsl:message>WARNING: Unknown element "<xsl:value-of select="local-name(.)"/>" was ignored.</xsl:message>
+  </xsl:template>
 
 </xsl:stylesheet>
