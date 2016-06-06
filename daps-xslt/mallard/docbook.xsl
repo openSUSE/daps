@@ -43,13 +43,25 @@
   <xsl:param name="generate.xml-model.pi" select="1"/>
 
   <xsl:template name="create-info">
-    <xsl:param name="node" select="."/>
-    <xsl:param name="subnodes" select="book|d:book"/>
+    <xsl:variable name="node" select="local-name(.)"/>
 
     <info>
       <link type="guide" xref="index" group="{$packagename}"/>
       <desc>
-        <xsl:apply-templates select="$subnodes"/>
+        <xsl:choose>
+          <xsl:when test="$node = 'set'">
+            <xsl:apply-templates
+              select="(book|d:book|d:article)[1]"
+              mode="setdesc"/>
+          </xsl:when>
+          <xsl:when test="$node = 'book'">
+            <xsl:apply-templates
+              select="(appendix|article|chapter|glossary|part|preface|reference|
+                      d:appendix|d:article|d:chapter|d:glossary|d:part|d:preface|
+                      d:reference)[1]"
+              mode="bookdesc"/>
+          </xsl:when>
+        </xsl:choose>
       </desc>
     </info>
   </xsl:template>
@@ -130,6 +142,175 @@
     </xsl:choose>
    </xsl:template>
 
+  <!-- Create a "desc:" a short link list to be displayed below on the global
+  overview page of the system help (i.e. not on this page itself). -->
+
+  <xsl:template match="book|article|d:book|d:article" mode="setdesc">
+    <xsl:param name="count" select="0"/>
+
+    <xsl:variable name="separator" select="', '"/>
+    <xsl:variable name="id" select="(./@id|./@xml:id)[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="not(@id|@xml:id)">
+        <xsl:call-template name="warning"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$count &gt; 0">
+          <xsl:value-of select="$separator"/>
+        </xsl:if>
+        <xsl:text>&#10;</xsl:text>
+        <link href="help:{$packagename}/{$id}">
+          <xsl:apply-templates select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
+        </link>
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <!-- FIXME: set/set is not handled (though we do not use that). -->
+    <xsl:choose>
+      <!-- Limit to a maximum of five entries, to match Yelp's style and
+      to avoid having a link list that is too long. -->
+      <xsl:when test="$count &gt; 4 and
+        ( following-sibling::book[@id]|following-sibling::d:book[@xml:id]|
+          following-sibling::article[@id]|following-sibling::d:article[@xml:id])">
+        <xsl:text>…</xsl:text>
+      </xsl:when>
+      <!-- Handle set/book/article -->
+      <xsl:when
+        test="following-sibling::*[1][self::book and article and not(chapter|glossary|part|preface|reference)]|
+              following-sibling::*[1][self::d:book and d:article and not(d:chapter|d:glossary|d:part|d:preface|d:reference)]">
+        <!-- FIXME: Currently this only works as long as there is only one book
+        of articles and it is the last book. -->
+        <xsl:apply-templates
+          select="(following-sibling::book[1]/article[1]|
+                  following-sibling::d:book[1]/d:article[1])[1]"
+          mode="setdesc">
+          <xsl:with-param name="count" select="$count + 1"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <!-- Handle set/book and set/article -->
+      <xsl:when
+        test="following-sibling::*[1][self::book or self::article or
+                                      self::d:book or self::d:article]">
+        <xsl:apply-templates
+          select="following-sibling::*[1][self::book or self::article or
+                                          self::d:book or self::d:article]"
+          mode="setdesc">
+          <xsl:with-param name="count" select="$count + 1"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <!-- Allow for set/set (but ignore those (FIXME)). -->
+      <xsl:when test="following-sibling::*">
+        <xsl:apply-templates
+          select="following-sibling::*[1]"
+          mode="setdesc">
+          <xsl:with-param name="count" select="$count"/>
+        </xsl:apply-templates>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="set|d:set" mode="setdesc">
+    <xsl:param name="count" select="0"/>
+    <xsl:apply-templates
+      select="following-sibling::*[1]"
+      mode="setdesc">
+      <xsl:with-param name="count" select="$count"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template
+    match=" appendix|article|chapter|preface|glossary|reference|
+            d:appendix|d:article|d:chapter|d:preface|d:glossary|d:reference"
+    mode="bookdesc">
+    <xsl:param name="count" select="0"/>
+
+    <xsl:variable name="separator" select="', '"/>
+    <xsl:variable name="id" select="(./@id|./@xml:id)[1]"/>
+
+    <xsl:choose>
+      <xsl:when test="not(@id|@xml:id)">
+        <xsl:call-template name="warning"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$count &gt; 0">
+          <xsl:value-of select="$separator"/>
+        </xsl:if>
+        <xsl:text>&#10;</xsl:text>
+        <link href="help:{$packagename}/{$id}">
+          <xsl:apply-templates
+            select="(*[contains(local-name(), 'info')]/title|title|d:info/d:title|d:title)[1]"/>
+        </link>
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:choose>
+      <!-- Limit to a maximum of five entries, to match Yelp's style and
+      to avoid having a link list that is too long. -->
+      <xsl:when
+        test="$count &gt; 4 and
+              following-sibling::*[1][self::article or self::chapter or
+                                      self::preface or self::part or
+                                      self::appendix[not(@role='legal')] or
+                                      self::glossary or self::reference or
+                                      self::d:article or self::d:chapter or
+                                      self::d:preface or self::d:part or
+                                      self::d:appendix[not(@role='legal')] or
+                                      self::d:glossary or self::d:reference]">
+        <xsl:text>…</xsl:text>
+      </xsl:when>
+      <!-- Handle book contents -->
+      <xsl:when
+        test="following-sibling::*[1][self::article or self::chapter or
+                                      self::preface or self::part or
+                                      self::appendix[not(@role='legal')] or
+                                      self::glossary or self::reference or
+                                      self::d:article or self::d:chapter or
+                                      self::d:preface or self::d:part or
+                                      self::d:appendix[not(@role='legal')] or
+                                      self::d:glossary or self::d:reference]">
+        <xsl:apply-templates
+          select="following-sibling::*[1][self::article or self::chapter or
+                                          self::preface or self::part or
+                                          self::appendix[not(@role='legal')] or
+                                          self::glossary or self::reference or
+                                          self::d:article or self::d:chapter or
+                                          self::d:preface or self::d:part or
+                                          self::d:appendix[not(@role='legal')] or
+                                          self::d:glossary or self::d:reference]"
+          mode="bookdesc">
+          <xsl:with-param name="count" select="$count + 1"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <!-- Allow for book/{acknowledgements,appendix[@role=legal],bibliography,
+      colophon,dedication,index,toc} (but ignore those - which is correct
+      behavior here) -->
+      <xsl:when test="following-sibling::*">
+        <xsl:apply-templates
+          select="following-sibling::*[1]"
+          mode="bookdesc">
+          <xsl:with-param name="count" select="$count"/>
+        </xsl:apply-templates>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+ 
+  <xsl:template
+    match=" acknowledgements|appendix[@role='legal']|bibliography|
+            colophon|dedication|index|lot|setindex|toc|
+            d:acknowledgements|d:appendix[@role='legal']|d:bibliography|
+            d:colophon|d:dedication|d:index|d:toc"
+    mode="bookdesc">
+    <xsl:param name="count" select="0"/>
+    <xsl:apply-templates
+      select="following-sibling::*[1]"
+      mode="bookdesc">
+      <xsl:with-param name="count" select="$count"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="*|d:*" mode="setdesc"/>
+  <xsl:template match="*|d:*" mode="bookdesc"/>
 
   <!-- fill the page with "sections" -->
   <xsl:template
@@ -175,8 +356,6 @@
      </xsl:choose>
     </section>
   </xsl:template>
-
-  <xsl:template match="*" mode="summary"/>
 
   <xsl:template
     match=" book[not(@id)]|d:book[not(@xml:id)]|
@@ -229,5 +408,7 @@
     </xsl:message>
     <xsl:apply-templates/>
   </xsl:template>
+
+  <xsl:template match="*|d:*"/>
 
 </xsl:stylesheet>
