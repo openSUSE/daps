@@ -167,7 +167,7 @@
     <xsl:choose>
       <!-- Limit to a maximum of five entries, to match Yelp's style and
       to avoid having a link list that is too long. -->
-      <xsl:when test="$count &gt; 4 and
+      <xsl:when test="$count &gt; 3 and
         ( following-sibling::book[@id]|following-sibling::d:book[@xml:id]|
           following-sibling::article[@id]|following-sibling::d:article[@xml:id])">
         <xsl:text>…</xsl:text>
@@ -246,7 +246,7 @@
       <!-- Limit to a maximum of five entries, to match Yelp's style and
       to avoid having a link list that is too long. -->
       <xsl:when
-        test="$count &gt; 4 and
+        test="$count &gt; 3 and
               following-sibling::*[1][self::article or self::chapter or
                                       self::preface or self::part or
                                       self::appendix[not(@role='legal')] or
