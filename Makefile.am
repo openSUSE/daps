@@ -340,3 +340,13 @@ $(dist_man1_MANS):
 
 $(INSTALLDIRS) $(BUILD_ROOT):
 	test -z "$@" || $(MKDIR_P) $@
+
+.PHONY: debian ubuntu redhat
+
+debian ubuntu:
+	(cd etc/fop && ln -sf fop-daps.generic fop-daps.xml)
+	(cd libexec && ln -sf daps-jing.debian daps-jing)
+	(cd etc     && ln -sf catalog.debian catalog.xml)
+
+redhat:
+	(cd etc/fop && ln -sf fop-daps.redhat fop-daps.xml)
