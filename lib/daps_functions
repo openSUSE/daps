@@ -528,11 +528,13 @@ function call_make {
             MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
         fi
     fi
+
+    # By default the number of parallel jobs for make is set to the number of
+    # CPU cores. This can be overwritten with --jobs.
+    # If verbosity 3 (-v3) is set, "make -j1" is forced
+    #
     if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
-        # calculate Number of CPUs (cores) for -j option, set to "1" if empty
-        CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
-        [[ -z "$CORE_NO" ]] && CORE_NO=1
-        MAKE_OPTIONS="$MAKE_OPTIONS -j${CORE_NO}"
+        MAKE_OPTIONS="$MAKE_OPTIONS -j${JOBS}"
         [[ 1 != "$DEBUG" || 1 = "$SILENT" ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
         # highest verbosity level - use -j1 for a better readability
@@ -655,7 +657,7 @@ function call_make {
         echo
 
         # Misc
-        for V in MAKECMD XSLTPROCESSOR XML_CATALOG_FILES; do
+        for V in MAKE_CMD XSLTPROCESSOR XML_CATALOG_FILES; do
             printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
         done
         echo -e "\n---------------\n"

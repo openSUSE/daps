@@ -265,6 +265,11 @@ else
     VERBOSITY=0
 fi
 
+# Set the maximum number of concurrent jobs to the number of cores
+# If egrep does not return somethiong usefule, set it to "2" as a sane default
+JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
+[[ -z $JOBS ]] && JOBS=2
+
 #---------------------------------------------------
 # SUBCOMMANDS
 #
@@ -677,17 +682,24 @@ Global Options:
   --fb_styleroot            Fallback styleroot directories. Can only be used in
                             conjunction with --styleroot. By default, the
                             DocBook stylesheets are used as a fallback if
-                            custom styles for an output format are  not present.
+                            custom styles for an output format are not present.
                             With this option you can specify a list of
                             alternative fallbacks (space separated absolute
                             paths). The directories will be tested in the order
                             specified, the first one that applies to the
                             requested format, will be used.  The original
                             DocBook stylesheets will be used as a last resort.
-                            Useful if you have forks of your custom stylesheets.
+                            Useful if you have forks of your custom
+                            stylesheets.
   --force                   Force a rebuild of the document even when an
                             up-to-date version exists.
   --help, -h                Help
+  --jobs                    Specify how many parallel jobs to use. Higher
+                            numbers will significantly increase the processing
+                            speed, but will also set your machine under heavy
+                            load, up to a point where it may become
+                            (temporarily) unresponsive.
+                            Default: Use as man jobs as available CPU cores.
   --main, -m                Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
                                   each other.
@@ -1079,7 +1091,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1158,6 +1170,14 @@ while true ; do
             else
                 CALL_SCMDHELP=1
             fi
+            ;;
+        --jobs)
+            if [[ $2 =~ ^[0-9][0-9]*$ ]]; then
+                JOBS="$2"
+            else
+                exit_on_error "Wrong value ($2) for --jobs. Must be a numeric"
+            fi
+            shift 2
             ;;
         -m|--main)
             # make path absolute and strip trailing slash
