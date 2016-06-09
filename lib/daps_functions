@@ -212,6 +212,10 @@ function parse_args {
                 P_NOSTATIC=1
                 shift
                 ;;
+            --norefcheck)
+                P_NOREFCHECK=1
+                shift
+                ;;
             --notrans-dir)
                 P_NOTRANS_DIR=""
                 sanitize_path "$2" "P_NOTRANS_DIR"
@@ -732,7 +736,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,param:,remarks,rootid:,stringparam:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -747,6 +751,7 @@ function build_pdfs {
         help_help
         help_meta
         help_name
+        help_norefcheck
         help_param
         help_remarks
         help_rootid
@@ -762,6 +767,7 @@ function build_pdfs {
     [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
     [[ 1 = "$P_CROPMARKS" ]]   && export CROPMARKS=1
     [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -793,7 +799,7 @@ function build_html_jsp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,norefcheck,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -809,6 +815,7 @@ function build_html_jsp {
         help_jsp
         help_meta
         help_name
+        help_norefcheck
         help_nostatic
         help_param
         help_remarks
@@ -828,6 +835,7 @@ function build_html_jsp {
     # usemeta implies draft mode
     [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
     [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ 1 = "$P_HTML5" ]]       && export HTML5=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -859,7 +867,7 @@ function webhelp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,norefcheck,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -872,6 +880,7 @@ function webhelp {
         help_draft
         help_help
         help_name
+        help_norefcheck
         help_nosearch
         help_nostatic
         help_param
@@ -897,6 +906,7 @@ function webhelp {
     [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
     [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
     [[ 1 = "$P_NOSEARCH" ]]    && export WH_SEARCH="no"
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -927,7 +937,7 @@ function build_epub {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="check,css:,epub3,help,name:,param:,remarks,rootid:,statdir:,stringparam:"
+    LONG_OPTS="check,css:,epub3,help,name:,norefcheck,param:,remarks,rootid:,statdir:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -940,6 +950,7 @@ function build_epub {
         help_epub3
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_statdir
@@ -950,6 +961,7 @@ function build_epub {
 
     [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
     [[ 1 = "$P_EPUB3" ]]  && export EPUB3=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
@@ -984,7 +996,7 @@ function build_man {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nogzip,param,rootid:,stringparam:,subdirs"
+    LONG_OPTS="help,nogzip,norefcheck,param,rootid:,stringparam:,subdirs"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -994,6 +1006,7 @@ function build_man {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -1002,9 +1015,10 @@ function build_man {
         exit 0
     fi
 
-    [[ -n "$P_NOGZIP" ]]    && export GZIP_MAN="no"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_SUBDIRS" ]]   && export MAN_SUBDIRS="yes"
+    [[ -n "$P_NOGZIP" ]]     && export GZIP_MAN="no"
+    [[ -n "$P_NOREFCHECK" ]] && export NOREFCHECK="1"
+    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
+    [[ -n "$P_SUBDIRS" ]]    && export MAN_SUBDIRS="yes"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1021,7 +1035,7 @@ function build_text {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="ignore-styleroot,help,name:,param:,rootid:,stringparam:"
+    LONG_OPTS="ignore-styleroot,help,name:,norefcheck,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1032,6 +1046,7 @@ function build_text {
         help_ignore-styleroot
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -1041,6 +1056,7 @@ function build_text {
 
     [[ 1 = "$P_TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="yes"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -1053,7 +1069,7 @@ function build_text {
 #
 # Generic BUILD function
 #
-# Subcommands: every commands that does not fit elsewhere
+# Subcommands: all commands that does not fit elsewhere
 #
 ###########################################################################
 function build_generic {
@@ -1062,7 +1078,7 @@ function build_generic {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,name:,param:,rootid:,stringparam:"
+    LONG_OPTS="help,name:,norefcheck,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1072,6 +1088,7 @@ function build_generic {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -1080,6 +1097,7 @@ function build_generic {
     fi
 
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -1101,7 +1119,7 @@ function bigfile {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,name:,param:,rootid:,stringparam:,novalid"
+    LONG_OPTS="help,name:,norefcheck,param:,rootid:,stringparam:,novalid"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1111,6 +1129,7 @@ function bigfile {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -1120,6 +1139,7 @@ function bigfile {
     fi
 
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -1692,7 +1712,7 @@ function comments_remarks {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,remarks"
+    LONG_OPTS="help,norefcheck,remarks"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1700,12 +1720,14 @@ function comments_remarks {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_norefcheck
         help_remarks
         echo
         exit 0
     fi
 
-    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && NOREFCHECK=1
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -2684,10 +2706,21 @@ EOF
 function help_nopdf {
     cat <<EOF
     --nopdf                   Deactivates creating the color-pdf. Useful when
-                              \"locdropping\" a complete set where you
+                              "locdropping" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
                               Default: PDF is created
+EOF
+}
+function help_norefcheck {
+    cat <<EOF
+    --norefcheck              Disables checking internal links
+                              (ID/IDREF/IDREFS) and thus allows to build
+                              or validate with e.g. xref-links pointing
+                              to non-existing IDs.
+                              This option only affects DocBook5 sources and is
+                              ignored when processing DocBook4.
+                              Default: unset
 EOF
 }
 function help_nosearch {
