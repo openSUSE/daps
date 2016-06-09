@@ -51,9 +51,6 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
-    DISTVER
-    PRODUCTNAME
-    PRODUCTNAMEREG
     ASPELL_EXTRA_DICT
     ASPELL_LANG
     ASPELL_SKIP_TAGS
@@ -70,6 +67,7 @@ VARLIST=(
     DB5TODB4NH
     DBNOCONV
     DEBUG
+    DISTVER
     DOC_DIR
     DAPSROOT
     DAPSROOT_DEFAULT
@@ -83,7 +81,6 @@ VARLIST=(
     DRAFT
     DRAFT_STR
     EPUB3
-    EPUBCHECK
     EPUB_CSS
     EXPORT_DIR
     FALLBACK_STYLEROOT
@@ -120,10 +117,15 @@ VARLIST=(
     NAME
     NODC
     NOENT
+    NOEPUB
     NOGZIP
+    NOHTML
     NOIMG
     NOPDF
+    NOSEARCH
     NOSET
+    NOSTATIC
+    NOVALID
     NOXML
     OPTIPNG
     PAGEFILES
@@ -147,6 +149,7 @@ VARLIST=(
     PROFWORDSIZE
     REMARKS
     REMARK_STR
+    RESULTCHECK
     ROOTID
     SETDATE
     SHOW
@@ -280,7 +283,7 @@ fi
 declare -a SUBCOMMANDS
 declare -a HELP_SUBCOMMAND
 
-SUBCOMMANDS+=("bigfile=build_generic")
+SUBCOMMANDS+=("bigfile=bigfile")
 HELP_SUBCOMMAND+=("bigfile=Creates a single XML file (bigfile) from the MAIN-file referenced in the\nDC-file or specified on the command line by following all xi:includes.\nIf a ROOTID is specified, all xref-links pointing to locations outside the\nscope defined by the ROOTID, are replaced by text-links.")
 
 SUBCOMMANDS+=("checklink=checklink")

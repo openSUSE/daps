@@ -217,6 +217,10 @@ function parse_args {
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
                 ;;
+            --novalid)
+                P_NOVALID=1
+                shift
+                ;;
             --noxml)
                 P_LIST_NOXML=1
                 shift
@@ -950,10 +954,10 @@ function build_epub {
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
 
-    # Checking ePUBs requires a minimum verbosity level of 1
+    # Checking the result requires a minimum verbosity level of 1
     if [[ 1 = "$P_CHECK" ]]; then
         [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
-        export EPUBCHECK="yes"
+        export RESULTCHECK=1
     fi
 
     if [[ -n "$P_CSS" ]]; then
@@ -1080,6 +1084,54 @@ function build_generic {
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# Bigfile
+#
+# Subcommand: bigfile
+#
+###########################################################################
+function bigfile {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="help,name:,param:,rootid:,stringparam:,novalid"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_help
+        help_name
+        help_param
+        help_rootid
+        help_stringparam
+        help_novalid
+        echo
+        exit 0
+    fi
+
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    # If --novalid was called, a validation check is automatically
+    # performed
+    # Checking the result requires a minimum verbosity level of 1
+    if [[ 1 = "$P_NOVALID" ]]; then
+        [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
+        export NOVALID=1
+    fi
 
     call_make "$SUB_CMD" "$@"
 }
@@ -2360,9 +2412,8 @@ $2\n"
 
 function help_check {
     cat <<EOF
-    --check                   Validate the resulting ePUB document.
-                              Useful when developing stylesheets. Implies a verbosity
-                              level of at least 1.
+    --check                   Validate the resulting document.
+                              Implies a verbosity level of at least 1.
                               Default: unset
 EOF
 }
@@ -2674,6 +2725,16 @@ function help_notrans-dir {
                               Optional. If not specified, the dirname of the
                               DC-file is used.
                               Default: DC-file directory
+EOF
+}
+function help_novalid {
+    cat <<EOF
+    --novalid                 Do not perform a validation check on the
+                              (profiled) sources. However, they need to be
+                              well-formed.
+                              Implies a validation check on the resulting
+                              bigfile.
+                              Default: unset
 EOF
 }
 function help_noxml {

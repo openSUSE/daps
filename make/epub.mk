@@ -126,7 +126,7 @@ endif
 .PHONY: epub
 epub: $(shell if [[ $$(expr match "$(EPUB_TMPDIR)" "$(TMP_DIR)/epub_") -gt 0 && -d "$(EPUB_TMPDIR)" ]]; then rm -r "$(EPUB_TMPDIR)"; fi 2>&1 >/dev/null)
 epub: list-images-missing
-ifeq "$(EPUBCHECK)" "yes"
+ifeq "$(RESULTCHECK)" "1"
   epub: epub-check
 endif
 epub: $(EPUB_RESULT)
