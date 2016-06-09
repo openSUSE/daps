@@ -22,6 +22,10 @@
      If an article or book does NOT contain an @id/@xml:id, it won't be
      included in the output format. In this case, the stylesheet
      prints a warning.
+     This would only be fixable by running the .page generation after the
+     generation of the HTML files: Generated IDs are not predictable
+     and differ between runs. Currently, the .page generation runs before
+     the actual HTML is generated.
 
      Copyright (C) 2012-2015 SUSE Linux GmbH
 
@@ -93,7 +97,6 @@
   </xsl:template>
 
   <xsl:template match="/*">
-    <!-- FIXME? This template currently matches "article" too. -->
     <xsl:message terminate="yes">ERROR: Mallard page creation: Unknown root element.</xsl:message>
    </xsl:template>
 
