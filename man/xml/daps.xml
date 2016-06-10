@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE refentry PUBLIC 
+<!DOCTYPE refentry PUBLIC
    "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
@@ -41,11 +41,6 @@
    </author>
    <author>
     <contrib>Developer</contrib>
-    <firstname>Curtis</firstname>
-    <surname>Graham</surname>
-   </author>
-   <author>
-    <contrib>Developer</contrib>
     <firstname>Stefan</firstname>
     <surname>Knorr</surname>
    </author>
@@ -73,7 +68,7 @@
    <arg choice="plain">-d <replaceable>DC-file</replaceable></arg>
    <arg choice="opt"><replaceable>GLOBAL OPTIONS</replaceable></arg>
    <arg choice="plain">subcommand</arg>
-   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg> 
+   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg>
   </cmdsynopsis>
 
   <cmdsynopsis>
@@ -81,7 +76,7 @@
    <arg choice="plain">--main <replaceable>MAIN-file</replaceable></arg>
    <arg choice="opt"><replaceable>GLOBAL OPTIONS</replaceable></arg>
    <arg choice="plain">subcommand</arg>
-   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg> 
+   <arg choice="opt"><replaceable>COMMAND OPTIONS</replaceable></arg>
   </cmdsynopsis>
  </refsynopsisdiv>
 
@@ -91,7 +86,7 @@
     DAPS contains a set of stylesheets, scripts and makefiles that enable
     you to create HTML, PDF, ePUB and other formats from DocBook XML with a
     single command. It also contains tools to generate profiled source
-    tarballs for distributing your XML sources for translation or review. 
+    tarballs for distributing your XML sources for translation or review.
    </para>
    <para>
     DAPS also includes tools that assist you when writing DocBook XML:
@@ -106,7 +101,7 @@
     <option>help</option></command>
    </para>
   </refsect1>
- 
+
  <refsect1 id="daps.globaloptions">
   <title>Global Options</title>
   <variablelist>
@@ -183,11 +178,34 @@
     </listitem>
    </varlistentry>
    <varlistentry>
+    <term><option>--jobs</option></term>
+    <listitem>
+     <para>
+      Specify how many parallel jobs to use. Higher numbers will significantly
+      increase the processing speed, but will also set your machine under
+      heavy load, up to a point where it may become (temporarily)
+      unresponsive.  Default: Use as man jobs as available CPU cores.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term><option>--main, -m</option></term>
     <listitem>
      <para>
       Path to the main file defining your document. Note: Options --main and
       --docconfig exclude each other.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>--schema</option></term>
+    <listitem>
+     <para>
+      URN to a DocBook 5 schema that is to be used for validation. Will be
+      ignored when validating DocBook 4 documents.  Note: To validate with a
+      local schema, specify an absolute path with the
+      <literal>file://</literal> prefix
+      (e.g. <literal>file:///foo/schema.rnc</literal>)
      </para>
     </listitem>
    </varlistentry>
@@ -244,7 +262,7 @@
    </varlistentry>
   </variablelist>
  </refsect1>
- 
+
  <refsect1 id="daps.commands">
   <title>Subcommands</title>
   <variablelist>
@@ -502,6 +520,14 @@
       </para>
      </listitem>
     </varlistentry>
+    <varlistentry>
+     <term>xmlformat</term>
+     <listitem>
+      <para>
+       Prettify the XNL source files using <command>daps-xmlformat</command>.
+      </para>
+     </listitem>
+    </varlistentry>
    </variablelist>
   </refsect2>
   <refsect2>
@@ -532,6 +558,16 @@
    <title>Debugging</title>
    <variablelist>
     <varlistentry>
+     <term>bigfile</term>
+     <listitem>
+      <para>
+       Creates a single <quote>big</quote> XML file by resolving
+       xi:includes. Useful for detecting validation errors that cannot be
+       found otherwise.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
      <term><option>dapsenv</option></term>
      <listitem>
       <para>
@@ -557,7 +593,7 @@
    </variablelist>
   </refsect2>
  </refsect1>
-  
+
  <refsect1 id="daps.examples">
   <title>Examples</title>
   <variablelist>
@@ -657,6 +693,5 @@
      </varlistentry>-->
    </variablelist>
  </refsect1>
-  
-</refentry>
 
+</refentry>
