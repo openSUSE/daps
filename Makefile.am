@@ -135,6 +135,9 @@ dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
 
 # DATA
+if !CATALOG_EDIT		
+dist_catalog_DATA   = $(DAPS_CATALOG)		
+endif
 dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
