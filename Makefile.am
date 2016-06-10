@@ -72,7 +72,7 @@ endif
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-envconvert.1 daps-autobuild.1
+MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
