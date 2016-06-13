@@ -78,7 +78,7 @@ function oneTimeTearDown() {
 function test_onlinedocs () {
     local _OD_BUILD_PATH
 
-    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE online-docs 2>/dev/null)
+    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE online-docs --dbnoconv 2>/dev/null)
     assertTrue \
         ' └─ The online-docs command itself failed' \
         "$?"
@@ -173,7 +173,7 @@ function test_onlinedocsRootidNoset () {
 
     clean_build_dir results
 
-    $_DAPSEXEC -v0 -d $_DCFILE --debug online-docs --rootid "$_ROOTID" --noset >/dev/null 2>&1
+    $_DAPSEXEC -v0 -d $_DCFILE --debug online-docs --rootid "$_ROOTID" --noset --dbnoconv >/dev/null 2>&1
     assertTrue \
         ' └─ Building the the online-docs with --rootid failed.' \
         "$?"
@@ -197,7 +197,7 @@ function test_onlinedocsName () {
 
     clean_build_dir results
 
-    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE online-docs --name $_NAME 2>/dev/null)
+    _OD_BUILD_PATH=$($_DAPSEXEC -v0 -d $_DCFILE online-docs --name $_NAME --dbnoconv 2>/dev/null)
     assertTrue \
         ' └─ Building online-docs with --name failed' \
         "$?"
@@ -222,7 +222,7 @@ function test_onlinedocsExportdir () {
 
     clean_build_dir results
 
-    _OD_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE online-docs --export-dir $_EXPORT_DIR 2>/dev/null)
+    _OD_BUILD_PATH=$($_DAPSEXEC -d $_DCFILE online-docs --export-dir $_EXPORT_DIR --dbnoconv 2>/dev/null)
     assertTrue \
         ' └─ Building the online-docs with --export-dir failed' \
         "$?"
@@ -239,7 +239,7 @@ function test_onlinedocsDraft () {
     local _DCFILE_DRAFT
     _DCFILE_DRAFT="${_DOC_DIR}/DC-booktest_draft"
 
-    $_DAPSEXEC -d $_DCFILE_DRAFT online-docs >/dev/null 2>&1
+    $_DAPSEXEC -d $_DCFILE_DRAFT online-docs --dbnoconv >/dev/null 2>&1
     assertTrue \
         ' └─ Building online docs with DRAFT="yes" in the DC-file failed.' \
         "$?"
