@@ -14,7 +14,7 @@
 #------------------------------
 #
 # enable quiet mode, unless --debug is used
-[[ 1 -ne $DEBUG ]] && FOP_DEFAULT_CMD_OPTIONS="-q"
+[[ 1 != "$DEBUG" ]] && FOP_DEFAULT_CMD_OPTIONS="-q"
 
 # Get the first 2 digits from the version number
 # 1.0 -> 10, 1.0.1 -> 10
