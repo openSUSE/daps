@@ -147,7 +147,7 @@
   
   <!-- This stylesheet gets only called once -->
   <xsl:template match="/*" mode="root">
-    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false">
+    <div href="{concat($xml.src.path, $mainfile)}" remap="{local-name()}" text="false"  id="{(@id|@xml:id)[1]}">
         <xsl:copy-of select="@*"/>
         <xsl:apply-templates/>
     </div>
