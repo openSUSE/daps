@@ -7,6 +7,8 @@
 # Author:
 # Thomas Schraitle <toms at opensuse dot org>
 #
+from __future__ import print_function
+
 import os.path
 import sys
 import optparse
@@ -69,7 +71,7 @@ class  MyEntityResolver(handler.EntityResolver):
             #self.ents.append( os.path.abspath(os.path.join( dirname, systemId)) ) 
             self.ents.append(systemId)
         return os.path.abspath(os.path.join( dirname, systemId))
-        
+
       elif publicId.startswith("-//OASIS//") or \
            publicId.startswith("-//Novell//DTD"):
         # Return a temporary filename without meaningful content
@@ -99,7 +101,6 @@ def joinEnts(unique, sep, ents):
     return sep.join(list(set(ents)))
   else:
     return sep.join(ents)
-  
 
 
 def getAllEntities(options, filenames):
@@ -107,7 +108,7 @@ def getAllEntities(options, filenames):
   ents=[]
   for f in filenames:
     if not os.path.exists(f):
-      print >> sys.stderr, "ERROR: File »%s« not found!" % sys.argv[1]
+      print("ERROR: File »%s« not found!" % sys.argv[1], file=sys.stderr)
       sys.exit(10)
     parser = make_parser()# ["drv_expat"]
     cwd=os.getcwd()
@@ -116,7 +117,7 @@ def getAllEntities(options, filenames):
     parser.parse(f)
     os.chdir(cwd)
 
-  print joinEnts(options.unique, options.separator, ents)
+  print(joinEnts(options.unique, options.separator, ents))
 
 
 def getFirstEntity(options, filenames):
@@ -161,7 +162,7 @@ def getFirstEntity(options, filenames):
     # print >> sys.stderr, "Analyzing %s" % f
     name = open(f, 'r')
     lines=[]
-    for i in xrange(50):
+    for i in range(50):
       lines.append( name.readline() )
     lines = "".join(lines)
 
@@ -183,9 +184,9 @@ def getFirstEntity(options, filenames):
         # Find comments without reg expressions:
         cs = Content.find("<!--")
         ce = Content.find("-->")
-        
+
         if (cs < 0 and ce >= 0) or (cs >=0 and ce <0):
-          print >> sys.stderr, "ERROR: Wrong XML comment found!"
+          print("ERROR: Wrong XML comment found!", file=sys.stderr)
           sys.exit(100)
         elif cs >= 0 and ce >= 0:
           # If XML comment found, remove the substring (cs,ce)
@@ -201,8 +202,8 @@ def getFirstEntity(options, filenames):
             ents.append( j[1][1:-1] )
           else:
             ents.append(j[1])
-      
-  print joinEnts(options.unique, options.separator, ents)
+
+  print(joinEnts(options.unique, options.separator, ents))
 
 
 def main():
@@ -223,7 +224,7 @@ def main():
     parser.add_option("-s", "--separator",
         dest="separator",
         help="Set the separator between consequitive filenames (default '%default'). Use '\\n' and '\\t' to insert a CR and TAB character.")
-    
+
     parser.set_defaults( \
         first=False,
         unique=True,
@@ -250,9 +251,9 @@ if __name__=="__main__":
       getFirstEntity(options, args)
     else:
       getAllEntities(options, args)
-  except SAXParseException, e:
-      print >> sys.stderr, e
-      print " ".join(resultEntities)
-  except IOError, e:
-      print >> sys.stderr, e 
+  except SAXParseException as e:
+      print(e, file=sys.stderr)
+      print(" ".join(resultEntities))
+  except IOError as e:
+      print(e, file=sys.stderr)
 

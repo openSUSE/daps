@@ -52,7 +52,8 @@ man: $(BIGFILE)
 	if [ -z $(firstword $(MAN_RESULTS)) ]; then \
 	  ccecho "error" "Fatal error: Cannot create man pages, because the XML sources do not\ncontain refentry sections which define man pages." && false; \
 	else \
-	  $(XSLTPROC) $(ROOTSTRING) $(MANSTRINGS) --stylesheet $(STYLEMAN) \
+	  $(XSLTPROC) $(ROOTSTRING) $(MANSTRINGS) $(DAPSSTRINGS) \
+	    $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) --stylesheet $(STYLEMAN) \
 	    --file $< $(XSLTPROCESSOR) $(ERR_DEVNULL); \
 	fi
   ifneq "$(GZIP_MAN)" "no"

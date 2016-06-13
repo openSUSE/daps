@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Copyright (C) 2012-2015 SUSE Linux GmbH
+#
+# Author:
+# Frank Sundermeyer <fsundermeyer at opensuse dor org>
+# Thomas Schraitle <toms at opensuse dor org>
+#
+# Customized JING executable for DAPS
+
+
+# set initial/maximum java heap size
+#
+#JING_MEMORY=${JING_MEMORY:-"-Xms400 -Xmx500m"}
+
+# set java thread stack size
+# A minimum stack size of 3072 is needed for builds on s390 and ARM
+#
+JING_STACKSIZE=${JING_STACKSIZE:-"-Xss3072K"}
+
+#
+# Default JAVA setup for JING needed by DAPS - do not change
+# To add additional flags/jars/options use
+#
+# JING_JAVA_FLAGS
+# JING_JAVA_JARS
+# JING_JAVA_OPTIONS
+#
+# in the config. These values will be used in addition to the default values
+# specified below
+
+JING_DEFAULT_JAVA_FLAGS="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"
+#JING_DEFAULT_JAVA_JARS="batik-all excalibur/avalon-framework-impl"
+JING_DEFAULT_JAVA_JARS=""
+JING_DEFAULT_JAVA_OPTIONS="$JING_MEMORY $JING_STACKSIZE"
+
+# Call /usr/bin/jing
+#
+ADDITIONAL_FLAGS="$JING_DEFAULT_JAVA_FLAGS $JING_JAVA_FLAGS" \
+  ADDITIONAL_JARS="$JING_DEFAULT_JAVA_JARS $JING_JAVA_JARS" \
+  ADDITIONAL_OPTIONS="$JING_DEFAULT_JAVA_OPTIONS $JING_JAVA_OPTIONS" \
+  jing "$@"

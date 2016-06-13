@@ -71,10 +71,10 @@
     <para>Why does &dapsacr; not talk to me?</para>
    </question>
    <answer>
-    <para>&dapsacr; is less verbose than its predecessor
-      <literal>susedoc</literal>. To get the same level of output as with
-     susedoc 4.x, run <command>daps</command> with the <option>-v</option>
-     option. For more details, use the <option>--debug</option> option. </para>
+    <para>By default &dapsacr; only shows the result of the current subcommnd. 
+     To increase the verbosity run <command>daps</command> with the option
+     <option>-v</option>, <option>-vv</option>, or <option>-vvv</option>.
+     For the highest verbosity, use the <option>--debug</option> option. </para>
    </answer>
   </qandaentry>
   <qandaentry>
@@ -87,8 +87,7 @@
        <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log</filename>.
      A complete log file of the latest
      <command>daps&nbsp;<replaceable>subcommand</replaceable> </command>
-     that was executed is available in <filename>
-      <replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
+     that was executed is available in <filename><replaceable>YOUR_DOC_DIR</replaceable>/build/<replaceable>BOOKNAME</replaceable>/log/make_<replaceable>SUBCOMMAND</replaceable>.log</filename>
     </para>
     <para> In case of an error the complete log file will be shown on the screen
      (STDOUT). </para>

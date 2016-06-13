@@ -89,7 +89,8 @@ EPUB_INLINE_IMAGES := $(subst $(IMG_GENDIR)/color,$(EPUB_INLINE_DIR),$(ONLINE_IM
 #
 EPUB_DIRECTORIES := $(EPUB_TMPDIR) $(EPUB_OEBPS) $(EPUB_STATIC)
 
-EPUBSTRINGS := --stringparam "epub.oebps.dir=OEBPS/" \
+EPUBSTRINGS := --param "show.comments=$(REMARKS)" \
+		--stringparam "epub.oebps.dir=OEBPS/" \
 		--stringparam "epub.metainf.dir=META-INF/"
 
 ifeq "$(IS_STATIC)" "static"
@@ -125,7 +126,7 @@ endif
 .PHONY: epub
 epub: $(shell if [[ $$(expr match "$(EPUB_TMPDIR)" "$(TMP_DIR)/epub_") -gt 0 && -d "$(EPUB_TMPDIR)" ]]; then rm -r "$(EPUB_TMPDIR)"; fi 2>&1 >/dev/null)
 epub: list-images-missing
-ifeq "$(EPUBCHECK)" "yes"
+ifeq "$(RESULTCHECK)" "1"
   epub: epub-check
 endif
 epub: $(EPUB_RESULT)
@@ -162,9 +163,10 @@ $(EPUB_CONTENT_OPF): $(EPUB_BIGFILE)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "   Creating HTML files for EPUB"
   endif
-	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) $(PARAMS) \
-	  $(STRINGPARAMS)  $(XSLTPARAM) --stylesheet $(STYLEEPUB) \
-	  --file $< $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL))
+	(cd $(EPUB_TMPDIR) && $(XSLTPROC) $(EPUBSTRINGS) $(DAPSSTRINGS) \
+	  $(PARAMS) $(XSLTPARAM) $(STRINGPARAMS)  \
+	  --stylesheet $(STYLEEPUB) --file $< $(XSLTPROCESSOR) \
+	  $(DEVNULL) $(ERR_DEVNULL))
 
 #---------------
 # Inline Graphics

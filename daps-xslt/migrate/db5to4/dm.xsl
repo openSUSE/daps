@@ -15,14 +15,13 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   exclude-result-prefixes="dm">
 
-  <xsl:strip-space elements="*"/>
 
   <xsl:template match="dm:docmanager|dm:docmanager/*">
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="dm:docmanager/dm:bugtracker">
-    <xsl:processing-instruction name="suse-bugtracker">
+    <xsl:processing-instruction name="dbsuse-bugtracker">
       <xsl:text>&#10;   </xsl:text>
       <xsl:apply-templates/>
     </xsl:processing-instruction>

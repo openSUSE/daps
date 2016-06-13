@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -90,8 +90,8 @@ function parse_args {
                 P_DB5TODB4NH=1
                 shift
                 ;;
-            --dbtonovdoc)
-                P_DBTONOVDOC=1
+            --dbnoconv)
+                P_DBNOCONV=1
                 shift
                 ;;
             --documentfiles)
@@ -212,10 +212,18 @@ function parse_args {
                 P_NOSTATIC=1
                 shift
                 ;;
+            --norefcheck)
+                P_NOREFCHECK=1
+                shift
+                ;;
             --notrans-dir)
                 P_NOTRANS_DIR=""
                 sanitize_path "$2" "P_NOTRANS_DIR"
                 shift 2
+                ;;
+            --novalid)
+                P_NOVALID=1
+                shift
                 ;;
             --noxml)
                 P_LIST_NOXML=1
@@ -438,6 +446,33 @@ function init_env {
 
 ###########################################################################
 #
+# Get Stylesheet Version
+#
+###########################################################################
+
+function get_stylesheet {
+    #
+    # takes an URN to VERSION.xsl as a required parameter
+
+    local STYLE_FILE STYLE_URN STYLE_VERSION
+
+    STYLE_URN=$1
+
+    [[ -z $STYLE_URN ]] && exit_on_error "Function get_stylesheet must be called with an URN"
+
+    # saxon6 (at least on openSUSE) does not properly resolve http Urls
+    # (because it does not ask the catalog but rather directly accesses
+    # the URl) we need to resolve it via xmlcatalog first
+    #
+    STYLE_FILE=$(xmlcatalog "$XML_MAIN_CATALOG" "$STYLE_URN")
+    STYLE_FILE=${STYLE_FILE##*file://}
+    STYLE_VERSION=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl" --file "$STYLE_FILE" "$XSLTPROCESSOR" 2>/dev/null || echo "Not available")
+        echo "$STYLE_VERSION"
+}
+
+
+###########################################################################
+#
 # RUN MAKE
 #
 # Set up log writing and verbosity
@@ -445,8 +480,10 @@ function init_env {
 #
 ###########################################################################
 function call_make {
-    local CORE_NO DBSTYLE_FILE DBSTYLE_VERS LOGFILE MAKE_BIN
-    local MAKE_OPTIONS MAKE_CMD STRING SILENT SUB_CMD
+    local COLWIDTH CORE_NO DBSTYLE_FILE DBSTYLE_VERS FB_STYLESHEET_VERS
+    local LOGFILE MAKE_BIN MAKE_OPTIONS MAKE_CMD PROFVAR STRING SILENT
+    local STYLEROOT_VERS SUB_CMD V
+    local -a PROFVARIABLES
 
     # first argument passed to the function is the subcommand
 
@@ -491,11 +528,13 @@ function call_make {
             MAKE_OPTIONS="$MAKE_OPTIONS --debug=b"
         fi
     fi
+
+    # By default the number of parallel jobs for make is set to the number of
+    # CPU cores. This can be overwritten with --jobs.
+    # If verbosity 3 (-v3) is set, "make -j1" is forced
+    #
     if [[ 0 = "$VERBOSITY" || 1 = "$VERBOSITY" || 2 = "$VERBOSITY" ]]; then
-        # calculate Number of CPUs (cores) for -j option, set to "1" if empty
-        CORE_NO=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
-        [[ -z "$CORE_NO" ]] && CORE_NO=1
-        MAKE_OPTIONS="$MAKE_OPTIONS -j${CORE_NO}"
+        MAKE_OPTIONS="$MAKE_OPTIONS -j${JOBS}"
         [[ 1 != "$DEBUG" || 1 = "$SILENT" ]] && MAKE_OPTIONS="$MAKE_OPTIONS -s"
     else
         # highest verbosity level - use -j1 for a better readability
@@ -510,77 +549,118 @@ function call_make {
 
     # Variable settings summary printed on debug and high verbosity mode
     if [[ 2 -le $VERBOSITY && 1 != "$SILENT" ]]; then
-        # get stylesheet version (ticket #151)
-        # saxon6 (at least on openSUSE) does not properly resolve http Urls
-        # (because it does not ask the catalog but rather directly accesses
-        # the URl) we need to resolve it via xmlcatalog first
+    # list of profiling variables for the debug output
+    #
+        PROFVARIABLES=(
+            PROFARCH
+            PROFAUDIENCE
+            PROFCONDITION
+            PROFCONFORMANCE
+            PROFLANG
+            PROFOS
+            PROFOUTPUTFORMAT
+            PROFREVISION
+            PROFREVISIONFLAG
+            PROFROLE
+            PROFSECURITY
+            PROFSTATUS
+            PROFUSERLEVEL
+            PROFVENDOR
+            PROFWORDSIZE )
+
+        # column width debug output (for printf)
+        COLWIDTH=20
+
+        # get DocBook stylesheet version
         #
-        DBSTYLE_FILE=$(xmlcatalog "$XML_MAIN_CATALOG" http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl)
-        DBSTYLE_FILE=${DBSTYLE_FILE##*file://}
-        DBSTYLE_VERS=$($XSLTPROC --stylesheet "$DAPSROOT/daps-xslt/common/get-dbxslt-version.xsl" --file "$DBSTYLE_FILE" "$XSLTPROCESSOR" 2>/dev/null || echo "Not available")
+        DBSTYLE_VERS=$(get_stylesheet "http://docbook.sourceforge.net/release/xsl/current/VERSION.xsl")
 
-        cat <<EOF
----------------
-           DOC_DIR: $DOC_DIR
-         BUILD_DIR: $BUILD_DIR
-          DAPSROOT: $DAPSROOT
-           DOCCONF: $DOCCONF
-              BOOK: $BOOK
+        STYLEROOT_VERS=$(get_stylesheet "file://${STYLEROOT}/VERSION.xsl")
+        FB_STYLEROOT_VERS=$(get_stylesheet "file://${FALLBACK_STYLEROOT}/VERSION.xsl")
 
-   DOCBOOK_VERSION: $DOCBOOK_VERSION
-      DOCBOOK5_RNG: $DOCBOOK5_RNG
-EOF
+        echo -e "---------------\n"
+        # DAPS version
+        printf "%${COLWIDTH}s: %s\n" "$MY_NAME VERSION" "$VERSION"
 
+        echo
+
+        # Directories
+        for V in DOC_DIR BUILD_DIR DAPSROOT DOCCONF BOOK; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+
+        echo
+
+        # Profiling
+        if [[ -z $PROFILE_URN ]]; then
+            printf "%${COLWIDTH}s: %s\n" "PROFILING" "Off"
+        else
+            printf "%${COLWIDTH}s: %s\n" "PROFILING" "On"
+            # show all profiling variables and their values
+            for PROFVAR in ${PROFVARIABLES[*]}; do
+                [[ -n ${!PROFVAR} ]] && printf "%${COLWIDTH}s: %s\n" "$PROFVAR" "${!PROFVAR}"
+            done
+        fi
+
+        echo
+
+        # DocBook
+        for V in DOCBOOK_VERSION DOCBOOK5_RNG DBSTYLE_VERS; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+
+        echo
+
+        # Styleroot / Fallback styleroot
         if [[ $SUB_CMD =~ text && "yes" == "$TXT_IGNORE_STYLEROOT" || 1 = "$P_TXT_IGNORE_STYLEROOT" ]]; then
-            echo "         STYLEROOT: $DOCBOOK_STYLES"
+            printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
         else
             if [[ -n "$STYLEDEVEL" ]]; then
-                echo "         STYLEROOT: $STYLEDEVEL"
+                printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$STYLEDEVEL"
             else
                 if [[ -n "$STYLEROOT" ]]; then
-                    echo "         STYLEROOT: $STYLEROOT"
+                    printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$STYLEROOT"
                 else
-                    echo "         STYLEROOT: $DOCBOOK_STYLES"
+                   printf "%${COLWIDTH}s: %s\n" "STYLEROOT" "$DOCBOOK_STYLES"
                 fi
             fi
+
+            printf "%${COLWIDTH}s: %s\n" "STYLEROOT_VERS" "$STYLEROOT_VERS"
+
             if [[ -n "$FALLBACK_STYLEROOT" ]]; then
-                echo "FALLBACK_STYLEROOT: $FALLBACK_STYLEROOT"
+                printf "%${COLWIDTH}s: %s\n" "FALLBACK_STYLEROOT" "$FALLBACK_STYLEROOT"
             else
                 # no fallback if STYLEROOT is not set
                 if [[ -n "$STYLEROOT" ]]; then
-                    echo "FALLBACK_STYLEROOT: $DOCBOOK_STYLES"
+                    printf "%${COLWIDTH}s: %s\n" "FALLBACK_STYLEROOT" "$DOCBOOK_STYLES"
                 fi
             fi
+            printf "%${COLWIDTH}s: %s\n" "FB_STYLEROOT_VERS" "$FB_STYLEROOT_VERS"
         fi
 
-        cat <<EOF
-          EPUB_CSS: $EPUB_CSS
-          HTML_CSS: $HTML_CSS
+        # CSS
+        printf "%${COLWIDTH}s: %s\n" "EPUB_CSS" "$EPUB_CSS"
+        printf "%${COLWIDTH}s: %s\n" "HTML_CSS" "$HTML_CSS"
 
-     PDF FORMATTER: $FORMATTER
-EOF
+        echo
 
+        # PDF
+        printf "%${COLWIDTH}s: %s\n" "PDF FORMATTER" "$FORMATTER"
         if [[ "fop" = "$FORMATTER" ]]; then
-            cat <<EOF
- FORMATTER WRAPPER: $FOP_WRAPPER
-  FORMATTER CONFIG: $FOP_CONFIG_FILE
-EOF
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$FOP_WRAPPER"
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG" "$FOP_CONFIG_FILE"
         elif [[ "xep" = "$FORMATTER" ]]; then
-            cat <<EOF
-  FORMATTER WRAPPER: $XEP_WRAPPER
-  FORMATTER CONFIG: $XEP_CONFIG_FILE
-EOF
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER WRAPPER" "$XEP_WRAPPER"
+            printf "%${COLWIDTH}s: %s\n" "FORMATTER CONFIG:" "$XEP_CONFIG_FILE"
         fi
 
-        cat <<EOF
-           MAKECMD: $MAKE_CMD
-     XSLTPROCESSOR: $XSLTPROCESSOR
- XML_CATALOG_FILES: $XML_CATALOG_FILES
+        echo
 
-      DAPS VERSION: $VERSION
-DB-STYLESHEET-VERS: $DBSTYLE_VERS
----------------
-EOF
+        # Misc
+        for V in MAKE_CMD XSLTPROCESSOR XML_CATALOG_FILES; do
+            printf "%${COLWIDTH}s: %s\n" "$V" "${!V}"
+        done
+        echo -e "\n---------------\n"
     fi
 
     if [[ 1 = "$WRITE_LOG" ]]; then
@@ -658,7 +738,7 @@ function build_pdfs {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,param:,remarks,rootid:,stringparam:,xsltparam:"
+    LONG_OPTS="cropmarks,draft,formatter:,help,grayscale,meta,name:,norefcheck,param:,remarks,rootid:,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -673,6 +753,7 @@ function build_pdfs {
         help_help
         help_meta
         help_name
+        help_norefcheck
         help_param
         help_remarks
         help_rootid
@@ -688,6 +769,7 @@ function build_pdfs {
     [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
     [[ 1 = "$P_CROPMARKS" ]]   && export CROPMARKS=1
     [[ 1 = "$P_GRAYSCALE" ]]   && export GRAYSCALE=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -719,7 +801,7 @@ function build_html_jsp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,html5,jsp,name:,norefcheck,nostatic,meta,param:,remarks,rootid:,single,statdir:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -735,6 +817,7 @@ function build_html_jsp {
         help_jsp
         help_meta
         help_name
+        help_norefcheck
         help_nostatic
         help_param
         help_remarks
@@ -754,6 +837,7 @@ function build_html_jsp {
     # usemeta implies draft mode
     [[ 1 = "$P_META" ]]        && META=1 DRAFT="yes"
     [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ 1 = "$P_HTML5" ]]       && export HTML5=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
@@ -785,7 +869,7 @@ function webhelp {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="clean,css:,draft,help,name:,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
+    LONG_OPTS="clean,css:,draft,help,name:,norefcheck,nosearch,nostatic,param:,remarks,rootid:,static,stringparam:,xsltparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -798,6 +882,7 @@ function webhelp {
         help_draft
         help_help
         help_name
+        help_norefcheck
         help_nosearch
         help_nostatic
         help_param
@@ -823,6 +908,7 @@ function webhelp {
     [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
     [[ 1 = "$P_NOSTATIC" ]]    && export STATIC_HTML=0
     [[ 1 = "$P_NOSEARCH" ]]    && export WH_SEARCH="no"
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -853,7 +939,7 @@ function build_epub {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="check,css:,epub3,help,name:,param:,remarks,rootid:,statdir:,stringparam:"
+    LONG_OPTS="check,css:,epub3,help,name:,norefcheck,param:,remarks,rootid:,statdir:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -866,6 +952,7 @@ function build_epub {
         help_epub3
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_statdir
@@ -876,14 +963,15 @@ function build_epub {
 
     [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
     [[ 1 = "$P_EPUB3" ]]  && export EPUB3=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && export NOREFCHECK=1
     [[ -n "$P_NAME" ]]      && export PDFNAME="$P_NAME" BOOK="$P_NAME"
     [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
     [[ -n "$P_STATIC_DIR" ]] && export STATIC_DIR="$P_STATIC_DIR"
 
-    # Checking ePUBs requires a minimum verbosity level of 1
+    # Checking the result requires a minimum verbosity level of 1
     if [[ 1 = "$P_CHECK" ]]; then
         [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
-        export EPUBCHECK="yes"
+        export RESULTCHECK=1
     fi
 
     if [[ -n "$P_CSS" ]]; then
@@ -910,7 +998,7 @@ function build_man {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,nogzip,param,rootid:,stringparam:,subdirs"
+    LONG_OPTS="help,nogzip,norefcheck,param,rootid:,stringparam:,subdirs"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -920,6 +1008,7 @@ function build_man {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_nogzip
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -928,9 +1017,10 @@ function build_man {
         exit 0
     fi
 
-    [[ -n "$P_NOGZIP" ]]    && export GZIP_MAN="no"
-    [[ -n "$P_ROOTID" ]]    && export ROOTID="$P_ROOTID"
-    [[ -n "$P_SUBDIRS" ]]   && export MAN_SUBDIRS="yes"
+    [[ -n "$P_NOGZIP" ]]     && export GZIP_MAN="no"
+    [[ -n "$P_NOREFCHECK" ]] && export NOREFCHECK="1"
+    [[ -n "$P_ROOTID" ]]     && export ROOTID="$P_ROOTID"
+    [[ -n "$P_SUBDIRS" ]]    && export MAN_SUBDIRS="yes"
 
     call_make "$SUB_CMD" "$@"
 }
@@ -947,7 +1037,7 @@ function build_text {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="ignore-styleroot,help,name:,param:,rootid:,stringparam:"
+    LONG_OPTS="ignore-styleroot,help,name:,norefcheck,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -958,6 +1048,7 @@ function build_text {
         help_ignore-styleroot
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -967,6 +1058,7 @@ function build_text {
 
     [[ 1 = "$P_TXT_IGNORE_STYLEROOT" ]] && export TXT_IGNORE_STYLEROOT="yes"
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
@@ -979,7 +1071,7 @@ function build_text {
 #
 # Generic BUILD function
 #
-# Subcommands: every commands that does not fit elsewhere
+# Subcommands: all commands that does not fit elsewhere
 #
 ###########################################################################
 function build_generic {
@@ -988,7 +1080,7 @@ function build_generic {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,name:,param:,rootid:,stringparam:"
+    LONG_OPTS="help,name:,norefcheck,param:,rootid:,stringparam:"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -998,6 +1090,7 @@ function build_generic {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_help
         help_name
+        help_norefcheck
         help_param
         help_rootid
         help_stringparam
@@ -1006,10 +1099,61 @@ function build_generic {
     fi
 
     [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
     [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
     [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
     [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
     [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# Bigfile
+#
+# Subcommand: bigfile
+#
+###########################################################################
+function bigfile {
+    local SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    SHORT_OPTS="h"
+    LONG_OPTS="help,name:,norefcheck,param:,rootid:,stringparam:,novalid"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_help
+        help_name
+        help_norefcheck
+        help_param
+        help_rootid
+        help_stringparam
+        help_novalid
+        echo
+        exit 0
+    fi
+
+    [[ -n "$P_NAME" ]]         && export PDFNAME="$P_NAME" BOOK="$P_NAME"
+    [[ -n "$P_NOREFCHECK" ]]   && export NOREFCHECK=1
+    [[ -n "$P_ROOTID" ]]       && export ROOTID="$P_ROOTID"
+    [[ -n "$P_STRINGPARAMS" ]] && export STRINGPARAMS="$P_STRINGPARAMS"
+    [[ -n "$P_PARAMS" ]]       && export PARAMS="$P_PARAMS"
+    [[ -n "$P_XSLTPARAM" ]]    && export XSLTPARAM="$XSLTPARAM $P_XSLTPARAM"
+
+    # If --novalid was called, a validation check is automatically
+    # performed
+    # Checking the result requires a minimum verbosity level of 1
+    if [[ 1 = "$P_NOVALID" ]]; then
+        [[ 0 = "$VERBOSITY" ]] && export VERBOSITY=1
+        export NOVALID=1
+    fi
 
     call_make "$SUB_CMD" "$@"
 }
@@ -1059,7 +1203,7 @@ function build_locdrop {
     else
         exit_on_error "Cannot find DEF file \"$P_DEF_FILE\""
     fi
-
+    call_make "profile" "$@" || exit_on_error "Profiling failed"
     call_make "$SUB_CMD" "$@"
 }
 
@@ -1078,7 +1222,7 @@ function online-docs {
     CONV_COUNT=0
 
     SHORT_OPTS="h"
-    LONG_OPTS="db5todb4,db5todb4nh,dbtonovdoc,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
+    LONG_OPTS="db5todb4,db5todb4nh,dbnoconv,export-dir:,formatter:,help,name:,noepub,nohtml,nopdf,noset,rootid:,optipng"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1088,7 +1232,7 @@ function online-docs {
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
         help_db5todb4
         help_db5todb4nh
-        help_dbtonovdoc
+        help_dbnoconv
         help_export-dir
         help_formatter
         help_help
@@ -1140,24 +1284,17 @@ function online-docs {
         $P_DB5TODB4NH)
             let CONV_COUNT++
             ;;
-        $P_DBTONOVDOC)
-            let CONV_COUNT++
-            ;;
     esac
 
-    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4, --db5todb4nh and --dbtonovdoc exclude each other"
+    [[ $CONV_COUNT -gt 1 ]] && exit_on_error "The options --db5todb4 and --db5todb4nh exclude each other"
 
     if [[ 4 = "$DOCBOOK_VERSION" ]]; then
        [[ 1 = "$P_DB5TODB4" || 1 = "$P_DB5TODB4NH" ]] && ccecho "warn" "No DocBook 5 source: --db5todb4/--db5todb4nh is ignored"
     fi
 
-    # Since make does not support and/or in if, it is hard to determine
-    # whether a conversion is needed or not. We have this information
-    # at hand here, so lets set DBNOCONV=1 if no conversion parameter is set
-    [[ 0 = "$CONV_COUNT" ]]    && export DBNOCONV=1
+    [[ 1 = "$P_DBNOCONV" ]]    && export DBNOCONV=1
     [[ 1 = "$P_DB5TODB4" ]]    && export DB5TODB4=1
     [[ 1 = "$P_DB5TODB4NH" ]]  && export DB5TODB4NH=1
-    [[ 1 = "$P_DBTONOVDOC" ]]  && export DBTONOVDOC=1
 
 
     call_make "$SUB_CMD" "$@"
@@ -1577,7 +1714,7 @@ function comments_remarks {
     shift
 
     SHORT_OPTS="h"
-    LONG_OPTS="help,remarks"
+    LONG_OPTS="help,norefcheck,remarks"
 
     parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
     eval set -- "$P_REMAIN_ARGS"
@@ -1585,12 +1722,14 @@ function comments_remarks {
     #------ Computing the values returned from the parser -----
     if [[ 1 = "$P_HELP" ]]; then
         help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_norefcheck
         help_remarks
         echo
         exit 0
     fi
 
-    [[ 1 = "$P_REMARKS" ]]  && REMARKS=1
+    [[ 1 = "$P_REMARKS" ]]     && REMARKS=1
+    [[ 1 = "$P_NOREFCHECK" ]]  && NOREFCHECK=1
 
     # we do not want to write a logfile this time
     WRITE_LOG=0
@@ -1961,14 +2100,14 @@ function spellcheck {
     if [[ -n "$P_LANG" ]]; then
         ASPELL_LANG="$P_LANG"
     else
-    if [[ -z "$ASPELL_LANG" ]]; then
+        if [[ -z "$ASPELL_LANG" ]]; then
             ASPELL_LANG=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-language.xsl" --file "$MAIN" "$XSLTPROCESSOR" 2>/dev/null)
             if [[ -n "$ASPELL_LANG" ]]; then
         ccecho "info" "Using language $ASPELL_LANG."
             else
         exit_on_error "Failed to get language from $MAIN. Please specify it with --lang."
             fi
-    fi
+        fi
     fi
 
     #------------------
@@ -2057,6 +2196,74 @@ function stylecheck {
     fi
 
     call_make "$SUB_CMD" "$@"
+}
+
+###########################################################################
+#
+# XMLformat
+#
+# Prettyfies the XML sources
+#
+###########################################################################
+function xmlformat {
+    local DAPSXMLFORMAT SHORT_OPTS LONG_OPTS SUB_CMD
+    SUB_CMD=$1
+    shift
+
+    # use daps-xmlformat from DAPSROOT if the latter is set
+    [[ "$DAPSROOT" != "$DAPSROOT_DEFAULT" ]] && DAPSXMLFORMAT="${DAPSROOT}/bin/daps-xmlformat"
+
+    SHORT_OPTS="h"
+    LONG_OPTS="file:,help,rootid:"
+
+    parse_args "$SHORT_OPTS" "$LONG_OPTS" "$SUB_CMD" "$@"
+    eval set -- "$P_REMAIN_ARGS"
+
+    #------ Computing the values returned from the parser -----
+    if [[ 1 = "$P_HELP" ]]; then
+        help_scmd_head "$SUB_CMD" "$HELP_SUBCMD"
+        help_file
+        help_help
+        help_rootid
+        echo -e "    NOTES: * Options --file and --rootid exclude one another.\n           * If neither file nor rootid is specified, the rootid\n             from the DC-file is used\n           * $SUB_CMD follows xi:includes\n           * MAIN is ignored when --file or when a ROOTID is specified\n           * This command will directly alter your source xml files!"
+        exit 0
+    fi
+
+    if [[ -z "$P_ROOTID" && -z "$P_FILE" ]]; then
+        if [[ 0 != $VERBOSITY ]]; then
+            ccecho "info" "Neither file nor rootid specified, using rootid from DC-file"
+        fi
+    elif [[ -n "$P_ROOTID" && -n "$P_FILE" ]]; then
+        exit_on_error "Options --file (-f) and --rootid exclude one another.\nPlease specify only one of these options"
+    fi
+
+    # if --file was specified, FILELIST contains just one file
+
+
+    # if --rootid was specified, we need to get the list of files
+
+    if [[ -n "$P_FILE" ]]; then
+        FILELIST[0]="$P_FILE"
+    else
+        [[ -n "$P_ROOTID" ]] && export ROOTID="$P_ROOTID"
+        FILELIST=( $(call_make list-srcfiles silent LIST_NODC=1 LIST_NOENT=1 LIST_NOIMG=1 ) )
+        if [[ 0 != $? ]]; then
+            exit_on_error "Failed to get filelist for ROOTID \"$ROOTID\""
+        fi
+    fi
+
+    # run daps-xmlformat
+    #
+    # ignore $MAIN with --file or --rootid
+    #
+    echo "Prettifying the following files:"
+    for FILE in "${FILELIST[@]}"; do
+        if [[ -n "$P_FILE" || -n "$ROOTID" ]]; then
+            [[ "$FILE" == "$MAIN" ]] && continue
+        fi
+        [[ 0 != "$VERBOSITY" ]] && echo -e "  $FILE"
+        $DAPSXMLFORMAT -i "$FILE" >/dev/null
+    done
 }
 
 
@@ -2155,7 +2362,7 @@ function build_images {
 # for functions with no command line options
 # do not write a log
 function no_opts {
-    local SHORT_OPTS LONG_OPTS SUB_CMD
+    local CURR_DIR SHORT_OPTS LONG_OPTS SUB_CMD
     local SUB_CMD=$1
     shift
 
@@ -2172,7 +2379,18 @@ function no_opts {
     fi
 
     WRITE_LOG=0
-    call_make "$SUB_CMD" "$@"
+    if [[ $SUB_CMD =~ ^clean.* ]]; then
+        #
+        # Use the cd commands to avoid errors when running DAPS from
+        # one of the directories that get removed
+        #
+        CURR_DIR=$(pwd)
+        cd $DOC_DIR > /dev/null
+        call_make "$SUB_CMD" "$@"
+        [[ -d $CURR_DIR ]] && cd $CURR_DIR
+    else
+        call_make "$SUB_CMD" "$@"
+    fi
 }
 
 # error message for deprecated targets
@@ -2218,9 +2436,8 @@ $2\n"
 
 function help_check {
     cat <<EOF
-    --check                   Validate the resulting ePUB document.
-                              Useful when developing stylesheets. Implies a verbosity
-                              level of at least 1.
+    --check                   Validate the resulting document.
+                              Implies a verbosity level of at least 1.
                               Default: unset
 EOF
 }
@@ -2262,12 +2479,20 @@ function help_css {
                               Default: unset
 EOF
 }
+
+function help_dbnoconv {
+    cat <<EOF
+    --dbnoconv                Do not convert to NovDoc, but rather keep
+                              the source format.
+                              Default: Conversion to NovDoc
+EOF
+}
 function help_db5todb4 {
     cat <<EOF
     --db5todb4                Create XML bigfile in DoBook 4 format. This
                               option only applies if the sources are in
                               DocBook5 format.
-                              Default: Same as source
+                              Default: Conversion to NovDoc
 EOF
 }
 function help_db5todb4nh {
@@ -2275,15 +2500,7 @@ function help_db5todb4nh {
     --db5todb4nh              Create XML bigfile in DocBook 4 format without
                               a DOCTYPE header. This option only applies if
                               the sources are in DocBook5 format.
-                              Default: Same as source
-EOF
-}
-function help_dbtonovdoc {
-    cat <<EOF
-    --db5tonovdoc             Create XML bigfile in NovDoc-format. This
-                              option only applies if the sources are in
-                              DocBook5 or DocBook 4 format.
-                              Default: Same as XML source
+                              Default: Conversion to NovDoc
 EOF
 }
 function help_def-file {
@@ -2491,10 +2708,21 @@ EOF
 function help_nopdf {
     cat <<EOF
     --nopdf                   Deactivates creating the color-pdf. Useful when
-                              \"locdropping\" a complete set where you
+                              "locdropping" a complete set where you
                               want to deliver separate PDFs for each book
                               rather than one huge PDF for the whole set.
                               Default: PDF is created
+EOF
+}
+function help_norefcheck {
+    cat <<EOF
+    --norefcheck              Disables checking internal links
+                              (ID/IDREF/IDREFS) and thus allows to build
+                              or validate with e.g. xref-links pointing
+                              to non-existing IDs.
+                              This option only affects DocBook5 sources and is
+                              ignored when processing DocBook4.
+                              Default: unset
 EOF
 }
 function help_nosearch {
@@ -2532,6 +2760,16 @@ function help_notrans-dir {
                               Optional. If not specified, the dirname of the
                               DC-file is used.
                               Default: DC-file directory
+EOF
+}
+function help_novalid {
+    cat <<EOF
+    --novalid                 Do not perform a validation check on the
+                              (profiled) sources. However, they need to be
+                              well-formed.
+                              Implies a validation check on the resulting
+                              bigfile.
+                              Default: unset
 EOF
 }
 function help_noxml {

@@ -132,9 +132,9 @@ $(FOFILE): $(PROFILES) $(PROFILEDIR)/.validate $(DOCFILES) $(STYLEFO)
 	@ccecho "info"  "   Creating fo-file..."
   endif
 	$(XSLTPROC) --xinclude $(FOSTRINGS) $(ROOTSTRING) $(METASTRING) \
-	  $(INDEXSTRING) $(FONTDEBUG) $(XSLTPARAM) $(PARAMS) $(STRINGPARAMS) \
-	  --output $(FOFILE) --stylesheet $(STYLEFO) --file $(PROFILED_MAIN) \
-	  $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
+	  $(INDEXSTRING) $(FONTDEBUG) $(DAPSSTRINGS) $(XSLTPARAM) $(PARAMS) \
+	  $(STRINGPARAMS) --output $(FOFILE) --stylesheet $(STYLEFO) \
+	  --file $(PROFILED_MAIN) $(XSLTPROCESSOR) $(DEVNULL) $(ERR_DEVNULL)
   ifeq "$(VERBOSITY)" "2"
 	@ccecho "info" "Successfully created fo file $(FOFILE)"
   endif

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
    Purpose:
-     Create a grayscaled version of a colored SVG
-     
+     Create a grayscale version of a color SVG.
+
    Parameters:
      * colornames.filename (default: "colornames.xml")
        Contains names and RGB values of colors
-       
+
    Input:
      SVG document
-     
+
    Output:
-     SVG document with grayscaled color
-   
+     Grayscale SVG document
+
    Author:    Thomas Schraitle <toms@opensuse.org>
-   Copyright (C) 2012-2015 SUSE Linux GmbH
-   
+   Copyright (C) 2012-2016 SUSE Linux GmbH
+
 -->
 
 <xsl:stylesheet version="1.0"
@@ -85,7 +85,7 @@
    </xsl:call-template>
   </xsl:variable>
 
-  <xsl:value-of select="floor(($first + $second + $third ) div 3)"/>
+  <xsl:value-of select="floor(($first + $second + $third) div 3)"/>
 
  </xsl:template>
 
@@ -104,8 +104,8 @@
    <xsl:apply-templates mode="svg"/>
   </xsl:variable>
 
-  <xsl:comment> This SVG file is converted from color to gray </xsl:comment>
-  <xsl:comment> with svg.color2grayscale.xsl                  </xsl:comment>
+  <xsl:comment> This SVG file was converted from color to gray </xsl:comment>
+  <xsl:comment> with svg.color2grayscale.xsl                   </xsl:comment>
   <xsl:apply-templates select="exsl:node-set($svg)/*"/>
 
  </xsl:template>
@@ -179,7 +179,7 @@
           <xsl:otherwise>
             <xsl:value-of select="$third"/>
           </xsl:otherwise>
-        </xsl:choose>        
+        </xsl:choose>
       </xsl:variable>
       
       <xsl:variable name="mean" select="concat((($_f + $_s + $_t) div 3)
@@ -195,7 +195,7 @@
         select="$_t"/>'
         mean = '<xsl:value-of select="$mean"/>'
       </xsl:message>-->
-      
+
       <xsl:attribute name="{name()}">
         <xsl:text>rgb(</xsl:text>
         <xsl:value-of select="concat($mean, ',', $mean, ',', $mean)"/>
@@ -205,7 +205,7 @@
    <xsl:otherwise>
      <xsl:attribute name="{name()}">
      <xsl:choose>
-       <xsl:when test="$color.nodes[@name=current()]/@grayvalue != ''">     
+       <xsl:when test="$color.nodes[@name=current()]/@grayvalue != ''">
            <xsl:text>#</xsl:text>
            <xsl:value-of select="$color.nodes[@name=current()]/@grayvalue"/>
        </xsl:when>

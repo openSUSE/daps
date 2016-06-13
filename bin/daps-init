@@ -15,7 +15,6 @@
 #
 function exit_on_error {
     ccecho "error" "ERROR: ${1}" >&2
-    [[ -f $TEMPFILE ]] && rm "$TEMPFILE"
     exit 1;
 }
 
@@ -81,7 +80,6 @@ EOF_helptext
 #
 
 ME=$(basename "$0")
-TEMPFILE=""
 
 trap "exit_on_error '\nCaught SIGTERM/SIGINT'" SIGTERM SIGINT
 
@@ -249,23 +247,21 @@ sed -i "s/§§DATE§§/$DATE/g" "$MAIN"
 # replace TITLE in MAIN
 sed -i "s/§§TITLE§§/$TITLE/g" "$MAIN"
 
-# insert <productname> and <productnumber tags
+# insert <productname> and <productnumber> tags
 
 if [[ -n $PRODUCTNAME ]]; then
     if [[ $DOCBOOKVERSION -eq 5 ]]; then
-        XML_CMD_OPTS="-a /_:${ROOTELEMENT}/_:info/_:title -t elem"
+        XPATH="/_:${ROOTELEMENT}/_:info/_:title"
     else
-        XML_CMD_OPTS="-a /${ROOTELEMENT}/${ROOTELEMENT}info/title -t elem"
+        XPATH="/${ROOTELEMENT}/${ROOTELEMENT}info/title"
     fi
 
-    TEMPFILE=$(mktemp /tmp/daps-init-temp.XXXXXXX 2>/dev/null) || \
-        exit_on_error "Could not create a temporary file to set productname"
-
-    xml ed "$XML_CMD_OPTS" -n productname -v "$PRODUCTNAME" "$MAIN" > "$TEMPFILE"
+    xml ed --inplace --append "$XPATH" --type elem --name productname \
+        --value "$PRODUCTNAME" "$MAIN"
     if [[ -n $PRODUCTNUMBER ]]; then
-        xml ed --inplace "$XML_CMD_OPTS" -n productnumber -v "$PRODUCTNUMBER" "$TEMPFILE"
+        xml ed --inplace --append "$XPATH" --type elem --name productnumber \
+            --value "$PRODUCTNUMBER" "$MAIN"
     fi
-    mv "$TEMPFILE" "$MAIN"
 fi
 
 #----------------

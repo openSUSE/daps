@@ -17,17 +17,33 @@ BIGFILE := $(TMP_DIR)/$(DOCNAME)_bigfile.xml
 
 .PHONY: bigfile
 bigfile: $(BIGFILE)
-	@ccecho "result" "Find the bigfile at:\n$(BIGFILE)"
-
+  ifeq "$(NOVALID)" "1"
+    ifeq "$(DOCBOOK_VERSION)" "4"
+	xmllint --noent --postvalid --noout --xinclude $< && \
+	  ccecho "result" "Successfully validated the bigfile at:\n$<" || \
+	  ccecho "error" "Validation failed for the bigfile at:\n$<"
+    else
+	$(JING_WRAPPER) $(JING_RNC) $(DOCBOOK5_RNG) $< && \
+	  ccecho "result" "Successfully validated the bigfile at:\n$<" || \
+	  ccecho "error" "Validation failed for the bigfile at:\n$<"
+    endif
+  else
+	@ccecho "result" "Find the bigfile at:\n$<"
+  endif
 
 # Creates one big XML file from a profiled MAIN by following the xincludes
 # considering the rootid. If no rootid is given, a bigfile for the whole set
 # is created
+# If --novalid is set, the XML sources are not checked for validness
 # If xref's to non existing locations are found, they are resolved to text
 # links
 #
+
 $(BIGFILE): | $(TMP_DIR)
-$(BIGFILE): $(PROFILES) $(PROFILEDIR)/.validate
+ifneq "$(NOVALID)" "1"
+  $(BIGFILE): $(PROFILEDIR)/.validate
+endif
+$(BIGFILE): $(PROFILES)
   ifeq "$(VERBOSITY)" "2"
 	@echo "   Creating bigfile"
   endif

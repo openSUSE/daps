@@ -13,12 +13,14 @@
        String to separate menu components in titles
      * rootid
        Process only parts of the document
+     * debug.level
+       Level what messages are shown (1=only warnings, 2=infos)
 
    Input:
      DocBook4 document
 
    Output:
-     Novdoc document (subset of DocBook)
+     Novdoc document (subset of DocBook) without remarks
 
    DocBook 5 compatible:
      No, convert your document to DocBook 4 first
@@ -59,14 +61,12 @@
   <xsl:import href="../../common/copy.xsl"/>
   <!--<xsl:import href="rootid.xsl"/>-->
 
-  <xsl:output method="xml" indent="yes"/>
-  <!-- We need to add the internal subset, so adding this is not enough:
+  <xsl:output method="xml" indent="yes"
     doctype-public="-//Novell//DTD NovDoc XML V1.0//EN"
     doctype-system="novdocx.dtd"/>
-  -->
 
-  <xsl:strip-space elements="*"/>
-  <xsl:preserve-space elements="screen"/>
+  <!--<xsl:strip-space elements="*"/>
+  <xsl:preserve-space elements="screen programlisting"/>-->
 
   <!-- ################################################################## -->
   <!-- Parameters                                                         -->
@@ -76,10 +76,15 @@
   <xsl:param name="menuchoice.menu.separator"> > </xsl:param>
   <xsl:param name="menuchoice.separator">+</xsl:param>
   <xsl:param name="rootid"/>
-  <xsl:param name="pi.profile.uri">urn:x-suse:xslt:profiling:novdoc-profile.xsl</xsl:param>
-
+  <xsl:param name="use.doctype4novdoc" select="0"/>
+  <xsl:param name="debug.level" select="4"/>
 
   <xsl:key name="id" match="*" use="@id|@xml:id"/>
+
+  <!-- ################################################################## -->
+  <!-- Suppressed PIs                                                     -->
+  <xsl:template match="processing-instruction('xml-stylesheet')"/>
+
 
   <!-- ################################################################## -->
   <!-- Suppressed attributes                                              -->
@@ -108,14 +113,76 @@
   <xsl:template match="variablelist/@role"/>
 
   <!-- ################################################################## -->
-  <!-- Suppressed Elements                                                -->
+  <!-- Suppressed Elements for Novdoc                                     -->
   <xsl:template match="abstract/title"/>
   <xsl:template match="appendixinfo|chapterinfo|prefaceinfo|partinfo"/>
   <xsl:template match="sect1info|sect2info|sect3info|sect4info|sect5info"/>
+  <xsl:template match="remark"/>
 
 
   <!-- ################################################################## -->
   <!-- Named Templates                                                    -->
+
+  <xsl:template name="message">
+    <xsl:param name="text"/>
+    <xsl:param name="type"/>
+    <xsl:param name="abort" select="0"/>
+
+    <xsl:choose>
+      <xsl:when test="$abort != 0">
+        <xsl:message terminate="yes">
+          <xsl:value-of select="$type"/>
+          <xsl:text>: </xsl:text>
+          <xsl:value-of select="$text"/>
+          <xsl:if test="ancestor-or-self::*/@id">
+            <xsl:text>&#10;  (within ID: </xsl:text>
+            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </xsl:message>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>
+          <xsl:value-of select="$type"/>
+          <xsl:text>: </xsl:text>
+          <xsl:value-of select="$text"/>
+          <xsl:if test="ancestor-or-self::*/@id">
+            <xsl:text>&#10;  (within ID: </xsl:text>
+            <xsl:value-of select="ancestor-or-self::*[@id][1]/@id"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="fatal">
+    <xsl:param name="text"/>
+      <xsl:call-template name="message">
+        <xsl:with-param name="type">FATAL</xsl:with-param>
+        <xsl:with-param name="text" select="$text"/>
+        <xsl:with-param name="abort" select="1"/>
+      </xsl:call-template>
+  </xsl:template>
+  <xsl:template name="warn">
+    <xsl:param name="text"/>
+    <xsl:if test="$debug.level > 1">
+      <xsl:call-template name="message">
+        <xsl:with-param name="type">WARNING</xsl:with-param>
+        <xsl:with-param name="text" select="$text"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template name="info">
+    <xsl:param name="text"/>
+    <xsl:if test="$debug.level > 2">
+      <xsl:call-template name="message">
+        <xsl:with-param name="type">INFO</xsl:with-param>
+        <xsl:with-param name="text" select="$text"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template name="getrootname">
     <xsl:choose>
       <xsl:when test="$rootid !=''">
@@ -133,7 +200,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
 
   <xsl:template name="test4para">
     <xsl:choose>
@@ -197,34 +263,33 @@
 
   <!-- ################################################################## -->
   <!-- Templates                                                          -->
-  <xsl:template match="/">
-    <xsl:apply-templates select="processing-instruction('xml-stylesheet')"/>
-    <xsl:text disable-output-escaping="yes">&#10;&lt;!DOCTYPE </xsl:text>
-   <xsl:call-template name="getrootname"/>
-<xsl:text disable-output-escaping="yes"> PUBLIC "-//Novell//DTD NovDoc XML V1.0//EN" "novdocx.dtd"
-[
-  &lt;!ENTITY % NOVDOC.DEACTIVATE.IDREF "INCLUDE">
-  &lt;!ENTITY % entities SYSTEM "entity-decl.ent">
-  %entities;
-]>
-&#10;</xsl:text>
-    <xsl:apply-templates select="node()[not(self::processing-instruction('xml-stylesheet'))]"/>
-    <!--<xsl:call-template name="process.rootid.node"/>-->
-  </xsl:template>
 
   <xsl:template match="book/title|book/titleabbrev"/><!-- Don't copy -->
   <xsl:template match="bookinfo">
     <bookinfo>
       <xsl:copy-of select="(title|../title)[1]"/>
-      <productname><xsl:text
-        disable-output-escaping="yes">&amp;productname;</xsl:text><!--<xsl:value-of select="subtitle"/>--></productname>
-      <productnumber><xsl:text disable-output-escaping="yes">&amp;productnumber;</xsl:text></productnumber>
-      <date><xsl:processing-instruction name="dbtimestamp">
-          <xsl:text>format="B d, Y"</xsl:text>
-        </xsl:processing-instruction></date>
-      <xsl:copy-of select="legalnotice"/>
+      <xsl:apply-templates select="productname"/>
+      <xsl:apply-templates select="productnumber"/>
+      <xsl:apply-templates select="date"/>
+      <xsl:apply-templates select="legalnotice"/>
       <xsl:apply-templates select="abstract"/>
     </bookinfo>
+  </xsl:template>
+
+  <xsl:template match="chapter|appendix">
+    <xsl:element name="{local-name()}">
+      <xsl:apply-templates select="@*"/>
+      <xsl:copy-of select="(title|*/title)[1]"/>
+      <xsl:choose>
+        <xsl:when test="abstract">
+          <xsl:apply-templates select="abstract"/>
+        </xsl:when>
+        <xsl:when test="*/abstract">
+          <xsl:apply-templates select="*/abstract"/>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:apply-templates select="node()[not(self::title or self::abstract)]"/>
+    </xsl:element>
   </xsl:template>
 
   <!-- ################################################################## -->
@@ -277,12 +342,20 @@
 
   <!-- ################################################################## -->
   <!-- Templates for Inline Elements                                      -->
-  <xsl:template match="application|abbrev|firstterm|glossterm">
+
+  <xsl:template match="application|abbrev|firstterm|para/glossterm">
     <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="command/command">
     <xsl:apply-templates />
+  </xsl:template>
+
+  <xsl:template match="citetitle/*">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Removed citetitle/<xsl:value-of select="local-name()"/> </xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="guilabel|guibutton|guimenuitem|guiicon|guisubmenu">
@@ -291,7 +364,7 @@
     </guimenu>
   </xsl:template>
 
-  <xsl:template match="guilabel/replaceable">
+  <xsl:template match="guilabel/replaceable|guimenu/replaceable">
     <xsl:apply-templates/>
   </xsl:template>
 
@@ -321,14 +394,6 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="entry[&dbinline;] | entry[not(*)][normalize-space(text() != '')]">
-    <entry>
-      <para>
-        <xsl:apply-templates/>
-      </para>
-    </entry>
-  </xsl:template>
-
   <xsl:template match="package">
     <systemitem class="resource">
       <xsl:apply-templates/>
@@ -350,11 +415,27 @@
 
   <!-- ################################################################## -->
   <!-- Templates for Block Elements                                       -->
-  <xsl:template match="mediaobject/textobject">
-    <xsl:message>mediaobject/textobject: <xsl:value-of select="normalize-space(.)"/></xsl:message>
-    <xsl:comment>
-  mediaobject/textobject: <xsl:value-of select="normalize-space(.)"/>
-    </xsl:comment>
+
+  <xsl:template match="mediaobject[textobject]">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Changed order of mediaobject/textobject</xsl:with-param>
+    </xsl:call-template>
+    <mediaobject>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="textobject"/>
+      <xsl:apply-templates select="*[not(self::textobject)]"/>
+    </mediaobject>
+  </xsl:template>
+
+  <xsl:template match="textobject[not(@role)]">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Added missing textobject/@role attribute</xsl:with-param>
+    </xsl:call-template>
+    <textobject>
+      <xsl:apply-templates select="@*"/>
+      <xsl:attribute name="role">description</xsl:attribute>
+      <xsl:apply-templates/>
+    </textobject>
   </xsl:template>
 
   <xsl:template match="mediaobject/textobject[screen]">
@@ -368,9 +449,27 @@
   </xsl:template>
 
   <xsl:template match="simplelist[@type='vert']">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert'] -> itemizedlist</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <itemizedlist>
       <xsl:apply-templates/>
     </itemizedlist>
+  </xsl:template>
+
+  <xsl:template match="simplelist[@type='vert']/member">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted simplelist[@type='vert']/member -> listitem</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+    <listitem>
+      <para>
+        <xsl:apply-templates/>
+      </para>
+    </listitem>
   </xsl:template>
 
   <xsl:template match="itemizedlist[para or note]">
@@ -381,16 +480,31 @@
     </xsl:copy>
   </xsl:template>
 
-  <!--<xsl:template match="member">
+  <xsl:template match="listitem/procedure">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted listitem/procedure -> listitem/itemizedlist</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+    <itemizedlist>
+      <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates/>
+    </itemizedlist>
+  </xsl:template>
+  <xsl:template match="listitem/procedure/step">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">
+        <xsl:text>Converted listitem/procedure/step -> listitem/itemizedlist/listitem</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
     <listitem>
-      <para>
-        <xsl:apply-templates/>
-      </para>
+      <xsl:apply-templates/>
     </listitem>
-  </xsl:template>-->
+  </xsl:template>
 
   <xsl:template match="note/procedure">
     <orderedlist>
+      <xsl:apply-templates select="@*"/>
       <xsl:apply-templates/>
     </orderedlist>
   </xsl:template>
@@ -409,15 +523,22 @@
     <xsl:comment> Removed <xsl:value-of select="name()"/> start</xsl:comment>
     <xsl:choose>
       <xsl:when test="@id">
-        <xsl:message> contains figure.
-        <xsl:text>WARNING: Admonition with id='</xsl:text>
-        <xsl:value-of select="@id"/>
-        <xsl:text>' contains figure.&#10;</xsl:text>
-      </xsl:message>
+        <xsl:call-template name="warn">
+          <xsl:with-param name="text">
+            <xsl:text>Admonition with id='</xsl:text>
+            <xsl:value-of select="@id"/>
+            <xsl:text>' contains figure.&#10;</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:message>WARNING: Removed admonition (<xsl:value-of
-          select="local-name()"/>) and figure, but preserved content</xsl:message>
+        <xsl:call-template name="warn">
+          <xsl:with-param name="text">
+            <xsl:text>Removed admonition (</xsl:text>
+            <xsl:value-of select="local-name()"/>
+            <xsl:text>) and figure, but preserved content</xsl:text>
+          </xsl:with-param>
+        </xsl:call-template>
         <xsl:apply-templates select="*[not(self::title)]"/>
       </xsl:otherwise>
     </xsl:choose>
@@ -428,6 +549,17 @@
     <para><emphasis role="bold">
       <xsl:apply-templates/>
     </emphasis></para>
+  </xsl:template>
+
+  <xsl:template match="step[*[1][not(self::para)]]">
+    <xsl:call-template name="info">
+      <xsl:with-param name="text">Added para at first position under step</xsl:with-param>
+    </xsl:call-template>
+    <step>
+      <xsl:apply-templates select="@*"/>
+      <para/>
+      <xsl:apply-templates/>
+    </step>
   </xsl:template>
 
   <xsl:template match="stepalternatives|stepalternatives/step/substeps">
@@ -478,5 +610,47 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="entry">
+    <xsl:variable name="dbinline" select="count(&dbinline;)"/>
+    <xsl:variable name="all" select="count(*)"/>
+    <xsl:variable name="diff" select="$all - $dbinline"/>
+    <entry>
+      <!--<xsl:call-template name="info">
+        <xsl:with-param name="text">
+          <xsl:text>>> Table entry first child: </xsl:text>
+          <xsl:value-of select="local-name(*[1])"/>
+          <xsl:text>&#10; first text node: "</xsl:text>
+          <xsl:value-of select="normalize-space(text()[1])"/>
+          <xsl:text>"</xsl:text>
+          <xsl:text>&#10; inlines=</xsl:text>
+          <xsl:value-of select="count(&dbinline;)"/>
+          <xsl:text> - </xsl:text>
+          <xsl:value-of select="count(*)"/>
+        </xsl:with-param>
+      </xsl:call-template>-->
+      <xsl:choose>
+        <xsl:when test="$diff = 0">
+          <para>
+             <xsl:apply-templates />
+          </para>
+        </xsl:when>
+        <xsl:when test="normalize-space(text()[1]) != '' and $diff >0">
+          <xsl:call-template name="warn">
+            <xsl:with-param name="text">
+              <xsl:text>Sorry, can't handle mixed content of inlines and blocks in entry for now. </xsl:text>
+              <xsl:text>Check your XML source and wrap text in paras. </xsl:text>
+              <xsl:if test="ancestor::table/@id">
+                <xsl:text>table id=</xsl:text>
+                <xsl:value-of select="ancestor::table/@id"/>
+              </xsl:if>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </entry>
+  </xsl:template>
 
 </xsl:stylesheet>

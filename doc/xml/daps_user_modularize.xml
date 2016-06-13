@@ -576,6 +576,21 @@
        <row>
         <entry colname="1">
          <para>
+          <sgmltag class="attribute">outputformat</sgmltag>
+         </para>
+        </entry>
+        <entry colname="2">
+         <para>
+          Output format to which the element applies (for example, print or
+          &epub;). Only available for DocBook 5.1 or later. 
+         </para>
+        </entry>
+        <entry colname="3"><parameter>PROFOUTPUTFORMAT</parameter>
+        </entry>
+       </row>
+       <row>
+        <entry colname="1">
+         <para>
           <sgmltag class="attribute">revision</sgmltag>
          </para>
         </entry>
@@ -715,8 +730,8 @@
     <example id="ex.daps.user.modular.pi.db5">
      <title>Profiling PI in a DocBook 5.0 File</title>
      <screen>&lt;?xml-stylesheet
-      href="urn:x-daps:xslt:profiling:docbook50-profile.xsl" 
-      type="text/xml" ?></screen>
+  href="urn:x-daps:xslt:profiling:docbook50-profile.xsl" 
+  type="text/xml" ?></screen>
     </example>
    <para>
      The &main; file of a documentation project is the one that is referenced
@@ -764,7 +779,7 @@
      (XML files, &main; file, and &dc; file).
     </para>
     <example id="ex.daps.xml.pa">
-     <title>XML File With Profiling Attributes</title>
+     <title>XML File With Profiling Attributes (DocBook 4.x)</title>
 <screen><?dbsuse-fo font-size="0.70em"?>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 [...] 
  
@@ -862,7 +877,8 @@
 
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
-&lt;article lang="en" id="art.frog"&gt;
+&lt;article xml:lang="en" xml:id="art.frog"
+   xmlns="http://docbook.org/ns/docbook"&gt;
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
  [...]
@@ -870,6 +886,11 @@
         <para>
          If the processing instruction (PI)  is
         missing, any profiling parameters in the &dc; file will be ignored.
+       </para>
+       <para>
+        Use the PI <sgmltag class="pi">xml-stylesheet
+ href="urn:x-daps:xslt:profiling:docbook51-profile.xsl"
+ type="text/xml" title="Profiling step"</sgmltag> for DocBook version 5.1.
        </para>
      </example>
 
@@ -1087,7 +1108,7 @@ PROFVENDOR="oemcompany" <co id="co.dc.pa.profvendor.oem"/>
  
 &lt;!--the following article is contained in the file art_frog.xml--&gt;
 
-&lt;article lang="en" id="art.frog"&gt; 
+&lt;article lang="en" xml:id="art.frog"&gt; 
  &lt;title&gt;Frog Sound Recordings&lt;/title&gt;
  &lt;subtitle&gt;Product Description&lt;/subtitle&gt;
   &lt;articleinfo&gt; <co id="co.daps.articleinfo"/>

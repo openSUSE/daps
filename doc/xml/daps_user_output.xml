@@ -166,7 +166,7 @@
    <varlistentry>
     <term>Building Only Parts of Your Documentation Project</term>
     <listitem>
-<screen>&prompt.user;daps -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
+<screen>&prompt.user;&dapscmd; -d &dc;-daps-example pdf --rootid=cha.template.examples</screen>
      &daps-partial-builds;
     </listitem>
    </varlistentry>
@@ -186,7 +186,7 @@
    <varlistentry>
     <term>Opening the Output Directly in Your PDF Viewer</term>
     <listitem>
-     <screen>&prompt.user;evince $(daps -d &dc;-daps-example pdf) &amp;</screen>
+     <screen>&prompt.user;<command>evince</command> $(daps -d &dc;-daps-example pdf) &amp;</screen>
      <para>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
       Evince).</para>
     </listitem>
@@ -194,17 +194,17 @@
    <varlistentry>
     <term>Getting More Information about the Building Process</term>
     <listitem>
-     <para>&dapsacr; is less verbose than its predecessor
-              <literal>susedoc</literal>. Several verbosity levels are
+     <para>By default &dapsacr; only shows the path to the resulting file.
+            Several verbosity levels are
             available. Use the global options <option>-v*</option> to
             specify the level of information you want. It ranges from
               <option>-v</option> (print one line of results) to
               <option>-vvv</option> (print all commands, very verbose).
             For example, the following command will print all files
             created during the build process: </para>
-     <screen>&prompt.user;daps -vv -d &dc;-daps-example pdf</screen>
+     <screen>&prompt.user;&dapscmd; -vv -d &dc;-daps-example pdf</screen>
      <para>For a debug output, use the following:</para>
-     <screen>&prompt.user;daps --debug -d &dc;-daps-example pdf</screen>
+     <screen>&prompt.user;&dapscmd; --debug -d &dc;-daps-example pdf</screen>
     </listitem>
    </varlistentry>
    

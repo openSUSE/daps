@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Purpose:
+     Everything related to the info element
+
+   Parameters:
+     see param.xsl
+
+   Input:
+     Valid DocBook5
+
+
+   Author:    Thomas Schraitle <toms@opensuse.org>
+   Copyright:  2015 SUSE Linux GmbH
+
+-->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:d="http://docbook.org/ns/docbook"
@@ -13,6 +28,7 @@
                       |d:colophon[d:info]
                       |d:equation[d:info]
                       |d:glossary[d:info]
+                      |d:glossdiv[d:info]
                       |d:index[d:info]
                       |d:legalnotice[d:info]
                       |d:part[d:info]
@@ -39,6 +55,7 @@
       <!--<xsl:message>********** <xsl:value-of select="(d:title|d:info/d:title)[1]"/></xsl:message>-->
       <xsl:apply-templates select="d:info"/>
       <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy"/>
+      <xsl:apply-templates select="(d:subtitle|d:info/d:subtitle)[1]" mode="copy"/>
       <!-- Process the rest -->
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
@@ -49,9 +66,45 @@
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
       <xsl:apply-templates select="(d:title|d:info/d:title)[1]" mode="copy"/>
+      <xsl:apply-templates select="(d:subtitle|d:info/d:subtitle)[1]" mode="copy"/>
+      <!--<xsl:apply-templates select="(d:titleabbrev|d:info/d:titleabbrev)[1]" mode="copy"/>-->
       <xsl:apply-templates select="d:info"/>
       <xsl:apply-templates select="d:info/following-sibling::node()"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="d:book/d:title | d:article/d:title" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <title><xsl:value-of select="normalize-space($text)"/></title>
+  </xsl:template>
+  <xsl:template match="d:book/d:subtitle | d:article/d:subtitle" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <subtitle><xsl:value-of select="normalize-space($text)"/></subtitle>
+  </xsl:template>
+
+  <xsl:template match="d:title" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <title>
+      <xsl:value-of select="normalize-space($text)"/>
+    </title>
+  </xsl:template>
+  <xsl:template match="d:subtitle" mode="copy">
+    <xsl:variable name="text">
+      <xsl:apply-templates mode="copy"/>
+    </xsl:variable>
+    <subtitle>
+      <xsl:value-of select="normalize-space($text)"/>
+    </subtitle>
+  </xsl:template>
+
+  <xsl:template match="d:title/d:citetitle|d:subtitle/d:citetitle" mode="copy">
+    <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
 
   <!-- Block elements using info -->
@@ -95,7 +148,7 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- Suppress other info elements who has no direct mapping -->
+  <!-- Suppress other info elements that has no direct mapping -->
   <xsl:template match="d:*[d:info]"/>
 
   <xsl:template match="d:info">
@@ -114,24 +167,14 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="d:info/d:productname[d:phrase] | d:info/d:productnumber[d:phrase]">
-    <xsl:choose>
-      <xsl:when test="d:phrase/@*">
-        <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
-          <xsl:copy-of select="descendant-or-self::*//@*"/>
-          <xsl:value-of select=".//text()"/>
-        </xsl:element>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:copy>
-          <xsl:value-of select=".//text()"/>
-        </xsl:copy>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template match="d:info/d:productnumber[d:phrase]">
+    <xsl:element name="{local-name(.)}" namespace="http://docbook.org/ns/docbook">
+      <xsl:value-of select=".//text()"/>
+    </xsl:element>
   </xsl:template>
 
-  <!-- Don't copy title inside info -->
-  <xsl:template match="d:info/d:title"/>
+  <!-- Don't copy title(s) inside info -->
+  <xsl:template match="d:info/d:title | d:info/d:subtitle | d:info/d:titleabbrev"/>
 
   <xsl:template match="d:info/d:title" mode="copy">
     <title>

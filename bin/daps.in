@@ -1,19 +1,31 @@
 #!/bin/bash
 #
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
 #
 # DAPS = DocBook Authoring and Publishing Suite
 
+MY_NAME=DAPS
 VERSION=@PACKAGE_VERSION@
+
+export MY_NAME VERSION
 
 # autoconf replaces @foo@ stuff with ${prefix}/.. if @foo@ has not
 # explicitly been set, so we need to at least export prefix to
 # be on the safe side
 
 export prefix=@prefix@
+
+#
+# Do not even attempt to start, if we are in a directory that does not exist
+# (fix for https://bugzilla.suse.com/show_bug.cgi?id=961526)
+
+[[ -d $(pwd 2>/dev/null) ]] || {
+    echo "Cannot operate from a directory that does not exist!"
+    exit 1
+    }
 
 # ----------------------------------------------------------------------------
 # VARIABLES
@@ -39,9 +51,6 @@ export prefix=@prefix@
 
 declare -a VARLIST
 VARLIST=(
-    DISTVER
-    PRODUCTNAME
-    PRODUCTNAMEREG
     ASPELL_EXTRA_DICT
     ASPELL_LANG
     ASPELL_SKIP_TAGS
@@ -56,8 +65,9 @@ VARLIST=(
     CROPMARKS
     DB5TODB4
     DB5TODB4NH
-    DBTONOVDOC
+    DBNOCONV
     DEBUG
+    DISTVER
     DOC_DIR
     DAPSROOT
     DAPSROOT_DEFAULT
@@ -71,7 +81,6 @@ VARLIST=(
     DRAFT
     DRAFT_STR
     EPUB3
-    EPUBCHECK
     EPUB_CSS
     EXPORT_DIR
     FALLBACK_STYLEROOT
@@ -108,10 +117,16 @@ VARLIST=(
     NAME
     NODC
     NOENT
+    NOEPUB
     NOGZIP
+    NOHTML
     NOIMG
     NOPDF
+    NOSEARCH
     NOSET
+    NOSTATIC
+    NOREFCHECK
+    NOVALID
     NOXML
     OPTIPNG
     PAGEFILES
@@ -135,6 +150,7 @@ VARLIST=(
     PROFWORDSIZE
     REMARKS
     REMARK_STR
+    RESULTCHECK
     ROOTID
     SETDATE
     SHOW
@@ -249,6 +265,11 @@ else
     VERBOSITY=0
 fi
 
+# Set the maximum number of concurrent jobs to the number of cores
+# If egrep does not return somethiong usefule, set it to "2" as a sane default
+JOBS=$(egrep -s -m1 "cpu cores\s*:" /proc/cpuinfo 2>/dev/null | sed 's/cpu cores\s*:\s*//')
+[[ -z $JOBS ]] && JOBS=2
+
 #---------------------------------------------------
 # SUBCOMMANDS
 #
@@ -268,7 +289,7 @@ fi
 declare -a SUBCOMMANDS
 declare -a HELP_SUBCOMMAND
 
-SUBCOMMANDS+=("bigfile=build_generic")
+SUBCOMMANDS+=("bigfile=bigfile")
 HELP_SUBCOMMAND+=("bigfile=Creates a single XML file (bigfile) from the MAIN-file referenced in the\nDC-file or specified on the command line by following all xi:includes.\nIf a ROOTID is specified, all xref-links pointing to locations outside the\nscope defined by the ROOTID, are replaced by text-links.")
 
 SUBCOMMANDS+=("checklink=checklink")
@@ -417,6 +438,9 @@ HELP_SUBCOMMAND+=("webhelp=Build an HTML document with a table of contents/searc
 
 SUBCOMMANDS+=("webhelp-dir-name=show_names")
 HELP_SUBCOMMAND+=("webhelp-dir-name=Print the directory name that would result when building a webhelp document.")
+
+SUBCOMMANDS+=("xmlformat=xmlformat")
+HELP_SUBCOMMAND+=("xmlformat=Prettify your xml-sources using the xmlformat program\nwith a configuration file supplied by daps (/etc/daps/docbook-xmlformat.conf).")
 
 #
 # deprecated targets
@@ -658,17 +682,24 @@ Global Options:
   --fb_styleroot            Fallback styleroot directories. Can only be used in
                             conjunction with --styleroot. By default, the
                             DocBook stylesheets are used as a fallback if
-                            custom styles for an output format are  not present.
+                            custom styles for an output format are not present.
                             With this option you can specify a list of
                             alternative fallbacks (space separated absolute
                             paths). The directories will be tested in the order
                             specified, the first one that applies to the
                             requested format, will be used.  The original
                             DocBook stylesheets will be used as a last resort.
-                            Useful if you have forks of your custom stylesheets.
+                            Useful if you have forks of your custom
+                            stylesheets.
   --force                   Force a rebuild of the document even when an
                             up-to-date version exists.
   --help, -h                Help
+  --jobs                    Specify how many parallel jobs to use. Higher
+                            numbers will significantly increase the processing
+                            speed, but will also set your machine under heavy
+                            load, up to a point where it may become
+                            (temporarily) unresponsive.
+                            Default: Use as man jobs as available CPU cores.
   --main, -m                Path to the main file defining your document.
                             Note: Options --main and --docconfig exclude
                                   each other.
@@ -697,7 +728,7 @@ Global Options:
                             Default: xsltproc
 
 Subcommands:
-   help                       Print this help
+   help                       Print this help.
 
   Generate Books:
     epub                      ePUB book
@@ -711,72 +742,77 @@ Subcommands:
 
   File lists:
     list-file                 Lists the filename that contains the ID specified
-                              with the mandatory paramater --rootid.
+                              with the mandatory parameter --rootid.
     list-srcfiles             List source files (XML sources, images, entity
                               declarations, DC-file) used by the document
-                              reference by the DC-file
+                              reference by the DC-file.
     list-srcfiles-unused      List files from the xml/ and images/src/
                               directories not used by the document reference
-                              by the DC-file
+                              by the DC-file.
     list-images-missing       List images referenced in the XML sources but
-                              missing in the images' source directory
+                              missing in the images' source directory.
     list-images-multisrc      List images for which mutiple sources exist
-                              (e.g. foo.svg and foo.png)
+                              (e.g. foo.svg and foo.png).
 
   Cleaning up:
-    clean                     Remove all profiled sources and temporary files
-    clean-images              Remove all generated images
+    clean                     Remove all profiled sources and temporary files.
+    clean-images              Remove all generated images.
     clean-package             Remove all generated package data for the given
                               DC-file. Generated images and profiled sources
-                              will _not_ be deleted
+                              will _not_ be deleted.
     clean-results             Remove all generated books, archives, and log
                               files for the given DC-file. Generated images
                               and profiled sources will _not_ be deleted.
-    clean-all, real-clean     Remove everything generated by $ME
+    clean-all, real-clean     Remove everything generated by $ME.
 
   Packaging:
     package-html              Provide an HTML tarball (chunked HTML,
                               single HTML, or JSP), desktop, document,
-                              and/or page files (for KDE and GNOME)
+                              and/or page files (for KDE and GNOME).
     package-pdf               Provide a PDF, desktop, document, and/or
-                              page files (for KDE and GNOME)
+                              page files (for KDE and GNOME).
     package-src               Provide profiled XML sources and graphics
 
   Deploying:
     locdrop                   Provide everything that is needed to translate a
-                              set
+                              set.
     online-docs               Provide a profiled XML bigfile, a graphics
                               tarball (PNG only), color-pdf, epub, and
-                              a single-html archive
-    unpack-locdrop            Unpack a localization drop packages source
+                              a single-html archive.
+    unpack-locdrop            Unpack a localization drop packages source.
 
   Other Commands:
     checklink                 Linkchecker for links from <ulink> tags
     getimages                 List or display images from a profiled DocBook
-                              XML file
-    optipng                   Optimize (size) source PNGs
-    profile                   Profile XML sources
+                              XML file.
+    optipng                   Optimize (size) source PNGs.
+    profile                   Profile XML sources.
     spellcheck                Spellchecks the file specified with --file or the
                               document specified by rootid.
     stylecheck                Performs a style check on the given DC-file or
-                              rootid
+                              rootid.
     validate                  Validate profiled sources. Automatically profiles
-                              the XML sources if needed
+                              the XML sources if needed.
+    xmlformat                 Prettify the XNL source files using
+                              daps-xmlformat.
 
   File and Directory Names:
     <target>-name             Print resulting file name for <target>. <target>
                               may be one of color-pdf, epub, html-single,
-                              pdf, txt
+                              pdf, txt.
     <target>-dir-name         Print resulting directory name for <target>.
-                              <target> may be html, man or webhelp
+                              <target> may be html, man or webhelp.
 
   Debugging:
+    bigfile                   Creates a single "big" XML file by resolving
+                              xi:includes. Useful for detecting validation
+                              errors that cannot be found otherwise.
     dapsenv                   Print a list of the most important make variables
-                              and their value
+                              and their value.
     images                    Generates all images for the given DC-file or
-                              rootid
+                              rootid.
     showvariable              Print value of a given make variable:
-                              $ME showvariable VARIABLE=<MAKE_VARIABLE>
+                              $ME showvariable VARIABLE=<MAKE_VARIABLE>.
 
 Type '$ME <subcommand> -h' for help on a specific subcommand.
 EOF_helptext
@@ -863,6 +899,11 @@ function sanitize_path {
 
     # Do nothing if $1 is an empty value
     [[ -z "$MYPATH" ]] && return
+
+    # Remove preceding file:// scheme
+    if [[ ${MYPATH:0:5} = file: ]]; then
+        MYPATH=${MYPATH#file:}
+    fi
 
     # ignore values that need to be set by configure
     # (makes it possible to directly use a SVN checkout)
@@ -1051,7 +1092,7 @@ export POSIXLY_CORRECT=1
 # Therefore we need to save each variable twice in order to recover the
 # original value.
 
-ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
+ARGS=$(getopt -o d:e:hm:v:: -l builddir:,color:,colour:,commands,debug,docconfig:,dapsroot:,envfile:,fb_styleroot:,force,help,jobs:,main:,schema:,styleroot:,verbosity::,version,xsltprocessor: -n "$ME" -- "$@")
 
 # Exit when getopt returns errors
 #
@@ -1130,6 +1171,14 @@ while true ; do
             else
                 CALL_SCMDHELP=1
             fi
+            ;;
+        --jobs)
+            if [[ $2 =~ ^[0-9][0-9]*$ ]]; then
+                JOBS="$2"
+            else
+                exit_on_error "Wrong value ($2) for --jobs. Must be a numeric"
+            fi
+            shift 2
             ;;
         -m|--main)
             # make path absolute and strip trailing slash
@@ -1603,7 +1652,7 @@ if [[ 5 = "$DOCBOOK_VERSION" ]]; then
     # remove file:// or file: (Debian, Tumbleweed) prefix
     # Is there a better way to do this with shell built-ins?
     #
-    DOCBOOK5_RNG=${DOCBOOK5_RNG##*file:}
+    DOCBOOK5_RNG=${DOCBOOK5_RNG#*file:}
     DOCBOOK5_RNG=${DOCBOOK5_RNG#*//}
     #
     # check if resulting path is valid
@@ -1650,6 +1699,13 @@ DOCBOOK_STYLES=${DOCBOOK_STYLES%/}
 
 # ...and export
 export DOCBOOK_STYLES DOCBOOK5_RNG DOCBOOK_VERSION
+
+#--------------------------
+# Get PROFILE_URN to determine whether profiling is turned on
+# will get exported via VARLIST
+#
+
+ PROFILE_URN=$($XSLTPROC --stylesheet "${DAPSROOT}/daps-xslt/common/get-xml-stylesheet.xsl" --file "$MAIN" "$XSLTPROCESSOR") || exit_on_error "Could not get DocBook version. Maybe $MAIN is not well-formed?"
 
 #----------------------------------
 # Result directory / LOG directory

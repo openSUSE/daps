@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2015 SUSE Linux GmbH
+# Copyright (C) 2012-2016 SUSE Linux GmbH
 #
 # Author:
 # Frank Sundermeyer <fsundermeyer at opensuse dot org>
@@ -9,7 +9,7 @@
 #
 # TODO: 
 # Stylesheets for building xhtml need to be packaged in src tar
-
+DIST_DEBIAN:=1
 #------------------------
 AUTOMAKE_OPTIONS = 1.10 foreign dist-bzip2 no-dist-gzip no-installinfo \
 			-Wall -Werror -Wno-portability
@@ -20,6 +20,8 @@ SUBDIRS =
 EXTRA_DIST := COPYING-2.0 COPYING-3.0 packaging/daps.spec
 
 #------------------------
+# Replace placeholders with distribution-specfic paths
+#
 REPL_PATH = sed \
              -e 's|@sysconfdir[@]|$(sysconfdir)|g' \
              -e 's|@bindir[@]|$(bindir)|g' \
@@ -28,16 +30,25 @@ REPL_PATH = sed \
              -e 's|@prefix[@]|$(prefix)|g' \
              -e 's|@PACKAGE_VERSION[@]|$(PACKAGE_VERSION)|g'
 
-DAPS_CATALOG := catalogs/for-catalog-$(PACKAGE).xml
 DAPSROOT     := $(abs_top_srcdir)
 
-# fop config
+#------------------------
+# Build directory - all generated files go there
 #
-FOP_CONFIG   := etc/fop/fop-daps.xml
-FOP_CONFIG_DEFAULT := etc/fop/fop-daps.generic
+BUILD_ROOT   := build
+FIRSTBUILD   := $(BUILD_ROOT)/.firstbuild
+DAPS_CATALOG := $(BUILD_ROOT)/for-catalog-$(PACKAGE).xml
+
+#------------------------
+# fop config / jing wrapper
+#
+FOP_CONFIG           := etc/fop/fop-daps.xml
+FOP_CONFIG_DEFAULT   := etc/fop/fop-daps.generic
+JING_WRAPPER         := libexec/daps-jing
+JING_WRAPPER_DEFAULT := libexec/daps-jing.generic
 
 if DIST_SUSE
-  FOP_CONFIG_SRC := etc/fop/fop-daps.suse
+  FOP_CONFIG_SRC   := etc/fop/fop-daps.suse
 endif
 if DIST_SUSEBS
   FOP_CONFIG_SRC := etc/fop/fop-daps.suse
@@ -45,22 +56,23 @@ endif
 if DIST_REDHAT
   FOP_CONFIG_SRC := etc/fop/fop-daps.redhat
 endif
-if DIST_UBUNTU
-  FOP_CONFIG_SRC := etc/fop/fop-daps.generic
+if DIST_DEBIAN
+  JING_WRAPPER_SRC      := libexec/daps-jing.debian
+  DAPS_CATALOG_TEMPLATE := inst_files/debian_catalog_template
 endif
 
 # stylesheets
 if HAS_DAPS_XSL
   STYLEROOT := $(daps_xsl)
 else
-  STYLEROOT := $(subst file://,,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url)))
+  STYLEROOT := $(patsubst //%,%,$(patsubst file:%,%,$(shell $(XMLCATALOG) $(root_catalog) $(db4_xslt_url))))
 endif
 
 
 # Man pages
 DC_MANPAGES    := DC-daps-manpages
 MAN_PAGE_DIR   := $(subst DC-,,$(DC_MANPAGES))
-MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-envconvert.1 daps-autobuild.1
+MAN_PAGES      := daps.1 ccecho.1 daps-init.1 daps-susespell.1 daps-autobuild.1
 MAN_BUILD_PATH := $(srcdir)/man/build/$(MAN_PAGE_DIR)/man/
 
 # Manuals
@@ -101,6 +113,7 @@ xsltjspdir       = $(xsltdir)/jsp
 xsltlibdir       = $(xsltdir)/lib
 xsltmallarddir   = $(xsltdir)/mallard
 xsltmigratedir   = $(xsltdir)/migrate
+xsltdb5todb4dir  = $(xsltdir)/migrate/db5to4
 xsltprofilingdir = $(xsltdir)/profiling
 xsltrelnotesdir  = $(xsltdir)/relnotes
 xsltxhtmldir     = $(xsltdir)/xhtml
@@ -110,13 +123,8 @@ xsltyelpdir      = $(xsltdir)/yelp
 # Automake primaries
 
 # BIN
-dist_bin_SCRIPTS         = $(wildcard bin/*[^.in])
+dist_bin_SCRIPTS         = $(wildcard bin/*[^.in] $(BUILD_ROOT)/bin/*)
 dist_dapslibexec_SCRIPTS = $(wildcard libexec/*)
-
-if !CATALOG_EDIT
-# CATALOG files
-dist_catalog_DATA   = $(DAPS_CATALOG)
-endif
 
 # CONFIG files
 dist_dapsconf_DATA    = etc/config etc/docbook-xmlformat.conf \
@@ -127,6 +135,9 @@ dist_hyphen_DATA      = $(wildcard etc/xep/hyphen/*.tex) \
 			$(wildcard etc/xep/hyphen/*.il2)
 
 # DATA
+if !CATALOG_EDIT		
+dist_catalog_DATA   = $(DAPS_CATALOG)		
+endif
 dist_dapslib_DATA       = $(wildcard lib/*)
 dist_emacssite_DATA     = misc/docbook_macros.el
 dist_dapsmake_DATA      = $(wildcard make/*.mk)
@@ -142,6 +153,7 @@ dist_xsltjsp_DATA       = $(wildcard daps-xslt/jsp/*.xsl)
 dist_xsltlib_DATA       = $(wildcard daps-xslt/lib/*.xsl)
 dist_xsltmallard_DATA   = $(wildcard daps-xslt/mallard/*.xsl)
 dist_xsltmigrate_DATA   = $(wildcard daps-xslt/migrate/*.xsl)
+dist_xsltdb5todb4_DATA  = $(wildcard daps-xslt/migrate/db5to4/*.xsl)
 dist_xsltprofiling_DATA = $(wildcard daps-xslt/profiling/*.xsl)
 dist_xsltrelnotes_DATA  = $(wildcard daps-xslt/relnotes/*.xsl)
 dist_xsltxhtml_DATA     = $(wildcard daps-xslt/xhtml/*.xsl)
@@ -155,11 +167,11 @@ dist_man1_MANS      = $(addprefix $(MAN_BUILD_PATH), $(MAN_PAGES))
 #---------------------------Local TARGETS--------------------------------------
 
 #
-# These targets need to be build _after_ the guides have been build, to make sure
-# the local config, as provided by the repo, is used. Otherwise we have a mixture
-# of system and repo setup and that will not work
+# These targets need to be built _after_ the guides have been built, to make
+# sure the local config, as provided by the repo, is used. Otherwise we have
+# a mixture of system and repo setup and that will not work
 
-bin/daps etc/config $(FOP_CONFIG): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
+bin/daps etc/config $(FOP_CONFIG) $(JING_WRAPPER): $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS)
 
 all-local: $(USERGUIDE) $(QUICKSTART) $(dist_man1_MANS) $(DAPS_CATALOG)
 
@@ -170,11 +182,9 @@ INSTALLDIRS = $(DESTDIR)$(docdir)/html $(DESTDIR)$(pkgdatadir) \
 	$(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/ \
 	$(DESTDIR)$(templatedir)
 
-$(INSTALLDIRS):
-	test -z "$@" || $(MKDIR_P) $@
 
 install-data-local: $(INSTALLDIRS) autobuild/daps-autobuild
-install-data-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
+install-data-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/daps_catalog.XXXXX)
 install-data-local:
 	for BOOK in $(MANUALS); do \
 	  tar c --mode=u+w,go+r-w,a-s -C $$BOOK . | \
@@ -184,20 +194,21 @@ install-data-local:
 	install -m644 autobuild/daps-autobuild.rnc $(DESTDIR)$(datadir)/xml/$(PACKAGE)/schema/
 	install -m644 autobuild/daps-autobuild.xml $(DESTDIR)$(templatedir)
 if CATALOG_EDIT
-# create entry in xml root catalog
-	{ \
-	  sed '/<\/catalog>/d' $(root_catalog); \
-	  $(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
-	    awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
-	      END{print "</catalog>"}'; \
-	} >$(TMP_CATALOG)
+# remove old DAPS entries in root catalog and create new entry
+	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
+	    awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} \
+	      /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" | \
+	      sed '/<\/catalog>/d' >$(TMP_CATALOG)
+	$(XMLLINT) --nocatalogs --format $(DAPS_CATALOG) | \
+	  awk '/<\/catalog>/{next} s == 1 {print} /<catalog/{s=1} \
+	    END{print "</catalog>"}' >>$(TMP_CATALOG)
 	chmod --reference=$(root_catalog) $(TMP_CATALOG)
 	mv $(TMP_CATALOG) $(root_catalog)
 endif
 
 #---------------------------Local UNINSTALL-----------------------------------
 if CATALOG_EDIT
-uninstall-local: TMP_CATALOG := $(shell mktemp -q catalogs/catalog.XXXXX)
+uninstall-local: TMP_CATALOG := $(shell mktemp -q $(BUILD_ROOT)/catalog.XXXXX)
 uninstall-local:
 	$(XMLLINT) --nocatalogs --format $(root_catalog) | \
 	  awk "/<\/group>/ && s == 1 {s=0;next} s == 1 {next} /<group id=\"$(PACKAGE)\">/{s=1;next} {print}" > $(TMP_CATALOG)
@@ -205,25 +216,34 @@ uninstall-local:
 	mv $(TMP_CATALOG) $(root_catalog)
 endif
 #-----------------------------CLEAN--------------------------------------------
+
 clean-local:
-	rm -rf $(srcdir)/man/build/ $(srcdir)/doc/build/ \
-	  $(srcdir)/.firstbuild $(dir $(DAPS_CATALOG)) $(srcdir)/bin/daps \
-	  $(srcdir)/etc/config $(srcdir)/etc/fop/fop-daps.xml \
-	  $(srcdir)/doc/xml/entity-decl.ent
-	(cd $(srcdir)/etc && ln -sf config.in config)
-	(cd $(srcdir)/bin && ln -sf daps.in daps)
-	(cd $(srcdir)/autobuild && ln -sf daps-autobuild.in daps-autobuild)
-	(cd $(srcdir)/etc/fop && ln -sf fop-daps.suse fop-daps.xml)
+	rm -rf build/ man/build/ doc/build/
+	(cd autobuild && ln -sf daps-autobuild.in daps-autobuild)
+	(cd bin && ln -sf daps.in daps)
+	(cd etc && ln -sf config.in config)
+	(cd etc/fop && ln -sf fop-daps.suse $(notdir $(FOP_CONFIG)))
+	(cd libexec && ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $(notdir $(JING_WRAPPER)))
 	(cd doc/xml && ln -sf entity-decl.ent.in entity-decl.ent)
 
 #-----------------------------DAPS--------------------------------------------
 
-# create temporary DAPS catalog entries file
+# The DAPS_CATALOG generation has been replaced by a static file
+# inst_files/daps_catalog_snippet to circumvent a bug in xmlformat
+# in Debian-based distributions
+
+$(DAPS_CATALOG): $(BUILD_ROOT)
 $(DAPS_CATALOG): DAPS_PROFDIR := $(pkgdatadir)/daps-xslt/profiling
-$(DAPS_CATALOG): URN_SUSE     := urn:x-suse:xslt:profiling
-$(DAPS_CATALOG): URN_DAPS     := urn:x-daps:xslt:profiling
-$(DAPS_CATALOG): DB_VERSIONS  := 41 42 43 44 45 50 51
-$(DAPS_CATALOG):
+if !DIST_DEBIAN
+  # On Debian and Ubuntu "xmlcatalog --add" is buggy and therefore cannot
+  # be used to generate the catalog file. It will be generated from a template
+  # instead (see else).
+  #
+  # create temporary DAPS catalog entries file
+  $(DAPS_CATALOG): URN_SUSE     := urn:x-suse:xslt:profiling
+  $(DAPS_CATALOG): URN_DAPS     := urn:x-daps:xslt:profiling
+  $(DAPS_CATALOG): DB_VERSIONS  := 41 42 43 44 45 50 51
+  $(DAPS_CATALOG):
 	$(Q)test -z "$(dir $@)" || $(MKDIR_P) $(dir $@)
 	$(Q)$(XMLCATALOG) --noout --create $@
 	$(Q)for VERS in $(DB_VERSIONS); do \
@@ -250,8 +270,14 @@ $(DAPS_CATALOG):
 	$(Q)$(SED) -i '/<catalog/a\ <group id="$(PACKAGE)">' $@
 	$(Q)$(SED) -i '/<\/catalog/i\ </group>' $@
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
+else
+  $(DAPS_CATALOG):
+	$(REPL_PATH) $(DAPS_CATALOG_TEMPLATE) > $@
+endif
 
-# the SVN sources contain links bin/daps, etc/config and $(FOP_CONFIG)
+
+
+# the sources contain links bin/daps, etc/config and $(FOP_CONFIG)
 # These need to be replaced by real files/different links created by
 # the respective targets below.
 # To make sure they are rebuild at least once when make is called for
@@ -261,41 +287,52 @@ $(DAPS_CATALOG):
 # This helps to avoid PHONY targets which would be called with every single
 # make call (even make clean) - something we definetely would like to avoid
 
-.firstbuild:
+$(FIRSTBUILD): $(BUILD_ROOT)
 	touch $@
 
 # see http://www.gnu.org/software/autoconf/manual/autoconf.html#Installation-Directory-Variables
-bin/daps: .firstbuild
+bin/daps: $(FIRSTBUILD)
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
-etc/config: .firstbuild
+etc/config: $(FIRSTBUILD)
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 
-autobuild/daps-autobuild: .firstbuild
+autobuild/daps-autobuild: $(FIRSTBUILD)
 	if [ -L $@ ]; then rm -f $@; fi
 	$(REPL_PATH) $@.in > $@
 	chmod +x $@
 
 # Create the FOP config file. RedHat and SUSE require a special version
 # (see FOP_CONFIG_SRC definitions above)
-$(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) .firstbuild
+$(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) $(FIRSTBUILD)
 	if test -n "$(FOP_CONFIG_SRC)"; then \
 	  ln -sf $(notdir $(FOP_CONFIG_SRC)) $@; \
 	else \
 	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
 	fi
 
+# Create the Jing Warpper. Debian and Ubuntu require a special version
+# (see JING_WRAPPER definitions above)
+$(JING_WRAPPER): $(JING_WRAPPER_SRC) $(JING_WRAPPER_DEFAULT) $(FIRSTBUILD)
+	if test -n "$(JING_WRAPPER_SRC)"; then \
+	  ln -sf $(notdir $(JING_WRAPPER_SRC)) $@; \
+	else \
+	  ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $@; \
+	fi
+
 $(USERGUIDE):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --styleroot=$(STYLEROOT) \
-	    --docconfig=$(DC_USERGUIDE) html --single --name=$(USERGUIDE_NAME)
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	    --styleroot=$(STYLEROOT) --docconfig=$(DC_USERGUIDE) html \
+	    --single --name=$(USERGUIDE_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  --styleroot=$(STYLEROOT) \
-	    --docconfig=$(DC_QUICKSTART) html --single --name=$(QUICKSTART_NAME)
+	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
+	    --styleroot=$(STYLEROOT) --docconfig=$(DC_QUICKSTART) html \
+	    --single --name=$(QUICKSTART_NAME)
 	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
@@ -303,3 +340,16 @@ $(dist_man1_MANS):
 	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
 	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
+
+$(INSTALLDIRS) $(BUILD_ROOT):
+	test -z "$@" || $(MKDIR_P) $@
+
+.PHONY: debian ubuntu redhat
+
+debian ubuntu:
+	(cd etc/fop && ln -sf fop-daps.generic fop-daps.xml)
+	(cd libexec && ln -sf daps-jing.debian daps-jing)
+	(cd etc     && ln -sf catalog.debian catalog.xml)
+
+redhat:
+	(cd etc/fop && ln -sf fop-daps.redhat fop-daps.xml)

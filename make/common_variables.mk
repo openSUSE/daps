@@ -118,11 +118,8 @@ endif
 #
 # 1. Check for profiling PI in $MAIN:
 #
-ifndef PROFILE_URN
-  PROFILE_URN := $(shell $(XSLTPROC) \
-	--stylesheet $(DAPSROOT)/daps-xslt/common/get-xml-stylesheet.xsl \
-	--file $(MAIN) $(XSLTPROCESSOR))
-endif
+
+# This has already been done in bin/daps
 
 # 2. Set PROFILEDIR and profiling stringparams
 #
@@ -159,7 +156,7 @@ ifdef PROFILE_URN
   endif
   ifdef PROFOUTPUTFORMAT
     PROFILEDIR := $(PROFILEDIR)_$(PROFOUTPUTFORMAT)
-    PROFSTRINGS += --stringparam "profile.os=$(PROFOUTPUTFORMAT)"
+    PROFSTRINGS += --stringparam "profile.outputformat=$(PROFOUTPUTFORMAT)"
   endif
   ifdef PROFREVISION
     PROFILEDIR := $(PROFILEDIR)_$(PROFREVISION)
@@ -242,6 +239,12 @@ PROFILEDIR := $(PROFILE_PARENT_DIR)/$(PROFILEDIR)
 # profiled MAIN
 PROFILED_MAIN := $(PROFILEDIR)/$(notdir $(MAIN))
 
+
+#-------
+# DAPS version string params
+#
+DAPSSTRINGS := --stringparam "converter.name=$(MY_NAME)" \
+	--stringparam "converter.version=$(VERSION)"
 
 
 #-------
@@ -419,3 +422,17 @@ endif
 LOCDROP_TMP_DIR  := $(TMP_DIR)/$(BOOK)_locdrop
 MANIFEST_TRANS   := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_trans.txt
 MANIFEST_NOTRANS := $(LOCDROP_TMP_DIR)/$(DOCNAME)_manifest_notrans.txt
+
+#-----
+# define function to print filelists
+# (used in filelist.mk and images.mk)
+#
+
+define print_list
+  @if [[ -t 1 || 1 = "$(strip $(PRETTY_FILELIST))" ]]; then \
+    echo -e "$(subst $(SPACE),\n,$(sort $1))"; \
+    echo "===============> Hallo"; \
+  else \
+    echo $(sort $1); \
+  fi
+endef

@@ -20,9 +20,11 @@ USED_FILES    := $(ENTITIES_DOC) $(DOCCONF) $(DOCFILES) $(USED_ALL)
 # it does not let you pipe the output, so we are using two tar calls
 #
 UNUSED_IMAGES := $(shell tar cP --exclude-vcs \
-		    $(IMG_SRCDIR) | tar tP | sed '/\/$$/d' | tr '\n' ' ')
+		    $(IMG_SRCDIR) 2>/dev/null | tar tP 2>/dev/null |\
+		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_XML    := $(shell tar cP --exclude-vcs \
-		    $(DOC_DIR)/xml | tar tP | sed '/\/$$/d' | tr '\n' ' ')
+		    $(DOC_DIR)/xml  2>/dev/null | tar tP 2>/dev/null |\
+		    sed '/\/$$/d' 2>/dev/null | tr '\n' ' ' 2>/dev/null)
 UNUSED_FILES := $(filter-out $(USED_FILES), $(UNUSED_IMAGES) $(UNUSED_XML))
 
 ifeq "$(LIST_NOIMG)" "1"
@@ -57,22 +59,14 @@ list-file:
 #
 .PHONY: list-srcfiles
 list-srcfiles: 
-  ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(USED_FILES)))"
-  else
-	@echo $(sort $(USED_FILES))
-  endif
+	$(call print_list,$(USED_FILES))
+
 
 # List files from xml and images/src _not_ referenced by $DOCFILE or $MAIN
 #
 .PHONY: list-srcfiles-unused
 list-srcfiles-unused:
-  ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(UNUSED_FILES)))"
-  else
-	@echo $(sort $(UNUSED_FILES))
-  endif
-
+	$(call print_list,$(UNUSED_FILES))
 
 # The targets
 #

@@ -190,7 +190,7 @@ MISSING     := $(sort $(filter-out $(notdir $(basename $(SRCALL))), \
 
 COLOR_IMAGES     := $(JPGONLINE) $(PDFONLINE) $(PNGONLINE) $(SVGONLINE)
 GRAYSCALE_IMAGES := $(JPGPRINT) $(PDFPRINT) $(PNGPRINT) $(SVGPRINT)
-ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE)
+ONLINE_IMAGES    := $(JPGONLINE) $(PNGONLINE) $(SVGONLINE)
 
 GEN_IMAGES       := $(addprefix $(IMG_GENDIR)/gen/pdf/,$(GEN_PDF)) $(addprefix $(IMG_GENDIR)/gen/png/,$(GEN_PNG)) $(addprefix $(IMG_GENDIR)/gen/svg/,$(GEN_SVG))
 
@@ -278,11 +278,7 @@ endif
 list-images-missing:
   ifdef MISSING
 	@ccecho "warn" "The following images are missing:"
-    ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(MISSING)))"
-    else
-	@echo "$(MISSING)"
-    endif
+	$(call print_list,$(MISSING))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-missing"
 	@ccecho "info" "All images for document \"$(DOCNAME)\" exist."
@@ -295,11 +291,7 @@ list-images-missing:
 list-images-multisrc warn-images:
   ifdef DOUBLEIMG
 	@ccecho "warn" "Image names not unique, multiple sources available for the following images:"
-    ifeq "$(PRETTY_FILELIST)" "1"
-	@echo -e "$(subst $(SPACE),\n,$(sort $(DOUBLEIMG)))"
-    else
-	@echo "$(DOUBLEIMG)"
-    endif
+	$(call print_list,$(DOUBLEIMG))
   else
     ifeq "$(MAKECMDGOALS)" "list-images-multisrc"
 	@ccecho "info" "All images for document \"$(DOCNAME)\" have unique names."
