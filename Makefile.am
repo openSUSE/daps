@@ -314,13 +314,13 @@ $(FOP_CONFIG): $(FOP_CONFIG_SRC) $(FOP_CONFIG_DEFAULT) $(FIRSTBUILD)
 	  ln -sf $(notdir $(FOP_CONFIG_DEFAULT)) $@; \
 	fi
 
-# Create the Jing Warpper. Debian and Ubuntu require a special version
+# Create the Jing Wrapper. Debian and Ubuntu require a special version
 # (see JING_WRAPPER definitions above)
 $(JING_WRAPPER): $(JING_WRAPPER_SRC) $(JING_WRAPPER_DEFAULT) $(FIRSTBUILD)
 	if test -n "$(JING_WRAPPER_SRC)"; then \
-	  ln -sf $(notdir $(JING_WRAPPER_SRC)) $@; \
+	  cp --remove-destination $(JING_WRAPPER_SRC) $@; \
 	else \
-	  ln -sf $(notdir $(JING_WRAPPER_DEFAULT)) $@; \
+	  cp --remove-destination $(JING_WRAPPER_DEFAULT) $@; \
 	fi
 
 $(USERGUIDE):
