@@ -362,14 +362,14 @@
   </xsl:template>
 
   <xsl:template match="title/ulink">
-   <xsl:call-template name="info">
+   <xsl:call-template name="warn">
      <xsl:with-param name="text">Removed ulink tag in title </xsl:with-param>
    </xsl:call-template>
    <xsl:value-of select="."/>
   </xsl:template>
 
  <xsl:template match="title/xref">
-   <xsl:call-template name="info">
+   <xsl:call-template name="warn">
      <xsl:with-param name="text">Removed xref tag in title </xsl:with-param>
    </xsl:call-template>
   </xsl:template>
