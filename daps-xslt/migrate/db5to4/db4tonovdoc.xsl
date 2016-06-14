@@ -304,6 +304,9 @@
 
   <xsl:template match="part/subtitle">
    <xsl:comment> subtitle=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed part/subtitle</xsl:with-param>
+   </xsl:call-template>
   </xsl:template>
 
 
@@ -359,6 +362,9 @@
 
   <xsl:template match="qandaset/title">
    <xsl:comment> title=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed qandaset/title</xsl:with-param>
+   </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="title/ulink">
