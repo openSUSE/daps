@@ -1,44 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Generating Output Formats | User Guide | DAPS 2.1.5</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="product-name" content="DAPS" /><meta name="product-number" content="2.1.5" /><meta name="book-title" content="User Guide" /><meta name="chapter-title" content="Chapter 4. Generating Output Formats" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="cha.daps.user.edit.html" title="Chapter 3. Editing DocBook XML" /><link rel="next" href="cha.daps.user.img.html" title="Chapter 5. Image Handling" /><script type="text/javascript">
-
-var protocol = window.location.protocol.toLowerCase();
-if ( protocol != 'file:' ) {
-  var agent = navigator.userAgent.toLowerCase();
-  var wanted = ( protocol == 'https:') ? 'https' : 'http';
-  var file = 'fonts.css';
-  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
-      file = 'fonts-nolocal.css';
-  }
-  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
-}
-else {
-   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
-}
-
-</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script></head><body class="nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="https://github.com/openSUSE/daps"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.output.html">Generating Output Formats</a></div><div class="clearme"></div></div></div><div id="_toolbar-wrap"><div id="_toolbar"><div id="_toc-area" class="inactive"><a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html"><span class="tool-spacer"><span class="toc-icon">Contents</span><span class="clearme"></span></span><span class="tool-label">Contents</span></a><div class="active-contents bubble-corner"></div><div class="active-contents bubble"><div class="bubble-container"><h6>User Guide</h6><div id="_bubble-toc"><ol><li class="inactive"><a href="pre.daps.user.html"><span class="number"> </span><span class="name">About This Guide</span></a></li><li class="inactive"><a href="cha.daps.user.inst.html"><span class="number">1 </span><span class="name">System Requirements and Installation</span></a></li><li class="inactive"><a href="cha.daps.user.features.html"><span class="number">2 </span><span class="name">Conceptual Overview</span></a></li><li class="inactive"><a href="cha.daps.user.edit.html"><span class="number">3 </span><span class="name">Editing DocBook XML</span></a></li><li class="inactive"><a href="cha.daps.user.output.html"><span class="number">4 </span><span class="name">Generating Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.img.html"><span class="number">5 </span><span class="name">Image Handling</span></a></li><li class="inactive"><a href="cha.daps.user.modular.html"><span class="number">6 </span><span class="name">Modularizing Documentation Projects</span></a></li><li class="inactive"><a href="cha.daps.user.review.html"><span class="number">7 </span><span class="name">Review and Translation Processes</span></a></li><li class="inactive"><a href="cha.daps.user.deploy.html"><span class="number">8 </span><span class="name">Packaging and Deploying Your Documentation</span></a></li><li class="inactive"><a href="cha.daps.user.layout.html"><span class="number">9 </span><span class="name">Customizing Layout of the Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.config.html"><span class="number">10 </span><span class="name">Configuring DAPS</span></a></li><li class="inactive"><a href="cha.daps.user.trouble.html"><span class="number">11 </span><span class="name">Troubleshooting</span></a></li><li class="inactive"><a href="gl.daps.html"><span class="number"> </span><span class="name">Glossary</span></a></li><li class="inactive"><a href="app.daps.user.migrate.html"><span class="number">A </span><span class="name">Migration of Existing DocBook Projects</span></a></li><li class="inactive"><a href="app.daps.user.editors.html"><span class="number">B </span><span class="name">Editor-specific Information</span></a></li><li class="inactive"><a href="app.daps.user.docupdates.html"><span class="number">C </span><span class="name">What's New?</span></a></li><li class="inactive"><a href="bk01apd.html"><span class="number">D </span><span class="name">GNU Licenses</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_nav-area" class="inactive"><div class="tool"><span class="nav-inner"><span class="tool-label">Navigation</span><a accesskey="p" class="tool-spacer" title="Chapter 3. Editing DocBook XML" href="cha.daps.user.edit.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 5. Image Handling" href="cha.daps.user.img.html"><span class="next-icon">→</span></a></span></div></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.output.html">Generating Output Formats</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="button"><a accesskey="p" class="tool-spacer" title="Chapter 3. Editing DocBook XML" href="cha.daps.user.edit.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 5. Image Handling" href="cha.daps.user.img.html"><span class="next-icon">→</span></a></div><div class="clearme"></div></div><div class="clearme"></div></div></div><div id="_content" class=""><div class="documentation"><div class="chapter " id="cha.daps.user.output"><div class="titlepage"><div><div class="version-info">Applies to  <span class="productname">DAPS</span> <span class="productnumber">2.1.5</span></div><div><h1 class="title"><span class="number">4 </span><span class="name">Generating Output Formats</span> </h1></div></div></div><div class="line"><div class="toc"><dl><dt><span class="sect1"><a href="cha.daps.user.output.html#sec.daps.user.output.validate"><span class="number">4.1 </span><span class="name">Validating Your XML Sources</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.output.html#sec.daps.user.output.syntax"><span class="number">4.2 </span><span class="name">Basic Syntax for Generating Output</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.output.html#sec.daps.user.output.formats"><span class="number">4.3 </span><span class="name">Supported Output Formats</span></a></span></dt><dt><span class="sect1"><a href="cha.daps.user.output.html#sec.daps.user.output.adv"><span class="number">4.4 </span><span class="name">Advanced Output Options</span></a></span></dt></dl></div></div><div class="abstract "><p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 4. Generating Output Formats</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="sec.daps.user.edit.more.html" title="For More Information" /><link rel="next" href="sec.daps.user.output.syntax.html" title="Basic Syntax for Generating Output" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Generating Output Formats</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.edit.more.html">Prev</a> </td><th width="60%" align="center">User Guide</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.user.output.syntax.html">Next</a></td></tr></table></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="cha.daps.user.output"></a>Chapter 4. Generating Output Formats</h1></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="sect1"><a href="cha.daps.user.output.html#sec.daps.user.output.validate">Validating Your XML Sources</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.output.syntax.html">Basic Syntax for Generating Output</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.output.formats.html">Supported Output Formats</a></span></dt><dt><span class="sect1"><a href="sec.daps.user.output.adv.html">Advanced Output Options</a></span></dt></dl></div><div class="abstract"><p class="title"><strong>Abstract</strong></p><p>
    This chapter describes:
-   </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       how to validate your XML files,
-     </p></li><li class="listitem "><p>
+     </p></li><li class="listitem"><p>
       the basic command syntax for generating output formats,
-     </p></li><li class="listitem "><p>
+     </p></li><li class="listitem"><p>
       which output formats you can generate with DAPS, 
-     </p></li><li class="listitem "><p>
+     </p></li><li class="listitem"><p>
       how to do partial builds of your documentation, and 
-     </p></li><li class="listitem "><p>how to specify the MAIN file at the command line (instead of using a DC
+     </p></li><li class="listitem"><p>how to specify the MAIN file at the command line (instead of using a DC
      file).</p></li></ul></div><p>
-  </p></div><div class="sect1 " id="sec.daps.user.output.validate"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.validate"><span class="number">4.1 </span><span class="name">Validating Your XML Sources</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.validate">#</a></h2></div></div></div><p>
+  </p></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.user.output.validate"></a>Validating Your XML Sources</h2></div></div></div><p>
     Generating any output requires that your XML files are valid. As soon as any
     output command is executed, DAPS
     automatically runs a validation check first. If it fails, DAPS
     returns the parser errors, including information about the type of
     error, the respective file name and the line number where the error
     occurred. In addition, DAPS shows the path to the profiled XML sources
-    and the total number of errors.</p><div class="example" id="idm140240613919440"><div class="example-title-wrap"><h6 class="example-title"><span class="number">Example 4.1: </span><span class="name">Parser Output For Validation Errors (<code class="sgmltag-element">xref</code> to unknown ID) </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#idm140240613919440">#</a></h6></div><div class="example-contents"><div class="verbatim-wrap"><pre class="screen">daps_user_concept.xml:60: element xref: validity error:
+    and the total number of errors.</p><div class="example"><a id="idm140128344949072"></a><p class="title"><strong>Example 4.1. Parser Output For Validation Errors (<code class="sgmltag-element">xref</code> to unknown ID)</strong></p><div class="example-contents"><pre class="screen">daps_user_concept.xml:60: element xref: validity error:
 IDREF attribute linkend references an unknown ID "itl.daps.user.inst.other.req"
 Document /local/svn/daps-svn/daps/doc/build/.profiled/x86-amd64-em64t_osuse_/
 MAIN.DAPS.xml does not validate
-make: *** [validate] Error 3</pre></div></div></div><div id="idm140240618827696" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Validating is Done in Build Directory</h6><p>Validation is always done in the <code class="filename">build</code>
+make: *** [validate] Error 3</pre></div></div><br class="example-break" /><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Validating is Done in Build Directory</h3><p>Validation is always done in the <code class="filename">build</code>
 directory and in the profiled sources, as indicated by
  the path above (<code class="filename">/local/[...]/build/.profiled/[...]/MAIN.DAPS.xml
  </code>). However,  you need to fix the validation error in the sources located in your
@@ -59,223 +43,8 @@ directory and in the profiled sources, as indicated by
    To validate all files that belong to your documentation project,
    DAPS only needs to know which DC file to use. Use the
    <code class="option">-d</code> option to specify it.
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140240616690960"><span class="term ">Validating All XML Files in Your Book, Article or Set</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate</pre></div><p>
+  </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">Validating All XML Files in Your Book, Article or Set</span></dt><dd><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> -d <em class="replaceable"><code>PATH_TO_DC_FILE</code></em> validate </pre><p>
       If the XML files are not valid, DAPS will return the parser
       errors. If validation was successful, DAPS returns: <code class="literal">All
       files are valid.</code>
-     </p></dd><dt id="idm140240614726416"><span class="term ">Validating Your Files Including <code class="sgmltag-element">Remark</code> Elements</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> validate --remarks</pre></div></dd></dl></div></div><div class="sect1 " id="sec.daps.user.output.syntax"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.syntax"><span class="number">4.2 </span><span class="name">Basic Syntax for Generating Output</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.syntax">#</a></h2></div></div></div><p>
-   DAPS supports a number of different output formats, including also
-   <span class="quote">“<span class="quote">exotic</span>”</span> formats like man pages or simple text.
-   <a class="xref" href="cha.daps.user.output.html#tab.daps.user.output.overview" title="DAPS Output Commands and Formats">Table 4.1</a>
-   gives an overview.
-  </p><p>
-   You can build several output formats (without them interfering with each
-   other in the <code class="filename">build</code> directory), build your complete
-   documentation project (set, book, or article), or only a part of it (for
-   example, a specific chapter).
-  </p><p>
-   Independent of the individual output format you want to create, you need
-   to specify the DC file to use:
-  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d <em class="replaceable ">PATH_TO_DC_FILE</em> <em class="replaceable ">OUTPUT_FORMAT</em></pre></div><p>
-   For example:
-  </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -d DC-daps-example pdf</pre></div><p>
-   At the end of the transformation process, DAPS shows a message where
-   to find the generated output.
-  </p></div><div class="sect1 " id="sec.daps.user.output.formats"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.formats"><span class="number">4.3 </span><span class="name">Supported Output Formats</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.formats">#</a></h2></div></div></div><p>
-   The following table lists the main output formats and their
-   characteristics, and the DAPS subcommands to generate them. Refer to
-   <a class="xref" href="cha.daps.user.output.html#sec.daps.user.output.syntax" title="4.2. Basic Syntax for Generating Output">Section 4.2</a>
-   for the commands' basic syntax.
-  </p><div class="table" id="tab.daps.user.output.overview"><div class="table-title-wrap"><h6 class="table-title"><span class="number">Table 4.1: </span><span class="name">DAPS Output Commands and Formats </span><a title="Permalink" class="permalink" href="cha.daps.user.output.html#tab.daps.user.output.overview">#</a></h6></div><div class="table-contents"><table summary="DAPS Output Commands and Formats" border="1"><colgroup><col class="1" /><col class="2" /></colgroup><thead><tr><th>
-       <p>
-         Subcommand
-        </p>
-      </th><th>
-       <p>
-         Output/Note
-        </p>
-      </th></tr></thead><tbody><tr><td>
-       <p>
-         pdf
-        </p>
-      </td><td>
-       <p>
-         Creates a color PDF. Open the result in a
-         PDF viewer.
-        </p>
-       <p>
-        Requires an FO formatter.
-        
-       </p>
-      </td></tr><tr><td>
-       <p>
-         pdf --grayscale
-        </p>
-      </td><td>
-       <p>
-         Creates a black-and-white PDF. 
-         Open the result in a PDF viewer.
-       </p>
-      <p>
-        Requires an FO formatter. All color images are automatically
-        converted to grayscale images. If you need a PDF for a printing shop, add the 
-        <code class="option">--cropmarks</code> option. Creation of crop marks is currently only
-        supported by the XEP FO formatter. 
-       </p>
-      </td></tr><tr><td>
-       <p>
-         html
-        </p>
-      </td><td>
-       <p>
-         Creates a subdirectory containing individual HTML files for all
-         chapters of a book (including also preface, glossary or appendix
-         files). The HTML files are named according to the ID of the
-         respective root element.
-         Open the generated <code class="filename">index.html</code> file in a Web
-         browser to view the generated HTML from the starting point (ROOTID
-         of the top-level element).
-        </p>
-       <p>
-         Images and CSS files are only linked in the resulting directory
-         that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <code class="option">--static</code>
-         option. This is useful for creating distributable HTML builds.
-       </p>
-       </td></tr><tr><td>
-       <p>
-         html --single
-        </p>
-      </td><td>
-       <p>
-         Creates a single HTML file, named after the DC file used to
-         create the output. Open the generated <code class="filename">*.html</code>
-         file in a Web browser.
-        </p>
-       <p>
-         Single HTML files are more convenient for full text searches.
-         Images and CSS files are only linked in the resulting directory
-         that contains the HTML files. To copy these files to the same
-         location like the HTML files, use the <code class="option">--static</code>
-         option. This is useful for creating distributable HTML builds.
-       </p>
-       </td></tr><tr><td>
-       <p>
-         epub
-        </p>
-      </td><td>
-       <p>
-         Creates an EPUB 2 document. Open the result in a portable e-book
-         reader (or with a software like Calibre).
-       </p>
-       <p>If you need an EPUB 3 document, add the <code class="option">--epub3</code> option.</p>
-       <p>
-        
-        
-       </p>
-       </td></tr><tr><td>
-       <p>
-        mobi
-       </p>
-      </td><td>
-    <p>Creates an Amazon Kindle e-book in Mobipocket format. Open the result in a portable
-     e-book reader (or with a software like Calibre).</p>
-    <p>Requires Calibre. DAPS first generates an EPUB file which is then converted
-     to <code class="filename">*.mobi</code> format with Calibre.</p>
-      </td></tr><tr><td>
-       <p>
-         webhelp
-       </p>
-      </td><td>
-       <p>
-         Creates a DocBook Web Help output. Open the generated
-         <code class="filename">index.html</code> file in a Web browser to view the
-         generated HTML from the starting point (ROOTID of the top-level
-         element).
-        </p>
-       <p>
-         Experimental feature. Requires a very recent version of the DocBook
-         stylesheets. DocBook Web Help consists of HTML pages with an
-         additional pane, featuring a table of contents and a search
-         function. The table of contents can be expanded and collapsed and
-         is automatically synchronized with the contents pane. The search
-         function weights the search results so that the most relevant
-         results are listed first.
-        </p>
-      </td></tr><tr><td>
-       <p>
-         text
-        </p>
-      </td><td>
-       <p>
-         Creates an ASCII text output. Open the result in a text editor.
-        </p>
-       <p>
-         All images are removed from the output, but their location is
-         indicated in the text by the respective image base name printed in
-         square brackets. A table of contents is automatically generated and
-         is available at the beginning of the text document.
-        </p>
-      </td></tr><tr><td>
-       <p>
-         man
-        </p>
-      </td><td>
-       <p>
-         Creates one or multiple man pages.
-        </p>
-       <p>
-         To create man pages, your XML files must contain at least one
-         <code class="sgmltag-element">refentry</code>—be it in a
-         <code class="sgmltag-element">chapter</code>, <code class="sgmltag-element">appendix</code>, or
-         collected in a <code class="sgmltag-element">reference</code> element. When
-         processing a DocBook document with multiple
-         <code class="sgmltag-element">refentry</code> elements (regardless where they
-         appear), DAPS generates one man page file per
-         <code class="sgmltag-element">refentry</code> element. All other parts of the
-         document will be ignored.
-        </p>
-
-      </td></tr></tbody></table></div></div><p>
-   The number of output formats may be extended in the future, depending on
-   the output formats that are supported by DocBook stylesheets. For an
-   overview of all output formats, run <code class="command">daps help</code>.
-   The available output formats are listed below <span class="guimenu">Subcommands</span> › <span class="guimenu">Generate Books</span>.
-  </p><p>
-   By default, DAPS uses the regular DocBook stylesheets, but DAPS
-   also allows you to customize your output formats in a very flexible way.
-   For details, refer to <a class="xref" href="cha.daps.user.layout.html" title="Chapter 9. Customizing Layout of the Output Formats">Chapter 9, <em>Customizing Layout of the Output Formats</em></a>.
-  </p></div><div class="sect1 " id="sec.daps.user.output.adv"><div class="titlepage"><div><div><h2 class="title" id="sec.daps.user.output.adv"><span class="number">4.4 </span><span class="name">Advanced Output Options</span> <a title="Permalink" class="permalink" href="cha.daps.user.output.html#sec.daps.user.output.adv">#</a></h2></div></div></div><p>
-   In the following, find some example commands for special use cases, like
-   doing partial builds of your documentation project or specifying no
-   further parameters than the MAIN file for an output. In the last case,
-   you can do completely without a DC file.
-  </p><p>
-   For more advanced output options like including remarks or
-   draft watermarks in the output, creating one big XML file or creating
-   distributable archives, refer to <a class="xref" href="cha.daps.user.review.html" title="Chapter 7. Review and Translation Processes">Chapter 7, <em>Review and Translation Processes</em></a>.
-  </p><div class="variablelist "><dl class="variablelist"><dt id="idm140240618164672"><span class="term ">Building Only Parts of Your Documentation Project</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -d DC-daps-example pdf --rootid=cha.template.examples</pre></div><p>Instead of always building your complete documentation project
-     (<code class="sgmltag-element">set</code>, <code class="sgmltag-element">book</code>, or
-     <code class="sgmltag-element">article</code>), DAPS also allows you to build only
-    individual parts. The <span class="quote">“<span class="quote">starting point</span>”</span> of your documentation
-    project is usually defined by the root element of the MAIN file that
-    is referenced in the respective Doc Config. To build only a part of your
-    documentation project, use the <code class="option">--rootid</code> option to specify
-    the ID of an individual <code class="sgmltag-element">book</code>, <code class="sgmltag-element">article</code>,
-     <code class="sgmltag-element">glossary</code>, <code class="sgmltag-element">appendix</code>,
-     <code class="sgmltag-element">part</code>, or <code class="sgmltag-element">chapter</code>.
-     </p></dd><dt id="idm140240618667600"><span class="term ">Specifying the MAIN File on the Command Line</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code><code class="command">daps</code> -m <em class="replaceable ">PATH_TO_MAIN_FILE</em></pre></div><p>
-      If you do not need to specify any further parameters than the MAIN
-      file, you can do completely without a DC file. With the
-      <code class="option">-m</code> option you can specify the MAIN file defining
-      your document. The options <code class="option">-m</code> and <code class="option">-d</code>
-      exclude each other.
-     </p></dd><dt id="idm140240619194960"><span class="term ">Opening the Output Directly in Your PDF Viewer</span></dt><dd><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>evince $(daps -d DC-daps-example pdf) &amp;</pre></div><p>Use the syntax above to open the PDF output directly in a PDF viewer (for example,
-      Evince).</p></dd><dt id="idm140240614307056"><span class="term ">Getting More Information about the Building Process</span></dt><dd><p>DAPS is less verbose than its predecessor
-              <code class="literal">susedoc</code>. Several verbosity levels are
-            available. Use the global options <code class="option">-v*</code> to
-            specify the level of information you want. It ranges from
-              <code class="option">-v</code> (print one line of results) to
-              <code class="option">-vvv</code> (print all commands, very verbose).
-            For example, the following command will print all files
-            created during the build process: </p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps -vv -d DC-daps-example pdf</pre></div><p>For a debug output, use the following:</p><div class="verbatim-wrap"><pre class="screen"><code class="prompt user">tux:~&gt; </code>daps --debug -d DC-daps-example pdf</pre></div></dd></dl></div></div></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="cha.daps.user.img.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Chapter 5 </span>Image Handling</span></a><a class="nav-link" href="cha.daps.user.edit.html"><span class="prev-icon">←</span><span class="nav-label"><span class="number">Chapter 3 </span>Editing DocBook XML</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
+     </p></dd><dt><span class="term">Validating Your Files Including <code class="sgmltag-element">Remark</code> Elements</span></dt><dd><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> -d <em class="replaceable"><code>PATH_TO_DC_FILE</code></em> validate --remarks</pre></dd></dl></div></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.edit.more.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="book.daps.user.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.user.output.syntax.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">For More Information </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Basic Syntax for Generating Output</td></tr></table></div></body></html>

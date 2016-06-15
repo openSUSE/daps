@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Defining Documentation Projects</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Quick Start" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="art.daps.quick.html" title="Quick Start" /><link rel="prev" href="sec.daps.quick.inst.html" title="Installation" /><link rel="next" href="sec.daps.quick.init.html" title="A Documentation Project From Scratch" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Defining Documentation Projects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.quick.inst.html">Prev</a> </td><th width="60%" align="center">Quick Start</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.quick.init.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.basics"></a>Defining Documentation Projects</h2></div></div></div><p>
+   The easiest way to set up a new documentation project from scratch is to
+   use the DAPS initialization script <span class="command"><strong>daps-init</strong></span>. For
+   instructions how to do so, refer to <a class="xref" href="sec.daps.quick.init.html#pro.daps.init" title="Procedure 2. Using daps-init">Procedure 2</a>. The
+   script automatically creates the
+   <a class="xref" href="sec.daps.quick.basics.html#sec.daps.quick.basics.dirstruct" title="Directory Structure">Directory Structure</a>
+   and
+   <a class="xref" href="sec.daps.quick.basics.html#sec.daps.quick.basics.files" title="Key Files">Key Files</a>
+   that you need to get started with DAPS.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.dirstruct"></a>Directory Structure</h3></div></div></div><p>
+   DAPS requires your XML files and images to be
+   organized in a specific structure within your documentation directory.
+    <a class="xref" href="sec.daps.quick.basics.html#ex.daps.quick.dir.doc" title="Example 1. Directory Structure">Example 1, “Directory Structure”</a> shows the required structure
+    including the key files for a DAPS documentation project. You can
+    also create multiple documentation directories for individual
+    documentation projects, but they all need the substructure outlined
+    below.
+   </p><div class="example"><a id="ex.daps.quick.dir.doc"></a><p class="title"><strong>Example 1. Directory Structure</strong></p><div class="example-contents"><pre class="screen"><em class="replaceable"><code>YOUR_DOC_DIR/</code></em><a id="co.quick.docdir.base"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+  |--DC*<a id="co.quick.docdir.dc"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+     |--images/
+     |   |--src/<a id="co.quick.docdir.img.src"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+     |      |--dia/
+     |      |--eps/
+     |      |--fig/
+     |      |--jpg/
+     |      |--pdf/
+     |      |--png/
+     |      |--svg/
+     |--xml/<a id="co.quick.docdir.xml"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span>
+         |--MAIN*.xml<a id="co.quick.docdir.main"></a><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span>
+         |--*.xml</pre></div></div><br class="example-break" /><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.base"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      <span class="quote">“<span class="quote">Working directory</span>”</span> for the respective documentation
+      project (in the following also called <code class="literal">project 
+       directory</code> or <code class="literal">documentation directory</code>).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.dc"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Doc Config file (or files) defining the documentation project (books, articles).
+</p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.img.src"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Top-level directory for any original images that you want to use in
+      the documentation project. Contains subdirectories for images in
+      various formats. Any images to be referenced in the XML sources must
+      be put in the respective subdirectories. For information about
+      referencing images, refer to
+      <a class="xref" href="sec.daps.quick.imgs.html#sec.daps.quick.imgs.refer" title="Referencing Images">the section called “Referencing Images”</a>.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.xml"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Directory holding the XML MAIN file and all other XML files for the
+      documentation project. If you declare entities in one or more external
+      files (for example, in <code class="filename">entity-decl.ent</code>), put the
+      entity declaration files here, too.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.quick.docdir.main"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      The MAIN file of the documentation project.  It contains the
+      <span class="quote">“<span class="quote">starting point</span>”</span> (the highest-level object) of your
+      documentation project and includes
+      <span class="quote">“<span class="quote">references</span>”</span> to other books, chapters, appendixes, etc. For more
+      information, refer to <a class="xref" href="sec.daps.quick.basics.html#sec.daps.quick.basics.files" title="Key Files">the section called “Key Files”</a>.
+     </p></td></tr></table></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Structure of the <code class="filename">xml</code> and
+     <code class="filename">image/src/*</code> Directories</h3><p>Avoid subdirectories within the <code class="filename">xml</code> and
+      <code class="filename">image/src/*</code> directories. Referencing or including
+     files from subdirectories within those directories can lead
+     to unpredictable results with DAPS.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.files"></a>Key Files</h3></div></div></div><p>
+    The following key files define a documentation project so that
+    it can be processed by DAPS:
+   </p><div class="variablelist"><dl class="variablelist"><dt><span class="term">MAIN File</span></dt><dd><p>
+     A DocBook XML file in the <code class="filename">xml</code> directory. It contains the <span class="quote">“<span class="quote">starting point</span>”</span> (the
+     highest-level object) of your documentation project (for example,
+       <code class="sgmltag-element">book</code> or <code class="sgmltag-element">article</code>). For larger
+       documentation projects, it is good practice to name the file
+    <code class="filename">MAIN-<em class="replaceable"><code>PROJECTNAME</code></em>.xml</code>,
+       but you can use any other file name as well. Other XML files may be
+       included into the MAIN file via <code class="sgmltag-element">&lt;xi:include/&gt;</code>
+       statements.
+      </p></dd><dt><span class="term">Doc Config (DC) File</span></dt><dd><p>
+      A configuration file in the project directory. It defines several parameters for your
+      documentation deliverable (for example, the MAIN file, layout variants, or
+      which profiling information to use). Of the multiple parameters that
+      can be set  in the DC file, the only one required is
+      <em class="parameter"><code>MAIN</code></em>, pointing to the XML file that you want to
+      process. Usually, you create one DC file per book or article. For a
+      documentation <code class="sgmltag-element">set</code> (a collection of books),
+      multiple DC files can be defined. This allows you to set different
+      parameters and different values for individual books in the set.
+     </p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.basics.namereq"></a>File Name Requirements</h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">No Spaces and Colons In File and Directory Names</span></dt><dd><p>Avoid spaces and colons in file and directory names. 
+      The <span class="command"><strong>make</strong></span> command
+       in DAPS has trouble understanding them. Use underscores
+       (<code class="filename">_</code>) or hyphens (<code class="filename">-</code>) instead.
+       </p><p>It is good practice to only use the following characters for
+       file or directory names: alphabetic characters [a-z] or [A-Z], numerical
+       characters [0-9], hyphens (<code class="literal">-</code>), or underscores
+       (<code class="literal">_</code>).</p></dd><dt><span class="term">Unique Image Names</span></dt><dd><p>Always store just one file with a particular name within the
+      <code class="filename">images/src</code> directory of a project. As DAPS tries to
+      create any missing image formats from original images, it will otherwise
+      not know which one of the duplicate files to use for converting to the
+      missing formats.</p><p>Additionally, having a file called <code class="filename">example.png</code>
+      and another called <code class="filename">example.svg</code> in the same documentation
+      project will often lead to  questions like: Which file to use where? Do
+      both files display the same content? Are both files current, or is one
+      outdated?</p><p>
+      When invoking DAPS with the parameter <span class="command"><strong><em class="parameter"><code>-v</code></em></strong></span>,
+      a warning will be printed whenever a file name appears twice within a project.
+      To specifically check for image name clashes upfront, use the
+      <span class="command"><strong>daps list-images-multisrc</strong></span> subcommand.
+     </p><p>
+      It is a good idea to find a consistent file naming scheme. For example, when
+      documenting software, it might prove helpful to include the name of the
+      application at the beginning of the file name. You can also use prefixes like
+     <code class="filename">screenshot_</code> and <code class="filename">diagram_</code>
+      to separate between different types of images.
+    </p></dd></dl></div></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.quick.inst.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="art.daps.quick.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.quick.init.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Installation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> A Documentation Project From Scratch</td></tr></table></div></body></html>

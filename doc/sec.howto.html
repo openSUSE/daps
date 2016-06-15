@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>How to Write</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Quick Start" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="art.tutorial.html" title="How to Write an Article with DocBook and DAPS" /><link rel="prev" href="bk02ar02s03.html" title="How to Start" /><link rel="next" href="bk02ar02s05.html" title="Convert Your XML Files" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">How to Write</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="bk02ar02s03.html">Prev</a> </td><th width="60%" align="center">How to Write an Article with DocBook and DAPS</th><td width="20%" align="right"> <a accesskey="n" href="bk02ar02s05.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.howto"></a>How to Write</h2></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144201144592"></a>Identifying Start and End Tags</h3></div></div></div><p>
+    The most important thing you need to know about XML is,
+    that you need to close the tags. Either with an end tag or with a
+    backslash at the end of the tag (for example:
+    <span class="command"><strong>&lt;para/&gt;</strong></span>). The content between the
+    tags depends on which element you want to
+    create. Open the XML file <code class="filename">recipe.xml</code> that you just
+    created, and place the cursor below the header. To write an article, paste
+    an <span class="command"><strong>article</strong></span> start and end tag into the XML file. Between these two tags, write your text as shown in <a class="xref" href="sec.howto.html#ex.tags" title="Example 2. Start- and Endtag of an Article">Example 2, “Start- and Endtag of an Article”</a>.
+   </p><div class="example"><a id="ex.tags"></a><p class="title"><strong>Example 2. Start- and Endtag of an Article</strong></p><div class="example-contents"><pre class="programlisting">&lt;article&gt;
+Tags and text
+&lt;/article&gt;
+    </pre></div></div><br class="example-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144203107984"></a>Adding Metadata</h3></div></div></div><p>
+    Each article may contain information about its author, publication
+    date, release information, copyright or other <span class="quote">“<span class="quote">metadata</span>”</span>. To include
+    such metadata use an article info element and enter the following data (see <a class="xref" href="sec.howto.html#ex.articleinfo" title="Example 3. Article Info Header">Example 3, “Article Info Header”</a>):
+   </p><div class="example"><a id="ex.articleinfo"></a><p class="title"><strong>Example 3. Article Info Header</strong></p><div class="example-contents"><pre class="programlisting">&lt;article lang="en" id="art.template"&gt;<a id="co.article.xml"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+&lt;title&gt;Little G's Ceylon Bang&lt;/title&gt;<a id="co.article2.xml"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+&lt;articleinfo&gt;
+&lt;releaseinfo&gt;
+  2013-10-21<a id="co.article3.xml"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+&lt;/releaseinfo&gt;
+ &lt;author&gt;<a id="co.author.xml"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span>
+  &lt;firstname&gt;Tux&lt;/firstname&gt;
+  &lt;surname&gt;Penguin&lt;/surname&gt;
+ &lt;/author&gt;
+&lt;/articleinfo&gt;
+&lt;abstract&gt;<a id="co.article5.xml"></a><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span>
+Recipe for a chili sauce.
+&lt;/abstract&gt;
+&lt;/article&gt;<a id="co.article4.xml"></a><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span>
+    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.article.xml"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Article start tag.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article2.xml"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Title for the article.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article3.xml"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Build date.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.author.xml"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       The author's name.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article5.xml"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       An abstract. What is the subject of your article?
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.article4.xml"><span><img src="static/images/callouts/6.png" alt="6" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Article end tag. It always has to be at the end of the whole article.
+      </p></td></tr></table></div></div></div><br class="example-break" /><div class="figure"><a id="idm140144199817264"></a><p class="title"><strong>Figure 2. HTML Output (Article Title and Article Info)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="70%"><tr><td><img src="images/articleinfo2.png" width="100%" alt="HTML Output (Article Title and Article Info)" /></td></tr></table></div></div></div><br class="figure-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144199419312"></a>Structuring Your Document With Sections</h3></div></div></div><p>
+    Each article consists of sections and subsections. <a class="xref" href="sec.howto.html#ex.sections" title="Example 4. Example: Structure With Sections">Example 4, “Example: Structure With Sections”</a> contains a
+    section and a subsection.
+   </p><div class="example"><a id="ex.sections"></a><p class="title"><strong>Example 4. Example: Structure With Sections</strong></p><div class="example-contents"><pre class="programlisting">&lt;sect1&gt;<a id="co.section.xml"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+ &lt;title&gt;What do you need?&lt;/title&gt;
+  &lt;sect2&gt;<a id="co.section2.xml"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+   &lt;title&gt;Ingredients&lt;/title&gt;
+    &lt;para/&gt;
+   &lt;/sect2&gt;<a id="co.section3.xml"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+   &lt;sect2&gt;
+    &lt;title&gt;Equipment&lt;/title&gt;
+     &lt;para/&gt;
+  &lt;/sect2&gt;
+ &lt;/sect1&gt;<a id="co.section4.xml"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span>
+&lt;sect1 id="sec.preparation"&gt;
+ &lt;title&gt;Preparation&lt;/title&gt;
+&lt;/sect1&gt;
+    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.section.xml"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Start tag of section level one. Section1 is the parent element of every
+       element that comes below. Always needs a title. Recommended is a para
+       tag in every section.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section2.xml"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Start tag section of level two.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section3.xml"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       End tag section of level two.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.section4.xml"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       End tag of the section level one parent element.
+      </p></td></tr></table></div></div></div><br class="example-break" /><p>
+    Place the cursor behind the abstract end tag and in front of the article
+    end tag and paste the content of <span class="quote">“<span class="quote">Example 4</span>”</span>  into your XML file.
+   </p><div class="figure"><a id="idm140144205512432"></a><p class="title"><strong>Figure 3. HTML Output (Article With Sections)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="70%"><tr><td><img src="images/ohnealles.png" width="100%" alt="HTML Output (Article With Sections)" /></td></tr></table></div></div></div><br class="figure-break" /><p>
+    The image above shows the given XML file example as an HTML
+    page. As you can see in the picture, the section level two is a child
+    element of section level one. It is possible to nest sections.
+   </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144202198448"></a>Creating Itemized Lists</h3></div></div></div><p>
+    To create a listing, use the <span class="command"><strong>&lt;itemizedlist&gt; </strong></span> tag.
+   </p><div class="example"><a id="idm140144205356192"></a><p class="title"><strong>Example 5. Itemized List</strong></p><div class="example-contents"><pre class="programlisting">&lt;itemizedlist&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   60g Habanero Chilis
+  &lt;/para&gt;
+  &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   30g Cayenne Chilis
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   1,5 Butch T Chilis
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+ &lt;listitem&gt;
+  &lt;para&gt;
+   75g Kidney Beans
+  &lt;/para&gt;
+ &lt;/listitem&gt;
+&lt;/itemizedlist&gt;
+    </pre></div></div><br class="example-break" /><p>
+    Place the cursor behind the following line:
+    </p><pre class="screen">&lt;title&gt;Preparation&lt;/title&gt;</pre><p>
+    and paste the contents of <span class="quote">“<span class="quote">Example 5</span>”</span> into your XML file.
+   </p><div class="figure"><a id="idm140144186613056"></a><p class="title"><strong>Figure 4. HTML Output (Article With an Itemized List)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="70%"><tr><td><img src="images/ohnestep.png" width="100%" alt="HTML Output (Article With an Itemized List)" /></td></tr></table></div></div></div><br class="figure-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144205233648"></a>Giving Step-by-Step Instructions</h3></div></div></div><p>
+    For writing instructions, it is recommended to do it step-by-step, as you can
+    see in the following <a class="xref" href="sec.howto.html#ex.listing" title="Example 6. Example for Step-by-Step Instructions">Example 6, “Example for Step-by-Step Instructions ”</a>. That way, instructions are easier to understand
+    and browse for the reader.
+   </p><div class="example"><a id="ex.listing"></a><p class="title"><strong>Example 6. Example for Step-by-Step Instructions </strong></p><div class="example-contents"><pre class="programlisting">&lt;procedure&gt;<a id="co.textstructure.xml"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+ &lt;step&gt;<a id="co.textstructure2.xml"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+  &lt;para&gt;<a id="co.textstructure3.xml"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span>
+   Rinse, than drain the kidney beans for about 10 minutes.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Fry kidney beans with some oil.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Puree all ingredients.
+  &lt;/para&gt;
+ &lt;/step&gt;
+ &lt;step&gt;
+  &lt;para&gt;
+   Cook for about 5 minutes.
+  &lt;/para&gt;
+ &lt;/step&gt;
+&lt;/procedure&gt;
+    </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure.xml"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Procedure start tag.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure2.xml"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       If you use <span class="command"><strong>&lt;step&gt;</strong></span> elements you can create numeric listed paragraphs. Every
+       further <span class="command"><strong> &lt;step&gt;</strong></span> you add automatically counts
+       up.
+      </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.textstructure3.xml"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+       Within <span class="command"><strong>&lt;para&gt;&lt;/para&gt;</strong></span> you can write down your text.
+      </p></td></tr></table></div></div></div><br class="example-break" /><div class="figure"><a id="idm140144198516560"></a><p class="title"><strong>Figure 5. HTML Output (Article with Step-by-Step-Instructions)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td><img src="images/ohnelink.png" width="100%" alt="HTML Output (Article with Step-by-Step-Instructions)" /></td></tr></table></div></div></div><br class="figure-break" /></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144206456688"></a>Integrating Remote Links and Cross References</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="idm140144206455984"></a>Remote Links</h4></div></div></div><p>
+  To refer to an external HTML page, integrate an internet link in your tutorial.
+  </p><div class="example"><a id="idm140144202348208"></a><p class="title"><strong>Example 7. Integrating Remote Link</strong></p><div class="example-contents"><pre class="programlisting">&lt;para&gt;
+ Before you start to cook:
+ &lt;ulink url="http://www.crazyhotseeds.com/top-10-worlds-hottest-peppers/"/&gt;
+&lt;/para&gt;
+  </pre></div></div><br class="example-break" /><p>
+  To get the output shown in Figure 6, place the cursor behind the
+  <span class="command"><strong>&lt;/para&gt;</strong></span> end tag within the
+  <span class="command"><strong>&lt;abstract&gt;</strong></span> element and paste the content of
+  <span class="quote">“<span class="quote">Example 7</span>”</span> into your XML file.
+ </p><div class="figure"><a id="idm140144202933072"></a><p class="title"><strong>Figure 6. HTML Output (Article with Remote Link)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td><img src="images/chilirezeptlink3.png" width="100%" alt="HTML Output (Article with Remote Link)" /></td></tr></table></div></div></div><br class="figure-break" /></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a id="idm140144193182224"></a>Cross References</h4></div></div></div><p>
+   With cross references (xref elements) you link to paragraphs or examples within your document.
+  </p><div class="example"><a id="idm140144193222816"></a><p class="title"><strong>Example 8. Integrating Cross References</strong></p><div class="example-contents"><pre class="programlisting">&lt;para&gt;
+ How to prepare see &lt;xref linkend="sec.preparation"/&gt;<a id="co.references.xml"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+&lt;/para&gt;
+
+...
+
+
+&lt;sect1 id="sec.preparation"&gt;<a id="co.references2.xml"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+
+   </pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.references.xml"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      With <span class="command"><strong>&lt;xref linkend="ex.preparation"/&gt;</strong></span> you set a link to the
+      following <span class="quote">“<span class="quote">Preparation</span>”</span> title.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.references2.xml"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Set <span class="command"><strong>id=sec.preparation</strong></span> at the section, that you want to refer to.
+      Set <span class="command"><strong>id=ex.preparation</strong></span> at the paragraph, you want to refer to.
+     </p></td></tr></table></div></div></div><br class="example-break" /><p>
+ To get the output shown in <span class="quote">“<span class="quote">Figure 7</span>”</span>, place the cursor below the
+ <span class="command"><strong>&lt;title&gt;Preparation&lt;/title&gt;</strong></span> element and paste the
+ contents of <span class="quote">“<span class="quote">Example 8</span>”</span> into your XML file.
+</p><div class="figure"><a id="idm140144189454704"></a><p class="title"><strong>Figure 7. HTML Output (Article with Cross-Reference)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="100%"><tr><td><img src="images/ohnebild.png" width="100%" alt="HTML Output (Article with Cross-Reference)" /></td></tr></table></div></div></div><br class="figure-break" /><p>
+ As you can see in the screenshot, the underlined part is a link to the section<span class="quote">“<span class="quote">Preparation</span>”</span>.
+</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="idm140144204507280"></a>Integrating Images</h3></div></div></div><div class="procedure"><ol class="procedure" type="1"><li class="step"><p><a id="ex.image"></a>
+      To integrate an image in your file, save an image (for example, <code class="filename">butcht.png</code>) in the
+      <code class="filename">image/png</code> directory.
+      That is very important because otherwise, it will not
+      work.
+     </p></li><li class="step"><p>
+      Add an image reference into your XML file.
+     </p></li></ol></div><div class="example"><a id="idm140144190965840"></a><p class="title"><strong>Example 9. Integrating Images</strong></p><div class="example-contents"><pre class="programlisting">&lt;figure&gt;
+    &lt;title&gt;Butch T Chili&lt;/title&gt;<a id="co.image.xml"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span>
+    &lt;mediaobject&gt;
+    &lt;imageobject&gt;
+    &lt;imagedata fileref="butcht.png"/&gt;<a id="co.image2.xml"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span>
+    &lt;/imageobject&gt;
+    &lt;/mediaobject&gt;
+    &lt;/figure&gt;
+    </pre></div></div><br class="example-break" /><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.image.xml"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Image title. In the output formats, the title will appear
+      together with the image.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.image2.xml"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      The image reference.
+     </p></td></tr></table></div><div class="figure"><a id="idm140144205696176"></a><p class="title"><strong>Figure 8. HTML Output (Article with Integrated Image)</strong></p><div class="figure-contents"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="80%"><tr><td><img src="images/butcht7.11.png" width="100%" alt="HTML Output (Article with Integrated Image)" /></td></tr></table></div></div></div><br class="figure-break" /></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="bk02ar02s03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="art.tutorial.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="bk02ar02s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">How to Start </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Convert Your XML Files</td></tr></table></div></body></html>

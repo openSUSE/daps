@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>System Requirements</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Quick Start" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="art.daps.quick.html" title="Quick Start" /><link rel="prev" href="sec.daps.quick.dbversions.html" title="Supported DocBook Versions" /><link rel="next" href="sec.daps.quick.inst.html" title="Installation" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">System Requirements</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.quick.dbversions.html">Prev</a> </td><th width="60%" align="center">Quick Start</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.quick.inst.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.req"></a>System Requirements</h2></div></div></div><p>
+  DAPS itself is a lean solution that does not require a lot of system
+  resources. However, it does use components that may need a stronger processor
+  and more RAM, for example, for creating PDF output files. Although not
+  required, DAPS benefits from multi-core processors.
+ </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.hw"></a>Hardware Requirements</h3></div></div></div><div class="variablelist"><dl class="variablelist"><dt><span class="term">RAM</span></dt><dd><p>The required amount of RAM mostly depends on the volume of your
+       documentation projects. For creation of PDF output, at least 2 GB of RAM are
+       recommended.</p></dd><dt><span class="term">CPU</span></dt><dd><p>If you have multiple or very large documentation projects, a machine
+       with multiple cores is recommended.</p></dd><dt><span class="term">Hard Disk Space</span></dt><dd><p>The disk space consumed mostly depends on the amount of your
+       documentation sources and the number of output formats you want to generate.</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.sw"></a>Software Requirements</h3></div></div></div><p>DAPS runs on any modern Linux system. It has not been
+    attempted to port DAPS to Windows* or Mac OS X* yet.</p><p>When installing DAPS as an RPM package (on any SUSE-based system),
+   dependencies on other software packages are automatically resolved during
+   installation. No additional action is required.</p><p>For installing DAPS from the sources on other Linux distributions, refer
+    to <a class="ulink" href="https://github.com/openSUSE/daps/blob/master/INSTALL.adoc" target="_top">https://github.com/openSUSE/daps/blob/master/INSTALL.adoc</a> where the
+    respective requirements are covered in detail.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.addon.sw"></a>Additional Software</h3></div></div></div><p>In addition to DAPS, you need the following software:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>An XML (or text) editor of your choice.</p></li><li class="listitem"><p>For generating PDF output: an FO formatter, like
+      <a class="ulink" href="http://projects.apache.org/projects/fop.html" target="_top">FOP</a> or
+      <a class="ulink" href="http://www.renderx.com" target="_top">XEP</a>. The FO formatter
+      <a class="ulink" href="http://www.antennahouse.com" target="_top">Antenna House Formatter</a>
+      is currently not supported. Whereas FOP is an open source product,
+      both XEP and Antenna House are commercial products.</p></li></ul></div><p>To add further components like version management or a workflow
+   mechanism for your projects, use DAPS in combination with the following
+   software:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Any version management system, like CVS, Subversion, Mercurial or Git.
+      </p></li></ul></div><p>
+   Together with the software components mentioned above, DAPS can be
+   used as a fully-fledged authoring and content management system for documentation
+   projects based on DocBook.
+  </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a id="sec.daps.quick.req.further"></a>Directory Structure</h3></div></div></div><p>
+    For DAPS to work out of the box, it requires a certain organization
+    of your DocBook XML files and images within your documentation directory. For
+    details, refer to <a class="xref" href="sec.daps.quick.basics.html#sec.daps.quick.basics.dirstruct" title="Directory Structure">the section called “Directory Structure”</a>. You
+    can generate the necessary structure with the DAPS initialization
+    script, <span class="command"><strong>daps-init</strong></span>. For instructions on how to make
+    existing DocBook projects compatible with DAPS, refer to
+    <a class="xref" href="sec.daps.quick.migrate.html" title="Migration of Existing DocBook Projects">the section called “Migration of Existing DocBook Projects”</a>.
+   </p></div></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.quick.dbversions.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="art.daps.quick.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.quick.inst.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Supported DocBook Versions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Installation</td></tr></table></div></body></html>

@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Configuring DAPS | User Guide | DAPS 2.1.5</title><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" /><link rel="stylesheet" type="text/css" href="static/css/style.css" /><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="product-name" content="DAPS" /><meta name="product-number" content="2.1.5" /><meta name="book-title" content="User Guide" /><meta name="chapter-title" content="Chapter 10. Configuring DAPS" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="cha.daps.user.layout.html" title="Chapter 9. Customizing Layout of the Output Formats" /><link rel="next" href="cha.daps.user.trouble.html" title="Chapter 11. Troubleshooting" /><script type="text/javascript">
-
-var protocol = window.location.protocol.toLowerCase();
-if ( protocol != 'file:' ) {
-  var agent = navigator.userAgent.toLowerCase();
-  var wanted = ( protocol == 'https:') ? 'https' : 'http';
-  var file = 'fonts.css';
-  if (agent.indexOf('android') != -1 && agent.indexOf('chrom') != -1 ) {
-      file = 'fonts-nolocal.css';
-  }
-  document.write('<link rel="stylesheet" type="text/css" href="' + wanted + '://static.opensuse.org/fonts/'+ file +'"></link>');
-}
-else {
-   document.write('<link rel="stylesheet" type="text/css" href="static/css/fonts-onlylocal.css"></link>');
-}
-
-</script><noscript><link rel="stylesheet" type="text/css" href="http://static.opensuse.org/fonts/fonts.css" /></noscript><script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script><script src="static/js/script.js" type="text/javascript"></script></head><body class="nofooter offline js-off"><div id="_outer-wrap"><div id="_white-bg"><div id="_header"><div id="_logo"><a href="https://github.com/openSUSE/daps"><img src="static/images/logo.png" alt="Logo" /></a></div><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.config.html">Configuring DAPS</a></div><div class="clearme"></div></div></div><div id="_toolbar-wrap"><div id="_toolbar"><div id="_toc-area" class="inactive"><a id="_toc-area-button" class="tool" title="Contents" accesskey="c" href="index.html"><span class="tool-spacer"><span class="toc-icon">Contents</span><span class="clearme"></span></span><span class="tool-label">Contents</span></a><div class="active-contents bubble-corner"></div><div class="active-contents bubble"><div class="bubble-container"><h6>User Guide</h6><div id="_bubble-toc"><ol><li class="inactive"><a href="pre.daps.user.html"><span class="number"> </span><span class="name">About This Guide</span></a></li><li class="inactive"><a href="cha.daps.user.inst.html"><span class="number">1 </span><span class="name">System Requirements and Installation</span></a></li><li class="inactive"><a href="cha.daps.user.features.html"><span class="number">2 </span><span class="name">Conceptual Overview</span></a></li><li class="inactive"><a href="cha.daps.user.edit.html"><span class="number">3 </span><span class="name">Editing DocBook XML</span></a></li><li class="inactive"><a href="cha.daps.user.output.html"><span class="number">4 </span><span class="name">Generating Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.img.html"><span class="number">5 </span><span class="name">Image Handling</span></a></li><li class="inactive"><a href="cha.daps.user.modular.html"><span class="number">6 </span><span class="name">Modularizing Documentation Projects</span></a></li><li class="inactive"><a href="cha.daps.user.review.html"><span class="number">7 </span><span class="name">Review and Translation Processes</span></a></li><li class="inactive"><a href="cha.daps.user.deploy.html"><span class="number">8 </span><span class="name">Packaging and Deploying Your Documentation</span></a></li><li class="inactive"><a href="cha.daps.user.layout.html"><span class="number">9 </span><span class="name">Customizing Layout of the Output Formats</span></a></li><li class="inactive"><a href="cha.daps.user.config.html"><span class="number">10 </span><span class="name">Configuring DAPS</span></a></li><li class="inactive"><a href="cha.daps.user.trouble.html"><span class="number">11 </span><span class="name">Troubleshooting</span></a></li><li class="inactive"><a href="gl.daps.html"><span class="number"> </span><span class="name">Glossary</span></a></li><li class="inactive"><a href="app.daps.user.migrate.html"><span class="number">A </span><span class="name">Migration of Existing DocBook Projects</span></a></li><li class="inactive"><a href="app.daps.user.editors.html"><span class="number">B </span><span class="name">Editor-specific Information</span></a></li><li class="inactive"><a href="app.daps.user.docupdates.html"><span class="number">C </span><span class="name">What's New?</span></a></li><li class="inactive"><a href="bk01apd.html"><span class="number">D </span><span class="name">GNU Licenses</span></a></li></ol></div><div class="clearme"></div></div></div></div><div id="_nav-area" class="inactive"><div class="tool"><span class="nav-inner"><span class="tool-label">Navigation</span><a accesskey="p" class="tool-spacer" title="Chapter 9. Customizing Layout of the Output Formats" href="cha.daps.user.layout.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 11. Troubleshooting" href="cha.daps.user.trouble.html"><span class="next-icon">→</span></a></span></div></div></div></div><div id="_fixed-header-wrap" class="inactive"><div id="_fixed-header"><div class="crumbs"><a class="book-link" href="index.html" title="User Guide"><span class="book-icon">User Guide</span></a><span> › </span><a class="crumb" href="cha.daps.user.config.html">Configuring DAPS</a></div><div class="buttons"><a class="top-button button" href="#">Top</a><div class="button"><a accesskey="p" class="tool-spacer" title="Chapter 9. Customizing Layout of the Output Formats" href="cha.daps.user.layout.html"><span class="prev-icon">←</span></a><a accesskey="n" class="tool-spacer" title="Chapter 11. Troubleshooting" href="cha.daps.user.trouble.html"><span class="next-icon">→</span></a></div><div class="clearme"></div></div><div class="clearme"></div></div></div><div id="_content" class=""><div class="documentation"><div class="chapter " id="cha.daps.user.config"><div class="titlepage"><div><div class="version-info">Applies to  <span class="productname">DAPS</span> <span class="productnumber">2.1.5</span></div><div><h1 class="title"><span class="number">10 </span><span class="name">Configuring DAPS</span> </h1></div></div></div><div class="line"></div><div class="abstract "><p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 10. Configuring DAPS</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Toolchain, User Guide" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="book.daps.user.html" title="User Guide" /><link rel="prev" href="sec.daps.user.layout.styleheets.html" title="Customizing the DocBook Stylesheets" /><link rel="next" href="cha.daps.user.trouble.html" title="Chapter 11. Troubleshooting" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. Configuring DAPS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.user.layout.styleheets.html">Prev</a> </td><th width="60%" align="center">User Guide</th><td width="20%" align="right"> <a accesskey="n" href="cha.daps.user.trouble.html">Next</a></td></tr></table></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a id="cha.daps.user.config"></a>Chapter 10. Configuring DAPS</h1></div></div></div><div class="abstract"><p class="title"><strong>Abstract</strong></p><p>
    This chapter shows:
-   </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
       how to customize DAPS behavior with a local
       configuration file.
      </p></li></ul></div><p>
@@ -32,28 +16,28 @@ else {
    the value defined in the next higher hierarchy level takes precedence. Values
    defined on the command line always take precedence over values set in any other
    locations.
-  </p><div class="itemizedlist "><ul class="itemizedlist"><li class="listitem "><p>
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
      <code class="filename">/etc/daps/config</code> (system-wide configuration file)
-    </p></li><li class="listitem "><p>
+    </p></li><li class="listitem"><p>
      <code class="filename">~/.config/daps/dapsrc</code> (user-specific configuration file)
-    </p></li><li class="listitem "><p>
+    </p></li><li class="listitem"><p>
      DC (doc config) file of the documentation project (for settings specific
      to a document or documentation set)
-    </p></li><li class="listitem "><p>
+    </p></li><li class="listitem"><p>
      on the fly at the command line by specifying options to a
-     <code class="command">daps</code> command.
+     <span class="command"><strong>daps</strong></span> command.
     </p></li></ul></div><p>
   For adjusting a few parameters that you want to set to custom values, do
   <span class="emphasis"><em>not </em></span> edit the system-wide DAPS configuration
   file. Instead, check if the file <code class="filename">~/.config/daps/dapsrc</code> already exists. If not,
   create the file and modify it as described below:
- </p><div class="procedure "><div class="procedure-contents"><ol class="procedure" type="1"><li class="step "><p>
+ </p><div class="procedure"><ol class="procedure" type="1"><li class="step"><p>
     Open both <code class="filename">~/.config/daps/dapsrc</code> and <code class="filename">/etc/daps/config</code> in a text editor.
-   </p></li><li class="step "><p>
+   </p></li><li class="step"><p>
     Select which parameters you want to modify.
-   </p></li><li class="step "><p>
+   </p></li><li class="step"><p>
     Copy <span class="emphasis"><em>only those</em></span> to <code class="filename">~/.config/daps/dapsrc</code>.
-   </p><div id="idm140240618604752" class="admonition note"><img class="symbol" alt="Note" title="Note" src="static/images/icon-note.png" /><h6>Note: Parameter Incompatibilities Between Configuration Files</h6><p>
+   </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Parameter Incompatibilities Between Configuration Files</h3><p>
      If copying <span class="emphasis"><em>all</em></span> parameters from <code class="filename">/etc/daps/config</code> to
      <code class="filename">~/.config/daps/dapsrc</code>, this will raise the risk of parameter
      incompatibilities as soon as you update to a higher DAPS version.
@@ -61,8 +45,8 @@ else {
      override the settings in <code class="filename">/etc/daps/config</code> by default, any parameter
      incompatibilities between the files may lead to unexpected behavior of
      DAPS.
-    </p></div></li><li class="step "><p>
+    </p></div></li><li class="step"><p>
     Save <code class="filename">~/.config/daps/dapsrc</code> and test if your changes lead to the expected
     results.
-   </p></li></ol></div></div><p>For a list of all parameters including a short description of each
-  parameter, see <code class="filename">/etc/daps/config</code> in your installed system or <a class="ulink" href="https://github.com/openSUSE/daps/blob/master/etc/config.in" target="_blank">https://github.com/openSUSE/daps/blob/master/etc/config.in</a>.</p></div></div><div class="page-bottom"><div id="_bottom-navigation"><a class="nav-link" href="cha.daps.user.trouble.html"><span class="next-icon">→</span><span class="nav-label"><span class="number">Chapter 11 </span>Troubleshooting</span></a><a class="nav-link" href="cha.daps.user.layout.html"><span class="prev-icon">←</span><span class="nav-label"><span class="number">Chapter 9 </span>Customizing Layout of the Output Formats</span></a></div><div id="_share-print"><div class="online-contents share"><strong>Share this page: </strong><span class="share-buttons"><span id="_share-fb" class="bottom-button">Facebook</span><span class="spacer"> • </span><span id="_share-gp" class="bottom-button">Google+</span><span class="spacer"> • </span><span id="_share-tw" class="bottom-button">Twitter</span></span></div><div class="print"><span id="_print-button" class="bottom-button">Print this page</span></div><div class="clearme"></div></div></div></div></div></body></html>
+   </p></li></ol></div><p>For a list of all parameters including a short description of each
+  parameter, see <code class="filename">/etc/daps/config</code> in your installed system or <a class="ulink" href="https://github.com/openSUSE/daps/blob/master/etc/config.in" target="_top">https://github.com/openSUSE/daps/blob/master/etc/config.in</a>.</p></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.user.layout.styleheets.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="book.daps.user.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="cha.daps.user.trouble.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Customizing the DocBook Stylesheets </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. Troubleshooting</td></tr></table></div></body></html>

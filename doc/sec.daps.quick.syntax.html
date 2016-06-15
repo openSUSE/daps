@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Basic DAPS Syntax</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Quick Start" /><meta name="keywords" content="DAPS, DocBook Authoring and Publishing Suite, DocBook, XML, Tool chain, Command Line" /><link rel="home" href="index.html" title="DAPS Documentation" /><link rel="up" href="art.daps.quick.html" title="Quick Start" /><link rel="prev" href="sec.daps.quick.imgs.html" title="Image Handling" /><link rel="next" href="sec.daps.quick.output.html" title="Output Formats" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Basic DAPS Syntax</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sec.daps.quick.imgs.html">Prev</a> </td><th width="60%" align="center">Quick Start</th><td width="20%" align="right"> <a accesskey="n" href="sec.daps.quick.output.html">Next</a></td></tr></table></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sec.daps.quick.syntax"></a>Basic DAPS Syntax</h2></div></div></div><p>
+   Before introducing the key <span class="command"><strong>daps</strong></span> commands to create
+   output formats from your XML documents, let's get familiar with the basic
+   syntax of the <span class="command"><strong>daps</strong></span> command:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> [--global-options] subcommand [--command-options] [arguments]</pre><p>
+  <a class="xref" href="sec.daps.quick.syntax.html#ex.daps.syntax" title="Example 4. DAPS Syntax">Example 4, “DAPS Syntax”</a> shows an example command that generates
+   HTML output. Global options are used to specify the level of verbosity,
+   and the Doc Config file for creating the output.
+  </p><div class="example"><a id="ex.daps.syntax"></a><p class="title"><strong>Example 4. DAPS Syntax</strong></p><div class="example-contents"><pre class="screen">daps<a id="co.daps.syntax.main"></a><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span> --debug<a id="co.daps.syntax.debug"></a><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span> -d<a id="co.daps.syntax.dc"></a><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span> DC-daps-example html<a id="co.daps.syntax.output"></a><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span> --static<a id="co.daps.syntax.static"></a><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></pre><div class="calloutlist"><table border="0" summary="Callout list"><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.main"><span><img src="static/images/callouts/1.png" alt="1" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Main command: <span class="command"><strong>daps</strong></span>
+    </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.debug"><span><img src="static/images/callouts/2.png" alt="2" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">--debug</code>: Sets the highest verbosity
+      level (number of messages shown during the transformation process from
+      XML to HTML).
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.dc"><span><img src="static/images/callouts/3.png" alt="3" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Global Option <code class="option">-d</code>: Defines the relative or absolute
+      path to the Doc Config file. In this example, <span class="command"><strong>daps</strong></span> is
+      called in the same directory that holds the Doc Config file.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.output"><span><img src="static/images/callouts/4.png" alt="4" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Subcommand <span class="command"><strong>html</strong></span>: Defines the output format to
+      create.
+     </p></td></tr><tr><td width="5%" valign="top" align="left"><p><a href="#co.daps.syntax.static"><span><img src="static/images/callouts/5.png" alt="5" border="0" /></span></a> </p></td><td valign="top" align="left"><p>
+      Command option <code class="option">--static</code>: Tells DAPS to copy CSS
+      and image files to the same location like the HTML files. For more
+      information, see <a class="xref" href="sec.daps.quick.output.html#tab.daps.quick.output.overview" title="Table 1. DAPS Output Commands and Formats">Table 1, “DAPS Output Commands and Formats”</a>.
+     </p></td></tr></table></div></div></div><br class="example-break" /><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Specifying the DC File</h3><p>For execution of most commands, DAPS needs to know which DC file
+      to use. Usually, you do so by specifying a DC file with the global option
+     <code class="option">-d</code>. For example:</p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> -d <em class="replaceable"><code>PATH_TO_DC_FILE</code></em> pdf</pre><p>Only in the following cases you may omit the <code class="option">-d</code>
+     option:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>If your documentation directory contains only one DC file. In that case,
+     DAPS automatically uses the corresponding file.</p></li><li class="listitem"><p>If you have specified a default DC file to use in <code class="filename">~/.config/daps/dapsrc</code>
+    (as a value for <em class="parameter"><code>DOCCONF_DEFAULT</code></em>). In that case,
+     DAPS automatically uses the corresponding file, unless you specify a
+     different one on the command line.</p></li><li class="listitem"><p>If you want to call the help function.</p></li></ul></div></div><p>
+   To view the global options and the available subcommands for DAPS, use the command:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> help</pre><p>
+   For a short help text on a specific <span class="emphasis"><em>subcommand</em></span>, use:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> help  <em class="replaceable"><code>subcommand</code></em> </pre><p>
+   For example, if you want more information about generating HTML output,
+   run:
+  </p><pre class="screen"><code class="prompt">tux:~&gt; </code><span class="command"><strong>daps</strong></span> help html</pre><p>
+   The following section introduces the key <span class="command"><strong>daps</strong></span> commands
+   needed to create output formats from XML files. All examples are based on
+   the example files that are provided by the DAPS init
+   script. For more information, refer to
+   <a class="xref" href="sec.daps.quick.init.html" title="A Documentation Project From Scratch">the section called “A Documentation Project From Scratch”</a>.
+  </p></div><div class="navfooter"><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sec.daps.quick.imgs.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="art.daps.quick.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sec.daps.quick.output.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Image Handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Output Formats</td></tr></table></div></body></html>
