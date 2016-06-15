@@ -264,10 +264,13 @@
   <!-- ################################################################## -->
   <!-- Templates                                                          -->
 
-  <xsl:template match="book/title|book/titleabbrev"/><!-- Don't copy -->
+  <xsl:template match="book/title|book/subtitle|book/titleabbrev"/><!-- Don't copy -->
+
   <xsl:template match="bookinfo">
     <bookinfo>
-      <xsl:copy-of select="(title|../title)[1]"/>
+      <xsl:apply-templates select="(title|../title)[1]"/>
+      <!--<xsl:copy-of select="(subtitle|../subtitle)[1]"/>-->
+      <!--<xsl:copy-of select="(titleabbrev|../titleabbrev)[1]"/>-->
       <xsl:apply-templates select="productname"/>
       <xsl:apply-templates select="productnumber"/>
       <xsl:apply-templates select="date"/>
@@ -279,7 +282,11 @@
   <xsl:template match="chapter|appendix">
     <xsl:element name="{local-name()}">
       <xsl:apply-templates select="@*"/>
-      <xsl:copy-of select="(title|*/title)[1]"/>
+      <xsl:apply-templates select="(title|*/title)[1]"/>
+      <xsl:if test="self::chapter">
+        <xsl:apply-templates select="(subtitle|../subtitle)[1]"/>
+      </xsl:if>
+      <!--<xsl:copy-of select="(titleabbrev|../titleabbrev)[1]"/>-->
       <xsl:choose>
         <xsl:when test="abstract">
           <xsl:apply-templates select="abstract"/>
@@ -288,9 +295,20 @@
           <xsl:apply-templates select="*/abstract"/>
         </xsl:when>
       </xsl:choose>
-      <xsl:apply-templates select="node()[not(self::title or self::abstract)]"/>
+      <xsl:apply-templates select="node()[not(self::title or
+                                              self::subtitle or
+                                              self::titleabbrev or
+                                              self::abstract)]"/>
     </xsl:element>
   </xsl:template>
+
+  <xsl:template match="part/subtitle">
+   <xsl:comment> subtitle=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed part/subtitle</xsl:with-param>
+   </xsl:call-template>
+  </xsl:template>
+
 
   <!-- ################################################################## -->
   <!-- Templates for Division Elements                                    -->
@@ -324,6 +342,8 @@
     <xsl:apply-templates />
   </xsl:template>
 
+  <xsl:template match="sect1/subtitle | sect2/subtitle | sect3/subtitle | sect4/subtitle | sect5/subtitle"/>
+
   <xsl:template match="sect1|sect2|sect3|sect4">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
@@ -338,6 +358,26 @@
        <xsl:apply-templates select="title"/>
     </bridgehead>
     <xsl:apply-templates select="node()[not(self::title)]"/>
+  </xsl:template>
+
+  <xsl:template match="qandaset/title">
+   <xsl:comment> title=<xsl:value-of select="normalize-space(.)"/> </xsl:comment>
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed qandaset/title</xsl:with-param>
+   </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="title/ulink">
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed ulink tag in title </xsl:with-param>
+   </xsl:call-template>
+   <xsl:value-of select="."/>
+  </xsl:template>
+
+ <xsl:template match="title/xref">
+   <xsl:call-template name="warn">
+     <xsl:with-param name="text">Removed xref tag in title </xsl:with-param>
+   </xsl:call-template>
   </xsl:template>
 
   <!-- ################################################################## -->
@@ -415,6 +455,15 @@
 
   <!-- ################################################################## -->
   <!-- Templates for Block Elements                                       -->
+
+  <xsl:template match="blockquote/attribution">
+   <xsl:call-template name="info">
+      <xsl:with-param name="text">Changed blockquote/attribution -> para/emphasis</xsl:with-param>
+    </xsl:call-template>
+   <para><emphasis>
+    <xsl:apply-templates/>
+   </emphasis></para>
+  </xsl:template>
 
   <xsl:template match="mediaobject[textobject]">
     <xsl:call-template name="info">

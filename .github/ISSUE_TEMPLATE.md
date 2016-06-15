@@ -1,5 +1,5 @@
 ## Problem description
 
-## Actual behaviour
+## Actual behavior
 
-## Steps to reproduce the behaviour
+## Steps to reproduce the behavior
