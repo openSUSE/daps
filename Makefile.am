@@ -324,22 +324,22 @@ $(JING_WRAPPER): $(JING_WRAPPER_SRC) $(JING_WRAPPER_DEFAULT) $(FIRSTBUILD)
 	fi
 
 $(USERGUIDE):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
+	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) \
 	    --styleroot=$(STYLEROOT) --docconfig=$(DC_USERGUIDE) html \
 	    --single --name=$(USERGUIDE_NAME)
-	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
+	+$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 $(QUICKSTART):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
+	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT)  \
 	    --styleroot=$(STYLEROOT) --docconfig=$(DC_QUICKSTART) html \
 	    --single --name=$(QUICKSTART_NAME)
-	$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
+	+$(Q)$(srcdir)/bin/ccecho "result" "Created $@"
 
 # Generate man pages on the fly
 $(dist_man1_MANS):
-	$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
+	+$(Q)bin/daps $(DEBUG) --dapsroot=$(DAPSROOT) --color=0 \
 	  --docconfig=$(DAPSROOT)/man/$(DC_MANPAGES) man --nogzip
-	$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
+	+$(Q)$(srcdir)/bin/ccecho "result" "Created man pages $@"
 
 $(INSTALLDIRS) $(BUILD_ROOT):
 	test -z "$@" || $(MKDIR_P) $@
